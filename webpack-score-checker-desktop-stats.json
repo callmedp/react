@@ -4,19 +4,19 @@
     "chunks": {
         "main": [
             {
-                "name": "main-1587817641957.css",
-                "publicPath": "https://static1.shine.com/l/s/score-checker/dist/desktop/main-1587817641957.css",
-                "path": "/Users/admin/HT_MEDIA/projects/learn/code/careerplus/careerplus/static_core/score-checker/dist/desktop/main-1587817641957.css"
+                "name": "main-1588015458517.css",
+                "publicPath": "https://static1.shine.com/l/s/score-checker/dist/desktop/main-1588015458517.css",
+                "path": "/Users/admin/HT_MEDIA/projects/learn/code/careerplus/careerplus/static_core/score-checker/dist/desktop/main-1588015458517.css"
             },
             {
-                "name": "main-1587817641957.js",
-                "publicPath": "https://static1.shine.com/l/s/score-checker/dist/desktop/main-1587817641957.js",
-                "path": "/Users/admin/HT_MEDIA/projects/learn/code/careerplus/careerplus/static_core/score-checker/dist/desktop/main-1587817641957.js"
+                "name": "main-1588015458517.js",
+                "publicPath": "https://static1.shine.com/l/s/score-checker/dist/desktop/main-1588015458517.js",
+                "path": "/Users/admin/HT_MEDIA/projects/learn/code/careerplus/careerplus/static_core/score-checker/dist/desktop/main-1588015458517.js"
             },
             {
-                "name": "main-1587817641957.js.map",
-                "publicPath": "https://static1.shine.com/l/s/score-checker/dist/desktop/main-1587817641957.js.map",
-                "path": "/Users/admin/HT_MEDIA/projects/learn/code/careerplus/careerplus/static_core/score-checker/dist/desktop/main-1587817641957.js.map"
+                "name": "main-1588015458517.js.map",
+                "publicPath": "https://static1.shine.com/l/s/score-checker/dist/desktop/main-1588015458517.js.map",
+                "path": "/Users/admin/HT_MEDIA/projects/learn/code/careerplus/careerplus/static_core/score-checker/dist/desktop/main-1588015458517.js.map"
             }
         ]
     }

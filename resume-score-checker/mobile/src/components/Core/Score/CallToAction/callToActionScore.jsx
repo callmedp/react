@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useHistory } from 'react-router-dom';
 import * as Actions from '../../../../stores/scorePage/actions/index';
 import { eventClicked } from '../../../../stores/googleAnalytics/actions/index';
 import './callToAction.scss';
@@ -23,6 +23,7 @@ export default function CallToActionScore() {
     const [visible, setVisible] = useState(false);
     const [filename, setFileName] = useState('Upload New Resume');
     useEffect(() => window.scrollTo(0,0),[flag])
+    const history = useHistory()
 
     const dispatch = useDispatch();
     const fileUpload = async event => {
@@ -54,6 +55,7 @@ export default function CallToActionScore() {
                         setFileName("Upload New Resume")
                         setVisible(false)
                         setFlag(!flag)
+                        history.push("/resume-score-checker/score-checker")
                     }
                 }
                 catch (e) {
@@ -90,8 +92,8 @@ export default function CallToActionScore() {
                                 <Loader />
                             }
                         </React.Fragment>)
-                    ||
-                    <Redirect to="/resume-score-checker/score-checker" />
+                    // ||
+                    // <Redirect to="/resume-score-checker/score-checker" />
                 }
                 <GetExpertForm isFormVisible={isFormVisible} hide={toggle} />
             </div>

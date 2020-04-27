@@ -2,7 +2,7 @@ import * as Actions from '../actions/actionTypes';
 import { takeLatest, call, put } from 'redux-saga/effects';
 import { Api } from './API';
 import { UPDATE_SCORE } from '../actions/actionTypes';
-import { Toast } from '../../../services/Toast';
+import Swal from 'sweetalert2';
 
 function* getCandidateId(action) {
     try {
@@ -29,7 +29,7 @@ function* uploadFileUrl(action) {
         const result = yield call(Api.uploadFileUrl, fileData);
 
         if (result.data['error_message']) {
-            Toast.fire({
+            Swal.fire({
                 icon: 'error',
                 html: result.data.error_message
             })
@@ -50,13 +50,14 @@ function* getCandidateScore(action) {
     try {
         const result = yield call(Api.getCandidateScore, candidateId)
         if (result.data['error_message']) {
-            Toast.fire({
+            Swal.fire({
                 icon: 'error',
                 html: result.data.error_message
             })
             return reject(result.data)
         }
         localStorage.setItem('resume_score', JSON.stringify({ ...result.data }))
+        localStorage.setItem('file_name', "Imported from shine")
         yield put({ type: UPDATE_SCORE, payload: result.data });
         return resolve(result)
     }

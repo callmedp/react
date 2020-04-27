@@ -1,11 +1,11 @@
 const rewire = require('rewire');
 const defaults = rewire('react-scripts/scripts/build.js');
-
 let config = defaults.__get__('config');
 var sass = require("node-sass");
 var sassUtils = require("node-sass-utils")(sass);
 var path = require('path');
 var BundleTracker = require('webpack-bundle-tracker');
+let paths = defaults.__get__('paths');
 
 config.optimization.splitChunks = {
     cacheGroups: {
@@ -18,6 +18,8 @@ config.optimization.runtimeChunk = false;
 const currentTimeStamp = process.argv && process.argv[2] || +new Date();
 
 __dirname = path.join(__dirname, '..', '..', '..')
+
+paths.appBuild = path.join(__dirname, 'careerplus', 'static_core', 'score-checker', 'dist', 'desktop');
 
 const staticPath = process.env.REACT_APP_ENV === 'development' ?
     '/media/static/' : process.env.REACT_APP_ENV === 'staging' ?
