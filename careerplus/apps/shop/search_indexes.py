@@ -895,7 +895,8 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                         'gbp_price': float(pv.gbp_price),
                         'fake_gbp_price': float(pv.fake_gbp_price),
                         "short_description": pv.short_description,
-                        'visible_on_crm': pv.visible_on_crm
+                        'visible_on_crm': pv.visible_on_crm,
+                        'image':pv.get_image_url()
                     })
                 elif pv.is_writing or pv.is_service:
                     fbt_list.append({
@@ -913,7 +914,9 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                         'gbp_price': float(pv.gbp_price),
                         'fake_gbp_price': float(pv.fake_gbp_price),
                         "short_description": pv.short_description,
-                        'visible_on_crm': pv.visible_on_crm})
+                        'visible_on_crm': pv.visible_on_crm,
+                        'image' : pv.get_image_url(),
+                    })
                 fbt_dict.update({
                     'fbt_list': fbt_list
                 })
