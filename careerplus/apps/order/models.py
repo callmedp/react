@@ -48,6 +48,17 @@ from coupon.models import Coupon
 #Global Constants
 CURRENCY_SYMBOL_CODE_MAPPING = {0:"INR",1:"USD",2:"AED",3:"GBP"}
 
+class GazettedHolidays(models.Model):
+    holiday_date = models.DateTimeField(
+        _('Holiday Date'), blank=True, null=True)
+    holiday_type = models.CharField(max_length=20, null=True, blank=True)
+
+    def __str__(self):
+        return self.holiday_type
+
+    @property
+    def get_holiday_list(self):
+        return list(GazettedHolidays.objects.all().values_list('holiday_date', flat=True))
 
 class Order(AbstractAutoDate):
     co_id = models.IntegerField(
@@ -914,6 +925,12 @@ class OrderItem(AbstractAutoDate):
     def get_due_date(self):
         profile = getattr(self, 'whatsapp_profile_orderitem', None)
         if profile and profile.due_date:
+            temp_due_date = profile.due_date
+            holiday_list = GazettedHolidays().get_holiday_list
+            while (temp_due_date.weekday() == 6 or temp_due_date in holiday_list):
+                profile.due_date_extended_by += 1
+                temp_due_date += relativedelta.relativedelta(days=1)
+            profile.due_date += relativedelta.relativedelta(days=profile.due_date_extended_by)
             return profile.due_date.strftime('%d-%m-%Y')
         return 'N.A'
 
@@ -1010,18 +1027,22 @@ class OrderItem(AbstractAutoDate):
 
         if profile:
             if profile.due_date and profile.due_date > today:
-                profile.due_date = profile.due_date + relativedelta.relativedelta(days=7)
+                profile.due_date = profile.due_date + relativedelta.relativedelta(days=(7 - profile.due_date_extended_by))
+                profile.due_date_extended_by = 0
                 profile.save()
             else:
                 day_of_week = profile.day_of_week
                 if today.weekday() == day_of_week:
-                    profile.due_date = today + relativedelta.relativedelta(days=7)
+                    profile.due_date = today + relativedelta.relativedelta(days=(7 - profile.due_date_extended_by))
+                    profile.due_date_extended_by = 0
                 elif today.weekday() > day_of_week:
                     profile.due_date = today +\
-                        relativedelta.relativedelta(days=7 - (today.weekday() - day_of_week))
+                        relativedelta.relativedelta(days=(7 - (today.weekday() - day_of_week) - profile.due_date_extended_by))
+                    profile.due_date_extended_by = 0
                 elif today.weekday() < day_of_week:
                     profile.due_date = today +\
-                        relativedelta.relativedelta(days=(day_of_week - today.weekday()))
+                        relativedelta.relativedelta(days=(day_of_week - today.weekday()) - profile.due_date_extended_by)
+                    profile.due_date_extended_by = 0
                 profile.save()
 
     def get_oi_communications(self):
