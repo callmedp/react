@@ -70,9 +70,9 @@
         
     </div>
 
-     <div class="search mb-50">
+     <div class="search-test mb-50">
         <div class="search_base"></div>
-        <div class="search__searchbox" id="bloodhound" >
+        <div class="search-test__searchbox" id="bloodhound" >
             <input id ="bloodhound_input" type="text" class="typeahead"  name="" placeholder="Search popular tests">
             <div id="bloodhound_message" style="display: none;">
               <p style="color:red;"> Test not available</p>
@@ -243,6 +243,7 @@ Shine learning brings to you one of the largest collection of functional tests. 
 {{block.super}}
     {% compress js %}
 <script src="{% static 'shinelearn/js/assessment/landing.js' %}"></script>
+<script src="{% static 'shinelearn/js/assessment/assessment_search.js' %}"></script>
 {% endcompress %}
    <script type="text/javascript">
    var page_number= 2;
@@ -342,7 +343,6 @@ Shine learning brings to you one of the largest collection of functional tests. 
 
 
     </script>
-<script src="{% static 'shinelearn/js/assessment/assessment_search.js' %}"></script>
 {% endblock js_section %}
 
 {% block johukum %}

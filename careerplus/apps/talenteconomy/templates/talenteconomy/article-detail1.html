@@ -14,20 +14,9 @@
 <meta name="twitter:description" content="{{ main_article.get_description }}" />
 <meta name="twitter:image:src" content="{{main_article.image.url}}">
 
+<link  href="https://fonts.googleapis.com/css?family=Montserrat:400,600,700&display=swap" rel="stylesheet">
 
 {%  endblock django_meta %}
-<!-- {% block GA %}
-<script>  
-(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-  // ga('create', 'UA-3537905-41', 'auto', {'name': 'a'});
-  // ga('a.send', 'pageview');
-  ga('create', 'UA-3537905-41', 'auto');
-  ga('send', 'pageview');
-</script>
-{% endblock GA %} -->
 {% block canonical_url %}
   <link rel="canonical" href="https://{{ SITE_DOMAIN }}{{ request.path }}">
 
@@ -173,7 +162,7 @@
             <span>or login with</span>
             <a class="facebook" onclick="Login();"></a>
             <a class="linkedin" href="{% url 'users:linkedin-code' %}"></a>
-            <a class="gplus" onclick="glogin();"></a>
+            <!-- <a class="gplus" onclick="glogin();"></a> -->
           </div>
           <small class="form-text text-muted text-center">Don’t have an account yet? <a role="button" data-toggle="modal" data-target=".bs-example-modal-sm2" data-dismiss="modal">Register Now</a></small>
         </form>
@@ -237,7 +226,7 @@
             <span>or Register with</span>
             <a class="facebook" onclick="Login();"></a>
             <a class="linkedin" href="{% url 'users:linkedin-code' %}"></a>
-            <a class="gplus" onclick="glogin();"></a>
+            <!-- <a class="gplus" onclick="glogin();"></a> -->
           </div>
           <small class="form-text text-muted text-center mt-4">Already have an account? <a role="button" data-toggle="modal" data-target=".login-div" data-dismiss="modal">Login Now</a></small>
         </form>
@@ -275,31 +264,10 @@
 
 {% endblock container %}
 {% block js_section %}
-<!-- <script>
-
-// (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-//   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-//   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-//   })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-// //   ga('create', 'UA-3537905-41', 'auto', {'name': 'a'});
-// //   ga('a.send', 'pageview');
-// //   ga('create', 'UA-3537905-41', 'auto');
-// //   ga('send', 'pageview');
-
-// function gaEvent(event_cat,event_lab,event_action){
-//   ga('send', 'event', event_cat, event_action, event_lab);
-//  }
-
-//  function gaEventFunc(status,typeOfProduct){
-//     var event_cat='Form Interactions';
-//     gaEvent(event_cat,typeOfProduct,status);
-//  }
-
-</script> -->
 
     {{ block.super }}
     {% compress js %}
-    <script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
+    <script async type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
     <script src="{% static 'shinelearn/js/blog/blog-detail.js' %}"></script>
     <script src="{% static 'shinelearn/js/blog/login-register.js' %}"></script>
     <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
@@ -310,7 +278,6 @@
         var pos = s.position();            
         $(window).scroll(function() {
           var windowpos = $(window).scrollTop();
-          // s.html("Distance from top:" + pos.top + "<br />Scroll position: " + windowpos);
           if (windowpos >= pos.top) {
             s.addClass("stick");
           } else {

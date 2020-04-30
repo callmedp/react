@@ -1,0 +1,27 @@
+.error {
+    color: $error;
+
+    &--mgs {
+        font-size: 1.1rem;
+        background-color: $error;
+        color: $white;
+        position: absolute;
+        right: 0;
+        line-height: 16px;
+        top: 1px;
+        display: none;
+        padding: 1px 5px;
+        border-radius: 0 4px 4px 4px;
+    }
+
+    .form--control {
+        border-color: $error;
+        box-shadow: 0 0 10px rgba(243,74,56,0.3);
+    }
+    
+    .error--mgs {
+        display: block;
+    }
+}
+
+
