@@ -1,0 +1,18 @@
+.error {
+    position: relative;
+
+    &__msg {
+        background-color: rgba($red, .6);
+        font-size: 1rem;
+        padding: 0 .4rem;
+        color: $white;
+        position: absolute;
+        right: 0;
+        top: 0;
+        border-top-right-radius: .4rem;
+    }
+
+    .input_field {
+       border-color: rgba($red, .6); 
+    }
+}

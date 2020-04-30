@@ -1,0 +1,50 @@
+
+// $static-url: get('staticUrl');
+// $static-url : '/media/static/';
+// $path: $static-url + "score-checker/images/mobile";
+
+@import '../_path.scss';
+
+%blue-gr {
+    background: #7B46AB; 
+    background: -moz-linear-gradient(45deg,  #7B46AB 0%, #997BD5 50%, #997BD5 50%, #997BD5 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(45deg,  #7B46AB 0%,#997BD5 50%,#997BD5 50%,#997BD5 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(45deg,  #7B46AB 0%,#997BD5 50%,#997BD5 50%,#997BD5 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#7B46AB', endColorstr='#997BD5',GradientType=1 );
+}
+
+%green-tick {
+    &::before {
+        @include size(14px, 11px);
+        content: '';
+        background-image: url('#{$path}/sprite.png');
+        background-repeat:  no-repeat;
+        background-position: -28px -310px;
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 17px;
+        
+    }
+}
+
+%blue-bullet {
+    &::before {
+        content: '';
+        @include size(7px, 7px);
+        flex: 0 0 7px;
+        border-radius: 50%;
+        background-color: $primary;
+        display: block;
+        position: relative;
+        top: 6px;
+        left: -15px;
+
+    }
+}
+
+
+%remove-space {
+    margin: 0;
+    padding: 0;
+}

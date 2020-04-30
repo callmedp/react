@@ -1,0 +1,64 @@
+// $static-url: get('staticUrl');
+// $path: $static-url + "score-checker/images";
+
+@import '../../../../styles/library';
+
+.score-banner {
+    @include size(100%, 400px, block);
+    @extend %blue-gr;
+    color: $white;
+    position: relative;
+    overflow: hidden;
+
+    h1 {
+        margin: 0;
+        font-weight: $font-weight-bold;
+        line-height: 1;
+        font-size: 3.0rem;
+    }
+
+    &__image {
+        @include size(296px, 248px, block);
+        background-image: url('#{$path}/score.png');
+        margin: 0 auto;
+        position: relative;
+        top: 5px;
+        z-index: 1;
+        box-shadow: 0 -25px 25px rgba($black, .2);
+    }
+
+    &__progressBar {
+        @include size(100%, 100%, block);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding-top: 60px;
+    }
+
+    .circle {
+        top: 120px;
+        right: 10px;
+    }
+
+    .dots {
+        top: 120px;
+        right: 10px;
+    }
+
+    &::after {
+        @include size(100%, 26px, block);
+        content: '';
+        background-image: url('#{$path}/curve.png');
+        position: absolute;
+        bottom: 0;
+        background-size: cover;
+    }
+}
+
+.resume-detail {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: $gray-darker;
+}
