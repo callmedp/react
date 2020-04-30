@@ -25,7 +25,8 @@ class GCPStaticStorage(GoogleCloudStorageMixin):
     """
     bucket_name = settings.GCP_STATIC_BUCKET
     location = settings.GCP_STATIC_LOCATION
-    cache_control = "max-age=86400"
+    # set cache control to be public having max age 1 year
+    cache_control = "public,max-age=31536000"
 
     def __init__(self, **settings):
         super(GCPStaticStorage, self).__init__(**settings)
@@ -48,7 +49,8 @@ class GCPMediaStorage(GoogleCloudStorageMixin):
     """
     bucket_name = settings.GS_BUCKET_NAME
     location = settings.GCP_MEDIA_LOCATION
-    cache_control = "max-age=86400"
+    # set cache control to be public having max age 1 year
+    cache_control = "public,max-age=31536000"
 
     def url(self, name):
         return settings.MEDIA_URL + name

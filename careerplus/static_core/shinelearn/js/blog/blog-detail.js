@@ -98,8 +98,6 @@ function commentSubmit(article_id, login_status){
 $(function(){
 
     $(document).on('click', '#article_share', function(event) {
-            // console.log($(this).attr('page-id'));
-            // console.log($(this).attr('article-slug'));
             $.ajax({
                 url: "/ajax/article-share/",
                 type: 'GET',
@@ -111,40 +109,6 @@ $(function(){
                 }
             });
     });
-
-
-    /*var win = $(window),
-    ajaxCalled = false;
-    let prev_page = 0,
-
-
-    win.scroll(function() {
-        if ( win.scrollTop() <= $('#related-container').offset().top - 150) {
-            page = $("#pg_id").val();
-            slug = $("#pg_slug").val();
-            if (page != undefined & page != prev_page){
-                prev_page = page;
-                data = "?page="+ page+ "&slug=" + slug;
-                $.ajax({
-                    url: "/article/ajax/article-detail-loading/" + data,
-                    type: "GET",
-                    dataType: "json",
-                    // dataType: "html",
-                    success: function(data) {
-                        var article_url = data.url;
-                        $("#load_more").remove();
-                        $('#related-container').append(data.article_detail);
-                        ga('send', 'pageview');
-                    },
-                    failure: function(response){
-                        //alert("Something went wrong.")
-                    }
-                });
-            }
-            
-        }
-    });*/
-
 });
 
 
@@ -164,16 +128,6 @@ var showArticleOnScroll = (function(){
 
         $(window).scroll(function() {
             if ($(window).scrollTop() > $('#id_ajax_article').offset().top - ajaxOffSetDistance) {
-                // debugger;
-              //  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-              // (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-              // m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-              // })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-              // ga('create', 'UA-3537905-41', 'auto', {'name': 'a'});
-              // ga('a.send', 'pageview');
-              // ga('create', 'UA-3537905-41', 'auto');
-              // ga('send', 'pageview');
-
                makeAjax();
             };
             
@@ -238,8 +192,6 @@ var showArticleOnScroll = (function(){
                       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
                       m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
                       })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-                      // ga('create', 'UA-3537905-41', 'auto', {'name': 'a'});
-                      // ga('a.send', 'pageview');
                       ga('create', 'UA-3537905-41', 'auto');
                       ga('send', 'pageview');
                     },

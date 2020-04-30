@@ -55,7 +55,7 @@ class LoginMiddleware(object):
         if any([request.path.startswith(path) for path in paths_to_avoid]):
             response = self.get_response(request)
             return response
-
+        
         em_data = request.COOKIES.get('_em_', '')
         if em_data and '|' in em_data:
             cookies_data = em_data.split('|')
@@ -69,7 +69,7 @@ class LoginMiddleware(object):
 
         if 'func_area' in request.session.keys():
             session_fa = True
-        if 'skills' in request.session.keys():
+        if 'mid_skills' in request.session.keys():
             session_skills = True
 
         candidate_id = request.session.get('candidate_id')
