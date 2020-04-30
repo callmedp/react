@@ -1,0 +1,132 @@
+@import '../../../../styles/library';
+
+$midnight: #2c3e50;
+$clouds: #ecf0f1;
+
+// $static-url: get('staticUrl');
+// $path: $static-url + "score-checker/images";
+
+// Layout
+.row {
+  display:flex;
+
+  .col {
+    flex:1;
+  }
+}
+/* Accordion styles */
+
+.tab {
+  width: 100%;
+  color: $gray-darker;
+  overflow: hidden;
+  margin-bottom: 10px;
+  box-shadow: 0 0 10px rgba($black ,0.2);
+  
+  &-label {
+    display: flex;
+    padding: 1em;
+    background: $white;
+    cursor: pointer;
+    width: 100%;
+    position: relative;
+    color: $gray-darker;
+    top: 0;
+    left: 0;
+
+    &::after {
+      content: "";
+      @include size(28px, 20px, block);
+      text-align: center;
+      transition: all .35s;
+      position: absolute;
+      right: 0;
+      top: 50%;
+      margin: -23px 8px 0px 0px;
+      background-image: url('#{$path}/sprite.png');
+      background-repeat:  no-repeat;
+      background-position: -60px -85px;
+
+    }
+  }
+
+  &-content {
+    max-height: 0;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+    color: $midnight;
+    background: white;
+    transition: all .35s;
+
+    ul {
+      padding-top: 10px;
+
+      li {
+        display: flex;
+        padding-left: 10px;
+        padding-top: 10px;
+
+        @extend %blue-bullet;
+
+        &:before {
+          left: -10px;
+        }
+      }
+    }
+  }
+  
+  &-close {
+    display: flex;
+    justify-content: flex-end;
+    padding: 1em;
+    font-size: 0.75em;
+    background: $midnight;
+    cursor: pointer;
+    &:hover {
+      background: darken($midnight, 10%);
+    }
+  }
+
+  input {
+    position: absolute;
+    opacity: 0;
+    z-index: -1;
+  }
+
+    // :checked
+  input:checked {
+    + .tab-label {
+      &::after {
+        transform: rotate(180deg);
+      }
+    }
+    ~ .tab-content {
+      max-height: 100vh;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+  }
+}
+
+
+.indicators {
+  li {
+    display: flex;
+    align-items: flex-start;
+    font-size: $font-size-xs;
+    line-height: 1.4;
+
+    i {
+      max-width: 14px;
+      flex: 0 0 14px;
+      position: relative;
+      top: 4px;
+
+      &.caution-mark {
+        max-width: 6px;
+        flex: 0 0 6px;
+      }
+    }
+  }
+}
+

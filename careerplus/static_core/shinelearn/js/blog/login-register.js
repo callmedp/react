@@ -13,7 +13,6 @@ $().ready(function() {
                 email:{
                     required:true,
                     email:true,
-                    /*emailDoesNotExist:true,*/
                 },
                 password:{
                     required:true,

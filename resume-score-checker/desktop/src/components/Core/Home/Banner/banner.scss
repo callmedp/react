@@ -1,0 +1,44 @@
+@import '../../../../styles/functions';
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+
+.banner {
+    @include size (100%, 431px);
+    @extend %blue-gr;
+    color: $white;
+    position: relative;
+    overflow: hidden;
+
+    h1 {
+        font-size: 4.4rem;
+        color: $white;
+    }
+
+    &__image {
+        position: absolute;
+        z-index: 1;
+        right: -110px;
+        top: -10px;
+    }
+
+    &__text {
+        color: rgba($white, .6);
+        font-size: 11px;
+        margin-top: 20px;
+    }
+}
+
+.file-upload {
+    position: relative;
+    cursor: pointer;
+
+    &__input {
+        position: absolute;
+        font-size: 50px;
+        opacity: 0;
+        right: 0;
+        top: 0;
+        width: 100%;
+    }
+}

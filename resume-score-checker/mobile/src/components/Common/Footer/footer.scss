@@ -1,0 +1,31 @@
+@import '../../../styles/library';
+
+.footer-new {
+   background-color: $gray-lightest;
+   border-top: 5px solid $primary-light;
+   text-align: center;
+   position: absolute;
+   bottom: 0;
+   width: 100%;
+   padding-bottom: 30px;
+
+   a {
+     color: $gray-dark;
+   }
+  
+    &__smo {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+      margin-bottom: 20px;
+      
+      a {
+        @include size(26px, 25px, block);
+  
+        &:not(:last-child) {
+          margin-right: 10px;
+        }
+      }
+    }
+  }
+    

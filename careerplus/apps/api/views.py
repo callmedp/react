@@ -1159,7 +1159,9 @@ class ShineCandidateLoginAPIView(APIView):
             logging.getLogger('error_log').error("Login attempt failed - {}".format(e))
             return Response({"data": "No user record found"}, status=status.HTTP_400_BAD_REQUEST)
 
-        return self.get_response_for_successful_login(candidate_id, login_response)
+        with_info = request.GET.get('with_info', 'true')
+        with_info = False if with_info == 'false' else True 
+        return self.get_response_for_successful_login(candidate_id, login_response, with_info)
 
     def post(self, request, *args, **kwargs):
         email = request.data.get('email')

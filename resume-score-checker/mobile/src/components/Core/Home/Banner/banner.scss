@@ -1,0 +1,58 @@
+@import '../../../../styles/library.scss';
+@import '../../../../styles/_path.scss';
+
+// $static-url: get('staticUrl');
+// $static-url: '/media/static/score-checker/images/mobile';
+
+// $path: $static-url + "score-checker/images/mobile";
+
+.banner {
+    @include size(100%, 344px, block);
+    @extend %blue-gr;
+    color: $white;
+    position: relative;
+    overflow: hidden;
+
+    h1 {
+        margin: 0;
+        font-weight: $font-weight-bold;
+        line-height: 1;
+    }
+
+    &__image {
+        position: absolute;
+        z-index: 1;
+        right: 0;
+        bottom: 5px;
+
+        img {
+            position: relative;
+            z-index: 1;
+        }
+    }
+
+    &__text {
+        color: rgba($white, .6);
+        font-size: 11px;
+        margin-top: 20px;
+    }
+
+    .circle {
+        top: -30px;
+        left: 10px;
+    }
+
+    .dots {
+        top: 16px;
+        right: 30px;
+    }
+
+    &::after {
+        @include size(100%, 26px, block);
+        content: '';
+        background-image: url('#{$path}/curve.png');
+        position: absolute;
+        bottom: 0;
+        background-size: cover;
+    }
+}
