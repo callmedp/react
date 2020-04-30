@@ -58,7 +58,11 @@ class GazettedHolidays(models.Model):
 
     @property
     def get_holiday_list(self):
-        return list(GazettedHolidays.objects.all().values_list('holiday_date', flat=True))
+        dates = list(GazettedHolidays.objects.all().values_list('holiday_date', flat=True))
+        holidays = []
+        for day in dates:
+            holidays.append(day.strftime('%d-%m-%Y'))
+        return holidays
 
 class Order(AbstractAutoDate):
     co_id = models.IntegerField(
@@ -927,7 +931,7 @@ class OrderItem(AbstractAutoDate):
         if profile and profile.due_date:
             temp_due_date = profile.due_date
             holiday_list = GazettedHolidays().get_holiday_list
-            while (temp_due_date.weekday() == 6 or temp_due_date in holiday_list):
+            while (temp_due_date.weekday() == 6 or temp_due_date.strftime('%d-%m-%Y') in holiday_list):
                 profile.due_date_extended_by += 1
                 temp_due_date += relativedelta.relativedelta(days=1)
             profile.due_date += relativedelta.relativedelta(days=profile.due_date_extended_by)
