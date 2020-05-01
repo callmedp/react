@@ -3,7 +3,7 @@ from django.contrib import admin
 from .models import Order, OrderItem, OrderItemOperation, Message,\
     RefundRequest, RefundItem, RefundOperation, CouponOrder,\
     EmailOrderItemOperation, SmsOrderItemOperation,\
-    InternationalProfileCredential, GazettedHolidays
+    InternationalProfileCredential, GazettedHoliday
 
 from wallet.models import WalletTransaction
 from payment.models import PaymentTxn
@@ -137,4 +137,4 @@ admin.site.register(
     InternationalProfileCredential,
     InternationalProfileCredentialAdmin
 )
-admin.site.register(GazettedHolidays ,GazettedHolidaysAdmin)
+admin.site.register(GazettedHoliday ,GazettedHolidaysAdmin)

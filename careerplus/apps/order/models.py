@@ -48,7 +48,7 @@ from coupon.models import Coupon
 #Global Constants
 CURRENCY_SYMBOL_CODE_MAPPING = {0:"INR",1:"USD",2:"AED",3:"GBP"}
 
-class GazettedHolidays(models.Model):
+class GazettedHoliday(models.Model):
     holiday_date = models.DateField(primary_key =True)
     holiday_type = models.CharField(max_length=25, null=True, blank=True)
 
@@ -59,7 +59,7 @@ class GazettedHolidays(models.Model):
 
     @property
     def get_holiday_list(self):
-        dates = list(GazettedHolidays.objects.all().values_list('holiday_date', flat=True))
+        dates = list(GazettedHoliday.objects.all().values_list('holiday_date', flat=True))
         holidays = []
         for day in dates:
             holidays.append(day.strftime('%d-%m-%Y'))
@@ -931,7 +931,7 @@ class OrderItem(AbstractAutoDate):
         profile = getattr(self, 'whatsapp_profile_orderitem', None)
         if profile and profile.due_date:
             temp_due_date = profile.due_date
-            holiday_list = GazettedHolidays().get_holiday_list
+            holiday_list = GazettedHoliday().get_holiday_list
             while (temp_due_date.weekday() == 6 or temp_due_date.strftime('%d-%m-%Y') in holiday_list):
                 profile.due_date_extended_by += 1
                 temp_due_date += relativedelta.relativedelta(days=1)
