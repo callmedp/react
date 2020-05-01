@@ -49,11 +49,12 @@ from coupon.models import Coupon
 CURRENCY_SYMBOL_CODE_MAPPING = {0:"INR",1:"USD",2:"AED",3:"GBP"}
 
 class GazettedHolidays(models.Model):
-    holiday_date = models.DateTimeField(
-        _('Holiday Date'), blank=True, null=True)
-    holiday_type = models.CharField(max_length=20, null=True, blank=True)
+    holiday_date = models.DateField(primary_key =True)
+    holiday_type = models.CharField(max_length=25, null=True, blank=True)
 
     def __str__(self):
+        if not self.holiday_type:
+            return ""
         return self.holiday_type
 
     @property
