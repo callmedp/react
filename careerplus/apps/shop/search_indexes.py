@@ -84,6 +84,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     pImA = indexes.CharField(model_attr='image_alt', null=True, indexed=False)
     pvurl = indexes.CharField(indexed=False)  # model_attr='video_url'
     pDsc = indexes.CharField(model_attr='description', indexed=False)
+    pDscPt =   indexes.CharField(null=True)
     pBS = indexes.CharField(model_attr='buy_shine', indexed=False)
     pStar = indexes.MultiValueField(null=True, indexed=False)
     pRC = indexes.IntegerField(
@@ -236,6 +237,18 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
         categories_list = list(set(categories_list))
         if len(categories_list) > 0:
             return [cat.name for cat in categories_list]
+
+
+    def prepare_pDscPt(self,obj):
+        try :
+            from bs4 import BeautifulSoup
+            soup = BeautifulSoup(obj.description, 'html.parser')
+            strpcontent = soup.get_text()
+        except Exception as e :
+            logging.getLogger('error_log').error(str(e))
+            strpcontent = obj.description
+        return strpcontent
+
 
     def prepare_pFA(self, obj):
         # if obj.is_course:
