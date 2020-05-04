@@ -84,7 +84,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     pImA = indexes.CharField(model_attr='image_alt', null=True, indexed=False)
     pvurl = indexes.CharField(indexed=False)  # model_attr='video_url'
     pDsc = indexes.CharField(model_attr='description', indexed=False)
-    pDscPt =   indexes.CharField(null=True)
+    pDscPt = indexes.CharField(indexed=False)
     pBS = indexes.CharField(model_attr='buy_shine', indexed=False)
     pStar = indexes.MultiValueField(null=True, indexed=False)
     pRC = indexes.IntegerField(
