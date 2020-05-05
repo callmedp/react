@@ -4,6 +4,7 @@ from cms import models
 from cms.config import COLUMN_TYPE, WIDGET_CHOICES
 from rest_framework import serializers 
 import datetime
+from django.core.cache import cache
 from users.models import User
 
 class ColumnHeadingSerializer(serializers.ModelSerializer):
@@ -25,18 +26,28 @@ class IndexColumnSerializer(serializers.ModelSerializer):
     """
         Serializer for `IndexColumn` model
     """
-    column =  serializers.ChoiceField(label='Column*', choices=COLUMN_TYPE, style={'template': 'console/fields/select.html', 'empty_text': 'Select Column',
+    column = serializers.ChoiceField(label='Column*', choices=COLUMN_TYPE, style={'template': 'console/fields/select.html', 'empty_text': 'Select Column',
         'attrs': {'data-parsley-required': True}})
     url = serializers.URLField(allow_blank=True, max_length=2048, required=False,
         style={'template': 'console/fields/input.html', 'attrs': {'data-parsley-trigger': 'keyup', 'data-parsley-length': [3, 2048], 'data-parsley-type': 'url'}})
     name = serializers.CharField(label='Name*', max_length=255,
         style={'template': 'console/fields/input.html',
         'attrs': {'data-parsley-trigger': 'keyup', 'data-parsley-length': [4, 255], 'data-parsley-required': True}})
+
+    heading = serializers.SerializerMethodField()
+
     class Meta:
         model = models.IndexColumn
-        fields = ('id', 'column', 'url', 'name', 'indexer_id')
+        fields = ('id', 'column', 'url', 'name', 'indexer_id','heading')
         read_only_fields = ('id',)
 
+    def get_heading(self,obj):
+        if not obj.indexer_id:
+            return ''
+        column_name = obj.indexer.columnheading_set.first()
+        if not column_name:
+            return ''
+        return column_name.name
 
 class IndexerWidgetSerializer(serializers.ModelSerializer):
     """

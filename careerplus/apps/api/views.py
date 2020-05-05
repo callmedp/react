@@ -1414,6 +1414,12 @@ class TalentEconomyApiView(FieldFilterMixin, ListAPIView):
         ]
     }
 
+    For Sorting according include sort_by
+    on last modified date include sort_by=last_modified_on   ,
+    on creation date include sort_by=created_on ,
+    for descending order include  '-', for ex-  sort_by=-created_on
+
+
     """
     permission_classes = []
     authentication_classes = []
@@ -1423,11 +1429,14 @@ class TalentEconomyApiView(FieldFilterMixin, ListAPIView):
     def get_queryset(self, *args, **kwargs):
         status = self.request.GET.get('status', )
         visibility = self.request.GET.get('visibility')
+        sort_filter = self.request.GET.get('sort_by')
         filter_dict = {}
         if status:
             filter_dict.update({'status': status})
         if visibility:
             filter_dict.update({'visibility': visibility})
+        if sort_filter:
+            return Blog.objects.filter(**filter_dict).order_by(sort_filter)
         return Blog.objects.filter(**filter_dict)
 
 

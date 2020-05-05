@@ -32,7 +32,7 @@ class ColumnHeadingViewMixin(object):
 
 class IndexColumnViewMixin(object):
 
-    queryset = models.IndexColumn.objects.all()
+    queryset = models.IndexColumn.objects.select_related('indexer').all()
     serializer_class = serializers.IndexColumnSerializer
     filter_backends = (SearchFilter, OrderingFilter, DjangoFilterBackend)
     filter_fields = ('column', 'indexer')
