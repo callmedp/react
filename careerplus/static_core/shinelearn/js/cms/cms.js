@@ -85,80 +85,88 @@ $(document).on('click', '#id_download_button', function(event) {
 
     // event.preventDefault();
 
-    var $pdfForm = $("#downloadpdf_form");
-    $pdfForm.validate({
-        rules: {
-            name: {
-                required: true,
-                maxlength: 100
-            },
-            email: {
-                required: false,
-                maxlength: 100
-            },
-            number: {
-                required: true,
-                digits: true,
-                indiaMobile: true,
-                minlength: 4,
-                maxlength: 15,
-            },
-            term_condition: {
-                required: true
-            }
-
-        },
-        messages: {
-            name: {
-                required: "Name is mandatory",
-                maxlength: "Maximum 100 characters."
-            },
-            email: {
-                maxlength: "At most 100 characters"
-            },
-            number: {
-                required: "Mobile Number is Mandatory",
-                digits: "Enter only digits",
-                indiaMobile: "Please enter 10 digits only",
-                minlength: "Please enter atleast 4 digits",
-                maxlength: "Please enter less than 16 digits",
-
-            },
-            term_condition: {
-                required: "Please accept our Terms & Conditions"
-            }
-
-        },
-        highlight: highlightError,
-        unhighlight: unhighlightError,
-        errorPlacement: errorPlacement,
-        submitHandler: function(form){
-//            MyGA.SendEvent('QueryForm', 'Form Interactions', 'General Enquiry', 'success');
-            // $("#id_action").val(1); //action on download button
-
-            var formData = $(form).serialize();
-            $.ajax({
-                url: "/lead/lead-management/",
-                type: "POST",
-                data: formData,
-                success: function(data, textStatus, jqXHR) {
-                    MyGA.SendEvent('QueryForm', 'Form Interactions', 'CMS Resume Enquiry', 'success');
-                    // alert('Your Query Submitted Successfully.');
-                    if (window.CURRENT_FLAVOUR == 'mobile'){
-                        $('.cls_mask').click();  
-                    }
-                    $pdfForm[0].reset();
-                    var href = $('#id_download_button').attr('href');
-                    $('#id_download_model').modal('toggle');
-                    window.open(href, '_blank');
+    // var $pdfForm = $("#downloadpdf_form");
+    $('form#downloadpdf_form').each(function(ele){
+        $(this).validate({
+            rules: {
+                name: {
+                    required: true,
+                    maxlength: 100
                 },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    MyGA.SendEvent('QueryForm', 'Form Interactions', 'CMS Resume Enquiry ', 'Failure');
-                    alert('Something went wrong. Try again later.');
+                email: {
+                    required: false,
+                    maxlength: 100
+                },
+                number: {
+                    required: true,
+                    digits: true,
+                    indiaMobile: true,
+                    minlength: 4,
+                    maxlength: 15,
+                },
+                term_condition: {
+                    required: true
                 }
-            });
-            return false;
-        }
+    
+            },
+            messages: {
+                name: {
+                    required: "Name is mandatory",
+                    maxlength: "Maximum 100 characters."
+                },
+                email: {
+                    maxlength: "At most 100 characters"
+                },
+                number: {
+                    required: "Mobile Number is Mandatory",
+                    digits: "Enter only digits",
+                    indiaMobile: "Please enter 10 digits only",
+                    minlength: "Please enter atleast 4 digits",
+                    maxlength: "Please enter less than 16 digits",
+    
+                },
+                term_condition: {
+                    required: "Please accept our Terms & Conditions"
+                }
+    
+            },
+            highlight: highlightError,
+            unhighlight: unhighlightError,
+            errorPlacement: errorPlacement,
+            submitHandler: function(form){
+    //            MyGA.SendEvent('QueryForm', 'Form Interactions', 'General Enquiry', 'success');
+                // $("#id_action").val(1); //action on download button
+    
+                var formData = $(form).serialize();
+                $.ajax({
+                    url: "/lead/lead-management/",
+                    type: "POST",
+                    data: formData,
+                    success: function(data, textStatus, jqXHR) {
+                        MyGA.SendEvent('QueryForm', 'Form Interactions', 'CMS Resume Enquiry', 'success');
+                        // alert('Your Query Submitted Successfully.');
+                        if (window.CURRENT_FLAVOUR == 'mobile'){
+                            $('.cls_mask').click();
+                            $("#downloadpdf_form").get(0).reset()
+                            var href = $('a#id_download_button').get(ele).href;
+                            window.open(href, '_blank');  
+                        }
+                        else{
+                            // $pdfForm.reset();
+                            $("#downloadpdf_form").get(0).reset()
+                            var href = $('a#id_download_button').get(ele).href;
+                            $('#id_download_model').modal('toggle');
+                            window.open(href, '_blank');
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        MyGA.SendEvent('QueryForm', 'Form Interactions', 'CMS Resume Enquiry ', 'Failure');
+                        alert('Something went wrong. Try again later.');
+                    }
+                });
+                return false;
+            }
+        })
     });
 
 
