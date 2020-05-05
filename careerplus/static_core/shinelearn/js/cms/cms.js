@@ -147,7 +147,9 @@ $(document).on('click', '#id_download_button', function(event) {
                         // alert('Your Query Submitted Successfully.');
                         if (window.CURRENT_FLAVOUR == 'mobile'){
                             $('.cls_mask').click();
-                            $("#downloadpdf_form").get(0).reset()
+                            $("form#downloadpdf_form").each(function(){
+                                $(this).get(0).reset()
+                            })
                             var href = $('a#id_download_button').get(ele).href;
                             window.open(href, '_blank');  
                         }
