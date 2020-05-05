@@ -198,14 +198,15 @@ $(document).on('click', '#cms_share', function(event) {
 
 
 $(function() {
-
-    $("#id_skip").click(function() {
-        MyGA.SendEvent('QueryForm', 'Form Interactions', 'Cms Resume Enquiry', 'skip');
-        if (window.CURRENT_FLAVOUR == 'mobile'){
-            $('.cls_mask').click(); 
-        }
-        var href = $('#id_download_button').attr('href');
-        window.open(href, '_blank');
+    $("a#id_skip").each(function(ele){
+        $(this).click(function() {
+            MyGA.SendEvent('QueryForm', 'Form Interactions', 'Cms Resume Enquiry', 'skip');
+            if (window.CURRENT_FLAVOUR == 'mobile'){
+                $('.cls_mask').click(); 
+            }
+            var href = $('a#id_download_button').get(ele).href;
+            window.open(href, '_blank');
+        })
     });
 
     $('.toggle-index').click(function(){
