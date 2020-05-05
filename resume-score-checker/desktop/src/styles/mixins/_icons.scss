@@ -1,0 +1,121 @@
+// $path:  get('staticUrl') + "score-checker/images";
+// $path: '/media/static/' + "score-checker/images";
+
+@import  '../__path.scss';
+
+.sprite {
+    background-image: url('#{$path}/sprite.png');
+    background-repeat:  no-repeat;
+}
+
+.sprite1 {
+    background-image:  url('#{$path}/sprite1.png');
+    background-repeat:  no-repeat;
+}
+
+.upload {
+    @include size(14px, 19px);
+    display: block;
+    background-position: 0 0;
+}
+
+.export {
+    @include size(14px, 18px);
+    display: block;
+    background-position: -18px 0;
+
+    &.down {
+        transform: rotate(180deg);
+    }
+}
+
+.layout-resume {
+    @include size(47px, 69px);
+    background-position: 0 -19px;
+}
+
+.tips {
+    @include size(58px, 69px);
+    background-position: -1px -88px;
+}
+
+.review-score {
+    @include size(56px, 69px);
+    background-position: 0 -167px;
+}
+
+.expert-guidance {
+    @include size(51px, 69px);
+    background-position: 0 -238px;
+}
+
+.upload-resume {
+    @include size(19px, 27px);
+    background-position: 0 -308px;
+}
+
+.resume-analysis {
+    @include size(27px, 27px);
+    background-position: 0 -341px;
+}
+
+.get-resume {
+    @include size(20px, 27px);
+    background-position: 0 -380px;
+}
+
+.clip {
+    @include size(7px, 15px);
+    background-position: -33px -328px;
+    display: inline-block;
+    position: relative;
+    top: 2px;
+}
+
+.green-tick {
+    @include size(14px, 11px);
+    background-position: -28px -310px;
+    flex: 0 0 14px;
+    display: inline-block;
+}
+
+.question-mark {
+    @include size(14px, 20px);
+    background-position: -27px -383px;
+    flex: 0 0 14px;
+    display: inline-block;
+    position: relative;
+    top: 2px;
+}
+
+.caution-mark {
+    @include size(14px, 20px);
+    background-position: 4px -415px;
+    flex: 0 0 14px;
+    display: inline-block;
+    position: relative;
+    top: 4px;
+}
+
+
+.circle {
+    @include size(168px, 168px);
+    background-color: rgba(#BAABFF, .1);
+    display: block;
+    position: absolute;
+    top: -50px;
+    left: -60px;
+    border-radius: 50%;
+    z-index: 0;
+}
+
+.dots {
+    @include size(119px, 93px);
+    background-image:  url('#{$path}/dots.png');
+    background-repeat:  no-repeat;
+    display: block;
+    position: absolute;
+    bottom: -35px;
+    right: 18px;
+    z-index: 0;
+}

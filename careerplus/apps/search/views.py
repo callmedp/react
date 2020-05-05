@@ -196,6 +196,7 @@ class SearchBaseView(TemplateView):
                 val = int(value[0]) if value[0].isdigit() else value[0]
                 val = bool_string_mapping.get(val,val)
 
+                if val == True : val = 1
                 facet_data = {"id":val,"count":value[1]}
                 
                 if self.facet_choice_map.get(key):

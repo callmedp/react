@@ -1,0 +1,54 @@
+// $static-url: get('staticUrl');
+// $path: $static-url + "score-checker/images";
+
+
+.body-wrapper {
+    padding-bottom: 202px;
+    position: relative;
+    height: 100%;
+}
+
+.h-100 {
+    height: 100%;
+}
+
+.w-100 {
+    width: 100%;
+}
+
+
+.circle {
+    @include size(168px, 168px);
+    background-color: rgba(#BAABFF, .1);
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+    z-index: 0;
+}
+
+.dots {
+    @include size(119px, 93px);
+    background-image: url('#{$path}/dots.png');
+    background-repeat:  no-repeat;
+    display: block;
+    position: absolute;
+    z-index: 0;
+}
+
+.container-box {
+    padding: 15px;
+}
+
+.white-bg {
+    background-color: $white !important;
+}
+
+.blue-bullet {
+    padding-left: 15px;
+
+    li {
+        display: flex;
+        @extend %blue-bullet;
+        margin-bottom: 15px;
+    }
+}

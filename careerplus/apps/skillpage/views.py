@@ -47,8 +47,17 @@ class SkillPageView(DetailView, SkillPageMixin):
         self.object = self.get_object()
         if not self.object:
             raise Http404
+        redirect = self.redirect_if_necessary(request.path, self.object)
+        if redirect:
+            return redirect
         context = super(SkillPageView, self).get(request, args, **kwargs)
         return context
+
+    def redirect_if_necessary(self, current_path, article):
+        expected_path = article.get_absolute_url()
+        if expected_path != urlquote(current_path):
+            return HttpResponsePermanentRedirect(expected_path)
+        return None
 
     def get_context_data(self, **kwargs):
         context = super(SkillPageView, self).get_context_data(**kwargs)
