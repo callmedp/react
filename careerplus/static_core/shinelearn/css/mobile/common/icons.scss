@@ -26,7 +26,7 @@
 }
 
 .icon-cart {
-	@include icon-block (18px, 18px, -3px -46px);
+	@include icon-inblock (18px, 18px, -3px -46px);
 	margin-left: 25px;
   position: relative;
   overflow: visible;
@@ -809,6 +809,10 @@
 
 .icon-whatsApp {
   background-position: -46px -214px;
+}
+
+.icon-offers {
+  @include icon-inblock (25px, 25px, -259px -469px);
 }
 
 

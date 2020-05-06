@@ -210,6 +210,10 @@ $(document).ready(function() {
 		infinite: true
 	});
 
+	$("#close-offer").click(function(){
+		$("#offer-widget").hide();
+	});
+
 	
 
 

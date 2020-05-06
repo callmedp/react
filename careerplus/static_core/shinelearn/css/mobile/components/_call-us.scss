@@ -274,7 +274,64 @@
 
 
 
+.offer-modal {
+  &--image {
+    background-image: url(#{$fullpath}offer-image.png);
+    @include size(100%, 185px, block);
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
 
+  &--head {
+    font-size: $font-size-lg;
+    margin-bottom: 10px;
+    margin-top: 15px;
+    color: $gray-darker;
+  }
+
+  &--formBox {
+    padding: 15px;
+
+    select {
+      background-position: 93% 6px !important;
+    }
+  }
+
+
+  &__counter {
+    display: flex;
+
+    li {
+      text-align: center;
+
+      &:not(:last-child) {
+        margin-right: 10px;
+      }
+    }
+
+    &--box {
+      @include size(45px, 39px, flex);
+      align-items: center;
+      justify-content: center;
+      font-size: 1.375rem;
+      color: $white;
+      border-radius: 2px;
+      background: #4cb1c0;
+      background: -moz-linear-gradient(-45deg,  #4cb1c0 0%, #569cc8 22%, #7067dc 100%);
+      background: -webkit-linear-gradient(-45deg,  #4cb1c0 0%,#569cc8 22%,#7067dc 100%);
+      background: linear-gradient(135deg,  #4cb1c0 0%,#569cc8 22%,#7067dc 100%);
+
+    }
+
+    &--title {
+      font-size: 0.625rem;
+      color: $gray-dark;
+      text-transform: uppercase;
+    }
+  }
+
+
+}
 
 
 
