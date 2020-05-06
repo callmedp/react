@@ -105,7 +105,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <span class="close" id="close-offer"></span>
                 <p class="pb-0">
                     Limited time offer- <strong>upto 20% off! <br/> Ends in 12 hours- </strong> 
-                    <a href="#" class="offer--link">Enroll Now!</a> 
+                    <a href="#" class="offer--link" id="enroll-now">Enroll Now!</a> 
                 </p>
             </div>
 
@@ -148,8 +148,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             {% endblock navigation %}
         </div>
 
-        <div class="new-enquire offer-modal" style="display: block"> 
+        <div class="new-enquire offer-modal" id="open-offer"> 
             <div class="container pt-0">
+                <span class="close" id="close-offer-modal"></span>
                 <div class="offer-modal--image">
                     <div class="content-box">
                         <div class="offer-modal--head">Limited time offer - <strong>upto 20% off</strong></div>
@@ -212,25 +213,61 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                                 <label for="email-id">Email id</label>
                                 <span class="error--mgs"></span>
                             </li>
-                            <li class="fs-14 semi-bold mb-15">Course you would be interested in</li>
-                            <li class="custom-checkbox">
-                                <label for="us">
-                                    <input class="form-check-input" type="checkbox" id="us" value="option1">
-                                    <span>United States</span>
+                            <li class="fs-14 semi-bold mb-5 mt-20">Course you would be interested in</li>
+                            <li class="custom-checkbox offer-modal--checkboxes mb-25">
+                                <label for="big-data">
+                                    <input class="form-check-input" type="checkbox" id="big-data" value="option1">
+                                    <span>Big data</span>
+                                </label>
+                                
+                                <label for="six-sigma">
+                                    <input class="form-check-input" type="checkbox" id="six-sigma" value="option1">
+                                    <span>Six Sigma</span>
+                                </label>
+                                
+                                <label for="cc">
+                                    <input class="form-check-input" type="checkbox" id="cc" value="option1">
+                                    <span>Cloud computing</span>
+                                </label>
+                                
+                                <label for="dm">
+                                    <input class="form-check-input" type="checkbox" id="dm" value="option1">
+                                    <span>Digital marketing</span>
+                                </label>
+                                
+                                <label for="ds">
+                                    <input class="form-check-input" type="checkbox" id="ds" value="option1">
+                                    <span>Data Science </span>
+                                </label>
+                                
+                                <label for="others">
+                                    <input class="form-check-input" type="checkbox" id="others" value="option1">
+                                    <span>Others </span>
                                 </label>
                             </li>
                             <input type="hidden" name="product" value="{{category.pk}}">
                             <input type="hidden" name="prd" value="{{category.heading}}">
                             <input type="hidden" name="path" value="{{category.get_absolute_url}}">
                             <li>
-                                <button class="btn btn-round btn-blue w100" type="submit">Submit</button>
+                                <button class="btn btn-round btn-blue w100 semi-bold" type="submit" id="open-thanks">Avail offer now!</button>
                             </li>
+                            <li class="fs-12 c9 text-center mt-10">*T&C applied, valid only on select courses</li>
 
                         </ul>
                     </form>
                 </div>
             </div>
-        </div>
+        </div><!-- Offer modal -->
+        
+        <div class="new-enquire offer-modal" id="thank-modal"> 
+            <span class="close" id="close-thanks-modal"></span>
+            <div class="content-box pt-0">
+                <div class="offer-modal--thanks w-100 text-center">
+                    <img src="{% static 'shinelearn/images/mobile/common/thank-you.jpg' %}" alt="">
+                </div>
+                <p class="fs-18 semi-bold text-center mt-15">Our expert will get in <br />touch with you.</p>
+            </div>
+        </div><!-- Thank You -->
         
 
 

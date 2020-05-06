@@ -285,7 +285,7 @@
   &--head {
     font-size: $font-size-lg;
     margin-bottom: 10px;
-    margin-top: 15px;
+    margin-top: 25px;
     color: $gray-darker;
   }
 
@@ -294,6 +294,16 @@
 
     select {
       background-position: 93% 6px !important;
+    }
+  }
+
+  &--checkboxes {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 -5px;
+
+    label {
+      padding: 10px 5px;
     }
   }
 
@@ -329,7 +339,19 @@
       text-transform: uppercase;
     }
   }
+  .close {
+    top: 10px;
+    right: 5px;
 
+    &::before,
+    &::after {
+      height: 18px;
+    }
+  }
+
+  &--thanks {
+    margin-top: 80px;
+  }
 
 }
 
