@@ -34,20 +34,20 @@ class IndexColumnSerializer(serializers.ModelSerializer):
         style={'template': 'console/fields/input.html',
         'attrs': {'data-parsley-trigger': 'keyup', 'data-parsley-length': [4, 255], 'data-parsley-required': True}})
 
-    heading = serializers.SerializerMethodField()
+    # heading = serializers.SerializerMethodField()
 
     class Meta:
         model = models.IndexColumn
-        fields = ('id', 'column', 'url', 'name', 'indexer_id','heading')
+        fields = ('id', 'column', 'url', 'name', 'indexer_id')
         read_only_fields = ('id',)
 
-    def get_heading(self,obj):
-        if not obj.indexer_id:
-            return ''
-        column_name = obj.indexer.columnheading_set.first()
-        if not column_name:
-            return ''
-        return column_name.name
+    # def get_heading(self,obj):
+    #     if not obj.indexer_id:
+    #         return ''
+    #     column_name = obj.indexer.columnheading_set.only('name').first()
+    #     if not column_name:
+    #         return ''
+    #     return column_name.name
 
 class IndexerWidgetSerializer(serializers.ModelSerializer):
     """
@@ -57,7 +57,7 @@ class IndexerWidgetSerializer(serializers.ModelSerializer):
         style={'template': 'console/fields/input.html',
         'attrs': {'data-parsley-trigger': 'keyup', 'data-parsley-length': [4, 255]}})
     column_heading = ColumnHeadingSerializer(label='ColumnHeading')
-    index_column = IndexColumnSerializer(label='Index Column')
+    index_column = IndexColumnSerializer(label='IndexColumn')
     class Meta:
         model = models.IndexerWidget
         fields = ('id', 'heading', 'column_heading', 'index_column', 'last_modified_by', 'last_modified_on')
@@ -163,10 +163,14 @@ class WidgetSerializer(serializers.ModelSerializer):
         style={'template': 'console/fields/checkbox.html', 'attrs': {}})
     iw = serializers.PrimaryKeyRelatedField(allow_null=True, label='Indexer Widget', queryset=models.IndexerWidget.objects.all(), required=False,
         style={'template': 'console/fields/select.html', 'empty_text': 'Select associated Indexer Widget', 'attrs': {}})
+
+    # iw =IndexerWidgetSerializer()
+
     class Meta:
         model = models.Widget
         fields = '__all__'
         read_only_fields = ('id', 'created_by', 'created_on', 'last_modified_by', 'last_modified_on')
+        
 
 
 class DocumentSerializer(serializers.ModelSerializer):
@@ -220,10 +224,11 @@ class PageSerializer(serializers.ModelSerializer):
         style={'template': 'console/fields/input.html',
         'attrs': {'data-parsley-length': [4, 255]}})
     document = DocumentSerializer(label='Document', required=False)
+    # widgets = WidgetSerializer(many=True)
 
     class Meta:
         model = models.Page
-        fields = ('id', 'name', 'parent', 'slug', 'widgets', 'total_view', 'total_download', 'total_share', 'is_active', 'show_menu', 'allow_comment',
+        fields = ('id', 'name', 'parent', 'slug', 'total_view', 'total_download', 'total_share', 'is_active', 'show_menu', 'allow_comment', 'widgets',
             'comment_count', 'publish_date', 'expiry_date', 'created_by', 'created_on', 'last_modified_by', 'last_modified_on', 'title', 'url', 'meta_desc', 'meta_keywords', 'heading', 'document')
         read_only_fields = ('id', 'slug', 'total_view', 'total_download', 'total_share', 'comment_count', 'created_by', 'created_on', 'last_modified_by', 'last_modified_on')
 
@@ -263,6 +268,8 @@ class PageWidgetSerializer(serializers.ModelSerializer):
     """
         Serializer for `PageWidget` model
     """
+    widget = WidgetSerializer()
+
     class Meta:
         model = models.PageWidget
         fields = '__all__'

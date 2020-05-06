@@ -4,6 +4,9 @@ from cms.api.core.mixins import IndexerWidgetViewMixin, ColumnHeadingViewMixin, 
 	PageViewMixin, PageWidgetViewMixin, DocumentViewMixin, CommentViewMixin, PageCounterViewMixin
 
 
+from cms.models import PageWidget,Widget
+
+
 # TODO: Will MODIFY these viewsets AFTERWARDS to limit the end point required.
 class IndexerWidgetViewSet(IndexerWidgetViewMixin, ModelViewSet):
     """
@@ -37,6 +40,13 @@ class WidgetViewSet(WidgetViewMixin, ReadOnlyModelViewSet):
     authentication_classes = ()
     permission_classes = ()
 
+    def get_queryset(self):
+        filter_dict = {}
+        if self.request.GET.get('id'):
+            filter_dict.update({'id__in': map(int,self.request.GET.get('id').split(','))})
+
+        return Widget.objects.filter(**filter_dict)
+
 class PageViewSet(PageViewMixin, ModelViewSet):
     """
         CRUD Viewset for `Page` model.
@@ -51,6 +61,15 @@ class PageWidgetViewSet(PageWidgetViewMixin, ReadOnlyModelViewSet):
     """
     authentication_classes = ()
     permission_classes = ()
+
+    def get_queryset(self):
+        page_id = self.request.GET.get('page_id').split(',')
+        filter_dict ={}
+        if page_id:
+            filter_dict.update({'page__in':page_id})
+
+        return PageWidget.objects.filter(**filter_dict).order_by('ranking')
+
 
 
 class DocumentViewSet(DocumentViewMixin, ReadOnlyModelViewSet):
