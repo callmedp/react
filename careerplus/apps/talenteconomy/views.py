@@ -23,6 +23,7 @@ from django.conf import settings
 from meta.views import Meta
 from blog.mixins import BlogMixin, PaginationMixin
 from blog.models import Category, Blog, Tag, Author
+from shop.models import ProductSkill, ProductCategory, Category
 
 from geolocation.models import Country
 
@@ -639,6 +640,7 @@ class TEBlogDetailView(DetailView, BlogMixin):
         })
 
         # popular courses..
+        # import ipdb;ipdb.set_trace();
         skills = blog.tags.filter(is_active=True)
 
         skills = [sk.name for sk in skills]
@@ -646,7 +648,17 @@ class TEBlogDetailView(DetailView, BlogMixin):
         popular_courses = self.get_product(
             p_cat.slug, skills)
 
-        page_url = '{}://{}/search/results/?q={}'.format(settings.SITE_PROTOCOL, settings.SITE_DOMAIN,p_cat.slug)
+        if len(popular_courses):
+            try:
+                category_id = ProductCategory.objects.filter(product_id=popular_courses[0].get('pid')).first().category_id
+                category_url = Category.objects.filter(pk=category_id).values_list('url', flat=True).first()
+            except:
+                category_url = '/'
+        else:
+            category_url = '/'
+
+        # page_url = '{}://{}/search/results/?q={}'.format(settings.SITE_PROTOCOL, settings.SITE_DOMAIN, p_cat.slug)
+        page_url = '{}://{}{}'.format(settings.SITE_PROTOCOL, settings.SITE_DOMAIN, category_url)
         context.update({
             "popular_courses": popular_courses,
             "show_chat": True,
