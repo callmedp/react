@@ -640,7 +640,6 @@ class TEBlogDetailView(DetailView, BlogMixin):
         })
 
         # popular courses..
-        # import ipdb;ipdb.set_trace();
         skills = blog.tags.filter(is_active=True)
 
         skills = [sk.name for sk in skills]
@@ -650,8 +649,9 @@ class TEBlogDetailView(DetailView, BlogMixin):
 
         if len(popular_courses):
             try:
-                category_id = ProductCategory.objects.filter(product_id=popular_courses[0].get('pid')).first().category_id
-                category_url = Category.objects.filter(pk=category_id).values_list('url', flat=True).first()
+                pd_id = popular_courses[0].get('pid')
+                category_id = ProductCategory.objects.filter(product_id = pd_id).first().category_id
+                category_url = Category.objects.filter(pk = category_id).values_list('url', flat=True).first()
             except:
                 category_url = '/'
         else:
