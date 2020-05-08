@@ -62,7 +62,7 @@ from django.db.models import Prefetch
 
 class PageViewMixin(object):
 
-    queryset = models.Page.objects.prefetch_related('widgets','widgets__related_article').all()
+    queryset = models.Page.objects.all()
     serializer_class = serializers.PageSerializer
     filter_backends = (SearchFilter, OrderingFilter, DjangoFilterBackend)
     filter_fields = ('created_by', 'is_active', 'allow_comment', 'publish_date', 'expiry_date')

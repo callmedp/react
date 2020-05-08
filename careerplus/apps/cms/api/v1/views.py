@@ -45,7 +45,7 @@ class WidgetViewSet(WidgetViewMixin, ReadOnlyModelViewSet):
         if self.request.GET.get('id'):
             filter_dict.update({'id__in': map(int,self.request.GET.get('id').split(','))})
 
-        return Widget.objects.filter(**filter_dict)
+        return Widget.objects.prefetch_related('related_article','iw').filter(**filter_dict)
 
 class PageViewSet(PageViewMixin, ModelViewSet):
     """
@@ -63,12 +63,14 @@ class PageWidgetViewSet(PageWidgetViewMixin, ReadOnlyModelViewSet):
     permission_classes = ()
 
     def get_queryset(self):
-        page_id = self.request.GET.get('page_id').split(',')
-        filter_dict ={}
+        page_id = self.request.GET.get('page_id')
+        filter_dict = {}
         if page_id:
-            filter_dict.update({'page__in':page_id})
+            filter_dict.update({'page__in': map(int,self.request.GET.get('page_id','').split(','))})
 
-        return PageWidget.objects.filter(**filter_dict).order_by('ranking')
+        return PageWidget.objects.prefetch_related('widget','page','widget__related_article',
+                                                   'widget__iw').filter(
+            **filter_dict).order_by('ranking')
 
 
 
