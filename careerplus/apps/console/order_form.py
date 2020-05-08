@@ -290,7 +290,7 @@ class OIFilterForm(forms.Form):
             )
 
             self.fields['day_choice'].choices = (
-                (-1, 'All'), (1, 'Today'), (2, 'Delayed'), (3, 'Tommorrow'), (4, 'Today\' On time')
+                (-1, 'All'), (1, 'Today'), (2, 'Delayed'), (3, 'Tomorrow'), (4, 'Today\' On time'), (5, 'Yesterday'), (6, 'Day after tomorrow')
             )
         self.fields['oi_status'].choices = NEW_OI_OPS_STATUS
 
