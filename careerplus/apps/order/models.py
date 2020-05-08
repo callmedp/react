@@ -45,11 +45,12 @@ from shop.choices import S_ATTR_DICT, DAYS_CHOICES_DICT
 from coupon.models import Coupon
 
 
-#Global Constants
+# Global Constants
 CURRENCY_SYMBOL_CODE_MAPPING = {0:"INR",1:"USD",2:"AED",3:"GBP"}
 
+
 class GazettedHoliday(models.Model):
-    holiday_date = models.DateField(primary_key =True)
+    holiday_date = models.DateField(unique=True)
     holiday_type = models.CharField(max_length=25, null=True, blank=True)
 
     def __str__(self):
@@ -64,6 +65,7 @@ class GazettedHoliday(models.Model):
         for day in dates:
             holidays.append(day.strftime('%d-%m-%Y'))
         return holidays
+
 
 class Order(AbstractAutoDate):
     co_id = models.IntegerField(
