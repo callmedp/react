@@ -47,8 +47,8 @@ class Summary extends Component {
     }
 
     async updateInfoBeforeLoss() {
-        let {initialValues, formData: {summary: {values}}, personalInfo} = this.props;
-        if (!this.state.submit && JSON.stringify(initialValues) !== JSON.stringify(values)) await this.props.onSubmit(values, personalInfo)
+        let {formData: {summary: {values}}, personalInfo} = this.props;
+        if (!this.state.submit && JSON.stringify(this.state.initVal) !== JSON.stringify(values)) await this.props.onSubmit(values, personalInfo)
     }
 
     async handleSubmit(values, entityLink) {
@@ -96,13 +96,14 @@ class Summary extends Component {
     }
 
     closeModal(suggestions) {
-        const {extra_info, upateSummaryWithSuggestion} = this.props
+        const {initialValues, extra_info, upateSummaryWithSuggestion} = this.props
         if (Object.keys(suggestions).length) {
             let suggestionsList = (extra_info ? extra_info + "\n" : '');
             Object.keys(suggestions).map((el, index) => {
                 suggestionsList += suggestions[el] + (index + 1 === Object.keys(suggestions).length ? "" : '\n')
                 return el;
             })
+            this.setState({initVal : initialValues })
             upateSummaryWithSuggestion(suggestionsList)
         }
         this.setState({modal_status: false})
