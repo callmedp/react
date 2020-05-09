@@ -4,10 +4,10 @@
   <marquee> {{ MAINTENANCE_MESSAGE }} </marquee>
   {% endif %}
   <div class="popup-box alert alert-dismissible">
-      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+      <button type="button" class="close" id = "sticky_close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
-      Limited time offer- <strong>upto 20% off!</strong>   |   Ends in 12 hours- <a href="="#" data-toggle="modal" data-target="#offerModal">Enroll Now!</a>
+      Limited time offer- <strong>upto 20% off!</strong>   |   Ends in <span id = 'sticky_timer'></span> - <a href="="#" id = 'offer-timer' data-toggle="modal" data-target="#offerModal">Enroll Now!</a>
   </div>
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
@@ -302,7 +302,7 @@
             <a class="" href="/courses/management/general-management/102/">General Management</a>
           </li>
         </ul>
-        <span class="pull-right mt-10"><i class="offer-icon"></i></span>
+        <span class="pull-right mt-10" data-toggle="modal" data-target="#offerModal"><i class="offer-icon"></i></span>
       </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
   </nav>
@@ -328,7 +328,7 @@
       </div>
       <div class="modal-body">
         <div class="col-sm-6">
-          <form>
+          <form id='pop_up_form'>
                 <div class="form-group">
                     <input type="text" class="form-control" id="name" name="name" placeholder=" "
                         value="" aria-required="true" aria-invalid="true">
@@ -359,37 +359,37 @@
                   <ul>
                     <li>
                       <label>
-                        <input type="checkbox"> Big data
+                        <input name = "course" value = "Big data" type="checkbox"> Big data
                       </label>
                     </li>
                     <li>
                       <label>
-                        <input type="checkbox"> Six Sigma
+                        <input name = "course" value = "Six Sigma" type="checkbox"> Six Sigma
                       </label>
                     </li>
                     <li>
                       <label>
-                        <input type="checkbox"> Cloud computing
+                        <input name = "course" value = "Cloud computing" type="checkbox"> Cloud computing
                       </label>
                     </li>
                     <li>
                       <label>
-                        <input type="checkbox"> Digital marketing
+                        <input name = "course" value = "Digital marketing" type="checkbox"> Digital marketing
                       </label>
                     </li>
                     <li>
                       <label>
-                        <input type="checkbox"> Data Science
+                        <input name = "course" value = "Data Science" type="checkbox"> Data Science
                       </label>
                     </li>
                     <li>
                       <label>
-                        <input type="checkbox"> Others
+                        <input name = "course" value = "Others" type="checkbox"> Others
                       </label>
                     </li>
                   </ul>
                 </div>
-                <button type="submit" class="btn btn-block" role="button" data-target="#thanksModal" data-dismiss="modal">Avail offer now!</button>
+                <button type="submit" id = "avail_offer_id" class="btn btn-block" role="button" data-target="#thanksModal" data-dismiss="modal">Avail offer now!</button>
                 <span class="tc">*T&C applied, valid only on select courses</span>
             </form>
         </div>
@@ -400,10 +400,10 @@
               <div class="offer-ending">
                 <p>Offer ending in</p>
                 <div class="d-flex">
-                  <span class="days">00</span>
-                  <span class="hours">11</span>
-                  <span class="min">52</span>
-                  <span class="sec">52</span>
+                  <span class="days"></span>
+                  <span class="hours"></span>
+                  <span class="min"></span>
+                  <span class="sec"></span>
                 </div>
               </div>
             </div>
