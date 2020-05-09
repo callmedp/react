@@ -23,6 +23,7 @@ from django.conf import settings
 from meta.views import Meta
 from blog.mixins import BlogMixin, PaginationMixin
 from blog.models import Category, Blog, Tag, Author
+
 from geolocation.models import Country
 
 
@@ -128,8 +129,8 @@ class TalentEconomyLandingView(TemplateView, BlogMixin):
 
     def get_breadcrumb_data(self):
         breadcrumbs = []
-        breadcrumbs.append({"url": '/', "name": "Home"})
-        breadcrumbs.append({"url": None, "name": "Talent Economy"})
+        breadcrumbs.append({"url": '/', "name": "Home", "position": "1"})
+        breadcrumbs.append({"url": None, "name": "Talent Economy", "position": "2"})
         data = {"breadcrumbs": breadcrumbs}
         return data
 
@@ -271,9 +272,9 @@ class TETagArticleView(TemplateView, BlogMixin):
 
     def get_breadcrumb_data(self):
         breadcrumbs = []
-        breadcrumbs.append({"url": '/', "name": "Home"})
-        breadcrumbs.append({"url": reverse('talent:talent-landing'), "name": "Talent Economy"})
-        breadcrumbs.append({"url": None, "name": self.tag_obj.name})
+        breadcrumbs.append({"url": '/', "name": "Home", "position": "1"})
+        breadcrumbs.append({"url": reverse('talent:talent-landing'), "name": "Talent Economy", "position": "2"})
+        breadcrumbs.append({"url": None, "name": self.tag_obj.name, "position": "3"})
         data = {"breadcrumbs": breadcrumbs}
         return data
 
@@ -449,9 +450,9 @@ class TEBlogCategoryListView(TemplateView, BlogMixin):
 
     def get_breadcrumb_data(self):
         breadcrumbs = []
-        breadcrumbs.append({"url": '/', "name": "Home"})
-        breadcrumbs.append({"url": reverse('talent:talent-landing'), "name": "Talent Economy"})
-        breadcrumbs.append({"url": None, "name": self.cat_obj.name})
+        breadcrumbs.append({"url": '/', "name": "Home", "position": "1"})
+        breadcrumbs.append({"url": reverse('talent:talent-landing'), "name": "Talent Economy", "position": "2"})
+        breadcrumbs.append({"url": None, "name": self.cat_obj.name, "position": "3"})
         data = {"breadcrumbs": breadcrumbs}
         return data
 
@@ -644,9 +645,12 @@ class TEBlogDetailView(DetailView, BlogMixin):
 
         popular_courses = self.get_product(
             p_cat.slug, skills)
+
+        page_url = '{}://{}/search/results/?q={}'.format(settings.SITE_PROTOCOL, settings.SITE_DOMAIN,p_cat.slug)
         context.update({
             "popular_courses": popular_courses,
-            "show_chat": True
+            "show_chat": True,
+            "page_url": page_url
         })
 
         context.update(self.get_meta_details())
@@ -654,15 +658,15 @@ class TEBlogDetailView(DetailView, BlogMixin):
 
     def get_breadcrumb_data(self):
         breadcrumbs = []
-        breadcrumbs.append({"url": '/', "name": "Home"})
+        breadcrumbs.append({"url": '/', "name": "Home", "position": "1"})
         breadcrumbs.append({
-            "url": reverse('talent:talent-landing'), "name": "Talent Economy"})
+            "url": reverse('talent:talent-landing'), "name": "Talent Economy", "position": "2"})
         breadcrumbs.append({
             "url": reverse(
                 'talent:te-articles-by-category',
                 kwargs={'slug': self.object.p_cat.slug}),
-            "name": self.object.p_cat.name})
-        breadcrumbs.append({"url": None, "name": self.object.display_name})
+            "name": self.object.p_cat.name, "position": "3"})
+        breadcrumbs.append({"url": None, "name": self.object.display_name, "position": "4"})
         data = {"breadcrumbs": breadcrumbs}
         return data
 
@@ -735,10 +739,10 @@ class AuthorListingView(TemplateView):
 
     def get_breadcrumb_data(self):
         breadcrumbs = []
-        breadcrumbs.append({"url": '/', "name": "Home"})
+        breadcrumbs.append({"url": '/', "name": "Home", "position": "1"})
         breadcrumbs.append({
-            "url": reverse('talent:talent-landing'), "name": "Talent Economy"})
-        breadcrumbs.append({"url": None, "name": "Authors"})
+            "url": reverse('talent:talent-landing'), "name": "Talent Economy", "position": "2"})
+        breadcrumbs.append({"url": None, "name": "Authors", "position": "3"})
         data = {"breadcrumbs": breadcrumbs}
         return data
 
@@ -840,12 +844,12 @@ class AuthorDetailView(DetailView):
 
     def get_breadcrumb_data(self):
         breadcrumbs = []
-        breadcrumbs.append({"url": '/', "name": "Home"})
+        breadcrumbs.append({"url": '/', "name": "Home", "position": "1"})
         breadcrumbs.append({
-            "url": reverse('talent:talent-landing'), "name": "Talent Economy"})
+            "url": reverse('talent:talent-landing'), "name": "Talent Economy", "position": "2"})
         breadcrumbs.append({
-            "url": reverse('talent:authors-listing'), "name": "Authors"})
-        breadcrumbs.append({"url": None, "name": self.object.name})
+            "url": reverse('talent:authors-listing'), "name": "Authors", "position": "3"})
+        breadcrumbs.append({"url": None, "name": self.object.name, "position": "4"})
         data = {"breadcrumbs": breadcrumbs}
         return data
 

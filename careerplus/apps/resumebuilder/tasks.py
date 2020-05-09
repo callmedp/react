@@ -1,5 +1,7 @@
 # python imports
-import os, json, sys
+import os
+import json
+import sys
 from io import BytesIO
 from datetime import date
 import logging
@@ -16,10 +18,10 @@ from .constants import ENTITY_LIST
 from core.library.gcloud.custom_cloud_storage import GCPResumeBuilderStorage
 # third party imports
 import zipfile
-import imgkit, pdfkit
+import imgkit
+import pdfkit
 from PIL import Image
 from celery.decorators import task
-
 
 
 @task
@@ -34,7 +36,8 @@ def generate_image_for_resume(candidate_id, template_no):
 
     thumbnail_sizes = [(151, 249), (144, 149)]
 
-    current_config = candidate.ordercustomisation_set.filter(template_no=template_no).first()
+    current_config = candidate.ordercustomisation_set.filter(
+        template_no=template_no).first()
     entity_position = current_config.entity_position_eval
     entity_preference = eval(candidate.entity_preference_data)
     extracurricular = candidate.extracurricular_list
@@ -46,7 +49,8 @@ def generate_image_for_resume(candidate_id, template_no):
     projects = candidate.candidateproject_set.all().order_by('order')
     certifications = candidate.candidatecertification_set.all().order_by('order')
     languages = candidate.candidatelanguage_set.all().order_by('order')
-    current_exp = experience.filter(is_working=True).order_by('-start_date').first()
+    current_exp = experience.filter(
+        is_working=True).order_by('-start_date').first()
 
     entity_id_count_mapping = {
         2: bool(education.count()),
@@ -82,7 +86,7 @@ def generate_image_for_resume(candidate_id, template_no):
                 latest_experience = i.job_profile
 
     template_id_suffix_mapping = {1: "pdf", 4: "pdf"}
-    template = get_template('resume{}_{}.html'.format( \
+    template = get_template('resume{}_{}.html'.format(
         template_no, template_id_suffix_mapping.get(int(template_no), "preview")))
 
     rendered_template = template.render(
@@ -98,20 +102,24 @@ def generate_image_for_resume(candidate_id, template_no):
     rendered_template = rendered_template.decode()
     # rendered_template = rendered_template.replace("\n", "")
 
-    file = imgkit.from_string(rendered_template, False, {'quiet': '', 'quality': '80', 'format': 'JPG'})
+    file = imgkit.from_string(rendered_template, False, {
+                              'quiet': '', 'quality': '80', 'format': 'JPG'})
     in_mem_file = BytesIO(file)
     in_mem_file_to_upload = BytesIO()
     img = Image.open(in_mem_file)
     img = remove_transparency(img)
     img.save(in_mem_file_to_upload, "JPEG", quality=80)
-    store_resume_file(str(candidate.id) + "/images", file_name, in_mem_file_to_upload.getvalue())
+    store_resume_file(str(candidate.id) + "/images",
+                      file_name, in_mem_file_to_upload.getvalue())
 
     for tsize in thumbnail_sizes:
-        tname = "resumetemplate-{}-{}x{}.jpg".format(template_no, tsize[0], tsize[1])
+        tname = "resumetemplate-{}-{}x{}.jpg".format(
+            template_no, tsize[0], tsize[1])
         in_mem_file_to_upload = BytesIO()
         img.thumbnail(tsize, Image.ANTIALIAS)
         img.save(in_mem_file_to_upload, "JPEG", quality=80)
-        store_resume_file(str(candidate.id) + "/images", tname, in_mem_file_to_upload.getvalue())
+        store_resume_file(str(candidate.id) + "/images",
+                          tname, in_mem_file_to_upload.getvalue())
 
 
 def remove_transparency(im, bg_colour=(255, 255, 255)):
@@ -129,9 +137,11 @@ def remove_transparency(im, bg_colour=(255, 255, 255)):
 def update_customisations_for_all_templates(candidate_id):
     from resumebuilder.models import Candidate, OrderCustomisation
     candidate_obj = Candidate.objects.get(id=candidate_id)
-    customisation_objects = OrderCustomisation.objects.filter(candidate_id=candidate_id)
+    customisation_objects = OrderCustomisation.objects.filter(
+        candidate_id=candidate_id)
     entity_id_data_mapping = candidate_obj.entity_id_data_mapping
-    entity_id_data_mapping[11] = {'active': True, 'entity_id': 11, 'entity_text': "Interest", 'priority': 11}
+    entity_id_data_mapping[11] = {
+        'active': True, 'entity_id': 11, 'entity_text': "Interest", 'priority': 11}
 
     for obj in customisation_objects:
         existing_data = obj.entity_position_eval
@@ -163,19 +173,23 @@ def zip_all_resume_pdfs(order_id, data):
     zf = zipfile.ZipFile(zip_stream, "w")
 
     for i in range(1, 6):
-        current_file = "{}_{}-{}.{}".format(order.first_name, order.last_name, i, "pdf")
-        pdf_file_path = "{}/{}/pdf/{}.pdf".format(settings.RESUME_TEMPLATE_DIR, candidate.id, i)
+        current_file = "{}_{}-{}.{}".format(order.first_name,
+                                            order.last_name, i, "pdf")
+        pdf_file_path = "{}/{}/pdf/{}.pdf".format(
+            settings.RESUME_TEMPLATE_DIR, candidate.id, i)
         try:
             file_obj = GCPResumeBuilderStorage().open(pdf_file_path)
         except:
-            logging.getLogger('error_log').error("Unable to open file - {}".format(pdf_file_path))
+            logging.getLogger('error_log').error(
+                "Unable to open file - {}".format(pdf_file_path))
 
         if not settings.IS_GCP:
             pdf_file_path = "{}/{}".format(settings.MEDIA_ROOT, pdf_file_path)
             try:
                 file_obj = open(pdf_file_path, "rb")
             except:
-                logging.getLogger('error_log').error("Unable to open file - {}".format(pdf_file_path))
+                logging.getLogger('error_log').error(
+                    "Unable to open file - {}".format(pdf_file_path))
                 continue
 
         open(current_file, 'wb').write(file_obj.read())
@@ -183,11 +197,12 @@ def zip_all_resume_pdfs(order_id, data):
         os.unlink(current_file)
     zf.close()
     store_resume_file(file_dir, file_name, zip_stream.getvalue())
-    send_resume_in_mail_resume_builder([file_name, zip_stream.getvalue()], data)
+    send_resume_in_mail_resume_builder(
+        [file_name, zip_stream.getvalue()], data)
 
 @task
 def generate_and_upload_resume_pdf(data):
-    from resumebuilder.models import Candidate,CandidateResumeOperations
+    from resumebuilder.models import Candidate, CandidateResumeOperations
     from order.models import Order
     from resumebuilder.utils import store_resume_file
     from order.tasks import send_resume_in_mail_resume_builder
@@ -196,8 +211,17 @@ def generate_and_upload_resume_pdf(data):
     order = Order.objects.filter(id=data.get('order_id')).first()
     template_no = data.get('template_no')
     send_mail = data.get('send_mail')
-    is_free_trial = data.get('is_free_trial',False)
-    is_combo = data.get('is_combo',False)
+    is_free_trial = data.get('is_free_trial', False)
+    is_combo = data.get('is_combo', False)
+
+    #  check if order contains resume builder subscription
+    def order_contains_resumebuilder_subscription():
+        items = order.orderitems.all()
+        return any([item.product.sub_type_flow == 1701 for item in items])
+
+    def order_contains_expert_assistance():
+        items = order.orderitems.all()
+        return any([item.product.sub_type_flow == 101 for item in items])
 
     # Render PDF for context
     def generate_file(context_dict={}, template_src=None, file_type='pdf'):
@@ -205,7 +229,8 @@ def generate_and_upload_resume_pdf(data):
             return None
 
         html_template = get_template(template_src)
-        rendered_html = html_template.render(context_dict).encode(encoding='UTF-8')
+        rendered_html = html_template.render(
+            context_dict).encode(encoding='UTF-8')
         rendered_html = rendered_html.decode()
 
         if file_type == 'pdf':
@@ -231,16 +256,17 @@ def generate_and_upload_resume_pdf(data):
 
     # Prepare Context for PDF generation
     content_type = "pdf"
-    candidate_id = order.candidate_id if not is_free_trial else data.get('candidate_id','')
+    candidate_id = order.candidate_id if not is_free_trial else data.get(
+        'candidate_id', '')
 
     if not candidate_id:
         logging.getLogger('error_log').error("No candidate id.")
         return
-    
+
     template_id = int(template_no)
     candidate = Candidate.objects.filter(candidate_id=candidate_id).first()
-    first_save = False 
-    
+    first_save = False
+
     if not candidate and not is_free_trial:
         candidate = Candidate.objects.create(
             email=order.email,
@@ -248,16 +274,17 @@ def generate_and_upload_resume_pdf(data):
             candidate_id=candidate_id,
             extracurricular="",
             entity_preference_data=str(ENTITY_LIST),
-            resume_generated= False,
-            selected_template=1
+            resume_generated=not order_contains_expert_assistance(),
+            selected_template=1,
+            active_subscription=order_contains_resumebuilder_subscription()
         )
         first_save = True
         candidate.save()
     elif not candidate and is_free_trial:
-        logging.getLogger('error_log').error("No candidate for this trial resume download.")
+        logging.getLogger('error_log').error(
+            "No candidate for this trial resume download.")
         return
-        
-   
+
     file_dir = "{}/{}".format(candidate.id, content_type)
     if is_free_trial:
         file_name = "free-trial-{}.{}".format(template_no, content_type)
@@ -274,8 +301,10 @@ def generate_and_upload_resume_pdf(data):
     projects = candidate.candidateproject_set.all().order_by('order')
     certifications = candidate.candidatecertification_set.all().order_by('order')
     languages = candidate.candidatelanguage_set.all().order_by('order')
-    current_exp = experience.filter(is_working=True).order_by('-start_date').first()
-    current_config = candidate.ordercustomisation_set.filter(template_no=template_id).first()
+    current_exp = experience.filter(
+        is_working=True).order_by('-start_date').first()
+    current_config = candidate.ordercustomisation_set.filter(
+        template_no=template_id).first()
     entity_position = current_config.entity_position_eval
 
     entity_id_count_mapping = {
@@ -310,7 +339,8 @@ def generate_and_upload_resume_pdf(data):
                 latest_experience = exp.job_profile
 
     template_id_suffix_mapping = {1: "pdf", 4: "pdf"}
-    template_src = 'resume{}_{}.html'.format(template_id, template_id_suffix_mapping.get(template_id, "preview"))
+    template_src = 'resume{}_{}.html'.format(
+        template_id, template_id_suffix_mapping.get(template_id, "preview"))
 
     context_dict = {'candidate': candidate, 'education': education, 'experience': experience, 'skills': skills,
                     'achievements': achievements, 'references': references, 'projects': projects,
@@ -319,7 +349,8 @@ def generate_and_upload_resume_pdf(data):
                     'preference_list': entity_preference, 'current_config': current_config,
                     'entity_position': updated_entity_position, "width": 93.7
                     }
-    pdf_file = generate_file(context_dict=context_dict, template_src=template_src, file_type='pdf')
+    pdf_file = generate_file(context_dict=context_dict,
+                             template_src=template_src, file_type='pdf')
 
     for i in range(5):
         try:
@@ -332,8 +363,9 @@ def generate_and_upload_resume_pdf(data):
         op_status = 1  # for free resume creation operation status
         candidate.resume_creation_count += 1
         candidate.save()
-        logging.getLogger('info_log').info("Trial part finished and incremented download count")
-    else :
+        logging.getLogger('info_log').info(
+            "Trial part finished and incremented download count")
+    else:
         op_status = 2  # paid resume creation operation status
 
     data = {}
@@ -350,10 +382,12 @@ def generate_and_upload_resume_pdf(data):
     if send_mail:
         send_resume_in_mail_resume_builder(['resume', pdf_file], data)
 
-    CandidateResumeOperations.objects.create(candidate=candidate,order=order,op_status=op_status)
-    logging.getLogger('info_log').info("RESUME BUILDER: File creation operation created for with op_status {}.".format(op_status))
+    CandidateResumeOperations.objects.create(
+        candidate=candidate, order=order, op_status=op_status)
+    logging.getLogger('info_log').info(
+        "RESUME BUILDER: File creation operation created for with op_status {}.".format(op_status))
 
-    # uploading resume on the shine 
+    # uploading resume on the shine
     if template_id == int(candidate.selected_template or 0) and candidate.upload_resume and not first_save:
         info = {
             'candidate_id': candidate_id,
@@ -366,8 +400,11 @@ def generate_and_upload_resume_pdf(data):
         resume_files = {
             'resume_file': pdf_file
         }
-        response = UploadResumeToShine().sync_candidate_resume_to_shine(candidate_id=candidate_id,files=resume_files, data=info)
+        response = UploadResumeToShine().sync_candidate_resume_to_shine(
+            candidate_id=candidate_id, files=resume_files, data=info)
         if response:
-            logging.getLogger('info_log').info("RESUME BUILDER: Upload to shine successful.")
+            logging.getLogger('info_log').info(
+                "RESUME BUILDER: Upload to shine successful.")
             return
-        logging.getLogger('info_log').info("RESUME BUILDER: Upload to shine failed.")
+        logging.getLogger('info_log').info(
+            "RESUME BUILDER: Upload to shine failed.")

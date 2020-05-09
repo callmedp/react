@@ -1,0 +1,35 @@
+// $static-url: get('staticUrl');
+
+// $path: $static-url + "score-checker/images";
+
+// @import '../../../../styles/_path.scss';
+@import '../../../../styles/library';
+.features {
+    &::before {
+        content: '';
+        display: block;
+        background-image: url('#{$path}/curve.png');
+        background-repeat:  no-repeat;
+        padding-top: 45px;
+        background-size: contain;
+        position: relative;
+        top: -27px;
+    }
+
+    &__lists {
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: -35px;
+    }   
+
+    &__item {
+        max-width: 50%;
+        flex: 0 0 50%;
+        text-align: center;
+        text-align: center;
+        padding: 10px 16px;
+        font-size: $font-base;
+        font-weight: $font-weight-medium;
+        color: $gray-darker;
+    }
+}

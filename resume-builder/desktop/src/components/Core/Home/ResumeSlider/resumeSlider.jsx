@@ -127,10 +127,15 @@ export default class ResumeSlider extends Component {
         if (localStorage.getItem('selected_template')) {
             settings['initialSlide'] = (localStorage.getItem('selected_template') - 1)
         }
-        const { ui: { select_template_modal }, page } = this.props;
+        const { ui: { select_template_modal, modal }, page, template: { templateId, modalTemplateImage }, hideModal } = this.props;
         return (
             <Fragment>
-                <TemplateModal {...this.props} page={'home'} />
+                <TemplateModal
+                    hideModal={hideModal}
+                    templateId={templateId}
+                    modalTemplateImage={modalTemplateImage}
+                    modal={modal}
+                    page={'home'} />
                 < section
                     name="templates"
                     id="templates"
@@ -163,13 +168,12 @@ export default class ResumeSlider extends Component {
                                                 <div onClick={() => this.showZoomedImage(item)} className="zoom" />
                                             }
                                             <img
-                                                alt = "Resume-Slider"
+                                                alt="Resume-Slider"
                                                 src={`${this.staticUrl}react/assets/images/resume${item}_preview.jpg`} />
                                         </div>
                                     </div>
                                 )
                             })
-
                         }
                     </Slider>
                 </section>

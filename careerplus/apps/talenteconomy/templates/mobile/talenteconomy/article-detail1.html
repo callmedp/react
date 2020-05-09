@@ -12,6 +12,8 @@
 <meta name="twitter:title" content="{{main_article.title}}">
 <meta name="twitter:description" content="{{ main_article.get_description }}" />
 <meta name="twitter:image:src" content="{{main_article.image.url}}">
+<link href="https://fonts.googleapis.com/css?family=Montserrat:400,600,700&display=swap" rel="stylesheet">
+
     
 {%  endblock django_meta %}
 {% block canonical_url %}
@@ -62,7 +64,7 @@
 
 {% block container %}
 <div class="body-wrapper ">
-    <section class="content-box">
+    <section class="content-box  content-box-article ">
         <ul class="breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList">
           {% for bradcbs in breadcrumbs %}
             {% if bradcbs.url %}
@@ -118,7 +120,7 @@
     <div class="share-wrap">
         <ul id="share-icon">
             <!-- <li class="wp-bg"><a href="#"><span class="icon-wp"></span></a></li> -->
-            <li class="gp-bg"><a href="https://plus.google.com/share?url={{SITEDOMAIN}}{{main_article.get_absolute_url}}" id="article_share" article-slug="{{main_article.slug}}" target="_blank">><span class="icon-gp"></span></a></li>
+            <!-- <li class="gp-bg"><a href="https://plus.google.com/share?url={{SITEDOMAIN}}{{main_article.get_absolute_url}}" id="article_share" article-slug="{{main_article.slug}}" target="_blank">><span class="icon-gp"></span></a></li> -->
             <li class="tw-bg"><a href="https://www.twitter.com/share?url=https://{{SITEDOMAIN}}{{main_article.get_absolute_url}}" id="article_share" article-slug="{{main_article.slug}}" target="_blank">><span class="icon-tw"></span></a></li>
             <li class="fb-bg"><a href="https://www.facebook.com/sharer/sharer.php?u={{SITEDOMAIN}}{{main_article.get_absolute_url}}" id="article_share" article-slug="{{main_article.slug}}" target="_blank">><span class="icon-fb"></span></a></li>
             <li class="share-bg"><a href="#">{{main_article.no_shares}}<br>{% if main_article.no_shares > 1 %} Shares {% else %}Share{% endif %}</a></li>

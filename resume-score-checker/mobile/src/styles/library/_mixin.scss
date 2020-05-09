@@ -1,0 +1,200 @@
+@function extend($obj, $ext-obj) {
+    @return map-merge($obj, $ext-obj);
+  }
+  
+  @function -imp($value, $inset: !important) {
+    @return $value $inset;
+  }
+
+  @mixin appearance($value) {
+    -webkit-appearance: $value;
+    -moz-appearance: $value;
+    appearance: $value;
+  }
+  
+  @mixin bggradient-six($color1, $color2, $color3, $color4, $color5, $color6) {
+    background: -moz-linear-gradient(top, $color1 0%, $color2 11%, $color3 27%, $color4 78%, $color5 91%, $color6 100%);
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, $color1), color-stop(11%, $color2), color-stop(27%, $color3), color-stop(78%, $color4), color-stop(91%, $color5), color-stop(100%, $color6));
+    background: -webkit-linear-gradient(top, $color1 0%, $color2 11%, $color3 27%, $color4 78%, $color5 91%, $color6 100%);
+    background: -o-linear-gradient(top, $color1 0%, $color2 11%, $color3 27%, $color4 78%, $color5 91%, $color6 100%);
+    background: -ms-linear-gradient(top, $color1 0%, $color2 11%, $color3 27%, $color4 78%, $color5 91%, $color6 100%);
+    background: linear-gradient(to bottom, $color1 0%, $color2 11%, $color3 27%, $color4 78%, $color5 91%, $color6 100%);
+  }
+  
+  @mixin linear-gradient($top, $bottom, $iestart, $ieend) {
+    background: $top; /* Old browsers */
+    background: -moz-linear-gradient(top,  $top 0%, $bottom 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,$top), color-stop(100%,$bottom)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  $top 0%,$bottom 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  $top 0%,$bottom 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  $top 0%,$bottom 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  $top 0%,$bottom 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#{$iestart}', endColorstr='#{$ieend}',GradientType=0 ); /* IE6-9 */
+  }
+  
+  @mixin gradient-directional($start-color: #555, $end-color: #333, $deg: 45deg) {
+    background-repeat: repeat-x;
+    background-image: -webkit-linear-gradient($deg, $start-color, $end-color); // Safari 5.1-6, Chrome 10+
+    background-image: -o-linear-gradient($deg, $start-color, $end-color); // Opera 12
+    background-image: linear-gradient($deg, $start-color, $end-color); // Standard, IE10, Firefox 16+, Opera 12.10+, Safari 7+, Chrome 26+
+  }
+  
+  @mixin opacity($value) {
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=$value)";
+    filter: alpha(opacity=$value);
+    -khtml-opacity: $value;
+    -moz-opacity: $value;
+    opacity: $value;
+  }
+  
+  @mixin icon-details($width, $height, $position) {
+    background-position: $position;
+    width: $width;
+    height: $height;
+  }
+  
+  @mixin icon-block($width, $height, $position) {
+    @include icon-details($width, $height, $position);
+    display: block;
+  }
+  
+  @mixin icon-inblock($width, $height, $position) {
+    @include icon-details($width, $height, $position);
+    display: inline-block;
+  }
+  
+  @mixin box($width, $height, $display: null) {
+    @if $display != null { display: $display; }
+    height: $height;
+    width: $width;
+  }
+  
+  @mixin square($value, $display: null) {
+    @include box($value, $value, $display);
+  }
+  
+  @mixin size($width, $height:null, $display: null) {
+    @if $display != null { display: $display; }
+    width: $width;
+    @if $height != null { height: $height;}
+    @if $height == null { height: $width;}
+  }
+  
+  @mixin absolute-box($width, $height, $display: null) {
+    @include box($width, $height, $display);
+    position: absolute;
+  }
+  
+  @mixin absolute-square($value, $display: null) {
+    @include square($value, $display);
+    position: absolute;
+  }
+  
+  @mixin relative-box($width, $height, $display: null) {
+    @include box($width, $height, $display);
+    position: relative;
+  }
+  
+  @mixin relative-square($value, $display: null) {
+    @include square($value, $display);
+    position: relative;
+  }
+  
+  @mixin fixed-box($width, $height, $display: null) {
+    @include box($width, $height, $display);
+    position: fixed;
+  }
+  
+  @mixin fixed-square($value, $display: null) {
+    @include square($value, $display);
+    position: fixed;
+  }
+  
+  %absolute-container{
+    @include absolute-box(100%, 100%);
+  }
+  
+  @mixin margin($coordinates){
+    @if nth($coordinates, 1) != null { margin-top: nth($coordinates, 1)}
+    @if nth($coordinates, 2) != null { margin-left: nth($coordinates, 2)}
+    @if nth($coordinates, 3) != null { margin-bottom: nth($coordinates, 3)}
+    @if nth($coordinates, 4) != null { margin-right: nth($coordinates, 4)}
+  }
+  
+  @mixin position($position, $coordinates: null, $zindex: null){
+    position: $position;
+    @if $coordinates != null {
+        $offsets: (
+          top:    nth($coordinates, 1),
+          left:   nth($coordinates, 2),
+          bottom: nth($coordinates, 3),
+          right:  nth($coordinates, 4),
+        );
+         @each $offset, $value in $offsets {
+          @if _is-length($value) {
+            #{$offset}: $value;
+          }
+        }
+      }
+    @if $zindex != null { z-index: $zindex}
+  }
+  
+  @mixin transition($transition...) {
+    -webkit-transition: $transition;
+    -moz-transition: $transition;
+    -o-transition: $transition;
+    transition: $transition;
+  }
+  
+  @mixin border-radius($radius) {
+    -webkit-border-radius: $radius;
+    -moz-border-radius: $radius;
+    -ms-border-radius: $radius;
+    border-radius: $radius;
+  }
+  
+  @mixin flexbox {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flexbox;
+    display: flex;
+  }
+  
+  %flexbox { @include flexbox; }
+  
+  @mixin flex-center($flex,$vCenter,$hCenter) {
+    display: $flex;
+    justify-content: $vCenter;
+    align-items: $hCenter;
+  }
+  
+  @mixin flex($fg: 1, $fs: null, $fb: null) {
+  
+      // Set a variable to be used by box-flex properties
+    $fg-boxflex: $fg;
+  
+      // Box-Flex only supports a flex-grow value so let's grab the
+      // first item in the list and just return that.
+    @if type-of($fg) == 'list' {
+          $fg-boxflex: nth($fg, 1);
+      }
+  
+    -webkit-box-flex: $fg-boxflex;
+    -webkit-flex: $fg $fs $fb;
+    -moz-box-flex: $fg-boxflex;
+    -moz-flex: $fg $fs $fb;
+    -ms-flex: $fg $fs $fb;
+    flex: $fg $fs $fb;
+  }
+  
+  @mixin transform($transforms) {
+    -moz-transform: $transforms;
+    -o-transform: $transforms;
+    -ms-transform: $transforms;
+    -webkit-transform: $transforms;
+    transform: $transforms;
+  }
+
+  
+  

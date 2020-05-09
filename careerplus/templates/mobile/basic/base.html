@@ -3,13 +3,20 @@
 <!DOCTYPE html>
 <html lang="en" itemscope itemtype="http://www.schema.org/WebPage">
     <head>
-                        <!-- Google Tag Manager -->
+<!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
 new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
 j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-TFD6PTW');</script>
+
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-M323HB');</script>
 <!-- End Google Tag Manager -->
+
 
     <title> {% block title %}Shine Learning{% endblock title %}</title>
     {% block head %}
@@ -24,7 +31,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <link rel="canonical" href="https://{{ SITE_DOMAIN }}{{ request.path }}">
    {% endblock canonical_url %}
     {% block css_section %}
-        <!--<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">-->
         {% compress css %}
         <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/global.scss' %}" rel="stylesheet">
         <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/icons.scss' %}" rel="stylesheet">
@@ -76,9 +82,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     {% endblock GA %}
    </head>
     <body>
-    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TFD6PTW"
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-TFD6PTW"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+
+<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-M323HB"
 height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
+
         {% if IS_MAINTENANCE %}
         <marquee> {{ MAINTENANCE_MESSAGE }} </marquee>
         {% endif %}
@@ -90,6 +101,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
         {% block main_container %}
         <div class="wrapper">
+            <div class="offer" id="offer-widget">
+                <span class="close" id="close-offer"></span>
+                <p class="pb-0">
+                    Limited time offer- <strong>upto 20% off! <br/> Ends in 12 hours- </strong> 
+                    <a href="#" class="offer--link" id="enroll-now">Enroll Now!</a> 
+                </p>
+            </div>
+
             {% block header %}
             <!-- header menu Icon Starts here -->
                 <header class="w100fl">
@@ -105,6 +124,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
                    <div class="pull-right">
                         <!--a class="icon-search pull-left " href="search-listing.html">search</a-->
+                        <a class="icon-offers" href="#"></a>
                         <a class="icon-cart" href="{% url "cart:payment-summary" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
                    </div><!-- / Right side Icon ends here -->
                 </div><!-- header menu Icon ends here -->
@@ -127,12 +147,137 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 {% include 'basic/navigation.html' %}
             {% endblock navigation %}
         </div>
+
+        <div class="new-enquire offer-modal" id="open-offer"> 
+            <div class="container pt-0">
+                <span class="close" id="close-offer-modal"></span>
+                <div class="offer-modal--image">
+                    <div class="content-box">
+                        <div class="offer-modal--head">Limited time offer - <strong>upto 20% off</strong></div>
+                        <p class="pb-5">Offer ending in</p>
+                        <ul class="offer-modal__counter">
+                            <li>
+                                <span class="offer-modal__counter--box">00</span>
+                                <span class="offer-modal__counter--title">Days</span>
+                            </li>
+                           
+                            <li>
+                                <span class="offer-modal__counter--box">11</span>
+                                <span class="offer-modal__counter--title">Hours</span>
+                            </li>
+                           
+                            <li>
+                                <span class="offer-modal__counter--box">52</span>
+                                <span class="offer-modal__counter--title">Min.</span>
+                            </li>
+                           
+                            <li>
+                                <span class="offer-modal__counter--box">12</span>
+                                <span class="offer-modal__counter--title">Sec.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="new-login-form offer-modal--formBox">
+                    <p class="fs-22 semi-bold mb-10">Avail offer</p>
+                    <form id="callUsForm">
+                        <ul>
+                            <li class="form-group input-effect">
+                                <input type="text" id="name" name="name" value="{{request.session.full_name}}" 
+                                    class="form--control animation-input {% if request.session.full_name %}has-content{% endif %}" 
+                                    placeholder="">
+                                <label for="name">Name</label>
+                                <span class="error--mgs">Name</span>
+                            </li>
+                            <li class="form-group d-flex">
+                                    <div class="input-effect code">
+                                        <select name="country_code" class="form--control" id="country-code">
+                                            {% for country in country_choices %}
+                                                <option value="{{country.0}}" {% if country.0 == '91' %} selected {% endif %} >{{country.0}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="input-effect ml-auto number-w67 rel"> 
+                                        <input type="text"  name="number" value="{{request.session.mobile_no }}" id="number" 
+                                            class="form--control animation-input {% if request.session.mobile_no %}has-content{% endif %}" 
+                                            placeholder="">
+                                        <label for="mobile-id">Mobile</label>
+                                        <span class="error--mgs"></span>
+                                    </div>
+                            </li>
+
+                            <li class="form-group input-effect">
+                                <input type="email" name="email" id="email-id" value="{{request.session.email}}"   
+                                    class="form--control animation-input {% if request.session.email %}has-content{% endif %}"
+                                    aria-describedby="email-id" placeholder="" >
+                                <label for="email-id">Email id</label>
+                                <span class="error--mgs"></span>
+                            </li>
+                            <li class="fs-14 semi-bold mb-5 mt-20">Course you would be interested in</li>
+                            <li class="custom-checkbox offer-modal--checkboxes mb-25">
+                                <label for="big-data">
+                                    <input class="form-check-input" type="checkbox" id="big-data" value="option1">
+                                    <span>Big data</span>
+                                </label>
+                                
+                                <label for="six-sigma">
+                                    <input class="form-check-input" type="checkbox" id="six-sigma" value="option1">
+                                    <span>Six Sigma</span>
+                                </label>
+                                
+                                <label for="cc">
+                                    <input class="form-check-input" type="checkbox" id="cc" value="option1">
+                                    <span>Cloud computing</span>
+                                </label>
+                                
+                                <label for="dm">
+                                    <input class="form-check-input" type="checkbox" id="dm" value="option1">
+                                    <span>Digital marketing</span>
+                                </label>
+                                
+                                <label for="ds">
+                                    <input class="form-check-input" type="checkbox" id="ds" value="option1">
+                                    <span>Data Science </span>
+                                </label>
+                                
+                                <label for="others">
+                                    <input class="form-check-input" type="checkbox" id="others" value="option1">
+                                    <span>Others </span>
+                                </label>
+                            </li>
+                            <input type="hidden" name="product" value="{{category.pk}}">
+                            <input type="hidden" name="prd" value="{{category.heading}}">
+                            <input type="hidden" name="path" value="{{category.get_absolute_url}}">
+                            <li>
+                                <button class="btn btn-round btn-blue w100 semi-bold" type="submit" id="open-thanks">Avail offer now!</button>
+                            </li>
+                            <li class="fs-12 c9 text-center mt-10">*T&C applied, valid only on select courses</li>
+
+                        </ul>
+                    </form>
+                </div>
+            </div>
+        </div><!-- Offer modal -->
+        
+        <div class="new-enquire offer-modal" id="thank-modal"> 
+            <span class="close" id="close-thanks-modal"></span>
+            <div class="content-box pt-0">
+                <div class="offer-modal--thanks w-100 text-center">
+                    <img src="{% static 'shinelearn/images/mobile/common/thank-you.jpg' %}" alt="">
+                </div>
+                <p class="fs-18 semi-bold text-center mt-15">Our expert will get in <br />touch with you.</p>
+            </div>
+        </div><!-- Thank You -->
+        
+
+
+
         {% endblock main_container %}
 
     {% block js_section %}
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"> </script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.2.1/typeahead.bundle.min.js"></script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.2.1/typeahead.bundle.min.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js"></script>
         <script>
          WebFont.load({
@@ -165,37 +310,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     {% endblock js_section %}
 
-    {% block zendesk %}
-        <!--Start of Zendesk Chat Script-->
-        <script type="text/javascript">
-          window.$zopim||(function(d,s){var z=$zopim=function(c){z._.push(c)},$=z.s=
-          d.createElement(s),e=d.getElementsByTagName(s)[0];z.set=function(o){z.set.
-          _.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute("charset","utf-8");
-          $.src="https://v2.zopim.com/?5xDfzOy1OsJEYM1rLRdXyvsf3GOj6Qmb";z.t=+new Date;$.
-          type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
-
-
-          const candidateId = '{{ request.session.candidate_id}}';
-
-          if (candidateId) {
-              const full_name = '{{ request.session.full_name }}';
-              const  email ='{{ request.session.email }}';
-              const mobile_no = '{{ request.session.mobile_no }}';
-
-
-              $zopim(function () {
-                  $zopim.livechat.set({
-                      language: 'en',
-                      name: full_name ? full_name : '',
-                      email: email ? email : '',
-                      phone: mobile_no ? mobile_no : ''
-                  });
-              });
-          }
-        </script>
-
-        <!--End of Zendesk Chat Script-->
-    {% endblock zendesk %}
+    
     {% block banner_ads_bottom %}
         <!-- /1198510/ShineLearning_1x1_mobile -->
         <div id='div-gpt-ad-1509431552856-0'>
@@ -248,3 +363,36 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 </script>
 {% endblock jquery_block %}
+
+
+{% block zendesk %}
+        <!--Start of Zendesk Chat Script-->
+        <script type="text/javascript" >
+          window.$zopim||(function(d,s){var z=$zopim=function(c){z._.push(c)},$=z.s=
+          d.createElement(s),e=d.getElementsByTagName(s)[0];z.set=function(o){z.set.
+          _.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute("charset","utf-8");$.setAttribute("defer",null);
+          $.src="https://v2.zopim.com/?5xDfzOy1OsJEYM1rLRdXyvsf3GOj6Qmb";z.t=+new Date;$.
+          type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
+
+
+          const candidateId = '{{ request.session.candidate_id}}';
+
+          if (candidateId) {
+              const full_name = '{{ request.session.full_name }}';
+              const  email ='{{ request.session.email }}';
+              const mobile_no = '{{ request.session.mobile_no }}';
+
+
+              $zopim(function () {
+                  $zopim.livechat.set({
+                      language: 'en',
+                      name: full_name ? full_name : '',
+                      email: email ? email : '',
+                      phone: mobile_no ? mobile_no : ''
+                  });
+              });
+          }
+        </script>
+
+        <!--End of Zendesk Chat Script-->
+    {% endblock zendesk %}

@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import './loader.scss'
 
-export default class LoaderPage extends Component {
+export default class LoaderPage extends PureComponent {
     constructor(props) {
         super(props);
         this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/'

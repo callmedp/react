@@ -203,19 +203,20 @@
                     </div>
                 </li>
                 <li>
-                    <a href="#" class="level-control"><span class="icon-job"></span>Job Assistance Services</a>
+                    <a class="level-control"><span class="icon-job"></span>Job Assistance Services</a>
                     <div class="level-one">
-                        <a href="#" class="backthis" data-index="0"><i class="icon-back pull-left"></i> Job Assistance Services</a>
+                        <a class="backthis" data-index="0"><i class="icon-back pull-left"></i> Job Assistance Services</a>
                         <ul>
                             <li><a href="/services/resume-writing/63/">Resume Writing</a></li>
-                            <li><a href="/services/international-resume-2/entry-level-freshers-5/pd-2553">International Resume</a></li>
-                            <li><a href="/services/visual-resume/entry-level-freshers-4/pd-2052">Visual Resume</a></li>
+                            <li><a href="/services/resume-services/entry-level-freshers-4/pd-2553">International Resume</a></li>
+                            <li><a href="/services/resume-services/entry-level-freshers/pd-2052">Visual Resume</a></li>
                             <li><a href="{{ SITE_PROTOCOL }}://{{SITE_DOMAIN}}/services/professional-service/jobs-on-the-move-3/pd-3411">Jobs On The Move</a></li>
                             <li><a href="/services/linkedin-profile/180/">LinkedIn Profile</a></li>
                             <li><a href="/services/recruiter-connect/featured-profile-10/pd-1939">Featured Profile</a></li>
-                              <li><a href="/services/background-verification-2/employment-verification/pd-2618">Background Verification Services</a></li>
-                            <li><a href="/services/interview-preparation-3/job-interview-coaching-by-sarabjeet-sachar/pd-1284">Interview Preparation</a></li>
+                              <!-- <li><a href="/services/background-verification-2/employment-verification/pd-2618">Background Verification Services</a></li>
+                            <li><a href="/services/interview-preparation-3/job-interview-coaching-by-sarabjeet-sachar/pd-1284">Interview Preparation</a></li> -->
                             <li><a href="/services/recruiter-connect/application-highlighter-3/pd-4117">Application Highlighter</a></li>
+                            <li><a class="dropdown-item" href="/resume-score-checker/">Resume Score Checker</a></li>
 
                         </ul>
                     </div>
@@ -264,6 +265,7 @@
 <script type="text/javascript">
   var productUrlSet = {{ product_url_set|safe|default:"[]"}} ;
   var categoryUrlSet = {{ category_url_set|safe }}
+  var courseUrlSet = {{ course_url_set|safe }}
 
     function clearLocalStorage(){
         localStorage.clear();

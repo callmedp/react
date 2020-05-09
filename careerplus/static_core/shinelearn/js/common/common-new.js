@@ -74,6 +74,14 @@ const attachTypeaheadElementDom = (el) =>{
             }
         },
         {
+            name: 'course',
+            source: typeAheadSource(courseUrlSet),
+            limit: 3,
+            templates: {
+                header: '<h3>Courses</h3>'
+            }
+        },
+        {
             name: 'products',
             source: typeAheadSource(productUrlSet),
             limit: 3,
@@ -84,8 +92,10 @@ const attachTypeaheadElementDom = (el) =>{
     ).bind('typeahead:select', function(ev, suggestion) {
         if (categoryUrlSet[suggestion]) 
             window.location.href = `${categoryUrlSet[suggestion]}`;
-        else 
+        else if (productUrlSet[suggestion])
             window.location.href = `${productUrlSet[suggestion]}`;
+        else 
+            window.location.href = `${courseUrlSet[suggestion]}`;
     });
 }
 

@@ -89,8 +89,11 @@
                   <!--<button type="submit" class=" skill-jobs-btn btn no-bgcol"></button>-->
                <!--</div>-->
                 <div id="bloodhound" class="form-inline">
-                   <input type="text" class="typeahead form-control" placeholder="Search popular tests">
-                  <button type="submit" class="skill-jobs-btn btn"></button>
+                   <input id ="bloodhound_input" type="text" class="typeahead form-control" placeholder="Search popular tests">
+                   <button id="bloodhound_submit" type="submit" class="skill-jobs-btn btn"></button>
+                </div>
+                <div id="bloodhound_message" style="display: none;">
+                  <p style="color:red;"> Test not available</p>
                 </div>
             </div>
          </div>
@@ -286,6 +289,7 @@ Shine learning brings to you one of the largest collection of functional tests. 
 {{block.super}}
     {% compress js %}
 <script src="{% static 'shinelearn/js/assessment/landing.js' %}"></script>
+<script src="{% static 'shinelearn/js/assessment/assessment_search.js' %}"></script>
 {% endcompress %}
 <script type="text/javascript">
    var page_number= 2;
@@ -327,7 +331,7 @@ Shine learning brings to you one of the largest collection of functional tests. 
 
 
 </script>
-<script src="{% static 'shinelearn/js/assessment/assessment_search.js' %}"></script>
+
 {% endblock js_section %}
 {% block johukum %}
 {% endblock johukum %}

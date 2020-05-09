@@ -1,16 +1,16 @@
-import React from 'react';
+import React, { PureComponent, Component } from 'react';
 import Modal from 'react-modal';
 import './helpModal.scss'
-import {getTitleCase} from "../../services/getTitleCase";
+import { getTitleCase } from "../../services/getTitleCase";
 
 if (typeof document !== 'undefined') {
 
     Modal.setAppElement(document.getElementById('react-app'));
 
 }
-export default class HelpModal extends React.Component {
+export default class HelpModal extends Component {
 
-     constructor(props) {
+    constructor(props) {
         super(props);
         this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/';
         this.handleFeedback = this.handleFeedback.bind(this);
@@ -23,7 +23,7 @@ export default class HelpModal extends React.Component {
         }
     }
 
-     closeModal() {
+    closeModal() {
         this.setState({
             feedbackText: '',
             isError: false,
@@ -33,10 +33,9 @@ export default class HelpModal extends React.Component {
     }
     handleFeedback(event) {
         event.preventDefault();
-        const {feedback, userInfo, hideHelpModal, eventClicked} = this.props;
-
+        const { feedback, userInfo, hideHelpModal, eventClicked } = this.props;
         const feedbackObj = {
-            name: userInfo.first_name,
+            name: userInfo.userName,
             email: userInfo.email,
             msg: this.state.feedbackText,
             number: userInfo.number,
@@ -67,7 +66,7 @@ export default class HelpModal extends React.Component {
         hideHelpModal();
     }
 
-     onTextChange(event) {
+    onTextChange(event) {
         this.setState({
             feedbackText: event.target.value,
             isError: false,
@@ -76,8 +75,8 @@ export default class HelpModal extends React.Component {
     }
 
     render() {
-        const {modalStatus, hideHelpModal} = this.props
-        const {errorMessage, isError} = this.state;
+        const { modalStatus, hideHelpModal } = this.props
+        const { errorMessage, isError } = this.state;
         return (
             <div className="pr">
                 <Modal
@@ -90,18 +89,18 @@ export default class HelpModal extends React.Component {
                         <div className="pr help-modal">
                             <React.Fragment>
                                 <i onClick={this.closeModal}
-                                   className='icon-close icon-close--position1'/>
+                                    className='icon-close icon-close--position1' />
                                 <h2>Reach out to us</h2>
                                 <p>Let us know your feedback and suggestions, so we can help you build a powerful
                                     resume. </p>
                                 <textarea rows="10" className="mb-20" placeholder="Message"
-                                          onChange={this.onTextChange}/>
+                                    onChange={this.onTextChange} />
                                 {
                                     !!(isError) &&
                                     <span className="help-message-error">{errorMessage}</span>
                                 }
                                 <button className="orange-button"
-                                        type={'submit'} onClick={this.handleFeedback}>Submit
+                                    type={'submit'} onClick={this.handleFeedback}>Submit
                                 </button>
                             </React.Fragment>
                         </div>

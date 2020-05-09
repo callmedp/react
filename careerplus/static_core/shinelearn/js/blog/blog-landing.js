@@ -7,12 +7,10 @@ $(document).ready(function() {
 	win.scroll(function() {
 		// End of the document reached?
 		if ( win.scrollTop() >= ($(document).height() - win.height()) * 0.8) {
-			//$('#loading').show();
 			page = $("#pg_id").val();
 			if (page != undefined & page != prev_page){
 				prev_page = page;
 				data = "?page="+ page;
-				//console.log(data);
 				$.ajax({
 					url: "/article/category-wise-loading/" + data,
 					dataType: "html",
@@ -20,8 +18,7 @@ $(document).ready(function() {
 						$("#load_more").remove();
 						$('#category_container').append(html);
 						ga('send', 'pageview');
-						//$('#loading').hide();
-					},
+=					},
 					failure: function(response){
 	                    alert("Something went wrong.")
 	                }

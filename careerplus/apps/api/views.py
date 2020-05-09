@@ -171,6 +171,7 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                 order.site = 1
                 order.country = country_obj
                 order.total_excl_tax = request.data.get('total_excl_tax_excl_discount', 0)
+                order.total_amount_free_prdts = request.data.get('free_products_total',0)
                 order.total_incl_tax = request.data.get('total_payable_amount', 0)
                 crm_lead_id = request.data.get('crm_lead_id', '')
                 crm_sales_id = request.data.get('crm_sales_id', '')
@@ -223,8 +224,9 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                         value=coupon_amount
                     )
 
-                total_discount = coupon_amount
+                total_discount = coupon_amount - order.total_amount_free_prdts
                 total_amount_before_discount = order.total_excl_tax  # berfore discount and excl tax
+                total_amount_before_discount -= order.total_amount_free_prdts
                 percentage_discount = (total_discount * 100) / total_amount_before_discount
                 for data in item_list:
                     delivery_service = None
@@ -232,6 +234,7 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                     addons = data.get('addons', [])
                     variations = data.get('variations', [])
                     combos = data.get('combos', [])
+                    is_free_product = data.get('free_product', False)
                     product = Product.objects.get(id=parent_id)
                     if data.get('delivery_service', None):
                         delivery_service = data.get('delivery_service', None)
@@ -276,7 +279,10 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
 
                     cost_price = data.get('price')
                     p_oi.cost_price = cost_price
-                    discount = (cost_price * percentage_discount) / 100
+                    if not is_free_product:
+                        discount = (cost_price * percentage_discount) / 100
+                    else:
+                        discount = cost_price
                     cost_price_after_discount = cost_price - discount
                     # As per product requirement , apply GST only for INR
                     if order.currency == 0:
@@ -299,10 +305,13 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                         if delivery_service:
                             # setup delivery service
                             p_oi.delivery_service = delivery_service
-
                             cost_price = float(p_oi.delivery_service.get_price())
                             p_oi.delivery_price_excl_tax = cost_price
-                            discount = (cost_price * percentage_discount) / 100
+                            if not is_free_product:
+                                discount = (cost_price * percentage_discount) / 100
+                            else:
+                                discount = cost_price
+                            
                             cost_price_after_discount = cost_price - discount
                             # As per product requirement , apply GST only for INR
                             if order.currency == 0:
@@ -795,7 +804,7 @@ class ResumeBuilderProductView(ListAPIView):
 
 
         type_flow = self.request.query_params.get('type_flow')
-        product_list = list(Product.objects.filter(type_flow=type_flow, type_product=0, active=True, sub_type_flow='1701').values('id', 'name', 'inr_price', 'usd_price', 'aed_price', 'fake_inr_price', 'heading').order_by('inr_price'))
+        product_list = list(Product.objects.filter(type_flow=type_flow, type_product=0, active=True, sub_type_flow=1701).values('id', 'name', 'inr_price', 'usd_price', 'aed_price', 'fake_inr_price', 'heading').order_by('inr_price'))
         product_list = map(modify_product, product_list)
 
 
@@ -1159,7 +1168,9 @@ class ShineCandidateLoginAPIView(APIView):
             logging.getLogger('error_log').error("Login attempt failed - {}".format(e))
             return Response({"data": "No user record found"}, status=status.HTTP_400_BAD_REQUEST)
 
-        return self.get_response_for_successful_login(candidate_id, login_response)
+        with_info = request.GET.get('with_info', 'true')
+        with_info = False if with_info == 'false' else True 
+        return self.get_response_for_successful_login(candidate_id, login_response, with_info)
 
     def post(self, request, *args, **kwargs):
         email = request.data.get('email')
@@ -1257,6 +1268,7 @@ class UpdateCertificateAndAssesment(APIView):
                 ),
                 "certificate_updated": certificate_updated,
                 "score": parsed_data.assesment.overallScore,
+                "certificate_url": parsed_data.user_certificate.certificate_file_url
 
             })
             create_assignment_lead.delay(obj_id=oi.id)

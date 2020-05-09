@@ -920,7 +920,6 @@ class SessionAvailabilityAPIView(APIView):
 
     def get(self, request, *args, **kwargs):
         if (request.user and request.user.is_authenticated):
-
             return Response(
                 data={'result': True},
                 status=status.HTTP_200_OK

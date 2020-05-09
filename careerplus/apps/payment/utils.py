@@ -89,7 +89,7 @@ def manually_generate_autologin_url(assesment_items=[]):
                 "candidate_email": oi.order.email,
                 "skill_id": str(skill_id),
                 "candidate_phone": candidate_mobile,
-                "candidate_name": oi.order.first_name,
+                "candidate_name": oi.order.first_name if oi.order.first_name else "No Name",
                 "candidate_city": candidate_location,
                 "candidate_degree": candidate_degree,
                 "shine_learning_order_id": str(oi.id)

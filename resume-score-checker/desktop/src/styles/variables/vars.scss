@@ -1,0 +1,53 @@
+@import '../_path.scss';
+
+/*Main-Colors*/
+$primary: #ff0000; //---heading with 40% opacity
+$link: #0acade;
+$white: #ffffff;
+$black: #333333;
+$grey1: #eaeaea;
+$grey2: #efefef;
+$grey3: #dddddd;
+$txt1: #666666;
+$txt2: #999999;
+$blue1: #3E6EB8;
+$border1: #ebebeb;
+$border2: #EAEAEA;
+$orange: #ebc114;
+$red: #ff0000;
+$theme-green: #639F59;
+$theme-blue: #4D7BA7;
+$theme-red: #D95B5B;
+$theme-black: #000000;
+$theme-brown: #C6A828;
+$theme-violet: #7d5ca5;
+$grey-bg: #f2f2f2;
+$grey-bg1: #F3F3F3;
+
+
+
+// $static-url: get('staticUrl');
+// $static-url: '/media/static/score-checker/images';
+
+
+$sprite: url(#{$path}/sprite1578891067918.svg);
+
+//$sprite: get('sprite');
+
+
+%icon-block {
+	width: 60px;
+	height: 60px;
+	background-color: $blue1;
+}
+
+%shadow{
+	box-shadow: 0px 3px 25px 0px rgba(0, 0, 0, 0.10);
+}
+
+%inner-shadow{
+	box-shadow: inset 0 3px 8px 0 rgba(214,214,214,0.40);
+}
+
+
+

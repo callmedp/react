@@ -82,7 +82,7 @@
             <a class='trig-loader' href="{% url "payment:ccavenue_request" cart_id 'all' %}">Card & Netbanking</a>
           </div>
         
-          {% if type_flow != 17 %}
+          {% if type_flow != 17 or debug_mode %}
 
           <div class="accordion_example1 smk_accordion">
               <div class="accordion_in">

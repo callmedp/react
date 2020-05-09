@@ -1,0 +1,74 @@
+@import '../../../../styles/functions';
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+@import '../../../../styles/utilities';
+
+.improve-score {
+    background-color: #F8F3FF;
+    margin-top: 100px;
+    padding-bottom: 115px;
+
+    &::before {
+        content: '';
+        display: block;
+        background-image: url('#{$path}/curve-timeToImprove.png');
+        background-repeat:  no-repeat;
+        padding-top: 74px;
+        background-size: contain;
+        position: relative;
+        top: -74px;
+
+        @include media-breakpoint-up(lg) { 
+            top: -59px;
+        }
+    }
+
+    &__wrap {
+        display: flex;
+        align-items: center;
+    }
+
+    &__leftPan {
+        max-width: 320px;
+        flex: 0 0 320px;
+        padding-right: 15px;
+    }
+
+    &__rightPan {
+        position: relative;
+        z-index: 1;
+        font-size: $font-size-base + .4;
+        display: flex;
+
+
+        a {
+            font-weight: $font-weight-bold;
+        }
+
+        .circle {
+            left: -40px;
+        }
+
+        .dots {
+            bottom: -45px;
+            right: -22px;
+        }
+
+        &__items {
+            max-width: 270px;
+            flex: 0 0 270px;
+            border-radius: 4px;
+            background-color: $white;
+            padding: 15px 20px;
+            box-shadow: 0 0 10px rgba($black, .2);
+            position: relative;
+            z-index: 1;
+            border-bottom: 3px solid #78C2FF;
+            color: $gray-300;
+
+            &:not(:last-child) {
+                margin-right: 20px;
+            }
+        }
+    }
+}

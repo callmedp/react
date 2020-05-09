@@ -28,10 +28,12 @@ class HomePageView(TemplateView, MetadataMixin):
     use_twitter = False
     
     def get_meta_title(self, context):
-        return 'Best Resume Writing Services | Online Courses | Linkedin Profile - Shine Learning'
+        # return 'Best Resume Writing Services | Online Courses | Linkedin Profile - Shine Learning'
+        return 'Online Courses, Practice Tests, Job Assistance Services | Shine Learning'
 
     def get_meta_description(self, context):
-        return 'Pick up the Best Resume Services - Check out the Latest Resume Format or Templates - Online Professional Certification Courses'
+        # return 'Pick up the Best Resume Services - Check out the Latest Resume Format or Templates - Online Professional Certification Courses'
+        return 'Discover a variety of online courses and certification training, practice tests, job assistance services with 24X7 support.'
     
     def get_meta_url(self, context):
         return 'https://learning.shine.com'
@@ -123,6 +125,11 @@ class HomePageView(TemplateView, MetadataMixin):
 
         session_fa = self.request.session.get('func_area')
         session_skills = self.request.session.get('mid_skills')
+
+        message = self.request.GET.get('message','')
+
+        if message:
+            context.update({'email_response':message})
 
         if session_fa:
             fa = FunctionalArea.objects.filter(

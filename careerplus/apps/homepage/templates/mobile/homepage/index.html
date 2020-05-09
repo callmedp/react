@@ -1,7 +1,7 @@
 {% extends "mobile/basic/base.html" %}
 {% load static compress %}
 {% load static thumbnail compress %}
-{% block title %}Shine learning{% endblock %}
+{% block title %}Online Courses, Practice Tests, Job Assistance Services | Shine Learning{% endblock %}
 
 {% block css_section %}
     {{ block.super }}
@@ -24,8 +24,7 @@
     
 <div class="body-wrapper">
     <!-- home banner starts here -->
-    <div class="home-banner">    
-        
+    <div class="home-banner">
         <!-- home slider starts here -->
         <ul class="home-slider">
             {% if request.session.candidate_id %}
