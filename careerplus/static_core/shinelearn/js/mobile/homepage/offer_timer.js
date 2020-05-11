@@ -21,15 +21,15 @@ function timer_values(end_date){
 }
 
 function sticky_timer(days, hours, minutes, seconds){
-    $('span#sticky_timer').text(days + 'd : ' + hours + 'h : ' + minutes + 'm : ' + seconds + 's')
+    $('#sticky_timer_mobile').text(days + 'd : ' + hours + 'h : ' + minutes + 'm : ' + seconds + 's')
     return;
 }
 
 function popup_timer(days, hours, minutes, seconds){
-    $('.days').text(days);
-    $('.hours').text(hours);
-    $('.min').text(minutes);
-    $('.sec').text(seconds);
+    $('#days').text(days);
+    $('#hours').text(hours);
+    $('#min').text(minutes);
+    $('#sec').text(seconds);
     return;
 }
 
@@ -50,7 +50,7 @@ $(window).ready(function(){
         // }
     }, 1000);
 
-    $('#avail_offer_id').on('click', function() {
+    $('#open-thanks').on('click', function() {
         var $availOfferForm = $("#pop_up_form");
         var flag = $availOfferForm.valid();
         if (flag) {
@@ -64,22 +64,21 @@ $(window).ready(function(){
                 type: "POST",
                 data: formData,
                 success: function(data, textStatus, jqXHR) {
-                    $('#thanksModal').modal('show')
+                    $("#pop_up_form").get(0).reset()
                     // $('#id_callback').removeAttr('disabled');
                     // MyGA.SendEvent('QueryForm', 'Form Interactions', 'Cms Enquiry', 'success');
     
-                    $("#pop_up_form").get(0).reset()
+                    //     $('#callback_form')[0].reset();
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     alert('Something went wrong. Try again later.');
+                    $("#pop_up_form").get(0).reset()
                     // $('#id_callback').removeAttr('disabled');
                     // MyGA.SendEvent('QueryForm', 'Form Interactions', 'Cms Enquiry', 'Failure');
-                    
-                    $("#pop_up_form").get(0).reset()
                 }
             });
         }
-
+    
     });
 });
 

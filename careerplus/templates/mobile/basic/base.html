@@ -104,7 +104,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <div class="offer" id="offer-widget">
                 <span class="close" id="close-offer"></span>
                 <p class="pb-0">
-                    Limited time offer- <strong>upto 20% off! <br/> Ends in 12 hours- </strong> 
+                    Limited time offer- <strong>upto 20% off! <br/> Ends in <span id = 'sticky_timer_mobile'></span> - </strong> 
                     <a href="#" class="offer--link" id="enroll-now">Enroll Now!</a> 
                 </p>
             </div>
@@ -124,7 +124,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
                    <div class="pull-right">
                         <!--a class="icon-search pull-left " href="search-listing.html">search</a-->
-                        <a class="icon-offers" href="#"></a>
+                        <a class="icon-offers" id="icon_offer" href="#"></a>
                         <a class="icon-cart" href="{% url "cart:payment-summary" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
                    </div><!-- / Right side Icon ends here -->
                 </div><!-- header menu Icon ends here -->
@@ -157,22 +157,22 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                         <p class="pb-5">Offer ending in</p>
                         <ul class="offer-modal__counter">
                             <li>
-                                <span class="offer-modal__counter--box">00</span>
+                                <span class="offer-modal__counter--box" id = 'days'>00</span>
                                 <span class="offer-modal__counter--title">Days</span>
                             </li>
                            
                             <li>
-                                <span class="offer-modal__counter--box">11</span>
+                                <span class="offer-modal__counter--box" id = 'hours'>11</span>
                                 <span class="offer-modal__counter--title">Hours</span>
                             </li>
                            
                             <li>
-                                <span class="offer-modal__counter--box">52</span>
+                                <span class="offer-modal__counter--box" id = 'min'>52</span>
                                 <span class="offer-modal__counter--title">Min.</span>
                             </li>
                            
                             <li>
-                                <span class="offer-modal__counter--box">12</span>
+                                <span class="offer-modal__counter--box" id = 'sec'>12</span>
                                 <span class="offer-modal__counter--title">Sec.</span>
                             </li>
                         </ul>
@@ -180,7 +180,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 </div>
                 <div class="new-login-form offer-modal--formBox">
                     <p class="fs-22 semi-bold mb-10">Avail offer</p>
-                    <form id="callUsForm">
+                    <form id="pop_up_form">
                         <ul>
                             <li class="form-group input-effect">
                                 <input type="text" id="name" name="name" value="{{request.session.full_name}}" 
@@ -192,9 +192,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                             <li class="form-group d-flex">
                                     <div class="input-effect code">
                                         <select name="country_code" class="form--control" id="country-code">
-                                            {% for country in country_choices %}
-                                                <option value="{{country.0}}" {% if country.0 == '91' %} selected {% endif %} >{{country.0}}</option>
-                                            {% endfor %}
+                                            <option value="{{country.0}}" {% if country.0 == '91' %} selected {% endif %} >{{country.0}}</option>
                                         </select>
                                     </div>
                                     <div class="input-effect ml-auto number-w67 rel"> 
@@ -299,7 +297,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/base.js' %}"> </script>
         <script type="text/javascript" src="{% static 'shinelearn/js/common/common.js' %}"> </script>
         <script type="text/javascript" src="{% static 'shinelearn/js/webmobile/webmobile.js' %}"> </script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/mobile/homepage/offer_timer.js' %}"></script>
         {% endcompress %}
+        <script type="text/javascript" src="https://twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.js"> </script>
 
         <!-- {% block johukum %}
         <script type='text/javascript' id='spd-busns-spt' async=''

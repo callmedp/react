@@ -218,6 +218,10 @@ $(document).ready(function() {
 	$("#enroll-now").click(function(){
 		$("#open-offer").addClass('show');
 	});
+
+	$("#icon_offer").click(function(){
+		$("#open-offer").addClass('show');
+	});
 	
 	$("#close-offer-modal").click(function(){
 		$("#open-offer").removeClass('show');
