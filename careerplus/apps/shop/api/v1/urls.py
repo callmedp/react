@@ -4,7 +4,8 @@ from django.urls import re_path
 from .views import (
     ProductListView, ProductDeleteView, ProductDetailView, CreatePracticeTestInfoAPIView,
     UpdatePracticeInfoApiView, BoardNeoProductApiView, ParseSkillFromTextApiView,
-    UpdateProductSkillView, UpdateScreenProductSkillView, RecommendedProductsAPIView
+    UpdateProductSkillView, UpdateScreenProductSkillView, RecommendedProductsAPIView,
+    ProductReview
 )
 from django.conf import settings
 from rest_framework import routers
@@ -20,7 +21,8 @@ urlpatterns = [
     re_path(r'^parse-skill/$', ParseSkillFromTextApiView.as_view()),
     re_path(r'^screen-product-skill/update/$', UpdateScreenProductSkillView.as_view()),
     re_path(r'^product-skill/update/$', UpdateProductSkillView.as_view()),
-    re_path(r'^recommended-products/$', RecommendedProductsAPIView.as_view())
+    re_path(r'^recommended-products/$', RecommendedProductsAPIView.as_view()),
+    re_path(r'^product-review',ProductReview.as_view())
 ]
 
 if settings.DEBUG:

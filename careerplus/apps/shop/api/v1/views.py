@@ -15,6 +15,8 @@ from .serializers import (
     PracticeTestInfoCreateSerializer,
     UpdateProductScreenSkillSerializer,
     UpdateProductSkillSerializer)
+from django.contrib.contenttypes.models import ContentType
+
 from .tasks import delete_from_solr, update_practice_test_info
 
 # interapp imports
@@ -29,6 +31,7 @@ from search.helpers import get_recommended_products
 from skillpage.api.v1.serializers import LoadMoreSerializerSolr
 from shared.rest_addons.pagination import LearningCustomPagination
 from shared.rest_addons.mixins import FieldFilterMixin
+from review.models import Review
 
 
 # 3rd party imports
@@ -313,3 +316,65 @@ class RecommendedProductsAPIView(FieldFilterMixin, ListAPIView):
             )
 
         return products
+
+
+class ProductReview(APIView):
+    authentication_classes = ()
+    permission_classes = ()
+
+
+    def post(self, request, *args, **kwargs) :
+        """
+        This method create reviews for individual product.
+        """
+        candidate_id = request.data.get('candidate_id', None)
+        product_pk = request.data.get('product_id')
+        review_id = request.data.get('review_id')
+        email = request.data.get('email')
+        name_full = request.data.get('full_name','')
+        update_dict = {'status':0}
+
+        if not candidate_id:
+            return Response({'error':'unable to ppost review'},status=status.HTTP_400_BAD_REQUEST)
+
+        data = {
+            "display_message" : 'Thank you for posting a review. It will be displayed on the site after moderation',
+            "success" : False
+        }
+        try:
+            product = Product.objects.get(pk=product_pk)
+            contenttype_obj = ContentType.objects.get_for_model(product)
+            if review_id:
+                review_obj = Review.objects.get(id=review_id)
+            else:
+                review_obj,created = Review.objects.get_or_create(
+                    object_id=product.id,
+                    content_type=contenttype_obj,
+                    user_id=candidate_id
+                )
+            review = request.data.get('review', '').strip()
+            rating = int(request.data.get('rating', 1))
+            title = request.data.get('title', '')
+
+            if rating and review_obj and product:
+
+                if not review_obj.user_name:
+                    update_dict.update({'user_name':name_full})
+                if not review_obj.user_email:
+                    if not email:
+                        return Response({'error':'unable to review'},status=status.HTTP_400_BAD_REQUEST)
+                    update_dict.update({'user_email':email})
+
+
+                update_dict.update({'title':title,'average_rating':rating,'content':review,
+                                    'extra_content_obj':contenttype_obj,'extra_object_id':product.id})
+
+                for attr,value in update_dict.items():
+                    setattr(review_obj,attr,value)
+                review_obj.save()
+
+                return Response(data,status=status.HTTP_201_CREATED)
+            else:
+                return Response({'error':'Something went Wrong'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        except:
+            return Response({'error' : 'Something went Wrong'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

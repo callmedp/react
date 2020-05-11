@@ -4,6 +4,9 @@ from shop.models import Product, Category, PracticeTestInfo, Skill, \
     ProductSkill, ProductScreen, ScreenProductSkill
 from shop.choices import C_ATTR_DICT, S_ATTR_DICT
 
+from review.models import Review
+
+
 from shared.rest_addons.mixins import SerializerFieldsMixin
 from django.core.cache import cache
 
@@ -166,3 +169,13 @@ class UpdateProductSkillSerializer(serializers.Serializer):
         return {
             'skills': ','.join(instance.productskills.values_list('skill__name', flat=True)),
         }
+
+
+class ReviewSerializer(ModelSerializer):
+    """
+    Review serializer
+    """
+
+    class Meta:
+        model = Review
+        fields = ('__all__' )
