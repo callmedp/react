@@ -36,6 +36,9 @@ export default function ResumeDetail() {
                                             !(value['section_status']) ? <p><strong>Oops ! We weren't able to detect this section on your resume. Let our experts guide you with most-commonly used terms and best practices to make your resume ATS friendly.</strong></p> : null
                                         }
                                         <div dangerouslySetInnerHTML={Description(value['section_description'])} />
+                                        {
+                                            (value['section_status'] && value['section_message']) ? <div dangerouslySetInnerHTML={{__html: value['section_message']}}/>:null
+                                        }
                                         <br/>
                                     </div>
                                 </div>

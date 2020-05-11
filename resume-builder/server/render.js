@@ -112,7 +112,7 @@ export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile
         ga('create', 'UA-3537905-41', 'auto');
         ga('send', 'pageview');
        </script>
-       <script type="text/javascript" src="https://static1.shine.com/l/cm/chatbot/learning_resume-1580458292.js">
+       <script type="text/javascript" src="https://static1.shine.com/l/cm/chatbot/learning_resume-1588796766.js">
        </script>
       <script type="text/javascript" src="${jsBuildUrl}"></script>
       </body>
