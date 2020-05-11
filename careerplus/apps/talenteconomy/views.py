@@ -647,6 +647,8 @@ class TEBlogDetailView(DetailView, BlogMixin):
         popular_courses = self.get_product(
             p_cat.slug, skills)
 
+        category_url = '/'
+        
         if len(popular_courses):
             pd_id = popular_courses[0].get('pid')
             category = Product.objects.get(id=pd_id).get_category_main()
