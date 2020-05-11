@@ -377,7 +377,7 @@ $sprite-new:         $fullpath + 'sprite-19.svg';
 
 
 // Font Family
-$font-family-montserrat: 'Montserrat', sans-serif;
+$font-family-montserrat: 'Montserrat', sans-serif !default;
 
 // border radius
 $border-radius-base   : 4px;

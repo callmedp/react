@@ -1,5 +1,7 @@
 # python imports
-import base64, json, logging
+import base64
+import json
+import logging
 import random
 from datetime import datetime, date
 
@@ -22,7 +24,7 @@ from rest_framework.generics import (RetrieveUpdateAPIView)
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
-
+from cart.mixins import CartMixin
 
 
 class EmailStatusView(APIView):
@@ -45,3 +47,15 @@ class CartRetrieveUpdateView(RetrieveUpdateAPIView):
     def get_queryset(self):
         cart_id = int(self.kwargs.get('pk'))
         return Cart.objects.filter(id=cart_id)
+
+
+class CartCountView(CartMixin, APIView):
+    authentication_classes = (SessionAuthentication,)
+    permission_classes = ()
+    serializer_class = None
+
+    def get(self, request, *args, **kwargs):
+        cart_count = self.get_cart_count()
+        return Response(
+            {'count': cart_count}, status=status.HTTP_200_OK
+        )

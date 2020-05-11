@@ -66,10 +66,13 @@
          {% endblock breadcrumb %}
 
 
-    <div class="search">
-        <div class="search__searchbox" id="bloodhound">
-            <input type="text" class="typeahead"  name="" placeholder="Search popular tests">
-            <i class="icon_search"></i>
+    <div class="search-test">
+        <div class="search-test__searchbox" id="bloodhound">
+            <input id ="bloodhound_input" type="text" class="typeahead"  name="" placeholder="Search popular tests">
+            <div id="bloodhound_message" style="display: none;">
+              <p style="color:red;"> Test not available</p>
+            </div>
+            <i id="bloodhound_submit" class="icon_search"></i>
         </div>
     </div>
 
@@ -192,6 +195,7 @@
    {{block.super}}
     {% compress js %}
 <script src="{% static 'shinelearn/js/assessment/landing.js' %}"></script>
+<script src="{% static 'shinelearn/js/assessment/assessment_search.js' %}"></script>
 {% endcompress %}
 
    <script type="text/javascript">
@@ -246,7 +250,6 @@
 
 
    </script>
-<script src="{% static 'shinelearn/js/assessment/assessment_search.js' %}"></script>
    <script>
     function testModal(e){
     modalobject = JSON.parse(e.currentTarget.dataset.attrValue);

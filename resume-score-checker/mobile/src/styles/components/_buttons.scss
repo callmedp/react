@@ -1,0 +1,114 @@
+.btn {
+  background-color: transparent;
+  background-image: none;
+  border: 1px solid transparent;
+  cursor: pointer;
+  font-size: 1em;
+  font-weight: normal;
+  line-height: 1.6;
+  margin-bottom: 0;
+  padding: 10px 12px;
+  text-align: center;
+  touch-action: manipulation;
+  user-select: none;
+  vertical-align: middle;
+  white-space: nowrap;
+  font-weight: $font-weight-medium;
+  font-family: $font-family-montserrat;
+
+  &:focus {
+    outline: 0;
+    border: 0;
+    box-shadow: none;
+  }
+  
+    &:disabled {
+      opacity:.65;
+    }
+  
+    @media (max-width: 320px) { 
+      padding: 6px 10px;
+      font-size: $font-base;
+    }
+  }
+  
+  
+  
+  .btn-lg {
+    padding: 6px 20px;
+  }
+  
+  .btn-slg {
+    padding: 10px 40px;
+  }
+  
+  .btn-lg2 {
+    padding: 5px 40px;
+  }
+  
+  .btn-shadow {
+    box-shadow:0 0 10px rgba(0,0,0, .15);
+  }
+  
+  .btn-round {
+    border-radius: $global-radius;
+  }
+  
+  .btn-round-30 {
+    border-radius: 40px;
+  }
+  
+  .btn-blue {
+    background-color: $primary;
+    color: $white;
+  }
+  
+  .btn-white {
+    background-color: $white;
+    color: $primary;
+    box-shadow: $box-shadow;
+  }
+  
+  .btn-grey {
+    background-color: $light-gray;
+    color: $gray-darker;
+  }
+  
+  .btn-yellow {
+    background-color: #ffcf26;
+    color: $gray-darker;
+  }
+  
+  .btn-orange {
+    background-color: #ff5d00;
+    color: $white;
+  }
+  
+  .btn-outline-blue {
+    border: 1px solid $primary;
+    color: $primary;
+  }
+  
+  .btn-outline-white {
+    border-color: $white !important;
+    color: $white;
+  }
+
+  .btn-sm {
+    padding: 10px 10px;
+    font-size: $font-size-xxs;
+  }
+  
+  .btn-md {
+    padding: 5px 15px;
+    font-size: $font-size-xxs;
+    font-weight: $font-weight-medium;
+  }
+
+
+  .swal2-styled {
+    &:focus {
+      box-shadow: none !important;
+      outline: none !important;
+    }
+  }

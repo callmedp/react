@@ -1,0 +1,75 @@
+// $static-url : '/media/static/';
+// $path: $static-url + "score-checker/images/mobile";
+
+@import '../_path.scss';
+
+// fonts size
+$font-weight: 400;
+$font-family: 'Open Sans', sans-serif;
+
+
+// box shadow
+$box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+
+// border radius
+$global-radius: 4px;
+
+//font size 
+$font-weight-light  :   300;
+$font-weight-normal :   400;
+$font-weight-medium :   600;
+$font-weight-bold   :   700;
+
+$font-weight-base: $font-weight-normal;
+$line-height-base: 1.5;
+
+
+// ------- New Variables Starts here ----- // 
+
+$primary            : #2958A8;
+$primary-light      : #78C2FF;
+$primary-lightest   : #F8F9FC;
+$primary-gr         : #C486DF;
+
+$secondary          : #FED27A;
+// $secondary-medium   : #ffa721;
+// $secondary-light    : #ffbd59;
+
+$white              : #ffffff;
+$gray-darker        : #333333;
+$gray-dark          : #666666;
+$gray-medium        : #999999;
+$gray-light         : #979797;
+$gray-lightest      : #F2F6FD;
+$black              : #000000;
+$body-color         : $gray-dark;
+$link-color         : $primary;
+$error              : #f34a38;
+
+
+$light-gray         : #f1f1f1;
+
+
+// Font Family
+$font-family-montserrat: 'Montserrat', sans-serif;
+
+// border radius
+$border-radius-base   : 4px;
+$round-corner         : 30px;
+$border-radius-circle : 50%;
+
+// Font Size 
+$font-size-xxs  :   1.1rem;     // 11px 
+$font-size-xs   :   1.2rem;     // 12px 
+$font-base      :   1.4rem;     // 14px
+$font-size-md   :   1.6rem;     // 16px
+$h1-heading     :   3.8rem;     // 38px
+$h2-heading     :   2.6rem;     // 26px
+
+
+$circle-size: 110px;
+$circle-background: #D8D8D8;
+$circle-color: #CBA5FF;
+$inset-size: 100px;
+$inset-color: #fbfbfb;
+$transition-length: 1s;

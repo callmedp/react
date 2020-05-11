@@ -245,11 +245,13 @@ class DiscountReportUtil:
                 item_delivery_service = item.delivery_service.display_name if item.delivery_service else ""
                 item_selling_price = item.selling_price
                 item_cost_price = float(item.cost_price)
+                item_discount_price = float(item.discount_amount)
                 if not item_cost_price:
                     item_cost_price = float(item.product.inr_price)
-
+                # check the discount_price with cost_price for free_product
                 if item.product.type_product == 0 and item_selling_price == 0 \
-                    and not item.is_combo and not item.no_process:
+                    and not item.is_combo and not item.no_process \
+                        and item_discount_price != item_cost_price:
                     item_selling_price = float((float(item.product.inr_price) - forced_coupon_amount)) * 1.18
 
                 item_refund_request_list = RefundItem.objects.filter(oi_id=item.id,\
@@ -307,7 +309,7 @@ class DiscountReportUtil:
                     replacement_id = item.get_replacement_order_id
 
                 total_items = item.order.orderitems.count()
-                if total_items == 1 and item_selling_price == 0:
+                if total_items == 1 and item_selling_price == 0 and item_discount_price != item_cost_price:
                     item_selling_price = float(float(order.total_excl_tax) - forced_coupon_amount)*1.18
 
                 writer_price = 0
