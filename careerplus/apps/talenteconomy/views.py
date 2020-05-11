@@ -23,7 +23,7 @@ from django.conf import settings
 from meta.views import Meta
 from blog.mixins import BlogMixin, PaginationMixin
 from blog.models import Category, Blog, Tag, Author
-from shop.models import ProductSkill, ProductCategory, Category
+from shop.models import ProductSkill, Product
 
 from geolocation.models import Country
 
@@ -648,21 +648,17 @@ class TEBlogDetailView(DetailView, BlogMixin):
             p_cat.slug, skills)
 
         if len(popular_courses):
-            try:
-                pd_id = popular_courses[0].get('pid')
-                category_id = ProductCategory.objects.filter(product_id = pd_id).first().category_id
-                category_url = Category.objects.filter(pk = category_id).values_list('url', flat=True).first()
-            except:
-                category_url = '/'
-        else:
-            category_url = '/'
-
-        # page_url = '{}://{}/search/results/?q={}'.format(settings.SITE_PROTOCOL, settings.SITE_DOMAIN, p_cat.slug)
-        page_url = '{}://{}{}'.format(settings.SITE_PROTOCOL, settings.SITE_DOMAIN, category_url)
+            pd_id = popular_courses[0].get('pid')
+            category = Product.objects.get(id=pd_id).get_category_main()
+            if(category):
+                category_url = category.get_absolute_url()
+            else:
+                category_url = '{}://{}/search/results/?q={}'.format(settings.SITE_PROTOCOL, settings.SITE_DOMAIN, p_cat.slug)
+        
         context.update({
             "popular_courses": popular_courses,
             "show_chat": True,
-            "page_url": page_url
+            "page_url": category_url
         })
 
         context.update(self.get_meta_details())
