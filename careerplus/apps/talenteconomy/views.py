@@ -34,6 +34,17 @@ from users.forms import (
     PasswordResetRequestForm
 )
 
+class CategoryUrl():
+    def get_category_url(self, popular_courses):
+        cat_url = '/'
+        
+        if len(popular_courses):
+            pd_id = popular_courses[0].get('pid')
+            category = Product.objects.get(id=pd_id).get_category_main()
+            if(category):
+                cat_url = category.get_absolute_url()
+
+        return cat_url
 
 class TalentEconomyLandingView(TemplateView, BlogMixin):
     model = Blog
@@ -108,6 +119,8 @@ class TalentEconomyLandingView(TemplateView, BlogMixin):
         skills = [sk.name for sk in skills]
 
         popular_courses = self.get_product(top_cats, skills)
+        category_url = CategoryUrl().get_category_url(popular_courses)
+
         country_choices, initial_country = self.get_countries()
         context.update({'country_choices': country_choices, 'initial_country': initial_country, })
 
@@ -121,7 +134,8 @@ class TalentEconomyLandingView(TemplateView, BlogMixin):
             'popular_courses': popular_courses,
             'authors': authors,
             'authors_list': list(author_list),
-            'show_chat': True
+            'show_chat': True,
+            'page_url': category_url
         })
 
         context.update(self.get_breadcrumb_data())
@@ -242,6 +256,8 @@ class TETagArticleView(TemplateView, BlogMixin):
         popular_courses = BlogMixin().get_product(
             tag_obj.slug, skills)
 
+        category_url = CategoryUrl().get_category_url(popular_courses)
+
         detail_article = None
         if recent_articles:
             detail_article = render_to_string('include/talent_page.html', {
@@ -261,7 +277,8 @@ class TETagArticleView(TemplateView, BlogMixin):
             "tag": tag_obj,
             "categories": categories,
             "popular_courses": popular_courses,
-            "show_chat": True
+            "show_chat": True,
+            "page_url": category_url
         })
         country_choices, initial_country = self.get_countries()
         context.update({'country_choices': country_choices, 'initial_country': initial_country, })
@@ -425,6 +442,8 @@ class TEBlogCategoryListView(TemplateView, BlogMixin):
         popular_courses = BlogMixin().get_product(
             cat_obj.slug, skills)
 
+        category_url = CategoryUrl().get_category_url(popular_courses)
+
         article_list = None
         if recent_articles:
             article_list = render_to_string(
@@ -441,6 +460,7 @@ class TEBlogCategoryListView(TemplateView, BlogMixin):
             "categories": categories,
             "popular_courses": popular_courses,
             'show_chat': True,
+            "page_url": category_url
         })
         context.update(self.get_breadcrumb_data())
         context['meta'] = cat_obj.as_meta(self.request)
@@ -647,15 +667,7 @@ class TEBlogDetailView(DetailView, BlogMixin):
         popular_courses = self.get_product(
             p_cat.slug, skills)
 
-        category_url = '/'
-        
-        if len(popular_courses):
-            pd_id = popular_courses[0].get('pid')
-            category = Product.objects.get(id=pd_id).get_category_main()
-            if(category):
-                category_url = category.get_absolute_url()
-            else:
-                category_url = '{}://{}/search/results/?q={}'.format(settings.SITE_PROTOCOL, settings.SITE_DOMAIN, p_cat.slug)
+        category_url = CategoryUrl().get_category_url(popular_courses)
         
         context.update({
             "popular_courses": popular_courses,
@@ -724,6 +736,9 @@ class AuthorListingView(TemplateView):
 
         popular_courses = BlogMixin().get_product(
             top_cats, skills)
+
+        category_url = CategoryUrl().get_category_url(popular_courses)
+
         country_choices, initial_country = self.get_countries()
         context.update({'country_choices': country_choices, 'initial_country': initial_country, })
 
@@ -732,7 +747,8 @@ class AuthorListingView(TemplateView):
             'authors_list': list(author_list),
             'categories': categories,
             'popular_courses': popular_courses,
-            'show_chat': True
+            'show_chat': True,
+            'page_url' : category_url
         })
 
         context.update(self.get_breadcrumb_data())
@@ -829,6 +845,8 @@ class AuthorDetailView(DetailView):
         popular_courses = BlogMixin().get_product(
             most_recent_cat, skills)
 
+        category_url = CategoryUrl().get_category_url(popular_courses)
+
         authors = Author.objects.filter(
             is_active=1,
             blog__visibility=2, blog__status=1).annotate(
@@ -845,7 +863,8 @@ class AuthorDetailView(DetailView):
             "article_list": article_list,
             "popular_courses": popular_courses,
             "amp": self.request.amp,
-            "show_chat": True
+            "show_chat": True,
+            "page_url": category_url
         })
 
         context.update(self.get_meta_details())
