@@ -1,11 +1,18 @@
 
 // Offer End date fetched from admin panel
-const end_date = new Date("5 12, 2020 12:52:25").getTime();
+const getnewDate = (date = null) =>
+	!date
+		? new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" }))
+		: new Date(
+			new Date(date).toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
+		);
+const end_date = getnewDate("May 15, 2020 18:02:00").getTime();
+
 
 //Function that will calculate the remaining day, hours, minutes, seconds
 
 function timer_values(end_date){
-    var now = new Date().getTime(); 
+    var now = getnewDate().getTime(); 
     var remaining_time = end_date - now; 
     var days = Math.floor(remaining_time / (1000 * 60 * 60 * 24)); 
     var hours = Math.floor((remaining_time%(1000 * 60 * 60 * 24))/(1000 * 60 * 60)); 
@@ -41,6 +48,8 @@ $(window).ready(function(){
         var {days, hours, minutes, seconds} = timer_values(end_date)
         if(days < 0){
             clearInterval(timer);
+            $("#avail_offer_id").html("Expired")
+            $("#avail_offer_id").attr("disabled", true)
             return;
         }
         sticky_timer(days, hours, minutes, seconds)
@@ -49,38 +58,7 @@ $(window).ready(function(){
         //     clearInterval(timer)
         // }
     }, 1000);
-
-    $('#avail_offer_id').on('click', function() {
-        var $availOfferForm = $("#pop_up_form");
-        var flag = $availOfferForm.valid();
-        if (flag) {
-            if(document.getElementById('offerModal' )){
-                document.getElementById('offerModal' ).style.display = 'none';
-            }
-            var formData = $availOfferForm.serialize();
-            console.log(formData)
-            $.ajax({
-                url: "/lead/lead-management/",
-                type: "POST",
-                data: formData,
-                success: function(data, textStatus, jqXHR) {
-                    $('#thanksModal').modal('show')
-                    // $('#id_callback').removeAttr('disabled');
-                    // MyGA.SendEvent('QueryForm', 'Form Interactions', 'Cms Enquiry', 'success');
     
-                    $("#pop_up_form").get(0).reset()
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    alert('Something went wrong. Try again later.');
-                    // $('#id_callback').removeAttr('disabled');
-                    // MyGA.SendEvent('QueryForm', 'Form Interactions', 'Cms Enquiry', 'Failure');
-                    
-                    $("#pop_up_form").get(0).reset()
-                }
-            });
-        }
-
-    });
 });
 
 //When user click on Enroll Now, this function will trigger

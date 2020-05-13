@@ -62,6 +62,8 @@ class LeadManagement(View):
             company = request.POST.get('cname','')
             path = request.POST.get('path', '')
             rejectlist = ['http', 'www', 'href', '***', 'url', '<html>']
+            product_offer = request.POST.get('product_offer', False)
+
             if any(rejectkey in msg for rejectkey in rejectlist):
                 return HttpResponse(json.dumps({'status': False}))
 
@@ -133,7 +135,7 @@ class LeadManagement(View):
             )
             created = True
             validate = True if lead.email else False
-            create_lead_crm.delay(pk=lead.pk, validate=validate)
+            create_lead_crm(pk=lead.pk, validate=validate, product_offer=product_offer)
         except Exception as e:
             logging.getLogger('error_log').error('lead creation is failed%s'%str(e))
 

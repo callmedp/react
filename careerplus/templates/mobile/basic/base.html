@@ -104,7 +104,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <div class="offer" id="offer-widget">
                 <span class="close" id="close-offer"></span>
                 <p class="pb-0">
-                    Limited time offer- <strong>upto 20% off! <br/> Ends in <span id = 'sticky_timer_mobile'></span> - </strong> 
+                    {{sticky_text}}- <strong>{{offer_value}} <br/> Ends in <span id = 'sticky_timer_mobile'></span> - </strong> 
                     <a href="#" class="offer--link" id="enroll-now">Enroll Now!</a> 
                 </p>
             </div>
@@ -153,7 +153,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <span class="close" id="close-offer-modal"></span>
                 <div class="offer-modal--image">
                     <div class="content-box">
-                        <div class="offer-modal--head">Limited time offer - <strong>upto 20% off</strong></div>
+                        <div class="offer-modal--head">{{ banner_text }} - <strong>{{ offer_value }}</strong></div>
                         <p class="pb-5">Offer ending in</p>
                         <ul class="offer-modal__counter">
                             <li>
@@ -187,12 +187,14 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                                     class="form--control animation-input {% if request.session.full_name %}has-content{% endif %}" 
                                     placeholder="">
                                 <label for="name">Name</label>
-                                <span class="error--mgs">Name</span>
+                                <span class="error--mgs"></span>
                             </li>
                             <li class="form-group d-flex">
                                     <div class="input-effect code">
                                         <select name="country_code" class="form--control" id="country-code">
-                                            <option value="{{country.0}}" {% if country.0 == '91' %} selected {% endif %} >{{country.0}}</option>
+                                        {% for country in country_choices %}
+                                            <option value="{{country.0}}" {% if country.0 == '91' %} selected {% endif %} >&emsp;&emsp;&emsp;{{country.0}}-- {{country.1}}</option>
+                                        {% endfor %}
                                         </select>
                                     </div>
                                     <div class="input-effect ml-auto number-w67 rel"> 
@@ -214,38 +216,39 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                             <li class="fs-14 semi-bold mb-5 mt-20">Course you would be interested in</li>
                             <li class="custom-checkbox offer-modal--checkboxes mb-25">
                                 <label for="big-data">
-                                    <input class="form-check-input" type="checkbox" id="big-data" value="option1">
+                                    <input class="form-check-input" type="checkbox" id = "big-data" name = "course" value="big-data">
                                     <span>Big data</span>
                                 </label>
                                 
                                 <label for="six-sigma">
-                                    <input class="form-check-input" type="checkbox" id="six-sigma" value="option1">
+                                    <input class="form-check-input" type="checkbox" id = "six-sigma" name = "course" value="six-sigma">
                                     <span>Six Sigma</span>
                                 </label>
                                 
                                 <label for="cc">
-                                    <input class="form-check-input" type="checkbox" id="cc" value="option1">
+                                    <input class="form-check-input" type="checkbox" id = "cc" name = "course" value="Cloud Computing">
                                     <span>Cloud computing</span>
                                 </label>
                                 
                                 <label for="dm">
-                                    <input class="form-check-input" type="checkbox" id="dm" value="option1">
+                                    <input class="form-check-input" type="checkbox" id = "dm" name = "course" value="Digital marketing">
                                     <span>Digital marketing</span>
                                 </label>
                                 
                                 <label for="ds">
-                                    <input class="form-check-input" type="checkbox" id="ds" value="option1">
+                                    <input class="form-check-input" type="checkbox" id = "ds" name = "course" value="Data Science">
                                     <span>Data Science </span>
                                 </label>
                                 
                                 <label for="others">
-                                    <input class="form-check-input" type="checkbox" id="others" value="option1">
+                                    <input class="form-check-input" type="checkbox" id = "others" name = "course" value="Others">
                                     <span>Others </span>
                                 </label>
                             </li>
-                            <input type="hidden" name="product" value="{{category.pk}}">
+                            <span class="error--mgs"></span>
+                            <!-- <input type="hidden" name="product" value="{{category.pk}}">
                             <input type="hidden" name="prd" value="{{category.heading}}">
-                            <input type="hidden" name="path" value="{{category.get_absolute_url}}">
+                            <input type="hidden" name="path" value="{{category.get_absolute_url}}"> -->
                             <li>
                                 <button class="btn btn-round btn-blue w100 semi-bold" type="submit" id="open-thanks">Avail offer now!</button>
                             </li>
@@ -298,6 +301,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <script type="text/javascript" src="{% static 'shinelearn/js/common/common.js' %}"> </script>
         <script type="text/javascript" src="{% static 'shinelearn/js/webmobile/webmobile.js' %}"> </script>
         <script type="text/javascript" src="{% static 'shinelearn/js/mobile/homepage/offer_timer.js' %}"></script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/mobile/homepage/offer_validate.js' %}"></script>
         {% endcompress %}
         <script type="text/javascript" src="https://twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.js"> </script>
 

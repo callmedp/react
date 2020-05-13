@@ -1,11 +1,17 @@
 
 // Offer End date fetched from admin panel
-const end_date = new Date("5 12, 2020 12:52:25").getTime();
+const getnewDate = (date = null) =>
+	!date
+		? new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" }))
+		: new Date(
+			new Date(date).toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
+		);
+const end_date = getnewDate("May 21, 2020 01:15:00").getTime();
 
 //Function that will calculate the remaining day, hours, minutes, seconds
 
 function timer_values(end_date){
-    var now = new Date().getTime(); 
+    var now = getnewDate().getTime(); 
     var remaining_time = end_date - now; 
     var days = Math.floor(remaining_time / (1000 * 60 * 60 * 24)); 
     var hours = Math.floor((remaining_time%(1000 * 60 * 60 * 24))/(1000 * 60 * 60)); 
@@ -50,51 +56,4 @@ $(window).ready(function(){
         // }
     }, 1000);
 
-    $('#open-thanks').on('click', function() {
-        var $availOfferForm = $("#pop_up_form");
-        var flag = $availOfferForm.valid();
-        if (flag) {
-            if(document.getElementById('offerModal' )){
-                document.getElementById('offerModal' ).style.display = 'none';
-            }
-            var formData = $availOfferForm.serialize();
-            console.log(formData)
-            $.ajax({
-                url: "/lead/lead-management/",
-                type: "POST",
-                data: formData,
-                success: function(data, textStatus, jqXHR) {
-                    $("#pop_up_form").get(0).reset()
-                    // $('#id_callback').removeAttr('disabled');
-                    // MyGA.SendEvent('QueryForm', 'Form Interactions', 'Cms Enquiry', 'success');
-    
-                    //     $('#callback_form')[0].reset();
-                },
-                error: function(jqXHR, textStatus, errorThrown) {
-                    alert('Something went wrong. Try again later.');
-                    $("#pop_up_form").get(0).reset()
-                    // $('#id_callback').removeAttr('disabled');
-                    // MyGA.SendEvent('QueryForm', 'Form Interactions', 'Cms Enquiry', 'Failure');
-                }
-            });
-        }
-    
-    });
 });
-
-//When user click on Enroll Now, this function will trigger
-
-// $('a#offer-timer').on('click', function(){
-//     const timer = setInterval(function() { 
-//         var {days, hours, minutes, seconds} = timer_values(end_date)
-
-//         $('.days').text(days);
-//         $('.hours').text(hours);
-//         $('.min').text(minutes);
-//         $('.sec').text(seconds);
-        
-//         if(!($('body').attr('class'))){
-//             clearInterval(timer)
-//         }
-//     }, 1000);
-// });

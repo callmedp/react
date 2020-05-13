@@ -227,9 +227,9 @@ $(document).ready(function() {
 		$("#open-offer").removeClass('show');
 	});
 
-	$("#open-thanks").click(function(){
-		$("#thank-modal").addClass('show');
-	});
+	// $("#open-thanks").click(function(){
+	// 	$("#thank-modal").addClass('show');
+	// });
 
 	$("#close-thanks-modal").click(function(){
 		$("#thank-modal , #open-offer").removeClass('show');

@@ -7,7 +7,7 @@
       <button type="button" class="close" id = "sticky_close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true">&times;</span>
       </button>
-      Limited time offer- <strong>upto 20% off!</strong>   |   Ends in <span id = 'sticky_timer'></span> - <a href="="#" id = 'offer-timer' data-toggle="modal" data-target="#offerModal">Enroll Now!</a>
+      {{sticky_text}}- <strong>{{offer_value}}</strong>   |   Ends in <span id = 'sticky_timer'>0d : 0h : 0m : 0s</span> - <a href="="#" id = 'offer-timer' data-toggle="modal" data-target="#offerModal">Enroll Now!</a>
   </div>
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
@@ -335,25 +335,27 @@
                     <input type="text" class="form-control" id="name" name="name" placeholder=" "
                         value="" aria-required="true" aria-invalid="true">
                     <label for="">Name</label>
+                    <span class="error-msg"></span>
                 </div>
                 <div class="form-group">
                     <input type="email" class="form-control" id="email" name="email" placeholder=" "
                         value="" aria-required="true" aria-invalid="true">
                     <label for="">Email</label>
+                    <span class="error-msg"></span>
                 </div>
                 <div class="d-flex">
                     <div class="custom-select-box">
-                        <select name="select" class="custom-select">
-                            <option selected>+91</option>
-                            <option value="+91">+91</option>
-                            <option value="+92">+92</option>
-                            <option value="+93">+93</option>
+                        <select name="country" class="custom-select">
+                          {% for country in country_choices %}
+                            <option value="{{country.0}}" {% if country.0 == '91' %} selected {% endif %} >{{country.0}} &emsp;&emsp;--&emsp;&emsp; {{country.1}}</option>
+                          {% endfor %}
                         </select>
                     </div>
                     <div class="form-group flex-100">
-                        <input type="text" class="form-control" id="mobile" name="mobile"
+                        <input type="text" class="form-control" id="mobile" name="number"
                             placeholder=" " value="" aria-required="true" aria-invalid="true">
                         <label for="">Mobile</label>
+                        <span class="error-msg"></span>
                     </div>
                 </div>
                 <div class="form-group course-interested">
@@ -390,22 +392,24 @@
                       </label>
                     </li>
                   </ul>
+                  <span id = checkbox_error class="error-msg"></span>
                 </div>
-                <button type="submit" id = "avail_offer_id" class="btn btn-block" role="button" data-target="#thanksModal" data-dismiss="modal">Avail offer now!</button>
+                <button type="submit" id = "avail_offer_id" class="btn btn-block" role="button" data-target="#thanksModal">Avail offer now!</button>
                 <span class="tc">*T&C applied, valid only on select courses</span>
+                <input type="hidden" name="product_offer" value="True">
             </form>
         </div>
         <div class="col-sm-6">
             <div class="offer-txt">
-              Limited time offer - <strong>upto 20% off</strong>
+              {{ banner_text }} - <strong>{{ offer_value }}</strong>
 
               <div class="offer-ending">
                 <p>Offer ending in</p>
                 <div class="d-flex">
-                  <span class="days"></span>
-                  <span class="hours"></span>
-                  <span class="min"></span>
-                  <span class="sec"></span>
+                  <span class="days">0</span>
+                  <span class="hours">0</span>
+                  <span class="min">0</span>
+                  <span class="sec">0</span>
                 </div>
               </div>
             </div>

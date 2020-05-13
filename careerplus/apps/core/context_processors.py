@@ -10,6 +10,8 @@ from django.core.cache import cache
 from django.template.loader import render_to_string
 
 #local imports
+from geolocation.models import Country
+from django.db.models import Q
 
 #inter app imports
 from cart.mixins import CartMixin
@@ -39,7 +41,8 @@ def js_settings(request):
         vars_text = '<script type=\"text/javascript\">%s;</script>' % vars_text
     return {
         'JS_SETTINGS': vars_text,
-        'CHATBOT_URL': cache.get('CHATBOT_URL','')
+        'CHATBOT_URL': cache.get('CHATBOT_URL',''),
+        
     }
 
 
@@ -69,7 +72,8 @@ def common_context_processor(request):
     except Exception as e:
         logging.getLogger('error_log').error('writer invoice is not reachable %s' % str(e))
         pass
-
+    country_choices = [(m.phone, m.name) for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+    country_choices = sorted(country_choices, key=lambda x: x[0])
     context.update({
         "SHINE_SITE": settings.SHINE_SITE,
         "SITE_DOMAIN": settings.SITE_DOMAIN,
@@ -107,7 +111,10 @@ def common_context_processor(request):
         "MAINTENANCE_MESSAGE": settings.MAINTENANCE_MESSAGE,
         "exoitel_status": cache.get('exoitel_status', False),
         "whatsapp_icon": cache.get('whatsapp_visibility_class', False),
-
+        "sticky_text": "Sticky Limited Period Offer",
+        "banner_text": "Banner Limited Period Offer",
+        "offer_value": "upto 30 off!",
+        'country_choices':country_choices,
      })
     return context
 
