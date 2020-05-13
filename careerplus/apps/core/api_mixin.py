@@ -69,6 +69,10 @@ class ShineToken(object):
 class ShineCandidateDetail(ShineToken):
 
     def get_shine_id(self, email=None, headers=None):
+        
+        hit_candidate_api = False
+        shine_id = None
+        
         try:
             # try to get info from candidate solr 
             if email: 
@@ -79,17 +83,16 @@ class ShineCandidateDetail(ShineToken):
                 if response.status_code == 200: 
                     response = response.json()
                     if not response and not isinstance(response, dict):
-                        return
+                        hit_candidate_api = True
                     response = response.get('response', {}).get('docs',[])
-                    if not response and not isinstance(response, list):
-                        return
-                    response = response[0]
+                    if not response or not isinstance(response, list):
+                        hit_candidate_api = True
 
-                    shine_id = response.get('id', None)
-
+                    if not hit_candidate_api:
+                        response = response[0]
+                        shine_id = response.get('id', None)
                     if shine_id:
                         return shine_id
-
 
             if not headers:
                 headers = self.get_api_headers()
