@@ -3294,6 +3294,7 @@ class ProductUserProfile(AbstractAutoDate):
     )
     due_date = models.DateTimeField(
         _('Due Date'), blank=True, null=True)
+    due_date_extended_by = models.PositiveSmallIntegerField(default = 0)
     day_of_week = models.PositiveSmallIntegerField(
         null=True, blank=True,
         choices=DAYS_CHOICES

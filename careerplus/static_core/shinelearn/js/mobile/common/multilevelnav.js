@@ -34,7 +34,8 @@
         backButton: '.backthis',
         defaultButton: '#sidebar-main-trigger',
         rightButton: '.sidebar-secondary-trigger',
-        countriesButton: '#sidebar-countries-trigger',
+        // countriesButton: '#sidebar-countries-trigger',
+        countriesButton : $('.fetch'),
         navClass: 'fixed-nav',
         opacityClass: 'opacity-add',
         menuByClass: '.sb-menu',
@@ -44,7 +45,7 @@
             'display': 'none'
         },
     };
-
+    
     $(document).ready(function(){
 
         $('#main-sidebar').simplerSidebar({
@@ -80,15 +81,19 @@
             }
         });
 
-        $('#sidebar-countries').simplerSidebar({
-            opener: defaults.countriesButton,
-            animation: {
-                easing: "easeOutQuint"
-            },
-            sidebar: {
-                align: 'right'
-            }
-        });
+        $('div#sidebar-countries').each(function(ele){
+            $(this).simplerSidebar({
+                opener: "#" + defaults.countriesButton.get(ele).id,
+                // opener : defaults.countriesButton,
+                animation: {
+                    easing: "easeOutQuint"
+                },
+                sidebar: {
+                    align: 'right'
+                }
+            });
+        }
+        )
 
         /* inner level button */ 
         $(defaults.level).on('click', function(e){
