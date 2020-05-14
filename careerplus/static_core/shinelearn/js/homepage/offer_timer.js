@@ -14,21 +14,18 @@ const end_date = getnewDate(end_date_time).getTime();
 //Function that will calculate the remaining day, hours, minutes, seconds
 
 function timer_values(end_date){
-    var start_date_timer = getnewDate(start_date_time).getTime()
     var now = getnewDate().getTime(); 
-    if(start_date_timer <= now){
-        var remaining_time = end_date - now; 
-        var days = Math.floor(remaining_time / (1000 * 60 * 60 * 24)); 
-        var hours = Math.floor((remaining_time%(1000 * 60 * 60 * 24))/(1000 * 60 * 60)); 
-        var minutes = Math.floor((remaining_time % (1000 * 60 * 60)) / (1000 * 60)); 
-        var seconds = Math.floor((remaining_time % (1000 * 60)) / 1000);
+    var remaining_time = end_date - now; 
+    var days = Math.floor(remaining_time / (1000 * 60 * 60 * 24)); 
+    var hours = Math.floor((remaining_time%(1000 * 60 * 60 * 24))/(1000 * 60 * 60)); 
+    var minutes = Math.floor((remaining_time % (1000 * 60 * 60)) / (1000 * 60)); 
+    var seconds = Math.floor((remaining_time % (1000 * 60)) / 1000);
           
-        return {
-            days: days, 
-            hours: hours,
-            minutes: minutes,
-            seconds: seconds
-        }
+    return {
+        days: days, 
+        hours: hours,
+        minutes: minutes,
+        seconds: seconds
     }
 }
 

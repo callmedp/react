@@ -3,6 +3,8 @@ import datetime
 import logging
 from json import loads
 from ast import literal_eval
+import pytz
+from django.utils import timezone
 
 #django imports
 from django.conf import settings
@@ -164,14 +166,21 @@ def get_home_offer_values():
     show = False
     end_date  = "05/18/2020 11:30:00"
     start_date = "05/18/2020 11:30:00"
+    fmt = "%m/%d/%Y %H:%M:%S"
     if active_offer:
-        end_date = active_offer.end_time.strftime("%m/%d/%Y %H:%M:%S")
+        end_local = active_offer.end_time
+        start_local= active_offer.start_time
+        utc_end = end_local.replace(tzinfo=pytz.UTC)
+        utc_start = start_local.replace(tzinfo=pytz.UTC)
+        end_date = utc_end.astimezone(timezone.get_current_timezone()).strftime(fmt)
+        start_date = utc_start.astimezone(timezone.get_current_timezone()).strftime(fmt)
+
         sticky_text = active_offer.sticky_text
         banner_text = active_offer.banner_text
         offer_value = active_offer.offer_value
-        if (active_offer.start_time.strftime("%m/%d/%Y %H:%M:%S") <= datetime.datetime.now().strftime("%m/%d/%Y %H:%M:%S")):
+
+        if (start_local.strftime("%m/%d/%Y %H:%M:%S") <= datetime.datetime.now(datetime.timezone.utc).strftime("%m/%d/%Y %H:%M:%S")):
             show = True
         else:
             show = False
-        start_date = active_offer.start_time.strftime("%m/%d/%Y %H:%M:%S")
     return start_date, end_date, sticky_text, banner_text, offer_value, show
