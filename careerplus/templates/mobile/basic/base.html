@@ -101,7 +101,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
         {% block main_container %}
         <div class="wrapper">
-            {% if show %}
+            {% if show and offer_home%}
                 <div class="offer" id="offer-widget">
                     <span class="close" id="close-offer"></span>
                     <script type="text/javascript">
@@ -129,8 +129,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
                    <div class="pull-right">
                         <!--a class="icon-search pull-left " href="search-listing.html">search</a-->
-                        {% if show %}
-                            <a class="icon-offers" id="icon_offer" href="javascript:void(0)"></a>
+                        {% if show and offer_home%}
+                            <a class="icon-offers" id="icon_offer" style="display: none;" href="javascript:void(0)"></a>
                         {% endif %}
                         <a class="icon-cart" href="{% url "cart:payment-summary" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
                    </div><!-- / Right side Icon ends here -->

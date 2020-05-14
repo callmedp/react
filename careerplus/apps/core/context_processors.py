@@ -75,7 +75,7 @@ def common_context_processor(request):
         pass
     country_choices = [(m.phone, m.name) for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
     country_choices = sorted(country_choices, key=lambda x: x[0])
-    end_date, sticky_text, banner_text, offer_value, show = get_home_offer_values()
+    start_date, end_date, sticky_text, banner_text, offer_value, show = get_home_offer_values()
     context.update({
         "SHINE_SITE": settings.SHINE_SITE,
         "SITE_DOMAIN": settings.SITE_DOMAIN,
@@ -117,8 +117,10 @@ def common_context_processor(request):
         "banner_text": banner_text,
         "offer_value": offer_value,
         "end_date": end_date,
+        "start_date": start_date,
         "show": show,
-        "country_choices": country_choices
+        "country_choices": country_choices,
+        "offer_home": False
      })
     return context
 
@@ -160,11 +162,16 @@ def get_home_offer_values():
     banner_text = ""
     offer_value = ""
     show = False
-    end_date  = "05 18 2020 11:30:00"
+    end_date  = "05/18/2020 11:30:00"
+    start_date = "05/18/2020 11:30:00"
     if active_offer:
-        end_date = active_offer.end_time.strftime("%m,%d,%Y %H:%M:%S")
+        end_date = active_offer.end_time.strftime("%m/%d/%Y %H:%M:%S")
         sticky_text = active_offer.sticky_text
         banner_text = active_offer.banner_text
         offer_value = active_offer.offer_value
-        show = True
-    return end_date, sticky_text, banner_text, offer_value, show
+        if (active_offer.start_time.strftime("%m/%d/%Y %H:%M:%S") <= datetime.datetime.now().strftime("%m/%d/%Y %H:%M:%S")):
+            show = True
+        else:
+            show = False
+        start_date = active_offer.start_time.strftime("%m/%d/%Y %H:%M:%S")
+    return start_date, end_date, sticky_text, banner_text, offer_value, show

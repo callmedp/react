@@ -1,5 +1,4 @@
 $(function(){
-
 	$.validator.addMethod("indiaMobile", function(value, element) {
 	    var country_code = $("select[name=country_code]").val(); //$('#call_back_country_code-id').val();
 	    if (country_code == '91') {

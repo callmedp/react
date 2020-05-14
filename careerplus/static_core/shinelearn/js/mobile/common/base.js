@@ -212,6 +212,7 @@ $(document).ready(function() {
 
 	$("#close-offer").click(function(){
 		$("#offer-widget").hide();
+		$("#icon_offer").show()
 	});
 
 	

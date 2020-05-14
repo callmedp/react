@@ -3,12 +3,13 @@
   {% if IS_MAINTENANCE %}
   <marquee> {{ MAINTENANCE_MESSAGE }} </marquee>
   {% endif %}
-  {% if show %}
+  {% if show and offer_home %}
     <div class="popup-box alert alert-dismissible" id = "product_offer_top">
         <button type="button" class="close" id = "sticky_close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true">&times;</span>
           <script type="text/javascript">
             var end_date_time = "{{end_date}}"
+            var start_date_time = "{{start_date}}"
           </script>
         </button>
         {{sticky_text}}- <strong>{{offer_value}}</strong>   |   Ends in <span id = 'sticky_timer'>0d : 0h : 0m : 0s</span> - <a href="="#" id = 'offer-timer' data-toggle="modal" data-target="#offerModal">Enroll Now!</a>
@@ -308,7 +309,7 @@
             <a class="" href="/courses/management/general-management/102/">General Management</a>
           </li>
         </ul>
-        {% if show %}
+        {% if show and offer_home %}
           <span class="pull-right mt-10" id = "pop_up_offer" data-toggle="modal" data-target="#offerModal"><i class="offer-icon"></i></span>
         {% endif %}
       </div><!-- /.navbar-collapse -->
