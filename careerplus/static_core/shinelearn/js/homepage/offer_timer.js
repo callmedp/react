@@ -1,3 +1,4 @@
+console.log(end_date_time)
 end_date_time != '' ? end_date_time : '01, 01, 2000 00:00:00'
 
 // Offer End date fetched from admin panel
