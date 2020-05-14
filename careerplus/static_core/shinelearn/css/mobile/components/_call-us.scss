@@ -277,8 +277,8 @@
 
 .offer-modal {
   &--image {
-    background-image: url(#{$fullpath}offer-image.png);
-    @include size(100%, 185px, block);
+    background-image: url(#{$fullpath}offer-image.svg);
+    @include size(100%, 200px, block);
     background-repeat: no-repeat;
     background-size: cover;
   }
