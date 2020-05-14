@@ -3,11 +3,10 @@ from django.contrib import admin
 from .models import Order, OrderItem, OrderItemOperation, Message,\
     RefundRequest, RefundItem, RefundOperation, CouponOrder,\
     EmailOrderItemOperation, SmsOrderItemOperation,\
-    InternationalProfileCredential
+    InternationalProfileCredential, GazettedHoliday
 
 from wallet.models import WalletTransaction
 from payment.models import PaymentTxn
-
 
 class CouponOrderInline(admin.TabularInline):
     model = CouponOrder
@@ -38,6 +37,8 @@ class OrderItemInline(admin.TabularInline):
         'assigned_to', 'assigned_by',)
     extra = 0
 
+class GazettedHolidaysAdmin(admin.ModelAdmin):
+    list_display = ['holiday_date', 'holiday_type']
 
 class OrderAdmin(admin.ModelAdmin):
     list_display = ['id', 'number', 'site', 'candidate_id', 'email',
@@ -136,3 +137,4 @@ admin.site.register(
     InternationalProfileCredential,
     InternationalProfileCredentialAdmin
 )
+admin.site.register(GazettedHoliday ,GazettedHolidaysAdmin)
