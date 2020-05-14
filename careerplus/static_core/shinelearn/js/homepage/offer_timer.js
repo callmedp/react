@@ -1,3 +1,4 @@
+end_date_time != '' ? end_date_time : '01, 01, 2000 00:00:00'
 
 // Offer End date fetched from admin panel
 const getnewDate = (date = null) =>
@@ -5,8 +6,9 @@ const getnewDate = (date = null) =>
 		? new Date(new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" }))
 		: new Date(
 			new Date(date).toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
-		);
-const end_date = getnewDate("May 15, 2020 18:02:00").getTime();
+        );
+
+const end_date = getnewDate(end_date_time).getTime();
 
 
 //Function that will calculate the remaining day, hours, minutes, seconds
@@ -50,7 +52,15 @@ $(window).ready(function(){
             clearInterval(timer);
             $("#avail_offer_id").html("Expired")
             $("#avail_offer_id").attr("disabled", true)
+            $("#product_offer_top").remove()
+            $("#pop_up_offer").remove()
             return;
+        }
+        if($("#product_offer_top").length){
+            $("#pop_up_offer").hide()
+        }
+        else{
+            $("#pop_up_offer").show()
         }
         sticky_timer(days, hours, minutes, seconds)
         popup_timer(days, hours, minutes, seconds)
@@ -60,20 +70,3 @@ $(window).ready(function(){
     }, 1000);
     
 });
-
-//When user click on Enroll Now, this function will trigger
-
-// $('a#offer-timer').on('click', function(){
-//     const timer = setInterval(function() { 
-//         var {days, hours, minutes, seconds} = timer_values(end_date)
-
-//         $('.days').text(days);
-//         $('.hours').text(hours);
-//         $('.min').text(minutes);
-//         $('.sec').text(seconds);
-        
-//         if(!($('body').attr('class'))){
-//             clearInterval(timer)
-//         }
-//     }, 1000);
-// });

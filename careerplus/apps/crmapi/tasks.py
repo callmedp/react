@@ -118,7 +118,7 @@ def add_server_lead_task(query_dict):
             utm_parameter=utm_parameter, campaign_slug=campaign_slug)
 
 
-# @task(name="create_lead_crm")
+@task(name="create_lead_crm")
 def create_lead_crm(pk=None, validate=False, product_offer = None):
     flag = False
     try:

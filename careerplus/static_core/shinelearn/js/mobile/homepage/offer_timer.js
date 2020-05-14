@@ -1,4 +1,4 @@
-
+end_date_time != '' ? end_date_time : '01, 01, 2000 00:00:00'
 // Offer End date fetched from admin panel
 const getnewDate = (date = null) =>
 	!date
@@ -6,7 +6,7 @@ const getnewDate = (date = null) =>
 		: new Date(
 			new Date(date).toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
 		);
-const end_date = getnewDate("May 21, 2020 01:15:00").getTime();
+const end_date = getnewDate(end_date_time).getTime();
 
 //Function that will calculate the remaining day, hours, minutes, seconds
 
@@ -47,13 +47,20 @@ $(window).ready(function(){
         var {days, hours, minutes, seconds} = timer_values(end_date)
         if(days < 0){
             clearInterval(timer);
+            $("#open-thanks").html("Expired")
+            $("#open-thanks").attr("disabled", true)
+            $("#offer-widget").remove()
+            $("#icon_offer").remove()
             return;
         }
+        // if($("#offer_widget").length){
+        //     $("#icon_offer").hide()
+        // }
+        // else{
+        //     $("#icon_offer").show()
+        // }
         sticky_timer(days, hours, minutes, seconds)
         popup_timer(days, hours, minutes, seconds)
-        // if(($('body').attr('class'))){
-        //     clearInterval(timer)
-        // }
     }, 1000);
 
 });

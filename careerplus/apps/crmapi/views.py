@@ -135,7 +135,7 @@ class LeadManagement(View):
             )
             created = True
             validate = True if lead.email else False
-            create_lead_crm(pk=lead.pk, validate=validate, product_offer=product_offer)
+            create_lead_crm.delay(pk=lead.pk, validate=validate, product_offer=product_offer)
         except Exception as e:
             logging.getLogger('error_log').error('lead creation is failed%s'%str(e))
 

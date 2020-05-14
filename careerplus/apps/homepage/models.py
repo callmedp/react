@@ -134,6 +134,9 @@ class HomePageOffer(AbstractAutoDate):
         _('Offer Name'), max_length=50,blank=True,null=True)
     sticky_text = models.CharField(
         _('Offer Sticky Text'), max_length=100,blank=True,null=True)
+    offer_value = models.CharField(
+        _('Offer value Text'), max_length=100,blank=True,null=True, 
+            help_text=("For eg. 'Upto 30%\' off!' or 'Flat 20%\' off!'"))
     banner_text = models.CharField(
         _('Offer Banner Text'), max_length=100, blank=True, null=True)
     start_time = models.DateTimeField(
@@ -152,9 +155,19 @@ class HomePageOffer(AbstractAutoDate):
     def clean(self):
         super().clean()
         now = timezone.now()
-        if not (self.start_time < now and self.end_time < now) :
-            if self.start_time > self.end_time:
-                raise ValidationError('End time Cannot be less than Start time')
-            elif self.start_time == self.end_time :
-                raise ValidationError('End time Cannot be same as Start time')
-        else : raise ValidationError('Offer Start Date or End Date cannot be less than Current Date')
+        if(self.sticky_text and self.banner_text and self.offer_value):
+            if (self.start_time and self.end_time):
+                if not ((self.start_time < now and self.end_time < now) or (self.start_time < now and self.end_time > now)):
+                    if self.start_time > self.end_time:
+                        raise ValidationError('End time Cannot be less than Start time')
+                    elif self.start_time == self.end_time :
+                        raise ValidationError('End time Cannot be same as Start time')
+                else : raise ValidationError('Offer Start Date or End Date cannot be less than Current Date')
+            else :
+                raise ValidationError('Date Time cannot be Empty')
+        else:
+            raise ValidationError('Sticky Text, Banner Text or Offer value cannot be empty')
+
+    def get_active_offer(self):
+        active_offer = HomePageOffer.objects.filter(is_active=True).first()
+        return active_offer

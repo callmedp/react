@@ -122,12 +122,12 @@ $(function(){
                 type: "POST",
                 data: formData,
                 success: function(data, textStatus, jqXHR) {
-                    MyGA.SendEvent('QueryForm', 'Form Interactions', 'Cms Enquiry', 'success'); 
+                    MyGA.SendEvent('QueryForm', 'Home Page Pop-up', 'Lead created', 'success'); 
                     $('#thanksModal').modal('show')
                     $("#pop_up_form").get(0).reset()
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
-                    MyGA.SendEvent('QueryForm', 'Form Interactions', 'Cms Enquiry', 'Failure');
+                    MyGA.SendEvent('QueryForm', 'Home Page Pop-up', 'Lead created', 'Failure');
                     alert('Something went wrong. Try again later.');  
                     $("#pop_up_form").get(0).reset()
                 }

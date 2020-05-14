@@ -12,6 +12,7 @@ from django.template.loader import render_to_string
 #local imports
 from geolocation.models import Country
 from django.db.models import Q
+from homepage.models import HomePageOffer
 
 #inter app imports
 from cart.mixins import CartMixin
@@ -74,6 +75,7 @@ def common_context_processor(request):
         pass
     country_choices = [(m.phone, m.name) for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
     country_choices = sorted(country_choices, key=lambda x: x[0])
+    end_date, sticky_text, banner_text, offer_value, show = get_home_offer_values()
     context.update({
         "SHINE_SITE": settings.SHINE_SITE,
         "SITE_DOMAIN": settings.SITE_DOMAIN,
@@ -111,10 +113,12 @@ def common_context_processor(request):
         "MAINTENANCE_MESSAGE": settings.MAINTENANCE_MESSAGE,
         "exoitel_status": cache.get('exoitel_status', False),
         "whatsapp_icon": cache.get('whatsapp_visibility_class', False),
-        "sticky_text": "Sticky Limited Period Offer",
-        "banner_text": "Banner Limited Period Offer",
-        "offer_value": "upto 30 off!",
-        'country_choices':country_choices,
+        "sticky_text": sticky_text,
+        "banner_text": banner_text,
+        "offer_value": offer_value,
+        "end_date": end_date,
+        "show": show,
+        "country_choices": country_choices
      })
     return context
 
@@ -150,5 +154,17 @@ def get_console_sidebar_badges(request):
             "ops_badges_dict":cache.get("{}{}".format("ops_badges_dict_",request.user.id),{}),
             }
 
-
-
+def get_home_offer_values():
+    active_offer = HomePageOffer().get_active_offer()
+    sticky_text = ""
+    banner_text = ""
+    offer_value = ""
+    show = False
+    end_date  = "05 18 2020 11:30:00"
+    if active_offer:
+        end_date = active_offer.end_time.strftime("%m,%d,%Y %H:%M:%S")
+        sticky_text = active_offer.sticky_text
+        banner_text = active_offer.banner_text
+        offer_value = active_offer.offer_value
+        show = True
+    return end_date, sticky_text, banner_text, offer_value, show

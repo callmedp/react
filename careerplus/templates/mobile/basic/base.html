@@ -101,13 +101,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
         {% block main_container %}
         <div class="wrapper">
-            <div class="offer" id="offer-widget">
-                <span class="close" id="close-offer"></span>
-                <p class="pb-0">
-                    {{sticky_text}}- <strong>{{offer_value}} <br/> Ends in <span id = 'sticky_timer_mobile'></span> - </strong> 
-                    <a href="#" class="offer--link" id="enroll-now">Enroll Now!</a> 
-                </p>
-            </div>
+            {% if show %}
+                <div class="offer" id="offer-widget">
+                    <span class="close" id="close-offer"></span>
+                    <script type="text/javascript">
+                        var end_date_time = "{{end_date}}"
+                    </script>
+                    <p class="pb-0">
+                        {{sticky_text}}- <strong>{{offer_value}} <br/> Ends in <span id = 'sticky_timer_mobile'></span> - </strong> 
+                        <a href="javascript:void(0)" class="offer--link" id="enroll-now">Enroll Now!</a> 
+                    </p>
+                </div>
+            {% endif %}
 
             {% block header %}
             <!-- header menu Icon Starts here -->
@@ -124,7 +129,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
                    <div class="pull-right">
                         <!--a class="icon-search pull-left " href="search-listing.html">search</a-->
-                        <a class="icon-offers" id="icon_offer" href="#"></a>
+                        {% if show %}
+                            <a class="icon-offers" id="icon_offer" href="javascript:void(0)"></a>
+                        {% endif %}
                         <a class="icon-cart" href="{% url "cart:payment-summary" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
                    </div><!-- / Right side Icon ends here -->
                 </div><!-- header menu Icon ends here -->
@@ -187,13 +194,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                                     class="form--control animation-input {% if request.session.full_name %}has-content{% endif %}" 
                                     placeholder="">
                                 <label for="name">Name</label>
-                                <span class="error--mgs"></span>
+                                <span class="mgs"></span>
                             </li>
                             <li class="form-group d-flex">
                                     <div class="input-effect code">
                                         <select name="country_code" class="form--control" id="country-code">
                                         {% for country in country_choices %}
-                                            <option value="{{country.0}}" {% if country.0 == '91' %} selected {% endif %} >&emsp;&emsp;&emsp;{{country.0}}-- {{country.1}}</option>
+                                            <option value="{{country.0}}" {% if country.0 == '91' %} selected {% endif %} >{{country.0}}&emsp;&emsp;&emsp;&emsp;&emsp;-- {{country.1}}</option>
                                         {% endfor %}
                                         </select>
                                     </div>
@@ -202,7 +209,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                                             class="form--control animation-input {% if request.session.mobile_no %}has-content{% endif %}" 
                                             placeholder="">
                                         <label for="mobile-id">Mobile</label>
-                                        <span class="error--mgs"></span>
+                                        <span class="mgs"></span>
                                     </div>
                             </li>
 
@@ -211,22 +218,22 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                                     class="form--control animation-input {% if request.session.email %}has-content{% endif %}"
                                     aria-describedby="email-id" placeholder="" >
                                 <label for="email-id">Email id</label>
-                                <span class="error--mgs"></span>
+                                <span class="mgs"></span>
                             </li>
                             <li class="fs-14 semi-bold mb-5 mt-20">Course you would be interested in</li>
-                            <li class="custom-checkbox offer-modal--checkboxes mb-25">
+                            <li class="custom-checkbox offer-modal--checkboxes mb-25 error">
                                 <label for="big-data">
-                                    <input class="form-check-input" type="checkbox" id = "big-data" name = "course" value="big-data">
+                                    <input class="form-check-input" type="checkbox" id = "big-data" name = "course" value="Big data">
                                     <span>Big data</span>
                                 </label>
                                 
                                 <label for="six-sigma">
-                                    <input class="form-check-input" type="checkbox" id = "six-sigma" name = "course" value="six-sigma">
+                                    <input class="form-check-input" type="checkbox" id = "six-sigma" name = "course" value="Six Sigma">
                                     <span>Six Sigma</span>
                                 </label>
                                 
                                 <label for="cc">
-                                    <input class="form-check-input" type="checkbox" id = "cc" name = "course" value="Cloud Computing">
+                                    <input class="form-check-input" type="checkbox" id = "cc" name = "course" value="Cloud computing">
                                     <span>Cloud computing</span>
                                 </label>
                                 
@@ -244,16 +251,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                                     <input class="form-check-input" type="checkbox" id = "others" name = "course" value="Others">
                                     <span>Others </span>
                                 </label>
+                                <span id = "checkbox_error" class="mgs"></span>
                             </li>
-                            <span class="error--mgs"></span>
-                            <!-- <input type="hidden" name="product" value="{{category.pk}}">
-                            <input type="hidden" name="prd" value="{{category.heading}}">
-                            <input type="hidden" name="path" value="{{category.get_absolute_url}}"> -->
                             <li>
                                 <button class="btn btn-round btn-blue w100 semi-bold" type="submit" id="open-thanks">Avail offer now!</button>
                             </li>
                             <li class="fs-12 c9 text-center mt-10">*T&C applied, valid only on select courses</li>
-
+                            <input type="hidden" name="product_offer" value="True">
                         </ul>
                     </form>
                 </div>
