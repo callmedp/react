@@ -1,5 +1,8 @@
-console.log(end_date_time)
-end_date_time != '' ? end_date_time : '01, 01, 2000 00:00:00'
+//when window loads, this function will trigger and it will calculate the days, hours, minutes and seconds
+//and show on sticky and popup offer
+
+$(window).ready(function(){
+    var end_date_time_new = end_date_time ? end_date_time : '01/01/2000 00:00:00'
 
 // Offer End date fetched from admin panel
 const getnewDate = (date = null) =>
@@ -9,7 +12,7 @@ const getnewDate = (date = null) =>
 			new Date(date).toLocaleString("en-US", { timeZone: "Asia/Kolkata" })
         );
 
-const end_date = getnewDate(end_date_time).getTime();
+const end_date = getnewDate(end_date_time_new).getTime();
 
 
 //Function that will calculate the remaining day, hours, minutes, seconds
@@ -43,10 +46,6 @@ function popup_timer(days, hours, minutes, seconds){
     return;
 }
 
-//when window loads, this function will trigger and it will calculate the days, hours, minutes and seconds
-//and show on sticky and popup offer
-
-$(window).ready(function(){
     const timer = setInterval(function() {
         var {days, hours, minutes, seconds} = timer_values(end_date)
         if(days < 0){

@@ -77,7 +77,7 @@ def common_context_processor(request):
         pass
     country_choices = [(m.phone, m.name) for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
     country_choices = sorted(country_choices, key=lambda x: x[0])
-    start_date, end_date, sticky_text, banner_text, offer_value, show = get_home_offer_values()
+    end_date, sticky_text, banner_text, offer_value, show = get_home_offer_values()
     context.update({
         "SHINE_SITE": settings.SHINE_SITE,
         "SITE_DOMAIN": settings.SITE_DOMAIN,
@@ -119,7 +119,6 @@ def common_context_processor(request):
         "banner_text": banner_text,
         "offer_value": offer_value,
         "end_date": end_date,
-        "start_date": start_date,
         "show": show,
         "country_choices": country_choices,
         "offer_home": False
@@ -164,23 +163,20 @@ def get_home_offer_values():
     banner_text = ""
     offer_value = ""
     show = False
-    end_date  = "05/18/2020 11:30:00"
-    start_date = "05/18/2020 11:30:00"
+    end_date  = ""
     fmt = "%m/%d/%Y %H:%M:%S"
     if active_offer:
         end_local = active_offer.end_time
         start_local= active_offer.start_time
         utc_end = end_local.replace(tzinfo=pytz.UTC)
-        utc_start = start_local.replace(tzinfo=pytz.UTC)
         end_date = utc_end.astimezone(timezone.get_current_timezone()).strftime(fmt)
-        start_date = utc_start.astimezone(timezone.get_current_timezone()).strftime(fmt)
 
         sticky_text = active_offer.sticky_text
         banner_text = active_offer.banner_text
         offer_value = active_offer.offer_value
 
-        if (start_local.strftime("%m/%d/%Y %H:%M:%S") <= datetime.datetime.now(datetime.timezone.utc).strftime("%m/%d/%Y %H:%M:%S")):
+        if (start_local.strftime(fmt) <= datetime.datetime.now(datetime.timezone.utc).strftime(fmt)):
             show = True
         else:
             show = False
-    return start_date, end_date, sticky_text, banner_text, offer_value, show
+    return end_date, sticky_text, banner_text, offer_value, show

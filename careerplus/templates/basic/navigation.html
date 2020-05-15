@@ -7,11 +7,8 @@
     <div class="popup-box alert alert-dismissible" id = "product_offer_top">
         <button type="button" class="close" id = "sticky_close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true">&times;</span>
-          <script type="text/javascript">
-            var end_date_time = "{{end_date}}"
-          </script>
         </button>
-        {{sticky_text}}- <strong>{{offer_value}}</strong>   |   Ends in <span id = 'sticky_timer'>0d : 0h : 0m : 0s</span> - <a href="="#" id = 'offer-timer' data-toggle="modal" data-target="#offerModal">Enroll Now!</a>
+        <div data-toggle="modal" data-target="#offerModal">{{sticky_text}}- <strong>{{offer_value}}</strong>   |   Ends in <span id = 'sticky_timer'>0d : 0h : 0m : 0s</span> - <a href="javascript:void(0)" id = 'offer-timer'>Enroll Now!</a></div>
     </div>
   {% endif %}
   <div class="container-fluid">
