@@ -11,4 +11,7 @@ urlpatterns = [
     re_path(r'^testimonial-category-map/$',
         views.TestimonialCategoryMapping.as_view(), name='testimonial-category-map'),
 
+    re_path(r'^user-inbox/$',
+            views.UserDashboardApi.as_view()),
+
     ]
