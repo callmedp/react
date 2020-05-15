@@ -17,6 +17,8 @@ class OrderItemDetailSerializer(SerializerFieldsMixin,serializers.ModelSerialize
     product_type_flow = serializers.SerializerMethodField()
     days_left_oi_product = serializers.SerializerMethodField()
     get_exp_db = serializers.SerializerMethodField()
+    get_user_oi_status = serializers.SerializerMethodField()
+    auto_upload = serializers.SerializerMethodField()
     # order = serializers.SerializerMethodField('get_order')
     # prdid = serializers.SerializerMethodField('get_parentprdid')
     # parent = SerializerMethodField('get_parent1')
@@ -32,6 +34,13 @@ class OrderItemDetailSerializer(SerializerFieldsMixin,serializers.ModelSerialize
                    'expiry_date','wc_cat','wc_sub_cat','wc_status','wc_follow_up','partner')
 
     #
+
+    def get_auto_upload(self,obj):
+        return obj.order.auto_upload
+
+
+    def get_get_user_oi_status(self,obj):
+        return obj.get_user_oi_status   
 
     def get_get_exp_db(self,obj):
         return obj.product.get_exp_db() if obj.product else ''
