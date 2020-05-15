@@ -72,13 +72,16 @@ class UserDashboardApi(FieldFilterMixin,ListAPIView):
         email = self.request.GET.get("email", None)
         candidate_id = self.request.GET.get("candidate_id", None)
         select_type = self.request.GET.get("select_type", 0)
-        days=0
+        days = 0
 
         last_month_from = self.request.GET.get("last_month_from", 18)
         try:
             days = int(last_month_from) * 30
+            select_type = int(select_type)
         except:
             days = 18*30
+            select_type = 0
+
         last_payment_date = timezone.now() - datetime.timedelta(days=days)
 
         queryset_list = OrderItem.objects.filter(no_process=False,order__site=2,product__type_flow__in=[1,12,13, 4,5,8])
