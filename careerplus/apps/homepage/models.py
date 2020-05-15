@@ -157,12 +157,18 @@ class HomePageOffer(AbstractAutoDate):
         now = timezone.now()
         if(self.sticky_text and self.banner_text and self.offer_value):
             if (self.start_time and self.end_time):
-                if not ((self.start_time < now and self.end_time < now) or (self.start_time < now and self.end_time > now)):
+                if self.is_active:
+                    if not (self.end_time < now):
+                        if self.start_time > self.end_time:
+                            raise ValidationError('End time Cannot be less than Start time')
+                        elif self.start_time == self.end_time :
+                            raise ValidationError('End time Cannot be same as Start time')
+                    else : raise ValidationError('Offer End Date cannot be less than Current Date')
+                else:
                     if self.start_time > self.end_time:
-                        raise ValidationError('End time Cannot be less than Start time')
+                            raise ValidationError('End time Cannot be less than Start time')
                     elif self.start_time == self.end_time :
-                        raise ValidationError('End time Cannot be same as Start time')
-                else : raise ValidationError('Offer Start Date or End Date cannot be less than Current Date')
+                            raise ValidationError('End time Cannot be same as Start time')
             else :
                 raise ValidationError('Date Time cannot be Empty')
         else:

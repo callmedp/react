@@ -174,7 +174,6 @@ def get_home_offer_values():
         sticky_text = active_offer.sticky_text
         banner_text = active_offer.banner_text
         offer_value = active_offer.offer_value
-
         if (start_local.strftime(fmt) <= datetime.datetime.now(datetime.timezone.utc).strftime(fmt)):
             show = True
         else:
