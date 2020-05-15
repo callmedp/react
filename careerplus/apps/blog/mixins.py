@@ -33,6 +33,7 @@ class BlogMixin(object):
 
             results = get_recommendations(
                 None, skills_ids)
+                
 
         if query and not results:
             slug = settings.COURSE_SLUG[0]
@@ -59,7 +60,8 @@ class BlogMixin(object):
                 'image_alt': prd.pImA,
                 'buy_count': prd.pBC,
                 'class': prd.pPc,
-                'star': prd.pStar}))
+                'star': prd.pStar,
+                'pid': prd.pk}))
         return product
 
 

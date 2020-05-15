@@ -161,6 +161,7 @@ class CMSPageView(DetailView, LoadMoreMixin):
                 'csrf_token_value': csrf_token_value,
                 'country_choices': country_choices,
                 'initial_country': initial_country,
+                'wid': left.widget.id
             })
 
             if self.request.amp:

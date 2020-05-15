@@ -603,7 +603,7 @@
                     <div class="item form-group {% if inline_admin_form.heading.errors %}bad{% endif %}">
                       <label class="control-label col-md-3 col-sm-3 col-xs-12" for="{{ inline_admin_form.heading.id_for_label }}">{{inline_admin_form.heading.label}} <span class="required" style="color:red">*</span>
                       </label>
-                      <div class="col-md-6 col-sm-6 col-xs-12">
+                      <div class="col-md-6 col-sm-6 col-xs-12" onchange="DeleteCheckboxOnClick()">
                         {{inline_admin_form.heading}}
                       </div>
                       <div class="alert">{{inline_admin_form.heading.errors}}</div>
@@ -846,6 +846,30 @@
         
 {% block js_block %}
   {{ block.super }}
+  <script>
+  var count = 0
+  window.onload = function(){
+    for(count = 0; count < 5;count++){
+        id_heading = "id_subheaders-"+String(count)+"-heading";
+        if(document.getElementById(id_heading) == null){break;}
+      }
+      count = count - 1;
+      id_delete = "id_subheaders-"+String(count)+"-DELETE";
+      document.getElementById(id_delete).checked = true;
+  }
+    function DeleteCheckboxOnClick(){
+      for(count = 0; count < 5;count++){
+        id_heading = "id_subheaders-"+String(count)+"-heading";
+        if(document.getElementById(id_heading) == null){break;}
+      };
+      count = count - 1;
+      id_delete = "id_subheaders-"+String(count)+"-DELETE";
+      id_heading = "id_subheaders-"+String(count)+"-heading";
+      if(document.getElementById(id_heading).value){
+        document.getElementById(id_delete).checked = false;}
+      else{document.getElementById(id_delete).checked = true;}
+    }
+  </script>
 
   {% compress js %}
   <script src="{% static 'console/js/myadmin/django-admin.multiselect.js' %}"></script>
