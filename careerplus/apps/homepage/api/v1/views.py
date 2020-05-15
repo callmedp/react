@@ -1,3 +1,4 @@
+import logging
 from rest_framework.generics import RetrieveAPIView ,ListAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -9,10 +10,13 @@ import datetime
 from django.utils import timezone
 from django.db.models import Prefetch
 # from order.api.v1.serializers import OrderItemSerializers
-from .serializers import StaticSiteContentSerializer  ,OrderListSerializer  ,OrderItemDetailSerializer
+from .serializers import StaticSiteContentSerializer, OrderItemDetailSerializer
 from homepage.models import StaticSiteContent,TestimonialCategoryRelationship,Testimonial
 from shop.models import Category
 from order.models import OrderItem
+
+logger = logging.getLogger('error_log')
+
 
 class StaticSiteView(RetrieveAPIView):
     # queryset = TermAndAgreement.objects.all()
@@ -56,6 +60,7 @@ class TestimonialCategoryMapping(APIView):
             TestimonialCategoryRelationship.objects.get_or_create(category=category,testimonial=testimonial)
 
         return HttpResponse("Successful")
+
 
 class UserDashboardApi(FieldFilterMixin,ListAPIView):
     """
@@ -133,5 +138,70 @@ class UserDashboardApi(FieldFilterMixin,ListAPIView):
                 '-order__payment_date')
 
 
+class DashboardDetailApi(APIView):
 
+    def get(self, request):
+        candidate_id = request.GET.get('candidate_id', '')
+        orderitem_id = request.GET.get('orderitem_id')
 
+        if not candidate_id:
+            return Response({'status': 'Failure', 'error': 'candidate_id is required'},
+                            status=status.HTTP_400_BAD_REQUEST)
+        if not orderitem_id:
+            return Response({'status': 'Failure', 'error': 'orderitem_id is required'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            order_item = OrderItem.objects.select_related('order', 'product').get(
+                pk=orderitem_id, order__candidate_id=candidate_id, order__status__in=[1, 3])
+        except OrderItem.DoesNotExist:
+            logger.error('OrderItem for candidate_id %s and pk %s with order status in [1, 3] does not exist' %(
+                candidate_id, orderitem_id))
+            return Response({'status': 'Failure', 'error': 'OrderItem does not exists.'})
+
+        ops = []
+
+        if order_item.product.type_flow in [1, 12, 13]:
+            ops = order_item.orderitemoperation_set.filter(oi_status__in=[2, 5, 24, 26, 27, 161, 162, 163, 164, 181])
+
+        elif order_item.product.vendor.slug == 'neo':
+            ops = order_item.orderitemoperation_set.filter(oi_status__in=[5, 33, 4, 161, 162, 163, 164])
+
+        elif order_item.product.type_flow in [2, 14]:
+            ops = order_item.orderitemoperation_set.filter(oi_status__in=[5, 6, 161, 162, 163, 164])
+
+        elif order_item.product.type_flow == 3:
+            ops = order_item.orderitemoperation_set.filter(oi_status__in=[2, 5, 121, 161, 162, 163, 164])
+        elif order_item.product.type_flow == 4:
+            ops = order_item.orderitemoperation_set.filter(oi_status__in=[2, 5, 6, 61, 161, 162, 163, 164])
+        elif order_item.product.type_flow == 5:
+            ops = order_item.orderitemoperation_set.filter(oi_status__in=[2, 5, 6, 61, 161, 162, 163, 164])
+        elif order_item.product.type_flow == 6:
+            ops = order_item.orderitemoperation_set.filter(oi_status__in=[6, 81, 82, 161, 162, 163, 164])
+        elif order_item.product.type_flow in [7, 15]:
+            ops = order_item.orderitemoperation_set.filter(oi_status__in=[2, 4, 5, 6, 61, 161, 162, 163, 164])
+        elif order_item.product.type_flow == 8:
+            oi_status_list = [2, 49, 5, 46, 48, 27, 4, 161, 162, 163, 181, 164]
+            ops = order_item.orderitemoperation_set.filter(oi_status__in=oi_status_list)
+        elif order_item.product.type_flow == 10:
+            ops = order_item.orderitemoperation_set.filter(oi_status__in=[5, 6, 101, 161, 162, 163, 164])
+        elif order_item.product.type_flow == 16:
+            ops = order_item.orderitemoperation_set.filter(oi_status__in=[5, 6, 4])
+
+        ops = ops.values_list('id', 'oi_status', 'draft_counter', 'get_user_oi_status', 'created__date',
+                              'oi_draft__name', 'oi_draft__name', flat=True)
+        resp_dict = {'status': 'Success', 'error': None, 'data': {'ops': list(ops), 'oi': {
+            'oi_status': order_item.oi_status,
+            'product_id': order_item.product.pk,
+            'product_type_flow': order_item.product.type_flow,
+            'oi_resume': order_item.oi_resume,
+            'product_sub_type_flow': order_item.product.sub_type_flow,
+            'custom_operations': list(order_item.get_item_operations().values()),
+            'order_id': order_item.order.pk,
+            'oi_id': order_item.pk,
+            'order_number': order_item.order.number,
+            'product_name': order_item.product.get_name,
+            'product_exp_db': order_item.product.get_exp_db(),
+        }}}
+
+        return Response(resp_dict, status=status.HTTP_200_OK)

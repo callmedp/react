@@ -13,5 +13,7 @@ urlpatterns = [
 
     re_path(r'^user-inbox/$',
             views.UserDashboardApi.as_view()),
+    re_path(r'^dashboard-detail/$',
+            views.DashboardDetailApi.as_view()),
 
     ]

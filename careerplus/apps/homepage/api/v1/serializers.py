@@ -85,8 +85,8 @@ class OrderListSerializer(serializers.ModelSerializer):
             return "Closed"
 
     def get_orderitems1(self, obj):
-        request = self.context.get('request',{})
-        query_dict = getattr(request,'GET',{})
+        request = self.context.get('request', {})
+        query_dict = getattr(request, 'GET', {})
         select_type = query_dict.get('select_type',0)
         orderitems = obj.orderitems.filter(parent=None)
         if select_type == 1:
@@ -95,7 +95,3 @@ class OrderListSerializer(serializers.ModelSerializer):
             orderitems = orderitems.filter(oi_status=4)
 
         return OrderItemDetailSerializer(orderitems, many=True).data
-
-
-
-
