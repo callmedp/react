@@ -128,12 +128,12 @@ class DashboardInfo(object):
     def get_pending_resume_items(self, candidate_id=None, email=None):
         if candidate_id:
             resume_pending_items = OrderItem.objects.\
-                filter(order__candidate_id=candidate_id,order__site =[], order__status__in=[1, 3],no_process=False).\
+                filter(order__candidate_id=candidate_id,order__status__in=[1,3],no_process=False).\
                 filter(Q(oi_status=2) | Q(order__auto_upload=True, assigned_to=None)).exclude(oi_status__in=[4,24])
 
         elif email:
             resume_pending_items = OrderItem.objects.\
-                filter(order__email=email, order__status__in=[1, 3],order__site=2,no_process=False).\
+                filter(order__email=email, order__status__in=[1, 3],no_process=False).\
                 filter(Q(oi_status=2) | Q(order__auto_upload=True, assigned_to=None)).exclude(oi_status__in=[4,24])
 
         return resume_pending_items.select_related('order', 'partner', 'product')
