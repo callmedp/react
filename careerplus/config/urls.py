@@ -233,7 +233,10 @@ urlpatterns += [
 
                    re_path(r'^lead/', include('crmapi.urls', namespace='crmapi')),
 
-                   re_path(r'^', include('marketing.urls', namespace='marketing')),
+                    re_path(r'^api/', include('wallet.urls')),
+
+                    re_path(r'^', include('marketing.urls', namespace='marketing')),
+
 
                    re_path(r'^about-us$',
                        homepage_view.AboutUsView.as_view(), name='about-us'),

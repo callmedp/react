@@ -61,7 +61,7 @@ class Wallet(AbstractAutoDate):
         return self.owner
 
     def get_current_amount(self):
-        points = self.point.filter(status=1)
+        points = self.point.only('expiry','current').filter(status=1)
         total = Decimal(0)
         for pts in points:
             if pts.expiry >= timezone.now():
