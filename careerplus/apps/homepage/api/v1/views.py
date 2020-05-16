@@ -203,6 +203,9 @@ class DashboardDetailApi(APIView):
 
 
 class DashboardNotificationBoxApi(APIView):
+    authentication_classes = []
+    permission_classes = []
+    serializer_class = None
 
     def get(self, request):
         candidate_id = request.GET.get('candidate_id', None)
@@ -217,9 +220,14 @@ class DashboardNotificationBoxApi(APIView):
                             status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            pending_resume_items = DashboardInfo().get_pending_resume_items(candidate_id=self.candidate_id,
-                                                                            email=email).values_list(
-                'id', 'product__get_name', 'product__get_exp_db')
+            # this is order__site=2 is required to get the data for resume.shine
+            pending_resume_items = DashboardInfo().get_pending_resume_items(candidate_id=candidate_id,
+                                                                            email=email).filter(order__site=2)
+
+            pending_resume_items = [{'id':oi.id,'product_name':oi.product.get_name if oi.product else ''
+                                     ,'product_get_exp_db':oi.product.get_exp_db() if oi.product else ''
+                                     } for oi in
+                                    pending_resume_items]
             res = ShineCandidateDetail().get_candidate_detail(email=None, shine_id=candidate_id)
             resumes = res['resumes']
             default_resumes = [resume for resume in resumes if resume['is_default']][0]
