@@ -3,17 +3,17 @@ from rest_framework.generics import RetrieveAPIView ,ListAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
 from django.http import HttpResponse
 from shared.rest_addons.mixins import FieldFilterMixin
 import datetime
 from django.utils import timezone
-from django.db.models import Prefetch
-# from order.api.v1.serializers import OrderItemSerializers
-from .serializers import StaticSiteContentSerializer, OrderItemDetailSerializer
+
+from .serializers import StaticSiteContentSerializer, OrderItemDetailSerializer, DashboardCancellationSerializer
 from homepage.models import StaticSiteContent,TestimonialCategoryRelationship,Testimonial
 from shop.models import Category
-from order.models import OrderItem
+from order.models import Order, OrderItem
+from dashboard.dashboard_mixin import DashboardInfo, DashboardCancelOrderMixin
+from core.api_mixins import ShineCandidateDetail
 
 logger = logging.getLogger('error_log')
 
@@ -62,7 +62,7 @@ class TestimonialCategoryMapping(APIView):
         return HttpResponse("Successful")
 
 
-class UserDashboardApi(FieldFilterMixin,ListAPIView):
+class UserDashboardApi(FieldFilterMixin, ListAPIView):
     """
      This api gives all the the order items.
     """
@@ -70,8 +70,6 @@ class UserDashboardApi(FieldFilterMixin,ListAPIView):
     permission_classes = ()
     authentication_classes = ()
     serializer_class = OrderItemDetailSerializer
-
-
 
     def get_queryset(self, *args, **kwargs):
         email = self.request.GET.get("email", None)
@@ -88,9 +86,8 @@ class UserDashboardApi(FieldFilterMixin,ListAPIView):
             select_type = 0
 
         last_payment_date = timezone.now() - datetime.timedelta(days=days)
-
-        queryset_list = OrderItem.objects.filter(no_process=False,order__site=2,product__type_flow__in=[1,12,13, 4,5,8])
-
+        queryset_list = OrderItem.objects.filter(no_process=False, order__site=2,
+                                                 product__type_flow__in=[1, 12, 13, 4, 5, 8])
 
         if select_type == 1:
             queryset_list = queryset_list.exclude(oi_status=4)
@@ -99,43 +96,29 @@ class UserDashboardApi(FieldFilterMixin,ListAPIView):
 
         if not email and not candidate_id:
             return queryset_list.none()
+
+        queryset_list = queryset_list.prefetch_related('product', 'product__product_class', 'delivery_service',
+                                                       'order', 'product__attributes'
+                                                       ).order_by('-order__payment_date')
+
         if candidate_id and not email:
-            queryset_list = queryset_list.prefetch_related('product', 'product__product_class', 'delivery_service',
-                                                  'order', 'product__attributes').order_by(
-                '-order__payment_date')
-            return queryset_list.filter(
-                order__candidate_id=candidate_id,
-                order__status__in=[1, 3],
-            order__payment_date__gte=last_payment_date)
+            return queryset_list.filter(order__candidate_id=candidate_id, order__status__in=[1, 3],
+                                        order__payment_date__gte=last_payment_date)
 
         if email and not candidate_id:
-            queryset_list = queryset_list.prefetch_related('product', 'product__product_class', 'delivery_service',
-                                           'order', 'product__attributes').order_by(
-                '-order__payment_date')
+            return queryset_list.filter(order__email=email, order__payment_date__gte=last_payment_date,
+                                        order__status__in=[1, 3])
 
-            return queryset_list.filter(
-                order__email=email,order__payment_date__gte=last_payment_date,
-                order__status__in=[1, 3])
         if email and candidate_id:
-            queryset_list = queryset_list.filter(
-                order__candidate_id=candidate_id,
-                order__status__in=[1, 3],
-                order__payment_date__gte=last_payment_date) | queryset_list.filter(
-                order__email=email,
-                order__status__in=[1, 3])
+            queryset_list = queryset_list.filter(order__candidate_id=candidate_id, order__status__in=[1, 3],
+                                                 order__payment_date__gte=last_payment_date)
+            if not queryset_list.exists():
+                queryset_list = queryset_list.filter(order__email=email, order__status__in=[1, 3])
 
-        #     return queryset_list.select_related('order','product','delivery_service').prefetch_related(
-        #         'product__attributes').only('product__name',
-        # 'product__product_class','product__type_flow','product__heading', 'delivery_service__name','delivery_service__slug',
-        #                                                                              'order__payment_date').order_by(
-        #         '-order__payment_date')
+            queryset_list = queryset_list.filter(order__email=email, order__status__in=[1, 3], no_process=False,
+                                                 order__site=2)
 
-            queryset_list = queryset_list.filter(
-                order__email=email,
-                order__status__in=[1, 3], no_process=False,order__site=2)
-            return queryset_list.prefetch_related('product','product__product_class','delivery_service',
-                                                  'order','product__attributes').order_by(
-                '-order__payment_date')
+            return queryset_list
 
 
 class DashboardDetailApi(APIView):
@@ -205,3 +188,68 @@ class DashboardDetailApi(APIView):
         }}}
 
         return Response(resp_dict, status=status.HTTP_200_OK)
+
+
+class DashboardNotificationBoxApi(APIView):
+
+    def get(self, request):
+        candidate_id = request.GET.get('candidate_id', None)
+        email = request.GET.get('email', None)
+
+        if not candidate_id:
+            return Response({'status': 'Failure', 'error': 'candidate_id is required.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        if not email:
+            return Response({'status': 'Failure', 'error': 'email is required.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            pending_resume_items = DashboardInfo().get_pending_resume_items(candidate_id=self.candidate_id,
+                                                                            email=email).values_list(
+                'id', 'product__get_name', 'product__get_exp_db')
+            res = ShineCandidateDetail().get_candidate_detail(email=None, shine_id=candidate_id)
+            resumes = res['resumes']
+            default_resumes = [resume for resume in resumes if resume['is_default']][0]
+        except Exception as exc:
+            logger.error('Error in getting notifications %s' % exc)
+            return Response({'status': 'Failure', 'error': 'Default resume does not exist'},
+                            status=status.HTTP_417_EXPECTATION_FAILED)
+
+        resp_dict = {'status': 'Success', 'error': None, 'data': {
+            "resume_id": default_resumes.get('id', ''),
+            "shine_resume_name": default_resumes.get('resume_name', ''),
+            "resume_extn": default_resumes.get('extension', ''),
+            "pending_resume_items": list(pending_resume_items)
+        }}
+
+        return Response(resp_dict, status=status.HTTP_200_OK)
+
+
+class DashboardCancellationApi(APIView):
+
+    serializer_class = DashboardCancellationSerializer
+
+    def post(self, request):
+        serializer = DashboardCancellationSerializer(request.data)
+        if serializer.is_valid():
+            candidate_id = serializer.data.get('candidate_id')
+            email = serializer.data.get('email')
+            order_id = serializer.data.get('order_id')
+            try:
+                order = Order.objects.get(pk=order_id)
+            except Order.DoesNotExist:
+                return Response({'status': 'Failure', 'error': 'Order not found against id'},
+                                status=status.HTTP_417_EXPECTATION_FAILED)
+            try:
+                cancellation = DashboardCancelOrderMixin().perform_cancellation(candidate_id=candidate_id, email=email,
+                                                                                order=order)
+            except Exception as exc:
+                logger.error('Dashboard cancellation error %s' % exc)
+                return Response({'status': 'Failure', 'error': exc}, status=status.HTTP_417_EXPECTATION_FAILED)
+            if cancellation:
+                return Response({'status': 'Success', 'error': None, 'cancelled': True}, status=status.HTTP_200_OK)
+            return Response({'status': 'Failure', 'error': None, 'cancelled': False},
+                            status=status.HTTP_417_EXPECTATION_FAILED)
+        return Response(serializer.errors, status=status.HTTP_200_OK)
+

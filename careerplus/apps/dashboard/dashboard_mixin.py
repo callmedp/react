@@ -3,6 +3,7 @@ import os
 import logging
 
 from random import random
+from dateutil.relativedelta import relativedelta
 
 from django.template.loader import render_to_string
 from django.utils import timezone
@@ -10,12 +11,14 @@ from django.conf import settings
 from django.template.context import RequestContext
 from django.middleware.csrf import get_token
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.db.models import Q
 
 from core.api_mixin import ShineCandidateDetail
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 from order.models import Order, OrderItem
+from order.choices import CANCELLED, OI_CANCELLED
 from payment.models import PaymentTxn
-from django.db.models import Q
+from wallet.models import Wallet
 
 
 class DashboardInfo(object):
@@ -207,3 +210,56 @@ class DashboardInfo(object):
             "shine_resume_name": default_resumes[0].get('resume_name', ''),
             "resume_extn": default_resumes[0].get('extension', ''),
         })
+
+
+class DashboardCancelOrderMixin(object):
+
+    def perform_cancellation(self, candidate_id=None, email=None, order=None):
+        if candidate_id and order.status == 0 and (order.email == email or order.candidate_id == candidate_id):
+            wal_obj = Wallet.objects.get(owner=candidate_id)
+            wallet_txn = order.wallettxn.filter(txn_type=2, order=order).first()
+            if wallet_txn:
+                total_refund = 0
+                used_points = wallet_txn.usedpoint.all().order_by('point__pk')
+                for pts in used_points:
+                    total_refund += pts.point_value
+                expiry = timezone.now() + relativedelta(days=10)
+
+                point_obj = wal_obj.point.create(
+                    original=total_refund,
+                    current=total_refund,
+                    expiry=expiry,
+                    status=1,
+                    txn=order.number
+                )
+
+                wallet_txn_des = "Refunded"
+                wal_txn = wal_obj.wallettxn.create(
+                    txn_type=5,
+                    status=1,
+                    order=order,
+                    txn=order.number,
+                    point_value=total_refund,
+                    notes=wallet_txn_des
+                )
+
+                point_obj.wallettxn.create(
+                    transaction=wal_txn,
+                    point_value=total_refund,
+                    txn_type=5
+                )
+
+                current_value = wal_obj.get_current_amount()
+                wal_txn.current_value = current_value
+                wal_txn.save()
+
+            for orderitem in order.orderitems.all():
+                orderitem.last_oi_status = orderitem.oi_status
+                orderitem.oi_status = OI_CANCELLED
+                orderitem.save()
+
+            order.status = CANCELLED
+            order.save()
+
+            return True
+        return False

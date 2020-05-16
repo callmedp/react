@@ -4,6 +4,7 @@ from order.models import Order ,OrderItem
 # from api.serializers import OrderItemDetailSerializer
 from shared.rest_addons.mixins import SerializerFieldsMixin
 
+
 class StaticSiteContentSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -95,3 +96,9 @@ class OrderListSerializer(serializers.ModelSerializer):
             orderitems = orderitems.filter(oi_status=4)
 
         return OrderItemDetailSerializer(orderitems, many=True).data
+
+
+class DashboardCancellationSerializer(serializers.Serializer):
+    candidate_id = serializers.CharField(required=True)
+    email = serializers.EmailField(required=True)
+    order_id = serializers.IntegerField(required=True)
