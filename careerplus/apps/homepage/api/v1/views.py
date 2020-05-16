@@ -13,7 +13,7 @@ from homepage.models import StaticSiteContent,TestimonialCategoryRelationship,Te
 from shop.models import Category
 from order.models import Order, OrderItem
 from dashboard.dashboard_mixin import DashboardInfo, DashboardCancelOrderMixin
-from core.api_mixins import ShineCandidateDetail
+from core.api_mixin import ShineCandidateDetail
 
 logger = logging.getLogger('error_log')
 
@@ -122,6 +122,9 @@ class UserDashboardApi(FieldFilterMixin, ListAPIView):
 
 
 class DashboardDetailApi(APIView):
+    permission_classes = ()
+    authentication_classes = ()
+    serializer_class = None
 
     def get(self, request):
         candidate_id = request.GET.get('candidate_id', '')
@@ -171,20 +174,29 @@ class DashboardDetailApi(APIView):
         elif order_item.product.type_flow == 16:
             ops = order_item.orderitemoperation_set.filter(oi_status__in=[5, 6, 4])
 
-        ops = ops.values_list('id', 'oi_status', 'draft_counter', 'get_user_oi_status', 'created__date',
-                              'oi_draft__name', 'oi_draft__name', flat=True)
-        resp_dict = {'status': 'Success', 'error': None, 'data': {'ops': list(ops), 'oi': {
+        # ops = ops.values_list('id', 'oi_status', 'draft_counter', 'get_user_oi_status', 'created__date',
+        #                       'oi_draft__name')
+
+        ops = [{"id" : op.id, "oi_status" : op.oi_status, "draft_counter" : op.draft_counter,
+                "get_user_oi_status" : op.get_user_oi_status, "created__date" : op.created.strftime("%b %d, ""%Y"),
+                "oi_draft__name" : op.oi_draft.url if op.oi_draft else ""
+                } for op in ops]
+
+
+        resp_dict = {'status': 'Success', 'error': None, 'data': {'oi': {
             'oi_status': order_item.oi_status,
-            'product_id': order_item.product.pk,
+            'product_id': order_item.product_id,
             'product_type_flow': order_item.product.type_flow,
-            'oi_resume': order_item.oi_resume,
+            'oi_resume': order_item.oi_resume.url,
             'product_sub_type_flow': order_item.product.sub_type_flow,
-            'custom_operations': list(order_item.get_item_operations().values()),
-            'order_id': order_item.order.pk,
+            'custom_operations': list(order_item.get_item_operations().values() if order_item.get_item_operations()
+            else ''),
+            'order_id': order_item.order_id,
             'oi_id': order_item.pk,
             'order_number': order_item.order.number,
             'product_name': order_item.product.get_name,
             'product_exp_db': order_item.product.get_exp_db(),
+            'ops': ops,
         }}}
 
         return Response(resp_dict, status=status.HTTP_200_OK)

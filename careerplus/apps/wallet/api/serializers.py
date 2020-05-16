@@ -25,7 +25,7 @@ class WalletHistoryTxnSerializer(serializers.ModelSerializer):
 
 
 class WalletTransactionSerializer(serializers.ModelSerializer):
-    # added_point_expiry = serializers.SerializerMethodField()
+    added_point_expiry = serializers.SerializerMethodField()
     wallet = WalletHistoryTxnSerializer(read_only=True)
     # wal_total = serializers.SerializerMethodField()
 
