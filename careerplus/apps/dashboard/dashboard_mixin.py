@@ -87,22 +87,20 @@ class DashboardInfo(object):
             payment_mode__in=[6, 7],
             order__candidate_id=candidate_id)
         # excl_txns = PaymentTxn.objects.filter(status=0, ).exclude(payment_mode__in=[1, 4])
-        excl_order_list = excl_txns.all().values_list('order__pk', flat=True)
+        excl_order_list = excl_txns.all().values_list('order_id', flat=True)
 
-        orders = orders.exclude(id__in=excl_order_list)
+        orders = orders.exclude(id__in=excl_order_list).order_by('-date_placed')
 
-        orders = orders.order_by('-date_placed')
         order_list = []
         for obj in orders:
-            orderitems = obj.orderitems.filter(no_process=False)
-            orderitems.select_related('product')
+            orderitems = OrderItem.objects.select_related('product').filter(no_process=False,order=obj)
             product_type_flow = None
             product_id = None
-            item_count = orderitems.count()
+            item_count = len(orderitems)
             if item_count > 0:
-                item_order = orderitems.first()
-                product_type_flow = item_order and item_order.product and item_order.product.type_flow or 0
-                product_id =item_order and item_order.product and item_order.product.id or None
+                item_order = orderitems[0]
+                product_type_flow = item_order and item_order.product_id and item_order.product.type_flow or 0
+                product_id = item_order and item_order.product_id
             data = {
                 "order": obj,
                 "item_count": item_count,
