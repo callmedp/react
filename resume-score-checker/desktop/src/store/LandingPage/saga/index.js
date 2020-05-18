@@ -37,6 +37,14 @@ function* uploadFileUrl(action) {
         }
         localStorage.setItem('resume_score', JSON.stringify({ ...result.data }))
 
+        result.data["loggedIn"] = localStorage.getItem('userId') ? localStorage.getItem('userId') : "";
+        try{
+            yield call(Api.saveDataApi, result.data);
+        }
+        catch{
+            //do nothing
+        }
+
         yield put({ type: UPDATE_SCORE, payload: result.data });
         return resolve(result)
     } catch (e) {

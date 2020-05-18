@@ -13,6 +13,11 @@ const getInformation = () => {
     })
 }
 
+const saveDataApi = (data) => {
+    const url = "https://learning.shine.com/api/resume-score-checker/save-data";
+    return BaseApiService.post(url, data);
+} 
+
 const uploadFileUrl = (data) => {
     const url = 'resume-score-checker/get-score/';
 
@@ -55,6 +60,7 @@ export const Api = {
     getCandidateResume,
     getCandidateScore,
     getInformation,
-    getCartCount
+    getCartCount,
+    saveDataApi
 }
 

@@ -32,7 +32,6 @@ const expertFormSubmit = (data) => {
 }
 
 const saveDataApi = (data) => {
-    console.log(data)
     const url = "https://learning.shine.com/api/resume-score-checker/save-data";
     return BaseApiService.post(url, data);
 } 
