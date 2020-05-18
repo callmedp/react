@@ -14,7 +14,7 @@ const getInformation = () => {
 }
 
 const saveDataApi = (data) => {
-    const url = `/resume-score-checker/save-data`
+    const url = `resume-score-checker/save-data`
     return BaseApiService.post(`${siteDomain}/api/${url}`, data);
 } 
 
