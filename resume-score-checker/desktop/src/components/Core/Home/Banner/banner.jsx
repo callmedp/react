@@ -1,6 +1,6 @@
-import React, { useState} from 'react';
+import React, { useState, useEffect} from 'react';
 import { useDispatch} from 'react-redux';
-import { Redirect } from 'react-router-dom'
+import { Redirect, useLocation } from 'react-router-dom'
 import * as Actions from '../../../../store/LandingPage/actions/index';
 import { eventClicked } from '../../../../store/googleAnalytics/actions/index'
 import './banner.scss'
@@ -14,6 +14,15 @@ const Banner = props => {
     const [redirect, setRedirect] = useState(false);
     const dispatch = useDispatch()
     const staticUrl = window && window.config && window.config.staticUrl || '/media/static/';   
+    let location_value = useLocation();
+
+    let import_value = new URLSearchParams(location_value.search).get("import");
+    useEffect(() => {
+        if(import_value){
+            location_value.search = "";
+            resumeImport()
+        }
+    },[])
 
     const resumeImport = async event => {
 

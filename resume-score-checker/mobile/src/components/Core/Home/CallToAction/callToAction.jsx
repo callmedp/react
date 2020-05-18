@@ -14,9 +14,15 @@ export default function CallToAction() {
     const [flag, setFlag] = useState(true);
     const [visible, setVisible] = useState(false);
     const [filename, setFileName] = useState('Upload Resume');
-    // let location_value = useLocation();
-    // let import_value = new URLSearchParams(location_value.search).get("import");
-
+    let location_value = useLocation();
+    let import_value = new URLSearchParams(location_value.search).get("import");
+    useEffect(() => {
+        if(import_value){
+            location_value.search = ""; 
+            importResume()
+        }
+    },[])
+     
     useEffect(() => localStorage.getItem("resume_score") === null ? setFileName('Upload Resume') : setFileName('Upload New Resume'), [])
 
     const dispatch = useDispatch();
@@ -124,11 +130,6 @@ export default function CallToAction() {
             }
         }
     }
-
-    // if(import_value){
-    //     importResume()
-    // }
-
 
     return (
         <div className="call-to-action">
