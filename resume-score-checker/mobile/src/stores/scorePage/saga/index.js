@@ -13,6 +13,14 @@ function* fileUpload(action) {
         if(!result.data['error_message']){
             yield put({ type: UPDATE_SCORE, payload: result.data });
             localStorage.setItem("resume_score", JSON.stringify({...result.data}))
+
+            result.data["loggedIn"] = localStorage.getItem('userId') ? localStorage.getItem('userId') : "";
+            try{
+                yield call(Api.saveDataApi, result.data);
+            }
+            catch{
+                //do nothing
+            }
         }
         return resolve(result.data)
 

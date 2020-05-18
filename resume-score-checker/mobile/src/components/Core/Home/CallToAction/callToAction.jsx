@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import { Redirect, useLocation } from 'react-router-dom';
 import './callToAction.scss';
 import * as Actions from '../../../../stores/scorePage/actions/index';
 import { eventClicked } from '../../../../stores/googleAnalytics/actions/index';
@@ -14,6 +14,8 @@ export default function CallToAction() {
     const [flag, setFlag] = useState(true);
     const [visible, setVisible] = useState(false);
     const [filename, setFileName] = useState('Upload Resume');
+    // let location_value = useLocation();
+    // let import_value = new URLSearchParams(location_value.search).get("import");
 
     useEffect(() => localStorage.getItem("resume_score") === null ? setFileName('Upload Resume') : setFileName('Upload New Resume'), [])
 
@@ -122,6 +124,10 @@ export default function CallToAction() {
             }
         }
     }
+
+    // if(import_value){
+    //     importResume()
+    // }
 
 
     return (

@@ -31,6 +31,12 @@ const expertFormSubmit = (data) => {
     }, false);
 }
 
+const saveDataApi = (data) => {
+    console.log(data)
+    const url = "https://learning.shine.com/api/resume-score-checker/save-data";
+    return BaseApiService.post(url, data);
+} 
+
 const checkSessionAvailability = () => {
     const url = 'session/';
     return BaseApiService.get(`${siteDomain}/api/v1/resume/${url}`);
@@ -60,5 +66,6 @@ export const Api = {
     getCandidateResume,
     getCandidateScore,
     getInformation,
-    getCartCount
+    getCartCount,
+    saveDataApi
 };
