@@ -1,5 +1,4 @@
 import json, ast
-import mimetypes
 import logging
 import time
 import os
@@ -216,6 +215,9 @@ class DashboardDetailView(TemplateView):
         context = super(DashboardDetailView, self).get_context_data(**kwargs)
         if self.oi and self.oi.order.candidate_id == self.candidate_id and self.oi.order.status in [1, 3]:
             ops = []
+
+            if not self.oi.product:
+                return context
 
             if self.oi.product.type_flow in [1, 12, 13]:
                 ops = self.oi.orderitemoperation_set.filter(oi_status__in=[2, 5, 24, 26, 27, 161, 162, 163, 164, 181])

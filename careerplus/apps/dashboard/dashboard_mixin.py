@@ -209,6 +209,23 @@ class DashboardInfo(object):
             "resume_extn": default_resumes[0].get('extension', ''),
         })
 
+    def get_user_shine_resume(self, candidate_id=None,email=None):
+        if not candidate_id and not email:
+            return
+
+        res = ShineCandidateDetail().get_candidate_detail(email=email, shine_id=candidate_id)
+        resumes = res.get('resumes', [])
+        default_resumes = [resume for resume in resumes if resume['is_default']]
+
+        if not default_resumes:
+            return
+
+        return({
+            "resume_id" : default_resumes[0].get('id', ''),
+            "shine_resume_name" : default_resumes[0].get('resume_name', ''),
+            "resume_extn" : default_resumes[0].get('extension', ''),
+        })
+
 
 class DashboardCancelOrderMixin(object):
 
@@ -261,3 +278,7 @@ class DashboardCancelOrderMixin(object):
 
             return True
         return False
+
+
+
+

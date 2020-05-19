@@ -192,6 +192,7 @@ class CartMixin(object):
         return flag
 
     def getCartObject(self, request: object = None):
+        #token utm candidate id candid email,
         try:
             cart_obj = None
             if not request:
@@ -806,3 +807,74 @@ class CartMixin(object):
             cart_obj.last_status = last_status
             cart_obj.date_closed = timezone.now()
             cart_obj.save()
+
+
+    # def getResumeCartObject(self,candidate_id=None,token=None,utm_params=None):
+    #     if not candidate_id and not token:
+    #         return
+    #     cart_users = []
+    #
+    #     if utm_params and isinstance(utm_params, dict):
+    #         utm_params = json.dumps(utm_params)
+    #
+    #     if candidate_id:
+    #         cart_users = Cart.objects.filter(owner_id=candidate_id, status=2)
+    #
+    #     if token:
+    #         cart_sessions = Cart.objects.filter(session_id=token, status=0)
+    #
+    #     cart_user, cart_session = None, None
+    #     if cart_users:
+    #         for cart in cart_users:
+    #             if cart_user:
+    #                 self.mergeCart(cart, cart_user)
+    #             else:
+    #                 cart_user = cart
+    #
+    #     if cart_sessions:
+    #         for cart in cart_sessions:
+    #             if cart_session:
+    #                 self.mergeCart(cart, cart_session)
+    #             else:
+    #                 cart_session = cart
+    #
+    #
+    #     if cart_user and cart_session and (cart_user != cart_session):
+    #         self.mergeCart(cart_session, cart_user)
+    #
+    #         if cart_user:
+    #             cart_obj = cart_user
+    #         elif cart_session and candidate_id:
+    #             cart_session.owner_id = candidate_id
+    #             cart_session.status = 2
+    #             cart_session.save()
+    #             cart_obj = cart_session
+    #         elif cart_session:
+    #             cart_obj = cart_session
+    #         elif candidate_id:
+    #             cart_obj = Cart.objects.create(owner_id=candidate_id, session_id=sessionid, status=2)
+    #         elif sessionid:
+    #             cart_obj = Cart.objects.create(session_id=sessionid, status=0)
+    #
+    #         # update cart_obj in session
+    #         if cart_obj:
+    #             # before updating the cart in session updating the utm params in
+    #             # cart objects
+    #             if utm_params:
+    #                 cart_obj.utm_params = utm_params
+    #                 cart_obj.save()
+    #
+    #             request.session.update({
+    #                 "cart_pk": cart_obj.pk,
+    #                 "checkout_type": 'cart',
+    #                 "cart_count_pk": cart_obj.pk,
+    #             })
+    #
+    #         elif request.session.get('cart_pk'):
+    #             del request.session['cart_pk']
+    #             del request.session['checkout_type']
+    #             request.session.modified = True
+    #         return cart_obj
+    #
+    #     except Exception as e:
+    #         logging.getLogger('error_log').error(str(e))

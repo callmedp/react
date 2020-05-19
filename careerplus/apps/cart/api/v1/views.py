@@ -59,3 +59,22 @@ class CartCountView(CartMixin, APIView):
         return Response(
             {'count': cart_count}, status=status.HTTP_200_OK
         )
+
+
+####api for resume.shine
+
+
+class GetCartObject(APIView):
+    authentication_classes = ()
+    permission_classes = ()
+
+    def post(self,request,*args,**kwargs):
+        candidate_id = self.request.POST.get('candidate_id')
+        token = self.request.POST.get('token')
+        utm = self.request.POST.get('utm')
+        
+
+        
+        
+
+

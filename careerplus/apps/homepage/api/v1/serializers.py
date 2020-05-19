@@ -20,6 +20,11 @@ class OrderItemDetailSerializer(SerializerFieldsMixin,serializers.ModelSerialize
     get_exp_db = serializers.SerializerMethodField()
     get_user_oi_status = serializers.SerializerMethodField()
     auto_upload = serializers.SerializerMethodField()
+    oi_resume = serializers.SerializerMethodField()
+    oio_linkedin =serializers.SerializerMethodField()
+    oi_draft = serializers.SerializerMethodField()
+
+    
     # order = serializers.SerializerMethodField('get_order')
     # prdid = serializers.SerializerMethodField('get_parentprdid')
     # parent = SerializerMethodField('get_parent1')
@@ -35,6 +40,15 @@ class OrderItemDetailSerializer(SerializerFieldsMixin,serializers.ModelSerialize
                    'expiry_date','wc_cat','wc_sub_cat','wc_status','wc_follow_up','partner')
 
     #
+
+    def get_oi_draft(self,obj):
+        return obj.oi_draft.name if obj.oi_draft else ''
+
+    def get_oi_resume(self,obj):
+        return obj.oi_resume.name if obj.oi_resume else ''
+
+    def get_oio_linkedin(self,obj):
+        return obj.oio_linkedin.name if obj.oio_linkedin else ''
 
     def get_auto_upload(self,obj):
         return obj.order.auto_upload
