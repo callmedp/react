@@ -58,11 +58,7 @@ function* getCandidateScore(action) {
     try {
         const result = yield call(Api.getCandidateScore, candidateId)
         if (result.data['error_message']) {
-            Swal.fire({
-                icon: 'error',
-                html: result.data.error_message
-            })
-            return reject(result.data)
+            return resolve(result)
         }
         localStorage.setItem('resume_score', JSON.stringify({ ...result.data }))
         localStorage.setItem('file_name', "Imported from shine")

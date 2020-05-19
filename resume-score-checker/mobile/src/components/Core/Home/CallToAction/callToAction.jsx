@@ -94,9 +94,9 @@ export default function CallToAction() {
                         history.replaceState(null, null ,"?import=")
                     }
                     else {
-                        setFlag(false)
                         // eslint-disable-next-line no-restricted-globals
                         history.replaceState(null, null ,"?import=")
+                        setFlag(false)
                     }
 
                     // fileUpload({target : {files : [resume]}})
@@ -131,9 +131,9 @@ export default function CallToAction() {
                     history.replaceState(null, null ,"?import=")
                 }
                 else {
-                    setFlag(false)
                     // eslint-disable-next-line no-restricted-globals
                     history.replaceState(null, null ,"?import=")
+                    setFlag(false)
                 }
             }
             catch (e) {

@@ -43,10 +43,10 @@ const Banner = props => {
                     setFlag(true);
                     let res = await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: localStorage.getItem('userId'), resolve, reject })))
                     if(!res.data['error_message']){
-                        setFlag(false)
-                        setRedirect(true)
                         // eslint-disable-next-line no-restricted-globals
                         history.replaceState(null, null ,"?import=")
+                        setFlag(false)
+                        setRedirect(true)
                     }
                     else{
                         setFlag(false);
@@ -83,10 +83,10 @@ const Banner = props => {
                 setFlag(true);
                 let res = await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: localStorage.getItem('userId'), resolve, reject })))
                 if(!res.data['error_message']){
+                    // eslint-disable-next-line no-restricted-globals
+                    history.replaceState(null, null ,"?import=")
                     setFlag(false)
                     setRedirect(true)
-                    // eslint-disable-next-line no-restricted-globals
-                    history.replaceState(null, null ,"")
                 }
                 else{
                     setFlag(false);
@@ -95,7 +95,7 @@ const Banner = props => {
                         html: '<h3>'+ res.data['error_message'] +'<h3>'
                     })
                     // eslint-disable-next-line no-restricted-globals
-                    history.replaceState(null, null ,"")
+                    history.replaceState(null, null ,"?import=")
                 }
             }
             catch (e) {
