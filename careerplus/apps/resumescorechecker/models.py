@@ -4,7 +4,7 @@ from django.db import models
 
 class ResumeScoreCheckerUserDetails(AbstractAutoDate):
     email = models.CharField(
-        "Email", max_length=30, unique=True, 
+        "Email", max_length=30, blank=True, null=True, 
         help_text=('Email extracted from resume'))
     mobile_number = models.CharField(
         "Mobile", max_length=20, blank=True, null=True,  

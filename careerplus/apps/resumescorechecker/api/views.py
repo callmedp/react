@@ -48,16 +48,20 @@ class SaveResumeDetailsApiView(APIView):
             section_dict.update({
                     str(section_id) : str(section_score)
                 })
-        user_detail = ResumeScoreCheckerUserDetails.objects.filter(email=email)
 
-        if user_detail:
-            logging.getLogger("info_log").error("User is already present")
-            user = user_detail[0]
-            user.total_score = int(total_score)
-            user.mobile = mobile
-            user.section_score = section_dict
-            user.save()
-            return Response({"status": "User was already present, score updated"})
+        if not email and not mobile and not candidate_id:
+            logging.getLogger("info_log").error("No Details is present")
+            return Response({"status": "No Details is present"})
+        # user_detail = ResumeScoreCheckerUserDetails.objects.filter(email=email)
+
+        # if user_detail:
+        #     logging.getLogger("info_log").error("User is already present")
+        #     user = user_detail[0]
+        #     user.total_score = int(total_score)
+        #     user.mobile = mobile
+        #     user.section_score = section_dict
+        #     user.save()
+        #     return Response({"status": "User was already present, score updated"})
 
         ResumeScoreCheckerUserDetails.objects.create(
                 total_score = int(total_score),
