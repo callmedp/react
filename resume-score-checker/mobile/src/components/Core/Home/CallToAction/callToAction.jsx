@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { Redirect, useLocation } from 'react-router-dom';
+import { Redirect, useLocation, useHistory } from 'react-router-dom';
 import './callToAction.scss';
 import * as Actions from '../../../../stores/scorePage/actions/index';
 import { eventClicked } from '../../../../stores/googleAnalytics/actions/index';
@@ -18,7 +18,6 @@ export default function CallToAction() {
     let import_value = new URLSearchParams(location_value.search).get("import");
     useEffect(() => {
         if(import_value){
-            location_value.search = ""; 
             importResume()
         }
     },[])
@@ -87,12 +86,18 @@ export default function CallToAction() {
                     // })
                     setFlag(true);
                     const candidateInfo = await new Promise((resolve, reject) => dispatch(Actions.getCandidateInfo({ resolve, reject })))
-                    let result = await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: candidateInfo['candidate_id'], resolve, reject })))
+                    let result = await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: localStorage.getItem('userId'), resolve, reject })))
                     if (result['error_message']) {
                         Toast('warning', result['error_message'])
                         setVisible(false)
+                        // eslint-disable-next-line no-restricted-globals
+                        history.replaceState(null, null ,"?import=")
                     }
-                    else { setFlag(false) }
+                    else {
+                        setFlag(false)
+                        // eslint-disable-next-line no-restricted-globals
+                        history.replaceState(null, null ,"?import=")
+                    }
 
                     // fileUpload({target : {files : [resume]}})
                 }
@@ -100,6 +105,8 @@ export default function CallToAction() {
                     //setFlag(false);
                     Toast('error', 'Something went wrong! Try again')
                     setVisible(false)
+                    // eslint-disable-next-line no-restricted-globals
+                    history.replaceState(null, null ,"?import=")
                 }
             }
             else {
@@ -120,13 +127,21 @@ export default function CallToAction() {
                 if (result['error_message']) {
                     Toast('warning', result['error_message'])
                     setVisible(false)
+                    // eslint-disable-next-line no-restricted-globals
+                    history.replaceState(null, null ,"?import=")
                 }
-                else { setFlag(false) }
+                else {
+                    setFlag(false)
+                    // eslint-disable-next-line no-restricted-globals
+                    history.replaceState(null, null ,"?import=")
+                }
             }
             catch (e) {
                 //setFlag(false)
                 Toast('error', 'Something went wrong! Try again')
                 setVisible(false)
+                // eslint-disable-next-line no-restricted-globals
+                history.replaceState(null, null ,"?import=")
             }
         }
     }
