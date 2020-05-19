@@ -359,7 +359,7 @@ class CandidateResumePreview(APIView):
         template_id = self.kwargs.get('pk', '')
         candidate = Candidate.objects.filter(candidate_id=candidate_id).first()
         if not candidate:
-            return {}
+            return Response({})
         current_config = candidate.ordercustomisation_set.filter(template_no=template_id).first()
         entity_position = current_config.entity_position_eval
         entity_preference = eval(candidate.entity_preference_data)

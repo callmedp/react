@@ -24,9 +24,11 @@ class TestCacheUtil:
         self.time_format = "%m/%d/%Y, %H:%M:%S"
         self.test_timeout = None
 
-    def get_cache(self,key):
-        cache_key = self.session_id + str(key)
-        return cache.get(cache_key) if cache.get(cache_key) else {}
+    def get_cache(self, key):
+        if self.session_id:
+            cache_key = self.session_id + str(key)
+            return cache.get(cache_key) if cache.get(cache_key) else {}
+        return {}
 
     def show_test_remove_local_storage(self,key):
         test_dict = self.get_cache(key)

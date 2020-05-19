@@ -1360,15 +1360,17 @@ class ImportCertificateApiView(APIView, AmcatApiMixin):
             data['vendor'] = vendor_name.lower()
 
             parsed_data = parser.parse_data(data)
-            resp = {}
-            certificates = ImportCertificateSerializer(
-                parsed_data.certificates,
-                many=True,
-                context={'vendor_provider': vendor_name}
-            )
-            resp['count'] = len(certificates.data)
-            resp['results'] = certificates.data
-            return Response(resp, status=status.HTTP_200_OK)
+            if parsed_data:
+                resp = {}
+                certificates = ImportCertificateSerializer(
+                    parsed_data.certificates,
+                    many=True,
+                    context={'vendor_provider': vendor_name}
+                )
+                resp['count'] = len(certificates.data)
+                resp['results'] = certificates.data
+                return Response(resp, status=status.HTTP_200_OK)
+            return Response(data, status=data['code'])
         else:
             return Response(data, status=data['code'])
 
