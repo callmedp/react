@@ -9,6 +9,9 @@ class ResumeScoreCheckerUserDetails(AbstractAutoDate):
     mobile_number = models.CharField(
         "Mobile", max_length=20, blank=True, null=True,  
         help_text=('Mobile extracted from resume'))
+    candidate_id = models.CharField(
+        "Candidate_Id", max_length=50, blank=True, null=True,  
+        help_text=('Candidate id stored here'))
     total_score = models.PositiveIntegerField(null=True, default=0)
     section_scores = JSONField(blank=True, null=True)
 
