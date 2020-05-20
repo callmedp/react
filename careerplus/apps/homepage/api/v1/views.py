@@ -30,6 +30,7 @@ from order.models import Order, OrderItem ,InternationalProfileCredential
 from dashboard.dashboard_mixin import DashboardInfo, DashboardCancelOrderMixin
 from core.api_mixin import ShineCandidateDetail
 from django.core.files.base import ContentFile
+from payment.models import PaymentTxn
 
 
 logger = logging.getLogger('error_log')
@@ -269,7 +270,7 @@ class DashboardCancellationApi(APIView):
     serializer_class = DashboardCancellationSerializer
 
     def post(self, request):
-        serializer = DashboardCancellationSerializer(request.data)
+        serializer = DashboardCancellationSerializer(data=request.data)
         if serializer.is_valid():
             candidate_id = serializer.data.get('candidate_id')
             email = serializer.data.get('email')
@@ -279,6 +280,10 @@ class DashboardCancellationApi(APIView):
             except Order.DoesNotExist:
                 return Response({'status': 'Failure', 'error': 'Order not found against id'},
                                 status=status.HTTP_417_EXPECTATION_FAILED)
+
+            if order.candidate_id != candidate_id:
+                return Response({'status' : 'Failure', 'error' : 'Order not found against id'},
+                                status=status.HTTP_417_EXPECTATION_FAILED)
             try:
                 cancellation = DashboardCancelOrderMixin().perform_cancellation(candidate_id=candidate_id, email=email,
                                                                                 order=order)
@@ -286,7 +291,8 @@ class DashboardCancellationApi(APIView):
                 logger.error('Dashboard cancellation error %s' % exc)
                 return Response({'status': 'Failure', 'error': exc}, status=status.HTTP_417_EXPECTATION_FAILED)
             if cancellation:
-                return Response({'status': 'Success', 'error': None, 'cancelled': True}, status=status.HTTP_200_OK)
+                return Response({'status': 'Success','data':order_id, 'error': None, 'cancelled': True},
+                                status=status.HTTP_200_OK)
             return Response({'status': 'Failure', 'error': None, 'cancelled': False},
                             status=status.HTTP_417_EXPECTATION_FAILED)
         return Response(serializer.errors, status=status.HTTP_200_OK)
@@ -553,4 +559,60 @@ class ResumeProfileCredentialDownload(APIView):
                 logging.getLogger('error_log').error(
                     "Profile download:%s", str(e))
         return Response({'error':'something went wrong'},status=status.HTTP_400_BAD_REQUEST)
+
+
+
+class UserInboxListApiView(APIView):
+    permission_classes = ()
+    authentication_classes = ()
+    serializer_classes=None
+
+
+    def get(self,request,*args,**kwargs):
+        candidate_id = request.GET.get('candidate_id')
+        if not candidate_id:
+            return Response({'error':'invalid request'}, status=status.HTTP_400_BAD_REQUEST)
+
+        orders = Order.objects.filter(
+            status__in=[0, 1, 3],
+            candidate_id=candidate_id)
+
+        excl_txns = PaymentTxn.objects.filter(
+            status__in=[0, 2, 3, 4, 5],
+            payment_mode__in=[6, 7],
+            order__candidate_id=candidate_id)
+
+        excl_order_list = excl_txns.all().values_list('order_id', flat=True)
+        orders = orders.exclude(id__in=excl_order_list).order_by('-date_placed')
+        order_list = []
+        for obj in orders:
+            orderitems = OrderItem.objects.prefetch_related('product','product__product_class','parent').filter(
+                order__site=2, no_process=False,order=obj)
+            product_type_flow = None
+            product_id = None
+            item_count = len(orderitems)
+            if item_count > 0:
+                item_order = orderitems[0]
+                product_type_flow = item_order and item_order.product_id and item_order.product.type_flow or 0
+                product_id = item_order and item_order.product_id
+
+            data = {
+                "item_count": item_count,
+                "get_currency": obj.get_currency(),
+                'total_incl_tax': obj.total_incl_tax,
+                'number': obj.number, 'date_placed' : obj.date_placed.strftime("%b %d, ""%Y"),
+                'status': obj.status, 'id' : obj.id,
+                'orderitems':[{'product_type_flow':oi.product.type_flow if oi.product_id else '' ,
+                   'parent': oi.parent_id ,
+                   'parent_heading': oi.parent.product.heading if oi.parent_id and oi.parent.product_id else '','get_user_oi_status':oi.get_user_oi_status,'heading':oi.product.heading if oi.product_id else '',
+                   'get_name':oi.product.get_name if oi.product_id else '',
+                   'get_exp_db':oi.product.get_exp_db() if oi.product_id else '',
+                   'get_studymode_db':'',
+                   'get_coursetype_db':'',
+                   'get_duration_in_day':oi.product.get_duration_in_ddmmyy() if oi.product_id and
+                    oi.product.get_duration_in_day() else'','oi_status':oi.oi_status,} for oi in orderitems]
+            }
+            order_list.append(data)
+
+        return Response({'data':order_list},status=status.HTTP_200_OK)
 

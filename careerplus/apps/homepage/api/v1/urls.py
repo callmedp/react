@@ -18,5 +18,6 @@ urlpatterns = [
     re_path(r'^dashboard-resume-download/$', views.DashboardResumeDownloadApi.as_view()),
     re_path(r'^dashboard-linkedin-download/$', views.DashboardDraftDownloadApi.as_view()),
     re_path(r'^dashboard-profile-cred-download/$', views.ResumeProfileCredentialDownload.as_view()),
+    re_path(r'^dashboard-order-list/$', views.UserInboxListApiView.as_view()),
 
 ]
