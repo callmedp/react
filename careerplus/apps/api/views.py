@@ -1424,6 +1424,11 @@ class TalentEconomyApiView(FieldFilterMixin, ListAPIView):
             }
         ]
     }
+    For Sorting according include sort_by
+    on last modified date include sort_by=last_modified_on   ,
+    on creation date include sort_by=created_on ,
+    for descending order include  '-', for ex-  sort_by=-created_on
+
 
     For Sorting according include sort_by
     on last modified date include sort_by=last_modified_on   ,
@@ -1449,6 +1454,7 @@ class TalentEconomyApiView(FieldFilterMixin, ListAPIView):
         if sort_filter:
             return Blog.objects.filter(**filter_dict).order_by(sort_filter)
         return Blog.objects.filter(**filter_dict)
+
 
 
 class OrderDetailApiView(FieldFilterMixin, RetrieveAPIView):
