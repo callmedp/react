@@ -14,6 +14,7 @@ from partner.models import Vendor
 from core.mixins import InvoiceGenerate
 from geolocation.models import Country
 
+
 from .models import Cart, LineItem
 
 from django.db.models import Q
@@ -58,19 +59,30 @@ class CartMixin(object):
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
 
-    def updateCart(self,product,addons,cv_id,add_type,req_options,is_resume_template):
+    def updateCart(self,product,addons,cv_id,add_type,req_options,is_resume_template,resume_shine_cart):
         flag = -1
         try:
             flag = 1
-            candidate_id = self.request.session.get('candidate_id')
-            email = self.request.session.get('email')
-            mobile = self.request.session.get('mobile_no')
-            country_code = self.request.session.get('country_code')
+            if resume_shine_cart:
+                candidate_id = self.request.data.get('candidate_id', None)
+                email = self.request.data.get('email', None)
+                mobile = self.request.data.get('mobile_no', None)
+                country_code = self.request.data.get('country_code', None)
+                session_id = self.request.data.get('session_id', None)
+                first_name = self.request.data.get('first_name',None)
+
+            else:
+                candidate_id = self.request.session.get('candidate_id')
+                email = self.request.session.get('email')
+                mobile = self.request.session.get('mobile_no')
+                country_code = self.request.session.get('country_code')
 
             if add_type == "cart":
-                self.getCartObject()
-                cart_pk = self.request.session.get('cart_pk')
-                session_id = self.request.session.session_key
+                cart_obj = self.getCartObject()
+                cart_pk = cart_obj.pk if cart_obj else None
+                if not resume_shine_cart:
+                    cart_pk = self.request.session.get('cart_pk')
+                    session_id = self.request.session.session_key
 
                 if cart_pk:
                     cart_obj = Cart.objects.get(pk=cart_pk)
@@ -78,7 +90,9 @@ class CartMixin(object):
                     cart_obj = Cart.objects.create(owner_id=candidate_id, session_id=session_id, status=2)
                 elif session_id:
                     cart_obj = Cart.objects.create(session_id=session_id, status=0)
-            elif add_type == "express":
+
+            # Todo skip  as understanding the new item to cart addition
+            elif add_type == "express": 
                 if not self.request.session.session_key:
                     self.request.session.create()
                 session_id = self.request.session.session_key
@@ -94,8 +108,12 @@ class CartMixin(object):
                         cart_obj.email = email
                     cart_obj.save()
 
-                if self.request.session.get('first_name') and not cart_obj.first_name:
+                if self.request.session.get('first_name') and not cart_obj.first_name and not resume_shine_cart:
                     cart_obj.first_name = self.request.session.get('first_name',None)
+                    cart_obj.save()
+                
+                if resume_shine_cart and first_name:
+                    cart_obj.first_name = first_name
                     cart_obj.save()
 
                 if country_code and not cart_obj.country_code:
@@ -175,20 +193,24 @@ class CartMixin(object):
                             li.parent_deleted = True
                             li.save()
 
-                self.request.session.update({
-                    "cart_pk": cart_obj.pk,
-                    "checkout_type": add_type,
-                })
+                if not resume_shine_cart:
+                    self.request.session.update({
+                        "cart_pk": cart_obj.pk,
+                        "checkout_type": add_type,
+                    })
 
-                if add_type == "cart":
+                if add_type == "cart" and not resume_shine_cart:
                     self.request.session.update({
                         "cart_count_pk": cart_obj.pk,
                     })
-
+            if resume_shine_cart: 
+                return flag, cart_obj.pk        
             return flag
 
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
+        if resume_shine_cart:
+            return flag, None
         return flag
 
     def getCartObject(self, request: object = None):
@@ -196,12 +218,27 @@ class CartMixin(object):
             cart_obj = None
             if not request:
                 request = self.request
-            candidate_id = request.session.get('candidate_id')
-            if not request.session.session_key:
-                request.session.create()
-            sessionid = request.session.session_key
+            resume_shine_cart = False
+            candidate_id = None
+            sessionid = None
+            utm_params = None
+            try:
+                resume_shine_cart = request.data.get('resume_shine', False)
+                candidate_id = request.data.get('candidate_id', None)
+                sessionid = request.data.get('session_id', None)
+                utm_params = request.data.get('utm', None)
+            except Exception as e:
+                logging.getLogger('error_log').error(e)
+            
             cart_users = []
-            utm_params = request.session.get('utm')
+
+            if not resume_shine_cart:
+                candidate_id = request.session.get('candidate_id')
+            if not resume_shine_cart:
+                if not request.session.session_key:
+                    request.session.create()
+                sessionid = request.session.session_key
+                utm_params = request.session.get('utm')
 
             if utm_params and isinstance(utm_params, dict):
                 utm_params = json.dumps(utm_params)
@@ -250,14 +287,14 @@ class CartMixin(object):
                 if utm_params:
                     cart_obj.utm_params = utm_params
                     cart_obj.save()
+                if not resume_shine_cart:
+                    request.session.update({
+                        "cart_pk": cart_obj.pk,
+                        "checkout_type": 'cart',
+                        "cart_count_pk": cart_obj.pk,
+                    })
 
-                request.session.update({
-                    "cart_pk": cart_obj.pk,
-                    "checkout_type": 'cart',
-                    "cart_count_pk": cart_obj.pk,
-                })
-
-            elif request.session.get('cart_pk'):
+            elif request.session.get('cart_pk') and not resume_shine_cart:
                 del request.session['cart_pk']
                 del request.session['checkout_type']
                 request.session.modified = True
@@ -773,17 +810,16 @@ class CartMixin(object):
             "fake_total": round(fake_total, 0)})
         return data
 
-    def get_cart_count(self, request=None):
+    def get_cart_count(self, request=None, cart_pk=None):
         total_count = 0
         try:
             if not request:
                 request = self.request
             if not request.session.get('cart_count_pk'):
                 self.getCartObject(request=request)
-            cart_pk = request.session.get('cart_count_pk')
+            cart_pk = cart_pk if cart_pk else request.session.get('cart_count_pk')
 
             if cart_pk:
-
                 course_classes = ProductClass.objects.filter(
                     slug__in=settings.COURSE_SLUG)
 
