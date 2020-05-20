@@ -379,7 +379,7 @@ class DashboardResumeUploadApi(APIView):
         file = request.FILES.get('file', '')
         list_ids = request.POST.getlist('resume_pending', [])
 
-        shine_resume = request.POST.get('shine_resume', None)
+        shine_resume = request.POST.get('resume_shine', None)
         if shine_resume:
             data = DashboardInfo().get_user_shine_resume(candidate_id=candidate_id)
             if data:
