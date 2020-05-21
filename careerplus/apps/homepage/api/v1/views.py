@@ -1,11 +1,18 @@
-import logging
+import logging ,json
 from rest_framework.generics import RetrieveAPIView ,ListAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from django.http import HttpResponse
 from shared.rest_addons.mixins import FieldFilterMixin
+from shared.rest_addons.pagination import LearningCustomPagination
 from django.template.loader import get_template
+from core.mixins import InvoiceGenerate
+from review.models import Review
+from emailers.email import SendMail
+from emailers.tasks import send_email_task
+from emailers.sms import SendSMS
+from django.contrib.contenttypes.models import ContentType
 
 from weasyprint import HTML
 from django.template import Context
@@ -88,6 +95,8 @@ class UserDashboardApi(FieldFilterMixin, ListAPIView):
     permission_classes = ()
     authentication_classes = ()
     serializer_class = OrderItemDetailSerializer
+    pagination_class = LearningCustomPagination
+
 
     def get_queryset(self, *args, **kwargs):
         email = self.request.GET.get("email", None)
@@ -377,7 +386,8 @@ class DashboardResumeUploadApi(APIView):
         if not candidate_id:
             return Response({'error': 'No credential Provided'},status=status.HTTP_401_UNAUTHORIZED)
         file = request.FILES.get('file', '')
-        list_ids = request.POST.getlist('resume_pending', [])
+        list_ids = request.POST.get('resume_pending', '')
+        list_ids = list_ids.split(',')
 
         shine_resume = request.POST.get('resume_shine', None)
         if shine_resume:
@@ -396,11 +406,13 @@ class DashboardResumeUploadApi(APIView):
                         'is_shine' : True,
                         'extension' : request.session.get('resume_extn', '')
                     }
+
                     DashboardInfo().upload_candidate_resume(candidate_id=candidate_id, data=data)
 
                     return Response({'success':'resumeUpload'},status=status.HTTP_200_OK)
-        else:
 
+            return Response({'error' : 'Something went Wrong'}, status=status.HTTP_400_BAD_REQUEST)
+        else:
             if not file:
                 return Response({'error':'No file found'},status=status.HTTP_400_BAD_REQUEST)
             extn = file.name.split('.')[-1]
@@ -410,8 +422,12 @@ class DashboardResumeUploadApi(APIView):
                     "candidate_resume": file,
                     'last_oi_status': 3
                 }
-                DashboardInfo().upload_candidate_resume(candidate_id=candidate_id, data=data)
+                try:
+                    DashboardInfo().upload_candidate_resume(candidate_id=candidate_id, data=data)
+                except:
+                    return Response({'error' : 'Something went Wrong'}, status=status.HTTP_400_BAD_REQUEST)
                 return Response({'success':'resumeuploaded'},status=status.HTTP_200_OK)
+            return Response({'error' : 'Something went Wrong'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class DashboardResumeDownloadApi(APIView):
@@ -575,7 +591,7 @@ class UserInboxListApiView(APIView):
 
         orders = Order.objects.filter(
             status__in=[0, 1, 3],
-            candidate_id=candidate_id)
+            candidate_id=candidate_id,site=2)
 
         excl_txns = PaymentTxn.objects.filter(
             status__in=[0, 2, 3, 4, 5],
@@ -615,4 +631,119 @@ class UserInboxListApiView(APIView):
             order_list.append(data)
 
         return Response({'data':order_list},status=status.HTTP_200_OK)
+
+
+
+class DashboardResumeInvoiceDownload(APIView):
+    permission_classes = ()
+    authentication_classes = ()
+    serializer_classes=None
+
+
+    def get(self, request, *args, **kwargs):
+        candidate_id = request.GET.get('candidate_id', None)
+        email = request.GET.get('email', None)
+        order_pk = request.GET.get('order_pk', None)
+        try:
+            order = Order.objects.get(pk=order_pk)
+
+            if candidate_id and order.status in [1, 3] and (order.email == email or order.candidate_id == candidate_id):
+                if order.invoice:
+                    invoice = order.invoice
+                else:
+                    order, invoice = InvoiceGenerate().save_order_invoice_pdf(order=order)
+                if invoice:
+                    file_path = invoice.name
+                    if not settings.IS_GCP:
+                        file_path = invoice.path
+                        fsock = FileWrapper(open(file_path, 'rb'))
+                    else:
+                        fsock = GCPInvoiceStorage().open(file_path)
+                    filename = invoice.name.split('/')[-1]
+                    response = HttpResponse(fsock, content_type=mimetypes.guess_type(filename)[0])
+                    response['Content-Disposition'] = 'attachment; filename="%s"' % (filename)
+                    return response
+        except Exception as e:
+            logging.getLogger('error_log').error("%s" % str(e))
+        return Response({'error' : 'Something Went Wrong'})
+
+
+
+class DashboardFeedbackSubmit(APIView):
+    permission_classes = ()
+    authentication_classes = ()
+    serializer_classes = None
+
+
+    def post(self, request, *args, **kwargs):
+        email_dict = {}
+        candidate_id = request.data.get('candidate_id', None)
+        oi_pk = request.data.get('oi_pk')
+        email = request.data.get('email')
+        data = {
+            "display_message": 'Thank you for sharing your valuable feedback',
+        }
+        if oi_pk and candidate_id:
+            try:
+                oi = OrderItem.objects.select_related("order").get(id=oi_pk)
+                review = request.data.get('review', '').strip()
+                rating = int(request.data.get('rating', 1))
+                title = request.data.get('title', '').strip()
+                name = request.data.get('full_name')
+                if rating and oi and oi.order.candidate_id == candidate_id and oi.order.status in [1, 3]:
+                    content_type = ContentType.objects.get(app_label="shop", model="product")
+                    review_obj = Review.objects.create(
+                        content_type=content_type,
+                        object_id=oi.product_id,
+                        user_name=name,
+                        user_email=email,
+                        user_id=candidate_id,
+                        content=review,
+                        average_rating=rating,
+                        title=title
+                    )
+
+                    extra_content_obj = ContentType.objects.get(app_label="order", model="OrderItem")
+
+                    review_obj.extra_content_type = extra_content_obj
+                    review_obj.extra_object_id =oi.id
+                    review_obj.save()
+
+                    oi.user_feedback = True
+                    oi.save()
+                    # send mail for coupon
+                    if oi.user_feedback:
+                        mail_type = "FEEDBACK_COUPON"
+                        to_emails = [oi.order.get_email()]
+                        email_dict.update({
+                            "username": oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
+                            "subject": 'You earned a discount coupon worth Rs. <500>',
+                            "coupon_code": '',
+                            'valid': '',
+                        })
+
+                        try:
+                            SendMail().send(to_emails, mail_type, email_dict)
+                        except Exception as e:
+                            logging.getLogger('error_log').error(
+                                "%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
+
+                else:
+                    data['display_message'] = "select valid input for feedback"
+                    return Response(data, status=status.HTTP_400_BAD_REQUEST)
+
+
+            except Exception as e:
+                logging.getLogger('error_log').error(str(e))
+                data['display_message'] = "select valid input for feedback"
+                return Response(data, status=status.HTTP_400_BAD_REQUEST)
+
+            return Response(data,status=status.HTTP_200_OK)
+        else:
+            return Response({'error':'Something went Wrong'},status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+
 

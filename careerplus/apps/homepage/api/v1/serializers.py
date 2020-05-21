@@ -23,6 +23,7 @@ class OrderItemDetailSerializer(SerializerFieldsMixin,serializers.ModelSerialize
     oi_resume = serializers.SerializerMethodField()
     oio_linkedin =serializers.SerializerMethodField()
     oi_draft = serializers.SerializerMethodField()
+    service_resume_upload_shine = serializers.SerializerMethodField()
 
     
     # order = serializers.SerializerMethodField('get_order')
@@ -52,6 +53,9 @@ class OrderItemDetailSerializer(SerializerFieldsMixin,serializers.ModelSerialize
 
     def get_auto_upload(self,obj):
         return obj.order.auto_upload
+
+    def get_service_resume_upload_shine(self,obj):
+        return obj.order.service_resume_upload_shine
 
 
     def get_get_user_oi_status(self,obj):
