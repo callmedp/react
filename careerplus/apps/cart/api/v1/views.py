@@ -12,7 +12,7 @@ from django.conf import settings
 from cart.api.core.serializers import CartSerializer
 
 # inter app imports
-from users.mixins import RegistrationLoginApi
+from users.mixins import RegistrationLoginApi, UserMixin
 from shared.rest_addons.authentication import ShineUserAuthentication
 from shared.permissions import IsObjectOwner, IsOwner
 from cart.mixins import CartMixin
@@ -70,11 +70,9 @@ class AddToCartApiView(CartMixin, APIView):
     serializer_class = None
 
     def post(self, request, *args, **kwargs):
-        import ipdb
-        ipdb.set_trace()
         data = {"status": -1}
         cart_type = request.data.get('cart_type')
-        prod_id = request.data.get('prod_id', '')
+        prod_id = request.data.get('prod_id', '-1')
         cart_pk = request.data.get('cart_pk', None)  # TODO handle this
         is_resume_template = request.data.get('add_resume', False)
         resume_shine_cart = request.data.get('resume_shine', False)
@@ -85,7 +83,7 @@ class AddToCartApiView(CartMixin, APIView):
             product = Product.objects.filter(id=int(prod_id)).first()
             if not product:
                 # TODO  handle response status here.
-                return Response('response message ', status=status.HTTP_400)
+                return Response({'errror_message': 'No Product with given id ' + prod_id}, status=status.HTTP_400_BAD_REQUEST)
             addons = request.data.get('addons[]', [])
             req_options = request.data.get('req_options[]', [])
             cv_id = request.data.get('cv_id')
@@ -124,4 +122,79 @@ class AddToCartApiView(CartMixin, APIView):
 
         data['cart_count'] = str(self.get_cart_count(None, cart_pk))
         data['cart_pk'] = cart_pk
+
         return Response(data, status=status.HTTP_201_CREATED)
+
+
+class RemoveFromCartAPIView(CartMixin, APIView):
+    authentication_classes = ()
+    permission_classes = ()
+    serializer_class = None
+
+    def post(self, request, *args, **kwargs):
+        data = {"status": -1}
+        reference = request.data.get('reference_id', None)
+        resume_shine_cart = request.data.get('resume_shine', False)
+        cart_pk = request.data.get('cart_pk', None)
+
+        try:
+            if not self.request.session.get('cart_pk') and not resume_shine_cart:
+                self.getCartObject()
+            cart_obj = None
+
+            if resume_shine_cart and not cart_pk:
+                cart_obj = self.getCartObject()
+                cart_pk = cart_obj.pk if cart_obj else None
+            cart_pk = int(cart_pk) if cart_pk else self.request.session.get(
+                'cart_pk')
+
+            if cart_pk:
+                cart_obj = Cart.objects.get(pk=cart_pk)
+                line_obj = cart_obj.lineitems.get(reference=reference)
+                if line_obj.parent_deleted:
+                    parent = line_obj.parent
+                    childs = cart_obj.lineitems.filter(
+                        parent=parent, parent_deleted=True)
+                    if childs.count() > 1:
+                        line_obj.delete()
+                    else:
+                        parent.delete()
+                else:
+                    line_obj.delete()
+
+                data['status'] = 1
+            else:
+                data['error_message'] = 'this cart item already removed.'
+
+        except Exception as e:
+            data['error_message'] = str(e)
+            logging.getLogger('error_log').error(
+                "unable to remove item from cart%s " % str(e))
+
+        return Response(data, status=status.HTTP_201_CREATED)
+
+
+class CartDetailView(CartMixin, UserMixin, APIView):
+    authentication_classes = ()
+    permission_classes = ()
+    serializer_class = None
+
+    def get_recommended_products(self):
+        rcourses = get_recommendations(self.request.session.get('func_area', None),
+                                       self.request.session.get('skills', None))
+        if rcourses:
+            rcourses = rcourses[:6]
+        return {'recommended_products': rcourses}
+
+    def get(self, request, *args, **kwargs):
+
+        cart_obj = self.getCartObject()
+        cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
+        cart_items = cart_dict.get('cart_items', [])
+        total_amount = cart_dict.get('total_amount')
+        # recomended_products = self.get_recommended_products()
+
+        return Response({"cart_items": cart_items,
+                         "total_amount": total_amount,
+                         "cart_pk": cart_obj.pk},
+                        status=status.HTTP_201_CREATED)

@@ -13,9 +13,9 @@ from shop.models import Product, ProductClass
 from partner.models import Vendor
 from core.mixins import InvoiceGenerate
 from geolocation.models import Country
-
-
 from .models import Cart, LineItem
+from cart.api.core.serializers import LineItemSerializer
+
 
 from django.db.models import Q
 
@@ -223,10 +223,21 @@ class CartMixin(object):
             sessionid = None
             utm_params = None
             try:
-                resume_shine_cart = request.data.get('resume_shine', False)
-                candidate_id = request.data.get('candidate_id', None)
-                sessionid = request.data.get('session_id', None)
-                utm_params = request.data.get('utm', None)
+                if request.method == 'POST':
+                    resume_shine_cart = request.data.get('resume_shine', False)
+                    candidate_id = request.data.get('candidate_id', None)
+                    sessionid = request.data.get('session_id', None)
+                    utm_params = request.data.get('utm', None)
+                else:
+                    resume_shine_cart = request.GET.get('resume_shine', False)
+                    if resume_shine_cart == 'true':
+                        resume_shine_cart = True
+                    else:
+                        resume_shine_cart = False
+                    candidate_id = request.GET.get('candidate_id', None)
+                    sessionid = request.GET.get('session_id', None)
+                    utm_params = request.GET.get('utm', None)
+
             except Exception as e:
                 logging.getLogger('error_log').error(e)
             
@@ -329,6 +340,22 @@ class CartMixin(object):
     def get_solr_cart_items(self, cart_obj: object = None) -> object:
         cart_items = []
         total_amount = Decimal(0)
+        # Handle request from resume Shine
+        resume_shine_cart = False
+        try: 
+            request = self.request
+
+            if request.method == "POST":
+                resume_shine_cart = request.data.get('resume_shine', False)
+            else:
+                resume_shine_cart = request.GET.get('resume_shine', False)
+                if resume_shine_cart == 'true':
+                    resume_shine_cart = True
+                else:
+                    resume_shine_cart = False
+        except Exception as e:
+            logging.getLogger('error_log').error('Error while checking request method from resume shine  %s' % str(e))
+                
         if not cart_obj:
             if not self.request.session.get('cart_pk'):
                 self.getCartObject()
@@ -393,7 +420,7 @@ class CartMixin(object):
 
                                 var_data = {
                                     "id": var_id,
-                                    "li": var,
+                                    "li": LineItemSerializer(var).data if resume_shine_cart else var,
                                     "name": var_name,
                                     "price": var_price,
                                     "is_available": var_available,
@@ -429,7 +456,7 @@ class CartMixin(object):
 
                                 addon_data = {
                                     "id": addon_id,
-                                    "li": addon,
+                                    "li": LineItemSerializer(addon).data if resume_shine_cart else  addon,
                                     "name": addon_name,
                                     "price": addon_price,
                                     "is_available": addon_available,
@@ -446,7 +473,7 @@ class CartMixin(object):
 
                     data = {
                         "id": main_id,
-                        "li": m_prod,
+                        "li": LineItemSerializer(m_prod).data if resume_shine_cart else m_prod,
                         "product_class": product_class,
                         "vendor": vendor_name,
                         "name": name,
