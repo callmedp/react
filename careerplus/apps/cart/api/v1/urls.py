@@ -8,7 +8,11 @@ from django.urls import re_path
 # local imports
 
 from .views import (EmailStatusView, CartRetrieveUpdateView,  CartCountView,
-                    AddToCartApiView, CartDetailView, RemoveFromCartAPIView)
+                    RemoveFromCartAPIView)
+
+from .paymentSummary import (PaymentSummaryView)
+from .addToCart import (AddToCartApiView)
+from .guestLogin import GuestLoginView
 # inter app imports
 
 # third party imports
@@ -22,7 +26,8 @@ urlpatterns = [
     re_path(r'^count/$', CartCountView.as_view()),
     re_path(r'^add/$', AddToCartApiView.as_view()),
     re_path(r'^remove/$', RemoveFromCartAPIView.as_view()),
-    re_path(r'^detail/$', CartDetailView.as_view())
+    re_path(r'^payment-summary/$', PaymentSummaryView.as_view()),
+    re_path(r'^guest-login/$', GuestLoginView.as_view())
 
 
 

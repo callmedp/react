@@ -2,74 +2,24 @@
 import base64
 import json
 import logging
-import random
 from datetime import datetime, date
-from decimal import Decimal
-
 
 # django imports
 from django.conf import settings
 
 # local imports
-from cart.api.core.serializers import CartSerializer
 
 # inter app imports
-from users.mixins import RegistrationLoginApi, UserMixin
-from shared.rest_addons.authentication import ShineUserAuthentication
-from shared.permissions import IsObjectOwner, IsOwner
 from cart.mixins import CartMixin
 from cart.models import Cart
 
 # third party imports
 from rest_framework.views import APIView
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-from rest_framework.generics import (RetrieveUpdateAPIView)
 from rest_framework.response import Response
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
 from cart.mixins import CartMixin
 from cart.tasks import cart_drop_out_mail, create_lead_on_crm
 from shop.models import Product
-
-
-class EmailStatusView(APIView):
-    authentication_classes = (SessionAuthentication,)
-    permission_classes = ()
-    serializer_class = None
-
-    def get(self, request, *args, **kwargs):
-        email = kwargs.get('email')
-        email_status = RegistrationLoginApi.check_email_exist(email)
-        return Response(
-            email_status, status=status.HTTP_200_OK)
-
-
-class CartRetrieveUpdateView(RetrieveUpdateAPIView):
-    authentication_classes = (ShineUserAuthentication,)
-    permission_classes = (IsAuthenticated, )
-    serializer_class = CartSerializer
-
-    def get_queryset(self):
-        cart_id = int(self.kwargs.get('pk'))
-        return Cart.objects.filter(id=cart_id)
-
-
-class CartCountView(CartMixin, APIView):
-    authentication_classes = ()
-    permission_classes = ()
-    serializer_class = None
-
-    def get(self, request, *args, **kwargs):
-        cart_obj = self.getCartObject()
-        if not cart_obj:
-            return Response(
-                {'error_message': "No cart object available."},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-        cart_count = self.get_cart_count(None, cart_obj.pk)
-        return Response(
-            {'count': cart_count}, status=status.HTTP_200_OK
-        )
 
 
 class AddToCartApiView(CartMixin, APIView):
@@ -130,53 +80,5 @@ class AddToCartApiView(CartMixin, APIView):
 
         data['cart_count'] = str(self.get_cart_count(None, cart_pk))
         data['cart_pk'] = cart_pk
-
-        return Response(data, status=status.HTTP_201_CREATED)
-
-
-class RemoveFromCartAPIView(CartMixin, APIView):
-    authentication_classes = ()
-    permission_classes = ()
-    serializer_class = None
-
-    def post(self, request, *args, **kwargs):
-        data = {"status": -1}
-        reference = request.data.get('reference_id', None)
-        resume_shine_cart = request.data.get('resume_shine', False)
-        cart_pk = request.data.get('cart_pk', None)
-
-        try:
-            if not self.request.session.get('cart_pk') and not resume_shine_cart:
-                self.getCartObject()
-            cart_obj = None
-
-            if resume_shine_cart and not cart_pk:
-                cart_obj = self.getCartObject()
-                cart_pk = cart_obj.pk if cart_obj else None
-            cart_pk = int(cart_pk) if cart_pk else self.request.session.get(
-                'cart_pk')
-
-            if cart_pk:
-                cart_obj = Cart.objects.get(pk=cart_pk)
-                line_obj = cart_obj.lineitems.get(reference=reference)
-                if line_obj.parent_deleted:
-                    parent = line_obj.parent
-                    childs = cart_obj.lineitems.filter(
-                        parent=parent, parent_deleted=True)
-                    if childs.count() > 1:
-                        line_obj.delete()
-                    else:
-                        parent.delete()
-                else:
-                    line_obj.delete()
-
-                data['status'] = 1
-            else:
-                data['error_message'] = 'this cart item already removed.'
-
-        except Exception as e:
-            data['error_message'] = str(e)
-            logging.getLogger('error_log').error(
-                "unable to remove item from cart%s " % str(e))
 
         return Response(data, status=status.HTTP_201_CREATED)
