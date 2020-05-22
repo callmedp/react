@@ -24,6 +24,8 @@ class OrderItemDetailSerializer(SerializerFieldsMixin,serializers.ModelSerialize
     oio_linkedin =serializers.SerializerMethodField()
     oi_draft = serializers.SerializerMethodField()
     service_resume_upload_shine = serializers.SerializerMethodField()
+    product_is_pause_service = serializers.SerializerMethodField()
+    service_pause_status = serializers.SerializerMethodField()
 
     
     # order = serializers.SerializerMethodField('get_order')
@@ -42,11 +44,17 @@ class OrderItemDetailSerializer(SerializerFieldsMixin,serializers.ModelSerialize
 
     #
 
+    def get_service_pause_status(self,obj):
+        return obj.service_pause_status()
+
     def get_oi_draft(self,obj):
         return obj.oi_draft.name if obj.oi_draft else ''
 
     def get_oi_resume(self,obj):
         return obj.oi_resume.name if obj.oi_resume else ''
+
+    def get_product_is_pause_service(self,obj):
+        return obj.product.is_pause_service if obj.product_id else ''
 
     def get_oio_linkedin(self,obj):
         return obj.oio_linkedin.name if obj.oio_linkedin else ''

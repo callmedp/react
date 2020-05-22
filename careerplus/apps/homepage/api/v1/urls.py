@@ -21,5 +21,6 @@ urlpatterns = [
     re_path(r'^dashboard-order-list/$', views.UserInboxListApiView.as_view()),
     re_path(r'^download-invoice/$', views.DashboardResumeInvoiceDownload.as_view()),
     re_path(r'^dashboard-feedback/$', views.DashboardFeedbackSubmit.as_view()),
+    re_path(r'^dashboard-pause-play/$', views.PausePlayService.as_view()),
 
 ]

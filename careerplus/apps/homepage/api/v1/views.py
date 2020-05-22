@@ -1,5 +1,5 @@
 import logging ,json
-from rest_framework.generics import RetrieveAPIView ,ListAPIView
+from rest_framework.generics import RetrieveAPIView ,ListAPIView ,UpdateAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -13,6 +13,8 @@ from emailers.email import SendMail
 from emailers.tasks import send_email_task
 from emailers.sms import SendSMS
 from django.contrib.contenttypes.models import ContentType
+from order.api.v1.serializers import OrderItemSerializer
+
 
 from weasyprint import HTML
 from django.template import Context
@@ -214,14 +216,14 @@ class DashboardDetailApi(APIView):
             'oi_status': order_item.oi_status,
             'product_id': order_item.product_id,
             'product_type_flow': order_item.product.type_flow,
-            'oi_resume': order_item.oi_resume.url,
+            'oi_resume': order_item.oi_resume.name if order_item.oi_resume else '',
             'product_sub_type_flow': order_item.product.sub_type_flow,
             'custom_operations': list(order_item.get_item_operations().values() if order_item.get_item_operations()
             else ''),
             'order_id': order_item.order_id,
             'oi_id': order_item.pk,
-            'order_number': order_item.order.number,
-            'product_name': order_item.product.get_name,
+            'order_number': order_item.order.number if order_item.order_id else '',
+            'product_name': order_item.product.get_name if order_item.product else '',
             'product_exp_db': order_item.product.get_exp_db(),
             'ops': ops,
         }}}
@@ -539,6 +541,10 @@ class DashboardDraftDownloadApi(APIView):
             return Response({'error':'somewthing went wrong'},status=status.HTTP_400_BAD_REQUEST)
 
 class ResumeProfileCredentialDownload(APIView):
+    authentication_classes = ()
+    permission_classes = ()
+    serializer_classes = None
+    
 
     def get(self, request, *args, **kwargs):
         candidate_id = request.GET.get('candidate_id')
@@ -742,6 +748,22 @@ class DashboardFeedbackSubmit(APIView):
         else:
             return Response({'error':'Something went Wrong'},status=status.HTTP_400_BAD_REQUEST)
 
+
+
+
+class PausePlayService(UpdateAPIView):
+    permission_classes = ()
+    authentication_classes = ()
+    serializer_classes = OrderItemSerializer
+    queryset = OrderItem.objects.all()
+    owner_fields = ['order.candidate_id']
+
+    def update(self, request, *args, **kwargs):
+        import ipdb;ipdb.set_trace()
+        return Response({'status':'success'},status=status.HTTP_200_OK)
+
+        #
+        #
 
 
 

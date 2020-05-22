@@ -148,6 +148,11 @@ class OrderItemUpdateView(UpdateAPIView):
     owner_fields = ['order.candidate_id']
 
 
+
+
+
+
+
         
 
 
