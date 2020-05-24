@@ -27,8 +27,6 @@ class RemoveFromCartAPIView(CartMixin, APIView):
     serializer_class = None
 
     def post(self, request, *args, **kwargs):
-        import ipdb;
-        ipdb.set_trace();
         data = {"status": -1}
         reference = request.data.get('reference_id', None)
         resume_shine_cart = request.data.get('resume_shine', False)
