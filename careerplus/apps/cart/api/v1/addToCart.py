@@ -42,8 +42,8 @@ class AddToCartApiView(CartMixin, APIView):
             if not product:
                 # TODO  handle response status here.
                 return Response({'errror_message': 'No Product with given id ' + prod_id}, status=status.HTTP_400_BAD_REQUEST)
-            addons = request.data.get('addons[]', [])
-            req_options = request.data.get('req_options[]', [])
+            addons = request.data.get('addons', [])
+            req_options = request.data.get('req_options', [])
             cv_id = request.data.get('cv_id')
             result = self.updateCart(product, addons, cv_id, cart_type,
                                      req_options, is_resume_template,
