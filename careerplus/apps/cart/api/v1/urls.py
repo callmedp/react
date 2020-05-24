@@ -7,13 +7,13 @@ from django.urls import re_path
 
 # local imports
 
-from .views import (EmailStatusView, CartRetrieveUpdateView,  CartCountView,
-                    RemoveFromCartAPIView)
+from .views import (EmailStatusView, CartRetrieveUpdateView,  CartCountView,)
 
 from .paymentSummary import (PaymentSummaryView)
 from .addToCart import (AddToCartApiView)
 from .guestLogin import GuestLoginView
 from .deliveryUpdate import DeliveryUpdateView
+from .removeFromCart import RemoveFromCartAPIView
 # inter app imports
 
 # third party imports
