@@ -15,6 +15,7 @@ from core.mixins import InvoiceGenerate
 from geolocation.models import Country
 from .models import Cart, LineItem
 from cart.api.core.serializers import LineItemSerializer
+from shop.api.v1.serializers import DeliveryServiceSerializer
 
 
 from django.db.models import Q
@@ -539,7 +540,6 @@ class CartMixin(object):
                             addon.delete()
 
                     combo_list = json.loads(sqs.pCmbs).get('combo_list', [])
-
                     data = {
                         "id": main_id,
                         "li": LineItemSerializer(m_prod).data if resume_shine_cart else m_prod,
@@ -549,12 +549,12 @@ class CartMixin(object):
                         "price": price,
                         "experience": experience,
                         "reference": reference,
-                        "delivery_obj": delivery_obj,
+                        "delivery_obj": DeliveryServiceSerializer(delivery_obj).data if resume_shine_cart else delivery_obj,
                         "addons": addon_list,
                         "variations": var_list,
                         "combos": combo_list,
                         "is_available": is_available,
-                        "delivery_types": m_prod.product.get_delivery_types(),
+                        "delivery_types": DeliveryServiceSerializer(m_prod.product.get_delivery_types(),many=True).data if resume_shine_cart else m_prod.product.get_delivery_types(),
                         "type_flow": product_type_flow
                     }
                     cart_items.append(data)
