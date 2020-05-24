@@ -13,6 +13,7 @@ from .views import (EmailStatusView, CartRetrieveUpdateView,  CartCountView,
 from .paymentSummary import (PaymentSummaryView)
 from .addToCart import (AddToCartApiView)
 from .guestLogin import GuestLoginView
+from .deliveryUpdate import DeliveryUpdateView
 # inter app imports
 
 # third party imports
@@ -27,7 +28,8 @@ urlpatterns = [
     re_path(r'^add/$', AddToCartApiView.as_view()),
     re_path(r'^remove/$', RemoveFromCartAPIView.as_view()),
     re_path(r'^payment-summary/$', PaymentSummaryView.as_view()),
-    re_path(r'^guest-login/$', GuestLoginView.as_view())
+    re_path(r'^guest-login/$', GuestLoginView.as_view()),
+    re_path(r'^delivery-update/$', DeliveryUpdateView.as_view())
 
 
 

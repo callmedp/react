@@ -2,6 +2,7 @@
 import logging
 from datetime import datetime, date
 from decimal import Decimal
+from django.utils import timezone
 
 # django imports
 
@@ -21,7 +22,6 @@ from wallet.api.core.serializers import (
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from cart.mixins import CartMixin
 
 
 class PaymentSummaryView(CartMixin, UserMixin, APIView):
@@ -106,6 +106,6 @@ class PaymentSummaryView(CartMixin, UserMixin, APIView):
             'cart_wallet': WalletTransactionSerializer(cart_wallet).data,
             'wallet': WalletSerializer(wal_obj).data, 'type_flow': type_flow,
             'cart': CartSerializer(cart_obj).data, 'wallet_total': wal_total, 'wallet_point': wal_point
-        })
-
+        }) 
+               
         return Response(data, status=status.HTTP_201_CREATED)
