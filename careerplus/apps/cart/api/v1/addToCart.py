@@ -30,7 +30,7 @@ class AddToCartApiView(CartMixin, APIView):
     def post(self, request, *args, **kwargs):
         data = {"status": -1}
         cart_type = request.data.get('cart_type')
-        prod_id = request.data.get('prod_id', '-1')
+        prod_id = request.data.get('prod_id', None)
         cart_pk = request.data.get('cart_pk', None)  # TODO handle this
         is_resume_template = request.data.get('add_resume', False)
         resume_shine_cart = request.data.get('resume_shine', False)
