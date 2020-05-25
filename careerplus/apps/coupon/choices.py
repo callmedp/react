@@ -13,6 +13,7 @@ SITE_CHOICES = (
 	(0, 'ALL SITE'),
 	(1, 'Learning'),
 	(2, 'CRM'),
+	(3,'Resume Shine')
 )
 
 
