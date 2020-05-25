@@ -230,6 +230,8 @@ urlpatterns += [
 
                    re_path(r'^api/v1/coupon/', include('coupon.api.v1.urls', namespace='coupon')),
 
+                   re_path(r'^api/v1/wallet/', include('wallet.api.v1.urls', namespace='wallet')),
+
                    re_path(r'^api/', include('api.urls', namespace='api')),
                    re_path(r'^api/', include('homepage.api.urls', namespace='api')),
 
