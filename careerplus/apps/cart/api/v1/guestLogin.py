@@ -86,13 +86,17 @@ class GuestLoginView(CartMixin, APIView):
 
         # setting guest candidate id for thank you upload fix
 
-        if error:
-            return Response({"error_message": error},
-                            status=status.HTTP_400_BAD_REQUEST)
+        # if error:
+        #     return Response({"error_message": error},
+        #                     status=status.HTTP_400_BAD_REQUEST)
 
         cart_obj.owner_id = candidate_id
-
-        cart_obj.save()
+        try:
+            cart_obj.save()
+        except Exception as e:
+            return Response({"error_message":
+                             "Unable to create guest User {}".format(e)},
+                            status=status.HTTP_400_BAD_REQUEST)
 
         return Response({"guest_candidate_id": candidate_id, "cart_pk": cart_pk},
                         status=status.HTTP_200_OK)
