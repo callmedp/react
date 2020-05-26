@@ -68,7 +68,7 @@ class CartCountView(CartMixin, APIView):
             )
         cart_count = self.get_cart_count(None, cart_obj.pk)
         return Response(
-            {'count': cart_count}, status=status.HTTP_200_OK
+            {'count': cart_count,'cart_pk':cart_obj.pk}, status=status.HTTP_200_OK
         )
 
 

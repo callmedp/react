@@ -85,10 +85,10 @@ class GuestLoginView(CartMixin, APIView):
                             status=status.HTTP_400_BAD_REQUEST)
 
         # setting guest candidate id for thank you upload fix
-
-        if error:
-            return Response({"error_message": error},
-                            status=status.HTTP_400_BAD_REQUEST)
+        #
+        # if error:
+        #     return Response({"error_message": error},
+        #                     status=status.HTTP_400_BAD_REQUEST)
 
         cart_obj.owner_id = candidate_id
 
