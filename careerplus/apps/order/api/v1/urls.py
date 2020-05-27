@@ -7,7 +7,7 @@ from django.urls import re_path
 # local imports
 from .views import (OrderItemViewSet,OrderItemsListView,OrderUpdateView,
 							OrderItemUpdateView,OrderItemOperationApiView,
-							MessageCommunicationListApiView,LTVReportView)
+							MessageCommunicationListApiView,LTVReportView, OrderItemPatchView)
 # inter app imports
 
 # 3rd party imports
@@ -24,6 +24,7 @@ urlpatterns = [
     re_path(r'^orderitem/$', OrderItemViewSet),
     re_path(r'^(?P<pk>\d+)/items/$', OrderItemsListView.as_view()),
     re_path(r'^(?P<pk>\d+)/update/$', OrderUpdateView.as_view()),
+	re_path(r'^orderitem/modify/$', OrderItemPatchView.as_view()),	
 	re_path(r'^orderitem/(?P<pk>\d+)/update/$',OrderItemUpdateView.as_view()),
 	re_path(r'^order-item-operation/(?P<oi_id>\d+)/$',
 		OrderItemOperationApiView.as_view(),
