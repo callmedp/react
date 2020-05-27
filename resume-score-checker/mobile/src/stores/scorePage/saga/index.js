@@ -73,9 +73,9 @@ function* checkSessionAvailability(action) {
 
 
 function* getCandidateScore(action) {
-    const { payload: { candidateId, resolve, reject } } = action;
+    const { payload: { candidateId, resumeId, resolve, reject } } = action;
     try {
-        const result = yield call(Api.getCandidateScore, candidateId)
+        const result = yield call(Api.getCandidateScore, candidateId, resumeId)
         if(!result.data['error_message']){
             yield put({ type: UPDATE_SCORE, payload: result.data });
             localStorage.setItem("resume_score", JSON.stringify({...result.data}))

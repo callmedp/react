@@ -33,7 +33,7 @@ const Banner = props => {
                     // const response = await new Promise((resolve,reject)=>dispatch(Actions.getCandidateResume({resolve,reject})))
                     //fileUpload({terget: {files : [response]}})
                     setFlag(true);
-                    await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: candidateInfo['candidate_id'], resolve, reject })))
+                    await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: candidateInfo['candidate_id'], resumeId:null, resolve, reject })))
                     setFlag(false)
                     setRedirect(true)
                 }
@@ -58,7 +58,7 @@ const Banner = props => {
                 // const response = await new Promise((resolve, reject) => dispatch(Actions.getCandidateResume({ resolve, reject })))
                 // fileUpload({ terget: { files: [response] } })
                 setFlag(true);
-                await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: localStorage.getItem('userId'), resolve, reject })))
+                await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: localStorage.getItem('userId'), resumeId:null, resolve, reject })))
                 setFlag(false)
                 setRedirect(true)
             }

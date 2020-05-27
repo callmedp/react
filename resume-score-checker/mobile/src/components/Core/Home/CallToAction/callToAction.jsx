@@ -79,7 +79,7 @@ export default function CallToAction() {
                     // })
                     setFlag(true);
                     const candidateInfo = await new Promise((resolve, reject) => dispatch(Actions.getCandidateInfo({ resolve, reject })))
-                    let result = await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: candidateInfo['candidate_id'], resolve, reject })))
+                    let result = await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: candidateInfo['candidate_id'], resumeId:null, resolve, reject })))
                     if (result['error_message']) {
                         Toast('warning', result['error_message'])
                         setVisible(false)
@@ -108,7 +108,7 @@ export default function CallToAction() {
                 // })
                 // fileUpload({target : { files : [resume] }})
                 setFlag(true);
-                let result = await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: localStorage.getItem('userId'), resolve, reject })))
+                let result = await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: localStorage.getItem('userId'), resumeId:null, resolve, reject })))
                 if (result['error_message']) {
                     Toast('warning', result['error_message'])
                     setVisible(false)

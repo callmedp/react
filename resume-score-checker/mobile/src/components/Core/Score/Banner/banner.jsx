@@ -26,7 +26,8 @@ export default function Banner() {
                     try {
                         setFlag(true);
                         const candidateInfo = await new Promise((resolve, reject) => dispatch(Actions.getCandidateInfo({ resolve, reject })))
-                        let result = await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: candidateInfo['candidate_id'], resolve, reject })))
+                        let resumeId = parsed.resume_id ? parsed.resume_id : null;
+                        let result = await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: candidateInfo['candidate_id'], resumeId: resumeId, resolve, reject })))
                         setFlag(false)
                         if (result['error_message']) {
                             Toast('warning', result['error_message'])
@@ -47,7 +48,8 @@ export default function Banner() {
             else {
                 try {
                     setFlag(true);
-                    let result = await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: localStorage.getItem('userId'), resolve, reject })))
+                    let resumeId = parsed.resume_id ? parsed.resume_id : null;
+                    let result = await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: localStorage.getItem('userId'), resumeId: resumeId, resolve, reject })))
                     setFlag(false)
                     if (result['error_message']) {
                         Toast('warning', result['error_message'])

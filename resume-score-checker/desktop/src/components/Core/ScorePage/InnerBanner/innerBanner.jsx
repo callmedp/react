@@ -38,7 +38,8 @@ const InnerBanner = props => {
                         // const response = await new Promise((resolve,reject)=>dispatch(Actions.getCandidateResume({resolve,reject})))
                         //fileUpload({terget: {files : [response]}})
                         setFlag(true);
-                        await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: candidateInfo['candidate_id'], resolve, reject })))
+                        let resumeId = parsed.resume_id ? parsed.resume_id : null;
+                        await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: candidateInfo['candidate_id'], resumeId :resumeId , resolve, reject })))
                         setFlag(false)
                     }
                     catch (e) {
@@ -62,7 +63,8 @@ const InnerBanner = props => {
                     // const response = await new Promise((resolve, reject) => dispatch(Actions.getCandidateResume({ resolve, reject })))
                     // fileUpload({ terget: { files: [response] } })
                     setFlag(true);
-                    await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: localStorage.getItem('userId'), resolve, reject })))
+                    let resumeId = parsed.resume_id ? parsed.resume_id : null;
+                    await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: localStorage.getItem('userId'), resumeId:resumeId, resolve, reject })))
                     setFlag(false)
                 }
                 catch (e) {
