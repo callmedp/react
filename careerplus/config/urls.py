@@ -254,6 +254,8 @@ urlpatterns += [
 
                    #resume score checker 
                    re_path(r'^resume-score-checker/', ScoreCheckerView.as_view()),
+                   re_path(r'^api/', include(('resumescorechecker.api.urls','resumescorechecker'), 
+                                namespace='resume_score_checker')),
 
                 #    #resume score checker 
                 #    re_path(r'^result-page/', ScoreCheckerView2.as_view()),
