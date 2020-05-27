@@ -103,7 +103,7 @@ export default function Header(props) {
                                     </div>
                                     :
                                     <div className="mt-10 d-flex justify-content-between">
-                                        <a href={`${siteDomain}/login/?next=/resume-score-checker/`} className="py-5 btn btn-round-30 btn-outline-white px-20">Login</a>
+                                        <a href={`${siteDomain}/login/?next=/resume-score-checker/`}><div className="py-5 btn btn-round-30 btn-outline-white px-20">Login</div></a>
                                     </div>
                             }
                         </div>
