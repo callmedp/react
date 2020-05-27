@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Redirect } from 'react-router-dom'
 import * as Actions from '../../../../store/LandingPage/actions/index';
@@ -7,13 +7,26 @@ import './banner.scss'
 import Loader from '../../../Loader/loader';
 import Swal from 'sweetalert2'
 import { siteDomain } from '../../../../utils/domains'
+import { useHistory } from "react-router-dom";
+const queryString = require('query-string');
+
 
 const Banner = props => {
-
     const [flag, setFlag] = useState(false);
     const [redirect, setRedirect] = useState(false);
     const dispatch = useDispatch()
     const staticUrl = window && window.config && window.config.staticUrl || '/media/static/';
+    const history = useHistory()
+
+    const parsed = queryString.parse(history.location.search);
+
+    useEffect(() => {
+        const importResumeFromShine = async () => {
+            await resumeImport();
+        }
+        if (parsed && parsed.candidate === 'true' || parsed && parsed.import === 'true') importResumeFromShine();
+    }, [])
+
 
     const resumeImport = async event => {
 
@@ -29,11 +42,11 @@ const Banner = props => {
                 // await dispatch(Actions.getCandidateId())
                 try {
                     const candidateInfo = await new Promise((resolve, reject) => dispatch(Actions.getCandidateInfo({ resolve, reject })))
-
                     // const response = await new Promise((resolve,reject)=>dispatch(Actions.getCandidateResume({resolve,reject})))
                     //fileUpload({terget: {files : [response]}})
+                    let resumeId = parsed.resume_id ? parsed.resume_id : null;
                     setFlag(true);
-                    await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: candidateInfo['candidate_id'], resumeId:null, resolve, reject })))
+                    await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: candidateInfo['candidate_id'], resumeId: resumeId, resolve, reject })))
                     setFlag(false)
                     setRedirect(true)
                 }
@@ -57,8 +70,9 @@ const Banner = props => {
             try {
                 // const response = await new Promise((resolve, reject) => dispatch(Actions.getCandidateResume({ resolve, reject })))
                 // fileUpload({ terget: { files: [response] } })
+                let resumeId = parsed.resume_id ? parsed.resume_id : null;
                 setFlag(true);
-                await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: localStorage.getItem('userId'), resumeId:null, resolve, reject })))
+                await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: localStorage.getItem('userId'), resumeId: resumeId, resolve, reject })))
                 setFlag(false)
                 setRedirect(true)
             }

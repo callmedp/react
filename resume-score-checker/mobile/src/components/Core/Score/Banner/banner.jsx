@@ -1,67 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import './score-banner.scss';
-import * as Actions from '../../../../stores/scorePage/actions/index.js'
-import { useDispatch } from 'react-redux';
-import { useHistory } from 'react-router-dom';
-import { siteDomain } from '../../../../Utils/domains';
 import Loader  from '../../../Common/Loader/loader.jsx'
-import {Toast} from '../../../../services/Toast';
-const queryString = require('query-string');
 
 export default function Banner() {
-    const [flag, setFlag] = useState(false);
-    const dispatch = useDispatch();
-    const history = useHistory();
-    const parsed = queryString.parse(history.location.search);
-
+    
     useEffect(() => {
         window.scrollTo(0, 0);
-
-        const importResume = async () => {
-            if (!localStorage.getItem('userId')) {
-                setFlag(true)
-                const isSessionAvailable = await new Promise((resolve, reject) => dispatch(Actions.checkSessionAvailability({ resolve, reject })));
-
-                if (isSessionAvailable['result']) {
-                    try {
-                        setFlag(true);
-                        const candidateInfo = await new Promise((resolve, reject) => dispatch(Actions.getCandidateInfo({ resolve, reject })))
-                        let resumeId = parsed.resume_id ? parsed.resume_id : null;
-                        let result = await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: candidateInfo['candidate_id'], resumeId: resumeId, resolve, reject })))
-                        setFlag(false)
-                        if (result['error_message']) {
-                            Toast('warning', result['error_message'])
-                        }
-                    }
-                    catch (error) {
-                        setFlag(false);
-                        Toast('error', 'Something went wrong! Try again')
-                    }
-                }
-                else {
-                    setFlag(true);
-                    setTimeout(() => {
-                        window.location.replace(`${siteDomain}/login/?next=/resume-score-checker/?import=true`)
-                    }, 100)
-                }
-            }
-            else {
-                try {
-                    setFlag(true);
-                    let resumeId = parsed.resume_id ? parsed.resume_id : null;
-                    let result = await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: localStorage.getItem('userId'), resumeId: resumeId, resolve, reject })))
-                    setFlag(false)
-                    if (result['error_message']) {
-                        Toast('warning', result['error_message'])
-                    }
-                }
-                catch (e) {
-                    setFlag(false)
-                    Toast('error', 'Something went wrong! Try again')
-                }
-            }
-        }
-        if (parsed && parsed.candidate === 'true') importResume();
     }, [])
     const localValue = JSON.parse(localStorage.getItem('resume_score'))
     const storeValue = localValue ?.total_score;
@@ -84,9 +28,6 @@ export default function Banner() {
 
     return (
         <div>
-            {
-                flag && <Loader />
-            }
             <div className="score-banner">
                 <div className="container-box">
                     <h1 className="mb-10"><span>Hello {localStorage.getItem('userName') || "User"} <br />Your resume scored {score} out of 100</span></h1>

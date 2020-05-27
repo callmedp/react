@@ -7,7 +7,8 @@ import { eventClicked } from '../../../../stores/googleAnalytics/actions/index';
 import Loader from '../../../Common/Loader/loader';
 import { Toast } from '../../../../services/Toast';
 import { siteDomain } from '../../../../Utils/domains';
-
+import { useHistory } from "react-router-dom";
+const queryString = require('query-string');
 
 export default function CallToAction() {
 
@@ -15,7 +16,21 @@ export default function CallToAction() {
     const [visible, setVisible] = useState(false);
     const [filename, setFileName] = useState('Upload Resume');
 
-    useEffect(() => localStorage.getItem("resume_score") === null ? setFileName('Upload Resume') : setFileName('Upload New Resume'), [])
+    const history = useHistory()
+
+    const parsed = queryString.parse(history.location.search);
+
+    useEffect(() => {
+
+        localStorage.getItem("resume_score") === null ? setFileName('Upload Resume') : setFileName('Upload New Resume')
+
+        const importResumeFromShine = async () => {
+            await importResume();
+        }
+        if (parsed && parsed.candidate === 'true' || parsed && parsed.import === 'true') importResumeFromShine();
+
+
+    }, [])
 
     const dispatch = useDispatch();
     const fileUpload = async event => {
@@ -69,6 +84,7 @@ export default function CallToAction() {
         }))
         setVisible(!visible)
         if (!localStorage.getItem('userId')) {
+
             const isSessionAvailable = await new Promise((resolve, reject) => dispatch(Actions.checkSessionAvailability({ resolve, reject })));
 
             if (isSessionAvailable['result']) {
@@ -78,8 +94,11 @@ export default function CallToAction() {
                     //     dispatch(Actions.getCandidateResume({ resolve, reject }));
                     // })
                     setFlag(true);
-                    const candidateInfo = await new Promise((resolve, reject) => dispatch(Actions.getCandidateInfo({ resolve, reject })))
-                    let result = await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: candidateInfo['candidate_id'], resumeId:null, resolve, reject })))
+                    const candidateInfo = await new Promise((resolve, reject) => dispatch(Actions.getCandidateInfo({ resolve, reject })));
+
+                    let resumeId = parsed.resume_id ? parsed.resume_id : null;
+
+                    let result = await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: candidateInfo['candidate_id'], resumeId: resumeId, resolve, reject })))
                     if (result['error_message']) {
                         Toast('warning', result['error_message'])
                         setVisible(false)
@@ -95,7 +114,7 @@ export default function CallToAction() {
                 }
             }
             else {
-             setFlag(true);
+                setFlag(true);
                 setTimeout(() => {
                     window.location.replace(`${siteDomain}/login/?next=/resume-score-checker/?import=true`)
                 }, 100)
@@ -108,7 +127,8 @@ export default function CallToAction() {
                 // })
                 // fileUpload({target : { files : [resume] }})
                 setFlag(true);
-                let result = await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: localStorage.getItem('userId'), resumeId:null, resolve, reject })))
+                let resumeId = parsed.resume_id ? parsed.resume_id : null;
+                let result = await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: localStorage.getItem('userId'), resumeId: resumeId, resolve, reject })))
                 if (result['error_message']) {
                     Toast('warning', result['error_message'])
                     setVisible(false)
