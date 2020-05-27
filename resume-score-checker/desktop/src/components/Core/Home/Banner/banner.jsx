@@ -1,5 +1,5 @@
-import React, { useState} from 'react';
-import { useDispatch} from 'react-redux';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Redirect } from 'react-router-dom'
 import * as Actions from '../../../../store/LandingPage/actions/index';
 import { eventClicked } from '../../../../store/googleAnalytics/actions/index'
@@ -13,7 +13,7 @@ const Banner = props => {
     const [flag, setFlag] = useState(false);
     const [redirect, setRedirect] = useState(false);
     const dispatch = useDispatch()
-    const staticUrl = window && window.config && window.config.staticUrl || '/media/static/';   
+    const staticUrl = window && window.config && window.config.staticUrl || '/media/static/';
 
     const resumeImport = async event => {
 
@@ -21,8 +21,8 @@ const Banner = props => {
             'action': 'Import from shine',
             'label': 'FirstFold'
         }))
-
         if (!localStorage.getItem('userId')) {
+            setFlag(true);
             const isSessionAvailable = await new Promise((resolve, reject) => dispatch(Actions.checkSessionAvailability({ resolve, reject })));
 
             if (isSessionAvailable['result']) {
@@ -72,6 +72,7 @@ const Banner = props => {
                 }
             }
         }
+
     }
 
     const fileUpload = async event => {

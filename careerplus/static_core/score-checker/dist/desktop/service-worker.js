@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "https://learning-static-staging-189607.storage.googleapis.com/l1/s/score-checker/dist/desktop/precache-manifest.cfdb90b6af67285597f6609645f1a4eb.js"
+  "/media/static/score-checker/dist/desktop/precache-manifest.546e4549511a495582ad5732dda47dac.js"
 );
 
 self.addEventListener('message', (event) => {

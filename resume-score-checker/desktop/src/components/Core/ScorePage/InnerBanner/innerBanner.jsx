@@ -8,18 +8,78 @@ import { eventClicked } from '../../../../store/googleAnalytics/actions/index';
 import Loader from '../../../Loader/loader';
 import Swal from 'sweetalert2';
 import { useHistory } from "react-router-dom";
+import { siteDomain } from '../../../../utils/domains'
+const queryString = require('query-string');
+
 
 const InnerBanner = props => {
 
     const [flag, setFlag] = useState(false);
     const localScore = JSON.parse(localStorage.getItem('resume_score')) ?.total_score
-    const [file_name,setFile_name] = useState(localStorage.getItem('file_name'))
+    const [file_name, setFile_name] = useState(localStorage.getItem('file_name'))
     const dispatch = useDispatch()
     const history = useHistory()
 
+    const parsed = queryString.parse(history.location.search);
+
+
     useEffect(() => {
-        window.scrollTo(0, 0)
+        window.scrollTo(0, 0);
+        const handleImport = async () => {
+            if (!localStorage.getItem('userId')) {
+                setFlag(true);
+                const isSessionAvailable = await new Promise((resolve, reject) => dispatch(Actions.checkSessionAvailability({ resolve, reject })));
+
+                if (isSessionAvailable['result']) {
+                    // await dispatch(Actions.getCandidateId())
+                    try {
+                        const candidateInfo = await new Promise((resolve, reject) => dispatch(Actions.getCandidateInfo({ resolve, reject })))
+
+                        // const response = await new Promise((resolve,reject)=>dispatch(Actions.getCandidateResume({resolve,reject})))
+                        //fileUpload({terget: {files : [response]}})
+                        setFlag(true);
+                        await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: candidateInfo['candidate_id'], resolve, reject })))
+                        setFlag(false)
+                    }
+                    catch (e) {
+                        setFlag(false);
+                        Swal.fire({
+                            icon: 'error',
+                            html: '<h3>Something went wrong! Try again.<h3>'
+                        })
+                    }
+                }
+                else {
+                    setFlag(true);
+                    setTimeout(() => {
+                        window.location.replace(`${siteDomain}/login/?next=/resume-score-checker/?import=true`)
+                    }, 100)
+
+                }
+            }
+            else {
+                try {
+                    // const response = await new Promise((resolve, reject) => dispatch(Actions.getCandidateResume({ resolve, reject })))
+                    // fileUpload({ terget: { files: [response] } })
+                    setFlag(true);
+                    await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: localStorage.getItem('userId'), resolve, reject })))
+                    setFlag(false)
+                }
+                catch (e) {
+                    setFlag(false)
+                    if (!e['error_message']) {
+                        Swal.fire({
+                            icon: 'error',
+                            html: '<h3>Something went wrong! Try again.<h3>'
+                        })
+                    }
+                }
+            }
+        }
+        if (parsed && parsed.candidate === 'true') handleImport();
     }, [])
+
+
 
     const fileUpload = async event => {
         dispatch(
@@ -94,7 +154,7 @@ const InnerBanner = props => {
             })
         )
     }
-    
+
     return (
         <div>
             <section className="banner">
@@ -130,7 +190,7 @@ const InnerBanner = props => {
                                     </div>
                                     <div className="banner-score__myresume">
                                         <span className="banner-score__myresume--fileName ">
-                                            {file_name} 
+                                            {file_name}
                                         </span>
 
                                         {/* <a href="/#" className="btn btn-outline-primary btn-round-40 fs-12 py-1">Download</a> */}
