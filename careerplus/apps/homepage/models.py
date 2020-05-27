@@ -4,6 +4,8 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
+from django.core.exceptions import ValidationError
+from django.utils import timezone
 
 # local imports
 from .config import PAGECHOICES, STATIC_PAGE_NAME_CHOICES
@@ -126,3 +128,52 @@ class StaticSiteContent(models.Model):
 
     def __str__(self):
         return str(STATIC_PAGE_NAME_CHOICES[self.page_type-1][1])
+
+class HomePageOffer(AbstractAutoDate):
+    name = models.CharField(
+        _('Offer Name'), max_length=50,blank=True,null=True)
+    sticky_text = models.CharField(
+        _('Offer Sticky Text'), max_length=100,blank=True,null=True)
+    offer_value = models.CharField(
+        _('Offer value Text'), max_length=100,blank=True,null=True, 
+            help_text=("For eg. 'Upto 30%\' off!' or 'Flat 20%\' off!'"))
+    banner_text = models.CharField(
+        _('Offer Banner Text'), max_length=100, blank=True, null=True)
+    start_time = models.DateTimeField(
+        _('Start Time'), blank=True, null=True)
+    end_time = models.DateTimeField(
+        _('End Time'), blank=True, null=True)
+    is_active = models.BooleanField(
+        _('Active'), default=False)
+
+    class Meta:
+        ordering = ['start_time']
+
+    def __str__(self):
+        return self.name if self.name else "Offer - " + str(self.id)
+
+    def clean(self):
+        super().clean()
+        now = timezone.now()
+        if(self.sticky_text and self.banner_text and self.offer_value):
+            if (self.start_time and self.end_time):
+                if self.is_active:
+                    if not (self.end_time < now):
+                        if self.start_time > self.end_time:
+                            raise ValidationError('End time Cannot be less than Start time')
+                        elif self.start_time == self.end_time :
+                            raise ValidationError('End time Cannot be same as Start time')
+                    else : raise ValidationError('Offer End Date cannot be less than Current Date')
+                else:
+                    if self.start_time > self.end_time:
+                            raise ValidationError('End time Cannot be less than Start time')
+                    elif self.start_time == self.end_time :
+                            raise ValidationError('End time Cannot be same as Start time')
+            else :
+                raise ValidationError('Date Time cannot be Empty')
+        else:
+            raise ValidationError('Sticky Text, Banner Text or Offer value cannot be empty')
+
+    def get_active_offer(self):
+        active_offer = HomePageOffer.objects.filter(is_active=True).first()
+        return active_offer

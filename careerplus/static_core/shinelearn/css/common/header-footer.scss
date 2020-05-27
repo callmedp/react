@@ -2507,6 +2507,14 @@ footer {
   vertical-align: middle;
 }
 
+.offer-icon {
+  width: 34px;
+  height: 33px;
+  background: $sprite -727px -433px;
+  display: inline-block;
+  vertical-align: middle;
+}
+
 
 /*---------login signup banner page css---------*/
 
@@ -3933,4 +3941,367 @@ footer {
 .email-overflow{
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+
+/* popup offer css*/
+.popup-box {
+  text-align: center;
+  font-size: 14px;
+  color: $white-color;
+  background-image: linear-gradient(195deg, #4CB1C0, #7067DC);
+  border-radius: 0;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  margin-bottom: 0;
+
+  strong {
+    font-weight: 600;
+  }
+
+  a {
+    color: $yellow-color;
+    text-decoration: underline;
+    font-weight: 600;
+    text-transform: uppercase;
+  }
+
+  > .close {
+      font-size: 30px;
+      font-weight: 300;
+      color: $white-color;
+      text-shadow: none;
+      opacity: 1;
+    }
+}
+
+.avail-offer {
+  background: url(#{$imagePath}images/offer-popup-bg.png) no-repeat right bottom $white-color;
+  width: 735px;
+  box-shadow: 0 3px 14px 0 rgba(212,209,209,0.50);
+  border-radius: 2px;
+
+  .modal-header {
+    border-bottom: none;
+    padding: 25px 15px 0 26px;
+
+    > .close {
+      font-size: 30px;
+      font-weight: 300;
+      margin-top: -15px;
+    }
+
+    .modal-title {
+      display: inline-block;
+      font-size: 22px;
+      font-weight: 600;
+      color: $primary-color;
+    }
+  }
+
+  .modal-body {
+    overflow: hidden;
+    padding: 15px 10px 30px 10px;
+    display: flex;
+
+    form {
+
+      .form-group{
+        position: relative;
+        margin-bottom: 1.5rem;
+
+        .form-control {
+          box-shadow: none;
+        }
+      }
+
+      label {
+        position: absolute;
+        left: 1rem;
+        top:.8rem;
+        font-weight: 400;
+        font-size: 1.2rem;
+        background: $white-color;
+        padding: .3rem;
+        pointer-events: none;
+      }
+
+      input:focus + label, input:not(:placeholder-shown) + label{
+        opacity:1;
+        transform: scale(.9) translateY(-100%) translateX(-10px);
+        color: $anchor-color;
+        left: 1.6rem;
+      }
+      .error {
+        label {
+          opacity:1;
+          transform: scale(.9) translateY(-100%) translateX(-10px);
+          color: $anchor-color;
+          left: 1.6rem;
+        }
+      }
+
+      input {
+        &:focus {
+          border:.2rem solid $anchor-color;
+          outline-color: $anchor-color;
+          box-shadow: none;
+        }
+      }
+
+      input {
+        width:100%;
+        padding-left: 1rem;
+        height: 4rem;
+      }
+
+      input, label {
+        transition: all 0.2s;
+        transition-timing-function: ease;
+        transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+        opacity:1;
+      }
+
+      .course-interested {
+        font-size: 13px;
+
+        strong {
+          font-size: 14px;
+          font-weight: 700;
+          margin-top: 10px;
+          display: block;
+        }
+
+        ul {
+          margin: 10px 0 0 0;
+          padding: 0;
+          list-style-type: none;
+
+          li {
+            display: inline-block;
+            margin: 0 20px 10px 0;
+            > label {
+              display: flex;
+              position: static;
+              margin: 0;
+              padding: 0;
+              pointer-events: all;
+              align-items: center;
+
+              > input {
+                border-radius: 3px;
+                border: 1px solid $border-color;
+                width: 12px;
+                height: 12px;
+                margin: 0 5px 0 0;
+                box-shadow: none;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  .btn {
+    background: #2958A8;
+    border-color: #2958A8;
+    padding: 12px;
+    color: $white-color;
+    font-size: 14px;
+  }
+
+  .tc {
+    font-size: 11px;
+    text-align: center;
+    display: block;
+    margin-top: 10px;
+    color: $secondary-color;
+  }
+
+  .offer-txt {
+    font-size: 22px;
+    color: $primary-color;
+    position: absolute;
+    bottom: 10px;
+    left: 75px;
+    text-align: center;
+
+    strong {
+      font-weight: 600;
+      display: block;
+      line-height: 20px;
+    }
+  }
+
+  .offer-ending {
+    
+    p {
+      font-size: 13px;
+      font-weight: 300;
+      margin-top: 20px;
+    }
+
+
+    span {
+      width: 55px;
+      height: 55px;
+      background-image: linear-gradient(180deg, #4CB1C0 0%, #569CC8 28%, #7067DC 100%);
+      border-radius: 2px;
+      font-size: 32px;
+      font-weight: 400;
+      text-align: center;
+      margin-left: 5px;
+      margin-right: 5px;
+      color: $white-color;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-transform: uppercase;
+      position: relative;
+
+      &.days {
+        &::after {
+          content: 'Days';
+          font-size: 11px;
+          color: $secondary-color;
+          position: absolute;
+          bottom: -20px;
+          left: 0;
+          right: 0;
+        }
+      }
+      &.hours {
+        &::after {
+          content: 'Hours';
+          font-size: 11px;
+          color: $secondary-color;
+          position: absolute;
+          bottom: -20px;
+          left: 0;
+          right: 0;
+        }
+      }
+      &.min {
+        &::after {
+          content: 'Min';
+          font-size: 11px;
+          color: $secondary-color;
+          position: absolute;
+          bottom: -20px;
+          left: 0;
+          right: 0;
+        }
+      }
+      &.sec {
+        &::after {
+          content: 'Sec.';
+          font-size: 11px;
+          color: $secondary-color;
+          position: absolute;
+          bottom: -20px;
+          left: 0;
+          right: 0;
+        }
+      }
+    }
+  }
+}
+
+/*.custom-select-box {
+  position: relative;
+  margin-right: 1rem;
+  width: 30%;
+
+  @media (max-width:1100px) {
+    width: 45%;
+  }
+
+  &::after {
+    content: "";
+    width: .8rem;
+    height: .5rem;
+    background: $sprite -324px -27px;
+    position: absolute;
+    right: .8rem;
+    top: 1.7rem;
+  }
+}*/
+
+.custom-select-box {
+  width: 60px;
+  display: inline-block;
+  position: relative;
+  margin-right: 10px;
+
+  &:after {
+    content: '';
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 6px solid #7f7f7f;
+    position: absolute;
+    right: 8px;
+    top: 16px;
+    text-indent: 1px;
+    text-overflow: ellipsis;
+  }
+
+  select {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+      text-indent: 0;
+      text-overflow: ellipsis;
+    height: 39px;
+    padding: 6px 0 6px 6px;
+    width: 100%;
+    background: $white-color;
+    border-color: $border-color;
+
+    &::-ms-expand {
+      display: none;
+    }
+
+    option {
+      min-width: 100px;
+    }
+  }
+}
+
+.d-flex {
+  display: flex;
+}
+
+.flex-100 {
+  flex: 100%;
+}
+
+.thanks-modal {
+  background: $white-color;
+  box-shadow: 0 3px 14px 0 rgba(212,209,209,0.50);
+  border-radius: 2px;
+
+  .modal-header {
+    border-bottom: none;
+    padding: 25px 15px 0 26px;
+
+    > .close {
+      font-size: 30px;
+      font-weight: 300;
+      margin-top: -15px;
+    }
+  }
+
+  .modal-body {
+    overflow: hidden;
+    padding: 0 10px 30px 10px;
+
+    strong {
+      font-size: 18px;
+      font-weight: 600;
+      display: block;
+      margin-top: 20px;
+    }
+  }
 }
