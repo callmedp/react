@@ -410,7 +410,7 @@ class PayuPaymentUtil():
             return False
 
 
-    def generate_payu_dict(self, txn):
+    def generate_payu_dict(self, txn,site=None):
         order = txn.order
         if not order:
             logging.getLogger('error_log').error('No order found for txn {}'.format(txn))
@@ -447,4 +447,21 @@ class PayuPaymentUtil():
                                                                settings.SITE_DOMAIN),
 
               })
+
+        if site:
+            initial_dict.update({
+                'surl' : "{}://{}/payment/payu/response/success/".format(settings.SITE_PROTOCOL,
+                                                                         settings.RESUME_SHINE_SITE_DOMAIN),
+                'furl' : "{}://{}/payment/payu/response/failure/".format(settings.SITE_PROTOCOL,
+                                                                         settings.RESUME_SHINE_SITE_DOMAIN),
+                'curl' : "{}://{}/payment/payu/response/cancel/".format(settings.SITE_PROTOCOL,
+                                                                        settings.RESUME_SHINE_SITE_DOMAIN),
+                'msurl' : "{}://{}/payment/payu/response/success/".format(settings.SITE_PROTOCOL,
+                                                                          settings.RESUME_SHINE_SITE_DOMAIN),
+                'mfurl' : "{}://{}/payment/payu/response/failure/".format(settings.SITE_PROTOCOL,
+                                                                          settings.RESUME_SHINE_SITE_DOMAIN),
+                'mcurl' : "{}://{}/payment/payu/response/cancel/".format(settings.SITE_PROTOCOL,
+                                                                         settings.RESUME_SHINE_SITE_DOMAIN),
+
+            })
         return initial_dict

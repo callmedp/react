@@ -11,6 +11,8 @@ from payment.models import PaymentTxn
 from order.mixins import OrderMixin
 from payment.mixin import PaymentMixin
 from geolocation.models import Country
+from payment.forms import PayByCheckForm
+from payment.utils import PayuPaymentUtil
 
 
 
@@ -115,6 +117,82 @@ class PaymentOptionsApiView(APIView,OrderMixin,PaymentMixin):
                     return Response({'redirect':return_parameter,'order_txn':txn},status=status.HTTP_200_OK)
             else :
                 return Response({'error':'Cart NOT FOUND'},status=status.HTTP_400_BAD_REQUEST)
+
+        elif payment_type == 'cheque':
+            form = PayByCheckForm(request.data)
+            if not form.is_valid():
+                return Response({'invalid Data'},status=status.HTTP_400_BAD_REQUEST)
+            cart_pk = request.data.get('cart_pk')
+            if cart_pk:
+                cart_obj = Cart.objects.get(pk=cart_pk)
+                order = self.createOrder(cart_obj)
+                self.closeCartObject(cart_obj)
+                if order:
+                    txn = 'CP%d%s%s' % (
+                        order.pk,
+                        int(time.time()),
+                        request.data.get('cheque_no'))
+                    pay_txn = PaymentTxn.objects.create(
+                        txn=txn,
+                        order=order,
+                        cart=cart_obj,
+                        status=0,
+                        payment_mode=4,
+                        currency=order.currency,
+                        txn_amount=order.total_incl_tax,
+                        instrument_number=request.data.get('cheque_no'),
+                        instrument_issuer=request.data.get('drawn_bank'),
+                        instrument_issue_date=request.data.get('deposit_date')
+                    )
+                    payment_type = "CHEQUE"
+                    return_parameter = self.process_payment_method(
+                        payment_type, request, pay_txn)
+      
+                    return Response({'redirect':return_parameter,'order_txn':txn},status=status.HTTP_200_OK)
+            else:
+                return Response({'redirect':'/'})
+
+        return Response({'redirect':'/'})
+
+
+class ResumeShinePayuRequestAPIView(OrderMixin,APIView):
+
+    def get(self,request,*args,**kwargs):
+        return_dict = {}
+        cart_id = self.request.GET.get('cart_id')
+        if not cart_id:
+            return_dict.update({'error': 'Cart id not found'})
+            return Response(return_dict,status=status.HTTP_400_BAD_REQUEST)
+        cart_obj = Cart.objects.filter(id=cart_id).first()
+        if not cart_obj:
+            return_dict.update({'error': 'Cart id not found'})
+            return Response(return_dict, status=status.HTTP_400_BAD_REQUEST)
+
+        order = self.createOrder(cart_obj)
+        if not order:
+            logging.getLogger('error_log').error('order is not created for '
+                                                 'cart id- {}'.format(cart_id))
+            return Response(return_dict, status=status.HTTP_400_BAD_REQUEST)
+
+        txn = 'CP%d%s' % (order.pk, int(time.time()))
+        # creating txn object
+        pay_txn = PaymentTxn.objects.create(
+            txn=txn,
+            order=order,
+            cart=cart_obj,
+            status=0,
+            payment_mode=13,
+            currency=order.currency,
+            txn_amount=order.total_incl_tax,
+        )
+
+        payu_object = PayuPaymentUtil()
+        payu_dict = payu_object.generate_payu_dict(pay_txn,'resume_shine')
+        hash_val = payu_object.generate_payu_hash(payu_dict)
+        payu_dict.update({'hash': hash_val, "action": settings.PAYU_INFO[
+            'payment_url']})
+        return Response(payu_dict,status=status.HTTP_200_OK)
+
 
 
 

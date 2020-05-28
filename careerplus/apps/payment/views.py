@@ -731,10 +731,10 @@ class PayUResponseView(CartMixin,PaymentMixin,View):
                 "PayU No txn obj for txnid - {}".format(txn_id))
             return HttpResponseRedirect(reverse('payment:payment_oops'))
         extra_info_dict ={
-                    'bank_ref_no' : payu_data.get('bank_ref_num', ''),
-                    'bank_gateway_txn_id' : payu_data.get('mihpayid', ''),
-                    'bank_code' : payu_data.get('bankcode', ''),
-                    'txn_mode' : payu_data.get('mode', ''),
+                    'bank_ref_no': payu_data.get('bank_ref_num', ''),
+                    'bank_gateway_txn_id': payu_data.get('mihpayid', ''),
+                    'bank_code': payu_data.get('bankcode', ''),
+                    'txn_mode': payu_data.get('mode', ''),
                     'error': payu_data.get('error_Message',''),
         }
         extra_info_json = json.dumps(extra_info_dict)
