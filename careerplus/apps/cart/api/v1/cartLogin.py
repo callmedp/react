@@ -11,20 +11,18 @@ class PaymentLoginView(APIView):
     serializer_classes = None
 
     def post(self, request, *args, **kwargs):
-        import ipdb;ipdb.set_trace()
+
         cart_obj=None
         candidate_id = request.data.get('candidate_id')
         cart_pk = request.data.get('cart_pk')
         email = request.data.get('email')
-        name = request.data.get('name')
+        first_name = request.data.get('first_name')
+        
+        last_name  =request.data.get('last_name')
         country_code = request.data.get('country_code','+91')
         mobile = request.data.get('mobile')
         first_name,last_name =None,None
-
-        if name:
-            first_name = name.strip().split(' ')[0]
-            last_name = ' '.join((name + ' ').split(' ')[1 :]).strip()
-
+        
         if not candidate_id or not cart_pk:
             return Response({'error':'Unable to update the cart '},status=status.HTTP_400_BAD_REQUEST)
 
@@ -44,6 +42,7 @@ class PaymentLoginView(APIView):
             cart_obj.owner_email = email
             cart_obj.email = email
         cart_obj.country_code = country_code
+        cart_obj.owner_id = candidate_id
 
         cart_obj.save()
 
