@@ -54,7 +54,7 @@ const Banner = props => {
                     //fileUpload({terget: {files : [response]}})
                     let resumeId = parsed.resume_id ? parsed.resume_id : null;
                     setFlag(true);
-                    await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: candidateInfo['candidate_id'], resumeId: resumeId, resolve, reject })))
+                    await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: candidateInfo['candidateId'], resumeId: resumeId, resolve, reject })))
                     setFlag(false)
                     setRedirect(true)
                 }

@@ -1,5 +1,6 @@
 {
   "files": {
+<<<<<<< HEAD
     "main.css": "/main-1590740785489.css",
     "main.js": "/main-1590740785489.js",
     "main.js.map": "/main-1590740785489.js.map",
@@ -12,5 +13,19 @@
   "entrypoints": [
     "main-1590740785489.css",
     "main-1590740785489.js"
+=======
+    "main.css": "/main-1590754589761.css",
+    "main.js": "/main-1590754589761.js",
+    "main.js.map": "/main-1590754589761.js.map",
+    "index.html": "/index.html",
+    "main-1590754589761.css.map": "/main-1590754589761.css.map",
+    "main-1590754589761.js.LICENSE.txt": "/main-1590754589761.js.LICENSE.txt",
+    "precache-manifest.64aa2850104ce989b77d5123c09ffb7f.js": "/precache-manifest.64aa2850104ce989b77d5123c09ffb7f.js",
+    "service-worker.js": "/service-worker.js"
+  },
+  "entrypoints": [
+    "main-1590754589761.css",
+    "main-1590754589761.js"
+>>>>>>> fixed: candidate_id issue fixed
   ]
 }

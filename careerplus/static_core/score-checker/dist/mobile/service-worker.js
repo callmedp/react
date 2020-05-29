@@ -14,7 +14,11 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
+<<<<<<< HEAD
   "https://learning-static-staging-189607.storage.googleapis.com/l1/s/score-checker/dist/mobile/precache-manifest.b96a0212c79c8a7abc52d98a91916ebc.js"
+=======
+  "https://learning-static-staging-189607.storage.googleapis.com/l1/s/score-checker/dist/mobile/precache-manifest.3cde09c86493025f585841ace7864feb.js"
+>>>>>>> fixed: candidate_id issue fixed
 );
 
 self.addEventListener('message', (event) => {

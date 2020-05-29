@@ -107,7 +107,7 @@ export default function CallToAction() {
 
                     let resumeId = parsed.resume_id ? parsed.resume_id : null;
 
-                    let result = await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: candidateInfo['candidate_id'], resumeId: resumeId, resolve, reject })))
+                    let result = await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: candidateInfo['candidateId'], resumeId: resumeId, resolve, reject })))
                     if (result['error_message']) {
                         Toast('warning', result['error_message'])
                         setVisible(false)
