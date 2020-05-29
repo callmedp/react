@@ -79,7 +79,7 @@ class ResumeShinePayuRequestAPIView(OrderMixin,APIView):
 
         payu_object = PayuPaymentUtil()
         payu_dict = payu_object.generate_payu_dict(pay_txn,'resume_shine')
-        hash_val = payu_object.generate_payu_hash(payu_dict)
+        hash_val = payu_object.generate_payu_hash(payu_dict,'resume_shine')
         payu_dict.update({'hash': hash_val, "action": settings.PAYU_INFO[
             'payment_url']})
         return Response(payu_dict,status=status.HTTP_200_OK)
