@@ -1,5 +1,5 @@
 # third party imports
-import logging
+import logging,json
 import time
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -153,47 +153,6 @@ class PaymentOptionsApiView(APIView,OrderMixin,PaymentMixin):
                 return Response({'redirect':'/'})
 
         return Response({'redirect':'/'})
-
-
-class ResumeShinePayuRequestAPIView(OrderMixin,APIView):
-
-    def get(self,request,*args,**kwargs):
-        return_dict = {}
-        cart_id = self.request.GET.get('cart_id')
-        if not cart_id:
-            return_dict.update({'error': 'Cart id not found'})
-            return Response(return_dict,status=status.HTTP_400_BAD_REQUEST)
-        cart_obj = Cart.objects.filter(id=cart_id).first()
-        if not cart_obj:
-            return_dict.update({'error': 'Cart id not found'})
-            return Response(return_dict, status=status.HTTP_400_BAD_REQUEST)
-
-        order = self.createOrder(cart_obj)
-        if not order:
-            logging.getLogger('error_log').error('order is not created for '
-                                                 'cart id- {}'.format(cart_id))
-            return Response(return_dict, status=status.HTTP_400_BAD_REQUEST)
-
-        txn = 'CP%d%s' % (order.pk, int(time.time()))
-        # creating txn object
-        pay_txn = PaymentTxn.objects.create(
-            txn=txn,
-            order=order,
-            cart=cart_obj,
-            status=0,
-            payment_mode=13,
-            currency=order.currency,
-            txn_amount=order.total_incl_tax,
-        )
-
-        payu_object = PayuPaymentUtil()
-        payu_dict = payu_object.generate_payu_dict(pay_txn,'resume_shine')
-        hash_val = payu_object.generate_payu_hash(payu_dict)
-        payu_dict.update({'hash': hash_val, "action": settings.PAYU_INFO[
-            'payment_url']})
-        return Response(payu_dict,status=status.HTTP_200_OK)
-
-
 
 
 

@@ -450,6 +450,8 @@ class PayuPaymentUtil():
 
         if site:
             initial_dict.update({
+                'txnid' : txn.txn,
+                'key' : settings.PAYU_INFO['merchant_key'],
                 'surl' : "{}://{}/payment/payu/response/success/".format(settings.SITE_PROTOCOL,
                                                                          settings.RESUME_SHINE_SITE_DOMAIN),
                 'furl' : "{}://{}/payment/payu/response/failure/".format(settings.SITE_PROTOCOL,
@@ -464,4 +466,5 @@ class PayuPaymentUtil():
                                                                          settings.RESUME_SHINE_SITE_DOMAIN),
 
             })
+        print(initial_dict)
         return initial_dict
