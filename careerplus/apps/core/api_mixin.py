@@ -17,6 +17,7 @@ class ShineToken(object):
     def get_client_token(self):
         try:
             if cache.get('shine_client_access_token'):
+                logging.getLogger('error_log').error('shine_client_access_token for 1177 %s'%str(cache.get('shine_client_access_token')))
                 return cache.get('shine_client_access_token')
             headers = {"User-Agent": 'Mozilla/5.0 (Linux; Android 4.1.1; Galaxy Nexus Build/JRO03C) '
                                      'AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 Mobile Safari/535.19'}
@@ -26,6 +27,7 @@ class ShineToken(object):
             client_access_resp_json = client_access_resp.json()
             if client_access_resp.status_code == 201:
                 cache.set('shine_client_access_token', client_access_resp_json.get('access_token'), timeout=None)
+                logging.getLogger('error_log').error('shine_client_access_token for 1177 %s'%str(cache.get('shine_client_access_token')))
                 return client_access_resp_json.get('access_token', None)
         except Exception as e:
             logging.getLogger('error_log').error('error in getting client token%s'%str(e))
@@ -34,6 +36,7 @@ class ShineToken(object):
     def get_access_token(self):
         try:
             if cache.get('shine_user_access_token'):
+                logging.getLogger('error_log').error('shine_user_access_token for 1177 %s'%str(cache.get('shine_user_access_token')))
                 return cache.get('shine_user_access_token')
             headers = {
                 "User-Agent": 'Mozilla/5.0 (Linux; Android 4.1.1; Galaxy Nexus Build/JRO03C) '
@@ -44,6 +47,7 @@ class ShineToken(object):
             user_access_resp_json = user_access_resp.json()
             if user_access_resp.status_code == 201:
                 cache.set('shine_user_access_token', user_access_resp_json.get('access_token'), timeout=None)
+                logging.getLogger('error_log').error('shine_user_access_token for 1177 %s'%str(cache.get('shine_user_access_token')))
                 return user_access_resp_json.get('access_token', None)
         except Exception as e:
             logging.getLogger('error_log').error('error in accessing token %s' % str(e))
@@ -60,6 +64,7 @@ class ShineToken(object):
                                "User-Agent": 'Mozilla/5.0 (Linux; Android 4.1.1; Galaxy Nexus Build/JRO03C) '
                                              'AppleWebKit/535.19 (KHTML, like Gecko) Chrome/18.0.1025.166 '
                                              'Mobile Safari/535.19'}
+                    logging.getLogger('error_log').error('headers for 1177 %s'%str(headers))
                     return headers
         except Exception as e:
             logging.getLogger('error_log').error('error in getting header %s'%str(e))
@@ -79,7 +84,8 @@ class ShineCandidateDetail(ShineToken):
                 candidate_solr_url = settings.CANDIDATE_SOLR_URL
                 solr_query = '?fl=id&wt=json&qt=edismax&rows=1&q=sEm:{}'.format(email)
                 response = requests.get('{}{}'.format(candidate_solr_url, solr_query))
-                
+                logging.getLogger('error_log').error('solr query for 1177 %s'%str('{}{}'.format(candidate_solr_url, solr_query)))
+                logging.getLogger('error_log').error('response for 1177 %s'%str(response.json()))
                 if response.status_code == 200: 
                     response = response.json()
                     if not response and not isinstance(response, dict):
@@ -92,6 +98,7 @@ class ShineCandidateDetail(ShineToken):
                         response = response[0]
                         shine_id = response.get('id', None)
                     if shine_id:
+                        logging.getLogger('error_log').error('shine_id for 1177 %s'%str(shine_id))
                         return shine_id
 
             if not headers:
@@ -175,8 +182,11 @@ class ShineCandidateDetail(ShineToken):
             logging.getLogger('error_log').error("Email ID or shine_id required for profile")
             return
         detail_url = settings.SHINE_SITE + "/api/v2/candidate-public-profiles/" + shine_id + "/?format=json"
+        logging.getLogger('error_log').error('detail_url fpor 1177 {}'.format(detail_url))
         try:
+            logging.getLogger('error_log').error('headers for 1177 {}'.format(headers))
             detail_response = requests.get(detail_url, headers=headers, timeout=settings.SHINE_API_TIMEOUT)
+            logging.getLogger('error_log').error('detail_response for 1177 {}'.format(detail_response.json()))
             if detail_response.status_code == 401:
                 logging.getLogger('error_log').error('Token validity compromised, trying again')
                 cache.set('shine_client_access_token', None)
@@ -206,19 +216,22 @@ class ShineCandidateDetail(ShineToken):
             elif email:
                 headers = self.get_api_headers()
                 shine_id = self.get_shine_id(email=email, headers=headers)
+                logging.getLogger('error_log').error('shine_id for 1177 %s'%str(shine_id))
                 if shine_id:
                     status_url = settings.SHINE_SITE + "/api/v2/candidate/" + shine_id + "/status/?format=json"
                     status_response = requests.get(status_url, headers=headers, timeout=settings.SHINE_API_TIMEOUT)
+                    logging.getLogger('error_log').error('shine_id_response for 1177 %s'%str(status_response.json()))
                     if status_response.status_code == 401:
-                        logging.getLogger('error_log').error('Token validity compromised, trying again')
+                        logging.getLogger('error_log').error('Token validity compromised for 1177, trying again')
                         cache.set('shine_client_access_token', None)
                         cache.set('shine_user_access_token', None)
                         headers = self.get_api_headers()
                         status_response = requests.get(status_url, headers=headers, timeout=settings.SHINE_API_TIMEOUT)
                     if status_response.status_code == 200 and status_response.json():
+                        logging.getLogger('error_log').error('shine_id_response for 1177 %s'%str(status_response.json()))
                         return status_response.json()
         except Exception as e:
-            logging.getLogger('error_log').error('unable to get status details %s'%str(e))
+            logging.getLogger('error_log').error('unable to get status details for 1177%s'%str(e))
         return None
 
     def get_shine_candidate_resume(self, candidate_id=None, resume_id=None, data={}, headers=None):

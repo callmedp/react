@@ -1,31 +1,16 @@
 {
   "files": {
-<<<<<<< HEAD
-    "main.css": "/main-1590606495366.css",
-    "main.js": "/main-1590606495366.js",
-    "main.js.map": "/main-1590606495366.js.map",
+    "main.css": "/main-1590740785489.css",
+    "main.js": "/main-1590740785489.js",
+    "main.js.map": "/main-1590740785489.js.map",
     "index.html": "/index.html",
-    "main-1590606495366.css.map": "/main-1590606495366.css.map",
-    "main-1590606495366.js.LICENSE.txt": "/main-1590606495366.js.LICENSE.txt",
-    "precache-manifest.07335a5124e89861510046fcc4d84093.js": "/precache-manifest.07335a5124e89861510046fcc4d84093.js",
+    "main-1590740785489.css.map": "/main-1590740785489.css.map",
+    "main-1590740785489.js.LICENSE.txt": "/main-1590740785489.js.LICENSE.txt",
+    "precache-manifest.a41e038772873f845d3d920eaa1379af.js": "/precache-manifest.a41e038772873f845d3d920eaa1379af.js",
     "service-worker.js": "/service-worker.js"
   },
   "entrypoints": [
-    "main-1590606495366.css",
-    "main-1590606495366.js"
-=======
-    "main.css": "/main-1590738229918.css",
-    "main.js": "/main-1590738229918.js",
-    "main.js.map": "/main-1590738229918.js.map",
-    "index.html": "/index.html",
-    "main-1590738229918.css.map": "/main-1590738229918.css.map",
-    "main-1590738229918.js.LICENSE.txt": "/main-1590738229918.js.LICENSE.txt",
-    "precache-manifest.e1da7621fed3980ae17d938bb4df1d5d.js": "/precache-manifest.e1da7621fed3980ae17d938bb4df1d5d.js",
-    "service-worker.js": "/service-worker.js"
-  },
-  "entrypoints": [
-    "main-1590738229918.css",
-    "main-1590738229918.js"
->>>>>>> build mobile and desktop created
+    "main-1590740785489.css",
+    "main-1590740785489.js"
   ]
 }
