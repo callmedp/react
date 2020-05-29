@@ -463,17 +463,17 @@ class PayuPaymentUtil():
             initial_dict.update({
                 'txnid' : txn.txn,
                 'key' : settings.PAYU_INFO1['merchant_key'],
-                'surl' : "{}://{}/payment/payu/response/success/".format(settings.SITE_PROTOCOL,
+                'surl' : "{}://{}/payment/payu/response/success/".format(settings.RESUME_SHINE_SITE_PROTOCOL,
                                                                          settings.RESUME_SHINE_SITE_DOMAIN),
-                'furl' : "{}://{}/payment/payu/response/failure/".format(settings.SITE_PROTOCOL,
+                'furl' : "{}://{}/payment/payu/response/failure/".format(settings.RESUME_SHINE_SITE_PROTOCOL,
                                                                          settings.RESUME_SHINE_SITE_DOMAIN),
-                'curl' : "{}://{}/payment/payu/response/cancel/".format(settings.SITE_PROTOCOL,
+                'curl' : "{}://{}/payment/payu/response/cancel/".format(settings.RESUME_SHINE_SITE_PROTOCOL,
                                                                         settings.RESUME_SHINE_SITE_DOMAIN),
-                'msurl' : "{}://{}/payment/payu/response/success/".format(settings.SITE_PROTOCOL,
+                'msurl' : "{}://{}/payment/payu/response/success/".format(settings.RESUME_SHINE_SITE_PROTOCOL,
                                                                           settings.RESUME_SHINE_SITE_DOMAIN),
-                'mfurl' : "{}://{}/payment/payu/response/failure/".format(settings.SITE_PROTOCOL,
+                'mfurl' : "{}://{}/payment/payu/response/failure/".format(settings.RESUME_SHINE_SITE_PROTOCOL,
                                                                           settings.RESUME_SHINE_SITE_DOMAIN),
-                'mcurl' : "{}://{}/payment/payu/response/cancel/".format(settings.SITE_PROTOCOL,
+                'mcurl' : "{}://{}/payment/payu/response/cancel/".format(settings.RESUME_SHINE_SITE_PROTOCOL,
                                                                          settings.RESUME_SHINE_SITE_DOMAIN),
 
             })
