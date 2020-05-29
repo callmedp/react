@@ -27,14 +27,8 @@ export default function CallToAction() {
         const importResumeFromShine = async () => {
             await importResume();
         }
-        if (parsed && parsed.candidate === 'true'  ){
-                setVisible(true)
-                setTimeout(()=>{
-                    setVisible(false)
-                    importResumeFromShine(); 
-                }, 2000)
-        } 
-        else if(parsed && parsed.import === 'true'){
+        if (parsed && parsed.candidate === 'true' || parsed && parsed.import === 'true') {
+
             importResumeFromShine();
         }
 

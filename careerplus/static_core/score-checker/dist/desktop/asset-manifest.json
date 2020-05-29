@@ -1,6 +1,7 @@
 {
   "files": {
 <<<<<<< HEAD
+<<<<<<< HEAD
     "main.css": "/main-1590740785489.css",
     "main.js": "/main-1590740785489.js",
     "main.js.map": "/main-1590740785489.js.map",
@@ -17,15 +18,25 @@
     "main.css": "/main-1590754589761.css",
     "main.js": "/main-1590754589761.js",
     "main.js.map": "/main-1590754589761.js.map",
+=======
+    "main.css": "/main-1590755362314.css",
+    "main.js": "/main-1590755362314.js",
+    "main.js.map": "/main-1590755362314.js.map",
+>>>>>>> fixed: candidate_id issue fixed
     "index.html": "/index.html",
-    "main-1590754589761.css.map": "/main-1590754589761.css.map",
-    "main-1590754589761.js.LICENSE.txt": "/main-1590754589761.js.LICENSE.txt",
-    "precache-manifest.64aa2850104ce989b77d5123c09ffb7f.js": "/precache-manifest.64aa2850104ce989b77d5123c09ffb7f.js",
+    "main-1590755362314.css.map": "/main-1590755362314.css.map",
+    "main-1590755362314.js.LICENSE.txt": "/main-1590755362314.js.LICENSE.txt",
+    "precache-manifest.e789678c2fd43bf8e62c6b4852deeb05.js": "/precache-manifest.e789678c2fd43bf8e62c6b4852deeb05.js",
     "service-worker.js": "/service-worker.js"
   },
   "entrypoints": [
+<<<<<<< HEAD
     "main-1590754589761.css",
     "main-1590754589761.js"
+>>>>>>> fixed: candidate_id issue fixed
+=======
+    "main-1590755362314.css",
+    "main-1590755362314.js"
 >>>>>>> fixed: candidate_id issue fixed
   ]
 }

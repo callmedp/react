@@ -24,13 +24,7 @@ const Banner = props => {
         const importResumeFromShine = async () => {
             await resumeImport();
         }
-        if (parsed && parsed.candidate === 'true') {
-            setFlag(true);
-            setTimeout(() =>{
-                importResumeFromShine();
-            }, 2000)
-        }
-        else if (parsed && parsed.import === 'true') {
+        if (parsed && parsed.candidate === 'true' || parsed && parsed.import === 'true') {
             importResumeFromShine()
         }
     }, [])
