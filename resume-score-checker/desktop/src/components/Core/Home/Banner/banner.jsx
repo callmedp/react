@@ -27,11 +27,11 @@ const Banner = props => {
         if (parsed && parsed.candidate === 'true') {
             setFlag(true);
             setTimeout(() =>{
-                importResumeFromShine;
+                importResumeFromShine();
             }, 2000)
         }
         else if (parsed && parsed.import === 'true') {
-            importResumeFromShine
+            importResumeFromShine()
         }
     }, [])
 

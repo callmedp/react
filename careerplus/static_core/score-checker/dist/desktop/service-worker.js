@@ -14,7 +14,11 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
+<<<<<<< HEAD
   "https://learning-static-staging-189607.storage.googleapis.com/l1/s/score-checker/dist/desktop/precache-manifest.07335a5124e89861510046fcc4d84093.js"
+=======
+  "https://learning-static-staging-189607.storage.googleapis.com/l1/s/score-checker/dist/desktop/precache-manifest.e1da7621fed3980ae17d938bb4df1d5d.js"
+>>>>>>> build mobile and desktop created
 );
 
 self.addEventListener('message', (event) => {
