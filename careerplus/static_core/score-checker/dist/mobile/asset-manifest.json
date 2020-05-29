@@ -1,42 +1,16 @@
 {
   "files": {
-<<<<<<< HEAD
-<<<<<<< HEAD
-    "main.css": "/main-1590740826402.css",
-    "main.js": "/main-1590740826402.js",
-    "main.js.map": "/main-1590740826402.js.map",
+    "main.css": "/main-1590755566179.css",
+    "main.js": "/main-1590755566179.js",
+    "main.js.map": "/main-1590755566179.js.map",
     "index.html": "/index.html",
-    "main-1590740826402.css.map": "/main-1590740826402.css.map",
-    "main-1590740826402.js.LICENSE.txt": "/main-1590740826402.js.LICENSE.txt",
-    "precache-manifest.b96a0212c79c8a7abc52d98a91916ebc.js": "/precache-manifest.b96a0212c79c8a7abc52d98a91916ebc.js",
+    "main-1590755566179.css.map": "/main-1590755566179.css.map",
+    "main-1590755566179.js.LICENSE.txt": "/main-1590755566179.js.LICENSE.txt",
+    "precache-manifest.7a3f631092f3520a71840d09812bce1f.js": "/precache-manifest.7a3f631092f3520a71840d09812bce1f.js",
     "service-worker.js": "/service-worker.js"
   },
   "entrypoints": [
-    "main-1590740826402.css",
-    "main-1590740826402.js"
-=======
-    "main.css": "/main-1590754635892.css",
-    "main.js": "/main-1590754635892.js",
-    "main.js.map": "/main-1590754635892.js.map",
-=======
-    "main.css": "/main-1590754921908.css",
-    "main.js": "/main-1590754921908.js",
-    "main.js.map": "/main-1590754921908.js.map",
->>>>>>> fixed: candidate_id issue fixed
-    "index.html": "/index.html",
-    "main-1590754921908.css.map": "/main-1590754921908.css.map",
-    "main-1590754921908.js.LICENSE.txt": "/main-1590754921908.js.LICENSE.txt",
-    "precache-manifest.2c9e01e524ab7d36fa87e906f675d73d.js": "/precache-manifest.2c9e01e524ab7d36fa87e906f675d73d.js",
-    "service-worker.js": "/service-worker.js"
-  },
-  "entrypoints": [
-<<<<<<< HEAD
-    "main-1590754635892.css",
-    "main-1590754635892.js"
->>>>>>> fixed: candidate_id issue fixed
-=======
-    "main-1590754921908.css",
-    "main-1590754921908.js"
->>>>>>> fixed: candidate_id issue fixed
+    "main-1590755566179.css",
+    "main-1590755566179.js"
   ]
 }

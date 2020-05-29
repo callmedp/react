@@ -14,15 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-<<<<<<< HEAD
-<<<<<<< HEAD
-  "https://learning-static-staging-189607.storage.googleapis.com/l1/s/score-checker/dist/desktop/precache-manifest.a41e038772873f845d3d920eaa1379af.js"
-=======
-  "https://learning-static-staging-189607.storage.googleapis.com/l1/s/score-checker/dist/desktop/precache-manifest.64aa2850104ce989b77d5123c09ffb7f.js"
->>>>>>> fixed: candidate_id issue fixed
-=======
-  "https://learning-static-staging-189607.storage.googleapis.com/l1/s/score-checker/dist/desktop/precache-manifest.e789678c2fd43bf8e62c6b4852deeb05.js"
->>>>>>> fixed: candidate_id issue fixed
+  "https://learning-static-staging-189607.storage.googleapis.com/l1/s/score-checker/dist/desktop/precache-manifest.95eaaab1c53dab9f3c1942c0350e65a3.js"
 );
 
 self.addEventListener('message', (event) => {
