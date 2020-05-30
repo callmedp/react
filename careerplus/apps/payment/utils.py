@@ -208,7 +208,7 @@ class ZestMoneyUtil:
         try:
             amount = eval(amount)
         except Exception as e:
-            logging.getLogger('error_log').error('Unable to evaluate amount}'
+            logging.getLogger('error_log').error('Unable to evaluate amount {}'
                                                  .format(amount))
             amount = 0
         headers = self.get_authorization_header()

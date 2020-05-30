@@ -2,6 +2,10 @@
 
 import logging,json
 import time
+import codecs
+from Crypto.Cipher import AES
+from hashlib import md5
+from datetime import datetime
 
 # django imports
 from django.http import HttpResponse, HttpResponseForbidden
@@ -9,13 +13,16 @@ from django.conf import settings
 
 
 # local imports
-from payment.utils import ZestMoneyUtil
-from payment.utils import PayuPaymentUtil
+from payment.utils import PayuPaymentUtil ,ZestMoneyUtil,EpayLaterEncryptDecryptUtil
 from cart.models import Cart
 from payment.models import PaymentTxn
 from order.mixins import OrderMixin
 from cart.mixins import CartMixin
 from payment.mixin import PaymentMixin
+from geolocation.models import PAYMENT_CURRENCY_SYMBOL
+from core.utils import get_client_ip, get_client_device_type
+
+
 
 # inter app imports
 
@@ -26,6 +33,8 @@ import requests
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
+import platform
+py_major, py_minor, py_patchlevel = platform.python_version_tuple()
 
 
 class ZestMoneyFetchEMIPlansApi(APIView):
@@ -128,10 +137,10 @@ class ResumeShinePayUResponseView(CartMixin,PaymentMixin,APIView):
         return Response({'redirect' : '/payment/oops?error=failure&txn_id=' + txn_id}, status=status.HTTP_200_OK)
 
 
-class Ccavenue(APIView, PaymentMixin, OrderMixin) :
+class Ccavenue( PaymentMixin, OrderMixin,APIView):
     authentication_classes = ()
     permission_classes = ()
-    serializer_classes = None
+    serializer_class = None
 
     def get_constants(self) :
         res_dict = {}
@@ -221,10 +230,9 @@ class Ccavenue(APIView, PaymentMixin, OrderMixin) :
         context_dict.update(self.default_params(request, order_obj))
         order_id = pay_txn.txn
 
-        amount = amount = order_obj.total_incl_tax
-        domain = settings.MOBILE_PROTOCOL_DOMAIN if request.flavour == 'mobile' else settings.MAIN_DOMAIN_PREFIX
-        surl = domain + reverse("payment:ccavenue_response", args=("success",))
-        curl = domain + reverse("payment:ccavenue_response", args=("cancel",))
+        amount = order_obj.total_incl_tax
+        surl = 'https://resumestage.shine.com/payment/ccavenue/success/'
+        curl = 'https://resumestage.shine.com/payment/ccavenue/cancel/'
 
         p_merchant_id = context_dict['merchant_id']
         p_currency = context_dict['currency']
@@ -251,22 +259,17 @@ class Ccavenue(APIView, PaymentMixin, OrderMixin) :
         if order_obj.mobile :
             p_billing_tel = order_obj.mobile  # excluding country_code
             merchant_data += 'billing_tel=' + p_billing_tel + '&'
-        elif self.request.session.get('mobile') :
-            p_billing_tel = self.request.session.get('mobile_no')
-            merchant_data += 'billing_tel=' + p_billing_tel + '&'
 
         if order_obj.email :
             p_billing_email = order_obj.email
-        elif self.request.session.get('email') :
-            p_billing_email = self.request.session.get('email')
         merchant_data += 'billing_email=' + p_billing_email + '&'
 
         encryption = self.encrypt(merchant_data, context_dict['workingkey'])
         return {'url' : context_dict['url'], 'encReq' : encryption, 'xscode' : context_dict['accesscode']}
 
-    def get(self, request, *args, **kwargs) :
-        if not request.session.get('cart_pk') :
-            return HttpResponseRedirect(reverse('homepage'))
+    def get(self, request, *args, **kwargs):
+        if not kwargs.get('cart_id') :
+            return Response({'error':'BAD REQUEST'},status=status.HTTP_400_BAD_REQUEST)
         data = {}
         cart_id = kwargs.get('cart_id', None)
         paytype = kwargs.get('paytype', '')
@@ -308,110 +311,172 @@ class Ccavenue(APIView, PaymentMixin, OrderMixin) :
             elif paytype == "all" :
                 data = {'p_payment_option' : 'ALL', 'p_card_type' : 'ALL'}
 
-            context = self.get_request_url(order, request, data=data, pay_txn=pay_txn)
+            # context =    self.get_request_url(order, request, data=data, pay_txn=pay_txn)
 
-            html = '''\
-                <html>
-                <head>
-                    <title>Sub-merchant checkout page</title>
-                    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-                </head>
-                <body>
-                <form id="nonseamless" method="post" name="redirect" action="{}"/>
-                        <input type="hidden" id="encRequest" name="encRequest" value=$encReq>
-                        <input type="hidden" name="access_code" id="access_code" value=$xscode>
-                        <script language='javascript'>document.redirect.submit();</script>
-                </form>
-                </body>
-                </html>
-                '''.format(settings.CCAVENUE_URL)
-            # fin = Template(html).safe_substitute(context)
-            # return HttpResponse(fin)
-        return HttpResponse({}, status=400)
+            return Response( self.get_request_url(order, request, data=data, pay_txn=pay_txn),status=status.HTTP_200_OK)
+        return Response({'error':"BAD REQUEST"}, status=400)
 
-    def post(self, request, *args, **kwargs) :
-        context_dict = {}
-        decresp_dict = {}
-        context_dict.update(self.get_constants())
-        order_id = ''
-
-        encresp = request.POST.get('encResp', None)
-        stresp = kwargs.get('pgstatus', None)
-
-        if stresp and encresp :
-            decresp = self.decrypt(encresp, context_dict['workingkey'])
-
-            for param_set in decresp.split('&') :
-                params = param_set.split('=')
-                param0 = '' if len(params) <= 0 else params[0]
-                param1 = '' if len(params) <= 1 else params[1]
-                if len(param0) <= 0 :
-                    continue
-                decresp_dict[param0] = param1
-            order_id = decresp_dict.get('merchant_param1')
-            txn_id = decresp_dict.get('order_id')
-            order_status = decresp_dict.get('order_status')
-            order = Order.objects.get(pk=order_id)
-            txn_obj = PaymentTxn.objects.get(txn=txn_id)
-            txn_info = str(decresp_dict)
-            txn_obj.txn_info = txn_info
-            txn_obj.save()
-
-            if stresp.upper() == "SUCCESS" :
-
-                if order_status.upper() == "SUCCESS" :
-                    try :
-                        self.closeCartObject(txn_obj.cart)
-                        return_url = self.process_payment_method(
-                            payment_type='CCAVENUE', request=request,
-                            txn_obj=txn_obj,
-                            data={'order_id' : order.pk, 'txn_id' : txn_id})
-                        try :
-                            del request.session['cart_pk']
-                            del request.session['checkout_type']
-                            request.session.modified = True
-                        except Exception as e :
-                            logging.getLogger('error_log').error('unable to modify request session  %s' % str(e))
-                            pass
-                        return HttpResponseRedirect(return_url)
-                    except Exception as e :
-                        logging.getLogger('error_log').error(
-                            'Response redirection for order success failed %s' % str(e))
-                        return HttpResponseRedirect(
-                            reverse('payment:payment_oops') +
-                            '?error=success&txn_id=' + txn_id)
-
-                elif order_status.upper() == "FAILURE" :
-                    txn_obj.status = 2
-                    txn_obj.save()
-                    logging.getLogger('error_log').error('Order_id - %s Order_status - %s' % (order_id, order_status))
-                    return HttpResponseRedirect(reverse('payment:payment_oops') + '?error=failure&txn_id=' + txn_id)
-
-                elif order_status.upper() == "ABORTED" :
-                    txn_obj.status = 3
-                    txn_obj.save()
-                    logging.getLogger('error_log').error('Order_id - %s Order_status - %s' % (order_id, order_status))
-                    return HttpResponseRedirect(
-                        reverse('payment:payment_oops') + '?error=aborted&txn_id=' + txn_id)
-
-                elif order_status.upper() == "INVALID" :
-                    txn_obj.status = 4
-                    txn_obj.save()
-                    logging.getLogger('error_log').error('Order_id - %s Order_status - %s' % (order_id, order_status))
-                    return HttpResponseRedirect(reverse('payment:payment_oops') + '?error=invalid&txn_id=' + txn_id)
-
-            elif stresp.upper() == "CANCEL" :
-                txn_obj.status = 5
-                txn_obj.save()
-                logging.getLogger('error_log').error('Order_id - %s Order_status - %s' % (order_id, order_status))
-                return HttpResponseRedirect(reverse('payment:payment_oops') + '?error=cancel&txn_id=' + txn_id)
-
-        # order_id = b64encode(str(order_id)) if order_id in (request.session.get('email_invoice_for') or []) else str(order_id)
-        # payloads = '?tab=payment&error=payment_error&orderid='+order_id + '#internationalcard'
-        # logging.getLogger('error_log').error(str(request))
-        return HttpResponseRedirect(reverse('payment:payment_oops') + '?error=failure')
+    # def post(self, request, *args, **kwargs) :
+    #     context_dict = {}
+    #     decresp_dict = {}
+    #     context_dict.update(self.get_constants())
+    #     order_id = ''
+    #
+    #     encresp = request.POST.get('encResp', None)
+    #     stresp = kwargs.get('pgstatus', None)
+    #
+    #     if stresp and encresp :
+    #         decresp = self.decrypt(encresp, context_dict['workingkey'])
+    #
+    #         for param_set in decresp.split('&') :
+    #             params = param_set.split('=')
+    #             param0 = '' if len(params) <= 0 else params[0]
+    #             param1 = '' if len(params) <= 1 else params[1]
+    #             if len(param0) <= 0 :
+    #                 continue
+    #             decresp_dict[param0] = param1
+    #         order_id = decresp_dict.get('merchant_param1')
+    #         txn_id = decresp_dict.get('order_id')
+    #         order_status = decresp_dict.get('order_status')
+    #         order = Order.objects.get(pk=order_id)
+    #         txn_obj = PaymentTxn.objects.get(txn=txn_id)
+    #         txn_info = str(decresp_dict)
+    #         txn_obj.txn_info = txn_info
+    #         txn_obj.save()
+    #
+    #         if stresp.upper() == "SUCCESS" :
+    #
+    #             if order_status.upper() == "SUCCESS" :
+    #                 try :
+    #                     self.closeCartObject(txn_obj.cart)
+    #                     return_url = self.process_payment_method(
+    #                         payment_type='CCAVENUE', request=request,
+    #                         txn_obj=txn_obj,
+    #                         data={'order_id' : order.pk, 'txn_id' : txn_id})
+    #                     try :
+    #                         del request.session['cart_pk']
+    #                         del request.session['checkout_type']
+    #                         request.session.modified = True
+    #                     except Exception as e :
+    #                         logging.getLogger('error_log').error('unable to modify request session  %s' % str(e))
+    #                         pass
+    #                     return HttpResponseRedirect(return_url)
+    #                 except Exception as e :
+    #                     logging.getLogger('error_log').error(
+    #                         'Response redirection for order success failed %s' % str(e))
+    #                     return HttpResponseRedirect(
+    #                         reverse('payment:payment_oops') +
+    #                         '?error=success&txn_id=' + txn_id)
+    #
+    #             elif order_status.upper() == "FAILURE" :
+    #                 txn_obj.status = 2
+    #                 txn_obj.save()
+    #                 logging.getLogger('error_log').error('Order_id - %s Order_status - %s' % (order_id, order_status))
+    #                 return HttpResponseRedirect(reverse('payment:payment_oops') + '?error=failure&txn_id=' + txn_id)
+    #
+    #             elif order_status.upper() == "ABORTED" :
+    #                 txn_obj.status = 3
+    #                 txn_obj.save()
+    #                 logging.getLogger('error_log').error('Order_id - %s Order_status - %s' % (order_id, order_status))
+    #                 return HttpResponseRedirect(
+    #                     reverse('payment:payment_oops') + '?error=aborted&txn_id=' + txn_id)
+    #
+    #             elif order_status.upper() == "INVALID" :
+    #                 txn_obj.status = 4
+    #                 txn_obj.save()
+    #                 logging.getLogger('error_log').error('Order_id - %s Order_status - %s' % (order_id, order_status))
+    #                 return HttpResponseRedirect(reverse('payment:payment_oops') + '?error=invalid&txn_id=' + txn_id)
+    #
+    #         elif stresp.upper() == "CANCEL" :
+    #             txn_obj.status = 5
+    #             txn_obj.save()
+    #             logging.getLogger('error_log').error('Order_id - %s Order_status - %s' % (order_id, order_status))
+    #             return HttpResponseRedirect(reverse('payment:payment_oops') + '?error=cancel&txn_id=' + txn_id)
+    #
+    #     # order_id = b64encode(str(order_id)) if order_id in (request.session.get('email_invoice_for') or []) else str(order_id)
+    #     # payloads = '?tab=payment&error=payment_error&orderid='+order_id + '#internationalcard'
+    #     # logging.getLogger('error_log').error(str(request))
+    #     return HttpResponseRedirect(reverse('payment:payment_oops') + '?error=failure')
+    #
+    #
+    #
 
 
+class EPayLaterRequestView(OrderMixin, APIView):
+    authentication_classes = ()
+    permission_classes = ()
+    serializer_class = None
+
+    def _get_order_history_list(self, order):
+        order_history = []
+
+        for past_order in order.get_past_orders_for_email_and_mobile():
+            past_txn = past_order.ordertxns.filter(status=1).first()
+            if not past_txn:
+                continue
+            order_data = {"orderId": past_txn.txn, "amount": float(past_order.total_incl_tax),
+                          "currencyCode": past_order.get_currency_code(),
+                          "date": past_order.payment_date.isoformat().split("+")[0].split(".")[0] + "Z",
+                          "category": settings.EPAYLATER_INFO['category'],
+                          "returned": "false", "paymentMethod": past_txn.get_payment_mode()}
+            order_history.append(order_data)
+
+        return order_history
+
+    def get(self,request,*args, **kwargs):
+        cart_id = kwargs.get('cart_id', 0)
+        cart_obj = Cart.objects.filter(id=cart_id).first()
+        if not cart_obj:
+            return Response({'error':'BAD REQUEST'},status=status.HTTP_400_BAD_REQUEST)
+
+        site_domain = settings.RESUME_SHINE_SITE_DOMAIN
+
+
+        order = self.createOrder(cart_obj)
+        txn_id = 'CP%d%s' % (order.pk, int(time.time()))
+        pay_txn = PaymentTxn.objects.create(
+            txn=txn_id, order=order,
+            cart=cart_obj, status=0,
+            payment_mode=11, currency=order.currency,
+            txn_amount=order.total_incl_tax,
+        )
+
+        current_utc_string = datetime.utcnow().isoformat().split(".")[0] + "Z"
+        initial_dict = {
+            "redirectType": "WEBPAGE", "marketplaceOrderId": txn_id,
+            "mCode": settings.EPAYLATER_INFO.get('mCode'),
+            "callbackUrl": "{}://{}/payment/epaylater/response/{}/".format( \
+                settings.SITE_PROTOCOL, site_domain, cart_id),
+            "customerEmailVerified": False, "customerTelephoneNumberVerified": False,
+            "customerLoggedin": True, "amount": float(order.total_incl_tax * 100),
+            "currencyCode": order.get_currency_code(),
+            "date": current_utc_string, "category": settings.EPAYLATER_INFO['category']}
+
+        customer_data = {"firstName": order.first_name, "lastName": order.last_name,
+                         "emailAddress": order.email, "telephoneNumber": order.mobile}
+
+        device_data = {"deviceType": get_client_device_type(self.request),
+                       "deviceClient": self.request.META.get('HTTP_USER_AGENT', ''),
+                       "deviceNumber": get_client_ip(self.request)}
+
+        market_data = {"marketplaceCustomerId": order.email,
+                       "memberSince": order.get_first_touch_for_email(). \
+                                          isoformat().split("+")[0].split(".")[0] + "Z"}
+
+        initial_dict.update({"customer": customer_data, "device": device_data,
+                             "orderHistory": self._get_order_history_list(order),
+                             "marketplaceSpecificSection": market_data})
+
+        # generate checksum and encdata for form submission
+        epay_encdec_obj = EpayLaterEncryptDecryptUtil(settings.EPAYLATER_INFO['aeskey'], \
+                                                      settings.EPAYLATER_INFO['iv'])
+        checksum = epay_encdec_obj.checksum(json.dumps(initial_dict).encode('utf-8'))
+        encdata = epay_encdec_obj.encrypt(json.dumps(initial_dict).encode('utf-8')).decode('utf-8')
+
+        template_context = {"action": settings.EPAYLATER_INFO['payment_url'],
+                            "mcode": settings.EPAYLATER_INFO['mCode'],
+                            "checksum": checksum, "encdata": encdata}
+        return Response(template_context,status=status.HTTP_200_OK)
 
 
 
