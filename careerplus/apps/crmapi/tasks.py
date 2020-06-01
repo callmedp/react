@@ -119,7 +119,7 @@ def add_server_lead_task(query_dict):
 
 
 @task(name="create_lead_crm")
-def create_lead_crm(pk=None, validate=False):
+def create_lead_crm(pk=None, validate=False, product_offer = None):
     flag = False
     try:
         data_dict = {}
@@ -147,9 +147,15 @@ def create_lead_crm(pk=None, validate=False):
                             total_salary = 55
 
                     if total_experience < 4 or total_salary < 4:
-                        return flag
+                        if not product_offer: 
+                            return flag
+                        else :
+                            flag = True
                 else:
-                    return flag
+                    if not product_offer: 
+                            return flag
+                    else :
+                        flag = True
 
         data_dict.update({
             "name": lead.name,

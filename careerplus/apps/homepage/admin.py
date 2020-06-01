@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import TopTrending, TrendingProduct, Testimonial, StaticSiteContent
+from .models import TopTrending, TrendingProduct, Testimonial, StaticSiteContent, HomePageOffer
 
 
 class TrendingProductInline(admin.TabularInline):
@@ -28,10 +28,17 @@ class TestimonialAdmin(admin.ModelAdmin):
     list_display = ['id', 'user_id', 'user_name', 'rating', 'page', 'designation', 'company']
     search_fields = ('id', 'user_id', 'user_name', 'designation', 'company')
 
+class HomePageOfferAdmin(admin.ModelAdmin):
+    list_display = [
+        'name', 'sticky_text', 'start_time', 'end_time', 'is_active']
+    list_filter = ('is_active',)
+    search_fields = ('name',)
+
 
 # admin.site.register(TrendingProduct, TrendingProductAdmin)
 admin.site.register(TopTrending, TopTrendingAdmin)
 admin.site.register(Testimonial, TestimonialAdmin)
 admin.site.register(StaticSiteContent)
+admin.site.register(HomePageOffer ,HomePageOfferAdmin)
 
 

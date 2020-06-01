@@ -1,6 +1,6 @@
-import React, { useState} from 'react';
+import React, { useState, useEffect} from 'react';
 import { useDispatch} from 'react-redux';
-import { Redirect } from 'react-router-dom'
+import { Redirect, useLocation, useHistory } from 'react-router-dom'
 import * as Actions from '../../../../store/LandingPage/actions/index';
 import { eventClicked } from '../../../../store/googleAnalytics/actions/index'
 import './banner.scss'
@@ -14,6 +14,15 @@ const Banner = props => {
     const [redirect, setRedirect] = useState(false);
     const dispatch = useDispatch()
     const staticUrl = window && window.config && window.config.staticUrl || '/media/static/';   
+    let location_value = useLocation();
+
+    let import_value = new URLSearchParams(location_value.search).get("import");
+    
+    useEffect(() => {
+        if(import_value){
+            resumeImport()
+        }
+    },[])
 
     const resumeImport = async event => {
 
@@ -24,18 +33,30 @@ const Banner = props => {
 
         if (!localStorage.getItem('userId')) {
             const isSessionAvailable = await new Promise((resolve, reject) => dispatch(Actions.checkSessionAvailability({ resolve, reject })));
-
             if (isSessionAvailable['result']) {
                 // await dispatch(Actions.getCandidateId())
                 try {
                     const candidateInfo = await new Promise((resolve, reject) => dispatch(Actions.getCandidateInfo({ resolve, reject })))
 
                     // const response = await new Promise((resolve,reject)=>dispatch(Actions.getCandidateResume({resolve,reject})))
-                    //fileUpload({terget: {files : [response]}})
+                    // fileUpload({terget: {files : [response]}})
                     setFlag(true);
-                    await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: candidateInfo['candidate_id'], resolve, reject })))
-                    setFlag(false)
-                    setRedirect(true)
+                    let res = await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: localStorage.getItem('userId'), resolve, reject })))
+                    if(!res.data['error_message']){
+                        // eslint-disable-next-line no-restricted-globals
+                        history.replaceState(null, null ,"?import=")
+                        setFlag(false)
+                        setRedirect(true)
+                    }
+                    else{
+                        setFlag(false);
+                        Swal.fire({
+                            icon: 'error',
+                            html: '<h3>'+ res.data['error_message'] +'<h3>'
+                        })
+                        // eslint-disable-next-line no-restricted-globals
+                        history.replaceState(null, null ,"?import=")
+                    }
                 }
                 catch (e) {
                     setFlag(false);
@@ -43,6 +64,8 @@ const Banner = props => {
                         icon: 'error',
                         html: '<h3>Something went wrong! Try again.<h3>'
                     })
+                    // eslint-disable-next-line no-restricted-globals
+                    history.replaceState(null, null ,"?import=")
                 }
             }
             else {
@@ -58,18 +81,31 @@ const Banner = props => {
                 // const response = await new Promise((resolve, reject) => dispatch(Actions.getCandidateResume({ resolve, reject })))
                 // fileUpload({ terget: { files: [response] } })
                 setFlag(true);
-                await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: localStorage.getItem('userId'), resolve, reject })))
-                setFlag(false)
-                setRedirect(true)
+                let res = await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: localStorage.getItem('userId'), resolve, reject })))
+                if(!res.data['error_message']){
+                    // eslint-disable-next-line no-restricted-globals
+                    history.replaceState(null, null ,"?import=")
+                    setFlag(false)
+                    setRedirect(true)
+                }
+                else{
+                    setFlag(false);
+                    Swal.fire({
+                        icon: 'error',
+                        html: '<h3>'+ res.data['error_message'] +'<h3>'
+                    })
+                    // eslint-disable-next-line no-restricted-globals
+                    history.replaceState(null, null ,"?import=")
+                }
             }
             catch (e) {
-                setFlag(false)
-                if (!e['error_message']) {
+                setFlag(false);
                     Swal.fire({
                         icon: 'error',
                         html: '<h3>Something went wrong! Try again.<h3>'
                     })
-                }
+                    // eslint-disable-next-line no-restricted-globals
+                    history.replaceState(null, null ,"?import=")
             }
         }
     }
