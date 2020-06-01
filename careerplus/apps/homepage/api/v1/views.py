@@ -442,21 +442,21 @@ class DashboardResumeDownloadApi(APIView):
         candidate_id = request.GET.get('candidate_id', None)
         order_pk = request.GET.get('order_pk',None)
         if not candidate_id or not order_pk:
-            return Response({'error':'BAD REQUEST'},status=status.HTTP_400_BAD_REQUEST)
+            return HttpResponsePermanentRedirect('{}/404'.format(settings.RESUME_SHINE_MAIN_DOMAIN))
         try:
             order = Order.objects.get(pk=order_pk)
         except:
             logging.getLogger('error_log').error('no order found {}'.format(order_pk))
-            return Response({'error':'Order not Found'},status=status.HTTP_400_BAD_REQUEST)
+            return HttpResponsePermanentRedirect('{}/404'.format(settings.RESUME_SHINE_MAIN_DOMAIN))
 
 
         if not order.candidate_id == candidate_id:
-            return Response({'error':'Unauthorized request'},status=status.HTTP_401_UNAUTHORIZED)
+            return HttpResponsePermanentRedirect('{}/404'.format(settings.RESUME_SHINE_MAIN_DOMAIN))
 
         if order.status in [1, 3]:
             file = request.GET.get('path', None)
             if not file:
-                return Response({'error': 'file not found'}, status=status.HTTP_200_OK)
+                return HttpResponsePermanentRedirect('{}/404'.format(settings.RESUME_SHINE_MAIN_DOMAIN))
 
             if file.startswith('/'):
                 file = file[1:]
@@ -467,14 +467,14 @@ class DashboardResumeDownloadApi(APIView):
                 else :
                     fsock = GCPPrivateMediaStorage().open(file_path)
             except:
-                return Response({'error': 'file not found'}, status=status.HTTP_200_OK)
+                return HttpResponsePermanentRedirect('{}/404'.format(settings.RESUME_SHINE_MAIN_DOMAIN))
 
             filename = file.split('/')[-1]
             response = HttpResponse(fsock, content_type=mimetypes.guess_type(filename)[0])
             response['Content-Disposition'] = 'attachment; filename="%s"' % (filename)
             return response
         else:
-            return Response({'error':'Unauthorized request'},status=status.HTTP_401_UNAUTHORIZED)
+            return HttpResponsePermanentRedirect('{}/404'.format(settings.RESUME_SHINE_MAIN_DOMAIN))
 
 class DashboardDraftDownloadApi(APIView):
     authentication_classes = ()
