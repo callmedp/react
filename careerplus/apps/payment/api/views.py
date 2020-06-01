@@ -1,6 +1,6 @@
 # python imports
 
-import logging,json
+import logging, json
 import time
 import codecs
 from Crypto.Cipher import AES
@@ -11,9 +11,8 @@ from datetime import datetime
 from django.http import HttpResponse, HttpResponseForbidden
 from django.conf import settings
 
-
 # local imports
-from payment.utils import PayuPaymentUtil ,ZestMoneyUtil,EpayLaterEncryptDecryptUtil
+from payment.utils import PayuPaymentUtil, ZestMoneyUtil, EpayLaterEncryptDecryptUtil
 from cart.models import Cart
 from payment.models import PaymentTxn
 from order.mixins import OrderMixin
@@ -21,8 +20,6 @@ from cart.mixins import CartMixin
 from payment.mixin import PaymentMixin
 from geolocation.models import PAYMENT_CURRENCY_SYMBOL
 from core.utils import get_client_ip, get_client_device_type
-
-
 
 # inter app imports
 
@@ -34,42 +31,43 @@ from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 import platform
+
 py_major, py_minor, py_patchlevel = platform.python_version_tuple()
 
 
-class ZestMoneyFetchEMIPlansApi(APIView):
-	authentication_classes = ()
-	permission_classes = ()
-	serializer_class = None
-
-	def get(self, request, *args, **kwargs):
-		amount = self.request.GET.get('amount',0)
-		if not amount:
-			return HttpResponseForbidden()
-		zest_util_obj = ZestMoneyUtil()
-		response_data = zest_util_obj.get_emi_plans(amount)
-		return Response(response_data.get('recommended_options',[]),
-						status=status.HTTP_200_OK)
-
-
-class ResumeShinePayuRequestAPIView(OrderMixin,APIView):
+class ZestMoneyFetchEMIPlansApi(APIView) :
     authentication_classes = ()
     permission_classes = ()
-    serizlizer_classes =None
+    serializer_class = None
 
-    def get(self,request,*args,**kwargs):
+    def get(self, request, *args, **kwargs) :
+        amount = self.request.GET.get('amount', 0)
+        if not amount :
+            return HttpResponseForbidden()
+        zest_util_obj = ZestMoneyUtil()
+        response_data = zest_util_obj.get_emi_plans(amount)
+        return Response(response_data.get('recommended_options', []),
+                        status=status.HTTP_200_OK)
+
+
+class ResumeShinePayuRequestAPIView(OrderMixin, APIView) :
+    authentication_classes = ()
+    permission_classes = ()
+    serizlizer_classes = None
+
+    def get(self, request, *args, **kwargs) :
         return_dict = {}
         cart_id = self.request.GET.get('cart_pk')
-        if not cart_id:
-            return_dict.update({'error': 'Cart id not found'})
-            return Response(return_dict,status=status.HTTP_400_BAD_REQUEST)
+        if not cart_id :
+            return_dict.update({'error' : 'Cart id not found'})
+            return Response(return_dict, status=status.HTTP_400_BAD_REQUEST)
         cart_obj = Cart.objects.filter(id=cart_id).first()
-        if not cart_obj:
-            return_dict.update({'error': 'Cart id not found'})
+        if not cart_obj :
+            return_dict.update({'error' : 'Cart id not found'})
             return Response(return_dict, status=status.HTTP_400_BAD_REQUEST)
 
         order = self.createOrder(cart_obj)
-        if not order:
+        if not order :
             logging.getLogger('error_log').error('order is not created for '
                                                  'cart id- {}'.format(cart_id))
             return Response(return_dict, status=status.HTTP_400_BAD_REQUEST)
@@ -87,57 +85,57 @@ class ResumeShinePayuRequestAPIView(OrderMixin,APIView):
         )
 
         payu_object = PayuPaymentUtil()
-        payu_dict = payu_object.generate_payu_dict(pay_txn,'resume_shine')
-        hash_val = payu_object.generate_payu_hash(payu_dict,'resume_shine')
-        payu_dict.update({'hash': hash_val, "action": settings.PAYU_INFO1[
+        payu_dict = payu_object.generate_payu_dict(pay_txn, 'resume_shine')
+        hash_val = payu_object.generate_payu_hash(payu_dict, 'resume_shine')
+        payu_dict.update({'hash' : hash_val, "action" : settings.PAYU_INFO1[
             'payment_url']})
-        return Response(payu_dict,status=status.HTTP_200_OK)
+        return Response(payu_dict, status=status.HTTP_200_OK)
 
 
-class ResumeShinePayUResponseView(CartMixin,PaymentMixin,APIView):
+class ResumeShinePayUResponseView(CartMixin, PaymentMixin, APIView) :
     authentication_classes = ()
     permission_classes = ()
     serizlizer_classes = None
 
-    def post(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs) :
         payu_data = request.POST.copy()
         transaction_status = payu_data.get('status', '').upper()
         txn_id = payu_data.get('txnid')
-        if not txn_id:
+        if not txn_id :
             logging.getLogger('error_log').error(
                 "PayU No txn id - {}".format(payu_data))
-            return Response({'error':'bad request'},status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error' : 'bad request'}, status=status.HTTP_400_BAD_REQUEST)
 
-        txn_obj = PaymentTxn.objects.filter(txn=txn_id,status=0).first()
-        if not txn_obj:
+        txn_obj = PaymentTxn.objects.filter(txn=txn_id, status=0).first()
+        if not txn_obj :
             logging.getLogger('error_log').error(
                 "PayU No txn obj for txnid - {}".format(txn_id))
-            return Response({'error':'bad request'},status=status.HTTP_400_BAD_REQUEST)
-        extra_info_dict ={
-                    'bank_ref_no': payu_data.get('bank_ref_num', ''),
-                    'bank_gateway_txn_id': payu_data.get('mihpayid', ''),
-                    'bank_code': payu_data.get('bankcode', ''),
-                    'txn_mode': payu_data.get('mode', ''),
-                    'error': payu_data.get('error_Message',''),
+            return Response({'error' : 'bad request'}, status=status.HTTP_400_BAD_REQUEST)
+        extra_info_dict = {
+            'bank_ref_no' : payu_data.get('bank_ref_num', ''),
+            'bank_gateway_txn_id' : payu_data.get('mihpayid', ''),
+            'bank_code' : payu_data.get('bankcode', ''),
+            'txn_mode' : payu_data.get('mode', ''),
+            'error' : payu_data.get('error_Message', ''),
         }
         extra_info_json = json.dumps(extra_info_dict)
         txn_obj.txn_info = extra_info_json
         txn_obj.save()
 
-        if transaction_status == "SUCCESS":
+        if transaction_status == "SUCCESS" :
             payment_type = "PAYU"
             return_parameter = self.process_payment_method(
                 payment_type, request, txn_obj)
             self.closeCartObject(txn_obj.cart)
-            return Response({'redirect' : return_parameter}, status=status.HTTP_200_OK)
+            return Response({'redirect' : return_parameter,'order_pk':order.pk}, status=status.HTTP_200_OK)
 
-        elif transaction_status == "FAILURE" or transaction_status == "PENDING":
+        elif transaction_status == "FAILURE" or transaction_status == "PENDING" :
             txn_obj.status = 0
             txn_obj.save()
         return Response({'redirect' : '/payment/oops?error=failure&txn_id=' + txn_id}, status=status.HTTP_200_OK)
 
 
-class Ccavenue( PaymentMixin, OrderMixin,APIView):
+class Ccavenue(PaymentMixin, OrderMixin, APIView) :
     authentication_classes = ()
     permission_classes = ()
     serializer_class = None
@@ -267,9 +265,9 @@ class Ccavenue( PaymentMixin, OrderMixin,APIView):
         encryption = self.encrypt(merchant_data, context_dict['workingkey'])
         return {'url' : context_dict['url'], 'encReq' : encryption, 'xscode' : context_dict['accesscode']}
 
-    def get(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs) :
         if not kwargs.get('cart_id') :
-            return Response({'error':'BAD REQUEST'},status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error' : 'BAD REQUEST'}, status=status.HTTP_400_BAD_REQUEST)
         data = {}
         cart_id = kwargs.get('cart_id', None)
         paytype = kwargs.get('paytype', '')
@@ -313,8 +311,8 @@ class Ccavenue( PaymentMixin, OrderMixin,APIView):
 
             # context =    self.get_request_url(order, request, data=data, pay_txn=pay_txn)
 
-            return Response( self.get_request_url(order, request, data=data, pay_txn=pay_txn),status=status.HTTP_200_OK)
-        return Response({'error':"BAD REQUEST"}, status=400)
+            return Response(self.get_request_url(order, request, data=data, pay_txn=pay_txn), status=status.HTTP_200_OK)
+        return Response({'error' : "BAD REQUEST"}, status=400)
 
     # def post(self, request, *args, **kwargs) :
     #     context_dict = {}
@@ -402,35 +400,34 @@ class Ccavenue( PaymentMixin, OrderMixin,APIView):
     #
 
 
-class EPayLaterRequestView(OrderMixin, APIView):
+class EPayLaterRequestView(OrderMixin, APIView) :
     authentication_classes = ()
     permission_classes = ()
     serializer_class = None
 
-    def _get_order_history_list(self, order):
+    def _get_order_history_list(self, order) :
         order_history = []
 
-        for past_order in order.get_past_orders_for_email_and_mobile():
+        for past_order in order.get_past_orders_for_email_and_mobile() :
             past_txn = past_order.ordertxns.filter(status=1).first()
-            if not past_txn:
+            if not past_txn :
                 continue
-            order_data = {"orderId": past_txn.txn, "amount": float(past_order.total_incl_tax),
-                          "currencyCode": past_order.get_currency_code(),
-                          "date": past_order.payment_date.isoformat().split("+")[0].split(".")[0] + "Z",
-                          "category": settings.EPAYLATER_INFO['category'],
-                          "returned": "false", "paymentMethod": past_txn.get_payment_mode()}
+            order_data = {"orderId" : past_txn.txn, "amount" : float(past_order.total_incl_tax),
+                          "currencyCode" : past_order.get_currency_code(),
+                          "date" : past_order.payment_date.isoformat().split("+")[0].split(".")[0] + "Z",
+                          "category" : settings.EPAYLATER_INFO['category'],
+                          "returned" : "false", "paymentMethod" : past_txn.get_payment_mode()}
             order_history.append(order_data)
 
         return order_history
 
-    def get(self,request,*args, **kwargs):
+    def get(self, request, *args, **kwargs) :
         cart_id = kwargs.get('cart_id', 0)
         cart_obj = Cart.objects.filter(id=cart_id).first()
-        if not cart_obj:
-            return Response({'error':'BAD REQUEST'},status=status.HTTP_400_BAD_REQUEST)
+        if not cart_obj :
+            return Response({'error' : 'BAD REQUEST'}, status=status.HTTP_400_BAD_REQUEST)
 
         site_domain = settings.RESUME_SHINE_SITE_DOMAIN
-
 
         order = self.createOrder(cart_obj)
         txn_id = 'CP%d%s' % (order.pk, int(time.time()))
@@ -443,29 +440,29 @@ class EPayLaterRequestView(OrderMixin, APIView):
 
         current_utc_string = datetime.utcnow().isoformat().split(".")[0] + "Z"
         initial_dict = {
-            "redirectType": "WEBPAGE", "marketplaceOrderId": txn_id,
-            "mCode": settings.EPAYLATER_INFO.get('mCode'),
-            "callbackUrl": "{}://{}/payment/epaylater/response/{}/".format( \
+            "redirectType" : "WEBPAGE", "marketplaceOrderId" : txn_id,
+            "mCode" : settings.EPAYLATER_INFO.get('mCode'),
+            "callbackUrl" : "{}://{}/payment/epaylater/response/{}/".format( \
                 settings.SITE_PROTOCOL, site_domain, cart_id),
-            "customerEmailVerified": False, "customerTelephoneNumberVerified": False,
-            "customerLoggedin": True, "amount": float(order.total_incl_tax * 100),
-            "currencyCode": order.get_currency_code(),
-            "date": current_utc_string, "category": settings.EPAYLATER_INFO['category']}
+            "customerEmailVerified" : False, "customerTelephoneNumberVerified" : False,
+            "customerLoggedin" : True, "amount" : float(order.total_incl_tax * 100),
+            "currencyCode" : order.get_currency_code(),
+            "date" : current_utc_string, "category" : settings.EPAYLATER_INFO['category']}
 
-        customer_data = {"firstName": order.first_name, "lastName": order.last_name,
-                         "emailAddress": order.email, "telephoneNumber": order.mobile}
+        customer_data = {"firstName" : order.first_name, "lastName" : order.last_name,
+                         "emailAddress" : order.email, "telephoneNumber" : order.mobile}
 
-        device_data = {"deviceType": get_client_device_type(self.request),
-                       "deviceClient": self.request.META.get('HTTP_USER_AGENT', ''),
-                       "deviceNumber": get_client_ip(self.request)}
+        device_data = {"deviceType" : get_client_device_type(self.request),
+                       "deviceClient" : self.request.META.get('HTTP_USER_AGENT', ''),
+                       "deviceNumber" : get_client_ip(self.request)}
 
-        market_data = {"marketplaceCustomerId": order.email,
-                       "memberSince": order.get_first_touch_for_email(). \
-                                          isoformat().split("+")[0].split(".")[0] + "Z"}
+        market_data = {"marketplaceCustomerId" : order.email,
+                       "memberSince" : order.get_first_touch_for_email(). \
+                                           isoformat().split("+")[0].split(".")[0] + "Z"}
 
-        initial_dict.update({"customer": customer_data, "device": device_data,
-                             "orderHistory": self._get_order_history_list(order),
-                             "marketplaceSpecificSection": market_data})
+        initial_dict.update({"customer" : customer_data, "device" : device_data,
+                             "orderHistory" : self._get_order_history_list(order),
+                             "marketplaceSpecificSection" : market_data})
 
         # generate checksum and encdata for form submission
         epay_encdec_obj = EpayLaterEncryptDecryptUtil(settings.EPAYLATER_INFO['aeskey'], \
@@ -473,11 +470,107 @@ class EPayLaterRequestView(OrderMixin, APIView):
         checksum = epay_encdec_obj.checksum(json.dumps(initial_dict).encode('utf-8'))
         encdata = epay_encdec_obj.encrypt(json.dumps(initial_dict).encode('utf-8')).decode('utf-8')
 
-        template_context = {"action": settings.EPAYLATER_INFO['payment_url'],
-                            "mcode": settings.EPAYLATER_INFO['mCode'],
-                            "checksum": checksum, "encdata": encdata}
-        return Response(template_context,status=status.HTTP_200_OK)
+        template_context = {"action" : settings.EPAYLATER_INFO['payment_url'],
+                            "mcode" : settings.EPAYLATER_INFO['mCode'],
+                            "checksum" : checksum, "encdata" : encdata}
+        return Response(template_context, status=status.HTTP_200_OK)
 
 
 
 
+class ZestMoneyResponseView(CartMixin,PaymentMixin,APIView):
+    authentication_classes = ()
+    permission_classes = ()
+    serializer_class = None
+
+    status_text_mapping = {
+        'applicationinprogress'     : 'Loan application is in progress',
+        'approved'                  : 'Loan application has been approved',
+        'bankaccountdetailscomplete': 'Customer has completed his bank '
+                                      'account details',
+        'cancelled'                 : 'Loan application has been cancelled',
+        'customercancelled'         : 'Loan application has been cancelled by '
+                                      'the customer',
+        'declined'                  : 'Loan application was declined',
+        'depositpaid'               : 'The customer has either made the '
+                                      'downpayment, or chose to pay on '
+                                      'delivery (if available)',
+        'documentscomplete'         : 'The customer has uploaded all the '
+                                      'required documents',
+        'loanagreementaccepted'     : 'The customer has signed the loan '
+                                      'agreement',
+        'merchantcancelled'         : 'Loan application was cancelled by the '
+                                      'merchant',
+        'outofstock'                : 'Some of the items in the order are out '
+                                      'of stock and the loan application was '
+                                      'cancelled',
+        'preaccepted'               : 'Loan application was pre-accepted by '
+                                      'automated risk process',
+        'riskpending'               : 'Risk decision pending',
+        'timeoutcancelled'          : 'Loan application was cancelled by a '
+                                      'timeout mechanism (customer did not '
+                                      'complete the application in time)'
+    }
+
+    zest_status_payment_status_mapping = {"cancelled"        : 5,
+                                          "customercancelled": 5,
+                                          "declined"         : 2,
+                                          "merchantcancelled": 5,
+                                          "outofstock"       : 5,
+                                          "timeoutcancelled" : 3,
+                                          }
+
+    approval_pending_status = ["bankaccountdetailscomplete",
+                               "applicationinprogress", "depositpaid", \
+                               "documentscomplete", "loanagreementaccepted",
+                               "riskpending"]
+
+
+    def update_txn_info(self,order_status,txn_obj):
+        success_text = self.status_text_mapping.get(order_status, "")
+        success_text = json.dumps(success_text)
+        txn_obj.txn_info = success_text
+        txn_obj.save()
+
+    def get(self, request, *args, **kwargs):
+        txn_id = kwargs.get('txn_id')
+        if not txn_id:
+            return Response({'error':'BAD REQUEST'},status=status.HTTP_400_BAD_REQUEST)
+        txn_obj = PaymentTxn.objects.filter(id=txn_id).first()
+
+        if not txn_obj:
+            return Response({'error':'Page Not Found'},status=status.HTTP_404_NOT_FOUND)
+
+        zest_obj = ZestMoneyUtil()
+        order_status = zest_obj.fetch_order_status(txn_obj).lower()
+        logging.getLogger('info_log').info('order_status - {}'.format(
+            order_status))
+
+        if order_status in ["preaccepted", "approved", "active"]:
+            return_parameter = self.process_payment_method(
+                'ZESTMONEY', request, txn_obj)
+            logging.getLogger('info_log').info (
+                "Zest Order Successfully updated {},{}".\
+                format(order_status, txn_obj.id))
+            self.closeCartObject(txn_obj.cart)
+            return Response({'redirect':return_parameter,'order_pk':txn_obj.order_id},status=status.HTTP_200_OK)
+
+        if order_status in self.approval_pending_status:
+            txn_obj.status = 0
+            self.update_txn_info(order_status, txn_obj)
+            self.closeCartObject(txn_obj.cart)
+            return Response({'redirect':'/payment/thank-you','order_pk':txn_obj.order_id},status=status.HTTP_200_OK)
+
+
+        failure_text = self.status_text_mapping.get(order_status, "")
+        failure_status = self.zest_status_payment_status_mapping.get (
+            order_status, 0)
+        logging.getLogger('info_log').info("Zest Order Update {},{}". \
+                                             format (order_status,
+                                                     txn_obj.id))
+
+        txn_obj.status = failure_status
+        failure_text = json.dumps(failure_text)
+        txn_obj.txn_info = failure_text
+        txn_obj.save()
+        return Response({'redirect' : '/payment/thank-you','order_pk':txn_obj.order_id}, status=status.HTTP_200_OK)

@@ -259,7 +259,7 @@ class ZestMoneyUtil:
 
         return mapped_response_data
 
-    def create_application_and_fetch_logon_url(self, txn_obj):
+    def create_application_and_fetch_logon_url(self, txn_obj,site=None):
 
         order = txn_obj.order
         headers = self.get_authorization_header()
@@ -272,8 +272,11 @@ class ZestMoneyUtil:
         data.update({
             "OrderId"           : order.id,
             "DeliveryPostCode"  : '122011',
-            "ReturnUrl"         : "{}/payment/zest-money/{}/callback/".format(settings.MAIN_DOMAIN_PREFIX, txn_obj.id),
-            "ApprovedUrl"       : "{}/payment/zest-money/{}/callback/".format(settings.MAIN_DOMAIN_PREFIX, txn_obj.id),
+            "ReturnUrl"         : "{}/payment/zest-money/{}/callback/".format(settings.MAIN_DOMAIN_PREFIX,txn_obj.id)
+            if not site else  '{}://{}/payment/zest-money/{}/callback/'.format(settings.RESUME_SHINE_SITE_PROTOCOL,settings.RESUME_SHINE_SITE_DOMAIN, txn_obj.id),
+
+            "ApprovedUrl"       : "{}/payment/zest-money/{}/callback/".format(settings.MAIN_DOMAIN_PREFIX,
+                                                                              txn_obj.id) if not site else  '{}://{}/payment/zest-money/{}/callback/'.format(settings.RESUME_SHINE_SITE_PROTOCOL,settings.RESUME_SHINE_SITE_DOMAIN, txn_obj.id) ,
             "MerchantCustomerId": order.email.lower().strip(),
             "EmailAddress"      : order.email.lower().strip(),
             "FullName"          : order.first_name + order.last_name if

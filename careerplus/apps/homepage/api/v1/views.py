@@ -3,7 +3,7 @@ from rest_framework.generics import RetrieveAPIView ,ListAPIView ,UpdateAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from django.http import HttpResponse
+from django.http import HttpResponse ,HttpResponsePermanentRedirect
 from shared.rest_addons.mixins import FieldFilterMixin
 from shared.rest_addons.pagination import LearningCustomPagination
 from django.template.loader import get_template
@@ -485,15 +485,15 @@ class DashboardDraftDownloadApi(APIView):
         candidate_id = request.GET.get('candidate_id', None)
         orderitem_id = request.GET.get('oi_pk',None)
         if not candidate_id or not orderitem_id:
-            return Response({'error':'BAD REQUEST'},status=status.HTTP_400_BAD_REQUEST)
+            return HttpResponsePermanentRedirect('{}/404'.format(settings.RESUME_SHINE_MAIN_DOMAIN))
         try:
             order_item = OrderItem.objects.get(pk=orderitem_id)
         except:
             logging.getLogger('error_log').error('no orderitem found {}'.format(orderitem_id))
-            return Response({'error':'Order not Found'},status=status.HTTP_400_BAD_REQUEST)
+            return HttpResponsePermanentRedirect('{}/404'.format(settings.RESUME_SHINE_MAIN_DOMAIN))
 
         if not order_item.order.candidate_id == candidate_id:
-            return Response({'error':'Unauthorized request'},status=status.HTTP_401_UNAUTHORIZED)
+            return HttpResponsePermanentRedirect('{}/404'.format(settings.RESUME_SHINE_MAIN_DOMAIN))
         try:
             flag2 = False
             draft = order_item.oio_linkedin
@@ -538,7 +538,7 @@ class DashboardDraftDownloadApi(APIView):
             return http_response
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
-            return Response({'error':'somewthing went wrong'},status=status.HTTP_400_BAD_REQUEST)
+            return HttpResponsePermanentRedirect('{}/404'.format(settings.RESUME_SHINE_MAIN_DOMAIN))
 
 class ResumeProfileCredentialDownload(APIView):
     authentication_classes = ()
@@ -550,20 +550,20 @@ class ResumeProfileCredentialDownload(APIView):
         candidate_id = request.GET.get('candidate_id')
         oi = request.GET.get('oi')
         if not candidate_id or not oi:
-            return Response({'error':'BAD REQUEST'},status=status.HTTP_400_BAD_REQUEST)
+            return HttpResponsePermanentRedirect('{}/404'.format(settings.RESUME_SHINE_MAIN_DOMAIN))
         try:
             oi = OrderItem.objects.select_related('order').get(pk=oi)
         except:
             logging.getLogger('error_log').error('order item not found for {}'.format(oi))
-            return Response({'error':'BAD REQUEST'},status=status.HTTP_400_BAD_REQUEST)
+            return HttpResponsePermanentRedirect('{}/404'.format(settings.RESUME_SHINE_MAIN_DOMAIN))
 
         profile_credentials = InternationalProfileCredential.objects.filter(
             oi=oi)
         if not profile_credentials:
-            return Response({'error' : 'BAD REQUEST'}, status=status.HTTP_400_BAD_REQUEST)
+            return HttpResponsePermanentRedirect('{}/404'.format(settings.RESUME_SHINE_MAIN_DOMAIN))
 
         if oi.order.candidate_id != candidate_id:
-            return Response({'error' : 'Unauthorized REQUEST'}, status=status.HTTP_401_UNAUTHORIZED)
+            return HttpResponsePermanentRedirect('{}/404'.format(settings.RESUME_SHINE_MAIN_DOMAIN))
 
         if profile_credentials:
             try:
@@ -580,8 +580,7 @@ class ResumeProfileCredentialDownload(APIView):
             except Exception as e:
                 logging.getLogger('error_log').error(
                     "Profile download:%s", str(e))
-        return Response({'error':'something went wrong'},status=status.HTTP_400_BAD_REQUEST)
-
+        return HttpResponsePermanentRedirect('{}/404'.format(settings.RESUME_SHINE_MAIN_DOMAIN))
 
 
 class UserInboxListApiView(APIView):
@@ -749,23 +748,12 @@ class DashboardFeedbackSubmit(APIView):
             return Response({'error':'Something went Wrong'},status=status.HTTP_400_BAD_REQUEST)
 
 
-
-
 class PausePlayService(UpdateAPIView):
     permission_classes = ()
     authentication_classes = ()
     serializer_classes = OrderItemSerializer
     queryset = OrderItem.objects.all()
     owner_fields = ['order.candidate_id']
-
-    def update(self, request, *args, **kwargs):
-        import ipdb;ipdb.set_trace()
-        return Response({'status':'success'},status=status.HTTP_200_OK)
-
-        #
-        #
-
-
 
 
 

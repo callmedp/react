@@ -114,7 +114,8 @@ class PaymentOptionsApiView(APIView,OrderMixin,PaymentMixin):
                     return_parameter = self.process_payment_method(
                         payment_type, request, pay_txn)
 
-                    return Response({'redirect':return_parameter,'order_txn':txn},status=status.HTTP_200_OK)
+                    return Response({'redirect':return_parameter,'order_txn':txn,'order_pk':order.pk},
+                                    status=status.HTTP_200_OK)
             else :
                 return Response({'error':'Cart NOT FOUND'},status=status.HTTP_400_BAD_REQUEST)
 
@@ -148,7 +149,8 @@ class PaymentOptionsApiView(APIView,OrderMixin,PaymentMixin):
                     return_parameter = self.process_payment_method(
                         payment_type, request, pay_txn)
       
-                    return Response({'redirect':return_parameter,'order_txn':txn},status=status.HTTP_200_OK)
+                    return Response({'redirect':return_parameter,'order_txn':txn,'order_pk':order.pk},
+                                    status=status.HTTP_200_OK)
             else:
                 return Response({'redirect':'/'})
 

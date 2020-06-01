@@ -543,6 +543,7 @@ class ZestMoneyRequestApiView(OrderMixin, APIView):
     def get(self,request,*args,**kwargs):
         data = {'url':''}
         cart_pk = kwargs.get('cart_id')
+        site = self.request.GET.get('site',None)
         if not cart_pk:
             return Response(data,status=status.HTTP_400_BAD_REQUEST)
         cart = Cart.objects.filter(id=cart_pk).first()
@@ -568,7 +569,7 @@ class ZestMoneyRequestApiView(OrderMixin, APIView):
         )
         zest_object = ZestMoneyUtil()
         redirect_url = zest_object.create_application_and_fetch_logon_url(
-            pay_txn)
+            pay_txn,site)
         if not redirect_url:
             return Response(data, status=status.HTTP_400_BAD_REQUEST)
         data.update({'url': redirect_url})
