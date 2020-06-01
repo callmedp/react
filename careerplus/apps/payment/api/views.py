@@ -146,11 +146,11 @@ class Ccavenue(PaymentMixin, OrderMixin, APIView) :
         res_dict['integration_type'] = 'iframe_normal'
         res_dict['language'] = 'EN'
         if self.request.flavour == 'mobile' :
-            res_dict['accesscode'] = settings.CCAVENUE_MOBILE_ACCESS_CODE
-            res_dict['workingkey'] = settings.CCAVENUE_MOBILE_WORKING_KEY
+            res_dict['accesscode'] = 'AVNZ03HE25BR73ZNRB'
+            res_dict['workingkey'] =  'FBD9C0D0B8D397CD4E182B9BFF6EA44F'
         else :
-            res_dict['accesscode'] = settings.CCAVENUE_ACCESS_CODE
-            res_dict['workingkey'] = settings.CCAVENUE_WORKING_KEY
+            res_dict['accesscode'] = 'AVNZ03HE25BR73ZNRB'
+            res_dict['workingkey'] =  'FBD9C0D0B8D397CD4E182B9BFF6EA44F'
         res_dict['url'] = settings.CCAVENUE_URL
 
         return res_dict
@@ -229,8 +229,8 @@ class Ccavenue(PaymentMixin, OrderMixin, APIView) :
         order_id = pay_txn.txn
 
         amount = order_obj.total_incl_tax
-        surl = 'https://resumestage.shine.com/payment/ccavenue/success/'
-        curl = 'https://resumestage.shine.com/payment/ccavenue/cancel/'
+        surl = 'http://resumestage.shine.com/payment/ccavenue/success/'
+        curl = 'http://resumestage.shine.com/payment/ccavenue/cancel/'
 
         p_merchant_id = context_dict['merchant_id']
         p_currency = context_dict['currency']
