@@ -6,6 +6,9 @@ import mimetypes
 from random import random
 from dateutil.relativedelta import relativedelta
 from wsgiref.util import FileWrapper
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+
 
 from django.http import (
     HttpResponse,
@@ -429,7 +432,11 @@ class DashboardFeedbackView(TemplateView):
             return HttpResponseForbidden()
 
 
-class DashboardRejectService(View):
+
+class DashboardRejectService(APIView):
+    authentication_classes = ()
+    permission_classes = ()
+    
 
     def post(self, request, *args, **kwargs):
         candidate_id = request.session.get('candidate_id', None)
@@ -532,8 +539,11 @@ class DashboardAcceptService(APIView):
         }
         oi = OrderItem.objects.filter(id=oi_pk).first()
 
-        if not oi and (not oi.order.candidate_id == candidate_id and oi.order.status not in [1, 3]) and\
-                oi.oi_status in [24, 46]:
+        if not oi or oi.order.candidate_id != candidate_id or oi.order.status not in [1,3] or oi.oi_status not in [24,\
+                46]:
+
+        # if not oi and (not oi.order.candidate_id == candidate_id and oi.order.status not in [1, 3]) and\
+        #         oi.oi_status in [24, 46]:
             return HttpResponseBadRequest(json.dumps({'result': 'Valid Actions Only'}), content_type="application/json")
 
         last_oi_status = oi.oi_status

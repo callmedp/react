@@ -150,7 +150,7 @@ class Ccavenue(PaymentMixin, OrderMixin, APIView) :
             res_dict['workingkey'] =  'FBD9C0D0B8D397CD4E182B9BFF6EA44F'
         else :
             res_dict['accesscode'] = 'AVNZ03HE25BR73ZNRB'
-            res_dict['workingkey'] =  'FBD9C0D0B8D397CD4E182B9BFF6EA44F'
+            res_dict['workingkey'] = 'FBD9C0D0B8D397CD4E182B9BFF6EA44F'
         res_dict['url'] = settings.CCAVENUE_URL
 
         return res_dict
