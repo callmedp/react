@@ -2,6 +2,7 @@
 from django.urls import re_path
 
 from . import views
+from order.api.v1.views import OrderItemPatchView
 
 app_name = "homepage"
 
@@ -21,6 +22,6 @@ urlpatterns = [
     re_path(r'^dashboard-order-list/$', views.UserInboxListApiView.as_view()),
     re_path(r'^download-invoice/$', views.DashboardResumeInvoiceDownload.as_view()),
     re_path(r'^dashboard-feedback/$', views.DashboardFeedbackSubmit.as_view()),
-    re_path(r'^dashboard-pause-play/$', views.PausePlayService.as_view()),
+    re_path(r'^dashboard-pause-play/$', OrderItemPatchView.as_view()),
 
 ]

@@ -466,17 +466,17 @@ class PayuPaymentUtil():
             initial_dict.update({
                 'txnid' : txn.txn,
                 'key' : settings.PAYU_INFO1['merchant_key'],
-                'surl' : "{}://{}/payment/payu/response/success/".format(settings.RESUME_SHINE_SITE_PROTOCOL,
+                'surl' : "{}://{}/api/payment/payu/response/success/".format(settings.RESUME_SHINE_SITE_PROTOCOL,
                                                                          settings.RESUME_SHINE_SITE_DOMAIN),
-                'furl' : "{}://{}/payment/payu/response/failure/".format(settings.RESUME_SHINE_SITE_PROTOCOL,
+                'furl' : "{}://{}/api/payment/payu/response/failure/".format(settings.RESUME_SHINE_SITE_PROTOCOL,
                                                                          settings.RESUME_SHINE_SITE_DOMAIN),
-                'curl' : "{}://{}/payment/payu/response/cancel/".format(settings.RESUME_SHINE_SITE_PROTOCOL,
+                'curl' : "{}://{}/api/payment/payu/response/cancel/".format(settings.RESUME_SHINE_SITE_PROTOCOL,
                                                                         settings.RESUME_SHINE_SITE_DOMAIN),
-                'msurl' : "{}://{}/payment/payu/response/success/".format(settings.RESUME_SHINE_SITE_PROTOCOL,
+                'msurl' : "{}://{}/api/payment/payu/response/success/".format(settings.RESUME_SHINE_SITE_PROTOCOL,
                                                                           settings.RESUME_SHINE_SITE_DOMAIN),
-                'mfurl' : "{}://{}/payment/payu/response/failure/".format(settings.RESUME_SHINE_SITE_PROTOCOL,
+                'mfurl' : "{}://{}/api/payment/payu/response/failure/".format(settings.RESUME_SHINE_SITE_PROTOCOL,
                                                                           settings.RESUME_SHINE_SITE_DOMAIN),
-                'mcurl' : "{}://{}/payment/payu/response/cancel/".format(settings.RESUME_SHINE_SITE_PROTOCOL,
+                'mcurl' : "{}://{}/api/payment/payu/response/cancel/".format(settings.RESUME_SHINE_SITE_PROTOCOL,
                                                                          settings.RESUME_SHINE_SITE_DOMAIN),
 
             })

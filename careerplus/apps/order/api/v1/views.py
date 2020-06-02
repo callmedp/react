@@ -159,8 +159,6 @@ class OrderItemPatchView(APIView):
     serializer_class = None
 
     def patch(self, request, *args, **kwargs):
-        import ipdb
-        ipdb.set_trace()
         candidate_id = request.data.get('candidate_id')
         order_item_id = request.data.get('order_item_id')
         oi_status = request.data.get('oi_status')
