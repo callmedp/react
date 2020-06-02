@@ -57,7 +57,7 @@ class OrderItemDetailSerializer(SerializerFieldsMixin,serializers.ModelSerialize
         return obj.product.is_pause_service if obj.product_id else ''
 
     def get_oio_linkedin(self,obj):
-        return obj.oio_linkedin.name if obj.oio_linkedin else ''
+        return obj.oio_linkedin_id if obj.oio_linkedin else ''
 
     def get_auto_upload(self,obj):
         return obj.order.auto_upload
