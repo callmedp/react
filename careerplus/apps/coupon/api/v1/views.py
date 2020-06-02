@@ -11,8 +11,10 @@ import logging
 
 
 class CouponRedeemView(APIView, CartMixin):
-    permission_classes = ()
     authentication_classes = ()
+    permission_classes = ()
+    serializer_class = None
+
 
     def post(self, request, *args, **kwargs):
         code = request.data.get('code', None)
@@ -210,6 +212,8 @@ class CouponRemoveView(APIView, CartMixin):
             #     self.getCartObject()
             cart_obj = None
             cart_pk = request.POST.get('cart_pk')
+            if not cart_pk:
+                cart_pk = request.data.get('cart_pk')
             try:
                 cart_obj = Cart.objects.select_related(
                     'coupon').get(pk=cart_pk)
