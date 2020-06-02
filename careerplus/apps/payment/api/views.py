@@ -229,8 +229,8 @@ class Ccavenue(PaymentMixin, OrderMixin, APIView) :
         order_id = pay_txn.txn
 
         amount = order_obj.total_incl_tax
-        surl = 'http://resumestage.shine.com/payment/ccavenue/success/'
-        curl = 'http://resumestage.shine.com/payment/ccavenue/cancel/'
+        surl = 'http://resumestage.shine.com/api/payment/ccavenue/success/'
+        curl = 'http://resumestage.shine.com/api/payment/ccavenue/cancel/'
 
         p_merchant_id = context_dict['merchant_id']
         p_currency = context_dict['currency']
@@ -442,7 +442,7 @@ class EPayLaterRequestView(OrderMixin, APIView) :
         initial_dict = {
             "redirectType" : "WEBPAGE", "marketplaceOrderId" : txn_id,
             "mCode" : settings.EPAYLATER_INFO.get('mCode'),
-            "callbackUrl" : "{}://{}/payment/epaylater/response/{}/".format( \
+            "callbackUrl" : "{}://{}/api/payment/epaylater/response/{}/".format( \
                 settings.SITE_PROTOCOL, site_domain, cart_id),
             "customerEmailVerified" : False, "customerTelephoneNumberVerified" : False,
             "customerLoggedin" : True, "amount" : float(order.total_incl_tax * 100),
