@@ -13,14 +13,16 @@ class ProductSerializer(serializers.ModelSerializer):
 
 
 class ProductSerializerForThankYouAPI(serializers.ModelSerializer):
+    get_name = serializers.CharField(allow_null=True, allow_blank=True)
 
     class Meta:
         model = models.Product
-        fields = 'id', 'name', 'is_course', 'is_assesment', 'sub_type_flow'
+        fields = ('id', 'name', 'is_course', 'is_assesment',
+                  'sub_type_flow', 'get_name')
 
 
 class DeliveryServiceSerializerForThankYouAPI(serializers.ModelSerializer):
-    
+
     class Meta:
-        model: models.DeliveryService
+        model = models.DeliveryService
         fields = 'id', 'name'
