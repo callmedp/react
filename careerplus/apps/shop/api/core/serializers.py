@@ -20,7 +20,7 @@ class ProductSerializerForThankYouAPI(serializers.ModelSerializer):
 
 
 class DeliveryServiceSerializerForThankYouAPI(serializers.ModelSerializer):
-    
+
     class Meta:
-        model: models.DeliveryService
+        model = models.DeliveryService
         fields = 'id', 'name'
