@@ -144,20 +144,23 @@ class ThankYouAPIView(APIView):
         order = OrderSerializerForThankYouAPI(order).data
         order['last_payment_txn'] = last_payment_txn
 
+        candidate_id = order['candidate_id']
+        resume_info = DashboardInfo().fetch_user_shine_resume(
+            candidate_id=candidate_id, request=request)
+        resume_id = None
+        if resume_info:
+            resume_id = resume_info['id']
+
         result = {
             "order": order,
             "order_items": order_items,
             "pending_resume_items": pending_resume_items,
             "assesment_items": assesment_items,
             "booster_item_exist": booster_item_exist,
+            "resume_id": resume_id,
+            "candidate_id": candidate_id,
             "error_message": ""
         }
-
-        #     if not self.request.session.get('resume_id', None):
-        #     DashboardInfo().check_user_shine_resume(
-        #     candidate_id=self.request.session.get('candidate_id'),
-        #     request=self.request)
-        #     return context
         return Response(result, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
