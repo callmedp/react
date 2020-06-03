@@ -16,6 +16,8 @@ from datetime import datetime
 # django imports
 from django.http import HttpResponse, HttpResponseForbidden
 from django.conf import settings
+from django.core.files.base import ContentFile
+
 
 # local imports
 from payment.utils import PayuPaymentUtil, ZestMoneyUtil, EpayLaterEncryptDecryptUtil
@@ -27,12 +29,16 @@ from payment.mixin import PaymentMixin
 from geolocation.models import PAYMENT_CURRENCY_SYMBOL
 from core.utils import get_client_ip, get_client_device_type
 
+
 # inter app imports
 from order.api.v1.serializers import (OrderItemAPISerializer,
                                       OrderSerializer, OrderSerializerForThankYouAPI)
 from order.models import Order
 from shop.api.core.serializers import(ProductSerializerForThankYouAPI,
                                       DeliveryServiceSerializerForThankYouAPI)
+from dashboard.dashboard_mixin import DashboardInfo
+from core.api_mixin import ShineCandidateDetail
+
 
 from payment.models import PaymentTxn
 
@@ -146,103 +152,69 @@ class ThankYouAPIView(APIView):
             "booster_item_exist": booster_item_exist,
             "error_message": ""
         }
+
+        #     if not self.request.session.get('resume_id', None):
+        #     DashboardInfo().check_user_shine_resume(
+        #     candidate_id=self.request.session.get('candidate_id'),
+        #     request=self.request)
+        #     return context
         return Response(result, status=status.HTTP_200_OK)
 
-    # def get_context_data(self, **kwargs):
-    #     context = super(ThankYouView, self).get_context_data(**kwargs)
-    #     order_pk = self.request.session.get('order_pk')
-    #     if not order_pk:
-    #         return
-    #     order = Order.objects.filter(pk=order_pk).first()
-    #     if not order:
-    #         return
-    #     order_items = []
-    #     parent_ois = order.orderitems.filter(
-    #         parent=None).select_related('product', 'partner')
-    #     for p_oi in parent_ois:
-    #         data = {}
-    #         data['oi'] = p_oi
-    #         data['addons'] = order.orderitems.filter(
-    #             parent=p_oi,
-    #             is_addon=True).select_related('product', 'partner')
-    #         data['variations'] = order.orderitems.filter(
-    #             parent=p_oi,
-    #             is_variation=True).select_related('product', 'partner')
-    #         order_items.append(data)
-    #     context.update({
-    #         'orderitems': order_items,
-    #         'order': order})
+    def post(self, request, *args, **kwargs):
 
-    #     pending_resume_items = order.orderitems.filter(
-    #         order__status__in=[0, 1],
-    #         no_process=False, oi_status=2)
+        response = None
+        resume_info = None
+        result = {"error_message": "", "success": False}
+        action_type = request.data.get('action_type', 'shine_reusme').strip()
+        order_pk = request.data.get('order_pk')
+        resume_id = request.data.get('resume_id', None)
+        candidate_id = request.data.get(
+            'candidate_id', None)
+        if not candidate_id:
+            result["error_message"] = "No candidate id is provided"
+            return Response(result, status=status.HTTP_400_BAD_REQUEST)
 
-    #     assesment_items = order.orderitems.filter(
-    #         order__status__in=[0],
-    #         product__type_flow=16,
-    #         product__sub_type_flow=1602
-    #     )
-    #     booster_item_exist = True if order.orderitems.filter(  # for single booster element in order
-    #         order__status__in=[0, 1],
-    #         product__type_flow__in=[7, 15],
-    #         no_process=False, oi_status=2).count()\
-    #         else False
+        if not order_pk:
+            result["error_message"] = "No order primary key is provided"
+            return Response(result, status=status.HTTP_400_BAD_REQUEST)
+        order = Order.objects.filter(pk=order_pk).first()
+        if not order:
+            result["error_message"]: "No order avaialable with given primary key"
+            return Response(result, status=status.HTTP_400_BAD_REQUEST)
+        order_item_ids = list(
+            order.orderitems.all().values_list('id', flat=True))
+        file = request.data.get('resume_file', '')
 
-    #     context.update({
-    #         "pending_resume_items": pending_resume_items,
-    #         "assesment_items": assesment_items,
-    #         'booster_item_exist': booster_item_exist,
-    #         'candidate_id': self.request and self.request.session.get('candidate_id', '')
-    #     })
+        if action_type == 'upload_resume' and order_pk and file:
+            data = {
+                "list_ids": order_item_ids,
+                "candidate_resume": file,
+                'last_oi_status': 3,
+            }
+            DashboardInfo().upload_candidate_resume(candidate_id=candidate_id, data=data)
 
-    #     if not self.request.session.get('resume_id', None):
-    #         DashboardInfo().check_user_shine_resume(
-    #             candidate_id=self.request.session.get('candidate_id'),
-    #             request=self.request)
-    #     return context
-
-    # @csrf_exempt
-    # def post(self, request, *args, **kwargs):
-    #     action_type = request.POST.get('action_type', '').strip()
-    #     order_pk = request.session.get('order_pk')
-    #     resume_id = request.session.get('resume_id', None)
-    #     candidate_id = request.session.get(
-    #         'candidate_id', None) or request.session.get('guest_candidate_id', None)
-    #     order = Order.objects.filter(pk=order_pk).first()
-    #     if not order:
-    #         return
-    #     order_item_ids = list(
-    #         order.orderitems.all().values_list('id', flat=True))
-    #     file = request.FILES.get('resume_file', '')
-
-    #     if action_type == 'upload_resume' and order_pk and file:
-    #         data = {
-    #             "list_ids": order_item_ids,
-    #             "candidate_resume": file,
-    #             'last_oi_status': 3,
-    #         }
-    #         DashboardInfo().upload_candidate_resume(candidate_id=candidate_id, data=data)
-
-    #     elif action_type == "shine_reusme" and order_pk and candidate_id and resume_id:
-    #         response = ShineCandidateDetail().get_shine_candidate_resume(
-    #             candidate_id=candidate_id,
-    #             resume_id=request.session.get('resume_id'))
-    #         if not response:
-    #             request.session.pop('resume_id')
-    #             DashboardInfo().check_user_shine_resume(
-    #                 candidate_id=candidate_id, request=request)
-    #             response = ShineCandidateDetail().get_shine_candidate_resume(
-    #                 candidate_id=candidate_id,
-    #                 resume_id=request.session.get('resume_id'))
-    #         if response.status_code == 200:
-    #             file = ContentFile(response.content)
-    #             data = {
-    #                 "list_ids": order_item_ids,
-    #                 "candidate_resume": file,
-    #                 'last_oi_status': 13,
-    #                 'is_shine': True,
-    #                 'extension': request.session.get('resume_extn', '')
-    #             }
-    #             DashboardInfo().upload_candidate_resume(candidate_id=candidate_id, data=data)
-
-    #     return HttpResponseRedirect(reverse('payment:thank-you'))
+        elif action_type == "shine_reusme" and order_pk and candidate_id:
+            if resume_id:
+                response = ShineCandidateDetail().get_shine_candidate_resume(
+                    candidate_id=candidate_id,
+                    resume_id=resume_id)
+            if not response:
+                resume_info = DashboardInfo().fetch_user_shine_resume(
+                    candidate_id=candidate_id, request=request)
+                if resume_info:
+                    response = ShineCandidateDetail().get_shine_candidate_resume(
+                        candidate_id=candidate_id,
+                        resume_id=resume_info['id'])
+            if response and response.status_code == 200:
+                file = ContentFile(response.content)
+                data = {
+                    "list_ids": order_item_ids,
+                    "candidate_resume": file,
+                    'last_oi_status': 13,
+                    'is_shine': True,
+                    'extension': resume_info['extension']
+                }
+                DashboardInfo().upload_candidate_resume(candidate_id=candidate_id, data=data)
+        if not response or response.status_code != 200:
+            return Response({"error_message": "Could not able to upload candidate resume.", "success": False}, status=status.HTTP_400_BAD_REQUEST)
+        return Response({"error_message": "", "success": True}, status=status.HTTP_200_OK)

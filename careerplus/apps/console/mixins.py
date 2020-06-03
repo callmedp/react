@@ -269,6 +269,7 @@ class ActionUserMixin(object):
                         # sms to writer in case of express and super express delivery
 
     def upload_candidate_resume(self, order_items=None, data={}, user=None):
+       
         oi_resume = data.get('candidate_resume', '')
         resume_path = None
         if not oi_resume:
