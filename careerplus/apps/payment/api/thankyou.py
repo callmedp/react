@@ -53,16 +53,23 @@ class ThankYouAPIView(APIView):
 
     def get(self, request, *args, **kwargs):
         order_pk = request.GET.get('order_pk', None)
-        if not order_pk:
+        pay_txn = request.GET.get('pay_txn',None)
+        if not order_pk and not pay_txn:
             return Response({"error_message": "No order primary key provided"},
                             status=status.HTTP_400_BAD_REQUEST)
-        order = Order.objects.filter(pk=order_pk).first()
+        order = None
+        if pay_txn:
+            pay_obj = PaymentTxn.objects.filter(txn=pay_txn).first()
+            if pay_obj:
+                order = pay_obj.order
+        else:
+            order = Order.objects.filter(pk=order_pk).first()
         if not order:
             logging.getLogger('error_log').error(
                 'unable to get order with given order id %s', order_pk)
             return Response({"error_message":
                              "No order found with given primary key."},
-                            status=tatus.HTTP_400_BAD_REQUEST)
+                            status=status.HTTP_400_BAD_REQUEST)
 
         order_items = []
         parent_ois = order.orderitems.filter(
