@@ -32,7 +32,7 @@ from console.welcomecall.views import ShowNumberField
 
 from homepage import views as homepage_view
 from linkedin.views import AutoLoginView
-from shop.views import ProductDetailView, CourseCatalogueView
+from shop.views import ProductDetailView, CourseCatalogueView, GoogleResumeAdView
 from users.views import LinkedinCallbackView, UserLoginTokenView,CourseServiceWhatsappBtn
 from search.views import FuncAreaPageView
 from blog import views as blog_view
@@ -142,6 +142,8 @@ urlpatterns += [
 
     re_path(r'^services/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
         ProductDetailView.as_view(), name='service-detail'),
+    re_path(r'^services/(?P<cat_slug>[\w-]+)/(?P<country>[\w-]+)/$',
+        GoogleResumeAdView.as_view(), name='google-resume-ad'),
     re_path(r'^courses/', include('skillpage.urls',
                               namespace='skillpage')),
     re_path(r'^university/faculty/(?P<faculty_slug>[-\w]+)/(?P<pk>\d+)/$',
