@@ -15,6 +15,7 @@ from django.conf import settings
 from payment.utils import PayuPaymentUtil, ZestMoneyUtil, EpayLaterEncryptDecryptUtil
 from cart.models import Cart
 from payment.models import PaymentTxn
+from order.models import Order
 from order.mixins import OrderMixin
 from cart.mixins import CartMixin
 from payment.mixin import PaymentMixin
@@ -127,7 +128,9 @@ class ResumeShinePayUResponseView(CartMixin, PaymentMixin, APIView) :
             return_parameter = self.process_payment_method(
                 payment_type, request, txn_obj)
             self.closeCartObject(txn_obj.cart)
-            return Response({'redirect' : return_parameter,'order_pk':order.pk}, status=status.HTTP_200_OK)
+            order = txn_obj.order
+            return Response({'redirect' : return_parameter,'order_pk':order.pk,'txn_id':txn_obj.txn},
+                            status=status.HTTP_200_OK)
 
         elif transaction_status == "FAILURE" or transaction_status == "PENDING" :
             txn_obj.status = 0
@@ -314,90 +317,79 @@ class Ccavenue(PaymentMixin, OrderMixin, APIView) :
             return Response(self.get_request_url(order, request, data=data, pay_txn=pay_txn), status=status.HTTP_200_OK)
         return Response({'error' : "BAD REQUEST"}, status=400)
 
-    # def post(self, request, *args, **kwargs) :
-    #     context_dict = {}
-    #     decresp_dict = {}
-    #     context_dict.update(self.get_constants())
-    #     order_id = ''
-    #
-    #     encresp = request.POST.get('encResp', None)
-    #     stresp = kwargs.get('pgstatus', None)
-    #
-    #     if stresp and encresp :
-    #         decresp = self.decrypt(encresp, context_dict['workingkey'])
-    #
-    #         for param_set in decresp.split('&') :
-    #             params = param_set.split('=')
-    #             param0 = '' if len(params) <= 0 else params[0]
-    #             param1 = '' if len(params) <= 1 else params[1]
-    #             if len(param0) <= 0 :
-    #                 continue
-    #             decresp_dict[param0] = param1
-    #         order_id = decresp_dict.get('merchant_param1')
-    #         txn_id = decresp_dict.get('order_id')
-    #         order_status = decresp_dict.get('order_status')
-    #         order = Order.objects.get(pk=order_id)
-    #         txn_obj = PaymentTxn.objects.get(txn=txn_id)
-    #         txn_info = str(decresp_dict)
-    #         txn_obj.txn_info = txn_info
-    #         txn_obj.save()
-    #
-    #         if stresp.upper() == "SUCCESS" :
-    #
-    #             if order_status.upper() == "SUCCESS" :
-    #                 try :
-    #                     self.closeCartObject(txn_obj.cart)
-    #                     return_url = self.process_payment_method(
-    #                         payment_type='CCAVENUE', request=request,
-    #                         txn_obj=txn_obj,
-    #                         data={'order_id' : order.pk, 'txn_id' : txn_id})
-    #                     try :
-    #                         del request.session['cart_pk']
-    #                         del request.session['checkout_type']
-    #                         request.session.modified = True
-    #                     except Exception as e :
-    #                         logging.getLogger('error_log').error('unable to modify request session  %s' % str(e))
-    #                         pass
-    #                     return HttpResponseRedirect(return_url)
-    #                 except Exception as e :
-    #                     logging.getLogger('error_log').error(
-    #                         'Response redirection for order success failed %s' % str(e))
-    #                     return HttpResponseRedirect(
-    #                         reverse('payment:payment_oops') +
-    #                         '?error=success&txn_id=' + txn_id)
-    #
-    #             elif order_status.upper() == "FAILURE" :
-    #                 txn_obj.status = 2
-    #                 txn_obj.save()
-    #                 logging.getLogger('error_log').error('Order_id - %s Order_status - %s' % (order_id, order_status))
-    #                 return HttpResponseRedirect(reverse('payment:payment_oops') + '?error=failure&txn_id=' + txn_id)
-    #
-    #             elif order_status.upper() == "ABORTED" :
-    #                 txn_obj.status = 3
-    #                 txn_obj.save()
-    #                 logging.getLogger('error_log').error('Order_id - %s Order_status - %s' % (order_id, order_status))
-    #                 return HttpResponseRedirect(
-    #                     reverse('payment:payment_oops') + '?error=aborted&txn_id=' + txn_id)
-    #
-    #             elif order_status.upper() == "INVALID" :
-    #                 txn_obj.status = 4
-    #                 txn_obj.save()
-    #                 logging.getLogger('error_log').error('Order_id - %s Order_status - %s' % (order_id, order_status))
-    #                 return HttpResponseRedirect(reverse('payment:payment_oops') + '?error=invalid&txn_id=' + txn_id)
-    #
-    #         elif stresp.upper() == "CANCEL" :
-    #             txn_obj.status = 5
-    #             txn_obj.save()
-    #             logging.getLogger('error_log').error('Order_id - %s Order_status - %s' % (order_id, order_status))
-    #             return HttpResponseRedirect(reverse('payment:payment_oops') + '?error=cancel&txn_id=' + txn_id)
-    #
-    #     # order_id = b64encode(str(order_id)) if order_id in (request.session.get('email_invoice_for') or []) else str(order_id)
-    #     # payloads = '?tab=payment&error=payment_error&orderid='+order_id + '#internationalcard'
-    #     # logging.getLogger('error_log').error(str(request))
-    #     return HttpResponseRedirect(reverse('payment:payment_oops') + '?error=failure')
-    #
-    #
-    #
+    def post(self, request, *args, **kwargs) :
+        context_dict = {}
+        decresp_dict = {}
+        context_dict.update(self.get_constants())
+        order_id = ''
+
+        encresp = request.POST.get('encResp', None)
+        stresp = kwargs.get('pgstatus', None)
+
+        if stresp and encresp :
+            decresp = self.decrypt(encresp, context_dict['workingkey'])
+
+            for param_set in decresp.split('&') :
+                params = param_set.split('=')
+                param0 = '' if len(params) <= 0 else params[0]
+                param1 = '' if len(params) <= 1 else params[1]
+                if len(param0) <= 0:
+                    continue
+                decresp_dict[param0] = param1
+            order_id = decresp_dict.get('merchant_param1')
+            txn_id = decresp_dict.get('order_id')
+            order_status = decresp_dict.get('order_status')
+            order = Order.objects.get(pk=order_id)
+            txn_obj = PaymentTxn.objects.get(txn=txn_id)
+            txn_info = str(decresp_dict)
+            txn_obj.txn_info = txn_info
+            txn_obj.save()
+
+            if stresp.upper() == "SUCCESS":
+
+                if order_status.upper() == "SUCCESS":
+                    try :
+                        self.closeCartObject(txn_obj.cart)
+                        return_url = self.process_payment_method(
+                            payment_type='CCAVENUE', request=request,
+                            txn_obj=txn_obj,
+                            data={'order_id' : order.pk, 'txn_id' : txn_id})
+                        return Response({'redirect':return_url,'txn_id':txn_id})
+                    except Exception as e :
+                        logging.getLogger('error_log').error(
+                            'Response redirection for order success failed %s' % str(e))
+                        return Response({'redirect':"payment/oops/?error=success&txn_id={}".format(txn_id)})
+
+                elif order_status.upper() == "FAILURE":
+                    txn_obj.status = 2
+                    txn_obj.save()
+                    logging.getLogger('error_log').error('Order_id - %s Order_status - %s' % (order_id, order_status))
+                    return Response({'redirect': 'payment/oops/?error=failure&txn_id=' + txn_id})
+
+                elif order_status.upper() == "ABORTED" :
+                    txn_obj.status = 3
+                    txn_obj.save()
+                    logging.getLogger('error_log').error('Order_id - %s Order_status - %s' % (order_id, order_status))
+                    return Response({'redirect': 'payment/oops/?error=aborted&txn_id=' + txn_id})
+
+
+                elif order_status.upper() == "INVALID":
+                    txn_obj.status = 4
+                    txn_obj.save()
+                    logging.getLogger('error_log').error('Order_id - %s Order_status - %s' % (order_id, order_status))
+                    return Response({'redirect' : 'payment/oops/?error=invalid&txn_id=' + txn_id})
+
+
+            elif stresp.upper() == "CANCEL":
+                txn_obj.status = 5
+                txn_obj.save()
+                logging.getLogger('error_log').error('Order_id - %s Order_status - %s' % (order_id, order_status))
+                return Response({'redirect' : 'payment/oops/?error=cancel&txn_id=' + txn_id})
+
+        # order_id = b64encode(str(order_id)) if order_id in (request.session.get('email_invoice_for') or []) else str(order_id)
+        # payloads = '?tab=payment&error=payment_error&orderid='+order_id + '#internationalcard'
+        # logging.getLogger('error_log').error(str(request))
+        return Response({'redirect': 'payment/oops/?error=failure&txn_id=' + txn_id})
 
 
 class EPayLaterRequestView(OrderMixin, APIView) :
@@ -553,13 +545,14 @@ class ZestMoneyResponseView(CartMixin,PaymentMixin,APIView):
                 "Zest Order Successfully updated {},{}".\
                 format(order_status, txn_obj.id))
             self.closeCartObject(txn_obj.cart)
-            return Response({'redirect':return_parameter,'order_pk':txn_obj.order_id},status=status.HTTP_200_OK)
+
+            return Response({'redirect':return_parameter,'order_pk':txn_obj.order_id,'txn_id':txn_obj.txn},status=status.HTTP_200_OK)
 
         if order_status in self.approval_pending_status:
             txn_obj.status = 0
             self.update_txn_info(order_status, txn_obj)
             self.closeCartObject(txn_obj.cart)
-            return Response({'redirect':'/payment/thank-you','order_pk':txn_obj.order_id},status=status.HTTP_200_OK)
+            return Response({'redirect':'/payment/thank-you','order_pk':txn_obj.order_id,'txn_id':txn_obj.txn},status=status.HTTP_200_OK)
 
 
         failure_text = self.status_text_mapping.get(order_status, "")
@@ -573,4 +566,4 @@ class ZestMoneyResponseView(CartMixin,PaymentMixin,APIView):
         failure_text = json.dumps(failure_text)
         txn_obj.txn_info = failure_text
         txn_obj.save()
-        return Response({'redirect' : '/payment/thank-you','order_pk':txn_obj.order_id}, status=status.HTTP_200_OK)
+        return Response({'redirect' : '/payment/thank-you','order_pk':txn_obj.order_id,'txn_id':txn_obj.txn}, status=status.HTTP_200_OK)
