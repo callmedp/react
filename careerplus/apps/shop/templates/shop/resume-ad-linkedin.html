@@ -18,8 +18,7 @@
 {% endblock title %}
 </head>
 <body>
-  <div class="footer-padding-botton">
-
+  <div>
     <section class="">
         <div class="">
             <div class="header-carousel">
@@ -501,31 +500,30 @@
                         <input type="hidden" id="country_modal" name="country" value="{{country}}" />
                         <input type="hidden" id="pre_register_modal" name="pre_register" value="True" />
                         <div class="form-group">
-                          <label for="name">Name</label>
-                          <input type="NameField" name="name_modal" class="input_field bo" id="name_modal" placeholder=" "  aria-describedby="name"  required="true" mandatory="true">
+                          <!-- <label for="name">Name</label> -->
+                          <input type="NameField" name="name_modal" class="input_field bo" id="name_modal" placeholder="Name"  aria-describedby="name"  required="true" mandatory="true">
                           
                         </div>
                         <div class="d-flex">
                           <div class="custom-select-box exp">
                               <select id="country_code_modal" name="country_code" class="custom-select">
-                                <option selected>+91</option>
-                                <option value="91">+91</option>
+                                <option value="91" selected>+91</option>
                                 <option value="92">+92</option>
                                 <option value="93">+93</option>
                               </select>
                           </div>
                           <div class="form-group">
-                             <label for="number">Mobile</label>
-                              <input type="" name="mobile_modal" class="input_field bo" placeholder=" " id="number_modal" aria-describedby="mobile-id"  required="true" mandatory="true" value="" valid="not_empty|integer|cellnum" pattern="^[0-9]{10}$"  minlength="10"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                             <!-- <label for="number">Mobile</label> -->
+                              <input type="" name="mobile_modal" class="input_field bo" placeholder="Mobile" id="number_modal" aria-describedby="mobile-id"  required="true" mandatory="true" value="" valid="not_empty|integer|cellnum" pattern="^[0-9]{10}$"  minlength="10"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
                               
                           </div>
                         </div>
                         <div class="form-group">
-                        <label for="email">Email</label>
-                          <input type="EmailField" name="email_modal" class="input_field bo" id="email_modal" placeholder=" " aria-describedby="email-id"  required="true" mandatory="true" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"> 
+                        <!-- <label for="email">Email</label> -->
+                          <input type="EmailField" name="email_modal" class="input_field bo" id="email_modal" placeholder="Email" aria-describedby="email-id"  required="true" mandatory="true" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"> 
                         </div>
                         <div class="form-group exp">
-                            <select name="experience" class="form-control" id="experience_modal" placeholder=" ">Experience
+                            <select name="experience" class="form-control" id="experience_modal" placeholder="Experience">Experience
                               <option value="0">Experience</option>
                               {% for exp in experience_range %}
                               <option value="{{exp}}">{{exp}} Yrs</option>
@@ -540,9 +538,11 @@
           </div>
         </div>
       </div>
-    <div {% if pre_register %} style="display: none;"{% endif %}>
-        <button onclick="topFunction()" class="sticky-btn d-block d-sm-none" >request a callback</button>
-    </div>
+    {% if not pre_register %}
+        <div class="footer-padding-botton" >
+            <button onclick="topFunction()" class="sticky-btn d-block d-sm-none" >request a callback</button>
+        <div>
+    {% endif %}
     <div class="modal fade" id="successMessage" data-keyboard="false" and data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-md modal-dialog-centered modal-mobile" role="document">
           <div class="modal-content" id='successContent' style="padding: 20px; text-align: center;">
