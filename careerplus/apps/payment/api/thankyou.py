@@ -204,18 +204,18 @@ class ThankYouAPIView(APIView):
             return Response({"error_message": "", "success": True}, status=status.HTTP_200_OK)
 
         elif action_type == "shine_resume" and order_pk and candidate_id:
+            resume_info = DashboardInfo().fetch_user_shine_resume(
+                candidate_id=candidate_id, request=request)
             if resume_id:
                 response = ShineCandidateDetail().get_shine_candidate_resume(
                     candidate_id=candidate_id,
                     resume_id=resume_id)
             if not response:
-                resume_info = DashboardInfo().fetch_user_shine_resume(
-                    candidate_id=candidate_id, request=request)
                 if resume_info:
                     response = ShineCandidateDetail().get_shine_candidate_resume(
                         candidate_id=candidate_id,
                         resume_id=resume_info['id'])
-            if response and response.status_code == 200:
+            if response and response.status_code == 200 and resume_info:
                 file = ContentFile(response.content)
                 data = {
                     "list_ids": order_item_ids,
