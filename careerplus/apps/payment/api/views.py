@@ -232,8 +232,8 @@ class Ccavenue(PaymentMixin, OrderMixin, APIView) :
         order_id = pay_txn.txn
 
         amount = order_obj.total_incl_tax
-        surl = 'http://resumestage.shine.com/api/payment/ccavenue/success/'
-        curl = 'http://resumestage.shine.com/api/payment/ccavenue/cancel/'
+        surl = 'http://resumestage.shine.com/api/payment/ccavenue/response/success/'
+        curl = 'http://resumestage.shine.com/api/payment/ccavenue/response/cancel/'
 
         p_merchant_id = context_dict['merchant_id']
         p_currency = context_dict['currency']
