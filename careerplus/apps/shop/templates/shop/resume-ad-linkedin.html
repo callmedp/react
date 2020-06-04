@@ -544,13 +544,11 @@
         <button onclick="topFunction()" class="sticky-btn d-block d-sm-none" >request a callback</button>
     </div>
     <div class="modal fade" id="successMessage" data-keyboard="false" and data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered modal-mobile" role="document">
-            <div class="col-md-6 col-sm-12">
-                <div class="modal-content" id="successContent">
-                </div>
-            </div>
+        <div class="modal-dialog modal-md modal-dialog-centered modal-mobile" role="document">
+          <div class="modal-content" id='successContent' style="padding: 20px; text-align: center;">
+          </div>
         </div>
-    </div>
+      </div>
 
   </div>
 {% block js_section %}
@@ -748,7 +746,7 @@
             if($("#successContent").html() == ""){
                 $("#successContent").append("<h4> Thank you for your interest, We will contact you soon </h4>");}
             $("#successMessage").modal('show');
-            // var timeOut = setTimeout(function(){$("#successMessage").modal('hide')}, 2000);
+            var timeOut = setTimeout(function(){$("#successMessage").modal('hide')}, 2000);
         }
 </script>
 <script>

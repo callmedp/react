@@ -545,14 +545,12 @@
         <div {% if pre_register %} style="display: none;"{% endif %}>
            <button onclick="topFunction()" class="sticky-btn d-block d-sm-none" >request a callback</button>
         </div>
-        <div class="modal fade" id="successMessage" data-keyboard="false" and data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" style="display: none;">
-        <div class="modal-dialog modal-lg modal-dialog-centered modal-mobile" role="document">
-            <div class="col-md-6 col-sm-12">
-                <div class="modal-content" id="successContent">
-                </div>
-            </div>
+        <div class="modal fade" id="successMessage" data-keyboard="false" and data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-md modal-dialog-centered modal-mobile" role="document">
+          <div class="modal-content" id='successContent' style="padding: 20px; text-align: center;">
+          </div>
         </div>
-    </div>
+      </div>
 
 </div>
 {% block js_section %}
