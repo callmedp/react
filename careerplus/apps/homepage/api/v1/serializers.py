@@ -26,6 +26,7 @@ class OrderItemDetailSerializer(SerializerFieldsMixin,serializers.ModelSerialize
     service_resume_upload_shine = serializers.SerializerMethodField()
     product_is_pause_service = serializers.SerializerMethodField()
     service_pause_status = serializers.SerializerMethodField()
+    is_assigned =  serializers.SerializerMethodField()
 
     
     # order = serializers.SerializerMethodField('get_order')
@@ -43,6 +44,10 @@ class OrderItemDetailSerializer(SerializerFieldsMixin,serializers.ModelSerialize
                    'expiry_date','wc_cat','wc_sub_cat','wc_status','wc_follow_up','partner')
 
     #
+
+
+    def get_is_assigned(self,obj):
+        return obj.is_assigned()
 
     def get_service_pause_status(self,obj):
         return obj.service_pause_status()
