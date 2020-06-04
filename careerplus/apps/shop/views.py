@@ -1287,7 +1287,7 @@ class GoogleResumeAdView(View):
                 site_slug = "resume-services"
         elif country == "india":
             currency = "INR"
-            add_on_cost = {"cover_letter":"550","express_delivery":"Not Yet","s_express_delivery":"Not Yet"}
+            add_on_cost = {"cover_letter":"550","express_delivery":"1099","s_express_delivery":"1609"}
             if cat_slug == "resume-services":
                 service_cost = {"0_1exp":"1299", "1_4exp":"2199", "4_8exp":"2999",
                     "8_15exp":"3999", "15_exp":"4999"}
