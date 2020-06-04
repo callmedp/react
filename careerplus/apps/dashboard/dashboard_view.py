@@ -667,7 +667,8 @@ class DashboardNotificationBoxView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(DashboardNotificationBoxView, self).get_context_data(**kwargs)
         email = self.request.session.get('email', None)
-        pending_resume_items = DashboardInfo().get_pending_resume_items(candidate_id=self.candidate_id, email=email)
+        pending_resume_items = DashboardInfo().get_pending_resume_items(candidate_id=self.candidate_id,
+                                                                        email=email).exclude(order__site=2)
         context.update({
             "pending_resume_items": pending_resume_items,
         })
