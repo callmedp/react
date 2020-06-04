@@ -53,7 +53,7 @@ class ThankYouAPIView(APIView):
 
     def get(self, request, *args, **kwargs):
         order_pk = request.GET.get('order_pk', None)
-        pay_txn = request.GET.get('pay_txn',None)
+        pay_txn = request.GET.get('pay_txn', None)
         if not order_pk and not pay_txn:
             return Response({"error_message": "No order primary key provided"},
                             status=status.HTTP_400_BAD_REQUEST)
@@ -171,7 +171,6 @@ class ThankYouAPIView(APIView):
         return Response(result, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
-
         response = None
         resume_info = None
         result = {"error_message": "", "success": False}
@@ -202,8 +201,9 @@ class ThankYouAPIView(APIView):
                 'last_oi_status': 3,
             }
             DashboardInfo().upload_candidate_resume(candidate_id=candidate_id, data=data)
+            return Response({"error_message": "", "success": True}, status=status.HTTP_200_OK)
 
-        elif action_type == "shine_reusme" and order_pk and candidate_id:
+        elif action_type == "shine_resume" and order_pk and candidate_id:
             if resume_id:
                 response = ShineCandidateDetail().get_shine_candidate_resume(
                     candidate_id=candidate_id,
