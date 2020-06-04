@@ -1277,7 +1277,7 @@ class GoogleResumeAdView(View):
             add_on_cost = {"cover_letter":"145","express_delivery":"145","s_express_delivery":"200"}
             if cat_slug == "resume-services":
                 service_cost = {"0_1exp":"250", "1_4exp":"400", "4_8exp":"575",
-                    "8_15exp":"735", "15+exp":"900"}
+                    "8_15exp":"735", "15_exp":"900"}
                 template = 'shop/resume-ad-services.html'
                 site_slug = "linkedin-profile"
             elif cat_slug == "linkedin-profile":
