@@ -32,6 +32,7 @@ from skillpage.api.v1.serializers import LoadMoreSerializerSolr
 from shared.rest_addons.pagination import LearningCustomPagination
 from shared.rest_addons.mixins import FieldFilterMixin
 from review.models import Review
+from django.conf import settings
 
 
 # 3rd party imports
@@ -372,6 +373,8 @@ class ProductReview(APIView):
                 for attr,value in update_dict.items():
                     setattr(review_obj,attr,value)
                 review_obj.save()
+                if settings.DEBUG:
+                    product.save()
 
                 return Response(data,status=status.HTTP_201_CREATED)
             else:

@@ -3512,7 +3512,7 @@ class SubSection(AbstractAutoDate):
     def get_icon_url(self):
         if not self.icon:
             return
-        return self.icon.url
+        return settings.MEDIA_URL + self.icon.url
     
 
     @property
@@ -3536,7 +3536,7 @@ class Section(AbstractAutoDate):
     def get_image(self):
         if not self.image:
             return
-        return self.image.url
+        return  settings.MEDIA_URL +  self.image.url
 
     def section_type_text(self):
         return dict(SECTION_TYPE_CHOICES).get(self.section_type, '')
