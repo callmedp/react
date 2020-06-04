@@ -25,7 +25,7 @@
             <div class="header-carousel">
                 <div class="{% if not pre_register %} header-bg1-form {% else %} header-bg1 {% endif %}">
                     <div class="content">
-                        <span><a href="https://learning.shine.com/"></a><img src="{% static 'shinelearn/images/shop/google-ad/shinelogo.png' %}" class="mb-3" alt="shinelogo"></span>
+                        <span><a href="https://learning.shine.com/"><img src="{% static 'shinelearn/images/shop/google-ad/shinelogo.png' %}" class="mb-3" alt="shinelogo"></a></span>
                         <strong>Struggling with your job?</strong>
                         <h1>Convert your CV into a job offer letter</h1> 
                         <ul>
@@ -81,11 +81,6 @@
         </span>
         <form id="form_desktop" class="form custom-form" name="maylandingpage">
             <strong>Get a new job offer</strong>
-            <!-- <input type="hidden" name="vendorid" value="maylandingpage" />
-            <input type="hidden" name="mail_lead" value="true" />
-            <input type="hidden" name="client_url" value="" />
-            <input type="hidden" name="client_method" value="post" />
-            <input type="hidden" name="redirect_url" value="None" /> -->
             <input type="hidden" id='country' name="country" value="{{country}}" />
             <input type="hidden" id='pre_register' name="pre_register" value="False" />
             <div class="form-group">
@@ -105,7 +100,7 @@
               </div>
             </div>
             <div class="form-group">
-              <input id='email' type="EmailField" class="form-control form-control1" id="exampleFormControlInput1" name="email" placeholder="Email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" aria-describedby="email-id" required="true" mandatory="true">
+              <input id='email' type="Email" class="form-control form-control1" id="exampleFormControlInput1" name="email" placeholder="Email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" aria-describedby="email-id" required="true" mandatory="true">
             </div>
             <div class="form-group exp">
                 <select type="MultipleChoiceField" name="experience" placeholder="Experience" class="form-control form-control1" id="experience" required="true" mandatory="true">
@@ -489,7 +484,7 @@
           </div>
     </section>
     <footer class="contanier footer-bg">
-        <span>Copyright © 2019 HT Media Limited.</span>
+        <span>Copyright © 2020 HT Media Limited.</span>
     </footer>
     <div class="modal fade" id="exampleModalCenter" data-keyboard="false" and data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered modal-mobile" role="document">
@@ -506,8 +501,9 @@
                         <input type="hidden" id="country_modal" name="country" value="{{country}}" />
                         <input type="hidden" id="pre_register_modal" name="pre_register" value="True" />
                         <div class="form-group">
-                          <input type="NameField" name="name" class="input_field bo" id="name_modal" placeholder=" "  aria-describedby="name"  required="true" mandatory="true">
                           <label for="name">Name</label>
+                          <input type="NameField" name="name_modal" class="input_field bo" id="name_modal" placeholder=" "  aria-describedby="name"  required="true" mandatory="true">
+                          
                         </div>
                         <div class="d-flex">
                           <div class="custom-select-box exp">
@@ -519,24 +515,25 @@
                               </select>
                           </div>
                           <div class="form-group">
-                              <input type="" name="mobile" class="input_field bo" placeholder=" " id="number_modal" aria-describedby="mobile-id"  required="true" mandatory="true" value="" valid="not_empty|integer|cellnum" pattern="^[0-9]{10}$"  minlength="10"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
-                              <label for="number">Mobile</label>
+                             <label for="number">Mobile</label>
+                              <input type="" name="mobile_modal" class="input_field bo" placeholder=" " id="number_modal" aria-describedby="mobile-id"  required="true" mandatory="true" value="" valid="not_empty|integer|cellnum" pattern="^[0-9]{10}$"  minlength="10"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                              
                           </div>
                         </div>
                         <div class="form-group">
-                          <input type="EmailField" name="email" class="input_field bo" id="email_modal" placeholder=" " aria-describedby="email-id"  required="true" mandatory="true" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
-                          <label for="email">Email</label>
+                        <label for="email">Email</label>
+                          <input type="EmailField" name="email_modal" class="input_field bo" id="email_modal" placeholder=" " aria-describedby="email-id"  required="true" mandatory="true" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"> 
                         </div>
                         <div class="form-group exp">
                             <select name="experience" class="form-control" id="experience_modal" placeholder=" ">Experience
-                              <option value="">Experience</option>
+                              <option value="0">Experience</option>
                               {% for exp in experience_range %}
-                              <option value={{exp}}>{{exp}} Yrs</option>
+                              <option value="{{exp}}">{{exp}} Yrs</option>
                               {% endfor %}
                               <option value="16">>15 Yrs</option>
                           </select>
                         </div>
-                        <button  onclick="createLeadModal()" id="modal_submit" type="button" data-dismiss="modal" class="callback__btn mt-4">request a callback</button>
+                        <button  onclick="createLeadModal()" id="modal_submit" type="button" class="callback__btn mt-4">request a callback</button>
                       </form>
                 </div>
             </div>
@@ -546,6 +543,14 @@
     <div {% if pre_register %} style="display: none;"{% endif %}>
         <button onclick="topFunction()" class="sticky-btn d-block d-sm-none" >request a callback</button>
     </div>
+    <div class="modal fade" id="successMessage" data-keyboard="false" and data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-mobile" role="document">
+            <div class="col-md-6 col-sm-12">
+                <div class="modal-content" id="successContent">
+                </div>
+            </div>
+        </div>
+    </div>
 
   </div>
 {% block js_section %}
@@ -553,6 +558,7 @@
   <script src="https://cdn.jsdelivr.net/npm/popper.j?pre-register=Trues@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
   <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
     <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js"></script>
 {% compress js %}
   <script type="text/javascript" src="{% static 'shinelearn/js/shop/google-ad-slick.js' %}"></script>
   <script type="text/javascript" src="{% static 'shinelearn/js/shop/bootstrap.min.js' %}"></script>
@@ -657,28 +663,79 @@
             ]
         });
         function createLead(){
-            var name, email, country_code, mobile, country, pre_register, experience, data;
-            name = $('#name').val();
-            email = $('#email').val();
-            mobile = $('#number').val();
-            country_code = $('#country_code').val();
-            country = $('#country').val();
-            pre_register = $('#pre_register').val();
-            experience = $('#experience').val();
-            data = { name : name, email: email, mobile:mobile, country_code:country_code, country:country, pre_register:pre_register, experience:experience }
-            crmHit(data);
+            $("form[id='form_desktop']").validate({
+                rules:{
+                    name: "required",
+                    email: {
+                        required:true,
+                        email:true
+                    },
+                    mobile: {
+                        required:true,
+                        minlength: 10
+                    }
+                },
+                messages: {
+                    name: "Please enter your Name",
+                    email: "Please enter a Valid Email",
+                    mobile: "Please enter a Valid Mobile"
+                }
+            });
+            $('#name').valid();
+            $('#email').valid();
+            $('#number').valid();
+            if($('#form_desktop').valid()){
+                var name, email, country_code, mobile, country, pre_register, experience, data;
+                name = $('#name').val();
+                email = $('#email').val();
+                mobile = $('#number').val();
+                country_code = $('#country_code').val();
+                country = $('#country').val();
+                pre_register = $('#pre_register').val();
+                experience = $('#experience').val();
+                data = { name : name, email: email, mobile:mobile, country_code:country_code, country:country, pre_register:pre_register, experience:experience }
+                crmHit(data);
+                debugger;
+                apiSuccess();
+            };
         };
         function createLeadModal(){
-            var name, email, country_code, mobile, country, pre_register, experience, data;
-            name = $('#name_modal').val();
-            email = $('#email_modal').val();
-            mobile = $('#number_modal').val();
-            country_code = $('#country_code_modal').val();
-            country = $('#country_modal').val();
-            pre_register = $('#pre_register_modal').val();
-            experience = $('#experience_modal').val();
-            data = { name : name, email: email, mobile:mobile, country_code:country_code, country:country, pre_register:pre_register, experience:experience }
-            crmHit(data);
+            $("form[id='modal_form']").validate({
+                rules:{
+                    name_modal: "required",
+                    email_modal: {
+                        required:true,
+                        email:true
+                    },
+                    mobile_modal: {
+                        required:true,
+                        minlength: 10
+                    }
+                },
+                messages: {
+                    name_modal: "Please enter your Name",
+                    email_modal: "Please enter a Valid Email",
+                    mobile_modal: "Please enter a Valid Mobile"
+                }
+            });
+            $('#name_modal').valid();
+            $('#email_modal').valid();
+            $('#number_modal').valid();
+            if($('#modal_form').valid()){
+                var name, email, country_code, mobile, country, pre_register, experience, data;
+                name = $('#name_modal').val();
+                email = $('#email_modal').val();
+                mobile = $('#number_modal').val();
+                country_code = $('#country_code_modal').val();
+                country = $('#country_modal').val();
+                pre_register = $('#pre_register_modal').val();
+                experience = $('#experience_modal').val();
+                data = { name : name, email: email, mobile:mobile, country_code:country_code, country:country, pre_register:pre_register, experience:experience }
+                crmHit(data);
+                debugger;
+                $('#exampleModalCenter').modal('hide');
+                apiSuccess();
+            };
         };
         function crmHit(data){
             $.post("{{crm_lead_link}}", data, function(data, status, xhr){
@@ -686,6 +743,12 @@
             }).done(function() {return {"status":"lead created"};})
             .fail(function(jqxhr, settings, ex){return {"status":"lead not created"};});
             localStorage.setItem("lead_created", "True");
+        }
+        function apiSuccess(){
+            if($("#successContent").html() == ""){
+                $("#successContent").append("<h4> Thank you for your interest, We will contact you soon </h4>");}
+            $("#successMessage").modal('show');
+            // var timeOut = setTimeout(function(){$("#successMessage").modal('hide')}, 2000);
         }
 </script>
 <script>
@@ -730,7 +793,7 @@
 </script>
 <script type="text/javascript">
     $(window).ready(function(){ 
-    if(isMobile()){
+    if(isMobile() && "{{pre_register}}" != "True"){
         $("#header-bg1-id").show();
         $("#header-bg2-id").show();
     }

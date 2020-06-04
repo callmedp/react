@@ -5438,3 +5438,11 @@ button {
   padding: 1rem 0rem; }
 .modal-backdrop.show {
   opacity: 0.9; }
+label.error {
+    display: block;
+    color: #ff0000;
+    font-size: 11px;
+    position: absolute !important;
+    z-index: 9;
+    font-weight: 400;
+}

@@ -1298,7 +1298,7 @@ class GoogleResumeAdView(View):
                     "8_15exp":"4600", "15_exp":"5600"}
                 template = 'shop/resume-ad-linkedin.html'
                 site_slug = "resume-services"
-        site_link = '{}/services/{}/{}/?pre-register={}'.format(settings.SITE_DOMAIN, site_slug, country, str(pre_register))
+        site_link = '{}/services/{}/{}/?pre-register={}'.format(settings.MAIN_DOMAIN_PREFIX, site_slug, country, str(pre_register))
         content = {
             "currency" : currency,
             "country" : country,
