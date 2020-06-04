@@ -1,11 +1,8 @@
 # python imports
-import base64
-import json
 import logging
-import random
 from datetime import datetime, date
 from decimal import Decimal
-
+from django.utils import timezone
 
 # django imports
 
@@ -14,12 +11,16 @@ from decimal import Decimal
 # inter app imports
 from cart.mixins import CartMixin
 from cart.models import Cart
+from wallet.models import (Wallet,
+                           PointTransaction, WalletTransaction)
+
+from wallet.api.core.serializers import (
+    WalletSerializer, WalletTransactionSerializer)
 
 # third party imports
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
-from wallet.models import Wallet
 
 
 class RemoveFromCartAPIView(CartMixin, APIView):
