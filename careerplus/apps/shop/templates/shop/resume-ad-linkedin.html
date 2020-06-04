@@ -545,7 +545,8 @@
     {% endif %}
     <div class="modal fade" id="successMessage" data-keyboard="false" and data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-md modal-dialog-centered modal-mobile" role="document">
-          <div class="modal-content" id='successContent' style="padding: 20px; text-align: center;">
+          <div class="modal-content" id='successContent' style="padding: 20px; text-align: center;" data="">
+            <h4> Thank you for your interest, We will contact you soon </h4>
           </div>
         </div>
       </div>
@@ -670,7 +671,7 @@
                     },
                     mobile: {
                         required:true,
-                        minlength: 10
+                        minlength: 5
                     }
                 },
                 messages: {
@@ -693,7 +694,6 @@
                 experience = $('#experience').val();
                 data = { name : name, email: email, mobile:mobile, country_code:country_code, country:country, pre_register:pre_register, experience:experience }
                 crmHit(data);
-                debugger;
                 apiSuccess();
             };
         };
@@ -707,7 +707,7 @@
                     },
                     mobile_modal: {
                         required:true,
-                        minlength: 10
+                        minlength: 5
                     }
                 },
                 messages: {
@@ -730,21 +730,26 @@
                 experience = $('#experience_modal').val();
                 data = { name : name, email: email, mobile:mobile, country_code:country_code, country:country, pre_register:pre_register, experience:experience }
                 crmHit(data);
-                debugger;
                 $('#exampleModalCenter').modal('hide');
                 apiSuccess();
             };
         };
         function crmHit(data){
             $.post("{{crm_lead_link}}", data, function(data, status, xhr){
-                return true;
-            }).done(function() {return {"status":"lead created"};})
-            .fail(function(jqxhr, settings, ex){return {"status":"lead not created"};});
+                return {"status":"lead created"};
+            }).done(function() {
+                if($("#successContent").attr('data') != "success"){
+                  $("#successContent").attr('data',"success");  
+                $("#successContent").html("<h4> Thank you for your interest, We will contact you soon </h4>");};
+                return {"status":"lead created"};})
+            .fail(function(jqxhr, settings, ex){
+                if($("#successContent").attr('data') != "fail"){
+                    $("#successContent").attr('data',"fail"); 
+                    $("#successContent").html("<h4> Sorry something went wrong, Please visit learning.shine.com</h4>");};
+                return {"status":"lead not created"};});
             localStorage.setItem("lead_created", "True");
         }
         function apiSuccess(){
-            if($("#successContent").html() == ""){
-                $("#successContent").append("<h4> Thank you for your interest, We will contact you soon </h4>");}
             $("#successMessage").modal('show');
             var timeOut = setTimeout(function(){$("#successMessage").modal('hide')}, 2000);
         }
