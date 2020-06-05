@@ -116,6 +116,28 @@ class Review(AbstractAutoDate):
 
         return remarks
 
+    def save(self, *args, **kwargs):
+        from shop.models import Product
+        review_obj = None
+        if not self.object_id:
+            return super(Review, self).save(*args, **kwargs)
+        prod = Product.objects.filter(id=self.object_id).first()
+        if not self.id:
+            review_obj = super(Review, self).save(*args, **kwargs)
+            if not prod:
+                return review_obj
+            prod.save()
+            return review_obj
+        if Review.objects.get(id=self.id).status == self.status:
+            return super(Review, self).save(*args, **kwargs)
+
+        if not prod:
+            return super(Review, self).save(*args, **kwargs)
+        prod.save()
+        return super(Review, self).save(*args, **kwargs)
+
+
+
 
 class DetailPageWidget(AbstractAutoDate):
     limit_choices = models.Q(app_label='shop', model='Product') | models.Q(app_label='shop', model='Category') |  models.Q(app_label='blog', model='Blog')
