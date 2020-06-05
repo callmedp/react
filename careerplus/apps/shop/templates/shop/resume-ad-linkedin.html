@@ -54,7 +54,7 @@
                          <h1 class="mt-5 make">Make your online profile Extremely Strong</h1> 
                         <ul>
                             <li>
-                                Optimise your<strong>profile</strong>   
+                                Optimise your <strong>profile</strong>   
                             </li>
                             <li>
                                 Detailed discussion <strong>with experts </strong> 
@@ -102,7 +102,8 @@
               <input id='email' type="Email" class="form-control form-control1" id="exampleFormControlInput1" name="email" placeholder="Email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" aria-describedby="email-id" required="true" mandatory="true">
             </div>
             <div class="form-group exp">
-                <select type="MultipleChoiceField" name="experience" placeholder="Experience" class="form-control form-control1" id="experience" required="true" mandatory="true">
+                <select type="MultipleChoiceField" name="experience" placeholder="Experience" class="form-control form-control1" id="experience">
+                    <option value="">Experience</option>
                   {% for exp in experience_range %}
                   <option value="{{exp}} Yr">{{exp}} Yrs</option>
                   {% endfor %}
@@ -119,7 +120,7 @@
             <div class="resume">
                 <div class="resume__services">
                     <a href= "{{ site_link }}" > Resume services </a>
-                    <a class="active"> Linkedin profile </a>
+                    <a class="active"> LinkedIn profile </a>
                 </div>
                 <p class="d-none d-sm-block">
                     Having more than <strong> 600 million LinkedIn members </strong>  worldwide and having a profile which stands out is essential for your job search success. Elevate your professional presence online with our <strong>LinkedIn profile makeover service</strong>. We will pair you with a writer with industry specific knowledge and work one-on-one to create an ideal profile specially modified to your career goals. You can then elevate your
@@ -523,8 +524,8 @@
                           <input type="EmailField" name="email_modal" class="input_field bo" id="email_modal" placeholder="Email" aria-describedby="email-id"  required="true" mandatory="true" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"> 
                         </div>
                         <div class="form-group exp">
-                            <select name="experience" class="form-control" id="experience_modal" placeholder="Experience">Experience
-                              <option value="0">Experience</option>
+                            <select name="experience" class="form-control" id="experience_modal" placeholder="Experience" >
+                              <option value="">Experience</option>
                               {% for exp in experience_range %}
                               <option value="{{exp}} Yr">{{exp}} Yrs</option>
                               {% endfor %}

@@ -55,7 +55,7 @@
                          <h1 class="mt-5 make">Make your online profile Extremely Strong</h1> 
                         <ul>
                             <li>
-                                Optimise your<strong>profile</strong>   
+                                Optimise your <strong>profile</strong>   
                             </li>
                             <li>
                                 Detailed discussion <strong>with experts </strong> 
@@ -81,11 +81,6 @@
         </span>
         <form id="form_desktop" class="form custom-form" name="maylandingpage">
             <strong>Get a new job offer</strong>
-            <!-- <input type="hidden" name="vendorid" value="maylandingpage" />
-            <input type="hidden" name="mail_lead" value="true" />
-            <input type="hidden" name="client_url" value="" />
-            <input type="hidden" name="client_method" value="post" />
-            <input type="hidden" name="redirect_url" value="None" /> -->
             <input type="hidden" id='country' name="country" value="{{country}}" />
             <input type="hidden" id='pre_register' name="pre_register" value="False" />
             <div class="form-group">
@@ -107,7 +102,8 @@
               <input id='email' type="EmailField" class="form-control form-control1" id="exampleFormControlInput1" name="email" placeholder="Email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" aria-describedby="email-id" required="true" mandatory="true">
             </div>
             <div class="form-group exp">
-                <select type="MultipleChoiceField" name="experience" placeholder="Experience" class="form-control form-control1" id="experience" required="true" mandatory="true">
+                <select type="MultipleChoiceField" name="experience" placeholder="Experience" class="form-control form-control1" id="experience">
+                    <option value="">Experience</option>
                   {% for exp in experience_range %}
                   <option value="{{exp}} Yr">{{exp}} Yrs</option>
                   {% endfor %}
@@ -124,7 +120,7 @@
             <div class="resume">
                 <div class="resume__services">
                     <a class="active"> Resume services </a>
-                    <a href="{{ site_link }}" > Linkedin profile </a>
+                    <a href="{{ site_link }}" > LinkedIn profile </a>
                 </div>
                         <p class=" d-none d-sm-block">
                             A resume is the first document which creates a lasting <strong>impression on recruiters</strong>. You may lack behind if your resume is not perfect. Our <strong>resume services</strong> guarantees you by creating a customized and <strong>unique resume</strong>  with strong understanding of your managerial skills and experience.
@@ -525,8 +521,8 @@
                           
                         </div>
                         <div class="form-group exp">
-                            <select name="experience" class="form-control" id="experience_modal" placeholder="Experience">Experience
-                              <option value="0">Experience</option>
+                            <select name="experience" class="form-control" id="experience_modal" placeholder="Experience">
+                              <option value="">Experience</option>
                               {% for exp in experience_range %}
                               <option value="{{exp}} Yr">{{exp}} Yrs</option>
                               {% endfor %}

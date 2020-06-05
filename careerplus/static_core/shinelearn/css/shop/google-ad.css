@@ -5344,7 +5344,11 @@ select {
   height: 2.5rem;
   border-radius: 0.4rem;
   border: solid 0.1rem #E3E3E3;
-  font-size: 12px; }
+  font-size: 12px;
+   }
+.custom-form-2 .input_field{
+  color: #000 !important;
+}
 .custom-form-2 input,
 .custom-form-2 label {
   transition: all 0.2s;
