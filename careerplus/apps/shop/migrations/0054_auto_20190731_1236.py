@@ -8,43 +8,43 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('shop', '0053_productuserprofile_onboard'),
+        # ('shop', '0053_productuserprofile_onboard'),
     ]
 
     operations = [
-        migrations.AlterField(
-            model_name='productuserprofile',
-            name='current_salary',
-            field=models.CharField(blank=True, max_length=200, null=True),
-        ),
-        migrations.AlterField(
-            model_name='productuserprofile',
-            name='desired_industry',
-            field=models.CharField(blank=True, max_length=300, null=True),
-        ),
-        migrations.AlterField(
-            model_name='productuserprofile',
-            name='desired_location',
-            field=models.CharField(blank=True, max_length=300, null=True),
-        ),
-        migrations.AlterField(
-            model_name='productuserprofile',
-            name='desired_position',
-            field=models.CharField(blank=True, max_length=300, null=True),
-        ),
-        migrations.AlterField(
-            model_name='productuserprofile',
-            name='desired_salary',
-            field=models.CharField(blank=True, max_length=200, null=True),
-        ),
-        migrations.AlterField(
-            model_name='productuserprofile',
-            name='experience',
-            field=models.CharField(blank=True, max_length=300, null=True),
-        ),
-        migrations.AlterField(
-            model_name='productuserprofile',
-            name='skills',
-            field=models.CharField(blank=True, max_length=300, null=True),
-        ),
+        # migrations.AlterField(
+        #     model_name='productuserprofile',
+        #     name='current_salary',
+        #     field=models.CharField(blank=True, max_length=200, null=True),
+        # ),
+        # migrations.AlterField(
+        #     model_name='productuserprofile',
+        #     name='desired_industry',
+        #     field=models.CharField(blank=True, max_length=300, null=True),
+        # ),
+        # migrations.AlterField(
+        #     model_name='productuserprofile',
+        #     name='desired_location',
+        #     field=models.CharField(blank=True, max_length=300, null=True),
+        # ),
+        # migrations.AlterField(
+        #     model_name='productuserprofile',
+        #     name='desired_position',
+        #     field=models.CharField(blank=True, max_length=300, null=True),
+        # ),
+        # migrations.AlterField(
+        #     model_name='productuserprofile',
+        #     name='desired_salary',
+        #     field=models.CharField(blank=True, max_length=200, null=True),
+        # ),
+        # migrations.AlterField(
+        #     model_name='productuserprofile',
+        #     name='experience',
+        #     field=models.CharField(blank=True, max_length=300, null=True),
+        # ),
+        # migrations.AlterField(
+        #     model_name='productuserprofile',
+        #     name='skills',
+        #     field=models.CharField(blank=True, max_length=300, null=True),
+        # ),
     ]

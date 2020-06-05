@@ -42,14 +42,14 @@ class CouponRedeemView(APIView, CartMixin):
             logging.getLogger('error_log').error(
                 'Not valid code id {}'.format(code))
             return Response(
-                {'success': 0,
-                 'error_message': 'Not valid code id {0}'.format(code)
+                {'success': '',
+                 'error_message': 'Not valid code id {}'.format(code)
                  }, status=status.HTTP_400_BAD_REQUEST)
 
         if coupon.is_redeemed:
             return Response(
-                {'success': 0,
-                 'error_message': 'This code has already been used for candidate id {0}'.format(candidate_id)
+                {'success': '',
+                 'error_message': 'This code has already been used for candidate id {}'.format(candidate_id)
                  }, status=status.HTTP_400_BAD_REQUEST)
         #  TODO commenting it for future use case.
         # if not request.session.get('cart_pk'):
@@ -60,18 +60,18 @@ class CouponRedeemView(APIView, CartMixin):
             'coupon').filter(pk=cart_pk).first()
         if not cart_obj:
             logging.getLogger('error_log').error(
-                'Something went wrong, Please login to continue for candidate id {0}'.format(candidate_id))
+                'Something went wrong, Please login to continue for candidate id {}'.format(candidate_id))
             return Response(
-                {'success': 0,
+                {'success': '',
                  'error_message': 'Something went wrong, Please login to continue.'
                  }, status=status.HTTP_400_BAD_REQUEST)
         wal_txn = cart_obj.wallettxn.filter(
             txn_type=2).order_by('-created').select_related('wallet')
         if wal_txn:
             logging.getLogger('error_log').error(
-                'Points already applied! for candidate id {0}'.format(candidate_id))
+                'Points already applied! for candidate id {}'.format(candidate_id))
             return Response(
-                {'success': 0,
+                {'success': '',
                  'error_message': 'Points already applied!.'
                  }, status=status.HTTP_400_BAD_REQUEST)
 
@@ -80,48 +80,48 @@ class CouponRedeemView(APIView, CartMixin):
 
         if old_coupon:
             logging.getLogger('error_log').error(
-                'Another coupon is already applied for candidate id {0}'.format(candidate_id))
+                'Another coupon is already applied for candidate id {}'.format(candidate_id))
             return Response(
-                {'success': 0,
+                {'success': '',
                  'error_message': 'Another coupon is already applied.'
                  }, status=status.HTTP_400_BAD_REQUEST)
         if not user_email:
             logging.getLogger('error_log').error(
-                'Session Expired, Please login to continue for candidate id {0}'.format(candidate_id))
+                'Session Expired, Please login to continue for candidate id {}'.format(candidate_id))
             return Response(
-                {'success': 0,
+                {'success': '',
                  'error_message': 'Session Expired, Please login to continue.'
                  }, status=status.HTTP_400_BAD_REQUEST)
 
         if coupon.expired():
             logging.getLogger('error_log').error(
-                'This code is expired for candidate id {0}'.format(candidate_id))
+                'This code is expired for candidate id {}'.format(candidate_id))
             return Response(
-                {'success': 0,
+                {'success': '',
                  'error_message': 'This code is expired.'
                  }, status=status.HTTP_400_BAD_REQUEST)
 
         if coupon.suspended():
             logging.getLogger('error_log').error(
-                'This code is suspended for candidate id {0}'.format(candidate_id))
+                'This code is suspended for candidate id {}'.format(candidate_id))
             return Response(
-                {'success': 0,
+                {'success': '',
                  'error_mesage': 'This code is suspended.'
                  }, status=status.HTTP_400_BAD_REQUEST)
 
         if not coupon.active:
             logging.getLogger('error_log').error(
-                'This code is Inactive for candidate id {0}'.format(candidate_id))
+                'This code is Inactive for candidate id {}'.format(candidate_id))
             return Response(
-                {'success': 0,
+                {'success': '',
                  'error_message': 'This code is Inactive.'
                  },  status=status.HTTP_400_BAD_REQUEST)
 
         if coupon.site not in [0, 1, 3]:
             logging.getLogger('error_log').error(
-                'This code is not valid for candidate id {0}'.format(candidate_id))
+                'This code is not valid for candidate id {}'.format(candidate_id))
             return Response(
-                {'success': 0,
+                {'success': '',
                  'error': 'This code is not valid.'
                  }, status=status.HTTP_400_BAD_REQUEST)
 
@@ -132,7 +132,7 @@ class CouponRedeemView(APIView, CartMixin):
                 error = 'This code is valid on particular products.'
             logging.getLogger('error_log').error(str(error))
             return Response(
-                {'success': 0,
+                {'success': '',
                  'error_message': error
                  }, status=status.HTTP_400_BAD_REQUEST)
 
@@ -140,9 +140,9 @@ class CouponRedeemView(APIView, CartMixin):
             user_coupon = coupon.users.get(user=user_email)
             if user_coupon.redeemed_at is not None:
                 logging.getLogger('error_log').error(
-                    'This code has already been used by your account for candidate id {0}'.format(candidate_id))
+                    'This code has already been used by your account for candidate id {}'.format(candidate_id))
                 return Response(
-                    {'success': 0,
+                    {'success': '',
                      'error_message': 'This code has already been used by your account.'
                      }, status=status.HTTP_400_BAD_REQUEST)
         except CouponUser.DoesNotExist:
@@ -150,17 +150,17 @@ class CouponRedeemView(APIView, CartMixin):
                 # only user bound coupons left and you don't have one
                 if coupon.user_limit is coupon.users.filter(user__isnull=False).count():
                     logging.getLogger('error_log').error(
-                        'This code is not valid for your account for candidate id {0}'.format(candidate_id))
+                        'This code is not valid for your account for candidate id {}'.format(candidate_id))
                     return Response(
-                        {'success': 0,
+                        {'success': '',
                          'error_message': 'This code is not valid for your account.'
                          }, status=status.HTTP_400_BAD_REQUEST)
                 # all coupons redeemed
                 if coupon.user_limit is coupon.users.filter(redeemed_at__isnull=False).count():
                     logging.getLogger('error_log').error(
-                        'This code has already been used for candidate id {0}'.format(candidate_id))
+                        'This code has already been used for candidate id {}'.format(candidate_id))
                     return Response(
-                        {'success': 0,
+                        {'success': '',
                          'error_message': 'This code has already been used.'
                          }, status=status.HTTP_400_BAD_REQUEST)
         try:
@@ -171,9 +171,9 @@ class CouponRedeemView(APIView, CartMixin):
             if coupon.min_purchase:
                 if total < coupon.min_purchase:
                     logging.getLogger('error_log').error(
-                        'This cart total is below minimum purchase for candidate id {0}'.format(candidate_id))
+                        'This cart total is below minimum purchase for candidate id {}'.format(candidate_id))
                     return Response(
-                        {'success': 0,
+                        {'success': '',
                          'error_message': 'This cart total is below minimum purchase.'
                          }, status=status.HTTP_400_BAD_REQUEST)
             try:
@@ -196,7 +196,7 @@ class CouponRedeemView(APIView, CartMixin):
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
             return Response(
-                {'success': 1,
+                {'success': '',
                  'error_message': 'Try after some Time'
                  }, status=status.HTTP_400_BAD_REQUEST)
 

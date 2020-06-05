@@ -12,16 +12,16 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='productuserprofile',
-            name='manual_change',
-            field=models.PositiveSmallIntegerField(blank=True, choices=[(1, 'Update Pending Links Count')], null=True),
-        ),
-        migrations.AddField(
-            model_name='productuserprofile',
-            name='manual_changes_data',
-            field=models.CharField(blank=True, max_length=200, null=True),
-        ),
+        # migrations.AddField(
+        #     model_name='productuserprofile',
+        #     name='manual_change',
+        #     field=models.PositiveSmallIntegerField(blank=True, choices=[(1, 'Update Pending Links Count')], null=True),
+        # ),
+        # migrations.AddField(
+        #     model_name='productuserprofile',
+        #     name='manual_changes_data',
+        #     field=models.CharField(blank=True, max_length=200, null=True),
+        # ),
         migrations.AlterField(
             model_name='product',
             name='sub_type_flow',

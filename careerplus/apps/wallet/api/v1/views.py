@@ -28,22 +28,22 @@ class WalletRedeemView(APIView, CartMixin):
         candidate_id = request.data.get('candidate_id')
         if not candidate_id:
             return Response(
-                {'success': 0,
+                {'success': '',
                  'error_message': 'Candidate Id is required.'
                  },  status=status.HTTP_400_BAD_REQUEST)
 
         point = request.data.get('point', '')
         if not point:
             logging.getLogger('error_log').error(
-                'Redeem point is required for candidate_id {0}.'.format(candidate_id))
+                'Redeem point is required for candidate_id {}.'.format(candidate_id))
             return Response(
-                {'success': 0,
+                {'success': '',
                  'error_message': 'Redeem point is required.'
                  },  status=status.HTTP_400_BAD_REQUEST)
 
         if not request.data.get('cart_pk'):
             return Response(
-                {'success': 0,
+                {'success': '',
                  'error_message': 'Cart pk is required.'
                  },  status=status.HTTP_400_BAD_REQUEST)
 
@@ -54,52 +54,52 @@ class WalletRedeemView(APIView, CartMixin):
             cart_obj = Cart.objects.select_related('coupon').get(pk=cart_pk)
         except Cart.DoesNotExist:
             logging.getLogger('error_log').error(
-                'Something went wrong, Please login to continue for candidate_id {0}.'.format(candidate_id))
+                'Something went wrong, Please login to continue for candidate_id {}.'.format(candidate_id))
             return Response(
-                {'success': 0,
+                {'success': '',
                  'error_message': 'Something went wrong, Please login to continue.'
                  },  status=status.HTTP_400_BAD_REQUEST)
         if cart_obj.coupon:
             logging.getLogger('error_log').error(
-                'Coupon already applied, You cannot redeem point now for candidate_id {0}.'.format(candidate_id))
+                'Coupon already applied, You cannot redeem point now for candidate_id {}.'.format(candidate_id))
             return Response(
-                {'success': 0,
+                {'success': '',
                  'error_message': 'Coupon already applied, You cannot redeem point now.'
                  },  status=status.HTTP_400_BAD_REQUEST)
         wal_txn = cart_obj.wallettxn.filter(
             txn_type=2).order_by('-created').select_related('wallet')
         if wal_txn:
             logging.getLogger('error_log').error(
-                'Points already applied! for candidate_id {0}.'.format(candidate_id))
+                'Points already applied! for candidate_id {}.'.format(candidate_id))
             return Response(
-                {'success': 0,
+                {'success': '',
                  'error_message': 'Points already applied!.'
                  },  status=status.HTTP_400_BAD_REQUEST)
         owner = cart_obj.owner_id
         owner_email = cart_obj.email
         if not owner:
             logging.getLogger('error_log').error(
-                'Session Expired, Please login to continue for candidate_id {0}.'.format(candidate_id))
+                'Session Expired, Please login to continue for candidate_id {}.'.format(candidate_id))
             return Response(
-                {'success': 0,
+                {'success': '',
                  'error_message': 'Session Expired, Please login to continue.'
                  },  status=status.HTTP_400_BAD_REQUEST)
         try:
             wal_obj = Wallet.objects.get(owner=owner)
         except Wallet.DoesNotExist:
             logging.getLogger('error_log').error(
-                'Something went wrong, Try after some time for candidate_id {0}.'.format(candidate_id))
+                'Something went wrong, Try after some time for candidate_id {}.'.format(candidate_id))
             return Response(
-                {'success': 0,
+                {'success': '',
                  'error_message': 'Something went wrong, Try after some time.'
                  },  status=status.HTTP_400_BAD_REQUEST)
         try:
             point = Decimal(point)
             if point <= Decimal(0):
                 logging.getLogger('error_log').error(
-                    'Redeem Point should be positive, Cannot Redeem! for candidate_id {0}.'.format(candidate_id))
+                    'Redeem Point should be positive, Cannot Redeem! for candidate_id {}.'.format(candidate_id))
                 return Response(
-                    {'success': 0,
+                    {'success': '',
                      'error_message': 'Redeem Point should be positive, Cannot Redeem!.'
                      },  status=status.HTTP_400_BAD_REQUEST)
             # line_item = cart_obj.lineitems.filter(parent=None)[0]
@@ -119,9 +119,9 @@ class WalletRedeemView(APIView, CartMixin):
             wal_total = total
             if wal_total < point:
                 logging.getLogger('error_log').error(
-                    'You have less points in wallet, Cannot Redeem! for candidate_id {0}.'.format(candidate_id))
+                    'You have less points in wallet, Cannot Redeem! for candidate_id {}.'.format(candidate_id))
                 return Response(
-                    {'success': 0,
+                    {'success': '',
                      'error_message': 'You have less points in wallet, Cannot Redeem!.'
                      },  status=status.HTTP_400_BAD_REQUEST)
             wal_obj.owner_email = owner_email
@@ -167,7 +167,7 @@ class WalletRedeemView(APIView, CartMixin):
             logging.getLogger('error_log').error(
                 'unable to redeem the points %s' % str(e))
             return Response(
-                {'success': 0,
+                {'success': '',
                  'error_message': 'Try after some Time'
                  },  status=status.HTTP_400_BAD_REQUEST)
 

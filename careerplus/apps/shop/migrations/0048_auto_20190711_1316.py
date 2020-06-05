@@ -12,9 +12,9 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AlterField(
-            model_name='jobslinks',
-            name='link',
-            field=models.URLField(max_length=2000),
-        ),
+        # migrations.AlterField(
+        #     model_name='jobslinks',
+        #     name='link',
+        #     field=models.URLField(max_length=2000),
+        # ),
     ]
