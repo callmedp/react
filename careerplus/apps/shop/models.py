@@ -1082,6 +1082,7 @@ class Product(AbstractProduct, ModelMeta):
     visible_on_crm = models.BooleanField(default=True)
     visible_on_resume_shine =  models.BooleanField(default=False)
     product_tag = models.SmallIntegerField(default=0,choices=PRODUCT_TAG_CHOICES)
+    image_class = models.CharField(_('product image class'), max_length=100,blank=True)
     
     #associated model managers
     objects = ProductManager()

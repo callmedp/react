@@ -479,5 +479,4 @@ class PayuPaymentUtil():
                                                                          settings.RESUME_SHINE_SITE_DOMAIN),
 
             })
-        print(initial_dict)
         return initial_dict
