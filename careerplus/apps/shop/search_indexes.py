@@ -184,6 +184,8 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
     # subheading
     pSub = indexes.CharField(indexed=False,model_attr='sub_heading')
 
+    pimgClass = indexes.CharField(model_attr='image_class', indexed=False)
+
     def get_model(self):
         return Product
 
