@@ -13,6 +13,14 @@ function* fileUpload(action) {
         if(!result.data['error_message']){
             yield put({ type: UPDATE_SCORE, payload: result.data });
             localStorage.setItem("resume_score", JSON.stringify({...result.data}))
+
+            result.data["loggedIn"] = localStorage.getItem('userId') ? localStorage.getItem('userId') : "";
+            try{
+                yield call(Api.saveDataApi, result.data);
+            }
+            catch{
+                //do nothing
+            }
         }
         return resolve(result.data)
 
@@ -24,8 +32,11 @@ function* fileUpload(action) {
 function* expertFormData(action) {
     const { payload: {values, resolve, reject} } = action;
     try{
-         let formData = values; 
+        let formData = values; 
         formData['lsource'] = 8;
+        formData['campaign'] = 'resumechecker';
+        formData['number'] = values.mobile;
+        
         const response = yield call(Api.expertFormSubmit, formData);
         return resolve(response)
     }

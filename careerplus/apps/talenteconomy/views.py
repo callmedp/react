@@ -589,7 +589,7 @@ class TEBlogDetailView(DetailView, BlogMixin):
         self.object = self.get_object()
         self.object.no_views += 1
         self.object.update_score()
-        self.object.save()
+        # self.object.save()
         redirect = self.redirect_if_necessary(request.path, self.object)
         if redirect:
            return redirect

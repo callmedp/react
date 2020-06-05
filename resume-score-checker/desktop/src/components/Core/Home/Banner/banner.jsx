@@ -39,12 +39,12 @@ const Banner = props => {
         if (!localStorage.getItem('userId')) {
             setFlag(true);
             const isSessionAvailable = await new Promise((resolve, reject) => dispatch(Actions.checkSessionAvailability({ resolve, reject })));
-
             if (isSessionAvailable['result']) {
                 // await dispatch(Actions.getCandidateId())
                 try {
                     const candidateInfo = await new Promise((resolve, reject) => dispatch(Actions.getCandidateInfo({ resolve, reject })))
                     // const response = await new Promise((resolve,reject)=>dispatch(Actions.getCandidateResume({resolve,reject})))
+
                     //fileUpload({terget: {files : [response]}})
                     let resumeId = parsed.resume_id ? parsed.resume_id : null;
                     setFlag(true);
@@ -58,6 +58,8 @@ const Banner = props => {
                         icon: 'error',
                         html: '<h3>Something went wrong! Try again.<h3>'
                     })
+                    // eslint-disable-next-line no-restricted-globals
+                    history.replaceState(null, null ,"?import=")
                 }
             }
             else {
@@ -79,13 +81,13 @@ const Banner = props => {
                 setRedirect(true)
             }
             catch (e) {
-                setFlag(false)
-                if (!e['error_message']) {
+                setFlag(false);
                     Swal.fire({
                         icon: 'error',
                         html: '<h3>Something went wrong! Try again.<h3>'
                     })
-                }
+                    // eslint-disable-next-line no-restricted-globals
+                    history.replaceState(null, null ,"?import=")
             }
         }
 

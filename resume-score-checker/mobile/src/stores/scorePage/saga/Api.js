@@ -34,6 +34,11 @@ const expertFormSubmit = (data) => {
     }, false);
 }
 
+const saveDataApi = (data) => {
+    const url = `resume-score-checker/save-data`
+    return BaseApiService.post(`${siteDomain}/api/${url}`, data);
+} 
+
 const checkSessionAvailability = () => {
     const url = 'session/';
     return BaseApiService.get(`${siteDomain}/api/v1/resume/${url}`);
@@ -63,5 +68,6 @@ export const Api = {
     getCandidateResume,
     getCandidateScore,
     getInformation,
-    getCartCount
+    getCartCount,
+    saveDataApi
 };

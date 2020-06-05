@@ -16,6 +16,7 @@ export function Form(hide){
                 dispatch(Actions.expertForm({values, resolve, reject}))
             })
             if (response){
+                hide()
                 Toast("success", "Form Submitted Successfully");
                 event.target.reset();
             }
@@ -122,7 +123,7 @@ return (
                                 {errors?.mobile?.type === 'minLength' && <span className="error--mgs">Enter a valid length Number</span>}
                                 {errors?.mobile?.type === 'maxLength' && <span className="error--mgs">Max length will be {max} </span>}
                             </li>
-                            
+
                             <li>
                                 <button className="btn btn-round-30 btn-blue w-100">Submit</button>
                             </li>

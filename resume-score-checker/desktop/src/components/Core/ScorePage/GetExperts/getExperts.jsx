@@ -94,7 +94,7 @@ const GetExperts = props => {
 
                 <div className={errors.number ? "form-group expert-help__mobile--mobile error " : "form-group expert-help__mobile--mobile"}>
                   <input type="text" className="form-control input_field error" id="number" name="number" placeholder="Mobile" ref={register({ required: true, pattern: /^[0-9-]+$/, maxLength: 13, validate: { mobLength: value => getValues('country') !== '+91' || value ?.length === 10 } })} />
-                  <label htmlFor="mobile" className="input_label">Mobile</label>
+                  <label htmlFor="number" className="input_label">Mobile</label>
                   {errors ?.number ?.type === "required" && <span className="error__msg">This field is required</span>}
                   {errors ?.number ?.type === "pattern" && <span className="error__msg">Mobile number is not valid!</span>}
                   {errors ?.number ?.type === "maxLength" && <span className="error__msg">Mobile number is not valid!</span>}

@@ -358,9 +358,14 @@
 {% endblock main_container %}
 {% block js_section %}
     {{block.super}}
+    <script type="text/javascript">
+        var end_date_time = "{{end_date}}"
+    </script>
     {% compress js %}
     <script src="{% static 'shinelearn/js/common/inputTags.jquery.js' %}"></script>
     <script src="{% static 'shinelearn/js/homepage/index.js' %}"></script>
+    <script src="{% static 'shinelearn/js/homepage/offer_timer.js' %}"></script>
+    <script src="{% static 'shinelearn/js/homepage/offer_validate.js' %}"></script>
     {% endcompress %}
     <script type="text/javascript">
         var funcAreaSet = {{ func_area_set|safe }},

@@ -102,11 +102,18 @@ export default function CallToAction() {
                     let resumeId = parsed.resume_id ? parsed.resume_id : null;
 
                     let result = await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: candidateInfo['candidateId'], resumeId: resumeId, resolve, reject })))
+
                     if (result['error_message']) {
                         Toast('warning', result['error_message'])
                         setVisible(false)
+                        // eslint-disable-next-line no-restricted-globals
+                        history.replaceState(null, null ,"?import=")
                     }
-                    else { setFlag(false) }
+                    else {
+                        // eslint-disable-next-line no-restricted-globals
+                        history.replaceState(null, null ,"?import=")
+                        setFlag(false)
+                    }
 
                     // fileUpload({target : {files : [resume]}})
                 }
@@ -114,6 +121,8 @@ export default function CallToAction() {
                     //setFlag(false);
                     Toast('error', 'Something went wrong! Try again')
                     setVisible(false)
+                    // eslint-disable-next-line no-restricted-globals
+                    history.replaceState(null, null ,"?import=")
                 }
             }
             else {
@@ -135,17 +144,24 @@ export default function CallToAction() {
                 if (result['error_message']) {
                     Toast('warning', result['error_message'])
                     setVisible(false)
+                    // eslint-disable-next-line no-restricted-globals
+                    history.replaceState(null, null ,"?import=")
                 }
-                else { setFlag(false) }
+                else {
+                    // eslint-disable-next-line no-restricted-globals
+                    history.replaceState(null, null ,"?import=")
+                    setFlag(false)
+                }
             }
             catch (e) {
                 //setFlag(false)
                 Toast('error', 'Something went wrong! Try again')
                 setVisible(false)
+                // eslint-disable-next-line no-restricted-globals
+                history.replaceState(null, null ,"?import=")
             }
         }
     }
-
 
     return (
         <div className="call-to-action">

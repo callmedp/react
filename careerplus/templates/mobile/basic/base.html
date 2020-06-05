@@ -101,6 +101,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
         {% block main_container %}
         <div class="wrapper">
+            {% if show and offer_home%}
+                <div class="offer" id="offer-widget">
+                    <span class="close" id="close-offer"></span>
+                    <script type="text/javascript">
+                        var end_date_time = "{{end_date}}"
+                    </script>
+                    <p class="pb-0" id="enroll-now">
+                        {{sticky_text}}- <strong>{{offer_value}} <br/> Ends in <span id = 'sticky_timer_mobile'></span> - </strong> 
+                        <a href="javascript:void(0)" class="offer--link">Enroll Now!</a> 
+                    </p>
+                </div>
+            {% endif %}
+
             {% block header %}
             <!-- header menu Icon Starts here -->
                 <header class="w100fl">
@@ -116,6 +129,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
                    <div class="pull-right">
                         <!--a class="icon-search pull-left " href="search-listing.html">search</a-->
+                        {% if show and offer_home%}
+                            <a class="icon-offers" id="icon_offer" style="display: none;" href="javascript:void(0)"></a>
+                        {% endif %}
                         <a class="icon-cart" href="{% url "cart:payment-summary" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
                    </div><!-- / Right side Icon ends here -->
                 </div><!-- header menu Icon ends here -->
@@ -138,6 +154,129 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 {% include 'basic/navigation.html' %}
             {% endblock navigation %}
         </div>
+
+        <div class="new-enquire offer-modal" id="open-offer"> 
+            <div class="container pt-0">
+                <span class="close" id="close-offer-modal"></span>
+                <div class="offer-modal--image">
+                    <div class="content-box">
+                        <div class="offer-modal--head">{{ banner_text }} - <strong>{{ offer_value }}</strong></div>
+                        <p class="pb-5">Offer ending in</p>
+                        <ul class="offer-modal__counter">
+                            <li>
+                                <span class="offer-modal__counter--box" id = 'days'>00</span>
+                                <span class="offer-modal__counter--title">Days</span>
+                            </li>
+                           
+                            <li>
+                                <span class="offer-modal__counter--box" id = 'hours'>11</span>
+                                <span class="offer-modal__counter--title">Hours</span>
+                            </li>
+                           
+                            <li>
+                                <span class="offer-modal__counter--box" id = 'min'>52</span>
+                                <span class="offer-modal__counter--title">Min.</span>
+                            </li>
+                           
+                            <li>
+                                <span class="offer-modal__counter--box" id = 'sec'>12</span>
+                                <span class="offer-modal__counter--title">Sec.</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="new-login-form offer-modal--formBox">
+                    <p class="fs-22 semi-bold mb-10">Avail offer</p>
+                    <form id="pop_up_form">
+                        <ul>
+                            <li class="form-group input-effect">
+                                <input type="text" id="name" name="name" value="{{request.session.full_name}}" 
+                                    class="form--control animation-input {% if request.session.full_name %}has-content{% endif %}" 
+                                    placeholder="">
+                                <label for="name">Name</label>
+                                <span class="mgs"></span>
+                            </li>
+                            <li class="form-group d-flex">
+                                    <div class="input-effect code">
+                                        <select name="country_code" class="form--control" id="country-code">
+                                        {% for country in country_choices %}
+                                            <option value="{{country.0}}" {% if country.0 == '91' %} selected {% endif %} >{{country.0}}&emsp;&emsp;&emsp;&emsp;&emsp;-- {{country.1}}</option>
+                                        {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="input-effect ml-auto number-w67 rel"> 
+                                        <input type="text"  name="number" value="{{request.session.mobile_no }}" id="number" 
+                                            class="form--control animation-input {% if request.session.mobile_no %}has-content{% endif %}" 
+                                            placeholder="">
+                                        <label for="mobile-id">Mobile</label>
+                                        <span class="mgs"></span>
+                                    </div>
+                            </li>
+
+                            <li class="form-group input-effect">
+                                <input type="email" name="email" id="email-id" value="{{request.session.email}}"   
+                                    class="form--control animation-input {% if request.session.email %}has-content{% endif %}"
+                                    aria-describedby="email-id" placeholder="" >
+                                <label for="email-id">Email id</label>
+                                <span class="mgs"></span>
+                            </li>
+                            <li class="fs-14 semi-bold mb-5 mt-20">Course you would be interested in</li>
+                            <li class="custom-checkbox offer-modal--checkboxes mb-25 error">
+                                <label for="big-data">
+                                    <input class="form-check-input" type="checkbox" id = "big-data" name = "course" value="Big data">
+                                    <span>Big data</span>
+                                </label>
+                                
+                                <label for="six-sigma">
+                                    <input class="form-check-input" type="checkbox" id = "six-sigma" name = "course" value="Six Sigma">
+                                    <span>Six Sigma</span>
+                                </label>
+                                
+                                <label for="cc">
+                                    <input class="form-check-input" type="checkbox" id = "cc" name = "course" value="Cloud computing">
+                                    <span>Cloud computing</span>
+                                </label>
+                                
+                                <label for="dm">
+                                    <input class="form-check-input" type="checkbox" id = "dm" name = "course" value="Digital marketing">
+                                    <span>Digital marketing</span>
+                                </label>
+                                
+                                <label for="ds">
+                                    <input class="form-check-input" type="checkbox" id = "ds" name = "course" value="Data Science">
+                                    <span>Data Science </span>
+                                </label>
+                                
+                                <label for="others">
+                                    <input class="form-check-input" type="checkbox" id = "others" name = "course" value="Others">
+                                    <span>Others </span>
+                                </label>
+                                <span id = "checkbox_error" class="mgs"></span>
+                            </li>
+                            <li>
+                                <button class="btn btn-round btn-blue w100 semi-bold" type="submit" id="open-thanks">Avail offer now!</button>
+                            </li>
+                            <li class="fs-12 c9 text-center mt-10">*T&C applied, valid only on select courses</li>
+                            <input type="hidden" name="product_offer" value="True">
+                        </ul>
+                    </form>
+                </div>
+            </div>
+        </div><!-- Offer modal -->
+        
+        <div class="new-enquire offer-modal" id="thank-modal"> 
+            <span class="close" id="close-thanks-modal"></span>
+            <div class="content-box pt-0">
+                <div class="offer-modal--thanks w-100 text-center">
+                    <img src="{% static 'shinelearn/images/mobile/common/thank-you.jpg' %}" alt="">
+                </div>
+                <p class="fs-18 semi-bold text-center mt-15">Our expert will get in <br />touch with you.</p>
+            </div>
+        </div><!-- Thank You -->
+        
+
+
+
         {% endblock main_container %}
 
     {% block js_section %}
@@ -165,7 +304,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/base.js' %}"> </script>
         <script type="text/javascript" src="{% static 'shinelearn/js/common/common.js' %}"> </script>
         <script type="text/javascript" src="{% static 'shinelearn/js/webmobile/webmobile.js' %}"> </script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/mobile/homepage/offer_timer.js' %}"></script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/mobile/homepage/offer_validate.js' %}"></script>
         {% endcompress %}
+        <script type="text/javascript" src="https://twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.js"> </script>
 
         <!-- {% block johukum %}
         <script type='text/javascript' id='spd-busns-spt' async=''

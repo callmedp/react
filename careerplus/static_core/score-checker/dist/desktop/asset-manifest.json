@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/main-1590755561417.css",
-    "main.js": "/main-1590755561417.js",
-    "main.js.map": "/main-1590755561417.js.map",
+    "main.css": "/main-1591346639174.css",
+    "main.js": "/main-1591346639174.js",
+    "main.js.map": "/main-1591346639174.js.map",
     "index.html": "/index.html",
-    "main-1590755561417.css.map": "/main-1590755561417.css.map",
-    "main-1590755561417.js.LICENSE.txt": "/main-1590755561417.js.LICENSE.txt",
-    "precache-manifest.95eaaab1c53dab9f3c1942c0350e65a3.js": "/precache-manifest.95eaaab1c53dab9f3c1942c0350e65a3.js",
+    "main-1591346639174.css.map": "/main-1591346639174.css.map",
+    "main-1591346639174.js.LICENSE.txt": "/main-1591346639174.js.LICENSE.txt",
+    "precache-manifest.68717890aef14da9c7fb3642b75c286d.js": "/precache-manifest.68717890aef14da9c7fb3642b75c286d.js",
     "service-worker.js": "/service-worker.js"
   },
   "entrypoints": [
-    "main-1590755561417.css",
-    "main-1590755561417.js"
+    "main-1591346639174.css",
+    "main-1591346639174.js"
   ]
 }

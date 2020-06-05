@@ -210,6 +210,32 @@ $(document).ready(function() {
 		infinite: true
 	});
 
+	$("#close-offer").click(function(){
+		$("#offer-widget").hide();
+		$("#icon_offer").show()
+	});
+
+	
+	$("#enroll-now").click(function(){
+		$("#open-offer").addClass('show');
+	});
+
+	$("#icon_offer").click(function(){
+		$("#open-offer").addClass('show');
+	});
+	
+	$("#close-offer-modal").click(function(){
+		$("#open-offer").removeClass('show');
+	});
+
+	// $("#open-thanks").click(function(){
+	// 	$("#thank-modal").addClass('show');
+	// });
+
+	$("#close-thanks-modal").click(function(){
+		$("#thank-modal , #open-offer").removeClass('show');
+	});
+
 	
 
 
