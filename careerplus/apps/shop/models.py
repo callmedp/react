@@ -3534,6 +3534,11 @@ class Section(AbstractAutoDate):
     product = models.ManyToManyField('shop.Product',blank=True,null=True)
 
 
+
+    def __str__(self):
+        return '{}={}'.format(self.name,self.id)
+
+
     def get_image(self):
         if not self.image:
             return
