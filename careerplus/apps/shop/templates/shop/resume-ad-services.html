@@ -23,7 +23,7 @@
     <section class="">
         <div class="">
             <div class="header-carousel">
-                <div class="header-bg1-form">
+                <div class="header-bg1">
                     <div class="content">
                         <span><a href="https://learning.shine.com/"><img src="{% static 'shinelearn/images/shop/google-ad/shinelogo.png' %}" class="mb-3" alt="shinelogo"></a></span>
                         <strong>Struggling with your job?</strong>
@@ -49,7 +49,7 @@
                     
                 </div>
     
-                <div class="{% if not pre_register %} header-bg2-form {% else %} header-bg2 {% endif %}">
+                <div class="header-bg2">
                     <div class="content">
                         <span><a href="https://learning.shine.com/"></a><img src="{% static 'shinelearn/images/shop/google-ad/shinelogo.png' %}" alt="shinelogo"></span>
                          <h1 class="mt-5 make">Make your online profile Extremely Strong</h1> 
@@ -109,9 +109,9 @@
             <div class="form-group exp">
                 <select type="MultipleChoiceField" name="experience" placeholder="Experience" class="form-control form-control1" id="experience" required="true" mandatory="true">
                   {% for exp in experience_range %}
-                  <option value="{{exp}}">{{exp}} Yrs</option>
+                  <option value="{{exp}} Yr">{{exp}} Yrs</option>
                   {% endfor %}
-                  <option value="16">>15 Yrs</option>
+                  <option value="16 Yr">>15 Yrs</option>
               </select>
             </div>
             <button onclick='createLead()' type="button" id="submit_form_desktop" class="callback__btn mt-4">request a callback</button>
@@ -528,9 +528,9 @@
                             <select name="experience" class="form-control" id="experience_modal" placeholder="Experience">Experience
                               <option value="0">Experience</option>
                               {% for exp in experience_range %}
-                              <option value="{{exp}}">{{exp}} Yrs</option>
+                              <option value="{{exp}} Yr">{{exp}} Yrs</option>
                               {% endfor %}
-                              <option value="16">>15 Yrs</option>
+                              <option value="16 Yr">>15 Yrs</option>
                           </select>
                         </div>
                         <button  onclick="createLeadModal()" id="modal_submit" type="button" class="callback__btn mt-4">request a callback</button>

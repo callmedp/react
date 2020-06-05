@@ -3960,7 +3960,7 @@ a.text-secondary:hover, a.text-secondary:focus {
 .invisible {
   visibility: hidden !important; }
 
-.header-bg1 {
+/*.header-bg1 {
   background: url("mobile-bg.jpg") left top no-repeat, linear-gradient(to right, #70b9f2, #674bc6);
   min-height: 475px;
   background-size: cover; }
@@ -3968,26 +3968,26 @@ a.text-secondary:hover, a.text-secondary:focus {
     .header-bg1 {
       background: url("resume.png") center top no-repeat, linear-gradient(to right, #70b9f2, #674bc6);
       min-height: 516px;
-      background-size: cover; } }
+      background-size: cover; } }*/
 
-.header-bg1-form {
+.header-bg1 {
   background: #674bc6 url("mobile-bg.jpg") left top no-repeat;
   background-size: cover;
   min-height: 490px; }
   @media (min-width: 577px) {
-    .header-bg1-form {
+    .header-bg1 {
       background: #674bc6 url("resumebanner.jpg") center top no-repeat;
       min-height: 540px; } }
 
-.header-bg2-form {
+/*.header-bg2 {
   background: url("mobile-bg2.jpg") left top no-repeat, linear-gradient(to right, #70b9f2, #674bc6);
   min-height: 475px;
   background-size: cover !important; }
   @media (min-width: 577px) {
-    .header-bg2-form {
+    .header-bg2 {
       background: url("linkedin.png") center top no-repeat, linear-gradient(to right, #70b9f2, #674bc6);
       min-height: 525px;
-      background-size: cover !important; } }
+      background-size: cover !important; } }*/
 
 .header-bg2 {
   background: #674bc6 url("mobile-bg2.jpg") left top no-repeat;
