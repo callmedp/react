@@ -32,8 +32,8 @@ class CouponRedeemView(APIView, CartMixin):
         if len(missing_list):
             return Response({"error_message": ', '.join(missing_list)
                              + ' are missing.'if len(missing_list) > 1
-                             else ', '.join(missing_list) + ' is missing.'},
-                            'success': '',
+                             else ', '.join(missing_list) + ' is missing.',
+                             'success': ''},
                             status=status.HTTP_400_BAD_REQUEST)
 
         coupon = Coupon.objects.filter(code=code).first()
