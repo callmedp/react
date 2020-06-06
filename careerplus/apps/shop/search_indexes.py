@@ -1055,7 +1055,9 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
             return section_list
         for section in sections:
             new_dict = {}
-            data_list = [{'icon':data.get_icon_url(),'heading':data.heading,'description':data.descriptions} for data in
+            data_list = [{'icon':data.get_icon_url(),'mobile_icon':data.get_mobile_icon_url() ,'heading':data.heading,\
+                                                                           'description':data.descriptions} for 
+                         data in
                          section.sub_section.all()]
 
             new_dict.update({'image': section.get_image(),'heading':section.name,'data':data_list,

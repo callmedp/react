@@ -65,6 +65,10 @@ def get_upload_path_feature_profile_file(instance, filename):
 def get_upload_path_product_subsection_icon(instance, filename):
     return "section/subsection/product/{filename}".format(filename=get_file_name(filename))
 
+
+def get_mobile_upload_path_product_subsection_icon(instance, filename):
+    return "section/subsection/mobile/product/{filename}".format(filename=get_file_name(filename))
+
 def get_upload_path_product_section_image(instance, filename):
     return "section/product/{filename}".format(filename=get_file_name(filename))
 

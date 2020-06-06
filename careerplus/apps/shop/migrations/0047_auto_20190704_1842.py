@@ -16,46 +16,46 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        # migrations.CreateModel(
-        #     name='JobsLinks',
-        #     fields=[
-        #         ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-        #         ('created_on', models.DateTimeField(auto_now_add=True, null=True)),
-        #         ('last_modified_on', models.DateTimeField(auto_now=True, null=True)),
-        #         ('created', models.DateTimeField(auto_now_add=True)),
-        #         ('modified', models.DateTimeField(auto_now=True, null=True)),
-        #         ('schedule_date', models.DateTimeField(blank=True, null=True, verbose_name='Date')),
-        #         ('company_name', models.CharField(max_length=255)),
-        #         ('location', models.CharField(max_length=255)),
-        #         ('link', models.URLField(max_length=500)),
-        #         ('job_title', models.CharField(max_length=255)),
-        #         ('status', models.IntegerField(choices=[(0, 'Save'), (2, 'Sent')], default=0)),
-        #         ('sent_date', models.DateTimeField(blank=True, null=True, verbose_name='Date')),
-        #         ('created_by', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='shop_jobslinks_created_by', related_query_name='shop_jobslinkss', to=settings.AUTH_USER_MODEL)),
-        #         ('last_modified_by', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='shop_jobslinks_last_modified_by', related_query_name='shop_jobslinkss', to=settings.AUTH_USER_MODEL)),
-        #         ('oi', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='jobs_link', to='order.OrderItem', verbose_name='Order Item')),
-        #     ],
-        # ),
-        # migrations.CreateModel(
-        #     name='ProductUserProfile',
-        #     fields=[
-        #         ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-        #         ('created', models.DateTimeField(auto_now_add=True)),
-        #         ('modified', models.DateTimeField(auto_now=True, null=True)),
-        #         ('contact_number', models.CharField(max_length=128, verbose_name='Contact number')),
-        #         ('desired_industry', models.CharField(blank=True, max_length=255, null=True)),
-        #         ('desired_location', models.CharField(blank=True, max_length=255, null=True)),
-        #         ('desired_position', models.CharField(blank=True, max_length=255, null=True)),
-        #         ('desired_salary', models.CharField(blank=True, max_length=255, null=True)),
-        #         ('current_salary', models.CharField(blank=True, max_length=255, null=True)),
-        #         ('order_item', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='whatsapp_profile_orderitem', to='order.OrderItem', verbose_name='Order Item')),
-        #     ],
-        #     options={
-        #         'abstract': False,
-        #     },
-        # ),
-        # migrations.AlterUniqueTogether(
-        #     name='jobslinks',
-        #     unique_together=set([('oi', 'link')]),
-        # ),
+        migrations.CreateModel(
+            name='JobsLinks',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('created_on', models.DateTimeField(auto_now_add=True, null=True)),
+                ('last_modified_on', models.DateTimeField(auto_now=True, null=True)),
+                ('created', models.DateTimeField(auto_now_add=True)),
+                ('modified', models.DateTimeField(auto_now=True, null=True)),
+                ('schedule_date', models.DateTimeField(blank=True, null=True, verbose_name='Date')),
+                ('company_name', models.CharField(max_length=255)),
+                ('location', models.CharField(max_length=255)),
+                ('link', models.URLField(max_length=500)),
+                ('job_title', models.CharField(max_length=255)),
+                ('status', models.IntegerField(choices=[(0, 'Save'), (2, 'Sent')], default=0)),
+                ('sent_date', models.DateTimeField(blank=True, null=True, verbose_name='Date')),
+                ('created_by', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='shop_jobslinks_created_by', related_query_name='shop_jobslinkss', to=settings.AUTH_USER_MODEL)),
+                ('last_modified_by', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='shop_jobslinks_last_modified_by', related_query_name='shop_jobslinkss', to=settings.AUTH_USER_MODEL)),
+                ('oi', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='jobs_link', to='order.OrderItem', verbose_name='Order Item')),
+            ],
+        ),
+        migrations.CreateModel(
+            name='ProductUserProfile',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('created', models.DateTimeField(auto_now_add=True)),
+                ('modified', models.DateTimeField(auto_now=True, null=True)),
+                ('contact_number', models.CharField(max_length=128, verbose_name='Contact number')),
+                ('desired_industry', models.CharField(blank=True, max_length=255, null=True)),
+                ('desired_location', models.CharField(blank=True, max_length=255, null=True)),
+                ('desired_position', models.CharField(blank=True, max_length=255, null=True)),
+                ('desired_salary', models.CharField(blank=True, max_length=255, null=True)),
+                ('current_salary', models.CharField(blank=True, max_length=255, null=True)),
+                ('order_item', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, related_name='whatsapp_profile_orderitem', to='order.OrderItem', verbose_name='Order Item')),
+            ],
+            options={
+                'abstract': False,
+            },
+        ),
+        migrations.AlterUniqueTogether(
+            name='jobslinks',
+            unique_together=set([('oi', 'link')]),
+        ),
     ]

@@ -52,10 +52,11 @@ from .functions import (
     get_upload_path_for_sample_certicate,
     get_upload_path_product_subsection_icon,
     get_upload_path_product_section_image,
-    get_upload_path_product_offer_icon,)
+    get_upload_path_product_offer_icon,
+    get_mobile_upload_path_product_subsection_icon)
 from .choices import (
     SERVICE_CHOICES, FACULTY_CHOICES,
-    CATEGORY_CHOICES,
+    CATEGORY_CHOICES,                       
     PRODUCT_CHOICES,
     FLOW_CHOICES,
     SUB_FLOW_CHOICES,
@@ -3486,6 +3487,11 @@ class SubSection(AbstractAutoDate):
     icon = models.ImageField(
         _('subsection icon'), upload_to=get_upload_path_product_subsection_icon,
         blank=True, null=True)
+
+    mobile_icon = models.ImageField(
+        _('subsection mobile icon'), upload_to=get_mobile_upload_path_product_subsection_icon,
+        blank=True, null=True)
+
     heading = models.CharField(_('Sub Section heading'),blank=True,default='', max_length=255)
     description = RichTextField(
         verbose_name=_('Sub Section Description'),
@@ -3514,6 +3520,13 @@ class SubSection(AbstractAutoDate):
         if not self.icon:
             return
         return self.icon.url
+
+
+
+    def get_mobile_icon_url(self):
+        if not self.mobile_icon:
+            return
+        return self.mobile_icon.url
     
 
     @property
