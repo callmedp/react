@@ -15,7 +15,6 @@ class CouponRedeemView(APIView, CartMixin):
     permission_classes = ()
     serializer_class = None
 
-
     def post(self, request, *args, **kwargs):
         code = request.data.get('code', None)
         candidate_id = request.data.get('candidate_id', None)
@@ -34,6 +33,7 @@ class CouponRedeemView(APIView, CartMixin):
             return Response({"error_message": ', '.join(missing_list)
                              + ' are missing.'if len(missing_list) > 1
                              else ', '.join(missing_list) + ' is missing.'},
+                            'success': '',
                             status=status.HTTP_400_BAD_REQUEST)
 
         coupon = Coupon.objects.filter(code=code).first()
@@ -43,13 +43,13 @@ class CouponRedeemView(APIView, CartMixin):
                 'Not valid code id {}'.format(code))
             return Response(
                 {'success': '',
-                 'error_message': 'Not valid code id {}'.format(code)
+                 'error_message': 'Not valid code.'
                  }, status=status.HTTP_400_BAD_REQUEST)
 
         if coupon.is_redeemed:
             return Response(
                 {'success': '',
-                 'error_message': 'This code has already been used for candidate id {}'.format(candidate_id)
+                 'error_message': 'Coupon already redeemed!.'
                  }, status=status.HTTP_400_BAD_REQUEST)
         #  TODO commenting it for future use case.
         # if not request.session.get('cart_pk'):
@@ -98,7 +98,7 @@ class CouponRedeemView(APIView, CartMixin):
                 'This code is expired for candidate id {}'.format(candidate_id))
             return Response(
                 {'success': '',
-                 'error_message': 'This code is expired.'
+                 'error_message': 'Coupon has been expired.'
                  }, status=status.HTTP_400_BAD_REQUEST)
 
         if coupon.suspended():
