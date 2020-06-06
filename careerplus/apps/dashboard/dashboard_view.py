@@ -70,7 +70,8 @@ class DashboardView(TemplateView):
         if not empty_inbox:
             inbox_list = DashboardInfo().get_inbox_list(candidate_id=candidate_id, request=self.request)
 
-            pending_resume_items = DashboardInfo().get_pending_resume_items(candidate_id=candidate_id, email=email)
+            pending_resume_items = DashboardInfo().get_pending_resume_items(candidate_id=candidate_id,
+                                                                            email=email).exclude(order__site=2)
             context.update({
                 'inbox_list': inbox_list,
                 'pending_resume_items': pending_resume_items,

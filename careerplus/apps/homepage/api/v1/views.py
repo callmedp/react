@@ -259,7 +259,11 @@ class DashboardNotificationBoxApi(APIView):
                                     pending_resume_items]
             res = ShineCandidateDetail().get_candidate_detail(email=None, shine_id=candidate_id)
             resumes = res['resumes']
-            default_resumes = [resume for resume in resumes if resume['is_default']][0]
+            default_resumes = [resume for resume in resumes if resume and resume['is_default']]
+            if len(default_resumes) :
+                default_resumes = default_resumes[0]
+            else :
+                default_resumes = {}
         except Exception as exc:
             logger.error('Error in getting notifications %s' % exc)
             return Response({'status': 'Failure', 'error': 'Default resume does not exist'},

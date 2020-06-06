@@ -30,7 +30,7 @@ class DashboardInfo(object):
             orderitems = OrderItem.objects.filter(
                 order__status__in=[1, 3],
                 order__candidate_id=candidate_id,
-                order__payment_date__gte=last_payment_date, no_process=False)
+                order__payment_date__gte=last_payment_date, no_process=False).exclude(order__site=2)
             if orderitems.exists():
                 return False
         return True
@@ -44,7 +44,7 @@ class DashboardInfo(object):
         orderitems = OrderItem.objects.filter(
             order__status__in=[1, 3],
             order__candidate_id=candidate_id,
-            order__payment_date__gte=last_payment_date, no_process=False)
+            order__payment_date__gte=last_payment_date, no_process=False).exclude(order__site=2)
 
         if select_type == 1:
             orderitems = orderitems.exclude(oi_status=4)
