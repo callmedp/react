@@ -54,9 +54,9 @@ function* uploadFileUrl(action) {
 }
 
 function* getCandidateScore(action) {
-    const { payload: { candidateId, resolve, reject } } = action;
+    const { payload: { candidateId, resumeId, resolve, reject } } = action;
     try {
-        const result = yield call(Api.getCandidateScore, candidateId)
+        const result = yield call(Api.getCandidateScore, candidateId, resumeId)
         if (result.data['error_message']) {
             return resolve(result)
         }

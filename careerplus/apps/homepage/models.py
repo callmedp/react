@@ -140,9 +140,9 @@ class HomePageOffer(AbstractAutoDate):
     banner_text = models.CharField(
         _('Offer Banner Text'), max_length=100, blank=True, null=True)
     start_time = models.DateTimeField(
-        _('Start Time'), blank=True, null=True)
+        _('Start Time'))
     end_time = models.DateTimeField(
-        _('End Time'), blank=True, null=True)
+        _('End Time'))
     is_active = models.BooleanField(
         _('Active'), default=False)
 

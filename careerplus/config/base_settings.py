@@ -617,6 +617,13 @@ PAYU_INFO = {'merchant_salt':'JN7rUoRe',
             'payment_url':'https://test.payu.in/_payment',
             'web_api_url':'https://test.payu.in/merchant/postservice.php?form=2'}
 
+
+PAYU_INFO1 = {'merchant_salt': 'DiRp9kCs',
+             'merchant_key': 'XzRABA',
+             'payment_url': 'https://test.payu.in/_payment',
+             'web_api_url': 'https://test.payu.in/merchant/postservice.php?form=2', }
+
+
 # Redirect obsolete article to category page.
 REDIRECT_ARTICLE = {
     1: '/talenteconomy/career-help/',
@@ -633,3 +640,25 @@ REDIRECT_ARTICLE_CATEGORY_TE_CATEGORY = {
 
 # default recommend products to be shown
 DEFAULT_RECOMMEND_PRODUCT = [2634, 2787,1,4]
+
+
+RESUME_SHINE_SITE_PROTOCOL = 'http'
+RESUME_SHINE_SITE_DOMAIN = 'resumestage.shine.com'
+RESUME_SHINE_MAIN_DOMAIN = '{}://{}'.format(RESUME_SHINE_SITE_PROTOCOL,RESUME_SHINE_SITE_DOMAIN)
+
+
+PAYU_POST_URL = "https://test.payu.in/_payment"
+
+
+PAYU_INFO1 = {'merchant_salt': 'DiRp9kCs',
+             'merchant_key': 'XzRABA',
+             'payment_url': 'https://test.payu.in/_payment',
+             'web_api_url': 'https://test.payu.in/merchant/postservice.php?form=2', }
+
+
+
+RSHINE_CCAVENUE_ACCESS_CODE = 'AVNZ03HE25BR73ZNRB'
+RSHINE_CCAVENUE_WORKING_KEY = 'FBD9C0D0B8D397CD4E182B9BFF6EA44F'
+
+
+

@@ -12,6 +12,7 @@ STATUS_CHOICES = (
 SITE_CHOICES = (
     (0, "Shinelearning"),
     (1, "Cpcrm"),
+    (2, 'ResumeShine.com')
 )
 
 PAYMENT_MODE = (

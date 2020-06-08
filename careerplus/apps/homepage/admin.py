@@ -30,7 +30,7 @@ class TestimonialAdmin(admin.ModelAdmin):
 
 class HomePageOfferAdmin(admin.ModelAdmin):
     list_display = [
-        'name', 'sticky_text', 'start_time', 'end_time', 'is_active', 'created']
+        'name', 'sticky_text', 'start_time', 'end_time', 'is_active']
     list_filter = ('is_active',)
     search_fields = ('name',)
 

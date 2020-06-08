@@ -12,9 +12,9 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='productuserprofile',
-            name='onboard',
-            field=models.BooleanField(default=False),
-        ),
+        # migrations.AddField(
+        #     model_name='productuserprofile',
+        #     name='onboard',
+        #     field=models.BooleanField(default=False),
+        # ),
     ]

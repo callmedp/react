@@ -787,6 +787,8 @@ class OrderItem(AbstractAutoDate):
         return self.product.day_duration
     @property
     def days_left_oi_product(self):
+        if not self.product:
+            return 
         can_be_paused = self.product.is_pause_service
         duration_days = self.get_duration_days
         
@@ -847,7 +849,7 @@ class OrderItem(AbstractAutoDate):
 
     @property
     def product_name(self):
-        return self.product.name if self.product else ''
+        return self.product.get_name if self.product else ''
 
     @property
     def order_status_text(self):
@@ -933,11 +935,13 @@ class OrderItem(AbstractAutoDate):
         profile = getattr(self, 'whatsapp_profile_orderitem', None)
         if profile and profile.due_date:
             temp_due_date = profile.due_date
+            temp_due_date_extended_by = 0
             holiday_list = GazettedHoliday().get_holiday_list
             while (temp_due_date.weekday() == 6 or temp_due_date.strftime('%d-%m-%Y') in holiday_list):
-                profile.due_date_extended_by += 1
+                temp_due_date_extended_by += 1
                 temp_due_date += relativedelta.relativedelta(days=1)
-            if profile.due_date_extended_by:
+            if temp_due_date_extended_by:
+                profile.due_date_extended_by += temp_due_date_extended_by
                 profile.due_date += relativedelta.relativedelta(days=profile.due_date_extended_by)
                 profile.save()
             return profile.due_date.strftime('%d-%m-%Y')
@@ -1113,8 +1117,11 @@ class OrderItem(AbstractAutoDate):
 
 
     def oi_status_transform(self):
-        val = OI_OPS_TRANSFORMATION_DICT.get(self.product.sub_type_flow, {})\
-            .get(self.oi_status, None)
+        if self.product:
+            val = OI_OPS_TRANSFORMATION_DICT.get(self.product.sub_type_flow, {})\
+                .get(self.oi_status, None)
+        else:
+            val = None
         if val:
             return val
         else:

@@ -32,7 +32,7 @@ class ColumnHeadingViewMixin(object):
 
 class IndexColumnViewMixin(object):
 
-    queryset = models.IndexColumn.objects.all()
+    queryset = models.IndexColumn.objects.select_related('indexer').all()
     serializer_class = serializers.IndexColumnSerializer
     filter_backends = (SearchFilter, OrderingFilter, DjangoFilterBackend)
     filter_fields = ('column', 'indexer')
@@ -44,7 +44,7 @@ class IndexColumnViewMixin(object):
 
 class WidgetViewMixin(object):
 
-    queryset = models.Widget.objects.all()
+    # queryset = models.Widget.objects.all()
     serializer_class = serializers.WidgetSerializer
     filter_backends = (SearchFilter, OrderingFilter, DjangoFilterBackend)
     filter_fields = ('widget_type', 'created_by', 'writer_designation', 'iw', 'is_external', 'is_pop_up', 'is_active')
@@ -57,6 +57,9 @@ class WidgetViewMixin(object):
 # TODO: Will change field format for relations to avoid `__` in url. Ex: <>/?created_by__name=<>&ordering=-page__publish_date
 # Keeping this way for now being.
 # TODO: modify pagination as per requirement further
+
+from django.db.models import Prefetch
+
 class PageViewMixin(object):
 
     queryset = models.Page.objects.all()
@@ -70,8 +73,6 @@ class PageViewMixin(object):
 
 
 class PageWidgetViewMixin(object):
-
-    queryset = models.PageWidget.objects.all()
     serializer_class = serializers.PageWidgetSerializer
     filter_backends = (SearchFilter, OrderingFilter, DjangoFilterBackend)
     filter_fields = ('section', 'page', 'widget', 'ranking')
