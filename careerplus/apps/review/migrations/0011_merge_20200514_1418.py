@@ -6,7 +6,6 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        # ('review', '0010_auto_20200430_1649'),
         ('review', '0010_auto_20200514_1311'),
     ]
 

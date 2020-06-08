@@ -6,9 +6,7 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('order', '0094_merge_20200109_1056'),
-        ('order', '0091_auto_20191218_1522'),
-        ('order', '0093_merge_20191230_1325'),
+        ('order', '0098_merge_20200519_1907'),
     ]
 
     operations = [
