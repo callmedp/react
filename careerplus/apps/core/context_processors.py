@@ -3,6 +3,8 @@ import datetime
 import logging
 from json import loads
 from ast import literal_eval
+import pytz
+from django.utils import timezone
 
 #django imports
 from django.conf import settings
@@ -10,6 +12,9 @@ from django.core.cache import cache
 from django.template.loader import render_to_string
 
 #local imports
+from geolocation.models import Country
+from django.db.models import Q
+from homepage.models import HomePageOffer
 
 #inter app imports
 from cart.mixins import CartMixin
@@ -39,7 +44,8 @@ def js_settings(request):
         vars_text = '<script type=\"text/javascript\">%s;</script>' % vars_text
     return {
         'JS_SETTINGS': vars_text,
-        'CHATBOT_URL': cache.get('CHATBOT_URL','')
+        'CHATBOT_URL': cache.get('CHATBOT_URL',''),
+        
     }
 
 
@@ -69,7 +75,9 @@ def common_context_processor(request):
     except Exception as e:
         logging.getLogger('error_log').error('writer invoice is not reachable %s' % str(e))
         pass
-
+    country_choices = [(m.phone, m.name) for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+    country_choices = sorted(country_choices, key=lambda x: x[0])
+    end_date, sticky_text, banner_text, offer_value, show = get_home_offer_values()
     context.update({
         "SHINE_SITE": settings.SHINE_SITE,
         "SITE_DOMAIN": settings.SITE_DOMAIN,
@@ -104,11 +112,18 @@ def common_context_processor(request):
         "ggn_contact_full": settings.GGN_CONTACT_FULL,
         "ggn_contact": settings.GGN_CONTACT,
         "toll_free_number": settings.TOLL_FREE_NUMBER,
+        "missed_call_number": settings.MISSED_CALL_NUMBER, 
         "IS_MAINTENANCE": settings.IS_MAINTENANCE,
         "MAINTENANCE_MESSAGE": settings.MAINTENANCE_MESSAGE,
         "exoitel_status": cache.get('exoitel_status', False),
         "whatsapp_icon": cache.get('whatsapp_visibility_class', False),
-
+        "sticky_text": sticky_text,
+        "banner_text": banner_text,
+        "offer_value": offer_value,
+        "end_date": end_date,
+        "show": show,
+        "country_choices": country_choices,
+        "offer_home": False
      })
     return context
 
@@ -144,5 +159,25 @@ def get_console_sidebar_badges(request):
             "ops_badges_dict":cache.get("{}{}".format("ops_badges_dict_",request.user.id),{}),
             }
 
+def get_home_offer_values():
+    active_offer = HomePageOffer().get_active_offer()
+    sticky_text = ""
+    banner_text = ""
+    offer_value = ""
+    show = False
+    end_date  = ""
+    fmt = "%m/%d/%Y %H:%M:%S"
+    if active_offer:
+        end_local = active_offer.end_time
+        start_local= active_offer.start_time
+        utc_end = end_local.replace(tzinfo=pytz.UTC)
+        end_date = utc_end.astimezone(timezone.get_current_timezone()).strftime(fmt)
 
-
+        sticky_text = active_offer.sticky_text
+        banner_text = active_offer.banner_text
+        offer_value = active_offer.offer_value
+        if (start_local.strftime(fmt) <= datetime.datetime.now(datetime.timezone.utc).strftime(fmt)):
+            show = True
+        else:
+            show = False
+    return end_date, sticky_text, banner_text, offer_value, show

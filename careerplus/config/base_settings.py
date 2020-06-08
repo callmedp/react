@@ -318,7 +318,7 @@ HTMSL_URL = 'https://alerts.solutionsinfini.com/api/v4/'
 ACCESSKEY = 'Af7fa4f7dacdc996393c18071b57d0a6f'
 
 ########## DOMAIN SETTINGS ######################
-SITE_DOMAIN = 'learning.shine.com'
+SITE_DOMAIN = 'http://127.0.0.1:8000/'
 MOBILE_SITE_DOMAIN = 'mlearning.shine.com'
 SITE_PROTOCOL = 'https'
 MAIN_DOMAIN_PREFIX = '{}://{}'.format(SITE_PROTOCOL, SITE_DOMAIN)  # 'http://learning.shine.com'

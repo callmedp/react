@@ -19,8 +19,11 @@ const getInformation = () => {
     })
 }
 
-const getCandidateScore = (candidateId) => {
-    const url = `resume-score-checker/get-score/?candidate_id=${candidateId}`;
+const getCandidateScore = (candidateId, resumeId) => {
+    let url = `resume-score-checker/get-score/?candidate_id=${candidateId}`;
+    if(resumeId){
+        url += `&resume_id=${resumeId}`;
+    }
     return BaseApiService.get(`${shineSite}/${url}`)
 }
 
@@ -30,6 +33,11 @@ const expertFormSubmit = (data) => {
         'Content-Type': 'application/x-www-form-urlencoded'
     }, false);
 }
+
+const saveDataApi = (data) => {
+    const url = `resume-score-checker/save-data`
+    return BaseApiService.post(`${siteDomain}/api/${url}`, data);
+} 
 
 const checkSessionAvailability = () => {
     const url = 'session/';
@@ -60,5 +68,6 @@ export const Api = {
     getCandidateResume,
     getCandidateScore,
     getInformation,
-    getCartCount
+    getCartCount,
+    saveDataApi
 };

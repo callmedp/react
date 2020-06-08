@@ -37,6 +37,14 @@ function* uploadFileUrl(action) {
         }
         localStorage.setItem('resume_score', JSON.stringify({ ...result.data }))
 
+        result.data["loggedIn"] = localStorage.getItem('userId') ? localStorage.getItem('userId') : "";
+        try{
+            yield call(Api.saveDataApi, result.data);
+        }
+        catch{
+            //do nothing
+        }
+
         yield put({ type: UPDATE_SCORE, payload: result.data });
         return resolve(result)
     } catch (e) {
@@ -46,15 +54,11 @@ function* uploadFileUrl(action) {
 }
 
 function* getCandidateScore(action) {
-    const { payload: { candidateId, resolve, reject } } = action;
+    const { payload: { candidateId, resumeId, resolve, reject } } = action;
     try {
-        const result = yield call(Api.getCandidateScore, candidateId)
+        const result = yield call(Api.getCandidateScore, candidateId, resumeId)
         if (result.data['error_message']) {
-            Swal.fire({
-                icon: 'error',
-                html: result.data.error_message
-            })
-            return reject(result.data)
+            return resolve(result)
         }
         localStorage.setItem('resume_score', JSON.stringify({ ...result.data }))
         localStorage.setItem('file_name', "Imported from shine")
@@ -71,6 +75,7 @@ function* expertFormSubmit(action) {
     try {
         let formData = data;
         formData['lsource'] = 8;
+        formData['campaign'] = 'resumechecker';
 
         const result = yield call(Api.expertFormSubmit, formData);
         return resolve(result)
