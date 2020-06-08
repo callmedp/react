@@ -113,7 +113,7 @@
           </form>
     </div> 
 </div>
-    
+    <br>
     <section class="container-fluid">
         <div class="container">
             <div class="resume">
@@ -539,7 +539,7 @@
         </div>
       </div>
     {% if not pre_register %}
-        <div class="footer-padding-botton" >
+        <div class="footer-padding-botton botton-request-callback" >
             <button onclick="topFunction()" class="sticky-btn d-block d-sm-none" >request a callback</button>
         <div>
     {% endif %}
@@ -641,6 +641,13 @@
                 // instead of a settings object
             ]
         });
+    });
+    $(document).scroll(function(){ 
+       if($(window).scrollTop() === 0) {
+           $(".botton-request-callback").hide();
+       }else{
+           $(".botton-request-callback").show();
+       };
     });
 </script>
 <script>
