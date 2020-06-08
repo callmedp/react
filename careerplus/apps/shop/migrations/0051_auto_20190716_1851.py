@@ -12,24 +12,24 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='productuserprofile',
-            name='approved',
-            field=models.BooleanField(default=False),
-        ),
-        migrations.AddField(
-            model_name='productuserprofile',
-            name='experience',
-            field=models.CharField(blank=True, max_length=50, null=True),
-        ),
-        migrations.AddField(
-            model_name='productuserprofile',
-            name='skills',
-            field=models.CharField(blank=True, max_length=100, null=True),
-        ),
-        migrations.AlterField(
-            model_name='product',
-            name='avg_rating',
-            field=models.DecimalField(decimal_places=2, default=4.5, max_digits=8, verbose_name='Average Rating'),
-        ),
+        # migrations.AddField(
+        #     model_name='productuserprofile',
+        #     name='approved',
+        #     field=models.BooleanField(default=False),
+        # ),
+        # migrations.AddField(
+        #     model_name='productuserprofile',
+        #     name='experience',
+        #     field=models.CharField(blank=True, max_length=50, null=True),
+        # ),
+        # migrations.AddField(
+        #     model_name='productuserprofile',
+        #     name='skills',
+        #     field=models.CharField(blank=True, max_length=100, null=True),
+        # ),
+        # migrations.AlterField(
+        #     model_name='product',
+        #     name='avg_rating',
+        #     field=models.DecimalField(decimal_places=2, default=4.5, max_digits=8, verbose_name='Average Rating'),
+        # ),
     ]

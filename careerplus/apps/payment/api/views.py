@@ -54,7 +54,7 @@ class ZestMoneyFetchEMIPlansApi(APIView) :
 class ResumeShinePayuRequestAPIView(OrderMixin, APIView) :
     authentication_classes = ()
     permission_classes = ()
-    serizlizer_classes = None
+    serializer_class = None
 
     def get(self, request, *args, **kwargs) :
         return_dict = {}
@@ -96,7 +96,7 @@ class ResumeShinePayuRequestAPIView(OrderMixin, APIView) :
 class ResumeShinePayUResponseView(CartMixin, PaymentMixin, APIView) :
     authentication_classes = ()
     permission_classes = ()
-    serizlizer_classes = None
+    serializer_class = None
 
     def post(self, request, *args, **kwargs) :
         payu_data = request.POST.copy()
@@ -148,12 +148,12 @@ class Ccavenue(PaymentMixin, OrderMixin, APIView) :
         res_dict['merchant_id'] = '392'
         res_dict['integration_type'] = 'iframe_normal'
         res_dict['language'] = 'EN'
-        if self.request.flavour == 'mobile' :
-            res_dict['accesscode'] = 'AVNZ03HE25BR73ZNRB'
-            res_dict['workingkey'] =  'FBD9C0D0B8D397CD4E182B9BFF6EA44F'
+        if self.request.flavour == 'mobile':
+            res_dict['accesscode'] = settings.RSHINE_CCAVENUE_ACCESS_CODE
+            res_dict['workingkey'] = settings.RSHINE_CCAVENUE_WORKING_KEY
         else :
-            res_dict['accesscode'] = 'AVNZ03HE25BR73ZNRB'
-            res_dict['workingkey'] = 'FBD9C0D0B8D397CD4E182B9BFF6EA44F'
+            res_dict['accesscode'] = settings.RSHINE_CCAVENUE_ACCESS_CODE
+            res_dict['workingkey'] = settings.RSHINE_CCAVENUE_WORKING_KEY
         res_dict['url'] = settings.CCAVENUE_URL
 
         return res_dict
@@ -232,8 +232,8 @@ class Ccavenue(PaymentMixin, OrderMixin, APIView) :
         order_id = pay_txn.txn
 
         amount = order_obj.total_incl_tax
-        surl = 'http://resumestage.shine.com/api/payment/ccavenue/response/success/'
-        curl = 'http://resumestage.shine.com/api/payment/ccavenue/response/cancel/'
+        surl = '{}/api/payment/ccavenue/response/success/'.format(settings.RESUME_SHINE_MAIN_DOMAIN)
+        curl = '{}/api/payment/ccavenue/response/cancel/'.format(settings.RESUME_SHINE_MAIN_DOMAIN)
 
         p_merchant_id = context_dict['merchant_id']
         p_currency = context_dict['currency']

@@ -15,7 +15,7 @@ urlpatterns = [
     re_path(r'^payu/request/$', views.ResumeShinePayuRequestAPIView.as_view()),
 
     re_path(r'^payu/resume-response/(?P<type>success|cancel|failure)/$',
-            views.ResumeShinePayuRequestAPIView.as_view()),
+            views.ResumeShinePayUResponseView.as_view()),
 
     re_path(r'^ccavenue/response/(?P<pgstatus>success|cancel)/$', csrf_exempt(views.Ccavenue.as_view()),
             name='ccavenue_response'),
