@@ -7,7 +7,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('order', '0096_orderitem_is_resume_candidate_upload'),
-        ('order', '0097_auto_20200505_1324'),
+        # ('order', '0097_auto_20200505_1324'),
     ]
 
     operations = [

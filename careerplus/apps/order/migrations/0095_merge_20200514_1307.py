@@ -7,8 +7,8 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('order', '0094_merge_20200109_1056'),
-        ('order', '0094_merge_20200110_1037'),
-        ('order', '0094_merge_20200117_1258'),
+        # ('order', '0094_merge_20200110_1037'),
+        # ('order', '0094_merge_20200117_1258'),
     ]
 
     operations = [

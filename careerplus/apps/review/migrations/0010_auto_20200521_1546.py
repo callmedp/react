@@ -7,13 +7,13 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('review', '0009_auto_20180816_1716'),
+        # ('review', '0009_auto_20180816_1716'),
     ]
 
     operations = [
-        migrations.AlterField(
-            model_name='detailpagewidget',
-            name='content_type',
-            field=models.ForeignKey(limit_choices_to=models.Q(models.Q(('app_label', 'shop'), ('model', 'Product')), models.Q(('app_label', 'shop'), ('model', 'Category')), models.Q(('app_label', 'blog'), ('model', 'Blog')), _connector='OR'), on_delete=django.db.models.deletion.CASCADE, to='contenttypes.ContentType'),
-        ),
+        # migrations.AlterField(
+        #     model_name='detailpagewidget',
+        #     name='content_type',
+        #     field=models.ForeignKey(limit_choices_to=models.Q(models.Q(('app_label', 'shop'), ('model', 'Product')), models.Q(('app_label', 'shop'), ('model', 'Category')), models.Q(('app_label', 'blog'), ('model', 'Blog')), _connector='OR'), on_delete=django.db.models.deletion.CASCADE, to='contenttypes.ContentType'),
+        # ),
     ]

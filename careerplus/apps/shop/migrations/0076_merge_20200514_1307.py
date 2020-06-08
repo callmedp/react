@@ -6,9 +6,9 @@ from django.db import migrations
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('shop', '0075_merge_20200110_1037'),
-        ('shop', '0075_merge_20200109_1056'),
-        ('shop', '0075_merge_20200117_1258'),
+        # ('shop', '0075_merge_20200110_1037'),
+        # ('shop', '0075_merge_20200109_1056'),
+        # ('shop', '0075_merge_20200117_1258'),
     ]
 
     operations = [
