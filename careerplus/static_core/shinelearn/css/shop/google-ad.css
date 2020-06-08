@@ -3979,6 +3979,12 @@ a.text-secondary:hover, a.text-secondary:focus {
       background: #674bc6 url("resumebanner.jpg") center top no-repeat;
       min-height: 540px; } }
 
+  
+@media (min-width: 1190px) and (max-width: 1400px) {
+    .header-bg1 {
+      background: #674bc6 url("resumebanner.jpg") 85% top no-repeat;
+    min-height: 540px; }}
+
 /*.header-bg2 {
   background: url("mobile-bg2.jpg") left top no-repeat, linear-gradient(to right, #70b9f2, #674bc6);
   min-height: 475px;
@@ -3997,6 +4003,10 @@ a.text-secondary:hover, a.text-secondary:focus {
     .header-bg2 {
       background: #674bc6 url("linkedin_banner.jpg") center top no-repeat;
       min-height: 540px; } }
+@media (min-width: 1190px) and (max-width: 1400px)  {
+.header-bg2 {
+  background: #674bc6 url("linkedin_banner.jpg") 95% top no-repeat;
+min-height: 540px; }}
 
 .header-carousel {
   height: 480px; }
