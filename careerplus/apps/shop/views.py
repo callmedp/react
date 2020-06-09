@@ -1270,8 +1270,9 @@ class GoogleResumeAdView(View):
         country = kwargs.get('country', 'india')
         cat_slug = kwargs.get('cat_slug', 'resume-services')
         pre_register = self.request.GET.get('pre-register', "False")
-        if cat_slug not in cat_slugs and country not in countries:
-            raise 404
+        site_slug = None
+        if cat_slug not in cat_slugs or country not in countries:
+            raise Http404
         if country == "gulf":
             currency = "AED"
             add_on_cost = {"cover_letter":"145","express_delivery":"145","s_express_delivery":"200"}
