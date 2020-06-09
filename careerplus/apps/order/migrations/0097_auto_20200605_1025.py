@@ -18,9 +18,4 @@ class Migration(migrations.Migration):
                 ('holiday_type', models.CharField(blank=True, max_length=25, null=True)),
             ],
         ),
-        migrations.AddField(
-            model_name='orderitem',
-            name='is_resume_candidate_upload',
-            field=models.BooleanField(default=False),
-        ),
     ]

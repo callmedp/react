@@ -10,19 +10,19 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        # migrations.CreateModel(
-        #     name='GazettedHoliday',
-        #     fields=[
-        #         ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-        #         ('holiday_date', models.DateField(unique=True)),
-        #         ('holiday_type', models.CharField(blank=True, max_length=25, null=True)),
-        #     ],
-        # ),
-        # migrations.AddField(
-        #     model_name='orderitem',
-        #     name='is_resume_candidate_upload',
-        #     field=models.BooleanField(default=False),
-        # ),
+        migrations.CreateModel(
+            name='GazettedHoliday',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('holiday_date', models.DateField(unique=True)),
+                ('holiday_type', models.CharField(blank=True, max_length=25, null=True)),
+            ],
+        ),
+        migrations.AddField(
+            model_name='orderitem',
+            name='is_resume_candidate_upload',
+            field=models.BooleanField(default=False),
+        ),
         migrations.AlterField(
             model_name='order',
             name='site',
