@@ -30,12 +30,16 @@ function* fileUpload(action) {
 }
 
 function* expertFormData(action) {
-    const { payload: {values, resolve, reject} } = action;
+    const { payload: {values, resolve, reject,score} } = action;
     try{
         let formData = values; 
         formData['lsource'] = 8;
         formData['campaign'] = 'resumechecker';
         formData['number'] = values.mobile;
+        formData['prd'] = 'Resume Writing Service';
+        formData['path'] = '/resume-score-checker';
+        formData['msg'] = `time_stamp : ${new Date()};\n
+        score : ${JSON.stringify(score)}`   
         
         const response = yield call(Api.expertFormSubmit, formData);
         return resolve(response)

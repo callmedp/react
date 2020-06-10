@@ -71,11 +71,16 @@ function* getCandidateScore(action) {
 }
 
 function* expertFormSubmit(action) {
-    const { payload: { data, resolve, reject } } = action;
+    const { payload: { data, resolve, reject, score } } = action;
+    console.log("score is ",score)
     try {
         let formData = data;
         formData['lsource'] = 8;
         formData['campaign'] = 'resumechecker';
+        formData['prd'] = 'Resume Writing Service';
+        formData['path'] = '/resume-score-checker';
+        formData['msg'] = `time_stamp : ${new Date()};\n
+                            score : ${JSON.stringify(score)}`   
 
         const result = yield call(Api.expertFormSubmit, formData);
         return resolve(result)

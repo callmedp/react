@@ -1,6 +1,6 @@
-import React , { useState } from 'react';
+import React , { useState,useEffect } from 'react';
 import { useForm } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
+import { useDispatch,useSelector } from 'react-redux';
 import * as Actions from '../../../../stores/scorePage/actions/index';
 import './getExpertForm.scss';
 import { COUNTRY_CODES } from '../../../../services/countryCode';
@@ -9,11 +9,20 @@ import { Toast } from '../../../../services/Toast';
 export function Form(hide){
     const { handleSubmit, register, errors, setValue } = useForm()
     const dispatch = useDispatch()
+    const [resume_score,setResume_score ] = useState(JSON.parse(localStorage.getItem('resume_score')))
+    const score_state = useSelector(state => state?.home);
+   
+  
+    useEffect(()=>{
+      if(score_state){
+        setResume_score(score_state)
+      }
+    },[score_state])
     const onSubmit = async (values, event) => {
         try{
             values.name = values.name.trim()
             let response = await new Promise((resolve, reject) => {
-                dispatch(Actions.expertForm({values, resolve, reject}))
+                dispatch(Actions.expertForm({values, resolve, reject,score:resume_score}))
             })
             if (response){
                 hide()
