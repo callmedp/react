@@ -47,7 +47,7 @@ class Wallet(AbstractAutoDate):
         null=True,
         blank=True,
         verbose_name=_("Owner Email"))
-    
+
     class Meta:
         verbose_name = _('Wallet')
         verbose_name_plural = _('Wallets')
@@ -68,7 +68,7 @@ class Wallet(AbstractAutoDate):
                 total += pts.current
         return total
 
-        
+
 class RewardPoint(AbstractAutoDate):
     wallet = models.ForeignKey(
         Wallet,
@@ -98,7 +98,6 @@ class RewardPoint(AbstractAutoDate):
         blank=True,
         null=True,
         editable=False)
-
 
     class Meta:
         verbose_name = _('Reward Point')
@@ -191,7 +190,6 @@ class WalletTransaction(AbstractAutoDate):
         if self.added_by:
             return User.objects.get(id=self.added_by)
 
-
     def get_cashback_details(self):
         response = {}
         response['name'] = self.wallet.owner if self.wallet.owner else self.wallet.owner_email
@@ -199,7 +197,7 @@ class WalletTransaction(AbstractAutoDate):
         response['order_id'] = self.wallet.order.id
         response['total_credits'] = self.point_value
         response['cash_back_date'] = self.created_on
-        # response['validity'] = 
+        # response['validity'] =
 
         # try:
         #     from core.common import PersonalRecommendation
@@ -295,3 +293,23 @@ class ECashTransaction(AbstractAutoDate):
         unique_together = ('ecash', 'transaction')
         verbose_name = _('ECash Transaction')
         verbose_name_plural = _('ECash Transactions')
+
+
+class ProductPoint(AbstractAutoDate):
+
+    order_id = models.ForeignKey(
+        Order,
+        related_name='order',
+        on_delete=models.CASCADE)
+
+    candidate_id = models.CharField(
+        blank=False,
+        null=False
+    )
+    redeem_options = models.CharField(
+        blank=True,
+        null=True
+    )
+    active = models.BooleanField(
+        default=1,
+    )

@@ -68,6 +68,7 @@ FLOW_CHOICES = (
     (15, 'Resume Booster International'),
     (16, 'Assessment and Certifications'),
     (17, 'Resume Builder'),
+    (18, 'Shine Premium'),
 )
 
 SUB_FLOWS = {
@@ -91,6 +92,11 @@ SUB_FLOWS = {
     17: (
         (1700, "Default"),
         (1701, "Subscription")
+    ),
+    18: (
+        (1800, 'One Month'),
+        (1801, 'Three Month'),
+        (1802, 'Six Month')
     )
 }
 
@@ -402,19 +408,19 @@ SUB_HEADING_CHOICES = (
 )
 
 SUB_HEADING_CHOICE_ATTR_MAPPING_DESKTOP = (
-    (1,'class="objective__list" id="expand-list"'),
-    (2,'class="who-should-learn__list d-flex flex-wrap"'),
+    (1, 'class="objective__list" id="expand-list"'),
+    (2, 'class="who-should-learn__list d-flex flex-wrap"'),
 )
 
 SUB_HEADING_CHOICE_ATTR_MAPPING_MOBILE = (
-    (1,'class="objective__list collapse" id="expand-list" aria-expanded="false"'),
-    (2,'class="bullet-custom tick"'),
+    (1, 'class="objective__list collapse" id="expand-list" aria-expanded="false"'),
+    (2, 'class="bullet-custom tick"'),
 )
 
-#also added in choices.py of search to be used in filter tag
+# also added in choices.py of search to be used in filter tag
 PRODUCT_TAG_CHOICES = (
-    (0,'None'),
-    (1,'Bestseller'),
-    (2,'Newly Added')
+    (0, 'None'),
+    (1, 'Bestseller'),
+    (2, 'Newly Added')
 
 )
