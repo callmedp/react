@@ -297,18 +297,20 @@ class ECashTransaction(AbstractAutoDate):
 
 class ProductPoint(AbstractAutoDate):
 
-    order_id = models.ForeignKey(
+    order = models.ForeignKey(
         Order,
-        related_name='order',
-        on_delete=models.CASCADE)
+        related_name='linked_order',
+        on_delete=models.CASCADE,
+        null=True)
 
     candidate_id = models.CharField(
         blank=False,
-        null=False
+        null=False,
+        max_length=50
     )
-    redeem_options = models.CharField(
+    redeem_options = models.TextField(
         blank=True,
-        null=True
+        null=True,
     )
     active = models.BooleanField(
         default=1,
