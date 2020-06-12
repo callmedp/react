@@ -25,6 +25,13 @@ SERVICE_CHOICES = (
     (4, 'Other Services'),
     (5, 'Assesment/Certification'))
 
+SECTION_TYPE_CHOICES = (
+    (1, 'features'),
+    (2, 'why-choose-us'),
+    (3, 'how-it-works'),
+    (4, 'product-banner-widget')
+)
+
 CATEGORY_CHOICES = (
     (0, 'Default'),
     (1, 'Level 1'),

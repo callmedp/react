@@ -78,6 +78,7 @@ class OrderMixin(CartMixin, ProductInformationMixin):
             order.pincode = cart_obj.pincode
             order.state = cart_obj.state
             order.country = cart_obj.country
+            order.site = 2 if cart_obj.site else cart_obj.site
             try:
                 utm = json.loads(cart_obj.utm_params) if cart_obj.utm_params else \
                     self.request.session.get('utm',{})

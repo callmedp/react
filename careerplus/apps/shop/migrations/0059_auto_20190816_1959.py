@@ -12,14 +12,14 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='productuserprofile',
-            name='day_of_week',
-            field=models.PositiveSmallIntegerField(blank=True, choices=[(0, 'Monday'), (1, 'Tuesday'), (2, 'Wednesday'), (3, 'Thursday'), (4, 'Friday'), (5, 'Saturday'), (6, 'Sunday')], null=True),
-        ),
-        migrations.AddField(
-            model_name='productuserprofile',
-            name='due_date',
-            field=models.DateTimeField(blank=True, null=True, verbose_name='Due Date'),
-        ),
+        # migrations.AddField(
+        #     model_name='productuserprofile',
+        #     name='day_of_week',
+        #     field=models.PositiveSmallIntegerField(blank=True, choices=[(0, 'Monday'), (1, 'Tuesday'), (2, 'Wednesday'), (3, 'Thursday'), (4, 'Friday'), (5, 'Saturday'), (6, 'Sunday')], null=True),
+        # ),
+        # migrations.AddField(
+        #     model_name='productuserprofile',
+        #     name='due_date',
+        #     field=models.DateTimeField(blank=True, null=True, verbose_name='Due Date'),
+        # ),
     ]

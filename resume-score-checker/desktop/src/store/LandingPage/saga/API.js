@@ -24,8 +24,11 @@ const uploadFileUrl = (data) => {
     return BaseApiService.post(`${shineSite}/${url}`, data,
         {}, false, true);
 };
-const getCandidateScore = (candidateId) => {
-    const url = `resume-score-checker/get-score/?candidate_id=${candidateId}`;
+const getCandidateScore = (candidateId, resumeId) => {
+    let url = `resume-score-checker/get-score/?candidate_id=${candidateId}`;
+    if(resumeId){
+        url += `&resume_id=${resumeId}`;
+    }
     return BaseApiService.get(`${shineSite}/${url}`)
 }
 const expertFormSubmit = (data) => {

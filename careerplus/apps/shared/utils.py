@@ -372,6 +372,18 @@ class DiscountReportUtil:
 
 
 
+# over come the datetime objects to json
+
+def default(obj):
+    if type(obj) is datetime.date or type(obj) is datetime:
+        return obj.strftime("%d %b, %Y")
+
+def jsondumps(obj):
+    return json.dumps(obj, default=default)
+
+
+
+
     
 
     

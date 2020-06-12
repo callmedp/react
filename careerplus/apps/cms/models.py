@@ -98,6 +98,7 @@ class Widget(AbstractCommonModel):
         widgetDict = dict(WIDGET_CHOICES)
         return widgetDict.get(self.widget_type)
 
+
     def get_widget_data(self):
         data_dict = {}
         for field in self._meta.fields:

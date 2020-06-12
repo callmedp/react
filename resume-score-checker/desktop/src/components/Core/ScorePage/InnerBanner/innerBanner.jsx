@@ -9,17 +9,22 @@ import Loader from '../../../Loader/loader';
 import Swal from 'sweetalert2';
 import { useHistory } from "react-router-dom";
 
+
 const InnerBanner = props => {
 
     const [flag, setFlag] = useState(false);
     const localScore = JSON.parse(localStorage.getItem('resume_score')) ?.total_score
-    const [file_name,setFile_name] = useState(localStorage.getItem('file_name'))
+    const [file_name, setFile_name] = useState(localStorage.getItem('file_name'))
     const dispatch = useDispatch()
     const history = useHistory()
 
+
+
     useEffect(() => {
-        window.scrollTo(0, 0)
+        window.scrollTo(0, 0);
     }, [])
+
+
 
     const fileUpload = async event => {
         dispatch(
@@ -94,7 +99,7 @@ const InnerBanner = props => {
             })
         )
     }
-    
+
     return (
         <div>
             <section className="banner">
@@ -130,7 +135,7 @@ const InnerBanner = props => {
                                     </div>
                                     <div className="banner-score__myresume">
                                         <span className="banner-score__myresume--fileName ">
-                                            {file_name} 
+                                            {file_name}
                                         </span>
 
                                         {/* <a href="/#" className="btn btn-outline-primary btn-round-40 fs-12 py-1">Download</a> */}

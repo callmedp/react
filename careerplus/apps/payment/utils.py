@@ -208,7 +208,7 @@ class ZestMoneyUtil:
         try:
             amount = eval(amount)
         except Exception as e:
-            logging.getLogger('error_log').error('Unable to evaluate amount}'
+            logging.getLogger('error_log').error('Unable to evaluate amount {}'
                                                  .format(amount))
             amount = 0
         headers = self.get_authorization_header()
@@ -259,7 +259,7 @@ class ZestMoneyUtil:
 
         return mapped_response_data
 
-    def create_application_and_fetch_logon_url(self, txn_obj):
+    def create_application_and_fetch_logon_url(self, txn_obj,site=None):
 
         order = txn_obj.order
         headers = self.get_authorization_header()
@@ -272,8 +272,10 @@ class ZestMoneyUtil:
         data.update({
             "OrderId"           : order.id,
             "DeliveryPostCode"  : '122011',
-            "ReturnUrl"         : "{}/payment/zest-money/{}/callback/".format(settings.MAIN_DOMAIN_PREFIX, txn_obj.id),
-            "ApprovedUrl"       : "{}/payment/zest-money/{}/callback/".format(settings.MAIN_DOMAIN_PREFIX, txn_obj.id),
+            "ReturnUrl"         : "{}/payment/zest-money/{}/callback/".format(settings.MAIN_DOMAIN_PREFIX,txn_obj.id) if not site else  '{}://{}/api/payment/zest-money/{}/callback/'.format(settings.RESUME_SHINE_SITE_PROTOCOL, settings.RESUME_SHINE_SITE_DOMAIN, txn_obj.id),
+
+            "ApprovedUrl"       : "{}/payment/zest-money/{}/callback/".format(settings.MAIN_DOMAIN_PREFIX,
+              txn_obj.id) if not site else '{}://{}/api/payment/zest-money/{}/callback/'.format(settings.RESUME_SHINE_SITE_PROTOCOL,settings.RESUME_SHINE_SITE_DOMAIN, txn_obj.id) ,
             "MerchantCustomerId": order.email.lower().strip(),
             "EmailAddress"      : order.email.lower().strip(),
             "FullName"          : order.first_name + order.last_name if
@@ -355,23 +357,33 @@ class PayuPaymentUtil():
             'udf9', 'udf10')
 
 
-    def generate_payu_hash(self,data):
+    def generate_payu_hash(self,data,site=None):
         hash = sha512(b'')
         for key in self.KEYS:
             hash.update(str.encode("%s%s" % (str(data.get(key, '')), '|')))
-        hash.update(str.encode(settings.PAYU_INFO.get('merchant_salt')))
+        if site:
+            hash.update(str.encode(settings.PAYU_INFO1.get('merchant_salt')))
+        else:
+            hash.update(str.encode(settings.PAYU_INFO.get('merchant_salt')))
         return hash.hexdigest().lower()
 
-    def generate_payu_hash_data(self,data, KEYS):
+    def generate_payu_hash_data(self,data, KEYS,site=None):
         hash = sha512(b'')
         for key in KEYS:
             hash.update(str.encode("%s%s" % (str(data.get (key, '')), '|')))
-        hash.update(str.encode(settings.PAYU_INFO.get('merchant_salt')))
+        if site:
+            hash.update(str.encode(settings.PAYU_INFO1.get('merchant_salt')))
+        else:
+            hash.update(str.encode(settings.PAYU_INFO.get('merchant_salt')))
+
         return hash.hexdigest().lower()
 
-    def verify_payu_hash(self,data):
+    def verify_payu_hash(self,data,site=None):
         keys_reversed = tuple (reversed (self.KEYS))
-        hash = sha512 (settings.PAYU_INFO.get('merchant_salt'))
+        if site:
+            hash = sha512 (settings.PAYU_INFO1.get('merchant_salt'))
+        else:
+            hash.update(str.encode(settings.PAYU_INFO.get('merchant_salt')))
         hash.update("%s%s" % ('|', str(data.get('status', ''))))
         for key in keys_reversed:
             hash.update("%s%s" % ('|', str(data.get(key, ''))))
@@ -382,14 +394,15 @@ class PayuPaymentUtil():
             return None
         return "|".join(obj.txn_id for obj in orders)
 
-    def create_payuparams(self,var, command):
+    def create_payuparams(self,var, command,site=None):
         KEYS = ('key', 'command', 'var1')
         data = {}
         data.update({'var1'   : var,
-                     'key'    : settings.PAYU_INFO.get('merchant_key'),
+                     'key'    : settings.PAYU_INFO1.get('merchant_key') if site else settings.PAYU_INFO.get(
+                         'merchant_key'),
                      'command': command
                      })
-        hash_value = self.generate_payu_hash_data(data, KEYS)
+        hash_value = self.generate_payu_hash_data(data, KEYS,site)
         data.update({'hash': hash_value})
         return data
 
@@ -410,7 +423,7 @@ class PayuPaymentUtil():
             return False
 
 
-    def generate_payu_dict(self, txn):
+    def generate_payu_dict(self, txn,site=None):
         order = txn.order
         if not order:
             logging.getLogger('error_log').error('No order found for txn {}'.format(txn))
@@ -447,4 +460,23 @@ class PayuPaymentUtil():
                                                                settings.SITE_DOMAIN),
 
               })
+
+        if site:
+            initial_dict.update({
+                'txnid' : txn.txn,
+                'key' : settings.PAYU_INFO1['merchant_key'],
+                'surl' : "{}://{}/api/payment/payu/response/success/".format(settings.RESUME_SHINE_SITE_PROTOCOL,
+                                                                         settings.RESUME_SHINE_SITE_DOMAIN),
+                'furl' : "{}://{}/api/payment/payu/response/failure/".format(settings.RESUME_SHINE_SITE_PROTOCOL,
+                                                                         settings.RESUME_SHINE_SITE_DOMAIN),
+                'curl' : "{}://{}/api/payment/payu/response/cancel/".format(settings.RESUME_SHINE_SITE_PROTOCOL,
+                                                                        settings.RESUME_SHINE_SITE_DOMAIN),
+                'msurl' : "{}://{}/api/payment/payu/response/success/".format(settings.RESUME_SHINE_SITE_PROTOCOL,
+                                                                          settings.RESUME_SHINE_SITE_DOMAIN),
+                'mfurl' : "{}://{}/api/payment/payu/response/failure/".format(settings.RESUME_SHINE_SITE_PROTOCOL,
+                                                                          settings.RESUME_SHINE_SITE_DOMAIN),
+                'mcurl' : "{}://{}/api/payment/payu/response/cancel/".format(settings.RESUME_SHINE_SITE_PROTOCOL,
+                                                                         settings.RESUME_SHINE_SITE_DOMAIN),
+
+            })
         return initial_dict

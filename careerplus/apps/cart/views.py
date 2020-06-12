@@ -89,7 +89,7 @@ class AddToCartView(View, CartMixin):
             addons = request.POST.getlist('addons[]')
             req_options = request.POST.getlist('req_options[]')
             cv_id = request.POST.get('cv_id')
-            data['status'] = self.updateCart(product, addons, cv_id, cart_type, req_options, is_resume_template)
+            data['status'] = self.updateCart(product, addons, cv_id, cart_type, req_options, is_resume_template, False)
 
             try:
                 cart_obj = Cart.objects.get(pk=cart_pk)

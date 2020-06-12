@@ -3192,24 +3192,24 @@ class ReviewModerateView(UpdateView):
             'messages': alert})
         return context
 
-@method_decorator(permission_required('review.can_change_review_queue', login_url='/console/login/'), name='dispatch')
-class ReviewModerateView(UpdateView):
-    model = Review
-    template_name = 'console/order/review-moderation-update.html'
-    success_url = "/console/queue/review/review-to-moderate/"
-    http_method_names = [u'get', u'post']
-    form_class = ReviewUpdateForm
-
-    def get(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        return super(self.__class__, self).get(request, args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        context = super(self.__class__, self).get_context_data(**kwargs)
-        alert = messages.get_messages(self.request)
-        context.update({
-            'messages': alert})
-        return context
+# @method_decorator(permission_required('review.can_change_review_queue', login_url='/console/login/'), name='dispatch')
+# class ReviewModerateView(UpdateView):
+#     model = Review
+#     template_name = 'console/order/review-moderation-update.html'
+#     success_url = "/console/queue/review/review-to-moderate/"
+#     http_method_names = [u'get', u'post']
+#     form_class = ReviewUpdateForm
+#
+#     def get(self, request, *args, **kwargs):
+#         self.object = self.get_object()
+#         return super(self.__class__, self).get(request, args, **kwargs)
+#
+#     def get_context_data(self, **kwargs):
+#         context = super(self.__class__, self).get_context_data(**kwargs)
+#         alert = messages.get_messages(self.request)
+#         context.update({
+#             'messages': alert})
+#         return context
 
 
 @Decorate(stop_browser_cache())
