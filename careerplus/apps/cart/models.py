@@ -10,7 +10,7 @@ from order.models import Order
 from geolocation.models import Country, CURRENCY_SYMBOL
 
 from .managers import OpenBasketManager, SavedBasketManager
-from .choices import STATUS_CHOICES
+from .choices import STATUS_CHOICES, SITE_STATUS
 
 
 class Cart(AbstractAutoDate):
@@ -34,7 +34,9 @@ class Cart(AbstractAutoDate):
         'coupon.Coupon',
         on_delete=models.SET_NULL,
         verbose_name=_("Coupon"), null=True,)
-
+    site = models.PositiveSmallIntegerField(
+        _("Site Status"),
+        default=0, choices=SITE_STATUS)
     is_submitted = models.BooleanField(default=False)
     date_merged = models.DateTimeField(
         _("Date merged"), null=True, blank=True)
@@ -65,15 +67,16 @@ class Cart(AbstractAutoDate):
 
     state = models.CharField(max_length=255, null=True, blank=True)
 
-    country = models.ForeignKey(Country, null=True, blank=True,on_delete=models.CASCADE)
+    country = models.ForeignKey(
+        Country, null=True, blank=True, on_delete=models.CASCADE)
 
-    shipping_done = models.BooleanField(default=False)  #shipping process
+    shipping_done = models.BooleanField(default=False)  # shipping process
     payment_page = models.BooleanField(default=False)
     # summary_done = models.BooleanField(default=False)  #summary process
     lead_archive = models.BooleanField(default=False)
     lead_created = models.BooleanField(default=False)
 
-    #utm parameters
+    # utm parameters
     utm_params = models.TextField(null=True, blank=True)
 
     class Meta:
@@ -89,7 +92,7 @@ class Cart(AbstractAutoDate):
         super(Cart, self).__init__(*args, **kwargs)
 
         self._lineitems = None
-    
+
     def __str__(self):
         return _(
             u"%(status)s cart (owner: %(owner)s)") \
@@ -108,14 +111,16 @@ class Cart(AbstractAutoDate):
 class LineItem(AbstractAutoDate):
     cart = models.ForeignKey(
         Cart, related_name='lineitems',
-        verbose_name=_("Cart"),on_delete=models.CASCADE)
-    parent = models.ForeignKey('self', null=True, blank=True,on_delete=models.CASCADE)
+        verbose_name=_("Cart"), on_delete=models.CASCADE)
+    parent = models.ForeignKey(
+        'self', null=True, blank=True, on_delete=models.CASCADE)
     type_item = models.PositiveSmallIntegerField(default=0)
     # unique slug for line item delete
-    reference = models.CharField(max_length=255, unique=True, null=True, blank=True)
+    reference = models.CharField(
+        max_length=255, unique=True, null=True, blank=True)
     product = models.ForeignKey(
         'shop.Product', related_name='cart_lineitems',
-        verbose_name=_("Product"),on_delete=models.CASCADE)
+        verbose_name=_("Product"), on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(_('Quantity'), default=1)
     delivery_service = models.ForeignKey(
         'shop.DeliveryService',
@@ -132,11 +137,12 @@ class LineItem(AbstractAutoDate):
 
     no_process = models.BooleanField(default=False)
     send_email = models.BooleanField(default=False)
-    parent_deleted = models.BooleanField(default=False)  # True for variation and False for Addon
+    # True for variation and False for Addon
+    parent_deleted = models.BooleanField(default=False)
 
     def __init__(self, *args, **kwargs):
         super(LineItem, self).__init__(*args, **kwargs)
-        
+
     class Meta:
         app_label = 'cart'
         ordering = ['modified', 'pk']
@@ -148,8 +154,8 @@ class LineItem(AbstractAutoDate):
         return _(
             u"Cart #%(cart_id)d, Product #%(product_id)d, lineid"
             u" %(line_id)d") % {'cart_id': self.cart.pk,
-                                 'product_id': self.product.pk,
-                                 'line_id': self.pk}
+                                'product_id': self.product.pk,
+                                'line_id': self.pk}
 
     def available(self):
         flag = False
@@ -226,17 +232,18 @@ class LineItem(AbstractAutoDate):
 
         return round(price, 0)
 
+
 SUBSCRIPTION_STATUS = (
     (-1, "Invalid"),
     (0, "Failed"),
     (1, "Processed"),
     (2, "Expired"),
-    )
+)
 
 
 class Subscription(AbstractAutoDate):
     candidateid = models.CharField(max_length=255, null=True, blank=True)
-    order = models.ForeignKey(Order,on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
     status = models.SmallIntegerField(
         choices=SUBSCRIPTION_STATUS, default=-1)
     remark = models.CharField(max_length=255, null=True, blank=True)

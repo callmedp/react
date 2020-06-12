@@ -36,7 +36,7 @@ const Navbar = props => {
                 }
             }
             catch (e) {
-
+                    
             }
         }
 

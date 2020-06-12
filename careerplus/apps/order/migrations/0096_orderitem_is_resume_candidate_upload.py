@@ -6,13 +6,13 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('order', '0095_merge_20200514_1307'),
+        ('order', '0095_merge_20200420_1106'),
     ]
 
     operations = [
-        migrations.AddField(
-            model_name='orderitem',
-            name='is_resume_candidate_upload',
-            field=models.BooleanField(default=False),
-        ),
+        # migrations.AddField(
+        #     model_name='orderitem',
+        #     name='is_resume_candidate_upload',
+        #     field=models.BooleanField(default=False),
+        # ),
     ]

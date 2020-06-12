@@ -9,12 +9,12 @@ import GetExperts from './GetExperts/getExperts';
 export default function ScorePage() {
     return (
         <div>
-        <Navbar></Navbar>
-        <InnerBanner></InnerBanner>
-        <ResumeReview></ResumeReview>
-        <ImproveScore></ImproveScore>
-        <GetExperts></GetExperts>
-        <Footer></Footer>
+            <Navbar></Navbar>
+            <InnerBanner></InnerBanner>
+            <ResumeReview></ResumeReview>
+            <ImproveScore></ImproveScore>
+            <GetExperts></GetExperts>
+            <Footer></Footer>
         </div>
     );
 }

@@ -56,10 +56,11 @@ def update_featured_oi():
             if 1 in badge_data.get('ec') or 4 in badge_data.get('ec'):
                 oi_op = OrderItemOperation.objects.filter(
                     oi=oi.id, oi_status__in=[5,23,31], last_oi_status=6).first()
-                oi.start_date = oi_op.created
-                oi.end_date = oi_op.created + \
-                    timedelta(days=oi.product.day_duration)
-                oi.save()
+                if oi_op:
+                    oi.start_date = oi_op.created
+                    oi.end_date = oi_op.created + \
+                        timedelta(days=oi.product.day_duration)
+                    oi.save()
     return
 
 

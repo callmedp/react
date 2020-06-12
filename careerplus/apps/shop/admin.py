@@ -9,7 +9,7 @@ from . import models
 
 # inter-app imports
 from core.api_mixin import ShineProfileDataUpdate
-from console.shop_form import ProductJobTitleChangeForm
+from console.shop_form import ProductJobTitleChangeForm,SectionChangeForm,OfferChangeForm
 
 #  third party imports
 
@@ -169,12 +169,22 @@ class SkillAdmin(admin.ModelAdmin):
 class PracticeTestInfoAdmin(admin.ModelAdmin):
     list_display = ['email', 'mobile_no', 'name', 'order_item', 'is_boarded']
 
-            
+
 class ProductJobTitleAdmin(admin.ModelAdmin):
     form = ProductJobTitleChangeForm
-    
+
+
+class Section(admin.ModelAdmin):
+    form = SectionChangeForm
+
+
+class Offer(admin.ModelAdmin):
+    form = OfferChangeForm
 
 admin.site.register(models.Category, CategoryAdmin)
+admin.site.register(models.Offer,Offer)
+admin.site.register(models.Section,Section)
+admin.site.register(models.SubSection)
 admin.site.register(models.Attribute, AttributeAdmin)
 admin.site.register(models.Keyword)
 admin.site.register(models.ProductJobTitle,ProductJobTitleAdmin)

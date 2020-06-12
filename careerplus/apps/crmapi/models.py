@@ -5,6 +5,11 @@ from geolocation.models import Country
 
 UNIVERSITY_LEAD_SOURCE = 28
 
+SITE_CHOICES = (
+    (0, "Shinelearning"),
+    (1, "ResumeShine.com"),
+)
+
 
 LEAD_LOCATION = (
     (0, 'Default'),
@@ -63,6 +68,7 @@ class UserQuries(AbstractAutoDate):
         Country, null=True,on_delete=models.CASCADE)
     phn_number = models.CharField(
         max_length=50)
+    site = models.PositiveSmallIntegerField(default=0, choices=SITE_CHOICES)
     message = models.TextField()
     lead_created = models.BooleanField(default=False)
     lead_source = models.SmallIntegerField(choices=LEAD_LOCATION, default=0)

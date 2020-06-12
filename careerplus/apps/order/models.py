@@ -787,6 +787,8 @@ class OrderItem(AbstractAutoDate):
         return self.product.day_duration
     @property
     def days_left_oi_product(self):
+        if not self.product:
+            return 
         can_be_paused = self.product.is_pause_service
         duration_days = self.get_duration_days
         
@@ -847,7 +849,7 @@ class OrderItem(AbstractAutoDate):
 
     @property
     def product_name(self):
-        return self.product.name if self.product else ''
+        return self.product.get_name if self.product else ''
 
     @property
     def order_status_text(self):
@@ -1115,8 +1117,11 @@ class OrderItem(AbstractAutoDate):
 
 
     def oi_status_transform(self):
-        val = OI_OPS_TRANSFORMATION_DICT.get(self.product.sub_type_flow, {})\
-            .get(self.oi_status, None)
+        if self.product:
+            val = OI_OPS_TRANSFORMATION_DICT.get(self.product.sub_type_flow, {})\
+                .get(self.oi_status, None)
+        else:
+            val = None
         if val:
             return val
         else:

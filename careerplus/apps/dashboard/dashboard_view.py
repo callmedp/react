@@ -1,5 +1,4 @@
 import json, ast
-import mimetypes
 import logging
 import time
 import os
@@ -7,6 +6,9 @@ import mimetypes
 from random import random
 from dateutil.relativedelta import relativedelta
 from wsgiref.util import FileWrapper
+from django.utils.decorators import method_decorator
+from django.views.decorators.csrf import csrf_exempt
+
 
 from django.http import (
     HttpResponse,
@@ -36,7 +38,7 @@ from core.api_mixin import ShineCandidateDetail
 from core.mixins import InvoiceGenerate
 from console.decorators import Decorate, stop_browser_cache
 from search.helpers import get_recommendations
-from .dashboard_mixin import DashboardInfo
+from .dashboard_mixin import DashboardInfo, DashboardCancelOrderMixin
 from linkedin.autologin import AutoLogin
 from shop.models import Product
 from core.library.gcloud.custom_cloud_storage import \
@@ -68,7 +70,8 @@ class DashboardView(TemplateView):
         if not empty_inbox:
             inbox_list = DashboardInfo().get_inbox_list(candidate_id=candidate_id, request=self.request)
 
-            pending_resume_items = DashboardInfo().get_pending_resume_items(candidate_id=candidate_id, email=email)
+            pending_resume_items = DashboardInfo().get_pending_resume_items(candidate_id=candidate_id,
+                                                                            email=email).exclude(order__site=2)
             context.update({
                 'inbox_list': inbox_list,
                 'pending_resume_items': pending_resume_items,
@@ -216,6 +219,9 @@ class DashboardDetailView(TemplateView):
         context = super(DashboardDetailView, self).get_context_data(**kwargs)
         if self.oi and self.oi.order.candidate_id == self.candidate_id and self.oi.order.status in [1, 3]:
             ops = []
+
+            if not self.oi.product:
+                return context
 
             if self.oi.product.type_flow in [1, 12, 13]:
                 ops = self.oi.orderitemoperation_set.filter(oi_status__in=[2, 5, 24, 26, 27, 161, 162, 163, 164, 181])
@@ -427,14 +433,27 @@ class DashboardFeedbackView(TemplateView):
             return HttpResponseForbidden()
 
 
-class DashboardRejectService(View):
+
+class DashboardRejectService(APIView):
+    authentication_classes = ()
+    permission_classes = ()
+    
 
     def post(self, request, *args, **kwargs):
         candidate_id = request.session.get('candidate_id', None)
+        if not candidate_id:
+            candidate_id = request.data.get('candidate_id', None)
+
         oi_pk = request.POST.get('oi_pk', None)
+        if not oi_pk:
+            oi_pk = request.data.get('oi_pk', None)
+
         comment = request.POST.get('comment', '').strip()
+        if not comment:
+            comment = request.data.get('comment', '').strip()
+
         reject_file = request.FILES.get('reject_file', '')
-        if request.is_ajax() and candidate_id and oi_pk and (comment or reject_file):
+        if candidate_id and oi_pk and (comment or reject_file):
             data = {
                 "display_message": '',
             }
@@ -506,16 +525,27 @@ class DashboardAcceptService(APIView):
 
     def post(self, request, *args, **kwargs):
         candidate_id = request.session.get('candidate_id', None)
+        if not candidate_id:
+            candidate_id = request.data.get('candidate_id', None)
         oi_pk = request.POST.get('oi_pk', None)
+
+        if not oi_pk:
+            oi_pk = request.data.get('oi_pk', None)
+
         if not candidate_id and oi_pk:
-            return HttpResponseBadRequest(json.dumps({'result':'Candidate or order_item pk not available'}), content_type="application/json")
+            return HttpResponseBadRequest(json.dumps({'result': 'Candidate or order_item pk not available'}),
+                                          content_type="application/json")
         data = {
             "display_message": '',
         }
         oi = OrderItem.objects.filter(id=oi_pk).first()
 
-        if not oi and (not oi.order.candidate_id == candidate_id and not oi.order.status in [1, 3]) and oi.oi_status in [24, 46]:
-            return HttpResponseBadRequest(json.dumps({'result':'Valid Actions Only'}), content_type="application/json")
+        if not oi or oi.order.candidate_id != candidate_id or oi.order.status not in [1,3] or oi.oi_status not in [24,\
+                46]:
+
+        # if not oi and (not oi.order.candidate_id == candidate_id and oi.order.status not in [1, 3]) and\
+        #         oi.oi_status in [24, 46]:
+            return HttpResponseBadRequest(json.dumps({'result': 'Valid Actions Only'}), content_type="application/json")
 
         last_oi_status = oi.oi_status
         oi.oi_status = 4
@@ -638,7 +668,8 @@ class DashboardNotificationBoxView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(DashboardNotificationBoxView, self).get_context_data(**kwargs)
         email = self.request.session.get('email', None)
-        pending_resume_items = DashboardInfo().get_pending_resume_items(candidate_id=self.candidate_id, email=email)
+        pending_resume_items = DashboardInfo().get_pending_resume_items(candidate_id=self.candidate_id,
+                                                                        email=email).exclude(order__site=2)
         context.update({
             "pending_resume_items": pending_resume_items,
         })
@@ -855,51 +886,7 @@ class DashboardCancelOrderView(View):
         try:
             order_pk = request.POST.get('order_pk', None)
             order = Order.objects.get(pk=order_pk)
-            if candidate_id and order.status == 0 and (order.email == email or order.candidate_id == candidate_id):
-                wal_obj = Wallet.objects.get(owner=candidate_id)
-                wallet_txn = order.wallettxn.filter(txn_type=2, order=order).first()
-                if wallet_txn:
-                    total_refund = 0
-                    used_points = wallet_txn.usedpoint.all().order_by('point__pk')
-                    for pts in used_points:
-                        total_refund += pts.point_value
-                    expiry = timezone.now() + relativedelta(days=10)
-
-                    point_obj = wal_obj.point.create(
-                        original=total_refund,
-                        current=total_refund,
-                        expiry=expiry,
-                        status=1,
-                        txn=order.number
-                    )
-
-                    wallet_txn_des = "Refunded"
-                    wal_txn = wal_obj.wallettxn.create(
-                        txn_type=5,
-                        status=1,
-                        order=order,
-                        txn=order.number,
-                        point_value=total_refund,
-                        notes=wallet_txn_des
-                    )
-
-                    point_obj.wallettxn.create(
-                        transaction=wal_txn,
-                        point_value=total_refund,
-                        txn_type=5
-                    )
-
-                    current_value = wal_obj.get_current_amount()
-                    wal_txn.current_value = current_value
-                    wal_txn.save()
-
-                for orderitem in order.orderitems.all():
-                    orderitem.last_oi_status = orderitem.oi_status
-                    orderitem.oi_status = OI_CANCELLED
-                    orderitem.save()
-
-                order.status = CANCELLED
-                order.save()
+            DashboardCancelOrderMixin().perform_cancellation(candidate_id=candidate_id, email=email, order=order)
 
         except Exception as e:
             logging.getLogger('error_log').error("%s" % str(e))
