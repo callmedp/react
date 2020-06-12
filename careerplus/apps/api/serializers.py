@@ -181,7 +181,7 @@ class OrderItemDetailSerializer(ModelSerializer):
         ]
 
     def get_parentprdid(self, obj):
-        return obj.product.id
+        return obj.product.id   if obj.product else ''
 
     def get_parent1(self, obj):
         try:

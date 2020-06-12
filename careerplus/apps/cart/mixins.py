@@ -13,8 +13,10 @@ from shop.models import Product, ProductClass
 from partner.models import Vendor
 from core.mixins import InvoiceGenerate
 from geolocation.models import Country
-
 from .models import Cart, LineItem
+from cart.api.core.serializers import LineItemSerializer
+from shop.api.v1.serializers import DeliveryServiceSerializer
+
 
 from django.db.models import Q
 
@@ -22,14 +24,19 @@ from django.db.models import Q
 class CartMixin(object):
     def mergeCart(self, fromcart, tocart):
         try:
-            from_parent_lines = fromcart.lineitems.filter(parent=None).select_related('product')
-            to_parent_pks = tocart.lineitems.filter(parent=None).values_list('product__pk', flat=True)
+            from_parent_lines = fromcart.lineitems.filter(
+                parent=None).select_related('product')
+            to_parent_pks = tocart.lineitems.filter(
+                parent=None).values_list('product__pk', flat=True)
 
             for main_p in from_parent_lines:
                 if main_p.product.pk in to_parent_pks:
-                    parent_product = tocart.lineitems.get(product=main_p.product)
-                    to_child_pks = tocart.lineitems.filter(parent=parent_product).values_list('product__pk', flat=True)
-                    from_child_lines = fromcart.lineitems.filter(parent=main_p).select_related('product')
+                    parent_product = tocart.lineitems.get(
+                        product=main_p.product)
+                    to_child_pks = tocart.lineitems.filter(
+                        parent=parent_product).values_list('product__pk', flat=True)
+                    from_child_lines = fromcart.lineitems.filter(
+                        parent=main_p).select_related('product')
 
                     for child in from_child_lines:
                         if child.product.pk not in to_child_pks:
@@ -39,14 +46,18 @@ class CartMixin(object):
                             li.save()
 
                 else:
-                    parent_product = tocart.lineitems.create(product=main_p.product)
-                    parent_product.reference = str(tocart.pk) + '_' + str(parent_product.pk)
+                    parent_product = tocart.lineitems.create(
+                        product=main_p.product)
+                    parent_product.reference = str(
+                        tocart.pk) + '_' + str(parent_product.pk)
                     parent_product.price_excl_tax = main_p.product.get_price()
                     parent_product.save()
-                    from_child_lines = fromcart.lineitems.filter(parent=main_p).select_related('product')
+                    from_child_lines = fromcart.lineitems.filter(
+                        parent=main_p).select_related('product')
 
                     for child in from_child_lines:
-                        li = tocart.lineitems.create(parent=parent_product, product=child.product)
+                        li = tocart.lineitems.create(
+                            parent=parent_product, product=child.product)
                         li.reference = str(tocart.pk) + '_' + str(li.pk)
                         li.price_excl_tax = child.product.get_price()
                         li.save()
@@ -58,34 +69,71 @@ class CartMixin(object):
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
 
-    def updateCart(self,product,addons,cv_id,add_type,req_options,is_resume_template):
+    def updateCart(self, product, addons, cv_id, add_type, req_options, is_resume_template, resume_shine_cart):
         flag = -1
         try:
             flag = 1
-            candidate_id = self.request.session.get('candidate_id')
-            email = self.request.session.get('email')
-            mobile = self.request.session.get('mobile_no')
-            country_code = self.request.session.get('country_code')
+            if resume_shine_cart:
+                candidate_id = self.request.data.get('candidate_id', None)
+                email = self.request.data.get('email', None)
+                mobile = self.request.data.get('mobile_no', None)
+                country_code = self.request.data.get('country_code', None)
+                session_id = self.request.data.get('session_id', None)
+                first_name = self.request.data.get('first_name', None)
+
+            else:
+                candidate_id = self.request.session.get('candidate_id')
+                email = self.request.session.get('email')
+                mobile = self.request.session.get('mobile_no')
+                country_code = self.request.session.get('country_code')
 
             if add_type == "cart":
-                self.getCartObject()
-                cart_pk = self.request.session.get('cart_pk')
-                session_id = self.request.session.session_key
+                cart_obj = self.getCartObject()
+                cart_pk = cart_obj.pk if cart_obj else None
+                if not resume_shine_cart:
+                    cart_pk = self.request.session.get('cart_pk')
+                    session_id = self.request.session.session_key
 
                 if cart_pk:
                     cart_obj = Cart.objects.get(pk=cart_pk)
+                elif candidate_id and resume_shine_cart:
+                    cart_obj = Cart.objects.create(
+                        owner_id=candidate_id, session_id=session_id, status=2,
+                        site=1)
                 elif candidate_id:
-                    cart_obj = Cart.objects.create(owner_id=candidate_id, session_id=session_id, status=2)
+                    cart_obj = Cart.objects.create(
+                        owner_id=candidate_id, session_id=session_id, status=2,
+                        site=0)
+
+                elif session_id and resume_shine_cart:
+                    cart_obj = Cart.objects.create(
+                        session_id=session_id, status=0, site=1)
                 elif session_id:
-                    cart_obj = Cart.objects.create(session_id=session_id, status=0)
+                    cart_obj = Cart.objects.create(
+                        session_id=session_id, status=0, site=0)
+
+            # Todo skip  as understanding the new item to cart addition
             elif add_type == "express":
-                if not self.request.session.session_key:
+                if not self.request.session.session_key and \
+                        not resume_shine_cart:
                     self.request.session.create()
-                session_id = self.request.session.session_key
-                if candidate_id:
-                    cart_obj = Cart.objects.create(owner_id=candidate_id, session_id=session_id, status=3)
+                if not session_id and not resume_shine_cart:
+                    session_id = self.request.session.session_key
+
+                if candidate_id and resume_shine_cart:
+                    cart_obj = Cart.objects.create(
+                        owner_id=candidate_id, session_id=session_id, status=3,
+                        site=1)
+                elif candidate_id:
+                    cart_obj = Cart.objects.create(
+                        owner_id=candidate_id, session_id=session_id, status=3,
+                        site=0)
+                elif session_id and resume_shine_cart:
+                    cart_obj = Cart.objects.create(
+                        session_id=session_id, status=3, site=1)
                 elif session_id:
-                    cart_obj = Cart.objects.create(session_id=session_id, status=3)
+                    cart_obj = Cart.objects.create(
+                        session_id=session_id, status=3, site=0)
 
             if cart_obj:
                 if email and not cart_obj.owner_email:
@@ -94,16 +142,24 @@ class CartMixin(object):
                         cart_obj.email = email
                     cart_obj.save()
 
-                if self.request.session.get('first_name') and not cart_obj.first_name:
-                    cart_obj.first_name = self.request.session.get('first_name',None)
+                if self.request.session.get('first_name') and not cart_obj.first_name and not resume_shine_cart:
+                    cart_obj.first_name = self.request.session.get(
+                        'first_name', None)
+                    cart_obj.save()
+
+                if resume_shine_cart and first_name:
+                    cart_obj.first_name = first_name
                     cart_obj.save()
 
                 if country_code and not cart_obj.country_code:
                     try:
-                        country_obj = Country.objects.get(phone=country_code, active=True)
+                        country_obj = Country.objects.get(
+                            phone=country_code, active=True)
                     except Exception as e:
-                        logging.getLogger('error_log').error('unable to get country object%s' % str(e))
-                        country_obj = Country.objects.get(phone='91', active=True)
+                        logging.getLogger('error_log').error(
+                            'unable to get country object%s' % str(e))
+                        country_obj = Country.objects.get(
+                            phone='91', active=True)
 
                     cart_obj.country_code = country_obj.phone
                     cart_obj.save()
@@ -126,12 +182,16 @@ class CartMixin(object):
                         #     cv_prod = Product.objects.get(id=cv_id)
                         # else:
                         cv_prod = Product.objects.get(id=cv_id, active=True)
-                        parent = cart_obj.lineitems.create(product=product, no_process=True)
-                        parent.reference = str(cart_obj.pk) + '_' + str(parent.pk)
+                        parent = cart_obj.lineitems.create(
+                            product=product, no_process=True)
+                        parent.reference = str(
+                            cart_obj.pk) + '_' + str(parent.pk)
                         parent.price_excl_tax = product.get_price()
                         parent.save()
-                        child = cart_obj.lineitems.create(product=cv_prod, parent=parent)
-                        child.reference = str(cart_obj.pk) + '_' + str(child.pk)
+                        child = cart_obj.lineitems.create(
+                            product=cv_prod, parent=parent)
+                        child.reference = str(
+                            cart_obj.pk) + '_' + str(child.pk)
                         child.price_excl_tax = cv_prod.get_price()
                         child.parent_deleted = True
                         child.save()
@@ -142,15 +202,18 @@ class CartMixin(object):
                         addons = Product.objects.filter(id__in=addons)
                         for child in addons:
                             if child in child_products:
-                                li = LineItem.objects.create(cart=cart_obj, parent=parent, product=child)
-                                li.reference = str(cart_obj.pk) + '_' + str(li.pk)
+                                li = LineItem.objects.create(
+                                    cart=cart_obj, parent=parent, product=child)
+                                li.reference = str(
+                                    cart_obj.pk) + '_' + str(li.pk)
                                 li.price_excl_tax = child.get_price()
                                 li.save()
                     except Exception as e:
                         logging.getLogger('error_log').error(str(e))
                 else:
                     # standalone/Combo/coutry-specific
-                    parent = LineItem.objects.create(cart=cart_obj, product=product)
+                    parent = LineItem.objects.create(
+                        cart=cart_obj, product=product)
                     parent.reference = str(cart_obj.pk) + '_' + str(parent.pk)
                     parent.price_excl_tax = product.get_price()
                     parent.save()
@@ -159,7 +222,8 @@ class CartMixin(object):
                     addons = Product.objects.filter(id__in=addons)
                     for child in addons:
                         if child in child_products:
-                            li = LineItem.objects.create(cart=cart_obj, parent=parent, product=child)
+                            li = LineItem.objects.create(
+                                cart=cart_obj, parent=parent, product=child)
                             li.reference = str(cart_obj.pk) + '_' + str(li.pk)
                             li.price_excl_tax = child.get_price()
                             li.save()
@@ -169,45 +233,81 @@ class CartMixin(object):
                         parent.no_process = True
                         parent.save()
                         for prd in req_products:
-                            li = LineItem.objects.create(cart=cart_obj, parent=parent, product=prd)
+                            li = LineItem.objects.create(
+                                cart=cart_obj, parent=parent, product=prd)
                             li.reference = str(cart_obj.pk) + '_' + str(li.pk)
                             li.price_excl_tax = prd.get_price()
                             li.parent_deleted = True
                             li.save()
 
-                self.request.session.update({
-                    "cart_pk": cart_obj.pk,
-                    "checkout_type": add_type,
-                })
+                if not resume_shine_cart:
+                    self.request.session.update({
+                        "cart_pk": cart_obj.pk,
+                        "checkout_type": add_type,
+                    })
 
-                if add_type == "cart":
+                if add_type == "cart" and not resume_shine_cart:
                     self.request.session.update({
                         "cart_count_pk": cart_obj.pk,
                     })
-
+            if resume_shine_cart:
+                return flag, cart_obj.pk
             return flag
 
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
+        if resume_shine_cart:
+            return flag, None
         return flag
 
     def getCartObject(self, request: object = None):
+        #token utm candidate id candid email,
         try:
             cart_obj = None
             if not request:
                 request = self.request
-            candidate_id = request.session.get('candidate_id')
-            if not request.session.session_key:
-                request.session.create()
-            sessionid = request.session.session_key
+            resume_shine_cart = False
+            candidate_id = None
+            sessionid = None
+            utm_params = None
+            try:
+                if request.method == 'POST':
+                    resume_shine_cart = request.data.get('resume_shine', False)
+                    candidate_id = request.data.get('candidate_id', None)
+                    sessionid = request.data.get('session_id', None)
+                    utm_params = request.data.get('utm', None)
+                else:
+                    resume_shine_cart = request.GET.get('resume_shine', False)
+                    if resume_shine_cart == 'true':
+                        resume_shine_cart = True
+                    else:
+                        resume_shine_cart = False
+                    candidate_id = request.GET.get('candidate_id', None)
+                    sessionid = request.GET.get('session_id', None)
+                    utm_params = request.GET.get('utm', None)
+
+            except Exception as e:
+                logging.getLogger('error_log').error(e)
+
             cart_users = []
-            utm_params = request.session.get('utm')
+
+            if not resume_shine_cart:
+                candidate_id = request.session.get('candidate_id')
+            if not resume_shine_cart:
+                if not request.session.session_key:
+                    request.session.create()
+                sessionid = request.session.session_key
+                utm_params = request.session.get('utm')
 
             if utm_params and isinstance(utm_params, dict):
                 utm_params = json.dumps(utm_params)
 
-            if candidate_id:
-                cart_users = Cart.objects.filter(owner_id=candidate_id, status=2)
+            if candidate_id and resume_shine_cart:
+                cart_users = Cart.objects.filter(
+                    owner_id=candidate_id, status=2, site=1)
+            elif candidate_id:
+                cart_users = Cart.objects.filter(
+                    owner_id=candidate_id, status=2, site=0)
 
             cart_sessions = Cart.objects.filter(session_id=sessionid, status=0)
             cart_user, cart_session = None, None
@@ -238,10 +338,20 @@ class CartMixin(object):
                 cart_obj = cart_session
             elif cart_session:
                 cart_obj = cart_session
+            elif candidate_id and resume_shine_cart:
+                cart_obj = Cart.objects.create(
+                    owner_id=candidate_id, session_id=sessionid, status=2,
+                    site=1)
             elif candidate_id:
-                cart_obj = Cart.objects.create(owner_id=candidate_id, session_id=sessionid, status=2)
+                cart_obj = Cart.objects.create(
+                    owner_id=candidate_id, session_id=sessionid, status=2,
+                    site=0)
+            elif sessionid and resume_shine_cart:
+                cart_obj = Cart.objects.create(session_id=sessionid, status=0,
+                                               site=1)
             elif sessionid:
-                cart_obj = Cart.objects.create(session_id=sessionid, status=0)
+                cart_obj = Cart.objects.create(session_id=sessionid, status=0,
+                                               site=0)
 
             # update cart_obj in session
             if cart_obj:
@@ -250,14 +360,14 @@ class CartMixin(object):
                 if utm_params:
                     cart_obj.utm_params = utm_params
                     cart_obj.save()
+                if not resume_shine_cart:
+                    request.session.update({
+                        "cart_pk": cart_obj.pk,
+                        "checkout_type": 'cart',
+                        "cart_count_pk": cart_obj.pk,
+                    })
 
-                request.session.update({
-                    "cart_pk": cart_obj.pk,
-                    "checkout_type": 'cart',
-                    "cart_count_pk": cart_obj.pk,
-                })
-
-            elif request.session.get('cart_pk'):
+            elif request.session.get('cart_pk') and not resume_shine_cart:
                 del request.session['cart_pk']
                 del request.session['checkout_type']
                 request.session.modified = True
@@ -275,7 +385,8 @@ class CartMixin(object):
                 cart_pk = self.request.session.get('cart_pk')
                 cart_obj = Cart.objects.get(pk=cart_pk)
             if cart_obj:
-                main_products = cart_obj.lineitems.filter(parent=None).select_related('product', 'product__vendor')
+                main_products = cart_obj.lineitems.filter(
+                    parent=None).select_related('product', 'product__vendor')
                 for m_prod in main_products:
                     data = {}
                     data['li'] = m_prod
@@ -286,12 +397,30 @@ class CartMixin(object):
                     cart_items.append(data)
             return cart_items
         except Exception as e:
-            logging.getLogger('error_log').error('unable to fetch cart items  %s' % str(e))
+            logging.getLogger('error_log').error(
+                'unable to fetch cart items  %s' % str(e))
         return cart_items
 
     def get_solr_cart_items(self, cart_obj: object = None) -> object:
         cart_items = []
         total_amount = Decimal(0)
+        # Handle request from resume Shine
+        resume_shine_cart = False
+        try:
+            request = self.request
+
+            if request.method == "POST":
+                resume_shine_cart = request.data.get('resume_shine', False)
+            else:
+                resume_shine_cart = request.GET.get('resume_shine', False)
+                if resume_shine_cart == 'true':
+                    resume_shine_cart = True
+                else:
+                    resume_shine_cart = False
+        except Exception as e:
+            logging.getLogger('error_log').error(
+                'Error while checking request method from resume shine  %s' % str(e))
+
         if not cart_obj:
             if not self.request.session.get('cart_pk'):
                 self.getCartObject()
@@ -300,7 +429,8 @@ class CartMixin(object):
         if cart_obj:
             main_products = cart_obj.lineitems.filter(parent=None)
 
-            main_product_pks = list(main_products.values_list('product__id', flat=True))
+            main_product_pks = list(
+                main_products.values_list('product__id', flat=True))
             filtered_sqs = SearchQuerySet().filter(id__in=main_product_pks)
 
             for m_prod in main_products:
@@ -322,8 +452,10 @@ class CartMixin(object):
                     experience = sqs.pEX
                     reference = m_prod.reference
 
-                    addons = cart_obj.lineitems.filter(parent=m_prod, parent_deleted=False).select_related('product')
-                    variations = cart_obj.lineitems.filter(parent=m_prod, parent_deleted=True).select_related('product')
+                    addons = cart_obj.lineitems.filter(
+                        parent=m_prod, parent_deleted=False).select_related('product')
+                    variations = cart_obj.lineitems.filter(
+                        parent=m_prod, parent_deleted=True).select_related('product')
 
                     if m_prod.no_process and product_class == 'course' and variations:
                         pass
@@ -341,7 +473,8 @@ class CartMixin(object):
                             if sqs_var.get('id') == var.product.id:
                                 var_id = var.id
                                 var_name = sqs_var.get('label')
-                                var_price = round(Decimal(sqs_var.get('inr_price')), 2)
+                                var_price = round(
+                                    Decimal(sqs_var.get('inr_price')), 2)
                                 var_available = True if is_available else False
                                 var_exp = sqs_var.get('experience')
                                 var_delivery_obj = var.delivery_service
@@ -356,7 +489,7 @@ class CartMixin(object):
 
                                 var_data = {
                                     "id": var_id,
-                                    "li": var,
+                                    "li": LineItemSerializer(var).data if resume_shine_cart else var,
                                     "name": var_name,
                                     "price": var_price,
                                     "is_available": var_available,
@@ -382,7 +515,8 @@ class CartMixin(object):
                             if sqs_addon.get('id') == addon.product.id:
                                 addon_id = addon.id
                                 addon_name = sqs_addon.get('label')
-                                addon_price = round(Decimal(sqs_addon.get('inr_price')), 2)
+                                addon_price = round(
+                                    Decimal(sqs_addon.get('inr_price')), 2)
                                 addon_available = True if is_available else False
                                 addon_exp = sqs_addon.get('experience')
                                 addon_reference = addon.reference
@@ -392,7 +526,7 @@ class CartMixin(object):
 
                                 addon_data = {
                                     "id": addon_id,
-                                    "li": addon,
+                                    "li": LineItemSerializer(addon).data if resume_shine_cart else addon,
                                     "name": addon_name,
                                     "price": addon_price,
                                     "is_available": addon_available,
@@ -406,28 +540,28 @@ class CartMixin(object):
                             addon.delete()
 
                     combo_list = json.loads(sqs.pCmbs).get('combo_list', [])
-
                     data = {
                         "id": main_id,
-                        "li": m_prod,
+                        "li": LineItemSerializer(m_prod).data if resume_shine_cart else m_prod,
                         "product_class": product_class,
                         "vendor": vendor_name,
                         "name": name,
                         "price": price,
                         "experience": experience,
                         "reference": reference,
-                        "delivery_obj": delivery_obj,
+                        "delivery_obj": DeliveryServiceSerializer(delivery_obj).data if resume_shine_cart else delivery_obj,
                         "addons": addon_list,
                         "variations": var_list,
                         "combos": combo_list,
                         "is_available": is_available,
-                        "delivery_types": m_prod.product.get_delivery_types(),
+                        "delivery_types": DeliveryServiceSerializer(m_prod.product.get_delivery_types(),many=True).data if resume_shine_cart else m_prod.product.get_delivery_types(),
                         "type_flow": product_type_flow
                     }
                     cart_items.append(data)
 
                 except Exception as e:
-                    logging.getLogger('error_log').error("Unable to add item on cart %s " % str(e))
+                    logging.getLogger('error_log').error(
+                        "Unable to add item on cart %s " % str(e))
                     m_prod.delete()
 
         return {"cart_items": cart_items, "total_amount": round(total_amount, 2)}
@@ -465,7 +599,7 @@ class CartMixin(object):
         return total_amount, var_list
 
     # add the product to the cart in case of resume builder
-    def add_item_to_cart(self, main_products, products, cart_obj, cart_items,total_amount):
+    def add_item_to_cart(self, main_products, products, cart_obj, cart_items, total_amount):
 
         for m_prod in main_products:
             addon_list = []
@@ -484,7 +618,8 @@ class CartMixin(object):
             is_available = True
             reference = m_prod.reference
 
-            variations = cart_obj.lineitems.filter(parent=m_prod, parent_deleted=True).select_related('product')
+            variations = cart_obj.lineitems.filter(
+                parent=m_prod, parent_deleted=True).select_related('product')
 
             if m_prod.no_process and product_class == 'course' and variations:
                 pass
@@ -494,7 +629,8 @@ class CartMixin(object):
             if m_prod.delivery_service and is_available:
                 total_amount += m_prod.delivery_service.get_price()
 
-            total_amount, var_list = self.get_variant_list(variations, total_amount, is_available, var_list)
+            total_amount, var_list = self.get_variant_list(
+                variations, total_amount, is_available, var_list)
 
             data = {
                 "id": main_id,
@@ -529,9 +665,12 @@ class CartMixin(object):
             return {"cart_items": cart_items, "total_amount": round(total_amount, 2)}
 
         main_products = cart_obj.lineitems.filter(parent=None)
-        main_product_pks = list(main_products.values_list('product__id', flat=True))
-        products = Product.objects.filter(id__in=main_product_pks).select_related('product_class', 'vendor')
-        cart_items, total_amount = self.add_item_to_cart(main_products, products, cart_obj, cart_items, total_amount)
+        main_product_pks = list(
+            main_products.values_list('product__id', flat=True))
+        products = Product.objects.filter(
+            id__in=main_product_pks).select_related('product_class', 'vendor')
+        cart_items, total_amount = self.add_item_to_cart(
+            main_products, products, cart_obj, cart_items, total_amount)
         return {"cart_items": cart_items, "total_amount": round(total_amount, 2)}
 
     def getTotalAmount(self, cart_obj=None):
@@ -543,10 +682,12 @@ class CartMixin(object):
                 cart_pk = self.request.session.get('cart_pk')
                 cart_obj = Cart.objects.get(pk=cart_pk)
             if cart_obj:
-                lis = cart_obj.lineitems.filter(no_process=False).select_related('product')
+                lis = cart_obj.lineitems.filter(
+                    no_process=False).select_related('product')
                 for li in lis:
                     total += li.product.get_price()
-                lis = cart_obj.lineitems.filter(no_process=True).select_related('product')
+                lis = cart_obj.lineitems.filter(
+                    no_process=True).select_related('product')
                 for li in lis:
                     if li.product.is_course and li.no_process == True:
                         pass
@@ -577,20 +718,13 @@ class CartMixin(object):
                 cart_obj = Cart.objects.get(pk=cart_pk)
             if cart_obj:
                 if not total_amount:
-
-                    # cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
-                    # line_item = cart_obj.lineitems.filter(parent=None)[0]
-                    # type_flow = int(line_item.product.type_flow)
-                    # # resume builder flow handle
-                    # if type_flow == 17:
-                    #     cart_dict = self.get_local_cart_items(cart_obj=cart_obj)
-                    # else:
                     cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
                     total_amount = cart_dict.get('total_amount', Decimal(0))
 
                 total_amount = InvoiceGenerate().get_quantize(total_amount)
                 coupon_obj = cart_obj.coupon
-                wal_txn = cart_obj.wallettxn.filter(txn_type=2).order_by('-created').select_related('wallet')
+                wal_txn = cart_obj.wallettxn.filter(txn_type=2).order_by(
+                    '-created').select_related('wallet')
                 valid_coupon = False
                 if coupon_obj:
                     valid_coupon = coupon_obj.is_valid_coupon(
@@ -637,7 +771,8 @@ class CartMixin(object):
                     tax_amount = InvoiceGenerate().get_quantize(tax_amount)
 
                 except Exception as e:
-                    logging.getLogger('error_log').error("Cart object has no country attached:", str(e))
+                    logging.getLogger('error_log').error(
+                        "Cart object has no country attached:", str(e))
                 total_payable_amount = amount_after_discount + tax_amount
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
@@ -670,7 +805,8 @@ class CartMixin(object):
                 # logging.getLogger('error_log').error(str(e))
                 parent_li = None
             if parent_li:
-                selected_product = cart_obj.lineitems.filter(parent=parent_li).values_list('product__pk', flat=True)
+                selected_product = cart_obj.lineitems.filter(
+                    parent=parent_li).values_list('product__pk', flat=True)
                 data['selected_products'] = selected_product
         return data
 
@@ -681,14 +817,16 @@ class CartMixin(object):
         cart_pk = self.request.session.get('cart_pk')
         if cart_pk:
             try:
-                cart_obj = Cart.objects.get(pk=cart_pk).prefetch_related('lineitems')
+                cart_obj = Cart.objects.get(
+                    pk=cart_pk).prefetch_related('lineitems')
                 product = Product.objects.get(id=sqs.id)
                 parent_li = cart_obj.lineitems.get(product=product)
             except Exception as e:
                 # logging.getLogger('error_log').error("Unable to select product, {},{}".format(str(e), cart_pk))
                 parent_li = None
             if parent_li:
-                selected_product = cart_obj.lineitems.filter(parent=parent_li).values_list('product__pk', flat=True)
+                selected_product = cart_obj.lineitems.filter(
+                    parent=parent_li).values_list('product__pk', flat=True)
                 data['selected_products'] = selected_product
         return data
 
@@ -715,7 +853,8 @@ class CartMixin(object):
                 # logging.getLogger('error_log').error(str(e))
                 parent_li = None
             if parent_li:
-                lis = cart_obj.lineitems.filter(parent=parent_li).select_related('product')
+                lis = cart_obj.lineitems.filter(
+                    parent=parent_li).select_related('product')
                 for li in lis:
                     total += li.product.get_price()
                     if li.product.get_fakeprice():
@@ -756,7 +895,8 @@ class CartMixin(object):
                 # logging.getLogger('error_log').error(str(e))
                 parent_li = None
             if parent_li:
-                lis = cart_obj.lineitems.filter(parent=parent_li).select_related('product')
+                lis = cart_obj.lineitems.filter(
+                    parent=parent_li).select_related('product')
                 for li in lis:
                     total += li.product.get_price()
                     if li.product.get_fakeprice():
@@ -773,17 +913,17 @@ class CartMixin(object):
             "fake_total": round(fake_total, 0)})
         return data
 
-    def get_cart_count(self, request=None):
+    def get_cart_count(self, request=None, cart_pk=None):
         total_count = 0
         try:
             if not request:
                 request = self.request
             if not request.session.get('cart_count_pk'):
                 self.getCartObject(request=request)
-            cart_pk = request.session.get('cart_count_pk')
+            cart_pk = cart_pk if cart_pk else request.session.get(
+                'cart_count_pk')
 
             if cart_pk:
-
                 course_classes = ProductClass.objects.filter(
                     slug__in=settings.COURSE_SLUG)
 
@@ -795,7 +935,8 @@ class CartMixin(object):
                                                              Q(parent=None, product__type_flow=17,
                                                                no_process=True)).count()
         except Exception as e:
-            logging.getLogger('error_log').error("{},{}".format(str(e), cart_pk))
+            logging.getLogger('error_log').error(
+                "{},{}".format(str(e), cart_pk))
         return total_count
 
     def closeCartObject(self, cart_obj=None):
@@ -806,3 +947,74 @@ class CartMixin(object):
             cart_obj.last_status = last_status
             cart_obj.date_closed = timezone.now()
             cart_obj.save()
+
+
+    # def getResumeCartObject(self,candidate_id=None,token=None,utm_params=None):
+    #     if not candidate_id and not token:
+    #         return
+    #     cart_users = []
+    #
+    #     if utm_params and isinstance(utm_params, dict):
+    #         utm_params = json.dumps(utm_params)
+    #
+    #     if candidate_id:
+    #         cart_users = Cart.objects.filter(owner_id=candidate_id, status=2)
+    #
+    #     if token:
+    #         cart_sessions = Cart.objects.filter(session_id=token, status=0)
+    #
+    #     cart_user, cart_session = None, None
+    #     if cart_users:
+    #         for cart in cart_users:
+    #             if cart_user:
+    #                 self.mergeCart(cart, cart_user)
+    #             else:
+    #                 cart_user = cart
+    #
+    #     if cart_sessions:
+    #         for cart in cart_sessions:
+    #             if cart_session:
+    #                 self.mergeCart(cart, cart_session)
+    #             else:
+    #                 cart_session = cart
+    #
+    #
+    #     if cart_user and cart_session and (cart_user != cart_session):
+    #         self.mergeCart(cart_session, cart_user)
+    #
+    #         if cart_user:
+    #             cart_obj = cart_user
+    #         elif cart_session and candidate_id:
+    #             cart_session.owner_id = candidate_id
+    #             cart_session.status = 2
+    #             cart_session.save()
+    #             cart_obj = cart_session
+    #         elif cart_session:
+    #             cart_obj = cart_session
+    #         elif candidate_id:
+    #             cart_obj = Cart.objects.create(owner_id=candidate_id, session_id=sessionid, status=2)
+    #         elif sessionid:
+    #             cart_obj = Cart.objects.create(session_id=sessionid, status=0)
+    #
+    #         # update cart_obj in session
+    #         if cart_obj:
+    #             # before updating the cart in session updating the utm params in
+    #             # cart objects
+    #             if utm_params:
+    #                 cart_obj.utm_params = utm_params
+    #                 cart_obj.save()
+    #
+    #             request.session.update({
+    #                 "cart_pk": cart_obj.pk,
+    #                 "checkout_type": 'cart',
+    #                 "cart_count_pk": cart_obj.pk,
+    #             })
+    #
+    #         elif request.session.get('cart_pk'):
+    #             del request.session['cart_pk']
+    #             del request.session['checkout_type']
+    #             request.session.modified = True
+    #         return cart_obj
+    #
+    #     except Exception as e:
+    #         logging.getLogger('error_log').error(str(e))

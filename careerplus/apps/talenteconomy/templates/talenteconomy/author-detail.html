@@ -3,12 +3,12 @@
 {% load thumbnail %}
 
 {% block django_meta %}
-		{% include 'meta/meta.html' %}
-		<link href="https://fonts.googleapis.com/css?family=Montserrat:400,600,700&display=swap" rel="stylesheet">
+{% include 'meta/meta.html' %}
+<link href="https://fonts.googleapis.com/css?family=Montserrat:400,600,700&display=swap" rel="stylesheet">
 
 {%  endblock django_meta %}
 {% block canonical_url %}
-  <link rel="canonical" href="https://{{ SITE_DOMAIN }}{{ request.path }}">
+<link rel="canonical" href="https://{{ SITE_DOMAIN }}{{ request.path }}">
 {% endblock canonical_url %}
 
 {% block title %}
@@ -16,141 +16,147 @@
 {% endblock title %}
 
 {% block css_section %}
-    {{block.super}}
-    {% compress css %}
-    <link type="text/scss" href="{% static 'shinelearn/css/talenteconomy/article.scss' %}" rel="stylesheet">
-    {% endcompress %}
+{{block.super}}
+{% compress css %}
+<link type="text/scss" href="{% static 'shinelearn/css/talenteconomy/article.scss' %}" rel="stylesheet">
+{% endcompress %}
 {% endblock css_section %}
 {% block container %}
 
- <section class="container">
-    {% include './include/breadcrumbs.tmpl.html' with breadcrumbs=breadcrumbs %}
+<section class="container">
+	{% include './include/breadcrumbs.tmpl.html' with breadcrumbs=breadcrumbs %}
 </section>
 
 <!-- main section start -->
 <section class="container">
-    <!-- page content body start -->
-    <div class="row">
-    	<!-- left content start -->
-    	<div class="col-md-9 col-sm-12">
-    		<div class="row">
-    			<div class="author-profile col-sm-12">
-                    <div class="media">
-                    	{% if author.image %}
-                        <figure class="media-left">
-	                        <img aria-label="{{author.image_alt}}" class="media-object" src="{{author.image.url}}" alt="{{author.image_alt}}">
-                        </figure>
-                        {% endif %}
-                        <figcaption class="media-body">
-                            <h1 class="author-name">{{author.name}}</h1>
-                            <span class="designation">({{author.designation}})</span>
-                            <span class="articles-no">{{author.no_of_blog}} articles</span>
-                            <span class="social-login-gr mt-10">
-                            	{% if author.fb_url %}
-			                    <a class="facebook-gr" href="{{author.fb_url}}"></a>
-		                    	{% endif %}
-                            	{% if author.twitter_url %}
-			                    <a class="twitter-gr" href="{{author.twitter_url}}"></a>
-		                    	{% endif %}
-                            	{% if author.linkedin_url %}
-			                    <a class="linkedin-gr" href="{{author.linkedin_url}}"></a>
-		                    	{% endif %}
-		                    </span>
-                            {{author.about|safe}}
-                        </figcaption>
-                    </div>
-                </div>
+	<!-- page content body start -->
+	<div class="row">
+		<!-- left content start -->
+		<div class="col-md-9 col-sm-12">
+			<div class="row">
+				<div class="author-profile col-sm-12">
+					<div class="media">
+						{% if author.image %}
+						<figure class="media-left">
+							<img aria-label="{{author.image_alt}}" class="media-object" src="{{author.image.url}}"
+								alt="{{author.image_alt}}">
+						</figure>
+						{% endif %}
+						<figcaption class="media-body">
+							<h1 class="author-name">{{author.name}}</h1>
+							<span class="designation">({{author.designation}})</span>
+							<span class="articles-no">{{author.no_of_blog}} articles</span>
+							<span class="social-login-gr mt-10">
+								{% if author.fb_url %}
+								<a class="facebook-gr" href="{{author.fb_url}}"></a>
+								{% endif %}
+								{% if author.twitter_url %}
+								<a class="twitter-gr" href="{{author.twitter_url}}"></a>
+								{% endif %}
+								{% if author.linkedin_url %}
+								<a class="linkedin-gr" href="{{author.linkedin_url}}"></a>
+								{% endif %}
+							</span>
+							{{author.about|safe}}
+						</figcaption>
+					</div>
+				</div>
 				<!-- author main end here -->
 
 				<div itemscope itemtype="https://schema.org/ItemList">
-				{% for article in article_list %}
-				<div class="author-article-list col-sm-12" itemprop="itemListElement" itemscope itemtype="http://schema.org/Article">
-	                <a class="box-panel" href="{% url 'talent:te-articles-detail' article.p_cat.slug article.slug %}" itemprop="url" title="{{article.heading}}">
-	                    <div class="col-sm-6">
-	                        <figure class="pr">
-	                        	{% if article.image  %}
-	                            <img aria-label="{{article.image_alt}}" src="{{article.image.url}}" alt="{{article.image_alt}}" itemprop="image">
-	                            {% endif %}
-	                            <span class="product-title product-title-pos">{{article.p_cat.name}}</span>
-	                        </figure>
-	                    </div>
-	                    <div class="col-sm-6">
-	                        <h3 class="heading-article" itemprop="name">
-	                            {{article.heading}}
-	                        </h3>
-	                        <article>
-	                            {{article.summary|striptags|safe}}
-	                        </article>
-	                        <hr>
-	                        <span class="view-forward">
-				                <figure class="calender-icon"></figure> {{article.publish_date.date}}
-				                {% if article.no_shares > 0 %}
-				                	<figure class="forward-icon ml-20"></figure> {{article.no_shares}}
-				                {% endif %}
-				                {% if article.no_views > 0 %}
-				                	<figure class="view-icon ml-20"></figure> {{article.no_views}}
-				                {% endif %}
-				            </span>
-	                    </div>
-	                </a>
-	                <meta itemprop="position" content="{{forloop.counter}}">
-	                <meta itemprop="headline" content="{{article.heading}}">
-	                <meta itemprop="datePublished" content="{{article.publish_date.date}}"></meta>
-                  <meta itemprop="dateModified" content="{{article.publish_date.date}}">
-                  <meta itemprop="mainEntityOfPage" content="{% url 'talent:talent-landing' %}">
-	                <meta itemprop="author" content={{article.author.name}}>
-                     <div itemprop="publisher" itemscope itemtype="https://schema.org/Organization" >
-                    <div itemprop="logo" itemscope itemtype="https://schema.org/ImageObject">
-                      <meta itemprop="url" content="{% static 'shinelearn/images/logo.png' %}">
-                    </div>
-                    <meta itemprop="name" content="Shine">
-                  </div>
-	            </div>
-				{% endfor %}
+					{% for article in article_list %}
+					<div class="author-article-list col-sm-12" itemprop="itemListElement" itemscope
+						itemtype="http://schema.org/Article">
+						<a class="box-panel"
+							href="{% url 'talent:te-articles-detail' article.p_cat.slug article.slug %}" itemprop="url"
+							title="{{article.heading}}">
+							<div class="col-sm-6">
+								<figure class="pr">
+									{% if article.image  %}
+									<img aria-label="{{article.image_alt}}" src="{{article.image.url}}"
+										alt="{{article.image_alt}}" itemprop="image">
+									{% endif %}
+									<span class="product-title product-title-pos">{{article.p_cat.name}}</span>
+								</figure>
+							</div>
+							<div class="col-sm-6">
+								<h3 class="heading-article" itemprop="name">
+									{{article.heading}}
+								</h3>
+								<article>
+									{{article.summary|striptags|safe}}
+								</article>
+								<hr>
+								<span class="view-forward">
+									<figure class="calender-icon"></figure> {{article.publish_date.date}}
+									{% if article.no_shares > 0 %}
+									<figure class="forward-icon ml-20"></figure> {{article.no_shares}}
+									{% endif %}
+									{% if article.no_views > 0 %}
+									<figure class="view-icon ml-20"></figure> {{article.no_views}}
+									{% endif %}
+								</span>
+							</div>
+						</a>
+						<meta itemprop="position" content="{{forloop.counter}}">
+						<meta itemprop="headline" content="{{article.heading}}">
+						<meta itemprop="datePublished" content="{{article.publish_date.date}}">
+						</meta>
+						<meta itemprop="dateModified" content="{{article.publish_date.date}}">
+						<meta itemprop="mainEntityOfPage" content="{% url 'talent:talent-landing' %}">
+						<meta itemprop="author" content={{article.author.name}}>
+						<div itemprop="publisher" itemscope itemtype="https://schema.org/Organization">
+							<div itemprop="logo" itemscope itemtype="https://schema.org/ImageObject">
+								<meta itemprop="url" content="{% static 'shinelearn/images/logo.png' %}">
+							</div>
+							<meta itemprop="name" content="Shine">
+						</div>
+					</div>
+					{% endfor %}
+				</div>
 			</div>
-    		</div>
 
-    	</div>
-    	<!-- left content end -->
+		</div>
+		<!-- left content end -->
 
-        <!-- right content start -->
-        <div class="col-md-3 col-sm-12">
-        	<!-- Popular Courses -->
-        	{% if popular_courses %}
-				{% include './include/popular.tmpl.html' with popular_courses=popular_courses titleCourses='Suggested Courses' page='talenteconomy-author-details' %}
+		<!-- right content start -->
+		<div class="col-md-3 col-sm-12">
+			<!-- Popular Courses -->
+			{% if popular_courses %}
+			{% include './include/popular.tmpl.html' with popular_courses=popular_courses titleCourses='Suggested Courses' page='talenteconomy-author-details' %}
 			{% endif %}
-        </div>
-    </div>
+		</div>
+	</div>
 </section>
 
 
 {% endblock container %}
 {% block js_section %}
-    {{ block.super }}
-    {% compress js %}
+{{ block.super }}
+{% compress js %}
 
 <script type="text/javascript">
-      $('#myCarousel1').carousel({
-        interval: false,
+	$('#myCarousel1').carousel({
+		interval: false,
 
-      })
+	})
 
-     $('.carousel[data-type="multi"] .item').each(function(){
-        var next = $(this).next();
-        if (!next.length) {
-          next = $(this).siblings(':first');
-        }
-        next.children(':first-child').clone().appendTo($(this));
+	$('.carousel[data-type="multi"] .item').each(function () {
+		var next = $(this).next();
+		if (!next.length) {
+			next = $(this).siblings(':first');
+		}
+		next.children(':first-child').clone().appendTo($(this));
 
-        for (var i=0;i<3;i++) {
-          next=next.next();
-          if (!next.length) {
-            next = $(this).siblings(':first');
-          }
-          
-          next.children(':first-child').clone().appendTo($(this));
-        }
-      });
-    </script>
-    {% endcompress %}
+		for (var i = 0; i < 3; i++) {
+			next = next.next();
+			if (!next.length) {
+				next = $(this).siblings(':first');
+			}
+
+			next.children(':first-child').clone().appendTo($(this));
+		}
+	});
+</script>
+{% endcompress %}
 {% endblock js_section %}

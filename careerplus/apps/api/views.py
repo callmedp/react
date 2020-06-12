@@ -1432,6 +1432,12 @@ class TalentEconomyApiView(FieldFilterMixin, ListAPIView):
     for descending order include  '-', for ex-  sort_by=-created_on
 
 
+    For Sorting according include sort_by
+    on last modified date include sort_by=last_modified_on   ,
+    on creation date include sort_by=created_on ,
+    for descending order include  '-', for ex-  sort_by=-created_on
+
+
     """
     permission_classes = []
     authentication_classes = []

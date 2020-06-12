@@ -112,6 +112,7 @@ def common_context_processor(request):
         "ggn_contact_full": settings.GGN_CONTACT_FULL,
         "ggn_contact": settings.GGN_CONTACT,
         "toll_free_number": settings.TOLL_FREE_NUMBER,
+        "missed_call_number": settings.MISSED_CALL_NUMBER, 
         "IS_MAINTENANCE": settings.IS_MAINTENANCE,
         "MAINTENANCE_MESSAGE": settings.MAINTENANCE_MESSAGE,
         "exoitel_status": cache.get('exoitel_status', False),

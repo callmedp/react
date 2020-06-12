@@ -157,7 +157,6 @@ class WalletRedeemView(APIView, CartMixin):
                  }, status=400, content_type='application/json')    
  
 
-
 class WalletRemoveView(APIView, CartMixin):
     permission_classes = (IsAuthenticated,)
     authentication_classes = (ShineUserAuthentication,)

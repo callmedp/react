@@ -13,21 +13,21 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.CreateModel(
-            name='PracticeTestInfo',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('created', models.DateTimeField(auto_now_add=True)),
-                ('modified', models.DateTimeField(auto_now=True, null=True)),
-                ('email', models.CharField(max_length=100, verbose_name='Customer Email')),
-                ('mobile_no', models.CharField(blank=True, max_length=15, null=True, verbose_name='Mobile number')),
-                ('name', models.CharField(blank=True, max_length=70, null=True, verbose_name='Name')),
-                ('test_data', models.TextField(blank=True, null=True, verbose_name='test_data')),
-                ('is_boarded', models.BooleanField(default=False)),
-                ('order_item', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='test_info', to='order.OrderItem', verbose_name='Order Item')),
-            ],
-            options={
-                'abstract': False,
-            },
-        ),
+        # migrations.CreateModel(
+        #     name='PracticeTestInfo',
+        #     fields=[
+        #         ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+        #         ('created', models.DateTimeField(auto_now_add=True)),
+        #         ('modified', models.DateTimeField(auto_now=True, null=True)),
+        #         ('email', models.CharField(max_length=100, verbose_name='Customer Email')),
+        #         ('mobile_no', models.CharField(blank=True, max_length=15, null=True, verbose_name='Mobile number')),
+        #         ('name', models.CharField(blank=True, max_length=70, null=True, verbose_name='Name')),
+        #         ('test_data', models.TextField(blank=True, null=True, verbose_name='test_data')),
+        #         ('is_boarded', models.BooleanField(default=False)),
+        #         ('order_item', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, related_name='test_info', to='order.OrderItem', verbose_name='Order Item')),
+        #     ],
+        #     options={
+        #         'abstract': False,
+        #     },
+        # ),
     ]

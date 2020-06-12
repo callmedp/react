@@ -1,11 +1,15 @@
 from rest_framework.serializers import ModelSerializer, ValidationError
 from rest_framework import serializers
 from shop.models import Product, Category, PracticeTestInfo, Skill, \
-    ProductSkill, ProductScreen, ScreenProductSkill
+    ProductSkill, ProductScreen, ScreenProductSkill,DeliveryService
 from shop.choices import C_ATTR_DICT, S_ATTR_DICT
+
+from review.models import Review
+
 
 from shared.rest_addons.mixins import SerializerFieldsMixin
 from django.core.cache import cache
+
 
 
 class ProductListSerializerForAuditHistory(SerializerFieldsMixin, ModelSerializer):
@@ -166,3 +170,20 @@ class UpdateProductSkillSerializer(serializers.Serializer):
         return {
             'skills': ','.join(instance.productskills.values_list('skill__name', flat=True)),
         }
+
+
+
+class DeliveryServiceSerializer(ModelSerializer):
+     class Meta:
+        model = DeliveryService
+        fields = '__all__'
+
+
+class ReviewSerializer(ModelSerializer):
+    """
+    Review serializer
+    """
+
+    class Meta:
+        model = Review
+        fields = ('__all__' )

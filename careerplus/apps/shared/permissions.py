@@ -3,7 +3,7 @@
 # django imports
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
-#local imports
+# local imports
 
 # inter app imports
 
@@ -33,7 +33,8 @@ class IsObjectOwner(BasePermission):
         return True
 
     def has_object_permission(self, request, view, model_obj):
-        owner_fields = getattr(view, 'owner_fields', ['owner_id', 'candidate_id'])
+        owner_fields = getattr(view, 'owner_fields', [
+                               'owner_id', 'candidate_id'])
         permission_granted = False
 
         user = request.user
@@ -52,7 +53,7 @@ class IsObjectOwner(BasePermission):
                     break
 
                 if object_data:
-                    obj = getattr(obj,f,'')
+                    obj = getattr(obj, f, '')
 
         return permission_granted
 
@@ -84,17 +85,18 @@ class IsOwner(BasePermission):
         if not request.session.get('candidate_id', None):
             return False
         return True
-        
+
+
 class HasGroupOrHasPermissions(BasePermission):
     """can pass when has the permission or has group """
 
-    def has_permission(self, request,view):
+    def has_permission(self, request, view):
         user = request.user
         if not user.is_authenticated:
             return False
         if not user.is_superuser:
             return True
-        elif (getattr(view,'permission_code_name',None) or getattr(view,'permission_groups',None)) == None:
+        elif (getattr(view, 'permission_code_name', None) or getattr(view, 'permission_groups', None)) == None:
             raise ImproperlyConfigured
         elif getattr(view, 'permission_code_name') == [] and getattr(view, 'permission_groups', None) == []:
             return True
@@ -104,7 +106,7 @@ class HasGroupOrHasPermissions(BasePermission):
             return True
         return False
 
-    def has_object_permission(self, request,view,obj):
+    def has_object_permission(self, request, view, obj):
         """if object has permission or has group then and only show the objects """
 
         user = request.user
@@ -115,7 +117,7 @@ class HasGroupOrHasPermissions(BasePermission):
         elif (getattr(view, 'permission_code_name', None) or getattr(view, 'permission_groups', None)) == None:
             raise ImproperlyConfigured
 
-        elif getattr(view,'permission_code_name') == [] and getattr(view,'permission_groups',None) == []:
+        elif getattr(view, 'permission_code_name') == [] and getattr(view, 'permission_groups', None) == []:
             return True
 
         elif any(perms for perms in view.permission_code_name if perms in user.get_all_permissions()):
@@ -123,5 +125,3 @@ class HasGroupOrHasPermissions(BasePermission):
         elif any(group for group in view.permission_groups if group in user.groups.all()):
             return True
         return False
-
-

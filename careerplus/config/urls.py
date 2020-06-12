@@ -32,7 +32,7 @@ from console.welcomecall.views import ShowNumberField
 
 from homepage import views as homepage_view
 from linkedin.views import AutoLoginView
-from shop.views import ProductDetailView, CourseCatalogueView
+from shop.views import ProductDetailView, CourseCatalogueView, GoogleResumeAdView
 from users.views import LinkedinCallbackView, UserLoginTokenView,CourseServiceWhatsappBtn
 from search.views import FuncAreaPageView
 from blog import views as blog_view
@@ -142,6 +142,8 @@ urlpatterns += [
 
     re_path(r'^services/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
         ProductDetailView.as_view(), name='service-detail'),
+    re_path(r'^services/(?P<cat_slug>[\w-]+)/(?P<country>[\w-]+)/$',
+        GoogleResumeAdView.as_view(), name='google-resume-ad'),
     re_path(r'^courses/', include('skillpage.urls',
                               namespace='skillpage')),
     re_path(r'^university/faculty/(?P<faculty_slug>[-\w]+)/(?P<pk>\d+)/$',
@@ -228,12 +230,19 @@ urlpatterns += [
 
                    re_path(r'^api/v1/cart/', include('cart.api.v1.urls', namespace='cart')),
 
+                   re_path(r'^api/v1/coupon/', include('coupon.api.v1.urls', namespace='coupon')),
+
+                   re_path(r'^api/v1/wallet/', include('wallet.api.v1.urls', namespace='wallet')),
+
                    re_path(r'^api/', include('api.urls', namespace='api')),
                    re_path(r'^api/', include('homepage.api.urls', namespace='api')),
 
                    re_path(r'^lead/', include('crmapi.urls', namespace='crmapi')),
 
-                   re_path(r'^', include('marketing.urls', namespace='marketing')),
+                    re_path(r'^api/', include('wallet.urls')),
+
+                    re_path(r'^', include('marketing.urls', namespace='marketing')),
+
 
                    re_path(r'^about-us$',
                        homepage_view.AboutUsView.as_view(), name='about-us'),
