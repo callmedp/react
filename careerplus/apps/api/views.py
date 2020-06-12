@@ -44,7 +44,7 @@ from order.tasks import (
     invoice_generation_order
 )
 from shop.models import Skill, DeliveryService, ShineProfileData
-from blog.models import Blog
+from blog.models import Blog,Tag
 from emailers.tasks import send_email_task
 from payment.models import PaymentTxn
 from resumebuilder.models import Candidate 
@@ -76,6 +76,11 @@ from users.mixins import RegistrationLoginApi
 from .education_specialization import educ_list
 from assessment.models import Question
 from assessment.utils import TestCacheUtil
+from unidecode import unidecode
+from django.template.defaultfilters import slugify
+
+
+
 
 
 class CreateOrderApiView(APIView, ProductInformationMixin):
@@ -1445,17 +1450,26 @@ class TalentEconomyApiView(FieldFilterMixin, ListAPIView):
     pagination_class = LearningCustomPagination
 
     def get_queryset(self, *args, **kwargs):
-        status = self.request.GET.get('status', )
-        visibility = self.request.GET.get('visibility')
-        sort_filter = self.request.GET.get('sort_by')
+        status = self.request.GET.get('status','' )
+        visibility = self.request.GET.get('visibility','')
+        sort_filter = self.request.GET.get('sort_by','')
+        tags = self.request.GET.get('tags','')
+
         filter_dict = {}
         if status:
             filter_dict.update({'status': status})
         if visibility:
             filter_dict.update({'visibility': visibility})
+        
+        if tags:
+            tags = [slugify(unidecode(tag)) for tag in tags.split(',')]
+            blogs = list(Tag.objects.filter(slug__in=tags,is_active=True).values_list('blog', flat=True))
+            filter_dict.update({'id__in': blogs})
+
         if sort_filter:
-            return Blog.objects.filter(**filter_dict).order_by(sort_filter)
-        return Blog.objects.filter(**filter_dict)
+            return Blog.objects.filter(**filter_dict).distinct().order_by(sort_filter)
+        
+        return Blog.objects.filter(**filter_dict).distinct()
 
 
 
