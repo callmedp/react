@@ -4,11 +4,11 @@
 import json
 
 # local imports
-from .serializers import OrderSerializer,LTVReportSerializer,OrderShineCandidateSerializer
+from .serializers import OrderSerializer, LTVReportSerializer, OrderShineCandidateSerializer
 
-#in app imports
+# in app imports
 from order.api.core.mixins import OrderItemViewMixin
-from order.models import Order,MonthlyLTVRecord,OrderItemOperation,Message,OrderItem
+from order.models import Order, MonthlyLTVRecord, OrderItemOperation, Message, OrderItem
 from order.api.v1.serializers import OrderItemSerializer
 from order.api.core.serializers import OrderItemOperationsSerializer,\
     MessageCommunincationSerializer
@@ -17,13 +17,13 @@ from emailers.utils import BadgingMixin
 
 # 3rd party imports
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.generics import ListAPIView,UpdateAPIView
+from rest_framework.generics import ListAPIView, UpdateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from shared.rest_addons.mixins import FieldFilterMixin,\
-    ListSerializerContextMixin,ListSerializerDataMixin
-from shared.rest_addons.permissions import OrderItemAccessPermission,IsObjectOwnerOrConsoleUser
+    ListSerializerContextMixin, ListSerializerDataMixin
+from shared.rest_addons.permissions import OrderItemAccessPermission, IsObjectOwnerOrConsoleUser
 from rest_framework.authentication import SessionAuthentication
 from shared.rest_addons.pagination import LearningCustomPagination
 from shared.permissions import IsObjectOwner
@@ -195,3 +195,16 @@ class OrderItemPatchView(APIView):
         except Exception as e:
             return Response({'error_message': 'Something went wrong. {}'.format(e)},
                             status=status.HTTP_400_BAD_REQUEST)
+
+
+class DirectOrderCreateApiView(APIView):
+    authentication_classes = (SessionAuthentication,)
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request, *args, **kwargs):
+        import ipdb;
+        ipdb.set_trace();
+
+        
+
+

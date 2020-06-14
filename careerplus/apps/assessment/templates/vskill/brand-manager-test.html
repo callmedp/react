@@ -153,8 +153,13 @@
                </ul>
                <p>Real exam & Practice environment</p>
                <p class="pb-30">Explanation to every questions</p>
-               <button class="yellow_btn pull-right" id="testAddToCart" >Add to cart</button>
-               <strike id="fakeProductPrice"></strike>
+               {% if test.redeem_test %}
+                  <button class="yellow_btn pull-right" id="createOrderForTest" >Redeem</button>
+               {% else %}
+                  <button class="yellow_btn pull-right" id="testAddToCart">Add to cart</button>
+               {% endif %}
+
+                  <strike id="fakeProductPrice"></strike>
                <h4 class="mt-0" id="productPrice">Rs.</h4>
             </span>
            </div>

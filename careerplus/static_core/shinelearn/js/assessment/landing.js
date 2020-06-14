@@ -1,114 +1,144 @@
-       $('#testModal').on('show.bs.modal', function(e) {
-        var modalobject = JSON.parse(e.relatedTarget.dataset.attrValue);
-        $('#productName').text(modalobject.productName);
-        $('#productName').attr("href",modalobject.productUrl);
-        $('#productName').attr("title",modalobject.productName);
-        $('#productDuration').text(modalobject.productDuration);
-        $('#productPrice').text('Rs. ' + modalobject.productPrice);
-        $('#courseDuration').text(modalobject.courseDuration);
-        $('#coursePrice').text('Rs. '+ modalobject.coursePrice);
-        $('#courseName').text(modalobject.courseName);
-        $('#courseName').attr("href",modalobject.courseUrl);
-        $('#courseName').attr("title",modalobject.courseName);
-        $('#questCount').text(modalobject.quescount);
-        $('#exampleModalLongTitle').text(modalobject.catname);
-        $('#fakeCoursePrice').text('Rs. '+ parseInt(parseInt(modalobject.coursePrice)/0.9));
-        $('#fakeProductPrice').text('Rs. '+parseInt(parseInt(modalobject.productPrice)/0.9));
+$('#testModal').on('show.bs.modal', function (e) {
+    var modalobject = JSON.parse(e.relatedTarget.dataset.attrValue);
+    $('#productName').text(modalobject.productName);
+    $('#productName').attr("href", modalobject.productUrl);
+    $('#productName').attr("title", modalobject.productName);
+    $('#productDuration').text(modalobject.productDuration);
+    $('#productPrice').text('Rs. ' + modalobject.productPrice);
+    $('#courseDuration').text(modalobject.courseDuration);
+    $('#coursePrice').text('Rs. ' + modalobject.coursePrice);
+    $('#courseName').text(modalobject.courseName);
+    $('#courseName').attr("href", modalobject.courseUrl);
+    $('#courseName').attr("title", modalobject.courseName);
+    $('#questCount').text(modalobject.quescount);
+    $('#exampleModalLongTitle').text(modalobject.catname);
+    $('#fakeCoursePrice').text('Rs. ' + parseInt(parseInt(modalobject.coursePrice) / 0.9));
+    $('#fakeProductPrice').text('Rs. ' + parseInt(parseInt(modalobject.productPrice) / 0.9));
 
-        if(modalobject.courseName == ""|| modalobject.courseName == "undefined" ){
+    if (modalobject.courseName == "" || modalobject.courseName == "undefined") {
         $('#testCourse').hide();
-        }
-        else{
-         $('#testCourse').show();
-        }
-        $('#startTestLink').attr("href",'/practice-tests/'+ modalobject.testSlug +'-test/');
-        $('#testAddToCart').click( function()
-         {
-            ga('send', 'event', 'Buy Flow', 'Enroll Now',modalobject.productId);
-            updateToCart(modalobject.productId,'cart');
-         }
-      );
-        $('#courseCartBtn').click(function(){
-        courseUpdateToCart(modalobject.courseId,'cart');
-        });
+    }
+    else {
+        $('#testCourse').show();
+    }
+    $('#startTestLink').attr("href", '/practice-tests/' + modalobject.testSlug + '-test/');
+    $('#testAddToCart').click(function () {
+        ga('send', 'event', 'Buy Flow', 'Enroll Now', modalobject.productId);
+        updateToCart(modalobject.productId, 'cart');
+    }
+    );
+    $('#courseCartBtn').click(function () {
+        courseUpdateToCart(modalobject.courseId, 'cart');
+    });
+
+    //  create direct order on Redeeming the Test and Update the ProductPoint Record
+    $('createOrderForTest').click(function () {
+        createDirectOrder(modalobject.productId)
+    })
 });
 
 
-function testSession(data){
+function testSession(data) {
     $.ajax({
-     url   : '/api/v1/set-session/',
-     data: data,
-     type  : 'post',
-     success: function(response){
+        url: '/api/v1/set-session/',
+        data: data,
+        type: 'post',
+        success: function (response) {
 
-        return false;
-     }
-});
+            return false;
+        }
+    });
 
 }
 
 
-   function courseUpdateToCart(prod_id,cart_type='cart')
-   {
-   $.ajax({
-                url: '/cart/add-to-cart/',
-                type: 'POST',
-                data: { 'prod_id': prod_id,'cv_id': prod_id,'cart_type': cart_type,},
-                dataType: 'json',
-                success: function(json) {
-                    if (json.status == 1){
+function courseUpdateToCart(prod_id, cart_type = 'cart') {
+    $.ajax({
+        url: '/cart/add-to-cart/',
+        type: 'POST',
+        data: { 'prod_id': prod_id, 'cv_id': prod_id, 'cart_type': cart_type, },
+        dataType: 'json',
+        success: function (json) {
+            if (json.status == 1) {
 
-                        window.location.href = json.cart_url ;
+                window.location.href = json.cart_url;
 
-                    }
-                    else if (json.status == -1){
-                        alert("Something went wrong, Please try again.");
-                    }
+            }
+            else if (json.status == -1) {
+                alert("Something went wrong, Please try again.");
+            }
 
-                },
-                failure: function(response){
-                    alert("Something went wrong, Please try again");
+        },
+        failure: function (response) {
+            alert("Something went wrong, Please try again");
 
-                },
-                error: function(xhr, ajaxOptions, thrownError) {
-                    alert("Something went wrong, Please try again");
-                }
-            });
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            alert("Something went wrong, Please try again");
         }
+    });
+}
 
+function createDirectOrder(productId) {
+    $.ajax({
+        url: '/order/api/v1/direct-order/',
+        type: 'POST',
+        data: { 'prod_id': productId},
+        dataType: 'json',
+        success: function (json) {
+            if (json.status == 1) {
 
+                window.location.href = json.cart_url;
 
-   function updateToCart(prod_id,cart_type='cart')
-   {
-   $.ajax({
-                url: '/cart/add-to-cart/',
-                type: 'POST',
-                data: { 'prod_id': prod_id,'cart_type': cart_type,},
-                dataType: 'json',
-                success: function(json) {
-                    if (json.status == 1){
+            }
+            else if (json.status == -1) {
+                alert("Something went wrong, Please try again.");
+            }
 
-                        window.location.href = json.cart_url ;
+        },
+        failure: function (response) {
+            alert("Something went wrong, Please try again");
 
-                    }
-                    else if (json.status == -1){
-                        alert("Something went wrong, Please try again.");
-                    }
-
-                },
-                failure: function(response){
-                    alert("Something went wrong, Please try again");
-
-                },
-                error: function(xhr, ajaxOptions, thrownError) {
-                    alert("Something went wrong, Please try again");
-                }
-            });
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            alert("Something went wrong, Please try again");
         }
+    });
+
+}
 
 
-      function counter(facolor){
 
-    return facolor%9;
+function updateToCart(prod_id, cart_type = 'cart') {
+    $.ajax({
+        url: '/cart/add-to-cart/',
+        type: 'POST',
+        data: { 'prod_id': prod_id, 'cart_type': cart_type, },
+        dataType: 'json',
+        success: function (json) {
+            if (json.status == 1) {
 
-   }
+                window.location.href = json.cart_url;
+
+            }
+            else if (json.status == -1) {
+                alert("Something went wrong, Please try again.");
+            }
+
+        },
+        failure: function (response) {
+            alert("Something went wrong, Please try again");
+
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            alert("Something went wrong, Please try again");
+        }
+    });
+}
+
+
+function counter(facolor) {
+
+    return facolor % 9;
+
+}

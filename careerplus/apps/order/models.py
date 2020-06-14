@@ -191,6 +191,9 @@ class Order(AbstractAutoDate):
     # utm parameters
     utm_params = models.TextField(null=True, blank=True)
 
+    ref_order = models.ForeignKey('self', null=True, default=None,
+                                  on_delete=models.SET_NULL)
+
     class Meta:
         app_label = 'order'
         ordering = ['-date_placed']
@@ -521,8 +524,6 @@ class Order(AbstractAutoDate):
 
         if self.status == 1 and existing_obj.status != 1 and self.order_contains_shine_premium():
             from wallet.models import ProductPoint
-            import ipdb;
-            ipdb.set_trace();
             """
             Handle the ProductPoint Flow for shine resume. 
             Step 1 - Create a product point with the order id and candidate id.
@@ -538,13 +539,13 @@ class Order(AbstractAutoDate):
                 sub_type_flow = order_item.product.sub_type_flow if order_item.product else None
 
             if sub_type_flow == 1800:
-                free_product_count = 1
+                product_redeem_count = 1
                 product_validity_in_days = 30
             elif sub_type_flow == 1801:
-                free_product_count = 2
+                product_redeem_count = 2
                 product_validity_in_days = 90
             elif sub_type_flow == 1802:
-                free_product_count = 3
+                product_redeem_count = 3
                 product_validity_in_days = 180
             now = datetime.now()
             time_tuple = now.timetuple()
@@ -564,18 +565,18 @@ class Order(AbstractAutoDate):
                 'purchased_at': purchased_at
             }]
 
-            product_point = ProductPoint.objects.create(
+            product_point = ProductPoint.objects.update_or_create(
                 order=self,
                 candidate_id=self.candidate_id,
                 redeem_options=str(redeem_options),
-                active=True
+                active=True,
+                defaults={candidate_id:self.candidate_id}
             )
             try:
                 product_point.save()
             except Exception as e:
                 logging.getLogger('error_log').error(
                     "Could not able to create product points for order {}".format(self.id))
-
 
         self.upload_service_resume_shine(existing_obj)
         obj = super(Order, self).save(**kwargs)

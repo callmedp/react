@@ -158,7 +158,11 @@
                     <span id="fakeProductPrice"> </span>
                     <strong id="productPrice">Rs. 699</strong>
                 </div>
+            {% if test.redeem_test %}
+                <button class="btn btn-lg btn-round-30 btn-yellow semi-bold" id="createOrderForTest">Redeem</button>
+            {% else %}
                 <button class="btn btn-lg btn-round-30 btn-yellow semi-bold" id="testAddToCart">Add to cart</button>
+            {% endif %}
             </div>
         </div><!-- Practice Tests box-->
 
