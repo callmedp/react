@@ -72,7 +72,6 @@ function* getCandidateScore(action) {
 
 function* expertFormSubmit(action) {
     const { payload: { data, resolve, reject, score } } = action;
-    console.log("score is ",score)
     try {
         let formData = data;
         formData['lsource'] = 8;
