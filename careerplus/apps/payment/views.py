@@ -223,9 +223,9 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
         payment_dict = self.getPayableAmount(cart_obj=self.cart_obj)
         line_items = list(self.cart_obj.lineitems.filter(parent=None).values_list('product__type_flow'))
         products_in_cart = [ item[0] for item in line_items]
-        type_flow = 17
-        if 17 not in products_in_cart:     
-            type_flow = int(products_in_cart[0])
+        type_flow = int(products_in_cart[0])
+        if 17 in products_in_cart:     
+            type_flow = 17
         # Fallback for cart object not being properly updated. TODO FIND SOURCE OF ISSUE
         email_id = self.cart_obj.owner_email or self.cart_obj.email or self.request.session.get('email','')
         first_name = self.cart_obj.first_name or self.request.session.get('first_name')
