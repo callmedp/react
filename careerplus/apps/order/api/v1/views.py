@@ -468,7 +468,8 @@ class DirectOrderCreateApiView(OrderMixin, CartMixin, PaymentMixin, APIView):
                         candidate_id=candidate_id).first()
 
                     if product_point:
-                        ref_order = Order.objects.filter(id=product_point.order_id).first()
+                        ref_order = Order.objects.filter(
+                            id=product_point.order_id).first()
                         order.ref_order = ref_order
                         try:
                             order.save()
@@ -492,7 +493,7 @@ class DirectOrderCreateApiView(OrderMixin, CartMixin, PaymentMixin, APIView):
                 return Response({'status': 1, 'redirectUrl': '/dashboard'},
                                 status=status.HTTP_200_OK)
             else:
-                return Response({'status': -1, error_message': "Could not able to create Order!"},
+                return Response({'status': -1, 'error_message': "Could not able to create Order!"},
                                 status=status.HTTP_400_BAD_REQUEST)
 
         else:
