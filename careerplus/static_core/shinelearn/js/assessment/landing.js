@@ -30,6 +30,7 @@ $('#testModal').on('show.bs.modal', function (e) {
         ga('send', 'event', 'Buy Flow', 'Enroll Now', modalobject.productId);
 
         if (modalobject.redeem_test == 'True') {
+            $('#testModal').modal('hide')
             $('.overlay-background').show()
             $('body').addClass('body-noscroll')
             createDirectOrder(modalobject.productId, 'practice_test');
