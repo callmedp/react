@@ -570,7 +570,7 @@ class Order(AbstractAutoDate):
                 candidate_id=self.candidate_id,
                 redeem_options=str(redeem_options),
                 active=True,
-                defaults={candidate_id:self.candidate_id}
+                defaults={'candidate_id':self.candidate_id}
             )
             try:
                 product_point.save()
