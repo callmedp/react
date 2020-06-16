@@ -196,12 +196,12 @@ class AssessmentSubCategoryPage(DetailView):
         """
         modified_tests = []
         for test in all_test:
-            test['redeem_test'] = False
+            setattr(test, 'redeem_test', False)
             if not test.product_id:
                 modified_tests.append(test)
                 continue
 
-            candidate_id = request.session and request.session.get(
+            candidate_id = self.request.session and self.request.session.get(
                 'candidate_id', None)
 
             if candidate_id is None:
@@ -218,7 +218,7 @@ class AssessmentSubCategoryPage(DetailView):
             else:
                 code = attr_value.value and attr_value.value.code or None
 
-            if code is None or code != '102':
+            if code is None or code != '101':
                 modified_tests.append(test)
                 continue
 
@@ -244,11 +244,11 @@ class AssessmentSubCategoryPage(DetailView):
             days = required_obj['product_validity_in_days'] or 0
             timestamp = required_obj['purchased_at'] or 0
             days_diff = datetime.now() - datetime.fromtimestamp(int(timestamp))
-            if days_diff > days:
+            if days_diff.days > days:
                 modified_tests.append(test)
                 continue
 
-            test['redeem_test'] = True
+            setattr(test, 'redeem_test', True)
             modified_tests.append(test)
 
         return modified_tests

@@ -50,6 +50,24 @@ class PaymentMixin(object):
             txn_obj.save()
 
             return_parameter = reverse('payment:thank-you')
+        
+        elif payment_type == "REDEEMED":
+            payment_date = datetime.now()
+            payment_mode = 15
+
+            order.status = 1
+            order.payment_date = payment_date
+            order.save()
+
+            txn_obj.status = 1
+            txn_obj.payment_mode = payment_mode
+            txn_obj.payment_date = payment_date
+            txn_obj.save()
+
+            return_parameter = reverse('dashboard:dashboard')
+
+            return return_parameter
+            
 
         elif payment_type == "CCAVENUE":
             payment_date = datetime.now()

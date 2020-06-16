@@ -65,3 +65,26 @@ input[type="button"] {
 :focus {
 outline: 0;
 }
+
+
+.overlay-background {
+  background: #000000;  
+  display: none;        
+  position: fixed;   
+  top: 0;                 
+  right: 0;             
+  bottom: 0;
+  left: 0;
+  opacity: 0.5;
+  z-index: 999;
+  
+}
+
+.loader-position {
+  transform: translate(900%, 500%);
+}
+
+.body-noscroll {
+ overflow: hidden;
+}
+

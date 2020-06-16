@@ -209,7 +209,7 @@ class ProductAttributesContainer(object):
         return self.objects.none()
 
     def get_attribute_by_name(self, name):
-        return self.get_all_attributes().get(name=name)
+        return self.get_all_attributes().filter(name=name).first()
 
     def __iter__(self):
         return iter(self.get_values())

@@ -4,6 +4,10 @@ $('#testModal').on('show.bs.modal', function (e) {
     $('#productName').attr("href", modalobject.productUrl);
     $('#productName').attr("title", modalobject.productName);
     $('#productDuration').text(modalobject.productDuration);
+    if (modalobject.redeem_test == 'True') {
+        $('#testAddToCart').text('Redeem');
+    }
+    else $('#testAddToCart').text('Add To Cart');
     $('#productPrice').text('Rs. ' + modalobject.productPrice);
     $('#courseDuration').text(modalobject.courseDuration);
     $('#coursePrice').text('Rs. ' + modalobject.coursePrice);
@@ -24,7 +28,13 @@ $('#testModal').on('show.bs.modal', function (e) {
     $('#startTestLink').attr("href", '/practice-tests/' + modalobject.testSlug + '-test/');
     $('#testAddToCart').click(function () {
         ga('send', 'event', 'Buy Flow', 'Enroll Now', modalobject.productId);
-        updateToCart(modalobject.productId, 'cart');
+
+        if (modalobject.redeem_test == 'True') {
+            $('.overlay-background').show()
+            $('body').addClass('body-noscroll')
+            createDirectOrder(modalobject.productId, 'practice_test');
+        }
+        else updateToCart(modalobject.productId, 'cart');
     }
     );
     $('#courseCartBtn').click(function () {
@@ -79,19 +89,20 @@ function courseUpdateToCart(prod_id, cart_type = 'cart') {
     });
 }
 
-function createDirectOrder(productId) {
+function createDirectOrder(productId, redeem_option) {
+
     $.ajax({
-        url: '/order/api/v1/direct-order/',
+        url: '/api/v1/order/direct-order/',
         type: 'POST',
-        data: { 'prod_id': productId},
+        data: { 'prod_id': productId, 'redeem_option': redeem_option },
         dataType: 'json',
         success: function (json) {
             if (json.status == 1) {
-
-                window.location.href = json.cart_url;
-
+                window.location.href = json.redirectUrl;
             }
             else if (json.status == -1) {
+                $('.overlay-background').hide()
+                $('body').removeClass('body-noscroll')
                 alert("Something went wrong, Please try again.");
             }
 

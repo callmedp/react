@@ -43,6 +43,10 @@
 
 {% block container %}
 <div class="body-wrapper practice-test ">
+    <div id="loader" class="overlay-background" text-align: center;">
+        <img aria-label="loader" id="loadingimg" class="loader-position-mobile"
+            src="{% static 'shinelearn/images/mobile/loader1.png' %}">
+    </div>
     <div class="practice-test-inside"></div>
 
     <div class="back" onclick="goBack();"></div>
@@ -81,7 +85,7 @@
                        {% for test in all_test %}
 
         <div class="popular_test_inside">
-           <a id="{{test.id}}" onclick="testModal(event);" data-attr-value='{"id":"{{test.id}}","catid":"{{test.category.id}}","quescount":"{{test.get_question_count}}","testSlug":"{{test.slug}}","vendor":"{{test.vendor.id}}","courseName":"{{test.course.name}}","courseDuration":"{{test.course.get_duration_in_day}}","coursePrice":"{{test.course.inr_price}}","productName":"{{test.product.name}}","productDuration":"{{test.product.get_duration_day}}","productPrice":"{{test.product.inr_price}}","productId":"{{test.product.id}}","courseId":"{{test.course.id}}","courseUrl":"{{test.course.get_absolute_url}}","productUrl":"{{test.product.get_absolute_url}}" }'>
+           <a id="{{test.id}}" onclick="testModal(event);" data-attr-value='{"id":"{{test.id}}","catid":"{{test.category.id}}","quescount":"{{test.get_question_count}}","testSlug":"{{test.slug}}","vendor":"{{test.vendor.id}}","courseName":"{{test.course.name}}","courseDuration":"{{test.course.get_duration_in_day}}","coursePrice":"{{test.course.inr_price}}","productName":"{{test.product.name}}","productDuration":"{{test.product.get_duration_day}}","productPrice":"{{test.product.inr_price}}","productId":"{{test.product.id}}","courseId":"{{test.course.id}}","courseUrl":"{{test.course.get_absolute_url}}","productUrl":"{{test.product.get_absolute_url}}", "redeem_test": "{{test.redeem_test}}" }'>
                 <span class="border border{{forloop.counter0}}"></span>
                 <span class="name">{{test.title}}</span>
                 <span class="btn btn-md btn-round-30 btn-blue" id="btn_check_result">Take free test</span>
@@ -158,11 +162,7 @@
                     <span id="fakeProductPrice"> </span>
                     <strong id="productPrice">Rs. 699</strong>
                 </div>
-            {% if test.redeem_test %}
-                <button class="btn btn-lg btn-round-30 btn-yellow semi-bold" id="createOrderForTest">Redeem</button>
-            {% else %}
-                <button class="btn btn-lg btn-round-30 btn-yellow semi-bold" id="testAddToCart">Add to cart</button>
-            {% endif %}
+                <button class="btn btn-lg btn-round-30 btn-yellow semi-bold" id="testAddToCart"></button>
             </div>
         </div><!-- Practice Tests box-->
 

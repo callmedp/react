@@ -44,6 +44,11 @@
 <div class="practice-skill__wrap-inner">
    <div class="right_base"></div>
       <div class="container">
+         
+         <div id="loader" class="overlay-background" text-align: center;">
+            <img aria-label="loader" id="loadingimg" class="loader-position" src="{% static 'shinelearn/images/loader1.png' %}">
+         </div>
+         
          {% block breadcrumb %}
          <ol class="breadcrumb  black mb-0" itemscope="" itemtype="http://schema.org/BreadcrumbList">
          {% for bradcbs in breadcrumbs %}
@@ -81,7 +86,7 @@
                {% for test in all_test %}
                <div class="testinside">
                   <span class="border-left border{{forloop.counter}}"></span>
-  <a id="{{test.id}}" class="testModal" data-toggle="modal" data-attr-value='{"id":"{{test.id}}","catid":"{{test.category.id}}","quescount":"{{test.get_question_count}}","testSlug":"{{test.slug}}","vendor":"{{test.vendor.id}}","courseName":"{{test.course.name}}","courseDuration":"{{test.course.get_duration_in_day}}","coursePrice":"{{test.course.inr_price}}","productName":"{{test.product.name}}","productDuration":"{{test.product.get_duration_day}}","productPrice":"{{test.product.inr_price}}","productId":"{{test.product.id}}","courseId":"{{test.course.id}}","courseUrl":"{{test.course.get_absolute_url}}","productUrl":"{{test.product.absolute_url}}"  }' data-target="#testModal">
+  <a id="{{test.id}}" class="testModal" data-toggle="modal" data-attr-value='{"id":"{{test.id}}","catid":"{{test.category.id}}","quescount":"{{test.get_question_count}}","testSlug":"{{test.slug}}","vendor":"{{test.vendor.id}}","courseName":"{{test.course.name}}","courseDuration":"{{test.course.get_duration_in_day}}","coursePrice":"{{test.course.inr_price}}","productName":"{{test.product.name}}","productDuration":"{{test.product.get_duration_day}}","productPrice":"{{test.product.inr_price}}","productId":"{{test.product.id}}","courseId":"{{test.course.id}}","courseUrl":"{{test.course.get_absolute_url}}","productUrl":"{{test.product.absolute_url}}", "redeem_test": "{{test.redeem_test}}" }' data-target="#testModal">
                      {{test.title}}
                      <div class="white_hover"></div>
                      <span class="taketest" >Take Free Test</span>
@@ -153,12 +158,7 @@
                </ul>
                <p>Real exam & Practice environment</p>
                <p class="pb-30">Explanation to every questions</p>
-               {% if test.redeem_test %}
-                  <button class="yellow_btn pull-right" id="createOrderForTest" >Redeem</button>
-               {% else %}
-                  <button class="yellow_btn pull-right" id="testAddToCart">Add to cart</button>
-               {% endif %}
-
+                  <button class="yellow_btn pull-right" id="testAddToCart"></button>
                   <strike id="fakeProductPrice"></strike>
                <h4 class="mt-0" id="productPrice">Rs.</h4>
             </span>
