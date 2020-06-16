@@ -60,7 +60,7 @@ from .serializers import (
     ImportCertificateSerializer,
     ShineDataFlowDataSerializer,
     CertificateSerializer,TalentEconomySerializer,QuestionAnswerSerializer,
-    OrderDetailSerializer, OrderListSerializer)
+    OrderDetailSerializer, OrderListSerializer,BlogTagsSerializer)
 
 from partner.models import Certificate, Vendor
 from shared.rest_addons.pagination import LearningCustomPagination
@@ -1716,6 +1716,14 @@ class GetCacheValue(APIView):
         }, status=status.HTTP_200_OK)
 
 
+class BlogTagsAPIView(ListAPIView):
+    authentication_classes = ()
+    permission_classes = ()
+    pagination_class = LearningCustomPagination
+    serializer_class = BlogTagsSerializer
+
+    def get_queryset(self, *args, **kwargs):
+        return Tag.objects.filter(blog__status=1,blog__visibility=2).exclude(blog=None)
 
         
 

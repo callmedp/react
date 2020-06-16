@@ -24,6 +24,7 @@ from django.core.cache import cache
 from django.utils.text import slugify
 from core.library.gcloud.custom_cloud_storage import GCPMediaStorage,GCPPrivateMediaStorage
 from assessment.models import Question
+from blog.models import Tag
 
 import logging
 
@@ -511,3 +512,10 @@ class OrderListSerializer(SerializerFieldsMixin, ModelSerializer):
         model = OrderItem
         fields = ('order_id', 'order_payment_date', 'product_name', 'created')
 
+
+
+class BlogTagsSerializer(ModelSerializer):
+
+    class Meta:
+        model = Tag
+        fields = ('id','name','slug')
