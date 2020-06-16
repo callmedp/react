@@ -492,9 +492,9 @@ class DirectOrderCreateApiView(OrderMixin, CartMixin, PaymentMixin, APIView):
                 return Response({'status': 1, 'redirectUrl': '/dashboard'},
                                 status=status.HTTP_200_OK)
             else:
-                return Response({'error_message': "Could not able  to create Order!"},
+                return Response({'status': -1, error_message': "Could not able to create Order!"},
                                 status=status.HTTP_400_BAD_REQUEST)
 
         else:
-            return Response({'error_message': "Could not able  to use wallet Points!"},
+            return Response({'status': -1, 'error_message': "Could not able to use wallet Points!"},
                             status=status.HTTP_400_BAD_REQUEST)
