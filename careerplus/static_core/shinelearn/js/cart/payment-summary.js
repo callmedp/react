@@ -228,14 +228,14 @@ function JSRemoveDiscount(e) {
         },
         failure: function (response) {
 
-           
+
 
             alert_message = 'Something is not working, Please try later!';
 
-             // remove loader
-             $('.overlay-background').hide()
-             $('body').removeClass('body-noscroll')
-             
+            // remove loader
+            $('.overlay-background').hide()
+            $('body').removeClass('body-noscroll')
+
             $('#discount_code').parent().addClass('error');
             $('#discount-alert').empty();
             $('#discount-alert').text(alert_message);
@@ -245,8 +245,8 @@ function JSRemoveDiscount(e) {
 
         },
         error: function (result, status, err) {
-     
-                    
+
+
 
             if (result && result.status == 400) {
                 alert_message = result.responseJSON;
@@ -256,11 +256,11 @@ function JSRemoveDiscount(e) {
 
             }
 
-              // remove loader
-              $('.overlay-background').hide()
-              $('body').removeClass('body-noscroll')
-  
-  
+            // remove loader
+            $('.overlay-background').hide()
+            $('body').removeClass('body-noscroll')
+
+
             $('#discount_code').parent().addClass('error');
             $('#discount-alert').empty();
             $('#discount-alert').text(alert_message);
@@ -375,9 +375,9 @@ function removeFromCart(line_id) {
 
     }
     else {
-          // remove loader
-          $('.overlay-background').hide()
-          $('body').removeClass('body-noscroll')
+        // remove loader
+        $('.overlay-background').hide()
+        $('body').removeClass('body-noscroll')
     }
 
 };
@@ -395,33 +395,146 @@ function removeVariationsOrAddons(csrfToken, reference, lineId) {
         // remove loader
         $('.overlay-background').hide()
         $('body').removeClass('body-noscroll')
-  }
+    }
 
 }
 
 
+async function handleResponse(response, isFetchingHTML) {
+
+    // handle all the status and conditions here
+    if (response['ok'] === false) {
+        let message = '';
+        let data = await response.json();
+        for (const key in data) {
+            message += `${data[key]} `;
+        }
+        if (response['status'] === 401) {
+            // Handle validation
+        }
+        return {
+            error: true,
+            errorMessage: message,
+            status: response['status'],
+        }
+    } else if (response['status'] === 204) {
+        return { data: {} };
+    } else {
+        let result = isFetchingHTML ? await response.text() : await response.json();
+        return { data: result };
+    }
+}
+
+const handleError = (prodId) => {
+    $('.overlay-background').hide()
+    $('body').removeClass('body-noscroll')
+
+    if (prodId) {
+        window.location.href = `/login/?next=/cart/payment-summary/?prod_id=${prodId}`;
+        return;
+    }
+    else {
+        window.location.href = `/login/?next=/cart/payment-summary/`;
+        return;
+    }
+
+}
+
+
+
 $(document).ready(function () {
-    $('#payment-summary-continue-id').click(function () {
-        $('#payment-summary-continue-id').attr('disabled', true);
-    });
+    const handPaymentSummary = async () => {
 
-    $('.trig-loader').click(function () {
+        const defaultHeaders = {
+            "Content-Type": "application/json",
+        };
 
-        $('.overlay-background').show()
-        $('body').addClass('body-noscroll')
-    })
 
-    $("#discount_code").keyup(function (event) {
-        event.preventDefault()
-        if (event.keyCode === 13) {
-            $("#discount-apply").click();
+
+        const urlParams = new URLSearchParams(window.location.search);
+
+        const token = urlParams.get('token');
+        const prodId = urlParams.get('prod_id');
+
+        const domain = window.location.hostname != 'localhost' && window.location.protocol + '//' + window.location.hostname + (window.location.port ? ':' + window.location.port : '') || 'http://127.0.0.1:8000'
+        let loginResponse, responseData;
+        if (token) {
+            $('.overlay-background').show()
+            $('body').addClass('body-noscroll')
+            const loginData = { alt: token };
+            try {
+                loginResponse = await fetch(`${domain}/api/v1/candidate-login/`, {
+                    headers: defaultHeaders,
+                    method: 'POST',
+                    body: JSON.stringify(loginData)
+                })
+            }
+            catch (e) {
+                handleError(prodId)
+            }
+
+            responseData = await handleResponse(loginResponse)
+
+            if (responseData['error']) {
+                // Todo ***** error handling  *****
+                handleError(prodId)
+            }
         }
-    });
 
-    $("#loyalty_point").keyup(function (event) {
-        event.preventDefault()
-        if (event.keyCode === 13) {
-            $("#loyalty-point-apply").click();
+        if (prodId) {
+
+            $.ajax({
+                url: '/cart/add-to-cart/',
+                type: 'POST',
+                data: { 'prod_id': prodId, 'cart_type': 'cart', },
+                dataType: 'json',
+                success: function (json) {
+                    if (json.status == 1) {
+
+                        window.location.href = json.cart_url;
+
+                    }
+                    else if (json.status == -1) {
+                        alert("Something went wrong, Please try again.");
+                    }
+
+                },
+                failure: function (response) {
+                    alert("Something went wrong, Please try again");
+
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    alert("Something went wrong, Please try again");
+                }
+            });
+
         }
-    });
+
+
+        $('#payment-summary-continue-id').click(function () {
+            $('#payment-summary-continue-id').attr('disabled', true);
+        });
+
+        $('.trig-loader').click(function () {
+
+            $('.overlay-background').show()
+            $('body').addClass('body-noscroll')
+        })
+
+        $("#discount_code").keyup(function (event) {
+            event.preventDefault()
+            if (event.keyCode === 13) {
+                $("#discount-apply").click();
+            }
+        });
+
+        $("#loyalty_point").keyup(function (event) {
+            event.preventDefault()
+            if (event.keyCode === 13) {
+                $("#loyalty-point-apply").click();
+            }
+        });
+
+    }
+    handPaymentSummary();
 });
