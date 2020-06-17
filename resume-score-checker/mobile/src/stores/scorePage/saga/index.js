@@ -9,13 +9,13 @@ function* fileUpload(action) {
         var fileData = new FormData();
         fileData.append('resume', file);
         const result = yield call(Api.fileUpload, fileData);
-        
-        if(!result.data['error_message']){
+
+        if (!result.data['error_message']) {
             yield put({ type: UPDATE_SCORE, payload: result.data });
-            localStorage.setItem("resume_score", JSON.stringify({...result.data}))
+            localStorage.setItem("resume_score", JSON.stringify({ ...result.data }))
 
             result.data["loggedIn"] = localStorage.getItem('userId') ? localStorage.getItem('userId') : "";
-            try{
+            try {
                 yield call(Api.saveDataApi, result.data);
             }
             catch{
@@ -29,39 +29,48 @@ function* fileUpload(action) {
     }
 }
 
-const get_cleaned_score = (score) =>{
+const get_cleaned_score = (score) => {
     let cleaned_score = JSON.parse(JSON.stringify(score))
     return {
         ...cleaned_score,
-        section_score : cleaned_score?.section_score?.map((item,key) => {
-              if(item['section_description']){
-                  delete item.section_description
-              }
-              if(item['section_message']){
-                  delete item.section_message
-              }
-              return item
-    })
-}
+        section_score: cleaned_score?.section_score?.map((item, key) => {
+            if (item['section_description']) {
+                delete item.section_description
+            }
+            if (item['section_message']) {
+                delete item.section_message
+            }
+            if (item['error_message']) {
+                delete item.error_message
+            }
+            if (item['loggedIn']) {
+                delete item.loggedIn
+            }
+            if (item['cartCount']) {
+                delete item.cartCount
+            }
+            return item
+        })
+    }
 }
 
 function* expertFormData(action) {
-    const { payload: {values, resolve, reject,score} } = action;
+    const { payload: { values, resolve, reject, score } } = action;
     const cleaned_score = get_cleaned_score(score)
-    try{
-        let formData = values; 
+    try {
+        let formData = values;
         formData['lsource'] = 8;
         formData['campaign'] = 'resumechecker';
         formData['number'] = values.mobile;
         formData['prd'] = 'Resume Writing Service';
         formData['path'] = '/resume-score-checker';
         formData['msg'] = `time_stamp : ${new Date()};\n
-        score : ${JSON.stringify(cleaned_score)}`   
-        
+        score : ${JSON.stringify(cleaned_score)}`
+
         const response = yield call(Api.expertFormSubmit, formData);
         return resolve(response)
     }
-    catch(error){
+    catch (error) {
         return reject(error)
     }
 }
@@ -80,7 +89,7 @@ function* getCandidateId(action) {
 
 function* getCandidateResume(action) {
     let { payload: { resolve, reject } } = action;
-    try{
+    try {
         yield call(Api.getCandidateResume);
         return resolve(true)
     }
@@ -94,12 +103,12 @@ function* checkSessionAvailability(action) {
     try {
         let resp = yield call(Api.checkSessionAvailability)
         if (resp["error"]) {
-            resolve({result:false})
+            resolve({ result: false })
         }
         const { result } = resp;
-        resolve({result: result});
+        resolve({ result: result });
     } catch (e) {
-            resolve({result:false})
+        resolve({ result: false })
     }
 }
 
@@ -108,9 +117,9 @@ function* getCandidateScore(action) {
     const { payload: { candidateId, resumeId, resolve, reject } } = action;
     try {
         const result = yield call(Api.getCandidateScore, candidateId, resumeId)
-        if(!result.data['error_message']){
+        if (!result.data['error_message']) {
             yield put({ type: UPDATE_SCORE, payload: result.data });
-            localStorage.setItem("resume_score", JSON.stringify({...result.data}))
+            localStorage.setItem("resume_score", JSON.stringify({ ...result.data }))
             localStorage.setItem('resume_file', 'Imported from Shine')
         }
         return resolve(result.data)
@@ -121,14 +130,14 @@ function* getCandidateScore(action) {
 }
 
 function* getCandidateInfo(action) {
-    const { payload: { resolve, reject }} = action;
+    const { payload: { resolve, reject } } = action;
     try {
         const result = yield call(Api.getInformation);
-        const {candidate_id, profile:{first_name, email}} = result; 
+        const { candidate_id, profile: { first_name, email } } = result;
         localStorage.setItem('userId', candidate_id);
         localStorage.setItem('userName', first_name);
         localStorage.setItem('userEmail', email);
-        resolve({candidateId:candidate_id|| '', name: first_name||'', email:email|| ''});
+        resolve({ candidateId: candidate_id || '', name: first_name || '', email: email || '' });
     }
     catch (e) {
         return reject(e);
@@ -141,7 +150,7 @@ function* getCartCount(action) {
     try {
         const result = yield call(Api.getCartCount);
         const { count } = result;
-        yield put({ type: UPDATE_SCORE, payload: { cartCount: count }});
+        yield put({ type: UPDATE_SCORE, payload: { cartCount: count } });
 
     }
     catch (e) {
