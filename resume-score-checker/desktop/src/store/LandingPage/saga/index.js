@@ -72,6 +72,16 @@ function* getCandidateScore(action) {
 
 const get_cleaned_score = (score) => {
     let cleaned_score = JSON.parse(JSON.stringify(score))
+    if (cleaned_score['error_message']) {
+        delete cleaned_score.error_message
+    }
+    if (cleaned_score['loggedIn']) {
+        delete cleaned_score.loggedIn
+    }
+    if (cleaned_score['cartCount']) {
+        delete cleaned_score.cartCount
+    }
+      
     return {
         ...cleaned_score,
         section_score: cleaned_score?.section_score?.map((item, key) => {
@@ -80,15 +90,6 @@ const get_cleaned_score = (score) => {
             }
             if (item['section_message']) {
                 delete item.section_message
-            }
-            if (item['error_message']) {
-                delete item.error_message
-            }
-            if (item['loggedIn']) {
-                delete item.loggedIn
-            }
-            if (item['cartCount']) {
-                delete item.cartCount
             }
             return item
         })
