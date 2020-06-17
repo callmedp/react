@@ -559,7 +559,7 @@ class PaymentSummaryView(TemplateView, CartMixin):
     def __init__(self):
         self.cart_obj = None
 
-    def redirect_if_necessary(self, token):
+    def redirect_if_necessary(self, reload_url):
 
         if not self.request.session.get('cart_pk'):
             self.cart_obj = self.getCartObject()
@@ -577,7 +577,7 @@ class PaymentSummaryView(TemplateView, CartMixin):
         if not self.cart_obj.owner_id:
             self.cart_obj = self.getCartObject()
 
-        if token:
+        if reload_url:
             return HttpResponseRedirect(reverse('cart:payment-summary'))
 
         if self.request.session.get('email') and not self.cart_obj.email:
@@ -602,6 +602,7 @@ class PaymentSummaryView(TemplateView, CartMixin):
         valid = False
         candidate_id = None
         add_status = -1
+        reload_url = token or product_id
         if token:
             try:
                 token = token.replace(" ", "+")
@@ -633,8 +634,7 @@ class PaymentSummaryView(TemplateView, CartMixin):
                     logging.getLogger('error_log').error(
                         "Failed Adding Product Item - {}".format(product.id))
 
-
-        redirect = self.redirect_if_necessary(token)
+        redirect = self.redirect_if_necessary(reload_url)
         if redirect:
             return redirect
         return super(self.__class__, self).get(request, *args, **kwargs)
