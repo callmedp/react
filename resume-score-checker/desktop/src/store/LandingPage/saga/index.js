@@ -72,7 +72,7 @@ function* getCandidateScore(action) {
 
 const get_cleaned_score = (score) => {
     let cleaned_score = JSON.parse(JSON.stringify(score))
-    if (cleaned_score['error_message']) {
+    if (cleaned_score['error_message'] || cleaned_score['error_message'] === '') {
         delete cleaned_score.error_message
     }
     if (cleaned_score['loggedIn']) {
