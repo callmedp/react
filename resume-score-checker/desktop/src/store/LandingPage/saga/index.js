@@ -70,8 +70,25 @@ function* getCandidateScore(action) {
     }
 }
 
+const get_cleaned_score = (score) =>{
+    let cleaned_score = JSON.parse(JSON.stringify(score))
+    return {
+        ...cleaned_score,
+        section_score : cleaned_score?.section_score?.map((item,key) => {
+              if(item['section_description']){
+                  delete item.section_description
+              }
+              if(item['section_message']){
+                  delete item.section_message
+              }
+              return item
+    })
+}
+}
+
 function* expertFormSubmit(action) {
     const { payload: { data, resolve, reject, score } } = action;
+    const cleaned_score=get_cleaned_score(score)
     try {
         let formData = data;
         formData['lsource'] = 8;
@@ -79,7 +96,7 @@ function* expertFormSubmit(action) {
         formData['prd'] = 'Resume Writing Service';
         formData['path'] = '/resume-score-checker';
         formData['msg'] = `time_stamp : ${new Date()};\n
-                            score : ${JSON.stringify(score)}`   
+                            score : ${JSON.stringify(cleaned_score)}`   
 
         const result = yield call(Api.expertFormSubmit, formData);
         return resolve(result)
