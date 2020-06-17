@@ -614,7 +614,10 @@ class PaymentSummaryView(TemplateView, CartMixin):
             if valid and candidate_id:
                 try:
                     login_response = ShineCandidateDetail().get_candidate_detail(shine_id=candidate_id)
+                    personal_info = login_response.get('personal_detail')[0]
+                    personal_info['candidate_id'] = personal_info.get('id')
                     request.session.update(login_response)
+                    request.session.update(personal_info)
                     mobile_number = request.session.get('cell_phone', '')
                     request.session.update({'mobile_no': mobile_number})
 
