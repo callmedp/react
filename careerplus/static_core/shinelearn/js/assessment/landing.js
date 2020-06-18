@@ -4,10 +4,7 @@ $('#testModal').on('show.bs.modal', function (e) {
     $('#productName').attr("href", modalobject.productUrl);
     $('#productName').attr("title", modalobject.productName);
     $('#productDuration').text(modalobject.productDuration);
-    if (modalobject.redeem_test == 'True') {
-        $('#testAddToCart').text('Redeem');
-    }
-    else $('#testAddToCart').text('Add To Cart');
+    
     $('#productPrice').text('Rs. ' + modalobject.productPrice);
     $('#courseDuration').text(modalobject.courseDuration);
     $('#coursePrice').text('Rs. ' + modalobject.coursePrice);
@@ -43,8 +40,10 @@ $('#testModal').on('show.bs.modal', function (e) {
     });
 
     //  create direct order on Redeeming the Test and Update the ProductPoint Record
-    $('createOrderForTest').click(function () {
-        createDirectOrder(modalobject.productId)
+    $('#createOrderForTest').click(function () {
+        $('.overlay-background').show()
+        $('body').addClass('body-noscroll')
+        createDirectOrder(modalobject.productId, 'practice_test')
     })
 });
 

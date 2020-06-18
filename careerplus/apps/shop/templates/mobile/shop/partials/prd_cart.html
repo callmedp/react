@@ -43,7 +43,11 @@
                                     Enroll now
                                 {% endif %}
                                 </a>
-
+                                {% if redeem_test %}
+                                    <a class="btn btn-yellow w100fl" id="redeem_test" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="#">
+                                        Redeem Now
+                                    </a>
+                                {% endif %}
                     </li>
                     {% endif %}
                 {% endif %}

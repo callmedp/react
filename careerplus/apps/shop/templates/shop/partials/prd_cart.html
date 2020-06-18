@@ -54,6 +54,12 @@
             Enroll now
         {% endif %}
         </a>
+        {% if redeem_test %}
+        <a role="button" class="enrol-now" id="redeem_test" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}"
+          href="javascript:void();">
+            Redeem Now
+        </a>
+        {% endif %}
       {% endif %}
     {% endif %}
     <!--div class="cart-message"><span class="cart-success" id="id-cart-message"></span></div-->

@@ -59,6 +59,9 @@
 
 {% block main_container %}
     <div id="id-detail-body">
+      <div id="loader" class="overlay-background" text-align: center;">
+        <img aria-label="loader" id="loadingimg" class="loader-position" src="{% static 'shinelearn/images/loader1.png' %}">
+      </div>
       {{product_detail|safe}}
         <input id="skill" type="hidden" value=" {{skill}} ">
    </div>

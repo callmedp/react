@@ -247,3 +247,41 @@ function closePopup() {
 }
 
 
+$('#redeem_test').click(function () {
+  $('.overlay-background').show()
+  $('body').addClass('body-noscroll')
+  const prodId =   $(this).attr('prod-id')
+  createDirectOrder(prodId , 'assessment')
+})
+
+
+function createDirectOrder(productId, redeem_option) {
+
+  $.ajax({
+    url: '/api/v1/order/direct-order/',
+    type: 'POST',
+    data: { 'prod_id': productId, 'redeem_option': redeem_option },
+    dataType: 'json',
+    success: function (json) {
+      if (json.status == 1) {
+        window.location.href = json.redirectUrl;
+      }
+      else if (json.status == -1) {
+        $('.overlay-background').hide()
+        $('body').removeClass('body-noscroll')
+        alert("Something went wrong, Please try again.");
+      }
+
+    },
+    failure: function (response) {
+      alert("Something went wrong, Please try again");
+
+    },
+    error: function (xhr, ajaxOptions, thrownError) {
+      alert("Something went wrong, Please try again");
+    }
+  });
+
+}
+
+

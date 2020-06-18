@@ -2255,3 +2255,27 @@ footer {
 .pb-83 {
 	padding-bottom: 83px !important;
   }
+
+  
+
+.overlay-background {
+  background: #000000;  
+  display: none;        
+  position: fixed;   
+  top: 0;                 
+  right: 0;             
+  bottom: 0;
+  left: 0;
+  opacity: 0.5;
+  z-index: 1000;
+  
+}
+
+.loader-position {
+  transform: translate(900%, 500%);
+  z-index:1000;
+}
+
+.body-noscroll {
+ overflow: hidden;
+}
