@@ -2,186 +2,199 @@
 
 <!--hidden form -->
 <div style="display: none">
-    <form role="form" method="POST" id="cartForm" > {% csrf_token %}
-        <input type="hidden" name="product_id" value="{{sqs.id}}">
-        <input type="hidden" name="cart_type" id="id-cart-type" value="">
-    </form>
+  <form role="form" method="POST" id="cartForm"> {% csrf_token %}
+    <input type="hidden" name="product_id" value="{{sqs.id}}">
+    <input type="hidden" name="cart_type" id="id-cart-type" value="">
+  </form>
 </div>
 
-  <div class="box-panel enrol-cart{% if product.inr_price < 5001 %} pb-65 {% else %} pb-83  {% endif %}">
-     <strong id="total-price" class="total-price" name="price_total" sum-price="{% if selected_var %}{{var_list.0.inr_price|floatformat}}{% else %}{{sqs.pPinb|floatformat}} {% endif %}" >Rs. {% if selected_var %}
-     {{var_list.0.inr_price|floatformat}}{% else %}
-     {{sqs.pPinb|floatformat}}{% endif %}/- <small>(+taxes)</small></strong>
+<div class="box-panel enrol-cart{% if product.inr_price < 5001 %} pb-65 {% else %} pb-83  {% endif %}">
+  <strong id="total-price" class="total-price" name="price_total"
+    sum-price="{% if selected_var %}{{var_list.0.inr_price|floatformat}}{% else %}{{sqs.pPinb|floatformat}} {% endif %}">Rs.
+    {% if selected_var %}
+    {{var_list.0.inr_price|floatformat}}{% else %}
+    {{sqs.pPinb|floatformat}}{% endif %}/- <small>(+taxes)</small></strong>
 
-    
-    {% if selected_var or sqs.pPfinb %}
-        <strike id="id-total-actual-price" total-actual-price="{% if selected_var.fake_inr_price %}{{selected_var.fake_inr_price|floatformat}}{% else %}{{sqs.pPfinb|floatformat}}{% endif %}" >
-            {% if selected_var.fake_inr_price > var_list.0.inr_price %}Rs.&nbsp;{{selected_var.fake_inr_price|floatformat}}/-{% elif sqs.pPfinb > sqs.pPinb %}Rs.&nbsp;{{sqs.pPfinb|floatformat}}/-{% endif %}
-        </strike>
 
-        <small id="id_percentage-off" percentage-off="{% if selected_var.fake_inr_price %}{{get_fakeprice.1|floatformat}}{% else %}{{get_fakeprice.1|floatformat}}{% endif %}">
-            {% if selected_var.fake_inr_price > var_list.0.inr_price %}
-              {{get_fakeprice.1}}% off
-            {% elif sqs.pPfinb > sqs.pPinb %}
-              {{get_fakeprice.1|floatformat}}% off
-            {% endif %}
-        </small>
+  {% if selected_var or sqs.pPfinb %}
+  <strike id="id-total-actual-price"
+    total-actual-price="{% if selected_var.fake_inr_price %}{{selected_var.fake_inr_price|floatformat}}{% else %}{{sqs.pPfinb|floatformat}}{% endif %}">
+    {% if selected_var.fake_inr_price > var_list.0.inr_price %}Rs.&nbsp;{{selected_var.fake_inr_price|floatformat}}/-{% elif sqs.pPfinb > sqs.pPinb %}Rs.&nbsp;{{sqs.pPfinb|floatformat}}/-{% endif %}
+  </strike>
+
+  <small id="id_percentage-off"
+    percentage-off="{% if selected_var.fake_inr_price %}{{get_fakeprice.1|floatformat}}{% else %}{{get_fakeprice.1|floatformat}}{% endif %}">
+    {% if selected_var.fake_inr_price > var_list.0.inr_price %}
+    {{get_fakeprice.1}}% off
+    {% elif sqs.pPfinb > sqs.pPinb %}
+    {{get_fakeprice.1|floatformat}}% off
     {% endif %}
-    <span class="clearfix db"></span>
+  </small>
+  {% endif %}
+  <span class="clearfix db"></span>
 
-    {% comment %}
-    {% if sqs.id in linkedin_resume_services and not request.session.candidate_id %}
-      <a role="button" class="enrol-now" id="login-now-button" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll now</a>
-    {% else %}
-    {% endcomment %}
+  {% comment %}
+  {% if sqs.id in linkedin_resume_services and not request.session.candidate_id %}
+  <a role="button" class="enrol-now" id="login-now-button" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}"
+    href="javascript:void();">Enroll now</a>
+  {% else %}
+  {% endcomment %}
 
-    {% if sqs.id in linkedin_resume_services %}
-    <!-- buy now button -->
-        <a role="button" class="enrol-now" id="enrol-now-button" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll now</a>
-    {% endif %}
+  {% if sqs.id in linkedin_resume_services %}
+  <!-- buy now button -->
+  <a role="button" class="enrol-now" id="enrol-now-button" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}"
+    href="javascript:void();">Enroll now</a>
+  {% endif %}
 
 
-    <!-- Add to cart button and redirect to cart add class- enrol-now -->
-    {% if sqs.id not in linkedin_resume_services %}
-        {% if prd_vendor_slug == 'neo' %}
-      <div class="price-box-prd">
-        <span class="col">
-          <a role="button" class="enrol-now neo-enroll-button" data-neotest="1" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" >Enroll now</a>
-        </span>
-        <span class="col">
-          <a role="button" class="enrol-now" id="redeem_test" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Redeem Now</a>
-        </span>
-      </div>
-      {% else %}
-        <a role="button" class="enrol-now" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">
-            {% if product.is_assesment %}
-            BuyNow
-            {% else %}
-            Enroll now
+  <!-- Add to cart button and redirect to cart add class- enrol-now -->
+  {% if sqs.id not in linkedin_resume_services %}
+  {% if prd_vendor_slug == 'neo' %}
+  <a role="button" class="enrol-now neo-enroll-button" data-neotest="1" prod-id="{{sqs.id}}"
+    data-price="{{sqs.inr_price}}">Enroll now</a>
+  {% else %}
+  <div class="price-box-prd">
+    <span class="col">
+      <a role="button" class="enrol-now" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}"
+        href="javascript:void();">
+        {% if product.is_assesment %}
+        BuyNow
+        {% else %}
+        Enroll now
         {% endif %}
-        </a>
-        <!-- {% if redeem_test %} -->
-        <a role="button" class="enrol-now" id="redeem_test" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}"
-          href="javascript:void();">
-            Redeem Now
-        </a>
-        <!-- {% endif %} -->
+      </a>
+    </span>
+    {% if redeem_test %}
+    <span class="col">
+      <a role="button" class="enrol-now" id="redeem_test" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}"
+        href="javascript:void();">Redeem Now</a>
+    </span>
       {% endif %}
-    {% endif %}
-    <!--div class="cart-message"><span class="cart-success" id="id-cart-message"></span></div-->
+  </div>
+  <!-- {% if redeem_test %} -->
 
-    <!--a role="button" class="add-cart" onclick="addToCart('{{object.id}}')" data-price="{{object.get_price}}">Add to cart</a-->
-    
-    <!--div class="query-call">
+  <!-- {% endif %} -->
+  {% endif %}
+  {% endif %}
+  <!--div class="cart-message"><span class="cart-success" id="id-cart-message"></span></div-->
+
+  <!--a role="button" class="add-cart" onclick="addToCart('{{object.id}}')" data-price="{{object.get_price}}">Add to cart</a-->
+
+  <!--div class="query-call">
       <a href="#" data-toggle="modal" data-target=".bs-example-modal-sm3"><figure class="email-icon"></figure> Have a query?</a>
       <a href="tel:{{ggn_contact}}">
         <figure class="calling-icon"></figure> {{ggn_contact}}
       </a>
     </div-->
-         {% if product.inr_price < 5001 %}
-    <div class="e-payLatter">
-      <span class="mr-15">
-        <img aria-label="ePayLater" src="{% static "shinelearn/images/epaylatter.png" %}"/>
-      </span>
-      <p>Buy now and <span class="bold">make payment within 14 days</span> using ePayLater </p>
-    </div><!-- ./ e-payLatter -->
+  {% if product.inr_price < 5001 %}
+  <div class="e-payLatter">
+    <span class="mr-15">
+      <img aria-label="ePayLater" src="{% static "shinelearn/images/epaylatter.png" %}" />
+    </span>
+    <p>Buy now and <span class="bold">make payment within 14 days</span> using ePayLater </p>
+  </div><!-- ./ e-payLatter -->
 
-        {% else %}
+  {% else %}
 
-        <div class="e-payLatter">
-      <span class="mr-15">
-        <img aria-label="ePayLater" src="{% static 'shinelearn/images/payments/zest.png' %}">
-      </span>
-      <p>Avail &nbsp<span class="bold">Interest-free EMIs at no additional cost </span> using Zest Money payment option  </p>
-    </div>
-
-          {% endif %}
+  <div class="e-payLatter">
+    <span class="mr-15">
+      <img aria-label="ePayLater" src="{% static 'shinelearn/images/payments/zest.png' %}">
+    </span>
+    <p>Avail &nbsp<span class="bold">Interest-free EMIs at no additional cost </span> using Zest Money payment option
+    </p>
   </div>
-  <div class="cls_samples_enquiry samples_enquiry">
- {%if product.inr_price > 501 %}
-  <!-- check free sample start -->
-      <!-- Interested in this course? -->
-      <div class="course-query box-panel mb-40 cleafix">
-          <h2 class="heading-right">
-            {% if product.is_course %}
-              Interested in this course?
-            {% elif product.is_assesment %}
-               Interested?
-            {% else %}
-              Interested in this service?
-            {% endif %}
-          </h2>
-          <form id="callback_form" role="form" action="" method="get">
-            <div style='display:none'>
-              <input type='hidden' name='csrfmiddlewaretoken' value='{{csrf_token}}'/>
-            </div>
-            <div class="form-group">
-                <input type="text" name="name" class="form-control" placeholder="Name" maxlength="100" value="{{request.session.full_name}}">
-                <span class="error-txt"></span>
-            </div>
-            <div class="form-group">
-              <input type="text" name="email" class="form-control" placeholder="Email" maxlength="100" value="{{request.session.email}}">
-              <span class="error-txt"></span>
-            </div>
-            <div class="form-group">
-                <div class="country-code">
-                    <div class="custom-select">
-                        <select class="form-control" name="country_code">
-                          {% for country in country_choices %}
-                            <option value="{{country.0}}" {% if country.0 == initial_country %} selected {% endif %} >{{country.0}}&nbsp;&nbsp;&nbsp;&nbsp; --&nbsp;&nbsp;&nbsp;&nbsp; {{country.1}}</option>
-                          {% endfor %}
-                        </select>
-                    </div>
-                    <input type="text" class="form-control" name="number" 
-                    placeholder="Mobile" maxlength="15" value="{{request.session.mobile_no}}">
-                    <span class="error-txt"></span>
-                </div>
-            </div>
-            {% if  prd_service == 'course' %}
-              <input type="hidden" name="lsource" value="2">
-            {% else %}
-              <input type="hidden" name="lsource" value="8">
-            {% endif %}
-            <input type="hidden" name="product" value="{{product.pk}}">
-            <input type="hidden" name="prd" value="{{product.heading}}">
-            <input type="hidden" name="path" value="{{product.get_absolute_url}}">
-            {% if prd_vendor_slug == "neo" %}
-               <input type="hidden" name="campaign" value="neo">
-            {% endif %}
 
-          </form>
-          <button type="button" {% if prd_vendor_slug == "neo" %} id="id_callback_neo"  {% else %}id="id_callback" {% endif %}class="callback-button mt-10">Request a call back</button>
-          <!--button type="button" id="id_callback" class="submit-button">
+  {% endif %}
+</div>
+<div class="cls_samples_enquiry samples_enquiry">
+  {%if product.inr_price > 501 %}
+  <!-- check free sample start -->
+  <!-- Interested in this course? -->
+  <div class="course-query box-panel mb-40 cleafix">
+    <h2 class="heading-right">
+      {% if product.is_course %}
+      Interested in this course?
+      {% elif product.is_assesment %}
+      Interested?
+      {% else %}
+      Interested in this service?
+      {% endif %}
+    </h2>
+    <form id="callback_form" role="form" action="" method="get">
+      <div style='display:none'>
+        <input type='hidden' name='csrfmiddlewaretoken' value='{{csrf_token}}' />
+      </div>
+      <div class="form-group">
+        <input type="text" name="name" class="form-control" placeholder="Name" maxlength="100"
+          value="{{request.session.full_name}}">
+        <span class="error-txt"></span>
+      </div>
+      <div class="form-group">
+        <input type="text" name="email" class="form-control" placeholder="Email" maxlength="100"
+          value="{{request.session.email}}">
+        <span class="error-txt"></span>
+      </div>
+      <div class="form-group">
+        <div class="country-code">
+          <div class="custom-select">
+            <select class="form-control" name="country_code">
+              {% for country in country_choices %}
+              <option value="{{country.0}}" {% if country.0 == initial_country %} selected {% endif %}>
+                {{country.0}}&nbsp;&nbsp;&nbsp;&nbsp; --&nbsp;&nbsp;&nbsp;&nbsp; {{country.1}}</option>
+              {% endfor %}
+            </select>
+          </div>
+          <input type="text" class="form-control" name="number" placeholder="Mobile" maxlength="15"
+            value="{{request.session.mobile_no}}">
+          <span class="error-txt"></span>
+        </div>
+      </div>
+      {% if  prd_service == 'course' %}
+      <input type="hidden" name="lsource" value="2">
+      {% else %}
+      <input type="hidden" name="lsource" value="8">
+      {% endif %}
+      <input type="hidden" name="product" value="{{product.pk}}">
+      <input type="hidden" name="prd" value="{{product.heading}}">
+      <input type="hidden" name="path" value="{{product.get_absolute_url}}">
+      {% if prd_vendor_slug == "neo" %}
+      <input type="hidden" name="campaign" value="neo">
+      {% endif %}
+
+    </form>
+    <button type="button" {% if prd_vendor_slug == "neo" %} id="id_callback_neo" {% else %}id="id_callback"
+      {% endif %}class="callback-button mt-10">Request a call back</button>
+    <!--button type="button" id="id_callback" class="submit-button">
             Submit
           </button-->
-      </div>
+  </div>
   {% endif %}
-      {% if product.take_free_test %}
-      <div class="mt-20 confused-about-buying">
-        <!-- <figure>
+  {% if product.take_free_test %}
+  <div class="mt-20 confused-about-buying">
+    <!-- <figure>
           <img src="{% static 'shinelearn/images/free_skill/take-test-bannerbg.png' %}" class="img-responsive">
         </figure> -->
 
-        <p>
-          <b>Confused about buying?</b>
-          Take our free practice test in
-          <strong>{{product.take_free_test.title}}</strong>
-          to know where you stand
-        </p>
-        <a href="{{product.take_free_test.get_absolute_url}}">Take free test</a>
-      </div>
+    <p>
+      <b>Confused about buying?</b>
+      Take our free practice test in
+      <strong>{{product.take_free_test.title}}</strong>
+      to know where you stand
+    </p>
+    <a href="{{product.take_free_test.get_absolute_url}}">Take free test</a>
+  </div>
 
 
   {% endif %}
-      {% if widget_objs %}
-      <div class="box-panel free-sample">
-          <span class="sample-pic"></span>
-          <strong>{{widget_obj.name}}</strong>
-          <ul>
-            {% for w_obj in widget_objs %}
-              <li><a href="{{w_obj.url}}" target="_blank">{{w_obj.name}}</a></li>
-            {% endfor %}
-          </ul>
-      </div>
-      {% endif %}
+  {% if widget_objs %}
+  <div class="box-panel free-sample">
+    <span class="sample-pic"></span>
+    <strong>{{widget_obj.name}}</strong>
+    <ul>
+      {% for w_obj in widget_objs %}
+      <li><a href="{{w_obj.url}}" target="_blank">{{w_obj.name}}</a></li>
+      {% endfor %}
+    </ul>
   </div>
+  {% endif %}
+</div>

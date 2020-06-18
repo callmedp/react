@@ -79,8 +79,24 @@
                     {{sqs.pPinb|floatformat}}{% endif %}/-</strong>
 
                     {% if sqs.id not in linkedin_resume_services %}
-                      <a role="button" class="enrol-now" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll now</a>
+                    <div class="price-box-prd">
+                      <span class="col">
+                      <a role="button" class="enrol-now" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">
+                          {% if product.is_assesment %}
+                            BuyNow
+                          {% else %}
+                            Enroll now
+                          {% endif %}
+                      </a>
+                          {% if redeem_test %}
+                          <span class="col">
+                            <a role="button" class="enrol-now ml-10" id="redeem_test" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}"
+                              href="javascript:void();">Redeem Now</a>
+                          </span>
+                          {% endif %} 
+                      </div>
                     {% endif %}
+
 
                     <!--a href="#" class="enrol-now" data-toggle="modal" data-target=".bs-example-modal-sm">Enroll now</a-->
                   </div>

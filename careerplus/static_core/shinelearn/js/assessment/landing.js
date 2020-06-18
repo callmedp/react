@@ -3,8 +3,7 @@ $('#testModal').on('show.bs.modal', function (e) {
     $('#productName').text(modalobject.productName);
     $('#productName').attr("href", modalobject.productUrl);
     $('#productName').attr("title", modalobject.productName);
-    $('#productDuration').text(modalobject.productDuration);
-    
+    $('#productDuration').text(modalobject.productDuration);    
     $('#productPrice').text('Rs. ' + modalobject.productPrice);
     $('#courseDuration').text(modalobject.courseDuration);
     $('#coursePrice').text('Rs. ' + modalobject.coursePrice);
@@ -16,6 +15,11 @@ $('#testModal').on('show.bs.modal', function (e) {
     $('#fakeCoursePrice').text('Rs. ' + parseInt(parseInt(modalobject.coursePrice) / 0.9));
     $('#fakeProductPrice').text('Rs. ' + parseInt(parseInt(modalobject.productPrice) / 0.9));
 
+    console.log('marg', modalobject.redeem_test);
+
+    if (modalobject.redeem_test == "True") {
+        $('#price_box_vskill').addClass('flex-column');
+    }
     if (modalobject.courseName == "" || modalobject.courseName == "undefined") {
         $('#testCourse').hide();
     }
@@ -41,6 +45,7 @@ $('#testModal').on('show.bs.modal', function (e) {
 
     //  create direct order on Redeeming the Test and Update the ProductPoint Record
     $('#createOrderForTest').click(function () {
+        $('#testModal').modal('hide')
         $('.overlay-background').show()
         $('body').addClass('body-noscroll')
         createDirectOrder(modalobject.productId, 'practice_test')
