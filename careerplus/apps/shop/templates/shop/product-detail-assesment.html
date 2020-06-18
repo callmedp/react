@@ -79,7 +79,7 @@
                     {{sqs.pPinb|floatformat}}{% endif %}/-</strong>
 
                     {% if sqs.id not in linkedin_resume_services %}
-                    <div class="price-box-prd">
+                    <div class="price-box-prd-scroll">
                       <span class="col">
                       <a role="button" class="enrol-now" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">
                           {% if product.is_assesment %}
@@ -88,7 +88,7 @@
                             Enroll now
                           {% endif %}
                       </a>
-                          
+                      </span>    
                           <span class="col">
                             <a role="button" class="redeem-now ml-10" id="redeem_test" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}"
                               href="javascript:void();">Redeem Now</a>
