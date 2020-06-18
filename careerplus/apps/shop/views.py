@@ -484,9 +484,9 @@ class ProductInformationMixin(object):
             if not attr_value:
                 code = None
             else:
-                code = attr_value.value and attr_value.value.code or None
+                code = attr_value.value or None
 
-            if code == '101':
+            if code:
                 product_point = ProductPoint.objects.filter(
                     candidate_id=candidate_id).first()
 
@@ -495,7 +495,7 @@ class ProductInformationMixin(object):
                     redeem_options = eval(product_point.redeem_options)
 
                     required_obj = [
-                        option for option in redeem_options if option['type'] == 'assessment']
+                        option for option in redeem_options if option['type'] == code]
                     required_obj = required_obj[0]
                     product_redeem_count = required_obj['product_redeem_count']
                     days = required_obj['product_validity_in_days'] or 0

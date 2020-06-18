@@ -95,7 +95,7 @@ SUB_FLOWS = {
     ),
     18: (
         (1800, 'One Month'),
-        (1801, 'Three Month'),
+        (1801, 'Two Month'),
         (1802, 'Six Month')
     )
 }

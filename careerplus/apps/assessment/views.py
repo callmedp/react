@@ -190,7 +190,7 @@ class AssessmentSubCategoryPage(DetailView):
         """
             Add  Redeem Button instead of Add To Cart Button:
                 Conditions: 
-                    - Product must have redeem_option as practice test  (redeem_option value = 102)
+                    - Product must have redeem_option as practice test  (redeem_option )
                     - User should be Logged_in
                     - User Should have ProductPoint available(He must have bought Shine Premium) 
         """
@@ -216,9 +216,9 @@ class AssessmentSubCategoryPage(DetailView):
                 code = None
                 pass
             else:
-                code = attr_value.value and attr_value.value.code or None
+                code = attr_value.value or None
 
-            if code is None or code != '101':
+            if code is None:
                 modified_tests.append(test)
                 continue
 
@@ -231,7 +231,7 @@ class AssessmentSubCategoryPage(DetailView):
       
             redeem_options = eval(product_point.redeem_options)
 
-            required_obj = [option for option in redeem_options if option['type'] == 'practice_test']
+            required_obj = [option for option in redeem_options if option['type'] == code]
             if not len(required_obj):
                 modified_tests.append(test)
                 continue
