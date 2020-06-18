@@ -86,7 +86,7 @@
                {% for test in all_test %}
                <div class="testinside">
                   <span class="border-left border{{forloop.counter}}"></span>
-  <a id="{{test.id}}" class="testModal" data-toggle="modal" data-attr-value='{"id":"{{test.id}}","catid":"{{test.category.id}}","quescount":"{{test.get_question_count}}","testSlug":"{{test.slug}}","vendor":"{{test.vendor.id}}","courseName":"{{test.course.name}}","courseDuration":"{{test.course.get_duration_in_day}}","coursePrice":"{{test.course.inr_price}}","productName":"{{test.product.name}}","productDuration":"{{test.product.get_duration_day}}","productPrice":"{{test.product.inr_price}}","productId":"{{test.product.id}}","courseId":"{{test.course.id}}","courseUrl":"{{test.course.get_absolute_url}}","productUrl":"{{test.product.absolute_url}}", "redeem_test": "{{test.redeem_test}}" }' data-target="#testModal">
+  <a id="{{test.id}}" class="testModal" data-toggle="modal" data-attr-value='{"id":"{{test.id}}","catid":"{{test.category.id}}","quescount":"{{test.get_question_count}}","testSlug":"{{test.slug}}","vendor":"{{test.vendor.id}}","courseName":"{{test.course.name}}","courseDuration":"{{test.course.get_duration_in_day}}","coursePrice":"{{test.course.inr_price}}","productName":"{{test.product.name}}","productDuration":"{{test.product.get_duration_day}}","productPrice":"{{test.product.inr_price}}","productId":"{{test.product.id}}","courseId":"{{test.course.id}}","courseUrl":"{{test.course.get_absolute_url}}","productUrl":"{{test.product.absolute_url}}", "redeem_test": "{{test.redeem_test}}", "redeem_count": "{{test.redeem_count}}" }' data-target="#testModal">
                      {{test.title}}
                      <div class="white_hover"></div>
                      <span class="taketest" >Take Free Test</span>
@@ -167,7 +167,7 @@
                      <button class="yellow_btn" id="testAddToCart">Add To Cart</button>
                      <span class="pull-right hide-redeem">
                         <button class="blue_btn_option" id="createOrderForTest" >Redeem now</button>
-                        <i class="tooltip-icon" data-toggle="tooltip" data-placement="top" title="You have 1 free practice test (Assessment) as you're a Shine Premium User">i</i>
+                        <i class="tooltip-icon" id="tooltip-assessment" data-toggle="tooltip" data-placement="top">i</i>
                      </span> 
                   </div>
                </div>
@@ -267,9 +267,6 @@
     return facolor%8;
 
    }
-   $(function () {
-      $('[data-toggle="tooltip"]').tooltip()
-   })
    </script>
 
 

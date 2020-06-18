@@ -183,7 +183,6 @@ h2 {
     height: 14px;
     margin-top: 5px;
 }
-
 .overlay-background {
   background: #000000;  
   display: none;        
@@ -193,12 +192,12 @@ h2 {
   bottom: 0;
   left: 0;
   opacity: 0.5;
-  z-index: 999;
-  
+  z-index: 1000;
 }
 
-.loader-position {
-  transform: translate(900%, 500%);
+.loader-position-mobile {
+  transform: translate(260%, 450%);
+  z-index: 1000;
 }
 
 .body-noscroll {

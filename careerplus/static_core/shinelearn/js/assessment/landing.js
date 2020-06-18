@@ -3,7 +3,7 @@ $('#testModal').on('show.bs.modal', function (e) {
     $('#productName').text(modalobject.productName);
     $('#productName').attr("href", modalobject.productUrl);
     $('#productName').attr("title", modalobject.productName);
-    $('#productDuration').text(modalobject.productDuration);    
+    $('#productDuration').text(modalobject.productDuration);
     $('#productPrice').text('Rs. ' + modalobject.productPrice);
     $('#courseDuration').text(modalobject.courseDuration);
     $('#coursePrice').text('Rs. ' + modalobject.coursePrice);
@@ -23,20 +23,22 @@ $('#testModal').on('show.bs.modal', function (e) {
     if (modalobject.courseName == "" || modalobject.courseName == "undefined") {
         $('#testCourse').hide();
     }
+    if (modalobject.redeem_count != '0') {
+
+        $('[data-toggle="tooltip"]').tooltip({
+            title: `You have ${modalobject.redeem_count} free practice test (Assessment) as you're a Shine Premium User`,
+            placement: "top"
+        })
+
+    }
+
     else {
         $('#testCourse').show();
     }
     $('#startTestLink').attr("href", '/practice-tests/' + modalobject.testSlug + '-test/');
     $('#testAddToCart').click(function () {
         ga('send', 'event', 'Buy Flow', 'Enroll Now', modalobject.productId);
-
-        if (modalobject.redeem_test == 'True') {
-            $('#testModal').modal('hide')
-            $('.overlay-background').show()
-            $('body').addClass('body-noscroll')
-            createDirectOrder(modalobject.productId, 'practice_test');
-        }
-        else updateToCart(modalobject.productId, 'cart');
+        updateToCart(modalobject.productId, 'cart');
     }
     );
     $('#courseCartBtn').click(function () {

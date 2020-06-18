@@ -197,9 +197,11 @@ class AssessmentSubCategoryPage(DetailView):
         modified_tests = []
         for test in all_test:
             setattr(test, 'redeem_test', False)
+            setattr(test,'redeem_count', 0)
             if not test.product_id:
                 modified_tests.append(test)
                 continue
+
 
             candidate_id = self.request.session and self.request.session.get(
                 'candidate_id', None)
@@ -249,6 +251,7 @@ class AssessmentSubCategoryPage(DetailView):
                 continue
 
             setattr(test, 'redeem_test', True)
+            setattr(test, 'redeem_count', required_obj['product_redeem_count'])
             modified_tests.append(test)
 
         return modified_tests

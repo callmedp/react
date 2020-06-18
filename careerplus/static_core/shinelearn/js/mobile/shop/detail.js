@@ -250,9 +250,11 @@ function closePopup() {
 $('#redeem_test').click(function () {
   $('.overlay-background').show()
   $('body').addClass('body-noscroll')
-  const prodId =   $(this).attr('prod-id')
-  createDirectOrder(prodId , 'assessment')
+  const prodId = $(this).attr('prod-id')
+  createDirectOrder(parseInt(prodId) , 'assessment')
 })
+
+
 
 
 function createDirectOrder(productId, redeem_option) {

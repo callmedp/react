@@ -14,28 +14,32 @@
 <link rel="canonical" href="https://{{ SITE_DOMAIN }}/practice-tests/{{Category.slug}}/sub">
 {% endblock canonical_url %}
 {% block django_meta %}
- <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <link rel="shortcut icon" href="{% static 'shinelearn/images/fav_icon.png' %}">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1,user-scalable=0"/>
-    <meta name="description" content="Take free practice tests for {{Category.name}} online. Start preparing {{Category.name}} mock tests on shine learning to obtain your score.">
-	<meta property="og:title" content="Free {{Category.name}} Practice Tests | Exam Preparation Question @ Shine Learning">
-	<meta property="og:url" content="https://{{ SITE_DOMAIN }}/practice-tests/{{Category.slug}}/sub">
-	<meta property="og:description" content="Take free practice tests for {{Category.name}} online. Start preparing {{Category.name}} mock tests on shine learning to obtain your score.">
-	<meta property="og:type" content="Website">
-	<meta property="og:site_name" content="ShineLearning">
-	<meta property="og:image" content="{% static 'shinelearn/images/free_skill/submit-test.png' %}">
-	<meta property="fb:profile_id" content="282244838633660">
-    <meta itemprop="name" content="{{Category.name}} Practice test | online mock test – Shine Learning">
-    <meta itemprop="url" content="https://{{ SITE_DOMAIN }}/practice-tests/{{Category.slug}}/sub">
-    <meta itemprop="description" content="Take free practice tests for {{Category.name}} online. Start preparing {{Category.name}} mock tests on shine learning to obtain your score.">
-    <meta name="twitter:card" content="summary">
-    <meta name="twitter:site" content="@shinelearning">
-    <meta name="twitter:domain" content="learning.shine.com">
-    <meta name="twitter:title" content="Free {{Category.name}} Practice Tests | Exam Preparation Question @ Shine Learning">
-    <meta name="twitter:description" content="Take free practice tests for {{Category.name}} online. Start preparing {{Category.name}} mock tests on shine learning to obtain your score.">
-        <!--<meta name="twitter:image:src" content="{{obj.image.url}}">-->
+<link rel="shortcut icon" href="{% static 'shinelearn/images/fav_icon.png' %}">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1,user-scalable=0" />
+<meta name="description"
+    content="Take free practice tests for {{Category.name}} online. Start preparing {{Category.name}} mock tests on shine learning to obtain your score.">
+<meta property="og:title" content="Free {{Category.name}} Practice Tests | Exam Preparation Question @ Shine Learning">
+<meta property="og:url" content="https://{{ SITE_DOMAIN }}/practice-tests/{{Category.slug}}/sub">
+<meta property="og:description"
+    content="Take free practice tests for {{Category.name}} online. Start preparing {{Category.name}} mock tests on shine learning to obtain your score.">
+<meta property="og:type" content="Website">
+<meta property="og:site_name" content="ShineLearning">
+<meta property="og:image" content="{% static 'shinelearn/images/free_skill/submit-test.png' %}">
+<meta property="fb:profile_id" content="282244838633660">
+<meta itemprop="name" content="{{Category.name}} Practice test | online mock test – Shine Learning">
+<meta itemprop="url" content="https://{{ SITE_DOMAIN }}/practice-tests/{{Category.slug}}/sub">
+<meta itemprop="description"
+    content="Take free practice tests for {{Category.name}} online. Start preparing {{Category.name}} mock tests on shine learning to obtain your score.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@shinelearning">
+<meta name="twitter:domain" content="learning.shine.com">
+<meta name="twitter:title" content="Free {{Category.name}} Practice Tests | Exam Preparation Question @ Shine Learning">
+<meta name="twitter:description"
+    content="Take free practice tests for {{Category.name}} online. Start preparing {{Category.name}} mock tests on shine learning to obtain your score.">
+<!--<meta name="twitter:image:src" content="{{obj.image.url}}">-->
 
 {% endblock django_meta %}
 {% block header %}
@@ -51,30 +55,30 @@
 
     <div class="back" onclick="goBack();"></div>
 
-<h1>{{Category.heading}}</h1>
-            {% block breadcrumb %}
-         <ol class="breadcrumb mt-0">
-                {% for bradcbs in breadcrumbs %}
-              {% if bradcbs.url %}
-                <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
-                    <a href="{{bradcbs.url}}" itemprop="item">
-                        <span itemprop="name">{{bradcbs.name}}</span>
-                    </a>
-                 <meta itemprop="position" content="{{forloop.counter}}" />
-                </li>
-              {% else %}
-                <li class="active">{{bradcbs.name}}</li>
-              {% endif %}
-            {% endfor %}
-         </ol>
-         {% endblock breadcrumb %}
+    <h1>{{Category.heading}}</h1>
+    {% block breadcrumb %}
+    <ol class="breadcrumb mt-0">
+        {% for bradcbs in breadcrumbs %}
+        {% if bradcbs.url %}
+        <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+            <a href="{{bradcbs.url}}" itemprop="item">
+                <span itemprop="name">{{bradcbs.name}}</span>
+            </a>
+            <meta itemprop="position" content="{{forloop.counter}}" />
+        </li>
+        {% else %}
+        <li class="active">{{bradcbs.name}}</li>
+        {% endif %}
+        {% endfor %}
+    </ol>
+    {% endblock breadcrumb %}
 
 
     <div class="search-test">
         <div class="search-test__searchbox" id="bloodhound">
-            <input id ="bloodhound_input" type="text" class="typeahead"  name="" placeholder="Search popular tests">
+            <input id="bloodhound_input" type="text" class="typeahead" name="" placeholder="Search popular tests">
             <div id="bloodhound_message" style="display: none;">
-              <p style="color:red;"> Test not available</p>
+                <p style="color:red;"> Test not available</p>
             </div>
             <i id="bloodhound_submit" class="icon_search"></i>
         </div>
@@ -82,155 +86,158 @@
 
 
     <div class="popular_test" id="funcDiv">
-                       {% for test in all_test %}
+        {% for test in all_test %}
 
         <div class="popular_test_inside">
-           <a id="{{test.id}}" onclick="testModal(event);" data-attr-value='{"id":"{{test.id}}","catid":"{{test.category.id}}","quescount":"{{test.get_question_count}}","testSlug":"{{test.slug}}","vendor":"{{test.vendor.id}}","courseName":"{{test.course.name}}","courseDuration":"{{test.course.get_duration_in_day}}","coursePrice":"{{test.course.inr_price}}","productName":"{{test.product.name}}","productDuration":"{{test.product.get_duration_day}}","productPrice":"{{test.product.inr_price}}","productId":"{{test.product.id}}","courseId":"{{test.course.id}}","courseUrl":"{{test.course.get_absolute_url}}","productUrl":"{{test.product.get_absolute_url}}", "redeem_test": "{{test.redeem_test}}" }'>
+            <a id="{{test.id}}" onclick="testModal(event);"
+                data-attr-value='{"id":"{{test.id}}","catid":"{{test.category.id}}","quescount":"{{test.get_question_count}}","testSlug":"{{test.slug}}","vendor":"{{test.vendor.id}}","courseName":"{{test.course.name}}","courseDuration":"{{test.course.get_duration_in_day}}","coursePrice":"{{test.course.inr_price}}","productName":"{{test.product.name}}","productDuration":"{{test.product.get_duration_day}}","productPrice":"{{test.product.inr_price}}","productId":"{{test.product.id}}","courseId":"{{test.course.id}}","courseUrl":"{{test.course.get_absolute_url}}","productUrl":"{{test.product.get_absolute_url}}", "redeem_test": "{{test.redeem_test}}", "redeem_count":"{{test.redeem_count}}" }'>
                 <span class="border border{{forloop.counter0}}"></span>
                 <span class="name">{{test.title}}</span>
                 <span class="btn btn-md btn-round-30 btn-blue" id="btn_check_result">Take free test</span>
             </a>
         </div>
-                     {% endfor %}
+        {% endfor %}
 
-      
+
     </div>
     {% comment %}
-       {%if all_test.count > 8 %}
-        <button class="load_more_button" id="loadmorebtn" onclick="loadmore();">Load more</button>
-      {% endif %}
+    {%if all_test.count > 8 %}
+    <button class="load_more_button" id="loadmorebtn" onclick="loadmore();">Load more</button>
+    {% endif %}
     {% endcomment %}
-    </div>
+</div>
 
-      <!--start Test Modal-->
-    <div class="practice-test check-result-wrap pt-30 w-100" id="check_results">
-        <div class="practice-test-inside"></div>
-        <div class="back" id="close"></div>
-        <h1 class="mt-30">{{Category.heading}}</h1>
-        <p class="c6">Make your choice and go ahead</p>
+<!--start Test Modal-->
+<div class="practice-test check-result-wrap pt-30 w-100" id="check_results">
+    <div class="practice-test-inside"></div>
+    <div class="back" id="close"></div>
+    <h1 class="mt-30">{{Category.heading}}</h1>
+    <p class="c6">Make your choice and go ahead</p>
 
-        <div class="test-option-box">
-            <h2 class="fs-20"><a href="#">Free Test</a></h2>
-            <div class="test-option-box--test-wrap">
-                <div class="test-option-box--content">
-                    <span>Test Format</span>
-                    <p>Practice Exam</p>
-                </div>
-
-                <div class="test-option-box--content">
-                    <span>No. of Questions</span>
-                    <p id="questCount">25 Questions</p>
-                </div>
+    <div class="test-option-box">
+        <h2 class="fs-20"><a href="#">Free Test</a></h2>
+        <div class="test-option-box--test-wrap">
+            <div class="test-option-box--content">
+                <span>Test Format</span>
+                <p>Practice Exam</p>
             </div>
 
-            <div class="test-option-box--cta">
-                <strong class="fs-20">FREE</strong>
-                <a class="btn btn-lg btn-round-30 btn-blue semi-bold" id="startTestLink">Take free test</a>
+            <div class="test-option-box--content">
+                <span>No. of Questions</span>
+                <p id="questCount">25 Questions</p>
             </div>
-        </div><!-- option test box-->
+        </div>
 
-        <div class="test-option-box pt-40">
-            <h2 class="fs-20"><a href="#" id="productName">Practice Tests</a></h2>
-            <span class="test-option-box--recommended">
-                Recommended
-            </span>
-            <div class="test-option-box--test-wrap">
-                <div class="test-option-box--content">
-                    <span>Test Format</span>
-                    <p>Practice Exam</p>
-                </div>
+        <div class="test-option-box--cta">
+            <strong class="fs-20">FREE</strong>
+            <a class="btn btn-lg btn-round-30 btn-blue semi-bold" id="startTestLink">Take free test</a>
+        </div>
+    </div><!-- option test box-->
 
-                <div class="test-option-box--content">
-                    <span>No. of Questions</span>
-                    <p>500+ Questions</p>
-                </div>
-            </div>
-
-            <ul class="blue-bullet mt-20">
-                <li>
-                    <span></span>
-                    Real exam & Practice environment
-                </li>
-                <li>
-                    <span></span>
-                    Answers and Detailed Explanations
-                </li>
-            </ul>
-
-            <div class="test-option-box--cta mt-20 flex-column">
-                <div class="test-option-box--price mb-10">
-                    <span id="fakeProductPrice"> </span>
-                    <strong id="productPrice">Rs. 699</strong>
-                </div>
-                <div>
-                    <button class="btn btn-lg btn-round-30 btn-yellow semi-bold" id="testAddToCart">Add to cart</button>
-                    <div class="hide-redeem pull-right">
-                        <button class="btn btn-lg btn-round-30 btn-outline semi-bold ml-20" id="testAddToCart">Redeem now</button>
-                        <span class="tooltip ml-10">
-                            <i>i</i>
-                            <span class="tooltiptext">You have 1 free practice test (Assessment) as you're a Shine Premium User</span>
-                        </span>
-                    </div>
-                </div>
-                
-            </div>
-        </div><!-- Practice Tests box-->
-
-        <div class="test-option-box" id="testCourse" style="display:none">
-            <h2 class="fs-20"><a href="#" id="courseName">Online Course</a></h2>
-            <div class="test-option-box--test-wrap">
-                <div class="test-option-box--content">
-                    <span>Duration</span>
-                    <p id="courseDuration">8 Days</p>
-                </div>
-
-                <div class="test-option-box--content">
-                    <span>Availability</span>
-                    <p>Unlimited</p>
-                </div>
+    <div class="test-option-box pt-40">
+        <h2 class="fs-20"><a href="#" id="productName">Practice Tests</a></h2>
+        <span class="test-option-box--recommended">
+            Recommended
+        </span>
+        <div class="test-option-box--test-wrap">
+            <div class="test-option-box--content">
+                <span>Test Format</span>
+                <p>Practice Exam</p>
             </div>
 
-            <div class="test-option-box--cta mt-20">
-                <div class="test-option-box--price">
-                    <span id="fakeCoursePrice"></span>
-                    <strong id="coursePrice">Rs. 1699</strong>
-                </div>
-                <button class="btn btn-lg btn-round-30 btn-blue semi-bold" id="courseCartBtn">Add to cart</button>
+            <div class="test-option-box--content">
+                <span>No. of Questions</span>
+                <p>500+ Questions</p>
             </div>
-        </div><!-- option test box-->
-    </div>
+        </div>
 
-   <!--end test modal-->
+        <ul class="blue-bullet mt-20">
+            <li>
+                <span></span>
+                Real exam & Practice environment
+            </li>
+            <li>
+                <span></span>
+                Answers and Detailed Explanations
+            </li>
+        </ul>
+
+        <div id="price_box_vskill_mob" class="test-option-box--cta mt-20">
+            <div class="test-option-box--price mb-10">
+                <span id="fakeProductPrice"> </span>
+                <strong id="productPrice">Rs. 699</strong>
+            </div>
+            <div>
+                <button class="btn btn-lg btn-round-30 btn-yellow semi-bold" id="testAddToCart">Add to cart</button>
+                <div class="hide-redeem pull-right">
+                    <button class="btn btn-lg btn-round-30 btn-outline semi-bold ml-20" id="createOrderForTest">Redeem
+                        now</button>
+                    <span class="tooltip">
+                        <i>i</i>
+                        <span class="tooltiptext" id="tooltiptext-prd"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div><!-- Practice Tests box-->
+
+    <div class="test-option-box" id="testCourse" style="display:none">
+        <h2 class="fs-20"><a href="#" id="courseName">Online Course</a></h2>
+        <div class="test-option-box--test-wrap">
+            <div class="test-option-box--content">
+                <span>Duration</span>
+                <p id="courseDuration">8 Days</p>
+            </div>
+
+            <div class="test-option-box--content">
+                <span>Availability</span>
+                <p>Unlimited</p>
+            </div>
+        </div>
+
+        <div class="test-option-box--cta mt-20">
+            <div class="test-option-box--price">
+                <span id="fakeCoursePrice"></span>
+                <strong id="coursePrice">Rs. 1699</strong>
+            </div>
+            <button class="btn btn-lg btn-round-30 btn-blue semi-bold" id="courseCartBtn">Add to cart</button>
+        </div>
+    </div><!-- option test box-->
+</div>
+
+<!--end test modal-->
 
 
 
 {% endblock container %}
 {% block js_section %}
-   {{block.super}}
-    {% compress js %}
+{{block.super}}
+{% compress js %}
 <script src="{% static 'shinelearn/js/assessment/landing.js' %}"></script>
 <script src="{% static 'shinelearn/js/assessment/assessment_search.js' %}"></script>
 {% endcompress %}
 
-   <script type="text/javascript">
-   var page_number= 2;
-   var facolor = 0;
-   function loadmore(){
-            page_number = page_number+1;
-             element = document.getElementById('funcDiv');
-           $.ajax({
-               url: '/api/get-test',
-               type: "GET",
-               data : {'page_size' : 4, 'page':page_number,'category_id':'{{Category.id}}','include_product_id':1,
-                'include_course_id':1 },
-               dataType: 'json',
-               success: function(json) {
-               if (json.next == null){
-                 $('#loadmorebtn').hide();
-               }
-               for (fa in json.results){
-                  color = counter(facolor)
-                element.innerHTML= element.innerHTML + `<div class="popular_test_inside">
+<script type="text/javascript">
+    var page_number = 2;
+    var facolor = 0;
+    function loadmore() {
+        page_number = page_number + 1;
+        element = document.getElementById('funcDiv');
+        $.ajax({
+            url: '/api/get-test',
+            type: "GET",
+            data: {
+                'page_size': 4, 'page': page_number, 'category_id': '{{Category.id}}', 'include_product_id': 1,
+                'include_course_id': 1
+            },
+            dataType: 'json',
+            success: function (json) {
+                if (json.next == null) {
+                    $('#loadmorebtn').hide();
+                }
+                for (fa in json.results) {
+                    color = counter(facolor)
+                    element.innerHTML = element.innerHTML + `<div class="popular_test_inside">
            <a id="${json.results[fa].id}" onclick="testModal(event);" data-attr-value='{"id":"${json.results[fa].id}","catid":"${json.results[fa].category}","quescount":"${json.results[fa].question_count}",
   "testSlug":"${json.results[fa].slug}","vendor":"${json.results[fa].vendor}",
    "courseName":"${json.results[fa].course_id_data[0].name}","courseDuration":"${json.results[fa].course_id_data[0].day_duration}","coursePrice":"${json.results[fa].course_id_data[0].inr_price}","productName":"${json.results[fa].product_id_data[0].name}","productDuration":"${json.results[fa].product_id_data[0].day_duration}","productPrice":"${json.results[fa].product_id_data[0].inr_price}","productId":"{{test.product.id}}","courseId":"{{test.course.id}}",
@@ -240,89 +247,106 @@
                 <span class="btn btn-md btn-round-30 btn-blue" id="btn_check_result">Take free test</span>
             </a>
         </div>`
-                facolor +=1;
+                    facolor += 1;
 
-               }
-               },
-               error: function(xhr, ajaxOptions, thrownError) {
-               if(xhr.status == 404){
-                     alert("No more Categories to show ");
-                     $('#loadmorebtn').hide();
-                     }
-                     else{
+                }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                if (xhr.status == 404) {
+                    alert("No more Categories to show ");
+                    $('#loadmorebtn').hide();
+                }
+                else {
 
-                   alert("Something went wrong. Try again later");
-                   }
-               }
-           });
-   }
-    function counter(facolor){
+                    alert("Something went wrong. Try again later");
+                }
+            }
+        });
+    }
+    function counter(facolor) {
 
-    return facolor%8;
+        return facolor % 8;
 
-   }
+    }
 
 
-   </script>
-   <script>
-    function testModal(e){
-    modalobject = JSON.parse(e.currentTarget.dataset.attrValue);
+</script>
+<script>
+    function testModal(e) {
+        modalobject = JSON.parse(e.currentTarget.dataset.attrValue);
         $('body').addClass('overflow-hidden');
         $("#check_results").addClass("open");
         $('#productName').text(modalobject.productName);
-        $('#productName').attr("href",modalobject.productUrl);
+        $('#productName').attr("href", modalobject.productUrl);
         $('#productDuration').text(modalobject.productDuration);
         $('#productPrice').text(modalobject.productPrice);
         $('#courseDuration').text(modalobject.courseDuration);
         $('#coursePrice').text(modalobject.coursePrice);
         $('#courseName').text(modalobject.courseName);
-        $('#courseName').attr("href",modalobject.courseUrl);
-        $('#courseName').attr("title",modalobject.courseName);
+        $('#courseName').attr("href", modalobject.courseUrl);
+        $('#courseName').attr("title", modalobject.courseName);
         $('#questCount').text(modalobject.quescount);
-        $('#fakeCoursePrice').text('Rs. '+ parseInt(parseInt(modalobject.coursePrice)/0.9));
-        $('#fakeProductPrice').text('Rs. '+parseInt(parseInt(modalobject.productPrice)/0.9));
+        $('#fakeCoursePrice').text('Rs. ' + parseInt(parseInt(modalobject.coursePrice) / 0.9));
+        $('#fakeProductPrice').text('Rs. ' + parseInt(parseInt(modalobject.productPrice) / 0.9));
 
-       if(modalobject.courseName == ""|| modalobject.courseName == "undefined" ){
-        $('#testCourse').hide();
+        if (modalobject.courseName == "" || modalobject.courseName == "undefined") {
+            $('#testCourse').hide();
         }
-        else{
-         $('#testCourse').show();
+        else {
+            $('#testCourse').show();
         }
-        $('#startTestLink').attr('href','/practice-tests/'+ modalobject.testSlug +'-test/');
-        $('#testAddToCart').click( function()
-         {
-           ga('send', 'event', 'Buy Flow', 'Enroll Now',modalobject.productId);
-           updateToCart(modalobject.productId,'cart');
-         }
-      );
-        $('#courseCartBtn').click(function(){
-        updateToCart(modalobject.courseId,'cart');
+
+
+        if (modalobject.redeem_test == "True") {
+            $('#price_box_vskill_mob').addClass('flex-column');
+        }
+
+        if (modalobject.redeem_count != '0') {
+
+            $("#tooltiptext-prd").text(`You have ${modalobject.redeem_count} free practice test (Assessment) as you're a Shine Premium User`);
+        }
+
+        $('#startTestLink').attr('href', '/practice-tests/' + modalobject.testSlug + '-test/');
+        $('#testAddToCart').click(function () {
+            ga('send', 'event', 'Buy Flow', 'Enroll Now', modalobject.productId);
+            updateToCart(modalobject.productId, 'cart');
+        });
+
+        $('#createOrderForTest').click(function () {
+            $("#check_results").removeClass("open");
+            $('.overlay-background').show()
+            $('body').addClass('body-noscroll')
+            createDirectOrder(modalobject.productId, 'practice_test')
+        })
+        
+        $('#courseCartBtn').click(function () {
+            updateToCart(modalobject.courseId, 'cart');
         });
 
     }
 
 
-        $("#btn_check_result").click(function(){
-            $("#check_results").addClass("open");
-        });
+    $("#btn_check_result").click(function () {
+        $("#check_results").addClass("open");
+    });
 
-        $("#close").click(function(){
-            $("#check_results").removeClass("open");
-        });
+    $("#close").click(function () {
+        $("#check_results").removeClass("open");
+    });
 
 
-        // sticky Header inner
-        $(window).scroll(function () {
-            var $this = $(this);
-            if ($this.scrollTop() > 50) {
-                $('.header.inner').addClass('sticky');
-                $('body').css('padding-top', '96px');
-            } else {
-                $('.header').removeClass('sticky');
-                $('body').css('padding-top', '0px');
-            }
-        });
-    </script>
+    // sticky Header inner
+    $(window).scroll(function () {
+        var $this = $(this);
+        if ($this.scrollTop() > 50) {
+            $('.header.inner').addClass('sticky');
+            $('body').css('padding-top', '96px');
+        } else {
+            $('.header').removeClass('sticky');
+            $('body').css('padding-top', '0px');
+        }
+    });
+</script>
 
 {% endblock js_section %}
 

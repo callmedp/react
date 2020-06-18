@@ -81,19 +81,21 @@
                     {% if sqs.id not in linkedin_resume_services %}
                     <div class="price-box-prd-scroll">
                       <span class="col">
-                      <a role="button" class="enrol-now" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">
-                          {% if product.is_assesment %}
-                            BuyNow
-                          {% else %}
-                            Enroll now
-                          {% endif %}
-                      </a>
-                      </span>    
+                        <a role="button" class="enrol-now" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">
+                            {% if product.is_assesment %}
+                              BuyNow
+                            {% else %}
+                              Enroll now
+                            {% endif %}
+                        </a>
+                      </span>
+                          {% if redeem_test %}
                           <span class="col">
                             <a role="button" class="redeem-now ml-10" id="redeem_test" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}"
                               href="javascript:void();">Redeem Now</a>
-                              <i class="tooltip-icon" data-toggle="tooltip" data-placement="bottom" title="You have 1 free practice test (Assessment) as you're a Shine Premium User">i</i>
+                              <i class="tooltip-icon" data-toggle="tooltip" data-placement="bottom" title="You have {{product_redeem_count}} free practice test (Assessment) as you're a Shine Premium User">i</i>
                           </span>
+                          {% endif %}
                           
                       </div>
                     {% endif %}
