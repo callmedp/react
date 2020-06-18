@@ -2279,3 +2279,50 @@ footer {
 .body-noscroll {
  overflow: hidden;
 }
+
+.price-box-prd {
+	display: flex;
+	justify-content: space-between;
+  }
+  
+  .col {
+	flex-basis: 0;
+    flex-grow: 1;
+    max-width: 100%;
+  }
+  
+  .tooltip-icon {
+	width: 20px;
+	height: 20px;
+	background: $p-blue;
+	color: $white-color;
+	font-style: italic;
+	font-weight: 700;
+	font-size: 12px;
+	border-radius: 100%;
+	display: inline-block;
+	text-align: center;
+	line-height: 20px;
+	margin-left: 5px;
+  }
+  
+  .tooltip {
+	opacity: 1;
+	.tooltip-inner {
+	  background-color: $white-color;
+	  color: $primary-color;
+	  line-height: 15px;
+	  box-shadow: $shadow1;
+	  opacity: 1;
+	  text-align: left;
+	  padding: 10px;
+	  max-width: 300px;
+	}
+  }
+  
+  .tooltip.top {
+	.tooltip-arrow {
+	  border-top-color: $white-color;
+	  color: $primary-color;
+	}
+  }

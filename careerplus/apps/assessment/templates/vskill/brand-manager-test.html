@@ -157,12 +157,19 @@
                   </li>
                </ul>
                <p>Real exam & Practice environment</p>
-               <p class="pb-30">Explanation to every questions</p>  
-               <strike style="display: inline-block" id="fakeProductPrice"></strike>
-               <h4 class="mt-0 redeem-view" id="productPrice">Rs.</h4>
-               <div style="display:flex;justify-content:flex-start;">
-                  <button class="yellow_btn mt-15" id="testAddToCart">Add To Cart</button>
-                  <button class="blue_btn_option pull-right mt-15 ml-10" style="display: none" id="createOrderForTest">Redeem now</button>
+               <p class="pb-30">Explanation to every questions</p>
+               <div class="price-box-vskill">
+                  <div class="mb-10">
+                     <strike id="fakeProductPrice"></strike>
+                     <h4 class="mt-0" id="productPrice">Rs.</h4>
+                  </div>
+                  <div>
+                     <button class="yellow_btn" id="testAddToCart">Add To Cart</button>
+                     <span class="pull-right hide-redeem">
+                        <button class="blue_btn_option" id="createOrderForTest" >Redeem now</button>
+                        <i class="tooltip-icon" data-toggle="tooltip" data-placement="top" title="You have 1 free practice test (Assessment) as you're a Shine Premium User">i</i>
+                     </span> 
+                  </div>
                </div>
             </span>
            </div>
@@ -260,6 +267,9 @@
     return facolor%8;
 
    }
+   $(function () {
+      $('[data-toggle="tooltip"]').tooltip()
+   })
    </script>
 
 

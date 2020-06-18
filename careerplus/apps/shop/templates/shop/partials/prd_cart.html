@@ -37,15 +37,21 @@
 
     {% if sqs.id in linkedin_resume_services %}
     <!-- buy now button -->
-    <a role="button" class="enrol-now" id="enrol-now-button" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll now</a>
+        <a role="button" class="enrol-now" id="enrol-now-button" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll now</a>
     {% endif %}
 
 
     <!-- Add to cart button and redirect to cart add class- enrol-now -->
     {% if sqs.id not in linkedin_resume_services %}
         {% if prd_vendor_slug == 'neo' %}
-      <a role="button" class="enrol-now neo-enroll-button" data-neotest="1" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" >Enroll now</a>
-
+      <div class="price-box-prd">
+        <span class="col">
+          <a role="button" class="enrol-now neo-enroll-button" data-neotest="1" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" >Enroll now</a>
+        </span>
+        <span class="col">
+          <a role="button" class="enrol-now" id="redeem_test" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Redeem Now</a>
+        </span>
+      </div>
       {% else %}
         <a role="button" class="enrol-now" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">
             {% if product.is_assesment %}
@@ -54,12 +60,12 @@
             Enroll now
         {% endif %}
         </a>
-        {% if redeem_test %}
+        <!-- {% if redeem_test %} -->
         <a role="button" class="enrol-now" id="redeem_test" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}"
           href="javascript:void();">
             Redeem Now
         </a>
-        {% endif %}
+        <!-- {% endif %} -->
       {% endif %}
     {% endif %}
     <!--div class="cart-message"><span class="cart-success" id="id-cart-message"></span></div-->
