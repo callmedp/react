@@ -106,8 +106,6 @@ export default function CallToAction() {
                     if (result['error_message']) {
                         Toast('warning', result['error_message'])
                         setVisible(false)
-                        // eslint-disable-next-line no-restricted-globals
-                        history.replaceState(null, null ,"?import=")
                     }
                     else {
                         setFlag(false)
@@ -140,8 +138,6 @@ export default function CallToAction() {
                 if (result['error_message']) {
                     Toast('warning', result['error_message'])
                     setVisible(false)
-                    // eslint-disable-next-line no-restricted-globals
-                    history.replaceState(null, null ,"?import=")
                 }
                 else {
                     setFlag(false)

@@ -58,12 +58,12 @@ function* getCandidateScore(action) {
     try {
         const result = yield call(Api.getCandidateScore, candidateId, resumeId)
         if (result.data['error_message']) {
-            return resolve(result)
+            return resolve(result.data)
         }
         localStorage.setItem('resume_score', JSON.stringify({ ...result.data }))
         localStorage.setItem('file_name', "Imported from shine")
         yield put({ type: UPDATE_SCORE, payload: result.data });
-        return resolve(result)
+        return resolve(result.data)
     }
     catch (e) {
         return reject(e)
