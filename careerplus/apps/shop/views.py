@@ -465,6 +465,7 @@ class ProductInformationMixin(object):
         ctx['linkedin_resume_services'] = settings.LINKEDIN_RESUME_PRODUCTS
         ctx['redeem_test'] = False
         ctx['product_redeem_count'] =0
+        ctx['redeem_option'] = 'assessment'
         if self.request.session.get('candidate_id'):
             candidate_id = self.request.session.get('candidate_id')
             contenttype_obj = ContentType.objects.get_for_model(product)
@@ -505,6 +506,8 @@ class ProductInformationMixin(object):
                     if days_diff.days < days and product_redeem_count != 0:
                         ctx['redeem_test'] = True
                         ctx['product_redeem_count'] = product_redeem_count
+                        ctx['redeem_option'] = code
+
 
                     
         navigation = True

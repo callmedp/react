@@ -14,6 +14,7 @@ $('#testModal').on('show.bs.modal', function (e) {
     $('#exampleModalLongTitle').text(modalobject.catname);
     $('#fakeCoursePrice').text('Rs. ' + parseInt(parseInt(modalobject.coursePrice) / 0.9));
     $('#fakeProductPrice').text('Rs. ' + parseInt(parseInt(modalobject.productPrice) / 0.9));
+    
 
     console.log('marg', modalobject.redeem_test);
 
@@ -50,7 +51,7 @@ $('#testModal').on('show.bs.modal', function (e) {
         $('#testModal').modal('hide')
         $('.overlay-background').show()
         $('body').addClass('body-noscroll')
-        createDirectOrder(modalobject.productId, 'practice_test')
+        createDirectOrder(modalobject.productId, modalobject.redeem_option)
     })
 });
 
@@ -110,15 +111,19 @@ function createDirectOrder(productId, redeem_option) {
             else if (json.status == -1) {
                 $('.overlay-background').hide()
                 $('body').removeClass('body-noscroll')
-                alert("Something went wrong, Please try again.");
+                alert(json.error_message);
             }
 
         },
         failure: function (response) {
+            $('.overlay-background').hide()
+            $('body').removeClass('body-noscroll')
             alert("Something went wrong, Please try again");
 
         },
         error: function (xhr, ajaxOptions, thrownError) {
+            $('.overlay-background').hide()
+            $('body').removeClass('body-noscroll')
             alert("Something went wrong, Please try again");
         }
     });

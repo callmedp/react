@@ -4,8 +4,7 @@
 import json
 from decimal import Decimal
 from django.utils import timezone
-import datetime
-from datetime import timedelta
+from datetime import timedelta, datetime
 import time
 
 
@@ -342,7 +341,7 @@ class DirectOrderCreateApiView(OrderMixin, CartMixin, PaymentMixin, APIView):
         if not wal_obj:
             return False
 
-        expiry = timezone.now() + datetime.timedelta(days=30)
+        expiry = timezone.now() + timedelta(days=30)
 
         point_obj = wal_obj.point.create(
             original=points,
@@ -437,10 +436,36 @@ class DirectOrderCreateApiView(OrderMixin, CartMixin, PaymentMixin, APIView):
         # paas the cart object to order and create order
         # change the status of order by making payemnt. Payment method should be redeem option.
         data = {"status": -1}
+        redeem_opt = request.data.get('redeem_option', 'practice_test')
+        candidate_id = request.session.get('candidate_id', '')
+        if not candidate_id:
+            return Response({'status': -1, 'error_message': "You must be loggedIn!"},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        product_point = ProductPoint.objects.filter(
+            candidate_id=candidate_id).first()
+
+        if not product_point:
+            return Response({'status': -1, 'error_message': "You Do not have any free Practice Test(assessment)!"},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        redeem_options = eval(product_point.redeem_options)
+
+        required_obj = [
+            option for option in redeem_options if option['type'] == redeem_opt]
+        required_obj = required_obj[0]
+        product_redeem_count = required_obj['product_redeem_count']
+        days = required_obj['product_validity_in_days'] or 0
+        timestamp = required_obj['purchased_at'] or 0
+        days_diff = datetime.now() - datetime.fromtimestamp(int(timestamp))
+
+        if days_diff.days > days or product_redeem_count == 0:
+            return Response({'status': -1, 'error_message': " Either Free Practice Test(Assessment) redeemed or expired!"},
+                            status=status.HTTP_400_BAD_REQUEST)
+
         cart_obj = self.getNewCartObject()
         cart_items = self.get_solr_cart_items(cart_obj)
         total_amount = cart_items.get('total_amount', Decimal(0))
-        redeem_opt = request.data.get('redeem_option', 'practice_test')
         wallet_status = self.addWalletPoints(total_amount)
 
         if wallet_status:
@@ -462,36 +487,35 @@ class DirectOrderCreateApiView(OrderMixin, CartMixin, PaymentMixin, APIView):
                 return_parameter = self.process_payment_method(
                     payment_type, request, pay_txn)
 
-                candidate_id = request.session.get('candidate_id', '')
-                if candidate_id:
-                    product_point = ProductPoint.objects.filter(
-                        candidate_id=candidate_id).first()
+                ref_order = Order.objects.filter(
+                    id=product_point.order_id).first()
+                order.ref_order = ref_order
 
-                    if product_point:
-                        ref_order = Order.objects.filter(
-                            id=product_point.order_id).first()
-                        order.ref_order = ref_order
-                        try:
-                            order.save()
-                        except Exception as e:
-                            logging.getLogger(
-                                'error_log').error(str(e))
+                try:
+                    order.save()
+                    updated_options = []
+                    for redeem_option in eval(product_point.redeem_options):
+                        if redeem_option['type'] == redeem_opt and redeem_option['product_redeem_count'] > 0:
+                            redeem_option['product_redeem_count'] = redeem_option['product_redeem_count'] - 1
+                        updated_options.append(redeem_option)
 
-                        updated_options = []
-                        for redeem_option in eval(product_point.redeem_options):
-                            if redeem_option['type'] == redeem_opt and redeem_option['product_redeem_count'] > 0:
-                                redeem_option['product_redeem_count'] = redeem_option['product_redeem_count'] - 1
-                            updated_options.append(redeem_option)
+                    product_point.redeem_options = str(updated_options)
+                    try:
+                        product_point.save()
+                        return Response({'status': 1, 'redirectUrl': '/dashboard'},
+                                        status=status.HTTP_200_OK)
+                    except Exception as e:
+                        # delete order
+                        logging.getLogger(
+                            'error_log').error(str(e))
+                        return Response({'status': -1, 'error_message': "Something went wrong!"},
+                                        status=status.HTTP_400_BAD_REQUEST)
 
-                        product_point.redeem_options = str(updated_options)
-                        try:
-                            product_point.save()
-                        except Exception as e:
-                            logging.getLogger(
-                                'error_log').error(str(e))
-
-                return Response({'status': 1, 'redirectUrl': '/dashboard'},
-                                status=status.HTTP_200_OK)
+                except Exception as e:
+                    logging.getLogger(
+                        'error_log').error(str(e))
+                    return Response({'status': -1, 'error_message': "Something went wrong!"},
+                                    status=status.HTTP_400_BAD_REQUEST)
             else:
                 return Response({'status': -1, 'error_message': "Could not able to create Order!"},
                                 status=status.HTTP_400_BAD_REQUEST)

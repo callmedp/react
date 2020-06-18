@@ -489,7 +489,8 @@ $(document).ready(function () {
     $('.overlay-background').show()
     $('body').addClass('body-noscroll')
     const prodId = $(this).attr('prod-id')
-    createDirectOrder(prodId, 'assessment')
+    const redeemOption = $(this).attr('redeem-option')
+    createDirectOrder(prodId, redeemOption)
   })
 
 
@@ -592,15 +593,19 @@ function createDirectOrder(productId, redeem_option) {
       else if (json.status == -1) {
         $('.overlay-background').hide()
         $('body').removeClass('body-noscroll')
-        alert("Something went wrong, Please try again.");
+        alert(json.error_message);
       }
 
     },
     failure: function (response) {
+      $('.overlay-background').hide()
+      $('body').removeClass('body-noscroll')
       alert("Something went wrong, Please try again");
 
     },
     error: function (xhr, ajaxOptions, thrownError) {
+      $('.overlay-background').hide()
+      $('body').removeClass('body-noscroll')
       alert("Something went wrong, Please try again");
     }
   });
