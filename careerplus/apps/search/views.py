@@ -573,14 +573,26 @@ class FuncAreaPageView(SearchBaseView):
     params_class = FuncAreaParams
     allow_empty_query = True
 
+    # def get(self,request,*args,**kwargs):
+    #     paths_to_redirect = {"/services/resume-services/537/":"/services/resume-writing/63/",
+    #             "/services/linkedin-profile-writing/65/":"/services/linkedin-profile/180/"}
+
+    #     if request.path in paths_to_redirect.keys():
+    #         return HttpResponsePermanentRedirect(paths_to_redirect.get(request.path))
+
+    #     return super(FuncAreaPageView,self).get(request,*args,**kwargs)
+
     def get(self,request,*args,**kwargs):
-        paths_to_redirect = {"/services/resume-services/537/":"/services/resume-writing/63/",
-                "/services/linkedin-profile-writing/65/":"/services/linkedin-profile/180/"}
+        path_info=kwargs
+        if(path_info.get('fa_slug') == 'linkedin-profile'):
+            cat_slug = 'linkedin-profile-writing'
+            prd_slug = 'fresher-level'
+            pk='1925'
+            expected_path = "{}/{}/{}/{}".format(settings.RESUME_SHINE_MAIN_DOMAIN,cat_slug, prd_slug,pk)
+            return HttpResponsePermanentRedirect(expected_path)
+        elif(path_info.get('fa_slug') == 'resume-writing'):
+            return HttpResponsePermanentRedirect(settings.RESUME_SHINE_MAIN_DOMAIN)
 
-        if request.path in paths_to_redirect.keys():
-            return HttpResponsePermanentRedirect(paths_to_redirect.get(request.path))
-
-        return super(FuncAreaPageView,self).get(request,*args,**kwargs)
 
     def empty_query_handler(self):
         """
