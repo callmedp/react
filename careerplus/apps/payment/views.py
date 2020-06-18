@@ -821,7 +821,7 @@ class RazorPayRequestView(OrderMixin,View):
             'email': order.email,
             'key' : key,
             'mobile_number':order.mobile,
-            'action': '{}/payment/razorpay/response/success/'.format(settings.MAIN_DOMAIN_PREFIX)
+            'action': '{}/payment/razorpay/response/success/'.format(settings.MAIN_DOMAIN_PREFIX),
             # 'action' : '{}/payment/razorpay/response/success/'.format('http://127.0.0.1:8000') ,
             'secret': settings.RAZOR_PAY_DICT.get('key_secret')
 
