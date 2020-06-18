@@ -660,5 +660,13 @@ PAYU_INFO1 = {'merchant_salt': 'DiRp9kCs',
 RSHINE_CCAVENUE_ACCESS_CODE = 'AVNZ03HE25BR73ZNRB'
 RSHINE_CCAVENUE_WORKING_KEY = 'FBD9C0D0B8D397CD4E182B9BFF6EA44F'
 
+'''
+links for analytics vidhya 
+'''
+ANALYTICS_VIDHYA_URL = {
+    'enrollment' : 'https://gitlab.analyticsvidhya.com/api/shine/enrollments',
+    'status' : 'https://gitlab.analyticsvidhya.com/api/shine/enrollments/{}'
+}
+
 
 
