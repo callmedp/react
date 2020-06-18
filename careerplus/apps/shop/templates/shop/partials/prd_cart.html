@@ -64,12 +64,13 @@
         {% endif %}
       </a>
     </span>
-    {% if redeem_test %}
+    
     <span class="col">
-      <a role="button" class="enrol-now" id="redeem_test" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}"
+      <a role="button" class="redeem-now" id="redeem_test" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}"
         href="javascript:void();">Redeem Now</a>
+        <i class="tooltip-icon" data-toggle="tooltip" data-placement="bottom" title="You have 1 free practice test (Assessment) as you're a Shine Premium User">i</i>
     </span>
-      {% endif %}
+      
   </div>
   <!-- {% if redeem_test %} -->
 

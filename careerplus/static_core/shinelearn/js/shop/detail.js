@@ -23,6 +23,9 @@ function showMoreLess() {
 
 };
 
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
 
 $.validator.addMethod("custom_review",
   function (value, element) {

@@ -820,6 +820,21 @@ header {
 		}
 	}
 
+	.redeem-now {
+		background-color: $white-color;
+		font-size: $font-size+5;
+		color: $anchor-color;
+		display: inline-block;
+		font-weight: $font-weight+300;
+		margin-top: 10px;
+		padding: 10px 20px;
+		border: 1px solid $anchor-color;
+
+		@media (min-width: 1190px) {
+			padding: 10px 5%;
+		}
+	}
+
 	.add-cart {
 		font-size: $font-size+5;
 		color: $anchor-color;
@@ -1634,6 +1649,17 @@ footer {
 		padding: 5px 20px;
 		border: 1px solid #ffcf26;
 	}
+
+	.redeem-now {
+		background-color: $white-color;
+		font-size: $font-size+5;
+		color: $anchor-color;
+		display: inline-block;
+		font-weight: $font-weight+300;
+		margin-top: 10px;
+		padding: 5px 10px;
+		border: 1px solid $anchor-color;
+	}
 }
 
 .query-call-scroll {
@@ -2323,6 +2349,13 @@ footer {
   .tooltip.top {
 	.tooltip-arrow {
 	  border-top-color: $white-color;
+	  color: $primary-color;
+	}
+  }
+
+  .tooltip.bottom {
+	.tooltip-arrow {
+	  border-bottom-color: $white-color;
 	  color: $primary-color;
 	}
   }

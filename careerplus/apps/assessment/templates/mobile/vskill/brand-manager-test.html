@@ -157,12 +157,22 @@
                 </li>
             </ul>
 
-            <div class="test-option-box--cta mt-20">
-                <div class="test-option-box--price">
+            <div class="test-option-box--cta mt-20 flex-column">
+                <div class="test-option-box--price mb-10">
                     <span id="fakeProductPrice"> </span>
                     <strong id="productPrice">Rs. 699</strong>
                 </div>
-                <button class="btn btn-lg btn-round-30 btn-yellow semi-bold" id="testAddToCart"></button>
+                <div>
+                    <button class="btn btn-lg btn-round-30 btn-yellow semi-bold" id="testAddToCart">Add to cart</button>
+                    <div class="hide-redeem pull-right">
+                        <button class="btn btn-lg btn-round-30 btn-outline semi-bold ml-20" id="testAddToCart">Redeem now</button>
+                        <span class="tooltip ml-10">
+                            <i>i</i>
+                            <span class="tooltiptext">You have 1 free practice test (Assessment) as you're a Shine Premium User</span>
+                        </span>
+                    </div>
+                </div>
+                
             </div>
         </div><!-- Practice Tests box-->
 
