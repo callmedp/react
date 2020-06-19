@@ -25,19 +25,7 @@ class RazorPaymentUtil:
     def create(self,order,pay_txn):
 
         response = None
-        """"
-        Create Order from given dict
-        Args:
-            data : Dictionary having keys using which order have to be created
-                'amount' :  Amount of Order
-                'currency' : Currency used in Order
-                'receipt' : Receipt Id for the order
-                'notes' : key value pair as notes
-                'payment_capture': 0/1 if payment should be auto captured or not
-        Returns:
-            Order Dict which was created
-        """
-
+        
         data ={ 'amount':int(order.total_incl_tax *100),
                 'currency':'INR',
                 'receipt': pay_txn.txn,

@@ -769,10 +769,37 @@ class PayUResponseView(CartMixin,PaymentMixin,View):
 class RazorPayResponseView(View):
 
     def post(self,request,*args,**kwargs):
-        print('post',self.request.POST)
+        import ipdb;ipdb.set_trace()
+        # post < QueryDict: {'order_id' : ['order_F4L0srOJFbc2bf'], 'key_id' : ['rzp_test_Oca8UTneyg6bwO'],
+        #                    'key_secret' : ['km5KILWfr6sF7XzaDoC5kGOj'], 'razorpay_payment_id' : ['pay_F4L2ZbXzu7D1SY'],
+        #                    'razorpay_order_id' : ['order_F4L0srOJFbc2bf'], 'razorpay_signature' : [
+        #         'c52edc37f2eb8675432bb151d31933cccc459d1eb80164dce7da9c650537a4a8']} >
 
-    def get(self,request,*args,**kwargs):
-        print('get',self.request.GET)
+        razorpay_order_id = self.request.POST.get('razorpay_order_id')
+        razorpay_payment_id = self.request.POST.get('razorpay_payment_id')
+        razorpay_signature = self.request.POST.get('razorpay_signature')
+        paytxn = None
+        if not razorpay_order_id or not razorpay_signature:
+            return HttpResponseRedirect(reverse('payment:payment_oops'))
+        if not razorpay_payment_id:
+            try:
+                paytxn = PaymentTxn.objects.get(razor_order_id =razorpay_order_id)
+            except Exception as e:
+                logging.getLogger('error_log').error('razor_id ={} error -{}'.format(razorpay_order_id,str(e)))
+                raise Http404()
+            paytxn.status = 2
+            paytxn.save()
+        rz = RazorPaymentUtil()
+
+        value = rz.verify_payment({'razorpay_order_id':razorpay_order_id,'razorpay_payment_id':razorpay_payment_id,
+                           'razorpay_signature':razorpay_signature})
+
+        if value:
+            paytxn.status=1
+            # paytxn.razorpay_signature = razorpay_signature
+            paytxn.save()
+            
+
 
 
 
@@ -809,6 +836,7 @@ class RazorPayRequestView(OrderMixin,View):
 
         rz = RazorPaymentUtil()
         response = rz.create(order,pay_txn)
+        print(response)
 
         key = settings.RAZOR_PAY_DICT.get('key_id')
         razor_dict = {
@@ -821,9 +849,9 @@ class RazorPayRequestView(OrderMixin,View):
             'email': order.email,
             'key' : key,
             'mobile_number':order.mobile,
-            'action': '{}/payment/razorpay/response/success/'.format(settings.MAIN_DOMAIN_PREFIX),
-            # 'action' : '{}/payment/razorpay/response/success/'.format('http://127.0.0.1:8000') ,
-            'secret': settings.RAZOR_PAY_DICT.get('key_secret')
+            # 'action': '{}/payment/razorpay/response/success/'.format(settings.MAIN_DOMAIN_PREFIX),
+            'action' : '{}/payment/razorpay/response/success/'.format('http://127.0.0.1:8000') ,
+            'secret': settings.RAZOR_PAY_DICT.get('key_secret'),
 
         }
 
