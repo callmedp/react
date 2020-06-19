@@ -128,7 +128,7 @@ class PaymentMixin(object):
 
 
         elif payment_type == 'RAZORPAY':
-            payment_type = datetime.now()
+            payment_date = datetime.now()
             txn_obj.status = 1
             txn_obj.payment_date = payment_date
             txn_obj.payment_mode = 15
