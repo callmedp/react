@@ -774,11 +774,16 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         return ctx
 
 
-    # def redirect_if_necessary(self, current_path, product):
-    #     if self._enforce_paths:
-    #         expected_path = product.pURL
-    #         if expected_path != urlquote(current_path):
-    #             return HttpResponsePermanentRedirect(expected_path)
+    def redirect_if_necessary(self, current_path, product):
+        if self._enforce_paths:
+            expected_path = product.pURL
+            if expected_path != urlquote(current_path):
+                return HttpResponsePermanentRedirect(expected_path)
+
+    # def send_signal(self, request, response, product):
+    #     self.view_signal.send(
+    #         sender=self, product=product, user=request.user, request=request,
+    #         response=response)
 
     def redirect_for_resume_shine(self, path_info):
         pk = path_info.get("pk", "")
@@ -790,24 +795,6 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         
         expected_path = "{}/{}/{}/{}".format(settings.RESUME_SHINE_MAIN_DOMAIN,cat_slug, prd_slug,pk)
         return HttpResponsePermanentRedirect(expected_path)
-        # path_url = product.pURL.split('/')
-        # category = ''
-        # try:
-        #     if path_url[path_url.index('services')+1] == 'linkedin-profile-writing':
-        #         category ='/' + path_url[path_url.index('services')+1]
-        # except : 
-        #     pass
-        # slug=product.pSg
-        # pk=product.pk
-        # expected_path = "{0}/product{1}/{2}/{3}".format(settings.RESUME_SHINE_MAIN_DOMAIN,category,slug,pk)
-        # if expected_path != urlquote(current_path):
-        #         return HttpResponsePermanentRedirect(expected_path)
-
-
-    # def send_signal(self, request, response, product):
-    #     self.view_signal.send(
-    #         sender=self, product=product, user=request.user, request=request,
-    #         response=response)
 
     def return_http404(self, sqs_obj):
         if sqs_obj.count() == 1:
@@ -832,69 +819,70 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             if redirect_url:
                 return HttpResponsePermanentRedirect(redirect_url)
         path_info = kwargs
-        redirection = self.redirect_for_resume_shine(path_info)
-        return redirection
-    #     pk = self.kwargs.get('pk')
-    #     self.prd_key = 'detail_db_product_'+pk
-    #     self.prd_solr_key = 'detail_solr_product_'+pk
-    #     cache_dbprd_maping=cache.get(self.prd_key, "")
-    #    #setting cache if product is not in dbcache
-    #     if cache_dbprd_maping:
-    #         self.product_obj = cache_dbprd_maping
-    #     else:
-    #         self.product_obj = Product.browsable.filter(pk=pk).first()
-    #         cache.set(self.prd_key, self.product_obj, 60 * 60 * 4)
-    #         if not self.product_obj:
-    #             raise Http404
-    #     cache_slrprd_maping = cache.get(self.prd_solr_key, "")
+        if request.path.split('/')[1] == 'services':
+            resume_shine_redirection = self.redirect_for_resume_shine(path_info)
+            return resume_shine_redirection
+        pk = self.kwargs.get('pk')
+        self.prd_key = 'detail_db_product_'+pk
+        self.prd_solr_key = 'detail_solr_product_'+pk
+        cache_dbprd_maping=cache.get(self.prd_key, "")
+       #setting cache if product is not in dbcache
+        if cache_dbprd_maping:
+            self.product_obj = cache_dbprd_maping
+        else:
+            self.product_obj = Product.browsable.filter(pk=pk).first()
+            cache.set(self.prd_key, self.product_obj, 60 * 60 * 4)
+            if not self.product_obj:
+                raise Http404
+        cache_slrprd_maping = cache.get(self.prd_solr_key, "")
 
-    #     # setting cache if product is not in solrcache
+        # setting cache if product is not in solrcache
 
-    #     if cache_slrprd_maping:
-    #         self.sqs = cache_slrprd_maping
-    #     else:
-    #         sqs = SearchQuerySet().filter(id=pk)
-    #         if sqs:
-    #             self.sqs = sqs[0]
-    #             cache.set(self.prd_solr_key, self.sqs, 60 * 60 * 4)
-    #         else:
-    #             raise Http404
-    #     if self.sqs.id in settings.LINKEDIN_RESUME_PRODUCTS:
-    #         linkedin_cid = settings.LINKEDIN_DICT.get('CLIENT_ID', None)
-    #         token = request.GET.get('token', '')
-    #         login_url = reverse('login') + '?next=' + request.get_full_path() + '&linkedin=true'
-    #         if token and request.session.get('email'):
-    #             validate = LinkedinSeriviceMixin().validate_encrypted_key(
-    #                 token=token,
-    #                 email=request.session.get('email'),
-    #                 prd=self.sqs.id)
-    #             if validate and linkedin_cid == request.session.get('linkedin_client_id', ''):
-    #                 services = OrderItem.objects.filter(
-    #                     order__status__in=[1, 3],
-    #                     order__candidate_id=request.session.get('candidate_id'),
-    #                     product__id__in=settings.LINKEDIN_RESUME_PRODUCTS)
-    #                 if services.exists():
-    #                     return HttpResponseRedirect(reverse('dashboard:dashboard'))
-    #             elif not validate and linkedin_cid == request.session.get('linkedin_client_id', ''):
-    #                 request.session['linkedin_modal'] = 1
-    #                 return HttpResponseRedirect('/')
-    #             elif validate and linkedin_cid != request.session.get('linkedin_client_id', ''):
-    #                 request.session.flush()
-    #                 return HttpResponseRedirect(login_url)
-    #             elif not validate:
-    #                 request.session.flush()
-    #                 return HttpResponseRedirect(login_url)
+        if cache_slrprd_maping:
+            self.sqs = cache_slrprd_maping
+        else:
+            sqs = SearchQuerySet().filter(id=pk)
+            if sqs:
+                self.sqs = sqs[0]
+                cache.set(self.prd_solr_key, self.sqs, 60 * 60 * 4)
+            else:
+                raise Http404
+        if self.sqs.id in settings.LINKEDIN_RESUME_PRODUCTS:
+            linkedin_cid = settings.LINKEDIN_DICT.get('CLIENT_ID', None)
+            token = request.GET.get('token', '')
+            login_url = reverse('login') + '?next=' + request.get_full_path() + '&linkedin=true'
+            if token and request.session.get('email'):
+                validate = LinkedinSeriviceMixin().validate_encrypted_key(
+                    token=token,
+                    email=request.session.get('email'),
+                    prd=self.sqs.id)
+                if validate and linkedin_cid == request.session.get('linkedin_client_id', ''):
+                    services = OrderItem.objects.filter(
+                        order__status__in=[1, 3],
+                        order__candidate_id=request.session.get('candidate_id'),
+                        product__id__in=settings.LINKEDIN_RESUME_PRODUCTS)
+                    if services.exists():
+                        return HttpResponseRedirect(reverse('dashboard:dashboard'))
+                elif not validate and linkedin_cid == request.session.get('linkedin_client_id', ''):
+                    request.session['linkedin_modal'] = 1
+                    return HttpResponseRedirect('/')
+                elif validate and linkedin_cid != request.session.get('linkedin_client_id', ''):
+                    request.session.flush()
+                    return HttpResponseRedirect(login_url)
+                elif not validate:
+                    request.session.flush()
+                    return HttpResponseRedirect(login_url)
 
-    #             elif token:
-    #                 request.session.flush()
-    #                 return HttpResponseRedirect(login_url)
-    #             else:
-    #                 request.session['linkedin_modal'] = 1
-    #                 return HttpResponseRedirect('/')
-    #     redirection = self.redirect_if_necessary(request.path, self.sqs)
-    #     if redirection is not None:
-    #         return redirection
-    #     return super(ProductDetailView, self).get(request, **kwargs)
+                elif token:
+                    request.session.flush()
+                    return HttpResponseRedirect(login_url)
+                else:
+                    request.session['linkedin_modal'] = 1
+                    return HttpResponseRedirect('/')
+        redirection = self.redirect_if_necessary(request.path, self.sqs)
+        if redirection is not None:
+            return redirection
+        return super(ProductDetailView, self).get(request, **kwargs)
         # self.send_signal(request, response, product)
 
 # @Decorate(stop_browser_cache())
