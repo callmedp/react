@@ -769,7 +769,6 @@ class PayUResponseView(CartMixin,PaymentMixin,View):
 class RazorPayResponseView(CartMixin,PaymentMixin,View):
 
     def post(self,request,*args,**kwargs):
-
         razorpay_order_id = self.request.POST.get('razorpay_order_id')
         razorpay_payment_id = self.request.POST.get('razorpay_payment_id')
         razorpay_signature = self.request.POST.get('razorpay_signature')
@@ -864,8 +863,7 @@ class RazorPayRequestView(OrderMixin,View):
             'email': order.email,
             'key' : key,
             'mobile_number':order.mobile,
-            # 'action': '{}/payment/razorpay/response/success/'.format(settings.MAIN_DOMAIN_PREFIX),
-            'action' : '{}/payment/razorpay/response/success/'.format('http://127.0.0.1:8000') ,
+            'action': '{}/payment/razorpay/response/success/'.format(settings.MAIN_DOMAIN_PREFIX),
             'secret': settings.RAZOR_PAY_DICT.get('key_secret'),
 
         }
