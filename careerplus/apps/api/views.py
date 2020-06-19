@@ -931,6 +931,10 @@ class ShineCandidateLoginAPIView(APIView):
         
         self.request.session.update(personal_info)
 
+        mobile_number = self.request.session.get('cell_phone','')
+
+        self.request.session.update({'mobile_no': mobile_number})
+
         if with_info:
             data_to_send = {"token": token,
                             "candidate_id": candidate_id,

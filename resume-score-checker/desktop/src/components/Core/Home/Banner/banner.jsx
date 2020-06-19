@@ -48,9 +48,17 @@ const Banner = props => {
                     //fileUpload({terget: {files : [response]}})
                     let resumeId = parsed.resume_id ? parsed.resume_id : null;
                     setFlag(true);
-                    await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: candidateInfo['candidateId'], resumeId: resumeId, resolve, reject })))
-                    setFlag(false)
-                    setRedirect(true)
+                    let response = await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: candidateInfo['candidateId'], resumeId: resumeId, resolve, reject })))
+                    if(response['error_message']){
+                        setFlag(false)
+                        Swal.fire({
+                            icon: 'error',
+                            html: '<h3>'+ response['error_message'] +'<h3>'
+                        })
+                    }
+                    else{
+                        setRedirect(true)
+                    }
                 }
                 catch (e) {
                     setFlag(false);
@@ -58,8 +66,6 @@ const Banner = props => {
                         icon: 'error',
                         html: '<h3>Something went wrong! Try again.<h3>'
                     })
-                    // eslint-disable-next-line no-restricted-globals
-                    history.replaceState(null, null ,"?import=")
                 }
             }
             else {
@@ -76,9 +82,17 @@ const Banner = props => {
                 // fileUpload({ terget: { files: [response] } })
                 let resumeId = parsed.resume_id ? parsed.resume_id : null;
                 setFlag(true);
-                await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: localStorage.getItem('userId'), resumeId: resumeId, resolve, reject })))
-                setFlag(false)
-                setRedirect(true)
+                let response = await new Promise((resolve, reject) => dispatch(Actions.getCandidateScore({ candidateId: localStorage.getItem('userId'), resumeId: resumeId, resolve, reject })))
+                if(response['error_message']){
+                    setFlag(false)
+                    Swal.fire({
+                        icon: 'error',
+                        html: '<h3>'+ response['error_message'] +'<h3>'
+                    })
+                }
+                else{
+                    setRedirect(true)
+                }
             }
             catch (e) {
                 setFlag(false);
@@ -86,8 +100,6 @@ const Banner = props => {
                         icon: 'error',
                         html: '<h3>Something went wrong! Try again.<h3>'
                     })
-                    // eslint-disable-next-line no-restricted-globals
-                    history.replaceState(null, null ,"?import=")
             }
         }
 
