@@ -38,7 +38,7 @@ function* uploadFileUrl(action) {
         localStorage.setItem('resume_score', JSON.stringify({ ...result.data }))
 
         result.data["loggedIn"] = localStorage.getItem('userId') ? localStorage.getItem('userId') : "";
-        try{
+        try {
             yield call(Api.saveDataApi, result.data);
         }
         catch{
@@ -70,12 +70,43 @@ function* getCandidateScore(action) {
     }
 }
 
+const get_cleaned_score = (score) => {
+    let cleaned_score = JSON.parse(JSON.stringify(score))
+    if (cleaned_score['error_message'] || cleaned_score['error_message'] === '') {
+        delete cleaned_score.error_message
+    }
+    if (cleaned_score['loggedIn']) {
+        delete cleaned_score.loggedIn
+    }
+    if (cleaned_score['cartCount']) {
+        delete cleaned_score.cartCount
+    }
+      
+    return {
+        ...cleaned_score,
+        section_score: cleaned_score?.section_score?.map((item, key) => {
+            if (item['section_description']) {
+                delete item.section_description
+            }
+            if (item['section_message']) {
+                delete item.section_message
+            }
+            return item
+        })
+    }
+}
+
 function* expertFormSubmit(action) {
-    const { payload: { data, resolve, reject } } = action;
+    const { payload: { data, resolve, reject, score } } = action;
+    const cleaned_score = get_cleaned_score(score)
     try {
         let formData = data;
         formData['lsource'] = 8;
         formData['campaign'] = 'resumechecker';
+        formData['prd'] = 'Resume Writing Service';
+        formData['path'] = '/resume-score-checker';
+        formData['msg'] = `time_stamp : ${new Date()};\n
+                            score : ${JSON.stringify(cleaned_score)}`
 
         const result = yield call(Api.expertFormSubmit, formData);
         return resolve(result)
@@ -127,7 +158,7 @@ function* getCartCount(action) {
     try {
         const result = yield call(Api.getCartCount);
         const { count } = result;
-        yield put({ type: UPDATE_SCORE, payload: { cartCount: count }});
+        yield put({ type: UPDATE_SCORE, payload: { cartCount: count } });
 
     }
     catch (e) {
