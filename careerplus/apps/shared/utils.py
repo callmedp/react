@@ -259,7 +259,7 @@ class DiscountReportUtil:
                 refund_amount = item_refund_request_list.first().amount \
                     if item_refund_request_list else 0
 
-                if item.is_combo and item.parent:
+                if item.is_combo and item.parent and item.parent.product.type_flow != 18:
                     parent_sum = float(item.parent.cost_price)
                     if not parent_sum:
                         #Assuming price remains unchanged
@@ -298,8 +298,13 @@ class DiscountReportUtil:
                             float(item.parent.selling_price)),2)
                     else:
                         refund_amount = 0
+                
+                if item.is_combo and item.parent and item.parent.product.type_flow == 18:
+                    item_selling_price = 0
 
-                if item.is_combo and not item.parent:
+                    
+
+                if item.is_combo and not item.parent and item.product.type_flow != 18:
                     combo_parent = True
                     item_selling_price = 0
                     refund_amount = 0
