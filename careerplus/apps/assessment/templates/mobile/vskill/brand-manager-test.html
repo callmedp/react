@@ -279,7 +279,7 @@
         $('#productName').text(modalobject.productName);
         $('#productName').attr("href", modalobject.productUrl);
         $('#productDuration').text(modalobject.productDuration);
-        $('#productPrice').text(modalobject.productPrice);
+        $('#productPrice').text(Math.floor(parseInt(modalobject.productPrice)));
         $('#courseDuration').text(modalobject.courseDuration);
         $('#coursePrice').text(modalobject.coursePrice);
         $('#courseName').text(modalobject.courseName);

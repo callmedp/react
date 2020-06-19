@@ -4,7 +4,7 @@ $('#testModal').on('show.bs.modal', function (e) {
     $('#productName').attr("href", modalobject.productUrl);
     $('#productName').attr("title", modalobject.productName);
     $('#productDuration').text(modalobject.productDuration);
-    $('#productPrice').text('Rs. ' + modalobject.productPrice);
+    $('#productPrice').text('Rs. ' + Math.floor(parseInt(modalobject.productPrice)));
     $('#courseDuration').text(modalobject.courseDuration);
     $('#coursePrice').text('Rs. ' + modalobject.coursePrice);
     $('#courseName').text(modalobject.courseName);
