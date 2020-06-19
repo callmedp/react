@@ -766,41 +766,51 @@ class PayUResponseView(CartMixin,PaymentMixin,View):
             reverse('payment:payment_oops') + '?error=failure&txn_id=' + txn_id)
 
 
-class RazorPayResponseView(View):
+class RazorPayResponseView(CartMixin,PaymentMixin,View):
 
     def post(self,request,*args,**kwargs):
-        import ipdb;ipdb.set_trace()
-        # post < QueryDict: {'order_id' : ['order_F4L0srOJFbc2bf'], 'key_id' : ['rzp_test_Oca8UTneyg6bwO'],
-        #                    'key_secret' : ['km5KILWfr6sF7XzaDoC5kGOj'], 'razorpay_payment_id' : ['pay_F4L2ZbXzu7D1SY'],
-        #                    'razorpay_order_id' : ['order_F4L0srOJFbc2bf'], 'razorpay_signature' : [
-        #         'c52edc37f2eb8675432bb151d31933cccc459d1eb80164dce7da9c650537a4a8']} >
 
         razorpay_order_id = self.request.POST.get('razorpay_order_id')
         razorpay_payment_id = self.request.POST.get('razorpay_payment_id')
         razorpay_signature = self.request.POST.get('razorpay_signature')
-        paytxn = None
+        txn_obj = None
         if not razorpay_order_id or not razorpay_signature:
             return HttpResponseRedirect(reverse('payment:payment_oops'))
-        if not razorpay_payment_id:
-            try:
-                paytxn = PaymentTxn.objects.get(razor_order_id =razorpay_order_id)
-            except Exception as e:
-                logging.getLogger('error_log').error('razor_id ={} error -{}'.format(razorpay_order_id,str(e)))
-                raise Http404()
-            paytxn.status = 2
-            paytxn.save()
-        rz = RazorPaymentUtil()
+        try:
+            txn_obj = PaymentTxn.objects.get(razor_order_id =razorpay_order_id)
+        except Exception as e:
+            logging.getLogger('error_log').error('razor_id ={} error -{}'.format(razorpay_order_id,str(e)))
+            raise Http404()
 
-        value = rz.verify_payment({'razorpay_order_id':razorpay_order_id,'razorpay_payment_id':razorpay_payment_id,
-                           'razorpay_signature':razorpay_signature})
+        if not razorpay_payment_id:
+            txn_obj.status = 2
+            txn_obj.save()
+            return HttpResponseRedirect(reverse('payment:payment_oops'))
+
+        rz = RazorPaymentUtil()
+        data ={'razorpay_order_id':razorpay_order_id,'razorpay_payment_id':razorpay_payment_id,
+                           'razorpay_signature':razorpay_signature}
+        value = rz.verify_payment(data)
+        payment_type = 'RAZORPAY'
 
         if value:
-            paytxn.status=1
-            # paytxn.razorpay_signature = razorpay_signature
-            paytxn.save()
-            
+            return_parameter = self.process_payment_method(
+                payment_type, request, txn_obj,data)
+            self.closeCartObject(txn_obj.cart)
+            try:
+                del request.session['cart_pk']
+                del request.session['checkout_type']
+                request.session.modified = True
+            except Exception as e:
+                logging.getLogger('error_log').error(
+                    'unable to delete request session objects%s' % str(e))
+                pass
+            return HttpResponseRedirect(return_parameter)
 
-
+        else:
+            txn_obj.status = 2
+            txn_obj.save()
+            return HttpResponseRedirect(reverse('payment:payment_oops'))
 
 
 class RazorPayRequestView(OrderMixin,View):
@@ -836,7 +846,12 @@ class RazorPayRequestView(OrderMixin,View):
 
         rz = RazorPaymentUtil()
         response = rz.create(order,pay_txn)
+        if not response:
+            return Response(return_dict, status=status.HTTP_400_BAD_REQUEST)
         print(response)
+
+        pay_txn.razor_order_id = response.get('id')
+        pay_txn.save()
 
         key = settings.RAZOR_PAY_DICT.get('key_id')
         razor_dict = {

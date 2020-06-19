@@ -29,10 +29,10 @@ class PaymentTxn(AbstractAutoDate):
     txn_amount = models.DecimalField(
         "Txn Amount", decimal_places=2, max_digits=12, default=0)
 
-    # razor_order_id =  models.CharField(max_length=255, null=True, blank=True)
-    #
-    # razor_payment_id= models.CharField(max_length=255, null=True, blank=True)
-    # razorpay_signature =  models.CharField(max_length=255, null=True, blank=True)
+    razor_order_id =  models.CharField(max_length=255, null=True, blank=True)
+
+    razor_payment_id= models.CharField(max_length=255, null=True, blank=True)
+    razorpay_signature =  models.CharField(max_length=255, null=True, blank=True)
 
     # pay by cheque/Draft
     instrument_number = models.CharField(max_length=255, null=True, blank=True)
