@@ -851,6 +851,11 @@ class RazorPayRequestView(OrderMixin,View):
 
         pay_txn.razor_order_id = response.get('id')
         pay_txn.save()
+        name = ''
+        if order.first_name:
+            name = order.first_name
+        if order.last_name:
+            name = name + ''+ order.last_name
 
         key = settings.RAZOR_PAY_DICT.get('key_id')
         razor_dict = {
@@ -859,7 +864,7 @@ class RazorPayRequestView(OrderMixin,View):
             'amount':response.get('amount'),
             'pname':'product name',
             'desc': 'order description',
-            'name':order.first_name + order.last_name,
+            'name': name,
             'email': order.email,
             'key' : key,
             'mobile_number':order.mobile,
