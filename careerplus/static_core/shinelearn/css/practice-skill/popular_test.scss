@@ -375,7 +375,7 @@ h2 {
     font-size: $font-size+3;
     color: $primary-color;
     text-align: center;
-    padding: 12px 25px;
+    padding: 12px 20px;
 }
 
 .blue_btn_option {
@@ -385,7 +385,7 @@ h2 {
     font-size: $font-size+3;
     color: $p-blue;
     text-align: center;
-    padding: 12px 25px;
+    padding: 12px 15px;
 
     &:hover {
         color: $p-blue;
@@ -1461,8 +1461,8 @@ input[type="button"] {
 }
 
 .tooltip-icon {
-  width: 20px;
-  height: 20px;
+  width: 15px;
+  height: 15px;
   background: $p-blue;
   color: $white-color;
   font-style: italic;
@@ -1471,7 +1471,7 @@ input[type="button"] {
   border-radius: 100%;
   display: inline-block;
   text-align: center;
-  line-height: 20px;
+  line-height: 15px;
   margin-left: 5px;
 }
 
