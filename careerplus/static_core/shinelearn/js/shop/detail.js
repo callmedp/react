@@ -485,7 +485,7 @@ $(document).ready(function () {
   }
 
 
-  $('#redeem_test').click(function () {
+  $(document).on('click','#redeem_test', function (e) {
     $('.overlay-background').show()
     $('body').addClass('body-noscroll')
     const prodId = $(this).attr('prod-id')
