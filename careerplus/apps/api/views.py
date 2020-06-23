@@ -76,6 +76,7 @@ from users.mixins import RegistrationLoginApi
 from .education_specialization import educ_list
 from assessment.models import Question
 from assessment.utils import TestCacheUtil
+from search.helpers import sort_prod_list, default_product_get_set_cache, get_skill_product_list
 
 
 class CreateOrderApiView(APIView, ProductInformationMixin):
@@ -1285,12 +1286,12 @@ class UpdateCertificateAndAssesment(APIView):
         )
 
 
-class ShineDataFlowDataApiView(ListAPIView):
-    permission_classes = []
-    authentication_classes = []
-    queryset = ShineProfileData.objects.all()
-    serializer_class = ShineDataFlowDataSerializer
-    pagination_class = None
+# class ShineDataFlowDataApiView(ListAPIView):
+#     permission_classes = []
+#     authentication_classes = []
+#     queryset = ShineProfileData.objects.all()
+#     serializer_class = ShineDataFlowDataSerializer
+#     pagination_class = None
 
 
 class QuestionAnswerApiView(ListAPIView):
@@ -1701,28 +1702,73 @@ class GetCacheValue(APIView):
             'value': value
         }, status=status.HTTP_200_OK)
 
+class GetRecommendedProductApi(APIView):
+    authentication_classes = ()
+    permission_classes = ()
 
+    def get_recommended_products_based_on_job_title(self, desired_job_title=None, actual_job_title=None):
+        data={}
+        recommended_products = []
+        try:
+            if desired_job_title:
 
+                desired_jt_products = SQS().filter(pJbtn=desired_job_title,pTF=2)
+                if actual_job_title:
+                    actual_jt_products = SQS().filter(pJbtn=actual_job_title,pTF=2)
+                    rproducts = list(set(desired_jt_products) - set(actual_jt_products))
+                    if rproducts:
+                        recommended_products = rproducts
+                    else:
+                        recommended_products = list(set(desired_jt_products))
+
+                elif not actual_job_title:
+                    if desired_jt_products:
+                        recommended_products = list(set(desired_jt_products))
+
+            default_recommended_products = sort_prod_list(default_product_get_set_cache())
+            data.update({
+                "recommended_products": recommended_products,
+                "default_recommended_products": default_recommended_products
+            })
+    
+        except Exception as e:
+            logging.getLogger('error_log').error("Error occurred for job title based recommendation : " + str(e))
+            data = {'msg':'error'}
+
+        return data
+
+    def get_recommended_products_based_on_skill_gap(self, jd_skills=None, candidate_profile_skills=None):
+
+        data={}
+        recommended_skill_product_list = []
+        try:
+            skills_list = list(set(jd_skills) - set(candidate_profile_skills))
+            recommended_skill_product_list = get_skill_product_list(skills_list)
+
+            default_recommended_products = sort_prod_list(default_product_get_set_cache())
+            data.update({
+                "recommended_products": recommended_skill_product_list,
+                "default_recommended_products": default_recommended_products
+            })
+
+        except Exception as e:
+            logging.getLogger('error_log').error("Error occurred for skill gap recommendation : " + str(e))
+            data = {'msg': 'error'}
+
+        return data
+
+    def post(self, request):
+        desired_job_title = self.request.data.get('desired_job_title',None)
+        actual_job_title = self.request.data.get('actual_job_title',None)
+        jd_skills = self.request.data.get('jd_skills', None)
+        candidate_profile_skills = self.request.data.get('candidate_profile_skills', None)
         
+        if desired_job_title or actual_job_title:
+            response_json = self.get_recommended_products_based_on_job_title(desired_job_title, actual_job_title)
 
+        elif jd_skills or candidate_profile_skills:
+            response_json = self.get_recommended_products_based_on_skill_gap(jd_skills, candidate_profile_skills)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        if not response_json.get('msg'):
+            return Response(response_json, status=status.HTTP_200_OK)
+        return Response({'msg' : 'error occured while getting recommendations'}, status=status.HTTP_400_BAD_REQUEST)
