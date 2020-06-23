@@ -8,6 +8,13 @@ $().ready(function() {
         return true;
     });
 
+    $.validator.addMethod("pattern",
+        function(value, element, regexp) {
+            return this.optional(element) || regexp.test(value);
+        },
+        "Password must be the combination of alphanumeric, lowercase, uppercase and special character"
+    );
+
     var emailresponse;
     $.validator.addMethod("uniqueUserName",
         function(value, element) {
@@ -40,8 +47,9 @@ $().ready(function() {
                 },
                 raw_password:{
                     required:true,
-                    minlength:6,
-                    maxlength: 15
+                    minlength:8,
+                    maxlength: 15,
+                    pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&].{8,15}$/
                 },
                 cell_phone:{
                     required:true,
@@ -59,7 +67,8 @@ $().ready(function() {
                 required:"Please enter a valid email address"
             },
             raw_password:{
-                required: "Please provide a password"
+                required: "Please provide a password",
+                minlength: "Password should be atleast 8 characters long!"
             },
             cell_phone:{
                 required:"Mobile No. is mandatory",

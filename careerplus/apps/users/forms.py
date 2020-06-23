@@ -128,7 +128,7 @@ class SetConfirmPasswordForm(forms.Form):
     A form that lets a user change set their password without entering the old
     password
     """
-    min_password_length = 6
+    min_password_length = 8
     max_password_length = 15
     error_messages = {
         'password_mismatch': ("The two password fields didn't match."),
@@ -143,7 +143,7 @@ class SetConfirmPasswordForm(forms.Form):
         password2 = self.cleaned_data.get('new_password2')
         password2 = self.cleaned_data.get('new_password2')
         if len(password2) < self.min_password_length:
-            raise forms.ValidationError("Password must be at least 6 chars.")
+            raise forms.ValidationError("Password must be at least 8 chars.")
         if len(password2) > self.max_password_length:
             raise forms.ValidationError("Password should not be greater than 10 chars.")
         if password1 and password2:
@@ -157,7 +157,7 @@ class SetConfirmPasswordForm(forms.Form):
     def clean_new_password1(self):
         password1 = self.cleaned_data.get('new_password1')
         if len(password1) < self.min_password_length:
-            raise forms.ValidationError("Password must be at least 6 chars.")
+            raise forms.ValidationError("Password must be at least 8 chars.")
         if len(password1) > self.max_password_length:
             raise forms.ValidationError("Password should not be greater than 10 chars.")
         return password1
