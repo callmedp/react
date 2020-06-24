@@ -49,7 +49,7 @@ $().ready(function() {
                     required:true,
                     minlength:8,
                     maxlength: 15,
-                    pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&].{8,15}$/
+                    pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&].{7,15}$/
                 },
                 cell_phone:{
                     required:true,
