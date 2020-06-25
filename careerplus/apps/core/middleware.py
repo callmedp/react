@@ -51,7 +51,7 @@ class LoginMiddleware(object):
         self.get_response = get_response
 
     def __call__(self, request):
-        print('called it here ----<><><><><><><><><><><>');
+        
         paths_to_avoid = ["/console/","/api/","/resume-builder/"]
         if any([request.path.startswith(path) for path in paths_to_avoid]):
             response = self.get_response(request)
@@ -64,7 +64,7 @@ class LoginMiddleware(object):
                 email=cookies_data[0], shine_id=None, token=None)
             if resp_status:
                 request.session.update(resp_status)
-        logging.getLogger('error_log').error('request.session for 1177 %s'%str(request.session))
+
         session_fa = False
         session_skills = False
 
@@ -74,7 +74,7 @@ class LoginMiddleware(object):
             session_skills = True
 
         candidate_id = request.session.get('candidate_id')
-        logging.getLogger('error_log').error('candidate_id for 1177 %s'%str(candidate_id))
+        
         candidate_detail = None
         if not session_fa and candidate_id:
 
