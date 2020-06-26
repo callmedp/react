@@ -199,6 +199,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 10, }
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -206,6 +208,19 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
+    {
+        'NAME': 'careerplus.config.admin_validator.NumberValidator'
+    },
+    {
+        'NAME': 'careerplus.config.admin_validator.UppercaseValidator'
+    },
+     {
+        'NAME': 'careerplus.config.admin_validator.LowercaseValidator'
+    },
+    {
+        'NAME': 'careerplus.config.admin_validator.PunctuationValidator'
+    },
+    
 ]
 
 # Internationalization
