@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import './getExperts.scss';
 import { useForm } from 'react-hook-form'
 import { useDispatch } from 'react-redux';
@@ -7,10 +7,22 @@ import { eventClicked } from '../../../../store/googleAnalytics/actions/index';
 import Swal from 'sweetalert2';
 import { COUNTRY_CODES } from '../../../../services/countryCodes';
 import { siteDomain } from '../../../../utils/domains';
+import { useSelector } from 'react-redux';
+
 const GetExperts = props => {
 
   const { register, handleSubmit, errors, getValues } = useForm()
   const dispatch = useDispatch()
+  const [resume_score,setResume_score ] = useState(JSON.parse(localStorage.getItem('resume_score')))
+  const score_state = useSelector(state => state?.home);
+ 
+
+  useEffect(()=>{
+    if(score_state){
+      setResume_score(score_state)
+    }
+  },[score_state])
+
   const onSubmit = async (data, event) => {
 
     dispatch(eventClicked({
@@ -21,7 +33,7 @@ const GetExperts = props => {
     try {
       data.name = data.name.trim()
       await new Promise((resolve, reject) => {
-        dispatch(Actions.expertFormSubmit({ data, resolve, reject }));
+        dispatch(Actions.expertFormSubmit({ data, resolve, reject, score : resume_score }));
       })
       event.target.reset();
       Swal.fire({

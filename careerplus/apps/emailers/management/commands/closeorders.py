@@ -53,8 +53,8 @@ def close_order_report():
             closed_order += 1
             
         send_dict['subject'] = "Order Closure Report"
-        send_dict['to'] = ["vishal.gupta@hindustantimes.com"]
-        send_dict['cc'] = ["animesh.sharma@hindustantimes.com"]
+        send_dict['to'] = ["heena.afshan@hindustantimes.com"]
+        send_dict['cc'] = ["nidhish.sharma@hindustantimes.com","gaurav.chopra1@hindustantimes.com"]
         send_dict['body'] = 'Please find attached .csv file containing information about Order Closing '
         send_dict['from_email'] = settings.CONSULTANTS_EMAIL
         file_name = "%s.csv" % (
