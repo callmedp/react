@@ -82,7 +82,7 @@ from users.mixins import RegistrationLoginApi
 from .education_specialization import educ_list
 from assessment.models import Question
 from assessment.utils import TestCacheUtil
-from search.helpers import sort_prod_list, default_product_get_set_cache, get_skill_product_list
+from search.helpers import sort_prod_list, default_product_get_set_cache
 
 
 class CreateOrderApiView(APIView, ProductInformationMixin):
@@ -1766,23 +1766,58 @@ class GetRecommendedProductApi(APIView):
     def create_product_info_list(self, products_list=None):
         if products_list:
             products_info_list = [{
-                'p_id': prd.id,
-                'p_name': prd.pNm,
-                'p_functional_area': prd.pFAn,
-                'p_functional_area_exact': prd.pFA_exact,
-                'p_url': prd.pURL,
-                'p_title': prd.pTt,
-                'p_icon': prd.pIc,
-                'p_image': prd.pImg,
-                'p_desc': prd.pDsc,
-                'p_ratings': prd.pStar,
-                'p_combos': prd.pCmbs,
-                'p_variations': prd.pVrs,
-                'p_offers': prd.pOff
+                'product_id': prd.id,
+                'product_name': prd.pNm,
+                'product_url': prd.pURL,
+                'product_title': prd.pTt,
+                'product_icon': prd.pIc,
+                'product_image': prd.pImg,
+                'product_desc': prd.pDsc,
+                'product_ratings': prd.pStar,
+                'product_combos': prd.pCmbs,
+                'product_variations': prd.pVrs,
+                'product_offers': prd.pOff,
+                'product_inr_price': prd.pPinb,
+                'product_usd_price': prd.pPusb,
+                'product_functional_area': prd.pFAn,
+                'product_type': prd.pTF
             } for prd in products_list]
             return products_info_list
 
         return []
+
+    def convert_qs_to_pskill_mapping_api_method(self, qs,skill=None, is_skill_id=False):
+        new_dict = {}
+        for prod in qs:
+            if is_skill_id:
+                user_skill = prod.uSkill
+            else:
+                user_skill = prod.uSkilln
+            if not prod or (skill and not user_skill):
+                continue
+            if not skill:
+                new_dict.update({prod: set(user_skill) if user_skill else {}})
+            else:
+                skill_len = len(set(user_skill).intersection(set(skill)))
+                if not skill_len:
+                    continue
+                new_dict.update({prod: set(user_skill).intersection(set(
+                    skill))})
+        return new_dict
+
+    def get_skill_product_list(self, skills):
+        is_skill_id = False
+        if not skills:
+            return []
+        if skills[0].isdigit():
+            all_prod_skill = SQS().filter(uSkill__in=skills, pTF__in=[2,16])
+            is_skill_id = True
+        else:
+            all_prod_skill = SQS().filter(uSkilln__in=skills, pTF__in=[2,16])
+        if not all_prod_skill:
+            return []
+        return sort_prod_list(self.convert_qs_to_pskill_mapping_api_method(
+            all_prod_skill,skills, is_skill_id))
 
     def get_recommended_products_based_on_job_title(self, desired_job_title=None, actual_job_title=None):
         data = {}
@@ -1790,9 +1825,9 @@ class GetRecommendedProductApi(APIView):
         try:
             if desired_job_title:
 
-                desired_jt_products = SQS().filter(pJbtn=desired_job_title, pTF=2)
+                desired_jt_products = SQS().filter(pJbtn=desired_job_title, pTF__in=[2,16])
                 if actual_job_title:
-                    actual_jt_products = SQS().filter(pJbtn=actual_job_title, pTF=2)
+                    actual_jt_products = SQS().filter(pJbtn=actual_job_title, pTF__in=[2,16])
                     rproducts = list(set(desired_jt_products) -
                                      set(actual_jt_products))
                     if rproducts:
@@ -1840,7 +1875,7 @@ class GetRecommendedProductApi(APIView):
 
         try:
             skills_list = list(set(jd_skills) - set(candidate_profile_skills))
-            recommended_skill_product_list = get_skill_product_list(
+            recommended_skill_product_list = self.get_skill_product_list(
                 skills_list)
 
             recommended_skill_products = self.create_product_info_list(
