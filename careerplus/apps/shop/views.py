@@ -378,6 +378,9 @@ class ProductInformationMixin(object):
         if sqs.pPc == 'course':
             ctx.update(json.loads(sqs_main.pPOP))
             pvrs_data = json.loads(sqs.pVrs)
+            if pvrs_data.get("var_list"):
+                sort_pvrs = sorted(pvrs_data.get('var_list'), key = lambda i: i['inr_price'])
+                pvrs_data['var_list'] = sort_pvrs
             try:
                 selected_var = pvrs_data['var_list'][0]
             except Exception as e:
