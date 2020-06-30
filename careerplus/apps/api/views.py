@@ -60,7 +60,7 @@ from .serializers import (
     ImportCertificateSerializer,
     ShineDataFlowDataSerializer,
     CertificateSerializer,TalentEconomySerializer,QuestionAnswerSerializer,
-    OrderDetailSerializer, OrderListSerializer)
+    OrderDetailSerializer, OrderListSerializer,BlogTagsSerializer)
 
 from partner.models import Certificate, Vendor
 from shared.rest_addons.pagination import LearningCustomPagination
@@ -931,6 +931,10 @@ class ShineCandidateLoginAPIView(APIView):
         
         self.request.session.update(personal_info)
 
+        mobile_number = self.request.session.get('cell_phone','')
+
+        self.request.session.update({'mobile_no': mobile_number})
+
         if with_info:
             data_to_send = {"token": token,
                             "candidate_id": candidate_id,
@@ -1716,6 +1720,14 @@ class GetCacheValue(APIView):
         }, status=status.HTTP_200_OK)
 
 
+class BlogTagsAPIView(ListAPIView):
+    authentication_classes = ()
+    permission_classes = ()
+    pagination_class = LearningCustomPagination
+    serializer_class = BlogTagsSerializer
+
+    def get_queryset(self, *args, **kwargs):
+        return Tag.objects.filter(blog__status=1,blog__visibility=2).exclude(blog=None)
 
         
 
