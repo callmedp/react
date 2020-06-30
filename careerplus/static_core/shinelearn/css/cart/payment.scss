@@ -1637,3 +1637,9 @@ input:-webkit-autofill:active {
 .input-dropdown-select2 {
   width: 150px !important;
 }
+
+@-moz-document url-prefix() {
+  .mozilla-handle {
+    display : flex
+  }  
+}

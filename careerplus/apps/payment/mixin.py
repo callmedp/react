@@ -126,6 +126,23 @@ class PaymentMixin(object):
             order.status = 1
             order.save()
 
+
+        elif payment_type == 'RAZORPAY':
+            payment_date = datetime.now()
+            txn_obj.status = 1
+            txn_obj.payment_date = payment_date
+            txn_obj.payment_mode = 15
+            txn_obj.razor_payment_id = data.get('razorpay_payment_id')
+
+            txn_obj.razorpay_signature = data.get('razorpay_signature')
+            txn_obj.save()
+
+            order.payment_date = payment_date
+            order.status = 1
+            order.save()
+            return_parameter = reverse('payment:thank-you')
+
+
         if order:
             request.session['order_pk'] = order.pk
             if not order.candidate_id:
