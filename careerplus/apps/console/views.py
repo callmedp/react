@@ -1,6 +1,7 @@
 #python imports
 import logging,urllib
 from datetime import datetime
+import string
 
 #django imports
 from django.views.generic import View, TemplateView, FormView
@@ -75,7 +76,6 @@ class ConsoleLoginView(TemplateView):
         username = request.POST['username']
         password = request.POST.get('password','')
         forgot_password_flow = request.POST.get('forgot_password_flow')
-
         if forgot_password_flow:
             return self.get_response_for_forgot_password_flow(username)
 
@@ -134,6 +134,17 @@ class ConsoleResetPasswordView(TemplateView):
 
         return super(ConsoleResetPasswordView,self).get(request,*args,**kwargs)
 
+    def validate_password(self, request, password):
+        lcase_letters = set(string.ascii_lowercase)
+        ucase_letters = set(string.ascii_uppercase)
+        digits = set(string.digits)
+        symbols = set(string.punctuation)
+        pwd = set(password)
+        if pwd.isdisjoint(lcase_letters) or pwd.isdisjoint(ucase_letters) or pwd.isdisjoint(digits) or pwd.isdisjoint(symbols) :
+            messages.error(request, 'Passwords should contain atleast 1 digit, 1 uppercase letter, 1 lowercase letter and a symbol') 
+            return True
+        return None
+
     def post(self, request, uidb64=None, token=None, *arg, **kwargs):
         password = request.POST.get('password')
         re_password = request.POST.get('re_password')
@@ -146,6 +157,19 @@ class ConsoleResetPasswordView(TemplateView):
         if password != re_password:
             messages.error(request, 'Passwords do not match')
             return HttpResponseRedirect("/console/reset-password/?alt={}".format(alt))
+        
+        if len(password) < 10 : 
+            messages.add_message(
+                self.request,
+                messages.ERROR,
+                'Password length should be greater than or equal to 10 characters.'
+            )
+            return HttpResponseRedirect("/console/reset-password/?alt={}".format(alt))
+        
+        validator = self.validate_password(request, password)
+
+        if validator:
+            return HttpResponseRedirect("/console/reset-password/?alt={}".format(alt))
 
         user_obj = User.objects.filter(alt=alt).first()
         
@@ -156,6 +180,7 @@ class ConsoleResetPasswordView(TemplateView):
         user_obj.set_password(password)
         user_obj.alt = ""
         user_obj.save()
+
 
         messages.info(request, 'Password has been successfully updated')
         return HttpResponseRedirect("/console/")
