@@ -105,7 +105,7 @@
                     <div class="panel panel-default box-shadow1">
                     <div class="panel-heading">
                       <h4 class="panel-title">
-                        <a  class="no-bg trig-loader" href="{% url "payment:ccavenue_request" cart_id 'all' %}">
+                        <a  class="no-bg trig-loader" href="{% url "payment:razor-request" cart_id %}">
                           Card & Netbanking
                         </a>
                       </h4>
@@ -176,7 +176,7 @@
                         <article>Pay by Cheque</article>
 
                         <form class="personal-details" id="check-pay-form" method="post" action="">{% csrf_token %}
-                            <fieldset>
+                            <fieldset class="mozilla-handle">
                                 <div class="form-group cheque-no">
                                        <input maxlength="100" placeholder=" " name="cheque_no" required class="form-control form--control" type="text">
                                         <label for="cheque_no">Cheque no. *</label>

@@ -1,0 +1,72 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Razor Pay</title>
+</head>
+<body>
+<h1>
+<span id="msg"></span>
+</h1>
+
+<button id="rzp-button1" style='visibility:hidden'>Pay</button>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+var options = {
+    "key": "{{key}}",
+    "amount": "{{amount }}",
+    "currency": "{{currency}}",
+    "name": "{{name}}",
+    "description": "{{description}}",
+     "order_id": "{{order_id}}", //This is a sample Order ID. Pass the `id` obtained in the response of$
+    "handler": function (response){
+    document.getElementById('msg').innerHTML = 'Please wait while we are updating the information'
+       submitfunc(response);
+    },
+    "prefill": {
+        "name": "{{name}}",
+        "email": "{{email}}",
+        "contact": "{{mobile_number}}"
+    },
+    "modal":{
+       "escape": false,
+       "ondismiss": function(){
+         window.location.replace(`{{MAIN_DOMAIN_PREFIX}}/cart/payment-summary`);
+     },
+},
+
+};
+
+var rzp1 = new Razorpay(options);
+document.getElementById('rzp-button1').onclick = function(e){
+    rzp1.open();
+    e.preventDefault();
+}
+</script>
+</body>
+<script>
+    document.getElementById('rzp-button1').click();
+function submitfunc(data){
+    var myform = document.createElement("form");
+    myform.action = "{{action}}";
+    myform.method = "post";
+    field = document.createElement("input");
+    field.value = data.razorpay_payment_id;
+    field.name = "razorpay_payment_id";
+    field1 = document.createElement("input");
+    field1.value = data.razorpay_order_id;
+    field1.name = "razorpay_order_id";
+    field2 = document.createElement("input");
+    field2.value = data.razorpay_signature;
+    field2.name = "razorpay_signature";
+    myform.appendChild(field);
+    myform.appendChild(field1);
+    myform.appendChild(field2);
+    myform.style.visibility = 'hidden';
+    document.body.appendChild(myform);
+    myform.submit();
+}
+</script>
+
+
+</html>

@@ -1,5 +1,6 @@
 import json
 import logging
+import requests
 
 from collections import OrderedDict
 from decimal import Decimal
@@ -13,6 +14,7 @@ from django.http import (
     HttpResponsePermanentRedirect,
 )
 from django.urls import reverse
+from django.shortcuts import render
 from django.utils import timezone
 from django.core.cache import cache
 from django.utils.http import urlquote
@@ -1275,3 +1277,54 @@ class SkillToProductRedirectView(View):
             url_ro_rirect = '/search/results/?fvid=59'
         return HttpResponseRedirect(url_ro_rirect)
 
+class GoogleResumeAdView(View):
+
+    def get(self, request, *args, **kwargs):
+        cat_slugs = ['resume-services','linkedin-profile']
+        countries = ['india','gulf']
+        country = kwargs.get('country', 'india')
+        cat_slug = kwargs.get('cat_slug', 'resume-services')
+        pre_register = self.request.GET.get('pre-register', "False")
+        site_slug = None
+        if cat_slug not in cat_slugs or country not in countries:
+            raise Http404
+        if country == "gulf":
+            currency = "AED"
+            add_on_cost = {"cover_letter":"145","express_delivery":"145","s_express_delivery":"200"}
+            if cat_slug == "resume-services":
+                service_cost = {"0_1exp":"250", "1_4exp":"400", "4_8exp":"575",
+                    "8_15exp":"735", "15_exp":"900"}
+                template = 'shop/resume-ad-services.html'
+                site_slug = "linkedin-profile"
+            elif cat_slug == "linkedin-profile":
+                service_cost = {"0_1exp":"300", "1_4exp":"450", "4_8exp":"600",
+                    "8_15exp":"750", "15_exp":"950"}
+                template = 'shop/resume-ad-linkedin.html'
+                site_slug = "resume-services"
+        elif country == "india":
+            currency = "INR"
+            add_on_cost = {"cover_letter":"550","express_delivery":"1099","s_express_delivery":"1609"}
+            if cat_slug == "resume-services":
+                service_cost = {"0_1exp":"1299", "1_4exp":"2199", "4_8exp":"2999",
+                    "8_15exp":"3999", "15_exp":"4999"}
+                template = 'shop/resume-ad-services.html'
+                site_slug = "linkedin-profile"
+            elif cat_slug == "linkedin-profile":
+                service_cost = {"0_1exp":"2200", "1_4exp":"2500", "4_8exp":"3600",
+                    "8_15exp":"4600", "15_exp":"5600"}
+                template = 'shop/resume-ad-linkedin.html'
+                site_slug = "resume-services"
+        site_link = '{}/services/{}/{}/?pre-register={}'.format(settings.MAIN_DOMAIN_PREFIX, site_slug, country, str(pre_register))
+        content = {
+            "currency" : currency,
+            "country" : country,
+            "site_link" : site_link,
+            "service_cost" : service_cost,
+            "country" : country,
+            "pre_register" : bool(eval(pre_register)),
+            "experience_range" : range(0,16),
+            "add_on_cost" : add_on_cost,
+            "crm_lead_link" : '{}/api/v1/googleAd-lead-creation/'.format(settings.SHINECPCRM_DICT.get('base_url')) 
+        }
+        return render(request, template, context=content)
+        
