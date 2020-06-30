@@ -82,7 +82,7 @@ class DocumentViewSet(DocumentViewMixin, ReadOnlyModelViewSet):
     permission_classes = ()
 
 
-class CommentViewSet(CommentViewMixin, ReadOnlyModelViewSet):
+class CommentViewSet(CommentViewMixin, ModelViewSet):
     """
         CRUD ViewSet for `Comment` model.
     """

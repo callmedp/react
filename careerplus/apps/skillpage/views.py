@@ -131,7 +131,6 @@ class ServiceDetailPage(DetailView):
 
     PRODUCT_PAGE_SIZE = 5
     REVIEW_PAGE_SIZE = 5
-
     def get_template_names(self):
         if self.request.amp:
             return ["services/detail-amp.html"]

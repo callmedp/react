@@ -29,5 +29,7 @@ PAYMENT_MODE = (
     (11, 'Paid Free'),
     (12, "EPAYLATER"),
     (13, "PAYU"),
-    (14, "Zest Money")
+    (14, "Zest Money"),
+    (15, 'RazorPay')
+
 )

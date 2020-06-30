@@ -1,10 +1,11 @@
+import string
+
 from django import forms
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.forms import ReadOnlyPasswordHashField
 from django.contrib.auth.forms import UserChangeForm
 from django.contrib.admin import helpers
-
 from users.models import User, UserProfile
 
 
@@ -18,12 +19,29 @@ class UserCreationForm(forms.ModelForm):
         model = User
         fields = ('email',)
 
+    def validate_password(self, password):
+        lcase_letters = set(string.ascii_lowercase)
+        ucase_letters = set(string.ascii_uppercase)
+        digits = set(string.digits)
+        symbols = set(string.punctuation)
+        pwd = set(password)
+        if pwd.isdisjoint(lcase_letters) or pwd.isdisjoint(ucase_letters) or pwd.isdisjoint(digits) or pwd.isdisjoint(symbols) :
+            return True
+        return False
+
     def clean_password2(self):
         # Check that the two password entries match
         password1 = self.cleaned_data.get("password1")
         password2 = self.cleaned_data.get("password2")
         if password1 and password2 and password1 != password2:
-            raise forms.ValidationError("Passwords don't match")
+            raise forms.ValidationError("Passwords don't match!")
+
+        if len(password1) < 10 : 
+            raise forms.ValidationError("Password length should be greater than or equal to 10 characters.")
+        
+        if self.validate_password(password1):
+            raise forms.ValidationError('Passwords should contain atleast 1 digit, 1 uppercase letter, 1 lowercase letter and a symbol')
+
         return password2
 
     def save(self, commit=True):

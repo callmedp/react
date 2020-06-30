@@ -1,1 +1,23 @@
-{"status":"done","publicPath":"https://learning-static-staging-189607.storage.googleapis.com/l1/s/score-checker/dist/desktop/","chunks":{"main":[{"name":"main-1592493433712.css","publicPath":"https://learning-static-staging-189607.storage.googleapis.com/l1/s/score-checker/dist/desktop/main-1592493433712.css","path":"/Users/admin/Shine/careerplus/careerplus/static_core/score-checker/dist/desktop/main-1592493433712.css"},{"name":"main-1592493433712.js","publicPath":"https://learning-static-staging-189607.storage.googleapis.com/l1/s/score-checker/dist/desktop/main-1592493433712.js","path":"/Users/admin/Shine/careerplus/careerplus/static_core/score-checker/dist/desktop/main-1592493433712.js"},{"name":"main-1592493433712.js.map","publicPath":"https://learning-static-staging-189607.storage.googleapis.com/l1/s/score-checker/dist/desktop/main-1592493433712.js.map","path":"/Users/admin/Shine/careerplus/careerplus/static_core/score-checker/dist/desktop/main-1592493433712.js.map"}]}}
+{
+    "status": "done",
+    "publicPath": "https://static1.shine.com/l/s/score-checker/dist/desktop/",
+    "chunks": {
+        "main": [
+            {
+                "name": "main-1592547647080.css",
+                "publicPath": "https://static1.shine.com/l/s/score-checker/dist/desktop/main-1592547647080.css",
+                "path": "/Users/admin/HT_MEDIA/projects/learn/code/careerplus/careerplus/static_core/score-checker/dist/desktop/main-1592547647080.css"
+            },
+            {
+                "name": "main-1592547647080.js",
+                "publicPath": "https://static1.shine.com/l/s/score-checker/dist/desktop/main-1592547647080.js",
+                "path": "/Users/admin/HT_MEDIA/projects/learn/code/careerplus/careerplus/static_core/score-checker/dist/desktop/main-1592547647080.js"
+            },
+            {
+                "name": "main-1592547647080.js.map",
+                "publicPath": "https://static1.shine.com/l/s/score-checker/dist/desktop/main-1592547647080.js.map",
+                "path": "/Users/admin/HT_MEDIA/projects/learn/code/careerplus/careerplus/static_core/score-checker/dist/desktop/main-1592547647080.js.map"
+            }
+        ]
+    }
+}
