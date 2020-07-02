@@ -642,7 +642,6 @@ class RecommendationBasedOnGaps():
                 candidate_profile_skills = eval(candidate_profile_skills_list)
             else:
                 candidate_profile_skills = candidate_profile_skills_list
-            import ipdb;ipdb.set_trace()
 
             try:
                 skills_list = list(set(jd_skills) - set(candidate_profile_skills))
