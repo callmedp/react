@@ -577,8 +577,9 @@ class FuncAreaPageView(SearchBaseView):
         path_info = kwargs
         root=request.GET.get('root')
         mobile=request.GET.get('mobile')
+        campaign = request.GET.get('utm_campaign')
         if root == 'interested_mail':
-            logging.getLogger('info_log').info('interested user clicked product having fa_slug {} and id-{}, mobile number is {}'.format(path_info.get('fa_slug'),path_info.get('pk'),mobile))
+            logging.getLogger('info_log').info('interested user clicked product having fa_slug "{}" id-{}, mobile number is "{}", under campaign "{}"'.format(path_info.get('fa_slug'),path_info.get("pk", ""), mobile, campaign))
         paths_to_redirect = {"/services/resume-services/537/":"/services/resume-writing/63/",
                 "/services/linkedin-profile-writing/65/":"/services/linkedin-profile/180/"}
 
