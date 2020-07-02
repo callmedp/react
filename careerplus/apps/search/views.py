@@ -574,6 +574,11 @@ class FuncAreaPageView(SearchBaseView):
     allow_empty_query = True
 
     def get(self,request,*args,**kwargs):
+        path_info = kwargs
+        root=request.GET.get('root')
+        mobile=request.GET.get('mobile')
+        if root == 'interested_mail':
+            logging.getLogger('info_log').info('interested user clicked product having fa_slug {} and id-{}, mobile number is {}'.format(path_info.get('fa_slug'),path_info.get('pk'),mobile))
         paths_to_redirect = {"/services/resume-services/537/":"/services/resume-writing/63/",
                 "/services/linkedin-profile-writing/65/":"/services/linkedin-profile/180/"}
 

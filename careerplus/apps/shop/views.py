@@ -802,6 +802,11 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             return redirect_url
 
     def get(self, request, **kwargs):
+        path_info = kwargs
+        root=request.GET.get('root')
+        mobile=request.GET.get('mobile')
+        if root == 'interested_mail':
+            logging.getLogger('info_log').info('interested user clicked product {} having id-{}, mobile number is {}'.format(path_info.get('prd_slug'),path_info.get("pk", ""),mobile))
         useragent = self.request.META['HTTP_USER_AGENT']
         if 'facebookexternalhit' not in useragent:
             redirect_url = self.redirect_for_neo(request)
