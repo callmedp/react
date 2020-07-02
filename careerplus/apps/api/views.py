@@ -1790,9 +1790,9 @@ class GetRecommendedProductApi(APIView):
     def get(self, request, *args, **kwargs):
         desired_job_title = self.request.GET.get('desired_jt', '')
         actual_job_title = self.request.GET.get('actual_jt', '')
-        jd_skills = self.request.GET.get('jd_skills', None)
+        jd_skills = self.request.GET.get('jd_skills', [])
         candidate_profile_skills = self.request.GET.get(
-            'candidate_skills', None)
+            'candidate_skills', [])
         response_json = {'msg': 'No argument passed'}
 
         if desired_job_title or actual_job_title:

@@ -630,7 +630,7 @@ class RecommendationBasedOnGaps():
 
             return data
 
-    def get_recommended_products_based_on_skill_gap(self, job_description_skills=None, candidate_profile_skills_list=None):
+    def get_recommended_products_based_on_skill_gap(self, job_description_skills=[], candidate_profile_skills_list=[]):
 
             data = {}
             recommended_skill_product_list = []
