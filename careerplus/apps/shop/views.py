@@ -360,6 +360,12 @@ class ProductInformationMixin(object):
         initial_country = Country.objects.filter(phone='91')[0].phone
         return country_choices,initial_country
 
+    def get_sorted_products(self, pvrs_data):
+        if pvrs_data.get("var_list"):
+                sort_pvrs = sorted(pvrs_data.get('var_list'), key = lambda i: i['inr_price'])
+                pvrs_data['var_list'] = sort_pvrs
+        return pvrs_data
+
     def get_product_information(self, product, sqs, product_main, sqs_main):
         pk = product.pk
         ctx = {}
@@ -378,9 +384,7 @@ class ProductInformationMixin(object):
         if sqs.pPc == 'course':
             ctx.update(json.loads(sqs_main.pPOP))
             pvrs_data = json.loads(sqs.pVrs)
-            if pvrs_data.get("var_list"):
-                sort_pvrs = sorted(pvrs_data.get('var_list'), key = lambda i: i['inr_price'])
-                pvrs_data['var_list'] = sort_pvrs
+            pvrs_data = self.get_sorted_products(pvrs_data)
             try:
                 selected_var = pvrs_data['var_list'][0]
             except Exception as e:
@@ -426,6 +430,7 @@ class ProductInformationMixin(object):
                 ctx['canonical_url'] = product.get_parent_canonical_url()
             ctx.update(json.loads(sqs_main.pPOP))
             pvrs_data = json.loads(sqs.pVrs)
+            pvrs_data = self.get_sorted_products(pvrs_data)
             ctx.update(pvrs_data)
         if self.is_combos(sqs):
             ctx.update(json.loads(sqs.pCmbs))
