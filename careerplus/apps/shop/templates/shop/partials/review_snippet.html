@@ -2,7 +2,7 @@
     <li class="box-panel" itemscope itemtype="http://schema.org/Review">
       <span class="review-heading" itemprop="name">{% if not review.title %}{{review.get_remarks}} {% else %} {{ review.title }}{% endif %}</span>
       <div class="rating-review-box" itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
-          {% for star in review.get_ratings %}
+         <!--  {% for star in review.get_ratings %}
             {% if star == "*" %}
               <figure class="full-star"></figure>
             {% elif star == "+" %}
@@ -10,7 +10,7 @@
             {% elif star == "-" %}
               <figure class="blank-star"></figure>
             {% endif %}
-          {% endfor %}
+          {% endfor %} -->
           <meta itemprop="worstRating" content="1">
           <strong><span itemprop="ratingValue">{{review.average_rating|floatformat:"1"}}</span>/<span itemprop="bestRating">5</span></strong>
       </div>

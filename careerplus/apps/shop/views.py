@@ -124,6 +124,7 @@ class ProductInformationMixin(object):
         }
 
     def solar_info(self, product):
+        import ipdb;ipdb.set_trace();
         info = {}
         info['prd_img'] = product.pImg
         info['prd_img_alt'] = product.pImA
@@ -342,6 +343,7 @@ class ProductInformationMixin(object):
             except Exception as e:
                 logging.getLogger('error_log').error(str(e))
                 review_list = []
+            import ipdb;ipdb.set_trace();
             return {
                 'prd_rv_total': rv_total,
                 'prd_review_list': review_list,
@@ -369,6 +371,7 @@ class ProductInformationMixin(object):
         if product:
             ctx.update(self.get_breadcrumbs(product, product.category_main))
         ctx.update(self.solar_info(sqs))
+        import ipdb;ipdb.set_trace();
         if product.is_course or product.is_assesment:
             ctx.update(self.solar_program_structure(sqs))
         ctx.update(self.solar_faq(sqs))
@@ -432,7 +435,7 @@ class ProductInformationMixin(object):
         ctx['domain_name'] = '{}//{}'.format(settings.SITE_PROTOCOL, settings.SITE_DOMAIN)
         if getattr(product, 'vendor', None):
             ctx.update({'prd_vendor_slug': product.vendor.slug})
-
+        import ipdb;ipdb.set_trace();
         ctx.update({'sqs': sqs})
         ctx.update({'get_fakeprice': get_fakeprice})
         ctx['meta'] = product.as_meta(self.request)
