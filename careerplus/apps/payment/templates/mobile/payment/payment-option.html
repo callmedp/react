@@ -79,7 +79,7 @@
         <div class="payment-type">
           <div class="payment-type--item">
             <span></span>
-            <a class='trig-loader' href="{% url "payment:ccavenue_request" cart_id 'all' %}">Card & Netbanking</a>
+            <a class='trig-loader' href="{% url "payment:razor-request" cart_id %}">Card & Netbanking</a>
           </div>
         
           {% if type_flow != 17 or debug_mode %}

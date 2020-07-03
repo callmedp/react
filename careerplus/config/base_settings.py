@@ -199,6 +199,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 10, }
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -206,6 +208,19 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
+    {
+        'NAME': 'careerplus.config.admin_validator.NumberValidator'
+    },
+    {
+        'NAME': 'careerplus.config.admin_validator.UppercaseValidator'
+    },
+     {
+        'NAME': 'careerplus.config.admin_validator.LowercaseValidator'
+    },
+    {
+        'NAME': 'careerplus.config.admin_validator.PunctuationValidator'
+    },
+    
 ]
 
 # Internationalization
@@ -659,6 +674,13 @@ PAYU_INFO1 = {'merchant_salt': 'DiRp9kCs',
 
 RSHINE_CCAVENUE_ACCESS_CODE = 'AVNZ03HE25BR73ZNRB'
 RSHINE_CCAVENUE_WORKING_KEY = 'FBD9C0D0B8D397CD4E182B9BFF6EA44F'
+
+THUMBNAIL_PRESERVE_FORMAT = True
+
+RAZOR_PAY_DICT = {
+    'key_id': 'rzp_test_Oca8UTneyg6bwO',
+    'key_secret': 'km5KILWfr6sF7XzaDoC5kGOj',
+}
 
 
 
