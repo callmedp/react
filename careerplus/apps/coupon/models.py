@@ -78,8 +78,10 @@ class Coupon(AbstractAutoDate):
         help_text=_("Leave empty for coupons that never expire"))
 
     image = models.ImageField(
-        _('Icon'), upload_to=get_upload_path_coupon,
+        _('image'), upload_to=get_upload_path_coupon,
         blank=True, null=True)
+
+
 
     campaign = models.ForeignKey(
         'Campaign',
