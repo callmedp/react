@@ -1,4 +1,10 @@
-import logging, binascii, os, pickle,math
+from .config import CRON_TO_ID_MAPPING
+from .tasks import cron_initiate, create_assignment_lead
+import logging
+import binascii
+import os
+import pickle
+import math
 import datetime
 
 import requests
@@ -17,7 +23,7 @@ from rest_framework.permissions import (
     IsAuthenticated,
     IsAdminUser, )
 
-from rest_framework.generics import ListAPIView, CreateAPIView,RetrieveAPIView
+from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveAPIView
 from rest_framework.authentication import SessionAuthentication
 from haystack import connections
 from haystack.query import SearchQuerySet
@@ -47,7 +53,7 @@ from shop.models import Skill, DeliveryService, ShineProfileData
 from blog.models import Blog,Tag
 from emailers.tasks import send_email_task
 from payment.models import PaymentTxn
-from resumebuilder.models import Candidate 
+from resumebuilder.models import Candidate
 
 from .serializers import (
     OrderListHistorySerializer,
@@ -78,9 +84,7 @@ from assessment.models import Question
 from assessment.utils import TestCacheUtil
 from unidecode import unidecode
 from django.template.defaultfilters import slugify
-
-
-
+from search.helpers import RecommendationBasedOnGaps
 
 
 class CreateOrderApiView(APIView, ProductInformationMixin):
@@ -104,12 +108,14 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
         order_already_created = False
 
         all_txn_ids = [x['txn_id'] for x in txns_list if x.get('txn_id')]
-        paid_transactions = PaymentTxn.objects.filter(txn__in=all_txn_ids,status=1)
+        paid_transactions = PaymentTxn.objects.filter(
+            txn__in=all_txn_ids, status=1)
 
         if paid_transactions:
-            logging.getLogger("error_log").error("Order for txns already created. {}".format(all_txn_ids))
+            logging.getLogger("error_log").error(
+                "Order for txns already created. {}".format(all_txn_ids))
             return Response({"status": 0, "msg": "Order for txns already created."},
-                status=status.HTTP_400_BAD_REQUEST)
+                            status=status.HTTP_400_BAD_REQUEST)
 
         try:
             order = None
@@ -152,7 +158,8 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                 try:
                     country_obj = Country.objects.get(phone=country_code)
                 except Exception as e:
-                    logging.getLogger('error_log').error("Unable to get country object %s" % str(e))
+                    logging.getLogger('error_log').error(
+                        "Unable to get country object %s" % str(e))
 
                     country_obj = Country.objects.get(phone=91)
 
@@ -175,9 +182,12 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                 order.status = 1
                 order.site = 1
                 order.country = country_obj
-                order.total_excl_tax = request.data.get('total_excl_tax_excl_discount', 0)
-                order.total_amount_free_prdts = request.data.get('free_products_total',0)
-                order.total_incl_tax = request.data.get('total_payable_amount', 0)
+                order.total_excl_tax = request.data.get(
+                    'total_excl_tax_excl_discount', 0)
+                order.total_amount_free_prdts = request.data.get(
+                    'free_products_total', 0)
+                order.total_incl_tax = request.data.get(
+                    'total_payable_amount', 0)
                 crm_lead_id = request.data.get('crm_lead_id', '')
                 crm_sales_id = request.data.get('crm_sales_id', '')
                 sales_user_info = request.data.get('sales_user_info', {})
@@ -232,7 +242,8 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                 total_discount = coupon_amount - order.total_amount_free_prdts
                 total_amount_before_discount = order.total_excl_tax  # berfore discount and excl tax
                 total_amount_before_discount -= order.total_amount_free_prdts
-                percentage_discount = (total_discount * 100) / total_amount_before_discount
+                percentage_discount = (
+                    total_discount * 100) / total_amount_before_discount
                 for data in item_list:
                     delivery_service = None
                     parent_id = data.get('id')
@@ -243,7 +254,8 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                     product = Product.objects.get(id=parent_id)
                     if data.get('delivery_service', None):
                         delivery_service = data.get('delivery_service', None)
-                        delivery_service = DeliveryService.objects.get(name=delivery_service)
+                        delivery_service = DeliveryService.objects.get(
+                            name=delivery_service)
 
                     p_oi = order.orderitems.create(
                         product=product,
@@ -291,7 +303,8 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                     cost_price_after_discount = cost_price - discount
                     # As per product requirement , apply GST only for INR
                     if order.currency == 0:
-                        tax_amount = (cost_price_after_discount * tax_rate_per) / 100
+                        tax_amount = (
+                            cost_price_after_discount * tax_rate_per) / 100
                     else:
                         tax_amount = 0
                     selling_price = cost_price_after_discount + tax_amount
@@ -310,17 +323,20 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                         if delivery_service:
                             # setup delivery service
                             p_oi.delivery_service = delivery_service
-                            cost_price = float(p_oi.delivery_service.get_price())
+                            cost_price = float(
+                                p_oi.delivery_service.get_price())
                             p_oi.delivery_price_excl_tax = cost_price
                             if not is_free_product:
-                                discount = (cost_price * percentage_discount) / 100
+                                discount = (
+                                    cost_price * percentage_discount) / 100
                             else:
                                 discount = cost_price
-                            
+
                             cost_price_after_discount = cost_price - discount
                             # As per product requirement , apply GST only for INR
                             if order.currency == 0:
-                                tax_amount = (cost_price_after_discount * tax_rate_per) / 100
+                                tax_amount = (
+                                    cost_price_after_discount * tax_rate_per) / 100
                             else:
                                 tax_amount = 0
                             selling_price = cost_price_after_discount + tax_amount
@@ -345,7 +361,8 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                         cost_price_after_discount = cost_price - discount
                         # As per product requirement , apply GST only for INR
                         if order.currency == 0:
-                            tax_amount = (cost_price_after_discount * tax_rate_per) / 100
+                            tax_amount = (
+                                cost_price_after_discount * tax_rate_per) / 100
                         else:
                             tax_amount = 0
                         selling_price = cost_price_after_discount + tax_amount
@@ -359,12 +376,15 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                                 # setup delivery service
                                 p_oi.delivery_service = delivery_service
 
-                                cost_price = float(p_oi.delivery_service.get_price())
+                                cost_price = float(
+                                    p_oi.delivery_service.get_price())
                                 p_oi.delivery_price_excl_tax = cost_price
-                                discount = (cost_price * percentage_discount) / 100
+                                discount = (
+                                    cost_price * percentage_discount) / 100
                                 cost_price_after_discount = cost_price - discount
                                 if order.currency == 0:
-                                    tax_amount = (cost_price_after_discount * tax_rate_per) / 100
+                                    tax_amount = (
+                                        cost_price_after_discount * tax_rate_per) / 100
                                 else:
                                     tax_amount = 0
                                 selling_price = cost_price_after_discount + tax_amount
@@ -393,7 +413,8 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                         cost_price_after_discount = cost_price - discount
                         # As per product requirement , apply GST only for INR
                         if order.currency == 0:
-                            tax_amount = (cost_price_after_discount * tax_rate_per) / 100
+                            tax_amount = (
+                                cost_price_after_discount * tax_rate_per) / 100
                         else:
                             tax_amount = 0
                         selling_price = cost_price_after_discount + tax_amount
@@ -410,7 +431,8 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                 for txn_dict in txns_list:
                     try:
                         payment_date = txn_dict.get('payment_date')
-                        payment_date = datetime.datetime.strptime(payment_date, "%Y-%m-%d %H:%M:%S")
+                        payment_date = datetime.datetime.strptime(
+                            payment_date, "%Y-%m-%d %H:%M:%S")
                     except Exception as e:
                         logging.getLogger('error_log').error("Unable to get payment date as per specified format "
                                                              "%s" %
@@ -433,8 +455,10 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                 invoice_generation_order.delay(order_pk=order.pk)
 
                 # email for order
-                process_mailer.apply_async((order.pk,), countdown=settings.MAIL_COUNTDOWN)
-                pending_item_email.apply_async((order.pk,), countdown=settings.MAIL_COUNTDOWN)
+                process_mailer.apply_async(
+                    (order.pk,), countdown=settings.MAIL_COUNTDOWN)
+                pending_item_email.apply_async(
+                    (order.pk,), countdown=settings.MAIL_COUNTDOWN)
 
                 return Response(
                     {"status": 1, "msg": 'order created successfully.'},
@@ -452,7 +476,6 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
             return Response(
                 {"msg": msg, "status": 0},
                 status=status.HTTP_400_BAD_REQUEST)
-
 
 
 class EmailLTValueApiView(APIView):
@@ -481,7 +504,8 @@ class EmailLTValueApiView(APIView):
         ltv = get_ltv(candidate_id)
 
         return Response(
-            {"status": "SUCCESS", "ltv_price": str(ltv), "name": name, "last_order": str(last_order)},
+            {"status": "SUCCESS", "ltv_price": str(
+                ltv), "name": name, "last_order": str(last_order)},
             status=status.HTTP_200_OK)
 
 
@@ -550,7 +574,6 @@ class ValidateCouponApiView(APIView):
                     "msg": 'This code is suspended.'},
                     status=status.HTTP_400_BAD_REQUEST)
 
-
             if not coupon.active:
                 return Response({
                     "status": "FAIL",
@@ -582,7 +605,8 @@ class ValidateCouponApiView(APIView):
                         "msg": 'This code has already been used by your account.'},
                         status=status.HTTP_400_BAD_REQUEST)
             except Exception as e:
-                logging.getLogger('error_log').error('unable to get coupon objects %s' % str(e))
+                logging.getLogger('error_log').error(
+                    'unable to get coupon objects %s' % str(e))
                 if coupon.user_limit is not 0:  # zero means no limit of user count
                     # only user bound coupons left and you don't have one
                     if coupon.user_limit is coupon.users.filter(user__isnull=False).count():
@@ -602,7 +626,8 @@ class ValidateCouponApiView(APIView):
                 total = Decimal(crm_order_amount)
                 if coupon.min_purchase:
                     if total < coupon.min_purchase:
-                        error = 'This cart total is below minimum purchase.(%s)' % (coupon.min_purchase)
+                        error = 'This cart total is below minimum purchase.(%s)' % (
+                            coupon.min_purchase)
                         return Response({
                             "status": "FAIL",
                             "msg": error},
@@ -614,7 +639,8 @@ class ValidateCouponApiView(APIView):
                         coupon_user = coupon.users.get(user__isnull=True)
                         coupon_user.user = lead_mobile
                     except CouponUser.DoesNotExist:
-                        coupon_user = CouponUser(coupon=coupon, user=lead_mobile)
+                        coupon_user = CouponUser(
+                            coupon=coupon, user=lead_mobile)
 
                 coupon_user.redeemed_at = timezone.now()
                 coupon_user.save()
@@ -747,10 +773,6 @@ class RecommendedProductsCategoryView(APIView):
             status=status.HTTP_200_OK)
 
 
-from .tasks import cron_initiate, create_assignment_lead
-from .config import CRON_TO_ID_MAPPING
-
-
 class CronInitiateApiView(APIView):
     permission_classes = []
     authentication_classes = []
@@ -794,24 +816,23 @@ class ResumeBuilderProductView(ListAPIView):
     permission_classes = ()
     serializer_class = ResumeBuilderProductSerializer
 
-   
-    
     def get_queryset(self):
-       
-        def modify_product(product): 
+
+        def modify_product(product):
             try:
-                product['discount'] = math.floor(((product['fake_inr_price'] - product['inr_price'])/product['fake_inr_price'])* 100)
+                product['discount'] = math.floor(
+                    ((product['fake_inr_price'] - product['inr_price'])/product['fake_inr_price']) * 100)
                 return product
             except Exception as e:
-                logging.getLogger('error_log').error("Builder Product  - {}".format(e))
+                logging.getLogger('error_log').error(
+                    "Builder Product  - {}".format(e))
                 product['discount'] = None
                 return product
 
-
         type_flow = self.request.query_params.get('type_flow')
-        product_list = list(Product.objects.filter(type_flow=type_flow, type_product=0, active=True, sub_type_flow=1701).values('id', 'name', 'inr_price', 'usd_price', 'aed_price', 'fake_inr_price', 'heading').order_by('inr_price'))
+        product_list = list(Product.objects.filter(type_flow=type_flow, type_product=0, active=True, sub_type_flow=1701).values(
+            'id', 'name', 'inr_price', 'usd_price', 'aed_price', 'fake_inr_price', 'heading').order_by('inr_price'))
         product_list = map(modify_product, product_list)
-
 
         # for item in  product_list:
         #     product = Product.objects.filter(id=item['id']).first()
@@ -819,6 +840,7 @@ class ResumeBuilderProductView(ListAPIView):
         #     if( value == 'single' or value == 'multiple'):
         #         new_product_list.append(item)
         return list(product_list)
+
 
 class ShineDataFlowDataApiView(ListAPIView):
     permission_classes = []
@@ -853,7 +875,8 @@ class ShineCandidateLoginAPIView(APIView):
 
     def get_or_create_token(self, candidate_obj):
         existing_token = self.conn.get(candidate_obj.id)
-        token = pickle.loads(existing_token) if existing_token else self.generate_token()
+        token = pickle.loads(
+            existing_token) if existing_token else self.generate_token()
         self.set_user_in_cache(token, candidate_obj)
         return token
 
@@ -880,8 +903,10 @@ class ShineCandidateLoginAPIView(APIView):
         data = []
         for key, value_tuple in entity_slug_model_mapping.items():
             model = value_tuple[0]
-            objects_count = model.objects.filter(**{value_tuple[1]: candidate_id}).count()
-            d = {"id": key, "set": bool(objects_count), "display_value": entity_mapping.get(key)}
+            objects_count = model.objects.filter(
+                **{value_tuple[1]: candidate_id}).count()
+            d = {"id": key, "set": bool(
+                objects_count), "display_value": entity_mapping.get(key)}
             data.append(d)
 
         return data
@@ -891,7 +916,8 @@ class ShineCandidateLoginAPIView(APIView):
 
         product_found = False
         order_data = {}
-        order_obj_list = Order.objects.filter(candidate_id=candidate_id, status__in=[1, 3])
+        order_obj_list = Order.objects.filter(
+            candidate_id=candidate_id, status__in=[1, 3])
 
         if not order_obj_list:
             return order_data
@@ -911,8 +937,8 @@ class ShineCandidateLoginAPIView(APIView):
 
         return order_data
 
-    def get_candidate_experience(self,login_response):
-        return (login_response['workex'] and login_response['workex'][0] and login_response['workex'][0].get('experience_in_years',0)) or 0
+    def get_candidate_experience(self, login_response):
+        return (login_response['workex'] and login_response['workex'][0] and login_response['workex'][0].get('experience_in_years', 0)) or 0
 
     def get_response_for_successful_login(self, candidate_id, login_response, with_info=True):
         candidate_obj = ShineCandidate(**login_response)
@@ -920,15 +946,16 @@ class ShineCandidateLoginAPIView(APIView):
         candidate_obj.candidate_id = candidate_id
         token = self.get_or_create_token(candidate_obj)
         personal_info = login_response.get('personal_detail')[0]
-        personal_info['candidate_id']= personal_info.get('id')
+        personal_info['candidate_id'] = personal_info.get('id')
         subscription_active = False
-        # Check whether subscription active or not if resumebuilder candidate exists 
-        resumebuilder_candidate = Candidate.objects.filter(candidate_id=candidate_id).first()
+        # Check whether subscription active or not if resumebuilder candidate exists
+        resumebuilder_candidate = Candidate.objects.filter(
+            candidate_id=candidate_id).first()
         if resumebuilder_candidate:
             subscription_active = resumebuilder_candidate.active_subscription or False
 
         self.request.session.update(login_response)
-        
+
         self.request.session.update(personal_info)
 
         mobile_number = self.request.session.get('cell_phone','')
@@ -958,10 +985,12 @@ class ShineCandidateLoginAPIView(APIView):
     def get_profile_info(self, profile):
         candidate_profile_keys = ['first_name', 'last_name', 'email', 'number', 'date_of_birth', 'location', 'gender',
                                   'candidate_id']
-        candidate_profile_values = [profile.get('first_name',''), profile.get('last_name', ''), profile.get('email',''),
-                                    profile.get('cell_phone',''), profile.get('date_of_birth',''),
-                                    profile.get('candidate_location',''), profile.get('gender',''), profile.get('id','')]
-        candidate_profile = dict(zip(candidate_profile_keys, candidate_profile_values))
+        candidate_profile_values = [profile.get('first_name', ''), profile.get('last_name', ''), profile.get('email', ''),
+                                    profile.get('cell_phone', ''), profile.get(
+                                        'date_of_birth', ''),
+                                    profile.get('candidate_location', ''), profile.get('gender', ''), profile.get('id', '')]
+        candidate_profile = dict(
+            zip(candidate_profile_keys, candidate_profile_values))
 
         return candidate_profile
 
@@ -984,7 +1013,7 @@ class ShineCandidateLoginAPIView(APIView):
             degree_index = next((index for (index, d) in enumerate(educ_list) if d["pid"] == edu['education_level']),
                                 None)
 
-            degree_name = educ_list[degree_index]['pdesc'];
+            degree_name = educ_list[degree_index]['pdesc']
 
             child = educ_list[degree_index]['child']
 
@@ -997,7 +1026,8 @@ class ShineCandidateLoginAPIView(APIView):
                                           course_type,
                                           '',
                                           None, None, True, ind]
-            education_dict = dict(zip(candidate_education_keys, candidate_education_values))
+            education_dict = dict(
+                zip(candidate_education_keys, candidate_education_values))
             candidate_education.append(education_dict)
 
         return candidate_education
@@ -1017,7 +1047,8 @@ class ShineCandidateLoginAPIView(APIView):
             candidate_experience_values = ['', exp['job_title'], exp['company_name'],
                                            start_date, end_date,
                                            exp['is_current'], '', exp['description'], ind]
-            experience_dict = dict(zip(candidate_experience_keys, candidate_experience_values))
+            experience_dict = dict(
+                zip(candidate_experience_keys, candidate_experience_values))
             candidate_experience.append(experience_dict)
 
         return candidate_experience
@@ -1034,12 +1065,15 @@ class ShineCandidateLoginAPIView(APIView):
         return candidate_skill
 
     def get_certification_info(self, certifications):
-        candidate_certification_keys = ['candidate_id', 'name_of_certification', 'year_of_certification', 'order']
+        candidate_certification_keys = [
+            'candidate_id', 'name_of_certification', 'year_of_certification', 'order']
         candidate_certification = []
 
         for ind, certi in enumerate(certifications):
-            candidate_certification_values = ['', certi['certification_name'], certi['certification_year'], ind]
-            certification_dict = dict(zip(candidate_certification_keys, candidate_certification_values))
+            candidate_certification_values = [
+                '', certi['certification_name'], certi['certification_year'], ind]
+            certification_dict = dict(
+                zip(candidate_certification_keys, candidate_certification_values))
             candidate_certification.append(certification_dict)
 
         if len(candidate_certification) == 0:
@@ -1060,13 +1094,16 @@ class ShineCandidateLoginAPIView(APIView):
         candidate_info['personalInfo'] = self.get_profile_info(profile)
 
         # get education info
-        candidate_info['education'] = self.get_education_info(login_response and login_response['education'])
+        candidate_info['education'] = self.get_education_info(
+            login_response and login_response['education'])
 
         #  get experience info
-        candidate_info['experience'] = self.get_experience_info(login_response and login_response['jobs'])
+        candidate_info['experience'] = self.get_experience_info(
+            login_response and login_response['jobs'])
 
         #  get skills
-        candidate_info['skill'] = self.get_skill_info(login_response and login_response['skills'])
+        candidate_info['skill'] = self.get_skill_info(
+            login_response and login_response['skills'])
 
         #  get language
         candidate_info['language'] = [{
@@ -1080,7 +1117,8 @@ class ShineCandidateLoginAPIView(APIView):
         }]
 
         #  get courses
-        candidate_info['course'] = self.get_certification_info(login_response and login_response['certifications'])
+        candidate_info['course'] = self.get_certification_info(
+            login_response and login_response['certifications'])
 
         #   get award
         candidate_info['award'] = [{
@@ -1118,11 +1156,12 @@ class ShineCandidateLoginAPIView(APIView):
 
     def _dispatch_via_autologin(self, alt, with_info):
         try:
-            alt = alt.replace(" ","+")
-            alt = alt.replace("%20","+")
+            alt = alt.replace(" ", "+")
+            alt = alt.replace("%20", "+")
             email, candidate_id, valid = AutoLogin().decode(alt)
         except Exception as e:
-            logging.getLogger('error_log').error("Login attempt failed - {}".format(e))
+            logging.getLogger('error_log').error(
+                "Login attempt failed - {}".format(e))
             return Response({"data": "No user record found"}, status=status.HTTP_400_BAD_REQUEST)
 
         if not valid or not candidate_id:
@@ -1131,7 +1170,8 @@ class ShineCandidateLoginAPIView(APIView):
         try:
             login_response = ShineCandidateDetail().get_candidate_detail(shine_id=candidate_id)
         except Exception as e:
-            logging.getLogger('error_log').error("Login attempt failed - {}".format(e))
+            logging.getLogger('error_log').error(
+                "Login attempt failed - {}".format(e))
             return Response({"data": "No user record found"}, status=status.HTTP_400_BAD_REQUEST)
 
         return self.get_response_for_successful_login(candidate_id, login_response, with_info)
@@ -1142,14 +1182,16 @@ class ShineCandidateLoginAPIView(APIView):
         try:
             login_resp = RegistrationLoginApi.user_login(login_data)
         except Exception as e:
-            logging.getLogger('error_log').error("Login attempt failed - {}".format(e))
+            logging.getLogger('error_log').error(
+                "Login attempt failed - {}".format(e))
             return Response({"data": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
 
         candidate_id = login_resp.get('candidate_id')
         access_token = login_resp.get('access_token')
 
         if not candidate_id and not access_token:
-            logging.getLogger('info_log').info("Login attempt failed - {}".format(login_resp))
+            logging.getLogger('info_log').info(
+                "Login attempt failed - {}".format(login_resp))
             return Response({"data": "Invalid credentials"}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
@@ -1157,7 +1199,8 @@ class ShineCandidateLoginAPIView(APIView):
             # else:
             #     login_response = ShineCandidateDetail().get_status_detail(shine_id=candidate_id)
         except Exception as e:
-            logging.getLogger('error_log').error("Login attempt failed - {}".format(e))
+            logging.getLogger('error_log').error(
+                "Login attempt failed - {}".format(e))
             return Response({"data": "No user record found"}, status=status.HTTP_400_BAD_REQUEST)
 
         return self.get_response_for_successful_login(candidate_id, login_response, with_info)
@@ -1174,11 +1217,12 @@ class ShineCandidateLoginAPIView(APIView):
         try:
             login_response = ShineCandidateDetail().get_candidate_detail(shine_id=candidate_id)
         except Exception as e:
-            logging.getLogger('error_log').error("Login attempt failed - {}".format(e))
+            logging.getLogger('error_log').error(
+                "Login attempt failed - {}".format(e))
             return Response({"data": "No user record found"}, status=status.HTTP_400_BAD_REQUEST)
 
         with_info = request.GET.get('with_info', 'true')
-        with_info = False if with_info == 'false' else True 
+        with_info = False if with_info == 'false' else True
         return self.get_response_for_successful_login(candidate_id, login_response, with_info)
 
     def post(self, request, *args, **kwargs):
@@ -1219,7 +1263,8 @@ class UpdateCertificateAndAssesment(APIView):
         data['vendor'] = vendor_name.lower()
         parser = CertiticateParser(parse_type=0)
         parsed_data = parser.parse_data(data)
-        certificates, user_certificates = parser.save_parsed_data(parsed_data, vendor=data['vendor'])
+        certificates, user_certificates = parser.save_parsed_data(
+            parsed_data, vendor=data['vendor'])
         if user_certificates:
             for user_certificate in user_certificates:
                 certificate = user_certificate.certificate
@@ -1239,7 +1284,8 @@ class UpdateCertificateAndAssesment(APIView):
         if getattr(parsed_data.user_certificate, 'order_item_id'):
             if not user_certificates:
                 logging.getLogger('error_log').error(
-                    "Order Item id present , Certificate not available, badging not done" % (data)
+                    "Order Item id present , Certificate not available, badging not done" % (
+                        data)
                 )
             orderitem_id = int(parsed_data.user_certificate.order_item_id)
             oi = OrderItem.objects.filter(id=orderitem_id).first()
@@ -1273,7 +1319,8 @@ class UpdateCertificateAndAssesment(APIView):
                 "subject": subject,
                 "product_name": oi.product.name,
                 "skill_name": ', '.join(
-                    list(ProductSkill.objects.filter(product=oi.product).values_list('skill__name', flat=True))
+                    list(ProductSkill.objects.filter(
+                        product=oi.product).values_list('skill__name', flat=True))
                 ),
                 "certificate_updated": certificate_updated,
                 "score": parsed_data.assesment.overallScore,
@@ -1281,10 +1328,12 @@ class UpdateCertificateAndAssesment(APIView):
 
             })
             create_assignment_lead.delay(obj_id=oi.id)
-            send_email_task.delay(to_emails, mail_type, data, status=201, oi=oi.pk)
+            send_email_task.delay(to_emails, mail_type,
+                                  data, status=201, oi=oi.pk)
         else:
             logging.getLogger('error_log').error(
-                "Order Item id not present , so unable close item related to this data ( %s ) " % (data)
+                "Order Item id not present , so unable close item related to this data ( %s ) " % (
+                    data)
             )
 
         return Response({
@@ -1294,12 +1343,12 @@ class UpdateCertificateAndAssesment(APIView):
         )
 
 
-class ShineDataFlowDataApiView(ListAPIView):
-    permission_classes = []
-    authentication_classes = []
-    queryset = ShineProfileData.objects.all()
-    serializer_class = ShineDataFlowDataSerializer
-    pagination_class = None
+# class ShineDataFlowDataApiView(ListAPIView):
+#     permission_classes = []
+#     authentication_classes = []
+#     queryset = ShineProfileData.objects.all()
+#     serializer_class = ShineDataFlowDataSerializer
+#     pagination_class = None
 
 
 class QuestionAnswerApiView(ListAPIView):
@@ -1313,6 +1362,7 @@ class QuestionAnswerApiView(ListAPIView):
         if not id:
             return Question.objects.none()
         return Question.objects.filter(test__id=id)
+
 
 class VendorCertificateMappingApiView(ListAPIView):
     authentication_classes = [OAuth2Authentication]
@@ -1476,7 +1526,6 @@ class TalentEconomyApiView(FieldFilterMixin, ListAPIView):
         return Blog.objects.filter(**filter_dict).distinct()
 
 
-
 class OrderDetailApiView(FieldFilterMixin, RetrieveAPIView):
     permission_classes = [IsAuthenticated, OrderAccessPermission]
     authentication_classes = [SessionAuthentication]
@@ -1492,7 +1541,7 @@ class OrderDetailApiView(FieldFilterMixin, RetrieveAPIView):
         for field in fields_to_log:
             if field not in fields_to_check:
                 continue
-            logging.getLogger('info_log').info('Order Data Accessed - {},{},{},{},{},{}'.format(current_time, \
+            logging.getLogger('info_log').info('Order Data Accessed - {},{},{},{},{},{}'.format(current_time,
                                                                                                 user.id,
                                                                                                 user.get_full_name(),
                                                                                                 getattr(instance,
@@ -1532,7 +1581,7 @@ class OrderListApiView(FieldFilterMixin, ListAPIView):
         items = OrderItem.objects.filter(
             product__vendor__id__in=vendor_ids,
             no_process=False,
-            order__status__in= self.custom_status
+            order__status__in=self.custom_status
         )
         return items
 
@@ -1543,23 +1592,26 @@ class CandidateInsight(APIView):
 
     def post(self, request, *args, **kwargs):
         data = request.data
-        logging.getLogger('info_log').info("Candidate Insight:- {}".format(str(data)))
+        logging.getLogger('info_log').info(
+            "Candidate Insight:- {}".format(str(data)))
         return Response({
             "msg": "Data has been noted."},
             status=status.HTTP_201_CREATED
         )
 
+
 class TestTimer(APIView):
     permission_classes = []
     authentication_classes = []
 
-
-    def get(self,request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         test_id = self.request.GET.get('test_id')
-        duration = int(self.request.GET.get('duration',0))
+        duration = int(self.request.GET.get('duration', 0))
         self.cache_test = TestCacheUtil(request=request)
-        test_start_time = self.cache_test.get_start_test_cache(key='test-'+test_id)
-        set_test_duration_cache = self.cache_test.get_test_duration_cache(key='test-'+test_id, duration=duration)
+        test_start_time = self.cache_test.get_start_test_cache(
+            key='test-'+test_id)
+        set_test_duration_cache = self.cache_test.get_test_duration_cache(
+            key='test-'+test_id, duration=duration)
         #
         # if not timestamp:
         #     timestamp_with_tduration = (datetime.now() + timedelta(seconds=duration)).strftime(timeformat)
@@ -1582,7 +1634,7 @@ class SetSession(APIView):
     permission_classes = []
     authentication_classes = []
 
-    def post(self,request,*args,**kwargs):
+    def post(self, request, *args, **kwargs):
         self.cache_test = TestCacheUtil(request=request)
         session_id = self.request.session.session_key
         data = {}
@@ -1590,10 +1642,10 @@ class SetSession(APIView):
         if not session_id:
             data.update({'is_set': False})
             return Response(data)
-        timeout = self.request.POST.get('timeout','')
-        submission = self.request.POST.get('submit','')
-        test_id = self.request.POST.get('test_id','')
-        lead_create = self.request.POST.get('lead_created','')
+        timeout = self.request.POST.get('timeout', '')
+        submission = self.request.POST.get('submit', '')
+        test_id = self.request.POST.get('test_id', '')
+        lead_create = self.request.POST.get('lead_created', '')
         key = 'test-' + str(test_id)
         # setting cache for timeout test sessions
         if timeout and test_id:
@@ -1610,17 +1662,18 @@ class SetSession(APIView):
         # creating lead for particular session_id
         if lead_create:
             self.request._request.session.update({'is_lead_created': 1})
-            return Response({'is_lead_created':True})
+            return Response({'is_lead_created': True})
 
         return Response({'timeout': self.cache_test.get_test_time_out(key),
                          'submission': self.cache_test.get_test_submit(key)})
+
 
 class RemoveCache(APIView):
     permission_classes = []
     authentication_classes = []
 
-    def post(self,request,*args,**kwargs):
-        test_id = self.request.POST.get('test_id','')
+    def post(self, request, *args, **kwargs):
+        test_id = self.request.POST.get('test_id', '')
         session_key = self.request.session.session_key
         key = session_key+'test-'+test_id
         cache_delete = cache.delete(key)
@@ -1631,27 +1684,27 @@ class ServerTimeAPIView(APIView):
     permission_classes = []
     authentication_classes = []
 
-    def get(self,request,*args,**kwargs):
+    def get(self, request, *args, **kwargs):
         self.time_format = "%m/%d/%Y, %H:%M:%S"
         if self.request.GET.get('time_format'):
-            return Response({'time':datetime.datetime.now().strftime(self.request.GET.get('time_format'))})
+            return Response({'time': datetime.datetime.now().strftime(self.request.GET.get('time_format'))})
         if self.request.GET.get('time_stamp'):
             return Response({'time': datetime.datetime.timestamp(datetime.datetime.now())})
-        return Response({'time':datetime.datetime.now().strftime(self.time_format)})
+        return Response({'time': datetime.datetime.now().strftime(self.time_format)})
 
 
 class ClaimOrderAPIView(APIView):
     authentication_classes = [OAuth2Authentication]
     permission_classes = [IsAuthenticated, IsAdminUser]
 
-    def post(self,request):
-        txn_id = self.request.POST.get('txn_id',None)
-        email = self.request.POST.get('email',None)
-        alt_email = self.request.POST.get('alt_email',None)
-        mobile = self.request.POST.get('mobile',"")[-10:]
-        alt_mobile = self.request.POST.get('alt_mobile',"")[-10:]
-        user_id = self.request.POST.get('user_id',None)
-        lead_id = self.request.POST.get('lead_id',None)
+    def post(self, request):
+        txn_id = self.request.POST.get('txn_id', None)
+        email = self.request.POST.get('email', None)
+        alt_email = self.request.POST.get('alt_email', None)
+        mobile = self.request.POST.get('mobile', "")[-10:]
+        alt_mobile = self.request.POST.get('alt_mobile', "")[-10:]
+        user_id = self.request.POST.get('user_id', None)
+        lead_id = self.request.POST.get('lead_id', None)
         name = self.request.POST.get('name', None)
 
         sales_user_info = self.request.POST.get('sales_user_info')
@@ -1659,7 +1712,8 @@ class ClaimOrderAPIView(APIView):
         if not txn_id:
             data.update({'msg': "Transaction id not found"})
             return Response(data, status=400)
-        payment_object = PaymentTxn.objects.filter(txn=txn_id,status=1).first()
+        payment_object = PaymentTxn.objects.filter(
+            txn=txn_id, status=1).first()
         if not payment_object:
             data.update({'msg': "Transaction object not found "})
             return Response(data, status=400)
@@ -1669,7 +1723,7 @@ class ClaimOrderAPIView(APIView):
             return Response(data,  status=400)
         if (email and getattr(order, 'email') == email) or\
                 (mobile and getattr(order, 'mobile') == mobile) or\
-                 (name and order.full_name == name):
+        (name and order.full_name == name):
             if order.sales_user_info or order.crm_lead_id or order.crm_sales_id:
                 data.update({'msg': "Order is already claimed"})
                 return Response(data, status=400)
@@ -1679,42 +1733,42 @@ class ClaimOrderAPIView(APIView):
             order.crm_sales_id = user_id
             order.sales_user_info = sales_user_info
             order.save()
-            data.update({'claim_order': True,'msg': 'Order claimed '
-                         'successfully','order_amount':order.total_incl_tax})
+            data.update({'claim_order': True, 'msg': 'Order claimed '
+                         'successfully', 'order_amount': order.total_incl_tax})
             return Response(data)
         data.update({"msg": "Invalid details"})
         return Response(data, status=400)
 
 
-
 class GetAutoLoginToken(APIView):
-     authentication_classes = [SessionAuthentication]
-     permission_classes = [IsAuthenticated]
+    authentication_classes = [SessionAuthentication]
+    permission_classes = [IsAuthenticated]
 
-     def get(self,request,*args,**kwargs):
+    def get(self, request, *args, **kwargs):
 
-         order_item_id = kwargs.get('order_item_id','')
-         order_item = OrderItem.objects.filter(id=order_item_id).first()
-         if not order_item:
-             return Response({"token":'', "msg": 'Invalid Order Item Id'}, status=status.HTTP_400_BAD_REQUEST)
+        order_item_id = kwargs.get('order_item_id', '')
+        order_item = OrderItem.objects.filter(id=order_item_id).first()
+        if not order_item:
+            return Response({"token": '', "msg": 'Invalid Order Item Id'}, status=status.HTTP_400_BAD_REQUEST)
 
-         email  = order_item.order.email;
-         candidate_id = order_item.order.candidate_id;
-         token_gen = AutoLogin()
-         login_token = token_gen.encode(email, candidate_id, None)
-         return Response({"token": login_token, "msg": "Successfull"}, status=status.HTTP_200_OK)
+        email = order_item.order.email
+        candidate_id = order_item.order.candidate_id
+        token_gen = AutoLogin()
+        login_token = token_gen.encode(email, candidate_id, None)
+        return Response({"token": login_token, "msg": "Successfull"}, status=status.HTTP_200_OK)
+
 
 class GetCacheValue(APIView):
     authentication_classes = ()
     permission_classes = ()
 
     def get(self, request, *args, **kwargs):
-        key = request.GET.get('key','')
-        if not key: 
+        key = request.GET.get('key', '')
+        if not key:
             return Response({
-                'value':''
+                'value': ''
             }, status=status.HTTP_400_BAD_REQUEST)
-        value = cache.get(key,'')
+        value = cache.get(key, '')
         return Response({
             'value': value
         }, status=status.HTTP_200_OK)
@@ -1729,26 +1783,25 @@ class BlogTagsAPIView(ListAPIView):
     def get_queryset(self, *args, **kwargs):
         return Tag.objects.filter(blog__status=1,blog__visibility=2).exclude(blog=None).distinct()
 
-        
+class GetRecommendedProductApi(APIView):
+    authentication_classes = ()
+    permission_classes = ()
 
+    def get(self, request, *args, **kwargs):
+        desired_job_title = self.request.GET.get('desired_jt', '')
+        actual_job_title = self.request.GET.get('actual_jt', '')
+        jd_skills = self.request.GET.get('jd_skills', [])
+        candidate_profile_skills = self.request.GET.get(
+            'candidate_skills', [])
+        response_json = {'msg': 'No argument passed'}
 
+        if desired_job_title or actual_job_title:
+            response_json = RecommendationBasedOnGaps().get_recommended_products_based_on_job_title_gap(
+                desired_job_title, actual_job_title)
+        elif jd_skills or candidate_profile_skills:
+            response_json = RecommendationBasedOnGaps().get_recommended_products_based_on_skill_gap(
+                jd_skills, candidate_profile_skills)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        if not response_json.get('msg'):
+            return Response(response_json, status=status.HTTP_200_OK)
+        return Response({'msg': 'Error! Expected parameters are not provided'}, status=status.HTTP_400_BAD_REQUEST)
