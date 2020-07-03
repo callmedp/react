@@ -81,7 +81,9 @@ class Coupon(AbstractAutoDate):
         _('image'), upload_to=get_upload_path_coupon,
         blank=True, null=True)
 
-
+    coupon_msg = models.CharField(
+        _("Message to be displayed"), max_length=60, null=True, blank=True,
+        help_text=_("This message will display when coupon limit exceeds"))
 
     campaign = models.ForeignKey(
         'Campaign',
