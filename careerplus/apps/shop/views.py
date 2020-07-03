@@ -828,9 +828,11 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             if redirect_url:
                 return HttpResponsePermanentRedirect(redirect_url)
         path_info = kwargs
-        if request.path.split('/')[1] == 'services':
-            resume_shine_redirection = self.redirect_for_resume_shine(path_info)
-            return resume_shine_redirection
+
+        # uncomment when resume.shine is live
+        # if request.path.split('/')[1] == 'services':
+        #     resume_shine_redirection = self.redirect_for_resume_shine(path_info)
+        #     return resume_shine_redirection
         pk = self.kwargs.get('pk')
         self.prd_key = 'detail_db_product_'+pk
         self.prd_solr_key = 'detail_solr_product_'+pk
