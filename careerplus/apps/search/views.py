@@ -592,6 +592,7 @@ class FuncAreaPageView(SearchBaseView):
             return HttpResponsePermanentRedirect(expected_path)
         elif(path_info.get('fa_slug') == 'resume-writing'):
             return HttpResponsePermanentRedirect(settings.RESUME_SHINE_MAIN_DOMAIN)
+        return super(FuncAreaPageView,self).get(request,*args,**kwargs)
 
 
     def empty_query_handler(self):
