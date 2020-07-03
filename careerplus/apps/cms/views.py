@@ -58,37 +58,67 @@ class CMSPageView(DetailView, LoadMoreMixin):
         if not self.request.amp:
             return template_names
         return [x.split(".html")[0]+"-amp.html" for x in template_names]
+
+
+    def redirect_if_necessary(self, current_path, article):
+        expected_path = article.get_absolute_url()
+        if expected_path != urlquote(current_path):
+            return HttpResponsePermanentRedirect(expected_path)
+        return None
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        if self.request.amp and settings.CMS_STATIC_TEMP_DICT.get(self.object.id):
+            template_to_render = 'mobile/cms/'+settings.CMS_STATIC_TEMP_DICT.get(self.object.id).split(".")[0] + "-amp.html"
+            return render(request,template_name=template_to_render)
+
+        self.slug = kwargs.get('slug', None)
+        self.page = request.GET.get('page', 1)
+        self.object = self.get_object()
+        redirect = self.redirect_if_necessary(request.path, self.object)
+        if redirect:
+            return redirect
+        self.object.total_view += 1
+        self.object.save()
+        today = timezone.now()
+        today_date = datetime.date(day=1, month=today.month, year=today.year)
+        pg_counter, created = self.object.pagecounter_set.get_or_create(count_period=today_date)
+        pg_counter.no_views += 1
+        pg_counter.save()
+        response = super(CMSPageView, self).get(request, *args, **kwargs)
+        return response
+
         
 
-    # def redirect_to_resume_shine(self, current_path, article):
-    #     expected_path = article.get_absolute_url()
-    #     # if expected_path != urlquote(current_path):
-    #     #     return HttpResponsePermanentRedirect(expected_path)
-    #     return HttpResponsePermanentRedirect("{0}{1}".format(settings.RESUME_SHINE_MAIN_DOMAIN,expected_path))
-
-    def get(self, request, *args, **kwargs):    
-          return HttpResponsePermanentRedirect("{}{}".format(settings.RESUME_SHINE_MAIN_DOMAIN,request.path))
-
+    # # def redirect_to_resume_shine(self, current_path, article):
+    # #     expected_path = article.get_absolute_url()
+    # #     # if expected_path != urlquote(current_path):
+    # #     #     return HttpResponsePermanentRedirect(expected_path)
+    # #     return HttpResponsePermanentRedirect("{0}{1}".format(settings.RESUME_SHINE_MAIN_DOMAIN,expected_path))
+    #
     # def get(self, request, *args, **kwargs):
-    #     self.object = self.get_object()
-    #     if self.request.amp and settings.CMS_STATIC_TEMP_DICT.get(self.object.id):
-    #         template_to_render = 'mobile/cms/'+settings.CMS_STATIC_TEMP_DICT.get(self.object.id).split(".")[0] + "-amp.html"
-    #         return render(request,template_name=template_to_render)
-    #     self.slug = kwargs.get('slug', None)
-    #     self.page = request.GET.get('page', 1)
-    #     self.object = self.get_object()
-    #     redirect = self.redirect_if_necessary(request.path, self.object)
-    #     if redirect:
-    #         return redirect
-    #     self.object.total_view += 1
-    #     self.object.save()
-    #     today = timezone.now()
-    #     today_date = datetime.date(day=1, month=today.month, year=today.year)
-    #     pg_counter, created = self.object.pagecounter_set.get_or_create(count_period=today_date)
-    #     pg_counter.no_views += 1
-    #     pg_counter.save()
-    #     response = super(CMSPageView, self).get(request, *args, **kwargs)
-    #     return response
+    #       return HttpResponsePermanentRedirect("{}{}".format(settings.RESUME_SHINE_MAIN_DOMAIN,request.path))
+    #
+    # # def get(self, request, *args, **kwargs):
+    # #     self.object = self.get_object()
+    # #     if self.request.amp and settings.CMS_STATIC_TEMP_DICT.get(self.object.id):
+    # #         template_to_render = 'mobile/cms/'+settings.CMS_STATIC_TEMP_DICT.get(self.object.id).split(".")[0] + "-amp.html"
+    # #         return render(request,template_name=template_to_render)
+    # #     self.slug = kwargs.get('slug', None)
+    # #     self.page = request.GET.get('page', 1)
+    # #     self.object = self.get_object()
+    # #     redirect = self.redirect_if_necessary(request.path, self.object)
+    # #     if redirect:
+    # #         return redirect
+    # #     self.object.total_view += 1
+    # #     self.object.save()
+    # #     today = timezone.now()
+    # #     today_date = datetime.date(day=1, month=today.month, year=today.year)
+    # #     pg_counter, created = self.object.pagecounter_set.get_or_create(count_period=today_date)
+    # #     pg_counter.no_views += 1
+    # #     pg_counter.save()
+    # #     response = super(CMSPageView, self).get(request, *args, **kwargs)
+    # #     return response
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax():
