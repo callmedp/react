@@ -1727,7 +1727,7 @@ class BlogTagsAPIView(ListAPIView):
     serializer_class = BlogTagsSerializer
 
     def get_queryset(self, *args, **kwargs):
-        return Tag.objects.filter(blog__status=1,blog__visibility=2).exclude(blog=None)
+        return Tag.objects.filter(blog__status=1,blog__visibility=2).exclude(blog=None).distinct()
 
         
 
