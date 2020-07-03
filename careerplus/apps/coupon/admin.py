@@ -67,7 +67,7 @@ class CouponAdmin(admin.ModelAdmin):
 
 
 class CampaignAdmin(admin.ModelAdmin):
-    list_display = ['name', 'num_coupons', 'num_coupons_used', 'num_coupons_unused', 'num_coupons_expired']
+    list_display = ['name', 'num_coupons', 'num_coupons_used', 'num_coupons_unused', 'num_coupons_expired','redeemed_count']
 
     def num_coupons(self, obj):
         return obj.coupons.count()
@@ -78,12 +78,17 @@ class CampaignAdmin(admin.ModelAdmin):
     num_coupons_used.short_description = _("used")
 
     def num_coupons_unused(self, obj):
-        return obj.coupons.used().count()
+        return obj.coupons.unused().count()
     num_coupons_unused.short_description = _("unused")
 
     def num_coupons_expired(self, obj):
         return obj.coupons.expired().count()
     num_coupons_expired.short_description = _("expired")
+
+    def redeemed_count(self,obj):
+        return ",".join([str(coupon.code) + '  - ' + str(coupon.users.count()) for coupon in obj.coupons.all()])
+
+    redeemed_count.short_description = _('redeemed')
 
 
 admin.site.register(Coupon, CouponAdmin)
