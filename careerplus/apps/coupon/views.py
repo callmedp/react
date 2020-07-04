@@ -25,7 +25,7 @@ class CouponRedeemView(APIView, CartMixin):
 
     @csrf_exempt
     def post(self, request, format=None):
-        code = request.data.get('code')
+        code = request.GET.get('code')
         candidate_id = request.user.candidate_id
 
         try:
@@ -38,6 +38,11 @@ class CouponRedeemView(APIView, CartMixin):
                  }, status=400, content_type='application/json')
 
         if coupon.is_redeemed:
+            if coupon.coupon_msg:
+                return Response({
+                    'success':0,
+                    'error':coupon.coupon_msg,
+                }, status=400, content_type='application/json')
             return Response(
                 {'success': 0,
                  'error': 'This code has already been used for candidate id {0}'.format(candidate_id)
