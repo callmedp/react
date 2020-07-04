@@ -228,14 +228,14 @@ function JSRemoveDiscount(e) {
         },
         failure: function (response) {
 
-           
+
 
             alert_message = 'Something is not working, Please try later!';
 
-             // remove loader
-             $('.overlay-background').hide()
-             $('body').removeClass('body-noscroll')
-             
+            // remove loader
+            $('.overlay-background').hide()
+            $('body').removeClass('body-noscroll')
+
             $('#discount_code').parent().addClass('error');
             $('#discount-alert').empty();
             $('#discount-alert').text(alert_message);
@@ -245,8 +245,8 @@ function JSRemoveDiscount(e) {
 
         },
         error: function (result, status, err) {
-     
-                    
+
+
 
             if (result && result.status == 400) {
                 alert_message = result.responseJSON;
@@ -256,11 +256,11 @@ function JSRemoveDiscount(e) {
 
             }
 
-              // remove loader
-              $('.overlay-background').hide()
-              $('body').removeClass('body-noscroll')
-  
-  
+            // remove loader
+            $('.overlay-background').hide()
+            $('body').removeClass('body-noscroll')
+
+
             $('#discount_code').parent().addClass('error');
             $('#discount-alert').empty();
             $('#discount-alert').text(alert_message);
@@ -375,9 +375,9 @@ function removeFromCart(line_id) {
 
     }
     else {
-          // remove loader
-          $('.overlay-background').hide()
-          $('body').removeClass('body-noscroll')
+        // remove loader
+        $('.overlay-background').hide()
+        $('body').removeClass('body-noscroll')
     }
 
 };
@@ -395,12 +395,40 @@ function removeVariationsOrAddons(csrfToken, reference, lineId) {
         // remove loader
         $('.overlay-background').hide()
         $('body').removeClass('body-noscroll')
-  }
+    }
 
 }
 
 
+async function handleResponse(response, isFetchingHTML) {
+
+    // handle all the status and conditions here
+    if (response['ok'] === false) {
+        let message = '';
+        let data = await response.json();
+        for (const key in data) {
+            message += `${data[key]} `;
+        }
+        if (response['status'] === 401) {
+            // Handle validation
+        }
+        return {
+            error: true,
+            errorMessage: message,
+            status: response['status'],
+        }
+    } else if (response['status'] === 204) {
+        return { data: {} };
+    } else {
+        let result = isFetchingHTML ? await response.text() : await response.json();
+        return { data: result };
+    }
+}
+
+
+
 $(document).ready(function () {
+
     $('#payment-summary-continue-id').click(function () {
         $('#payment-summary-continue-id').attr('disabled', true);
     });

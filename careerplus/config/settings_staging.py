@@ -446,3 +446,6 @@ except:
 
 
 CANDIDATE_SOLR_URL = "http://172.22.65.34:9999/solr/cda/select/"
+
+
+RESUME_SHINE_MAIN_DOMAIN = 'https://resumestage.shine.com'

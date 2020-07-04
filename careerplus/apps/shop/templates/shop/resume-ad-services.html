@@ -15,6 +15,14 @@
 {% block title %}
     <title>Resume services</title>
 {% endblock title %}
+    <script async src="https://www.googletagmanager.com/gtag/js?id=991709191"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', '991709191', { 'send_page_view': false });
+</script>
+
 </head>
 <body>
   
@@ -560,6 +568,9 @@
   <script type="text/javascript" src="{% static 'shinelearn/js/shop/google-ad-slick.js' %}"></script>
   <script type="text/javascript" src="{% static 'shinelearn/js/shop/bootstrap.min.js' %}"></script>
 {% endcompress %}
+
+
+
   
   <script>
         $('.header-carousel').slick({
@@ -691,6 +702,8 @@
             if($('#form_desktop').valid()){
                 // $('#form_desktop').valid();
                 var name, email, country_code, mobile, country, pre_register, experience, data;
+                gtag('event', 'conversion', {'send_to': 'AW-991709191/oylVCIrp89MBEIeQ8dgD'});
+
                 name = $('#name').val();
                 email = $('#email').val();
                 mobile = $('#number').val();
@@ -700,6 +713,7 @@
                 experience = $('#experience').val();
                 data = { name : name, email: email, mobile:mobile, country_code:country_code, country:country, pre_register:pre_register, experience:experience }
                 crmHit(data);
+
                 apiSuccess();
             };
         };
