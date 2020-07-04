@@ -142,6 +142,8 @@ urlpatterns += [
 
     re_path(r'^services/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
         ProductDetailView.as_view(), name='service-detail'),
+    re_path(r'^services/(?P<fa_slug>[-\w]+)/(?P<pk>\d+)/$',
+        FuncAreaPageView.as_view(), name='func_area_results'),
     re_path(r'^services/(?P<cat_slug>[\w-]+)/(?P<country>[\w-]+)/$',
         GoogleResumeAdView.as_view(), name='google-resume-ad'),
     re_path(r'^courses/', include('skillpage.urls',
@@ -150,8 +152,6 @@ urlpatterns += [
         UniversityFacultyView.as_view(), name='university-faculty'),
     re_path(r'^university/(?P<fa_slug>[-\w]+)/(?P<university_slug>[-\w]+)/(?P<pk>\d+)/$',
         UniversityPageView.as_view(), name='university-page'),
-    re_path(r'^services/(?P<fa_slug>[-\w]+)/(?P<pk>\d+)/$',
-        FuncAreaPageView.as_view(), name='func_area_results'),
 
     re_path(r'^online-courses.html$',
         CourseCatalogueView.as_view(), name='course-catalogoue'),

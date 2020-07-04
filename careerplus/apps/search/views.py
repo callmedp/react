@@ -583,15 +583,22 @@ class FuncAreaPageView(SearchBaseView):
     #     return super(FuncAreaPageView,self).get(request,*args,**kwargs)
 
     def get(self,request,*args,**kwargs):
-        path_info=kwargs
+        path_info = kwargs
+        root=request.GET.get('root')
+        mobile=request.GET.get('mobile')
+        campaign = request.GET.get('utm_campaign')
+        if root == 'interested_mail':
+            logging.getLogger('info_log').info('interested user clicked product having fa_slug "{}" id-{}, mobile number is "{}", under campaign "{}"'.format(path_info.get('fa_slug'),path_info.get("pk", ""), mobile, campaign))
+            
         if(path_info.get('fa_slug') == 'linkedin-profile'):
             cat_slug = 'linkedin-profile-writing'
             prd_slug = 'fresher-level'
             pk='1925'
-            expected_path = "{}/{}/{}/{}".format(settings.RESUME_SHINE_MAIN_DOMAIN,cat_slug, prd_slug,pk)
+            expected_path = "{}/product/{}/{}/{}".format(settings.RESUME_SHINE_MAIN_DOMAIN,cat_slug, prd_slug,pk)
             return HttpResponsePermanentRedirect(expected_path)
         elif(path_info.get('fa_slug') == 'resume-writing'):
             return HttpResponsePermanentRedirect(settings.RESUME_SHINE_MAIN_DOMAIN)
+        return super(FuncAreaPageView,self).get(request,*args,**kwargs)
 
 
     def empty_query_handler(self):
