@@ -214,7 +214,7 @@ class BlogDetailView(DetailView, BlogMixin):
                 "slug": blog.slug,
                 "visibility": blog.visibility,
                 "SITEDOMAIN": settings.SITE_DOMAIN,
-                "main_article": main_obj[0]})
+                "main_article": main_obj[0] if main_obj else None})
         else:
             detail_article = render_to_string('include/detail-article-list.html',
                 {"page_obj": detail_obj,
@@ -223,7 +223,7 @@ class BlogDetailView(DetailView, BlogMixin):
 
         context.update({
             "detail_article": detail_article,
-            "main_article": main_obj[0],
+            "main_article": main_obj[0] if main_obj else None,
         })
 
         context.update({

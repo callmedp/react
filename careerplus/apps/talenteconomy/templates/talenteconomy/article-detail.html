@@ -5,15 +5,23 @@
         {% include 'meta/meta.html' %}
  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,600,700&display=swap" rel="stylesheet">
 
-<meta property="og:image" content="{{main_article.image.url}}">
+  <meta name="twitter:domain" content="learning.shine.com">
+        <meta name="twitter:card" content="summary">
+        <meta name="twitter:site" content="@shinelearning">
 
-<meta name="twitter:card" content="summary">
-<meta name="twitter:site" content="@shinelearning">
+   {% if main_article %}
 
-<meta name="twitter:domain" content="learning.shine.com">
+        {% if main_article.image %}
+        <meta name="twitter:image:src" content="{{main_article.image.url}}">
+         <meta property="og:image" content="{{main_article.image.url}}">
+        {% endif %}
+
 <meta name="twitter:title" content="{{main_article.title}}">
 <meta name="twitter:description" content="{{ main_article.get_description }}" />
-<meta name="twitter:image:src" content="{{main_article.image.url}}">
+
+{% endif %}
+
+
 
 
 {%  endblock django_meta %}
