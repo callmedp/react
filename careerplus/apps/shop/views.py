@@ -53,7 +53,7 @@ from .mixins import (CourseCatalogueMixin, \
 from users.forms import (
     ModalLoginApiForm
 )
-from shop.choices import APPLICATION_PROCESS, BENEFITS, NEO_LEVEL_OG_IMAGES
+from shop.choices import APPLICATION_PROCESS, BENEFITS, NEO_LEVEL_OG_IMAGES, SMS_URL_LIST
 from review.forms import ReviewForm
 from .models import Skill
 from homepage.config import UNIVERSITY_COURSE
@@ -1337,3 +1337,19 @@ class GoogleResumeAdView(View):
         }
         return render(request, template, context=content)
         
+class SmsUrlRedirect(View):
+
+    def get(self, request, *args, **kwargs):
+        url_id = int(kwargs.get('url_id',1))
+        encoded_mobile = kwargs.get('encoded_mobile', '')
+
+        if not encoded_mobile:
+            return HttpResponsePermanentRedirect(settings.MAIN_DOMAIN_PREFIX)
+
+        mobile = int(encoded_mobile, 16)
+        logging.getLogger('info_log').info("SMS link was opened by mobile number- {}".format(mobile))
+        url = SMS_URL_LIST.get(url_id, '')
+        if not url:
+            return HttpResponsePermanentRedirect(settings.MAIN_DOMAIN_PREFIX)
+        return HttpResponsePermanentRedirect(url)
+

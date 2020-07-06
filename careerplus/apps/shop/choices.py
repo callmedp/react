@@ -418,3 +418,7 @@ PRODUCT_TAG_CHOICES = (
     (2,'Newly Added')
 
 )
+
+SMS_URL_LIST = {
+    1 : "https://learning.shine.com/services/recruiter-connect/application-highlighter-3/pd-4117?utm_campaign=IVRCampaign",
+}
