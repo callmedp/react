@@ -25,7 +25,7 @@ class CouponRedeemView(APIView, CartMixin):
 
     @csrf_exempt
     def post(self, request, format=None):
-        code = request.GET.get('code')
+        code = request.data.get('code')
         candidate_id = request.user.candidate_id
 
         try:
