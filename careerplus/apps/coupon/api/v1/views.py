@@ -298,7 +298,8 @@ class ProductCouponDetail(APIView):
 		data = {'code': coupons.code,
 		        'coupon_type': coupons.get_coupon_type_display(),
 		        'min_purchase': coupons.min_purchase,
-		        'product_price_before_coupon': prod.inr_price,}
+		        'product_price_before_coupon': prod.inr_price,
+				'coupon_description':coupons.description}
 		if coupons.coupon_type == 'flat':
 			data.update({'product_price_after_coupon': (
 					prod.inr_price - coupons.value) if prod.inr_price >

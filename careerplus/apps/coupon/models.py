@@ -85,6 +85,10 @@ class Coupon(AbstractAutoDate):
         _("Message to be displayed"), max_length=60, null=True, blank=True,
         help_text=_("This message will display when coupon limit exceeds"))
 
+    description = models.CharField(
+        _("Description to be displayed on mailers"), max_length=255, null=True, blank=True,
+        help_text=_("This will be display on description"))
+
     campaign = models.ForeignKey(
         'Campaign',
         verbose_name=_("Campaign"),
