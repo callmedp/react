@@ -216,6 +216,8 @@ $(document).ready(function () {
               url : "/article/login-to-comment/",
               type: "POST",
               data : formData,
+              async : false,
+              timeout : 3000,
               success: function(data, textStatus, jqXHR)
               {
 
