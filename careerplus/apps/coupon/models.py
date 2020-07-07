@@ -89,6 +89,9 @@ class Coupon(AbstractAutoDate):
         _("Description to be displayed on mailers"), max_length=255, null=True, blank=True,
         help_text=_("This will be display on description"))
 
+    mailers = models.BooleanField(default=False)
+
+
     campaign = models.ForeignKey(
         'Campaign',
         verbose_name=_("Campaign"),

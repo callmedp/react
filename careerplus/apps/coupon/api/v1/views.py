@@ -272,7 +272,6 @@ class ProductCouponDetail(APIView):
 	authentication_classes = [OAuth2Authentication]
 	permission_classes = [IsAuthenticated, IsAdminUser]
 
-	@csrf_exempt
 	def get(self, request, *args, **kwargs):
 		prod_id = request.GET.get('pid')
 		prod = None
@@ -285,32 +284,39 @@ class ProductCouponDetail(APIView):
 			logging.getLogger('error_log').error("No product found ")
 			return Response({'error': 'No Product id found', },
 			                status=status.HTTP_400_BAD_REQUEST)
-		coupons = prod.couponproducts.filter(active=True,
-		                                     valid_until__gte=datetime.now())
-		if not coupons:
+		coupons_qs = prod.couponproducts.filter(active=True,
+		                                     valid_until__gte=datetime.now(),mailers=True)
+		if not coupons_qs.exists():
 			return Response({'error': 'No active coupon found', },
 			                status=status.HTTP_400_BAD_REQUEST)
 
-		if coupons.count() > 1:
-			return Response({'error': 'Multiple Coupon found', },
-			                status=status.HTTP_400_BAD_REQUEST)
-		coupons = coupons[0]
-		data = {'code': coupons.code,
-		        'coupon_type': coupons.get_coupon_type_display(),
-		        'min_purchase': coupons.min_purchase,
-		        'product_price_before_coupon': prod.inr_price,
-				'coupon_description':coupons.description}
-		if coupons.coupon_type == 'flat':
-			data.update({'product_price_after_coupon': (
-					prod.inr_price - coupons.value) if prod.inr_price >
-					coupons.value else 0,'coupon_value':coupons.value
-					})
-			return Response(data,status=status.HTTP_200_OK)
-		else:
-			discount = (prod.inr_price * coupons.value) / 100
-			data.update({'product_price_after_coupon': (prod.inr_price -
-			discount) if prod.inr_price > discount else 0,
-			'coupon_value': coupons.value})
+		# if coupons.count() > 1:
+		# 	return Response({'error': 'Multiple Coupon found', },
+		# 	                status=status.HTTP_400_BAD_REQUEST)
+		# coupons = coupons[0]
 
-			return Response(data,status=status.HTTP_200_OK)
+		coupons_list = []
+
+		for coupons in coupons_qs:
+
+			data = {'code': coupons.code,
+					'coupon_type': coupons.get_coupon_type_display(),
+					'min_purchase': coupons.min_purchase,
+					'product_price_before_coupon': prod.inr_price,
+					'coupon_description':coupons.description}
+			if coupons.coupon_type == 'flat':
+				data.update({'product_price_after_coupon': (
+						prod.inr_price - coupons.value) if prod.inr_price >
+						coupons.value else 0,'coupon_value':coupons.value
+						})
+			else:
+				discount = (prod.inr_price * coupons.value) / 100
+				data.update({'product_price_after_coupon': (prod.inr_price -
+				discount) if prod.inr_price > discount else 0,
+				'coupon_value': coupons.value})
+
+			coupons_list.append(data)
+
+		return Response({'data':coupons_list},status=status.HTTP_200_OK)
+
 
