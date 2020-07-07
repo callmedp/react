@@ -1,79 +1,154 @@
 
 WRITER_TYPE = (
-	(0, 'Select Type'),
-	(1, 'Starter'),
-	(2, 'Runner'),
-	(3, 'Expert'),
-	(4, 'Veteran'),
+    (0, 'Select Type'),
+    (1, 'Starter'),
+    (2, 'Runner'),
+    (3, 'Expert'),
+    (4, 'Veteran'),
 )
 
 # writer invoices variants
 
-WRITING_STARTER_VALUE = 180
+WRITING_STARTER_VALUE = 150
 
 # starter is value calculation on WRITING_STARTER_VALUE
-# runner, expert, and veteran value is given percentage of starter value 
+# runner, expert, and veteran value is given percentage of starter value
 # matrix value is in percentages
 RESUME_WRITING_MATRIX_DICT = {
-	'FR': {
-		1: 100, 2: 108,
-		3: 115, 4: 122},
+    'FR': {
+        1: 100, 2: 100,
+        3: 120, 4: 133
+    },
+    'FP': {
+        1: 133, 2: 133,
+        3: 166, 4: 200},
 
-	'FP': {
-		1: 170, 2: 184,
-		3: 196, 4: 207},
+    'SP': {
+        1: 200, 2: 200,
+        3: 233, 4: 266},
 
-	'SP': {
-		1: 225, 2: 243,
-		3: 259, 4: 275},
+    'EP': {
+        1: 266, 2: 266,
+        3: 300, 4: 333
+    },
 
-	'EP': {
-		1: 357, 2: 386,
-		3: 411, 4: 436},
-
-	'DP': {
-		1: 357, 2: 386,
-		3: 411, 4: 436},
-
+    'DP': {
+        1: 266, 2: 266,
+        3: 300, 4: 333
+    },
 }
 
 
-LINKEDIN_STARTER_VALUE = 400
+LINKEDIN_STARTER_VALUE = 300
 
 # starter is value calculation on WRITING_STARTER_VALUE
-# runner, expert, and veteran value is given percentage of starter value 
+# runner, expert, and veteran value is given percentage of starter value
 # matrix value is in percentages
 # 1 starter, 2 - runner, 3 - expert, 4 - veteran
 LINKEDIN_WRITING_MATRIX_DICT = {
-	'FR': {
-		1: 100, 2: 100,
-		3: 135, 4: 140},
+    'FR': {
+        1: 100, 2: 100,
+        3: 133, 4: 133},
 
-	'FP': {
-		1: 100, 2: 100,
-		3: 135, 4: 140},
+    'FP': {
+        1: 116, 2: 116,
+        3: 150, 4: 150},
 
-	'SP': {
-		1: 135, 2: 135,
-		3: 182, 4: 189},
+    'SP': {
+        1: 116, 2: 116,
+        3: 150, 4: 166},
 
-	'EP': {
-		1: 135, 2: 135,
-		3: 182, 4: 189},
+    'EP': {
+        1: 150, 2: 150,
+        3: 166, 4: 166},
 
-	'DP': {
-		1: 135, 2: 135,
-		3: 182, 4: 189},
+    'DP': {
+        1: 150, 2: 150,
+        3: 166, 4: 166},
+}
+
+INTERNATIONAL_RESUME_STARTER_VALUE = 225
+
+
+# starter is value calculation on INTERNATIONAL_RESUME_STARTER_VALUE
+# runner, expert, and veteran value is given percentage of starter value
+# matrix value is in percentages
+# 1 starter, 2 - runner, 3 - expert, 4 - veteran
+INTERNATIONAL_RESUME_MATRIX_DICT = {
+    'FR': {
+        1: 100, 2: 100,
+        3: 115, 4: 126},
+
+    'FP': {
+        1: 122, 2: 122,
+        3: 146, 4: 171},
+
+    'SP': {
+        1: 166, 2: 166,
+        3: 191, 4: 215},
+
+    'EP': {
+        1: 211, 2: 211,
+        3: 235, 4: 260},
+
+    'DP': {
+        1: 211, 2: 211,
+        3: 235, 4: 260},
 }
 
 
+VISUAL_RESUME_STARTER_VALUE = 225
+
+
+# starter is value calculation on VISUAL_RESUME_STARTER_VALUE
+# runner, expert, and veteran value is given percentage of starter value
+# matrix value is in percentages
+# 1 starter, 2 - runner, 3 - expert, 4 - veteran
+VISUAL_RESUME_MATRIX_DICT = {
+    'FR': {
+        1: 100, 2: 100,
+        3: 115, 4: 126},
+
+    'FP': {
+        1: 122, 2: 122,
+        3: 146, 4: 171},
+
+    'SP': {
+        1: 166, 2: 166,
+        3: 191, 4: 215},
+
+    'EP': {
+        1: 211, 2: 211,
+        3: 235, 4: 260},
+
+    'DP': {
+        1: 211, 2: 211,
+        3: 235, 4: 260},
+}
+
+PORTFOLIO_PRICE_MATRIX_DICT = {1: 700, 2: 800, 3: 900, 4: 900}
+
+VISUAL_RESUME_MATRIX_DICT = {1: 75, 2: 80, 3: 85, 4: 85}
+
+INTERNATIONAL_RESUME_MATRIX_DICT = {1: 75, 2: 80, 3: 85, 4: 85}
+
+COUNTRY_SPCIFIC_VARIATION_MATRIX_DICT = {1: 75, 2: 80, 3: 85, 4: 85}
+
+SECOND_REGULAR_RESUME_MATRIX_DICT = {1: 75, 2: 80, 3: 85, 4: 85}
+
+
+# 90% percentage
+# 10 % penalty value
+# 15% - 85%
+
 # Addon Prices:
-EXPRESS = 75
-SUPER_EXPRESS = 150
-VISUAL_RESUME = 150
-COVER_LETTER = 50
-COUNTRY_SPCIFIC_VARIATION = 150
-SECOND_REGULAR_RESUME = 150
+EXPRESS = 50
+SUPER_EXPRESS = 125
+VISUAL_RESUME = 75
+COVER_LETTER = 0
+COUNTRY_SPCIFIC_VARIATION = 75
+SECOND_REGULAR_RESUME = 75
+INTERNATIONAL_RESUME = 75
 
 # portfolio price
 PORTFOLIO_PRICE = 1200
@@ -82,14 +157,17 @@ PORTFOLIO_PRICE = 1200
 # combo discount
 DISCOUNT_ALLOCATION_DAYS = 15
 COMBO_DISCOUNT = 25  # in percentage
-
+COMBO_DISCOUNT_OF_TWO = 10  # in percentage
+COMBO_DISCOUNT_OF_THREE = 20  # in percentage
 
 # SLA Incentive and Penalty Parameter
 
 REGULAR_SLA = 15
 EXPRESS_SLA = 12
 SUPER_EXPRESS_SLA = 10
-PASS_PERCENTAGE = 60  # in percentage
-INCENTIVE_PASS_PERCENTAGE = 85  # in percentage
-PENALTY_PERCENTAGE = 0  # in percentage
-INCENTIVE_PERCENTAGE = 15  # in percentage
+PASS_PERCENTAGE = 85  # in percentage
+INCENTIVE_PASS_PERCENTAGE = 95  # in percentage
+PENALTY_PERCENTAGE = 10  # in percentage
+INCENTIVE_PERCENTAGE = 10  # in percentage
+
+# second regular 75 80 85
