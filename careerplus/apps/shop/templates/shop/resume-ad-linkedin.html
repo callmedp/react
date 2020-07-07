@@ -16,6 +16,13 @@
 {% block title %}
     <title>Linkedin profile</title>
 {% endblock title %}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=991709191"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', '991709191', { 'send_page_view': false });
+</script>
 </head>
 <body>
   <div>
@@ -691,6 +698,7 @@
             $('#number').valid();
             if($('#form_desktop').valid()){
                 var name, email, country_code, mobile, country, pre_register, experience, data;
+                gtag('event', 'conversion', {'send_to': 'AW-991709191/oylVCIrp89MBEIeQ8dgD'});
                 name = $('#name').val();
                 email = $('#email').val();
                 mobile = $('#number').val();

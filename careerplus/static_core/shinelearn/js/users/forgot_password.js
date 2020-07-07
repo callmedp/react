@@ -13,11 +13,11 @@ $(document).ready(function () {
                     console.log('--JSON--',json);
                     if (json.exist == true) {
                         Swal.fire({
+                            icon: 'success',
                             title: 'Success!',
                             text: 'Link has been sent to your registered email id',
-                            type: 'success',
                             showConfirmButton: false,
-                            timer: 1500
+                            timer: 3000
                         })
                         $("#forgot_form")[0].reset();
                         loginAsCandidate()
@@ -30,18 +30,18 @@ $(document).ready(function () {
                         Swal.fire({
                             title: 'Error!',
                             text: 'Your email is not registered on shine learning. Please enter the register email',
-                            type: 'error',
+                            icon: 'error',
                             showConfirmButton: false,
-                            timer: 2000
+                            timer: 3000
 
                         })
                     } else if (json.noresponse == true) {
                         Swal.fire({
                             title: 'Error!',
                             text: 'Something went wrong. Try again later',
-                            type: 'error',
+                            icon: 'error',
                             showConfirmButton: false,
-                            timer: 2000
+                            timer: 3000
 
                         })
                     }
@@ -50,9 +50,9 @@ $(document).ready(function () {
                     Swal.fire({
                         title: 'Error!',
                         text: 'Something went wrong. Try again later',
-                        type: 'error',
+                        icon: 'error',
                         showConfirmButton: false,
-                        timer: 2000
+                        timer: 3000
 
                     })
                 }

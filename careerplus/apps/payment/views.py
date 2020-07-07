@@ -46,6 +46,7 @@ from console.decorators import Decorate, stop_browser_cache
 from core.utils import get_client_ip, get_client_device_type
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 from geolocation.models import Country
+from .razor import  RazorPaymentUtil
 
 
 # third party imports
@@ -221,8 +222,11 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
     def get_context_data(self, **kwargs):
         context = super(PaymentOptionView, self).get_context_data(**kwargs)
         payment_dict = self.getPayableAmount(cart_obj=self.cart_obj)
-        line_item = self.cart_obj.lineitems.filter(parent=None)[0]
-        type_flow = int(line_item.product.type_flow)
+        line_items = list(self.cart_obj.lineitems.filter(parent=None).values_list('product__type_flow'))
+        products_in_cart = [ item[0] for item in line_items]
+        type_flow = int(products_in_cart[0])
+        if 17 in products_in_cart:     
+            type_flow = 17
         # Fallback for cart object not being properly updated. TODO FIND SOURCE OF ISSUE
         email_id = self.cart_obj.owner_email or self.cart_obj.email or self.request.session.get('email','')
         first_name = self.cart_obj.first_name or self.request.session.get('first_name')
@@ -715,6 +719,7 @@ class PayuRequestView(OrderMixin,View):
             'payment_url']})
         return render(request, 'payment/payu_submission_form.html',payu_dict)
 
+
 class PayUResponseView(CartMixin,PaymentMixin,View):
 
     def post(self, request, *args, **kwargs):
@@ -762,6 +767,116 @@ class PayUResponseView(CartMixin,PaymentMixin,View):
             txn_obj.save()
         return HttpResponseRedirect(
             reverse('payment:payment_oops') + '?error=failure&txn_id=' + txn_id)
+
+
+class RazorPayResponseView(CartMixin,PaymentMixin,View):
+
+    def post(self,request,*args,**kwargs):
+        razorpay_order_id = self.request.POST.get('razorpay_order_id')
+        razorpay_payment_id = self.request.POST.get('razorpay_payment_id')
+        razorpay_signature = self.request.POST.get('razorpay_signature')
+        txn_obj = None
+        if not razorpay_order_id or not razorpay_signature:
+            return HttpResponseRedirect(reverse('payment:payment_oops'))
+        try:
+            txn_obj = PaymentTxn.objects.get(razor_order_id =razorpay_order_id)
+        except Exception as e:
+            logging.getLogger('error_log').error('razor_id ={} error -{}'.format(razorpay_order_id,str(e)))
+            raise Http404()
+
+        if not razorpay_payment_id:
+            txn_obj.status = 2
+            txn_obj.save()
+            return HttpResponseRedirect(reverse('payment:payment_oops'))
+
+        rz = RazorPaymentUtil()
+        data ={'razorpay_order_id':razorpay_order_id,'razorpay_payment_id':razorpay_payment_id,
+                           'razorpay_signature':razorpay_signature}
+        value = rz.verify_payment(data)
+        payment_type = 'RAZORPAY'
+
+        if value:
+            return_parameter = self.process_payment_method(
+                payment_type, request, txn_obj,data)
+            self.closeCartObject(txn_obj.cart)
+            try:
+                del request.session['cart_pk']
+                del request.session['checkout_type']
+                request.session.modified = True
+            except Exception as e:
+                logging.getLogger('error_log').error(
+                    'unable to delete request session objects%s' % str(e))
+                pass
+            return HttpResponseRedirect(return_parameter)
+
+        else:
+            txn_obj.status = 2
+            txn_obj.save()
+            return HttpResponseRedirect(reverse('payment:payment_oops'))
+
+
+class RazorPayRequestView(OrderMixin,View):
+    def get(self, request, *args, **kwargs):
+
+        return_dict = {}
+        cart_id = self.kwargs.get('cart_id')
+        if not cart_id :
+            return_dict.update({'error' : 'Cart id not found'})
+            return Response(return_dict, status=status.HTTP_400_BAD_REQUEST)
+        cart_obj = Cart.objects.filter(id=cart_id).first()
+        if not cart_obj :
+            return_dict.update({'error' : 'Cart id not found'})
+            return Response(return_dict, status=status.HTTP_400_BAD_REQUEST)
+
+        order = self.createOrder(cart_obj)
+        if not order :
+            logging.getLogger('error_log').error('order is not created for '
+                                                 'cart id- {}'.format(cart_id))
+            return Response(return_dict, status=status.HTTP_400_BAD_REQUEST)
+
+        txn = 'CP%d%s' % (order.pk, int(time.time()))
+        # creating txn object
+        pay_txn = PaymentTxn.objects.create(
+            txn=txn,
+            order=order,
+            cart=cart_obj,
+            status=0,
+            payment_mode=15,
+            currency=order.currency,
+            txn_amount=order.total_incl_tax,
+        )
+
+        rz = RazorPaymentUtil()
+        response = rz.create(order,pay_txn)
+        if not response:
+            return Response(return_dict, status=status.HTTP_400_BAD_REQUEST)
+        print(response)
+
+        pay_txn.razor_order_id = response.get('id')
+        pay_txn.save()
+        name = ''
+        if order.first_name:
+            name = order.first_name
+        if order.last_name:
+            name = name + ''+ order.last_name
+
+        key = settings.RAZOR_PAY_DICT.get('key_id')
+        razor_dict = {
+            'order_id':response.get('id'),
+            'currency':"INR",
+            'amount':response.get('amount'),
+            'pname':'product name',
+            'desc': 'order description',
+            'name': name,
+            'email': order.email,
+            'key' : key,
+            'mobile_number':order.mobile,
+            'action': '{}/payment/razorpay/response/success/'.format(settings.MAIN_DOMAIN_PREFIX),
+            'secret': settings.RAZOR_PAY_DICT.get('key_secret'),
+
+        }
+
+        return render(request, 'payment/razor_submission_form.html', razor_dict)
 
 
 

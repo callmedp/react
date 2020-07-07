@@ -1,1 +1,23 @@
-{"status":"done","publicPath":"https://static1.shine.com/l/s/score-checker/dist/desktop/","chunks":{"main":[{"name":"main-1591346639174.css","publicPath":"https://static1.shine.com/l/s/score-checker/dist/desktop/main-1591346639174.css","path":"/home/sahil/Desktop/HT work/learning/careerplus/careerplus/static_core/score-checker/dist/desktop/main-1591346639174.css"},{"name":"main-1591346639174.js","publicPath":"https://static1.shine.com/l/s/score-checker/dist/desktop/main-1591346639174.js","path":"/home/sahil/Desktop/HT work/learning/careerplus/careerplus/static_core/score-checker/dist/desktop/main-1591346639174.js"},{"name":"main-1591346639174.js.map","publicPath":"https://static1.shine.com/l/s/score-checker/dist/desktop/main-1591346639174.js.map","path":"/home/sahil/Desktop/HT work/learning/careerplus/careerplus/static_core/score-checker/dist/desktop/main-1591346639174.js.map"}]}}
+{
+    "status": "done",
+    "publicPath": "https://static1.shine.com/l/s/score-checker/dist/desktop/",
+    "chunks": {
+        "main": [
+            {
+                "name": "main-1592547647080.css",
+                "publicPath": "https://static1.shine.com/l/s/score-checker/dist/desktop/main-1592547647080.css",
+                "path": "/Users/admin/HT_MEDIA/projects/learn/code/careerplus/careerplus/static_core/score-checker/dist/desktop/main-1592547647080.css"
+            },
+            {
+                "name": "main-1592547647080.js",
+                "publicPath": "https://static1.shine.com/l/s/score-checker/dist/desktop/main-1592547647080.js",
+                "path": "/Users/admin/HT_MEDIA/projects/learn/code/careerplus/careerplus/static_core/score-checker/dist/desktop/main-1592547647080.js"
+            },
+            {
+                "name": "main-1592547647080.js.map",
+                "publicPath": "https://static1.shine.com/l/s/score-checker/dist/desktop/main-1592547647080.js.map",
+                "path": "/Users/admin/HT_MEDIA/projects/learn/code/careerplus/careerplus/static_core/score-checker/dist/desktop/main-1592547647080.js.map"
+            }
+        ]
+    }
+}

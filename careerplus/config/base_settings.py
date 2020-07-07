@@ -199,6 +199,8 @@ AUTH_PASSWORD_VALIDATORS = [
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'OPTIONS': {
+            'min_length': 10, }
     },
     {
         'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
@@ -206,6 +208,19 @@ AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
+    {
+        'NAME': 'careerplus.config.admin_validator.NumberValidator'
+    },
+    {
+        'NAME': 'careerplus.config.admin_validator.UppercaseValidator'
+    },
+     {
+        'NAME': 'careerplus.config.admin_validator.LowercaseValidator'
+    },
+    {
+        'NAME': 'careerplus.config.admin_validator.PunctuationValidator'
+    },
+    
 ]
 
 # Internationalization
@@ -666,6 +681,15 @@ links for analytics vidhya
 ANALYTICS_VIDHYA_URL = {
     'enrollment' : 'https://gitlab.analyticsvidhya.com/api/shine/enrollments',
     'status' : 'https://gitlab.analyticsvidhya.com/api/shine/enrollments/{}'
+}
+'''
+link end
+'''
+THUMBNAIL_PRESERVE_FORMAT = True
+
+RAZOR_PAY_DICT = {
+    'key_id': 'rzp_test_Oca8UTneyg6bwO',
+    'key_secret': 'km5KILWfr6sF7XzaDoC5kGOj',
 }
 
 

@@ -10,7 +10,7 @@ from .ccavenue import Ccavenue
 from .mobikwik import MobikwikRequestView, MobikwikResponseView
 from .views import (PaymentOptionView, ThankYouView, PaymentOopsView,\
 EPayLaterRequestView, EPayLaterResponseView,ZestMoneyRequestApiView,\
-    ZestMoneyResponseView,PayuRequestView,PayUResponseView )
+    ZestMoneyResponseView,PayuRequestView,PayUResponseView,RazorPayRequestView,RazorPayResponseView)
 
 
 #inter app imports
@@ -47,6 +47,12 @@ urlpatterns = [
 
     re_path(r'^payu/response/(?P<type>success|cancel|failure)/$',
         csrf_exempt(PayUResponseView.as_view()), name="payu-response"),
+
+    re_path(r'^razorpay/request/(?P<cart_id>[-\w]+)/$',
+            RazorPayRequestView.as_view(), name="razor-request"),
+
+    re_path(r'^razorpay/response/success/$',
+           csrf_exempt(RazorPayResponseView.as_view()), name="razor-response"),
 
     # re_path("^mobikwik/request?$", MobikwikRequestView.as_view(), name='mobikwik_request'),
     # re_path("^mobikwik/response/$", MobikwikResponseView.as_view(), name='mobikwik_response'),

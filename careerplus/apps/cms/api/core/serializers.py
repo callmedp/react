@@ -300,9 +300,11 @@ class PageSerializer(serializers.ModelSerializer):
     #
     def to_representation(self, obj):
         data = super(PageSerializer, self).to_representation(obj)
-        comment = obj.comment_set.filter(is_published=True,is_removed=False)
+        comment = obj.comment_set.filter(is_published=True,is_removed=False).values('name','message','created_on')
+        if obj.parent_id:
+            data.update({'parent_name':obj.parent.get_display_name})
         if comment:
-            data.update({'comments':comment.values('name','message','created_on')})
+            data.update({'comments':comment})
         return data
     #
     # def create(self, validated_data):
