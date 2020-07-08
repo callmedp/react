@@ -874,7 +874,6 @@ class WriterInvoiceMixin(object):
         return data
 
     def save_writer_invoice_pdf(self, user=None, invoice_date=None):
-        import ipdb; ipdb.set_trace();
         if not user:
             user = self.request.user
 
