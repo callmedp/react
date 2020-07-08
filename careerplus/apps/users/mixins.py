@@ -143,7 +143,7 @@ class WriterInvoiceMixin(object):
                 if linkedin_ois.exists():
                     product_count = product_count + 1
 
-                if oi.product.type_flow != 12:
+                if oi.product.type_flow != 12 and oi.product.type_flow != 1:
                     country_specific_ois = OrderItem.objects.filter(
                         order__candidate_id=oi.order.candidate_id,
                         product__type_flow__in=[12],
