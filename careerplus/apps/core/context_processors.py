@@ -60,7 +60,7 @@ def common_context_processor(request):
         roundone_user = None
 
     console_user = request.user
-    writer_invoice = False
+    writer_invoice = True
     try:
         if console_user and hasattr(console_user, 'userprofile') and \
                 console_user.userprofile and console_user.userprofile.invoice_date:

@@ -874,6 +874,7 @@ class WriterInvoiceMixin(object):
         return data
 
     def save_writer_invoice_pdf(self, user=None, invoice_date=None):
+        import ipdb; ipdb.set_trace();
         if not user:
             user = self.request.user
 
@@ -881,7 +882,11 @@ class WriterInvoiceMixin(object):
             today_date = datetime.datetime.now().date()
             prev_month = today_date.replace(day=1) - datetime.timedelta(days=1)
             invoice_date = prev_month
-        self.invoice_date = invoice_date
+
+        date_current = datetime.datetime.now().date()
+        date_current = date_current.replace(day=1)
+        invoice_date = date_current
+        self.invoice_date = date_current
 
         data = self._get_context_writer_invoice(
             user=user)
