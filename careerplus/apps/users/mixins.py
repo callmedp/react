@@ -2,6 +2,7 @@ import requests
 import json
 import logging
 import os
+import math
 import datetime
 import calendar
 from dateutil import relativedelta
@@ -33,7 +34,8 @@ from .choices import (
     PENALTY_PERCENTAGE, INCENTIVE_PERCENTAGE, PORTFOLIO_PRICE,
     PORTFOLIO_PRICE_MATRIX_DICT, VISUAL_RESUME_MATRIX_DICT,
     INTERNATIONAL_RESUME_MATRIX_DICT, COUNTRY_SPCIFIC_VARIATION_MATRIX_DICT,
-    SECOND_REGULAR_RESUME_MATRIX_DICT
+    SECOND_REGULAR_RESUME_MATRIX_DICT, COMBO_DISCOUNT_OF_TWO,
+    COMBO_DISCOUNT_OF_THREE
 )
 
 VISUAL_RESUME_PRODUCT_LIST = settings.VISUAL_RESUME_PRODUCT_LIST
@@ -106,13 +108,29 @@ class WriterInvoiceMixin(object):
             datetime.timedelta(days=DISCOUNT_ALLOCATION_DAYS)
 
         if assigned_date:
+            # prev_month = self.invoice_date.replace(day=1)
+            # prev_month = prev_month - datetime.timedelta(days=1)
+            _, last_day = calendar.monthrange(
+                self.invoice_date.year, self.invoice_date.month)
+            invoice_month = datetime.date(
+                self.invoice_date.year, self.invoice_date.month, last_day)
+
             if oi.product and oi.product.type_flow in [1, 12, 13]:
-                prev_month = self.invoice_date.replace(day=1)
-                prev_month = prev_month - datetime.timedelta(days=1)
-                _, last_day = calendar.monthrange(
-                    prev_month.year, prev_month.month)
-                prev_month = datetime.date(
-                    prev_month.year, prev_month.month, last_day)
+
+                if oi.product.type_flow == 12:
+                    resume_writing_ois = OrderItem.objects.filter(
+                        order__candidate_id=oi.order.candidate_id,
+                        product__type_flow__in=[1],
+                        oi_status=4,
+                        assigned_to=assigned_to,
+                        assigned_date__range=[start_date, end_date],
+                        closed_on__lte=invoice_month).exclude(
+                        product__id__in=COVER_LETTER_PRODUCT_LIST).order_by('-id')
+                    
+                    if resume_writing_ois.exists():
+                        return -1
+
+
 
                 linkedin_ois = OrderItem.objects.filter(
                     order__candidate_id=oi.order.candidate_id,
@@ -120,20 +138,33 @@ class WriterInvoiceMixin(object):
                     oi_status=4,
                     assigned_to=assigned_to,
                     assigned_date__range=[start_date, end_date],
-                    closed_on__lte=prev_month).order_by('-id')
+                    closed_on__lte=invoice_month).order_by('-id')
 
                 if linkedin_ois.exists():
                     product_count = product_count + 1
+
+                if oi.product.type_flow != 12:
+                    country_specific_ois = OrderItem.objects.filter(
+                        order__candidate_id=oi.order.candidate_id,
+                        product__type_flow__in=[12],
+                        oi_status=4,
+                        assigned_to=assigned_to,
+                        assigned_date__range=[start_date, end_date],
+                        closed_on__lte=invoice_month).exclude(
+                        product__id__in=COVER_LETTER_PRODUCT_LIST).order_by('-id')
+
+                    if country_specific_ois.exists():
+                        product_count = product_count + 1
 
                 if product_pk in PORTFOLIO_PRODUCT_LIST:
                     joint_list = PORTFOLIO_PRODUCT_LIST + COVER_LETTER_PRODUCT_LIST
                     resume_writing_ois = OrderItem.objects.filter(
                         order__candidate_id=oi.order.candidate_id,
-                        product__type_flow__in=[1, 12, 13],
+                        product__type_flow__in=[1],
                         oi_status=4,
                         assigned_to=assigned_to,
                         assigned_date__range=[start_date, end_date],
-                        closed_on__lte=prev_month).exclude(
+                        closed_on__lte=invoice_month).exclude(
                         product__id__in=joint_list).order_by('-id')
 
                     if resume_writing_ois.exists():
@@ -146,11 +177,23 @@ class WriterInvoiceMixin(object):
                         oi_status=4,
                         assigned_to=assigned_to,
                         assigned_date__range=[start_date, end_date],
-                        closed_on__lte=prev_month).exclude(
+                        closed_on__lte=invoice_month).exclude(
                         product__id__in=COVER_LETTER_PRODUCT_LIST).order_by('-id')
 
                     if portfolio_ois.exists():
                         product_count = product_count + 1
+                    if oi.product.type_flow != 1:
+                        _resume_writing_ois_ = OrderItem.objects.filter(
+                            order__candidate_id=oi.order.candidate_id,
+                            product__type_flow__in=[1],
+                            oi_status=4,
+                            assigned_to=assigned_to,
+                            assigned_date__range=[start_date, end_date],
+                            closed_on__lte=invoice_month).exclude(
+                            product__id__in=COVER_LETTER_PRODUCT_LIST).order_by('-id')
+
+                        if _resume_writing_ois_.exists():
+                            product_count = product_count + 1
 
                 if product_count >= 3:
                     combo_discount = amount * (COMBO_DISCOUNT_OF_THREE/100)
@@ -218,11 +261,11 @@ class WriterInvoiceMixin(object):
 
                 resume_writing_ois = OrderItem.objects.filter(
                     order__candidate_id=oi.order.candidate_id,
-                    product__type_flow__in=[1, 12, 13],
+                    product__type_flow__in=[1],
                     oi_status=4,
                     assigned_to=assigned_to,
                     assigned_date__range=[start_date, end_date],
-                    closed_on__lte=prev_month).exclude(
+                    closed_on__lte=invoice_month).exclude(
                     product__id__in=PORTFOLIO_PRODUCT_LIST +
                     COVER_LETTER_PRODUCT_LIST).order_by('-id')
 
@@ -235,10 +278,22 @@ class WriterInvoiceMixin(object):
                     oi_status=4,
                     assigned_to=assigned_to,
                     assigned_date__range=[start_date, end_date],
-                    closed_on__lte=prev_month).exclude(
+                    closed_on__lte=invoice_month).exclude(
                     product__id__in=COVER_LETTER_PRODUCT_LIST).order_by('-id')
 
                 if portfolio_ois.exists():
+                    product_count = product_count + 1
+
+                country_specific_ois = OrderItem.objects.filter(
+                    order__candidate_id=oi.order.candidate_id,
+                    product__type_flow__in=[12],
+                    oi_status=4,
+                    assigned_to=assigned_to,
+                    assigned_date__range=[start_date, end_date],
+                    closed_on__lte=invoice_month).exclude(
+                    product__id__in=COVER_LETTER_PRODUCT_LIST).order_by('-id')
+
+                if country_specific_ois.exists():
                     product_count = product_count + 1
 
                 if product_count >= 3:
@@ -356,12 +411,18 @@ class WriterInvoiceMixin(object):
             starter_value = WRITING_STARTER_VALUE
             amount = starter_value
             if value_dict and value_dict.get(self.user_type):
-                amount = (starter_value * value_dict.get(self.user_type)) / 100
-                amount = int(amount)
+                amount = (value_dict.get(self.user_type))
+            amount += self.country_specific_dict.get(self.user_type)
+            amount = int(amount)
 
             # combo discount calculation
             combo_discount = self._get_combo_discount(
                 oi=p_oi, amount=amount)
+            
+            if combo_discount < 0:
+                amount = int(self.country_specific_dict.get(self.user_type))
+                combo_discount = int(0)
+            
             variation_combo_discount += combo_discount
 
             self.added_base_object.append(pk)
@@ -509,7 +570,7 @@ class WriterInvoiceMixin(object):
 
             amount = starter_value
             if value_dict and value_dict.get(self.user_type):
-                amount = (starter_value * value_dict.get(self.user_type)) / 100
+                amount = (value_dict.get(self.user_type))
 
             if product_pk in VISUAL_RESUME_PRODUCT_LIST:
                 amount += self.visual_resume_dict.get(self.user_type)
@@ -606,7 +667,7 @@ class WriterInvoiceMixin(object):
 
             amount = starter_value
             if value_dict and value_dict.get(self.user_type):
-                amount = (starter_value * value_dict.get(self.user_type)) / 100
+                amount = (value_dict.get(self.user_type))
 
             if product_pk in VISUAL_RESUME_PRODUCT_LIST:
                 amount += self.visual_resume_dict.get(self.user_type)
