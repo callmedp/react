@@ -420,13 +420,11 @@ PRODUCT_TAG_CHOICES = (
 )
 
 AV_STATUS_CHOICES = (
-    (0, 'pending'),
-    (1, 'user_exist'),
-    (2, 'user_registered'),
-    (3, 'user_activation_pending'),
-    (4, 'user_activated'),
-    (5, 'user_enrolled'),
-    (6, 'error')
+    (0, 'new'),
+    (1, 'user_activation_pending'),
+    (2, 'enrollment_pending'),
+    (3, 'enrollment_done'),
+    (4, 'enrollment_error'),
     )
 av_status_choices = dict(AV_STATUS_CHOICES)
 av_status_choices = { av_status_choices[k] : k for k in av_status_choices}

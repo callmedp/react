@@ -679,8 +679,11 @@ RSHINE_CCAVENUE_WORKING_KEY = 'FBD9C0D0B8D397CD4E182B9BFF6EA44F'
 links for analytics vidhya 
 '''
 ANALYTICS_VIDHYA_URL = {
-    'enrollment' : 'https://gitlab.analyticsvidhya.com/api/shine/enrollments',
-    'status' : 'https://gitlab.analyticsvidhya.com/api/shine/enrollments/{}'
+    'BASE_URL' : 'https://id.analyticsvidhya.com',
+    'USERNAME' : 'rajila.madhavan@hindustantimes.com',
+    'PASSWORD' : 'shine123',
+    'ENROLLMENT' : '/api/enrollments/requests',
+    'STATUS' : '/api/enrollments/requests/{}'
 }
 '''
 link end

@@ -3566,8 +3566,9 @@ class Section(AbstractAutoDate):
 
 class AnalyticsVidhyaRecord(AbstractAutoDate):
     '''
+    saving data for analytics vidhya
     '''
-    AV_Id = models.CharField(max_length=300, blank=False, 
+    AV_Id = models.CharField(max_length=255, blank=False, 
         null=False, unique=True)
     email = models.CharField(max_length=100, verbose_name=_("Customer Email"))
     name = models.CharField(
@@ -3575,7 +3576,19 @@ class AnalyticsVidhyaRecord(AbstractAutoDate):
         help_text=_('Unique name going to decide the slug'))
     phone = models.CharField(
         _("Contact number"), max_length=50)
+    product_id = models.CharField(
+        _("product id"), max_length=10, null=False)
+    price = models.CharField(
+        _("price"), max_length=50)
+    price_currency = models.CharField(
+        _("price_currency"), max_length=50, default='INR')
     status = models.PositiveSmallIntegerField(
         choices=AV_STATUS_CHOICES, default=0)
-    # course_id = 
+    status_msg = models.CharField(
+        _("status message"), max_length=100)
+    remarks = models.CharField(
+        _("remarks"), max_length=200)
+
+    def __str__(self):
+        return self.email
 

@@ -248,7 +248,7 @@ class ShineCandidateDetail(ShineToken):
                     if status_response.status_code == 200 and status_response.json():
                         return status_response.json()
         except Exception as e:
-            logging.getLogger('error_log').error('unable to get status details for 1177%s'%str(e))
+            logging.getLogger('error_log').error('unable to get status details %s'%str(e))
 
         return None
 

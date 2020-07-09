@@ -18,7 +18,6 @@ from .serializers import (
 from django.contrib.contenttypes.models import ContentType
 
 from .tasks import delete_from_solr, update_practice_test_info
-from ..choices import av_status_choices
 
 # interapp imports
 from shop.models import (Product, ProductScreen, PracticeTestInfo, 
@@ -383,64 +382,3 @@ class ProductReview(APIView):
                 return Response({'error':'Something went Wrong'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         except:
             return Response({'error' : 'Something went Wrong'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-class AnalyticsVidhyaEnrollment(APIView):
-    '''
-    document at : https://gitlab.analyticsvidhya.com/snippets/30#endpoints
-    '''
-    authentication_classes = ()
-    permission_classes = ()
-
-    def post(self, request, *args, **kwargs):
-        '''
-        enrollment for course 
-        '''
-        data = self.request.data
-        email = data.get('email','')
-        first_name = data.get('first_name', '')
-        last_name = data.get('last_name', '')
-        course_id = data.get('course_id', '')
-        course_name = data.get('course_name', '')
-        price = data.get('price', '')
-        phone_number = data.get('phone', '')
-        request_url = settings.ANALYTICS_VIDHYA_URL.get('enrollment','')
-        try:
-            response = requests.post(request_url, data)
-            if response.status_code == 201:
-                logging.getLogger('info_log').info('lead is created')
-            else:
-                logging.getLogger('info_log').info('Error in response')
-                return Response({'status': 'Failure', "msg": "Error \
-                    in lead enrollment API"}, status=status.HTTP_400_BAD_REQUEST)
-        except Exception as e:
-            logging.getLogger('error_log').error(e)
-            return Response({'status': 'Failure', "msg": "Error in lead enrollment \
-                API"}, status=status.HTTP_400_BAD_REQUEST)
-        res_json = response.json()
-        course_id = res_json.get('course_id','')
-        AV_id = res_json.get('id','')
-        status = res_json.get('status','')
-
-        if not av_status_choices.get(status):
-            logging.getLogger('error_log').error('invalid enrollment status')
-            return Response({'status': 'Failure', "msg": "Error in lead enrollment API:\
-                invalid enrollment status"}, status=status.HTTP_400_BAD_REQUEST)
-
-        if AnalyticsVidhyaRecord.objects.filter(AV_Id=AV_id).exists():
-            logging.getLogger('info_log').info('lead already exists')
-            return Response({'status': 'success', "msg": "lead \
-                already exists"}, status=status.HTTP_200_OK)
-
-        AV_details = {
-            'AV_Id' : AV_id,
-            'name' : '{} {}'.format(first_name, last_name),
-            'email' : email,
-            'phone' : phone_number,
-            'status' : av_status_choices.get(status)
-            }
-        try: 
-            AnalyticsVidhyaRecord.objects.create(**AV_details)
-        except Exception as e:
-            logging.getLogger('error_log').error(e)
-            return Response({'status': 'Failure', "msg": "Error in Saving leads created from"},
-                            status=status.HTTP_400_BAD_REQUEST)

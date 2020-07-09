@@ -1,10 +1,12 @@
-import hashlib
+import hashlib, base64
+import logging, requests
 
 from django.conf import settings
 from django.core.cache import cache
 
-from shop.models import Product, Category
+from shop.models import Product, Category, AnalyticsVidhyaRecord
 from partner.models import Vendor
+from .choices import av_status_choices
 
 
 class CourseCatalogueMixin(object):
@@ -126,3 +128,86 @@ class LinkedinSeriviceMixin(object):
 					flag = True
 					break
 		return flag
+
+class AnalyticsVidhyaMixin(object):
+	def get_api_header(self):
+		username = settings.ANALYTICS_VIDHYA_URL.get('USERNAME', '')
+		password = settings.ANALYTICS_VIDHYA_URL.get('PASSWORD', '')
+
+		if not username and not password:
+			return None
+
+		us_pd = "{}:{}".format(username, password)
+		b_us_pd = us_pd.encode('ascii')
+		b64_us_pd = base64.b64encode(b_us_pd)
+		b64_us_pd = b64_us_pd.decode('ascii')
+
+		authorization = "Basic {}".format(b64_us_pd)
+
+		headers = {"Authorization" : authorization}
+		return headers
+
+	def user_enrollment(self, data=None):
+		if not data:
+			logging.getLogger('error_log').error('data is empty')
+			return False
+
+		base_url = settings.ANALYTICS_VIDHYA_URL.get('BASE_URL', '')
+		enrollment_url = settings.ANALYTICS_VIDHYA_URL.get('ENROLLMENT', '')
+
+		url = base_url + enrollment_url
+		headers = self.get_api_header()
+		try:
+			response = requests.post(url, data=data, headers=headers)
+			if response.status_code == 201:
+				logging.getLogger('info_log').info('request for user registeration \
+					is successful')
+			elif response.status_code == 401:
+				logging.getLogger('error_log').error('something wrong with \
+					authorization headers, contact Analytics Vidhya \
+					for user - {}'.format(data))
+				return False
+			elif response.status_code == 400:
+				error = response.json().get('errors')
+				logging.getLogger('error_log').error('issue in json parsed \
+					- {}'.format(error))
+				return False
+			else:
+				logging.getLogger('error_log').error('something wrong with \
+					response, contact Analytics Vidhya for user - {}'.format(data))
+				return False
+		except Exception as e:
+			logging.getLogger('error_log').error('Unable to enroll the user,\
+					please try again, user - {}'.format(data))
+			return False
+
+		data = response.json()
+		status = data.get('status', '')
+		product = data.get('product', {})
+		if not av_status_choices.get(status) and not data.get('id') and not product:
+	            logging.getLogger('error_log').error('invalid enrollment status or id or product')
+	            return False
+
+		data_dict = {
+			'AV_Id' : data.get('id'),
+			'name' : '{} {}'.format(data.get('first_name', ''), data.get('last_name', '')),
+			'email' : data.get('email', ''),
+			'phone' : data.get('phone_number', ''),
+			'product_id' : product.get('id',''),
+			'price' : data.get("price"),
+			'price_currency' : data.get("price_currency"),
+			'status' : 	av_status_choices.get(data.get('status')),
+			'status_msg' : data.get('status_msg',''),
+			'remarks' : data.get('remarks','')
+		}
+		try:
+			user = AnalyticsVidhyaRecord.objects.create(**data_dict)
+			if user:
+				logging.getLogger("info_log").info("user is added in analytics vidhya record")
+		except Exception as e:
+			logging.getLogger("error_log").error("Unable to add record - {}".format(data_dict))
+			return False
+		return True
+
+
+

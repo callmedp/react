@@ -26,7 +26,7 @@ from .choices import STATUS_CHOICES, SITE_CHOICES,\
     WC_FLOW_STATUS, OI_OPS_TRANSFORMATION_DICT,LTV_BRACKET_LABELS
 
 from .functions import get_upload_path_order_invoice, process_application_highlighter
-from .tasks import generate_resume_for_order,bypass_resume_midout,upload_Resume_shine,board_user_on_neo
+from .tasks import generate_resume_for_order,bypass_resume_midout,upload_Resume_shine,board_user_on_neo, av_user_enrollment
 
 #inter app imports
 from linkedin.models import Draft
@@ -223,6 +223,10 @@ class Order(AbstractAutoDate):
     def order_contains_neo_item(self):
         items = self.orderitems.all()
         return any([item.product.vendor.slug == 'neo' for item in items])
+
+    def order_contains_analytics_vidhya_item(self):
+        items = self.orderitems.all()
+        return any([item.product.vendor.slug == 'analytics_vidhya' for item in items])
 
     def order_contains_resumebuilder_subscription(self):
         items = self.orderitems.all()
@@ -470,6 +474,13 @@ class Order(AbstractAutoDate):
                 no_process=False
             ).values_list('id', flat=True))
             board_user_on_neo.delay(neo_ids=neo_items_id)
+
+        if self.status == 1 and existing_obj.status != 1 and self.order_contains_analytics_vidhya_item():
+            av_items_id = list(self.orderitems.filter(
+                product__vendor__slug='analytics_vidhya',
+                no_process=False
+            ).values_list('id', flat=True))
+            av_user_enrollment.delay(av_ids=av_items_id)
 
         if self.status == 1 and existing_obj.status != 1 and self.order_contains_jobs_on_the_move():
             jobs_on_the_move_items = self.orderitems.filter(product__sub_type_flow=502)

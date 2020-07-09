@@ -181,6 +181,10 @@ class Section(admin.ModelAdmin):
 class Offer(admin.ModelAdmin):
     form = OfferChangeForm
 
+class AnalyticsVidhyaAdmin(admin.ModelAdmin):
+    model = models.AnalyticsVidhyaRecord
+    list_display = ('AV_Id', 'name', 'email', 'phone', 'product_id', 'status', 'status_msg', 'remarks')
+
 admin.site.register(models.Category, CategoryAdmin)
 admin.site.register(models.Offer,Offer)
 admin.site.register(models.Section,Section)
@@ -198,4 +202,5 @@ admin.site.register(models.ShineProfileData, ShineProfileDataAdmin)
 admin.site.register(models.Skill, SkillAdmin)
 admin.site.register(models.FunctionalArea, FunctionalAreaAdmin)
 admin.site.register(models.PracticeTestInfo, PracticeTestInfoAdmin)
+admin.site.register(models.AnalyticsVidhyaRecord, AnalyticsVidhyaAdmin)
 # admin.site.register(models.ProductExtraInfo, ProductExtraInfoAdmin)
