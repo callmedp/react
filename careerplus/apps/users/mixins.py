@@ -881,11 +881,7 @@ class WriterInvoiceMixin(object):
             today_date = datetime.datetime.now().date()
             prev_month = today_date.replace(day=1) - datetime.timedelta(days=1)
             invoice_date = prev_month
-
-        date_current = datetime.datetime.now().date()
-        date_current = date_current.replace(day=1)
-        invoice_date = date_current
-        self.invoice_date = date_current
+        self.invoice_date = invoice_date
 
         data = self._get_context_writer_invoice(
             user=user)
