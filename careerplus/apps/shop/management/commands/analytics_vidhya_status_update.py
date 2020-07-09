@@ -40,7 +40,7 @@ class Command(BaseCommand):
                         check the api')
                     continue
             except Exception as e:
-                logging.getLogger('error_log').error('unable to call api')
+                logging.getLogger('error_log').error('unable to call api - e'.format(e))
             data = response.json()
             status = data.get('status', '')
             status_msg = data.get('status_msg', '')

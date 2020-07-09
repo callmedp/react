@@ -900,7 +900,7 @@ def av_user_enrollment(av_ids):
     from order.models import OrderItem
     orderitems = OrderItem.objects.filter(id__in=av_ids)
     for oi in orderitems:
-        first_name = oi.order.first_name
+        first_name = oi.order.first_name if oi.order.first_name else 'Candidate'
         email = oi.order.email
         phone = oi.order.mobile
         currency = oi.order.get_currency_code()
@@ -916,7 +916,6 @@ def av_user_enrollment(av_ids):
             }
             av_enroll = AnalyticsVidhyaMixin().user_enrollment(data=av_data)
             if not av_enroll:
-                logging.getLogger('error_log').error('enrollment request \
-                    incomplete for user - {}'.format(av_data))
+                logging.getLogger('error_log').error('enrollment request incomplete for user - {}'.format(av_data))
         else:
             logging.getLogger('error_log').error('missing data from profile')
