@@ -26,31 +26,41 @@ class Command(BaseCommand):
         for user in users:
             av_id = user.AV_Id
             url = final_url.format(av_id)
+            id_data = {"id" : av_id, "message" : "analytics_vidhya_status_update has been ternimated in between, fix the issue"}
             try:
                 response = requests.get(url, headers=headers)
                 if response.status_code == 200:
-                    logging.getLogger('info_log').info('updated status is \
-                        recieved from analytics vidhya')
+                    logging.getLogger('info_log').info('updated status is'
+                        ' recieved from analytics vidhya')
                 elif response.status_code == 401:
-                    logging.getLogger('error_log').error('authorization error \
-                        check if authorization header is correct')
-                    continue
+                    logging.getLogger('error_log').error('authorization error'
+                        ' check if authorization header is correct')
+                    AnalyticsVidhyaMixin().send_failure_mail(id_data, response.json())
+                    break
                 else:
-                    logging.getLogger('error_log').error('Unable to update status\
-                        check the api')
-                    continue
+                    logging.getLogger('error_log').error('Unable to update status'
+                        ' check the api')
+                    AnalyticsVidhyaMixin().send_failure_mail(id_data, response.json())
+                    break
             except Exception as e:
+                AnalyticsVidhyaMixin().send_failure_mail(id_data, e)
                 logging.getLogger('error_log').error('unable to call api - e'.format(e))
+                continue
             data = response.json()
             status = data.get('status', '')
             status_msg = data.get('status_msg', '')
             remarks = data.get('remarks', '')
             if not status:
                 logging.getLogger('error_log').error('Incorrect response from analytics vidhya')
-                continue
+                AnalyticsVidhyaMixin().send_failure_mail(data, 'Incorrect response')
+                break
             status_code = av_status_choices.get(status, -1)
             if status_code == -1:
                 logging.getLogger('error_log').error('Change of status list analytics vidhya')
+                AnalyticsVidhyaMixin().send_failure_mail(data, 'Invalid status response')
+                break
+            if user.status == status_code:
+                logging.getLogger('error_log').error('No change in status')
                 continue
             user.status = status_code
             user.status_msg = status_msg

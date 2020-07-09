@@ -3,10 +3,12 @@ import logging, requests
 
 from django.conf import settings
 from django.core.cache import cache
+from datetime import datetime
 
 from shop.models import Product, Category, AnalyticsVidhyaRecord
 from partner.models import Vendor
 from .choices import av_status_choices
+from django.core.mail import EmailMessage
 
 
 class CourseCatalogueMixin(object):
@@ -130,7 +132,16 @@ class LinkedinSeriviceMixin(object):
 		return flag
 
 class AnalyticsVidhyaMixin(object):
+
+	TEAM_EMAILS = ["Nidhish Sharma<nidhish.sharma@hindustantimes.com>",
+	               "Priya Kharb<Priya.Kharb@hindustantimes.com> ",
+	               "Sahil Singla<sahil.singla@hindustantimes.com>",
+	               "Heena Afshan<heena.afshan@hindustantimes.com>"]
+
 	def get_api_header(self):
+		'''
+		generate header for analytics vidhya
+		'''
 		username = settings.ANALYTICS_VIDHYA_URL.get('USERNAME', '')
 		password = settings.ANALYTICS_VIDHYA_URL.get('PASSWORD', '')
 
@@ -160,25 +171,27 @@ class AnalyticsVidhyaMixin(object):
 		try:
 			response = requests.post(url, data=data, headers=headers)
 			if response.status_code == 201:
-				logging.getLogger('info_log').info('request for user registeration \
-					is successful')
+				logging.getLogger('info_log').info('request for user registeration is successful')
 			elif response.status_code == 401:
-				logging.getLogger('error_log').error('something wrong with \
-					authorization headers, contact Analytics Vidhya \
-					for user - {}'.format(data))
+				logging.getLogger('error_log').error('something wrong with'
+					'authorization headers, contact Analytics Vidhya'
+					'for user - {}'.format(data))
+				self.send_failure_mail(data, response.json())
 				return False
 			elif response.status_code == 400:
 				error = response.json().get('errors')
-				logging.getLogger('error_log').error('issue in json parsed \
-					- {}'.format(error))
+				logging.getLogger('error_log').error('issue in json parsed - {}'.format(error))
+				self.send_failure_mail(data, response.json())
 				return False
 			else:
-				logging.getLogger('error_log').error('something wrong with \
-					response, contact Analytics Vidhya for user - {}'.format(data))
+				logging.getLogger('error_log').error('something wrong with'
+					'response, contact Analytics Vidhya for user - {}'.format(data))
+				self.send_failure_mail(data, response.json())
 				return False
 		except Exception as e:
-			logging.getLogger('error_log').error('Unable to enroll the user,\
-					please try again, user - {}'.format(data))
+			logging.getLogger('error_log').error('Unable to enroll the user,'
+					'please try again, user - {}, errors - {}'.format(data,e))
+			self.send_failure_mail(data, e)
 			return False
 
 		data = response.json()
@@ -186,6 +199,7 @@ class AnalyticsVidhyaMixin(object):
 		product = data.get('product', {})
 		if not av_status_choices.get(status) and not data.get('id') and not product:
 	            logging.getLogger('error_log').error('invalid enrollment status or id or product')
+	            self.send_failure_mail(data, 'Invalid Response')
 	            return False
 
 		data_dict = {
@@ -206,8 +220,22 @@ class AnalyticsVidhyaMixin(object):
 				logging.getLogger("info_log").info("user is added in analytics vidhya record")
 		except Exception as e:
 			logging.getLogger("error_log").error("Unable to add record - {}".format(data_dict))
+			self.send_failure_mail(data, e)
 			return False
 		return True
 
-
-
+	def send_failure_mail(self, data, errors):
+		'''
+		email sent in case of failure to enroll/status 
+		'''
+		html = """<html><title></title><body><h3>Issue with enrollment/status update for Analytics Vidhya for following user</h3><br>"""
+		for content in data:
+			html += """{} : {}<br>""".format(content , data.get(content))
+		html += """Error : {}<br>""".format(errors)
+		html += """Date : {}<br>""".format(datetime.now().strftime("%m/%d/%Y, %H:%M:%S"))
+		html += """</body></html>"""
+		email = EmailMessage(subject="Failure to enroll/status from Analytics Vidhya", body=html,
+				from_email=settings.DEFAULT_FROM_EMAIL, to=self.TEAM_EMAILS)
+		email.content_subtype = "html"
+		logging.getLogger('error_log').error('Failure to enroll/status from Analytics Vidhya for user - {}'.format(data))
+		return email.send()
