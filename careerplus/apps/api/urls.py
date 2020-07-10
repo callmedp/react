@@ -91,7 +91,11 @@ urlpatterns = [
 
 
     re_path(r'^v1/auto-login-token/(?P<order_item_id>\d+)/$',views.GetAutoLoginToken.as_view()),
-    re_path(r'^v1/cache/$', views.GetCacheValue.as_view(), name='get-cache-value')
+    re_path(r'^v1/cache/$', views.GetCacheValue.as_view(), name='get-cache-value'),
+    re_path(r'^v1/get-recommended-products/$',
+    views.GetRecommendedProductApi.as_view(),
+    name='get-recommended-products'
+    )
 ]
 
 if settings.DEBUG:

@@ -216,6 +216,13 @@ $(document).ready(function () {
               url : "/article/login-to-comment/",
               type: "POST",
               data : formData,
+              async : false,
+              timeout : 30000,
+              error: function (jqXHR, textStatus, errorThrown)
+              {
+                  alert('Something went wrong. Try again later.');
+                  $('#login-button').prop('disabled', false);
+              },
               success: function(data, textStatus, jqXHR)
               {
 
@@ -231,11 +238,6 @@ $(document).ready(function () {
                   else if (data.response == 'form_validation_error'){
                       $('#non-field-error').text('Please enter Valid Data')
                   }
-                  $('#login-button').prop('disabled', false);
-              },
-              error: function (jqXHR, textStatus, errorThrown)
-              {
-                  alert('Something went wrong. Try again later.');
                   $('#login-button').prop('disabled', false);
               }
           });
@@ -509,13 +511,13 @@ $.ajax({ url: "/api/v1/recommended-products/?skills=" +skill+"&product="+prod_id
          for(i=0;i<count;i++) {
 
              var first = '<li class="col-sm-6 col-md-4">' +
-              '<a title="'+ (data.results[i].display_name).substring(0, 40)+'"class="box-panel" href="'+data.results[i].pURL+'">'+
+              '<a title="'+ (data.results[i].pHd).substring(0, 40)+'"class="box-panel" href="'+data.results[i].pURL+'">'+
               '<div class="media">'+
               '<div class="media-body">'+
               '<h3 class="listing-heading">'
-              + data.results[i].display_name+ '</h3>'
+              + data.results[i].pHd+ '</h3>'
               +'<div class="rating-review-box">';
-                if (data.results[i].review_count){
+                if (data.results[i].pRC){
 
                          for (star in data.results[i].pStar){
 
@@ -529,12 +531,12 @@ $.ajax({ url: "/api/v1/recommended-products/?skills=" +skill+"&product="+prod_id
                                 first=first+ '<figure class="blank-star"></figure>';
                               }
                         }
-                first = first + '<strong><small>'+ (data.results[i].avg_rating)+'</small>/5</strong>'
+                first = first + '<strong><small>'+ (data.results[i].pARx)+'</small>/5</strong>'
                 }
              else{
-            first = first + '<strong>'+data.results[i].buy_count+'</strong> people bought'
+            first = first + '<strong>'+data.results[i].pBC+'</strong> people bought'
             }
-            var second = '<span class="jobs-available"><strong>' + data.results[i].no_jobs +'</strong> jobs available</span>'+
+            var second = '<span class="jobs-available"><strong>' + data.results[i].pNJ +'</strong> jobs available</span>'+
              '</div>'+
              '</div>' +
              '<div class="media-left">'+
