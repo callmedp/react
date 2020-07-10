@@ -86,6 +86,8 @@ function request_to_submit_feedback(formData){
       type: 'POST',
       data : formData,
       dataType: 'json',
+      async : false,
+      timeout : 30000,
       success: function(json) {
           if (json.success){
             alert(json.display_message);
