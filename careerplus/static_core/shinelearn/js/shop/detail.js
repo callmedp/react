@@ -216,6 +216,13 @@ $(document).ready(function () {
               url : "/article/login-to-comment/",
               type: "POST",
               data : formData,
+              async : false,
+              timeout : 30000,
+              error: function (jqXHR, textStatus, errorThrown)
+              {
+                  alert('Something went wrong. Try again later.');
+                  $('#login-button').prop('disabled', false);
+              },
               success: function(data, textStatus, jqXHR)
               {
 
@@ -231,11 +238,6 @@ $(document).ready(function () {
                   else if (data.response == 'form_validation_error'){
                       $('#non-field-error').text('Please enter Valid Data')
                   }
-                  $('#login-button').prop('disabled', false);
-              },
-              error: function (jqXHR, textStatus, errorThrown)
-              {
-                  alert('Something went wrong. Try again later.');
                   $('#login-button').prop('disabled', false);
               }
           });
