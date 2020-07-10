@@ -26,7 +26,9 @@ class Command(BaseCommand):
         for user in users:
             av_id = user.AV_Id
             url = final_url.format(av_id)
-            id_data = {"id" : av_id, "message" : "analytics_vidhya_status_update has been ternimated in between, fix the issue"}
+            error_message = {"message" : "analytics_vidhya_status_update has been ternimated in between, fix the issue"}
+            id_data = {"id" : av_id}
+            id_data.update(error_message)
             try:
                 response = requests.get(url, headers=headers)
                 if response.status_code == 200:
@@ -51,11 +53,13 @@ class Command(BaseCommand):
             status_msg = data.get('status_msg', '')
             remarks = data.get('remarks', '')
             if not status:
+                data.update(error_message)
                 logging.getLogger('error_log').error('Incorrect response from analytics vidhya')
                 AnalyticsVidhyaMixin().send_failure_mail(data, 'Incorrect response')
                 break
             status_code = av_status_choices.get(status, -1)
             if status_code == -1:
+                data.update(error_message)
                 logging.getLogger('error_log').error('Change of status list analytics vidhya')
                 AnalyticsVidhyaMixin().send_failure_mail(data, 'Invalid status response')
                 break
