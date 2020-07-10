@@ -3,7 +3,7 @@ from django.contrib import admin
 from .models import Order, OrderItem, OrderItemOperation, Message,\
     RefundRequest, RefundItem, RefundOperation, CouponOrder,\
     EmailOrderItemOperation, SmsOrderItemOperation,\
-    InternationalProfileCredential, GazettedHoliday
+    InternationalProfileCredential, GazettedHoliday, AnalyticsVidhyaRecord
 
 from wallet.models import WalletTransaction
 from payment.models import PaymentTxn
@@ -126,6 +126,16 @@ class SmsOrderItemOperationAdmin(admin.ModelAdmin):
     raw_id_fields = ('oi', )
     search_fields = ('oi__id', 'to_mobile')
 
+class AnalyticsVidhyaAdmin(admin.ModelAdmin):
+    model = AnalyticsVidhyaRecord
+    list_display = ('AV_Id', 'email', 'product', 'status', 'status_msg', 'remarks')
+
+    def email(self, obj):
+        return str(obj.order_item.order.email)
+    def product(self, obj):
+        return str(obj.order_item.product.upc)
+
+
 admin.site.register(Order, OrderAdmin)
 admin.site.register(OrderItem, OrderItemAdmin)
 admin.site.register(OrderItemOperation, OrderItemOperationAdmin)
@@ -138,3 +148,4 @@ admin.site.register(
     InternationalProfileCredentialAdmin
 )
 admin.site.register(GazettedHoliday ,GazettedHolidaysAdmin)
+admin.site.register(AnalyticsVidhyaRecord, AnalyticsVidhyaAdmin)

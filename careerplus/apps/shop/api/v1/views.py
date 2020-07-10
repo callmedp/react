@@ -21,7 +21,7 @@ from .tasks import delete_from_solr, update_practice_test_info
 
 # interapp imports
 from shop.models import (Product, ProductScreen, PracticeTestInfo, 
-                    Skill, FunctionalArea, AnalyticsVidhyaRecord)
+                    Skill, FunctionalArea)
 from shared.permissions import HasGroupOrHasPermissions
 from shop.api.core.permissions import IsVendorAssociated
 from shared.rest_addons.mixins import FieldFilterMixin

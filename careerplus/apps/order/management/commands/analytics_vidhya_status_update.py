@@ -1,9 +1,9 @@
 import logging, requests
 from datetime import datetime, timedelta
 from django.core.management.base import BaseCommand
-from ...models import AnalyticsVidhyaRecord
+from order.models import AnalyticsVidhyaRecord
 from django.conf import settings
-from shop.mixins import AnalyticsVidhyaMixin
+from order.mixins import AnalyticsVidhyaMixin
 from shop.choices import av_status_choices
 
 class Command(BaseCommand):
@@ -70,7 +70,3 @@ class Command(BaseCommand):
             user.status_msg = status_msg
             user.remarks =  remarks
             user.save()
-
-
-
-

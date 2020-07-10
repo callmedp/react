@@ -25,7 +25,7 @@ from shop.models import PracticeTestInfo
 from core.api_mixin import NeoApiMixin
 
 from shop.models import ProductUserProfile
-from shop.mixins import AnalyticsVidhyaMixin
+
 
 @task(name="invoice_generation_order")
 def invoice_generation_order(order_pk=None):
@@ -898,6 +898,7 @@ def upload_Resume_shine(order_item_id):
 @task
 def av_user_enrollment(av_ids):
     from order.models import OrderItem
+    from order.mixins import AnalyticsVidhyaMixin
     orderitems = OrderItem.objects.filter(id__in=av_ids)
     for oi in orderitems:
         first_name = oi.order.first_name if oi.order.first_name else 'guest-user'
@@ -914,7 +915,7 @@ def av_user_enrollment(av_ids):
                 "price" : int(oi.product.inr_price),#check
                 "price_currency" : currency,
             }
-            av_enroll = AnalyticsVidhyaMixin().user_enrollment(data=av_data)
+            av_enroll = AnalyticsVidhyaMixin().user_enrollment(data=av_data, orderItem=oi)
             if not av_enroll:
                 logging.getLogger('error_log').error('enrollment request incomplete for user - {}'.format(av_data))
         else:

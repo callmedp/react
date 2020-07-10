@@ -41,7 +41,7 @@ from order.utils import FeatureProfileUtil
 
 #third party imports
 from payment.utils import manually_generate_autologin_url
-from shop.choices import S_ATTR_DICT, DAYS_CHOICES_DICT
+from shop.choices import S_ATTR_DICT, DAYS_CHOICES_DICT, AV_STATUS_CHOICES
 from coupon.models import Coupon
 
 
@@ -1738,6 +1738,20 @@ class MonthlyLTVRecord(models.Model):
         order_amounts = Order.objects.filter(id__in=order_ids).values_list('total_excl_tax',flat=True)
         return sum(order_amounts)        
         
-    
+class AnalyticsVidhyaRecord(AbstractAutoDate):
+    '''
+    saving data for analytics vidhya
+    '''
+    AV_Id = models.CharField(max_length=255, blank=False, 
+        null=False, unique=True)
+    order_item = models.ForeignKey(
+        'order.OrderItem', related_name='av_orders', on_delete=models.CASCADE)
+    status = models.PositiveSmallIntegerField(
+        choices=AV_STATUS_CHOICES, default=0)
+    status_msg = models.CharField(
+        _("status message"), max_length=100)
+    remarks = models.TextField(
+        _("remarks"), null=True, blank=True)
 
-    
+    def __str__(self):
+        return self.AV_Id

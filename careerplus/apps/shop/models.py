@@ -77,7 +77,6 @@ from .choices import (
     SUB_HEADING_CHOICE_ATTR_MAPPING_MOBILE,
     PRODUCT_TAG_CHOICES,
     SECTION_TYPE_CHOICES,
-    AV_STATUS_CHOICES,
     convert_inr,
     convert_usd,
     convert_aed,
@@ -3563,32 +3562,4 @@ class Section(AbstractAutoDate):
 
     class Meta:
         ordering = ['-priority', ]
-
-class AnalyticsVidhyaRecord(AbstractAutoDate):
-    '''
-    saving data for analytics vidhya
-    '''
-    AV_Id = models.CharField(max_length=255, blank=False, 
-        null=False, unique=True)
-    email = models.CharField(max_length=100, verbose_name=_("Customer Email"))
-    name = models.CharField(
-        _('Name'), max_length=100,
-        help_text=_('Unique name going to decide the slug'))
-    phone = models.CharField(
-        _("Contact number"), max_length=50)
-    product_id = models.CharField(
-        _("product id"), max_length=10, null=False)
-    price = models.CharField(
-        _("price"), max_length=50)
-    price_currency = models.CharField(
-        _("price_currency"), max_length=50, default='INR')
-    status = models.PositiveSmallIntegerField(
-        choices=AV_STATUS_CHOICES, default=0)
-    status_msg = models.CharField(
-        _("status message"), max_length=100)
-    remarks = models.TextField(
-        _("remarks"), null=True, blank=True)
-
-    def __str__(self):
-        return self.email
 
