@@ -526,12 +526,13 @@ class OrderHistoryAPIView(ListAPIView):
             queryset_list = queryset_list.filter(
                 candidate_id=candidate_id,
                 status__in=[1, 2, 3])
-            return queryset_list
+            # return queryset_list
         elif email:
             queryset_list = queryset_list.filter(
                 email=email,
                 status__in=[1, 2, 3])
-            return queryset_list
+            # return queryset_list
+        return queryset_list.prefetch_related('orderitems','ordertxns')
 
 
 class ValidateCouponApiView(APIView):
