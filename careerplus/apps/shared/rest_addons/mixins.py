@@ -324,7 +324,7 @@ class ImageThumbnailMixin(object):
             for size in request.query_params.get(img + '_size').split(','):
                 try:
                     ret.update({img + '_' + str(size): get_thumbnail(ret.get(
-                                    img),size,crop='center',quality=70).url})
+                                    img),size,quality=70).url})
                 except Exception as e:
                     logging.getLogger('error_log').error("error in "
                     "get_thumbnail for {}".format(img, str(e)))

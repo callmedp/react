@@ -1,0 +1,833 @@
+{% load static  compress%}
+{% spaceless %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+{% block css_section %}
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    {% compress css %}
+    <link type="text/css" rel="stylesheet" href="{% static 'shinelearn/css/shop/google-ad.css' %}">
+    {% endcompress %}
+{% endblock css_section %}
+{% block title %}
+    <title>Resume services</title>
+{% endblock title %}
+    <script async src="https://www.googletagmanager.com/gtag/js?id=991709191"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', '991709191', { 'send_page_view': false });
+</script>
+
+</head>
+<body>
+  
+<div>
+
+    <section class="">
+        <div class="">
+            <div class="header-carousel">
+                <div class="header-bg1">
+                    <div class="content">
+                        <span><a href="https://learning.shine.com/"><img src="{% static 'shinelearn/images/shop/google-ad/shinelogo.png' %}" class="mb-3" alt="shinelogo"></a></span>
+                        <strong>Struggling with your job?</strong>
+                        <h1>Convert your CV into a job offer letter</h1> 
+                        <ul>
+                            <li>
+                                Increased <strong>recruiter views</strong>   
+                            </li>
+                            <li>
+                                Great first <strong>impression to recruiter</strong> 
+                            </li>
+                            <li>
+                                Applicant <strong>Tracking System friendly</strong>
+                            </li>
+                            <li>
+                                Power to get you <strong>hired 33% FASTER</strong>
+                            </li>
+                        </ul>
+                        <div style="display: none;" id="header-bg1-id">
+                            <button onclick="topFunction()" class="callback1__btn mt-3 d-block float-left">request a callback</button>
+                        </div>
+                    </div>
+                    
+                </div>
+    
+                <div class="header-bg2">
+                    <div class="content">
+                        <span><a href="https://learning.shine.com/"></a><img src="{% static 'shinelearn/images/shop/google-ad/shinelogo.png' %}" alt="shinelogo"></span>
+                         <h1 class="mt-5 make">Make your online profile Extremely Strong</h1> 
+                        <ul>
+                            <li>
+                                Optimise your <strong>profile</strong>   
+                            </li>
+                            <li>
+                                Detailed discussion <strong>with experts </strong> 
+                            </li>
+                            <li>
+                                <strong>Telephonic assistance</strong> in uploading
+                            </li>
+                        </ul>
+                        <div style="display: none;" id="header-bg2-id">
+                            <button onclick="topFunction()" class="callback1__btn mt-3 d-block float-left">request a callback</button>
+                        </div>
+                    </div>
+                </div>
+                
+            </div>
+    
+        </div>
+    </section>
+<div {% if pre_register %} style="display:none;" {% endif %} >
+    <div  class=" form-posiation d-none d-md-block" >
+        <span class="circle">
+            <i class="icon-form"></i>
+        </span>
+        <form id="form_desktop" class="form custom-form" name="maylandingpage">
+            <strong>Get a new job offer</strong>
+            <input type="hidden" id='country' name="country" value="{{country}}" />
+            <input type="hidden" id='pre_register' name="pre_register" value="False" />
+            <div class="form-group">
+              <input type="NameField" id='name' name="name" class="form-control bo form-control1" id="name" placeholder="Name"  aria-describedby="name"  required="true" mandatory="true" data-fieldlabel="Name"  field_label="name" valid="not_empty">
+            </div>
+            <div class="d-flex">
+              <div class="custom-select-box exp">
+                  <select id='country_code' name="country_code" class="custom-select">
+                    <option value="91" selected>+91</option>
+                    <option value="92">+92</option>
+                    <option value="93">+93</option>
+                  </select>
+              </div>
+              <div class="form-group">
+                  <input type="MobileField" class="form-control bo form-control1" name="Mobile No" placeholder="Mobile No" id="number" aria-describedby="mobile-id"  required="true" mandatory="true" valid="not_empty|integer|cellnum" pattern="^[0-9]{10}$"  minlength="10" value="" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+              </div>
+            </div>
+            <div class="form-group">
+              <input id='email' type="EmailField" class="form-control form-control1" id="exampleFormControlInput1" name="email" placeholder="Email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$" aria-describedby="email-id" required="true" mandatory="true">
+            </div>
+            <div class="form-group exp">
+                <select type="MultipleChoiceField" name="experience" placeholder="Experience" class="form-control form-control1" id="experience">
+                    <option value="">Experience</option>
+                  {% for exp in experience_range %}
+                  <option value="{{exp}} Yr">{{exp}} Yrs</option>
+                  {% endfor %}
+                  <option value="16 Yr">>15 Yrs</option>
+              </select>
+            </div>
+            <button onclick='createLead()' type="button" id="submit_form_desktop" class="callback__btn mt-4">request a callback</button>
+          </form>
+    </div> 
+</div>
+    <br>
+    <section class="container-fluid">
+        <div class="container">
+            <div class="resume">
+                <div class="resume__services">
+                    <a class="active"> Resume services </a>
+                    <a href="{{ site_link }}" > LinkedIn profile </a>
+                </div>
+                        <p class=" d-none d-sm-block">
+                            A resume is the first document which creates a lasting <strong>impression on recruiters</strong>. You may lack behind if your resume is not perfect. Our <strong>resume services</strong> guarantees you by creating a customized and <strong>unique resume</strong>  with strong understanding of your managerial skills and experience.
+                        </p>
+                        <div class="about d-block d-sm-none">
+                            <input type="checkbox" class="read-more-state" id="post-1" />
+                            <p class="read-more-wrap">
+                                A resume is the first document which creates a lasting <strong>impression on recruiters</strong>. You may lack behind if your resume is not perfect. Our <strong>resume services</strong> guarantees you by creating a customized and <strong>unique resume</strong>  with <span class="read-more-target"> strong understanding of your managerial skills and experience.</span>
+                            </p>
+                            <label for="post-1" class="read-more-trigger"></label>
+                        </div>
+                </div>
+                <div class="regular">
+                    <div>
+                        <div class="years">
+                            <ul>
+                                <li class="top-content resume-first">
+                                    0- 1 yrs. Exp.
+                                </li>
+                                <li class="resume-secend">
+                                    <strong>
+                                        Get resume services for freshers. We assure you to provide:
+                                    </strong>
+                                    <ul>
+                                        <li>Detailed discussion with our expert</li>
+                                        <li>Right keyword delivery </li>
+                                    </ul>
+                                </li>
+                                <li class="bottom-content resume-third"> <small>{{currency}}</small> <span> {{ service_cost.0_1exp }} </span> </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="years">
+                            <ul>
+                                <li class="top-content resume-first">
+                                    1- 4 yrs. Exp.
+                                </li>
+                                <li class="resume-secend">
+                                    <strong>
+                                        Get resume services for executives. We assure you to provide:
+                                    </strong>
+                                    <ul>
+                                        <li>Pre development counseling</li>
+                                        <li>Defined SLA</li>
+                                        <li>Exposing relevant experience details</li>
+                                        
+                                    </ul>
+                                </li>
+                                <li class="bottom-content resume-third"> <small>{{currency}}</small> <span> {{ service_cost.1_4exp }}  </span> </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="years">
+                            <ul>
+                                <li class="top-content resume-first">
+                                    4- 8 yrs. Exp.
+                                </li>
+                                <li class="resume-secend">
+                                    <strong>
+                                        Get resume services for experienced professionals. We assure you to provide:
+                                    </strong>
+                                    <ul>
+                                        <li>2 iterations, if required</li>
+                                        <li>Professionally developed resume with defined SLA </li>
+                                        <li>Detailed pre development discussion with resume expert </li>
+                                    </ul>
+                                </li>
+                                <li class="bottom-content resume-third"> <small>{{currency}}</small> <span> {{ service_cost.4_8exp }}  </span> </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="years">
+                            <ul>
+                                <li class="top-content resume-first">
+                                    8 - 15 yrs. Exp.
+                                </li>
+                                <li class="resume-secend">
+                                    <strong>
+                                        Get resume services for skilled professionals. We assure you to provide:
+                                    </strong>
+                                    <ul>
+                                        <li>Detailed discussion with industry specific resume expert</li>
+                                        <li>Discussion on template and information</li>
+                                        <li>2 iterations, if needed</li>
+                                    </ul>
+                                </li>
+                                <li class="bottom-content resume-third"> <small>{{currency}}</small> <span> {{ service_cost.8_15exp }}  </span> </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="years">
+                            <ul>
+                                <li class="top-content resume-first">
+                                    15+ yrs. Exp.
+                                </li>
+                                <li class="resume-secend">
+                                    <strong>
+                                    Get resume services for senior management professionals. We assure you to provide:
+                                    </strong>
+                                    <ul>
+                                        <li>Strategies for managing experience</li>
+                                        <li>Discussion on C-level resumes</li>
+                                        <li>2 iterations, if needed</li>
+                                    </ul>
+                                </li>
+                                <li class="bottom-content resume-third"> <small>{{currency}}</small> <span> {{ service_cost.15_exp }}  </span> </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            <div {% if pre_register %} style="display: none;"{% endif %}>
+                <div class="callback mb-5 mt-5">
+                    <button onclick="topFunction()" class="callback__btn d-none d-sm-block">request a callback</button>
+                 </div>
+            </div>
+    
+        </div>
+    </section>
+    <section class="container-fluid bg1">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-2 col-md-2 col-sm-12">
+                    <div class="left-content">
+                        <h5>Our Add on services</h5>
+                    </div>
+                </div>
+                <div class="col-lg-10 col-md-10 col-sm-12">
+                    <div class="right-content mobile-carousel">
+                        <div class="item">
+                            <ul>
+                                <li class="add-first">
+                                    <small class="cover">
+                                        <i class="cls-icon"></i>
+                                    </small>
+                                </li>
+                                <li class="add-secend">
+                                    <strong class="text-cover">Cover letter service</strong>
+                                    <p>This services guarantees you by creating a customized and unique cover letter which addresses your specific interest in the job role.</p>
+                                </li>
+                                <li class="add-third"> 
+                                    <span class="aed-text">{{currency}}</span> 
+                                    <strong class="rs"> {{ add_on_cost.cover_letter }}  </strong> 
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="item">
+                            <ul>
+                                <li class="add-first">
+                                    <small class="cover">
+                                        <i class="ed-icon"></i>
+                                    </small>
+                                </li>
+                                <li class="add-secend">
+                                    <strong class="text-cover">Express Delivery</strong>
+                                    <p>Our express delivery expedite the SL services in express mode and process the delivery in 72 hours</p>
+                                </li>
+                                <li class="add-third"> 
+                                    <span class="aed-text">{{currency}}</span> 
+                                    <strong class="rs"> {{ add_on_cost.express_delivery }}  </strong> 
+                                </li>
+                            </ul>
+                        </div> 
+                        <div class="item">
+                            <ul>
+                                <li class="add-first">
+                                    <small class="cover">
+                                        <i class="sd-icon"></i>
+                                    </small>
+                                </li>
+                                <li class="add-secend">
+                                    <strong class="text-cover">Super Express Delivery</strong>
+                                    <p>Our super express delivery expedite the SL services in super accelerated mode and process the delivery in 48 hours</p>
+                                </li>
+                                <li class="add-third"> 
+                                    <span class="aed-text">{{currency}}</span> 
+                                    <strong class="rs"> {{ add_on_cost.s_express_delivery }}  </strong> 
+                                </li>
+                            </ul>
+                        </div>  
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section>
+        <div class="container my-4">
+            <div class="parent-accordion">
+                <h4>Frequently Asked Questions</h4>
+                 <!--Accordion wrapper-->
+        <div class="accordion md-accordion" id="accordionEx" role="tablist" aria-multiselectable="true">
+        
+            <!-- Accordion card -->
+            <div class="card mb-3">
+          
+              <!-- Card header -->
+              <div class="card-header" role="tab" id="headingOne1">
+                <a data-toggle="collapse" data-parent="#accordionEx" href="#collapseOne1" aria-expanded="true"
+                  aria-controls="collapseOne1">
+                  <h5 class="mb-0 cards-links-color">
+                      1. How can I avail these services? <i class="fas fa-angle-down rotate-icon icon-accordion"></i>
+                  </h5>
+                </a>
+              </div>
+          
+              <!-- Card body -->
+              <div id="collapseOne1" class="collapse show" role="tabpanel" aria-labelledby="headingOne1"
+                data-parent="#accordionEx">
+                <div class="card-body card-body-text">
+                  Enter your details and our executives will get in touch with you & help you in placing the order for the services required by you.
+                </div>
+              </div>
+          
+            </div>
+            <!-- Accordion card -->
+          
+            <!-- Accordion card -->
+            <div class="card mb-3">
+          
+              <!-- Card header -->
+              <div class="card-header" role="tab" id="headingTwo2">
+                <a class="collapsed" data-toggle="collapse" data-parent="#accordionEx" href="#collapseTwo2"
+                  aria-expanded="false" aria-controls="collapseTwo2">
+                  <h5 class="mb-0 cards-links-color">
+                      2. How does it work once I place the order? <i class="fas fa-angle-down rotate-icon icon-accordion"></i>
+                  </h5>
+                </a>
+              </div>
+          
+              <!-- Card body -->
+              <div id="collapseTwo2" class="collapse" role="tabpanel" aria-labelledby="headingTwo2"
+                data-parent="#accordionEx">
+                <div class="card-body card-body-text">
+                  Enter your details and our executives will get in touch with you & help you in placing the order for the services required by you.
+                </div>
+              </div>
+          
+            </div>
+            <!-- Accordion card -->
+          
+            <!-- Accordion card -->
+            <div class="card mb-3">
+          
+              <!-- Card header -->
+              <div class="card-header" role="tab" id="headingThree3">
+                <a class="collapsed" data-toggle="collapse" data-parent="#accordionEx" href="#collapseThree3"
+                  aria-expanded="false" aria-controls="collapseThree3">
+                  <h5 class="mb-0 cards-links-color">
+                      3. How will my resume be written? <i class="fas fa-angle-down rotate-icon icon-accordion"></i>
+                  </h5>
+                </a>
+              </div>
+          
+              <!-- Card body -->
+              <div id="collapseThree3" class="collapse" role="tabpanel" aria-labelledby="headingThree3"
+                data-parent="#accordionEx">
+                <div class="card-body card-body-text">
+                    Your resume will be written by professional resume writers with over 10+ years of experience. Our experts are aware of industry best practices and keywords that recruiters use to search profiles and will create the resume as per the requirements of different countries after a detailed discussion with you to create a highly targeted resume that represents your experience, skill in a manner that gives you a competitive edge over other candidates
+                </div>
+              </div>
+          
+            </div>
+            <!-- Accordion card -->
+      
+            <!-- Accordion card -->
+
+            <div class="card mb-3">
+          
+              <!-- Card header -->
+              <div class="card-header" role="tab" id="headingFour4">
+                <a class="collapsed" data-toggle="collapse" data-parent="#accordionEx" href="#collapseFour4"
+                  aria-expanded="false" aria-controls="collapseFour4">
+                  <h5 class="mb-0 cards-links-color">
+                      4. Can I meet or speak to my resume writer? <i class="fas fa-angle-down rotate-icon icon-accordion"></i>
+                  </h5>
+                </a>
+              </div>
+          
+              <!-- Card body -->
+              <div id="collapseFour4" class="collapse" role="tabpanel" aria-labelledby="headingFour4"
+                data-parent="#accordionEx">
+                <div class="card-body card-body-text">
+                    You can speak to the writer over the phone. We do not allow face to face meetings. You are however welcome to visit our Noida office at any time.
+                </div>
+              </div>
+          
+            </div>
+
+            <!-- Accordion card -->
+
+            <!-- Accordion card -->
+            
+            <div class="card mb-3">
+          
+                <!-- Card header -->
+                <div class="card-header" role="tab" id="headingFive5">
+                  <a class="collapsed" data-toggle="collapse" data-parent="#accordionEx" href="#collapseFive5"
+                    aria-expanded="false" aria-controls="collapseFive5">
+                    <h5 class="mb-0 cards-links-color">
+                        5. Will you seek my approval before you finalize my resume? <i class="fas fa-angle-down rotate-icon icon-accordion"></i>
+                    </h5>
+                  </a>
+                </div>
+            
+                <!-- Card body -->
+                <div id="collapseFive5" class="collapse" role="tabpanel" aria-labelledby="headingFive5"
+                  data-parent="#accordionEx">
+                  <div class="card-body card-body-text">
+                    Yes we will finalize your resume after your approval, unless you have already done 3 iterations. Then the resume automatically closes. Also if you do not request changes within the stipulated time of 7 days, your resume will automatically close.
+                  </div>
+                </div>
+            
+              </div>
+  
+              <!-- Accordion card -->
+
+              <!-- Accordion card -->
+            
+            <div class="card mb-3">
+          
+              <!-- Card header -->
+              <div class="card-header" role="tab" id="headingSix6">
+                <a class="collapsed" data-toggle="collapse" data-parent="#accordionEx" href="#collapseSix6"
+                  aria-expanded="false" aria-controls="collapseSix6">
+                  <h5 class="mb-0 cards-links-color">
+                      6. Once I finalize my resume, Can I ask for modifications again? <i class="fas fa-angle-down rotate-icon icon-accordion"></i>
+                  </h5>
+                </a>
+              </div>
+          
+              <!-- Card body -->
+              <div id="collapseSix6" class="collapse" role="tabpanel" aria-labelledby="headingSix6"
+                data-parent="#accordionEx">
+                <div class="card-body card-body-text">
+                    After the finalization of the resume, no modifications can be incorporated. In case you need any changes or modifications you need to purchase the basic resume writing services once again.
+                </div>
+              </div>
+          
+            </div>
+
+            <!-- Accordion card -->
+          
+          </div>
+          <!-- Accordion wrapper -->
+            <div {% if pre_register %} style="display: none;"{% endif %}>
+                <div class="callback mb-5 mt-5">
+                    <button onclick="topFunction()" class="callback__btn d-none d-sm-block">request a callback</button>
+                </div>
+            </div>
+            </div>
+          </div>
+    </section>
+    <footer class="contanier footer-bg">
+        <span>Copyright © 2020 HT Media Limited.</span>
+    </footer>
+    
+    
+    
+    <div class="modal fade" id="exampleModalCenter" data-keyboard="false" and data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-mobile" role="document">
+          <div class="modal-content">
+            <div class="row pt-5">
+                <div class="col-md-6 col-sm-12">
+                    <div class="find">
+                        <strong>Find your next job offer here</strong>
+                        <img src="{% static 'shinelearn/images/shop/google-ad/profsionalwork-laptop-img.jpg' %}"  alt="img">
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12 mt-5">
+                    <form id="modal_form" class="custom-form-2 mr-4">
+                        <input type="hidden" id="country_modal" name="country" value="{{country}}" />
+                        <input type="hidden" id="pre_register_modal" name="pre_register" value="True" />
+                        <div class="form-group">
+                            <!-- <label for="name">Name</label> -->
+                          <input type="NameField" name="name_modal" class="input_field bo" id="name_modal" placeholder="Name"  aria-describedby="name"  required="true" mandatory="true">
+                          
+                        </div>
+                        <div class="d-flex">
+                          <div class="custom-select-box exp">
+                              <select id="country_code_modal" name="country_code" class="custom-select">
+                                <option value="91" selected>+91</option>
+                                <option value="92">+92</option>
+                                <option value="93">+93</option>
+                              </select>
+                          </div>
+                          <div class="form-group">
+                            <!-- <label for="number">Mobile</label> -->
+                              <input type="number" name="mobile_modal" class="input_field bo" placeholder="Mobile" id="number_modal" aria-describedby="mobile-id"  required="true" mandatory="true" value="" valid="not_empty|integer|cellnum" pattern="^[0-9]{10}$"  minlength="10"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                              
+                          </div>
+                        </div>
+                        <div class="form-group">
+                            <!-- <label for="email">Email</label> -->
+                          <input type="Email" name="email_modal" class="input_field bo" id="email_modal" placeholder="Email" aria-describedby="email-id"  required="true" mandatory="true" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$">
+                          
+                        </div>
+                        <div class="form-group exp">
+                            <select name="experience" class="form-control" id="experience_modal" placeholder="Experience">
+                              <option value="">Experience</option>
+                              {% for exp in experience_range %}
+                              <option value="{{exp}} Yr">{{exp}} Yrs</option>
+                              {% endfor %}
+                              <option value="16 Yr">>15 Yrs</option>
+                          </select>
+                        </div>
+                        <button  onclick="createLeadModal()" id="modal_submit" type="button" class="callback__btn mt-4">request a callback</button>
+                      </form>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% if not pre_register %}
+    <div class="footer-padding-botton botton-request-callback" >
+        <button onclick="topFunction()" class="sticky-btn d-block d-sm-none" >request a callback</button>
+    </div>
+    {% endif %}
+        <div class="modal fade" id="successMessage" data-keyboard="false" and data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-md modal-dialog-centered modal-mobile" role="document">
+          <div class="modal-content" id='successContent' style="padding: 20px; text-align: center;" data="">
+            <h4> Thank you for your interest, We will contact you soon </h4>
+          </div>
+        </div>
+      </div>
+
+{% block js_section %}
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <script type="text/javascript" src="//code.jquery.com/jquery-migrate-1.2.1.min.js"></script>
+    <script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
+    <script src="//ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js"></script>
+{% compress js %}
+  <script type="text/javascript" src="{% static 'shinelearn/js/shop/google-ad-slick.js' %}"></script>
+  <script type="text/javascript" src="{% static 'shinelearn/js/shop/bootstrap.min.js' %}"></script>
+{% endcompress %}
+
+
+
+  
+  <script>
+        $('.header-carousel').slick({
+        dots: true,
+        arrows: false,
+        infinite: false,
+        speed: 200,
+        fade: true,
+        cssEase: 'linear',
+        autoplay:true,
+
+        responsive: [
+
+                {
+                breakpoint: 600,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                    dots: false,
+                    infinite: false,
+                    autoplay:true,
+                }
+                },
+               
+                {
+                breakpoint: 480,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                    dots: true,
+                    infinite: false,
+                    autoplay:true,
+                }
+                }
+                // You can unslick at a given breakpoint now by adding:
+                // settings: "unslick"
+                // instead of a settings object
+            ]
+    });
+</script>
+  <script>
+    $(document).ready(function(){
+        $(".regular").slick({
+            dots: false,
+            slidesToShow: 3,
+            slidesToScroll: 1,
+            arrows: true,
+            infinite:false,
+            speed: 300,
+
+            responsive: [
+                {
+                breakpoint: 1024,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 1,
+                    infinite: false,
+                    dots: false,
+                }
+                },
+                {
+                breakpoint: 600,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                }
+                },
+                {
+                breakpoint: 480,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1,
+                }
+                }
+                // You can unslick at a given breakpoint now by adding:
+                // settings: "unslick"
+                // instead of a settings object
+            ]
+        });
+    });
+    $(document).scroll(function(){ 
+       if($(window).scrollTop() === 0) {
+           $(".botton-request-callback").hide();
+       }else{
+           $(".botton-request-callback").show();
+       };
+    });
+</script>
+<script>
+        $(".mobile-carousel").slick({
+            dots: false,
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            arrows: true,
+            infinite: false,
+            speed: 300,
+            centerMode: true,
+            centerPadding: '25px',
+            mobileFirst: true,
+            responsive: [
+                {
+                breakpoint: 576,
+                settings: "unslick"
+                }
+            ]
+        });
+        function createLead(){
+            $("form[id='form_desktop']").validate({
+                rules:{
+                    name: "required",
+                    email: {
+                        required:true,
+                        email:true
+                    },
+                    mobile: {
+                        required:true,
+                        minlength: 5
+                    }
+                },
+                messages: {
+                    name: "Please enter your Name",
+                    email: "Please enter a Valid Email",
+                    mobile: "Please enter a Valid Mobile"
+                }
+            });
+            $('#name').valid();
+            $('#email').valid();
+            $('#number').valid();
+            if($('#form_desktop').valid()){
+                // $('#form_desktop').valid();
+                var name, email, country_code, mobile, country, pre_register, experience, data;
+                gtag('event', 'conversion', {'send_to': 'AW-991709191/oylVCIrp89MBEIeQ8dgD'});
+
+                name = $('#name').val();
+                email = $('#email').val();
+                mobile = $('#number').val();
+                country_code = $('#country_code').val();
+                country = $('#country').val();
+                pre_register = $('#pre_register').val();
+                experience = $('#experience').val();
+                data = { name : name, email: email, mobile:mobile, country_code:country_code, country:country, pre_register:pre_register, experience:experience }
+                crmHit(data);
+
+                apiSuccess();
+            };
+        };
+        function createLeadModal(){
+            $("form[id='modal_form']").validate({
+                rules:{
+                    name_modal: "required",
+                    email_modal: {
+                        required:true,
+                        email:true
+                    },
+                    mobile_modal: {
+                        required:true,
+                        minlength: 5
+                    }
+                },
+                messages: {
+                    name_modal: "Please enter your Name",
+                    email_modal: "Please enter a Valid Email",
+                    mobile_modal: "Please enter a Valid Mobile"
+                }
+            });
+            $('#name_modal').valid();
+            $('#email_modal').valid();
+            $('#number_modal').valid();
+            if($('#modal_form').valid()){
+                var name, email, country_code, mobile, country, pre_register, experience, data;
+                name = $('#name_modal').val();
+                email = $('#email_modal').val();
+                mobile = $('#number_modal').val();
+                country_code = $('#country_code_modal').val();
+                country = $('#country_modal').val();
+                pre_register = $('#pre_register_modal').val();
+                experience = $('#experience_modal').val();
+                data = { name : name, email: email, mobile:mobile, country_code:country_code, country:country, pre_register:pre_register, experience:experience }
+                crmHit(data);
+                $('#exampleModalCenter').modal('hide');
+                apiSuccess();
+            };
+        };
+        function crmHit(data){
+            $.post("{{crm_lead_link}}", data, function(data, status, xhr){
+                return {"status":"lead created"};
+            }).done(function() {
+                if($("#successContent").attr('data') != "success"){
+                  $("#successContent").attr('data',"success");  
+                $("#successContent").html("<h4> Thank you for your interest, We will contact you soon </h4>");};
+                return {"status":"lead created"};})
+            .fail(function(jqxhr, settings, ex){
+                if($("#successContent").attr('data') != "fail"){
+                $("#successContent").attr('data',"fail"); 
+                $("#successContent").html("<h4> Sorry something went wrong, Please visit learning.shine.com</h4>");};
+                return {"status":"lead not created"};});
+            localStorage.setItem("lead_created", "True");
+            
+        }
+        function apiSuccess(){
+            $("#successMessage").modal('show');
+            var timeOut = setTimeout(function(){$("#successMessage").modal('hide')}, 2000);
+        }
+</script>
+<script>
+        
+    function testInput(event) {
+       var value = String.fromCharCode(event.which);
+       var pattern = new RegExp(/[a-zåäö ]/i);
+       return pattern.test(value);
+    }
+
+    $('#name, #designation').bind('keypress', testInput);
+    $(document).on('click','.cls_add_participant',function(e){
+        var element_no = $('#enroll-item li').length + 1 ;
+        var item = '<li class="form-group"> <label class="users">'+element_no+'.</label> <div class="input-wrap"> <span> <input type="text" name="name" class="form-control" id="name" aria-describedby="name" placeholder="Name"> </span> <span> <input type="text" name="designation" class="form-control" id="designation" aria-describedby="designation" placeholder="Designation"> </span> <span> <input type="text" name="company" class="form-control cls_company" id="Company" aria-describedby="company" placeholder="company"> </span> <span> <input type="MobileField" name="mobileno" class="form-control" id="mobile" aria-describedby="mobile" placeholder="mobileno"> </span> <span> <input type="EmailField" name="email" class="form-control" id="email-id" aria-describedby="email-id" placeholder="email"> </span> </div></li>';
+        $("#enroll-item").append(item);
+    });
+    
+    function checkCompany(){
+        console.log("Inside check company");
+        var companies = $('.cls_company');
+        var defaultCompany = $('.cls_company')[0].value;
+        for(i=1; i<companies.length; i++){
+            if($('.cls_company')[i].value.trim()){
+                continue;
+            }
+            else{
+                $('.cls_company')[i].value = defaultCompany;
+            }
+        }
+    }
+    function topFunction() {
+      document.body.scrollTop = 0; // For Safari
+      document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+      $("#pre_register_modal").val('False');
+      if(isMobile()){
+        $('#exampleModalCenter').modal('show');
+      }
+    }
+    function isMobile() {
+        return navigator.userAgent.match(/Android/i) || navigator.userAgent.match(/BlackBerry/i) || navigator.userAgent.match(/iPhone|iPad|iPod/i) || navigator.userAgent.match(/Opera Mini/i) || navigator.userAgent.match(/IEMobile/i);
+    }
+</script>
+
+<script type="text/javascript">
+    $(window).ready(function(){ 
+    if("{{pre_register}}" == "True" && localStorage.getItem("lead_created") != 'True'){    
+        $('#exampleModalCenter').modal('show');
+        };
+    if(isMobile() && "{{pre_register}}" != "True"){
+        $("#header-bg1-id").show();
+        $("#header-bg2-id").show();
+    }
+    }); 
+</script>
+{% endblock js_section %}
+</body>
+</html>
+{% endspaceless %}
