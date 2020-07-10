@@ -54,6 +54,11 @@ def get_upload_path_badge_file(instance, filename):
     return "badge_file/{ven_id}/{filename}".format(
         ven_id=instance.id, filename=get_file_name(filename))
 
+
+def get_upload_path_coupon(instance, filename):
+    return "coupon/{coupon_id}/{filename}".format(
+        coupon_id=instance.id, filename=get_file_name(filename))
+
 def get_upload_path_mobile_banner_file(instance, filename):
     return "badge_file/{ven_id}/{filename}".format(
         ven_id=instance.id, filename=get_file_name(filename))
