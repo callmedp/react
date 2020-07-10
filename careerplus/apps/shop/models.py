@@ -3586,8 +3586,8 @@ class AnalyticsVidhyaRecord(AbstractAutoDate):
         choices=AV_STATUS_CHOICES, default=0)
     status_msg = models.CharField(
         _("status message"), max_length=100)
-    remarks = models.CharField(
-        _("remarks"), max_length=200)
+    remarks = models.TextField(
+        _("remarks"), null=True, blank=True)
 
     def __str__(self):
         return self.email
