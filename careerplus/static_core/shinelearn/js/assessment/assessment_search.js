@@ -23,7 +23,7 @@ var test_fa = new Bloodhound({
   },
   queryTokenizer: Bloodhound.tokenizers.whitespace,
   remote: {
-    url: "/api/get-category-level-products/?nopage=true&fl=id,title,slug&title=%QUERY&active=true&format=json",
+    url: "/api/get-category-level-products/?nopage=true&fl=id,title,slug&title=%QUERY&format=json",
     wildcard: '%QUERY',
     filter: function(responses) {
       return $.map(responses, function(response){
