@@ -26,7 +26,7 @@ from .choices import STATUS_CHOICES, SITE_CHOICES,\
     WC_FLOW_STATUS, OI_OPS_TRANSFORMATION_DICT,LTV_BRACKET_LABELS
 
 from .functions import get_upload_path_order_invoice, process_application_highlighter
-from .tasks import generate_resume_for_order,bypass_resume_midout,upload_Resume_shine,board_user_on_neo
+from .tasks import generate_resume_for_order,bypass_resume_midout,upload_Resume_shine,board_user_on_neo, av_user_enrollment
 
 #inter app imports
 from linkedin.models import Draft
@@ -41,7 +41,7 @@ from order.utils import FeatureProfileUtil
 
 #third party imports
 from payment.utils import manually_generate_autologin_url
-from shop.choices import S_ATTR_DICT, DAYS_CHOICES_DICT
+from shop.choices import S_ATTR_DICT, DAYS_CHOICES_DICT, AV_STATUS_CHOICES
 from coupon.models import Coupon
 
 
@@ -223,6 +223,10 @@ class Order(AbstractAutoDate):
     def order_contains_neo_item(self):
         items = self.orderitems.all()
         return any([item.product.vendor.slug == 'neo' for item in items])
+
+    def order_contains_analytics_vidhya_item(self):
+        items = self.orderitems.all()
+        return any([item.product.vendor.slug == 'analytics_vidhya' for item in items])
 
     def order_contains_resumebuilder_subscription(self):
         items = self.orderitems.all()
@@ -470,6 +474,13 @@ class Order(AbstractAutoDate):
                 no_process=False
             ).values_list('id', flat=True))
             board_user_on_neo.delay(neo_ids=neo_items_id)
+
+        if self.status == 1 and existing_obj.status != 1 and self.order_contains_analytics_vidhya_item():
+            av_items_id = list(self.orderitems.filter(
+                product__vendor__slug='analytics_vidhya',
+                no_process=False
+            ).values_list('id', flat=True))
+            av_user_enrollment.delay(av_ids=av_items_id)
 
         if self.status == 1 and existing_obj.status != 1 and self.order_contains_jobs_on_the_move():
             jobs_on_the_move_items = self.orderitems.filter(product__sub_type_flow=502)
@@ -1727,6 +1738,20 @@ class MonthlyLTVRecord(models.Model):
         order_amounts = Order.objects.filter(id__in=order_ids).values_list('total_excl_tax',flat=True)
         return sum(order_amounts)        
         
-    
+class AnalyticsVidhyaRecord(AbstractAutoDate):
+    '''
+    saving data for analytics vidhya
+    '''
+    AV_Id = models.CharField(max_length=255, blank=False, 
+        null=False, unique=True)
+    order_item = models.ForeignKey(
+        'order.OrderItem', related_name='av_orders', on_delete=models.CASCADE)
+    status = models.PositiveSmallIntegerField(
+        choices=AV_STATUS_CHOICES, default=0)
+    status_msg = models.CharField(
+        _("status message"), max_length=100)
+    remarks = models.TextField(
+        _("remarks"), null=True, blank=True)
 
-    
+    def __str__(self):
+        return self.AV_Id

@@ -53,7 +53,7 @@ from .mixins import (CourseCatalogueMixin, \
 from users.forms import (
     ModalLoginApiForm
 )
-from shop.choices import APPLICATION_PROCESS, BENEFITS, NEO_LEVEL_OG_IMAGES
+from shop.choices import APPLICATION_PROCESS, BENEFITS, NEO_LEVEL_OG_IMAGES, SMS_URL_LIST
 from review.forms import ReviewForm
 from .models import Skill
 from homepage.config import UNIVERSITY_COURSE
@@ -822,6 +822,12 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             return redirect_url
 
     def get(self, request, **kwargs):
+        path_info = kwargs
+        root=request.GET.get('root')
+        mobile=request.GET.get('mobile')
+        campaign = request.GET.get('utm_campaign')
+        if root == 'interested_mail':
+            logging.getLogger('info_log').info('interested user clicked product "{}" having id-{}, mobile number is "{}", under campaign "{}"'.format(path_info.get('prd_slug'),path_info.get("pk", ""), mobile, campaign))
         useragent = self.request.META['HTTP_USER_AGENT']
         if 'facebookexternalhit' not in useragent:
             redirect_url = self.redirect_for_neo(request)
@@ -1337,3 +1343,19 @@ class GoogleResumeAdView(View):
         }
         return render(request, template, context=content)
         
+class SmsUrlRedirect(View):
+
+    def get(self, request, *args, **kwargs):
+        url_id = int(kwargs.get('url_id',1))
+        encoded_mobile = kwargs.get('encoded_mobile', '')
+
+        if not encoded_mobile:
+            return HttpResponsePermanentRedirect(settings.MAIN_DOMAIN_PREFIX)
+
+        mobile = int(encoded_mobile, 16)
+        logging.getLogger('info_log').info("SMS link was opened by mobile number- {}".format(mobile))
+        url = SMS_URL_LIST.get(url_id, '')
+        if not url:
+            return HttpResponsePermanentRedirect(settings.MAIN_DOMAIN_PREFIX)
+        return HttpResponsePermanentRedirect(url)
+

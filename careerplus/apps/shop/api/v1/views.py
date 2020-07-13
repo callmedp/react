@@ -20,7 +20,8 @@ from django.contrib.contenttypes.models import ContentType
 from .tasks import delete_from_solr, update_practice_test_info
 
 # interapp imports
-from shop.models import (Product, ProductScreen, PracticeTestInfo, Skill, FunctionalArea)
+from shop.models import (Product, ProductScreen, PracticeTestInfo, 
+                    Skill, FunctionalArea)
 from shared.permissions import HasGroupOrHasPermissions
 from shop.api.core.permissions import IsVendorAssociated
 from shared.rest_addons.mixins import FieldFilterMixin

@@ -202,8 +202,8 @@ class AddScreenProductForm(forms.ModelForm):
         self.fields['upc'].widget.attrs['placeholder'] = 'Add Universal Product Code'
         self.fields['upc'].widget.attrs['data-parsley-trigger'] = 'change'
         self.fields['upc'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
-        self.fields['upc'].widget.attrs['data-parsley-length'] = "[2, 100]"
-        self.fields['upc'].widget.attrs['data-parsley-length-message'] = 'Length should be between 2-100 characters.'
+        self.fields['upc'].widget.attrs['data-parsley-length'] = "[1, 100]"
+        self.fields['upc'].widget.attrs['data-parsley-length-message'] = 'Length should be between 1-100 characters.'
 
         self.fields['vendor'].widget.attrs['class'] = form_class
         self.fields['vendor'].required = True
@@ -256,9 +256,9 @@ class AddScreenProductForm(forms.ModelForm):
     def clean_upc(self):
         upc = self.cleaned_data.get('upc', '')
         if upc:
-            if len(upc) < 2 or len(upc) > 100:
+            if len(upc) < 1 or len(upc) > 100:
                 raise forms.ValidationError(
-                    "Name should be between 2-100 characters.")
+                    "Name should be between 1-100 characters.")
         else:
             raise forms.ValidationError(
                 "This field is required.")
@@ -323,8 +323,8 @@ class ChangeScreenProductForm(forms.ModelForm):
         self.fields['upc'].widget.attrs['placeholder'] = 'Add Universal Product Code'
         self.fields['upc'].widget.attrs['data-parsley-trigger'] = 'change'
         self.fields['upc'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
-        self.fields['upc'].widget.attrs['data-parsley-length'] = "[2, 100]"
-        self.fields['upc'].widget.attrs['data-parsley-length-message'] = 'Length should be between 2-100 characters.'
+        self.fields['upc'].widget.attrs['data-parsley-length'] = "[1, 100]"
+        self.fields['upc'].widget.attrs['data-parsley-length-message'] = 'Length should be between 1-100 characters.'
         if self.instance.type_flow == 14:
             for val in ['about', 'buy_shine']:
                 self.fields.pop(val)
@@ -344,9 +344,9 @@ class ChangeScreenProductForm(forms.ModelForm):
     def clean_upc(self):
         upc = self.cleaned_data.get('upc', '')
         if upc:
-            if len(upc) < 2 or len(upc) > 100:
+            if len(upc) < 1 or len(upc) > 100:
                 raise forms.ValidationError(
-                    "Name should be between 2-100 characters.")
+                    "Name should be between 1-100 characters.")
         else:
             raise forms.ValidationError(
                 "This field is required.")
@@ -756,8 +756,8 @@ class AddScreenProductVariantForm(forms.ModelForm):
         self.fields['upc'].widget.attrs['placeholder'] = 'Add Universal Product Code'
         self.fields['upc'].widget.attrs['data-parsley-trigger'] = 'change'
         self.fields['upc'].widget.attrs['data-parsley-required-message'] = 'This field is required.'
-        self.fields['upc'].widget.attrs['data-parsley-length'] = "[2, 100]"
-        self.fields['upc'].widget.attrs['data-parsley-length-message'] = 'Length should be between 2-100 characters.'
+        self.fields['upc'].widget.attrs['data-parsley-length'] = "[1, 100]"
+        self.fields['upc'].widget.attrs['data-parsley-length-message'] = 'Length should be between 1-100 characters.'
         self.fields['inr_price'].widget.attrs['class'] = form_class
         self.fields['inr_price'].required = True
         self.fields['usd_price'].widget.attrs['class'] = form_class

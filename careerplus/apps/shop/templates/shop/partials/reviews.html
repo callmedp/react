@@ -7,7 +7,7 @@
             {% if not prd_review_list %}
               <h2>Write a Review </h2>
               {% else %}
-          {% if prd_num_rating > 15 %}
+          {% if prd_num_rating > 0 %}
                 <h2> 
                 Reviews
                 </h2>
@@ -92,7 +92,7 @@
             </div>
           </div>
           <ul id="id_review_list">
-          {% if prd_num_rating > 15 %}
+            {% if prd_num_rating > 0 %}
           {% include 'shop/partials/review_snippet.html' %}
               {% endif %}
 
