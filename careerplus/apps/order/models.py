@@ -1,12 +1,14 @@
-#python imports
+# python imports
 import math
-import  logging,json 
-from datetime import datetime,timedelta
+import logging
+import json
+from datetime import datetime, timedelta
+import time
 
 from decimal import Decimal
 from dateutil import relativedelta
 
-#django imports
+# django imports
 from django.db import models
 from django.db.models import Q, Count, Case, When, IntegerField
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -18,35 +20,35 @@ from django.core.cache import cache
 from django.db.models.signals import post_save
 from django.core.cache import cache
 
-#local imports
+# local imports
 from .choices import STATUS_CHOICES, SITE_CHOICES,\
     PAYMENT_MODE, OI_OPS_STATUS, OI_LINKEDIN_FLOW_STATUS,\
     OI_USER_STATUS, OI_EMAIL_STATUS, REFUND_MODE, REFUND_OPS_STATUS,\
     TYPE_REFUND, OI_SMS_STATUS, WC_CATEGORY, WC_SUB_CATEGORY,\
-    WC_FLOW_STATUS, OI_OPS_TRANSFORMATION_DICT,LTV_BRACKET_LABELS
+    WC_FLOW_STATUS, OI_OPS_TRANSFORMATION_DICT, LTV_BRACKET_LABELS
 
 from .functions import get_upload_path_order_invoice, process_application_highlighter
 from .tasks import generate_resume_for_order,bypass_resume_midout,upload_Resume_shine,board_user_on_neo, av_user_enrollment
 
-#inter app imports
+# inter app imports
 from linkedin.models import Draft
 from seo.models import AbstractAutoDate
 from geolocation.models import Country, CURRENCY_SYMBOL
 from users.models import User
-from console.feedbackCall.choices import FEEDBACK_RESOLUTION_CHOICES,FEEDBACK_CATEGORY_CHOICES,FEEDBACK_STATUS,TOTAL_FEEDBACK_OPERATION_TYPE
+from console.feedbackCall.choices import FEEDBACK_RESOLUTION_CHOICES, FEEDBACK_CATEGORY_CHOICES, FEEDBACK_STATUS, TOTAL_FEEDBACK_OPERATION_TYPE
 from order.utils import get_ltv
 from coupon.models import Coupon
 from order.utils import FeatureProfileUtil
 
 
-#third party imports
+# third party imports
 from payment.utils import manually_generate_autologin_url
 from shop.choices import S_ATTR_DICT, DAYS_CHOICES_DICT, AV_STATUS_CHOICES
 from coupon.models import Coupon
 
 
 # Global Constants
-CURRENCY_SYMBOL_CODE_MAPPING = {0:"INR",1:"USD",2:"AED",3:"GBP"}
+CURRENCY_SYMBOL_CODE_MAPPING = {0: "INR", 1: "USD", 2: "AED", 3: "GBP"}
 
 
 class GazettedHoliday(models.Model):
@@ -60,7 +62,8 @@ class GazettedHoliday(models.Model):
 
     @property
     def get_holiday_list(self):
-        dates = list(GazettedHoliday.objects.all().values_list('holiday_date', flat=True))
+        dates = list(GazettedHoliday.objects.all(
+        ).values_list('holiday_date', flat=True))
         holidays = []
         for day in dates:
             holidays.append(day.strftime('%d-%m-%Y'))
@@ -90,7 +93,8 @@ class Order(AbstractAutoDate):
         max_length=255,
         verbose_name=_("Customer ID"))
 
-    status = models.PositiveSmallIntegerField(default=0, choices=STATUS_CHOICES)
+    status = models.PositiveSmallIntegerField(
+        default=0, choices=STATUS_CHOICES)
 
     currency = models.PositiveIntegerField(
         _("Currency"), choices=CURRENCY_SYMBOL, default=0)
@@ -106,7 +110,8 @@ class Order(AbstractAutoDate):
 
     tax_config = models.CharField(max_length=255, null=True, blank=True)
 
-    payment_date = models.DateTimeField(null=True, blank=True)  # order payment complete
+    payment_date = models.DateTimeField(
+        null=True, blank=True)  # order payment complete
     date_placed = models.DateTimeField(db_index=True)
     closed_on = models.DateTimeField(null=True, blank=True)
 
@@ -126,7 +131,8 @@ class Order(AbstractAutoDate):
         max_length=15, null=True, blank=True, verbose_name=_("Country Code"))
 
     mobile = models.CharField(max_length=15, null=True, blank=True,)
-    alt_mobile = models.CharField(max_length=15, null=True, blank=True,verbose_name=_("Alternate Mobile"))
+    alt_mobile = models.CharField(
+        max_length=15, null=True, blank=True, verbose_name=_("Alternate Mobile"))
     alt_email = models.CharField(
         null=True,
         blank=True,
@@ -138,7 +144,7 @@ class Order(AbstractAutoDate):
     pincode = models.CharField(max_length=15, null=True, blank=True)
     state = models.CharField(max_length=255, null=True, blank=True)
 
-    country = models.ForeignKey(Country, null=True,on_delete=models.CASCADE)
+    country = models.ForeignKey(Country, null=True, on_delete=models.CASCADE)
 
     # welcome call done or not
     assigned_to = models.ForeignKey(
@@ -156,7 +162,8 @@ class Order(AbstractAutoDate):
         choices=WC_FLOW_STATUS)
     wc_follow_up = models.DateTimeField(null=True, blank=True)
     welcome_call_done = models.BooleanField(default=False)
-    welcome_call_records = models.TextField(_('Call Recording'),blank=True,null=True)
+    welcome_call_records = models.TextField(
+        _('Call Recording'), blank=True, null=True)
     midout_sent_on = models.DateTimeField(null=True, blank=True)
 
     # cash or Faild trasnsaction manual paid by..
@@ -177,13 +184,15 @@ class Order(AbstractAutoDate):
         max_length=255, null=True, blank=True)
     sales_user_info = models.TextField(default='', null=True, blank=True)
 
-    #resume writing
+    # resume writing
     auto_upload = models.BooleanField(default=False)
     service_resume_upload_shine = models.BooleanField(default=True)
 
-    #utm parameters
+    # utm parameters
     utm_params = models.TextField(null=True, blank=True)
 
+    ref_order = models.ForeignKey('self', null=True, default=None,
+                                  on_delete=models.SET_NULL)
 
     class Meta:
         app_label = 'order'
@@ -195,7 +204,7 @@ class Order(AbstractAutoDate):
             ("can_show_order_queue", "Can Show Order Queue"),
             ("can_show_all_order", "Can View All Orders"),
             ("can_show_paid_order", "Can View Only Paid Orders"),
-            
+
             # welcome call permission
             ("can_show_welcome_queue", "Can Show Welcome Queue"),
 
@@ -216,10 +225,10 @@ class Order(AbstractAutoDate):
         items = self.orderitems.all()
         return any([item.product.type_flow == 17 for item in items])
 
-
     def order_contains_expert_assistance(self):
         items = self.orderitems.all()
         return any([item.product.sub_type_flow == 101 for item in items])
+
     def order_contains_neo_item(self):
         items = self.orderitems.all()
         return any([item.product.vendor.slug == 'neo' for item in items])
@@ -236,13 +245,16 @@ class Order(AbstractAutoDate):
         items = self.orderitems.all()
         return any([item.product.sub_type_flow == 502 for item in items])
 
+    def order_contains_shine_premium(self):
+        items = self.orderitems.filter(parent=None)
+        return any([item.product.type_flow == 18 for item in items])
 
     def update_subscription_in_order_item(self):
         items = self.orderitems.all().select_related('product')
         items = [item for item in items if item.product.sub_type_flow == 1701]
-        for oi in items :
-            oi.start_date = timezone.now() 
-            oi.end_date = timezone.now() + timedelta(days =oi.product.day_duration)
+        for oi in items:
+            oi.start_date = timezone.now()
+            oi.end_date = timezone.now() + timedelta(days=oi.product.day_duration)
             oi.save()
 
     @property
@@ -262,7 +274,8 @@ class Order(AbstractAutoDate):
 
     @property
     def replaced_order(self):
-        oi = OrderItem.objects.filter(Q(replacement_order_id=self.id) | Q(replacement_order_id=self.number)).first()
+        oi = OrderItem.objects.filter(Q(replacement_order_id=self.id) | Q(
+            replacement_order_id=self.number)).first()
         if oi:
             return oi.order.id
         return None
@@ -288,7 +301,6 @@ class Order(AbstractAutoDate):
         mobile = str(self.alt_mobile)
         return mobile[:2] + "".join(["*" for i in list(mobile[2:len(mobile)-2])]) + mobile[-2:]
 
-
     @property
     def full_name(self):
         name = ""
@@ -302,8 +314,8 @@ class Order(AbstractAutoDate):
         return CURRENCY_SYMBOL_CODE_MAPPING.get(self.currency)
 
     def get_past_orders_for_email_and_mobile(self):
-        return Order.objects.filter(email=self.email,mobile=self.mobile,\
-            status__in=[1,2,3]).exclude(id=self.id)
+        return Order.objects.filter(email=self.email, mobile=self.mobile,
+                                    status__in=[1, 2, 3]).exclude(id=self.id)
 
     def get_txns(self):
         return self.ordertxns.all()
@@ -350,9 +362,10 @@ class Order(AbstractAutoDate):
                 return 'pink'
         return ''
 
-    def upload_service_resume_shine(self,existing_obj):
-        if self.service_resume_upload_shine and self.service_resume_upload_shine  != existing_obj.service_resume_upload_shine:
-            order_items = self.orderitems.filter(oi_status=4,product__type_flow__in=[1,12,13,8,3,4])
+    def upload_service_resume_shine(self, existing_obj):
+        if self.service_resume_upload_shine and self.service_resume_upload_shine != existing_obj.service_resume_upload_shine:
+            order_items = self.orderitems.filter(
+                oi_status=4, product__type_flow__in=[1, 12, 13, 8, 3, 4])
             for order_item in order_items:
                 upload_Resume_shine.delay(order_item.id)
 
@@ -365,13 +378,13 @@ class Order(AbstractAutoDate):
         coupon_code = coupon_order.coupon_code if coupon_order else ""
         order_discount = sum(
             order_items.values_list('discount_amount', flat=True))
-        coupon_objs = Coupon.objects.filter ( \
+        coupon_objs = Coupon.objects.filter(
             id__in=self.couponorder_set.values_list('coupon', flat=True))
         forced_coupon_amount = 0
 
         for obj in coupon_objs:
-            amount = float (obj.value) if obj.coupon_type == "flat" else \
-                float ((obj.value * self.total_excl_tax) / 100)
+            amount = float(obj.value) if obj.coupon_type == "flat" else \
+                float((obj.value * self.total_excl_tax) / 100)
             forced_coupon_amount += amount
 
         for item in order_items:
@@ -388,50 +401,50 @@ class Order(AbstractAutoDate):
                                             forced_coupon_amount)) * 1.18
 
             item_refund_request_list = RefundItem.objects.filter(oi_id=item.id,
-                                refund_request__status__in=[1, 3, 5,7, 8, 11])
+                                                                 refund_request__status__in=[1, 3, 5, 7, 8, 11])
             refund_amount = item_refund_request_list.first().amount \
                 if item_refund_request_list else 0
 
             if item.is_combo and item.parent:
-                parent_sum = float (item.parent.cost_price)
+                parent_sum = float(item.parent.cost_price)
                 if not parent_sum:
                     # Assuming price remains unchanged
-                    parent_sum = float (item.parent.product.inr_price)
-                    order_discount = float (forced_coupon_amount)
+                    parent_sum = float(item.parent.product.inr_price)
+                    order_discount = float(forced_coupon_amount)
 
                 actual_sum_of_child_combos = 0
-                child_combos = item.order.orderitems.filter (parent=item.parent)
+                child_combos = item.order.orderitems.filter(parent=item.parent)
 
                 for child_combo in child_combos:
-                    child_cost_price = float (child_combo.cost_price)
+                    child_cost_price = float(child_combo.cost_price)
                     if not child_cost_price:
-                        child_cost_price = float (child_combo.product.inr_price)
+                        child_cost_price = float(child_combo.product.inr_price)
                     actual_sum_of_child_combos += child_cost_price
 
                 virtual_decrease_in_price = actual_sum_of_child_combos - parent_sum
                 virtual_decrease_part_of_this_item = virtual_decrease_in_price * \
-                                                     (float (
-                                                         item_cost_price) / actual_sum_of_child_combos)
-                actual_price_of_item_after_virtual_decrease = float (
+                    (float(
+                        item_cost_price) / actual_sum_of_child_combos)
+                actual_price_of_item_after_virtual_decrease = float(
                     item_cost_price) - virtual_decrease_part_of_this_item
 
                 if order_discount > 0:
                     combo_discount_amount = (float(order_discount) /
-                                    float(self.total_excl_tax)) * \
-                                    actual_price_of_item_after_virtual_decrease
+                                             float(self.total_excl_tax)) * \
+                        actual_price_of_item_after_virtual_decrease
                     actual_price_of_item_after_virtual_decrease -= combo_discount_amount
 
-                item_selling_price = round (
+                item_selling_price = round(
                     (actual_price_of_item_after_virtual_decrease * 1.18), 2)
                 item_refund_request_list = RefundItem.objects.filter(
-                    oi_id=item.parent.id, \
+                    oi_id=item.parent.id,
                     refund_request__status__in=[1, 3, 5, 7, 8, 11])
                 total_refund = float(item_refund_request_list.first().amount) \
                     if item_refund_request_list else 0
 
                 if item.parent.selling_price:
                     refund_amount = round(total_refund * (item_selling_price /
-                                    float(item.parent.selling_price)), 2)
+                                                          float(item.parent.selling_price)), 2)
                 else:
                     refund_amount = 0
 
@@ -453,7 +466,7 @@ class Order(AbstractAutoDate):
                     item.delivery_price_incl_tax)})
         return amt_dict
 
-    def save(self,**kwargs):
+    def save(self, **kwargs):
         created = not bool(getattr(self, "id"))
         if created:
             return super(Order, self).save(**kwargs)
@@ -483,47 +496,107 @@ class Order(AbstractAutoDate):
             av_user_enrollment.delay(av_ids=av_items_id)
 
         if self.status == 1 and existing_obj.status != 1 and self.order_contains_jobs_on_the_move():
-            jobs_on_the_move_items = self.orderitems.filter(product__sub_type_flow=502)
+            jobs_on_the_move_items = self.orderitems.filter(
+                product__sub_type_flow=502)
 
             for jobs_oi in jobs_on_the_move_items:
                 jobs_oi.start_date = timezone.now()
-                jobs_oi.end_date = timezone.now() + timedelta(days = jobs_oi.product.day_duration)
+                jobs_oi.end_date = timezone.now() + timedelta(days=jobs_oi.product.day_duration)
                 jobs_oi.save()
 
-
         if self.status == 1 and existing_obj.status != 1 and self.order_contains_resume_builder():
-            from resumebuilder.models import Candidate   # imported here to not cause cyclic import for resumebuilder models
-            
+            # imported here to not cause cyclic import for resumebuilder models
+            from resumebuilder.models import Candidate
 
             if self.order_contains_resumebuilder_subscription():
-                
+
                 self.update_subscription_in_order_item()
                 cand_id = existing_obj and existing_obj.candidate_id
                 if cand_id:
-                    candidate_obj = Candidate.objects.filter(candidate_id=cand_id).first()
-                    if candidate_obj: 
+                    candidate_obj = Candidate.objects.filter(
+                        candidate_id=cand_id).first()
+                    if candidate_obj:
                         candidate_obj.active_subscription = True
                         candidate_obj.save()
 
             if self.order_contains_expert_assistance():
                 cand_id = existing_obj and existing_obj.candidate_id
                 if cand_id:
-                    candidate_obj = Candidate.objects.filter(candidate_id=cand_id).first()
-                    if candidate_obj: 
+                    candidate_obj = Candidate.objects.filter(
+                        candidate_id=cand_id).first()
+                    if candidate_obj:
                         candidate_obj.resume_generated = False
                         candidate_obj.save()
 
             generate_resume_for_order.delay(self.id)
 
-            logging.getLogger('info_log').info("Generating resume for order {}".format(self.id))
-    
+            logging.getLogger('info_log').info(
+                "Generating resume for order {}".format(self.id))
+
+        if self.status == 1 and existing_obj.status != 1 and self.order_contains_shine_premium():
+            from wallet.models import ProductPoint
+            """
+            Handle the ProductPoint Flow for shine resume. 
+            Step 1 - Create a product point with the order id and candidate id.
+            Step 2 - check the sub type flow.
+            step 3 - Based on sub type decide the validity and count of test & assessments.
+            """
+            order_item = self.orderitems.filter(
+                parent=None, product__type_flow=18).first()
+            product_redeem_count = 0
+            product_validity_in_days = 0
+
+            if order_item:
+                sub_type_flow = order_item.product.sub_type_flow if order_item.product else None
+
+            if sub_type_flow == 1800:
+                product_redeem_count = 1
+                product_validity_in_days = 30
+            elif sub_type_flow == 1801:
+                product_redeem_count = 2
+                product_validity_in_days = 90
+            elif sub_type_flow == 1802:
+                product_redeem_count = 3
+                product_validity_in_days = 180
+            now = datetime.now()
+            time_tuple = now.timetuple()
+            purchased_at = time.mktime(time_tuple)
+
+            # saving this for assessments and practice test
+            redeem_options = [{
+                'type': 'assessment',
+                'product_redeem_count': product_redeem_count,
+                'product_validity_in_days': product_validity_in_days,
+                'purchased_at': purchased_at
+            },
+                {
+                'type': 'practice_test',
+                'product_redeem_count': product_redeem_count,
+                'product_validity_in_days': product_validity_in_days,
+                'purchased_at': purchased_at
+            }]
+
+            product_point = ProductPoint.objects.update_or_create(
+                order=self,
+                candidate_id=self.candidate_id,
+                redeem_options=str(redeem_options),
+                active=True,
+                defaults={'candidate_id':self.candidate_id}
+            )
+            try:
+                product_point.save()
+            except Exception as e:
+                logging.getLogger('error_log').error(
+                    "Could not able to create product points for order {}".format(self.id))
+
         self.upload_service_resume_shine(existing_obj)
-        obj = super(Order,self).save(**kwargs)
+        obj = super(Order, self).save(**kwargs)
 
         if self.status == 1:
             bypass_resume_midout(self.id)
-        
+
         return obj
+
 
 class OrderItem(AbstractAutoDate):
     coi_id = models.IntegerField(
@@ -535,12 +608,13 @@ class OrderItem(AbstractAutoDate):
         _('Archive JSON'),
         blank=True,
         editable=False
-        )
-    
-    order = models.ForeignKey(
-        'order.Order', related_name='orderitems', verbose_name=_("Order"),on_delete=models.CASCADE)
+    )
 
-    parent = models.ForeignKey('self', null=True, blank=True,on_delete=models.CASCADE)
+    order = models.ForeignKey(
+        'order.Order', related_name='orderitems', verbose_name=_("Order"), on_delete=models.CASCADE)
+
+    parent = models.ForeignKey(
+        'self', null=True, blank=True, on_delete=models.CASCADE)
 
     partner = models.ForeignKey(
         'partner.Vendor', related_name='order_items', blank=True, null=True,
@@ -616,7 +690,8 @@ class OrderItem(AbstractAutoDate):
     draft_counter = models.PositiveIntegerField(default=0)
     tat_date = models.DateTimeField(null=True, blank=True)
 
-    oio_linkedin = models.OneToOneField(Draft, null=True, blank=True,on_delete=models.CASCADE)
+    oio_linkedin = models.OneToOneField(
+        Draft, null=True, blank=True, on_delete=models.CASCADE)
 
     waiting_for_input = models.BooleanField(default=False)
 
@@ -635,7 +710,8 @@ class OrderItem(AbstractAutoDate):
 
     closed_on = models.DateTimeField(null=True, blank=True)
     draft_added_on = models.DateTimeField(null=True, blank=True)
-    approved_on = models.DateTimeField(null=True, blank=True)  # draft approved on
+    approved_on = models.DateTimeField(
+        null=True, blank=True)  # draft approved on
     expiry_date = models.DateTimeField(null=True, blank=True)
     user_feedback = models.BooleanField(default=False)
     buy_count_updated = models.BooleanField(default=False)
@@ -672,7 +748,6 @@ class OrderItem(AbstractAutoDate):
 
     is_resume_candidate_upload = models.BooleanField(default=False)
 
-
     class Meta:
         app_label = 'order'
         # Enforce sorting in order of creation.
@@ -694,67 +769,93 @@ class OrderItem(AbstractAutoDate):
             ("can_view_order_item_detail", "Can View Order Item Detail"),
 
             # for linkedin flow
-            ("writer_assignment_linkedin_action", "Can Assign to Other linkedin writer"),
-            ("can_assigned_to_linkedin_writer", "Can Assigned To This linkedin Writer"),
-            ("can_show_linkedinrejectedbyadmin_queue", "Can View Linkedin Rejected By Admin Queue"),
-            ("can_show_linkedinrejectedbycandidate_queue", "Can View LinkedinRejected By Candidate Queue"),
-            ("can_show_linkedin_approval_queue", "Can View Linkedin Approval Queue"),
-            ("can_show_linkedin_approved_queue", "Can View Linkedin Approved Queue"),
+            ("writer_assignment_linkedin_action",
+             "Can Assign to Other linkedin writer"),
+            ("can_assigned_to_linkedin_writer",
+             "Can Assigned To This linkedin Writer"),
+            ("can_show_linkedinrejectedbyadmin_queue",
+             "Can View Linkedin Rejected By Admin Queue"),
+            ("can_show_linkedinrejectedbycandidate_queue",
+             "Can View LinkedinRejected By Candidate Queue"),
+            ("can_show_linkedin_approval_queue",
+             "Can View Linkedin Approval Queue"),
+            ("can_show_linkedin_approved_queue",
+             "Can View Linkedin Approved Queue"),
             ("can_show_linkedin_inbox_queue", "Can View Linkedin Inbox Queue"),
             ("can_show_linkedin_writer_draft", "Can View Linkedin Writer Draft"),
-            ("can_show_linkedin_counselling_form", "Can View Linkedin Counselling Form"),
-            ("can_view_counselling_form_in_approval_queue", "Can View Counselling Form In Approval Queue"),
+            ("can_show_linkedin_counselling_form",
+             "Can View Linkedin Counselling Form"),
+            ("can_view_counselling_form_in_approval_queue",
+             "Can View Counselling Form In Approval Queue"),
 
             # Approval Queue
             ("can_show_approval_queue", "Can View Approval Queue"),
             ("can_view_all_approval_list", "Can View All Approval List"),
-            ("can_view_only_assigned_approval_list", "Can View Only Assigned Approval List"),
+            ("can_view_only_assigned_approval_list",
+             "Can View Only Assigned Approval List"),
             ("can_approve_or_reject_draft", "Can Approve Or Reject Draft"),
 
             # Appoved Queue
             ("can_show_approved_queue", "Can View Approved Queue"),
             ("can_view_all_approved_list", "Can View All Approved List"),
-            ("can_view_only_assigned_approved_list", "Can View Only Assigned Approved List"),
+            ("can_view_only_assigned_approved_list",
+             "Can View Only Assigned Approved List"),
 
             # Rejected By Admin Queue
             ("can_show_rejectedbyadmin_queue", "Can View Rejected By Admin Queue"),
-            ("can_view_all_rejectedbyadmin_list", "Can View All Rejected by Admin List"),
-            ("can_view_only_assigned_rejectedbyadmin_list", "Can View Only Assigned Rejected By Admin List"),
+            ("can_view_all_rejectedbyadmin_list",
+             "Can View All Rejected by Admin List"),
+            ("can_view_only_assigned_rejectedbyadmin_list",
+             "Can View Only Assigned Rejected By Admin List"),
 
             # Rejected By Candidate Queue
-            ("can_show_rejectedbycandidate_queue", "Can View Rejected By Candidate Queue"),
-            ("can_view_all_rejectedbycandidate_list", "Can View All Rejected By Candidate List"),
-            ("can_view_only_assigned_rejectedbycandidate_list", "Can View Only Assigned Rejected By Candidate List"),
+            ("can_show_rejectedbycandidate_queue",
+             "Can View Rejected By Candidate Queue"),
+            ("can_view_all_rejectedbycandidate_list",
+             "Can View All Rejected By Candidate List"),
+            ("can_view_only_assigned_rejectedbycandidate_list",
+             "Can View Only Assigned Rejected By Candidate List"),
 
             # Allocated Queue
             ("can_show_allocated_queue", "Can Show Allocated Queue"),
             ("can_view_all_allocated_list", "Can View All Allocated List"),
-            ("can_view_only_assigned_allocated_list", "Can View Only Assigned Allocated List"),
+            ("can_view_only_assigned_allocated_list",
+             "Can View Only Assigned Allocated List"),
 
             # Booster Queue
             ("can_show_booster_queue", "Can Show Booster Queue"),
 
             # Domestic Profile Update Queue Permissions
-            ("can_show_domestic_profile_update_queue", "Can Show Domestic Profile Update Queue"),
-            ("domestic_profile_update_assigner", "Domestic Profile Update Assigner"),
-            ("domestic_profile_update_assignee", "Domestic Profile Update Assignee"),
-            ("can_show_domestic_profile_initiated_queue", "Can Show Domestic Profile Initiated Queue"),
+            ("can_show_domestic_profile_update_queue",
+             "Can Show Domestic Profile Update Queue"),
+            ("domestic_profile_update_assigner",
+             "Domestic Profile Update Assigner"),
+            ("domestic_profile_update_assignee",
+             "Domestic Profile Update Assignee"),
+            ("can_show_domestic_profile_initiated_queue",
+             "Can Show Domestic Profile Initiated Queue"),
 
             # Domestic Profile Approval Queue Permissions
-            ("can_show_domestic_profile_approval_queue", "Can Show Domestic Profile Approval Queue"),
+            ("can_show_domestic_profile_approval_queue",
+             "Can Show Domestic Profile Approval Queue"),
 
             # International Profile Update Queue Permissions
-            ("can_show_international_profile_update_queue", "Can Show International Profile Update Queue"),
-            ("international_profile_update_assigner", "International Profile Update Assigner"),
-            ("international_profile_update_assignee", "International Profile Update Assignee"),
+            ("can_show_international_profile_update_queue",
+             "Can Show International Profile Update Queue"),
+            ("international_profile_update_assigner",
+             "International Profile Update Assigner"),
+            ("international_profile_update_assignee",
+             "International Profile Update Assignee"),
 
             # International Profile Approval Queue Permissions
-            ("can_show_international_profile_approval_queue", "Can Show International Profile Approval Queue"),
+            ("can_show_international_profile_approval_queue",
+             "Can Show International Profile Approval Queue"),
 
             # Closed Permission
             ("can_show_closed_oi_queue", "Can Show Closed Orderitem Queue"),
             ("can_view_all_closed_oi_list", "Can View All Closed Orderitem List"),
-            ("can_view_only_assigned_closed_oi_list", "Can View Only Assigned Closed Orderitem List"),
+            ("can_view_only_assigned_closed_oi_list",
+             "Can View Only Assigned Closed Orderitem List"),
 
             # partner inbox permission
             ("can_show_partner_inbox_queue", "Can Show Partner Inbox Queue"),
@@ -764,17 +865,20 @@ class OrderItem(AbstractAutoDate):
             ("can_show_hold_orderitem_queue", "Can Show Hold Orderitem Queue"),
 
             # Varification report queue
-            ("can_show_varification_report_queue", "Can Show Varification Report Queue"),
+            ("can_show_varification_report_queue",
+             "Can Show Varification Report Queue"),
 
             # Action Permission
             ("oi_action_permission", "OrderItem Action Permission"),
             ("oi_export_as_csv_permission", "Order Item Export As CSV Permission"),
 
             # complaince generation permission
-            ("can_generate_compliance_report", "can create compliance report permmission"),
+            ("can_generate_compliance_report",
+             "can create compliance report permmission"),
 
             # jobs on the move permission
-            ("can_view_assigned_jobs_on_the_move", "Can view assigned jobs on the move"),
+            ("can_view_assigned_jobs_on_the_move",
+             "Can view assigned jobs on the move"),
             ("can_assign_jobs_on_the_move", "Can assign jobs on the move"),
             ("can_send_jobs_on_the_move", "Can send assigned jobs on the move"),
             ("can_approve_jobs_on_the_move", "Can Approve jobs on the move"),
@@ -785,24 +889,26 @@ class OrderItem(AbstractAutoDate):
         return "#{}".format(self.pk)
 
     def service_pause_status(self):
-        pause_resume_ops_count = self.orderitemoperation_set.filter(oi_status__in=[34,35]).count()
-        if pause_resume_ops_count&1 and self.oi_status == 34:
+        pause_resume_ops_count = self.orderitemoperation_set.filter(oi_status__in=[
+                                                                    34, 35]).count()
+        if pause_resume_ops_count & 1 and self.oi_status == 34:
             return False
         return True
 
     @property
     def get_duration_days(self):
-        if self.start_date and self.end_date: 
+        if self.start_date and self.end_date:
             duration_days = self.end_date - self.start_date
             return duration_days.days
         return self.product.day_duration
+
     @property
     def days_left_oi_product(self):
         if not self.product:
-            return 
+            return
         can_be_paused = self.product.is_pause_service
         duration_days = self.get_duration_days
-        
+
         if not self.product or not self.product.is_service:
             return 0
 
@@ -814,28 +920,28 @@ class OrderItem(AbstractAutoDate):
             sdt = featured_op.created
         else:
             sdt = self.start_date
-        
 
         if not can_be_paused:
             edt = sdt + timedelta(days=duration_days)
             days_left = edt - timezone.now()
             return days_left.days
 
-
         edt = sdt + timedelta(days=duration_days*2)
-        pause_resume_operations = self.orderitemoperation_set.filter(oi_status__in=[34,35]).values_list('created',flat=True)
+        pause_resume_operations = self.orderitemoperation_set.filter(
+            oi_status__in=[34, 35]).values_list('created', flat=True)
         days_left = timedelta(days=duration_days)
         days_between_pause_resume = timedelta(0)
 
-        for pos in range(0,pause_resume_operations.count(),2):
-            if pos==0:
+        for pos in range(0, pause_resume_operations.count(), 2):
+            if pos == 0:
                 days_between_pause_resume += pause_resume_operations[pos] - sdt
                 continue
 
             days_between_pause_resume += pause_resume_operations[pos] - \
-                                        pause_resume_operations[pos-1]
+                pause_resume_operations[pos-1]
 
-        if (not pause_resume_operations.count() & 1) and pause_resume_operations.count()>0:  #if even no of operations -> the service is resumed
+        # if even no of operations -> the service is resumed
+        if (not pause_resume_operations.count() & 1) and pause_resume_operations.count() > 0:
             days_between_pause_resume += timezone.now() - pause_resume_operations.last()
         elif pause_resume_operations.count() == 0:
             days_left -= (timezone.now() - sdt)
@@ -904,7 +1010,6 @@ class OrderItem(AbstractAutoDate):
     def oi_draft_path(self):
         return str(self.oi_draft.url) if self.oi_draft else ""
 
-
     @property
     def is_onboard(self):
         if self.product.sub_type_flow == 502:
@@ -915,9 +1020,11 @@ class OrderItem(AbstractAutoDate):
     def get_item_operations(self):
         if self.product.sub_type_flow == 502:
             ops = []
-            start_op = self.orderitemoperation_set.filter(oi_status__in=[31, 32, 5]).order_by('id').first()
+            start_op = self.orderitemoperation_set.filter(
+                oi_status__in=[31, 32, 5]).order_by('id').first()
             ops.append(start_op)
-            closed_op = self.orderitemoperation_set.filter(oi_status=4).order_by('id').first()
+            closed_op = self.orderitemoperation_set.filter(
+                oi_status=4).order_by('id').first()
             if closed_op:
                 start_op = ops.append(closed_op)
 
@@ -953,7 +1060,8 @@ class OrderItem(AbstractAutoDate):
                 temp_due_date += relativedelta.relativedelta(days=1)
             if temp_due_date_extended_by:
                 profile.due_date_extended_by += temp_due_date_extended_by
-                profile.due_date += relativedelta.relativedelta(days=profile.due_date_extended_by)
+                profile.due_date += relativedelta.relativedelta(
+                    days=profile.due_date_extended_by)
                 profile.save()
             return profile.due_date.strftime('%d-%m-%Y')
         return 'N.A'
@@ -966,7 +1074,8 @@ class OrderItem(AbstractAutoDate):
 
     def get_weeks(self):
         weeks, weeks_till_now = None, None
-        sevice_started_op = self.orderitemoperation_set.all().filter(oi_status__in=[31]).order_by('id').first()
+        sevice_started_op = self.orderitemoperation_set.all().filter(
+            oi_status__in=[31]).order_by('id').first()
         if sevice_started_op:
             started = sevice_started_op.created
             day = self.product.get_duration_in_day()
@@ -980,7 +1089,8 @@ class OrderItem(AbstractAutoDate):
     def get_links_needed_till_now(self):
         start, end = None, None
         links_count = 0
-        sevice_started_op = self.orderitemoperation_set.all().filter(oi_status__in=[31]).order_by('id').first()
+        sevice_started_op = self.orderitemoperation_set.all().filter(
+            oi_status__in=[31]).order_by('id').first()
         links_per_week = getattr(self.product.attr, S_ATTR_DICT.get('LC'), 2)
         if sevice_started_op:
             links_count = 0
@@ -1003,7 +1113,8 @@ class OrderItem(AbstractAutoDate):
             if profile.manual_change == 1:
                 manual_changes_data = eval(profile.manual_changes_data) if \
                     profile.manual_changes_data else {}
-                already_sent_link = manual_changes_data.get('already_sent_link', 0)
+                already_sent_link = manual_changes_data.get(
+                    'already_sent_link', 0)
                 return already_sent_link
         return 0
 
@@ -1020,7 +1131,8 @@ class OrderItem(AbstractAutoDate):
         return None
 
     def get_sent_link_count_for_current_week(self):
-        sevice_started_op = self.orderitemoperation_set.all().filter(oi_status__in=[31]).order_by('id').first()
+        sevice_started_op = self.orderitemoperation_set.all().filter(
+            oi_status__in=[31]).order_by('id').first()
         started = sevice_started_op.created
         day = self.product.get_duration_in_day()
         weeks = math.floor(day / 7)
@@ -1051,21 +1163,27 @@ class OrderItem(AbstractAutoDate):
 
         if profile:
             if profile.due_date and profile.due_date > today:
-                profile.due_date = profile.due_date + relativedelta.relativedelta(days=(7 - profile.due_date_extended_by))
+                profile.due_date = profile.due_date + \
+                    relativedelta.relativedelta(
+                        days=(7 - profile.due_date_extended_by))
                 profile.due_date_extended_by = 0
                 profile.save()
             else:
                 day_of_week = profile.day_of_week
                 if today.weekday() == day_of_week:
-                    profile.due_date = today + relativedelta.relativedelta(days=(7 - profile.due_date_extended_by))
+                    profile.due_date = today + \
+                        relativedelta.relativedelta(
+                            days=(7 - profile.due_date_extended_by))
                     profile.due_date_extended_by = 0
                 elif today.weekday() > day_of_week:
                     profile.due_date = today +\
-                        relativedelta.relativedelta(days=(7 - (today.weekday() - day_of_week) - profile.due_date_extended_by))
+                        relativedelta.relativedelta(
+                            days=(7 - (today.weekday() - day_of_week) - profile.due_date_extended_by))
                     profile.due_date_extended_by = 0
                 elif today.weekday() < day_of_week:
                     profile.due_date = today +\
-                        relativedelta.relativedelta(days=(day_of_week - today.weekday()) - profile.due_date_extended_by)
+                        relativedelta.relativedelta(
+                            days=(day_of_week - today.weekday()) - profile.due_date_extended_by)
                     profile.due_date_extended_by = 0
                 profile.save()
 
@@ -1126,7 +1244,6 @@ class OrderItem(AbstractAutoDate):
         if assigned_op:
             return assigned_op.created
 
-
     def oi_status_transform(self):
         if self.product:
             val = OI_OPS_TRANSFORMATION_DICT.get(self.product.sub_type_flow, {})\
@@ -1139,17 +1256,17 @@ class OrderItem(AbstractAutoDate):
             dict_status = dict(OI_OPS_STATUS)
             return dict_status.get(self.oi_status)
 
-
-    def upload_service_resume_shine(self,existing_obj):
-        if self.oi_status == 4 and self.oi_status !=existing_obj.oi_status  and self.order.service_resume_upload_shine:
+    def upload_service_resume_shine(self, existing_obj):
+        if self.oi_status == 4 and self.oi_status != existing_obj.oi_status and self.order.service_resume_upload_shine:
             upload_Resume_shine.delay(self.id)
 
-    def update_pause_resume_service(self,existing_obj):
-        if not self.oi_status in [34,35]:
+    def update_pause_resume_service(self, existing_obj):
+        if not self.oi_status in [34, 35]:
             return
         feature_util = FeatureProfileUtil()
-        
-        if not feature_util.pause_resume_feature(existing_obj,self.service_pause_status):  # if pause or resume fails then return oi_status to previous position
+
+        # if pause or resume fails then return oi_status to previous position
+        if not feature_util.pause_resume_feature(existing_obj, self.service_pause_status):
             self.oi_status = existing_obj.oi_status
             return
 
@@ -1169,16 +1286,16 @@ class OrderItem(AbstractAutoDate):
         self.oi_status = 4 if orderitem and orderitem.oi_status == 4 else self.oi_status
         # handling combo case getting parent and updating child
         self.update_pause_resume_service(orderitem)
-        obj = super().save(*args, **kwargs)  # Call the "real" save() method.       
+        obj = super().save(*args, **kwargs)  # Call the "real" save() method.
         self.upload_service_resume_shine(orderitem)
-        
-        return obj 
+
+        return obj
 
         # # for resume booster create orderitem
         # if self.product.type_flow in [7, 15] and obj.oi_status != last_oi_status:
         #     if obj.oi_status == 5:
         #         self.orderitemoperation_set.create(
-        #             
+        #
         # oi_draft=self.oi_draft,
         #             draft_counter=self.draft_counter,
         #             oi_status=self.oi_status,
@@ -1219,8 +1336,10 @@ class OrderItem(AbstractAutoDate):
     def post_save_product(cls, sender, instance, **kwargs):
         # automate application highlighter/priority applicant
         if instance.is_combo and not instance.parent:
-            jobs_on_the_move_item = instance.order.orderitems.filter(product__sub_type_flow=502)
-            priority_applicant_items = instance.order.orderitems.filter(product__sub_type_flow=503)
+            jobs_on_the_move_item = instance.order.orderitems.filter(
+                product__sub_type_flow=502)
+            priority_applicant_items = instance.order.orderitems.filter(
+                product__sub_type_flow=503)
 
             for i in jobs_on_the_move_item:
                 from order.tasks import process_jobs_on_the_move
@@ -1236,6 +1355,7 @@ class OrderItem(AbstractAutoDate):
         if instance.product.sub_type_flow == 503:
             process_application_highlighter(obj=instance)
 
+
 post_save.connect(OrderItem.post_save_product, sender=OrderItem)
 
 
@@ -1245,9 +1365,10 @@ class OrderItemOperation(AbstractAutoDate):
         blank=True,
         null=True,
         editable=False)
-    
-    oi = models.ForeignKey(OrderItem,on_delete=models.CASCADE)
-    linkedin = models.ForeignKey(Draft, null=True, blank=True,on_delete=models.CASCADE)
+
+    oi = models.ForeignKey(OrderItem, on_delete=models.CASCADE)
+    linkedin = models.ForeignKey(
+        Draft, null=True, blank=True, on_delete=models.CASCADE)
     oi_resume = models.FileField(
         max_length=255, upload_to='shinelearning/resumes/', null=True, blank=True)
 
@@ -1275,10 +1396,9 @@ class OrderItemOperation(AbstractAutoDate):
     def __str__(self):
         return "#{}".format(self.pk)
 
-
     @property
     def oi_status_display(self):
-         return self.get_oi_status
+        return self.get_oi_status
 
     @property
     def get_oi_status(self):
@@ -1306,9 +1426,11 @@ class OrderItemOperation(AbstractAutoDate):
             dict_status = dict(OI_OPS_STATUS)
             return dict_status.get(self.oi_status)
 
+
 class Message(AbstractAutoDate):
-    oi = models.ForeignKey(OrderItem, null=True,on_delete=models.CASCADE)
-    oio = models.ForeignKey(OrderItemOperation, null=True,on_delete=models.CASCADE)
+    oi = models.ForeignKey(OrderItem, null=True, on_delete=models.CASCADE)
+    oio = models.ForeignKey(
+        OrderItemOperation, null=True, on_delete=models.CASCADE)
     added_by = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL,
         related_name='message_added_by',
@@ -1335,13 +1457,16 @@ class Message(AbstractAutoDate):
 
 
 class InternationalProfileCredential(AbstractAutoDate):
-    oi = models.ForeignKey(OrderItem,on_delete=models.CASCADE)
-    country = models.ForeignKey(Country, null=True,on_delete=models.CASCADE)
+    oi = models.ForeignKey(OrderItem, on_delete=models.CASCADE)
+    country = models.ForeignKey(Country, null=True, on_delete=models.CASCADE)
     username = models.CharField(_('Username'), max_length=100)
-    password = models.CharField(_('Password'), max_length=100, null=True, blank=True)
-    candidateid = models.CharField(_('CandidateId'), max_length=100, null=True, blank=True)
+    password = models.CharField(
+        _('Password'), max_length=100, null=True, blank=True)
+    candidateid = models.CharField(
+        _('CandidateId'), max_length=100, null=True, blank=True)
     candidate_email = models.CharField(_('Candidate Email'), max_length=100)
-    site_url = models.CharField(_('Site Url'), max_length=100, null=True, blank=True)
+    site_url = models.CharField(
+        _('Site Url'), max_length=100, null=True, blank=True)
     profile_status = models.BooleanField(default=False)
 
     def __str__(self):
@@ -1349,12 +1474,13 @@ class InternationalProfileCredential(AbstractAutoDate):
 
 
 class EmailOrderItemOperation(AbstractAutoDate):
-    oi = models.ForeignKey(OrderItem,on_delete=models.CASCADE)
+    oi = models.ForeignKey(OrderItem, on_delete=models.CASCADE)
     email_oi_status = models.PositiveIntegerField(
         _("Email Operation Status"), default=0, choices=OI_EMAIL_STATUS)
     draft_counter = models.PositiveIntegerField(default=0)
     status = models.PositiveIntegerField(default=0)
-    to_email = models.CharField(_('To Email'), max_length=100, null=True, blank=True)
+    to_email = models.CharField(
+        _('To Email'), max_length=100, null=True, blank=True)
 
     class Meta:
         ordering = ['-created']
@@ -1363,10 +1489,8 @@ class EmailOrderItemOperation(AbstractAutoDate):
         return '{}-{}'.format(str(self.oi), self.to_email)
 
 
-
-
 class SmsOrderItemOperation(AbstractAutoDate):
-    oi = models.ForeignKey(OrderItem,on_delete=models.CASCADE)
+    oi = models.ForeignKey(OrderItem, on_delete=models.CASCADE)
     sms_oi_status = models.PositiveIntegerField(
         _("SMS Operation Status"), default=0, choices=OI_SMS_STATUS)
     draft_counter = models.PositiveIntegerField(default=0)
@@ -1381,7 +1505,7 @@ class SmsOrderItemOperation(AbstractAutoDate):
 
 
 class CouponOrder(AbstractAutoDate):
-    order = models.ForeignKey(Order,on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
     coupon = models.ForeignKey(
         'coupon.Coupon',
         on_delete=models.SET_NULL,
@@ -1396,7 +1520,7 @@ class CouponOrder(AbstractAutoDate):
 
 class RefundRequest(AbstractAutoDate):
     order = models.ForeignKey(
-        'order.Order', verbose_name=_("Order"),on_delete=models.CASCADE)
+        'order.Order', verbose_name=_("Order"), on_delete=models.CASCADE)
 
     message = models.TextField()
 
@@ -1451,7 +1575,8 @@ class RefundRequest(AbstractAutoDate):
 
 
 class RefundItem(AbstractAutoDate):
-    refund_request = models.ForeignKey('order.RefundRequest',on_delete=models.CASCADE)
+    refund_request = models.ForeignKey(
+        'order.RefundRequest', on_delete=models.CASCADE)
     oi = models.ForeignKey(
         'order.OrderItem', on_delete=models.SET_NULL,
         related_name='refund_items',
@@ -1469,7 +1594,7 @@ class RefundItem(AbstractAutoDate):
 
 
 class RefundOperation(AbstractAutoDate):
-    refund_request = models.ForeignKey(RefundRequest,on_delete=models.CASCADE)
+    refund_request = models.ForeignKey(RefundRequest, on_delete=models.CASCADE)
     status = models.PositiveIntegerField(
         _("Status"), default=0, choices=REFUND_OPS_STATUS)
     last_status = models.PositiveIntegerField(
@@ -1495,7 +1620,7 @@ class RefundOperation(AbstractAutoDate):
 
 
 class WelcomeCallOperation(AbstractAutoDate):
-    order = models.ForeignKey(Order,on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE)
     message = models.TextField(blank=True)
     wc_cat = models.PositiveIntegerField(
         _("Welcome Call Category"), default=0,
@@ -1516,38 +1641,46 @@ class WelcomeCallOperation(AbstractAutoDate):
         blank=True,
         null=True,
         related_name='wop_created_by',
-        verbose_name=_("Created By"),on_delete=models.CASCADE)
+        verbose_name=_("Created By"), on_delete=models.CASCADE)
 
     def __str__(self):
         return str(self.pk)
 
-    def get_wc_cat(self,default_text=""):
+    def get_wc_cat(self, default_text=""):
         sub_dict = dict(WC_CATEGORY)
         return sub_dict.get(self.wc_cat, default_text)
 
-    def get_wc_sub_cat(self,default_text=""):
+    def get_wc_sub_cat(self, default_text=""):
         cat_dict = dict(WC_SUB_CATEGORY)
         return cat_dict.get(self.wc_sub_cat, default_text)
 
-    def get_wc_status(self,default_text=""):
+    def get_wc_status(self, default_text=""):
         status_dict = dict(WC_FLOW_STATUS)
         return status_dict.get(self.wc_status, default_text)
 
 
 class CustomerFeedback(models.Model):
     candidate_id = models.CharField('Candidate Id', max_length=100)
-    full_name = models.CharField('Full Name',max_length=255,blank=True, null=True)
+    full_name = models.CharField(
+        'Full Name', max_length=255, blank=True, null=True)
     mobile = models.CharField(max_length=15, null=True, blank=True,)
-    email = models.CharField('Full Name',max_length=255,blank=True, null=True)
+    email = models.CharField(
+        'Full Name', max_length=255, blank=True, null=True)
     added_on = models.DateTimeField(editable=False, auto_now_add=True)
-    status = models.SmallIntegerField(choices=FEEDBACK_STATUS,default=1)
-    assigned_to =  models.ForeignKey(User,blank=True, null=True,on_delete=models.CASCADE)
-    follow_up_date = models.DateTimeField('Follow Up Date', blank=True, null=True)
-    comment = models.TextField('Feedback Comment',blank=True, null=True)
-    last_payment_date = models.DateTimeField('Last Payment Date',blank=True, null=True)
-    ltv = models.DecimalField(max_digits=20, decimal_places=2,blank=True, null=True)
-    category =  models.SmallIntegerField(choices=FEEDBACK_CATEGORY_CHOICES,blank=True, null=True)
-    resolution =  models.SmallIntegerField(choices=FEEDBACK_RESOLUTION_CHOICES,blank=True, null=True)
+    status = models.SmallIntegerField(choices=FEEDBACK_STATUS, default=1)
+    assigned_to = models.ForeignKey(
+        User, blank=True, null=True, on_delete=models.CASCADE)
+    follow_up_date = models.DateTimeField(
+        'Follow Up Date', blank=True, null=True)
+    comment = models.TextField('Feedback Comment', blank=True, null=True)
+    last_payment_date = models.DateTimeField(
+        'Last Payment Date', blank=True, null=True)
+    ltv = models.DecimalField(
+        max_digits=20, decimal_places=2, blank=True, null=True)
+    category = models.SmallIntegerField(
+        choices=FEEDBACK_CATEGORY_CHOICES, blank=True, null=True)
+    resolution = models.SmallIntegerField(
+        choices=FEEDBACK_RESOLUTION_CHOICES, blank=True, null=True)
 
     @property
     def status_text(self):
@@ -1567,45 +1700,48 @@ class CustomerFeedback(models.Model):
 
     def create_operation(self):
         prev_feedback = CustomerFeedback.objects.get(id=self.id)
-        if prev_feedback.comment != self.comment :
-            OrderItemFeedbackOperation.objects.create(comment=self.comment,customer_feedback=self,\
-                assigned_to=self.assigned_to,oi_type=2)
+        if prev_feedback.comment != self.comment:
+            OrderItemFeedbackOperation.objects.create(comment=self.comment, customer_feedback=self,
+                                                      assigned_to=self.assigned_to, oi_type=2)
 
-        if not prev_feedback.assigned_to and  self.assigned_to :
-            OrderItemFeedbackOperation.objects.create(customer_feedback=self,assigned_to=self.assigned_to\
-                ,oi_type=3)
-        elif prev_feedback.assigned_to != self.assigned_to :
-            OrderItemFeedbackOperation.objects.create(customer_feedback=self,assigned_to=self.assigned_to\
-                ,oi_type=4)
-            
+        if not prev_feedback.assigned_to and self.assigned_to:
+            OrderItemFeedbackOperation.objects.create(
+                customer_feedback=self, assigned_to=self.assigned_to, oi_type=3)
+        elif prev_feedback.assigned_to != self.assigned_to:
+            OrderItemFeedbackOperation.objects.create(
+                customer_feedback=self, assigned_to=self.assigned_to, oi_type=4)
+
         if prev_feedback.follow_up_date != self.follow_up_date:
-            OrderItemFeedbackOperation.objects.create(customer_feedback=self,assigned_to=self.assigned_to\
-                ,oi_type=5,follow_up_date=self.follow_up_date)
+            OrderItemFeedbackOperation.objects.create(
+                customer_feedback=self, assigned_to=self.assigned_to, oi_type=5, follow_up_date=self.follow_up_date)
 
         if prev_feedback.category != self.category:
-            OrderItemFeedbackOperation.objects.create(customer_feedback=self,assigned_to=self.assigned_to\
-                ,oi_type=6,category=self.category)
-                
+            OrderItemFeedbackOperation.objects.create(
+                customer_feedback=self, assigned_to=self.assigned_to, oi_type=6, category=self.category)
+
         if prev_feedback.category != self.category:
-            OrderItemFeedbackOperation.objects.create(customer_feedback=self,assigned_to=self.assigned_to\
-                ,oi_type=7,resolution=self.resolution)
+            OrderItemFeedbackOperation.objects.create(
+                customer_feedback=self, assigned_to=self.assigned_to, oi_type=7, resolution=self.resolution)
 
     def save(self, *args, **kwargs):
         created = not bool(self.id)
         if not created:
             self.create_operation()
-            
+
         super(CustomerFeedback, self).save(*args, **kwargs)
 
 
 class OrderItemFeedback(models.Model):
-    category =  models.SmallIntegerField(choices=FEEDBACK_CATEGORY_CHOICES,blank=True, null=True)
-    resolution =  models.SmallIntegerField(choices=FEEDBACK_RESOLUTION_CHOICES,blank=True, null=True)
-    comment = models.TextField('Feedback Comment',blank=True, null=True)
-    order_item = models.ForeignKey(OrderItem,on_delete=models.CASCADE)
-    customer_feedback  = models.ForeignKey(CustomerFeedback,on_delete=models.CASCADE)
-    created = models.DateTimeField(editable=False, auto_now_add=True,null=True)
-    
+    category = models.SmallIntegerField(
+        choices=FEEDBACK_CATEGORY_CHOICES, blank=True, null=True)
+    resolution = models.SmallIntegerField(
+        choices=FEEDBACK_RESOLUTION_CHOICES, blank=True, null=True)
+    comment = models.TextField('Feedback Comment', blank=True, null=True)
+    order_item = models.ForeignKey(OrderItem, on_delete=models.CASCADE)
+    customer_feedback = models.ForeignKey(
+        CustomerFeedback, on_delete=models.CASCADE)
+    created = models.DateTimeField(
+        editable=False, auto_now_add=True, null=True)
 
     @property
     def category_text(self):
@@ -1618,26 +1754,39 @@ class OrderItemFeedback(models.Model):
     def save(self, *args, **kwargs):
         create = not bool(self.id)
         if not create:
-            assigned_to = CustomerFeedback.objects.get(id=self.customer_feedback.id).assigned_to
+            assigned_to = CustomerFeedback.objects.get(
+                id=self.customer_feedback.id).assigned_to
             prev_data = OrderItemFeedback.objects.get(id=self.id)
-            compare_list = [self.category==prev_data.category,self.resolution==prev_data.resolution,self.comment==prev_data.comment]
+            compare_list = [self.category == prev_data.category, self.resolution ==
+                            prev_data.resolution, self.comment == prev_data.comment]
             if not all(compare_list):
-                OrderItemFeedbackOperation.objects.create(category=self.category,resolution=self.resolution,comment=self.comment,\
-                    order_item=self.order_item,customer_feedback=self.customer_feedback,assigned_to=assigned_to,oi_type=1)
-        super(OrderItemFeedback, self).save(*args, **kwargs) # Call the real save() method
+                OrderItemFeedbackOperation.objects.create(category=self.category, resolution=self.resolution, comment=self.comment,
+                                                          order_item=self.order_item, customer_feedback=self.customer_feedback, assigned_to=assigned_to, oi_type=1)
+        super(OrderItemFeedback, self).save(
+            *args, **kwargs)  # Call the real save() method
+
 
 class OrderItemFeedbackOperation(models.Model):
-    assigned_to = models.ForeignKey(User,blank=True, null=True,on_delete=models.CASCADE)
+    assigned_to = models.ForeignKey(
+        User, blank=True, null=True, on_delete=models.CASCADE)
     added_on = models.DateTimeField(editable=False, auto_now_add=True)
-    category =  models.SmallIntegerField(choices=FEEDBACK_CATEGORY_CHOICES,blank=True, null=True)
-    resolution =  models.SmallIntegerField(choices=FEEDBACK_RESOLUTION_CHOICES,blank=True, null=True)
-    comment = models.TextField('Feedback Comment',blank=True, null=True)
-    order_item = models.ForeignKey(OrderItem,blank=True, null=True,on_delete=models.CASCADE)
-    customer_feedback  = models.ForeignKey(CustomerFeedback,on_delete=models.CASCADE)
-    oi_type = models.SmallIntegerField(choices=TOTAL_FEEDBACK_OPERATION_TYPE,default=-1)
-    feedback_category = models.SmallIntegerField(choices=FEEDBACK_CATEGORY_CHOICES,default=-1)
-    feedback_resolution =  models.SmallIntegerField(choices=FEEDBACK_RESOLUTION_CHOICES,default=-1)
-    follow_up_date = models.DateTimeField('Follow Up Date', blank=True, null=True)
+    category = models.SmallIntegerField(
+        choices=FEEDBACK_CATEGORY_CHOICES, blank=True, null=True)
+    resolution = models.SmallIntegerField(
+        choices=FEEDBACK_RESOLUTION_CHOICES, blank=True, null=True)
+    comment = models.TextField('Feedback Comment', blank=True, null=True)
+    order_item = models.ForeignKey(
+        OrderItem, blank=True, null=True, on_delete=models.CASCADE)
+    customer_feedback = models.ForeignKey(
+        CustomerFeedback, on_delete=models.CASCADE)
+    oi_type = models.SmallIntegerField(
+        choices=TOTAL_FEEDBACK_OPERATION_TYPE, default=-1)
+    feedback_category = models.SmallIntegerField(
+        choices=FEEDBACK_CATEGORY_CHOICES, default=-1)
+    feedback_resolution = models.SmallIntegerField(
+        choices=FEEDBACK_RESOLUTION_CHOICES, default=-1)
+    follow_up_date = models.DateTimeField(
+        'Follow Up Date', blank=True, null=True)
 
     @property
     def category_text(self):
@@ -1668,7 +1817,7 @@ class OrderItemFeedbackOperation(models.Model):
 
 
 class LTVMonthlyRecord(models.Model):
-    ltv_bracket =  models.SmallIntegerField(choices=LTV_BRACKET_LABELS)
+    ltv_bracket = models.SmallIntegerField(choices=LTV_BRACKET_LABELS)
     total_users = models.IntegerField()
     crm_users = models.IntegerField(default=0)
     learning_users = models.IntegerField(default=0)
@@ -1678,8 +1827,9 @@ class LTVMonthlyRecord(models.Model):
     crm_item_count = models.IntegerField()
     learning_order_count = models.IntegerField()
     learning_item_count = models.IntegerField()
-    year = models.IntegerField(validators=[MinValueValidator(2018)])  
-    month = models.IntegerField(validators=[MaxValueValidator(12), MinValueValidator(1)])
+    year = models.IntegerField(validators=[MinValueValidator(2018)])
+    month = models.IntegerField(
+        validators=[MaxValueValidator(12), MinValueValidator(1)])
     candidate_id_ltv_mapping = models.TextField()
 
     @property
@@ -1688,13 +1838,16 @@ class LTVMonthlyRecord(models.Model):
 
 
 class MonthlyLTVRecord(models.Model):
-    ltv_bracket =  models.SmallIntegerField(choices=LTV_BRACKET_LABELS)
+    ltv_bracket = models.SmallIntegerField(choices=LTV_BRACKET_LABELS)
     crm_order_ids = models.TextField()
     learning_order_ids = models.TextField()
-    crm_item_count = models.IntegerField()   # no process,free,combo parent,variation parent to be removed so query will take time
-    learning_item_count = models.IntegerField()  # no process,free,combo parent,variation parent to be removed so query will take time
-    year = models.IntegerField(validators=[MinValueValidator(2018)])  
-    month = models.IntegerField(validators=[MaxValueValidator(12), MinValueValidator(1)])
+    # no process,free,combo parent,variation parent to be removed so query will take time
+    crm_item_count = models.IntegerField()
+    # no process,free,combo parent,variation parent to be removed so query will take time
+    learning_item_count = models.IntegerField()
+    year = models.IntegerField(validators=[MinValueValidator(2018)])
+    month = models.IntegerField(
+        validators=[MaxValueValidator(12), MinValueValidator(1)])
     revenue = models.IntegerField(default=0)
     candidate_ids = models.TextField()
 
@@ -1702,13 +1855,14 @@ class MonthlyLTVRecord(models.Model):
     def ltv_bracket_text(self):
         return dict(LTV_BRACKET_LABELS).get(self.ltv_bracket)
 
-    @property 
+    @property
     def total_users(self):
         return len(json.loads(self.candidate_ids))
 
     @property
     def crm_users(self):
-        candidates = Order.objects.filter(id__in=json.loads(self.crm_order_ids)).values_list('candidate_id',flat=True)
+        candidates = Order.objects.filter(id__in=json.loads(
+            self.crm_order_ids)).values_list('candidate_id', flat=True)
         return len({candidate for candidate in candidates})
 
     @property
@@ -1717,13 +1871,14 @@ class MonthlyLTVRecord(models.Model):
 
     @property
     def learning_users(self):
-        candidates = Order.objects.filter(id__in=json.loads(self.learning_order_ids)).values_list('candidate_id',flat=True)
+        candidates = Order.objects.filter(id__in=json.loads(
+            self.learning_order_ids)).values_list('candidate_id', flat=True)
         return len({candidate for candidate in candidates})
 
     @property
     def learning_order_count(self):
         return len(json.loads(self.learning_order_ids))
-    
+
     @property
     def total_order_count(self):
         return len(json.loads(self.crm_order_ids)) + len(json.loads(self.learning_order_ids))

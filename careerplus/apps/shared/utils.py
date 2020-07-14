@@ -175,7 +175,7 @@ class DiscountReportUtil:
     def generate_report(self):
         file_obj = self.get_file_obj(self.file_name)
         csv_writer = csv.writer(file_obj, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        csv_writer.writerow(["order_id","Candidate Id","Owner_name","Order_Date","Payment_Date","Payment Time",\
+        csv_writer.writerow(["order_id","order_reference_id","Candidate Id","Owner_name","Order_Date","Payment_Date","Payment Time",\
                     "Last Payment Date","Last Payment Time","Sales_executive","Sales_TL",\
                     "Branch_Head","Transaction_ID","item_id","Product Id","Product_Name","Functional Area",\
                     "Item_Name","Experience","Course Duration","Status",\
@@ -259,7 +259,7 @@ class DiscountReportUtil:
                 refund_amount = item_refund_request_list.first().amount \
                     if item_refund_request_list else 0
 
-                if item.is_combo and item.parent:
+                if item.is_combo and item.parent and item.parent.product.type_flow != 18:
                     parent_sum = float(item.parent.cost_price)
                     if not parent_sum:
                         #Assuming price remains unchanged
@@ -298,8 +298,13 @@ class DiscountReportUtil:
                             float(item.parent.selling_price)),2)
                     else:
                         refund_amount = 0
+                
+                if item.is_combo and item.parent and item.parent.product.type_flow == 18:
+                    item_selling_price = 0
 
-                if item.is_combo and not item.parent:
+                    
+
+                if item.is_combo and not item.parent and item.product.type_flow != 18:
                     combo_parent = True
                     item_selling_price = 0
                     refund_amount = 0
@@ -345,7 +350,7 @@ class DiscountReportUtil:
 
                 try:
                     row_data = [
-                        order.id,order.candidate_id,item.partner.name,order.date_placed.date(),\
+                        order.id, order.ref_order_id, order.candidate_id, item.partner.name, order.date_placed.date(),
                         txn_obj.payment_date.date(),txn_obj.payment_date.time(),\
                         last_txn_obj.payment_date.date(),last_txn_obj.payment_date.time(),\
                         sales_user_info.get('executive',''),\

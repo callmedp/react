@@ -375,7 +375,25 @@ h2 {
     font-size: $font-size+3;
     color: $primary-color;
     text-align: center;
-    padding: 12px 25px;
+    padding: 12px 20px;
+}
+
+.blue_btn_option {
+    border-radius: 30px;
+    background-color: $white-color;
+    border: 1px solid $p-blue;
+    font-size: $font-size+3;
+    color: $p-blue;
+    text-align: center;
+    padding: 12px 15px;
+
+    &:hover {
+        color: $p-blue;
+    }
+
+    &:focus {
+        color: $p-blue;
+    }
 }
 
 .block-vcenter {
@@ -470,12 +488,20 @@ h2 {
         display: block;
     }
 
+    .fake-price{
+        display: inline-block;
+    }
+
     h4 {
-        font-size: $font-size+13;
+        font-size: $font-size+11;
         font-weight: $font-weight+300;
         color: $black-color;
         display: inline-block;
         margin-bottom: 0;
+    }
+
+    .redeem-view {
+        margin-left:10px;
     }
 }
 
@@ -1413,4 +1439,59 @@ input[type="button"] {
 
 .company-icons {
     max-width: 100px;
+}
+
+
+
+.price-box-vskill {
+  display: flex;
+  justify-content: space-between;
+
+  .hide-redeem {
+    display: none;
+  }
+}
+
+.flex-column {
+  flex-direction: column;
+
+  .hide-redeem {
+    display: block !important;
+  }
+}
+
+.tooltip-icon {
+  width: 15px;
+  height: 15px;
+  background: $p-blue;
+  color: $white-color;
+  font-style: italic;
+  font-weight: 700;
+  font-size: 12px;
+  border-radius: 100%;
+  display: inline-block;
+  text-align: center;
+  line-height: 15px;
+  margin-left: 5px;
+}
+
+.tooltip {
+  opacity: 1;
+  .tooltip-inner {
+    background-color: $white-color;
+    color: $primary-color;
+    line-height: 15px;
+    box-shadow: $shadow1;
+    opacity: 1;
+    text-align: left;
+    padding: 10px;
+    max-width: 300px;
+  }
+}
+
+.tooltip.top {
+  .tooltip-arrow {
+    border-top-color: $white-color;
+    color: $primary-color;
+  }
 }
