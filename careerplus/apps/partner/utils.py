@@ -620,8 +620,7 @@ class CertiticateParser:
                                 for index, field in enumerate(multiple_fields):
                                     setattr(data_instance, multiple_fields[index], val[index])
                             elif isinstance(multiple_fields, dict):
-                                for k, valuall_keys_for_parsed_datae in multiple_fields.items():
-                                    print(k, value)
+                                for k, value in multiple_fields.items():
                                     setattr(data_instance, k, val[value])
                             parse_data.__dict__[key + 's'].append(data_instance)
                     else:

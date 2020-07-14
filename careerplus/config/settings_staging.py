@@ -446,3 +446,20 @@ except:
 
 
 CANDIDATE_SOLR_URL = "http://172.22.65.34:9999/solr/cda/select/"
+
+
+RESUME_SHINE_MAIN_DOMAIN = 'https://resumestage.shine.com'
+
+'''
+links for analytics vidhya 
+'''
+ANALYTICS_VIDHYA_URL = {
+    'BASE_URL' : 'https://id.aifest.org',
+    'USERNAME' : 'rajila.madhavan@hindustantimes.com',
+    'PASSWORD' : 'shine123',
+    'ENROLLMENT' : '/api/enrollments/requests',
+    'STATUS' : '/api/enrollments/requests/{}'
+}
+'''
+link end
+'''

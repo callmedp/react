@@ -30,5 +30,7 @@ PAYMENT_MODE = (
     (12, "EPAYLATER"),
     (13, "PAYU"),
     (14, "Zest Money"),
-    (15, "Redeemed")
+    (15, 'RazorPay'),
+    (16, "Redeemed"),
+
 )

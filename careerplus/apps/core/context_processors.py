@@ -82,6 +82,7 @@ def common_context_processor(request):
         "SHINE_SITE": settings.SHINE_SITE,
         "SITE_DOMAIN": settings.SITE_DOMAIN,
         "MOBILE_SITE_DOMAIN": settings.SITE_DOMAIN,
+        'MAIN_DOMAIN_PREFIX' : settings.MAIN_DOMAIN_PREFIX,
         "SITE_PROTOCOL": settings.SITE_PROTOCOL,
         "cart_count": cart_count,
         "PRODUCT_GROUP_LIST": settings.PRODUCT_GROUP_LIST,

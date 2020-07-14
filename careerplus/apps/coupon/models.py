@@ -9,12 +9,14 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 
 from seo.models import AbstractAutoDate
+from shop.functions import get_upload_path_coupon
 
 from .choices import (
     COUPON_TYPES, CODE_LENGTH, CODE_CHARS,
     SEGMENTED_CODES, SEGMENT_LENGTH, SEGMENT_SEPARATOR,
     SITE_CHOICES, COUPON_SCOPE_CHOICES
 )
+
 
 
 class CouponManager(models.Manager):
@@ -74,6 +76,22 @@ class Coupon(AbstractAutoDate):
     valid_until = models.DateTimeField(
         _("Valid until"), blank=True, null=True,
         help_text=_("Leave empty for coupons that never expire"))
+
+    image = models.ImageField(
+        _('image'), upload_to=get_upload_path_coupon,
+        blank=True, null=True)
+
+    coupon_msg = models.CharField(
+        _("Message to be displayed"), max_length=60, null=True, blank=True,
+        help_text=_("This message will display when coupon limit exceeds"))
+
+    description = models.CharField(
+        _("Description to be displayed on mailers"), max_length=255, null=True, blank=True,
+        help_text=_("This will be display on description"))
+
+    mailers = models.BooleanField(default=False)
+
+
     campaign = models.ForeignKey(
         'Campaign',
         verbose_name=_("Campaign"),

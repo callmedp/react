@@ -1,9 +1,10 @@
-import json,logging
+import json,logging, requests, base64
 import datetime
 
 from decimal import Decimal
 
 from django.utils import timezone
+from django.conf import settings
 
 from cart.mixins import CartMixin
 from shop.views import ProductInformationMixin
@@ -11,8 +12,10 @@ from linkedin.models import Draft, Organization, Education
 from quizs.models import QuizResponse
 from wallet.models import Wallet
 from order.tasks import service_initiation
+from shop.choices import av_status_choices
+from django.core.mail import EmailMessage
 
-from .models import Order, OrderItem
+from .models import Order, OrderItem, AnalyticsVidhyaRecord
 from .functions import (
     update_initiat_orderitem_sataus, )
 
@@ -408,3 +411,106 @@ class OrderMixin(CartMixin, ProductInformationMixin):
                                 if parent_li.delivery_service:
                                     oi.delivery_service = parent_li.delivery_service
                                 oi.save()
+
+class AnalyticsVidhyaMixin(object):
+
+    TEAM_EMAILS = ["Nidhish Sharma<nidhish.sharma@hindustantimes.com>",
+                   "Priya Kharb<Priya.Kharb@hindustantimes.com> ",
+                   "Sahil Singla<sahil.singla@hindustantimes.com>",
+                   "Heena Afshan<heena.afshan@hindustantimes.com>"]
+
+    def get_api_header(self):
+        '''
+        generate header for analytics vidhya
+        '''
+        username = settings.ANALYTICS_VIDHYA_URL.get('USERNAME', '')
+        password = settings.ANALYTICS_VIDHYA_URL.get('PASSWORD', '')
+
+        if not username and not password:
+            return None
+
+        us_pd = "{}:{}".format(username, password)
+        b_us_pd = us_pd.encode('ascii')
+        b64_us_pd = base64.b64encode(b_us_pd)
+        b64_us_pd = b64_us_pd.decode('ascii')
+
+        authorization = "Basic {}".format(b64_us_pd)
+
+        headers = {"Authorization" : authorization}
+        return headers
+
+    def user_enrollment(self, data=None, orderItem=None):
+        if not data and not orderItem:
+            logging.getLogger('error_log').error('data is empty')
+            return False
+
+        base_url = settings.ANALYTICS_VIDHYA_URL.get('BASE_URL', '')
+        enrollment_url = settings.ANALYTICS_VIDHYA_URL.get('ENROLLMENT', '')
+
+        url = base_url + enrollment_url
+        headers = self.get_api_header()
+        try:
+            response = requests.post(url, data=data, headers=headers)
+            if response.status_code == 201:
+                logging.getLogger('info_log').info('request for user registeration is successful')
+            elif response.status_code == 401:
+                logging.getLogger('error_log').error('something wrong with'
+                    'authorization headers, contact Analytics Vidhya'
+                    'for user - {}'.format(data))
+                self.send_failure_mail(data, response.json())
+                return False
+            elif response.status_code == 400:
+                error = response.json().get('errors')
+                logging.getLogger('error_log').error('issue in json parsed - {}'.format(error))
+                self.send_failure_mail(data, response.json())
+                return False
+            else:
+                logging.getLogger('error_log').error('something wrong with'
+                    'response, contact Analytics Vidhya for user - {}'.format(data))
+                self.send_failure_mail(data, response.json())
+                return False
+        except Exception as e:
+            logging.getLogger('error_log').error('Unable to enroll the user,'
+                    'please try again, user - {}, errors - {}'.format(data,e))
+            self.send_failure_mail(data, e)
+            return False
+
+        data = response.json()
+        status = data.get('status', '')
+        product = data.get('product', {})
+        if not av_status_choices.get(status) and not data.get('id') and not product:
+                logging.getLogger('error_log').error('invalid enrollment status or id or product')
+                self.send_failure_mail(data, 'Invalid Response')
+                return False
+        data_dict = {
+            'AV_Id' : data.get('id'),
+            'order_item' : orderItem,
+            'status' :  av_status_choices.get(data.get('status')),
+            'status_msg' : data.get('status_msg',''),
+            'remarks' : data.get('remarks','')
+        }
+        try:
+            user = AnalyticsVidhyaRecord.objects.create(**data_dict)
+            if user:
+                logging.getLogger("info_log").info("user is added in analytics vidhya record")
+        except Exception as e:
+            logging.getLogger("error_log").error("Unable to add record - {}".format(data_dict))
+            self.send_failure_mail(data, e)
+            return False
+        return True
+
+    def send_failure_mail(self, data, errors):
+        '''
+        email sent in case of failure to enroll/status 
+        '''
+        html = """<html><title></title><body><h3>Issue with enrollment/status update for Analytics Vidhya for following user</h3><br>"""
+        for content in data:
+            html += """{} : {}<br>""".format(content , data.get(content))
+        html += """Error : {}<br>""".format(errors)
+        html += """Date : {}<br>""".format(datetime.datetime.now().strftime("%m/%d/%Y, %H:%M:%S"))
+        html += """</body></html>"""
+        email = EmailMessage(subject="Failure to enroll/status from Analytics Vidhya", body=html,
+                from_email=settings.DEFAULT_FROM_EMAIL, to=self.TEAM_EMAILS)
+        email.content_subtype = "html"
+        logging.getLogger('error_log').error('Failure to enroll/status from Analytics Vidhya for user - {}'.format(data))
+        return email.send()

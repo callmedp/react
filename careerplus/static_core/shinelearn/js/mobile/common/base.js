@@ -57,7 +57,7 @@ $(document).ready(function() {
 	$(window).on('scroll', function() {
 		var scroll = $(window).scrollTop();
 
-		if (scroll >= 460) {
+		if (scroll >= 530) {
 			$('#hide-second').addClass('remove-second');
 		} else {
 			$('#hide-second').removeClass('remove-second');

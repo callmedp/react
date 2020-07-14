@@ -186,6 +186,10 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
 
     pimgClass = indexes.CharField(model_attr='image_class', indexed=False)
 
+    # product Category slug
+    pCat = indexes.CharField(indexed=False)
+
+
     def get_model(self):
         return Product
 
@@ -1046,6 +1050,17 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_pBan(self, obj):
         return obj.get_banner_url()
+
+
+    def prepare_pCat(self, obj):
+
+        c_main =  obj.get_category_main()
+        if not c_main:
+            return
+        c_parent = c_main.get_parent()
+        if not c_parent:
+            return
+        return c_parent[0].slug if c_parent and c_parent[0] else None
 
 
     def prepare_pSec(self, obj):

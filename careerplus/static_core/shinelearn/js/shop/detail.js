@@ -210,6 +210,7 @@ $(document).ready(function () {
   // });
 
 
+<<<<<<< HEAD
   $('#login-button').click(function () {
     flag = $("#login_form").valid();
     if (flag) {
@@ -242,6 +243,44 @@ $(document).ready(function () {
       });
     }
   });
+=======
+    $('#login-button').click(function() {
+      flag = $("#login_form").valid();
+      if (flag){
+          var formData = $("#login_form").serialize();
+          $('#login-button').prop('disabled', true);
+          $.ajax({
+              url : "/article/login-to-comment/",
+              type: "POST",
+              data : formData,
+              async : false,
+              timeout : 30000,
+              error: function (jqXHR, textStatus, errorThrown)
+              {
+                  alert('Something went wrong. Try again later.');
+                  $('#login-button').prop('disabled', false);
+              },
+              success: function(data, textStatus, jqXHR)
+              {
+
+                  if (data.response == 'login_user'){
+                      var formData = $('#feedback-form').serialize();
+                      feedback_submit(formData)
+                      window.location.reload();
+                  }
+                  else if (data.response == 'error_pass'){
+                      var error_message = data.error_message;
+                      $('#non-field-error').text(error_message)
+                  }
+                  else if (data.response == 'form_validation_error'){
+                      $('#non-field-error').text('Please enter Valid Data')
+                  }
+                  $('#login-button').prop('disabled', false);
+              }
+          });
+      }
+    });
+>>>>>>> release_14072020
 
   var processing = false;
 
@@ -475,6 +514,7 @@ $(document).ready(function () {
     $('#review-tab').trigger('click');
   });
 
+<<<<<<< HEAD
   function getUrlVar(key) {
     var result = new RegExp(key + "=([^&]*)", "i").exec(window.location.search);
     return result && unescape(result[1]) || "";
@@ -538,6 +578,67 @@ function ajax_call(authen, prod_id) {
                 else {
                   first = first + '<figure class="blank-star"></figure>';
                 }
+=======
+function ajax_call(authen,prod_id){
+if(skill != false) {
+$.ajax({ url: "/api/v1/recommended-products/?skills=" +skill+"&product="+prod_id+"&page_size="+6,
+        type: "GET",
+          success: function(data, textStatus, jqXHR){
+          var count=((data.results).length);
+          var i;
+    if (count){
+        document.getElementById('heads').style.display="block";
+          var recom= "";
+                    if (authen) {
+                     recom+='<h2 class="detail-heading">Recommended products</h2>';
+                     }
+                     else{
+                     recom+='<h2 class="detail-heading">Related products</h2>';
+                     }
+                    recom+='<div class="row">'+
+                     '<ul class="listing">';
+
+         for(i=0;i<count;i++) {
+
+             var first = '<li class="col-sm-6 col-md-4">' +
+              '<a title="'+ (data.results[i].pHd).substring(0, 40)+'"class="box-panel" href="'+data.results[i].pURL+'">'+
+              '<div class="media">'+
+              '<div class="media-body">'+
+              '<h3 class="listing-heading">'
+              + data.results[i].pHd+ '</h3>'
+              +'<div class="rating-review-box">';
+                if (data.results[i].pRC){
+
+                         for (star in data.results[i].pStar){
+
+                               if (data.results[i].pStar[star] == "*"){
+                              first= first+'<figure class="full-star"></figure>' ;
+                              }
+                               else if(data.results[i].pStar[star] == "+" ){
+                                first=first+'<figure class="half-star"></figure>';
+                                }
+                               else{
+                                first=first+ '<figure class="blank-star"></figure>';
+                              }
+                        }
+                first = first + '<strong><small>'+ (data.results[i].pARx)+'</small>/5</strong>'
+                }
+             else{
+            first = first + '<strong>'+data.results[i].pBC+'</strong> people bought'
+            }
+            var second = '<span class="jobs-available"><strong>' + data.results[i].pNJ +'</strong> jobs available</span>'+
+             '</div>'+
+             '</div>' +
+             '<div class="media-left">'+
+             '<figure>'+
+             '<img class="img-responsive" src="'+data.results[i].pImg+'" alt="'+data.results[i].pImg+'">'+
+             '</figure>'+
+             '</div>'+
+             '</div>'+
+             '</a>'+
+             '</li>';
+             recom =recom + first + second;
+>>>>>>> release_14072020
               }
               first = first + '<strong><small>' + (data.results[i].avg_rating) + '</small>/5</strong>'
             }

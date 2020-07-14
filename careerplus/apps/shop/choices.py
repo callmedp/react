@@ -424,3 +424,18 @@ PRODUCT_TAG_CHOICES = (
     (2, 'Newly Added')
 
 )
+
+AV_STATUS_CHOICES = (
+    (0, 'new'),
+    (1, 'user_activation_pending'),
+    (2, 'enrollment_pending'),
+    (3, 'enrollment_done'),
+    (4, 'enrollment_error'),
+    )
+av_status_choices = dict(AV_STATUS_CHOICES)
+av_status_choices = { av_status_choices[k] : k for k in av_status_choices}
+
+SMS_URL_LIST = {
+    1 : "https://learning.shine.com/services/recruiter-connect/application-highlighter-3/pd-4117?utm_campaign=IVRCampaign",
+}
+

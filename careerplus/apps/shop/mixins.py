@@ -1,10 +1,14 @@
-import hashlib
+import hashlib, base64
+import logging, requests
 
 from django.conf import settings
 from django.core.cache import cache
+from datetime import datetime
 
 from shop.models import Product, Category
 from partner.models import Vendor
+from django.core.mail import EmailMessage
+from order.models import AnalyticsVidhyaRecord
 
 
 class CourseCatalogueMixin(object):
@@ -126,3 +130,4 @@ class LinkedinSeriviceMixin(object):
 					flag = True
 					break
 		return flag
+

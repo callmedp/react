@@ -1,5 +1,6 @@
 import json
 import logging
+import requests
 
 from datetime import datetime;
 from collections import OrderedDict
@@ -14,6 +15,7 @@ from django.http import (
     HttpResponsePermanentRedirect,
 )
 from django.urls import reverse
+from django.shortcuts import render
 from django.utils import timezone
 from django.core.cache import cache
 from django.utils.http import urlquote
@@ -54,7 +56,7 @@ from .mixins import (CourseCatalogueMixin, \
 from users.forms import (
     ModalLoginApiForm
 )
-from shop.choices import APPLICATION_PROCESS, BENEFITS, NEO_LEVEL_OG_IMAGES
+from shop.choices import APPLICATION_PROCESS, BENEFITS, NEO_LEVEL_OG_IMAGES, SMS_URL_LIST
 from review.forms import ReviewForm
 from .models import Skill
 from homepage.config import UNIVERSITY_COURSE
@@ -361,6 +363,12 @@ class ProductInformationMixin(object):
         initial_country = Country.objects.filter(phone='91')[0].phone
         return country_choices,initial_country
 
+    def get_sorted_products(self, pvrs_data):
+        if pvrs_data.get("var_list"):
+                sort_pvrs = sorted(pvrs_data.get('var_list'), key = lambda i: i['inr_price'])
+                pvrs_data['var_list'] = sort_pvrs
+        return pvrs_data
+
     def get_product_information(self, product, sqs, product_main, sqs_main):
         pk = product.pk
         ctx = {}
@@ -379,6 +387,7 @@ class ProductInformationMixin(object):
         if sqs.pPc == 'course':
             ctx.update(json.loads(sqs_main.pPOP))
             pvrs_data = json.loads(sqs.pVrs)
+            pvrs_data = self.get_sorted_products(pvrs_data)
             try:
                 selected_var = pvrs_data['var_list'][0]
             except Exception as e:
@@ -424,6 +433,7 @@ class ProductInformationMixin(object):
                 ctx['canonical_url'] = product.get_parent_canonical_url()
             ctx.update(json.loads(sqs_main.pPOP))
             pvrs_data = json.loads(sqs.pVrs)
+            pvrs_data = self.get_sorted_products(pvrs_data)
             ctx.update(pvrs_data)
         if self.is_combos(sqs):
             ctx.update(json.loads(sqs.pCmbs))
@@ -433,7 +443,6 @@ class ProductInformationMixin(object):
         ctx['domain_name'] = '{}//{}'.format(settings.SITE_PROTOCOL, settings.SITE_DOMAIN)
         if getattr(product, 'vendor', None):
             ctx.update({'prd_vendor_slug': product.vendor.slug})
-
         ctx.update({'sqs': sqs})
         ctx.update({'get_fakeprice': get_fakeprice})
         ctx['meta'] = product.as_meta(self.request)
@@ -824,6 +833,17 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
     #         sender=self, product=product, user=request.user, request=request,
     #         response=response)
 
+    def redirect_for_resume_shine(self, path_info):
+        pk = path_info.get("pk", "")
+        cat_slug = 'product'
+        prd_slug = path_info.get('prd_slug')
+       
+        if(path_info.get('cat_slug') == 'linkedin-profile-writing'):
+            cat_slug = path_info.get("cat_slug", "")
+        
+        expected_path = "{}/{}/{}/{}".format(settings.RESUME_SHINE_MAIN_DOMAIN,cat_slug, prd_slug,pk)
+        return HttpResponsePermanentRedirect(expected_path)
+
     def return_http404(self, sqs_obj):
         if sqs_obj.count() == 1:
             return False
@@ -841,11 +861,23 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             return redirect_url
 
     def get(self, request, **kwargs):
+        path_info = kwargs
+        root=request.GET.get('root')
+        mobile=request.GET.get('mobile')
+        campaign = request.GET.get('utm_campaign')
+        if root == 'interested_mail':
+            logging.getLogger('info_log').info('interested user clicked product "{}" having id-{}, mobile number is "{}", under campaign "{}"'.format(path_info.get('prd_slug'),path_info.get("pk", ""), mobile, campaign))
         useragent = self.request.META['HTTP_USER_AGENT']
         if 'facebookexternalhit' not in useragent:
             redirect_url = self.redirect_for_neo(request)
             if redirect_url:
                 return HttpResponsePermanentRedirect(redirect_url)
+        path_info = kwargs
+
+        # uncomment when resume.shine is live
+        # if request.path.split('/')[1] == 'services':
+        #     resume_shine_redirection = self.redirect_for_resume_shine(path_info)
+        #     return resume_shine_redirection
         pk = self.kwargs.get('pk')
         self.prd_key = 'detail_db_product_'+pk
         self.prd_solr_key = 'detail_solr_product_'+pk
@@ -1298,4 +1330,71 @@ class SkillToProductRedirectView(View):
         else:
             url_ro_rirect = '/search/results/?fvid=59'
         return HttpResponseRedirect(url_ro_rirect)
+
+class GoogleResumeAdView(View):
+
+    def get(self, request, *args, **kwargs):
+        cat_slugs = ['resume-services','linkedin-profile']
+        countries = ['india','gulf']
+        country = kwargs.get('country', 'india')
+        cat_slug = kwargs.get('cat_slug', 'resume-services')
+        pre_register = self.request.GET.get('pre-register', "False")
+        site_slug = None
+        if cat_slug not in cat_slugs or country not in countries:
+            raise Http404
+        if country == "gulf":
+            currency = "AED"
+            add_on_cost = {"cover_letter":"145","express_delivery":"145","s_express_delivery":"200"}
+            if cat_slug == "resume-services":
+                service_cost = {"0_1exp":"250", "1_4exp":"400", "4_8exp":"575",
+                    "8_15exp":"735", "15_exp":"900"}
+                template = 'shop/resume-ad-services.html'
+                site_slug = "linkedin-profile"
+            elif cat_slug == "linkedin-profile":
+                service_cost = {"0_1exp":"300", "1_4exp":"450", "4_8exp":"600",
+                    "8_15exp":"750", "15_exp":"950"}
+                template = 'shop/resume-ad-linkedin.html'
+                site_slug = "resume-services"
+        elif country == "india":
+            currency = "INR"
+            add_on_cost = {"cover_letter":"550","express_delivery":"1099","s_express_delivery":"1609"}
+            if cat_slug == "resume-services":
+                service_cost = {"0_1exp":"1299", "1_4exp":"2199", "4_8exp":"2999",
+                    "8_15exp":"3999", "15_exp":"4999"}
+                template = 'shop/resume-ad-services.html'
+                site_slug = "linkedin-profile"
+            elif cat_slug == "linkedin-profile":
+                service_cost = {"0_1exp":"2200", "1_4exp":"2500", "4_8exp":"3600",
+                    "8_15exp":"4600", "15_exp":"5600"}
+                template = 'shop/resume-ad-linkedin.html'
+                site_slug = "resume-services"
+        site_link = '{}/services/{}/{}/?pre-register={}'.format(settings.MAIN_DOMAIN_PREFIX, site_slug, country, str(pre_register))
+        content = {
+            "currency" : currency,
+            "country" : country,
+            "site_link" : site_link,
+            "service_cost" : service_cost,
+            "country" : country,
+            "pre_register" : bool(eval(pre_register)),
+            "experience_range" : range(0,16),
+            "add_on_cost" : add_on_cost,
+            "crm_lead_link" : '{}/api/v1/googleAd-lead-creation/'.format(settings.SHINECPCRM_DICT.get('base_url')) 
+        }
+        return render(request, template, context=content)
+        
+class SmsUrlRedirect(View):
+
+    def get(self, request, *args, **kwargs):
+        url_id = int(kwargs.get('url_id',1))
+        encoded_mobile = kwargs.get('encoded_mobile', '')
+
+        if not encoded_mobile:
+            return HttpResponsePermanentRedirect(settings.MAIN_DOMAIN_PREFIX)
+
+        mobile = int(encoded_mobile, 16)
+        logging.getLogger('info_log').info("SMS link was opened by mobile number- {}".format(mobile))
+        url = SMS_URL_LIST.get(url_id, '')
+        if not url:
+            return HttpResponsePermanentRedirect(settings.MAIN_DOMAIN_PREFIX)
+        return HttpResponsePermanentRedirect(url)
 
