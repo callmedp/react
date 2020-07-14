@@ -43,8 +43,21 @@
                                     Enroll now
                                 {% endif %}
                                 </a>
-
+                                
+                                
                     </li>
+                    {% if redeem_test %}
+                     <li>
+                                <div class="hide-redeem">
+                                    <button class="btn btn-outline" id="redeem_test" prod-id="{{sqs.id}}" redeem-option="{{redeem_option}}">Redeem now</button>
+                                    <span class="tooltip">
+                                        <i>i</i>
+                                        <span class="tooltiptext" id="tooltiptext-prd-mob">You have {{product_redeem_count}} free practice test (Assessment) as you're a Shine Premium User</span>
+                                    </span>
+                                </div>
+                            
+                     </li>
+                     {% endif %}
                     {% endif %}
                 {% endif %}
 

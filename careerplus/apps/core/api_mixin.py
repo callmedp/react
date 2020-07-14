@@ -564,7 +564,7 @@ class AmcatApiMixin(object):
         api_url = settings.VENDOR_URLS['amcat']['get_autologin_url']
         headers = self.get_headers(data, api_url, 'POST')
         resp = requests.post(api_url, data=data, headers=headers)
-        if resp.status_code == 200:
+        if resp.status_code == 200 and resp.json()['data']:
             resp = resp.json()
             autologin_url = resp['data']['autoLoginUrl']
             logging.getLogger('info_log').info(
