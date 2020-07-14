@@ -183,6 +183,17 @@ datalist {
   }
 }
 
+.config-tag {
+  border-radius: 3px;
+  background-color: #ff0000;
+  padding: 2px 6px 1px;
+  color:#ffffff;
+  font-size: 10px;
+  font-weight: 600;
+  position: relative;
+  top: -12px;
+}
+
 .navbar-right > li > a {
   padding-bottom: 0;
 }

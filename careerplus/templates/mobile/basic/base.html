@@ -103,8 +103,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="wrapper">
             {% if show and offer_home%}
                 <div class="offer" id="offer-widget">
-                    <span class="close" id="close-offer"></span>
-                    <p class="pb-0" id="enroll-now">
+                    <span class="close" id="close-offer" onclick="gaOffer_sticky_close()"></span>
+                    <p class="pb-0" id="enroll-now" onclick="gaOffer_popup()">
                         {{sticky_text}}- <strong>{{offer_value}} <br/> Ends in <span id = 'sticky_timer_mobile'></span> - </strong> 
                         <a href="javascript:void(0)" class="offer--link">Enroll Now!</a> 
                     </p>
@@ -127,7 +127,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                    <div class="pull-right">
                         <!--a class="icon-search pull-left " href="search-listing.html">search</a-->
                         {% if show and offer_home%}
-                            <a class="icon-offers" id="icon_offer" style="display: none;" href="javascript:void(0)"></a>
+                            <a class="icon-offers" id="icon_offer" style="display: none;" href="javascript:void(0)" onclick="gaOffer_popup()"></a>
                         {% endif %}
                         <a class="icon-cart" href="{% url "cart:payment-summary" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
                    </div><!-- / Right side Icon ends here -->
@@ -154,7 +154,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
         <div class="new-enquire offer-modal" id="open-offer"> 
             <div class="container pt-0">
-                <span class="close" id="close-offer-modal"></span>
+                <span class="close" id="close-offer-modal" onclick="gaPopup_close()"></span>
                 <div class="offer-modal--image">
                     <div class="content-box">
                         <div class="offer-modal--head">{{ banner_text }} - <strong>{{ offer_value }}</strong></div>
@@ -189,7 +189,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                             <li class="form-group input-effect">
                                 <input type="text" id="name" name="name" value="{{request.session.full_name}}" 
                                     class="form--control animation-input {% if request.session.full_name %}has-content{% endif %}" 
-                                    placeholder="">
+                                    placeholder="" onfocus="gaForm_fill()">
                                 <label for="name">Name</label>
                                 <span class="mgs"></span>
                             </li>
@@ -251,7 +251,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                                 <span id = "checkbox_error" class="mgs"></span>
                             </li>
                             <li>
-                                <button class="btn btn-round btn-blue w100 semi-bold" type="submit" id="open-thanks">Avail offer now!</button>
+                                <button class="btn btn-round btn-blue w100 semi-bold" type="submit" id="open-thanks" onclick="gaAvail_offer()">Avail offer now!</button>
                             </li>
                             <li class="fs-12 c9 text-center mt-10">*T&C applied, valid only on select courses</li>
                             <input type="hidden" name="product_offer" value="True">

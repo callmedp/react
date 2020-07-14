@@ -177,3 +177,33 @@ class HomePageOffer(AbstractAutoDate):
     def get_active_offer(self):
         active_offer = HomePageOffer.objects.filter(is_active=True).first()
         return active_offer
+
+
+class NavigationSpecialTag(AbstractAutoDate):
+    display_name = models.CharField(
+        _('Display Name'), max_length=25, blank=False, unique=True)
+    skill_page_url = models.CharField(
+        _('URL of Skill Page'), max_length=60, blank=True)
+    tag = models.CharField(
+        _('Tag on Display Name '), max_length=100,blank=True, null=True, 
+            help_text=("For eg. 'New\' or 'Limited time offer\'"))
+    icon = models.ImageField(
+        _('Mobile Icon'), upload_to="images/mobile/homepage/", blank=True, null=True)
+    is_active = models.BooleanField(
+        _('Active'), default=False)
+
+    class Meta:
+        ordering = ['-modified' ,]
+
+    def __str__(self):
+        return 'NavTag-' + str(self.id)
+
+    def get_active_navlink(self):
+        active_navlink = list(NavigationSpecialTag.objects.filter(is_active=True))
+        nav_list = []
+        if len(active_navlink):
+            if len(active_navlink) >= 2:
+                return list(active_navlink[:2])
+            nav_list.append(active_navlink[0])
+        return nav_list
+        

@@ -1,6 +1,7 @@
 from django.contrib import admin
 
-from .models import TopTrending, TrendingProduct, Testimonial, StaticSiteContent, HomePageOffer
+from .models import TopTrending, TrendingProduct, Testimonial, StaticSiteContent, HomePageOffer, NavigationSpecialTag
+from console.shop_form import SpecialTagsForm
 
 
 class TrendingProductInline(admin.TabularInline):
@@ -34,11 +35,16 @@ class HomePageOfferAdmin(admin.ModelAdmin):
     list_filter = ('is_active',)
     search_fields = ('name',)
 
+class SpecialTagsAdmin(admin.ModelAdmin):
+    form = SpecialTagsForm
+    list_display = ['id','display_name','tag','is_active']
+    list_filter = ('is_active',)
+    search_fields = ('display_name',)
 
 # admin.site.register(TrendingProduct, TrendingProductAdmin)
 admin.site.register(TopTrending, TopTrendingAdmin)
 admin.site.register(Testimonial, TestimonialAdmin)
 admin.site.register(StaticSiteContent)
 admin.site.register(HomePageOffer ,HomePageOfferAdmin)
-
+admin.site.register(NavigationSpecialTag, SpecialTagsAdmin)
 
