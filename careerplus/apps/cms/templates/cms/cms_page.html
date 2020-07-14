@@ -17,6 +17,7 @@
         <link type="text/scss" href="{% static 'shinelearn/css/cms/cms.scss' %}" rel="stylesheet">
         <link type="text/css" href="{% static 'shinelearn/css/cms/extra.css' %}" rel="stylesheet">
         <link type="text/css" href="{% static 'shinelearn/css/common/typeaheadjs.css' %}" rel="stylesheet">
+        <link type="text/scss" href="{% static 'shinelearn/css/cms/faq.scss' %}" rel="stylesheet">
         {% endcompress %}
     {% endblock css_section %}
     {% block banner_ads %}{% endblock banner_ads %}
@@ -116,6 +117,7 @@
                             </div>
                         </div>
                     </div><!-- /. white-box -->
+                    <a id="top-page" class="top-on-page" href="#top">Top</a>
         </div>
         <!-- right content end -->
 
@@ -271,6 +273,7 @@
    <script src="{% static 'shinelearn/js/cms/cms.js' %}"></script>
    <script src="{% static 'shinelearn/js/blog/login-register.js' %}"></script>
    <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
+   <script type="text/javascript" src="{% static 'shinelearn/js/cms/gotoTop.js' %}"></script>
     {% endcompress %}
 <script>
         $('.icon-downlod, .download-icon').on('click', function() {
