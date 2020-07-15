@@ -199,6 +199,7 @@ urlpatterns += [
                    re_path(r'^console/', include('console.urls', namespace='console')),
                    re_path(r'^shine/', include('shine.urls', namespace='shine')),
                    re_path(r'^shop/', include('shop.urls', namespace='shop')),
+                   re_path(r'^', include('shop.urls', namespace='shop')),
                    re_path(r'^user/', include('users.urls', namespace='users')),
                    re_path(r'^cms/', include('cms.urls', namespace='cms')),
                    re_path(r'^article/', include('blog.urls', namespace='blog')),

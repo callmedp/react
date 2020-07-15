@@ -1398,3 +1398,5 @@ class SmsUrlRedirect(View):
             return HttpResponsePermanentRedirect(settings.MAIN_DOMAIN_PREFIX)
         return HttpResponsePermanentRedirect(url)
 
+class AnalyticsVidhyaProductView(TemplateView):
+    template_name = 'shop/analytics-vidhya.html'
