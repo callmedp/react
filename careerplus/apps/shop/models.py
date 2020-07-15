@@ -1292,7 +1292,7 @@ class Product(AbstractProduct, ModelMeta):
             )
         elif self.is_service or self.is_writing:
             if self.get_category_main(no_cache):
-                return '%s for %s - Online Services' % (
+                return '%s for %s - Shine Resume' % (
                     self.get_category_main(no_cache).name,
                     EXP_DICT.get(self.get_exp(), ''),
                 )
