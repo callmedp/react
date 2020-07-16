@@ -6,6 +6,9 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.utils import timezone
+from django.core.cache import cache
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 # local imports
 from .config import PAGECHOICES, STATIC_PAGE_NAME_CHOICES
@@ -206,4 +209,10 @@ class NavigationSpecialTag(AbstractAutoDate):
                 return list(active_navlink[:2])
             nav_list.append(active_navlink[0])
         return nav_list
+
+@receiver(post_save, sender=NavigationSpecialTag)
+def latest_active_link_fetch(sender, instance, created, **kwargs):
+    data = NavigationSpecialTag().get_active_navlink()
+    cache.set('active_homepage_navlink', data, 24*60*60)
+
         

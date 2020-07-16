@@ -187,7 +187,12 @@ def get_home_offer_values():
     return end_date, sticky_text, banner_text, offer_value, show
 
 def get_navlink_values():
-    active_navlinks = NavigationSpecialTag().get_active_navlink()
+    special_link = cache.get('active_homepage_navlink')
+    if special_link:
+        active_navlinks = special_link
+    else:
+        active_navlinks = NavigationSpecialTag().get_active_navlink()
+        cache.set('active_homepage_navlink', active_navlinks, 24*60*60)
     navlink_1, navlink_2 = "", ""
     if active_navlinks:
         if len(active_navlinks) >= 2:
