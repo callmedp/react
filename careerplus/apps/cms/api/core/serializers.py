@@ -314,7 +314,9 @@ class PageSerializer(serializers.ModelSerializer):
         if comment:
             data.update({'comments': comment})
         if document:
-            data.update({'document': document.doc.url})
+            data.update(
+                {'document': document.doc.url if document.doc and
+                 document.doc.url else ''})
         return data
     #
 
