@@ -429,6 +429,18 @@ class SkillProductView(APIView):
         if not skill_list:
             return Response({'data':'Not Product Found'},status=status.HTTP_200_OK)
 
+        WhatYouGet = {
+            'testpreptraining':[
+            "Receive valuable feedback, from reliable exam reports, on your strong and weak areas",
+            "Get real exam and practice environment",
+            "In depth and exhaustive explanation to every question to enhance your learning",
+                "Unlimited access to the assessment platform",
+                "500+ questions to test your learning on variety of topics",
+                "Gets Tips & Tricks to crack the test",
+            ],
+        }
+
+
         if assessment:
             filter_dict.update({'type_flow':16})
 
@@ -436,12 +448,40 @@ class SkillProductView(APIView):
                                                                                                   flat=True)
         products = Product.objects.filter(id__in=product_id,**filter_dict)
 
-        data = [ {'id':prod.id,'heading':prod.get_heading(),'title':prod.get_title(),'url':prod.get_url(),
+        data =[]
+
+        for prod in products:
+            data_dict ={}
+            data_dict.update({'id':prod.id,'heading':prod.get_heading(),'title':prod.get_title(),'url':prod.get_url(),
                   'icon':prod.get_icon_url(),'about':prod.get_about(),'inr_price':prod.get_price(),
                   'fake_inr_price':prod.fake_inr_price,'attribute':prod.get_assessment_attribute(),
-                  'vendor':prod.vendor_id }
-                 for prod in
-                 products ]
+                  'vendor':prod.vendor_id})
+            if prod.type_flow == 16:
+                if not prod.vendor:
+                    data_dict.update({
+                        'what_you_get':[
+                    "Industry recognized certification after clearing the test",
+                        "Get badge on shine.com and showcase your knowledge to the recruiters",
+                        "Shine shows your skills as validated and certification as verified which build high trust "
+                        "among recruiters",
+                        "Receive valuable feedback on your strong and weak areas to improve yourself",
+                        "Certified candidates gets higher salary as compared to non certified candidate"
+                    ]
+                    })
+                else:
+
+                    data_dict.update({
+                        'what_you_get':WhatYouGet.get(prod.vendor.slug,[
+                        "Industry recognized certification after clearing the test",
+                            "Get badge on shine.com and showcase your knowledge to the recruiters",
+                            "Shine shows your skills as validated and certification as verified which build high trust "
+                            "among recruiters",
+                            "Receive valuable feedback on your strong and weak areas to improve yourself",
+                            "Certified candidates gets higher salary as compared to non certified candidate"
+                        ])
+                    })
+
+            data.append(data_dict)
 
         return Response({'data':data},status=status.HTTP_200_OK)
 
