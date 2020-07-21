@@ -426,9 +426,6 @@ class SkillProductView(APIView):
 
             skill_list +=skills
 
-        print(skill_list)
-
-
         if not skill_list:
             return Response({'data':'Not Product Found'},status=status.HTTP_200_OK)
 
@@ -441,7 +438,9 @@ class SkillProductView(APIView):
 
         data = [ {'id':prod.id,'heading':prod.get_heading(),'title':prod.get_title(),'url':prod.get_url(),
                   'icon':prod.get_icon_url(),'about':prod.get_about(),'inr_price':prod.get_price(),
-                  'fake_inr_price':prod.fake_inr_price,'attribute':prod.get_assessment_attribute() } for prod in
+                  'fake_inr_price':prod.fake_inr_price,'attribute':prod.get_assessment_attribute(),
+                  'vendor':prod.vendor_id }
+                 for prod in
                  products ]
 
         return Response({'data':data},status=status.HTTP_200_OK)
