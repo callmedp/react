@@ -389,7 +389,24 @@ class FeatureProfileUtil:
         SendSMS().send(sms_type=mail_type, data=data)
                     
 
-
-
-
-
+class BadgeAnalyticsVidhya:
+    
+    def badge_user_for_analytics_vidhya(self, av_id=None):
+        from .models import AnalyticsVidhyaRecord
+        if av_id:
+            oi = AnalyticsVidhyaRecord.objects.filter(AV_Id=av_id).first().order_item
+            if oi:
+                candidate_id = oi.order.candidate_id
+                data = BadgingMixin().get_badging_data(
+                    candidate_id=candidate_id, curr_order_item=oi, feature=True
+                )
+                flag = BadgingMixin().update_badging_data(candidate_id=candidate_id, data=data)
+                if flag:
+                    logging.getLogger('info_log').info(
+                        'Analytics Vidya Badging data is done for OrderItem  %s is %s' % (str(oi.id), str(data))
+                    )
+                    return True
+                else:
+                    logging.getLogger('error_log').error('Analytics Vidya Badging data failed, Error: %s' % (str(e)))
+                    return False
+        return False

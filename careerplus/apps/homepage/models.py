@@ -6,6 +6,9 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.utils import timezone
+from django.core.cache import cache
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 
 # local imports
 from .config import PAGECHOICES, STATIC_PAGE_NAME_CHOICES
@@ -177,3 +180,5 @@ class HomePageOffer(AbstractAutoDate):
     def get_active_offer(self):
         active_offer = HomePageOffer.objects.filter(is_active=True).first()
         return active_offer
+
+        
