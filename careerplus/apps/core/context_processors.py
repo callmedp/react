@@ -191,7 +191,8 @@ def get_navlink_values():
     if special_link:
         active_navlinks = special_link
     else:
-        active_navlinks = NavigationSpecialTag().get_active_navlink()
+        data_obj_list = list(NavigationSpecialTag().get_active_navlink())
+        active_navlinks  = NavigationSpecialTag().convert_data_in_list(data_obj_list)
         cache.set('active_homepage_navlink', active_navlinks, 24*60*60)
     navlink_1, navlink_2 = "", ""
     if active_navlinks:

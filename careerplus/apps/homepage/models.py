@@ -201,18 +201,32 @@ class NavigationSpecialTag(AbstractAutoDate):
     def __str__(self):
         return 'NavTag-' + str(self.id)
 
-    def get_active_navlink(self):
-        active_navlink = list(NavigationSpecialTag.objects.filter(is_active=True))
+    @classmethod
+    def get_active_navlink(cls):
+        active_navlink = NavigationSpecialTag.objects.filter(is_active=True)
         nav_list = []
-        if len(active_navlink):
-            if len(active_navlink) >= 2:
-                return list(active_navlink[:2])
-            nav_list.append(active_navlink[0])
+        if active_navlink.count():
+            return active_navlink[:2]
         return nav_list
 
-@receiver(post_save, sender=NavigationSpecialTag)
-def latest_active_link_fetch(sender, instance, created, **kwargs):
-    data = NavigationSpecialTag().get_active_navlink()
-    cache.set('active_homepage_navlink', data, 24*60*60)
+    @classmethod
+    def convert_data_in_list(cls, data):
+        if data:
+            link_info = [{
+                'display_name': link.display_name,
+                'skill_page_url': link.skill_page_url,
+                'tag': link.tag,
+                'icon': link.icon
+            } for link in data]
+            return link_info
+        return []
+
+    @classmethod
+    def post_save_data(cls, sender, instance, created, **kwargs):
+        data_obj_list = list(cls.get_active_navlink())
+        data = cls.convert_data_in_list(data_obj_list)
+        cache.set('active_homepage_navlink', data, 24*60*60)
+    
+post_save.connect(NavigationSpecialTag.post_save_data, sender=NavigationSpecialTag)
 
         
