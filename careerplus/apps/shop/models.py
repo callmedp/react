@@ -1201,6 +1201,21 @@ class Product(AbstractProduct, ModelMeta):
             return cached_data
         return self.category_main
 
+
+    def get_about(self):
+        if self.about:
+            try:
+                from bs4 import BeautifulSoup
+                soup = BeautifulSoup(self.about, 'html.parser')
+                strpcontent = soup.get_text()
+            except Exception as e:
+                logging.getLogger('error_log').error(str(e))
+                strpcontent = self.about
+            return strpcontent
+        return ''
+
+
+
     def category_attached(self):
         main_prod_cat = self.categories.filter(
             productcategories__is_main=True,

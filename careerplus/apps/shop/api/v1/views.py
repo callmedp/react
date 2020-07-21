@@ -6,6 +6,8 @@ from django.core.cache import cache
 from django.core.exceptions import PermissionDenied
 from django.views.decorators.csrf import csrf_protect
 from django.utils.decorators import method_decorator
+from django.conf import settings
+
 
 
 # local imports
@@ -20,8 +22,7 @@ from django.contrib.contenttypes.models import ContentType
 from .tasks import delete_from_solr, update_practice_test_info
 
 # interapp imports
-from shop.models import (Product, ProductScreen, PracticeTestInfo, 
-                    Skill, FunctionalArea)
+from shop.models import (Product, ProductScreen, PracticeTestInfo, Skill, FunctionalArea)
 from shared.permissions import HasGroupOrHasPermissions
 from shop.api.core.permissions import IsVendorAssociated
 from shared.rest_addons.mixins import FieldFilterMixin
@@ -33,7 +34,7 @@ from skillpage.api.v1.serializers import LoadMoreSerializerSolr
 from shared.rest_addons.pagination import LearningCustomPagination
 from shared.rest_addons.mixins import FieldFilterMixin
 from review.models import Review
-from django.conf import settings
+from partner.models import Certificate
 
 
 # 3rd party imports
@@ -382,3 +383,51 @@ class ProductReview(APIView):
                 return Response({'error':'Something went Wrong'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         except:
             return Response({'error' : 'Something went Wrong'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
+class SkillProductView(APIView):
+    authentication_classes = ()
+    permission_classes = ()
+
+    def get(self,request,*args,**kwargs):
+        certificate_id =  self.request.GET.get('cert_id')
+        skills = self.request.GET.get('skills',[])
+        assessment = self.request.GET.get('assessment')
+        skill_list = []
+        filter_dict = {'active':True,'is_indexed':True,'is_indexable':True}
+
+        if certificate_id:
+            certificate_id = certificate_id.split(',')
+            skill_list = Certificate.objects.filter(id__in=certificate_id).values_list('skill')
+
+        if skills:
+            skills = skills.split(',')
+            skill_list +=skills
+
+
+        if not skills:
+            return Response({'data':'Not Product Found'},status=status.HTTP_200_OK)
+
+        if assessment:
+            filter_dict.update({'type_flow':16})
+
+        product_id = ProductSkill.objects.filter(skill__name__in=skill_list,active=True).values_list('product_id')
+        products = Product.objects.filter(id__in=product_id)
+
+        data = [ {'id':prod.id,'heading':prod.get_heading(),'title':prod.get_title(),'url':prod.get_url(),
+                  'icon':prod.get_icon_url(),'about':prod.get_about(),'inr_price':prod.get_price(),
+                  'fake_inr_price':prod.get_fakeprice() } for prod in products ]
+
+        return Response({'data':data},status=status.HTTP_200_OK)
+
+
+
+
+        
+
+
+
+
+
+
