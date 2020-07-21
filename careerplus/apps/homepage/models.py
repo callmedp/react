@@ -188,8 +188,8 @@ class NavigationSpecialTag(AbstractAutoDate):
     skill_page_url = models.CharField(
         _('URL of Skill Page'), max_length=60, blank=True)
     tag = models.CharField(
-        _('Tag on Display Name '), max_length=100,blank=True, null=True, 
-            help_text=("For eg. 'New\' or 'Limited time offer\'"))
+        _('Tag on Display Name (Optional)'), max_length=100,blank=True, null=True, 
+            help_text=("For eg. 'New\' or 'Limited time offer\'. Recommended 'New\' only"))
     icon = models.ImageField(
         _('Mobile Icon'), upload_to="images/mobile/homepage/", blank=True, null=True)
     is_active = models.BooleanField(
