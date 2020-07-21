@@ -1586,6 +1586,17 @@ class Product(AbstractProduct, ModelMeta):
         else:
             return delivery_services.none()
 
+
+    def get_assessment_attribute(self):
+        detail = {}
+        if self.product_class.name == 'assessment':
+            objs = self.productattributes.filter(active=True)
+            for obj in objs:
+                detail[obj.attribute.name] = obj.value
+            return detail
+
+
+
     def get_exp(self):
         # for code return
         if self.is_writing:
