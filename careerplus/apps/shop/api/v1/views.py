@@ -417,7 +417,7 @@ class SkillProductView(APIView):
 
         if certificate_id:
             certificate_id = certificate_id.split(',')
-            skill_list = list(Certificate.objects.filter(id__in=certificate_id).values_list('skill'))
+            skill_list = list(Certificate.objects.filter(id__in=certificate_id).values_list('skill',flat=True))
 
             skill_list = list(map(slugify,skill_list))
 
@@ -435,7 +435,8 @@ class SkillProductView(APIView):
         if assessment:
             filter_dict.update({'type_flow':16})
 
-        product_id = ProductSkill.objects.filter(skill__slug__in=skill_list,active=True).values_list('product_id')
+        product_id = ProductSkill.objects.filter(skill__slug__in=skill_list,active=True).values_list('product_id',
+                                                                                                  flat=True)
         products = Product.objects.filter(id__in=product_id,**filter_dict)
 
         data = [ {'id':prod.id,'heading':prod.get_heading(),'title':prod.get_title(),'url':prod.get_url(),
