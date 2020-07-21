@@ -81,7 +81,7 @@ def update_initiat_orderitem_sataus(order=None):
                     last_oi_status = oi.oi_status
                     if oi.product.sub_type_flow == 502:
                         oi.oi_status = 23
-                    elif oi.product.sub_type_flow == 503:
+                    elif oi.product.sub_type_flow in [503, 504]:
                         oi.oi_status = 5
                     else:
                         oi.oi_status = 2
@@ -287,13 +287,23 @@ def process_application_highlighter(obj=None):
             last_oi_status=last_oi_status,
             assigned_to=obj.assigned_to
         )
-        obj.orderitemoperation_set.create(
+        if obj.product.sub_type_flow == 504 : 
+            obj.orderitemoperation_set.create(
+            oi_status=38,
+            last_oi_status=23,
+            assigned_to=obj.assigned_to)
+
+            obj.oi_status = 38
+
+        else :    
+            obj.orderitemoperation_set.create(
             oi_status=30,
             last_oi_status=23,
             assigned_to=obj.assigned_to)
 
+            obj.oi_status = 30
+            
         last_oi_status = 23
-        obj.oi_status = 30  # approved
         obj.last_oi_status = last_oi_status
         obj.approved_on = timezone.now()
         obj.save()

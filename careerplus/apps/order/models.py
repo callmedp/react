@@ -1169,7 +1169,7 @@ class OrderItem(AbstractAutoDate):
         self.oi_status = 4 if orderitem and orderitem.oi_status == 4 else self.oi_status
         # handling combo case getting parent and updating child
         self.update_pause_resume_service(orderitem)
-        obj = super().save(*args, **kwargs)  # Call the "real" save() method.       
+        obj = super(OrderItem, self).save(*args, **kwargs)  # Call the "real" save() method.       
         self.upload_service_resume_shine(orderitem)
         
         return obj 
@@ -1218,9 +1218,11 @@ class OrderItem(AbstractAutoDate):
     @classmethod
     def post_save_product(cls, sender, instance, **kwargs):
         # automate application highlighter/priority applicant
+      
         if instance.is_combo and not instance.parent:
             jobs_on_the_move_item = instance.order.orderitems.filter(product__sub_type_flow=502)
             priority_applicant_items = instance.order.orderitems.filter(product__sub_type_flow=503)
+            top_applicant_items = instance.order.orderitems.filter(product__sub_type_flow=504)
 
             for i in jobs_on_the_move_item:
                 from order.tasks import process_jobs_on_the_move
@@ -1228,12 +1230,15 @@ class OrderItem(AbstractAutoDate):
 
             for i in priority_applicant_items:
                 process_application_highlighter(i)
+            
+            for i in top_applicant_items:
+                process_application_highlighter(i)
 
         elif instance.product.sub_type_flow == 502:
             from order.tasks import process_jobs_on_the_move
             process_jobs_on_the_move.delay(instance.id)
 
-        if instance.product.sub_type_flow == 503:
+        if instance.product.sub_type_flow in [503, 504]:
             process_application_highlighter(obj=instance)
 
 post_save.connect(OrderItem.post_save_product, sender=OrderItem)

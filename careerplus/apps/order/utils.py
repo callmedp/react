@@ -280,11 +280,11 @@ class FeatureProfileUtil:
             return False
         return True
     def start_all_feature(self):
-        oi_status =[30]
-        sub_type_flow = [501,503]
+        oi_status =[30,38]
+        sub_type_flow = [501,503,504]
         featured_orderitems = self.get_featured_oi(oi_status,sub_type_flow)
         featured_count = 0
-
+        applicant_count = 0
         for oi in featured_orderitems:
             candidate_id = self.get_candidate_id(oi)
             flag = self.update_badges(candidate_id,oi,True)
@@ -293,10 +293,18 @@ class FeatureProfileUtil:
                     'Badging Failed {} '.format(str(oi.id))
                 )
                 continue
-            
-            featured_count += 1
+            if oi.product.sub_type_flow == 504 :
+                applicant_count +=1
+                oi.oi_status = 36
+                out_str = '%s top applicant profile featured out of %s' % (
+                applicant_count, featured_orderitems.count())
+            else :
+                featured_count += 1
+                oi.oi_status = 28
+                out_str = '%s profile featured out of %s' % (
+                featured_count, featured_orderitems.count())
+
             last_oi_status = oi.oi_status
-            oi.oi_status = 28
             oi.closed_on = timezone.now()
             oi.last_oi_status = 6
             oi.start_date = timezone.now()
@@ -308,8 +316,7 @@ class FeatureProfileUtil:
             # Send mail and sms with subject line as Your Profile updated
             self.send_feature_mail(oi)
             
-        out_str = '%s profile featured out of %s' % (
-            featured_count, featured_orderitems.count())
+       
 
         logging.getLogger('info_log').info("{}".format(out_str))
 
@@ -319,8 +326,8 @@ class FeatureProfileUtil:
 
     def close_all_feature(self):
         from order.models import OrderItem
-        oi_status = [28,34,35]
-        sub_type_flow = [501,503]
+        oi_status = [28,34,35,36]
+        sub_type_flow = [501,503,504]
         featured_orderitems = self.get_featured_oi(oi_status,sub_type_flow)
         unfeature_count = 0
 
@@ -336,7 +343,7 @@ class FeatureProfileUtil:
 
             other_item_exist = OrderItem.objects.filter(
                     order__status__in=[1, 3], product__type_flow__in=[5],
-                    oi_status=28,
+                    oi_status__in=[28,36],
                     product__sub_type_flow=oi.product.sub_type_flow,
                     order__candidate_id=oi.order.candidate_id).exclude(id=oi.id).exists()
 
@@ -346,14 +353,19 @@ class FeatureProfileUtil:
                     logging.getLogger('info_log').info(
                         'Badging Failed for order item id %s' % (str(oi.id)))
                     continue
-
+            if oi.product.sub_type_flow == 504 :
+                oi.last_oi_status = 37
+                self.create_oi_operation(oi,37,last_oi_status)
+            else:
+                oi.last_oi_status = 29
+                self.create_oi_operation(oi,29,last_oi_status)
             unfeature_count += 1
             last_oi_status = oi.oi_status
             oi.oi_status = 4
             oi.closed_on = timezone.now()
-            oi.last_oi_status = 29
+            
             oi.save()
-            self.create_oi_operation(oi,29,last_oi_status)
+            
             self.create_oi_operation(oi,oi.oi_status,oi.last_oi_status)
 
         out_str = '%s profile expired out of %s featured items' % (
@@ -369,17 +381,27 @@ class FeatureProfileUtil:
             mail_type = "FEATURED_PROFILE_UPDATED"
         elif oi.product.sub_type_flow == 503:
             mail_type = "PRIORITY_APPLICANT_MAIL"
+        elif oi.product.sub_type_flow == 504:
+            mail_type = "TOP_APPLICANT_MAIL"
 
         email_sets = list(
             oi.emailorderitemoperation_set.all().values_list(
                 'email_oi_status', flat=True).distinct())
         to_emails = [oi.order.get_email()]
         data = {}
-        data.update({
+        if oi.product.sub_type_flow == 504:
+            data.update({
+            "subject": 'Your Top Applicant Is Updated',
+            "username": oi.order.first_name,
+            "product_timeline": oi.product.get_duration_in_day(),
+            })
+        else :
+            data.update({
             "subject": 'Your Featured Profile Is Updated',
             "username": oi.order.first_name,
             "product_timeline": oi.product.get_duration_in_day(),
-        })
+            })
+        
 
         if 72 not in email_sets:
             send_email_task.delay(
