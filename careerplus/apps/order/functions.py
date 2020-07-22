@@ -5,7 +5,7 @@ from django.conf import settings
 from emailers.email import SendMail
 from dateutil import relativedelta
 from emailers.email import SendMail
-from emailers.utils import BadgingMixin
+
 from emailers.sms import SendSMS
 from django.utils import timezone
 from django.db.models import Q
@@ -29,6 +29,7 @@ def update_initiat_orderitem_sataus(order=None):
                     last_oi_status=last_oi_status,
                     assigned_to=oi.assigned_to)
                 if type_flow == 1:
+                    from emailers.utils import BadgingMixin
                     try:
                         badging_details = BadgingMixin().get_badging_data(
                             candidate_id=order.candidate_id, curr_order_item=oi, touch_point=True)
@@ -93,6 +94,7 @@ def update_initiat_orderitem_sataus(order=None):
                     if oi.product.sub_type_flow == 502:
                         oi.oi_status = 23
                         try:
+                            from emailers.utils import BadgingMixin
                             badging_details = BadgingMixin().get_badging_data(
                                 candidate_id=order.candidate_id, curr_order_item=oi, touch_point=True)
                             if badging_details:
