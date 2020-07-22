@@ -1809,10 +1809,8 @@ class GetRecommendedProductApi(APIView):
         return Response({'msg': 'Error! Expected parameters are not provided'}, status=status.HTTP_400_BAD_REQUEST)
 
 class CandidateBadging(APIView):
-    # authentication_classes = [OAuth2Authentication]
-    # permission_classes = [IsAuthenticated]
-    authentication_classes = ()
-    permission_classes = ()
+    authentication_classes = [OAuth2Authentication]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
         candidate_data = self.request.data.get('result', {})
