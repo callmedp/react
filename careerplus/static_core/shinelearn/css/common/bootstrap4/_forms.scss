@@ -405,3 +405,43 @@ textarea.form-control {
 .search {
 
 }
+
+.enquire-now-form {
+  form {
+
+    .form-group {
+      position: relative;
+      margin-bottom: 1.5rem;
+    }
+
+    .input_label {
+      font-size: 1.2rem;
+      color: $input-focus;
+      background: $white;
+      border-radius: $border-radius;
+      padding: .3rem;
+      display: block;
+      transition: all .3s;
+      margin: 0;
+      position: absolute;
+      top: -1rem;
+      left: 1rem;
+    }
+    
+    .input_field {
+      font-size: 1.3rem;
+
+      &:focus {
+        border: .2rem solid $input-focus;
+        box-shadow: none;
+      }
+    }
+
+    .input_field:placeholder-shown + .input_label {
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(100%) translateX(-1rem);
+      
+    }
+  }
+}

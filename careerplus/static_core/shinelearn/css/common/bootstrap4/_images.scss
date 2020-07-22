@@ -155,3 +155,9 @@
   background: $sprite-new;
   @include icon-inblock (252px, 29px, 0 -48px);
 }
+
+.b4-anylatics-ds-bg {
+  background: url($path + 'images/anlytics-ds-bg.png') no-repeat right top;
+  background-size: contain;
+  min-height: 47.3rem;
+}
