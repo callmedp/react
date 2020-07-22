@@ -279,7 +279,7 @@ def process_application_highlighter(obj=None):
     else:
         wc_cat = obj.wc_cat
         wc_sub_cat = obj.wc_sub_cat
-    updated_orderitem_operation = obj.orderitemoperation_set.filter(oi_status=30).first()
+    updated_orderitem_operation = obj.orderitemoperation_set.filter(oi_status__in=[30,38]).first()
     if ((wc_cat == 21 and wc_sub_cat in [41, 42]) or (wc_cat == 22 and wc_sub_cat == 63)) and not updated_orderitem_operation:
         last_oi_status = obj.oi_status
         obj.orderitemoperation_set.create(

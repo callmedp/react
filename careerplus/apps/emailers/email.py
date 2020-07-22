@@ -49,6 +49,7 @@ class SendMail():
                             bcc=send_dict.get('bcc_list', None), fail_silently=False, attachments=attachments)
 
     def send(self, to=None, mail_type=None, data={},attachment=[]):
+        import ipdb;ipdb.set_trace()
         send_dict = {}
         send_dict.update({
             'template':'',
@@ -212,9 +213,9 @@ class SendMail():
             send_dict['template'] = 'emailers/candidate/' + template_name
             self.process(to, send_dict, data)
 
-        elif mail_type == "TOP_APPLICANT_UPDATED":
+        elif mail_type == 'TOP_APPLICANT_MAIL':
             send_dict['subject'] = data.get('subject', "Your Top Applicant Is Updated")
-            template_name = data.get('template_name', 'feature_profile.html')
+            template_name = data.get('template_name', 'priority_applicant.html')
             send_dict['template'] = 'emailers/candidate/' + template_name
             self.process(to, send_dict, data)
         

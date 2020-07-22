@@ -280,6 +280,7 @@ class FeatureProfileUtil:
             return False
         return True
     def start_all_feature(self):
+        import ipdb;ipdb.set_trace()
         oi_status =[30,38]
         sub_type_flow = [501,503,504]
         featured_orderitems = self.get_featured_oi(oi_status,sub_type_flow)
@@ -347,12 +348,15 @@ class FeatureProfileUtil:
                     product__sub_type_flow=oi.product.sub_type_flow,
                     order__candidate_id=oi.order.candidate_id).exclude(id=oi.id).exists()
 
+            
             if not other_item_exist:
                 flag = self.update_badges(candidate_id,oi,False)
                 if not flag:
                     logging.getLogger('info_log').info(
                         'Badging Failed for order item id %s' % (str(oi.id)))
                     continue
+            last_oi_status = oi.oi_status
+
             if oi.product.sub_type_flow == 504 :
                 oi.last_oi_status = 37
                 self.create_oi_operation(oi,37,last_oi_status)
@@ -360,7 +364,7 @@ class FeatureProfileUtil:
                 oi.last_oi_status = 29
                 self.create_oi_operation(oi,29,last_oi_status)
             unfeature_count += 1
-            last_oi_status = oi.oi_status
+            
             oi.oi_status = 4
             oi.closed_on = timezone.now()
             
