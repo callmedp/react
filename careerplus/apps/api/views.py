@@ -1809,6 +1809,32 @@ class GetRecommendedProductApi(APIView):
         return Response({'msg': 'Error! Expected parameters are not provided'}, status=status.HTTP_400_BAD_REQUEST)
 
 class CandidateBadging(APIView):
+    '''
+        "Request data format from Analytics Vidhya"
+        -------------------------------------------
+        {
+            "result": {
+                "av_ID": "eda8c020-58ba-41cc-b944-0c01aaba60a5",
+                "name": "John",
+                "email": "s@gmail.com",
+                "status": "",
+                "certificates": [
+                {
+                    "certificateName": "Analytics Vidhya Course 1",
+                    "certificateUrl": "https://certificate-course-1",
+                    "validTill": "2012-08-26"
+                }
+                ]
+            }
+        }
+
+        "Response format from Candidate Badging Api"
+        ---------------------------------------------
+        {
+            'status': 'success',
+            'badging_status' : 'Candidate Badging Details Updated'
+        }   
+    '''
     authentication_classes = [OAuth2Authentication]
     permission_classes = [IsAuthenticated]
 
@@ -1846,39 +1872,4 @@ class CandidateBadging(APIView):
             SendMail().send(to_emails, mail_type, email_dict)
         except Exception as e:
             logging.getLogger('error_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
-        return 
-
-{
-
-  "result": {
-
-    "av_ID": "eda8c020-58ba-41cc-b944-0c01aaba60a5",
-
-    "name": "John",
-
-    "email": "s@gmail.com",
-
-    "status": "",
-
-    "certificates": [
-      {
-
-        "certificateName": "Analytics Vidhya Course 1",
-
-        "certificateUrl": "https://certificate-course-1",
-
-        "validTill": "2012-08-26"
-
-      }
-
-    ]
-
-  }
-
-}
-
-
-{
-    'status': 'success',
-    'badging_status' : 'Candidate Badging Details Updated'
-}        
+        return

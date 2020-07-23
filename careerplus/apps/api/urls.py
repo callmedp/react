@@ -96,7 +96,7 @@ urlpatterns = [
     views.GetRecommendedProductApi.as_view(),
     name='get-recommended-products'
     ),
-    re_path(r'^v1/candidate-badging/$',
+    re_path(r'^v1/update-candidate-badging/$',
     views.CandidateBadging.as_view(),
     name='candidate-badging-details'
     )
