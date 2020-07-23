@@ -128,6 +128,7 @@ def common_context_processor(request):
         "offer_home": False,
         "navlink_1": navlink_1,
         "navlink_2": navlink_2,
+        "image_static_url": settings.MEDIA_URL
      })
     return context
 
