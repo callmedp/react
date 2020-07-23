@@ -58,6 +58,18 @@ section {
         li {
             display: block;
             margin-top: 1.5rem;
+            padding-left: 2.3rem;
+            position: relative;
+
+            &::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                top: .5rem;
+                background: $sprite-new -232px -118px;
+                width: 1.3rem;
+                height: 1rem;
+            }
 
             strong {
                 font-size: 1.6rem;
@@ -263,6 +275,10 @@ section {
                 border-top-color: transparent;
                 border-bottom-color: transparent;
             }
+
+            figure {
+                margin-bottom: 1.5rem;
+            }
         }
     }
 }
@@ -278,17 +294,17 @@ section {
         li {
             position: relative;
             margin-bottom: 1rem;
-            padding-left: 2rem;
+            padding-left: 2.3rem;
+            position: relative;
 
             &::before {
                 content: '';
                 position: absolute;
-                top: .7rem;
                 left: 0;
-                width: .6rem;
-                height: .6rem;
-                border-radius: 100%;
-                background: $blue-heading;
+                top: .7rem;
+                background: $sprite-new -233px -135px;
+                width: 1rem;
+                height: .8rem;
             }
         }
     }
@@ -308,21 +324,21 @@ section {
         li {
             position: relative;
             margin-bottom: 1rem;
-            padding: 1rem 2rem;
+            padding: 1rem 2rem 1rem 3.1rem;
             @extend %box-shadow;
             background: $white;
             border-radius: 3rem; 
             margin: 0 2rem 1.5rem 0;
+            position: relative;
 
             &::before {
                 content: '';
                 position: absolute;
-                top: .7rem;
-                left: 0;
-                width: .6rem;
-                height: .6rem;
-                border-radius: 100%;
-                background: $blue-heading;
+                left: 1.5rem;
+                top: 1.7rem;
+                background: $sprite-new -233px -135px;
+                width: 1rem;
+                height: .8rem;
             }
         }
     }
@@ -343,6 +359,7 @@ section {
     .accordion {
         margin-left: 10%;
         margin-right: 10%;
+        width: 80%;
 
         .card {
             border-radius: $border-radius;
@@ -359,10 +376,23 @@ section {
                 .btn {
                     display: block;
                     padding: 1rem 3rem;
+                    width: 100%;
+                    text-align: left;
 
                     &:focus {
                         box-shadow: none;
                         display: block;
+                    }
+
+                    &::after {
+                        content: '';
+                        background: $sprite-new -187px -120px;
+                        width: 1.4rem;
+                        height: .8rem;
+                        display: inline-block;
+                        position: absolute;
+                        right: 3rem;
+                        top: 3rem;
                     }
 
                     P {
@@ -380,6 +410,19 @@ section {
                             }
                         }
                     }
+
+                    &.collapsed {
+                        &::after {
+                            content: '';
+                            background: $sprite-new -209px -120px;
+                            width: 1.4rem;
+                            height: .8rem;
+                            display: inline-block;
+                            position: absolute;
+                            right: 3rem;
+                            top: 3rem;
+                        }
+                    }
                 }
             }
     
@@ -395,5 +438,118 @@ section {
                 }
             }
         }
+    }
+}
+
+.mtp8 {
+    margin-top: 8%;
+}
+
+.sticky-top {
+    background: $white;
+
+    .nav-link {
+        padding-left: 1.5rem !important;
+        padding-right: 1.5rem !important;
+
+        strong {
+            font-size: 1.6rem;
+            font-weight: 600;
+        }
+    }
+}
+
+.enquire-now-av {
+    padding: 2rem;
+    background: $white;
+    width: 30rem;
+    @include border-radius(4px);
+    @extend %box-shadow;
+    
+
+    strong {
+        display: block;
+        font-size: 2.2rem;
+        font-weight: 700;
+        text-align: center;
+        line-height: 2rem;
+    }
+    form {
+  
+      .form-group{
+        position: relative;
+        margin-bottom: 1.5rem;
+      }
+  
+      label {
+        position: absolute;
+        left: 1rem;
+        top:.8rem;
+        font-weight: 400;
+        font-size: 1.2rem;
+        background: $white;
+        padding: .3rem;
+        pointer-events: none;
+      }
+  
+      input:focus + label, input:not(:placeholder-shown) + label{
+        opacity:1;
+        transform: scale(.9) translateY(-100%) translateX(-10px);
+        color: $blue;
+        left: 1.6rem;
+      }
+      .error {
+        label {
+          opacity:1;
+          transform: scale(.9) translateY(-100%) translateX(-10px);
+          color: $blue;
+          left: 1.6rem;
+        }
+      }
+  
+      input {
+        &:focus {
+          border:.2rem solid $input-focus;
+          outline-color: $input-focus;
+          box-shadow: none;
+        }
+      }
+  
+      input {
+        width:100%;
+        padding-left: 1rem;
+        height: 4rem;
+      }
+  
+      input, label {
+        transition: all 0.2s;
+        transition-timing-function: ease;
+        transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
+        opacity:1;
+      }
+    }
+}
+.looking-job {
+    display: inline-flex;
+    width: 70%;
+    margin-left: 15%;
+    margin-right: 15%;
+    @include border-radius(5px);
+    @extend %box-shadow;
+    align-items: center;
+    padding: 0 2rem 0 0;
+
+    strong {
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-left: 3rem;
+
+        span {
+            font-weight: 400;
+        }
+    }
+
+    a {
+        margin-left: auto;
     }
 }
