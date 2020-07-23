@@ -7,7 +7,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 from django.core.cache import cache
-from django.db.models.signals import post_save
+from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 
 # local imports
@@ -206,7 +206,7 @@ class NavigationSpecialTag(AbstractAutoDate):
         active_navlink = NavigationSpecialTag.objects.filter(is_active=True)
         nav_list = []
         if active_navlink.count():
-            return active_navlink[:2]
+            return active_navlink
         return nav_list
 
     @classmethod
@@ -220,13 +220,29 @@ class NavigationSpecialTag(AbstractAutoDate):
             } for link in data]
             return link_info
         return []
-
-    @classmethod
-    def post_save_data(cls, sender, instance, created, **kwargs):
-        data_obj_list = list(cls.get_active_navlink())
-        data = cls.convert_data_in_list(data_obj_list)
-        cache.set('active_homepage_navlink', data, 24*60*60)
     
-post_save.connect(NavigationSpecialTag.post_save_data, sender=NavigationSpecialTag)
+def post_save_data(sender, instance, created, **kwargs):
+    data_obj_list = list(NavigationSpecialTag().get_active_navlink())
+    if created and instance.is_active:
+        data_obj_list.insert(0, instance)
+            
+    elif instance.is_active:
+        if instance in data_obj_list:
+            data_obj_list.remove(instance)
+        data_obj_list.insert(0, instance)
+    else:
+        if instance in data_obj_list:
+            data_obj_list.remove(instance)
+    data = NavigationSpecialTag().convert_data_in_list(data_obj_list[:2])
+    cache.set('active_homepage_navlink', data, 24*60*60)
 
+post_save.connect(post_save_data, sender=NavigationSpecialTag)
         
+def post_delete_data(sender, instance, **kwargs):
+    data_obj_list = list(NavigationSpecialTag().get_active_navlink())
+    if instance in data_obj_list:
+        data_obj_list.remove(instance)
+    data = NavigationSpecialTag().convert_data_in_list(data_obj_list[:2])
+    cache.set('active_homepage_navlink', data, 24*60*60)
+
+post_delete.connect(post_delete_data, sender=NavigationSpecialTag)
