@@ -296,13 +296,11 @@ class FeatureProfileUtil:
             if oi.product.sub_type_flow == 504 :
                 applicant_count +=1
                 oi.oi_status = 36
-                out_str = '%s top applicant profile featured out of %s' % (
-                applicant_count, featured_orderitems.count())
+                
             else :
                 featured_count += 1
                 oi.oi_status = 28
-                out_str = '%s profile featured out of %s' % (
-                featured_count, featured_orderitems.count())
+                
 
             last_oi_status = oi.oi_status
             oi.closed_on = timezone.now()
@@ -317,8 +315,15 @@ class FeatureProfileUtil:
             self.send_feature_mail(oi)
             
        
-
-        logging.getLogger('info_log').info("{}".format(out_str))
+        if applicant_count : 
+            out_str = '%s top applicant profile featured out of %s' % (
+                applicant_count, featured_orderitems.count())
+            logging.getLogger('info_log').info("{}".format(out_str))
+        
+        if featured_count : 
+            out_str = '%s profile featured out of %s' % (
+                featured_count, featured_orderitems.count())
+            logging.getLogger('info_log').info("{}".format(out_str))
 
         return
 
@@ -394,7 +399,7 @@ class FeatureProfileUtil:
         data = {}
         if oi.product.sub_type_flow == 504:
             data.update({
-            "subject": 'Your Top Applicant Is Updated',
+            "subject": 'Your Top Applicant Service is Initiated',
             "username": oi.order.first_name,
             "product_timeline": oi.product.get_duration_in_day(),
             })

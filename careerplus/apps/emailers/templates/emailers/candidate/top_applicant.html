@@ -1,0 +1,46 @@
+{% load static %}
+{% spaceless %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Shine Learning</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+
+<body style="margin: 0; padding: 0;">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center" style="max-width: 600px; border: 1px solid #efefef; font-family: arial; font-size: 13px; color: #666666; line-height: 20px;">
+  <tbody>
+    <tr>
+      <td bgcolor="#f9e590">
+      	<!-- <img src="{% static 'shinelearn/images/emailers/feature_profile.jpg' %}" alt="Shine Learning" style="display: block; border: 0; max-width: 100%"> -->
+      	<strong style="text-align: center; display: block; font-size: 19px; font-weight: bold; color: #002d66; padding: 5px 10px 15px 10px;">
+      		{{subject}}
+      	</strong>
+      </td>
+    </tr>
+    <tr>
+      <td style="padding: 10px">
+      	<strong style="font-size: 14px; display: block; font-weight: normal; color: #333333; padding-bottom: 5px; padding-top: 2px;">Dear {% if username %}{{username}}{% else %}Candidate{% endif %},</strong>
+        <span style="fon">
+          Congratulations! Your order for Top Applicant has been initiated and you'll be able to access jobs where are you a Top Applicant.<br><br>
+          Our services enable you to increase your job applications visibility among recruiters by bringing you the jobs where you are at top compared to other applicants.<br><br>
+          However, we do not guarantee a response by these consultants as they will contact you on the basis of availability of job opportunities with them that suits your profile.
+        </span>
+      </td>
+    </tr>
+    <tr>
+    	<td style="padding: 10px;">
+    		<strong style="display: block; font-weight: normal; font-size: 12px; color: #333333; padding-top: 10px;">
+    		 Warm Regards, <br>
+    		 Shine Learning Team
+    		</strong>
+    	</td>
+    </tr>
+    {%  include "emailers/includes/mailer_footer.html" %}
+
+  </tbody>
+</table>
+
+</body>
+</html>
+{% endspaceless %}
