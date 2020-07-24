@@ -2,6 +2,7 @@ import json
 import logging
 import requests
 
+from datetime import datetime;
 from collections import OrderedDict
 from decimal import Decimal
 from urllib.parse import unquote
@@ -44,6 +45,8 @@ from search.choices import STUDY_MODE
 from homepage.models import Testimonial
 from review.models import Review
 from order.models import OrderItem
+from wallet.models import ProductPoint
+
 
 from .models import Product
 from review.models import DetailPageWidget
@@ -53,7 +56,7 @@ from .mixins import (CourseCatalogueMixin, \
 from users.forms import (
     ModalLoginApiForm
 )
-from shop.choices import APPLICATION_PROCESS, BENEFITS, NEO_LEVEL_OG_IMAGES
+from shop.choices import APPLICATION_PROCESS, BENEFITS, NEO_LEVEL_OG_IMAGES, SMS_URL_LIST
 from review.forms import ReviewForm
 from .models import Skill
 from homepage.config import UNIVERSITY_COURSE
@@ -469,6 +472,9 @@ class ProductInformationMixin(object):
         ctx['is_logged_in'] = True if self.request.session.get('candidate_id') else False
         ctx["loginform"] = ModalLoginApiForm()
         ctx['linkedin_resume_services'] = settings.LINKEDIN_RESUME_PRODUCTS
+        ctx['redeem_test'] = False
+        ctx['product_redeem_count'] =0
+        ctx['redeem_option'] = 'assessment'
         if self.request.session.get('candidate_id'):
             candidate_id = self.request.session.get('candidate_id')
             contenttype_obj = ContentType.objects.get_for_model(product)
@@ -480,6 +486,39 @@ class ProductInformationMixin(object):
                 user_id=candidate_id).count()
 
             ctx['user_reviews'] = True if user_reviews else False
+            
+            redeem_option = product.attr.get_attribute_by_name(
+                'redeem_option')
+            
+            attr_value = product.attr.get_value_by_attribute(redeem_option)
+            
+            if not attr_value:
+                code = None
+            else:
+                code = attr_value.value or None
+
+            if code:
+                product_point = ProductPoint.objects.filter(
+                    candidate_id=candidate_id).first()
+
+                if  product_point:
+            
+                    redeem_options = eval(product_point.redeem_options)
+
+                    required_obj = [
+                        option for option in redeem_options if option['type'] == code]
+                    required_obj = required_obj[0]
+                    product_redeem_count = required_obj['product_redeem_count']
+                    days = required_obj['product_validity_in_days'] or 0
+                    timestamp = required_obj['purchased_at'] or 0
+                    days_diff = datetime.now() - datetime.fromtimestamp(int(timestamp))
+                    if days_diff.days < days and product_redeem_count != 0:
+                        ctx['redeem_test'] = True
+                        ctx['product_redeem_count'] = product_redeem_count
+                        ctx['redeem_option'] = code
+
+
+                    
         navigation = True
 
         if sqs.id in settings.LINKEDIN_RESUME_PRODUCTS:
@@ -822,6 +861,12 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             return redirect_url
 
     def get(self, request, **kwargs):
+        path_info = kwargs
+        root=request.GET.get('root')
+        mobile=request.GET.get('mobile')
+        campaign = request.GET.get('utm_campaign')
+        if root == 'interested_mail':
+            logging.getLogger('info_log').info('interested user clicked product "{}" having id-{}, mobile number is "{}", under campaign "{}"'.format(path_info.get('prd_slug'),path_info.get("pk", ""), mobile, campaign))
         useragent = self.request.META['HTTP_USER_AGENT']
         if 'facebookexternalhit' not in useragent:
             redirect_url = self.redirect_for_neo(request)
@@ -1337,3 +1382,19 @@ class GoogleResumeAdView(View):
         }
         return render(request, template, context=content)
         
+class SmsUrlRedirect(View):
+
+    def get(self, request, *args, **kwargs):
+        url_id = int(kwargs.get('url_id',1))
+        encoded_mobile = kwargs.get('encoded_mobile', '')
+
+        if not encoded_mobile:
+            return HttpResponsePermanentRedirect(settings.MAIN_DOMAIN_PREFIX)
+
+        mobile = int(encoded_mobile, 16)
+        logging.getLogger('info_log').info("SMS link was opened by mobile number- {}".format(mobile))
+        url = SMS_URL_LIST.get(url_id, '')
+        if not url:
+            return HttpResponsePermanentRedirect(settings.MAIN_DOMAIN_PREFIX)
+        return HttpResponsePermanentRedirect(url)
+

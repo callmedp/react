@@ -620,8 +620,8 @@ CANDIDATE_MONGO_DB = 'sumoplus'
 
 
 ZESTMONEY_INFO = {
-                "authentication_base_url":"http://staging-auth.zestmoney.in",
-                "api_base_url":"http://staging-app.zestmoney.in",
+                "authentication_base_url":"https://staging-auth.zestmoney.in",
+                "api_base_url":"https://staging-app.zestmoney.in",
                 "user_name":"ShineLearning",
                 "password":"IWo)2IDs",
                 "client_id":"e32b336c-74ab-4254-82a6-3d9ebd9242d0",
@@ -675,6 +675,19 @@ PAYU_INFO1 = {'merchant_salt': 'DiRp9kCs',
 RSHINE_CCAVENUE_ACCESS_CODE = 'AVNZ03HE25BR73ZNRB'
 RSHINE_CCAVENUE_WORKING_KEY = 'FBD9C0D0B8D397CD4E182B9BFF6EA44F'
 
+'''
+links for analytics vidhya 
+'''
+ANALYTICS_VIDHYA_URL = {
+    'BASE_URL' : 'https://id.analyticsvidhya.com',
+    'USERNAME' : 'rajila.madhavan@hindustantimes.com',
+    'PASSWORD' : 'shine123',
+    'ENROLLMENT' : '/api/enrollments/requests',
+    'STATUS' : '/api/enrollments/requests/{}'
+}
+'''
+link end
+'''
 THUMBNAIL_PRESERVE_FORMAT = True
 
 RAZOR_PAY_DICT = {

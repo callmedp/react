@@ -894,3 +894,35 @@ def upload_Resume_shine(order_item_id):
         order.save()
         return
     logging.getLogger('error_log').info("Upload to shine failed ")
+
+@task
+def av_user_enrollment(av_ids):
+    from order.models import OrderItem
+    from order.mixins import AnalyticsVidhyaMixin
+    orderitems = OrderItem.objects.filter(id__in=av_ids)
+    for oi in orderitems:
+        first_name = oi.order.first_name if oi.order.first_name else 'guest-user'
+        email = oi.order.email
+        phone = oi.order.mobile
+        currency = oi.order.get_currency_code()
+        if first_name and email and phone:    
+            av_data = {
+                "first_name" : first_name,
+                "last_name" : oi.order.last_name if oi.order.last_name else '',
+                "email" : email,
+                "phone_number" : phone,
+                "product" : oi.product.upc,
+                "price" : int(oi.product.inr_price),#check
+                "price_currency" : currency,
+            }
+            av_enroll = AnalyticsVidhyaMixin().user_enrollment(data=av_data, orderItem=oi)
+            if not av_enroll:
+                logging.getLogger('error_log').error('enrollment request incomplete for user - {}'.format(av_data))
+        else:
+            logging.getLogger('error_log').error('missing data from profile')
+            data = {
+                "first_name" : oi.order.first_name,
+                "email" : oi.order.email,
+                "phone" : oi.order.mobile
+            }
+            AnalyticsVidhyaMixin().send_failure_mail(data, 'missing data from profile')

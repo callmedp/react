@@ -108,6 +108,10 @@
 
 {% block container %}
     <div class="body-wrapper">
+        <div id="loader" class="overlay-background" text-align: center;">
+            <img aria-label="loader" id="loadingimg" class="loader-position-mobile"
+                src="{% static 'shinelearn/images/mobile/loader1.png' %}">
+        </div>
         <section class="content-box">
             <div class="mb-10 c6">
                 {% if prd_num_rating %}
@@ -120,7 +124,7 @@
                     <li>
                         <figure class="icon-comments"></figure>
                             <a href="javascript:void(0);">
-                        {% if prd_num_rating > 15 %}
+                        {% if prd_num_rating > 0 %}
                             {{prd_num_rating}}
                             Reviews
                             {%else%}

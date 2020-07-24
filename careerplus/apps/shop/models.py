@@ -3563,7 +3563,3 @@ class Section(AbstractAutoDate):
     class Meta:
         ordering = ['-priority', ]
 
-
-
-
-

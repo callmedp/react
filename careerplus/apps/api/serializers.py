@@ -38,6 +38,9 @@ class PaymentSerializer(ModelSerializer):
             'payment_date',
         ]
 
+        read_only_fields = fields
+
+
 
 class ParentSerializer(ModelSerializer):
     productname = SerializerMethodField('get_product_name')
@@ -53,16 +56,19 @@ class ParentSerializer(ModelSerializer):
             'selling_price',  # price as selling_price
         ]
 
+        read_only_fields = fields
+
+
     def get_product_name(self, obj):
         try:
-            return obj.product.name
+            return obj.title if obj.title else obj.product.name
         except Exception as e:
             logging.getLogger('error_log').error("Unable to return Product name %s"% str(e))
         return ''
 
     def get_prd_parent_id(self, obj):
         try:
-            return obj.product.id
+            return obj.product_id if obj.product_id else ''
         except Exception as e:
             logging.getLogger('error_log').error("Unable to return product parent id %s" % str(e))
         return ''
@@ -83,9 +89,12 @@ class VariationSerializer(ModelSerializer):
             'selling_price',  # price as selling_price
         ]
 
+        read_only_fields = fields
+
+
     def get_variation_product_name(self, obj):
         try:
-            return obj.product.name
+            return obj.title if obj.title else obj.product.name
         except Exception as e:
             logging.getLogger('error_log').error(" Msg= Unable to return variant Product name %s"% str(e))
             pass
@@ -93,7 +102,7 @@ class VariationSerializer(ModelSerializer):
 
     def get_variation_product_id(self, obj):
         try:
-            return obj.product.id
+            return obj.product_id if obj.product_id else ''
         except Exception as e:
             logging.getLogger('error_log').error("Unable to get variant Product id  %s"% str(e))
             pass
@@ -115,9 +124,12 @@ class AddonSerializer(ModelSerializer):
             'selling_price'
         ]
 
+        read_only_fields = fields
+
+
     def get_addon_product_name(self, obj):
         try:
-            return obj.product.name
+            return obj.title if obj.title else obj.product.name
         except Exception as e:
             logging.getLogger('error_log').error("Unable to return addon Product name %s"% str(e))
             pass
@@ -125,7 +137,7 @@ class AddonSerializer(ModelSerializer):
 
     def get_addon_product_id(self, obj):
         try:
-            return obj.product.id
+            return obj.product_id if obj.product_id else ''
         except Exception as e:
             logging.getLogger('error_log').error("Unable to return addon Product id %s"% str(e))
             pass
@@ -147,9 +159,12 @@ class ComboSerializer(ModelSerializer):
             'selling_price'
         ]
 
+        read_only_fields = fields
+
+
     def get_combo_product_name(self, obj):
         try:
-            return obj.product.name
+            return obj.title if obj.title else obj.product.name
         except Exception as e:
             logging.getLogger('error_log').error("Unable to return combo Product name %s"% str(e))
             pass
@@ -157,7 +172,7 @@ class ComboSerializer(ModelSerializer):
 
     def get_combo_product_id(self, obj):
         try:
-            return obj.product.id
+            return obj.product_id  if obj.product_id else ''
         except Exception as e:
             logging.getLogger('error_log').error("Unable to return combo Product id %s"% str(e))
             pass
@@ -181,11 +196,15 @@ class OrderItemDetailSerializer(ModelSerializer):
             'combo',
         ]
 
+        read_only_fields = fields
+
+
     def get_parentprdid(self, obj):
-        return obj.product.id   if obj.product else ''
+        return obj.product_id if obj.product_id else ''
 
     def get_parent1(self, obj):
         try:
+            # v = OrderItem.objects.filter(parent=None,order_id=obj.order_id)
             v = obj.order.orderitems.filter(parent=None)
             return ParentSerializer(v, many=True).data
         except Exception as e:
@@ -246,6 +265,8 @@ class OrderListHistorySerializer(ModelSerializer):
             'total_excl_tax',
             'orderitems',
         ]
+        read_only_fields = fields
+
 
     def get_order_status(self, obj):
         if obj.status == 1:
@@ -257,13 +278,14 @@ class OrderListHistorySerializer(ModelSerializer):
 
     def get_orderitems1(self, obj):
         orderitems = obj.orderitems.filter(parent=None)
-        if orderitems:
-            return OrderItemDetailSerializer(orderitems, many=True).data
+        return OrderItemDetailSerializer(orderitems, many=True).data
 
     def get_txn(self, obj):
+        # payment_obj = PaymentTxn.objects.only('txn','payment_mode',
+        #                                       'payment_date').filter(
+        #     order=obj)
         payment_obj = obj.ordertxns.all()
-        if payment_obj:
-            return PaymentSerializer(payment_obj, many=True).data
+        return PaymentSerializer(payment_obj, many=True).data
 
 
 class RecommendedProductSerializer(ModelSerializer):

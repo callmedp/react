@@ -248,7 +248,7 @@ class ShineCandidateDetail(ShineToken):
                     if status_response.status_code == 200 and status_response.json():
                         return status_response.json()
         except Exception as e:
-            logging.getLogger('error_log').error('unable to get status details for 1177%s'%str(e))
+            logging.getLogger('error_log').error('unable to get status details %s'%str(e))
 
         return None
 
@@ -564,7 +564,7 @@ class AmcatApiMixin(object):
         api_url = settings.VENDOR_URLS['amcat']['get_autologin_url']
         headers = self.get_headers(data, api_url, 'POST')
         resp = requests.post(api_url, data=data, headers=headers)
-        if resp.status_code == 200:
+        if resp.status_code == 200 and resp.json()['data']:
             resp = resp.json()
             autologin_url = resp['data']['autoLoginUrl']
             logging.getLogger('info_log').info(
