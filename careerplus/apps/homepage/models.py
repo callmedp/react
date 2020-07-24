@@ -220,29 +220,30 @@ class NavigationSpecialTag(AbstractAutoDate):
             } for link in data]
             return link_info
         return []
-    
-def post_save_data(sender, instance, created, **kwargs):
-    data_obj_list = list(NavigationSpecialTag().get_active_navlink())
-    if created and instance.is_active:
-        data_obj_list.insert(0, instance)
-            
-    elif instance.is_active:
+
+    @classmethod
+    def post_save_data(cls, sender, instance, created, **kwargs):
+        data_obj_list = list(cls.get_active_navlink())
+        if created and instance.is_active:
+            data_obj_list.insert(0, instance)
+                
+        elif instance.is_active:
+            if instance in data_obj_list:
+                data_obj_list.remove(instance)
+            data_obj_list.insert(0, instance)
+        else:
+            if instance in data_obj_list:
+                data_obj_list.remove(instance)
+        data = cls.convert_data_in_list(data_obj_list[:2])
+        cache.set('active_homepage_navlink', data, 24*60*60)
+
+    @classmethod
+    def post_delete_data(cls, sender, instance, **kwargs):
+        data_obj_list = list(cls.get_active_navlink())
         if instance in data_obj_list:
             data_obj_list.remove(instance)
-        data_obj_list.insert(0, instance)
-    else:
-        if instance in data_obj_list:
-            data_obj_list.remove(instance)
-    data = NavigationSpecialTag().convert_data_in_list(data_obj_list[:2])
-    cache.set('active_homepage_navlink', data, 24*60*60)
+        data = cls.convert_data_in_list(data_obj_list[:2])
+        cache.set('active_homepage_navlink', data, 24*60*60)
 
-post_save.connect(post_save_data, sender=NavigationSpecialTag)
-        
-def post_delete_data(sender, instance, **kwargs):
-    data_obj_list = list(NavigationSpecialTag().get_active_navlink())
-    if instance in data_obj_list:
-        data_obj_list.remove(instance)
-    data = NavigationSpecialTag().convert_data_in_list(data_obj_list[:2])
-    cache.set('active_homepage_navlink', data, 24*60*60)
-
-post_delete.connect(post_delete_data, sender=NavigationSpecialTag)
+post_save.connect(NavigationSpecialTag.post_save_data, sender=NavigationSpecialTag)
+post_delete.connect(NavigationSpecialTag.post_delete_data, sender=NavigationSpecialTag)
