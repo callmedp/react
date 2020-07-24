@@ -264,7 +264,7 @@ class FeatureProfileUtil:
         if isPause:
             other_item_exist = OrderItem.objects.filter(
                     order__status__in=[1, 3], product__type_flow__in=[5],
-                    oi_status=28,
+                    oi_status__in=[28,36],
                     product__sub_type_flow=oi.product.sub_type_flow,
                     order__candidate_id=oi.order.candidate_id).exclude(id=oi.id).exists()
 
@@ -280,6 +280,7 @@ class FeatureProfileUtil:
             return False
         return True
     def start_all_feature(self):
+        import ipdb;ipdb.set_trace()
         oi_status =[30,38]
         sub_type_flow = [501,503,504]
         featured_orderitems = self.get_featured_oi(oi_status,sub_type_flow)
@@ -307,9 +308,10 @@ class FeatureProfileUtil:
             oi.last_oi_status = 6
             oi.start_date = timezone.now()
             oi.end_date = timezone.now() + timedelta(days=oi.product.day_duration)
-            oi.save()
             self.create_oi_operation(oi,6,last_oi_status)
             self.create_oi_operation(oi,oi.oi_status,oi.last_oi_status)
+            oi.save()
+           
 
             # Send mail and sms with subject line as Your Profile updated
             self.send_feature_mail(oi)
@@ -410,7 +412,6 @@ class FeatureProfileUtil:
             "product_timeline": oi.product.get_duration_in_day(),
             })
         
-
         if 72 not in email_sets:
             send_email_task.delay(
                 to_emails, mail_type, data,
