@@ -408,27 +408,15 @@ class SkillProductView(APIView):
     permission_classes = ()
 
 
-    def get(self,request,*args,**kwargs):
-        certificate_id =  self.request.GET.get('cert')
-        skills = self.request.GET.get('skills',[])
-        assessment = self.request.GET.get('assessment')
-        skill_list = []
+
+    def get_product_from_skill(self,skill=[]):
+        if not skill:
+            return []
         filter_dict = {'active':True,'is_indexed':True,'is_indexable':True}
-
-        if certificate_id:
-            certificate_id = certificate_id.split(',')
-            skill_list = list(Certificate.objects.filter(id__in=certificate_id).values_list('skill',flat=True))
-
-            skill_list = list(map(slugify,skill_list))
-
-        if skills:
-            skills = list(map(slugify,skills.split(',')))
-
-            skill_list +=skills
-
-        if not skill_list:
-            return Response({'data':'Not Product Found'},status=status.HTTP_200_OK)
-
+        product_id = None
+        assessment = self.request.GET.get('assessment')
+        if assessment:
+            filter_dict.update({'type_flow':16})
         WhatYouGet = {
             'testpreptraining':[
             "Receive valuable feedback, from reliable exam reports, on your strong and weak areas",
@@ -440,50 +428,86 @@ class SkillProductView(APIView):
             ],
         }
 
+        if isinstance(skill,list):
+            product_id = ProductSkill.objects.filter(skill__slug__in=skill,active=True).values_list('product_id',
+                                                                                                      flat=True)
 
-        if assessment:
-            filter_dict.update({'type_flow':16})
+        else:
+            product_id = ProductSkill.objects.filter(skill__slug=skill,active=True).values_list('product_id', flat=True)
 
-        product_id = ProductSkill.objects.filter(skill__slug__in=skill_list,active=True).values_list('product_id',
-                                                                                                  flat=True)
         products = Product.objects.filter(id__in=product_id,**filter_dict)
 
-        data =[]
+        data = []
 
         for prod in products:
-            data_dict ={}
-            data_dict.update({'id':prod.id,'heading':prod.get_heading(),'title':prod.get_title(),'url':prod.get_url(),
-                  'icon':prod.get_icon_url(),'about':prod.get_about(),'inr_price':prod.get_price(),
-                  'fake_inr_price':prod.fake_inr_price,'attribute':prod.get_assessment_attribute(),
-                  'vendor':prod.vendor_id})
-            if prod.type_flow == 16:
-                if not prod.vendor:
-                    data_dict.update({
-                        'what_you_get':[
-                    "Industry recognized certification after clearing the test",
-                        "Get badge on shine.com and showcase your knowledge to the recruiters",
-                        "Shine shows your skills as validated and certification as verified which build high trust "
-                        "among recruiters",
-                        "Receive valuable feedback on your strong and weak areas to improve yourself",
-                        "Certified candidates gets higher salary as compared to non certified candidate"
-                    ]
-                    })
-                else:
-
-                    data_dict.update({
-                        'what_you_get':WhatYouGet.get(prod.vendor.slug,[
-                        "Industry recognized certification after clearing the test",
-                            "Get badge on shine.com and showcase your knowledge to the recruiters",
+            data_dict = {}
+            data_dict.update ({'id' : prod.id , 'heading' : prod.get_heading () , 'title' : prod.get_title () ,
+                               'url' : prod.get_url () ,
+                               'icon' : prod.get_icon_url () , 'about' : prod.get_about () ,
+                               'inr_price' : prod.get_price () ,
+                               'fake_inr_price' : prod.fake_inr_price , 'attribute' : prod.get_assessment_attribute () ,
+                               'vendor' : prod.vendor_id})
+            if prod.type_flow == 16 :
+                if not prod.vendor :
+                    data_dict.update ({
+                        'what_you_get' : [
+                            "Industry recognized certification after clearing the test" ,
+                            "Get badge on shine.com and showcase your knowledge to the recruiters" ,
                             "Shine shows your skills as validated and certification as verified which build high trust "
-                            "among recruiters",
-                            "Receive valuable feedback on your strong and weak areas to improve yourself",
+                            "among recruiters" ,
+                            "Receive valuable feedback on your strong and weak areas to improve yourself" ,
+                            "Certified candidates gets higher salary as compared to non certified candidate"
+                        ]
+                    })
+                else :
+
+                    data_dict.update ({
+                        'what_you_get' : WhatYouGet.get (prod.vendor.slug , [
+                            "Industry recognized certification after clearing the test" ,
+                            "Get badge on shine.com and showcase your knowledge to the recruiters" ,
+                            "Shine shows your skills as validated and certification as verified which build high trust "
+                            "among recruiters" ,
+                            "Receive valuable feedback on your strong and weak areas to improve yourself" ,
                             "Certified candidates gets higher salary as compared to non certified candidate"
                         ])
                     })
 
-            data.append(data_dict)
+            data.append (data_dict)
+        return data
 
-        return Response({'data':data},status=status.HTTP_200_OK)
+    def get(self,request,*args,**kwargs):
+        certificate_id = self.request.GET.get('cert')
+        skills = self.request.GET.get('skills',[])
+        assessment = self.request.GET.get('assessment')
+        skill_list = []
+
+        if certificate_id:
+            certificate_products =[]
+            certificate_id = certificate_id.split(',')
+            certificate = Certificate.objects.only('id','skill').filter(id__in=certificate_id)
+            if not certificate.exists():
+                return Response({'data': []},status=status.HTTP_200_OK)
+            for cert in certificate:
+                if not cert.skill:
+                    continue
+                skills = list(map(slugify,cert.skill.split(',')))
+                certificate_products.append({cert.id:self.get_product_from_skill(skills)})
+
+            return Response({'data':certificate_products},status=status.HTTP_200_OK)
+
+        if skills:
+            skills = list(map(slugify,skills.split(',')))
+            for skill in skills:
+                skill_list.append({skill:self.get_product_from_skill(skill)})
+            return Response ({'data': skill_list}, status=status.HTTP_200_OK)
+
+
+        return Response({'data':[]},status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+
 
 
 
