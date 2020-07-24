@@ -1841,13 +1841,13 @@ class CandidateBadging(APIView):
     def post(self, request, *args, **kwargs):
         candidate_data = self.request.data.get('result', {})
         av_id = candidate_data.get('av_ID')
-
+        
         try:
             flag = BadgeAnalyticsVidhya().badge_user_for_analytics_vidhya(av_id)
             if not flag:
                 return Response({
                     'status': 'failed',
-                    'badging_status' : 'Candidate Badging Details Updation failed.',
+                    'badging_status' : 'Candidate Badging Details Updation failed. AV Id might not be correct',
                 }, status=status.HTTP_400_BAD_REQUEST)
             # self.send_course_completion_mail(candidate_data)
             return Response({
