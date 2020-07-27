@@ -94,27 +94,23 @@ function feedback_submit(formData) {
 
 function request_to_submit_feedback(formData) {
   $.ajax({
-      url: '/shop/reviews/product/create/',
-      type: 'POST',
-      data : formData,
-      dataType: 'json',
-      async : false,
-      timeout : 30000,
-      success: function(json) {
-          if (json.success){
-            alert(json.display_message);
-            window.location.reload();
-          }
-          else if(json.display_message){
-            alert(json.display_message)
-            refreshErrors(json)
-          }
-          else{
-            refreshErrors(json)
-          }
-      },
-      error: function(xhr, ajaxOptions, thrownError) {
-          alert("Something went wrong, try again later");
+    url: '/shop/reviews/product/create/',
+    type: 'POST',
+    data: formData,
+    dataType: 'json',
+    async: false,
+    timeout: 30000,
+    success: function (json) {
+      if (json.success) {
+        alert(json.display_message);
+        window.location.reload();
+      }
+      else if (json.display_message) {
+        alert(json.display_message)
+        refreshErrors(json)
+      }
+      else {
+        refreshErrors(json)
       }
     },
     error: function (xhr, ajaxOptions, thrownError) {
