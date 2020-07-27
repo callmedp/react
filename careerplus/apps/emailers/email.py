@@ -212,6 +212,13 @@ class SendMail():
             send_dict['template'] = 'emailers/candidate/' + template_name
             self.process(to, send_dict, data)
 
+        elif mail_type == 'TOP_APPLICANT_MAIL':
+            send_dict['subject'] = data.get('subject', "Your Top Applicant Service is Initiated")
+            template_name = data.get('template_name', 'top_applicant.html')
+            send_dict['template'] = 'emailers/candidate/' + template_name
+            self.process(to, send_dict, data)
+        
+
         elif mail_type == "COURSE_CLOSER_MAIL":
             send_dict['subject'] = data.get('subject', "Your service(s) has been initiated")
             template_name = data.get('template_name', 'candidate/course_closure.html')
