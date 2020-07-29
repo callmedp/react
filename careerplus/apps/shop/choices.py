@@ -68,13 +68,15 @@ FLOW_CHOICES = (
     (15, 'Resume Booster International'),
     (16, 'Assessment and Certifications'),
     (17, 'Resume Builder'),
+    (18, 'Shine Premium'),
 )
 
 SUB_FLOWS = {
     5: (
         (501, "Featured Profile"),
         (502, "Jobs on the Move"),
-        (503, "Priority Applicant")
+        (503, "Priority Applicant"),
+        (504, "Top Applicant")
     ),
     16: (
         (1601, "Free Test"),
@@ -91,6 +93,11 @@ SUB_FLOWS = {
     17: (
         (1700, "Default"),
         (1701, "Subscription")
+    ),
+    18: (
+        (1800, 'One Month'),
+        (1801, 'Two Month'),
+        (1802, 'Six Month')
     )
 }
 
@@ -411,7 +418,7 @@ SUB_HEADING_CHOICE_ATTR_MAPPING_MOBILE = (
     (2, 'class="bullet-custom tick"'),
 )
 
-#also added in choices.py of search to be used in filter tag
+# also added in choices.py of search to be used in filter tag
 PRODUCT_TAG_CHOICES = (
     (0, 'None'),
     (1, 'Bestseller'),

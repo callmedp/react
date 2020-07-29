@@ -74,6 +74,8 @@ class CategoryApiView(FieldFilterMixin,ListAPIView):
         if self.request.query_params.get('tl'):
             type_flow = self.request.query_params.get('tl').split(',')
             filter_dict.update({'type_level__in': type_flow})
+        if self.request.query_params.get('title'):
+            filter_dict.update({'title__icontains': self.request.query_params.get('title')})
         return queryset.filter(**filter_dict)
 
 

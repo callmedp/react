@@ -19,6 +19,7 @@ WIDGET_CHOICES = (
     (7, 'BannerLink'),
     (8, 'Indexer Widget'),
     (9, 'Detail Page Widget'),
+    (10, 'Button Widget'),
 )
 
 SECTION = (

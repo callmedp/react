@@ -620,8 +620,8 @@ CANDIDATE_MONGO_DB = 'sumoplus'
 
 
 ZESTMONEY_INFO = {
-                "authentication_base_url":"http://staging-auth.zestmoney.in",
-                "api_base_url":"http://staging-app.zestmoney.in",
+                "authentication_base_url":"https://staging-auth.zestmoney.in",
+                "api_base_url":"https://staging-app.zestmoney.in",
                 "user_name":"ShineLearning",
                 "password":"IWo)2IDs",
                 "client_id":"e32b336c-74ab-4254-82a6-3d9ebd9242d0",

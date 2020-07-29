@@ -212,12 +212,14 @@
                 {% elif obj.oi_status == 61 %}
                     <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
 
+                {% elif obj.oi_status == 36 or obj.oi_status == 37   %}
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
                 {% elif obj.oi_status == 161 or obj.oi_status == 162 or obj.oi_status == 163 or obj.oi_status == 164  %}
                     <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
                 {% else %}
                    <p><strong>Status:</strong> Service is under progress</p>
                 {% endif %}
-                {% if obj.oi_status == 28 or obj.oi_status == 34 or obj.oi_status == 35 %}
+                {% if obj.oi_status == 28 or obj.oi_status == 36 or obj.oi_status == 34 or obj.oi_status == 35 %}
                     {% if obj.days_left_oi_product > 0 and obj.product.is_pause_service  %}
                         {% if obj.service_pause_status %}
                             <p class="pause-play-services">

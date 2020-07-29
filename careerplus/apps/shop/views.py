@@ -2,6 +2,7 @@ import json
 import logging
 import requests
 
+from datetime import datetime;
 from collections import OrderedDict
 from decimal import Decimal
 from urllib.parse import unquote
@@ -44,6 +45,8 @@ from search.choices import STUDY_MODE
 from homepage.models import Testimonial
 from review.models import Review
 from order.models import OrderItem
+from wallet.models import ProductPoint
+
 
 from .models import Product
 from review.models import DetailPageWidget
@@ -469,6 +472,9 @@ class ProductInformationMixin(object):
         ctx['is_logged_in'] = True if self.request.session.get('candidate_id') else False
         ctx["loginform"] = ModalLoginApiForm()
         ctx['linkedin_resume_services'] = settings.LINKEDIN_RESUME_PRODUCTS
+        ctx['redeem_test'] = False
+        ctx['product_redeem_count'] =0
+        ctx['redeem_option'] = 'assessment'
         if self.request.session.get('candidate_id'):
             candidate_id = self.request.session.get('candidate_id')
             contenttype_obj = ContentType.objects.get_for_model(product)
@@ -480,6 +486,39 @@ class ProductInformationMixin(object):
                 user_id=candidate_id).count()
 
             ctx['user_reviews'] = True if user_reviews else False
+            
+            redeem_option = product.attr.get_attribute_by_name(
+                'redeem_option')
+            
+            attr_value = product.attr.get_value_by_attribute(redeem_option)
+            
+            if not attr_value:
+                code = None
+            else:
+                code = attr_value.value or None
+
+            if code:
+                product_point = ProductPoint.objects.filter(
+                    candidate_id=candidate_id).first()
+
+                if  product_point:
+            
+                    redeem_options = eval(product_point.redeem_options)
+
+                    required_obj = [
+                        option for option in redeem_options if option['type'] == code]
+                    required_obj = required_obj[0]
+                    product_redeem_count = required_obj['product_redeem_count']
+                    days = required_obj['product_validity_in_days'] or 0
+                    timestamp = required_obj['purchased_at'] or 0
+                    days_diff = datetime.now() - datetime.fromtimestamp(int(timestamp))
+                    if days_diff.days < days and product_redeem_count != 0:
+                        ctx['redeem_test'] = True
+                        ctx['product_redeem_count'] = product_redeem_count
+                        ctx['redeem_option'] = code
+
+
+                    
         navigation = True
 
         if sqs.id in settings.LINKEDIN_RESUME_PRODUCTS:

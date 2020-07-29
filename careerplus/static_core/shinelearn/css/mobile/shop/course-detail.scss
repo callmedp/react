@@ -377,3 +377,89 @@
 		  border: 0;
 	  }
 }
+
+
+.overlay-background {
+  background: #000000;  
+  display: none;        
+  position: fixed;   
+  top: 0;                 
+  right: 0;             
+  bottom: 0;
+  left: 0;
+  opacity: 0.5;
+  z-index: 1000;
+}
+
+.loader-position-mobile {
+  transform: translate(260%, 450%);
+  z-index: 1000;
+}
+
+.body-noscroll {
+ overflow: hidden;
+}
+
+.flex-column {
+	flex-direction: column;
+	align-items: flex-start;
+
+	.hide-redeem {
+			display: block;
+	}
+}
+
+.tooltip {
+	position: relative;
+	display: inline-block;
+
+	i {
+			width: 17px;
+			height: 17px;
+			background: $txt-blue;
+			color: $txt-white;
+			font-style: italic;
+			font-weight: 700;
+			font-size: 12px;
+			border-radius: 100%;
+			display: inline-block;
+			text-align: center;
+			line-height: 17px;
+			margin-left: 5px;
+	}
+
+	.tooltiptext {
+			visibility: hidden;
+			width: 120px;
+			background-color: $txt-white;
+			color: $txt-black;
+			text-align: center;
+			border-radius: 6px;
+			padding: 5px;
+			position: absolute;
+			z-index: 1;
+			top: 150%;
+			left: -90%;
+			margin-left: -60px;
+			font-size: 11px;
+			line-height: 14px;
+			box-shadow: $box-shadow;
+
+			&::after {
+				content: " ";
+				position: absolute;
+				bottom: 100%;  /* At the top of the tooltip */
+				right: 20%;
+				margin-left: -5px;
+				border-width: 5px;
+				border-style: solid;
+				border-color: transparent transparent $txt-white transparent;
+			}
+		}
+
+		&:hover {
+			.tooltiptext {
+					visibility: visible;
+			}
+		}
+}
