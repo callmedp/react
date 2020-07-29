@@ -147,6 +147,8 @@ class Widget(AbstractCommonModel):
             return 'banner_ad.html'
         elif self.widget_type == 8:
             return 'index_widget.html'
+        elif self.widget_type == 10:
+            return 'button_widget.html'
 
 
 class Page(AbstractCommonModel, AbstractSEO, ModelMeta):

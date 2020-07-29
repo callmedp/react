@@ -179,6 +179,9 @@
                 {% elif obj.oi_status == 61 %}
                     <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
 
+                {% elif obj.oi_status == 36 or obj.oi_status == 37   %}
+                    <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
+
                 {% elif obj.oi_status == 161 or obj.oi_status == 162 or obj.oi_status == 163 %}
                     <p><strong>Status:</strong> {{obj.get_user_oi_status}}</p>
 

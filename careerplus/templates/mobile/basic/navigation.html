@@ -225,6 +225,8 @@
                 <li><a href="/talenteconomy/" class="cls_eventtrack" data-category="TELINK" data-action="Menu" data-label="learning.shine"><span class="icon-talentEco"></span>Blog</a></li>
                 <li><a href="/cms/resume-format/1/"><span class="icon-sample"></span>Free Samples</a></li>
                 <li><a href="/practice-tests/"><span class="icon-practice-test"></span>Practice Tests <small class="new-tag">New</small></a></li>
+                {% if navlink_1 %}<li><a href="{{navlink_1.skill_page_url}}" onclick="nav1_gaEvent()">{% if navlink_1.icon %}<span class="icon"><img src="{{image_static_url}}{{navlink_1.icon}}"></img>{% endif %}</span>{{navlink_1.display_name}}{% if navlink_1.tag %}<small class="new-tag">{{navlink_1.tag}}</small>{% endif %}</a></li>{% endif %}
+                {% if navlink_2 %}<li><a href="{{navlink_2.skill_page_url}}" onclick="nav2_gaEvent()">{% if navlink_2.icon %}<span class="icon"><img src="{{image_static_url}}{{navlink_2.icon}}"></img>{% endif %}</span>{{navlink_2.display_name}}{% if navlink_2.tag %}<small class="new-tag">{{navlink_2.tag}}</small>{% endif %}</li>{% endif %}
 
                 {% if request.session.candidate_id %}
                 <li class="dashboard c9 fs-12">
@@ -270,4 +272,23 @@
     function clearLocalStorage(){
         localStorage.clear();
     }
+
+    (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+            (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date(); a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+    ga('create', 'UA-3537905-41', 'auto', { 'name': 'a' });
+    ga('a.send', 'pageview');
+    ga('create', 'UA-3537905-41', 'auto');
+    ga('send', 'pageview');
+
+    function nav1_gaEvent() {ga('send', 'event', 'Side Menu', 'Click', 'Skillpage1');}
+    function nav2_gaEvent() {ga('send', 'event', 'Side Menu', 'Click', 'Skillpage2');}
+    function gaOffer_popup() {ga('send', 'event', 'Homepage Banner Mobile', 'Banner-click', 'Top Banner');}
+    function gaOffer_sticky_close() {ga('send', 'event', 'Homepage Banner Mobile', 'Banner-close', 'Top Banner');}
+    function gaAvail_offer() {ga('send', 'event', 'Homepage Banner Mobile', 'Popup-Form-Fill', 'Offer Popup')}
+    function gaPopup_close() {ga('send', 'event', 'Homepage Banner Mobile', 'Popup-close', 'Offer Popup')}
+    function gaForm_fill() {ga('send', 'event', 'Homepage Banner Mobile', 'Popup-Form-Attempt', 'Offer Popup')}
 </script>

@@ -19,7 +19,8 @@ from shop.choices import (
     APPLICATION_PROCESS_CHOICES, APPLICATION_PROCESS,
     BENEFITS_CHOICES, BENEFITS, FACULTY_PRINCIPAL,
 )
-from homepage.models import Testimonial
+from homepage.models import Testimonial, NavigationSpecialTag
+from shop.models import Category
 
 # third party imports
 from dal import autocomplete
@@ -1848,9 +1849,18 @@ class OfferChangeForm(forms.ModelForm):
             (p.id, '{}({})'.format(p.pNm,p.id),) for p in prod_objs]
         self.fields['product'] = forms.MultipleChoiceField(choices=choices)
 
+class SpecialTagsForm(forms.ModelForm):
 
+    class Meta:
+        model = NavigationSpecialTag
+        fields = '__all__'
 
+    def __init__(self, *args, **kwargs):
+        instance = kwargs.get('instance')
+        super(SpecialTagsForm, self).__init__(*args, **kwargs)
+        form_class = 'form-control col-md-7 col-xs-12'
+        skill_page_objs = Category.objects.filter(is_skill=True, active=True)
+        choices = [
+            (p.url, '{}({})'.format(p.name,p.id),) for p in skill_page_objs]
 
-
-
-
+        self.fields['skill_page_url'] = forms.ChoiceField(choices=choices)

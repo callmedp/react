@@ -727,8 +727,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                <a class="icon-li" id="article_share" target="_blank" article-slug="{{page_obj.slug}}" href="https://www.linkedin.com/shareArticle?mini=true&url=https://{{SITE_DOMAIN}}{{page_obj.get_absolute_url}}&title={{page_obj.title}}&summary={{page_obj.meta_desc}}&source={{SITEDOMAIN}}/"></a>
                             </li>
                             <li class="twitter">
-                                  <a aria-label="Share on Twitter" href="https://twitter.com/home?status=https://{{SITE_DOMAIN}}{{page_obj.get_absolute_url}}" target="_blank" class="icon-tw"></a>
-
+                                <a  aria-label="Share on Twitter" href="https://twitter.com/intent/tweet?text={{page_obj.title}}&url=https://{{SITE_DOMAIN}}{{page_obj.get_absolute_url}}" target="_blank" class="icon-tw"></a>
+                                  <!-- <a aria-label="Share on Twitter" href="https://twitter.com/home?status=https://{{SITE_DOMAIN}}{{page_obj.get_absolute_url}}" target="_blank" class="icon-tw"></a> -->
                             </li>
                         </ul>
                     </div><!-- /. social-share -->
