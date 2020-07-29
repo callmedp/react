@@ -122,7 +122,8 @@ class HomePageView(TemplateView, MetadataMixin):
         else:
             data = Testimonial.objects.filter(page=1, is_active=True)
             data = data[: 5]
-            cache.set('get_testimonial',{"testimonials": data},timeout=None)
+            data ={"testimonials": data}
+            cache.set('get_testimonial',data,timeout=None)
         return data
 
     def get_context_data(self, **kwargs):
