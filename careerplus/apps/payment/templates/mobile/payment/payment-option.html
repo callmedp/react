@@ -285,7 +285,7 @@
                 {% endif %}
                    <div class="payment-type--item">
             <span></span>
-            <a href="{% url "payment:payu-request" cart_id %}" >Amazon Pay
+            <a href="{% url "payment:payu-request" cart_id %}" id="amazon-pay-payment" >Amazon Pay
               <img src="{% static 'shinelearn/images/payments/amazon-pay.png' %}" width="89" class="payment-type--item--img"/>
             </a>
           </div>
@@ -311,6 +311,11 @@
 <script type="text/javascript">
         var totalAmount = "{{total_amount}}";
         var cart_id     = "{{cart_id}}"
+        var shineApiUrl = "{{shine_api_url}}"
+        var trackingProductId = "{{tracking_product_id}}"
+        var productTrackingMappingId = "{{product_tracking_mapping_id}}"
+        var trackingId = "{{tracking_id}}"
+        console.log({ trackingProductId, shineApiUrl, productTrackingMappingId, trackingId })
         </script>
     {{block.super}}
     {% compress js %}

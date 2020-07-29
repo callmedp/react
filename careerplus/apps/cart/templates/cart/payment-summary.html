@@ -57,18 +57,18 @@ Payment Summary - Shine Learning
 
       <a href="{% url "cart:payment-login" %}"><span {% if candidate_in_session or guest_in_session  %}
           class="green-circle" {% endif %}>2</span>
-          {% if candidate_in_session or guest_in_session  %}
-           Logged in<strong class="truncate-email">as
-            {% if candidate_in_session %}
-                {%if first_name%}
-                  {{first_name}}
-                {% else %}
-                  {{email_id}}
-                {% endif %}         
-            {% else %}
-              Guest
-            {% endif%}
-              
+        {% if candidate_in_session or guest_in_session  %}
+        Logged in<strong class="truncate-email">as
+          {% if candidate_in_session %}
+          {%if first_name%}
+          {{first_name}}
+          {% else %}
+          {{email_id}}
+          {% endif %}
+          {% else %}
+          Guest
+          {% endif%}
+
           {% else %}
           Login
           {% endif %}</strong></a>
@@ -240,7 +240,8 @@ Payment Summary - Shine Learning
             {% elif cart_wallet %}
             <div id="shineCredit">
               <div class="coupon__wrap">
-                <input id="loyalty_point" type="text" placeholder="{{redeemed_reward_point}} loyalty points redeemed!" disabled>
+                <input id="loyalty_point" type="text" placeholder="{{redeemed_reward_point}} loyalty points redeemed!"
+                  disabled>
                 <button type="button" id='remove-point' onclick="JSRemovePoint(event);">Remove</button>
               </div><!-- // coupon__wrap -->
               <span class="error-txt" id="point-alert"></span>
@@ -315,7 +316,8 @@ Payment Summary - Shine Learning
       <!-- Make payment -->
       <span class="col-sm-7 col-md-8"></span>
       <span class="col-sm-3 col-md-4 continue">
-        <a class='trig-loader' href="{% url "cart:payment-login" %}"><button type="button"  id="payment-summary-continue-id">Proceed to
+        <a class='trig-loader' href="{% url "cart:payment-login" %}"><button type="button"
+            id="payment-summary-continue-id">Proceed to
             payment</button></a>
         <!-- <figure class="secure-payment-icon"></figure>
           <span>100% Secure Payment</span> -->
@@ -329,30 +331,38 @@ Payment Summary - Shine Learning
 </section>
 <!-- main section end -->
 {% else %}
-        <!-- Blank Cart -->
-        <section class="container mt-53 mb-100">
+<!-- Blank Cart -->
+<section class="container mt-53 mb-100">
 
-            <!-- page content body start -->
-            <div class="row">
-                <!-- content start -->
-                <div class="col-sm-12 mt-53">
-                  <div class="empty-cart bdr">
-                    <figure class="empty-cart-pic"></figure>
-                    <article>You have no product in your cart. <br>Add your first product and earn <strong>Shine loyalty points</strong></article>
-                    <a href="{% url "homepage" %}" class="search-button">Search now</a>
-                  </div>
-                </div>
-                <!-- content end -->
+  <!-- page content body start -->
+  <div class="row">
+    <!-- content start -->
+    <div class="col-sm-12 mt-53">
+      <div class="empty-cart bdr">
+        <figure class="empty-cart-pic"></figure>
+        <article>You have no product in your cart. <br>Add your first product and earn <strong>Shine loyalty
+            points</strong></article>
+        <a href="{% url "homepage" %}" class="search-button">Search now</a>
+      </div>
+    </div>
+    <!-- content end -->
 
-                  {% include "shop/partials/recommended_product.html" %}
-            </div>
-        </section>
-  {% endif %}
+    {% include "shop/partials/recommended_product.html" %}
+  </div>
+</section>
+{% endif %}
 {% endblock container %}
 
 
 {% block js_section %}
 {{ block.super }}
+<script>
+  var shineApiUrl = "{{shine_api_url}}"
+  var trackingProductId = "{{tracking_product_id}}"
+  var productTrackingMappingId = "{{product_tracking_mapping_id}}"
+  var trackingId = "{{tracking_id}}"
+console.log({ trackingProductId, shineApiUrl, productTrackingMappingId, trackingId})
+</script>
 {% compress js %}
 <script type="text/javascript" src="{% static 'shinelearn/js/cart/payment-summary.js' %}"></script>
 <script src="{% static 'shinelearn/js/cart/cart.js' %}"></script>
