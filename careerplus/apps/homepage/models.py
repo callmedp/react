@@ -113,6 +113,11 @@ class Testimonial(AbstractAutoDate):
         return currency_dict.get(self.page)
 
 
+    def save(self,*args,**kwargs):
+        cache.delete('get_testimonial')
+        super(Testimonial,self).save(*args,**kwargs)
+
+
 class TestimonialCategoryRelationship(AbstractAutoDate):
     category = models.ForeignKey('shop.Category',on_delete=models.CASCADE)
     testimonial = models.ForeignKey('homepage.Testimonial',on_delete=models.CASCADE)
@@ -178,8 +183,16 @@ class HomePageOffer(AbstractAutoDate):
             raise ValidationError('Sticky Text, Banner Text or Offer value cannot be empty')
 
     def get_active_offer(self):
-        active_offer = HomePageOffer.objects.filter(is_active=True).first()
-        return active_offer
+        offer = cache.get('homepage_active_offer')
+        if not offer:
+            offer = HomePageOffer.objects.filter(is_active=True).first()
+            cache.set('homepage_active_offer',offer,timeout=None)
+        return offer
+
+
+    def save(self,*args,**kwargs):
+        cache.delete('homepage_active_offer')
+        super(HomePageOffer,self).save(*args,**kwargs)
 
 
 class NavigationSpecialTag(AbstractAutoDate):
@@ -205,7 +218,7 @@ class NavigationSpecialTag(AbstractAutoDate):
     def get_active_navlink(cls):
         active_navlink = NavigationSpecialTag.objects.filter(is_active=True)
         nav_list = []
-        if active_navlink.count():
+        if active_navlink.exists():
             return active_navlink
         return nav_list
 

@@ -2,6 +2,7 @@ import logging
 
 from django.views.generic import TemplateView
 from django.conf import settings
+from django.core.cache import cache
 from django.http.response import Http404
 
 from django_redis import get_redis_connection
@@ -43,8 +44,9 @@ class HomePageView(TemplateView, MetadataMixin):
         job_services = []
         job_asst_view_all = None
         try:
+
             tjob = TopTrending.objects.filter(
-                is_active=True, is_jobassistance=True)[0]
+                is_active=True, is_jobassistance=True).first()
             job_services = tjob.get_trending_products()
             # services_class = ProductClass.objects.filter(slug__in=settings.SERVICE_SLUG)
             # job_services = job_services.filter(product__type_product__in=[0, 1, 3])
@@ -114,9 +116,14 @@ class HomePageView(TemplateView, MetadataMixin):
         return {'tcourses': tcourses, 'pcourses': pcourses, 'rcourses': rcourses}
 
     def get_testimonials(self):
-        testimonials = Testimonial.objects.filter(page=1, is_active=True)
-        testimonials = testimonials[: 5]
-        return {"testimonials": testimonials}
+        data =cache.get('get_testimonial')
+        if data:
+            return data
+        else:
+            data = Testimonial.objects.filter(page=1, is_active=True)
+            data = data[: 5]
+            cache.set('get_testimonial',{"testimonials": data},timeout=None)
+        return data
 
     def get_context_data(self, **kwargs):
         context = super(HomePageView, self).get_context_data(**kwargs)
