@@ -230,7 +230,11 @@
                                             </div>
                                             <div class="media-left">
                                                 <figure>
-                                                    <img aria-label="{{tprd.pImA}}" class="img-responsive" src="{{tprd.pImg}}" alt="{{tprd.pImA}}">
+
+                                                                                        {% thumbnail tprd.pImg "120x120" as im %}
+    <img class="img-responsive" aria-label="{{tprd.pImA}}" src="{{ im.url }}"  alt="{{tprd.pImA}}">
+{% endthumbnail %}
+
                                                 </figure>
                                             </div>
                                         </div>
