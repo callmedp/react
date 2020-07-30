@@ -30,6 +30,12 @@ from django.shortcuts import render
 from django.forms import modelformset_factory
 from django.template.response import TemplateResponse
 
+
+from django.db.models import Prefetch
+
+
+
+
 from geolocation.models import Country
 from order.models import Order, OrderItem, InternationalProfileCredential, OrderItemOperation
 from shop.models import DeliveryService, Product, JobsLinks,Category
@@ -229,7 +235,11 @@ class OrderListView(ListView, PaginationMixin):
             logging.getLogger('error_log').error("%s " % str(e))
             pass
         if queryset.exists():
-            return queryset.order_by('-modified')
+            return queryset.prefetch_related(Prefetch('ordertxns',
+    queryset=PaymentTxn.objects.select_related('order'),
+    to_attr='get_txnss'
+)).order_by('-modified')
+            # return queryset.prefetch_related('orderitems').order_by('-modified')
         else:
             return queryset.none()
 

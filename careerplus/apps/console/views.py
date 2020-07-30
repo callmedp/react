@@ -29,7 +29,7 @@ class ConsoleDashboardView(TemplateView):
     def get_context_data(self, **kwargs):
         if hasattr(self.request.user, 'vendor_set') and self.request.user.vendor_set.count():
             kwargs['is_vendee'] = True
-            kwargs['vendor_id'] = self.request.user.vendor_set.all()[0].id
+            kwargs['vendor_id'] = self.request.user.vendor_set.only('id').first().id
         if self.request.user and self.request.user.is_staff:
             kwargs['is_admin'] = True
         context = super(ConsoleDashboardView, self).get_context_data(**kwargs)
