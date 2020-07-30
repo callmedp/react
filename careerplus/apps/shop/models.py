@@ -1120,7 +1120,7 @@ class Product(AbstractProduct, ModelMeta):
 
     def __init__(self, *args, **kwargs):
         super(Product, self).__init__(*args, **kwargs)
-        if self.product_class:
+        if self.product_class_id:
             self.attr = ProductAttributesContainer(product=self)
 
     def __str__(self):

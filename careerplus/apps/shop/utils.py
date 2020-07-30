@@ -204,7 +204,7 @@ class ProductAttributesContainer(object):
 
     def get_all_attributes(self):
         if self.product:
-            if self.product.product_class:
+            if self.product.product_class_id:
                 return self.product.product_class.attributes.filter(active=True)  
         return self.objects.none()
 
