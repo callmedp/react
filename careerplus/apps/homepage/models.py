@@ -43,10 +43,14 @@ class TopTrending(AbstractAutoDate):
     def __str__(self):
         return self.name
 
+    def get_all_active_trending_products_ids(self):
+        return TrendingProduct.objects.filter(is_active=True,trendingcourse=self).values_list('product_id',flat=True)
+
     def get_trending_products(self):
         tprds = self.trendingproduct_set.filter(is_active=True).select_related('product')
         tprds = tprds.filter(product__type_product__in=[0, 1, 3])
         return tprds
+
 
 
 class TrendingProduct(AbstractAutoDate):

@@ -4,6 +4,7 @@ from django.views.generic import TemplateView
 from django.conf import settings
 from django.core.cache import cache
 from django.http.response import Http404
+from django.db.models import Prefetch
 
 from django_redis import get_redis_connection
 from haystack.query import SearchQuerySet
@@ -15,7 +16,7 @@ from core.library.haystack.query import SQS
 from core.api_mixin import ShineCandidateDetail
 from geolocation.models import Country
 from meta.views import MetadataMixin
-from .models import TopTrending, Testimonial
+from .models import TopTrending, Testimonial,TrendingProduct
 
 from .config import STATIC_SITE_SLUG_TO_ID_MAPPING, STATIC_PAGE_NAME_CHOICES,TOPTRENDING_FA_MAPPING
 
@@ -47,11 +48,14 @@ class HomePageView(TemplateView, MetadataMixin):
 
             tjob = TopTrending.objects.filter(
                 is_active=True, is_jobassistance=True).first()
-            job_services = tjob.get_trending_products()
+            # job_services = tjob.get_trending_products()
             # services_class = ProductClass.objects.filter(slug__in=settings.SERVICE_SLUG)
             # job_services = job_services.filter(product__type_product__in=[0, 1, 3])
-            job_services_pks = list(job_services.all().values_list('product', flat=True))
-            job_sqs = SearchQuerySet().filter(id__in=job_services_pks).exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS)
+            # job_services_pks = list(job_services.all().values_list('product', flat=True))
+            job_services_pks = list(tjob.get_all_active_trending_products_ids())
+
+            job_sqs = SearchQuerySet().filter(id__in=job_services_pks,pTP__in=[0,1,3]).exclude(
+                id__in=settings.EXCLUDE_SEARCH_PRODUCTS)
             job_services = job_sqs[:5]
             job_asst_view_all = tjob.view_all
         except Exception as e:
@@ -63,7 +67,12 @@ class HomePageView(TemplateView, MetadataMixin):
         pcourses = []
         rcourses = []
         t_objects = TopTrending.objects.filter(
-            is_active=True, is_jobassistance=False)
+            is_active=True, is_jobassistance=False).prefetch_related(Prefetch('trendingproduct_set',
+                              queryset=TrendingProduct.objects.select_related('trendingcourse').filter(
+                                  is_active=True),to_attr='get_pids'))
+
+
+
         t_objects = t_objects[:4]
         show_pcourses = False
 
@@ -92,14 +101,17 @@ class HomePageView(TemplateView, MetadataMixin):
 
         i = 0
         tabs = ['home', 'profile', 'message', 'settings']
-        course_classes = ProductClass.objects.filter(slug__in=settings.COURSE_SLUG)
+        # course_classes = ProductClass.objects.filter(slug__in=settings.COURSE_SLUG)
         for tcourse in t_objects:
-            tprds = tcourse.get_trending_products()
-            tprds = tprds.filter(product__product_class__in=course_classes,
-            product__type_product__in=[0, 1, 3])
-            product_pks = list(tprds.all().values_list('product', flat=True))
-            tprds = SearchQuerySet().filter(id__in=product_pks).exclude(
-            id__in=settings.EXCLUDE_SEARCH_PRODUCTS)[:9]
+            # tprds = tcourse.get_trending_products()
+            # tprds = tprds.filter(product__product_class__in=course_classes,
+            # product__type_product__in=[0, 1, 3])
+            # product_pks = list(tprds.all().values_list('product', flat=True))
+            product_pks = [prod.id for prod in tcourse.get_pids]
+            # product_pks = list(tcourse.get_all_active_trending_products_ids())
+
+            tprds = SearchQuerySet().filter(id__in=product_pks,pPc__in=settings.COURSE_SLUG,pTP__in=[0,1,3]).exclude(
+                id__in=settings.EXCLUDE_SEARCH_PRODUCTS)[:9]
 
             data = {
                 'name': tcourse.name,
