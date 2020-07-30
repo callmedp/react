@@ -2188,7 +2188,10 @@ class BoosterQueueVeiw(ListView, PaginationMixin):
         q1 = queryset.filter(oi_status=61)
         exclude_list = []
         for obj in q1:
-            closed_ois = obj.order.orderitems.filter(oi_status=4, product__type_flow=1, product__sub_type_flow__in=[101,100], no_process=False)
+
+            closed_ois = OrderItem.objects.filter(order_id=obj.order_id,oi_status=4,product__type_flow=1,
+                                                  product__sub_type_flow__in=[101,100],no_process=False)
+            # closed_ois = obj.order.orderitems.filter(oi_status=4, product__type_flow=1, product__sub_type_flow__in=[101,100], no_process=False)
             if closed_ois.exists():
                 last_oi_status = obj.oi_status
                 obj.oi_status = 5
