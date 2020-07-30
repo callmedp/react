@@ -14,16 +14,30 @@
 
     
 {% block css_section %}
-    {{block.super}}
+        <link async href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
+       <link async rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+
+        <link type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/common/header-footer.scss' %}" rel="stylesheet">
+        <link type="text/css" href="{% static 'shinelearn/css/common/typeaheadjs.css' %}" rel="stylesheet">
+        <link href="{% static 'console/css/custom-icon.scss' %}" rel="stylesheet" type="text/scss">
+
+
     {% if request.session.candidate_id %}
     {% compress css %}
     <link type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/homepage/home1.scss' %}" rel="stylesheet">
     <link type="text/css" href="{% static 'shinelearn/css/common/inputTags.css' %}" rel="stylesheet">
+        <link type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/common/header-footer.scss' %}" rel="stylesheet">
+        <link type="text/css" href="{% static 'shinelearn/css/common/typeaheadjs.css' %}" rel="stylesheet">
+        <link href="{% static 'console/css/custom-icon.scss' %}" rel="stylesheet" type="text/scss">
     {% endcompress %}
     {% else %}
     {% compress css %}
     <link type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/homepage/home.scss' %}" rel="stylesheet">
     <link type="text/css" href="{% static 'shinelearn/css/common/inputTags.css' %}" rel="stylesheet">
+        <link type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/common/header-footer.scss' %}" rel="stylesheet">
+        <link type="text/css" href="{% static 'shinelearn/css/common/typeaheadjs.css' %}" rel="stylesheet">
+        <link href="{% static 'console/css/custom-icon.scss' %}" rel="stylesheet" type="text/scss">
     {% endcompress %}
     {% endif %}
     
@@ -376,11 +390,21 @@
 
 {% endblock main_container %}
 {% block js_section %}
-    {{block.super}}
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+    <script async src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"> </scriptasync>
+    <script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"></script>
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.2.1/typeahead.bundle.js"></script>
+<script async src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
     <script type="text/javascript">
         var end_date_time = "{{end_date}}"
     </script>
     {% compress js %}
+    <script src="{% static 'shinelearn/js/common/common.js' %}"> </script>
+    <script src="{% static 'shinelearn/js/common/plugins.ga.js' %}"></script>
+    <script src="{% static 'shinelearn/js/webmobile/webmobile.js' %}"> </script>
+
     <script src="{% static 'shinelearn/js/common/inputTags.jquery.js' %}"></script>
     <script src="{% static 'shinelearn/js/homepage/index.js' %}"></script>
     <script src="{% static 'shinelearn/js/homepage/offer_timer.js' %}"></script>
@@ -405,13 +429,17 @@
     
     {% compress js inline %}
     <script>
-        $('#myCarousel1').carousel({
+    $(document).ready(function(){
+      $('#myCarousel1').carousel({
             interval: 4000,
         });
 
         $('#carousel-example-generic1').carousel({
             interval: 100000
         })
+
+    });
+
     </script>
     {% endcompress %}
 {% endblock js_section %}
