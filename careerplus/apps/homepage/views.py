@@ -107,7 +107,7 @@ class HomePageView(TemplateView, MetadataMixin):
             # tprds = tprds.filter(product__product_class__in=course_classes,
             # product__type_product__in=[0, 1, 3])
             # product_pks = list(tprds.all().values_list('product', flat=True))
-            product_pks = [prod.id for prod in tcourse.get_pids]
+            product_pks = [prod.product_id for prod in tcourse.get_pids]
             # product_pks = list(tcourse.get_all_active_trending_products_ids())
 
             tprds = SearchQuerySet().filter(id__in=product_pks,pPc__in=settings.COURSE_SLUG,pTP__in=[0,1,3]).exclude(
