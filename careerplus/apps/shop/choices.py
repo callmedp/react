@@ -75,7 +75,8 @@ SUB_FLOWS = {
     5: (
         (501, "Featured Profile"),
         (502, "Jobs on the Move"),
-        (503, "Priority Applicant")
+        (503, "Priority Applicant"),
+        (504, "Top Applicant")
     ),
     16: (
         (1601, "Free Test"),

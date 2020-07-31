@@ -32,6 +32,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <!--<link type="text/css"  href="{% static 'shinelearn/css/common/bootstrapv3.3.7.css' %}" rel="stylesheet" >-->
         <link type="text/scss" href="{% static 'shinelearn/css/common/header-footer.scss' %}" rel="stylesheet">
         <link type="text/css"  href="{% static 'shinelearn/css/cms/global.css' %}"  rel="stylesheet">
+        <link type="text/scss" href="{% static 'shinelearn/css/cms/faq.scss' %}" rel="stylesheet">
 
         {% endcompress %}
          <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -377,7 +378,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                 <a target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{hostname}}{{page_obj.get_absolute_url}}" page-id="{{page_obj.id}}" class="icon-fb"></a>
                             </li>
                             <li class="twitter">
-                                  <a href="https://twitter.com/home?status=https://{{SITE_DOMAIN}}{{page_obj.get_absolute_url}}" target="_blank" class="icon-tw"></a>
+                                  <!-- <a href="https://twitter.com/home?status=https://{{SITE_DOMAIN}}{{page_obj.get_absolute_url}}" target="_blank" class="icon-tw"></a> -->
+                                  <a href="https://twitter.com/intent/tweet?text=Resignation Letter Format and Samples&url={{SITE_DOMAIN}}{{page_obj.get_absolute_url}}" target="_blank" class="icon-tw"></a>
 
                             </li>
                             <li class="linkedin">
@@ -516,7 +518,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         </div>
 
                     </div><!-- /. white-box -->
-
+                    <a id="top-page" class="top-on-page" href="#top">Top</a>
 
                 </div><!-- /. Right pan -->
             </div><!-- /. col -->
@@ -539,6 +541,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <!--<script type="text/javascript" src="{% static 'shinelearn/js/common/plugins.ga.js' %}"></script>-->
     <!--<script type="text/javascript" src="{% static 'shinelearn/js/common/bootstrap.min.js' %}"> </script>-->
     <script type="text/javascript" src="{% static 'shinelearn/js/cms/validate.js' %}"></script>
+    <script type="text/javascript" src="{% static 'shinelearn/js/cms/gotoTop.js' %}"></script>
 
     {% comment %} <script src="{% static 'shinelearn/js/common/typeahead.min.js' %}"></script> {% endcomment %}
 
