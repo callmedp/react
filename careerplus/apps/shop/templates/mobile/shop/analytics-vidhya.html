@@ -33,7 +33,7 @@
 
     <div class="about-section light-blue-bg">
         <h2>About Data Science</h2>
-        <p>Data science is everywhere right now. It is the hottest field in the industry right now. Organisation today are using data science solutions to solve the business... <a href="#">Read more</a></p>
+        <p>Data science is everywhere right now. It is the hottest field in the industry right now. Organisation today are using data science solutions to solve the business.<span id="dots">...</span><div  id="more" style="display:none;"><p>It’s a great time to learn data science and get ready for your first industry role! The potential of data science is limitless - spanning across industries, roles and functions</p></div></p><a id="read_more" onclick="read_more()">Read more</a>
 
         <p class="my-10"><strong>Benefits of the program</strong></p>
         <ul class="about-section--list">
@@ -303,7 +303,7 @@
             </li><!-- // Question 1 -->
             
             <li class="accordion_in">
-                <div class="acc_head"><h3>Do I get a certification on completion</h3></div>
+                <div class="acc_head"><h3>Do I get a certification on completion?</h3></div>
                 
                 <div class="acc_content">
                     Yes, You will be given a certificate upon satisfactory completion of each course in this program.
@@ -452,6 +452,21 @@
 
     document.querySelector("#" + content).classList.add("active");
     btnTarget.classList.add("active");
+    }
+
+    function read_more(){
+        var dots = document.getElementById("dots");
+        var moreText = document.getElementById("more");
+        var readMore = document.getElementById("read_more");
+        if (dots.style.display === "none") {
+            dots.style.display = "inline";
+            readMore.innerHTML = "Read more"; 
+            moreText.style.display = "none";
+        } else {
+            dots.style.display = "none";
+            readMore.innerHTML = "Read less"; 
+            moreText.style.display = "inline";
+        }
     }
 
 </script>
