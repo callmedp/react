@@ -1400,3 +1400,11 @@ class SmsUrlRedirect(View):
 
 class AnalyticsVidhyaProductView(TemplateView):
     template_name = 'shop/analytics-vidhya.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(AnalyticsVidhyaProductView, self).get_context_data(**kwargs)
+        context.update({
+            "campaign_slug" : "analytics_vidhya"
+        })
+        return context
+

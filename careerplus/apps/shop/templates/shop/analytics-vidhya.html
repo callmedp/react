@@ -33,32 +33,33 @@
             <div class="col-sm-3 mtp8">
                 <div class="enquire-now-av">
                     <strong class="mb-30">Enquire now</strong>
-                    <form>
-                        <div class="form-group error">
-                            <input type="text" class="form-control" id="name" name="name" placeholder=" " value="" aria-required="true" aria-invalid="true">
-                            <label for="">Name</label>
-                            <span class="error-msg">Required</span>
+                    <form id="create_lead" method="POST" action="{% url 'crmapi:lead-management' %}">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="name" name="name" placeholder="" value="{{request.session.full_name|safe}}" aria-required="true" aria-invalid="true" required>
+                            <label id="name_id" for="">Name</label>
+                            <!-- <span class="error-msg">Required</span> -->
                         </div>
                         <div class="d-flex">
                             <div class="custom-select-box">
-                            <select name="select" class="custom-select">
-                                <option selected>+91</option>
-                                <option value="+91">+91</option>
-                                <option value="+92">+92</option>
-                                <option value="+93">+93</option>
+                            <select id='country' name="country" name="select" class="custom-select">
+                                <option value="91" selected>+91</option>
+                                <option value="92">+92</option>
+                                <option value="93">+93</option>
                             </select>
                             </div>
                             <div class="form-group">
-                            <input type="text" class="form-control" id="mobile" name="mobile" placeholder=" " value="" aria-required="true" aria-invalid="true">
-                            <label for="">Mobile</label> 
+                            <input type="text" class="form-control" id="mobile" name="mobile" placeholder="" value="{{request.session.mobile_no|safe}}" aria-required="true" aria-invalid="true" maxlength="12" minlength="8" required>
+                            <label id="mobile_id" for="">Mobile</label> 
                             </div>
                         </div>
                         <div class="form-group">
-                            <input type="email" class="form-control" id="email" name="email" placeholder=" " value="" aria-required="true" aria-invalid="true">
-                            <label for="">Email</label>              
+                            <input type="email" class="form-control" id="email" name="email" placeholder="" value="{{request.session.email|safe}}" aria-required="true" aria-invalid="true" required>
+                            <label id="email_id" for="">Email</label>              
                         </div>
+                        <input type="hidden" name="campaign" value="{{campaign_slug}}">
                         
-                        <button type="submit" class="w-100 cta-orange">ENROLL NOW</button>
+                        <button type="submit" class="w-100 cta-orange" onclick="redirect_site()">ENROLL NOW</button>
                     </form>
                 </div>
             </div>
@@ -427,10 +428,14 @@
     </section>
        
 </main>
-<script>
+<script type="text/javascript">
     $('.sticky-nav .nav-link').click(function(){
         $('.sticky-nav .nav-link').removeClass('active');
         $(this).addClass('active');
     })
+    function redirect_site(){
+        window.location.pathname = 'thankyou-for-query';
+        return false;
+    }
 </script>
 {% endblock container %}
