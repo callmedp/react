@@ -33,7 +33,7 @@
         <ul class="home-slider">
             {% if request.session.candidate_id %}
                 <li>
-                    <img loading="lazy" aria-label="home image" src="{% static 'shinelearn/images/mobile/common/home-img2.jpg' %}" class="img-responsive">
+                    <img loading="lazy" aria-label="home image" src="{% static 'shinelearn/images/mobile/common/home-img2.jpg' %}" class="img-responsive" alt="home-img2">
                     <span class="slide-caption">
                         <h1>Hi {% if request.session.full_name %} {{request.session.full_name}} {%else %}{{request.session.email}}{% endif %},</h1>
                         <strong>Want to make your career future ready? <br> Discover courses matched for your profile</strong>
@@ -41,7 +41,7 @@
                 </li>
             {% else %}
                 <li>
-                    <img loading="lazy" aria-label="home image" src="{% static 'shinelearn/images/mobile/common/home-img1.jpg' %}" class="img-responsive">
+                    <img loading="lazy" aria-label="home image" src="{% static 'shinelearn/images/mobile/common/home-img1.jpg' %}" alt="home-img1" class="img-responsive">
                     <span class="slide-caption">
                         <h1>Take online courses from <br>India’s largest career skills site.</h1>
                     </span>
@@ -283,9 +283,9 @@
     <div class="text-center how-it-works mb-20">
         <h2>Why us</h2>
         <ul>
-            <li><figure><img loading="lazy" aria-label="why us" src="{% static 'shinelearn/images/mobile/common/how-work-icon1.png' %}" class="img-responsive"></figure> Explore 500+ courses with reviews and ratings from fellow learners</li>
-            <li><figure><img loading="lazy" aria-label="why us" src="{% static 'shinelearn/images/mobile/common/how-work-icon2.png' %}" class="img-responsive"></figure> Learn at your own pace, choose your mode of study</li>
-            <li><figure><img loading="lazy" aria-label="why us" src="{% static 'shinelearn/images/mobile/common/how-work-icon3.png' %}" class="img-responsive"></figure> Be future-ready with industry recognised certifications in skills that recruiters want</li>
+            <li><figure><img loading="lazy" aria-label="why us" src="{% static 'shinelearn/images/mobile/common/how-work-icon1.png' %}" alt="icon1" class="img-responsive"></figure> Explore 500+ courses with reviews and ratings from fellow learners</li>
+            <li><figure><img loading="lazy" aria-label="why us" src="{% static 'shinelearn/images/mobile/common/how-work-icon2.png' %}"  alt="icon2"  class="img-responsive"></figure> Learn at your own pace, choose your mode of study</li>
+            <li><figure><img loading="lazy" aria-label="why us"  alt="icon3"  src="{% static 'shinelearn/images/mobile/common/how-work-icon3.png' %}" class="img-responsive"></figure> Be future-ready with industry recognised certifications in skills that recruiters want</li>
         </ul>
     </div>
     <!-- how it works ends here -->
