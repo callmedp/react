@@ -342,9 +342,9 @@
         <h2 class="enquire__wrap--head">Enquire now</h2>
         <p class="enquire__wrap--subhead">Share your query, our experts will help you take your career forward!</p>
         <div class="content-box login-form">
-            <form id="enroll_now_form" name="enroll" method="POST" action="{% url 'crmapi:lead-management' %}">
+            <form id="enroll_now_form" name="enroll">
                 <div class="form-group">
-                    <input type="text" name="name" placeholder="Name" class="form-control" maxlength="60" inputmode="name" value="{{request.session.full_name}}" id="id_name" aria-required="true">
+                    <input type="text" name="name" placeholder="Name" class="form-control" maxlength="60" inputmode="name" value="{{request.session.full_name}}" id="name" aria-required="true">
                 </div>
                 <div class="form-group enquire__flex">
 
@@ -356,17 +356,17 @@
                         </select>
                     </div>
                     <span class="mobile_input">
-                        <input type="tel" name="number" class="form-control number" inputmode="numeric" required="" id="id_cell_phone" aria-required="true" placeholder="Mobile" value="{{request.session.mobile_no|safe}}">
+                        <input type="tel" name="number" class="form-control number" inputmode="numeric" required="" id="mobile" aria-required="true" placeholder="Mobile" value="{{request.session.mobile_no|safe}}">
                     </span>
 
                 </div>
                 <div class="form-group">
-                    <input type="email" name="email" placeholder="Email" class="form-control" maxlength="100" value="{{request.session.email}}" id="id_email" aria-required="true">
+                    <input type="email" name="email" placeholder="Email" class="form-control" maxlength="100" value="{{request.session.email}}" id="email" aria-required="true">
                 </div>
-                <input type="hidden" name="campaign" value="{{campaign_slug}}">
-
+                <input type="hidden" id="campaign" name="campaign" value="{{campaign_slug}}">
+                <input type="hidden" id="lsource" name="lsource" value="2">
             <div class="form-group">
-                <button type="submit" id="" class="btn btn-blue w100 btn-round" onclick="redirect_site()">Submit</button>
+                <button id="" class="btn btn-blue w100 btn-round" onclick="enroll_now()">Submit</button>
             </div>
 
             </form>
@@ -402,6 +402,29 @@
         $('#enroll_now_modal').removeClass('show');
       });
 
+      function enroll_now(){
+        $('#enroll_now_form').submit(function() {
+                var data = {
+                'name' : $("#name").val(),
+                'country' : $("#country").val(),
+                'number' : $('#mobile').val(),
+                'email' : $('#email').val(),
+                'campaign': $('#campaign').val(),
+                'lsource': $('#lsource').val() 
+            }
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'crmapi:lead-management' %}",
+                data: data,
+                dataType: 'json',
+                success: function(json) {
+                   window.location.pathname = 'thankyou-for-query';
+                }
+            })
+            return false;
+        });
+      }
+
     </script>
     {% endcompress %}
 
@@ -429,11 +452,6 @@
 
     document.querySelector("#" + content).classList.add("active");
     btnTarget.classList.add("active");
-    }
-
-    function redirect_site(){
-        window.location.pathname = 'thankyou-for-query';
-        return false;
     }
 
 </script>

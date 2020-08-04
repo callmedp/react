@@ -33,7 +33,7 @@
             <div class="col-sm-3 mtp8">
                 <div class="enquire-now-av">
                     <strong class="mb-30">Enquire now</strong>
-                    <form id="create_lead" method="POST" action="{% url 'crmapi:lead-management' %}">
+                    <form id="enroll_now_form">
                         {% csrf_token %}
                         <div class="form-group">
                             <input type="text" class="form-control" id="name" name="name" placeholder="" value="{{request.session.full_name|safe}}" aria-required="true" aria-invalid="true" required>
@@ -57,9 +57,9 @@
                             <input type="email" class="form-control" id="email" name="email" placeholder="" value="{{request.session.email|safe}}" aria-required="true" aria-invalid="true" required>
                             <label id="email_id" for="">Email</label>              
                         </div>
-                        <input type="hidden" name="campaign" value="{{campaign_slug}}">
-                        
-                        <button type="submit" class="w-100 cta-orange" onclick="redirect_site()">ENROLL NOW</button>
+                        <input type="hidden" id="campaign" name="campaign" value="{{campaign_slug}}">
+                        <input type="hidden" id="lsource" name="lsource" value="2">
+                        <button class="w-100 cta-orange" onclick="enroll_now()">ENROLL NOW</button>
                     </form>
                 </div>
             </div>
@@ -433,9 +433,28 @@
         $('.sticky-nav .nav-link').removeClass('active');
         $(this).addClass('active');
     })
-    function redirect_site(){
-        window.location.pathname = 'thankyou-for-query';
-        return false;
+    function enroll_now(){
+        debugger;
+        var data = {
+            'name' : $("#name").val(),
+            'country' : $("#country").val(),
+            'number' : $('#mobile').val(),
+            'email' : $('#email').val(),
+            'campaign': $('#campaign').val(),
+            'lsource': $('#lsource').val() 
+        }
+        $('#enroll_now_form').submit(function() {
+    $.ajax({
+        type: 'POST',
+        url: "{% url 'crmapi:lead-management' %}",
+        data: data,
+        dataType: 'json',
+        success: function(json) {
+           window.location.pathname = 'thankyou-for-query';
+        }
+    })
+    return false;
+});
     }
 </script>
 {% endblock container %}
