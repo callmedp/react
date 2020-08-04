@@ -60,4 +60,11 @@ $(document).ready(function () {
             return false; 
         }
     });
+        WebFont.load({
+            google: {
+              families: ['Open+Sans:300,400,600,700']
+            }
+          });
+
+
 });
