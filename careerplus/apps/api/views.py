@@ -1785,6 +1785,7 @@ class BlogTagsAPIView(ListAPIView):
     def get_queryset(self, *args, **kwargs):
         return Tag.objects.filter(blog__status=1,blog__visibility=2).exclude(blog=None).distinct()
 
+
 class GetRecommendedProductApi(APIView):
     authentication_classes = ()
     permission_classes = ()
