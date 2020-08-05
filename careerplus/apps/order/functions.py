@@ -28,16 +28,16 @@ def update_initiat_orderitem_sataus(order=None):
                     oi_status=oi.oi_status,
                     last_oi_status=last_oi_status,
                     assigned_to=oi.assigned_to)
-                if type_flow == 1:
-                    from emailers.utils import BadgingMixin
-                    try:
-                        badging_details = BadgingMixin().get_badging_data(
-                            candidate_id=order.candidate_id, curr_order_item=oi, touch_point=True)
-                        if badging_details:
-                            BadgingMixin().update_badging_data(
-                                candidate_id=order.candidate_id, data=badging_details)
-                    except Exception as exc:
-                        logging.getLogger('error_log').error('could not update touch point data')
+                # if type_flow == 1:
+                #     from emailers.utils import BadgingMixin
+                #     try:
+                #         badging_details = BadgingMixin().get_badging_data(
+                #             candidate_id=order.candidate_id, curr_order_item=oi, touch_point=True)
+                #         if badging_details:
+                #             BadgingMixin().update_badging_data(
+                #                 candidate_id=order.candidate_id, data=badging_details)
+                #     except Exception as exc:
+                #         logging.getLogger('error_log').error('could not update touch point data')
 
             elif type_flow in [2, 14]:
                 last_oi_status = oi.oi_status
@@ -94,16 +94,16 @@ def update_initiat_orderitem_sataus(order=None):
                     if oi.product.sub_type_flow == 502:
                         oi.oi_status = 23
 
-                        try:
-                            from emailers.utils import BadgingMixin
-                            badging_details = BadgingMixin().get_badging_data(
-                                candidate_id=order.candidate_id, curr_order_item=oi, touch_point=True)
-                            if badging_details:
-                                BadgingMixin().update_badging_data(
-                                    candidate_id=order.candidate_id, data=badging_details)
-                        except Exception as exc:
-                            logging.getLogger('error_log').error(
-                                'could not update touch point data')
+                        # try:
+                        #     from emailers.utils import BadgingMixin
+                        #     badging_details = BadgingMixin().get_badging_data(
+                        #         candidate_id=order.candidate_id, curr_order_item=oi, touch_point=True)
+                        #     if badging_details:
+                        #         BadgingMixin().update_badging_data(
+                        #             candidate_id=order.candidate_id, data=badging_details)
+                        # except Exception as exc:
+                        #     logging.getLogger('error_log').error(
+                        #         'could not update touch point data')
 
                     elif oi.product.sub_type_flow in [503, 504]:
                         oi.oi_status = 5
