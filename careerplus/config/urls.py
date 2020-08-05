@@ -32,7 +32,7 @@ from console.welcomecall.views import ShowNumberField
 
 from homepage import views as homepage_view
 from linkedin.views import AutoLoginView
-from shop.views import ProductDetailView, CourseCatalogueView, GoogleResumeAdView
+from shop.views import ProductDetailView, CourseCatalogueView, GoogleResumeAdView, SmsUrlRedirect
 from users.views import LinkedinCallbackView, UserLoginTokenView,CourseServiceWhatsappBtn
 from search.views import FuncAreaPageView
 from blog import views as blog_view
@@ -142,10 +142,12 @@ urlpatterns += [
 
     re_path(r'^services/(?P<cat_slug>[\w-]+)/(?P<prd_slug>[\w-]+)/pd-(?P<pk>[\d]+)$',
         ProductDetailView.as_view(), name='service-detail'),
+
     re_path(r'^services/(?P<fa_slug>[-\w]+)/(?P<pk>\d+)/$',
         FuncAreaPageView.as_view(), name='func_area_results'),
     re_path(r'^services/(?P<cat_slug>[\w-]+)/(?P<country>[\w-]+)/$',
         GoogleResumeAdView.as_view(), name='google-resume-ad'),
+
     re_path(r'^courses/', include('skillpage.urls',
                               namespace='skillpage')),
     re_path(r'^university/faculty/(?P<faculty_slug>[-\w]+)/(?P<pk>\d+)/$',
@@ -155,6 +157,9 @@ urlpatterns += [
 
     re_path(r'^online-courses.html$',
         CourseCatalogueView.as_view(), name='course-catalogoue'),
+    
+    re_path(r'^services/(?P<cat_slug>[\w-]+)/(?P<country>[\w-]+)/$',
+            GoogleResumeAdView.as_view(), name='google-resume-ad'),
 
     re_path(r'^courses/(?P<sc_slug>[a-z\-]+)/$', 
         LocationSkillPageView.as_view(), 
@@ -198,6 +203,7 @@ urlpatterns += [
                    re_path(r'^console/', include('console.urls', namespace='console')),
                    re_path(r'^shine/', include('shine.urls', namespace='shine')),
                    re_path(r'^shop/', include('shop.urls', namespace='shop')),
+                   re_path(r'^', include('shop.urls', namespace='shop')),
                    re_path(r'^user/', include('users.urls', namespace='users')),
                    re_path(r'^cms/', include('cms.urls', namespace='cms')),
                    re_path(r'^article/', include('blog.urls', namespace='blog')),
@@ -265,6 +271,7 @@ urlpatterns += [
                    re_path(r'^resume-score-checker/', ScoreCheckerView.as_view()),
                    re_path(r'^api/', include(('resumescorechecker.api.urls','resumescorechecker'), 
                                 namespace='resume_score_checker')),
+                   re_path(r'^(?P<url_id>\d+)/(?P<encoded_mobile>[-\w]+)/$', SmsUrlRedirect.as_view())
 
                 #    #resume score checker 
                 #    re_path(r'^result-page/', ScoreCheckerView2.as_view()),

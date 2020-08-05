@@ -59,6 +59,9 @@
 
 {% block main_container %}
     <div id="id-detail-body">
+      <div id="loader" class="overlay-background" text-align: center;">
+        <img aria-label="loader"  class="loader-position" src="{% static 'shinelearn/images/loader1.png' %}">
+      </div>
       {{product_detail|safe}}
         <input id="skill" type="hidden" value=" {{skill}} ">
    </div>
@@ -90,7 +93,8 @@
     src="https://www.facebook.com/tr?id=379551866029481&ev=PageView&noscript=1"
   /></noscript>
   <!-- End Facebook Pixel Code -->
-   
+  
+  
    
   <!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':

@@ -2,14 +2,22 @@
 {% load static humanize thumbnail compress %}
     {% block django_meta %}
         {% include 'meta/meta.html' %}
-        <meta property="og:image" content="{{main_article.image.url}}">
+
+  <meta name="twitter:domain" content="learning.shine.com">
         <meta name="twitter:card" content="summary">
         <meta name="twitter:site" content="@shinelearning">
 
-        <meta name="twitter:domain" content="learning.shine.com">
+       {% if main_article %}
+
+        {% if main_article.image %}
+        <meta name="twitter:image:src" content="{{main_article.image.url}}">
+         <meta property="og:image" content="{{main_article.image.url}}">
+        {% endif %}
+
+
         <meta name="twitter:title" content="{{main_article.heading}}">
         <meta name="twitter:description" content="{{ main_article.get_description }}" />
-        <meta name="twitter:image:src" content="{{main_article.image.url}}">
+{% endif %}
     {%  endblock django_meta %}
     {% block canonical_url %}
       <link rel="canonical" href="https://{{ SITE_DOMAIN }}{{ object.get_absolute_url }}">

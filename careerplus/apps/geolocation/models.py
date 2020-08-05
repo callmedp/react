@@ -5,6 +5,7 @@ from cities_light.abstract_models import (
 from django.utils.translation import ugettext_lazy as _
 from cities_light.receivers import connect_default_signals
 from django.db import models
+from django.core.cache import cache
 from seo.models import AbstractAutoDate
 
 # display on site
@@ -82,6 +83,10 @@ class Country(AbstractCountry):
         else:
             currency = '$'
         return currency
+
+    def save(self,*args, **kwargs):
+        cache.delete('country_choices')
+        super(Country, self).save(*args,**kwargs)
 
 connect_default_signals(Country)
 

@@ -215,7 +215,6 @@ class DashboardDetailView(TemplateView):
             return HttpResponseForbidden()
 
     def get_context_data(self, **kwargs):
-       
         context = super(DashboardDetailView, self).get_context_data(**kwargs)
         if self.oi and self.oi.order.candidate_id == self.candidate_id and self.oi.order.status in [1, 3]:
             ops = []
@@ -237,7 +236,7 @@ class DashboardDetailView(TemplateView):
             elif self.oi.product.type_flow == 4:
                 ops = self.oi.orderitemoperation_set.filter(oi_status__in=[2, 5, 6, 61, 161, 162, 163, 164])
             elif self.oi.product.type_flow == 5:
-                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[2, 5, 6, 61, 161, 162, 163, 164])
+                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[2, 5, 6, 36, 37, 61, 161, 162, 163, 164])
             elif self.oi.product.type_flow == 6:
                 ops = self.oi.orderitemoperation_set.filter(oi_status__in=[6, 81, 82, 161, 162, 163, 164])
             elif self.oi.product.type_flow in [7, 15]:

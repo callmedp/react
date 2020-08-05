@@ -4,11 +4,15 @@
 {% block title %}Online Courses, Practice Tests, Job Assistance Services | Shine Learning{% endblock %}
 
 {% block css_section %}
-    {{ block.super }}
     {% compress css %}
-    <link type="text/scss" href="{% static 'shinelearn/css/mobile/homepage/home.scss' %}" rel="stylesheet">
-    <link type="text/scss" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" rel="stylesheet">
-    <link type="text/css" href="{% static 'shinelearn/css/common/mobile/typeaheadjs.css' %}" rel="stylesheet">
+
+        <link defer type="text/scss" href="{% static 'shinelearn/css/mobile/common/global.scss' %}" rel="stylesheet">
+        <link defer type="text/scss" href="{% static 'shinelearn/css/mobile/common/icons.scss' %}" rel="stylesheet">
+        <link defer type="text/scss" href="{% static 'shinelearn/css/mobile/common/navigation.scss' %}" rel="stylesheet">
+        <link defer type="text/scss" href="{% static 'shinelearn/css/mobile/common/images.scss' %}" rel="stylesheet" >
+        <link defer type="text/scss" href="{% static 'shinelearn/css/mobile/homepage/home.scss' %}" rel="stylesheet">
+        <link defer type="text/scss" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" rel="stylesheet">
+        <link defer type="text/css" href="{% static 'shinelearn/css/common/mobile/typeaheadjs.css' %}" rel="stylesheet">
     {% endcompress %}
 {% endblock css_section %}
 
@@ -29,7 +33,7 @@
         <ul class="home-slider">
             {% if request.session.candidate_id %}
                 <li>
-                    <img aria-label="home image" src="{% static 'shinelearn/images/mobile/common/home-img2.jpg' %}" class="img-responsive">
+                    <img loading="lazy" aria-label="home image" src="{% static 'shinelearn/images/mobile/common/home-img2.jpg' %}" class="img-responsive" alt="home-img2">
                     <span class="slide-caption">
                         <h1>Hi {% if request.session.full_name %} {{request.session.full_name}} {%else %}{{request.session.email}}{% endif %},</h1>
                         <strong>Want to make your career future ready? <br> Discover courses matched for your profile</strong>
@@ -37,7 +41,7 @@
                 </li>
             {% else %}
                 <li>
-                    <img aria-label="home image" src="{% static 'shinelearn/images/mobile/common/home-img1.jpg' %}" class="img-responsive">
+                    <img loading="lazy" aria-label="home image" src="{% static 'shinelearn/images/mobile/common/home-img1.jpg' %}" alt="home-img1" class="img-responsive">
                     <span class="slide-caption">
                         <h1>Take online courses from <br>India’s largest career skills site.</h1>
                     </span>
@@ -60,7 +64,7 @@
         <!-- Tab content Satrts here -->
         <div id="tab-1" class="tab-content current row">
           <div class="custom-search">
-            <input class="form-control key_press_js_search" id="id_q" placeholder="Search for courses, services" type="text" autocomplete="off">
+            <input class="form-control key_press_js_search" role="search" id="id_q" placeholder="Search for courses, services" type="text" autocomplete="off">
               <span class="error-txt"></span>
             <button type="images" onclick="redirectToSearch()" class="search-icon-tab"></button>
         </div>
@@ -118,7 +122,9 @@
                                     
                                 </div>
                                 <div class="media-left">
-                                  <a title="{{ product.pHd|default:product.pNm}}" href="{{ product.pURL }}" class="home-banner-img" title="{{ product.pHd|default:product.pNm}}"><img aria-label="{{product.pImA}}" src="{{product.pImg}}" alt="{{product.pImA}}" class="img-responsive" alt="{{product.pImA}}"></a>
+                                  <a title="{{ product.pHd|default:product.pNm}}" href="{{ product.pURL }}" class="home-banner-img" title="{{ product.pHd|default:product.pNm}}">
+
+     <img loading="lazy" aria-label="{{product.pImA}}" src="{{product.pImg}}" alt="{{product.pImA}}" class="img-responsive" alt="{{product.pImA}}"></a>
                                 </div><!-- end of media body -->
                               </div><!-- end of media -->
                         </li>
@@ -140,7 +146,12 @@
                                     
                                 </div>
                                 <div class="media-left">
-                                  <a title="{{ product.pHd|default:product.pNm|truncatechars:40 }}" href="{{ product.pURL }}" class="home-banner-img"><img aria-label="{{product.pImA}}" src="{{product.pImg}}" class="img-responsive" alt="{{product.pImA}}"></a>
+                                  <a title="{{ product.pHd|default:product.pNm|truncatechars:40 }}" href="{{ product.pURL }}" class="home-banner-img">
+                                                                 {% thumbnail im.pImg "100x100" as im %}
+                                        <img loading="lazy" aria-label="{{product.pImA}}" class="img-responsive" src="{{im.url}}" alt="{{product.pImA}}">
+{% endthumbnail %}
+                                      
+                                  </a>
                                 </div><!-- end of media body -->
                               </div><!-- end of media -->
                         </li>
@@ -169,7 +180,7 @@
                     </div>                
                     <div class="media-right"> 
                         <div class="img-box">                   
-                            <img aria-label="finance" src="{% static 'shinelearn/images/mobile/common/invetsment_banking.png' %}" alt="Finance">
+                            <img loading="lazy" aria-label="finance" src="{% static 'shinelearn/images/mobile/common/invetsment_banking.png' %}" alt="Finance">
                         </div>
                     </div>                
                 </a>
@@ -182,7 +193,7 @@
                     </div>                
                     <div class="media-right"> 
                         <div class="img-box">                   
-                            <img aria-label="Operation" src="{% static 'shinelearn/images/mobile/common/operation-management.png' %}" alt="Operation">
+                            <img loading="lazy" aria-label="Operation" src="{% static 'shinelearn/images/mobile/common/operation-management.png' %}" alt="Operation">
                         </div>
                     </div>                
                 </a>
@@ -195,7 +206,7 @@
                     </div>                
                     <div class="media-right"> 
                         <div class="img-box">                   
-                            <img aria-label="information" src="{% static 'shinelearn/images/mobile/common/it.png' %}" alt="information">
+                            <img  loading="lazy"aria-label="information" src="{% static 'shinelearn/images/mobile/common/it.png' %}" alt="information">
                         </div>
                     </div>                
                 </a>
@@ -208,7 +219,7 @@
                     </div>                
                     <div class="media-right"> 
                         <div class="img-box">                   
-                            <img aria-label="human res" src="{% static 'shinelearn/images/mobile/common/hr.png' %}" alt="human res">
+                            <img loading="lazy" aria-label="human res" src="{% static 'shinelearn/images/mobile/common/hr.png' %}" alt="human res">
                         </div>
                     </div>         
                 </a>
@@ -230,7 +241,10 @@
                     <li>
                         <a title="{{tprd.pHd|default:tprd.pNm|truncatechars:40}}" href="{{tprd.pURL}}">
                             <div class="img-box">
-                                <img aria-label="{{tprd.pImA}}" src="{{ tprd.pImg }}" class="img-responsive" alt="{{tprd.pImA}}">
+
+                                                          {% thumbnail tprd.pImg "135x135" as im %}
+                                        <img loading="lazy" aria-label="{{tprd.pImA}}" class="img-responsive" src="{{im.url}}" alt="{{tprd.pImA}}">
+{% endthumbnail %}
                             </div>
                             <p class="title">{{tprd.pHd|default:tprd.pNm|truncatechars:40}}</p>
                         </a>
@@ -269,9 +283,9 @@
     <div class="text-center how-it-works mb-20">
         <h2>Why us</h2>
         <ul>
-            <li><figure><img aria-label="why us" src="{% static 'shinelearn/images/mobile/common/how-work-icon1.png' %}" class="img-responsive"></figure> Explore 500+ courses with reviews and ratings from fellow learners</li>
-            <li><figure><img aria-label="why us" src="{% static 'shinelearn/images/mobile/common/how-work-icon2.png' %}" class="img-responsive"></figure> Learn at your own pace, choose your mode of study</li>
-            <li><figure><img aria-label="why us" src="{% static 'shinelearn/images/mobile/common/how-work-icon3.png' %}" class="img-responsive"></figure> Be future-ready with industry recognised certifications in skills that recruiters want</li>
+            <li><figure><img loading="lazy" aria-label="why us" src="{% static 'shinelearn/images/mobile/common/how-work-icon1.png' %}" alt="icon1" class="img-responsive"></figure> Explore 500+ courses with reviews and ratings from fellow learners</li>
+            <li><figure><img loading="lazy" aria-label="why us" src="{% static 'shinelearn/images/mobile/common/how-work-icon2.png' %}"  alt="icon2"  class="img-responsive"></figure> Learn at your own pace, choose your mode of study</li>
+            <li><figure><img loading="lazy" aria-label="why us"  alt="icon3"  src="{% static 'shinelearn/images/mobile/common/how-work-icon3.png' %}" class="img-responsive"></figure> Be future-ready with industry recognised certifications in skills that recruiters want</li>
         </ul>
     </div>
     <!-- how it works ends here -->
@@ -286,7 +300,30 @@
 {% endblock container %}
 
 {% block js_section %}
-    {{block.super}}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"> </script>
+        <script async src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.2.1/typeahead.bundle.min.js"></script>
+        <script defer src="https://ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js"></script>
+
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/bxslider/4.1.2/jquery.bxslider.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.js"></script>
+
+        {% compress js %}
+        <script defer type="text/javascript" src="{% static 'shinelearn/js/mobile/common/jquery-ui.min.js' %}"> </script>
+        <script defer type="text/javascript" src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"> </script>
+
+        <script defer type="text/javascript" src="{% static 'shinelearn/js/mobile/common/jquery.simpler-sidebar.js' %}"> </script>
+        <script defer type="text/javascript" src="{% static 'shinelearn/js/mobile/common/multilevelnav.js' %}"></script>
+        <script defer type="text/javascript" src="{% static 'shinelearn/js/mobile/common/smk-accordion.js' %}"> </script>
+        <script defer type="text/javascript" src="{% static 'shinelearn/js/common/plugins.ga.js' %}"></script>
+        <script defer type="text/javascript" src="{% static 'shinelearn/js/mobile/common/base.js' %}"> </script>
+        <script defer type="text/javascript" src="{% static 'shinelearn/js/common/common.js' %}"> </script>
+        <script defer type="text/javascript" src="{% static 'shinelearn/js/webmobile/webmobile.js' %}"> </script>
+
+    <script defer src="{% static 'shinelearn/js/mobile/homepage/index.js' %}" type="text/javascript"></script>
+    <script defer type="text/javascript" src="{% static 'shinelearn/js/mobile/homepage/offer_timer.js' %}"></script>
+    <script defer type="text/javascript" src="{% static 'shinelearn/js/mobile/homepage/offer_validate.js' %}"></script>
+    {% endcompress %}
+
     <script type="text/javascript">
         var end_date_time = "{{end_date}}"
     </script>
@@ -296,11 +333,8 @@
             prefetchedFuncArea = '{{ recmnd_func_area }}',
             prefetchedSkills = '{{ recmnd_skills }}';
     </script>
-    {% compress js %}
-    <script src="{% static 'shinelearn/js/mobile/homepage/index.js' %}" type="text/javascript"></script>
-    <script type="text/javascript" src="{% static 'shinelearn/js/mobile/homepage/offer_timer.js' %}"></script>
-    <script type="text/javascript" src="{% static 'shinelearn/js/mobile/homepage/offer_validate.js' %}"></script>
-    {% endcompress %}
+
+
 {% endblock js_section %}
 {% block johukum %}
 {% endblock johukum %}

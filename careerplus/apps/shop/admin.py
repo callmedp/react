@@ -181,6 +181,8 @@ class Section(admin.ModelAdmin):
 class Offer(admin.ModelAdmin):
     form = OfferChangeForm
 
+
+
 admin.site.register(models.Category, CategoryAdmin)
 admin.site.register(models.Offer,Offer)
 admin.site.register(models.Section,Section)
@@ -198,4 +200,5 @@ admin.site.register(models.ShineProfileData, ShineProfileDataAdmin)
 admin.site.register(models.Skill, SkillAdmin)
 admin.site.register(models.FunctionalArea, FunctionalAreaAdmin)
 admin.site.register(models.PracticeTestInfo, PracticeTestInfoAdmin)
+
 # admin.site.register(models.ProductExtraInfo, ProductExtraInfoAdmin)

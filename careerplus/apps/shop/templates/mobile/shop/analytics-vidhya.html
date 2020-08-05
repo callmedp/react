@@ -1,0 +1,474 @@
+{% extends "mobile/basic/base.html" %}
+{% load static compress %}
+
+
+{% block css_section %}
+{{ block.super }}
+    {% compress css %}
+    <link  type="text/scss" href="{% static 'shinelearn/css/mobile/pages/analytics.scss' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'shinelearn/css/mobile/common/smk-accordion.css' %}" rel="stylesheet">
+    {% endcompress css %}
+
+{% endblock css_section %}
+
+{% block container %}
+<div class="body-wrapper montserrat-font" style="padding-bottom: 100px;">
+    <div class="clearfix"></div>
+    <div class="banner">
+        <img src="{% static 'shinelearn/images/mobile/analytics/analytics-banner-image.png' %}">
+        <div class="banner--heading">
+            <h1>Build your career in Data Science</h1>
+            <p class="mt-5">with Analytics Vidhya</p>
+        </div>
+    </div>
+
+    <div class="banner-content pt-5">
+        <ul class="tick-list">
+            <li>Data science hottest skill in demand</li>
+            <li>Avg. package is 2x higher than other fields</li>
+            <li>Be feature ready, 36K+ jobs</li>
+        </ul>
+        <a id="enroll_btn" href="#" class="btn btn-round-30 btn-yellow btn-slg inline-block mt-20">Enroll now</a>
+    </div>
+
+    <div class="about-section light-blue-bg">
+        <h2>About Data Science</h2>
+        <p>Data science is everywhere right now. It is the hottest field in the industry right now. Organisation today are using data science solutions to solve the business.<span id="dots">...</span><div  id="more" style="display:none;"><p>It’s a great time to learn data science and get ready for your first industry role! The potential of data science is limitless - spanning across industries, roles and functions</p></div></p><a id="read_more" onclick="read_more()">Read more</a>
+
+        <p class="my-10"><strong>Benefits of the program</strong></p>
+        <ul class="about-section--list">
+            <li>Easy to understand courses</li>
+            <li>Experienced Instructors: All the material in this program was created by instructors who bring immense industry experience. Combined among us, we have multiple decades of teaching experience.</li>
+            <li>Industry Relevant: All the courses in this program have been vetted by industry experts. This ensures relevance in the industry and enables you with the content which matters most.</li>
+            <li>Real life problems: All projects in the program are modelled on real-world scenarios. We mean it when we say “industry relevant”!</li>
+        </ul>
+    </div><!-- // About Data Science -->
+
+    <div class="content-box">
+        <h2 class="mb-25">Learning Path</h2>
+        <img src="{% static 'shinelearn/images/mobile/analytics/learning-path.svg' %}" class="img-responsive" alt="Learning Path">
+    </div><!-- // Learning Path -->
+
+    <div class="light-blue-bg pt-15 courses-offered">
+        <div class="content-box">
+            <h2>Courses Offered</h2>
+            <div class="tab-wrap-new row">
+                <div class="tab mt-15">
+                    <div class="tab-menu">
+                        <button class="tab-menu-link active" data-content="first">
+                            <span data-title="first">Basic</span>
+                        </button>
+                        <button class="tab-menu-link" data-content="second">
+                            <span data-title="second">Advanced</span>
+                        </button>
+                        <button class="tab-menu-link" data-content="third">
+                            <span data-title="third">Master’s</span>
+                        </button>
+                    </div>
+
+                    <div class="tab-bar">
+                        <div class="tab-bar-content active" id="first">
+                            <div class="courses-offered__slider">
+                                <ul class="courses-offered__slider--list">
+                                    <li class="courses-offered__slider--item">
+                                        <div class="courses-offered__slider--box">
+                                            <h3>Introduction to Datascience</h3>
+
+                                            <div class="courses-offered__slider--box-content">
+                                                <ul>
+                                                    <li>Introduction to Data Science Course</li>
+                                                    <li>Application Highlighter</li>
+                                                    <li>Interview Handbook</li>
+                                                </ul>
+                                                
+
+                                                <div class="courses-offered__slider--bottom">
+                                                    <span class="price">Rs. 7999/- </span>
+                                                    <a href="#" class="btn btn-outline-blue btn-round-30 text-uppercase fs-14">Know more</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li><!-- slider item -->
+                                    
+                                    <li class="courses-offered__slider--item">
+                                        <div class="courses-offered__slider--box">
+                                            <h3>Introduction to Business Analytics</h3>
+
+                                            <div class="courses-offered__slider--box-content">
+                                                <ul>
+                                                    <li>Introduction to Business Analytics Course</li>
+                                                    <li>Interview Handbook</li>
+                                                </ul>
+                                                
+
+                                                <div class="courses-offered__slider--bottom">
+                                                    <span class="price">Rs. 7999/- </span>
+                                                    <a href="#" class="btn btn-outline-blue btn-round-30 text-uppercase fs-14">Know more</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li><!-- slider item -->
+                                </ul>
+                            </div>
+                        </div><!-- //tab content -->
+
+                        <div class="tab-bar-content" id="second">
+                            <div class="courses-offered__slider">
+                                <ul class="courses-offered__slider--list">
+                                    <li class="courses-offered__slider--item">
+                                        <div class="courses-offered__slider--box">
+                                            <h3>Applied Machine Learning</h3>
+
+                                            <div class="courses-offered__slider--box-content">
+                                                <ul>
+                                                    <li>557 lessons</li>
+                                                    <li>4 real life projects from the industry</li>
+                                                    <li>Ace Datascience interview preparation</li>
+                                                </ul>
+                                                
+
+                                                <div class="courses-offered__slider--bottom">
+                                                    <span class="price">Rs. 7999/- </span>
+                                                    <a href="#" class="btn btn-outline-blue btn-round-30 text-uppercase fs-14">Know more</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li><!-- slider item -->
+                                    
+                                    <li class="courses-offered__slider--item">
+                                        <div class="courses-offered__slider--box">
+                                            <h3>Certified Business Analytics Program</h3>
+
+                                            <div class="courses-offered__slider--box-content">
+                                                <ul>
+                                                    <li>9+ courses</li>
+                                                    <li>12+ Real Life Projects</li>
+                                                    <li>1: 1 Mentorship sessions</li>
+                                                </ul>
+                                                
+
+                                                <div class="courses-offered__slider--bottom">
+                                                    <span class="price">Rs. 7999/- </span>
+                                                    <a href="#" class="btn btn-outline-blue btn-round-30 text-uppercase fs-14">Know more</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li><!-- slider item -->
+                                </ul>
+                            </div>
+                        </div><!-- //tab content -->
+
+                        <div class="tab-bar-content" id="third">
+                            <div class="courses-offered__slider">
+                                <ul class="courses-offered__slider--list">
+                                    <li class="courses-offered__slider--item master">
+                                        <div class="courses-offered__slider--box">
+                                            <h3>Certified AI and ML Blackbelt Program</h3>
+
+                                            <div class="courses-offered__slider--box-content">
+                                                <ul>
+                                                    <li>Introduction to Data Science Course</li>
+                                                    <li>Application Highlighter</li>
+                                                    <li>Interview Handbook</li>
+                                                </ul>
+                                                
+
+                                                <div class="courses-offered__slider--bottom">
+                                                    <span class="price">Rs. 7999/- </span>
+                                                    <a href="#" class="btn btn-outline-blue btn-round-30 text-uppercase fs-14">Know more</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </li><!-- slider item -->
+                                </ul>
+                            </div>
+                        </div><!-- //tab content -->
+                    </div><!-- // tab-bar-->
+                </div><!-- Tabs -->
+            </div><!-- // tab-wrap-new-->
+        </div><!-- // content-box -->
+    </div><!-- // courses-offered -->
+
+    <div class="content-box mt-15 why-choose-us">
+        <h2>Why Choose us</h2>
+        <ul class="mt-30">
+            <li>
+                <i class="sprite opportunities"></i>
+                <div class="ml-10">
+                    <strong>36000+ Jobs</strong>
+                    <p>opportunities on shine</p>
+                </div>
+            </li>
+            
+            <li>
+                <i class="sprite application"></i>
+                <div class="ml-10">
+                    <strong>Application Highlighter</strong>
+                    <p>worth Rs 1600 Free for 90 Days</p>
+                </div>
+            </li>
+            
+            <li>
+                <i class="sprite interview"></i>
+                <div class="ml-10">
+                    <strong>Interview Prep Assistance </strong>
+                    <p>Exclusive Interview Preparation Handbook & Free Mock Interview with Expert*</p>
+                </div>
+            </li>
+            
+            <li>
+                <i class="sprite industry"></i>
+                <div class="ml-10">
+                    <strong>Industry Recognized Certification</strong>
+                    <p>Certificate by Analytics Vidhya with lifetime validity.</p>
+                </div>
+            </li>
+            
+            <li>
+                <i class="sprite customer"></i>
+                <div class="ml-10">
+                    <strong>Customer Support</strong>
+                    <p>over calls and emails</p>
+                </div>
+            </li>
+            
+            <li>
+                <i class="sprite chat"></i>
+                <div class="ml-10">
+                    <strong>Chat With Mentors</strong>
+                    <p>1 Hour Chat with mentors Daily</p>
+                </div>
+            </li>
+        </ul><!-- // Why Choose us -->
+
+        <div class="job-opportunities-banner mt-30">
+            <img src="{% static 'shinelearn/images/mobile/analytics/job-opportunities.png' %}" width="146px" height="176px" alt="Looking for job opportunity in Data Science">
+
+            <div class="job-opportunities-banner--content">
+                <p class="pb-5">Looking for</p>
+                <strong>job opportunity in Data Science</strong>
+                <a href="#" class="btn btn-lg btn-outline-blue btn-round-30 text-uppercase fs-14 mt-15">View Jobs</a>
+            </div>
+        </div><!-- // Looking for -->
+    </div><!-- // content-box -->
+
+    <div class="content-box who-should-learn mt-10">
+        <h2>Who should learn?</h2>
+        <ul class="tick-list mt-20">
+            <li>Anyone can Enroll -All the courses in this program have been curated and designed for people from all walks of life. We don’t assume anything – this is DataScience from scratch.</li>
+            <li>Any professional from Business Analytics/Business Intelligence background</li>
+            <li>Engineering or Non-Engineering aspirants wanting to become a Data Scientist</li>
+            <li>Managers from Analytical background and those who are leading a team of Analysts</li>
+            <li>Any Data Analyst or Software Developer aspiring to be a Data Scientist</li>
+            <li>Managers who want to implement AI ML use cases </li>
+        </ul>
+    </div><!-- // Who should learn? -->
+
+    <div class="light-blue-bg pt-15 mt-15 skill-tag">
+        <div class="content-box pb-0">
+            <h2>Skills you will gain</h2>
+            <ul>
+                <li><span>Machine Learning</span></li>
+                <li><span>Data Science</span> </li>
+                <li><span>Business Analytics.</span></li>
+                <li><span>Tableau</span></li>
+                <li><span>SQL</span> </li>
+                <li><span>Statistics</span> </li>
+                <li><span>Python</span></li>
+                <li><span>Deep Learning</span></li>
+                <li><span>AI</span></li>
+            </ul>
+                <img src="{% static 'shinelearn/images/mobile/analytics/skill-gain.png' %}" alt="Skills you will gain">
+        </div>
+    </div><!-- // Skills you will gain -->
+
+    <div class="content-box pb-0 mt-20 pb-30">
+        <h2>Frequently Asked Quetions</h2>
+        <!-- Accordion begin -->
+        <ol class="faqs analytics-faqs accordion-wrap mt-25 mb-30 row">
+            <li class="accordion_in acc_active">
+                <div class="acc_head"><h3>Who should take up these courses ?</h3></div>
+                
+                <div class="acc_content">
+                    Anyone can take up these courses as the course materials are very easy to understand. There are no prerequisites for any of the courses. Aspiring data scientists, business analysts or managers who want to apply these technologies to their business problems can enroll in the course.
+                </div>
+            </li><!-- // Question 1 -->
+            
+            <li class="accordion_in">
+                <div class="acc_head"><h3>How can I access the course after I make the payment ?</h3></div>
+                
+                <div class="acc_content">
+                    After you make the payment, you will get the login credentials over mail with which you can login & access the course materials. All the materials can be accessed online through the website.
+                </div>
+            </li><!-- // Question 1 -->
+            
+            <li class="accordion_in">
+                <div class="acc_head"><h3>Do I get a certification on completion?</h3></div>
+                
+                <div class="acc_content">
+                    Yes, You will be given a certificate upon satisfactory completion of each course in this program.
+                </div>
+            </li><!-- // Question 1 -->
+            
+            <li class="accordion_in">
+                <div class="acc_head"><h3>What are the prerequisites for these courses ?</h3></div>
+                
+                <div class="acc_content">
+                    This program requires no past knowledge about Data Science, Machine Learning, Artificial Intelligence, or any tool.
+                </div>
+            </li><!-- // Question 1 -->
+            
+            <li class="accordion_in">
+                <div class="acc_head"><h3>I need help in choosing the right course for me ?</h3></div>
+                
+                <div class="acc_content">
+                    You can call us at [phone no] or reach out to us at [email no] , our experts will guide you with the best suited courses.
+                </div>
+            </li><!-- // Question 1 -->
+
+
+        </ol>
+        <!-- Accordion end -->
+    </div><!-- // Frequently Asked Quetions -->
+
+</div><!-- // Body Wrapper -->
+<!-- enroll now modal -->
+<div class="enquire" id="enroll_now_modal">
+    <header>
+        <a class="icon-back pull-left" id="back_btn_enroll"></a>
+    </header>
+    <div id="snackbar"></div>
+    <div class="enquire__wrap">
+        <h2 class="enquire__wrap--head">Enquire now</h2>
+        <p class="enquire__wrap--subhead">Share your query, our experts will help you take your career forward!</p>
+        <div class="content-box login-form">
+            <form id="enroll_now_form" name="enroll">
+                <div class="form-group">
+                    <input type="text" name="name" placeholder="Name" class="form-control" maxlength="60" inputmode="name" value="{{request.session.full_name}}" id="name" aria-required="true">
+                </div>
+                <div class="form-group enquire__flex">
+
+                    <div class="code">
+                        <select name="country" class="form-control" id="country">
+                          {% for country in country_choices %}
+                            <option value="{{country.0}}" {% if country.0 == initial_country %} selected {% endif %} >{{country.0}}</option>
+                          {% endfor %}
+                        </select>
+                    </div>
+                    <span class="mobile_input">
+                        <input type="tel" name="number" class="form-control number" inputmode="numeric" required="" id="mobile" aria-required="true" placeholder="Mobile" value="{{request.session.mobile_no|safe}}">
+                    </span>
+
+                </div>
+                <div class="form-group">
+                    <input type="email" name="email" placeholder="Email" class="form-control" maxlength="100" value="{{request.session.email}}" id="email" aria-required="true">
+                </div>
+                <input type="hidden" id="campaign" name="campaign" value="{{campaign_slug}}">
+                <input type="hidden" id="lsource" name="lsource" value="2">
+            <div class="form-group">
+                <button id="" class="btn btn-blue w100 btn-round" onclick="enroll_now()">Submit</button>
+            </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- call us and chat widget starts here -->
+{% block call_us %}
+    {% include "shop/partials/call_us.html" %}
+{% endblock call_us %}
+{% endblock container %}
+
+{% block js_section %}
+{{block.super}}
+    {% compress js %}
+    <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/smk-accordion.js' %}"></script>
+    <script type="text/javascript">
+      jQuery(document).ready(function($){ 
+        $(".faqs").smk_Accordion({
+          showIcon: true, //boolean
+          animation: true, //boolean
+          closeAble: true, //boolean
+          slideSpeed: 200 //integer, miliseconds
+        });
+      });
+
+      $("#enroll_btn").on('click', function() {
+        $('#enroll_now_modal').addClass('show');
+      });
+
+      $("#back_btn_enroll").on('click', function() {
+        $('#enroll_now_modal').removeClass('show');
+      });
+
+      function enroll_now(){
+        $('#enroll_now_form').submit(function() {
+                var data = {
+                'name' : $("#name").val(),
+                'country' : $("#country").val(),
+                'number' : $('#mobile').val(),
+                'email' : $('#email').val(),
+                'campaign': $('#campaign').val(),
+                'lsource': $('#lsource').val() 
+            }
+            $.ajax({
+                type: 'POST',
+                url: "{% url 'crmapi:lead-management' %}",
+                data: data,
+                dataType: 'json',
+                success: function(json) {
+                   window.location.pathname = 'thankyou-for-query';
+                }
+            })
+            return false;
+        });
+      }
+
+    </script>
+    {% endcompress %}
+
+
+<script>
+    // Tabs Action
+    const tabLink = document.querySelectorAll(".tab-menu-link");
+    const tabContent = document.querySelectorAll(".tab-bar-content");
+
+    tabLink.forEach((el) => {
+    el.addEventListener("click", activeTab);
+    });
+
+    function activeTab(el) {
+    const btnTarget = el.currentTarget;
+    const content = btnTarget.dataset.content;
+
+    tabContent.forEach((el) => {
+        el.classList.remove("active");
+    });
+
+    tabLink.forEach((el) => {
+        el.classList.remove("active");
+    });
+
+    document.querySelector("#" + content).classList.add("active");
+    btnTarget.classList.add("active");
+    }
+
+    function read_more(){
+        var dots = document.getElementById("dots");
+        var moreText = document.getElementById("more");
+        var readMore = document.getElementById("read_more");
+        if (dots.style.display === "none") {
+            dots.style.display = "inline";
+            readMore.innerHTML = "Read more"; 
+            moreText.style.display = "none";
+        } else {
+            dots.style.display = "none";
+            readMore.innerHTML = "Read less"; 
+            moreText.style.display = "inline";
+        }
+    }
+
+</script>
+
+{% endblock js_section %}

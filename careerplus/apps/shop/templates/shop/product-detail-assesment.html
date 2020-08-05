@@ -79,8 +79,27 @@
                     {{sqs.pPinb|floatformat}}{% endif %}/-</strong>
 
                     {% if sqs.id not in linkedin_resume_services %}
-                      <a role="button" class="enrol-now" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll now</a>
+                    <div class="price-box-prd-scroll">
+                      <span class="col">
+                        <a role="button" class="enrol-now" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">
+                            {% if product.is_assesment %}
+                              BuyNow
+                            {% else %}
+                              Enroll now
+                            {% endif %}
+                        </a>
+                      </span>
+                          {% if redeem_test %}
+                          <span class="col">
+                            <a role="button" class="redeem-now ml-10" id="redeem_test" prod-id="{{sqs.id}}" redeem-option="{{redeem_option}}" data-price="{{sqs.inr_price}}"
+                              href="javascript:void();">Redeem Now</a>
+                              <i class="tooltip-icon" data-toggle="tooltip" data-placement="bottom" title="You have {{product_redeem_count}} free practice test (Assessment) as you're a Shine Premium User">i</i>
+                          </span>
+                          {% endif %}
+                          
+                      </div>
                     {% endif %}
+
 
                     <!--a href="#" class="enrol-now" data-toggle="modal" data-target=".bs-example-modal-sm">Enroll now</a-->
                   </div>
@@ -108,7 +127,7 @@
                     <li>
                      <a href="#review" class="cls_review">
                       <figure class="review-icon"></figure>
-                      <span>{% if prd_num_rating > 15 %}
+                      <span>{% if prd_num_rating > 0 %}
                           &nbsp;<strong class="anchor-color" >
                               {{prd_num_rating}}
                           </strong>

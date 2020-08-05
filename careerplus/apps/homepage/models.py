@@ -6,6 +6,9 @@ from django.utils.translation import ugettext_lazy as _
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.utils import timezone
+from django.core.cache import cache
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
 
 # local imports
 from .config import PAGECHOICES, STATIC_PAGE_NAME_CHOICES
@@ -40,10 +43,14 @@ class TopTrending(AbstractAutoDate):
     def __str__(self):
         return self.name
 
+    def get_all_active_trending_products_ids(self):
+        return TrendingProduct.objects.filter(is_active=True,trendingcourse=self).values_list('product_id',flat=True)
+
     def get_trending_products(self):
         tprds = self.trendingproduct_set.filter(is_active=True).select_related('product')
         tprds = tprds.filter(product__type_product__in=[0, 1, 3])
         return tprds
+
 
 
 class TrendingProduct(AbstractAutoDate):
@@ -108,6 +115,11 @@ class Testimonial(AbstractAutoDate):
     def page_choice_text(self):
         currency_dict = dict(PAGECHOICES)
         return currency_dict.get(self.page)
+
+
+    def save(self,*args,**kwargs):
+        cache.delete('get_testimonial')
+        super(Testimonial,self).save(*args,**kwargs)
 
 
 class TestimonialCategoryRelationship(AbstractAutoDate):
@@ -175,5 +187,80 @@ class HomePageOffer(AbstractAutoDate):
             raise ValidationError('Sticky Text, Banner Text or Offer value cannot be empty')
 
     def get_active_offer(self):
-        active_offer = HomePageOffer.objects.filter(is_active=True).first()
-        return active_offer
+        offer = cache.get('homepage_active_offer')
+        if not offer:
+            offer = HomePageOffer.objects.filter(is_active=True).first()
+            cache.set('homepage_active_offer',offer,timeout=None)
+        return offer
+
+
+    def save(self,*args,**kwargs):
+        cache.delete('homepage_active_offer')
+        super(HomePageOffer,self).save(*args,**kwargs)
+
+
+class NavigationSpecialTag(AbstractAutoDate):
+    display_name = models.CharField(
+        _('Display Name'), max_length=25, blank=False, unique=True)
+    skill_page_url = models.CharField(
+        _('URL of Skill Page'), max_length=60, blank=True)
+    tag = models.CharField(
+        _('Tag on Display Name (Optional)'), max_length=100,blank=True, null=True, 
+            help_text=("For eg. 'New\' or 'Limited time offer\'. Recommended 'New\' only"))
+    icon = models.ImageField(
+        _('Mobile Icon'), upload_to="images/mobile/homepage/", blank=True, null=True)
+    is_active = models.BooleanField(
+        _('Active'), default=False)
+
+    class Meta:
+        ordering = ['-modified' ,]
+
+    def __str__(self):
+        return 'NavTag-' + str(self.id)
+
+    @classmethod
+    def get_active_navlink(cls):
+        active_navlink = NavigationSpecialTag.objects.filter(is_active=True)
+        nav_list = []
+        if active_navlink.exists():
+            return active_navlink
+        return nav_list
+
+    @classmethod
+    def convert_data_in_list(cls, data):
+        if data:
+            link_info = [{
+                'display_name': link.display_name,
+                'skill_page_url': link.skill_page_url,
+                'tag': link.tag,
+                'icon': link.icon
+            } for link in data]
+            return link_info
+        return []
+
+    @classmethod
+    def post_save_data(cls, sender, instance, created, **kwargs):
+        data_obj_list = list(cls.get_active_navlink())
+        if created and instance.is_active:
+            data_obj_list.insert(0, instance)
+                
+        elif instance.is_active:
+            if instance in data_obj_list:
+                data_obj_list.remove(instance)
+            data_obj_list.insert(0, instance)
+        else:
+            if instance in data_obj_list:
+                data_obj_list.remove(instance)
+        data = cls.convert_data_in_list(data_obj_list[:2])
+        cache.set('active_homepage_navlink', data, 24*60*60)
+
+    @classmethod
+    def post_delete_data(cls, sender, instance, **kwargs):
+        data_obj_list = list(cls.get_active_navlink())
+        if instance in data_obj_list:
+            data_obj_list.remove(instance)
+        data = cls.convert_data_in_list(data_obj_list[:2])
+        cache.set('active_homepage_navlink', data, 24*60*60)
+
+post_save.connect(NavigationSpecialTag.post_save_data, sender=NavigationSpecialTag)
+post_delete.connect(NavigationSpecialTag.post_delete_data, sender=NavigationSpecialTag)

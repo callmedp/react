@@ -175,18 +175,21 @@ class DiscountReportUtil:
     def generate_report(self):
         file_obj = self.get_file_obj(self.file_name)
         csv_writer = csv.writer(file_obj, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        csv_writer.writerow(["order_id","Candidate Id","Owner_name","Order_Date","Payment_Date","Payment Time",\
-                    "Last Payment Date","Last Payment Time","Sales_executive","Sales_TL",\
-                    "Branch_Head","Transaction_ID","item_id","Product Id","Product_Name","Functional Area",\
-                    "Item_Name","Experience","Course Duration","Status",\
-                    "Price of item on site according to order (without tax including context)",\
-                    "Discount (includes wallet and coupon)","Price of order with no discount/wallet",\
-                    "Actual collection of order","Effective collection per item",\
-                    "Delivery Service","Delivery Price Incl Tax","Delivery Price Excl Tax",\
-                    "Price of item on site","Transaction_Amount","coupon_id",\
-                    "Payment_mode","Combo", "Combo Parent","Variation","Refunded","Refund Amount",\
-                    "No Process", "Replaced", "Replaced With", "Replacement Of","Writer price excluding Incentives",\
-                    "Writer's name", "Lead Type",'LTV Bracket'])
+        csv_writer.writerow(
+            ["order_id", "order_reference_id", "Candidate Id", "Owner_name", "Order_Date", "Payment_Date",
+             "Payment Time",\
+             "Last Payment Date", "Last Payment Time", "Sales_executive", "Sales_TL",\
+             "Branch_Head", "Transaction_ID","RazorPay TxnID","RazorPay OrderId",
+             "item_id", "Product Id", "Product_Name", "Functional Area",\
+             "Item_Name", "Experience", "Course Duration", "Status",\
+             "Price of item on site according to order (without tax including context)",\
+             "Discount (includes wallet and coupon)", "Price of order with no discount/wallet",\
+             "Actual collection of order", "Effective collection per item",\
+             "Delivery Service", "Delivery Price Incl Tax", "Delivery Price Excl Tax",\
+             "Price of item on site", "Transaction_Amount", "coupon_id",\
+             "Payment_mode", "Combo", "Combo Parent", "Variation", "Refunded", "Refund Amount",\
+             "No Process", "Replaced", "Replaced With", "Replacement Of", "Writer price excluding Incentives",\
+             "Writer's name", "Lead Type", 'LTV Bracket'])
 
         if int(self.filter_type) == 1:  # get order item based on payment_date filter
             transactions = PaymentTxn.objects.filter(status=1,\
@@ -216,7 +219,9 @@ class DiscountReportUtil:
             txn_obj_list = order.get_txns().filter(status=1)
             txn_obj = txn_obj_list.first()
             last_txn_obj = txn_obj_list.order_by('-id').first()
-            transaction_ids = ", ".join([x.txn for x in txn_obj_list])
+            transaction_ids = ", ".join([x.txn if x.txn else '' for x in txn_obj_list])
+            razor_pay_ids = ", ".join([x.razor_payment_id if x.razor_payment_id else'' for x in txn_obj_list])
+            razor_order_ids = ", ".join([x.razor_order_id if x.razor_order_id else '' for x in txn_obj_list ])
             coupon_order = CouponOrder.objects.filter(order=order).first()
             coupon_code = coupon_order.coupon_code if coupon_order else ""
             replaced = False
@@ -259,7 +264,7 @@ class DiscountReportUtil:
                 refund_amount = item_refund_request_list.first().amount \
                     if item_refund_request_list else 0
 
-                if item.is_combo and item.parent:
+                if item.is_combo and item.parent and item.parent.product.type_flow != 18:
                     parent_sum = float(item.parent.cost_price)
                     if not parent_sum:
                         #Assuming price remains unchanged
@@ -298,8 +303,13 @@ class DiscountReportUtil:
                             float(item.parent.selling_price)),2)
                     else:
                         refund_amount = 0
+                
+                if item.is_combo and item.parent and item.parent.product.type_flow == 18:
+                    item_selling_price = 0
 
-                if item.is_combo and not item.parent:
+                    
+
+                if item.is_combo and not item.parent and item.product.type_flow != 18:
                     combo_parent = True
                     item_selling_price = 0
                     refund_amount = 0
@@ -345,12 +355,13 @@ class DiscountReportUtil:
 
                 try:
                     row_data = [
-                        order.id,order.candidate_id,item.partner.name,order.date_placed.date(),\
+                        order.id, order.ref_order_id, order.candidate_id, item.partner.name, order.date_placed.date(),
                         txn_obj.payment_date.date(),txn_obj.payment_date.time(),\
                         last_txn_obj.payment_date.date(),last_txn_obj.payment_date.time(),\
                         sales_user_info.get('executive',''),\
                         sales_user_info.get('team_lead',''),sales_user_info.get('branch_head',''),\
-                        transaction_ids,item.id,item.product.id,item.product.name,lv2_parent,item.product.heading,\
+                        transaction_ids,razor_pay_ids,razor_order_ids,
+                        item.id,item.product.id,item.product.name,lv2_parent,item.product.heading,\
                         EXP_DICT.get(item.product.get_exp(),"N/A"), \
                         DURATION_DICT.get(item.product.get_duration(),"N/A"),order.get_status,\
                         item_cost_price,order_discount,price_without_wallet_discount,order.total_incl_tax,\

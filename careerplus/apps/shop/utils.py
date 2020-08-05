@@ -200,16 +200,16 @@ class ProductAttributesContainer(object):
             return self.product.productattributes.all()
 
     def get_value_by_attribute(self, attribute):
-        return self.get_values().get(attribute=attribute)
+        return self.get_values().filter(attribute=attribute).first()
 
     def get_all_attributes(self):
         if self.product:
-            if self.product.product_class:
+            if self.product.product_class_id:
                 return self.product.product_class.attributes.filter(active=True)  
         return self.objects.none()
 
     def get_attribute_by_name(self, name):
-        return self.get_all_attributes().get(name=name)
+        return self.get_all_attributes().filter(name=name).first()
 
     def __iter__(self):
         return iter(self.get_values())

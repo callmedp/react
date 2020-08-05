@@ -60,6 +60,9 @@ OI_OPS_STATUS = (
     (33, 'Boarded on Neo'),
     (34, 'Service paused'),
     (35, 'Service Resumed'),
+    (36, 'Top Applicant initiated'),
+    (37, 'Top Applicant expired'),
+    (38, 'Top Applicant updated'),
 
     # for linkedin flow8 41 - 60
     (42, 'Counselling Form Submitted'),
@@ -131,6 +134,8 @@ OI_USER_STATUS = (
     (29, 'Feature profile expired'),
     (30, 'Feature profile updated'),
     (33, 'Boarded on Neo'),
+    (36, 'Top Applicant initiated'),
+    (37, 'Top Applicant expired'),
 
     # for linkedin flow8 41 - 60
     (44, 'Linkedin Draft Created'),

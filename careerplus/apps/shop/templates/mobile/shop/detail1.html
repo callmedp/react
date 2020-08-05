@@ -42,6 +42,7 @@
 
         </style>
 {% endblock css_section %}
+
 {% block title %}
   {% if meta.title %}{{ meta.title }}{% else %}{{prd_H1}}{% endif %}
 {% endblock title %}
@@ -119,7 +120,7 @@
                 <ul class="inline-block fs-12 jobs-icon-wrap">
                     <li>
                         <figure class="icon-comments"></figure>
-                        {% if prd_num_rating > 15 %}
+                        {% if prd_num_rating > 0 %}
                         <a href="javascript:void(0);">{{prd_num_rating}}
                             Reviews
                         </a>
@@ -325,7 +326,7 @@
 
     {% if prd_service == 'resume' and var_list %}
         <!-- Select countries (optional) start here -->
-        <div class="sidebar" id="sidebar-countries">
+        <div class="sidebar fetch" id="sidebar-countries">
             <div class="right-navbar packages pt-0">
                 <ul class="underline">
                 {% for country in var_list %}

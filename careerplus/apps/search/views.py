@@ -573,14 +573,20 @@ class FuncAreaPageView(SearchBaseView):
     params_class = FuncAreaParams
     allow_empty_query = True
 
+    # this will go after resume.shine
+
     # def get(self,request,*args,**kwargs):
-    #     paths_to_redirect = {"/services/resume-services/537/":"/services/resume-writing/63/",
-    #             "/services/linkedin-profile-writing/65/":"/services/linkedin-profile/180/"}
-
-    #     if request.path in paths_to_redirect.keys():
-    #         return HttpResponsePermanentRedirect(paths_to_redirect.get(request.path))
-
+    #     path_info=kwargs
+    #     if(path_info.get('fa_slug') == 'linkedin-profile'):
+    #         cat_slug = 'linkedin-profile-writing'
+    #         prd_slug = 'fresher-level'
+    #         pk='1925'
+    #         expected_path = "{}/{}/{}/{}".format(settings.RESUME_SHINE_MAIN_DOMAIN,cat_slug, prd_slug,pk)
+    #         return HttpResponsePermanentRedirect('{}'.format(expected_path))
+    #     elif(path_info.get('fa_slug') == 'resume-writing'):
+    #         return HttpResponsePermanentRedirect('{}'.format(settings.RESUME_SHINE_MAIN_DOMAIN))
     #     return super(FuncAreaPageView,self).get(request,*args,**kwargs)
+
 
     def get(self,request,*args,**kwargs):
         path_info = kwargs
@@ -589,6 +595,7 @@ class FuncAreaPageView(SearchBaseView):
         campaign = request.GET.get('utm_campaign')
         if root == 'interested_mail':
             logging.getLogger('info_log').info('interested user clicked product having fa_slug "{}" id-{}, mobile number is "{}", under campaign "{}"'.format(path_info.get('fa_slug'),path_info.get("pk", ""), mobile, campaign))
+
             
         if(path_info.get('fa_slug') == 'linkedin-profile'):
             cat_slug = 'linkedin-profile-writing'
@@ -599,6 +606,7 @@ class FuncAreaPageView(SearchBaseView):
         elif(path_info.get('fa_slug') == 'resume-writing'):
             return HttpResponsePermanentRedirect(settings.RESUME_SHINE_MAIN_DOMAIN)
         return super(FuncAreaPageView,self).get(request,*args,**kwargs)
+
 
 
     def empty_query_handler(self):

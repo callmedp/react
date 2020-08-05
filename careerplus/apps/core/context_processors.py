@@ -14,7 +14,7 @@ from django.template.loader import render_to_string
 #local imports
 from geolocation.models import Country
 from django.db.models import Q
-from homepage.models import HomePageOffer
+from homepage.models import HomePageOffer, NavigationSpecialTag
 
 #inter app imports
 from cart.mixins import CartMixin
@@ -75,9 +75,17 @@ def common_context_processor(request):
     except Exception as e:
         logging.getLogger('error_log').error('writer invoice is not reachable %s' % str(e))
         pass
-    country_choices = [(m.phone, m.name) for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+    #country_choices = [(m.phone, m.name) for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+
+    country_choices = cache.get('country_choices')
+    if not country_choices:
+        country_choices = Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact='')).values_list('phone',
+                                                                                                          'name').order_by()
+        cache.set('country_choices',country_choices,timeout=None)
+
     country_choices = sorted(country_choices, key=lambda x: x[0])
     end_date, sticky_text, banner_text, offer_value, show = get_home_offer_values()
+    navlink_1, navlink_2 = get_navlink_values()
     context.update({
         "SHINE_SITE": settings.SHINE_SITE,
         "SITE_DOMAIN": settings.SITE_DOMAIN,
@@ -124,7 +132,10 @@ def common_context_processor(request):
         "end_date": end_date,
         "show": show,
         "country_choices": country_choices,
-        "offer_home": False
+        "offer_home": False,
+        "navlink_1": navlink_1,
+        "navlink_2": navlink_2,
+        "image_static_url": settings.MEDIA_URL
      })
     return context
 
@@ -182,3 +193,20 @@ def get_home_offer_values():
         else:
             show = False
     return end_date, sticky_text, banner_text, offer_value, show
+
+def get_navlink_values():
+    special_link = cache.get('active_homepage_navlink')
+    if special_link:
+        active_navlinks = special_link
+    else:
+        data_obj_list = list(NavigationSpecialTag().get_active_navlink())
+        active_navlinks  = NavigationSpecialTag().convert_data_in_list(data_obj_list[:2])
+        cache.set('active_homepage_navlink', active_navlinks, 24*60*60)
+    navlink_1, navlink_2 = "", ""
+    if active_navlinks:
+        if len(active_navlinks) >= 2:
+            navlink_1 = active_navlinks[0]
+            navlink_2 = active_navlinks[1]
+        else:
+            navlink_1 = active_navlinks[0]
+    return navlink_1, navlink_2
