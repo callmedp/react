@@ -25,12 +25,14 @@ from linkedin.autologin import AutoLogin
 from users.tasks import user_register
 from search.helpers import get_recommendations
 from cart.tasks import cart_drop_out_mail, create_lead_on_crm
+from payment.tasks import make_logging_request
 from django.db.models import Q
 from django.core.cache import cache
 from .models import Cart
 from .mixins import CartMixin
 from .forms import ShippingDetailUpdateForm
 import requests
+
 
 
 @Decorate(stop_browser_cache())
@@ -668,6 +670,11 @@ class PaymentSummaryView(TemplateView, CartMixin):
 
         if tracking_id:
             request.session.update({'tracking_id': tracking_id})
+        
+        if tracking_id and product_id and product_tracking_mapping_id:
+            make_logging_request.delay(product_id, product_tracking_mapping_id, tracking_id, 'cart_payment_summary')
+
+
         redirect = self.redirect_if_necessary(reload_url)
         if redirect:
             return redirect

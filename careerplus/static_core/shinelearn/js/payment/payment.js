@@ -1,13 +1,24 @@
+const makeTrackingRequest = (loggingData) => {
+
+    $.ajax({
+        method: "POST",
+        url: `${shineApiUrl}/learning-touchpoints-tracking/`,
+        data: loggingData
+    })
+}
+
+
+const trackClickEvent = () => {
+    let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'exit_cart', 'position': 1, domain: 2, sub_product: trackingProductId };
+    if (trackingId) {
+        makeTrackingRequest(loggingData);
+    }
+}
+
+
 $(document).ready(function () {
 
-    const makeTrackingRequest = (loggingData) => {
 
-        $.ajax({
-            method: "POST",
-            url: `${shineApiUrl}/learning-touchpoints-tracking/`,
-            data: loggingData
-        })
-    }
 
     $('#review-order-option').click(function () {
         let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'review_order', 'position': 1, domain: 2, sub_product: trackingProductId };
