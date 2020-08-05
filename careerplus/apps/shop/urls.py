@@ -29,7 +29,9 @@ urlpatterns = [
         views.ProductReviewCreateView.as_view(), name='product-review-create'),
 
     re_path(r'^product/(?P<skill_name>[\w|\W]+)/$',
-        views.SkillToProductRedirectView.as_view(), name="skill-to-product-redirect")
+        views.SkillToProductRedirectView.as_view(), name="skill-to-product-redirect"),
+
+    re_path(r'^analytics-vidhya/$', views.AnalyticsVidhyaProductView.as_view(), name='analytics-vidhya')
 
     # re_path(r'^crm/lead/$',
     #     views.LeadView.as_view(), name='crm-lead'),

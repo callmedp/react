@@ -1398,3 +1398,14 @@ class SmsUrlRedirect(View):
             return HttpResponsePermanentRedirect(settings.MAIN_DOMAIN_PREFIX)
         return HttpResponsePermanentRedirect(url)
 
+class AnalyticsVidhyaProductView(TemplateView):
+    template_name = 'shop/analytics-vidhya.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(AnalyticsVidhyaProductView, self).get_context_data(**kwargs)
+        context.update({
+            "campaign_slug" : "analytics_vidhya",
+            "initial_country" : "91"
+        })
+        return context
+

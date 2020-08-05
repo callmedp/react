@@ -7,7 +7,7 @@
 // Color system
 
 $white:    #fff !default;
-$gray-100: #F8F9FC !default;
+$gray-100: #28303F !default;
 $gray-200: #e9ecef !default;
 $gray-300: #333333 !default;
 $gray-400: #E3E3E3 !default;
@@ -49,6 +49,11 @@ $blue-tag:#E0F3FF !default;
 $orange-tag:#FED27A !default;
 $footer-bg: #F8F8F8 !default;
 $input-focus: #709DE8 !default;
+$blue-heading: #396CD8 !default;
+$lightblue-bg: #F3F9FD !default;
+$cta-orange: #FCB100 !default;
+$purple-course: #DFE9FA !default;
+$blue-av: #366FD1 !default;
 
 $colors: () !default;
 // stylelint-disable-next-line scss/dollar-variable-default
@@ -1153,6 +1158,14 @@ $sprite-new: url($path + 'images/sprite-new.png') no-repeat;
     width: .5rem;
     background: #{$purple};
   }
+}
+
+%av-box {
+  padding: 5rem 0;
+}
+
+%av-box-bg {
+  background: $lightblue-bg;
 }
 
 

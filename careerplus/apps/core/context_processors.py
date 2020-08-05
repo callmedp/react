@@ -75,7 +75,14 @@ def common_context_processor(request):
     except Exception as e:
         logging.getLogger('error_log').error('writer invoice is not reachable %s' % str(e))
         pass
-    country_choices = [(m.phone, m.name) for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+    #country_choices = [(m.phone, m.name) for m in Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+
+    country_choices = cache.get('country_choices')
+    if not country_choices:
+        country_choices = Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact='')).values_list('phone',
+                                                                                                          'name').order_by()
+        cache.set('country_choices',country_choices,timeout=None)
+
     country_choices = sorted(country_choices, key=lambda x: x[0])
     end_date, sticky_text, banner_text, offer_value, show = get_home_offer_values()
     navlink_1, navlink_2 = get_navlink_values()

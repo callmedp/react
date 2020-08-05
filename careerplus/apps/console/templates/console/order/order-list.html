@@ -122,7 +122,7 @@
           <div class="clearfix"></div>
         </div>
         <div class="x_content">
-          {% if page %}
+          {% if page.exists %}
           <b>{{page.object_list.count}}</b> item listed out of <b>{{ page.paginator.count }}</b>
           {% endif %}
           <div class="table-responsive">
@@ -173,8 +173,10 @@
                     <button type="button" onclick="order_get_details('{{obj.id}}','mobile,alt_mobile','mobile','{{forloop.counter}}');" class="btn btn-primary btn-xs"><i class="fa fa-search" aria-hidden="true"></i>ClickToView</button>
                   </td>
                   <td>
-                    {% for txn in obj.get_txns %}
+                    {% for txn in obj.get_txnss %}
+
                     {{txn.txn}}<br>{{txn.get_payment_mode}} {{txn.get_payment_status}}<br>
+
                     {% endfor %}
                   </td>
                   <td>{% if obj.currency %}{{obj.currency}}{% else %}Rs.{% endif %}{{obj.total_incl_tax}}</td>
@@ -220,7 +222,7 @@
           </div>
           {% block main_pagination %}
           <div class="main_pagination">
-            {% if page %}
+            {% if page.exists %}
             <div class="col-sm-4">
               <div class="pull-left" style="display: inline-block;adding-left: 0;margin: 20px 0;">
                 {% with current_page=page.number total_page=page.paginator.num_pages %}Page {{ current_page }} of {{ total_page }}

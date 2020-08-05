@@ -43,10 +43,14 @@ class TopTrending(AbstractAutoDate):
     def __str__(self):
         return self.name
 
+    def get_all_active_trending_products_ids(self):
+        return TrendingProduct.objects.filter(is_active=True,trendingcourse=self).values_list('product_id',flat=True)
+
     def get_trending_products(self):
         tprds = self.trendingproduct_set.filter(is_active=True).select_related('product')
         tprds = tprds.filter(product__type_product__in=[0, 1, 3])
         return tprds
+
 
 
 class TrendingProduct(AbstractAutoDate):
@@ -111,6 +115,11 @@ class Testimonial(AbstractAutoDate):
     def page_choice_text(self):
         currency_dict = dict(PAGECHOICES)
         return currency_dict.get(self.page)
+
+
+    def save(self,*args,**kwargs):
+        cache.delete('get_testimonial')
+        super(Testimonial,self).save(*args,**kwargs)
 
 
 class TestimonialCategoryRelationship(AbstractAutoDate):
@@ -178,8 +187,16 @@ class HomePageOffer(AbstractAutoDate):
             raise ValidationError('Sticky Text, Banner Text or Offer value cannot be empty')
 
     def get_active_offer(self):
-        active_offer = HomePageOffer.objects.filter(is_active=True).first()
-        return active_offer
+        offer = cache.get('homepage_active_offer')
+        if not offer:
+            offer = HomePageOffer.objects.filter(is_active=True).first()
+            cache.set('homepage_active_offer',offer,timeout=None)
+        return offer
+
+
+    def save(self,*args,**kwargs):
+        cache.delete('homepage_active_offer')
+        super(HomePageOffer,self).save(*args,**kwargs)
 
 
 class NavigationSpecialTag(AbstractAutoDate):
@@ -205,7 +222,7 @@ class NavigationSpecialTag(AbstractAutoDate):
     def get_active_navlink(cls):
         active_navlink = NavigationSpecialTag.objects.filter(is_active=True)
         nav_list = []
-        if active_navlink.count():
+        if active_navlink.exists():
             return active_navlink
         return nav_list
 
