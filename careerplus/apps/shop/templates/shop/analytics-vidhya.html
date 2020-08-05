@@ -59,7 +59,7 @@
                         </div>
                         <input type="hidden" id="campaign" name="campaign" value="{{campaign_slug}}">
                         <input type="hidden" id="lsource" name="lsource" value="2">
-                        <button class="w-100 cta-orange" onclick="enroll_now()">ENROLL NOW</button>
+                        <button class="w-100 cta-orange" onclick="enroll_now()">Submit</button>
                     </form>
                 </div>
             </div>
@@ -68,7 +68,7 @@
 </header>
 <main>
     <!-- sticky nav -->
-    <nav class="navbar navbar-expand-lg navbar-light shadow sticky-nav sticky-top mt-20">
+    <nav class="navbar navbar-expand-lg navbar-light shadow sticky-nav sticky-top mt-20 sticky-none">
         <div class="collapse navbar-collapse container" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item active">
@@ -81,7 +81,7 @@
                     <a class="nav-link" href="#courses"><strong>Courses</strong></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#why-choose"><strong>Why choosse us</strong></a>
+                    <a class="nav-link" href="#why-choose"><strong>Why choose us</strong></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#who-learn"><strong>Who should learn</strong></a>
@@ -428,13 +428,26 @@
     </section>
        
 </main>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script type="text/javascript">
+    let aboutSectionPosTop = null;
+    $(document).ready(()=>{
+        aboutSectionPosTop = $('#about').offset().top;
+        stickyNavbarActiveScroll();
+    })
+    //Funtion used to set activate of sticky nav while scrolling
+    const stickyNavbarActiveScroll = () => {
+        var showStickyNavbarHandler = () =>{
+            $('.sticky-nav')[$(window).scrollTop() >= aboutSectionPosTop ? 'removeClass' : 'addClass']('sticky-none');
+        }
+        $(window).on('scroll',showStickyNavbarHandler)
+    }
+
     $('.sticky-nav .nav-link').click(function(){
         $('.sticky-nav .nav-link').removeClass('active');
         $(this).addClass('active');
     })
     function enroll_now(){
-        debugger;
         var data = {
             'name' : $("#name").val(),
             'country' : $("#country").val(),

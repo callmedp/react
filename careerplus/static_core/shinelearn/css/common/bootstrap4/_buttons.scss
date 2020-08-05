@@ -167,4 +167,7 @@ input[type="button"] {
   display: inline-flex;
   justify-content: center;
   align-items: center;
+  &:hover {
+   color: $blue-av;
+   }
 }

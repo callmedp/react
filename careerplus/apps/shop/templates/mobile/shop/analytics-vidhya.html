@@ -7,6 +7,7 @@
     {% compress css %}
     <link  type="text/scss" href="{% static 'shinelearn/css/mobile/pages/analytics.scss' %}" rel="stylesheet">
     <link type="text/css" href="{% static 'shinelearn/css/mobile/common/smk-accordion.css' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/zopim_chat/custom.css' %}" rel="stylesheet">
     {% endcompress css %}
 
 {% endblock css_section %}
@@ -33,7 +34,7 @@
 
     <div class="about-section light-blue-bg">
         <h2>About Data Science</h2>
-        <p>Data science is everywhere right now. It is the hottest field in the industry right now. Organisation today are using data science solutions to solve the business.<span id="dots">...</span><div  id="more" style="display:none;"><p>It’s a great time to learn data science and get ready for your first industry role! The potential of data science is limitless - spanning across industries, roles and functions</p></div></p><a id="read_more" onclick="read_more()">Read more</a>
+        <p>Data science is everywhere right now. It is the hottest field in the industry right now. Organisation today are using data science solutions to solve the business.<span id="dots">...</span><span id="more" style="display:none;">It’s a great time to learn data science and get ready for your first industry role! The potential of data science is limitless - spanning across industries, roles and functions. </span><a id="read_more" onclick="read_more()">Read more</a></p>
 
         <p class="my-10"><strong>Benefits of the program</strong></p>
         <ul class="about-section--list">
@@ -375,15 +376,16 @@
 </div>
 
 <!-- call us and chat widget starts here -->
-{% block call_us %}
-    {% include "shop/partials/call_us.html" %}
-{% endblock call_us %}
+    {% block call_us %}
+        {% include "shop/partials/call_us.html" %}
+    {% endblock call_us %}
 {% endblock container %}
 
 {% block js_section %}
 {{block.super}}
     {% compress js %}
     <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/smk-accordion.js' %}"></script>
+    <script src="{% static 'shinelearn/js/mobile/zopim_chat/custom.js' %}"></script>
     <script type="text/javascript">
       jQuery(document).ready(function($){ 
         $(".faqs").smk_Accordion({
