@@ -219,9 +219,9 @@ class DiscountReportUtil:
             txn_obj_list = order.get_txns().filter(status=1)
             txn_obj = txn_obj_list.first()
             last_txn_obj = txn_obj_list.order_by('-id').first()
-            transaction_ids = ", ".join([x.txn for x in txn_obj_list])
-            razor_pay_ids = ", ".join([x.razor_payment_id for x in txn_obj_list])
-            razor_order_ids = ", ".join([x.razor_order_id for x in txn_obj_list ])
+            transaction_ids = ", ".join([x.txn if x.txn else '' for x in txn_obj_list])
+            razor_pay_ids = ", ".join([x.razor_payment_id if x.razor_payment_id else'' for x in txn_obj_list])
+            razor_order_ids = ", ".join([x.razor_order_id if x.razor_order_id else '' for x in txn_obj_list ])
             coupon_order = CouponOrder.objects.filter(order=order).first()
             coupon_code = coupon_order.coupon_code if coupon_order else ""
             replaced = False
