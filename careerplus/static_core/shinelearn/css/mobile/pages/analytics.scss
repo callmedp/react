@@ -172,6 +172,7 @@
             background-color: $white;
             overflow: hidden;
             box-shadow: 0 0 10px rgba($black, .15);
+            min-height: 225px;
 
             h3 {
                 background-color: #DFE9FA;
@@ -179,10 +180,18 @@
                 color: $gray-darker;
                 font-size: $font-base;
                 font-weight: 700;
+                min-height: 60px;
+                display: flex;
+                align-items: center;
             }
 
             &-content {
                 padding: 15px;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+                align-content: space-between;
+                min-height: 185px;
 
                 ul {
                     li {
