@@ -193,6 +193,18 @@ class OrderListView(ListView, PaginationMixin):
                         result = self.query.strip()
                         queryset = queryset.filter(email__iexact=result)
 
+                    elif self.sel_opt == 'razorpay_order_id':
+                        result = self.query.strip()
+                        paymentTxnList = PaymentTxn.objects.filter(razor_order_id__iexact=result).values('order')
+                        order_id_list = [ oId.get('order') for oId in paymentTxnList ]
+                        queryset = queryset.filter(id__in=order_id_list)
+
+                    elif self.sel_opt == 'razorpay_payment_id':
+                        result = self.query.strip()
+                        paymentTxnList = PaymentTxn.objects.filter(razor_payment_id__iexact=result).values('order')
+                        order_id_list = [ oId.get('order') for oId in paymentTxnList ]
+                        queryset = queryset.filter(id__in=order_id_list)
+
         except Exception as e:
             queryset = queryset.none()
             logging.getLogger('error_log').error("%s " % str(e))
