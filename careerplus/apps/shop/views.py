@@ -867,24 +867,13 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         campaign = request.GET.get('utm_campaign')
         if root == 'interested_mail':
             logging.getLogger('info_log').info('interested user clicked product "{}" having id-{}, mobile number is "{}", under campaign "{}"'.format(path_info.get('prd_slug'),path_info.get("pk", ""), mobile, campaign))
-<<<<<<< HEAD
 
-=======
->>>>>>> release_05082020
         useragent = self.request.META['HTTP_USER_AGENT']
         if 'facebookexternalhit' not in useragent:
             redirect_url = self.redirect_for_neo(request)
             if redirect_url:
                 return HttpResponsePermanentRedirect(redirect_url)
-<<<<<<< HEAD
-=======
-        path_info = kwargs
 
-        # uncomment when resume.shine is live
-        # if request.path.split('/')[1] == 'services':
-        #     resume_shine_redirection = self.redirect_for_resume_shine(path_info)
-        #     return resume_shine_redirection
->>>>>>> release_05082020
         pk = self.kwargs.get('pk')
         self.prd_key = 'detail_db_product_'+pk
         self.prd_solr_key = 'detail_solr_product_'+pk
