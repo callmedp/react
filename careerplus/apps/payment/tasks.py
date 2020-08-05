@@ -1,6 +1,6 @@
 # python imports
 import logging
-
+import json
 # django imports
 from django.conf import settings
 
@@ -45,6 +45,8 @@ def put_epay_for_successful_payment(epl_id, epl_market_place_id):
 def make_logging_request(tracking_product_id, product_tracking_mapping_id, tracking_id, action):
     shine_api_url = settings.SHINE_API_URL
     req_dict = {}
+    headers = dict()
+    headers['content-type'] = 'application/json'
     resp = None
     url_to_hit = "{}/learning-touchpoints-tracking/".format(
         settings.SHINE_API_URL)
@@ -54,7 +56,8 @@ def make_logging_request(tracking_product_id, product_tracking_mapping_id, track
                      'position': 1, 'domain': 2,
                      'sub_product': tracking_product_id})
     try:
-        resp = requests.post(url_to_hit, data=req_dict)
+        resp = requests.post(
+            url_to_hit, data=json.dumps(req_dict), headers=headers)
     except Exception as e:
         logging.getLogger('error_log').error(
             'thank you logging request failed.  %s' % str(e))

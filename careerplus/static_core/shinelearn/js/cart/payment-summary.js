@@ -431,7 +431,10 @@ const makeTrackingRequest = (loggingData) => {
     $.ajax({
         method: "POST",
         url: `${shineApiUrl}/learning-touchpoints-tracking/`,
-        data: loggingData
+        data: JSON.stringify(loggingData),
+        dataType: 'json',
+        contentType: "application/json",
+
     })
 }
 
