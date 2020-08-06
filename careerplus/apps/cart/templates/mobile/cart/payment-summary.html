@@ -301,9 +301,19 @@
 {% block js_section %}
 {{block.super}}
 
+<script>
+    var shineApiUrl = "{{shine_api_url}}"
+    var trackingProductId = "{{tracking_product_id}}"
+    var productTrackingMappingId = "{{product_tracking_mapping_id}}"
+    var trackingId = "{{tracking_id}}"
+  console.log({ trackingProductId, shineApiUrl, productTrackingMappingId, trackingId})
+</script>
+
 {% compress js %}
 <script src="{% static 'shinelearn/js/mobile/cart/cart.js' %}"></script>
 <script type="text/javascript" src="{% static 'shinelearn/js/cart/payment-summary.js' %}"></script>
+
+
 
 <script>
     $(function () {

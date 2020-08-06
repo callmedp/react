@@ -25,12 +25,14 @@ from linkedin.autologin import AutoLogin
 from users.tasks import user_register
 from search.helpers import get_recommendations
 from cart.tasks import cart_drop_out_mail, create_lead_on_crm
+from payment.tasks import make_logging_request
 from django.db.models import Q
 from django.core.cache import cache
 from .models import Cart
 from .mixins import CartMixin
 from .forms import ShippingDetailUpdateForm
 import requests
+
 
 
 @Decorate(stop_browser_cache())
@@ -596,9 +598,33 @@ class PaymentSummaryView(TemplateView, CartMixin):
 
         return None
 
+    def maintain_tracking_info(self, product=None):
+        if not product:
+            return -1
+        if product.sub_type_flow == 501:
+            return 1
+        if product.sub_type_flow == 503:
+            return 2
+        if product.sub_type_flow == 504:
+            return 3
+        if product.type_flow == 18:
+            return 4
+        if product.type_flow == 19:
+            return 5
+        if product.type_flow == 1:
+            return 6
+        if product.sub_type_flow == 502:
+            return 7
+        if product.type_flow == 16:
+            return 8
+        if product.type_flow == 2:
+            return 9
+
     def get(self, request, *args, **kwargs):
         token = request.GET.get('token', '')
         product_id = request.GET.get('prod_id', '')
+        tracking_id = request.GET.get('t_id', '')
+
         valid = False
         candidate_id = None
         add_status = -1
@@ -629,10 +655,25 @@ class PaymentSummaryView(TemplateView, CartMixin):
         if product_id:
             product = Product.objects.filter(id=int(product_id)).first()
             if product:
-                add_status = self.updateCart(product, [], None, 'cart', [],  False, False)
+                add_status = self.updateCart(
+                    product, [], None, 'cart', [],  False, False)
                 if add_status == -1:
                     logging.getLogger('error_log').error(
                         "Failed Adding Product Item - {}".format(product.id))
+                else:
+                    request.session.update({'tracking_product_id': product.id})
+                    product_tracking_mapping_id = self.maintain_tracking_info(
+                        product)
+                    if product_tracking_mapping_id != -1:
+                        request.session.update(
+                            {'product_tracking_mapping_id': product_tracking_mapping_id})
+
+        if tracking_id:
+            request.session.update({'tracking_id': tracking_id})
+        
+        if tracking_id and product_id and product_tracking_mapping_id:
+            make_logging_request.delay(product_id, product_tracking_mapping_id, tracking_id, 'cart_payment_summary')
+
 
         redirect = self.redirect_if_necessary(reload_url)
         if redirect:
@@ -716,7 +757,11 @@ class PaymentSummaryView(TemplateView, CartMixin):
             'email_id':  cart_obj.owner_email or self.request.session.get('email', '') or '',
             'first_name': cart_obj.first_name or self.request.session.get('first_name') or '',
             'candidate_in_session': self.request.session.get('candidate_id', ''),
-            'guest_in_session': self.request.session.get('guest_candidate_id')
+            'guest_in_session': self.request.session.get('guest_candidate_id'),
+            'shine_api_url': settings.SHINE_API_URL,
+            'tracking_product_id': self.request.session.get('tracking_product_id',''),
+            'product_tracking_mapping_id': self.request.session.get('product_tracking_mapping_id',''),
+            'tracking_id': self.request.session.get('tracking_id','')
         })
 
         context.update({
