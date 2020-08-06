@@ -404,6 +404,10 @@
         $('#enroll_now_modal').removeClass('show');
       });
 
+      $("#enquire_btn_av").on('click', function() {
+        $('#enroll_now_modal').addClass('show');
+      });
+
       function enroll_now(){
         $('#enroll_now_form').submit(function() {
                 var data = {

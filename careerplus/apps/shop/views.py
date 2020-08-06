@@ -1405,7 +1405,8 @@ class AnalyticsVidhyaProductView(TemplateView):
         context = super(AnalyticsVidhyaProductView, self).get_context_data(**kwargs)
         context.update({
             "campaign_slug" : "analvid",
-            "initial_country" : "91"
+            "initial_country" : "91",
+            "av_enroll_now" : True
         })
         return context
 
