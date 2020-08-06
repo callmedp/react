@@ -62,6 +62,7 @@ from .models import Skill
 from homepage.config import UNIVERSITY_COURSE
 from crmapi.models import UNIVERSITY_LEAD_SOURCE
 from partner.models import ProductSkill
+from crmapi.tasks import create_lead_crm
 
 redis_conn = get_redis_connection("search_lookup")
 
@@ -860,8 +861,33 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             redirect_url = path + '?' + '&'.join([k + '=' + v for k, v in query_params.items()])
             return redirect_url
 
+    def create_product_detail_leads(self,data_dict={}):
+        if not data_dict:
+            logging.getLogger('info_log').info('No data found')
+            return
+        from crmapi.models import UserQuries
+        lead = UserQuries.objects.create(**data_dict)
+        create_lead_crm.apply_async(pk=lead.pk, countdown=settings.PRODUCT_LEADCREATION_COUNTDOWN)
+        return lead
+
     def get(self, request, **kwargs):
         path_info = kwargs
+        if self.request.GET.get('lc'):
+            data_dict = {
+                'name': "{} {}".format(self.request.session.get('first_name',''), self.request.session.get(
+                    'last_name', '')),
+                'email': self.request.session.get('email',''),
+                'phn_number': self.request.session.get('mobile_no',''),
+                'site':1,
+                'product_id':path_info.get("pk", ""),
+                'utm_parameter': request.GET.get('utm_campaign',''),
+                'path': request.path
+            }
+            lead = self.create_product_detail_leads(data_dict)
+            try:
+                self.request.session.update({'product_lead_dropout':lead.id})
+            except:
+                logging.getLogger('error_log').error('error in updating session for product lead drop out {}'.format(data_dict))
         root=request.GET.get('root')
         mobile=request.GET.get('mobile')
         campaign = request.GET.get('utm_campaign')

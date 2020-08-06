@@ -30,6 +30,7 @@ from django.core.cache import cache
 from .models import Cart
 from .mixins import CartMixin
 from .forms import ShippingDetailUpdateForm
+from crmapi.models import  UserQuries
 import requests
 
 
@@ -111,11 +112,19 @@ class AddToCartView(View, CartMixin):
                 # cart_drop_out_mail.apply_async(
                 #     (cart_pk, email),
                 #     countdown=settings.CART_DROP_OUT_EMAIL)
+
                 source_type = "cart_drop_out"
 
                 create_lead_on_crm.apply_async(
                     (cart_obj.pk, source_type, name),
                     countdown=settings.CART_DROP_OUT_LEAD)
+
+                lead = self.request.session.get('product_lead_dropout','')
+                if lead:
+                    userqueries = UserQuries.objects.get(id=lead)
+                    userqueries.inactive=True
+                    userqueries.save()
+
         except Exception as e:
             data['error_message'] = str(e)
             logging.getLogger('error_log').error("%s " % str(e))

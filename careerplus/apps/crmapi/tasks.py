@@ -124,6 +124,10 @@ def create_lead_crm(pk=None, validate=False, product_offer = None):
     try:
         data_dict = {}
         lead = UserQuries.objects.get(pk=pk)
+
+        if lead.inactive:
+            return
+
         lsource = lead.lead_source
         total_experience = 0
         total_salary = 0
@@ -178,7 +182,6 @@ def create_lead_crm(pk=None, validate=False, product_offer = None):
             lead.lead_created = True
             lead.save()
     except Exception as e:
-        print (str(e))
         logging.getLogger('error_log').error("unable to create lead from crm%s" % str(e))
 
     return flag
