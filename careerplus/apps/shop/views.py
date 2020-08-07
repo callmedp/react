@@ -1334,7 +1334,7 @@ class GoogleResumeAdView(View):
 
     def get(self, request, *args, **kwargs):
         cat_slugs = ['resume-services','linkedin-profile']
-        countries = ['india','gulf']
+        countries = ['india','gulf','usa']
         country = kwargs.get('country', 'india')
         cat_slug = kwargs.get('cat_slug', 'resume-services')
         pre_register = self.request.GET.get('pre-register', "False")
@@ -1365,6 +1365,19 @@ class GoogleResumeAdView(View):
             elif cat_slug == "linkedin-profile":
                 service_cost = {"0_1exp":"2200", "1_4exp":"2500", "4_8exp":"3600",
                     "8_15exp":"4600", "15_exp":"5600"}
+                template = 'shop/resume-ad-linkedin.html'
+                site_slug = "resume-services"
+        elif country == "usa":
+            currency = "USD"
+            add_on_cost = {"cover_letter":"25","express_delivery":"5","s_express_delivery":"10"}
+            if cat_slug == "resume-services":
+                service_cost = {"0_1exp":"75", "1_4exp":"90", "4_8exp":"110",
+                    "8_15exp":"125", "15_exp":"150"}
+                template = 'shop/resume-ad-services.html'
+                site_slug = "linkedin-profile"
+            elif cat_slug == "linkedin-profile":
+                service_cost = {"0_1exp":"50", "1_4exp":"65", "4_8exp":"80",
+                    "8_15exp":"95", "15_exp":"110"}
                 template = 'shop/resume-ad-linkedin.html'
                 site_slug = "resume-services"
         site_link = '{}/services/{}/{}/?pre-register={}'.format(settings.MAIN_DOMAIN_PREFIX, site_slug, country, str(pre_register))
