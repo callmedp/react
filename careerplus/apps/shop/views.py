@@ -1339,10 +1339,12 @@ class GoogleResumeAdView(View):
         cat_slug = kwargs.get('cat_slug', 'resume-services')
         pre_register = self.request.GET.get('pre-register', "False")
         site_slug = None
+        country_code_list = ['91','92','92','971','1']
         if cat_slug not in cat_slugs or country not in countries:
             raise Http404
         if country == "gulf":
             currency = "AED"
+            country_code = "971"
             add_on_cost = {"cover_letter":"145","express_delivery":"145","s_express_delivery":"200"}
             if cat_slug == "resume-services":
                 service_cost = {"0_1exp":"250", "1_4exp":"400", "4_8exp":"575",
@@ -1356,6 +1358,7 @@ class GoogleResumeAdView(View):
                 site_slug = "resume-services"
         elif country == "india":
             currency = "INR"
+            country_code = "91"
             add_on_cost = {"cover_letter":"550","express_delivery":"1099","s_express_delivery":"1609"}
             if cat_slug == "resume-services":
                 service_cost = {"0_1exp":"1299", "1_4exp":"2199", "4_8exp":"2999",
@@ -1368,7 +1371,8 @@ class GoogleResumeAdView(View):
                 template = 'shop/resume-ad-linkedin.html'
                 site_slug = "resume-services"
         elif country == "usa":
-            currency = "USD"
+            currency = "starting from $"
+            country_code = "1"
             add_on_cost = {"cover_letter":"25","express_delivery":"5","s_express_delivery":"10"}
             if cat_slug == "resume-services":
                 service_cost = {"0_1exp":"75", "1_4exp":"90", "4_8exp":"110",
@@ -1384,6 +1388,8 @@ class GoogleResumeAdView(View):
         content = {
             "currency" : currency,
             "country" : country,
+            "country_code" : country_code,
+            "country_code_list" : country_code_list,
             "site_link" : site_link,
             "service_cost" : service_cost,
             "country" : country,

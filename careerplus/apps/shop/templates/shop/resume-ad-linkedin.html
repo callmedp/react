@@ -95,10 +95,9 @@
             <div class="d-flex">
               <div class="custom-select-box exp">
                   <select id='country_code' name="country_code" class="custom-select">
-                    <option value="91" selected>+91</option>
-                    <option value="92">+92</option>
-                    <option value="93">+93</option>
-                    <option value="1">+1</option>
+                    {% for code in country_code_list %}
+                      <option value="{{code}}" {% if code == country_code %} selected {% endif %}>+{{code}}</option>
+                    {% endfor %}
                   </select>
               </div>
               <div class="form-group">
@@ -515,10 +514,9 @@
                         <div class="d-flex">
                           <div class="custom-select-box exp">
                               <select id="country_code_modal" name="country_code" class="custom-select">
-                                <option value="91" selected>+91</option>
-                                <option value="92">+92</option>
-                                <option value="93">+93</option>
-                                <option value="1">+1</option>
+                                {% for code in country_code_list %}
+                                  <option value="{{code}}" {% if code == country_code %} selected {% endif %}>+{{code}}</option>
+                                {% endfor %}
                               </select>
                           </div>
                           <div class="form-group">
