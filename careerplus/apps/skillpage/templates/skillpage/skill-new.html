@@ -61,7 +61,7 @@
               {% if bread.url %}
                 <li class="breadcrumb-item" itemprop="itemListElement" itemscope
 					      itemtype="http://schema.org/ListItem">
-                  <a href="{{bread.url}}" itemprop="item">{{bread.name}}</a>
+                  <a href="{{bread.url}}" itemprop="item" content="{{bread.url}}">{{bread.name}}</a>
                   <meta itemprop="name" content="{{bread.name}}" />
                   <meta itemprop="position" content="{{forloop.counter}}" />
                 </li>
@@ -290,7 +290,7 @@
             </section>
 
             <!-- courses assesments tab section -->
-            <section class="col-sm-12" id="courseTab" itemscope itemtype="http://schema.org/ItemList">
+            <section class="col-sm-12" id="courseTab">
               <div class="courses-assesment-tab">
                 <ul class="nav nav-tabs"  role="tablist">
                   {% if course_count %}
@@ -312,7 +312,7 @@
                   
                 </ul>
                 <div class="tab-content listing" id="myTabContent">
-                  <div class="tab-pane fade show active" id="courses" role="tabpanel" aria-labelledby="courses-tab">
+                  <div class="tab-pane fade show active" id="courses" role="tabpanel" aria-labelledby="courses-tab" id="courses_list" itemscope itemtype="http://schema.org/ItemList">
                       {% comment %}Note: Catergory id and heading is used in lead management and 
                           for receiving products for used as an attribute here {% endcomment %}
                       <ul class="list-unstyled" id="course-list" categoryId="{{category.pk}}" categoryHeading={{category.heading}}>  
@@ -391,7 +391,7 @@
                       {% endif %}
                       
                   </div>
-                  <div class="tab-pane fade" id="assessments" role="tabpanel" aria-labelledby="assessments-tab">
+                  <div class="tab-pane fade" id="assessments" role="tabpanel" aria-labelledby="assessments-tab" id="assessments_list" itemscope itemtype="http://schema.org/ItemList">
                       <ul class="list-unstyled" id="assessment-list">
                         {% for assesment in assesments %}
                           <li class="media listing__list" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
