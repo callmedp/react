@@ -61,13 +61,13 @@
               {% if bread.url %}
                 <li class="breadcrumb-item" itemprop="itemListElement" itemscope
 					      itemtype="http://schema.org/ListItem">
-                  <a href="{{bread.url}}" itemprop="item" content="{{bread.url}}">{{bread.name}}</a>
+                  <a href="{{bread.url}}" itemprop="item" content="{{ SITE_DOMAIN }}{{bread.url}}">{{bread.name}}</a>
                   <meta itemprop="name" content="{{bread.name}}" />
                   <meta itemprop="position" content="{{forloop.counter}}" />
                 </li>
               {% else %}
                 <li class="breadcrumb-item active" aria-current="page">
-                  <span itemprop="item">{{bread.name}}</span>
+                  <span>{{bread.name}}</span>
                 </li>
               {% endif %}
               
@@ -290,7 +290,7 @@
             </section>
 
             <!-- courses assesments tab section -->
-            <section class="col-sm-12" id="courseTab">
+            <section class="col-sm-12" id="courseTab" itemscope itemtype="http://schema.org/ItemList">
               <div class="courses-assesment-tab">
                 <ul class="nav nav-tabs"  role="tablist">
                   {% if course_count %}
@@ -312,7 +312,7 @@
                   
                 </ul>
                 <div class="tab-content listing" id="myTabContent">
-                  <div class="tab-pane fade show active" id="courses" role="tabpanel" aria-labelledby="courses-tab" id="courses_list" itemscope itemtype="http://schema.org/ItemList">
+                  <div class="tab-pane fade show active" id="courses" role="tabpanel" aria-labelledby="courses-tab" id="courses_list">
                       {% comment %}Note: Catergory id and heading is used in lead management and 
                           for receiving products for used as an attribute here {% endcomment %}
                       <ul class="list-unstyled" id="course-list" categoryId="{{category.pk}}" categoryHeading={{category.heading}}>  
@@ -391,11 +391,11 @@
                       {% endif %}
                       
                   </div>
-                  <div class="tab-pane fade" id="assessments" role="tabpanel" aria-labelledby="assessments-tab" id="assessments_list" itemscope itemtype="http://schema.org/ItemList">
+                  <div class="tab-pane fade" id="assessments" role="tabpanel" aria-labelledby="assessments-tab" id="assessments_list">
                       <ul class="list-unstyled" id="assessment-list">
                         {% for assesment in assesments %}
                           <li class="media listing__list" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
-                            <meta itemprop="position" content="{{forloop.counter}}" />
+                            <meta itemprop="position" content="{{forloop.counter|add:course_count}}" />
 
                             <figure class="listing__image">
                                 <img aria-label="{{assesment.pNm}}" class="img-fluid" src="{{assesment.pImg}}" 

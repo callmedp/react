@@ -20,7 +20,29 @@
 
       <div itemprop="itemReviewed" itemscope itemtype="http://schema.org/Product">
         <meta itemprop="name" content="{{prd_H1}}" />
+        <meta itemprop="brand" content="{{prd_vendor}}">
+        <meta itemprop="description" content="{{prd_about}}">
+        <!-- <meta itemprop="offers" content="">
+        <meta itemprop="review" content=""> -->
+        <meta itemprop="sku" content="{{prd_product}}">
+        <meta itemprop="mpn" content="{{prd_H1}}">
+        <meta itemprop="image" content="{{prd_img}}">
+        <div itemprop="aggregateRating"
+                      itemscope itemtype="http://schema.org/AggregateRating">
+            <meta itemprop="ratingValue" content="{{review.average_rating|floatformat:'1'}}">
+            <meta itemprop="reviewCount" content="{{forloop.counter}}">
       </div>
+      <div itemprop="review" itemscope itemtype="http://schema.org/Review">
+            <meta itemprop="author" content="{% if review.user_name %}{{review.user_name}}{% else %}anonymous{% endif %}">
+      </div>
+      <div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+        <meta itemprop="price" content="{% if selected_var %}{{var_list.0.inr_price|floatformat}}{% else %}{{sqs.pPinb|floatformat}} {% endif %}">
+        <meta itemprop="availability" content="https://schema.org/OnlineOnly">
+        <meta itemprop="priceCurrency" content="INR">
+        <meta itemprop="priceValidUntil" content="{% now 'SHORT_DATETIME_FORMAT' %}">
+        <meta itemprop="url" content="{{ SITE_DOMAIN }}{{url}}">
+      </div>
+    </div>
       
     </li>
   {% endfor %}

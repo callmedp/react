@@ -25,6 +25,21 @@
                     <img aria-label="{{prd_img_alt}}" itemprop="image" src="{{prd_img}}" alt="{{prd_img_alt}}" class="img-responsive" >
                   </figure>
                 </div>
+                <meta itemprop="brand" content="{{prd_vendor}}">
+                <meta itemprop="description" content="{{prd_about}}">
+                <!-- <meta itemprop="offers" content="{{inr_price}}"> -->
+                <div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
+                  <meta itemprop="price" content="{% if selected_var %}{{var_list.0.inr_price|floatformat}}{% else %}{{sqs.pPinb|floatformat}} {% endif %}">
+                  <meta itemprop="availability" content="https://schema.org/OnlineOnly">
+                  <meta itemprop="priceCurrency" content="INR">
+                  <meta itemprop="priceValidUntil" content="{% now 'SHORT_DATETIME_FORMAT' %}">
+                  <meta itemprop="url" content="{{ SITE_DOMAIN }}{{url}}">
+                </div>
+                <div itemprop="review" itemscope itemtype="http://schema.org/Review">
+                  <meta itemprop="author" content="{{prd_vendor}}">
+                </div>
+                <meta itemprop="sku" content="{{prd_product}}">
+                <meta itemprop="mpn" content="{{product.upc}}">
 
                 <div class="course-caption-content">
                   <h1 itemprop="name">{{prd_H1}}</h1>
@@ -36,12 +51,6 @@
                         {% else %}
                           1      
                         {% endif %}">
-                        <meta itemprop="brand" content="{{prd_vendor}}">
-                        <meta itemprop="description" content="{{prd_about}}">
-                        <meta itemprop="offers" content="">
-                        <meta itemprop="review" content="{{prd_rv_total}}">
-                        <meta itemprop="sku" content="{{prd_product}}">
-                        <meta itemprop="isbn" content="{{prd_product}}">
 
                   </div>
                   {% include "shop/partials/packagediv.html" %}
