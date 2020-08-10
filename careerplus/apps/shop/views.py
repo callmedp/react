@@ -874,7 +874,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             logging.getLogger('info_log').info('user query not created')
             return
 
-        create_lead_crm.apply_async((lead.pk), countdown=settings.PRODUCT_LEADCREATION_COUNTDOWN)
+        create_lead_crm.apply_async((lead.pk,), countdown=settings.PRODUCT_LEADCREATION_COUNTDOWN)
         return lead
 
     def get(self, request, **kwargs):
