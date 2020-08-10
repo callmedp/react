@@ -547,7 +547,8 @@ class PaymentShippingView(UpdateView, CartMixin):
                     last_name = request.session.get('last_name', '')
                     name = "{}{}".format(first_name, last_name)
                     source_type = "shipping_drop_out"
-                    create_lead_on_crm.apply_async(
+                    create_lead_on_crm.\
+                        apply_async(
                         (obj.pk, source_type, name),
                         countdown=settings.SHIPPING_DROP_OUT_LEAD)
                 return valid_form

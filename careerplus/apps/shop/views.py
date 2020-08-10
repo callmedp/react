@@ -870,7 +870,11 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             return
         from crmapi.models import UserQuries
         lead = UserQuries.objects.create(**data_dict)
-        create_lead_crm.apply_async(pk=lead.pk, countdown=settings.PRODUCT_LEADCREATION_COUNTDOWN)
+        if not lead:
+            logging.getLogger('info_log').info('user query not created')
+            return
+
+        create_lead_crm.apply_async((lead.pk), countdown=settings.PRODUCT_LEADCREATION_COUNTDOWN)
         return lead
 
     def get(self, request, **kwargs):
