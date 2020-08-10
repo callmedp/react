@@ -126,6 +126,7 @@ def create_lead_crm(pk=None, validate=False, product_offer = None):
         lead = UserQuries.objects.get(pk=pk)
 
         if lead.inactive:
+            print('lead is already inactive -{}'.format(lead.id))
             return
 
         lsource = lead.lead_source

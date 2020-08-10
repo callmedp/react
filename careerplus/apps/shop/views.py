@@ -60,9 +60,12 @@ from shop.choices import APPLICATION_PROCESS, BENEFITS, NEO_LEVEL_OG_IMAGES, SMS
 from review.forms import ReviewForm
 from .models import Skill
 from homepage.config import UNIVERSITY_COURSE
-from crmapi.models import UNIVERSITY_LEAD_SOURCE
+from crmapi.models import UNIVERSITY_LEAD_SOURCE,DEFAULT_SLUG_SOURCE
 from partner.models import ProductSkill
 from crmapi.tasks import create_lead_crm
+from crmapi.config import PRODUCT_SOURCE_MAPPING
+
+
 
 redis_conn = get_redis_connection("search_lookup")
 
@@ -873,15 +876,29 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
     def get(self, request, **kwargs):
         path_info = kwargs
         if self.request.GET.get('lc'):
+            if not kwargs.get('pk',''):
+                return
+            prod = Product.objects.filter(id=kwargs.get('pk')).first()
+            if not prod:
+                return
+
+            lead_source = PRODUCT_SOURCE_MAPPING.get(prod.product_class.slug, 0)
+            slug_source = dict(DEFAULT_SLUG_SOURCE)
+            campaign_slug = slug_source.get(int(lead_source))
+
             data_dict = {
                 'name': "{} {}".format(self.request.session.get('first_name',''), self.request.session.get(
                     'last_name', '')),
                 'email': self.request.session.get('email',''),
                 'phn_number': self.request.session.get('mobile_no',''),
                 'site':1,
-                'product_id':path_info.get("pk", ""),
-                'utm_parameter': request.GET.get('utm_campaign',''),
-                'path': request.path
+                'product_id':prod.id,
+                'utm_parameter': self.request.session.get('utm_campaign',''),
+                'product':prod.name,
+                'lead_source':lead_source,
+                'path': request.path,
+                'campaign_slug':campaign_slug,
+
             }
             lead = self.create_product_detail_leads(data_dict)
             try:
