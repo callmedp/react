@@ -35,8 +35,19 @@
                   <meta itemprop="priceValidUntil" content="{% now 'SHORT_DATETIME_FORMAT' %}">
                   <meta itemprop="url" content="{{ SITE_DOMAIN }}{{url}}">
                 </div>
-                <div itemprop="review" itemscope itemtype="http://schema.org/Review">
-                  <meta itemprop="author" content="{{prd_vendor}}">
+                <div>
+                  {% for review in prd_review_list %}
+                  <li itemprop="review" itemscope itemtype="http://schema.org/Review">
+                    <meta itemprop="name" content="{% if not review.title %}{{review.get_remarks}} {% else %} {{ review.title }}{% endif %}">
+                    <div itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
+                        <meta itemprop="worstRating" content="1">
+                        <meta itemprop="ratingValue" content="{{review.average_rating|floatformat:'1'}}">
+                        <meta itemprop="bestRating" content="5">
+                    </div>
+                    <meta itemprop="description" content="{{review.content|safe}}">
+                    <meta itemprop="author" content="{% if review.user_name %}{{review.user_name}}{% else %}anonymous{% endif %}" />    
+                  </li>
+                  {% endfor %}
                 </div>
                 <meta itemprop="sku" content="{{prd_product}}">
                 <meta itemprop="mpn" content="{{product.upc}}"> 
