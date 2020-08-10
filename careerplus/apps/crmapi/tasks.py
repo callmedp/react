@@ -183,6 +183,7 @@ def create_lead_crm(pk=None, validate=False, product_offer = None):
             lead.lead_created = True
             lead.save()
     except Exception as e:
-        logging.getLogger('error_log').error("unable to create lead from crm%s" % str(e))
+        print (str(e))
+        logging.getLogger('error_log').error("unable to create lead from crm {} -{}".format(e,pk))
 
     return flag
