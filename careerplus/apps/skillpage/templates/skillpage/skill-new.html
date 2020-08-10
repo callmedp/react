@@ -61,7 +61,7 @@
               {% if bread.url %}
                 <li class="breadcrumb-item" itemprop="itemListElement" itemscope
 					      itemtype="http://schema.org/ListItem">
-                  <a href="{{bread.url}}" itemprop="item" content="{{ SITE_DOMAIN }}{{bread.url}}">{{bread.name}}</a>
+                  <a href="{{bread.url}}" itemprop="item" content="https://{{ SITE_DOMAIN }}{{bread.url}}">{{bread.name}}</a>
                   <meta itemprop="name" content="{{bread.name}}" />
                   <meta itemprop="position" content="{{forloop.counter}}" />
                 </li>
