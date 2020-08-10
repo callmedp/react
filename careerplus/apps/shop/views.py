@@ -895,7 +895,6 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
                     'last_name', '')),
                 'email': self.request.session.get('email',''),
                 'phn_number': self.request.session.get('mobile_no',''),
-                'site':1,
                 'product_id':prod.id,
                 'utm_parameter': self.request.session.get('utm_campaign',''),
                 'product':prod.name,
