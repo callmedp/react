@@ -25,7 +25,9 @@
                     <img aria-label="{{prd_img_alt}}" itemprop="image" src="{{prd_img}}" alt="{{prd_img_alt}}" class="img-responsive" >
                   </figure>
                 </div>
-                <meta itemprop="brand" content="{{prd_vendor}}">
+                <div itemprop="brand" itemtype="http://schema.org/Brand"  itemscope>
+                  <meta itemprop="name" content="{{prd_vendor}}"/>
+                </div>
                 <meta itemprop="description" content="{{prd_about}}">
                 <!-- <meta itemprop="offers" content="{{inr_price}}"> -->
                 <div itemprop="offers" itemscope itemtype="http://schema.org/Offer">
@@ -33,7 +35,7 @@
                   <meta itemprop="availability" content="https://schema.org/OnlineOnly">
                   <meta itemprop="priceCurrency" content="INR">
                   <meta itemprop="priceValidUntil" content="{% now 'SHORT_DATETIME_FORMAT' %}">
-                  <meta itemprop="url" content="{{ SITE_DOMAIN }}{{url}}">
+                  <meta itemprop="url" content="{{ SITE_DOMAIN }}{{canonical_url}}">
                 </div>
                 <div>
                   {% for review in prd_review_list %}
@@ -45,7 +47,9 @@
                         <meta itemprop="bestRating" content="5">
                     </div>
                     <meta itemprop="description" content="{{review.content|safe}}">
-                    <meta itemprop="author" content="{% if review.user_name %}{{review.user_name}}{% else %}anonymous{% endif %}" />    
+                    <div itemprop="author" itemtype="http://schema.org/Person" itemscope>
+                    <meta itemprop="name" content="{% if review.user_name %}{{review.user_name}}{% else %}anonymous{% endif %}"/>
+                    </div>     
                   </li>
                   {% endfor %}
                 </div>
