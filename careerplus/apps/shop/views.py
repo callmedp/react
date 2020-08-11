@@ -1371,17 +1371,17 @@ class GoogleResumeAdView(View):
                 template = 'shop/resume-ad-linkedin.html'
                 site_slug = "resume-services"
         elif country == "usa":
-            currency = "starting from $"
+            currency = "starting from "
             country_code = "1"
-            add_on_cost = {"cover_letter":"25","express_delivery":"5","s_express_delivery":"10"}
+            add_on_cost = {"cover_letter":"25 $","express_delivery":"5 $","s_express_delivery":"10 $"}
             if cat_slug == "resume-services":
-                service_cost = {"0_1exp":"75", "1_4exp":"90", "4_8exp":"110",
-                    "8_15exp":"125", "15_exp":"150"}
+                service_cost = {"0_1exp":"75 $", "1_4exp":"90 $", "4_8exp":"110 $",
+                    "8_15exp":"125 $", "15_exp":"150 $"}
                 template = 'shop/resume-ad-services.html'
                 site_slug = "linkedin-profile"
             elif cat_slug == "linkedin-profile":
-                service_cost = {"0_1exp":"50", "1_4exp":"65", "4_8exp":"80",
-                    "8_15exp":"95", "15_exp":"110"}
+                service_cost = {"0_1exp":"50 $", "1_4exp":"65 $", "4_8exp":"80 $",
+                    "8_15exp":"95 $", "15_exp":"110 $"}
                 template = 'shop/resume-ad-linkedin.html'
                 site_slug = "resume-services"
         site_link = '{}/services/{}/{}/?pre-register={}'.format(settings.MAIN_DOMAIN_PREFIX, site_slug, country, str(pre_register))
