@@ -136,3 +136,35 @@ input[type="button"] {
     width: 100%;
   }
 }
+
+
+.cta-orange {
+  background: $cta-orange;
+  font-size: 1.3rem;
+  color: $gray-100;
+  text-align: center;
+  padding: 1rem 3rem;
+  border-radius: 3rem;
+  border: 1px solid transparent;
+  text-transform: uppercase;
+  font-weight: 700;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  box-shadow: -5px 10px 15px 0 #FFF7E4;
+}
+
+.cta-blue-outline {
+  background: $white;
+  font-size: 1.3rem;
+  color: $blue-av;
+  text-align: center;
+  padding: 1rem 2rem;
+  border: 1px solid $blue-av;
+  border-radius: 3rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}

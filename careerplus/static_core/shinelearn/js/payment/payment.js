@@ -1,38 +1,71 @@
+const makeTrackingRequest = (loggingData) => {
+
+    $.ajax({
+        method: "POST",
+        url: `${shineApiUrl}/learning-touchpoints-tracking/`,
+        data: JSON.stringify(loggingData),
+        contentType: "application/json",
+    })
+}
+
+
+const trackClickEvent = () => {
+    let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'exit_cart', 'position': 1, domain: 2, sub_product: trackingProductId };
+    if (trackingId) {
+        makeTrackingRequest(loggingData);
+    }
+}
+
+
 $(document).ready(function () {
 
 
 
+    $('#review-order-option').click(function () {
+        let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'review_order', 'position': 1, domain: 2, sub_product: trackingProductId };
+        if (trackingId) {
+            makeTrackingRequest(loggingData);
+        }
+    })
 
- // 
- $('.trig-loader').click(function(){
-    $('.overlay-background').show()
-    $('body').addClass('body-noscroll')
- })   
+    $('#card-netbanking').click(function () {
+        let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'card_and_netbanking', 'position': 1, domain: 2, sub_product: trackingProductId };
+        if (trackingId) {
+            makeTrackingRequest(loggingData);
+        }
+    })
+
+    // 
+    $('.trig-loader').click(function () {
+        $('.overlay-background').show()
+        $('body').addClass('body-noscroll')
+    })
 
 
- $('#zest_emi_div').show();
- $("#emi-block-0" ).hide();
- $("#emi-block-1" ).hide();
-      $.ajax({
+    $('#zest_emi_div').show();
+    $("#emi-block-0").hide();
+    $("#emi-block-1").hide();
+    $.ajax({
         url: '/payment/api/zest-money/emi-plans/',
         type: 'get',
-        data: {'amount' :totalAmount },
+        data: { 'amount': totalAmount },
         dataType: 'json',
-        success: function(data) {
-            if (data.length > 0) {;
+        success: function (data) {
+            if (data.length > 0) {
+                ;
                 $("#zest-emi-head").text("EMI Options");
-                $.each(data, function(index, plan) {
-                    $("#emi-" + index + "-months").text( plan['number_of_months']);
+                $.each(data, function (index, plan) {
+                    $("#emi-" + index + "-months").text(plan['number_of_months']);
                     $("#emi-" + index + "-monthly-amount").text((plan['total_monthly_amount'] - plan['interest_amount'] / plan['number_of_months']));
-                    $("#emi-" + index + "-interest").text( plan['interest_amount']);
-                    $("#emi-" + index + "-interest-rate").text( plan['interest_rate'] + '%');
+                    $("#emi-" + index + "-interest").text(plan['interest_amount']);
+                    $("#emi-" + index + "-interest-rate").text(plan['interest_rate'] + '%');
                     $("#emi-" + index + "-down-payment").text(plan['down_payment_amount']);
                     $("#emi-" + index + "-total-amount").text((plan['loan_amount'] + plan['interest_amount'] + plan['down_payment_amount']));
-                    $("#emi-block-" + index ).show();
+                    $("#emi-block-" + index).show();
                 });
             }
         },
-        failure: function() {
+        failure: function () {
             $(".zest_emi_div").hide();
         }
     });
@@ -43,21 +76,43 @@ $(document).ready(function () {
     $('#check-sumit-button').click(function () {
         if ($('#check-pay-form').valid()) {
             var attr = $('#check-sumit-button').attr('disabled');
-            if(typeof attr !== typeof undefined && attr !== false){
+            if (typeof attr !== typeof undefined && attr !== false) {
                 e.preventDefault();
-                return ;
+                return;
             }
-            $('#check-sumit-button').prop('disabled',true);
+            let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'cheque_payment', 'position': 3, domain: 2, sub_product: trackingProductId };
+            if (trackingId) {
+                makeTrackingRequest(loggingData);
+            }
+            $('#check-sumit-button').prop('disabled', true);
             $('.overlay-background').show()
             $('body').addClass('body-noscroll')
             $('#check-pay-form').submit();
         }
     });
 
-    $('#cash-option-submit').click(function(){
+    $('#cash-option-submit').click(function () {
+        let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'cash_payment', 'position': 2, domain: 2, sub_product: trackingProductId };
+        if (trackingId) {
+            makeTrackingRequest(loggingData);
+        }
         $(this).val('Please wait...')
-        .attr('disabled','disabled');
+            .attr('disabled', 'disabled');
         $('#id-cash-form').submit();
+    })
+
+    $('#buy-now-pay-later').click(function () {
+        let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'buy_now_pay_later', 'position': 4, domain: 2, sub_product: trackingProductId };
+        if (trackingId) {
+            makeTrackingRequest(loggingData);
+        }
+    })
+
+    $('#amazon-pay-payment').click(function () {
+        let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'amazon_pay_payment', 'position': 4, domain: 2, sub_product: trackingProductId };
+        if (trackingId) {
+            makeTrackingRequest(loggingData);
+        }
     })
 
     $.validator.addMethod("validState", function (value, element) {
@@ -172,14 +227,14 @@ $(document).ready(function () {
 
 
 
- $('#zestMakePaymentBtn').click(function(){
- $.get( "/payment/zestmoney/request/"+cart_id+'/', function(data) {
- if(hasOwnProperty.call(data, 'url')){
- window.location.replace(data.url);
- }
-})
-  .done(function(data) {
-    $('#containerBlock').html(`
+    $('#zestMakePaymentBtn').click(function () {
+        $.get("/payment/zestmoney/request/" + cart_id + '/', function (data) {
+            if (hasOwnProperty.call(data, 'url')) {
+                window.location.replace(data.url);
+            }
+        })
+            .done(function (data) {
+                $('#containerBlock').html(`
     <html>
 <head>
     <title>Redirecting to Zest Money for Payment</title>
@@ -188,11 +243,11 @@ $(document).ready(function () {
     <h3>Redirecting to Payment gateway. Please do not Refresh or close this window.</h3>
 </body>
     `)
-  })
-  .fail(function(data) {
-    alert( "Error in making a request" );
-  })
- })
+            })
+            .fail(function (data) {
+                alert("Error in making a request");
+            })
+    })
 
 });
 

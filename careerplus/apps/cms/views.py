@@ -96,9 +96,9 @@ class CMSPageView(DetailView, LoadMoreMixin):
     # #     #     return HttpResponsePermanentRedirect(expected_path)
     # #     return HttpResponsePermanentRedirect("{0}{1}".format(settings.RESUME_SHINE_MAIN_DOMAIN,expected_path))
     #
-    # def get(self, request, *args, **kwargs):
-    #       return HttpResponsePermanentRedirect("{}{}".format(settings.RESUME_SHINE_MAIN_DOMAIN,request.path))
-    #
+    def get(self, request, *args, **kwargs):
+          return HttpResponsePermanentRedirect("{}{}".format(settings.RESUME_SHINE_MAIN_DOMAIN,request.path))
+    
     # # def get(self, request, *args, **kwargs):
     # #     self.object = self.get_object()
     # #     if self.request.amp and settings.CMS_STATIC_TEMP_DICT.get(self.object.id):

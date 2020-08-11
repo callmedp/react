@@ -5,6 +5,7 @@ from django.conf import settings
 from emailers.email import SendMail
 from dateutil import relativedelta
 from emailers.email import SendMail
+
 from emailers.sms import SendSMS
 from django.utils import timezone
 from django.db.models import Q
@@ -17,7 +18,8 @@ def update_initiat_orderitem_sataus(order=None):
 
         # update initial status
         for oi in orderitems:
-            if oi.product.type_flow in [1, 3, 12, 13]:
+            type_flow = oi.product.type_flow
+            if type_flow in [1, 3, 12, 13]:
                 last_oi_status = oi.oi_status
                 oi.oi_status = 2
                 oi.last_oi_status = last_oi_status
@@ -26,8 +28,18 @@ def update_initiat_orderitem_sataus(order=None):
                     oi_status=oi.oi_status,
                     last_oi_status=last_oi_status,
                     assigned_to=oi.assigned_to)
+                # if type_flow == 1:
+                #     from emailers.utils import BadgingMixin
+                #     try:
+                #         badging_details = BadgingMixin().get_badging_data(
+                #             candidate_id=order.candidate_id, curr_order_item=oi, touch_point=True)
+                #         if badging_details:
+                #             BadgingMixin().update_badging_data(
+                #                 candidate_id=order.candidate_id, data=badging_details)
+                #     except Exception as exc:
+                #         logging.getLogger('error_log').error('could not update touch point data')
 
-            elif oi.product.type_flow in [2, 14]:
+            elif type_flow in [2, 14]:
                 last_oi_status = oi.oi_status
                 oi.oi_status = 5
                 oi.last_oi_status = last_oi_status
@@ -46,7 +58,7 @@ def update_initiat_orderitem_sataus(order=None):
                         test_info.order_item = oi
                         test_info.save()
 
-            elif oi.product.type_flow == 4:
+            elif type_flow == 4:
                 if oi.order.orderitems.filter(product__type_flow=12,  no_process=False).exists():
                     last_oi_status = oi.oi_status
                     oi.oi_status = 61
@@ -66,7 +78,7 @@ def update_initiat_orderitem_sataus(order=None):
                         last_oi_status=last_oi_status,
                         assigned_to=oi.assigned_to)
 
-            elif oi.product.type_flow == 5:
+            elif type_flow == 5:
                 if (oi.order.orderitems.filter(product__type_flow=1,product__sub_type_flow__in=[101,100], no_process=False).exists() and \
                         oi.product.sub_type_flow == 501):
                     last_oi_status = oi.oi_status
@@ -81,6 +93,18 @@ def update_initiat_orderitem_sataus(order=None):
                     last_oi_status = oi.oi_status
                     if oi.product.sub_type_flow == 502:
                         oi.oi_status = 23
+
+                        # try:
+                        #     from emailers.utils import BadgingMixin
+                        #     badging_details = BadgingMixin().get_badging_data(
+                        #         candidate_id=order.candidate_id, curr_order_item=oi, touch_point=True)
+                        #     if badging_details:
+                        #         BadgingMixin().update_badging_data(
+                        #             candidate_id=order.candidate_id, data=badging_details)
+                        # except Exception as exc:
+                        #     logging.getLogger('error_log').error(
+                        #         'could not update touch point data')
+
                     elif oi.product.sub_type_flow in [503, 504]:
                         oi.oi_status = 5
                     else:

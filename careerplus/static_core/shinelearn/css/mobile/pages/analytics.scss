@@ -1,0 +1,363 @@
+@import url('https://fonts.googleapis.com/css?family=Montserrat:400,600,700&display=swap');
+
+@import '../library/variables';
+@import '../library/mixin';
+
+/* Rating */
+@import '../components/tabs';
+
+.sprite {
+    background-image: url(#{$path-mobile}analytics/analyrics-aprite.svg);
+    background-repeat: no-repeat;
+}
+
+.opportunities {
+    @include icon-block(51px, 40px, 10px 0);
+    flex: 0 0 51px;
+}
+
+.application {
+    @include icon-block(51px, 35px, 0 -45px);
+    flex: 0 0 51px;
+}
+
+.interview {
+    @include icon-block(51px, 41px, 5px -84px);
+    flex: 0 0 51px;
+}
+
+.industry {
+    @include icon-block(51px, 39px, 6px -130px);
+    flex: 0 0 51px;
+}
+
+.customer {
+    @include icon-block(51px, 32px, 11px -174px);
+    flex: 0 0 51px;
+}
+
+.chat {
+    @include icon-block(51px, 33px, 5px -211px);
+    flex: 0 0 51px;
+}
+
+
+.montserrat-font {
+    font-family: $font-family-montserrat !important;
+    font-size: 13px;
+    line-height: 1.4 !important;
+}
+
+.main-heading, h2 {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+
+
+.banner {
+    position: relative;
+    padding-right: 170px;
+    padding-left: 15px;
+
+    &--heading {
+        padding-top: 50px;
+
+        h1 {
+            color: $primary;
+            font-size: 26px;
+            font-weight: 700;
+            margin: 0;
+            line-height: 1.2;
+        }
+
+        p {
+            font-size: 1rem;
+            font-weight: 400;
+        }
+    }
+
+    img {
+        position: absolute;
+        top: -60px;
+        right: 0;
+    }
+}
+
+.banner-content {
+    padding: 15px;
+}
+
+.tick-list {
+    padding-left: 5px;
+
+    li {
+        position: relative;
+        padding-left: 15px;
+
+        &::before {
+            @include icon-inblock (10px, 7px, -38px -96px);
+            content: '';
+            background-image: url($image-path);
+            position: absolute;
+            left: 0;
+            top: 7px;
+        }
+
+        &:not(:last-child) {
+            margin-bottom: 10px;
+        }
+    }
+}
+
+.light-blue-bg {
+    background-color: #F3F9FD;
+}
+
+.about-section {
+    padding: 30px 15px;
+    margin: 20px 0 10px;
+
+    &--list {
+        li {
+            padding-left: 15px;
+            position: relative;
+
+            &::before {
+                content: '';
+                @include size(6px, 6px, block);
+                margin-right: 5px;
+                background-color: $bg-blue;
+                border-radius: 50%;
+                position: absolute;
+                left: 0;
+                top: 6px;
+            }
+
+            &:not(:last-child) {
+                margin-bottom: 10px;
+            }
+        }
+    }
+}
+
+
+.courses-offered {
+    &__slider {
+        &--list {
+            display: flex;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+
+        &--item {
+            flex: 0 0 310px;
+            padding: 25px 10px 10px 10px;
+
+            &:first-child {
+                padding-left: 15px;
+            }
+
+            &:last-child {
+                padding-right: 15px;
+            }
+
+            &.master {
+                flex: 0 0 100%;
+            }
+        }
+
+        &--box {
+            border-radius: $border-radius-base;
+            background-color: $white;
+            overflow: hidden;
+            box-shadow: 0 0 10px rgba($black, .15);
+
+            h3 {
+                background-color: #DFE9FA;
+                padding: 10px 15px;
+                color: $gray-darker;
+                font-size: $font-base;
+                font-weight: 700;
+            }
+
+            &-content {
+                padding: 15px;
+
+                ul {
+                    li {
+                        color: $gray-dark;
+                        position: relative;
+                        padding-left: 15px;
+
+                        &::before {
+                            content: '';
+                            @include size(6px, 6px, inline-block);
+                            margin-right: 5px;
+                            background-color: $primary;
+                            border-radius: $border-radius-circle;
+                            position: absolute;
+                            top: 6px;
+                            left: 0;
+                        }
+
+                        &:not(:last-child) {
+                            margin-bottom: 3px;
+                        }
+                    }
+                }
+            }
+        }
+
+        &--bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 0 5px;
+
+            .price {
+                font-size: 18px;
+                font-weight: 600;
+                color: $gray-darker;
+            }
+        }
+    }
+}
+
+.why-choose-us {
+    ul {
+        li {
+            display: flex;
+
+            &:not(:last-child) {
+                margin-bottom: 15px;
+            }
+        }
+    }
+}
+
+.job-opportunities-banner {
+    box-shadow: 0 3px 14px rgba($black, .1);
+    border-radius: $border-radius-base;
+    overflow: hidden;
+    display: flex;
+
+    &--content {
+        font-size: 18px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: center;
+        padding-left: 15px;
+    }
+}
+
+.who-should-learn {
+    .tick-list {
+        li {
+            &:not(:last-child) {
+                margin-bottom: 15px;
+            }
+        }
+    }
+}
+
+.skill-tag{
+    overflow: hidden;
+    
+    ul {
+        margin: 20px -10px 0 -10px;
+
+        li {
+            padding: 12px 10px;
+            display: inline-block;
+
+            span {
+                border-radius: $round-corner;
+                box-shadow: 0 2px 6px rgba($black, .1);
+                background-color: $white;
+                position: relative;
+                padding: 7px 15px 7px 25px;
+
+                &::before {
+                    @include icon-inblock (10px, 7px, -38px -96px);
+                    content: '';
+                    background-image: url($image-path);
+                    position: absolute;
+                    left: 12px;
+                    top: 13px;
+                }
+            }
+        }
+    }
+
+    img {
+        position: relative;
+        right: -50px;
+        bottom: -5px;
+    }
+}
+
+.analytics-faqs {
+    list-style: none;
+    counter-reset: my-awesome-counter;
+    background-color: $white !important;
+    border: 0 !important;
+
+    li {
+        counter-increment: my-awesome-counter;
+
+        &::before {
+            content: counter(my-awesome-counter) ". ";
+            color: $gray-darker;
+            font-weight: bold;
+            position: absolute;
+            top: 12px;
+            left: 15px;
+            font-size: 14px;
+        }
+    }
+
+    .accordion_in {
+        border: 0 !important;
+        background-color: #F3F9FD !important;
+
+        &:not(:last-child) {
+            margin-bottom: 15px;
+        }
+
+        .acc_head {
+            font-size: 13px;
+            color: $gray-darker;
+            background-color: transparent !important;
+            padding-left: 30px !important;
+        }
+
+        .acc_content {
+            background-color: transparent !important;
+        }
+
+        .acc_icon_expand {
+            width: 15px !important;
+            height: 8px !important;
+            display: block !important;
+            background-image: url(#{$path-mobile}analytics/analyrics-aprite.svg) !important;
+            background-repeat: no-repeat !important;
+            background-position: 0 -252px !important;
+            margin-top: -4px;
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transition: all .3s ease-in;
+        }
+
+        &.acc_active {
+            .acc_head {
+                .acc_icon_expand {
+                    transform: rotate(180deg);
+                }
+            }
+        }
+    }
+    
+}
