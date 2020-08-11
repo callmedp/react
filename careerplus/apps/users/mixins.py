@@ -35,13 +35,14 @@ from .choices import (
     PORTFOLIO_PRICE_MATRIX_DICT, VISUAL_RESUME_MATRIX_DICT,
     INTERNATIONAL_RESUME_MATRIX_DICT, COUNTRY_SPCIFIC_VARIATION_MATRIX_DICT,
     SECOND_REGULAR_RESUME_MATRIX_DICT, COMBO_DISCOUNT_OF_TWO,
-    COMBO_DISCOUNT_OF_THREE
+    COMBO_DISCOUNT_OF_THREE, EXECUTIVE_BIO_PRICE_MATRIX_DICT
 )
 
 VISUAL_RESUME_PRODUCT_LIST = settings.VISUAL_RESUME_PRODUCT_LIST
 SECOND_REGULAR_RESUME_PRODUCT_LIST = settings.SECOND_REGULAR_RESUME_PRODUCT_LIST
 COVER_LETTER_PRODUCT_LIST = settings.COVER_LETTER_PRODUCT_LIST
 PORTFOLIO_PRODUCT_LIST = settings.PORTFOLIO_PRODUCT_LIST
+EXECUTIVE_BIO_PRODUCT_LIST = settings.EXECUTIVE_BIO_PRODUCT_LIST
 
 
 class WriterInvoiceMixin(object):
@@ -50,6 +51,7 @@ class WriterInvoiceMixin(object):
     international_dict = INTERNATIONAL_RESUME_MATRIX_DICT
     visual_resume_dict = VISUAL_RESUME_MATRIX_DICT
     portfolio_dict = PORTFOLIO_PRICE_MATRIX_DICT
+    executive_bio_dict = EXECUTIVE_BIO_PRICE_MATRIX_DICT
     visual_resume_dict = VISUAL_RESUME_MATRIX_DICT
     international_resume_dict = INTERNATIONAL_RESUME_MATRIX_DICT
     country_specific_dict = COUNTRY_SPCIFIC_VARIATION_MATRIX_DICT
@@ -126,11 +128,9 @@ class WriterInvoiceMixin(object):
                         assigned_date__range=[start_date, end_date],
                         closed_on__lte=invoice_month).exclude(
                         product__id__in=COVER_LETTER_PRODUCT_LIST).order_by('-id')
-                    
+
                     if resume_writing_ois.exists():
                         return -1
-
-
 
                 linkedin_ois = OrderItem.objects.filter(
                     order__candidate_id=oi.order.candidate_id,
@@ -156,21 +156,7 @@ class WriterInvoiceMixin(object):
                     if country_specific_ois.exists():
                         product_count = product_count + 1
 
-                if product_pk in PORTFOLIO_PRODUCT_LIST:
-                    joint_list = PORTFOLIO_PRODUCT_LIST + COVER_LETTER_PRODUCT_LIST
-                    resume_writing_ois = OrderItem.objects.filter(
-                        order__candidate_id=oi.order.candidate_id,
-                        product__type_flow__in=[1],
-                        oi_status=4,
-                        assigned_to=assigned_to,
-                        assigned_date__range=[start_date, end_date],
-                        closed_on__lte=invoice_month).exclude(
-                        product__id__in=joint_list).order_by('-id')
-
-                    if resume_writing_ois.exists():
-                        product_count = product_count + 1
-
-                else:
+                if product_pk not in PORTFOLIO_PRODUCT_LIST:
                     portfolio_ois = OrderItem.objects.filter(
                         order__candidate_id=oi.order.candidate_id,
                         product__id__in=PORTFOLIO_PRODUCT_LIST,
@@ -182,18 +168,32 @@ class WriterInvoiceMixin(object):
 
                     if portfolio_ois.exists():
                         product_count = product_count + 1
-                    if oi.product.type_flow != 1:
-                        _resume_writing_ois_ = OrderItem.objects.filter(
-                            order__candidate_id=oi.order.candidate_id,
-                            product__type_flow__in=[1],
-                            oi_status=4,
-                            assigned_to=assigned_to,
-                            assigned_date__range=[start_date, end_date],
-                            closed_on__lte=invoice_month).exclude(
-                            product__id__in=COVER_LETTER_PRODUCT_LIST).order_by('-id')
+                
+                if product_pk not in EXECUTIVE_BIO_PRODUCT_LIST:
+                    executive_bio_ois = OrderItem.objects.filter(
+                        order_candidate_id=oi.order.candidate_id,
+                        product__id__in=EXECUTIVE_BIO_PRODUCT_LIST,
+                        oi_status=4,
+                        assigned_to=assigned_to,
+                        assigned_date__range=[start_date, end_date],
+                        closed_on__lte=invoice_month).exclude(
+                        product__id__in=COVER_LETTER_PRODUCT_LIST).order_by('-id')
 
-                        if _resume_writing_ois_.exists():
-                            product_count = product_count + 1
+                    if executive_bio_ois.exists():
+                        product_count = product_count + 1
+                     
+                if oi.product.type_flow != 1:
+                    _resume_writing_ois_ = OrderItem.objects.filter(
+                        order__candidate_id=oi.order.candidate_id,
+                        product__type_flow__in=[1],
+                        oi_status=4,
+                        assigned_to=assigned_to,
+                        assigned_date__range=[start_date, end_date],
+                        closed_on__lte=invoice_month).exclude(
+                        product__id__in=COVER_LETTER_PRODUCT_LIST).order_by('-id')
+
+                    if _resume_writing_ois_.exists():
+                        product_count = product_count + 1
 
                 if product_count >= 3:
                     combo_discount = amount * (COMBO_DISCOUNT_OF_THREE/100)
@@ -296,6 +296,17 @@ class WriterInvoiceMixin(object):
                 if country_specific_ois.exists():
                     product_count = product_count + 1
 
+                executive_bio_ois = OrderItem.objects.filter(
+                    order_candidate_id=oi.order.candidate_id,
+                    product__id__in=EXECUTIVE_BIO_PRODUCT_LIST,
+                    oi_status=4,
+                    assigned_to=assigned_to,
+                    assigned_date__range=[start_date, end_date],
+                    closed_on__lte=invoice_month).exclude(
+                    product__id__in=COVER_LETTER_PRODUCT_LIST).order_by('-id')
+
+                if executive_bio_ois.exists():
+                    product_count = product_count + 1
                 if product_count >= 3:
                     combo_discount = amount * (COMBO_DISCOUNT_OF_THREE/100)
 
@@ -418,11 +429,11 @@ class WriterInvoiceMixin(object):
             # combo discount calculation
             combo_discount = self._get_combo_discount(
                 oi=p_oi, amount=amount)
-            
+
             if combo_discount < 0:
                 amount = int(self.country_specific_dict.get(self.user_type))
                 combo_discount = int(0)
-            
+
             variation_combo_discount += combo_discount
 
             self.added_base_object.append(pk)
@@ -511,6 +522,13 @@ class WriterInvoiceMixin(object):
             addon_combo_discount += combo_discount
             process = True
 
+        elif product_pk in EXECUTIVE_BIO_PRODUCT_LIST:
+            amount = self.executive_bio_dict.get(self.user_type)
+            combo_discount = self._get_combo_discount(
+                oi=oi, amount=amount)
+            addon_combo_discount += combo_discount
+            process = True
+
         if process:
             oi_dict = {
                 "item_id": pk,
@@ -554,6 +572,12 @@ class WriterInvoiceMixin(object):
             amount = self.portfolio_dict.get(self.user_type)
 
             # combo discount calculation
+            combo_discount = self._get_combo_discount(
+                oi=oi, amount=amount)
+            oi_combo_discount += combo_discount
+
+        elif product_pk in EXECUTIVE_BIO_PRODUCT_LIST:
+            amount = self.executive_bio_dict.get(self.user_type)
             combo_discount = self._get_combo_discount(
                 oi=oi, amount=amount)
             oi_combo_discount += combo_discount
@@ -651,6 +675,11 @@ class WriterInvoiceMixin(object):
             # no_process_combo_discount += combo_discount
         elif product_pk in PORTFOLIO_PRODUCT_LIST:
             amount = self.portfolio_dict.get(self.user_type)
+            combo_discount = self._get_combo_discount(
+                oi=oi, amount=amount)
+            no_process_combo_discount += combo_discount
+        elif product_pk in EXECUTIVE_BIO_PRODUCT_LIST:
+            amount = self.executive_bio_dict.get(self.user_type)
             combo_discount = self._get_combo_discount(
                 oi=oi, amount=amount)
             no_process_combo_discount += combo_discount

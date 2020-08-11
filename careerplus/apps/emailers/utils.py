@@ -1,5 +1,6 @@
 import bson
 import logging
+import datetime
 
 from shop.models import ShineProfileData
 from django.db.models import Q
@@ -59,7 +60,7 @@ class BadgingMixin(object):
             existing_badge_value['ec'] = sorted_ec_values
         return existing_badge_value
 
-    def get_badging_data(self, candidate_id, curr_order_item=None, feature=False):
+    def get_badging_data(self, candidate_id, curr_order_item=None, feature=False, touch_point=False):
         existing_badge_value = self.get_existing_badge_value(candidate_id)
         if existing_badge_value is None:
             return None
@@ -70,6 +71,16 @@ class BadgingMixin(object):
                 existing_values.append(new_value)
                 final_values = list(set(existing_values))
                 existing_badge_value['ec'] = final_values
+            elif touch_point:
+                existing_values = existing_badge_value.get('tp', [])
+                touch_data = {'pid': curr_order_item.product.id, 'name': curr_order_item.product.name,
+                              'start': curr_order_item.added_on}
+                if curr_order_item.product.type_flow == 1:
+                    touch_data.update({'end': curr_order_item.added_on + datetime.timedelta(days=30)})
+                else:
+                    touch_data.update({'end': curr_order_item.end_date})
+                existing_values.append(touch_data)
+                existing_badge_value['tp'] = existing_values
             else:
                 try:
                     existing_badge_value.get('ec', []).remove(new_value)

@@ -216,7 +216,7 @@ def cart_drop_out_mail(pk=None, cnd_email=None):
                     continue
 
                 token = AutoLogin().encode(toemail, cart_id, days=None)
-                data['autologin'] = "{}://{}/autologin/{}/?next=/cart/".format(
+                data['autologin'] = "{}://{}/autologin/{}/?next=/cart/payment_summary".format(
                     settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
                     token)
                 try:

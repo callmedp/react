@@ -33,7 +33,7 @@ urlpatterns = [
     re_path(r'^candidates/$', CandidateCreateView.as_view()),
     re_path(r'^candidate/(?P<candidate_id>[0-9a-z]+)/skills/(?P<pk>\d+)/$', SkillRetrieveUpdateView.as_view()),
     re_path(r'^candidate/(?P<candidate_id>[0-9a-z]+)/skills/$', SkillListCreateView.as_view()),
-    re_path(r'^user-profile/$', CandidateShineProfileRetrieveUpdateView.as_view()),
+    # re_path(r'^user-profile/$', CandidateShineProfileRetrieveUpdateView.as_view()),
     re_path(r'^candidate/(?P<candidate_id>[0-9a-z]+)/experiences/(?P<pk>\d+)/$', CandidateExperienceRetrieveUpdateView.as_view()),
     re_path(r'^candidate/(?P<candidate_id>[0-9a-z]+)/experiences/$', CandidateExperienceListCreateView.as_view()),
     re_path(r'^candidate/(?P<candidate_id>[0-9a-z]+)/educations/(?P<pk>\d+)/$', CandidateEducationRetrieveUpdateView.as_view()),

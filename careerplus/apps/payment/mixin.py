@@ -14,7 +14,7 @@ from order.tasks import (
     payment_realisation_mailer,
     invoice_generation_order,
 )
-from .tasks import add_reward_point_in_wallet
+from .tasks import add_reward_point_in_wallet, make_logging_request
 
 
 class PaymentMixin(object):
@@ -50,7 +50,7 @@ class PaymentMixin(object):
             txn_obj.save()
 
             return_parameter = reverse('payment:thank-you')
-        
+
         elif payment_type == "REDEEMED":
             payment_date = datetime.now()
             payment_mode = 16
@@ -67,7 +67,6 @@ class PaymentMixin(object):
             return_parameter = reverse('dashboard:dashboard')
 
             return return_parameter
-            
 
         elif payment_type == "CCAVENUE":
             payment_date = datetime.now()
@@ -83,7 +82,6 @@ class PaymentMixin(object):
             txn_obj.save()
 
             return_parameter = reverse('payment:thank-you')
-
 
         elif payment_type == "PAYU":
             payment_date = datetime.now()
@@ -144,7 +142,6 @@ class PaymentMixin(object):
             order.status = 1
             order.save()
 
-
         elif payment_type == 'RAZORPAY':
             payment_date = datetime.now()
             txn_obj.status = 1
@@ -160,11 +157,19 @@ class PaymentMixin(object):
             order.save()
             return_parameter = reverse('payment:thank-you')
 
-
         if order:
             request.session['order_pk'] = order.pk
             if not order.candidate_id:
                 user_register.delay(data={}, order=order.pk)
+            tracking_product_id = request.session.get(
+                'tracking_product_id', '')
+            product_tracking_mapping_id = request.session.get(
+                'product_tracking_mapping_id', '')
+            tracking_id = request.session.get('tracking_id', '')
+            action = 'purchase_done'
+            if tracking_id:
+                make_logging_request.delay(
+                    tracking_product_id, product_tracking_mapping_id, tracking_id, action)
 
             # order = InvoiceGenerate().save_order_invoice_pdf(order=order)
             invoice_generation_order.delay(order_pk=order.pk)
@@ -178,16 +183,25 @@ class PaymentMixin(object):
                 del request.session['cart_pk']
                 del request.session['checkout_type']
                 self.request.session.modified = True
+                if tracking_id:
+                    del request.session['tracking_id']
+                if tracking_product_id:
+                    del request.session['tracking_product_id']
+                if product_tracking_mapping_id:
+                    del request.session['product_tracking_mapping_id']
             except Exception as e:
-                logging.getLogger('error_log').error("unable to modify session request %s " % str(e))
+                logging.getLogger('error_log').error(
+                    "unable to modify session request %s " % str(e))
                 pass
 
             # emails
-            process_mailer.apply_async((order.pk,), countdown=settings.MAIL_COUNTDOWN)
+            process_mailer.apply_async(
+                (order.pk,), countdown=settings.MAIL_COUNTDOWN)
             # process_mailer(order=order)
             payment_pending_mailer.delay(order.pk)
             # payment_pending_mailer(order=order)
-            pending_item_email.apply_async((order.pk,), countdown=settings.MAIL_COUNTDOWN)
+            pending_item_email.apply_async(
+                (order.pk,), countdown=settings.MAIL_COUNTDOWN)
             # pending_item_email(order=order)
             # payment_realisation_mailer(order=order)
             payment_realisation_mailer.delay(order.pk)
