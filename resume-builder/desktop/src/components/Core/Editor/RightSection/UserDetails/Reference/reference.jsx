@@ -7,9 +7,89 @@ import validate from '../../../../../FormHandler/validations/reference/validate'
 import { scroller } from "react-scroll/modules";
 import { scrollOnErrors } from "../../../../../../Utils/srollOnError"
 import SavePreviewButtons from '../../../../../Common/SavePreviewButtons/savePreviewButtons';
-
+import propTypes from 'prop-types';
 
 class Reference extends Component {
+    static propTypes = {
+        currentForm: propTypes.func,
+        history: propTypes.shape({
+            action: propTypes.string,
+            block: propTypes.func,
+            createHref: propTypes.func,
+            go: propTypes.func,
+            goBack: propTypes.func,
+            goForward: propTypes.func,
+            length: propTypes.number,
+            listen: propTypes.func,
+            location: propTypes.shape({
+                hash: propTypes.string,
+                pathname: propTypes.string,
+                search: propTypes.string,
+                state: undefined
+            }),
+            push: propTypes.func,
+            replace: propTypes.func, 
+        }),
+        bulkUpdateOrCreate: propTypes.func,
+        generateResumeAlert: propTypes.func,
+        previewButtonClicked: propTypes.func,
+        previewClicked: propTypes.func,
+        initialValues: propTypes.object,
+        formData: propTypes.object,
+        bulkUpdateOrCreate: propTypes.func,
+        fetchUserReference: propTypes.func,
+        eventClicked: propTypes.func,
+        removeReference: propTypes.func,
+        handleSubmit: propTypes.func,
+        userInfo: propTypes.shape({
+            active_subscription: propTypes.bool,
+            candidate_id: propTypes.string,
+            date_of_birth: propTypes.string,
+            email: propTypes.string,
+            entity_preference_data: propTypes.array,
+            extra_info: propTypes.string,
+            extracurricular: propTypes.array,
+            first_name: propTypes.string,
+            free_resume_downloads: propTypes.number,
+            gender: propTypes.object,
+            id: propTypes.number,
+            image: propTypes.string,
+            interest_list: propTypes.array,
+            last_name: propTypes.string,
+            location: propTypes.string,
+            number: propTypes.string,
+            selected_template: propTypes.string,
+        }),
+        ui: propTypes.shape({
+            alertModal: propTypes.bool,
+            alertType: propTypes.string,
+            formName: propTypes.string,
+            generateResumeModal: propTypes.bool,
+            helpModal: propTypes.bool,
+            loader: propTypes.bool,
+            loginModal: propTypes.bool,
+            modal: propTypes.bool,
+            previewClicked: propTypes.bool,
+            select_template_modal: propTypes.bool,
+            showMoreSection: propTypes.bool,
+            successLogin: propTypes.bool,
+            suggestionModal: propTypes.bool,
+            suggestionType: propTypes.string,
+            suggestions: propTypes.array,
+        }),
+        saveTitle: propTypes.func,
+        editHeading: propTypes.func,
+        isEditable: propTypes.bool,
+        entityName: propTypes.string,
+        handleInputValue: propTypes.func,
+        showAlertModal: propTypes.func,
+        changeOrderingDown: propTypes.func,
+        changeOrderingUp: propTypes.func,
+        showAlertMessage: propTypes.func,
+
+
+    }
+
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);

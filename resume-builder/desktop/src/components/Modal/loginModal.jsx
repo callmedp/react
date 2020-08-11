@@ -1,6 +1,7 @@
 import React from 'react';
 import Modal from 'react-modal';
 import './loginModal.scss'
+import propTypes from 'prop-types';
 
 
 if (typeof document !== 'undefined') {
@@ -9,6 +10,30 @@ if (typeof document !== 'undefined') {
 
 
 export default class LoginModal extends React.Component {
+    static propTypes = {
+        history: propTypes.shape({
+            action: propTypes.string,
+            block: propTypes.func,
+            createHref: propTypes.func,
+            go: propTypes.func,
+            goBack: propTypes.func,
+            goForward: propTypes.func,
+            length: propTypes.number,
+            listen: propTypes.func,
+            location: propTypes.shape({
+                hash: propTypes.string,
+                pathname: propTypes.string,
+                search: propTypes.string,
+                state: undefined
+            }),
+            push: propTypes.func,
+            replace: propTypes.func, 
+        }),
+        handleLoginSuccess: propTypes.func,
+        hideLoginModal: propTypes.func,
+        loginCandidate: propTypes.func,
+        loginModal: propTypes.bool,
+    }
 
     constructor(props) {
         super(props);

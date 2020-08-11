@@ -1,12 +1,21 @@
 import React from 'react';
 import Modal from 'react-modal';
 import './suggestionModal.scss'
+import propTypes from 'prop-types';
 
 if (typeof document !== 'undefined') {
 
     Modal.setAppElement(document.getElementById('react-app'));
 }
 export default class SuggestionModal extends React.Component {
+    static propTypes = {
+        closeModal: propTypes.func,
+        suggestions: propTypes.array,
+        length : propTypes.number,
+        maxLength: propTypes.number,
+        label: propTypes.string
+    }
+
     constructor(props) {
         super(props);
         this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/'
@@ -17,7 +26,9 @@ export default class SuggestionModal extends React.Component {
             error: false,
             length: 0
         }
-        this.handleSuggestion = this.handleSuggestion.bind(this)
+        this.handleSuggestion = this.handleSuggestion.bind(this);
+
+        console.log(this.props)
     }
 
     componentDidMount() {

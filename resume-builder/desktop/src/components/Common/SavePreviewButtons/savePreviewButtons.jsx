@@ -28,7 +28,7 @@ export default class SavePreviewButtons extends Component {
     }
 
     render (){
-        const {showAlertModal,nextEntity,order_data} = this.props
+        const {showAlertModal,nextEntity,order_data} = this.props;
         const newUser = localStorage.getItem('newUser')
         return (
             <div className="flex-container items-right mr-20 mb-30">
