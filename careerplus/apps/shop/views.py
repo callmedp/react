@@ -899,7 +899,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
                 cache.set(self.prd_solr_key, self.sqs, 60 * 60 * 4)
             else:
                 raise Http404
-        if self.sqs.pPc == 'writing' or self.sqs.pPc == 'service' or self.sqs.pPc == 'other':
+        if (self.sqs.pPc == 'writing' or self.sqs.pPc == 'service' or self.sqs.pPc == 'other') and self.sqs.pTP not in [2,4] and self.sqs.pTF not in [16,2]:
             resume_shine_redirection = self.redirect_for_resume_shine(path_info)
             return resume_shine_redirection
         if self.sqs.id in settings.LINKEDIN_RESUME_PRODUCTS:
@@ -1403,8 +1403,9 @@ class AnalyticsVidhyaProductView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super(AnalyticsVidhyaProductView, self).get_context_data(**kwargs)
         context.update({
-            "campaign_slug" : "analytics_vidhya",
-            "initial_country" : "91"
+            "campaign_slug" : "analvid",
+            "initial_country" : "91",
+            "av_enroll_now" : True
         })
         return context
 

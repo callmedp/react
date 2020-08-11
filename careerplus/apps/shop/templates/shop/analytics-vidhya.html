@@ -59,7 +59,7 @@
                         </div>
                         <input type="hidden" id="campaign" name="campaign" value="{{campaign_slug}}">
                         <input type="hidden" id="lsource" name="lsource" value="2">
-                        <button class="w-100 cta-orange" onclick="enroll_now()">ENROLL NOW</button>
+                        <button class="w-100 cta-orange" onclick="enroll_now()">Submit</button>
                     </form>
                 </div>
             </div>
@@ -68,7 +68,7 @@
 </header>
 <main>
     <!-- sticky nav -->
-    <nav class="navbar navbar-expand-lg navbar-light shadow sticky-nav sticky-top mt-20">
+    <nav class="navbar navbar-expand-lg navbar-light shadow sticky-nav sticky-top mt-20 sticky-none">
         <div class="collapse navbar-collapse container" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item active">
@@ -81,7 +81,7 @@
                     <a class="nav-link" href="#courses"><strong>Courses</strong></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#why-choose"><strong>Why choosse us</strong></a>
+                    <a class="nav-link" href="#why-choose"><strong>Why choose us</strong></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#who-learn"><strong>Who should learn</strong></a>
@@ -177,7 +177,7 @@
                                         </ul>
                                         <span class="price-cta">
                                             <strong class="price-cta__price">Rs. 7999/-</strong>
-                                            <a class="cta-blue-outline" href="#">Know more</a>
+                                            <a class="cta-blue-outline" href="https://learning.shine.com/course/it-information-technology/data-science-self-paced-2/pd-4565" target="_blank">Know more</a>
                                         </span>
                                     </div>
                                 </div>
@@ -190,7 +190,7 @@
                                         </ul>
                                         <span class="price-cta">
                                             <strong class="price-cta__price">Rs. 7999/-</strong>
-                                            <a class="cta-blue-outline" href="#">Know more</a>
+                                            <a class="cta-blue-outline" href="https://learning.shine.com/course/it-information-technology/business-analytics-4/pd-4566" target="_blank">Know more</a>
                                         </span>
                                     </div>
                                 </div>
@@ -207,8 +207,8 @@
                                             <li>Ace Datascience interview preparation</li>
                                         </ul>
                                         <span class="price-cta">
-                                            <strong class="price-cta__price">Rs. 7999/-</strong>
-                                            <a class="cta-blue-outline" href="#">Know more</a>
+                                            <strong class="price-cta__price">Rs. 17999/-</strong>
+                                            <a class="cta-blue-outline" href="https://learning.shine.com/course/it-information-technology/applied-machine-learning-basic-to-advanced/pd-4567" target="_blank">Know more</a>
                                         </span>
                                     </div>
                                 </div>
@@ -221,8 +221,8 @@
                                             <li>1: 1 Mentorship sessions</li>
                                         </ul>
                                         <span class="price-cta">
-                                            <strong class="price-cta__price">Rs. 7999/-</strong>
-                                            <a class="cta-blue-outline" href="#">Know more</a>
+                                            <strong class="price-cta__price">Rs. 14999/-</strong>
+                                            <a class="cta-blue-outline" href="https://learning.shine.com/course/it-information-technology/certified-business-analytics-program/pd-4568" target="_blank">Know more</a>
                                         </span>
                                     </div>
                                 </div>
@@ -239,8 +239,8 @@
                                             <li>1 to 1 Mentorship sessions</li>
                                         </ul>
                                         <span class="price-cta">
-                                            <strong class="price-cta__price">Rs. 7999/-</strong>
-                                            <a class="cta-blue-outline" href="#">Know more</a>
+                                            <strong class="price-cta__price">Rs. 49999/-</strong>
+                                            <a class="cta-blue-outline" href="https://learning.shine.com/course/it-information-technology/certified-ai-and-ml-black-belt-masters/pd-4575" target="_blank">Know more</a>
                                         </span>
                                     </div>
                                 </div>
@@ -353,7 +353,7 @@
         <div class="looking-job">
                 <img src="{% static 'shinelearn/images/looking-job.png' %}" class="img-fluid" alt="Looking for job opportunity in Data Science<">
             <strong><span>Looking for</span> job opportunity in <br>Data Science</strong>
-            <a href="#" class="cta-blue-outline">VIEW JOBS</a>
+            <a href="https://learning.shine.com/courses/it-information-technology/data-science/497/" class="cta-blue-outline" target="_blank">Know More</a>
         </div>
     </section>
 
@@ -419,7 +419,7 @@
                     </div>
                     <div id="collapseFive" class="collapse" aria-labelledby="headingFive" data-parent="#accordionExample">
                         <div class="card-body card__answer">
-                            <p>You can call us at [phone no] or reach out to us at [email no] , our experts will guide you with the best suited courses.</p>
+                            <p>You can reach out to us at education@shine.com, our experts will guide you with the best suited courses.</p>
                         </div>
                     </div>
                 </div>
@@ -428,13 +428,26 @@
     </section>
        
 </main>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script type="text/javascript">
+    let aboutSectionPosTop = null;
+    $(document).ready(()=>{
+        aboutSectionPosTop = $('#about').offset().top;
+        stickyNavbarActiveScroll();
+    })
+    //Funtion used to set activate of sticky nav while scrolling
+    const stickyNavbarActiveScroll = () => {
+        var showStickyNavbarHandler = () =>{
+            $('.sticky-nav')[$(window).scrollTop() >= aboutSectionPosTop ? 'removeClass' : 'addClass']('sticky-none');
+        }
+        $(window).on('scroll',showStickyNavbarHandler)
+    }
+
     $('.sticky-nav .nav-link').click(function(){
         $('.sticky-nav .nav-link').removeClass('active');
         $(this).addClass('active');
     })
     function enroll_now(){
-        debugger;
         var data = {
             'name' : $("#name").val(),
             'country' : $("#country").val(),

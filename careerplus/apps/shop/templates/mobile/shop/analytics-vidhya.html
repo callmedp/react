@@ -7,6 +7,7 @@
     {% compress css %}
     <link  type="text/scss" href="{% static 'shinelearn/css/mobile/pages/analytics.scss' %}" rel="stylesheet">
     <link type="text/css" href="{% static 'shinelearn/css/mobile/common/smk-accordion.css' %}" rel="stylesheet">
+    <link type="text/scss" href="{% static 'shinelearn/css/mobile/zopim_chat/custom.css' %}" rel="stylesheet">
     {% endcompress css %}
 
 {% endblock css_section %}
@@ -28,12 +29,12 @@
             <li>Avg. package is 2x higher than other fields</li>
             <li>Be feature ready, 36K+ jobs</li>
         </ul>
-        <a id="enroll_btn" href="#" class="btn btn-round-30 btn-yellow btn-slg inline-block mt-20">Enroll now</a>
+        <a id="enroll_btn" href="#" class="btn bold btn-round-30 btn-yellow btn-slg inline-block mt-20 text-uppercase">Enroll now</a>
     </div>
 
     <div class="about-section light-blue-bg">
         <h2>About Data Science</h2>
-        <p>Data science is everywhere right now. It is the hottest field in the industry right now. Organisation today are using data science solutions to solve the business.<span id="dots">...</span><div  id="more" style="display:none;"><p>It’s a great time to learn data science and get ready for your first industry role! The potential of data science is limitless - spanning across industries, roles and functions</p></div></p><a id="read_more" onclick="read_more()">Read more</a>
+        <p>Data science is everywhere right now. It is the hottest field in the industry right now. Organisation today are using data science solutions to solve the business.<span id="dots">...</span><span id="more" style="display:none;">It’s a great time to learn data science and get ready for your first industry role! The potential of data science is limitless - spanning across industries, roles and functions. </span><a id="read_more" class="bold" onclick="read_more()">Read more</a></p>
 
         <p class="my-10"><strong>Benefits of the program</strong></p>
         <ul class="about-section--list">
@@ -46,7 +47,7 @@
 
     <div class="content-box">
         <h2 class="mb-25">Learning Path</h2>
-        <img src="{% static 'shinelearn/images/mobile/analytics/learning-path.svg' %}" class="img-responsive" alt="Learning Path">
+        <img src="{% static 'shinelearn/images/mobile/analytics/howitworks-mobile.jpg' %}" class="img-responsive" alt="Learning Path">
     </div><!-- // Learning Path -->
 
     <div class="light-blue-bg pt-15 courses-offered">
@@ -84,7 +85,7 @@
 
                                                 <div class="courses-offered__slider--bottom">
                                                     <span class="price">Rs. 7999/- </span>
-                                                    <a href="#" class="btn btn-outline-blue btn-round-30 text-uppercase fs-14">Know more</a>
+                                                    <a href="https://learning.shine.com/course/it-information-technology/data-science-self-paced-2/pd-4565" class="btn btn-outline-blue btn-round-30 text-uppercase fs-14 fw700 px-20" target="_blank">Know more</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -103,7 +104,7 @@
 
                                                 <div class="courses-offered__slider--bottom">
                                                     <span class="price">Rs. 7999/- </span>
-                                                    <a href="#" class="btn btn-outline-blue btn-round-30 text-uppercase fs-14">Know more</a>
+                                                    <a href="https://learning.shine.com/course/it-information-technology/business-analytics-4/pd-4566" class="btn btn-outline-blue btn-round-30 text-uppercase fs-14 fw700 px-20" target="_blank">Know more</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -128,8 +129,8 @@
                                                 
 
                                                 <div class="courses-offered__slider--bottom">
-                                                    <span class="price">Rs. 7999/- </span>
-                                                    <a href="#" class="btn btn-outline-blue btn-round-30 text-uppercase fs-14">Know more</a>
+                                                    <span class="price">Rs. 17999/- </span>
+                                                    <a href="https://learning.shine.com/course/it-information-technology/applied-machine-learning-basic-to-advanced/pd-4567" class="btn btn-outline-blue btn-round-30 text-uppercase fs-14 fw700 px-20" target="_blank">Know more</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -148,8 +149,8 @@
                                                 
 
                                                 <div class="courses-offered__slider--bottom">
-                                                    <span class="price">Rs. 7999/- </span>
-                                                    <a href="#" class="btn btn-outline-blue btn-round-30 text-uppercase fs-14">Know more</a>
+                                                    <span class="price">Rs. 14999/- </span>
+                                                    <a href="https://learning.shine.com/course/it-information-technology/certified-business-analytics-program/pd-4568" class="btn btn-outline-blue btn-round-30 text-uppercase fs-14 fw700 px-20" target="_blank">Know more</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -174,8 +175,8 @@
                                                 
 
                                                 <div class="courses-offered__slider--bottom">
-                                                    <span class="price">Rs. 7999/- </span>
-                                                    <a href="#" class="btn btn-outline-blue btn-round-30 text-uppercase fs-14">Know more</a>
+                                                    <span class="price">Rs. 49999/- </span>
+                                                    <a href="https://learning.shine.com/course/it-information-technology/certified-ai-and-ml-black-belt-masters/pd-4575" class="btn btn-outline-blue btn-round-30 text-uppercase fs-14 fw700 px-20" target="_blank">Know more</a>
                                                 </div>
                                             </div>
                                         </div>
@@ -247,7 +248,7 @@
             <div class="job-opportunities-banner--content">
                 <p class="pb-5">Looking for</p>
                 <strong>job opportunity in Data Science</strong>
-                <a href="#" class="btn btn-lg btn-outline-blue btn-round-30 text-uppercase fs-14 mt-15">View Jobs</a>
+                <a href="https://learning.shine.com/courses/it-information-technology/data-science/497/" class="btn btn-lg btn-outline-blue btn-round-30 text-uppercase fs-14 mt-15 fw700 px-20" target="_blank">Know More</a>
             </div>
         </div><!-- // Looking for -->
     </div><!-- // content-box -->
@@ -283,7 +284,7 @@
     </div><!-- // Skills you will gain -->
 
     <div class="content-box pb-0 mt-20 pb-30">
-        <h2>Frequently Asked Quetions</h2>
+        <h2>Frequently Asked Questions</h2>
         <!-- Accordion begin -->
         <ol class="faqs analytics-faqs accordion-wrap mt-25 mb-30 row">
             <li class="accordion_in acc_active">
@@ -322,7 +323,7 @@
                 <div class="acc_head"><h3>I need help in choosing the right course for me ?</h3></div>
                 
                 <div class="acc_content">
-                    You can call us at [phone no] or reach out to us at [email no] , our experts will guide you with the best suited courses.
+                    You can reach out to us at education@shine.com, our experts will guide you with the best suited courses.
                 </div>
             </li><!-- // Question 1 -->
 
@@ -375,15 +376,16 @@
 </div>
 
 <!-- call us and chat widget starts here -->
-{% block call_us %}
-    {% include "shop/partials/call_us.html" %}
-{% endblock call_us %}
+    {% block call_us %}
+        {% include "shop/partials/call_us.html" %}
+    {% endblock call_us %}
 {% endblock container %}
 
 {% block js_section %}
 {{block.super}}
     {% compress js %}
     <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/smk-accordion.js' %}"></script>
+    <script src="{% static 'shinelearn/js/mobile/zopim_chat/custom.js' %}"></script>
     <script type="text/javascript">
       jQuery(document).ready(function($){ 
         $(".faqs").smk_Accordion({
@@ -400,6 +402,10 @@
 
       $("#back_btn_enroll").on('click', function() {
         $('#enroll_now_modal').removeClass('show');
+      });
+
+      $("#enquire_btn_av").on('click', function() {
+        $('#enroll_now_modal').addClass('show');
       });
 
       function enroll_now(){
