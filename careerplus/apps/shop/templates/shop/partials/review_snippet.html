@@ -1,7 +1,7 @@
   {% for review in prd_review_list %}
-    <li class="box-panel" itemscope itemtype="http://schema.org/Review">
-      <span class="review-heading" itemprop="name">{% if not review.title %}{{review.get_remarks}} {% else %} {{ review.title }}{% endif %}</span>
-      <div class="rating-review-box" itemprop="reviewRating" itemscope itemtype="http://schema.org/Rating">
+    <li class="box-panel">
+      <span class="review-heading">{% if not review.title %}{{review.get_remarks}} {% else %} {{ review.title }}{% endif %}</span>
+      <div class="rating-review-box">
           {% for star in review.get_ratings %}
             {% if star == "*" %}
               <figure class="full-star"></figure>
@@ -11,17 +11,12 @@
               <figure class="blank-star"></figure>
             {% endif %}
           {% endfor %}
-          <meta itemprop="worstRating" content="1">
-          <strong><span itemprop="ratingValue">{{review.average_rating|floatformat:"1"}}</span>/<span itemprop="bestRating">5</span></strong>
+          <!-- <meta itemprop="worstRating" content="1"> -->
+          <strong><span >{{review.average_rating|floatformat:"1"}}</span>/<span>5</span></strong>
       </div>
-      <article itemprop="description">{{review.content|safe}}</article>
-      <meta itemprop="author" content="{% if review.user_name %}{{review.user_name}}{% else %}anonymous{% endif %}" />
-      <span class="editor">By <a ><span >{% if review.user_name %}{{review.user_name}}{% else %}anonymous{% endif %}</span></a>, <span >{{review.created|date:"M d, Y" }}</span></span>
-
-      <div itemprop="itemReviewed" itemscope itemtype="http://schema.org/Product">
-        <meta itemprop="name" content="{{prd_H1}}" />
-      </div>
-      
+      <article>{{review.content|safe}}</article>
+      <!-- <meta itemprop="author" content="{% if review.user_name %}{{review.user_name}}{% else %}anonymous{% endif %}" /> -->
+      <span class="editor">By <a ><span >{% if review.user_name %}{{review.user_name}}{% else %}anonymous{% endif %}</span></a>, <span >{{review.created|date:"M d, Y" }}</span></span>     
     </li>
   {% endfor %}
   {% if prd_review_list.has_next %}
