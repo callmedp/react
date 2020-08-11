@@ -35,7 +35,7 @@
                   <meta itemprop="availability" content="https://schema.org/OnlineOnly">
                   <meta itemprop="priceCurrency" content="INR">
                   <meta itemprop="priceValidUntil" content="{% now 'SHORT_DATETIME_FORMAT' %}">
-                  <meta itemprop="url" content="{{ SITE_DOMAIN }}{{canonical_url}}">
+                  <meta itemprop="url" content="{{product.absolute_url}}">
                 </div>
                 <div>
                   {% for review in prd_review_list %}
