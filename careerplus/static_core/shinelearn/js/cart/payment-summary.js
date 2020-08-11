@@ -426,12 +426,45 @@ async function handleResponse(response, isFetchingHTML) {
 }
 
 
+const makeTrackingRequest = (loggingData) => {
+
+    $.ajax({
+        method: "POST",
+        url: `${shineApiUrl}/learning-touchpoints-tracking/`,
+        data: JSON.stringify(loggingData),
+        dataType: 'json',
+        contentType: "application/json",
+
+    })
+}
+
+
+const trackClickEvent = () => {
+    let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'exit_cart', 'position': 1, domain: 2, sub_product: trackingProductId };
+    if (trackingId) {
+        makeTrackingRequest(loggingData);
+    }
+}
+
+
 
 $(document).ready(function () {
 
     $('#payment-summary-continue-id').click(function () {
         $('#payment-summary-continue-id').attr('disabled', true);
+        let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'proceed_to_payments', 'position': 1, domain: 2, sub_product: trackingProductId };
+        if (trackingId) {
+            makeTrackingRequest(loggingData);
+
+        }
     });
+
+    $('#cart-navbar').click(function () {
+        let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'exit_cart', 'position': 1, domain: 2, sub_product: trackingProductId };
+        if (trackingId) {
+            makeTrackingRequest(loggingData);
+        }
+    })
 
     $('.trig-loader').click(function () {
 

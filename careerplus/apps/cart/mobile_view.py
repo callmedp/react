@@ -8,6 +8,7 @@ from decimal import Decimal
 from .mixins import CartMixin
 from .models import Cart
 from wallet.models import Wallet, WalletTransaction, PointTransaction
+from payment.tasks import make_logging_request
 
 
 class RemoveFromCartMobileView(View, CartMixin):
@@ -25,7 +26,8 @@ class RemoveFromCartMobileView(View, CartMixin):
                     cart_obj = Cart.objects.get(pk=cart_pk)
                     if child_list:
                         for child_ref in child_list:
-                            line_obj = cart_obj.lineitems.get(reference=child_ref)
+                            line_obj = cart_obj.lineitems.get(
+                                reference=child_ref)
                             if line_obj.parent_deleted:
                                 parent = line_obj.parent
                                 childs = cart_obj.lineitems.filter(
@@ -48,16 +50,37 @@ class RemoveFromCartMobileView(View, CartMixin):
                             else:
                                 parent.delete()
                         else:
+                            tracking_id = request.session.get(
+                                'tracking_id', '')
+                            tracking_product_id = request.session.get(
+                                'tracking_product_id', '')
+                            product_tracking_mapping_id = request.session.get(
+                                'product_tracking_mapping_id', '')
+                            if tracking_product_id == line_obj.product.id and tracking_id:
+                                make_logging_request.delay(
+                                    tracking_product_id, product_tracking_mapping_id, tracking_id, 'remove_product')
+                                # for showing the user exits for that particular cart product
+                                make_logging_request.delay(
+                                    tracking_product_id, product_tracking_mapping_id, tracking_id, 'exit_cart')
+                                if tracking_id:
+                                    del request.session['tracking_id']
+                                if product_tracking_mapping_id:
+                                    del request.session['product_tracking_mapping_id']
+                                if tracking_product_id:
+                                    del request.session['tracking_product_id']
+
                             line_obj.delete()
+
                     data['status'] = 1
-    
+
                     cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
-                    total_amount = Decimal(cart_dict.get('total_amount', Decimal(0)))
+                    total_amount = Decimal(
+                        cart_dict.get('total_amount', Decimal(0)))
                     initial_redeemed_points = Decimal(0)
                     # payment_dict = self.getPayableAmount(cart_obj, cart_dict.get('total_amount'))
                     # point = payment_dict["redeemed_reward_point"]
                     wal_txn = cart_obj.wallettxn.filter(
-                            txn_type=2).order_by('-created').select_related('wallet')
+                        txn_type=2).order_by('-created').select_related('wallet')
                     if wal_txn:
                         wal_txn = wal_txn[0]
                         initial_redeemed_points = wal_txn.point_value
@@ -83,12 +106,13 @@ class RemoveFromCartMobileView(View, CartMixin):
                         wal_txn.save()
 
                         point = total_amount
-                        points = wal_obj.point.filter(status=1).order_by('created')
+                        points = wal_obj.point.filter(
+                            status=1).order_by('created')
                         wallettxn = WalletTransaction.objects.create(
                             wallet=wal_obj, cart=cart_obj, txn_type=2, point_value=point)
                         for pts in points:
                             if pts.expiry >= timezone.now():
-                                if point > Decimal(0):    
+                                if point > Decimal(0):
                                     if pts.current >= point:
                                         pts.current -= point
                                         pts.last_used = timezone.now()
@@ -101,7 +125,7 @@ class RemoveFromCartMobileView(View, CartMixin):
                                             point_value=point,
                                             txn_type=2)
                                         point = Decimal(0)
-                                        
+
                                     else:
                                         point -= pts.current
                                         pts.last_used = timezone.now()
@@ -113,7 +137,7 @@ class RemoveFromCartMobileView(View, CartMixin):
                                             txn_type=2)
                                         pts.current = Decimal(0)
                                         pts.save()
-                            
+
                         wallettxn.status = 1
                         wallettxn.notes = 'Redeemed from cart'
                         wallettxn.current_value = wal_obj.get_current_amount()

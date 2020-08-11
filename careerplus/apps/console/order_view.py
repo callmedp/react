@@ -30,6 +30,12 @@ from django.shortcuts import render
 from django.forms import modelformset_factory
 from django.template.response import TemplateResponse
 
+
+from django.db.models import Prefetch
+
+
+
+
 from geolocation.models import Country
 from order.models import Order, OrderItem, InternationalProfileCredential, OrderItemOperation
 from shop.models import DeliveryService, Product, JobsLinks,Category
@@ -187,6 +193,12 @@ class OrderListView(ListView, PaginationMixin):
                         result = self.query.strip()
                         queryset = queryset.filter(email__iexact=result)
 
+                    elif self.sel_opt in ['razor_order_id', 'razor_payment_id']:
+                        result = self.query.strip()
+                        filter_dict = {self.sel_opt+'__iexact':result}
+                        oi = PaymentTxn.objects.filter(**filter_dict).values_list('order_id',flat=True)
+                        queryset = queryset.filter(id__in=oi)
+
         except Exception as e:
             queryset = queryset.none()
             logging.getLogger('error_log').error("%s " % str(e))
@@ -229,7 +241,11 @@ class OrderListView(ListView, PaginationMixin):
             logging.getLogger('error_log').error("%s " % str(e))
             pass
         if queryset.exists():
-            return queryset.order_by('-modified')
+            return queryset.prefetch_related(Prefetch('ordertxns',
+    queryset=PaymentTxn.objects.select_related('order'),
+    to_attr='get_txnss'
+)).order_by('-modified')
+            # return queryset.prefetch_related('orderitems').order_by('-modified')
         else:
             return queryset.none()
 
@@ -2178,7 +2194,10 @@ class BoosterQueueVeiw(ListView, PaginationMixin):
         q1 = queryset.filter(oi_status=61)
         exclude_list = []
         for obj in q1:
-            closed_ois = obj.order.orderitems.filter(oi_status=4, product__type_flow=1, product__sub_type_flow__in=[101,100], no_process=False)
+
+            closed_ois = OrderItem.objects.filter(order_id=obj.order_id,oi_status=4,product__type_flow=1,
+                                                  product__sub_type_flow__in=[101,100],no_process=False)
+            # closed_ois = obj.order.orderitems.filter(oi_status=4, product__type_flow=1, product__sub_type_flow__in=[101,100], no_process=False)
             if closed_ois.exists():
                 last_oi_status = obj.oi_status
                 obj.oi_status = 5
