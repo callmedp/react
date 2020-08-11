@@ -29,7 +29,7 @@
     <section class="">
         <div class="">
             <div class="header-carousel">
-                <div class=" header-bg1">
+                <div class="{% if country in 'india,gulf' %} header-bg1 {% else %} header-bg1-gen {% endif %}">
                     <div class="content">
                         <span><a href="https://learning.shine.com/"><img src="{% static 'shinelearn/images/shop/google-ad/shinelogo.png' %}" class="mb-3" alt="shinelogo"></a></span>
                         <strong>Struggling with your job?</strong>
@@ -55,7 +55,7 @@
                     
                 </div>
     
-                <div class="header-bg2">
+                <div class="{% if country in 'india,gulf' %} header-bg2 {% else %} header-bg2-gen {% endif %}">
                     <div class="content">
                         <span><a href="https://learning.shine.com/"></a><img src="{% static 'shinelearn/images/shop/google-ad/shinelogo.png'%}" alt="shinelogo"></span>
                          <h1 class="mt-5 make">Make your online profile Extremely Strong</h1> 
@@ -498,8 +498,13 @@
             <div class="row pt-5">
                 <div class="col-md-6 col-sm-12">
                     <div class="find">
+                        {% if country in 'india,gulf' %}
                         <strong>Find your next job offer here</strong>
                         <img src="{% static 'shinelearn/images/shop/google-ad/profsionalwork-laptop-img.jpg' %}"  alt="img">
+                        {% else %}
+                        <strong>Limited Time Offer</strong>
+                        <img src="{% static 'shinelearn/images/shop/google-ad/limited-time-offer.jpg' %}"  alt="img">
+                        {% endif %}
                     </div>
                 </div>
                 <div class="col-md-6 col-sm-12 mt-5">

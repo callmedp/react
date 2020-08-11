@@ -3979,10 +3979,24 @@ a.text-secondary:hover, a.text-secondary:focus {
       background: #674bc6 url("resumebanner.jpg") center top no-repeat;
       min-height: 540px; } }
 
+.header-bg1-gen {
+  background: #674bc6 url("mobile-bg-gen.jpg") left top no-repeat;
+  background-size: cover;
+  min-height: 490px; }
+  @media (min-width: 577px) {
+    .header-bg1-gen {
+      background: #674bc6 url("resumebanner-gen.jpg") center top no-repeat;
+      min-height: 540px; } }
+
   
 @media (min-width: 1190px) and (max-width: 1400px) {
     .header-bg1 {
       background: #674bc6 url("resumebanner.jpg") 85% top no-repeat;
+    min-height: 540px; }}
+
+@media (min-width: 1190px) and (max-width: 1400px) {
+    .header-bg1-gen {
+      background: #674bc6 url("resumebanner-gen.jpg") 85% top no-repeat;
     min-height: 540px; }}
 
 /*.header-bg2 {
@@ -4006,6 +4020,19 @@ a.text-secondary:hover, a.text-secondary:focus {
 @media (min-width: 1190px) and (max-width: 1400px)  {
 .header-bg2 {
   background: #674bc6 url("linkedin_banner.jpg") 95% top no-repeat;
+min-height: 540px; }}
+
+.header-bg2-gen {
+  background: #674bc6 url("mobile-bg2-gen.jpg") left top no-repeat;
+  background-size: cover;
+  min-height: 490px; }
+  @media (min-width: 577px) {
+    .header-bg2-gen {
+      background: #674bc6 url("linkedin-gen.jpg") center top no-repeat;
+      min-height: 540px; } }
+@media (min-width: 1190px) and (max-width: 1400px)  {
+.header-bg2-gen {
+  background: #674bc6 url("linkedin-gen.jpg") 95% top no-repeat;
 min-height: 540px; }}
 
 .header-carousel {
