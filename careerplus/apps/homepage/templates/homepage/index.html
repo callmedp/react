@@ -17,12 +17,14 @@
 <link defer href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
 
 
+
 {% if request.session.candidate_id %}
 {% compress css %}
 <link async type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/common/bootstrap.scss' %}" rel="stylesheet">
 <link defer type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/homepage/home1.scss' %}" rel="stylesheet">
-<link defer type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/common/header-footer.scss' %}"
-    rel="stylesheet">
+<link defer type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/common/header-footer.scss' %}" rel="stylesheet">
+<link defer type="text/css" href="{% static 'shinelearn/css/common/inputTags.css' %}" rel="stylesheet">
+
 <link defer type="text/css" href="{% static 'shinelearn/css/common/typeaheadjs.css' %}" rel="stylesheet">
 {% endcompress %}
 {% else %}
@@ -31,6 +33,8 @@
 <link defer type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/homepage/home.scss' %}" rel="stylesheet">
 <link defer type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/common/header-footer.scss' %}"
     rel="stylesheet">
+<link defer type="text/css" href="{% static 'shinelearn/css/common/inputTags.css' %}" rel="stylesheet">
+
 <link defer type="text/css" href="{% static 'shinelearn/css/common/typeaheadjs.css' %}" rel="stylesheet">
 {% endcompress %}
 {% endif %}
