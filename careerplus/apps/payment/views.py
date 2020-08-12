@@ -24,7 +24,7 @@ from console.decorators import Decorate, stop_browser_cache
 from django.core.files.base import ContentFile
 from django.utils import timezone
 from django.http import HttpResponseRedirect, HttpResponsePermanentRedirect,\
-    HttpResponseForbidden, Http404
+    HttpResponseForbidden, Http404, HttpResponseBadRequest
 from django.views.decorators.csrf import csrf_exempt
 
 # local imports
@@ -850,17 +850,17 @@ class RazorPayRequestView(OrderMixin, View):
         cart_id = self.kwargs.get('cart_id')
         if not cart_id:
             return_dict.update({'error': 'Cart id not found'})
-            return Response(return_dict, status=status.HTTP_400_BAD_REQUEST)
+            return  HttpResponseBadRequest()
         cart_obj = Cart.objects.filter(id=cart_id).first()
         if not cart_obj:
             return_dict.update({'error': 'Cart id not found'})
-            return Response(return_dict, status=status.HTTP_400_BAD_REQUEST)
+            return  HttpResponseBadRequest()
 
         order = self.createOrder(cart_obj)
         if not order:
             logging.getLogger('error_log').error('order is not created for '
                                                  'cart id- {}'.format(cart_id))
-            return Response(return_dict, status=status.HTTP_400_BAD_REQUEST)
+            return  HttpResponseBadRequest()
 
         txn = 'CP%d%s' % (order.pk, int(time.time()))
         # creating txn object
@@ -877,8 +877,7 @@ class RazorPayRequestView(OrderMixin, View):
         rz = RazorPaymentUtil()
         response = rz.create(order, pay_txn)
         if not response:
-            return Response(return_dict, status=status.HTTP_400_BAD_REQUEST)
-        print(response)
+            return HttpResponseBadRequest()
 
         pay_txn.razor_order_id = response.get('id')
         pay_txn.save()

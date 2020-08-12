@@ -171,7 +171,7 @@ class WriterInvoiceMixin(object):
                 
                 if product_pk not in EXECUTIVE_BIO_PRODUCT_LIST:
                     executive_bio_ois = OrderItem.objects.filter(
-                        order_candidate_id=oi.order.candidate_id,
+                        order__candidate_id=oi.order.candidate_id,
                         product__id__in=EXECUTIVE_BIO_PRODUCT_LIST,
                         oi_status=4,
                         assigned_to=assigned_to,
@@ -297,7 +297,7 @@ class WriterInvoiceMixin(object):
                     product_count = product_count + 1
 
                 executive_bio_ois = OrderItem.objects.filter(
-                    order_candidate_id=oi.order.candidate_id,
+                    order__candidate_id=oi.order.candidate_id,
                     product__id__in=EXECUTIVE_BIO_PRODUCT_LIST,
                     oi_status=4,
                     assigned_to=assigned_to,
