@@ -879,7 +879,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
 
     def get(self, request, **kwargs):
         path_info = kwargs
-        if self.request.GET.get('lc'):
+        if self.request.GET.get('lc') and self.request.session.get('candidate_id'):
             if not kwargs.get('pk',''):
                 return
             prod = Product.objects.filter(id=kwargs.get('pk')).first()
