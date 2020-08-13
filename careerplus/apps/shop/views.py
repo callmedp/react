@@ -533,7 +533,7 @@ class ProductInformationMixin(object):
     def get_product_detail_context(self, product, sqs, product_main, sqs_main):
         main_ctx = {}
         key = "context_product_detail_"+ str(product.pk)
-        useragent = self.request.META['HTTP_USER_AGENT']
+        useragent = self.request.META.get('HTTP_USER_AGENT',[])
         if cache.get(key) and 'facebookexternalhit' not in useragent:
             main_ctx.update(cache.get(key))
         else:
@@ -811,7 +811,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
 
     def update_og_meta_tag(self, request, ctx):
         if ctx['prd_vendor_slug'] == 'neo':
-            useragent = request.META['HTTP_USER_AGENT']
+            useragent = request.META.get('HTTP_USER_AGENT',[])
             if'facebookexternalhit' in useragent:
 
                 title = unquote(request.GET.get('title', ''))
@@ -888,7 +888,9 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
 
             lead_source = PRODUCT_SOURCE_MAPPING.get(prod.product_class.slug, 0)
             slug_source = dict(DEFAULT_SLUG_SOURCE)
-            campaign_slug = slug_source.get(int(lead_source))
+            utm_params = self.request.GET.get('utm',{})
+            campaign_slug = self.request.GET.get('utm_campaign',slug_source.get(int(lead_source)))
+            sub_campaign = self.request.GET.get('subcampaign','')
 
             data_dict = {
                 'name': "{} {}".format(self.request.session.get('first_name',''), self.request.session.get(
@@ -896,7 +898,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
                 'email': self.request.session.get('email',''),
                 'phn_number': self.request.session.get('mobile_no',''),
                 'product_id':prod.id,
-                'utm_parameter': self.request.GET.get('utm_campaign',''),
+                'utm_parameter': json.dumps(utm_params),
                 'product':prod.name,
                 'lead_source':lead_source,
                 'path': request.path,
@@ -914,7 +916,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         if root == 'interested_mail':
             logging.getLogger('info_log').info('interested user clicked product "{}" having id-{}, mobile number is "{}", under campaign "{}"'.format(path_info.get('prd_slug'),path_info.get("pk", ""), mobile, campaign))
 
-        useragent = self.request.META['HTTP_USER_AGENT']
+        useragent = self.request.META.get('HTTP_USER_AGENT',[])
         if 'facebookexternalhit' not in useragent:
             redirect_url = self.redirect_for_neo(request)
             if redirect_url:
