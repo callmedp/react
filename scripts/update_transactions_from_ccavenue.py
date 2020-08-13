@@ -125,7 +125,7 @@ if __name__=="__main__":
         sdt = (current_utc_time - timedelta(minutes=interval)).replace(tzinfo=utc_tz)
         edt = (sdt + timedelta(minutes=2)).replace(tzinfo=utc_tz) #Hour + buffer
         all_initiated_transactions = PaymentTxn.objects.filter(status__in=[0,2,3,4,5],\
-                payment_mode__in=[5,7],created__gte=sdt,created__lte=edt,order__site=0)
+                payment_mode__in=[5,7],created__gte=sdt,created__lte=edt,order__site=1)
 
         logging.getLogger('info_log').info(\
             "Total initiated transactions for interval {} minutes - {}".format(\
@@ -135,14 +135,14 @@ if __name__=="__main__":
             get_params_mapping = {"command":"orderStatusTracker",
                             "request_type":"JSON",
                             "response_type":"JSON",
-                            "access_code":settings.CCAVENUE_ACCESS_CODE,
+                            "access_code":settings.RSHINE_CCAVENUE_ACCESS_CODE,
                             "order_no":txn.txn
                             }
 
             url_get_string = "&".join(["{}={}".format(key,value) for key,value in get_params_mapping.items()])
 
             obj = CCAvenueCrypto()
-            encrypted_data = obj.encrypt(json.dumps(get_params_mapping), settings.CCAVENUE_WORKING_KEY)
+            encrypted_data = obj.encrypt(json.dumps(get_params_mapping), settings.RSHINE_CCAVENUE_WORKING_KEY)
             json_data = json.dumps({"encRequest":url_get_string +"&enc_request=" + encrypted_data,\
                 "order_no":txn.txn})
             
@@ -163,7 +163,7 @@ if __name__=="__main__":
                     "CCAvenue Enc response - {} {} {}".format(response.text,response_dict,txn.txn))
                 continue
             decrypted_text = get_clean_string(obj.decrypt(response_dict.get('enc_response'),\
-                settings.CCAVENUE_WORKING_KEY).strip())
+                settings.RSHINE_CCAVENUE_WORKING_KEY).strip())
             start_index = 0
             end_index = 0
             try:
