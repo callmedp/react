@@ -99,6 +99,7 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
         country_code = request.data.get('country_code', '91').strip()
         mobile = request.data.get('mobile').strip()
         candidate_id = request.data.get('candidate_id', '').strip()
+        logging.getLogger('info_log').info("Order creation request recieved -{}".format(request.data))
 
         if not item_list:
             return Response(
@@ -154,14 +155,14 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
 
                 if not first_name and not last_name:
                     first_name = name
-
-            if country_code:
+            country_obj = cache.get('country_obj_{}'.format(country_code))
+            if not country_obj:
                 try:
                     country_obj = Country.objects.get(phone=country_code)
+                    cache.set('country_obj_{}'.format(country_code),country_obj,timeout=None)
                 except Exception as e:
                     logging.getLogger('error_log').error(
-                        "Unable to get country object %s" % str(e))
-
+                        "Unable to get country object %s"%str(e))
                     country_obj = Country.objects.get(phone=91)
 
             if flag:
@@ -466,6 +467,7 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                     status=status.HTTP_200_OK)
 
             else:
+                logging.getLogger('error_log').error('order not created -{}'.format(msg))
                 return Response(
                     {"msg": msg, "status": 0},
                     status=status.HTTP_400_BAD_REQUEST)
