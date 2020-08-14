@@ -24,24 +24,6 @@ const isSame = (initialField, formField) => {
 }
 
 class Edit extends Component {
-    static propTypes = {
-        entityList: propTypes.array,
-        eventClicked: propTypes.func,
-        updateCategoryEntity: propTypes.func,
-        showAlertModal: propTypes.func,
-        hideAlertModal: propTypes.func,
-        location: propTypes.shape({
-            hash: propTypes.string,
-            pathname: propTypes.string,
-            search: propTypes.string,
-            state: undefined
-        }),
-        formData: propTypes.object,
-        formName: propTypes.string,
-        generateResumeModal: propTypes.bool,
-        alertModal: propTypes.bool,
-    }
-
     constructor(props) {
         super(props);
         this.showErrorMessage = this.showErrorMessage.bind(this);
@@ -255,6 +237,24 @@ class Edit extends Component {
         )
     }
 
+}
+
+Edit.propTypes = {
+    entityList: propTypes.array,
+    eventClicked: propTypes.func,
+    updateCategoryEntity: propTypes.func,
+    showAlertModal: propTypes.func,
+    hideAlertModal: propTypes.func,
+    location: propTypes.shape({
+        hash: propTypes.string,
+        pathname: propTypes.string,
+        search: propTypes.string,
+        state: undefined
+    }),
+    formData: propTypes.object,
+    formName: propTypes.string,
+    generateResumeModal: propTypes.bool,
+    alertModal: propTypes.bool,
 }
 
 const mapStateToProps = (state) => {

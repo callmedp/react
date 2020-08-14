@@ -16,7 +16,7 @@ import {
     reorderSection,
     reGeneratePDF
 } from "../../../store/template/actions"
-import { fetchPersonalInfo, updatePersonalInfo, getComponentTitle } from "../../../store/personalInfo/actions"
+import { fetchPersonalInfo, updatePersonalInfo, getComponentTitle, getChatBotUrl } from "../../../store/personalInfo/actions"
 import SelectTemplateModal from '../../Modal/selectTemplateModal';
 import {
     showAlertModal,
@@ -30,90 +30,13 @@ import { locationRouteChange, eventClicked } from '../../../store/googleAnalytic
 import Swal from 'sweetalert2'
 import { siteDomain } from '../../../Utils/domains'
 import propTypes from 'prop-types';
+import {Helmet} from "react-helmet";
+import * as lscache from '../../../../node_modules/lscache/lscache';
+
+
+
 
 class EditPreview extends Component {
-    
-    static propTypes = {
-        location: propTypes.shape({
-            hash: propTypes.string,
-            pathname: propTypes.string,
-            search: propTypes.string,
-            state: undefined
-        }),
-        match: propTypes.shape({
-            isExact: propTypes.bool,
-            params: propTypes.object,
-            path: propTypes.string,
-            url: propTypes.string
-        }),
-        userInfo: propTypes.shape({
-            active_subscription: propTypes.bool,
-            candidate_id: propTypes.string,
-            date_of_birth: propTypes.string,
-            email: propTypes.string,
-            entity_preference_data: propTypes.array,
-            extra_info: propTypes.string,
-            extracurricular: propTypes.array,
-            first_name: propTypes.string,
-            free_resume_downloads: propTypes.number,
-            gender: propTypes.object,
-            id: propTypes.number,
-            image: propTypes.string,
-            interest_list: propTypes.array,
-            last_name: propTypes.string,
-            location: propTypes.string,
-            number: propTypes.string,
-            selected_template: propTypes.string,
-        }),
-        analytics: propTypes.shape({
-            locationPath: propTypes.string
-        }),
-        fetchEntityInfo: propTypes.func,
-        history: propTypes.shape({
-            action: propTypes.string,
-            block: propTypes.func,
-            createHref: propTypes.func,
-            go: propTypes.func,
-            goBack: propTypes.func,
-            goForward: propTypes.func,
-            length: propTypes.number,
-            listen: propTypes.func,
-            location: propTypes.shape({
-                hash: propTypes.string,
-                pathname: propTypes.string,
-                search: propTypes.string,
-                state: undefined
-            }),
-            push: propTypes.func,
-            replace: propTypes.func, 
-        }),
-        locationRouteChange: propTypes.func,
-        loginCandidate: propTypes.func,
-        previewButtonClicked: propTypes.func,
-        updateSelectedTemplate: propTypes.func,
-        showGenerateResumeModal: propTypes.func,
-        reGeneratePDF: propTypes.func,
-        hideGenerateResumeModal: propTypes.func,
-        template: propTypes.shape({
-            candidate: propTypes.number,
-            candidate_id: propTypes.string,
-            color: propTypes.number,
-            entity_id_count_mapping: propTypes.object,
-            entity_position: propTypes.string,
-            heading_font_size: propTypes.number,
-            html: propTypes.string,
-            id: propTypes.number,
-            modalTemplateImage: propTypes.string,
-            template: propTypes.number,
-            templateId: propTypes.number,
-            templateImage: propTypes.string,
-            templateToPreview: propTypes.string,
-            template_no: propTypes.number,
-            text_font_size: propTypes.number,
-            thumbnailImages: propTypes.array
-        })
-    }
-    
     constructor(props) {
         super(props);
         this.removeNote = this.removeNote.bind(this);
@@ -123,14 +46,11 @@ class EditPreview extends Component {
         this.state = {
             visibleNote: true
         }
-        
     }
     
+    
     async componentDidMount() {
-        
-        
         // check if the userexperinece is greater or equal to 4 years. (7 is the pid for 4 years (mapping done here))
-        
         if (parseInt(localStorage.getItem('userExperience') || 0) >= 7) {
             if (typeof document !== 'undefined' && document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]) {
                 document.getElementsByClassName('chat-bot')[0].style.display = 'none';
@@ -143,12 +63,14 @@ class EditPreview extends Component {
         }
         
         
-        const { analytics: { locationPath }, fetchEntityInfo, history: { location: { pathname } }, locationRouteChange, loginCandidate } = this.props
+        const { analytics: { locationPath }, fetchEntityInfo, getChatBot, history: { location: { pathname } }, locationRouteChange, loginCandidate } = this.props
         if (!localStorage.getItem('candidateId')) {
             await loginCandidate()
         }
         
         fetchEntityInfo();
+        await getChatBot();
+        
         
         // get userInfo from LocalStorage
         if (localStorage.getItem('email')) window['email'] = localStorage.getItem('email')
@@ -247,10 +169,16 @@ class EditPreview extends Component {
         const { visibleNote } = this.state;
         return (
             <div>
+            <Helmet
+            script={[
+                {"src": (lscache.get('chatbotScript') ? lscache.get('chatbotScript') : null), "type": "text/javascript"}
+            ]}
+            />
             {
                 !!(loader) &&
                 <LoaderPage />
             }
+            
             <Header
             userName={first_name}
             lastName={last_name}
@@ -317,6 +245,87 @@ class EditPreview extends Component {
         }
         
     }
+
+    EditPreview.propTypes = {
+        location: propTypes.shape({
+            hash: propTypes.string,
+            pathname: propTypes.string,
+            search: propTypes.string,
+            state: undefined
+        }),
+        match: propTypes.shape({
+            isExact: propTypes.bool,
+            params: propTypes.object,
+            path: propTypes.string,
+            url: propTypes.string
+        }),
+        userInfo: propTypes.shape({
+            active_subscription: propTypes.bool,
+            candidate_id: propTypes.string,
+            date_of_birth: propTypes.string,
+            email: propTypes.string,
+            entity_preference_data: propTypes.array,
+            extra_info: propTypes.string,
+            extracurricular: propTypes.array,
+            first_name: propTypes.string,
+            free_resume_downloads: propTypes.number,
+            gender: propTypes.object,
+            id: propTypes.number,
+            image: propTypes.string,
+            interest_list: propTypes.array,
+            last_name: propTypes.string,
+            location: propTypes.string,
+            number: propTypes.string,
+            selected_template: propTypes.string,
+        }),
+        analytics: propTypes.shape({
+            locationPath: propTypes.string
+        }),
+        fetchEntityInfo: propTypes.func,
+        history: propTypes.shape({
+            action: propTypes.string,
+            block: propTypes.func,
+            createHref: propTypes.func,
+            go: propTypes.func,
+            goBack: propTypes.func,
+            goForward: propTypes.func,
+            length: propTypes.number,
+            listen: propTypes.func,
+            location: propTypes.shape({
+                hash: propTypes.string,
+                pathname: propTypes.string,
+                search: propTypes.string,
+                state: undefined
+            }),
+            push: propTypes.func,
+            replace: propTypes.func, 
+        }),
+        locationRouteChange: propTypes.func,
+        loginCandidate: propTypes.func,
+        previewButtonClicked: propTypes.func,
+        updateSelectedTemplate: propTypes.func,
+        showGenerateResumeModal: propTypes.func,
+        reGeneratePDF: propTypes.func,
+        hideGenerateResumeModal: propTypes.func,
+        template: propTypes.shape({
+            candidate: propTypes.number,
+            candidate_id: propTypes.string,
+            color: propTypes.number,
+            entity_id_count_mapping: propTypes.object,
+            entity_position: propTypes.string,
+            heading_font_size: propTypes.number,
+            html: propTypes.string,
+            id: propTypes.number,
+            modalTemplateImage: propTypes.string,
+            template: propTypes.number,
+            templateId: propTypes.number,
+            templateImage: propTypes.string,
+            templateToPreview: propTypes.string,
+            template_no: propTypes.number,
+            text_font_size: propTypes.number,
+            thumbnailImages: propTypes.array
+        })
+    }
     
     const mapStateToProps = (state) => {
         return {
@@ -334,6 +343,11 @@ class EditPreview extends Component {
                     return dispatch(fetchPersonalInfo())
                 })
                 
+            },
+            "getChatBot": () => {
+                return new Promise((resolve, reject) => {
+                    return dispatch(getChatBotUrl())
+                })
             },
             "showSelectTemplateModal": () => {
                 return dispatch(actions.showSelectTemplateModal())

@@ -11,30 +11,7 @@ import AlertModal from '../../../../Modal/alertModal';
 import { formCategoryList } from '../../../../../Utils/formCategoryList';
 import propTypes from 'prop-types';
 
-export default class Preview extends Component {
-    static propTypes = {
-        onChange: propTypes.func,
-        fetchDefaultCustomization: propTypes.func,
-        eventClicked: propTypes.func,
-        customizeTemplate: propTypes.func,
-        generateResumeAlert: propTypes.func,
-        reorderSection: propTypes.func,
-        template: propTypes.shape({
-            color: propTypes.number,
-            entity_position: propTypes.string,
-            heading_font_size: propTypes.number,
-            html: propTypes.string,
-            modalTemplateImage: propTypes.string,
-            template: propTypes.number,
-            templateId: propTypes.number,
-            templateImage: propTypes.string,
-            templateToPreview: propTypes.string,
-            text_font_size: propTypes.number,
-            thumbnailImages: propTypes.array,
-            entity_id_count_mapping: propTypes.object,
-        })
-    }
-    
+export default class Preview extends Component {    
     constructor(props) {
         super(props);
         this.goToBuyPage = this.goToBuyPage.bind(this);
@@ -657,6 +634,29 @@ export default class Preview extends Component {
                             </div>
                             )
                         }
+                    }
+
+                    Preview.propTypes = {
+                        onChange: propTypes.func,
+                        fetchDefaultCustomization: propTypes.func,
+                        eventClicked: propTypes.func,
+                        customizeTemplate: propTypes.func,
+                        generateResumeAlert: propTypes.func,
+                        reorderSection: propTypes.func,
+                        template: propTypes.shape({
+                            color: propTypes.number,
+                            entity_position: propTypes.string,
+                            heading_font_size: propTypes.number,
+                            html: propTypes.string,
+                            modalTemplateImage: propTypes.string,
+                            template: propTypes.number,
+                            templateId: propTypes.number,
+                            templateImage: propTypes.string,
+                            templateToPreview: propTypes.string,
+                            text_font_size: propTypes.number,
+                            thumbnailImages: propTypes.array,
+                            entity_id_count_mapping: propTypes.object,
+                        })
                     }
                     
                     

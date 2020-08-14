@@ -1,6 +1,6 @@
 import {
     FETCH_PERSONAL_INFO, UPDATE_PERSONAL_INFO, FETCH_IMAGE_URL, GET_COMPONENT_TITLE,
-    UPDATE_ENTITY_PREFERENCE, FETCH_INTEREST_LIST, UPDATE_SUMMARY_WITH_SUGGESTION
+    UPDATE_ENTITY_PREFERENCE, FETCH_INTEREST_LIST, UPDATE_SUMMARY_WITH_SUGGESTION, GET_CHATBOT_URL
 } from './actionTypes';
 
 
@@ -41,5 +41,9 @@ export const upateSummaryWithSuggestion = (payload) => ({
 export const getComponentTitle = (payload) => ({
     type: GET_COMPONENT_TITLE,
     payload
+});
+
+export const getChatBotUrl = () => ({
+    type: GET_CHATBOT_URL,
 });
 

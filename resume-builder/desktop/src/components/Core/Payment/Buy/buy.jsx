@@ -27,70 +27,10 @@ import { eventClicked } from '../../../../store/googleAnalytics/actions/index'
 import { loginCandidate } from "../../../../store/landingPage/actions";
 import { Toast } from '../../../../services/ErrorToast';
 import propTypes from 'prop-types';
-
+import {Helmet} from "react-helmet";
+import * as lscache from '../../../../../node_modules/lscache/lscache';
 
 export class Buy extends Component {
-    static propTypes = {
-        fetchSelectedTemplateImage: propTypes.func,
-        showModal: propTypes.func,
-        eventClicked: propTypes.func,
-        showSelectTemplateModal: propTypes.func,
-        userInfo: propTypes.shape({
-            active_subscription: propTypes.bool,
-            candidate_id: propTypes.string,
-            date_of_birth: propTypes.string,
-            email: propTypes.string,
-            entity_preference_data: propTypes.array,
-            extra_info: propTypes.string,
-            extracurricular: propTypes.array,
-            first_name: propTypes.string,
-            free_resume_downloads: propTypes.number,
-            gender: propTypes.object,
-            id: propTypes.number,
-            image: propTypes.string,
-            interest_list: propTypes.array,
-            last_name: propTypes.string,
-            location: propTypes.string,
-            number: propTypes.string,
-            selected_template: propTypes.string,
-            order_data: propTypes.object,
-            resume_creation_count: propTypes.number,
-            resume_generated: propTypes.bool,
-            upload_resume: propTypes.bool,
-        }),
-        hideGenerateResumeModal: propTypes.func,
-        requestFreeResume: propTypes.func,
-        showGenerateResumeModal: propTypes.func,
-        fetchUserInfo: propTypes.func,
-        productIds: propTypes.shape({
-            ids: propTypes.array
-        }),
-        showLoader: propTypes.func,
-        addToCart: propTypes.func,
-        getProductIds: propTypes.func,
-        template: propTypes.shape({
-            color: propTypes.number,
-            entity_id_count_mapping: propTypes.object,
-            entity_position: propTypes.string,
-            heading_font_size: propTypes.number,
-            html: propTypes.string,
-            modalTemplateImage: propTypes.string,
-            template: propTypes.number,
-            templateId: propTypes.number,
-            templateImage: propTypes.string,
-            templateToPreview: propTypes.string,
-            text_font_size: propTypes.number,
-            thumbnailImages: propTypes.array
-        }),
-        hideModal: propTypes.func,
-        location: propTypes.shape({
-            hash: propTypes.string,
-            pathname: propTypes.string,
-            search: propTypes.string,
-            state: undefined
-        }),
-    }
-    
     constructor(props) {
         super(props);
         this.state = {
@@ -292,6 +232,11 @@ export class Buy extends Component {
                     * @desc Top Bar component
                     * */
                     <div>
+                    <Helmet
+                    script={[
+                        {"src": (lscache.get('chatbotScript') ? lscache.get('chatbotScript') : null), "type": "text/javascript"}
+                    ]}
+                    />
                     <Header userName={first_name}
                     lastName={last_name}
                     number={number}
@@ -481,6 +426,67 @@ export class Buy extends Component {
         
     }
     
+    Buy.propTypes = {
+        fetchSelectedTemplateImage: propTypes.func,
+        showModal: propTypes.func,
+        eventClicked: propTypes.func,
+        showSelectTemplateModal: propTypes.func,
+        userInfo: propTypes.shape({
+            active_subscription: propTypes.bool,
+            candidate_id: propTypes.string,
+            date_of_birth: propTypes.string,
+            email: propTypes.string,
+            entity_preference_data: propTypes.array,
+            extra_info: propTypes.string,
+            extracurricular: propTypes.array,
+            first_name: propTypes.string,
+            free_resume_downloads: propTypes.number,
+            gender: propTypes.object,
+            id: propTypes.number,
+            image: propTypes.string,
+            interest_list: propTypes.array,
+            last_name: propTypes.string,
+            location: propTypes.string,
+            number: propTypes.string,
+            selected_template: propTypes.string,
+            order_data: propTypes.object,
+            resume_creation_count: propTypes.number,
+            resume_generated: propTypes.bool,
+            upload_resume: propTypes.bool,
+        }),
+        hideGenerateResumeModal: propTypes.func,
+        requestFreeResume: propTypes.func,
+        showGenerateResumeModal: propTypes.func,
+        fetchUserInfo: propTypes.func,
+        productIds: propTypes.shape({
+            ids: propTypes.array
+        }),
+        showLoader: propTypes.func,
+        addToCart: propTypes.func,
+        getProductIds: propTypes.func,
+        template: propTypes.shape({
+            color: propTypes.number,
+            entity_id_count_mapping: propTypes.object,
+            entity_position: propTypes.string,
+            heading_font_size: propTypes.number,
+            html: propTypes.string,
+            modalTemplateImage: propTypes.string,
+            template: propTypes.number,
+            templateId: propTypes.number,
+            templateImage: propTypes.string,
+            templateToPreview: propTypes.string,
+            text_font_size: propTypes.number,
+            thumbnailImages: propTypes.array
+        }),
+        hideModal: propTypes.func,
+        location: propTypes.shape({
+            hash: propTypes.string,
+            pathname: propTypes.string,
+            search: propTypes.string,
+            state: undefined
+        }),
+    }
+
     const mapStateToProps = (state) => {
         return {
             productIds: state.productIds,

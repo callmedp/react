@@ -18,78 +18,6 @@ import { Redirect } from 'react-router-dom';
 import propTypes from 'prop-types';
 
 class Home extends Component {
-    
-    static propTypes = {
-        location: propTypes.shape({
-            hash: propTypes.string,
-            pathname: propTypes.string,
-            search: propTypes.string,
-            state: undefined
-        }),
-        eventClicked: propTypes.func,
-        loginCandidate: propTypes.func,
-        history: propTypes.shape({
-            action: propTypes.string,
-            block: propTypes.func,
-            createHref: propTypes.func,
-            go: propTypes.func,
-            goBack: propTypes.func,
-            goForward: propTypes.func,
-            length: propTypes.number,
-            listen: propTypes.func,
-            location: propTypes.shape({
-                hash: propTypes.string,
-                pathname: propTypes.string,
-                search: propTypes.string,
-                state: undefined
-            }),
-            push: propTypes.func,
-            replace: propTypes.func, 
-        }),
-        checkSessionAvaialability: propTypes.func,
-        getCandidateShineDetails: propTypes.func,
-        showLoginModal: propTypes.func,
-        hideLoginModal: propTypes.func,
-        userInfo: propTypes.shape({
-            active_subscription: propTypes.bool,
-            candidate_id: propTypes.string,
-            date_of_birth: propTypes.string,
-            email: propTypes.string,
-            entity_preference_data: propTypes.array,
-            extra_info: propTypes.string,
-            extracurricular: propTypes.array,
-            first_name: propTypes.string,
-            free_resume_downloads: propTypes.number,
-            gender: propTypes.object,
-            id: propTypes.number,
-            image: propTypes.string,
-            interest_list: propTypes.array,
-            last_name: propTypes.string,
-            location: propTypes.string,
-            number: propTypes.string,
-            selected_template: propTypes.string,
-        }),
-        ui: propTypes.shape({
-            alertModal: propTypes.bool,
-            alertType: propTypes.string,
-            formName: propTypes.string,
-            generateResumeModal: propTypes.bool,
-            helpModal: propTypes.bool,
-            loader: propTypes.bool,
-            loginModal: propTypes.bool,
-            modal: propTypes.bool,
-            previewClicked: propTypes.bool,
-            select_template_modal: propTypes.bool,
-            showMoreSection: propTypes.bool,
-            successLogin: propTypes.bool,
-            suggestionModal: propTypes.bool,
-            suggestionType: propTypes.string,
-            suggestions: propTypes.array,
-        }),
-        feedback: propTypes.func,
-        loginCandidate: propTypes.func,
-    }
-    
     constructor(props) {
         super(props);
         this.scrollTo = this.scrollTo.bind(this);
@@ -429,6 +357,76 @@ class Home extends Component {
         }
     }
     
+    Home.propTypes = {
+        location: propTypes.shape({
+            hash: propTypes.string,
+            pathname: propTypes.string,
+            search: propTypes.string,
+            state: undefined
+        }),
+        eventClicked: propTypes.func,
+        loginCandidate: propTypes.func,
+        history: propTypes.shape({
+            action: propTypes.string,
+            block: propTypes.func,
+            createHref: propTypes.func,
+            go: propTypes.func,
+            goBack: propTypes.func,
+            goForward: propTypes.func,
+            length: propTypes.number,
+            listen: propTypes.func,
+            location: propTypes.shape({
+                hash: propTypes.string,
+                pathname: propTypes.string,
+                search: propTypes.string,
+                state: undefined
+            }),
+            push: propTypes.func,
+            replace: propTypes.func, 
+        }),
+        checkSessionAvaialability: propTypes.func,
+        getCandidateShineDetails: propTypes.func,
+        showLoginModal: propTypes.func,
+        hideLoginModal: propTypes.func,
+        userInfo: propTypes.shape({
+            active_subscription: propTypes.bool,
+            candidate_id: propTypes.string,
+            date_of_birth: propTypes.string,
+            email: propTypes.string,
+            entity_preference_data: propTypes.array,
+            extra_info: propTypes.string,
+            extracurricular: propTypes.array,
+            first_name: propTypes.string,
+            free_resume_downloads: propTypes.number,
+            gender: propTypes.object,
+            id: propTypes.number,
+            image: propTypes.string,
+            interest_list: propTypes.array,
+            last_name: propTypes.string,
+            location: propTypes.string,
+            number: propTypes.string,
+            selected_template: propTypes.string,
+        }),
+        ui: propTypes.shape({
+            alertModal: propTypes.bool,
+            alertType: propTypes.string,
+            formName: propTypes.string,
+            generateResumeModal: propTypes.bool,
+            helpModal: propTypes.bool,
+            loader: propTypes.bool,
+            loginModal: propTypes.bool,
+            modal: propTypes.bool,
+            previewClicked: propTypes.bool,
+            select_template_modal: propTypes.bool,
+            showMoreSection: propTypes.bool,
+            successLogin: propTypes.bool,
+            suggestionModal: propTypes.bool,
+            suggestionType: propTypes.string,
+            suggestions: propTypes.array,
+        }),
+        feedback: propTypes.func,
+        loginCandidate: propTypes.func,
+    }
     
     const mapStateToProps = (state) => {
         return {

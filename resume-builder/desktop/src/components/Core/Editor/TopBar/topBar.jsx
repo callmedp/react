@@ -4,36 +4,6 @@ import { withRouter } from 'react-router-dom';
 import propTypes from 'prop-types';
 
 class TopBar extends Component {
-    static propTypes = {
-        history: propTypes.shape({
-            action: propTypes.string,
-            block: propTypes.func,
-            createHref: propTypes.func,
-            go: propTypes.func,
-            goBack: propTypes.func,
-            goForward: propTypes.func,
-            length: propTypes.number,
-            listen: propTypes.func,
-            location: propTypes.shape({
-                hash: propTypes.string,
-                pathname: propTypes.string,
-                search: propTypes.string,
-                state: undefined
-            }),
-            push: propTypes.func,
-            replace: propTypes.func, 
-        }),
-        eventClicked: propTypes.func,
-        showSelectTemplateModal: propTypes.func,
-        userInfo: propTypes.shape({
-            order_data: undefined,
-            resume_generated: undefined,
-            selected_template: propTypes.string,
-        }),
-        showAlertModal: propTypes.func,
-        page: propTypes.string
-    }
-    
     constructor(props) {
         super(props);
         this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/'
@@ -163,4 +133,35 @@ class TopBar extends Component {
                 )
             }
         }
+
+        TopBar.propTypes = {
+            history: propTypes.shape({
+                action: propTypes.string,
+                block: propTypes.func,
+                createHref: propTypes.func,
+                go: propTypes.func,
+                goBack: propTypes.func,
+                goForward: propTypes.func,
+                length: propTypes.number,
+                listen: propTypes.func,
+                location: propTypes.shape({
+                    hash: propTypes.string,
+                    pathname: propTypes.string,
+                    search: propTypes.string,
+                    state: undefined
+                }),
+                push: propTypes.func,
+                replace: propTypes.func, 
+            }),
+            eventClicked: propTypes.func,
+            showSelectTemplateModal: propTypes.func,
+            userInfo: propTypes.shape({
+                order_data: undefined,
+                resume_generated: undefined,
+                selected_template: propTypes.string,
+            }),
+            showAlertModal: propTypes.func,
+            page: propTypes.string
+        }
+        
         export default withRouter(TopBar)

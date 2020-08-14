@@ -11,14 +11,6 @@ if (typeof document !== 'undefined') {
 // Make sure to bind modal to your appElement (http://reactcommunity.org/react-modal/accessibility/)
 
 export default class TemplateModal extends React.Component {
-    static propTypes = {
-        hideModal: propTypes.func,
-        modal: propTypes.bool,
-        modalTemplateImage: propTypes.string,
-        page: propTypes.string,
-        templateId: propTypes.number
-    }
-    
     constructor(props) {
         super(props);
         this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/'
@@ -66,4 +58,12 @@ export default class TemplateModal extends React.Component {
         </div>
         );
     }
+}
+
+TemplateModal.propTypes = {
+    hideModal: propTypes.func,
+    modal: propTypes.bool,
+    modalTemplateImage: propTypes.string,
+    page: propTypes.string,
+    templateId: propTypes.number
 }

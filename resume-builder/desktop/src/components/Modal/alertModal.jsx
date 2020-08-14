@@ -11,32 +11,6 @@ if(typeof document !== 'undefined') {
 // Make sure to bind modal to your appElement (http://reactcommunity.org/react-modal/accessibility/)
 
 class AlertModal extends PureComponent {
-    static propTypes = {
-        hideAlertModal: propTypes.func,
-        alertModal: propTypes.bool,
-        history: propTypes.shape({
-            action: propTypes.string,
-            block: propTypes.func,
-            createHref: propTypes.func,
-            go: propTypes.func,
-            goBack: propTypes.func,
-            goForward: propTypes.func,
-            length: propTypes.number,
-            listen: propTypes.func,
-            location: propTypes.shape({
-                hash: propTypes.string,
-                pathname: propTypes.string,
-                search: propTypes.string,
-                state: undefined
-            }),
-            push: propTypes.func,
-            replace: propTypes.func, 
-        }),
-        nextLink: propTypes.string,
-        newUser: propTypes.func ,
-        isPreview: propTypes.bool
-    }
-
     constructor(props) {
         super(props);
         this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/'
@@ -137,6 +111,32 @@ class AlertModal extends PureComponent {
         )
             ;
     }
+}
+
+AlertModal.propTypes = {
+    hideAlertModal: propTypes.func,
+    alertModal: propTypes.bool,
+    history: propTypes.shape({
+        action: propTypes.string,
+        block: propTypes.func,
+        createHref: propTypes.func,
+        go: propTypes.func,
+        goBack: propTypes.func,
+        goForward: propTypes.func,
+        length: propTypes.number,
+        listen: propTypes.func,
+        location: propTypes.shape({
+            hash: propTypes.string,
+            pathname: propTypes.string,
+            search: propTypes.string,
+            state: undefined
+        }),
+        push: propTypes.func,
+        replace: propTypes.func, 
+    }),
+    nextLink: propTypes.string,
+    newUser: propTypes.func ,
+    isPreview: propTypes.bool
 }
 
 export default withRouter(AlertModal) 

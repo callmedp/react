@@ -4,12 +4,6 @@ import {scroller} from 'react-scroll'
 import propTypes from 'prop-types';
 
 export default class Banner extends PureComponent {
-
-    static propTypes = {
-        eventClicked: propTypes.func,
-        userName: propTypes.string
-    }
-
     constructor(props) {
         super(props);
         this.scrollTo = this.scrollTo.bind(this);
@@ -58,5 +52,9 @@ export default class Banner extends PureComponent {
             </div>
         )
     }
+}
 
+Banner.propTypes = {
+    eventClicked: propTypes.func,
+    userName: propTypes.string
 }

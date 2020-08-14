@@ -1,6 +1,6 @@
 import BaseApiService from '../../../services/BaseApiService'
 
-import {siteDomain} from "../../../Utils/domains";
+import {siteDomain, chatDomain} from "../../../Utils/domains";
 
 const fetchPersonalInfo = (candidateId) => {
     const url = `candidates/${candidateId}/`;
@@ -33,6 +33,10 @@ const updateEntityPreference = (data, candidateId) => {
     return BaseApiService.patch(`${siteDomain}/api/v1/resume/${url}`, data);
 };
 
+const getChatBotUrl = () => {
+    return BaseApiService.get(`${chatDomain}/api/app/resume/get-script/`);
+};
+
 
 export const Api = {
     fetchPersonalInfo,
@@ -40,5 +44,6 @@ export const Api = {
     fetchImageUrl,
     updateEntityPreference,
     createPersonalInfo,
-    fetchInterestList
+    fetchInterestList,
+    getChatBotUrl
 }

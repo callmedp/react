@@ -10,19 +10,6 @@ if (typeof document !== 'undefined') {
     
 }
 export default class HelpModal extends Component {
-    static propTypes = {
-        hideHelpModal: propTypes.func,
-        feedback: propTypes.func,
-        eventClicked: propTypes.func,
-        modalStatus: propTypes.bool,
-        userInfo: propTypes.shape({
-            email: propTypes.string,
-            number: propTypes.string,
-            userName: propTypes.string,
-        }),
-        
-    }
-    
     constructor(props) {
         super(props);
         this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/';
@@ -122,5 +109,17 @@ export default class HelpModal extends Component {
             </div>
             );
         }
+    }
+    
+    HelpModal.propTypes = {
+        hideHelpModal: propTypes.func,
+        feedback: propTypes.func,
+        eventClicked: propTypes.func,
+        modalStatus: propTypes.bool,
+        userInfo: propTypes.shape({
+            email: propTypes.string,
+            number: propTypes.string,
+            userName: propTypes.string,
+        })
     }
     

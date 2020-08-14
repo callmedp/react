@@ -9,15 +9,6 @@ if (typeof document !== 'undefined') {
 }
 
 export default class MenuModal extends React.Component {
-    static propTypes = {
-        closeMenuModal: propTypes.func,
-        eventClicked: propTypes.func,
-        formCategoryList: propTypes.object,
-        menu_modal_status: propTypes.bool,
-        preferenceList: propTypes.array,
-        updateCategoryEntity: propTypes.func
-    }
-
     constructor(props) {
         super(props)
         this.state = {
@@ -147,4 +138,13 @@ export default class MenuModal extends React.Component {
             </div>
         );
     }
+}
+
+MenuModal.propTypes = {
+    closeMenuModal: propTypes.func,
+    eventClicked: propTypes.func,
+    formCategoryList: propTypes.object,
+    menu_modal_status: propTypes.bool,
+    preferenceList: propTypes.array,
+    updateCategoryEntity: propTypes.func
 }

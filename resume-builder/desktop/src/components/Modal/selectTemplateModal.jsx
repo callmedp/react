@@ -10,28 +10,6 @@ if (typeof document !== 'undefined') {
 
 }
 export default class SelectTemplateModal extends Component {
-    static propTypes = {
-        hideSelectTemplateModal: propTypes.func,
-        ui: propTypes.shape({
-            alertModal: propTypes.bool,
-            alertType: propTypes.string,
-            formName: propTypes.string,
-            generateResumeModal: propTypes.bool,
-            helpModal: propTypes.bool,
-            loader: propTypes.bool,
-            loginModal: propTypes.bool,
-            modal: propTypes.bool,
-            previewClicked: propTypes.bool,
-            select_template_modal: propTypes.bool,
-            showMoreSection: propTypes.bool,
-            successLogin: propTypes.bool,
-            suggestionModal: propTypes.bool,
-            suggestionType: propTypes.string,
-            suggestions: propTypes.array,
-        }),
-        page: propTypes.string
-    }
-
     render() {
         const {page} = this.props;
         return (
@@ -49,4 +27,26 @@ export default class SelectTemplateModal extends Component {
             </Modal>
         )
     }
+}
+
+SelectTemplateModal.propTypes = {
+    hideSelectTemplateModal: propTypes.func,
+    ui: propTypes.shape({
+        alertModal: propTypes.bool,
+        alertType: propTypes.string,
+        formName: propTypes.string,
+        generateResumeModal: propTypes.bool,
+        helpModal: propTypes.bool,
+        loader: propTypes.bool,
+        loginModal: propTypes.bool,
+        modal: propTypes.bool,
+        previewClicked: propTypes.bool,
+        select_template_modal: propTypes.bool,
+        showMoreSection: propTypes.bool,
+        successLogin: propTypes.bool,
+        suggestionModal: propTypes.bool,
+        suggestionType: propTypes.string,
+        suggestions: propTypes.array,
+    }),
+    page: propTypes.string
 }

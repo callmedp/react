@@ -7,47 +7,6 @@ import queryString from "query-string";
 import propTypes from 'prop-types';
 
 export default class ResumeSlider extends Component {
-    
-    static propTypes = {
-        eventClicked: propTypes.func,
-        displaySelectedTemplate: propTypes.func,
-        showModal: propTypes.func,
-        showLoginModal: propTypes.func,
-        ui: propTypes.shape({
-            alertModal: propTypes.bool,
-            alertType: propTypes.string,
-            formName: propTypes.string,
-            generateResumeModal: propTypes.bool,
-            helpModal: propTypes.bool,
-            loader: propTypes.bool,
-            loginModal: propTypes.bool,
-            modal: propTypes.bool,
-            previewClicked: propTypes.bool,
-            select_template_modal: propTypes.bool,
-            showMoreSection: propTypes.bool,
-            successLogin: propTypes.bool,
-            suggestionModal: propTypes.bool,
-            suggestionType: propTypes.string,
-            suggestions: propTypes.array,
-        }),
-        page: propTypes.string,
-        template: propTypes.shape({
-            color: propTypes.number,
-            entity_id_count_mapping: propTypes.object,
-            entity_position: propTypes.string,
-            heading_font_size: propTypes.number,
-            html: propTypes.string,
-            modalTemplateImage: propTypes.string,
-            template: propTypes.number,
-            templateId: propTypes.number,
-            templateImage: propTypes.string,
-            templateToPreview: propTypes.string,
-            text_font_size: propTypes.number,
-            thumbnailImages: propTypes.array
-        }),
-        hideModal: propTypes.func
-    }
-    
     constructor(props) {
         super(props);
         this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/'
@@ -221,4 +180,45 @@ export default class ResumeSlider extends Component {
                 }
                 
             }
+
+            ResumeSlider.propTypes = {
+                eventClicked: propTypes.func,
+                displaySelectedTemplate: propTypes.func,
+                showModal: propTypes.func,
+                showLoginModal: propTypes.func,
+                ui: propTypes.shape({
+                    alertModal: propTypes.bool,
+                    alertType: propTypes.string,
+                    formName: propTypes.string,
+                    generateResumeModal: propTypes.bool,
+                    helpModal: propTypes.bool,
+                    loader: propTypes.bool,
+                    loginModal: propTypes.bool,
+                    modal: propTypes.bool,
+                    previewClicked: propTypes.bool,
+                    select_template_modal: propTypes.bool,
+                    showMoreSection: propTypes.bool,
+                    successLogin: propTypes.bool,
+                    suggestionModal: propTypes.bool,
+                    suggestionType: propTypes.string,
+                    suggestions: propTypes.array,
+                }),
+                page: propTypes.string,
+                template: propTypes.shape({
+                    color: propTypes.number,
+                    entity_id_count_mapping: propTypes.object,
+                    entity_position: propTypes.string,
+                    heading_font_size: propTypes.number,
+                    html: propTypes.string,
+                    modalTemplateImage: propTypes.string,
+                    template: propTypes.number,
+                    templateId: propTypes.number,
+                    templateImage: propTypes.string,
+                    templateToPreview: propTypes.string,
+                    text_font_size: propTypes.number,
+                    thumbnailImages: propTypes.array
+                }),
+                hideModal: propTypes.func
+            }
+            
             

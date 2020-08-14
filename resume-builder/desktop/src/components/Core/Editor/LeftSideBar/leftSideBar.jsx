@@ -6,34 +6,6 @@ import { Link } from 'react-router-dom'
 import propTypes from 'prop-types';
 
 export default class LeftSideBar extends Component {
-
-    static propTypes = {
-        match: propTypes.shape({
-            isExact: propTypes.bool,
-            params: propTypes.object,
-            path: propTypes.string,
-            url: propTypes.string
-        }),
-        template: propTypes.shape({
-            candidate: propTypes.number,
-            candidate_id: propTypes.string,
-            color: propTypes.number,
-            entity_id_count_mapping: propTypes.object,
-            entity_position: propTypes.string,
-            heading_font_size: propTypes.number,
-            html: propTypes.string,
-            id: propTypes.number,
-            modalTemplateImage: propTypes.string,
-            template: propTypes.number,
-            templateId: propTypes.number,
-            templateImage: propTypes.string,
-            templateToPreview: propTypes.string,
-            template_no: propTypes.number,
-            text_font_size: propTypes.number,
-            thumbnailImages: propTypes.array
-        })
-    }
-
     constructor(props) {
         super(props);
         this.state = {
@@ -125,4 +97,31 @@ export default class LeftSideBar extends Component {
             </section>
         )
     }
+}
+
+LeftSideBar.propTypes = {
+    match: propTypes.shape({
+        isExact: propTypes.bool,
+        params: propTypes.object,
+        path: propTypes.string,
+        url: propTypes.string
+    }),
+    template: propTypes.shape({
+        candidate: propTypes.number,
+        candidate_id: propTypes.string,
+        color: propTypes.number,
+        entity_id_count_mapping: propTypes.object,
+        entity_position: propTypes.string,
+        heading_font_size: propTypes.number,
+        html: propTypes.string,
+        id: propTypes.number,
+        modalTemplateImage: propTypes.string,
+        template: propTypes.number,
+        templateId: propTypes.number,
+        templateImage: propTypes.string,
+        templateToPreview: propTypes.string,
+        template_no: propTypes.number,
+        text_font_size: propTypes.number,
+        thumbnailImages: propTypes.array
+    })
 }

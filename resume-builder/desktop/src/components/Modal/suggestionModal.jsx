@@ -8,14 +8,6 @@ if (typeof document !== 'undefined') {
     Modal.setAppElement(document.getElementById('react-app'));
 }
 export default class SuggestionModal extends React.Component {
-    static propTypes = {
-        closeModal: propTypes.func,
-        suggestions: propTypes.array,
-        length : propTypes.number,
-        maxLength: propTypes.number,
-        label: propTypes.string
-    }
-
     constructor(props) {
         super(props);
         this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/'
@@ -132,4 +124,12 @@ export default class SuggestionModal extends React.Component {
             </div>
         );
     }
+}
+
+SuggestionModal.propTypes = {
+    closeModal: propTypes.func,
+    suggestions: propTypes.array,
+    length : propTypes.number,
+    maxLength: propTypes.string,
+    label: propTypes.string
 }

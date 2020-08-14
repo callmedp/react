@@ -9,6 +9,7 @@ import moment from 'moment'
 import { SubmissionError } from 'redux-form'
 import { Toast } from "../../../services/ErrorToast";
 import { UPDATE_UI } from "../../ui/actions/actionTypes";
+import * as lscache from '../../../../node_modules/lscache/lscache';
 
 const genderDict = {
     '0': {
@@ -233,7 +234,21 @@ function* updateEntityPreference(action) {
 function* getComponentTitle(action) {
     try {
         let { payload: { resolve, reject } } = action;
-        resolve('Edit-Preview Page | Shine Learning')
+        resolve('Edit-Preview Page | Shine Learning');
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+function* getChatBotUrl() {
+    try {
+        const result = yield call(Api.getChatBotUrl);
+        // console.log(result['data']['script_link']);
+        
+        if(result['data']['script_link'] != "script not available") {
+            lscache.set('chatbotScript',result['data']['script_link'], 1440);
+        }
+        lscache.flushExpired();
     } catch (e) {
         console.log(e);
     }
@@ -246,4 +261,5 @@ export default function* watchPersonalInfo() {
     yield takeLatest(Actions.UPDATE_ENTITY_PREFERENCE, updateEntityPreference);
     yield takeLatest(Actions.FETCH_INTEREST_LIST, getInterestList);
     yield takeLatest(Actions.GET_COMPONENT_TITLE, getComponentTitle);
+    yield takeLatest(Actions.GET_CHATBOT_URL, getChatBotUrl);
 }
