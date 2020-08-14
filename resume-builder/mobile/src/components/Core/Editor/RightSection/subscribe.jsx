@@ -4,7 +4,7 @@ import {hideSubscribeButton} from '../../../../store/personalInfo/actions/index'
 import {updateAlertModalStatus} from '../../../../store/ui/actions/index';
 import './rightSection.scss'
 import moment from 'moment';
-
+import propTypes from 'prop-types';
 
 class Subscribe extends Component {
     constructor(props) {
@@ -14,7 +14,6 @@ class Subscribe extends Component {
         this.state = {
             showSubscribeButton: true
         }
-
     }
 
     hideSubscribeButton() {
@@ -68,6 +67,48 @@ class Subscribe extends Component {
             </div>
         )
     }
+}
+
+Subscribe.propTypes = {
+    history: propTypes.shape({
+        action: propTypes.string,
+        block: propTypes.func,
+        createHref: propTypes.func,
+        go: propTypes.func,
+        goBack: propTypes.func,
+        goForward: propTypes.func,
+        length: propTypes.number,
+        listen: propTypes.func,
+        location: propTypes.shape({
+            hash: propTypes.string,
+            pathname: propTypes.string,
+            search: propTypes.string,
+            state: undefined
+        }),
+        push: propTypes.func,
+        replace: propTypes.func, 
+    }),
+    eventClicked: propTypes.func, 
+    updateAlertModalStatus: propTypes.func,
+    userInfo: propTypes.shape({
+        active_subscription: propTypes.bool,
+        candidate_id: propTypes.string,
+        date_of_birth: propTypes.string,
+        email: propTypes.string,
+        entity_preference_data: propTypes.array,
+        extra_info: propTypes.string,
+        extracurricular: propTypes.array,
+        first_name: propTypes.string,
+        free_resume_downloads: propTypes.number,
+        gender: propTypes.string,
+        id: propTypes.number,
+        image: propTypes.string,
+        interest_list: propTypes.array,
+        last_name: propTypes.string,
+        location: propTypes.string,
+        number: propTypes.string,
+        selected_template: propTypes.string,
+    }),
 }
 
 

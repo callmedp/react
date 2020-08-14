@@ -9,6 +9,7 @@ import * as uiAction from '../../ui/actions/actionTypes';
 import moment from 'moment'
 
 import { SubmissionError } from 'redux-form'
+import * as lscache from '../../../../node_modules/lscache/lscache';
 
 
 function modifyPersonalInfo(data) {
@@ -28,6 +29,7 @@ function modifyPersonalInfo(data) {
             image
         }
     }
+    // console.log(newData);
     return newData;
 }
 
@@ -191,10 +193,25 @@ function* updateEntityPreference(action) {
     }
 }
 
+function* getChatBotUrl() {
+    try {
+        const result = yield call(Api.getChatBotUrl);
+        // console.log(result['data']['script_link']);
+        
+        if(result['data']['script_link'] != "script not available") {
+            lscache.set('chatbotScript',result['data']['script_link'], 1440);
+        }
+        lscache.flushExpired();
+    } catch (e) {
+        console.log(e);
+    }
+}
+
 export default function* watchPersonalInfo() {
     yield takeEvery(Actions.FETCH_PERSONAL_INFO, getPersonalDetails)
     yield takeLatest(Actions.UPDATE_PERSONAL_INFO, updatePersonalDetails)
     yield takeLatest(Actions.FETCH_IMAGE_URL, fetchImageUrl)
     yield takeLatest(Actions.FETCH_INTEREST_LIST, getInterestList);
     yield takeLatest(Actions.UPDATE_ENTITY_PREFERENCE, updateEntityPreference);
+    yield takeLatest(Actions.GET_CHATBOT_URL, getChatBotUrl);
 }

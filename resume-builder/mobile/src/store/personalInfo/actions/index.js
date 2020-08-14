@@ -5,7 +5,8 @@ import {
     FETCH_INTEREST_LIST,
     UPDATE_SUMMARY_WITH_SUGGESTION,
     UPDATE_ENTITY_PREFERENCE,
-    HIDE_SUBSCRIBE_BUTTON
+    HIDE_SUBSCRIBE_BUTTON,
+    GET_CHATBOT_URL
 } from './actionTypes';
 
 
@@ -49,3 +50,7 @@ export const hideSubscribeButton = () => {
         data : {'hide_subscribe_button': true}
     }
 }
+
+export const getChatBotUrl = () => ({
+    type: GET_CHATBOT_URL,
+});

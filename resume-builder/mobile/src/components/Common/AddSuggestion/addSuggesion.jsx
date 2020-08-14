@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import Modal from 'react-modal';
 import './addSuggestion.scss';
 import {renderAsyncCreatableSelect} from '../../FormHandler/formFieldRenderer';
+import propTypes from 'prop-types';
 
 if(typeof document !== 'undefined') {
     Modal.setAppElement(document.getElementById('react-app'));
@@ -119,4 +120,13 @@ export default class AddSuggesion extends Component {
             </Modal>
         )
     }
+}
+
+AddSuggesion.propTypes = {
+    label: propTypes.string,
+    modal_status: propTypes.bool,
+    closeModal: propTypes.func,
+    suggestions: propTypes.array,
+    maxLength: propTypes.string,
+    length: propTypes.number
 }

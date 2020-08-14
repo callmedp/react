@@ -11,9 +11,10 @@ import AddSuggesion from '../../../../../Common/AddSuggestion/addSuggesion';
 import { scrollOnErrors } from "../../../../../../Utils/srollOnError"
 import BottomCTC from '../../../../../Common/BottomCTC/bottom-ctc';
 import Subscribe from '../../../RightSection/subscribe';
+import propTypes from 'prop-types';
 
 class Experience extends Component {
-
+    
     constructor(props) {
         super(props);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -31,8 +32,8 @@ class Experience extends Component {
         this.updateInfoBeforeLoss = this.updateInfoBeforeLoss.bind(this);
         this.openModal = this.openModal.bind(this);
         this.closeModal = this.closeModal.bind(this);
-
     }
+    
     componentDidMount() {
         this.props.fetchUserExperience()
         let till_today = []
@@ -44,27 +45,27 @@ class Experience extends Component {
             this.setState({ heading: this.props.personalInfo.entity_preference_data[2].entity_text })
         }
     }
-
+    
     tillTodayDisable(index, checked, e) {
         e.stopPropagation();
         let { till_today } = this.state
         till_today[parseInt(index)] = checked
     }
-
-
+    
+    
     editHeadingClick() {
         this.setState({ editHeading: true })
     }
-
+    
     async handleSubmit(values) {
         values = this.state.fields ? this.state.fields : values.list
         let { sidenav: { listOfLinks, currentLinkPos }, bulkUpdateUserExperience, generateResumeAlert, updateCurrentLinkPos,
-            history } = this.props
+        history } = this.props
         currentLinkPos++
         if (values.length) {
             // skip the api call if there is a certain field which is required but empty (We skipped validation intentionally)
             let skipApiCall = false;
-
+            
             values.map(el => {
                 if (!el.job_profile) {
                     skipApiCall = true;
@@ -76,7 +77,7 @@ class Experience extends Component {
             }
         }
         this.setState({ submit: true })
-
+        
         if (currentLinkPos === listOfLinks.length) {
             currentLinkPos = 0
             generateResumeAlert()
@@ -85,11 +86,11 @@ class Experience extends Component {
             updateCurrentLinkPos({ currentLinkPos })
             history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)
         }
-
+        
     }
-
+    
     async updateInfoBeforeLoss() {
-
+        
         if (!this.state.submit) {
             const { initialValues } = this.props
             const form_data = this.props.info.form.experience;
@@ -106,17 +107,17 @@ class Experience extends Component {
                 }
             }
             if (!error && JSON.stringify(initialValues) !== JSON.stringify(form_data['values'])) {
-
+                
                 const values = this.props.handleOrdering(form_data['values'])
                 await this.props.bulkUpdateUserExperience(values.list)
             }
         }
     }
-
+    
     componentWillUnmount() {
         this.updateInfoBeforeLoss()
     }
-
+    
     componentDidUpdate(prevProps) {
         if (this.props.personalInfo.entity_preference_data !== prevProps.personalInfo.entity_preference_data) {
             this.setState({ heading: this.props.personalInfo.entity_preference_data[2].entity_text })
@@ -129,14 +130,14 @@ class Experience extends Component {
             this.setState({ till_today })
         }
     }
-
+    
     async openModal(fields, index) {
-
+        
         const { job_profile: { label } } = fields.get(index)
         await this.props.fetchJobTitles(label || '', 'experience')
         this.setState({ modal_status: true, scrollpos: window.scrollY, fields, currentIndex: index })
     }
-
+    
     closeModal(suggestions) {
         const { fields, currentIndex } = this.state
         const currentField = fields.get(currentIndex)
@@ -151,7 +152,7 @@ class Experience extends Component {
         }
         this.setState({ modal_status: false }, () => { window.scrollTo(0, this.state.scrollpos) })
     }
-
+    
     deleteExperience(index, fields, event) {
         event.stopPropagation();
         const experience = fields.get(index);
@@ -160,115 +161,206 @@ class Experience extends Component {
             this.props.removeExperience(experience.id)
         }
     }
-
+    
     render() {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
         const { updateAlertModalStatus, handleSubmit, submitting, personalInfo: { order_data, entity_preference_data }, history,
-            changeOrderingUp, changeOrderingDown, fetchJobTitles, ui: { suggestions }, headingChange, eventClicked, showAlertMessage } = this.props;
+        changeOrderingUp, changeOrderingDown, fetchJobTitles, ui: { suggestions }, headingChange, eventClicked, showAlertMessage } = this.props;
         const { editHeading, heading, till_today, modal_status } = this.state;
         return (
             <div className="buildResume">
-                <form onSubmit={handleSubmit(this.handleSubmit)}>
-                    <PreviewModal {...this.props} />
-                    <Subscribe {...this.props} />
-                    <AddSuggesion label={'Job Description'} modal_status={modal_status} maxLength="1000" length={length} closeModal={this.closeModal} suggestions={suggestions} />
-                    <FieldArray name="list"
-                        handleSubmit={handleSubmit}
-                        handleAddition={this.props.handleAddition}
-                        deleteExperience={this.deleteExperience}
-                        changeOrderingUp={changeOrderingUp}
-                        changeOrderingDown={changeOrderingDown}
-                        eventClicked={eventClicked}
-                        component={renderExperiences}
-                        headingChange={headingChange}
-                        entity_preference_data={entity_preference_data}
-                        editHeading={editHeading}
-                        editHeadingClick={this.editHeadingClick}
-                        heading={heading}
-                        context={this}
-                        openModal={this.openModal}
-                        till_today={till_today}
-                        fetchJobTitles={fetchJobTitles}
-                        tillTodayDisable={this.tillTodayDisable}
-                        ws={showAlertMessage}
-                        showAlertMessage={showAlertMessage}
-                    />
-                    <ul className="form mt-15">
-                        <li className="form__group">
-                            <BottomCTC disabled={submitting} context={this} history={history} updateAlertModalStatus={updateAlertModalStatus}
-                                length={length} pos={pos + 1} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
-                                order_data={order_data} eventClicked={eventClicked} form_name={'Experience'} />
-                        </li>
-                    </ul>
-                </form>
+            <form onSubmit={handleSubmit(this.handleSubmit)}>
+            <PreviewModal {...this.props} />
+            <Subscribe {...this.props} />
+            <AddSuggesion label={'Job Description'} modal_status={modal_status} maxLength="1000" length={length} closeModal={this.closeModal} suggestions={suggestions} />
+            <FieldArray name="list"
+            handleSubmit={handleSubmit}
+            handleAddition={this.props.handleAddition}
+            deleteExperience={this.deleteExperience}
+            changeOrderingUp={changeOrderingUp}
+            changeOrderingDown={changeOrderingDown}
+            eventClicked={eventClicked}
+            component={renderExperiences}
+            headingChange={headingChange}
+            entity_preference_data={entity_preference_data}
+            editHeading={editHeading}
+            editHeadingClick={this.editHeadingClick}
+            heading={heading}
+            context={this}
+            openModal={this.openModal}
+            till_today={till_today}
+            fetchJobTitles={fetchJobTitles}
+            tillTodayDisable={this.tillTodayDisable}
+            ws={showAlertMessage}
+            showAlertMessage={showAlertMessage}
+            />
+            <ul className="form mt-15">
+            <li className="form__group">
+            <BottomCTC disabled={submitting} context={this} history={history} updateAlertModalStatus={updateAlertModalStatus}
+            length={length} pos={pos + 1} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
+            order_data={order_data} eventClicked={eventClicked} form_name={'Experience'} />
+            </li>
+            </ul>
+            </form>
             </div>
-        )
+            )
+        }
     }
-}
-
-export const ExperienceForm = reduxForm({
-    form: 'experience',
-    enableReinitialize: true,
-    onSubmitFail: (errors) => scrollOnErrors(errors, 'experience', -100),
-    validate
-})(Experience);
-
-
-const mapStateToProps = (state) => {
-    return {
-        initialValues: state.experience,
-        experience: state.experience,
-        ui: state.ui
+    
+    Experience.propTypes = {
+        bulkUpdateUserExperience: propTypes.func,
+        changeOrderingDown: propTypes.func,
+        changeOrderingUp: propTypes.func,
+        eventClicked: propTypes.func,
+        experience: propTypes.shape({
+            list: propTypes.array
+        }),
+        fetchJobTitles: propTypes.func,
+        fetchUserExperience: propTypes.func,
+        generateResumeAlert: propTypes.func,          
+        handleAddition: propTypes.func,
+        handleOrdering: propTypes.func,
+        handleSubmit: propTypes.func,
+        headingChange: propTypes.func,          
+        history: propTypes.shape({
+            action: propTypes.string,
+            block: propTypes.func,
+            createHref: propTypes.func,
+            go: propTypes.func,
+            goBack: propTypes.func,
+            goForward: propTypes.func,
+            length: propTypes.number,
+            listen: propTypes.func,
+            location: propTypes.shape({
+                hash: propTypes.string,
+                pathname: propTypes.string,
+                search: propTypes.string,
+                state: undefined
+            }),
+            push: propTypes.func,
+            replace: propTypes.func, 
+        }),
+        initialValues: propTypes.shape({
+            currentLinkPos: propTypes.string,
+            listOfLinks: propTypes.array,
+            sidenavStatus: propTypes.bool
+        }),
+        location: propTypes.shape({
+            hash: propTypes.string,
+            pathname: propTypes.string,
+            search: propTypes.string,
+            state: undefined
+        }),
+        onSubmit: propTypes.func,
+        onSubmitFail: propTypes.func,
+        personalInfo: propTypes.shape({
+            date_of_birth: propTypes.string,
+            email: propTypes.string,
+            entity_preference_data: propTypes.array,
+            extra_info: propTypes.string,
+            extracurricular: propTypes.array,
+            first_name: propTypes.string,
+            gender: propTypes.string,
+            hide_subscribe_button: propTypes.bool,
+            image: propTypes.string,
+            interest_list: propTypes.array,
+            last_name: propTypes.string,
+            location: propTypes.string,
+            number: propTypes.string,
+        }),
+        removeExperience: propTypes.func,
+        showAlertMessage: propTypes.func,
+        sidenav: propTypes.shape({
+            currentLinkPos: propTypes.string,
+            listOfLinks: propTypes.array,
+            sidenavStatus: propTypes.bool
+        }),
+        submitting: propTypes.bool,
+        ui: propTypes.shape({
+            alertModal: propTypes.bool,
+            alertType: propTypes.string,
+            formName: propTypes.string,
+            generateResumeModal: propTypes.bool,
+            helpModal: propTypes.bool,
+            loader: propTypes.bool,
+            loginModal: propTypes.bool,
+            modal: propTypes.bool,
+            previewClicked: propTypes.bool,
+            select_template_modal: propTypes.bool,
+            showMoreSection: propTypes.bool,
+            successLogin: propTypes.bool,
+            suggestionModal: propTypes.bool,
+            suggestionType: propTypes.string,
+            suggestions: propTypes.array,
+        }),
+        updateAlertModalStatus: propTypes.func,
+        updateCurrentLinkPos: propTypes.func,
     }
-};
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-        "onSubmit": (userExperience) => {
-            const { start_date, end_date } = userExperience;
-            userExperience = {
-                ...userExperience,
-                ...{
-                    start_date: (start_date && moment(start_date).format('YYYY-MM-DD')) || '',
-                    end_date: (end_date && moment(end_date).format('YYYY-MM-DD')) || ''
-                }
-            };
-            return new Promise((resolve, reject) => {
-                return dispatch(actions.updateUserExperience({ userExperience, resolve, reject }));
-            })
-        },
-        "fetchUserExperience": () => {
-            return dispatch(actions.fetchUserExperience())
-        },
-        "removeExperience": (experienceId) => {
-            return dispatch(actions.deleteExperience(experienceId))
-        },
-        "fetchJobTitles": (inputValue, suggestionType) => {
-            if (inputValue.length < 3) return new Promise(resolve => resolve([]));
-            return new Promise((resolve, reject) => {
-                return dispatch(actions.fetchJobTitles({ inputValue, suggestionType, resolve, reject }))
-            })
-        },
-
-        "bulkUpdateUserExperience": (listItems) => {
-            listItems = (listItems || []).map(userExperience => {
+    
+    export const ExperienceForm = reduxForm({
+        form: 'experience',
+        enableReinitialize: true,
+        onSubmitFail: (errors) => scrollOnErrors(errors, 'experience', -100),
+        validate
+    })(Experience);
+    
+    
+    const mapStateToProps = (state) => {
+        return {
+            initialValues: state.experience,
+            experience: state.experience,
+            ui: state.ui
+        }
+    };
+    
+    const mapDispatchToProps = (dispatch) => {
+        return {
+            "onSubmit": (userExperience) => {
                 const { start_date, end_date } = userExperience;
-                if (!userExperience['id']) delete userExperience['id'];
                 userExperience = {
                     ...userExperience,
                     ...{
                         start_date: (start_date && moment(start_date).format('YYYY-MM-DD')) || '',
-                        end_date: (end_date && moment(end_date).format('YYYY-MM-DD')) || null
+                        end_date: (end_date && moment(end_date).format('YYYY-MM-DD')) || ''
                     }
                 };
-                return userExperience;
-            });
-            return new Promise((resolve, reject) => {
-                return dispatch(actions.bulkUpdateUserExperience({ list: listItems, resolve, reject }))
-            })
+                return new Promise((resolve, reject) => {
+                    return dispatch(actions.updateUserExperience({ userExperience, resolve, reject }));
+                })
+            },
+            "fetchUserExperience": () => {
+                return dispatch(actions.fetchUserExperience())
+            },
+            "removeExperience": (experienceId) => {
+                return dispatch(actions.deleteExperience(experienceId))
+            },
+            "fetchJobTitles": (inputValue, suggestionType) => {
+                if (inputValue.length < 3) return new Promise(resolve => resolve([]));
+                return new Promise((resolve, reject) => {
+                    return dispatch(actions.fetchJobTitles({ inputValue, suggestionType, resolve, reject }))
+                })
+            },
+            
+            "bulkUpdateUserExperience": (listItems) => {
+                listItems = (listItems || []).map(userExperience => {
+                    const { start_date, end_date } = userExperience;
+                    if (!userExperience['id']) delete userExperience['id'];
+                    userExperience = {
+                        ...userExperience,
+                        ...{
+                            start_date: (start_date && moment(start_date).format('YYYY-MM-DD')) || '',
+                            end_date: (end_date && moment(end_date).format('YYYY-MM-DD')) || null
+                        }
+                    };
+                    return userExperience;
+                });
+                return new Promise((resolve, reject) => {
+                    return dispatch(actions.bulkUpdateUserExperience({ list: listItems, resolve, reject }))
+                })
+            }
         }
-    }
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(ExperienceForm);
+    };
+    
+    export default connect(mapStateToProps, mapDispatchToProps)(ExperienceForm);
+    
