@@ -1334,12 +1334,12 @@ class GoogleResumeAdView(View):
 
     def get(self, request, *args, **kwargs):
         cat_slugs = ['resume-services','linkedin-profile']
-        countries = ['india','gulf','usa']
+        countries = ['india','gulf','usa','uk']
         country = kwargs.get('country', 'india')
         cat_slug = kwargs.get('cat_slug', 'resume-services')
         pre_register = self.request.GET.get('pre-register', "False")
         site_slug = None
-        country_code_list = ['91','92','92','971','1']
+        country_code_list = ['91','92','92','971','1','44']
         if cat_slug not in cat_slugs or country not in countries:
             raise Http404
         if country == "gulf":
@@ -1370,9 +1370,9 @@ class GoogleResumeAdView(View):
                     "8_15exp":"4600", "15_exp":"5600"}
                 template = 'shop/resume-ad-linkedin.html'
                 site_slug = "resume-services"
-        elif country == "usa":
+        elif country in ["usa","uk"]:
             currency = "starting from "
-            country_code = "1"
+            country_code = "1" if country == "usa" else "44"
             add_on_cost = {"cover_letter":"25 $","express_delivery":"5 $","s_express_delivery":"10 $"}
             if cat_slug == "resume-services":
                 service_cost = {"0_1exp":"75 $", "1_4exp":"90 $", "4_8exp":"110 $",
