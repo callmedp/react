@@ -8,13 +8,13 @@
         <button type="button" class="close" id = "sticky_close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true" onclick="gaOffer_popup_close()">&times;</span>
         </button>
-        <div data-toggle="modal" data-target="#offerModal" onclick="gaOffer_popup()">{{sticky_text}}- <strong>{{offer_value}}</strong>   |   Ends in <span id = 'sticky_timer'>0d : 0h : 0m : 0s</span> - <a onclick="exit_tracking()" href="javascript:void(0)" id = 'offer-timer'>Enroll Now!</a></div>
+        <div data-toggle="modal" data-target="#offerModal" onclick="gaOffer_popup()">{{sticky_text}}- <strong>{{offer_value}}</strong>   |   Ends in <span id = 'sticky_timer'>0d : 0h : 0m : 0s</span> - <a href="javascript:void(0)" id = 'offer-timer'>Enroll Now!</a></div>
     </div>
   {% endif %}
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header" itemscope itemtype="http://schema.org/Organization" >
-      <a onclick="exit_tracking()" aria-label="shinelearning.com" class="navbar-brand" href="{% url 'homepage' %}"></a>
+      <a aria-label="shinelearning.com" class="navbar-brand" href="{% url 'homepage' %}"></a>
       <meta itemprop="name" content="Shine">
       <meta itemprop="url" content="https://learning.shine.com"/>
     </div>
@@ -30,7 +30,7 @@
             </form>
           </li>
           <!--li class="ms-link">
-            <a onclick="exit_tracking()" class="cls_eventtrack" href="/talenteconomy/" data-category="TELINK" data-action="Header" data-label="learing.shine"><span class="hidden-sm">Executive Course</span></a>
+            <a class="cls_eventtrack" href="/talenteconomy/" data-category="TELINK" data-action="Header" data-label="learing.shine"><span class="hidden-sm">Executive Course</span></a>
           </li> -->
         </ul>
       {% endif %}
@@ -38,78 +38,78 @@
 
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown jobs-dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" onclick="exit_tracking()">Job Assistance</a>
+          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Job Assistance</a>
           <ul class="dropdown-menu">
-            <li><a href="/services/resume-writing/63/" onclick="exit_tracking()">Resume Writing</a></li>
-            <li><a href="/services/resume-services/entry-level-freshers-4/pd-2553" onclick="exit_tracking()">International Resume</a></li>
-            <li><a href="/services/resume-services/entry-level-freshers/pd-2052" onclick="exit_tracking()">Visual Resume</a></li>
-            <li><a href="https://learning.shine.com/services/professional-service/jobs-on-the-move-3/pd-3411" onclick="exit_tracking()">Jobs On The Move</a></li>
-            <li><a href="/services/linkedin-profile/180/" onclick="exit_tracking()">LinkedIn Profile</a></li>
+            <li><a href="/services/resume-writing/63/">Resume Writing</a></li>
+            <li><a href="/services/resume-services/entry-level-freshers-4/pd-2553">International Resume</a></li>
+            <li><a href="/services/resume-services/entry-level-freshers/pd-2052">Visual Resume</a></li>
+            <li><a href="https://learning.shine.com/services/professional-service/jobs-on-the-move-3/pd-3411">Jobs On The Move</a></li>
+            <li><a href="/services/linkedin-profile/180/">LinkedIn Profile</a></li>
 
-              <li><a href="/services/recruiter-connect/featured-profile-10/pd-1939" onclick="exit_tracking()">Featured Profile</a></li>
+              <li><a href="/services/recruiter-connect/featured-profile-10/pd-1939">Featured Profile</a></li>
               <!-- <li><a href="/services/background-verification-2/employment-verification/pd-2618">Background Verification Services</a></li>
             <li><a href="/services/interview-preparation-3/job-interview-coaching-by-sarabjeet-sachar/pd-1284">Interview Preparation</a></li> -->
-           <li><a href="/services/recruiter-connect/application-highlighter-3/pd-4117" onclick="exit_tracking()">Application Highlighter</a></li>
-           <li><a class="dropdown-item" href="/resume-score-checker/" onclick="exit_tracking()">Resume Score Checker</a></li>
+           <li><a href="/services/recruiter-connect/application-highlighter-3/pd-4117">Application Highlighter</a></li>
+           <li><a class="dropdown-item" href="/resume-score-checker/">Resume Score Checker</a></li>
 
               <!--<li><a href="/services/job-referral-2/job-referrals-pack/pd-2129">Job referral</a></li>-->
           </ul>
         </li>
         <li class="ms-link">
-          <a class="cls_eventtrack pr" href="/practice-tests/" data-category="" data-action="Header" data-label="learing.shine"><span class="hidden-sm" onclick="exit_tracking()">Practice Tests</span></a>
+          <a class="cls_eventtrack pr" href="/practice-tests/" data-category="" data-action="Header" data-label="learing.shine"><span class="hidden-sm">Practice Tests</span></a>
         </li>
         <li class="dropdown format-dropdown">
-           <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" onclick="exit_tracking()">Free Resources</a>
+           <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Free Resources</a>
            <div class="dropdown-menu format-tabs">
               <ul class="nav nav-tabs" role="tablist">
-                 <li role="presentation" class="active"><a href="/cms/resume-format/1/" onclick="exit_tracking()" data-target="#format1" aria-controls="format1" role="tab">Resume Formats</a></li>
-                 <li role="presentation"><a href="/cms/resignation-letter-formats-samples/3/" onclick="exit_tracking()" data-target="#format2" aria-controls="format2" role="tab">Resignation Letter Formats</a></li>
-                 <li role="presentation"><a href="/cms/cover-letter-format/7/" onclick="exit_tracking()" data-target="#format3" aria-controls="format3"  role="tab">Cover Letter Formats</a></li>
-                 <li role="presentation"><a href="/cms/resume-samples-and-templates/50/" onclick="exit_tracking()" data-target="#format4" aria-controls="format4" role="tab">Resume Templates</a></li>
-                 <li role="presentation"><a href="/cms/linkedin-summary-examples/43/" onclick="exit_tracking()" data-target="#format5" aria-controls="format5" role="tab">LinkedIn Summary Example</a></li>
-                 <li role="presentation"><a href="/cms/relieving-letter-format/58/" onclick="exit_tracking()" data-target="#format6" aria-controls="format6" role="tab" >Relieving Letter</a></li>
+                 <li role="presentation" class="active"><a href="/cms/resume-format/1/" data-target="#format1" aria-controls="format1" role="tab">Resume Formats</a></li>
+                 <li role="presentation"><a href="/cms/resignation-letter-formats-samples/3/" data-target="#format2" aria-controls="format2" role="tab">Resignation Letter Formats</a></li>
+                 <li role="presentation"><a href="/cms/cover-letter-format/7/" data-target="#format3" aria-controls="format3"  role="tab">Cover Letter Formats</a></li>
+                 <li role="presentation"><a href="/cms/resume-samples-and-templates/50/" data-target="#format4" aria-controls="format4" role="tab">Resume Templates</a></li>
+                 <li role="presentation"><a href="/cms/linkedin-summary-examples/43/" data-target="#format5" aria-controls="format5" role="tab">LinkedIn Summary Example</a></li>
+                 <li role="presentation"><a href="/cms/relieving-letter-format/58/" data-target="#format6" aria-controls="format6" role="tab" >Relieving Letter</a></li>
               </ul>
               <!-- Tab panes -->
               <div class="tab-content">
                  <div role="tabpanel" class="tab-pane active" id="format1">
                     <ul>
-                      <li><a href="/cms/resume-format/freshers-2/2/" onclick="exit_tracking()">Freshers </a></li>
-                       <li><a href="/cms/resume-format/banking-freshers/4/" onclick="exit_tracking()">Banking Freshers  </a></li>
-                       <li><a href="/cms/resume-format/experienced-professionals/6/" onclick="exit_tracking()">Experienced Professional   </a></li>
-                       <li><a href="/cms/resume-format/engineers-2/20/" onclick="exit_tracking()">Engineers   </a></li>
-                       <li><a href="/cms/resume-format/it/53/" onclick="exit_tracking()">IT </a></li>
+                      <li><a href="/cms/resume-format/freshers-2/2/">Freshers </a></li>
+                       <li><a href="/cms/resume-format/banking-freshers/4/">Banking Freshers  </a></li>
+                       <li><a href="/cms/resume-format/experienced-professionals/6/">Experienced Professional   </a></li>
+                       <li><a href="/cms/resume-format/engineers-2/20/">Engineers   </a></li>
+                       <li><a href="/cms/resume-format/it/53/">IT </a></li>
 
-                       <li><a href="/cms/resume-format/1/ " class="view-all-detail" onclick="exit_tracking()">View all </a></li>
+                       <li><a href="/cms/resume-format/1/ " class="view-all-detail">View all </a></li>
                     </ul>
                  </div>
                  <div role="tabpanel" class="tab-pane" id="format2">
                     <ul>
-                       <li><a href="/cms/resignation-letter-formats-samples/notice-period/5/" onclick="exit_tracking()">With Notice Period   </a></li>
-                       <li><a href="/cms/resignation-letter-formats-samples/personal-reasons/15/" onclick="exit_tracking()">Personal Reasons  </a></li>
-                       <li><a href="/cms/resignation-letter-formats-samples/higher-studies-or-going-abroad/49/ " onclick="exit_tracking()">Higher Studies </a></li>
-                       <li><a href="/cms/resignation-letter-formats-samples/without-notice-period/17/" onclick="exit_tracking()">Without Notice Period   </a></li>
-                       <li><a href="/cms/resignation-letter-formats-samples/family-illness/18/" onclick="exit_tracking()">Family Illness </a></li>
-                       <li><a href="/cms/resignation-letter-formats-samples/3/" class="view-all-detail" onclick="exit_tracking()"> View all </a></li>
+                       <li><a href="/cms/resignation-letter-formats-samples/notice-period/5/">With Notice Period   </a></li>
+                       <li><a href="/cms/resignation-letter-formats-samples/personal-reasons/15/">Personal Reasons  </a></li>
+                       <li><a href="/cms/resignation-letter-formats-samples/higher-studies-or-going-abroad/49/ ">Higher Studies </a></li>
+                       <li><a href="/cms/resignation-letter-formats-samples/without-notice-period/17/">Without Notice Period   </a></li>
+                       <li><a href="/cms/resignation-letter-formats-samples/family-illness/18/">Family Illness </a></li>
+                       <li><a href="/cms/resignation-letter-formats-samples/3/" class="view-all-detail"> View all </a></li>
                     </ul>
                  </div>
                  <div role="tabpanel" class="tab-pane" id="format3">
                     <ul>
-                       <li><a href="/cms/cover-letter-format/freshers/8/" onclick="exit_tracking()">Freshers </a></li>
-                       <li><a href="/cms/cover-letter-format/engineers/9/" onclick="exit_tracking()">Engineers </a></li>
-                       <li><a href="/cms/cover-letter-format/7/" class="view-all-detail" onclick="exit_tracking()"> View all </a></li>
+                       <li><a href="/cms/cover-letter-format/freshers/8/">Freshers </a></li>
+                       <li><a href="/cms/cover-letter-format/engineers/9/">Engineers </a></li>
+                       <li><a href="/cms/cover-letter-format/7/" class="view-all-detail"> View all </a></li>
                     </ul>
                  </div>
                  <div role="tabpanel" class="tab-pane" id="format4">
                     <ul>
-                       <li><a href="/cms/resume-samples-and-templates/pharma/34/" onclick="exit_tracking()">Pharma </a></li>
-                       <li><a href="/cms/resume-samples-and-templates/freshers-3/55/" onclick="exit_tracking()">Freshers </a></li>
-                       <li><a href="/cms/resume-samples-and-templates/50/" class="view-all-detail" onclick="exit_tracking()"> View all </a></li>
+                       <li><a href="/cms/resume-samples-and-templates/pharma/34/">Pharma </a></li>
+                       <li><a href="/cms/resume-samples-and-templates/freshers-3/55/">Freshers </a></li>
+                       <li><a href="/cms/resume-samples-and-templates/50/" class="view-all-detail"> View all </a></li>
                     </ul>
                  </div>
                  <div role="tabpanel" class="tab-pane" id="format5">
                     <ul>
-                       <li><a href="/cms/linkedin-summary-examples/hr-professional/36/" onclick="exit_tracking()"> HR Professionals </a></li>
-                       <li><a href="/cms/linkedin-summary-examples/43/" class="view-all-detail" onclick="exit_tracking()"> View all </a></li>
+                       <li><a href="/cms/linkedin-summary-examples/hr-professional/36/"> HR Professionals </a></li>
+                       <li><a href="/cms/linkedin-summary-examples/43/" class="view-all-detail"> View all </a></li>
                     </ul>
                  </div>
                  <div role="tabpanel" class="tab-pane" id="format6">
@@ -118,7 +118,7 @@
            </div>
         </li>
         <li class="ms-link">
-          <a class="cls_eventtrack" href="/talenteconomy/" onclick="exit_tracking()" data-category="TELINK" data-action="Header" data-label="learing.shine"><span class="hidden-sm">Blog</span></a>
+          <a class="cls_eventtrack" href="/talenteconomy/" data-category="TELINK" data-action="Header" data-label="learing.shine"><span class="hidden-sm">Blog</span></a>
         </li>
         <li class="dropdown call-dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="call-icon"></span></a>
@@ -133,14 +133,14 @@
 
           <!--a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="login-btn">{{request.session.email}}</span></a-->
           <ul class="dropdown-menu">
-            <li><a href="{% url 'dashboard:dashboard' %}" onclick="exit_tracking()">My Inbox</a></li>
-            <li><a href="{% url 'dashboard:dashboard-myorder' %}" onclick="exit_tracking()">My Orders</a></li>
-            <li><a href="{% url 'dashboard:dashboard-mywallet' %}" onclick="exit_tracking()">My Wallet</a></li>
+            <li><a href="{% url 'dashboard:dashboard' %}">My Inbox</a></li>
+            <li><a href="{% url 'dashboard:dashboard-myorder' %}">My Orders</a></li>
+            <li><a href="{% url 'dashboard:dashboard-mywallet' %}">My Wallet</a></li>
             {% if roundone_user %}
-              <li><a href="{% url 'dashboard:roundone-dashboard' %}" onclick="exit_tracking()">Referrals</a></li>
+              <li><a href="{% url 'dashboard:roundone-dashboard' %}">Referrals</a></li>
             {% endif %}
             <li><a class="email-overflow">{{request.session.email}}</a></li>
-            <li><a onclick= "return clearLocalStorage();" href="{% url 'logout' %}" onclick="exit_tracking()">Logout</a></li>
+            <li><a onclick= "return clearLocalStorage();" href="{% url 'logout' %}">Logout</a></li>
           </ul>
         </li>
         {% else %}
@@ -169,17 +169,17 @@
             <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <span class="explore">Explore</span>Categories <i class="cat-down-icon"></i></a>
             <div class="dropdown-menu courses-tabs">
               <ul class="nav nav-tabs" role="tablist">
-                <li role="presentation" class="active" ><a onclick="exit_tracking()" href="/courses/sales-and-marketing/17/" data-target="#courses1" aria-controls="#courses1" role="tab">Sales &amp; Marketing</a></li>
-                <li role="presentation"><a onclick="exit_tracking()" href="/courses/operation-management/19/" data-target="#courses2" aria-controls="courses2" role="tab">Operation Management</a></li>
-                <li role="presentation"><a onclick="exit_tracking()" href="/courses/banking-and-finance/20/" data-target="#courses3" aria-controls="courses3" role="tab">Banking &amp; Finance</a></li>
-                <li role="presentation"><a onclick="exit_tracking()" href="/courses/it-information-technology/22/" data-target="#courses4" aria-controls="courses4" role="tab">Information Technology</a></li>
-                <li role="presentation"><a onclick="exit_tracking()" href="/courses/hr-human-resource/25/" data-target="#courses5" aria-controls="courses5" role="tab">Human Resources</a></li>
-                <li role="presentation"><a onclick="exit_tracking()" href="/courses/management/27/" data-target="#courses6" aria-controls="courses6" role="tab">Management</a></li>
-                <li role="presentation"><a onclick="exit_tracking()" href="/courses/mass-communication/29/" data-target="#courses7" aria-controls="courses7" role="tab">Mass Communication</a></li>
-                <li role="presentation"><a onclick="exit_tracking()" href="/courses/personal-development/21/" data-target="#courses8" aria-controls="courses8" role="tab">Personal Development</a></li>
-                <li role="presentation"><a onclick="exit_tracking()" href="/courses/law/23/"  data-target="#courses9" aria-controls="courses9" role="tab">Law</a></li>
+                <li role="presentation" class="active" ><a href="/courses/sales-and-marketing/17/" data-target="#courses1" aria-controls="#courses1" role="tab">Sales &amp; Marketing</a></li>
+                <li role="presentation"><a href="/courses/operation-management/19/" data-target="#courses2" aria-controls="courses2" role="tab">Operation Management</a></li>
+                <li role="presentation"><a href="/courses/banking-and-finance/20/" data-target="#courses3" aria-controls="courses3" role="tab">Banking &amp; Finance</a></li>
+                <li role="presentation"><a href="/courses/it-information-technology/22/" data-target="#courses4" aria-controls="courses4" role="tab">Information Technology</a></li>
+                <li role="presentation"><a href="/courses/hr-human-resource/25/" data-target="#courses5" aria-controls="courses5" role="tab">Human Resources</a></li>
+                <li role="presentation"><a href="/courses/management/27/" data-target="#courses6" aria-controls="courses6" role="tab">Management</a></li>
+                <li role="presentation"><a href="/courses/mass-communication/29/" data-target="#courses7" aria-controls="courses7" role="tab">Mass Communication</a></li>
+                <li role="presentation"><a href="/courses/personal-development/21/" data-target="#courses8" aria-controls="courses8" role="tab">Personal Development</a></li>
+                <li role="presentation"><a href="/courses/law/23/"  data-target="#courses9" aria-controls="courses9" role="tab">Law</a></li>
                <!--  <li role="presentation"><a href="{% url 'skillpage:func_area_results' 'other-online' 5 %}#courses10" aria-controls="courses9" role="tab">Other Online Courses</a></li> -->
-               <li role="presentation"><a onclick="exit_tracking()" href="{% url "course-catalogoue" %}" data-target="#courses10" aria-controls="courses10" role="tab">Course Catalogue</a></li>
+               <li role="presentation"><a href="{% url "course-catalogoue" %}" data-target="#courses10" aria-controls="courses10" role="tab">Course Catalogue</a></li>
   
               </ul>
   
@@ -188,94 +188,94 @@
               <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="courses1">
                   <ul>
-                  <li><a href="/courses/sales-and-marketing/digital-marketing/32/" onclick="exit_tracking()" >Digital Marketing</a></li>
-                  <li><a href="/courses/sales-and-marketing/sales/18/" onclick="exit_tracking()">Sales</a></li>
-                  <li><a href="/courses/sales-and-marketing/retail/35/ " onclick="exit_tracking()">  Retail </a></li>
-                  <li><a href="/courses/sales-and-marketing/product-marketing/24/" onclick="exit_tracking()">Product Marketing</a></li>
-                  <li><a href="/courses/sales-and-marketing/service-marketing/30/" onclick="exit_tracking()">Service Marketing</a></li>
-                  <li><a href="/courses/sales-and-marketing/17/" onclick="exit_tracking()" class="view-all-detail">View all products</a></li>
+                  <li><a href="/courses/sales-and-marketing/digital-marketing/32/">Digital Marketing</a></li>
+                  <li><a href="/courses/sales-and-marketing/sales/18/">Sales</a></li>
+                  <li><a href="/courses/sales-and-marketing/retail/35/ ">  Retail </a></li>
+                  <li><a href="/courses/sales-and-marketing/product-marketing/24/">Product Marketing</a></li>
+                  <li><a href="/courses/sales-and-marketing/service-marketing/30/">Service Marketing</a></li>
+                  <li><a href="/courses/sales-and-marketing/17/" class="view-all-detail">View all products</a></li>
                 </ul>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="courses2">
                   <ul>
-                  <li><a href="/courses/operation-management/six-sigma/193/" onclick="exit_tracking()">Six Sigma</a></li>
-                  <li><a href="/courses/operation-management/project-management/123/" onclick="exit_tracking()">Project Management </a></li>
-                  <li><a href="/courses/operation-management/logistics-and-supply-chain/135/" onclick="exit_tracking()">Logistic and Supply Chain</a></li>
-                  <li><a href="/courses/operation-management/service-quality/316/" onclick="exit_tracking()">Service Quality</a></li>
-                  <li><a href="/courses/operation-management/production/39/" onclick="exit_tracking()">Production </a></li>
-                  <li><a href="/courses/operation-management/customer-care/37/" onclick="exit_tracking()">Customer Care</a></li>
-                  <li><a href="/courses/operation-management/19/" onclick="exit_tracking()" class="view-all-detail">View all products</a></li>
+                  <li><a href="/courses/operation-management/six-sigma/193/">Six Sigma</a></li>
+                  <li><a href="/courses/operation-management/project-management/123/">Project Management </a></li>
+                  <li><a href="/courses/operation-management/logistics-and-supply-chain/135/">Logistic and Supply Chain</a></li>
+                  <li><a href="/courses/operation-management/service-quality/316/">Service Quality</a></li>
+                  <li><a href="/courses/operation-management/production/39/">Production </a></li>
+                  <li><a href="/courses/operation-management/customer-care/37/">Customer Care</a></li>
+                  <li><a href="/courses/operation-management/19/" class="view-all-detail">View all products</a></li>
                 </ul>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="courses3">
                   <ul>
-                  <li><a href="/courses/banking-finance/advanced-accounting/114/" onclick="exit_tracking()">Advanced Accounting</a></li>
-                  <li><a href="/courses/banking-finance/banking/113/" onclick="exit_tracking()">Banking</a></li>
-                  <li><a href="/courses/banking-finance/risk-management/95/" onclick="exit_tracking()">Risk Management</a></li>
-                  <li><a href="/courses/banking-finance/stock-market-trading/94/" onclick="exit_tracking()">Stock Market Training</a></li>
-                  <li><a href="/courses/banking-finance/financial-reporting-and-management/103/" onclick="exit_tracking()">Finanacial Reporting and Management</a></li>
-                  <li><a href="/courses/banking-finance/commercial-operation/112/" onclick="exit_tracking()">Commercial Operation </a></li>
-                  <li><a href="/courses/banking-finance/investment-banking/100/" onclick="exit_tracking()">Investment Banking </a></li>
-                  <li><a href="/courses/banking-finance/gst-2/507/" onclick="exit_tracking()">GST</a></li>
-                  <li><a href="/courses/banking-and-finance/20/"  onclick="exit_tracking()" class="view-all-detail">View all products</a></li>
+                  <li><a href="/courses/banking-finance/advanced-accounting/114/">Advanced Accounting</a></li>
+                  <li><a href="/courses/banking-finance/banking/113/">Banking</a></li>
+                  <li><a href="/courses/banking-finance/risk-management/95/">Risk Management</a></li>
+                  <li><a href="/courses/banking-finance/stock-market-trading/94/">Stock Market Training</a></li>
+                  <li><a href="/courses/banking-finance/financial-reporting-and-management/103/">Finanacial Reporting and Management</a></li>
+                  <li><a href="/courses/banking-finance/commercial-operation/112/">Commercial Operation </a></li>
+                  <li><a href="/courses/banking-finance/investment-banking/100/">Investment Banking </a></li>
+                  <li><a href="/courses/banking-finance/gst-2/507/">GST</a></li>
+                  <li><a href="/courses/banking-and-finance/20/" class="view-all-detail">View all products</a></li>
                 </ul>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="courses4">
                   <ul>
-                  <li><a onclick="exit_tracking()" href="/courses/it-information-technology/big-data/84/">Big Data </a></li>
-                  <li><a onclick="exit_tracking()" href="/courses/operation-management/project-management/123/">Project Management </a></li>
-                  <li><a onclick="exit_tracking()" href="/courses/it-information-technology/it-software/53/">IT Software</a></li>
-                  <li><a onclick="exit_tracking()" href="/courses/it-information-technology/graphic-design/54/">Graphic Design </a></li>
-                  <li><a onclick="exit_tracking()" href="/courses/it-information-technology/cloud-computing/82/">Cloud Computing</a></li>
-                  <li><a onclick="exit_tracking()" href="/courses/it-information-technology/ms-skills/98/">MS Skills</a></li>
-                  <li><a onclick="exit_tracking()" href="/courses/it-information-technology/it-language/80/">IT Language</a></li>
-                  <li><a onclick="exit_tracking()" href="/courses/it-information-technology/blockchain/496/">Blockchain</a></li>
-                  <li><a onclick="exit_tracking()" href="/courses/it-information-technology/data-science/497/">Data Science</a></li>
-                  <li><a onclick="exit_tracking()" href="/courses/it-information-technology/22/" class="view-all-detail">View all products</a></li>
+                  <li><a href="/courses/it-information-technology/big-data/84/">Big Data </a></li>
+                  <li><a href="/courses/operation-management/project-management/123/">Project Management </a></li>
+                  <li><a href="/courses/it-information-technology/it-software/53/">IT Software</a></li>
+                  <li><a href="/courses/it-information-technology/graphic-design/54/">Graphic Design </a></li>
+                  <li><a href="/courses/it-information-technology/cloud-computing/82/">Cloud Computing</a></li>
+                  <li><a href="/courses/it-information-technology/ms-skills/98/">MS Skills</a></li>
+                  <li><a href="/courses/it-information-technology/it-language/80/">IT Language</a></li>
+                  <li><a href="/courses/it-information-technology/blockchain/496/">Blockchain</a></li>
+                  <li><a href="/courses/it-information-technology/data-science/497/">Data Science</a></li>
+                  <li><a href="/courses/it-information-technology/22/" class="view-all-detail">View all products</a></li>
                 </ul>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="courses5">
                   <ul>
-                  <li><a onclick="exit_tracking()" href="/courses/hr-human-resource/talent-acquisition/93/">Talent Aquistion </a></li>
-                  <li><a onclick="exit_tracking()" href="/courses/hr-human-resource/organizational-structure/97/">Organizational Structure </a></li>
-                  <li><a onclick="exit_tracking()" href="/courses/hr-human-resource/training-and-development/91/">Training & Development </a></li>
-                  <li><a onclick="exit_tracking()" href="/courses/hr-human-resource/compensation-2/110/">Compensation </a></li>
-                  <li><a onclick="exit_tracking()" href="/courses/hr-human-resource/25/" class="view-all-detail">View all products</a></li>
+                  <li><a href="/courses/hr-human-resource/talent-acquisition/93/">Talent Aquistion </a></li>
+                  <li><a href="/courses/hr-human-resource/organizational-structure/97/">Organizational Structure </a></li>
+                  <li><a href="/courses/hr-human-resource/training-and-development/91/">Training & Development </a></li>
+                  <li><a href="/courses/hr-human-resource/compensation-2/110/">Compensation </a></li>
+                  <li><a href="/courses/hr-human-resource/25/" class="view-all-detail">View all products</a></li>
                 </ul>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="courses6">
                   <ul>
-                  <li><a onclick="exit_tracking()" href="/courses/management/general-management/102/">General Management </a></li>
-                  <li><a onclick="exit_tracking()" href="/courses/management/business-analyst/58/">Business Analyst </a></li>
-                  <li><a onclick="exit_tracking()" href="/courses/management/corporate-governance/59/">Corporate Governance </a></li>
-                  <li><a onclick="exit_tracking()" href="/courses/management/27/" class="view-all-detail">View all products</a></li>
+                  <li><a href="/courses/management/general-management/102/">General Management </a></li>
+                  <li><a href="/courses/management/business-analyst/58/">Business Analyst </a></li>
+                  <li><a href="/courses/management/corporate-governance/59/">Corporate Governance </a></li>
+                  <li><a href="/courses/management/27/" class="view-all-detail">View all products</a></li>
                 </ul>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="courses7">
                   <ul>
-                  <li><a onclick="exit_tracking()" href="/courses/mass-communication/content/46/">Content</a></li>
-                  <li><a onclick="exit_tracking()" href="/courses/mass-communication/public-relations/96/">Public Relations </a></li>
-                  <li><a onclick="exit_tracking()" href="/courses/mass-communication/editor/106/">Editor </a></li>
-                  <li><a onclick="exit_tracking()" href="/courses/mass-communication/journalism/99/">Journalism </a></li>
-                  <li><a onclick="exit_tracking()" tabindex="-1" href="/courses/mass-communication/29/" class="view-all-detail">View all products</a></li>
+                  <li><a href="/courses/mass-communication/content/46/">Content</a></li>
+                  <li><a href="/courses/mass-communication/public-relations/96/">Public Relations </a></li>
+                  <li><a href="/courses/mass-communication/editor/106/">Editor </a></li>
+                  <li><a href="/courses/mass-communication/journalism/99/">Journalism </a></li>
+                  <li><a tabindex="-1" href="/courses/mass-communication/29/" class="view-all-detail">View all products</a></li>
                 </ul>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="courses8">
                   <ul>
-                  <li><a onclick="exit_tracking()" href="/courses/personal-development/language-learning/40/">Language Learning</a></li>
-                  <li><a onclick="exit_tracking()" href="/courses/personal-development/leadership/41/">Leadership </a></li>
-                  <li><a onclick="exit_tracking()" href="/courses/personal-development/personality-development/42/">Personality Development</a></li>
-                  <li><a onclick="exit_tracking()" href="/courses/personal-development/interview-preparation/38/">Interview Preparation</a></li>
-                  <li><a onclick="exit_tracking()" href="/courses/personal-development/communication-development/36/">Communication Development</a></li>
-                  <li><a onclick="exit_tracking()" tabindex="-1" href="/courses/personal-development/21/" class="view-all-detail">View all products</a></li>
+                  <li><a href="/courses/personal-development/language-learning/40/">Language Learning</a></li>
+                  <li><a href="/courses/personal-development/leadership/41/">Leadership </a></li>
+                  <li><a href="/courses/personal-development/personality-development/42/">Personality Development</a></li>
+                  <li><a href="/courses/personal-development/interview-preparation/38/">Interview Preparation</a></li>
+                  <li><a href="/courses/personal-development/communication-development/36/">Communication Development</a></li>
+                  <li><a tabindex="-1" href="/courses/personal-development/21/" class="view-all-detail">View all products</a></li>
                 </ul>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="courses9">
                   <ul>
-                  <li><a onclick="exit_tracking()" href="/courses/law/cyber-law/107/">Cyber Law</a></li>
-                  <li><a onclick="exit_tracking()" href="/courses/law/criminal-law/108/">Criminal Law </a></li>
-                  <li><a onclick="exit_tracking()" href="/courses/law/company-law/111/">Company Law</a></li>
-                  <li><a onclick="exit_tracking()" tabindex="-1" href="/courses/law/23/" class="view-all-detail">View all products</a></li>
+                  <li><a href="/courses/law/cyber-law/107/">Cyber Law</a></li>
+                  <li><a href="/courses/law/criminal-law/108/">Criminal Law </a></li>
+                  <li><a href="/courses/law/company-law/111/">Company Law</a></li>
+                  <li><a tabindex="-1" href="/courses/law/23/" class="view-all-detail">View all products</a></li>
                 </ul>
                 </div>
   
@@ -287,37 +287,37 @@
             </div>
           </li>
           <li class="ms-link">
-            <a onclick="exit_tracking()" class="" href="/courses/sales-and-marketing/digital-marketing/32/">Digital Marketing</a>
+            <a class="" href="/courses/sales-and-marketing/digital-marketing/32/">Digital Marketing</a>
           </li>
           <li class="ms-link">
-            <a onclick="exit_tracking()" class="" href="/courses/operation-management/six-sigma/193/">Six Sigma</a>
+            <a class="" href="/courses/operation-management/six-sigma/193/">Six Sigma</a>
           </li>
           <li class="ms-link">
-            <a onclick="exit_tracking()" class="" href="/courses/operation-management/project-management/123/">Project Management</a>
+            <a class="" href="/courses/operation-management/project-management/123/">Project Management</a>
           </li>
           <li class="ms-link">
-            <a onclick="exit_tracking()" class="" href="/courses/it-information-technology/big-data/84/">Big Data</a>
+            <a class="" href="/courses/it-information-technology/big-data/84/">Big Data</a>
           </li>
           <li class="ms-link">
-            <a onclick="exit_tracking()" class="" href="/courses/it-information-technology/it-software/53/">IT Software</a>
+            <a class="" href="/courses/it-information-technology/it-software/53/">IT Software</a>
           </li>
           <!-- <li class="ms-link">
-            <a onclick="exit_tracking()" class="" href="/courses/management/general-management/102/">General Management</a>
+            <a class="" href="/courses/management/general-management/102/">General Management</a>
           </li> -->
           <li class="nav-item">
-            <a onclick="exit_tracking()" class="nav-link" href="/courses/it-information-technology/data-science/497/">Data Science</a>
+            <a class="nav-link" href="/courses/it-information-technology/data-science/497/">Data Science</a>
           </li>
           <li class="nav-item">
-            <a onclick="exit_tracking()" class="nav-link" href="/courses/it-information-technology/cloud-computing/82/">Cloud Computing</a>
+            <a class="nav-link" href="/courses/it-information-technology/cloud-computing/82/">Cloud Computing</a>
           </li>
           {% if navlink_1 %}
             <li class="ms-link">
-              <a onclick="exit_tracking()" class="" href="{{navlink_1.skill_page_url}}" onclick="nav1_gaEvent();">{{navlink_1.display_name}}{% if navlink_1.tag %}<small class="config-tag">{{navlink_1.tag}}</small>{% endif %}</a>
+              <a class="" href="{{navlink_1.skill_page_url}}" onclick="nav1_gaEvent();">{{navlink_1.display_name}}{% if navlink_1.tag %}<small class="config-tag">{{navlink_1.tag}}</small>{% endif %}</a>
             </li>
           {% endif %}
           {% if navlink_2 %}
             <li class="ms-link">
-              <a onclick="exit_tracking()" class="" href="{{navlink_2.skill_page_url}}" onclick="nav2_gaEvent();">{{navlink_2.display_name}}{% if navlink_2.tag %}<small class="config-tag">{{navlink_2.tag}}</small>{% endif %}</a>
+              <a class="" href="{{navlink_2.skill_page_url}}" onclick="nav2_gaEvent();">{{navlink_2.display_name}}{% if navlink_2.tag %}<small class="config-tag">{{navlink_2.tag}}</small>{% endif %}</a>
             </li>
           {% endif %}
         </ul>
