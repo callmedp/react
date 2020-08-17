@@ -113,7 +113,7 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
         paid_transactions = PaymentTxn.objects.filter(
             txn__in=all_txn_ids, status=1)
 
-        if paid_transactions:
+        if paid_transactions.exists():
             logging.getLogger("error_log").error(
                 "Order for txns already created. {}".format(all_txn_ids))
             return Response({"status": 0, "msg": "Order for txns already created."},
@@ -183,6 +183,7 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                 order.tax_config = str(request.data.get('tax_config', {}))
                 order.status = 1
                 order.site = 1
+                # order.site = int(request.data.get('site',2))
                 order.country = country_obj
                 order.total_excl_tax = request.data.get(
                     'total_excl_tax_excl_discount', 0)
