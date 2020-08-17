@@ -3,445 +3,471 @@
 
 {% load static meta thumbnail compress %}
 
-{% block title %}Online Courses, Practice Tests, Job Assistance Services | Shine Learning{% endblock title %}
+{% block title %}Best Online Courses  & Certification Trainings | Shine Learning{% endblock title %}
 {% block canonical_url %}
-  <link rel="canonical" href="https://{{ SITE_DOMAIN }}/">
+<link rel="canonical" href="https://{{ SITE_DOMAIN }}/">
 {% endblock canonical_url %}
 
 {% block django_meta %}
-    {% include 'meta/meta.html' %}
+{% include 'meta/meta.html' %}
 {% endblock django_meta %}
 
-    
+
 {% block css_section %}
-        <link async href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
-       <link async rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<link defer href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
 
 
-        <link type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/common/header-footer.scss' %}" rel="stylesheet">
-        <link type="text/css" href="{% static 'shinelearn/css/common/typeaheadjs.css' %}" rel="stylesheet">
-        <link href="{% static 'console/css/custom-icon.scss' %}" rel="stylesheet" type="text/scss">
 
+{% if request.session.candidate_id %}
+{% compress css %}
+<link async type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/common/bootstrap.scss' %}" rel="stylesheet">
+<link defer type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/homepage/home1.scss' %}" rel="stylesheet">
+<link defer type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/common/header-footer.scss' %}" rel="stylesheet">
+<link defer type="text/css" href="{% static 'shinelearn/css/common/inputTags.css' %}" rel="stylesheet">
 
-    {% if request.session.candidate_id %}
-    {% compress css %}
-    <link type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/homepage/home1.scss' %}" rel="stylesheet">
-    <link type="text/css" href="{% static 'shinelearn/css/common/inputTags.css' %}" rel="stylesheet">
-        <link type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/common/header-footer.scss' %}" rel="stylesheet">
-        <link type="text/css" href="{% static 'shinelearn/css/common/typeaheadjs.css' %}" rel="stylesheet">
-        <link href="{% static 'console/css/custom-icon.scss' %}" rel="stylesheet" type="text/scss">
-    {% endcompress %}
-    {% else %}
-    {% compress css %}
-    <link type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/homepage/home.scss' %}" rel="stylesheet">
-    <link type="text/css" href="{% static 'shinelearn/css/common/inputTags.css' %}" rel="stylesheet">
-        <link type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/common/header-footer.scss' %}" rel="stylesheet">
-        <link type="text/css" href="{% static 'shinelearn/css/common/typeaheadjs.css' %}" rel="stylesheet">
-        <link href="{% static 'console/css/custom-icon.scss' %}" rel="stylesheet" type="text/scss">
-    {% endcompress %}
-    {% endif %}
-    
-    <style type="text/css">
-        .searchNavBar{
-            display: none !important;
-        }
-    </style>
+<link defer type="text/css" href="{% static 'shinelearn/css/common/typeaheadjs.css' %}" rel="stylesheet">
+{% endcompress %}
+{% else %}
+{% compress css %}
+<link async type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/common/bootstrap.scss' %}" rel="stylesheet">
+<link defer type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/homepage/home.scss' %}" rel="stylesheet">
+<link defer type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/common/header-footer.scss' %}"
+    rel="stylesheet">
+<link defer type="text/css" href="{% static 'shinelearn/css/common/inputTags.css' %}" rel="stylesheet">
+
+<link defer type="text/css" href="{% static 'shinelearn/css/common/typeaheadjs.css' %}" rel="stylesheet">
+{% endcompress %}
+{% endif %}
+
+<style type="text/css">
+    .searchNavBar {
+        display: none !important;
+    }
+</style>
 {% endblock css_section %}
 
 {% block main_container %}
-    {% block page_heading %}
+{% block page_heading %}
 
-        <!-- header -->
-        <header class="home-header" {% if IS_MAINTENANCE %} style="position: relative; top: -53px; margin-top:54px;" {% endif %}>
-            <div id="carousel-example-generic1" class="carousel slide" data-ride="carousel">
+<!-- header -->
+<header class="home-header" {% if IS_MAINTENANCE %} style="position: relative; top: -53px; margin-top:54px;"
+    {% endif %}>
+    <div id="carousel-example-generic1" class="carousel slide" data-ride="carousel">
 
-                <!-- Wrapper for slides -->
-                <div class="carousel-inner" role="listbox">
-                    <div class="item active">
-                        <img aria-label="Shine Learning" src="{% if request.session.candidate_id %}{% static 'shinelearn/images/home-header1.jpg' %}{% else %}{% static 'shinelearn/images/home-header1.jpg' %}{% endif %}" alt="Shine Learning">
-                        <div class="carousel-caption">
-                            {% if request.session.candidate_id %}
-                            <strong>Hi {% if request.session.full_name %} {{request.session.full_name}} {%else %}{{request.session.email}}{% endif %},</strong>
-                            <span>Want to make your career future ready? <br>Discover courses matched for your profile</span>
-                            {% else %}
-                            <strong>Take online courses from <br>India’s largest career skills site</strong>
-                            {% endif %}
-                        </div>
-                    </div>
-                    {% if not request.session.candidate_id %}
-                    <div class="item">
-                        <img aria-label="Shine Learning" src="{% static 'shinelearn/images/home-header2.jpg' %}" alt="Shine Learning">
-                        <div class="carousel-caption">
-                            <h1>Get the right skills for <br>a future ready career</h1>
-                        </div>
-                    </div>
-                    {% endif %}
-                </div>
-                {% if not request.session.candidate_id %}
-                <!-- Controls -->
-                <a class="left carousel-control" href="#carousel-example-generic1" role="button" data-slide="prev">
-                </a>
-                <a class="right carousel-control" href="#carousel-example-generic1" role="button" data-slide="next">
-                </a>
-                {% endif %}
-            </div>
-        </header>
-    {% endblock page_heading %}
-    <!-- search & carousel box start -->
-
-    <section class="search-carousel-box">
-        {% if not request.session.candidate_id %}
-        <!-- search box -->
-        {% include 'homepage/partials/search_box.html' with request=request %}
-        {% endif %}
-
-
-        <!-- product carousel -->
-        <section class="container product-carousel-box">
-            <div class="product-carousel">
-                <h2>{% if request.session.candidate_id and rcourses %}Recommended{% else %}Most popular{% endif %} courses</h2>
-                <div class="carousel slide row" id="myCarousel1">
-                    <div class="carousel-inner">
-                    {% if request.session.candidate_id and rcourses %}
-                    {% for course_list in rcourses %}
-                      <div class="item {% if forloop.first %}active{% endif %}">
-                        {% for product in course_list %}
-
-                          <ul class="listing col-sm-4">
-                            <li>
-                              <a title="{{ product.pHd|default:product.pNm}}" class="box-panel" href="{{ product.pURL }}">
-                                <div class="media">
-                                  <div class="media-body">
-                                    <h3 class="listing-heading">{{ product.pHd|default:product.pNm|truncatechars:40 }}</h3>
-                                    <div class="rating-review-box">
-                                        {% if product.pRC %}<figure class="full-star"></figure>
-                                        <strong>{{product.pARx|floatformat}}<small>/5</small></strong>
-                                        {% else %}
-                                            <strong>{{ product.pBC|default:"10" }}</strong> people bought
-                                        {% endif %}
-                                        <span class="jobs-available"><strong>{{product.pNJ}}</strong> jobs available</span>
-                                    </div>
-
-                                  </div>
-                                  <div class="media-left">
-                                      <figure>
-                                          {% thumbnail im.pImg "120x120" as im %}
-                                        <img aria-label="{{product.pImA}}" class="img-responsive" src="{{im.url}}" alt="{{product.pImA}}">
-{% endthumbnail %}
-
-                                      </figure>
-                                  </div>
-                                </div>
-                              </a>
-                            </li>
-                          </ul>
-                        {% endfor %}
-                      </div>
-                    {% endfor %}
+        <!-- Wrapper for slides -->
+        <div class="carousel-inner" role="listbox">
+            <div class="item active">
+                <img loading="lazy" aria-label="Shine Learning"
+                    src="{% if request.session.candidate_id %}{% static 'shinelearn/images/home-header1.jpg' %}{% else %}{% static 'shinelearn/images/home-header1.jpg' %}{% endif %}"
+                    alt="Shine Learning">
+                <div class="carousel-caption">
+                    {% if request.session.candidate_id %}
+                    <strong>Hi {% if request.session.full_name %} {{request.session.full_name}}
+                        {%else %}{{request.session.email}}{% endif %},</strong>
+                    <span>Want to make your career future ready? <br>Discover courses matched for your profile</span>
                     {% else %}
-                    {% for course_list in pcourses %}
-                      <div class="item {% if forloop.first %}active{% endif %}">
-                       
-                      {% for product in course_list %}
-                        <ul class="listing col-sm-4" >
-                          <li>
-                            <a title="{{ product.pHd|default:product.pNm}}" class="box-panel" href="{{ product.pURL }}">
-                              <div class="media">
-                                <div class="media-body">
-                                  <h3 class="listing-heading">{{ product.pHd|default:product.pNm|truncatechars:50 }}</h3>
-                                  <div class="rating-review-box">
-                                      {% if product.pRC %}<figure class="full-star"></figure>
-                                      <strong>{{product.pARx|floatformat}}<small>/5</small></strong>
-                                      {% else %}
-                                          <strong>{{ product.pBC|default:"10" }}</strong> people bought
-                                      {% endif %}
-                                      <span class="jobs-available"><strong>{{product.pNJ}}</strong> jobs available</span>
-                                  </div>
-
-
-                                </div>
-                                <div class="media-left">
-                                    <figure>
-                                      <img aria-label="{{product.pImA}}" class="img-responsive" src="{{product.pImg}}" alt="{{product.pImA}}">
-                                    </figure>
-                                </div>
-                              </div>
-                            </a>
-                          </li>
-                        </ul>
-                      {% endfor %}
-                    </div>
-                    {% endfor %}
+                    <strong>Take online courses from <br>India’s largest career skills site</strong>
                     {% endif %}
-                    </div>
                 </div>
             </div>
-            <a class="left carousel-control" href="#myCarousel1" data-slide="prev"><i class="left-arrow"></i></a>
-            <a class="right carousel-control" href="#myCarousel1" data-slide="next"><i class="right-arrow"></i></a>
-        </section>
+            {% if not request.session.candidate_id %}
+            <div class="item">
+                <img loading="lazy" aria-label="Shine Learning" src="{% static 'shinelearn/images/home-header2.jpg' %}"
+                    alt="Shine Learning">
+                <div class="carousel-caption">
+                    <h1>Get the right skills for <br>a future ready career</h1>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+        {% if not request.session.candidate_id %}
+        <!-- Controls -->
+        <a class="left carousel-control" href="#carousel-example-generic1" role="button" data-slide="prev">
+        </a>
+        <a class="right carousel-control" href="#carousel-example-generic1" role="button" data-slide="next">
+        </a>
+        {% endif %}
+    </div>
+</header>
+{% endblock page_heading %}
+<!-- search & carousel box start -->
 
-    </section>
-    {% if request.session.candidate_id %}
+<section class="search-carousel-box">
+    {% if not request.session.candidate_id %}
+    <!-- search box -->
     {% include 'homepage/partials/search_box.html' with request=request %}
     {% endif %}
 
-    <!-- how it works -->
-    <section class="container">
-        <div class="row">
-            <ul class="how-it-works">
-                <li class="col-sm-4">
-                    <figure class="discover-home-icon"></figure>
-                    <article>Explore 500+ courses with reviews and ratings from fellow learners</article>
-                </li>
-                <li class="col-sm-4">
-                    <figure class="evaluate-home-icon"></figure>
-                    <article>Learn at your own pace, choose your mode of study</article>
-                </li>
-                <li class="col-sm-4">
-                    <figure class="buy-home-icon"></figure>
-                    <article>Be future-ready with industry recognised certifications in skills that recruiters want</article>
-                </li>
-            </ul>
-        </div>
-    </section>
 
-    {% block section2 %}
-        {% if tcourses|length %}
+    <!-- product carousel -->
+    <section class="container product-carousel-box">
+        <div class="product-carousel">
+            <h2>{% if request.session.candidate_id and rcourses %}Recommended{% else %}Most popular{% endif %} courses
+            </h2>
+            <div class="carousel slide row" id="myCarousel1">
+                <div class="carousel-inner">
+                    {% if request.session.candidate_id and rcourses %}
+                    {% for course_list in rcourses %}
+                    <div class="item {% if forloop.first %}active{% endif %}">
+                        {% for product in course_list %}
 
-        <!-- trending courses -->
-        <section class="container-fluid our-courses">
-            <div class="row">
-                <div class="container">
-                    <h2>Trending Courses</h2>
-                    <article>Browse the most popular and new courses!</article>
-                    <!-- Nav tabs -->
-                    <ul class="nav tab-link" role="tablist">
-                        {% for course in tcourses %}
-                            <li role="presentation" {% if course.name == preSelect %}class="active"{% endif %}><a href="#{{course.tab}}" aria-controls="{{course.tab}}" role="tab" data-toggle="tab">{{course.name}}</a></li>
-                        {% endfor %}
-                    </ul>
-
-                    <!-- Tab panes -->
-                    <div class="tab-content">
-                        <!-- Certifications tab content -->
-                        {% for course in tcourses %}
-                        <div role="tabpanel" class="tab-pane {% if forloop.first %}active{% endif %}" id="{{course.tab}}">
-                            <ul class="listing">
-                                {% for tprd in course.tprds %}
-                                <li class="col-sm-6 col-md-4">
-                                    <a title="{{tprd.pHd|default:tprd.pNm}}" class="box-panel" href="{{tprd.pURL}}">
-                                        <div class="media">
-                                            <div class="media-body">
-                                                <h3 class="listing-heading">{{tprd.pHd|default:tprd.pNm|truncatechars:40}}</h3>
-                                                <div class="rating-review-box">
-                                                    {% if product.pRC %}<figure class="full-star"></figure>
-                                                    <strong>{{tprd.pARx|floatformat}}<small>/5</small></strong>
-                                                    {% else %}
-                                                        <strong>{{ tprd.pBC|default:"10" }}</strong> people bought
-                                                    {% endif %}
-                                                    <span class="jobs-available"><strong>{{tprd.pNJ}}</strong> jobs available</span>
-                                                </div>
+                        <ul class="listing col-sm-4">
+                            <li>
+                                <a title="{{ product.pHd|default:product.pNm}}" class="box-panel"
+                                    href="{{ product.pURL }}">
+                                    <div class="media">
+                                        <div class="media-body">
+                                            <h3 class="listing-heading">
+                                                {{ product.pHd|default:product.pNm|truncatechars:40 }}</h3>
+                                            <div class="rating-review-box">
+                                                {% if product.pRC %}<figure class="full-star"></figure>
+                                                <strong>{{product.pARx|floatformat}}<small>/5</small></strong>
+                                                {% else %}
+                                                <strong>{{ product.pBC|default:"10" }}</strong> people bought
+                                                {% endif %}
+                                                <span class="jobs-available"><strong>{{product.pNJ}}</strong> jobs
+                                                    available</span>
                                             </div>
-                                            <div class="media-left">
-                                                <figure>
 
-                                                                                        {% thumbnail tprd.pImg "120x120" as im %}
-    <img class="img-responsive" aria-label="{{tprd.pImA}}" src="{{ im.url }}"  alt="{{tprd.pImA}}">
-{% endthumbnail %}
-
-                                                </figure>
-                                            </div>
                                         </div>
-                                    </a>
-                                </li>
-                                {% endfor %}
-                            </ul>
-                            <a title="View all" href="{{course.view_all}}" class="view-all">View all</a>
-                        </div>
+                                        <div class="media-left">
+                                            <figure>
+                                                {% thumbnail product.pImg "120x120" as im %}
+                                                <img loading="lazy" aria-label="{{product.pImA}}" class="img-responsive"
+                                                    src="{{im.url}}" alt="{{product.pImA}}">
+                                                {% endthumbnail %}
+
+                                            </figure>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
                         {% endfor %}
                     </div>
+                    {% endfor %}
+                    {% else %}
+                    {% for course_list in pcourses %}
+                    <div class="item {% if forloop.first %}active{% endif %}">
+
+                        {% for product in course_list %}
+                        <ul class="listing col-sm-4">
+                            <li>
+                                <a title="{{ product.pHd|default:product.pNm}}" class="box-panel"
+                                    href="{{ product.pURL }}">
+                                    <div class="media">
+                                        <div class="media-body">
+                                            <h3 class="listing-heading">
+                                                {{ product.pHd|default:product.pNm|truncatechars:50 }}</h3>
+                                            <div class="rating-review-box">
+                                                {% if product.pRC %}<figure class="full-star"></figure>
+                                                <strong>{{product.pARx|floatformat}}<small>/5</small></strong>
+                                                {% else %}
+                                                <strong>{{ product.pBC|default:"10" }}</strong> people bought
+                                                {% endif %}
+                                                <span class="jobs-available"><strong>{{product.pNJ}}</strong> jobs
+                                                    available</span>
+                                            </div>
+
+
+                                        </div>
+                                        <div class="media-left">
+                                            <figure>
+                                                <img loading="lazy" aria-label="{{product.pImA}}" class="img-responsive"
+                                                    src="{{product.pImg}}" alt="{{product.pImA}}">
+                                            </figure>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                        {% endfor %}
+                    </div>
+                    {% endfor %}
+                    {% endif %}
                 </div>
             </div>
-        </section>
-        {% endif %}
-    {% endblock section2 %}
+        </div>
+        <a class="left carousel-control" href="#myCarousel1" data-slide="prev"><i class="left-arrow"></i></a>
+        <a class="right carousel-control" href="#myCarousel1" data-slide="next"><i class="right-arrow"></i></a>
+    </section>
 
-    {% block section3 %}
-        <!-- Job assistance services -->
-        {% if job_asst_services|length %}
-        <section class="container-fluid job-assistance">
-            <div class="row">
-                <div class="container">
-                    <h2>Job assistance services</h2>
-                    <article>Find your next job faster by using our services.</article>
+</section>
+{% if request.session.candidate_id %}
+{% include 'homepage/partials/search_box.html' with request=request %}
+{% endif %}
+
+<!-- how it works -->
+<section class="container">
+    <div class="row">
+        <ul class="how-it-works">
+            <li class="col-sm-4">
+                <figure class="discover-home-icon"></figure>
+                <article>Explore 500+ courses with reviews and ratings from fellow learners</article>
+            </li>
+            <li class="col-sm-4">
+                <figure class="evaluate-home-icon"></figure>
+                <article>Learn at your own pace, choose your mode of study</article>
+            </li>
+            <li class="col-sm-4">
+                <figure class="buy-home-icon"></figure>
+                <article>Be future-ready with industry recognised certifications in skills that recruiters want
+                </article>
+            </li>
+        </ul>
+    </div>
+</section>
+
+{% block section2 %}
+{% if tcourses|length %}
+
+<!-- trending courses -->
+<section class="container-fluid our-courses">
+    <div class="row">
+        <div class="container">
+            <h2>Trending Courses</h2>
+            <article>Browse the most popular and new courses!</article>
+            <!-- Nav tabs -->
+            <ul class="nav tab-link" role="tablist">
+                {% for course in tcourses %}
+                <li role="presentation" {% if course.name == preSelect %}class="active" {% endif %}><a
+                        href="#{{course.tab}}" aria-controls="{{course.tab}}" role="tab"
+                        data-toggle="tab">{{course.name}}</a></li>
+                {% endfor %}
+            </ul>
+
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <!-- Certifications tab content -->
+                {% for course in tcourses %}
+                <div role="tabpanel" class="tab-pane {% if forloop.first %}active{% endif %}" id="{{course.tab}}">
                     <ul class="listing">
-                        {% for tprd in job_asst_services %}
-                        <li>
+                        {% for tprd in course.tprds %}
+                        <li class="col-sm-6 col-md-4">
                             <a title="{{tprd.pHd|default:tprd.pNm}}" class="box-panel" href="{{tprd.pURL}}">
-                                <figure class="media-object">
+                                <div class="media">
+                                    <div class="media-body">
+                                        <h3 class="listing-heading">{{tprd.pHd|default:tprd.pNm|truncatechars:40}}</h3>
+                                        <div class="rating-review-box">
+                                            {% if product.pRC %}<figure class="full-star"></figure>
+                                            <strong>{{tprd.pARx|floatformat}}<small>/5</small></strong>
+                                            {% else %}
+                                            <strong>{{ tprd.pBC|default:"10" }}</strong> people bought
+                                            {% endif %}
+                                            <span class="jobs-available"><strong>{{tprd.pNJ}}</strong> jobs
+                                                available</span>
+                                        </div>
+                                    </div>
+                                    <div class="media-left">
+                                        <figure>
 
-                                    {% thumbnail tprd.pImg "120x120" as im %}
-    <img class="img-responsive" aria-label="{{tprd.pImA}}" src="{{ im.url }}"  alt="{{tprd.pImA}}">
-{% endthumbnail %}
+                                            {% thumbnail tprd.pImg "120x120" as im %}
+                                            <img loading="lazy" class="img-responsive" aria-label="{{tprd.pImA}}"
+                                                src="{{ im.url }}" alt="{{tprd.pImA}}">
+                                            {% endthumbnail %}
 
-                   
-
-
-                                </figure>
-                                <div class="caption">
-                                    <h3 class="listing-heading">{{tprd.pHd|default:tprd.pNm|truncatechars:25}}</h3>
-                                    <div class="rating-review-box">
-                                        {% if tprd.pRC %}<figure class="full-star"></figure>
-                                        <strong>{{tprd.pARx}}<small>/5</small></strong>{% endif %}
-                                        <span class="jobs-available"><strong>{{tprd.pBC}}</strong> people bought</span>
+                                        </figure>
                                     </div>
                                 </div>
                             </a>
                         </li>
                         {% endfor %}
                     </ul>
-                   {% comment %}
-                   <a title="View all" href="{{job_asst_view_all}}" class="view-all">View all</a> TODO: Show in v2
-                   {% endcomment %}
+                    <a title="View all" href="{{course.view_all}}" class="view-all">View all</a>
                 </div>
+                {% endfor %}
             </div>
-        </section>
-        {% endif %}
-    {% endblock section3 %}
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock section2 %}
 
-    {% block section4 %}
-        <!-- Testimonials start -->
-        {% if testimonials|length %}
-        <section class="container mb-100">
-            <div class="testimonials">
-                <h2 class="text-center ro-heading">What our learners are saying</h2>
+{% block section3 %}
+<!-- Job assistance services -->
+{% if job_asst_services|length %}
+<section class="container-fluid job-assistance">
+    <div class="row">
+        <div class="container">
+            <h2>Job assistance services</h2>
+            <article>Find your next job faster by using our services.</article>
+            <ul class="listing">
+                {% for tprd in job_asst_services %}
+                <li>
+                    <a title="{{tprd.pHd|default:tprd.pNm}}" class="box-panel" href="{{tprd.pURL}}">
+                        <figure class="media-object">
 
-                <div id="carousel-example-generic2" class="carousel slide" data-ride="carousel">
-
-                    <!-- Wrapper for slides -->
-                    <div class="carousel-inner" role="listbox">
-                        {% for test in testimonials %}
-                        <div class="item {% if forloop.first %}active{% endif %}">
-                            {% if test.image %}
-                            {% thumbnail test.image.url "100x100" as im %}
-                     <img  aria-label="{{test.user_name}}"  alt="{{test.user_name}}" src="{{ im.url }}">
+                            {% thumbnail tprd.pImg "120x120" as im %}
+                            <img loading="lazy" class="img-responsive" aria-label="{{tprd.pImA}}" src="{{ im.url }}"
+                                alt="{{tprd.pImA}}">
                             {% endthumbnail %}
 
-                            {% else %}
-                            <img aria-label="{{test.user_name}}" src="{% static 'shinelearn/images/user-loggedin.jpg' %}" alt="{{test.user_name}}" width="100" height="100">
-                            {% endif %}
-                            <div class="carousel-caption">
-                                {{test.review|striptags|safe}}
-                                <strong>
-                                  {{test.user_name}}
-                                  <small>{{test.designation}} {% if test.company %}at {{test.company}}{% endif %}</small>
-                                </strong>
+
+
+
+                        </figure>
+                        <div class="caption">
+                            <h3 class="listing-heading">{{tprd.pHd|default:tprd.pNm|truncatechars:25}}</h3>
+                            <div class="rating-review-box">
+                                {% if tprd.pRC %}<figure class="full-star"></figure>
+                                <strong>{{tprd.pARx}}<small>/5</small></strong>{% endif %}
+                                <span class="jobs-available"><strong>{{tprd.pBC}}</strong> people bought</span>
                             </div>
                         </div>
-                        {% endfor %}
+                    </a>
+                </li>
+                {% endfor %}
+            </ul>
+            {% comment %}
+            <a title="View all" href="{{job_asst_view_all}}" class="view-all">View all</a> TODO: Show in v2
+            {% endcomment %}
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock section3 %}
+
+{% block section4 %}
+<!-- Testimonials start -->
+{% if testimonials|length %}
+<section class="container mb-100">
+    <div class="testimonials">
+        <h2 class="text-center ro-heading">What our learners are saying</h2>
+
+        <div id="carousel-example-generic2" class="carousel slide" data-ride="carousel">
+
+            <!-- Wrapper for slides -->
+            <div class="carousel-inner" role="listbox">
+                {% for test in testimonials %}
+                <div class="item {% if forloop.first %}active{% endif %}">
+                    {% if test.image %}
+                    {% thumbnail test.image.url "100x100" as im %}
+                    <img loading="lazy" aria-label="{{test.user_name}}" alt="{{test.user_name}}" src="{{ im.url }}">
+                    {% endthumbnail %}
+
+                    {% else %}
+                    <img loading="lazy" aria-label="{{test.user_name}}"
+                        src="{% static 'shinelearn/images/user-loggedin.jpg' %}" alt="{{test.user_name}}" width="100"
+                        height="100">
+                    {% endif %}
+                    <div class="carousel-caption">
+                        {{test.review|striptags|safe}}
+                        <strong>
+                            {{test.user_name}}
+                            <small>{{test.designation}} {% if test.company %}at {{test.company}}{% endif %}</small>
+                        </strong>
                     </div>
-                    <!-- Controls -->
-                    <a class="left carousel-control" href="#carousel-example-generic2" role="button" data-slide="prev">
-                    </a>
-                    <a class="right carousel-control" href="#carousel-example-generic2" role="button" data-slide="next">
-                    </a>
                 </div>
+                {% endfor %}
             </div>
-        </section>
-        {% endif %}
-    {% endblock section4 %}
+            <!-- Controls -->
+            <a class="left carousel-control" href="#carousel-example-generic2" role="button" data-slide="prev">
+            </a>
+            <a class="right carousel-control" href="#carousel-example-generic2" role="button" data-slide="next">
+            </a>
+        </div>
+    </div>
+</section>
+{% endif %}
+{% endblock section4 %}
 
 
 
 <!-- linkedin Modal-->
-<div class="modal fade bs-example-modal-sm3" tabindex="-1" id="linkedin_modal" role="dialog" aria-labelledby="mySmallModalLabel">
-  <div class="modal-dialog modal-sm" role="document">
-    <div class="modal-content">
-     <div class="register">
-     <div>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h1 class="modal-title" id="myModalLabel">Note:</h1>
-     </div>
-        <div class="form-group accept-msg">
-            <strong>This is a limited time offer for selected LinkedIn members and requires eligible members to sign-in with their respective LinkedIn <a href="https://www.linkedin.com/help/linkedin/answer/60" target="_blank" >primary email address</a>.</strong>
+<div class="modal fade bs-example-modal-sm3" tabindex="-1" id="linkedin_modal" role="dialog"
+    aria-labelledby="mySmallModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="register">
+                <div>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h1 class="modal-title" id="myModalLabel">Note:</h1>
+                </div>
+                <div class="form-group accept-msg">
+                    <strong>This is a limited time offer for selected LinkedIn members and requires eligible members to
+                        sign-in with their respective LinkedIn <a
+                            href="https://www.linkedin.com/help/linkedin/answer/60" rel="noopener"
+                            target="_blank">primary email address</a>.</strong>
+                </div>
+                <!--small class="form-text text-muted text-center"><a href="https://www.linkedin.com/help/linkedin/answer/60" data-toggle="modal" data-target="" data-dismiss="modal">primary email address</a></small-->
+            </div>
         </div>
-        <!--small class="form-text text-muted text-center"><a href="https://www.linkedin.com/help/linkedin/answer/60" data-toggle="modal" data-target="" data-dismiss="modal">primary email address</a></small-->
-      </div>
     </div>
-  </div>
 </div>
 
 <!-- email Modal -->
-<div class="modal fade bs-example-modal-sm3" tabindex="-1" id="emailer_modal" role="dialog" aria-labelledby="mySmallModalLabel">
-  <div class="modal-dialog modal-sm" role="document">
-    <div class="modal-content">
-     <div class="register">
-     <div>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h1 class="modal-title" id="myModalLabel">Thank you!</h1>
-     </div>
-        <div class="form-group accept-msg">
-            <strong>We will call you back shortly</strong>
+<div class="modal fade bs-example-modal-sm3" tabindex="-1" id="emailer_modal" role="dialog"
+    aria-labelledby="mySmallModalLabel">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="register">
+                <div>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">&times;</span></button>
+                    <h1 class="modal-title" id="myModalLabel">Thank you!</h1>
+                </div>
+                <div class="form-group accept-msg">
+                    <strong>We will call you back shortly</strong>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
-  </div>
 </div>
 
 {% endblock main_container %}
 {% block js_section %}
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"> </script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js" rel="noreferrer"> </script>
 
-<script async src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-<script defer src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+<script defer src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"
+    rel="noreferrer"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" rel="noreferrer"></script>
+<!--<script defer src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.2.1/typeahead.bundle.js" rel="noreferrer"></script>-->
+
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.2.1/typeahead.bundle.min.js"
+    rel="noreferrer"></script>
+
+
+<script type="text/javascript">
+    var end_date_time = "{{end_date}}"
+</script>
+
+
+<script type="text/javascript">
+
+    var funcAreaSet = {{ func_area_set| safe }},
+    skillsSet = {{ skills_set | safe }},
+    prefetchedFuncArea = '{{ recmnd_func_area }}',
+        prefetchedSkills = '{{ recmnd_skills }}';
+
+    if ({{ linkedin_modal }} ) {
+        $('#linkedin_modal').modal('show');
+    }
+
+    if ($('.tab-link li.active').length == 0) {
+        $('.tab-link li').first().addClass('active');
+    };
+
+    if ('{{email_response}}') {
+        $('#emailer_modal').modal('show');
+    };
+</script>
+
+{% compress js %}
 <script defer src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"></script>
-<script async src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.2.1/typeahead.bundle.js"></script>
+<script defer src="{% static 'shinelearn/js/common/common.js' %}"> </script>
+<script async src="{% static 'shinelearn/js/common/plugins.ga.js' %}"></script>
+<script defer src="{% static 'shinelearn/js/webmobile/webmobile.js' %}"> </script>
+<script defer src="{% static 'shinelearn/js/common/inputTags.jquery.js' %}"></script>
+<script defer src="{% static 'shinelearn/js/homepage/index.js' %}"></script>
+<script defer src="{% static 'shinelearn/js/homepage/offer_timer.js' %}"></script>
+<script defer src="{% static 'shinelearn/js/homepage/offer_validate.js' %}"></script>
+<script defer src="{% static 'shinelearn/js/homepage/homepage.js' %}"></script>
 
-    <script type="text/javascript">
-        var end_date_time = "{{end_date}}"
-    </script>
-    {% compress js %}
-    <script defer src="{% static 'shinelearn/js/common/common.js' %}"> </script>
-    <script defer src="{% static 'shinelearn/js/common/plugins.ga.js' %}"></script>
-    <script defer src="{% static 'shinelearn/js/webmobile/webmobile.js' %}"> </script>
+{% endcompress %}
 
-    <script defer src="{% static 'shinelearn/js/common/inputTags.jquery.js' %}"></script>
-    <script defer src="{% static 'shinelearn/js/homepage/index.js' %}"></script>
-    <script defer src="{% static 'shinelearn/js/homepage/offer_timer.js' %}"></script>
-    <script defer src="{% static 'shinelearn/js/homepage/offer_validate.js' %}"></script>
-    {% endcompress %}
-    <script type="text/javascript">
-        var funcAreaSet = {{ func_area_set|safe }},
-            skillsSet = {{ skills_set|safe }},
-            prefetchedFuncArea = '{{ recmnd_func_area }}',
-            prefetchedSkills = '{{ recmnd_skills }}';
-            
-        if ( {{linkedin_modal}} ){
-            $('#linkedin_modal').modal('show');
-        }
-                if($('.tab-link li.active').length == 0){
-            $('.tab-link li').first().addClass('active');
-        };
-        if ( '{{email_response}}' ){
-            $('#emailer_modal').modal('show');
-        };
-    </script>
-    
-    {% compress js inline %}
-    <script>
-    $(document).ready(function(){
-      $('#myCarousel1').carousel({
-            interval: 4000,
-        });
 
-        $('#carousel-example-generic1').carousel({
-            interval: 100000
-        })
-
-    });
-
-    </script>
-    {% endcompress %}
 {% endblock js_section %}
 {% block johukum %}
 {% endblock johukum %}

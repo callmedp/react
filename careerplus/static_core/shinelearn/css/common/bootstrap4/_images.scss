@@ -155,3 +155,54 @@
   background: $sprite-new;
   @include icon-inblock (252px, 29px, 0 -48px);
 }
+
+.b4-anylatics-ds-bg {
+  background: url($path + 'images/anlytics-ds-bg.png') no-repeat right top;
+  background-size: contain;
+  min-height: 47.3rem;
+}
+
+// .b4-icon-tick-big {
+//   background: $sprite-new;
+//   @include icon-inblock (13px, 10px, -232px -118px);
+// }
+
+// .b4-icon-arrow-up {
+//   background: $sprite-new;
+//   @include icon-inblock (14px, 8px, -209px -120px);
+// }
+
+// .b4-icon-arrow-down {
+//   background: $sprite-new;
+//   @include icon-inblock (14px, 8px, -187px -120px);
+// }
+
+.b4-icon-choose1 {
+  background: $sprite-new;
+  @include icon-inblock (39px, 49px, 0 -257px);
+}
+
+.b4-icon-choose2 {
+  background: $sprite-new;
+  @include icon-inblock (60px, 41px, -48px -258px);
+}
+
+.b4-icon-choose3 {
+  background: $sprite-new;
+  @include icon-inblock (48px, 48px, -121px -258px);
+}
+
+.b4-icon-choose4 {
+  background: $sprite-new;
+  @include icon-inblock (49px, 49px, -183px -258px);
+}
+
+.b4-icon-choose5 {
+  background: $sprite-new;
+  @include icon-inblock (38px, 42px, -2px -318px);
+}
+
+.b4-icon-choose6 {
+  background: $sprite-new;
+  @include icon-inblock (59px, 48px, -53px -315px);
+}

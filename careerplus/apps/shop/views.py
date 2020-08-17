@@ -60,8 +60,12 @@ from shop.choices import APPLICATION_PROCESS, BENEFITS, NEO_LEVEL_OG_IMAGES, SMS
 from review.forms import ReviewForm
 from .models import Skill
 from homepage.config import UNIVERSITY_COURSE
-from crmapi.models import UNIVERSITY_LEAD_SOURCE
+from crmapi.models import UNIVERSITY_LEAD_SOURCE,DEFAULT_SLUG_SOURCE
 from partner.models import ProductSkill
+from crmapi.tasks import create_lead_crm
+from crmapi.config import PRODUCT_SOURCE_MAPPING
+
+
 
 redis_conn = get_redis_connection("search_lookup")
 
@@ -839,7 +843,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         prd_slug = path_info.get('prd_slug')
        
         if(path_info.get('cat_slug') == 'linkedin-profile-writing'):
-            cat_slug = path_info.get("cat_slug", "")
+            cat_slug = cat_slug + '/' + path_info.get("cat_slug", "")
         
         expected_path = "{}/{}/{}/{}".format(settings.RESUME_SHINE_MAIN_DOMAIN,cat_slug, prd_slug,pk)
         return HttpResponsePermanentRedirect(expected_path)
@@ -860,24 +864,62 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             redirect_url = path + '?' + '&'.join([k + '=' + v for k, v in query_params.items()])
             return redirect_url
 
+    def create_product_detail_leads(self,data_dict={}):
+        if not data_dict:
+            logging.getLogger('info_log').info('No data found')
+            return
+        from crmapi.models import UserQuries
+        lead = UserQuries.objects.create(**data_dict)
+        if not lead:
+            logging.getLogger('info_log').info('user query not created')
+            return
+
+        create_lead_crm.apply_async((lead.pk,), countdown=settings.PRODUCT_LEADCREATION_COUNTDOWN)
+        return lead
+
     def get(self, request, **kwargs):
         path_info = kwargs
+        if self.request.GET.get('lc') and self.request.session.get('candidate_id'):
+            if not kwargs.get('pk',''):
+                return
+            prod = Product.objects.filter(id=kwargs.get('pk')).first()
+            if not prod:
+                return
+
+            lead_source = PRODUCT_SOURCE_MAPPING.get(prod.product_class.slug, 0)
+            slug_source = dict(DEFAULT_SLUG_SOURCE)
+            campaign_slug = slug_source.get(int(lead_source))
+
+            data_dict = {
+                'name': "{} {}".format(self.request.session.get('first_name',''), self.request.session.get(
+                    'last_name', '')),
+                'email': self.request.session.get('email',''),
+                'phn_number': self.request.session.get('mobile_no',''),
+                'product_id':prod.id,
+                'utm_parameter': self.request.session.get('utm_campaign',''),
+                'product':prod.name,
+                'lead_source':lead_source,
+                'path': request.path,
+                'campaign_slug':campaign_slug,
+
+            }
+            lead = self.create_product_detail_leads(data_dict)
+            try:
+                self.request.session.update({'product_lead_dropout':lead.id})
+            except:
+                logging.getLogger('error_log').error('error in updating session for product lead drop out {}'.format(data_dict))
         root=request.GET.get('root')
         mobile=request.GET.get('mobile')
         campaign = request.GET.get('utm_campaign')
         if root == 'interested_mail':
             logging.getLogger('info_log').info('interested user clicked product "{}" having id-{}, mobile number is "{}", under campaign "{}"'.format(path_info.get('prd_slug'),path_info.get("pk", ""), mobile, campaign))
+
         useragent = self.request.META['HTTP_USER_AGENT']
         if 'facebookexternalhit' not in useragent:
             redirect_url = self.redirect_for_neo(request)
             if redirect_url:
                 return HttpResponsePermanentRedirect(redirect_url)
-        path_info = kwargs
 
-        # uncomment when resume.shine is live
-        # if request.path.split('/')[1] == 'services':
-        #     resume_shine_redirection = self.redirect_for_resume_shine(path_info)
-        #     return resume_shine_redirection
         pk = self.kwargs.get('pk')
         self.prd_key = 'detail_db_product_'+pk
         self.prd_solr_key = 'detail_solr_product_'+pk
@@ -903,6 +945,9 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
                 cache.set(self.prd_solr_key, self.sqs, 60 * 60 * 4)
             else:
                 raise Http404
+        if (self.sqs.pPc == 'writing' or self.sqs.pPc == 'service' or self.sqs.pPc == 'other') and self.sqs.pTP not in [2,4] and self.sqs.pTF not in [16,2]:
+            resume_shine_redirection = self.redirect_for_resume_shine(path_info)
+            return resume_shine_redirection
         if self.sqs.id in settings.LINKEDIN_RESUME_PRODUCTS:
             linkedin_cid = settings.LINKEDIN_DICT.get('CLIENT_ID', None)
             token = request.GET.get('token', '')
@@ -1397,4 +1442,16 @@ class SmsUrlRedirect(View):
         if not url:
             return HttpResponsePermanentRedirect(settings.MAIN_DOMAIN_PREFIX)
         return HttpResponsePermanentRedirect(url)
+
+class AnalyticsVidhyaProductView(TemplateView):
+    template_name = 'shop/analytics-vidhya.html'
+
+    def get_context_data(self, **kwargs):
+        context = super(AnalyticsVidhyaProductView, self).get_context_data(**kwargs)
+        context.update({
+            "campaign_slug" : "analvid",
+            "initial_country" : "91",
+            "av_enroll_now" : True
+        })
+        return context
 

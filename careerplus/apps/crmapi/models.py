@@ -28,7 +28,11 @@ LEAD_LOCATION = (
     (27, 'Email Marketing Resume Leads'),
     (UNIVERSITY_LEAD_SOURCE, 'University Course Leads'),
     (29, "Human Resource Leads"),
-    (30, "Assignment Lead")
+    (30, "Assignment Lead"),
+    (31, "Mailer Course Lead"),
+    (32, "Mailer Service Lead"),
+    (33, "Mailer Assessment Lead"),
+
 )
 
 DEFAULT_SLUG_SOURCE = (
@@ -48,7 +52,11 @@ DEFAULT_SLUG_SOURCE = (
     (27, 'resmdefault'),  # resume mailer default
     (UNIVERSITY_LEAD_SOURCE, 'university-campaign'),
     (29, "hrleads"),
-    (30, "assignmentleads")
+    (30, "assignmentleads"),
+    (31, "mailercourselead"),
+    (32, "mailerservicelead"),
+    (33, "mailerassignmentlead"),
+
 
 )
 

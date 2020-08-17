@@ -91,7 +91,7 @@ if DEBUG:
 
 DEBUG_TOOLBAR_CONFIG = {
     "SHOW_TOOLBAR_CALLBACK": lambda request: DEBUG and not request.GET.get('nodebug'),
-    'JQUERY_URL':'',
+    'JQUERY_URL': '',
 
 }
 
@@ -109,8 +109,9 @@ RESUME_TEMPLATE_DIR = 'resume-builder'  # Cloud path
 SITE_DOMAIN = 'learning1.shine.com'
 MOBILE_SITE_DOMAIN = 'mlearning1.shine.com'
 SITE_PROTOCOL = 'https'
-MAIN_DOMAIN_PREFIX = '{}://{}'.format(SITE_PROTOCOL, SITE_DOMAIN)  # 'http://learning.shine.com'
-MOBILE_PROTOCOL_DOMAIN = '{}://{}'.format(SITE_PROTOCOL,SITE_DOMAIN)
+# 'http://learning.shine.com'
+MAIN_DOMAIN_PREFIX = '{}://{}'.format(SITE_PROTOCOL, SITE_DOMAIN)
+MOBILE_PROTOCOL_DOMAIN = '{}://{}'.format(SITE_PROTOCOL, SITE_DOMAIN)
 MOBILE_LOGIN_URL = '{}/login/'.format(MAIN_DOMAIN_PREFIX)
 META_SITE_PROTOCOL = SITE_DOMAIN
 META_SITE_DOMAIN = SITE_PROTOCOL
@@ -120,13 +121,15 @@ META_FB_PROFILE_ID = '282244838633660'
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'core.library.haystack.custom_solr_backend.CustomSolrEngine',
-        'URL': 'http://172.22.67.214:8983/solr/prdt',  # prdt(staging learning1) # live_prod(staging learing2)
+        # prdt(staging learning1) # live_prod(staging learing2)
+        'URL': 'http://172.22.67.214:8983/solr/prdt',
         'INCLUDE_SPELLING': False,
     },
 
     'index': {
         'ENGINE': 'core.library.haystack.custom_solr_backend.CustomSolrEngine',
-        'URL': 'http://172.22.67.214:8983/solr/prdt',  # prdt(staging learning1) # live_prod(staging learing2)
+        # prdt(staging learning1) # live_prod(staging learing2)
+        'URL': 'http://172.22.67.214:8983/solr/prdt',
         'INCLUDE_SPELLING': False,
     }
 }
@@ -247,7 +250,7 @@ BOOSTER_RECRUITERS = ['amar.kumar@hindustantimes.com']
 
 CP_VENDOR_ID = '12345'
 
-##### ROUNDONE
+# ROUNDONE
 ROUNDONE_PRODUCT_ID = 2129
 ROUNDONE_API_BASEURL = "http://api.roundone.asia"
 ROUNDONE_API_BASEURL_ORDER = "http://testing.roundone.asia"
@@ -289,7 +292,7 @@ ROUNDONE_API_DICT = {
     'update_credential_url': ROUNDONE_API_BASEURL + "/applicant/update-credentials"
 }
 
-### LINKEDIN SETTINGS
+# LINKEDIN SETTINGS
 REDIRECT_URI = '{}/linkedin/login'.format(MAIN_DOMAIN_PREFIX)
 CLIENT_ID = "757gbstpwa6dqp"
 CLIENT_SECRET = "creqezZ0kPJnJWRk"
@@ -357,7 +360,9 @@ for conn, attrs in MONGO_SETTINGS.items():
     try:
         if attrs.get('REPSET'):
             connect(attrs['DB_NAME'],
-                    host="mongodb://" + attrs['USERNAME'] + ":" + attrs['PASSWORD'] + "@" + attrs['HOST'],
+                    host="mongodb://" +
+                    attrs['USERNAME'] + ":" +
+                    attrs['PASSWORD'] + "@" + attrs['HOST'],
                     maxPoolSize=attrs['MAX_POOL_SIZE'],
                     read_preference=ReadPreference.SECONDARY_PREFERRED,
                     replicaSet=attrs['REPSET'],
@@ -369,7 +374,8 @@ for conn, attrs in MONGO_SETTINGS.items():
                     maxPoolSize=attrs['MAX_POOL_SIZE']
                     )
     except Exception as e:
-        logging.getLogger('error_log').error(" unable to connect to mongo %s" % repr(e))
+        logging.getLogger('error_log').error(
+            " unable to connect to mongo %s" % repr(e))
         continue
 
 
@@ -398,7 +404,7 @@ SERVICE_PAGE_ID_SLUG_MAPPING = {"45": "resume-writing"}
 IS_MAINTENANCE = False
 MAINTENANCE_MESSAGE = "This site will be under maintenance from 9 pm to 12 pm on Friday, 11 Jan, 2019."
 
-############### VIRTUAL_ENV PATH
+# VIRTUAL_ENV PATH
 VENV_PATH = "/root/virtualenvs/careerplus3.6/bin/python3"
 CODE_PATH = "/code/careerplus/"
 
@@ -426,13 +432,13 @@ NEO_URL = {
 NEO_USERNAME = 'shineadmin@shine.com'
 NEO_PASSWORD = 'MPgddK5vpM'
 
-#Candidate Mongo Settings
+# Candidate Mongo Settings
 CANDIDATE_MONGO_PORT = ':27017'
 CANDIDATE_MONGO_USERNAME = 'candadmin'
 CANDIDATE_MONGO_PASSWORD = 'candadmin'
 CANDIDATE_MONGO_INSTANCE_STR = '172.22.67.226:27017'
 CANDIDATE_MONGO_DB = 'sumoplus'
-DEFAULT_RECOMMEND_PRODUCT = [2634,2787]
+DEFAULT_RECOMMEND_PRODUCT = [2634, 2787]
 
 try:
     from .settings_local import *
@@ -440,7 +446,7 @@ except:
     pass
 
 
-##for testing purpose using live working key
+# for testing purpose using live working key
 
 # CCAVENUE_WORKING_KEY = 'BB84397177B2D640744BA272627C2A61'
 
@@ -454,12 +460,14 @@ RESUME_SHINE_MAIN_DOMAIN = 'https://resumestage.shine.com'
 links for analytics vidhya 
 '''
 ANALYTICS_VIDHYA_URL = {
-    'BASE_URL' : 'https://id.aifest.org',
-    'USERNAME' : 'rajila.madhavan@hindustantimes.com',
-    'PASSWORD' : 'shine123',
-    'ENROLLMENT' : '/api/enrollments/requests',
-    'STATUS' : '/api/enrollments/requests/{}'
+    'BASE_URL': 'https://id.aifest.org',
+    'USERNAME': 'rajila.madhavan@hindustantimes.com',
+    'PASSWORD': 'shine123',
+    'ENROLLMENT': '/api/enrollments/requests',
+    'STATUS': '/api/enrollments/requests/{}'
 }
 '''
 link end
 '''
+
+PRODUCT_LEADCREATION_COUNTDOWN = 30

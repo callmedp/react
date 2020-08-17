@@ -31,12 +31,14 @@ class HomePageView(TemplateView, MetadataMixin):
     
     def get_meta_title(self, context):
         # return 'Best Resume Writing Services | Online Courses | Linkedin Profile - Shine Learning'
-        return 'Online Courses, Practice Tests, Job Assistance Services | Shine Learning'
+        # return 'Online Courses, Practice Tests, Job Assistance Services | Shine Learning'
+        return 'Best Online Courses  & Certification Trainings | Shine Learning'
 
     def get_meta_description(self, context):
         # return 'Pick up the Best Resume Services - Check out the Latest Resume Format or Templates - Online Professional Certification Courses'
-        return 'Discover a variety of online courses and certification training, practice tests, job assistance services with 24X7 support.'
-    
+        # return 'Discover a variety of online courses and certification training, practice tests, job assistance services with 24X7 support.'
+        return 'Discover a comprehensive variety of online courses, certification training programs, practice tests with 24X7 support to build a successful career or grow your business.'
+
     def get_meta_url(self, context):
         return 'https://learning.shine.com'
         
@@ -107,7 +109,7 @@ class HomePageView(TemplateView, MetadataMixin):
             # tprds = tprds.filter(product__product_class__in=course_classes,
             # product__type_product__in=[0, 1, 3])
             # product_pks = list(tprds.all().values_list('product', flat=True))
-            product_pks = [prod.id for prod in tcourse.get_pids]
+            product_pks = [prod.product_id for prod in tcourse.get_pids]
             # product_pks = list(tcourse.get_all_active_trending_products_ids())
 
             tprds = SearchQuerySet().filter(id__in=product_pks,pPc__in=settings.COURSE_SLUG,pTP__in=[0,1,3]).exclude(

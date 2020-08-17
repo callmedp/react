@@ -119,3 +119,13 @@ SALARY_IN_THOUSAND_MODEL_CHOICES = [
     (90, 90),
     (95, 95)
 ]
+
+
+PRODUCT_SOURCE_MAPPING = {
+    "course":31,
+    "service":32,
+    "assessment":33,
+    "writing": 32,
+    "other": 31
+
+}

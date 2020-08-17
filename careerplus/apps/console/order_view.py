@@ -193,6 +193,12 @@ class OrderListView(ListView, PaginationMixin):
                         result = self.query.strip()
                         queryset = queryset.filter(email__iexact=result)
 
+                    elif self.sel_opt in ['razor_order_id', 'razor_payment_id']:
+                        result = self.query.strip()
+                        filter_dict = {self.sel_opt+'__iexact':result}
+                        oi = PaymentTxn.objects.filter(**filter_dict).values_list('order_id',flat=True)
+                        queryset = queryset.filter(id__in=oi)
+
         except Exception as e:
             queryset = queryset.none()
             logging.getLogger('error_log').error("%s " % str(e))
