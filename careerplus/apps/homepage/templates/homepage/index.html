@@ -114,7 +114,7 @@
                         <ul class="listing col-sm-4">
                             <li>
                                 <a title="{{ product.pHd|default:product.pNm}}" class="box-panel"
-                                    href="{{ product.pURL }}" onclick="hompage_tracking('Homepage Recommended Courses Product Clicked')">
+                                    href="{{ product.pURL }}" onclick="homepageTracking('Homepage Recommended Courses Product Clicked')">
                                     <div class="media">
                                         <div class="media-body">
                                             <h3 class="listing-heading">
@@ -233,7 +233,7 @@
                 <li role="presentation" {% if course.name == preSelect %}class="active" {% endif %}><a
                         href="#{{course.tab}}" aria-controls="{{course.tab}}" role="tab"
                         data-toggle="tab"
-                        onclick="hompage_tracking('Homepage Trending Subheading Clicked')">{{course.name}}</a></li>
+                        onclick="homepageTracking('Homepage Trending Subheading Clicked')">{{course.name}}</a></li>
                 {% endfor %}
             </ul>
 
@@ -246,7 +246,7 @@
                         {% for tprd in course.tprds %}
                         <li class="col-sm-6 col-md-4">
                             <a title="{{tprd.pHd|default:tprd.pNm}}" class="box-panel" href="{{tprd.pURL}}" 
-                            onclick="hompage_tracking('Homepage Trending Courses Product Clicked')">
+                            onclick="homepageTracking('Homepage Trending Courses Product Clicked')">
                                 <div class="media">
                                     <div class="media-body">
                                         <h3 class="listing-heading">{{tprd.pHd|default:tprd.pNm|truncatechars:40}}</h3>
@@ -276,7 +276,7 @@
                         {% endfor %}
                     </ul>
                     <a title="View all" href="{{course.view_all}}" class="view-all"
-                    onclick="hompage_tracking('Homepage Trending Courses View All Clicked')">View all</a>
+                    onclick="homepageTracking('Homepage Trending Courses View All Clicked')">View all</a>
                 </div>
                 {% endfor %}
             </div>
@@ -298,7 +298,7 @@
                 {% for tprd in job_asst_services %}
                 <li>
                     <a title="{{tprd.pHd|default:tprd.pNm}}" class="box-panel" href="{{tprd.pURL}}"
-                     onclick="hompage_tracking('Homepage Job Assistance Product Clicked')">
+                     onclick="homepageTracking('Homepage Job Assistance Product Clicked')">
                         <figure class="media-object">
 
                             {% thumbnail tprd.pImg "120x120" as im %}
@@ -324,7 +324,7 @@
             </ul>
             {% comment %}
             <a title="View all" href="{{job_asst_view_all}}" class="view-all"
-            onclick="hompage_tracking('Homepage Job Assistance View All Clicked')">View all</a> TODO: Show in v2
+            onclick="homepageTracking('Homepage Job Assistance View All Clicked')">View all</a> TODO: Show in v2
             {% endcomment %}
         </div>
     </div>
