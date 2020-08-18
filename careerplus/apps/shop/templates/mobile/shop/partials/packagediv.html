@@ -28,7 +28,7 @@
         {% if pop %}
             <div class="select-provider">
 
-                <a href="#" class="form-control sidebar-secondary-trigger" on="tap:sidebar-right.toggle">
+                <a href="#" class="form-control sidebar-secondary-trigger" on="tap:sidebar-right.toggle" onclick="handleTracking('select_other_provider')">
                     Select other provider
                 </a>
             </div>
@@ -48,7 +48,7 @@
         </div>
         {% if pop_list %}
         <div class="select-provider">
-            <a href="#" class="form-control sidebar-secondary-trigger">Other packages</a>
+            <a href="#" class="form-control sidebar-secondary-trigger" onclick="handleTracking('exit_product_page');handleTracking('other_packages');">Other packages</a>
         </div>
         {% endif %}
     </div>
@@ -67,7 +67,7 @@
         </div>
         {% if pop_list %}
         <div class="select-provider">
-            <a href="#" class="form-control sidebar-secondary-trigger">Other packages</a>
+            <a href="#" class="form-control sidebar-secondary-trigger" onclick="handleTracking('exit_product_page');handleTracking('other_packages');">Other packages</a>
         </div>
         {% endif %}
     </div>

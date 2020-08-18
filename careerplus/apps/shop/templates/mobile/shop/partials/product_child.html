@@ -5,7 +5,7 @@
 		<ul class="combos grey-bg p-10">
 			{% for i in combo_list  %}
 				<li>
-				<a href="{{i.url}}">
+				<a href="{{i.url}}" onclick="handleTracking('exit_product_page');handleTracking('combo_list')">
 				{% if i.heading %}
 	              {{i.heading}}
 	            {% else %}

@@ -36,7 +36,7 @@
   {% comment %}
   {% if sqs.id in linkedin_resume_services and not request.session.candidate_id %}
   <a role="button" class="enrol-now" id="login-now-button" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}"
-    href="javascript:void();">Enroll now</a>
+    href="javascript:void();" onclick="handleTracking('enroll_now')" >Enroll now</a>
   {% else %}
   {% endcomment %}
 
@@ -56,7 +56,7 @@
   <div class="price-box-prd">
     <span class="col">
       <a role="button" class="enrol-now" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}"
-        href="javascript:void();">
+        href="javascript:void();" onclick="handleTracking('enroll_now')" >
         {% if product.is_assesment %}
         BuyNow
         {% else %}
@@ -67,7 +67,7 @@
     {% if redeem_test %}
     <span class="col">
       <a role="button" class="redeem-now" id="redeem_test" prod-id="{{sqs.id}}" redeem-option="{{redeem_option}}" data-price="{{sqs.inr_price}}"
-        href="javascript:void();">Redeem Now</a>
+        href="javascript:void();" onclick="handleTracking('redeem_now')" >Redeem Now</a>
         <i class="tooltip-icon" data-toggle="tooltip" data-placement="bottom" title="You have {{product_redeem_count}} free practice test (Assessment) as you're a Shine Premium User">i</i>
     </span>
     {% endif %}
@@ -165,7 +165,7 @@
 
     </form>
     <button type="button" {% if prd_vendor_slug == "neo" %} id="id_callback_neo" {% else %}id="id_callback"
-      {% endif %}class="callback-button mt-10">Request a call back</button>
+      {% endif %}class="callback-button mt-10"  onclick="handleTracking('enroll_now')" >Request a call back</button>
     <!--button type="button" id="id_callback" class="submit-button">
             Submit
           </button-->
@@ -183,7 +183,7 @@
       <strong>{{product.take_free_test.title}}</strong>
       to know where you stand
     </p>
-    <a href="{{product.take_free_test.get_absolute_url}}">Take free test</a>
+    <a href="{{product.take_free_test.get_absolute_url}}" onclick="handleTracking('take_free_test')">Take free test</a>
   </div>
 
 
