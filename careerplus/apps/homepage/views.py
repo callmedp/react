@@ -210,6 +210,12 @@ class HomePageView(TemplateView, MetadataMixin):
         context['meta'] = self.get_meta()
         context['remove_nav_search'] = True
         context['offer_home'] = True
+        context.update({
+            'shine_api_url': settings.SHINE_API_URL,
+            'tracking_product_id': self.request.session.get('tracking_product_id',''),
+            'product_tracking_mapping_id': self.request.session.get('product_tracking_mapping_id',''),
+            'tracking_id': self.request.session.get('tracking_id','')
+        })
 
         linkedin_modal = self.request.session.get('linkedin_modal', 0)
         if linkedin_modal:

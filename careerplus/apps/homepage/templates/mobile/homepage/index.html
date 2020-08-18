@@ -109,7 +109,8 @@
                         <li>
                             <div class="media"> 
                                 <div class="media-body">
-                                    <p class="fs-15 bold"><a title="{{ product.pHd|default:product.pNm}}" href="{{ product.pURL }}">{{ product.pHd|default:product.pNm|truncatechars:40 }}</a></p>
+                                    <p class="fs-15 bold"><a title="{{ product.pHd|default:product.pNm}}" href="{{ product.pURL }}" 
+                                        onclick="homepageTracking('Homepage Recommended Courses Product Clicked')">{{ product.pHd|default:product.pNm|truncatechars:40 }}</a></p>
                                     
                                     <div class="rating block ml-0 fs-12 pb-10">
                                         {% if product.pRC %}<sup class="fill-star"></sup>
@@ -136,7 +137,8 @@
                         <li>
                             <div class="media"> 
                                 <div class="media-body">
-                                    <p class="fs-15 bold"><a title="{{ product.pHd|default:product.pNm|truncatechars:40 }}" href="{{ product.pURL }}">{{ product.pHd|default:product.pNm|truncatechars:40 }}</a></p>
+                                    <p class="fs-15 bold"><a title="{{ product.pHd|default:product.pNm|truncatechars:40 }}" href="{{ product.pURL }}"
+                                        onclick="homepageTracking('Homepage Recommended Courses Product Clicked')">{{ product.pHd|default:product.pNm|truncatechars:40 }}</a></p>
                                     
                                     <div class="rating block ml-0 fs-12 pb-10">
                                         <sup class="fill-star"></sup>
@@ -174,7 +176,8 @@
         <p class="c6 mb-10">Browse the most popular and new courses!</p>
             
             <div class="media">
-                <a title="Finance" href="/courses/banking-and-finance/20/#courses1">
+                <a title="Finance" href="/courses/banking-and-finance/20/#courses1" 
+                onclick="homepageTracking('Homepage Trending Courses Subheading Clicked')">
                     <div class="media-body">
                         <p class="title">Finance</p>
                     </div>                
@@ -187,7 +190,8 @@
             </div>
             
             <div class="media">
-                <a title="Operations" href="/courses/operation-management/19/#courses2">
+                <a title="Operations" href="/courses/operation-management/19/#courses2"
+                onclick="homepageTracking('Homepage Trending Courses Subheading Clicked')">
                     <div class="media-body">
                         <p class="title">Operations</p>
                     </div>                
@@ -200,7 +204,8 @@
             </div>
             
             <div class="media">
-                <a title="Information Technology" href="/courses/it-information-technology/it-language/80/#courses3">
+                <a title="Information Technology" href="/courses/it-information-technology/it-language/80/#courses3"
+                onclick="homepageTracking('Homepage Trending Courses Subheading Clicked')">
                     <div class="media-body">
                         <p class="title">Information Technology</p>
                     </div>                
@@ -213,7 +218,8 @@
             </div>
             
             <div class="media">
-                <a title="Human Resources" href="/courses/hr-human-resource/25/#courses4">
+                <a title="Human Resources" href="/courses/hr-human-resource/25/#courses4"
+                onclick="homepageTracking('Homepage Trending Courses Subheading Clicked')">
                     <div class="media-body">
                         <p class="title">Human Resources</p>
                     </div>                
@@ -239,7 +245,8 @@
                 <ul class="trending-slide mt-10">
                     {% for tprd in job_asst_services %}
                     <li>
-                        <a title="{{tprd.pHd|default:tprd.pNm|truncatechars:40}}" href="{{tprd.pURL}}">
+                        <a title="{{tprd.pHd|default:tprd.pNm|truncatechars:40}}" href="{{tprd.pURL}}"
+                        onclick="homepageTracking('Homepage Job Assistance Product Clicked')">
                             <div class="img-box">
 
                                                           {% thumbnail tprd.pImg "135x135" as im %}
@@ -332,6 +339,14 @@
             skillsSet = {{ skills_set|safe }},
             prefetchedFuncArea = '{{ recmnd_func_area }}',
             prefetchedSkills = '{{ recmnd_skills }}';
+    </script>
+
+<script type="text/javascript">
+    var shineApiUrl = "{{shine_api_url}}"
+    var trackingProductId = "{{tracking_product_id}}"
+    var productTrackingMappingId = "{{product_tracking_mapping_id}}"
+    var trackingId = "{{tracking_id}}"
+    console.log({ trackingProductId, shineApiUrl, productTrackingMappingId, trackingId })
     </script>
 
 
