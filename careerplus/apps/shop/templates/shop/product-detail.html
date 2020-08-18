@@ -123,16 +123,16 @@
 
                     {% if sqs.id in linkedin_resume_services %}
                     <!-- buy now button -->
-                    <a role="button" class="enrol-now" id="enrol-now-button" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();" onclick="handleTracking('enroll_now')">Enroll now</a>
+                    <a role="button" class="enrol-now" id="enrol-now-button" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll now</a>
                     {% endif %}
 
                     <!-- Add to cart button and redirect to cart add class- enrol-now -->
                     {% if sqs.id not in linkedin_resume_services %}
                         {% if prd_vendor_slug == 'neo' %}
-                      <a role="button" class="enrol-now neo-enroll-button" data-neotest="1" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" onclick="handleTracking('enroll_now')" >Enroll now</a>
+                      <a role="button" class="enrol-now neo-enroll-button" data-neotest="1" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" >Enroll now</a>
 
                       {% else %}
-                        <a role="button" class="enrol-now" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();" onclick="handleTracking('enroll_now')">Enroll now</a>
+                        <a role="button" class="enrol-now" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll now</a>
                       {% endif %}
                     {% endif %}
 
@@ -177,7 +177,7 @@
                   
                     {% if prd_num_jobs %}
                       <li>
-                       <a href="{% if num_jobs_url %}{{num_jobs_url}}{% else %}javascript:void(0);{% endif %}" target="_blank" onclick="handleTracking('exit_product_page');handleTracking('jobs_available');">
+                       <a href="{% if num_jobs_url %}{{num_jobs_url}}{% else %}javascript:void(0);{% endif %}" target="_blank">
                         <figure class="course-jobs-icon"></figure>
                         <span><strong class="anchor-color">&nbsp;{{prd_num_jobs}}</strong>&nbsp;Jobs available</span>
                        </a> 
@@ -194,7 +194,7 @@
                 </ul>
                 {% if prd_service == 'course' or product.type_flow == 16 %}
                 <span class="byvskills">
-                  <strong><a onclick="gaEvent('Search','{{prd_vendor}}','ViewAllProductVendor');" href="/search/results/?fvid={{product.vendor.id}}"onclick="handleTracking('exit_product_page');handleTracking('all_courses_or_certifications')">All courses/ certification ({{prd_vendor_count}})</a></strong>
+                  <strong><a onclick="gaEvent('Search','{{prd_vendor}}','ViewAllProductVendor');" href="/search/results/?fvid={{product.vendor.id}}">All courses/ certification ({{prd_vendor_count}})</a></strong>
                   By {{prd_vendor}}
                 </span>
                 {% endif %}
@@ -217,7 +217,7 @@
                       <strong>Know your current English CEFR level,</strong>
                       corresponding TOEFL and IELTS score by taking this test.
                     </span>
-                    <a class="cefr_level__link" data-toggle="modal" data-target="#myModal" id="take-test_button" onclick="handleTracking('take_free_test')">Take free test</a>
+                    <a class="cefr_level__link" data-toggle="modal" data-target="#myModal" id="take-test_button">Take free test</a>
                     </div>
                   </div>
 
@@ -230,7 +230,7 @@
                         <strong id="cefr_level">B1</strong>
                         Your CEFR level
                       </span>
-                      <a class="cefr_level__link--level" id="id_share" role="button" ><span class="share-icon"></span></a>
+                      <a class="cefr_level__link--level" id="id_share" role="button"><span class="share-icon"></span></a>
                     </div>
                     <a class="mb-30 db" href="https://www.coe.int/en/web/common-european-framework-reference-languages/table-1-cefr-3.3-common-reference-levels-global-scale" target="_blank"><span class="link-icon mr-5"></span> Official translations of CEFR global scale</a>
                   </div>

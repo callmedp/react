@@ -56,6 +56,8 @@ class RemoveFromCartMobileView(View, CartMixin):
                                 'tracking_product_id', '')
                             product_tracking_mapping_id = request.session.get(
                                 'product_tracking_mapping_id', '')
+                            product_availability = request.session.get(
+                                'product_availability', '')
                             if tracking_product_id == line_obj.product.id and tracking_id:
                                 make_logging_request.delay(
                                     tracking_product_id, product_tracking_mapping_id, tracking_id, 'remove_product')
@@ -68,6 +70,8 @@ class RemoveFromCartMobileView(View, CartMixin):
                                     del request.session['product_tracking_mapping_id']
                                 if tracking_product_id:
                                     del request.session['tracking_product_id']
+                                if product_availability:
+                                    del request.session['product_availability']
 
                             line_obj.delete()
 

@@ -468,9 +468,18 @@
 
 {% block js_section %}
 
+    <script>
+        var shineApiUrl = "{{shine_api_url}}"
+        var trackingProductId = "{{tracking_product_id}}"
+        var productTrackingMappingId = "{{product_tracking_mapping_id}}"
+        var trackingId = "{{tracking_id}}"
+        var productId = "{{product_id}}"
+    </script>
+
     {{block.super}}
     {% compress js %}
     <script src="{% static 'shinelearn/js/mobile/cart/cart.js' %}"></script>
+    <script src="{% static 'shinelearn/js/shop/commonDetails.js' %}"></script>
     <script src="{% static 'shinelearn/js/cart/cart.js' %}"></script>
     <script src="{% static 'shinelearn/js/mobile/shop/detail.js' %}"></script>
     <script src="{% static 'shinelearn/js/users/login.js' %}"></script>

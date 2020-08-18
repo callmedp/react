@@ -330,16 +330,6 @@ function cartScroller() {
 }
 
 
-function handleTracking(action) {
-    console.log('Tracking fetch : ', action);
-}
-
-function trackClickEvent() {
-    // exit product page handling 
-    console.log('Tracking footer : exit_product');
-}
-
-
 
 $(document).ready(function () {
 

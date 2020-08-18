@@ -2,7 +2,7 @@ import json
 import logging
 import requests
 
-from datetime import datetime;
+from datetime import datetime
 from collections import OrderedDict
 from decimal import Decimal
 from urllib.parse import unquote
@@ -50,9 +50,9 @@ from wallet.models import ProductPoint
 
 from .models import Product
 from review.models import DetailPageWidget
-from .mixins import (CourseCatalogueMixin, \
-    LinkedinSeriviceMixin
-)
+from .mixins import (CourseCatalogueMixin,
+                     LinkedinSeriviceMixin
+                     )
 from users.forms import (
     ModalLoginApiForm
 )
@@ -60,14 +60,12 @@ from shop.choices import APPLICATION_PROCESS, BENEFITS, NEO_LEVEL_OG_IMAGES, SMS
 from review.forms import ReviewForm
 from .models import Skill
 from homepage.config import UNIVERSITY_COURSE
-from crmapi.models import UNIVERSITY_LEAD_SOURCE,DEFAULT_SLUG_SOURCE
+from crmapi.models import UNIVERSITY_LEAD_SOURCE, DEFAULT_SLUG_SOURCE
 from partner.models import ProductSkill
 from crmapi.tasks import create_lead_crm
 from crmapi.config import PRODUCT_SOURCE_MAPPING
-
-
-
 redis_conn = get_redis_connection("search_lookup")
+
 
 class ProductInformationMixin(object):
 
@@ -90,7 +88,8 @@ class ProductInformationMixin(object):
                 'active': True}))
         if category:
             if category.type_level == 4:
-                category = category.get_parent()[0] if category.get_parent() else None
+                category = category.get_parent(
+                )[0] if category.get_parent() else None
         if category:
             if product.is_course and product.type_flow != 14:
                 parent = category.get_parent()
@@ -114,8 +113,8 @@ class ProductInformationMixin(object):
                         breadcrumbs.append(
                             OrderedDict({
                                 'label': parent[0].name,
-                                'url': reverse('func_area_results', kwargs={'fa_slug':parent[0].slug, 'pk': parent[0].id}),
-                            'active': True}))
+                                'url': reverse('func_area_results', kwargs={'fa_slug': parent[0].slug, 'pk': parent[0].id}),
+                                'active': True}))
             else:
                 breadcrumbs.append(
                     OrderedDict({
@@ -206,7 +205,7 @@ class ProductInformationMixin(object):
 
     def get_jobs_url(self, product):
         job_url = 'https://www.shine.com/job-search/{}-jobs'.format(product.slug)\
-        if product.slug else None
+            if product.slug else None
         return job_url
 
     def solar_faq(self, product):
@@ -363,14 +362,15 @@ class ProductInformationMixin(object):
 
     def get_countries(self):
         country_choices = [(m.phone, m.name) for m in
-            Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+                           Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
         initial_country = Country.objects.filter(phone='91')[0].phone
-        return country_choices,initial_country
+        return country_choices, initial_country
 
     def get_sorted_products(self, pvrs_data):
         if pvrs_data.get("var_list"):
-                sort_pvrs = sorted(pvrs_data.get('var_list'), key = lambda i: i['inr_price'])
-                pvrs_data['var_list'] = sort_pvrs
+            sort_pvrs = sorted(pvrs_data.get('var_list'),
+                               key=lambda i: i['inr_price'])
+            pvrs_data['var_list'] = sort_pvrs
         return pvrs_data
 
     def get_product_information(self, product, sqs, product_main, sqs_main):
@@ -387,7 +387,8 @@ class ProductInformationMixin(object):
         ctx.update(self.solar_faq(sqs))
 
         country_choices, initial_country = self.get_countries()
-        ctx.update({'country_choices': country_choices, 'initial_country': initial_country, })
+        ctx.update({'country_choices': country_choices,
+                    'initial_country': initial_country, })
         if sqs.pPc == 'course':
             ctx.update(json.loads(sqs_main.pPOP))
             pvrs_data = json.loads(sqs.pVrs)
@@ -401,13 +402,17 @@ class ProductInformationMixin(object):
             ctx['canonical_url'] = product.get_parent_canonical_url()
             if self.product_obj.type_flow == 14:
                 ctx['university_detail'] = json.loads(sqs.pUncdl[0])
-                faculty = [f.faculty for f in self.product_obj.facultyproducts.all().select_related('faculty','faculty__institute')]
-                ctx['faculty'] = [faculty[i:i + 2]for i in range(0, len(faculty),2)]
+                faculty = [f.faculty for f in self.product_obj.facultyproducts.all(
+                ).select_related('faculty', 'faculty__institute')]
+                ctx['faculty'] = [faculty[i:i + 2]
+                                  for i in range(0, len(faculty), 2)]
                 ctx['institute'] = self.product_obj.category_main
                 app_process = ctx['university_detail']['app_process']
-                ctx['university_detail']['app_process'] = [APPLICATION_PROCESS.get(proc) for proc in app_process]
+                ctx['university_detail']['app_process'] = [
+                    APPLICATION_PROCESS.get(proc) for proc in app_process]
                 app_process = ctx['university_detail']['benefits']
-                ctx['university_detail']['benefits'] = [BENEFITS.get(proc) for proc in app_process]
+                ctx['university_detail']['benefits'] = [
+                    BENEFITS.get(proc) for proc in app_process]
                 ctx['university_testimonial'] = Testimonial.objects.filter(
                     page=UNIVERSITY_COURSE, object_id=self.product_obj.pk
                 )
@@ -444,7 +449,8 @@ class ProductInformationMixin(object):
 
         ctx.update(json.loads(sqs.pFBT))
         get_fakeprice = self.get_solar_fakeprice(sqs.pPinb, sqs.pPfinb)
-        ctx['domain_name'] = '{}//{}'.format(settings.SITE_PROTOCOL, settings.SITE_DOMAIN)
+        ctx['domain_name'] = '{}//{}'.format(
+            settings.SITE_PROTOCOL, settings.SITE_DOMAIN)
         if getattr(product, 'vendor', None):
             ctx.update({'prd_vendor_slug': product.vendor.slug})
         ctx.update({'sqs': sqs})
@@ -464,7 +470,8 @@ class ProductInformationMixin(object):
         ctx.update(self.getSelectedProduct_solr(sqs))
         ctx.update(self.get_reviews(product, 1))
         try:
-            widget_obj = DetailPageWidget.objects.get(content_type__model='Product', listid__contains=pk)
+            widget_obj = DetailPageWidget.objects.get(
+                content_type__model='Product', listid__contains=pk)
             widget_objs = widget_obj.widget.iw.indexcolumn_set.filter(column=1)
         except DetailPageWidget.DoesNotExist:
             widget_objs = None
@@ -473,29 +480,31 @@ class ProductInformationMixin(object):
         ctx['meta'] = product.as_meta(self.request)
         ctx['widget_objs'] = widget_objs
         ctx['widget_obj'] = widget_obj
-        ctx['is_logged_in'] = True if self.request.session.get('candidate_id') else False
+        ctx['is_logged_in'] = True if self.request.session.get(
+            'candidate_id') else False
         ctx["loginform"] = ModalLoginApiForm()
         ctx['linkedin_resume_services'] = settings.LINKEDIN_RESUME_PRODUCTS
         ctx['redeem_test'] = False
-        ctx['product_redeem_count'] =0
+        ctx['product_redeem_count'] = 0
         ctx['redeem_option'] = 'assessment'
         if self.request.session.get('candidate_id'):
             candidate_id = self.request.session.get('candidate_id')
             contenttype_obj = ContentType.objects.get_for_model(product)
-            ctx['review_obj'] = Review.objects.filter(object_id=product.id, content_type=contenttype_obj, user_id=candidate_id).first()
+            ctx['review_obj'] = Review.objects.filter(
+                object_id=product.id, content_type=contenttype_obj, user_id=candidate_id).first()
             # user_reviews depicts if user already has a review for this product or not
             # product_type = ContentType.objects.get(app_label='shop', model='product')
             candidate_id = self.request.session.get('candidate_id', None)
             user_reviews = Review.objects.filter(content_type=contenttype_obj, object_id=pk, status__in=[0, 1],
-                user_id=candidate_id).count()
+                                                 user_id=candidate_id).count()
 
             ctx['user_reviews'] = True if user_reviews else False
-            
+
             redeem_option = product.attr.get_attribute_by_name(
                 'redeem_option')
-            
+
             attr_value = product.attr.get_value_by_attribute(redeem_option)
-            
+
             if not attr_value:
                 code = None
             else:
@@ -505,8 +514,8 @@ class ProductInformationMixin(object):
                 product_point = ProductPoint.objects.filter(
                     candidate_id=candidate_id).first()
 
-                if  product_point:
-            
+                if product_point:
+
                     redeem_options = eval(product_point.redeem_options)
 
                     required_obj = [
@@ -521,8 +530,6 @@ class ProductInformationMixin(object):
                         ctx['product_redeem_count'] = product_redeem_count
                         ctx['redeem_option'] = code
 
-
-                    
         navigation = True
 
         if sqs.id in settings.LINKEDIN_RESUME_PRODUCTS:
@@ -532,17 +539,17 @@ class ProductInformationMixin(object):
 
     def get_product_detail_context(self, product, sqs, product_main, sqs_main):
         main_ctx = {}
-        key = "context_product_detail_"+ str(product.pk)
+        key = "context_product_detail_" + str(product.pk)
         useragent = self.request.META['HTTP_USER_AGENT']
         if cache.get(key) and 'facebookexternalhit' not in useragent:
             main_ctx.update(cache.get(key))
         else:
-            data = self.get_product_information(product, sqs, product_main, sqs_main)
+            data = self.get_product_information(
+                product, sqs, product_main, sqs_main)
             main_ctx.update(data)
-            cache.set(key,data,60*60*4)
+            cache.set(key, data, 60*60*4)
         main_ctx.update(self.get_other_detail(product, sqs))
         return main_ctx
-
 
     # def get_product_detail_context(self, product, sqs, product_main, sqs_main):
     #     pk = product.pk
@@ -660,6 +667,7 @@ class ProductInformationMixin(object):
     #         return ctx
     #
 
+
 @Decorate(stop_browser_cache())
 class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
     context_object_name = 'product'
@@ -677,8 +685,8 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         self._enforce_parent = True
         self.sqs = None
         self.skill = False
-        self.key=None
-        self.cache_dict={}
+        self.key = None
+        self.cache_dict = {}
         super(ProductDetailView, self).__init__(*args, **kwargs)
 
     def get_template_names(self):
@@ -695,7 +703,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         self.skill = self.request.session.get('skills_name', [])
         if not self.skill and self.product_obj.type_flow == 2:
             self.skill = self.product_obj.productskills.filter(skill__active=True)\
-                .values_list('skill__name',flat=True)[:3]
+                .values_list('skill__name', flat=True)[:3]
         self.skill = ",".join(self.skill)
         ctx.update({'skill': self.skill})
         product_data = self.get_product_detail_context(
@@ -714,6 +722,11 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             'product_detail': product_detail_content,
             "ggn_contact_full": settings.GGN_CONTACT_FULL,
             "ggn_contact": settings.GGN_CONTACT,
+            'shine_api_url': settings.SHINE_API_URL,
+            'tracking_product_id': self.request.session.get('tracking_product_id', ''),
+            'product_tracking_mapping_id': self.request.session.get('product_tracking_mapping_id', ''),
+            'tracking_id': self.request.session.get('tracking_id', ''),
+            'product_id': self.product_obj and self.product_obj.id
         })
 
         ctx.update(product_data)
@@ -764,7 +777,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         #                 pid = Product.objects.get(pk=pid)
         #                 ctx['canonical_url'] = pid.get_canonical_url()
         #             else:
-        #                 ctx['canonical_url'] = self.product_obj.get_canonical_url()      
+        #                 ctx['canonical_url'] = self.product_obj.get_canonical_url()
         #         except:
         #             ctx['canonical_url'] = self.product_obj.get_canonical_url()
         #             logging.getLogger('error_log').error(
@@ -801,7 +814,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         # ctx['amp'] = self.request.amp
         # ctx['widget_objs'] = widget_objs
         # ctx['widget_obj'] = widget_obj
-        
+
         # ctx['linkedin_resume_services'] = settings.LINKEDIN_RESUME_PRODUCTS
         # navigation = True
         # if self.sqs.id in settings.LINKEDIN_RESUME_PRODUCTS:
@@ -818,13 +831,13 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
                 description = unquote(request.GET.get('description', ''))
                 level = request.GET.get('level', 'Starter')
                 img = NEO_LEVEL_OG_IMAGES.get(level)
-                curr_url = '{}://{}{}'.format(settings.SITE_PROTOCOL, settings.SITE_DOMAIN, request.get_full_path())
+                curr_url = '{}://{}{}'.format(settings.SITE_PROTOCOL,
+                                              settings.SITE_DOMAIN, request.get_full_path())
                 setattr(ctx['meta'], 'og_description', description)
                 setattr(ctx['meta'], 'title', title)
                 setattr(ctx['meta'], 'image', img)
                 setattr(ctx['meta'], '_url', curr_url)
         return ctx
-
 
     def redirect_if_necessary(self, current_path, product):
         if self._enforce_paths:
@@ -841,11 +854,12 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         pk = path_info.get("pk", "")
         cat_slug = 'product'
         prd_slug = path_info.get('prd_slug')
-       
+
         if(path_info.get('cat_slug') == 'linkedin-profile-writing'):
             cat_slug = cat_slug + '/' + path_info.get("cat_slug", "")
-        
-        expected_path = "{}/{}/{}/{}".format(settings.RESUME_SHINE_MAIN_DOMAIN,cat_slug, prd_slug,pk)
+
+        expected_path = "{}/{}/{}/{}".format(
+            settings.RESUME_SHINE_MAIN_DOMAIN, cat_slug, prd_slug, pk)
         return HttpResponsePermanentRedirect(expected_path)
 
     def return_http404(self, sqs_obj):
@@ -857,14 +871,15 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         from copy import deepcopy
         path = request.path
         query_params = deepcopy(request.GET)
-        if not any(x in query_params.keys() for x in ['title', 'description','level']):
+        if not any(x in query_params.keys() for x in ['title', 'description', 'level']):
             return
-        [query_params.pop(k, None) for k in ['title', 'description', 'level'] ]
+        [query_params.pop(k, None) for k in ['title', 'description', 'level']]
         if query_params.keys():
-            redirect_url = path + '?' + '&'.join([k + '=' + v for k, v in query_params.items()])
+            redirect_url = path + '?' + \
+                '&'.join([k + '=' + v for k, v in query_params.items()])
             return redirect_url
 
-    def create_product_detail_leads(self,data_dict={}):
+    def create_product_detail_leads(self, data_dict={}):
         if not data_dict:
             logging.getLogger('info_log').info('No data found')
             return
@@ -874,45 +889,102 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             logging.getLogger('info_log').info('user query not created')
             return
 
-        create_lead_crm.apply_async((lead.pk,), countdown=settings.PRODUCT_LEADCREATION_COUNTDOWN)
+        create_lead_crm.apply_async(
+            (lead.pk,), countdown=settings.PRODUCT_LEADCREATION_COUNTDOWN)
         return lead
+
+    def maintain_tracking_info(self, product=None):
+        if not product:
+            return -1
+        if product.sub_type_flow == 501:
+            return 1
+        if product.sub_type_flow == 503:
+            return 2
+        if product.sub_type_flow == 504:
+            return 3
+        if product.type_flow == 18:
+            return 4
+        if product.type_flow == 19:
+            return 5
+        if product.type_flow == 1:
+            return 6
+        if product.sub_type_flow == 502:
+            return 7
+        if product.type_flow == 16:
+            return 8
+        if product.type_flow == 2:
+            return 9
 
     def get(self, request, **kwargs):
         path_info = kwargs
+        tracking_id = request.GET.get('t_id', '')
         if self.request.GET.get('lc') and self.request.session.get('candidate_id'):
-            if not kwargs.get('pk',''):
+            if not kwargs.get('pk', ''):
                 return
             prod = Product.objects.filter(id=kwargs.get('pk')).first()
             if not prod:
                 return
 
-            lead_source = PRODUCT_SOURCE_MAPPING.get(prod.product_class.slug, 0)
+            lead_source = PRODUCT_SOURCE_MAPPING.get(
+                prod.product_class.slug, 0)
             slug_source = dict(DEFAULT_SLUG_SOURCE)
             campaign_slug = slug_source.get(int(lead_source))
 
             data_dict = {
-                'name': "{} {}".format(self.request.session.get('first_name',''), self.request.session.get(
+                'name': "{} {}".format(self.request.session.get('first_name', ''), self.request.session.get(
                     'last_name', '')),
-                'email': self.request.session.get('email',''),
-                'phn_number': self.request.session.get('mobile_no',''),
-                'product_id':prod.id,
-                'utm_parameter': self.request.session.get('utm_campaign',''),
-                'product':prod.name,
-                'lead_source':lead_source,
+                'email': self.request.session.get('email', ''),
+                'phn_number': self.request.session.get('mobile_no', ''),
+                'product_id': prod.id,
+                'utm_parameter': self.request.session.get('utm_campaign', ''),
+                'product': prod.name,
+                'lead_source': lead_source,
                 'path': request.path,
-                'campaign_slug':campaign_slug,
+                'campaign_slug': campaign_slug,
 
             }
+
             lead = self.create_product_detail_leads(data_dict)
             try:
-                self.request.session.update({'product_lead_dropout':lead.id})
+                self.request.session.update({'product_lead_dropout': lead.id})
             except:
-                logging.getLogger('error_log').error('error in updating session for product lead drop out {}'.format(data_dict))
-        root=request.GET.get('root')
-        mobile=request.GET.get('mobile')
+                logging.getLogger('error_log').error(
+                    'error in updating session for product lead drop out {}'.format(data_dict))
+
+        if tracking_id and self.request.session.get('candidate_id'):
+            from payment.tasks import make_logging_request
+
+            if not kwargs.get('pk', ''):
+                return
+            prod = Product.objects.filter(id=kwargs.get('pk')).first()
+            if not prod:
+                return
+            request.session.update({'tracking_product_id': prod.id})
+            product_tracking_mapping_id = self.maintain_tracking_info(
+                prod)
+            if product_tracking_mapping_id != -1:
+                request.session.update(
+                    {'product_tracking_mapping_id': product_tracking_mapping_id})
+
+            request.session.update({'tracking_id': tracking_id})
+
+            if tracking_id and prod.id and product_tracking_mapping_id:
+                make_logging_request.delay(
+                    prod.id, product_tracking_mapping_id, tracking_id, 'product_page')
+
+        elif self.request.session.get('candidate_id') and \
+                request.sesion.get('tracking_product_id') and \
+                request.session.get('tracking_id') and \
+                kwargs.get('pk') == request.sesion.get('tracking_product_id'):
+            make_logging_request.delay(
+                request.sesion.get('tracking_product_id'), request.sesion.get('product_tracking_mapping_id'), request.session.get('tracking_id'), 'product_page')
+
+        root = request.GET.get('root')
+        mobile = request.GET.get('mobile')
         campaign = request.GET.get('utm_campaign')
         if root == 'interested_mail':
-            logging.getLogger('info_log').info('interested user clicked product "{}" having id-{}, mobile number is "{}", under campaign "{}"'.format(path_info.get('prd_slug'),path_info.get("pk", ""), mobile, campaign))
+            logging.getLogger('info_log').info('interested user clicked product "{}" having id-{}, mobile number is "{}", under campaign "{}"'.format(
+                path_info.get('prd_slug'), path_info.get("pk", ""), mobile, campaign))
 
         useragent = self.request.META['HTTP_USER_AGENT']
         if 'facebookexternalhit' not in useragent:
@@ -923,8 +995,8 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         pk = self.kwargs.get('pk')
         self.prd_key = 'detail_db_product_'+pk
         self.prd_solr_key = 'detail_solr_product_'+pk
-        cache_dbprd_maping=cache.get(self.prd_key, "")
-       #setting cache if product is not in dbcache
+        cache_dbprd_maping = cache.get(self.prd_key, "")
+       # setting cache if product is not in dbcache
         if cache_dbprd_maping:
             self.product_obj = cache_dbprd_maping
         else:
@@ -945,13 +1017,15 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
                 cache.set(self.prd_solr_key, self.sqs, 60 * 60 * 4)
             else:
                 raise Http404
-        if (self.sqs.pPc == 'writing' or self.sqs.pPc == 'service' or self.sqs.pPc == 'other') and self.sqs.pTP not in [2,4] and self.sqs.pTF not in [16,2]:
-            resume_shine_redirection = self.redirect_for_resume_shine(path_info)
+        if (self.sqs.pPc == 'writing' or self.sqs.pPc == 'service' or self.sqs.pPc == 'other') and self.sqs.pTP not in [2, 4] and self.sqs.pTF not in [16, 2]:
+            resume_shine_redirection = self.redirect_for_resume_shine(
+                path_info)
             return resume_shine_redirection
         if self.sqs.id in settings.LINKEDIN_RESUME_PRODUCTS:
             linkedin_cid = settings.LINKEDIN_DICT.get('CLIENT_ID', None)
             token = request.GET.get('token', '')
-            login_url = reverse('login') + '?next=' + request.get_full_path() + '&linkedin=true'
+            login_url = reverse('login') + '?next=' + \
+                request.get_full_path() + '&linkedin=true'
             if token and request.session.get('email'):
                 validate = LinkedinSeriviceMixin().validate_encrypted_key(
                     token=token,
@@ -960,7 +1034,8 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
                 if validate and linkedin_cid == request.session.get('linkedin_client_id', ''):
                     services = OrderItem.objects.filter(
                         order__status__in=[1, 3],
-                        order__candidate_id=request.session.get('candidate_id'),
+                        order__candidate_id=request.session.get(
+                            'candidate_id'),
                         product__id__in=settings.LINKEDIN_RESUME_PRODUCTS)
                     if services.exists():
                         return HttpResponseRedirect(reverse('dashboard:dashboard'))
@@ -1046,7 +1121,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
 #             expected_path = product.get_absolute_url(cat_slug)
 #             if expected_path != urlquote(current_path):
 #                 return HttpResponsePermanentRedirect(expected_path)
-    
+
 #     def return_http404(self, product):
 #         if not product:
 #             return True
@@ -1059,7 +1134,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
 #         if product.is_virtual:
 #             return True
 #         return False
-    
+
 #     def get(self, request, **kwargs):
 #         self.object = product = self.get_object()
 #         if product:
@@ -1102,7 +1177,8 @@ class ProductReviewListView(ListView, ProductInformationMixin):
                 self._product = Product.objects.get(
                     pk=self.kwargs['product_pk'])
             except Exception as e:
-                logging.getLogger('error_log').error('unable to get product object %s'%str(e))
+                logging.getLogger('error_log').error(
+                    'unable to get product object %s' % str(e))
                 pass
 
             if self._product:
@@ -1128,7 +1204,6 @@ class ProductReviewCreateView(CreateView):
         self.rating = None
         self.sel_rat = None
 
-
     def post(self, request, *args, **kwargs):
         """
         This method create reviews for individual product.
@@ -1145,7 +1220,8 @@ class ProductReviewCreateView(CreateView):
             if review_form.is_valid():
                 try:
                     self.product = Product.objects.get(pk=self.product_pk)
-                    contenttype_obj = ContentType.objects.get_for_model(self.product)
+                    contenttype_obj = ContentType.objects.get_for_model(
+                        self.product)
                     review_obj = Review.objects.filter(
                         object_id=self.product.id,
                         content_type=contenttype_obj,
@@ -1163,7 +1239,8 @@ class ProductReviewCreateView(CreateView):
                             name += ' ' + request.session.get('last_name')
                         product = self.product
                         email = request.session.get('email')
-                        content_type = ContentType.objects.get(app_label="shop", model="product")
+                        content_type = ContentType.objects.get(
+                            app_label="shop", model="product")
                         review_obj = Review.objects.create(
                             content_type=content_type,
                             object_id=product.id,
@@ -1174,7 +1251,8 @@ class ProductReviewCreateView(CreateView):
                             average_rating=rating,
                             title=title
                         )
-                        extra_content_obj = ContentType.objects.get(app_label="shop", model="product")
+                        extra_content_obj = ContentType.objects.get(
+                            app_label="shop", model="product")
 
                         review_obj.extra_content_type = extra_content_obj
                         review_obj.extra_object_id = self.product.id
@@ -1215,11 +1293,13 @@ class ProductReviewEditView(View):
             if review_form.is_valid():
                 review = request.POST.get('review', '').strip()
                 rating = int(request.POST.get('rating', 1))
-                title = request.POST.get('title','').strip()
+                title = request.POST.get('title', '').strip()
                 try:
                     product_obj = Product.objects.get(pk=product_pk)
-                    contenttype_obj = ContentType.objects.get_for_model(product_obj)
-                    review_obj = Review.objects.filter(object_id=product_obj.id, content_type=contenttype_obj, user_id=candidate_id).first()
+                    contenttype_obj = ContentType.objects.get_for_model(
+                        product_obj)
+                    review_obj = Review.objects.filter(
+                        object_id=product_obj.id, content_type=contenttype_obj, user_id=candidate_id).first()
 
                     # Setting status back to 0 for adding this review again to moderation list
                     if review_obj and review_obj.user_id == candidate_id:
@@ -1247,13 +1327,13 @@ class CourseCatalogueView(TemplateView, MetadataMixin, CourseCatalogueMixin):
     use_twitter = True
     twitter_site = True
     twitter_card = True
-    
+
     def get_meta_title(self, context=None):
         return 'Online Courses and Certifications : Free Online Education'
 
     def get_meta_description(self, context=None):
         return 'Join India\'s Largest E-Learning Online Courses and Education Platform. Get Certifications in Top Courses under Finance, IT, Analytics, Marketing and more'
-    
+
     def get_meta_url(self, context=None):
         return settings.MAIN_DOMAIN_PREFIX + '/online-courses.html'
 
@@ -1297,7 +1377,8 @@ class ProductDetailContent(View, ProductInformationMixin, CartMixin):
             cached_db_item = cache.get(db_key, "")
 
             if not cached_db_item:
-                self.product_obj = Product.browsable.filter(pk=self.obj_pk).first()
+                self.product_obj = Product.browsable.filter(
+                    pk=self.obj_pk).first()
                 cache.set(db_key, self.product_obj, 60*60*4)
 
             else:
@@ -1308,7 +1389,7 @@ class ProductDetailContent(View, ProductInformationMixin, CartMixin):
 
             db_key = 'detail_db_product_' + str(self.main_pk)
             cached_db_item = cache.get(db_key, "")
-            #setting cache if product is not in dbcache
+            # setting cache if product is not in dbcache
             if not cached_db_item:
                 self.product_main = Product.browsable.get(pk=self.main_pk)
                 cache.set(db_key, self.product_main, 60*60*4)
@@ -1350,7 +1431,7 @@ class ProductDetailContent(View, ProductInformationMixin, CartMixin):
                     request=request)
                 if self.product_obj.type_flow == 2:
                     skill = self.product_obj.productskills.filter(skill__active=True)\
-                        .values_list('skill__name',flat=True)[:3]
+                        .values_list('skill__name', flat=True)[:3]
                     skill = ",".join(skill)
                     data.update({'skills': skill})
 
@@ -1376,11 +1457,12 @@ class SkillToProductRedirectView(View):
             url_ro_rirect = '/search/results/?fvid=59'
         return HttpResponseRedirect(url_ro_rirect)
 
+
 class GoogleResumeAdView(View):
 
     def get(self, request, *args, **kwargs):
-        cat_slugs = ['resume-services','linkedin-profile']
-        countries = ['india','gulf']
+        cat_slugs = ['resume-services', 'linkedin-profile']
+        countries = ['india', 'gulf']
         country = kwargs.get('country', 'india')
         cat_slug = kwargs.get('cat_slug', 'resume-services')
         pre_register = self.request.GET.get('pre-register', "False")
@@ -1389,69 +1471,75 @@ class GoogleResumeAdView(View):
             raise Http404
         if country == "gulf":
             currency = "AED"
-            add_on_cost = {"cover_letter":"145","express_delivery":"145","s_express_delivery":"200"}
+            add_on_cost = {"cover_letter": "145",
+                           "express_delivery": "145", "s_express_delivery": "200"}
             if cat_slug == "resume-services":
-                service_cost = {"0_1exp":"250", "1_4exp":"400", "4_8exp":"575",
-                    "8_15exp":"735", "15_exp":"900"}
+                service_cost = {"0_1exp": "250", "1_4exp": "400", "4_8exp": "575",
+                                "8_15exp": "735", "15_exp": "900"}
                 template = 'shop/resume-ad-services.html'
                 site_slug = "linkedin-profile"
             elif cat_slug == "linkedin-profile":
-                service_cost = {"0_1exp":"300", "1_4exp":"450", "4_8exp":"600",
-                    "8_15exp":"750", "15_exp":"950"}
+                service_cost = {"0_1exp": "300", "1_4exp": "450", "4_8exp": "600",
+                                "8_15exp": "750", "15_exp": "950"}
                 template = 'shop/resume-ad-linkedin.html'
                 site_slug = "resume-services"
         elif country == "india":
             currency = "INR"
-            add_on_cost = {"cover_letter":"550","express_delivery":"1099","s_express_delivery":"1609"}
+            add_on_cost = {"cover_letter": "550",
+                           "express_delivery": "1099", "s_express_delivery": "1609"}
             if cat_slug == "resume-services":
-                service_cost = {"0_1exp":"1299", "1_4exp":"2199", "4_8exp":"2999",
-                    "8_15exp":"3999", "15_exp":"4999"}
+                service_cost = {"0_1exp": "1299", "1_4exp": "2199", "4_8exp": "2999",
+                                "8_15exp": "3999", "15_exp": "4999"}
                 template = 'shop/resume-ad-services.html'
                 site_slug = "linkedin-profile"
             elif cat_slug == "linkedin-profile":
-                service_cost = {"0_1exp":"2200", "1_4exp":"2500", "4_8exp":"3600",
-                    "8_15exp":"4600", "15_exp":"5600"}
+                service_cost = {"0_1exp": "2200", "1_4exp": "2500", "4_8exp": "3600",
+                                "8_15exp": "4600", "15_exp": "5600"}
                 template = 'shop/resume-ad-linkedin.html'
                 site_slug = "resume-services"
-        site_link = '{}/services/{}/{}/?pre-register={}'.format(settings.MAIN_DOMAIN_PREFIX, site_slug, country, str(pre_register))
+        site_link = '{}/services/{}/{}/?pre-register={}'.format(
+            settings.MAIN_DOMAIN_PREFIX, site_slug, country, str(pre_register))
         content = {
-            "currency" : currency,
-            "country" : country,
-            "site_link" : site_link,
-            "service_cost" : service_cost,
-            "country" : country,
-            "pre_register" : bool(eval(pre_register)),
-            "experience_range" : range(0,16),
-            "add_on_cost" : add_on_cost,
-            "crm_lead_link" : '{}/api/v1/googleAd-lead-creation/'.format(settings.SHINECPCRM_DICT.get('base_url')) 
+            "currency": currency,
+            "country": country,
+            "site_link": site_link,
+            "service_cost": service_cost,
+            "country": country,
+            "pre_register": bool(eval(pre_register)),
+            "experience_range": range(0, 16),
+            "add_on_cost": add_on_cost,
+            "crm_lead_link": '{}/api/v1/googleAd-lead-creation/'.format(settings.SHINECPCRM_DICT.get('base_url'))
         }
         return render(request, template, context=content)
-        
+
+
 class SmsUrlRedirect(View):
 
     def get(self, request, *args, **kwargs):
-        url_id = int(kwargs.get('url_id',1))
+        url_id = int(kwargs.get('url_id', 1))
         encoded_mobile = kwargs.get('encoded_mobile', '')
 
         if not encoded_mobile:
             return HttpResponsePermanentRedirect(settings.MAIN_DOMAIN_PREFIX)
 
         mobile = int(encoded_mobile, 16)
-        logging.getLogger('info_log').info("SMS link was opened by mobile number- {}".format(mobile))
+        logging.getLogger('info_log').info(
+            "SMS link was opened by mobile number- {}".format(mobile))
         url = SMS_URL_LIST.get(url_id, '')
         if not url:
             return HttpResponsePermanentRedirect(settings.MAIN_DOMAIN_PREFIX)
         return HttpResponsePermanentRedirect(url)
 
+
 class AnalyticsVidhyaProductView(TemplateView):
     template_name = 'shop/analytics-vidhya.html'
 
     def get_context_data(self, **kwargs):
-        context = super(AnalyticsVidhyaProductView, self).get_context_data(**kwargs)
+        context = super(AnalyticsVidhyaProductView,
+                        self).get_context_data(**kwargs)
         context.update({
-            "campaign_slug" : "analvid",
-            "initial_country" : "91",
-            "av_enroll_now" : True
+            "campaign_slug": "analvid",
+            "initial_country": "91",
+            "av_enroll_now": True
         })
         return context
-
