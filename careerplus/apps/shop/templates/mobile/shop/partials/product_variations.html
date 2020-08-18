@@ -23,7 +23,7 @@
                                 data-price="{{vars.inr_price}}" data-id="{{vars.id}}" 
                                 data-actual-price="{% if vars.fake_inr_price %} {{vars.fake_inr_price}}{% else %}{{vars.inr_price}}{% endif %}" id="pro{{vars.id}}">
                                 <label for="pro{{vars.id}}">
-                                    <table class="table fs-10">
+                                    <table class="table fs-10" onclick="handleTracking('study_mode_and_access_duration')">
                                         <tr>
                                             <td>Study mode</td>
                                             <td>{{vars.mode|get_choice_display:"STUDY_MODE"}}</td>
@@ -61,7 +61,7 @@
                                 data-price="{{vars.inr_price}}" data-id="{{vars.id}}" 
                                 data-actual-price="{% if vars.fake_inr_price %} {{vars.fake_inr_price}}{% else %}{{vars.inr_price}}{% endif %}" id="pro{{vars.id}}">
                                 <label for="pro{{vars.id}}">
-                                    <table class="table fs-10">
+                                    <table class="table fs-10" onclick="handleTracking('study_mode_and_access_duration')">
                                         <tr>
                                             <td>Study mode</td>
                                             <td>{{vars.mode|get_choice_display:"STUDY_MODE"}}</td>
@@ -108,7 +108,12 @@
             {% for service in var_list %}
                 {% if forloop.counter0|divisibleby:"2" %}
                     <div class="ui-block-a">
-                        <input type="checkbox" id="pro{{forloop.counter}}" data-id="{{service.id}}" name="required_option" data-price="{{service.inr_price}}" actual-price="{% if service.fake_inr_price %} {{service.fake_inr_price|floatformat}}{% else %}{{service.inr_price|floatformat}}{% endif %}">
+                        <input type="checkbox" id="pro{{forloop.counter}}" 
+                        data-id="{{service.id}}" name="required_option" 
+                        data-price="{{service.inr_price}}" 
+                        onclick="handleTracking('selected_products')"
+                        actual-price="{% if service.fake_inr_price %} {{service.fake_inr_price|floatformat}}{% else %}{{service.inr_price|floatformat}}{% endif %}"
+                        >
                         <label for="pro{{forloop.counter}}">
                             <p class="pb-5">{{service.label}}</p>
                             <strong>Rs. {{service.inr_price|floatformat}}/-</strong>

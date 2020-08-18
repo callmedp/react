@@ -219,8 +219,8 @@ function updateUnCheckedPrice(this_obj) {
 
 function toggler(divId, divToHide) {
     $("#" + divId).toggle();
-    if($('#'+divToHide).is(':visible')) {
-        $('#'+divToHide).toggle();
+    if ($('#' + divToHide).is(':visible')) {
+        $('#' + divToHide).toggle();
     }
 }
 
@@ -321,13 +321,25 @@ function cartScroller() {
         var $recommendProductDiv = $('.recomend-product-bg');
         if ($recommendProductDiv.length && item.length) {
             if (item.offset().top + height > $recommendProductDiv.offset().top - 50) {
-                item.css({'visibility': 'hidden'})
+                item.css({ 'visibility': 'hidden' })
             } else {
-                item.css({'visibility': 'visible'});
+                item.css({ 'visibility': 'visible' });
             }
         }
     });
 }
+
+
+function handleTracking(action) {
+    console.log('Tracking fetch : ', action);
+}
+
+function trackClickEvent() {
+    // exit product page handling 
+    console.log('Tracking footer : exit_product');
+}
+
+
 
 $(document).ready(function () {
 
@@ -577,7 +589,7 @@ $(document).ready(function () {
         $('#add-to-cart').attr('disabled', true);
 
         var prod_id = $('#add-to-cart').attr('prod-id');
-        ga('send', 'event', 'Buy Flow', 'Enroll Now',prod_id);
+        ga('send', 'event', 'Buy Flow', 'Enroll Now', prod_id);
         // required options ie. for countries and product varification
 
         var req_options = [];
@@ -660,7 +672,7 @@ $(document).ready(function () {
     $(document).on("click", "#enrol-now-button", function (e) {
         e.preventDefault();
         var prod_id = $('#enrol-now-button').attr('prod-id');
-        ga('send', 'event', 'Buy Flow', 'Enroll Now',prod_id);
+        ga('send', 'event', 'Buy Flow', 'Enroll Now', prod_id);
 
         var req_options = [];
         if ($('input[name="required_option"]').length) {

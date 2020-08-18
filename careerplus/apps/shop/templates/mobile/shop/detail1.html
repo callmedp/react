@@ -271,7 +271,7 @@
                 <ul class="underline">
                 {% for provider in pop_list|slice:"0:4" %}
                     <li>
-                        <a href="{{provider.url}}" for="test1" onclick="handleTracking('other_providers')">
+                        <a href="{{provider.url}}" for="test1" onclick="handleTracking('exit_product_page');handleTracking('other_providers')">
                             <span>
                                 <img aria-label="provider image" src="{{provider.vendor.image.url}}" style="z-index: 10;">
                                 {{provider.vendor}} - {{provider.heading}} (Rs.{{provider.inr_price|floatformat:"0"}})
