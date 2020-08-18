@@ -35,3 +35,42 @@
     padding-right: 15px;
   }
 }
+
+
+.related-article-new {
+
+  &__list {
+    display: flex;
+    margin: 0 -10px;
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 15px;
+
+    &--item {
+      flex: 0 0 230px;
+      padding: 10px;
+    }
+
+    &--box {
+      border-radius: 4px;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba($bg-black, .1);
+    }
+
+    &--content {
+      padding: 15px;
+    }
+  }
+
+  .heading-article {
+    height: 60px;
+
+    a {
+      color: $txt-grey-666;
+      text-decoration: none !important;
+    }
+  }
+
+  
+}

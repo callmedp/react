@@ -85,7 +85,6 @@
 
 {% if main_article.allow_comment %}
 <p class="take-me pb-0 mt-10" onclick="openCommentBox('{{main_article.id}}', 2)" id="total_comment{{main_article.id}}">
-    <span class="line"><sup></sup></span>
     <span class="icon-chat"></span>{% if main_article.comment_moderated > 0 %}{{main_article.comment_moderated}} comments{% else %}Tap to Comment {% endif %}
 </p>
 <div id="comment-box{{main_article.id}}" ></div>
