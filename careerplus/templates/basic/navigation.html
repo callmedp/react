@@ -8,7 +8,7 @@
     <button type="button" class="close" id = "sticky_close" data-dismiss="alert" aria-label="Close">
       <span aria-hidden="true" onclick="gaOffer_popup_close()">&times;</span>
     </button>
-    <div data-toggle="modal" data-target="#offerModal" onclick="gaOffer_popup()">{{sticky_text}}- <strong>{{offer_value}}</strong>   |   Ends in <span id = 'sticky_timer'></span> - <a href="javascript:void(0)" id = 'offer-timer'>Enroll Now!</a></div>
+    <div data-toggle="modal" data-target="#offerModal" onclick="gaOffer_popup(); openAlert()">{{sticky_text}}- <strong>{{offer_value}}</strong>   |   Ends in <span id = 'sticky_timer'></span> - <a href="javascript:void(0)" id = 'offer-timer'>Enroll Now!</a></div>
   </div>
   {% endif %}
   <div class="container-fluid">
@@ -382,11 +382,6 @@
     function gaPopup_close() {ga('send', 'event', 'Homepage Banner', 'Popup-close', 'Offer Popup')}
     function gaForm_fill() {ga('send', 'event', 'Homepage Banner', 'Popup-Form-Attempt', 'Offer Popup')}
     
-    function sticky_timer(days, hours, minutes, seconds){
-      $('#sticky_timer').text(days + 'd : ' + hours + 'h : ' + minutes + 'm : ' + seconds + 's');
-      return;
-    }
-    
     // Update the count down every 1 second
     var timer = setInterval(function() {
       // Get today's date and time
@@ -401,17 +396,21 @@
       minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
       seconds = Math.floor((distance % (1000 * 60)) / 1000);
       
-      $("#product_offer_top").show();
-      
-      sticky_timer(days, hours, minutes, seconds);
-      document.getElementById('addCounter').innerHTML = '<span class="days">' + days + '</span><span class="hours">' + hours + '</span><span class="min">' + minutes + '</span><span class="sec">' + seconds + '</span>';
-      
       // If the count down is over, write some text 
       if (distance < 0) {
         clearInterval(timer);
         $("#product_offer_top").hide();
       }
+      else {
+        $("#product_offer_top").show();
+        
+        $('#sticky_timer').text(days + 'd : ' + hours + 'h : ' + minutes + 'm : ' + seconds + 's');
+      }
     }, 1000);
+    
+    openAlert = function() {
+      document.getElementById('addCounter').innerHTML = '<span class="days">' + days + '</span><span class="hours">' + hours + '</span><span class="min">' + minutes + '</span><span class="sec">' + seconds + '</span>';
+    }
   </script>
   
   <!-- Modal Offer -->
