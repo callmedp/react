@@ -440,6 +440,7 @@ class WriterInvoiceMixin(object):
             self.added_base_object.append(pk)
 
             p_oi_dict.update({
+                "order_id": p_oi.order.id,
                 "item_id": pk,
                 "product_name": product_name,
                 "closed_on": closed_on,
@@ -459,6 +460,7 @@ class WriterInvoiceMixin(object):
                     amount = SUPER_EXPRESS
                 product_name = p_oi.product.get_name + ' - ' + p_oi.delivery_service.name
                 d_dict = {
+                    "order_id": p_oi.order.id,
                     "item_id": p_oi.pk,
                     "product_name": product_name,
                     "closed_on": closed_on,
@@ -477,6 +479,7 @@ class WriterInvoiceMixin(object):
         amount = self.country_specific_dict.get(self.user_type)
 
         oi_dict.update({
+            "order_id": oi.order.id,
             "item_id": pk,
             "product_name": product_name,
             "closed_on": closed_on,
@@ -532,6 +535,7 @@ class WriterInvoiceMixin(object):
 
         if process:
             oi_dict = {
+                "order_id": oi.order.id,
                 "item_id": pk,
                 "product_name": product_name,
                 "closed_on": closed_on,
@@ -612,6 +616,7 @@ class WriterInvoiceMixin(object):
             oi_combo_discount += combo_discount
 
         oi_dict = {
+            "order_id": oi.order.id,
             "item_id": pk,
             "product_name": product_name,
             "closed_on": closed_on,
@@ -636,6 +641,7 @@ class WriterInvoiceMixin(object):
                 amount = SUPER_EXPRESS
             product_name = oi.product.get_name + ' - ' + oi.delivery_service.name
             d_dict = {
+                "order_id": oi.order.id,
                 "item_id": oi.pk,
                 "product_name": product_name,
                 "closed_on": oi.closed_on.date(),
@@ -713,6 +719,7 @@ class WriterInvoiceMixin(object):
             no_process_combo_discount += combo_discount
 
         oi_dict = {
+            "order_id": oi.order.id,
             "item_id": pk,
             "product_name": product_name,
             "closed_on": closed_on,
@@ -731,6 +738,7 @@ class WriterInvoiceMixin(object):
                 amount = SUPER_EXPRESS
             product_name = oi.product.get_name + ' - ' + oi.delivery_service.name
             d_dict = {
+                "order_id": oi.order.id,
                 "item_id": oi.pk,
                 "product_name": product_name,
                 "closed_on": closed_on,

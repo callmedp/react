@@ -78,6 +78,7 @@
 
     <tr>
       <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0; width:5%"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">S.No</span></td>
+      <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0; width:5%"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">Order Id</span></td>
       <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0; width:15%"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">Item Id</span></td>
       <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0; width:40%"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">Product Name</span></td>
       <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; width:10%">Closed On</span></td>
@@ -89,6 +90,9 @@
 
     <tr>
       <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;" width="5%"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">{{forloop.counter}}</span></td>
+            <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;word-break: break-all;"
+              width="40%"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">{{oi.order_id}}</span></td>
+
       <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;" width="15%">{% if oi.item_type == 'older' %}<span style="color:red; float:left;">* </span>{% endif %}<span style="display: block; margin:0; padding:3px 0 3px 5px; ">{{oi.item_id}}</span></td>
       <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;word-break: break-all;" width="40%"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">{{oi.product_name}}</span></td>
       <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;" width="10%"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">{{oi.closed_on|date:"d M Y"}}</span></td>
@@ -158,6 +162,7 @@
     <table width="100%" border="0" cellspacing="0" cellpadding="0" style="border: solid 1px #000; width: 90%;margin-right: 5px; padding: 0;">
     <tr>
       <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">S.No</span></td>
+      <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">Order Id</span></td>
       <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">Order Item Id</span></td>
       <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">Product Name</span></td>
       <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">Closure Date</span></td>
@@ -167,6 +172,8 @@
     {% for oi in item_list %}
     <tr>
       <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">{{forloop.counter}}</span></td>
+            <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span
+                style="display: block; margin:0; padding:3px 0 3px 5px; ">{{oi.order_id}}</span></td>
       <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;">{% if oi.item_type == 'older' %}<span style="color:red; float:left;">* </span>{% endif %}<span style="display: block; margin:0; padding:3px 0 3px 5px; ">{{oi.item_id}}</span></td>
       <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">{{oi.product_name}}</span></td>
       <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">{{oi.closed_on|date:"d M Y"}}</span></td>
@@ -179,6 +186,8 @@
     {% for oi in "aksjjkasakaskdjl" %}
     <tr>
       <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">{{forloop.counter}}</span></td>
+            <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span
+                style="display: block; margin:0; padding:3px 0 3px 5px; ">{{oi.order_id}}</span></td>
       <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;">{% if oi.item_type == 'older' %}<span style="color:red; float:left;">* </span>{% endif %}<span style="display: block; margin:0; padding:3px 0 3px 5px; ">{{oi.item_id}}</span></td>
       <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">{{oi.product_name}}</span></td>
       <td style="padding:0;border-bottom: solid 1px #000;border-right: solid 1px #000; margin:0;"><span style="display: block; margin:0; padding:3px 0 3px 5px; ">{{oi.closed_on|date:"d M Y"}}</span></td>
