@@ -441,6 +441,7 @@ class SkillProductView(APIView):
             data_dict.update ({'id' : prod.id , 'heading' : prod.get_heading () , 'title' : prod.get_title () ,
                                'url' : prod.get_url () ,
                                'icon' : prod.get_icon_url () , 'about' : prod.get_about () ,
+                               'img_url':prod.image.url if prod.image else '',
                                'inr_price' : prod.get_price () ,
                                'fake_inr_price' : prod.fake_inr_price , 'attribute' : prod.get_assessment_attribute () ,
                                'vendor' : prod.vendor_id})
