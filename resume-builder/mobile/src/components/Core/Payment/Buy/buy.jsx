@@ -14,7 +14,7 @@ import { eventClicked } from '../../../../store/googleAnalytics/actions/index'
 import { loginCandidate } from "../../../../store/landingPage/actions";
 import { apiError } from '../../../../Utils/apiError.js';
 import AlertModal from '../../../Common/AlertModal/alertModal';
-import * as lscache from '../../../../../node_modules/lscache/lscache';
+// import * as lscache from '../../../../../node_modules/lscache/lscache';
 import {Helmet} from "react-helmet";
 import propTypes from 'prop-types';
 
@@ -201,7 +201,7 @@ class Buy extends Component {
                 <div className="buy-container">
                 <Helmet
                 script={[
-                    {"src": (lscache.get('chatbotScript') ? lscache.get('chatbotScript') : null), "type": "text/javascript"}
+                    {"src": (localStorage.getItem('script_link') ? localStorage.getItem('script_link') : null), "type": "text/javascript"}
                 ]}
                 />
                 <Header page={"buy"} history={history} />

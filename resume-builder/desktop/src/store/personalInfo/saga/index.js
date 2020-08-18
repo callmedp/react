@@ -9,7 +9,6 @@ import moment from 'moment'
 import { SubmissionError } from 'redux-form'
 import { Toast } from "../../../services/ErrorToast";
 import { UPDATE_UI } from "../../ui/actions/actionTypes";
-import * as lscache from '../../../../node_modules/lscache/lscache';
 
 const genderDict = {
     '0': {
@@ -240,16 +239,32 @@ function* getComponentTitle(action) {
     }
 }
 
+
 function* getChatBotUrl() {
+    var hours = 1; // Reset when storage is more than 24hours
+    var now = new Date().getTime();
+    var setupTime = localStorage.getItem('setupTime');
+    
     try {
         const result = yield call(Api.getChatBotUrl);
-        // console.log(result['data']['script_link']);
         
-        if(result['data']['script_link'] != "script not available") {
-            lscache.set('chatbotScript',result['data']['script_link'], 1440);
+        if (setupTime == null) {
+            if(result['data']['script_link'] != "script not available") {
+                localStorage.setItem('script_link', result['data']['script_link'])
+                localStorage.setItem('setupTime', now);
+            }
         }
-        lscache.flushExpired();
-    } catch (e) {
+        else {
+            if(now-setupTime > hours*60*60*1000) {
+                localStorage.clear();
+                if(result['data']['script_link'] != "script not available") {
+                    localStorage.setItem('script_link', result['data']['script_link'])
+                    localStorage.setItem('setupTime', now);
+                }
+            }
+        }
+    }
+    catch (e) {
         console.log(e);
     }
 }

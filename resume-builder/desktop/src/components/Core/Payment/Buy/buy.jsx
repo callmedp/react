@@ -28,7 +28,7 @@ import { loginCandidate } from "../../../../store/landingPage/actions";
 import { Toast } from '../../../../services/ErrorToast';
 import propTypes from 'prop-types';
 import {Helmet} from "react-helmet";
-import * as lscache from '../../../../../node_modules/lscache/lscache';
+// import * as lscache from '../../../../../node_modules/lscache/lscache';
 
 export class Buy extends Component {
     constructor(props) {
@@ -234,7 +234,7 @@ export class Buy extends Component {
                     <div>
                     <Helmet
                     script={[
-                        {"src": (lscache.get('chatbotScript') ? lscache.get('chatbotScript') : null), "type": "text/javascript"}
+                        {"src": (localStorage.getItem('script_link') ? localStorage.getItem('script_link') : null), "type": "text/javascript"}
                     ]}
                     />
                     <Header userName={first_name}

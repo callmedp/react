@@ -23,7 +23,7 @@ import { siteDomain } from "../../../../Utils/domains";
 import AlertModal from '../../../Common/AlertModal/alertModal.jsx';
 import { eventClicked } from '../../../../store/googleAnalytics/actions/index'
 import { formCategoryList } from '../../../../Utils/formCategoryList'
-import * as lscache from '../../../../../node_modules/lscache/lscache';
+// import * as lscache from '../../../../../node_modules/lscache/lscache';
 import {Helmet} from "react-helmet";
 import propTypes from 'prop-types';
 
@@ -258,7 +258,7 @@ class Preview extends Component {
             <div className="preview">
             <Helmet
             script={[
-                {"src": (lscache.get('chatbotScript') ? lscache.get('chatbotScript') : null), "type": "text/javascript"}
+                {"src": (localStorage.getItem('script_link') ? localStorage.getItem('script_link') : null), "type": "text/javascript"}
             ]}
             />
             <Header page={'preview'} {...this.props} order_data={order_data} eventClicked={eventClicked} />

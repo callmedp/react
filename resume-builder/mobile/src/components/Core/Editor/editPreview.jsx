@@ -15,7 +15,7 @@ import {formCategoryList} from '../../../Utils/formCategoryList'
 import Swal from 'sweetalert2'
 import { siteDomain } from '../../../Utils/domains';
 import {Helmet} from "react-helmet";
-import * as lscache from '../../../../node_modules/lscache/lscache';
+// import * as lscache from '../../../../node_modules/lscache/lscache';
 import propTypes from 'prop-types';
 
 class EditPreview extends Component {
@@ -128,7 +128,7 @@ render() {
         <div className="edit-section">
         <Helmet
         script={[
-            {"src": (lscache.get('chatbotScript') ? lscache.get('chatbotScript') : null), "type": "text/javascript"}
+            {"src": (localStorage.getItem('script_link') ? localStorage.getItem('script_link') : null), "type": "text/javascript"}
         ]}
         />
         {mainloader ? <Loader/> : ""}
