@@ -193,7 +193,7 @@ function* updateEntityPreference(action) {
 }
 
 function* getChatBotUrl() {
-    var hours = 1; // Reset when storage is more than 24hours
+    var hours = 24; // Reset when storage is more than 24hours
     var now = new Date().getTime();
     var setupTime = localStorage.getItem('setupTime');
     
