@@ -4,6 +4,7 @@
     <form id="blog-comment-form{{article.id}}">
         {% csrf_token %}
         <div class="form-group">
+            <p class="logged-in">You need to be <a href="#" class="font-weight-bold">logged in</a> to post a comment</p>
             <textarea class="form-control" placeholder="Your comment" rows="3" id="id_comment{{article.id}}" name="message"></textarea>
         </div>
         <input type="hidden" id="id_slug" name="slug" value="{{article.slug}}">
