@@ -149,11 +149,11 @@
                         </li>
 
                         <li>
-                            <a class="btn btn-yellow w100fl" id="enrol-now-button" href="//{{ SITE_DOMAIN }}{{canonical_url}}?type=autoEnrol">Enroll now</a>
+                            <a class="btn btn-yellow w100fl" id="enrol-now-button" href="//{{ SITE_DOMAIN }}{{canonical_url}}?type=autoEnrol" onclick="handleTracking('enroll_now')" >Enroll now</a>
                         </li>
 
                         <li>
-                            <a class="btn btn-outline w100fl" id="add-to-cart" href="//{{ SITE_DOMAIN }}{{canonical_url}}?type=autoCart">Add to cart</a>
+                            <a class="btn btn-outline w100fl" id="add-to-cart" href="//{{ SITE_DOMAIN }}{{canonical_url}}?type=autoCart" onclick="handleTracking('add_to_cart')">Add to cart</a>
                         </li>
                     </ul>
                 </div>
@@ -306,12 +306,12 @@
       </div><!-- Login widgets Ends here -->
       <nav>
         <ul class="sb-menu">
-          <li><a href="/"><span class="icon-home"></span>Home</a></li>
-          <li><a href="/talenteconomy/" class="cls_eventtrack" data-category="TELINK" data-action="Menu" data-label="learning.shine"><span class="icon-talentEco"></span>Talent Economy</a></li>
-          <li><a href="/cms/resume-format/1/"><span class="icon-sample"></span>Free samples</a></li>
-          <li><a href="{% url "blog:blog-landing"%}">Blog</a></li>
-          <li><a href="/about-us">About us</a></li>
-          <li><a href="/contact-us">Contact us</a></li>
+          <li><a href="/" onclick="trackClickEvent()"><span class="icon-home"></span>Home</a></li>
+          <li><a href="/talenteconomy/" class="cls_eventtrack" data-category="TELINK" data-action="Menu" data-label="learning.shine" onclick="trackClickEvent()"><span class="icon-talentEco"></span>Talent Economy</a></li>
+          <li><a href="/cms/resume-format/1/" onclick="trackClickEvent()"><span class="icon-sample"></span>Free samples</a></li>
+          <li><a href="{% url "blog:blog-landing"%}" onclick="trackClickEvent()">Blog</a></li>
+          <li><a href="/about-us" onclick="trackClickEvent()">About us</a></li>
+          <li><a href="/contact-us" onclick="trackClickEvent()">Contact us</a></li>
         </ul>
         </nav><!-- Main Menu list Ends here -->
     </amp-sidebar>
