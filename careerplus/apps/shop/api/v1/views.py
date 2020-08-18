@@ -35,7 +35,7 @@ from skillpage.api.v1.serializers import LoadMoreSerializerSolr
 from shared.rest_addons.pagination import LearningCustomPagination
 from shared.rest_addons.mixins import FieldFilterMixin
 from review.models import Review
-from partner.models import Certificate
+from partner.models import Certificate,ProductSkill
 
 
 # 3rd party imports
@@ -407,8 +407,6 @@ class SkillProductView(APIView):
     authentication_classes = ()
     permission_classes = ()
 
-
-
     def get_product_from_skill(self,skill=[]):
         if not skill:
             return []
@@ -429,11 +427,10 @@ class SkillProductView(APIView):
         }
 
         if isinstance(skill,list):
-            product_id = ProductSkill.objects.filter(skill__slug__in=skill,active=True).values_list('product_id',
-                                                                                                      flat=True)
+            product_id = ProductSkill.objects.filter(skill__slug__in=skill).values_list('product_id',flat=True)
 
         else:
-            product_id = ProductSkill.objects.filter(skill__slug=skill,active=True).values_list('product_id', flat=True)
+            product_id = ProductSkill.objects.filter(skill__slug=skill).values_list('product_id',flat=True)
 
         products = Product.objects.filter(id__in=product_id,**filter_dict)
 
