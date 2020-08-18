@@ -39,3 +39,10 @@ const homepageTracking = (action) => {
         makeTrackingRequest(loggingData);
     }
 }
+
+const trackClickEvent = () => {
+    let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'exit_home_page', 'position': 1, domain: 2, sub_product: trackingProductId };
+    if (trackingId) {
+        makeTrackingRequest(loggingData);
+    }
+}
