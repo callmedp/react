@@ -889,7 +889,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             lead_source = PRODUCT_SOURCE_MAPPING.get(prod.product_class.slug, 0)
             slug_source = dict(DEFAULT_SLUG_SOURCE)
             utm_params = self.request.GET.get('utm',{})
-            campaign_slug = self.request.GET.get('utm_campaign',slug_source.get(int(lead_source)))
+            campaign_slug = self.request.GET.get('utm_content',slug_source.get(int(lead_source)))
             sub_campaign = self.request.GET.get('subcampaign','')
 
             data_dict = {
