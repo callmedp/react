@@ -916,6 +916,8 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             return 9
 
     def get(self, request, **kwargs):
+        from payment.tasks import make_logging_request
+
         path_info = kwargs
         tracking_id = request.GET.get('t_id', '')
         if self.request.GET.get('lc') and self.request.session.get('candidate_id'):
@@ -952,8 +954,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
                     'error in updating session for product lead drop out {}'.format(data_dict))
 
         if tracking_id and self.request.session.get('candidate_id'):
-            from payment.tasks import make_logging_request
-
+            
             if not kwargs.get('pk', ''):
                 return
             prod = Product.objects.filter(id=kwargs.get('pk')).first()
@@ -978,6 +979,27 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
                 kwargs.get('pk') == request.sesion.get('tracking_product_id'):
             make_logging_request.delay(
                 request.sesion.get('tracking_product_id'), request.sesion.get('product_tracking_mapping_id'), request.session.get('tracking_id'), 'product_page')
+        elif self.request.session.get('candidate_id') and \
+                request.session.get('tracking_id') and \
+                not request.sesion.get('tracking_product_id'):
+            if not kwargs.get('pk', ''):
+                return
+            prod = Product.objects.filter(id=kwargs.get('pk')).first()
+            if not prod:
+                return
+            request.session.update({'tracking_product_id': prod.id})
+            product_tracking_mapping_id = self.maintain_tracking_info(
+                prod)
+            if product_tracking_mapping_id != -1:
+                request.session.update(
+                    {'product_tracking_mapping_id': product_tracking_mapping_id})
+            
+            tracking_id = request.session.get('tracking_id','');
+            
+            if tracking_id and prod.id and product_tracking_mapping_id:
+                make_logging_request.delay(
+                    prod.id, product_tracking_mapping_id, tracking_id, 'product_page')
+
 
         root = request.GET.get('root')
         mobile = request.GET.get('mobile')

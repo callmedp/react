@@ -14,6 +14,7 @@ from shop.models import ProductClass, FunctionalArea, Skill
 from search.helpers import get_recommendations,get_recommended_products
 from core.library.haystack.query import SQS
 from core.api_mixin import ShineCandidateDetail
+
 from geolocation.models import Country
 from meta.views import MetadataMixin
 from .models import TopTrending, Testimonial,TrendingProduct
@@ -28,6 +29,21 @@ class HomePageView(TemplateView, MetadataMixin):
     use_title_tag = False
     use_og = True
     use_twitter = False
+
+    def get_params(self):
+        tracking_id = self.request.GET.get('t_id', '')
+        product_tracking_mapping_id = self.request.GET.get('t_id', '')
+        if tracking_id and self.request.session.get('candidate_id'): 
+            from payment.tasks import make_logging_request
+            self.request.session.update({
+                'tracking_id': tracking_id,
+                'product_tracking_mapping_id': product_tracking_mapping_id
+            })
+            make_logging_request.delay(
+                '', product_tracking_mapping_id, tracking_id, 'home_page')
+        return None
+
+
     
     def get_meta_title(self, context):
         # return 'Best Resume Writing Services | Online Courses | Linkedin Profile - Shine Learning'
@@ -46,6 +62,7 @@ class HomePageView(TemplateView, MetadataMixin):
     def get_job_assistance_services(self):
         job_services = []
         job_asst_view_all = None
+        
         try:
 
             tjob = TopTrending.objects.filter(
@@ -207,6 +224,7 @@ class HomePageView(TemplateView, MetadataMixin):
         context.update(self.get_job_assistance_services())
         context.update(self.get_courses())
         context.update(self.get_testimonials())
+        self.get_params()
         context['meta'] = self.get_meta()
         context['remove_nav_search'] = True
         context['offer_home'] = True
