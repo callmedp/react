@@ -63,3 +63,29 @@ const timer = setInterval(function() {
     popup_timer(days, hours, minutes, seconds)
 }, 1000);
 });
+
+
+const makeTrackingRequest = (loggingData) => {
+
+    $.ajax({
+        method: "POST",
+        url: `${shineApiUrl}/learning-touchpoints-tracking/`,
+        data: JSON.stringify(loggingData),
+        contentType: "application/json",
+    })
+}
+
+const homepageTracking = (action) => {
+    console.log("homepage tracking on")
+    let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: action, 'position': 1, domain: 2, sub_product: trackingProductId };
+    if (trackingId) {
+        makeTrackingRequest(loggingData);
+    }
+}
+
+const trackClickEvent = () => {
+    let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'exit_home_page', 'position': 1, domain: 2, sub_product: trackingProductId };
+    if (trackingId) {
+        makeTrackingRequest(loggingData);
+    }
+}
