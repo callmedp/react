@@ -6,6 +6,9 @@ from django.core.cache import cache
 from django.core.exceptions import PermissionDenied
 from django.views.decorators.csrf import csrf_protect
 from django.utils.decorators import method_decorator
+from django.utils.text import slugify  
+from django.conf import settings
+
 
 
 # local imports
@@ -20,8 +23,7 @@ from django.contrib.contenttypes.models import ContentType
 from .tasks import delete_from_solr, update_practice_test_info
 
 # interapp imports
-from shop.models import (Product, ProductScreen, PracticeTestInfo, 
-                    Skill, FunctionalArea)
+from shop.models import (Product, ProductScreen, PracticeTestInfo, Skill, FunctionalArea,ProductSkill)
 from shared.permissions import HasGroupOrHasPermissions
 from shop.api.core.permissions import IsVendorAssociated
 from shared.rest_addons.mixins import FieldFilterMixin
@@ -33,7 +35,7 @@ from skillpage.api.v1.serializers import LoadMoreSerializerSolr
 from shared.rest_addons.pagination import LearningCustomPagination
 from shared.rest_addons.mixins import FieldFilterMixin
 from review.models import Review
-from django.conf import settings
+from partner.models import Certificate
 
 
 # 3rd party imports
@@ -382,3 +384,138 @@ class ProductReview(APIView):
                 return Response({'error':'Something went Wrong'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         except:
             return Response({'error' : 'Something went Wrong'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+
+class SkillProductView(APIView):
+
+    """
+     Params  to be added 
+     
+     1) cert=1,2,3    [ comma separated certificate id to get the product according to certificate skill]
+     
+     2) skills = [ comma separated skills name or slug to get the product according to skills ]
+     
+     3) assessment = [Add this params as true or 1 to get the assessment type products]
+    
+     EX:= /api/v1/skill-product/?skills=java,javascript or
+     /api/v1/skill-product/?cert=221,220&assessment=true
+
+
+    """
+
+    authentication_classes = ()
+    permission_classes = ()
+
+
+
+    def get_product_from_skill(self,skill=[]):
+        if not skill:
+            return []
+        filter_dict = {'active':True,'is_indexed':True,'is_indexable':True}
+        product_id = None
+        assessment = self.request.GET.get('assessment')
+        if assessment:
+            filter_dict.update({'type_flow':16})
+        WhatYouGet = {
+            'testpreptraining':[
+            "Receive valuable feedback, from reliable exam reports, on your strong and weak areas",
+            "Get real exam and practice environment",
+            "In depth and exhaustive explanation to every question to enhance your learning",
+                "Unlimited access to the assessment platform",
+                "500+ questions to test your learning on variety of topics",
+                "Gets Tips & Tricks to crack the test",
+            ],
+        }
+
+        if isinstance(skill,list):
+            product_id = ProductSkill.objects.filter(skill__slug__in=skill,active=True).values_list('product_id',
+                                                                                                      flat=True)
+
+        else:
+            product_id = ProductSkill.objects.filter(skill__slug=skill,active=True).values_list('product_id', flat=True)
+
+        products = Product.objects.filter(id__in=product_id,**filter_dict)
+
+        data = []
+
+        for prod in products:
+            data_dict = {}
+            data_dict.update ({'id' : prod.id , 'heading' : prod.get_heading () , 'title' : prod.get_title () ,
+                               'url' : prod.get_url () ,
+                               'icon' : prod.get_icon_url () , 'about' : prod.get_about () ,
+                               'inr_price' : prod.get_price () ,
+                               'fake_inr_price' : prod.fake_inr_price , 'attribute' : prod.get_assessment_attribute () ,
+                               'vendor' : prod.vendor_id})
+            if prod.type_flow == 16 :
+                if not prod.vendor :
+                    data_dict.update ({
+                        'what_you_get' : [
+                            "Industry recognized certification after clearing the test" ,
+                            "Get badge on shine.com and showcase your knowledge to the recruiters" ,
+                            "Shine shows your skills as validated and certification as verified which build high trust "
+                            "among recruiters" ,
+                            "Receive valuable feedback on your strong and weak areas to improve yourself" ,
+                            "Certified candidates gets higher salary as compared to non certified candidate"
+                        ]
+                    })
+                else :
+
+                    data_dict.update ({
+                        'what_you_get' : WhatYouGet.get (prod.vendor.slug , [
+                            "Industry recognized certification after clearing the test" ,
+                            "Get badge on shine.com and showcase your knowledge to the recruiters" ,
+                            "Shine shows your skills as validated and certification as verified which build high trust "
+                            "among recruiters" ,
+                            "Receive valuable feedback on your strong and weak areas to improve yourself" ,
+                            "Certified candidates gets higher salary as compared to non certified candidate"
+                        ])
+                    })
+
+            data.append (data_dict)
+        return data
+
+    def get(self,request,*args,**kwargs):
+        certificate_id = self.request.GET.get('cert')
+        skills = self.request.GET.get('skills',[])
+        assessment = self.request.GET.get('assessment')
+        skill_list = []
+
+        if certificate_id:
+            certificate_products =[]
+            certificate_id = certificate_id.split(',')
+            certificate = Certificate.objects.only('id','skill').filter(id__in=certificate_id)
+            if not certificate.exists():
+                return Response({'data': []},status=status.HTTP_200_OK)
+            for cert in certificate:
+                if not cert.skill:
+                    continue
+                skills = list(map(slugify,cert.skill.split(',')))
+                certificate_products.append({cert.id:self.get_product_from_skill(skills)})
+
+            return Response({'data':certificate_products},status=status.HTTP_200_OK)
+
+        if skills:
+            skills = list(map(slugify,skills.split(',')))
+            for skill in skills:
+                skill_list.append({skill:self.get_product_from_skill(skill)})
+            return Response ({'data': skill_list}, status=status.HTTP_200_OK)
+
+
+        return Response({'data':[]},status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
