@@ -35,9 +35,10 @@
 {% block container %}
 {% if cart_contain_items %}
 <div class="clearfix"></div>
-<div id = "loader" class="overlay-background"  text-align: center;">
-        <img aria-label="loader" id="loadingimg" class="loader-position-mobile" src="{% static 'shinelearn/images/mobile/loader1.png' %}" >
-  </div>
+<div id="loader" class="overlay-background" text-align: center;">
+    <img aria-label="loader" id="loadingimg" class="loader-position-mobile"
+        src="{% static 'shinelearn/images/mobile/loader1.png' %}">
+</div>
 <div class="payment">
     <div class="payment--bg"></div>
     <ul class="payment__steps">
@@ -86,9 +87,10 @@
                         <p class="payment__summary__item--course-title">{{item.name}}
                             <strong>Rs.
                                 {% if item.product_class == 'course' and variations|length or item.type_flow == 17 and variations|length %}
-                                {{variations.0.price}} {% else %} {{item.price}} {% endif %} 
+                                {{variations.0.price}} {% else %} {{item.price}} {% endif %}
                             </strong>
-                            <span id="delivery-charge{{item.id}}">{%if delivery_service.inr_price %}Rs. {{delivery_service.inr_price}}/-{% endif %}</span>
+                            <span id="delivery-charge{{item.id}}">{%if delivery_service.inr_price %}Rs.
+                                {{delivery_service.inr_price}}/-{% endif %}</span>
                         </p>
                         {% if addons|length or variations|length %}
                         <div class="payment__summary__item__addons mt-20">
@@ -111,11 +113,9 @@
                                 <li class="payment__summary__item__addons__item">
                                     <span class="payment__summary__item__addons__item--title">{{addon.name}}</span>
                                     <span class="semi-bold">Rs. {{addon.price}}/-</span>
-                                    <form role="form" id="cart_remove_form{{addon.id}}">{% csrf_token %}
-                                        <input type="hidden" name="reference_id" value="{{addon.reference}}">
-                                        <span class="payment__summary__item--close" id="id-remove-cart{{addon.id}}"
-                                            onclick="removeFromCart('{{addon.id}}')">+</span>
-                                    </form>
+                                    <span class="payment__summary__item--close"
+                                        onclick="removeVariationsOrAddons('{{csrf_token}}','{{addon.reference}}','{{addon.id}}')">+</span>
+
                                 </li>
                                 {% endif %}
                                 {% endfor %}
@@ -129,21 +129,24 @@
                                 onclick="toggleDeliveryItems('{{item.id}}')">
                                 <span class="icon-delivery delivery-toggle-action"></span>
                                 <p class="pb-0 delivery-toggle-action">
-                                    <strong class="block delivery-toggle-action" id="active-delivery-title{{item.id}}">{%if delivery_service %}
+                                    <strong class="block delivery-toggle-action"
+                                        id="active-delivery-title{{item.id}}">{%if delivery_service %}
                                         {{delivery_service.title}}- {% if delivery_service.inr_price|is_free %}No extra
                                         cost {% else %}Rs. {{delivery_service.inr_price}}/- {% endif %} {%else%}Normal -
                                         No extra cost{%endif%}</strong>
-                                    <span id="active-delivery-description{{item.id}}" class="delivery-toggle-action"> ({%if delivery_service %}
+                                    <span id="active-delivery-description{{item.id}}" class="delivery-toggle-action">
+                                        ({%if delivery_service %}
                                         {{delivery_service.meta_desc}} {%else%}get it in 5 working days{%endif%})</span>
                                 </p>
                                 <span class="icon-down-arrow delivery-toggle-action"></span>
                             </div><!-- /. select delivery options -->
 
-                            <ul class="delivery-list delivery-dropdown delivery-toggle-action cls_delivery-content" id="delivery-item{{item.id}}"
-                                style="display: none;">
+                            <ul class="delivery-list delivery-dropdown delivery-toggle-action cls_delivery-content"
+                                id="delivery-item{{item.id}}" style="display: none;">
                                 {% for delivery_obj in delivery_types %}
                                 <li>
-                                    <input type="radio" class="delivery-toggle-action" name="{{item.id}}" id="{{delivery_obj.slug}}{{item.id}}"
+                                    <input type="radio" class="delivery-toggle-action" name="{{item.id}}"
+                                        id="{{delivery_obj.slug}}{{item.id}}"
                                         {% if delivery_obj.slug == delivery_service|get_slug %} checked {%endif %}
                                         name="delivery-list"
                                         onclick="selectDeliveryType('{{delivery_obj.id}}', '{% if variations|length  %} {{variations.0.id}} {% else %} {{item.id}} {% endif %}', '{{csrf_token}}', '{{item.id}}')"
@@ -173,17 +176,17 @@
 
         {% if cart_coupon %}
         <div class="apply mb-10 pt-0">
-                <div id="redeem-content">
-                    <div class="apply__wrap">
-                        <input id="loyalty_point" type="text" placeholder="{{cart_coupon.code}} points redeemed."
-                            name="point"  disabled class="apply__wrap--input">
-                        <button class="btn btn-lg btn-round btn-blue" id="loyalty-point-apply" type="button"
-                            onclick="JSRemoveDiscount(event);">Remove</button>
-                    </div>
-                    <p class="error-txt" id="point-alert">Required</p>
+            <div id="redeem-content">
+                <div class="apply__wrap">
+                    <input id="loyalty_point" type="text" placeholder="{{cart_coupon.code}} points redeemed."
+                        name="point" disabled class="apply__wrap--input">
+                    <button class="btn btn-lg btn-round btn-blue" id="loyalty-point-apply" type="button"
+                        onclick="JSRemoveDiscount(event);">Remove</button>
                 </div>
-    
+                <p class="error-txt" id="point-alert">Required</p>
             </div>
+
+        </div>
         {% elif cart_wallet %}
         <div class="apply mb-10 pt-0">
             <div id="redeem-content">
@@ -271,20 +274,23 @@
     </div>
 
     <div class="bottom-cta__btn">
-        <a class='trig-loader' href="{% url "cart:payment-login" %}" ><button class='summary-proceed-button' id='payment-summary-continue-id'>Proceed</button></a>
+        <a class='trig-loader' href="{% url "cart:payment-login" %}"><button class='summary-proceed-button'
+                id='payment-summary-continue-id'>Proceed</button></a>
     </div>
 </div><!-- Bottom CTA -->
 {% else %}
-    <div class="body-wrapper">
-        <div class="content-box">
-            <div class="text-center mt-50">
-                <span class="inline-block"><img aria-label="empty-image" src="{% static 'shinelearn/images/mobile/common/wallet_empty.jpg' %}" alt="empty-image"></span>
-                <p class="fs-18 c6 mt-10">You have no product in your cart. Add your first product and earn Shine loyalty points</p>
+<div class="body-wrapper">
+    <div class="content-box">
+        <div class="text-center mt-50">
+            <span class="inline-block"><img aria-label="empty-image"
+                    src="{% static 'shinelearn/images/mobile/common/wallet_empty.jpg' %}" alt="empty-image"></span>
+            <p class="fs-18 c6 mt-10">You have no product in your cart. Add your first product and earn Shine loyalty
+                points</p>
 
             <a href="/" class="btn btn-blue btn-lg">Search now</a>
-            </div>
         </div>
     </div>
+</div>
 {% endif %}
 
 {% endblock container %}
@@ -295,9 +301,19 @@
 {% block js_section %}
 {{block.super}}
 
+<script>
+    var shineApiUrl = "{{shine_api_url}}"
+    var trackingProductId = "{{tracking_product_id}}"
+    var productTrackingMappingId = "{{product_tracking_mapping_id}}"
+    var trackingId = "{{tracking_id}}"
+  console.log({ trackingProductId, shineApiUrl, productTrackingMappingId, trackingId})
+</script>
+
 {% compress js %}
 <script src="{% static 'shinelearn/js/mobile/cart/cart.js' %}"></script>
 <script type="text/javascript" src="{% static 'shinelearn/js/cart/payment-summary.js' %}"></script>
+
+
 
 <script>
     $(function () {

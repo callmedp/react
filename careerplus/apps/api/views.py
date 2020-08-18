@@ -36,7 +36,8 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from users.tasks import user_register
 from order.models import Order, OrderItem, RefundRequest
-from order.utils import get_ltv
+from order.utils import get_ltv, BadgeAnalyticsVidhya
+from emailers.email import SendMail
 from shop.views import ProductInformationMixin
 from shop.models import Product, Category
 from coupon.models import Coupon, CouponUser
@@ -1609,6 +1610,9 @@ class TestTimer(APIView):
         test_id = self.request.GET.get('test_id')
         duration = int(self.request.GET.get('duration', 0))
         self.cache_test = TestCacheUtil(request=request)
+        if not test_id:
+            return Response({'status':'Bad Request'},status=status.HTTP_400_BAD_REQUEST)
+
         test_start_time = self.cache_test.get_start_test_cache(
             key='test-'+test_id)
         set_test_duration_cache = self.cache_test.get_test_duration_cache(
@@ -1784,6 +1788,7 @@ class BlogTagsAPIView(ListAPIView):
     def get_queryset(self, *args, **kwargs):
         return Tag.objects.filter(blog__status=1,blog__visibility=2).exclude(blog=None).distinct()
 
+
 class GetRecommendedProductApi(APIView):
     authentication_classes = ()
     permission_classes = ()
@@ -1806,3 +1811,69 @@ class GetRecommendedProductApi(APIView):
         if not response_json.get('msg'):
             return Response(response_json, status=status.HTTP_200_OK)
         return Response({'msg': 'Error! Expected parameters are not provided'}, status=status.HTTP_400_BAD_REQUEST)
+
+class CandidateBadging(APIView):
+    '''
+        "Request data format from Analytics Vidhya"
+        -------------------------------------------
+        {
+            "result": {
+                "av_ID": "eda8c020-58ba-41cc-b944-0c01aaba60a5",
+                "name": "John",
+                "email": "s@gmail.com",
+                "status": "",
+                "certificates": [
+                {
+                    "certificateName": "Analytics Vidhya Course 1",
+                    "certificateUrl": "https://certificate-course-1",
+                    "validTill": "2012-08-26"
+                }
+                ]
+            }
+        }
+
+        "Response format from Candidate Badging Api"
+        ---------------------------------------------
+        {
+            'status': 'success',
+            'badging_status' : 'Candidate Badging Details Updated'
+        }   
+    '''
+    authentication_classes = [OAuth2Authentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        candidate_data = self.request.data.get('result', {})
+        av_id = candidate_data.get('av_ID')
+        
+        try:
+            flag = BadgeAnalyticsVidhya().badge_user_for_analytics_vidhya(av_id)
+            if not flag:
+                return Response({
+                    'status': 'failed',
+                    'badging_status' : 'Candidate Badging Details Updation failed. AV Id might not be correct',
+                }, status=status.HTTP_400_BAD_REQUEST)
+            # self.send_course_completion_mail(candidate_data)
+            return Response({
+                'status': 'success',
+                'badging_status' : 'Candidate Badging Details Updated'
+            }, status=status.HTTP_200_OK)
+
+        except Exception as e:
+            logging.getLogger('error_log').error('Error occured during Candidate Badging. Error: %s ' % str(e))
+            return Response({
+                'error':'Something went Wrong'
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def send_course_completion_mail(self, candidate_data):
+        email_dict = {}
+        mail_type = "ANALYTICS_VIDHYA_COURSE_COMPLETION_MAIL"
+        to_emails = [candidate_data.get('email')]
+        email_dict.update({
+            "subject": 'Analytics Vidhya Course Completion Report',
+        })
+        try:
+            SendMail().send(to_emails, mail_type, email_dict)
+        except Exception as e:
+            logging.getLogger('error_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
+        return

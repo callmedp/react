@@ -1120,7 +1120,7 @@ class Product(AbstractProduct, ModelMeta):
 
     def __init__(self, *args, **kwargs):
         super(Product, self).__init__(*args, **kwargs)
-        if self.product_class:
+        if self.product_class_id:
             self.attr = ProductAttributesContainer(product=self)
 
     def __str__(self):
@@ -1298,6 +1298,8 @@ class Product(AbstractProduct, ModelMeta):
         return self.name
 
     def get_title(self,no_cache=False):
+        if self.title:
+            return self.title
         if self.is_course:
             return '%s (INR %s) - Shine Learning' % (
                 self.heading,
@@ -1305,7 +1307,7 @@ class Product(AbstractProduct, ModelMeta):
             )
         elif self.is_service or self.is_writing:
             if self.get_category_main(no_cache):
-                return '%s for %s - Online Services - Shine Learning' % (
+                return '%s for %s - Shine Resume' % (
                     self.get_category_main(no_cache).name,
                     EXP_DICT.get(self.get_exp(), ''),
                 )

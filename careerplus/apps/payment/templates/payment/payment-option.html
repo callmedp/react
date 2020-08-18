@@ -97,7 +97,7 @@
             <div class="col-sm-9 payment-option box-shadow round-border">
                 <div class="payable">
                     Total <strong>Rs. {{ total_amount }}</strong>
-                    <a href="{% url "cart:payment-summary" %}" class="review-order">Review order</a>
+                    <a href="{% url "cart:payment-summary" %}" class="review-order" id='review-order-option'>Review order</a>
                 </div>
 
 
@@ -105,7 +105,7 @@
                     <div class="panel panel-default box-shadow1">
                     <div class="panel-heading">
                       <h4 class="panel-title">
-                        <a  class="no-bg trig-loader" href="{% url "payment:razor-request" cart_id %}">
+                        <a  class="no-bg trig-loader" id="card-netbanking" href="{% url "payment:razor-request" cart_id %}">
                           Card & Netbanking
                         </a>
                       </h4>
@@ -226,7 +226,7 @@
                   <div class="panel panel-default box-shadow1">
                     <div class="panel-heading">
                       <h4 class="panel-title">
-                        <a class="no-bg trig-loader" href="{% url "payment:epaylater-request" cart_id %}">
+                        <a class="no-bg trig-loader" id="buy-now-pay-later" href="{% url "payment:epaylater-request" cart_id %}">
                           Buy now, Pay Later <img src="{% static 'shinelearn/images/payments/epaylater-logo.svg' %}" width="89" alt="ePayLater" class="ml-5">
                         </a>
                       </h4>
@@ -319,7 +319,7 @@
                              <div class="panel panel-default box-shadow1">
                     <div class="panel-heading">
                       <h4 class="panel-title">
-                        <a class="no-bg" href="{% url "payment:payu-request" cart_id %}">
+                        <a class="no-bg" href="{% url "payment:payu-request" cart_id %}" id="amazon-pay-payment">
                          Amazon Pay <img src="{% static 'shinelearn/images/payments/amazon-pay.png' %}" width="89" style="margin-top:8px" alt="payu" class="ml-5">
                         </a>
                       </h4>
@@ -344,6 +344,11 @@
         var site_domain = "{{ SITE_PROTOCOL }}://{{ SITE_DOMAIN}}";
         var totalAmount = "{{total_amount}}";
         var cart_id     = "{{cart_id}}"
+        var shineApiUrl = "{{shine_api_url}}"
+        var trackingProductId = "{{tracking_product_id}}"
+        var productTrackingMappingId = "{{product_tracking_mapping_id}}"
+        var trackingId = "{{tracking_id}}"
+        console.log({ trackingProductId, shineApiUrl, productTrackingMappingId, trackingId })
     </script>
     {% compress js %}
         <script src="{% static 'shinelearn/js/common/bootstrap-datepicker.min.js' %}"></script>

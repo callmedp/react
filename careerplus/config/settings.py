@@ -26,14 +26,14 @@ SITEMAP_CACHING_TIME = 1
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'careerplus1',
+        'NAME': 'careerplus_new',
         'USER': 'root',
         'PASSWORD': 'root',
         'HOST': '',
         'PORT': '',
     },
     'master': {
-        'NAME': 'careerplus1',
+        'NAME': 'careerplus_new',
         'ENGINE': 'django.db.backends.mysql',
         'USER': 'root',
         'PASSWORD': 'root',
@@ -41,7 +41,7 @@ DATABASES = {
         'PORT': '',
     },
     'slave': {
-        'NAME': 'careerplus1',
+        'NAME': 'careerplus_new',
         'ENGINE': 'django.db.backends.mysql',
         'USER': 'root',
         'PASSWORD': 'root',
@@ -355,6 +355,8 @@ COVER_LETTER_PRODUCT_LIST = [83, ]
 SECOND_REGULAR_RESUME_PRODUCT_LIST = [126, 127, 128, 129, 130]
 # new flow product
 PORTFOLIO_PRODUCT_LIST = [2632, ]
+
+EXECUTIVE_BIO_PRODUCT_LIST = [2051]
 
 # product list for linkedin resume services
 LINKEDIN_RESUME_FREE = [2684, 2685]

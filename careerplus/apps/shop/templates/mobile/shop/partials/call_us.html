@@ -1,6 +1,12 @@
 <div class="stick_bottom enquire-cta">
-    {% if not product.is_assesment %}
+    {% if not product.is_assesment and not av_enroll_now %}
     <a class="enquire-cta__enquire" href="javascript:void(0)" id="enquire_btn">
+        <i class="icon-enquire"></i>
+        <span>Enquire</span>
+    </a><!-- // Enquire -->
+    {% endif %}
+    {% if av_enroll_now %}
+    <a class="enquire-cta__enquire" href="javascript:void(0)" id="enquire_btn_av">
         <i class="icon-enquire"></i>
         <span>Enquire</span>
     </a><!-- // Enquire -->

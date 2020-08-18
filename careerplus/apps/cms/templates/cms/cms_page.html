@@ -17,6 +17,7 @@
         <link type="text/scss" href="{% static 'shinelearn/css/cms/cms.scss' %}" rel="stylesheet">
         <link type="text/css" href="{% static 'shinelearn/css/cms/extra.css' %}" rel="stylesheet">
         <link type="text/css" href="{% static 'shinelearn/css/common/typeaheadjs.css' %}" rel="stylesheet">
+        <link type="text/scss" href="{% static 'shinelearn/css/cms/faq.scss' %}" rel="stylesheet">
         {% endcompress %}
     {% endblock css_section %}
     {% block banner_ads %}{% endblock banner_ads %}
@@ -42,7 +43,8 @@
 
             <a id="cms_share" class="linkedin" target="_blank" href="https://www.linkedin.com/shareArticle?mini=true&title={{page_obj.title}}& summary={{page_obj.discription}}&url={{hostname}}{{page_obj.get_absolute_url}}&source={{hostname}}{{page_obj.get_absolute_url}}" page-id="{{page_obj.id}}"></a>
 
-            <a id="cms_share" class="gplus" target="_blank" page-id="{{page_obj.id}}" href="https://plus.google.com/share?url={{hostname}}{{page_obj.get_absolute_url}}"></a>
+            <a id="cms_share" class="twitter" page-id="{{page_obj.id}}" href="https://twitter.com/intent/tweet?text={{page_obj.get_title}}&url={{hostname}}{{page_obj.get_absolute_url}}" target="_blank" class="icon-tw"></a>
+            <!-- <a id="cms_share" class="gplus" target="_blank" page-id="{{page_obj.id}}" href="https://plus.google.com/share?url={{hostname}}{{page_obj.get_absolute_url}}"></a> -->
         </div>
         <div class="page-header">
           <h1>{{page_heading}}</h1>
@@ -116,6 +118,7 @@
                             </div>
                         </div>
                     </div><!-- /. white-box -->
+                    <a id="top-page" class="top-on-page" href="#top">Top</a>
         </div>
         <!-- right content end -->
 
@@ -271,6 +274,7 @@
    <script src="{% static 'shinelearn/js/cms/cms.js' %}"></script>
    <script src="{% static 'shinelearn/js/blog/login-register.js' %}"></script>
    <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
+   <script type="text/javascript" src="{% static 'shinelearn/js/cms/gotoTop.js' %}"></script>
     {% endcompress %}
 <script>
         $('.icon-downlod, .download-icon').on('click', function() {

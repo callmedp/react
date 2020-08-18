@@ -6,9 +6,9 @@
   {% if show and offer_home %}
     <div class="popup-box alert alert-dismissible" id = "product_offer_top">
         <button type="button" class="close" id = "sticky_close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
+          <span aria-hidden="true" onclick="gaOffer_popup_close()">&times;</span>
         </button>
-        <div data-toggle="modal" data-target="#offerModal">{{sticky_text}}- <strong>{{offer_value}}</strong>   |   Ends in <span id = 'sticky_timer'>0d : 0h : 0m : 0s</span> - <a href="javascript:void(0)" id = 'offer-timer'>Enroll Now!</a></div>
+        <div data-toggle="modal" data-target="#offerModal" onclick="gaOffer_popup()">{{sticky_text}}- <strong>{{offer_value}}</strong>   |   Ends in <span id = 'sticky_timer'>0d : 0h : 0m : 0s</span> - <a href="javascript:void(0)" id = 'offer-timer'>Enroll Now!</a></div>
     </div>
   {% endif %}
   <div class="container-fluid">
@@ -301,12 +301,28 @@
           <li class="ms-link">
             <a class="" href="/courses/it-information-technology/it-software/53/">IT Software</a>
           </li>
-          <li class="ms-link">
+          <!-- <li class="ms-link">
             <a class="" href="/courses/management/general-management/102/">General Management</a>
+          </li> -->
+          <li class="nav-item">
+            <a class="nav-link" href="/courses/it-information-technology/data-science/497/">Data Science</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/courses/it-information-technology/cloud-computing/82/">Cloud Computing</a>
+          </li>
+          {% if navlink_1 %}
+            <li class="ms-link">
+              <a class="" href="{{navlink_1.skill_page_url}}" onclick="nav1_gaEvent();">{{navlink_1.display_name}}{% if navlink_1.tag %}<small class="config-tag">{{navlink_1.tag}}</small>{% endif %}</a>
+            </li>
+          {% endif %}
+          {% if navlink_2 %}
+            <li class="ms-link">
+              <a class="" href="{{navlink_2.skill_page_url}}" onclick="nav2_gaEvent();">{{navlink_2.display_name}}{% if navlink_2.tag %}<small class="config-tag">{{navlink_2.tag}}</small>{% endif %}</a>
+            </li>
+          {% endif %}
         </ul>
         {% if show and offer_home %}
-          <span class="pull-right mt-10" id = "pop_up_offer" data-toggle="modal" data-target="#offerModal"><i class="offer-icon"></i></span>
+          <span class="pull-right mt-10" id = "pop_up_offer" data-toggle="modal" data-target="#offerModal" onclick="gaOffer_popup()"><i class="offer-icon"></i></span>
         {% endif %}
       </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
@@ -320,6 +336,25 @@
     function clearLocalStorage(){
         localStorage.clear();
     }
+
+    (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+            (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date(); a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+    ga('create', 'UA-3537905-41', 'auto', { 'name': 'a' });
+    ga('a.send', 'pageview');
+    ga('create', 'UA-3537905-41', 'auto');
+    ga('send', 'pageview');
+
+    function nav1_gaEvent() {ga('send', 'event', 'Nav Bar', 'Click', 'Skillpage1');}
+    function nav2_gaEvent() {ga('send', 'event', 'Nav Bar', 'Click', 'Skillpage2');}
+    function gaOffer_popup() {ga('send', 'event', 'Homepage Banner', 'Banner-click', 'Top Banner');}
+    function gaOffer_popup_close() {ga('send', 'event', 'Homepage Banner', 'Banner-close', 'Top Banner');}
+    function gaAvail_offer() {ga('send', 'event', 'Homepage Banner', 'Popup-Form-Fill', 'Offer Popup')}
+    function gaPopup_close() {ga('send', 'event', 'Homepage Banner', 'Popup-close', 'Offer Popup')}
+    function gaForm_fill() {ga('send', 'event', 'Homepage Banner', 'Popup-Form-Attempt', 'Offer Popup')}
 </script>
 
 <!-- Modal Offer -->
@@ -328,7 +363,7 @@
     <div class="modal-conten">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Avail offer</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="gaPopup_close()">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
@@ -337,7 +372,7 @@
           <form id='pop_up_form'>
                 <div class="form-group">
                     <input type="text" class="form-control" id="name" name="name" placeholder=" "
-                        value="" aria-required="true" aria-invalid="true">
+                        value="" aria-required="true" aria-invalid="true" onfocus="gaForm_fill()">
                     <label for="">Name</label>
                     <span class="error-msg"></span>
                 </div>
@@ -398,7 +433,7 @@
                   </ul>
                   <span id = checkbox_error class="error-msg"></span>
                 </div>
-                <button type="submit" id = "avail_offer_id" class="btn btn-block" role="button" data-target="#thanksModal">Avail offer now!</button>
+                <button type="submit" id = "avail_offer_id" class="btn btn-block" role="button" data-target="#thanksModal" onclick="gaAvail_offer()">Avail offer now!</button>
                 <span class="tc">*T&C applied, valid only on select courses</span>
                 <input type="hidden" name="product_offer" value="True">
             </form>
@@ -433,7 +468,7 @@
         </button>
       </div>
       <div class="modal-body text-center">
-        <img src="{% static 'shinelearn/images/thankyou-bg.png' %}" > 
+        <img loading="lazy" src="{% static 'shinelearn/images/thankyou-bg.png' %}" >
         <strong>Our expert will get in touch with you.</strong>
       </div>
     </div>
