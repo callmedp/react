@@ -114,7 +114,7 @@
                         <ul class="listing col-sm-4">
                             <li>
                                 <a title="{{ product.pHd|default:product.pNm}}" class="box-panel"
-                                    href="{{ product.pURL }}" onclick="homepageTracking('homepage_recommended_courses')">
+                                    href="{{ product.pURL }}" onclick="homepageTracking('exit_home_page');homepageTracking('homepage_recommended_courses')">
                                     <div class="media">
                                         <div class="media-body">
                                             <h3 class="listing-heading">
@@ -246,7 +246,7 @@
                         {% for tprd in course.tprds %}
                         <li class="col-sm-6 col-md-4">
                             <a title="{{tprd.pHd|default:tprd.pNm}}" class="box-panel" href="{{tprd.pURL}}" 
-                            onclick="homepageTracking('trending_courses_subheading')">
+                            onclick="homepageTracking('exit_home_page');homepageTracking('trending_courses_subheading')">
                                 <div class="media">
                                     <div class="media-body">
                                         <h3 class="listing-heading">{{tprd.pHd|default:tprd.pNm|truncatechars:40}}</h3>
@@ -298,7 +298,7 @@
                 {% for tprd in job_asst_services %}
                 <li>
                     <a title="{{tprd.pHd|default:tprd.pNm}}" class="box-panel" href="{{tprd.pURL}}"
-                     onclick="homepageTracking('job_assistance_service')">
+                     onclick="homepageTracking('exit_home_page');homepageTracking('job_assistance_service')">
                         <figure class="media-object">
 
                             {% thumbnail tprd.pImg "120x120" as im %}

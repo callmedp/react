@@ -110,7 +110,7 @@
                             <div class="media"> 
                                 <div class="media-body">
                                     <p class="fs-15 bold"><a title="{{ product.pHd|default:product.pNm}}" href="{{ product.pURL }}" 
-                                        onclick="homepageTracking('homepage_recommended_courses')">{{ product.pHd|default:product.pNm|truncatechars:40 }}</a></p>
+                                        onclick="homepageTracking('exit_home_page');homepageTracking('homepage_recommended_courses')">{{ product.pHd|default:product.pNm|truncatechars:40 }}</a></p>
                                     
                                     <div class="rating block ml-0 fs-12 pb-10">
                                         {% if product.pRC %}<sup class="fill-star"></sup>
@@ -138,7 +138,7 @@
                             <div class="media"> 
                                 <div class="media-body">
                                     <p class="fs-15 bold"><a title="{{ product.pHd|default:product.pNm|truncatechars:40 }}" href="{{ product.pURL }}"
-                                        onclick="homepageTracking('homepage_recommended_courses')">{{ product.pHd|default:product.pNm|truncatechars:40 }}</a></p>
+                                        onclick="homepageTracking('exit_home_page');homepageTracking('homepage_recommended_courses')">{{ product.pHd|default:product.pNm|truncatechars:40 }}</a></p>
                                     
                                     <div class="rating block ml-0 fs-12 pb-10">
                                         <sup class="fill-star"></sup>
@@ -177,7 +177,7 @@
             
             <div class="media">
                 <a title="Finance" href="/courses/banking-and-finance/20/#courses1" 
-                onclick="homepageTracking('trending_courses_heading')">
+                onclick="homepageTracking('exit_home_page');homepageTracking('trending_courses_heading')">
                     <div class="media-body">
                         <p class="title">Finance</p>
                     </div>                
@@ -191,7 +191,7 @@
             
             <div class="media">
                 <a title="Operations" href="/courses/operation-management/19/#courses2"
-                onclick="homepageTracking('trending_courses_heading')">
+                onclick="homepageTracking('exit_home_page');homepageTracking('trending_courses_heading')">
                     <div class="media-body">
                         <p class="title">Operations</p>
                     </div>                
@@ -205,7 +205,7 @@
             
             <div class="media">
                 <a title="Information Technology" href="/courses/it-information-technology/it-language/80/#courses3"
-                onclick="homepageTracking('trending_courses_heading')">
+                onclick="homepageTracking('exit_home_page');homepageTracking('trending_courses_heading')">
                     <div class="media-body">
                         <p class="title">Information Technology</p>
                     </div>                
@@ -219,7 +219,7 @@
             
             <div class="media">
                 <a title="Human Resources" href="/courses/hr-human-resource/25/#courses4"
-                onclick="homepageTracking('trending_courses_heading')">
+                onclick="homepageTracking('exit_home_page');homepageTracking('trending_courses_heading')">
                     <div class="media-body">
                         <p class="title">Human Resources</p>
                     </div>                
@@ -246,7 +246,7 @@
                     {% for tprd in job_asst_services %}
                     <li>
                         <a title="{{tprd.pHd|default:tprd.pNm|truncatechars:40}}" href="{{tprd.pURL}}"
-                        onclick="homepageTracking('job_assistance_service')">
+                        onclick="homepageTracking('exit_home_page');homepageTracking('job_assistance_service')">
                             <div class="img-box">
 
                                                           {% thumbnail tprd.pImg "135x135" as im %}

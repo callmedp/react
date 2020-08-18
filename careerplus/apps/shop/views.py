@@ -974,14 +974,14 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
                     prod.id, product_tracking_mapping_id, tracking_id, 'product_page')
 
         elif self.request.session.get('candidate_id') and \
-                request.sesion.get('tracking_product_id') and \
+                request.session.get('tracking_product_id') and \
                 request.session.get('tracking_id') and \
-                kwargs.get('pk') == request.sesion.get('tracking_product_id'):
+                kwargs.get('pk') == request.session.get('tracking_product_id'):
             make_logging_request.delay(
-                request.sesion.get('tracking_product_id'), request.sesion.get('product_tracking_mapping_id'), request.session.get('tracking_id'), 'product_page')
+                request.session.get('tracking_product_id'), request.session.get('product_tracking_mapping_id'), request.session.get('tracking_id'), 'product_page')
         elif self.request.session.get('candidate_id') and \
                 request.session.get('tracking_id') and \
-                not request.sesion.get('tracking_product_id'):
+                not request.session.get('tracking_product_id'):
             if not kwargs.get('pk', ''):
                 return
             prod = Product.objects.filter(id=kwargs.get('pk')).first()

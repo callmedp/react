@@ -11,15 +11,15 @@ from haystack.query import SearchQuerySet
 
 
 from shop.models import ProductClass, FunctionalArea, Skill
-from search.helpers import get_recommendations,get_recommended_products
+from search.helpers import get_recommendations, get_recommended_products
 from core.library.haystack.query import SQS
 from core.api_mixin import ShineCandidateDetail
 
 from geolocation.models import Country
 from meta.views import MetadataMixin
-from .models import TopTrending, Testimonial,TrendingProduct
+from .models import TopTrending, Testimonial, TrendingProduct
 
-from .config import STATIC_SITE_SLUG_TO_ID_MAPPING, STATIC_PAGE_NAME_CHOICES,TOPTRENDING_FA_MAPPING
+from .config import STATIC_SITE_SLUG_TO_ID_MAPPING, STATIC_PAGE_NAME_CHOICES, TOPTRENDING_FA_MAPPING
 
 redis_conn = get_redis_connection("search_lookup")
 
@@ -31,20 +31,27 @@ class HomePageView(TemplateView, MetadataMixin):
     use_twitter = False
 
     def get_params(self):
+        from payment.tasks import make_logging_request
         tracking_id = self.request.GET.get('t_id', '')
-        product_tracking_mapping_id = self.request.GET.get('t_id', '')
-        if tracking_id and self.request.session.get('candidate_id'): 
-            from payment.tasks import make_logging_request
+        product_tracking_mapping_id = self.request.GET.get('product', '')
+        if tracking_id and self.request.session.get('candidate_id'):
             self.request.session.update({
                 'tracking_id': tracking_id,
                 'product_tracking_mapping_id': product_tracking_mapping_id
             })
             make_logging_request.delay(
                 '', product_tracking_mapping_id, tracking_id, 'home_page')
-        return None
 
+        elif self.request.session.get('tracking_id', '') and self.request.session.get('candidate_id'):
+            product_tracking_mapping_id = self.request.session.get(
+                'product_tracking_mapping_id', '')
+            tracking_product_id = self.request.session.get(
+                'tracking_product_id', '')
+            tracking_id = self.request.session.get(
+                'tracking_id', '')
+            make_logging_request.delay(
+                tracking_product_id, product_tracking_mapping_id, tracking_id, 'home_page')
 
-    
     def get_meta_title(self, context):
         # return 'Best Resume Writing Services | Online Courses | Linkedin Profile - Shine Learning'
         # return 'Online Courses, Practice Tests, Job Assistance Services | Shine Learning'
@@ -57,12 +64,11 @@ class HomePageView(TemplateView, MetadataMixin):
 
     def get_meta_url(self, context):
         return 'https://learning.shine.com'
-        
 
     def get_job_assistance_services(self):
         job_services = []
         job_asst_view_all = None
-        
+
         try:
 
             tjob = TopTrending.objects.filter(
@@ -71,14 +77,16 @@ class HomePageView(TemplateView, MetadataMixin):
             # services_class = ProductClass.objects.filter(slug__in=settings.SERVICE_SLUG)
             # job_services = job_services.filter(product__type_product__in=[0, 1, 3])
             # job_services_pks = list(job_services.all().values_list('product', flat=True))
-            job_services_pks = list(tjob.get_all_active_trending_products_ids())
+            job_services_pks = list(
+                tjob.get_all_active_trending_products_ids())
 
-            job_sqs = SearchQuerySet().filter(id__in=job_services_pks,pTP__in=[0,1,3]).exclude(
+            job_sqs = SearchQuerySet().filter(id__in=job_services_pks, pTP__in=[0, 1, 3]).exclude(
                 id__in=settings.EXCLUDE_SEARCH_PRODUCTS)
             job_services = job_sqs[:5]
             job_asst_view_all = tjob.view_all
         except Exception as e:
-            logging.getLogger('error_log').error("unable to load job assistance services%s " % str(e))
+            logging.getLogger('error_log').error(
+                "unable to load job assistance services%s " % str(e))
         return {"job_asst_services": list(job_services), "job_asst_view_all": job_asst_view_all}
 
     def get_courses(self):
@@ -87,10 +95,8 @@ class HomePageView(TemplateView, MetadataMixin):
         rcourses = []
         t_objects = TopTrending.objects.filter(
             is_active=True, is_jobassistance=False).prefetch_related(Prefetch('trendingproduct_set',
-                              queryset=TrendingProduct.objects.select_related('trendingcourse').filter(
-                                  is_active=True),to_attr='get_pids'))
-
-
+                                                                              queryset=TrendingProduct.objects.select_related('trendingcourse').filter(
+                                                                                  is_active=True), to_attr='get_pids'))
 
         t_objects = t_objects[:4]
         show_pcourses = False
@@ -101,8 +107,8 @@ class HomePageView(TemplateView, MetadataMixin):
             #                                self.request.session.get('skills', None))
 
             rcourses = get_recommended_products(self.request.session.get(
-                'job_title',None),self.request.session.get('all_skill_ids',
-                []),self.request.session.get('func_area',None))
+                'job_title', None), self.request.session.get('all_skill_ids',
+                                                             []), self.request.session.get('func_area', None))
 
             if rcourses:
                 rcourses = rcourses[:9]
@@ -129,7 +135,7 @@ class HomePageView(TemplateView, MetadataMixin):
             product_pks = [prod.product_id for prod in tcourse.get_pids]
             # product_pks = list(tcourse.get_all_active_trending_products_ids())
 
-            tprds = SearchQuerySet().filter(id__in=product_pks,pPc__in=settings.COURSE_SLUG,pTP__in=[0,1,3]).exclude(
+            tprds = SearchQuerySet().filter(id__in=product_pks, pPc__in=settings.COURSE_SLUG, pTP__in=[0, 1, 3]).exclude(
                 id__in=settings.EXCLUDE_SEARCH_PRODUCTS)[:9]
 
             data = {
@@ -141,20 +147,22 @@ class HomePageView(TemplateView, MetadataMixin):
             tcourses.append(data)
             i += 1
         if not self.request.session.get('candidate_id'):
-            pcourses = [pcourses[count:count + 3] for count in range(0, len(pcourses), 3)]
-        rcourses = [rcourses[count:count + 3] for count in range(0, len(rcourses), 3)]
+            pcourses = [pcourses[count:count + 3]
+                        for count in range(0, len(pcourses), 3)]
+        rcourses = [rcourses[count:count + 3]
+                    for count in range(0, len(rcourses), 3)]
 
         return {'tcourses': tcourses, 'pcourses': pcourses, 'rcourses': rcourses}
 
     def get_testimonials(self):
-        data =cache.get('get_testimonial')
+        data = cache.get('get_testimonial')
         if data:
             return data
         else:
             data = Testimonial.objects.filter(page=1, is_active=True)
             data = data[: 5]
-            data ={"testimonials": data}
-            cache.set('get_testimonial',data,timeout=None)
+            data = {"testimonials": data}
+            cache.set('get_testimonial', data, timeout=None)
         return data
 
     def get_context_data(self, **kwargs):
@@ -165,10 +173,10 @@ class HomePageView(TemplateView, MetadataMixin):
         session_fa = self.request.session.get('func_area')
         session_skills = self.request.session.get('mid_skills')
 
-        message = self.request.GET.get('message','')
+        message = self.request.GET.get('message', '')
 
         if message:
-            context.update({'email_response':message})
+            context.update({'email_response': message})
 
         if session_fa:
             fa = FunctionalArea.objects.filter(
@@ -180,7 +188,8 @@ class HomePageView(TemplateView, MetadataMixin):
                 context['preSelect'] = top_trend.name if top_trend else ""
 
         if session_skills:
-            skills_found = Skill.objects.filter(pk__in=session_skills).values_list('name', flat=True)
+            skills_found = Skill.objects.filter(
+                pk__in=session_skills).values_list('name', flat=True)
             context.update({'recmnd_skills': ','.join(skills_found)})
 
         # if not session_fa:
@@ -218,9 +227,11 @@ class HomePageView(TemplateView, MetadataMixin):
         #     skills_found = Skill.objects.filter(pk__in=session_skills).values_list('name', flat=True)
         #     context.update({'recmnd_skills': ','.join(skills_found)})
 
-        func_areas_set = [f.decode() for f in redis_conn.smembers('func_area_set')]
+        func_areas_set = [f.decode()
+                          for f in redis_conn.smembers('func_area_set')]
         skills_set = [s.decode() for s in redis_conn.smembers('skills_set')]
-        context.update({'func_area_set': func_areas_set, 'skills_set': skills_set})
+        context.update({'func_area_set': func_areas_set,
+                        'skills_set': skills_set})
         context.update(self.get_job_assistance_services())
         context.update(self.get_courses())
         context.update(self.get_testimonials())
@@ -230,9 +241,9 @@ class HomePageView(TemplateView, MetadataMixin):
         context['offer_home'] = True
         context.update({
             'shine_api_url': settings.SHINE_API_URL,
-            'tracking_product_id': self.request.session.get('tracking_product_id',''),
-            'product_tracking_mapping_id': self.request.session.get('product_tracking_mapping_id',''),
-            'tracking_id': self.request.session.get('tracking_id','')
+            'tracking_product_id': self.request.session.get('tracking_product_id', ''),
+            'product_tracking_mapping_id': self.request.session.get('product_tracking_mapping_id', ''),
+            'tracking_id': self.request.session.get('tracking_id', '')
         })
 
         linkedin_modal = self.request.session.get('linkedin_modal', 0)
@@ -249,6 +260,7 @@ class AboutUsView(TemplateView):
         context = super(AboutUsView, self).get_context_data(**kwargs)
         return context
 
+
 class ContactUsView(TemplateView):
     template_name = 'homepage/contact-us.html'
 
@@ -261,15 +273,16 @@ class ContactUsView(TemplateView):
         })
         return context
 
+
 class StaticSiteContentView(TemplateView):
     template_name = 'homepage/static-site-content.html'
-    
+
     def get_context_data(self, **kwargs):
-        page_slug = kwargs.get('page_slug','')
+        page_slug = kwargs.get('page_slug', '')
         if not page_slug:
             raise Http404
-        
-        page_type = str(STATIC_SITE_SLUG_TO_ID_MAPPING.get(page_slug,''))
+
+        page_type = str(STATIC_SITE_SLUG_TO_ID_MAPPING.get(page_slug, ''))
         if not page_type or not page_type.isdigit():
             raise Http404
 
@@ -278,10 +291,5 @@ class StaticSiteContentView(TemplateView):
         context.update({
             "page_type": page_type,
             "page_name": STATIC_PAGE_NAME_CHOICES[page_type-1][1]
-            })
+        })
         return context
-
-    
-    
-
-
