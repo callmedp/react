@@ -459,6 +459,13 @@
     };
 </script>
 
+<script type="text/javascript">
+    var shineApiUrl = "{{shine_api_url}}"
+    var trackingProductId = "{{tracking_product_id}}"
+    var productTrackingMappingId = "{{product_tracking_mapping_id}}"
+    var trackingId = "{{tracking_id}}"
+    console.log({ trackingProductId, shineApiUrl, productTrackingMappingId, trackingId })
+    </script>
 {% compress js %}
 <script defer src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"></script>
 <script defer src="{% static 'shinelearn/js/common/common.js' %}"> </script>

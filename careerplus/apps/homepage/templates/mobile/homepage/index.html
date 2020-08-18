@@ -341,6 +341,14 @@
             prefetchedSkills = '{{ recmnd_skills }}';
     </script>
 
+<script type="text/javascript">
+    var shineApiUrl = "{{shine_api_url}}"
+    var trackingProductId = "{{tracking_product_id}}"
+    var productTrackingMappingId = "{{product_tracking_mapping_id}}"
+    var trackingId = "{{tracking_id}}"
+    console.log({ trackingProductId, shineApiUrl, productTrackingMappingId, trackingId })
+    </script>
+
 
 {% endblock js_section %}
 {% block johukum %}
