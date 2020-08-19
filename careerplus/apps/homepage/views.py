@@ -37,7 +37,8 @@ class HomePageView(TemplateView, MetadataMixin):
         if tracking_id and self.request.session.get('candidate_id'):
             self.request.session.update({
                 'tracking_id': tracking_id,
-                'product_tracking_mapping_id': product_tracking_mapping_id
+                'product_tracking_mapping_id': product_tracking_mapping_id,
+                'tracking_product_id':''
             })
             make_logging_request.delay(
                 '', product_tracking_mapping_id, tracking_id, 'home_page')
