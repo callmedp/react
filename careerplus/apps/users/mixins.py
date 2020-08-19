@@ -12,6 +12,7 @@ from django.conf import settings
 from django.utils import timezone
 from shine.core import ShineCandidateDetail
 from django.core.files.uploadedfile import SimpleUploadedFile
+from django.core.cache import cache
 from django.http import HttpResponseRedirect
 from django.core.exceptions import PermissionDenied
 
@@ -439,6 +440,7 @@ class WriterInvoiceMixin(object):
             self.added_base_object.append(pk)
 
             p_oi_dict.update({
+                "order_id": p_oi.order.id,
                 "item_id": pk,
                 "product_name": product_name,
                 "closed_on": closed_on,
@@ -458,6 +460,7 @@ class WriterInvoiceMixin(object):
                     amount = SUPER_EXPRESS
                 product_name = p_oi.product.get_name + ' - ' + p_oi.delivery_service.name
                 d_dict = {
+                    "order_id": p_oi.order.id,
                     "item_id": p_oi.pk,
                     "product_name": product_name,
                     "closed_on": closed_on,
@@ -476,6 +479,7 @@ class WriterInvoiceMixin(object):
         amount = self.country_specific_dict.get(self.user_type)
 
         oi_dict.update({
+            "order_id": oi.order.id,
             "item_id": pk,
             "product_name": product_name,
             "closed_on": closed_on,
@@ -531,6 +535,7 @@ class WriterInvoiceMixin(object):
 
         if process:
             oi_dict = {
+                "order_id": oi.order.id,
                 "item_id": pk,
                 "product_name": product_name,
                 "closed_on": closed_on,
@@ -611,6 +616,7 @@ class WriterInvoiceMixin(object):
             oi_combo_discount += combo_discount
 
         oi_dict = {
+            "order_id": oi.order.id,
             "item_id": pk,
             "product_name": product_name,
             "closed_on": closed_on,
@@ -635,6 +641,7 @@ class WriterInvoiceMixin(object):
                 amount = SUPER_EXPRESS
             product_name = oi.product.get_name + ' - ' + oi.delivery_service.name
             d_dict = {
+                "order_id": oi.order.id,
                 "item_id": oi.pk,
                 "product_name": product_name,
                 "closed_on": oi.closed_on.date(),
@@ -712,6 +719,7 @@ class WriterInvoiceMixin(object):
             no_process_combo_discount += combo_discount
 
         oi_dict = {
+            "order_id": oi.order.id,
             "item_id": pk,
             "product_name": product_name,
             "closed_on": closed_on,
@@ -730,6 +738,7 @@ class WriterInvoiceMixin(object):
                 amount = SUPER_EXPRESS
             product_name = oi.product.get_name + ' - ' + oi.delivery_service.name
             d_dict = {
+                "order_id": oi.order.id,
                 "item_id": oi.pk,
                 "product_name": product_name,
                 "closed_on": closed_on,
@@ -1189,9 +1198,10 @@ class UserMixin(object):
     def get_client_country(self, request):
         g = GeoIP2()
         ip = self.get_client_ip(request)
+        code2 = 'IN'
         try:
             if ip:
-                code2 = g.country(ip)['country_code']
+                code2 = g.country(ip)['country_code'].upper()
             else:
                 code2 = 'IN'
         except Exception as e:
@@ -1199,10 +1209,9 @@ class UserMixin(object):
                 'unable to get country code %s' % str(e))
             code2 = 'IN'
 
-        if not code2:
-            code2 = 'IN'
-
-        code2 = code2.upper()
+        country_obj = cache.get('client_country_{}'.format(code2))
+        if country_obj:
+            return country_obj
 
         try:
             country_objs = Country.objects.filter(code2=code2)
@@ -1212,6 +1221,7 @@ class UserMixin(object):
                 'unable to get country object %s' % str(e))
 
             country_obj = Country.objects.get(phone='91')
+        cache.set('client_country_{}'.format(code2),country_obj,timeout=60*24*24)
 
         return country_obj
 
