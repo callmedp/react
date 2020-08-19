@@ -1485,18 +1485,19 @@ class SkillToProductRedirectView(View):
 class GoogleResumeAdView(View):
 
     def get(self, request, *args, **kwargs):
-        cat_slugs = ['resume-services', 'linkedin-profile']
-        countries = ['india', 'gulf']
+        cat_slugs = ['resume-services','linkedin-profile']
+        countries = ['india','gulf','usa','uk']
         country = kwargs.get('country', 'india')
         cat_slug = kwargs.get('cat_slug', 'resume-services')
         pre_register = self.request.GET.get('pre-register', "False")
         site_slug = None
+        country_code_list = ['91','92','92','971','1','44']
         if cat_slug not in cat_slugs or country not in countries:
             raise Http404
         if country == "gulf":
             currency = "AED"
-            add_on_cost = {"cover_letter": "145",
-                           "express_delivery": "145", "s_express_delivery": "200"}
+            country_code = "971"
+            add_on_cost = {"cover_letter":"145","express_delivery":"145","s_express_delivery":"200"}
             if cat_slug == "resume-services":
                 service_cost = {"0_1exp": "250", "1_4exp": "400", "4_8exp": "575",
                                 "8_15exp": "735", "15_exp": "900"}
@@ -1509,8 +1510,8 @@ class GoogleResumeAdView(View):
                 site_slug = "resume-services"
         elif country == "india":
             currency = "INR"
-            add_on_cost = {"cover_letter": "550",
-                           "express_delivery": "1099", "s_express_delivery": "1609"}
+            country_code = "91"
+            add_on_cost = {"cover_letter":"550","express_delivery":"1099","s_express_delivery":"1609"}
             if cat_slug == "resume-services":
                 service_cost = {"0_1exp": "1299", "1_4exp": "2199", "4_8exp": "2999",
                                 "8_15exp": "3999", "15_exp": "4999"}
@@ -1521,18 +1522,33 @@ class GoogleResumeAdView(View):
                                 "8_15exp": "4600", "15_exp": "5600"}
                 template = 'shop/resume-ad-linkedin.html'
                 site_slug = "resume-services"
-        site_link = '{}/services/{}/{}/?pre-register={}'.format(
-            settings.MAIN_DOMAIN_PREFIX, site_slug, country, str(pre_register))
+        elif country in ["usa","uk"]:
+            currency = "starting from "
+            country_code = "1" if country == "usa" else "44"
+            add_on_cost = {"cover_letter":"25 $","express_delivery":"5 $","s_express_delivery":"10 $"}
+            if cat_slug == "resume-services":
+                service_cost = {"0_1exp":"75 $", "1_4exp":"90 $", "4_8exp":"110 $",
+                    "8_15exp":"125 $", "15_exp":"150 $"}
+                template = 'shop/resume-ad-services.html'
+                site_slug = "linkedin-profile"
+            elif cat_slug == "linkedin-profile":
+                service_cost = {"0_1exp":"50 $", "1_4exp":"65 $", "4_8exp":"80 $",
+                    "8_15exp":"95 $", "15_exp":"110 $"}
+                template = 'shop/resume-ad-linkedin.html'
+                site_slug = "resume-services"
+        site_link = '{}/services/{}/{}/?pre-register={}'.format(settings.MAIN_DOMAIN_PREFIX, site_slug, country, str(pre_register))
         content = {
-            "currency": currency,
-            "country": country,
-            "site_link": site_link,
-            "service_cost": service_cost,
-            "country": country,
-            "pre_register": bool(eval(pre_register)),
-            "experience_range": range(0, 16),
-            "add_on_cost": add_on_cost,
-            "crm_lead_link": '{}/api/v1/googleAd-lead-creation/'.format(settings.SHINECPCRM_DICT.get('base_url'))
+            "currency" : currency,
+            "country" : country,
+            "country_code" : country_code,
+            "country_code_list" : country_code_list,
+            "site_link" : site_link,
+            "service_cost" : service_cost,
+            "country" : country,
+            "pre_register" : bool(eval(pre_register)),
+            "experience_range" : range(0,16),
+            "add_on_cost" : add_on_cost,
+            "crm_lead_link" : '{}/api/v1/googleAd-lead-creation/'.format(settings.SHINECPCRM_DICT.get('base_url')) 
         }
         return render(request, template, context=content)
 
