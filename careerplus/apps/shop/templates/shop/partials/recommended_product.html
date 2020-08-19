@@ -12,7 +12,7 @@
         <ul class="listing">
           {% for prd in recommended_products %}
           <li class="col-sm-6 col-md-4">
-            <a title="{{ prd.pHd|default:prd.pNm|truncatechars:40 }}" class="box-panel" href="{{prd.pURL}}">
+            <a title="{{ prd.pHd|default:prd.pNm|truncatechars:40 }}" class="box-panel" href="{{prd.pURL}}"  onclick="handleTracking('exit_product_page');handleTracking('recommended_products');">
               <div class="media">
                 <div class="media-body">
                   <h3 class="listing-heading">{{ prd.pHd|default:prd.pNm|truncatechars:40 }}</h3>

@@ -263,7 +263,9 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
             'shine_api_url': settings.SHINE_API_URL,
             'tracking_product_id': self.request.session.get('tracking_product_id', ''),
             'product_tracking_mapping_id': self.request.session.get('product_tracking_mapping_id', ''),
-            'tracking_id': self.request.session.get('tracking_id', '')
+            'tracking_id': self.request.session.get('tracking_id', ''),
+            'product_availability': self.request.session.get('product_availability', '')
+            
         })
         return context
 

@@ -121,7 +121,10 @@
                     </div>
                 {% else %}
                     <div class="ui-block-b">
-                        <input type="checkbox" id="pro{{forloop.counter}}" name="required_option" data-price="{{service.inr_price}}" actual-price="{% if service.fake_inr_price %} {{service.fake_inr_price|floatformat}}{% else %}{{service.inr_price|floatformat}}{% endif %}">
+                        <input type="checkbox" id="pro{{forloop.counter}}"
+                        onclick="handleTracking('selected_products')"
+
+                        name="required_option" data-price="{{service.inr_price}}" actual-price="{% if service.fake_inr_price %} {{service.fake_inr_price|floatformat}}{% else %}{{service.inr_price|floatformat}}{% endif %}">
                         <label for="pro{{forloop.counter}}">
                             <p class="pb-5">{{service.label}}</p>
                             <strong>Rs. {{service.inr_price|floatformat}}/-</strong>
