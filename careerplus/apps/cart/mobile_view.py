@@ -12,6 +12,31 @@ from payment.tasks import make_logging_request
 
 
 class RemoveFromCartMobileView(View, CartMixin):
+
+    def removeTracking(self, product_id):
+        tracking_id = self.request.session.get(
+            'tracking_id', '')
+        tracking_product_id = self.request.session.get(
+            'tracking_product_id', '')
+        product_tracking_mapping_id = self.request.session.get(
+            'product_tracking_mapping_id', '')
+        product_availability = self.request.session.get(
+            'product_availability', '')
+        if tracking_product_id == product_id and tracking_id:
+            make_logging_request.delay(
+                tracking_product_id, product_tracking_mapping_id, tracking_id, 'remove_product')
+            # for showing the user exits for that particular cart product
+            make_logging_request.delay(
+                tracking_product_id, product_tracking_mapping_id, tracking_id, 'exit_cart')
+            if tracking_id:
+                del self.request.session['tracking_id']
+            if product_tracking_mapping_id:
+                del self.request.session['product_tracking_mapping_id']
+            if tracking_product_id:
+                del self.request.session['tracking_product_id']
+            if product_availability:
+                del self.request.session['product_availability']
+
     def post(self, request, *args, **kwargs):
         if request.is_ajax():
             data = {"status": -1}
@@ -33,11 +58,17 @@ class RemoveFromCartMobileView(View, CartMixin):
                                 childs = cart_obj.lineitems.filter(
                                     parent=parent, parent_deleted=True)
                                 if childs.count() > 1:
+                                    self.removeTracking(line_obj.product.id)
                                     line_obj.delete()
+
                                 else:
+                                    self.removeTracking(parent.product.id)
                                     parent.delete()
+
                             else:
+                                self.removeTracking(line_obj.product.id)
                                 line_obj.delete()
+
                     elif product_reference:
                         line_obj = cart_obj.lineitems.get(
                             reference=product_reference)
@@ -46,33 +77,16 @@ class RemoveFromCartMobileView(View, CartMixin):
                             childs = cart_obj.lineitems.filter(
                                 parent=parent, parent_deleted=True)
                             if childs.count() > 1:
+                                self.removeTracking(
+                                    line_obj.product.id)
                                 line_obj.delete()
-                            else:
-                                parent.delete()
-                        else:
-                            tracking_id = request.session.get(
-                                'tracking_id', '')
-                            tracking_product_id = request.session.get(
-                                'tracking_product_id', '')
-                            product_tracking_mapping_id = request.session.get(
-                                'product_tracking_mapping_id', '')
-                            product_availability = request.session.get(
-                                'product_availability', '')
-                            if tracking_product_id == line_obj.product.id and tracking_id:
-                                make_logging_request.delay(
-                                    tracking_product_id, product_tracking_mapping_id, tracking_id, 'remove_product')
-                                # for showing the user exits for that particular cart product
-                                make_logging_request.delay(
-                                    tracking_product_id, product_tracking_mapping_id, tracking_id, 'exit_cart')
-                                if tracking_id:
-                                    del request.session['tracking_id']
-                                if product_tracking_mapping_id:
-                                    del request.session['product_tracking_mapping_id']
-                                if tracking_product_id:
-                                    del request.session['tracking_product_id']
-                                if product_availability:
-                                    del request.session['product_availability']
 
+                            else:
+                                self.removeTracking(parent.product.id)
+                                parent.delete()
+
+                        else:
+                            self.removeTracking(line_obj.product.id)
                             line_obj.delete()
 
                     data['status'] = 1
