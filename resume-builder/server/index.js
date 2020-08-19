@@ -21,6 +21,7 @@ if (typeof window == 'undefined') {
             staticUrl: process.env.STATIC_URL || '',
             siteDomain: process.env.SITE_DOMAIN || '',
             siteProtocol: process.env.SITE_PROTOCOL || '',
+            siteDomainChat: process.env.CHAT_STAGING || '',
         },
         location: {
             href: ''
@@ -113,7 +114,7 @@ app.get('*', async (req, res) => {
         }
     }
 
-    const content = render(req.path, store, routes, context, timestamp, window.config.staticUrl, isMobile, window.config.siteDomain);
+    const content = render(req.path, store, routes, context, timestamp, window.config.staticUrl, isMobile, window.config.siteDomain, window.config.siteDomainChat);
     res.send(content);
 });
 

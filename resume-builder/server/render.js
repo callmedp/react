@@ -7,7 +7,7 @@ import { renderRoutes } from 'react-router-config';
 var path = require('path');
 const fs = require('fs');
 
-export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile, siteDomain) => {
+export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile, siteDomain, siteDomainChat) => {
 
   const content = renderToString(< Provider
     store={store} >
@@ -112,11 +112,14 @@ export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile
         ga('create', 'UA-3537905-41', 'auto');
         ga('send', 'pageview');
        </script>
-       <script type="text/javascript" src="https://static1.shine.com/l/cm/chatbot/learning_resume-1588796766.js">
-       </script>
+       
+       <script type="text/javascript" src="${siteDomainChat}"></script>
       <script type="text/javascript" src="${jsBuildUrl}"></script>
       </body>
     </html>
   `;
 
 };
+
+
+//<script type="text/javascript" src="https://static1.shine.com/l/cm/chatbot/learning_resume-1588796766.js"></script>
