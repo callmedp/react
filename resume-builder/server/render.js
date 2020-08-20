@@ -80,6 +80,7 @@ export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile
         window.config = {}
         config.staticUrl = "${staticUrl}" 
         config.siteDomain = "${siteDomain}"
+        config.siteDomainChat = "${siteDomainChat}"
       </script>
       <script>
           document.oncontextmenu = document.body.oncontextmenu = function() {return false;}
@@ -113,7 +114,6 @@ export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile
         ga('send', 'pageview');
        </script>
        
-       <script type="text/javascript" src="${siteDomainChat}"></script>
       <script type="text/javascript" src="${jsBuildUrl}"></script>
       </body>
     </html>
