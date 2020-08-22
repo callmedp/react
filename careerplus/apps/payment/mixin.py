@@ -166,8 +166,11 @@ class PaymentMixin(object):
             product_tracking_mapping_id = request.session.get(
                 'product_tracking_mapping_id', '')
             tracking_id = request.session.get('tracking_id', '')
+            product_availability = request.session.get(
+                'product_availability', '')
+            
             action = 'purchase_done'
-            if tracking_id:
+            if tracking_id and product_availability:
                 make_logging_request.delay(
                     tracking_product_id, product_tracking_mapping_id, tracking_id, action)
 
@@ -189,6 +192,8 @@ class PaymentMixin(object):
                     del request.session['tracking_product_id']
                 if product_tracking_mapping_id:
                     del request.session['product_tracking_mapping_id']
+                if product_availability:
+                    del request.session['product_availability']
             except Exception as e:
                 logging.getLogger('error_log').error(
                     "unable to modify session request %s " % str(e))

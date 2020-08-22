@@ -80,7 +80,7 @@
                 </div>
                 <div class="pull-right" style="width:90%;">
 
-                   <a class="icon-cart pull-right" href="{% url "cart:payment-summary" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
+                   <a class="icon-cart pull-right" href="{% url "cart:payment-summary" %}" onclick="handleTracking('exit_product_page')" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
                    <form method='get' id="search-form">
                     <div class="searchbox">
                         <input id='id_q' type="text" placeholder="Search here" name="search" class="searchbox-input" autocomplete="off">
@@ -182,7 +182,7 @@
         <article class="mt-20">
             {% if prd_service == 'course' or product.type_flow == 16 %}
             <span class="byvskills mb-30">
-              <strong><a onclick="gaEvent('Search','{{prd_vendor}}','ViewAllProductVendor');" href="/search/results/?fvid={{product.vendor.id}}">All courses/ certifications ({{prd_vendor_count}})</a></strong>
+              <strong><a onclick="gaEvent('Search','{{prd_vendor}}','ViewAllProductVendor');handleTracking('exit_product_page');handleTracking('all_courses_or_certifications');" href="/search/results/?fvid={{product.vendor.id}}">All courses/ certifications ({{prd_vendor_count}})</a></strong>
               By {{prd_vendor}}
             </span>
             {% endif %}
@@ -271,7 +271,7 @@
                 <ul class="underline">
                 {% for provider in pop_list|slice:"0:4" %}
                     <li>
-                        <a href="{{provider.url}}" for="test1">
+                        <a href="{{provider.url}}" for="test1" onclick="handleTracking('exit_product_page');handleTracking('other_providers')">
                             <span>
                                 <img aria-label="provider image" src="{{provider.vendor.image.url}}" style="z-index: 10;">
                                 {{provider.vendor}} - {{provider.heading}} (Rs.{{provider.inr_price|floatformat:"0"}})
@@ -290,7 +290,7 @@
             <ul class="underline">
             {% for package in pop_list|slice:"0:4"  %}
                 <li>
-                    <a href="{{package.url}}">
+                    <a href="{{package.url}}" onclick="handleTracking('exit_product_page');handleTracking('other_packages')">
                     {% if package.duration %}
                         <strong>
                             {{ package.duration }} days
@@ -310,7 +310,7 @@
         <ul class="underline">
         {% for package in pop_list|slice:"0:4"  %}
             <li>
-                <a href="{{package.url}}{% if sqs.id in linkedin_resume_services %}?token={{request.GET.token}}{% endif %}" class="blue-link pb-0">
+                <a href="{{package.url}}{% if sqs.id in linkedin_resume_services %}?token={{request.GET.token}}{% endif %}" class="blue-link pb-0" onclick="handleTracking('exit_product_page');handleTracking('other_packages')">
                 {% if package.experience %}
                     <strong>
                         {{package.experience|get_choice_display:"EXP_DICT"}}
@@ -468,17 +468,25 @@
 
 {% block js_section %}
 
+    <script>
+        var shineApiUrl = "{{shine_api_url}}"
+        var trackingProductId = "{{tracking_product_id}}"
+        var productTrackingMappingId = "{{product_tracking_mapping_id}}"
+        var trackingId = "{{tracking_id}}"
+        var productId = "{{product_id}}"
+    </script>
+
     {{block.super}}
     {% compress js %}
     <script src="{% static 'shinelearn/js/mobile/cart/cart.js' %}"></script>
+    <script src="{% static 'shinelearn/js/shop/commonDetails.js' %}"></script>
     <script src="{% static 'shinelearn/js/cart/cart.js' %}"></script>
     <script src="{% static 'shinelearn/js/mobile/shop/detail.js' %}"></script>
     <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
     <script src="{% static 'shinelearn/js/mobile/zopim_chat/custom.js' %}"></script>
     {% endcompress %}
 
-<script type="text/javascript">
-
+<script type="text/javascript"> 
           (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
               (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
               m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)

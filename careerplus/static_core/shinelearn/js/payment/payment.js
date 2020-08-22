@@ -11,7 +11,7 @@ const makeTrackingRequest = (loggingData) => {
 
 const trackClickEvent = () => {
     let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'exit_cart', 'position': 1, domain: 2, sub_product: trackingProductId };
-    if (trackingId) {
+    if (trackingId && productAvailability) {
         makeTrackingRequest(loggingData);
     }
 }
@@ -23,14 +23,14 @@ $(document).ready(function () {
 
     $('#review-order-option').click(function () {
         let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'review_order', 'position': 1, domain: 2, sub_product: trackingProductId };
-        if (trackingId) {
+        if (trackingId && productAvailability) {
             makeTrackingRequest(loggingData);
         }
     })
 
     $('#card-netbanking').click(function () {
         let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'card_and_netbanking', 'position': 1, domain: 2, sub_product: trackingProductId };
-        if (trackingId) {
+        if (trackingId && productAvailability) {
             makeTrackingRequest(loggingData);
         }
     })
@@ -81,7 +81,7 @@ $(document).ready(function () {
                 return;
             }
             let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'cheque_payment', 'position': 3, domain: 2, sub_product: trackingProductId };
-            if (trackingId) {
+            if (trackingId && productAvailability) {
                 makeTrackingRequest(loggingData);
             }
             $('#check-sumit-button').prop('disabled', true);
@@ -93,7 +93,7 @@ $(document).ready(function () {
 
     $('#cash-option-submit').click(function () {
         let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'cash_payment', 'position': 2, domain: 2, sub_product: trackingProductId };
-        if (trackingId) {
+        if (trackingId && productAvailability) {
             makeTrackingRequest(loggingData);
         }
         $(this).val('Please wait...')
@@ -103,14 +103,14 @@ $(document).ready(function () {
 
     $('#buy-now-pay-later').click(function () {
         let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'buy_now_pay_later', 'position': 4, domain: 2, sub_product: trackingProductId };
-        if (trackingId) {
+        if (trackingId && productAvailability) {
             makeTrackingRequest(loggingData);
         }
     })
 
     $('#amazon-pay-payment').click(function () {
         let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'amazon_pay_payment', 'position': 4, domain: 2, sub_product: trackingProductId };
-        if (trackingId) {
+        if (trackingId && productAvailability) {
             makeTrackingRequest(loggingData);
         }
     })

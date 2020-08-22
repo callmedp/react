@@ -31,7 +31,7 @@
     <section class="">
         <div class="">
             <div class="header-carousel">
-                <div class="header-bg1">
+                <div class="{% if country in 'india,gulf' %} header-bg1 {% else %} header-bg1-gen {% endif %}">
                     <div class="content">
                         <span><a href="https://learning.shine.com/"><img src="{% static 'shinelearn/images/shop/google-ad/shinelogo.png' %}" class="mb-3" alt="shinelogo"></a></span>
                         <strong>Struggling with your job?</strong>
@@ -57,7 +57,7 @@
                     
                 </div>
     
-                <div class="header-bg2">
+                <div class="{% if country in 'india,gulf' %} header-bg2 {% else %} header-bg2-gen {% endif %}">
                     <div class="content">
                         <span><a href="https://learning.shine.com/"></a><img src="{% static 'shinelearn/images/shop/google-ad/shinelogo.png' %}" alt="shinelogo"></span>
                          <h1 class="mt-5 make">Make your online profile Extremely Strong</h1> 
@@ -97,9 +97,9 @@
             <div class="d-flex">
               <div class="custom-select-box exp">
                   <select id='country_code' name="country_code" class="custom-select">
-                    <option value="91" selected>+91</option>
-                    <option value="92">+92</option>
-                    <option value="93">+93</option>
+                    {% for code in country_code_list %}
+                      <option value="{{code}}" {% if code == country_code %} selected {% endif %}>+{{code}}</option>
+                    {% endfor %}
                   </select>
               </div>
               <div class="form-group">
@@ -496,8 +496,13 @@
             <div class="row pt-5">
                 <div class="col-md-6 col-sm-12">
                     <div class="find">
+                        {% if country in 'india,gulf' %}
                         <strong>Find your next job offer here</strong>
                         <img src="{% static 'shinelearn/images/shop/google-ad/profsionalwork-laptop-img.jpg' %}"  alt="img">
+                        {% else %}
+                        <strong class="modal-heading">Limited Time Offer</strong>
+                        <img src="{% static 'shinelearn/images/shop/google-ad/limited-time-offer.jpg' %}"  alt="img">
+                        {% endif %}
                     </div>
                 </div>
                 <div class="col-md-6 col-sm-12 mt-5">
@@ -512,9 +517,9 @@
                         <div class="d-flex">
                           <div class="custom-select-box exp">
                               <select id="country_code_modal" name="country_code" class="custom-select">
-                                <option value="91" selected>+91</option>
-                                <option value="92">+92</option>
-                                <option value="93">+93</option>
+                                {% for code in country_code_list %}
+                                  <option value="{{code}}" {% if code == country_code %} selected {% endif %}>+{{code}}</option>
+                                {% endfor %}
                               </select>
                           </div>
                           <div class="form-group">

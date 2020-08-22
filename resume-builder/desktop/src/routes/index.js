@@ -8,7 +8,6 @@ import Middleware from '../middlewares/middleware'
 
 let middleware =new Middleware();
 export const RouteWithSubRoutes = route => {
-    
     return(
     <Route
         path={route.path}

@@ -115,10 +115,19 @@
 
 {% block js_section %}
     {{block.super}}
+    <script>
+    var shineApiUrl = "{{shine_api_url}}"
+      var trackingProductId = "{{tracking_product_id}}"
+      var productTrackingMappingId = "{{product_tracking_mapping_id}}"
+      var trackingId = "{{tracking_id}}"
+      var productId ="{{product_id}}"
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.14.0/dist/sweetalert2.all.min.js"></script>
 
     {% compress js %}
     <script src="{% static 'shinelearn/js/common/plugin.activeOnScroll.js' %}"></script>
+    <script src="{% static 'shinelearn/js/shop/commonDetails.js' %}"></script>
+    
     <script src="{% static 'shinelearn/js/cart/cart.js' %}"></script>
     <script src="{% static 'shinelearn/js/shop/detail.js' %}"></script>
     <script src="{% static 'shinelearn/js/common/scroller.js' %}" type="text/javascript"></script>

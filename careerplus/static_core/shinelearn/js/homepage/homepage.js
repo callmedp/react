@@ -20,3 +20,29 @@ $(document).ready(function () {
     });
 
 })
+
+
+
+const makeTrackingRequest = (loggingData) => {
+
+    $.ajax({
+        method: "POST",
+        url: `${shineApiUrl}/learning-touchpoints-tracking/`,
+        data: JSON.stringify(loggingData),
+        contentType: "application/json",
+    })
+}
+
+const homepageTracking = (action) => {
+    let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: action, 'position': 1, domain: 2, sub_product: trackingProductId };
+    if (trackingId) {
+        makeTrackingRequest(loggingData);
+    }
+}
+
+const trackClickEvent = () => {
+    let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'exit_home_page', 'position': 1, domain: 2, sub_product: trackingProductId };
+    if (trackingId) {
+        makeTrackingRequest(loggingData);
+    }
+}

@@ -96,6 +96,9 @@ class TestCacheUtil:
         return self.set_cache_data(key,test_dict)
 
     def set_cache_data(self, key, data):
+        if not key or not self.session_id:
+            return
+
         key = self.session_id + key
         timeout = None
         if not self.test_timeout:

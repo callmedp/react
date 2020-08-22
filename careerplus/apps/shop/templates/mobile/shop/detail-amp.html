@@ -12,6 +12,7 @@
     <meta name="amp-google-client-id-api" content="googleanalytics">
 
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet"> 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"> </script>
 
     <script async src="https://cdn.ampproject.org/v0.js"></script>
     <script async custom-element="amp-accordion" src="https://cdn.ampproject.org/v0/amp-accordion-0.1.js"></script>
@@ -151,11 +152,11 @@
                         </li>
 
                         <li>
-                            <a class="btn btn-yellow w100fl" id="enrol-now-button" href="//{{ SITE_DOMAIN }}{{canonical_url}}?type=autoEnrol">Enroll now</a>
+                            <a class="btn btn-yellow w100fl" id="enrol-now-button" href="//{{ SITE_DOMAIN }}{{canonical_url}}?type=autoEnrol" onclick="handleTracking('enroll_now')">Enroll now</a>
                         </li>
 
                         <li>
-                            <a class="btn btn-outline w100fl" id="add-to-cart" href="//{{ SITE_DOMAIN }}{{canonical_url}}?type=autoCart">Add to cart</a>
+                            <a class="btn btn-outline w100fl" id="add-to-cart" href="//{{ SITE_DOMAIN }}{{canonical_url}}?type=autoCart" onclick="handleTracking('add_to_cart')">Add to cart</a>
                         </li>
                     </ul>
                 </div>
@@ -271,6 +272,39 @@
     {% include "mobile/shop/partials/call_us.html" %}
     {% include 'basic/footer.html' %}
     {% include 'basic/navigation-amp.html' %}
+
+    <script type="text/javascript">
+        var shineApiUrl = "{{shine_api_url}}"
+        var trackingProductId = "{{tracking_product_id}}"
+        var productTrackingMappingId = "{{product_tracking_mapping_id}}"
+        var trackingId = "{{tracking_id}}"
+        var productId = "{{product_id}}"
+
+
+    const makeTrackingRequest = (loggingData) => {
+        $.ajax({
+            method: "POST",
+            url: `${shineApiUrl}/learning-touchpoints-tracking/`,
+            data: JSON.stringify(loggingData),
+            contentType: "application/json",
+        })
+    }
+
+    function handleTracking(action) {
+
+        let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: action, 'position': 1, domain: 2, sub_product: trackingProductId };
+        if (trackingId && trackingProductId === productId) {
+            makeTrackingRequest(loggingData);
+        }  
+      }
+
+    function trackClickEvent() {
+        let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'exit_product_page', 'position': 1, domain: 2, sub_product: trackingProductId };
+        if (trackingId && trackingProductId === productId) {
+            makeTrackingRequest(loggingData);
+        }
+        }
+    </script>
 
   </body>
 </html>

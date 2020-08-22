@@ -359,9 +359,9 @@ Payment Summary - Shine Learning
 <script>
   var shineApiUrl = "{{shine_api_url}}"
   var trackingProductId = "{{tracking_product_id}}"
+  var productAvailability = "{{product_availability}}"
   var productTrackingMappingId = "{{product_tracking_mapping_id}}"
   var trackingId = "{{tracking_id}}"
-console.log({ trackingProductId, shineApiUrl, productTrackingMappingId, trackingId})
 </script>
 {% compress js %}
 <script type="text/javascript" src="{% static 'shinelearn/js/cart/payment-summary.js' %}"></script>
