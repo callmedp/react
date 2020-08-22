@@ -295,6 +295,30 @@
             </div><!-- // Skill Tabs -->
         </div><!-- // Course and Assessments -->
 
+        <!--Other Courses To Explore--->
+        {% if explore_courses %}
+        <div class="popular-courses mb-20 mt-20" id="popular-courses">
+            <div class="d-flex align-items-center mb-15">
+                <h2 class="mr-auto">Other Courses To Explore</h2>
+            </div>
+
+            <ul class="popular-courses__slides">
+                {% for course in explore_courses %}
+                <li class="postion-relative">
+                    <span class="popular-courses__slides--circle">
+                        <img aria-label="{{course.name}}" src="{{course.icon}}" alt="{{course.name}}">
+                    </span>
+                    <div class="popular-courses__slides--items border-bottom-blue mt-0">
+                        <a href="{{course.url}}">
+                            <p>{{course.name}}</p>
+                        </a>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+
         {% if testimonialcategory|length %}
         <div class="learner-stories row mt-20" id="testimonial">
             <h2 class="pl-15">Learner’s stories</h2>

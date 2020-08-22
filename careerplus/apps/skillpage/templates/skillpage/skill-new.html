@@ -474,6 +474,31 @@
               </div>
             </section>
 
+            <!-- other courses to explore section -->
+            {% if explore_courses %}
+              <section id="explore-courses" class="col-sm-12">
+                <div class="popular-course">
+                  <div class="row">
+                    <h2>Other Courses To Explore</h2>
+                    <div class="d-flex mb-10 course-wd">
+                      {% for course in explore_courses %}
+                        <div class="col">
+                          <div class="media">
+                            <figure class="mr-20 shadow-icon">
+                              <img aria-label="{{course.name}}" class="img-fluid" src="{{course.icon}}" alt="{{course.name}}">
+                            </figure>
+                            <figcaption class="media-body">
+                                <a href="{{course.url}}">{{course.name}}</a>
+                            </figcaption>
+                          </div>
+                        </div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                </div>
+              </section>
+            {% endif %}
+
             {% if testimonialcategory|length %}
               <!-- learners stories section -->
               <section id="testimonial" class="col-sm-12">

@@ -157,6 +157,7 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
         blank=True)
     active = models.BooleanField(default=False)
     display_order = models.IntegerField(default=1)
+    ex_cour = models.TextField(default='[]')
 
     _metadata_default = ModelMeta._metadata_default.copy()
 
