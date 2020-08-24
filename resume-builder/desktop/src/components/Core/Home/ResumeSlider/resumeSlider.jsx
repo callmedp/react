@@ -38,6 +38,7 @@ export default class ResumeSlider extends Component {
     }
 
     async selectTemplate() {
+        this.props.sendTrackingInfo('homepage_select_template',1)
         this.props.eventClicked({
             'action': 'SelectTemplate',
             'label': 'HomePage'
@@ -78,33 +79,7 @@ export default class ResumeSlider extends Component {
         }
 
 
-        // get candidate details 
-        // try {
-        //     await this.props.getCandidateShineDetails();
-        // }
-        // catch (e) {
-        //     console.log('error ', e);
-        // }
-        // if (page == 'home') {
-        //     //   this.props.showLoginModal()
-        // }
-        // else {
-        //     const { page, fetchSelectedTemplateImage, history } = this.props;
-        //     localStorage.setItem('selected_template', (templateId))
-        //     const select_template_modal = this.props.ui ? this.props.ui.select_template_modal : false
-        //     if (select_template_modal) {
-        //         this.props.hideSelectTemplateModal();
-        //         if (page === 'edit') {
-        //             this.props.fetchDefaultCustomization(templateId);
-        //         }
-        //         this.props.updateSelectedTemplate(this.props.userInfo)
-        //         if (fetchSelectedTemplateImage && page === 'buy') {
-        //             this.props.fetchSelectedTemplateImage(templateId, false)
-        //         }
-        //     } else {
-        //         history.push('/resume-builder/edit/?type=profile')
-        //     }
-        // }
+
     }
 
     showZoomedImage(templateId) {

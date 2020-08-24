@@ -9,7 +9,8 @@ import Menuitem from './menuItem';
 import moment from 'moment'
 import Loader from '../../../Common/Loader/loader';
 import {eventClicked} from '../../../../store/googleAnalytics/actions/index'
-
+import { trackUser } from '../../../../store/tracking/actions/index';
+import { isTrackingInfoAvailable, getTrackingInfo } from "../../../../Utils/common";
 
 class Menu extends Component {
 
@@ -23,6 +24,7 @@ class Menu extends Component {
         this.removeItem = this.removeItem.bind(this);
         this.saveMenu = this.saveMenu.bind(this);
         this.closeMenu = this.closeMenu.bind(this);
+        this.sendTrackingInfo = this.sendTrackingInfo.bind(this);
     }
 
     componentDidMount(){
@@ -31,6 +33,13 @@ class Menu extends Component {
             history.push(`/resume-builder/edit/?type=profile`)
         }
         this.setState({addmore: entity_preference_data})
+    }
+    sendTrackingInfo(action, position) {
+        if (isTrackingInfoAvailable()) {
+            const { trackingId, productTrackingMappingId, productId } = getTrackingInfo();
+            const {userTrack} = this.props;
+            userTrack({ trackingId, productTrackingMappingId, productId, action, position });
+        }
     }
 
     componentDidUpdate(prevProps){
@@ -45,10 +54,13 @@ class Menu extends Component {
     async saveMenu() {
         const {addmore} = this.state
         const {sidenav:{currentLinkPos},updateMenuItems,personalInfo,updateListOfLink,history,eventClicked} = this.props
+
         eventClicked({
             'action':'CompletedAddRemove',
             'label':'Click'
         })
+
+        this.sendTrackingInfo('mobile_done_add_remove_menu',1)
         let links = []
         for (let i of addmore) {
             if (i.active) {
@@ -70,6 +82,7 @@ class Menu extends Component {
 
     closeMenu(){
         const {sidenav:{currentLinkPos},history} = this.props
+        this.sendTrackingInfo('mobile_cancel_add_remove_menu',1)
         history.push(`/resume-builder/edit/?type=${entityLinkNameLink[parseInt(currentLinkPos)+ 1]}`)
     }
 
@@ -77,12 +90,14 @@ class Menu extends Component {
         let {addmore} = this.state;
         addmore[pos -1].active = true;
         this.setState({addmore})
+        this.sendTrackingInfo('mobile_menu_add_section',1);
     }
 
     removeItem(pos) {
         let {addmore} = this.state;
         addmore[pos -1].active = false
         this.setState({addmore})
+        this.sendTrackingInfo('mobile_menu_remove_section',1);
     }
 
     render() {
@@ -98,6 +113,7 @@ class Menu extends Component {
                         {
                             return(
                                     <Menuitem 
+            
                                         label={item.entity_text}
                                         key={key}
                                         pos={item.entity_id}
@@ -117,6 +133,7 @@ class Menu extends Component {
                             {
                                 return(
                                         <Menuitem 
+                            
                                             label={item.entity_text}
                                             key={key}
                                             pos={item.entity_id}
@@ -174,7 +191,8 @@ const mapDispatchToProps = (dispatch) => {
         },
         'eventClicked': (data) => {
             return dispatch(eventClicked(data))
-        }
+        },
+        "userTrack" : ( data ) => dispatch(trackUser(data)),
         
     }
 };

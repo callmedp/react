@@ -39,12 +39,14 @@ export default class MenuModal extends React.Component {
         let {preferenceList} = this.state;
         preferenceList[pos - 1].active = true;
         this.setState({preferenceList})
+        this.props.sendTrackingInfo('menu_add_section',1)
     }
 
     removeItem(pos) {
         let {preferenceList} = this.state;
         preferenceList[pos - 1].active = false
         this.setState({preferenceList})
+        this.props.sendTrackingInfo('menu_remove_section',1)
     }
 
     async saveMenuItems() {

@@ -14,10 +14,8 @@ import LoginModal from "../../Modal/loginModal";
 import { hideModal, showModal, showLoginModal, hideLoginModal } from "../../../store/ui/actions";
 import { displaySelectedTemplate } from '../../../store/template/actions';
 import { eventClicked } from '../../../store/googleAnalytics/actions/index';
-import {
-    Redirect
-} from 'react-router-dom'
-
+import { trackUser } from '../../../store/tracking/actions/index';
+import { storeTrackingInfo, updateProductAvailability, isTrackingInfoAvailable, getTrackingInfo, removeTrackingInfo} from '../../../Utils/common';
 class Home extends Component {
     constructor(props) {
 
@@ -36,6 +34,9 @@ class Home extends Component {
         this.state.login = login;
         this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/'
         this.handleLoginSuccess = this.handleLoginSuccess.bind(this);
+        this.handleBuildYourResumeClick = this.handleBuildYourResumeClick.bind(this)
+        this.sendTrackingInfo = this.sendTrackingInfo.bind(this)
+        this.handleExitTracking = this.handleExitTracking.bind(this)
     }
 
 
@@ -65,6 +66,15 @@ class Home extends Component {
         }
     }
 
+    sendTrackingInfo(action, position) {
+        if (isTrackingInfoAvailable()) {
+            const { trackingId, productTrackingMappingId, productId } = getTrackingInfo();
+            const {userTrack} = this.props;
+            userTrack({ trackingId, productTrackingMappingId, productId, action, position });
+        }
+    }
+
+
 
     handleLoginSuccess() {
         const { history, location } = this.props;
@@ -78,6 +88,17 @@ class Home extends Component {
         }
     }
     async componentDidMount() {
+
+        const query = new URLSearchParams(this.props.location.search);
+        const trackingId = query.get('t_id')
+        const productId = query.get('prod_id')
+        
+        if(trackingId !== null){
+            const productTrackingMappingId = productId === '11' ? productId : -1;
+            storeTrackingInfo(trackingId, productTrackingMappingId, productId)
+            updateProductAvailability(productId);
+            this.sendTrackingInfo('enter_resume_builder_homepage',1)
+        }
 
         if (typeof document !== 'undefined' && document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]) {
             document.getElementsByClassName('chat-bot')[0].style.display = 'none';
@@ -113,6 +134,16 @@ class Home extends Component {
 
     }
 
+    handleBuildYourResumeClick(){
+        this.scrollTo('templates', 'BuildResume', 'Features')
+        this.sendTrackingInfo('homepage_build_your_resume',1)
+    }
+
+    handleExitTracking(){
+        this.sendTrackingInfo('resume_builder_exit',1)
+        removeTrackingInfo()
+    }
+
     static getActions() {
         return [getComponentTitle]
     }
@@ -146,6 +177,7 @@ class Home extends Component {
                     <LoaderPage />
                 }
                 <Header
+                    sendTrackingInfo = {this.sendTrackingInfo}
                     userName={first_name}
                     number={number}
                     email={email}
@@ -155,9 +187,11 @@ class Home extends Component {
                     getclass={this.state.scrolled ? 'color-change' : ''}
                     location={this.props.location} />
                 <Banner
+                    sendTrackingInfo = {this.sendTrackingInfo}
                     userName={first_name}
                     eventClicked={eventClicked} />
                 <LoginModal
+                    
                     handleLoginSuccess={this.handleLoginSuccess}
                     loginCandidate={loginCandidate}
                     hideLoginModal={hideLoginModal}
@@ -254,8 +288,10 @@ class Home extends Component {
                 </section>
 
                 <ResumeSlider
+                    sendTrackingInfo = {this.sendTrackingInfo}
                     {...this.props}
                     page={'home'}
+                   
                 />
 
                 <section className="section-container">
@@ -319,7 +355,7 @@ class Home extends Component {
                     </ul>
 
                     <button className="orange-button"
-                        onClick={() => this.scrollTo('templates', 'BuildResume', 'Features')}>Build your resume
+                        onClick={this.handleBuildYourResumeClick}>Build your resume
                     </button>
 
                 </section>
@@ -344,15 +380,16 @@ class Home extends Component {
                             Shine.com, Shine Learning has a vision to up-skill the Indian talent pool to adapt to the
                             changing job market.</p>
                         <ul>
-                            <li><a href="https://learning.shine.com/" className="hyper-link-urls" >Explore courses</a></li>
-                            <li> <a href="https://learning.shine.com/services/resume-writing/63/" className="hyper-link-urls">Job assistance</a></li>
-                            <li>  <a href="https://learning.shine.com/cms/resume-format/1/" className="hyper-link-urls" >Free rescources</a></li>
-                            <li><a href="https://learning.shine.com/talenteconomy/" className="hyper-link-urls">Talent economy</a></li>
+                            <li><a href="https://learning.shine.com/" className="hyper-link-urls" onClick={this.handleExitTracking}>Explore courses</a></li>
+                            <li> <a href="https://learning.shine.com/services/resume-writing/63/" className="hyper-link-urls" onClick={this.handleExitTracking}>Job assistance</a></li>
+                            <li>  <a href="https://learning.shine.com/cms/resume-format/1/" className="hyper-link-urls" onClick={this.handleExitTracking} >Free rescources</a></li>
+                            <li><a href="https://learning.shine.com/talenteconomy/" className="hyper-link-urls" onClick={this.handleExitTracking}>Talent economy</a></li>
                         </ul>
                     </div>
                 </section>
 
-                <Footer />
+                <Footer 
+                sendTrackingInfo = {this.sendTrackingInfo} />
             </div>
         )
     }
@@ -409,7 +446,8 @@ const mapDispatchToProps = (dispatch) => {
             return new Promise((resolve, reject) => {
                 return dispatch(checkSessionAvaialability({ resolve, reject }))
             })
-        }
+        },
+       "userTrack" : (data) => dispatch(trackUser(data)),
     }
 };
 

@@ -16,6 +16,9 @@ class Header extends Component {
         this.scrollTo = this.scrollTo.bind(this);
         this.reachUsButton = this.reachUsButton.bind(this);
         this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/'
+        this.handleBuildYourResumeClick = this.handleBuildYourResumeClick.bind(this)
+        this.handleTemplateClick = this.handleTemplateClick.bind(this)
+        this.howItWorks = this.howItWorks.bind(this)
     }
 
     scrollTo(elem, offset, action, label) {
@@ -34,11 +37,27 @@ class Header extends Component {
 
     reachUsButton() {
         const { showHelpModal, eventClicked } = this.props;
+        this.props.sendTrackingInfo("header_reach_us",1)
         showHelpModal()
         eventClicked({
             'action': 'ReachUs',
             'label': 'Header'
         })
+    }
+
+    howItWorks(){
+        this.scrollTo('works', -63, 'Howitworks_Header', 'Header')
+        this.props.sendTrackingInfo('header_how_it_works',1)
+    }
+
+    handleTemplateClick(){
+        this.scrollTo('templates', -50, 'Templates', 'Header')
+        this.props.sendTrackingInfo('header_templates',1)
+    }
+
+    handleBuildYourResumeClick(){
+         this.scrollTo('templates', -60, 'BuildResume', 'Header') 
+         this.props.sendTrackingInfo('header_build_your_resume',1)
     }
 
     componentDidMount() {
@@ -60,10 +79,10 @@ class Header extends Component {
                     {!!(page === 'home') &&
                         <ul className="home-links">
                             <li>
-                                <span onClick={() => this.scrollTo('works', -63, 'Howitworks_Header', 'Header')}>How it Works</span>
+                                <span onClick={this.howItWorks}>How it Works</span>
                             </li>
                             <li>
-                                <span onClick={() => this.scrollTo('templates', -50, 'Templates', 'Header')}>Templates</span>
+                                <span onClick={this.handleTemplateClick}>Templates</span>
                             </li>
                         </ul>
                     }
@@ -76,7 +95,7 @@ class Header extends Component {
                                         Reach us
                                 </button>
                                 }
-                                <button className="white-button mr-30" onClick={() => { this.scrollTo('templates', -60, 'BuildResume', 'Header') }}>Build your
+                                <button className="white-button mr-30" onClick={this.handleBuildYourResumeClick}>Build your
                                         resume
                             </button>
                             </React.Fragment>

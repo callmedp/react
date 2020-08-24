@@ -8,7 +8,7 @@ import { updateAlertModalStatus, showGenerateResumeModal, hideGenerateResumeModa
 import Loader from '../../../Common/Loader/loader.jsx';
 import ChangeTemplateModal from './changeTemplateModal.jsx';
 import { loginCandidate } from '../../../../store/landingPage/actions/index';
-
+import { trackUser } from '../../../../store/tracking/actions/index';
 import moment from 'moment'
 import {
     Accordion,
@@ -23,7 +23,7 @@ import { siteDomain } from "../../../../Utils/domains";
 import AlertModal from '../../../Common/AlertModal/alertModal.jsx';
 import { eventClicked } from '../../../../store/googleAnalytics/actions/index'
 import { formCategoryList } from '../../../../Utils/formCategoryList'
-
+import { getTrackingInfo, isTrackingInfoAvailable } from '../../../../Utils/common';
 class Preview extends Component {
 
     constructor(props) {
@@ -55,6 +55,9 @@ class Preview extends Component {
         this.themeChange = this.themeChange.bind(this);
         this.fontChange = this.fontChange.bind(this);
         this.toggleUploadResume = this.toggleUploadResume.bind(this);
+        this.customizeTemplate = this.customizeTemplate.bind(this);
+        this.selectTab = this.selectTab.bind(this);
+        this.sendTrackingInfo = this.sendTrackingInfo.bind(this);
     }
 
     componentWillUpdate(prevProps) {
@@ -94,7 +97,8 @@ class Preview extends Component {
 
 
     toggleUploadResume(event) {
-        let { personalInfo: { upload_resume: uploadResume }, personalInfo, updateSelectedTemplate } = this.props;
+        let { personalInfo: { upload_resume: uploadResume }, personalInfo, updateSelectedTemplate} = this.props;
+        this.sendTrackingInfo('mobile_update_resume_on_shine_profile',1)
         personalInfo['upload_resume'] = !uploadResume;
         updateSelectedTemplate(personalInfo);
     }
@@ -144,6 +148,7 @@ class Preview extends Component {
 
     themeChange(colorNo, colorName) {
         this.setState({ selectedColor: colorNo })
+        this.sendTrackingInfo('mobile_change_theme',1)
         this.props.eventClicked({
             'action': 'ChangeTheme',
             'label': colorName
@@ -172,7 +177,8 @@ class Preview extends Component {
     }
 
     moveUpSection(selectedEntity, selectedTemplate) {
-        const { eventClicked, reorderSection } = this.props;
+        const { eventClicked, reorderSection} = this.props;
+        this.sendTrackingInfo('mobile_reorder_section',1);
         eventClicked({
             'action': 'ReorderSection',
             'label': formCategoryList[selectedEntity['entity_id']].name
@@ -184,7 +190,8 @@ class Preview extends Component {
     }
 
     moveDownSection(selectedEntity, selectedTemplate) {
-        const { eventClicked, reorderSection } = this.props;
+        const { eventClicked, reorderSection} = this.props;
+        this.sendTrackingInfo('mobile_reorder_section',1);
         eventClicked({
             'action': 'ReorderSection',
             'label': formCategoryList[selectedEntity['entity_id']].name
@@ -196,7 +203,10 @@ class Preview extends Component {
     }
 
     getResume() {
-        const { personalInfo: { order_data, resume_generated }, history, reGeneratePDF, showGenerateResumeModal, hideGenerateResumeModal, eventClicked } = this.props;
+        const { personalInfo: { order_data, resume_generated }, history, reGeneratePDF, showGenerateResumeModal, hideGenerateResumeModal, eventClicked} = this.props;
+
+        this.sendTrackingInfo('mobile_preview_get_your_resume',1);
+
         eventClicked({
             'action': 'GetYourResume',
             'label': 'Click'
@@ -244,11 +254,30 @@ class Preview extends Component {
         }
     }
 
+    sendTrackingInfo(action, position) {
+        if (isTrackingInfoAvailable()) {
+            const { trackingId, productTrackingMappingId, productId } = getTrackingInfo();
+            const {userTrack} = this.props;
+            userTrack({ trackingId, productTrackingMappingId, productId, action, position });
+        }
+    }
+
     async handleCustomization(data) {
         await this.props.customizeTemplate(data)
         this.props.fetchTemplate();
         this.setState({ customize: false, currentTab: 1 })
     }
+    
+    customizeTemplate(){
+        this.setState({ customize: true }) 
+        this.sendTrackingInfo('mobile_preview_customize_template',1);
+    }
+
+    selectTab(tabNo){
+        this.setState({ currentTab: tabNo }) 
+        this.sendTrackingInfo('mobile_preview_select_tab',1);
+    }
+    
 
     render() {
         const { customize, currentTab, selectedColor, headingFontSize, textFontSize, sectionEntityName, startingReorderUpDowmIndex, zoomIn } = this.state
@@ -285,7 +314,7 @@ class Preview extends Component {
                 </div>
 
                 <div className="preview__bottom-btns pos-fixed">
-                    <span className="btn btn__round btn--outline" onClick={() => { this.setState({ customize: true }) }}>Customize template</span>
+                    <span className="btn btn__round btn--outline" onClick={this.customizeTemplate }>Customize template</span>
                     <span className="btn btn__round btn__primary" onClick={this.getResume}>Get your resume</span>
                 </div>
 
@@ -301,7 +330,7 @@ class Preview extends Component {
                                         <div className={"filter__accordion__card " + (currentTab === 1 ? "filter__accordion--active" : "")}>
                                             <AccordionItemHeading>
                                                 <AccordionItemButton>
-                                                    <div className="filter__accordion__card__heading" onClick={() => { this.setState({ currentTab: 1 }) }}>
+                                                    <div className="filter__accordion__card__heading" onClick={ () => this.selectTab(1) }>
                                                         <div className="filter__accordion__card__heading--left">
                                                             <i className="sprite icon--theme mr-10"></i>
                                                             <span>Change theme</span>
@@ -378,7 +407,7 @@ class Preview extends Component {
                                         <div className={"filter__accordion__card " + (currentTab === 2 ? "filter__accordion--active" : "")}>
                                             <AccordionItemHeading>
                                                 <AccordionItemButton>
-                                                    <div className="filter__accordion__card__heading" onClick={() => { this.setState({ currentTab: 2 }) }}>
+                                                    <div className="filter__accordion__card__heading" onClick={() => this.selectTab(2)}>
                                                         <div className="filter__accordion__card__heading--left">
                                                             <i className="sprite icon--font mr-10"></i>
                                                             <span>Font size</span>
@@ -433,7 +462,7 @@ class Preview extends Component {
                                         <div className={"filter__accordion__card " + (currentTab === 3 ? "filter__accordion--active" : "")}>
                                             <AccordionItemHeading>
                                                 <AccordionItemButton>
-                                                    <div className="filter__accordion__card__heading" onClick={() => { this.setState({ currentTab: 3 }) }}>
+                                                    <div className="filter__accordion__card__heading" onClick={() => this.selectTab(3) }>
                                                         <div className="filter__accordion__card__heading--left">
                                                             <i className="sprite icon--reorder mr-10"></i>
                                                             <span>Reorder section</span>
@@ -581,6 +610,7 @@ const mapDispatchToProps = (dispatch) => {
                 dispatch(loginCandidate({ payload: { alt: token }, resolve, reject, isTokenAvail: false }))
             })
         },
+        "userTrack" : (data) => dispatch(trackUser(data))
     }
 };
 

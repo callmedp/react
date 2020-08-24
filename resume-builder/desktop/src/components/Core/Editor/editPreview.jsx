@@ -29,7 +29,8 @@ import moment from 'moment'
 import { locationRouteChange, eventClicked } from '../../../store/googleAnalytics/actions/index'
 import Swal from 'sweetalert2'
 import { siteDomain } from '../../../Utils/domains'
-
+import { storeTrackingInfo, updateProductAvailability, isTrackingInfoAvailable, getTrackingInfo } from '../../../Utils/common';
+import { trackUser } from '../../../store/tracking/actions/index';
 
 class EditPreview extends Component {
     constructor(props) {
@@ -37,15 +38,32 @@ class EditPreview extends Component {
         this.removeNote = this.removeNote.bind(this);
         this.allowUploadResume = this.allowUploadResume.bind(this);
         this.generateResumeAlert = this.generateResumeAlert.bind(this);
-
+        this.sendTrackingInfo = this.sendTrackingInfo.bind(this);
         this.state = {
             visibleNote: true
         }
     }
 
+    sendTrackingInfo(action, position) {
+        if (isTrackingInfoAvailable()) {
+            const { trackingId, productTrackingMappingId, productId } = getTrackingInfo();
+            const {userTrack} = this.props;
+            userTrack({ trackingId, productTrackingMappingId, productId, action, position });
+        }
+    }
+
     async componentDidMount() {
 
+        const queryString = new URLSearchParams(this.props.location.search);
+        const trackingId = queryString.get('t_id')
+        const productId = queryString.get('prod_id')
 
+        if(trackingId !== null){
+            const productTrackingMappingId = productId ? productId === '11' : -1;
+            storeTrackingInfo(trackingId, productTrackingMappingId, productId)
+            updateProductAvailability(productId);
+        }
+      
         // check if the userexperinece is greater or equal to 4 years. (7 is the pid for 4 years (mapping done here))
 
         if (parseInt(localStorage.getItem('userExperience') || 0) >= 7) {
@@ -107,6 +125,8 @@ class EditPreview extends Component {
         userInfo['upload_resume'] = !uploadResume
         updateSelectedTemplate(userInfo)
     }
+
+    
 
     generateResumeAlert() {
         const { userInfo: { order_data, resume_generated }, previewButtonClicked, history, showGenerateResumeModal, reGeneratePDF, hideGenerateResumeModal } = this.props;
@@ -173,6 +193,7 @@ class EditPreview extends Component {
                     number={number}
                     email={email}
                     location={this.props.location}
+                    
                 />
                 <div className="page-container">
                     <SelectTemplateModal
@@ -186,6 +207,7 @@ class EditPreview extends Component {
                     />
                     <section className={'flex-container mt-30'}>
                         <LeftSideBar
+                            sendTrackingInfo = {this.sendTrackingInfo}
                             showAlertModal={showAlertModal}
                             eventClicked={eventClicked}
                             customizeTemplate={customizeTemplate}
@@ -201,6 +223,7 @@ class EditPreview extends Component {
                         />
 
                         <RightSection
+                            sendTrackingInfo = {this.sendTrackingInfo}
                             eventClicked={eventClicked}
                             generateResumeAlert={this.generateResumeAlert}
                         />
@@ -226,7 +249,8 @@ class EditPreview extends Component {
                     }
                 </div>
 
-                <Footer />
+                <Footer 
+                sendTrackingInfo = {this.sendTrackingInfo}/>
 
             </div>
         )
@@ -313,6 +337,9 @@ const mapDispatchToProps = (dispatch) => {
                 dispatch(loginCandidate({ info: { alt: '' }, resolve, reject, isTokenAvail: false }))
             })
         },
+        "userTrack": (data) =>  {
+            return  dispatch(trackUser(data))
+          },
     }
 }
 

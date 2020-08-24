@@ -14,6 +14,8 @@ import {eventClicked} from '../../../store/googleAnalytics/actions/index'
 import {formCategoryList} from '../../../Utils/formCategoryList'
 import Swal from 'sweetalert2'
 import { siteDomain } from '../../../Utils/domains';
+import { trackUser } from '../../../store/tracking/actions/index';
+import {isTrackingInfoAvailable, getTrackingInfo, storeTrackingInfo, updateProductAvailability} from '../../../Utils/common';
 
 class EditPreview extends Component {
 
@@ -24,9 +26,29 @@ class EditPreview extends Component {
         this.changeLink = this.changeLink.bind(this)
         this.headingChange = this.headingChange.bind(this);
         this.generateResumeAlert = this.generateResumeAlert.bind(this);
+        this.sendTrackingInfo = this.sendTrackingInfo.bind(this);
+    }
+
+    sendTrackingInfo(action, position) {
+        if (isTrackingInfoAvailable()) {
+            const { trackingId, productTrackingMappingId, productId } = getTrackingInfo();
+            const {userTrack} = this.props;
+            userTrack({ trackingId, productTrackingMappingId, productId, action, position });
+        }
     }
 
     async componentDidMount() {
+
+        const queryString = new URLSearchParams(this.props.location.search);
+        const trackingId = queryString.get('t_id')
+        const productId = queryString.get('prod_id')
+
+        if(trackingId !== null){
+            const productTrackingMappingId = productId ? productId === '11' : -1;
+            storeTrackingInfo(trackingId, productTrackingMappingId, productId)
+            updateProductAvailability(productId);
+        }
+      
 
          // check if the userexperinece is greater or equal to 4 years. (7 is the pid for 4 years (mapping done here))
  
@@ -126,7 +148,10 @@ class EditPreview extends Component {
             <div className="edit-section">
                 {mainloader ? <Loader/> : ""}
                 <Header page={'edit'} history={history}/>
-                <LeftSideBar {...this.props} generateResumeAlert={this.generateResumeAlert}/>
+                <LeftSideBar 
+                {...this.props} 
+                generateResumeAlert={this.generateResumeAlert}
+                sendTrackingInfo={this.sendTrackingInfo}/>
                 <RightSection {...this.props} changeLink={this.changeLink} headingChange={this.headingChange}
                         generateResumeAlert={this.generateResumeAlert} />
             </div>
@@ -191,6 +216,7 @@ const mapDispatchToProps = (dispatch) => {
                 dispatch(loginCandidate({info: {alt: token}, resolve, reject, isTokenAvail: false}))
             })
         },
+        "userTrack" : ( data ) => dispatch(trackUser(data)),
     }
 };
 export default withRouter(connect(mapStateToProps, mapDispatchToProps)(EditPreview))

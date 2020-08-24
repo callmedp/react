@@ -29,6 +29,8 @@ class Edit extends Component {
         this.showErrorMessage = this.showErrorMessage.bind(this);
         this.openMenuModal = this.openMenuModal.bind(this);
         this.closeMenuModal = this.closeMenuModal.bind(this);
+        this.handleAddMoreSectionClick = this.handleAddMoreSectionClick.bind(this);
+        this.selectSection = this.selectSection.bind(this)
         this.state = {
             preferenceList: this.props.entityList,
             nextLink: '',
@@ -44,6 +46,8 @@ class Edit extends Component {
             'label': 'Click'
         })
     }
+
+   
 
 
     static getDerivedStateFromProps(nextProps, prevState) {
@@ -73,6 +77,7 @@ class Edit extends Component {
     }
 
     deleteFromVisibleList(deletedElem) {
+        this.props.sendTrackingInfo('left_edit_section_deleted',1);
         const updatedList = (this.state.preferenceList || []).map(elem => {
             if (elem['entity_id'] === deletedElem['entity_id']) {
                 return {
@@ -86,7 +91,7 @@ class Edit extends Component {
         this.setState({
             preferenceList: updatedList
         })
-    }
+    } 
 
     showErrorMessage(link) {
         this.setState({
@@ -110,6 +115,15 @@ class Edit extends Component {
         }
     }
 
+
+    selectSection(name){
+        eventClicked({
+            'action': 'SelectSection',
+            'label': name
+        })
+        this.props.sendTrackingInfo('left_edit_select_section',1)
+    }
+
     openMenuModal() {
         this.setState({ menu_modal_status: true });
         this.props.eventClicked({
@@ -120,6 +134,11 @@ class Edit extends Component {
 
     closeMenuModal() {
         this.setState({ menu_modal_status: false })
+    }
+
+    handleAddMoreSectionClick(newUser){
+        this.props.sendTrackingInfo('left_edit_add_more_sections',1);
+        newUser ? showAlertModal('error') : this.openMenuModal();
     }
 
     render() {
@@ -169,6 +188,7 @@ class Edit extends Component {
         return (
             <div className="edit-section">
                 <MenuModal
+                    sendTrackingInfo = {this.props.sendTrackingInfo}
                     eventClicked={eventClicked}
                     menu_modal_status={menu_modal_status}
                     closeMenuModal={this.closeMenuModal}
@@ -206,13 +226,7 @@ class Edit extends Component {
                                             :
 
                                             (
-                                                <Link to={link}
-                                                    onClick={() => {
-                                                        eventClicked({
-                                                            'action': 'SelectSection',
-                                                            'label': name
-                                                        })
-                                                    }}>
+                                                <Link to={link} onClick={() => this.selectSection(name)} >
                                                     <span className={'mr-20 ' + icon}></span>
                                                     {elem['entity_text']}
                                                 </Link>
@@ -229,9 +243,7 @@ class Edit extends Component {
                     }
                 </ul>
 
-                <div className="edit-section--addmore" onClick={() => {
-                    newUser ? showAlertModal('error') : this.openMenuModal()
-                }}>
+                <div className="edit-section--addmore" onClick={() => this.handleAddMoreSectionClick(newUser)}>
                     + Add more sections
                 </div>
             </div>

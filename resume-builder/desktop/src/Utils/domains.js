@@ -2,3 +2,4 @@ export const siteDomain = (window && window.config && window.config.siteDomain) 
 //  export const siteDomain = 'https://learning1.shine.com'
 
 
+export const shineSiteDomain = (window && window.config && window.config.siteDomain) || 'https://sumosc.shine.com' 
