@@ -477,6 +477,7 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                 order.delete()
             msg = str(e)
             logging.getLogger('error_log').error(msg)
+            logging.getLogger('error_log').error({}.format(str(e.msg)))
             return Response(
                 {"msg": msg, "status": 0},
                 status=status.HTTP_400_BAD_REQUEST)
