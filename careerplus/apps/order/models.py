@@ -554,7 +554,7 @@ class Order(AbstractAutoDate):
                 product_validity_in_days = 30
             elif sub_type_flow == 1801:
                 product_redeem_count = 2
-                product_validity_in_days = 90
+                product_validity_in_days = 60
             elif sub_type_flow == 1802:
                 product_redeem_count = 3
                 product_validity_in_days = 180
