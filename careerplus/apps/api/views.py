@@ -110,6 +110,16 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
         order_already_created = False
 
         all_txn_ids = [x['txn_id'] for x in txns_list if x.get('txn_id')]
+
+        razor_payment = [x.get('razor_payment_id') for x in txns_list if x.get('razor_payment_id') and int(x.get('payment_mode',0)) == 15]
+
+        if razor_payment:
+            if PaymentTxn.objects.filter(razor_payment_id=razor_payment,status=1).exists():
+                logging.getLogger("error_log").error(
+                    "Order for txns are already created. for razorpay {}".format(all_txn_ids))
+                return Response({"status": 0, "msg": "Order for txns already created."},
+                                status=status.HTTP_400_BAD_REQUEST)
+
         paid_transactions = PaymentTxn.objects.filter(
             txn__in=all_txn_ids, status=1)
 
@@ -441,13 +451,16 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                                                              "%s" %
                                                              str(e))
                         payment_date = timezone.now()
+
+                    razor_payment_id = txn_dict.get('txn_id','') if int(txn_dict.get('payment_mode',7)) == 15 else ''
                     order.ordertxns.create(
                         txn=txn_dict.get('txn_id', ''),
                         status=int(txn_dict.get('status', 0)),
                         payment_mode=int(txn_dict.get('payment_mode', 7)),
                         payment_date=payment_date,
                         currency=int(txn_dict.get('currency', 0)),
-                        txn_amount=txn_dict.get('amount', 0)
+                        txn_amount=txn_dict.get('amount', 0),
+                        razor_payment_id= razor_payment_id,
                     )
 
                 # wallet reward point
