@@ -1201,6 +1201,21 @@ class Product(AbstractProduct, ModelMeta):
             return cached_data
         return self.category_main
 
+
+    def get_about(self):
+        if self.about:
+            try:
+                from bs4 import BeautifulSoup
+                soup = BeautifulSoup(self.about, 'html.parser')
+                strpcontent = soup.get_text()
+            except Exception as e:
+                logging.getLogger('error_log').error(str(e))
+                strpcontent = self.about
+            return strpcontent
+        return ''
+
+
+
     def category_attached(self):
         main_prod_cat = self.categories.filter(
             productcategories__is_main=True,
@@ -1573,6 +1588,17 @@ class Product(AbstractProduct, ModelMeta):
         else:
             return delivery_services.none()
 
+
+    def get_assessment_attribute(self):
+        detail = {}
+        if self.product_class.name == 'assessment':
+            objs = self.productattributes.filter(active=True)
+            for obj in objs:
+                detail[obj.attribute.name] = obj.value
+            return detail
+
+
+
     def get_exp(self):
         # for code return
         if self.is_writing:
@@ -1679,7 +1705,7 @@ class Product(AbstractProduct, ModelMeta):
                 if getattr(self.attr, C_ATTR_DICT.get('DD'), None) \
                 else 0
             return dd
-        elif self.is_service and self.type_flow == 5:
+        elif self.is_service and self.type_flow in [5,18]:
             dd = getattr(self.attr, S_ATTR_DICT.get('FD'), 180) \
                 if getattr(self.attr, S_ATTR_DICT.get('FD'), None) \
                 else 0

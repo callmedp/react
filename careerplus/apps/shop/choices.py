@@ -69,6 +69,7 @@ FLOW_CHOICES = (
     (16, 'Assessment and Certifications'),
     (17, 'Resume Builder'),
     (18, 'Shine Premium'),
+    (19, 'Profile Booster')
 )
 
 SUB_FLOWS = {
@@ -432,11 +433,10 @@ AV_STATUS_CHOICES = (
     (2, 'enrollment_pending'),
     (3, 'enrollment_done'),
     (4, 'enrollment_error'),
-    )
+)
 av_status_choices = dict(AV_STATUS_CHOICES)
-av_status_choices = { av_status_choices[k] : k for k in av_status_choices}
+av_status_choices = {av_status_choices[k]: k for k in av_status_choices}
 
 SMS_URL_LIST = {
-    1 : "https://learning.shine.com/services/recruiter-connect/application-highlighter-3/pd-4117?utm_campaign=IVRCampaign",
+    1: "https://learning.shine.com/services/recruiter-connect/application-highlighter-3/pd-4117?utm_campaign=IVRCampaign",
 }
-

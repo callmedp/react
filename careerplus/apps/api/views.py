@@ -6,6 +6,9 @@ import os
 import pickle
 import math
 import datetime
+import json
+import traceback
+
 
 import requests
 from decimal import Decimal
@@ -99,6 +102,7 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
         country_code = request.data.get('country_code', '91').strip()
         mobile = request.data.get('mobile').strip()
         candidate_id = request.data.get('candidate_id', '').strip()
+        logging.getLogger('info_log').info("Order creation request recieved -{}".format(request.data))
 
         if not item_list:
             return Response(
@@ -109,10 +113,26 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
         order_already_created = False
 
         all_txn_ids = [x['txn_id'] for x in txns_list if x.get('txn_id')]
+
+        razor_payment = None
+        try:
+            razor_payment = [json.loads(x.get('razor_dict')).get('razor_payment_id','') for x in txns_list if x.get(
+                'razor_dict') and x.get('razor_dict','{}') !='{}' and int(x.get('payment_mode',0)) == 15]
+        except:
+            logging.getLogger('error_log').error('unable to decode razor payment txn')
+            razor_payment = None
+
+        if razor_payment:
+            if PaymentTxn.objects.filter(razor_payment_id__in=razor_payment,status=1).exists():
+                logging.getLogger("error_log").error(
+                    "Order for txns are already created. for razorpay {}".format(all_txn_ids))
+                return Response({"status": 0, "msg": "Order for txns already created."},
+                                status=status.HTTP_400_BAD_REQUEST)
+
         paid_transactions = PaymentTxn.objects.filter(
             txn__in=all_txn_ids, status=1)
 
-        if paid_transactions:
+        if paid_transactions.exists():
             logging.getLogger("error_log").error(
                 "Order for txns already created. {}".format(all_txn_ids))
             return Response({"status": 0, "msg": "Order for txns already created."},
@@ -154,14 +174,14 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
 
                 if not first_name and not last_name:
                     first_name = name
-
-            if country_code:
+            country_obj = cache.get('country_obj_{}'.format(country_code))
+            if not country_obj:
                 try:
                     country_obj = Country.objects.get(phone=country_code)
+                    cache.set('country_obj_{}'.format(country_code),country_obj,timeout=None)
                 except Exception as e:
                     logging.getLogger('error_log').error(
-                        "Unable to get country object %s" % str(e))
-
+                        "Unable to get country object %s"%str(e))
                     country_obj = Country.objects.get(phone=91)
 
             if flag:
@@ -182,6 +202,7 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                 order.tax_config = str(request.data.get('tax_config', {}))
                 order.status = 1
                 order.site = 1
+                # order.site = int(request.data.get('site',2))
                 order.country = country_obj
                 order.total_excl_tax = request.data.get(
                     'total_excl_tax_excl_discount', 0)
@@ -439,13 +460,23 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                                                              "%s" %
                                                              str(e))
                         payment_date = timezone.now()
+
+                    # razor_payment_id = txn_dict.get('txn_id','') if int(txn_dict.get('payment_mode',7)) == 15 else ''
+                    razor_dict = txn_dict.get('razor_dict','{}')
+                    try:
+                        razor_dict = json.loads(razor_dict)
+                    except:
+                        logging.getLogger('error_log').error('unable to decode razor dict')
+                        razor_dict = {}
                     order.ordertxns.create(
                         txn=txn_dict.get('txn_id', ''),
                         status=int(txn_dict.get('status', 0)),
                         payment_mode=int(txn_dict.get('payment_mode', 7)),
                         payment_date=payment_date,
                         currency=int(txn_dict.get('currency', 0)),
-                        txn_amount=txn_dict.get('amount', 0)
+                        txn_amount=txn_dict.get('amount', 0),
+                        razor_payment_id= razor_dict.get('razor_payment_id',''),
+                        razor_order_id=razor_dict.get('razor_order_id',''),
                     )
 
                 # wallet reward point
@@ -466,6 +497,7 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                     status=status.HTTP_200_OK)
 
             else:
+                logging.getLogger('error_log').error('order not created -{}'.format(msg))
                 return Response(
                     {"msg": msg, "status": 0},
                     status=status.HTTP_400_BAD_REQUEST)
@@ -474,6 +506,7 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                 order.delete()
             msg = str(e)
             logging.getLogger('error_log').error(msg)
+            logging.getLogger('error_log').error('Order creation error = {}'.format(traceback.format_exc()))
             return Response(
                 {"msg": msg, "status": 0},
                 status=status.HTTP_400_BAD_REQUEST)

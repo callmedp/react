@@ -79,7 +79,7 @@
                 </div>
                 <div class="pull-right" style="width:90%;">
 
-                   <a class="icon-cart pull-right" href="{% url "cart:payment-summary" %}" >cart <span id="cart-counter-id">{{cart_count}}</span></a>
+                   <a class="icon-cart pull-right" href="{% url "cart:payment-summary" %}" onclick="handleTracking('exit_product_page')"  >cart <span id="cart-counter-id">{{cart_count}}</span></a>
                    <form method='get' id="search-form">
                     <div class="searchbox">
                         <input id='id_q' type="text" placeholder="Search here" name="search" class="searchbox-input" autocomplete="off">
@@ -157,7 +157,7 @@
         <article class="mt-20">
                {% if prd_service == 'course' or product.type_flow == 16 %}
             <span class="byvskills mb-30">
-              <strong><a onclick="gaEvent('Search','{{prd_vendor}}','ViewAllProductVendor');" href="/search/results/?fvid={{product.vendor.id}}">All courses/ certifications ({{prd_vendor_count}})</a></strong>
+              <strong><a onclick="gaEvent('Search','{{prd_vendor}}','ViewAllProductVendor');" href="/search/results/?fvid={{product.vendor.id}}" onclick="handleTracking('all_courses_or_certifications')" >All courses/ certifications ({{prd_vendor_count}})</a></strong>
               By {{prd_vendor}}
             </span>
             {% endif %}
@@ -250,8 +250,17 @@
 {% block js_section %}
 
     {{block.super}}
+    <script>
+        var shineApiUrl = "{{shine_api_url}}"
+        var trackingProductId = "{{tracking_product_id}}"
+        var productTrackingMappingId = "{{product_tracking_mapping_id}}"
+        var trackingId = "{{tracking_id}}"
+        var productId = "{{product_id}}"
+
+    </script>
     {% compress js %}
     <script src="{% static 'shinelearn/js/mobile/cart/cart.js' %}"></script>
+    <script src="{% static 'shinelearn/js/shop/commonDetails.js' %}"></script>
     <script src="{% static 'shinelearn/js/cart/cart.js' %}"></script>
     <script src="{% static 'shinelearn/js/mobile/shop/detail.js' %}"></script>
     <script src="{% static 'shinelearn/js/users/login.js' %}"></script>

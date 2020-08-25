@@ -263,20 +263,20 @@ class Ccavenue(PaymentMixin, OrderMixin, APIView) :
 
         if order_obj.email :
             p_billing_email = order_obj.email
-        merchant_data += 'billing_email=' + p_billing_email + '&'
+            merchant_data += 'billing_email=' + p_billing_email + '&'
 
         encryption = self.encrypt(merchant_data, context_dict['workingkey'])
         return {'url' : context_dict['url'], 'encReq' : encryption, 'xscode' : context_dict['accesscode']}
 
-    def get(self, request, *args, **kwargs) :
-        if not kwargs.get('cart_id') :
+    def get(self, request, *args, **kwargs):
+        if not kwargs.get('cart_id'):
             return Response({'error' : 'BAD REQUEST'}, status=status.HTTP_400_BAD_REQUEST)
         data = {}
         cart_id = kwargs.get('cart_id', None)
         paytype = kwargs.get('paytype', '')
 
-        if cart_id and len(paytype) > 0 :
-            cart_obj = Cart.objects.get(id=cart_id)
+        if cart_id and cart_id.isnumeric() and len(paytype) > 0:
+            cart_obj = Cart.objects.filter(id=cart_id).first()
             # self.fridge_cart(cart_obj)
             order = self.createOrder(cart_obj)
             txn = 'CP%d%s' % (order.pk, int(time.time()))

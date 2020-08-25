@@ -31,9 +31,8 @@ from django.core.cache import cache
 from .models import Cart
 from .mixins import CartMixin
 from .forms import ShippingDetailUpdateForm
-from crmapi.models import  UserQuries
+from crmapi.models import UserQuries
 import requests
-
 
 
 @Decorate(stop_browser_cache())
@@ -106,6 +105,9 @@ class AddToCartView(View, CartMixin):
                 cart_obj = None
             logging.getLogger('info_log').info(
                 "Cart Obj:{}, candidate_ID: {}, Owner ID:{}".format(cart_obj, candidate_id, cart_obj.owner_id))
+
+            if cart_obj and candidate_id and int(prod_id) == int(request.session.get('tracking_product_id', -1)):
+                request.session.update({'product_availability': prod_id})
             if cart_obj and (candidate_id == cart_obj.owner_id) and not request.ip_restricted:
                 first_name = request.session.get('first_name', '')
                 last_name = request.session.get('last_name', '')
@@ -121,10 +123,10 @@ class AddToCartView(View, CartMixin):
                     (cart_obj.pk, source_type, name),
                     countdown=settings.CART_DROP_OUT_LEAD)
 
-                lead = self.request.session.get('product_lead_dropout','')
+                lead = self.request.session.get('product_lead_dropout', '')
                 if lead:
                     userqueries = UserQuries.objects.get(id=lead)
-                    userqueries.inactive=True
+                    userqueries.inactive = True
                     userqueries.save()
 
         except Exception as e:
@@ -142,8 +144,31 @@ class AddToCartView(View, CartMixin):
 
 class RemoveFromCartView(View, CartMixin):
 
-    def post(self, request, *args, **kwargs):
+    def removeTracking(self, product_id):
+        tracking_id = self.request.session.get(
+            'tracking_id', '')
+        tracking_product_id = self.request.session.get(
+            'tracking_product_id', '')
+        product_tracking_mapping_id = self.request.session.get(
+            'product_tracking_mapping_id', '')
+        product_availability = self.request.session.get(
+            'product_availability', '')
+        if tracking_product_id == product_id and tracking_id:
+            make_logging_request.delay(
+                tracking_product_id, product_tracking_mapping_id, tracking_id, 'remove_product')
+            # for showing the user exits for that particular cart product
+            make_logging_request.delay(
+                tracking_product_id, product_tracking_mapping_id, tracking_id, 'exit_cart')
+            if tracking_id:
+                del self.request.session['tracking_id']
+            if product_tracking_mapping_id:
+                del self.request.session['product_tracking_mapping_id']
+            if tracking_product_id:
+                del self.request.session['tracking_product_id']
+            if product_availability:
+                del self.request.session['product_availability']
 
+    def post(self, request, *args, **kwargs):
         if request.is_ajax():
             data = {"status": -1}
             reference = request.POST.get('reference_id')
@@ -160,10 +185,13 @@ class RemoveFromCartView(View, CartMixin):
                         childs = cart_obj.lineitems.filter(
                             parent=parent, parent_deleted=True)
                         if childs.count() > 1:
+                            self.removeTracking(line_obj.product.id)
                             line_obj.delete()
                         else:
+                            self.removeTracking(parent.product.id)
                             parent.delete()
                     else:
+                        self.removeTracking(line_obj.product.id)
                         line_obj.delete()
 
                     data['status'] = 1
@@ -551,8 +579,8 @@ class PaymentShippingView(UpdateView, CartMixin):
                     source_type = "shipping_drop_out"
                     create_lead_on_crm.\
                         apply_async(
-                        (obj.pk, source_type, name),
-                        countdown=settings.SHIPPING_DROP_OUT_LEAD)
+                            (obj.pk, source_type, name),
+                            countdown=settings.SHIPPING_DROP_OUT_LEAD)
                 return valid_form
             except Exception as e:
                 non_field_error = 'Personal detail not updated due to %s' % (
@@ -671,7 +699,8 @@ class PaymentSummaryView(TemplateView, CartMixin):
                     logging.getLogger('error_log').error(
                         "Failed Adding Product Item - {}".format(product.id))
                 else:
-                    request.session.update({'tracking_product_id': product.id})
+                    request.session.update({'tracking_product_id': product.id,
+                                            'product_availability': product.id})
                     product_tracking_mapping_id = self.maintain_tracking_info(
                         product)
                     if product_tracking_mapping_id != -1:
@@ -681,9 +710,14 @@ class PaymentSummaryView(TemplateView, CartMixin):
         if tracking_id:
             request.session.update({'tracking_id': tracking_id})
         
-        if tracking_id and product_id and product_tracking_mapping_id:
-            make_logging_request.delay(product_id, product_tracking_mapping_id, tracking_id, 'cart_payment_summary')
+        tracking_id= request.session.get('tracking_id','')
+        tracking_product_id= request.session.get('tracking_product_id','')
+        product_availability = request.session.get('product_availability','')
+        product_tracking_mapping_id= request.session.get('product_tracking_mapping_id','')
 
+        if tracking_id and tracking_product_id and product_tracking_mapping_id and product_availability:
+            make_logging_request.delay(
+                tracking_product_id, product_tracking_mapping_id, tracking_id, 'cart_payment_summary')
 
         redirect = self.redirect_if_necessary(reload_url)
         if redirect:
@@ -769,9 +803,10 @@ class PaymentSummaryView(TemplateView, CartMixin):
             'candidate_in_session': self.request.session.get('candidate_id', ''),
             'guest_in_session': self.request.session.get('guest_candidate_id'),
             'shine_api_url': settings.SHINE_API_URL,
-            'tracking_product_id': self.request.session.get('tracking_product_id',''),
-            'product_tracking_mapping_id': self.request.session.get('product_tracking_mapping_id',''),
-            'tracking_id': self.request.session.get('tracking_id','')
+            'tracking_product_id': self.request.session.get('tracking_product_id', ''),
+            'product_tracking_mapping_id': self.request.session.get('product_tracking_mapping_id', ''),
+            'product_availability': self.request.session.get('product_availability', ''),
+            'tracking_id': self.request.session.get('tracking_id', '')
         })
 
         context.update({

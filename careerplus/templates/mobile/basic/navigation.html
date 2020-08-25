@@ -15,7 +15,7 @@
                                 <a href="{% url 'login' %}" class="btn btn-outline">Login</a>
                                 <a href="{% url 'register' %}" class="btn btn-outline">Register</a>
                                 {% else %}
-                                <a onclick="return clearLocalStorage()" href="{% url 'logout' %}" class="btn btn-outline">Logout</a>
+                                <a onclick="trackClickEvent()" onclick="return clearLocalStorage()" href="{% url 'logout' %}" class="btn btn-outline">Logout</a>
                                 {% endif %}
                             </div>
                         </div>
@@ -28,82 +28,82 @@
         <nav itemscope itemtype="http://schema.org/Organization" class="h-100">
             <ul class="sb-menu h-100">
 
-                <li><a href="/"><span class="icon-home"></span>Home</a></li>
+                <li><a  href="/"><span class="icon-home"></span>Home</a></li>
                 <meta itemprop="name" content="Shine">
                 <meta itemprop="url" content="{{ SITE_PROTOCOL }}://{{SITE_DOMAIN}}" />
                 <!-- <li> <a href="#"><span class="icon-home-search"></span>Search</a></li> -->
                 <li>
-                    <a href="#" class="level-control"><span class="icon-all-courses"></span>All Courses</a>
+                    <a  href="#" class="level-control"><span class="icon-all-courses"></span>All Courses</a>
                     <div class="level-one">
-                        <a href="#" class="backthis" data-index="0"><i class="icon-back pull-left"></i>  All Courses</a>
+                        <a  href="#" class="backthis" data-index="0"><i class="icon-back pull-left"></i>  All Courses</a>
 
                         <ul>
                             <li>
-                                <a href="#" class="level-control">Sales & Marketing</a>
+                                <a  href="#" class="level-control">Sales & Marketing</a>
                                 <div class="level-two">
-                                    <a href="/courses/sales-and-marketing/17/" class="backthis"><i class="icon-back pull-left"></i>Sales & Marketing</a>
+                                    <a onclick="trackClickEvent()" href="/courses/sales-and-marketing/17/" class="backthis"><i class="icon-back pull-left"></i>Sales & Marketing</a>
                                     <ul>
-                                        <li><a href="/courses/sales-and-marketing/digital-marketing/32/">Digital Marketing</a></li>
-                                        <li><a href="/courses/sales-and-marketing/sales/18/">Sales</a></li>
-                                        <li><a href="/courses/sales-and-marketing/retail/35/ ">  Retail </a></li>
-                                        <li><a href="/courses/sales-and-marketing/product-marketing/24/">Product Marketing</a></li>
-                                        <li><a href="/courses/sales-and-marketing/service-marketing/30/">Service Marketing</a></li>
-                                        <li><a href="/courses/sales-and-marketing/17/#courses1">View all products</a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/sales-and-marketing/digital-marketing/32/">Digital Marketing</a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/sales-and-marketing/sales/18/">Sales</a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/sales-and-marketing/retail/35/ ">  Retail </a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/sales-and-marketing/product-marketing/24/">Product Marketing</a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/sales-and-marketing/service-marketing/30/">Service Marketing</a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/sales-and-marketing/17/#courses1">View all products</a></li>
                                     </ul>
                                 </div>
                             </li>
 
                             <li>
-                                <a href="#" class="level-control">Operation Management</a>
+                                <a  href="#" class="level-control">Operation Management</a>
                                 <div class="level-two">
-                                    <a href="/courses/operation-management/19/#courses2" class="backthis"><i class="icon-back pull-left"></i>Operation Management</a>
+                                    <a onclick="trackClickEvent()" href="/courses/operation-management/19/#courses2" class="backthis"><i class="icon-back pull-left"></i>Operation Management</a>
                                     <ul>
-                                        <li><a href="/courses/operation-management/six-sigma/193/">Six Sigma</a></li>
-                                        <li><a href="/courses/operation-management/project-management/123/">Project Management </a></li>
-                                        <li><a href="/courses/operation-management/logistics-and-supply-chain/135/">Logistic and Supply Chain</a></li>
-                                        <li><a href="/courses/operation-management/service-quality/316/">Service Quality</a></li>
-                                        <li><a href="/courses/operation-management/production/39/">Production </a></li>
-                                        <li><a href="/courses/operation-management/customer-care/37/">Customer Care</a></li>
-                                        <li><a href="/courses/operation-management/19/#courses2">View all products</a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/operation-management/six-sigma/193/">Six Sigma</a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/operation-management/project-management/123/">Project Management </a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/operation-management/logistics-and-supply-chain/135/">Logistic and Supply Chain</a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/operation-management/service-quality/316/">Service Quality</a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/operation-management/production/39/">Production </a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/operation-management/customer-care/37/">Customer Care</a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/operation-management/19/#courses2">View all products</a></li>
                                     </ul>
                                 </div>
                             </li>
 
                             <li>
-                                <a href="#" class="level-control">Banking & Finance</a>
+                                <a  href="#" class="level-control">Banking & Finance</a>
                                 <div class="level-two">
-                                    <a href="/courses/banking-and-finance/20/#courses3" class="backthis"><i class="icon-back pull-left"></i> Banking & Finance</a>
+                                    <a onclick="trackClickEvent()" href="/courses/banking-and-finance/20/#courses3" class="backthis"><i class="icon-back pull-left"></i> Banking & Finance</a>
                                     <ul>
-                                        <li><a href="/courses/banking-finance/advanced-accounting/114/">Advanced Accounting</a></li>
-                                        <li><a href="/courses/banking-finance/banking/113/">Banking</a></li>
-                                        <li><a href="/courses/banking-finance/risk-management/95/">Risk Management</a></li>
-                                        <li><a href="/courses/banking-finance/stock-market-trading/94/">Stock Market Training</a></li>
-                                        <li><a href="/courses/banking-finance/financial-reporting-and-management/103/">Finanacial Reporting and Management</a></li>
-                                        <li><a href="/courses/banking-finance/commercial-operation/112/">Commercial Operation </a></li>
-                                        <li><a href="/courses/banking-finance/investment-banking/100/">Investment Banking </a></li>
-                                        <li><a href="/courses/banking-finance/accounting-fundamental/115/">Accounting Fundamental </a></li>
-                                        <li><a href="/courses/banking-finance/financial-analyst/104/">Finanacial Analyst </a></li>
-                                        <li><a href="/courses/banking-finance/gst-2/507/">GST</a></li>
-                                        <li><a href="/courses/banking-and-finance/20/#courses3">View all products</a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/banking-finance/advanced-accounting/114/">Advanced Accounting</a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/banking-finance/banking/113/">Banking</a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/banking-finance/risk-management/95/">Risk Management</a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/banking-finance/stock-market-trading/94/">Stock Market Training</a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/banking-finance/financial-reporting-and-management/103/">Finanacial Reporting and Management</a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/banking-finance/commercial-operation/112/">Commercial Operation </a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/banking-finance/investment-banking/100/">Investment Banking </a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/banking-finance/accounting-fundamental/115/">Accounting Fundamental </a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/banking-finance/financial-analyst/104/">Finanacial Analyst </a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/banking-finance/gst-2/507/">GST</a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/banking-and-finance/20/#courses3">View all products</a></li>
                                     </ul>
                                 </div>
                             </li>
 
                             <li>
-                                <a href="#" class="level-control" >Information Technology </a>
+                                <a  href="#" class="level-control" >Information Technology </a>
                                 <div class="level-two">
-                                    <a href="/courses/it-information-technology/22/#courses4" class="backthis"><i class="icon-back pull-left"></i> Information Technology</a>
+                                    <a onclick="trackClickEvent()" href="/courses/it-information-technology/22/#courses4" class="backthis"><i class="icon-back pull-left"></i> Information Technology</a>
                                     <ul>
-                                        <li><a href="/courses/it-information-technology/big-data/84/">Big Data </a></li>
-                                        <li><a href="/courses/operation-management/project-management/123/">project management </a></li>
-                                        <li><a href="/courses/it-information-technology/it-software/53/ ">IT Software</a></li>
-                                        <li><a href="/courses/it-information-technology/graphic-design/54/">Graphic Design </a></li>
-                                        <li><a href="/courses/it-information-technology/cloud-computing/82/">Cloud Computing</a></li>
-                                        <li><a href="/courses/it-information-technology/ms-skills/98/">MS Skills</a></li>
-                                        <li><a href="/courses/it-information-technology/it-language/80/">IT Language</a></li>
-                                        <li><a href="/courses/it-information-technology/database-development/83/">Database Development </a></li>
-                                        <li><a href="/courses/it-information-technology/it-development-interface-learning/119/">IT Development Interface Learning</a></li>
-                                        <li><a href="/courses/it-information-technology/22/#courses4">View all products</a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/it-information-technology/big-data/84/">Big Data </a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/operation-management/project-management/123/">project management </a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/it-information-technology/it-software/53/ ">IT Software</a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/it-information-technology/graphic-design/54/">Graphic Design </a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/it-information-technology/cloud-computing/82/">Cloud Computing</a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/it-information-technology/ms-skills/98/">MS Skills</a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/it-information-technology/it-language/80/">IT Language</a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/it-information-technology/database-development/83/">Database Development </a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/it-information-technology/it-development-interface-learning/119/">IT Development Interface Learning</a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/it-information-technology/22/#courses4">View all products</a></li>
                                     </ul>
                                 </div>
                             </li>
@@ -111,40 +111,40 @@
                             <li>
                                 <a href="#" class="level-control" >Human Resources</a>
                                 <div class="level-two">
-                                    <a href="/courses/hr-human-resource/25/#courses5" class="backthis"><i class="icon-back pull-left"></i>Human Resources</a>
+                                    <a onclick="trackClickEvent()" href="/courses/hr-human-resource/25/#courses5" class="backthis"><i class="icon-back pull-left"></i>Human Resources</a>
                                     <ul>
-                                        <li><a href="/courses/hr-human-resource/talent-acquisition/93/">Talent Aquistion </a></li>
-                                        <li><a href="/courses/hr-human-resource/organizational-structure/97/">Organizational Structure </a></li>
-                                        <li><a href="/courses/hr-human-resource/training-and-development/91/">Training &map; Development </a></li>
-                                        <li><a href="/courses/hr-human-resource/compensation-2/110/">Compensation </a></li>
-                                        <li><a href="/courses/hr-human-resource/25/#courses5">View all products</a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/hr-human-resource/talent-acquisition/93/">Talent Aquistion </a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/hr-human-resource/organizational-structure/97/">Organizational Structure </a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/hr-human-resource/training-and-development/91/">Training &map; Development </a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/hr-human-resource/compensation-2/110/">Compensation </a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/hr-human-resource/25/#courses5">View all products</a></li>
                                     </ul>
                                 </div>
                             </li>
 
                             <li>
-                                <a href="#" class="level-control" >Management</a>
+                                <a  href="#" class="level-control" >Management</a>
                                 <div class="level-two">
-                                    <a href="/courses/management/27/#courses6" class="backthis"><i class="icon-back pull-left"></i>Management</a>
+                                    <a onclick="trackClickEvent()" href="/courses/management/27/#courses6" class="backthis"><i class="icon-back pull-left"></i>Management</a>
                                     <ul>
-                                        <li><a href="/courses/management/general-management/102/">General Management </a></li>
-                                        <li><a href="/courses/management/business-analyst/58/">Business Analyst </a></li>
-                                        <li><a href="/courses/management/corporate-governance/59/">Corporate Governance </a></li>
-                                        <li><a href="/courses/management/27/#courses6">View all products</a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/management/general-management/102/">General Management </a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/management/business-analyst/58/">Business Analyst </a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/management/corporate-governance/59/">Corporate Governance </a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/management/27/#courses6">View all products</a></li>
                                     </ul>
                                 </div>
                             </li>
 
                             <li>
-                                <a href="#" class="level-control" >Mass Communication</a>
+                                <a  href="#" class="level-control" >Mass Communication</a>
                                 <div class="level-two">
-                                    <a href="/courses/mass-communication/29/#courses7" class="backthis"><i class="icon-back pull-left"></i>Mass Communication</a>
+                                    <a onclick="trackClickEvent()" href="/courses/mass-communication/29/#courses7" class="backthis"><i class="icon-back pull-left"></i>Mass Communication</a>
                                     <ul>
-                                        <li><a href="/courses/mass-communication/content/46/">Content</a></li>
-                                        <li><a href="/courses/mass-communication/public-relations/96/">Public Relations </a></li>
-                                        <li><a href="/courses/mass-communication/editor/106/">Editor </a></li>
-                                        <li><a href="/courses/mass-communication/journalism/99/">Journalism </a></li>
-                                        <li><a tabindex="-1" href="/courses/mass-communication/29/#courses7">View all products</a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/mass-communication/content/46/">Content</a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/mass-communication/public-relations/96/">Public Relations </a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/mass-communication/editor/106/">Editor </a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/mass-communication/journalism/99/">Journalism </a></li>
+                                        <li><a onclick="trackClickEvent()" tabindex="-1" href="/courses/mass-communication/29/#courses7">View all products</a></li>
                                     </ul>
                                 </div>
                             </li>
@@ -152,27 +152,27 @@
                             <li>
                                 <a href="#" class="level-control" >Personal Development</a>
                                 <div class="level-two">
-                                    <a href="{{ SITE_PROTOCOL }}://{{SITE_DOMAIN}}/courses/personal-development/21/#courses8" class="backthis"><i class="icon-back pull-left"></i>Personal Development</a>
+                                    <a onclick="trackClickEvent()" href="{{ SITE_PROTOCOL }}://{{SITE_DOMAIN}}/courses/personal-development/21/#courses8" class="backthis"><i class="icon-back pull-left"></i>Personal Development</a>
                                     <ul>
-                                        <li><a href="/courses/personal-development/language-learning/40/">Language Learning</a></li>
-                                        <li><a href="/courses/personal-development/leadership/41/">Leadership </a></li>
-                                        <li><a href="/courses/personal-development/personality-development/42/">Personality Development</a></li>
-                                        <li><a href="/courses/personal-development/interview-preparation/38/">Interview Preparation</a></li>
-                                        <li><a href="/courses/personal-development/communication-development/36/    ">Communication Development</a></li>
-                                        <li><a tabindex="-1" href="/courses/personal-development/21/#courses8">View all products</a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/personal-development/language-learning/40/">Language Learning</a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/personal-development/leadership/41/">Leadership </a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/personal-development/personality-development/42/">Personality Development</a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/personal-development/interview-preparation/38/">Interview Preparation</a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/personal-development/communication-development/36/    ">Communication Development</a></li>
+                                        <li><a onclick="trackClickEvent()" tabindex="-1" href="/courses/personal-development/21/#courses8">View all products</a></li>
                                     </ul>
                                 </div>
                             </li>
 
                             <li>
-                                <a href="#" class="level-control" >Law</a>
+                                <a  href="#" class="level-control" >Law</a>
                                 <div class="level-two">
-                                    <a href="/courses/law/23/#courses9" class="backthis"><i class="icon-back pull-left"></i>Law</a>
+                                    <a onclick="trackClickEvent()" href="/courses/law/23/#courses9" class="backthis"><i class="icon-back pull-left"></i>Law</a>
                                     <ul>
-                                        <li><a href="/courses/law/cyber-law/107/">Cyber Law</a></li>
-                                        <li><a href="/courses/law/criminal-law/108/">Criminal Law </a></li>
-                                        <li><a href="/courses/law/company-law/111/">Company Law</a></li>
-                                        <li><a tabindex="-1" href="/courses/law/23/#courses9">View all products</a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/law/cyber-law/107/">Cyber Law</a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/law/criminal-law/108/">Criminal Law </a></li>
+                                        <li><a onclick="trackClickEvent()" href="/courses/law/company-law/111/">Company Law</a></li>
+                                        <li><a onclick="trackClickEvent()" tabindex="-1" href="/courses/law/23/#courses9">View all products</a></li>
                                     </ul>
                                 </div>
                             </li>
@@ -180,7 +180,7 @@
 
                             <hr>
                             <li>
-                                <a href="{% url "course-catalogoue" %}">Course Catalogue</a>
+                                <a onclick="trackClickEvent()" href="{% url "course-catalogoue" %}">Course Catalogue</a>
                             </li>
 
 
@@ -203,55 +203,55 @@
                     </div>
                 </li>
                 <li>
-                    <a class="level-control"><span class="icon-job"></span>Job Assistance Services</a>
+                    <a  class="level-control"><span class="icon-job"></span>Job Assistance Services</a>
                     <div class="level-one">
                         <a class="backthis" data-index="0"><i class="icon-back pull-left"></i> Job Assistance Services</a>
                         <ul>
-                            <li><a href="/services/resume-writing/63/">Resume Writing</a></li>
-                            <li><a href="/services/resume-services/entry-level-freshers-4/pd-2553">International Resume</a></li>
-                            <li><a href="/services/resume-services/entry-level-freshers/pd-2052">Visual Resume</a></li>
-                            <li><a href="{{ SITE_PROTOCOL }}://{{SITE_DOMAIN}}/services/professional-service/jobs-on-the-move-3/pd-3411">Jobs On The Move</a></li>
-                            <li><a href="/services/linkedin-profile/180/">LinkedIn Profile</a></li>
-                            <li><a href="/services/recruiter-connect/featured-profile-10/pd-1939">Featured Profile</a></li>
-                              <!-- <li><a href="/services/background-verification-2/employment-verification/pd-2618">Background Verification Services</a></li>
-                            <li><a href="/services/interview-preparation-3/job-interview-coaching-by-sarabjeet-sachar/pd-1284">Interview Preparation</a></li> -->
-                            <li><a href="/services/recruiter-connect/application-highlighter-3/pd-4117">Application Highlighter</a></li>
-                            <li><a class="dropdown-item" href="/resume-score-checker/">Resume Score Checker</a></li>
+                            <li><a onclick="trackClickEvent()" href="/services/resume-writing/63/">Resume Writing</a></li>
+                            <li><a onclick="trackClickEvent()" href="/services/resume-services/entry-level-freshers-4/pd-2553">International Resume</a></li>
+                            <li><a onclick="trackClickEvent()" href="/services/resume-services/entry-level-freshers/pd-2052">Visual Resume</a></li>
+                            <li><a onclick="trackClickEvent()" href="{{ SITE_PROTOCOL }}://{{SITE_DOMAIN}}/services/professional-service/jobs-on-the-move-3/pd-3411">Jobs On The Move</a></li>
+                            <li><a onclick="trackClickEvent()" href="/services/linkedin-profile/180/">LinkedIn Profile</a></li>
+                            <li><a onclick="trackClickEvent()" href="/services/recruiter-connect/featured-profile-10/pd-1939">Featured Profile</a></li>
+                              <!-- <li><a onclick="trackClickEvent()" href="/services/background-verification-2/employment-verification/pd-2618">Background Verification Services</a></li>
+                            <li><a onclick="trackClickEvent()" href="/services/interview-preparation-3/job-interview-coaching-by-sarabjeet-sachar/pd-1284">Interview Preparation</a></li> -->
+                            <li><a onclick="trackClickEvent()" href="/services/recruiter-connect/application-highlighter-3/pd-4117">Application Highlighter</a></li>
+                            <li><a onclick="trackClickEvent()" class="dropdown-item" href="/resume-score-checker/">Resume Score Checker</a></li>
 
                         </ul>
                     </div>
                 </li>
-{#                <li><a href="#"><span class="icon-career"></span>Career Guidance</a></li>#}
-                <li><a href="/talenteconomy/" class="cls_eventtrack" data-category="TELINK" data-action="Menu" data-label="learning.shine"><span class="icon-talentEco"></span>Blog</a></li>
-                <li><a href="/cms/resume-format/1/"><span class="icon-sample"></span>Free Samples</a></li>
-                <li><a href="/practice-tests/"><span class="icon-practice-test"></span>Practice Tests <small class="new-tag">New</small></a></li>
-                {% if navlink_1 %}<li><a href="{{navlink_1.skill_page_url}}" onclick="nav1_gaEvent()">{% if navlink_1.icon %}<span class="icon"><img src="{{image_static_url}}{{navlink_1.icon}}"></img>{% endif %}</span>{{navlink_1.display_name}}{% if navlink_1.tag %}<small class="new-tag">{{navlink_1.tag}}</small>{% endif %}</a></li>{% endif %}
-                {% if navlink_2 %}<li><a href="{{navlink_2.skill_page_url}}" onclick="nav2_gaEvent()">{% if navlink_2.icon %}<span class="icon"><img src="{{image_static_url}}{{navlink_2.icon}}"></img>{% endif %}</span>{{navlink_2.display_name}}{% if navlink_2.tag %}<small class="new-tag">{{navlink_2.tag}}</small>{% endif %}</li>{% endif %}
+{#                <li><a  href="#"><span class="icon-career"></span>Career Guidance</a></li>#}
+                <li><a onclick="trackClickEvent()" href="/talenteconomy/" class="cls_eventtrack" data-category="TELINK" data-action="Menu" data-label="learning.shine"><span class="icon-talentEco"></span>Blog</a></li>
+                <li><a onclick="trackClickEvent()" href="/cms/resume-format/1/"><span class="icon-sample"></span>Free Samples</a></li>
+                <li><a onclick="trackClickEvent()" href="/practice-tests/"><span class="icon-practice-test"></span>Practice Tests <small class="new-tag">New</small></a></li>
+                {% if navlink_1 %}<li><a onclick="trackClickEvent()" href="{{navlink_1.skill_page_url}}" onclick="nav1_gaEvent()">{% if navlink_1.icon %}<span class="icon"><img src="{{image_static_url}}{{navlink_1.icon}}"></img>{% endif %}</span>{{navlink_1.display_name}}{% if navlink_1.tag %}<small class="new-tag">{{navlink_1.tag}}</small>{% endif %}</a></li>{% endif %}
+                {% if navlink_2 %}<li><a onclick="trackClickEvent()" href="{{navlink_2.skill_page_url}}" onclick="nav2_gaEvent()">{% if navlink_2.icon %}<span class="icon"><img src="{{image_static_url}}{{navlink_2.icon}}"></img>{% endif %}</span>{{navlink_2.display_name}}{% if navlink_2.tag %}<small class="new-tag">{{navlink_2.tag}}</small>{% endif %}</li>{% endif %}
 
                 {% if request.session.candidate_id %}
                 <li class="dashboard c9 fs-12">
-                    <a href="{% url "dashboard:dashboard" %}"><span class="icon-dashboard"></span>Dashboard</a>
+                    <a onclick="trackClickEvent()" href="{% url "dashboard:dashboard" %}"><span class="icon-dashboard"></span>Dashboard</a>
                     <ul>
-                        <li><a href="{% url "dashboard:dashboard" %}">Inbox</a></li>
-                        <li><a href="{% url "dashboard:dashboard-myorder" %}">My Order</a></li>
-                        <li><a href="{% url "dashboard:dashboard-mywallet" %}">My Wallet</a></li>
+                        <li><a onclick="trackClickEvent()" href="{% url "dashboard:dashboard" %}">Inbox</a></li>
+                        <li><a onclick="trackClickEvent()" href="{% url "dashboard:dashboard-myorder" %}">My Order</a></li>
+                        <li><a onclick="trackClickEvent()" href="{% url "dashboard:dashboard-mywallet" %}">My Wallet</a></li>
                     </ul>
                 </li>
                 {% endif %}
 
                 {% comment %}
                 {% if request.session.candidate_id %}
-                    <li><a href="{% url "dashboard:dashboard" %}"><span class="icon-dashboard"></span>Dashboard</a></li>
+                    <li><a onclick="trackClickEvent()" href="{% url "dashboard:dashboard" %}"><span class="icon-dashboard"></span>Dashboard</a></li>
 
-                    <li><a href="{% url "dashboard:dashboard-myorder" %}"><span class="icon-dashboard"></span>My Order</a></li>
+                    <li><a onclick="trackClickEvent()" href="{% url "dashboard:dashboard-myorder" %}"><span class="icon-dashboard"></span>My Order</a></li>
 
-                    <li><a href="{% url "dashboard:dashboard-mywallet" %}"><span class="icon-dashboard"></span>My Wallet</a></li>
+                    <li><a onclick="trackClickEvent()" href="{% url "dashboard:dashboard-mywallet" %}"><span class="icon-dashboard"></span>My Wallet</a></li>
                 {% endif %}
                 {% endcomment %}
 
-                {% comment %} <li><a href="{% url "blog:blog-landing"%}">Blog</a></li> {% endcomment %} 
-                <li><a href="/about-us">About us</a></li>
-                <li><a href="/contact-us">Contact us</a></li>
+                {% comment %} <li><a onclick="trackClickEvent()" href="{% url "blog:blog-landing"%}">Blog</a></li> {% endcomment %} 
+                <li><a onclick="trackClickEvent()" href="/about-us">About us</a></li>
+                <li><a onclick="trackClickEvent()" href="/contact-us">Contact us</a></li>
             </ul>
         </nav><!-- Main Menu list Ends here -->
        <!-- <nav class="borderBottom-0">

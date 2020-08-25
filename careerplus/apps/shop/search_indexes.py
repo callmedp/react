@@ -411,7 +411,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
             else:
                 dm.append(obj.get_duration())
             return list(set(dm))
-        elif obj.is_service and obj.type_flow == 5:
+        elif obj.is_service and obj.type_flow in [5,18]:
             dm = []
             dm.append(obj.get_duration_in_day())
             return list(set(dm))
