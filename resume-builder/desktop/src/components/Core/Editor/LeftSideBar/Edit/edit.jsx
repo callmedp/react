@@ -10,7 +10,7 @@ import AlertModal from '../../../../Modal/alertModal.jsx'
 import MenuModal from '../../../../Modal/menuModal';
 import { eventClicked } from '../../../../../store/googleAnalytics/actions/index'
 import { withRouter } from 'react-router-dom';
-
+import propTypes from 'prop-types';
 
 const isSame = (initialField, formField) => {
     let isSame = true;
@@ -35,7 +35,6 @@ class Edit extends Component {
             elementToDelete: null,
             menu_modal_status: false,
         };
-
     }
 
     componentDidMount() {
@@ -238,6 +237,24 @@ class Edit extends Component {
         )
     }
 
+}
+
+Edit.propTypes = {
+    entityList: propTypes.array,
+    eventClicked: propTypes.func,
+    updateCategoryEntity: propTypes.func,
+    showAlertModal: propTypes.func,
+    hideAlertModal: propTypes.func,
+    location: propTypes.shape({
+        hash: propTypes.string,
+        pathname: propTypes.string,
+        search: propTypes.string,
+        state: undefined
+    }),
+    formData: propTypes.object,
+    formName: propTypes.string,
+    generateResumeModal: propTypes.bool,
+    alertModal: propTypes.bool,
 }
 
 const mapStateToProps = (state) => {

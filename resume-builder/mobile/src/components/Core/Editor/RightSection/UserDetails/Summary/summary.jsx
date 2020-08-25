@@ -14,7 +14,7 @@ import validate from "../../../../../FormHandler/validtaions/summary/validate"
 import AddSuggesion from '../../../../../Common/AddSuggestion/addSuggesion';
 import BottomCTC from '../../../../../Common/BottomCTC/bottom-ctc';
 import Subscribe from '../../../RightSection/subscribe';
-
+import propTypes from 'prop-types';
 
 class Summary extends Component {
 
@@ -182,6 +182,69 @@ class Summary extends Component {
             </div>
         )
     }
+}
+
+Summary.propTypes = {
+    eventClicked: propTypes.func,
+    experience: propTypes.shape({
+        list: propTypes.array
+    }),
+    extra_info: propTypes.string,
+    fetchJobTitles: propTypes.func,
+    fetchPersonalInfo: propTypes.func,
+    fetchUserExperience: propTypes.func,
+    form: propTypes.string,
+    generateResumeAlert: propTypes.func,
+    handleSubmit: propTypes.func,
+    headingChange: propTypes.func,
+    history: propTypes.shape({
+        action: propTypes.string,
+        block: propTypes.func,
+        createHref: propTypes.func,
+        go: propTypes.func,
+        goBack: propTypes.func,
+        goForward: propTypes.func,
+        length: propTypes.number,
+        listen: propTypes.func,
+        location: propTypes.shape({
+            hash: propTypes.string,
+            pathname: propTypes.string,
+            search: propTypes.string,
+            state: undefined
+        }),
+        push: propTypes.func,
+        replace: propTypes.func, 
+    }),
+    initialValues: propTypes.shape({
+        // currentLinkPos: propTypes.number,
+        listOfLinks: propTypes.array,
+        sidenavStatus: propTypes.bool
+    }),
+    onSubmit: propTypes.func,
+    personalInfo: propTypes.shape({
+        date_of_birth: propTypes.string,
+        email: propTypes.string,
+        entity_preference_data: propTypes.array,
+        extra_info: propTypes.string,
+        extracurricular: propTypes.array,
+        first_name: propTypes.string,
+        gender: propTypes.string,
+        hide_subscribe_button: propTypes.bool,
+        image: propTypes.string,
+        interest_list: propTypes.array,
+        last_name: propTypes.string,
+        location: propTypes.string,
+        number: propTypes.string,
+    }),
+    sidenav: propTypes.shape({
+        currentLinkPos: propTypes.number,
+        listOfLinks: propTypes.array,
+        sidenavStatus: propTypes.bool
+    }),
+    submitting: propTypes.bool,
+    upateSummaryWithSuggestion: propTypes.func,
+    updateAlertModalStatus: propTypes.func,
+    updateCurrentLinkPos: propTypes.func,
 }
 
 export const SummaryForm = reduxForm({

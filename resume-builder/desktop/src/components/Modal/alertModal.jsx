@@ -2,6 +2,7 @@ import React, {Component, PureComponent} from 'react';
 import Modal from 'react-modal';
 import './alertModal.scss'
 import { withRouter } from 'react-router-dom';
+import propTypes from 'prop-types';
 
 if(typeof document !== 'undefined') {
     Modal.setAppElement(document.getElementById('react-app'));
@@ -22,7 +23,7 @@ class AlertModal extends PureComponent {
     }
 
     render() {
-        const {  alertModal,generateResumeModal , nextLink, newUser,isPreview} = this.props;
+        const {alertModal, generateResumeModal, nextLink, newUser, isPreview} = this.props;
         return (
 
             <React.Fragment>
@@ -110,6 +111,32 @@ class AlertModal extends PureComponent {
         )
             ;
     }
+}
+
+AlertModal.propTypes = {
+    hideAlertModal: propTypes.func,
+    alertModal: propTypes.bool,
+    history: propTypes.shape({
+        action: propTypes.string,
+        block: propTypes.func,
+        createHref: propTypes.func,
+        go: propTypes.func,
+        goBack: propTypes.func,
+        goForward: propTypes.func,
+        length: propTypes.number,
+        listen: propTypes.func,
+        location: propTypes.shape({
+            hash: propTypes.string,
+            pathname: propTypes.string,
+            search: propTypes.string,
+            state: undefined
+        }),
+        push: propTypes.func,
+        replace: propTypes.func, 
+    }),
+    nextLink: propTypes.string,
+    newUser: propTypes.func ,
+    isPreview: propTypes.bool
 }
 
 export default withRouter(AlertModal) 

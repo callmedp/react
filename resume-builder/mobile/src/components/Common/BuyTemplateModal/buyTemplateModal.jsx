@@ -1,7 +1,7 @@
 import React,{Component} from 'react';
 import Modal from 'react-modal';
 import './buyTemplateModal.scss'
-
+import propTypes from 'prop-types';
 
 if(typeof document !== 'undefined') {
     Modal.setAppElement(document.getElementById('react-app'));
@@ -33,4 +33,10 @@ export default class BuyTemplateModal extends Component{
             </Modal>
         )
     }
+}
+
+BuyTemplateModal.propTypes  ={
+    modal_status: propTypes.bool,
+    templateImage: propTypes.string,
+    closeModalStatus: propTypes.func
 }

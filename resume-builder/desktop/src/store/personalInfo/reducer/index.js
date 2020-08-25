@@ -2,8 +2,8 @@ import { SAVE_USER_INFO, SAVE_INTEREST_LIST, UPDATE_SUMMARY_WITH_SUGGESTION } fr
 
 const initialState = {
     active_subscription: false,
-    "candidate_id": '',
-    "id": '',
+    candidate_id: '',
+    id: 0,
     first_name: '',
     last_name: '',
     email: '',
@@ -11,8 +11,8 @@ const initialState = {
     image: '',
     date_of_birth: '',
     location: '',
-    gender: '',
-    extracurricular: '',
+    gender: {},
+    extracurricular: [],
     extra_info: '',
     entity_preference_data: [],
     interest_list: [],

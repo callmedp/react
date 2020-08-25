@@ -8,6 +8,7 @@ import {CourseRenderer} from "./courseRenderer";
 import {scroller} from "react-scroll/modules";
 import {scrollOnErrors} from "../../../../../../Utils/srollOnError"
 import SavePreviewButtons from '../../../../../Common/SavePreviewButtons/savePreviewButtons';
+import propTypes from 'prop-types';
 
 class Course extends Component {
     constructor(props) {
@@ -23,6 +24,8 @@ class Course extends Component {
 
         }
         this.props.currentForm('course');
+
+        // console.log(this.props);
     }
 
     componentDidMount() {
@@ -151,6 +154,60 @@ class Course extends Component {
     }
 }
 
+Course.propTypes = {
+    currentForm: propTypes.func,
+    fetchUserCourse: propTypes.func,
+    generateResumeAlert: propTypes.func,
+    bulkUpdateOrCreate: propTypes.func,
+    history: propTypes.shape({
+        action: propTypes.string,
+        block: propTypes.func,
+        createHref: propTypes.func,
+        go: propTypes.func,
+        goBack: propTypes.func,
+        goForward: propTypes.func,
+        length: propTypes.number,
+        listen: propTypes.func,
+        location: propTypes.shape({
+            hash: propTypes.string,
+            pathname: propTypes.string,
+            search: propTypes.string,
+            state: undefined
+        }),
+        push: propTypes.func,
+        replace: propTypes.func, 
+    }),
+    initialValues: propTypes.object,
+    formData: propTypes.object,
+    ui: propTypes.shape({
+        alertModal: propTypes.bool,
+        formName: propTypes.string,
+        generateResumeModal: propTypes.bool,
+        helpModal: propTypes.bool,
+        loader: propTypes.bool,
+        loginModal: propTypes.bool,
+        modal: propTypes.bool,
+        previewClicked: propTypes.bool,
+        select_template_modal: propTypes.bool,
+        showMoreSection: propTypes.bool,
+        successLogin: propTypes.bool,
+        suggestionModal: propTypes.bool,
+        suggestionType: propTypes.string,
+        suggestions: propTypes.array,
+    }),
+    previewButtonClicked: propTypes.func,
+    removeCourse: propTypes.func,
+    handleSubmit: propTypes.func,
+    saveTitle: propTypes.func,
+    editHeading: propTypes.func,
+    isEditable: propTypes.bool,
+    entityName: propTypes.string,
+    handleInputValue: propTypes.func,
+    showAlertModal: propTypes.func,
+    changeOrderingDown: propTypes.func,
+    changeOrderingUp: propTypes.func,
+    showAlertMessage: propTypes.func,
+}
 
 export const
     CourseForm = reduxForm({

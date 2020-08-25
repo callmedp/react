@@ -1,6 +1,7 @@
 import React from 'react';
 import Modal from 'react-modal';
 import './suggestionModal.scss'
+import propTypes from 'prop-types';
 
 if (typeof document !== 'undefined') {
 
@@ -17,7 +18,9 @@ export default class SuggestionModal extends React.Component {
             error: false,
             length: 0
         }
-        this.handleSuggestion = this.handleSuggestion.bind(this)
+        this.handleSuggestion = this.handleSuggestion.bind(this);
+
+        console.log(this.props)
     }
 
     componentDidMount() {
@@ -121,4 +124,12 @@ export default class SuggestionModal extends React.Component {
             </div>
         );
     }
+}
+
+SuggestionModal.propTypes = {
+    closeModal: propTypes.func,
+    suggestions: propTypes.array,
+    length : propTypes.number,
+    maxLength: propTypes.string,
+    label: propTypes.string
 }

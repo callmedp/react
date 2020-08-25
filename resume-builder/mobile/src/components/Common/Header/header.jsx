@@ -5,7 +5,7 @@ import * as actions from "../../../store/sidenav/actions";
 import { showHelpModal, hideHelpModal } from "../../../store/ui/actions/index"
 import { connect } from "react-redux";
 import NeedHelpModal from '../../Core/Home/NeedHelpModal/needHelpModal.jsx'
-
+import propTypes from 'prop-types';
 
 class Header extends Component {
     constructor(props) {
@@ -122,6 +122,41 @@ class Header extends Component {
         )
     }
 
+}
+
+Header.propTypes = {
+    email: propTypes.string,
+    eventClicked: propTypes.func,
+    feedback: propTypes.func,
+    getclass: propTypes.string,
+    hideHelpModal: propTypes.func,
+    number: propTypes.string,
+    page: propTypes.string,
+    showHelpModal: propTypes.func,
+    userName: propTypes.string,
+    location: propTypes.shape({
+        hash: propTypes.string,
+        pathname: propTypes.string,
+        search: propTypes.string,
+        state: undefined
+    }),
+    ui: propTypes.shape({
+        alertModal: propTypes.bool,
+        alertType: propTypes.string,
+        formName: propTypes.string,
+        generateResumeModal: propTypes.bool,
+        helpModal: propTypes.bool,
+        loader: propTypes.bool,
+        loginModal: propTypes.bool,
+        modal: propTypes.bool,
+        previewClicked: propTypes.bool,
+        select_template_modal: propTypes.bool,
+        showMoreSection: propTypes.bool,
+        successLogin: propTypes.bool,
+        suggestionModal: propTypes.bool,
+        suggestionType: propTypes.string,
+        suggestions: propTypes.array,
+    }),
 }
 
 const mapStateToProps = (state) => {

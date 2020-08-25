@@ -1,15 +1,13 @@
 import React, {Component, PureComponent} from 'react';
 import './banner.scss'
 import {scroller} from 'react-scroll'
+import propTypes from 'prop-types';
 
 export default class Banner extends PureComponent {
-
-
     constructor(props) {
         super(props);
         this.scrollTo = this.scrollTo.bind(this);
         this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/'
-
     }
 
     scrollTo(elem,action,label) {
@@ -54,5 +52,9 @@ export default class Banner extends PureComponent {
             </div>
         )
     }
+}
 
+Banner.propTypes = {
+    eventClicked: propTypes.func,
+    userName: propTypes.string
 }
