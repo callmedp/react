@@ -1715,6 +1715,11 @@ class Product(AbstractProduct, ModelMeta):
                 if getattr(self.attr,S_ATTR_DICT.get('SUB'), None )\
                 else 0 
             return dd 
+        elif self.type_flow in [18, 19]:
+            dd = int(getattr(self.attr, S_ATTR_DICT.get('SUB'), 30))\
+                if getattr(self.attr,S_ATTR_DICT.get('SUB'), None )\
+                else 0 
+            return dd 
         else:
             return ''
     @property

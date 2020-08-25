@@ -51,7 +51,8 @@ OI_OPS_STATUS = (
     (24, 'Approved'),
     (25, 'Rejected By Admin'),
     (26, 'Rejected By Candidate'),
-    (27, 'Service has been processed and Document is finalized'),  # user Accept the draft flow 8 too
+    # user Accept the draft flow 8 too
+    (27, 'Service has been processed and Document is finalized'),
     (28, 'Feature profile initiated'),
     (29, 'Feature profile expired'),
     (30, 'Feature profile updated'),
@@ -434,7 +435,8 @@ WC_SUB_CATEGORY3 = (
     (83, 'User is busy'),
 )
 
-WC_SUB_CATEGORY = WC_SUB_CATEGORY1 + WC_SUB_CATEGORY2 + WC_SUB_CATEGORY3 + WC_SUB_CAT2
+WC_SUB_CATEGORY = WC_SUB_CATEGORY1 + \
+    WC_SUB_CATEGORY2 + WC_SUB_CATEGORY3 + WC_SUB_CAT2
 
 WC_FLOW_STATUS = (
     # 0-20
@@ -482,15 +484,20 @@ OI_OPS_TRANSFORMATION_DICT = {
 }
 
 LTV_BRACKET_LABELS = (
-        (0,"0-5k"),
-        (1,"5-10k"),
-        (2,"10-20k"),
-        (3,"20-40k"),
-        (4,"40-60k"),
-        (5,"60-80k"),
-        (6,"80-100k"),
-        (7,"100-125k"),
-        (8,"125-150k"),
-        (9,"150-175k"),
-        (10,"175k+")
+    (0, "0-5k"),
+    (1, "5-10k"),
+    (2, "10-20k"),
+    (3, "20-40k"),
+    (4, "40-60k"),
+    (5, "60-80k"),
+    (6, "80-100k"),
+    (7, "100-125k"),
+    (8, "125-150k"),
+    (9, "150-175k"),
+    (10, "175k+")
+)
+
+SHINE_ACTIVATION = (
+    (0, "In Active"),
+    (1, "Active")
 )
