@@ -26,8 +26,9 @@ import {
 import { eventClicked } from '../../../../store/googleAnalytics/actions/index'
 import { loginCandidate } from "../../../../store/landingPage/actions";
 import { Toast } from '../../../../services/ErrorToast';
-
-
+import { trackUser } from '../../../../store/tracking/actions/index';
+import {  isTrackingInfoAvailable, getTrackingInfo} from '../../../../Utils/common';
+ 
 export class Buy extends Component {
 
     constructor(props) {
@@ -45,6 +46,7 @@ export class Buy extends Component {
         this.pollingUserInfo = this.pollingUserInfo.bind(this);
         this.downloadRequestedResume = this.downloadRequestedResume.bind(this);
         this.timerFunction = this.timerFunction.bind(this);
+        this.sendTrackingInfo = this.sendTrackingInfo.bind(this)
     }
 
     async showEnlargedTemplate(templateId) {
@@ -53,6 +55,7 @@ export class Buy extends Component {
     }
 
     changeTemplate() {
+        this.sendTrackingInfo('buy_change_template',1)
         const { eventClicked, showSelectTemplateModal } = this.props
         showSelectTemplateModal()
         eventClicked({
@@ -71,7 +74,17 @@ export class Buy extends Component {
     }
 
 
+    sendTrackingInfo(action, position) {
+        if (isTrackingInfoAvailable()) {
+            const { trackingId, productTrackingMappingId, productId } = getTrackingInfo();
+            const {userTrack} = this.props;
+            userTrack({ trackingId, productTrackingMappingId, productId, action, position });
+        }
+    }
+
+
     async downloadRequestedResume() {
+        this.sendTrackingInfo('download_requested_resume',1)
         const { hideGenerateResumeModal } = this.props
         const candidateId = localStorage.getItem('candidateId')
         const selectedTemplate = localStorage.getItem('selected_template', 1)
@@ -86,6 +99,7 @@ export class Buy extends Component {
     }
 
     async freeResumeRequest() {
+        this.sendTrackingInfo('free_resume_request',1);
         const { requestFreeResume, showGenerateResumeModal,
             userInfo: { resume_creation_count }, } = this.props
         this.setState({ 'resumeDownloadCount': resume_creation_count, 'freeDownloadButtonDisable': true }, async () => {
@@ -110,6 +124,9 @@ export class Buy extends Component {
         fetchUserInfo(true);
     }
 
+
+
+
     pollingUserInfo() {
         const timer = setInterval(this.timerFunction, 2000);
         const startTime = new Date().getTime();
@@ -117,6 +134,7 @@ export class Buy extends Component {
     }
 
     async redirectToCart(checkedProduct) {
+        this.sendTrackingInfo('enter_cart',1)
         this.props.eventClicked({
             'action': 'PayNow',
             'label': 'Click'
@@ -136,7 +154,14 @@ export class Buy extends Component {
             "cart_type": 'cart',
         }
         await this.props.addToCart(data);
-        window.location.href = `${siteDomain}/cart/payment-summary/`;
+        if( isTrackingInfoAvailable()){
+            const { trackingId, productId } = getTrackingInfo()
+            console.log("track")
+            window.location.href = `${siteDomain}/cart/payment-summary/?prod_id=${productId}&t_id=${trackingId}`;
+        }
+        else{
+            window.location.href = `${siteDomain}/cart/payment-summary/`;
+        }
     }
 
     async componentDidMount() {
@@ -244,6 +269,7 @@ export class Buy extends Component {
                     modal={modal}
                     page={'buy'} />
                 <SelectTemplateModal
+                    sendTrackingInfo = {this.sendTrackingInfo}
                     {...this.props}
                     page={"buy"} />
                 {
@@ -409,6 +435,7 @@ export class Buy extends Component {
                                     'action': 'EditTemplate',
                                     'label': 'Click'
                                 })
+                                this.sendTrackingInfo('buy_edit_tempate',1)
                             }}>Edit template</Link>
                     </div>
                 </div>
@@ -508,7 +535,8 @@ const mapDispatchToProps = (dispatch) => {
         },
         "showLoader": () => {
             return dispatch(updateUi({ loader: true }))
-        }
+        },
+        "userTrack" : (data) => dispatch(trackUser(data)),
     }
 };
 

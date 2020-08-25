@@ -71,6 +71,7 @@ class Summary extends Component {
 
     async openModal() {
         const {experience} = this.props;
+        this.props.sendTrackingInfo('right_section_add',1);
         let latest_experience = ''
         let latest_end_date = 'None'
         for (let exp of experience.list) {

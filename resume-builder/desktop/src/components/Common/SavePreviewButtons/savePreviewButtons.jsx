@@ -15,7 +15,7 @@ class SavePreviewButtons extends Component {
 
     async preview(){
         const {history,updateInfoBeforeLoss,context,eventClicked} = this.props
-        this.sendTrackingInfo('right_section_review_button',1);
+        this.sendTrackingInfo('bottom_preview',1);
         await updateInfoBeforeLoss()
         context.setState({submit:true})
         history.push(`/resume-builder/preview`);
@@ -43,8 +43,7 @@ class SavePreviewButtons extends Component {
     }
 
     handleSaveClick(order_data, nextEntity){
-        const { sendTrackingInfo } = this.props;
-        nextEntity ? sendTrackingInfo('right_section_save_and_continue',1) : !order_data ? sendTrackingInfo('right_section_download',1) : sendTrackingInfo('right_section_save_changes',1); 
+        nextEntity ? this.sendTrackingInfo('bottom_save_and_continue',1) : !order_data ? this.sendTrackingInfo('bottom_download',1) : this.sendTrackingInfo('bottom_save_changes',1); 
         order_data && order_data.id && !nextEntity ? this.eventActionClick(1) : !nextEntity ? this.eventActionClick(2) : this.eventActionClick(3)
     }
 

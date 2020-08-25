@@ -9,7 +9,6 @@ import renderEducation from "./renderEducation"
 import { scrollOnErrors } from "../../../../../../Utils/srollOnError"
 import BottomCTC from '../../../../../Common/BottomCTC/bottom-ctc';
 import Subscribe from '../../../RightSection/subscribe';
-
 class Education extends Component {
 
     constructor(props) {
@@ -96,6 +95,7 @@ class Education extends Component {
 
     editHeadingClick() {
         this.setState({ editHeading: true })
+        this.props.sendTrackingInfo('right_section_edit',1)
     }
 
 
@@ -125,6 +125,7 @@ class Education extends Component {
     }
 
     deleteEducation(index, fields, event) {
+        this.props.sendTrackingInfo('right_section_delete',1)
         event.stopPropagation();
         const education = fields.get(index);
         fields.remove(index);

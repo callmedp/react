@@ -56,6 +56,7 @@ const renderExperiences = ({
                     <button role="button"
                             onClick=
                             {
+                        
                                 handleSubmit((values) => {
                                     let skipAddition = false;
                                     (values && values.list || []).forEach(el => {

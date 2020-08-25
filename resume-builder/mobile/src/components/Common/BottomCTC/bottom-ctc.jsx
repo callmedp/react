@@ -24,7 +24,7 @@ class BottomCTC extends Component {
     async preview() {
         const { history, updateInfoBeforeLoss, context, eventClicked } = this.props
 
-        this.sendTrackingInfo('mobile_bottom_ctc_preview',1)
+        this.sendTrackingInfo('bottom_preview',1)
 
         eventClicked({
             'action': 'Preview',
@@ -37,7 +37,7 @@ class BottomCTC extends Component {
 
     eventActionClick(option) {
         const { eventClicked, form_name } = this.props;
-        option === 1 ? this.sendTrackingInfo('mobile_bottom_ctc_save_changes',1) : option === 2 ? this.sendTrackingInfo('mobile_bottom_ctc_dowload',1) : this.sendTrackingInfo('mobile_bottom_ctc_save_and_continue',1)
+        option === 1 ? this.sendTrackingInfo('bottom_save_changes',1) : option === 2 ? this.sendTrackingInfo('bottom_dowload',1) : this.sendTrackingInfo('bottom_save_and_continue',1)
 
         eventClicked({
             'action': option === 1 ? 'Save Changes' : option === 2 ? 'Download' : 'Save&Continue',

@@ -60,6 +60,7 @@ class Project extends Component {
 
     editHeadingClick() {
         this.setState({ editHeading: true })
+        this.props.sendTrackingInfo('right_section_edit',1)
     }
 
     async handleSubmit(values) {

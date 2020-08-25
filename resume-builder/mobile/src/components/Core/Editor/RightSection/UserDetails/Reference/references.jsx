@@ -101,6 +101,7 @@ class References extends Component {
 
     editHeadingClick() {
         this.setState({ editHeading: true })
+        this.props.sendTrackingInfo('right_section_edit',1)
     }
 
     deleteReference(index, fields, event) {

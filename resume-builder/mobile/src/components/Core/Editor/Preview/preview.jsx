@@ -98,7 +98,7 @@ class Preview extends Component {
 
     toggleUploadResume(event) {
         let { personalInfo: { upload_resume: uploadResume }, personalInfo, updateSelectedTemplate} = this.props;
-        this.sendTrackingInfo('mobile_update_resume_on_shine_profile',1)
+        this.sendTrackingInfo('preview_update_resume_on_shine',1)
         personalInfo['upload_resume'] = !uploadResume;
         updateSelectedTemplate(personalInfo);
     }
@@ -148,7 +148,7 @@ class Preview extends Component {
 
     themeChange(colorNo, colorName) {
         this.setState({ selectedColor: colorNo })
-        this.sendTrackingInfo('mobile_change_theme',1)
+        this.sendTrackingInfo('preview_change_theme',1)
         this.props.eventClicked({
             'action': 'ChangeTheme',
             'label': colorName
@@ -178,7 +178,7 @@ class Preview extends Component {
 
     moveUpSection(selectedEntity, selectedTemplate) {
         const { eventClicked, reorderSection} = this.props;
-        this.sendTrackingInfo('mobile_reorder_section',1);
+        this.sendTrackingInfo('preview_reorder_section',1);
         eventClicked({
             'action': 'ReorderSection',
             'label': formCategoryList[selectedEntity['entity_id']].name
@@ -191,7 +191,7 @@ class Preview extends Component {
 
     moveDownSection(selectedEntity, selectedTemplate) {
         const { eventClicked, reorderSection} = this.props;
-        this.sendTrackingInfo('mobile_reorder_section',1);
+        this.sendTrackingInfo('preview_reorder_section',1);
         eventClicked({
             'action': 'ReorderSection',
             'label': formCategoryList[selectedEntity['entity_id']].name
@@ -205,7 +205,7 @@ class Preview extends Component {
     getResume() {
         const { personalInfo: { order_data, resume_generated }, history, reGeneratePDF, showGenerateResumeModal, hideGenerateResumeModal, eventClicked} = this.props;
 
-        this.sendTrackingInfo('mobile_preview_get_your_resume',1);
+        this.sendTrackingInfo('get_your_resume',1);
 
         eventClicked({
             'action': 'GetYourResume',
@@ -270,12 +270,12 @@ class Preview extends Component {
     
     customizeTemplate(){
         this.setState({ customize: true }) 
-        this.sendTrackingInfo('mobile_preview_customize_template',1);
+        this.sendTrackingInfo('preview_customize_template',1);
     }
 
     selectTab(tabNo){
         this.setState({ currentTab: tabNo }) 
-        this.sendTrackingInfo('mobile_preview_select_tab',1);
+        this.sendTrackingInfo('preview_tab_selected',1);
     }
     
 

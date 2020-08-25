@@ -8,8 +8,7 @@ import {
     AccordionItemPanel
 } from "react-accessible-accordion";
 import AlertModal from '../../../../Modal/alertModal';
-import { formCategoryList } from '../../../../../Utils/formCategoryList'
-import { removeTrackingInfo } from '../../../../../Utils/common';
+import { formCategoryList } from '../../../../../Utils/formCategoryList';
 
 export default class Preview extends Component {
     constructor(props) {
@@ -50,7 +49,7 @@ export default class Preview extends Component {
             selectedColor: color
         })
         const { eventClicked, customizeTemplate, sendTrackingInfo } = this.props;
-        sendTrackingInfo('edit_preview_color_change',1);
+        sendTrackingInfo('preview_change_theme',1);
         eventClicked({
             'action': 'ChangeTheme',
             'label': data['color_name']
@@ -69,7 +68,6 @@ export default class Preview extends Component {
     goToBuyPage() {
         const { generateResumeAlert, eventClicked, sendTrackingInfo } = this.props;
         sendTrackingInfo('get_your_resume',1)
-        removeTrackingInfo()
         eventClicked({
             'action': 'GetYourResume',
             'label': 'Click'

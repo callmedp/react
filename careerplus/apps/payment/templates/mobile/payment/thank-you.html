@@ -218,6 +218,9 @@
 
 {% block js_section %}
     {{block.super}}
+    <script>
+      var ResumeBuilderBuy = "{{order.order_contains_resume_builder}}"
+  </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.14.0/dist/sweetalert2.all.min.js"></script>
     {% compress js %}
         <script src="{% static 'shinelearn/js/mobile/payment/thank-you.js' %}"></script>

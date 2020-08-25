@@ -8,7 +8,7 @@ import * as uiAction from '../../ui/actions/actionTypes';
 
 import {SubmissionError} from 'redux-form'
 import {siteDomain} from '../../../Utils/domains'
-
+import { isTrackingInfoAvailable, getTrackingInfo } from '../../../Utils/common';
 
 function* fetchProductIds(action) {
     try {
@@ -34,6 +34,10 @@ function* addToCart(action) {
             apiError();
             yield put({type:uiAction.UPDATE_MAIN_PAGE_LOADER,payload:{mainloader: false}})
             return reject(new SubmissionError({_error: result['errorMessage']}));
+        }
+        else if(isTrackingInfoAvailable()){
+            const {trackingId, productId}  = getTrackingInfo()
+            window.location.href = `${siteDomain}/cart/payment-summary/?prod_id=${productId}&t_id=${trackingId}`
         }
         else{
             window.location.href = `${siteDomain}/cart/payment-summary/`

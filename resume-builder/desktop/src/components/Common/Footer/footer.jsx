@@ -1,13 +1,10 @@
 import React from 'react';
 import './footer.scss'
-import { removeTrackingInfo } from '../../../Utils/common';
 
 export default function Footer(props) {
 
     const handleFooterClick = () =>{
         props.sendTrackingInfo('exit_resume_builder',1)
-        console.log("footer tracker")
-        removeTrackingInfo()
     }
 
     return (

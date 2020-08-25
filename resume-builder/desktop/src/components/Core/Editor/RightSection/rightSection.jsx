@@ -63,6 +63,7 @@ class RightSection extends Component {
         this.setState({
             'isEditable': true
         });
+        this.props.sendTrackingInfo('right_section_edit')
         this.props.eventClicked({
             'action': 'EditSection',
             'label': formCategoryList[entityId].name
@@ -156,6 +157,7 @@ class RightSection extends Component {
                         <button className="orange-button" onClick={hideMoreSection}>Back to Edit</button>
                     </div>
                     : <PersonalInfo {...this.props}
+                       
                         isEditable={isEditable}
                         saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
                         handlePreview={this.handlePreview}
@@ -178,6 +180,7 @@ class RightSection extends Component {
                         <button className="orange-button" onClick={hideMoreSection}>Back to Edit</button>
                     </div>
                     : <Education {...this.props}
+                        sendTrackingInfo = {this.props.sendTrackingInfo}
                         isEditable={isEditable}
                         handlePreview={this.handlePreview}
                         editHeading={(elem) => this.editHeading(elem)}
@@ -203,6 +206,7 @@ class RightSection extends Component {
                         <button className="orange-button" onClick={hideMoreSection}>Back to Edit</button>
                     </div>
                     : <Experience {...this.props}
+                        sendTrackingInfo = {this.props.sendTrackingInfo}
                         isEditable={isEditable}
                         handlePreview={this.handlePreview}
                         nextEntity={(nextEntity && nextEntity['link']) || nextEntity}
@@ -230,6 +234,7 @@ class RightSection extends Component {
                     </div>
                     : <Project {...this.props}
                         isEditable={isEditable}
+                        sendTrackingInfo = {this.props.sendTrackingInfo}
                         handlePreview={this.handlePreview}
                         nextEntity={(nextEntity && nextEntity['link']) || nextEntity}
                         entityName={(entity && entity['entity_text']) || 'Project'}
@@ -257,6 +262,7 @@ class RightSection extends Component {
                     : <Skill {...this.props}
                         isEditable={isEditable}
                         handlePreview={this.handlePreview}
+                        sendTrackingInfo = {this.props.sendTrackingInfo}
                         nextEntity={(nextEntity && nextEntity['link']) || nextEntity}
                         entityName={(entity && entity['entity_text']) || 'Skill'}
                         saveTitle={(event, entityId) => this.saveTitle(event, entityId)}
@@ -281,6 +287,7 @@ class RightSection extends Component {
                         <button className="orange-button" onClick={hideMoreSection}>Back to Edit</button>
                     </div>
                     : <Summary {...this.props}
+                        sendTrackingInfo = {this.props.sendTrackingInfo}
                         isEditable={isEditable}
                         handlePreview={this.handlePreview}
                         nextEntity={(nextEntity && nextEntity['link']) || nextEntity}
@@ -303,6 +310,7 @@ class RightSection extends Component {
                     </div>
                     : <Award {...this.props}
                         isEditable={isEditable}
+                        sendTrackingInfo = {this.props.sendTrackingInfo}
                         handlePreview={this.handlePreview}
                         nextEntity={(nextEntity && nextEntity['link']) || nextEntity}
                         entityName={(entity && entity['entity_text']) || 'Award'}
@@ -328,6 +336,7 @@ class RightSection extends Component {
                     </div>
                     : <Course {...this.props}
                         isEditable={isEditable}
+                        sendTrackingInfo = {this.props.sendTrackingInfo}
                         handlePreview={this.handlePreview}
                         nextEntity={(nextEntity && nextEntity['link']) || nextEntity}
                         entityName={(entity && entity['entity_text']) || 'Course'}
@@ -353,6 +362,7 @@ class RightSection extends Component {
                     </div>
                     : <Language {...this.props}
                         isEditable={isEditable}
+                        sendTrackingInfo = {this.props.sendTrackingInfo}
                         handlePreview={this.handlePreview}
                         nextEntity={(nextEntity && nextEntity['link']) || nextEntity}
                         entityName={(entity && entity['entity_text']) || 'Language'}
@@ -377,6 +387,7 @@ class RightSection extends Component {
                     </div>
                     : <Reference {...this.props}
                         isEditable={isEditable}
+                        sendTrackingInfo = {this.props.sendTrackingInfo}
                         handlePreview={this.handlePreview}
                         nextEntity={(nextEntity && nextEntity['link']) || nextEntity}
                         entityName={(entity && entity['entity_text']) || 'Reference'}

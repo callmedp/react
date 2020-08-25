@@ -38,7 +38,7 @@ export default class ResumeSlider extends Component {
     }
 
     async selectTemplate() {
-        this.props.sendTrackingInfo('homepage_select_template',1)
+        this.props.sendTrackingInfo('select_template',1)
         this.props.eventClicked({
             'action': 'SelectTemplate',
             'label': 'HomePage'

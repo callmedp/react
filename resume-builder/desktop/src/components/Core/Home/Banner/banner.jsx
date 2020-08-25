@@ -26,7 +26,7 @@ export default class Banner extends PureComponent {
     }
     handleBuildYourResumeClick(){
         this.scrollTo('templates','BuildResume','TopButton')
-        this.props.sendTrackingInfo('homepage_build_your_resume',1)
+        this.props.sendTrackingInfo('home_page_build_your_resume',1)
     }
 
     render() {

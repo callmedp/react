@@ -105,3 +105,9 @@ const uploadResumeShine = (checkbox,order_id)=>{
         })
     })
 }
+
+if(ResumeBuilderBuy){
+    localStorage.removeItem("trackingId")
+    localStorage.removeItem("productId")
+    localStorage.removeItem("productTrackingMappingId")
+}

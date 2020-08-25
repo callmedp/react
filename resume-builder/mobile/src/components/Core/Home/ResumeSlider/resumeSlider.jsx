@@ -34,7 +34,7 @@ export default class ResumeSlider extends Component {
             'action': 'SelectTemplate',
             'label': 'HomePage'
         })
-        sendTrackingInfo('mobile_homepage_select_template',1);
+        sendTrackingInfo('home_page_select_template',1);
 
         const templateId = (parseInt(document.getElementsByClassName('slick-current')[0].getAttribute('data-index')) + 1);
 

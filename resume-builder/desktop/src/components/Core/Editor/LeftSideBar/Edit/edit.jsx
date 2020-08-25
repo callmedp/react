@@ -121,7 +121,7 @@ class Edit extends Component {
             'action': 'SelectSection',
             'label': name
         })
-        this.props.sendTrackingInfo('left_edit_select_section',1)
+        this.props.sendTrackingInfo('left_edit_change_section',1)
     }
 
     openMenuModal() {
@@ -137,7 +137,7 @@ class Edit extends Component {
     }
 
     handleAddMoreSectionClick(newUser){
-        this.props.sendTrackingInfo('left_edit_add_more_sections',1);
+        this.props.sendTrackingInfo('left_section_add_or_remove',1);
         newUser ? showAlertModal('error') : this.openMenuModal();
     }
 

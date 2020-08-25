@@ -14,8 +14,8 @@ import { eventClicked } from '../../../../store/googleAnalytics/actions/index'
 import { loginCandidate } from "../../../../store/landingPage/actions";
 import { apiError } from '../../../../Utils/apiError.js';
 import AlertModal from '../../../Common/AlertModal/alertModal';
-
-
+import {isTrackingInfoAvailable, getTrackingInfo,} from '../../../../Utils/common';
+import { trackUser } from '../../../../store/tracking/actions/index'
 
 class Buy extends Component {
 
@@ -37,12 +37,13 @@ class Buy extends Component {
         this.pollingUserInfo = this.pollingUserInfo.bind(this);
         this.downloadRequestedResume = this.downloadRequestedResume.bind(this);
         this.timerFunction = this.timerFunction.bind(this);
+        this.sendTrackingInfo = this.sendTrackingInfo.bind(this);
     }
 
 
     redirectToCart() {
 
-
+        this.sendTrackingInfo('enter_cart',1)
         this.props.eventClicked({
             'action': 'PayNow',
             'label': 'Click'
@@ -114,6 +115,7 @@ class Buy extends Component {
     }
 
     async downloadRequestedResume() {
+        this.sendTrackingInfo('download_requested_resume',1)
         const { hideGenerateResumeModal } = this.props
         const candidateId = localStorage.getItem('candidateId')
         const selectedTemplate = localStorage.getItem('selected_template', 1)
@@ -128,6 +130,7 @@ class Buy extends Component {
     }
 
     async freeResumeRequest() {
+        this.sendTrackingInfo('free_resume_request',1);
         const { requestFreeResume, showGenerateResumeModal,
             userInfo: { resume_creation_count }, } = this.props
 
@@ -169,12 +172,21 @@ class Buy extends Component {
     }
 
     editTemplate() {
+        this.sendTrackingInfo('buy_edit_template',1);
         const { eventClicked, history } = this.props;
         eventClicked({
             'action': 'EditTemplate',
             'label': 'Click'
         })
         history.push(`/resume-builder/edit/?type=profile`)
+    }
+
+    sendTrackingInfo(action, position) {
+        if (isTrackingInfoAvailable()) {
+            const { trackingId, productTrackingMappingId, productId } = getTrackingInfo();
+            const {userTrack} = this.props;
+            userTrack({ trackingId, productTrackingMappingId, productId, action, position });
+        }
     }
 
     render() {
@@ -364,6 +376,7 @@ const mapDispatchToProps = (dispatch) => {
         'hideGenerateResumeModal': () => {
             return dispatch(hideGenerateResumeModal())
         },
+        "userTrack" : ( data ) => dispatch(trackUser(data)),
     }
 };
 

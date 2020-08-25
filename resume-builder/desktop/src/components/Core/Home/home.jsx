@@ -15,7 +15,7 @@ import { hideModal, showModal, showLoginModal, hideLoginModal } from "../../../s
 import { displaySelectedTemplate } from '../../../store/template/actions';
 import { eventClicked } from '../../../store/googleAnalytics/actions/index';
 import { trackUser } from '../../../store/tracking/actions/index';
-import { storeTrackingInfo, updateProductAvailability, isTrackingInfoAvailable, getTrackingInfo, removeTrackingInfo} from '../../../Utils/common';
+import { storeTrackingInfo, updateProductAvailability, isTrackingInfoAvailable, getTrackingInfo} from '../../../Utils/common';
 class Home extends Component {
     constructor(props) {
 
@@ -97,7 +97,7 @@ class Home extends Component {
             const productTrackingMappingId = productId === '11' ? productId : -1;
             storeTrackingInfo(trackingId, productTrackingMappingId, productId)
             updateProductAvailability(productId);
-            this.sendTrackingInfo('enter_resume_builder_homepage',1)
+            this.sendTrackingInfo('enter_home_page',1)
         }
 
         if (typeof document !== 'undefined' && document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]) {
@@ -136,12 +136,11 @@ class Home extends Component {
 
     handleBuildYourResumeClick(){
         this.scrollTo('templates', 'BuildResume', 'Features')
-        this.sendTrackingInfo('homepage_build_your_resume',1)
+        this.sendTrackingInfo('home_page_build_your_resume',1)
     }
 
     handleExitTracking(){
-        this.sendTrackingInfo('resume_builder_exit',1)
-        removeTrackingInfo()
+        this.sendTrackingInfo('exit_home_page',1)
     }
 
     static getActions() {

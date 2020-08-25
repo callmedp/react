@@ -40,10 +40,12 @@ class Skill extends Component {
 
     editHeadingClick() {
         this.setState({ editHeading: true })
+        this.props.sendTrackingInfo('right_section_edit',1)
     }
 
     deleteSkill(index, fields, event) {
         event.stopPropagation();
+        this.props.sendTrackingInfo('right_section_delete',1)
         const skill = fields.get(index);
         fields.remove(index);
         if (skill && skill.id) {

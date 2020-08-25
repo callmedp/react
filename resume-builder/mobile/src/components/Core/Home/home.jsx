@@ -14,7 +14,7 @@ import { eventClicked } from '../../../store/googleAnalytics/actions/index'
 import { showLoginModal, hideLoginModal } from '../../../store/ui/actions/index'
 import LoginModal from '../../Common/LoginModal/loginModal.jsx'
 import { trackUser } from '../../../store/tracking/actions/index'
-import { isTrackingInfoAvailable, getTrackingInfo, storeTrackingInfo, updateProductAvailability, removeTrackingInfo } from '../../../Utils/common';
+import { isTrackingInfoAvailable, getTrackingInfo, storeTrackingInfo, updateProductAvailability} from '../../../Utils/common';
 
 class Home extends Component {
 
@@ -56,7 +56,7 @@ class Home extends Component {
             const productTrackingMappingId = productId === '11' ? productId : -1;
             storeTrackingInfo(trackingId, productTrackingMappingId, productId)
             updateProductAvailability(productId);
-            this.sendTrackingInfo('enter_resume_builder_mobile',1);
+            this.sendTrackingInfo('enter_home_page',1);
         }
 
         if (typeof document !== 'undefined' && document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]) {
@@ -101,12 +101,11 @@ class Home extends Component {
 
     handleBuildYourResumeClick(){
         this.scrollTo('templates', 'BuildResume', 'Features');
-        this.sendTrackingInfo('mobile_homepage_build_your_resume',1);
+        this.sendTrackingInfo('home_page_build_your_resume',1);
     }
 
     handleExitTracking(){
-        this.sendTrackingInfo('resume_builder_exit',1);
-        removeTrackingInfo()
+        this.sendTrackingInfo('exit_home_page',1);
     }
 
     handleLoginSuccess() {

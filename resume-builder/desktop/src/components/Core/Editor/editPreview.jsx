@@ -197,6 +197,7 @@ class EditPreview extends Component {
                 />
                 <div className="page-container">
                     <SelectTemplateModal
+                        sendTrackingInfo={this.sendTrackingInfo}
                         {...this.props}
                         page={'edit'} />
                     <TopBar

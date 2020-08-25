@@ -90,14 +90,14 @@ class Menu extends Component {
         let {addmore} = this.state;
         addmore[pos -1].active = true;
         this.setState({addmore})
-        this.sendTrackingInfo('mobile_menu_add_section',1);
+        this.sendTrackingInfo('menu_add_section',1);
     }
 
     removeItem(pos) {
         let {addmore} = this.state;
         addmore[pos -1].active = false
         this.setState({addmore})
-        this.sendTrackingInfo('mobile_menu_remove_section',1);
+        this.sendTrackingInfo('menu_remove_section',1);
     }
 
     render() {

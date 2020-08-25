@@ -143,7 +143,8 @@ class PersonalInfo extends Component {
                             <React.Fragment>
                                 <h1 className="heading-style">{heading}</h1>
                                 <i className="sprite icon--edit" onClick={() => {
-                                    newUser ? updateAlertModalStatus(true) : this.setState({ editHeading: true })
+                                    newUser ? updateAlertModalStatus(true) : this.setState({ editHeading: true });
+                                    this.props.sendTrackingInfo('right_section_delete',1)
                                 }}></i>
                                 {/* <div className="toolTip">
                                 <span className="toolTip--arrow-up"></span>

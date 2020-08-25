@@ -152,8 +152,10 @@ class EditPreview extends Component {
                 {...this.props} 
                 generateResumeAlert={this.generateResumeAlert}
                 sendTrackingInfo={this.sendTrackingInfo}/>
-                <RightSection {...this.props} changeLink={this.changeLink} headingChange={this.headingChange}
-                        generateResumeAlert={this.generateResumeAlert} />
+                <RightSection {...this.props} changeLink={this.changeLink}
+                    headingChange={this.headingChange}
+                    generateResumeAlert={this.generateResumeAlert} 
+                    sendTrackingInfo={this.sendTrackingInfo}/>
             </div>
 
         )

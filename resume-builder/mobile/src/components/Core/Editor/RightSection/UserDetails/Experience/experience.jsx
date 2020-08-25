@@ -53,6 +53,7 @@ class Experience extends Component {
 
 
     editHeadingClick() {
+        this.props.sendTrackingInfo('right_section_edit',1)
         this.setState({ editHeading: true })
     }
 
@@ -153,6 +154,7 @@ class Experience extends Component {
     }
 
     deleteExperience(index, fields, event) {
+        this.props.sendTrackingInfo('right_section_delete',1)
         event.stopPropagation();
         const experience = fields.get(index);
         fields.remove(index);

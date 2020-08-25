@@ -92,6 +92,7 @@ class Award extends Component {
     }
 
     deleteAward(index, fields, event) {
+        this.props.sendTrackingInfo('right_section_delete',1)
         event.stopPropagation();
         const award = fields.get(index);
         fields.remove(index);
@@ -103,6 +104,7 @@ class Award extends Component {
 
     editHeadingClick() {
         this.setState({ editHeading: true })
+        this.props.sendTrackingInfo('right_section_edit',1)
     }
 
     componentDidUpdate(prevProps) {

@@ -81,6 +81,7 @@ class Course extends Component {
     }
 
     handleAddition(fields, error) {
+        this.props.sendTrackingInfo('right_section_add',1)
         const listLength = fields.length;
         fields.push({
             "candidate_id": '',
@@ -104,6 +105,7 @@ class Course extends Component {
     }
 
     deleteCourse(index, fields, event) {
+        this.props.sendTrackingInfo('right_section_delete',1)
         event.stopPropagation();
         const course = fields.get(index);
         fields.remove(index);

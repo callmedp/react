@@ -86,7 +86,6 @@ export class PersonalInfo extends Component {
     async getImageURI(event) {
         let reader = new FileReader();
         reader.onload = (event) => {
-
             this.setState({
                 imageURI: event.target.result,
                 flag: true

@@ -82,7 +82,7 @@ class Award extends Component {
 
     handleAddition(fields, error) {
         const listLength = fields.length;
-
+        this.props.sendTrackingInfo('right_section_add',1)
         fields.push({
             "candidate_id": '',
             "id": '',
@@ -106,6 +106,7 @@ class Award extends Component {
     }
 
     deleteAward(index, fields, event) {
+        this.props.sendTrackingInfo('right_section_delete',1)
         event.stopPropagation();
         const award = fields.get(index);
         fields.remove(index);
