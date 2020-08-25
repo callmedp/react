@@ -460,7 +460,7 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                         payment_date = timezone.now()
 
                     # razor_payment_id = txn_dict.get('txn_id','') if int(txn_dict.get('payment_mode',7)) == 15 else ''
-                    razor_dict = txns_list.get('razor_dict','{}')
+                    razor_dict = txn_dict.get('razor_dict','{}')
                     try:
                         razor_dict = json.loads(razor_dict)
                     except:
