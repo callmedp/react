@@ -121,7 +121,7 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
             razor_payment = None
 
         if razor_payment:
-            if PaymentTxn.objects.filter(razor_payment_id=razor_payment,status=1).exists():
+            if PaymentTxn.objects.filter(razor_payment_id__in=razor_payment,status=1).exists():
                 logging.getLogger("error_log").error(
                     "Order for txns are already created. for razorpay {}".format(all_txn_ids))
                 return Response({"status": 0, "msg": "Order for txns already created."},
