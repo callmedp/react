@@ -1705,7 +1705,7 @@ class Product(AbstractProduct, ModelMeta):
                 if getattr(self.attr, C_ATTR_DICT.get('DD'), None) \
                 else 0
             return dd
-        elif self.is_service and self.type_flow == 5:
+        elif self.is_service and self.type_flow in [5,18]:
             dd = getattr(self.attr, S_ATTR_DICT.get('FD'), 180) \
                 if getattr(self.attr, S_ATTR_DICT.get('FD'), None) \
                 else 0
