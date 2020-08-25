@@ -89,7 +89,7 @@ class SkillPageView(DetailView, SkillPageMixin):
 
         explore_courses = []
         exp_cour_ids = json.loads(self.object.ex_cour)
-        explore_courses = Category.objects.filter(id__in=exp_cour_ids).values('name','url','icon')
+        explore_courses = Category.objects.filter(id__in=exp_cour_ids).values('name','url')
         
         context.update({
             'subheading':subheading_id_data_mapping,
@@ -110,7 +110,6 @@ class SkillPageView(DetailView, SkillPageMixin):
             'canonical_url':self.object.get_canonical_url(),
             'show_chat':True,
             'explore_courses': explore_courses,
-            'static_url': settings.STATIC_URL
         })
         return context
 

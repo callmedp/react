@@ -476,27 +476,14 @@
 
             <!-- other courses to explore section -->
             {% if explore_courses %}
-              <section id="explore-courses" class="col-sm-12">
-                <div class="popular-course">
-                  <div class="row">
-                    <h2>Other Courses To Explore</h2>
-                    <div class="d-flex mb-10 course-wd">
-                      {% for course in explore_courses %}
-                        <div class="col">
-                          <div class="media">
-                          {% if course.icon %}
-                            <figure class="mr-20 shadow-icon">
-                              <img aria-label="{{course.name}}" class="img-fluid" src="{{static_url}}{{course.icon}}">
-                            </figure>
-                          {% endif %}
-                            <figcaption class="media-body">
-                                <a href="{{course.url}}">{{course.name}}</a>
-                            </figcaption>
-                          </div>
-                        </div>
-                      {% endfor %}
-                    </div>
-                  </div>
+              <section id="explore_courses" class="col-sm-12">
+                <div class="other-courses">
+                  <h2>Other Courses To Explore</h2>
+                  <p class="mb-0 mt-30">
+                  {% for course in explore_courses %}
+                    <a href="{{course.url}}"></a><span class="badge_other_courses badge-pill badge-purple">{{course.name}}</span></a>
+                  {% endfor %}
+                  </p>
                 </div>
               </section>
             {% endif %}
