@@ -7,6 +7,8 @@ import pickle
 import math
 import datetime
 import json
+import traceback
+
 
 import requests
 from decimal import Decimal
@@ -504,7 +506,7 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                 order.delete()
             msg = str(e)
             logging.getLogger('error_log').error(msg)
-            logging.getLogger('error_log').error({}.format(str(e.msg)))
+            logging.getLogger('error_log').error('Order creation error = {}'.format(traceback.format_exc()))
             return Response(
                 {"msg": msg, "status": 0},
                 status=status.HTTP_400_BAD_REQUEST)
