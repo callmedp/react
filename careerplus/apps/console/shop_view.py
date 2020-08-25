@@ -58,7 +58,8 @@ from .shop_form import (
     TestimonialModelForm,
     AddSubCategoryForm,ChangeSubCategoryForm,FunctionalAreaForm,
     FunctionalAreaCreateForm,ProductJobTitleChangeForm,
-    ProductJobTitleCreateForm)
+    ProductJobTitleCreateForm,
+    ChangeOtherCoursesForm)
 
 from scheduler.models import Scheduler
 from console.schedule_tasks.tasks import generate_discount_report
@@ -349,6 +350,8 @@ class ChangeCategoryView(DetailView):
             instance=self.get_object())
         seo_change_form = ChangeCategorySEOForm(
             instance=self.get_object())
+        explore_courses_form = ChangeOtherCoursesForm(
+            instance=self.get_object())
         if self.object.type_level in [2, 3, 4]:
             skill_change_form = ChangeCategorySkillForm(
             instance=self.get_object())
@@ -377,7 +380,9 @@ class ChangeCategoryView(DetailView):
             'form': main_change_form,
             'seo_form': seo_change_form,
             "childrens": childrens,
-            "products": products})
+            "products": products,
+            'other_courses_form': explore_courses_form
+            })
         return context
 
     def post(self, request, *args, **kwargs):
@@ -542,6 +547,27 @@ class ChangeCategoryView(DetailView):
                                 "You cannot add Sub Header for level1 and Level2")
                             return HttpResponseRedirect(
                                 reverse('console:category-change', kwargs={'pk': cat}))
+                    elif slug == 'explore_courses':
+                        form = ChangeOtherCoursesForm(
+                            request.POST, instance=obj)
+                        if form.is_valid():
+                            form.save()
+                            messages.success(
+                                self.request,
+                                "Other Courses Added Successfully")
+                            return HttpResponseRedirect(
+                                reverse('console:category-change',kwargs={'pk': obj.pk}))
+                        else:
+                            context = self.get_context_data()
+                            if form:
+                                context.update({'other_courses_form': form})
+                            messages.error(
+                                self.request,
+                                "Other Courses addition Failed, Changes not Saved")
+                            return TemplateResponse(
+                                request, [
+                                    "console/shop/change_category.html"
+                                ], context)
 
                 messages.error(
                     self.request,

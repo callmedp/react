@@ -478,3 +478,25 @@ section {
         margin-top:1.5rem;
     }
 }
+
+.badge_other_courses{
+    display: inline-block;
+    padding: 2rem 2.5rem;
+    @include font-size($badge-font-size);
+    font-weight: $badge-font-weight;
+    line-height: 1;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    margin-bottom: 1rem;  
+}
+
+.other-courses {
+    @extend %box-shadow;
+    @extend %left-bdr;
+
+    .badge-purple {
+        margin-right: 1rem;
+        position: relative;
+    }
+}
