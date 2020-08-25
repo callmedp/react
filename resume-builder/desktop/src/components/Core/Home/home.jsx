@@ -15,7 +15,7 @@ import { hideModal, showModal, showLoginModal, hideLoginModal } from "../../../s
 import { displaySelectedTemplate } from '../../../store/template/actions';
 import { eventClicked } from '../../../store/googleAnalytics/actions/index';
 import { trackUser } from '../../../store/tracking/actions/index';
-import { storeTrackingInfo, updateProductAvailability, isTrackingInfoAvailable, getTrackingInfo} from '../../../Utils/common';
+import { storeTrackingInfo, isTrackingInfoAvailable, getTrackingInfo} from '../../../Utils/common';
 class Home extends Component {
     constructor(props) {
 
@@ -91,12 +91,10 @@ class Home extends Component {
 
         const query = new URLSearchParams(this.props.location.search);
         const trackingId = query.get('t_id')
-        const productId = query.get('prod_id')
         
         if(trackingId !== null){
-            const productTrackingMappingId = productId === '11' ? productId : -1;
-            storeTrackingInfo(trackingId, productTrackingMappingId, productId)
-            updateProductAvailability(productId);
+            const productTrackingMappingId = '11'
+            storeTrackingInfo(trackingId, productTrackingMappingId, '')
             this.sendTrackingInfo('enter_home_page',1)
         }
 

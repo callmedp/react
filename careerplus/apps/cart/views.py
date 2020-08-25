@@ -657,6 +657,8 @@ class PaymentSummaryView(TemplateView, CartMixin):
             return 8
         if product.type_flow == 2:
             return 9
+        if product.type_flow == 17:
+            return 11
 
     def get(self, request, *args, **kwargs):
         token = request.GET.get('token', '')

@@ -156,8 +156,7 @@ export class Buy extends Component {
         await this.props.addToCart(data);
         if( isTrackingInfoAvailable()){
             const { trackingId, productId } = getTrackingInfo()
-            console.log("track")
-            window.location.href = `${siteDomain}/cart/payment-summary/?prod_id=${productId}&t_id=${trackingId}`;
+            window.location.replace(`${siteDomain}/cart/payment-summary/?prod_id=${productId}&t_id=${trackingId}`)
         }
         else{
             window.location.href = `${siteDomain}/cart/payment-summary/`;

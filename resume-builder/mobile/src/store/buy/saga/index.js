@@ -37,10 +37,10 @@ function* addToCart(action) {
         }
         else if(isTrackingInfoAvailable()){
             const {trackingId, productId}  = getTrackingInfo()
-            window.location.href = `${siteDomain}/cart/payment-summary/?prod_id=${productId}&t_id=${trackingId}`
+            window.location.replace( `${siteDomain}/cart/payment-summary/?prod_id=${productId}&t_id=${trackingId}`)
         }
         else{
-            window.location.href = `${siteDomain}/cart/payment-summary/`
+            window.location.repace `${siteDomain}/cart/payment-summary/`
         }
         return resolve('Product added to cart successfully.');
 

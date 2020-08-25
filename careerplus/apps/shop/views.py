@@ -914,6 +914,8 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             return 8
         if product.type_flow == 2:
             return 9
+        if product.type_flow == 17:
+            return 11
 
     def get(self, request, **kwargs):
         from payment.tasks import make_logging_request

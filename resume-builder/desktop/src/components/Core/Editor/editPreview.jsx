@@ -56,12 +56,10 @@ class EditPreview extends Component {
 
         const queryString = new URLSearchParams(this.props.location.search);
         const trackingId = queryString.get('t_id')
-        const productId = queryString.get('prod_id')
 
         if(trackingId !== null){
-            const productTrackingMappingId = productId ? productId === '11' : -1;
-            storeTrackingInfo(trackingId, productTrackingMappingId, productId)
-            updateProductAvailability(productId);
+            const productTrackingMappingId = '11'
+            storeTrackingInfo(trackingId, productTrackingMappingId, '')
         }
       
         // check if the userexperinece is greater or equal to 4 years. (7 is the pid for 4 years (mapping done here))

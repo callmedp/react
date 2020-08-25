@@ -50,12 +50,10 @@ class Home extends Component {
 
         const query = new URLSearchParams(this.props.location.search);
         const trackingId = query.get('t_id')
-        const productId = query.get('prod_id')
         
         if(trackingId !== null){
-            const productTrackingMappingId = productId === '11' ? productId : -1;
-            storeTrackingInfo(trackingId, productTrackingMappingId, productId)
-            updateProductAvailability(productId);
+            const productTrackingMappingId = '11'
+            storeTrackingInfo(trackingId, productTrackingMappingId, '')
             this.sendTrackingInfo('enter_home_page',1);
         }
 

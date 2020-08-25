@@ -16,7 +16,6 @@ export const removeTrackingInfo = () => {
 export const isTrackingInfoAvailable = () => {
     return localStorage.getItem("trackingId")
         && localStorage.getItem("productTrackingMappingId")
-        && localStorage.getItem("productId")
 }
 
 
@@ -34,6 +33,3 @@ export const isProductInCart = () => {
 }
 
 
-export const updateProductAvailability = (productId) => {
-    localStorage.setItem('productPresentInCart', productId)
-}
