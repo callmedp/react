@@ -1,5 +1,6 @@
 # python imports
 import logging
+import json
 
 # django imports
 from django import forms
@@ -1864,3 +1865,31 @@ class SpecialTagsForm(forms.ModelForm):
             (p.url, '{}({})'.format(p.name,p.id),) for p in skill_page_objs]
 
         self.fields['skill_page_url'] = forms.ChoiceField(choices=choices)
+
+class ChangeOtherCoursesForm(forms.ModelForm):
+    ex_cour = forms.MultipleChoiceField(label=("Skill Pages:"),
+        required = False,
+        widget=forms.SelectMultiple(
+        attrs={'class': 'form-control col-md-7 col-xs-12'}))
+
+    class Meta:
+        model = Category
+        fields = ['ex_cour']
+
+    def __init__(self, *args, **kwargs):
+        instance = kwargs.get('instance', None)
+        instance_id = 0
+        super(ChangeOtherCoursesForm, self).__init__(*args, **kwargs)
+        if instance:
+            instance_id = instance.id
+            skill_ids = eval(instance.ex_cour)
+            self.initial['ex_cour'] = skill_ids
+
+        skills_objs = Category.objects.filter(active=True, is_skill=True).exclude(id=instance_id).only('id','name')
+        cat_choices = [(p.id, '{0}'.format(p.name),) for p in skills_objs]
+        self.fields['ex_cour'].choices = cat_choices
+
+    def clean_ex_cour(self):
+        data = self.cleaned_data.get('ex_cour', '')[:3]
+        data_list = [eval(skill_id) for skill_id in data]
+        return json.dumps(data_list)

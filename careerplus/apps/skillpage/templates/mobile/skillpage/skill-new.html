@@ -295,6 +295,18 @@
             </div><!-- // Skill Tabs -->
         </div><!-- // Course and Assessments -->
 
+        <!--Other Courses To Explore--->
+        {% if explore_courses %}
+        <div class="white-box mb-30 pb-30" id="other_courses">
+            <h2>Other Courses To Explore</h2>
+            <div class="tags">
+                {% for course in explore_courses %}
+                    <a href="{{course.url}}"><span class="tags--items">{{course.name}}</span></a>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
         {% if testimonialcategory|length %}
         <div class="learner-stories row mt-20" id="testimonial">
             <h2 class="pl-15">Learner’s stories</h2>
