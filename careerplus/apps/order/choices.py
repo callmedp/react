@@ -498,6 +498,6 @@ LTV_BRACKET_LABELS = (
 )
 
 SHINE_ACTIVATION = (
-    (0, "In Active"),
+    (0, "Inactive"),
     (1, "Active")
 )

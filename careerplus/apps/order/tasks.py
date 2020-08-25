@@ -961,7 +961,7 @@ def av_user_enrollment(av_ids):
             }
             AnalyticsVidhyaMixin().send_failure_mail(data, 'missing data from profile')
 
-@tasks
+@task
 def update_purchase_on_shine(oi):
     from emailers.utils import BadgingMixin
     try:
