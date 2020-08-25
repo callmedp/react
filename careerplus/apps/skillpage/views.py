@@ -109,7 +109,8 @@ class SkillPageView(DetailView, SkillPageMixin):
             'meta':meta,
             'canonical_url':self.object.get_canonical_url(),
             'show_chat':True,
-            'explore_courses': explore_courses
+            'explore_courses': explore_courses,
+            'static_url': settings.STATIC_URL
         })
         return context
 

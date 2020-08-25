@@ -484,9 +484,11 @@
                       {% for course in explore_courses %}
                         <div class="col">
                           <div class="media">
+                          {% if course.icon %}
                             <figure class="mr-20 shadow-icon">
-                              <img aria-label="{{course.name}}" class="img-fluid" src="{{course.icon}}">
+                              <img aria-label="{{course.name}}" class="img-fluid" src="{{static_url}}{{course.icon}}">
                             </figure>
+                          {% endif %}
                             <figcaption class="media-body">
                                 <a href="{{course.url}}">{{course.name}}</a>
                             </figcaption>
