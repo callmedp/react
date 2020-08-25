@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 import os,django,sys,json,ast,re,pytz,logging
 
 #Settings imports
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "careerplus.config.settings_live")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "careerplus.config.settings_staging")
 ROOT_FOLDER = os.path.realpath(os.path.dirname(__file__))
 ROOT_FOLDER = ROOT_FOLDER[:ROOT_FOLDER.rindex('/')]
 if ROOT_FOLDER not in sys.path:
@@ -119,24 +119,25 @@ def update_transaction_object(order_status_data,txn_obj):
 if __name__=="__main__":
     utc_tz = pytz.timezone('UTC')
     current_utc_time = datetime.utcnow().replace(tzinfo=utc_tz)
-    time_intervals_to_check = [5,15,240,1440]
+    time_intervals_to_check = [5]
+    import ipdb;ipdb.set_trace()
 
     for interval in time_intervals_to_check:
         sdt = (current_utc_time - timedelta(minutes=interval)).replace(tzinfo=utc_tz)
         edt = (sdt + timedelta(minutes=2)).replace(tzinfo=utc_tz) #Hour + buffer
-        all_initiated_transactions = PaymentTxn.objects.filter(status__in=[0,2,3,4,5],\
-                payment_mode__in=[5,7],created__gte=sdt,created__lte=edt,order__site=1)
+        # all_initiated_transactions = PaymentTxn.objects.filter(status__in=[0,2,3,4,5],\
+        #         payment_mode__in=[5,7],created__gte=sdt,created__lte=edt,order__site=1)
+        #
+        # logging.getLogger('info_log').info(\
+        #     "Total initiated transactions for interval {} minutes - {}".format(\
+        #     interval,all_initiated_transactions.count()))
 
-        logging.getLogger('info_log').info(\
-            "Total initiated transactions for interval {} minutes - {}".format(\
-            interval,all_initiated_transactions.count()))
-
-        for txn in all_initiated_transactions:
+        for txn in [1]:
             get_params_mapping = {"command":"orderStatusTracker",
                             "request_type":"JSON",
                             "response_type":"JSON",
                             "access_code":settings.RSHINE_CCAVENUE_ACCESS_CODE,
-                            "order_no":txn.txn
+                            "order_no":'CP2642141598070966',
                             }
 
             url_get_string = "&".join(["{}={}".format(key,value) for key,value in get_params_mapping.items()])
@@ -144,7 +145,7 @@ if __name__=="__main__":
             obj = CCAvenueCrypto()
             encrypted_data = obj.encrypt(json.dumps(get_params_mapping), settings.RSHINE_CCAVENUE_WORKING_KEY)
             json_data = json.dumps({"encRequest":url_get_string +"&enc_request=" + encrypted_data,\
-                "order_no":txn.txn})
+                "order_no":'CP2642141598070966'})
             
             request_url = CCAVENUE_API_URL_BASE + "?" + url_get_string + "&enc_request=" + encrypted_data
             response = requests.post(request_url,data=json_data)
@@ -187,7 +188,7 @@ if __name__=="__main__":
                 logging.getLogger('info_log').info(\
                     "Order Status Failure - {} {}".format(order_status_data,txn.txn))
                 continue
-            update_transaction_object(order_status_data,txn)
+            # update_transaction_object(order_status_data,txn)
     
     logging.getLogger('info_log').info(\
         "Total successful transactions - {}".format(SUCCESSFUL_TRANSACTIONS))
