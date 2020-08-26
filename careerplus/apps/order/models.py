@@ -470,8 +470,12 @@ class Order(AbstractAutoDate):
         created = not bool(getattr(self, "id"))
         if created:
             return super(Order, self).save(**kwargs)
-
-        existing_obj = Order.objects.get(id=self.id)
+        existing_obj =None
+        try:
+            existing_obj = Order.objects.get(id=self.id)
+        except:
+            logging.getLogger('error_log').error('order not in save found checking using master -{}'.format(self.id))
+            existing_obj = Order.objects.using('master').get(id=self.id)
 
         if self.status == 1:
             assesment_items = self.orderitems.filter(
