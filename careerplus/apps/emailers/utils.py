@@ -103,6 +103,8 @@ class BadgingMixin(object):
             return 'lac'
         elif product.type_flow in [16]:
             return 'laa'
+        elif product.sub_type_flow in [502]:
+            return 'las'
         else:
             return 'las'
 

@@ -15,7 +15,7 @@ def remove_inactive_products_from_scp():
     order_items = OrderItem.objects.filter(active_on_shine=1)
 
     for oi in order_items:
-        if (oi.end_date and (oi.end_date > timezone.now())):
+        if (oi.end_date and (oi.end_date < timezone.now())):
             try:
                 active_services_details = BadgingMixin().get_active_services_or_courses_or_assessments(
                     candidate_id=oi.order.candidate_id, curr_order_item=oi, active=False)

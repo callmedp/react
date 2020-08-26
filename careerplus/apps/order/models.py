@@ -521,6 +521,8 @@ class Order(AbstractAutoDate):
             for jobs_oi in jobs_on_the_move_items:
                 jobs_oi.start_date = timezone.now()
                 jobs_oi.end_date = timezone.now() + timedelta(days=jobs_oi.product.day_duration)
+                jobs_oi.active_on_shine = 1
+                update_purchase_on_shine.delay(jobs_oi)
                 jobs_oi.save()
 
         if self.status == 1 and existing_obj.status != 1 and self.order_contains_amcat_item():
