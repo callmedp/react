@@ -962,9 +962,10 @@ def av_user_enrollment(av_ids):
             AnalyticsVidhyaMixin().send_failure_mail(data, 'missing data from profile')
 
 @task
-def update_purchase_on_shine(oi):
+def update_purchase_on_shine(oi_id):
     from emailers.utils import BadgingMixin
     try:
+        oi = OrderItem.objects.filter(id=oi_id).first()
         active_services_details = BadgingMixin().get_active_services_or_courses_or_assessments(
             candidate_id=oi.order.candidate_id, curr_order_item=oi, active=True)
         if active_services_details:

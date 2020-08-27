@@ -273,7 +273,7 @@ class Order(AbstractAutoDate):
             oi.start_date = timezone.now()
             oi.end_date = timezone.now() + timedelta(days=oi.product.day_duration)
             oi.active_on_shine = 1
-            update_purchase_on_shine.delay(oi)
+            update_purchase_on_shine.delay(oi.pk)
             oi.save()
 
     @property
@@ -522,7 +522,7 @@ class Order(AbstractAutoDate):
                 jobs_oi.start_date = timezone.now()
                 jobs_oi.end_date = timezone.now() + timedelta(days=jobs_oi.product.day_duration)
                 jobs_oi.active_on_shine = 1
-                update_purchase_on_shine.delay(jobs_oi)
+                update_purchase_on_shine.delay(jobs_oi.pk)
                 jobs_oi.save()
 
         if self.status == 1 and existing_obj.status != 1 and self.order_contains_amcat_item():
@@ -535,7 +535,7 @@ class Order(AbstractAutoDate):
                 amcat_oi.start_date = timezone.now()
                 amcat_oi.end_date = timezone.now() + timedelta(days=15)
                 amcat_oi.active_on_shine = 1
-                update_purchase_on_shine.delay(amcat_oi)
+                update_purchase_on_shine.delay(amcat_oi.pk)
                 amcat_oi.save()
 
         if self.status == 1 and existing_obj.status != 1 and self.order_contains_resume_builder():
@@ -606,7 +606,7 @@ class Order(AbstractAutoDate):
             now = datetime.now()
             time_tuple = now.timetuple()
             purchased_at = time.mktime(time_tuple)
-            update_purchase_on_shine.delay(order_item)
+            update_purchase_on_shine.delay(order_item.pk)
 
             # saving this for assessments and practice test
             redeem_options = [{
@@ -642,7 +642,7 @@ class Order(AbstractAutoDate):
             order_item.start_date = timezone.now()
             order_item.end_date = timezone.now() + timedelta(days=order_item.product.day_duration)
             order_item.active_on_shine = 1
-            update_purchase_on_shine.delay(order_item)
+            update_purchase_on_shine.delay(order_item.pk)
             try:
                 order_item.save()
             except Exception as e:
@@ -656,7 +656,7 @@ class Order(AbstractAutoDate):
                 order_item.start_date = timezone.now()
                 order_item.end_date = timezone.now() + timedelta(days=30)
                 order_item.active_on_shine = 1
-                update_purchase_on_shine.delay(order_item)
+                update_purchase_on_shine.delay(order_item.pk)
                 try:
                     order_item.save()
                 except Exception as e:
@@ -670,7 +670,7 @@ class Order(AbstractAutoDate):
                 order_item.start_date = timezone.now()
                 order_item.end_date = timezone.now() + timedelta(days=30)
                 order_item.active_on_shine = 1
-                update_purchase_on_shine.delay(order_item)
+                update_purchase_on_shine.delay(order_item.pk)
                 try:
                     order_item.save()
                 except Exception as e:
