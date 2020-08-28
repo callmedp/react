@@ -15,6 +15,7 @@ from celery.decorators import task
 # Local imports
 # from order.functions import date_timezone_convert
 from cart.models import Cart
+from shop.models import Product
 from emailers.email import SendMail
 from crmapi.functions import lead_create_on_crm
 from cart.mixins import CartMixin
@@ -149,6 +150,7 @@ def lead_creation_function(filter_dict=None, cndi_name=None):
 
 @task(name="cart_drop_out_mail")
 def cart_drop_out_mail(pk=None, cnd_email=None):
+    import ipdb;ipdb.set_trace();
     mail_type = 'CART_DROP_OUT'
     cart_objs = Cart.objects.filter(
         status=2,
@@ -157,8 +159,8 @@ def cart_drop_out_mail(pk=None, cnd_email=None):
         owner_id__isnull=False, pk=pk).exclude(owner_id__exact='')
     count = 0
     for crt_obj in cart_objs:
-        # send mail only if user has not edited cart in the last 45 minutes
-        if crt_obj.modified < (timezone.now() - timezone.timedelta(minutes=45)):
+        # send mail only if user has not edited cart in the last 45 minutes 
+        if crt_obj.modified < (timezone.now()- timezone.timedelta(minutes=45)):
             cart_id = crt_obj.owner_id
             data = {}
             last_cart_items = []
@@ -227,3 +229,38 @@ def cart_drop_out_mail(pk=None, cnd_email=None):
                         "{}-{}-{}".format(
                             str(to_email), str(mail_type), str(e)))
     print("{} of {} cart dropout mails sent".format(count, cart_objs.count()))
+
+@task(name="cart_product_removed_mail")
+def cart_product_removed_mail(data):
+    cart_id = data.get('card_id', '')
+    email = data.get('email', '')
+    prod_id = data.get('prod_id', '')
+    mail_type = 'CART_DROP_OUT'
+    last_cart_items = []
+    cart_obj = Cart.objects.filter(
+        status=2,
+        shipping_done=False,
+        payment_page=False,
+        owner_id__isnull=False, 
+        pk=cart_id).exclude(owner_id__exact='').first()
+    count = 0
+
+    if cart_obj.modified < (timezone.now()- timezone.timedelta(minutes=30))\
+        and len(cart_obj.lineitems.all()) == 0:
+        cart_id = crt_obj.owner_id
+        data = {}
+        last_cart_items = []
+        to_email = [email]
+        total_price = Decimal(0)
+        prod = Product.object.filter(id=prod_id).first()
+
+        product = dict()
+        product['name'] = prod.name
+
+
+        token = AutoLogin().encode(toemail, cart_id, days=None)
+        data['autologin'] = "{}://{}/autologin/{}/?next=/cart/payment_summary".format(
+            settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token)
+
+
+

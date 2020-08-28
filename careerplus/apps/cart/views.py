@@ -82,6 +82,7 @@ class AddToCartView(View, CartMixin):
         return super(AddToCartView, self).dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
+        import ipdb;ipdb.set_trace();
         data = {"status": -1}
         cart_type = request.POST.get('cart_type')
         prod_id = request.POST.get('prod_id', '')
@@ -169,6 +170,7 @@ class RemoveFromCartView(View, CartMixin):
                 del self.request.session['product_availability']
 
     def post(self, request, *args, **kwargs):
+        import ipdb;ipdb.set_trace();
         if request.is_ajax():
             data = {"status": -1}
             reference = request.POST.get('reference_id')

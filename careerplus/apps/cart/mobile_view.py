@@ -7,13 +7,14 @@ from decimal import Decimal
 
 from .mixins import CartMixin
 from .models import Cart
+from .tasks import cart_product_removed_mail
 from wallet.models import Wallet, WalletTransaction, PointTransaction
 from payment.tasks import make_logging_request
 
 
 class RemoveFromCartMobileView(View, CartMixin):
 
-    def removeTracking(self, product_id):
+    def removeTracking(self, product_id, email_data):
         tracking_id = self.request.session.get(
             'tracking_id', '')
         tracking_product_id = self.request.session.get(
@@ -22,6 +23,7 @@ class RemoveFromCartMobileView(View, CartMixin):
             'product_tracking_mapping_id', '')
         product_availability = self.request.session.get(
             'product_availability', '')
+        cart_product_removed_mail.deplay(email_data)
         if tracking_product_id == product_id and tracking_id:
             make_logging_request.delay(
                 tracking_product_id, product_tracking_mapping_id, tracking_id, 'remove_product')
@@ -38,6 +40,7 @@ class RemoveFromCartMobileView(View, CartMixin):
                 del self.request.session['product_availability']
 
     def post(self, request, *args, **kwargs):
+        import ipdb;ipdb.set_trace();
         if request.is_ajax():
             data = {"status": -1}
             product_reference = request.POST.get('product_reference')
