@@ -760,7 +760,12 @@ class WriterInvoiceMixin(object):
 
         if oi.assigned_date and oi.closed_on and oi.assigned_date < oi.closed_on:
             oi_filter_kwargs = {}
-            oi_filter_kwargs.update({'oi_status': '22', 'last_oi_status': '5'})
+            if oi.product.type_flow == 8:
+                oi_filter_kwargs.update(
+                    {'oi_status': '44', 'last_oi_status': '42'})
+            else:
+                oi_filter_kwargs.update(
+                    {'oi_status': '22', 'last_oi_status': '5'})
             first_draft = oi.orderitemoperation_set.filter(
                 **oi_filter_kwargs).first()
 
@@ -923,8 +928,6 @@ class WriterInvoiceMixin(object):
         return data
 
     def save_writer_invoice_pdf(self, user=None, invoice_date=None):
-        import ipdb
-        ipdb.set_trace()
         if not user:
             user = self.request.user
 
