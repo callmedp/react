@@ -96,7 +96,6 @@ DEBUG_TOOLBAR_CONFIG = {
 }
 
 #### CELERY SETTINGS ########
-BROKER_URL = 'redis://localhost:6379/0'
 
 ########## WSGI SETTINGS #################
 WSGI_APPLICATION = 'careerplus.config.wsgi.application'

@@ -6,11 +6,9 @@ import { Link } from "react-router-dom";
 import { showHelpModal, hideHelpModal } from '../../../store/ui/actions/index';
 import HelpModal from '../../Modal/helpModal';
 import queryString from "query-string";
-
-
+import propTypes from 'prop-types';
 
 class Header extends Component {
-
     constructor(props) {
         super(props);
         this.scrollTo = this.scrollTo.bind(this);
@@ -20,7 +18,7 @@ class Header extends Component {
         this.handleTemplateClick = this.handleTemplateClick.bind(this)
         this.howItWorks = this.howItWorks.bind(this)
     }
-
+    
     scrollTo(elem, offset, action, label) {
         scroller.scrollTo(elem, {
             duration: 800,
@@ -28,13 +26,13 @@ class Header extends Component {
             smooth: 'easeInOutQuad',
             offset
         })
-
+        
         this.props.eventClicked({
             action,
             label
         })
     }
-
+    
     reachUsButton() {
         const { showHelpModal, eventClicked } = this.props;
         this.props.sendTrackingInfo("header_reach_us",1)
@@ -63,11 +61,11 @@ class Header extends Component {
     componentDidMount() {
         const values = queryString.parse(this.props.location.search);
         const template = (values && values.template) || '';
-
+        
         if (template === "false") {
             this.scrollTo('templates', -50, 'Templates', 'Header')
         }
-
+        
     }
     render() {
         const { page, userName,lastName, number,email, ui: { helpModal }, hideHelpModal, feedback, eventClicked } = this.props;
@@ -113,9 +111,45 @@ class Header extends Component {
                     </div>
                 </div>
             </header>
-        )
-    }
+    
+)
+}
 
+}
+
+Header.propTypes = {
+    email: propTypes.string,
+    eventClicked: propTypes.func,
+    feedback: propTypes.func,
+    getclass: propTypes.string,
+    hideHelpModal: propTypes.func,
+    number: propTypes.string,
+    page: propTypes.string,
+    showHelpModal: propTypes.func,
+    userName: propTypes.string,
+    location: propTypes.shape({
+        hash: propTypes.string,
+        pathname: propTypes.string,
+        search: propTypes.string,
+        state: undefined
+    }),
+    ui: propTypes.shape({
+        alertModal: propTypes.bool,
+        alertType: propTypes.string,
+        formName: propTypes.string,
+        generateResumeModal: propTypes.bool,
+        helpModal: propTypes.bool,
+        loader: propTypes.bool,
+        loginModal: propTypes.bool,
+        modal: propTypes.bool,
+        previewClicked: propTypes.bool,
+        select_template_modal: propTypes.bool,
+        showMoreSection: propTypes.bool,
+        successLogin: propTypes.bool,
+        suggestionModal: propTypes.bool,
+        suggestionType: propTypes.string,
+        suggestions: propTypes.array,
+    }),
 }
 
 const mapStateToProps = (state) => {

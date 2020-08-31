@@ -153,12 +153,20 @@ class RemoveFromCartView(View, CartMixin):
             'product_tracking_mapping_id', '')
         product_availability = self.request.session.get(
             'product_availability', '')
+        trigger_point = self.request.session.get(
+            'trigger_point','')
+        u_id = self.request.session.get(
+            'u_id','')
+        position = self.request.session.get(
+            'position','')
+        utm_campaign = self.request.session.get(
+            'utm_campaign','')
         if tracking_product_id == product_id and tracking_id:
             make_logging_request.delay(
-                tracking_product_id, product_tracking_mapping_id, tracking_id, 'remove_product')
+                tracking_product_id, product_tracking_mapping_id, tracking_id, 'remove_product', position, trigger_point, u_id, utm_campaign )
             # for showing the user exits for that particular cart product
             make_logging_request.delay(
-                tracking_product_id, product_tracking_mapping_id, tracking_id, 'exit_cart')
+                tracking_product_id, product_tracking_mapping_id, tracking_id, 'exit_cart', position, trigger_point, u_id, utm_campaign )
             if tracking_id:
                 del self.request.session['tracking_id']
             if product_tracking_mapping_id:
@@ -664,6 +672,10 @@ class PaymentSummaryView(TemplateView, CartMixin):
         token = request.GET.get('token', '')
         product_id = request.GET.get('prod_id', '')
         tracking_id = request.GET.get('t_id', '')
+        utm_campaign = request.GET.get('utm_campaign', '')
+        trigger_point = request.GET.get('trigger_point', '')
+        u_id = request.GET.get('u_id', '')
+        position = request.GET.get('position', '')
 
         valid = False
         candidate_id = None
@@ -719,7 +731,7 @@ class PaymentSummaryView(TemplateView, CartMixin):
 
         if tracking_id and tracking_product_id and product_tracking_mapping_id and product_availability:
             make_logging_request.delay(
-                tracking_product_id, product_tracking_mapping_id, tracking_id, 'cart_payment_summary')
+                tracking_product_id, product_tracking_mapping_id, tracking_id, 'cart_payment_summary',position, trigger_point, u_id, utm_campaign)
 
         redirect = self.redirect_if_necessary(reload_url)
         if redirect:

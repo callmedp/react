@@ -474,6 +474,20 @@
               </div>
             </section>
 
+            <!-- other courses to explore section -->
+            {% if explore_courses %}
+              <section id="explore_courses" class="col-sm-12">
+                <div class="other-courses">
+                  <h2>Other Courses To Explore</h2>
+                  <p class="mb-0 mt-30">
+                  {% for course in explore_courses %}
+                    <a href="{{course.url}}"><span class="badge_other_courses badge-pill badge-purple">{{course.name}}</span></a>
+                  {% endfor %}
+                  </p>
+                </div>
+              </section>
+            {% endif %}
+
             {% if testimonialcategory|length %}
               <!-- learners stories section -->
               <section id="testimonial" class="col-sm-12">

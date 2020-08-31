@@ -1,10 +1,9 @@
 import React, {Component} from 'react';
 import './banner.scss'
 import {scroller} from 'react-scroll';
+import propTypes from 'prop-types';
 
 export default class Banner extends Component {
-
-
     constructor(props) {
         super(props);
         this.scrollTo = this.scrollTo.bind(this);
@@ -67,5 +66,9 @@ export default class Banner extends Component {
             </section>
         )
     }
+}
 
+Banner.propTypes = {
+    eventClicked: propTypes.func,
+    userName: propTypes.string
 }

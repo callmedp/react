@@ -2,7 +2,7 @@ import React, { Component, ReactDOM } from 'react';
 import './resumeSlider.scss'
 import Slider from "react-slick";
 import queryString from "query-string";
-
+import propTypes from 'prop-types';
 
 export default class ResumeSlider extends Component {
     constructor(props) {
@@ -118,4 +118,53 @@ export default class ResumeSlider extends Component {
             </section>
         )
     }
+}
+
+ResumeSlider.propTypes = {
+    personalInfo: propTypes.shape({
+        date_of_birth: propTypes.string,
+        email: propTypes.string,
+        entity_preference_data: propTypes.array,
+        extra_info: propTypes.string,
+        extracurricular: propTypes.array,
+        first_name: propTypes.string,
+        gender: propTypes.string,
+        hide_subscribe_button: propTypes.bool,
+        image: propTypes.string,
+        interest_list: propTypes.array,
+        last_name: propTypes.string,
+        location: propTypes.string,
+        number: propTypes.string,
+    }),
+    eventClicked: propTypes.func,
+    history: propTypes.shape({
+        action: propTypes.string,
+        block: propTypes.func,
+        createHref: propTypes.func,
+        go: propTypes.func,
+        goBack: propTypes.func,
+        goForward: propTypes.func,
+        length: propTypes.number,
+        listen: propTypes.func,
+        location: propTypes.shape({
+            hash: propTypes.string,
+            pathname: propTypes.string,
+            search: propTypes.string,
+            state: undefined
+        }),
+        push: propTypes.func,
+        replace: propTypes.func, 
+    }),
+    location: propTypes.shape({
+        hash: propTypes.string,
+        pathname: propTypes.string,
+        search: propTypes.string,
+        state: undefined
+    }),
+    showLoginModal: propTypes.func,
+    showtext: propTypes.bool,
+    updateModalStatus: propTypes.func,
+    updateSelectedTemplate: propTypes.func,
+    checkSessionAvaialability: propTypes.func,
+    getCandidateShineDetails: propTypes.func,
 }

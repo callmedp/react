@@ -2,12 +2,14 @@ import React, {Component} from 'react';
 import Modal from 'react-modal';
 import './NeedHelpModal.scss'
 import {getTitleCase} from "../../../../services/getTitleCase";
+import propTypes from 'prop-types';
+
 if(typeof document !== 'undefined') {
     Modal.setAppElement(document.getElementById('react-app'));
 }
 
 export default class NeedHelpModal extends Component {
-
+    
     constructor(props) {
         super(props);
         this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/';
@@ -20,7 +22,7 @@ export default class NeedHelpModal extends Component {
             'isError': false
         }
     }
-
+    
     closeModal() {
         this.setState({
             feedbackText: '',
@@ -29,13 +31,13 @@ export default class NeedHelpModal extends Component {
         });
         this.props.hideHelpModal();
     }
-
-
+    
+    
     handleFeedback(event) {
         event.preventDefault();
         const {feedback,personalInfo,hideHelpModal,eventClicked} = this.props;
-
-
+        
+        
         const feedbackObj = {
             name: personalInfo.first_name,
             email: personalInfo.email,
@@ -43,17 +45,17 @@ export default class NeedHelpModal extends Component {
             number: personalInfo.number,
             lsource: "8"
         };
-
-         if (!this.state.feedbackText) {
+        
+        if (!this.state.feedbackText) {
             this.setState({
                 errorMessage: 'Please provide us some information.',
                 isError: true
             });
             return;
         }
-
+        
         feedback(feedbackObj)
-
+        
         eventClicked({
             'action':'LeadSubmit',
             'label':'Header'
@@ -63,10 +65,10 @@ export default class NeedHelpModal extends Component {
             isError: false,
             errorMessage: ''
         })
-
+        
         hideHelpModal();
     }
-
+    
     onTextChange(event) {
         this.setState({
             feedbackText: event.target.value,
@@ -74,39 +76,61 @@ export default class NeedHelpModal extends Component {
             errorMessage: ''
         })
     }
-
+    
     render() {
         const {modalStatus} = this.props;
         const {errorMessage, isError} = this.state;
         return (
             <Modal
-                isOpen={modalStatus}
-                contentLabel="onRequestClose Preview"
-                onRequestClose={this.closeModal}
-                className="alertModal"
-                overlayClassName="Overlay">
-                <div className="modal-reachus">
-                    <h2>Reach out to us</h2>
-                    <p>Let us know your feedback and suggestions, so we can help you build a powerful resume.</p>
-                    <div className="form__group mt-20">
-                        <textarea rows="6" maxlength="100" className="form__input" onChange={this.onTextChange}></textarea>
-                    </div>
-                    {
-                        !!(isError) &&
-                        <span className="help-message-error">{errorMessage}</span>
-                    }
-                    <div class="text-center">
-                        <button className="btn btn__round btn__primary mt-20" onClick={this.handleFeedback}>
-                            Submit
-                        </button>
-                    </div>
-                    <span className="close-wrap" onClick={this.closeModal}>
-                        <i className="sprite icon--close"></i>
-                    </span>
-                </div>
-
-
+            isOpen={modalStatus}
+            contentLabel="onRequestClose Preview"
+            onRequestClose={this.closeModal}
+            className="alertModal"
+            overlayClassName="Overlay">
+            <div className="modal-reachus">
+            <h2>Reach out to us</h2>
+            <p>Let us know your feedback and suggestions, so we can help you build a powerful resume.</p>
+            <div className="form__group mt-20">
+            <textarea rows="6" maxlength="100" className="form__input" onChange={this.onTextChange}></textarea>
+            </div>
+            {
+                !!(isError) &&
+                <span className="help-message-error">{errorMessage}</span>
+            }
+            <div class="text-center">
+            <button className="btn btn__round btn__primary mt-20" onClick={this.handleFeedback}>
+            Submit
+            </button>
+            </div>
+            <span className="close-wrap" onClick={this.closeModal}>
+            <i className="sprite icon--close"></i>
+            </span>
+            </div>
+            
+            
             </Modal>
-        )
+            )
+        }
     }
-}
+    
+    NeedHelpModal.propTypes = {
+        hideHelpModal: propTypes.func,
+        modalStatus: propTypes.bool,
+        feedback: propTypes.func,
+        personalInfo: propTypes.shape({
+            date_of_birth: propTypes.string,
+            email: propTypes.string,
+            entity_preference_data: propTypes.array,
+            extra_info: propTypes.string,
+            extracurricular: propTypes.array,
+            first_name: propTypes.string,
+            gender: propTypes.string,
+            hide_subscribe_button: propTypes.bool,
+            image: propTypes.string,
+            interest_list: propTypes.array,
+            last_name: propTypes.string,
+            location: propTypes.string,
+            number: propTypes.string,
+        }),
+        eventClicked: propTypes.func,
+    }

@@ -1,6 +1,7 @@
 import React from 'react';
 import Modal from 'react-modal';
-import "./menuModal.scss"
+import "./menuModal.scss";
+import propTypes from 'prop-types';
 
 if (typeof document !== 'undefined') {
 
@@ -8,7 +9,6 @@ if (typeof document !== 'undefined') {
 }
 
 export default class MenuModal extends React.Component {
-
     constructor(props) {
         super(props)
         this.state = {
@@ -18,7 +18,7 @@ export default class MenuModal extends React.Component {
         this.addItem = this.addItem.bind(this)
         this.removeItem = this.removeItem.bind(this)
         this.saveMenuItems = this.saveMenuItems.bind(this)
-        this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/'
+        this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/';
     }
 
     componentDidMount() {
@@ -140,4 +140,13 @@ export default class MenuModal extends React.Component {
             </div>
         );
     }
+}
+
+MenuModal.propTypes = {
+    closeMenuModal: propTypes.func,
+    eventClicked: propTypes.func,
+    formCategoryList: propTypes.object,
+    menu_modal_status: propTypes.bool,
+    preferenceList: propTypes.array,
+    updateCategoryEntity: propTypes.func
 }

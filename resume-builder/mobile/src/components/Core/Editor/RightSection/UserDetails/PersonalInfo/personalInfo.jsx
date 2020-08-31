@@ -18,6 +18,7 @@ import Subscribe from "../../../RightSection/subscribe";
 import validate from "../../../../../FormHandler/validtaions/profile/validate"
 import { scrollOnErrors } from "../../../../../../Utils/srollOnError";
 import { defaultInterests } from "../../../../../../Utils/defaultInterests";
+import propTypes from 'prop-types';
 
 class PersonalInfo extends Component {
     constructor(props) {
@@ -33,21 +34,20 @@ class PersonalInfo extends Component {
             'submit': false,
             'flag': true
         }
-        this.updateInfoBeforeLoss = this.updateInfoBeforeLoss.bind(this)
-
-
+        this.updateInfoBeforeLoss = this.updateInfoBeforeLoss.bind(this);
     }
-
+    
     componentDidMount() {
         if (this.props.personalInfo.entity_preference_data.length) {
             this.setState({ heading: this.props.personalInfo.entity_preference_data[0].entity_text })
         }
-
+        
     }
-
+    
     async handleSubmit(values) {
         let { sidenav: { listOfLinks, currentLinkPos }, generateResumeAlert, history, updateCurrentLinkPos,
-            onSubmit, personalInfo } = this.props
+        onSubmit, personalInfo } = this.props;
+
         const { imageURL, flag } = this.state
         currentLinkPos++
         this.setState({ submit: true })
@@ -59,9 +59,9 @@ class PersonalInfo extends Component {
             updateCurrentLinkPos({ currentLinkPos })
             history.push(`/resume-builder/edit/?type=${listOfLinks[currentLinkPos]}`)
         }
-
+        
     }
-
+    
     async updateInfoBeforeLoss() {
         if (!this.state.submit) {
             const { initialValues, personalInfo } = this.props
@@ -77,53 +77,53 @@ class PersonalInfo extends Component {
                 }
             }
             if (!error && JSON.stringify(initialValues) !== JSON.stringify(form_data['values'])) {
-
+                
                 const { imageURL, flag } = this.state
                 await this.props.onSubmit(form_data['values'], imageURL, flag, personalInfo);
             }
         }
-
+        
     }
-
+    
     async componentWillUnmount() {
         this.updateInfoBeforeLoss();
     }
-
-
+    
+    
     removeImage() {
         this.setState({
             imageURI: '',
             imageURL: ''
         })
     }
-
-
+    
+    
     componentDidUpdate(prevProps) {
         if (this.props.personalInfo.entity_preference_data !== prevProps.personalInfo.entity_preference_data) {
             this.setState({ heading: this.props.personalInfo.entity_preference_data[0].entity_text })
         }
     }
-
-
+    
+    
     async getImageURI(event) {
         let reader = new FileReader();
         reader.onload = (event) => {
-
+            
             this.setState({
                 imageURI: event.target.result
             })
-
+            
         };
         reader.readAsDataURL(event.target.files[0]);
-
+        
         let url = await this.props.fetchImageUrl(event.target.files[0]);
-
+        
         this.setState({
             'imageURL': url,
             flag: true
         })
     }
-
+    
     render() {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
@@ -131,7 +131,7 @@ class PersonalInfo extends Component {
         const { editHeading, heading, flag } = this.state;
         const newUser = localStorage.getItem('newUser')
         return (
-
+            
             <div className="buildResume">
                 <PreviewModal {...this.props} />
                 <Subscribe {...this.props} />
@@ -276,6 +276,63 @@ class PersonalInfo extends Component {
             </div>
         )
     }
+}
+
+PersonalInfo.propTypes = {
+    eventClicked: propTypes.func,
+    fetchImageUrl: propTypes.func,
+    fetchInterestList: propTypes.func,
+    form: propTypes.string,
+    generateResumeAlert: propTypes.func,
+    handleSubmit: propTypes.func,
+    headingChange: propTypes.func,
+    history: propTypes.shape({
+        action: propTypes.string,
+        block: propTypes.func,
+        createHref: propTypes.func,
+        go: propTypes.func,
+        goBack: propTypes.func,
+        goForward: propTypes.func,
+        length: propTypes.number,
+        listen: propTypes.func,
+        location: propTypes.shape({
+            hash: propTypes.string,
+            pathname: propTypes.string,
+            search: propTypes.string,
+            state: undefined
+        }),
+        push: propTypes.func,
+        replace: propTypes.func, 
+    }),
+    initialValues: propTypes.shape({
+        // currentLinkPos: propTypes.number,
+        listOfLinks: propTypes.array,
+        sidenavStatus: propTypes.bool
+    }),
+    onSubmit: propTypes.func,
+    personalInfo: propTypes.shape({
+        date_of_birth: propTypes.string,
+        email: propTypes.string,
+        entity_preference_data: propTypes.array,
+        extra_info: propTypes.string,
+        extracurricular: propTypes.array,
+        first_name: propTypes.string,
+        gender: propTypes.string,
+        hide_subscribe_button: propTypes.bool,
+        image: propTypes.string,
+        interest_list: propTypes.array,
+        last_name: propTypes.string,
+        location: propTypes.string,
+        number: propTypes.string,
+    }),
+    sidenav: propTypes.shape({
+        currentLinkPos: propTypes.number,
+        listOfLinks: propTypes.array,
+        sidenavStatus: propTypes.bool
+    }),
+    submitting: propTypes.bool,
+    updateAlertModalStatus: propTypes.func,
+    updateCurrentLinkPos: propTypes.func,
 }
 
 export const PersonalInfoForm = reduxForm({

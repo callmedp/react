@@ -27,7 +27,6 @@ from django_redis import get_redis_connection
 #Global Variables
 redis_conn = get_redis_connection("search_lookup")
 
-
 def js_settings(request):
     js_vars = {}
     js_vars.update(
@@ -137,6 +136,7 @@ def common_context_processor(request):
         "navlink_2": navlink_2,
         "image_static_url": settings.MEDIA_URL
      })
+
     return context
 
 
@@ -178,7 +178,7 @@ def get_home_offer_values():
     offer_value = ""
     show = False
     end_date  = ""
-    fmt = "%m/%d/%Y %H:%M:%S"
+    fmt = "%d %b, %Y %H:%M:%S"
     if active_offer:
         end_local = active_offer.end_time
         start_local= active_offer.start_time

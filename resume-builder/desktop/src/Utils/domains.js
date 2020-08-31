@@ -3,3 +3,4 @@ export const siteDomain = (window && window.config && window.config.siteDomain) 
 
 
 export const shineSiteDomain = (window && window.config && window.config.siteDomain) || 'https://sumosc.shine.com' 
+export const chatDomain = (window && window.config && window.config.siteDomainChat) || 'https://learning1.shine.com/chatbot'

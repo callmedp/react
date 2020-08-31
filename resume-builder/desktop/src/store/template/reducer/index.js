@@ -14,12 +14,12 @@ const initialState = {
     'text_font_size': 1,
     'heading_font_size': 1,
     'color': 1,
-    'entity_position': [],
+    'entity_position': "",
     'templateImage': '',
     'modalTemplateImage': '',
     'thumbnailImages': [],
-    'templateToPreview': ''
-
+    'templateToPreview': '',
+    'entity_id_count_mapping': {}
 };
 
 

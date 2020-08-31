@@ -169,7 +169,7 @@ class WriterInvoiceMixin(object):
 
                     if portfolio_ois.exists():
                         product_count = product_count + 1
-                
+
                 if product_pk not in EXECUTIVE_BIO_PRODUCT_LIST:
                     executive_bio_ois = OrderItem.objects.filter(
                         order__candidate_id=oi.order.candidate_id,
@@ -182,7 +182,7 @@ class WriterInvoiceMixin(object):
 
                     if executive_bio_ois.exists():
                         product_count = product_count + 1
-                     
+
                 if oi.product.type_flow != 1:
                     _resume_writing_ois_ = OrderItem.objects.filter(
                         order__candidate_id=oi.order.candidate_id,
@@ -757,8 +757,22 @@ class WriterInvoiceMixin(object):
         total_sum, total_combo_discount, success_closure = 0, 0, 0
 
         # sla incentive or penalty calculation
+
         if oi.assigned_date and oi.closed_on and oi.assigned_date < oi.closed_on:
-            finish_days = (oi.closed_on - oi.assigned_date).days
+            oi_filter_kwargs = {}
+            if oi.product.type_flow == 8:
+                oi_filter_kwargs.update(
+                    {'oi_status': '44', 'last_oi_status': '42'})
+            else:
+                oi_filter_kwargs.update(
+                    {'oi_status': '22', 'last_oi_status': '5'})
+            first_draft = oi.orderitemoperation_set.filter(
+                **oi_filter_kwargs).first()
+
+            initial_draft_date = first_draft.created if first_draft and first_draft.created else None
+            if initial_draft_date is None:
+                return total_sum, total_combo_discount, success_closure
+            finish_days = (initial_draft_date - oi.assigned_date).days
             if oi.delivery_service and oi.delivery_service.slug in self.express_slug_list:
                 if finish_days <= EXPRESS_SLA:
                     success_closure += 1
@@ -883,6 +897,8 @@ class WriterInvoiceMixin(object):
             if success_per >= INCENTIVE_PASS_PERCENTAGE:
                 incentive = (total * INCENTIVE_PERCENTAGE) / 100
                 incentive = int(incentive)
+                if incentive > 2000:
+                    incentive = 2000
                 total_payable += incentive
             elif success_per < PASS_PERCENTAGE:
                 penalty = (total * PENALTY_PERCENTAGE) / 100
@@ -1221,7 +1237,8 @@ class UserMixin(object):
                 'unable to get country object %s' % str(e))
 
             country_obj = Country.objects.get(phone='91')
-        cache.set('client_country_{}'.format(code2),country_obj,timeout=60*24*24)
+        cache.set('client_country_{}'.format(code2),
+                  country_obj, timeout=60*24*24)
 
         return country_obj
 

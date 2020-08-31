@@ -292,6 +292,16 @@
         <li class="nav-item">
           <a onclick="trackClickEvent()" class="nav-link" href="/courses/it-information-technology/cloud-computing/82/">Cloud Computing</a>
         </li>
+        {% if navlink_1 %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{navlink_1.skill_page_url}}" onclick="nav1_gaEvent();">{{navlink_1.display_name}}{% if navlink_1.tag %}<small class="config-tag">{{navlink_1.tag}}</small>{% endif %}</a>
+            </li>
+          {% endif %}
+          {% if navlink_2 %}
+            <li class="nav-item">
+              <a class="nav-link" href="{{navlink_2.skill_page_url}}" onclick="nav2_gaEvent();">{{navlink_2.display_name}}{% if navlink_2.tag %}<small class="config-tag">{{navlink_2.tag}}</small>{% endif %}</a>
+            </li>
+          {% endif %}
 
       </ul>
       <span class="pull-right mt-10" data-toggle="modal" data-target="#offerModal"><i class="offer-icon"></i></span>

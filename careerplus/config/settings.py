@@ -26,14 +26,14 @@ SITEMAP_CACHING_TIME = 1
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'careerplus_new',
+        'NAME': 'careerplus_test',
         'USER': 'root',
         'PASSWORD': 'root',
         'HOST': '',
         'PORT': '',
     },
     'master': {
-        'NAME': 'careerplus_new',
+        'NAME': 'careerplus_test',
         'ENGINE': 'django.db.backends.mysql',
         'USER': 'root',
         'PASSWORD': 'root',
@@ -41,7 +41,7 @@ DATABASES = {
         'PORT': '',
     },
     'slave': {
-        'NAME': 'careerplus_new',
+        'NAME': 'careerplus_test',
         'ENGINE': 'django.db.backends.mysql',
         'USER': 'root',
         'PASSWORD': 'root',

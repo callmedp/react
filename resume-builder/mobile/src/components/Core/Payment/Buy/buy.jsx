@@ -14,11 +14,13 @@ import { eventClicked } from '../../../../store/googleAnalytics/actions/index'
 import { loginCandidate } from "../../../../store/landingPage/actions";
 import { apiError } from '../../../../Utils/apiError.js';
 import AlertModal from '../../../Common/AlertModal/alertModal';
-import {isTrackingInfoAvailable, getTrackingInfo, storeProduct} from '../../../../Utils/common';
+import { isTrackingInfoAvailable, getTrackingInfo, storeProduct } from '../../../../Utils/common';
 import { trackUser } from '../../../../store/tracking/actions/index'
+// import * as lscache from '../../../../../node_modules/lscache/lscache';
+import { Helmet } from "react-helmet";
+import propTypes from 'prop-types';
 
 class Buy extends Component {
-
     constructor(props) {
         super(props);
 
@@ -43,7 +45,7 @@ class Buy extends Component {
 
     redirectToCart() {
 
-       
+
         this.props.eventClicked({
             'action': 'PayNow',
             'label': 'Click'
@@ -63,7 +65,7 @@ class Buy extends Component {
             "cart_type": 'cart'
         }
         storeProduct(product.id)
-        this.sendTrackingInfo('enroll_now',1,product.id)
+        this.sendTrackingInfo('enroll_now', 1, product.id)
         this.props.addToCart(data);
     }
 
@@ -103,7 +105,7 @@ class Buy extends Component {
         else window['name'] = ''
 
         getProductIds();
-       // fetchThumbNailImages();
+        // fetchThumbNailImages();
         fetchUserInfo();
     }
 
@@ -117,7 +119,7 @@ class Buy extends Component {
     }
 
     async downloadRequestedResume() {
-        this.sendTrackingInfo('download_requested_resume',1)
+        this.sendTrackingInfo('download_requested_resume', 1)
         const { hideGenerateResumeModal } = this.props
         const candidateId = localStorage.getItem('candidateId')
         const selectedTemplate = localStorage.getItem('selected_template', 1)
@@ -132,7 +134,7 @@ class Buy extends Component {
     }
 
     async freeResumeRequest() {
-        this.sendTrackingInfo('free_resume_request',1);
+        this.sendTrackingInfo('free_resume_request', 1);
         const { requestFreeResume, showGenerateResumeModal,
             userInfo: { resume_creation_count }, } = this.props
 
@@ -173,8 +175,9 @@ class Buy extends Component {
         }
     }
 
+
     editTemplate() {
-        this.sendTrackingInfo('buy_edit_tempate',1);
+        this.sendTrackingInfo('buy_edit_tempate', 1);
         const { eventClicked, history } = this.props;
         eventClicked({
             'action': 'EditTemplate',
@@ -187,9 +190,11 @@ class Buy extends Component {
         if (isTrackingInfoAvailable()) {
             const { trackingId, productTrackingMappingId, productId,
                 triggerPoint, uId, position, utmCampaign } = getTrackingInfo();
-            const {userTrack} = this.props;
-            userTrack({ trackingId, productTrackingMappingId, productId, action, position,
-                triggerPoint, uId, utmCampaign });
+            const { userTrack } = this.props;
+            userTrack({
+                trackingId, productTrackingMappingId, productId, action, position,
+                triggerPoint, uId, utmCampaign
+            });
         }
     }
 
@@ -215,6 +220,11 @@ class Buy extends Component {
         return (
 
             <div className="buy-container">
+                <Helmet
+                    script={[
+                        { "src": (localStorage.getItem('script_link') ? localStorage.getItem('script_link') : null), "type": "text/javascript" }
+                    ]}
+                />
                 <Header page={"buy"} history={history} />
                 {mainloader ? <Loader /> : ""}
                 {modal_status ? <BuyTemplateModal modal_status={modal_status}
@@ -230,7 +240,7 @@ class Buy extends Component {
 
                     <button className="btn btn__round btn__primary fs-"
                         onClick={this.redirectToCart.bind(this)}>Pay Now
-                    </button>
+                </button>
                 </div>
 
 
@@ -238,7 +248,7 @@ class Buy extends Component {
                     <div className="d-flex mb-30">
                         <div className="mr-auto">
                             <p className="fs-20 color-333"> Your customised <br></br>resume is ready </p>
-                            <button class="btn btn--sm btn__round btn--outline mt-10" onClick={this.editTemplate}>Edit template</button>
+                            <button className="btn btn--sm btn__round btn--outline mt-10" onClick={this.editTemplate}>Edit template</button>
                         </div>
 
 
@@ -331,6 +341,88 @@ class Buy extends Component {
     }
 }
 
+Buy.propTypes = {
+    addToCart: propTypes.func,
+    eventClicked: propTypes.func,
+    fetchSelectedTemplateImage: propTypes.func,
+    fetchThumbNailImages: propTypes.func,
+    fetchUserInfo: propTypes.func,
+    getProductIds: propTypes.func,
+    hideGenerateResumeModal: propTypes.func,
+    history: propTypes.shape({
+        action: propTypes.string,
+        block: propTypes.func,
+        createHref: propTypes.func,
+        go: propTypes.func,
+        goBack: propTypes.func,
+        goForward: propTypes.func,
+        length: propTypes.number,
+        listen: propTypes.func,
+        location: propTypes.shape({
+            hash: propTypes.string,
+            pathname: propTypes.string,
+            search: propTypes.string,
+            state: undefined
+        }),
+        push: propTypes.func,
+        replace: propTypes.func,
+    }),
+    loginCandidate: propTypes.func,
+    productIds: propTypes.shape({
+        ids: propTypes.array
+    }),
+    requestFreeResume: propTypes.func,
+    showGenerateResumeModal: propTypes.func,
+    template: propTypes.shape({
+        color: propTypes.number,
+        entity_position: propTypes.array,
+        heading_font_size: propTypes.number,
+        html: propTypes.string,
+        modal_status: propTypes.bool,
+        reorderFailToast: propTypes.bool,
+        templateImage: propTypes.string,
+        text_font_size: propTypes.number,
+        thumbnailImages: propTypes.array,
+        zoomInHtml: propTypes.string,
+    }),
+    ui: propTypes.shape({
+        alertModal: propTypes.bool,
+        alertType: propTypes.string,
+        formName: propTypes.string,
+        generateResumeModal: propTypes.bool,
+        helpModal: propTypes.bool,
+        loader: propTypes.bool,
+        loginModal: propTypes.bool,
+        modal: propTypes.bool,
+        previewClicked: propTypes.bool,
+        select_template_modal: propTypes.bool,
+        showMoreSection: propTypes.bool,
+        successLogin: propTypes.bool,
+        suggestionModal: propTypes.bool,
+        suggestionType: propTypes.string,
+        suggestions: propTypes.array,
+    }),
+    userInfo: propTypes.shape({
+        active_subscription: propTypes.bool,
+        candidate_id: propTypes.string,
+        date_of_birth: propTypes.string,
+        email: propTypes.string,
+        entity_preference_data: propTypes.array,
+        extra_info: propTypes.string,
+        extracurricular: propTypes.array,
+        first_name: propTypes.string,
+        free_resume_downloads: propTypes.number,
+        gender: propTypes.string,
+        id: propTypes.number,
+        image: propTypes.string,
+        interest_list: propTypes.array,
+        last_name: propTypes.string,
+        location: propTypes.string,
+        number: propTypes.string,
+        selected_template: propTypes.string,
+    })
+}
+
 const mapStateToProps = (state) => {
     return {
         productIds: state.productIds,
@@ -380,7 +472,7 @@ const mapDispatchToProps = (dispatch) => {
         'hideGenerateResumeModal': () => {
             return dispatch(hideGenerateResumeModal())
         },
-        "userTrack" : ( data ) => dispatch(trackUser(data)),
+        "userTrack": (data) => dispatch(trackUser(data)),
     }
 };
 

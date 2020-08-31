@@ -3,7 +3,7 @@ import Header from '../../../Common/Header/header.jsx';
 import './preview.scss';
 import { connect } from "react-redux";
 import { fetchTemplate, updateModalStatus, customizeTemplate, fetchDefaultCustomization, reorderSection, reGeneratePDF, } from "../../../../store/template/actions/index"
-import { updatePersonalInfo, fetchPersonalInfo } from "../../../../store/personalInfo/actions/index"
+import { updatePersonalInfo, fetchPersonalInfo, getChatBotUrl } from "../../../../store/personalInfo/actions/index"
 import { updateAlertModalStatus, showGenerateResumeModal, hideGenerateResumeModal } from "../../../../store/ui/actions/index"
 import Loader from '../../../Common/Loader/loader.jsx';
 import ChangeTemplateModal from './changeTemplateModal.jsx';
@@ -23,15 +23,16 @@ import { siteDomain } from "../../../../Utils/domains";
 import AlertModal from '../../../Common/AlertModal/alertModal.jsx';
 import { eventClicked } from '../../../../store/googleAnalytics/actions/index'
 import { formCategoryList } from '../../../../Utils/formCategoryList'
+// import * as lscache from '../../../../../node_modules/lscache/lscache';
+import { Helmet } from "react-helmet";
+import propTypes from 'prop-types';
 import { getTrackingInfo, isTrackingInfoAvailable } from '../../../../Utils/common';
+
 class Preview extends Component {
 
     constructor(props) {
         super(props)
-
         // check if the userexperinece is greater or equal to 4 years. (7 is the pid for 4 years (mapping done here))
-
-
         this.state = {
             'customize': false,
             currentTab: 1,
@@ -97,8 +98,8 @@ class Preview extends Component {
 
 
     toggleUploadResume(event) {
-        let { personalInfo: { upload_resume: uploadResume }, personalInfo, updateSelectedTemplate} = this.props;
-        this.sendTrackingInfo('preview_update_resume_on_shine',1)
+        let { personalInfo: { upload_resume: uploadResume }, personalInfo, updateSelectedTemplate } = this.props;
+        this.sendTrackingInfo('preview_update_resume_on_shine', 1)
         personalInfo['upload_resume'] = !uploadResume;
         updateSelectedTemplate(personalInfo);
     }
@@ -131,6 +132,7 @@ class Preview extends Component {
             }
         }
         await this.props.fetchPersonalInfo();
+        // await this.props.getChatBotUrl();
         this.props.fetchTemplate();
         const { personalInfo: { selected_template } } = this.props
         this.props.fetchDefaultCustomization(selected_template || 1);
@@ -148,7 +150,7 @@ class Preview extends Component {
 
     themeChange(colorNo, colorName) {
         this.setState({ selectedColor: colorNo })
-        this.sendTrackingInfo('preview_change_theme',1)
+        this.sendTrackingInfo('preview_change_theme', 1)
         this.props.eventClicked({
             'action': 'ChangeTheme',
             'label': colorName
@@ -177,8 +179,9 @@ class Preview extends Component {
     }
 
     moveUpSection(selectedEntity, selectedTemplate) {
-        const { eventClicked, reorderSection} = this.props;
-        this.sendTrackingInfo('preview_reorder_section',1);
+        const { eventClicked, reorderSection } = this.props;
+        this.sendTrackingInfo('preview_reorder_section', 1);
+
         eventClicked({
             'action': 'ReorderSection',
             'label': formCategoryList[selectedEntity['entity_id']].name
@@ -190,8 +193,9 @@ class Preview extends Component {
     }
 
     moveDownSection(selectedEntity, selectedTemplate) {
-        const { eventClicked, reorderSection} = this.props;
-        this.sendTrackingInfo('preview_reorder_section',1);
+        const { eventClicked, reorderSection } = this.props;
+        this.sendTrackingInfo('preview_reorder_section', 1);
+
         eventClicked({
             'action': 'ReorderSection',
             'label': formCategoryList[selectedEntity['entity_id']].name
@@ -203,10 +207,8 @@ class Preview extends Component {
     }
 
     getResume() {
-        const { personalInfo: { order_data, resume_generated }, history, reGeneratePDF, showGenerateResumeModal, hideGenerateResumeModal, eventClicked} = this.props;
-
-        this.sendTrackingInfo('get_your_resume',1);
-
+        const { personalInfo: { order_data, resume_generated }, history, reGeneratePDF, showGenerateResumeModal, hideGenerateResumeModal, eventClicked } = this.props;
+        this.sendTrackingInfo('get_your_resume', 1);
         eventClicked({
             'action': 'GetYourResume',
             'label': 'Click'
@@ -258,34 +260,41 @@ class Preview extends Component {
         if (isTrackingInfoAvailable()) {
             const { trackingId, productTrackingMappingId, productId,
                 triggerPoint, uId, position, utmCampaign } = getTrackingInfo();
-            const {userTrack} = this.props;
-            userTrack({ trackingId, productTrackingMappingId, productId, action, position,
-                triggerPoint, uId, utmCampaign });
+            const { userTrack } = this.props;
+            userTrack({
+                trackingId, productTrackingMappingId, productId, action, position,
+                triggerPoint, uId, utmCampaign
+            });
         }
     }
+
 
     async handleCustomization(data) {
         await this.props.customizeTemplate(data)
         this.props.fetchTemplate();
         this.setState({ customize: false, currentTab: 1 })
     }
-    
-    customizeTemplate(){
-        this.setState({ customize: true }) 
-        this.sendTrackingInfo('preview_customize_template',1);
+    customizeTemplate() {
+        this.setState({ customize: true })
+        this.sendTrackingInfo('preview_customize_template', 1);
     }
 
-    selectTab(tabNo){
-        this.setState({ currentTab: tabNo }) 
-        this.sendTrackingInfo('preview_tab_selected',1);
+    selectTab(tabNo) {
+        this.setState({ currentTab: tabNo })
+        this.sendTrackingInfo('preview_tab_selected', 1);
     }
-    
+
 
     render() {
         const { customize, currentTab, selectedColor, headingFontSize, textFontSize, sectionEntityName, startingReorderUpDowmIndex, zoomIn } = this.state
         const { template: { html, zoomInHtml, entity_position, entity_id_count_mapping }, ui: { mainloader, alertModalStatus, generateResumeModal }, personalInfo: { selected_template, order_data, resume_generated, upload_resume: uploadResume }, history, eventClicked } = this.props
         return (
             <div className="preview">
+                <Helmet
+                    script={[
+                        { "src": (localStorage.getItem('script_link') ? localStorage.getItem('script_link') : null), "type": "text/javascript" }
+                    ]}
+                />
                 <Header page={'preview'} {...this.props} order_data={order_data} eventClicked={eventClicked} />
                 <AlertModal modal_status={alertModalStatus || generateResumeModal} history={history} generateResumeModal={generateResumeModal} />
 
@@ -298,12 +307,12 @@ class Preview extends Component {
 
                 {mainloader ? <Loader /> : ""}
 
-                <div class="toss-widget">
+                <div className="toss-widget">
                     <div className="checkbox-wrap">
                         <input type="checkbox" name="update" id="update" onClick={this.toggleUploadResume} defaultChecked={uploadResume} />
                         <label htmlFor="update">
                             Update resume on shine profile
-                        </label>
+            </label>
                     </div>
                 </div>
 
@@ -316,7 +325,7 @@ class Preview extends Component {
                 </div>
 
                 <div className="preview__bottom-btns pos-fixed">
-                    <span className="btn btn__round btn--outline" onClick={this.customizeTemplate }>Customize template</span>
+                    <span className="btn btn__round btn--outline" onClick={() => { this.setState({ customize: true }) }}>Customize template</span>
                     <span className="btn btn__round btn__primary" onClick={this.getResume}>Get your resume</span>
                 </div>
 
@@ -332,7 +341,7 @@ class Preview extends Component {
                                         <div className={"filter__accordion__card " + (currentTab === 1 ? "filter__accordion--active" : "")}>
                                             <AccordionItemHeading>
                                                 <AccordionItemButton>
-                                                    <div className="filter__accordion__card__heading" onClick={ () => this.selectTab(1) }>
+                                                    <div className="filter__accordion__card__heading" onClick={() => this.selectTab(1)}>
                                                         <div className="filter__accordion__card__heading--left">
                                                             <i className="sprite icon--theme mr-10"></i>
                                                             <span>Change theme</span>
@@ -425,12 +434,12 @@ class Preview extends Component {
                                                 <div className="filter__accordion__card--content">
                                                     <div className="font-filter">
                                                         {/* <h3>Section Heading</h3>
-                                                    <div className="font-filter__slide-bar">
-                                                        <span className="font-filter__dot"></span>
-                                                        <span className="font-filter--small mt-10 fs-12">S</span>
-                                                    <span className="font-filter--medium mt-10 fs-12">M</span>
-                                                        <span className="font-filter--large mt-10 fs-12">L</span>
-                                                    </div> */}
+                    <div className="font-filter__slide-bar">
+                    <span className="font-filter__dot"></span>
+                    <span className="font-filter--small mt-10 fs-12">S</span>
+                    <span className="font-filter--medium mt-10 fs-12">M</span>
+                    <span className="font-filter--large mt-10 fs-12">L</span>
+                </div> */}
                                                         <h3>Section Heading</h3>
                                                         <InputRange
                                                             name="heading_font_size"
@@ -464,7 +473,7 @@ class Preview extends Component {
                                         <div className={"filter__accordion__card " + (currentTab === 3 ? "filter__accordion--active" : "")}>
                                             <AccordionItemHeading>
                                                 <AccordionItemButton>
-                                                    <div className="filter__accordion__card__heading" onClick={() => this.selectTab(3) }>
+                                                    <div className="filter__accordion__card__heading" onClick={() => this.selectTab(3)}>
                                                         <div className="filter__accordion__card__heading--left">
                                                             <i className="sprite icon--reorder mr-10"></i>
                                                             <span>Reorder section</span>
@@ -480,11 +489,11 @@ class Preview extends Component {
                                                 <div className="filter__accordion__card--content">
 
                                                     {/* <ul className="tabs">
-                                                        <li className={activeSection ==='left' ? "active":""} 
-                                                            onClick={() => this.handleActiveSection('left')}>Left</li>
-                                                        <li className={activeSection ==='right' ? "active":""}
-                                                            onClick={() => this.handleActiveSection('right')}>Right</li>
-                                                    </ul> */}
+                <li className={activeSection ==='left' ? "active":""} 
+                onClick={() => this.handleActiveSection('left')}>Left</li>
+                <li className={activeSection ==='right' ? "active":""}
+                onClick={() => this.handleActiveSection('right')}>Right</li>
+            </ul> */}
                                                     <div className="reorder">
                                                         <ul className="reorder__items">
                                                             {entity_position.filter(item =>
@@ -544,6 +553,100 @@ class Preview extends Component {
 
 }
 
+Preview.propTypes = {
+    allinfo: propTypes.object,
+    customizeTemplate: propTypes.func,
+    eventClicked: propTypes.func,
+    fetchDefaultCustomization: propTypes.func,
+    fetchPersonalInfo: propTypes.func,
+    fetchTemplate: propTypes.func,
+    getChatBot: propTypes.func,
+    hideGenerateResumeModal: propTypes.func,
+    location: propTypes.shape({
+        hash: propTypes.string,
+        pathname: propTypes.string,
+        search: propTypes.string,
+        state: undefined
+    }),
+    history: propTypes.shape({
+        action: propTypes.string,
+        block: propTypes.func,
+        createHref: propTypes.func,
+        go: propTypes.func,
+        goBack: propTypes.func,
+        goForward: propTypes.func,
+        length: propTypes.number,
+        listen: propTypes.func,
+        location: propTypes.shape({
+            hash: propTypes.string,
+            pathname: propTypes.string,
+            search: propTypes.string,
+            state: undefined
+        }),
+        push: propTypes.func,
+        replace: propTypes.func,
+    }),
+    loginCandidate: propTypes.func,
+    match: propTypes.shape({
+        isExact: propTypes.bool,
+        params: propTypes.object,
+        path: propTypes.string,
+        url: propTypes.string,
+    }),
+    personalInfo: propTypes.shape({
+        date_of_birth: propTypes.string,
+        email: propTypes.string,
+        entity_preference_data: propTypes.array,
+        extra_info: propTypes.string,
+        extracurricular: propTypes.array,
+        first_name: propTypes.string,
+        gender: propTypes.string,
+        hide_subscribe_button: propTypes.bool,
+        image: propTypes.string,
+        interest_list: propTypes.array,
+        last_name: propTypes.string,
+        location: propTypes.string,
+        number: propTypes.string,
+    }),
+    reGeneratePDF: propTypes.func,
+    reorderSection: propTypes.func,
+    routes: propTypes.func,
+    showGenerateResumeModal: propTypes.func,
+    staticContext: propTypes.func,
+    template: propTypes.shape({
+        color: propTypes.number,
+        entity_position: propTypes.array,
+        heading_font_size: propTypes.number,
+        html: propTypes.string,
+        modal_status: propTypes.bool,
+        reorderFailToast: propTypes.bool,
+        templateImage: propTypes.string,
+        text_font_size: propTypes.number,
+        thumbnailImages: propTypes.array,
+        zoomInHtml: propTypes.string,
+    }),
+    ui: propTypes.shape({
+        alertModal: propTypes.bool,
+        alertType: propTypes.string,
+        formName: propTypes.string,
+        generateResumeModal: propTypes.bool,
+        helpModal: propTypes.bool,
+        loader: propTypes.bool,
+        loginModal: propTypes.bool,
+        modal: propTypes.bool,
+        previewClicked: propTypes.bool,
+        select_template_modal: propTypes.bool,
+        showMoreSection: propTypes.bool,
+        successLogin: propTypes.bool,
+        suggestionModal: propTypes.bool,
+        suggestionType: propTypes.string,
+        suggestions: propTypes.array,
+    }),
+    updateAlertModalStatus: propTypes.func,
+    updateModalStatus: propTypes.func,
+    updateSelectedTemplate: propTypes.func,
+}
+
 const mapStateToProps = (state) => {
     return {
         template: state.template,
@@ -557,6 +660,11 @@ const mapDispatchToProps = (dispatch) => {
     return {
         "fetchTemplate": () => {
             return dispatch(fetchTemplate())
+        },
+        "getChatBot": () => {
+            return new Promise((resolve, reject) => {
+                return dispatch(getChatBotUrl())
+            })
         },
         'reGeneratePDF': (data) => {
             return dispatch(reGeneratePDF(data))
@@ -612,7 +720,7 @@ const mapDispatchToProps = (dispatch) => {
                 dispatch(loginCandidate({ payload: { alt: token }, resolve, reject, isTokenAvail: false }))
             })
         },
-        "userTrack" : (data) => dispatch(trackUser(data))
+        "userTrack": (data) => dispatch(trackUser(data)),
     }
 };
 

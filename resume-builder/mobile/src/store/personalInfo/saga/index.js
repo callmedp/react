@@ -28,6 +28,7 @@ function modifyPersonalInfo(data) {
             image
         }
     }
+    // console.log(newData);
     return newData;
 }
 
@@ -191,10 +192,40 @@ function* updateEntityPreference(action) {
     }
 }
 
+function* getChatBotUrl() {
+    var hours = 24; // Reset when storage is more than 24hours
+    var now = new Date().getTime();
+    var setupTime = localStorage.getItem('setupTime');
+    
+    try {
+        const result = yield call(Api.getChatBotUrl);
+        
+        if (setupTime == null) {
+            if(result['data']['script_link'] != "script not available") {
+                localStorage.setItem('script_link', result['data']['script_link'])
+                localStorage.setItem('setupTime', now);
+            }
+        }
+        else {
+            if(now-setupTime > hours*60*60*1000) {
+                localStorage.clear();
+                if(result['data']['script_link'] != "script not available") {
+                    localStorage.setItem('script_link', result['data']['script_link'])
+                    localStorage.setItem('setupTime', now);
+                }
+            }
+        }
+    }
+    catch (e) {
+        console.log(e);
+    }
+}
+
 export default function* watchPersonalInfo() {
     yield takeEvery(Actions.FETCH_PERSONAL_INFO, getPersonalDetails)
     yield takeLatest(Actions.UPDATE_PERSONAL_INFO, updatePersonalDetails)
     yield takeLatest(Actions.FETCH_IMAGE_URL, fetchImageUrl)
     yield takeLatest(Actions.FETCH_INTEREST_LIST, getInterestList);
     yield takeLatest(Actions.UPDATE_ENTITY_PREFERENCE, updateEntityPreference);
+    yield takeLatest(Actions.GET_CHATBOT_URL, getChatBotUrl);
 }

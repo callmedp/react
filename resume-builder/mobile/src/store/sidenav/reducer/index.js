@@ -3,7 +3,7 @@ import {UPDATE_SIDENAV_STATUS,UPDATE_LIST_LINK,UPDATE_CURRENT_LINK_POS} from "..
 const initialState = {
     sidenavStatus : false,
     listOfLinks : [],
-    currentLinkPos : "0"
+    currentLinkPos : 0
 };
 
 

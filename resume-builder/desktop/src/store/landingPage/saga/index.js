@@ -6,8 +6,26 @@ import { UPDATE_UI } from '../../ui/actions/actionTypes'
 import { entityList } from "../../../Utils/formCategoryList";
 import { SAVE_USER_INFO } from "../../personalInfo/actions/actionTypes";
 import { Toast, LandingPageToast } from "../../../services/ErrorToast";
-import { SubmissionError } from 'redux-form'
+import { SubmissionError } from 'redux-form';
 
+const genderDict = {
+    0: {
+        value: '0',
+        'label': 'None'
+    },
+    1: {
+        value: '1',
+        'label': 'Male'
+    },
+    2: {
+        value: '2',
+        'label': 'Female'
+    },
+    3: {
+        value: '3',
+        'label': 'Other'
+    }
+}
 
 function* getCandidateId(action) {
     try {
@@ -136,7 +154,8 @@ function* loginCandidate(action) {
             //redirect code here
         }
 
-        const { data: { candidate_id, candidate_profile, token, entity_status, userExperience, order_data: orderData, subscription_active: subscriptionActive } } = result;
+        const { data: { candidate_id, candidate_profile,gender, token, entity_status, userExperience, order_data: orderData, subscription_active: subscriptionActive } } = result;
+
         localStorage.setItem('candidateId', (candidate_id) || '');
         localStorage.setItem('userExperience', (userExperience || 0));
         if (orderData && orderData.id) {
@@ -158,6 +177,9 @@ function* loginCandidate(action) {
                     ...candidate_profile[key],
                     ...{
                         "location": ''
+                    },
+                    ...{
+                        "gender": (candidate_profile[key]['gender'] && genderDict[candidate_profile[key]['gender']]) || {}
                     }
                 }
                 localStorage.setItem('email', candidate_profile[key]['email'] || '');

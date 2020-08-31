@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import { getTrackingInfo, isTrackingInfoAvailable } from '../../../Utils/common';
 import { connect } from 'react-redux';
 import { trackUser } from '../../../store/tracking/actions/index'; 
+import propTypes from 'prop-types';
 class SavePreviewButtons extends Component { 
 
     constructor(props){
@@ -12,7 +13,7 @@ class SavePreviewButtons extends Component {
         this.handleSaveClick = this.handleSaveClick.bind(this);
 
     }
-
+    
     async preview(){
         const {history,updateInfoBeforeLoss,context,eventClicked} = this.props
         this.sendTrackingInfo('bottom_preview',1);
@@ -50,7 +51,7 @@ class SavePreviewButtons extends Component {
     }
 
     render (){
-        const {showAlertModal,nextEntity,order_data} = this.props
+        const {showAlertModal,nextEntity,order_data} = this.props;
         const newUser = localStorage.getItem('newUser')
         return (
             <div className="flex-container items-right mr-20 mb-30">
@@ -59,8 +60,8 @@ class SavePreviewButtons extends Component {
                     { order_data && order_data.id && !nextEntity ? 'Save Changes' : !nextEntity ? "Download" :'Save and Continue'}
                 </button>
             </div>
-        )
-    }
+            )
+        }
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -71,4 +72,50 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-export default connect(null,mapDispatchToProps)(SavePreviewButtons);
+
+    
+    SavePreviewButtons.propTypes = {
+        context: propTypes.shape({
+            context: propTypes.object,
+            getImageURI: propTypes.func,
+            handleSubmit: propTypes.func,
+            props: propTypes.object,
+            refs: propTypes.object,
+            removeImage: propTypes.func,
+            state: propTypes.shape({
+                imageURI: propTypes.string,
+                imageURL: propTypes.string,
+                flag: propTypes.bool,
+                submit: propTypes.bool
+            }),
+            staticUrl: propTypes.string,
+            updateInfoBeforeLoss: propTypes.func,
+            updater: propTypes.object,
+        }),
+        eventClicked: propTypes.func,
+        form_name: propTypes.string,
+        history: propTypes.shape({
+            action: propTypes.string,
+            block: propTypes.func,
+            createHref: propTypes.func,
+            go: propTypes.func,
+            goBack: propTypes.func,
+            goForward: propTypes.func,
+            length: propTypes.number,
+            listen: propTypes.func,
+            location: propTypes.shape({
+                hash: propTypes.string,
+                pathname: propTypes.string,
+                search: propTypes.string,
+                state: undefined
+            }),
+            push: propTypes.func,
+            replace: propTypes.func, 
+        }),
+        order_data: propTypes.object,
+        showAlertModal: propTypes.func,
+        updateInfoBeforeLoss: propTypes.func,
+    }
+
+
+    export default connect(null,mapDispatchToProps)(SavePreviewButtons);

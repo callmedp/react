@@ -41,7 +41,7 @@ function* addToCart(action) {
                 &trigger_point=${triggerPoint}&u_id=${uId}&utm_campaign=${utmCampaign}&position=${position}`)
         }
         else{
-            window.location.repace `${siteDomain}/cart/payment-summary/`
+            window.location.replace(`${siteDomain}/cart/payment-summary/`)
         }
         return resolve('Product added to cart successfully.');
 
