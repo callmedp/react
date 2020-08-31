@@ -74,9 +74,9 @@ export class Buy extends Component {
     }
 
 
-    sendTrackingInfo(action, position) {
+    sendTrackingInfo(action, position, productId="") {
         if (isTrackingInfoAvailable()) {
-            const { trackingId, productTrackingMappingId, productId } = getTrackingInfo();
+            const { trackingId, productTrackingMappingId } = getTrackingInfo();
             const {userTrack} = this.props;
             userTrack({ trackingId, productTrackingMappingId, productId, action, position });
         }
@@ -134,7 +134,7 @@ export class Buy extends Component {
     }
 
     async redirectToCart(checkedProduct) {
-        this.sendTrackingInfo('enter_cart',1)
+        
         this.props.eventClicked({
             'action': 'PayNow',
             'label': 'Click'
@@ -153,6 +153,7 @@ export class Buy extends Component {
             "prod_id": product.id,
             "cart_type": 'cart',
         }
+        this.sendTrackingInfo('enroll_now',1,product.id)
         await this.props.addToCart(data);
         if( isTrackingInfoAvailable()){
             const { trackingId, productId } = getTrackingInfo()

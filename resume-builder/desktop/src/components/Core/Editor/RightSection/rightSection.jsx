@@ -63,7 +63,7 @@ class RightSection extends Component {
         this.setState({
             'isEditable': true
         });
-        this.props.sendTrackingInfo('right_section_edit')
+        this.props.sendTrackingInfo('right_section_edit',1)
         this.props.eventClicked({
             'action': 'EditSection',
             'label': formCategoryList[entityId].name

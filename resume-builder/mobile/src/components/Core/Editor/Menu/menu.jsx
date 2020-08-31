@@ -60,7 +60,7 @@ class Menu extends Component {
             'label':'Click'
         })
 
-        this.sendTrackingInfo('mobile_done_add_remove_menu',1)
+        this.sendTrackingInfo('menu_done_add_remove_menu',1)
         let links = []
         for (let i of addmore) {
             if (i.active) {
@@ -82,7 +82,7 @@ class Menu extends Component {
 
     closeMenu(){
         const {sidenav:{currentLinkPos},history} = this.props
-        this.sendTrackingInfo('mobile_cancel_add_remove_menu',1)
+        this.sendTrackingInfo('menu_cancel_add_remove_menu',1)
         history.push(`/resume-builder/edit/?type=${entityLinkNameLink[parseInt(currentLinkPos)+ 1]}`)
     }
 

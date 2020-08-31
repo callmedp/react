@@ -103,7 +103,7 @@ class Home extends Component {
     }
 
     handleExitTracking(){
-        this.sendTrackingInfo('exit_home_page',1);
+        this.sendTrackingInfo('exit_resume_builder',1);
     }
 
     handleLoginSuccess() {

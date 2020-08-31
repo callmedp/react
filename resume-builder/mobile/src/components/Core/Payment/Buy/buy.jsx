@@ -43,7 +43,7 @@ class Buy extends Component {
 
     redirectToCart() {
 
-        this.sendTrackingInfo('enter_cart',1)
+       
         this.props.eventClicked({
             'action': 'PayNow',
             'label': 'Click'
@@ -62,6 +62,7 @@ class Buy extends Component {
             "prod_id": product.id,
             "cart_type": 'cart'
         }
+        this.sendTrackingInfo('enroll_now',1,product.id)
         this.props.addToCart(data);
     }
 
@@ -172,7 +173,7 @@ class Buy extends Component {
     }
 
     editTemplate() {
-        this.sendTrackingInfo('buy_edit_template',1);
+        this.sendTrackingInfo('buy_edit_tempate',1);
         const { eventClicked, history } = this.props;
         eventClicked({
             'action': 'EditTemplate',
@@ -181,9 +182,9 @@ class Buy extends Component {
         history.push(`/resume-builder/edit/?type=profile`)
     }
 
-    sendTrackingInfo(action, position) {
+    sendTrackingInfo(action, position, productId="") {
         if (isTrackingInfoAvailable()) {
-            const { trackingId, productTrackingMappingId, productId } = getTrackingInfo();
+            const { trackingId, productTrackingMappingId} = getTrackingInfo();
             const {userTrack} = this.props;
             userTrack({ trackingId, productTrackingMappingId, productId, action, position });
         }
