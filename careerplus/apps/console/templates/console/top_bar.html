@@ -53,10 +53,10 @@
           </a>
           <ul class="dropdown-menu dropdown-usermenu pull-right">
               {% if not writer_invoice or not IS_LIVE %}
-              <li><a href="{% url 'users:generate-writer-invoice' %}">
-                Generate Invoice
-              </a></li>
               {% endif %}
+              <li><a href="{% url 'users:generate-writer-invoice' %}">
+                  Generate Invoice
+              </a></li>
               {% if writer_invoice %}
               <li>
                 <a href="{% url 'users:download-writer-invoice' %}">
