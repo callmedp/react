@@ -18,7 +18,8 @@ const renderLanguage = ({
     editHeadingClick,
     context,
     entity_preference_data,
-    showAlertMessage
+    showAlertMessage,
+    sendTrackingInfo
 }) => {
     return (
 
@@ -49,6 +50,7 @@ const renderLanguage = ({
                                     }
                                 })
                                 if (!skipAddition) {
+                                    sendTrackingInfo('right_section_add',1)
                                     handleAddition(fields, languageNewData(fields), 0, 'language', eventClicked, 'Languages')
                                 }
                                 else {

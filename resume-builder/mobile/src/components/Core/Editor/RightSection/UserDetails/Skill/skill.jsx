@@ -132,6 +132,7 @@ class Skill extends Component {
                     <PreviewModal {...this.props} />
                     <Subscribe {...this.props} />
                     <FieldArray name="list"
+                        sendTrackingInfo={this.props.sendTrackingInfo}
                         handleSubmit={handleSubmit}
                         handleAddition={this.props.handleAddition}
                         deleteSkill={this.deleteSkill}

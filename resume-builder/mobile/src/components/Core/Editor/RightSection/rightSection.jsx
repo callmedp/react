@@ -116,7 +116,8 @@ class RightSection extends Component {
 }
 
 const handleAddition = (fields,data,offset,type,eventClicked,entity_name) =>{
-    this.props.sendTrackingInfo('right_section_add')
+
+   
     fields.push(data)
     scroller.scrollTo(`${type}${fields.length -1}`, {
         duration: 800,

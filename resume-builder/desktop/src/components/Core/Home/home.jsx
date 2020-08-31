@@ -66,11 +66,13 @@ class Home extends Component {
         }
     }
 
-    sendTrackingInfo(action, position) {
+    sendTrackingInfo(action, pos) {
         if (isTrackingInfoAvailable()) {
-            const { trackingId, productTrackingMappingId, productId } = getTrackingInfo();
+            const { trackingId, productTrackingMappingId, productId,
+                triggerPoint, uId, position, utmCampaign } = getTrackingInfo();
             const {userTrack} = this.props;
-            userTrack({ trackingId, productTrackingMappingId, productId, action, position });
+            userTrack({ trackingId, productTrackingMappingId, productId, action, position,
+                triggerPoint, uId, utmCampaign });
         }
     }
 
@@ -91,10 +93,15 @@ class Home extends Component {
 
         const query = new URLSearchParams(this.props.location.search);
         const trackingId = query.get('t_id')
-        
+        const triggerPoint = query.get('trigger_point')
+        const uId = query.get('u_id')
+        const position = query.get('position')
+        const utmCampaign = query.get('utm_campaign')
+
         if(trackingId !== null){
             const productTrackingMappingId = '11'
-            storeTrackingInfo(trackingId, productTrackingMappingId, '')
+            storeTrackingInfo(trackingId, productTrackingMappingId, '',
+            triggerPoint,uId,position,utmCampaign)
             this.sendTrackingInfo('enter_home_page',1)
         }
 

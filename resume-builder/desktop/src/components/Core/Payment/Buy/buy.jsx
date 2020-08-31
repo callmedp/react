@@ -27,7 +27,7 @@ import { eventClicked } from '../../../../store/googleAnalytics/actions/index'
 import { loginCandidate } from "../../../../store/landingPage/actions";
 import { Toast } from '../../../../services/ErrorToast';
 import { trackUser } from '../../../../store/tracking/actions/index';
-import {  isTrackingInfoAvailable, getTrackingInfo} from '../../../../Utils/common';
+import {  isTrackingInfoAvailable, getTrackingInfo, storeProduct} from '../../../../Utils/common';
  
 export class Buy extends Component {
 
@@ -76,9 +76,11 @@ export class Buy extends Component {
 
     sendTrackingInfo(action, position, productId="") {
         if (isTrackingInfoAvailable()) {
-            const { trackingId, productTrackingMappingId } = getTrackingInfo();
+            const { trackingId, productTrackingMappingId,
+            triggerPoint, uId, utmCampaign } = getTrackingInfo();
             const {userTrack} = this.props;
-            userTrack({ trackingId, productTrackingMappingId, productId, action, position });
+            userTrack({ trackingId, productTrackingMappingId, productId, action, position,
+            triggerPoint, uId, utmCampaign });
         }
     }
 
@@ -153,11 +155,13 @@ export class Buy extends Component {
             "prod_id": product.id,
             "cart_type": 'cart',
         }
+        storeProduct(product.id)
         this.sendTrackingInfo('enroll_now',1,product.id)
         await this.props.addToCart(data);
         if( isTrackingInfoAvailable()){
-            const { trackingId, productId } = getTrackingInfo()
-            window.location.replace(`${siteDomain}/cart/payment-summary/?prod_id=${productId}&t_id=${trackingId}`)
+            const {trackingId, productId, triggerPoint, uId, utmCampaign, position }  = getTrackingInfo()
+            window.location.replace( `${siteDomain}/cart/payment-summary/?prod_id=${productId}&t_id=${trackingId}
+                &trigger_point=${triggerPoint}&u_id=${uId}&utm_campaign=${utmCampaign}&position=${position}`)
         }
         else{
             window.location.href = `${siteDomain}/cart/payment-summary/`;

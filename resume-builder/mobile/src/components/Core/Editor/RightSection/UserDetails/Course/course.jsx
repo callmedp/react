@@ -124,6 +124,7 @@ class Course extends Component {
                 <Subscribe {...this.props} />
                 <form onSubmit={handleSubmit(this.handleSubmit)}>
                     <FieldArray name="list"
+                        sendTrackingInfo={this.props.sendTrackingInfo}
                         handleSubmit={handleSubmit}
                         handleAddition={this.props.handleAddition}
                         deleteCourse={this.deleteCourse}

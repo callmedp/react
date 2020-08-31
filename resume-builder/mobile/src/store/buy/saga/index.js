@@ -36,8 +36,9 @@ function* addToCart(action) {
             return reject(new SubmissionError({_error: result['errorMessage']}));
         }
         else if(isTrackingInfoAvailable()){
-            const {trackingId, productId}  = getTrackingInfo()
-            window.location.replace( `${siteDomain}/cart/payment-summary/?prod_id=${productId}&t_id=${trackingId}`)
+            const {trackingId, productId, triggerPoint, uId, utmCampaign, position }  = getTrackingInfo()
+            window.location.replace( `${siteDomain}/cart/payment-summary/?prod_id=${productId}&t_id=${trackingId}
+                &trigger_point=${triggerPoint}&u_id=${uId}&utm_campaign=${utmCampaign}&position=${position}`)
         }
         else{
             window.location.repace `${siteDomain}/cart/payment-summary/`

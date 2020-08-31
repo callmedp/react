@@ -4,9 +4,11 @@ import { Api } from './Api'
 
 
 function* trackUser(action) {
-    const { payload: { trackingId, productTrackingMappingId, productId, action: userAction, position } } = action;
+    const { payload: { trackingId, productTrackingMappingId, productId, action: userAction, position,
+        triggerPoint, uId, utmCampaign } } = action;
     try {
-        yield call(Api.trackUser, trackingId, productTrackingMappingId, productId, userAction, position);
+        yield call(Api.trackUser, trackingId, productTrackingMappingId, 
+            productId, userAction, position, triggerPoint, uId, utmCampaign);
     }
     catch (e) {
     }

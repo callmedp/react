@@ -34,13 +34,8 @@ class Menu extends Component {
         }
         this.setState({addmore: entity_preference_data})
     }
-    sendTrackingInfo(action, position) {
-        if (isTrackingInfoAvailable()) {
-            const { trackingId, productTrackingMappingId, productId } = getTrackingInfo();
-            const {userTrack} = this.props;
-            userTrack({ trackingId, productTrackingMappingId, productId, action, position });
-        }
-    }
+    
+    
 
     componentDidUpdate(prevProps){
         const {personalInfo:{entity_preference_data}} = this.props
@@ -49,6 +44,16 @@ class Menu extends Component {
             this.setState({addmore: entity_preference_data})
         }
 
+    }
+
+    sendTrackingInfo(action, pos) {
+        if (isTrackingInfoAvailable()) {
+            const { trackingId, productTrackingMappingId, productId,
+                triggerPoint, uId, position, utmCampaign } = getTrackingInfo();
+            const {userTrack} = this.props;
+            userTrack({ trackingId, productTrackingMappingId, productId, action, position,
+                triggerPoint, uId, utmCampaign });
+        }
     }
 
     async saveMenu() {

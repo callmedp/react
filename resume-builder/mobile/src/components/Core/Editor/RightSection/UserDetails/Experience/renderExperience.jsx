@@ -29,10 +29,12 @@ const renderExperiences = ({
                                tillTodayDisable,
                                fetchJobTitles,
                                headingChange,
-                               showAlertMessage
+                               showAlertMessage,
+                               sendTrackingInfo
                            }) => {
+                        
     return (
-
+        
         <div className="buildResume__wrap">
             <div className="buildResume__heading heading">
                 <div className="heading__info">
@@ -56,7 +58,7 @@ const renderExperiences = ({
                     <button role="button"
                             onClick=
                             {
-                        
+                             
                                 handleSubmit((values) => {
                                     let skipAddition = false;
                                     (values && values.list || []).forEach(el => {
@@ -65,6 +67,7 @@ const renderExperiences = ({
                                         }
                                     })
                                     if (!skipAddition) {
+                                        sendTrackingInfo('right_section_add',1)
                                         handleAddition(fields, experienceNewData(fields), 780, 'experience', eventClicked, 'Experience')
                                     }
                                     else {

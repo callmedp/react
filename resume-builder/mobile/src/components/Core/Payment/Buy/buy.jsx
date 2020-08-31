@@ -14,7 +14,7 @@ import { eventClicked } from '../../../../store/googleAnalytics/actions/index'
 import { loginCandidate } from "../../../../store/landingPage/actions";
 import { apiError } from '../../../../Utils/apiError.js';
 import AlertModal from '../../../Common/AlertModal/alertModal';
-import {isTrackingInfoAvailable, getTrackingInfo,} from '../../../../Utils/common';
+import {isTrackingInfoAvailable, getTrackingInfo, storeProduct} from '../../../../Utils/common';
 import { trackUser } from '../../../../store/tracking/actions/index'
 
 class Buy extends Component {
@@ -62,6 +62,7 @@ class Buy extends Component {
             "prod_id": product.id,
             "cart_type": 'cart'
         }
+        storeProduct(product.id)
         this.sendTrackingInfo('enroll_now',1,product.id)
         this.props.addToCart(data);
     }
@@ -182,11 +183,13 @@ class Buy extends Component {
         history.push(`/resume-builder/edit/?type=profile`)
     }
 
-    sendTrackingInfo(action, position, productId="") {
+    sendTrackingInfo(action, pos) {
         if (isTrackingInfoAvailable()) {
-            const { trackingId, productTrackingMappingId} = getTrackingInfo();
+            const { trackingId, productTrackingMappingId, productId,
+                triggerPoint, uId, position, utmCampaign } = getTrackingInfo();
             const {userTrack} = this.props;
-            userTrack({ trackingId, productTrackingMappingId, productId, action, position });
+            userTrack({ trackingId, productTrackingMappingId, productId, action, position,
+                triggerPoint, uId, utmCampaign });
         }
     }
 

@@ -44,11 +44,13 @@ class EditPreview extends Component {
         }
     }
 
-    sendTrackingInfo(action, position) {
+    sendTrackingInfo(action, pos) {
         if (isTrackingInfoAvailable()) {
-            const { trackingId, productTrackingMappingId, productId } = getTrackingInfo();
+            const { trackingId, productTrackingMappingId, productId,
+                triggerPoint, uId, position, utmCampaign } = getTrackingInfo();
             const {userTrack} = this.props;
-            userTrack({ trackingId, productTrackingMappingId, productId, action, position });
+            userTrack({ trackingId, productTrackingMappingId, productId, action, position,
+                triggerPoint, uId, utmCampaign });
         }
     }
 
@@ -56,10 +58,15 @@ class EditPreview extends Component {
 
         const queryString = new URLSearchParams(this.props.location.search);
         const trackingId = queryString.get('t_id')
+        const triggerPoint = queryString.get('trigger_point')
+        const uId = queryString.get('u_id')
+        const position = queryString.get('position')
+        const utmCampaign = queryString.get('utm_campaign')
 
         if(trackingId !== null){
             const productTrackingMappingId = '11'
-            storeTrackingInfo(trackingId, productTrackingMappingId, '')
+            storeTrackingInfo(trackingId, productTrackingMappingId, '',
+            triggerPoint,uId,position,utmCampaign)
         }
       
         // check if the userexperinece is greater or equal to 4 years. (7 is the pid for 4 years (mapping done here))

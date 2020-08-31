@@ -20,7 +20,8 @@ export const renderAwards = ({
                                 context,
                                 headingChange,
                                 entity_preference_data,
-                                showAlertMessage
+                                showAlertMessage,
+                                sendTrackingInfo
                             }) => {
     return (
         
@@ -49,6 +50,7 @@ export const renderAwards = ({
                             }
                         })
                         if (!skipAddition) {
+                            sendTrackingInfo('right_section_add',1)
                             handleAddition(fields,awardNewData(fields),100,'award',eventClicked,'Awards')
                         }
                         else {

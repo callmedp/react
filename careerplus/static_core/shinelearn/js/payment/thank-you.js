@@ -110,4 +110,8 @@ if(ResumeBuilderBuy){
     localStorage.removeItem("trackingId")
     localStorage.removeItem("productId")
     localStorage.removeItem("productTrackingMappingId")
+    localStorage.removeItem("triggerPoint")
+    localStorage.removeItem("position")
+    localStorage.removeItem("uId")
+    localStorage.removeItem("utmCampaign")
 }

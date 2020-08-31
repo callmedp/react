@@ -254,11 +254,13 @@ class Preview extends Component {
         }
     }
 
-    sendTrackingInfo(action, position) {
+    sendTrackingInfo(action, pos) {
         if (isTrackingInfoAvailable()) {
-            const { trackingId, productTrackingMappingId, productId } = getTrackingInfo();
+            const { trackingId, productTrackingMappingId, productId,
+                triggerPoint, uId, position, utmCampaign } = getTrackingInfo();
             const {userTrack} = this.props;
-            userTrack({ trackingId, productTrackingMappingId, productId, action, position });
+            userTrack({ trackingId, productTrackingMappingId, productId, action, position,
+                triggerPoint, uId, utmCampaign });
         }
     }
 

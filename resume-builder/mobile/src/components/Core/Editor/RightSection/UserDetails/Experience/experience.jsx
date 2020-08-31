@@ -176,6 +176,7 @@ class Experience extends Component {
                     <Subscribe {...this.props} />
                     <AddSuggesion label={'Job Description'} modal_status={modal_status} maxLength="1000" length={length} closeModal={this.closeModal} suggestions={suggestions} />
                     <FieldArray name="list"
+                        sendTrackingInfo={this.props.sendTrackingInfo}
                         handleSubmit={handleSubmit}
                         handleAddition={this.props.handleAddition}
                         deleteExperience={this.deleteExperience}
