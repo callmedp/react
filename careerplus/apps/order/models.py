@@ -25,10 +25,11 @@ from .choices import STATUS_CHOICES, SITE_CHOICES,\
     PAYMENT_MODE, OI_OPS_STATUS, OI_LINKEDIN_FLOW_STATUS,\
     OI_USER_STATUS, OI_EMAIL_STATUS, REFUND_MODE, REFUND_OPS_STATUS,\
     TYPE_REFUND, OI_SMS_STATUS, WC_CATEGORY, WC_SUB_CATEGORY,\
-    WC_FLOW_STATUS, OI_OPS_TRANSFORMATION_DICT, LTV_BRACKET_LABELS
+    WC_FLOW_STATUS, OI_OPS_TRANSFORMATION_DICT, LTV_BRACKET_LABELS, \
+    SHINE_ACTIVATION
 
 from .functions import get_upload_path_order_invoice, process_application_highlighter
-from .tasks import generate_resume_for_order,bypass_resume_midout,upload_Resume_shine,board_user_on_neo, av_user_enrollment
+from .tasks import generate_resume_for_order, bypass_resume_midout, upload_Resume_shine, board_user_on_neo, av_user_enrollment, update_purchase_on_shine
 
 # inter app imports
 from linkedin.models import Draft
@@ -237,6 +238,10 @@ class Order(AbstractAutoDate):
         items = self.orderitems.all()
         return any([item.product.vendor.slug == 'analytics_vidhya' for item in items])
 
+    def order_contains_amcat_item(self):
+        items = self.orderitems.all()
+        return any([item.product.vendor.slug == 'amcat' for item in items])
+
     def order_contains_resumebuilder_subscription(self):
         items = self.orderitems.all()
         return any([item.product.sub_type_flow == 1701 for item in items])
@@ -249,12 +254,26 @@ class Order(AbstractAutoDate):
         items = self.orderitems.filter(parent=None)
         return any([item.product.type_flow == 18 for item in items])
 
+    def order_contains_profile_booster(self):
+        items = self.orderitems.filter(parent=None)
+        return any([item.product.type_flow == 19 for item in items])
+
+    def order_contains_resume_writing(self):
+        items = self.orderitems.all()
+        return any([item.product.type_flow == 1 for item in items])
+
+    def order_contains_course(self):
+        items = self.orderitems.all()
+        return any([item.product.type_flow == 2 for item in items])
+
     def update_subscription_in_order_item(self):
         items = self.orderitems.all().select_related('product')
         items = [item for item in items if item.product.sub_type_flow == 1701]
         for oi in items:
             oi.start_date = timezone.now()
             oi.end_date = timezone.now() + timedelta(days=oi.product.day_duration)
+            oi.active_on_shine = 1
+            update_purchase_on_shine.delay(oi.pk)
             oi.save()
 
     @property
@@ -367,7 +386,7 @@ class Order(AbstractAutoDate):
             order_items = self.orderitems.filter(
                 oi_status=4, product__type_flow__in=[1, 12, 13, 8, 3, 4])
             for order_item in order_items:
-                upload_Resume_shine.delay(order_item.id)
+                upload_Resume_shine(order_item.id)
 
     def get_oi_actual_price_mapping(self):
         amt_dict = {}
@@ -506,7 +525,22 @@ class Order(AbstractAutoDate):
             for jobs_oi in jobs_on_the_move_items:
                 jobs_oi.start_date = timezone.now()
                 jobs_oi.end_date = timezone.now() + timedelta(days=jobs_oi.product.day_duration)
+                jobs_oi.active_on_shine = 1
+                update_purchase_on_shine.delay(jobs_oi.pk)
                 jobs_oi.save()
+
+        if self.status == 1 and existing_obj.status != 1 and self.order_contains_amcat_item():
+            amcat_items = self.orderitems.filter(
+                product__vendor__slug='amcat',
+                no_process=False
+            )
+
+            for amcat_oi in amcat_items:
+                amcat_oi.start_date = timezone.now()
+                amcat_oi.end_date = timezone.now() + timedelta(days=15)
+                amcat_oi.active_on_shine = 1
+                update_purchase_on_shine.delay(amcat_oi.pk)
+                amcat_oi.save()
 
         if self.status == 1 and existing_obj.status != 1 and self.order_contains_resume_builder():
             # imported here to not cause cyclic import for resumebuilder models
@@ -540,7 +574,7 @@ class Order(AbstractAutoDate):
         if self.status == 1 and existing_obj.status != 1 and self.order_contains_shine_premium():
             from wallet.models import ProductPoint
             """
-            Handle the ProductPoint Flow for shine resume. 
+            Handle the ProductPoint Flow for shine resume.
             Step 1 - Create a product point with the order id and candidate id.
             Step 2 - check the sub type flow.
             step 3 - Based on sub type decide the validity and count of test & assessments.
@@ -555,16 +589,27 @@ class Order(AbstractAutoDate):
 
             if sub_type_flow == 1800:
                 product_redeem_count = 1
-                product_validity_in_days = 30
+                product_validity_in_days = order_item.product.day_duration
+                order_item.start_date = timezone.now()
+                order_item.end_date = timezone.now() + timedelta(days=product_validity_in_days)
+
             elif sub_type_flow == 1801:
                 product_redeem_count = 2
-                product_validity_in_days = 60
+                product_validity_in_days = order_item.product.day_duration
+                order_item.start_date = timezone.now()
+                order_item.end_date = timezone.now() + timedelta(days=product_validity_in_days)
             elif sub_type_flow == 1802:
                 product_redeem_count = 3
-                product_validity_in_days = 180
+                product_validity_in_days = order_item.product.day_duration
+                order_item.start_date = timezone.now()
+                order_item.end_date = timezone.now() + timedelta(days=product_validity_in_days)
+
+            order_item.active_on_shine = 1
+
             now = datetime.now()
             time_tuple = now.timetuple()
             purchased_at = time.mktime(time_tuple)
+            update_purchase_on_shine.delay(order_item.pk)
 
             # saving this for assessments and practice test
             redeem_options = [{
@@ -580,18 +625,60 @@ class Order(AbstractAutoDate):
                 'purchased_at': purchased_at
             }]
 
-            product_point = ProductPoint.objects.update_or_create(
-                order=self,
+            product_point, created = ProductPoint.objects.update_or_create(
                 candidate_id=self.candidate_id,
-                redeem_options=str(redeem_options),
-                active=True,
-                defaults={'candidate_id':self.candidate_id}
+                defaults={'order': self,
+                          'redeem_options': str(redeem_options),
+                          'candidate_id': self.candidate_id,
+                          'active': True}
             )
             try:
                 product_point.save()
+                order_item.save()
             except Exception as e:
                 logging.getLogger('error_log').error(
-                    "Could not able to create product points for order {}".format(self.id))
+                    "Could not able to create product points or order item for order {}".format(self.id))
+
+        if self.status == 1 and existing_obj.status != 1 and self.order_contains_profile_booster():
+            order_item = self.orderitems.filter(
+               parent=None, product__type_flow=19).first()
+            order_item.start_date = timezone.now()
+            order_item.end_date = timezone.now() + timedelta(days=order_item.product.day_duration)
+            order_item.active_on_shine = 1
+            update_purchase_on_shine.delay(order_item.pk)
+            try:
+                order_item.save()
+            except Exception as e:
+                logging.getLogger('error_log').error(
+                    "Could not able to save order item {}  for order {}".format(order_item.id, self.id))
+
+        if self.status == 1 and existing_obj.status != 1 and self.order_contains_resume_writing():
+            order_items = self.orderitems.filter(
+                 product__type_flow=1)
+            for order_item in order_items:
+                order_item.start_date = timezone.now()
+                order_item.end_date = timezone.now() + timedelta(days=30)
+                order_item.active_on_shine = 1
+                update_purchase_on_shine.delay(order_item.pk)
+                try:
+                    order_item.save()
+                except Exception as e:
+                    logging.getLogger('error_log').error(
+                        "Could not able to save order item {}  for order {}".format(order_item.id, self.id))
+
+        if self.status == 1 and existing_obj.status != 1 and self.order_contains_course():
+            order_items = self.orderitems.filter(
+                product__type_flow=2)
+            for order_item in order_items:
+                order_item.start_date = timezone.now()
+                order_item.end_date = timezone.now() + timedelta(days=30)
+                order_item.active_on_shine = 1
+                update_purchase_on_shine.delay(order_item.pk)
+                try:
+                    order_item.save()
+                except Exception as e:
+                    logging.getLogger('error_log').error(
+                        "Could not able to save order item {}  for order {}".format(order_item.id, self.id))
 
         self.upload_service_resume_shine(existing_obj)
         obj = super(Order, self).save(**kwargs)
@@ -749,7 +836,8 @@ class OrderItem(AbstractAutoDate):
         null=True,
         default=0
     )
-
+    active_on_shine = models.PositiveIntegerField(
+        _("Active On Shine"), default=0, choices=SHINE_ACTIVATION)
     is_resume_candidate_upload = models.BooleanField(default=False)
 
     class Meta:
@@ -1290,7 +1378,8 @@ class OrderItem(AbstractAutoDate):
         self.oi_status = 4 if orderitem and orderitem.oi_status == 4 else self.oi_status
         # handling combo case getting parent and updating child
         self.update_pause_resume_service(orderitem)
-        obj = super(OrderItem, self).save(*args, **kwargs)  # Call the "real" save() method.       
+        # Call the "real" save() method.
+        obj = super(OrderItem, self).save(*args, **kwargs)
         self.upload_service_resume_shine(orderitem)
 
         return obj
@@ -1339,11 +1428,14 @@ class OrderItem(AbstractAutoDate):
     @classmethod
     def post_save_product(cls, sender, instance, **kwargs):
         # automate application highlighter/priority applicant
-      
+
         if instance.is_combo and not instance.parent:
-            jobs_on_the_move_item = instance.order.orderitems.filter(product__sub_type_flow=502)
-            priority_applicant_items = instance.order.orderitems.filter(product__sub_type_flow=503)
-            top_applicant_items = instance.order.orderitems.filter(product__sub_type_flow=504)
+            jobs_on_the_move_item = instance.order.orderitems.filter(
+                product__sub_type_flow=502)
+            priority_applicant_items = instance.order.orderitems.filter(
+                product__sub_type_flow=503)
+            top_applicant_items = instance.order.orderitems.filter(
+                product__sub_type_flow=504)
 
             for i in jobs_on_the_move_item:
                 from order.tasks import process_jobs_on_the_move
@@ -1351,7 +1443,7 @@ class OrderItem(AbstractAutoDate):
 
             for i in priority_applicant_items:
                 process_application_highlighter(i)
-            
+
             for i in top_applicant_items:
                 process_application_highlighter(i)
 
@@ -1896,16 +1988,19 @@ class MonthlyLTVRecord(models.Model):
 
     @property
     def revenue(self):
-        order_ids = json.loads(self.crm_order_ids) + json.loads(self.learning_order_ids)
-        order_amounts = Order.objects.filter(id__in=order_ids).values_list('total_excl_tax',flat=True)
-        return sum(order_amounts)        
-        
+        order_ids = json.loads(self.crm_order_ids) + \
+            json.loads(self.learning_order_ids)
+        order_amounts = Order.objects.filter(
+            id__in=order_ids).values_list('total_excl_tax', flat=True)
+        return sum(order_amounts)
+
+
 class AnalyticsVidhyaRecord(AbstractAutoDate):
     '''
     saving data for analytics vidhya
     '''
-    AV_Id = models.CharField(max_length=255, blank=False, 
-        null=False, unique=True)
+    AV_Id = models.CharField(max_length=255, blank=False,
+                             null=False, unique=True)
     order_item = models.ForeignKey(
         'order.OrderItem', related_name='av_orders', on_delete=models.CASCADE)
     status = models.PositiveSmallIntegerField(

@@ -17,7 +17,7 @@ from django.http import HttpResponseRedirect
 from django.core.exceptions import PermissionDenied
 
 from geolocation.models import Country
-from order.models import OrderItem
+from order.models import OrderItem, OrderItemOperation
 from core.mixins import InvoiceGenerate
 from core.library.gcloud.custom_cloud_storage import GCPInvoiceStorage
 from console.decorators import flatlist
@@ -772,7 +772,10 @@ class WriterInvoiceMixin(object):
             initial_draft_date = first_draft.created if first_draft and first_draft.created else None
             if initial_draft_date is None:
                 return total_sum, total_combo_discount, success_closure
-            finish_days = (initial_draft_date - oi.assigned_date).days
+            # finish_days = (initial_draft_date - oi.assigned_date).days
+            oi_ops = OrderItemOperation.objects.filter(oi=oi, oi_status=1, last_oi_status=5).last()
+            date_assigned = oi_ops.created if oi_ops else oi.assigned_date
+            finish_days = (initial_draft_date - date_assigned).days
             if oi.delivery_service and oi.delivery_service.slug in self.express_slug_list:
                 if finish_days <= EXPRESS_SLA:
                     success_closure += 1
@@ -815,10 +818,10 @@ class WriterInvoiceMixin(object):
             changed_date = userprofile.wt_changed_date
             changed_date = changed_date.replace(
                 day=1) + relativedelta.relativedelta(months=1)
-            if self.invoice_date >= changed_date:
-                user_type = userprofile.writer_type
-            else:
-                user_type = userprofile.last_writer_type
+            # if self.invoice_date >= changed_date:
+            user_type = userprofile.writer_type
+            # else:
+            #     user_type = userprofile.last_writer_type
         else:
             user_type = userprofile.writer_type if userprofile else 1
 
