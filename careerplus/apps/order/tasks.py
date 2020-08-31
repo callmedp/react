@@ -34,7 +34,8 @@ def invoice_generation_order(order_pk=None):
         order = Order.objects.get(pk=order_pk)
         InvoiceGenerate().save_order_invoice_pdf(order=order)
     except Exception as e:
-        logging.getLogger('error_log').error("invoice generation failed%s" % (str(e)))
+        logging.getLogger('error_log').error(
+            "invoice generation failed%s" % (str(e)))
 
 
 @task(name="pending_item_email")
@@ -46,14 +47,14 @@ def pending_item_email(pk=None):
 
     data = {}
     token = AutoLogin().encode(
-            order.email, order.candidate_id, days=None)
+        order.email, order.candidate_id, days=None)
     data.update({
-            'subject': 'To initiate your services fulfil these details',
-            'username': order.first_name,
-            'mobile': order.get_mobile(),
-            'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
-                    settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
-                    token)
+        'subject': 'To initiate your services fulfil these details',
+        'username': order.first_name,
+        'mobile': order.get_mobile(),
+        'upload_url': "%s://%s/autologin/%s/?next=/dashboard" % (
+                settings.SITE_PROTOCOL, settings.SITE_DOMAIN,
+                token)
     })
     urlshortener = create_short_url(login_url=data)
     data.update({'url': urlshortener.get('url')})
@@ -151,14 +152,15 @@ def pending_item_email(pk=None):
 
     if oi_status_mapping:
         data.update({
-                'product_names': product_names,
-                'combined_mail': True  # for type flow type_flow = [1,3,4,5,12,13,7,8,15]
-            })
+            'product_names': product_names,
+            # for type flow type_flow = [1,3,4,5,12,13,7,8,15]
+            'combined_mail': True
+        })
         SendSMS().send(sms_type=mail_type, data=data)
         send_email(
             to_emails=to_emails, mail_type=mail_type,
             email_dict=data, oi_status_mapping=oi_status_mapping
-            )
+        )
 
 
 @task(name="process_mailer")
@@ -345,7 +347,8 @@ def payment_pending_mailer(pk=None):
                     send_email(to_emails, mail_type, data, status=1, oi=oi.pk)
                     mail_flag = True
                 elif 1 not in email_sets:
-                    to_email = to_emails[0] if to_emails else oi.order.get_email()
+                    to_email = to_emails[0] if to_emails else oi.order.get_email(
+                    )
                     oi.emailorderitemoperation_set.create(
                         email_oi_status=1, to_email=to_email,
                         status=1)
@@ -388,7 +391,8 @@ def payment_pending_mailer(pk=None):
                 #         logging.getLogger('error_log').error(
                 #             "%s - %s" % (str(sms_type), str(e)))
     except Exception as e:
-        logging.getLogger('error_log').error("%s - %s" % (str(mail_type), str(e)))
+        logging.getLogger('error_log').error(
+            "%s - %s" % (str(mail_type), str(e)))
 
 
 @task(name="payment_realisation_mailer")
@@ -399,7 +403,8 @@ def payment_realisation_mailer(pk=None):
     try:
         order = Order.objects.get(pk=pk)
     except Exception as e:
-        logging.getLogger('error_log').error('unable to get order object %s' % str(e))
+        logging.getLogger('error_log').error(
+            'unable to get order object %s' % str(e))
     try:
         invoice_data = InvoiceGenerate().get_invoice_data(order=order)
         pymt_objs = PaymentTxn.objects.filter(order=order)
@@ -447,7 +452,8 @@ def service_initiation(pk=None):
     try:
         order = Order.objects.get(pk=pk)
     except Exception as e:
-        logging.getLogger('error_log').error('unable to get order object%s' % str(e))
+        logging.getLogger('error_log').error(
+            'unable to get order object%s' % str(e))
     try:
         if order:
             orderitems = order.orderitems.filter(
@@ -513,7 +519,8 @@ def service_initiation(pk=None):
                         logging.getLogger('error_log').error(
                             "%s - %s" % (str(sms_type), str(e)))
     except Exception as e:
-        logging.getLogger('error_log').error('service initiation failed%s' % str(e))
+        logging.getLogger('error_log').error(
+            'service initiation failed%s' % str(e))
 
 
 @task(name="process_jobs_on_the_move")
@@ -558,16 +565,21 @@ def process_jobs_on_the_move(obj_id=None):
                     email=obj.order.email, shine_id=None)
 
                 if 'total_experience' in resp_status and resp_status['total_experience']:
-                    experience_years = resp_status['total_experience'][0].get('experience_in_years', 0)
-                    experience_months = resp_status['total_experience'][0].get('experience_in_months', 0)
+                    experience_years = resp_status['total_experience'][0].get(
+                        'experience_in_years', 0)
+                    experience_months = resp_status['total_experience'][0].get(
+                        'experience_in_months', 0)
 
-                    experience_years = dict(EXPERIENCE_IN_YEARS_MODEL_CHOICES).get(experience_years)
+                    experience_years = dict(
+                        EXPERIENCE_IN_YEARS_MODEL_CHOICES).get(experience_years)
                     if experience_months:
                         experience_months = str(experience_months) + ' months'
-                    experience = '{} {}'.format(experience_years, experience_months)
+                    experience = '{} {}'.format(
+                        experience_years, experience_months)
 
                 if 'skills' in resp_status and resp_status['skills']:
-                    skills = ','.join([i['value'] for i in resp_status['skills']])[0:99]
+                    skills = ','.join([i['value']
+                                       for i in resp_status['skills']])[0:99]
 
                 if 'education' in resp_status and resp_status['education']:
                     # extarcting the education level choice from shine api and storing it
@@ -579,7 +591,8 @@ def process_jobs_on_the_move(obj_id=None):
                                 < education.get('year_of_passout', 0):
                             latest_education_dict = education
 
-                    latest_education = latest_education_dict.get('education_level')
+                    latest_education = latest_education_dict.get(
+                        'education_level')
 
                 if resp_status and 'desired_job' in resp_status:
 
@@ -588,25 +601,29 @@ def process_jobs_on_the_move(obj_id=None):
                     # Get canidate location
                     candidate_location = candidate_data['candidate_location']
                     desired_location = ','.join(
-                        [LOCATION_MAPPING.get(loc, '') for loc in candidate_location]
-                        )[0:244]
+                        [LOCATION_MAPPING.get(loc, '')
+                         for loc in candidate_location]
+                    )[0:244]
 
                     # Get candidate industry
                     candidate_industry = candidate_data['industry']
                     desired_industry = ','.join(
-                        [INDUSTRY_MAPPING.get(ind, '') for ind in candidate_industry]
-                        )[0:244]
+                        [INDUSTRY_MAPPING.get(ind, '')
+                         for ind in candidate_industry]
+                    )[0:244]
 
                     # Get desired salary
                     maximum_salary = candidate_data['maximum_salary']
                     expected_min_salary = ','.join(
-                        [DESIRED_SALARY_MAPPING.get(l, 'N.A') for l in maximum_salary]
-                        )
+                        [DESIRED_SALARY_MAPPING.get(l, 'N.A')
+                         for l in maximum_salary]
+                    )
 
                     minimum_salary = candidate_data['minimum_salary']
                     expected_max_salary = ','.join(
-                        [DESIRED_SALARY_MAPPING.get(l, 'N.A') for l in minimum_salary]
-                        )
+                        [DESIRED_SALARY_MAPPING.get(l, 'N.A')
+                         for l in minimum_salary]
+                    )
 
                     desired_salary = expected_min_salary if expected_min_salary \
                         else expected_max_salary
@@ -651,7 +668,7 @@ def generate_resume_for_order(order_id):
     else:
         is_combo = True if product.attr.get_value_by_attribute(
             product.attr.get_attribute_by_name('template_type')
-            ).value == 'multiple' else False
+        ).value == 'multiple' else False
 
     candidate_obj = Candidate.objects.filter(candidate_id=candidate_id).first()
     # if not candidate_obj create it by yourself.
@@ -661,7 +678,8 @@ def generate_resume_for_order(order_id):
         selected_template = candidate_obj.selected_template or 1
     # selected_template
     builder_obj = ResumeGenerator()
-    builder_obj.save_order_resume_pdf(order=order_obj, is_combo=is_combo, index=selected_template)
+    builder_obj.save_order_resume_pdf(
+        order=order_obj, is_combo=is_combo, index=selected_template)
 
 
 @task
@@ -699,7 +717,8 @@ def board_user_on_neo(neo_ids):
             data_dict['account_type'] = 'trial'
             if duration:
                 start_date = datetime.now().strftime('%Y-%m-%d')
-                end_date = (datetime.now() + timedelta(days=duration)).strftime('%Y-%m-%d')
+                end_date = (datetime.now() + timedelta(days=duration)
+                            ).strftime('%Y-%m-%d')
                 data_dict.update({
                     'start_date': start_date,
                     'end_date': end_date,
@@ -713,20 +732,23 @@ def board_user_on_neo(neo_ids):
             flag = NeoApiMixin().update_student_sso_profile(data=data, email=email)
             if flag:
                 cache.set(
-                    'updated_from_trial_to_regular_{}'.format(str(item.id)), 1, 3600 * 24 * 2
-                    )
+                    'updated_from_trial_to_regular_{}'.format(
+                        str(item.id)), 1, 3600 * 24 * 2
+                )
                 logging.getLogger('error_log').error(
-                    'Account update to Regular from Trial for email {}'.format(email)
-                    )
+                    'Account update to Regular from Trial for email {}'.format(
+                        email)
+                )
             else:
                 logging.getLogger('error_log').error(
                     'Unable to Update SSO profile for email{}'.format(email)
-                    )
+                )
 
         else:
             flag = NeoApiMixin().board_user_on_neo(email=email, data_dict=data_dict)
             if flag:
-                cache.set('neo_mail_sent_{}'.format(str(item.id)), 1, 3600 * 24 * 2)
+                cache.set('neo_mail_sent_{}'.format(
+                    str(item.id)), 1, 3600 * 24 * 2)
         return boarding_type
 
 
@@ -756,12 +778,14 @@ def bypass_resume_midout(order_id):
             update_resume_oi_ids.append(order_item.id)
 
     if not update_resume_oi_ids:
-        logging.getLogger('error_log').error("No orderitem Id found to update resume")
+        logging.getLogger('error_log').error(
+            "No orderitem Id found to update resume")
         return
 
     logging.getLogger('info_log').info(
-        "Order item to update resume : {} ".format(' '.join(map(str, update_resume_oi_ids)))
-        )
+        "Order item to update resume : {} ".format(
+            ' '.join(map(str, update_resume_oi_ids)))
+    )
 
     old_resume = None
     oi_resume_creation_date = None
@@ -769,13 +793,15 @@ def bypass_resume_midout(order_id):
     end_date = timezone.now()
     # order items to get previous resume in previous 180 days
     order_items = OrderItem.objects.filter(
-        order__candidate_id=order.candidate_id, created__range=[start_date, end_date]
-        ).order_by('-id')
+        order__candidate_id=order.candidate_id, created__range=[
+            start_date, end_date]
+    ).order_by('-id')
 
     for order_item in order_items:
         if order_item.oi_resume:
             old_resume = order_item.oi_resume
-            oi_operation = order_item.orderitemoperation_set.filter(oi_status=3).last()
+            oi_operation = order_item.orderitemoperation_set.filter(
+                oi_status=3).last()
             oi_resume_creation_date = oi_operation.created if oi_operation else None
             break
 
@@ -787,16 +813,19 @@ def bypass_resume_midout(order_id):
         if len(resumes) > 0:
             shine_resume_details = resumes[0]
             logging.getLogger('info_log').info(
-                "shine resume exist with id {}".format(shine_resume_details.get('id'))
-                )
+                "shine resume exist with id {}".format(
+                    shine_resume_details.get('id'))
+            )
 
         shine_resume_creation_date = datetime.strptime(
             shine_resume_details.get('creation_date'), '%Y-%m-%dT%H:%M:%S'
-            ) if shine_resume_details else None
+        ) if shine_resume_details else None
 
         if oi_resume_creation_date and shine_resume_creation_date:
-            oi_resume_creation_date = oi_resume_creation_date.replace(tzinfo=utc)
-            shine_resume_creation_date = shine_resume_creation_date.replace(tzinfo=utc)
+            oi_resume_creation_date = oi_resume_creation_date.replace(
+                tzinfo=utc)
+            shine_resume_creation_date = shine_resume_creation_date.replace(
+                tzinfo=utc)
 
         if ((oi_resume_creation_date and shine_resume_creation_date) and
                 (oi_resume_creation_date < shine_resume_creation_date)) or \
@@ -804,9 +833,10 @@ def bypass_resume_midout(order_id):
             response = ShineCandidateDetail().get_shine_candidate_resume(
                 candidate_id=order.candidate_id,
                 resume_id=shine_resume_details.get('id')
-                )
+            )
             if response.status_code == 200:
-                content_disposition_header = response.headers.get('Content-Disposition')
+                content_disposition_header = response.headers.get(
+                    'Content-Disposition')
                 file_name_pos = content_disposition_header.find('filename=')
                 file_name = content_disposition_header[file_name_pos + 9:] if file_name_pos != -1\
                     else 'file'
@@ -831,12 +861,13 @@ def bypass_resume_midout(order_id):
                 else:
                     GCPPrivateMediaStorage().save(
                         settings.RESUME_DIR + full_path + file_name, shine_resume
-                        )
+                    )
                 shine_resume.close()
                 old_resume = full_path + file_name
 
     except Exception as e:
-        logging.getLogger('error_log').error('get resume failed from shine  %s' % str(e))
+        logging.getLogger('error_log').error(
+            'get resume failed from shine  %s' % str(e))
 
     if not old_resume:
         logging.getLogger('info_log').info("Old Resume Not Found")
@@ -886,7 +917,8 @@ def upload_Resume_shine(order_item_id):
         'resume_trigger': 7
     }
     file_path = settings.RESUME_DIR + order_item.oi_draft.name
-    response = ShineCandidateDetail().upload_resume_shine(data=data, file_path=file_path)
+    response = ShineCandidateDetail().upload_resume_shine(
+        data=data, file_path=file_path)
     if response:
         logging.getLogger('info_log').info("Uploaded to shine")
         order = order_item.order
@@ -894,6 +926,7 @@ def upload_Resume_shine(order_item_id):
         order.save()
         return
     logging.getLogger('error_log').info("Upload to shine failed ")
+
 
 @task
 def av_user_enrollment(av_ids):
@@ -905,24 +938,39 @@ def av_user_enrollment(av_ids):
         email = oi.order.email
         phone = oi.order.mobile
         currency = oi.order.get_currency_code()
-        if first_name and email and phone:    
+        if first_name and email and phone:
             av_data = {
-                "first_name" : first_name,
-                "last_name" : oi.order.last_name if oi.order.last_name else '',
-                "email" : email,
-                "phone_number" : phone,
-                "product" : oi.product.upc,
-                "price" : int(oi.product.inr_price),#check
-                "price_currency" : currency,
+                "first_name": first_name,
+                "last_name": oi.order.last_name if oi.order.last_name else '',
+                "email": email,
+                "phone_number": phone,
+                "product": oi.product.upc,
+                "price": int(oi.product.inr_price),  # check
+                "price_currency": currency,
             }
             av_enroll = AnalyticsVidhyaMixin().user_enrollment(data=av_data, orderItem=oi)
             if not av_enroll:
-                logging.getLogger('error_log').error('enrollment request incomplete for user - {}'.format(av_data))
+                logging.getLogger('error_log').error(
+                    'enrollment request incomplete for user - {}'.format(av_data))
         else:
             logging.getLogger('error_log').error('missing data from profile')
             data = {
-                "first_name" : oi.order.first_name,
-                "email" : oi.order.email,
-                "phone" : oi.order.mobile
+                "first_name": oi.order.first_name,
+                "email": oi.order.email,
+                "phone": oi.order.mobile
             }
             AnalyticsVidhyaMixin().send_failure_mail(data, 'missing data from profile')
+
+@task
+def update_purchase_on_shine(oi_id):
+    from emailers.utils import BadgingMixin
+    try:
+        oi = OrderItem.objects.filter(id=oi_id).first()
+        active_services_details = BadgingMixin().get_active_services_or_courses_or_assessments(
+            candidate_id=oi.order.candidate_id, curr_order_item=oi, active=True)
+        if active_services_details:
+            BadgingMixin().update_badging_data(
+                candidate_id=oi.order.candidate_id, data=active_services_details)
+    except Exception as exc:
+        logging.getLogger('error_log').error(
+            'could not update touch point data')

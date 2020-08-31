@@ -8,6 +8,7 @@ from pymongo import MongoClient
 from django.conf import settings
 from core.api_mixin import FeatureProfileUpdate
 
+
 class BadgingMixin(object):
     CANDIDATE_MONGO_PORT = settings.CANDIDATE_MONGO_PORT
     CANDIDATE_MONGO_USERNAME = settings.CANDIDATE_MONGO_USERNAME
@@ -47,7 +48,8 @@ class BadgingMixin(object):
             filter_kwargs = {
                 'sub_type_flow': curr_order_item.product.sub_type_flow
             }
-        current_sub_type_flow = ShineProfileData.objects.filter(**filter_kwargs)
+        current_sub_type_flow = ShineProfileData.objects.filter(
+            **filter_kwargs)
         if current_sub_type_flow.first():
             return current_sub_type_flow.first().id
 
@@ -65,7 +67,8 @@ class BadgingMixin(object):
         if existing_badge_value is None:
             return None
         if candidate_id and curr_order_item:
-            new_value = self.get_badging_value_for_order(candidate_id, curr_order_item)
+            new_value = self.get_badging_value_for_order(
+                candidate_id, curr_order_item)
             if feature:
                 existing_values = existing_badge_value.get('ec', [])
                 existing_values.append(new_value)
@@ -76,7 +79,8 @@ class BadgingMixin(object):
                 touch_data = {'pid': curr_order_item.product.id, 'name': curr_order_item.product.name,
                               'start': curr_order_item.added_on}
                 if curr_order_item.product.type_flow == 1:
-                    touch_data.update({'end': curr_order_item.added_on + datetime.timedelta(days=30)})
+                    touch_data.update(
+                        {'end': curr_order_item.added_on + datetime.timedelta(days=30)})
                 else:
                     touch_data.update({'end': curr_order_item.end_date})
                 existing_values.append(touch_data)
@@ -85,11 +89,45 @@ class BadgingMixin(object):
                 try:
                     existing_badge_value.get('ec', []).remove(new_value)
                 except ValueError:
-                    logging.getLogger('error_log').error('unfeature values does not exist in ec')
+                    logging.getLogger('error_log').error(
+                        'unfeature values does not exist in ec')
                     return None
 
         existing_badge_value = self.sort_as_per_priority(existing_badge_value)
         return existing_badge_value
+
+    def get_specificKey(self, product):
+        if product.type_flow in [1, 3, 13, 17, 18, 19]:
+            return 'las'
+        elif product.type_flow in [2, 4]:
+            return 'lac'
+        elif product.type_flow in [16]:
+            return 'laa'
+        elif product.sub_type_flow in [502]:
+            return 'las'
+        else:
+            return 'las'
+
+    def get_active_services_or_courses_or_assessments(self, candidate_id, curr_order_item=None, active=False):
+        active_values = self.get_existing_badge_value(candidate_id)
+        if active_values is None:
+            return None
+        if candidate_id and curr_order_item:
+            key = self.get_specificKey(curr_order_item.product)
+
+            if active:
+                existing_values = active_values.get(key, [])
+                existing_values.append(curr_order_item.product.id)
+                active_values[key] = list(set(existing_values))
+            else:
+                try:
+                    active_values.get(key, []).remove(
+                        curr_order_item.product.id)
+                except Exception as e:
+                    logging.getLogger('error_log').error(
+                        ' Product Id {} is not available in key {}'.format(curr_order_item.product.id, key))
+
+        return active_values
 
     def update_badging_data(self, candidate_id, data):
         data = {
