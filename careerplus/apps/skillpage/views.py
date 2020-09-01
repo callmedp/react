@@ -43,8 +43,33 @@ class SkillPageView(DetailView, SkillPageMixin):
     template_name = "skillpage/skill-new.html"
     no_of_products = 5
 
+    def get_params(self):
+        from payment.tasks import make_logging_request
+        tracking_id = self.request.GET.get('t_id', '')
+        skill_id = self.kwargs.get('pk')
+        product_tracking_mapping_id = 8
+        if tracking_id and self.request.session.get('candidate_id'):
+            self.request.session.update({
+                'tracking_id': tracking_id,
+                'product_tracking_mapping_id': product_tracking_mapping_id,
+                'tracking_product_id' : skill_id
+            })
+            make_logging_request.delay(
+                '', product_tracking_mapping_id, tracking_id, 'product_page')
+
+        elif self.request.session.get('tracking_id', '') and self.request.session.get('candidate_id'):
+            product_tracking_mapping_id = self.request.session.get(
+                'product_tracking_mapping_id', 8)
+            tracking_product_id = self.request.session.get(
+                'tracking_product_id', skill_id)
+            tracking_id = self.request.session.get(
+                'tracking_id', '')
+            make_logging_request.delay(
+                tracking_product_id, product_tracking_mapping_id, tracking_id, 'product_page')
+
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
+        self.get_params()
         if not self.object:
             raise Http404
         redirect = self.redirect_if_necessary(request.path, self.object)
@@ -110,6 +135,9 @@ class SkillPageView(DetailView, SkillPageMixin):
             'canonical_url':self.object.get_canonical_url(),
             'show_chat':True,
             'explore_courses': explore_courses,
+            'tracking_product_id': self.request.session.get('tracking_product_id', ''),
+            'product_tracking_mapping_id': self.request.session.get('product_tracking_mapping_id', ''),
+            'tracking_id': self.request.session.get('tracking_id', '')
         })
         return context
 

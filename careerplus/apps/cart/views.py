@@ -24,7 +24,7 @@ from geolocation.models import Country
 from linkedin.autologin import AutoLogin
 from users.tasks import user_register
 from search.helpers import get_recommendations
-from cart.tasks import cart_drop_out_mail, create_lead_on_crm
+from cart.tasks import cart_drop_out_mail, create_lead_on_crm, cart_product_removed_mail
 from payment.tasks import make_logging_request
 from django.db.models import Q
 from django.core.cache import cache
@@ -82,7 +82,6 @@ class AddToCartView(View, CartMixin):
         return super(AddToCartView, self).dispatch(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
-        import ipdb;ipdb.set_trace();
         data = {"status": -1}
         cart_type = request.POST.get('cart_type')
         prod_id = request.POST.get('prod_id', '')
@@ -154,7 +153,18 @@ class RemoveFromCartView(View, CartMixin):
             'product_tracking_mapping_id', '')
         product_availability = self.request.session.get(
             'product_availability', '')
+        candidate_id = self.request.session.get(
+            'candidate_id', '')
         if tracking_product_id == product_id and tracking_id:
+            # data_dict = dict()
+            # data_dict['prod_id'] = product_id
+            email_data = { 
+                "candidate_id"  : self.request.session.get('candidate_id'),
+                "prod_id" : product_id,
+            }
+            logging.getLogger('info_log').info(email_data)
+            cart_product_removed_mail.apply_async(
+                (email_data), countdown=settings.CART_DROP_OUT_EMAIL)
             make_logging_request.delay(
                 tracking_product_id, product_tracking_mapping_id, tracking_id, 'remove_product')
             # for showing the user exits for that particular cart product
@@ -170,7 +180,6 @@ class RemoveFromCartView(View, CartMixin):
                 del self.request.session['product_availability']
 
     def post(self, request, *args, **kwargs):
-        import ipdb;ipdb.set_trace();
         if request.is_ajax():
             data = {"status": -1}
             reference = request.POST.get('reference_id')
@@ -669,6 +678,7 @@ class PaymentSummaryView(TemplateView, CartMixin):
         candidate_id = None
         add_status = -1
         reload_url = token or product_id
+        email = None
         if token:
             try:
                 token = token.replace(" ", "+")
@@ -711,6 +721,13 @@ class PaymentSummaryView(TemplateView, CartMixin):
 
         if tracking_id:
             request.session.update({'tracking_id': tracking_id})
+
+        cart_pk = self.request.session.get('cart_pk', '')
+        if product_id and tracking_id and cart_pk:    
+            cart_drop_out_mail.apply_async(
+                (cart_pk, email, "SHINE_CART_DROP"),
+                countdown=settings.CART_DROP_OUT_EMAIL)
+            
         
         tracking_id= request.session.get('tracking_id','')
         tracking_product_id= request.session.get('tracking_product_id','')

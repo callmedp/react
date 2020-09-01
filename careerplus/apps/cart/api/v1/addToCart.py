@@ -28,7 +28,6 @@ class AddToCartApiView(CartMixin, APIView):
     serializer_class = None
 
     def post(self, request, *args, **kwargs):
-        import ipdb;ipdb.set_trace();
         data = {"status": -1}
         cart_type = request.data.get('cart_type')
         prod_id = request.data.get('prod_id', None)
@@ -65,7 +64,7 @@ class AddToCartApiView(CartMixin, APIView):
                 email = request.session.get('email', '')
                 name = "{}{}".format(first_name, last_name)
                 cart_drop_out_mail.apply_async(
-                    (cart_pk, email),
+                    (cart_pk, email, "SHINE_CART_DROP", name),
                     countdown=settings.CART_DROP_OUT_EMAIL)
                 source_type = "cart_drop_out"
 
