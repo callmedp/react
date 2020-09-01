@@ -21,8 +21,8 @@ from emailers.email import SendMail
 from crmapi.functions import lead_create_on_crm
 from cart.mixins import CartMixin
 from linkedin.autologin import AutoLogin
-from core.api_mixin import ShineCandidateDetail
 
+time_delta = 45 if not settings.DEBUG else 0
 
 @task(name="create_lead_on_crm")
 def create_lead_on_crm(pk=None, source_type=None, name=None):
@@ -161,11 +161,11 @@ def cart_drop_out_mail(pk=None, cnd_email=None, mail_type=None, name=None):
     count = 0
     for crt_obj in cart_objs:
         # send mail only if user has not edited cart in the last 45 minutes 
-        if crt_obj.modified < (timezone.now()- timezone.timedelta(minutes=45)):
+        if crt_obj.modified < (timezone.now()- timezone.timedelta(minutes=time_delta)):
             cart_id = crt_obj.owner_id
             data = {}
             last_cart_items = []
-            to_email = []
+            to_email, toemail = [], ""
             total_price = Decimal(0)
             m_prod = crt_obj.lineitems.filter(
                 parent=None).select_related(
@@ -220,12 +220,12 @@ def cart_drop_out_mail(pk=None, cnd_email=None, mail_type=None, name=None):
 
                 if mail_type == "SHINE_CART_DROP":
                     email_list_spent = cache.get("email_sent_for_the_day", [])
-                    if to_email in email_list_spent: 
+                    if toemail in email_list_spent: 
                         logging.getLogger('info_log').info(
                             "Candidate already recieved an email for the day, email: {}".format(to_email))
                         continue
                     else:
-                        email_list_spent.append(to_email)
+                        email_list_spent.append(toemail)
                         cache.set("email_sent_for_the_day", email_list_spent)
 
                 token = AutoLogin().encode(toemail, cart_id, days=None)
@@ -245,10 +245,11 @@ def cart_drop_out_mail(pk=None, cnd_email=None, mail_type=None, name=None):
 
 @task(name="cart_product_removed_mail")
 def cart_product_removed_mail(data):
-    try: 
-        cart_id = data.get('card_id', None)
-        email = data.get('email', None)
+    try:
+        name = data.get('name', '')
+        email = data.get('email', '')
         prod_id = data.get('prod_id', '')
+        t_id = data.get('tracking_id', '')
         candidate_id = data.get('candidate_id', '')
         mail_type = 'CART_FUNNEL_DROP'
 
@@ -258,27 +259,26 @@ def cart_product_removed_mail(data):
                 "Candidate already recieved an email for the day, email: {}".format(to_email))
             return
         else:
-            email_list_spent.append(to_email)
+            email_list_spent.append(email)
             cache.set("email_sent_for_the_day", email_list_spent)
         to_email = [email]
-        prod = Product.object.filter(id=prod_id).first()
-
-        details = ShineCandidateDetail.get_candidate_detail(shine_id=candidate_id)
-        f_name = details.get('personal_detail')[0].get('firt_name')
-        l_name = details.get('personal_detail')[0].get('last_name')
-        user_name = "{} {}".format(f_name, l_name)
+        try: 
+            prod = Product.object.filter(id=prod_id).first()
+        except Exception as e:
+            logging.getLogger('error_log').error("product doesnot exist")
+            return
 
         data = dict()
-        data['name'] = user_name
+        data['name'] = name
         data['product_name'] = prod.heading
         data['product_price'] = round(prod.inr_price, 2)
         data['product_description'] = prod.meta_desc
         data['subject'] = '{} is still available'.format(
             prod.heading)
 
-        token = AutoLogin().encode(toemail, cart_id, days=None)
-        data['autologin'] = "{}://{}/autologin/{}/?next=/cart/payment_summary".format(
-            settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token)
+        token = AutoLogin().encode(email, candidate_id, days=None)
+        data['autologin'] = "{}://{}/autologin/{}/?next=/cart/payment_summary/?prod_id={}&t_id={}".format(
+            settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token, prod_id, t_id)
         email_list_spent.append(email)
         cache.set("email_sent_for_the_day", email_list_spent)
 

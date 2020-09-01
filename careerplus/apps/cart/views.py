@@ -144,7 +144,7 @@ class AddToCartView(View, CartMixin):
 
 class RemoveFromCartView(View, CartMixin):
 
-    def removeTracking(self, product_id):
+    def removeTracking(self, product_id, email_data):
         tracking_id = self.request.session.get(
             'tracking_id', '')
         tracking_product_id = self.request.session.get(
@@ -156,15 +156,15 @@ class RemoveFromCartView(View, CartMixin):
         candidate_id = self.request.session.get(
             'candidate_id', '')
         if tracking_product_id == product_id and tracking_id:
-            # data_dict = dict()
-            # data_dict['prod_id'] = product_id
-            email_data = { 
-                "candidate_id"  : self.request.session.get('candidate_id'),
+            email_data.update({ 
                 "prod_id" : product_id,
-            }
-            logging.getLogger('info_log').info(email_data)
+                "tracking_id" : tracking_id,
+                "candidate_id" : candidate_id
+            })
+            # logging.getLogger('info_log').info(email_data)
             cart_product_removed_mail.apply_async(
                 (email_data), countdown=settings.CART_DROP_OUT_EMAIL)
+            # cart_product_removed_mail(email_data)
             make_logging_request.delay(
                 tracking_product_id, product_tracking_mapping_id, tracking_id, 'remove_product')
             # for showing the user exits for that particular cart product
@@ -183,6 +183,7 @@ class RemoveFromCartView(View, CartMixin):
         if request.is_ajax():
             data = {"status": -1}
             reference = request.POST.get('reference_id')
+            email_dict = dict()
             try:
                 if not self.request.session.get('cart_pk'):
                     self.getCartObject()
@@ -190,19 +191,28 @@ class RemoveFromCartView(View, CartMixin):
                 cart_pk = self.request.session.get('cart_pk')
                 if cart_pk:
                     cart_obj = Cart.objects.get(pk=cart_pk)
+                    if cart_obj:
+                        email = cart_obj.email if cart_obj.email else ""
+                        first_name = cart_obj.first_name if cart_obj.first_name else ""
+                        last_name = cart_obj.last_name if cart_obj.last_name else ""
+                        name = "{} {}".format(first_name, last_name)
+                        email_dict.update({
+                            'email' : email,
+                            'name' : name
+                        })
                     line_obj = cart_obj.lineitems.get(reference=reference)
                     if line_obj.parent_deleted:
                         parent = line_obj.parent
                         childs = cart_obj.lineitems.filter(
                             parent=parent, parent_deleted=True)
                         if childs.count() > 1:
-                            self.removeTracking(line_obj.product.id)
+                            self.removeTracking(line_obj.product.id, email_dict)
                             line_obj.delete()
                         else:
-                            self.removeTracking(parent.product.id)
+                            self.removeTracking(parent.product.id, email_dict)
                             parent.delete()
                     else:
-                        self.removeTracking(line_obj.product.id)
+                        self.removeTracking(line_obj.product.id, email_dict)
                         line_obj.delete()
 
                     data['status'] = 1
@@ -678,7 +688,6 @@ class PaymentSummaryView(TemplateView, CartMixin):
         candidate_id = None
         add_status = -1
         reload_url = token or product_id
-        email = None
         if token:
             try:
                 token = token.replace(" ", "+")
@@ -721,12 +730,21 @@ class PaymentSummaryView(TemplateView, CartMixin):
 
         if tracking_id:
             request.session.update({'tracking_id': tracking_id})
-
-        cart_pk = self.request.session.get('cart_pk', '')
-        if product_id and tracking_id and cart_pk:    
+        
+        if product_id and tracking_id:
+            try:  
+                cart_pk = self.request.session.get('cart_pk', '')
+                cart_obj = Cart.objects.filter(pk=cart_pk).first()
+            if cart_obj:
+                email = cart_obj.email if cart_obj.email else ""
+                first_name = cart_obj.first_name if cart_obj.first_name else ""
+                last_name  = cart_obj.last_name if cart_obj.last_name else ""
+                name = "{} {}".format(first_name, last_name)
             cart_drop_out_mail.apply_async(
-                (cart_pk, email, "SHINE_CART_DROP"),
+                (cart_pk, email, "SHINE_CART_DROP", name),
                 countdown=settings.CART_DROP_OUT_EMAIL)
+            except Exception as e:
+                logging.getLogger('error_log').error("Unable to send mail: {}".format(e))
             
         
         tracking_id= request.session.get('tracking_id','')

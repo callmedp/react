@@ -14,7 +14,7 @@ from payment.tasks import make_logging_request
 
 class RemoveFromCartMobileView(View, CartMixin):
 
-    def removeTracking(self, product_id):
+    def removeTracking(self, product_id, email_dict):
         tracking_id = self.request.session.get(
             'tracking_id', '')
         tracking_product_id = self.request.session.get(
@@ -26,13 +26,14 @@ class RemoveFromCartMobileView(View, CartMixin):
         candidate_id = self.request.session.get(
             'candidate_id', '')
         if tracking_product_id == product_id and tracking_id:
-            email_data = { 
-                "candidate_id"  : self.request.session.get('candidate_id'),
+            email_data.update({ 
                 "prod_id" : product_id,
-            }
-            logging.getLogger('info_log').info(email_data)
+                "tracking_id" : tracking_id,
+                "candidate_id" : candidate_id
+            })
             cart_product_removed_mail.apply_async(
                 (email_data), countdown=settings.CART_DROP_OUT_EMAIL)
+            # cart_product_removed_mail(email_data)
             make_logging_request.delay(
                 tracking_product_id, product_tracking_mapping_id, tracking_id, 'remove_product')
             # for showing the user exits for that particular cart product
@@ -52,6 +53,7 @@ class RemoveFromCartMobileView(View, CartMixin):
             data = {"status": -1}
             product_reference = request.POST.get('product_reference')
             child_list = request.POST.getlist('child_list', [])
+            email_dict = dict()
             try:
                 if not self.request.session.get('cart_pk'):
                     self.getCartObject()
@@ -59,6 +61,15 @@ class RemoveFromCartMobileView(View, CartMixin):
                 cart_pk = self.request.session.get('cart_pk')
                 if cart_pk:
                     cart_obj = Cart.objects.get(pk=cart_pk)
+                    if cart_obj:
+                        email = cart_obj.email if cart_obj.email else ""
+                        first_name = cart_obj.first_name if cart_obj.first_name else ""
+                        last_name = cart_obj.last_name if cart_obj.last_name else ""
+                        name = "{} {}".format(first_name, last_name)
+                        email_dict.update({
+                            'email' : email,
+                            'name' : name
+                        })
                     if child_list:
                         for child_ref in child_list:
                             line_obj = cart_obj.lineitems.get(
@@ -68,15 +79,15 @@ class RemoveFromCartMobileView(View, CartMixin):
                                 childs = cart_obj.lineitems.filter(
                                     parent=parent, parent_deleted=True)
                                 if childs.count() > 1:
-                                    self.removeTracking(line_obj.product.id)
+                                    self.removeTracking(line_obj.product.id, email_dict)
                                     line_obj.delete()
 
                                 else:
-                                    self.removeTracking(parent.product.id)
+                                    self.removeTracking(parent.product.id, email_dict)
                                     parent.delete()
 
                             else:
-                                self.removeTracking(line_obj.product.id)
+                                self.removeTracking(line_obj.product.id, email_dict)
                                 line_obj.delete()
 
                     elif product_reference:
@@ -88,15 +99,15 @@ class RemoveFromCartMobileView(View, CartMixin):
                                 parent=parent, parent_deleted=True)
                             if childs.count() > 1:
                                 self.removeTracking(
-                                    line_obj.product.id)
+                                    line_obj.product.id, email_dict)
                                 line_obj.delete()
 
                             else:
-                                self.removeTracking(parent.product.id)
+                                self.removeTracking(parent.product.id, email_dict)
                                 parent.delete()
 
                         else:
-                            self.removeTracking(line_obj.product.id)
+                            self.removeTracking(line_obj.product.id, email_dict)
                             line_obj.delete()
 
                     data['status'] = 1
