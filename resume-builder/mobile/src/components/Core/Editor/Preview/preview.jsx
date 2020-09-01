@@ -300,9 +300,9 @@ class Preview extends Component {
 
                 {
                     (!(order_data && order_data.id) || !(resume_generated)) ?
-                        <ChangeTemplateModal {...this.props} /> :
-                        (order_data && order_data.id && order_data.combo) ? <ChangeTemplateModal {...this.props} /> :
-                            (order_data && order_data.id && order_data.expiry) ? <ChangeTemplateModal {...this.props} /> : ''
+                        <ChangeTemplateModal sendTrackingInfo={this.sendTrackingInfo} {...this.props} /> :
+                        (order_data && order_data.id && order_data.combo) ? <ChangeTemplateModal {...this.props} sendTrackingInfo={this.sendTrackingInfo} /> :
+                            (order_data && order_data.id && order_data.expiry) ? <ChangeTemplateModal {...this.props} sendTrackingInfo={this.sendTrackingInfo} /> : ''
                 }
 
                 {mainloader ? <Loader /> : ""}
