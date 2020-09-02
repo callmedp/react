@@ -256,11 +256,9 @@ def cart_product_removed_mail(data):
         email_list_spent = cache.get("email_sent_for_the_day", [])
         if email in email_list_spent:
             logging.getLogger('info_log').info(
-                "Candidate already recieved an email for the day, email: {}".format(to_email))
+                "Candidate already recieved an email for the day, email: {}".format(email))
             return
-        else:
-            email_list_spent.append(email)
-            cache.set("email_sent_for_the_day", email_list_spent)
+
         to_email = [email]
         try: 
             prod = Product.object.filter(id=prod_id).first()
@@ -279,6 +277,7 @@ def cart_product_removed_mail(data):
         token = AutoLogin().encode(email, candidate_id, days=None)
         data['autologin'] = "{}://{}/autologin/{}/?next=/cart/payment_summary/?prod_id={}&t_id={}".format(
             settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token, prod_id, t_id)
+
         email_list_spent.append(email)
         cache.set("email_sent_for_the_day", email_list_spent)
 

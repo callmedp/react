@@ -15,12 +15,12 @@ class SendMail():
         '''
             Base function to send email. If debug_mode is true the cc will be shinecp@hindustantimes.com
         '''
-        # if not settings.DEBUG and not settings.TEST_EMAIL:
-        #     subject = "Test Mail " + subject
-        #     to = ['priya.kharb@hindustantimes.com','gaurav.chopra1@hindustantimes.com','kanak.garg@hindustantimes.com']
-        #     cc = []
-        # else:
-        #     bcc = [settings.DEFAULT_FROM_EMAIL]
+        if settings.DEBUG and settings.TEST_EMAIL:
+            subject = "Test Mail " + subject
+            to = ['priya.kharb@hindustantimes.com','sahil.singla@hindustantimes.com','kanak.garg@hindustantimes.com']
+            cc = []
+        else:
+            bcc = [settings.DEFAULT_FROM_EMAIL]
         emsg = EmailMessage(subject, body=body, to=to, from_email=from_email, headers=headers, cc=cc, bcc=bcc,
                             attachments=[])
         emsg.content_subtype = "html"

@@ -190,7 +190,7 @@ class RemoveFromCartView(View, CartMixin):
 
                 cart_pk = self.request.session.get('cart_pk')
                 if cart_pk:
-                    cart_obj = Cart.objects.get(pk=cart_pk)
+                    cart_obj = Cart.objects.filter(pk=cart_pk).first()
                     if cart_obj:
                         email = cart_obj.email if cart_obj.email else ""
                         first_name = cart_obj.first_name if cart_obj.first_name else ""
