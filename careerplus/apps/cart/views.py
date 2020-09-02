@@ -735,14 +735,14 @@ class PaymentSummaryView(TemplateView, CartMixin):
             try:  
                 cart_pk = self.request.session.get('cart_pk', '')
                 cart_obj = Cart.objects.filter(pk=cart_pk).first()
-            if cart_obj:
-                email = cart_obj.email if cart_obj.email else ""
-                first_name = cart_obj.first_name if cart_obj.first_name else ""
-                last_name  = cart_obj.last_name if cart_obj.last_name else ""
-                name = "{} {}".format(first_name, last_name)
-            cart_drop_out_mail.apply_async(
-                (cart_pk, email, "SHINE_CART_DROP", name),
-                countdown=settings.CART_DROP_OUT_EMAIL)
+                if cart_obj:
+                    email = cart_obj.email if cart_obj.email else ""
+                    first_name = cart_obj.first_name if cart_obj.first_name else ""
+                    last_name  = cart_obj.last_name if cart_obj.last_name else ""
+                    name = "{} {}".format(first_name, last_name)
+                    cart_drop_out_mail.apply_async(
+                        (cart_pk, email, "SHINE_CART_DROP", name),
+                        countdown=settings.CART_DROP_OUT_EMAIL)
             except Exception as e:
                 logging.getLogger('error_log').error("Unable to send mail: {}".format(e))
             
