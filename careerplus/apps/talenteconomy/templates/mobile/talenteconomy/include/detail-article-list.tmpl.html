@@ -85,9 +85,15 @@
 
 {% if main_article.allow_comment %}
 <p class="take-me pb-0 mt-10" onclick="openCommentBox('{{main_article.id}}', 2)" id="total_comment{{main_article.id}}">
-    <span class="line"><sup></sup></span>
-    <span class="icon-chat"></span>{% if main_article.comment_moderated > 0 %}{{main_article.comment_moderated}} comments{% else %}Tap to Comment {% endif %}
+    <span class="icon-chat"></span>{% if main_article.comment_moderated > 0 %}{{main_article.comment_moderated}} comments{% else %}Comments {% endif %}
 </p>
+<p class="mt-10">Currently there are no comments on this article</p>
+
+<div class="leave-comment row">
+    <p class="leave-comment--head pb-5"> Post a comment</p>
+    <p>You need to be <a href="#" class="bold">logged in</a> to post a comment</p>
+</div>
+
 <div id="comment-box{{main_article.id}}" ></div>
 {% endif %}
 

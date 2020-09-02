@@ -35,13 +35,16 @@
             {% endif %}
         </div>
         <div class="social-login">
+          <span>Share</span>
             <a class="facebook" id="article_share" href="https://www.facebook.com/sharer/sharer.php?u={{SITEDOMAIN}}{{main_article.get_absolute_url}}" article-slug="{{main_article.slug}}" target="_blank"></a>
             
             <a class="twitter" id="article_share" article-slug="{{article.slug}}" href="https://twitter.com/intent/tweet?text={{main_article.title}}&url={{SITEDOMAIN}}{{main_article.get_absolute_url}}" target="_blank"></a>
 
-            <!-- <a class="gplus" id="article_share" target="_blank" article-slug="{{article.slug}}" href="https://plus.google.com/share?url={{SITEDOMAIN}}{{main_article.get_absolute_url}}"></a> -->
-
             <a class="linkedin" id="article_share" target="_blank" article-slug="{{article.slug}}" href="https://www.linkedin.com/shareArticle?mini=true&url=https://{{SITEDOMAIN}}{{main_article.get_absolute_url}}&title={{main_article.title}}&summary={{main_article.meta_desc}}&source={{SITEDOMAIN}}/"></a>
+
+            <a class="printrest" id="article_share" target="_blank" article-slug="{{article.slug}}" href="#"></a>
+            
+            <a class="whatsapp" id="article_share" target="_blank" article-slug="{{article.slug}}" href="https://plus.google.com/share?url={{SITEDOMAIN}}{{main_article.get_absolute_url}}"></a>
 
         </div>
     </div>
@@ -58,13 +61,15 @@
     <div class="clearfix"></div>
 
     <div class="social-login">
-        <a class="facebook" id="article_share" href="https://www.facebook.com/sharer/sharer.php?u={{SITEDOMAIN}}{{main_article.get_absolute_url}}" article-slug="{{main_article.slug}}" target="_blank"></a>
-        
-        <a class="twitter" id="article_share" article-slug="{{article.slug}}" href="https://twitter.com/home?status=={{SITEDOMAIN}}{{main_article.get_absolute_url}}"></a>
+      <a class="facebook" id="article_share" href="https://www.facebook.com/sharer/sharer.php?u={{SITEDOMAIN}}{{main_article.get_absolute_url}}" article-slug="{{main_article.slug}}" target="_blank"></a>
+            
+      <a class="twitter" id="article_share" article-slug="{{article.slug}}" href="https://twitter.com/intent/tweet?text={{main_article.title}}&url={{SITEDOMAIN}}{{main_article.get_absolute_url}}" target="_blank"></a>
 
-        <!-- <a class="gplus" id="article_share" target="_blank" article-slug="{{article.slug}}" href="https://plus.google.com/share?url={{SITEDOMAIN}}{{main_article.get_absolute_url}}"></a> -->
+      <a class="linkedin" id="article_share" target="_blank" article-slug="{{article.slug}}" href="https://www.linkedin.com/shareArticle?mini=true&url=https://{{SITEDOMAIN}}{{main_article.get_absolute_url}}&title={{main_article.title}}&summary={{main_article.meta_desc}}&source={{SITEDOMAIN}}/"></a>
 
-        <a class="linkedin" id="article_share" target="_blank" article-slug="{{article.slug}}" href="https://www.linkedin.com/shareArticle?mini=true&url={{SITEDOMAIN}}{{main_article.get_absolute_url}}&title={{main_article.title}}&summary={{main_article.meta_desc}}&source={{SITEDOMAIN}}/"></a>
+      <a class="printrest" id="article_share" target="_blank" article-slug="{{article.slug}}" href="#"></a>
+      
+      <a class="whatsapp" id="article_share" target="_blank" article-slug="{{article.slug}}" href="https://plus.google.com/share?url={{SITEDOMAIN}}{{main_article.get_absolute_url}}"></a>
     </div>
 
     <meta itemprop="headline" content="{{main_article.heading}}">
@@ -96,6 +101,7 @@
         <!-- comments box heading-->
         <div class="comments-box-heading is-clickable">
             <span class="comments-icon mr-10"></span> <strong><label for="total_comment{{main_article.id}}" class="is-clickable">{% if main_article.comment_moderated > 0 %}{{main_article.comment_moderated}} comments{% else %}Click to Comment {% endif %}</label></strong>
+            <p>Currently there are no comments on this article</p>
             <!-- <a role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Leave a comment</a> -->
             <input type="radio" class="hide" onchange="openCommentBox('{{main_article.id}}', 2)" id="total_comment{{main_article.id}}">
         </div>

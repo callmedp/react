@@ -132,6 +132,7 @@ button {
       padding-left: 50px;
       font-size: 100%;
       margin-bottom: 20px;
+      list-style-type: none !important;
 
       sup {
         @include box (40px, 40px);
@@ -146,5 +147,33 @@ button {
         }
       }
     }
+  }
+}
+
+.leave-comment {
+  background-color: $gray-g6;
+  overflow: hidden;
+  padding: 15px;
+
+  &--head {
+    font-size: $font-size-md;
+    font-weight: $font-weight-bold;
+  }
+
+  &--textarea {
+    border: 1px solid #E6E6E6;
+    background-color: $white;
+    padding: 12px;
+    height: 80px;
+    width: 100%;
+  }
+
+  strong {
+    font-size: $font-base;
+    color: $gray-dark;
+    font-weight: 600;
+    text-transform: uppercase;
+    margin-bottom: 15px;
+    display: block;
   }
 }

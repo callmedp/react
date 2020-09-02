@@ -190,7 +190,82 @@ article {
     font-weight: 600;
     font-size: 130%;
   }
+
+  h2 {
+    margin-bottom: 15px;
+  }
+
+  h3 {
+    margin-bottom: 5px;
+  }
+
+  ul, ol {
+    margin-bottom: 15px;
+    padding-left: 15px;
+  }
+
+  ul li, ol li {
+    margin-bottom: 5px;
+    list-style: outside !important;
+  }  
 }
+
+table {
+  border: 1px solid rgba(#979797, .33);
+  border-collapse: collapse;
+  font-size: 15px;
+  margin: 20px 0;
+
+  tr {
+    &:first-child {
+      background-color: #B5CDF6;
+
+      td {
+        font-weight: 700;
+        font-size: $font-size + 2;
+        color: $dark-blue;
+        text-align: center;
+      }
+    }
+  }
+
+  td {
+    padding: 15px;
+
+    ul {
+      padding: 0;
+      margin-left: -15px;
+      margin-right: -15px;
+      list-style-type: none;
+
+      li {
+        padding-left: 30px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        position: relative;
+        
+        &::before {
+          content: '';
+          width: 6px;
+          height: 6px;
+          display: inline-block;
+          margin-right: 10px;
+          background-color:#979797;
+          border-radius: 50%;
+          top: 18px;
+          left: 12px;
+          position: absolute;
+
+          
+        }
+        &:not(:last-child) {
+          border-bottom: 1px solid rgba(#979797, .33);
+        }
+      }
+    }
+  }
+}
+
 
 .trending-articles {
   .slick-initialized .slick-slide {
@@ -346,30 +421,28 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#3b6fc2', end
 }
 
 .take-me {
-  text-transform: uppercase;
   font-weight: 600;
   font-size: 18px;
-  border-bottom: 2px solid #eaf8ff;
   position: relative;
 
-  .line {
-    width: 50px;
-    height: 2px;
-    position: absolute;
-    left: 0;
-    background-color: #62b2d6;
-    bottom: -2px;
+  // .line {
+  //   width: 50px;
+  //   height: 2px;
+  //   position: absolute;
+  //   left: 0;
+  //   background-color: #62b2d6;
+  //   bottom: -2px;
 
-    sup {
-      position: absolute;
-      width: 0;
-      height: 0;
-      border-style: solid;
-      border-width: 6px 6px 0 0;
-      border-color: #62b1d6 transparent transparent transparent;
-      left: 0;
-    }
-  }
+  //   sup {
+  //     position: absolute;
+  //     width: 0;
+  //     height: 0;
+  //     border-style: solid;
+  //     border-width: 6px 6px 0 0;
+  //     border-color: #62b1d6 transparent transparent transparent;
+  //     left: 0;
+  //   }
+  // }
 }
 
 .take-list {
@@ -616,6 +689,6 @@ body {
 
 .content-box-article {
   a {
-    text-decoration: underline !important;
+    text-decoration: underline;
   }
 }

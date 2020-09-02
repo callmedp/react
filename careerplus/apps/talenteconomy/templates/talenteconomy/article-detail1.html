@@ -65,44 +65,54 @@
 
 		<!-- right content start -->
 		<div class="col-md-3 col-sm-12">
-            <div class="popular-courses box-panel col-sm-6 col-md-12 mb-40 look-interesting">
-    <h2 class="heading-right-talent">WANT TO HIRE TOP TALENTS? </h2>
-    <p class="mt-15">Ask for a call back</p>
+            <div class="right-box box-panel col-sm-6 col-md-12 mb-40 look-interesting">
+              <h2 class="heading-right-talent">Want to here top Talents?</h2>
+              <p class="mt-10">Ask for a call back</p>
 
-    <form id="enquireform" name="enq" class="mt-15 register">
-        <div class="form-group">
-         <input type="text" name="name" placeholder="Name" class="form-control" maxlength="60" inputmode="name" value="{{request.session.full_name}}"  id="id_name" aria-required="true">
-        </div>
-          <div class="form-group">
-         <input type="text" name="cname" placeholder="Company Name" class="form-control" maxlength="60" value="{{request.session.full_name}}"  id="id_cname" aria-required="true">
-        </div>
+              <form id="enquireform" name="enq" class="te-form mt-15">
+                  <div class="form-group">
+                    <input type="text" name="name" placeholder=" " class="form-control input_field" maxlength="60" inputmode="name" value="{{request.session.full_name}}"  id="id_name" aria-required="true">
+                    <label class="input_label" for="id_name">Name</label>
+                  </div>
 
-        <div class="form-group ">
-            <div class="country-code">
-                <div class="custom-select">
-                    <select name="country_code" class="form-control" id="id_country_code">
-                  {% for country in country_choices %}
-                            <option value="{{country.0}}" {% if country.0 == initial_country %} selected {% endif %} >{{country.0}}</option>
-                          {% endfor %}
+                  <div class="form-group">
+                    <input type="text" name="cname" placeholder=" " class="form-control input_field" maxlength="60" value="{{request.session.full_name}}"  id="id_cname" aria-required="true">
+                    <label class="input_label" for="id_cname">Company Name</label>
+                  </div>
 
-                        </select>
+                  <div class="form-group" style="display: flex;">
+                    <div class="country-code">
+                        <div class="custom-select">
+                          <select name="country_code" class="form-control" id="id_country_code">
+                            {% for country in country_choices %}
+                              <option value="{{country.0}}" {% if country.0 == initial_country %} selected {% endif %} >{{country.0}}</option>
+                            {% endfor %}
+
+                          </select>
+                        </div>
                     </div>
-            <span class="mobile_input">
-          <input type="tel" name="number" class="form-control number" inputmode="numeric" required="" id="id_cell_phone" aria-required="true" placeholder="Mobile" value="{{request.session.mobile_no|safe}}">
-                    </span></div>
-        </div>
 
-        <div class="form-group">
-       <textarea class="form-control" rows="2" name="msg" placeholder="Message"></textarea>
-            <span class="error-txt">Please enter a valid email address.</span>
-        </div>
-        <input type="hidden" name="email" class="form-control" value="{{request.session.email}}">
-        <input type="hidden" name="lsource" value="29">
-        <input type="hidden" name="campaign" value="humanresource">
-        <button type="button" id="enquire_form" class="btn btn-primary submit">Submit</button>
-    </form>
+                    <div style="position: relative;">
+                        <input type="text" class="input_field form-control" name="number" id="id_cell_phone"
+                        placeholder=" " maxlength="15" value="{{request.session.mobile_no}}">
+                        <label class="input_label" for="id_cell_phone">Mobile</label>
+                        <span class="error-txt position-error"></span>
+                    </div>
+                </div>
 
-</div>
+      
+                  <!-- <div class="form-group">
+                      <textarea class="form-control" rows="2" name="msg" placeholder="Message"></textarea>
+                      <span class="error-txt">Please enter a valid email address.</span>
+                  </div> -->
+                  
+                  <input type="hidden" name="email" class="form-control" value="{{request.session.email}}">
+                  <input type="hidden" name="lsource" value="29">
+                  <input type="hidden" name="campaign" value="humanresource">
+                  <button type="button" id="enquire_form" class="submit-button">Submit</button>
+              </form>
+
+          </div>
 
 			
 			<!-- take me to -->
