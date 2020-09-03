@@ -1,5 +1,6 @@
 import json
 import logging
+from django.conf import settings
 from django.views.generic import View
 from django.http import HttpResponse, HttpResponseForbidden
 from django.utils import timezone
@@ -26,13 +27,16 @@ class RemoveFromCartMobileView(View, CartMixin):
         candidate_id = self.request.session.get(
             'candidate_id', '')
         if tracking_product_id == product_id and tracking_id:
-            email_data.update({ 
-                "prod_id" : product_id,
-                "tracking_id" : tracking_id,
-                "candidate_id" : candidate_id
-            })
+            # email_dict.update({ 
+            #     "prod_id" : product_id,
+            #     "tracking_id" : tracking_id,
+            #     "candidate_id" : candidate_id
+            # })
+            name = email_dict.get('name', '')
+            email = email_dict.get('email', '')
             cart_product_removed_mail.apply_async(
-                (email_data), countdown=settings.CART_DROP_OUT_EMAIL)
+                (product_id, tracking_id, candidate_id, email, name), 
+                countdown=settings.CART_DROP_OUT_EMAIL)
             # cart_product_removed_mail(email_data)
             make_logging_request.delay(
                 tracking_product_id, product_tracking_mapping_id, tracking_id, 'remove_product')
@@ -53,14 +57,14 @@ class RemoveFromCartMobileView(View, CartMixin):
             data = {"status": -1}
             product_reference = request.POST.get('product_reference')
             child_list = request.POST.getlist('child_list', [])
-            email_dict = dict()
+            email_dict = {}
             try:
                 if not self.request.session.get('cart_pk'):
                     self.getCartObject()
 
                 cart_pk = self.request.session.get('cart_pk')
                 if cart_pk:
-                    cart_obj = Cart.objects.get(pk=cart_pk)
+                    cart_obj = Cart.objects.filter(pk=cart_pk).first()
                     if cart_obj:
                         email = cart_obj.email if cart_obj.email else ""
                         first_name = cart_obj.first_name if cart_obj.first_name else ""

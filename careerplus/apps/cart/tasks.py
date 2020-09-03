@@ -244,13 +244,13 @@ def cart_drop_out_mail(pk=None, cnd_email=None, mail_type=None, name=None):
     print("{} of {} cart dropout mails sent".format(count, cart_objs.count()))
 
 @task(name="cart_product_removed_mail")
-def cart_product_removed_mail(data):
+def cart_product_removed_mail(product_id= None, tracking_id=None, candidate_id=None, email=None, name=None):
     try:
-        name = data.get('name', '')
-        email = data.get('email', '')
-        prod_id = data.get('prod_id', '')
-        t_id = data.get('tracking_id', '')
-        candidate_id = data.get('candidate_id', '')
+        name = name if name else "Candidate"
+        if not email and not candidate_id:
+            logging.getLogger('error_log').error(
+                "Email is not present, email: {}".format(email))
+            return
         mail_type = 'CART_FUNNEL_DROP'
 
         email_list_spent = cache.get("email_sent_for_the_day", [])
@@ -261,7 +261,7 @@ def cart_product_removed_mail(data):
 
         to_email = [email]
         try: 
-            prod = Product.object.filter(id=prod_id).first()
+            prod = Product.object.filter(id=product_id).first()
         except Exception as e:
             logging.getLogger('error_log').error("product doesnot exist")
             return
@@ -276,7 +276,7 @@ def cart_product_removed_mail(data):
 
         token = AutoLogin().encode(email, candidate_id, days=None)
         data['autologin'] = "{}://{}/autologin/{}/?next=/cart/payment_summary/?prod_id={}&t_id={}".format(
-            settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token, prod_id, t_id)
+            settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token, product_id, tracking_id)
 
         email_list_spent.append(email)
         cache.set("email_sent_for_the_day", email_list_spent)

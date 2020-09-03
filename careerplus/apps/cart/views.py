@@ -144,7 +144,7 @@ class AddToCartView(View, CartMixin):
 
 class RemoveFromCartView(View, CartMixin):
 
-    def removeTracking(self, product_id, email_data):
+    def removeTracking(self, product_id, email_dict):
         tracking_id = self.request.session.get(
             'tracking_id', '')
         tracking_product_id = self.request.session.get(
@@ -156,14 +156,12 @@ class RemoveFromCartView(View, CartMixin):
         candidate_id = self.request.session.get(
             'candidate_id', '')
         if tracking_product_id == product_id and tracking_id:
-            email_data.update({ 
-                "prod_id" : product_id,
-                "tracking_id" : tracking_id,
-                "candidate_id" : candidate_id
-            })
             # logging.getLogger('info_log').info(email_data)
+            name = email_dict.get('name', '')
+            email = email_dict.get('email', '')
             cart_product_removed_mail.apply_async(
-                (email_data), countdown=settings.CART_DROP_OUT_EMAIL)
+                (product_id, tracking_id, candidate_id, email, name), 
+                countdown=settings.CART_DROP_OUT_EMAIL)
             # cart_product_removed_mail(email_data)
             make_logging_request.delay(
                 tracking_product_id, product_tracking_mapping_id, tracking_id, 'remove_product')
@@ -183,7 +181,7 @@ class RemoveFromCartView(View, CartMixin):
         if request.is_ajax():
             data = {"status": -1}
             reference = request.POST.get('reference_id')
-            email_dict = dict()
+            email_dict = {}
             try:
                 if not self.request.session.get('cart_pk'):
                     self.getCartObject()
