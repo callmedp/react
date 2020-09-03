@@ -165,7 +165,7 @@
                     <input type="hidden" name="product_reference"
                         value="{% if item.product_class == 'course' and variations|length  or item.type_flow == 17 and variations|length  %}{{variations.0.reference}}{% else %}{{item.reference}}{% endif %}">
 
-                    <span class="payment__summary__item--close" onclick="removeFromCartMobile('{{item.id}}')">+</span>
+                    <span class="payment__summary__item--close item-list" name="{{item.id}}" onclick="removeFromCartMobile('{{item.id}}')">+</span>
                 </li>
             </form>
             {% endif %}
@@ -308,6 +308,7 @@
     var productTrackingMappingId = "{{product_tracking_mapping_id}}"
     var trackingId = "{{tracking_id}}"
   console.log({ trackingProductId, shineApiUrl, productTrackingMappingId, trackingId})
+
 </script>
 
 {% compress js %}
@@ -324,6 +325,11 @@
             return false;
         });
     });
+    var items = document.getElementsByClassName("item-list");
+    for (var i = 0; i < items.length; i++){
+      let id = items[i].getAttribute('name');
+      document.getElementsByName(id)[0].addEventListener("click", function(){removeFromCartMobile(id);});
+    }
 </script>
 {% endcompress %}
 
