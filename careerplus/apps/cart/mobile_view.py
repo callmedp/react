@@ -24,8 +24,14 @@ class RemoveFromCartMobileView(View, CartMixin):
             'product_tracking_mapping_id', '')
         product_availability = self.request.session.get(
             'product_availability', '')
-        candidate_id = self.request.session.get(
-            'candidate_id', '')
+        trigger_point = self.request.session.get(
+            'trigger_point','')
+        u_id = self.request.session.get(
+            'u_id','')
+        position = self.request.session.get(
+            'position','')
+        utm_campaign = self.request.session.get(
+            'utm_campaign','')
         if tracking_product_id == product_id and tracking_id:
             # email_dict.update({ 
             #     "prod_id" : product_id,
@@ -39,10 +45,10 @@ class RemoveFromCartMobileView(View, CartMixin):
                 countdown=settings.CART_DROP_OUT_EMAIL)
             # cart_product_removed_mail(email_data)
             make_logging_request.delay(
-                tracking_product_id, product_tracking_mapping_id, tracking_id, 'remove_product')
+                tracking_product_id, product_tracking_mapping_id, tracking_id, 'remove_product',position, trigger_point, u_id, utm_campaign )
             # for showing the user exits for that particular cart product
             make_logging_request.delay(
-                tracking_product_id, product_tracking_mapping_id, tracking_id, 'exit_cart')
+                tracking_product_id, product_tracking_mapping_id, tracking_id, 'exit_cart',position, trigger_point, u_id, utm_campaign )
             if tracking_id:
                 del self.request.session['tracking_id']
             if product_tracking_mapping_id:

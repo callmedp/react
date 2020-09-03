@@ -726,6 +726,10 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             'tracking_product_id': self.request.session.get('tracking_product_id', ''),
             'product_tracking_mapping_id': self.request.session.get('product_tracking_mapping_id', ''),
             'tracking_id': self.request.session.get('tracking_id', ''),
+            'trigger_point':self.request.session.get('trigger_point',''),
+            'u_id':self.request.session.get('u_id',''),
+            'position':self.request.session.get('position',''),
+            'utm_campaign':self.request.session.get('utm_campaign',''),
             'product_id': self.product_obj and self.product_obj.id
         })
 
@@ -914,12 +918,18 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             return 8
         if product.type_flow == 2:
             return 9
+        if product.type_flow == 17:
+            return 11
 
     def get(self, request, **kwargs):
         from payment.tasks import make_logging_request
 
         path_info = kwargs
         tracking_id = request.GET.get('t_id', '')
+        utm_campaign = request.GET.get('utm_campaign', '')
+        trigger_point = request.GET.get('trigger_point', '')
+        u_id = request.GET.get('u_id', '')
+        position = self.request.GET.get('position', '')
         if self.request.GET.get('lc') and self.request.session.get('candidate_id'):
             if not kwargs.get('pk', ''):
                 return
@@ -962,25 +972,35 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             prod = Product.objects.filter(id=kwargs.get('pk')).first()
             if not prod:
                 return
-            request.session.update({'tracking_product_id': prod.id})
+            request.session.update({
+                'tracking_product_id': prod.id,
+                'tracking_id': tracking_id,
+                'trigger_point': trigger_point,
+                'u_id': u_id,
+                'position':position,
+                'utm_camppaign':utm_campaign
+                })
             product_tracking_mapping_id = self.maintain_tracking_info(
                 prod)
             if product_tracking_mapping_id != -1:
                 request.session.update(
                     {'product_tracking_mapping_id': product_tracking_mapping_id})
 
-            request.session.update({'tracking_id': tracking_id})
 
             if tracking_id and prod.id and product_tracking_mapping_id:
                 make_logging_request.delay(
-                    prod.id, product_tracking_mapping_id, tracking_id, 'product_page')
+                    prod.id, product_tracking_mapping_id, tracking_id, 'product_page',position, trigger_point, u_id, utm_campaign )
 
         elif self.request.session.get('candidate_id') and \
                 request.session.get('tracking_product_id') and \
                 request.session.get('tracking_id') and \
                 kwargs.get('pk') == request.session.get('tracking_product_id'):
+            position = request.session.get('position','')
+            utm_campaign = request.session.get('utm_campaign','')
+            trigger_point = request.session.get('trigger_point','')
+            u_id = request.session.get('u_id','')
             make_logging_request.delay(
-                request.session.get('tracking_product_id'), request.session.get('product_tracking_mapping_id'), request.session.get('tracking_id'), 'product_page')
+                request.session.get('tracking_product_id'), request.session.get('product_tracking_mapping_id'), request.session.get('tracking_id'), 'product_page',position, trigger_point, u_id, utm_campaign)
         elif self.request.session.get('candidate_id') and \
                 request.session.get('tracking_id') and \
                 not request.session.get('tracking_product_id'):
@@ -996,11 +1016,15 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
                 request.session.update(
                     {'product_tracking_mapping_id': product_tracking_mapping_id})
             
-            tracking_id = request.session.get('tracking_id','');
+            tracking_id = request.session.get('tracking_id','')
+            trigger_point = request.session.get('trigger_point','')
+            u_id = request.session.get('u_id','')
+            position = self.request.session.get('position','')
+            utm_campaign = self.request.session.get('utm_campaign','')
             
             if tracking_id and prod.id and product_tracking_mapping_id:
                 make_logging_request.delay(
-                    prod.id, product_tracking_mapping_id, tracking_id, 'product_page')
+                    prod.id, product_tracking_mapping_id, tracking_id, 'product_page',position, trigger_point, u_id, utm_campaign )
 
 
         root = request.GET.get('root')

@@ -367,6 +367,10 @@ Payment Summary - Shine Learning
     let id = items[i].getAttribute('name');
     document.getElementsByName(id)[0].addEventListener("click", function(){removeFromCartMobile(id);});
   }
+  var triggerPoint = "{{trigger_point}}"
+  var uId = "{{u_id}}"
+  var position = "{{position}}"
+  var utmCampaign ="{{utm_campaign}}"
 </script>
 {% compress js %}
 <script type="text/javascript" src="{% static 'shinelearn/js/cart/payment-summary.js' %}"></script>

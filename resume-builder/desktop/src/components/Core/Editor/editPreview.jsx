@@ -29,6 +29,8 @@ import moment from 'moment'
 import { locationRouteChange, eventClicked } from '../../../store/googleAnalytics/actions/index'
 import Swal from 'sweetalert2'
 import { siteDomain } from '../../../Utils/domains'
+import { storeTrackingInfo, isTrackingInfoAvailable, getTrackingInfo } from '../../../Utils/common';
+import { trackUser } from '../../../store/tracking/actions/index';
 import propTypes from 'prop-types';
 import {Helmet} from "react-helmet";
 // import * as lscache from '../../../../node_modules/lscache/lscache';
@@ -42,14 +44,37 @@ class EditPreview extends Component {
         this.removeNote = this.removeNote.bind(this);
         this.allowUploadResume = this.allowUploadResume.bind(this);
         this.generateResumeAlert = this.generateResumeAlert.bind(this);
-        
+        this.sendTrackingInfo = this.sendTrackingInfo.bind(this);
         this.state = {
             visibleNote: true
         }
     }
-    
-    
+
+    sendTrackingInfo(action, pos) {
+        if (isTrackingInfoAvailable()) {
+            const { trackingId, productTrackingMappingId, productId,
+                triggerPoint, uId, position, utmCampaign } = getTrackingInfo();
+            const {userTrack} = this.props;
+            userTrack({ trackingId, productTrackingMappingId, productId, action, position,
+                triggerPoint, uId, utmCampaign });
+        }
+    }
+
     async componentDidMount() {
+
+        const queryString = new URLSearchParams(this.props.location.search);
+        const trackingId = queryString.get('t_id')
+        const triggerPoint = queryString.get('trigger_point')
+        const uId = queryString.get('u_id')
+        const position = queryString.get('position')
+        const utmCampaign = queryString.get('utm_campaign')
+
+        if(trackingId !== null){
+            const productTrackingMappingId = '11'
+            storeTrackingInfo(trackingId, productTrackingMappingId, '',
+            triggerPoint,uId,position,utmCampaign)
+        }
+      
         // check if the userexperinece is greater or equal to 4 years. (7 is the pid for 4 years (mapping done here))
         if (parseInt(localStorage.getItem('userExperience') || 0) >= 7) {
             if (typeof document !== 'undefined' && document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]) {
@@ -169,77 +194,81 @@ class EditPreview extends Component {
         const { visibleNote } = this.state;
         return (
             <div>
-            <Helmet
-            script={[
-                {"src": (localStorage.getItem('script_link') ? localStorage.getItem('script_link') : null), "type": "text/javascript"}
-            ]}
-            />
-            {
-                !!(loader) &&
-                <LoaderPage />
-            }
-            
-            <Header
-            userName={first_name}
-            lastName={last_name}
-            number={number}
-            email={email}
-            location={this.props.location}
-            />
-            <div className="page-container">
-            <SelectTemplateModal
-            {...this.props}
-            page={'edit'} />
-            <TopBar
-            eventClicked={eventClicked}
-            showSelectTemplateModal={showSelectTemplateModal}
-            userInfo={{ selected_template, order_data, resume_generated }}
-            showAlertModal={showAlertModal}
-            />
-            <section className={'flex-container mt-30'}>
-            <LeftSideBar
-            showAlertModal={showAlertModal}
-            eventClicked={eventClicked}
-            customizeTemplate={customizeTemplate}
-            fetchDefaultCustomization={fetchDefaultCustomization}
-            userInfo={{ selected_template }}
-            reorderSection={reorderSection}
-            template={{ entity_position, entity_id_count_mapping, heading_font_size, color, text_font_size }}
-            previewButtonClicked={previewButtonClicked}
-            onChange={this.allowUploadResume}
-            generateResumeAlert={this.generateResumeAlert}
-            ui={{ alertModal, generateResumeModal }}
-            match={this.props.match}
-            />
-            
-            <RightSection
-            eventClicked={eventClicked}
-            generateResumeAlert={this.generateResumeAlert}
-            />
-            </section>
-            {
-                pathname === '/resume-builder/preview/' && !!(!uploadResume) && !!(!showNote.length) && !!(visibleNote) &&
-                < div className="sticky-msg">
-                <span className="pt-20">
-                <figure>
-                <i className="icon-thumbsup"></i>
-                Well Done!
-                </figure>
-                </span>
-                <span>
-                <strong>Update Resume</strong>
-                <p>Your resume is ready to help you
-                search best jobs, update it on your
-                shine profile</p>
-                <button className="orange-button" onClick={this.allowUploadResume}>Update</button>
-                </span>
-                <i className="icon-close" onClick={this.removeNote}></i>
+                 <Helmet
+                 script={[
+                     {"src": (localStorage.getItem('script_link') ? localStorage.getItem('script_link') : null), "type": "text/javascript"}
+                 ]}
+                 />
+                {
+                    !!(loader) &&
+                    <LoaderPage />
+                }
+                <Header
+                    userName={first_name}
+                    lastName={last_name}
+                    number={number}
+                    email={email}
+                    location={this.props.location}
+                    
+                />
+                <div className="page-container">
+                    <SelectTemplateModal
+                        sendTrackingInfo={this.sendTrackingInfo}
+                        {...this.props}
+                        page={'edit'} />
+                    <TopBar
+                        eventClicked={eventClicked}
+                        showSelectTemplateModal={showSelectTemplateModal}
+                        userInfo={{ selected_template, order_data, resume_generated }}
+                        showAlertModal={showAlertModal}
+                    />
+                    <section className={'flex-container mt-30'}>
+                        <LeftSideBar
+                            sendTrackingInfo = {this.sendTrackingInfo}
+                            showAlertModal={showAlertModal}
+                            eventClicked={eventClicked}
+                            customizeTemplate={customizeTemplate}
+                            fetchDefaultCustomization={fetchDefaultCustomization}
+                            userInfo={{ selected_template }}
+                            reorderSection={reorderSection}
+                            template={{ entity_position, entity_id_count_mapping, heading_font_size, color, text_font_size }}
+                            previewButtonClicked={previewButtonClicked}
+                            onChange={this.allowUploadResume}
+                            generateResumeAlert={this.generateResumeAlert}
+                            ui={{ alertModal, generateResumeModal }}
+                            match={this.props.match}
+                        />
+
+                        <RightSection
+                            sendTrackingInfo = {this.sendTrackingInfo}
+                            eventClicked={eventClicked}
+                            generateResumeAlert={this.generateResumeAlert}
+                        />
+                    </section>
+                    {
+                        pathname === '/resume-builder/preview/' && !!(!uploadResume) && !!(!showNote.length) && !!(visibleNote) &&
+                        < div className="sticky-msg">
+                            <span className="pt-20">
+                                <figure>
+                                    <i className="icon-thumbsup"></i>
+                                    Well Done!
+                        </figure>
+                            </span>
+                            <span>
+                                <strong>Update Resume</strong>
+                                <p>Your resume is ready to help you
+                                search best jobs, update it on your
+                        shine profile</p>
+                                <button className="orange-button" onClick={this.allowUploadResume}>Update</button>
+                            </span>
+                            <i className="icon-close" onClick={this.removeNote}></i>
+                        </div>
+                    }
                 </div>
-            }
-            </div>
-            
-            <Footer />
-            
+
+                <Footer 
+                sendTrackingInfo = {this.sendTrackingInfo}/>
+
             </div>
             )
         }
@@ -411,6 +440,9 @@ class EditPreview extends Component {
                     dispatch(loginCandidate({ info: { alt: '' }, resolve, reject, isTokenAvail: false }))
                 })
             },
+            "userTrack": (data) =>  {
+                return  dispatch(trackUser(data))
+              },
         }
     }
     

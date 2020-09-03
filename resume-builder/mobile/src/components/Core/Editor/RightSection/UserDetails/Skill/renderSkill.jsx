@@ -19,7 +19,8 @@ const renderSkills = ({
     context,
     editHeadingClick,
     entity_preference_data,
-    showAlertMessage
+    showAlertMessage,
+    sendTrackingInfo
 }) => {
     return (
         <React.Fragment>
@@ -49,6 +50,7 @@ const renderSkills = ({
                                     }
                                 })
                                 if (!skipAddition) {
+                                    sendTrackingInfo('right_section_add',1)
                                     handleAddition(fields, skillNewData(fields), 0, 'skill', eventClicked, 'Skills')
                                 }
                                 else {

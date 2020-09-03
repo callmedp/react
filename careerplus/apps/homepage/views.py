@@ -34,14 +34,22 @@ class HomePageView(TemplateView, MetadataMixin):
         from payment.tasks import make_logging_request
         tracking_id = self.request.GET.get('t_id', '')
         product_tracking_mapping_id = self.request.GET.get('product', '')
+        utm_campaign = self.request.GET.get('utm_campaign', '')
+        trigger_point = self.request.GET.get('trigger_point', '')
+        u_id = self.request.GET.get('u_id', '')
+        position = self.request.GET.get('position', '')
         if tracking_id and self.request.session.get('candidate_id'):
             self.request.session.update({
                 'tracking_id': tracking_id,
                 'product_tracking_mapping_id': product_tracking_mapping_id,
-                'tracking_product_id':''
+                'tracking_product_id':'',
+                'trigger_point': trigger_point,
+                'utm_campaign' : utm_campaign,
+                'u_id':u_id,
+                'postion' : position
             })
             make_logging_request.delay(
-                '', product_tracking_mapping_id, tracking_id, 'home_page')
+                '', product_tracking_mapping_id, tracking_id, 'home_page',position, trigger_point, u_id, utm_campaign )
 
         elif self.request.session.get('tracking_id', '') and self.request.session.get('candidate_id'):
             product_tracking_mapping_id = self.request.session.get(
@@ -50,8 +58,16 @@ class HomePageView(TemplateView, MetadataMixin):
                 'tracking_product_id', '')
             tracking_id = self.request.session.get(
                 'tracking_id', '')
+            trigger_point = self.request.session.get(
+            'trigger_point','')
+            u_id = self.request.session.get(
+            'u_id','')
+            position = self.request.session.get(
+            'position','')
+            utm_campaign = self.request.session.get(
+            'utm_campaign','')
             make_logging_request.delay(
-                tracking_product_id, product_tracking_mapping_id, tracking_id, 'home_page')
+                tracking_product_id, product_tracking_mapping_id, tracking_id, 'home_page', position, trigger_point, u_id, utm_campaign)
 
     def get_meta_title(self, context):
         # return 'Best Resume Writing Services | Online Courses | Linkedin Profile - Shine Learning'
@@ -244,7 +260,11 @@ class HomePageView(TemplateView, MetadataMixin):
             'shine_api_url': settings.SHINE_API_URL,
             'tracking_product_id': self.request.session.get('tracking_product_id', ''),
             'product_tracking_mapping_id': self.request.session.get('product_tracking_mapping_id', ''),
-            'tracking_id': self.request.session.get('tracking_id', '')
+            'tracking_id': self.request.session.get('tracking_id', ''),
+            'trigger_point':self.request.session.get('trigger_point',''),
+            'u_id':self.request.session.get('u_id',''),
+            'position':self.request.session.get('position',''),
+            'utm_campaign':self.request.session.get('utm_campaign',''),
         })
 
         linkedin_modal = self.request.session.get('linkedin_modal', 0)

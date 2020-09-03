@@ -19,7 +19,9 @@ export default class ChangeTemplateModal extends Component{
                 className="Modal overflow-visible"
                 overlayClassName="Overlay">
                 <div className="">
-                    <ResumeSlider showtext={false} {...this.props}/>
+                    <ResumeSlider 
+                        sendTrackingInfo={this.props.sendTrackingInfo}
+                        showtext={false} {...this.props}/>
                 </div>
                 <span className="close-wrap preview-close" onClick={()=>{this.props.updateModalStatus({modal_status:false})}}>
                     <i className="sprite icon--close"></i>

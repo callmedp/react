@@ -54,6 +54,7 @@ class Experience extends Component {
     
     
     editHeadingClick() {
+        this.props.sendTrackingInfo('right_section_edit',1)
         this.setState({ editHeading: true })
     }
     
@@ -154,6 +155,7 @@ class Experience extends Component {
     }
     
     deleteExperience(index, fields, event) {
+        this.props.sendTrackingInfo('right_section_delete',1)
         event.stopPropagation();
         const experience = fields.get(index);
         fields.remove(index);
@@ -170,39 +172,40 @@ class Experience extends Component {
         const { editHeading, heading, till_today, modal_status } = this.state;
         return (
             <div className="buildResume">
-            <form onSubmit={handleSubmit(this.handleSubmit)}>
-            <PreviewModal {...this.props} />
-            <Subscribe {...this.props} />
-            <AddSuggesion label={'Job Description'} modal_status={modal_status} maxLength="1000" length={length} closeModal={this.closeModal} suggestions={suggestions} />
-            <FieldArray name="list"
-            handleSubmit={handleSubmit}
-            handleAddition={this.props.handleAddition}
-            deleteExperience={this.deleteExperience}
-            changeOrderingUp={changeOrderingUp}
-            changeOrderingDown={changeOrderingDown}
-            eventClicked={eventClicked}
-            component={renderExperiences}
-            headingChange={headingChange}
-            entity_preference_data={entity_preference_data}
-            editHeading={editHeading}
-            editHeadingClick={this.editHeadingClick}
-            heading={heading}
-            context={this}
-            openModal={this.openModal}
-            till_today={till_today}
-            fetchJobTitles={fetchJobTitles}
-            tillTodayDisable={this.tillTodayDisable}
-            ws={showAlertMessage}
-            showAlertMessage={showAlertMessage}
-            />
-            <ul className="form mt-15">
-            <li className="form__group">
-            <BottomCTC disabled={submitting} context={this} history={history} updateAlertModalStatus={updateAlertModalStatus}
-            length={length} pos={pos + 1} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
-            order_data={order_data} eventClicked={eventClicked} form_name={'Experience'} />
-            </li>
-            </ul>
-            </form>
+                <form onSubmit={handleSubmit(this.handleSubmit)}>
+                    <PreviewModal {...this.props} />
+                    <Subscribe {...this.props} />
+                    <AddSuggesion label={'Job Description'} modal_status={modal_status} maxLength="1000" length={length} closeModal={this.closeModal} suggestions={suggestions} />
+                    <FieldArray name="list"
+                        sendTrackingInfo={this.props.sendTrackingInfo}
+                        handleSubmit={handleSubmit}
+                        handleAddition={this.props.handleAddition}
+                        deleteExperience={this.deleteExperience}
+                        changeOrderingUp={changeOrderingUp}
+                        changeOrderingDown={changeOrderingDown}
+                        eventClicked={eventClicked}
+                        component={renderExperiences}
+                        headingChange={headingChange}
+                        entity_preference_data={entity_preference_data}
+                        editHeading={editHeading}
+                        editHeadingClick={this.editHeadingClick}
+                        heading={heading}
+                        context={this}
+                        openModal={this.openModal}
+                        till_today={till_today}
+                        fetchJobTitles={fetchJobTitles}
+                        tillTodayDisable={this.tillTodayDisable}
+                        ws={showAlertMessage}
+                        showAlertMessage={showAlertMessage}
+                    />
+                    <ul className="form mt-15">
+                        <li className="form__group">
+                            <BottomCTC disabled={submitting} context={this} history={history} updateAlertModalStatus={updateAlertModalStatus}
+                                length={length} pos={pos + 1} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
+                                order_data={order_data} eventClicked={eventClicked} form_name={'Experience'} />
+                        </li>
+                    </ul>
+                </form>
             </div>
             )
         }

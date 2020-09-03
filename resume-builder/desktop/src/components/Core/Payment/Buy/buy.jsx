@@ -28,6 +28,8 @@ import { loginCandidate } from "../../../../store/landingPage/actions";
 import { Toast } from '../../../../services/ErrorToast';
 import propTypes from 'prop-types';
 import {Helmet} from "react-helmet";
+import { trackUser } from '../../../../store/tracking/actions/index';
+import {  isTrackingInfoAvailable, getTrackingInfo, storeProduct} from '../../../../Utils/common';
 // import * as lscache from '../../../../../node_modules/lscache/lscache';
 
 export class Buy extends Component {
@@ -71,8 +73,18 @@ export class Buy extends Component {
         }
     }
     
-    
+       sendTrackingInfo(action, position, productId="") {
+        if (isTrackingInfoAvailable()) {
+            const { trackingId, productTrackingMappingId,
+            triggerPoint, uId, utmCampaign } = getTrackingInfo();
+            const {userTrack} = this.props;
+            userTrack({ trackingId, productTrackingMappingId, productId, action, position,
+            triggerPoint, uId, utmCampaign });
+        }
+    }
+
     async downloadRequestedResume() {
+this.sendTrackingInfo('download_requested_resume',1)
         const { hideGenerateResumeModal } = this.props
         const candidateId = localStorage.getItem('candidateId')
         const selectedTemplate = localStorage.getItem('selected_template', 1)
@@ -87,6 +99,7 @@ export class Buy extends Component {
     }
     
     async freeResumeRequest() {
+this.sendTrackingInfo('free_resume_request',1);
         const { requestFreeResume, showGenerateResumeModal,
             userInfo: { resume_creation_count }, } = this.props
             this.setState({ 'resumeDownloadCount': resume_creation_count, 'freeDownloadButtonDisable': true }, async () => {
@@ -136,8 +149,17 @@ export class Buy extends Component {
                 "prod_id": product.id,
                 "cart_type": 'cart',
             }
+  storeProduct(product.id)
+        this.sendTrackingInfo('enroll_now',1,product.id)
             await this.props.addToCart(data);
+             if( isTrackingInfoAvailable()){
+            const {trackingId, productId, triggerPoint, uId, utmCampaign, position }  = getTrackingInfo()
+            window.location.replace( `${siteDomain}/cart/payment-summary/?prod_id=${productId}&t_id=${trackingId}
+                &trigger_point=${triggerPoint}&u_id=${uId}&utm_campaign=${utmCampaign}&position=${position}`)
+        }
+        else{
             window.location.href = `${siteDomain}/cart/payment-summary/`;
+        }
         }
         
         async componentDidMount() {
@@ -250,6 +272,7 @@ export class Buy extends Component {
                     modal={modal}
                     page={'buy'} />
                     <SelectTemplateModal
+sendTrackingInfo = {this.sendTrackingInfo}
                     {...this.props}
                     page={"buy"} />
                     {
@@ -575,7 +598,8 @@ export class Buy extends Component {
             },
             "showLoader": () => {
                 return dispatch(updateUi({ loader: true }))
-            }
+            },
+"userTrack" : (data) => dispatch(trackUser(data)),
         }
     };
     
