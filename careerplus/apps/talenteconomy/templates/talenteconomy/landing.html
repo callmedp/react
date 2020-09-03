@@ -115,9 +115,11 @@
 <!-- contributors end -->
 {% endblock container %}
 {% block js_section %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+
     {{ block.super }}
     {% compress js %}
-    <script src="{% static 'shinelearn/js/mobile/common/slick.js' %}"> </script>
+    <!-- <script src="{% static 'shinelearn/js/mobile/common/slick.js' %}"> </script> -->
     <script src="{% static 'shinelearn/js/talenteconomy/article.js' %}"></script>
     <script>
     	$(function(){

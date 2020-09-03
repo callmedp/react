@@ -4,98 +4,98 @@
 {% block title %}Best Online Courses  & Certification Trainings | Shine Learning{% endblock %}
 
 {% block css_section %}
-    {% compress css %}
+{% compress css %}
 
-        <link defer type="text/scss" href="{% static 'shinelearn/css/mobile/common/global.scss' %}" rel="stylesheet">
-        <link defer type="text/scss" href="{% static 'shinelearn/css/mobile/common/icons.scss' %}" rel="stylesheet">
-        <link defer type="text/scss" href="{% static 'shinelearn/css/mobile/common/navigation.scss' %}" rel="stylesheet">
-        <link defer type="text/scss" href="{% static 'shinelearn/css/mobile/common/images.scss' %}" rel="stylesheet" >
-        <link defer type="text/scss" href="{% static 'shinelearn/css/mobile/homepage/home.scss' %}" rel="stylesheet">
-        <link defer type="text/scss" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" rel="stylesheet">
-        <link defer type="text/css" href="{% static 'shinelearn/css/common/mobile/typeaheadjs.css' %}" rel="stylesheet">
-    {% endcompress %}
+<link defer type="text/scss" href="{% static 'shinelearn/css/mobile/common/global.scss' %}" rel="stylesheet">
+<link defer type="text/scss" href="{% static 'shinelearn/css/mobile/common/icons.scss' %}" rel="stylesheet">
+<link defer type="text/scss" href="{% static 'shinelearn/css/mobile/common/navigation.scss' %}" rel="stylesheet">
+<link defer type="text/scss" href="{% static 'shinelearn/css/mobile/common/images.scss' %}" rel="stylesheet" >
+<link defer type="text/scss" href="{% static 'shinelearn/css/mobile/homepage/home.scss' %}" rel="stylesheet">
+<link defer type="text/scss" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" rel="stylesheet">
+<link defer type="text/css" href="{% static 'shinelearn/css/common/mobile/typeaheadjs.css' %}" rel="stylesheet">
+{% endcompress %}
 {% endblock css_section %}
 
 {% block canonical_url %}
-  <link rel="canonical" href="https://{{ SITE_DOMAIN }}/">
+<link rel="canonical" href="https://{{ SITE_DOMAIN }}/">
 {% endblock canonical_url %}
 
 {% block django_meta %}
-    {% include 'meta/meta.html' %}
+{% include 'meta/meta.html' %}
 {% endblock django_meta %}
 
 {% block container %}
-    
+
 <div class="body-wrapper">
     <!-- home banner starts here -->
     <div class="home-banner">
         <!-- home slider starts here -->
         <ul class="home-slider">
             {% if request.session.candidate_id %}
-                <li>
-                    <img loading="lazy" aria-label="home image" src="{% static 'shinelearn/images/mobile/common/home-img2.jpg' %}" class="img-responsive" alt="home-img2">
-                    <span class="slide-caption">
-                        <h1>Hi {% if request.session.full_name %} {{request.session.full_name}} {%else %}{{request.session.email}}{% endif %},</h1>
-                        <strong>Want to make your career future ready? <br> Discover courses matched for your profile</strong>
-                    </span>            
-                </li>
+            <li>
+                <img loading="lazy" aria-label="home image" src="{% static 'shinelearn/images/mobile/common/home-img2.jpg' %}" class="img-responsive" alt="home-img2">
+                <span class="slide-caption">
+                    <h1>Hi {% if request.session.full_name %} {{request.session.full_name}} {%else %}{{request.session.email}}{% endif %},</h1>
+                    <strong>Want to make your career future ready? <br> Discover courses matched for your profile</strong>
+                </span>            
+            </li>
             {% else %}
-                <li>
-                    <img loading="lazy" aria-label="home image" src="{% static 'shinelearn/images/mobile/common/home-img1.jpg' %}" alt="home-img1" class="img-responsive">
-                    <span class="slide-caption">
-                        <h1>Take online courses from <br>India’s largest career skills site.</h1>
-                    </span>
-                </li>
+            <li>
+                <img loading="lazy" aria-label="home image" src="{% static 'shinelearn/images/mobile/common/home-img1.jpg' %}" alt="home-img1" class="img-responsive">
+                <span class="slide-caption">
+                    <h1>Take online courses from <br>India’s largest career skills site.</h1>
+                </span>
+            </li>
             {% endif %}
         </ul><!-- home slider end here -->
         
         <!-- search tab container starts here -->
         <div class="tab-search">
-          <ul class="tabs">
+            <ul class="tabs">
+                {% comment %}
+                
+                <li><a href="javascript:void(0)" class="current" data-tab="tab-1">Search</a></li>
+                
+                <li><a href="javascript:void(0)" data-tab="tab-2">Advanced Search</a></li>
+                {% endcomment %}
+                
+            </ul>
+            
+            <!-- Tab content Satrts here -->
+            <div id="tab-1" class="tab-content current row">
+                <div class="custom-search">
+                    <input class="form-control key_press_js_search" role="search" id="id_q" placeholder="Search for courses, services" type="text" autocomplete="off">
+                    <span class="error-txt"></span>
+                    <button type="images" onclick="redirectToSearch()" class="search-icon-tab"></button>
+                </div>
+                <div class="clearfix"></div>   
+            </div><!-- Tab content ends here -->
+            
+            <!-- Tab content Satrts here -->
             {% comment %}
             
-            <li><a href="javascript:void(0)" class="current" data-tab="tab-1">Search</a></li>
-                
-            <li><a href="javascript:void(0)" data-tab="tab-2">Advanced Search</a></li>
+            <div id="tab-2" class="tab-content row">
+                <div class="custom-advnaced-search">
+                    <form class="form-inline js_advance_search_form" method="post" action="{% url 'search:recommend' %}">
+                        {% csrf_token %}
+                        <input class="form-control bdr1" name="area" placeholder="Functional area" type="text"
+                        autocomplete="off" value="{{ recmnd_func_area }}" id="tags11" >
+                        <input class="form-control bdr2" name="skills" placeholder="Skills" type="text"
+                        autocomplete="off" value="{{ recmnd_skills }}" id="tags21">
+                        <span class="error-txt pull-left js_area_error"></span>
+                        <span class="error-txt pull-left js_skill_error"></span>
+                        <button type="submit" class="custom-search-btn search-icon-tab js_advance_search"></button>
+                    </form>
+                </div>
+                <div class="clearfix"></div>   
+            </div><!-- Tab content ends here -->
             {% endcomment %}
             
-          </ul>
-
-        <!-- Tab content Satrts here -->
-        <div id="tab-1" class="tab-content current row">
-          <div class="custom-search">
-            <input class="form-control key_press_js_search" role="search" id="id_q" placeholder="Search for courses, services" type="text" autocomplete="off">
-              <span class="error-txt"></span>
-            <button type="images" onclick="redirectToSearch()" class="search-icon-tab"></button>
-        </div>
-        <div class="clearfix"></div>   
-        </div><!-- Tab content ends here -->
-
-        <!-- Tab content Satrts here -->
-        {% comment %}
-            
-        <div id="tab-2" class="tab-content row">
-          <div class="custom-advnaced-search">
-              <form class="form-inline js_advance_search_form" method="post" action="{% url 'search:recommend' %}">
-                    {% csrf_token %}
-                    <input class="form-control bdr1" name="area" placeholder="Functional area" type="text"
-                           autocomplete="off" value="{{ recmnd_func_area }}" id="tags11" >
-                    <input class="form-control bdr2" name="skills" placeholder="Skills" type="text"
-                           autocomplete="off" value="{{ recmnd_skills }}" id="tags21">
-                    <span class="error-txt pull-left js_area_error"></span>
-                    <span class="error-txt pull-left js_skill_error"></span>
-                    <button type="submit" class="custom-search-btn search-icon-tab js_advance_search"></button>
-              </form>
-        </div>
-        <div class="clearfix"></div>   
-        </div><!-- Tab content ends here -->
-        {% endcomment %}
+        </div><!-- search Tab container -->
         
-      </div><!-- search Tab container -->
-     
-
+        
     </div><!-- home banner starts here -->
-
+    
     {% block popular_courses %}
     <!-- Most popular Course Starts here -->
     <div class="popular-courses text-center">
@@ -105,93 +105,93 @@
             <ul class="login-slider">
                 {% if request.session.candidate_id and rcourses %}
                 {% for course_list in rcourses %}
-                    {% for product in course_list %}
-                        <li>
-                            <div class="media"> 
-                                <div class="media-body">
-                                    <p class="fs-15 bold"><a title="{{ product.pHd|default:product.pNm}}" href="{{ product.pURL }}" 
-                                        onclick="homepageTracking('exit_home_page');homepageTracking('homepage_recommended_courses')">{{ product.pHd|default:product.pNm|truncatechars:40 }}</a></p>
+                {% for product in course_list %}
+                <li>
+                    <div class="media"> 
+                        <div class="media-body">
+                            <p class="fs-15 bold"><a title="{{ product.pHd|default:product.pNm}}" href="{{ product.pURL }}" 
+                                onclick="homepageTracking('exit_home_page');homepageTracking('homepage_recommended_courses')">{{ product.pHd|default:product.pNm|truncatechars:40 }}</a></p>
+                                
+                                <div class="rating block ml-0 fs-12 pb-10">
+                                    {% if product.pRC %}<sup class="fill-star"></sup>
+                                    <strong>{{product.pARx|floatformat}}</strong>/5
+                                    {% else %}
+                                    {{ product.pBC|default:"10" }} people bought
+                                    {% endif %}
+                                </div><!-- end of star rating -->
+                                <p class="fs-12 c6"><strong>{{product.pNJ}}</strong> Jobs available</p>
+                                
+                            </div>
+                            <div class="media-left">
+                                <a title="{{ product.pHd|default:product.pNm}}" href="{{ product.pURL }}" class="home-banner-img" title="{{ product.pHd|default:product.pNm}}">
                                     
-                                    <div class="rating block ml-0 fs-12 pb-10">
-                                        {% if product.pRC %}<sup class="fill-star"></sup>
-                                        <strong>{{product.pARx|floatformat}}</strong>/5
-                                        {% else %}
-                                        {{ product.pBC|default:"10" }} people bought
-                                        {% endif %}
-                                    </div><!-- end of star rating -->
-                                    <p class="fs-12 c6"><strong>{{product.pNJ}}</strong> Jobs available</p>
-                                    
-                                </div>
-                                <div class="media-left">
-                                  <a title="{{ product.pHd|default:product.pNm}}" href="{{ product.pURL }}" class="home-banner-img" title="{{ product.pHd|default:product.pNm}}">
-
-     <img loading="lazy" aria-label="{{product.pImA}}" src="{{product.pImg}}" alt="{{product.pImA}}" class="img-responsive" alt="{{product.pImA}}"></a>
+                                    <img loading="lazy" aria-label="{{product.pImA}}" src="{{product.pImg}}" alt="{{product.pImA}}" class="img-responsive" alt="{{product.pImA}}"></a>
                                 </div><!-- end of media body -->
-                              </div><!-- end of media -->
+                            </div><!-- end of media -->
                         </li>
-                    {% endfor %}
-                    {% endfor %}
-                {% else %}
-                {% for course_list in pcourses %}
-                    {% for product in course_list %}
+                        {% endfor %}
+                        {% endfor %}
+                        {% else %}
+                        {% for course_list in pcourses %}
+                        {% for product in course_list %}
                         <li>
                             <div class="media"> 
                                 <div class="media-body">
                                     <p class="fs-15 bold"><a title="{{ product.pHd|default:product.pNm|truncatechars:40 }}" href="{{ product.pURL }}"
                                         onclick="homepageTracking('exit_home_page');homepageTracking('homepage_recommended_courses')">{{ product.pHd|default:product.pNm|truncatechars:40 }}</a></p>
-                                    
-                                    <div class="rating block ml-0 fs-12 pb-10">
-                                        <sup class="fill-star"></sup>
-                                        <strong>{{product.pARx|floatformat}}</strong>/5
-                                    </div><!-- end of star rating -->
-                                    <p class="fs-12 c6"><strong>{{product.pNJ}}</strong> Jobs available</p>
-                                    
-                                </div>
-                                <div class="media-left">
-                                  <a title="{{ product.pHd|default:product.pNm|truncatechars:40 }}" href="{{ product.pURL }}" class="home-banner-img">
-                                                                 {% thumbnail im.pImg "100x100" as im %}
-                                        <img loading="lazy" aria-label="{{product.pImA}}" class="img-responsive" src="{{im.url}}" alt="{{product.pImA}}">
-{% endthumbnail %}
-                                      
-                                  </a>
-                                </div><!-- end of media body -->
-                              </div><!-- end of media -->
-                        </li>
-                    {% endfor %}
-                    {% endfor %}
-                {% endif %}
+                                        
+                                        <div class="rating block ml-0 fs-12 pb-10">
+                                            <sup class="fill-star"></sup>
+                                            <strong>{{product.pARx|floatformat}}</strong>/5
+                                        </div><!-- end of star rating -->
+                                        <p class="fs-12 c6"><strong>{{product.pNJ}}</strong> Jobs available</p>
+                                        
+                                    </div>
+                                    <div class="media-left">
+                                        <a title="{{ product.pHd|default:product.pNm|truncatechars:40 }}" href="{{ product.pURL }}" class="home-banner-img">
+                                            {% thumbnail im.pImg "100x100" as im %}
+                                            <img loading="lazy" aria-label="{{product.pImA}}" class="img-responsive" src="{{im.url}}" alt="{{product.pImA}}">
+                                            {% endthumbnail %}
+                                            
+                                        </a>
+                                    </div><!-- end of media body -->
+                                </div><!-- end of media -->
+                            </li>
+                            {% endfor %}
+                            {% endfor %}
+                            {% endif %}
+                            
+                        </ul><!-- login slider ends here -->
+                    </div><!-- slider container ends here -->
+                </div><!-- Most popular Course Ends here -->
+                {% endblock popular_courses %}
                 
-            </ul><!-- login slider ends here -->
-        </div><!-- slider container ends here -->
-    </div><!-- Most popular Course Ends here -->
-    {% endblock popular_courses %}
-
-
-    {% block trending_course %}
-
-    <!-- Trending Course Starts here -->
-    <div class="course-new text-center">
-        <h2 class="mb-0">Trending courses</h2>
-        {# STATIC CONTENT #}
-        <p class="c6 mb-10">Browse the most popular and new courses!</p>
-            
-            <div class="media">
-                <a title="Finance" href="/courses/banking-and-finance/20/#courses1" 
-                onclick="homepageTracking('exit_home_page');homepageTracking('trending_courses_heading')">
-                    <div class="media-body">
-                        <p class="title">Finance</p>
-                    </div>                
-                    <div class="media-right"> 
-                        <div class="img-box">                   
-                            <img loading="lazy" aria-label="finance" src="{% static 'shinelearn/images/mobile/common/invetsment_banking.png' %}" alt="Finance">
-                        </div>
-                    </div>                
-                </a>
-            </div>
-            
-            <div class="media">
-                <a title="Operations" href="/courses/operation-management/19/#courses2"
-                onclick="homepageTracking('exit_home_page');homepageTracking('trending_courses_heading')">
+                
+                {% block trending_course %}
+                
+                <!-- Trending Course Starts here -->
+                <div class="course-new text-center">
+                    <h2 class="mb-0">Trending courses</h2>
+                    {# STATIC CONTENT #}
+                    <p class="c6 mb-10">Browse the most popular and new courses!</p>
+                    
+                    <div class="media">
+                        <a title="Finance" href="/courses/banking-and-finance/20/#courses1" 
+                        onclick="homepageTracking('exit_home_page');homepageTracking('trending_courses_heading')">
+                        <div class="media-body">
+                            <p class="title">Finance</p>
+                        </div>                
+                        <div class="media-right"> 
+                            <div class="img-box">                   
+                                <img loading="lazy" aria-label="finance" src="{% static 'shinelearn/images/mobile/common/invetsment_banking.png' %}" alt="Finance">
+                            </div>
+                        </div>                
+                    </a>
+                </div>
+                
+                <div class="media">
+                    <a title="Operations" href="/courses/operation-management/19/#courses2"
+                    onclick="homepageTracking('exit_home_page');homepageTracking('trending_courses_heading')">
                     <div class="media-body">
                         <p class="title">Operations</p>
                     </div>                
@@ -206,99 +206,99 @@
             <div class="media">
                 <a title="Information Technology" href="/courses/it-information-technology/it-language/80/#courses3"
                 onclick="homepageTracking('exit_home_page');homepageTracking('trending_courses_heading')">
-                    <div class="media-body">
-                        <p class="title">Information Technology</p>
-                    </div>                
-                    <div class="media-right"> 
-                        <div class="img-box">                   
-                            <img  loading="lazy"aria-label="information" src="{% static 'shinelearn/images/mobile/common/it.png' %}" alt="information">
-                        </div>
-                    </div>                
-                </a>
-            </div>
-            
-            <div class="media">
-                <a title="Human Resources" href="/courses/hr-human-resource/25/#courses4"
-                onclick="homepageTracking('exit_home_page');homepageTracking('trending_courses_heading')">
-                    <div class="media-body">
-                        <p class="title">Human Resources</p>
-                    </div>                
-                    <div class="media-right"> 
-                        <div class="img-box">                   
-                            <img loading="lazy" aria-label="human res" src="{% static 'shinelearn/images/mobile/common/hr.png' %}" alt="human res">
-                        </div>
-                    </div>         
-                </a>
-            </div>
-    </div><!-- Trending Course Ends here -->
+                <div class="media-body">
+                    <p class="title">Information Technology</p>
+                </div>                
+                <div class="media-right"> 
+                    <div class="img-box">                   
+                        <img  loading="lazy"aria-label="information" src="{% static 'shinelearn/images/mobile/common/it.png' %}" alt="information">
+                    </div>
+                </div>                
+            </a>
+        </div>
+        
+        <div class="media">
+            <a title="Human Resources" href="/courses/hr-human-resource/25/#courses4"
+            onclick="homepageTracking('exit_home_page');homepageTracking('trending_courses_heading')">
+            <div class="media-body">
+                <p class="title">Human Resources</p>
+            </div>                
+            <div class="media-right"> 
+                <div class="img-box">                   
+                    <img loading="lazy" aria-label="human res" src="{% static 'shinelearn/images/mobile/common/hr.png' %}" alt="human res">
+                </div>
+            </div>         
+        </a>
+    </div>
+</div><!-- Trending Course Ends here -->
 
-    {% endblock trending_course %}
+{% endblock trending_course %}
 
 
-    {% block job_assistance %}
-    <!-- Job assistance Starts here -->
-    {% if job_asst_services %}
-        <div class="job-assistance text-center white-bg">
-            <h2 class="mb-0">Job assistance services</h2>
-            <p class="c6">Find your next job faster by using our services.</p>
-            <div class="slide-container">
-                <ul class="trending-slide mt-10">
-                    {% for tprd in job_asst_services %}
-                    <li>
-                        <a title="{{tprd.pHd|default:tprd.pNm|truncatechars:40}}" href="{{tprd.pURL}}"
-                        onclick="homepageTracking('exit_home_page');homepageTracking('job_assistance_service')">
-                            <div class="img-box">
-
-                                                          {% thumbnail tprd.pImg "135x135" as im %}
-                                        <img loading="lazy" aria-label="{{tprd.pImA}}" class="img-responsive" src="{{im.url}}" alt="{{tprd.pImA}}">
-{% endthumbnail %}
-                            </div>
-                            <p class="title">{{tprd.pHd|default:tprd.pNm|truncatechars:40}}</p>
-                        </a>
-                    </li>
-                    {% endfor %}
+{% block job_assistance %}
+<!-- Job assistance Starts here -->
+{% if job_asst_services %}
+<div class="job-assistance text-center white-bg">
+    <h2 class="mb-0">Job assistance services</h2>
+    <p class="c6">Find your next job faster by using our services.</p>
+    <div class="slide-container">
+        <ul class="trending-slide mt-10">
+            {% for tprd in job_asst_services %}
+            <li>
+                <a title="{{tprd.pHd|default:tprd.pNm|truncatechars:40}}" href="{{tprd.pURL}}"
+                onclick="homepageTracking('exit_home_page');homepageTracking('job_assistance_service')">
+                <div class="img-box">
                     
-                </ul>
-            </div>
-        </div><!-- Job assistance Ends here -->
-    {% endif %}
-    {% endblock job_assistance %}
+                    {% thumbnail tprd.pImg "135x135" as im %}
+                    <img loading="lazy" aria-label="{{tprd.pImA}}" class="img-responsive" src="{{im.url}}" alt="{{tprd.pImA}}">
+                    {% endthumbnail %}
+                </div>
+                <p class="title">{{tprd.pHd|default:tprd.pNm|truncatechars:40}}</p>
+            </a>
+        </li>
+        {% endfor %}
+        
+    </ul>
+</div>
+</div><!-- Job assistance Ends here -->
+{% endif %}
+{% endblock job_assistance %}
 
-    {% block testimonial %}
+{% block testimonial %}
 
-        {% if testimonials %}
-        <!-- Testimonials Course Starts here -->
-        <div class="testimonials text-center">
-            <h2 class="mb-0">What our learners are saying</h2>
-            <div class="slide-container">
-                <ul class="review-slide">
-                    {% for test in testimonials %}
-                    <li>
-                        {{test.review|striptags|safe}}
-                    </li>
-                    {% endfor %}
-                </ul>
-            </div>
-        </div><!-- Testimonials Course ends here -->
-        {% endif %}
-
-    {% endblock testimonial %}
-
-
-
-    <!-- how it works starts here -->
-    <div class="text-center how-it-works mb-20">
-        <h2>Why us</h2>
-        <ul>
-            <li><figure><img loading="lazy" aria-label="why us" src="{% static 'shinelearn/images/mobile/common/how-work-icon1.png' %}" alt="icon1" class="img-responsive"></figure> Explore 500+ courses with reviews and ratings from fellow learners</li>
-            <li><figure><img loading="lazy" aria-label="why us" src="{% static 'shinelearn/images/mobile/common/how-work-icon2.png' %}"  alt="icon2"  class="img-responsive"></figure> Learn at your own pace, choose your mode of study</li>
-            <li><figure><img loading="lazy" aria-label="why us"  alt="icon3"  src="{% static 'shinelearn/images/mobile/common/how-work-icon3.png' %}" class="img-responsive"></figure> Be future-ready with industry recognised certifications in skills that recruiters want</li>
+{% if testimonials %}
+<!-- Testimonials Course Starts here -->
+<div class="testimonials text-center">
+    <h2 class="mb-0">What our learners are saying</h2>
+    <div class="slide-container">
+        <ul class="review-slide">
+            {% for test in testimonials %}
+            <li>
+                {{test.review|striptags|safe}}
+            </li>
+            {% endfor %}
         </ul>
     </div>
-    <!-- how it works ends here -->
+</div><!-- Testimonials Course ends here -->
+{% endif %}
 
-    <!-- leadform start here -->
-    <!-- call us and chat widget starts here -->
+{% endblock testimonial %}
+
+
+
+<!-- how it works starts here -->
+<div class="text-center how-it-works mb-20">
+    <h2>Why us</h2>
+    <ul>
+        <li><figure><img loading="lazy" aria-label="why us" src="{% static 'shinelearn/images/mobile/common/how-work-icon1.png' %}" alt="icon1" class="img-responsive"></figure> Explore 500+ courses with reviews and ratings from fellow learners</li>
+        <li><figure><img loading="lazy" aria-label="why us" src="{% static 'shinelearn/images/mobile/common/how-work-icon2.png' %}"  alt="icon2"  class="img-responsive"></figure> Learn at your own pace, choose your mode of study</li>
+        <li><figure><img loading="lazy" aria-label="why us"  alt="icon3"  src="{% static 'shinelearn/images/mobile/common/how-work-icon3.png' %}" class="img-responsive"></figure> Be future-ready with industry recognised certifications in skills that recruiters want</li>
+    </ul>
+</div>
+<!-- how it works ends here -->
+
+<!-- leadform start here -->
+<!-- call us and chat widget starts here -->
 
 </div>
 
@@ -307,40 +307,42 @@
 {% endblock container %}
 
 {% block js_section %}
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"> </script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.2.1/typeahead.bundle.min.js"></script>
-        <script defer src="https://ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"> </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.3.1/typeahead.bundle.min.js"></script>
+<script defer src="https://ajax.googleapis.com/ajax/libs/webfont/1.5.18/webfont.js"></script>
 
-    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/bxslider/4.1.2/jquery.bxslider.min.js"></script>
-    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bxslider/4.2.15/jquery.bxslider.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
 
-        {% compress js %}
-        <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/jquery-ui.min.js' %}"> </script>
-        <!-- <script type="text/javascript" src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"> </script> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
-        <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/jquery.simpler-sidebar.js' %}"> </script>
-        <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/multilevelnav.js' %}"></script>
-        <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/smk-accordion.js' %}"> </script>
-        <script type="text/javascript" src="{% static 'shinelearn/js/common/plugins.ga.js' %}"></script>
-        <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/base.js' %}"> </script>
-        <script type="text/javascript" src="{% static 'shinelearn/js/common/common.js' %}"> </script>
-        <script type="text/javascript" src="{% static 'shinelearn/js/webmobile/webmobile.js' %}"> </script>
+{% compress js %}
+<!-- <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/jquery-ui.min.js' %}"> </script> -->
+<!-- <script type="text/javascript" src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"> </script> -->
 
-    <script src="{% static 'shinelearn/js/mobile/homepage/index.js' %}" type="text/javascript"></script>
-    <script defer type="text/javascript" src="{% static 'shinelearn/js/mobile/homepage/offer_timer.js' %}"></script>
-    <script defer type="text/javascript" src="{% static 'shinelearn/js/mobile/homepage/offer_validate.js' %}"></script>
-    {% endcompress %}
+<script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/jquery.simpler-sidebar.js' %}"> </script>
+<script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/multilevelnav.js' %}"></script>
+<script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/smk-accordion.js' %}"> </script>
+<script type="text/javascript" src="{% static 'shinelearn/js/common/plugins.ga.js' %}"></script>
+<script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/base.js' %}"> </script>
+<script type="text/javascript" src="{% static 'shinelearn/js/common/common.js' %}"> </script>
+<script type="text/javascript" src="{% static 'shinelearn/js/webmobile/webmobile.js' %}"> </script>
 
-    <script type="text/javascript">
-        var end_date_time = "{{end_date}}"
-    </script>
-    <script type="text/javascript">
-        var funcAreaSet = {{ func_area_set|safe }},
-            skillsSet = {{ skills_set|safe }},
-            prefetchedFuncArea = '{{ recmnd_func_area }}',
-            prefetchedSkills = '{{ recmnd_skills }}';
-    </script>
+<script src="{% static 'shinelearn/js/mobile/homepage/index.js' %}" type="text/javascript"></script>
+<script defer type="text/javascript" src="{% static 'shinelearn/js/mobile/homepage/offer_timer.js' %}"></script>
+<script defer type="text/javascript" src="{% static 'shinelearn/js/mobile/homepage/offer_validate.js' %}"></script>
+{% endcompress %}
+
+<script type="text/javascript">
+    var end_date_time = "{{end_date}}"
+</script>
+<script type="text/javascript">
+    var funcAreaSet = {{ func_area_set|safe }},
+    skillsSet = {{ skills_set|safe }},
+    prefetchedFuncArea = '{{ recmnd_func_area }}',
+    prefetchedSkills = '{{ recmnd_skills }}';
+</script>
 
 <script type="text/javascript">
     var shineApiUrl = "{{shine_api_url}}"
@@ -348,7 +350,7 @@
     var productTrackingMappingId = "{{product_tracking_mapping_id}}"
     var trackingId = "{{tracking_id}}"
     console.log({ trackingProductId, shineApiUrl, productTrackingMappingId, trackingId })
-    </script>
+</script>
 
 
 {% endblock js_section %}
