@@ -928,7 +928,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         tracking_id = request.GET.get('t_id', '')
         utm_campaign = request.GET.get('utm_campaign', '')
         trigger_point = request.GET.get('trigger_point', '')
-        u_id = request.GET.get('u_id', '')
+        u_id = request.GET.get('u_id', request.session.get('u_id',''))
         position = self.request.GET.get('position', '')
         if self.request.GET.get('lc') and self.request.session.get('candidate_id'):
             if not kwargs.get('pk', ''):

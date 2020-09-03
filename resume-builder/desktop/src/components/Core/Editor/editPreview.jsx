@@ -32,7 +32,7 @@ import { siteDomain } from '../../../Utils/domains'
 import { storeTrackingInfo, isTrackingInfoAvailable, getTrackingInfo } from '../../../Utils/common';
 import { trackUser } from '../../../store/tracking/actions/index';
 import propTypes from 'prop-types';
-import {Helmet} from "react-helmet";
+import { Helmet } from "react-helmet";
 // import * as lscache from '../../../../node_modules/lscache/lscache';
 
 
@@ -53,28 +53,34 @@ class EditPreview extends Component {
     sendTrackingInfo(action, pos) {
         if (isTrackingInfoAvailable()) {
             const { trackingId, productTrackingMappingId, productId,
-                triggerPoint, uId, position, utmCampaign } = getTrackingInfo();
-            const {userTrack} = this.props;
-            userTrack({ trackingId, productTrackingMappingId, productId, action, position,
-                triggerPoint, uId, utmCampaign });
+                triggerPoint, uId, utmCampaign } = getTrackingInfo();
+            const { userTrack } = this.props;
+            let { position } = getTrackingInfo()
+            if (position === "") {
+                position = pos;
+            }
+            userTrack({
+                trackingId, productTrackingMappingId, productId, action, position,
+                triggerPoint, uId, utmCampaign
+            });
         }
     }
 
     async componentDidMount() {
 
         const queryString = new URLSearchParams(this.props.location.search);
-        const trackingId = queryString.get('t_id')
-        const triggerPoint = queryString.get('trigger_point')
-        const uId = queryString.get('u_id')
-        const position = queryString.get('position')
-        const utmCampaign = queryString.get('utm_campaign')
+        const trackingId = queryString.get('t_id') || ''
+        const triggerPoint = queryString.get('trigger_point') || ''
+        const uId = queryString.get('u_id') ||  localStorage.getItem("candidateId") || ''
+        const position = queryString.get('position') || ''
+        const utmCampaign = queryString.get('utm_campaign') || ''
 
-        if(trackingId !== null){
+        if (!!trackingId) {
             const productTrackingMappingId = '11'
             storeTrackingInfo(trackingId, productTrackingMappingId, '',
-            triggerPoint,uId,position,utmCampaign)
+                triggerPoint, uId, position, utmCampaign)
         }
-      
+
         // check if the userexperinece is greater or equal to 4 years. (7 is the pid for 4 years (mapping done here))
         if (parseInt(localStorage.getItem('userExperience') || 0) >= 7) {
             if (typeof document !== 'undefined' && document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]) {
@@ -86,17 +92,17 @@ class EditPreview extends Component {
                 document.getElementsByClassName('chat-bot')[0].style.display = 'block';
             }
         }
-        
-        
+
+
         const { analytics: { locationPath }, fetchEntityInfo, getChatBot, history: { location: { pathname } }, locationRouteChange, loginCandidate } = this.props
         if (!localStorage.getItem('candidateId')) {
             await loginCandidate()
         }
-        
+
         fetchEntityInfo();
         await getChatBot();
-        
-        
+
+
         // get userInfo from LocalStorage
         if (localStorage.getItem('email')) window['email'] = localStorage.getItem('email')
         else window['email'] = ''
@@ -104,17 +110,17 @@ class EditPreview extends Component {
         else window['mobile'] = ''
         if (localStorage.getItem('name')) window['name'] = localStorage.getItem('name')
         else window['name'] = ''
-        
-        
+
+
         if (localStorage.getItem('personalInfo')) {
             localStorage.setItem('newUser', true)
         }
     }
-    
+
     static getActions() {
         return [getComponentTitle]
     }
-    
+
     static async fetching({ dispatch }, params) {
         const actionList = EditPreview.getActions()
         const results = [];
@@ -123,21 +129,21 @@ class EditPreview extends Component {
         }
         return results;
     }
-    
-    
+
+
     removeNote() {
         localStorage.setItem('showNote', 'false')
         this.setState({
             visibleNote: false
         })
     }
-    
+
     allowUploadResume() {
         let { userInfo: { upload_resume: uploadResume }, userInfo, updateSelectedTemplate } = this.props;
         userInfo['upload_resume'] = !uploadResume
         updateSelectedTemplate(userInfo)
     }
-    
+
     generateResumeAlert() {
         const { userInfo: { order_data, resume_generated }, previewButtonClicked, history, showGenerateResumeModal, reGeneratePDF, hideGenerateResumeModal } = this.props;
         if (order_data && order_data.id && (localStorage.getItem('subscriptionActive') && localStorage.getItem('subscriptionActive') === 'true' ? true : false)) {
@@ -149,7 +155,7 @@ class EditPreview extends Component {
                     },
                     buttonsStyling: false
                 })
-                
+
                 swalWithBootstrapButtons.fire({
                     title: 'Are you sure?',
                     text: "You won't be able to change your template again.",
@@ -177,28 +183,28 @@ class EditPreview extends Component {
                     hideGenerateResumeModal()
                 }, 5000);
             }
-            
+
         } else {
             history.push('/resume-builder/buy')
         }
     }
-    
+
     render() {
         const { ui: { loader, alertModal, generateResumeModal }, reorderSection, fetchDefaultCustomization,
-        customizeTemplate, previewButtonClicked, template: { entity_position, entity_id_count_mapping, heading_font_size, color, text_font_size },
-        eventClicked, showSelectTemplateModal, showAlertModal,
-        userInfo: { first_name, last_name, number, email, upload_resume: uploadResume, selected_template, order_data, resume_generated },
-        history: { location: { pathname } } } = this.props;
-        
+            customizeTemplate, previewButtonClicked, template: { entity_position, entity_id_count_mapping, heading_font_size, color, text_font_size },
+            eventClicked, showSelectTemplateModal, showAlertModal,
+            userInfo: { first_name, last_name, number, email, upload_resume: uploadResume, selected_template, order_data, resume_generated },
+            history: { location: { pathname } } } = this.props;
+
         const showNote = localStorage.getItem('showNote') || '';
         const { visibleNote } = this.state;
         return (
             <div>
-                 <Helmet
-                 script={[
-                     {"src": (localStorage.getItem('script_link') ? localStorage.getItem('script_link') : null), "type": "text/javascript"}
-                 ]}
-                 />
+                <Helmet
+                    script={[
+                        { "src": (localStorage.getItem('script_link') ? localStorage.getItem('script_link') : null), "type": "text/javascript" }
+                    ]}
+                />
                 {
                     !!(loader) &&
                     <LoaderPage />
@@ -209,7 +215,7 @@ class EditPreview extends Component {
                     number={number}
                     email={email}
                     location={this.props.location}
-                    
+
                 />
                 <div className="page-container">
                     <SelectTemplateModal
@@ -224,7 +230,7 @@ class EditPreview extends Component {
                     />
                     <section className={'flex-container mt-30'}>
                         <LeftSideBar
-                            sendTrackingInfo = {this.sendTrackingInfo}
+                            sendTrackingInfo={this.sendTrackingInfo}
                             showAlertModal={showAlertModal}
                             eventClicked={eventClicked}
                             customizeTemplate={customizeTemplate}
@@ -240,7 +246,7 @@ class EditPreview extends Component {
                         />
 
                         <RightSection
-                            sendTrackingInfo = {this.sendTrackingInfo}
+                            sendTrackingInfo={this.sendTrackingInfo}
                             eventClicked={eventClicked}
                             generateResumeAlert={this.generateResumeAlert}
                         />
@@ -266,186 +272,185 @@ class EditPreview extends Component {
                     }
                 </div>
 
-                <Footer 
-                sendTrackingInfo = {this.sendTrackingInfo}/>
+                <Footer
+                    sendTrackingInfo={this.sendTrackingInfo} />
 
             </div>
-            )
-        }
-        
+        )
     }
 
-    EditPreview.propTypes = {
+}
+
+EditPreview.propTypes = {
+    location: propTypes.shape({
+        hash: propTypes.string,
+        pathname: propTypes.string,
+        search: propTypes.string,
+        state: undefined
+    }),
+    match: propTypes.shape({
+        isExact: propTypes.bool,
+        params: propTypes.object,
+        path: propTypes.string,
+        url: propTypes.string
+    }),
+    userInfo: propTypes.shape({
+        active_subscription: propTypes.bool,
+        candidate_id: propTypes.string,
+        date_of_birth: propTypes.string,
+        email: propTypes.string,
+        entity_preference_data: propTypes.array,
+        extra_info: propTypes.string,
+        extracurricular: propTypes.array,
+        first_name: propTypes.string,
+        free_resume_downloads: propTypes.number,
+        gender: propTypes.object,
+        id: propTypes.number,
+        image: propTypes.string,
+        interest_list: propTypes.array,
+        last_name: propTypes.string,
+        location: propTypes.string,
+        number: propTypes.string,
+        selected_template: propTypes.string,
+    }),
+    analytics: propTypes.shape({
+        locationPath: propTypes.string
+    }),
+    fetchEntityInfo: propTypes.func,
+    history: propTypes.shape({
+        action: propTypes.string,
+        block: propTypes.func,
+        createHref: propTypes.func,
+        go: propTypes.func,
+        goBack: propTypes.func,
+        goForward: propTypes.func,
+        length: propTypes.number,
+        listen: propTypes.func,
         location: propTypes.shape({
             hash: propTypes.string,
             pathname: propTypes.string,
             search: propTypes.string,
             state: undefined
         }),
-        match: propTypes.shape({
-            isExact: propTypes.bool,
-            params: propTypes.object,
-            path: propTypes.string,
-            url: propTypes.string
-        }),
-        userInfo: propTypes.shape({
-            active_subscription: propTypes.bool,
-            candidate_id: propTypes.string,
-            date_of_birth: propTypes.string,
-            email: propTypes.string,
-            entity_preference_data: propTypes.array,
-            extra_info: propTypes.string,
-            extracurricular: propTypes.array,
-            first_name: propTypes.string,
-            free_resume_downloads: propTypes.number,
-            gender: propTypes.object,
-            id: propTypes.number,
-            image: propTypes.string,
-            interest_list: propTypes.array,
-            last_name: propTypes.string,
-            location: propTypes.string,
-            number: propTypes.string,
-            selected_template: propTypes.string,
-        }),
-        analytics: propTypes.shape({
-            locationPath: propTypes.string
-        }),
-        fetchEntityInfo: propTypes.func,
-        history: propTypes.shape({
-            action: propTypes.string,
-            block: propTypes.func,
-            createHref: propTypes.func,
-            go: propTypes.func,
-            goBack: propTypes.func,
-            goForward: propTypes.func,
-            length: propTypes.number,
-            listen: propTypes.func,
-            location: propTypes.shape({
-                hash: propTypes.string,
-                pathname: propTypes.string,
-                search: propTypes.string,
-                state: undefined
-            }),
-            push: propTypes.func,
-            replace: propTypes.func, 
-        }),
-        locationRouteChange: propTypes.func,
-        loginCandidate: propTypes.func,
-        previewButtonClicked: propTypes.func,
-        updateSelectedTemplate: propTypes.func,
-        showGenerateResumeModal: propTypes.func,
-        reGeneratePDF: propTypes.func,
-        hideGenerateResumeModal: propTypes.func,
-        template: propTypes.shape({
-            candidate: propTypes.number,
-            candidate_id: propTypes.string,
-            color: propTypes.number,
-            entity_id_count_mapping: propTypes.object,
-            entity_position: propTypes.string,
-            heading_font_size: propTypes.number,
-            html: propTypes.string,
-            id: propTypes.number,
-            modalTemplateImage: propTypes.string,
-            template: propTypes.number,
-            templateId: propTypes.number,
-            templateImage: propTypes.string,
-            templateToPreview: propTypes.string,
-            template_no: propTypes.number,
-            text_font_size: propTypes.number,
-            thumbnailImages: propTypes.array
-        })
+        push: propTypes.func,
+        replace: propTypes.func,
+    }),
+    locationRouteChange: propTypes.func,
+    loginCandidate: propTypes.func,
+    previewButtonClicked: propTypes.func,
+    updateSelectedTemplate: propTypes.func,
+    showGenerateResumeModal: propTypes.func,
+    reGeneratePDF: propTypes.func,
+    hideGenerateResumeModal: propTypes.func,
+    template: propTypes.shape({
+        candidate: propTypes.number,
+        candidate_id: propTypes.string,
+        color: propTypes.number,
+        entity_id_count_mapping: propTypes.object,
+        entity_position: propTypes.string,
+        heading_font_size: propTypes.number,
+        html: propTypes.string,
+        id: propTypes.number,
+        modalTemplateImage: propTypes.string,
+        template: propTypes.number,
+        templateId: propTypes.number,
+        templateImage: propTypes.string,
+        templateToPreview: propTypes.string,
+        template_no: propTypes.number,
+        text_font_size: propTypes.number,
+        thumbnailImages: propTypes.array
+    })
+}
+
+const mapStateToProps = (state) => {
+    return {
+        ui: state.ui,
+        userInfo: state.personalInfo,
+        template: state.template,
+        analytics: state.analytics
     }
-    
-    const mapStateToProps = (state) => {
-        return {
-            ui: state.ui,
-            userInfo: state.personalInfo,
-            template: state.template,
-            analytics: state.analytics
-        }
-    }
-    
-    const mapDispatchToProps = (dispatch) => {
-        return {
-            "fetchEntityInfo": () => {
-                return new Promise((resolve, reject) => {
-                    return dispatch(fetchPersonalInfo())
-                })
-                
-            },
-            "getChatBot": () => {
-                return new Promise((resolve, reject) => {
-                    return dispatch(getChatBotUrl())
-                })
-            },
-            "showSelectTemplateModal": () => {
-                return dispatch(actions.showSelectTemplateModal())
-            },
-            "hideSelectTemplateModal": () => {
-                return dispatch(actions.hideSelectTemplateModal())
-            },
-            
-            "customizeTemplate": (data) => {
-                return dispatch(customizeTemplate(data))
-            },
-            "fetchDefaultCustomization": (templateId) => {
-                return new Promise((resolve, reject) => {
-                    return dispatch(fetchDefaultCustomization({ templateId, resolve, reject }))
-                })
-            },
-            "updateSelectedTemplate": (personalDetails) => {
-                const { gender, date_of_birth, extracurricular } = personalDetails;
-                personalDetails = {
-                    ...personalDetails,
-                    ...{
-                        'date_of_birth': (date_of_birth && moment(date_of_birth).format('YYYY-MM-DD')) || '',
-                        'gender': (gender && gender['value']) || '',
-                        'extracurricular': extracurricular instanceof Array ?
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        "fetchEntityInfo": () => {
+            return new Promise((resolve, reject) => {
+                return dispatch(fetchPersonalInfo())
+            })
+
+        },
+        "getChatBot": () => {
+            return new Promise((resolve, reject) => {
+                return dispatch(getChatBotUrl())
+            })
+        },
+        "showSelectTemplateModal": () => {
+            return dispatch(actions.showSelectTemplateModal())
+        },
+        "hideSelectTemplateModal": () => {
+            return dispatch(actions.hideSelectTemplateModal())
+        },
+
+        "customizeTemplate": (data) => {
+            return dispatch(customizeTemplate(data))
+        },
+        "fetchDefaultCustomization": (templateId) => {
+            return new Promise((resolve, reject) => {
+                return dispatch(fetchDefaultCustomization({ templateId, resolve, reject }))
+            })
+        },
+        "updateSelectedTemplate": (personalDetails) => {
+            const { gender, date_of_birth, extracurricular } = personalDetails;
+            personalDetails = {
+                ...personalDetails,
+                ...{
+                    'date_of_birth': (date_of_birth && moment(date_of_birth).format('YYYY-MM-DD')) || '',
+                    'gender': (gender && gender['value']) || '',
+                    'extracurricular': extracurricular instanceof Array ?
                         (extracurricular || []).map(el => el.value).join(',') : extracurricular
-                    }
                 }
-                return new Promise((resolve, reject) => {
-                    dispatch(updatePersonalInfo({ personalDetails, resolve, reject }));
-                })
-            },
-            "reorderSection": (payload) => {
-                return dispatch(reorderSection(payload))
-            },
-            'showAlertModal': (alertType) => {
-                return dispatch(showAlertModal(alertType))
-            },
-            'hideAlertModal': () => {
-                return dispatch(hideAlertModal())
-            },
-            'previewButtonClicked': (data) => {
-                return dispatch(previewButtonClicked(data))
-            },
-            'reGeneratePDF': (data) => {
-                return dispatch(reGeneratePDF(data))
-            },
-            'showGenerateResumeModal': () => {
-                return dispatch(showGenerateResumeModal())
-            },
-            'hideGenerateResumeModal': () => {
-                return dispatch(hideGenerateResumeModal())
-            },
-            'locationRouteChange': (path) => {
-                return dispatch(locationRouteChange(path))
-            },
-            'eventClicked': (data) => {
-                return dispatch(eventClicked(data))
-            },
-            "loginCandidate": (token = '') => {
-                return new Promise((resolve, reject) => {
-                    dispatch(loginCandidate({ info: { alt: '' }, resolve, reject, isTokenAvail: false }))
-                })
-            },
-            "userTrack": (data) =>  {
-                return  dispatch(trackUser(data))
-              },
-        }
+            }
+            return new Promise((resolve, reject) => {
+                dispatch(updatePersonalInfo({ personalDetails, resolve, reject }));
+            })
+        },
+        "reorderSection": (payload) => {
+            return dispatch(reorderSection(payload))
+        },
+        'showAlertModal': (alertType) => {
+            return dispatch(showAlertModal(alertType))
+        },
+        'hideAlertModal': () => {
+            return dispatch(hideAlertModal())
+        },
+        'previewButtonClicked': (data) => {
+            return dispatch(previewButtonClicked(data))
+        },
+        'reGeneratePDF': (data) => {
+            return dispatch(reGeneratePDF(data))
+        },
+        'showGenerateResumeModal': () => {
+            return dispatch(showGenerateResumeModal())
+        },
+        'hideGenerateResumeModal': () => {
+            return dispatch(hideGenerateResumeModal())
+        },
+        'locationRouteChange': (path) => {
+            return dispatch(locationRouteChange(path))
+        },
+        'eventClicked': (data) => {
+            return dispatch(eventClicked(data))
+        },
+        "loginCandidate": (token = '') => {
+            return new Promise((resolve, reject) => {
+                dispatch(loginCandidate({ info: { alt: '' }, resolve, reject, isTokenAvail: false }))
+            })
+        },
+        "userTrack": (data) => {
+            return dispatch(trackUser(data))
+        },
     }
-    
-    export default withRouter(connect(mapStateToProps, mapDispatchToProps)(EditPreview))
-    
-    
+}
+
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(EditPreview))
+

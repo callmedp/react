@@ -175,6 +175,12 @@ class RemoveFromCartView(View, CartMixin):
                 del self.request.session['tracking_product_id']
             if product_availability:
                 del self.request.session['product_availability']
+            if trigger_point:
+                del self.request.session['trigger_point']
+            if position:
+                del self.request.session['position']
+            if utm_campaign:
+                del self.request.session['utm_campaign']
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax():
@@ -674,7 +680,7 @@ class PaymentSummaryView(TemplateView, CartMixin):
         tracking_id = request.GET.get('t_id', '')
         utm_campaign = request.GET.get('utm_campaign', '')
         trigger_point = request.GET.get('trigger_point', '')
-        u_id = request.GET.get('u_id', '')
+        u_id = request.GET.get('u_id', request.session.get('u_id',''))
         position = request.GET.get('position', '')
 
         valid = False
@@ -722,12 +728,21 @@ class PaymentSummaryView(TemplateView, CartMixin):
                             {'product_tracking_mapping_id': product_tracking_mapping_id})
 
         if tracking_id:
-            request.session.update({'tracking_id': tracking_id})
+            request.session.update({
+                'tracking_id': tracking_id,
+                'trigger_point': trigger_point,
+                'position': position,
+                'u_id': u_id,
+                'utm_campaign': utm_campaign})
         
         tracking_id= request.session.get('tracking_id','')
         tracking_product_id= request.session.get('tracking_product_id','')
         product_availability = request.session.get('product_availability','')
         product_tracking_mapping_id= request.session.get('product_tracking_mapping_id','')
+        trigger_point= request.session.get('trigger_point','')
+        position= request.session.get('position','')
+        u_id= request.session.get('u_id','')
+        utm_campaign= request.session.get('utm_campaign','')
 
         if tracking_id and tracking_product_id and product_tracking_mapping_id and product_availability:
             make_logging_request.delay(

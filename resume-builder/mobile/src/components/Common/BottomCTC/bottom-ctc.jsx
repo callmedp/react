@@ -16,8 +16,12 @@ class BottomCTC extends Component {
     sendTrackingInfo(action, pos) {
         if (isTrackingInfoAvailable()) {
             const { trackingId, productTrackingMappingId, productId,
-                triggerPoint, uId, position, utmCampaign } = getTrackingInfo();
+                triggerPoint, uId, utmCampaign } = getTrackingInfo();
             const {userTrack} = this.props;
+            let { position } = getTrackingInfo() 
+            if(position === ""){
+                position = pos;
+            }
             userTrack({ trackingId, productTrackingMappingId, productId, action, position,
                 triggerPoint, uId, utmCampaign });
         }

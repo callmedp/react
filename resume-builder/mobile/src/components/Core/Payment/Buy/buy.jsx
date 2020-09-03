@@ -65,7 +65,7 @@ class Buy extends Component {
             "cart_type": 'cart'
         }
         storeProduct(product.id)
-        this.sendTrackingInfo('enroll_now', 1, product.id)
+        this.sendTrackingInfo('enroll_now', 1)
         this.props.addToCart(data);
     }
 
@@ -189,8 +189,12 @@ class Buy extends Component {
     sendTrackingInfo(action, pos) {
         if (isTrackingInfoAvailable()) {
             const { trackingId, productTrackingMappingId, productId,
-                triggerPoint, uId, position, utmCampaign } = getTrackingInfo();
+                triggerPoint, uId, utmCampaign } = getTrackingInfo();
             const { userTrack } = this.props;
+            let { position } = getTrackingInfo() 
+            if(position === ""){
+                position = pos;
+            }
             userTrack({
                 trackingId, productTrackingMappingId, productId, action, position,
                 triggerPoint, uId, utmCampaign
