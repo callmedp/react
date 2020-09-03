@@ -275,19 +275,19 @@ $(".input-effect input").focusout(function () {
     }
 })
 
-const makeTrackingRequest = (loggingData) => {
+// const makeTrackingRequest = (loggingData) => {
 
-    $.ajax({
-        method: "POST",
-        url: `${shineApiUrl}/learning-touchpoints-tracking/`,
-        data: JSON.stringify(loggingData),
-        contentType: "application/json",
-    })
-}
+//     $.ajax({
+//         method: "POST",
+//         url: `${shineApiUrl}/learning-touchpoints-tracking/`,
+//         data: JSON.stringify(loggingData),
+//         contentType: "application/json",
+//     })
+// }
 
-const trackEvent = (action) => {
-    let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: action, 'position': 1, domain: 2, sub_product: trackingProductId };
-    if (trackingId) {
-        makeTrackingRequest(loggingData);
-    }
-}
+// const trackEvent = (action) => {
+//     let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: action, 'position': 1, domain: 2, sub_product: trackingProductId };
+//     if (trackingId) {
+//         makeTrackingRequest(loggingData);
+//     }
+// }
