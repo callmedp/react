@@ -155,7 +155,7 @@ def lead_creation_function(filter_dict=None, cndi_name=None):
 def cart_drop_out_mail(pk=None, cnd_email=None, mail_type=None, name=None, 
     tracking_id="", u_id="", tracking_product_id="", 
     product_tracking_mapping_id="", trigger_point="", 
-    position="", utm_campaign=""):
+    position=-1, utm_campaign=""):
     mail_type = 'CART_DROP_OUT' if not mail_type else mail_type
     cart_objs = Cart.objects.filter(
         status=2,
@@ -236,8 +236,7 @@ def cart_drop_out_mail(pk=None, cnd_email=None, mail_type=None, name=None,
                             'exit_cart_mail_sent', position, trigger_point, u_id, utm_campaign )
 
                 token = AutoLogin().encode(toemail, cart_id, days=None)
-                data['autologin'] = "{}://{}/cart/payment-summary/?t_id={}&token={}\
-                    &utm_campaign=learning_exit_mailer&trigger_point={}&u_id={}&position={}&emailer=1&t_prod_id={}&prod_t_m_id={}".format(
+                data['autologin'] = "{}://{}/cart/payment-summary/?t_id={}&token={}&utm_campaign=learning_exit_mailer&trigger_point={}&u_id={}&position={}&emailer=1&t_prod_id={}&prod_t_m_id={}".format(
                     settings.SITE_PROTOCOL, settings.SITE_DOMAIN,tracking_id, token,trigger_point, 
                     u_id, position, tracking_product_id, product_tracking_mapping_id
                     )
@@ -256,7 +255,7 @@ def cart_drop_out_mail(pk=None, cnd_email=None, mail_type=None, name=None,
 def cart_product_removed_mail(product_id= None, tracking_id="", 
         u_id=None, email=None, name=None, tracking_product_id="", 
         product_tracking_mapping_id="", trigger_point="", 
-        position="", utm_campaign=""):
+        position=-1, utm_campaign=""):
     try:
         name = name if name else "Candidate"
         if not email and not u_id:
@@ -288,8 +287,7 @@ def cart_product_removed_mail(product_id= None, tracking_id="",
             prod.heading)
 
         token = AutoLogin().encode(email, u_id, days=None)
-        data['autologin'] = "{}://{}/cart/payment-summary/?prod_id={}&t_id={}&token={}&\
-        utm_campaign=learning_remove_product_mailer&trigger_point={}&u_id={}&position={}&email=1".format(
+        data['autologin'] = "{}://{}/cart/payment-summary/?prod_id={}&t_id={}&token={}&utm_campaign=learning_remove_product_mailer&trigger_point={}&u_id={}&position={}&email=1".format(
             settings.SITE_PROTOCOL, settings.SITE_DOMAIN, product_id, tracking_id, token, trigger_point, u_id, position)
 
         email_list_spent.append(email)

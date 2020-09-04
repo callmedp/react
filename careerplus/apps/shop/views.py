@@ -929,7 +929,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         utm_campaign = request.GET.get('utm_campaign', '')
         trigger_point = request.GET.get('trigger_point', '')
         u_id = request.GET.get('u_id', '')
-        position = self.request.GET.get('position', '')
+        position = self.request.GET.get('position', -1)
         if self.request.GET.get('lc') and self.request.session.get('candidate_id'):
             if not kwargs.get('pk', ''):
                 return

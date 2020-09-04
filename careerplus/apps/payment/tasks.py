@@ -61,6 +61,15 @@ def make_logging_request(tracking_product_id, product_tracking_mapping_id, track
     try:
         resp = requests.post(
             url_to_hit, data=json.dumps(req_dict), headers=headers)
+        if resp:
+            logging.getLogger('info_log').info(
+                "send tracking data {}".format(req_dict))
+        elif not resp:
+            logging.getLogger('error_log').error(
+                "unable to send tracking data {}".format(req_dict))
+        elif resp.status_code != 200:
+            logging.getLogger('error_log').error(
+                "Wrong values were sent {}".format(req_dict))
     except Exception as e:
         logging.getLogger('error_log').error(
             'thank you logging request failed.  %s' % str(e))

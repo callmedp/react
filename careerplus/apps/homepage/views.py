@@ -37,7 +37,7 @@ class HomePageView(TemplateView, MetadataMixin):
         utm_campaign = self.request.GET.get('utm_campaign', '')
         trigger_point = self.request.GET.get('trigger_point', '')
         u_id = self.request.GET.get('u_id', '')
-        position = self.request.GET.get('position', '')
+        position = self.request.GET.get('position', -1)
         if tracking_id and self.request.session.get('candidate_id'):
             self.request.session.update({
                 'tracking_id': tracking_id,

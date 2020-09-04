@@ -694,7 +694,7 @@ class PaymentSummaryView(TemplateView, CartMixin):
         utm_campaign = request.GET.get('utm_campaign', '')
         trigger_point = request.GET.get('trigger_point', '')
         u_id = request.GET.get('u_id', '')
-        position = request.GET.get('position', '')
+        position = request.GET.get('position', -1)
         emailer = request.GET.get('emailer', '')
         tracking_product_id = request.GET.get('t_prod_id', '')
         product_tracking_mapping_id = request.GET.get('prod_t_m_id', '')
