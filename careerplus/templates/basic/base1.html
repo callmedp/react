@@ -2,254 +2,257 @@
 {% spaceless %}
 <!DOCTYPE html>
 <html lang="en" itemscope itemtype="http://www.schema.org/WebPage">
-  {% block head %}
-    <head>
-             <!-- Google Tag Manager -->
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-TFD6PTW');</script>
-
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-M323HB');</script>
-<!-- End Google Tag Manager -->
-
-    <title> {% block title %}Shine Learning{% endblock title %}</title>
-    {% block meta_html %}
-        <meta charset="utf-8">
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="shortcut icon" href="{% static 'shinelearn/images/fav_icon.png' %}">
-    {% endblock meta_html %}
-    {% block django_meta %}
-    {% endblock django_meta %}
-    {% block canonical_url %}
-      <link rel="canonical" href="https://{{ SITE_DOMAIN }}{{ request.path }}">
-    {% endblock canonical_url %}
-    
-    {% block css_section %}
-        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet">
-        {% compress css %}
-        <link type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/common/bootstrap.scss' %}" rel="stylesheet">
-        <link type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/common/header-footer.scss' %}" rel="stylesheet">
-        <link type="text/css" href="{% static 'shinelearn/css/common/typeaheadjs.css' %}" rel="stylesheet">
-        <link href="{% static 'console/css/custom-icon.scss' %}" rel="stylesheet" type="text/scss">
-        {% endcompress %}
-    {% endblock css_section %}
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE]>
-      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+{% block head %}
+<head>
+  <!-- Google Tag Manager -->
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-TFD6PTW');</script>
+  
+  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+  })(window,document,'script','dataLayer','GTM-M323HB');</script>
+  <!-- End Google Tag Manager -->
+  
+  <title> {% block title %}Shine Learning{% endblock title %}</title>
+  {% block meta_html %}
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="shortcut icon" href="{% static 'shinelearn/images/fav_icon.png' %}">
+  {% endblock meta_html %}
+  {% block django_meta %}
+  {% endblock django_meta %}
+  {% block canonical_url %}
+  <link rel="canonical" href="https://{{ SITE_DOMAIN }}{{ request.path }}">
+  {% endblock canonical_url %}
+  
+  {% block css_section %}
+  <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+  {% compress css %}
+  <link type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/common/bootstrap.scss' %}" rel="stylesheet">
+  <link type="text/scss" charset="utf-8" href="{% static 'shinelearn/css/common/header-footer.scss' %}" rel="stylesheet">
+  <link type="text/css" href="{% static 'shinelearn/css/common/typeaheadjs.css' %}" rel="stylesheet">
+  <link href="{% static 'console/css/custom-icon.scss' %}" rel="stylesheet" type="text/scss">
+  {% endcompress %}
+  {% endblock css_section %}
+  
+  <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+  <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+  <!--[if lt IE]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-        {% block GA %}
-             <!--Global site tag (gtag.js) - Google Analytics-->
-            <script async src="https://www.googletagmanager.com/gtag/js?id=UA-3537905-41"></script>
-            <script>
-              window.dataLayer = window.dataLayer || [];
-              function gtag(){dataLayer.push(arguments);}
-              gtag('js', new Date());
-              {% if request.GET.itm_source or request.GET.itm_medium or request.GET.itm_campaign or request.GET.itm_content %}
-                gtag('config', 'UA-3537905-41' ,{'dimension1': '{{request.GET.itm_source}}','dimension2' : '{{request.GET.itm_medium}}','dimension3':  '{{request.GET.itm_campaign}}','dimension4':'{{request.GET.itm_content}}' });
-              {% else%}
-                gtag('config', 'UA-3537905-41');
-              {%endif%}
-
-              gtag('config', 'UA-3537905-1',{'group':'mainProfile'});
-            </script>
-
-
-
-
-        {% endblock GA %}
+    {% block GA %}
+    <!--Global site tag (gtag.js) - Google Analytics-->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-3537905-41"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      {% if request.GET.itm_source or request.GET.itm_medium or request.GET.itm_campaign or request.GET.itm_content %}
+      gtag('config', 'UA-3537905-41' ,{'dimension1': '{{request.GET.itm_source}}','dimension2' : '{{request.GET.itm_medium}}','dimension3':  '{{request.GET.itm_campaign}}','dimension4':'{{request.GET.itm_content}}' });
+      {% else%}
+      gtag('config', 'UA-3537905-41');
+      {%endif%}
+      
+      gtag('config', 'UA-3537905-1',{'group':'mainProfile'});
+    </script>
+    
+    
+    
+    
+    {% endblock GA %}
     {% block banner_ads %}
-        <script async='async' src='https://www.googletagservices.com/tag/js/gpt.js'></script>
-        <script>
-        var googletag = googletag || {};
-        googletag.cmd = googletag.cmd || [];
-        </script>
-
-        <script>
-        googletag.cmd.push(function() {
+    <script async='async' src='https://www.googletagservices.com/tag/js/gpt.js'></script>
+    <script>
+      var googletag = googletag || {};
+      googletag.cmd = googletag.cmd || [];
+    </script>
+    
+    <script>
+      googletag.cmd.push(function() {
         googletag.defineSlot('/1198510/ShineLearning_1x1_desktop', [1, 1], 'div-gpt-ad-1509431221932-0').addService(googletag.pubads());
         googletag.pubads().enableSingleRequest();
         googletag.enableServices();
-        });
-        </script>
+      });
+    </script>
     {% endblock banner_ads %}
-   {{ JS_SETTINGS|safe }}
-        {% block marketing_pixel %}
-            <!--&lt;!&ndash; Google Tag Manager &ndash;&gt;  Commented out till https issue resolved.-->
-            <!--<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':-->
-            <!--new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],-->
-            <!--j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=-->
-            <!--'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);-->
-            <!--})(window,document,'script','dataLayer','GTM-M323HB');</script>-->
-            <!-- End Google Tag Manager -->
-        {% endblock marketing_pixel %}
-
-   </head>
-  
-  {% endblock head %}
-  
-<body>
-<!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-TFD6PTW"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-
-<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-M323HB"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
-
-<!-- End Google Tag Manager (noscript) -->
-
-    {% block navigation %}
-      <!-- navigation bar -->
-
-      {% include 'basic/navigation.html' %}
-  
-    {% endblock navigation %}
-
-    <!-- main section start -->
-    {% block main_container %}
-
-      <div id="id-detail-body">
+    {{ JS_SETTINGS|safe }}
+    {% block marketing_pixel %}
+    <!--&lt;!&ndash; Google Tag Manager &ndash;&gt;  Commented out till https issue resolved.-->
+    <!--<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':-->
+      <!--new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],-->
+      <!--j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=-->
+      <!--'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);-->
+      <!--})(window,document,'script','dataLayer','GTM-M323HB');</script>-->
+      <!-- End Google Tag Manager -->
+      {% endblock marketing_pixel %}
       
-        {% block page_heading %}
-          <!-- header -->
-          <header class="home-header">
-            <div class="container">
-              <div class="home-caption">
-                <h1>Get the right skills to <br>move ahead in your career</h1>
-                <strong>1 lakh happy learners | Over 400 courses</strong>
-              </div>
-
-              <div class="home-search-box search-mg">
-                <strong>Let’s find the right course for you</strong>
-                <form class="form-inline">
-                  <div class="form-group">
-                    <input class="form-control input1" name="query1" id="query1" placeholder="Functional area" type="text">
-                    <input class="form-control input2" name="query2" id="query2" placeholder="Key skills" type="text">
-                    <input class="form-control input3" name="query3" id="query3" placeholder="Experience" type="text">              
-                  </div>
-                  <button type="submit" class="find-jobs-btn btn">Find</button>
-                </form>
-              </div>
-
-            </div>
-          </header>
+    </head>
+    
+    {% endblock head %}
+    
+    <body>
+      <!-- Google Tag Manager (noscript) -->
+      <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-TFD6PTW"
+        height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         
-        {% endblock page_heading %}
-
-      </div>
-
-    {% endblock main_container %}
-
-    {% block footer %}
-      <!-- footer -->
-      {% include 'basic/footer.html' %}
-      
-    {% endblock footer %}
-
-    {% block marketingpopup%}
-      {% if marketing_popup_html %}
+        <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-M323HB"
+          height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+          <!-- End Google Tag Manager (noscript) -->
+          
+          <!-- End Google Tag Manager (noscript) -->
+          
+          {% block navigation %}
+          <!-- navigation bar -->
+          
+          {% include 'basic/navigation.html' %}
+          
+          {% endblock navigation %}
+          
+          <!-- main section start -->
+          {% block main_container %}
+          
+          <div id="id-detail-body">
+            
+            {% block page_heading %}
+            <!-- header -->
+            <header class="home-header">
+              <div class="container">
+                <div class="home-caption">
+                  <h1>Get the right skills to <br>move ahead in your career</h1>
+                  <strong>1 lakh happy learners | Over 400 courses</strong>
+                </div>
+                
+                <div class="home-search-box search-mg">
+                  <strong>Let’s find the right course for you</strong>
+                  <form class="form-inline">
+                    <div class="form-group">
+                      <input class="form-control input1" name="query1" id="query1" placeholder="Functional area" type="text">
+                      <input class="form-control input2" name="query2" id="query2" placeholder="Key skills" type="text">
+                      <input class="form-control input3" name="query3" id="query3" placeholder="Experience" type="text">              
+                    </div>
+                    <button type="submit" class="find-jobs-btn btn">Find</button>
+                  </form>
+                </div>
+                
+              </div>
+            </header>
+            
+            {% endblock page_heading %}
+            
+          </div>
+          
+          {% endblock main_container %}
+          
+          {% block footer %}
+          <!-- footer -->
+          {% include 'basic/footer.html' %}
+          
+          {% endblock footer %}
+          
+          {% block marketingpopup%}
+          {% if marketing_popup_html %}
           {% include marketing_popup_html %}
-      {% endif %}
-    {% endblock %}
-
-    {% block js_section %}
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.7/js/tether.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"> </script>
-    <!-- <script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"></script> -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.3.1/typeahead.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
-
-    {% compress js %}
-    <!-- <script src="{% static 'shinelearn/js/common/bootstrap.min.js' %}"></script> -->
-    <script src="{% static 'shinelearn/js/common/common.js' %}"> </script>
-    <script src="{% static 'shinelearn/js/common/plugins.ga.js' %}"></script>
-    <script src="{% static 'shinelearn/js/webmobile/webmobile.js' %}"> </script>
-    {% endcompress %}
-    <script>
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+          {% endif %}
+          {% endblock %}
+          
+          {% block js_section %}
+          <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.7/js/tether.min.js"></script>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"> </script>
+          <!-- <script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"></script> -->
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.3.1/typeahead.bundle.min.js"></script>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
+          
+          {% compress js %}
+          <!-- <script src="{% static 'shinelearn/js/common/bootstrap.min.js' %}"></script> -->
+          <script src="{% static 'shinelearn/js/common/common.js' %}"> </script>
+          <script src="{% static 'shinelearn/js/common/plugins.ga.js' %}"></script>
+          <script src="{% static 'shinelearn/js/webmobile/webmobile.js' %}"> </script>
+          {% endcompress %}
+          <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
               (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
               m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-              })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-        ga('create', 'UA-3537905-41', 'auto');
-
-        function gaEvent(event_cat,event_lab,event_action){
-          ga('send', 'event', event_cat, event_action, event_lab);
-        }
-
-        $('.nav-tabs > li > a').hover(function() {
-            $(this).tab('show');
-          });
-        $('.dropdown').hover(function(){
-            $('.dropdown-toggle', this).trigger('click');
-          });
-      {% if marketing_popup_html %}
-        setTimeout(function() {
-          $('.marketing-popup').modal();
-        }, 1000);
-      {% endif %}   
-    </script>
-
-    {% endblock js_section %}
-
-    <!-- {% block johukum %}
-    <script type='text/javascript' id='spd-busns-spt' async=''
-        src='https://cdn.joehukum.com/assets/share/js/joeChat.min.js'
-        data-client='324ed0abb0694b0c66a6daecb178352d'>
-    </script>
-    {% endblock johukum %} -->
-
-    {% block zendesk %}
-    <!--Start of Zendesk Chat Script-->
-      <script type="text/javascript">
-      window.$zopim||(function(d,s){var z=$zopim=function(c){z._.push(c)},$=z.s=
-      d.createElement(s),e=d.getElementsByTagName(s)[0];z.set=function(o){z.set.
-      _.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute("charset","utf-8");
-      $.src="https://v2.zopim.com/?5xDfzOy1OsJEYM1rLRdXyvsf3GOj6Qmb";z.t=+new Date;$.
-      type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
-
-         const candidateId = '{{ request.session.candidate_id}}';
-
-          if (candidateId) {
-              const full_name = '{{ request.session.full_name }}';
-              const  email ='{{ request.session.email }}';
-              const mobile_no = '{{ request.session.mobile_no }}';
-
-
-              $zopim(function () {
+            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+            ga('create', 'UA-3537905-41', 'auto');
+            
+            function gaEvent(event_cat,event_lab,event_action){
+              ga('send', 'event', event_cat, event_action, event_lab);
+            }
+            
+            $('.nav-tabs > li > a').hover(function() {
+              $(this).tab('show');
+            });
+            $('.dropdown').hover(function(){
+              $('.dropdown-toggle', this).trigger('click');
+            });
+            {% if marketing_popup_html %}
+            setTimeout(function() {
+              $('.marketing-popup').modal();
+            }, 1000);
+            {% endif %}   
+          </script>
+          
+          {% endblock js_section %}
+          
+          <!-- {% block johukum %}
+            <script type='text/javascript' id='spd-busns-spt' async=''
+            src='https://cdn.joehukum.com/assets/share/js/joeChat.min.js'
+            data-client='324ed0abb0694b0c66a6daecb178352d'>
+          </script>
+          {% endblock johukum %} -->
+          
+          {% block zendesk %}
+          <!--Start of Zendesk Chat Script-->
+          <script type="text/javascript">
+            window.$zopim||(function(d,s){var z=$zopim=function(c){z._.push(c)},$=z.s=
+            d.createElement(s),e=d.getElementsByTagName(s)[0];z.set=function(o){z.set.
+              _.push(o)};z._=[];z.set._=[];$.async=!0;$.setAttribute("charset","utf-8");
+              $.src="https://v2.zopim.com/?5xDfzOy1OsJEYM1rLRdXyvsf3GOj6Qmb";z.t=+new Date;$.
+              type="text/javascript";e.parentNode.insertBefore($,e)})(document,"script");
+              
+              const candidateId = '{{ request.session.candidate_id}}';
+              
+              if (candidateId) {
+                const full_name = '{{ request.session.full_name }}';
+                const  email ='{{ request.session.email }}';
+                const mobile_no = '{{ request.session.mobile_no }}';
+                
+                
+                $zopim(function () {
                   $zopim.livechat.set({
-                      language: 'en',
-                      name: full_name ? full_name : '',
-                      email: email ? email : '',
-                      phone: mobile_no ? mobile_no : ''
+                    language: 'en',
+                    name: full_name ? full_name : '',
+                    email: email ? email : '',
+                    phone: mobile_no ? mobile_no : ''
                   });
-              });
-          }
-      </script>
-      <!--End of Zendesk Chat Script-->
-    {% endblock zendesk %}
-
-{%comment%}
-    {% block banner_ads_bottom %}
-        <!-- /1198510/ShineLearning_1x1_desktop -->
-        <div id='div-gpt-ad-1509431221932-0'>
-        <script>
-        googletag.cmd.push(function() { googletag.display('div-gpt-ad-1509431221932-0'); });
-        </script>
-        </div>
-    {% endblock banner_ads_bottom %}
-    {%endcomment%}
-  </body>
-</html>
-{% endspaceless %}
+                });
+              }
+            </script>
+            <!--End of Zendesk Chat Script-->
+            {% endblock zendesk %}
+            
+            {%comment%}
+            {% block banner_ads_bottom %}
+            <!-- /1198510/ShineLearning_1x1_desktop -->
+            <div id='div-gpt-ad-1509431221932-0'>
+              <script>
+                googletag.cmd.push(function() { googletag.display('div-gpt-ad-1509431221932-0'); });
+              </script>
+            </div>
+            {% endblock banner_ads_bottom %}
+            {%endcomment%}
+          </body>
+          </html>
+          {% endspaceless %}
+          
