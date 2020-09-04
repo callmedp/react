@@ -865,7 +865,7 @@ class ResumeBuilderProductView(ListAPIView):
                 return product
 
         type_flow = self.request.query_params.get('type_flow')
-        product_list = list(Product.objects.filter(type_flow=type_flow, type_product=0, active=True, sub_type_flow=1701).values(
+        product_list = list(Product.objects.filter(type_flow=type_flow, type_product=0, active=True,is_indexed=True, sub_type_flow=1701).values(
             'id', 'name', 'inr_price', 'usd_price', 'aed_price', 'fake_inr_price', 'heading').order_by('inr_price'))
         product_list = map(modify_product, product_list)
 
