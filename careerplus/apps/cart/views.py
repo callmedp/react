@@ -158,7 +158,7 @@ class RemoveFromCartView(View, CartMixin):
         u_id = self.request.session.get(
             'u_id','')
         position = self.request.session.get(
-            'position','')
+            'position',1)
         utm_campaign = self.request.session.get(
             'utm_campaign','')
         if tracking_product_id == product_id and tracking_id:
@@ -681,7 +681,7 @@ class PaymentSummaryView(TemplateView, CartMixin):
         utm_campaign = request.GET.get('utm_campaign', '')
         trigger_point = request.GET.get('trigger_point', '')
         u_id = request.GET.get('u_id', request.session.get('u_id',''))
-        position = request.GET.get('position', '')
+        position = request.GET.get('position', 1)
 
         valid = False
         candidate_id = None
@@ -740,7 +740,7 @@ class PaymentSummaryView(TemplateView, CartMixin):
         product_availability = request.session.get('product_availability','')
         product_tracking_mapping_id= request.session.get('product_tracking_mapping_id','')
         trigger_point= request.session.get('trigger_point','')
-        position= request.session.get('position','')
+        position= request.session.get('position',1)
         u_id= request.session.get('u_id','')
         utm_campaign= request.session.get('utm_campaign','')
 

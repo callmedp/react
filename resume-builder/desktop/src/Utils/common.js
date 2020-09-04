@@ -27,7 +27,7 @@ export const getTrackingInfo = () => {
         "productId": localStorage.getItem("productId"),
         "triggerPoint": localStorage.getItem("triggerPoint"),
         "uId": localStorage.getItem("uId"),
-        "position": localStorage.getItem("position"),
+        "position": !!localStorage.getItem("position") ? parseInt(localStorage.getItem("position")): '',
         "utmCampaign": localStorage.getItem("utmCampaign")
     }
 }

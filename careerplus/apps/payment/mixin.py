@@ -173,7 +173,7 @@ class PaymentMixin(object):
             u_id = self.request.session.get(
                 'u_id','')
             position = self.request.session.get(
-                'position','')
+                'position',1)
             utm_campaign = self.request.session.get(
                 'utm_campaign','')
             

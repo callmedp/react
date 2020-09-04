@@ -10,7 +10,7 @@ const makeTrackingRequest = (loggingData) => {
 
 
 const trackClickEvent = () => {
-    let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'exit_cart', 'position': position, 
+    let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'exit_cart', 'position': parseInt(position), 
         domain: 2, sub_product: trackingProductId , trigger_point : triggerPoint, u_id : uId, utm_campaign : utmCampaign};
     if (trackingId && productAvailability) {
         makeTrackingRequest(loggingData);
@@ -23,7 +23,7 @@ $(document).ready(function () {
 
 
     $('#review-order-option').click(function () {
-        let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'review_order', 'position': position, domain: 2, sub_product: trackingProductId,
+        let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'review_order', 'position': parseInt(position), domain: 2, sub_product: trackingProductId,
             trigger_point : triggerPoint, u_id : uId, utm_campaign : utmCampaign };
         if (trackingId && productAvailability) {
             makeTrackingRequest(loggingData);
@@ -31,7 +31,7 @@ $(document).ready(function () {
     })
 
     $('#card-netbanking').click(function () {
-        let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'card_and_netbanking', 'position': position, domain: 2, 
+        let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'card_and_netbanking', 'position': parseInt(position), domain: 2, 
         sub_product: trackingProductId, trigger_point : triggerPoint, u_id : uId, utm_campaign : utmCampaign };
         if (trackingId && productAvailability) {
             makeTrackingRequest(loggingData);
@@ -84,7 +84,7 @@ $(document).ready(function () {
                 return;
             }
             let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'cheque_payment', 
-                'position': position, domain: 2, sub_product: trackingProductId, trigger_point : triggerPoint, u_id : uId, utm_campaign : utmCampaign };
+                'position': parseInt(position), domain: 2, sub_product: trackingProductId, trigger_point : triggerPoint, u_id : uId, utm_campaign : utmCampaign };
             if (trackingId && productAvailability) {
                 makeTrackingRequest(loggingData);
             }
@@ -97,7 +97,7 @@ $(document).ready(function () {
 
     $('#cash-option-submit').click(function () {
         let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'cash_payment',
-         'position': position, domain: 2, sub_product: trackingProductId, trigger_point : triggerPoint, u_id : uId, utm_campaign : utmCampaign };
+         'position': parseInt(position), domain: 2, sub_product: trackingProductId, trigger_point : triggerPoint, u_id : uId, utm_campaign : utmCampaign };
         if (trackingId && productAvailability) {
             makeTrackingRequest(loggingData);
         }
@@ -108,7 +108,7 @@ $(document).ready(function () {
 
     $('#buy-now-pay-later').click(function () {
         let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'buy_now_pay_later', 
-        'position': position, domain: 2, sub_product: trackingProductId, trigger_point : triggerPoint, u_id : uId, utm_campaign : utmCampaign };
+        'position': parseInt(position), domain: 2, sub_product: trackingProductId, trigger_point : triggerPoint, u_id : uId, utm_campaign : utmCampaign };
         if (trackingId && productAvailability) {
             makeTrackingRequest(loggingData);
         }
@@ -116,7 +116,7 @@ $(document).ready(function () {
 
     $('#amazon-pay-payment').click(function () {
         let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'amazon_pay_payment',
-         'position': position, domain: 2, sub_product: trackingProductId, trigger_point : triggerPoint, u_id : uId, utm_campaign: utmCampaign };
+         'position': parseInt(position), domain: 2, sub_product: trackingProductId, trigger_point : triggerPoint, u_id : uId, utm_campaign: utmCampaign };
         if (trackingId && productAvailability) {
             makeTrackingRequest(loggingData);
         }
