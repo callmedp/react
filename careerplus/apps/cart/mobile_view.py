@@ -33,15 +33,12 @@ class RemoveFromCartMobileView(View, CartMixin):
         utm_campaign = self.request.session.get(
             'utm_campaign','')
         if tracking_product_id == product_id and tracking_id:
-            # email_dict.update({ 
-            #     "prod_id" : product_id,
-            #     "tracking_id" : tracking_id,
-            #     "candidate_id" : candidate_id
-            # })
             name = email_dict.get('name', '')
             email = email_dict.get('email', '')
             cart_product_removed_mail.apply_async(
-                (product_id, tracking_id, candidate_id, email, name), 
+                (product_id, tracking_id, u_id, email, name, 
+                    tracking_product_id, product_tracking_mapping_id,
+                    trigger_point, position, utm_campaign), 
                 countdown=settings.CART_DROP_OUT_EMAIL)
             # cart_product_removed_mail(email_data)
             make_logging_request.delay(

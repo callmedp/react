@@ -166,7 +166,9 @@ class RemoveFromCartView(View, CartMixin):
             name = email_dict.get('name', '')
             email = email_dict.get('email', '')
             cart_product_removed_mail.apply_async(
-                (product_id, tracking_id, candidate_id, email, name), 
+                (product_id, tracking_id, u_id, email, name, 
+                    tracking_product_id, product_tracking_mapping_id,
+                    trigger_point, position, utm_campaign), 
                 countdown=settings.CART_DROP_OUT_EMAIL)
             # cart_product_removed_mail(email_data)
             make_logging_request.delay(
@@ -693,6 +695,9 @@ class PaymentSummaryView(TemplateView, CartMixin):
         trigger_point = request.GET.get('trigger_point', '')
         u_id = request.GET.get('u_id', '')
         position = request.GET.get('position', '')
+        emailer = request.GET.get('emailer', '')
+        tracking_product_id = request.GET.get('t_prod_id', '')
+        product_tracking_mapping_id = request.GET.get('prod_t_m_id', '')
 
         valid = False
         candidate_id = None
@@ -740,7 +745,12 @@ class PaymentSummaryView(TemplateView, CartMixin):
 
         if tracking_id:
             request.session.update({'tracking_id': tracking_id})
-        
+
+        tracking_id= request.session.get('tracking_id','')
+        tracking_product_id= request.session.get('tracking_product_id',tracking_product_id)
+        product_availability = request.session.get('product_availability','')
+        product_tracking_mapping_id= request.session.get('product_tracking_mapping_id',product_tracking_mapping_id)
+
         if product_id and tracking_id:
             try:  
                 cart_pk = self.request.session.get('cart_pk', '')
@@ -751,18 +761,18 @@ class PaymentSummaryView(TemplateView, CartMixin):
                     last_name  = cart_obj.last_name if cart_obj.last_name else ""
                     name = "{} {}".format(first_name, last_name)
                     cart_drop_out_mail.apply_async(
-                        (cart_pk, email, "SHINE_CART_DROP", name),
+                        (cart_pk, email, "SHINE_CART_DROP", name, 
+                        tracking_id, u_id, tracking_product_id, 
+                        product_tracking_mapping_id, trigger_point, 
+                        position, utm_campaign),
                         countdown=settings.CART_DROP_OUT_EMAIL)
             except Exception as e:
                 logging.getLogger('error_log').error("Unable to send mail: {}".format(e))
-            
-        
-        tracking_id= request.session.get('tracking_id','')
-        tracking_product_id= request.session.get('tracking_product_id','')
-        product_availability = request.session.get('product_availability','')
-        product_tracking_mapping_id= request.session.get('product_tracking_mapping_id','')
 
         if tracking_id and tracking_product_id and product_tracking_mapping_id and product_availability:
+            if emailer:
+                make_logging_request.delay(
+                    tracking_product_id, product_tracking_mapping_id, tracking_id, 'clicked', position, trigger_point, u_id, utm_campaign)
             make_logging_request.delay(
                 tracking_product_id, product_tracking_mapping_id, tracking_id, 'cart_payment_summary',position, trigger_point, u_id, utm_campaign)
 
