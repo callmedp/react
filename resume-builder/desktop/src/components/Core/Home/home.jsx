@@ -71,9 +71,13 @@ class Home extends Component {
     sendTrackingInfo(action, pos) {
         if (isTrackingInfoAvailable()) {
             const { trackingId, productTrackingMappingId, productId,
-                triggerPoint, uId, position, utmCampaign } = getTrackingInfo();
-            const {userTrack} = this.props;
-            userTrack({ trackingId, productTrackingMappingId, productId, action, position,
+                triggerPoint, uId, utmCampaign } = getTrackingInfo();
+        let { position } = getTrackingInfo() 
+        if(position === ""){
+            position = pos;
+        }
+        const {userTrack} = this.props;
+        userTrack({ trackingId, productTrackingMappingId, productId, action, position,
                 triggerPoint, uId, utmCampaign });
         }
     }
@@ -94,13 +98,13 @@ class Home extends Component {
     async componentDidMount() {
 
         const query = new URLSearchParams(this.props.location.search);
-        const trackingId = query.get('t_id')
-        const triggerPoint = query.get('trigger_point')
-        const uId = query.get('u_id')
-        const position = query.get('position')
-        const utmCampaign = query.get('utm_campaign')
+        const trackingId = query.get('t_id') || ''
+        const triggerPoint = query.get('trigger_point') || ''
+        const uId = query.get('u_id') || localStorage.getItem('candidateId') || ''
+        const position = query.get('position') || ''
+        const utmCampaign = query.get('utm_campaign') || ''
 
-        if(trackingId !== null){
+        if(!!trackingId){
             const productTrackingMappingId = '11'
             storeTrackingInfo(trackingId, productTrackingMappingId, '',
             triggerPoint,uId,position,utmCampaign)

@@ -10,13 +10,6 @@ export const storeTrackingInfo = (trackingId, productTrackingMappingId, productI
     localStorage.setItem("utmCampaign", utmCampaign);
 }
 
-export const removeTrackingInfo = () => {
-    localStorage.removeItem("trackingId");
-    localStorage.removeItem("productTrackingMappingId");
-    localStorage.removeItem("productId");
-    localStorage.removeItem("productPresentInCart");
-
-}
 
 export const isTrackingInfoAvailable = () => {
     return localStorage.getItem("trackingId")
@@ -34,7 +27,7 @@ export const getTrackingInfo = () => {
         "productId": localStorage.getItem("productId"),
         "triggerPoint": localStorage.getItem("triggerPoint"),
         "uId": localStorage.getItem("uId"),
-        "position": localStorage.getItem("position"),
+        "position": !!localStorage.getItem("position") ? parseInt(localStorage.getItem("position")): '',
         "utmCampaign": localStorage.getItem("utmCampaign")
     }
 }

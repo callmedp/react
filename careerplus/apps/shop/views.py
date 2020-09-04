@@ -728,7 +728,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             'tracking_id': self.request.session.get('tracking_id', ''),
             'trigger_point':self.request.session.get('trigger_point',''),
             'u_id':self.request.session.get('u_id',''),
-            'position':self.request.session.get('position',''),
+            'position':self.request.session.get('position',1),
             'utm_campaign':self.request.session.get('utm_campaign',''),
             'product_id': self.product_obj and self.product_obj.id
         })
@@ -928,7 +928,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         tracking_id = request.GET.get('t_id', '')
         utm_campaign = request.GET.get('utm_campaign', '')
         trigger_point = request.GET.get('trigger_point', '')
-        u_id = request.GET.get('u_id', '')
+        u_id = request.GET.get('u_id', request.session.get('u_id',''))
         position = self.request.GET.get('position', -1)
         if self.request.GET.get('lc') and self.request.session.get('candidate_id'):
             if not kwargs.get('pk', ''):
@@ -995,7 +995,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
                 request.session.get('tracking_product_id') and \
                 request.session.get('tracking_id') and \
                 kwargs.get('pk') == request.session.get('tracking_product_id'):
-            position = request.session.get('position','')
+            position = request.session.get('position',1)
             utm_campaign = request.session.get('utm_campaign','')
             trigger_point = request.session.get('trigger_point','')
             u_id = request.session.get('u_id','')
@@ -1019,7 +1019,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             tracking_id = request.session.get('tracking_id','')
             trigger_point = request.session.get('trigger_point','')
             u_id = request.session.get('u_id','')
-            position = self.request.session.get('position','')
+            position = self.request.session.get('position',1)
             utm_campaign = self.request.session.get('utm_campaign','')
             
             if tracking_id and prod.id and product_tracking_mapping_id:

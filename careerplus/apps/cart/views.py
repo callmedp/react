@@ -158,7 +158,7 @@ class RemoveFromCartView(View, CartMixin):
         u_id = self.request.session.get(
             'u_id','')
         position = self.request.session.get(
-            'position','')
+            'position',1)
         utm_campaign = self.request.session.get(
             'utm_campaign','')
         if tracking_product_id == product_id and tracking_id:
@@ -184,6 +184,12 @@ class RemoveFromCartView(View, CartMixin):
                 del self.request.session['tracking_product_id']
             if product_availability:
                 del self.request.session['product_availability']
+            if trigger_point:
+                del self.request.session['trigger_point']
+            if position:
+                del self.request.session['position']
+            if utm_campaign:
+                del self.request.session['utm_campaign']
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax():
@@ -693,7 +699,7 @@ class PaymentSummaryView(TemplateView, CartMixin):
         tracking_id = request.GET.get('t_id', '')
         utm_campaign = request.GET.get('utm_campaign', '')
         trigger_point = request.GET.get('trigger_point', '')
-        u_id = request.GET.get('u_id', '')
+        u_id = request.GET.get('u_id', request.session.get('u_id',''))
         position = request.GET.get('position', -1)
         emailer = request.GET.get('emailer', '')
         tracking_product_id = request.GET.get('t_prod_id', '')
@@ -744,11 +750,19 @@ class PaymentSummaryView(TemplateView, CartMixin):
                             {'product_tracking_mapping_id': product_tracking_mapping_id})
 
         if tracking_id:
-            request.session.update({'tracking_id': tracking_id})
-
+            request.session.update({
+                'tracking_id': tracking_id,
+                'trigger_point': trigger_point,
+                'position': position,
+                'u_id': u_id,
+                'utm_campaign': utm_campaign})
+        
         tracking_id= request.session.get('tracking_id','')
         tracking_product_id= request.session.get('tracking_product_id',tracking_product_id)
         product_availability = request.session.get('product_availability','')
+        position= request.session.get('position',-1)
+        u_id= request.session.get('u_id','')
+        utm_campaign= request.session.get('utm_campaign','')
         product_tracking_mapping_id= request.session.get('product_tracking_mapping_id',product_tracking_mapping_id)
 
         if product_id and tracking_id:

@@ -32,8 +32,12 @@ class EditPreview extends Component {
     sendTrackingInfo(action, pos) {
         if (isTrackingInfoAvailable()) {
             const { trackingId, productTrackingMappingId, productId,
-                triggerPoint, uId, position, utmCampaign } = getTrackingInfo();
+                triggerPoint, uId,  utmCampaign } = getTrackingInfo();
             const { userTrack } = this.props;
+            let { position } = getTrackingInfo() 
+            if(position === ""){
+                position = pos;
+            }
             userTrack({
                 trackingId, productTrackingMappingId, productId, action, position,
                 triggerPoint, uId, utmCampaign
@@ -44,13 +48,13 @@ class EditPreview extends Component {
     async componentDidMount() {
 
         const queryString = new URLSearchParams(this.props.location.search);
-        const trackingId = queryString.get('t_id')
-        const triggerPoint = queryString.get('trigger_point')
-        const uId = queryString.get('u_id')
-        const position = queryString.get('position')
-        const utmCampaign = queryString.get('utm_campaign')
+        const trackingId = queryString.get('t_id') || ''
+        const triggerPoint = queryString.get('trigger_point') || ''
+        const uId = queryString.get('u_id') || localStorage.getItem("candidateId") || ''
+        const position = queryString.get('position') || ''
+        const utmCampaign = queryString.get('utm_campaign') || ''
 
-        if (trackingId !== null) {
+        if (!!trackingId) {
             const productTrackingMappingId = '11'
             storeTrackingInfo(trackingId, productTrackingMappingId, '',
                 triggerPoint, uId, position, utmCampaign)

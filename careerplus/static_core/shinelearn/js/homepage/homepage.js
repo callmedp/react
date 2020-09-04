@@ -35,7 +35,7 @@ const makeTrackingRequest = (loggingData) => {
 
 const homepageTracking = (action) => {
     let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: action, 
-        'position': position, domain: 2, sub_product: trackingProductId, trigger_point : triggerPoint, u_id : uId, utm_campaign : utmCampaign };
+        'position': parseInt(position), domain: 2, sub_product: trackingProductId, trigger_point : triggerPoint, u_id : uId, utm_campaign : utmCampaign };
     if (trackingId) {
         makeTrackingRequest(loggingData);
     }
@@ -43,7 +43,7 @@ const homepageTracking = (action) => {
 
 const trackClickEvent = () => {
     let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'exit_home_page', 
-    'position': position, domain: 2, sub_product: trackingProductId, trigger_point : triggerPoint, u_id : uId, utm_campaign : utmCampaign };
+    'position': parseInt(position), domain: 2, sub_product: trackingProductId, trigger_point : triggerPoint, u_id : uId, utm_campaign : utmCampaign };
     if (trackingId) {
         makeTrackingRequest(loggingData);
     }

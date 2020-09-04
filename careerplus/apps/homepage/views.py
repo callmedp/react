@@ -36,8 +36,9 @@ class HomePageView(TemplateView, MetadataMixin):
         product_tracking_mapping_id = self.request.GET.get('product', '')
         utm_campaign = self.request.GET.get('utm_campaign', '')
         trigger_point = self.request.GET.get('trigger_point', '')
-        u_id = self.request.GET.get('u_id', '')
+        u_id = self.request.GET.get('u_id',self.request.session.get('u_id',''))
         position = self.request.GET.get('position', -1)
+
         if tracking_id and self.request.session.get('candidate_id'):
             self.request.session.update({
                 'tracking_id': tracking_id,
@@ -63,7 +64,7 @@ class HomePageView(TemplateView, MetadataMixin):
             u_id = self.request.session.get(
             'u_id','')
             position = self.request.session.get(
-            'position','')
+            'position',1)
             utm_campaign = self.request.session.get(
             'utm_campaign','')
             make_logging_request.delay(
@@ -263,7 +264,7 @@ class HomePageView(TemplateView, MetadataMixin):
             'tracking_id': self.request.session.get('tracking_id', ''),
             'trigger_point':self.request.session.get('trigger_point',''),
             'u_id':self.request.session.get('u_id',''),
-            'position':self.request.session.get('position',''),
+            'position':self.request.session.get('position',1),
             'utm_campaign':self.request.session.get('utm_campaign',''),
         })
 
