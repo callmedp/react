@@ -50,18 +50,19 @@ def make_logging_request(tracking_product_id, product_tracking_mapping_id, track
     resp = None
     url_to_hit = "{}/learning-touchpoints-tracking/".format(
         settings.SHINE_API_URL)
+    product_tracking_mapping_id = product_tracking_mapping_id if product_tracking_mapping_id else None
     req_dict.update({'t_id': tracking_id, 'products':
                      [product_tracking_mapping_id],
                      'action': action,
-                     'position': int(position) if position.strip() != '' else 1, 'domain': 2,
+                     'position': int(position) if position.strip() != '' else -1, 'domain': 2,
                      'sub_product': tracking_product_id,
                      'trigger_point': trigger_point,
-                     'u_id': u_id,
-                     'utm_campaign':utm_campaign})
+                     'u_id': u_id.strip(),
+                     'utm_campaign':utm_campaign.strip() if utm_campaign.strip().lower() != 'null' else ''})
     try:
         resp = requests.post(
             url_to_hit, data=json.dumps(req_dict), headers=headers)
-        if resp:
+        if resp.status_code == 200:
             logging.getLogger('info_log').info(
                 "send tracking data {}".format(req_dict))
         elif not resp:

@@ -231,9 +231,10 @@ def cart_drop_out_mail(pk=None, cnd_email=None, mail_type=None, name=None,
                     else:
                         email_list_spent.append(toemail)
                         cache.set("email_sent_for_the_day", email_list_spent)
-                        make_logging_request.delay(
-                            tracking_product_id, product_tracking_mapping_id, tracking_id,\
-                            'exit_cart_mail_sent', position, trigger_point, u_id, utm_campaign )
+                        if product_tracking_mapping_id and tracking_id and tracking_product_id:
+                            make_logging_request.delay(
+                                tracking_product_id, product_tracking_mapping_id, tracking_id,\
+                                'exit_cart_mail_sent', position, trigger_point, u_id, utm_campaign )
 
                 token = AutoLogin().encode(toemail, cart_id, days=None)
                 data['autologin'] = "{}://{}/cart/payment-summary/?t_id={}&token={}&utm_campaign=learning_exit_mailer&trigger_point={}&u_id={}&position={}&emailer=1&t_prod_id={}&prod_t_m_id={}".format(
