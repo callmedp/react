@@ -783,16 +783,18 @@ class PaymentSummaryView(TemplateView, CartMixin):
             except Exception as e:
                 logging.getLogger('error_log').error("Unable to send mail: {}".format(e))
 
-        if tracking_id and tracking_product_id and product_tracking_mapping_id and product_availability:
-            if emailer:
-                make_logging_request.delay(
-                    tracking_product_id, product_tracking_mapping_id, tracking_id, 'clicked', position, trigger_point, u_id, utm_campaign)
+        if tracking_id and tracking_product_id and product_tracking_mapping_id and product_availability and emailer:
             make_logging_request.delay(
-                tracking_product_id, product_tracking_mapping_id, tracking_id, 'cart_payment_summary',position, trigger_point, u_id, utm_campaign)
+                    tracking_product_id, product_tracking_mapping_id, tracking_id, 'clicked', position, trigger_point, u_id, utm_campaign)
 
         redirect = self.redirect_if_necessary(reload_url)
         if redirect:
             return redirect
+
+        if tracking_id and tracking_product_id and product_tracking_mapping_id and product_availability:
+            make_logging_request.delay(
+                tracking_product_id, product_tracking_mapping_id, tracking_id, 'cart_payment_summary',position, trigger_point, u_id, utm_campaign)
+            
         return super(self.__class__, self).get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
