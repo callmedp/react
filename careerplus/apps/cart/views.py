@@ -764,6 +764,7 @@ class PaymentSummaryView(TemplateView, CartMixin):
         u_id= request.session.get('u_id','')
         utm_campaign= request.session.get('utm_campaign','')
         product_tracking_mapping_id= request.session.get('product_tracking_mapping_id',product_tracking_mapping_id)
+        trigger_point = request.session.get('trigger_point', '')
 
         if product_id and tracking_id:
             try:  
@@ -794,7 +795,7 @@ class PaymentSummaryView(TemplateView, CartMixin):
         if tracking_id and tracking_product_id and product_tracking_mapping_id and product_availability:
             make_logging_request.delay(
                 tracking_product_id, product_tracking_mapping_id, tracking_id, 'cart_payment_summary',position, trigger_point, u_id, utm_campaign)
-            
+
         return super(self.__class__, self).get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
