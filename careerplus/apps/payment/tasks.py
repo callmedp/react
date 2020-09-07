@@ -51,7 +51,7 @@ def make_logging_request(tracking_product_id, product_tracking_mapping_id, track
     url_to_hit = "{}/learning-touchpoints-tracking/".format(
         settings.SHINE_API_URL)
     product_tracking_mapping_id = product_tracking_mapping_id if product_tracking_mapping_id else None
-    req_dict.update({'t_id': tracking_id, 'products':
+    req_dict.update({'t_id': tracking_id.strip(), 'products':
                      [product_tracking_mapping_id],
                      'action': action,
                      'position': int(position) if position.strip() != '' else -1, 'domain': 2,
