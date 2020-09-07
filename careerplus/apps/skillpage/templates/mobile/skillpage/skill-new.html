@@ -414,12 +414,17 @@
         {% endif %}
     </ul>
 </div><!-- // sticky-header -->
-
+<!-- function : onclick="trackEvent('exit_product_page');" -->
 {% endblock container %}
 <!-- // Main body Ends here -->
 
 {% block js_section %}
 {{block.super}}
+<!--  <script> 
+      var trackingProductId = "{{tracking_product_id}}";
+      var productTrackingMappingId = "{{product_tracking_mapping_id}}";
+      var trackingId = "{{tracking_id}}";
+</script> -->
 
 {% compress js %}
 <script src="{% static 'shinelearn/js/mobile/zopim_chat/custom.js' %}"></script>

@@ -13,7 +13,10 @@ class Header extends Component {
         super(props);
         this.scrollTo = this.scrollTo.bind(this);
         this.reachUsButton = this.reachUsButton.bind(this);
-        this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/';
+        this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/'
+        this.handleBuildYourResumeClick = this.handleBuildYourResumeClick.bind(this)
+        this.handleTemplateClick = this.handleTemplateClick.bind(this)
+        this.howItWorks = this.howItWorks.bind(this)
     }
     
     scrollTo(elem, offset, action, label) {
@@ -32,13 +35,29 @@ class Header extends Component {
     
     reachUsButton() {
         const { showHelpModal, eventClicked } = this.props;
+        this.props.sendTrackingInfo("header_reach_us",1)
         showHelpModal()
         eventClicked({
             'action': 'ReachUs',
             'label': 'Header'
         })
     }
-    
+
+    howItWorks(){
+        this.scrollTo('works', -63, 'Howitworks_Header', 'Header')
+        this.props.sendTrackingInfo('header_how_it_works',1)
+    }
+
+    handleTemplateClick(){
+        this.scrollTo('templates', -50, 'Templates', 'Header')
+        this.props.sendTrackingInfo('header_templates',1)
+    }
+
+    handleBuildYourResumeClick(){
+         this.scrollTo('templates', -60, 'BuildResume', 'Header') 
+         this.props.sendTrackingInfo('header_build_your_resume',1)
+    }
+
     componentDidMount() {
         const values = queryString.parse(this.props.location.search);
         const template = (values && values.template) || '';
@@ -52,46 +71,47 @@ class Header extends Component {
         const { page, userName,lastName, number,email, ui: { helpModal }, hideHelpModal, feedback, eventClicked } = this.props;
         return (
             <header className={this.props.getclass + " home-nav-fixed"}>
-            <HelpModal modalStatus={helpModal} hideHelpModal={hideHelpModal} userInfo={{ userName, email, number }} feedback={feedback} eventClicked={eventClicked} />
-            <div className="container">
-            <Link to={'/resume-builder/'} className="container--logo" />
-            {!!(page === 'home') &&
-            <ul className="home-links">
-            <li>
-            <span onClick={() => this.scrollTo('works', -63, 'Howitworks_Header', 'Header')}>How it Works</span>
-            </li>
-            <li>
-            <span onClick={() => this.scrollTo('templates', -50, 'Templates', 'Header')}>Templates</span>
-            </li>
-            </ul>
-        }
-        <div className="signin">
-        {!!(page === 'home') &&
-        <React.Fragment>
-        {
-            !!(localStorage.getItem('candidateId')) &&
-            <button className="white-button mr-15" onClick={this.reachUsButton}>
-            Reach us
-            </button>
-        }
-        <button className="white-button mr-30" onClick={() => { this.scrollTo('templates', -60, 'BuildResume', 'Header') }}>Build your
-        resume
-        </button>
-        </React.Fragment>
-    }
-    {!!(page !== 'home') &&
-    <React.Fragment>
-    <span className="signin--user-pic">
-    <img alt="user info" src={`${this.staticUrl}react/assets/images/user-pic.jpg`} />
-    </span>
-    <span>
-    Hello {userName || 'User'}
-    </span>
-    </React.Fragment>
-}
-</div>
-</div>
-</header>
+                <HelpModal modalStatus={helpModal} hideHelpModal={hideHelpModal} userInfo={{ userName, email, number }} feedback={feedback} eventClicked={eventClicked} />
+                <div className="container">
+                    <Link to={'/resume-builder/'} className="container--logo" />
+                    {!!(page === 'home') &&
+                        <ul className="home-links">
+                            <li>
+                                <span onClick={this.howItWorks}>How it Works</span>
+                            </li>
+                            <li>
+                                <span onClick={this.handleTemplateClick}>Templates</span>
+                            </li>
+                        </ul>
+                    }
+                    <div className="signin">
+                        {!!(page === 'home') &&
+                            <React.Fragment>
+                                {
+                                    !!(localStorage.getItem('candidateId')) &&
+                                    <button className="white-button mr-15" onClick={this.reachUsButton}>
+                                        Reach us
+                                </button>
+                                }
+                                <button className="white-button mr-30" onClick={this.handleBuildYourResumeClick}>Build your
+                                        resume
+                            </button>
+                            </React.Fragment>
+                        }
+                        {!!(page !== 'home') &&
+                            <React.Fragment>
+                                <span className="signin--user-pic">
+                                    <img alt="user info" src={`${this.staticUrl}react/assets/images/user-pic.jpg`} />
+                                </span>
+                                <span>
+                                    Hello {userName || 'User'}
+                                </span>
+                            </React.Fragment>
+                        }
+                    </div>
+                </div>
+            </header>
+    
 )
 }
 

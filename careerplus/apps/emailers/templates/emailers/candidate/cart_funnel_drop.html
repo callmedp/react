@@ -1,0 +1,198 @@
+{% load static %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>shine</title>
+</head>
+<body style="margin:0px;">
+<table width="100%" border="0" cellspacing="0" cellpadding="0" align="" style="font-family: Arial, 'sans-serif'; font-size: 13px; color: #666;">
+  <tbody>
+    <tr>
+      <td style="display:none !important;visibility:hidden;mso-hide:all;font-size:1px;color:#000000;line-height:1px;max-height:0px; max-width:0px;opacity:0;overflow:hidden;"> Pre-Header </td>
+    </tr>
+  </tbody>
+</table>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" align="center" style="font-family: Arial, Helvetica, 'sans-serif';font-size:13px; max-width:600px; border:solid 1px #efefef; background-color: #fbfaff;">
+  <tbody>
+    <tr>
+      <td><div style="padding: 5px; background: #f5f5f5; color: #777777; font-size: 11px; text-align: center;"> Do Not forward this mail, it contains links which allow direct login to your Shine account. </div></td>
+    </tr>
+    <tr>
+      <td align="left" valign="top" style="background-color: #fbfaff; padding: 15px 13px 0px 13px;">
+      <a href="https://www.shine.com/?utm_campaign=cart_drop" target="_blank"><img src="{% static 'shinelearn/images/emailers/slogo.png' %}" style="display: block; border: none;margin: 0;padding: 0;" alt="shinelogo"></a>
+    </td>
+    </tr>
+  <tr>
+      <td align="center" valign="top" style="background-color: #fbfaff; padding:0 15px; text-align: center; margin: 0 auto;">
+      <img src="{% static 'shinelearn/images/emailers/cart.png' %}" style="display: block; border: none;margin: 0 auto;padding: 0;" alt="shinelogo">
+      <strong style="display: block; text-align: center; margin: 0 auto; padding: 0; font-size: 26px; color: #303E4B;">We miss you! Why did you leave?</strong>
+       <p style="display: block; margin: 0 auto; padding: 10px 25px; color: #505E6B; font-size: 14px; line-height: 19px;"><strong>Hi {{name}}</strong>, you recently visited us and we noticed that you
+didn’t complete your order for the following items</p>
+    </td>
+    </tr>
+  <tr>
+      <td align="center" valign="top" style="padding: 15px 15px 25px 15px;background-color: #fbfaff; margin: 0 auto;">
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" align="center" style="border: solid 1px #e6e9fe;border-radius: 4px; background-color: #ffffff; margin: 0; padding: 30px 0px 30px 15px;">
+          <tbody>
+      <tr>
+      <td align="left" valign="top">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" align="left" style="padding-bottom: 25px;">
+  <tbody>
+    <tr>
+      <td align="left" valign="top" width="55"><img src="{% static 'shinelearn/images/emailers/pb.jpg' %}" alt="icon"></td>
+      <td align="left" valign="top">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" align="left" style="margin: 0; padding: 0; max-width: 392px; display: inline-block; vertical-align: top;">
+  <tbody>
+    
+    <tr>
+      <td align="left" valign="top" style="display: inline-block; font-size: 13px; text-align: left; color: #505E6B; vertical-align: top;">  
+    <a href="{{product_url}}" target="_blank" style="text-decoration: none;font-size: 16px;color: #5364C4; font-weight: bold; display: block;">{{product_name}}</a>
+    <p align="left" style="margin: 0; padding: 5px 10px 10px 0;font-size: 13px;color: #505E6B;">{{product_description}}</p>
+    </td>
+    </tr>
+  </tbody>
+</table>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" align="left" style="margin: 0; padding: 0; max-width: 100px; display: inline-block; vertical-align: top;">
+  <tbody>
+    <tr>
+      <td align="left" valign="top" style="text-align: left;">
+    <strong style="display: inline-block; text-align: left; color: #505E6B; font-size: 14px;">Rs. {{product_price}}</strong>
+    </td>
+    </tr>
+  </tbody>
+</table>
+    </td>
+    </tr>
+  </tbody>
+</table>
+    </td>
+    </tr>
+        <!--     <tr>
+      <td align="left" valign="top">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" align="left" style="padding-bottom: 25px;">
+  <tbody> -->
+    <!-- <tr>
+      <td align="left" valign="top" width="55"><img src="images/jm.jpg" alt="icon"></td>
+      <td align="left" valign="top">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" align="left" style="margin: 0; padding: 0; max-width: 392px; display: inline-block; vertical-align: top;">
+  <tbody>
+    
+    <tr>
+      <td align="left" valign="top" style="display: inline-block; font-size: 13px; text-align: left; color: #505E6B; vertical-align: top;">  
+    <a href="#" target="_blank" style="text-decoration: none;font-size: 16px;color: #5364C4; font-weight: bold; display: block;">Jobs on the move</a>
+    <p align="left" style="margin: 0; padding: 5px 10px 10px 0;font-size: 13px;color: #505E6B;">Get personalized job recommendation on your WhatsApp</p>
+    </td>
+    </tr>
+  </tbody>
+</table>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" align="left" style="margin: 0; padding: 0; max-width: 100px; display: inline-block; vertical-align: top;">
+  <tbody>
+    <tr>
+      <td align="left" valign="top" style="text-align: left;">
+    <strong style="display: inline-block; text-align: left; color: #505E6B; font-size: 14px;">Rs. 1200.00</strong>
+    </td>
+    </tr>
+  </tbody>
+</table>
+    </td>
+    </tr> -->
+<!--   </tbody>
+</table>
+    </td>
+    </tr>
+  <tr>
+      <td align="left" valign="top">
+        <table width="100%" border="0" cellspacing="0" cellpadding="0" align="left" style="padding-bottom: 25px;">
+  <tbody> -->
+    <!-- <tr>
+      <td align="left" valign="top" width="55"><img src="images/rw.jpg" alt="icon"></td>
+      <td align="left" valign="top">
+    <table width="100%" border="0" cellspacing="0" cellpadding="0" align="left" style="margin: 0; padding: 0; max-width: 392px; display: inline-block; vertical-align: top;">
+  <tbody>
+    
+    <tr>
+      <td align="left" valign="top" style="display: inline-block; font-size: 13px; text-align: left; color: #505E6B; vertical-align: top;">  
+    <a href="#" target="_blank" style="text-decoration: none;font-size: 16px;color: #5364C4; font-weight: bold; display: block;">Resume Writing</a>
+    <p align="left" style="margin: 0; padding: 5px 10px 10px 0;font-size: 13px;color: #505E6B; hyphens: none;">Highlight right skills on resume to get noticed by recruiters</p>
+    </td>
+    </tr>
+  </tbody>
+</table>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" align="left" style="margin: 0; padding: 0; max-width: 100px; display: inline-block; vertical-align: top;">
+  <tbody>
+    <tr>
+      <td align="left" valign="top" style="text-align: left;">
+    <strong style="display: inline-block; text-align: left; color: #505E6B; font-size: 14px;">Rs. 2000.00</strong>
+    </td>
+    </tr>
+  </tbody>
+</table>
+    </td>
+    </tr>
+  </tbody>
+</table>
+    </td>
+    </tr> -->
+    <tr>
+      <td align="center" valign="top" style="padding: 10px 15px 0px 0px;">
+     
+      <table width="100%" border="0" cellspacing="0" cellpadding="0" align="center" style="">
+          <tbody>
+        <tr>
+          <td align="center" valign="top" style="padding-bottom: 30px;">
+            <p style="margin: 0 auto; text-align: center; width: 100%;height: 1px; background-color: #e2eaf6;"></p>
+          </td>
+        </tr>
+            <tr>
+              <td align="center" valign="top">
+                <a href="{{autologin}}" target="_blank" style="text-decoration: none; text-align: center; display: block; padding: 12px 0px; color: #ffffff; font-size: 16px; border-radius: 4px; margin: 0 auto; width:220px;background-color: #F7A400; font-weight: bold;">Complete your order</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </td>
+    </tr>
+          </tbody>
+        </table>
+    </td>
+    </tr>
+    <tr>
+      <td align="left" valign="top" style="padding: 0 15px; background-color: #fbfaff;">
+      <span style="display: block; text-align: left; font-size: 13px; color: #505E6B;">Call us at</span>
+      <strong style="display: block; text-align: left; font-size: 13px; color: #303E4B;"><a href="tel:0124- 4312500/01" style="text-decoration: none;font-size: 13px; color: #303E4B;">0124- 4312500/01</a></strong>
+      <p align="left" style="margin: 0; padding: 7px 0 0 0; text-align: left;color: #505E6B; font-size: 13px;">*Available between 9am-7pm, Monday to Saturday</p>
+      <p align="left" style="margin: 0; padding: 0 0 10px 0; text-align: left;color: #505E6B; font-size: 13px;">Or you can reach out to us at <a href="mailto:resumeservices@shine.com" target="_blank" style="color: #5566C3; font-size: 13px; text-decoration: none;">resumeservices@shine.com</a></p>
+      </td>
+    </tr>
+    <tr>
+      <td align="left" valign="top" style="background-color: #fbfaff"><table width="100%" border="0" cellspacing="0" cellpadding="0" style="">
+          <tbody>
+            <tr>
+              <td align="left" valign="top" style=""><table width="100%" border="0" cellspacing="0" cellpadding="0" align="left" style="padding: 12px 15px; ">
+                  <tbody>
+                    <tr>
+                      <td align="left" valign="top" style="padding-top: 25px;"><table width="100%" border="0" cellspacing="0" cellpadding="0"  align="center" style="border: solid 1px #ECECEC; max-width: 220px; padding: 5px 10px 10px 10px; border-radius: 4px;">
+                          <tbody>
+                            <tr>
+                              <td align="center" valign="top" style=""><span style="display: inline-block; vertical-align:middle; padding-top: 12px; color: #666666; font-size: 12px;">Download Shine app</span> <span style="display: inline-block; vertical-align:top; padding:4px 12px 0 12px;"> <a href= "https://itunes.apple.com/us/app/shine.com-job-search/id950558510?mt=8&utm_source=shinemailer&utm_medium=appicon_email&utm_campaign=Shineapp_mailicon" target="_blank"> <img src="{% static 'shinelearn/images/emailers/app.png' %}" alt="app store" style="vertical-align: top;"> </a></span> <span style="display: inline-block; vertical-align:top;"> <a href="https://play.google.com/store/apps/details?id=com.net.shine&utm_source=shinemailer&utm_medium=appicon_email&utm_campaign=Shineapp_mailicon" target="_blank"> <img src="{% static 'shinelearn/images/emailers/playstore.png' %}" alt="play store" style="vertical-align: top; margin-top: 5px"> </a></span></td>
+                            </tr>
+                          </tbody>
+                        </table></td>
+                    </tr>
+                    <tr>
+                      <td align="left" valign="top" style="font-size:11px; color: #878787; line-height:15px;"><p align="left" style="margin: 0; padding: 0; font-size:11px; color: #878787;">
+                        <p align="left" style="margin: 0; padding: 20px 0 15px 0; font-size:11px; color: #878787;">Please add <a style="color:#5566c3; text-decoration:none;" href="mailto:jobs@jobs.shine.com">jobs@jobs.shine.com</a> to your Address Book or Safe List to prevent future Shine Updates from being classified as Junk/Bulk Mail</p>
+                        <span style="color: #414141;">Security Alert</span> - In case you receive a suspicious mail from anyone claiming to be a client of Shine, asking for your personal information or some money by pretending to offer you a job please do not respond to such mails and bring it to the immediate notice of <a href="https://www.shine.com/?utm_campaign=cart_drop" target="_blank" style="text-decoration: none; color: #5566c3;">Shine.com</a> by writing to us at <a href="mailto:contactus@shine.com" style="text-decoration: none; color: #5566c3;">contactus@shine.com</a>. Please note that such offers / emails are a violation of our <a href="https://m.shine.com/termsandconditions/" target="_blank" style="text-decoration: none; color: #5566c3;">Terms and Conditions</a>, and Shine.com does not endorse such communication with candidates. Please <a href="https://m.shine.com/myshine/login/" target="_blank" style="text-decoration: none; color: #5566c3;">click here</a> if you do not want to receive any further communication from us.
+                        </p></td>
+                    </tr>
+                  </tbody>
+                </table></td>
+            </tr>
+          </tbody>
+        </table></td>
+    </tr>
+  </tbody>
+</table>
+</body>
+</html>

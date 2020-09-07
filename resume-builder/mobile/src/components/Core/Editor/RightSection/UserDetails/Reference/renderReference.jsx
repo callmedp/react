@@ -18,7 +18,8 @@ const renderReferences = ({
     editHeadingClick,
     context,
     entity_preference_data,
-    showAlertMessage
+    showAlertMessage,
+    sendTrackingInfo
 }) => {
     return (
 
@@ -49,6 +50,7 @@ const renderReferences = ({
                                     }
                                 })
                                 if (!skipAddition) {
+                                    sendTrackingInfo('right_section_add',1)
                                     handleAddition(fields, referenceNewData(fields), 150, 'references', eventClicked, 'References')
                                 }
                                 else {

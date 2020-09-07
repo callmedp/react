@@ -8,7 +8,7 @@ export default class Banner extends Component {
         super(props);
         this.scrollTo = this.scrollTo.bind(this);
         this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/';
-
+        this.handleBuildYourResumeClick = this.handleBuildYourResumeClick.bind(this);
     }
 
     scrollTo(elem, action, label) {
@@ -24,6 +24,10 @@ export default class Banner extends Component {
         })
     }
 
+    handleBuildYourResumeClick(){
+        this.scrollTo('templates', 'BuildResume', 'TopButton')
+        this.props.sendTrackingInfo('home_page_build_your_resume',1);
+    }
 
     render() {
         const {userName} = this.props;
@@ -38,7 +42,7 @@ export default class Banner extends Component {
                      className="img-fluid"/>
                 <p className="text-center mt-5">
                     <a className="btn pt-10 pb-10 btn__round btn__primary btn__shadow" alt="Build Your Resume"
-                       onClick={() => this.scrollTo('templates', 'BuildResume', 'TopButton')}>Build your resume</a>
+                       onClick={ this.handleBuildYourResumeClick}>Build your resume</a>
                 </p>
                 <ul className="resume-pointer">
                     <li>

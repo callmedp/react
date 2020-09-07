@@ -421,7 +421,7 @@ rel="stylesheet">
                     </div>
                 </div>
             </div>
-            
+
             {% endblock main_container %}
             {% block js_section %}
             <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" rel="noreferrer"> </script>
@@ -464,6 +464,10 @@ rel="stylesheet">
                 var trackingProductId = "{{tracking_product_id}}"
                 var productTrackingMappingId = "{{product_tracking_mapping_id}}"
                 var trackingId = "{{tracking_id}}"
+                var triggerPoint = "{{trigger_point}}"
+                var uId = "{{u_id}}"
+                var position = "{{position}}"
+                var utmCampaign ="{{utm_campaign}}"
             </script>
             {% compress js %}
             <!-- <script defer src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"></script> -->

@@ -36,6 +36,8 @@
 
 */30 * * * * export DJANGO_SETTINGS_MODULE=careerplus.config.settings_live && /var/www/virtualenvs/learning/bin/python /var/www/site/learning/current/scripts/update_transactions_from_payu.py
 
+00 00 * * * /var/www/virtualenvs/learning/bin/python /var/www/site/learning/current/manage.py refresh_emailer_cache --settings=careerplus.config.settings_live
+
 59 23 * * * /var/www/virtualenvs/chatbot/bin/python /var/www/site/chatbot/current/scripts/candidate_tracking.py
 
 #Keep extra line for crontab syntax correction

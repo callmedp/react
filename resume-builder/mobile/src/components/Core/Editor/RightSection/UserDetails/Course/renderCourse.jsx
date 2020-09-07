@@ -19,7 +19,8 @@ const renderCourse = ({
     context,
     entity_preference_data,
     editHeadingClick,
-    showAlertMessage
+    showAlertMessage,
+    sendTrackingInfo
 }) => {
     return (
 
@@ -49,6 +50,7 @@ const renderCourse = ({
                                 }
                             })
                             if (!skipAddition) {
+                                sendTrackingInfo('right_section_add',1)
                                 handleAddition(fields, courseNewData(fields), 0, 'course', eventClicked, 'Courses')
                             }
                             else {

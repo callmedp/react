@@ -12,7 +12,9 @@ import { scroller } from 'react-scroll';
 import Loader from '../../Common/Loader/loader.jsx';
 import { eventClicked } from '../../../store/googleAnalytics/actions/index'
 import { showLoginModal, hideLoginModal } from '../../../store/ui/actions/index'
-import LoginModal from '../../Common/LoginModal/loginModal.jsx';
+import LoginModal from '../../Common/LoginModal/loginModal.jsx'
+import { trackUser } from '../../../store/tracking/actions/index'
+import { isTrackingInfoAvailable, getTrackingInfo, storeTrackingInfo, updateProductAvailability} from '../../../Utils/common';
 import propTypes from 'prop-types';
 
 class Home extends Component {
@@ -31,9 +33,41 @@ class Home extends Component {
         this.state.login = login;
         this.staticUrl = window && window.config && window.config.staticUrl || '/media/static/';
         this.handleLoginSuccess = this.handleLoginSuccess.bind(this);
+        this.sendTrackingInfo = this.sendTrackingInfo.bind(this);
+        this.handleBuildYourResumeClick = this.handleBuildYourResumeClick.bind(this);
+        this.handleExitTracking = this.handleExitTracking.bind(this);
+    }
+
+
+    sendTrackingInfo(action, pos) {
+        if (isTrackingInfoAvailable()) {
+            const { trackingId, productTrackingMappingId, productId,
+                triggerPoint, uId, utmCampaign } = getTrackingInfo();
+            const {userTrack} = this.props;
+            let { position } = getTrackingInfo() 
+            if(position === ""){
+                position = pos;
+            }
+            userTrack({ trackingId, productTrackingMappingId, productId, action, position,
+                triggerPoint, uId, utmCampaign });
+        }
     }
 
     async componentDidMount() {
+
+        const query = new URLSearchParams(this.props.location.search);
+        const trackingId = query.get('t_id') || ''
+        const triggerPoint = query.get('trigger_point') || ''
+        const uId = query.get('u_id')  || localStorage.getItem("candidateId") || ''
+        const position = query.get('position') || ''
+        const utmCampaign = query.get('utm_campaign') || ''
+        
+        if(!!trackingId){
+            const productTrackingMappingId = '11'
+            storeTrackingInfo(trackingId, productTrackingMappingId, '',
+            triggerPoint,uId,position,utmCampaign)
+            this.sendTrackingInfo('enter_home_page',1);
+        }
 
         if (typeof document !== 'undefined' && document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]) {
             document.getElementsByClassName('chat-bot')[0].style.display = 'none';
@@ -73,6 +107,15 @@ class Home extends Component {
             this.scrollTo('templates', -15, 'Templates', 'Header')
         }
 
+    }
+
+    handleBuildYourResumeClick(){
+        this.scrollTo('templates', 'BuildResume', 'Features');
+        this.sendTrackingInfo('home_page_build_your_resume',1);
+    }
+
+    handleExitTracking(){
+        this.sendTrackingInfo('exit_resume_builder',1);
     }
 
     handleLoginSuccess() {
@@ -126,7 +169,10 @@ class Home extends Component {
         return (
             <div className="home">
                 <Header eventClicked={eventClicked} />
-                <Banner userName={first_name} eventClicked={eventClicked} />
+                <Banner 
+                userName={first_name} 
+                eventClicked={eventClicked} 
+                sendTrackingInfo = {this.sendTrackingInfo}  />
                 {
                     !!(mainloader)
                     && <Loader />
@@ -203,7 +249,7 @@ class Home extends Component {
                     </div>
                 </section>
 
-                <ResumeSlider showtext={true} eventClicked={eventClicked} {...this.props} />
+                <ResumeSlider showtext={true} eventClicked={eventClicked} {...this.props} sendTrackingInfo ={this.sendTrackingInfo}/>
 
                 <section className="section pt-30 pb-30">
                     <div className="text-center">
@@ -241,7 +287,7 @@ class Home extends Component {
 
                     <div className="text-center mt-30">
                         <a className="btn btn__shadow btn__round btn__primary" alt="Build Your Resume"
-                            onClick={() => this.scrollTo('templates', 'BuildResume', 'Features')}>Build your resume</a>
+                            onClick={this.handleBuildYourResumeClick}>Build your resume</a>
                     </div>
 
                 </section>
@@ -267,15 +313,16 @@ class Home extends Component {
 
                     <ul className="shine-learning__items">
                         <li className="shine-learning__item">
-                            <a className="shine-learning__anchortag" href="https://learning.shine.com/">Explore courses</a></li>
-                        <li className="shine-learning__item shine-learning__anchortag"><a className="shine-learning__anchortag" href="https://learning.shine.com/services/resume-writing/63/">Job assistance</a></li>
-                        <li className="shine-learning__item shine-learning__anchortag"><a className = "shine-learning__anchortag" href="https://learning.shine.com/cms/resume-format/1/">Free rescources</a></li>
-                        <li className="shine-learning__item shine-learning__anchortag"><a className ="shine-learning__anchortag" href="https://learning.shine.com/talenteconomy/">Talent economy</a></li>
+                            <a className="shine-learning__anchortag" href="https://learning.shine.com/" onClick={this.handleExitTracking}>Explore courses</a></li>
+                        <li className="shine-learning__item shine-learning__anchortag"><a className="shine-learning__anchortag" href="https://learning.shine.com/services/resume-writing/63/" onClick={this.handleExitTracking}>Job assistance</a></li>
+                        <li className="shine-learning__item shine-learning__anchortag"><a className = "shine-learning__anchortag" href="https://learning.shine.com/cms/resume-format/1/" onClick={this.handleExitTracking}>Free rescources</a></li>
+                        <li className="shine-learning__item shine-learning__anchortag"><a className ="shine-learning__anchortag" href="https://learning.shine.com/talenteconomy/" onClick={this.handleExitTracking}>Talent economy</a></li>
                     </ul>
                 </section>
 
 
-                <Footer />
+                <Footer 
+                sendTrackingInfo = {this.sendTrackingInfo}/>
             </div>
         )
     }
@@ -389,7 +436,8 @@ const mapDispatchToProps = (dispatch) => {
             return new Promise((resolve, reject) => {
                 return dispatch(checkSessionAvaialability({ resolve, reject }))
             })
-        }
+        },
+        "userTrack" : (data) => dispatch(trackUser(data)),
     }
 };
 
