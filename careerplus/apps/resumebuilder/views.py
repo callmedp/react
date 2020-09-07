@@ -41,6 +41,8 @@ class WriteResumeView(TemplateView):
             make_logging_request.delay(
                         tracking_product_id, product_tracking_mapping_id, tracking_id, 'product_page', position, trigger_point, u_id, utm_campaign)
 
+        return render(request, self.template_name)
+
 class FreeResumeDownload(View):
     template_name = "admin/free-resume-downloads.html"
 
