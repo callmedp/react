@@ -39,7 +39,7 @@
 					<div class="media">
 						{% if author.image %}
 						<figure class="media-left">
-							<img aria-label="{{author.image_alt}}" class="media-object" src="{{author.image.url}}"
+							<img loading="lazy" aria-label="{{author.image_alt}}" class="media-object" src="{{author.image.url}}"
 								alt="{{author.image_alt}}">
 						</figure>
 						{% endif %}
@@ -74,7 +74,7 @@
 							<div class="col-sm-6">
 								<figure class="pr">
 									{% if article.image  %}
-									<img aria-label="{{article.image_alt}}" src="{{article.image.url}}"
+									<img loading="lazy" aria-label="{{article.image_alt}}" src="{{article.image.url}}"
 										alt="{{article.image_alt}}" itemprop="image">
 									{% endif %}
 									<span class="product-title product-title-pos">{{article.p_cat.name}}</span>

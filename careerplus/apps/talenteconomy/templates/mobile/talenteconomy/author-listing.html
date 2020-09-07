@@ -68,7 +68,7 @@
         <h1>All Contributors</h1>
 
       </div>
-      <img aria-label="Author Image" src="{% static 'shinelearn/images/mobile/common/author-img.jpg' %}" class="img-responsive">
+      <img loading="lazy" aria-label="Author Image" src="{% static 'shinelearn/images/mobile/common/author-img.jpg' %}" class="img-responsive">
   </div><!-- Trending articles Ends here -->
 
   <!-- Starts of talent-economy list -->
@@ -79,7 +79,7 @@
   {% for author in authors %}
   <div class="box mb-20">
       <div class="author-item">
-        <span class="author-img"><img aria-label="{{author.image_alt}}" src="{{author.image.url}}" alt="{{author.image_alt}}"></span>
+        <span class="author-img"><img loading="lazy" aria-label="{{author.image_alt}}" src="{{author.image.url}}" alt="{{author.image_alt}}"></span>
         <div class="author-detail">
           <h2 class="mb-0 fs-16"><a href="{% url 'talent:authors-detail' author.slug %}" title="{{author.name}}">{{author.name}} </a><sup></sup></h2>
           <span class="spacer c-666">/</span> <span class="c-666 fs-12">{{author.designation}}</span>

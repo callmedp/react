@@ -72,11 +72,11 @@
                   <div class="faculty-pic">
                     <figure>
                       {% if faculty_obj.image %}
-                      <img aria-label="{{faculty_obj.name}}" src="{{ faculty_obj.get_image_url }}" height="209px" width="209px" class="img-responsive" alt="{{faculty_obj.name}}">
+                      <img loading="lazy" aria-label="{{faculty_obj.name}}" src="{{ faculty_obj.get_image_url }}" height="209px" width="209px" class="img-responsive" alt="{{faculty_obj.name}}">
                       {% else %}
-                      <img aria-label="{{faculty_obj.name}}" src="{% static 'shinelearn/images/executive/default-user-pic.jpg' %}" alt="{{faculty_obj.name}}">
+                      <img loading="lazy" aria-label="{{faculty_obj.name}}" src="{% static 'shinelearn/images/executive/default-user-pic.jpg' %}" alt="{{faculty_obj.name}}">
                       {% endif %}
-                      <i><img aria-label="{{university.name}}" src="{{university.icon.url}}" alt="{{university.name}}" class="img-responsive"></i>
+                      <i><img loading="lazy" aria-label="{{university.name}}" src="{{university.icon.url}}" alt="{{university.name}}" class="img-responsive"></i>
                     </figure>
                   </div>
                   <div class="faculty-intro">
@@ -109,7 +109,7 @@
                     <div class="media">
                       <div class="media-body">
                         <figure>
-                          <i class="exe-university-small-img"><img aria-label="{{university.heading}}" src="{{university.icon.url}}" alt="{{university.heading}}" class="img-responsive"></i>
+                          <i class="exe-university-small-img"><img loading="lazy" aria-label="{{university.heading}}" src="{{university.icon.url}}" alt="{{university.heading}}" class="img-responsive"></i>
                           <figcaption>
                             <a href="{{prd.get_absolute_url}}">
                             <h3 itemprop="name">{{prd.heading}}</h3>
@@ -125,7 +125,7 @@
                         {% endif %}
                         <a href="{{prd.get_absolute_url}}" itemprop="url">
                         <figure>
-                          <img aria-label="{{prd.name}}" src="{{prd.icon.url}}" alt="{{prd.name}}">
+                          <img loading="lazy" aria-label="{{prd.name}}" src="{{prd.icon.url}}" alt="{{prd.name}}">
                         </figure></a>
                       </div>
                     </div>
