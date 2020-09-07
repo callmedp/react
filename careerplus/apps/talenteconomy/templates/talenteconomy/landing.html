@@ -3,7 +3,8 @@
 
 {% block django_meta %}
         {% include 'meta/meta.html' %}
-<link href="https://fonts.googleapis.com/css?family=Montserrat:400,600,700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" media="print" onload="this.media='all'"
+ rel="stylesheet">
 
 {%  endblock django_meta %}
 {% block canonical_url %}
@@ -115,9 +116,11 @@
 <!-- contributors end -->
 {% endblock container %}
 {% block js_section %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+
     {{ block.super }}
     {% compress js %}
-    <script src="{% static 'shinelearn/js/mobile/common/slick.js' %}"> </script>
+    <!-- <script src="{% static 'shinelearn/js/mobile/common/slick.js' %}"> </script> -->
     <script src="{% static 'shinelearn/js/talenteconomy/article.js' %}"></script>
     <script>
     	$(function(){

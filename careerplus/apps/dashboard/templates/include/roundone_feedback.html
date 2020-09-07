@@ -78,9 +78,11 @@
 <!-- main section end -->
 {% endblock container %}
 {% block js_section %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
    {{ block.super }}
     {% compress js %}
-    <script src="{% static 'shinelearn/js/common/bootstrap.min.js' %}"></script>
+    <!-- <script src="{% static 'shinelearn/js/common/bootstrap.min.js' %}"></script> -->
     <script src="{% static 'shinelearn/js/dashboard/dashboard.js' %}"></script>
     {% endcompress %}
 {% endblock js_section %}

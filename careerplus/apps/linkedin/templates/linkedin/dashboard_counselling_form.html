@@ -99,9 +99,11 @@
 <!-- main section end -->
 {% endblock container %}
 {% block js_section %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
+
     {{ block.super }}
     {% compress js %}
-    <script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"></script>
+    <!-- <script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"></script> -->
     <script src="{% static 'shinelearn/js/dashboard/counselling.js' %}"></script>
     {% endcompress %}
 {% endblock js_section %}
