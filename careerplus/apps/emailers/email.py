@@ -17,7 +17,7 @@ class SendMail():
         '''
         if settings.DEBUG and settings.TEST_EMAIL:
             subject = "Test Mail " + subject
-            to = ['priya.kharb@hindustantimes.com','gaurav.chopra1@hindustantimes.com','kanak.garg@hindustantimes.com']
+            to = ['priya.kharb@hindustantimes.com','sahil.singla@hindustantimes.com','kanak.garg@hindustantimes.com']
             cc = []
         else:
             bcc = [settings.DEFAULT_FROM_EMAIL]
@@ -311,3 +311,14 @@ class SendMail():
             send_dict['template'] = ''
             send_dict['header'] = {'Reply-To': settings.REPLY_TO}
             self.process(to, send_dict, data)
+
+        elif mail_type == "CART_FUNNEL_DROP":
+            send_dict['subject'] = data.get('subject', "")
+            send_dict['template'] = 'emailers/candidate/cart_funnel_drop.html'
+            self.process(to, send_dict, data)
+
+        elif mail_type == "SHINE_CART_DROP":
+            send_dict['subject'] = data.get('subject', "")
+            send_dict['template'] = 'emailers/candidate/shine_cart_drop.html'
+            self.process(to, send_dict, data)
+

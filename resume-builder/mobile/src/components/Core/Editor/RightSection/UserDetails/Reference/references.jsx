@@ -102,6 +102,7 @@ class References extends Component {
     
     editHeadingClick() {
         this.setState({ editHeading: true })
+        this.props.sendTrackingInfo('right_section_edit',1)
     }
     
     deleteReference(index, fields, event) {
@@ -119,39 +120,40 @@ class References extends Component {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
         const { updateAlertModalStatus, handleSubmit, history, personalInfo: { order_data, entity_preference_data },
-        headingChange, submitting, changeOrderingUp, changeOrderingDown, eventClicked, showAlertMessage
-    } = this.props;
-    const { editHeading, heading } = this.state;
-    return (
-        <div className="buildResume">
-        <form onSubmit={handleSubmit(this.handleSubmit)}>
-        <PreviewModal {...this.props} />
-        <Subscribe {...this.props} />
-        <FieldArray name={"list"}
-        handleSubmit={handleSubmit}
-        handleAddition={this.props.handleAddition}
-        deleteReference={this.deleteReference}
-        changeOrderingUp={changeOrderingUp}
-        changeOrderingDown={changeOrderingDown}
-        eventClicked={eventClicked}
-        component={renderReferences}
-        headingChange={headingChange}
-        entity_preference_data={entity_preference_data}
-        editHeading={editHeading}
-        editHeadingClick={this.editHeadingClick}
-        context={this}
-        heading={heading}
-        showAlertMessage={showAlertMessage}
-        />
-        <ul className="form">
-        <li className="form__group">
-        <BottomCTC disabled={submitting} context={this} history={history} updateAlertModalStatus={updateAlertModalStatus}
-        length={length} pos={pos + 1} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
-        order_data={order_data} eventClicked={eventClicked} form_name={'References'} />
-        </li>
-        </ul>
-        </form>
-        </div>
+            headingChange, submitting, changeOrderingUp, changeOrderingDown, eventClicked, showAlertMessage
+        } = this.props;
+        const { editHeading, heading } = this.state;
+        return (
+            <div className="buildResume">
+                <form onSubmit={handleSubmit(this.handleSubmit)}>
+                    <PreviewModal {...this.props} />
+                    <Subscribe {...this.props} />
+                    <FieldArray name={"list"}
+                        sendTrackingInfo={this.props.sendTrackingInfo}
+                        handleSubmit={handleSubmit}
+                        handleAddition={this.props.handleAddition}
+                        deleteReference={this.deleteReference}
+                        changeOrderingUp={changeOrderingUp}
+                        changeOrderingDown={changeOrderingDown}
+                        eventClicked={eventClicked}
+                        component={renderReferences}
+                        headingChange={headingChange}
+                        entity_preference_data={entity_preference_data}
+                        editHeading={editHeading}
+                        editHeadingClick={this.editHeadingClick}
+                        context={this}
+                        heading={heading}
+                        showAlertMessage={showAlertMessage}
+                    />
+                    <ul className="form">
+                        <li className="form__group">
+                            <BottomCTC disabled={submitting} context={this} history={history} updateAlertModalStatus={updateAlertModalStatus}
+                                length={length} pos={pos + 1} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
+                                order_data={order_data} eventClicked={eventClicked} form_name={'References'} />
+                        </li>
+                    </ul>
+                </form>
+            </div>
         )
     }
 }

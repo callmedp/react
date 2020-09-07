@@ -35,7 +35,8 @@ export default class LeftSideBar extends Component {
     }
 
     previewClicked() {
-        const { previewButtonClicked, eventClicked } = this.props;
+        const { previewButtonClicked, eventClicked, sendTrackingInfo } = this.props;
+        sendTrackingInfo('left_edit_preview',1)
         previewButtonClicked(true);
         eventClicked({
             'action': 'Preview',
@@ -48,6 +49,7 @@ export default class LeftSideBar extends Component {
         const isEdit = this.state.edit;
         const newUser = localStorage.getItem('newUser')
         const {
+            sendTrackingInfo,
             showAlertModal,
             onChange,
             eventClicked,
@@ -81,8 +83,10 @@ export default class LeftSideBar extends Component {
                 </ul>
                 {
                     isEdit ?
-                        <Edit /> :
+                        <Edit 
+                            sendTrackingInfo = {sendTrackingInfo} /> :
                         <Preview
+                            sendTrackingInfo = {sendTrackingInfo}
                             onChange={onChange}
                             eventClicked={eventClicked}
                             customizeTemplate={customizeTemplate}

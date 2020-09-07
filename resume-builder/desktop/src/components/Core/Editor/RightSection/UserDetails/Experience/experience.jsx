@@ -129,7 +129,6 @@ class Experience extends Component {
             Object.keys(suggestions).map((el, index) => {
                 suggestionsList += suggestions[el] + (index + 1 === Object.keys(suggestions).length ? "" : '\n')
             })
-            console.log('-ddi------', suggestionsList);
             currentField['work_description'] = suggestionsList;
             fields.remove(currentIndex);
             fields.insert(currentIndex, currentField)
@@ -139,7 +138,7 @@ class Experience extends Component {
 
     handleAddition(fields, error) {
         const listLength = fields.length;
-
+        this.props.sendTrackingInfo('right_section_add',1);
         fields.push({
             "candidate_id": '',
             "id": '',
@@ -170,6 +169,7 @@ class Experience extends Component {
     }
 
     deleteExperience(index, fields, event) {
+        this.props.sendTrackingInfo('right_section_delete',1);
         event.stopPropagation();
         const experience = fields.get(index);
         fields.remove(index);
@@ -216,8 +216,6 @@ class Experience extends Component {
                         handleInputValue={handleInputValue}
                         openModal={this.openModal}
                         showAlertMessage={showAlertMessage}
-
-
                     />
 
                     <SavePreviewButtons

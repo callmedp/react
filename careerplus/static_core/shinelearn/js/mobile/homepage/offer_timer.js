@@ -77,14 +77,16 @@ const makeTrackingRequest = (loggingData) => {
 
 const homepageTracking = (action) => {
     console.log("homepage tracking on")
-    let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: action, 'position': 1, domain: 2, sub_product: trackingProductId };
+    let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: action,
+         'position': parseInt(position), domain: 2, sub_product: trackingProductId, trigger_point : triggerPoint, u_id : uId, utm_campaign : utmCampaign };
     if (trackingId) {
         makeTrackingRequest(loggingData);
     }
 }
 
 const trackClickEvent = () => {
-    let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'exit_home_page', 'position': 1, domain: 2, sub_product: trackingProductId };
+    let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'exit_home_page',
+     'position': parseInt(position), domain: 2, sub_product: trackingProductId, trigger_point : triggerPoint, u_id : uId, utm_campaign : utmCampaign };
     if (trackingId) {
         makeTrackingRequest(loggingData);
     }

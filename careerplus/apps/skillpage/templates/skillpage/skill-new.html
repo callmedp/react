@@ -247,8 +247,7 @@
                       alt="Test your skills">
                   <h2>Test Your Skills</h2>
                   <p>Take our free practice test to test your skill level in <strong>{{category.heading}}</strong></p>
-                  <a class="btn btn-primary mt-10" href="{% url 'assessment:vskill-subcategory' slug=category.slug  %}" 
-                      role="button">Take free test</a>
+                  <a class="btn btn-primary mt-10" href="{% url 'assessment:vskill-subcategory' slug=category.slug  %}" role="button">Take free test</a>
                 </div>
               </section>
             {% endif %}
@@ -616,6 +615,9 @@
     {{ block.super }}
     <script> 
       const modeChoices = {{product_mode_choices|safe}};
+      var trackingProductId = "{{tracking_product_id}}";
+      var productTrackingMappingId = "{{product_tracking_mapping_id}}";
+      var trackingId = "{{tracking_id}}";
     </script>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     {% compress js %}

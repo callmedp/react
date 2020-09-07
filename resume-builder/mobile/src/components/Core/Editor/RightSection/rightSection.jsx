@@ -53,42 +53,48 @@ class RightSection extends Component {
 }
 
 
-
-renderSwitch() {
-    switch (this.state.type) {
-        case 'education': {
-            return <Education {...this.props}/>
+    renderSwitch() {
+        switch (this.state.type) {
+            case 'education': {
+                return <Education {...this.props}
+                 sendTrackingInfo = {this.props.sendTrackingInfo}/>
+            }
+            case 'skill': {
+                return <Skills {...this.props}
+                sendTrackingInfo = {this.props.sendTrackingInfo}/>
+            }
+            case 'experience': {
+                return <Experience {...this.props}
+                sendTrackingInfo = {this.props.sendTrackingInfo}/>
+            }
+            case 'language': {
+                return <Language {...this.props}
+                sendTrackingInfo = {this.props.sendTrackingInfo}/>
+            }
+            case 'award': {
+                return <Award {...this.props}
+                sendTrackingInfo = {this.props.sendTrackingInfo}/>
+            }
+            case 'project': {
+                return <Project {...this.props}
+                sendTrackingInfo = {this.props.sendTrackingInfo}/>
+            }
+            case 'course': {
+                return <Course {...this.props}
+                sendTrackingInfo = {this.props.sendTrackingInfo}/>
+            }
+            case 'reference': {
+                return <Reference {...this.props}
+                sendTrackingInfo = {this.props.sendTrackingInfo}/>
+            }
+            case 'summary': {
+                return <Summary {...this.props}
+                sendTrackingInfo = {this.props.sendTrackingInfo}/>
+            }
+            default: {
+                return <PersonalInfo {...this.props}/>
+            }
         }
-        case 'skill': {
-            return <Skills {...this.props}/>
-        }
-        case 'experience': {
-            return <Experience {...this.props}/>
-        }
-        case 'language': {
-            return <Language {...this.props}/>
-        }
-        case 'award': {
-            return <Award {...this.props}/>
-        }
-        case 'project': {
-            return <Project {...this.props}/>
-        }
-        case 'course': {
-            return <Course {...this.props}/>
-        }
-        case 'reference': {
-            return <Reference {...this.props}/>
-        }
-        case 'summary': {
-            return <Summary {...this.props}/>
-        }
-        default: {
-            return <PersonalInfo {...this.props}/>
-        }
-        
-    }
-    
 }
 
 render() {
@@ -222,8 +228,9 @@ RightSection.propTypes = {
 }
 
 const handleAddition = (fields,data,offset,type,eventClicked,entity_name) =>{
+
+   
     fields.push(data)
-    
     scroller.scrollTo(`${type}${fields.length -1}`, {
         duration: 800,
         delay: 0,
@@ -238,7 +245,7 @@ const handleAddition = (fields,data,offset,type,eventClicked,entity_name) =>{
 }
 
 const changeOrderingUp = (index,fields,event) => {
-    
+    this.props.sendTrackingInfo('right_section_change_ordering',1)
     event.stopPropagation();
     let currentItem = fields.get(index);
     let prevItem = fields.get(index - 1);
@@ -251,6 +258,7 @@ const changeOrderingUp = (index,fields,event) => {
 }
 
 const changeOrderingDown = (index,fields,event) => {
+    this.props.sendTrackingInfo('right_section_change_ordering',1)
     event.stopPropagation();
     let currentItem = fields.get(index);
     let nextItem = fields.get(index + 1);

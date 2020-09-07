@@ -64,7 +64,7 @@ class AddToCartApiView(CartMixin, APIView):
                 email = request.session.get('email', '')
                 name = "{}{}".format(first_name, last_name)
                 # cart_drop_out_mail.apply_async(
-                #     (cart_pk, email),
+                #     (cart_pk, email, "SHINE_CART_DROP", name),
                 #     countdown=settings.CART_DROP_OUT_EMAIL)
                 source_type = "cart_drop_out"
 

@@ -117,7 +117,7 @@ Payment Summary - Shine Learning
           <form role="form" id="cart_remove_form{{item.id}}">{% csrf_token %}
             <input type="hidden" name="product_reference"
               value="{% if item.product_class == 'course' and variations|length  or item.type_flow == 17 and variations|length %}{{variations.0.reference}}{% else %}{{item.reference}}{% endif %}">
-            <span class="close-icon" onclick="removeFromCartMobile('{{item.id}}')"
+            <span class="close-icon item-list" name="{{item.id}}"
               id="id-remove-cart{{item.id}}"></span>
           </form>
 
@@ -362,6 +362,15 @@ Payment Summary - Shine Learning
   var productAvailability = "{{product_availability}}"
   var productTrackingMappingId = "{{product_tracking_mapping_id}}"
   var trackingId = "{{tracking_id}}"
+  var items = document.getElementsByClassName("item-list");
+  for (var i = 0; i < items.length; i++){
+    let id = items[i].getAttribute('name');
+    document.getElementsByName(id)[0].addEventListener("click", function(){removeFromCartMobile(id);});
+  }
+  var triggerPoint = "{{trigger_point}}"
+  var uId = "{{u_id}}"
+  var position = "{{position}}"
+  var utmCampaign ="{{utm_campaign}}"
 </script>
 {% compress js %}
 <script type="text/javascript" src="{% static 'shinelearn/js/cart/payment-summary.js' %}"></script>

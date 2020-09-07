@@ -29,11 +29,12 @@ export default class ResumeSlider extends Component {
     }
 
     async customise() {
-        const { eventClicked, showtext, updateModalStatus, updateSelectedTemplate ,location, history, checkSessionAvaialability, getCandidateShineDetails} = this.props
+        const { eventClicked, showtext, updateModalStatus, updateSelectedTemplate ,location, history, checkSessionAvaialability, getCandidateShineDetails, sendTrackingInfo} = this.props
         eventClicked({
             'action': 'SelectTemplate',
             'label': 'HomePage'
         })
+        sendTrackingInfo('select_template',1);
 
         const templateId = (parseInt(document.getElementsByClassName('slick-current')[0].getAttribute('data-index')) + 1);
 
