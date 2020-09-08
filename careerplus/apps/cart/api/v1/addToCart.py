@@ -52,6 +52,7 @@ class AddToCartApiView(CartMixin, APIView):
             return 11
 
     def post(self, request, *args, **kwargs):
+        from payment.tasks import make_logging_request
         data = {"status": -1}
         cart_type = request.data.get('cart_type')
         prod_id = request.data.get('prod_id', None)
@@ -98,7 +99,7 @@ class AddToCartApiView(CartMixin, APIView):
                     tracking_product_id = prod_id
                     product_tracking_mapping_id = self.maintain_tracking_info(product)
 
-                    if tracking_product_id and product_tracking_mapping_id and product_availability and emailer:
+                    if tracking_product_id and product_tracking_mapping_id and emailer:
                         make_logging_request.delay(
                                 tracking_product_id, product_tracking_mapping_id, tracking_id, 'clicked', position, trigger_point, u_id, utm_campaign, domain)
 

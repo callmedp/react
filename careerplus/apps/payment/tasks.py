@@ -42,7 +42,7 @@ def put_epay_for_successful_payment(epl_id, epl_market_place_id):
 
 
 @task
-def make_logging_request(tracking_product_id, product_tracking_mapping_id, tracking_id, action, position, trigger_point, u_id, utm_campaign, domain=2):
+def make_logging_request(tracking_product_id, product_tracking_mapping_id, tracking_id, action, position, trigger_point, u_id, utm_campaign, domain):
     shine_api_url = settings.SHINE_API_URL
     req_dict = {}
     headers = dict()
@@ -54,7 +54,7 @@ def make_logging_request(tracking_product_id, product_tracking_mapping_id, track
     req_dict.update({'t_id': tracking_id.strip(), 'products':
                      [product_tracking_mapping_id],
                      'action': action,
-                     'position': int(position) if position.strip() != '' else -1, 'domain': domain,
+                     'position': int(position) if isinstance(position, int) or position != '' else -1, 'domain': domain,
                      'sub_product': tracking_product_id,
                      'trigger_point': trigger_point,
                      'u_id': u_id.strip(),
