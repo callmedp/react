@@ -59,6 +59,8 @@ class AddToCartApiView(CartMixin, APIView):
         is_resume_template = request.data.get('add_resume', False)
         resume_shine_cart = request.data.get('resume_shine', False)
         tracking_id = request.data.get('tracking_id', '')
+        emailer = int(request.data.get('emailer', 0))
+        domain = 3
         candidate_id = request.data.get(
             'candidate_id', None)  # TODO  handle this
         try:
@@ -95,11 +97,16 @@ class AddToCartApiView(CartMixin, APIView):
                     utm_campaign = request.data.get('utm_campaign', '')
                     tracking_product_id = prod_id
                     product_tracking_mapping_id = self.maintain_tracking_info(product)
+
+                    if tracking_product_id and product_tracking_mapping_id and product_availability and emailer:
+                        make_logging_request.delay(
+                                tracking_product_id, product_tracking_mapping_id, tracking_id, 'clicked', position, trigger_point, u_id, utm_campaign, domain)
+
                     cart_drop_out_mail.apply_async(
                         (cart_pk, email, "SHINE_CART_DROP", name, 
                             tracking_id, u_id, tracking_product_id, 
                             product_tracking_mapping_id, trigger_point, 
-                            position, utm_campaign),
+                            position, utm_campaign, domain),
                         countdown=settings.CART_DROP_OUT_EMAIL)
                 source_type = "cart_drop_out"
 

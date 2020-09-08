@@ -180,7 +180,7 @@ class PaymentMixin(object):
             action = 'purchase_done'
             if tracking_id and product_availability:
                 make_logging_request.delay(
-                    tracking_product_id, product_tracking_mapping_id, tracking_id, action,position, trigger_point, u_id, utm_campaign )
+                    tracking_product_id, product_tracking_mapping_id, tracking_id, action,position, trigger_point, u_id, utm_campaign, 2)
 
             # order = InvoiceGenerate().save_order_invoice_pdf(order=order)
             invoice_generation_order.delay(order_pk=order.pk)

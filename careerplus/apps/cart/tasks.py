@@ -155,7 +155,7 @@ def lead_creation_function(filter_dict=None, cndi_name=None):
 def cart_drop_out_mail(pk=None, cnd_email=None, mail_type=None, name=None, 
     tracking_id="", u_id="", tracking_product_id="", 
     product_tracking_mapping_id="", trigger_point="", 
-    position=-1, utm_campaign=""):
+    position=-1, utm_campaign="", domain=2):
     mail_type = 'CART_DROP_OUT' if not mail_type else mail_type
     cart_objs = Cart.objects.filter(
         status=2,
@@ -232,15 +232,18 @@ def cart_drop_out_mail(pk=None, cnd_email=None, mail_type=None, name=None,
                         email_list_spent.append(toemail)
                         cache.set("email_sent_for_the_day", email_list_spent)
                         if product_tracking_mapping_id and tracking_id and tracking_product_id:
-                            make_logging_request.delay(
-                                tracking_product_id, product_tracking_mapping_id, tracking_id,\
-                                'exit_cart_mail_sent', position, trigger_point, u_id, utm_campaign )
+                                make_logging_request.delay(
+                                        tracking_product_id, product_tracking_mapping_id, tracking_id,\
+                                         'exit_cart_mail_sent', position, trigger_point, u_id, utm_campaign, domain)
 
                 token = AutoLogin().encode(toemail, cart_id, days=None)
                 data['autologin'] = "{}://{}/cart/payment-summary/?t_id={}&token={}&utm_campaign=learning_exit_mailer&trigger_point={}&u_id={}&position={}&emailer=1&t_prod_id={}&prod_t_m_id={}".format(
-                    settings.SITE_PROTOCOL, settings.SITE_DOMAIN,tracking_id, token,trigger_point, 
-                    u_id, position, tracking_product_id, product_tracking_mapping_id
-                    )
+                    settings.SITE_PROTOCOL, settings.SITE_DOMAIN, tracking_id, token,trigger_point, u_id, position, tracking_product_id, product_tracking_mapping_id)
+                if domain == 3:
+                    data.update({
+                        'autologin' : "{}://{}/cart/payment-summary/?t_id={}&utm_campaign=learning_exit_mailer&trigger_point={}&u_id={}&position={}&emailer=1&t_prod_id={}&prod_t_m_id={}".format(
+                    settings.SITE_PROTOCOL, settings.RESUME_SHINE_SITE_DOMAIN, tracking_id, trigger_point, u_id, position, tracking_product_id, product_tracking_mapping_id)
+                        })
                 if name:
                     data['name'] = name
                 try:
@@ -256,7 +259,7 @@ def cart_drop_out_mail(pk=None, cnd_email=None, mail_type=None, name=None,
 def cart_product_removed_mail(product_id= None, tracking_id="", 
         u_id=None, email=None, name=None, tracking_product_id="", 
         product_tracking_mapping_id="", trigger_point="", 
-        position=-1, utm_campaign=""):
+        position=-1, utm_campaign="", domain=2):
     try:
         name = name if name else "Candidate"
         if not email and not u_id:
@@ -290,6 +293,12 @@ def cart_product_removed_mail(product_id= None, tracking_id="",
         token = AutoLogin().encode(email, u_id, days=None)
         data['autologin'] = "{}://{}/cart/payment-summary/?prod_id={}&t_id={}&token={}&utm_campaign=learning_remove_product_mailer&trigger_point={}&u_id={}&position={}&email=1".format(
             settings.SITE_PROTOCOL, settings.SITE_DOMAIN, product_id, tracking_id, token, trigger_point, u_id, position)
+        if domain == 3:
+            data.update({
+                'autologin' : "{}://{}/cart/payment-summary/?prod_id={}&t_id={}&utm_campaign=learning_remove_product_mailer&trigger_point={}&u_id={}&position={}&email=1".format(
+            settings.SITE_PROTOCOL, settings.RESUME_SHINE_SITE_DOMAIN, product_id, tracking_id, trigger_point, u_id, position)
+                })
+
 
         email_list_spent.append(email)
         cache.set("email_sent_for_the_day", email_list_spent)
@@ -299,7 +308,7 @@ def cart_product_removed_mail(product_id= None, tracking_id="",
         except Exception as e:
             logging.getLogger('error_log').error("Unable to sent mail: {}".format(e))
         make_logging_request.delay(
-                tracking_product_id, product_tracking_mapping_id, tracking_id, 'remove_product_mail_sent', position, trigger_point, u_id, utm_campaign )
+            tracking_product_id, product_tracking_mapping_id, tracking_id, 'remove_product_mail_sent', position, trigger_point, u_id, utm_campaign, domain)
     except Exception as e:
          logging.getLogger('error_log').error(e)
 

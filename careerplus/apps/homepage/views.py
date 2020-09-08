@@ -50,7 +50,7 @@ class HomePageView(TemplateView, MetadataMixin):
                 'postion' : position
             })
             make_logging_request.delay(
-                '', product_tracking_mapping_id, tracking_id, 'home_page',position, trigger_point, u_id, utm_campaign )
+                '', product_tracking_mapping_id, tracking_id, 'home_page',position, trigger_point, u_id, utm_campaign, 2)
 
         elif self.request.session.get('tracking_id', '') and self.request.session.get('candidate_id'):
             product_tracking_mapping_id = self.request.session.get(
@@ -68,7 +68,7 @@ class HomePageView(TemplateView, MetadataMixin):
             utm_campaign = self.request.session.get(
             'utm_campaign','')
             make_logging_request.delay(
-                tracking_product_id, product_tracking_mapping_id, tracking_id, 'home_page', position, trigger_point, u_id, utm_campaign)
+                tracking_product_id, product_tracking_mapping_id, tracking_id, 'home_page', position, trigger_point, u_id, utm_campaign, 2)
 
     def get_meta_title(self, context):
         # return 'Best Resume Writing Services | Online Courses | Linkedin Profile - Shine Learning'

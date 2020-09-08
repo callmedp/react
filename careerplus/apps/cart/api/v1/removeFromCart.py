@@ -38,7 +38,7 @@ class RemoveFromCartAPIView(CartMixin, APIView):
         child_list = request.data.get('child_list', [])
         product_reference = request.data.get('product_reference', None)
         tracking_id = request.data.get('tracking_id', '')
-
+        domain = 3
         cart_obj = None
 
         if cart_pk is None:
@@ -122,7 +122,7 @@ class RemoveFromCartAPIView(CartMixin, APIView):
             cart_product_removed_mail.apply_async(
                     (product_id, tracking_id, u_id, email, name, 
                         product_id, product_tracking_mapping_id,
-                        trigger_point, position, utm_campaign), 
+                        trigger_point, position, utm_campaign, domain), 
                     countdown=settings.CART_DROP_OUT_EMAIL)
 
         cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
