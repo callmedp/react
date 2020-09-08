@@ -27,6 +27,30 @@ class AddToCartApiView(CartMixin, APIView):
     permission_classes = ()
     serializer_class = None
 
+    def maintain_tracking_info(self, product=None):
+        if not product:
+            return -1
+        if product.sub_type_flow == 501:
+            return 1
+        if product.sub_type_flow == 503:
+            return 2
+        if product.sub_type_flow == 504:
+            return 3
+        if product.type_flow == 18:
+            return 4
+        if product.type_flow == 19:
+            return 5
+        if product.type_flow == 1:
+            return 6
+        if product.sub_type_flow == 502:
+            return 7
+        if product.type_flow == 16:
+            return 8
+        if product.type_flow == 2:
+            return 9
+        if product.type_flow == 17:
+            return 11
+
     def post(self, request, *args, **kwargs):
         data = {"status": -1}
         cart_type = request.data.get('cart_type')
@@ -34,6 +58,7 @@ class AddToCartApiView(CartMixin, APIView):
         cart_pk = request.data.get('cart_pk', None)  # TODO handle this
         is_resume_template = request.data.get('add_resume', False)
         resume_shine_cart = request.data.get('resume_shine', False)
+        tracking_id = request.data.get('tracking_id', '')
         candidate_id = request.data.get(
             'candidate_id', None)  # TODO  handle this
         try:
@@ -63,9 +88,19 @@ class AddToCartApiView(CartMixin, APIView):
                 last_name = request.session.get('last_name', '')
                 email = request.session.get('email', '')
                 name = "{}{}".format(first_name, last_name)
-                # cart_drop_out_mail.apply_async(
-                #     (cart_pk, email, "SHINE_CART_DROP", name),
-                #     countdown=settings.CART_DROP_OUT_EMAIL)
+                if tracking_id:
+                    u_id = request.data.get('u_id', '')
+                    trigger_point = request.data.get('trigger_point', '')
+                    position = request.data.get('position', '')
+                    utm_campaign = request.data.get('utm_campaign', '')
+                    tracking_product_id = prod_id
+                    product_tracking_mapping_id = self.maintain_tracking_info(product)
+                    cart_drop_out_mail.apply_async(
+                        (cart_pk, email, "SHINE_CART_DROP", name, 
+                            tracking_id, u_id, tracking_product_id, 
+                            product_tracking_mapping_id, trigger_point, 
+                            position, utm_campaign),
+                        countdown=settings.CART_DROP_OUT_EMAIL)
                 source_type = "cart_drop_out"
 
                 create_lead_on_crm.apply_async(

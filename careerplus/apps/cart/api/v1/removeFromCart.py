@@ -3,6 +3,7 @@ import logging
 from datetime import datetime, date
 from decimal import Decimal
 from django.utils import timezone
+from django.conf import settings
 
 # django imports
 
@@ -11,6 +12,7 @@ from django.utils import timezone
 # inter app imports
 from cart.mixins import CartMixin
 from cart.models import Cart
+from cart.tasks import cart_product_removed_mail
 from wallet.models import (Wallet,
                            PointTransaction, WalletTransaction)
 
@@ -35,6 +37,7 @@ class RemoveFromCartAPIView(CartMixin, APIView):
         cart_pk = request.data.get('cart_pk', None)
         child_list = request.data.get('child_list', [])
         product_reference = request.data.get('product_reference', None)
+        tracking_id = request.data.get('tracking_id', '')
 
         cart_obj = None
 
@@ -106,6 +109,21 @@ class RemoveFromCartAPIView(CartMixin, APIView):
             line_obj.delete()
 
         data['status'] = 1
+
+        if tracking_id:
+            email = request.data.get('email', '')
+            name = request.data.get('name', '')
+            u_id = request.data.get('u_id', '')
+            trigger_point = request.data.get('trigger_point', '')
+            position = request.data.get('position', '')
+            utm_campaign = request.data.get('utm_campaign', '')
+            product_id = request.data.get('product_id', '')
+            product_tracking_mapping_id = request.data.get('product_tracking_mapping_id', '')
+            cart_product_removed_mail.apply_async(
+                    (product_id, tracking_id, u_id, email, name, 
+                        product_id, product_tracking_mapping_id,
+                        trigger_point, position, utm_campaign), 
+                    countdown=settings.CART_DROP_OUT_EMAIL)
 
         cart_dict = self.get_solr_cart_items(cart_obj=cart_obj)
         total_amount = Decimal(cart_dict.get('total_amount', Decimal(0)))
