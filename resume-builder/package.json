@@ -46,7 +46,8 @@
     "sweetalert2": "8.18.3",
     "webpack-bundle-tracker": "0.4.3",
     "webpack": "4.28.3",
-    "webpack-node-externals": "1.7.2"
+    "webpack-node-externals": "1.7.2",
+    "react-helmet": "^6.1.0"
   },
   "scripts": {
     "start:dev": "REACT_APP_ENV=development npm run start",
