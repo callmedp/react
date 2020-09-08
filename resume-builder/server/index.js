@@ -22,6 +22,7 @@ if (typeof window == 'undefined') {
             siteDomain: process.env.SITE_DOMAIN || '',
             siteProtocol: process.env.SITE_PROTOCOL || '',
             siteDomainChat: process.env.CHAT_STAGING || '',
+            shineSiteDomain: process.env.SHINE_SITE_DOMAIN || ''
         },
         location: {
             href: ''
@@ -114,7 +115,7 @@ app.get('*', async (req, res) => {
         }
     }
 
-    const content = render(req.path, store, routes, context, timestamp, window.config.staticUrl, isMobile, window.config.siteDomain, window.config.siteDomainChat);
+    const content = render(req.path, store, routes, context, timestamp, window.config.staticUrl, isMobile, window.config.siteDomain, window.config.siteDomainChat, window.config.shineSiteDomain);
     res.send(content);
 });
 
