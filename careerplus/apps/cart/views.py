@@ -704,7 +704,8 @@ class PaymentSummaryView(TemplateView, CartMixin):
         emailer = request.GET.get('emailer', '')
         tracking_product_id = request.GET.get('t_prod_id', '')
         product_tracking_mapping_id = request.GET.get('prod_t_m_id', '')
-
+        if tracking_id:
+            tracking_id = tracking_id.strip()
         valid = False
         candidate_id = None
         add_status = -1
