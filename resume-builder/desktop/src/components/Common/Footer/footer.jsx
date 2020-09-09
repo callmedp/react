@@ -3,6 +3,7 @@ import './footer.scss'
 
 export default function Footer(props) {
 
+    
     const handleFooterClick = () =>{
         props.sendTrackingInfo('exit_resume_builder',1)
     }
