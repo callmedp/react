@@ -222,7 +222,13 @@ def cart_drop_out_mail(pk=None, cnd_email=None, mail_type=None, name=None,
                         "Candidate details not present in cart id:", crt_obj.id)
                     continue
 
+                name = name if name else "Candidate"
+                data['name'] = name
                 if mail_type == "SHINE_CART_DROP":
+                    subject_name = "{}, ".format(name) if name != 'Candidate' else ''
+                    data.update({
+                        'subject' : "{}Your cart is waiting!".format(subject_name)
+                        })
                     email_list_spent = cache.get("email_sent_for_the_day", [])
                     if toemail in email_list_spent: 
                         logging.getLogger('info_log').info(
@@ -244,8 +250,7 @@ def cart_drop_out_mail(pk=None, cnd_email=None, mail_type=None, name=None,
                         'autologin' : "{}://{}/cart/payment-summary/?t_id={}&utm_campaign=learning_exit_mailer&trigger_point={}&u_id={}&position={}&emailer=1&t_prod_id={}&prod_t_m_id={}".format(
                     settings.SITE_PROTOCOL, settings.RESUME_SHINE_SITE_DOMAIN, tracking_id, trigger_point, u_id, position, tracking_product_id, product_tracking_mapping_id)
                         })
-                if name:
-                    data['name'] = name
+
                 try:
                     SendMail().send(to_email, mail_type, data)
                     count += 1
@@ -287,8 +292,8 @@ def cart_product_removed_mail(product_id= None, tracking_id="",
         data['product_url'] = prod.url
         data['product_price'] = round(prod.inr_price, 2)
         data['product_description'] = prod.meta_desc
-        data['subject'] = '{} is still available'.format(
-            prod.heading)
+        subject_name = "{}, ".format(name) if name != "Candidate" else ""
+        data['subject'] = '{}Forgot Something?'.format(subject_name)
 
         token = AutoLogin().encode(email, u_id, days=None)
         data['autologin'] = "{}://{}/cart/payment-summary/?prod_id={}&t_id={}&token={}&utm_campaign=learning_remove_product_mailer&trigger_point={}&u_id={}&position={}&email=1".format(
