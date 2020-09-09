@@ -134,7 +134,7 @@ class Education extends Component {
     }
     
     deleteEducation(index, fields, event) {
-        this.props.sendTrackingInfo('right_selection_delete',1)
+        this.props.sendTrackingInfo('right_section_delete',1)
         event.stopPropagation();
         const education = fields.get(index);
         fields.remove(index);
