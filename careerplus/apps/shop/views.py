@@ -978,7 +978,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
                 'trigger_point': trigger_point,
                 'u_id': u_id,
                 'position':position,
-                'utm_camppaign':utm_campaign
+                'utm_campaign':utm_campaign
                 })
             product_tracking_mapping_id = self.maintain_tracking_info(
                 prod)

@@ -880,7 +880,12 @@ class PaymentSummaryView(TemplateView, CartMixin):
             'tracking_product_id': self.request.session.get('tracking_product_id', ''),
             'product_tracking_mapping_id': self.request.session.get('product_tracking_mapping_id', ''),
             'product_availability': self.request.session.get('product_availability', ''),
-            'tracking_id': self.request.session.get('tracking_id', '')
+            'tracking_id': self.request.session.get('tracking_id', ''),
+            'trigger_point': self.request.session.get('trigger_point', ''),
+            'u_id': self.request.session.get('u_id', ''),
+            'position': self.request.session.get('position', 1),
+            'utm_campaign': self.request.session.get('utm_campaign', ''),
+            'product_availability': self.request.session.get('product_availability', '')
         })
 
         context.update({
