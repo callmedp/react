@@ -53,7 +53,10 @@ class Command(BaseCommand):
 
             try:
                 if obj.start_date:
-                    activation_date = obj.start_date
+                    if obj.approved_date_time:
+                        activation_date = obj.approved_date_time
+                    else:
+                        activation_date = obj.start_date
                 else:
                     activation_date = featured_op.created
             except Exception as e:
