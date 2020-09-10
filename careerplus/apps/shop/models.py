@@ -3358,8 +3358,6 @@ class ProductUserProfile(AbstractAutoDate):
         null=True, blank=True, choices=MANUAL_CHANGES_CHOICES
     )
     manual_changes_data = models.CharField(max_length=200, null=True, blank=True)
-    approved_date_time = models.DateTimeField(
-        null=True, blank=True)
 
     def save(self, *args, **kwargs):
         user = kwargs.pop('user', None)
