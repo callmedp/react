@@ -16,7 +16,7 @@ export default function Footer(props) {
                     <a href="/tnc" onClick={handleFooterClick}>Terms & Condition</a> 
                     <a href="/contact-us" onClick={handleFooterClick}>Contact us</a>
                 </div>
-                <div className="container--footer-txt">Copyright © 2020 HT Media Limited..</div>
+                <div className="container--footer-txt">Copyright © 2020 HT Media Limited.</div>
             </div>
         </footer>
     )
