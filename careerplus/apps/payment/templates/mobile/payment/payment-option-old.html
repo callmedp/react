@@ -227,9 +227,11 @@
 
 
 {% block js_section %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
     {{block.super}}
     {% compress js %}
-        <script src="{% static 'shinelearn/js/common/bootstrap.min.js' %}"></script>
+        <!-- <script src="{% static 'shinelearn/js/common/bootstrap.min.js' %}"></script> -->
         <script src="{% static 'shinelearn/js/common/bootstrap-datepicker.min.js' %}"></script>
         <script src="{% static 'shinelearn/js/payment/payment.js' %}"></script>
     {% endcompress %}

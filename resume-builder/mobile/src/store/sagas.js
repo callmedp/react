@@ -11,6 +11,7 @@ import watchProject from './project/saga/index'
 import watchReference from './reference/saga/index'
 import watchProductId from './buy/saga/index'
 import watchTemplate from './template/saga/index'
+import watchTracking from './tracking/saga/index'
 
 export default function* () {
     yield all([
@@ -25,6 +26,7 @@ export default function* () {
         watchProject(),
         watchReference(),
         watchProductId(),
-        watchTemplate()
+        watchTemplate(),
+        watchTracking(),
     ])
 }

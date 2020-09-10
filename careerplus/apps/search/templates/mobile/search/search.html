@@ -44,7 +44,7 @@ Search Result Page - Shine Learning
 
 {% block header %}
     <header class="w100fl he-auto">
-        <img aria-label="header search" src="{% static 'shinelearn/images/mobile/search/header-search.png' %}">
+        <img loading="lazy" aria-label="header search" src="{% static 'shinelearn/images/mobile/search/header-search.png' %}">
         <!-- header menu Icon Starts here -->
         <div class="main-menu w100fl">
             <div class="pull-left">
@@ -98,7 +98,7 @@ Search Result Page - Shine Learning
               {% if vendor_banner %}
     <div class="amcat-certification">
         <div class="amcat-box">
-            <img class="img-responsive" alt="" src="{{vendor_banner}}">
+            <img loading="lazy" class="img-responsive" alt="" src="{{vendor_banner}}">
         </div>
         <div class="amcat-tags mt-30">
             <div class="slide-container">

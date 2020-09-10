@@ -12,7 +12,7 @@
             <span>
 
                 {% if main_article.author.image %}
-              <img aria-label="{{main_article.author.image_alt}}" src="{{main_article.author.image.url}}" class="author-small-pic" alt="{{main_article.author.image_alt}}">
+              <img loading="lazy" aria-label="{{main_article.author.image_alt}}" src="{{main_article.author.image.url}}" class="author-small-pic" alt="{{main_article.author.image_alt}}">
                 {% endif %}
 
               <a href="/talenteconomy/authors/{{main_article.author.slug}}" title="{{main_article.author.name}}">{{main_article.author.name}}</a> / <span itemprop="datePublished">{{main_article.publish_date.date}}</span>
@@ -48,7 +48,7 @@
 
 
     <figure>
-        <img aria-label="{{main_article.image_alt}}" src="{% if main_article.image %}{{main_article.image.url}} {% endif %}" alt="{{main_article.image_alt}}" class="img-responsive" itemprop="image">
+        <img loading="lazy" aria-label="{{main_article.image_alt}}" src="{% if main_article.image %}{{main_article.image.url}} {% endif %}" alt="{{main_article.image_alt}}" class="img-responsive" itemprop="image">
     </figure>
 
     <article class="article-content" itemprop="articleBody">

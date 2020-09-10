@@ -569,18 +569,20 @@ gtag('config', 'UA-3537905-1',{'group':'mainProfile'});
 
   {% block js_section %}
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"> </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"> </script>
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"> </script>
 <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.2.1/typeahead.bundle.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.3.1/typeahead.bundle.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bxslider/4.2.15/jquery.bxslider.min.js"></script>
 
      {% compress js %}
         <script type="text/javascript" src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"> </script>
-        <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/jquery.bxslider.js' %}"> </script>
+        <!-- <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/jquery.bxslider.js' %}"> </script> -->
         <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/jquery.simpler-sidebar.js' %}"> </script>
         <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/multilevelnav.js' %}"></script>
         <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/smk-accordion.js' %}"> </script>
-        <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/slick.js' %}"></script>
+        <!-- <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/slick.js' %}"></script> -->
         <script type="text/javascript" src="{% static 'shinelearn/js/common/plugins.ga.js' %}"></script>
         <script type="text/javascript" src="{% static 'shinelearn/js/mobile/common/base.js' %}"> </script>
         <script type="text/javascript" src="{% static 'shinelearn/js/common/common.js' %}"> </script>

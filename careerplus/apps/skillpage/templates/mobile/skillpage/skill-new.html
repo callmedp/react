@@ -71,7 +71,7 @@
                 {% for course in top_3_courses %}
                 <li class="postion-relative">
                     <span class="popular-courses__slides--circle">
-                        <img aria-label="{{course.pNm}}" src="{{course.pImg}}" alt="{{course.pNm}}">
+                        <img loading="lazy" aria-label="{{course.pNm}}" src="{{course.pImg}}" alt="{{course.pNm}}">
                     </span>
                     <div class="popular-courses__slides--items border-bottom-blue mt-0">
                         <a href="{{course.pURL}}">
@@ -129,7 +129,7 @@
                         Take free test
                     </a>
                 </div>
-                <img src="{% static 'shinelearn/images/mobile/skill/test-your-skill.png'%}" alt="">
+                <img loading="lazy" src="{% static 'shinelearn/images/mobile/skill/test-your-skill.png'%}" alt="">
             </div>
         </div><!-- // Test your skills -->
         {% endif %}
@@ -183,7 +183,7 @@
                                 <meta itemprop="position" content="{{forloop.counter}}" />
 
                                 <span class="skill-tabs--image">
-                                    <img aria-label="{{course.pNm}}" src="{{course.pImg}}" alt="{{course.pNm}}">
+                                    <img loading="lazy" aria-label="{{course.pNm}}" src="{{course.pImg}}" alt="{{course.pNm}}">
                                 </span><!-- // Image -->
 
                                 <div class="skill-tabs__content">
@@ -225,7 +225,7 @@
                                 More course
                             </a>
                             <div class="hide">
-                                <img aria-label="Loader image" class="img-fluid"
+                                <img loading="lazy" aria-label="Loader image" class="img-fluid"
                                     src="{% static 'shinelearn/images/new-loader.gif' %}" alt="Loader image">
                             </div>
                         </div>
@@ -240,7 +240,7 @@
                                 <meta itemprop="position" content="{{forloop.counter}}" />
 
                                 <span class="skill-tabs--image">
-                                    <img aria-label="{{assesment.pNm}}" src="{{assesment.pImg}}"
+                                    <img loading="lazy" aria-label="{{assesment.pNm}}" src="{{assesment.pImg}}"
                                         alt="{{assesment.pNm}}">
                                 </span><!-- // Image -->
 
@@ -284,7 +284,7 @@
                                 More Assessments
                             </a>
                             <div class="hide">
-                                <img aria-label="Loader image" class="img-fluid"
+                                <img loading="lazy" aria-label="Loader image" class="img-fluid"
                                     src="{% static 'shinelearn/images/new-loader.gif' %}" alt="Loader image">
                             </div>
                         </div>
@@ -414,12 +414,17 @@
         {% endif %}
     </ul>
 </div><!-- // sticky-header -->
-
+<!-- function : onclick="trackEvent('exit_product_page');" -->
 {% endblock container %}
 <!-- // Main body Ends here -->
 
 {% block js_section %}
 {{block.super}}
+<!--  <script> 
+      var trackingProductId = "{{tracking_product_id}}";
+      var productTrackingMappingId = "{{product_tracking_mapping_id}}";
+      var trackingId = "{{tracking_id}}";
+</script> -->
 
 {% compress js %}
 <script src="{% static 'shinelearn/js/mobile/zopim_chat/custom.js' %}"></script>

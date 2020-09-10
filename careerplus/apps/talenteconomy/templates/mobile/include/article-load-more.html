@@ -15,7 +15,7 @@
         itemprop="image">
       </amp-img>
       {% else %}
-      <img aria-label="{{articlelist.image_alt}}" class="media-object" width="{{ im.width }}" height="{{ im.height }}" src="{{articlelist.image.url}}" alt="{{articlelist.image_alt}}" itemprop="image">
+      <img loading="lazy" aria-label="{{articlelist.image_alt}}" class="media-object" width="{{ im.width }}" height="{{ im.height }}" src="{{articlelist.image.url}}" alt="{{articlelist.image_alt}}" itemprop="image">
       {% endif %}
       {% endthumbnail %}
     </figure>

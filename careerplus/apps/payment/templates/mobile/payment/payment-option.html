@@ -308,6 +308,8 @@
 
 
 {% block js_section %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
 <script type="text/javascript">
         var totalAmount = "{{total_amount}}";
         var cart_id     = "{{cart_id}}"
@@ -316,11 +318,15 @@
         var productTrackingMappingId = "{{product_tracking_mapping_id}}"
         var productAvailability = "{{product_availability}}"
         var trackingId = "{{tracking_id}}"
+        var triggerPoint = "{{trigger_point}}"
+        var uId = "{{u_id}}"
+        var position = "{{position}}"
+        var utmCampaign ="{{utm_campaign}}"
         console.log({ trackingProductId, shineApiUrl, productTrackingMappingId, trackingId })
         </script>
     {{block.super}}
     {% compress js %}
-        <script src="{% static 'shinelearn/js/common/bootstrap.min.js' %}"></script>
+        <!-- <script src="{% static 'shinelearn/js/common/bootstrap.min.js' %}"></script> -->
         <script src="{% static 'shinelearn/js/common/bootstrap-datepicker.min.js' %}"></script>
         <script src="{% static 'shinelearn/js/payment/payment.js' %}"></script>
     {% endcompress %}

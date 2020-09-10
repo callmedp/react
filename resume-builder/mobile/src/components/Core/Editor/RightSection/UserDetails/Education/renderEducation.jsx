@@ -25,7 +25,8 @@ const renderEducation = ({
     context,
     tillTodayDisable,
     headingChange,
-    showAlertMessage
+    showAlertMessage,
+    sendTrackingInfo
 }) => {
     return (
 
@@ -60,6 +61,7 @@ const renderEducation = ({
                                     }
                                 })
                                 if (!skipAddition) {
+                                    sendTrackingInfo('right_section_add',1)
                                     handleAddition(fields, educationNewData(fields), 450, 'education', eventClicked, 'Education')
                                 }
                                 else {

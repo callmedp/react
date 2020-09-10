@@ -24,7 +24,7 @@ from geolocation.models import Country
 from linkedin.autologin import AutoLogin
 from users.tasks import user_register
 from search.helpers import get_recommendations
-from cart.tasks import cart_drop_out_mail, create_lead_on_crm
+from cart.tasks import cart_drop_out_mail, create_lead_on_crm, cart_product_removed_mail
 from payment.tasks import make_logging_request
 from django.db.models import Q
 from django.core.cache import cache
@@ -144,7 +144,7 @@ class AddToCartView(View, CartMixin):
 
 class RemoveFromCartView(View, CartMixin):
 
-    def removeTracking(self, product_id):
+    def removeTracking(self, product_id, email_dict):
         tracking_id = self.request.session.get(
             'tracking_id', '')
         tracking_product_id = self.request.session.get(
@@ -153,12 +153,29 @@ class RemoveFromCartView(View, CartMixin):
             'product_tracking_mapping_id', '')
         product_availability = self.request.session.get(
             'product_availability', '')
+        trigger_point = self.request.session.get(
+            'trigger_point','')
+        u_id = self.request.session.get(
+            'u_id','')
+        position = self.request.session.get(
+            'position',1)
+        utm_campaign = self.request.session.get(
+            'utm_campaign','')
         if tracking_product_id == product_id and tracking_id:
+            # logging.getLogger('info_log').info(email_data)
+            name = email_dict.get('name', '')
+            email = email_dict.get('email', '')
+            cart_product_removed_mail.apply_async(
+                (product_id, tracking_id, u_id, email, name, 
+                    tracking_product_id, product_tracking_mapping_id,
+                    trigger_point, position, utm_campaign), 
+                countdown=settings.CART_DROP_OUT_EMAIL)
+            # cart_product_removed_mail(email_data)
             make_logging_request.delay(
-                tracking_product_id, product_tracking_mapping_id, tracking_id, 'remove_product')
+                tracking_product_id, product_tracking_mapping_id, tracking_id, 'remove_product', position, trigger_point, u_id, utm_campaign )
             # for showing the user exits for that particular cart product
             make_logging_request.delay(
-                tracking_product_id, product_tracking_mapping_id, tracking_id, 'exit_cart')
+                tracking_product_id, product_tracking_mapping_id, tracking_id, 'exit_cart', position, trigger_point, u_id, utm_campaign )
             if tracking_id:
                 del self.request.session['tracking_id']
             if product_tracking_mapping_id:
@@ -167,31 +184,47 @@ class RemoveFromCartView(View, CartMixin):
                 del self.request.session['tracking_product_id']
             if product_availability:
                 del self.request.session['product_availability']
+            if trigger_point:
+                del self.request.session['trigger_point']
+            if position:
+                del self.request.session['position']
+            if utm_campaign:
+                del self.request.session['utm_campaign']
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax():
             data = {"status": -1}
             reference = request.POST.get('reference_id')
+            email_dict = {}
             try:
                 if not self.request.session.get('cart_pk'):
                     self.getCartObject()
 
                 cart_pk = self.request.session.get('cart_pk')
                 if cart_pk:
-                    cart_obj = Cart.objects.get(pk=cart_pk)
+                    cart_obj = Cart.objects.filter(pk=cart_pk).first()
+                    if cart_obj:
+                        email = cart_obj.email if cart_obj.email else ""
+                        first_name = cart_obj.first_name if cart_obj.first_name else ""
+                        last_name = cart_obj.last_name if cart_obj.last_name else ""
+                        name = "{} {}".format(first_name, last_name)
+                        email_dict.update({
+                            'email' : email,
+                            'name' : name
+                        })
                     line_obj = cart_obj.lineitems.get(reference=reference)
                     if line_obj.parent_deleted:
                         parent = line_obj.parent
                         childs = cart_obj.lineitems.filter(
                             parent=parent, parent_deleted=True)
                         if childs.count() > 1:
-                            self.removeTracking(line_obj.product.id)
+                            self.removeTracking(line_obj.product.id, email_dict)
                             line_obj.delete()
                         else:
-                            self.removeTracking(parent.product.id)
+                            self.removeTracking(parent.product.id, email_dict)
                             parent.delete()
                     else:
-                        self.removeTracking(line_obj.product.id)
+                        self.removeTracking(line_obj.product.id, email_dict)
                         line_obj.delete()
 
                     data['status'] = 1
@@ -657,12 +690,22 @@ class PaymentSummaryView(TemplateView, CartMixin):
             return 8
         if product.type_flow == 2:
             return 9
+        if product.type_flow == 17:
+            return 11
 
     def get(self, request, *args, **kwargs):
         token = request.GET.get('token', '')
         product_id = request.GET.get('prod_id', '')
         tracking_id = request.GET.get('t_id', '')
-
+        utm_campaign = request.GET.get('utm_campaign', '')
+        trigger_point = request.GET.get('trigger_point', '')
+        u_id = request.GET.get('u_id', request.session.get('u_id',''))
+        position = request.GET.get('position', -1)
+        emailer = request.GET.get('emailer', '')
+        tracking_product_id = request.GET.get('t_prod_id', '')
+        product_tracking_mapping_id = request.GET.get('prod_t_m_id', '')
+        if tracking_id:
+            tracking_id = tracking_id.strip()
         valid = False
         candidate_id = None
         add_status = -1
@@ -708,20 +751,52 @@ class PaymentSummaryView(TemplateView, CartMixin):
                             {'product_tracking_mapping_id': product_tracking_mapping_id})
 
         if tracking_id:
-            request.session.update({'tracking_id': tracking_id})
+            request.session.update({
+                'tracking_id': tracking_id,
+                'trigger_point': trigger_point,
+                'position': position,
+                'u_id': u_id,
+                'utm_campaign': utm_campaign})
         
         tracking_id= request.session.get('tracking_id','')
-        tracking_product_id= request.session.get('tracking_product_id','')
+        tracking_product_id= request.session.get('tracking_product_id',tracking_product_id)
         product_availability = request.session.get('product_availability','')
-        product_tracking_mapping_id= request.session.get('product_tracking_mapping_id','')
+        position= request.session.get('position',-1)
+        u_id= request.session.get('u_id','')
+        utm_campaign= request.session.get('utm_campaign','')
+        product_tracking_mapping_id= request.session.get('product_tracking_mapping_id',product_tracking_mapping_id)
+        trigger_point = request.session.get('trigger_point', '')
 
-        if tracking_id and tracking_product_id and product_tracking_mapping_id and product_availability:
+        if product_id and tracking_id:
+            try:  
+                cart_pk = self.request.session.get('cart_pk', '')
+                cart_obj = Cart.objects.filter(pk=cart_pk).first()
+                if cart_obj:
+                    email = cart_obj.email if cart_obj.email else ""
+                    first_name = cart_obj.first_name if cart_obj.first_name else ""
+                    last_name  = cart_obj.last_name if cart_obj.last_name else ""
+                    name = "{} {}".format(first_name, last_name)
+                    cart_drop_out_mail.apply_async(
+                        (cart_pk, email, "SHINE_CART_DROP", name, 
+                        tracking_id, u_id, tracking_product_id, 
+                        product_tracking_mapping_id, trigger_point, 
+                        position, utm_campaign),
+                        countdown=settings.CART_DROP_OUT_EMAIL)
+            except Exception as e:
+                logging.getLogger('error_log').error("Unable to send mail: {}".format(e))
+
+        if tracking_id and tracking_product_id and product_tracking_mapping_id and product_availability and emailer:
             make_logging_request.delay(
-                tracking_product_id, product_tracking_mapping_id, tracking_id, 'cart_payment_summary')
+                    tracking_product_id, product_tracking_mapping_id, tracking_id, 'clicked', position, trigger_point, u_id, utm_campaign)
 
         redirect = self.redirect_if_necessary(reload_url)
         if redirect:
             return redirect
+
+        if tracking_id and tracking_product_id and product_tracking_mapping_id and product_availability:
+            make_logging_request.delay(
+                tracking_product_id, product_tracking_mapping_id, tracking_id, 'cart_payment_summary',position, trigger_point, u_id, utm_campaign)
+
         return super(self.__class__, self).get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -806,7 +881,12 @@ class PaymentSummaryView(TemplateView, CartMixin):
             'tracking_product_id': self.request.session.get('tracking_product_id', ''),
             'product_tracking_mapping_id': self.request.session.get('product_tracking_mapping_id', ''),
             'product_availability': self.request.session.get('product_availability', ''),
-            'tracking_id': self.request.session.get('tracking_id', '')
+            'tracking_id': self.request.session.get('tracking_id', ''),
+            'trigger_point': self.request.session.get('trigger_point', ''),
+            'u_id': self.request.session.get('u_id', ''),
+            'position': self.request.session.get('position', 1),
+            'utm_campaign': self.request.session.get('utm_campaign', ''),
+            'product_availability': self.request.session.get('product_availability', '')
         })
 
         context.update({

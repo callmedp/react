@@ -14,7 +14,7 @@
                     </amp-img>
 
                     {% else %}
-                    <img aria-label="Product image" src="{{ product.pImg}}">
+                    <img loading="lazy" aria-label="Product image" src="{{ product.pImg}}">
                     {% endif %}
                 </a>
             </div>
@@ -66,7 +66,7 @@
 {% if certifications.has_next %}
     <div id='cert_load_more_mobile' class="loadmore">
             <div id = "cert_loader_mobile" style ="display:none" class="loadmore__loader">
-                <img aria-label="loader"  src="{% static 'shinelearn/images/loader.gif' %}" class="img-responsive" >
+                <img loading="lazy" aria-label="loader"  src="{% static 'shinelearn/images/loader.gif' %}" class="img-responsive" >
             </div>
         <p class="text-center pb-0">
             <a role="button" id="certification_load_more_mobile"

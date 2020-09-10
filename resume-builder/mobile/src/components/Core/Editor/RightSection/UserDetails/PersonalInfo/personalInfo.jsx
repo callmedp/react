@@ -133,146 +133,147 @@ class PersonalInfo extends Component {
         return (
             
             <div className="buildResume">
-            <PreviewModal {...this.props} />
-            <Subscribe {...this.props} />
-            
-            <div className="buildResume__wrap">
-            <div className="buildResume__heading">
-            {!editHeading ?
-                
-                <React.Fragment>
-                <h1 className="heading-style">{heading}</h1>
-                <i className="sprite icon--edit" onClick={() => {
-                    newUser ? updateAlertModalStatus(true) : this.setState({ editHeading: true })
-                }}></i>
-                {/* <div className="toolTip">
-                <span className="toolTip--arrow-up"></span>
-                <span className="toolTip--close">+</span>
-                You can always edit the section title
-            </div> */}
-            </React.Fragment> :
-            <React.Fragment>
-            <input type="text" autoFocus defaultValue={heading} maxLength={'20'}
-            onChange={(event) => this.setState({ heading: event.target.value })} />
-            <i className="sprite icon--editTick" onClick={() => {
-                headingChange(personalInfo.entity_preference_data, heading, 0);
-                this.setState({ editHeading: false })
-            }}></i>
-            </React.Fragment>
-            
-        }
-        {/*  */}
-        </div>
-        
-        
-        <form onSubmit={handleSubmit(this.handleSubmit)}>
-        
-        <ul className="form">
-        {/*  Temporary disabled closed due to expert assitance */}
-        <li className="form__group">
-        <Field component={renderField} label={"First Name"} type={"text"} name="first_name"
-        id="first_name" disabled={order_data && order_data.id && false ? true : false}
-        iconClass={"sprite icon--firstName"} className="form__input" prepend={true}
-        maxLength={"20"} />
-        </li>
-        {/*  Temporary disabled closed due to expert assitance */}
-        <li className="form__group">
-        <Field component={renderField} label={"Last Name"} type={"text"} name="last_name"
-        id="last_name" disabled={order_data && order_data.id && false ? true : false}
-        iconClass={"sprite icon--lastName"} className="form__input" prepend={true}
-        maxLength={"20"} />
-        </li>
-        
-        <li className="form__group">
-        <Field component={renderSelect} label={"Gender"} name="gender" prepend={true}
-        iconClass={"sprite icon--gender"} className="form__input form__select">
-        <option value="">Gender</option>
-        <option value="1">Male</option>
-        <option value="2">Female</option>
-        <option value="3">Others</option>
-        </Field>
-        </li>
-        
-        <li className="form__group dob">
-        <Field component={datepicker} label={"Date Of Birth"} type={"date"} name="date_of_birth"
-        id="date_of_birth"
-        yearDropDownItemNumber={50} maxDateAllowed={'true'} />
-        </li>
-        
-        <li className="form__group">
-        <Field component={renderField} label={"Mobile"} type={"number"} name="number"
-        id="number" prepend={true}
-        iconClass={"sprite icon--mobile"} className="form__input" pattern="\d*"
-        maxLength={"10"} />
-        </li>
-        
-        <li className="form__group">
-        <Field component={renderField} label={"Email"} type={"email"} name="email" id="email"
-        prepend={true}
-        iconClass={"sprite icon--mail"} className="form__input" />
-        </li>
-        
-        <li className="form__group">
-        <Field component={renderTextArea} label={"Address"} type={"text"} name="location"
-        id="location"
-        prepend={true} iconClass={"sprite icon--address"} className="form__input"
-        rows="4" maxLength={'100'} />
-        </li>
-        
-        <li className="form__group">
-        <Field name="extracurricular" id="extracurricular"
-        
-        component={renderAsyncCreatableSelect}
-        className={'multi-select'}
-        defaultOptions={defaultInterests}
-        iconClass={'sprite icon--interest'}
-        label={'Interest'}
-        loadOptions={(inputValue) => fetchInterestList(inputValue)}
-        value={personalInfo.extracurricular}
-        isMulti={true}
-        closeMenuOnSelect={false}
-        />
-        </li>
-        
-        <li className="form__group">
-        <div className="upload-btn-wrapper">
-        
-        <button className="upload-btn-wrapper__btn">
-        <i className="sprite icon--camera"></i>
-        Upload a file
-        </button>
-        <input type="file" accept="image/*" name="displayPicture"
-        onChange={this.getImageURI.bind(this)} />
-        </div>
-        </li>
-        
-        <li className="form__group">
-        <span className="upload--image overflow-hidden">
-        {
-            (this.state.imageURI || personalInfo.image) && flag ?
-            <React.Fragment>
-            <span className="close-wrap">
-            <i className="sprite icon--close" onClick={() => {
-                this.setState({ imageURL: '', imageURI: '', flag: false })
-            }}></i>
-            </span>
-            <img alt={"User Profile"}
-            src={this.state.imageURI || personalInfo.image} />
-            </React.Fragment> :
-            <img alt={"User Profile"}
-            src="/media/static/react/assets/images/mobile/default-user.jpg" />
-        }
-        </span>
-        </li>
-        </ul>
-        <BottomCTC disabled={submitting} context={this} history={history}
-        updateAlertModalStatus={updateAlertModalStatus}
-        length={length} pos={pos + 1} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
-        order_data={order_data} eventClicked={eventClicked} form_name={'Personal Info'} />
-        </form>
-        </div>
-        
-        </div>
+                <PreviewModal {...this.props} />
+                <Subscribe {...this.props} />
+
+                <div className="buildResume__wrap">
+                    <div className="buildResume__heading">
+                        {!editHeading ?
+
+                            <React.Fragment>
+                                <h1 className="heading-style">{heading}</h1>
+                                <i className="sprite icon--edit" onClick={() => {
+                                    newUser ? updateAlertModalStatus(true) : this.setState({ editHeading: true });
+                                    this.props.sendTrackingInfo('right_section_delete',1)
+                                }}></i>
+                                {/* <div className="toolTip">
+                                <span className="toolTip--arrow-up"></span>
+                                <span className="toolTip--close">+</span>
+                                You can always edit the section title
+                            </div> */}
+                            </React.Fragment> :
+                            <React.Fragment>
+                                <input type="text" autoFocus defaultValue={heading} maxLength={'20'}
+                                    onChange={(event) => this.setState({ heading: event.target.value })} />
+                                <i className="sprite icon--editTick" onClick={() => {
+                                    headingChange(personalInfo.entity_preference_data, heading, 0);
+                                    this.setState({ editHeading: false })
+                                }}></i>
+                            </React.Fragment>
+
+                        }
+                        {/*  */}
+                    </div>
+
+
+                    <form onSubmit={handleSubmit(this.handleSubmit)}>
+
+                        <ul className="form">
+                            {/*  Temporary disabled closed due to expert assitance */}
+                            <li className="form__group">
+                                <Field component={renderField} label={"First Name"} type={"text"} name="first_name"
+                                    id="first_name" disabled={order_data && order_data.id && false ? true : false}
+                                    iconClass={"sprite icon--firstName"} className="form__input" prepend={true}
+                                    maxLength={"20"} />
+                            </li>
+                            {/*  Temporary disabled closed due to expert assitance */}
+                            <li className="form__group">
+                                <Field component={renderField} label={"Last Name"} type={"text"} name="last_name"
+                                    id="last_name" disabled={order_data && order_data.id && false ? true : false}
+                                    iconClass={"sprite icon--lastName"} className="form__input" prepend={true}
+                                    maxLength={"20"} />
+                            </li>
+
+                            <li className="form__group">
+                                <Field component={renderSelect} label={"Gender"} name="gender" prepend={true}
+                                    iconClass={"sprite icon--gender"} className="form__input form__select">
+                                    <option value="">Gender</option>
+                                    <option value="1">Male</option>
+                                    <option value="2">Female</option>
+                                    <option value="3">Others</option>
+                                </Field>
+                            </li>
+
+                            <li className="form__group dob">
+                                <Field component={datepicker} label={"Date Of Birth"} type={"date"} name="date_of_birth"
+                                    id="date_of_birth"
+                                    yearDropDownItemNumber={50} maxDateAllowed={'true'} />
+                            </li>
+
+                            <li className="form__group">
+                                <Field component={renderField} label={"Mobile"} type={"number"} name="number"
+                                    id="number" prepend={true}
+                                    iconClass={"sprite icon--mobile"} className="form__input" pattern="\d*"
+                                    maxLength={"10"} />
+                            </li>
+
+                            <li className="form__group">
+                                <Field component={renderField} label={"Email"} type={"email"} name="email" id="email"
+                                    prepend={true}
+                                    iconClass={"sprite icon--mail"} className="form__input" />
+                            </li>
+
+                            <li className="form__group">
+                                <Field component={renderTextArea} label={"Address"} type={"text"} name="location"
+                                    id="location"
+                                    prepend={true} iconClass={"sprite icon--address"} className="form__input"
+                                    rows="4" maxLength={'100'} />
+                            </li>
+
+                            <li className="form__group">
+                                <Field name="extracurricular" id="extracurricular"
+
+                                    component={renderAsyncCreatableSelect}
+                                    className={'multi-select'}
+                                    defaultOptions={defaultInterests}
+                                    iconClass={'sprite icon--interest'}
+                                    label={'Interest'}
+                                    loadOptions={(inputValue) => fetchInterestList(inputValue)}
+                                    value={personalInfo.extracurricular}
+                                    isMulti={true}
+                                    closeMenuOnSelect={false}
+                                />
+                            </li>
+
+                            <li className="form__group">
+                                <div className="upload-btn-wrapper">
+
+                                    <button className="upload-btn-wrapper__btn">
+                                        <i className="sprite icon--camera"></i>
+                                        Upload a file
+                                    </button>
+                                    <input type="file" accept="image/*" name="displayPicture"
+                                        onChange={this.getImageURI.bind(this)} />
+                                </div>
+                            </li>
+
+                            <li className="form__group">
+                                <span className="upload--image overflow-hidden">
+                                    {
+                                        (this.state.imageURI || personalInfo.image) && flag ?
+                                            <React.Fragment>
+                                                <span className="close-wrap">
+                                                    <i className="sprite icon--close" onClick={() => {
+                                                        this.setState({ imageURL: '', imageURI: '', flag: false })
+                                                    }}></i>
+                                                </span>
+                                                <img alt={"User Profile"}
+                                                    src={this.state.imageURI || personalInfo.image} />
+                                            </React.Fragment> :
+                                            <img alt={"User Profile"}
+                                                src="/media/static/react/assets/images/mobile/default-user.jpg" />
+                                    }
+                                </span>
+                            </li>
+                        </ul>
+                        <BottomCTC disabled={submitting} context={this} history={history}
+                            updateAlertModalStatus={updateAlertModalStatus}
+                            length={length} pos={pos + 1} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
+                            order_data={order_data} eventClicked={eventClicked} form_name={'Personal Info'} />
+                    </form>
+                </div>
+
+            </div>
         )
     }
 }

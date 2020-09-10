@@ -67,7 +67,7 @@
 
     {% for oi in item_list %}
 
-    {% if forloop.counter0|divisibleby:20 %}
+    {% if forloop.counter0|divisibleby:18 %}
     <tr>
       <td height="20"></td>
     </tr>
@@ -140,7 +140,7 @@
       </tr>
     {% endif %}
 
-{% if forloop.counter|divisibleby:20 or forloop.last %}
+{% if forloop.counter|divisibleby:18 or forloop.last %}
 </table>
 
   </td>

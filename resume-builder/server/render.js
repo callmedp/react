@@ -7,7 +7,7 @@ import { renderRoutes } from 'react-router-config';
 var path = require('path');
 const fs = require('fs');
 
-export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile, siteDomain, siteDomainChat) => {
+export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile, siteDomain, siteDomainChat, shineSiteDomain) => {
 
   const content = renderToString(< Provider
     store={store} >
@@ -81,6 +81,8 @@ export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile
         config.staticUrl = "${staticUrl}" 
         config.siteDomain = "${siteDomain}"
         config.siteDomainChat = "${siteDomainChat}"
+        config.shineSiteDomain = "${shineSiteDomain}"
+        
       </script>
       <script>
           document.oncontextmenu = document.body.oncontextmenu = function() {return false;}

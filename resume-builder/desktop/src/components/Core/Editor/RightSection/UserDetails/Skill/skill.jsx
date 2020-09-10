@@ -88,6 +88,7 @@ class Skill extends Component {
     
     handleAddition(fields) {
         const listLength = fields.length;
+        this.props.sendTrackingInfo('right_section_add',1);
         fields.push({
             "candidate_id": '',
             "id": '',
@@ -112,6 +113,7 @@ class Skill extends Component {
     }
     
     deleteSkill(index, fields, event) {
+        this.props.sendTrackingInfo('right_section_delete',1);
         event.stopPropagation();
         const skill = fields.get(index);
         fields.remove(index);
