@@ -52,13 +52,7 @@ class Command(BaseCommand):
                 oi_status__in=[5, 23, 31]).order_by('id').order_by('id').first()
 
             try:
-                if obj.approved_date_time:
-                    activation_date = obj.approved_date_time
-                else:
-                    if obj.start_date:
-                            activation_date = obj.start_date
-                    else:
-                        activation_date = featured_op.created
+                activation_date = featured_op.created
             except Exception as e:
                 logging.getLogger('error_log').error(
                     "unable to create activation date%s" % (str(e)))

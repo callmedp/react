@@ -806,8 +806,6 @@ class OrderItem(AbstractAutoDate):
     buy_count_updated = models.BooleanField(default=False)
     start_date = models.DateTimeField(null=True, blank=True)
     end_date = models.DateTimeField(null=True, blank=True)
-    approved_date_time = models.DateTimeField(
-        null=True, blank=True)
 
     # welcome call flow
     wc_cat = models.PositiveIntegerField(

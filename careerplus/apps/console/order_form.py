@@ -679,8 +679,6 @@ class ProductUserProfileForm(forms.ModelForm):
         if commit:
             instance.save(user=self.user)
         if not existing_obj.approved and instance.approved and not instance.order_item.has_due_date:
-            instance.order_item.approved_date_time =  timezone.now()
-            instance.order_item.save()
             instance.order_item.set_due_date()
         if self.cleaned_data.get('manual_change', None) and self.cleaned_data.get('manual_data', None):
             instance.manual_change = self.cleaned_data['manual_change']
