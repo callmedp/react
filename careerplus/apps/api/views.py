@@ -1940,5 +1940,5 @@ class TrackingResumeShine(APIView):
             logging.getLogger('info_log').info("tracking data updated, tracking_id: {}".format(t_id))
             return Response({ 'status': 'Tracking updated on learning' }, status=status.HTTP_200_OK)
         except Exception as e:
-            logging.getLogger('error_log').error("Unable to update tracking data, tracking_id: {}, except : {}".format(t_id,e))
+            logging.getLogger('error_log').error("Unable to update tracking data, tracking_id: {}, except : {}".format(t_id, e))
             return Response({ 'status': 'Unable to update on learning'}, status=status.HTTP_400_BAD_REQUEST)
