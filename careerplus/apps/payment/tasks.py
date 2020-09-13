@@ -1,6 +1,7 @@
 # python imports
 import logging
 import json
+from datetime import datetime
 # django imports
 from django.conf import settings
 
@@ -44,22 +45,24 @@ def put_epay_for_successful_payment(epl_id, epl_market_place_id):
 @task
 def make_logging_request(tracking_product_id, product_tracking_mapping_id, tracking_id, action, position, trigger_point, u_id, utm_campaign):
     shine_api_url = settings.SHINE_API_URL
-    req_dict = {}
+    req_dict, tracking_data = {} ,{}
     headers = dict()
+
     headers['content-type'] = 'application/json'
     resp = None
     url_to_hit = "{}/learning-touchpoints-tracking/".format(
         settings.SHINE_API_URL)
-    product_tracking_mapping_id = product_tracking_mapping_id if product_tracking_mapping_id else None
-    req_dict.update({'t_id': tracking_id.strip() if isinstance(tracking_id, str) else tracking_id, 
+    tracking_id = tracking_id.strip() if isinstance(tracking_id, str) else tracking_id
+    u_id = u_id.strip() if isinstance(u_id, str) else u_id
+    req_dict.update({'t_id': tracking_id, 
                      'products': [product_tracking_mapping_id] if product_tracking_mapping_id else [],
                      'action': action,
                      'position': int(position) if isinstance(tracking_id, int) or position.strip() != '' else -1, 'domain': 2,
                      'sub_product': tracking_product_id,
                      'trigger_point': trigger_point,
-                     'u_id': u_id.strip() if isinstance(u_id, str) else u_id,
+                     'u_id': u_id,
                      'utm_campaign':utm_campaign.strip() if utm_campaign.strip().lower() != 'null' else ''})
-    if product_tracking_mapping_id and tracking_product_id:
+    if product_tracking_mapping_id:
         logging.getLogger('error_log').error(
                 "tracking details is missing data : {}".format(req_dict))
     try:
@@ -68,6 +71,17 @@ def make_logging_request(tracking_product_id, product_tracking_mapping_id, track
         if resp.status_code == 200:
             logging.getLogger('info_log').info(
                 "send tracking data {}".format(req_dict))
+            cache_data = cache.get('tracking_last_action',{})
+            cache_data.update({
+                str(tracking_id) : {
+                        "u_id" : u_id,
+                        "action" : action,
+                        "products" : product_tracking_mapping_id,
+                        "sub_product" : tracking_product_id,
+                        "date_time" : datetime.now()
+                    }
+                })
+            cache.set('tracking_last_action',cache_data, timeout=None)
         elif not resp:
             logging.getLogger('error_log').error(
                 "unable to send tracking data {}".format(req_dict))

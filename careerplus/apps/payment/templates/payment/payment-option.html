@@ -106,13 +106,14 @@
                     <div class="panel-heading">
                       <h4 class="panel-title">
                         <a  class="no-bg trig-loader" id="card-netbanking" href="{% url "payment:razor-request" cart_id %}">
-                          Card & Netbanking
+                          Cards, Net Banking & UPI
                         </a>
                       </h4>
                     </div>
                   </div>
                 {% if type_flow != 17 or debug_mode %}
-                  <div class="panel panel-default box-shadow1">
+                  <!-- cash payment method -->
+                  <!-- <div class="panel panel-default box-shadow1">
                     <div class="panel-heading" role="tab" id="headingOne">
                       <h4 class="panel-title">
                         <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
@@ -122,8 +123,7 @@
                     </div>
                     <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
                       <div class="panel-body other-payment" id="cash">
-                        <!-- cash payment method -->
-                        <article>Deposit your cash at ICICI bank branches accross the country!</article>
+                                                <article>Deposit your cash at ICICI bank branches accross the country!</article>
 
                         <b>Step to follow</b>
                         <ul>
@@ -158,10 +158,10 @@
                                 <button type="butotn" id="cash-option-submit"  class="make-payment trig-loader">Make Payment</button>
                             </div>
                         </form>
-                        <!-- cash payment method end -->
                       </div>
                     </div>
-                  </div>
+                  </div> -->
+                  <!-- cash payment method end -->
                   <div class="panel panel-default box-shadow1">
                     <div class="panel-heading" role="tab" id="headingTwo">
                       <h4 class="panel-title">
@@ -320,7 +320,8 @@
                     <div class="panel-heading">
                       <h4 class="panel-title">
                         <a class="no-bg" href="{% url "payment:payu-request" cart_id %}" id="amazon-pay-payment">
-                         Amazon Pay <img src="{% static 'shinelearn/images/payments/amazon-pay.png' %}" width="89" style="margin-top:8px" alt="payu" class="ml-5">
+                         Amazon Pay, Paytm, PhonePe & Other Wallets 
+                        <!--  <img src="{% static 'shinelearn/images/payments/amazon-pay.png' %}" width="89" style="margin-top:8px" alt="payu" class="ml-5"> -->
                         </a>
                       </h4>
                     </div>

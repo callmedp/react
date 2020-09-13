@@ -79,13 +79,13 @@
         <div class="payment-type">
           <div class="payment-type--item">
             <span></span>
-            <a class='trig-loader' id="card-netbanking" href="{% url "payment:razor-request" cart_id %}">Card & Netbanking</a>
+            <a class='trig-loader' id="card-netbanking" href="{% url "payment:razor-request" cart_id %}">Cards, Net Banking & UPI</a>
           </div>
         
           {% if type_flow != 17 or debug_mode %}
 
           <div class="accordion_example1 smk_accordion">
-              <div class="accordion_in">
+              <!-- <div class="accordion_in">
                 <div class="acc_head payment-type--item">
                   <span></span>
                   Cash
@@ -113,7 +113,7 @@
                           <span>: 00705038629</span>
                         </div>
                       </div>
-                    </div><!-- /. Account Details -->
+                    </div>
                 <form role="form" id="id-cash-form" method="post" action="." >{% csrf_token %}
                     <div class="mt-15">
                         <select class="form--control" id="states_list" name="state">
@@ -132,8 +132,8 @@
                     </p>
                 </form>
 
-                  </div><!-- /. accordion content -->
-              </div><!-- /. cash accordion item -->
+                  </div>
+              </div> -->
 
               <div class="accordion_in">
                 <div class="acc_head payment-type--item">
@@ -285,8 +285,8 @@
                 {% endif %}
                    <div class="payment-type--item">
             <span></span>
-            <a href="{% url "payment:payu-request" cart_id %}" id="amazon-pay-payment" >Amazon Pay
-              <img src="{% static 'shinelearn/images/payments/amazon-pay.png' %}" width="89" class="payment-type--item--img"/>
+            <a href="{% url "payment:payu-request" cart_id %}" id="amazon-pay-payment" >Amazon Pay, Paytm, PhonePe & Other Wallets
+              <!-- <img src="{% static 'shinelearn/images/payments/amazon-pay.png' %}" width="89" class="payment-type--item--img"/> -->
             </a>
           </div>
         </div>
