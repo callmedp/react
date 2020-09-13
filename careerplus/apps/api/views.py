@@ -1933,7 +1933,8 @@ class TrackingResumeShine(APIView):
                         "action" : action,
                         "products" : products,
                         "sub_product" : sub_product,
-                        "date_time" : datetime.datetime.now()
+                        "date_time" : datetime.datetime.now(),
+                        "domain" : 3
                     }
                 })
             cache.set('tracking_last_action', cache_data, timeout=None)

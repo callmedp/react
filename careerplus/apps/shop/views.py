@@ -989,7 +989,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
 
             if tracking_id and prod.id and product_tracking_mapping_id:
                 make_logging_request.delay(
-                    prod.id, product_tracking_mapping_id, tracking_id, 'product_page',position, trigger_point, u_id, utm_campaign )
+                    prod.id, product_tracking_mapping_id, tracking_id, 'product_page',position, trigger_point, u_id, utm_campaign, 2)
 
         elif self.request.session.get('candidate_id') and \
                 request.session.get('tracking_product_id') and \
@@ -1000,7 +1000,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             trigger_point = request.session.get('trigger_point','')
             u_id = request.session.get('u_id','')
             make_logging_request.delay(
-                request.session.get('tracking_product_id'), request.session.get('product_tracking_mapping_id'), request.session.get('tracking_id'), 'product_page',position, trigger_point, u_id, utm_campaign)
+                request.session.get('tracking_product_id'), request.session.get('product_tracking_mapping_id'), request.session.get('tracking_id'), 'product_page',position, trigger_point, u_id, utm_campaign, 2)
         elif self.request.session.get('candidate_id') and \
                 request.session.get('tracking_id') and \
                 not request.session.get('tracking_product_id'):
@@ -1024,7 +1024,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             
             if tracking_id and prod.id and product_tracking_mapping_id:
                 make_logging_request.delay(
-                    prod.id, product_tracking_mapping_id, tracking_id, 'product_page',position, trigger_point, u_id, utm_campaign )
+                    prod.id, product_tracking_mapping_id, tracking_id, 'product_page',position, trigger_point, u_id, utm_campaign, 2)
 
 
         root = request.GET.get('root')

@@ -43,7 +43,7 @@ def put_epay_for_successful_payment(epl_id, epl_market_place_id):
 
 
 @task
-def make_logging_request(tracking_product_id, product_tracking_mapping_id, tracking_id, action, position, trigger_point, u_id, utm_campaign):
+def make_logging_request(tracking_product_id, product_tracking_mapping_id, tracking_id, action, position, trigger_point, u_id, utm_campaign, domain):
     shine_api_url = settings.SHINE_API_URL
     req_dict, tracking_data = {} ,{}
     headers = dict()
@@ -57,7 +57,8 @@ def make_logging_request(tracking_product_id, product_tracking_mapping_id, track
     req_dict.update({'t_id': tracking_id, 
                      'products': [product_tracking_mapping_id] if product_tracking_mapping_id else [],
                      'action': action,
-                     'position': int(position) if isinstance(tracking_id, int) or position.strip() != '' else -1, 'domain': 2,
+                     'position': int(position) if isinstance(position, int) or position != '' else -1, 
+                     'domain': domain,
                      'sub_product': tracking_product_id,
                      'trigger_point': trigger_point,
                      'u_id': u_id,
@@ -78,7 +79,8 @@ def make_logging_request(tracking_product_id, product_tracking_mapping_id, track
                         "action" : action,
                         "products" : product_tracking_mapping_id,
                         "sub_product" : tracking_product_id,
-                        "date_time" : datetime.now()
+                        "date_time" : datetime.now(),
+                        "domain" : 2
                     }
                 })
             cache.set('tracking_last_action',cache_data, timeout=None)
