@@ -1914,6 +1914,7 @@ class CandidateBadging(APIView):
 class TrackingResumeShine(APIView):
     authentication_classes = ()
     permission_classes = ()
+    serializer_class = None
 
     def post(self, request, *args, **kwargs):
         '''
@@ -1932,12 +1933,12 @@ class TrackingResumeShine(APIView):
                         "action" : action,
                         "products" : products,
                         "sub_product" : sub_product,
-                        "date_time" : datetime.now()
+                        "date_time" : datetime.datetime.now()
                     }
                 })
-            cache_data.set('tracking_last_action', cache_data, timeout=None)
+            cache.set('tracking_last_action', cache_data, timeout=None)
             logging.getLogger('info_log').info("tracking data updated, tracking_id: {}".format(t_id))
             return Response({ 'status': 'Tracking updated on learning' }, status=status.HTTP_200_OK)
         except Exception as e:
-            logging.getLogger('error_log').error("Unable to update tracking data, tracking_id: {}".format(t_id))
+            logging.getLogger('error_log').error("Unable to update tracking data, tracking_id: {}, except : {}".format(t_id,e))
             return Response({ 'status': 'Unable to update on learning'}, status=status.HTTP_400_BAD_REQUEST)
