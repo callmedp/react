@@ -244,11 +244,11 @@ def cart_drop_out_mail(pk=None, cnd_email=None, mail_type=None, name=None,
 
                 token = AutoLogin().encode(toemail, cart_id, days=None)
                 data['autologin'] = "{}://{}/cart/payment-summary/?t_id={}&token={}&utm_campaign=learning_exit_mailer&trigger_point={}&u_id={}&position={}&emailer=1&t_prod_id={}&prod_t_m_id={}".format(
-                    settings.SITE_PROTOCOL, settings.SITE_DOMAIN, tracking_id, token,trigger_point, u_id, position, tracking_product_id, product_tracking_mapping_id)
+                    settings.SITE_PROTOCOL, settings.SITE_DOMAIN, tracking_id, token, trigger_point, u_id, position, tracking_product_id, product_tracking_mapping_id)
                 if domain == 3:
                     data.update({
-                        'autologin' : "{}://{}/cart/payment-summary/?t_id={}&utm_campaign=learning_exit_mailer&trigger_point={}&u_id={}&position={}&emailer=1&t_prod_id={}&prod_t_m_id={}".format(
-                    settings.SITE_PROTOCOL, settings.RESUME_SHINE_SITE_DOMAIN, tracking_id, trigger_point, u_id, position, tracking_product_id, product_tracking_mapping_id)
+                        'autologin' : "{}://{}/cart/payment-summary/?token={}&t_id={}&utm_campaign=learning_exit_mailer&trigger_point={}&u_id={}&position={}&emailer=1&t_prod_id={}&prod_t_m_id={}".format(
+                    settings.SITE_PROTOCOL, settings.RESUME_SHINE_SITE_DOMAIN, token, tracking_id, trigger_point, u_id, position, tracking_product_id, product_tracking_mapping_id)
                         })
 
                 try:
@@ -301,8 +301,8 @@ def cart_product_removed_mail(product_id= None, tracking_id="",
             settings.SITE_PROTOCOL, settings.SITE_DOMAIN, product_id, tracking_id, token, trigger_point, u_id, position)
         if domain == 3:
             data.update({
-                'autologin' : "{}://{}/cart/payment-summary/?prod_id={}&t_id={}&utm_campaign=learning_remove_product_mailer&trigger_point={}&u_id={}&position={}&email=1".format(
-            settings.SITE_PROTOCOL, settings.RESUME_SHINE_SITE_DOMAIN, product_id, tracking_id, trigger_point, u_id, position)
+                'autologin' : "{}://{}/cart/payment-summary/?token={}&prod_id={}&t_id={}&utm_campaign=learning_remove_product_mailer&trigger_point={}&u_id={}&position={}&email=1".format(
+            settings.SITE_PROTOCOL, settings.RESUME_SHINE_SITE_DOMAIN, token, product_id, tracking_id, trigger_point, u_id, position)
                 })
 
 

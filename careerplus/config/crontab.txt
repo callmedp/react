@@ -40,5 +40,7 @@
 
 59 23 * * * /var/www/virtualenvs/chatbot/bin/python /var/www/site/chatbot/current/scripts/candidate_tracking.py
 
+0 */2 * * * /var/www/virtualenvs/learning/bin/python /var/www/site/learning/current/manage.py cart_funnel_drop_mail --settings=careerplus.config.settings_live
+
 #Keep extra line for crontab syntax correction
 

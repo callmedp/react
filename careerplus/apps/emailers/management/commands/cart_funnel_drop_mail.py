@@ -41,9 +41,7 @@ def check_interval(tracking_data):
 
 def send_cart_funnel_mail(send_email_list):
     mail_type = 'CART_FUNNEL_DROP'
-    email_list_spent = cache.get("email_sent_for_the_day", [])
     try:
-        
         for email_data in send_email_list:
             u_id = email_data.get('u_id', '')
             job_title, email, name = '', '', 'Candidate'
@@ -96,10 +94,11 @@ def send_cart_funnel_mail(send_email_list):
             token = AutoLogin().encode(email, u_id, days=None)
 
             data['autologin'] = "{}://{}/autologin/{}/?next=/search/results/?q={}".format(settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token, job_title)
-            if  product == '8':
-                data['autologin'] = "/myshine/myprofile/".format(settings.SHINE_SITE) ## add autologin token
+            if product == '8':
+                data['autologin'] = "{}/myshine/myprofile/".format(settings.SHINE_SITE) ## add autologin token
 
             email_list_spent.append(email)
+            cache.set("email_sent_for_the_day", email_list_spent)
             try:
                 SendMail().send(to_email, mail_type, data)
                 logging.getLogger('info_log').info("cart product removed mail successfully sent {}".format(email))
@@ -107,7 +106,7 @@ def send_cart_funnel_mail(send_email_list):
                 logging.getLogger('error_log').error("Unable to sent mail: {}".format(e))
             # make_logging_request.delay(
             #     tracking_product_id, product_tracking_mapping_id, tracking_id, 'remove_product_mail_sent', position, trigger_point, u_id, utm_campaign, domain)
-        cache.set("email_sent_for_the_day", email_list_spent)
+        
     except Exception as e:
          logging.getLogger('error_log').error("Unable to send mail, reason: {}".format(e))
 
