@@ -28,8 +28,8 @@
       <td align="center" valign="top" style="background-color: #fbfaff; padding:0 15px; text-align: center; margin: 0 auto;">
       <img src="{% static 'shinelearn/images/emailers/cart.png' %}" style="display: block; border: none;margin: 0 auto;padding: 0;" alt="shinelogo">
       <strong style="display: block; text-align: center; margin: 0 auto; padding: 0; font-size: 26px; color: #303E4B;">We miss you! Why did you leave?</strong>
-       <p style="display: block; margin: 0 auto; padding: 10px 25px; color: #505E6B; font-size: 14px; line-height: 19px;"><strong>Hi {{name}}</strong>, you recently visited us and we noticed that you
-didn’t complete your order for the following items</p>
+       <p style="display: block; margin: 0 auto; padding: 10px 25px; color: #505E6B; font-size: 14px; line-height: 19px;"><strong>Hi {{name}}</strong>, {% if cart_entered %} you recently visited us and we noticed that you
+didn’t complete your order for the following items {% else %} you recently visited us and we noticed that you were interested in the following items{% endif %}</p>
     </td>
     </tr>
   <tr>
@@ -147,7 +147,7 @@ didn’t complete your order for the following items</p>
         </tr>
             <tr>
               <td align="center" valign="top">
-                <a href="{{autologin}}" target="_blank" style="text-decoration: none; text-align: center; display: block; padding: 12px 0px; color: #ffffff; font-size: 16px; border-radius: 4px; margin: 0 auto; width:220px;background-color: #F7A400; font-weight: bold;">Complete your order</a></td>
+                <a href="{{autologin}}" target="_blank" style="text-decoration: none; text-align: center; display: block; padding: 12px 0px; color: #ffffff; font-size: 16px; border-radius: 4px; margin: 0 auto; width:220px;background-color: #F7A400; font-weight: bold;">{% if cart_entered %} Complete your order {% else %} View more suggestions {% endif %}</a></td>
             </tr>
           </tbody>
         </table>

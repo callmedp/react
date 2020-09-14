@@ -292,6 +292,7 @@ def cart_product_removed_mail(product_id= None, tracking_id="",
         data['product_url'] = prod.url
         data['product_price'] = round(prod.inr_price, 2)
         data['product_description'] = prod.meta_desc
+        data['cart_entered'] = True
         subject_name = "{}, ".format(name) if name != "Candidate" else ""
         data['subject'] = '{}Forgot Something?'.format(subject_name)
 
