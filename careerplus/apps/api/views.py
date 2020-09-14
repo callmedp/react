@@ -1933,7 +1933,7 @@ class TrackingResumeShine(APIView):
                         "action" : action,
                         "products" : products,
                         "sub_product" : sub_product,
-                        "date_time" : datetime.datetime.now(),
+                        "date_time" : timezone.now(),
                         "domain" : 3
                     }
                 })

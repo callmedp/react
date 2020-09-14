@@ -8,11 +8,14 @@ from django.core.cache import cache
 from django.core.management.base import BaseCommand
 from django.utils import timezone
 
+
 # local imports
 from emailers.email import SendMail
 
 # inter app imports
 from core.api_mixin import ShineCandidateDetail
+from shop.models import Product
+from linkedin.autologin import AutoLogin
 
 # third party imports
 
@@ -29,15 +32,18 @@ def check_interval(tracking_data):
     action = tracking_data.get('action', '')
     if not date_time and not action:
         return False
-    start_interval = timezone.now() - timezone.timedelta(hours = 4)
-    end_interval = timezone.now() - timezone.timedelta(hours = 2)
-    if start_interval <= date_time <= end_interval and action == 'product_page':
+    end_hr = 2 if not settings.DEBUG else 0
+    # start_interval = timezone.now() - timezone.timedelta(hours = 4)
+    end_interval = timezone.now() - timezone.timedelta(hours = end_hr)
+    if date_time <= end_interval and action == 'product_page':
         return True
-    return False
+    return False 
 
 def send_cart_funnel_mail(send_email_list):
     mail_type = 'CART_FUNNEL_DROP'
+    email_list_spent = cache.get("email_sent_for_the_day", [])
     try:
+        
         for email_data in send_email_list:
             u_id = email_data.get('u_id', '')
             job_title, email, name = '', '', 'Candidate'
@@ -94,7 +100,6 @@ def send_cart_funnel_mail(send_email_list):
                 data['autologin'] = "/myshine/myprofile/".format(settings.SHINE_SITE) ## add autologin token
 
             email_list_spent.append(email)
-            cache.set("email_sent_for_the_day", email_list_spent)
             try:
                 SendMail().send(to_email, mail_type, data)
                 logging.getLogger('info_log').info("cart product removed mail successfully sent {}".format(email))
@@ -102,7 +107,7 @@ def send_cart_funnel_mail(send_email_list):
                 logging.getLogger('error_log').error("Unable to sent mail: {}".format(e))
             # make_logging_request.delay(
             #     tracking_product_id, product_tracking_mapping_id, tracking_id, 'remove_product_mail_sent', position, trigger_point, u_id, utm_campaign, domain)
-
+        cache.set("email_sent_for_the_day", email_list_spent)
     except Exception as e:
          logging.getLogger('error_log').error("Unable to send mail, reason: {}".format(e))
 
@@ -111,25 +116,26 @@ def cart_funnel_drop_mail():
     function too send mail to users who 
     looked at the products but didn't add the product to cart
     """
-    start_interval = timezone.now() - timezone.timedelta(hours = 4)
+    end_hr = 2 if not settings.DEBUG else 0
+    end_interval = timezone.now() - timezone.timedelta(hours = end_hr)
     tracking_data = cache.get('tracking_last_action', {})
-    send_email_list= []
+    send_email_list, tracking_dict = [] , {}
 
-    for key, value in tracking_data:
+    for key in tracking_data:
         track_dict = tracking_data[key]
-        if tracking_data.get('date_time', '') and tracking_data.get('date_time') < start_interval:
-            del tracking_data[key]
-        elif tracking_data.get('date_time', '') and check_interval(tracking_data):
+        if track_dict.get('date_time', '') and track_dict.get('date_time') > end_interval:
+            tracking_dict.update({ key : tracking_data[key] })
+        elif track_dict.get('date_time', '') and check_interval(track_dict):
             user_data = {
                 "tracking_id" : key,
-                "u_id" : tracking_data.get('u_id', '')
-                "product" : tracking_data.get('products', '')
-                "sub_product" : tracking_data.get('sub_product', '')
+                "u_id" : track_dict.get('u_id', ''),
+                "product" : track_dict.get('products', ''),
+                "sub_product" : track_dict.get('sub_product', ''),
             }
             send_email_list.append(user_data)
-            del tracking_data[key]
 
-    cache.set('tracking_last_action', tracking_data, timeout=None)
+
+    cache.set('tracking_last_action', tracking_dict, timeout=None)
     logging.getLogger('info_log').info('cart mail drop tracking data has been filtered')
 
     send_cart_funnel_mail(send_email_list)

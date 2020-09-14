@@ -1,10 +1,10 @@
 # python imports
 import logging
 import json
-from datetime import datetime
+from django.utils import timezone
 # django imports
 from django.conf import settings
-
+from django.core.cache import cache
 # local imports
 
 # inter app imports
@@ -63,7 +63,7 @@ def make_logging_request(tracking_product_id, product_tracking_mapping_id, track
                      'trigger_point': trigger_point,
                      'u_id': u_id,
                      'utm_campaign':utm_campaign.strip() if utm_campaign.strip().lower() != 'null' else ''})
-    if product_tracking_mapping_id:
+    if not product_tracking_mapping_id:
         logging.getLogger('error_log').error(
                 "tracking details is missing data : {}".format(req_dict))
     try:
@@ -79,7 +79,7 @@ def make_logging_request(tracking_product_id, product_tracking_mapping_id, track
                         "action" : action,
                         "products" : product_tracking_mapping_id,
                         "sub_product" : tracking_product_id,
-                        "date_time" : datetime.now(),
+                        "date_time" : timezone.now(),
                         "domain" : 2
                     }
                 })
