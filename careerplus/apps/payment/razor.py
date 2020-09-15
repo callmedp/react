@@ -29,7 +29,7 @@ class RazorPaymentUtil:
         data ={ 'amount':int(order.total_incl_tax *100),
                 'currency':'INR',
                 'receipt': pay_txn.txn,
-                'notes': {'product_name':'oooooooooddddddddddooo'}
+                'notes': {'product_name': order.get_product_name()}
                }
 
         #payment capture should always be 1
