@@ -19,7 +19,7 @@ class RazorPaymentUtil:
     SUBSCRIPTION_URL = "/subscriptions"
     ADDON_URL = "/addons"
     PLAN_URL = "/plans"
-    SETTLEMENT_URL = "/settlements"
+    FETCH_PAYMENT = "/orders/{}/payments"
 
 
     def create(self,order,pay_txn):
@@ -90,6 +90,24 @@ class RazorPaymentUtil:
         for x, y in zip(expected_str, actual_str):
             result |= ord(x) ^ ord(y)
         return result == 0
+
+
+    def fetch_payment(self,order_id):
+        if not order_id:
+            return
+        headers = {'Content-type': 'application/json'}
+        auth=(settings.RAZOR_PAY_DICT.get('key_id'), settings.RAZOR_PAY_DICT.get('key_secret'))
+        try:
+            response = requests.get(self.BASE_URL+self.FETCH_PAYMENT.format(order_id) ,headers=headers,auth=auth)
+        except:
+            response = None
+
+        return response
+
+
+
+
+
 
 
     # def all(self, data={}, **kwargs):
