@@ -16,6 +16,7 @@ from emailers.email import SendMail
 from core.api_mixin import ShineCandidateDetail
 from shop.models import Product
 from linkedin.autologin import AutoLogin
+from core.mixins import TokenGeneration
 
 # third party imports
 
@@ -70,8 +71,8 @@ def send_cart_funnel_mail(send_email_list):
                 logging.getLogger('error_log').error("No email available, candidate_id : {}".format(u_id))
                 continue                
 
-            email_list_sent = cache.get("email_sent_for_the_day", [])
-            if email in email_list_sent:
+            email_list_spent = cache.get("email_sent_for_the_day", [])
+            if email in email_list_spent:
                 logging.getLogger('info_log').info(
                     "Candidate already recieved an email for the day, email: {}".format(email))
                 continue
@@ -95,10 +96,11 @@ def send_cart_funnel_mail(send_email_list):
 
             data['autologin'] = "{}://{}/autologin/{}/?next=/search/results/?q={}".format(settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token, job_title)
             if product == '8':
-                data['autologin'] = "{}/myshine/myprofile/".format(settings.SHINE_SITE) ## add autologin token
+                token = TokenGeneration().encode(email, 2, 30)
+                data['autologin'] = "{}/myshine/login/?tc={}&next=/myshine/myprofile/".format(settings.SHINE_SITE, token) ## add autologin token
 
             email_list_spent.append(email)
-            cache.set("email_sent_for_the_day", email_list_spent)
+            cache.set("email_sent_for_the_day", email_list_spent, timeout = None)
             try:
                 SendMail().send(to_email, mail_type, data)
                 logging.getLogger('info_log').info("cart product removed mail successfully sent {}".format(email))
@@ -123,7 +125,7 @@ def cart_funnel_drop_mail():
     for key in tracking_data:
         track_dict = tracking_data[key]
         if track_dict.get('date_time', '') and track_dict.get('date_time') > end_interval:
-            tracking_dict.update({ key : tracking_data[key] })
+            tracking_dict.update({ key : track_dict })
         elif track_dict.get('date_time', '') and check_interval(track_dict):
             user_data = {
                 "tracking_id" : key,

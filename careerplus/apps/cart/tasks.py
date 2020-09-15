@@ -236,7 +236,7 @@ def cart_drop_out_mail(pk=None, cnd_email=None, mail_type=None, name=None,
                         continue
                     else:
                         email_list_spent.append(toemail)
-                        cache.set("email_sent_for_the_day", email_list_spent)
+                        cache.set("email_sent_for_the_day", email_list_spent, timeout=None)
                         if product_tracking_mapping_id and tracking_id and tracking_product_id:
                                 make_logging_request.delay(
                                         tracking_product_id, product_tracking_mapping_id, tracking_id,\
@@ -307,7 +307,7 @@ def cart_product_removed_mail(product_id= None, tracking_id="",
 
 
         email_list_spent.append(email)
-        cache.set("email_sent_for_the_day", email_list_spent)
+        cache.set("email_sent_for_the_day", email_list_spent, timeout=None)
         try:
             SendMail().send(to_email, mail_type, data)
             logging.getLogger('info_log').info("cart product removed mail successfully sent {}".format(email))

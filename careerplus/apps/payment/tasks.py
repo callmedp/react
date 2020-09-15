@@ -57,7 +57,7 @@ def make_logging_request(tracking_product_id, product_tracking_mapping_id, track
     req_dict.update({'t_id': tracking_id, 
                      'products': [product_tracking_mapping_id] if product_tracking_mapping_id else [],
                      'action': action,
-                     'position': int(position) if isinstance(position, int) or position != '' else -1, 
+                     'position': int(position) if isinstance(position, int) or position.strip() != '' else -1, 
                      'domain': domain,
                      'sub_product': tracking_product_id,
                      'trigger_point': trigger_point,
