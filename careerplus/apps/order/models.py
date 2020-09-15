@@ -381,6 +381,13 @@ class Order(AbstractAutoDate):
                 return 'pink'
         return ''
 
+    def get_product_name(self):
+        product_list = self.orderitems.values_list('product__name',flat=True)
+
+        return " ,".join(product_list)
+
+
+
     def upload_service_resume_shine(self, existing_obj):
         if self.service_resume_upload_shine and self.service_resume_upload_shine != existing_obj.service_resume_upload_shine:
             order_items = self.orderitems.filter(
