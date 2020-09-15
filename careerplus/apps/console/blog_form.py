@@ -5,6 +5,7 @@ from django.utils import timezone
 from django.conf import settings
 from django.contrib import messages
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
+from tinymce.widgets import TinyMCE
 
 from blog.models import Tag, Category, Blog, Comment, Author, SITE_TYPE
 
@@ -151,7 +152,7 @@ class ArticleChangeForm(forms.ModelForm):
         attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
     content = forms.CharField(label=("Content*:"),
-        widget=CKEditorUploadingWidget())
+        widget=TinyMCE(attrs={'cols': 80, 'rows': 40}))
 
     p_cat = forms.ModelChoiceField(label=("Primary Category*:"),
         queryset=Category.objects.filter(is_active=True),

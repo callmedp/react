@@ -59,7 +59,7 @@
             </div>
 
             <!-- Table Widgets -->
-            <table border="1" cellspacing="0">
+            <!-- <table border="1" cellspacing="0">
               <tbody>
                 <tr>
                   <td width="50%">
@@ -84,7 +84,8 @@
                   <td></td>
                 </tr>
               </tbody>
-            </table><!-- // Table Widgets -->
+            </table> -->
+            <!-- // Table Widgets -->
 
             <!-- Related Articles -->
             <div class="related-article article-list">
@@ -185,7 +186,7 @@
 
 
         <h2 class="heading-right">Looks interesting?</h2>
-          <p>Know more about our services, just fill the details below!</p>
+          <p>Subscribe & Get our daily newsletter. Fill the details below.</p>
           <form class="te-form mt-20" role="form"  id="enquireform" name="enq" >
             <div style='display:none'>
                 <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}'/>
@@ -194,13 +195,13 @@
             <div class="form-group">
               <input type="text" class="input_field form-control" name="name"  id="id_name"  placeholder=" "
               maxlength="100" value="{{request.session.full_name}}">
-              <label class="input_label" for="id_name">Name</label>
+              <label class="input_label" for="id_name">Name<sup>*</sup></label>
             </div>
             
             <div class="form-group">
               <input type="email" class="input_field form-control" name="name"  id="id_email"  placeholder=" "
               maxlength="100" value="{{request.session.full_name}}">
-              <label class="input_label" for="id_email">Email</label>
+              <label class="input_label" for="id_email">Email<sup>*</sup></label>
               <span class="error-txt position-error">Please enter your name</span>
             </div>
 
@@ -229,7 +230,7 @@
             <input type="hidden" name="email" class="form-control" value="{{request.session.email}}">
             <input type="hidden" name="lsource" value="8">
            <input type="hidden" name="campaign" value="blogsonline">
-           <button type="button" id="enquire_form" class="submit-button">Submit</button>
+           <button type="button" id="enquire_form" class="submit-button">Subscribe Now</button>
           </form>
 
       </div>
@@ -345,7 +346,7 @@
           <div id="terms"></div>
           <button type="button" id="register-button" class="btn btn-primary submit">Register</button>
           <div class="social-login">
-            <span>or Register with</span>
+            <span style="margin-right:20px;">or Register with</span>
             <a class="facebook" onclick="Login();"></a>
             <a class="linkedin" href="{% url 'users:linkedin-code' %}"></a>
             <!-- <a class="gplus" onclick="glogin();"></a> -->
