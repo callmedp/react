@@ -255,6 +255,7 @@ class ArticleListView(ListView, PaginationMixin):
         self.sel_writer = request.GET.get('author', '')
         self.visibility = int(request.GET.get('visibility', '-1'))
         self.sortdate = int(request.GET.get('sortdate', '1'))
+        self.sortdate_lm = int(request.GET.get('sortdate_lm', '3'))
         return super(self.__class__, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -275,7 +276,8 @@ class ArticleListView(ListView, PaginationMixin):
             "sel_p_cat": self.sel_p_cat,
             "sel_writer": self.sel_writer,
             "visibility": self.visibility,
-            "sortdate": 0 if self.sortdate == 1 else 1
+            "sortdate": 0 if self.sortdate == 1 else 1,
+            "sortdate_lm": 2 if self.sortdate_lm == 3 else 3
         })
         return context
 
@@ -330,8 +332,10 @@ class ArticleListView(ListView, PaginationMixin):
         except Exception as e:
             logging.getLogger('error_log').error("%s " % str(e))
             pass
-
-        sort_query = "publish_date" if self.sortdate == 1 else "-publish_date"
+        if self.sortdate in [0, 1]:
+            sort_query = "publish_date" if self.sortdate == 1 else "-publish_date"
+        else:
+            sort_query = "last_modified_on" if self.sortdate_lm == 3 else "-last_modified_on"
 
         return queryset.select_related('p_cat', 'user', 'created_by',
                                        'last_modified_by').order_by(sort_query)

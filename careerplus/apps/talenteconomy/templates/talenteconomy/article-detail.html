@@ -200,9 +200,8 @@
             
             <div class="form-group">
               <input type="email" class="input_field form-control" name="name"  id="id_email"  placeholder=" "
-              maxlength="100" value="{{request.session.full_name}}">
+              maxlength="100" value="{{request.session.email}}">
               <label class="input_label" for="id_email">Email<sup>*</sup></label>
-              <span class="error-txt position-error">Please enter your name</span>
             </div>
 
             <div class="form-group" style="display: flex;">
@@ -221,6 +220,11 @@
                     <label class="input_label" for="id_cell_phone">Mobile</label>
                     <span class="error-txt position-error"></span>
                 </div>
+            </div>
+
+            <div class="form-group">
+              <textarea class="form-control" rows="1" name="msg" placeholder="Message" maxlength="500"></textarea>
+              <span class="error-txt position-error"></span>
             </div>
 
 
@@ -258,7 +262,7 @@
         <label id="non-field-error" class="error-msg"></label>
       </div>
 
-       <form autocomplete="off" role method="post" id="login_form" >{% csrf_token %}
+       <form role method="post" id="login_form" >{% csrf_token %}
           
           <div class="form-group {% if loginform.email.errors %} error {% endif %}">
             {{loginform.email}}

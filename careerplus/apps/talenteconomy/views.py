@@ -644,7 +644,7 @@ class TEBlogDetailView(DetailView, BlogMixin):
                 {
                     "page_obj": detail_obj,
                     "slug": blog.slug, "visibility": blog.visibility,
-                    "SITEDOMAIN": settings.SITE_DOMAIN})
+                    "SITEDOMAIN": settings.SITE_DOMAIN, "STATIC_URL": settings.STATIC_URL})
 
         context.update({
             "detail_article": detail_article,
