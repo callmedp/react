@@ -41,6 +41,7 @@ class Language extends Component {
     
     editHeadingClick() {
         this.setState({ editHeading: true })
+        this.props.sendTrackingInfo('right_section_edit',1)
     }
     
     
@@ -107,6 +108,7 @@ class Language extends Component {
     }
     
     deleteLanguage(index, fields, event) {
+        this.props.sendTrackingInfo('right_section_delete',1)
         event.stopPropagation();
         const language = fields.get(index);
         fields.remove(index);
@@ -119,39 +121,40 @@ class Language extends Component {
         const length = parseInt(this.props.sidenav.listOfLinks.length)
         const pos = parseInt(this.props.sidenav.currentLinkPos)
         const { updateAlertModalStatus, handleSubmit, submitting, personalInfo: { order_data, entity_preference_data }, headingChange,
-        history, changeOrderingUp, changeOrderingDown, eventClicked, showAlertMessage
-    } = this.props;
-    const { editHeading, heading } = this.state;
-    return (
-        <div className="buildResume">
-        <form onSubmit={handleSubmit(this.handleSubmit)}>
-        <PreviewModal {...this.props} />
-        <Subscribe {...this.props} />
-        <FieldArray name="list"
-        handleSubmit={handleSubmit}
-        handleAddition={this.props.handleAddition}
-        deleteLanguage={this.deleteLanguage}
-        changeOrderingUp={changeOrderingUp}
-        changeOrderingDown={changeOrderingDown}
-        eventClicked={eventClicked}
-        component={renderLanguage}
-        headingChange={headingChange}
-        entity_preference_data={entity_preference_data}
-        editHeading={editHeading}
-        editHeadingClick={this.editHeadingClick}
-        context={this}
-        heading={heading}
-        showAlertMessage={showAlertMessage}
-        />
-        <ul className="form">
-        <li className="form__group">
-        <BottomCTC disabled={submitting} context={this} history={history} updateAlertModalStatus={updateAlertModalStatus}
-        length={length} pos={pos + 1} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
-        order_data={order_data} eventClicked={eventClicked} form_name={'Languages'} />
-        </li>
-        </ul>
-        </form>
-        </div>
+            history, changeOrderingUp, changeOrderingDown, eventClicked, showAlertMessage
+        } = this.props;
+        const { editHeading, heading } = this.state;
+        return (
+            <div className="buildResume">
+                <form onSubmit={handleSubmit(this.handleSubmit)}>
+                    <PreviewModal {...this.props} />
+                    <Subscribe {...this.props} />
+                    <FieldArray name="list"
+                        sendTrackingInfo={this.props.sendTrackingInfo}
+                        handleSubmit={handleSubmit}
+                        handleAddition={this.props.handleAddition}
+                        deleteLanguage={this.deleteLanguage}
+                        changeOrderingUp={changeOrderingUp}
+                        changeOrderingDown={changeOrderingDown}
+                        eventClicked={eventClicked}
+                        component={renderLanguage}
+                        headingChange={headingChange}
+                        entity_preference_data={entity_preference_data}
+                        editHeading={editHeading}
+                        editHeadingClick={this.editHeadingClick}
+                        context={this}
+                        heading={heading}
+                        showAlertMessage={showAlertMessage}
+                    />
+                    <ul className="form">
+                        <li className="form__group">
+                            <BottomCTC disabled={submitting} context={this} history={history} updateAlertModalStatus={updateAlertModalStatus}
+                                length={length} pos={pos + 1} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
+                                order_data={order_data} eventClicked={eventClicked} form_name={'Languages'} />
+                        </li>
+                    </ul>
+                </form>
+            </div>
         )
     }
 }

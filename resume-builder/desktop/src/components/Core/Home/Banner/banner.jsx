@@ -8,6 +8,7 @@ export default class Banner extends PureComponent {
         super(props);
         this.scrollTo = this.scrollTo.bind(this);
         this.staticUrl = (window && window.config && window.config.staticUrl) || '/media/static/'
+        this.handleBuildYourResumeClick = this.handleBuildYourResumeClick.bind(this)
     }
 
     scrollTo(elem,action,label) {
@@ -22,7 +23,10 @@ export default class Banner extends PureComponent {
             label
         })
     }
-
+    handleBuildYourResumeClick(){
+        this.scrollTo('templates','BuildResume','TopButton')
+        this.props.sendTrackingInfo('home_page_build_your_resume',1)
+    }
 
     render() {
         const {userName} = this.props;
@@ -41,7 +45,7 @@ export default class Banner extends PureComponent {
                         <li> <span className="icon-builderexpert4"></span>Use <strong>resume builder for 12 months</strong> to create unlimited resume</li>
                     </ul>
                     <button className="orange-button banner-content--button"
-                            onClick={() => this.scrollTo('templates','BuildResume','TopButton')}>Build your resume
+                            onClick={this.handleBuildYourResumeClick}>Build your resume
                     </button>
                 </div>
                 <div className="banner-slider">

@@ -2,25 +2,27 @@
 {% load static compress %}
 
 {% block django_meta %}
-        {% include 'meta/meta.html' %}
-<link href="https://fonts.googleapis.com/css?family=Montserrat:400,600,700&display=swap" rel="stylesheet">
+{% include 'meta/meta.html' %}
+<link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" media="print" onload="this.media='all'"
+rel="stylesheet">
 
 {%  endblock django_meta %}
 {% block canonical_url %}
-  <link rel="canonical" href="https://{{ SITE_DOMAIN }}{{ request.path }}">
+<link rel="canonical" href="https://{{ SITE_DOMAIN }}{{ request.path }}">
 {% endblock canonical_url %}
 
 
 {% block title %}
-	Talent Economy: Career Skilling for a future ready India
+Talent Economy: Career Skilling for a future ready India
 {% endblock title %}
 
 {% block css_section %}
-    {{block.super}}
-    {% compress css %}
-    <link type="text/scss" rel="stylesheet" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" >
-    <link type="text/scss" href="{% static 'shinelearn/css/talenteconomy/article.scss' %}" rel="stylesheet">
-    {% endcompress %}
+{{block.super}}
+{% compress css %}
+<link type="text/scss" rel="stylesheet" href="{% static 'shinelearn/css/mobile/common/slick.scss' %}" >
+<link type="text/scss" href="{% static 'shinelearn/css/talenteconomy/article.scss' %}" rel="stylesheet">
+{% endcompress %}
 {% endblock css_section %}
 
 {% block container %}
@@ -28,41 +30,41 @@
 <header id="carousel-example-generic2" class="carousel slide article-carousel" data-ride="carousel">
   <!-- Wrapper for slides -->
   <div class="container">
-  	<!-- breadcrums -->
+    <!-- breadcrums -->
     {% include './include/breadcrumbs.tmpl.html' with breadcrumbs=breadcrumbs white=True  %}
-
-	 {% if top_article_list %}
-      <div class="carousel-inner" role="listbox">
-
-      	{% for topArtList in top_article_list %}
-        {% if topArtList.0 %}
-        <div class="item {% if forloop.counter == 1 %}active{% endif %}">
-          <!-- big images -->
-          <div class="col-sm-8 pr pl-0">
-          	{% include './include/bannerbox.tmpl.html' with articlelist=topArtList.0 bigtmpl=True %}
-          </div>
-
-          <!-- small images -->
-          <div class="col-sm-4">
-
-      	  	{% if topArtList.1 %}
-            <div class="pr mb-20">
-          		{% include './include/bannerbox.tmpl.html' with articlelist=topArtList.1 mini=True secondary=True %}
-            </div>
-            {% endif %}
-            
-            {% if topArtList.2 %}
-            <div class="pr">
-          		{% include './include/bannerbox.tmpl.html' with articlelist=topArtList.2 mini=True secondary=True %}
-            </div>
-            {% endif %}
-
-          </div>
+    
+    {% if top_article_list %}
+    <div class="carousel-inner" role="listbox">
+      
+      {% for topArtList in top_article_list %}
+      {% if topArtList.0 %}
+      <div class="item {% if forloop.counter == 1 %}active{% endif %}">
+        <!-- big images -->
+        <div class="col-sm-8 pr pl-0">
+          {% include './include/bannerbox.tmpl.html' with articlelist=topArtList.0 bigtmpl=True %}
         </div>
-        {% endif %}
-        {% endfor %}
+        
+        <!-- small images -->
+        <div class="col-sm-4">
+          
+          {% if topArtList.1 %}
+          <div class="pr mb-20">
+            {% include './include/bannerbox.tmpl.html' with articlelist=topArtList.1 mini=True secondary=True %}
+          </div>
+          {% endif %}
+          
+          {% if topArtList.2 %}
+          <div class="pr">
+            {% include './include/bannerbox.tmpl.html' with articlelist=topArtList.2 mini=True secondary=True %}
+          </div>
+          {% endif %}
+          
+        </div>
       </div>
       {% endif %}
+      {% endfor %}
+    </div>
+    {% endif %}
   </div>
   <!-- Controls -->
   <a class="left carousel-control" href="#carousel-example-generic2" role="button" data-slide="prev">
@@ -71,58 +73,60 @@
   </a>
 </header>
 
- <!-- main section start -->
+<!-- main section start -->
 <section class="container mt-40">
-	<!-- page content body start -->
-	<div class="row">
-		<!-- left content start -->
-	    <div class="col-md-9 col-sm-12">
-			<div class="talent-economy">
-				<h1>Talent Economy</h1>
-				<p>It goes without saying that over time, jobs will require a different set of
-					unique skillsets, as opposed to the ones required now. By applying for the
-					online professional courses present on this platform, you'll be able to stay ahead of the curve and massively improve your job prospects by staying future-ready at all times. </p>
-			</div>
-			{% if article_list %}
-            <div class="row" itemscope itemtype="https://schema.org/ItemList">
-                <h2 class="main-heading-article ml-15">Recently added</h2>
-                <div id="list-container-id">
-                    {{article_list}}
-                </div>
-			</div>
-			{% endif %}
-		</div>
-		<!-- left content end -->
-		<!-- right content start -->
-		<div class="col-md-3 col-sm-12">
-			<!-- take me to -->
-			{% if categories %}
-				{% include './include/category.tmpl.html' with categories=categories %}
-			{% endif %}
-			<!-- Popular Courses -->
-			{% if popular_courses %}
-				{% include './include/popular.tmpl.html' with popular_courses=popular_courses page='talenteconomy-home' %}
-			{% endif %}
-		</div>
-		<!-- right content end -->
-	</div>
-</section>
-<!-- main section end -->
-<!-- contributors start -->
-{% if authors %}
-	{% include './include/authorSlide.tmpl.html' with authors=authors %}
-{% endif %}
-<!-- contributors end -->
-{% endblock container %}
-{% block js_section %}
-    {{ block.super }}
-    {% compress js %}
-    <script src="{% static 'shinelearn/js/mobile/common/slick.js' %}"> </script>
-    <script src="{% static 'shinelearn/js/talenteconomy/article.js' %}"></script>
-    <script>
-    	$(function(){
-    		Article.init();
-    	});
-    </script>
-    {% endcompress %}
-{% endblock js_section %}
+  <!-- page content body start -->
+  <div class="row">
+    <!-- left content start -->
+    <div class="col-md-9 col-sm-12">
+      <div class="talent-economy">
+        <h1>Talent Economy</h1>
+        <p>It goes without saying that over time, jobs will require a different set of
+          unique skillsets, as opposed to the ones required now. By applying for the
+          online professional courses present on this platform, you'll be able to stay ahead of the curve and massively improve your job prospects by staying future-ready at all times. </p>
+        </div>
+        {% if article_list %}
+        <div class="row" itemscope itemtype="https://schema.org/ItemList">
+          <h2 class="main-heading-article ml-15">Recently added</h2>
+          <div id="list-container-id">
+            {{article_list}}
+          </div>
+        </div>
+        {% endif %}
+      </div>
+      <!-- left content end -->
+      <!-- right content start -->
+      <div class="col-md-3 col-sm-12">
+        <!-- take me to -->
+        {% if categories %}
+        {% include './include/category.tmpl.html' with categories=categories %}
+        {% endif %}
+        <!-- Popular Courses -->
+        {% if popular_courses %}
+        {% include './include/popular.tmpl.html' with popular_courses=popular_courses page='talenteconomy-home' %}
+        {% endif %}
+      </div>
+      <!-- right content end -->
+    </div>
+  </section>
+  <!-- main section end -->
+  <!-- contributors start -->
+  {% if authors %}
+  {% include './include/authorSlide.tmpl.html' with authors=authors %}
+  {% endif %}
+  <!-- contributors end -->
+  {% endblock container %}
+  {% block js_section %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+  
+  {{ block.super }}
+  {% compress js %}
+  <!-- <script src="{% static 'shinelearn/js/mobile/common/slick.js' %}"> </script> -->
+  <script src="{% static 'shinelearn/js/talenteconomy/article.js' %}"></script>
+  <script>
+    $(function(){
+      Article.init();
+    });
+  </script>
+  {% endcompress %}
+  {% endblock js_section %}

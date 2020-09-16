@@ -92,6 +92,7 @@ class Award extends Component {
     }
     
     deleteAward(index, fields, event) {
+        this.props.sendTrackingInfo('right_section_delete',1)
         event.stopPropagation();
         const award = fields.get(index);
         fields.remove(index);
@@ -103,6 +104,7 @@ class Award extends Component {
     
     editHeadingClick() {
         this.setState({ editHeading: true })
+        this.props.sendTrackingInfo('right_section_edit',1)
     }
     
     componentDidUpdate(prevProps) {
@@ -119,33 +121,34 @@ class Award extends Component {
         
         return (
             <div className="buildResume">
-            <PreviewModal {...this.props} />
-            <Subscribe {...this.props} />
-            <form onSubmit={handleSubmit((values) => this.handleSubmit(values))}>
-            <FieldArray name="list"
-            handleSubmit={handleSubmit}
-            handleAddition={this.props.handleAddition}
-            deleteAward={this.deleteAward}
-            changeOrderingUp={changeOrderingUp}
-            changeOrderingDown={changeOrderingDown}
-            eventClicked={eventClicked}
-            component={renderAwards}
-            headingChange={headingChange}
-            editHeading={editHeading}
-            editHeadingClick={this.editHeadingClick}
-            entity_preference_data={entity_preference_data}
-            context={this}
-            heading={heading}
-            showAlertMessage={showAlertMessage}
-            />
-            <ul className="form">
-            <li className="form__group">
-            <BottomCTC disabled={submitting} context={this} history={history} updateAlertModalStatus={updateAlertModalStatus}
-            length={length} pos={pos + 1} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
-            order_data={order_data} eventClicked={eventClicked} form_name={'Awards'} />
-            </li>
-            </ul>
-            </form>
+                <PreviewModal {...this.props} />
+                <Subscribe {...this.props} />
+                <form onSubmit={handleSubmit((values) => this.handleSubmit(values))}>
+                    <FieldArray name="list"
+                        sendTrackingInfo ={this.props.sendTrackingInfo}
+                        handleSubmit={handleSubmit}
+                        handleAddition={this.props.handleAddition}
+                        deleteAward={this.deleteAward}
+                        changeOrderingUp={changeOrderingUp}
+                        changeOrderingDown={changeOrderingDown}
+                        eventClicked={eventClicked}
+                        component={renderAwards}
+                        headingChange={headingChange}
+                        editHeading={editHeading}
+                        editHeadingClick={this.editHeadingClick}
+                        entity_preference_data={entity_preference_data}
+                        context={this}
+                        heading={heading}
+                        showAlertMessage={showAlertMessage}
+                    />
+                    <ul className="form">
+                        <li className="form__group">
+                            <BottomCTC disabled={submitting} context={this} history={history} updateAlertModalStatus={updateAlertModalStatus}
+                                length={length} pos={pos + 1} updateInfoBeforeLoss={this.updateInfoBeforeLoss}
+                                order_data={order_data} eventClicked={eventClicked} form_name={'Awards'} />
+                        </li>
+                    </ul>
+                </form>
             </div>
             
             )

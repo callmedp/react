@@ -239,7 +239,7 @@ DEBUG = True
 COMPRESS_ENABLED = True
 COMPRESS_OFFLINE = True
 
-CART_DROP_OUT_EMAIL = 1 * 60
+CART_DROP_OUT_EMAIL = 1
 CART_DROP_OUT_LEAD = 3 * 60
 SHIPPING_DROP_OUT_LEAD = 10 * 60
 PAYMENT_DROP_LEAD = 5 * 60
@@ -452,7 +452,8 @@ except:
 
 CANDIDATE_SOLR_URL = "http://172.22.65.34:9999/solr/cda/select/"
 
-
+RESUME_SHINE_SITE_PROTOCOL = 'https'
+RESUME_SHINE_SITE_DOMAIN = 'resumestage.shine.com'
 RESUME_SHINE_MAIN_DOMAIN = 'https://resumestage.shine.com'
 
 '''

@@ -43,6 +43,7 @@ export default class Preview extends Component {
     
     
     toggleUploadResume() {
+        this.props.sendTrackingInfo("preview_upload_resume_on_shine",1);
         this.props.onChange({})
     }
     
@@ -50,7 +51,8 @@ export default class Preview extends Component {
         this.setState({
             selectedColor: color
         })
-        const { eventClicked, customizeTemplate } = this.props;
+        const { eventClicked, customizeTemplate, sendTrackingInfo } = this.props;
+        sendTrackingInfo('preview_change_theme',1);
         eventClicked({
             'action': 'ChangeTheme',
             'label': data['color_name']
@@ -59,6 +61,7 @@ export default class Preview extends Component {
     }
     
     selectCurrentTab(tab) {
+        this.props.sendTrackingInfo('preview_tab_selected',1)
         this.setState({
             currentTab: Number(tab)
         })
@@ -66,8 +69,8 @@ export default class Preview extends Component {
     
     
     goToBuyPage() {
-        const { generateResumeAlert, eventClicked } = this.props;
-        
+        const { generateResumeAlert, eventClicked, sendTrackingInfo } = this.props;
+        sendTrackingInfo('get_your_resume',1)
         eventClicked({
             'action': 'GetYourResume',
             'label': 'Click'
@@ -308,7 +311,7 @@ export default class Preview extends Component {
     }
     
     selectSection(section) {
-        
+        this.props.sendTrackingInfo('preview_reorder_section',1)
         this.setState({
             sectionEntityName: section['entity_text'],
             selectedEntity: section

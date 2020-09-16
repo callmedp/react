@@ -4,7 +4,7 @@
 
 {% for comment in comments %}
     <li>
-        <sup><img aria-label="Default user" src="{% static 'shinelearn/images/mobile/common/default-user.jpg' %}"></sup>
+        <sup><img loading="lazy" aria-label="Default user" src="{% static 'shinelearn/images/mobile/common/default-user.jpg' %}"></sup>
         <p><strong>{% if comment.name %}{{comment.name}}{% else %}Anonymous{% endif %}</strong> <span class="spacer c-666">/</span><span class="c-666">{% get_humanize_date comment.created_on %}</span></p>
         <p class="pb-0">{{comment.message}}</p>
     </li>

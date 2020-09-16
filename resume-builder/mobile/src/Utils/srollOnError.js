@@ -10,7 +10,7 @@ export const scrollOnErrors = (errors,type,offset) =>{
 
     }
     else{
-        const {list} = errors
+        const {list} = errors || {list : []}
         
         error_pos:
         for(let i in list){

@@ -168,11 +168,19 @@ class PaymentMixin(object):
             tracking_id = request.session.get('tracking_id', '')
             product_availability = request.session.get(
                 'product_availability', '')
+            trigger_point = self.request.session.get(
+                'trigger_point','')
+            u_id = self.request.session.get(
+                'u_id','')
+            position = self.request.session.get(
+                'position',1)
+            utm_campaign = self.request.session.get(
+                'utm_campaign','')
             
             action = 'purchase_done'
             if tracking_id and product_availability:
                 make_logging_request.delay(
-                    tracking_product_id, product_tracking_mapping_id, tracking_id, action)
+                    tracking_product_id, product_tracking_mapping_id, tracking_id, action,position, trigger_point, u_id, utm_campaign, 2)
 
             # order = InvoiceGenerate().save_order_invoice_pdf(order=order)
             invoice_generation_order.delay(order_pk=order.pk)

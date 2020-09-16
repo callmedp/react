@@ -8,7 +8,7 @@
     <div class="offer-tag">Admission open</div>
     {% endif %}
     <div class="university-logo">
-        <img aria-label="Category object icon"
+        <img loading="lazy" aria-label="Category object icon"
             src="{{category_obj.icon.url}}"/>
     </div>
     <div class="media mt-15">
@@ -21,7 +21,7 @@
         
         <div class="media-left pr-0">
             <a itemprop="url" href="{{prd.pURL}}" title="{{prd.pHd}}" class="course-logo">
-                <img aria-label="{{prd.pImA}}"    
+                <img loading="lazy" aria-label="{{prd.pImA}}"    
                     src="{{prd.pIc}}" 
                     class="img-responsive" alt="{{prd.pImA}}"
                 />

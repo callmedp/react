@@ -4,42 +4,43 @@
 {% block head %}
 <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-TFD6PTW');</script>
 
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
 })(window,document,'script','dataLayer','GTM-M323HB');</script>
 <!-- End Google Tag Manager -->
 
 
- {% block canonical_url %}
-      <link rel="canonical" href="https://{{ SITE_DOMAIN }}{{ page_obj.get_absolute_url }}">
-    {% endblock canonical_url %}
+{% block canonical_url %}
+<link rel="canonical" href="https://{{ SITE_DOMAIN }}{{ page_obj.get_absolute_url }}">
+{% endblock canonical_url %}
 {% block css_section %}
-        <!-- Bootstrap -->
-        {% compress css %}
+<!-- Bootstrap -->
+{% compress css %}
 
-        <link type="text/scss" href="{% static 'shinelearn/css/common/bootstrap.scss' %}" rel="stylesheet">
-        <link type="text/css" href="{% static 'shinelearn/css/common/typeaheadjs.css' %}" rel="stylesheet">
-        <!--<link type="text/css"  href="{% static 'shinelearn/css/common/bootstrapv3.3.7.css' %}" rel="stylesheet" >-->
-        <link type="text/scss" href="{% static 'shinelearn/css/common/header-footer.scss' %}" rel="stylesheet">
-        <link type="text/css"  href="{% static 'shinelearn/css/cms/global.css' %}"  rel="stylesheet">
-        <link type="text/scss" href="{% static 'shinelearn/css/cms/faq.scss' %}" rel="stylesheet">
+<link type="text/scss" href="{% static 'shinelearn/css/common/bootstrap.scss' %}" rel="stylesheet">
+<link type="text/css" href="{% static 'shinelearn/css/common/typeaheadjs.css' %}" rel="stylesheet">
+<!--<link type="text/css"  href="{% static 'shinelearn/css/common/bootstrapv3.3.7.css' %}" rel="stylesheet" >-->
+<link type="text/scss" href="{% static 'shinelearn/css/common/header-footer.scss' %}" rel="stylesheet">
+<link type="text/css"  href="{% static 'shinelearn/css/cms/global.css' %}"  rel="stylesheet">
+<link type="text/scss" href="{% static 'shinelearn/css/cms/faq.scss' %}" rel="stylesheet">
 
-        {% endcompress %}
-        <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-        <!--[if lt IE]>
-        <![endif]-->
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,600,700" rel="stylesheet">
-
-{% block meta_html %}
- <meta charset="utf-8">
+{% endcompress %}
+<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+<!--[if lt IE]>
+    <![endif]-->
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" media="print" onload="this.media='all'"> 
+    
+    {% block meta_html %}
+    <meta charset="utf-8">
     
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <meta name="description" content="Resume Format  - Get Resume Format recommended by experts for experienced professionals or freshers with examples. Download Resume Formats in pdf or word doc here.">
@@ -50,47 +51,47 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <meta property="og:description" content="Resume Format  - Get Resume Format recommended by experts for experienced professionals or freshers with examples. Download Resume Formats in pdf or word doc here.">
     <meta property="og:type" content="Website">
     <meta property="og:site_name" content="ShineLearning">
-
+    
     <meta property="fb:profile_id" content="282244838633660">
     <meta property="og:image" content="https://static1.shine.com/l/s/shinelearn/images/cms/creative-1.jpg">
     <meta itemprop="name" content="Resume Format and CV Samples - Download Online @ Shine Learning">
     <meta itemprop="dateModified" content="2020-03-20"><meta itemprop="url" content="https://learning.shine.com/cms/resume-format/1/">
     <meta itemprop="url" content="https://learning.shine.com/cms/resume-format/1/">
     <meta itemprop="description" content="Resume Format  - Get Resume Format recommended by experts for experienced professionals or freshers with examples. Download Resume Formats in pdf or word doc here.">
-
-{% endblock meta_html %}
+    
+    {% endblock meta_html %}
     <!-- Bootstrap CSS -->
     <link rel="shortcut icon" href="https://static1.shine.com/l/s/shinelearn/images/fav_icon.png">
     <title>{% block title %}Resume Format {{year}} - Download CV Sample with Examples - Shine Learning {%endblock title%}</title>
-
-{% block GA %}
-             <!--Global site tag (gtag.js) - Google Analytics-->
-           <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries --><!-- WARNING: Respond.js doesn't work if you view the page via file:// --><!--[if lt IE]><![endif]-->
+    
+    {% block GA %}
+    <!--Global site tag (gtag.js) - Google Analytics-->
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries --><!-- WARNING: Respond.js doesn't work if you view the page via file:// --><!--[if lt IE]><![endif]-->
     <script async src="https://www.googletagmanager.com/gtag/js?id=UA-3537905-41"></script><script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-              gtag('config', 'UA-3537905-41');
-          gtag('config', 'UA-3537905-1',{'group':'mainProfile'});
-        </script>
-        <script type="text/javascript">window['CURRENT_FLAVOUR']="full";window['SHINE_SITE']="https://m.shine.com";window['MAIN_DOMAIN_PREFIX']="https://learning.shine.com";window['MOBILE_LOGIN_URL']="https://learning.shine.com/login/";</script>
-         <script>
-              (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-              (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-              m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-              })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-              ga('create', 'UA-3537905-41', 'auto');
-              ga('send', 'pageview');
-        </script>
-        {% endblock GA %}
-{% endblock css_section %}
-
-{% block banner_ads %}{% endblock banner_ads %}
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'UA-3537905-41');
+        gtag('config', 'UA-3537905-1',{'group':'mainProfile'});
+    </script>
+    <script type="text/javascript">window['CURRENT_FLAVOUR']="full";window['SHINE_SITE']="https://m.shine.com";window['MAIN_DOMAIN_PREFIX']="https://learning.shine.com";window['MOBILE_LOGIN_URL']="https://learning.shine.com/login/";</script>
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-3537905-41', 'auto');
+        ga('send', 'pageview');
+    </script>
+    {% endblock GA %}
+    {% endblock css_section %}
+    
+    {% block banner_ads %}{% endblock banner_ads %}
     {% block banner_ads_bottom %}{% endblock banner_ads_bottom %}
-{% endblock head %}
-
-{% block container %}
-
+    {% endblock head %}
+    
+    {% block container %}
+    
     <div id="top" class="container">
         <div class="row">
             <div class="col-md-12 d-resume fs-12 mt-15">
@@ -103,7 +104,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             </div>
             <div class="col-md-8">
                 <h1 class="mb-30">Resume Format</h1>
-
+                
                 <p>A resume is a summarized document which represents a job seeker’s professional background and skills for a prospective employer. To build an attractive resume, you need to find out the best resume format. Resume format plays a vital role while creating a job-winning resume. You should be well-versed about the kind of resume format that suits your current situation. Here we have explained in detail which type of format suits you and what points to keep in mind while building an impressive resume. </p>
                 
                 <!-- white box -->
@@ -127,86 +128,86 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                         <a aria-label="Sample Resume" href="{% static 'shinelearn/static_media/learning_sample_resume.pdf' %}" target="_blank" class="icon-downlod"></a>
                                         <div class="overlay"></div>
                                         <img src="{% static 'shinelearn/images/cms/resume-1-thumb.jpg' %}" alt="most targeted resume format" />
-                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="media-body mt-15">
                                 <p class="mt-0 subhead">Select the most targeted resume format:</p>
                                 <ul class="mt-15">
                                     <li>
-                                    <a title="Format for Fresher" href="https://learning.shine.com/cms/resume-format/freshers-2/2/" target="_blank">Format for Fresher</a>
+                                        <a title="Format for Fresher" href="https://learning.shine.com/cms/resume-format/freshers-2/2/" target="_blank">Format for Fresher</a>
                                     </li>
-
+                                    
                                     <li><a title="Format for Experienced" href="https://learning.shine.com/cms/resume-format/experienced-professionals/6/" target="_blank">Format for Experienced</a></li>
-
+                                    
                                     <li><a title="Format for Banking Fresher" href="https://learning.shine.com/cms/resume-format/banking-freshers/4/" target="_blank">Format for Banking Fresher</a></li>
-
+                                    
                                     <li><a title="Format for IT Fresher" href="https://learning.shine.com/cms/resume-format/it-fresher/27/" target="_blank">Format for IT Fresher</a></li>
-
+                                    
                                     <li><a title="Format for Teachers" href="https://learning.shine.com/cms/resume-format/teachers/41/" target="_blank">Format for Teachers</a></li>
                                 </ul>
                             </div>
                         </div>
                     </div><!-- /. most-resume -->
-
+                    
                 </div><!--/. White box -->
-
+                
                 <!-- white box -->
                 <div id="essential-tips" class="white-box mt-30">
                     <h2 class="mb-15">Essential Tips to Keep In Mind for a Professional Resume Format</h2>
                     <p>Formatting and layout hold a lot of value in the resume building because the first impression is the last. If the resume format is clean and concise, then the employer can look at your resume with no trouble. Also, your resume aims to express the journey of your professional life. So, here are some of the ultimate tips that will help you out to build an impressive resume. </p>
-
+                    
                     <div class="most-resume mb-15">
                         <div class="media">
-
+                            
                             <div class="media-body mt-15">
                                 <p class="mt-0 subhead">Select the most targeted resume format:</p>
                                 <ul class="mt-15">
                                     <li><strong>Single page:</strong> We recommend keeping your resume length short. Avoid writing long, 2-3 pages resume when not necessary. No one is free and interested in reading the long journey of your professional life.</li>
-
+                                    
                                     <li><strong>Break resume into sections:</strong> Always divide your resume into proper sections like contact information, skills, summary, work experience.</li>
-
+                                    
                                     <li><strong>Create header:</strong> Create a header for the contact information section.</li>
-
+                                    
                                     <li><strong>Keep it concise:</strong> Using lengthy statements and paragraphs can make it look odd and annoying. So, keep it straight to the point statements. </li>
-
+                                    
                                     <li><strong>Consistent font-size:</strong> Avoid changing your font size. It can look disorganized. Also, keep it 10,11or 12pts size. These sizes are preferable.</li>
-
+                                    
                                     <li><strong>Use simple and readable fonts:</strong> Times New Roman, Arial are some simple and recommended fonts for writing a resume. </li>
-
+                                    
                                     <li><strong>Give margins:</strong> Give a neat and complete look to your resume by giving it a margin of 0.5 inches to 1 inch. </li>
-
+                                    
                                     <li><strong>Use bullet points:</strong> Describe your past job responsibilities in bullet points.</li>
-
+                                    
                                     <li><strong>Add space:</strong> You should add space before and after each section. </li>
-
+                                    
                                     <li><strong>Eliminate the word “I” -</strong> Eliminate your “I” from your CV. Other than this, you should avoid other including commonly used words in your resume such as hardworking, team player, etc.</li>
-
+                                    
                                     <li><strong>Avoid making grammatical and spelling errors:</strong> The resume errors like grammatical and spelling irritate anybody reading it. Grammatical mistakes can change the whole meaning of a sentence. It can give an employer the wrong ideas about you. So be careful and avoid making grammatical errors.</li>
-
+                                    
                                     <li><strong>Don’t add a photo:</strong> Don’t add your photo unless specified or asked for it.</li>
                                 </ul>
                             </div>
                         </div>
                     </div><!-- /. most-resume -->
-                        <p>
-                            It is recommended that the resume should always be saved as a PDF file because it keeps the content intact. Also, abide by the rules. If the recruiter mentions the other file format such as DOC, DOCX then save as that file only. Don’t save your resume as a graphics file like JPG, JPEG, PNG, and WEBP, etc.
-                        </p>
-                        <p class="text-center"><a href="https://learning.shine.com/resume-builder/" class="btn mt-10 mb-10 resume-writing-service-btn" target="_blank">Create My Resume</a></p>
-                        <p>
-                            These were the tips to always have in mind while formatting a resume. But have you heard about an ATS friendly resume? If No then don’t worry because we have your back. Keep reading it to find out about ATS-friendly resume.
-                        </p>
+                    <p>
+                        It is recommended that the resume should always be saved as a PDF file because it keeps the content intact. Also, abide by the rules. If the recruiter mentions the other file format such as DOC, DOCX then save as that file only. Don’t save your resume as a graphics file like JPG, JPEG, PNG, and WEBP, etc.
+                    </p>
+                    <p class="text-center"><a href="https://learning.shine.com/resume-builder/" class="btn mt-10 mb-10 resume-writing-service-btn" target="_blank">Create My Resume</a></p>
+                    <p>
+                        These were the tips to always have in mind while formatting a resume. But have you heard about an ATS friendly resume? If No then don’t worry because we have your back. Keep reading it to find out about ATS-friendly resume.
+                    </p>
                 </div>
                 <!--/. White box -->
-
+                
                 <!-- white box -->
                 <div id="ats-friendly" class="white-box mt-30">
                     <h2 class="mb-15">What Is An ATS Friendly Resume?</h2>
                     <p>The applicant tracking system (ATS) scan, sort or rank the resume for recruiters who receive hundreds of job applications. It eases their job and selects the resume on behalf of them, which matches their current openings. Now in this digital era, many reputed companies use this system to ease the selection process of job applications. This software quickly sorts the application, which matches their opening position requirements. </p>
-
+                    
                     <div class="most-resume mb-15">
                         <div class="media">
-
+                            
                             <div class="media-body mt-15">
                                 <p class="mt-0 subhead">What Points To Keep In Mind While Formatting An ATS Friendly Resume?</p>
                                 <ul class="mt-15">
@@ -235,14 +236,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     </p>
                 </div>
                 <!--/. White box -->
-
+                
                 <!-- white box -->
                 <div id="resume-formats" class="white-box mt-30 scroll">
                     <h2 class="mb-15">Types of Resume formats</h2>
                     <p>There are three types of formats of resume preferred and recommended by most of the recruiters. These are chronological resume format, functional resume format, and combination resume format.</p>
-
+                    
                     <p> <img src="{% static 'shinelearn/images/cms/type-of-resume.jpg' %}" alt="Types of Resume formats" class="img-responsive" /></p>
-
+                    
                     <div class="most-resume mt-25">
                         <h3 class="uppercase">CHRONOLOGICAL RESUME FORMAT</h3>
                         <p>This format is the <strong>most common and simple</strong> one. In this resume format, one can get a quick overview of everything they want to know. This format gives the most weightage to work experience section which is mentioned before skills and education. The recruiter prefers this format because it has a simple and neat layout because he/she can get a quick idea about your experience and skills.</p>
@@ -251,10 +252,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             <div class="media-left">
                                 <div class="img-wrap mr-20">
                                     <div class="img-content">
-                                    <a aria-label="Chronological Resume Format" href="{% static 'shinelearn/static_media/chronological-resume-format.docx' %}" class="icon-downlod"></a>
-                                    <div class="overlay"></div>
-                                    <img src="{% static 'shinelearn/images/cms/chrono-format.jpg' %}" alt="Chronological Resume Format">
-                                </div>
+                                        <a aria-label="Chronological Resume Format" href="{% static 'shinelearn/static_media/chronological-resume-format.docx' %}" class="icon-downlod"></a>
+                                        <div class="overlay"></div>
+                                        <img src="{% static 'shinelearn/images/cms/chrono-format.jpg' %}" alt="Chronological Resume Format">
+                                    </div>
                                 </div><!-- /. img-wrap -->
                             </div>
                             <div class="media-body mt-15">
@@ -281,7 +282,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             </div>
                         </div>
                         <hr />
-
+                        
                         <div class="media">
                             <div class="media-body mt-15">
                                 <p class="mt-0 subhead">Advantages</p>
@@ -301,11 +302,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                 </ul>
                             </div>
                         </div>
-
+                        
                         <p class="text-center"><a href="https://learning.shine.com/resume-builder/" class="btn mt-10 mb-20 resume-writing-service-btn" target="_blank">Create My Resume</a></p>
-
+                        
                     </div><!-- /. most-resume -->
-
+                    
                     <div class="most-resume mt-25">
                         <h3 class="uppercase">Functional Resume Format (Skill-Based)</h3>
                         <p>This format allows a candidate to put his/her best foot forward. The functional resume format <strong>emphasizes the skills</strong> more than work-experience. This format is the exact opposite of the chronological format. Here the job role-related skills, qualifications are listed first, and the work-experience is written below without elaborating it much.</p>
@@ -314,11 +315,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             <div class="media-left">
                                 <div class="img-wrap mr-20">
                                     <div class="img-content">
-                                    <a aria-label="FUNCTIONAL RESUME FORMAT" href="{% static 'shinelearn/static_media/functional-resume-format.docx' %}" class="icon-downlod"></a>
-                                    <div class="overlay"></div>
-                                    <img src="{% static 'shinelearn/images/cms/functional.jpg' %}"alt="Functional Resume Format">
+                                        <a aria-label="FUNCTIONAL RESUME FORMAT" href="{% static 'shinelearn/static_media/functional-resume-format.docx' %}" class="icon-downlod"></a>
+                                        <div class="overlay"></div>
+                                        <img src="{% static 'shinelearn/images/cms/functional.jpg' %}"alt="Functional Resume Format">
+                                    </div>
                                 </div>
-                            </div>
                             </div>
                             <div class="media-body mt-15">
                                 <p class="mt-0 subhead">What Sections To Include In A Functional Resume Format?</p>
@@ -342,7 +343,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             </div>
                         </div>
                         <hr />
-
+                        
                         <div class="media">
                             <div class="media-body mt-15">
                                 <p class="mt-0 subhead">Advantages</p>
@@ -363,7 +364,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         </div>
                         <p class="text-center"><a href="https://learning.shine.com/resume-builder/" class="btn mt-10 mb-20 resume-writing-service-btn" target="_blank">Create My Resume</a></p>
                     </div><!-- /. most-resume -->
-
+                    
                     <div class="most-resume mt-25">
                         <h3 class="uppercase">Hybrid/Combination Resume Format</h3>
                         <p>As the name says it all, it is the combination of the above two mentioned formats namely chronological resume format and functional resume format. This format emphasizes skills and experience equally. You can say that it is the blend of characteristics of both formats. This format is less confusing as compared to Functional format, and it also highlights the candidate’s strength.</p>
@@ -372,10 +373,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             <div class="media-left">
                                 <div class="img-wrap mr-20">
                                     <div class="img-content">
-                                    <a aria-label="COMBINATION RESUME FORMAT" href="{% static 'shinelearn/static_media/combination-resume-format.docx' %}" class="icon-downlod"></a>
-                                    <div class="overlay"></div>
-                                    <img src="{% static 'shinelearn/images/cms/mixed-format.jpg' %}" alt="Combination resumes Format">
-                                </div>
+                                        <a aria-label="COMBINATION RESUME FORMAT" href="{% static 'shinelearn/static_media/combination-resume-format.docx' %}" class="icon-downlod"></a>
+                                        <div class="overlay"></div>
+                                        <img src="{% static 'shinelearn/images/cms/mixed-format.jpg' %}" alt="Combination resumes Format">
+                                    </div>
                                 </div>
                             </div>
                             <div class="media-body mt-15">
@@ -390,7 +391,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             </div>
                         </div>
                         <hr />
-
+                        
                         <div class="media">
                             <div class="media-body mt-15">
                                 <p class="mt-0 subhead">Advantages</p>
@@ -412,53 +413,53 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                         <p class="text-center"><a href="https://learning.shine.com/resume-builder/" class="btn mt-10 mb-20 resume-writing-service-btn" target="_blank">Create My Resume</a></p>
                     </div><!-- /. most-resume -->
                 </div><!--/. White box -->
-
+                
                 <!-- white box -->
                 <div id="" class="white-box mt-30">
                     <h2 class="mb-15">How to Select the Best Resume Format for Yourself</h2>
                     <p>Every format has its pros and cons and it is difficult to find out which format works best for you. But you don’t need to worry about choosing the correct one as we are here to guide you and suggest the right for you. So, let’s hop to the conclusion of choosing the correct resume format.</p>
-
+                    
                     <table class="table table-bordered mt-15">
-                      <tr class="active">
-                          <td></td>
-                          <td>Student or Entry-level</td>
-                          <td>Mid-level</td>
-                          <td>Senior</td>
-                      </tr>
-                      <tr>
-                          <td>Reverse Chronological</td>
-                          <td><span>&#10004;</span></td>
-                          <td><span>&#10004;</span></td>
-                          <td><span>&#10004;</span></td>
-                      </tr>
-                      <tr>
-                          <td>Fucntional</td>
-                          <td></td>
-                          <td></td>
-                          <td><span>&#10004;</span></td>
-                      </tr>
-                      <tr>
-                          <td>Combination</td>
-                          <td></td>
-                          <td><span>&#10004;</span></td>
-                          <td><span>&#10004;</span></td>
-                      </tr>
+                        <tr class="active">
+                            <td></td>
+                            <td>Student or Entry-level</td>
+                            <td>Mid-level</td>
+                            <td>Senior</td>
+                        </tr>
+                        <tr>
+                            <td>Reverse Chronological</td>
+                            <td><span>&#10004;</span></td>
+                            <td><span>&#10004;</span></td>
+                            <td><span>&#10004;</span></td>
+                        </tr>
+                        <tr>
+                            <td>Fucntional</td>
+                            <td></td>
+                            <td></td>
+                            <td><span>&#10004;</span></td>
+                        </tr>
+                        <tr>
+                            <td>Combination</td>
+                            <td></td>
+                            <td><span>&#10004;</span></td>
+                            <td><span>&#10004;</span></td>
+                        </tr>
                     </table>
                     
                     <div class="most-resume mt-25">
                         <p class="mt-0 subhead">Chronological Resume Format Recommended For:</p>
                         <p>This format is suggested for the candidates who have solid work experience and have continuous growth in their career. As this resume format focuses on work experience, it should be only chosen by the well-experienced candidates. For example Software Engineers, Customer Service Representative, Sales Manager can use this format.</p>
-
+                        
                         <p class="mt-25 subhead">Functional Resume Format Recommended For:</p>
                         <p>This format is suggested for the ones who are into changing careers. It is also best suited for the job hunters who have a gap in their work-experience or have limited work experience. For example, an Intensive Care Unit Registered Nurse, people in the field of data entry, and Secretary/Assistant can use this resume format.  </p>
-
+                        
                         <p class="mt-25 subhead">Hybrid/Combination Resume Format Recommended For:</p>
                         <p>This one works for the ones who have transferable skills and with diverse working history and freelancers who have little professional experience. Also, recommended for making career changes. For example, the Food inspector, Hairstylist, and Yoga instructor can use this format.</p>
                         
-                    <div class="clearfix"></div>
+                        <div class="clearfix"></div>
                     </div><!-- /. most-resume -->
                 </div><!--/. White box -->
-
+                
                 <!-- white box -->
                 <div id="creative-visual" class="white-box mt-30">
                     <h2 class="mb-15">Creative and visual resume formats</h2>
@@ -473,16 +474,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                     </div>
                                     <img src="{% static 'shinelearn/images/cms/creative-1-thumb.jpg' %}" alt="Creative and visual resume formats" class="img-responsive" />
                                 </div>
-
+                                
                                 <!-- Modal -->
                                 <div class="modal fade" id="resume-1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                            <p class="modal-title">Creative and visual resume formats</p>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
+                                                <p class="modal-title">Creative and visual resume formats</p>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
                                             </div>
                                             <div class="modal-body">
                                                 <img src="{% static 'shinelearn/images/cms/creative-1.jpg' %}" alt="Creative and visual resume formats" class="img-responsive">
@@ -498,16 +499,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                     </div>
                                     <img src="{% static 'shinelearn/images/cms/creative-2-thumb.jpg' %}" alt="Creative and visual resume formats" class="img-responsive">
                                 </div>
-
+                                
                                 <!-- Modal -->
                                 <div class="modal fade" id="resume-2" tabindex="-2" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                            <p class="modal-title">Creative and visual resume formats</p>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
+                                                <p class="modal-title">Creative and visual resume formats</p>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
                                             </div>
                                             <div class="modal-body">
                                                 <img src=" {% static 'shinelearn/images/cms/creative-2.jpg' %}" alt="Creative and visual resume formats" class="img-responsive">
@@ -519,22 +520,22 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             <div class="img-wrap pull-left mr-15">
                                 <div class="img-content">
                                     <div class="overlay">
-                                            <a href="#" data-toggle="modal" data-target="#resume-3" class="icon-zoom"></a>
+                                        <a href="#" data-toggle="modal" data-target="#resume-3" class="icon-zoom"></a>
                                     </div>
-                                       <img src="{% static 'shinelearn/images/cms/creative-3-thumb.jpg' %}"  alt="Creative and visual resume formats" class="img-responsive">
+                                    <img src="{% static 'shinelearn/images/cms/creative-3-thumb.jpg' %}"  alt="Creative and visual resume formats" class="img-responsive">
                                 </div>
                                 <!-- Modal -->
                                 <div class="modal fade" id="resume-3" tabindex="-3" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                     <div class="modal-dialog" role="document">
                                         <div class="modal-content">
                                             <div class="modal-header">
-                                            <p class="modal-title">Creative and visual resume formats</p>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
+                                                <p class="modal-title">Creative and visual resume formats</p>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
                                             </div>
                                             <div class="modal-body">
-                                               <img src="{% static 'shinelearn/images/cms/creative-3.jpg' %}" alt="Creative and visual resume formats" class="img-responsive">
+                                                <img src="{% static 'shinelearn/images/cms/creative-3.jpg' %}" alt="Creative and visual resume formats" class="img-responsive">
                                             </div>
                                         </div>
                                     </div>
@@ -546,174 +547,174 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             <p>It is important to understand that these resumes are not accepted everywhere and should be used with care. Also, they are difficult or impossible to run through application tracking software.</p>
                             
                         </div>
-                    <div class="clearfix"></div>
+                        <div class="clearfix"></div>
                     </div><!-- /. most-resume -->
                 </div><!--/. White box -->
-
-
+                
+                
                 <!-- White box -->
                 <div id="faq" class="white-box mt-30 faq-static">
                     <h2 class="mb-15">Frequently Asked Questions (FAQs) </h2>
                     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" style="margin-bottom: 0;">
-                      <div class="panel panel-default">
-                        <div class="panel-heading" role="tab" id="headingOne">
-                          <h3 class="panel-title">
-                            <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                              1. What is a resume format? 
-                            </a>
-                          </h3>
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingOne">
+                                <h3 class="panel-title">
+                                    <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                        1. What is a resume format? 
+                                    </a>
+                                </h3>
+                            </div>
+                            <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                                <div class="panel-body">
+                                    A resume format is a sample resume that can be edited and filled with the required details. It is often provided with instructions or sample text and needs a rigorous edit to make it useful. 
+                                </div>
+                            </div>
                         </div>
-                        <div id="collapseOne" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
-                          <div class="panel-body">
-                            A resume format is a sample resume that can be edited and filled with the required details. It is often provided with instructions or sample text and needs a rigorous edit to make it useful. 
-                          </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingTwo">
+                                <h3 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                        2. I’ve never created a resume before, how do I make a resume for the first time? 
+                                    </a>
+                                </h3>
+                            </div>
+                            <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                                <div class="panel-body">
+                                    Use a word template to start your resume and choose amongst the type of resumes mentioned above. Make your resume legible, readable and well managed with relevant titles and headings. 
+                                </div>
+                            </div>
                         </div>
-                      </div>
-                      <div class="panel panel-default">
-                        <div class="panel-heading" role="tab" id="headingTwo">
-                          <h3 class="panel-title">
-                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                              2. I’ve never created a resume before, how do I make a resume for the first time? 
-                            </a>
-                          </h3>
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingThree">
+                                <h3 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                        3. How to choose a resume format? 
+                                    </a>
+                                </h3>
+                            </div>
+                            <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                                <div class="panel-body">
+                                    There are various kinds of resume formats that can be used. You can also develop your customized format from scratch. The format should provide the required information strategically and clearly. Also, based on various factors like experience, skills, industry, etc, you can choose between a chronological resume format, a functional resume format, or a combination resume format. 
+                                    <ul>
+                                        <li>A chronological resume is used when you have been working in the same industry and you are applying for another job within the same space. </li>
+                                        <li>A functional resume is used if you are a new graduate and have very less or no work experience. </li>
+                                        <li>A combination resume is used when if you have skills developed outside your area of expertise, have career gaps or changing profession. </li>
+                                    </ul>
+                                </div>
+                            </div>
                         </div>
-                        <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-                          <div class="panel-body">
-                            Use a word template to start your resume and choose amongst the type of resumes mentioned above. Make your resume legible, readable and well managed with relevant titles and headings. 
-                          </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingFour">
+                                <h3 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                        4.  Why are resume formats important? 
+                                    </a>
+                                </h3>
+                            </div>
+                            <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+                                <div class="panel-body">
+                                    Resume formats are important, especially the resume types that are mainstream due to their simplicity, targeting, and utility with job applications and their processing. A good resume is easily legible, readable and well managed with relevant titles and headings. Different resume formats are also important to show information in different ways to emphasize the connection of a candidate with the job profile, organization, and industry. 
+                                </div>
+                            </div>
                         </div>
-                      </div>
-                      <div class="panel panel-default">
-                        <div class="panel-heading" role="tab" id="headingThree">
-                          <h3 class="panel-title">
-                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                              3. How to choose a resume format? 
-                            </a>
-                          </h3>
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingFive">
+                                <h3 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                        5. What makes a resume good and attractive? 
+                                    </a>
+                                </h3>
+                            </div>
+                            <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
+                                <div class="panel-body">
+                                    A resume is considered good if it looks neat, simple, well-managed, and is easy to read and skim through without missing important information. Simple text fonts in a maximum of two colors and three sizes are the basic requirements. Distributing information in shorter points, giving proper headings, aligning text on the left margin and other best practices make the resume look good and attractive. Composing simpler sentences, using appropriate vocabulary, highlighting or underlining important phrases, and similar practices with content will make it readable and legible. You can also use some creativity with these but keep it limited and uncompromising on its utility. 
+                                </div>
+                            </div>
                         </div>
-                        <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-                          <div class="panel-body">
-                            There are various kinds of resume formats that can be used. You can also develop your customized format from scratch. The format should provide the required information strategically and clearly. Also, based on various factors like experience, skills, industry, etc, you can choose between a chronological resume format, a functional resume format, or a combination resume format. 
-                            <ul>
-                                <li>A chronological resume is used when you have been working in the same industry and you are applying for another job within the same space. </li>
-                                <li>A functional resume is used if you are a new graduate and have very less or no work experience. </li>
-                                <li>A combination resume is used when if you have skills developed outside your area of expertise, have career gaps or changing profession. </li>
-                            </ul>
-                          </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingSix">
+                                <h3 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                                        6. Should I include hobbies in my resume? 
+                                    </a>
+                                </h3>
+                            </div>
+                            <div id="collapseSix" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSix">
+                                <div class="panel-body">
+                                    One should only list hobbies if they are professionally relevant. Make sure the hobbies project skills and personality traits related to the job you are applying for. You can take advantage of this section if you have achievements to quote with your hobbies. 
+                                </div>
+                            </div>
                         </div>
-                      </div>
-                      <div class="panel panel-default">
-                        <div class="panel-heading" role="tab" id="headingFour">
-                          <h3 class="panel-title">
-                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                              4.  Why are resume formats important? 
-                            </a>
-                          </h3>
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingSeven">
+                                <h3 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+                                        7. What makes a resume bad or unattractive? What not to do in a resume? 
+                                    </a>
+                                </h3>
+                            </div>
+                            <div id="collapseSeven" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSeven">
+                                <div class="panel-body">
+                                    There are several factors that can make a resume bad or unattractive; the worst is unmanaged and badly formatted text. Standard resume formats solve this problem beforehand. Apart from it, recursive or multiple grammatical and spelling mistakes can result in bad impressions. Using odd fonts, uneven text alignment, long paragraphs (<4-5 sentences), long sentences (<22 words), etc are a strict no-no. Do not include your picture and other unnecessary information. Do not make your resume longer than two A4 size pages. But also, do not cramp the text in the document; leave ample spaces between lines, paragraphs, and other elements in the resume. 
+                                </div>
+                            </div>
                         </div>
-                        <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
-                          <div class="panel-body">
-                            Resume formats are important, especially the resume types that are mainstream due to their simplicity, targeting, and utility with job applications and their processing. A good resume is easily legible, readable and well managed with relevant titles and headings. Different resume formats are also important to show information in different ways to emphasize the connection of a candidate with the job profile, organization, and industry. 
-                          </div>
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingEight">
+                                <h3 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
+                                        8. Should I include an objective statement in my resume? 
+                                    </a>
+                                </h3>
+                            </div>
+                            <div id="collapseEight" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingEight">
+                                <div class="panel-body">
+                                    Every employer has a different perspective. We suggest if you are including objective in your resume, make sure it is directed and specific to the employer. Also, objective statements work better without the heading 'Objective' or something else. 
+                                </div>
+                            </div>
                         </div>
-                      </div>
-                      <div class="panel panel-default">
-                        <div class="panel-heading" role="tab" id="headingFive">
-                          <h3 class="panel-title">
-                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-                              5. What makes a resume good and attractive? 
-                            </a>
-                          </h3>
+                        <div class="panel panel-default">
+                            <div class="panel-heading" role="tab" id="headingNine">
+                                <h3 class="panel-title">
+                                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
+                                        9. How many pages are allowed in a resume? 
+                                    </a>
+                                </h3>
+                            </div>
+                            <div id="collapseNine" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingNine">
+                                <div class="panel-body">
+                                    Employers prefer resumes with 1 or 2 pages. Moreover, for freshers, a single-page resume is acceptable and for experienced two pages resume serves the purpose. In case of highly experienced, one more page can be added but it is best to not extend it further. 
+                                </div>
+                            </div>
                         </div>
-                        <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
-                          <div class="panel-body">
-                            A resume is considered good if it looks neat, simple, well-managed, and is easy to read and skim through without missing important information. Simple text fonts in a maximum of two colors and three sizes are the basic requirements. Distributing information in shorter points, giving proper headings, aligning text on the left margin and other best practices make the resume look good and attractive. Composing simpler sentences, using appropriate vocabulary, highlighting or underlining important phrases, and similar practices with content will make it readable and legible. You can also use some creativity with these but keep it limited and uncompromising on its utility. 
-                          </div>
-                        </div>
-                      </div>
-                      <div class="panel panel-default">
-                        <div class="panel-heading" role="tab" id="headingSix">
-                          <h3 class="panel-title">
-                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
-                              6. Should I include hobbies in my resume? 
-                            </a>
-                          </h3>
-                        </div>
-                        <div id="collapseSix" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSix">
-                          <div class="panel-body">
-                            One should only list hobbies if they are professionally relevant. Make sure the hobbies project skills and personality traits related to the job you are applying for. You can take advantage of this section if you have achievements to quote with your hobbies. 
-                          </div>
-                        </div>
-                      </div>
-                      <div class="panel panel-default">
-                        <div class="panel-heading" role="tab" id="headingSeven">
-                          <h3 class="panel-title">
-                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
-                              7. What makes a resume bad or unattractive? What not to do in a resume? 
-                            </a>
-                          </h3>
-                        </div>
-                        <div id="collapseSeven" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSeven">
-                          <div class="panel-body">
-                            There are several factors that can make a resume bad or unattractive; the worst is unmanaged and badly formatted text. Standard resume formats solve this problem beforehand. Apart from it, recursive or multiple grammatical and spelling mistakes can result in bad impressions. Using odd fonts, uneven text alignment, long paragraphs (<4-5 sentences), long sentences (<22 words), etc are a strict no-no. Do not include your picture and other unnecessary information. Do not make your resume longer than two A4 size pages. But also, do not cramp the text in the document; leave ample spaces between lines, paragraphs, and other elements in the resume. 
-                          </div>
-                        </div>
-                      </div>
-                      <div class="panel panel-default">
-                        <div class="panel-heading" role="tab" id="headingEight">
-                          <h3 class="panel-title">
-                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
-                              8. Should I include an objective statement in my resume? 
-                            </a>
-                          </h3>
-                        </div>
-                        <div id="collapseEight" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingEight">
-                          <div class="panel-body">
-                            Every employer has a different perspective. We suggest if you are including objective in your resume, make sure it is directed and specific to the employer. Also, objective statements work better without the heading 'Objective' or something else. 
-                          </div>
-                        </div>
-                      </div>
-                      <div class="panel panel-default">
-                        <div class="panel-heading" role="tab" id="headingNine">
-                          <h3 class="panel-title">
-                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
-                              9. How many pages are allowed in a resume? 
-                            </a>
-                          </h3>
-                        </div>
-                        <div id="collapseNine" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingNine">
-                          <div class="panel-body">
-                            Employers prefer resumes with 1 or 2 pages. Moreover, for freshers, a single-page resume is acceptable and for experienced two pages resume serves the purpose. In case of highly experienced, one more page can be added but it is best to not extend it further. 
-                          </div>
-                        </div>
-                      </div>
                     </div>
-                    </ul>
-                </div><!--/. White box -->
-
-                <!-- White box -->
-                <div id="difference" class="white-box mt-30 rf">
-                    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" style="margin-bottom: 0;">
-                      <div class="panel panel-default">
+                </ul>
+            </div><!--/. White box -->
+            
+            <!-- White box -->
+            <div id="difference" class="white-box mt-30 rf">
+                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" style="margin-bottom: 0;">
+                    <div class="panel panel-default">
                         <div class="panel-heading" role="tab" id="headingEleven">
-                          <h2 class="panel-title">
-                            <a role="button" class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseEleven" aria-expanded="true" aria-controls="collapseEleven">
-                                Difference Between Resume, Curriculum Vitae (CV) and Biodata
-                            </a></h2>
+                            <h2 class="panel-title">
+                                <a role="button" class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseEleven" aria-expanded="true" aria-controls="collapseEleven">
+                                    Difference Between Resume, Curriculum Vitae (CV) and Biodata
+                                </a></h2>
+                            </div>
                         </div>
-                    </div>
-                    <div id="collapseEleven" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingEleven">
-                        <div class="panel-body">
-                        <p>Resumes, CV and Biodata are very similar in nature and are used to present personal-professional information about a person. They are usually used in job applications, academic applications, and similar documentation. The primary differences between the three are: </p>
-                        <ul class="list">
-                            <li>Biodata is a very short document with basic factual information only while resume and CV present the same information in more details. Curriculum Vitaes contain very detailed information while resumes have brief descriptions only. </li>
-                            <li>Biodata formats are single page while resume formats can extend to two pages and CV formats can be even longer due to the details presented. However, it is not recommended to have a CV longer than 3-pages unless you are highly experienced. </li>
-                            <li>Biodata is used widely and may be required for documentation other than jobs or academic. Resumes and CVs are mainly used for job applications and academic applications or similar professional use. </li>
-                            <li>Biodata follows the format of a functional resume while CVs can be made with either combination resume or chronological resume. </li>
-                        </ul>
-                    </div>
+                        <div id="collapseEleven" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingEleven">
+                            <div class="panel-body">
+                                <p>Resumes, CV and Biodata are very similar in nature and are used to present personal-professional information about a person. They are usually used in job applications, academic applications, and similar documentation. The primary differences between the three are: </p>
+                                <ul class="list">
+                                    <li>Biodata is a very short document with basic factual information only while resume and CV present the same information in more details. Curriculum Vitaes contain very detailed information while resumes have brief descriptions only. </li>
+                                    <li>Biodata formats are single page while resume formats can extend to two pages and CV formats can be even longer due to the details presented. However, it is not recommended to have a CV longer than 3-pages unless you are highly experienced. </li>
+                                    <li>Biodata is used widely and may be required for documentation other than jobs or academic. Resumes and CVs are mainly used for job applications and academic applications or similar professional use. </li>
+                                    <li>Biodata follows the format of a functional resume while CVs can be made with either combination resume or chronological resume. </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div><!--/. White box -->
                 </div>
-                </div><!--/. White box -->
-            </div>
             </div><!-- /. col -->
             <div class="col-md-4">
                 <div class="right-pan">
@@ -723,49 +724,49 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                             <li class="facebook">
                                 <a aria-label="Share on Facebook" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{hostname}}{{page_obj.get_absolute_url}}" page-id="{{page_obj.id}}" class="icon-fb"></a>
                             </li>
-                           <li class="linkedin">
-                               <a class="icon-li" id="article_share" target="_blank" article-slug="{{page_obj.slug}}" href="https://www.linkedin.com/shareArticle?mini=true&url=https://{{SITE_DOMAIN}}{{page_obj.get_absolute_url}}&title={{page_obj.title}}&summary={{page_obj.meta_desc}}&source={{SITEDOMAIN}}/"></a>
+                            <li class="linkedin">
+                                <a class="icon-li" id="article_share" target="_blank" article-slug="{{page_obj.slug}}" href="https://www.linkedin.com/shareArticle?mini=true&url=https://{{SITE_DOMAIN}}{{page_obj.get_absolute_url}}&title={{page_obj.title}}&summary={{page_obj.meta_desc}}&source={{SITEDOMAIN}}/"></a>
                             </li>
                             <li class="twitter">
                                 <a  aria-label="Share on Twitter" href="https://twitter.com/intent/tweet?text={{page_obj.title}}&url=https://{{SITE_DOMAIN}}{{page_obj.get_absolute_url}}" target="_blank" class="icon-tw"></a>
-                                  <!-- <a aria-label="Share on Twitter" href="https://twitter.com/home?status=https://{{SITE_DOMAIN}}{{page_obj.get_absolute_url}}" target="_blank" class="icon-tw"></a> -->
+                                <!-- <a aria-label="Share on Twitter" href="https://twitter.com/home?status=https://{{SITE_DOMAIN}}{{page_obj.get_absolute_url}}" target="_blank" class="icon-tw"></a> -->
                             </li>
                         </ul>
                     </div><!-- /. social-share -->
-
+                    
                     <div id="snackbar"></div>
                     <div class="white-box">
                         <p class="pb-15 mb-15 rhs-head uppercase">Request a call</p>
                         <form class="form-group" role="form" id="callback_form">
                             <div class="form-group">
-                            <input aria-label="Name" type="text" class="form-control" name='name' placeholder="Name" value="{{request.session.full_name|safe}}">
-                            <span class="error-txt"></span>
+                                <input aria-label="Name" type="text" class="form-control" name='name' placeholder="Name" value="{{request.session.full_name|safe}}">
+                                <span class="error-txt"></span>
                             </div>
-                        <div class="form-group">
-                            <input aria-label="Mobile No" type="text" class="form-control" name="number" id="id_mobile" placeholder="Mobile Number" value="{{request.session.mobile_no|safe}}" maxlength="15">
-                            <span class="error-txt"></span>
-                        </div>
-
-                        {% if  page_obj %}
+                            <div class="form-group">
+                                <input aria-label="Mobile No" type="text" class="form-control" name="number" id="id_mobile" placeholder="Mobile Number" value="{{request.session.mobile_no|safe}}" maxlength="15">
+                                <span class="error-txt"></span>
+                            </div>
+                            
+                            {% if  page_obj %}
                             <input type="hidden" name="lsource" value="7">
                             <input type="hidden" name="product" value="{{page_obj.pk}}">
                             <input type="hidden" name="prd" value="{{page_obj.heading}}">
                             <input type="hidden" name="path" value="{{request.build_absolute_uri}}">
-                        {% endif %}
-                        <div class="form-group">
-                            <textarea aria-label="Message" class="form-control" name='msg' placeholder="Message" rows="3"></textarea>
-                            <span class="error-txt"></span>
-                        </div>
+                            {% endif %}
+                            <div class="form-group">
+                                <textarea aria-label="Message" class="form-control" name='msg' placeholder="Message" rows="3"></textarea>
+                                <span class="error-txt"></span>
+                            </div>
                         </form>
                         <button type="submit" id="id_callback" class="btn btn-primary w-100">Submit</button>
-
+                        
                         <div class="call mt-30 text-center">
                             <p class="number"><span class="icon-call"></span><a href="tel:{{ggn_contact_full}}">{{ggn_contact_full}}</a></p>
                             <p class="fs-12 c9">9AM to 7PM IST Monday-Saturday</p>
                         </div>
-
+                        
                     </div><!-- /. white-box -->
-
+                    
                     <div class="white-box mt-30">
                         <p class="uppercase pb-15 mb-15 rhs-head">Related articles</p>
                         <ul>
@@ -773,146 +774,149 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                                 <div class="media">
                                     <div class="media-left">
                                         <a href="https://learning.shine.com/article/6-things-to-be-removed-from-your-resume/14/" target="_blank">
-                                        <img class="mr-3" src="{% static 'shinelearn/images/cms/related-1.jpg' %}" alt="6 Things to be removed from Your Resume"></a>
-                                    </div>
-
-                                    <div class="media-body ml-15 fs-16">
-                                        <h3><a href="https://learning.shine.com/article/6-things-to-be-removed-from-your-resume/14/" target="_blank">6 Things to be removed from Your Resume</a></h3>
-                                    </div>
-                                </div>
-                            </li><!-- /. l1 - 1 -->
-
-                            <li class="mb-20">
-                                <div class="media">
-                                        <div class="media-left">
-                                        <a href="https://learning.shine.com/article/should-i-write-ctc-in-my-resume/3/" target="_blank">
-                                            <img class="mr-3" src= "{% static 'shinelearn/images/cms/related-2.jpg' %}"  alt="Should I write CTC in my Resume">
-                                        </a>
+                                            <img class="mr-3" src="{% static 'shinelearn/images/cms/related-1.jpg' %}" alt="6 Things to be removed from Your Resume"></a>
                                         </div>
-                                    <div class="media-body ml-15 fs-16">
-                                        <h3><a href="https://learning.shine.com/article/should-i-write-ctc-in-my-resume/3/" target="_blank">Should I write CTC in my Resume</a></h3>
-                                    </div>
-                                </div>
-                            </li><!-- /. l1 - 2 -->
-
-                            <li class="mb-20">
-                                <div class="media">
-                                        <div class="media-left">
-                                        <a href="https://learning.shine.com/talenteconomy/career-help/3-ways-to-self-evaluate-your-resume-format-and-content/" target="_blank">
-                                            <img class="mr-3" src= "{% static 'shinelearn/images/cms/related-3.jpg' %}"  alt="3 Ways To Self Evaluate Your Resume Format And Content">
-                                        </a>
+                                        
+                                        <div class="media-body ml-15 fs-16">
+                                            <h3><a href="https://learning.shine.com/article/6-things-to-be-removed-from-your-resume/14/" target="_blank">6 Things to be removed from Your Resume</a></h3>
                                         </div>
-                                    <div class="media-body ml-15 fs-16">
-                                        <h3><a href="https://learning.shine.com/talenteconomy/career-help/3-ways-to-self-evaluate-your-resume-format-and-content/" target="_blank">3 Ways To Self Evaluate Your Resume Format And Content </a></h3>
                                     </div>
-                                </div>
-                            </li><!-- /. l1 - 3 -->
-
-                            <li class="mb-20">
-                                <div class="media">
+                                </li><!-- /. l1 - 1 -->
+                                
+                                <li class="mb-20">
+                                    <div class="media">
                                         <div class="media-left">
-                                        <a href="https://learning.shine.com/talenteconomy/career-help/7-quick-strategic-changes-in-your-resume-format-you-can-do-right-away/" target="_blank">
-                                           <img class="mr-3" src="{% static 'shinelearn/images/cms/related-4.jpg' %}" alt="7 Quick Strategic Changes In Your Resume Format You Can Do Right Away!">
-                                        </a>
+                                            <a href="https://learning.shine.com/article/should-i-write-ctc-in-my-resume/3/" target="_blank">
+                                                <img class="mr-3" src= "{% static 'shinelearn/images/cms/related-2.jpg' %}"  alt="Should I write CTC in my Resume">
+                                            </a>
                                         </div>
-                                    <div class="media-body ml-15 fs-16">
-                                        <h3><a href="https://learning.shine.com/talenteconomy/career-help/7-quick-strategic-changes-in-your-resume-format-you-can-do-right-away/" target="_blank">7 Quick Strategic Changes In Your Resume Format You Can Do Right Away! </a></h3>
+                                        <div class="media-body ml-15 fs-16">
+                                            <h3><a href="https://learning.shine.com/article/should-i-write-ctc-in-my-resume/3/" target="_blank">Should I write CTC in my Resume</a></h3>
+                                        </div>
                                     </div>
-                                </div>
-                            </li><!-- /. l1 - 4 -->
-
-                            <li>
-                                <div class="media">
+                                </li><!-- /. l1 - 2 -->
+                                
+                                <li class="mb-20">
+                                    <div class="media">
                                         <div class="media-left">
-                                        <a href="https://learning.shine.com/talenteconomy/career-help/9-words-to-replace-in-your-resume-and-other-professional-communications/" target="_blank">
-                                            <img class="mr-3" src="{% static 'shinelearn/images/cms/related-5.jpg' %}"alt="9 Words To Replace In Your Resume And Other Professional Communications!">
-                                        </a>
+                                            <a href="https://learning.shine.com/talenteconomy/career-help/3-ways-to-self-evaluate-your-resume-format-and-content/" target="_blank">
+                                                <img class="mr-3" src= "{% static 'shinelearn/images/cms/related-3.jpg' %}"  alt="3 Ways To Self Evaluate Your Resume Format And Content">
+                                            </a>
                                         </div>
-                                    <div class="media-body ml-15 fs-16">
-                                        <h3><a href="https://learning.shine.com/talenteconomy/career-help/9-words-to-replace-in-your-resume-and-other-professional-communications/" target="_blank">9 Words To Replace In Your Resume And Other Professional Communications! </a></h3>
+                                        <div class="media-body ml-15 fs-16">
+                                            <h3><a href="https://learning.shine.com/talenteconomy/career-help/3-ways-to-self-evaluate-your-resume-format-and-content/" target="_blank">3 Ways To Self Evaluate Your Resume Format And Content </a></h3>
+                                        </div>
                                     </div>
+                                </li><!-- /. l1 - 3 -->
+                                
+                                <li class="mb-20">
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <a href="https://learning.shine.com/talenteconomy/career-help/7-quick-strategic-changes-in-your-resume-format-you-can-do-right-away/" target="_blank">
+                                                <img class="mr-3" src="{% static 'shinelearn/images/cms/related-4.jpg' %}" alt="7 Quick Strategic Changes In Your Resume Format You Can Do Right Away!">
+                                            </a>
+                                        </div>
+                                        <div class="media-body ml-15 fs-16">
+                                            <h3><a href="https://learning.shine.com/talenteconomy/career-help/7-quick-strategic-changes-in-your-resume-format-you-can-do-right-away/" target="_blank">7 Quick Strategic Changes In Your Resume Format You Can Do Right Away! </a></h3>
+                                        </div>
+                                    </div>
+                                </li><!-- /. l1 - 4 -->
+                                
+                                <li>
+                                    <div class="media">
+                                        <div class="media-left">
+                                            <a href="https://learning.shine.com/talenteconomy/career-help/9-words-to-replace-in-your-resume-and-other-professional-communications/" target="_blank">
+                                                <img class="mr-3" src="{% static 'shinelearn/images/cms/related-5.jpg' %}"alt="9 Words To Replace In Your Resume And Other Professional Communications!">
+                                            </a>
+                                        </div>
+                                        <div class="media-body ml-15 fs-16">
+                                            <h3><a href="https://learning.shine.com/talenteconomy/career-help/9-words-to-replace-in-your-resume-and-other-professional-communications/" target="_blank">9 Words To Replace In Your Resume And Other Professional Communications! </a></h3>
+                                        </div>
+                                    </div>
+                                </li><!-- /. l1 - 5 -->
+                            </ul>
+                        </div><!-- /. white-box -->
+                        
+                        <div class="white-box mt-30">
+                            <div class="media">
+                                <div class="media-left">
+                                    <img class="mr-3" src="{% static 'shinelearn/images/cms/resume-writing-service-pic.png' %}"alt="Resume Writing Service">
                                 </div>
-                            </li><!-- /. l1 - 5 -->
-                        </ul>
-                    </div><!-- /. white-box -->
-
-                    <div class="white-box mt-30">
-                        <div class="media">
-                            <div class="media-left">
-                                <img class="mr-3" src="{% static 'shinelearn/images/cms/resume-writing-service-pic.png' %}"alt="Resume Writing Service">
+                                <div class="media-body ml-15 fs-16">
+                                    <p class="resume-writing-service-head">Resume Writing Service</p>
+                                    <p class="resume-writing-service-txt">Having trouble writing your Resume? Hire our Professional Writers to give your Resume the best of everything. We know the recruitment industry for 10+ years.</p>
+                                    <a onclick="hitGA()" href="https://learning.shine.com/services/resume-services/freshers-level/pd-1921" class="btn mt-10 resume-writing-service-btn">Write My Resume</a>
+                                </div>
                             </div>
-                            <div class="media-body ml-15 fs-16">
-                                <p class="resume-writing-service-head">Resume Writing Service</p>
-                                <p class="resume-writing-service-txt">Having trouble writing your Resume? Hire our Professional Writers to give your Resume the best of everything. We know the recruitment industry for 10+ years.</p>
-                                <a onclick="hitGA()" href="https://learning.shine.com/services/resume-services/freshers-level/pd-1921" class="btn mt-10 resume-writing-service-btn">Write My Resume</a>
-                            </div>
-                        </div>
-                    </div><!-- /. white-box -->
-
-                    <a id="top-page" class="top-on-page" href="#top">Top</a>
-
-                </div><!-- /. Right pan -->
-            </div><!-- /. col -->
-        </div><!-- /. row -->
-    </div><!-- /. container -->
-{% endblock container %}
-
-{% block js_section %}
- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"> </script>
-<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"> </script>
-<script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.2.1/typeahead.bundle.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
-    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-    {% compress js %}
-    <script type="text/javascript" src="{% static 'shinelearn/js/common/plugins.ga.js' %}"></script>
-    <script type="text/javascript" src="{% static 'shinelearn/js/common/common.js' %}"> </script>
-    <script type="text/javascript" src="{% static 'shinelearn/js/cms/validate.js' %}"></script>
-    <script type="text/javascript" src="{% static 'shinelearn/js/common/bootstrap.min.js' %}"> </script>
-    {% endcompress %}
-  <script>
-        $('.nav-tabs > li > a').hover(function() {
-            $(this).tab('show');
-          });
-        $('.dropdown').hover(function(){
-            $('.dropdown-toggle', this).trigger('click');
-          });
-        function hitGA(){
-            ga('send', 'event', 'Clicks', 'Write My Resume', 'Resume Static Page');
-          }
-    </script>
-    <script type="text/javascript">
-        $("a[href^='#']").on('click', function(e) {
-           // prevent default anchor click behavior
-           e.preventDefault();
-
-           // animate
-           $('html, body').animate({
-               scrollTop: $(this.hash).offset().top - 55
-             }, 300, function(){
-             });
-        });
-
-        // When the user scrolls down 20px from the top of the document, show the button
-        window.onscroll = function() {scrollFunction()};
-
-        function scrollFunction() {
-            if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
-                document.getElementById("top-page").style.display = "block";
-            } else {
-                document.getElementById("top-page").style.display = "none";
+                        </div><!-- /. white-box -->
+                        
+                        <a id="top-page" class="top-on-page" href="#top">Top</a>
+                        
+                    </div><!-- /. Right pan -->
+                </div><!-- /. col -->
+            </div><!-- /. row -->
+        </div><!-- /. container -->
+        {% endblock container %}
+        
+        {% block js_section %}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"> </script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"> </script>
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery.validate/1.11.1/jquery.validate.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.3.1/typeahead.bundle.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.7/js/tether.min.js"></script>
+        <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+        <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        {% compress js %}
+        <script type="text/javascript" src="{% static 'shinelearn/js/common/plugins.ga.js' %}"></script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/common/common.js' %}"> </script>
+        <script type="text/javascript" src="{% static 'shinelearn/js/cms/validate.js' %}"></script>
+        <!-- <script type="text/javascript" src="{% static 'shinelearn/js/common/bootstrap.min.js' %}"> </script> -->
+        {% endcompress %}
+        <script>
+            $('.nav-tabs > li > a').hover(function() {
+                $(this).tab('show');
+            });
+            $('.dropdown').hover(function(){
+                $('.dropdown-toggle', this).trigger('click');
+            });
+            function hitGA(){
+                ga('send', 'event', 'Clicks', 'Write My Resume', 'Resume Static Page');
             }
-        }
-        // When the user clicks on the button, scroll to the top of the document
-        function topFunction() {
-            document.body.scrollTop = 0;
-            document.documentElement.scrollTop = 0;
-        }
-       $(document).on('click', '.icon-downlod', function () {
-
-    MyGA.SendEvent('QueryForm', 'Form Interactions', 'Cms Resume Enquiry', 'success');
-});
-    </script>
- {% endblock js_section %}
+        </script>
+        <script type="text/javascript">
+            $("a[href^='#']").on('click', function(e) {
+                // prevent default anchor click behavior
+                e.preventDefault();
+                
+                // animate
+                $('html, body').animate({
+                    scrollTop: $(this.hash).offset().top - 55
+                }, 300, function(){
+                });
+            });
+            
+            // When the user scrolls down 20px from the top of the document, show the button
+            window.onscroll = function() {scrollFunction()};
+            
+            function scrollFunction() {
+                if (document.body.scrollTop > 100 || document.documentElement.scrollTop > 100) {
+                    document.getElementById("top-page").style.display = "block";
+                } else {
+                    document.getElementById("top-page").style.display = "none";
+                }
+            }
+            // When the user clicks on the button, scroll to the top of the document
+            function topFunction() {
+                document.body.scrollTop = 0;
+                document.documentElement.scrollTop = 0;
+            }
+            $(document).on('click', '.icon-downlod', function () {
+                
+                MyGA.SendEvent('QueryForm', 'Form Interactions', 'Cms Resume Enquiry', 'success');
+            });
+        </script>
+        {% endblock js_section %}
+        

@@ -64,6 +64,7 @@ class Summary extends Component {
     }
 
     async openModal() {
+        this.props.sendTrackingInfo('right_section_add',1)
         const {experience} = this.props;
         let latest_experience = ''
         let latest_end_date = 'None'
@@ -154,6 +155,7 @@ class Summary extends Component {
                                    onClick={() => {
                                        headingChange(entity_preference_data, heading, 5);
                                        this.setState({editHeading: false})
+                                       this.props.sendTrackingInfo('right_section_edit',1)
                                    }}></i>
                             </React.Fragment>
 

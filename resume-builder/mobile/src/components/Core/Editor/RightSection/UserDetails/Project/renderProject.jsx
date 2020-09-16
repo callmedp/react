@@ -25,7 +25,8 @@ const renderProjects = ({
     till_today,
     tillTodayDisable,
     entity_preference_data,
-    showAlertMessage
+    showAlertMessage,
+    sendTrackingInfo
 }) => {
     return (
 
@@ -59,6 +60,7 @@ const renderProjects = ({
                                     }
                                 })
                                 if (!skipAddition) {
+                                    sendTrackingInfo('right_section_add',1)
                                     handleAddition(fields, projectNewData(fields), 200, 'project', eventClicked, 'Projects')
                                 }
                                 else {

@@ -104,6 +104,7 @@ class Education extends Component {
     
     
     handleAddition(fields, error, event) {
+        this.props.sendTrackingInfo('right_section_add',1);
         const listLength = fields.length;
         fields.push({
             "candidate_id": '',
@@ -133,6 +134,7 @@ class Education extends Component {
     }
     
     deleteEducation(index, fields, event) {
+        this.props.sendTrackingInfo('right_section_delete',1)
         event.stopPropagation();
         const education = fields.get(index);
         fields.remove(index);

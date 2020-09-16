@@ -10,8 +10,10 @@
     {% include 'meta/meta.html' %}
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="amp-google-client-id-api" content="googleanalytics">
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet"> 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"> </script>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" media="print" onload="this.media='all'"
+ rel="stylesheet"> 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"> </script>
     <script async src="https://cdn.ampproject.org/v0.js"></script>
     <script async custom-element="amp-accordion" src="https://cdn.ampproject.org/v0/amp-accordion-0.1.js"></script>
     <script async custom-element="amp-sidebar" src="https://cdn.ampproject.org/v0/amp-sidebar-0.1.js"></script>
@@ -324,6 +326,10 @@
         var productTrackingMappingId = "{{product_tracking_mapping_id}}"
         var trackingId = "{{tracking_id}}"
         var productId = "{{product_id}}"
+         var triggerPoint = "{{trigger_point}}"
+        var uId = "{{u_id}}"
+        var position = "{{position}}"
+        var utmCampaign = "{{utm_campaign}}"
 
 
     const makeTrackingRequest = (loggingData) => {
@@ -337,14 +343,14 @@
 
         function handleTracking(action) {
 
-            let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: action, 'position': 1, domain: 2, sub_product: trackingProductId };
+            let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: action, 'position': parseInt(position), domain: 2, sub_product: trackingProductId, trigger_point: triggerPoint, u_id: uId, utm_campaign: utmCampaign };
             if (trackingId && trackingProductId === productId) {
                 makeTrackingRequest(loggingData);
             }
         }
 
         function trackClickEvent() {
-            let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'exit_product_page', 'position': 1, domain: 2, sub_product: trackingProductId };
+            let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'exit_product_page', 'position': parseInt(position), domain: 2, sub_product: trackingProductId, trigger_point: triggerPoint, u_id: uId, utm_campaign: utmCampaign };
             if (trackingId && trackingProductId === productId) {
                 makeTrackingRequest(loggingData);
             }

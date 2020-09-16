@@ -1,6 +1,6 @@
 <a href="{{articlelist.url}}" title="{{articlelist.name}}">
   <figure class="{% if bigtmpl %}big-image{% endif %}">
-    <img aria-label="{{articlelist.image_alt}}" src="{{articlelist.image.url}}" alt="{{articlelist.image_alt}}">
+    <img loading="lazy" aria-label="{{articlelist.image_alt}}" src="{{articlelist.image.url}}" alt="{{articlelist.image_alt}}">
   </figure>
   <div class="carousel-heading-container {% if mini %}b-mini{% endif %}">
     <span class="product-title">{{articlelist.p_cat.name}}</span>
