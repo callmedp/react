@@ -89,26 +89,31 @@
             <!-- // Table Widgets -->
 
             <!-- Related Articles -->
+            {% if related_articles %}
             <div class="related-article article-list">
               <h2><strong>Related Articles:</strong></h2>
               <div class="row mt-20">
+              {% for article in related_articles %}
                 <div class="col-md-4">
                   <div class="box-panel">
-                    <a href="#">
+                    <a href="{{article.get_absolute_url}}">
                       <figure class="pr">
-                        <img aria-label="Test Product 12" src="{% static 'shinelearn/images/blog/related-article-1.png' %}" alt="Test Product 12" itemprop="image">
+                        <img aria-label="{{article.image_alt}}" src="{{STATIC_URL}}{{article.image}}" alt="{{article.image_alt}}" itemprop="image">
                       </figure>
 
-                      <h3 class="heading-article" itemprop="name">10 High-Income Skills To Make Six Figures A Month</h3>
+                      <h3 class="heading-article" itemprop="name">{{article.name}}</h3>
                     </a>
 
-                    <span class="view-forward"><figure class="forward-icon"></figure> 0
-                        <figure class="view-icon ml-20"></figure> 249
+                    <span class="view-forward"><figure class="forward-icon"></figure> {{article.no_shares}}
+                        <figure class="view-icon ml-20"></figure> {{article.no_views}}
                     </span>
                   </div>
-                </div><!-- // col -->
+                </div>
+              {% endfor %}
+            {% endif %}
+                <!-- // col -->
                 
-                <div class="col-md-4">
+                <!-- <div class="col-md-4">
                   <div class="box-panel">
                     <a href="#">
                       <figure class="pr">
@@ -122,7 +127,7 @@
                         <figure class="view-icon ml-20"></figure> 249
                     </span>
                   </div>
-                </div><!-- // col -->
+                </div>
                 
                 <div class="col-md-4">
                   <div class="box-panel">
@@ -138,7 +143,7 @@
                         <figure class="view-icon ml-20"></figure> 249
                     </span>
                   </div>
-                </div><!-- // col -->
+                </div> -->
 
               </div>
             </div><!-- //Related Articles -->
@@ -167,13 +172,13 @@
       <div class="right-box box-panel col-sm-6 col-md-12 mb-40">
         <h2 class="heading-right-talent">Article Categories</h2>
         <ul class="blue-list">
-          <li><a href="#">Career help</a></li>
-          <li><a href="#">Resume tips</a></li>
-          <li><a href="#">Job search guidance</a></li>
-          <li><a href="#">Interview tips</a></li>
-          <li><a href="#">Human resources</a></li>
-          <li><a href="#">Interview questions</a></li>
-          <li><a href="#">Career prospects</a></li>
+          <li><a href="https://learning.shine.com/talenteconomy/career-help/">Career help</a></li>
+          <li><a href="https://learning.shine.com/talenteconomy/resume-tips/">Resume tips</a></li>
+          <li><a href="https://learning.shine.com/talenteconomy/job-search-guidance/">Job search guidance</a></li>
+          <li><a href="https://learning.shine.com/talenteconomy/interview-tips/">Interview tips</a></li>
+          <li><a href="https://learning.shine.com/talenteconomy/human-resources/">Human resources</a></li>
+          <li><a href="https://learning.shine.com/talenteconomy/interview-questions/">Interview questions</a></li>
+          <li><a href="https://learning.shine.com/talenteconomy/career-prospects/">Career prospects</a></li>
         </ul>
       </div>
       <!-- // Article categories -->
@@ -197,10 +202,11 @@
               <input type="text" class="input_field form-control" name="name"  id="id_name"  placeholder=" "
               maxlength="100" value="{{request.session.full_name}}">
               <label class="input_label" for="id_name">Name<sup>*</sup></label>
+              <span class="error-txt"></span>
             </div>
             
             <div class="form-group">
-              <input type="email" class="input_field form-control" name="name"  id="id_email"  placeholder=" "
+              <input type="email" class="input_field form-control" name="email"  id="id_email"  placeholder=" "
               maxlength="100" value="{{request.session.email}}">
               <label class="input_label" for="id_email">Email<sup>*</sup></label>
             </div>
@@ -219,20 +225,20 @@
                     <input type="text" class="input_field form-control" name="number" id="id_cell_phone"
                     placeholder=" " maxlength="15" value="{{request.session.mobile_no}}">
                     <label class="input_label" for="id_cell_phone">Mobile</label>
-                    <span class="error-txt position-error"></span>
+                    <span class="error-txt"></span>
                 </div>
             </div>
 
             <div class="form-group">
               <textarea class="form-control" rows="1" name="msg" placeholder="Message" maxlength="500"></textarea>
-              <span class="error-txt position-error"></span>
+              <span class="error-txt"></span>
             </div>
 
 
             <input type="hidden" name="product" value="{{category_obj.pk}}">
             <input type="hidden" name="prd" value="{{category_obj.heading}}">
             <input type="hidden" name="path" value="{{request.build_absolute_uri}}">
-            <input type="hidden" name="email" class="form-control" value="{{request.session.email}}">
+            <!-- <input type="hidden" name="email" class="form-control" value="{{request.session.email}}"> -->
             <input type="hidden" name="lsource" value="8">
            <input type="hidden" name="campaign" value="blogsonline">
            <button type="button" id="enquire_form" class="submit-button">Subscribe Now</button>
@@ -424,14 +430,20 @@ function gaEvent(event_cat,event_lab,event_action){
     <script type="text/javascript">
       $(document).ready(function() {
         var s = $("#sticker");
-        var pos = s.position();            
+        var pos = s.position(); 
+        var sticky_height = s.height()      
         $(window).scroll(function() {
           var windowpos = $(window).scrollTop();
+          var footer_top = $('#footer').position().top;
           // s.html("Distance from top:" + pos.top + "<br />Scroll position: " + windowpos);
-          if (windowpos >= pos.top) {
+          if (windowpos >= (pos.top + 120)) {
             s.addClass("stick");
-          } else {
-            s.removeClass("stick"); 
+            if(windowpos + s.position().top + sticky_height >= footer_top){
+              s.removeClass("stick");
+            }
+          } 
+          else{
+            s.removeClass("stick");
           }
         });
       });

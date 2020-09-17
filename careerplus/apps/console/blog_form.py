@@ -1,4 +1,5 @@
 from django import forms
+import json
 # from django.contrib.sites.models import Site
 from django.contrib.auth import get_user_model
 from django.utils import timezone
@@ -10,6 +11,7 @@ from tinymce.widgets import TinyMCE
 from blog.models import Tag, Category, Blog, Comment, Author, SITE_TYPE
 
 from shop.models import Product, Category as shop_Category, BlogProductMapping
+from blog.models import Blog
 from blog.config import STATUS
 from .decorators import (
     has_group,)
@@ -45,9 +47,8 @@ class ArticleAddForm(forms.ModelForm):
         widget=forms.TextInput(
             attrs={'class': 'form-control col-md-7 col-xs-12'}))
 
-    content = forms.CharField(
-        label=("Content*:"),
-        widget=CKEditorUploadingWidget())
+    content = forms.CharField(label=("Content*:"),
+        widget=TinyMCE(attrs={'cols': 80, 'rows': 40}))
 
     p_cat = forms.ModelChoiceField(
         label=("Primary Category*:"),
@@ -213,13 +214,15 @@ class ArticleChangeForm(forms.ModelForm):
     products = forms.MultipleChoiceField(label=("Product:"),
         choices=choices, required=False)
 
+    related_arts = forms.MultipleChoiceField(label=("Related Articles:"), required=False)
+
     class Meta:
         model = Blog
         fields = ['name', 'visibility', 'status', 'image', 'image_alt',
             'p_cat', 'content', 'sec_cat', 'tags', 'allow_comment', 'summary',
             'url', 'heading', 'title', 'slug', 'meta_desc', 'meta_keywords',
             'author', 'speakers', 'start_date', 'end_date', 'venue', 'city', 'address', 'sponsor_img',
-            'position', 'products']
+            'position', 'products', 'related_arts']
 
         widgets = {
             'url': forms.TextInput(attrs={'class': 'form-control col-md-7 col-xs-12', 'max_length': '100'}),
@@ -265,6 +268,13 @@ class ArticleChangeForm(forms.ModelForm):
             for bpm in BlogProductMapping.objects.filter(blog = instance):
                 product_list.append(bpm.product.id)
             self.initial['products'] = product_list
+
+            articles = Blog.objects.filter(status=1).exclude(id=instance.id).only('name', 'id')
+            blog_choices = [(p.id, '{}({})'.format(p.name,p.id)) for p in articles]
+            related_articles = eval(instance.related_arts)
+            
+            self.fields['related_arts'].choices = blog_choices
+            self.initial['related_arts'] = related_articles
 
         self.fields['author'].queryset = Author.objects.filter(
             is_active=True)
@@ -417,6 +427,11 @@ class ArticleChangeForm(forms.ModelForm):
                 self.request, messages.ERROR, 'Please enter Value less than 10')
             raise forms.ValidationError("Please enter Value less than 10")
         return position
+
+    def clean_related_arts(self):
+        data = self.cleaned_data.get('related_arts', '')[:3]
+        data_list = [eval(article_id) for article_id in data]
+        return json.dumps(data_list)
 
 
 class TagAddForm(forms.ModelForm):

@@ -676,6 +676,12 @@ class TEBlogDetailView(DetailView, BlogMixin):
         })
 
         context.update(self.get_meta_details())
+
+        # Related Articles...
+        related_articles_ids_list = json.loads(self.object.related_arts)
+        related_articles = Blog.objects.filter(id__in=related_articles_ids_list)[:3]
+        context.update({'related_articles': related_articles})
+
         return context
 
     def get_breadcrumb_data(self):
