@@ -837,8 +837,39 @@ body {
 	}
 
 	.article-content {
+		h3 {
+			font-size: 18px;
+			display: block;
+			margin-bottom: 20px;
+			overflow: hidden;
+		}
 		img {
 			margin: 5px;
+		}
+
+		.mce-toc {
+			padding: 20px 0 0 20px;
+			margin-bottom: 20px;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.10);
+			-moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.10);
+			-webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.10);
+			-ms-box-shadow: 0 0 10px rgba(0, 0, 0, 0.10);
+			background-color: #fff;
+			overflow: hidden;
+
+			h2 {
+				margin: 10px 0 20px 0;
+			}
+
+			>ul {
+				>li {
+					>ul {
+						>li {
+							font-size: 15px !important;
+						}
+					}
+				}
+			}
 		}
 	}
 
