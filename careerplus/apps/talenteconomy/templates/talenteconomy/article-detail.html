@@ -199,16 +199,15 @@
             </div>
 
             <div class="form-group">
-              <input type="text" class="input_field form-control" name="name"  id="id_name"  placeholder=" "
+              <input type="text" class="input_field form-control" name="name"  id="id_name"  placeholder="Name*"
               maxlength="100" value="{{request.session.full_name}}">
-              <label class="input_label" for="id_name">Name<sup>*</sup></label>
-              <span class="error-txt"></span>
+              <!-- <label class="input_label" for="id_name">Name<sup>*</sup></label> -->
             </div>
             
             <div class="form-group">
-              <input type="email" class="input_field form-control" name="email"  id="id_email"  placeholder=" "
+              <input type="email" class="input_field form-control" name="name"  id="id_email"  placeholder="Email*"
               maxlength="100" value="{{request.session.email}}">
-              <label class="input_label" for="id_email">Email<sup>*</sup></label>
+              <!-- <label class="input_label" for="id_email">Email<sup>*</sup></label> -->
             </div>
 
             <div class="form-group" style="display: flex;">
@@ -223,9 +222,9 @@
                 </div>
                 <div style="position: relative;">
                     <input type="text" class="input_field form-control" name="number" id="id_cell_phone"
-                    placeholder=" " maxlength="15" value="{{request.session.mobile_no}}">
-                    <label class="input_label" for="id_cell_phone">Mobile</label>
-                    <span class="error-txt"></span>
+                    placeholder="Mobile" maxlength="15" value="{{request.session.mobile_no}}">
+                    <!-- <label class="input_label" for="id_cell_phone">Mobile</label> -->
+                    <span class="error-txt position-error"></span>
                 </div>
             </div>
 
