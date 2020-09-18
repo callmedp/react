@@ -2,7 +2,7 @@
     <ul class="mt-20 article-comment" id="page_comment{{article.id}}">
         {{ comment_list|safe|default:'' }}
     </ul>
-
+{% if login_status %}
     <div class="leave-comment row">
         <p class="leave-comment--head pb-5"> Post a comment</p>
         <form class="mb-20" class="js_comments"  id="blog-comment-form{{article.id}}">
@@ -19,4 +19,5 @@
             {% endif %}
         </form>
     </div>
+{% endif %}
 </div>

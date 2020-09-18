@@ -110,7 +110,6 @@
                   </div>
                 </div>
               {% endfor %}
-            {% endif %}
                 <!-- // col -->
                 
                 <!-- <div class="col-md-4">
@@ -147,6 +146,7 @@
 
               </div>
             </div><!-- //Related Articles -->
+          {% endif %}
 
           </div>
           <div id="id_ajax_article"></div>
@@ -199,13 +199,13 @@
             </div>
 
             <div class="form-group">
-              <input type="text" class="input_field form-control" name="name"  id="id_name"  placeholder="Name*"
+              <input type="text" class="input_field form-control" name="name"  id="id_name"  placeholder="Name"
               maxlength="100" value="{{request.session.full_name}}">
               <!-- <label class="input_label" for="id_name">Name<sup>*</sup></label> -->
             </div>
             
             <div class="form-group">
-              <input type="email" class="input_field form-control" name="name"  id="id_email"  placeholder="Email*"
+              <input type="email" class="input_field form-control" name="email"  id="id_email"  placeholder="Email"
               maxlength="100" value="{{request.session.email}}">
               <!-- <label class="input_label" for="id_email">Email<sup>*</sup></label> -->
             </div>

@@ -79,9 +79,6 @@ $(function() {
   $("form[name='enq']").validate({
     // Specify validation rules
     rules: {
-        name: {
-            required : true
-        },
         number: {
             numbercheck : true,
         },
@@ -91,9 +88,6 @@ $(function() {
     },
     // Specify validation error messages
     messages: {
-        name: {
-            required: "Please Enter Name",
-        },
         number: {
                 required: "Please enter your number",
                 minlength: "Please enter atleast 8 digit number",
