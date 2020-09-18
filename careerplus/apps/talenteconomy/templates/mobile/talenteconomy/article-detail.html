@@ -127,7 +127,7 @@
                         <div class="related-article-new__list--box">
                             <a href="{{article.get_absolute_url}}">
                                 <figure class="pr">
-                                    <img aria-label="{{article.image_alt}}" src="{{STATIC_URL}}{{article.image}}" alt="{{article.image_alt}}" itemprop="image">
+                                    <img aria-label="{{article.image_alt}}" src="{{article.image.url}}" alt="{{article.image_alt}}" itemprop="image">
                                 </figure>
                             </a>
 
@@ -236,7 +236,7 @@
         <ul id="share-icon">
             <!-- <li class="gp-bg"><a href="https://plus.google.com/share?url={{SITEDOMAIN}}{{main_article.get_absolute_url}}" id="article_share" article-slug="{{main_article.slug}}" target="_blank">><span class="icon-gp"></span></a></li> -->
             <li><a href="https://api.whatsapp.com/send?text=https://{{SITEDOMAIN}}{{main_article.get_absolute_url}}" data-action="share/whatsapp/share"><span class="icon-wp-color"></span></a></li>
-            <li><a href="http://pinterest.com/pin/create/link/?url=https://{{SITEDOMAIN}}{{main_article.get_absolute_url}}&media={{STATIC_URL}}{{main_article.image}}&description={{main_article.meta_desc}}"><span class="icon-printrest-color"></span></a></li>
+            <li><a href="http://pinterest.com/pin/create/link/?url=https://{{SITEDOMAIN}}{{main_article.get_absolute_url}}&media={{main_article.image.url}}&description={{main_article.meta_desc}}"><span class="icon-printrest-color"></span></a></li>
             <li><a href="https://www.linkedin.com/shareArticle?mini=true&url=https://{{SITEDOMAIN}}{{main_article.get_absolute_url}}&title={{main_article.title}}&summary={{main_article.meta_desc}}&source={{SITEDOMAIN}}/"><span class="icon-linkedin-color"></span></a></li>
             
             <li>

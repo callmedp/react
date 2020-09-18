@@ -98,7 +98,7 @@
                   <div class="box-panel">
                     <a href="{{article.get_absolute_url}}">
                       <figure class="pr">
-                        <img aria-label="{{article.image_alt}}" src="{{STATIC_URL}}{{article.image}}" alt="{{article.image_alt}}" itemprop="image">
+                        <img aria-label="{{article.image_alt}}" src="{{article.image.url}}" alt="{{article.image_alt}}" itemprop="image">
                       </figure>
 
                       <h3 class="heading-article" itemprop="name">{{article.name}}</h3>
