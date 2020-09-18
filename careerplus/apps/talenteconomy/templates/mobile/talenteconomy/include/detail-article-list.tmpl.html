@@ -102,7 +102,7 @@
             {% else %}
                 <div class="leave-comment row">
                     <p class="leave-comment--head pb-5">Post a comment</p>
-                    <p>You need to be <a href="/login/" class="bold">logged in</a> to post a comment</p>
+                    <p>You need to be <a href="/login/?next={{main_article.get_absolute_url}}" class="bold">logged in</a> to post a comment</p>
                 </div>
             {% endif %}
 
