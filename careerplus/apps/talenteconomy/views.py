@@ -637,7 +637,9 @@ class TEBlogDetailView(DetailView, BlogMixin):
                     "page_obj": detail_obj,
                     "slug": blog.slug,
                     "visibility": blog.visibility,
-                    "SITEDOMAIN": settings.SITE_DOMAIN})
+                    "SITEDOMAIN": settings.SITE_DOMAIN,
+                    "login_status": 1 if self.request.session.get('candidate_id') else 0,
+                })
         else:
             detail_article = render_to_string(
                 'talenteconomy/include/detail-article-list.tmpl.html',
