@@ -1910,3 +1910,36 @@ class CandidateBadging(APIView):
         except Exception as e:
             logging.getLogger('error_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
         return
+
+class TrackingResumeShine(APIView):
+    authentication_classes = ()
+    permission_classes = ()
+    serializer_class = None
+
+    def post(self, request, *args, **kwargs):
+        '''
+        '''
+        t_id = self.request.data.get('t_id', '')
+        products = self.request.data.get('products', '')
+        action = self.request.data.get('action', '')
+        sub_product = self.request.data.get('sub_product', '')
+        u_id = self.request.data.get('u_id', '')
+
+        try:
+            cache_data = cache.get('tracking_last_action', {})
+            cache_data.update({
+                str(t_id) : {
+                        "u_id" : u_id,
+                        "action" : action,
+                        "products" : products,
+                        "sub_product" : sub_product,
+                        "date_time" : timezone.now(),
+                        "domain" : 3
+                    }
+                })
+            cache.set('tracking_last_action', cache_data, timeout=None)
+            logging.getLogger('info_log').info("tracking data updated, tracking_id: {}".format(t_id))
+            return Response({ 'status': 'Tracking updated on learning' }, status=status.HTTP_200_OK)
+        except Exception as e:
+            logging.getLogger('error_log').error("Unable to update tracking data, tracking_id: {}, except : {}".format(t_id, e))
+            return Response({ 'status': 'Unable to update on learning'}, status=status.HTTP_400_BAD_REQUEST)

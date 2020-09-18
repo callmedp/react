@@ -155,7 +155,7 @@ def lead_creation_function(filter_dict=None, cndi_name=None):
 def cart_drop_out_mail(pk=None, cnd_email=None, mail_type=None, name=None, 
     tracking_id="", u_id="", tracking_product_id="", 
     product_tracking_mapping_id="", trigger_point="", 
-    position=-1, utm_campaign=""):
+    position=-1, utm_campaign="", domain=2):
     mail_type = 'CART_DROP_OUT' if not mail_type else mail_type
     cart_objs = Cart.objects.filter(
         status=2,
@@ -222,7 +222,13 @@ def cart_drop_out_mail(pk=None, cnd_email=None, mail_type=None, name=None,
                         "Candidate details not present in cart id:", crt_obj.id)
                     continue
 
+                name = name if name else "Candidate"
+                data['name'] = name
                 if mail_type == "SHINE_CART_DROP":
+                    subject_name = "{}, ".format(name) if name != 'Candidate' else ''
+                    data.update({
+                        'subject' : "{}Your cart is waiting!".format(subject_name)
+                        })
                     email_list_spent = cache.get("email_sent_for_the_day", [])
                     if toemail in email_list_spent: 
                         logging.getLogger('info_log').info(
@@ -230,19 +236,21 @@ def cart_drop_out_mail(pk=None, cnd_email=None, mail_type=None, name=None,
                         continue
                     else:
                         email_list_spent.append(toemail)
-                        cache.set("email_sent_for_the_day", email_list_spent)
+                        cache.set("email_sent_for_the_day", email_list_spent, timeout=None)
                         if product_tracking_mapping_id and tracking_id and tracking_product_id:
-                            make_logging_request.delay(
-                                tracking_product_id, product_tracking_mapping_id, tracking_id,\
-                                'exit_cart_mail_sent', position, trigger_point, u_id, utm_campaign )
+                                make_logging_request.delay(
+                                        tracking_product_id, product_tracking_mapping_id, tracking_id,\
+                                         'exit_cart_mail_sent', position, trigger_point, u_id, utm_campaign, domain)
 
                 token = AutoLogin().encode(toemail, cart_id, days=None)
                 data['autologin'] = "{}://{}/cart/payment-summary/?t_id={}&token={}&utm_campaign=learning_exit_mailer&trigger_point={}&u_id={}&position={}&emailer=1&t_prod_id={}&prod_t_m_id={}".format(
-                    settings.SITE_PROTOCOL, settings.SITE_DOMAIN,tracking_id, token,trigger_point, 
-                    u_id, position, tracking_product_id, product_tracking_mapping_id
-                    )
-                if name:
-                    data['name'] = name
+                    settings.SITE_PROTOCOL, settings.SITE_DOMAIN, tracking_id, token, trigger_point, u_id, position, tracking_product_id, product_tracking_mapping_id)
+                if domain == 3:
+                    data.update({
+                        'autologin' : "{}://{}/cart/payment-summary/?token={}&t_id={}&utm_campaign=learning_exit_mailer&trigger_point={}&u_id={}&position={}&emailer=1&t_prod_id={}&prod_t_m_id={}".format(
+                    settings.SITE_PROTOCOL, settings.RESUME_SHINE_SITE_DOMAIN, token, tracking_id, trigger_point, u_id, position, tracking_product_id, product_tracking_mapping_id)
+                        })
+
                 try:
                     SendMail().send(to_email, mail_type, data)
                     count += 1
@@ -256,7 +264,7 @@ def cart_drop_out_mail(pk=None, cnd_email=None, mail_type=None, name=None,
 def cart_product_removed_mail(product_id= None, tracking_id="", 
         u_id=None, email=None, name=None, tracking_product_id="", 
         product_tracking_mapping_id="", trigger_point="", 
-        position=-1, utm_campaign=""):
+        position=-1, utm_campaign="", domain=2):
     try:
         name = name if name else "Candidate"
         if not email and not u_id:
@@ -284,22 +292,29 @@ def cart_product_removed_mail(product_id= None, tracking_id="",
         data['product_url'] = prod.url
         data['product_price'] = round(prod.inr_price, 2)
         data['product_description'] = prod.meta_desc
-        data['subject'] = '{} is still available'.format(
-            prod.heading)
+        data['cart_entered'] = True
+        subject_name = "{}, ".format(name) if name != "Candidate" else ""
+        data['subject'] = '{}Forgot Something?'.format(subject_name)
 
         token = AutoLogin().encode(email, u_id, days=None)
         data['autologin'] = "{}://{}/cart/payment-summary/?prod_id={}&t_id={}&token={}&utm_campaign=learning_remove_product_mailer&trigger_point={}&u_id={}&position={}&email=1".format(
             settings.SITE_PROTOCOL, settings.SITE_DOMAIN, product_id, tracking_id, token, trigger_point, u_id, position)
+        if domain == 3:
+            data.update({
+                'autologin' : "{}://{}/cart/payment-summary/?token={}&prod_id={}&t_id={}&utm_campaign=learning_remove_product_mailer&trigger_point={}&u_id={}&position={}&email=1".format(
+            settings.SITE_PROTOCOL, settings.RESUME_SHINE_SITE_DOMAIN, token, product_id, tracking_id, trigger_point, u_id, position)
+                })
+
 
         email_list_spent.append(email)
-        cache.set("email_sent_for_the_day", email_list_spent)
+        cache.set("email_sent_for_the_day", email_list_spent, timeout=None)
         try:
             SendMail().send(to_email, mail_type, data)
             logging.getLogger('info_log').info("cart product removed mail successfully sent {}".format(email))
         except Exception as e:
             logging.getLogger('error_log').error("Unable to sent mail: {}".format(e))
         make_logging_request.delay(
-                tracking_product_id, product_tracking_mapping_id, tracking_id, 'remove_product_mail_sent', position, trigger_point, u_id, utm_campaign )
+            tracking_product_id, product_tracking_mapping_id, tracking_id, 'remove_product_mail_sent', position, trigger_point, u_id, utm_campaign, domain)
     except Exception as e:
          logging.getLogger('error_log').error(e)
 

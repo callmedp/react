@@ -81,7 +81,7 @@ if __name__ == "__main__":
             tzinfo=utc_tz)
         edt = (sdt + timedelta(minutes=2)).replace(tzinfo=utc_tz) #Hour + buffer
         all_initiated_transactions = PaymentTxn.objects.filter(status__in=[0,2,3,4,5],\
-                payment_mode=13,created__gte=sdt,order__site=1)
+                payment_mode=13,created__gte=sdt,order__site=2)
 
         logging.getLogger('info_log').info( "Total payu initiated "
          "transactions for interval {} minutes - {}".format(interval,

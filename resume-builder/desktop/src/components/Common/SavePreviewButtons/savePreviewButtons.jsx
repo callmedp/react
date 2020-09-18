@@ -52,7 +52,7 @@ class SavePreviewButtons extends Component {
     }
 
     handleSaveClick(order_data, nextEntity) {
-        nextEntity ? this.sendTrackingInfo('bottom_save_and_continue', 1) : !order_data ? this.sendTrackingInfo('bottom_download', 1) : this.sendTrackingInfo('bottom_save_changes', 1);
+        nextEntity ? this.sendTrackingInfo('bottom_save_and_continue', 1) : !!(order_data && order_data.id) ? this.sendTrackingInfo('bottom_save_changes', 1) : this.sendTrackingInfo('bottom_download', 1);
         order_data && order_data.id && !nextEntity ? this.eventActionClick(1) : !nextEntity ? this.eventActionClick(2) : this.eventActionClick(3)
     }
 

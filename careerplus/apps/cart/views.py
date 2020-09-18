@@ -168,14 +168,14 @@ class RemoveFromCartView(View, CartMixin):
             cart_product_removed_mail.apply_async(
                 (product_id, tracking_id, u_id, email, name, 
                     tracking_product_id, product_tracking_mapping_id,
-                    trigger_point, position, utm_campaign), 
+                    trigger_point, position, utm_campaign, 2), 
                 countdown=settings.CART_DROP_OUT_EMAIL)
             # cart_product_removed_mail(email_data)
             make_logging_request.delay(
-                tracking_product_id, product_tracking_mapping_id, tracking_id, 'remove_product', position, trigger_point, u_id, utm_campaign )
+                tracking_product_id, product_tracking_mapping_id, tracking_id, 'remove_product', position, trigger_point, u_id, utm_campaign, 2)
             # for showing the user exits for that particular cart product
             make_logging_request.delay(
-                tracking_product_id, product_tracking_mapping_id, tracking_id, 'exit_cart', position, trigger_point, u_id, utm_campaign )
+                tracking_product_id, product_tracking_mapping_id, tracking_id, 'exit_cart', position, trigger_point, u_id, utm_campaign, 2)
             if tracking_id:
                 del self.request.session['tracking_id']
             if product_tracking_mapping_id:
@@ -704,7 +704,8 @@ class PaymentSummaryView(TemplateView, CartMixin):
         emailer = request.GET.get('emailer', '')
         tracking_product_id = request.GET.get('t_prod_id', '')
         product_tracking_mapping_id = request.GET.get('prod_t_m_id', '')
-
+        if tracking_id:
+            tracking_id = tracking_id.strip()
         valid = False
         candidate_id = None
         add_status = -1
@@ -779,14 +780,14 @@ class PaymentSummaryView(TemplateView, CartMixin):
                         (cart_pk, email, "SHINE_CART_DROP", name, 
                         tracking_id, u_id, tracking_product_id, 
                         product_tracking_mapping_id, trigger_point, 
-                        position, utm_campaign),
+                        position, utm_campaign, 2),
                         countdown=settings.CART_DROP_OUT_EMAIL)
             except Exception as e:
                 logging.getLogger('error_log').error("Unable to send mail: {}".format(e))
 
         if tracking_id and tracking_product_id and product_tracking_mapping_id and product_availability and emailer:
             make_logging_request.delay(
-                    tracking_product_id, product_tracking_mapping_id, tracking_id, 'clicked', position, trigger_point, u_id, utm_campaign)
+                    tracking_product_id, product_tracking_mapping_id, tracking_id, 'clicked', position, trigger_point, u_id, utm_campaign, 2)
 
         redirect = self.redirect_if_necessary(reload_url)
         if redirect:
@@ -794,7 +795,7 @@ class PaymentSummaryView(TemplateView, CartMixin):
 
         if tracking_id and tracking_product_id and product_tracking_mapping_id and product_availability:
             make_logging_request.delay(
-                tracking_product_id, product_tracking_mapping_id, tracking_id, 'cart_payment_summary',position, trigger_point, u_id, utm_campaign)
+                tracking_product_id, product_tracking_mapping_id, tracking_id, 'cart_payment_summary',position, trigger_point, u_id, utm_campaign, 2)
 
         return super(self.__class__, self).get(request, *args, **kwargs)
 

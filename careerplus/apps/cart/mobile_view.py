@@ -38,14 +38,14 @@ class RemoveFromCartMobileView(View, CartMixin):
             cart_product_removed_mail.apply_async(
                 (product_id, tracking_id, u_id, email, name, 
                     tracking_product_id, product_tracking_mapping_id,
-                    trigger_point, position, utm_campaign), 
+                    trigger_point, position, utm_campaign, 2), 
                 countdown=settings.CART_DROP_OUT_EMAIL)
             # cart_product_removed_mail(email_data)
             make_logging_request.delay(
-                tracking_product_id, product_tracking_mapping_id, tracking_id, 'remove_product',position, trigger_point, u_id, utm_campaign )
+                tracking_product_id, product_tracking_mapping_id, tracking_id, 'remove_product',position, trigger_point, u_id, utm_campaign, 2)
             # for showing the user exits for that particular cart product
             make_logging_request.delay(
-                tracking_product_id, product_tracking_mapping_id, tracking_id, 'exit_cart',position, trigger_point, u_id, utm_campaign )
+                tracking_product_id, product_tracking_mapping_id, tracking_id, 'exit_cart',position, trigger_point, u_id, utm_campaign, 2)
             if tracking_id:
                 del self.request.session['tracking_id']
             if product_tracking_mapping_id:

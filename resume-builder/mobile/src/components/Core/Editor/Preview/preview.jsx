@@ -99,7 +99,7 @@ class Preview extends Component {
 
     toggleUploadResume(event) {
         let { personalInfo: { upload_resume: uploadResume }, personalInfo, updateSelectedTemplate } = this.props;
-        this.sendTrackingInfo('preview_update_resume_on_shine', 1)
+        this.sendTrackingInfo('preview_upload_resume_on_shine', 1)
         personalInfo['upload_resume'] = !uploadResume;
         updateSelectedTemplate(personalInfo);
     }
