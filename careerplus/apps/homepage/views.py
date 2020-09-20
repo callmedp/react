@@ -30,8 +30,18 @@ class HomePageView(TemplateView, MetadataMixin):
     use_og = True
     use_twitter = False
 
+    def remove_tracking(self):
+        if self.request.session('tracking_id',''):
+            del self.request.session['tracking_id']
+        if self.request.session('product_tracking_mapping_id',''):
+            del self.request.session['product_tracking_mapping_id']
+        if self.request.session('tracking_product_id',''):
+            del self.request.session['tracking_product_id']
+        if self.request.session('product_availability',''):
+            del self.request.session['product_availability']
+
     def get_params(self):
-        from payment.tasks import make_logging_request
+        from payment.tasks import make_logging_request, make_logging_sk_request
         tracking_id = self.request.GET.get('t_id', '')
         product_tracking_mapping_id = self.request.GET.get('product', '')
         utm_campaign = self.request.GET.get('utm_campaign', '')
@@ -68,10 +78,16 @@ class HomePageView(TemplateView, MetadataMixin):
             'position',1)
             utm_campaign = self.request.session.get(
             'utm_campaign','')
+            referal_product = self.request.session.get('referal_product','')
+            referal_subproduct = self.request.session.get('referal_subproduct','')
+            if product_tracking_mapping_id == 10:
+                #remove cart
+                self.remove_tracking()
+                return
 
             if product_tracking_mapping_id:
-                make_logging_request.delay(
-                    tracking_product_id, product_tracking_mapping_id, tracking_id, 'home_page', position, trigger_point, u_id, utm_campaign, 2)
+                make_logging_sk_request.delay(
+                    tracking_product_id, product_tracking_mapping_id, tracking_id, 'home_page', position, trigger_point, u_id, utm_campaign, 2, referal_product, referal_subproduct)
 
     def get_meta_title(self, context):
         # return 'Best Resume Writing Services | Online Courses | Linkedin Profile - Shine Learning'

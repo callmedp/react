@@ -25,7 +25,7 @@ from linkedin.autologin import AutoLogin
 from users.tasks import user_register
 from search.helpers import get_recommendations
 from cart.tasks import cart_drop_out_mail, create_lead_on_crm, cart_product_removed_mail
-from payment.tasks import make_logging_request
+from payment.tasks import make_logging_request, make_logging_sk_request
 from django.db.models import Q
 from django.core.cache import cache
 from .models import Cart
@@ -161,6 +161,10 @@ class RemoveFromCartView(View, CartMixin):
             'position',1)
         utm_campaign = self.request.session.get(
             'utm_campaign','')
+        referal_product = self.request.session.get(
+            'referal_product','')
+        referal_subproduct = self.request.session.get(
+            'referal_subproduct','')
         if tracking_product_id == product_id and tracking_id:
             # logging.getLogger('info_log').info(email_data)
             name = email_dict.get('name', '')
@@ -171,11 +175,11 @@ class RemoveFromCartView(View, CartMixin):
                     trigger_point, position, utm_campaign, 2), 
                 countdown=settings.CART_DROP_OUT_EMAIL)
             # cart_product_removed_mail(email_data)
-            make_logging_request.delay(
-                tracking_product_id, product_tracking_mapping_id, tracking_id, 'remove_product', position, trigger_point, u_id, utm_campaign, 2)
+            make_logging_sk_request.delay(
+                tracking_product_id, product_tracking_mapping_id, tracking_id, 'remove_product', position, trigger_point, u_id, utm_campaign, 2, referal_product, referal_subproduct)
             # for showing the user exits for that particular cart product
-            make_logging_request.delay(
-                tracking_product_id, product_tracking_mapping_id, tracking_id, 'exit_cart', position, trigger_point, u_id, utm_campaign, 2)
+            make_logging_sk_request.delay(
+                tracking_product_id, product_tracking_mapping_id, tracking_id, 'exit_cart', position, trigger_point, u_id, utm_campaign, 2, referal_product, referal_subproduct)
             if tracking_id:
                 del self.request.session['tracking_id']
             if product_tracking_mapping_id:
@@ -693,6 +697,16 @@ class PaymentSummaryView(TemplateView, CartMixin):
         if product.type_flow == 17:
             return 11
 
+    def remove_tracking(self):
+        if self.request.session('tracking_id',''):
+            del self.request.session['tracking_id']
+        if self.request.session('product_tracking_mapping_id',''):
+            del self.request.session['product_tracking_mapping_id']
+        if self.request.session('tracking_product_id',''):
+            del self.request.session['tracking_product_id']
+        if self.request.session('product_availability',''):
+            del self.request.session['product_availability']
+
     def get(self, request, *args, **kwargs):
         token = request.GET.get('token', '')
         product_id = request.GET.get('prod_id', '')
@@ -766,6 +780,8 @@ class PaymentSummaryView(TemplateView, CartMixin):
         utm_campaign= request.session.get('utm_campaign','')
         product_tracking_mapping_id= request.session.get('product_tracking_mapping_id',product_tracking_mapping_id)
         trigger_point = request.session.get('trigger_point', '')
+        referal_product = request.session.get('referal_product', '')
+        referal_subproduct = request.session.get('referal_subproduct', '')
 
         if product_id and tracking_id:
             try:  
@@ -793,9 +809,12 @@ class PaymentSummaryView(TemplateView, CartMixin):
         if redirect:
             return redirect
 
+        if product_tracking_mapping_id == 10:
+            self.remove_tracking()
+
         if tracking_id and tracking_product_id and product_tracking_mapping_id and product_availability:
-            make_logging_request.delay(
-                tracking_product_id, product_tracking_mapping_id, tracking_id, 'cart_payment_summary',position, trigger_point, u_id, utm_campaign, 2)
+            make_logging_sk_request.delay(
+                tracking_product_id, product_tracking_mapping_id, tracking_id, 'cart_payment_summary',position, trigger_point, u_id, utm_campaign, 2, referal_product, referal_subproduct)
 
         return super(self.__class__, self).get(request, *args, **kwargs)
 

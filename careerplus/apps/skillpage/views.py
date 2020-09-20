@@ -43,33 +43,42 @@ class SkillPageView(DetailView, SkillPageMixin):
     template_name = "skillpage/skill-new.html"
     no_of_products = 5
 
-    # def get_params(self):
-    #     from payment.tasks import make_logging_request
-    #     tracking_id = self.request.GET.get('t_id', '')
-    #     skill_id = self.kwargs.get('pk')
-    #     product_tracking_mapping_id = 12
-    #     if tracking_id and self.request.session.get('candidate_id'):
-    #         self.request.session.update({
-    #             'tracking_id': tracking_id,
-    #             'product_tracking_mapping_id': product_tracking_mapping_id,
-    #             'tracking_product_id' : skill_id
-    #         })
-    #         make_logging_request.delay(
-    #             '', product_tracking_mapping_id, tracking_id, 'product_page')
+    def get_params(self):
+        from payment.tasks import make_logging_request
+        tracking_id = self.request.GET.get('t_id', '')
+        u_id = self.request.GET.get('u_id', '')
+        position = self.request.GET.get('position', '')
+        trigger_point = self.request.GET.get('trigger_point', '')
+        utm_campaign = self.request.GET.get('utm_campaign', '')
+        skill_id = self.kwargs.get('pk')
+        product_tracking_mapping_id = 10
+        if tracking_id and u_id:
+            self.request.session.update({
+                'tracking_id': tracking_id,
+                'product_tracking_mapping_id': product_tracking_mapping_id,
+                'tracking_product_id' : skill_id,
+                'position': position, 
+                'trigger_point': trigger_point, 
+                'u_id': u_id,
+                'utm_campaign':utm_campaign
+            })
+            make_logging_request.delay(
+                skill_id, product_tracking_mapping_id, tracking_id, 'skill_page',\
+                position, trigger_point, u_id, utm_campaign, 2)
 
-    #     elif self.request.session.get('tracking_id', '') and self.request.session.get('candidate_id'):
-    #         product_tracking_mapping_id = self.request.session.get(
-    #             'product_tracking_mapping_id', 12)
-    #         tracking_product_id = self.request.session.get(
-    #             'tracking_product_id', skill_id)
-    #         tracking_id = self.request.session.get(
-    #             'tracking_id', '')
-    #         make_logging_request.delay(
-    #             tracking_product_id, product_tracking_mapping_id, tracking_id, 'product_page')
+        # elif self.request.session.get('tracking_id', '') and self.request.session.get('candidate_id'):
+        #     product_tracking_mapping_id = self.request.session.get(
+        #         'product_tracking_mapping_id', 12)
+        #     tracking_product_id = self.request.session.get(
+        #         'tracking_product_id', skill_id)
+        #     tracking_id = self.request.session.get(
+        #         'tracking_id', '')
+        #     make_logging_request.delay(
+        #         tracking_product_id, product_tracking_mapping_id, tracking_id, 'skill_page')
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        # self.get_params()
+        self.get_params()
         if not self.object:
             raise Http404
         redirect = self.redirect_if_necessary(request.path, self.object)
@@ -115,6 +124,17 @@ class SkillPageView(DetailView, SkillPageMixin):
         explore_courses = []
         exp_cour_ids = json.loads(self.object.ex_cour)
         explore_courses = Category.objects.filter(id__in=exp_cour_ids).values('name','url')
+
+        tracking_id = self.request.session.get('tracking_id', '')
+        u_id = self.request.session.get('u_id', '')
+        position = self.request.session.get('position', '')
+        trigger_point = self.request.session.get('trigger_point', '')
+        utm_campaign = self.request.session.get('utm_campaign', '')
+        tracking_product_id = self.request.session.get('tracking_product_id')
+        product_tracking_mapping_id = self.request.session.get('product_tracking_mapping_id','')
+
+        if tracking_id:
+            product_tracking_mapping_id = 10
         
         context.update({
             'subheading':subheading_id_data_mapping,
@@ -134,10 +154,14 @@ class SkillPageView(DetailView, SkillPageMixin):
             'meta':meta,
             'canonical_url':self.object.get_canonical_url(),
             'show_chat':True,
-            'explore_courses': explore_courses
-            # 'tracking_product_id': self.request.session.get('tracking_product_id', ''),
-            # 'product_tracking_mapping_id': self.request.session.get('product_tracking_mapping_id', ''),
-            # 'tracking_id': self.request.session.get('tracking_id', '')
+            'explore_courses': explore_courses,
+            'tracking_product_id': tracking_product_id,
+            'product_tracking_mapping_id': product_tracking_mapping_id,
+            'tracking_id': tracking_id,
+            'position': position,
+            'trigger_point': trigger_point, 
+            'u_id': u_id, 
+            'utm_campaign': utm_campaign
         })
         return context
 

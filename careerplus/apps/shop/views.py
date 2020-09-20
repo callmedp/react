@@ -922,7 +922,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             return 11
 
     def get(self, request, **kwargs):
-        from payment.tasks import make_logging_request
+        from payment.tasks import make_logging_request, make_logging_sk_request
 
         path_info = kwargs
         tracking_id = request.GET.get('t_id', '')
@@ -999,8 +999,10 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             utm_campaign = request.session.get('utm_campaign','')
             trigger_point = request.session.get('trigger_point','')
             u_id = request.session.get('u_id','')
-            make_logging_request.delay(
-                request.session.get('tracking_product_id'), request.session.get('product_tracking_mapping_id'), request.session.get('tracking_id'), 'product_page',position, trigger_point, u_id, utm_campaign, 2)
+            r_p = request.session.get('referal_product', '')
+            r_sp = request.session.get('referal_subproduct', '')
+            make_logging_sk_request.delay(
+                request.session.get('tracking_product_id'), request.session.get('product_tracking_mapping_id'), request.session.get('tracking_id'), 'product_page',position, trigger_point, u_id, utm_campaign, 2, r_p, r_sp)
         elif self.request.session.get('candidate_id') and \
                 request.session.get('tracking_id') and \
                 not request.session.get('tracking_product_id'):
@@ -1021,10 +1023,43 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             u_id = request.session.get('u_id','')
             position = self.request.session.get('position',1)
             utm_campaign = self.request.session.get('utm_campaign','')
+            r_p = request.session.get('referal_product', '')
+            r_sp = request.session.get('referal_subproduct', '')
             
             if tracking_id and prod.id and product_tracking_mapping_id:
-                make_logging_request.delay(
-                    prod.id, product_tracking_mapping_id, tracking_id, 'product_page',position, trigger_point, u_id, utm_campaign, 2)
+                make_logging_sk_request.delay(
+                    prod.id, product_tracking_mapping_id, tracking_id, 'product_page',position, trigger_point, u_id, utm_campaign, 2, r_p, r_sp)
+
+        elif self.request.session.get('candidate_id') and \
+                request.session.get('tracking_id') and \
+                request.session.get('product_tracking_mapping_id') == 10:
+            if not kwargs.get('pk', ''):
+                return
+            request.session.update({
+                'referal_product': request.session.get('product_tracking_mapping_id',''),
+                'referal_subproduct': request.session.get('tracking_product_id'.'')
+                })
+            prod = Product.objects.filter(id=kwargs.get('pk')).first()
+            if not prod:
+                return
+            request.session.update({'tracking_product_id': prod.id})
+            product_tracking_mapping_id = self.maintain_tracking_info(
+                prod)
+            if product_tracking_mapping_id != -1:
+                request.session.update(
+                    {'product_tracking_mapping_id': product_tracking_mapping_id})
+
+            tracking_id = request.session.get('tracking_id','')
+            trigger_point = request.session.get('trigger_point','')
+            u_id = request.session.get('u_id','')
+            position = self.request.session.get('position',1)
+            utm_campaign = self.request.session.get('utm_campaign','')
+            r_p = request.session.get('referal_product', '')
+            r_sp = request.session.get('referal_subproduct', '')
+
+            if tracking_id and prod.id and product_tracking_mapping_id:
+                make_logging_sk_request.delay(
+                    prod.id, product_tracking_mapping_id, tracking_id, 'product_page',position, trigger_point, u_id, utm_campaign, 2, r_p, r_sp)
 
 
         root = request.GET.get('root')
