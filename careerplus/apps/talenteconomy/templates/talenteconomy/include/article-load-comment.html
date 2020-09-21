@@ -15,7 +15,7 @@
         <span class="author-name">{% if comment.name %}{{comment.name}}{% else %}Anonymous{% endif %}</span>
         <span class="time">{% get_humanize_date comment.created_on %}</span>
         <p>{{comment.message}}</p>
-        <!-- <a href="#">Reply</a> -->
+        <a class="pull-right" href="#">Reply</a>
     </figcaption>
   </div>
 {% endfor %}
