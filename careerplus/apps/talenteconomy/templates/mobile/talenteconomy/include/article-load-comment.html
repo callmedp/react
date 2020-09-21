@@ -9,6 +9,12 @@
         <p class="pb-0">{{comment.message}}</p>
         <a class="reply" href="javascript:void(0)" id="reply_{{comment.id}}" onclick="openReplySection('{{comment.id}}','1')">Reply</a>
     </li>
+    <li class="reply-mg">
+        <sup><img loading="lazy" aria-label="Default user" src="/media/static/shinelearn/images/mobile/common/default-user.jpg"></sup>
+        <p><strong>Anonymous</strong> <span class="spacer c-666">/</span><span class="c-666">3 days ago</span></p>
+        <p class="pb-0">testing comment 2</p>
+        <a class="reply" href="javascript:void(0)" id="reply_21" onclick="openReplySection('21','1')">Reply</a>
+    </li>
     <div class="leave-comment row reply-section" id="comment_{{comment.id}}" style="display:none;">
         <form class="mb-20" class="js_comments"  id="blog-comment-form{{article.id}}">
             {% csrf_token %}

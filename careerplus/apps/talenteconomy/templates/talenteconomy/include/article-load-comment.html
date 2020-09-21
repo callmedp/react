@@ -18,6 +18,35 @@
         <a class="pull-right" href="javascript:void(0)" id="reply_{{comment.id}}" onclick="openReplySection('{{comment.id}}', '0')">Reply</a>
     </figcaption>
     <div class="leave-comment reply-section" id="comment_{{comment.id}}" style="display:none;">
+      <div class="media mt-30 mb-20">
+          <div class="media-left">
+              <figure>
+                  <a href="javascript:void(0)">
+                  <img aria-label="shine" class="media-object" src="/media/static/shinelearn/images/blog/user-pic.jpg" alt="shine">
+                </a>
+              </figure>
+          </div>
+          <figcaption class="media-body">
+              <span class="author-name">Anonymous</span>
+              <span class="time">3 days ago</span>
+              <p>testing comment 2</p>
+              <a class="pull-right" href="javascript:void(0)" id="reply_21" onclick="openReplySection('21', '0')">Reply</a>
+          </figcaption>
+          <div class="leave-comment reply-section" id="comment_21" style="display:none;">
+            <form id="blog-comment-form">
+                
+                <div class="form-group ml-70">
+                
+                    <p class="logged-in">You need to be <a href="javascript:void(0)" data-toggle="modal" data-target="#login-model" class="font-weight-bold">logged in</a> to reply this comment</p>
+                
+                    <textarea class="form-control" placeholder="Your comment" rows="3" id="id_comment" name="message"></textarea>
+                </div>
+                <input type="hidden" id="id_slug" name="slug" value="">
+                <input type="hidden" id="pk_id" name="pk" value="">
+                <button type="button" class="submit-button" onclick="commentSubmit('', '')" id="comment-submit">Reply</button>
+            </form>
+        </div>
+        </div>
       <form id="blog-comment-form{{article.id}}">
           {% csrf_token %}
           <div class="form-group">

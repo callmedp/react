@@ -558,7 +558,7 @@ blockquote {
     }
   }
 
-  &.reply {
+  .reply {
     display: block;
     text-decoration: none;
     color: $txt-grey-333;
@@ -702,4 +702,21 @@ body {
   a {
     text-decoration: underline;
   }
+}
+
+.reply-section {
+  background: $white;
+  padding: 0;
+  margin-left: 50px;
+  margin-right: 0;
+
+  .btn-blue {
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+}
+
+.reply-mg {
+  margin-left: 50px;
+  padding-left: 0;
 }
