@@ -147,6 +147,7 @@ class PaymentMixin(object):
             order.payment_date = payment_date
             order.status = 1
             order.save()
+            method = "purchase_done_zest_money"
 
         elif payment_type == 'RAZORPAY':
             payment_date = datetime.now()
