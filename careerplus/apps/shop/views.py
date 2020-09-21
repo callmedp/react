@@ -1037,7 +1037,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
                 return
             request.session.update({
                 'referal_product': request.session.get('product_tracking_mapping_id',''),
-                'referal_subproduct': request.session.get('tracking_product_id'.'')
+                'referal_subproduct': request.session.get('tracking_product_id','')
                 })
             prod = Product.objects.filter(id=kwargs.get('pk')).first()
             if not prod:

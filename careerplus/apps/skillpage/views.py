@@ -63,8 +63,7 @@ class SkillPageView(DetailView, SkillPageMixin):
                 'utm_campaign':utm_campaign
             })
             make_logging_request.delay(
-                skill_id, product_tracking_mapping_id, tracking_id, 'skill_page',\
-                position, trigger_point, u_id, utm_campaign, 2)
+                skill_id, product_tracking_mapping_id, tracking_id, 'skill_page', position, trigger_point, u_id, utm_campaign, 2)
 
         # elif self.request.session.get('tracking_id', '') and self.request.session.get('candidate_id'):
         #     product_tracking_mapping_id = self.request.session.get(
