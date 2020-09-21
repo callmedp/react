@@ -560,9 +560,9 @@ blockquote {
 
   &.reply {
     display: block;
-    text-align: right;
     text-decoration: none;
     color: $txt-grey-333;
+    font-size: 12px;
   }
 }
 
