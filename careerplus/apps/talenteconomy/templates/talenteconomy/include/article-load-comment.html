@@ -6,7 +6,7 @@
   <div class="media mt-30" >
     <div class="media-left">
         <figure>
-            <a href="#">
+            <a href="javascript:void(0)">
             <img aria-label="shine" class="media-object" src="{% static 'shinelearn/images/blog/user-pic.jpg' %}" alt="shine">
           </a>
         </figure>
@@ -15,8 +15,22 @@
         <span class="author-name">{% if comment.name %}{{comment.name}}{% else %}Anonymous{% endif %}</span>
         <span class="time">{% get_humanize_date comment.created_on %}</span>
         <p>{{comment.message}}</p>
-        <a class="pull-right" href="#">Reply</a>
+        <a class="pull-right" href="javascript:void(0)" id="reply_{{comment.id}}" onclick="openReplySection('{{comment.id}}')">Reply</a>
     </figcaption>
+    <div class="leave-comment reply-section" id="comment_{{comment.id}}" style="display:none;">
+      <form id="blog-comment-form{{article.id}}">
+          {% csrf_token %}
+          <div class="form-group">
+          {% if not login_status %}
+              <p class="logged-in">You need to be <a href="javascript:void(0)" data-toggle="modal" data-target="#login-model" class="font-weight-bold">logged in</a> to reply this comment</p>
+          {% endif %}
+              <textarea class="form-control" placeholder="Your comment" rows="3" id="id_comment{{article.id}}" name="message"></textarea>
+          </div>
+          <input type="hidden" id="id_slug" name="slug" value="{{article.slug}}">
+          <input type="hidden" id="pk_id" name="pk" value="{{article.pk}}" />
+          <button type="button" class="submit-button" onclick="commentSubmit('{{article.id}}', '{{login_status}}')" id="comment-submit{{article.id}}">Reply</button>
+      </form>
+  </div>
   </div>
 {% endfor %}
 

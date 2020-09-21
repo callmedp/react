@@ -218,8 +218,20 @@ var showArticleOnScroll = (function(){
 
 })();
 
-
-
-
-
-
+function openReplySection(comment_id){
+    var val = "#comment_" + comment_id
+    $('.reply-section').each(function(){
+        if($(this)[0].id === $(val)[0].id){
+            $(val).toggle()
+        }
+        else{
+            $(this)[0].style.display = 'none'
+        }
+    })
+    if ($(val)[0].style.display != 'none'){
+        $('#collapseExample')[0].style.display = "none"
+    }
+    else{
+        $('#collapseExample')[0].style.display = ""
+    }
+}
