@@ -208,6 +208,10 @@ article {
     margin-bottom: 5px;
     list-style: outside !important;
   }  
+
+  pre {
+    white-space: pre-wrap;
+  }
 }
 
 table {
@@ -552,6 +556,13 @@ blockquote {
       border-bottom: 0 none;
       padding-bottom: 0;
     }
+  }
+
+  &.reply {
+    display: block;
+    text-align: right;
+    text-decoration: none;
+    color: $txt-grey-333;
   }
 }
 

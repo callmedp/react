@@ -56,6 +56,16 @@
       border-radius: 4px;
       overflow: hidden;
       box-shadow: 0 0 10px rgba($bg-black, .1);
+
+      figure {
+        &.imght {
+          height: 129px;
+          overflow: hidden;
+          img {
+            max-width: 100%;
+          }
+        }
+      }
     }
 
     &--content {
