@@ -7,8 +7,18 @@
         <sup><img loading="lazy" aria-label="Default user" src="{% static 'shinelearn/images/mobile/common/default-user.jpg' %}"></sup>
         <p><strong>{% if comment.name %}{{comment.name}}{% else %}Anonymous{% endif %}</strong> <span class="spacer c-666">/</span><span class="c-666">{% get_humanize_date comment.created_on %}</span></p>
         <p class="pb-0">{{comment.message}}</p>
-        <a class="reply" href="#">Reply</a>
+        <a class="reply" href="javascript:void(0)" id="reply_{{comment.id}}" onclick="openReplySection('{{comment.id}}','1')">Reply</a>
     </li>
+    <div class="leave-comment row reply-section" id="comment_{{comment.id}}" style="display:none;">
+        <form class="mb-20" class="js_comments"  id="blog-comment-form{{article.id}}">
+            {% csrf_token %}
+            <textarea placeholder="Enter your message" class="leave-comment--textarea" id="id_comment{{article.id}}" name="message"></textarea>
+            <input type="hidden" id="id_slug" name="slug" value="{{article.slug}}">
+            <input type="hidden" id="pk_id" name="pk" value="{{article.pk}}" />
+
+            <button class="btn-sm btn-blue btn-round mt-10" onclick="commentSubmit('{{article.id}}', '{{login_status}}')" id="comment-submit{{article.id}}">Submit</button>
+        </form>
+    </div>
 {% endfor %}
 
 {% if comments.has_next %}

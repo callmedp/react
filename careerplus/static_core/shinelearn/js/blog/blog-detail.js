@@ -218,7 +218,7 @@ var showArticleOnScroll = (function(){
 
 })();
 
-function openReplySection(comment_id){
+function openReplySection(comment_id, medium){
     var val = "#comment_" + comment_id
     $('.reply-section').each(function(){
         if($(this)[0].id === $(val)[0].id){
@@ -228,10 +228,12 @@ function openReplySection(comment_id){
             $(this)[0].style.display = 'none'
         }
     })
-    if ($(val)[0].style.display != 'none'){
-        $('#collapseExample')[0].style.display = "none"
-    }
-    else{
-        $('#collapseExample')[0].style.display = ""
+    if(medium === '0'){
+        if ($(val)[0].style.display != 'none'){
+            $('#collapseExample')[0].style.display = "none"
+        }
+        else{
+            $('#collapseExample')[0].style.display = ""
+        }
     }
 }

@@ -15,7 +15,7 @@
         <span class="author-name">{% if comment.name %}{{comment.name}}{% else %}Anonymous{% endif %}</span>
         <span class="time">{% get_humanize_date comment.created_on %}</span>
         <p>{{comment.message}}</p>
-        <a class="pull-right" href="javascript:void(0)" id="reply_{{comment.id}}" onclick="openReplySection('{{comment.id}}')">Reply</a>
+        <a class="pull-right" href="javascript:void(0)" id="reply_{{comment.id}}" onclick="openReplySection('{{comment.id}}', '0')">Reply</a>
     </figcaption>
     <div class="leave-comment reply-section" id="comment_{{comment.id}}" style="display:none;">
       <form id="blog-comment-form{{article.id}}">
