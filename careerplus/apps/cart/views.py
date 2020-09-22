@@ -698,13 +698,13 @@ class PaymentSummaryView(TemplateView, CartMixin):
             return 11
 
     def remove_tracking(self):
-        if self.request.session('tracking_id',''):
+        if self.request.session.get('tracking_id',''):
             del self.request.session['tracking_id']
-        if self.request.session('product_tracking_mapping_id',''):
+        if self.request.session.get('product_tracking_mapping_id',''):
             del self.request.session['product_tracking_mapping_id']
-        if self.request.session('tracking_product_id',''):
+        if self.request.session.get('tracking_product_id',''):
             del self.request.session['tracking_product_id']
-        if self.request.session('product_availability',''):
+        if self.request.session.get('product_availability',''):
             del self.request.session['product_availability']
 
     def get(self, request, *args, **kwargs):

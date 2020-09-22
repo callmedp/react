@@ -43,6 +43,16 @@ class SkillPageView(DetailView, SkillPageMixin):
     template_name = "skillpage/skill-new.html"
     no_of_products = 5
 
+    def remove_tracking(self):
+        if self.request.session.get('tracking_id',''):
+            del self.request.session['tracking_id']
+        if self.request.session.get('product_tracking_mapping_id',''):
+            del self.request.session['product_tracking_mapping_id']
+        if self.request.session.get('tracking_product_id',''):
+            del self.request.session['tracking_product_id']
+        if self.request.session.get('product_availability',''):
+            del self.request.session['product_availability']
+
     def get_params(self):
         from payment.tasks import make_logging_request
         tracking_id = self.request.GET.get('t_id', '')
@@ -51,8 +61,13 @@ class SkillPageView(DetailView, SkillPageMixin):
         trigger_point = self.request.GET.get('trigger_point', '')
         utm_campaign = self.request.GET.get('utm_campaign', '')
         skill_id = self.kwargs.get('pk')
-        product_tracking_mapping_id = 10
-        if tracking_id and u_id:
+        product_tracking_mapping_id = self.request.session.get('product_tracking_mapping_id', '')
+
+        if product_tracking_mapping_id == 10:
+            self.remove_tracking()
+
+        elif tracking_id and u_id:
+            product_tracking_mapping_id = 10
             self.request.session.update({
                 'tracking_id': tracking_id,
                 'product_tracking_mapping_id': product_tracking_mapping_id,
