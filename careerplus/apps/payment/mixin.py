@@ -14,7 +14,7 @@ from order.tasks import (
     payment_realisation_mailer,
     invoice_generation_order,
 )
-from .tasks import add_reward_point_in_wallet, make_logging_request
+from .tasks import add_reward_point_in_wallet, make_logging_request, make_logging_sk_request
 
 
 class PaymentMixin(object):
@@ -28,6 +28,7 @@ class PaymentMixin(object):
         # sms_data = {}
         return_parameter = None
         payment_date = None
+        method = None
         # is_tssc = False
         # mail_type = False
         # sms_type = False
@@ -35,6 +36,7 @@ class PaymentMixin(object):
 
         if payment_type == "CASH":
             return_parameter = reverse('payment:thank-you')
+            method = "purchase_done_cash"
 
         elif payment_type == "PAID FREE":
             payment_date = datetime.now()
@@ -96,6 +98,8 @@ class PaymentMixin(object):
             txn_obj.payment_date = payment_date
             txn_obj.save()
 
+            method = "purchase_done_amazon_pay"
+
             return_parameter = reverse('payment:thank-you')
 
         elif payment_type == "EPAYLATER":
@@ -112,9 +116,11 @@ class PaymentMixin(object):
             txn_obj.save()
 
             return_parameter = reverse('payment:thank-you')
+            method = "purchase_done_buy_now_pay_later"
 
         elif payment_type == "CHEQUE":
             return_parameter = reverse('payment:thank-you')
+            method = "purchase_done_cheque"
 
         elif payment_type == "MOBIKWIK":
             payment_date = datetime.now()
@@ -141,6 +147,7 @@ class PaymentMixin(object):
             order.payment_date = payment_date
             order.status = 1
             order.save()
+            method = "purchase_done_zest_money"
 
         elif payment_type == 'RAZORPAY':
             payment_date = datetime.now()
@@ -156,6 +163,7 @@ class PaymentMixin(object):
             order.status = 1
             order.save()
             return_parameter = reverse('payment:thank-you')
+            method = "purchase_done_card_and_netbanking"
 
         if order:
             request.session['order_pk'] = order.pk
@@ -167,7 +175,7 @@ class PaymentMixin(object):
                 'product_tracking_mapping_id', '')
             tracking_id = request.session.get('tracking_id', '')
             product_availability = request.session.get(
-                'product_availability', '')
+                'product_availability', tracking_product_id)
             trigger_point = self.request.session.get(
                 'trigger_point','')
             u_id = self.request.session.get(
@@ -176,11 +184,18 @@ class PaymentMixin(object):
                 'position',1)
             utm_campaign = self.request.session.get(
                 'utm_campaign','')
+            referal_product = self.request.session.get(
+            'referal_product','')
+            referal_subproduct = self.request.session.get(
+                'referal_subproduct','')
             
             action = 'purchase_done'
             if tracking_id and product_availability:
-                make_logging_request.delay(
-                    tracking_product_id, product_tracking_mapping_id, tracking_id, action,position, trigger_point, u_id, utm_campaign, 2)
+                make_logging_sk_request.delay(
+                    tracking_product_id, product_tracking_mapping_id, tracking_id, action, position, trigger_point, u_id, utm_campaign, 2, referal_product, referal_subproduct)
+                if method:
+                    make_logging_sk_request.delay(
+                        tracking_product_id, product_tracking_mapping_id, tracking_id, method, position, trigger_point, u_id, utm_campaign, 2, referal_product, referal_subproduct)
 
             # order = InvoiceGenerate().save_order_invoice_pdf(order=order)
             invoice_generation_order.delay(order_pk=order.pk)
