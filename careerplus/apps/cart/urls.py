@@ -1,4 +1,4 @@
-cart/payment-summary.html# from django.conf.urls import url
+# from django.conf.urls import url
 from django.urls import re_path
 
 from coupon.views import CouponRedeemView, CouponRemoveView
