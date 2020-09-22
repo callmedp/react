@@ -730,7 +730,9 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             'u_id':self.request.session.get('u_id',''),
             'position':self.request.session.get('position',1),
             'utm_campaign':self.request.session.get('utm_campaign',''),
-            'product_id': self.product_obj and self.product_obj.id
+            'product_id': self.product_obj and self.product_obj.id,
+            'referal_product': self.request.session.get('referal_product',''),
+            'referal_subproduct': self.request.session.get('referal_subproduct')
         })
 
         ctx.update(product_data)

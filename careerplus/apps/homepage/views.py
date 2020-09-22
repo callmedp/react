@@ -285,6 +285,8 @@ class HomePageView(TemplateView, MetadataMixin):
             'u_id':self.request.session.get('u_id',''),
             'position':self.request.session.get('position',1),
             'utm_campaign':self.request.session.get('utm_campaign',''),
+            'referal_product': self.request.session.get('referal_product',''),
+            'referal_subproduct':self.request.session.get('referal_subproduct','')
         })
 
         linkedin_modal = self.request.session.get('linkedin_modal', 0)

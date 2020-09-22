@@ -116,7 +116,7 @@ def make_logging_sk_request(tracking_product_id, product_tracking_mapping_id, tr
                      'trigger_point': trigger_point,
                      'u_id': u_id,
                      'utm_campaign':utm_campaign.strip() if utm_campaign.strip().lower() != 'null' else '',
-                     'referal_product': referal_product,
+                     'referral_product': referal_product,
                      'referal_subproduct': referal_sub_product})
     if not product_tracking_mapping_id:
         logging.getLogger('error_log').error(

@@ -905,7 +905,9 @@ class PaymentSummaryView(TemplateView, CartMixin):
             'u_id': self.request.session.get('u_id', ''),
             'position': self.request.session.get('position', 1),
             'utm_campaign': self.request.session.get('utm_campaign', ''),
-            'product_availability': self.request.session.get('product_availability', '')
+            'product_availability': self.request.session.get('product_availability', ''),
+            'referal_product': self.request.session.get('referal_product', ''),
+            'referal_subproduct': self.request.session.get('referal_subproduct', ''),
         })
 
         context.update({
