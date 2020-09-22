@@ -445,7 +445,7 @@ const trackClickEvent = () => {
     if (trackingId && productAvailability) {
         if(referal_product){
             let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'exit_cart', 'position': parseInt(position),
-     domain: 2, sub_product: trackingProductId, trigger_point : triggerPoint, utm_campaign : utmCampaign, u_id : uId, referral_product:referal_product, referal_subproduct:referal_subproduct};
+     domain: 2, sub_product: trackingProductId, trigger_point : triggerPoint, utm_campaign : utmCampaign, u_id : uId, referral_product:parseInt(referal_product), referal_subproduct:referal_subproduct};
             makeTrackingRequest(loggingData);
         }else{
         makeTrackingRequest(loggingData);}
@@ -463,7 +463,7 @@ $(document).ready(function () {
         if (trackingId && productAvailability) {
             if(referal_product){
             let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'proceed_to_payments', 'position': parseInt(position),
-     domain: 2, sub_product: trackingProductId, trigger_point : triggerPoint, utm_campaign : utmCampaign, u_id : uId, referral_product:referal_product, referal_subproduct:referal_subproduct};
+     domain: 2, sub_product: trackingProductId, trigger_point : triggerPoint, utm_campaign : utmCampaign, u_id : uId, referral_product:parseInt(referal_product), referal_subproduct:referal_subproduct};
             makeTrackingRequest(loggingData);
         }else{
         makeTrackingRequest(loggingData);}
@@ -477,7 +477,7 @@ $(document).ready(function () {
         if (trackingId && productAvailability) {
             if(referal_product){
             let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'exit_cart', 'position': parseInt(position),
-     domain: 2, sub_product: trackingProductId, trigger_point : triggerPoint, utm_campaign : utmCampaign, u_id : uId, referral_product:referal_product, referal_subproduct:referal_subproduct};
+     domain: 2, sub_product: trackingProductId, trigger_point : triggerPoint, utm_campaign : utmCampaign, u_id : uId, referral_product:parseInt(referal_product), referal_subproduct:referal_subproduct};
             makeTrackingRequest(loggingData);
         }else{
         makeTrackingRequest(loggingData);}

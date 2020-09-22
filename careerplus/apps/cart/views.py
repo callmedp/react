@@ -774,7 +774,7 @@ class PaymentSummaryView(TemplateView, CartMixin):
         
         tracking_id= request.session.get('tracking_id','')
         tracking_product_id= request.session.get('tracking_product_id',tracking_product_id)
-        product_availability = request.session.get('product_availability','')
+        product_availability = request.session.get('product_availability', tracking_product_id)
         position= request.session.get('position',-1)
         u_id= request.session.get('u_id','')
         utm_campaign= request.session.get('utm_campaign','')
@@ -899,13 +899,13 @@ class PaymentSummaryView(TemplateView, CartMixin):
             'shine_api_url': settings.SHINE_API_URL,
             'tracking_product_id': self.request.session.get('tracking_product_id', ''),
             'product_tracking_mapping_id': self.request.session.get('product_tracking_mapping_id', ''),
-            'product_availability': self.request.session.get('product_availability', ''),
+            'product_availability': self.request.session.get('product_availability', self.request.session.get('tracking_product_id', '')),
             'tracking_id': self.request.session.get('tracking_id', ''),
             'trigger_point': self.request.session.get('trigger_point', ''),
             'u_id': self.request.session.get('u_id', ''),
             'position': self.request.session.get('position', 1),
             'utm_campaign': self.request.session.get('utm_campaign', ''),
-            'product_availability': self.request.session.get('product_availability', ''),
+            'product_availability': self.request.session.get('product_availability', self.request.session.get('tracking_product_id', '')),
             'referal_product': self.request.session.get('referal_product', ''),
             'referal_subproduct': self.request.session.get('referal_subproduct', ''),
         })

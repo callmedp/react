@@ -175,7 +175,7 @@ class PaymentMixin(object):
                 'product_tracking_mapping_id', '')
             tracking_id = request.session.get('tracking_id', '')
             product_availability = request.session.get(
-                'product_availability', '')
+                'product_availability', tracking_product_id)
             trigger_point = self.request.session.get(
                 'trigger_point','')
             u_id = self.request.session.get(
