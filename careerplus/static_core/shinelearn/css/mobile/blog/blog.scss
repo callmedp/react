@@ -704,11 +704,12 @@ body {
   }
 }
 
-.reply-section {
+.reply-box {
   background: $white;
   padding: 0;
-  margin-left: 50px;
+  margin-top: 10px;
   margin-right: 0;
+  margin-left: 0;
 
   .btn-blue {
     padding: 5px 10px;
