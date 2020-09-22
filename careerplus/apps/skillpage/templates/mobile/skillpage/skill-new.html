@@ -74,7 +74,7 @@
                         <img loading="lazy" aria-label="{{course.pNm}}" src="{{course.pImg}}" alt="{{course.pNm}}">
                     </span>
                     <div class="popular-courses__slides--items border-bottom-blue mt-0">
-                        <a href="{{course.pURL}}">
+                        <a href="{{course.pURL}}" onclick="skillpageTracking('exit_skill_page')">
                             <p>{{course.pNm}}</p>
                         </a>
                     </div>
@@ -125,7 +125,7 @@
                             {{category.heading}}</strong>
                     </p>
                     <a href="{% url 'assessment:vskill-subcategory' slug=category.slug  %}"
-                        class="btn btn-blue btn-round">
+                        class="btn btn-blue btn-round" onclick="skillpageTracking('exit_skill_page')">
                         Take free test
                     </a>
                 </div>
@@ -194,7 +194,7 @@
                                     <div class="skill-tabs__content--tag skill-tabs__content--new">Newly Added</div>
                                     {% endif %}
                                     <a class="d-block pt-5" itemprop="url"
-                                        href="{{course.pURL}}"><strong>{{course.pNm}}</strong></a>
+                                        href="{{course.pURL}}" onclick="skillpageTracking('exit_skill_page')"><strong>{{course.pNm}}</strong></a>
                                     <div class="ratingView mt-10">
                                         <span class="rating" data-rating="{{course.pARx|floatformat:1}}"></span>
                                         {{course.pARx|floatformat:1}}/5
@@ -252,7 +252,7 @@
                                     <div class="skill-tabs__content--tag skill-tabs__content--new">Newly Added</div>
                                     {% endif %}
                                     <a class="d-block pt-5" itemprop="url"
-                                        href="{{assesment.pURL}}"><strong>{{assesment.pNm}}</strong></a>
+                                        href="{{assesment.pURL}}" onclick="skillpageTracking('exit_skill_page')"><strong>{{assesment.pNm}}</strong></a>
                                     <div class="ratingView mt-10">
                                         <span class="rating" data-rating="{{assesment.pARx|floatformat:1}}"></span>
                                         {{assesment.pARx|floatformat:1}}/5
@@ -301,7 +301,7 @@
             <h2>Other Courses To Explore</h2>
             <div class="tags">
                 {% for course in explore_courses %}
-                    <a href="{{course.url}}"><span class="tags--items">{{course.name}}</span></a>
+                    <a href="{{course.url}}" onclick="skillpageTracking('exit_skill_page')"><span class="tags--items">{{course.name}}</span></a>
                 {% endfor %}
             </div>
         </div>
@@ -375,7 +375,7 @@
             <strong class="also-check-tag">{{widget_name}}</strong>
             <ul class="bullet-custom arrow">
                 {% for obj in widget_obj_data %}
-                <li><a href="{{obj.url}}">{{obj.name}}</a></li>
+                <li><a href="{{obj.url}}" onclick="skillpageTracking('exit_skill_page')">{{obj.name}}</a></li>
                 {% endfor %}
             </ul>
         </div><!-- // Also check -->
@@ -420,11 +420,15 @@
 
 {% block js_section %}
 {{block.super}}
-<!--  <script> 
+ <script> 
       var trackingProductId = "{{tracking_product_id}}";
       var productTrackingMappingId = "{{product_tracking_mapping_id}}";
       var trackingId = "{{tracking_id}}";
-</script> -->
+      var position = "{{position}}";
+      var trigger_point = "{{trigger_point}}";
+      var candidate_id = "{{u_id}}";
+      var utm_campaign = "{{utm_campaign}}";
+</script>
 
 {% compress js %}
 <script src="{% static 'shinelearn/js/mobile/zopim_chat/custom.js' %}"></script>

@@ -133,21 +133,21 @@ const gaEvent = (event_cat,event_lab,event_action) =>{
     ga('send', 'event', event_cat, event_action, event_lab);
 }
 
-// const makeTrackingRequest = (loggingData) => {
-//     $.ajax({
-//         method: "POST",
-//         url: `${shineApiUrl}/learning-touchpoints-tracking/`,
-//         data: JSON.stringify(loggingData),
-//         contentType: "application/json",
-//     })
-// }
+const makeTrackingRequest = (loggingData) => {
+    $.ajax({
+        method: "POST",
+        url: `${shineApiUrl}/learning-touchpoints-tracking/`,
+        data: JSON.stringify(loggingData),
+        contentType: "application/json",
+    })
+}
 
-// const trackEvent = (action) => {
-// let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: action, 'position': null, domain: 2, sub_product: trackingProductId, trigger_point: trigger_point, u_id: candidate_id, utm_campaign: utm_campaign };
-//     if (trackingId) {
-//         makeTrackingRequest(loggingData);
-//     }
-// }
+const skillpageTracking = (action) => {
+    let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: action, 'position': position, domain: 2, sub_product: trackingProductId, trigger_point: trigger_point, u_id: candidate_id, utm_campaign: utm_campaign };
+    if (trackingId) {
+        makeTrackingRequest(loggingData);
+    }
+}
 
 
   
