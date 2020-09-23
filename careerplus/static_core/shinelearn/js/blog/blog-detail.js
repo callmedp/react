@@ -95,7 +95,6 @@ function commentSubmit(article_id, login_status){
 };
 
 function replySubmit(comment_id, login_status){
-    debugger;
     if (comment_id){
 
         if (login_status == 0){
@@ -103,6 +102,7 @@ function replySubmit(comment_id, login_status){
             window.event.preventDefault();
         }
         else if (login_status == 1){
+            window.event.preventDefault();
             $('#id_reply' + comment_id).attr({
                 'data-parsley-required': 'true',
                 'maxlength': 200,

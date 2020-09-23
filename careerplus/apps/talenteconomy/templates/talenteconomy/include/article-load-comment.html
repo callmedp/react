@@ -18,7 +18,7 @@
         <a class="pull-right" href="javascript:void(0)" id="reply_{{comment.id}}" onclick="openReplySection('{{comment.id}}', '0')">Reply</a>
     </figcaption>
     <div class="leave-comment reply-section" id="comment_{{comment.id}}" style="display:none;">
-      {% for rep in comment.comments.all %}
+      {% for rep in comment.comments.all|dictsort:"id" %}
         {% if rep.is_published and not rep.is_removed %}
           <div class="media mt-30 mb-20">
               <div class="media-left">
