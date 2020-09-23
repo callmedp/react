@@ -10,7 +10,7 @@ from .mixins import CartMixin
 from .models import Cart
 from .tasks import cart_product_removed_mail
 from wallet.models import Wallet, WalletTransaction, PointTransaction
-from payment.tasks import make_logging_request
+from payment.tasks import make_logging_request, make_logging_sk_request
 
 
 class RemoveFromCartMobileView(View, CartMixin):
@@ -32,6 +32,10 @@ class RemoveFromCartMobileView(View, CartMixin):
             'position',1)
         utm_campaign = self.request.session.get(
             'utm_campaign','')
+        referal_product = self.request.session.get(
+            'referal_product','')
+        referal_subproduct = self.request.session.get(
+            'referal_subproduct','')
         if tracking_product_id == product_id and tracking_id:
             name = email_dict.get('name', '')
             email = email_dict.get('email', '')
@@ -41,11 +45,13 @@ class RemoveFromCartMobileView(View, CartMixin):
                     trigger_point, position, utm_campaign, 2), 
                 countdown=settings.CART_DROP_OUT_EMAIL)
             # cart_product_removed_mail(email_data)
-            make_logging_request.delay(
-                tracking_product_id, product_tracking_mapping_id, tracking_id, 'remove_product',position, trigger_point, u_id, utm_campaign, 2)
+            make_logging_sk_request.delay(
+                tracking_product_id, product_tracking_mapping_id, tracking_id, 'remove_product',position, trigger_point,\
+                 u_id, utm_campaign, 2, referal_product, referal_subproduct)
             # for showing the user exits for that particular cart product
-            make_logging_request.delay(
-                tracking_product_id, product_tracking_mapping_id, tracking_id, 'exit_cart',position, trigger_point, u_id, utm_campaign, 2)
+            make_logging_sk_request.delay(
+                tracking_product_id, product_tracking_mapping_id, tracking_id, 'exit_cart',position, trigger_point, u_id, \
+                utm_campaign, 2, referal_product, referal_subproduct)
             if tracking_id:
                 del self.request.session['tracking_id']
             if product_tracking_mapping_id:
