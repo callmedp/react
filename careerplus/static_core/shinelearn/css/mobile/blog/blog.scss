@@ -561,8 +561,10 @@ blockquote {
   .reply {
     display: block;
     text-decoration: none;
-    color: $txt-grey-333;
+    color: $txt-grey-999;
     font-size: 12px;
+    font-weight: 600;
+    margin-top: 10px;
   }
 }
 
@@ -699,9 +701,9 @@ body {
 }
 
 .content-box-article {
-  a {
-    text-decoration: underline;
-  }
+  // a {
+  //   text-decoration: underline;
+  // }
 }
 
 .reply-box {
