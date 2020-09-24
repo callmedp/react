@@ -540,8 +540,9 @@ blockquote {
   margin-left: 0;
   margin-right: 0;
   padding: 15px;
-  font-size: 15px;
+  font-size: 16px;
   color: $txt-grey-333;
+  font-style: italic;
 }
 
 
@@ -722,4 +723,11 @@ body {
 .reply-mg {
   margin-left: 50px;
   padding-left: 0;
+}
+
+.mce-toc {
+  background: #f5f5f5;
+  border: 1px solid #ccc;
+  padding: 20px 20px 0 20px;
+  margin-bottom: 20px;
 }
