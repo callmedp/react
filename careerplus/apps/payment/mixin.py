@@ -112,7 +112,7 @@ class PaymentMixin(object):
             txn_obj.payment_date = payment_date
             txn_obj.save()
 
-            method = "purchase_done_ccavenue"
+            method = "purchase_done_card_and_netbanking"
 
             return_parameter = reverse('payment:thank-you')
 
@@ -194,7 +194,7 @@ class PaymentMixin(object):
             order.status = 1
             order.save()
             return_parameter = reverse('payment:thank-you')
-            method = "purchase_done_razopay"
+            method = "purchase_done_card_and_netbanking"
 
         if order:
             request.session['order_pk'] = order.pk

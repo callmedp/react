@@ -44,5 +44,7 @@
 
 0 */2 * * * /var/www/virtualenvs/learning/bin/python /var/www/site/learning/current/manage.py cart_funnel_drop_mail --settings=careerplus.config.settings_live
 
+0 */3 * * * /var/www/virtualenvs/learning/bin/python /var/www/site/learning/current/manage.py refresh_payment_tracking --settings=careerplus.config.settings_live
+
 #Keep extra line for crontab syntax correction
 
