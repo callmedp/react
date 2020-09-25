@@ -12,6 +12,7 @@ from datetime import datetime
 # django imports
 from django.conf import settings
 from django.core.cache import cache
+from django.utils import timezone
 # local imports
 
 # inter app imports
@@ -480,3 +481,85 @@ class PayuPaymentUtil():
 
             })
         return initial_dict
+
+class UpdatetrackingCache():
+
+    def update_tracking_last_action(self, data_dict):
+        try:
+            t_id = data_dict.get('t_id','')
+            products = data_dict.get('products',[])
+            action = data_dict.get('action','')
+            position = data_dict.get('position','')
+            domain = data_dict.get('domain','')
+            sub_product = data_dict.get('sub_product','')
+            trigger_point = data_dict.get('trigger_point','')
+            u_id = data_dict.get('u_id','')
+            utm_campaign = data_dict.get('utm_campaign','')
+            referral_product = data_dict.get('referral_product','')
+            referal_subproduct = data_dict.get('referal_subproduct','')
+
+            cache_data = cache.get('tracking_last_action',{})
+            cache_data.update({
+                str(t_id) : {
+                        "u_id" : u_id,
+                        "action" : action,
+                        "products" : products,
+                        "sub_product" : sub_product,
+                        "date_time" : timezone.now(),
+                        "domain" : domain
+                    }
+                })
+            cache.set('tracking_last_action',cache_data, timeout=None)
+
+            logging.getLogger('info_log').info(
+                    "tracking_last_action updated t_id : {}".format(t_id))
+        except Exception as e:
+            logging.getLogger('error_log').error(
+                'Issue in updating tracking_last_action %s' % str(e))
+            return False
+        return True
+
+    def update_tracking_payment_action(self, data_dict):
+        try:
+            t_id = data_dict.get('t_id','')
+            products = data_dict.get('products',[])
+            if len(products) > 0:
+                products = products[0]
+            action = data_dict.get('action','')
+            position = data_dict.get('position','')
+            domain = data_dict.get('domain','')
+            sub_product = data_dict.get('sub_product','')
+            trigger_point = data_dict.get('trigger_point','')
+            u_id = data_dict.get('u_id','')
+            utm_campaign = data_dict.get('utm_campaign','')
+            referral_product = data_dict.get('referral_product','')
+            referal_subproduct = data_dict.get('referal_subproduct','')
+
+            payment_cache = cache.get('tracking_payment_action', {})
+            u_id_payment_cache = payment_cache.get(str(u_id),{})
+            u_id_payment_cache.update({
+                    str(sub_product) : {
+                        "t_id" : t_id,
+                        "action" : action,
+                        "products" : products,
+                        "domain" : domain,
+                        "position" : position,
+                        "trigger_point" : trigger_point,
+                        "utm_campaign" : utm_campaign,
+                        "referal_product" : referal_product,
+                        "referal_subproduct" : referal_subproduct
+                    },
+                    "date_time" : timezone.now()
+                })
+            payment_cache.update({
+                str(u_id) : u_id_payment_cache
+                })
+            cache.set("tracking_payment_action", payment_cache, timeout = None)
+
+            logging.getLogger('info_log').info(
+                "tracking_payment_action updated t_id: {}".format(t_id))
+        except Exception as e:
+            logging.getLogger('error_log').error(
+                'Issue in updating tracking_payment_action %s' % str(e))
+            return False
+        return True
