@@ -1939,7 +1939,7 @@ class TrackingResumeShine(APIView):
                         "products" : products,
                         "sub_product" : sub_product,
                         "date_time" : timezone.now(),
-                        "domain" : 3
+                        "domain" : domain
                     }
                 })
             cache.set('tracking_last_action', cache_data, timeout=None)
@@ -1955,7 +1955,7 @@ class TrackingResumeShine(APIView):
                             "t_id" : t_id,
                             "action" : action,
                             "products" : [products],
-                            "domain" : 3,
+                            "domain" : domain,
                             "position" : position,
                             "trigger_point" : trigger_point,
                             "utm_campaign" : utm_campaign
