@@ -837,6 +837,9 @@ body {
 	}
 
 	.article-content {
+		h2 {
+			margin-bottom: 22px;
+		}
 		h3 {
 			font-size: 18px;
 			display: block;
@@ -858,15 +861,7 @@ body {
 				margin: 10px 0 20px 0;
 			}
 
-			>ul {
-				>li {
-					>ul {
-						>li {
-							font-size: 15px !important;
-						}
-					}
-				}
-			}
+			
 		}
 	}
 
