@@ -14,18 +14,24 @@ class Command(BaseCommand):
         super(Command, self).__init__(*args, **kwargs)
 
     def handle(self, *args, **options):
-        payment_cache = cache.get('tracking_payment_action', {})
+        try:
+            payment_cache = cache.get('tracking_payment_action', {})
+            cache_result = cache.get('tracking_payment_action', {})
 
-        interval = timezone.now() - timezone.timedelta(hours = 1)
+            interval = timezone.now() - timezone.timedelta(hours = 1)
 
-        for u_id in payment_cache:
-            cache_u_id = payment_cache.get(str(u_id),{})
-            date_time = cache_u_id.get('date_time', '')
-            if not date_time or date_time > interval:
-                continue
-            del payment_cache[str(u_id)]
+            for u_id in payment_cache:
+                cache_u_id = payment_cache.get(str(u_id),{})
+                date_time = cache_u_id.get('date_time', '')
+                if not date_time or date_time > interval:
+                    continue
+                del cache_result[str(u_id)]
 
-        cache.set('tracking_payment_action',payment_cache, timeout=None)
+            cache.set('tracking_payment_action',cache_result, timeout=None)
+            logging.getLogger('info_log').info("tracking_payment_action updated")
+        except Exception as e:
+            logging.getLogger('error_log').error("failed tracking_payment_action updated")
+
 
 
 

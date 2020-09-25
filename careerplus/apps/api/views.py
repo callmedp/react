@@ -1954,7 +1954,7 @@ class TrackingResumeShine(APIView):
                         str(sub_product) : {
                             "t_id" : t_id,
                             "action" : action,
-                            "products" : [products],
+                            "products" : products,
                             "domain" : domain,
                             "position" : position,
                             "trigger_point" : trigger_point,

@@ -74,50 +74,7 @@ def make_logging_request(tracking_product_id, product_tracking_mapping_id, track
             logging.getLogger('info_log').info(
                 "send tracking data {}".format(req_dict))
             tracking_last_action = UpdatetrackingCache().update_tracking_last_action(data_dict=req_dict)
-
-            # cache_data = cache.get('tracking_last_action',{})
-            # cache_data.update({
-            #     str(tracking_id) : {
-            #             "u_id" : u_id,
-            #             "action" : action,
-            #             "products" : product_tracking_mapping_id,
-            #             "sub_product" : tracking_product_id,
-            #             "date_time" : timezone.now(),
-            #             "domain" : domain
-            #         }
-            #     })
-            # cache.set('tracking_last_action',cache_data, timeout=None)
-
-            # logging.getLogger('info_log').info(
-            #     "tracking_last_action updated t_id : {}".format(tracking_id))
-
-            payment_action = [ "card_and_netbanking", "zest_money", "amazon_pay_payment", "cheque_payment", "cash_payment" , "buy_now_pay_later"] 
-
-            if action in payment_action:
-                tracking_payment_action = UpdatetrackingCache().update_tracking_payment_action(data_dict=req_dict)
-                # payment_cache = cache.get('tracking_payment_action', {})
-                # u_id_payment_cache = payment_cache.get(str(u_id),{})
-                # u_id_payment_cache.update({
-                #         str(tracking_product_id) : {
-                #             "t_id" : tracking_id,
-                #             "action" : action,
-                #             "products" : product_tracking_mapping_id,
-                #             "domain" : domain,
-                #             "position" : position,
-                #             "trigger_point" : trigger_point,
-                #             "utm_campaign" : utm_campaign,
-                #             "referal_product" : referal_product,
-                #             "referal_subproduct" : referal_subproduct
-                #         },
-                #         "date_time" : timezone.now()
-                #     })
-                # payment_cache.update({
-                #     str(u_id) : u_id_payment_cache
-                #     })
-                # cache.set("tracking_payment_action", payment_cache, timeout = None)
-
-                # logging.getLogger('info_log').info(
-                #     "tracking_payment_action updated t_id: {}".format(tracking_id))
+            
         elif not resp:
             logging.getLogger('error_log').error(
                 "unable to send tracking data {}".format(req_dict))
@@ -163,49 +120,6 @@ def make_logging_sk_request(tracking_product_id, product_tracking_mapping_id, tr
                 "send tracking data {}".format(req_dict))
             tracking_last_action = UpdatetrackingCache().update_tracking_last_action(data_dict=req_dict)
 
-            # cache_data = cache.get('tracking_last_action',{})
-            # cache_data.update({
-            #     str(tracking_id) : {
-            #             "u_id" : u_id,
-            #             "action" : action,
-            #             "products" : product_tracking_mapping_id,
-            #             "sub_product" : tracking_product_id,
-            #             "date_time" : timezone.now(),
-            #             "domain" : domain
-            #         }
-            #     })
-            # cache.set('tracking_last_action',cache_data, timeout=None)
-
-            # logging.getLogger('info_log').info(
-            #     "tracking_last_action updated t_id : {}".format(tracking_id))
-
-            payment_action = [ "card_and_netbanking", "zest_money", "amazon_pay_payment", "cheque_payment", "cash_payment" , "buy_now_pay_later"] 
-
-            if action in payment_action:
-                tracking_payment_action = UpdatetrackingCache().update_tracking_payment_action(data_dict=req_dict)
-                # payment_cache = cache.get('tracking_payment_action', {})
-                # u_id_payment_cache = payment_cache.get(str(u_id),{})
-                # u_id_payment_cache.update({
-                #         str(tracking_product_id) : {
-                #             "t_id" : tracking_id,
-                #             "action" : action,
-                #             "products" : product_tracking_mapping_id,
-                #             "domain" : domain,
-                #             "position" : position,
-                #             "trigger_point" : trigger_point,
-                #             "utm_campaign" : utm_campaign,
-                #             "referal_product" : referal_product,
-                #             "referal_subproduct" : referal_subproduct
-                #         },
-                #         "date_time" : timezone.now()
-                #     })
-                # payment_cache.update({
-                #     str(u_id) : u_id_payment_cache
-                #     })
-                # cache.set("tracking_payment_action", payment_cache, timeout = None)
-
-                # logging.getLogger('info_log').info(
-                #     "tracking_payment_action updated t_id: {}".format(tracking_id))
         elif not resp:
             logging.getLogger('error_log').error(
                 "unable to send tracking data {}".format(req_dict))
