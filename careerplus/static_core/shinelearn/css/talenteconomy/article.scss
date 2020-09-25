@@ -874,6 +874,10 @@ body {
 		font-size: $font-size+9;
 		color: $primary-color;
 		font-style: italic;
+
+		p {
+			font-size: $font-size+9;
+		}
 	}
 
 	.article-mid-pic {
