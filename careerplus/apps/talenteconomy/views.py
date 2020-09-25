@@ -480,8 +480,10 @@ class TEBlogCategoryListView(TemplateView, BlogMixin):
     def get_meta_details(self):
         name = self.cat_obj.name
         meta = Meta(
-            title=name + " - Career & Certification Guidance @ Shine Learning",
-            description="Read Latest Articles on %s. Find the Most Relevant Information, News and other career guidance for %s at Shine Learning" %(name,name),
+            # title=name + " - Career & Certification Guidance @ Shine Learning",
+            # description="Read Latest Articles on %s. Find the Most Relevant Information, News and other career guidance for %s at Shine Learning" %(name,name),
+            title = self.cat_obj.get_title,
+            description = self.cat_obj.get_description if self.cat_obj.get_description else ("Read Latest Articles on %s. Find the Most Relevant Information, News and other career guidance for %s at Shine Learning" %(name,name)),
         )
         return {"meta": meta}
 
