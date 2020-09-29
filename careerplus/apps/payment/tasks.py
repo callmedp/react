@@ -6,6 +6,7 @@ from django.utils import timezone
 from django.conf import settings
 from django.core.cache import cache
 # local imports
+from payment.utils import UpdatetrackingCache
 
 # inter app imports
 from order.models import Order
@@ -72,18 +73,8 @@ def make_logging_request(tracking_product_id, product_tracking_mapping_id, track
         if resp.status_code == 200:
             logging.getLogger('info_log').info(
                 "send tracking data {}".format(req_dict))
-            cache_data = cache.get('tracking_last_action',{})
-            cache_data.update({
-                str(tracking_id) : {
-                        "u_id" : u_id,
-                        "action" : action,
-                        "products" : product_tracking_mapping_id,
-                        "sub_product" : tracking_product_id,
-                        "date_time" : timezone.now(),
-                        "domain" : 2
-                    }
-                })
-            cache.set('tracking_last_action',cache_data, timeout=None)
+            tracking_last_action = UpdatetrackingCache().update_tracking_last_action(data_dict=req_dict)
+            
         elif not resp:
             logging.getLogger('error_log').error(
                 "unable to send tracking data {}".format(req_dict))
@@ -127,18 +118,8 @@ def make_logging_sk_request(tracking_product_id, product_tracking_mapping_id, tr
         if resp.status_code == 200:
             logging.getLogger('info_log').info(
                 "send tracking data {}".format(req_dict))
-            cache_data = cache.get('tracking_last_action',{})
-            cache_data.update({
-                str(tracking_id) : {
-                        "u_id" : u_id,
-                        "action" : action,
-                        "products" : product_tracking_mapping_id,
-                        "sub_product" : tracking_product_id,
-                        "date_time" : timezone.now(),
-                        "domain" : 2
-                    }
-                })
-            cache.set('tracking_last_action',cache_data, timeout=None)
+            tracking_last_action = UpdatetrackingCache().update_tracking_last_action(data_dict=req_dict)
+
         elif not resp:
             logging.getLogger('error_log').error(
                 "unable to send tracking data {}".format(req_dict))
