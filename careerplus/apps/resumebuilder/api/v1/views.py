@@ -648,6 +648,15 @@ class OrderCustomisationRUDView(RetrieveUpdateDestroyAPIView):
         if not self.candidate_id:
             return Response({"detail": "Candidate with given  candidate id is invalid."}, status= status.HTTP_400_BAD_REQUEST)
         return super().patch(request, *args, **kwargs)
+    
+    def get(self, request, *args, **kwargs):
+        c_id = kwargs.get('candidate_id', '')
+        candidate = Candidate.objects.filter(candidate_id=c_id).first()
+        self.candidate_id = getattr(candidate, 'candidate_id','')
+        if not self.candidate_id:
+            return Response({"detail": "Candidate with given  candidate id is invalid."}, status= status.HTTP_400_BAD_REQUEST)
+        return super().get(request, *args, **kwargs)
+
 
 
 class EntityReorderView(APIView):
