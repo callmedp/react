@@ -654,7 +654,7 @@ class OrderCustomisationRUDView(RetrieveUpdateDestroyAPIView):
         candidate = Candidate.objects.filter(candidate_id=c_id).first()
         self.candidate_id = getattr(candidate, 'candidate_id','')
         if not self.candidate_id:
-            return Response({"detail": "Candidate with given  candidate id is invalid."}, status= status.HTTP_400_BAD_REQUEST)
+            return Response({"detail": "Candidate with given candidate id is invalid."}, status= status.HTTP_400_BAD_REQUEST)
         return super().get(request, *args, **kwargs)
 
 
