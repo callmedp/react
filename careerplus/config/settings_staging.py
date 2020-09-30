@@ -470,7 +470,7 @@ ANALYTICS_VIDHYA_URL = {
 link end
 '''
 
-LOGGED_IN_CHATBOT = "https://learning-media-staging-189607.storage.googleapis.com/c/m/chatbot/learning_learning_logged_in-1601327404.js"
-NON_LOGGED_IN_CHATBOT = "https://learning-media-staging-189607.storage.googleapis.com/c/m/chatbot/learning_learning_non-logged_in-1601374257.js"
+LOGGED_IN_CHATBOT = "https://learning-media-staging-189607.storage.googleapis.com/c/m/chatbot/learning_learning_logged_in-1601445965.js"
+NON_LOGGED_IN_CHATBOT = "https://learning-media-staging-189607.storage.googleapis.com/c/m/chatbot/learning_learning_non-logged_in-1601445975.js"
 
 PRODUCT_LEADCREATION_COUNTDOWN = 30
