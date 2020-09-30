@@ -1242,10 +1242,13 @@ class ShineCandidateLoginAPIView(APIView):
 
     def get(self, request, *args, **kwargs):
         # user = request.user
+        # import pdb;pdb.set_trace()
         c_id = kwargs.get('candidate_id','')
         candidate_obj= Candidate.objects.filter(candidate_id=c_id).first()
         candidate_id= getattr(candidate_obj, 'candidate_id','')
-        print(c_id, 'c_id', candidate_obj, 'candidate_obj', candidate_id, 'candidate_id')
+        print(c_id, 'c_id', candidate_obj, 'candidate_obj', Candidate.objects.filter())
+
+        # import pdb;pdb.set_trace()
 
         if not candidate_id:
             return Response({"detail": "Not Authorised"}, status=status.HTTP_401_UNAUTHORIZED)
