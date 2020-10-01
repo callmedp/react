@@ -240,6 +240,10 @@ class Order(AbstractAutoDate):
         items = self.orderitems.all()
         return any([item.product.vendor.slug == 'amcat' for item in items])
 
+    def order_contains_testprep_item(self):
+        items = self.orderitems.all()
+        return any([item.product.vendor.slug == 'testprep' for item in items])
+
     def order_contains_resumebuilder_subscription(self):
         items = self.orderitems.all()
         return any([item.product.sub_type_flow == 1701 for item in items])
@@ -546,6 +550,13 @@ class Order(AbstractAutoDate):
                 amcat_oi.active_on_shine = 1
                 update_purchase_on_shine.delay(amcat_oi.pk)
                 amcat_oi.save()
+
+        if self.status == 1 and existing_obj.status !=1 and self.order_contains_testprep_item():
+            testprep_items = self.orderitems.filter(
+                product__vendor__slug='testprep',
+                no_process=False
+            )
+
 
         if self.status == 1 and existing_obj.status != 1 and self.order_contains_resume_builder():
             # imported here to not cause cyclic import for resumebuilder models
