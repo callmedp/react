@@ -989,13 +989,13 @@ class ShineCandidateLoginAPIView(APIView):
         if resumebuilder_candidate:
             subscription_active = resumebuilder_candidate.active_subscription or False
 
-        self.request.session.update(login_response)
+        # self.request.session.update(login_response)
 
-        self.request.session.update(personal_info)
+        # self.request.session.update(personal_info)
 
-        mobile_number = self.request.session.get('cell_phone','')
+        # mobile_number = self.request.session.get('cell_phone','')
 
-        self.request.session.update({'mobile_no': mobile_number})
+        # self.request.session.update({'mobile_no': mobile_number})
 
         if with_info:
             data_to_send = {"token": token,
@@ -1011,7 +1011,7 @@ class ShineCandidateLoginAPIView(APIView):
             data_to_send = {
                 "token": token,
                 "candidate_id": candidate_id,
-                'cart_pk': self.request.session.get('cart_pk') or self.request._request.session.get('cart_pk'),
+                'cart_pk': self.request.session.get('cart_pk') or self.request._request.session.get('cart_pk'), ##
                 'profile': personal_info
             }
 
@@ -1241,13 +1241,20 @@ class ShineCandidateLoginAPIView(APIView):
         return self.get_response_for_successful_login(candidate_id, login_response, with_info)
 
     def get(self, request, *args, **kwargs):
-        user = request.user
-        candidate_id = request.session.get('candidate_id')
-        if not user.is_authenticated and not candidate_id:
-            return Response({"detail": "Not Authorised"}, status=status.HTTP_401_UNAUTHORIZED)
+        # user = request.user
+        # import pdb;pdb.set_trace()
+        c_id = kwargs.get('candidate_id','')
+        candidate_obj= Candidate.objects.filter(candidate_id=c_id).first()
+        candidate_id= getattr(candidate_obj, 'candidate_id','')
+        print(c_id, 'c_id', candidate_obj, 'candidate_obj', Candidate.objects.filter())
+
+        # import pdb;pdb.set_trace()
 
         if not candidate_id:
-            candidate_id = user.candidate_id
+            return Response({"detail": "Not Authorised"}, status=status.HTTP_401_UNAUTHORIZED)
+
+        # if not candidate_id:
+        #     candidate_id = user.candidate_id
 
         try:
             login_response = ShineCandidateDetail().get_candidate_detail(shine_id=candidate_id)
