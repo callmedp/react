@@ -259,6 +259,7 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
     author = models.ForeignKey(
         Author, null=True, blank=True,
         help_text='for author',on_delete=models.CASCADE)
+    related_arts = models.TextField(default='[]')
     
     # sites = models.ManyToManyField(Site, blank=True, related_name='related_sites',
     #     help_text=("sites where blog published."))

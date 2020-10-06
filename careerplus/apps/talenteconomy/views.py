@@ -480,8 +480,10 @@ class TEBlogCategoryListView(TemplateView, BlogMixin):
     def get_meta_details(self):
         name = self.cat_obj.name
         meta = Meta(
-            title=name + " - Career & Certification Guidance @ Shine Learning",
-            description="Read Latest Articles on %s. Find the Most Relevant Information, News and other career guidance for %s at Shine Learning" %(name,name),
+            # title=name + " - Career & Certification Guidance @ Shine Learning",
+            # description="Read Latest Articles on %s. Find the Most Relevant Information, News and other career guidance for %s at Shine Learning" %(name,name),
+            title = self.cat_obj.get_title,
+            description = self.cat_obj.get_description if self.cat_obj.get_description else ("Read Latest Articles on %s. Find the Most Relevant Information, News and other career guidance for %s at Shine Learning" %(name,name)),
         )
         return {"meta": meta}
 
@@ -637,14 +639,16 @@ class TEBlogDetailView(DetailView, BlogMixin):
                     "page_obj": detail_obj,
                     "slug": blog.slug,
                     "visibility": blog.visibility,
-                    "SITEDOMAIN": settings.SITE_DOMAIN})
+                    "SITEDOMAIN": settings.SITE_DOMAIN,
+                    "login_status": 1 if self.request.session.get('candidate_id') else 0,
+                })
         else:
             detail_article = render_to_string(
                 'talenteconomy/include/detail-article-list.tmpl.html',
                 {
                     "page_obj": detail_obj,
                     "slug": blog.slug, "visibility": blog.visibility,
-                    "SITEDOMAIN": settings.SITE_DOMAIN})
+                    "SITEDOMAIN": settings.SITE_DOMAIN, "STATIC_URL": settings.STATIC_URL})
 
         context.update({
             "detail_article": detail_article,
@@ -676,6 +680,12 @@ class TEBlogDetailView(DetailView, BlogMixin):
         })
 
         context.update(self.get_meta_details())
+
+        # Related Articles...
+        related_articles_ids_list = json.loads(self.object.related_arts)
+        related_articles = Blog.objects.filter(id__in=related_articles_ids_list)[:3]
+        context.update({'related_articles': related_articles})
+
         return context
 
     def get_breadcrumb_data(self):

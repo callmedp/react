@@ -13,7 +13,7 @@
 
 
 {% block title %}
-   {{category.name}} - Career & Certification Guidance @ Shine Learning
+    {% if category.get_title %} {{category.get_title}} {% else %} {{category.name}} - Career & Certification Guidance @ Shine Learning{%endif%}
 {% endblock title %}
 
 {% block css_section %}
@@ -59,7 +59,7 @@
 
 			<!-- Popular Courses -->
 <div class="popular-courses box-panel col-sm-6 col-md-12 mb-40 look-interesting">
-    <h2 class="heading-right-talent">WANT TO HIRE TOP TALENTS? </h2>
+    <h2 class="heading-right-talent">WANT TO HIRE TOP TALENTS? 00000 </h2>
     <p class="mt-15">Ask for a call back</p>
 
     <form id="enquireform" name="enq" class="mt-15 register">

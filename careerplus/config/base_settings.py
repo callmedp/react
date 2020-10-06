@@ -67,6 +67,7 @@ THIRD_PARTY_APPS = [
     'django_filters',
     'webpack_loader',
     'corsheaders' ,
+    'tinymce',
 ]
 
 # Apps specific for this project go here.
