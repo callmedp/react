@@ -58,6 +58,96 @@
             <div class="cls_ajax_article" data-url="{{main_article.get_absolute_url}}" data-title="{{main_article.display_name}}">
             {{detail_article}}
             </div>
+
+            <!-- Table Widgets -->
+            <!-- <table border="1" cellspacing="0">
+              <tbody>
+                <tr>
+                  <td width="50%">
+                    Absolute Path
+                  </td>
+
+                  <td width="50%">
+                    Relative Path
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>Absolute XPath starts from the root node and ends with desired descendant element’s node.</td>
+                  <td>It starts with the top HTML node and ends with an input node.</td>
+
+                <tr>
+                  <td>Absolute XPath starts from the root node and ends with desired descendant element’s node.</td>
+                  <td>It starts with a double forward-slash (//)</td>
+                </tr>
+                <tr>
+                  <td>It starts with a single forward-slash (/)</td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table> -->
+            <!-- // Table Widgets -->
+
+            <!-- Related Articles -->
+            {% if related_articles %}
+            <div class="related-article article-list">
+              <h2><strong>Related Articles:</strong></h2>
+              <div class="row mt-20">
+              {% for article in related_articles %}
+                <div class="col-md-4">
+                  <div class="box-panel">
+                    <a href="{{article.get_absolute_url}}">
+                      <figure class="pr">
+                        <img aria-label="{{article.image_alt}}" src="{{article.image.url}}" alt="{{article.image_alt}}" itemprop="image">
+                      </figure>
+
+                      <h3 class="heading-article" itemprop="name">{{article.name}}</h3>
+                    </a>
+
+                    <span class="view-forward"><figure class="forward-icon"></figure> {{article.no_shares}}
+                        <figure class="view-icon ml-20"></figure> {{article.no_views}}
+                    </span>
+                  </div>
+                </div>
+              {% endfor %}
+                <!-- // col -->
+                
+                <!-- <div class="col-md-4">
+                  <div class="box-panel">
+                    <a href="#">
+                      <figure class="pr">
+                        <img aria-label="Test Product 12" src="{% static 'shinelearn/images/blog/related-article-2.png' %}" alt="Test Product 12" itemprop="image">
+                      </figure>
+
+                      <h3 class="heading-article" itemprop="name">Fresher's Guide to Writing an Appealing Resume</h3>
+                    </a>
+
+                    <span class="view-forward"><figure class="forward-icon"></figure> 0
+                        <figure class="view-icon ml-20"></figure> 249
+                    </span>
+                  </div>
+                </div>
+                
+                <div class="col-md-4">
+                  <div class="box-panel">
+                    <a href="#">
+                      <figure class="pr">
+                        <img aria-label="Test Product 12" src="{% static 'shinelearn/images/blog/related-article-3.png' %}" alt="Test Product 12" itemprop="image" class="img-responsive">
+                      </figure>
+
+                      <h3 class="heading-article" itemprop="name">Top 25 Mobile Testing Interview Questions & Answers</h3>
+                    </a>
+
+                    <span class="view-forward"><figure class="forward-icon"></figure> 0
+                        <figure class="view-icon ml-20"></figure> 249
+                    </span>
+                  </div>
+                </div> -->
+
+              </div>
+            </div><!-- //Related Articles -->
+          {% endif %}
+
           </div>
           <div id="id_ajax_article"></div>
           <!-- content start -->
@@ -76,28 +166,51 @@
 			<!-- Popular Courses -->
 			{% if popular_courses %}
 				{% include './include/popular.tmpl.html' with popular_courses=popular_courses page='talenteconomy-article-details' %}
-			{% endif %}
-      <br>
+      {% endif %}
+      
+      <!-- Article categories -->
+      <div class="right-box box-panel col-sm-6 col-md-12 mb-40">
+        <h2 class="heading-right-talent">Article Categories</h2>
+        <ul class="blue-list">
+          <li><a href="https://learning.shine.com/talenteconomy/career-help/">Career help</a></li>
+          <li><a href="https://learning.shine.com/talenteconomy/resume-tips/">Resume tips</a></li>
+          <li><a href="https://learning.shine.com/talenteconomy/job-search-guidance/">Job search guidance</a></li>
+          <li><a href="https://learning.shine.com/talenteconomy/interview-tips/">Interview tips</a></li>
+          <li><a href="https://learning.shine.com/talenteconomy/interview-questions/">Interview questions</a></li>
+          <li><a href="https://learning.shine.com/talenteconomy/career-prospects/">Career prospects</a></li>
+          <li><a href="https://learning.shine.com/talenteconomy/human-resources/">Human resources</a></li>
+        </ul>
+      </div>
+      <!-- // Article categories -->
+
       <!-- Looks interesting? -->
 
-                          <div id="snackbar"></div>
+      <div id="snackbar"></div>
 
 
-      <div id="sticker" class="request-call query-form-right box-panel col-sm-6 col-md-12 cleafix">
+      <div id="sticker" class="right-box query-form-right box-panel col-sm-6 col-md-12 cleafix">
 
 
         <h2 class="heading-right">Looks interesting?</h2>
-          <p>Know more about our services, just fill the details below!</p>
-          <form class="mt-20" role="form"  id="enquireform" name="enq" >
+          <p>Subscribe & Get our daily newsletter. Fill the details below.</p>
+          <form class="te-form mt-20" role="form"  id="enquireform" name="enq" >
             <div style='display:none'>
                 <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}'/>
             </div>
+
             <div class="form-group">
-              <input type="text" class="form-control" name="name"  id="id_name"  placeholder="Name"
+              <input type="text" class="input_field form-control" name="name"  id="id_name"  placeholder="Name"
               maxlength="100" value="{{request.session.full_name}}">
-              <span class="error-txt position-error"></span>
+              <!-- <label class="input_label" for="id_name">Name<sup>*</sup></label> -->
             </div>
+            
             <div class="form-group">
+              <input type="email" class="input_field form-control" name="email"  id="id_email"  placeholder="Email"
+              maxlength="100" value="{{request.session.email}}">
+              <!-- <label class="input_label" for="id_email">Email<sup>*</sup></label> -->
+            </div>
+
+            <div class="form-group" style="display: flex;">
                 <div class="country-code">
                     <div class="custom-select">
                       <select class="form-control" name="country">
@@ -106,23 +219,28 @@
                       {% endfor %}
                       </select>
                     </div>
-                    <input type="text" class="form-control" name="number" id="id_cell_phone"
+                </div>
+                <div style="position: relative;">
+                    <input type="text" class="input_field form-control" name="number" id="id_cell_phone"
                     placeholder="Mobile" maxlength="15" value="{{request.session.mobile_no}}">
+                    <!-- <label class="input_label" for="id_cell_phone">Mobile</label> -->
                     <span class="error-txt position-error"></span>
                 </div>
             </div>
+
             <div class="form-group">
-                <textarea class="form-control" rows="1" name="msg" placeholder="Message" maxlength="500"></textarea>
-                <span class="error-txt position-error"></span>
+              <textarea class="form-control" rows="1" name="msg" placeholder="Message" maxlength="500"></textarea>
+              <span class="error-txt"></span>
             </div>
+
 
             <input type="hidden" name="product" value="{{category_obj.pk}}">
             <input type="hidden" name="prd" value="{{category_obj.heading}}">
             <input type="hidden" name="path" value="{{request.build_absolute_uri}}">
-            <input type="hidden" name="email" class="form-control" value="{{request.session.email}}">
+            <!-- <input type="hidden" name="email" class="form-control" value="{{request.session.email}}"> -->
             <input type="hidden" name="lsource" value="8">
            <input type="hidden" name="campaign" value="blogsonline">
-           <button type="button" id="enquire_form" class="submit-button">Submit</button>
+           <button type="button" id="enquire_form" class="submit-button">Subscribe Now</button>
           </form>
 
       </div>
@@ -150,7 +268,7 @@
         <label id="non-field-error" class="error-msg"></label>
       </div>
 
-       <form autocomplete="off" role method="post" id="login_form" >{% csrf_token %}
+       <form role method="post" id="login_form" >{% csrf_token %}
           
           <div class="form-group {% if loginform.email.errors %} error {% endif %}">
             {{loginform.email}}
@@ -238,7 +356,7 @@
           <div id="terms"></div>
           <button type="button" id="register-button" class="btn btn-primary submit">Register</button>
           <div class="social-login">
-            <span>or Register with</span>
+            <span style="margin-right:20px;">or Register with</span>
             <a class="facebook" onclick="Login();"></a>
             <a class="linkedin" href="{% url 'users:linkedin-code' %}"></a>
             <!-- <a class="gplus" onclick="glogin();"></a> -->
@@ -311,14 +429,20 @@ function gaEvent(event_cat,event_lab,event_action){
     <script type="text/javascript">
       $(document).ready(function() {
         var s = $("#sticker");
-        var pos = s.position();            
+        var pos = s.position(); 
+        var sticky_height = s.height()      
         $(window).scroll(function() {
           var windowpos = $(window).scrollTop();
+          var footer_top = $('#footer').position().top;
           // s.html("Distance from top:" + pos.top + "<br />Scroll position: " + windowpos);
-          if (windowpos >= pos.top) {
+          if (windowpos >= (pos.top + 120)) {
             s.addClass("stick");
-          } else {
-            s.removeClass("stick"); 
+            if(windowpos + s.position().top + sticky_height >= footer_top){
+              s.removeClass("stick");
+            }
+          } 
+          else{
+            s.removeClass("stick");
           }
         });
       });

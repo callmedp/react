@@ -135,6 +135,7 @@
                     <th class="column-title">#</th>
                     <th class="column-title">Name</th>
                     <th class="column-title">Slug</th>
+                    <th class="column-title" style="cursor: pointer;" onclick="sortByLastModified()">Last Modified<i id="sortAngle_lm" class="fa {% if sortdate_lm == 3 %} fa-angle-down {% else %} fa-angle-up {% endif %} "></i></th>
                     <th class="column-title">Status</th>
                     <th class="column-title" style="cursor: pointer;" onclick="sortByDate()">Publish Date <i id="sortAngle" class="fa {% if sortdate == 1 %} fa-angle-down {% else %} fa-angle-up {% endif %} "></i></th>
                     <th class="column-title">View on Site</th>
@@ -155,6 +156,9 @@
                       </td>
                       <td>
                         {{obj.slug}}
+                      </td>
+                      <td>
+                        {{obj.last_modified_on}}
                       </td>
                       <td>
                         {{obj.get_status}}
@@ -253,6 +257,7 @@
   {{ block.super }}
 <script>
    var sorting = '{{sortdate}}';
+   var sorting_lm = '{{sortdate_lm}}';
    </script>
   <!-- Parsley Validate Scripts -->
   {% compress js %}

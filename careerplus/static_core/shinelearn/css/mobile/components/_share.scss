@@ -35,6 +35,7 @@
       margin-bottom: 7px;
       margin-left: auto;
       margin-right: auto;
+      background-color: $white;
 
       a {
         @include box (50px, 50px, table-cell);
@@ -44,8 +45,9 @@
         line-height: 12px;
         vertical-align: middle;
         color: #666;
-        box-shadow: $box-shadow-5;
+        box-shadow: $box-shadow-2;
         position: relative;
+        background-color: $white;
       }
     }
 }

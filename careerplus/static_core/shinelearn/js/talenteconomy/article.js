@@ -69,7 +69,7 @@ $.validator.addMethod("numbercheck", function (value, element) {
     else if($('#id_cell_phone').val().length >= 8 && $('#id_cell_phone').val().length <= 15){
         return true
     }
-}, 'please enter valid mobile number');
+}, 'Please enter valid mobile number');
 
 
 
@@ -79,24 +79,23 @@ $(function() {
   $("form[name='enq']").validate({
     // Specify validation rules
     rules: {
-      number: {
-        numbercheck : true,
-      },
-      msg: {
-        maxlength:250,
-      }
+        number: {
+            numbercheck : true,
+        },
+        msg: {
+            maxlength:250,
+        }
     },
     // Specify validation error messages
     messages: {
-      number: {
-            required: "Please enter your number",
-            minlength: "please enter atleast 8 digit number",
-      },
+        number: {
+                required: "Please enter your number",
+                minlength: "Please enter atleast 8 digit number",
+        },
 
-      msg: {
-        maxlength: "Message should be within 250 characters",
-      },
-
+        msg: {
+            maxlength: "Message should be within 250 characters",
+        },
     },
     // Make sure the form is submitted to the destination defined
     // in the "action" attribute of the form when valid
@@ -134,7 +133,7 @@ $('#enquire_form').click(function(event) {
             data: formData,
             success: function(data, textStatus, jqXHR) {
                 gaEventFunc(typeOfProduct,'success');
-            pop('Your Query Submitted Successfully.');
+                pop('Your Query Submitted Successfully.');
                 $('#enquireform')[0].reset();
                 $('#enquire_form').removeAttr("disabled");
             },

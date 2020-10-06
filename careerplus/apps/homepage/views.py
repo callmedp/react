@@ -276,7 +276,12 @@ class HomePageView(TemplateView, MetadataMixin):
         context['meta'] = self.get_meta()
         context['remove_nav_search'] = True
         context['offer_home'] = True
+        if candidate_id:
+            chatbot_url = settings.LOGGED_IN_CHATBOT
+        else:
+            chatbot_url = settings.NON_LOGGED_IN_CHATBOT
         context.update({
+            'chatbot_url':chatbot_url,
             'shine_api_url': settings.SHINE_API_URL,
             'tracking_product_id': self.request.session.get('tracking_product_id', ''),
             'product_tracking_mapping_id': self.request.session.get('product_tracking_mapping_id', ''),
