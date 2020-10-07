@@ -989,13 +989,13 @@ class ShineCandidateLoginAPIView(APIView):
         if resumebuilder_candidate:
             subscription_active = resumebuilder_candidate.active_subscription or False
 
-        # self.request.session.update(login_response)
+        self.request.session.update(login_response)
 
-        # self.request.session.update(personal_info)
+        self.request.session.update(personal_info)
 
-        # mobile_number = self.request.session.get('cell_phone','')
+        mobile_number = self.request.session.get('cell_phone','')
 
-        # self.request.session.update({'mobile_no': mobile_number})
+        self.request.session.update({'mobile_no': mobile_number})
 
         if with_info:
             data_to_send = {"token": token,
@@ -1011,7 +1011,7 @@ class ShineCandidateLoginAPIView(APIView):
             data_to_send = {
                 "token": token,
                 "candidate_id": candidate_id,
-                'cart_pk': self.request.session.get('cart_pk') or self.request._request.session.get('cart_pk'), ##
+                'cart_pk': self.request.session.get('cart_pk') or self.request._request.session.get('cart_pk'),
                 'profile': personal_info
             }
 
@@ -1241,20 +1241,13 @@ class ShineCandidateLoginAPIView(APIView):
         return self.get_response_for_successful_login(candidate_id, login_response, with_info)
 
     def get(self, request, *args, **kwargs):
-        # user = request.user
-        # import pdb;pdb.set_trace()
-        c_id = kwargs.get('candidate_id','')
-        candidate_obj= Candidate.objects.filter(candidate_id=c_id).first()
-        candidate_id= getattr(candidate_obj, 'candidate_id','')
-        print(c_id, 'c_id', candidate_obj, 'candidate_obj', Candidate.objects.filter())
-
-        # import pdb;pdb.set_trace()
-
-        if not candidate_id:
+        user = request.user
+        candidate_id = request.session.get('candidate_id')
+        if not user.is_authenticated and not candidate_id:
             return Response({"detail": "Not Authorised"}, status=status.HTTP_401_UNAUTHORIZED)
 
-        # if not candidate_id:
-        #     candidate_id = user.candidate_id
+        if not candidate_id:
+            candidate_id = user.candidate_id
 
         try:
             login_response = ShineCandidateDetail().get_candidate_detail(shine_id=candidate_id)
@@ -1918,64 +1911,3 @@ class CandidateBadging(APIView):
             logging.getLogger('error_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
         return
 
-class TrackingResumeShine(APIView):
-    authentication_classes = ()
-    permission_classes = ()
-    serializer_class = None
-
-    def post(self, request, *args, **kwargs):
-        '''
-        '''
-        t_id = self.request.data.get('t_id', '')
-        products = self.request.data.get('products', '')
-        action = self.request.data.get('action', '')
-        sub_product = self.request.data.get('sub_product', '')
-        u_id = self.request.data.get('u_id', '')
-        position = self.request.data.get('position', '')
-        domain = self.request.data.get('domain',3)
-        trigger_point = self.request.data.get('trigger_point','')
-        utm_campaign = self.request.data.get('utm_campaign', '')
-
-
-        try:
-            cache_data = cache.get('tracking_last_action', {})
-            cache_data.update({
-                str(t_id) : {
-                        "u_id" : u_id,
-                        "action" : action,
-                        "products" : products,
-                        "sub_product" : sub_product,
-                        "date_time" : timezone.now(),
-                        "domain" : domain
-                    }
-                })
-            cache.set('tracking_last_action', cache_data, timeout=None)
-            logging.getLogger('info_log').info("tracking data updated, tracking_id: {}".format(t_id))
-
-            payment_action = [ "card_and_netbanking", "zest_money", "amazon_pay_payment", "cheque_payment", "cash_payment" , "buy_now_pay_later"] 
-
-            if action in payment_action:
-                payment_cache = cache.get('tracking_payment_action', {})
-                u_id_payment_cache = payment_cache.get(str(u_id),{})
-                u_id_payment_cache.update({
-                        str(sub_product) : {
-                            "t_id" : t_id,
-                            "action" : action,
-                            "products" : products,
-                            "domain" : domain,
-                            "position" : position,
-                            "trigger_point" : trigger_point,
-                            "utm_campaign" : utm_campaign
-                        },
-                        "date_time" : timezone.now()
-                    })
-                payment_cache.update({
-                    str(u_id) : u_id_payment_cache
-                    })
-                cache.set("tracking_payment_action", payment_cache, timeout = None)
-                logging.getLogger('info_log').info("tracking data for payment is updated, tracking_id: {}".format(t_id))
-
-            return Response({ 'status': 'Tracking updated on learning' }, status=status.HTTP_200_OK)
-        except Exception as e:
-            logging.getLogger('error_log').error("Unable to update tracking data, tracking_id: {}, except : {}".format(t_id, e))
-            return Response({ 'status': 'Unable to update on learning'}, status=status.HTTP_400_BAD_REQUEST)
