@@ -689,3 +689,59 @@ class NeoApiMixin(object):
         if resp.status_code == 200:
             json_rep = resp.json()
             return json_rep
+
+
+class TestPrepApiMixin(object):
+
+    def get_headers(self):
+        url = settings.TEST_PREP_DICT['token_url']
+        data = {'username':  settings.TEST_PREP_DICT['username'],
+                'password': settings.TEST_PREP_DICT['password']
+                }
+        try:
+            response = requests.post(url,data)
+            response = response.json()
+        except:
+            logging.getLogger('error_log').error('unable to get the token from test prep')
+            return
+        token = response.get('token',None)
+        if not token:
+            logging.getLogger('error_log').error('unable to get the token from test prep')
+            return
+        return {
+            'Authorization': token
+        }
+
+
+    def get_auto_login_url(self,data_dict):
+        if not data_dict:
+            logging.getLogger('error_log').error('autologin url cannot be created empty dict passed')
+
+        url = settings.TEST_PREP_DICT['new_order']
+        headers = self.get_headers()
+        if not headers:
+            logging.getLogger('error_log').error('cannot create autologin url header not found')
+            return
+
+        try:
+            response = requests.post(url,data=data_dict,headers=headers)
+        except:
+            logging.getLogger('error_log').error('error in making testprep autlogin request')
+            return
+        if response.status_code != 200:
+            logging.getLogger('error_log').error('error in testprep autlogin {}'.format(response.json()))
+            return
+        response = response.json()
+        data = response.get('data')
+        if not data:
+            logging.getLogger('error_log').error('error in testprep autlogin {}'.format(response.json()))
+            return
+        return data.get('auto_login_url')
+
+
+
+
+
+        
+
+        

@@ -556,7 +556,12 @@ class Order(AbstractAutoDate):
                 product__vendor__slug='testprep',
                 no_process=False
             )
-
+            for amcat_oi in amcat_items:
+                amcat_oi.start_date = timezone.now()
+                amcat_oi.end_date = timezone.now() + timedelta(days=15)
+                amcat_oi.active_on_shine = 1
+                update_purchase_on_shine.delay(amcat_oi.pk)
+                amcat_oi.save()
 
         if self.status == 1 and existing_obj.status != 1 and self.order_contains_resume_builder():
             # imported here to not cause cyclic import for resumebuilder models

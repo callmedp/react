@@ -701,4 +701,12 @@ RAZOR_PAY_DICT = {
 }
 
 
+TEST_PREP_DICT = {
+    'token_url': 'https://www.testpreptraining.com/api/index.php/apiv2/login',
+    'new_order': 'https://www.testpreptraining.com/api/index.php/apiv2/newOrder',
+    'username': 'shinecom',
+    'password': 'lkhsg87$4w50934nkl#%'
+
+}
+
 

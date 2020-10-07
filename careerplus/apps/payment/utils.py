@@ -53,8 +53,18 @@ class EpayLaterEncryptDecryptUtil(object):
 
 
 def update_auto_login_url_for_assesment(orderitem, data):
-    from core.api_mixin import AmcatApiMixin
-    autologin_url = AmcatApiMixin().get_auto_login_url(data)
+    product = orderitem.product
+    if product.vendor.name.lower() == 'testprep':
+        if not product.upc:
+            logging.getLogger('error_log').error('product upc is not defined autologin cannot be create')
+            return False
+        from core.api_mixin import TestPrepApiMixin
+        data.update({'skill_id':str(product.upc)})
+        autologin_url = TestPrepApiMixin().get_auto_login_url(data)
+    else:
+        from core.api_mixin import AmcatApiMixin
+        autologin_url = AmcatApiMixin().get_auto_login_url(data)
+
     if autologin_url:
         orderitem.autologin_url = autologin_url
         orderitem.save()
