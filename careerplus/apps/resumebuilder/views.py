@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 # Create your views here.
 
@@ -12,7 +12,7 @@ from .mixins import SessionManagerMixin
 
 
 class WriteResumeView(TemplateView):
-    template_name = 'resumebuilder/index.html'
+    # template_name = 'https://resumestage.shine.com/resume-builder'
 
     def get(self, request, *args, **kwargs):
         tracking_id = request.GET.get('t_id', '')
@@ -41,7 +41,8 @@ class WriteResumeView(TemplateView):
             make_logging_request.delay(
                         tracking_product_id, product_tracking_mapping_id, tracking_id, 'product_page', position, trigger_point, u_id, utm_campaign, 2)
 
-        return render(request, self.template_name)
+        return redirect("https://resumestage.shine.com/resume-builder")
+        # return render(request, self.template_name)
 
 class FreeResumeDownload(View):
     template_name = "admin/free-resume-downloads.html"
