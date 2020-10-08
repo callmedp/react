@@ -40,7 +40,7 @@ class WriteResumeView(TemplateView):
         if tracking_id and product_tracking_mapping_id:
             make_logging_request.delay(
                         tracking_product_id, product_tracking_mapping_id, tracking_id, 'product_page', position, trigger_point, u_id, utm_campaign, 2)
-
+        
         return redirect("https://resumestage.shine.com/resume-builder")
         # return render(request, self.template_name)
 
