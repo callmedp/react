@@ -135,7 +135,7 @@
             <li class="fb-bg"><a href="https://www.facebook.com/sharer/sharer.php?u={{SITEDOMAIN}}{{main_article.get_absolute_url}}" id="article_share" article-slug="{{main_article.slug}}" target="_blank">><span class="icon-fb"></span></a></li>
             <li class="share-bg"><a href="#">{{main_article.no_shares}}<br>{% if main_article.no_shares > 1 %} Shares {% else %}Share{% endif %}</a></li>
         </ul>
-        <a href="JavaScript:Void(0);" id="share-btn" class="blue-circle-60"><span class="icon-share"></span></a>
+        <a href="JavaScript:void(0);" id="share-btn" class="blue-circle-60"><span class="icon-share"></span></a>
     </div>
 </div>
 
@@ -219,7 +219,7 @@
     {{block.super}}
     {% compress js %}
     <script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
-    <script src="{% static 'shinelearn/js/blog/blog-detail.js' %}"></script>
+    <script onload="openCommentBox('{{main_article.id}}', 2)" src="{% static 'shinelearn/js/blog/blog-detail.js' %}"></script>
     <script type="text/javascript" src="{% static 'shinelearn/js/mobile/talenteconomy/article.js' %}"></script>
     <script type="text/javascript" src="{% static 'shinelearn/js/talenteconomy/article.js' %}"></script>
 

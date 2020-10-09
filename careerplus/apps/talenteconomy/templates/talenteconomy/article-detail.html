@@ -58,96 +58,6 @@
             <div class="cls_ajax_article" data-url="{{main_article.get_absolute_url}}" data-title="{{main_article.display_name}}">
             {{detail_article}}
             </div>
-
-            <!-- Table Widgets -->
-            <!-- <table border="1" cellspacing="0">
-              <tbody>
-                <tr>
-                  <td width="50%">
-                    Absolute Path
-                  </td>
-
-                  <td width="50%">
-                    Relative Path
-                  </td>
-                </tr>
-
-                <tr>
-                  <td>Absolute XPath starts from the root node and ends with desired descendant element’s node.</td>
-                  <td>It starts with the top HTML node and ends with an input node.</td>
-
-                <tr>
-                  <td>Absolute XPath starts from the root node and ends with desired descendant element’s node.</td>
-                  <td>It starts with a double forward-slash (//)</td>
-                </tr>
-                <tr>
-                  <td>It starts with a single forward-slash (/)</td>
-                  <td></td>
-                </tr>
-              </tbody>
-            </table> -->
-            <!-- // Table Widgets -->
-
-            <!-- Related Articles -->
-            {% if related_articles %}
-            <div class="related-article article-list">
-              <h2><strong>Related Articles:</strong></h2>
-              <div class="row mt-20">
-              {% for article in related_articles %}
-                <div class="col-md-4">
-                  <div class="box-panel">
-                    <a href="{{article.get_absolute_url}}">
-                      <figure class="pr">
-                        <img aria-label="{{article.image_alt}}" src="{{article.image.url}}" alt="{{article.image_alt}}" itemprop="image">
-                      </figure>
-
-                      <h3 class="heading-article" itemprop="name">{{article.name}}</h3>
-                    </a>
-
-                    <span class="view-forward"><figure class="forward-icon"></figure> {{article.no_shares}}
-                        <figure class="view-icon ml-20"></figure> {{article.no_views}}
-                    </span>
-                  </div>
-                </div>
-              {% endfor %}
-                <!-- // col -->
-                
-                <!-- <div class="col-md-4">
-                  <div class="box-panel">
-                    <a href="#">
-                      <figure class="pr">
-                        <img aria-label="Test Product 12" src="{% static 'shinelearn/images/blog/related-article-2.png' %}" alt="Test Product 12" itemprop="image">
-                      </figure>
-
-                      <h3 class="heading-article" itemprop="name">Fresher's Guide to Writing an Appealing Resume</h3>
-                    </a>
-
-                    <span class="view-forward"><figure class="forward-icon"></figure> 0
-                        <figure class="view-icon ml-20"></figure> 249
-                    </span>
-                  </div>
-                </div>
-                
-                <div class="col-md-4">
-                  <div class="box-panel">
-                    <a href="#">
-                      <figure class="pr">
-                        <img aria-label="Test Product 12" src="{% static 'shinelearn/images/blog/related-article-3.png' %}" alt="Test Product 12" itemprop="image" class="img-responsive">
-                      </figure>
-
-                      <h3 class="heading-article" itemprop="name">Top 25 Mobile Testing Interview Questions & Answers</h3>
-                    </a>
-
-                    <span class="view-forward"><figure class="forward-icon"></figure> 0
-                        <figure class="view-icon ml-20"></figure> 249
-                    </span>
-                  </div>
-                </div> -->
-
-              </div>
-            </div><!-- //Related Articles -->
-          {% endif %}
-
           </div>
           <div id="id_ajax_article"></div>
           <!-- content start -->
@@ -422,7 +332,7 @@ function gaEvent(event_cat,event_lab,event_action){
     {{ block.super }}
     {% compress js %}
     <script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
-    <script src="{% static 'shinelearn/js/blog/blog-detail.js' %}"></script>
+    <script onload="openCommentBox('{{main_article.id}}', 2)" src="{% static 'shinelearn/js/blog/blog-detail.js' %}"></script>
     <script src="{% static 'shinelearn/js/blog/login-register.js' %}"></script>
     <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
     <script src="{% static 'shinelearn/js/talenteconomy/article.js' %}"></script>

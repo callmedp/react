@@ -87,110 +87,6 @@
         </ul>
         <div id="related-container">
             {{detail_article}}
-
-            <!-- Table Widgets -->
-            <!-- <table border="1" cellspacing="0">
-                <tbody>
-                    <tr>
-                    <td width="50%">
-                        Absolute Path
-                    </td>
-
-                    <td width="50%">
-                        Relative Path
-                    </td>
-                    </tr>
-
-                    <tr>
-                    <td>Absolute XPath starts from the root node and ends with desired descendant element’s node.</td>
-                    <td>It starts with the top HTML node and ends with an input node.</td>
-
-                    <tr>
-                    <td>Absolute XPath starts from the root node and ends with desired descendant element’s node.</td>
-                    <td>It starts with a double forward-slash (//)</td>
-                    </tr>
-                    <tr>
-                    <td>It starts with a single forward-slash (/)</td>
-                    <td></td>
-                    </tr>
-                </tbody>
-            </table> -->
-            <!-- // Table Widgets -->
-
-            <!-- Related Articles -->
-        {% if related_articles %}
-            <div class="related-article-new">
-                <h2><strong>Related Articles:</strong></h2>
-                <div class="related-article-new__list">
-                {% for article in related_articles %}
-                    <div class="related-article-new__list--item">
-                        <div class="related-article-new__list--box">
-                            <a href="{{article.get_absolute_url}}">
-                                <figure class="pr imght">
-                                    <img aria-label="{{article.image_alt}}" src="{{article.image.url}}" alt="{{article.image_alt}}" itemprop="image">
-                                </figure>
-                            </a>
-
-                            <div class="related-article-new__list--content">
-                                <h3 class="heading-article mb-15" itemprop="name">
-                                    <a href="{{article.get_absolute_url}}">{{article.name}}</a>
-                                </h3>
-
-                                <span class="view-forward">
-                                    <figure class="icon-forward"></figure> {{article.no_shares}}
-                                    <figure class="icon-view icon-grey-view ml-20"></figure> {{article.no_views}}
-                                </span>
-                            </div>
-                        </div><!-- // Related Item box -->
-                    </div><!-- // Related Item -->
-                {% endfor %}
-                    <!-- <div class="related-article-new__list--item">
-                        <div class="related-article-new__list--box">
-                            <a href="#">
-                                <figure class="pr imght">
-                                    <img aria-label="Test Product 12" src="{% static 'shinelearn/images/blog/related-article-2.png' %}" alt="Test Product 12" itemprop="image">
-                                </figure>
-                            </a>
-
-                            <div class="related-article-new__list--content">
-                                <h3 class="heading-article mb-15" itemprop="name">
-                                    <a href="#">Fresher's Guide to Writing an Appealing Resume</a>
-                                </h3>
-
-                                <span class="view-forward">
-                                    <figure class="icon-forward"></figure> 0
-                                    <figure class="icon-view icon-grey-view ml-20"></figure> 249
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    
-                    <div class="related-article-new__list--item">
-                        <div class="related-article-new__list--box">
-                            <a href="#">
-                                <figure class="pr imght">
-                                    <img aria-label="Test Product 12" src="{% static 'shinelearn/images/blog/related-article-3.png' %}" alt="Test Product 12" itemprop="image">
-                                </figure>
-                            </a>
-
-                            <div class="related-article-new__list--content">
-                                <h3 class="heading-article mb-15" itemprop="name">
-                                    <a href="#">Top 25 Mobile Testing Interview Questions & Answers</a>
-                                </h3>
-
-                                <span class="view-forward">
-                                    <figure class="icon-forward"></figure> 0
-                                    <figure class="icon-view icon-grey-view ml-20"></figure> 249
-                                </span>
-                            </div>
-                        </div>
-                    </div> -->
-
-                </div><!-- // Related List -->
-              </div><!-- //Related Articles -->
-        {% endif %}
-              
         </div>
         <div id="id_ajax_article"></div>
     </section>
@@ -255,7 +151,7 @@
                 <a href="#">{{main_article.no_shares}}<br>{% if main_article.no_shares > 1 %} Shares {% else %}Share{% endif %}</a>
             </li>
         </ul>
-        <a href="JavaScript:Void(0);" id="share-btn" class="white-circle-60"><span class="icon-share-white"></span></a>
+        <a href="JavaScript:void(0);" id="share-btn" class="white-circle-60"><span class="icon-share-white"></span></a>
     </div>
 </div>
 
@@ -270,7 +166,7 @@
     {{block.super}}
     {% compress js %}
     <script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
-    <script src="{% static 'shinelearn/js/blog/blog-detail.js' %}"></script>
+    <script onload="openCommentBox('{{main_article.id}}', 2)" src="{% static 'shinelearn/js/blog/blog-detail.js' %}"></script>
     <script type="text/javascript" src="{% static 'shinelearn/js/mobile/talenteconomy/article.js' %}"></script>
     <script type="text/javascript" src="{% static 'shinelearn/js/talenteconomy/article.js' %}"></script>
 

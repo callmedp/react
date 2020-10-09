@@ -285,7 +285,7 @@
     {{ block.super }}
     {% compress js %}
     <script async type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
-    <script src="{% static 'shinelearn/js/blog/blog-detail.js' %}"></script>
+    <script onload="openCommentBox('{{main_article.id}}', 2)" src="{% static 'shinelearn/js/blog/blog-detail.js' %}"></script>
     <script src="{% static 'shinelearn/js/blog/login-register.js' %}"></script>
     <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
     <script src="{% static 'shinelearn/js/talenteconomy/article.js' %}"></script>
@@ -295,10 +295,12 @@
         var pos = s.position();            
         $(window).scroll(function() {
           var windowpos = $(window).scrollTop();
-          if (windowpos >= pos.top) {
-            s.addClass("stick");
-          } else {
-            s.removeClass("stick"); 
+          if(pos){
+            if (windowpos >= pos.top) {
+              s.addClass("stick");
+            }else {
+              s.removeClass("stick"); 
+            }
           }
         });
       });
