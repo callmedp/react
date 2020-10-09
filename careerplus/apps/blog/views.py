@@ -610,12 +610,24 @@ class BlogDetailAjaxView(View, BlogMixin):
                 else:
                     template_name = 'include/detail-article-list.html'
 
+                # Related Articles...
+                related_articles=[]
+                try:
+                    r_arts = page_obj.object_list[0].related_arts if page_obj.object_list[0] else []
+                    related_articles_ids_list = json.loads(r_arts)
+                    related_articles = Blog.objects.filter(id__in=related_articles_ids_list)[:3]
+                except Exception as e:
+                    logging.getLogger('error_log').error(
+                    "Error in related articles fetch - %s" % str(e))
+                    
                 detail_article = render_to_string(
                     template_name,
                     {"page_obj": page_obj,
                     "slug": self.blog.slug,
                     "visibility": self.blog.visibility,
-                    "SITEDOMAIN": settings.SITE_DOMAIN, })
+                    "SITEDOMAIN": settings.SITE_DOMAIN,
+                    "related_articles": related_articles
+                })
 
                 data = {
                     'article_detail': detail_article,
