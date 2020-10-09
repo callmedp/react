@@ -5,16 +5,18 @@ from django.shortcuts import render, redirect
 from django.views.generic.base import TemplateView,View
 from django.core.cache import  cache
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponsePermanentRedirect
 
 from payment.tasks import make_logging_request
 from .mixins import SessionManagerMixin
+from django.conf import settings
 
 
 class WriteResumeView(TemplateView):
     # template_name = 'https://resumestage.shine.com/resume-builder'
 
     def get(self, request, *args, **kwargs):
+        return HttpResponsePermanentRedirect("{}{}".format(settings.RESUME_SHINE_BUILDER_DOMAIN,request.path))
         # tracking_id = request.GET.get('t_id', '')
         # utm_campaign = request.GET.get('utm_campaign', '')
         # trigger_point = request.GET.get('trigger_point', '')
@@ -41,7 +43,7 @@ class WriteResumeView(TemplateView):
         #     make_logging_request.delay(
         #                 tracking_product_id, product_tracking_mapping_id, tracking_id, 'product_page', position, trigger_point, u_id, utm_campaign, 2)
         
-        return redirect("https://resumestage.shine.com/resume-builder")
+        # return redirect("https://resumestage.shine.com/resume-builder")
         # return render(request, self.template_name)
 
 class FreeResumeDownload(View):
