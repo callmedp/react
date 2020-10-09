@@ -234,12 +234,15 @@
     {{block.super}}
     {% compress js %}
     <script type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
-    <script onload="openCommentBox('{{main_article.id}}', 2)" src="{% static 'shinelearn/js/blog/blog-detail.js' %}"></script>
+    <script src="{% static 'shinelearn/js/blog/blog-detail.js' %}"></script>
     <script type="text/javascript" src="{% static 'shinelearn/js/mobile/talenteconomy/article.js' %}"></script>
     <script type="text/javascript" src="{% static 'shinelearn/js/talenteconomy/article.js' %}"></script>
 
     <script src="{% static 'shinelearn/js/mobile/zopim_chat/custom.js' %}"></script>
     {% endcompress %}
+    <script>
+        openCommentBox('{{main_article.id}}', 2)
+    </script>
     {% compress js inline %}
         <script>
             $(function() {
