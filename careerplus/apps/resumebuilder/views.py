@@ -15,31 +15,31 @@ class WriteResumeView(TemplateView):
     # template_name = 'https://resumestage.shine.com/resume-builder'
 
     def get(self, request, *args, **kwargs):
-        tracking_id = request.GET.get('t_id', '')
-        utm_campaign = request.GET.get('utm_campaign', '')
-        trigger_point = request.GET.get('trigger_point', '')
-        u_id = request.GET.get('u_id', request.session.get('u_id',''))
-        position = request.GET.get('position', -1)
-        product_tracking_mapping_id = 11
+        # tracking_id = request.GET.get('t_id', '')
+        # utm_campaign = request.GET.get('utm_campaign', '')
+        # trigger_point = request.GET.get('trigger_point', '')
+        # u_id = request.GET.get('u_id', request.session.get('u_id',''))
+        # position = request.GET.get('position', -1)
+        # product_tracking_mapping_id = 11
 
-        if tracking_id:
-            request.session.update({
-                'tracking_id': tracking_id,
-                'trigger_point': trigger_point,
-                'position': position,
-                'u_id': u_id,
-                'utm_campaign': utm_campaign,
-                'product_tracking_mapping_id': product_tracking_mapping_id})
+        # if tracking_id:
+        #     request.session.update({
+        #         'tracking_id': tracking_id,
+        #         'trigger_point': trigger_point,
+        #         'position': position,
+        #         'u_id': u_id,
+        #         'utm_campaign': utm_campaign,
+        #         'product_tracking_mapping_id': product_tracking_mapping_id})
 
-        tracking_id= request.session.get('tracking_id','')
-        tracking_product_id= request.session.get('tracking_product_id','')
-        position= request.session.get('position',position)
-        u_id= request.session.get('u_id',u_id)
-        utm_campaign= request.session.get('utm_campaign',utm_campaign)
+        # tracking_id= request.session.get('tracking_id','')
+        # tracking_product_id= request.session.get('tracking_product_id','')
+        # position= request.session.get('position',position)
+        # u_id= request.session.get('u_id',u_id)
+        # utm_campaign= request.session.get('utm_campaign',utm_campaign)
 
-        if tracking_id and product_tracking_mapping_id:
-            make_logging_request.delay(
-                        tracking_product_id, product_tracking_mapping_id, tracking_id, 'product_page', position, trigger_point, u_id, utm_campaign, 2)
+        # if tracking_id and product_tracking_mapping_id:
+        #     make_logging_request.delay(
+        #                 tracking_product_id, product_tracking_mapping_id, tracking_id, 'product_page', position, trigger_point, u_id, utm_campaign, 2)
         
         return redirect("https://resumestage.shine.com/resume-builder")
         # return render(request, self.template_name)
