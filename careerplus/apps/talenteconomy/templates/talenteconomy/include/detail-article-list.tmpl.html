@@ -103,7 +103,7 @@
           <div class="col-md-4">
             <div class="box-panel">
               <a href="{{article.get_absolute_url}}">
-                <figure class="pr">
+                <figure class="pr mb-0">
                   <img aria-label="{{article.image_alt}}" src="{{article.image.url}}" alt="{{article.image_alt}}" itemprop="image">
                 </figure>
 
@@ -111,8 +111,8 @@
               </a>
 
               <span class="view-forward">
-                <figure class="forward-icon"></figure> {{article.no_shares}}
-                <figure class="view-icon ml-20"></figure> {{article.no_views}}
+                <figure class="forward-icon mb-0"></figure> {{article.no_shares}}
+                <figure class="view-icon ml-20 mb-0"></figure> {{article.no_views}}
               </span>
             </div>
           </div>
