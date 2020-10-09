@@ -178,7 +178,7 @@
             <p class="fs-16">You want to submit the test?</p>
             <div class="sure--btn-warp">
             <button class="btn btn-slg btn-round-30 btn-blue btn-lg mt-20" onclick="submitTestFinal();">Submit</button>
-            <button class="btn btn-slg btn-round-30 btn-outline btn-lg mt-20" >Cancel</button>
+            <button class="btn btn-slg btn-round-30 btn-outline btn-lg mt-20 close-btn">Cancel</button>
             </div>
             
         </div>
@@ -620,7 +620,7 @@ $(window).scroll(function () {
   }
 });
 
-    $(".close, .close-big").click(function(){
+    $(".close, .close-big, .close-btn").click(function(){
      $("#submitPermissionModal").removeClass("show");
     });
 

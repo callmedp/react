@@ -3,6 +3,7 @@ from datetime import datetime
 
 from django.urls import reverse
 from django.conf import settings
+from django.core.cache import cache
 
 from users.tasks import user_register
 # from core.mixins import InvoiceGenerate
@@ -18,6 +19,34 @@ from .tasks import add_reward_point_in_wallet, make_logging_request, make_loggin
 
 
 class PaymentMixin(object):
+
+    def payment_tracking(self, candidate_id, product_list, method):
+        cache_data = cache.get("tracking_payment_action",{})
+        c_id_data = cache_data.get(str(candidate_id),{})
+        if not c_id_data:
+            logging.getLogger('info_log').info("candidate_id {} not being tracked".format(candidate_id))
+            return False
+        payment_ids = [str(x) for x in product_list]
+        products_purchased_by_user = list(c_id_data.keys())
+        tracked_purchased_products = list(set(payment_ids) & set(products_purchased_by_user))
+        if not tracked_purchased_products:
+            logging.getLogger('info_log').info("candidate_id {} not being tracked".format(candidate_id))
+            return False
+        for prod in tracked_purchased_products:
+            prod_data = c_id_data.get(prod, {})
+            t_id = prod_data.get('t_id', '')
+            products = prod_data.get('products', '')
+            domain = prod_data.get('domain', '')
+            position = prod_data.get('position', '')
+            trigger_point = prod_data.get('trigger_point', '')
+            utm_campaign = prod_data.get('utm_campaign', '')
+            referal_product = prod_data.get('referal_product', '')
+            referal_subproduct = prod_data.get('referal_subproduct', '')
+            if t_id and prod and method:
+                make_logging_sk_request.delay(
+                    prod, products, t_id, method, position, trigger_point, str(candidate_id), utm_campaign, domain, referal_product, referal_subproduct)
+        return True
+
 
     def process_payment_method(self, payment_type, request, txn_obj, data={}):
         """ This method should be called for adding info to the order.
@@ -82,6 +111,8 @@ class PaymentMixin(object):
             txn_obj.payment_mode = payment_mode
             txn_obj.payment_date = payment_date
             txn_obj.save()
+
+            method = "purchase_done_card_and_netbanking"
 
             return_parameter = reverse('payment:thank-you')
 
@@ -193,9 +224,13 @@ class PaymentMixin(object):
             if tracking_id and product_availability:
                 make_logging_sk_request.delay(
                     tracking_product_id, product_tracking_mapping_id, tracking_id, action, position, trigger_point, u_id, utm_campaign, 2, referal_product, referal_subproduct)
-                if method:
-                    make_logging_sk_request.delay(
-                        tracking_product_id, product_tracking_mapping_id, tracking_id, method, position, trigger_point, u_id, utm_campaign, 2, referal_product, referal_subproduct)
+                # if method:
+                #     make_logging_sk_request.delay(
+                #         tracking_product_id, product_tracking_mapping_id, tracking_id, method, position, trigger_point, u_id, utm_campaign, 2, referal_product, referal_subproduct)
+            candidate_id = order.candidate_id
+            product_ids = list(order.orderitems.values_list('product__pk',flat=True))
+            if candidate_id and product_ids and method:
+                self.payment_tracking(candidate_id = candidate_id, product_list = product_ids, method = method)
 
             # order = InvoiceGenerate().save_order_invoice_pdf(order=order)
             invoice_generation_order.delay(order_pk=order.pk)

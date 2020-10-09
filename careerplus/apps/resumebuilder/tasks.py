@@ -264,7 +264,7 @@ def generate_and_upload_resume_pdf(data):
         return
 
     template_id = int(template_no)
-    candidate = Candidate.objects.filter(candidate_id=candidate_id).first()
+    candidate = Candidate.objects.using('master').filter(candidate_id=candidate_id).first()
     first_save = False
 
     if not candidate and not is_free_trial:

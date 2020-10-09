@@ -623,6 +623,13 @@ class OrderCustomisationListView(ListAPIView):
     def get_queryset(self):
         return OrderCustomisation.objects.filter(candidate__candidate_id=self.request.user.id)
 
+    # def patch(self, request, *args, **kwargs):
+    #     c_id = kwargs.get('candidate_id', '')
+    #     candidate = Candidate.objects.filter(candidate_id=c_id).first()
+    #     self.candidate_id = getattr(candidate, 'candidate_id','')
+    #     if not self.candidate_id:
+    #         return Response({"detail": "Candidate with given  candidate id is invalid."}, status= status.HTTP_400_BAD_REQUEST)
+    #     return super().patch(request, *args, **kwargs)
 
 class OrderCustomisationRUDView(RetrieveUpdateDestroyAPIView):
     authentication_classes = (ShineUserAuthentication,)
@@ -633,6 +640,23 @@ class OrderCustomisationRUDView(RetrieveUpdateDestroyAPIView):
 
     def get_queryset(self):
         return OrderCustomisation.objects.filter(candidate__candidate_id=self.request.user.id)
+
+    # def patch(self, request, *args, **kwargs):
+    #     c_id = kwargs.get('candidate_id', '')
+    #     candidate = Candidate.objects.filter(candidate_id=c_id).first()
+    #     self.candidate_id = getattr(candidate, 'candidate_id','')
+    #     if not self.candidate_id:
+    #         return Response({"detail": "Candidate with given  candidate id is invalid."}, status= status.HTTP_400_BAD_REQUEST)
+    #     return super().patch(request, *args, **kwargs)
+    
+    # def get(self, request, *args, **kwargs):
+    #     c_id = kwargs.get('candidate_id', '')
+    #     candidate = Candidate.objects.filter(candidate_id=c_id).first()
+    #     self.candidate_id = getattr(candidate, 'candidate_id','')
+    #     if not self.candidate_id:
+    #         return Response({"detail": "Candidate with given candidate id is invalid."}, status= status.HTTP_400_BAD_REQUEST)
+    #     return super().get(request, *args, **kwargs)
+
 
 
 class EntityReorderView(APIView):
@@ -763,8 +787,8 @@ class ResumeImagePreviewView(APIView):
         if not candidate_obj:
             return Response(status=status.HTTP_404_NOT_FOUND)
 
-        if candidate_obj.candidate_id != request.user.id:
-            return Response(status=status.HTTP_404_NOT_FOUND)
+        # if candidate_obj.candidate_id != request.user.id:
+        #     return Response(status=status.HTTP_404_NOT_FOUND)
 
         name_suffix = template_no
         split_tsize = tsize.split("x")
@@ -940,7 +964,14 @@ class PDFRefreshAPIView(APIView):
         from order.tasks import generate_resume_for_order
 
         order_id = kwargs.get('order_id')
-        candidate_id = request.user.id
+        # candidate_id = request.user.id
+        c_id = kwargs.get('candidate_id', '')
+        candidate = Candidate.objects.filter(candidate_id=c_id).first()
+        candidate_id = getattr(candidate, 'candidate_id','')
+
+        if not candidate_id:
+            return Response({"detail": "Candidate with given  candidate id is invalid."}, status= status.HTTP_400_BAD_REQUEST)
+
         product_found = False
         order_obj_list = Order.objects.filter(id=order_id, candidate_id=candidate_id, status__in=[1, 3])
 

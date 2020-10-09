@@ -431,6 +431,9 @@ NEO_URL = {
 NEO_USERNAME = 'shineadmin@shine.com'
 NEO_PASSWORD = 'MPgddK5vpM'
 
+LOGGED_IN_CHATBOT = "https://static1.shine.com/l/cm/chatbot/learning_learning_logged_in-1601875262.js"
+NON_LOGGED_IN_CHATBOT = "https://static1.shine.com/l/cm/chatbot/learning_learning_nonloggedin-1601875610.js"
+
 TINYMCE_DEFAULT_CONFIG = {
     'plugins': 'print preview importcss searchreplace autolink autosave save directionality \
                 visualblocks visualchars fullscreen image link media template codesample code table charmap hr \
