@@ -116,7 +116,7 @@ class UserDashboardApi(FieldFilterMixin, ListAPIView):
 
         last_payment_date = timezone.now() - datetime.timedelta(days=days)
         queryset_list = OrderItem.objects.filter(no_process=False, order__site=2,
-                                                 product__type_flow__in=[1, 12, 13, 4, 5, 8])
+                                                 product__type_flow__in=[1, 12, 13, 4, 5, 8, 17])
 
         if select_type == 1:
             queryset_list = queryset_list.exclude(oi_status=4)
