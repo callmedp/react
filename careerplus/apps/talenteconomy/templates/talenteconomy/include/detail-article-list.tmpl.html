@@ -1,5 +1,11 @@
 {% load static %}
+{% load static compress %}
 <!-- content start -->
+{% block css_section %}
+    {% compress css %}
+    <link type="text/css" href="{% static 'shinelearn/css/talenteconomy/prism.css' %}" rel="stylesheet">
+    {% endcompress %}
+{% endblock css_section %}
 
 {% for main_article in page_obj %}
 <div class="article-detail-content" itemscope itemtype="https://schema.org/Article">
@@ -156,3 +162,8 @@
     </div>
 </div>
 {% endif %}
+{% block js_section %}
+    {% compress js %}
+    <script src="{% static 'shinelearn/js/talenteconomy/prism.js' %}"></script>
+    {% endcompress %}
+{% endblock js_section %}

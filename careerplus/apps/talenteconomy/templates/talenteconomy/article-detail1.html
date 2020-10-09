@@ -38,6 +38,7 @@
     {{block.super}}
     {% compress css %}
     <link type="text/scss" href="{% static 'shinelearn/css/talenteconomy/article.scss' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'shinelearn/css/talenteconomy/prism.css' %}" rel="stylesheet">
     {% endcompress %}
 {% endblock css_section %}
 
@@ -289,6 +290,7 @@
     <script src="{% static 'shinelearn/js/blog/login-register.js' %}"></script>
     <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
     <script src="{% static 'shinelearn/js/talenteconomy/article.js' %}"></script>
+    <script src="{% static 'shinelearn/js/talenteconomy/prism.js' %}"></script>
     <script type="text/javascript">
       $(document).ready(function() {
         var s = $("#sticker");

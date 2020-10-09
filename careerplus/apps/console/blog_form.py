@@ -311,7 +311,8 @@ class ArticleChangeForm(forms.ModelForm):
     def save(self, commit=True):
         blog = super(ArticleChangeForm, self).save(commit=False)
         if self.cleaned_data.get('status') == '1' and int(self.cleaned_data.get('status')) != self.initial.get('status'):
-            blog.publish_date = timezone.now()
+            if not blog.publish_date:
+                blog.publish_date = timezone.now()
         
         if commit:
             products = self.cleaned_data.get('products',[])
