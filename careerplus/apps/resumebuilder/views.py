@@ -16,7 +16,8 @@ class WriteResumeView(TemplateView):
     # template_name = 'https://resumestage.shine.com/resume-builder'
 
     def get(self, request, **kwargs):
-        return HttpResponsePermanentRedirect("{}{}".format(settings.RESUME_SHINE_BUILDER_DOMAIN, request.get_full_path()))
+        print(request.get_full_path())
+        return HttpResponsePermanentRedirect("{}{}".format(settings.RESUME_SHINE_MAIN_DOMAIN, request.get_full_path()))
         # tracking_id = request.GET.get('t_id', '')
         # utm_campaign = request.GET.get('utm_campaign', '')
         # trigger_point = request.GET.get('trigger_point', '')
