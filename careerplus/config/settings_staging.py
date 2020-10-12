@@ -500,4 +500,5 @@ CORS_ALLOW_HEADERS = [
 'content-type',
 'token',
 'access-key',
+'X-CSRFToken'
 ]
