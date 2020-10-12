@@ -471,3 +471,33 @@ link end
 '''
 
 PRODUCT_LEADCREATION_COUNTDOWN = 30
+
+
+RESUME_SHINE_SITE_PROTOCOL = 'https'
+RESUME_SHINE_SITE_DOMAIN = 'resumestage.shine.com'
+RESUME_SHINE_MAIN_DOMAIN = '{}://{}'.format(RESUME_SHINE_SITE_PROTOCOL,RESUME_SHINE_SITE_DOMAIN)
+
+
+
+CORS_ORIGIN_ALLOW_ALL = True
+ 
+CORS_ORIGIN_WHITELIST = (
+'https://localhost:8000',
+'http://localhost:3000',
+'https://127.0.0.1:8001',
+'http://127.0.0.1:8000',
+'https://learning2.shine.com',
+'https://learning.shine.com',
+'https://resume.shine.com',
+ 'https://learning1.shine.com',
+ 'https://resumestage.shine.com',
+)
+ 
+CORS_ALLOW_HEADERS = [
+'accept',
+'accept-encoding',
+'authorization',
+'content-type',
+'token',
+'access-key',
+]
