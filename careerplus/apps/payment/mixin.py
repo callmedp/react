@@ -36,6 +36,9 @@ class PaymentMixin(object):
             prod_data = c_id_data.get(prod, {})
             t_id = prod_data.get('t_id', '')
             products = prod_data.get('products', '')
+            if isinstance(products, str) or isinstance(products, int) :
+                products = str(products)
+                products = [products]
             domain = prod_data.get('domain', '')
             position = prod_data.get('position', '')
             trigger_point = prod_data.get('trigger_point', '')
