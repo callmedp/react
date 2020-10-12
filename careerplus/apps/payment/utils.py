@@ -85,6 +85,11 @@ def manually_generate_autologin_url(assesment_items=[]):
         skill_id = oi.product.new_productskills.filter(primary=True).first()
         if skill_id:
             skill_id = skill_id.third_party_skill_id
+
+        product = oi.product
+        if product.vendor.name.lower() == 'testprep':
+            skill_id = int(product.upc)
+    
         if not oi.autologin_url and skill_id:
             candidate_location = status_response.get('candidate_location', 'N.A')
             if candidate_location != 'N.A':

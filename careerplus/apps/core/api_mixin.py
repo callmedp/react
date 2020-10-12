@@ -704,7 +704,7 @@ class TestPrepApiMixin(object):
         except:
             logging.getLogger('error_log').error('unable to get the token from test prep')
             return
-        token = response.get('token',None)
+        token = response.get('data',{}).get('token',None)
         if not token:
             logging.getLogger('error_log').error('unable to get the token from test prep')
             return
