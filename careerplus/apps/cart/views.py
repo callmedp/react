@@ -638,21 +638,23 @@ class PaymentSummaryView(TemplateView, CartMixin):
 
     def redirect_if_necessary(self, reload_url):
 
-        if not self.request.session.get('cart_pk'):
-            self.cart_obj = self.getCartObject()
-        else:
-            cart_pk = self.request.session.get('cart_pk')
-            try:
-                self.cart_obj = Cart.objects.get(pk=cart_pk)
-            except Exception as e:
-                logging.getLogger('error_log').error("%s " % str(e))
-                return HttpResponseRedirect(reverse('homepage'))
+        # if not self.request.session.get('cart_pk'):
+        #     self.cart_obj = self.getCartObject()
+        # else:
+        #     cart_pk = self.request.session.get('cart_pk')
+        #     try:
+        #         self.cart_obj = Cart.objects.get(pk=cart_pk)
+        #     except Exception as e:
+        #         logging.getLogger('error_log').error("%s " % str(e))
+        #         return HttpResponseRedirect(reverse('homepage'))
+
+        self.cart_obj = self.getCartObject()
 
         if not self.cart_obj:
             return HttpResponseRedirect(reverse('homepage'))
 
-        if not self.cart_obj.owner_id:
-            self.cart_obj = self.getCartObject()
+        # if not self.cart_obj.owner_id:
+        #     self.cart_obj = self.getCartObject()
 
         if reload_url:
             return HttpResponseRedirect(reverse('cart:payment-summary'))
