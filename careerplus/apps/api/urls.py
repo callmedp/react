@@ -103,7 +103,11 @@ urlpatterns = [
     re_path(r'^v1/tracking-resume-shine/$',
         views.TrackingResumeShine.as_view(),
         name='tracking-resume-shine'
-    )
+    ),
+    re_path(r'^v1/resumetemplatedownload/$',
+        views.ResumeTemplateDownload.as_view(),
+        name='resume-template-download'
+    ),
 
 ]
 

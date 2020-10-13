@@ -25,6 +25,7 @@ from rest_framework import status
 from rest_framework.permissions import (
     IsAuthenticated,
     IsAdminUser, )
+from wsgiref.util import FileWrapper
 
 from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveAPIView
 from rest_framework.authentication import SessionAuthentication
@@ -71,7 +72,7 @@ from .serializers import (
     ShineDataFlowDataSerializer,
     CertificateSerializer,TalentEconomySerializer,QuestionAnswerSerializer,
     OrderDetailSerializer, OrderListSerializer,BlogTagsSerializer)
-
+from core.library.gcloud.custom_cloud_storage import  GCPResumeBuilderStorage
 from partner.models import Certificate, Vendor
 from shared.rest_addons.pagination import LearningCustomPagination
 
@@ -1917,6 +1918,67 @@ class CandidateBadging(APIView):
         except Exception as e:
             logging.getLogger('error_log').error("%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
         return
+
+
+
+class ResumeTemplateDownload(APIView):
+    authentication_classes = ()
+    permission_classes = ()
+    serializer_class = None
+
+    def post(self, request, *args, **kwargs):
+        candidate_id = request.data.get('candidate_id', None)
+        email = request.data.get('email', None)
+        product_id = request.data.get('product_id', None)
+        product = Product.objects.filter(id=product_id).first()
+        if product.sub_type_flow == 1701:
+            is_combo = True
+        else:
+            is_combo = True if product.attr.get_value_by_attribute(product.attr.get_attribute_by_name('template_type')).value == 'multiple' else False
+        order_pk = request.data.get('order_pk', None)
+        candidate_obj = Candidate.objects.filter(candidate_id=candidate_id).first()
+        selected_template = candidate_obj.selected_template if candidate_obj and candidate_obj.selected_template else 1
+        order = Order.objects.get(pk=order_pk)
+
+        if not candidate_id or not order.status in [1, 3, 0] or not (order.email == email) \
+                or not (order.candidate_id == candidate_id):
+            return Response(
+                {'success': '',
+                 'error_message': 'Invalid Request'
+                 },  status=status.HTTP_400_BAD_REQUEST)
+
+        filename_prefix = "{}_{}".format(order.first_name or "resume", order.last_name or order_pk)
+        file_path = settings.RESUME_TEMPLATE_DIR + "/{}/pdf/{}.pdf".format(candidate_obj.id, selected_template)
+        content_type = "application/pdf"
+        filename_suffix = ".pdf"
+
+        if is_combo:
+            file_path = settings.RESUME_TEMPLATE_DIR + "/{}/zip/combo.zip".format(candidate_obj.id)
+            content_type = "application/zip"
+            filename_suffix = ".zip"
+
+        try:
+            if not settings.IS_GCP:
+                file_path = "{}/{}".format(settings.MEDIA_ROOT, file_path)
+                fsock = FileWrapper(open(file_path, 'rb'))
+            else:
+                fsock = GCPResumeBuilderStorage().open(file_path)
+
+            filename = filename_prefix + filename_suffix
+            response = Response(fsock, content_type=content_type)
+            response['Content-Disposition'] = 'attachment; filename="%s"' % (filename)
+            return response
+
+        except Exception as e:
+            logging.getLogger('error_log').error("%s" % str(e))
+            return Response(
+                {'success': '',
+                 'error_message': 'Try after some Time'
+                 },  status=status.HTTP_400_BAD_REQUEST)
+
+
+
+
 
 class TrackingResumeShine(APIView):
     authentication_classes = ()
