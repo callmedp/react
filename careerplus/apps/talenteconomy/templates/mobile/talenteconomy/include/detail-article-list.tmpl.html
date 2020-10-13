@@ -1,4 +1,11 @@
 {% load static %}
+{% load static compress %}
+{% block css_section %}
+    {% compress css %}
+    <link type="text/css" href="{% static 'shinelearn/css/talenteconomy/prism.css' %}" rel="stylesheet">
+    {% endcompress %}
+{% endblock css_section %}
+
 {% for main_article in page_obj %}
 <div itemscope itemtype="https://schema.org/Article">
     <h1 class="h1-head" itemprop="name">{{main_article.heading}}</h1>
@@ -80,11 +87,42 @@
         <div class="clearfix"></div>
     </article>
 
+    <!-- Related Articles -->
+    {% if related_articles %}
+    <div class="related-article-new">
+        <h2><strong>Related Articles:</strong></h2>
+        <div class="related-article-new__list">
+        {% for article in related_articles %}
+            <div class="related-article-new__list--item">
+                <div class="related-article-new__list--box">
+                    <a href="{{article.get_absolute_url}}">
+                        <figure class="pr imght">
+                            <img aria-label="{{article.image_alt}}" src="{{article.image.url}}" alt="{{article.image_alt}}" itemprop="image">
+                        </figure>
+                    </a>
+
+                    <div class="related-article-new__list--content">
+                        <h3 class="heading-article mb-15" itemprop="name">
+                            <a href="{{article.get_absolute_url}}">{{article.heading}}</a>
+                        </h3>
+
+                        <span class="view-forward">
+                            <figure class="icon-forward"></figure> {{article.no_shares}}
+                            <figure class="icon-view icon-grey-view ml-20"></figure> {{article.no_views}}
+                        </span>
+                    </div>
+                </div><!-- // Related Item box -->
+            </div><!-- // Related Item -->
+        {% endfor %}
+        </div><!-- // Related List -->
+      </div><!-- //Related Articles -->
+    {% endif %}
+
     {% if request.amp %}
 
     {% else %}
         {% if main_article.allow_comment %}
-            <p class="take-me pb-0 mt-10" onclick="openCommentBox('{{main_article.id}}', 2)"
+            <p class="take-me pb-0 mt-10"
                 id="total_comment{{main_article.id}}">
                 <span class="icon-chat"></span>
                 {% if main_article.comment_moderated > 0 %}
@@ -112,7 +150,9 @@
 
     <!-- end of article -->
 </div>
-
+<script>
+    openCommentBox('{{main_article.id}}', 2)
+  </script>
 {% endfor %}
 
 {% if page_obj.has_next %}
@@ -124,3 +164,8 @@
     </div>
 </div>
 {% endif %}
+{% block js_section %}
+    {% compress js %}
+    <script src="{% static 'shinelearn/js/talenteconomy/prism.js' %}"></script>
+    {% endcompress %}
+{% endblock js_section %}

@@ -114,10 +114,13 @@
         <div class="comments-box-heading is-clickable">
             <span class="icon-comments"></span> 
             <strong>
-                <label for="total_comment{{main_article.id}}" class="is-clickable">{% if main_article.comment_moderated > 0 %}{{main_article.comment_moderated}} comments{% else %}Click to Comment {% endif %}</label>
+                <label for="total_comment{{main_article.id}}" class="is-clickable">{% if main_article.comment_moderated > 0 %}{{main_article.comment_moderated}} comments{% else %}No Comments {% endif %}</label>
             </strong>
             <!-- <a role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Leave a comment</a> -->
-            <input type="radio" class="hide" onchange="openCommentBox('{{main_article.id}}', 2)" id="total_comment{{main_article.id}}">
+            <!-- <input type="radio" class="hide" onchange="openCommentBox('{{main_article.id}}', 2)" id="total_comment{{main_article.id}}"> -->
+            <script>
+              openCommentBox('{{main_article.id}}', 2)
+            </script>
         </div>
         <div id="comment-box{{main_article.id}}" class="mt-20"></div>
     </div>
