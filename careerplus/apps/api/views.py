@@ -1927,6 +1927,7 @@ class ResumeTemplateDownload(APIView):
     serializer_class = None
 
     def post(self, request, *args, **kwargs):
+        from django.http.response import HttpResponse
         candidate_id = request.data.get('candidate_id', None)
         email = request.data.get('email', None)
         product_id = request.data.get('product_id', None)
@@ -1963,9 +1964,9 @@ class ResumeTemplateDownload(APIView):
                 fsock = FileWrapper(open(file_path, 'rb'))
             else:
                 fsock = GCPResumeBuilderStorage().open(file_path)
-
+            
             filename = filename_prefix + filename_suffix
-            response = Response(fsock, content_type=content_type)
+            response = HttpResponse(fsock, content_type=content_type)
             response['Content-Disposition'] = 'attachment; filename="%s"' % (filename)
             return response
 
@@ -1974,7 +1975,7 @@ class ResumeTemplateDownload(APIView):
             return Response(
                 {'success': '',
                  'error_message': 'Try after some Time'
-                 },  status=status.HTTP_400_BAD_REQUEST)
+                 },  status=status.HTTP_500_BAD_REQUEST)
 
 
 
