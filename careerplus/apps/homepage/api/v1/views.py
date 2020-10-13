@@ -105,7 +105,6 @@ class UserDashboardApi(FieldFilterMixin, ListAPIView):
         candidate_id = self.request.GET.get("candidate_id", None)
         select_type = self.request.GET.get("select_type", 0)
         days = 0
-
         last_month_from = self.request.GET.get("last_month_from", 18)
         try:
             days = int(last_month_from) * 30
@@ -146,7 +145,6 @@ class UserDashboardApi(FieldFilterMixin, ListAPIView):
 
             queryset_list = queryset_list.filter(order__email=email, order__status__in=[1, 3], no_process=False,
                                                  order__site=2)
-
             return queryset_list
 
 
@@ -158,7 +156,7 @@ class DashboardDetailApi(APIView):
     def get(self, request):
         candidate_id = request.GET.get('candidate_id', '')
         orderitem_id = request.GET.get('orderitem_id')
-
+        # import ipdb;ipdb.set_trace()
         if not candidate_id:
             return Response({'status': 'Failure', 'error': 'candidate_id is required'},
                             status=status.HTTP_400_BAD_REQUEST)
@@ -202,6 +200,8 @@ class DashboardDetailApi(APIView):
             ops = order_item.orderitemoperation_set.filter(oi_status__in=[5, 6, 101, 161, 162, 163, 164])
         elif order_item.product.type_flow == 16:
             ops = order_item.orderitemoperation_set.filter(oi_status__in=[5, 6, 4])
+        elif order_item.product.type_flow == 17:
+            ops = order_item.orderitemoperation_set.filter(oi_status__in=[0])
 
         # ops = ops.values_list('id', 'oi_status', 'draft_counter', 'get_user_oi_status', 'created__date',
         #
