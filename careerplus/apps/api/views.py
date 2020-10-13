@@ -1926,16 +1926,17 @@ class ResumeTemplateDownload(APIView):
     permission_classes = ()
     serializer_class = None
 
-    def post(self, request, *args, **kwargs):
-        candidate_id = request.data.get('candidate_id', None)
-        email = request.data.get('email', None)
-        product_id = request.data.get('product_id', None)
+    def get(self, request, *args, **kwargs):
+        from django.http.response import HttpResponse
+        candidate_id = request.GET.get('candidate_id', None)
+        email = request.GET.get('email', None)
+        product_id = request.GET.get('product_id', None)
         product = Product.objects.filter(id=product_id).first()
         if product.sub_type_flow == 1701:
             is_combo = True
         else:
             is_combo = True if product.attr.get_value_by_attribute(product.attr.get_attribute_by_name('template_type')).value == 'multiple' else False
-        order_pk = request.data.get('order_pk', None)
+        order_pk = request.GET.get('order_pk', None)
         candidate_obj = Candidate.objects.filter(candidate_id=candidate_id).first()
         selected_template = candidate_obj.selected_template if candidate_obj and candidate_obj.selected_template else 1
         order = Order.objects.get(pk=order_pk)
@@ -1963,9 +1964,9 @@ class ResumeTemplateDownload(APIView):
                 fsock = FileWrapper(open(file_path, 'rb'))
             else:
                 fsock = GCPResumeBuilderStorage().open(file_path)
-
+            
             filename = filename_prefix + filename_suffix
-            response = Response(fsock, content_type=content_type)
+            response = HttpResponse(fsock, content_type=content_type)
             response['Content-Disposition'] = 'attachment; filename="%s"' % (filename)
             return response
 
@@ -1974,7 +1975,7 @@ class ResumeTemplateDownload(APIView):
             return Response(
                 {'success': '',
                  'error_message': 'Try after some Time'
-                 },  status=status.HTTP_400_BAD_REQUEST)
+                 },  status=status.HTTP_500_BAD_REQUEST)
 
 
 
