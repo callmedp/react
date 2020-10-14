@@ -8,7 +8,7 @@ class App extends Component {
 
             // < AppRouter />
             // null
-            <Redirect to='https://learning2.shine.com/resume-builder'  />
+            <Redirect to='https://resumestage.shine.com/resume-builder'  />
     )
         ;
     }
