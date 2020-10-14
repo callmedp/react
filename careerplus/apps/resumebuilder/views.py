@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 
 # Create your views here.
 
-from django.views.generic.base import TemplateView,View
+from django.views.generic.base import View
 from django.core.cache import  cache
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect, HttpResponsePermanentRedirect
@@ -12,7 +12,7 @@ from .mixins import SessionManagerMixin
 from django.conf import settings
 
 
-class WriteResumeView(TemplateView):
+class WriteResumeView(View):
     # template_name = 'https://resumestage.shine.com/resume-builder'
 
     def get(self, request, **kwargs):

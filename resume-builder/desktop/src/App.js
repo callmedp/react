@@ -5,7 +5,8 @@ class App extends Component {
     render() {
         return (
 
-            < AppRouter />
+            // < AppRouter />
+            null
     )
         ;
     }
