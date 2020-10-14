@@ -1012,7 +1012,7 @@ class ShineCandidateLoginAPIView(APIView):
             data_to_send = {
                 "token": token,
                 "candidate_id": candidate_id,
-                'cart_pk': self.request.session.get('cart_pk') or self.request._request.session.get('cart_pk'), ##
+                'cart_pk': self.request.session.get('cart_pk') or self.request._request.session.get('cart_pk'),
                 'profile': personal_info
             }
 
@@ -1998,7 +1998,6 @@ class TrackingResumeShine(APIView):
         domain = self.request.data.get('domain',3)
         trigger_point = self.request.data.get('trigger_point','')
         utm_campaign = self.request.data.get('utm_campaign', '')
-
 
         try:
             cache_data = cache.get('tracking_last_action', {})

@@ -6,7 +6,7 @@
   <div class="media mt-30" >
     <div class="media-left">
         <figure>
-            <a href="#">
+            <a href="javascript:void(0)">
             <img aria-label="shine" class="media-object" src="{% static 'shinelearn/images/blog/user-pic.jpg' %}" alt="shine">
           </a>
         </figure>
@@ -15,8 +15,46 @@
         <span class="author-name">{% if comment.name %}{{comment.name}}{% else %}Anonymous{% endif %}</span>
         <span class="time">{% get_humanize_date comment.created_on %}</span>
         <p>{{comment.message}}</p>
-        <!-- <a href="#">Reply</a> -->
+        <a class="pull-right" href="javascript:void(0)" id="reply_{{comment.id}}" onclick="openReplySection('{{comment.id}}', '0')">Reply</a>
     </figcaption>
+    <div class="leave-comment reply-section" id="comment_{{comment.id}}" style="display:none;">
+      {% for rep in comment.comments.all|dictsort:"id" %}
+        {% if rep.is_published and not rep.is_removed %}
+          <div class="media mt-30 mb-20">
+              <div class="media-left">
+                  <figure>
+                      <a href="javascript:void(0)">
+                      <img aria-label="shine" class="media-object" src="{% static 'shinelearn/images/blog/user-pic.jpg' %}" alt="shine">
+                    </a>
+                  </figure>
+              </div>
+              <figcaption class="media-body">
+                  <span class="author-name">{% if rep.name %}{{rep.name}}{% else %}Anonymous{% endif %}</span>
+                  <span class="time">{% get_humanize_date rep.created_on %}</span>
+                  <p>{{rep.message}}</p>
+              </figcaption>
+          </div>
+        {% endif %}
+      {% endfor %}
+
+      <form id="blog-reply-form{{comment.id}}">
+          {% csrf_token %}
+          <div class="form-group ml-70">
+          {% if not login_status %}
+              <p class="logged-in">You need to be <a href="javascript:void(0)" data-toggle="modal" data-target="#login-model" class="font-weight-bold">logged in</a> to reply this comment</p>
+          {% endif %}
+              <textarea class="form-control" {% if login_status %} placeholder="Your comment" {%else%} disabled {%endif%} rows="3" id="id_reply{{comment.id}}" name="message"></textarea>
+          </div>
+          <!-- <input type="hidden" id="id_slug" name="slug" value="{{article.slug}}" /> -->
+          <input type="hidden" id="pk_id" name="pk" value="{{page_obj.id}}" />
+          <input type="hidden" id="comment_id" name="c_id" value="{{comment.id}}" />
+          {% if login_status %}
+            <button type="button" class="submit-button" onclick="replySubmit('{{comment.id}}', '{{login_status}}')" id="reply-submit{{comment.id}}">Reply</button>
+          {% else %}
+            <button type="button" class="submit-button" data-toggle="modal" data-target="#login-model" id="reply-submit{{comment.id}}">Reply</button>
+          {% endif %}
+      </form>
+    </div>
   </div>
 {% endfor %}
 

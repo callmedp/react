@@ -631,6 +631,7 @@ class OrderCustomisationListView(ListAPIView):
             return Response({"detail": "Candidate with given  candidate id is invalid."}, status= status.HTTP_400_BAD_REQUEST)
         return super().patch(request, *args, **kwargs)
 
+
 class OrderCustomisationRUDView(RetrieveUpdateDestroyAPIView):
     authentication_classes = (ShineUserAuthentication,)
     permission_classes = (IsAuthenticated,)

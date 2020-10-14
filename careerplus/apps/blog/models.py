@@ -259,6 +259,7 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
     author = models.ForeignKey(
         Author, null=True, blank=True,
         help_text='for author',on_delete=models.CASCADE)
+    related_arts = models.TextField(default='[]')
     
     # sites = models.ManyToManyField(Site, blank=True, related_name='related_sites',
     #     help_text=("sites where blog published."))
@@ -340,7 +341,7 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
         if self.id:
             self.url = 'https://' + settings.SITE_DOMAIN + self.get_absolute_url()
             blog_obj = Blog.objects.filter(id=self.id).first()
-            self.publish_date = self.publish_date if self.content == blog_obj.content else timezone.now()
+            # self.publish_date = self.publish_date if self.content == blog_obj.content else timezone.now()
         if not self.summary:
             try:
                 soup = BeautifulSoup(self.content, 'html.parser')

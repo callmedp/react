@@ -800,7 +800,6 @@ class DashboardInvoiceDownload(View):
 
         return HttpResponseRedirect(reverse('dashboard:dashboard-myorder'))
 
-
 class DashboardResumeDownload(View):
 
     def get(self, request, *args, **kwargs):
@@ -832,7 +831,6 @@ class DashboardResumeDownload(View):
 class DashboardResumeTemplateDownload(View):
 
     def post(self, request, *args, **kwargs):
-        
         candidate_id = request.session.get('candidate_id', None)
         email = request.session.get('email', None)
         product_id = request.POST.get('product_id', None)

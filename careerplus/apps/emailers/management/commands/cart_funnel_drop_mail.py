@@ -95,7 +95,7 @@ def send_cart_funnel_mail(send_email_list):
             token = AutoLogin().encode(email, u_id, days=None)
 
             data['autologin'] = "{}://{}/autologin/{}/?next=/search/results/?q={}".format(settings.SITE_PROTOCOL, settings.SITE_DOMAIN, token, job_title)
-            if product == '8':
+            if product in ['8',['8']]:
                 token = TokenGeneration().encode(email, 2, 30)
                 data['autologin'] = "{}/myshine/login/?tc={}&next=/myshine/myprofile/".format(settings.SHINE_SITE, token) ## add autologin token
 

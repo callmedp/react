@@ -455,7 +455,7 @@ CANDIDATE_SOLR_URL = "http://172.22.65.34:9999/solr/cda/select/"
 RESUME_SHINE_SITE_PROTOCOL = 'https'
 RESUME_SHINE_SITE_DOMAIN = 'resumestage.shine.com'
 RESUME_SHINE_MAIN_DOMAIN = 'https://resumestage.shine.com'
-
+RESUME_SHINE_BUILDER_DOMAIN = 'https://resumestage.shine.com/resume-builder'
 '''
 links for analytics vidhya 
 '''
@@ -469,6 +469,9 @@ ANALYTICS_VIDHYA_URL = {
 '''
 link end
 '''
+
+LOGGED_IN_CHATBOT = "https://learning-media-staging-189607.storage.googleapis.com/c/m/chatbot/learning_learning_logged_in-1601445965.js"
+NON_LOGGED_IN_CHATBOT = "https://learning-media-staging-189607.storage.googleapis.com/c/m/chatbot/learning_learning_non-logged_in-1601445975.js"
 
 PRODUCT_LEADCREATION_COUNTDOWN = 30
 

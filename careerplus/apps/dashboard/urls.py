@@ -13,6 +13,9 @@ from .views import (
 )
 from . import dashboard_view, mobile_view
 
+from django.views.decorators.csrf import csrf_exempt
+
+
 app_name='dashboard'
 urlpatterns = [
     re_path(r'^roundone/$', RoundoneDashboardView.as_view(),
@@ -92,7 +95,7 @@ urlpatterns += [
         dashboard_view.DashboardInvoiceDownload.as_view(),
         name='dashboard-invoicedownload'),
     re_path(r'^order-resumetemplatedownload/$',
-        dashboard_view.DashboardResumeTemplateDownload.as_view(),
+        csrf_exempt(dashboard_view.DashboardResumeTemplateDownload.as_view()),
         name='dashboard-resumetemplatedownload'),
 
     re_path(r'^order-resumedownload/(?P<pk>[\d]+)/$',

@@ -67,6 +67,7 @@ THIRD_PARTY_APPS = [
     'django_filters',
     'webpack_loader',
     'corsheaders' ,
+    'tinymce',
 ]
 
 # Apps specific for this project go here.
@@ -248,7 +249,7 @@ COMPRESS_CSS_FILTERS = (
 )
 
 COMPRESS_PRECOMPILERS = (
-    ('text/scss', 'sass --scss {infile} {outfile}'),
+    ('text/scss', 'sass {infile} {outfile}'),
 )
 
 # Static files (CSS, JavaScript, Images)
@@ -662,6 +663,8 @@ DEFAULT_RECOMMEND_PRODUCT = [2634, 2787,1,4]
 RESUME_SHINE_SITE_PROTOCOL = 'https'
 RESUME_SHINE_SITE_DOMAIN = 'resume.shine.com'
 RESUME_SHINE_MAIN_DOMAIN = '{}://{}'.format(RESUME_SHINE_SITE_PROTOCOL,RESUME_SHINE_SITE_DOMAIN)
+RESUME_SHINE_BUILDER_DOMAIN = '{}://{}'.format(RESUME_SHINE_SITE_PROTOCOL,RESUME_SHINE_SITE_DOMAIN)
+
 
 
 PAYU_POST_URL = "https://test.payu.in/_payment"

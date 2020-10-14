@@ -36,6 +36,7 @@
             <span class="transaction">Order ID : {{obj.order.number}}</span>
             <span hidden class="order-item-id">{{obj.id}}</span>
            {% if obj.product.type_flow == 17 %}
+           {{obj.order.pk}}
                 <form role="form" id="download-resume-form{{obj.order.pk}}" method="POST" action="{% url "dashboard:dashboard-resumetemplatedownload" %}" >
                     <div style="display:none">
                         <input type="hidden" name="csrfmiddlewaretoken" value="{{csrf_token_value}}" />

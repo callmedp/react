@@ -1,4 +1,4 @@
-<div class="popular-courses box-panel col-sm-6 col-md-12 mb-40">
+<div class="popular-courses right-box box-panel col-sm-6 col-md-12 mb-40">
 	<h2 class="heading-right-talent">
 		{% if titleCourses %}
 		{{titleCourses}}
@@ -33,14 +33,14 @@
 					<strong>{{popularCourses.avg_rating_exact}}<small>/5</small></strong>
 				</div>
 				<span class="jobs-available">
-					<strong>{{popularCourses.num_jobs}}</strong> jobs available
+					{{popularCourses.num_jobs}} jobs available
 				</span>
 				<span class="people-bought">
-					<strong>{{popularCourses.buy_count}}</strong> people bought
+					{{popularCourses.buy_count}} people bought
 				</span>
 			</a>
 		</li>
 		{% endfor %}
 	</ul>
-	<a type="button" href="{{page_url}}" target="_blank" class="submit-button">View ALL</a>
+	<a type="button" href="{{page_url}}" target="_blank" class="submit-button">View All</a>
 </div>

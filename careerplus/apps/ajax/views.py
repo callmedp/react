@@ -56,6 +56,7 @@ class ArticleCommentView(View):
             try:
                 message = request.POST.get('message').strip()
                 pk = request.POST.get('pk', None)
+                comment_id = request.POST.get('c_id', '')
                 blog = Blog.objects.get(pk=pk, status=1)
 
                 if request.session.get('candidate_id') and message:
@@ -64,9 +65,14 @@ class ArticleCommentView(View):
                         name = request.session.get('first_name')
                     if request.session.get('last_name'):
                         name += ' ' + request.session.get('last_name')
-                    Comment.objects.create(blog=blog, message=message, name=name, candidate_id=request.session.get('candidate_id'))
-                    status = 1
-                    blog.no_comment += 1
+                    if comment_id:
+                        reply_to = Comment.objects.filter(id=comment_id).first()
+                        Comment.objects.create(blog=blog, message=message, name=name, candidate_id=request.session.get('candidate_id'), replied_to=reply_to)
+                        status = 1
+                    else:
+                        Comment.objects.create(blog=blog, message=message, name=name, candidate_id=request.session.get('candidate_id'))
+                        status = 1
+                        blog.no_comment += 1
                     blog.save()
             except Exception as e:
                 logging.getLogger('error_log').error("Unable to comment on article %s " % str(e))
