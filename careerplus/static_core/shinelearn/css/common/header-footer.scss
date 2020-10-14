@@ -845,7 +845,7 @@ footer {
 
 .heading-right {
   font-size: $font-size+4;
-  color: $anchor-color;
+  color: $te-dark-blue;
   font-weight: $font-weight+300;
   border-bottom: 2px solid $anchor-color;
   margin: 0;
@@ -1009,78 +1009,50 @@ footer {
   color: $secondary-color;
   margin: 5px 0 15px 0;
 
+  a {
+    border-radius: 50%;
+    background-color: $white-color;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 47px;
+    height: 47px;
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    margin-right: 10px;
+  }
+
   span {
-    display: block;
-    margin-bottom: 15px;
+    display: inline-block;
+    position: relative;
+    top: -18px;
+    font-size: 15px;
+    color: $te-dark-blue;
+    margin-right: 30px;
+    font-weight: 600;
   }
 
   .facebook {
-    border-radius: 2px;
-    background: $sprite -633px 6px;
-    width: 52px;
-    height: 35px;
-    border: 1px solid #3b5896;
-    display: inline-block;
-    text-align: center;
-    cursor: pointer;
+    background: $sprite -634px 13px;
   }
 
   .twitter {
-    border-radius: 2px;
-    background: $sprite -764px 7px;
-    width: 52px;
-    height: 35px;
-    border: 1px solid #3aa9de;
-    display: inline-block;
-    text-align: center;
-    margin-left: 10px;
+    background: $sprite -765px 14px;
   }
 
   .gplus {
-    border-radius: 2px;
-    background: $sprite -719px 6px;
-    width: 52px;
-    height: 35px;
-    border: 1px solid #d14635;
-    display: inline-block;
-    text-align: center;
-    margin-left: 10px;
-    cursor: pointer;
+    background: $sprite -720px 13px;
   }
 
   .linkedin {
-    border-radius: 2px;
-    background: $sprite -671px 5px;
-    width: 52px;
-    height: 35px;
-    border: 1px solid #3aa9de;
-    display: inline-block;
-    text-align: center;
-    margin-left: 10px;
+    background: $sprite -673px 13px;
   }
 
   .whatsapp {
-    border-radius: 2px;
-    width: 52px;
-    height: 35px;
-    border: 1px solid #44c455;
-    display: inline-block;
-    text-align: center;
-    margin-left: 10px;
-    position: relative;
+    background: $sprite -691px -477px;
+  }
 
-    &:after {
-      content: '';
-      position: absolute;
-      left: 10px;
-      right: 0;
-      top: 3px;
-      bottom: 0;
-      display: inline-block;
-      background: $sprite -463px -341px;
-      width: 27px;
-      height: 27px;
-    }
+  .printrest {
+    background: $sprite -741px -477px;
   }
 
   .share-txt {
@@ -3001,7 +2973,7 @@ footer {
 }
 
 .mb-0 {
-  margin-bottom: 0px;
+  margin-bottom: 0px !important;
 }
 
 .mb-5 {

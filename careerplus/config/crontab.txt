@@ -42,6 +42,8 @@
 
 59 23 * * * /var/www/virtualenvs/chatbot/bin/python /var/www/site/chatbot/current/scripts/candidate_tracking.py
 
+00 23 * * * /var/www/virtualenvs/chatbot/bin/python /var/www/site/chatbot/current/scripts/candidate_tracking_big_query.py
+
 0 */2 * * * /var/www/virtualenvs/learning/bin/python /var/www/site/learning/current/manage.py cart_funnel_drop_mail --settings=careerplus.config.settings_live
 
 0 */3 * * * /var/www/virtualenvs/learning/bin/python /var/www/site/learning/current/manage.py refresh_payment_tracking --settings=careerplus.config.settings_live

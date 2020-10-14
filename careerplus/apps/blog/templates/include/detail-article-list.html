@@ -50,8 +50,10 @@
   {% if article.allow_comment %}
   <!-- comment box -->
     <div class="comments-box mb-40 mt-40">
-      <a class="comments-links mb-40" role="button" onclick="openCommentBox('{{article.id}}')" id="total_comment{{article.id}}"> <span class="comments-icon mr-10"></span>{{article.comment_moderated}} Comments</a>
-
+      <a class="comments-links mb-40" role="button" id="total_comment{{article.id}}"> <span class="comments-icon mr-10"></span>{{article.comment_moderated}} Comments</a>
+      <script>
+        openCommentBox('{{article.id}}')
+      </script>
       <div id="comment-box{{article.id}}" >
 
       </div><!-- page comment-hide-->

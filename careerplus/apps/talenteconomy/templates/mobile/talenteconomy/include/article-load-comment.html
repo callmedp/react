@@ -7,6 +7,38 @@
         <sup><img loading="lazy" aria-label="Default user" src="{% static 'shinelearn/images/mobile/common/default-user.jpg' %}"></sup>
         <p><strong>{% if comment.name %}{{comment.name}}{% else %}Anonymous{% endif %}</strong> <span class="spacer c-666">/</span><span class="c-666">{% get_humanize_date comment.created_on %}</span></p>
         <p class="pb-0">{{comment.message}}</p>
+        <a class="reply" href="javascript:void(0)" id="reply_{{comment.id}}" onclick="openReplySection('{{comment.id}}','1')">Reply</a>
+    </li>
+    <li class="reply-section" style="display:none;" id="comment_{{comment.id}}">
+        <div>
+            {% for rep in comment.comments.all|dictsort:"id" %}
+                {% if rep.is_published and not rep.is_removed %}
+                    <div>
+                        <img loading="lazy" aria-label="Default user" src="{% static 'shinelearn/images/mobile/common/default-user.jpg' %}" style="width:40px;height:40px;border-radius: 20px;">
+                        <span style="display:inline-block;margin-left: 10px;">
+                            <p><strong>{% if rep.name %}{{rep.name}}{% else %}Anonymous{% endif %}</strong> <span class="spacer c-666">/</span><span class="c-666">{% get_humanize_date rep.created_on %}</span></p>
+                            <p class="pb-0">{{rep.message}}</p>
+                        </span>
+                        <hr>
+                    </div>
+                {% endif %}
+            {% endfor %}
+            <!-- <a class="reply" href="javascript:void(0)" id="reply_21" onclick="openReplySection('21','1')">Reply</a> -->
+            <div class="leave-comment row reply-box" id="reply-box_{{comment.id}}">
+                <form class="mb-20" id="blog-reply-form{{comment.id}}">
+                {% csrf_token %}
+                    <textarea placeholder="Enter your message" class="leave-comment--textarea" id="id_reply{{comment.id}}" name="message"></textarea>
+                    <!-- <input type="hidden" id="id_slug" name="slug" value="{{article.slug}}"> -->
+                    <input type="hidden" id="pk_id_{{comment.id}}" name="pk" value="{{page_obj.id}}" />
+                    <input type="hidden" id="comment_id" name="c_id" value="{{comment.id}}" />
+                    {% if login_status %}
+                        <button class="btn-sm btn-blue btn-round mt-10" onclick="replySubmit('{{comment.id}}', '{{login_status}}')" id="reply-submit{{comment.id}}">Reply</button>
+                    {% else %}
+                        <a href="/login/?next={{page_obj.get_absolute_url}}" class="btn-sm btn-blue btn-round mt-10" id="reply-submit{{comment.id}}">Reply</a>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
     </li>
 {% endfor %}
 

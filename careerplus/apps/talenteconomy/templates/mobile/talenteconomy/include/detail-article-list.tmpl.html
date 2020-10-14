@@ -1,109 +1,171 @@
 {% load static %}
+{% load static compress %}
+{% block css_section %}
+    {% compress css %}
+    <link type="text/css" href="{% static 'shinelearn/css/talenteconomy/prism.css' %}" rel="stylesheet">
+    {% endcompress %}
+{% endblock css_section %}
+
 {% for main_article in page_obj %}
 <div itemscope itemtype="https://schema.org/Article">
-<h1 class="h1-head" itemprop="name">{{main_article.heading}}</h1>
+    <h1 class="h1-head" itemprop="name">{{main_article.heading}}</h1>
 
-<div class="clearfix border-bottom pb-10 mb-10 fs-13">
-    <span class="editor" itemprop="author"><a href="/talenteconomy/authors/{{main_article.author.slug}}" title="{{main_article.author.name}}">{{main_article.author.name}}</a> <span class="spacer c-666">/</span> <span class="c-666" itemprop="datePublished">{{main_article.publish_date.date}}</span>
-    </span>
-    <span class="view-forward pull-right mt-0">
-        {% if main_article.comment_moderated > 0 %}
-        <figure class="icon-chat-sm"></figure> <a href="#">{{main_article.comment_moderated}}</a>
-        {% endif %}
-        {% if main_article.no_views > 0 %}
-        <figure class="icon-view icon-grey-view ml-10"></figure> {{main_article.no_views}}
-        {% endif %}
-    </span>
-</div>
-
-{% if request.amp %}
-
-{% else %}
-{% with main_article.tags.all as tags %}
-{% if tags %}
-<div class="tagging mt-30 mb-30">
-    <p>Tagged in</p>
-    {% for tag in tags %}
-    <a href="{% url "talent:te-articles-by-tag" tag.slug %}" title="{{tag.name}}">{{tag.name}}</a>
-    {% endfor %}
-</div>
-{% endif %}
-{% endwith %}
-
-{% endif%}
-
-<p class="mt-15">
-    {% if request.amp %}
-    <amp-img 
-        src="{{main_article.image.url}}"
-        itemprop="image"
-        width="345"
-        height="262"
-        layout="responsive">
-    </amp-img>
-    {% else %}
-    
-    <img loading="lazy" aria-label="Main article image" src="{{main_article.image.url}}" class="img-responsive" itemprop="image">
-    {% endif %}
-</p>
-<article class="" itemprop="articleBody">
-{% if request.amp %}<pre>{{main_article.content|striptags|safe}}</pre>{%else%}{{main_article.content|safe}}{%endif%}
-<meta itemprop="headline" content="{{main_article.heading}}">
-<meta itemprop="dateModified" content="{{main_article.publish_date.date}}">
-<meta itemprop="mainEntityOfPage" content="{% url 'talent:talent-landing' %}">
-
-<div itemprop="publisher" itemscope itemtype="https://schema.org/Organization" >
-    <div itemprop="logo" itemscope itemtype="https://schema.org/ImageObject">
-      <meta itemprop="url" content="{% static 'shinelearn/images/logo.png' %}">
+    <div class="clearfix border-bottom pb-10 mb-10 fs-13">
+        <span class="editor" itemprop="author"><a href="/talenteconomy/authors/{{main_article.author.slug}}"
+                title="{{main_article.author.name}}">{{main_article.author.name}}</a> <span
+                class="spacer c-666">/</span> <span class="c-666"
+                itemprop="datePublished">{{main_article.publish_date.date}}</span>
+        </span>
+        <span class="view-forward pull-right mt-0">
+            {% if main_article.comment_moderated > 0 %}
+                <figure class="icon-chat-sm"></figure> {{main_article.comment_moderated}}
+            {% endif %}
+            {% if main_article.no_views > 0 %}
+                <figure class="icon-view icon-grey-view ml-10"></figure> {{main_article.no_views}}
+            {% endif %}
+        </span>
     </div>
-    <meta itemprop="name" content="Shine">
-  </div>
+
+    {% if request.amp %}
+
+    {% else %}
+        {% with main_article.tags.all as tags %}
+            {% if tags %}
+                <div class="tagging mt-30 mb-30">
+                    <p>Tagged in</p>
+                    {% for tag in tags %}
+                    <a href="{% url "talent:te-articles-by-tag" tag.slug %}" title="{{tag.name}}">{{tag.name}}</a>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+    {% endif%}
+
+    <p class="mt-15">
+        {% if request.amp %}
+        <amp-img src="{{main_article.image.url}}" itemprop="image" width="345" height="262" layout="responsive">
+        </amp-img>
+        {% else %}
+        <img loading="lazy" aria-label="Main article image" src="{{main_article.image.url}}" class="img-responsive"
+            itemprop="image">
+        {% endif %}
+    </p>
+    <article class="" itemprop="articleBody">
+        {% if request.amp %}
+            <pre>{{main_article.content|striptags|safe}}</pre>
+        {%else%}
+            {{main_article.content|safe}}
+        {%endif%}
+        <meta itemprop="headline" content="{{main_article.heading}}">
+        <meta itemprop="dateModified" content="{{main_article.publish_date.date}}">
+        <meta itemprop="mainEntityOfPage" content="{% url 'talent:talent-landing' %}">
+
+        <div itemprop="publisher" itemscope itemtype="https://schema.org/Organization">
+            <div itemprop="logo" itemscope itemtype="https://schema.org/ImageObject">
+                <meta itemprop="url" content="{% static 'shinelearn/images/logo.png' %}">
+            </div>
+            <meta itemprop="name" content="Shine">
+        </div>
 
 
-{% if request.amp %}
+        {% if request.amp %}
 
-{% else %}
-<hr>
-{% with main_article.tags.all as tags %}
-{% if tags %}
-<div class="tagging mt-30 mb-30">
-    <p>Tagged in</p>
-    {% for tag in tags %}
-    <a href="{% url "talent:te-articles-by-tag" tag.slug %}" title="{{tag.name}}">{{tag.name}}</a>
-    {% endfor %}
+        {% else %}
+        <hr>
+            {% with main_article.tags.all as tags %}
+                {% if tags %}
+                <div class="tagging mt-30 mb-30">
+                    <p>Tagged in</p>
+                    {% for tag in tags %}
+                    <a href="{% url "talent:te-articles-by-tag" tag.slug %}" title="{{tag.name}}">{{tag.name}}</a>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            {% endwith %}
+        {% endif%}
+        <div class="clearfix"></div>
+    </article>
+
+    <!-- Related Articles -->
+    {% if related_articles %}
+    <div class="related-article-new">
+        <h2><strong>Related Articles:</strong></h2>
+        <div class="related-article-new__list">
+        {% for article in related_articles %}
+            <div class="related-article-new__list--item">
+                <div class="related-article-new__list--box">
+                    <a href="{{article.get_absolute_url}}">
+                        <figure class="pr imght">
+                            <img aria-label="{{article.image_alt}}" src="{{article.image.url}}" alt="{{article.image_alt}}" itemprop="image">
+                        </figure>
+                    </a>
+
+                    <div class="related-article-new__list--content">
+                        <h3 class="heading-article mb-15" itemprop="name">
+                            <a href="{{article.get_absolute_url}}">{{article.heading}}</a>
+                        </h3>
+
+                        <span class="view-forward">
+                            <figure class="icon-forward"></figure> {{article.no_shares}}
+                            <figure class="icon-view icon-grey-view ml-20"></figure> {{article.no_views}}
+                        </span>
+                    </div>
+                </div><!-- // Related Item box -->
+            </div><!-- // Related Item -->
+        {% endfor %}
+        </div><!-- // Related List -->
+      </div><!-- //Related Articles -->
+    {% endif %}
+
+    {% if request.amp %}
+
+    {% else %}
+        {% if main_article.allow_comment %}
+            <p class="take-me pb-0 mt-10"
+                id="total_comment{{main_article.id}}">
+                <span class="icon-chat"></span>
+                {% if main_article.comment_moderated > 0 %}
+                    {{main_article.comment_moderated}} comments
+                {% else %}
+                    Comments
+                {% endif %}
+            </p>
+            {% if not main_article.comment_moderated %}
+                <p class="mt-10">Currently there are no comments on this article</p>
+            {% endif %}
+
+            {% if login_status %}
+            <br>
+            {% else %}
+                <div class="leave-comment row">
+                    <p class="leave-comment--head pb-5">Post a comment</p>
+                    <p>You need to be <a href="/login/?next={{main_article.get_absolute_url}}" class="bold">logged in</a> to post a comment</p>
+                </div>
+            {% endif %}
+
+            <div id="comment-box{{main_article.id}}"></div>
+        {% endif %}
+    {% endif %}
+
+    <!-- end of article -->
 </div>
-{% endif %}
-{% endwith %}
-
-{% endif%}
-<div class="clearfix"></div>
-</article>
-
-{% if request.amp %}
-
-{% else %}
-
-{% if main_article.allow_comment %}
-<p class="take-me pb-0 mt-10" onclick="openCommentBox('{{main_article.id}}', 2)" id="total_comment{{main_article.id}}">
-    <span class="line"><sup></sup></span>
-    <span class="icon-chat"></span>{% if main_article.comment_moderated > 0 %}{{main_article.comment_moderated}} comments{% else %}Tap to Comment {% endif %}
-</p>
-<div id="comment-box{{main_article.id}}" ></div>
-{% endif %}
-
-{% endif %}
-
-<!-- end of article -->
-</div>
-
+<script>
+    openCommentBox('{{main_article.id}}', 2)
+  </script>
 {% endfor %}
 
 {% if page_obj.has_next %}
 <div id="load_more" style='display:none'>
     <div>
-    <input type="hidden" id="pg_id" name="page" value="{{page_obj.next_page_number}}">
-    <input type="hidden" id="pg_slug" name="slug" value="{{slug}}">
-    <input type="hidden" id="id_visibility" name="visibility" value="{{visibility}}">
+        <input type="hidden" id="pg_id" name="page" value="{{page_obj.next_page_number}}">
+        <input type="hidden" id="pg_slug" name="slug" value="{{slug}}">
+        <input type="hidden" id="id_visibility" name="visibility" value="{{visibility}}">
     </div>
 </div>
 {% endif %}
+{% block js_section %}
+    {% compress js %}
+    <script src="{% static 'shinelearn/js/talenteconomy/prism.js' %}"></script>
+    {% endcompress %}
+{% endblock js_section %}

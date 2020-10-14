@@ -10,6 +10,7 @@ from django.http import HttpResponseForbidden, Http404,\
     HttpResponsePermanentRedirect, HttpResponse
 from django.utils.http import urlquote
 from django.template.loader import render_to_string
+from django.middleware.csrf import get_token
 from django.core.paginator import Paginator
 from django.urls import reverse
 from django.conf import settings
@@ -28,6 +29,7 @@ from users.mixins import RegistrationLoginApi
 from .mixins import BlogMixin, PaginationMixin, LoadCommentMixin
 from .models import Category, Blog, Tag
 from review.models import DetailPageWidget
+from blog.models import Blog, Comment
 
 
 class LoginToCommentView(View):
@@ -608,12 +610,24 @@ class BlogDetailAjaxView(View, BlogMixin):
                 else:
                     template_name = 'include/detail-article-list.html'
 
+                # Related Articles...
+                related_articles=[]
+                try:
+                    r_arts = page_obj.object_list[0].related_arts if page_obj.object_list[0] else []
+                    related_articles_ids_list = json.loads(r_arts)
+                    related_articles = Blog.objects.filter(id__in=related_articles_ids_list)[:3]
+                except Exception as e:
+                    logging.getLogger('error_log').error(
+                    "Error in related articles fetch - %s" % str(e))
+                    
                 detail_article = render_to_string(
                     template_name,
                     {"page_obj": page_obj,
                     "slug": self.blog.slug,
                     "visibility": self.blog.visibility,
-                    "SITEDOMAIN": settings.SITE_DOMAIN, })
+                    "SITEDOMAIN": settings.SITE_DOMAIN,
+                    "related_articles": related_articles
+                })
 
                 data = {
                     'article_detail': detail_article,
@@ -662,13 +676,15 @@ class ShowCommentBoxView(TemplateView, LoadCommentMixin):
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
 
-        comments = self.article.comment_set.filter(is_published=True, is_removed=False)
+        comments = self.article.comment_set.filter(is_published=True, is_removed=False, replied_to=None)
         page_obj = self.pagination_loadmore(page=self.page,
             paginated_by=self.paginated_by, comment_list=comments)
 
         comment_load_context = {
             "comments": page_obj,
             "page_obj": self.article,
+            "login_status": 1 if self.request.session.get('candidate_id') else 0,
+            "csrf_token": get_token(self.request),
         }
 
         if self.visibility == 2:
@@ -678,15 +694,10 @@ class ShowCommentBoxView(TemplateView, LoadCommentMixin):
             comment_list = render_to_string('include/article-load-comment.html',
                 comment_load_context)
 
-        if self.request.session.get('candidate_id'):
-            login_status = 1
-        else:
-            login_status = 0
-
         context.update({
             "article": self.article,
             "comment_list": comment_list,
-            "login_status": login_status
+            "login_status": 1 if self.request.session.get('candidate_id') else 0
         })
         return context
 
@@ -720,12 +731,14 @@ class LoadMoreCommentView(TemplateView, LoadCommentMixin):
     def get_context_data(self, **kwargs):
         context = super(self.__class__, self).get_context_data(**kwargs)
 
-        comments = self.article.comment_set.filter(is_published=True, is_removed=False)
+        comments = self.article.comment_set.filter(is_published=True, is_removed=False, replied_to=None)
         page_obj = self.pagination_loadmore(page=self.page,
             paginated_by=self.paginated_by, comment_list=comments)
 
         context.update({
             "comments": page_obj,
             "page_obj": self.article,
+            "login_status": 1 if self.request.session.get('candidate_id') else 0,
+            "csrf_token": get_token(self.request),
         })
         return context

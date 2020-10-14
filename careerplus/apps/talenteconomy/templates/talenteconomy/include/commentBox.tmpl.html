@@ -4,7 +4,10 @@
     <form id="blog-comment-form{{article.id}}">
         {% csrf_token %}
         <div class="form-group">
-            <textarea class="form-control" placeholder="Your comment" rows="3" id="id_comment{{article.id}}" name="message"></textarea>
+        {% if not login_status %}
+            <p class="logged-in">You need to be <a href="javascript:void(0)" data-toggle="modal" data-target="#login-model" class="font-weight-bold">logged in</a> to post a comment</p>
+        {% endif %}
+            <textarea class="form-control" {% if login_status %} placeholder="Your comment"{%else%} disabled{%endif%} rows="3" id="id_comment{{article.id}}" name="message"></textarea>
         </div>
         <input type="hidden" id="id_slug" name="slug" value="{{article.slug}}">
         <input type="hidden" id="pk_id" name="pk" value="{{article.pk}}" />
