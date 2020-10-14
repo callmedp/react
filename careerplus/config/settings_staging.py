@@ -455,7 +455,6 @@ CANDIDATE_SOLR_URL = "http://172.22.65.34:9999/solr/cda/select/"
 RESUME_SHINE_SITE_PROTOCOL = 'https'
 RESUME_SHINE_SITE_DOMAIN = 'resumestage.shine.com'
 RESUME_SHINE_MAIN_DOMAIN = 'https://resumestage.shine.com'
-RESUME_SHINE_BUILDER_DOMAIN = 'https://resumestage.shine.com/resume-builder'
 '''
 links for analytics vidhya 
 '''
