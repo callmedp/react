@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import AppRouter from './routes/index';
-import  { Redirect } from 'react-router-dom'
+import  { Link } from 'react-router-dom'
 
 class App extends Component {
     render() {
@@ -8,7 +8,8 @@ class App extends Component {
 
             // < AppRouter />
             // null
-            <Redirect to='https://resumestage.shine.com/resume-builder'  />
+            // <Redirect to='https://resumestage.shine.com/resume-builder'  />
+            <Link to={{ pathname: "https://resumestage.shine.com/resume-builder" }} />
     )
         ;
     }
