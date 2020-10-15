@@ -32,6 +32,8 @@ from .models import Cart
 from .mixins import CartMixin
 from .forms import ShippingDetailUpdateForm
 from crmapi.models import UserQuries
+from django.contrib import messages
+
 import requests
 
 
@@ -296,6 +298,15 @@ class PaymentLoginView(TemplateView, CartMixin):
                         (guest_name + ' ').split(' ')[1:]).strip()
                 if cart_pk:
                     cart_obj = Cart.objects.get(pk=cart_pk)
+
+                    if email and cart_obj.coupon_id and cart_obj.email !=email:
+                        messages.add_message(request,messages.ERROR,'Coupon code is already applied to another email '
+                                                                    'address, either remove the coupon or continue '
+                                                                    'with same email')
+
+                        return HttpResponseRedirect(reverse('cart:payment-summary'))
+
+
                     cart_obj.email = email
                     cart_obj.owner_email = email
                     cart_obj.mobile = mobile_number
@@ -440,6 +451,10 @@ class PaymentLoginView(TemplateView, CartMixin):
         if cart_obj.email == email:
             context['email_exist'] = True
             context.update({'email': email})
+
+        alert = messages.get_messages(self.request)
+        context.update({
+            'messages': alert})
         return context
 
 
@@ -915,6 +930,18 @@ class PaymentSummaryView(TemplateView, CartMixin):
             "cart_contain_items": True if len(cart_items) else False
         })
 
+        if cart_obj and cart_obj.lineitems.filter(product__vendor__slug='neo').exists():
+            session_id = self.request.session.session_key
+            email = cache.get('{}_neo_email_done'.format(session_id))
+            context.update({'neo_email': email})
+
+
+        alert = messages.get_messages(self.request)
+        context.update({
+            'messages': alert})
+
+
+
         return context
 
 
@@ -961,3 +988,97 @@ class UpdateDeliveryType(View, CartMixin):
                 })
 
         return HttpResponse(json.dumps(data), content_type="application/json")
+
+
+
+class GuestCouponApply(View,CartMixin):
+
+    def post(self,request,*args,**kwargs):
+        data_dict = {}
+        login_dict = {}
+        email = self.request.POST.get('email','').strip(' ')
+        password = self.request.POST.get('password','').strip(' ')
+        guest_login = self.request.POST.get('login_with',False)
+
+        if guest_login:
+            cart_pk = self.request.POST.get('cart_pk')
+            mobile_number = self.request.POST.get('mobile', '')
+            guest_name = self.request.POST.get('name', '')
+            country_code = self.request.POST.get('country_code')
+
+            if guest_name:
+                first_name = guest_name.strip().split(' ')[0]
+                last_name = ' '.join(
+                    (guest_name + ' ').split(' ')[1:]).strip()
+            if cart_pk:
+                cart_obj = Cart.objects.get(pk=cart_pk)
+                cart_obj.email = email
+                cart_obj.owner_email = email
+                cart_obj.mobile = mobile_number
+                cart_obj.first_name = first_name
+                cart_obj.last_name = last_name
+                cart_obj.country_code = country_code
+                data = {}
+                data.update({
+                    "email": cart_obj.email,
+                    "country_code": cart_obj.country_code,
+                    "cell_phone": cart_obj.mobile,
+                    "name": guest_name,
+                })
+                candidate_id, error = user_register(data=data)
+
+                self.request.session['guest_candidate_id'] = candidate_id
+                cart_obj.owner_id = candidate_id
+                cart_obj.save()
+                data_dict.update({'candidate_id':candidate_id})
+                return HttpResponse(json.dumps(data_dict), content_type="application/json")
+
+            data_dict.update({'error':"Something Went Wrong"})
+            return HttpResponse(json.dumps(data_dict), content_type="application/json")
+
+        if not email or not password:
+            data_dict.update({'error':'Please check {} {} {}'.format('email' if not email else '', 'and' if not email
+                              and not password else '','password' if not password else '')})
+            return HttpResponse(json.dumps(data_dict), content_type="application/json")
+
+        login_dict.update({'email':email,'password':password})
+        try:
+            login_resp = RegistrationLoginApi.user_login(login_dict)
+        except Exception as e:
+            logging.getLogger('error_log').error(
+                "Login attempt failed - {}".format(e))
+            data_dict.update({'error':'Invalid credentials'})
+            return HttpResponse(json.dumps(data_dict), content_type="application/json")
+
+        candidate_id = login_resp.get('candidate_id')
+        if not candidate_id:
+            logging.getLogger('info_log').info(
+                "Login attempt failed - {}".format(login_resp))
+            data_dict.update({'error':'Invalid credentials'})
+            return HttpResponse(json.dumps(data_dict), content_type="application/json")
+
+        if login_resp['response'] == 'login_user':
+            resp_status = ShineCandidateDetail().get_status_detail(
+                email=None,
+                shine_id=candidate_id)
+            if resp_status:
+                self.request.session.update(resp_status)
+                self.request.session.set_expiry(
+                    settings.SESSION_COOKIE_AGE)
+
+            data_dict.update({'candidate_id':candidate_id})
+            cart_obj = self.getCartObject()
+            return HttpResponse(json.dumps(data_dict), content_type="application/json")
+        data_dict.update({'error':'Something Went Wrong'})
+        return HttpResponse(json.dumps(data_dict), content_type="application/json")
+
+
+
+
+
+
+
+
+
+
+

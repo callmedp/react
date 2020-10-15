@@ -60,7 +60,7 @@ class GuestLoginView(CartMixin, APIView):
             return Response({"error_message": 'There is no cart available \
                               with cart id' + cart_pk},
                             status=status.HTTP_400_BAD_REQUEST)
-        cart_obj.email = email
+
         cart_obj.owner_email = email
         cart_obj.mobile = mobile_number
         cart_obj.first_name = first_name
