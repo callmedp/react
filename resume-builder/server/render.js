@@ -45,16 +45,16 @@ export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile
     <meta name="viewport" content="${viewPort}"/>
     <meta name="description" content="Online Resume Builder, Make your resume with our easy-to-use templates & pro resume tips from experts. Select, Personalize/Customize any built-in resume templates for free download.">
     <meta property="og:title" content="${context.title}">
-    <meta property="og:url" content="https://learning.shine.com/resume-builder/">
+    <meta property="og:url" content="https://resumestage.shine.com/resume-builder">
     <meta property="og:description" content="Online Resume Builder, Make your resume with our easy-to-use templates & pro resume tips from experts. Select, Personalize/Customize any built-in resume templates for free download.">
     <meta property="og:type" content="Website">
     <meta property="og:site_name" content="ShineLearning">
     <meta property="fb:profile_id" content="282244838633660">
     <meta property="og:image" content="https://static1.shine.com/l/s/react/assets/images/home-banner-slider.png">
     <meta itemprop="name" content="${context.title}">
-    <meta itemprop="url" content="https://learning.shine.com/resume-builder/">
+    <meta itemprop="url" content="https://resumestage.shine.com/resume-builder">
     <meta itemprop="description" content="Online Resume Builder, Make your resume with our easy-to-use templates & pro resume tips from experts. Select, Personalize/Customize any built-in resume templates for free download.">
-    <link rel="canonical" href="${siteDomain}${pathname}">
+    <link rel="canonical" href="https://resumestage.shine.com/resume-builder">
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css"
     integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf"
