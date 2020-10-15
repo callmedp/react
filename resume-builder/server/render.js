@@ -9,25 +9,25 @@ const fs = require('fs');
 
 export default (pathname, store, routes, context, timeStamp, staticUrl, isMobile, siteDomain, siteDomainChat, shineSiteDomain) => {
   
-  const content = renderToString(< Provider
-    store={store} >
-    {/* < StaticRouter
-    location={pathname}
-    context={context} >
-    < div >
-    {renderRoutes(routes)}
-    </div>
-    </StaticRouter> */}
-    </Provider>);
+  // const content = renderToString(< Provider
+  //   store={store} >
+  //   {/* < StaticRouter
+  //   location={pathname}
+  //   context={context} >
+  //   < div >
+  //   {renderRoutes(routes)}
+  //   </div>
+  //   </StaticRouter> */}
+  //   </Provider>);
     
     
-    // const cssUrl = isMobile ? `${staticUrl}react/dist/mobile/main-${timeStamp}.css` : `${staticUrl}react/dist/desktop/main-${timeStamp}.css`;
-    // const jsBuildUrl = isMobile ? `${staticUrl}react/dist/mobile/main-${timeStamp}.js` : `${staticUrl}react/dist/desktop/main-${timeStamp}.js`;
-    // const viewPort = isMobile ? `width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no`
-    // : "width=device-width, initial-scale=1, shrink-to-fit=no";
+    const cssUrl = isMobile ? `${staticUrl}react/dist/mobile/main-${timeStamp}.css` : `${staticUrl}react/dist/desktop/main-${timeStamp}.css`;
+    const jsBuildUrl = isMobile ? `${staticUrl}react/dist/mobile/main-${timeStamp}.js` : `${staticUrl}react/dist/desktop/main-${timeStamp}.js`;
+    const viewPort = isMobile ? `width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no`
+    : "width=device-width, initial-scale=1, shrink-to-fit=no";
     
-     const cssUrl = isMobile ? `dist/main-mobile.css` : `dist/main-desktop.css`,
-     jsBuildUrl = isMobile ? `dist/main-mobile.js` : `dist/main-desktop.js`;
+    //  const cssUrl = isMobile ? `dist/main-mobile.css` : `dist/main-desktop.css`,
+    //  jsBuildUrl = isMobile ? `dist/main-mobile.js` : `dist/main-desktop.js`;
     
     // Meta descriptions 
     
