@@ -565,7 +565,8 @@ class ProductUserProfileForm(forms.ModelForm):
             'contact_number', 'desired_industry', 'desired_location',
             'desired_position', 'desired_salary', 'current_salary',
             'approved', 'experience', 'latest_education', 'skills',
-            'onboard', 'day_of_week', 'manual_links_count'
+            'onboard', 'day_of_week', 'manual_links_count', 'specialization',
+            'remarks'
         )
     contact_number = forms.CharField(
         max_length=500,
@@ -612,7 +613,9 @@ class ProductUserProfileForm(forms.ModelForm):
     latest_education = forms.ChoiceField(
         choices=EDUCATION_CHOICES,
         widget=forms.Select(attrs={
-            'class': 'form-control col-md-3 col-xs-12'}),
+            'class': 'form-control col-md-3 col-xs-12',
+            # 'onchange': 'desEducation(value);'
+        }),
         required=False
     )
     skills = forms.CharField(
@@ -628,6 +631,18 @@ class ProductUserProfileForm(forms.ModelForm):
         required=True
     )
     manual_links_count = forms.IntegerField(
+        widget=forms.TextInput(attrs={
+            'class': 'form-control col-md-3 col-xs-12'}),
+        required=False
+    )
+    specialization = forms.CharField(
+        max_length=500,
+        widget=forms.TextInput(attrs={
+            'class': 'form-control col-md-3 col-xs-12'}),
+        required=False
+    )
+    remarks = forms.CharField(
+        max_length=500,
         widget=forms.TextInput(attrs={
             'class': 'form-control col-md-3 col-xs-12'}),
         required=False
@@ -659,6 +674,18 @@ class ProductUserProfileForm(forms.ModelForm):
                 self.initial['manual_links_count'] = self.instance.order_item.get_manual_sent_link()
             else:
                 self.initial['manual_links_count'] = 0
+
+        if self.instance:
+            # education_id = self.instance.latest_education
+            # if education_id:
+            #     for i in SPECIALIZATION_CHOICES:
+            #         if i[0] == education_id:
+            #             choices = i[1]
+            #     self.fields['specialization_education'].choices = choices
+            self.fields['specialization'].initial = self.instance.specialization
+            self.fields['remarks'].initial = self.instance.remarks
+        # else:
+        #     self.fields['specialization_education'].choices = [(0, 'N/A')]
 
     def clean_manual_links_count(self):
         manual_links_count = self.cleaned_data['manual_links_count']

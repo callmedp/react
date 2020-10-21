@@ -20,6 +20,7 @@ from django.contrib.auth.decorators import permission_required
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse_lazy
+from django.core.cache import cache
 
 from django.urls import reverse
 from django.http import HttpResponseRedirect, HttpResponse, HttpResponseForbidden
@@ -37,7 +38,7 @@ from django.db.models import Prefetch
 
 
 from geolocation.models import Country
-from order.models import Order, OrderItem, InternationalProfileCredential, OrderItemOperation
+from order.models import Order, OrderItem, InternationalProfileCredential, OrderItemOperation, GazettedHoliday
 from shop.models import DeliveryService, Product, JobsLinks,Category
 from blog.mixins import PaginationMixin
 from emailers.email import SendMail
@@ -3269,6 +3270,9 @@ class WhatsappListQueueView(UserPermissionMixin, ListView, PaginationMixin):
         self.payment_date = self.request.GET.get('payment_date', '')
         self.due_date = self.request.GET.get('due_date', '')
         self.sort_value = self.request.GET.get('sort_value', '0')
+        if not cache.get('gazetted_holidays'):
+            holiday_list = GazettedHoliday().get_holiday_list
+            cache.set('gazetted_holidays', holiday_list, 60 * 60 * 12)
         return super(WhatsappListQueueView, self).get(request, args, **kwargs)
 
     def get_context_data(self, **kwargs):
@@ -3718,7 +3722,13 @@ class WhatsAppScheduleView(UserPermissionMixin, DetailView, PaginationMixin):
             profile_form = ProductUserProfileForm(instance=obj.whatsapp_profile_orderitem)
         else:
             profile_form = ProductUserProfileForm()
-        context.update({'formset': formset, 'previous_links': previous_links, 'profile_form': profile_form})
+        context.update({
+            'formset': formset,
+            'previous_links': previous_links,
+            'profile_form': profile_form,
+            'SITEDOMAIN': settings.SITE_DOMAIN,
+            'SITE_PROTOCOL': settings.SITE_PROTOCOL
+        })
         return context
 
     def attach_object_with_data(self, request, *args, **kwargs):

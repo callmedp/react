@@ -1,0 +1,6 @@
+
+<select name="specialization_education" class="form-control col-md-3 col-xs-12" id="id_specialization_education">
+    {% for deg in specialization %}
+        <option value="{{deg.0}}">{{deg.1}}</option>
+    {% endfor %}
+</select>
