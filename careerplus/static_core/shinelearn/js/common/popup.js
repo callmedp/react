@@ -9,5 +9,5 @@ window.onclick = function(event) {
     }
 }
 window.onload = function() {
-        modal.style.display = "block";
+        setTimeout(modal.style.display = "block", 10000);
 }
