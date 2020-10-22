@@ -6,7 +6,7 @@ from wallet.views import WalletRedeemView, WalletRemoveView
 
 from .views import CartView, AddToCartView, RemoveFromCartView,\
     PaymentLoginView, PaymentShippingView, PaymentSummaryView,\
-    UpdateDeliveryType
+    UpdateDeliveryType,GuestCouponApply
 
 from . import mobile_view
 
@@ -26,6 +26,10 @@ urlpatterns = [
 
     re_path(r'^applypoint/$', WalletRedeemView.as_view(), name='wallet-apply'),
     re_path(r'^removepoint/$', WalletRemoveView.as_view(), name='wallet-remove'),
+
+    re_path(r'^guest-coupon-apply/$',GuestCouponApply.as_view(),name='guest-coupon-apply'),
+
+
 
     # mobile
     re_path(r'^mobile/remove-from-cart/$',
