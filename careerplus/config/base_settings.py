@@ -693,6 +693,7 @@ link end
 '''
 THUMBNAIL_PRESERVE_FORMAT = True
 
+
 RAZOR_PAY_DICT = {
     'key_id': 'rzp_test_Oca8UTneyg6bwO',
     'key_secret': 'km5KILWfr6sF7XzaDoC5kGOj',
