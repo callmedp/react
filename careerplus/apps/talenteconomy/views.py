@@ -631,6 +631,11 @@ class TEBlogDetailView(DetailView, BlogMixin):
         detail_obj = self.scrollPagination(
             paginated_by=self.paginated_by, page=self.page,
             object_list=object_list)
+        
+        # Related Articles...
+        related_articles=[]
+        related_articles_ids_list = json.loads(self.object.related_arts)
+        related_articles = Blog.objects.filter(id__in=related_articles_ids_list)[:3]
 
         if self.request.flavour == 'mobile':
             detail_article = render_to_string(
@@ -641,14 +646,19 @@ class TEBlogDetailView(DetailView, BlogMixin):
                     "visibility": blog.visibility,
                     "SITEDOMAIN": settings.SITE_DOMAIN,
                     "login_status": 1 if self.request.session.get('candidate_id') else 0,
+                    "related_articles": related_articles
                 })
         else:
             detail_article = render_to_string(
                 'talenteconomy/include/detail-article-list.tmpl.html',
                 {
                     "page_obj": detail_obj,
-                    "slug": blog.slug, "visibility": blog.visibility,
-                    "SITEDOMAIN": settings.SITE_DOMAIN, "STATIC_URL": settings.STATIC_URL})
+                    "slug": blog.slug,
+                    "visibility": blog.visibility,
+                    "SITEDOMAIN": settings.SITE_DOMAIN,
+                    "STATIC_URL": settings.STATIC_URL,
+                    "related_articles": related_articles
+                })
 
         context.update({
             "detail_article": detail_article,
@@ -680,12 +690,6 @@ class TEBlogDetailView(DetailView, BlogMixin):
         })
 
         context.update(self.get_meta_details())
-
-        # Related Articles...
-        related_articles_ids_list = json.loads(self.object.related_arts)
-        related_articles = Blog.objects.filter(id__in=related_articles_ids_list)[:3]
-        context.update({'related_articles': related_articles})
-
         return context
 
     def get_breadcrumb_data(self):

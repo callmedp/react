@@ -38,6 +38,7 @@
     {{block.super}}
     {% compress css %}
     <link type="text/scss" href="{% static 'shinelearn/css/talenteconomy/article.scss' %}" rel="stylesheet">
+    <link type="text/css" href="{% static 'shinelearn/css/talenteconomy/prism.css' %}" rel="stylesheet">
     {% endcompress %}
 {% endblock css_section %}
 
@@ -72,13 +73,13 @@
 
               <form id="enquireform" name="enq" class="te-form mt-15">
                   <div class="form-group">
-                    <input type="text" name="name" placeholder=" " class="form-control input_field" maxlength="60" inputmode="name" value="{{request.session.full_name}}"  id="id_name" aria-required="true">
-                    <label class="input_label" for="id_name">Name</label>
+                    <input type="text" name="name" placeholder="Name" class="form-control input_field" maxlength="60" inputmode="name" value="{{request.session.full_name}}"  id="id_name" aria-required="true">
+                    <label class="input_label" for="id_name"></label>
                   </div>
 
                   <div class="form-group">
-                    <input type="text" name="cname" placeholder=" " class="form-control input_field" maxlength="60" value="{{request.session.full_name}}"  id="id_cname" aria-required="true">
-                    <label class="input_label" for="id_cname">Company Name</label>
+                    <input type="text" name="cname" placeholder="Company Name" class="form-control input_field" maxlength="60" value="{{request.session.full_name}}"  id="id_cname" aria-required="true">
+                    <label class="input_label" for="id_cname"></label>
                   </div>
 
                   <div class="form-group" style="display: flex;">
@@ -95,8 +96,8 @@
 
                     <div style="position: relative;">
                         <input type="text" class="input_field form-control" name="number" id="id_cell_phone"
-                        placeholder=" " maxlength="15" value="{{request.session.mobile_no}}">
-                        <label class="input_label" for="id_cell_phone">Mobile</label>
+                        placeholder="Mobile" maxlength="15" value="{{request.session.mobile_no}}">
+                        <label class="input_label" for="id_cell_phone"></label>
                         <span class="error-txt position-error"></span>
                     </div>
                 </div>
@@ -289,21 +290,27 @@
     <script src="{% static 'shinelearn/js/blog/login-register.js' %}"></script>
     <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
     <script src="{% static 'shinelearn/js/talenteconomy/article.js' %}"></script>
+    <script src="{% static 'shinelearn/js/talenteconomy/prism.js' %}"></script>
     <script type="text/javascript">
       $(document).ready(function() {
         var s = $("#sticker");
         var pos = s.position();            
         $(window).scroll(function() {
           var windowpos = $(window).scrollTop();
-          if (windowpos >= pos.top) {
-            s.addClass("stick");
-          } else {
-            s.removeClass("stick"); 
+          if(pos){
+            if (windowpos >= pos.top) {
+              s.addClass("stick");
+            }else {
+              s.removeClass("stick"); 
+            }
           }
         });
       });
     </script>
     {% endcompress %}
+    <script type="text/javascript">
+      openCommentBox('{{main_article.id}}', 2)
+    </script>
 
     {% compress js inline %}
     <script>

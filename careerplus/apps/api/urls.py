@@ -100,10 +100,10 @@ urlpatterns = [
     views.CandidateBadging.as_view(),
     name='candidate-badging-details'
     ),
-    # re_path(r'^v1/tracking-resume-shine/$',
-    #     views.TrackingResumeShine.as_view(),
-    #     name='tracking-resume-shine'
-    # )
+    re_path(r'^v1/tracking-resume-shine/$',
+        views.TrackingResumeShine.as_view(),
+        name='tracking-resume-shine'
+    )
 
 ]
 
