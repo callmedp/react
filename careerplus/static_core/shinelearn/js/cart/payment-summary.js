@@ -38,6 +38,7 @@ function JSApplyDiscount(e) {
                     window.location.reload();
                 },
                 failure: function (response) {
+                $('#CartloginModal').modal('hide')
                     alert_message = 'Something is not working, Please try later!';
 
                     // remove loader
@@ -53,6 +54,7 @@ function JSApplyDiscount(e) {
 
                 },
                 error: function (result, status, err) {
+                            $('#CartloginModal').modal('hide')
                     if (result && result.status == 400) {
                         alert_message = result.responseJSON;
                         alert_message = alert_message.error;
@@ -504,3 +506,63 @@ $(document).ready(function () {
         }
     });
 });
+
+
+const removeGuestCoupon = (cart_pk) =>{
+    $('.overlay-background').show()
+    $('body').addClass('body-noscroll')
+    $.ajax({
+          url : "/api/v1/coupon/remove/",
+          type: "POST",
+          data : {'cart_pk':cart_pk},
+          success: function(data, textStatus, jqXHR)
+          {
+           $('.overlay-background').show()
+           $('body').removeClass('body-noscroll')
+           $('#CartLoginBtn').removeAttr("disabled")
+           let msg
+           if(data?.msg != undefined){
+           msg = data?.msg}
+
+           if(msg !=undefined){
+                 Swal.fire({
+                title: 'Success!',
+                text: msg,
+                type: 'success',
+                showConfirmButton: false,
+                timer: 1500
+                })
+
+           }
+          window.location.reload();
+
+
+          },
+          error: function (jqXHR, textStatus, errorThrown)
+          {
+                                               let message;
+          if(jqXHR?.responseJSON?.error_message != undefined){
+            message =  jqXHR?.responseJSON?.error_message
+          }
+          else{
+          message= 'Something Went Wrong'
+          }
+
+           $('.overlay-background').show()
+           $('body').removeClass('body-noscroll')
+
+           Swal.fire({
+                    title: 'Error!',
+                    text: message,
+                    type: 'error',
+                    showConfirmButton: false,
+                    timer: 2000
+
+                    })
+
+          }
+        });
+
+
+}
+

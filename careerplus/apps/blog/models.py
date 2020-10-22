@@ -341,7 +341,7 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
         if self.id:
             self.url = 'https://' + settings.SITE_DOMAIN + self.get_absolute_url()
             blog_obj = Blog.objects.filter(id=self.id).first()
-            self.publish_date = self.publish_date if self.content == blog_obj.content else timezone.now()
+            # self.publish_date = self.publish_date if self.content == blog_obj.content else timezone.now()
         if not self.summary:
             try:
                 soup = BeautifulSoup(self.content, 'html.parser')

@@ -60,7 +60,7 @@ urlpatterns = [
     re_path(r'^v1/resume-product-id/$',
         views.ResumeBuilderProductView.as_view(),
         name='v1.resume-product-id'),
-    re_path(r'^v1/candidate-login/(?P<candidate_id>[0-9a-z]+)$', views.ShineCandidateLoginAPIView.as_view(), name='v1.api-login'),
+    re_path(r'^v1/candidate-login/$', views.ShineCandidateLoginAPIView.as_view(), name='v1.api-login'),
     re_path(r'^v1/update-certificate-assesment/(?P<vendor_name>[\w\-]+)/$',
         views.UpdateCertificateAndAssesment.as_view(),
         name='remove-cookie-from-header'),

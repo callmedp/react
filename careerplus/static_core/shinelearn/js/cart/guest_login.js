@@ -1,11 +1,13 @@
 $(document).ready(function () {
     var login_button = document.getElementById("login_guests")
+    var paymentSummary = $('#payment-summary-page').val()
 
     if (login_button != null) {
         login_button.addEventListener("click", guest_login);
     }
 
     async function guest_login() {
+
         (function (i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r;
             i[r] = i[r] || function () {
@@ -22,6 +24,7 @@ $(document).ready(function () {
         ga('create', 'UA-3537905-41', 'auto');
         ga('send', 'pageview');
 
+
         function hitGA() {
             ga('send', 'event', 'Cart Order Login', 'Buy Flow', 'Continue as Guest');
         }
@@ -32,6 +35,8 @@ $(document).ready(function () {
             obj[elem.name] = elem.value
             return obj;
         }, {})
+
+
         hitGA();
         let email = guest_info['email'] || '';
         let countryCode = guest_info['country_code'] || '';
@@ -53,7 +58,6 @@ $(document).ready(function () {
                 return ;
             }
 
-
             // let isEmailRegistered = await checkEmailExists(email)
             // if (isEmailRegistered) {
             //     $('#email-error').html('This email already exists. Please register with some other email.');
@@ -63,16 +67,97 @@ $(document).ready(function () {
             
             $('.overlay-background').show()
             $('body').addClass('body-noscroll')
+
+            try{
+            if(paymentSummary == undefined){
+                 if(window.location.pathname =="cart/payment-summary/"){
+                       paymentSummary = true
+                 }
+                else{
+                   paymentSummary = false
+                }
+            }
+            }catch(err){
+                paymentSummary = false
+
+            }
+
+            if(paymentSummary) {
+            guest_info['login_with'] = true;
+
+        $.ajax({
+          url : "/cart/guest-coupon-apply/",
+          type: "POST",
+          data : guest_info,
+          success: function(data, textStatus, jqXHR)
+          {
+
+           $('.overlay-background').hide()
+           $('body').removeClass('body-noscroll')
+           $('#CartLoginBtn').removeAttr("disabled")
+
+          if(data?.error != undefined){
+           $('#CartloginModal').modal('hide')
+           Swal.fire({
+                title: 'Error!',
+                text: data?.error,
+                type: 'error',
+                showConfirmButton: false,
+                timer: 2000
+
+            })
+          }
+
+          else if (data?.candidate_id !=undefined){
+          let cart_pk = $('#cart_pk').val()
+          let code = $('#discount_code').val()
+             applyGuestCoupon(data?.candidate_id,cart_pk,code)
+
+
+          }
+
+
+          },
+          error: function (jqXHR, textStatus, errorThrown)
+          {
+           $('.overlay-background').hide()
+           $('#CartloginModal').modal('hide')
+           $('body').removeClass('body-noscroll')
+                     $('#CartLoginBtn').removeAttr("disabled")
+
+                   Swal.fire({
+                            title: 'Error!',
+                            text: 'Something Went Wrong',
+                            type: 'error',
+                            showConfirmButton: false,
+                            timer: 2000
+
+                        })
+            form.reset();
+          }
+        });
+
+
+
+
+            }else{
             let input = document.createElement("input");
             input.setAttribute("type", "hidden");
             input.setAttribute("name", "login_with");
             input.setAttribute("value", "login_guest")
             form.appendChild(input);
             form.submit();
+
+            }
+            
+
         }
 
 
     }
+
+
+
 
     const numberValidate = async(countryCode, mobile) =>{
         // hit api to check whether the number with particular country is valid or not
@@ -477,7 +562,93 @@ function init_autocomplete() {
     });        
 }
 
+const applyGuestCoupon = (candidate_id,cart_pk,code) =>{
+
+    $('.overlay-background').show()
+    $('body').addClass('body-noscroll')
+
+let data = { 'candidate_id':candidate_id,'cart_pk':cart_pk,'code':code }
+               $.ajax({
+          url : "/api/v1/coupon/redeem/",
+          type: "POST",
+          data : data,
+          success: function(data, textStatus, jqXHR)
+          {
+           $('.overlay-background').show()
+           $('body').removeClass('body-noscroll')
+           $('#CartLoginBtn').removeAttr("disabled")
+          $('#CartloginModal').modal('hide')
+
+          if(data?.error != undefined){
+                       $('.overlay-background').show()
+
+           $('#CartloginModal').modal('hide')
+           Swal.fire({
+                title: 'Error!',
+                text: data?.error,
+                type: 'error',
+                showConfirmButton: false,
+                timer: 2000
+
+            })
+                $('#discount_code').parent().addClass('error');
+                    $('#discount-alert').empty();
+                    $('#discount-alert').text(data?.error);
+                    $('#discount-alert').fadeIn('slow').fadeTo('fast', 0.5).fadeTo('fast', 1.0);
+                    $('#discount-apply').prop('disabled', false);
+          }
+
+          if(data?.msg != undefined){
 
 
+                     Swal.fire({
+                title: 'Success!',
+                text: data?.msg,
+                type: 'success',
+                showConfirmButton: false,
+                timer: 2000
+
+            })
+
+          }
+
+           window.location.reload();
+
+
+          },
+          error: function (jqXHR, textStatus, errorThrown)
+          {
+
+                                               let message;
+          if(jqXHR?.responseJSON?.error_message != undefined){
+            message =  jqXHR?.responseJSON?.error_message
+          }
+          else{
+          message= 'Something Went Wrong'
+          }
+           $('.overlay-background').hide()
+           $('#CartloginModal').modal('hide')
+           $('body').removeClass('body-noscroll')
+                     $('#CartLoginBtn').removeAttr("disabled")
+
+                   Swal.fire({
+                            title: 'Error!',
+                            text: message,
+                            type: 'error',
+                            showConfirmButton: false,
+                            timer: 2000
+
+                        })
+                    $('#discount_code').parent().addClass('error');
+                    $('#discount-alert').empty();
+                    $('#discount-alert').text(message);
+                    $('#discount-alert').fadeIn('slow').fadeTo('fast', 0.5).fadeTo('fast', 1.0);
+                    $('#discount-apply').prop('disabled', false);
+
+          }
+        });
+
+
+}
 
 })
