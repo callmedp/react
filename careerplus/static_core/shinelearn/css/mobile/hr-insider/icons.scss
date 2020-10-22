@@ -204,3 +204,13 @@
     @include icon-block (24px, 16px, -39px -68px);
   }
 }
+
+.social-icon-sm {
+  &-linkedin {
+    @include icon-block (17px, 16px, -63px -127px);
+  }
+
+  &-whatsapp {
+    @include icon-block (17px, 16px, -88px -127px);
+  }
+}

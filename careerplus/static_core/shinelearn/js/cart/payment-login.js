@@ -393,3 +393,110 @@ const forgotPassword = () => {
 /*
 *  login form validation
 * */
+
+
+
+
+const CartLogin =  (e) => {
+     $('.overlay-background').show()
+     $('body').addClass('body-noscroll')
+     $('#CartLoginBtn').attr('disabled',true)
+
+
+    const formData = $('#login_form').serializeArray().reduce((obj, item) => {
+        obj[item.name] = item.value
+        return obj;
+    }, {});
+    if (!$('#login_form').valid()) {
+         $('.overlay-background').hide()
+     $('body').removeClass('body-noscroll')
+     $('#CartLoginBtn').removeAttr('disabled')
+        return;
+        }
+
+
+    $.ajax({
+          url : "/cart/guest-coupon-apply/",
+          type: "POST",
+          data : formData,
+          success: function(data, textStatus, jqXHR)
+          {
+           $('.overlay-background').hide()
+           $('body').removeClass('body-noscroll')
+           $('#CartLoginBtn').removeAttr("disabled")
+
+          if(data?.error != undefined){
+                          $('#CartloginModal').modal('hide')
+
+                       Swal.fire({
+                            title: 'Error!',
+                            text: data?.error,
+                            type: 'error',
+                            showConfirmButton: false,
+                            timer: 2000
+
+                        })
+          }
+
+          else if (data?.candidate_id !=undefined){
+
+          $('#guest_apply_btn').removeAttr('data-target')
+
+          $('#guest_apply_btn').removeAttr('onclick').off('click').on('click', function(){
+                JSApplyDiscount(e);
+
+});
+          
+
+                JSApplyDiscount(e);
+          }
+
+
+          },
+          error: function (jqXHR, textStatus, errorThrown)
+          {
+
+           $('.overlay-background').hide()
+           $('#CartloginModal').modal('hide')
+           $('body').removeClass('body-noscroll')
+                     $('#CartLoginBtn').removeAttr("disabled")
+
+                   Swal.fire({
+                            title: 'Error!',
+                            text: 'Something Went Wrong',
+                            type: 'error',
+                            showConfirmButton: false,
+                            timer: 2000
+
+                        })
+            form.reset();
+          }
+        });
+
+        }
+
+
+
+//const guestLogin = (e) =>{
+//e.preventDefault();
+//debugger;
+//     $('.overlay-background').show()
+//     $('body').addClass('body-noscroll')
+//     $('#login_guests').attr('disabled',true)
+//
+//         const formData = $('#guest_form').serializeArray().reduce((obj, item) => {
+//        obj[item.name] = item.value
+//        return obj;
+//    }, {});
+//
+//         if (!$('#guest_form').valid()) {
+//        return;
+//        }
+//
+//
+//
+//
+//
+//}
+
+
