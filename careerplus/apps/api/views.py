@@ -1294,8 +1294,8 @@ class ShineCandidateLoginAPIView(APIView):
 
 
 class UpdateCertificateAndAssesment(APIView):
-    authentication_classes = [OAuth2Authentication]
-    permission_classes = [IsAuthenticated]
+    authentication_classes = []
+    permission_classes = []
 
     def post(self, request, *args, **kwargs):
         certificate_updated = False
@@ -1311,17 +1311,6 @@ class UpdateCertificateAndAssesment(APIView):
                 "status": 0,
                 "msg": "Provide Data for Certificate"},
                 status=status.HTTP_400_BAD_REQUEST
-            )
-
-        if vendor_name.lower() == 'testprep':
-
-
-
-
-            return Response({
-                "status": 1,
-                "msg": "Certificate Updated"},
-                status=status.HTTP_201_CREATED
             )
 
         data['vendor'] = vendor_name.lower()

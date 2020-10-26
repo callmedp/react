@@ -739,6 +739,50 @@ class TestPrepApiMixin(object):
         return data.get('auto_login_url')
 
 
+    def get_all_test_for_email(self,email):
+        if not email:
+            logging.getLogger('error_log').error('cannot get test, email address not found')
+        url = 'https://testpreptraining.com/api/apiv2/getCertificationsByEmail?email={}'.format(email)
+        headers = self.get_headers()
+        if not headers:
+            return
+
+        response = None
+        data_dict ={'email':email}
+        try:
+            response = requests.get(url,data=data_dict,headers=headers)
+        except:
+            logging.getLogger('error_log').error('error in making testprep get_all_test_for_email request')
+
+        return response
+
+
+    def get_all_product(self):
+
+        url = 'https://testpreptraining.com/api/index.php/apiv2/getProducts'
+        headers = self.get_headers()
+        if not headers:
+            return
+
+        response = None
+        try:
+            response = requests.get(url,headers=headers)
+        except:
+            logging.getLogger('error_log').error('error in making testprep get_all_test_for_email request')
+
+        return response
+
+
+
+        
+
+
+
+        
+        
+        
+
+
 
 
 
