@@ -77,6 +77,7 @@ from .choices import (
     SUB_HEADING_CHOICE_ATTR_MAPPING_MOBILE,
     PRODUCT_TAG_CHOICES,
     SECTION_TYPE_CHOICES,
+    # SPECIALIZATION_CHOICES,
     convert_inr,
     convert_usd,
     convert_aed,
@@ -3358,6 +3359,11 @@ class ProductUserProfile(AbstractAutoDate):
         null=True, blank=True, choices=MANUAL_CHANGES_CHOICES
     )
     manual_changes_data = models.CharField(max_length=200, null=True, blank=True)
+    # specialization_education = models.PositiveSmallIntegerField(
+    #     null=True, blank=True, choices=SPECIALIZATION_CHOICES
+    # )
+    specialization = models.CharField(max_length=200, null=True, blank=True)
+    remarks = models.CharField(max_length=200, null=True, blank=True)
 
     def save(self, *args, **kwargs):
         user = kwargs.pop('user', None)

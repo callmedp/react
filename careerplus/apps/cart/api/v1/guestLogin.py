@@ -60,6 +60,10 @@ class GuestLoginView(CartMixin, APIView):
             return Response({"error_message": 'There is no cart available \
                               with cart id' + cart_pk},
                             status=status.HTTP_400_BAD_REQUEST)
+
+        if cart_obj.coupon_id and cart_obj.owner_email != email:
+            return Response({'error_message':'Coupon is already applied with another email.Either remove the coupon '
+                                             'or enter the same email address'}, status=status.HTTP_400_BAD_REQUEST)
         cart_obj.email = email
         cart_obj.owner_email = email
         cart_obj.mobile = mobile_number

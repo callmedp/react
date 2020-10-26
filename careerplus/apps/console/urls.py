@@ -384,6 +384,10 @@ urlpatterns += [
     re_path(r'^queue/review/(?P<pk>\d+)/change/$',
         order_view.ReviewModerateView.as_view(),
         name='review-moderate-update'),
+    
+    # re_path(r'^ajax/load-specialization/$',
+    #     load_specialization,
+    #     name='ajax_load_specialization')
 ]
 
 # refunf flow

@@ -6,6 +6,10 @@
 	background-image: url($image-path);
 }
 
+[class^="social-icon-"] {
+    background-image: url($sprite-path);
+}
+
 .fill-star, 
 .unfill-star, 
 .countries sup,

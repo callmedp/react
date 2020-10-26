@@ -67,7 +67,6 @@ THIRD_PARTY_APPS = [
     'django_filters',
     'webpack_loader',
     'corsheaders' ,
-    'tinymce',
 ]
 
 # Apps specific for this project go here.
@@ -106,7 +105,8 @@ LOCAL_APPS = [
     'scheduler',
     'resumebuilder',
     'assessment',
-    'resumescorechecker'
+    'resumescorechecker',
+    'tinymce',
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
@@ -693,6 +693,7 @@ ANALYTICS_VIDHYA_URL = {
 link end
 '''
 THUMBNAIL_PRESERVE_FORMAT = True
+
 
 RAZOR_PAY_DICT = {
     'key_id': 'rzp_test_Oca8UTneyg6bwO',

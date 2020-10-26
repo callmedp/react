@@ -71,7 +71,7 @@ class PaymentOptionsApiView(APIView, OrderMixin, PaymentMixin):
                 pay_txn = PaymentTxn.objects.create(
                     txn=txn,
                     order=order,
-                    cart=self.cart_obj,
+                    cart=cart_obj,
                     status=0,
                     payment_mode=11,
                     currency=order.currency,

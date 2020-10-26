@@ -10,9 +10,11 @@ from django.contrib import messages
 from django.conf import settings
 from django.urls import reverse_lazy
 from django.contrib.auth import authenticate, login, logout
+# from django.shortcuts import render
 
 #local imports
 from .forms import PasswordResetRequestForm, SetConfirmPasswordForm
+# from shop.choices import SPECIALIZATION_CHOICES
 
 #inter app imports
 
@@ -208,3 +210,12 @@ class ConsoleAutoLoginView(View):
                 "Token has been expired. Login with Username/Password "
             )
         return HttpResponseRedirect(reverse_lazy('console:login'))
+
+# def load_specialization(request):
+#     education_id = request.GET.get('id')
+#     if education_id:
+#         # specialization = SPECIALIZATION_CHOICES.get(int(education_id))
+#         for choice in SPECIALIZATION_CHOICES:
+#             if (choice[0] == int(education_id)):
+#                 specialization = choice[1] 
+#         return render(request, 'console/load_specializations.html', {'specialization': specialization})
