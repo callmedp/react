@@ -1036,7 +1036,7 @@ class ShineCandidateLoginAPIView(APIView):
                                     'start_date',
                                     'end_date', 'is_pursuing', 'order']
         candidate_education = []
-        
+
         for ind, edu in enumerate(education):
             course_type = ""
             if edu.get('course_type',-1) == 1:
@@ -1059,7 +1059,7 @@ class ShineCandidateLoginAPIView(APIView):
 
                 if specialization_index is not None:
                     specialization_name = child[specialization_index].get('cdesc','')
-                
+
                 else:
                     logging.getLogger('error_log').error(
                         "specialization_index is None for education - {} in get_education_info".format(edu))
@@ -1069,13 +1069,13 @@ class ShineCandidateLoginAPIView(APIView):
                 logging.getLogger('error_log').error(
                     "degree_index is None for education - {} in get_education_info".format(edu))
 
-            
-            
+
+
             candidate_education_values = ['', '{}({})'.format(degree_name, specialization_name),
                                                 edu.get('institute_name',''),
                                                 course_type,
                                                 '',
-                                                None, None, True, ind]        
+                                                None, None, True, ind]
             education_dict = dict(
                 zip(candidate_education_keys, candidate_education_values))
             candidate_education.append(education_dict)
@@ -1294,8 +1294,8 @@ class ShineCandidateLoginAPIView(APIView):
 
 
 class UpdateCertificateAndAssesment(APIView):
-    authentication_classes = []
-    permission_classes = []
+    authentication_classes = [OAuth2Authentication]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request, *args, **kwargs):
         certificate_updated = False
@@ -1463,7 +1463,7 @@ class ImportCertificateApiView(APIView, AmcatApiMixin):
             'candidate_email': email
         }
 
-       
+
         success, data = self.get_all_certiticate_data(data)
         if success:
             if not data:
@@ -1933,6 +1933,7 @@ class CandidateBadging(APIView):
 
 
 
+
 class ResumeTemplateDownload(APIView):
     authentication_classes = ()
     permission_classes = ()
@@ -1976,7 +1977,7 @@ class ResumeTemplateDownload(APIView):
                 fsock = FileWrapper(open(file_path, 'rb'))
             else:
                 fsock = GCPResumeBuilderStorage().open(file_path)
-            
+
             filename = filename_prefix + filename_suffix
             response = HttpResponse(fsock, content_type=content_type)
             response['Content-Disposition'] = 'attachment; filename="%s"' % (filename)
