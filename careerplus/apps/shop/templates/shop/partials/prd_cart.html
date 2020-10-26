@@ -88,7 +88,7 @@
         <figure class="calling-icon"></figure> {{ggn_contact}}
       </a>
     </div-->
-  {% comment %} {% if product.inr_price < 5001 %}
+  {% if product.inr_price < 5001 %}
   <div class="e-payLatter">
     <span class="mr-15">
       <img aria-label="ePayLater" src="{% static "shinelearn/images/epaylatter.png" %}" />
@@ -96,8 +96,8 @@
     <p>Buy now and <span class="bold">make payment within 14 days</span> using ePayLater </p>
   </div><!-- ./ e-payLatter -->
 
-  {% else %} {% endcomment %}
-  {% if product.inr_price > 5001 %}
+  {% else %}
+
   <div class="e-payLatter">
     <span class="mr-15">
       <img aria-label="ePayLater" src="{% static 'shinelearn/images/payments/zest.png' %}">

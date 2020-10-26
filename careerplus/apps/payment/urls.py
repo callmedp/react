@@ -26,11 +26,11 @@ urlpatterns = [
     re_path(r'^ccavenue/request/(?P<cart_id>[-\w]+)/(?P<paytype>[-\w]+)/$',
         csrf_exempt(Ccavenue.as_view()), name='ccavenue_request'),
 
-    # re_path(r'^epaylater/request/(?P<cart_id>[-\w]+)/$',
-    #     EPayLaterRequestView.as_view(), name="epaylater-request"),
+    re_path(r'^epaylater/request/(?P<cart_id>[-\w]+)/$',
+        EPayLaterRequestView.as_view(), name="epaylater-request"),
 
-    # re_path(r'^epaylater/response/(?P<cart_id>[-\w]+)/$',
-    #     csrf_exempt(EPayLaterResponseView.as_view()), name="epaylater-response"),
+    re_path(r'^epaylater/response/(?P<cart_id>[-\w]+)/$',
+        csrf_exempt(EPayLaterResponseView.as_view()), name="epaylater-response"),
 
     re_path(r'^oops/$', PaymentOopsView.as_view(), name='payment_oops'),
 
