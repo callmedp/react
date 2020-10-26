@@ -32,6 +32,10 @@ from review.models import DetailPageWidget
 from blog.models import Blog, Comment
 
 
+from geolocation.models import Country
+from django.db.models import Q
+
+
 class LoginToCommentView(View):
     http_method_names = [u'post', ]
 
@@ -619,18 +623,29 @@ class BlogDetailAjaxView(View, BlogMixin):
                 except Exception as e:
                     logging.getLogger('error_log').error(
                     "Error in related articles fetch - %s" % str(e))
-                    
+
+                def get_countries():
+                    country_choices = [(m.phone, m.name) for m in
+                                       Country.objects.exclude(Q(phone__isnull=True) | Q(phone__exact=''))]
+                    initial_country = Country.objects.filter(phone='91')[0].phone
+                    return country_choices, initial_country
+
+                country_choices, initial_country = get_countries()
+
                 detail_article = render_to_string(
                     template_name,
                     {"page_obj": page_obj,
                     "slug": self.blog.slug,
-                    "visibility": self.blog.visibility,
+                    "country_choices": country_choices,
+                     "initial_country": initial_country,
+                     "visibility": self.blog.visibility,
                     "SITEDOMAIN": settings.SITE_DOMAIN,
                     "related_articles": related_articles
                 })
 
                 data = {
                     'article_detail': detail_article,
+
                     'url': page_obj.object_list[0].get_absolute_url(),
                     'title': page_obj.object_list[0].display_name,
                 }
