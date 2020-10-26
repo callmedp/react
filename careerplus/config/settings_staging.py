@@ -474,3 +474,5 @@ LOGGED_IN_CHATBOT = "https://learning-media-staging-189607.storage.googleapis.co
 NON_LOGGED_IN_CHATBOT = "https://learning-media-staging-189607.storage.googleapis.com/c/m/chatbot/learning_learning_non-logged_in-1601445975.js"
 
 PRODUCT_LEADCREATION_COUNTDOWN = 30
+
+RESUME_SHINE_URL = "https://resumestage.shine.com"
