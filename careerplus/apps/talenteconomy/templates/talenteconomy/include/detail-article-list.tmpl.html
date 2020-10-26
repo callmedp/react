@@ -10,6 +10,10 @@
 {% for main_article in page_obj %}
 <div class="article-detail-content" itemscope itemtype="https://schema.org/Article">
 
+    <style>
+    .close_popup_modal{{main_article.id}}{color:#aaa;float:right;font-size:28px;margin-top:-15px;font-weight:700}.close_popup_modal{{main_article.id}}:hover,.close_popup_modal{{main_article.id}}:focus{color:#000;text-decoration:none;cursor:pointer}
+    </style>
+
     <!-- page heading -->
     <div class="page-header">
         <h1 itemprop="name">{{main_article.heading}}</h1>
@@ -128,6 +132,69 @@
       </div><!-- //Related Articles -->
     {% endif %}
 
+    <div id="popup_subscribe{{main_article.id}}" class="modal">
+
+        <!-- Modal content -->
+        <div class="modal-content">
+            <span class="close_popup_modal{{main_article.id}}">&times;</span>
+            <h2 class="heading-right">Looks interesting?</h2>
+            <p>Subscribe & Get our daily newsletter. Fill the details below.</p>
+            <form class="te-form mt-20" role="form"  id="enquireform{{main_article.id}}" name="enq{{main_article.id}}" >
+                <div style='display:none'>
+                    <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}'/>
+                </div>
+
+                <div class="form-group">
+                    <input type="text" class="input_field form-control" name="name"  id="id_name{{main_article.id}}"
+                           placeholder="Name"
+                           maxlength="100" value="{{request.session.full_name}}">
+                    <!-- <label class="input_label" for="id_name">Name<sup>*</sup></label> -->
+                </div>
+
+                <div class="form-group">
+                    <input type="email" class="input_field form-control" name="email"  id="id_email{{main_article.id}}"  placeholder="Email"
+                           maxlength="100" value="{{request.session.email}}">
+                    <!-- <label class="input_label" for="id_email">Email<sup>*</sup></label> -->
+                </div>
+
+                <div class="form-group" style="display: flex;">
+                    <div class="country-code">
+                        <div class="custom-select">
+                            <select class="form-control" id="id_country_name{{main_article.id}}" name="country">
+                                {% for country in country_choices %}
+                                <option value="{{country.0}}" {% if country.0 == initial_country %} selected {% endif %} >{{country.0}}&nbsp;&nbsp;&nbsp;&nbsp; -- &nbsp;&nbsp;&nbsp;&nbsp;{{country.1}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div style="position: relative;">
+                        <input type="text" class="input_field form-control" name="number"
+                               id="id_cell_phone{{main_article.id}}"
+                               placeholder="Mobile" maxlength="15" value="{{request.session.mobile_no}}">
+                        <!-- <label class="input_label" for="id_cell_phone">Mobile</label> -->
+                        <span class="error-txt position-error"></span>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <textarea class="form-control" rows="1" name="msg" id="msg{{main_article.id}}" placeholder="Message"
+                              maxlength="500"></textarea>
+                    <span class="error-txt"></span>
+                </div>
+
+
+                <input type="hidden" name="product" value="{{main_article.pk}}">
+                <input type="hidden" name="prd" value="{{main_article.heading}}">
+                <input type="hidden" name="path" value="{{main_article.get_absolute_url}}">
+                <!-- <input type="hidden" name="email" class="form-control" value="{{request.session.email}}"> -->
+                <input type="hidden" name="lsource" value="8">
+                <input type="hidden" name="campaign" value="blogsonline">
+                <button type="button" id="enquire_form{{main_article.id}}" class="submit-button">Subscribe Now</button>
+            </form>
+        </div>
+
+    </div>
+
     <!-- comments box -->
     {% if main_article.allow_comment %}
     <div class="comments-box mb-40 mt-40">
@@ -149,7 +216,93 @@
 
 </div>
 <script>
-  openCommentBox('{{main_article.id}}', 2)
+        openCommentBox('{{main_article.id}}', 2)
+        var modal = document.getElementById("popup_subscribe{{main_article.id}}");
+        var span = document.getElementsByClassName("close_popup_modal{{main_article.id}}")[0];
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+        $(document).ready(function() {
+          setTimeout(function() {
+              modal.style.display = "block";
+          }, 10000);
+        });
+    $.validator.addMethod("numbercheck", function (value, element) {
+        if( $('#id_country_code{{main_article.id}}').val() == "91" && $('#id_cell_phone{{main_article.id}}').val().length != 10){
+             $('#enquire_form{{main_article.id}}').removeAttr("disabled");
+            return false;
+        }
+        else if($('#id_cell_phone{{main_article.id}}').val().length >= 8 && $('#id_cell_phone{{main_article.id}}').val().length <= 15){
+            return true
+        }
+    }, 'Please enter valid mobile number');
+
+    $(function() {
+      // Initialize form validation on the registration form.
+      // It has the name attribute "registration"
+      $("form[name='enq{{main_article.id}}']").validate({
+        // Specify validation rules
+        rules: {
+            number: {
+                numbercheck : true,
+            },
+            msg: {
+                maxlength:250,
+            }
+        },
+        // Specify validation error messages
+        messages: {
+            number: {
+                    required: "Please enter your number",
+                    minlength: "Please enter atleast 8 digit number",
+            },
+
+            msg: {
+                maxlength: "Message should be within 250 characters",
+            },
+        },
+        // Make sure the form is submitted to the destination defined
+        // in the "action" attribute of the form when valid
+      });
+    });
+    $('#enquire_form{{main_article.id}}').click(function(event) {
+    event.preventDefault();
+    $('#enquire_form{{main_article.id}}').attr("disabled", true);
+    var $enquireform{{main_article.id}} = $("#enquireform{{main_article.id}}");
+    var typeOfProduct = 'Talent Enquiry';
+    flag = true;
+    if($('#id_cell_phone{{main_article.id}}').val().length != 10){
+             $('#enquire_form{{main_article.id}}').removeAttr("disabled");
+             flag = false;
+            pop('Please enter your number');
+        }
+    if (flag) {
+        var formData = $enquireform{{main_article.id}}.serialize();
+        $.ajax({
+            url: "/lead/lead-management/",
+            type: "POST",
+            data: formData,
+            success: function(data, textStatus, jqXHR) {
+                gaEventFunc(typeOfProduct,'success');
+                pop('Your Query Submitted Successfully.');
+                $('#enquireform{{main_article.id}}')[0].reset();
+                $('#enquire_form{{main_article.id}}').removeAttr("disabled");
+                var modal = document.getElementById("popup_subscribe{{main_article.id}}");
+                modal.style.display = "none";
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                gaEventFunc(typeOfProduct,'failure');
+                $('#enquire_form{{main_article.id}}').removeAttr("disabled");
+                pop('Something went wrong. Try again later.');
+            }
+        });
+    }
+});
 </script>
 {% endfor %}
 

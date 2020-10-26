@@ -8,6 +8,8 @@ window.onclick = function(event) {
         modal.style.display = "none";
     }
 }
-window.onload = function() {
-        setTimeout(modal.style.display = "block", 10000);
-}
+$(document).ready(function() {
+  setTimeout(function() {
+      modal.style.display = "block";
+  }, 10000);
+});
