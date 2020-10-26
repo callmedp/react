@@ -13,8 +13,39 @@ Payment Summary - Shine Learning
 {% block css_section %}
 {{block.super}}
 {% compress css %}
+<link href="{% static 'packages/select2/dist/css/select2.min.css' %}" rel="stylesheet" type="text/css">
+<link href="{% static 'packages/sweetalert/dist/sweetalert2.min.css' %}" rel="stylesheet" type="text/css">
 <link type="text/scss" href="{% static 'shinelearn/css/cart/payment.scss' %}" rel="stylesheet">
 {% endcompress %}
+<style type="text/css">
+  .error {
+      color: red;
+  }
+
+  .autocomplete-suggestions {
+      border: 2px solid #e4e4e4;
+      background: #F4F4F4;
+      cursor: default;
+      overflow: auto;
+  }
+
+  .autocomplete-suggestion {
+      padding: 2px 5px;
+      font-size: 1.2em;
+      white-space: nowrap;
+      overflow: hidden
+  }
+
+  .autocomplete-selected {
+      background: #f0f0f0
+  }
+
+  .autocomplete-suggestions strong {
+      font-weight: normal;
+      color: #3399ff;
+      font-weight: bolder
+  }
+</style>
 {% endblock css_section %}
 
 {% block navigation %}
@@ -43,9 +74,12 @@ Payment Summary - Shine Learning
 
 
 {% block container %}
+
+
 {% if cart_contain_items %}
 <section class="container mt-53">
-  <div id="loader" class="overlay-background" text-align: center;">
+
+  <div id="loader" style='z-index:9999' class="overlay-background" text-align: center;">
     <img aria-label="loader" id="loadingimg" class="loader-position" src="{% static 'shinelearn/images/loader1.png' %}">
   </div>
   <!-- page content body start -->
@@ -234,7 +268,13 @@ Payment Summary - Shine Learning
                 <input id="discount_code" type="text" value="Coupon {{cart_coupon.code}} is applied!" name="code"
                   maxlength="15" disabled>
                 <span class="error-txt" id="discount-alert"></span>
+
+              {% if candidate_in_session  %}
                 <button type="button" id='remove-discount' onclick="JSRemoveDiscount(event);">Remove</button>
+                  {% else %}
+                                 <button type="button" id='remove-discount' onclick="removeGuestCoupon('{{cart.pk}}');">Remove</button>
+                                {% endif %}
+
               </div>
             </div>
             {% elif cart_wallet %}
@@ -248,11 +288,21 @@ Payment Summary - Shine Learning
             </div><!-- // shineCredit -->
             {% else %}
             {% if candidate_in_session %}
-            <a href="javascript:void(0)" onclick="toggler('showCoupon','shineCredit',true);" id="show_hide_coupon">Apply
+             <a href="javascript:void(0)" onclick="toggler('showCoupon','shineCredit',true);" id="show_hide_coupon">Apply
               coupon</a>
             |
             <a href="javascript:void(0)" onclick="toggler('shineCredit','showCoupon',false) ;">Redeem Shine credit</a>
-            {% endif %}
+              {% else %}
+                   <div class="form-group pr">
+                <div class="coupon__wrap">
+                  <input id="discount_code" type="text" placeholder="Enter coupon code" name="code" maxlength="15" value="{% if cart_coupon %}{{cart_coupon}}{%endif%}">
+                  <button id="guest_apply_btn" type="button" class="btn btn-primary" disabled data-toggle="modal" data-target=".bs-example-modal-lg">Apply</button>
+                </div><!-- // coupon wrap -->
+                <span class="error-txt" id="discount-alert"></span>
+              </div>
+
+
+              {% endif %}
             <div id="showCoupon" class="hidden-div">
               <div class="form-group pr">
                 <div class="coupon__wrap">
@@ -316,9 +366,18 @@ Payment Summary - Shine Learning
       <!-- Make payment -->
       <span class="col-sm-7 col-md-8"></span>
       <span class="col-sm-3 col-md-4 continue">
-        <a class='trig-loader' href="{% url "cart:payment-login" %}"><button type="button"
+         {% if cart.coupon_id and guest_in_session %}
+                      <a class='trig-loader' href="{% url 'payment:payment-option' %}"><button type="button"
             id="payment-summary-continue-id">Proceed to
             payment</button></a>
+
+          {% else %}
+
+        <a class='trig-loader' href="{% url 'cart:payment-login' %}"><button type="button"
+            id="payment-summary-continue-id">Proceed to
+            payment</button></a>
+
+          {% endif %}
         <!-- <figure class="secure-payment-icon"></figure>
           <span>100% Secure Payment</span> -->
       </span>
@@ -328,6 +387,152 @@ Payment Summary - Shine Learning
 
   </div>
   <!-- page content body end -->
+    <!-- login popup start -->
+    <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" id="CartloginModal" aria-labelledby="myLargeModalLabel">
+        <div class="modal-dialog modal-lg" role="document">
+          <div class="modal-content">
+            <div class="modal-body round-border box-shadow" style="overflow:hidden;">
+              <!-- login -->
+              <form class="personal-details col-sm-6 bdr-rt" method="post" action="" role="form" id="login_form">
+                {% csrf_token %}
+                <strong class="personal-details-heading ml-15">Login</strong>
+                <span class="invalid-cred-err" style="display: none" id="invalid-cred">Invalid email or password</span>
+                <div class="form-group clearfix">
+                    <div class="col-sm-12">
+                        <input {% if request.session.email or neo_email %} readonly {% endif %} type="email"
+                            name="email" class="form-control" placeholder=" " value="{% if neo_email %} {{ neo_email }} {% elif request.session.email %}
+                                        {{ request.session.email }}
+                                        {% elif request.session.lead_email %}
+                                        {{ request.session.lead_email }}{% endif %}" />
+                        <label for="">Email id</label>
+                        <span class="error-txt"></span>
+                    </div>
+                </div>
+                <div class="form-group clearfix">
+                    <div class="col-sm-12">
+                        <input type="password" class="form-control" required id="password" name="password" placeholder=" " />
+                        <label for="">Password</label>
+                        <span class="error-txt"></span>
+                    </div>
+                </div>
+
+                <div class="continue">
+                    <a class="pull-right mr-20" onclick="forgotPassword()">Forgot password?</a>
+                    <button type="button" class="btn continue" id="CartLoginBtn" onclick="CartLogin(event)">Continue</button>
+                </div>
+
+                <!-- <div class="col-sm-12 text-center social-icon-new mt-20">
+                        Login with
+                        <a class="facebook-social-icon"
+                            onclick="Login('/payment/payment-options/');soc_gaevent('Buy Flow','Facebook_BuyFlow','Sign In');"></a>
+                        <a class="linkedin-social-icon" onclick="soc_gaevent('Buy Flow','Linkedin_BuyFlow','Sign In');"
+                            href="{% url 'users:linkedin-code' %}?next=/payment/payment-options/"></a>
+                        <a class="google-social-icon"
+                            onclick="glogin('/payment/payment-options/');soc_gaevent('Buy Flow','GooglePlus_BuyFlow','Sign In');"></a>
+                    </div> -->
+
+            </form>
+
+            <!-- Continue as guest -->
+             <input type="hidden" id="payment-summary-page" value="1">
+            <form name='guest_form' class="personal-details col-sm-6 bdr-rt hidden" method="post" action="/cart/guest-coupon-apply/"
+                id="guest_form">{% csrf_token %}
+                <strong class="personal-details-heading ml-15">Continue as guest</strong>
+                {% if form.non_field_errors %}
+                <span class="error" style="left:14px;">{{ form.non_field_errors.0 }}</span>
+                {% endif %}
+                <input type="hidden" name="cart_pk" id="cart_pk"  value="{{cart.pk}}">
+                <div class="form-group clearfix">
+                    <div class="col-sm-12 {% if form.first_name.errors %} error {% endif %}">
+                        <!-- {{form.first_name}} -->
+                        <input type="text" class="form-control" id="guest-name" name="name" placeholder=" " />
+                        <label for="">Your name</label>
+                        <span class="error-txt">{{ form.first_name.errors.0 }}</span>
+                    </div>
+                </div>
+                <div class="form-group clearfix">
+                    <div class="col-sm-12">
+                        <input type="email" name="email" class="form-control" placeholder=" " id="guest-email" value="{% if neo_email %} {{ neo_email }} {% elif request.session.email %}
+                                        {{ request.session.email }}
+                                        {% elif request.session.lead_email %}
+                                        {{ request.session.lead_email }}{% endif %}">
+                        <label for="">Email</label>
+                        <span class="error-txt" id="email-error"></span>
+                    </div>
+                </div>
+                <div class="form-group clearfix">
+                    <div class="col-sm-12 {% if form.mobile.errors or form.country_code.errors %} error {% endif %}">
+                        <div class="country-code">
+                            <div class="custom-select">
+                                <select class="form--control" id="country_code" name="country_code">
+                                    <option selected value="91">+91</option>
+                                    <option></option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group wd2 pl-0">
+                            <input type="text" class="form-control" id="guest-mobile" name="mobile" placeholder=" " />
+                            <label for="">Mobile no.</label>
+                            <span class="error-txt">{% if form.mobile.errors %}
+                                {{ form.mobile.errors.0 }} {% else %}
+                                {{ form.country_code.errors.0 }}{% endif %}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="continue">
+                    <button type="button" id="login_guests">Continue</button>
+                </div>
+            </form>
+
+            <!-- Forgot Password  -->
+            <form class="personal-details col-sm-6 bdr-rt hidden" method="post" id="forgot_form_1"
+                action="{% url 'users:forgot-email-sent' %}">{% csrf_token %}
+                <strong class="personal-details-heading ml-15">Forgot Password</strong>
+                <div class="form-group clearfix">
+                    <div class="col-sm-12 ">
+                        <!-- {{form.first_name}} -->
+                        <input type="text" class="form-control" id="" name="email" placeholder=" "
+                            value="{% if neo_email %} {{ neo_email }} {% endif %}" {% if neo_email %} readonly
+                            {% endif %} />
+                        <label for="">Your email</label>
+                        <span class="error-txt"></span>
+                    </div>
+                </div>
+                <div class="continue">
+                    <button type="button" onclick="handleForgotPassword()">Submit</button>
+                </div>
+            </form>
+
+  
+            <div class="col-sm-6 text-center" id="continue-as-guest-button">
+                <div class="login-guest guest-selection">
+                    <span>
+                        <a onclick="continueAsGuest()">
+                            <figure class="guestlogin-payment-icon"></figure>
+                            Continue as guest
+                        </a>
+                    </span>
+                </div>
+  
+            </div>
+  
+            <div class="col-sm-6 text-center hidden" id="login-candidate-button">
+                <div class="login-guest">
+                    <span>
+                        <a onclick="loginAsCandidate()">
+                            <figure class="login-payment-icon"></figure>
+                            Login
+                        </a>
+                    </span>
+                </div>
+            </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- login popup end -->
+  
 </section>
 <!-- main section end -->
 {% else %}
@@ -362,6 +567,9 @@ Payment Summary - Shine Learning
   var productAvailability = "{{product_availability}}"
   var productTrackingMappingId = "{{product_tracking_mapping_id}}"
   var trackingId = "{{tracking_id}}"
+
+    var site_domain = "{{ SITE_PROTOCOL }}://{{ SITE_DOMAIN}}";
+
   var items = document.getElementsByClassName("item-list");
   for (var i = 0; i < items.length; i++){
     let id = items[i].getAttribute('name');
@@ -373,12 +581,49 @@ Payment Summary - Shine Learning
   var utmCampaign ="{{utm_campaign}}"
   var referal_product = "{{referal_product}}"
   var referal_subproduct = "{{referal_subproduct}}"
+  var paymentSummary = true;
+  var cartData = "{{request|get_cart_info}}";
+  var cart_candidate_id ='{{cart.owner_id}}'
+  var neoEmail = "{{neo_email}}";
+
+
+
 </script>
+<script type="text/javascript" src="{% static 'packages/select2/dist/js/select2.min.js' %}"></script>
+<script src="{% static 'packages/sweetalert/dist/sweetalert2.all.min.js' %}"></script>
+<script src="{% static 'shinelearn/js/cart/payment-login.js' %}"></script>
+<script src="{% static 'shinelearn/js/cart/guest_login.js' %}"></script>
+
+
+
 {% compress js %}
 <script type="text/javascript" src="{% static 'shinelearn/js/cart/payment-summary.js' %}"></script>
 <script src="{% static 'shinelearn/js/cart/cart.js' %}"></script>
 <script type="text/javascript" src="{% static 'shinelearn/js/mobile/cart/cart.js' %}"></script>
 {% endcompress %}
+
+
+
+<script>
+    $("#discount_code").on('input',() => $('#discount_code').val().length > 3 ? $('#guest_apply_btn').removeAttr("disabled") :$('#guest_apply_btn').attr("disabled", true)  );
+    var msg = [];
+    {% if messages %} {% for message in messages %} msg.push('{{message}}') {% endfor %} {% endif %}
+
+    if (msg.length){
+              Swal.fire({
+                title: 'Error!',
+                text: msg.join('\n'),
+                type: 'error',
+                showConfirmButton: false,
+                timer: 3500
+
+            })
+    }
+
+</script>
+
+
+
 {% endblock js_section %}
 
 {% block johukum %}

@@ -1153,7 +1153,7 @@ class OrderItem(AbstractAutoDate):
         if profile and profile.due_date:
             temp_due_date = profile.due_date
             temp_due_date_extended_by = 0
-            holiday_list = GazettedHoliday().get_holiday_list
+            holiday_list = cache.get("gazetted_holidays") if cache.get("gazetted_holidays") else GazettedHoliday().get_holiday_list
             while (temp_due_date.weekday() == 6 or temp_due_date.strftime('%d-%m-%Y') in holiday_list):
                 temp_due_date_extended_by += 1
                 temp_due_date += relativedelta.relativedelta(days=1)

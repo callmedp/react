@@ -99,18 +99,18 @@ class CartMixin(object):
                 elif candidate_id and resume_shine_cart:
                     cart_obj = Cart.objects.create(
                         owner_id=candidate_id, session_id=session_id, status=2,
-                        site=1)
+                        )
                 elif candidate_id:
                     cart_obj = Cart.objects.create(
                         owner_id=candidate_id, session_id=session_id, status=2,
-                        site=0)
+                        )
 
                 elif session_id and resume_shine_cart:
                     cart_obj = Cart.objects.create(
-                        session_id=session_id, status=0, site=1)
+                        session_id=session_id, status=0,)
                 elif session_id:
                     cart_obj = Cart.objects.create(
-                        session_id=session_id, status=0, site=0)
+                        session_id=session_id, status=0,)
 
             # Todo skip  as understanding the new item to cart addition
             elif add_type == "express":
@@ -123,17 +123,17 @@ class CartMixin(object):
                 if candidate_id and resume_shine_cart:
                     cart_obj = Cart.objects.create(
                         owner_id=candidate_id, session_id=session_id, status=3,
-                        site=1)
+                        )
                 elif candidate_id:
                     cart_obj = Cart.objects.create(
                         owner_id=candidate_id, session_id=session_id, status=3,
-                        site=0)
+                        )
                 elif session_id and resume_shine_cart:
                     cart_obj = Cart.objects.create(
-                        session_id=session_id, status=3, site=1)
+                        session_id=session_id, status=3,)
                 elif session_id:
                     cart_obj = Cart.objects.create(
-                        session_id=session_id, status=3, site=0)
+                        session_id=session_id, status=3,)
 
             if cart_obj:
                 if email and not cart_obj.owner_email:
@@ -304,10 +304,10 @@ class CartMixin(object):
 
             if candidate_id and resume_shine_cart:
                 cart_users = Cart.objects.filter(
-                    owner_id=candidate_id, status=2, site=1)
+                    owner_id=candidate_id, status=2, )
             elif candidate_id:
                 cart_users = Cart.objects.filter(
-                    owner_id=candidate_id, status=2, site=0)
+                    owner_id=candidate_id, status=2, )
 
             cart_sessions = Cart.objects.filter(session_id=sessionid, status=0)
             cart_user, cart_session = None, None
@@ -341,17 +341,17 @@ class CartMixin(object):
             elif candidate_id and resume_shine_cart:
                 cart_obj = Cart.objects.create(
                     owner_id=candidate_id, session_id=sessionid, status=2,
-                    site=1)
+                    )
             elif candidate_id:
                 cart_obj = Cart.objects.create(
                     owner_id=candidate_id, session_id=sessionid, status=2,
-                    site=0)
+                    )
             elif sessionid and resume_shine_cart:
                 cart_obj = Cart.objects.create(session_id=sessionid, status=0,
-                                               site=1)
+                                               )
             elif sessionid:
                 cart_obj = Cart.objects.create(session_id=sessionid, status=0,
-                                               site=0)
+                                               )
 
             # update cart_obj in session
             if cart_obj:

@@ -148,6 +148,12 @@
 
 .content-box {
   padding: 15px;
+  ul {
+    li {
+      list-style: disc;
+      margin-left: 25px;
+    }
+  }
 }
 
 .rel {
