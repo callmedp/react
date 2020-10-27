@@ -138,6 +138,7 @@ $('#enquire_form').click(function(event) {
                 $('#enquire_form').removeAttr("disabled");
                 var modal = document.getElementById("popup_subscribe");
                 modal.style.display = "none";
+                enableScroll();
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 gaEventFunc(typeOfProduct,'failure');
