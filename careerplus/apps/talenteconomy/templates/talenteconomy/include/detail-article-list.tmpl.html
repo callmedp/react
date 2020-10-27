@@ -216,20 +216,38 @@
 
 </div>
 <script>
+        function disableScroll() {
+            // Get the current page scroll position
+            scrollTop =
+              window.pageYOffset || document.documentElement.scrollTop;
+            scrollLeft =
+              window.pageXOffset || document.documentElement.scrollLeft,
+                window.onscroll = function() {
+                    window.scrollTo(scrollLeft, scrollTop);
+                };
+        }
+        function enableScroll() {
+            window.onscroll = function() {};
+        }
+
         openCommentBox('{{main_article.id}}', 2)
         var modal = document.getElementById("popup_subscribe{{main_article.id}}");
         var span = document.getElementsByClassName("close_popup_modal{{main_article.id}}")[0];
         span.onclick = function() {
             modal.style.display = "none";
+            enableScroll();
         }
         window.onclick = function(event) {
             if (event.target == modal) {
                 modal.style.display = "none";
+                enableScroll();
             }
         }
         $(document).ready(function() {
           setTimeout(function() {
               modal.style.display = "block";
+
+              disableScroll();
           }, 10000);
         });
     $.validator.addMethod("numbercheck", function (value, element) {
@@ -294,6 +312,7 @@
                 $('#enquire_form{{main_article.id}}').removeAttr("disabled");
                 var modal = document.getElementById("popup_subscribe{{main_article.id}}");
                 modal.style.display = "none";
+                enableScroll();
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 gaEventFunc(typeOfProduct,'failure');
