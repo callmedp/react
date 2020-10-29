@@ -12,8 +12,8 @@ from rest_framework.permissions import IsAuthenticated
 
 
 class VendorCertificateMappingApiView(APIView):
-    authentication_classes = []
-    permission_classes = []
+    authentication_classes = [OAuth2Authentication]
+    permission_classes = [IsAuthenticated]
     serializer_class = None
     pagination_class = None
 
