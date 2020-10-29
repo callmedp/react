@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework import status
 
 from partner.models import  Vendor,Certificate
-from shop.models import Skill
+from shop.models import Skill,Product
 from partner.models import ProductSkill
 from django.utils.text import slugify
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
@@ -52,12 +52,23 @@ class VendorCertificateMappingApiView(APIView):
             val.append(ps.product_id)
             new_skill_product.update({new_skill_dict[ps.skill_id]: val})
 
+        product_vendor = Product.objects.only('id','vendor_id').filter(vendor__in=vendors)
+        prod_vendor = {}
+        for prdvend in product_vendor:
+            val = prod_vendor.get(prdvend.vendor_id,[])
+            val.append(prdvend.id)
+            prod_vendor.update({prdvend.vendor_id:val})
+
         for certificate in certificates:
             skills = certificate.skill.split(',')
             # skills = list(map(lambda x: slugify(x), certificate.skill.split(',')))
             new_skill = []
             for skill in skills:
-                new_skill.append({'name':skill,'product_id':new_skill_product.get(slugify(skill),[])})
+                prods = set(new_skill_product.get(slugify(skill),[]))
+                vendor_prod = prod_vendor.get(certificate.vendor_provider_id,{})
+                prods = list(prods.intersection(vendor_prod))
+                new_skill.append({'name':skill,'product_id':prods})
+
             new_list.append({'name':new_dict[certificate.vendor_provider_id],'certificate_set':[{
                 'name':certificate.name,'skill':new_skill}]})
         return Response({'data':new_list},status=status.HTTP_200_OK)
