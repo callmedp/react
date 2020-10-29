@@ -12,8 +12,8 @@ from rest_framework.permissions import IsAuthenticated
 
 
 class VendorCertificateMappingApiView(APIView):
-    authentication_classes = [OAuth2Authentication]
-    permission_classes = [IsAuthenticated]
+    authentication_classes = []
+    permission_classes = []
     serializer_class = None
     pagination_class = None
 
@@ -59,6 +59,8 @@ class VendorCertificateMappingApiView(APIView):
             val.append(prdvend.id)
             prod_vendor.update({prdvend.vendor_id:val})
 
+        vendor_data = {}
+
         for certificate in certificates:
             skills = certificate.skill.split(',')
             # skills = list(map(lambda x: slugify(x), certificate.skill.split(',')))
@@ -69,9 +71,14 @@ class VendorCertificateMappingApiView(APIView):
                 prods = list(prods.intersection(vendor_prod))
                 new_skill.append({'name':skill,'product_id':prods})
 
-            new_list.append({'name':new_dict[certificate.vendor_provider_id],'certificate_set':[{
-                'name':certificate.name,'skill':new_skill}]})
-        return Response({'data':new_list},status=status.HTTP_200_OK)
+            vendor_set = vendor_data.get(new_dict[certificate.vendor_provider_id],[])
+            vendor_set.append({
+                'name':certificate.name,'skill':new_skill})
+            vendor_data.update({new_dict[certificate.vendor_provider_id]:vendor_set})
+            #
+            # new_list.append({'name':new_dict[certificate.vendor_provider_id],'certificate_set':[{
+            #     'name':certificate.name,'skill':new_skill}]})
+        return Response({'data':vendor_data},status=status.HTTP_200_OK)
 
 
 
