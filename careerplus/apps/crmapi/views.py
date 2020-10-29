@@ -62,7 +62,7 @@ class LeadManagement(View):
             company = request.POST.get('cname','')
             path = request.POST.get('path', '')
             rejectlist = ['http', 'www', 'href', '***', 'url', '<html>']
-            product_offer = request.POST.get('product_offer', False)
+            product_offer = request.POST.get('product_offer', True)
 
             if any(rejectkey in msg for rejectkey in rejectlist):
                 return HttpResponse(json.dumps({'status': False}))
