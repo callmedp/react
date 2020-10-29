@@ -45,7 +45,8 @@ class VendorCertificateMappingApiView(APIView):
         for skill in skills:
             new_skill_dict.update({skill.id:skill.slug})
 
-        product_skill = ProductSkill.objects.filter(skill_id__in=list(new_skill_dict.keys()),)
+        product_skill = ProductSkill.objects.filter(skill_id__in=list(new_skill_dict.keys()),
+                                                    product__vendor__in=vendors)
         for ps in product_skill:
             val = new_skill_product.get(new_skill_dict[ps.skill_id],[])
             val.append(ps.product_id)
