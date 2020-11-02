@@ -241,7 +241,7 @@ const handleLoginCandidate = async () => {
     $('.overlay-background').show()
     $('body').addClass('body-noscroll')
 
-    loginResponse = await fetch(`${site_domain}/api/v1/candidate-login/`, {
+    loginResponse = await fetch(`${site_domain}/api/v2/candidate-login/`, {
         headers: defaultHeaders,
         method: 'POST',
         body: JSON.stringify(formData)
