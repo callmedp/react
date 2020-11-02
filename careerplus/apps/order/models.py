@@ -556,7 +556,7 @@ class Order(AbstractAutoDate):
                 product__vendor__slug='testprep',
                 no_process=False
             )
-            for amcat_oi in amcat_items:
+            for amcat_oi in testprep_items:
                 amcat_oi.start_date = timezone.now()
                 amcat_oi.end_date = timezone.now() + timedelta(days=15)
                 amcat_oi.active_on_shine = 1
