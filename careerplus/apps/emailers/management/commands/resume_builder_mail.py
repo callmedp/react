@@ -11,7 +11,7 @@ from django.core.management.base import BaseCommand
 # local imports
 from emailers.email import SendMail
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "careerplus.config.settings_staging")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "careerplus.config.settings")
 
 ROOT_FOLDER = os.path.realpath(os.path.dirname(__file__))
 ROOT_FOLDER = ROOT_FOLDER[:ROOT_FOLDER.rindex('/')]
@@ -85,8 +85,9 @@ def resume_promotion():
                     candidate_id = cand.get('id')
                     email = cand.get('sEm')
                     name = cand.get('sFLN')
+                    name = name.capitalize()
                     if candidate_id and email and name:
-                        sent_mail_count += 1
+                        sent_mail_count = sent_mail_count + 1
                         if settings.DEBUG:
                             if not testing:
                                 send_mail_resume("kanak.garg@hindustantimes.com","5f9fb6799cbeea23f026f228","kanak")
