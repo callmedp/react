@@ -45,7 +45,7 @@ from emailers.email import SendMail
 from shop.views import ProductInformationMixin
 from shop.models import Product, Category
 from coupon.models import Coupon, CouponUser
-from core.api_mixin import ShineCandidateDetail, AmcatApiMixin
+from core.api_mixin import ShineCandidateDetail, AmcatApiMixin,TestPrepApiMixin
 from payment.tasks import add_reward_point_in_wallet
 from order.functions import update_initiat_orderitem_sataus
 from geolocation.models import Country
@@ -1463,8 +1463,12 @@ class ImportCertificateApiView(APIView, AmcatApiMixin):
             'candidate_email': email
         }
 
-
-        success, data = self.get_all_certiticate_data(data)
+        if vendor_name == 'testprep':
+            data = TestPrepApiMixin().get_all_test_for_email(email=email)
+            if data:
+                success = True
+        else:
+            success, data = self.get_all_certiticate_data(data)
         if success:
             if not data:
                 data = {'certificates': []}

@@ -271,11 +271,11 @@ MAPPING_VALUES_TO_DATA_KEY_2 = {
             'certificate': '6|certificates',
         },
     },
-    # 'testprep': {
-    #     'certificate': {
-    #         'certificate': '3|certificates',
-    #     },
-    # }
+    'testprep': {
+        'certificate': {
+            'certificate': '6|data',
+        },
+    }
 }
 
 MAPPING_VALUES_TO_DATA_KEY = {
@@ -292,10 +292,12 @@ MAPPING_SCORE_TYPE_VENDOR = {
 # Max_Score
 MAPPING_VENDOR_MAX_SCORE = {
     'amcat': 900,
+    'testprep':''
 }
 
 MAPPING_VENDOR_MAX_SCORE_MODULE_WISE = {
     'amcat': 100,
+    'testprep':''
 }
 
 MULTIPLE_VALUES_1 = {
@@ -332,7 +334,19 @@ MULTIPLE_VALUES_2 = {
             'expiry': 'validTill',
             'amcatID': 'amcatID'
         }
-    }
+    },
+    'testprep': {
+        'certificate': {
+            'name': 'certificateName',
+            'skill': 'skillValidated',
+            'vendor_certificate_id': 'licenseNumber',
+            'active_from': 'certificationDate',
+            'expiry': 'validTill',
+            "overallScore": 'overallScore',
+            'testprepID': 'testprepID'
+            }
+    },
+    
 }
 
 ADDITONAL_OPERATIONS_1 = {
@@ -342,7 +356,7 @@ ADDITONAL_OPERATIONS_1 = {
 
 ADDITONAL_OPERATIONS_2 = {
     'amcat': ['attach_score_to_certificates'],
-    'testprep': []
+    'testprep': ['attach_testprep_score_to_certificates']
 }
 
 ADDITONAL_OPERATIONS_MAPPING = {
@@ -694,6 +708,25 @@ class CertiticateParser:
                 else:
                     setattr(certificate, 'overallScore', None)
         return parsed_data
+
+    def attach_testprep_score_to_certificates(self, parsed_data, data):
+        all_scores = self.get_list_of_dictionary(data, 'data')
+        for certificate in parsed_data.certificates:
+            current_certificate_id = certificate.testprepID
+            for score in all_scores:
+                max_score = self.get_max_score_as_per_vendor_module_wise(vendor=data['vendor'])
+                setattr(certificate, 'max_score', max_score)
+                if str(current_certificate_id) == str(score['testprepID']):
+                    overallScore = score.get('overallScore', None)
+                    if overallScore and overallScore != 'NA':
+                        setattr(certificate, 'overallScore', int(overallScore))
+                    else:
+                        setattr(certificate, 'overallScore', None)
+                    break
+                else:
+                    setattr(certificate, 'overallScore', None)
+        return parsed_data
+
 
     def update_order_and_badge_user(self, parsed_data, vendor):
         orderitem_id = int(parsed_data.user_certificate.order_item_id)
