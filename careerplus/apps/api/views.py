@@ -1261,8 +1261,8 @@ class ShineCandidateLoginAPIView(APIView):
 
         # import pdb;pdb.set_trace()
 
-        # if not candidate_id:
-        #     return Response({"detail": "Not Authorised"}, status=status.HTTP_401_UNAUTHORIZED)
+        if not candidate_id:
+            return Response({"detail": "Not Authorised"}, status=status.HTTP_401_UNAUTHORIZED)
 
         # if not candidate_id:
         #     candidate_id = user.candidate_id
