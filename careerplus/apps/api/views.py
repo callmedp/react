@@ -990,13 +990,13 @@ class ShineCandidateLoginAPIView(APIView):
         if resumebuilder_candidate:
             subscription_active = resumebuilder_candidate.active_subscription or False
 
-        # self.request.session.update(login_response)
+        self.request.session.update(login_response)
 
-        # self.request.session.update(personal_info)
+        self.request.session.update(personal_info)
 
-        # mobile_number = self.request.session.get('cell_phone','')
+        mobile_number = self.request.session.get('cell_phone','')
 
-        # self.request.session.update({'mobile_no': mobile_number})
+        self.request.session.update({'mobile_no': mobile_number})
 
         if with_info:
             data_to_send = {"token": token,
