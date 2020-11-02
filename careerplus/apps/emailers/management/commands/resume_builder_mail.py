@@ -27,11 +27,14 @@ from linkedin.autologin import AutoLogin
 
 COUPON_CODE = "qwerty"
 COUPON_VAL = "20"
-COUPON_DESC = 'description' 
+COUPON_DESC = 'description'
+
 
 def send_mail_resume(email, candidate_id, name):
 
-    site_domain = "https://resumestage.shine.com"
+    site_domain = "https://resume.shine.com"
+    if settings.DEBUG:
+        site_domain = "https://resumestage.shine.com"
 
     token = AutoLogin().encode(email, candidate_id, days=None)
 
@@ -66,6 +69,8 @@ def resume_promotion():
     row = 100
     start = 0
     loop = True
+    sent_mail_count = 0
+    testing = False
     query_string = "sMNEx:[{} TO {}]".format(min_exp, max_exp)  
     candidate_solr_url = settings.CANDIDATE_SOLR_URL
 
@@ -81,11 +86,19 @@ def resume_promotion():
                     email = cand.get('sEm')
                     name = cand.get('sFLN')
                     if candidate_id and email and name:
+                        sent_mail_count += 1
+                        if settings.DEBUG:
+                            if not testing:
+                                send_mail_resume("kanak.garg@hindustantimes.com","5f9fb6799cbeea23f026f228","kanak")
+                                testing = settings.DEBUG
+                            break
                         send_mail_resume(email, candidate_id, name)
                 start += row
             else:
                 loop = False
                 break
+            logging.getLogger('info_log').info("number of emails sent {}".format(sent_mail_count))
+            print("number of emails sent {}".format(sent_mail_count))
         else:
             logging.getLogger('error_log').error("something went wrong"+ str(response.content))
     
