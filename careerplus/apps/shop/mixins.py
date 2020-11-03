@@ -291,6 +291,8 @@ class SkillProducts:
 			vendor_to_product_map[prod.vendor_id] = val
 		vendors = vendor_to_product_map.keys()
 		vendors = list(Vendor.objects.filter(id__in=vendors).order_by('-priority').values_list('id',flat=True))
+		if specific_vendor:
+			vendors = specific_vendor
 
 		new_data = {}
 
