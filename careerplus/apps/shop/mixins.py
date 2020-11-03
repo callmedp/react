@@ -5,10 +5,11 @@ from django.conf import settings
 from django.core.cache import cache
 from datetime import datetime
 
-from shop.models import Product, Category
+from shop.models import Product, Category,Skill
 from partner.models import Vendor
 from django.core.mail import EmailMessage
 from order.models import AnalyticsVidhyaRecord
+from partner.models import ProductSkill
 
 
 class CourseCatalogueMixin(object):
@@ -130,4 +131,196 @@ class LinkedinSeriviceMixin(object):
 					flag = True
 					break
 		return flag
+
+
+
+class SkillProducts:
+
+
+	def get_value_products(self,fl=[],products=[]):
+		data = []
+		fl_mapping = {
+			'id': 'id',
+			'title':'title',
+			'vendor_id': 'vendor_id',
+			'fake_inr_price': 'fake_inr_price',
+		}
+
+		fl_func_mapping = {
+			'heading': 'get_heading',
+			# 'title': 'get_title',
+			'icon': 'get_icon_url',
+			'url':  'get_url',
+			'about': 'get_about',
+			'inr_price': 'get_price',
+			'attribute': 'get_assessment_attribute',
+			'img_url': 'get_image_url',
+			'vendor_name': 'get_vendor'
+		}
+		WhatYouGet = {
+			'testpreptraining': [
+				"Receive valuable feedback, from reliable exam reports, on your strong and weak areas",
+				"Get real exam and practice environment",
+				"In depth and exhaustive explanation to every question to enhance your learning",
+				"Unlimited access to the assessment platform",
+				"500+ questions to test your learning on variety of topics",
+				"Gets Tips & Tricks to crack the test",
+			],
+		}
+
+		for prod in products:
+			data_dict = {}
+
+			for f in fl:
+				if f in fl_mapping.keys():
+					data_dict.update({f: getattr(prod,fl_mapping[f],None)})
+				if f in fl_func_mapping.keys():
+					if fl_func_mapping.get(f):
+						data_dict.update({f:getattr(prod,fl_func_mapping[f])()})
+					else:
+						data_dict.update({f:''})
+			if fl:
+				data.append(data_dict)
+				continue
+
+			data_dict.update({'id': prod.id, 'heading': prod.get_heading(), 'title': prod.get_title(),
+							  'url': prod.get_url(),
+							  'icon': prod.get_icon_url(), 'about': prod.get_about(),
+							  'img_url': prod.image.url if prod.image else '',
+							  'inr_price': prod.get_price(),
+							  'vendor_'
+							  'fake_inr_price': prod.fake_inr_price, 'attribute': prod.get_assessment_attribute(),
+							  'vendor': prod.vendor_id})
+
+			if prod.type_flow == 16:
+				if not prod.vendor:
+					data_dict.update({
+						'what_you_get': [
+							"Industry recognized certification after clearing the test",
+							"Get badge on shine.com and showcase your knowledge to the recruiters",
+							"Shine shows your skills as validated and certification as verified which build high trust "
+							"among recruiters",
+							"Receive valuable feedback on your strong and weak areas to improve yourself",
+							"Certified candidates gets higher salary as compared to non certified candidate"
+						]
+					})
+				else:
+					data_dict.update({
+						'what_you_get': WhatYouGet.get(prod.vendor.slug, [
+							"Industry recognized certification after clearing the test",
+							"Get badge on shine.com and showcase your knowledge to the recruiters",
+							"Shine shows your skills as validated and certification as verified which build high trust "
+							"among recruiters",
+							"Receive valuable feedback on your strong and weak areas to improve yourself",
+							"Certified candidates gets higher salary as compared to non certified candidate"
+						])
+					})
+
+			data.append(data_dict)
+		return data
+
+
+
+	def get_product_from_skill(self, skill=[], fl=[]):
+		if not skill:
+			return []
+		filter_dict = {'active': True, 'is_indexed': True, 'is_indexable': True}
+		product_id = None
+		assessment = self.request.GET.get('assessment')
+
+		if assessment:
+			filter_dict.update({'type_flow': 16})
+
+
+
+		if isinstance(skill, list):
+			product_id = ProductSkill.objects.filter(skill__slug__in=skill).values_list('product_id', flat=True)
+
+		else:
+			product_id = ProductSkill.objects.filter(skill__slug=skill).values_list('product_id', flat=True)
+
+
+		if  'vendor_name' in fl:
+
+			products = Product.objects.select_related('vendor').filter(id__in=product_id, **filter_dict).order_by(
+				'-vendor__priority')
+		else:
+			products = Product.objects.filter(id__in=product_id, **filter_dict).order_by(
+				'-vendor__priority')
+
+		return self.get_value_products(fl,products)
+
+
+	def get_all_products_with_skill(self,specific_vendor = []):
+		data = []
+		skill_to_product_map = {}
+		vendor_to_product_map = {}
+		vendor_id_to_name_map = {}
+		skill_id_to_skill_name={}
+		prod_id_to_details = {}
+
+		pdlist = Product.objects.values_list('id','title', 'vendor_id','vendor__name')
+		for pdl in pdlist:
+			prod_id_to_details[pdl[0]] = {
+				'title': pdl[1],
+				'vendor_id': pdl[2],
+				'vendor_name':pdl[3],
+				'id':pdl[0],
+			}
+
+		ps = ProductSkill.objects.values('skill_id','product_id')
+
+		for i in ps:
+			val = skill_to_product_map.get(i.get('skill_id',[]),[])
+			val.append(i.get('product_id',-1))
+			skill_to_product_map[i['skill_id']] = val
+
+		for i in Skill.objects.values('id','slug'):
+			skill_id_to_skill_name[i['id']] = i['slug']
+
+		for i in Vendor.objects.values('id','name'):
+			vendor_id_to_name_map[i['id']] = i['name']
+
+		product_ids = [y for x in skill_to_product_map.values() for y in x]
+
+		products = Product.objects.filter(id__in=product_ids)
+
+		for prod in products:
+			val = vendor_to_product_map.get(prod.vendor_id,[])
+			val.append(prod.id)
+			vendor_to_product_map[prod.vendor_id] = val
+		vendors = vendor_to_product_map.keys()
+		vendors = list(Vendor.objects.filter(id__in=vendors).order_by('-priority').values_list('id',flat=True))
+
+		new_data = {}
+
+		for sk, prod in skill_to_product_map.items():
+			skill_products = []
+			for vendor in vendors:
+				prd = list(set(vendor_to_product_map[vendor]).intersection(set(skill_to_product_map[sk])))
+				if not prd:
+					continue
+				skill_products = skill_products + prd
+			skill_products = [prod_id_to_details.get(i) for i in skill_products]
+			new_data[skill_id_to_skill_name[sk]] = skill_products
+
+		return new_data
+
+
+
+
+
+
+
+
+
+
+
+			
+
+
+
+
+
+
 

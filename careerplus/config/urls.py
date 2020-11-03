@@ -198,6 +198,7 @@ urlpatterns += [
                    re_path(r'^admin/', admin.site.urls),
                    re_path(r'^api-auth/',include('rest_framework.urls', namespace='rest_framework')),
                    re_path(r'api/v1/', include('shop.api.v1.urls', namespace='shop-api')),
+                   re_path(r'api/v2/', include('shop.api.v2.urls', namespace='shop-api')),
                    re_path(r'api/', include('skillpage.api.v1.urls', namespace='skillpage-api')),
                    re_path(r'^$', homepage_view.HomePageView.as_view(), name='homepage'),
                    re_path(r'^console/', include('console.urls', namespace='console')),
