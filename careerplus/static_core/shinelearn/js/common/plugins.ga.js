@@ -13,9 +13,11 @@ function GA(){
         switchcase = options.switchcase || false,
         metrics = options.metrics || {},
         name = options.name || '';
+        window.dataLayer = window.dataLayer || [];
 
         try{
-            gtag('event', name, {
+            window.dataLayer.push({
+              'event': name,
               'send_to': ['UA-3537905-41'],
               'event_category': category,
               'event_label': label,
