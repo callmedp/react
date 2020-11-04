@@ -12,17 +12,27 @@ function GA(){
         noninteraction = options.noninteraction || false,
         switchcase = options.switchcase || false,
         metrics = options.metrics || {},
-        name = options.name || '';
-        window.dataLayer = window.dataLayer || [];
+        name = options.name || '',
+        window.dataLayer = window.dataLayer || [],
+        datalayer_push = options.datalayer_push || false;
 
         try{
-            window.dataLayer.push({
-              'event': name,
-              'send_to': ['UA-3537905-41'],
-              'event_category': category,
-              'event_label': label,
-              'event_action':action
-            });
+            if(datalayer_push==false){
+                gtag('event', name, {
+                    'send_to': ['UA-3537905-41'],
+                    'event_category': category,
+                    'event_label': label,
+                    'event_action':action
+                  });
+            }
+            else{
+                window.dataLayer.push({
+                'event': name,
+                'event_category': category,
+                'event_label': label,
+                'event_action':action
+                });
+        }
         }catch(e)
         {
             try{
