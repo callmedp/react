@@ -134,7 +134,7 @@
             <figure class="mt-20">
                 <img src="{% static 'shinelearn/images/learning-path.jpg' %}" class="img-fluid" alt="About Data Science">
             </figure>
-            <a class="cta-orange mt-50" href="#">Enroll Now</a>
+            <a class="cta-orange mt-50" href="#" onClick="MyGA.SendEvent('ln_enroll_now', 'ln_enroll_now_clicked', 'ln_Analytics_Vidhya', 'clicked', true);">Enroll Now</a>
         </div>
     </section>
 
@@ -177,7 +177,7 @@
                                         </ul>
                                         <span class="price-cta">
                                             <strong class="price-cta__price">Rs. 7999/-</strong>
-                                            <a class="cta-blue-outline" href="https://learning.shine.com/course/it-information-technology/data-science-self-paced-2/pd-4565" target="_blank">Know more</a>
+                                            <a class="cta-blue-outline" href="https://learning.shine.com/course/it-information-technology/data-science-self-paced-2/pd-4565" onClick="MyGA.SendEvent('ln_courses_offered', 'ln_Basic', 'ln_Introduction_to_Data_Science', 'clicked', true);" target="_blank">Know more</a>
                                         </span>
                                     </div>
                                 </div>
@@ -190,7 +190,7 @@
                                         </ul>
                                         <span class="price-cta">
                                             <strong class="price-cta__price">Rs. 7999/-</strong>
-                                            <a class="cta-blue-outline" href="https://learning.shine.com/course/it-information-technology/business-analytics-4/pd-4566" target="_blank">Know more</a>
+                                            <a class="cta-blue-outline" href="https://learning.shine.com/course/it-information-technology/business-analytics-4/pd-4566" onClick="MyGA.SendEvent('ln_courses_offered', 'ln_Basic', 'ln_Introduction_to_Business_Analytics', 'clicked', true);" target="_blank">Know more</a>
                                         </span>
                                     </div>
                                 </div>
@@ -208,7 +208,7 @@
                                         </ul>
                                         <span class="price-cta">
                                             <strong class="price-cta__price">Rs. 17999/-</strong>
-                                            <a class="cta-blue-outline" href="https://learning.shine.com/course/it-information-technology/applied-machine-learning-basic-to-advanced/pd-4567" target="_blank">Know more</a>
+                                            <a class="cta-blue-outline" href="https://learning.shine.com/course/it-information-technology/applied-machine-learning-basic-to-advanced/pd-4567" onClick="MyGA.SendEvent('ln_courses_offered', 'ln_Advanced', 'ln_Applied_Machine_Learning', 'clicked', true);" target="_blank">Know more</a>
                                         </span>
                                     </div>
                                 </div>
@@ -222,7 +222,7 @@
                                         </ul>
                                         <span class="price-cta">
                                             <strong class="price-cta__price">Rs. 14999/-</strong>
-                                            <a class="cta-blue-outline" href="https://learning.shine.com/course/it-information-technology/certified-business-analytics-program/pd-4568" target="_blank">Know more</a>
+                                            <a class="cta-blue-outline" href="https://learning.shine.com/course/it-information-technology/certified-business-analytics-program/pd-4568" onClick="MyGA.SendEvent('ln_courses_offered', 'ln_Advanced', 'ln_Certified_Business_Analytics_Program', 'clicked', true);" target="_blank">Know more</a>
                                         </span>
                                     </div>
                                 </div>
@@ -240,7 +240,7 @@
                                         </ul>
                                         <span class="price-cta">
                                             <strong class="price-cta__price">Rs. 49999/-</strong>
-                                            <a class="cta-blue-outline" href="https://learning.shine.com/course/it-information-technology/certified-ai-and-ml-black-belt-masters/pd-4575" target="_blank">Know more</a>
+                                            <a class="cta-blue-outline" href="https://learning.shine.com/course/it-information-technology/certified-ai-and-ml-black-belt-masters/pd-4575" onClick="MyGA.SendEvent('ln_courses_offered', 'ln_Masters_Program', 'ln_Certified_AI_and_ML_Blackbelt_Program', 'clicked', true);" target="_blank">Know more</a>
                                         </span>
                                     </div>
                                 </div>
@@ -448,6 +448,7 @@
         $(this).addClass('active');
     })
     function enroll_now(){
+        MyGA.SendEvent('ln_enquire_now', 'ln_enquire_now_clicked', '', 'inprocess', true);
         var data = {
             'name' : $("#name").val(),
             'country' : $("#country").val(),
