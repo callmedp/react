@@ -101,7 +101,22 @@ GA.prototype.SendEvent = function() {
         case 'talenteconomy' : /* talenteconomy navigation click (header->desktop, menu->mobile) */    
         case 'InboxJobs' :/*When user click on get these jobs jsrp*/
         case 'itm' : /* when ever url contains itm parameters */
-
+        case 'ln_enquire_now': /* When the user fills the Enquire now form and clicks the submit button */
+        case 'ln_enroll_now': /* When the user clicks on Enrol now button */
+        case 'ln_courses_offered': /* When the user clicks on any of the courses offered */
+        case 'ln_course_provider': /* When user clicks on course provided by  */
+        case 'ln_breadcrumbs': /* When user clicks on the breadcrumbs */
+        case 'ln_study_mode': /* When user chooses the study mode */
+        case 'ln_review': /* When user writes a review */
+        case 'ln_request_call': /* When user requests a call back */
+        case 'ln_course_details': /* When user clicks on all course/certification */
+        case 'ln_enroll_now': /* When user clicks on enroll now */
+        case 'ln_proceed_payment': /* When user clicks on proceed payment */
+        case 'ln_resume_service': /* When user clicks on resume service on checkout page */
+        case 'ln_coupon_apply': /* When user is looking to apply coupon, redeeem credit */
+        case 'ln_payment_option': /* When user selects a payment option */
+        case 'ln_complete_payment': /* When user completes the payments and moves ahead */
+    
             
             that.fireGaEvent({
                 'category': arguments[1],
