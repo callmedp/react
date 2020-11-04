@@ -205,7 +205,7 @@ const stickyNavbarActiveScroll = (startStickyActiveScroll) => {
 const needHelpFormValidation = () => {
 
     var callUsForm = $("#callUsForm");
-    callUsForm.validate({
+    $("#callUsForm").validate({
         errorClass:'error-msg',
         rules: {
             name: {
