@@ -12,15 +12,26 @@ function GA(){
         noninteraction = options.noninteraction || false,
         switchcase = options.switchcase || false,
         metrics = options.metrics || {},
-        name = options.name || '';
+        name = options.name || '',
+        custom_event = options.custom_event || false;
 
         try{
-            gtag('event', name, {
-              'send_to': ['UA-3537905-41'],
-              'event_category': category,
-              'event_label': label,
-              'event_action':action
-            });
+            if(custom_event==false){
+                gtag('event', name, {
+                    'send_to': ['UA-3537905-41'],
+                    'event_category': category,
+                    'event_label': label,
+                    'event_action':action
+                  });
+            }
+            else{
+                window.dataLayer.push({
+                'event': name,
+                'event_category': category,
+                'event_label': label,
+                'event_action':action
+                });
+        }
         }catch(e)
         {
             try{
@@ -98,7 +109,8 @@ GA.prototype.SendEvent = function() {
                 'label': arguments[3],
                 'value': value,
                 'noninteraction': noninteraction,
-                'name': fn 
+                'name': fn,
+                'custom_event': typeof arguments[4] != "undefined" ? arguments[4] : false
             });
             break;
         
