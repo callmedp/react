@@ -474,7 +474,6 @@ NON_LOGGED_IN_CHATBOT = "https://learning-media-staging-189607.storage.googleapi
 
 PRODUCT_LEADCREATION_COUNTDOWN = 30
 
-
 RESUME_SHINE_SITE_PROTOCOL = 'https'
 RESUME_SHINE_SITE_DOMAIN = 'resumestage.shine.com'
 RESUME_SHINE_MAIN_DOMAIN = '{}://{}'.format(RESUME_SHINE_SITE_PROTOCOL,RESUME_SHINE_SITE_DOMAIN)
@@ -504,3 +503,6 @@ CORS_ALLOW_HEADERS = [
 'access-key',
 'X-CSRFToken'
 ]
+
+RESUME_SHINE_URL = "https://resumestage.shine.com"
+
