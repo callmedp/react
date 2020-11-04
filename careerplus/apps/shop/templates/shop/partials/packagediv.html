@@ -6,7 +6,7 @@
     <span>Provided by</span>
 
     {% if sqs_main.id == sqs.id %}
-      <a role="button" class="other-package selected" data-id="{{sqs_main.id}}" main-id="{{sqs_main.id}}">
+      <a role="button" class="other-package selected" onClick="MyGA.SendEvent('ln_course_provider', 'ln_click_course_provider', '{{prd_vendor}}', 'clicked', true);" data-id="{{sqs_main.id}}" main-id="{{sqs_main.id}}">
         <div class="other-package-img">
           <img aria-label="{{prd_vendor}}" src="{{prd_vendor_img}}" class="img-responsive text-center" alt="{{prd_vendor}}">
         </div>
@@ -16,7 +16,7 @@
         </div>
       </a>
     {% else %}
-      <a role="button" class="other-package other-product" data-id="{{sqs_main.id}}" main-id="{{sqs_main.id}}">
+      <a role="button" class="other-package other-product" data-id="{{sqs_main.id}}" onClick="MyGA.SendEvent('ln_course_provider', 'ln_click_course_provider', '{{sqs_main.pPvn}}', 'clicked', true);" main-id="{{sqs_main.id}}">
         <div class="other-package-img">
           <img aria-label="{{sqs_main.pPvn}}" src="{{sqs_main.pVi}}" class="img-responsive text-center" alt="{{sqs_main.pPvn}}">
         </div>
@@ -26,7 +26,7 @@
       {% for provider in pop_list|slice:"0:4" %}
 
         {% if provider.id == sqs.id %}
-          <a role="button" class="other-package selected" data-id="{{provider.id}}" main-id="{{sqs_main.id}}">
+          <a role="button" class="other-package selected" data-id="{{provider.id}}" onClick="MyGA.SendEvent('ln_course_provider', 'ln_click_course_provider', '{{provider.vendor}}', 'clicked', true);" main-id="{{sqs_main.id}}">
             <div class="other-package-img">
               <img aria-label="{{provider.vendor}}" src="{{provider.vendor_image}}" class="img-responsive text-center" alt="{{provider.vendor}}">
             </div>
@@ -36,7 +36,7 @@
             </div>
           </a>
         {% else %}
-          <a role="button" class="other-package other-product" data-id="{{provider.id}}" main-id="{{sqs_main.id}}">
+          <a role="button" class="other-package other-product" data-id="{{provider.id}}" onClick="MyGA.SendEvent('ln_course_provider', 'ln_click_course_provider', '{{provider.vendor}}', 'clicked', true);" main-id="{{sqs_main.id}}">
             <div class="other-package-img">
               <img aria-label="{{provider.vendor}}" src="{{provider.vendor_image}}" class="img-responsive text-center" alt="{{provider.vendor}}">
             </div>

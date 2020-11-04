@@ -2,11 +2,11 @@
 	{% for breadcrumb in breadcrumbs  %}
 		{% if breadcrumb.active %}
 			<li itemprop="itemListElement" itemscope
-		      itemtype="http://schema.org/ListItem"><a itemprop="item" href="{{breadcrumb.url}}" onclick="handleTracking('exit_product_page')"><span itemprop="name">{{breadcrumb.label}}</span></a>
+		      itemtype="http://schema.org/ListItem"><a itemprop="item" href="{{breadcrumb.url}}" onclick="handleTracking('exit_product_page'); MyGA.SendEvent('ln_breadcrumbs', 'ln_breadcrumb_click', '{{breadcrumb.label}}', 'clicked', true);"><span itemprop="name">{{breadcrumb.label}}</span></a>
 			<meta itemprop="position" content="{{forloop.counter}}" />
 		  </li>
 		{% else %}
-			<li class="active">{{breadcrumb.label}}</li>
+			<li class="active" onclick="MyGA.SendEvent('ln_breadcrumbs', 'ln_breadcrumb_click', '{{breadcrumb.label}}', 'clicked', true);">{{breadcrumb.label}}</li>
 		{% endif %}
 		
 	{% endfor %}

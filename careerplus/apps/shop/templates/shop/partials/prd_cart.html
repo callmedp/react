@@ -56,7 +56,7 @@
   <div class="price-box-prd">
     <span class="col">
       <a role="button" class="enrol-now" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}"
-        href="javascript:void();" onclick="handleTracking('enroll_now')" >
+        href="javascript:void();" onclick="handleTracking('enroll_now'); MyGA.SendEvent('ln_enroll_now', 'ln_click_enroll_now', '{{prd_H1}}', 'clicked', true);" >
         {% if product.is_assesment %}
         BuyNow
         {% else %}
@@ -165,7 +165,7 @@
 
     </form>
     <button type="button" {% if prd_vendor_slug == "neo" %} id="id_callback_neo" {% else %}id="id_callback"
-      {% endif %}class="callback-button mt-10"  onclick="handleTracking('enroll_now')" >Request a call back</button>
+      {% endif %}class="callback-button mt-10"  onclick="handleTracking('enroll_now'); MyGA.SendEvent('ln_request_call', 'ln_request_call', '{{product.heading}}', 'clicked', true);" >Request a call back</button>
     <!--button type="button" id="id_callback" class="submit-button">
             Submit
           </button-->
