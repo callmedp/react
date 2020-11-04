@@ -235,7 +235,7 @@
           <div class="box-panel checkout-box cls_scroller pr">
             Amount Payable
           <span id="total-cart-amount-id"><strong>Rs.{{total_amount}}/-<small style="font-size:12px; font-weight:normal; color:#999; margin-left:5px">(+taxes)</small></strong></span>
-            <a href="{% url "cart:payment-summary" %}">Proceed to checkout</a>
+            <a onClick="MyGA.SendEvent('ln_proceed_payment', 'ln_click_to_payment', 'course_opted', 'clicked', true);" href="{% url "cart:payment-summary" %}">Proceed to checkout</a>
           </div>
 
           <!-- secure payment -->
