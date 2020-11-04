@@ -136,6 +136,9 @@ $('#enquire_form').click(function(event) {
                 pop('Your Query Submitted Successfully.');
                 $('#enquireform')[0].reset();
                 $('#enquire_form').removeAttr("disabled");
+                var modal = document.getElementById("popup_subscribe");
+                modal.style.display = "none";
+                enableScroll();
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 gaEventFunc(typeOfProduct,'failure');

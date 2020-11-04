@@ -40,6 +40,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         {% compress css %}
         <link type="text/scss" href="{% static 'shinelearn/css/common/bootstrap.scss' %}" rel="stylesheet">
         <link type="text/scss" href="{% static 'shinelearn/css/common/header-footer.scss' %}" rel="stylesheet">
+        <link type="text/css" href="{% static 'shinelearn/css/common/popup.css' %}" rel="stylesheet">
         <link type="text/css" href="{% static 'shinelearn/css/common/typeaheadjs.css' %}" rel="stylesheet">
         {% endcompress %}
          <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
@@ -138,6 +139,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 
 {% block js_section %}
+
     <script async src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.7/js/tether.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"> </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.3.1/typeahead.bundle.min.js"></script>
@@ -148,6 +150,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     {% compress js %}
     <!-- <script src="{% static 'shinelearn/js/common/bootstrap.min.js' %}"></script> -->
     <!-- <script src="{% static 'shinelearn/js/common/jquery.validate.min.js' %}"> </script> -->
+    <script src="{% static 'shinelearn/js/common/popup.js' %}"></script>
+    <script src="{% static 'shinelearn/js/talenteconomy/article.js' %}"></script>
     <script src="{% static 'shinelearn/js/common/plugins.ga.js' %}"></script>
     <script src="{% static 'shinelearn/js/common/common.js' %}"> </script>
     <script src="{% static 'shinelearn/js/webmobile/webmobile.js' %}"> </script>

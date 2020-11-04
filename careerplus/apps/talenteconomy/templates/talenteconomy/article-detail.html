@@ -99,63 +99,123 @@
       <div id="snackbar"></div>
 
 
-      <div id="sticker" class="right-box query-form-right box-panel col-sm-6 col-md-12 cleafix">
+<!--      <div id="sticker" class="right-box query-form-right box-panel col-sm-6 col-md-12 cleafix">-->
 
 
-        <h2 class="heading-right">Looks interesting?</h2>
-          <p>Subscribe & Get our daily newsletter. Fill the details below.</p>
-          <form class="te-form mt-20" role="form"  id="enquireform" name="enq" >
-            <div style='display:none'>
-                <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}'/>
-            </div>
+<!--        <h2 class="heading-right">Looks interesting?</h2>-->
+<!--          <p>Subscribe & Get our daily newsletter. Fill the details below.</p>-->
+<!--          <form class="te-form mt-20" role="form"  id="enquireform" name="enq" >-->
+<!--            <div style='display:none'>-->
+<!--                <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}'/>-->
+<!--            </div>-->
 
-            <div class="form-group">
-              <input type="text" class="input_field form-control" name="name"  id="id_name"  placeholder="Name"
-              maxlength="100" value="{{request.session.full_name}}">
-              <!-- <label class="input_label" for="id_name">Name<sup>*</sup></label> -->
-            </div>
-            
-            <div class="form-group">
-              <input type="email" class="input_field form-control" name="email"  id="id_email"  placeholder="Email"
-              maxlength="100" value="{{request.session.email}}">
-              <!-- <label class="input_label" for="id_email">Email<sup>*</sup></label> -->
-            </div>
+<!--            <div class="form-group">-->
+<!--              <input type="text" class="input_field form-control" name="name"  id="id_name"  placeholder="Name"-->
+<!--              maxlength="100" value="{{request.session.full_name}}">-->
+<!--              &lt;!&ndash; <label class="input_label" for="id_name">Name<sup>*</sup></label> &ndash;&gt;-->
+<!--            </div>-->
+<!--            -->
+<!--            <div class="form-group">-->
+<!--              <input type="email" class="input_field form-control" name="email"  id="id_email"  placeholder="Email"-->
+<!--              maxlength="100" value="{{request.session.email}}">-->
+<!--              &lt;!&ndash; <label class="input_label" for="id_email">Email<sup>*</sup></label> &ndash;&gt;-->
+<!--            </div>-->
 
-            <div class="form-group" style="display: flex;">
-                <div class="country-code">
-                    <div class="custom-select">
-                      <select class="form-control" name="country">
-                        {% for country in country_choices %}
-                           <option value="{{country.0}}" {% if country.0 == initial_country %} selected {% endif %} >{{country.0}}&nbsp;&nbsp;&nbsp;&nbsp; -- &nbsp;&nbsp;&nbsp;&nbsp;{{country.1}}</option>
-                      {% endfor %}
-                      </select>
-                    </div>
+<!--            <div class="form-group" style="display: flex;">-->
+<!--                <div class="country-code">-->
+<!--                    <div class="custom-select">-->
+<!--                      <select class="form-control" name="country">-->
+<!--                        {% for country in country_choices %}-->
+<!--                           <option value="{{country.0}}" {% if country.0 == initial_country %} selected {% endif %} >{{country.0}}&nbsp;&nbsp;&nbsp;&nbsp; &#45;&#45; &nbsp;&nbsp;&nbsp;&nbsp;{{country.1}}</option>-->
+<!--                      {% endfor %}-->
+<!--                      </select>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--                <div style="position: relative;">-->
+<!--                    <input type="text" class="input_field form-control" name="number" id="id_cell_phone"-->
+<!--                    placeholder="Mobile" maxlength="15" value="{{request.session.mobile_no}}">-->
+<!--                    &lt;!&ndash; <label class="input_label" for="id_cell_phone">Mobile</label> &ndash;&gt;-->
+<!--                    <span class="error-txt position-error"></span>-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--            <div class="form-group">-->
+<!--              <textarea class="form-control" rows="1" name="msg" placeholder="Message" maxlength="500"></textarea>-->
+<!--              <span class="error-txt"></span>-->
+<!--            </div>-->
+
+
+<!--            <input type="hidden" name="product" value="{{category_obj.pk}}">-->
+<!--            <input type="hidden" name="prd" value="{{category_obj.heading}}">-->
+<!--            <input type="hidden" name="path" value="{{request.build_absolute_uri}}">-->
+<!--            &lt;!&ndash; <input type="hidden" name="email" class="form-control" value="{{request.session.email}}"> &ndash;&gt;-->
+<!--            <input type="hidden" name="lsource" value="8">-->
+<!--           <input type="hidden" name="campaign" value="blogsonline">-->
+<!--           <button type="button" id="enquire_form" class="submit-button">Subscribe Now</button>-->
+<!--          </form>-->
+
+<!--      </div>-->
+      <!-- Looks interesting Popup? -->
+
+            <div id="popup_subscribe" class="modal">
+
+                <!-- Modal content -->
+                <div class="modal-content">
+                    <span class="close_popup_modal">&times;</span>
+                    <h2 class="heading-right">Looks interesting?</h2>
+                    <p>Subscribe & Get our daily newsletter. Fill the details below.</p>
+                    <form class="te-form mt-20" role="form"  id="enquireform" name="enq" >
+                        <div style='display:none'>
+                            <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}'/>
+                        </div>
+
+                        <div class="form-group">
+                            <input type="text" class="input_field form-control" name="name"  id="id_name"  placeholder="Name"
+                                   maxlength="100" value="{{request.session.full_name}}">
+                            <!-- <label class="input_label" for="id_name">Name<sup>*</sup></label> -->
+                        </div>
+
+                        <div class="form-group">
+                            <input type="email" class="input_field form-control" name="email"  id="id_email"  placeholder="Email"
+                                   maxlength="100" value="{{request.session.email}}">
+                            <!-- <label class="input_label" for="id_email">Email<sup>*</sup></label> -->
+                        </div>
+
+                        <div class="form-group" style="display: flex;">
+                            <div class="country-code">
+                                <div class="custom-select">
+                                    <select class="form-control" name="country">
+                                        {% for country in country_choices %}
+                                        <option value="{{country.0}}" {% if country.0 == initial_country %} selected {% endif %} >{{country.0}}&nbsp;&nbsp;&nbsp;&nbsp; -- &nbsp;&nbsp;&nbsp;&nbsp;{{country.1}}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            <div style="position: relative;">
+                                <input type="text" class="input_field form-control" name="number" id="id_cell_phone"
+                                       placeholder="Mobile" maxlength="15" value="{{request.session.mobile_no}}">
+                                <!-- <label class="input_label" for="id_cell_phone">Mobile</label> -->
+                                <span class="error-txt position-error"></span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <textarea class="form-control" rows="1" name="msg" placeholder="Message" maxlength="500"></textarea>
+                            <span class="error-txt"></span>
+                        </div>
+
+
+                        <input type="hidden" name="product" value="{{category_obj.pk}}">
+                        <input type="hidden" name="prd" value="{{category_obj.heading}}">
+                        <input type="hidden" name="path" value="{{request.build_absolute_uri}}">
+                        <!-- <input type="hidden" name="email" class="form-control" value="{{request.session.email}}"> -->
+                        <input type="hidden" name="lsource" value="8">
+                        <input type="hidden" name="campaign" value="blogsonline">
+                        <button type="button" id="enquire_form" class="submit-button">Subscribe Now</button>
+                    </form>
                 </div>
-                <div style="position: relative;">
-                    <input type="text" class="input_field form-control" name="number" id="id_cell_phone"
-                    placeholder="Mobile" maxlength="15" value="{{request.session.mobile_no}}">
-                    <!-- <label class="input_label" for="id_cell_phone">Mobile</label> -->
-                    <span class="error-txt position-error"></span>
-                </div>
+
             </div>
-
-            <div class="form-group">
-              <textarea class="form-control" rows="1" name="msg" placeholder="Message" maxlength="500"></textarea>
-              <span class="error-txt"></span>
-            </div>
-
-
-            <input type="hidden" name="product" value="{{category_obj.pk}}">
-            <input type="hidden" name="prd" value="{{category_obj.heading}}">
-            <input type="hidden" name="path" value="{{request.build_absolute_uri}}">
-            <!-- <input type="hidden" name="email" class="form-control" value="{{request.session.email}}"> -->
-            <input type="hidden" name="lsource" value="8">
-           <input type="hidden" name="campaign" value="blogsonline">
-           <button type="button" id="enquire_form" class="submit-button">Subscribe Now</button>
-          </form>
-
-      </div>
-      <!-- Looks interesting? --> 
 
       <!-- Look interesting -->
 				<!--{% include './include/look-interesting.tmpl.html' with popular_courses=popular_courses page='talenteconomy-article-details' %}-->
@@ -336,7 +396,6 @@ function gaEvent(event_cat,event_lab,event_action){
     <script src="{% static 'shinelearn/js/blog/blog-detail.js' %}"></script>
     <script src="{% static 'shinelearn/js/blog/login-register.js' %}"></script>
     <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
-    <script src="{% static 'shinelearn/js/talenteconomy/article.js' %}"></script>
     <script src="{% static 'shinelearn/js/talenteconomy/prism.js' %}"></script>
     <script type="text/javascript">
       $(document).ready(function() {
