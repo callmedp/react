@@ -125,7 +125,7 @@ GA.prototype.SendEvent = function() {
                 'value': value,
                 'noninteraction': noninteraction,
                 'name': fn,
-                'custom_event': typeof arguments[4] != "undefined" ? arguments[4] : false
+                'custom_event': typeof arguments[6] != "undefined" ? arguments[6] : false
             });
             break;
         
