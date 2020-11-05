@@ -449,6 +449,8 @@ TINYMCE_DEFAULT_CONFIG = {
     'toolbar_mode': 'sliding',
 }
 
+RESUME_SHINE_URL = "https://resume.shine.com"
+
 try:
     from .settings_local import *
 except:

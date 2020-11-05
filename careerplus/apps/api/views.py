@@ -974,14 +974,14 @@ class ShineCandidateLoginAPIView(APIView):
         return order_data
 
     def get_candidate_experience(self, login_response):
-        return (login_response['workex'] and login_response['workex'][0] and login_response['workex'][0].get('experience_in_years', 0)) or 0
+        return (login_response.get('workex',0) and login_response['workex'][0] and login_response['workex'][0].get('experience_in_years', 0)) or 0
 
     def get_response_for_successful_login(self, candidate_id, login_response, with_info=True):
         candidate_obj = ShineCandidate(**login_response)
         candidate_obj.id = candidate_id
         candidate_obj.candidate_id = candidate_id
         token = self.get_or_create_token(candidate_obj)
-        personal_info = login_response.get('personal_detail')[0]
+        personal_info = login_response.get('personal_detail')[0] if login_response.get('personal_detail') else {}
         personal_info['candidate_id'] = personal_info.get('id')
         subscription_active = False
         # Check whether subscription active or not if resumebuilder candidate exists
@@ -990,13 +990,13 @@ class ShineCandidateLoginAPIView(APIView):
         if resumebuilder_candidate:
             subscription_active = resumebuilder_candidate.active_subscription or False
 
-        # self.request.session.update(login_response)
+        self.request.session.update(login_response)
 
-        # self.request.session.update(personal_info)
+        self.request.session.update(personal_info)
 
-        # mobile_number = self.request.session.get('cell_phone','')
+        mobile_number = self.request.session.get('cell_phone','')
 
-        # self.request.session.update({'mobile_no': mobile_number})
+        self.request.session.update({'mobile_no': mobile_number})
 
         if with_info:
             data_to_send = {"token": token,
@@ -1036,32 +1036,46 @@ class ShineCandidateLoginAPIView(APIView):
                                     'start_date',
                                     'end_date', 'is_pursuing', 'order']
         candidate_education = []
-
+        
         for ind, edu in enumerate(education):
             course_type = ""
-            if edu['course_type'] == 1:
+            if edu.get('course_type',-1) == 1:
                 course_type = "FT"
-            elif edu['course_type'] == 2:
+            elif edu.get('course_type',-1) == 2:
                 course_type = "PT"
             else:
                 course_type = "CR"
 
-            degree_index = next((index for (index, d) in enumerate(educ_list) if d["pid"] == edu['education_level']),
+            degree_index = next((index for (index, d) in enumerate(educ_list) if d["pid"] == edu.get('education_level')),
                                 None)
+            degree_name = ''
+            specialization_name = ''
 
-            degree_name = educ_list[degree_index]['pdesc']
+            if degree_index is not None:
+                degree_name = educ_list[degree_index].get('pdesc','')
+                child = educ_list[degree_index].get('child','')
+                specialization_index = next((index for (index, d) in enumerate(child)
+                                            if d['cid'] == edu.get('education_specialization','')), None)
 
-            child = educ_list[degree_index]['child']
+                if specialization_index is not None:
+                    specialization_name = child[specialization_index].get('cdesc','')
+                
+                else:
+                    logging.getLogger('error_log').error(
+                        "specialization_index is None for education - {} in get_education_info".format(edu))
 
-            specialization_index = next((index for (index, d) in enumerate(child)
-                                         if d['cid'] == edu['education_specialization']), None)
-            specialization_name = child[specialization_index]['cdesc']
 
+            else:
+                logging.getLogger('error_log').error(
+                    "degree_index is None for education - {} in get_education_info".format(edu))
+
+            
+            
             candidate_education_values = ['', '{}({})'.format(degree_name, specialization_name),
-                                          edu['institute_name'],
-                                          course_type,
-                                          '',
-                                          None, None, True, ind]
+                                                edu.get('institute_name',''),
+                                                course_type,
+                                                '',
+                                                None, None, True, ind]        
             education_dict = dict(
                 zip(candidate_education_keys, candidate_education_values))
             candidate_education.append(education_dict)
@@ -1125,21 +1139,18 @@ class ShineCandidateLoginAPIView(APIView):
     def customize_user_profile(self, login_response):
 
         # get personal info
-        profile = login_response and login_response['personal_detail'][0]
+        profile = login_response.get('personal_detail')[0] if login_response.get('personal_detail','') else {}
         candidate_info = dict()
         candidate_info['personalInfo'] = self.get_profile_info(profile)
 
         # get education info
-        candidate_info['education'] = self.get_education_info(
-            login_response and login_response['education'])
+        candidate_info['education'] = self.get_education_info(login_response.get('education',[]))
 
         #  get experience info
-        candidate_info['experience'] = self.get_experience_info(
-            login_response and login_response['jobs'])
+        candidate_info['experience'] = self.get_experience_info(login_response.get('jobs',[]))
 
         #  get skills
-        candidate_info['skill'] = self.get_skill_info(
-            login_response and login_response['skills'])
+        candidate_info['skill'] = self.get_skill_info(login_response.get('skills',[]))
 
         #  get language
         candidate_info['language'] = [{
@@ -1153,8 +1164,7 @@ class ShineCandidateLoginAPIView(APIView):
         }]
 
         #  get courses
-        candidate_info['course'] = self.get_certification_info(
-            login_response and login_response['certifications'])
+        candidate_info['course'] = self.get_certification_info(login_response.get('certifications',[]))
 
         #   get award
         candidate_info['award'] = [{
@@ -1251,8 +1261,8 @@ class ShineCandidateLoginAPIView(APIView):
 
         # import pdb;pdb.set_trace()
 
-        # if not candidate_id:
-        #     return Response({"detail": "Not Authorised"}, status=status.HTTP_401_UNAUTHORIZED)
+        if not candidate_id:
+            return Response({"detail": "Not Authorised"}, status=status.HTTP_401_UNAUTHORIZED)
 
         # if not candidate_id:
         #     candidate_id = user.candidate_id
@@ -1452,6 +1462,8 @@ class ImportCertificateApiView(APIView, AmcatApiMixin):
             'check_type': 'certificate',
             'candidate_email': email
         }
+
+       
         success, data = self.get_all_certiticate_data(data)
         if success:
             if not data:

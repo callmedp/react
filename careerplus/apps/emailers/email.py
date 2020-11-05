@@ -322,3 +322,8 @@ class SendMail():
             send_dict['template'] = 'emailers/candidate/shine_cart_drop.html'
             self.process(to, send_dict, data)
 
+        elif mail_type == "RESUME_BUILDER_PROMOTION":
+            send_dict['subject'] = data.get('subject', "")
+            send_dict['template'] = 'emailers/candidate/resume_builder_promotion.html'
+            self.process(to, send_dict, data)
+

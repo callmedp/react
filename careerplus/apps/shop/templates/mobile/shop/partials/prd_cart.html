@@ -65,7 +65,7 @@
 
 
             </ul>
-         {% if product.inr_price < 5001 %}
+         {% comment %} {% if product.inr_price < 5001 %}
             <div class="e-payLatter">
                 <span class="mr-15">
                   <img aria-label="epay latter" class="img-responsive" src="{% static "shinelearn/images/mobile/shop/epaylatter.webp" %}"/>
@@ -73,7 +73,8 @@
                 <p class="pb-0">Buy now and <span class="bold">make payment within 14 days</span> using ePayLater </p>
             </div><!-- ./ e-payLatter -->
 
-           {% else %}
+           {% else %} {% endcomment %}
+         {% if product.inr_price > 5001 %}
              <div class="e-payLatter">
                 <span class="mr-15">
                   <img aria-label="epay latter" class="img-responsive" src="{% static 'shinelearn/images/payments/zest.png' %}" >

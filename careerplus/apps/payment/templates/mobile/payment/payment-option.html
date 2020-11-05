@@ -217,12 +217,12 @@
 
         {% endif %}
 
-          <div class="payment-type--item">
+          {% comment %} <!-- <div class="payment-type--item">
             <span></span>
             <a class="trig-loader" id="buy-now-pay-later" href="{% url "payment:epaylater-request" cart_id %}" >Buy now, Pay Later
               <img src="{% static 'shinelearn/images/mobile/common/epaylater.jpg' %}" class="payment-type--item--img"/>
             </a>
-          </div>
+          </div> --> {% endcomment %}
             {% if total_amount > 5000 %}
 
             <div class="accordion_example1 smk_accordion" id="zestMoneyAccordion" >

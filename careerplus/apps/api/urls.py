@@ -1,5 +1,5 @@
 # from django.conf.urls import url
-from django.urls import re_path
+from django.urls import re_path ,include
 from django.conf import settings
 
 from . import views
@@ -108,6 +108,7 @@ urlpatterns = [
         views.ResumeTemplateDownload.as_view(),
         name='resume-template-download'
     ),
+    re_path(r'^v2/', include('api.v2.urls')),
 
 ]
 
