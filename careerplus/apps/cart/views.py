@@ -167,6 +167,8 @@ class RemoveFromCartView(View, CartMixin):
             'referal_product','')
         referal_subproduct = self.request.session.get(
             'referal_subproduct','')
+        popup_based_product = self.request.session.get(
+            'popup_based_product', '')
         if tracking_product_id == product_id and tracking_id:
             # logging.getLogger('info_log').info(email_data)
             name = email_dict.get('name', '')
@@ -174,14 +176,14 @@ class RemoveFromCartView(View, CartMixin):
             cart_product_removed_mail.apply_async(
                 (product_id, tracking_id, u_id, email, name, 
                     tracking_product_id, product_tracking_mapping_id,
-                    trigger_point, position, utm_campaign, 2), 
+                    trigger_point, position, utm_campaign, 2, popup_based_product), 
                 countdown=settings.CART_DROP_OUT_EMAIL)
             # cart_product_removed_mail(email_data)
             make_logging_sk_request.delay(
-                tracking_product_id, product_tracking_mapping_id, tracking_id, 'remove_product', position, trigger_point, u_id, utm_campaign, 2, referal_product, referal_subproduct)
+                tracking_product_id, product_tracking_mapping_id, tracking_id, 'remove_product', position, trigger_point, u_id, utm_campaign, 2, referal_product, referal_subproduct, popup_based_product)
             # for showing the user exits for that particular cart product
             make_logging_sk_request.delay(
-                tracking_product_id, product_tracking_mapping_id, tracking_id, 'exit_cart', position, trigger_point, u_id, utm_campaign, 2, referal_product, referal_subproduct)
+                tracking_product_id, product_tracking_mapping_id, tracking_id, 'exit_cart', position, trigger_point, u_id, utm_campaign, 2, referal_product, referal_subproduct, popup_based_product, popup_based_product)
             if tracking_id:
                 del self.request.session['tracking_id']
             if product_tracking_mapping_id:
@@ -196,6 +198,8 @@ class RemoveFromCartView(View, CartMixin):
                 del self.request.session['position']
             if utm_campaign:
                 del self.request.session['utm_campaign']
+            if popup_based_product:
+                del self.request.session['popup_based_product']
 
     def post(self, request, *args, **kwargs):
         if request.is_ajax():
@@ -735,6 +739,7 @@ class PaymentSummaryView(TemplateView, CartMixin):
         emailer = request.GET.get('emailer', '')
         tracking_product_id = request.GET.get('t_prod_id', '')
         product_tracking_mapping_id = request.GET.get('prod_t_m_id', '')
+        popup_based_product = request.GET.get('popup_based_product','')
         if tracking_id:
             tracking_id = tracking_id.strip()
         valid = False
@@ -787,7 +792,8 @@ class PaymentSummaryView(TemplateView, CartMixin):
                 'trigger_point': trigger_point,
                 'position': position,
                 'u_id': u_id,
-                'utm_campaign': utm_campaign})
+                'utm_campaign': utm_campaign,
+                'popup_based_product': popup_based_product})
         
         tracking_id= request.session.get('tracking_id','')
         tracking_product_id= request.session.get('tracking_product_id',tracking_product_id)
@@ -799,6 +805,7 @@ class PaymentSummaryView(TemplateView, CartMixin):
         trigger_point = request.session.get('trigger_point', '')
         referal_product = request.session.get('referal_product', '')
         referal_subproduct = request.session.get('referal_subproduct', '')
+        popup_based_product = request.session.get('popup_based_product', '')
 
         if product_id and tracking_id:
             try:  
@@ -813,14 +820,14 @@ class PaymentSummaryView(TemplateView, CartMixin):
                         (cart_pk, email, "SHINE_CART_DROP", name, 
                         tracking_id, u_id, tracking_product_id, 
                         product_tracking_mapping_id, trigger_point, 
-                        position, utm_campaign, 2),
+                        position, utm_campaign, 2, popup_based_product),
                         countdown=settings.CART_DROP_OUT_EMAIL)
             except Exception as e:
                 logging.getLogger('error_log').error("Unable to send mail: {}".format(e))
 
         if tracking_id and tracking_product_id and product_tracking_mapping_id and product_availability and emailer:
             make_logging_request.delay(
-                    tracking_product_id, product_tracking_mapping_id, tracking_id, 'clicked', position, trigger_point, u_id, utm_campaign, 2)
+                    tracking_product_id, product_tracking_mapping_id, tracking_id, 'clicked', position, trigger_point, u_id, utm_campaign, 2, popup_based_product)
 
         redirect = self.redirect_if_necessary(reload_url)
         if redirect:
@@ -831,7 +838,7 @@ class PaymentSummaryView(TemplateView, CartMixin):
 
         if tracking_id and tracking_product_id and product_tracking_mapping_id and product_availability:
             make_logging_sk_request.delay(
-                tracking_product_id, product_tracking_mapping_id, tracking_id, 'cart_payment_summary',position, trigger_point, u_id, utm_campaign, 2, referal_product, referal_subproduct)
+                tracking_product_id, product_tracking_mapping_id, tracking_id, 'cart_payment_summary',position, trigger_point, u_id, utm_campaign, 2, referal_product, referal_subproduct, popup_based_product)
 
         return super(self.__class__, self).get(request, *args, **kwargs)
 
@@ -925,6 +932,7 @@ class PaymentSummaryView(TemplateView, CartMixin):
             'product_availability': self.request.session.get('product_availability', self.request.session.get('tracking_product_id', '')),
             'referal_product': self.request.session.get('referal_product', ''),
             'referal_subproduct': self.request.session.get('referal_subproduct', ''),
+            'popup_based_product' : self.request.session.get('popup_based_product', '')
         })
 
         context.update({

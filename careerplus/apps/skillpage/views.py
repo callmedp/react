@@ -62,6 +62,7 @@ class SkillPageView(DetailView, SkillPageMixin):
         utm_campaign = self.request.GET.get('utm_campaign', '')
         skill_id = self.kwargs.get('pk')
         product_tracking_mapping_id = self.request.session.get('product_tracking_mapping_id', '')
+        popup_based_product = self.request.session.get('popup_based_product', '')
 
         if product_tracking_mapping_id == 10:
             self.remove_tracking()
@@ -75,10 +76,11 @@ class SkillPageView(DetailView, SkillPageMixin):
                 'position': position, 
                 'trigger_point': trigger_point, 
                 'u_id': u_id,
-                'utm_campaign':utm_campaign
+                'utm_campaign':utm_campaign,
+                'popup_based_product':popup_based_product
             })
             make_logging_request.delay(
-                skill_id, product_tracking_mapping_id, tracking_id, 'skill_page', position, trigger_point, u_id, utm_campaign, 2)
+                skill_id, product_tracking_mapping_id, tracking_id, 'skill_page', position, trigger_point, u_id, utm_campaign, 2, popup_based_product)
 
         # elif self.request.session.get('tracking_id', '') and self.request.session.get('candidate_id'):
         #     product_tracking_mapping_id = self.request.session.get(
@@ -175,7 +177,8 @@ class SkillPageView(DetailView, SkillPageMixin):
             'position': position,
             'trigger_point': trigger_point, 
             'u_id': u_id, 
-            'utm_campaign': utm_campaign
+            'utm_campaign': utm_campaign,
+            'popup_based_product' : popup_based_product
         })
         return context
 

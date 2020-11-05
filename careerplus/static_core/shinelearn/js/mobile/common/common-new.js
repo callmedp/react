@@ -122,7 +122,7 @@ const makeTrackingRequest = (loggingData) => {
 }
 
 const skillpageTracking = (action) => {
-    let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: action, 'position': position, domain: 2, sub_product: trackingProductId, trigger_point: trigger_point, u_id: candidate_id, utm_campaign: utm_campaign };
+    let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: action, 'position': position, domain: 2, sub_product: trackingProductId, trigger_point: trigger_point, u_id: candidate_id, utm_campaign: utm_campaign, popup_based_product: popup_based_product };
     if (trackingId) {
         makeTrackingRequest(loggingData);
     }

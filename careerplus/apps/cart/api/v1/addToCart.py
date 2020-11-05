@@ -64,6 +64,7 @@ class AddToCartApiView(CartMixin, APIView):
         domain = 3
         candidate_id = request.data.get(
             'candidate_id', None)  # TODO  handle this
+        popup_based_product = request.data.get('popup_based_product', '')
         try:
             # not filter on active because product is coming from solr
             product = Product.objects.filter(id=int(prod_id)).first()
@@ -98,16 +99,17 @@ class AddToCartApiView(CartMixin, APIView):
                     utm_campaign = request.data.get('utm_campaign', '')
                     tracking_product_id = prod_id
                     product_tracking_mapping_id = self.maintain_tracking_info(product)
+                    popup_based_product = request.data.get('popup_based_product', '')
 
                     if tracking_product_id and product_tracking_mapping_id and emailer:
                         make_logging_request.delay(
-                                tracking_product_id, product_tracking_mapping_id, tracking_id, 'clicked', position, trigger_point, u_id, utm_campaign, domain)
+                                tracking_product_id, product_tracking_mapping_id, tracking_id, 'clicked', position, trigger_point, u_id, utm_campaign, domain, popup_based_product)
 
                     cart_drop_out_mail.apply_async(
                         (cart_pk, email, "SHINE_CART_DROP", name, 
                             tracking_id, u_id, tracking_product_id, 
                             product_tracking_mapping_id, trigger_point, 
-                            position, utm_campaign, domain),
+                            position, utm_campaign, domain, popup_based_product),
                         countdown=settings.CART_DROP_OUT_EMAIL)
                 source_type = "cart_drop_out"
 

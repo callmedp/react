@@ -2010,6 +2010,7 @@ class TrackingResumeShine(APIView):
         domain = self.request.data.get('domain',3)
         trigger_point = self.request.data.get('trigger_point','')
         utm_campaign = self.request.data.get('utm_campaign', '')
+        popup_based_product = self.request.data.get('popup_based_product', '')
 
         try:
             cache_data = cache.get('tracking_last_action', {})
@@ -2039,7 +2040,8 @@ class TrackingResumeShine(APIView):
                             "domain" : domain,
                             "position" : position,
                             "trigger_point" : trigger_point,
-                            "utm_campaign" : utm_campaign
+                            "utm_campaign" : utm_campaign,
+                            "popup_based_product" : popup_based_product
                         },
                         "date_time" : timezone.now()
                     })

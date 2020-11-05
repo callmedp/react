@@ -732,7 +732,8 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             'utm_campaign':self.request.session.get('utm_campaign',''),
             'product_id': self.product_obj and self.product_obj.id,
             'referal_product': self.request.session.get('referal_product',''),
-            'referal_subproduct': self.request.session.get('referal_subproduct')
+            'referal_subproduct': self.request.session.get('referal_subproduct'),
+            'popup_based_product': self.request.session.get('popup_based_product', '')
         })
 
         ctx.update(product_data)
@@ -932,6 +933,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         trigger_point = request.GET.get('trigger_point', '')
         u_id = request.GET.get('u_id', request.session.get('u_id',''))
         position = self.request.GET.get('position', -1)
+        popup_based_product = self.request.GET.get('popup_based_product', '')
         if self.request.GET.get('lc') and self.request.session.get('candidate_id'):
             if not kwargs.get('pk', ''):
                 return
@@ -957,7 +959,6 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
                 'lead_source':lead_source,
                 'path': request.path,
                 'campaign_slug': campaign_slug,
-
             }
 
             lead = self.create_product_detail_leads(data_dict)
@@ -980,7 +981,8 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
                 'trigger_point': trigger_point,
                 'u_id': u_id,
                 'position':position,
-                'utm_campaign':utm_campaign
+                'utm_campaign':utm_campaign,
+                'popup_based_product':popup_based_product
                 })
             product_tracking_mapping_id = self.maintain_tracking_info(
                 prod)
@@ -991,7 +993,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
 
             if tracking_id and prod.id and product_tracking_mapping_id:
                 make_logging_request.delay(
-                    prod.id, product_tracking_mapping_id, tracking_id, 'product_page',position, trigger_point, u_id, utm_campaign, 2)
+                    prod.id, product_tracking_mapping_id, tracking_id, 'product_page',position, trigger_point, u_id, utm_campaign, 2, popup_based_product)
 
         elif self.request.session.get('candidate_id') and \
                 request.session.get('tracking_product_id') and \
@@ -1003,8 +1005,9 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             u_id = request.session.get('u_id','')
             r_p = request.session.get('referal_product', '')
             r_sp = request.session.get('referal_subproduct', '')
+            popup_based_product = request.session.get('popup_based_product', '')
             make_logging_sk_request.delay(
-                request.session.get('tracking_product_id'), request.session.get('product_tracking_mapping_id'), request.session.get('tracking_id'), 'product_page',position, trigger_point, u_id, utm_campaign, 2, r_p, r_sp)
+                request.session.get('tracking_product_id'), request.session.get('product_tracking_mapping_id'), request.session.get('tracking_id'), 'product_page',position, trigger_point, u_id, utm_campaign, 2, r_p, r_sp, popup_based_product)
         elif self.request.session.get('candidate_id') and \
                 request.session.get('tracking_id') and \
                 not request.session.get('tracking_product_id'):
@@ -1027,10 +1030,10 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             utm_campaign = self.request.session.get('utm_campaign','')
             r_p = request.session.get('referal_product', '')
             r_sp = request.session.get('referal_subproduct', '')
-            
+            popup_based_product = request.session.get('popup_based_product', '')
             if tracking_id and prod.id and product_tracking_mapping_id:
                 make_logging_sk_request.delay(
-                    prod.id, product_tracking_mapping_id, tracking_id, 'product_page',position, trigger_point, u_id, utm_campaign, 2, r_p, r_sp)
+                    prod.id, product_tracking_mapping_id, tracking_id, 'product_page',position, trigger_point, u_id, utm_campaign, 2, r_p, r_sp, popup_based_product)
 
         elif self.request.session.get('candidate_id') and \
                 request.session.get('tracking_id') and \
@@ -1058,10 +1061,10 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             utm_campaign = self.request.session.get('utm_campaign','')
             r_p = request.session.get('referal_product', '')
             r_sp = request.session.get('referal_subproduct', '')
-
+            popup_based_product = request.session.get('popup_based_product', '')
             if tracking_id and prod.id and product_tracking_mapping_id:
                 make_logging_sk_request.delay(
-                    prod.id, product_tracking_mapping_id, tracking_id, 'product_page',position, trigger_point, u_id, utm_campaign, 2, r_p, r_sp)
+                    prod.id, product_tracking_mapping_id, tracking_id, 'product_page',position, trigger_point, u_id, utm_campaign, 2, r_p, r_sp, popup_based_product)
 
 
         root = request.GET.get('root')

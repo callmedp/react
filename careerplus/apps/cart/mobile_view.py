@@ -36,22 +36,24 @@ class RemoveFromCartMobileView(View, CartMixin):
             'referal_product','')
         referal_subproduct = self.request.session.get(
             'referal_subproduct','')
+        popup_based_product = self.request.session.get(
+            'popup_based_product', '')
         if tracking_product_id == product_id and tracking_id:
             name = email_dict.get('name', '')
             email = email_dict.get('email', '')
             cart_product_removed_mail.apply_async(
                 (product_id, tracking_id, u_id, email, name, 
                     tracking_product_id, product_tracking_mapping_id,
-                    trigger_point, position, utm_campaign, 2), 
+                    trigger_point, position, utm_campaign, 2, popup_based_product), 
                 countdown=settings.CART_DROP_OUT_EMAIL)
             # cart_product_removed_mail(email_data)
             make_logging_sk_request.delay(
                 tracking_product_id, product_tracking_mapping_id, tracking_id, 'remove_product',position, trigger_point,\
-                 u_id, utm_campaign, 2, referal_product, referal_subproduct)
+                 u_id, utm_campaign, 2, referal_product, referal_subproduct, popup_based_product)
             # for showing the user exits for that particular cart product
             make_logging_sk_request.delay(
                 tracking_product_id, product_tracking_mapping_id, tracking_id, 'exit_cart',position, trigger_point, u_id, \
-                utm_campaign, 2, referal_product, referal_subproduct)
+                utm_campaign, 2, referal_product, referal_subproduct, popup_based_product)
             if tracking_id:
                 del self.request.session['tracking_id']
             if product_tracking_mapping_id:

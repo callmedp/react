@@ -155,7 +155,7 @@ def lead_creation_function(filter_dict=None, cndi_name=None):
 def cart_drop_out_mail(pk=None, cnd_email=None, mail_type=None, name=None, 
     tracking_id="", u_id="", tracking_product_id="", 
     product_tracking_mapping_id="", trigger_point="", 
-    position=-1, utm_campaign="", domain=2):
+    position=-1, utm_campaign="", domain=2, popup_based_product=""):
     mail_type = 'CART_DROP_OUT' if not mail_type else mail_type
     cart_objs = Cart.objects.filter(
         status=2,
@@ -240,7 +240,7 @@ def cart_drop_out_mail(pk=None, cnd_email=None, mail_type=None, name=None,
                         if product_tracking_mapping_id and tracking_id and tracking_product_id:
                                 make_logging_request.delay(
                                         tracking_product_id, product_tracking_mapping_id, tracking_id,\
-                                         'exit_cart_mail_sent', position, trigger_point, u_id, utm_campaign, domain)
+                                         'exit_cart_mail_sent', position, trigger_point, u_id, utm_campaign, domain, popup_based_product)
 
                 token = AutoLogin().encode(toemail, cart_id, days=None)
                 data['autologin'] = "{}://{}/cart/payment-summary/?t_id={}&token={}&utm_campaign=learning_exit_mailer&trigger_point={}&u_id={}&position={}&emailer=1&t_prod_id={}&prod_t_m_id={}".format(
@@ -264,7 +264,7 @@ def cart_drop_out_mail(pk=None, cnd_email=None, mail_type=None, name=None,
 def cart_product_removed_mail(product_id= None, tracking_id="", 
         u_id=None, email=None, name=None, tracking_product_id="", 
         product_tracking_mapping_id="", trigger_point="", 
-        position=-1, utm_campaign="", domain=2):
+        position=-1, utm_campaign="", domain=2, popup_based_product=""):
     try:
         name = name if name else "Candidate"
         if not email and not u_id:
@@ -314,7 +314,7 @@ def cart_product_removed_mail(product_id= None, tracking_id="",
         except Exception as e:
             logging.getLogger('error_log').error("Unable to sent mail: {}".format(e))
         make_logging_request.delay(
-            tracking_product_id, product_tracking_mapping_id, tracking_id, 'remove_product_mail_sent', position, trigger_point, u_id, utm_campaign, domain)
+            tracking_product_id, product_tracking_mapping_id, tracking_id, 'remove_product_mail_sent', position, trigger_point, u_id, utm_campaign, domain, popup_based_product)
     except Exception as e:
          logging.getLogger('error_log').error(e)
 
