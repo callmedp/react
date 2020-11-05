@@ -1,0 +1,10 @@
+import AppRouter from './routes/index';
+import './App.css';
+
+function App() {
+  return (
+    <AppRouter/>
+  );
+}
+
+export default App;
