@@ -116,6 +116,21 @@ GA.prototype.SendEvent = function() {
         case 'ln_coupon_apply': /* When user is looking to apply coupon, redeeem credit */
         case 'ln_payment_option': /* When user selects a payment option */
         case 'ln_complete_payment': /* When user completes the payments and moves ahead */
+        case 'ln_logo_click': /* when user clicks on home page logo */
+        case 'homepage_navigation': /* homepage navigation */
+        case 'search_course': /* search bar */
+        case 'popular_course_select': /*left slider click on home page popular courses */
+        case 'trending_course': /*trending course department click */
+        case 'homepage_footer': /* Homepage footer about us, contact us ... */
+        case 'social_media_follow': /* follow social media facebook, twitter etc. */
+        case 'practicetest_search': /* search practice test*/
+        case 'test_preps_select': /* when user clicks on test preparation */
+        case 'sign_in': /* existing user sign in using facebook etc */
+        case 'header_icons': /*header icons clicked like cart, account etc. */
+        case 'homepage_avail_offer': /* when user clicks on avail offer */
+        case 'blog_banner': /* when user clicks on blog banner */
+        case 'take_me_to_section': /* In blog section when user clicks take me */
+        case 'contributor_click': /* in blog section when user clicks contributor */
     
             
             that.fireGaEvent({

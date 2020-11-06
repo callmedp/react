@@ -3,7 +3,7 @@
 	<ul>
     	{% for category in categories %}
 		<li {% if category.slug == main_cat %}style="border:1px solid #666"{% endif %}>
-	    	<a href="{{category.get_absolute_url}}" title="{{category.name}}">
+	    	<a href="{{category.get_absolute_url}}" title="{{category.name}}" onclick ="MyGA.SendEvent('take_me_to_section','ln_take_me_to_section', {{category.name}}, '','', false, true)">
 					<figure>
 						{% if category.image %}
 						<img loading="lazy" aria-label="{{category.image_alt}}" src="{{category.image.url}}" alt="{{category.image_alt}}" class="img-responsive">
