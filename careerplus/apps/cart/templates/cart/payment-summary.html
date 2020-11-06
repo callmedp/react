@@ -288,10 +288,10 @@ Payment Summary - Shine Learning
             </div><!-- // shineCredit -->
             {% else %}
             {% if candidate_in_session %}
-             <a href="javascript:void(0)" onclick="toggler('showCoupon','shineCredit',true);" id="show_hide_coupon">Apply
+             <a href="javascript:void(0)" onclick="toggler('showCoupon','shineCredit',true); MyGA.SendEvent('ln_coupon_apply', 'ln_coupon_apply', 'ln_click_apply', 'apply_coupon', '', false, true);" id="show_hide_coupon">Apply
               coupon</a>
             |
-            <a href="javascript:void(0)" onclick="toggler('shineCredit','showCoupon',false) ;">Redeem Shine credit</a>
+            <a href="javascript:void(0)" onclick="toggler('shineCredit','showCoupon',false); MyGA.SendEvent('ln_coupon_apply', 'ln_coupon_apply', 'ln_click_apply', 'reedem_credit', '', false, true);">Redeem Shine credit</a>
               {% else %}
                    <div class="form-group pr">
                 <div class="coupon__wrap">
@@ -367,13 +367,13 @@ Payment Summary - Shine Learning
       <span class="col-sm-7 col-md-8"></span>
       <span class="col-sm-3 col-md-4 continue">
          {% if cart.coupon_id and guest_in_session %}
-                      <a class='trig-loader' href="{% url 'payment:payment-option' %}"><button type="button"
+                      <a class='trig-loader' onClick="MyGA.SendEvent('ln_proceed_payment', 'ln_proceed_payment', 'ln_click_to_payment', 'course_opted', '', false, true);" href="{% url 'payment:payment-option' %}"><button type="button"
             id="payment-summary-continue-id">Proceed to
             payment</button></a>
 
           {% else %}
 
-        <a class='trig-loader' href="{% url 'cart:payment-login' %}"><button type="button"
+        <a class='trig-loader' onClick="MyGA.SendEvent('ln_proceed_payment', 'ln_proceed_payment', 'ln_click_to_payment', 'course_opted', '', false, true);" href="{% url 'cart:payment-login' %}"><button type="button"
             id="payment-summary-continue-id">Proceed to
             payment</button></a>
 

@@ -190,7 +190,7 @@
           {% if prd_num_jobs %}
           <li>
             <a href="{% if num_jobs_url %}{{num_jobs_url}}{% else %}javascript:void(0);{% endif %}" target="_blank"
-              onclick="handleTracking('exit_product_page');handleTracking('jobs_available')">
+              onclick="handleTracking('exit_product_page');handleTracking('jobs_available');MyGA.SendEvent('ln_course_details', 'ln_course_details', 'ln_jobs_available', 'Jobs available', '', '', true);">
               <figure class="course-jobs-icon"></figure>
               <span><strong class="anchor-color">&nbsp;{{prd_num_jobs}}</strong>&nbsp;Jobs available</span>
             </a>
@@ -207,7 +207,7 @@
         </ul>
         {% if prd_service == 'course' or product.type_flow == 16 %}
         <span class="byvskills">
-          <strong><a onclick="gaEvent('Search','{{prd_vendor}}','ViewAllProductVendor');handleTracking('exit_product_page');handleTracking('all_courses_or_certifications');"
+          <strong><a onclick="gaEvent('Search','{{prd_vendor}}','ViewAllProductVendor');handleTracking('exit_product_page');handleTracking('all_courses_or_certifications');MyGA.SendEvent('ln_course_details', 'ln_course_details', 'ln_all_course', '{{prd_vendor}}', '', false, true);"
               href="/search/results/?fvid={{product.vendor.id}}" >All courses/ certification
               ({{prd_vendor_count}})</a></strong>
           By {{prd_vendor}}

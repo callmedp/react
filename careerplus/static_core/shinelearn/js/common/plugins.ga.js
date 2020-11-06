@@ -12,15 +12,26 @@ function GA(){
         noninteraction = options.noninteraction || false,
         switchcase = options.switchcase || false,
         metrics = options.metrics || {},
-        name = options.name || '';
+        name = options.name || '',
+        custom_event = options.custom_event || false;
 
         try{
-            gtag('event', name, {
-              'send_to': ['UA-3537905-41'],
-              'event_category': category,
-              'event_label': label,
-              'event_action':action
-            });
+            if(custom_event==false){
+                gtag('event', name, {
+                    'send_to': ['UA-3537905-41'],
+                    'event_category': category,
+                    'event_label': label,
+                    'event_action':action
+                  });
+            }
+            else{
+                window.dataLayer.push({
+                'event': name,
+                'event_category': category,
+                'event_label': label,
+                'event_action':action
+                });
+        }
         }catch(e)
         {
             try{
@@ -90,7 +101,37 @@ GA.prototype.SendEvent = function() {
         case 'talenteconomy' : /* talenteconomy navigation click (header->desktop, menu->mobile) */    
         case 'InboxJobs' :/*When user click on get these jobs jsrp*/
         case 'itm' : /* when ever url contains itm parameters */
-
+        case 'ln_enquire_now': /* When the user fills the Enquire now form and clicks the submit button */
+        case 'ln_enroll_now': /* When the user clicks on Enrol now button */
+        case 'ln_courses_offered': /* When the user clicks on any of the courses offered */
+        case 'ln_course_provider': /* When user clicks on course provided by  */
+        case 'ln_breadcrumbs': /* When user clicks on the breadcrumbs */
+        case 'ln_study_mode': /* When user chooses the study mode */
+        case 'ln_review': /* When user writes a review */
+        case 'ln_request_call': /* When user requests a call back */
+        case 'ln_course_details': /* When user clicks on all course/certification */
+        case 'ln_enroll_now': /* When user clicks on enroll now */
+        case 'ln_proceed_payment': /* When user clicks on proceed payment */
+        case 'ln_resume_service': /* When user clicks on resume service on checkout page */
+        case 'ln_coupon_apply': /* When user is looking to apply coupon, redeeem credit */
+        case 'ln_payment_option': /* When user selects a payment option */
+        case 'ln_complete_payment': /* When user completes the payments and moves ahead */
+        case 'ln_logo_click': /* when user clicks on home page logo */
+        case 'homepage_navigation': /* homepage navigation */
+        case 'search_course': /* search bar */
+        case 'popular_course_select': /*left slider click on home page popular courses */
+        case 'trending_course': /*trending course department click */
+        case 'homepage_footer': /* Homepage footer about us, contact us ... */
+        case 'social_media_follow': /* follow social media facebook, twitter etc. */
+        case 'practicetest_search': /* search practice test*/
+        case 'test_preps_select': /* when user clicks on test preparation */
+        case 'sign_in': /* existing user sign in using facebook etc */
+        case 'header_icons': /*header icons clicked like cart, account etc. */
+        case 'homepage_avail_offer': /* when user clicks on avail offer */
+        case 'blog_banner': /* when user clicks on blog banner */
+        case 'take_me_to_section': /* In blog section when user clicks take me */
+        case 'contributor_click': /* in blog section when user clicks contributor */
+    
             
             that.fireGaEvent({
                 'category': arguments[1],
@@ -98,7 +139,8 @@ GA.prototype.SendEvent = function() {
                 'label': arguments[3],
                 'value': value,
                 'noninteraction': noninteraction,
-                'name': fn 
+                'name': fn,
+                'custom_event': typeof arguments[6] != "undefined" ? arguments[6] : false
             });
             break;
         

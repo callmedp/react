@@ -10,7 +10,7 @@
 							{% for author in author_l %}
 								{% if author %}
 									<div class="col">
-										<a class="box-panel" href="{% url 'talent:authors-detail' author.slug %}" title="{{author.name}}">
+										<a class="box-panel" href="{% url 'talent:authors-detail' author.slug %}" title="{{author.name}}" onclick="MyGA.SendEvent('contributor_click','ln_contributor_click', 'ln_contributor_name_click', 'ln_{{author name}}','', false, true)">
 											<figure>
 												{% if author.image %}
 												<img loading="lazy" aria-label="{{author.image_alt}}" src="{{author.image.url}}" class="img-responsive" alt="{{author.image_alt}}">
@@ -29,9 +29,9 @@
 				</div>
 			</div>
 		</div>
-		<a class="left carousel-control" href="#myCarousel1" data-slide="prev"></a>
-		<a class="right carousel-control" href="#myCarousel1" data-slide="next"></a>
-		<a href="{% url 'talent:authors-listing' %}" class="view-all" title="View all Contributors">View all</a>
+		<a class="left carousel-control" href="#myCarousel1" data-slide="prev" onclick="MyGA.SendEvent('contributor_click','ln_contributor_click', 'ln_slider', 'ln_left_slider','', false, true)"></a>
+		<a class="right carousel-control" href="#myCarousel1" data-slide="next" onclick="MyGA.SendEvent('contributor_click','ln_contributor_click', 'ln_slider', 'ln_right_slider','', false, true)"></a>
+		<a href="{% url 'talent:authors-listing' %}" class="view-all" title="View all Contributors" onclick="MyGA.SendEvent('contributor_click','ln_contributor_click', 'ln_view_all', '','', false, true)">View all</a>
 		
 	</div>
 </section>
