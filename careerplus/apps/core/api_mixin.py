@@ -761,8 +761,7 @@ class TestPrepApiMixin(object):
 
 
     def get_all_product(self):
-
-        url = 'https://wwww.testpreptraining.com/api/index.php/apiv2/getProducts'
+        url = 'https://www.testpreptraining.com/api/index.php/apiv2/getProducts'
         headers = self.get_headers()
         if not headers:
             return

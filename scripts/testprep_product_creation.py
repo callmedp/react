@@ -16,7 +16,7 @@ django.setup()
 
 
 from shop.models import *
-from partner.models import Vendor , ProductSkill
+from partner.models import Vendor , ProductSkill,Certificate
 from shop.utils import ProductModeration
 from requests.models import Request
 
@@ -115,6 +115,13 @@ if __name__ == "__main__":
             product.save()
         else:
             print('product is already indexed')
+
+        cert, create = Certificate.objects.get_or_create(name=name,skill=data[10].strip(),vendor_provider=vendor)
+        if not create:
+            cert.vendor_certificate_id = None
+            cert.save()
+
+        print('cerificate id {} created {}'.format(cert.id,create))
 
 
     print('complete')
