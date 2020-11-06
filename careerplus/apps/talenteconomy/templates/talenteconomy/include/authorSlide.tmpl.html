@@ -10,7 +10,7 @@
 							{% for author in author_l %}
 								{% if author %}
 									<div class="col">
-										<a class="box-panel" href="{% url 'talent:authors-detail' author.slug %}" title="{{author.name}}" onclick="MyGA.SendEvent('contributor_click','ln_contributor_click', 'ln_contributor_name_click', 'ln_{{author name}}','', false, true)">
+										<a class="box-panel" href="{% url 'talent:authors-detail' author.slug %}" title="{{author.name}}" onclick="MyGA.SendEvent('contributor_click','ln_contributor_click', 'ln_contributor_name_click', 'ln_{{author.name}}','', false, true)">
 											<figure>
 												{% if author.image %}
 												<img loading="lazy" aria-label="{{author.image_alt}}" src="{{author.image.url}}" class="img-responsive" alt="{{author.image_alt}}">
