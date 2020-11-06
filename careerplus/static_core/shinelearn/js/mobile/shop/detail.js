@@ -186,7 +186,6 @@ function submit_feedback_form(is_logged_in) {
   if (is_logged_in == 'True') {
     var formData = $('#feedback-form').serialize();
     feedback_submit(formData);
-    MyGA.SendEvent('ln_review', 'ln_review', 'ln_submit_review', JSON.stringify(formData), '', false, true);
   }
   else {
     var flag = $('#feedback-form').valid();
