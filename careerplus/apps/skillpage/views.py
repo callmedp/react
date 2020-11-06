@@ -148,6 +148,7 @@ class SkillPageView(DetailView, SkillPageMixin):
         utm_campaign = self.request.session.get('utm_campaign', '')
         tracking_product_id = self.request.session.get('tracking_product_id')
         product_tracking_mapping_id = self.request.session.get('product_tracking_mapping_id','')
+        popup_based_product = self.request.session.get('popup_based_product', '')
 
         if tracking_id:
             product_tracking_mapping_id = 10
