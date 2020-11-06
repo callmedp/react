@@ -117,8 +117,9 @@ GA.prototype.SendEvent = function() {
         case 'ln_coupon_apply': /* When user is looking to apply coupon, redeeem credit */
         case 'ln_payment_option': /* When user selects a payment option */
         case 'ln_complete_payment': /* When user completes the payments and moves ahead */
-        case 'ln_logo_click': /* when user clicks on home page logo */
+        case 'logo_click': /* when user clicks on home page logo */
         case 'homepage_navigation': /* homepage navigation */
+        case 'navigation_menu': /* when user clicks navigates on homepage */
         case 'search_course': /* search bar */
         case 'popular_course_select': /*left slider click on home page popular courses */
         case 'trending_course': /*trending course department click */
