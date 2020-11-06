@@ -14,6 +14,7 @@ function GA(){
         metrics = options.metrics || {},
         name = options.name || '',
         custom_event = options.custom_event || false;
+        window.dataLayer = window.dataLayer || [];
 
         try{
             if(custom_event==false){
@@ -132,6 +133,29 @@ GA.prototype.SendEvent = function() {
         case 'take_me_to_section': /* In blog section when user clicks take me */
         case 'contributor_click': /* in blog section when user clicks contributor */
     
+        
+        /* Skill Page Events */
+        case 'SkillNeedHelpForm': /* When the user fills the form of need help */
+        case 'SkillPopularCourses': /* When the user clicks on popular courses */ 
+        case 'TestYourSkill': /* When the user clicks on Test your skills */
+        case 'SkillAllCourses': /* When user clicks on any course */
+        case 'SkillAllAssesments': /* When user clicks on any assesment */
+        case 'SkillCourseLoadMore': /* When user clicks on course load more */
+        case 'SkillAssesmentLoadMore': /* When user clicks on assesment load more */
+        case 'SkillFAQs': /* When user clicks on FAQs */
+        case 'SkillMoreFAQs': /* When User clicks on More FAQs */
+        case 'SkillAlsoCheck': /* When User clicks on any link of also check */
+
+        /* Product Listing Page Events */
+        case 'ProductListSort': /* When user selects a sort */
+        case 'ProductListSelectProduct': /* When user select any product */
+        case 'ProductListFilter': /* When user apply filters */
+
+        /* Dashboard Events */
+        case 'DashboardLeftMenu': /* When user clicks on left menu */
+        case 'DashboardInbox': /* Events in inbox*/
+        case 'DashboardMyOrders': /* Events in my orders */
+        case 'DashboardMyWallet': /* Events in my wallets*/
             
             that.fireGaEvent({
                 'category': arguments[1],
