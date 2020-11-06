@@ -38,7 +38,7 @@
       
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown jobs-dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" >Job Assistance</a>
+          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" onclick="MyGA.SendEvent('homepage_navigation','ln_homepage_navigation', 'ln_job_assisstance', 'ln_job_assisstance', '', false, true);" >Job Assistance</a>
           <ul class="dropdown-menu">
             <li><a href="/services/resume-writing/63/" onclick="trackClickEvent()">Resume Writing</a></li>
             <li><a href="/services/resume-services/entry-level-freshers-4/pd-2553" onclick="trackClickEvent()">International Resume</a></li>
@@ -59,7 +59,7 @@
           <a class="cls_eventtrack pr" href="/practice-tests/" data-category="" data-action="Header" data-label="learing.shine"><span class="hidden-sm" onclick="trackClickEvent()">Practice Tests</span></a>
         </li>
         <li class="dropdown format-dropdown">
-           <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" onclick="trackClickEvent()">Free Resources</a>
+           <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_homepage_navigation', 'ln_free_resources', 'ln_free_resources', '', false, true);">Free Resources</a>
            <div class="dropdown-menu format-tabs">
               <ul class="nav nav-tabs" role="tablist">
                  <li role="presentation" class="active"><a href="{{resume_shine_url}}/cms/resume-format/1/" onclick="trackClickEvent()" data-target="#format1" aria-controls="format1" role="tab">Resume Formats</a></li>
@@ -118,7 +118,7 @@
            </div>
         </li>
         <li class="ms-link">
-          <a class="cls_eventtrack" href="/talenteconomy/" onclick="trackClickEvent()" data-category="TELINK" data-action="Header" data-label="learing.shine"><span class="hidden-sm">Blog</span></a>
+          <a class="cls_eventtrack" href="/talenteconomy/" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_homepage_navigation', 'ln_blog', 'ln_blog', '', false, true);" data-category="TELINK" data-action="Header" data-label="learing.shine"><span class="hidden-sm">Blog</span></a>
         </li>
         <li class="dropdown call-dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="call-icon"></span></a>

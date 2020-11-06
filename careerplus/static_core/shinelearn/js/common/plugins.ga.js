@@ -27,7 +27,7 @@ function GA(){
             }
             else{
                 window.dataLayer.push({
-                'event': name,
+                'event': 'LearningEvents',
                 'event_category': category,
                 'event_label': label,
                 'event_action':action
