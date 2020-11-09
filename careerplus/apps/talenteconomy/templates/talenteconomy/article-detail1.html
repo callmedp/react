@@ -35,6 +35,7 @@
 {% endblock title %}
 
 {% block css_section %}
+    <link type="text/css" href="{% static 'shinelearn/css/common/popup.css' %}" rel="stylesheet">
     {{block.super}}
     {% compress css %}
     <link type="text/scss" href="{% static 'shinelearn/css/talenteconomy/article.scss' %}" rel="stylesheet">
@@ -342,7 +343,6 @@
 
 {% endblock container %}
 {% block js_section %}
-
     {{ block.super }}
     {% compress js %}
     <script async type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
