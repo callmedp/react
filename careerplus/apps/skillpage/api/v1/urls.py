@@ -8,4 +8,5 @@ urlpatterns = [
     re_path(r'^v1/load-more/$',
         LoadMoreApiView.as_view(),
         name='load-more'),
+    # re_path('about',skill_page_about,name='about-skill')
 ]

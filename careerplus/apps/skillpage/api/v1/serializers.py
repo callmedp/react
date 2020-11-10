@@ -6,6 +6,7 @@ from rest_framework.serializers import (
 from rest_framework import serializers
 
 from shared.rest_addons.mixins import SerializerFieldsMixin
+from shop.models import Category, SubHeaderCategory
 
 class LoadMoreSerializerSolr(SerializerFieldsMixin,Serializer):
     id = serializers.CharField()
@@ -133,3 +134,8 @@ class LoadMoreSerializerSolr(SerializerFieldsMixin,Serializer):
         if obj.pPfin != 0:
             return round((obj.pPfin-obj.pPin)*100/obj.pPfin,2)
         return 0
+
+class SubHeaderCategorySerializer(ModelSerializer):
+    class Meta:
+        model = SubHeaderCategory
+        exclude = ("created","modified",)
