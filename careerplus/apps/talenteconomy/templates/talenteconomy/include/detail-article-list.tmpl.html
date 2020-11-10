@@ -133,10 +133,9 @@
       </div><!-- //Related Articles -->
     {% endif %}
 
-    <div id="popup_subscribe{{main_article.id}}" class="modal">
-
-        <!-- Modal content -->
-        <div class="modal-content">
+    <div class="modal fade bs-example-modal-sm" id="popup_subscribe{{main_article.id}}">
+      <div class="modal-dialog modal-sm modal-custom" role="document">
+      <div class="modal-content" style="padding: 20px;">
             <span class="close_popup_modal{{main_article.id}}">&times;</span>
             <h2 class="heading-right">Looks interesting?</h2>
             <p>Subscribe & Get our daily newsletter. Fill the details below.</p>
@@ -193,7 +192,7 @@
                 <button type="button" id="enquire_form{{main_article.id}}" class="submit-button">Subscribe Now</button>
             </form>
         </div>
-
+      </div>
     </div>
 
     <!-- comments box -->
@@ -217,40 +216,17 @@
 
 </div>
 <script>
-        function disableScroll() {
-            // Get the current page scroll position
-            scrollTop =
-              window.pageYOffset || document.documentElement.scrollTop;
-            scrollLeft =
-              window.pageXOffset || document.documentElement.scrollLeft,
-                window.onscroll = function() {
-                    window.scrollTo(scrollLeft, scrollTop);
-                };
-        }
-        function enableScroll() {
-            window.onscroll = function() {};
-        }
-
         openCommentBox('{{main_article.id}}', 2)
-        var modal = document.getElementById("popup_subscribe{{main_article.id}}");
         var span = document.getElementsByClassName("close_popup_modal{{main_article.id}}")[0];
         span.onclick = function() {
-            modal.style.display = "none";
-            enableScroll();
-        }
-        window.onclick = function(event) {
-            if (event.target == modal) {
-                modal.style.display = "none";
-                enableScroll();
-            }
+        $('#popup_subscribe{{main_article.id}}').modal('toggle');
         }
         $(document).ready(function() {
           setTimeout(function() {
-              modal.style.display = "block";
-
-              disableScroll();
+              $("#popup_subscribe{{main_article.id}}").modal('show');
           }, 10000);
         });
+
     $.validator.addMethod("numbercheck", function (value, element) {
         if( $('#id_country_code{{main_article.id}}').val() == "91" && $('#id_cell_phone{{main_article.id}}').val().length != 10){
              $('#enquire_form{{main_article.id}}').removeAttr("disabled");
@@ -311,9 +287,7 @@
                 pop('Your Query Submitted Successfully.');
                 $('#enquireform{{main_article.id}}')[0].reset();
                 $('#enquire_form{{main_article.id}}').removeAttr("disabled");
-                var modal = document.getElementById("popup_subscribe{{main_article.id}}");
-                modal.style.display = "none";
-                enableScroll();
+                $('#popup_subscribe{{main_article.id}}').modal('toggle');
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 gaEventFunc(typeOfProduct,'failure');
