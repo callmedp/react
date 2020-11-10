@@ -1,0 +1,27 @@
+// Sizing shortcuts
+
+@mixin size($width, $height: $width) {
+  width: $width;
+  height: $height;
+  @include deprecate("`size()`", "v4.3.0", "v5");
+}
+
+//custom mixins by Sachin K.
+
+// @mixin icon-details($width, $height, $position) {
+//   background-position: $position;
+//   width: $width;
+//   height: $height;
+// }
+
+// @mixin icon-block($width, $height, $position) {
+//   @include icon-details($width, $height, $position);
+//   display: block;
+// }
+
+// @mixin icon-inblock($width, $height, $position) {
+//   @include icon-details($width, $height, $position);
+//   display: inline-block;
+//   background-image: $sprite1;
+//   vertical-align: text-top;
+// }

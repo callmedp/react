@@ -1,0 +1,15 @@
+@import '../../../../styles/functions';
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+.who-learn {
+    ul {
+        list-style-type: none;
+
+        li {
+            &:not(:last-child) {
+                margin-bottom: 1rem;
+            }
+        }
+    }
+}
