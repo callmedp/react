@@ -55,10 +55,11 @@ class SkillPageAbout(APIView):
         return breadcrumbs
 
     def get(self,request,*args,**kwargs):
-        id = request.GET.get('id')
+        id = request.GET.get('id',None)
         try:
             category = Category.objects.get(id=id)
             subheading = SubHeaderCategory.objects.filter(category=category,active=True,heading='Who should learn')
+            career_outcomes = category.split_career_outcomes()
         except Category.DoesNotExist:
             return Response({'detail':'Category not found'},status=status.HTTP_404_NOT_FOUND)
         except SubHeaderCategory.DoesNotExist:
@@ -68,6 +69,7 @@ class SkillPageAbout(APIView):
             'name':category.name +' Courses & <br/>Certifications</h1>',
             'description' : category.description,
             'subheading':subheading_data,
+            'career_outcomes':career_outcomes,
             'breadcrumbs':self.get_breadcrumb_data(category),
         }
         return Response({'data':data},status=status.HTTP_200_OK) 
