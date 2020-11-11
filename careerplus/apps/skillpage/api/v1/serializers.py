@@ -138,4 +138,4 @@ class LoadMoreSerializerSolr(SerializerFieldsMixin,Serializer):
 class SubHeaderCategorySerializer(ModelSerializer):
     class Meta:
         model = SubHeaderCategory
-        exclude = ("created","modified",)
+        exclude = ("created","modified","active","display_order","heading_choices","category",)
