@@ -224,7 +224,7 @@
         $(document).ready(function() {
           setTimeout(function() {
               $("#popup_subscribe{{main_article.id}}").modal('show');
-          }, 10000);
+          }, 15000);
         });
 
     $.validator.addMethod("numbercheck", function (value, element) {
@@ -274,7 +274,7 @@
     if($('#id_cell_phone{{main_article.id}}').val().length != 10){
              $('#enquire_form{{main_article.id}}').removeAttr("disabled");
              flag = false;
-            pop('Please enter your number');
+            pop('Please enter valid number');
         }
     if (flag) {
         var formData = $enquireform{{main_article.id}}.serialize();
