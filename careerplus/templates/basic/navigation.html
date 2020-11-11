@@ -6,9 +6,9 @@
   {% if show and offer_home %}
   <div class="popup-box alert alert-dismissible" id = "product_offer_top">
     <button type="button" class="close" id = "sticky_close" data-dismiss="alert" aria-label="Close">
-      <span aria-hidden="true" onclick="gaOffer_popup_close()">&times;</span>
+      <span aria-hidden="true" onclick="gaOffer_popup_close();stickerVisible()">&times;</span>
     </button>
-    <div data-toggle="modal" data-target="#offerModal" onclick="gaOffer_popup(); openAlert()">{{sticky_text}}- <strong>{{offer_value}}</strong>   |   Ends in <span id = 'sticky_timer'></span> - <a href="javascript:void(0)" id = 'offer-timer'>Enroll Now!</a></div>
+    <div data-toggle="modal" id="open-popup" onclick="gaOffer_popup(); openAlert()">{{sticky_text}}- <strong>{{offer_value}}</strong>   |   Ends in <span id = 'sticky_timer'></span> - <a href="javascript:void(0)" id = 'offer-timer'>Enroll Now!</a></div>
   </div>
   {% endif %}
   <div class="container-fluid">
@@ -322,7 +322,7 @@
           {% endif %}
         </ul>
         {% if show and offer_home %}
-        <span class="pull-right mt-10" id = "pop_up_offer" data-toggle="modal" data-target="#offerModal" onclick="gaOffer_popup()"><i class="offer-icon"></i></span>
+        <span class="pull-right mt-10" id = "pop_up_offer" data-toggle="modal" onclick="gaOffer_popup();openAlert()"><i class="offer-icon"></i></span>
         {% endif %}
       </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
@@ -358,6 +358,7 @@
     }
     
     $('#product_offer_top').hide();
+    $("#pop_up_offer").hide()
     
     var countDownDate = new Date('{{ end_date }}').getTime();
     var days = 0;
@@ -402,9 +403,16 @@
       if (distance < 0) {
         clearInterval(timer);
         $("#product_offer_top").hide();
+        $("#pop_up_offer").hide()
       }
       else {
         $("#product_offer_top").show();
+        if($("#product_offer_top").length){
+            $("#pop_up_offer").hide()
+        }
+        else{
+            $("#pop_up_offer").show()
+        }
         
         $('#sticky_timer').text(days + 'd : ' + hours + 'h : ' + minutes + 'm : ' + seconds + 's');
       }
@@ -491,7 +499,7 @@
                 </ul>
                 <span id = checkbox_error class="error-msg"></span>
               </div>
-              <button type="submit" id = "avail_offer_id" class="btn btn-block" role="button" data-target="#thanksModal" onclick="gaAvail_offer()">Avail offer now!</button>
+              <button type="submit" id = "avail_offer_id" class="btn btn-block" role="button" onclick="gaAvail_offer()">Avail offer now!</button>
               <span class="tc">*T&C applied, valid only on select courses</span>
               <input type="hidden" name="product_offer" value="True">
             </form>
@@ -534,3 +542,17 @@
     </div>
   </div>
 </div>
+
+<script>
+  $("#open-popup").on('click', function(){
+      $('#offerModal').modal('show')
+  })
+
+  $("#pop_up_offer").on('click', function(){
+      $('#offerModal').modal('show')
+  })
+
+  function stickerVisible(){
+      $("#pop_up_offer").show()
+  }
+</script>
