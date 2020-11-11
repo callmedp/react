@@ -150,12 +150,12 @@ def update_customisations_for_all_templates(candidate_id):
             #d = {key: value for key, value in item.items()}
             #d['active'] = entity_id_data_mapping[d['entity_id']]['active']
             #d['entity_text'] = entity_id_data_mapping[d['entity_id']]['entity_text']
-            if entity_id_data_mapping[item['entity_id']] and entity_id_data_mapping[item['entity_id']].get('active'):
+            if entity_id_data_mapping.get(item['entity_id'] )and entity_id_data_mapping[item['entity_id']].get('active'):
                 item['active'] = True
             else:
                 item['active'] = False
 
-            if entity_id_data_mapping[item['entity_id']] and entity_id_data_mapping[item['entity_id']].get(
+            if entity_id_data_mapping.get(item['entity_id']) and entity_id_data_mapping[item['entity_id']].get(
                     'entity_text'):
                 item['active'] = entity_id_data_mapping[item['entity_id']].get('entity_text')
             else:
