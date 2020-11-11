@@ -45,7 +45,7 @@ from emailers.email import SendMail
 from shop.views import ProductInformationMixin
 from shop.models import Product, Category
 from coupon.models import Coupon, CouponUser
-from core.api_mixin import ShineCandidateDetail, AmcatApiMixin
+from core.api_mixin import ShineCandidateDetail, AmcatApiMixin,TestPrepApiMixin
 from payment.tasks import add_reward_point_in_wallet
 from order.functions import update_initiat_orderitem_sataus
 from geolocation.models import Country
@@ -1036,7 +1036,7 @@ class ShineCandidateLoginAPIView(APIView):
                                     'start_date',
                                     'end_date', 'is_pursuing', 'order']
         candidate_education = []
-        
+
         for ind, edu in enumerate(education):
             course_type = ""
             if edu.get('course_type',-1) == 1:
@@ -1059,7 +1059,7 @@ class ShineCandidateLoginAPIView(APIView):
 
                 if specialization_index is not None:
                     specialization_name = child[specialization_index].get('cdesc','')
-                
+
                 else:
                     logging.getLogger('error_log').error(
                         "specialization_index is None for education - {} in get_education_info".format(edu))
@@ -1069,13 +1069,13 @@ class ShineCandidateLoginAPIView(APIView):
                 logging.getLogger('error_log').error(
                     "degree_index is None for education - {} in get_education_info".format(edu))
 
-            
-            
+
+
             candidate_education_values = ['', '{}({})'.format(degree_name, specialization_name),
                                                 edu.get('institute_name',''),
                                                 course_type,
                                                 '',
-                                                None, None, True, ind]        
+                                                None, None, True, ind]
             education_dict = dict(
                 zip(candidate_education_keys, candidate_education_values))
             candidate_education.append(education_dict)
@@ -1427,7 +1427,9 @@ class VendorCertificateMappingApiView(ListAPIView):
     def get_queryset(self):
         queryset = super(self.__class__, self).get_queryset()
         name = self.request.GET.get('name', '')
-        queryset = queryset.filter(slug=name)
+        if name:
+            name = name.split(',')
+        queryset = queryset.filter(slug__in=name)
         return queryset.exclude(certificate=None)
 
     def get(self, request, *args, **kwargs):
@@ -1463,8 +1465,12 @@ class ImportCertificateApiView(APIView, AmcatApiMixin):
             'candidate_email': email
         }
 
-       
-        success, data = self.get_all_certiticate_data(data)
+        if vendor_name == 'testprep':
+            data = TestPrepApiMixin().get_all_test_for_email(email=email)
+            if data:
+                success = True
+        else:
+            success, data = self.get_all_certiticate_data(data)
         if success:
             if not data:
                 data = {'certificates': []}
@@ -1933,6 +1939,7 @@ class CandidateBadging(APIView):
 
 
 
+
 class ResumeTemplateDownload(APIView):
     authentication_classes = ()
     permission_classes = ()
@@ -1976,7 +1983,7 @@ class ResumeTemplateDownload(APIView):
                 fsock = FileWrapper(open(file_path, 'rb'))
             else:
                 fsock = GCPResumeBuilderStorage().open(file_path)
-            
+
             filename = filename_prefix + filename_suffix
             response = HttpResponse(fsock, content_type=content_type)
             response['Content-Disposition'] = 'attachment; filename="%s"' % (filename)

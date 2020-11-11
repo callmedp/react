@@ -31,10 +31,8 @@
 	margin: auto;
 	padding: 20px;
 	border: 1px solid #888;
-	width: 21%;
+	/* width: 21%; */
 }
-
-
 /* The Close Button */
 
 .close_popup_modal {
