@@ -51,4 +51,7 @@
   white-space: nowrap;
 }
 
-
+.icon-round-arrow {
+  background: $sprite;
+  @include icon-inblock(40px, 27px, 0 0);
+}

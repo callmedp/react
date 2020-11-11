@@ -6,7 +6,7 @@ const BannerSkill = (props) => {
     return (
        <header className="container-fluid">
            <figure className="banner-img row">
-                <img src="./media/images/home-bg.svg" alt="" />
+                <img src="./media/images/home-bg.svg" alt="Digital Marketing Courses & Certifications" />
             </figure>
             <div className="container header-content">
                 <div className="row">
@@ -22,7 +22,9 @@ const BannerSkill = (props) => {
                     </h1>
                     <p>
                         <i className="icon-round-arrow"></i>
-                        Digital Marketing expected to <strong>create 3.3 million jobs by 2022</strong>
+                        <span>
+                            Digital Marketing expected to <strong>create 3.3 million jobs by 2022</strong>
+                        </span>
                     </p>
                 </div>
             </div>

@@ -18,6 +18,7 @@
   border: $btn-border-width solid transparent;
   @include button-size($btn-padding-y, $btn-padding-x, $btn-font-size, $btn-line-height, $btn-border-radius);
   @include transition($btn-transition);
+  text-transform: uppercase;
 
   @include hover() {
     color: $body-color;
@@ -140,3 +141,6 @@ input[type="button"] {
     width: 100%;
   }
 }
+
+
+// custom button css by Sachin K.

@@ -8,20 +8,19 @@
 
 //custom mixins by Sachin K.
 
-// @mixin icon-details($width, $height, $position) {
-//   background-position: $position;
-//   width: $width;
-//   height: $height;
-// }
+@mixin icon-details($width, $height, $position) {
+  background-position: $position;
+  width: $width;
+  height: $height;
+}
 
-// @mixin icon-block($width, $height, $position) {
-//   @include icon-details($width, $height, $position);
-//   display: block;
-// }
+@mixin icon-block($width, $height, $position) {
+  @include icon-details($width, $height, $position);
+  display: block;
+}
 
-// @mixin icon-inblock($width, $height, $position) {
-//   @include icon-details($width, $height, $position);
-//   display: inline-block;
-//   background-image: $sprite1;
-//   vertical-align: text-top;
-// }
+@mixin icon-inblock($width, $height, $position) {
+  @include icon-details($width, $height, $position);
+  display: inline-block;
+  vertical-align: text-top;
+}

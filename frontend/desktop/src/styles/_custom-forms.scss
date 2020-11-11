@@ -218,13 +218,30 @@
 // https://primer.github.io/.
 //
 
+.custom-select-box {
+  position: relative;
+  margin-right: 1rem;
+  width: 7rem;
+
+
+  &::after {
+    content: "";
+    width: .8rem;
+    height: .5rem;
+    background: $sprite -324px -27px;
+    position: absolute;
+    right: .8rem;
+    top: 1.7rem;
+  }
+}
+
 .custom-select {
   display: inline-block;
   width: 100%;
   height: $custom-select-height;
   padding: $custom-select-padding-y ($custom-select-padding-x + $custom-select-indicator-padding) $custom-select-padding-y $custom-select-padding-x;
   font-family: $custom-select-font-family;
-  @include font-size($custom-select-font-size);
+  font-size: 1.3rem;
   font-weight: $custom-select-font-weight;
   line-height: $custom-select-line-height;
   color: $custom-select-color;

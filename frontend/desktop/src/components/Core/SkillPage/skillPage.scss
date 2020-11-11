@@ -3,7 +3,7 @@
 @import '../../../styles/mixins';
 
 section {
-    &:not(:last-child) {
+    &:not(:last-of-type) {
         margin-top: 3rem;
         margin-bottom: 4rem;
     }
@@ -11,4 +11,10 @@ section {
     h2 {
         margin-bottom: 1.5rem;
     }
+}
+
+.right-widget {
+    margin-top: -22%;
+    position: relative;
+    z-index: 999;
 }
