@@ -1,5 +1,6 @@
 import logging
 from datetime import datetime
+import json
 
 from django.urls import reverse
 from django.conf import settings
@@ -52,6 +53,7 @@ class PaymentMixin(object):
         return True
 
     def paid_amount_without_tax(self, order):
+        original_amount = ''
         tax_config = order.tax_config if order.tax_config else ''
         if not tax_config:
             return ''
@@ -66,7 +68,11 @@ class PaymentMixin(object):
             total_tax += tax_config[tax] 
         total_tax = 1 + total_tax/100
 
-        original_amount = order.total_incl_tax if order.total_incl_tax else ''
+        try:
+            original_amount = order.total_incl_tax if order.total_incl_tax else ''
+            original_amount = float(original_amount)
+        except Exception as e:
+            logging.getLogger('error_log').error("invalid data in original_amount for order {}".format(order.id))
         if not original_amount:
             return ''
         original_amount = original_amount/total_tax
