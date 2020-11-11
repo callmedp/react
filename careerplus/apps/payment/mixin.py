@@ -59,7 +59,7 @@ class PaymentMixin(object):
             tax_config = json.loads(tax_config)
         except Exception as e:
             logging.getLogger('error_log').error("invalid data in tax_config for order {}".format(order.id))
-        if not isintance(tax_config, dict):
+        if not isinstance(tax_config, dict):
             return '' 
         total_tax = 0
         for tax in tax_config:
