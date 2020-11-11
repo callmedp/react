@@ -72,4 +72,4 @@ class SkillPageAbout(APIView):
             'career_outcomes':career_outcomes,
             'breadcrumbs':self.get_breadcrumb_data(category),
         }
-        return Response({'data':data},status=status.HTTP_200_OK) 
+        return Response(data,status=status.HTTP_200_OK) 
