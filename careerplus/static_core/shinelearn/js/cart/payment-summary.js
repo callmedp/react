@@ -38,7 +38,9 @@ function JSApplyDiscount(e) {
                     window.location.reload();
                 },
                 failure: function (response) {
-                $('#CartloginModal').modal('hide')
+                    if($('#CartloginModal').length){
+                        $('#CartloginModal').modal('hide')
+                    }
                     alert_message = 'Something is not working, Please try later!';
 
                     // remove loader
@@ -54,7 +56,9 @@ function JSApplyDiscount(e) {
 
                 },
                 error: function (result, status, err) {
-                            $('#CartloginModal').modal('hide')
+                    if($('#CartloginModal').length){
+                        $('#CartloginModal').modal('hide')
+                    }
                     if (result && result.status == 400) {
                         alert_message = result.responseJSON;
                         alert_message = alert_message.error;
