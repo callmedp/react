@@ -6,7 +6,7 @@ const WhoLearn = (props) => {
         <section className="container">
             <div className="row">
                 <div className="who-learn">
-                    <h2>Who should learn?</h2>
+                    <h2 className="heading2">Who should learn?</h2>
                     <ul>
                         <li>People willing to learn and grow digital marketing from a realistic point of view</li>
                         <li>Professional willing to grow and evolve in marketing or related fields</li>

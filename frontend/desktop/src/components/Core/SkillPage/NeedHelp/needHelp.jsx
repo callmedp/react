@@ -4,7 +4,7 @@ import './needHelp.scss';
 const NeedHelp = (props) => {
     return (
             <div className="need-help">
-                <h2>Need Help?</h2>
+                <strong className="heading2">Need Help?</strong>
                 <form className="mt-20">
                     <div className="d-flex">
                         <div className="custom-select-box">

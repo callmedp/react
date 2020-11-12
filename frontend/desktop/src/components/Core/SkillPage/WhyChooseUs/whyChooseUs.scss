@@ -1,0 +1,62 @@
+@import '../../../../styles/functions';
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+.why-choose-us {
+    ul {
+        list-style-type: none;
+        padding: 1.5rem 3rem 3rem 3rem;
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 1.5rem;
+
+        li {
+            flex: 0 0 33%;
+            border: 1px solid $gray-900;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding: 4rem;
+
+            strong {
+                color: $gray-200;
+                font-weight: 600;
+            }
+
+            &:nth-child(1){
+                border-left-color: transparent;
+                border-top-color: transparent;
+            }
+            &:nth-child(2){
+                border-left-color: transparent;
+                border-top-color: transparent;
+            }
+            &:nth-child(3){
+                border-left-color: transparent;
+                border-right-color: transparent;
+                border-top-color: transparent;
+            }
+            &:nth-child(4){
+                border-left-color: transparent;
+                border-top-color: transparent;
+                border-bottom-color: transparent;
+            }
+            &:nth-child(5){
+                border-left-color: transparent;
+                border-top-color: transparent;
+                border-bottom-color: transparent;
+            }
+            &:nth-child(6){
+                border-left-color: transparent;
+                border-right-color: transparent;
+                border-top-color: transparent;
+                border-bottom-color: transparent;
+            }
+
+            figure {
+                margin-bottom: 1.5rem;
+            }
+        }
+    }
+}

@@ -7,14 +7,18 @@ section {
         margin-top: 3rem;
         margin-bottom: 4rem;
     }
-
-    h2 {
-        margin-bottom: 1.5rem;
-    }
 }
 
 .right-widget {
     margin-top: -22%;
     position: relative;
     z-index: 999;
+}
+
+.load-more {
+    font-size: 1.3rem;
+    font-weight: 700;
+    display: flex;
+    justify-content: center;
+    text-transform: uppercase;
 }

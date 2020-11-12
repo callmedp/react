@@ -1,6 +1,6 @@
 import React from 'react';
 import Badge from 'react-bootstrap/Badge';
-import Button from 'react-bootstrap/Button'
+import Button from 'react-bootstrap/Button';
 import './skillGain.scss'
 
 const SkillGain = (props) => {
@@ -10,7 +10,7 @@ const SkillGain = (props) => {
                 <div className="container">
                     <div className="d-flex">
                         <div className="skill-gain">
-                            <h2 className="mt-40">Skills you will gain</h2>
+                            <h2 className="heading2 mt-40">Skills you will gain</h2>
                             <div className="skill-gain__list">
                                 <Badge pill variant="light">Light</Badge>{' '}
                                 <Badge pill variant="light">PythonR</Badge>{' '}
