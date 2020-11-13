@@ -1,6 +1,5 @@
 import React from 'react';
 import './aboutSection.scss';
-import Accordion from 'react-bootstrap/Accordion'
 
 const AboutSection = (props) => {
     return (
