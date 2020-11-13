@@ -1,5 +1,5 @@
 import { createStore, applyMiddleware, compose } from 'redux';
-import reducer from './allReducers'
+import rootReducer from './allReducers'
 import rootSaga from './sagas'
 import createSagaMiddleware from 'redux-saga';
 
@@ -18,7 +18,7 @@ const preloadedState = window.__PRELOADED_STATE__
 delete window.__PRELOADED_STATE__
 
 // Create Redux store with initial state
-const store = createStore(reducer, preloadedState, composeEnhancers(applyMiddleware(sagaMiddleware)));
+const store = createStore(rootReducer, preloadedState, composeEnhancers(applyMiddleware(sagaMiddleware)));
 sagaMiddleware.run(rootSaga);
 
 

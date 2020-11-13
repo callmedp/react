@@ -1,0 +1,1 @@
+const siteDomain = 'https://learning1.shine.com'
