@@ -1,54 +1,39 @@
 @import '../../../../styles/functions';
 @import '../../../../styles/variables';
 @import '../../../../styles/mixins';
+  
 
-.about {
-    display: block;
-    .read-more-state {
-        display: none;
-    }
-    
-    .read-more-target {
-        opacity: 0;
-        max-height: 0;
-        font-size: 0;
-        transition: .25s ease;
-    }
+.about-course {
 
-    .read-more-state {
-        &:checked {
-            ~ .read-more-wrap {
-                .read-more-target {
-                    opacity: 1;
-                    font-size: inherit;
-                    max-height: 999em;
-                }
-            }
+    #expand-content {
+        &.collapse:not(.show) {
+            display: block;
+            height: 4rem;
+            overflow: hidden;
+            transition: all .2s;
+        }
+
+        &.collapsing {
+            height: 4rem;
         }
     }
 
-    .read-more-state {
-        ~ .read-more-trigger {
-            &:before {
-                content: 'Know more';
-            }
-        } 
-    }
-
-    .read-more-state {
-        &:checked {
-            ~ .read-more-trigger {
-                &:before {
-                    content: 'Show less';
-                }
+    a {
+       margin-bottom: .7rem;
+       display: inline-block; 
+       cursor: pointer;
+       font-weight: 600;
+       
+        &.collapsed {
+            &::after {
+                content: 'Read more';
             }
         }
-    }
-    
-    .read-more-trigger {
-        cursor: pointer;
-        display: inline;
-        color: $blue;
-        font-size: 1.3rem;
+
+        &:not(.collapsed) {
+            &::after {
+                content: 'Read less';
+            }
+        }
     }
 }

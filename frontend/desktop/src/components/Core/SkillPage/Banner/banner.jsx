@@ -17,11 +17,11 @@ const BannerSkill = (props) => {
                         </Breadcrumb.Item>
                         <Breadcrumb.Item active>Digital Marketing</Breadcrumb.Item>
                     </Breadcrumb>
-                    <h1>
+                    <h1 className="heading1">
                         Digital Marketing Courses & Certifications
                     </h1>
                     <p>
-                        <i className="icon-round-arrow"></i>
+                        <figure className="icon-round-arrow"></figure>
                         <span>
                             Digital Marketing expected to <strong>create 3.3 million jobs by 2022</strong>
                         </span>

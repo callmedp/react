@@ -27,8 +27,8 @@
 
     &__banner {
         padding: 1.5rem;
-        background-color: #F4FBFF;
-        border: 1px solid #D5E8F5;
+        background-color: $free-test-banner-bg;
+        border: 1px solid $free-test-banner-bdr;
         border-radius: $border-radius;
         display: flex;
         align-items: center;

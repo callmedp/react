@@ -17,7 +17,6 @@ $gray-700: #495057 !default;
 $gray-800: #343a40 !default;
 $gray-900: #E3E3E3 !default;
 $black:    #000 !default;
-$input-focus: #709DE8 !default;
 
 $grays: () !default;
 $grays: map-merge(
@@ -46,6 +45,16 @@ $green:   #28a745 !default;
 $teal:    #20c997 !default;
 $cyan:    #17a2b8 !default;
 $lightblue: #F3F9FD !default;
+$bluehover: #5C94F5 !default;
+$input-focus: #709DE8 !default;
+$free-test-banner-bg: #F4FBFF !default;
+$free-test-banner-bdr: #D5E8F5 !default;
+$card-btm-bdr: #D9E5F8 !default;
+$tab-pill-solid: #CFE1FE;
+$tab-pill-color: #88A6D8;
+$course-light-bg: #F1F8FC;
+$course-badge-blue: #E0F3FF;
+$course-badge-red: #FBC1C1;
 
 $colors: () !default;
 $colors: map-merge(
@@ -176,10 +185,10 @@ $body-color:                $gray-200 !default;
 //
 // Style anchor elements.
 
-$link-color:                              theme-color("primary") !default;
+$link-color:                              $blue !default;
 $link-decoration:                         none !default;
-$link-hover-color:                        darken($link-color, 15%) !default;
-$link-hover-decoration:                   underline !default;
+$link-hover-color:                        $bluehover !default;
+$link-hover-decoration:                   none !default;
 // Darken percentage for links with `.text-*` class (e.g. `.text-success`)
 $emphasized-link-hover-darken-percentage: 15% !default;
 
@@ -1154,3 +1163,9 @@ $print-body-min-width:              map-get($grid-breakpoints, "lg") !default;
 // custom variables by Sachin K.
 
 $sprite: url('/media/images/learning-sprite.png') no-repeat;
+
+%box-shadow {
+  box-shadow: $box-shadow;
+  padding: 2rem;
+  border-radius: .4rem;
+}
