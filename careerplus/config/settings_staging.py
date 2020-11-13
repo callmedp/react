@@ -455,6 +455,7 @@ CANDIDATE_SOLR_URL = "http://172.22.65.34:9999/solr/cda/select/"
 RESUME_SHINE_SITE_PROTOCOL = 'https'
 RESUME_SHINE_SITE_DOMAIN = 'resumestage.shine.com'
 RESUME_SHINE_MAIN_DOMAIN = 'https://resumestage.shine.com'
+
 '''
 links for analytics vidhya 
 '''
@@ -474,6 +475,9 @@ NON_LOGGED_IN_CHATBOT = "https://learning-media-staging-189607.storage.googleapi
 
 PRODUCT_LEADCREATION_COUNTDOWN = 30
 
+
+SHINE_SKILL_ASSESSENT_VENDOR = [50,52]
+
 RESUME_SHINE_SITE_PROTOCOL = 'https'
 RESUME_SHINE_SITE_DOMAIN = 'resumestage.shine.com'
 RESUME_SHINE_MAIN_DOMAIN = '{}://{}'.format(RESUME_SHINE_SITE_PROTOCOL,RESUME_SHINE_SITE_DOMAIN)
@@ -481,7 +485,7 @@ RESUME_SHINE_MAIN_DOMAIN = '{}://{}'.format(RESUME_SHINE_SITE_PROTOCOL,RESUME_SH
 
 
 CORS_ORIGIN_ALLOW_ALL = True
- 
+
 CORS_ORIGIN_WHITELIST = (
 'https://localhost:8000',
 'http://localhost:3000',
@@ -493,7 +497,7 @@ CORS_ORIGIN_WHITELIST = (
  'https://learning1.shine.com',
  'https://resumestage.shine.com',
 )
- 
+
 CORS_ALLOW_HEADERS = [
 'accept',
 'accept-encoding',

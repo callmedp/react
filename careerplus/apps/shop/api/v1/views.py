@@ -46,6 +46,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 
+from shop.mixins import SkillProducts
 
 class ProductListView(FieldFilterMixin, ListAPIView):
     serializer_class = ProductListSerializerForAuditHistory
@@ -387,7 +388,7 @@ class ProductReview(APIView):
 
 
 
-class SkillProductView(APIView):
+class SkillProductView(SkillProducts,APIView):
 
     """
      Params  to be added 
@@ -407,77 +408,89 @@ class SkillProductView(APIView):
     authentication_classes = ()
     permission_classes = ()
 
-    def get_product_from_skill(self,skill=[]):
-        if not skill:
-            return []
-        filter_dict = {'active':True,'is_indexed':True,'is_indexable':True}
-        product_id = None
-        assessment = self.request.GET.get('assessment')
-        if assessment:
-            filter_dict.update({'type_flow':16})
-        WhatYouGet = {
-            'testpreptraining':[
-            "Receive valuable feedback, from reliable exam reports, on your strong and weak areas",
-            "Get real exam and practice environment",
-            "In depth and exhaustive explanation to every question to enhance your learning",
-                "Unlimited access to the assessment platform",
-                "500+ questions to test your learning on variety of topics",
-                "Gets Tips & Tricks to crack the test",
-            ],
-        }
-
-        if isinstance(skill,list):
-            product_id = ProductSkill.objects.filter(skill__slug__in=skill).values_list('product_id',flat=True)
-
-        else:
-            product_id = ProductSkill.objects.filter(skill__slug=skill).values_list('product_id',flat=True)
-
-        products = Product.objects.filter(id__in=product_id,**filter_dict)
-
-        data = []
-
-        for prod in products:
-            data_dict = {}
-            data_dict.update ({'id' : prod.id , 'heading' : prod.get_heading () , 'title' : prod.get_title () ,
-                               'url' : prod.get_url () ,
-                               'icon' : prod.get_icon_url () , 'about' : prod.get_about () ,
-                               'img_url':prod.image.url if prod.image else '',
-                               'inr_price' : prod.get_price () ,
-                               'fake_inr_price' : prod.fake_inr_price , 'attribute' : prod.get_assessment_attribute () ,
-                               'vendor' : prod.vendor_id})
-            if prod.type_flow == 16 :
-                if not prod.vendor :
-                    data_dict.update ({
-                        'what_you_get' : [
-                            "Industry recognized certification after clearing the test" ,
-                            "Get badge on shine.com and showcase your knowledge to the recruiters" ,
-                            "Shine shows your skills as validated and certification as verified which build high trust "
-                            "among recruiters" ,
-                            "Receive valuable feedback on your strong and weak areas to improve yourself" ,
-                            "Certified candidates gets higher salary as compared to non certified candidate"
-                        ]
-                    })
-                else :
-
-                    data_dict.update ({
-                        'what_you_get' : WhatYouGet.get (prod.vendor.slug , [
-                            "Industry recognized certification after clearing the test" ,
-                            "Get badge on shine.com and showcase your knowledge to the recruiters" ,
-                            "Shine shows your skills as validated and certification as verified which build high trust "
-                            "among recruiters" ,
-                            "Receive valuable feedback on your strong and weak areas to improve yourself" ,
-                            "Certified candidates gets higher salary as compared to non certified candidate"
-                        ])
-                    })
-
-            data.append (data_dict)
-        return data
+    # def get_product_from_skill(self,skill=[]):
+    #     if not skill:
+    #         return []
+    #     filter_dict = {'active':True,'is_indexed':True,'is_indexable':True}
+    #     product_id = None
+    #     assessment = self.request.GET.get('assessment')
+    #     if assessment:
+    #         filter_dict.update({'type_flow':16})
+    #     WhatYouGet = {
+    #         'testpreptraining':[
+    #         "Receive valuable feedback, from reliable exam reports, on your strong and weak areas",
+    #         "Get real exam and practice environment",
+    #         "In depth and exhaustive explanation to every question to enhance your learning",
+    #             "Unlimited access to the assessment platform",
+    #             "500+ questions to test your learning on variety of topics",
+    #             "Gets Tips & Tricks to crack the test",
+    #         ],
+    #     }
+    #
+    #     if isinstance(skill,list):
+    #         product_id = ProductSkill.objects.filter(skill__slug__in=skill).values_list('product_id',flat=True)
+    #
+    #     else:
+    #         product_id = ProductSkill.objects.filter(skill__slug=skill).values_list('product_id',flat=True)
+    #
+    #     products = Product.objects.filter(id__in=product_id, **filter_dict)
+    #
+    #     data = []
+    #
+    #     for prod in products:
+    #         data_dict = {}
+    #         data_dict.update ({'id' : prod.id , 'heading' : prod.get_heading () , 'title' : prod.get_title () ,
+    #                            'url' : prod.get_url () ,
+    #                            'icon' : prod.get_icon_url () , 'about' : prod.get_about () ,
+    #                            'img_url':prod.image.url if prod.image else '',
+    #                            'inr_price' : prod.get_price () ,
+    #                            'fake_inr_price' : prod.fake_inr_price , 'attribute' : prod.get_assessment_attribute () ,
+    #                            'vendor' : prod.vendor_id})
+    #         if prod.type_flow == 16 :
+    #             if not prod.vendor :
+    #                 data_dict.update ({
+    #                     'what_you_get' : [
+    #                         "Industry recognized certification after clearing the test" ,
+    #                         "Get badge on shine.com and showcase your knowledge to the recruiters" ,
+    #                         "Shine shows your skills as validated and certification as verified which build high trust "
+    #                         "among recruiters" ,
+    #                         "Receive valuable feedback on your strong and weak areas to improve yourself" ,
+    #                         "Certified candidates gets higher salary as compared to non certified candidate"
+    #                     ]
+    #                 })
+    #             else :
+    #
+    #                 data_dict.update ({
+    #                     'what_you_get' : WhatYouGet.get (prod.vendor.slug , [
+    #                         "Industry recognized certification after clearing the test" ,
+    #                         "Get badge on shine.com and showcase your knowledge to the recruiters" ,
+    #                         "Shine shows your skills as validated and certification as verified which build high trust "
+    #                         "among recruiters" ,
+    #                         "Receive valuable feedback on your strong and weak areas to improve yourself" ,
+    #                         "Certified candidates gets higher salary as compared to non certified candidate"
+    #                     ])
+    #                 })
+    #
+    #         data.append (data_dict)
+    #     return data
 
     def get(self,request,*args,**kwargs):
         certificate_id = self.request.GET.get('cert')
         skills = self.request.GET.get('skills',[])
         assessment = self.request.GET.get('assessment')
+        vendors_list = self.request.GET.get('vendor')
+
+        if vendors_list:
+            vendors_list = vendors_list.split(',')
+        else:
+            vendors_list = []
         skill_list = []
+        fl = self.request.GET.get('fl',[])
+        if not fl:
+            fl = []
+        else:
+            fl = fl.split(',')
+
 
         if certificate_id:
             certificate_products =[]
@@ -489,15 +502,20 @@ class SkillProductView(APIView):
                 if not cert.skill:
                     continue
                 skills = list(map(slugify,cert.skill.split(',')))
-                certificate_products.append({cert.id:self.get_product_from_skill(skills)})
+                certificate_products.append({cert.id:self.get_product_from_skill(skills,fl)})
 
             return Response({'data':certificate_products},status=status.HTTP_200_OK)
 
-        if skills:
+
+        if skills and skills != 'all':
             skills = list(map(slugify,skills.split(',')))
             for skill in skills:
-                skill_list.append({skill:self.get_product_from_skill(skill)})
+                skill_list.append({skill:self.get_product_from_skill(skill,fl)})
             return Response ({'data': skill_list}, status=status.HTTP_200_OK)
+
+        if skills == 'all':
+            return Response({'data': self.get_all_products_with_skill(specific_vendor=vendors_list)},
+                            status=status.HTTP_200_OK)
 
 
         return Response({'data':[]},status=status.HTTP_400_BAD_REQUEST)

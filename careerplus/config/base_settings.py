@@ -701,4 +701,77 @@ RAZOR_PAY_DICT = {
 }
 
 
+TEST_PREP_DICT = {
+    'token_url': 'https://www.testpreptraining.com/api/index.php/apiv2/login',
+    'new_order': 'https://www.testpreptraining.com/api/index.php/apiv2/newOrder',
+    'username': 'shinecom',
+    'password': 'lkhsg87$4w50934nkl#%'
 
+}
+
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+    },
+    'formatters': {
+        'verbose': {
+            'format': 'shinelearning_%(name)s: %(levelname)s %(asctime)s %(pathname)s %(lineno)s %(message)s'
+        },
+        'simple': {
+            'format': '[%(asctime)s] %(levelname)s %(message)s',
+            'datefmt': '%d/%b/%Y %H:%M:%S'
+        },
+    },
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler'
+        },
+        'console': {
+            'level': 'DEBUG',
+            'filters': ['require_debug_true'],
+            'class': 'logging.handlers.SysLogHandler',
+            'facility': 'local4',
+            'formatter': 'simple'
+        },
+        'syslog': {
+            'level': 'DEBUG',
+            'class': 'logging.handlers.SysLogHandler',
+            'facility': 'local4',
+            'formatter': 'verbose'
+        },
+    },
+    'loggers': {
+        # root logger
+        '': {
+            'handlers': ['console', 'syslog'],
+            'level': 'INFO',
+            'disabled': False
+        },
+        'django.request': {
+            'handlers': ['mail_admins', 'syslog'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+        'info_log': {
+            'handlers': ['syslog'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'error_log': {
+            'handlers': ['syslog'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
+}
