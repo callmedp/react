@@ -1,12 +1,26 @@
+# Python Core Import
 import logging ,json
+import datetime
+import mimetypes
+
+# DRF Import
 from rest_framework.generics import RetrieveAPIView ,ListAPIView ,UpdateAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
+from rest_framework import permissions, status
+
+# Core Django Import
 from django.http import HttpResponse ,HttpResponsePermanentRedirect
 from shared.rest_addons.mixins import FieldFilterMixin
 from shared.rest_addons.pagination import LearningCustomPagination
 from django.template.loader import get_template
+from django.utils import timezone
+from django.conf import settings
+from django.template import Context
+from django.db.models import Prefetch
+from haystack.query import SearchQuerySet
+
+# Local Import
 from core.mixins import InvoiceGenerate
 from review.models import Review
 from emailers.email import SendMail
@@ -14,25 +28,11 @@ from emailers.tasks import send_email_task
 from emailers.sms import SendSMS
 from django.contrib.contenttypes.models import ContentType
 from order.api.v1.serializers import OrderItemSerializer
-
-
-from weasyprint import HTML
-from django.template import Context
-
-import datetime
-from django.utils import timezone
-
 from .serializers import StaticSiteContentSerializer, OrderItemDetailSerializer, DashboardCancellationSerializer
-
 from core.library.gcloud.custom_cloud_storage import \
     GCPPrivateMediaStorage, GCPInvoiceStorage, GCPMediaStorage, GCPResumeBuilderStorage
-from wsgiref.util import FileWrapper
-from django.conf import settings
-import mimetypes
 
-
-
-
+# Local Inter App Import
 from homepage.models import StaticSiteContent,TestimonialCategoryRelationship,Testimonial
 from shop.models import Category
 from order.models import Order, OrderItem ,InternationalProfileCredential
@@ -40,7 +40,12 @@ from dashboard.dashboard_mixin import DashboardInfo, DashboardCancelOrderMixin
 from core.api_mixin import ShineCandidateDetail
 from django.core.files.base import ContentFile
 from payment.models import PaymentTxn
+from homepage.models import TopTrending, TrendingProduct
+from .helper import APIResponse
 
+# Other Import
+from weasyprint import HTML
+from wsgiref.util import FileWrapper
 
 logger = logging.getLogger('error_log')
 
@@ -683,7 +688,6 @@ class DashboardFeedbackSubmit(APIView):
     authentication_classes = ()
     serializer_classes = None
 
-
     def post(self, request, *args, **kwargs):
         email_dict = {}
         candidate_id = request.data.get('candidate_id', None)
@@ -758,6 +762,47 @@ class PausePlayService(UpdateAPIView):
     serializer_classes = OrderItemSerializer
     queryset = OrderItem.objects.all()
     owner_fields = ['order.candidate_id']
+
+
+class TrendingCourseAPI(APIView):
+    __author__ = 'Rahul'
+    permission_classes = (permissions.AllowAny,)
+    authentication_classes = ()
+
+    def get(self, request, format=None):
+        """
+        Return Trending Course API
+        :param request: get
+        :param args: (required section)
+        :param kwargs:
+        :return: [{'course': 'course_link'}]
+        """
+        t_courses = []
+        t_objects = TopTrending.objects.filter(
+            is_active=True, is_jobassistance=False
+        ).prefetch_related(Prefetch('trendingproduct_set',
+                                    queryset=TrendingProduct.objects.select_related('trendingcourse').filter(
+                                        is_active = True), to_attr='get_pids'))
+
+        for tcourse in t_objects:
+            product_pks = [prod.product_id for prod in tcourse.get_pids]
+            tprds = SearchQuerySet().filter(id__in=product_pks, pPc__in=settings.COURSE_SLUG, pTP__in=[0,1,3]).exclude(
+                id__in=settings.EXCLUSIVE_SEARCH_PRODUCTS
+            )
+            data = {
+                'name': tcourse.name,
+                'tprds': list(tprds),
+                'view_all': tcourse.view_all
+            }
+            t_courses.append(data)
+
+        return APIResponse(data=t_courses, status=status.HTTP_200_OK)
+
+
+
+
+
+
 
 
 
