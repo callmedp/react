@@ -1,6 +1,5 @@
 import React from 'react';
 import './aboutSection.scss';
-import Accordion from 'react-bootstrap/Accordion'
 import { useSelector } from 'react-redux'
 
 const AboutSection = (props) => {

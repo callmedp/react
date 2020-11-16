@@ -48,6 +48,8 @@ const SkillPage = (props) => {
                 </aside>
             </section>
             <WhyChooseUs />
+            <FAQ />
+            <LearnersStories />
         </div>
     )
 }
