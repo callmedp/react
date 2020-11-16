@@ -1,9 +1,9 @@
 # Python Imports
 import json
 import logging
+import re
 
 # Core Django Imports
-from crmapi.models import (UserQuries, DEFAULT_SLUG_SOURCE)
 from crmapi.tasks import create_lead_crm
 # Third Party Imports
 from geolocation.models import Country
@@ -12,10 +12,11 @@ from rest_framework import permissions, status
 from rest_framework.views import APIView
 
 # Local Imports
-from .helper import APIResponse
-
+from .helper import APIResponse, isValidPhone
 
 # Inter App Imports
+from crmapi.models import (
+    UserQuries, DEFAULT_SLUG_SOURCE)
 
 
 class LeadManagementAPI(APIView):
@@ -28,11 +29,12 @@ class LeadManagementAPI(APIView):
         Getting the request from user like email, mobile, name, msg etc to create a lead
         in the back-end.
         Variables can be dynamic but the email or mobile should be neccessary.
+
+        Required Params:
+        name, email, msg, number, campaign
         """
 
         # Specify the lead is not created yet
-        created = False
-
         try:
             email = request.POST.get('email', '')
             university_course = request.POST.get('uc', 0)
@@ -45,7 +47,6 @@ class LeadManagementAPI(APIView):
             source = request.POST.get('source', '')
             queried_for = request.POST.get('queried_for', '')
             lead_source = request.POST.get('lsource', 0)
-            selection = request.POST.get('selection', 0)
             company = request.POST.get('cname', '')
             path = request.POST.get('path', '')
             rejectlist = ['http', 'www', 'href', '***', 'url', '<html>']
@@ -54,7 +55,14 @@ class LeadManagementAPI(APIView):
             medium = 0
 
             if any(rejectkey in msg for rejectkey in rejectlist):
-                return APIResponse(message='Something went wrong', status=status.HTTP_400_BAD_REQUEST)
+                return APIResponse(message='Something went wrong', status=status.HTTP_400_BAD_REQUEST, error=True)
+
+            if not all(len(i) > 0 for i in [name, mobile]):
+                return APIResponse(message='Please fill all the fields.',
+                                   status=status.HTTP_400_BAD_REQUEST, error=True)
+
+            if not isValidPhone(mobile):
+                return APIResponse(message='Please enter valid number', status=status.HTTP_400_BAD_REQUEST, error=True)
 
             try:
                 # In case not able to find product
@@ -110,7 +118,7 @@ class LeadManagementAPI(APIView):
             lead = UserQuries.objects.create(name=name,
                                              email=email,
                                              country=country,
-                                             phn_numnber=mobile,
+                                             phn_number=mobile,
                                              message=msg,
                                              lead_source=lead_source,
                                              product=prd,
@@ -121,11 +129,12 @@ class LeadManagementAPI(APIView):
                                              utm_parameter=utm_parameter,
                                              campaign_slug=campaign_slug,
                                              sub_campaign_slug=sub_campaign_slug)
-            created = True
+
             validate = True if lead.email else False
             create_lead_crm.delay(pk=lead.pk, validate=validate, product_offer=product_offer)
-            return APIResponse(message='Thank you for your response', status=status.HTTP_201_CREATED)
+            return APIResponse(message='Thank you for your response', status=status.HTTP_201_CREATED, error=False)
 
         except Exception as e:
             logging.getLogger('error_log').error('Lead Creation failed {}'.format(str(e)))
-            return APIResponse(message='Something went wrong, \n Please try again!', status=status.HTTP_400_BAD_REQUEST)
+            return APIResponse(message='Something went wrong, \n Please try again!', 
+                               status=status.HTTP_400_BAD_REQUEST, error=False)

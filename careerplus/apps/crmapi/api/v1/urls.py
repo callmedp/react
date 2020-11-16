@@ -8,7 +8,7 @@ from .views import LeadManagementAPI
 from rest_framework import routers
 
 router = routers.DefaultRouter()
-app_name = 'console'
+app_name = 'crmapi'
 urlpatterns = [
     re_path(r'^lead-management/$', LeadManagementAPI.as_view())
 ]

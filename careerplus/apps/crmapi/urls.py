@@ -9,5 +9,5 @@ urlpatterns = [
         views.LeadManagement.as_view(), name='lead-management'),
     re_path(r'^lead-save/$',
         views.LeadManagementWithCaptcha.as_view(), name='lead-management-captcha'),
-    re_path(r'^api/v1/', include('crmapi.api.urls', namespace='api')),
+    re_path(r'^api/', include('crmapi.api.urls', namespace='api')),
 ]
