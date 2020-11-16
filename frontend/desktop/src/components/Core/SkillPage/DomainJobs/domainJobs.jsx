@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import './domainJobs.scss';
-import { fetchDomainJobs } from 'store/DomainJobs/actions/index';
+import { fetchDomainJobs } from 'store/SkillPage/DomainJobs/actions/index';
 
 const DomainJobs = (props) => {
 
     const dispatch = useDispatch()
-    const jobList = useSelector(store => store.jobs.list) 
-
+    const { jobsList } = useSelector(store => store.jobs) 
+    const pageId = props.pageId
     useEffect(() => {
-        dispatch(fetchDomainJobs())
+        dispatch(fetchDomainJobs({id : pageId}))
     }, [])
 
 
@@ -19,10 +19,10 @@ const DomainJobs = (props) => {
                 <strong className="heading3">Jobs in this domain</strong>
                 <ul>
                     {
-                        jobList?.map((job, index) => {
+                        jobsList?.map((job, index) => {
                             return (
                                 <li key={index}>
-                                    <a href={job.href}>{job.name}</a>
+                                    <a href={job.url}>{job.name}</a>
                                 </li>
                             )
                         })
@@ -35,7 +35,7 @@ const DomainJobs = (props) => {
                 </ul>
             </div>
             <figure className="domain-jobs__img">
-                <img src="./media/images/domain-jobs.svg" alt="Jobs in this domain" />
+                <img src="/media/images/domain-jobs.svg" alt="Jobs in this domain" />
             </figure>
         </section>
     )

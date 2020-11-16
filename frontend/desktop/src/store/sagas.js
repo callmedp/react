@@ -1,11 +1,12 @@
 import { all } from 'redux-saga/effects'
-import WatchLeadForm from './NeedHelp/saga/index';
-import WatchDomainJobs from './DomainJobs/saga/index';
-
+import WatchLeadForm from './SkillPage/NeedHelp/saga/index';
+import WatchDomainJobs from './SkillPage/DomainJobs/saga/index';
+import WatchBannerData from './SkillPage/Banner/saga/index';
 
 export default function* () {
     yield all([
         WatchLeadForm(),
-        WatchDomainJobs()
+        WatchDomainJobs(),
+        WatchBannerData()
     ])
 }

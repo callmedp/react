@@ -15,9 +15,12 @@ import LearnersStories from './LearnersStories/learnersStories';
 import '../SkillPage/skillPage.scss'
 
 const SkillPage = (props) => {
+
+    const pageId = props.match.params.id;
+
     return (
         <div>
-            <SkillBanner/>
+            <SkillBanner pageId={pageId}/>
             <section className="container">
                 <div className="row">
                     <div className="col-sm-9">
@@ -37,7 +40,7 @@ const SkillPage = (props) => {
             <section className="container">
                 <aside className="row">
                     <div className="col">
-                        <DomainJobs />
+                        <DomainJobs pageId={pageId}/>
                     </div>
                     <div className="col">
                         <WriteMyResume />

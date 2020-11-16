@@ -67,10 +67,12 @@ class SkillPageAbout(APIView):
             return Response({'detail':'SubHeaderCategory not found'},status=status.HTTP_404_NOT_FOUND)
         subheading_data = SubHeaderCategorySerializer(subheading,many=True).data
         data = {
-            'name':category.name +' Courses & <br/>Certifications</h1>',
+            'name':category.name,
+            'heading':category.heading,
+            'slug':category.slug, 
             'description' : category.description,
             'subheading':subheading_data,
-            'career_outcomes':career_outcomes,
+            'skillGainList':career_outcomes,
             'breadcrumbs':self.get_breadcrumb_data(category),
         }
         return Response(data,status=status.HTTP_200_OK) 

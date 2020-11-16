@@ -4,7 +4,7 @@ import './needHelp.scss';
 import { useForm } from 'react-hook-form';
 import { InputField, SelectBox } from 'formHandler/formFields';
 import NeedHelpForm from 'formHandler/formData/needHelp';
-import { createLead } from 'store/NeedHelp/actions/index';
+import { createLead } from 'store/SkillPage/NeedHelp/actions/index';
 
 const NeedHelp = (props) => {
 
@@ -41,7 +41,7 @@ const NeedHelp = (props) => {
                         <input type="email" className="form-control" id="email" name="email" placeholder=" "
                             value="" aria-required="true" aria-invalid="true" />
                         <label for="">Email</label>
-                        <span class="error-msg">Required</span>
+                        <span className="error-msg">Required</span>
                     </div> */}
 
                 <InputField attributes={NeedHelpForm.email} register={register}
