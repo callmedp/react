@@ -787,7 +787,7 @@ class TrendingCourseAPI(APIView):
         for tcourse in t_objects:
             product_pks = [prod.product_id for prod in tcourse.get_pids]
             tprds = SearchQuerySet().filter(id__in=product_pks, pPc__in=settings.COURSE_SLUG, pTP__in=[0,1,3]).exclude(
-                id__in=settings.EXCLUSIVE_SEARCH_PRODUCTS
+                id__in=settings.EXCLUDE_SEARCH_PRODUCTS
             )
             data = {
                 'name': tcourse.name,
