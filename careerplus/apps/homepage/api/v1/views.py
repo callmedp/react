@@ -783,7 +783,6 @@ class TrendingCourseAPI(APIView):
         ).prefetch_related(Prefetch('trendingproduct_set',
                                     queryset=TrendingProduct.objects.select_related('trendingcourse').filter(
                                         is_active = True), to_attr='get_pids'))
-
         for tcourse in t_objects:
             product_pks = [prod.product_id for prod in tcourse.get_pids]
             tprds = SearchQuerySet().filter(id__in=product_pks, pPc__in=settings.COURSE_SLUG, pTP__in=[0,1,3]).exclude(
@@ -791,7 +790,7 @@ class TrendingCourseAPI(APIView):
             )
             data = {
                 'name': tcourse.name,
-                'tprds': list(tprds),
+                'tprds': [{'heading': tprd.pHd, 'url': tprd.pURL, 'img': tprd.pImg} for tprd in tprds],
                 'view_all': tcourse.view_all
             }
             t_courses.append(data)
