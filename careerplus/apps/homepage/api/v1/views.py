@@ -795,7 +795,7 @@ class TrendingCourseAPI(APIView):
             }
             t_courses.append(data)
 
-        return APIResponse(data=t_courses, status=status.HTTP_200_OK)
+        return APIResponse(message='Trending Course Loaded', data=t_courses, status=status.HTTP_200_OK)
 
 
 
