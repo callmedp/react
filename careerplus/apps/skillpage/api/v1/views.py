@@ -2,6 +2,7 @@ from rest_framework.generics import ListAPIView
 from shared.rest_addons.pagination import LearningCustomPagination
 from .serializers import LoadMoreSerializerSolr
 from django.conf import settings
+from django.core.cache import cache
 from core.library.haystack.query import SQS
 from rest_framework.permissions import (
     IsAuthenticated,
@@ -16,6 +17,7 @@ from rest_framework import status
 from rest_framework.views import APIView
 from .serializers import SubHeaderCategorySerializer,ProductSerializer,IndexColumnSerializer
 from review.models import DetailPageWidget
+from homepage.models import TestimonialCategoryRelationship
 
 class LoadMoreApiView(FieldFilterMixin, ListAPIView):
     serializer_class = LoadMoreSerializerSolr
@@ -57,24 +59,42 @@ class SkillPageAbout(APIView):
 
     def get(self,request,*args,**kwargs):
         id = request.GET.get('id',None)
+
+        # id = int(kwargs.get('pk',None))
+        if cache.get('skill_page_{}'.format(id), None):
+            data = cache.get('skill_page_{}'.format(id)) 
+            return Response(data, status=status.HTTP_200_OK)
+
         try:
             category = Category.objects.get(id=id)
-            subheading = SubHeaderCategory.objects.filter(category=category,active=True,heading='Who should learn')
+            subheading = SubHeaderCategory.objects.filter(category=category, active=True)
             career_outcomes = category.split_career_outcomes()
         except Category.DoesNotExist:
-            return Response({'detail':'Category not found'},status=status.HTTP_404_NOT_FOUND)
+            return Response({'detail':'Category not found'}, status=status.HTTP_404_NOT_FOUND)
         except SubHeaderCategory.DoesNotExist:
-            return Response({'detail':'SubHeaderCategory not found'},status=status.HTTP_404_NOT_FOUND)
-        subheading_data = SubHeaderCategorySerializer(subheading,many=True).data
+            return Response({'detail':'SubHeaderCategory not found'},\
+                status=status.HTTP_404_NOT_FOUND)
+        subheading_id_data_mapping = {}
+        for heading in subheading:
+            subheading_id_data_mapping.update({
+                    heading.heading_choice_text: SubHeaderCategorySerializer(heading).data
+                })
+        testimonialcategory = TestimonialCategoryRelationship.objects.filter(\
+                                category=id, testimonial__is_active=True\
+                                ).values('testimonial__user_name', 'testimonial__review',\
+                                'testimonial__designation', 'testimonial__company')
         data = {
             'name':category.name,
             'heading':category.heading,
             'slug':category.slug, 
             'description' : category.description,
-            'subheading':subheading_data,
+            'subheading':subheading_id_data_mapping,
             'skillGainList':career_outcomes,
             'breadcrumbs':self.get_breadcrumb_data(category),
+            'testimonialcategory':testimonialcategory
         }
+
+        cache.set('skill_page_{}'.format(id), data, timeout=60*60*24)
         return Response(data,status=status.HTTP_200_OK) 
     
 class CourseComponentView(APIView):
