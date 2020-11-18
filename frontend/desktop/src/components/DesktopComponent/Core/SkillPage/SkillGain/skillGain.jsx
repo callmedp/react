@@ -20,9 +20,9 @@ const SkillGain = (props) => {
                             <div className="skill-gain__list">
                                 {
                                     skillGainList?.map((skill, index) => {
-                                        return (<>
-                                            <Badge pill key={index} variant="light">{skill}</Badge>&nbsp;
-                                        </>)
+                                        return (<React.Fragment key={index}>
+                                            <Badge pill  variant="light">{skill}</Badge>&nbsp;
+                                        </React.Fragment>)
                                     })
                                 }   
                                 {/* <Badge pill variant="light">PythonR</Badge>&nbsp;

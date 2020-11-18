@@ -2,22 +2,18 @@ import * as Actions from '../actions/actionTypes';
 import { takeLatest, call, put } from 'redux-saga/effects';
 import Api from './Api';
 
-
-
-function* skillPageBanner(action) {
+function* coursesAndAssessments(action) {
     try {
         const { payload } = action;
-        console.log("payload is ", payload)
-        const response = yield call(Api.skillPageBanner, payload);
+        const response = yield call(Api.coursesAndAssessments, payload);
+        console.log("response is ", response)
         if (response["error"]) {
             return
         }
         const item = response.data;
-    
-        console.log("breadLitem",item)
         yield put({ 
-            type : Actions.SKILL_PAGE_BANNER_FETCHED, 
-            item 
+            type : Actions.COURSES_AND_ASSESSMENTS_FETCHED, 
+            item
         })
 
     } catch (e) {
@@ -28,6 +24,6 @@ function* skillPageBanner(action) {
 
 
 
-export default function* WatchSkillPageBanner() {
-    yield takeLatest(Actions.FETCH_SKILL_PAGE_BANNER, skillPageBanner);
+export default function* WatchCoursesAndAssessments() {
+    yield takeLatest(Actions.FETCH_COURSES_AND_ASSESSMENTS, coursesAndAssessments);
 }

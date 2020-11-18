@@ -58,9 +58,10 @@ class SkillPageAbout(APIView):
         return breadcrumbs
 
     def get(self,request,*args,**kwargs):
-        id = request.GET.get('id',None)
+        # import ipdb;ipdb.set_trace()
+        # id = request.GET.get('id',None)
 
-        # id = int(kwargs.get('pk',None))
+        id = int(kwargs.get('pk',None))
         if cache.get('skill_page_{}'.format(id), None):
             data = cache.get('skill_page_{}'.format(id)) 
             return Response(data, status=status.HTTP_200_OK)
