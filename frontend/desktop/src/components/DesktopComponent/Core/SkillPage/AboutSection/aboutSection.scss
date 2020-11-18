@@ -1,0 +1,39 @@
+@import '../../../../../styles/functions';
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
+  
+
+.about-course {
+
+    #expand-content {
+        &.collapse:not(.show) {
+            display: block;
+            height: 4rem;
+            overflow: hidden;
+            transition: all .2s;
+        }
+
+        &.collapsing {
+            height: 4rem;
+        }
+    }
+
+    a {
+       margin-bottom: .7rem;
+       display: inline-block; 
+       cursor: pointer;
+       font-weight: 600;
+       
+        &.collapsed {
+            &::after {
+                content: 'Read more';
+            }
+        }
+
+        &:not(.collapsed) {
+            &::after {
+                content: 'Read less';
+            }
+        }
+    }
+}

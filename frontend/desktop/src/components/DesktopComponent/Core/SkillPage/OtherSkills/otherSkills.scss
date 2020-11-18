@@ -1,0 +1,26 @@
+@import '../../../../../styles/functions';
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
+
+.other-skills {
+
+    &__list {
+        width: auto;
+        margin: 3rem 0;
+
+        .badge {
+            border: 1px solid $white;
+            color: $blue;
+
+            &:hover, &:focus {
+                border: 1px solid $blue;
+            }
+
+            a {
+                &:hover, &:focus {
+                    color: $blue;
+                }
+            }
+        }
+    }
+}
