@@ -798,10 +798,11 @@ class TrendingCourseAPI(APIView):
         return APIResponse(message='Trending Course Loaded', data=t_courses, status=status.HTTP_200_OK)
 
 
+class TrendingSkillsAPI(APIView):
+    __author__ = 'Rahul'
 
-
-
-
-
-
-
+    def get(self, request, format=None):
+        """
+        Return the trending skills
+        """
+        pass
