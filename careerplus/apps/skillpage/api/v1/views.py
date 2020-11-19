@@ -65,16 +65,16 @@ class SkillPageAbout(APIView):
             return Response(data, status=status.HTTP_200_OK)
         try:
             category = Category.objects.get(id=id)
-            subheading = SubHeaderCategory.objects.filter(category=category, active=True)
+            subheading = SubHeaderCategory.objects.filter(category=category, active=True, heading_choices__in=[2,3])
             career_outcomes = category.split_career_outcomes()
         except Category.DoesNotExist:
             return Response({'detail':'Category not found'}, status=status.HTTP_404_NOT_FOUND)
         except SubHeaderCategory.DoesNotExist:
             return Response({'detail':'SubHeaderCategory not found'},\
                 status=status.HTTP_404_NOT_FOUND)
-        subheading_id_data_mapping = {}
+        data = {}
         for heading in subheading:
-            subheading_id_data_mapping.update({
+            data.update({
                     heading.heading_choice_text: SubHeaderCategorySerializer(heading).data
                 })
         testimonialcategory = Testimonial.objects.filter(testimonialcategoryrelationship__category=id,is_active=True)
@@ -84,8 +84,7 @@ class SkillPageAbout(APIView):
             'heading':category.heading,
             'slug':category.slug, 
             'description' : category.description,
-            'subheading':subheading_id_data_mapping,
-            'skillGainList':career_outcomes,
+            'skillGainList' : career_outcomes,
             'breadcrumbs':self.get_breadcrumb_data(category),
             'testimonialcategory':testimonialcategory_data,
         }

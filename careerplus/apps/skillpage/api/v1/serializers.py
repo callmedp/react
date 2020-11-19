@@ -12,6 +12,8 @@ from shop.models import (
 from cms.models import IndexColumn
 from homepage.models import Testimonial
 
+from homepage.models import Testimonial
+
 class LoadMoreSerializerSolr(SerializerFieldsMixin,Serializer):
     id = serializers.CharField()
     django_ct = serializers.CharField()
