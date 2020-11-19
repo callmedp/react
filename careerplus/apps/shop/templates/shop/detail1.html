@@ -108,7 +108,7 @@
                             <input type="hidden" class="form-control" id="prd" name="prd" value="{{product.name}}" />
 
 
-                            <button type="submit" class="btn btn-primary btn-block ht-40" role="button">Submit</button>
+                            <button type="button" id="leadCreationFormSubmit" class="btn btn-primary btn-block ht-40" role="button">Submit</button>
                         </form>
                     </div>
                 </div>
@@ -768,7 +768,7 @@ $('#leadCreationForm').validate({
 }
 
 
-$("#leadCreationForm").click(function(e){
+$("#leadCreationFormSubmit").click(function(e){
 var flag=$('#leadCreationForm').valid();
 if(flag){
     var form = $(this);
