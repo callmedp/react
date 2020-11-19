@@ -19,6 +19,7 @@ from .serializers import SubHeaderCategorySerializer,ProductSerializer,IndexColu
 from review.models import DetailPageWidget
 from homepage.models import TestimonialCategoryRelationship, Testimonial
 from shop.templatetags.shop_tags import get_faq_list
+import json
 
 class LoadMoreApiView(FieldFilterMixin, ListAPIView):
     serializer_class = LoadMoreSerializerSolr
@@ -39,9 +40,9 @@ class LoadMoreApiView(FieldFilterMixin, ListAPIView):
 
         return SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).filter(pCtg=pCtg).exclude(pTF=pTF)
 
-class SkillPageAbout(APIView):
+class SkillPage(APIView):
     ''' 
-    api to return about section of skillpage(course detailpage)
+    api to return skillpage(course detailpage) data
     id : id of the skill category
     '''
     permission_classes = []
@@ -77,14 +78,18 @@ class SkillPageAbout(APIView):
         faq_list = get_faq_list(faq)
         testimonialcategory = Testimonial.objects.filter(testimonialcategoryrelationship__category=id,is_active=True)
         testimonialcategory_data = TestimonialSerializer(testimonialcategory,many=True).data
+        explore_courses = []
+        exp_cour_ids = json.loads(category.ex_cour)
+        explore_courses = Category.objects.filter(id__in=exp_cour_ids).values('name','url')
         data = {
             'name':category.name,
             'faqList':faq_list,
             'slug':category.slug, 
-            'Who should learn' : category.description,
+            'whoShouldLearn' : category.description,
             'skillGainList' : career_outcomes,
             'breadcrumbs':self.get_breadcrumb_data(category),
-            'testimonialcategory':testimonialcategory_data,
+            'testimonialCategory':testimonialcategory_data,
+            'otherSkills':explore_courses,
         }
 
         cache.set('skill_page_{}'.format(id), data, timeout=60*60*24)
