@@ -1,14 +1,19 @@
 import React from 'react';
 import Navbar from 'react-bootstrap/Navbar';
 import { Nav, Form } from 'react-bootstrap';
+import { LinkScroll as Link } from 'react-scroll';
 import './stickyNav.scss';
+import { useSelector} from "react-redux";
 
 const StickyNav = (props) => {
+
+    const { name } = useSelector( store => store.skillBanner )
+
     return(
         <Navbar className="container-fluid lightblue-bg sticky-nav" expand="lg">
            <div className="container">
                 <div className="flex-100">
-                    <h2>Digital Marketing Courses & Certification</h2>
+                    <h2>{name} Courses & Certification</h2>
                     <Nav>
                         <Nav.Link className="active" href="#home">About</Nav.Link>
                         <Nav.Link href="#link">Skills you gain</Nav.Link>

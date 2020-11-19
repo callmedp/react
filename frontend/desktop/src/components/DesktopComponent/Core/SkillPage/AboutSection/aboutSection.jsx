@@ -7,7 +7,7 @@ const AboutSection = (props) => {
     const { name, description } = useSelector(store => store.skillBanner)
 
     return (
-        <section className="container mt-0">
+        <section className="container mt-0" id="home">
             <div id="module" className="row about-course">
                 <h2 className="heading2">About {name}</h2>
                 <div dangerouslySetInnerHTML={{ __html: description }} >
