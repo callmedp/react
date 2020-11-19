@@ -35,8 +35,10 @@
 {% endblock title %}
 
 {% block css_section %}
+    
     {{block.super}}
     {% compress css %}
+    <link type="text/css" href="{% static 'shinelearn/css/common/popup1.css' %}" rel="stylesheet">
     <link type="text/scss" href="{% static 'shinelearn/css/talenteconomy/article.scss' %}" rel="stylesheet">
     <link type="text/css" href="{% static 'shinelearn/css/talenteconomy/prism.css' %}" rel="stylesheet">
     {% endcompress %}
@@ -131,10 +133,9 @@
 
             <!-- Looks interesting Popup? -->
 
-            <div id="popup_subscribe" class="modal">
-
-                <!-- Modal content -->
-                <div class="modal-content">
+            <div class="modal fade bs-example-modal-sm" id="popup_subscribe">
+              <div class="modal-dialog modal-sm modal-custom" role="document">
+              <div class="modal-content" style="padding: 20px;">
                     <span class="close_popup_modal">&times;</span>
                     <h2 class="heading-right">Looks interesting?</h2>
                     <p>Subscribe & Get our daily newsletter. Fill the details below.</p>
@@ -188,7 +189,7 @@
                         <button type="button" id="enquire_form" class="submit-button">Subscribe Now</button>
                     </form>
                 </div>
-
+              </div>
             </div>
 
             <!-- Look interesting -->
@@ -342,7 +343,6 @@
 
 {% endblock container %}
 {% block js_section %}
-
     {{ block.super }}
     {% compress js %}
     <script async type="text/javascript" src="{% static 'packages/parsleyjs/parsley.min.js' %}"></script>
@@ -353,7 +353,8 @@
     <script type="text/javascript">
       $(document).ready(function() {
         var s = $("#sticker");
-        var pos = s.position();            
+        var pos = s.position();
+        if (pos === undefined) {} else {            
         $(window).scroll(function() {
           var windowpos = $(window).scrollTop();
           if(pos){
@@ -364,6 +365,7 @@
             }
           }
         });
+       }
       });
     </script>
     {% endcompress %}
