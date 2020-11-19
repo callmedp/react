@@ -50,6 +50,10 @@ class PaymentOptionsApiView(APIView, OrderMixin, PaymentMixin):
             return Response({'redirect': '/'}, status=status.HTTP_200_OK)
 
         cart_obj.payment_page = True
+        # handling the resume.shine
+        if not cart_obj.site:
+            cart_obj.site = 1
+
         cart_obj.save()
 
         payment_dict = self.getPayableAmount(cart_obj)
