@@ -423,52 +423,7 @@ rel="stylesheet">
             </div>
 
 
-            <!-- Modal -->
-            <div class="modal fade modal-popup" id="Modal_popup" tabindex="-1" role="dialog" aria-labelledby="Modal_popupLabel" data-backdrop="static" data-keyboard="false">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                <figure class="popup-img"><img loading="lazy" aria-label="Shine Learning"
-                    src="{% static 'shinelearn/images/popup-bg.png' %}"
-                    alt="Shine Learning">
-                </figure>
-                <div class="modal-content">
-                    <div class="modal-body text-center">
-                        <strong>AWS Certified Solutions Architect Associate Certification</strong>
-                        <p>Weekend/Weekday Online Live Classes</p>
-                        <form id="">
-                            <div class="form-group">
-                            <input type="text" class="form-control" id="name" name="name" placeholder=" "
-                            value="" aria-required="true" aria-invalid="true" onfocus="gaForm_fill()">
-                            <label for="">Name</label>
-                            <span class="error-msg"></span>
-                            </div>
-                            <div class="d-flex">
-                            <div class="custom-select-box">
-                            <select name="country" class="custom-select">
-                            <option>+91</option>
-                            <option>+92</option>
-                            <option>+93</option>
-                            </select>
-                            </div>
-                            <div class="form-group flex-100">
-                            <input type="text" class="form-control" id="mobile" name="number"
-                            placeholder=" " value="" aria-required="true" aria-invalid="true">
-                            <label for="">Mobile</label>
-                            <span class="error-msg"></span>
-                            </div>
-                            </div>
-                            <div class="form-group">
-                            <input type="email" class="form-control" id="email" name="email" placeholder=" "
-                            value="" aria-required="true" aria-invalid="true">
-                            <label for="">Email</label>
-                            <span class="error-msg"></span>
-                            </div>
-                            <button type="submit" class="btn btn-primary btn-block ht-40" role="button">Submit</button>
-                        </form>
-                    </div>
-                </div>
-                </div>
-            </div>
-
+  
             {% endblock main_container %}
             {% block js_section %}
             <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" rel="noreferrer"> </script>
@@ -479,12 +434,6 @@ rel="stylesheet">
             <script src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.3.1/typeahead.bundle.min.js"
             rel="noreferrer"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.2/jquery.validate.min.js"></script>
-            
-            <script type="text/javascript">
-                $(window).on('load',function(){
-                    $('#Modal_popup').modal('show');
-                });
-            </script>
 
             <script type="text/javascript">
                 var end_date_time = "{{end_date}}"
