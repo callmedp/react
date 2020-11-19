@@ -63,7 +63,7 @@
         <img aria-label="loader"  class="loader-position" src="{% static 'shinelearn/images/loader1.png' %}">
       </div>
 
-{% if product_id == 1 %}
+{% if product_id == 4589 %}
 
           <!-- Modal -->
             <div class="modal fade modal-popup" id="leadCreationModal" tabindex="-1" role="dialog" aria-labelledby="Modal_popupLabel" data-backdrop="static" data-keyboard="false">
@@ -692,9 +692,8 @@ if(curr_url.includes('?iframe=')||curr_url.includes('&iframe=')){
 
 
     <script type="text/javascript">
-    {% if product_id == 1 %}
+    {% if product_id == 4589 %}
         $(window).on('load',function(){
-        console.log('dsadsadasdas','{{request.session.lead_create_prods}}');
             {% if product_id not in request.session.lead_create_prods or not request.session.lead_create_prods %}
             $('#leadCreationModal').modal('show');
             {% endif %}
