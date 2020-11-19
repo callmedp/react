@@ -76,23 +76,19 @@ class SkillPage(APIView):
                 status=status.HTTP_404_NOT_FOUND)
         data = {}
         for heading in subheadercategory:
+            heading_description = SubHeaderCategorySerializer(heading).data
+            description = heading_description.get('description',None)
+            heading_value = heading.heading_choice_text
+
+            if heading.heading_choice_text == "who-should-learn":
+                heading_value = "whoShouldLearn"
+            elif heading.heading_choice_text == "faq":
+                heading_value = "faq"
+                description = get_faq_list(description)
             data.update({
-                heading.heading_choice_text : SubHeaderCategorySerializer(heading).data
+                heading_value : description
             })
 
-        faq_data = data.get('faq', None)
-
-        if faq_data and faq_data.get('description',None):
-            faq_description = faq_data.get('description')
-            faq_list = get_faq_list(faq_description)
-            faq_value = data.get('faq')
-            faq_value.update({
-                'description':faq_list
-                })
-            data.update({
-                'faq' : faq_value
-                })
-            
         testimonialcategory = Testimonial.objects.filter(testimonialcategoryrelationship__category=id,is_active=True)
         testimonialcategory_data = TestimonialSerializer(testimonialcategory,many=True).data
         explore_courses = []
