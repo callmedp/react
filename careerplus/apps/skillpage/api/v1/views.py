@@ -83,7 +83,7 @@ class SkillPageAbout(APIView):
             'name':category.name,
             'heading':category.heading,
             'slug':category.slug, 
-            'description' : category.description,
+            'Who should learn' : category.description,
             'skillGainList' : career_outcomes,
             'breadcrumbs':self.get_breadcrumb_data(category),
             'testimonialcategory':testimonialcategory_data,
