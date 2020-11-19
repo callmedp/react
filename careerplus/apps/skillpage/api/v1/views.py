@@ -15,9 +15,9 @@ from shop.models import Category, SubHeaderCategory
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
-from .serializers import SubHeaderCategorySerializer,ProductSerializer,IndexColumnSerializer
+from .serializers import SubHeaderCategorySerializer,ProductSerializer,IndexColumnSerializer, TestimonialSerializer
 from review.models import DetailPageWidget
-from homepage.models import TestimonialCategoryRelationship
+from homepage.models import TestimonialCategoryRelationship, Testimonial
 
 class LoadMoreApiView(FieldFilterMixin, ListAPIView):
     serializer_class = LoadMoreSerializerSolr
@@ -58,14 +58,11 @@ class SkillPageAbout(APIView):
         return breadcrumbs
 
     def get(self,request,*args,**kwargs):
-        # import ipdb;ipdb.set_trace()
         # id = request.GET.get('id',None)
-
         id = int(kwargs.get('pk',None))
         if cache.get('skill_page_{}'.format(id), None):
             data = cache.get('skill_page_{}'.format(id)) 
             return Response(data, status=status.HTTP_200_OK)
-
         try:
             category = Category.objects.get(id=id)
             subheading = SubHeaderCategory.objects.filter(category=category, active=True)
@@ -80,10 +77,8 @@ class SkillPageAbout(APIView):
             subheading_id_data_mapping.update({
                     heading.heading_choice_text: SubHeaderCategorySerializer(heading).data
                 })
-        testimonialcategory = TestimonialCategoryRelationship.objects.filter(\
-                                category=id, testimonial__is_active=True\
-                                ).values('testimonial__user_name', 'testimonial__review',\
-                                'testimonial__designation', 'testimonial__company')
+        testimonialcategory = Testimonial.objects.filter(testimonialcategoryrelationship__category=id,is_active=True)
+        testimonialcategory_data = TestimonialSerializer(testimonialcategory,many=True).data
         data = {
             'name':category.name,
             'heading':category.heading,
@@ -92,7 +87,7 @@ class SkillPageAbout(APIView):
             'subheading':subheading_id_data_mapping,
             'skillGainList':career_outcomes,
             'breadcrumbs':self.get_breadcrumb_data(category),
-            'testimonialcategory':testimonialcategory
+            'testimonialcategory':testimonialcategory_data,
         }
 
         cache.set('skill_page_{}'.format(id), data, timeout=60*60*24)
