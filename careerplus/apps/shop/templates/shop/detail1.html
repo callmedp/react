@@ -165,6 +165,17 @@
   <!-- End Google Tag Manager (noscript) -->
 
   {% endif %}
+
+
+        <script async src="https://www.googletagmanager.com/gtag/js?id=991709191"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', '991709191', { 'send_page_view': false });
+</script>
+
+
 {% endblock main_container %}
 
 
@@ -779,7 +790,9 @@ if(flag){
          success: function(response){
          }
     });
+   gtag('event', 'conversion', {'send_to': 'AW-991709191/KzvhCOuFhuoBEleQ8dgD'});
     setSession({'lead_create_id':productId });
+
     $('#leadCreationModal').modal('hide');
     return false;
 }
