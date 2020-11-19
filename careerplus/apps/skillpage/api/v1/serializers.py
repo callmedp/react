@@ -159,4 +159,10 @@ class IndexColumnSerializer(ModelSerializer):
 class TestimonialSerializer(ModelSerializer):
     class Meta:
         model = Testimonial
-        fields = ("user_name", "company", "designation", "review")
+        fields = ("user_name","company", "designation", "review")
+    
+    def to_representation(self, instance):
+        data = super(TestimonialSerializer, self).to_representation(instance)
+        data['firstName'],data['lastName'] = data['user_name'].split(' ',1)
+        data.pop('user_name')
+        return data
