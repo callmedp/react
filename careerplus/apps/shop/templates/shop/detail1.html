@@ -148,9 +148,9 @@
     src="https://www.facebook.com/tr?id=379551866029481&ev=PageView&noscript=1"
   /></noscript>
   <!-- End Facebook Pixel Code -->
-  
-  
-   
+
+
+
   <!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
   new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
@@ -165,6 +165,17 @@
   <!-- End Google Tag Manager (noscript) -->
 
   {% endif %}
+
+
+        <script async src="https://www.googletagmanager.com/gtag/js?id=991709191"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', '991709191', { 'send_page_view': false });
+</script>
+
+
 {% endblock main_container %}
 
 
@@ -188,13 +199,13 @@
     {% compress js %}
     <script src="{% static 'shinelearn/js/common/plugin.activeOnScroll.js' %}"></script>
     <script src="{% static 'shinelearn/js/shop/commonDetails.js' %}"></script>
-    
+
     <script src="{% static 'shinelearn/js/cart/cart.js' %}"></script>
     <script src="{% static 'shinelearn/js/shop/detail.js' %}"></script>
     <script src="{% static 'shinelearn/js/common/scroller.js' %}" type="text/javascript"></script>
     <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
     {% endcompress %}
-    
+
 <script type="text/javascript">
 var authen=false;
 var prod_id = {{product.id}};
@@ -322,7 +333,7 @@ $(document).ready(function() {
           data : formData,
           success: function(data, textStatus, jqXHR)
           {
-            
+
           },
           error: function (jqXHR, textStatus, errorThrown)
           {
@@ -344,14 +355,14 @@ $(document).ready(function() {
       iframeWin = iframe.contentWindow || iframe,
       iframeDoc = iframe.contentDocument || iframeWin.document;
       var html =
-        '<html>' + 
+        '<html>' +
         '<head>' +
         '<meta content="width=device-width,  initial-scale=1"  name="viewport" />' +
         '<scr' + 'ipt src="https://etest.dyned.com/neowidget.min.js"></scr' + 'ipt>' +
         '</head>' +
         '<body>'+
         '<neo id="widgetbyneo"data-neo-email="'+ email +'"data-neo-mode="pt" data-neo-token="xRm7FoiyQ221ZL7MV07zEOtcF3xrPcCTXYKmAnA5ylPtFWYCWJS6XqgXoHFsmuPR"data-neo-dial-code="'+country_code+'"data-neo-phone-number="'+mobile_no+'"data-neo-fullname="'+name+'"data-neo-autostart="false">' +
-        '</body>' + 
+        '</body>' +
         '</html>';
 
         iframe.srcdoc = html;
@@ -397,9 +408,9 @@ function get_create_profile(email, name, country_code, mobile) {
     $.post(`/api/v1/create_practice_test_info/`,data,function(response,status,responseJSON){
       if(responseJSON.status == '201' || responseJSON.status =='200'){
         check_for_load_test(response)
-      } 
+      }
       else {
-       
+
         $('#neo-test-modal').modal('hide')
         Swal.fire(
           'Oops...',
@@ -407,7 +418,7 @@ function get_create_profile(email, name, country_code, mobile) {
           'warning'
         )
       }
-        
+
     }).fail((error)=>{
       $('#neo-test-modal').modal('hide')
       Swal.fire(
@@ -427,13 +438,13 @@ function check_for_load_test(data){
           $(this).attr('id', 'add-to-cart');
         });
 
-       
+
         $('#neo-test-modal').modal('hide')
         $("#cefr_level").text(data['cefr_level'])
         let title = 'Hey, I got ' + data['cefr_level'] +'. What about you?'
         let description = 'I got CEFR ' + data['cefr_level'] + ' in this internationally recognized English Test. Check yours now'
         let url = window.location.href + "?title=" + title + "&description=" + description + "&level=" + data['cefr_level'] + '&iframe=true&utm_campaign=scoreshare'
-        
+
         var attr = $("#id_share").attr('data-href');
 
         if (attr == undefined) {
@@ -579,14 +590,14 @@ jQuery.validator.addMethod("customEmail", function(value, element) {
       },
       errorPlacement: function(error, element){
         $(element).siblings('.js-error').html(error.text());
-      } 
+      }
 
     });
 {% endif %}
 
 
 $('#take-test_button').click(function(){
-  
+
     {% if request.session.candidate_id %}
         let email = "{{ request.session.email }}";
         let name = "{{request.session.full_name}}";
@@ -629,7 +640,7 @@ $("#modal-take-test-btn").click(function(){
 $('iframe').load(function(){
     var ifrm = document.getElementById('iframe');
     var doc = ifrm.contentDocument? ifrm.contentDocument: ifrm.contentWindow.document;
- 
+
     $(doc).on('click', '#neookbutton', function() {
         update_test_info(global_email);
     });
@@ -644,7 +655,7 @@ $('iframe').load(function(){
         $('#id_callback_neo').trigger('click')
         {% endif %}
 
-    }, 1000) 
+    }, 1000)
 
     });
 
@@ -779,7 +790,9 @@ if(flag){
          success: function(response){
          }
     });
+   gtag('event', 'conversion', {'send_to': 'AW-991709191/KzvhCOuFhuoBEleQ8dgD'});
     setSession({'lead_create_id':productId });
+
     $('#leadCreationModal').modal('hide');
     return false;
 }
