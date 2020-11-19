@@ -18,6 +18,7 @@ from rest_framework.views import APIView
 from .serializers import SubHeaderCategorySerializer,ProductSerializer,IndexColumnSerializer, TestimonialSerializer
 from review.models import DetailPageWidget
 from homepage.models import TestimonialCategoryRelationship, Testimonial
+from shop.templatetags.shop_tags import get_faq_list
 
 class LoadMoreApiView(FieldFilterMixin, ListAPIView):
     serializer_class = LoadMoreSerializerSolr
@@ -65,7 +66,7 @@ class SkillPageAbout(APIView):
             return Response(data, status=status.HTTP_200_OK)
         try:
             category = Category.objects.get(id=id)
-            subheading = SubHeaderCategory.objects.filter(category=category, active=True, heading_choices__in=[2,3])
+            faq = SubHeaderCategory.objects.get(category=category, active=True, heading_choices=3).description
             career_outcomes = category.split_career_outcomes()
         except Category.DoesNotExist:
             return Response({'detail':'Category not found'}, status=status.HTTP_404_NOT_FOUND)
@@ -73,15 +74,12 @@ class SkillPageAbout(APIView):
             return Response({'detail':'SubHeaderCategory not found'},\
                 status=status.HTTP_404_NOT_FOUND)
         data = {}
-        for heading in subheading:
-            data.update({
-                    heading.heading_choice_text: SubHeaderCategorySerializer(heading).data
-                })
+        faq_list = get_faq_list(faq)
         testimonialcategory = Testimonial.objects.filter(testimonialcategoryrelationship__category=id,is_active=True)
         testimonialcategory_data = TestimonialSerializer(testimonialcategory,many=True).data
         data = {
             'name':category.name,
-            'heading':category.heading,
+            'faqList':faq_list,
             'slug':category.slug, 
             'Who should learn' : category.description,
             'skillGainList' : career_outcomes,
