@@ -2,11 +2,11 @@ import React from 'react';
 import Button from 'react-bootstrap/Button';
 import './writeMyresume.scss';
 import { resumeShineSiteDomain } from 'utils/domains';
+
 const WriteMyResume = (props) => {
 
     const builderRedirect = () => window.location.replace(`${resumeShineSiteDomain}/resume-builder`)
     
-
     return (
         <section className="write-resume">
             <div className="write-resume__text">

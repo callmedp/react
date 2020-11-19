@@ -25,15 +25,6 @@ const SkillGain = (props) => {
                                         </React.Fragment>)
                                     })
                                 }   
-                                {/* <Badge pill variant="light">PythonR</Badge>&nbsp;
-                                <Badge pill variant="light">Programming</Badge>&nbsp;
-                                <Badge pill variant="light">Tableau</Badge>&nbsp;
-                                <Badge pill variant="light">Data Science</Badge>&nbsp;
-                                <Badge pill variant="light">Deep Learning</Badge>&nbsp;
-                                <Badge pill variant="light">Data Visualization</Badge>&nbsp;
-                                <Badge pill variant="light">Statistical computing</Badge>&nbsp;
-                                <Badge pill variant="light">Visual Analytics</Badge>&nbsp;
-                                <Badge pill variant="light">Dashboards</Badge>&nbsp; */}
                             </div>
                             <div className="skill-gain__banner mt-30  mb-30">
                                 <p>Take our free practice test to test your skill level in <strong>heading</strong></p>

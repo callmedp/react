@@ -17,7 +17,6 @@ function* skillPageBanner(action) {
         //converts 1D array to 2D array
         const storiesList = item?.testimonialCategory.reduce((rows, key, index) => 
             (index % 3 == 0 ? rows.push([key]) : rows[rows.length-1].push(key)) && rows, []);
-        console.log("storiesList", storiesList)
         
         if(storiesList.length){
             item.testimonialCategory = storiesList.slice()
