@@ -11,6 +11,8 @@ from shop.models import (
     Category, Product)
 from cms.models import IndexColumn
 
+from homepage.models import Testimonial
+
 class LoadMoreSerializerSolr(SerializerFieldsMixin,Serializer):
     id = serializers.CharField()
     django_ct = serializers.CharField()
@@ -152,3 +154,8 @@ class IndexColumnSerializer(ModelSerializer):
     class Meta:
         model = IndexColumn
         fields = ("url","name",)
+
+class testimonialSerializer(ModelSerializer):
+    class Meta:
+        model = Testimonial
+        fields = ("user_name", "company", "designation", "review")
