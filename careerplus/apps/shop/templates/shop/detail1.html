@@ -782,7 +782,7 @@ $('#leadCreationForm').validate({
 $("#leadCreationFormSubmit").click(function(e){
 var flag=$('#leadCreationForm').valid();
 if(flag){
-    var form = $(this);
+    var form = $('#leadCreationForm');
     $.ajax({
          url   : '/lead/lead-management/',
          type  : 'post',
