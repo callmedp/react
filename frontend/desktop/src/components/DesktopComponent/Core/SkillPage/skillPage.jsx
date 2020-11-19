@@ -5,13 +5,14 @@ import WhoLearn from './WhoLearn/whoLearn';
 import NeedHelp from './NeedHelp/needHelp';
 import PopularCourses from './PopularCourses/popularCourses';
 import SkillGain from './SkillGain/skillGain';
-import ControlledTabs from './CoursesTray/coursesTray';
+import CoursesTray from './CoursesTray/coursesTray';
 import OtherSkills from './OtherSkills/otherSkills';
 import DomainJobs from './DomainJobs/domainJobs';
 import WriteMyResume from './WriteMyResume/writeMyResume';
 import WhyChooseUs from './WhyChooseUs/whyChooseUs';
 import FAQ from './FAQ/faq';
 import LearnersStories from './LearnersStories/learnersStories';
+import StickyNav from './StickyNav/stickyNav';
 import './skillPage.scss'
 
 const SkillPage = (props) => {
@@ -20,6 +21,7 @@ const SkillPage = (props) => {
 
     return (
         <div>
+            <StickyNav />
             <SkillBanner pageId={pageId}/>
             <section className="container">
                 <div className="row">
@@ -36,6 +38,7 @@ const SkillPage = (props) => {
                 </div>
             </section>
             <SkillGain />
+            <CoursesTray />
             <OtherSkills />
             <section className="container">
                 <aside className="row">
