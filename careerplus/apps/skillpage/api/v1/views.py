@@ -67,7 +67,7 @@ class SkillPage(APIView):
             return Response(data, status=status.HTTP_200_OK)
         try:
             category = Category.objects.get(id=id)
-            faq = SubHeaderCategory.objects.get(category=category, active=True, heading_choices=3).description
+            subheadercategory = SubHeaderCategory.objects.filter(category=category, active=True, heading_choices__in=[2,3])
             career_outcomes = category.split_career_outcomes()
         except Category.DoesNotExist:
             return Response({'detail':'Category not found'}, status=status.HTTP_404_NOT_FOUND)
@@ -75,22 +75,38 @@ class SkillPage(APIView):
             return Response({'detail':'SubHeaderCategory not found'},\
                 status=status.HTTP_404_NOT_FOUND)
         data = {}
-        faq_list = get_faq_list(faq)
+        for heading in subheadercategory:
+            data.update({
+                heading.heading_choice_text : SubHeaderCategorySerializer(heading).data
+            })
+
+        faq_data = data.get('faq', None)
+
+        if faq_data and faq_data.get('description',None):
+            faq_description = faq_data.get('description')
+            faq_list = get_faq_list(faq_description)
+            faq_value = data.get('faq')
+            faq_value.update({
+                'description':faq_list
+                })
+            data.update({
+                'faq' : faq_value
+                })
+            
         testimonialcategory = Testimonial.objects.filter(testimonialcategoryrelationship__category=id,is_active=True)
         testimonialcategory_data = TestimonialSerializer(testimonialcategory,many=True).data
         explore_courses = []
         exp_cour_ids = json.loads(category.ex_cour)
         explore_courses = Category.objects.filter(id__in=exp_cour_ids).values('name','url')
-        data = {
+        data.update({
             'name':category.name,
-            'faqList':faq_list,
-            'slug':category.slug, 
-            'whoShouldLearn' : category.description,
+            'slug':category.slug,
+            'about': category.description,
             'skillGainList' : career_outcomes,
             'breadcrumbs':self.get_breadcrumb_data(category),
             'testimonialCategory':testimonialcategory_data,
             'otherSkills':explore_courses,
-        }
+        })
 
         cache.set('skill_page_{}'.format(id), data, timeout=60*60*24)
         return Response(data,status=status.HTTP_200_OK) 
