@@ -2,19 +2,17 @@ import * as Actions from '../actions/actionTypes';
 import { takeLatest, call, put } from 'redux-saga/effects';
 import Api from './Api';
 
-
-
-function* skillPageBanner(action) {
+function* populerCourses(action) {
     try {
-        const { payload } = action;
-        const response = yield call(Api.skillPageBanner, payload);
+        // const { payload } = action;
+        // console.log("payload is ", payload)
+        const response = yield call(Api.populerCourses);
         if (response["error"]) {
             return
         }
         const item = response.data;
-    
         yield put({ 
-            type : Actions.SKILL_PAGE_BANNER_FETCHED, 
+            type : Actions.POPULER_COURSES_FETCHED, 
             item 
         })
 
@@ -26,6 +24,6 @@ function* skillPageBanner(action) {
 
 
 
-export default function* WatchSkillPageBanner() {
-    yield takeLatest(Actions.FETCH_SKILL_PAGE_BANNER, skillPageBanner);
+export default function* WatchPopulerCourses() {
+    yield takeLatest(Actions.FETCH_POPULER_COURSES, populerCourses);
 }
