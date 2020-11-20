@@ -1710,6 +1710,17 @@ class SetSession(APIView):
         submission = self.request.POST.get('submit', '')
         test_id = self.request.POST.get('test_id', '')
         lead_create = self.request.POST.get('lead_created', '')
+        lead_create_prods = self.request.POST.get('lead_create_id', '')
+
+        if lead_create_prods:
+            leads = self.request.session.get('lead_create_prods',[])
+            if not leads:
+                self.request.session.update({'lead_create_prods':[int(lead_create_prods)]})
+                return Response({'is_lead_created':True})
+            leads = leads.append(int(lead_create_prods))
+            self.request.session.update({'lead_create_prods': [lead_create_prods]})
+            return Response({'is_lead_created': True})
+
         key = 'test-' + str(test_id)
         # setting cache for timeout test sessions
         if timeout and test_id:

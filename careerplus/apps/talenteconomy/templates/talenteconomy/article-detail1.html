@@ -35,9 +35,10 @@
 {% endblock title %}
 
 {% block css_section %}
-    <link type="text/css" href="{% static 'shinelearn/css/common/popup.css' %}" rel="stylesheet">
+    
     {{block.super}}
     {% compress css %}
+    <link type="text/css" href="{% static 'shinelearn/css/common/popup1.css' %}" rel="stylesheet">
     <link type="text/scss" href="{% static 'shinelearn/css/talenteconomy/article.scss' %}" rel="stylesheet">
     <link type="text/css" href="{% static 'shinelearn/css/talenteconomy/prism.css' %}" rel="stylesheet">
     {% endcompress %}

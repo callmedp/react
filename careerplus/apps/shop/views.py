@@ -934,6 +934,17 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         u_id = request.GET.get('u_id', request.session.get('u_id',''))
         position = self.request.GET.get('position', -1)
         popup_based_product = self.request.GET.get('popup_based_product', '')
+
+        show_popup = self.request.GET.get('spop',False)
+        if not show_popup:
+            try:
+                self.request.session.update({'lead_create_prods': [int(kwargs.get('pk', 0))]})
+            except:
+                pass
+
+
+        
+
         if self.request.GET.get('lc') and self.request.session.get('candidate_id'):
             if not kwargs.get('pk', ''):
                 return

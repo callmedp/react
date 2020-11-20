@@ -71,7 +71,7 @@ class DashboardView(TemplateView):
             inbox_list = DashboardInfo().get_inbox_list(candidate_id=candidate_id, request=self.request)
 
             pending_resume_items = DashboardInfo().get_pending_resume_items(candidate_id=candidate_id,
-                                                                            email=email).exclude(order__site=2)
+                                                                            email=email)
             context.update({
                 'inbox_list': inbox_list,
                 'pending_resume_items': pending_resume_items,
@@ -668,7 +668,7 @@ class DashboardNotificationBoxView(TemplateView):
         context = super(DashboardNotificationBoxView, self).get_context_data(**kwargs)
         email = self.request.session.get('email', None)
         pending_resume_items = DashboardInfo().get_pending_resume_items(candidate_id=self.candidate_id,
-                                                                        email=email).exclude(order__site=2)
+                                                                        email=email)
         context.update({
             "pending_resume_items": pending_resume_items,
         })
