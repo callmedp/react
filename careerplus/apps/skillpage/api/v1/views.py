@@ -125,9 +125,8 @@ class CourseComponentView(APIView):
             category = Category.objects.get(id=id)
             courses = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).filter(pCtg=category.pk).exclude(pTF=16)
             for course in courses[:self.no_of_products]:
-                d = json.loads(course.pVrs)
+                d = json.loads(course.pVrs)['var_list']
                 data = {
-                    'label':d['var_list'][0]['label'],
                     'src':course.pImg,
                     'url':course.pURL,
                     'name':course.pNm,
@@ -137,15 +136,20 @@ class CourseComponentView(APIView):
                     'coursePrice':float(course.pPin),
                     'skill': course.pSkilln,
                     'about':course.pAb,
-                    'duration':d['var_list'][0]['dur_days'],
-                    'type':d['var_list'][0]['type'],
                     'title':course.pTt,
                     'slug':course.pSg,
                     'jobsAvailable':course.pNJ,
                     'tags':PRODUCT_TAG_CHOICES[course.pTg][1],
                     'brochure':json.loads(course.pUncdl[0])['brochure'] if course.pUncdl else None,
-                    'level':d['var_list'][0]['level'],
-                }
+                    'highlights':json.loads(course.pUncdl[0])['highlighted_benefits'] if course.pUncdl else None,
+                    }
+                if len(d)!=0:
+                    data.update({
+                        'duration':d[0]['dur_days'], 
+                        'type':d[0]['type'],  
+                        'label':d[0]['label'], 
+                        'level':d[0]['level'], 
+                    })
                 course_data.append(data)
             assesments = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).filter(pCtg=category.pk, pTF=16)
             for assessment in assesments[:self.no_of_products]:
