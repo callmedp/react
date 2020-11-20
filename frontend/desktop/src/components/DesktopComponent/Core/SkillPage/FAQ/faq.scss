@@ -1,0 +1,79 @@
+@import '../../../../../styles/functions';
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
+
+.faq {
+    &__list {
+        width: auto;
+        margin: 3rem 7rem 3rem 0;
+        flex: 100%;
+
+        .accordion {
+            counter-reset: strong 0;
+
+            .card {
+                background-color: $white;
+                margin-bottom: 2rem;
+                border: none;
+                border-radius: .5rem;
+                padding: 2rem 2rem;
+
+                &:hover, &:focus {
+                    cursor: pointer;
+                }
+
+                .card-header {
+                    background-color: $white;
+                    border: none;
+                    padding: 0;
+                    position: relative;
+
+                    &::after {
+                        content: '';
+                        position: absolute;
+                        right: 1rem;
+                        top: 1rem;
+                        background: #fff $sprite -24px -36px;
+                        width: 1.4rem;
+                        height: 1.8rem;
+                        display: inline-block;
+                    }
+                    
+                    strong {
+                        font-size: 1.6rem;
+                        font-weight: 600;
+                        counter-increment: strong;
+
+                        &::before {
+                            content: counter(strong) ". ";
+                        }
+                    }
+                }
+
+                .collapse {
+                    position: relative;
+
+                    &::after {
+                        content: '';
+                        position: absolute;
+                        right: 1rem;
+                        top: -1.5rem;
+                        background: #fff $sprite 0 -36px;
+                        width: 1.4rem;
+                        height: 1.8rem;
+                        display: inline-block
+                    }
+                }
+
+                .card-body {
+                    padding: 1.5rem 1.5rem 0 0; 
+                }
+            }
+        }
+    }
+
+    &__img {
+        margin-left: auto;
+        align-self: flex-end;
+    }
+}

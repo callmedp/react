@@ -1,0 +1,32 @@
+@import '../../../../../styles/functions';
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
+
+.write-resume {
+    @extend %box-shadow;
+    padding: 0 0 0 2rem;
+    display: flex;
+
+    &__text {
+
+        strong {
+            display: block;
+            margin-top: 2rem;
+        }
+
+        p {
+            margin: 1.5rem 4rem 2rem 0;
+        }
+
+        button {
+            font-size: 1.3rem;
+        }
+
+    }
+
+    &__img {
+        align-self: flex-end;
+        margin-left: auto;
+        margin-bottom: 0;
+    }
+}

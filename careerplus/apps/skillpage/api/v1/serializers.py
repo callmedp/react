@@ -6,6 +6,13 @@ from rest_framework.serializers import (
 from rest_framework import serializers
 
 from shared.rest_addons.mixins import SerializerFieldsMixin
+from shop.models import Category, SubHeaderCategory
+from shop.models import (
+    Category, Product)
+from cms.models import IndexColumn
+from homepage.models import Testimonial
+
+from homepage.models import Testimonial
 
 class LoadMoreSerializerSolr(SerializerFieldsMixin,Serializer):
     id = serializers.CharField()
@@ -133,3 +140,29 @@ class LoadMoreSerializerSolr(SerializerFieldsMixin,Serializer):
         if obj.pPfin != 0:
             return round((obj.pPfin-obj.pPin)*100/obj.pPfin,2)
         return 0
+
+class SubHeaderCategorySerializer(ModelSerializer):
+    class Meta:
+        model = SubHeaderCategory
+        exclude = ("created","modified","active","display_order","heading_choices","category",)
+
+class ProductSerializer(ModelSerializer):
+    class Meta:
+        model = Product
+        exclude = ("created",)
+    
+class IndexColumnSerializer(ModelSerializer):
+    class Meta:
+        model = IndexColumn
+        fields = ("url","name",)
+
+class TestimonialSerializer(ModelSerializer):
+    class Meta:
+        model = Testimonial
+        fields = ("user_name","company", "designation", "review")
+    
+    def to_representation(self, instance):
+        data = super(TestimonialSerializer, self).to_representation(instance)
+        data['firstName'],data['lastName'] = data['user_name'].split(' ',1)
+        data.pop('user_name')
+        return data
