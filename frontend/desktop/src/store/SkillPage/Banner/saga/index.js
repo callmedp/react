@@ -7,7 +7,6 @@ import Api from './Api';
 function* skillPageBanner(action) {
     try {
         const { payload } = action;
-        console.log("payload is ", payload)
         const response = yield call(Api.skillPageBanner, payload);
         if (response["error"]) {
             return

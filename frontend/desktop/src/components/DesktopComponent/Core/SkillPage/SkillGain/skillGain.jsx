@@ -11,7 +11,7 @@ const SkillGain = (props) => {
     const testRedirect = () => window.location.replace(`${siteDomain}/practice-tests/${slug}/sub`)
 
     return (
-        <section className="container-fluid lightblue-bg mt-40">
+        <section className="container-fluid lightblue-bg mt-40" id="gain">
             <div className="row">
                 <div className="container">
                     <div className="d-flex">

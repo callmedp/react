@@ -17,9 +17,9 @@ const LearnersStories = (props) => {
                             return (
                                 <div className="col-sm-4" key={index.toString() + idx.toString() + item.userName}>
                                     <div className="card text-center">
-                                        <span className="card__name">AS</span>
+                                        <span className="card__name">{item.firstName ? item.firstName[0].toUpperCase() : ""}{item.lastName ? item.lastName[0].toUpperCase() : ""}</span>
                                         <p className="card__txt">{item.review}</p>
-                                        <strong>{item.userName}</strong>
+                                        <strong>{item.firstName + item.lastName}</strong>
                                         <span className="card__location">{item.company}</span>
                                     </div>
                                 </div>
@@ -33,7 +33,7 @@ const LearnersStories = (props) => {
 
 
     return (
-        <section className="container">
+        <section className="container" id="story">
             <div className="row">
                 <h2 className="heading2 m-auto pb-20">Learners stories</h2>
                 <Carousel className="learner-stories">

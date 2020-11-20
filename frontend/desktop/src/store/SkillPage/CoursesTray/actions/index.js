@@ -1,4 +1,4 @@
-import { FETCH_DOMAIN_JOBS  } from './actionTypes';
+import { FETCH_COURSES_AND_ASSESSMENTS  } from './actionTypes';
 
 const fetchCoursesAndAssessments = (payload) => {
     return {
@@ -8,5 +8,5 @@ const fetchCoursesAndAssessments = (payload) => {
 }
 
 export {
-    fetchCourses,
+    fetchCoursesAndAssessments,
 }

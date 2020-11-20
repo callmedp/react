@@ -28,7 +28,7 @@ const FAQ = (props) => {
     )}
 
     return (
-        <section className="container-fluid lightblue-bg mt-40">
+        <section className="container-fluid lightblue-bg mt-40" id="faq">
             <div className="row">
                 <div className="container">
                     <h2 className="heading2 mt-40">Frequently Asked Questions</h2>
