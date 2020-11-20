@@ -131,7 +131,7 @@ class CourseComponentView(APIView):
                     'url':course.pURL,
                     'name':course.pNm,
                     'rating': float(course.pARx),
-                    'mode':course.pStM,
+                    'mode':course.pStM[0] if course.pStM else None,
                     'providerName':course.pPvn,
                     'coursePrice':float(course.pPin),
                     'skill': course.pSkilln,
