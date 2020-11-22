@@ -2,6 +2,7 @@
 import os, django, sys, csv, math, requests
 
 import random, logging
+from datetime import datetime
 # django imports
 from django.core.mail import (EmailMessage, get_connection)
 from django.conf import settings
@@ -23,20 +24,20 @@ if ROOT_FOLDER not in sys.path:
 django.setup()
 
 # import inter apps
-from linkedin.autologin import AutoLogin
+from core.mixins import TokenGeneration
 
-COUPON_CODE = "qwerty"
-COUPON_VAL = "20"
-COUPON_DESC = 'description'
-
+UTM_CAMPAIGN = "resume" 
+UTM_SOURCE = "email"
 
 def send_mail_resume(email, candidate_id, name):
 
     site_domain = "https://resume.shine.com"
+    shine_domain = "https://www.shine.com"
     if settings.DEBUG:
         site_domain = "https://resumestage.shine.com"
+        shine_domain = "https://sumosc.shine.com"
 
-    token = AutoLogin().encode(email, candidate_id, days=None)
+    token = TokenGeneration().encode(email, 1, None)
 
     subjects = [
         "Do you have a job winning resume?",
@@ -49,14 +50,26 @@ def send_mail_resume(email, candidate_id, name):
 
     subject = subjects[random.randint(0, 5)]
 
+    email_domain = ''
+    email_data = email.split('@')
+    if len(email_domain) >= 2;
+        email_domain = email_data[1]
+
+    date = datetime.now()
+    date_time = date.strftime("%d/%m/%Y_%H:%M:%S")
+
     context_data = {
-                'token': token,
-                'coupon_code':COUPON_CODE,
-                'coupon_val' : COUPON_VAL,
-                'coupon_desc' : COUPON_DESC,
-                'subject': subject,
-                'domain_name':site_domain,
-                'username': name
+                'token' : token,
+                'subject' : subject,
+                'domain_name' : site_domain,
+                'shine_domain' : shine_domain,
+                'candidate_id' : candidate_id,
+                'username' : name,
+                'email_domain' : email_domain,
+                'encrypted_email' : email,
+                'utm_campaign' : UTM_CAMPAIGN,
+                'utm_source' : UTM_SOURCE,
+                'utm_campaign_date' : date_time
             }
     to_email = [email]
     mail_type = "RESUME_BUILDER_PROMOTION"
