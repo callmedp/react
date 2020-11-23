@@ -102,6 +102,8 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
         redirect = self.redirect_if_necessary()
         try:
             self.cart_obj.payment_page = True
+            if self.cart_obj.site:
+                self.cart_obj.site = 0
             self.cart_obj.save()
         except Exception as e:
             logging.getLogger('error_log').error(

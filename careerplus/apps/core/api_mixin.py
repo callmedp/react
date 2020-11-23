@@ -689,3 +689,105 @@ class NeoApiMixin(object):
         if resp.status_code == 200:
             json_rep = resp.json()
             return json_rep
+
+
+class TestPrepApiMixin(object):
+
+    def get_headers(self):
+        url = settings.TEST_PREP_DICT['token_url']
+        data = {'username':  settings.TEST_PREP_DICT['username'],
+                'password': settings.TEST_PREP_DICT['password']
+                }
+        try:
+            response = requests.post(url,data)
+            response = response.json()
+        except:
+            logging.getLogger('error_log').error('unable to get the token from test prep')
+            return
+        token = response.get('data',{}).get('token',None)
+        if not token:
+            logging.getLogger('error_log').error('unable to get the token from test prep')
+            return
+        return {
+            'Authorization': token
+        }
+
+
+    def get_auto_login_url(self,data_dict):
+        if not data_dict:
+            logging.getLogger('error_log').error('autologin url cannot be created empty dict passed')
+
+        url = settings.TEST_PREP_DICT['new_order']
+        headers = self.get_headers()
+        if not headers:
+            logging.getLogger('error_log').error('cannot create autologin url header not found')
+            return
+
+        try:
+            response = requests.post(url,data=data_dict,headers=headers)
+        except:
+            logging.getLogger('error_log').error('error in making testprep autlogin request')
+            return
+        if response.status_code != 200:
+            logging.getLogger('error_log').error('error in testprep autlogin {}'.format(response.json()))
+            return
+        response = response.json()
+        data = response.get('data')
+        if not data:
+            logging.getLogger('error_log').error('error in testprep autlogin {}'.format(response.json()))
+            return
+        return data.get('auto_login_url')
+
+
+    def get_all_test_for_email(self,email):
+        if not email:
+            logging.getLogger('error_log').error('cannot get test, email address not found')
+        url = 'https://www.testpreptraining.com/api/apiv2/getCertificationsByEmail?email={}'.format(email)
+        headers = self.get_headers()
+        if not headers:
+            return
+
+        response = None
+        data_dict ={'email':email}
+        try:
+            response = requests.get(url,data=data_dict,headers=headers)
+        except:
+            logging.getLogger('error_log').error('error in making testprep get_all_test_for_email request')
+
+        if response.status_code == 200:
+            return response.json()
+        else:
+            return 
+
+
+    def get_all_product(self):
+        url = 'https://www.testpreptraining.com/api/index.php/apiv2/getProducts'
+        headers = self.get_headers()
+        if not headers:
+            return
+
+        response = None
+        try:
+            response = requests.get(url,headers=headers)
+        except:
+            logging.getLogger('error_log').error('error in making testprep get_all_test_for_email request')
+
+        return response
+
+
+
+        
+
+
+
+        
+        
+        
+
+
+
+
+
+        
+
+        

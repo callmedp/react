@@ -38,6 +38,7 @@
 {% block css_section %}
     {{block.super}}
     {% compress css %}
+    <link type="text/css" href="{% static 'shinelearn/css/common/popup.css' %}" rel="stylesheet">
     <link type="text/scss" href="{% static 'shinelearn/css/talenteconomy/article.scss' %}" rel="stylesheet">
     <link type="text/css" href="{% static 'shinelearn/css/talenteconomy/prism.css' %}" rel="stylesheet">
     {% endcompress %}
@@ -157,65 +158,67 @@
 <!--      </div>-->
       <!-- Looks interesting Popup? -->
 
-            <div id="popup_subscribe" class="modal">
+      <div class="modal fade bs-example-modal-sm" id="popup_subscribe">
+        <div class="modal-dialog modal-sm modal-custom" role="document">
+        <div class="modal-content" style="padding: 20px;">
+          <span class="close_popup_modal">&times;</span>
+          <h2 class="heading-right">Looks interesting?</h2>
+          <p>Subscribe & Get our daily newsletter. Fill the details below.</p>
+          <form class="te-form mt-20" role="form"  id="enquireform" name="enq" >
+              <div style='display:none'>
+                  <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}'/>
+              </div>
 
-                <!-- Modal content -->
-                <div class="modal-content">
-                    <span class="close_popup_modal">&times;</span>
-                    <h2 class="heading-right">Looks interesting?</h2>
-                    <p>Subscribe & Get our daily newsletter. Fill the details below.</p>
-                    <form class="te-form mt-20" role="form"  id="enquireform" name="enq" >
-                        <div style='display:none'>
-                            <input type='hidden' name='csrfmiddlewaretoken' value='{{ csrf_token }}'/>
-                        </div>
+              <div class="form-group">
+                  <input type="text" class="input_field form-control" name="name"  id="id_name"  placeholder="Name"
+                         maxlength="100" value="{{request.session.full_name}}">
+              </div>
 
-                        <div class="form-group">
-                            <input type="text" class="input_field form-control" name="name"  id="id_name"  placeholder="Name"
-                                   maxlength="100" value="{{request.session.full_name}}">
-                            <!-- <label class="input_label" for="id_name">Name<sup>*</sup></label> -->
-                        </div>
+              <div class="form-group">
+                  <input type="email" class="input_field form-control" name="email"  id="id_email"  placeholder="Email"
+                         maxlength="100" value="{{request.session.email}}">
+                  
+              </div>
 
-                        <div class="form-group">
-                            <input type="email" class="input_field form-control" name="email"  id="id_email"  placeholder="Email"
-                                   maxlength="100" value="{{request.session.email}}">
-                            <!-- <label class="input_label" for="id_email">Email<sup>*</sup></label> -->
-                        </div>
+              <div class="form-group" style="display: flex;">
+                  <div class="country-code">
+                      <div class="custom-select">
+                          <select class="form-control" name="country">
+                              {% for country in country_choices %}
+                              <option value="{{country.0}}" {% if country.0 == initial_country %} selected {% endif %} >{{country.0}}&nbsp;&nbsp;&nbsp;&nbsp; -- &nbsp;&nbsp;&nbsp;&nbsp;{{country.1}}</option>
+                              {% endfor %}
+                          </select>
+                      </div>
+                  </div>
+                  <div style="position: relative;">
+                      <input type="text" class="input_field form-control" name="number" id="id_cell_phone"
+                             placeholder="Mobile" maxlength="15" value="{{request.session.mobile_no}}">
+                      <span class="error-txt position-error"></span>
+                  </div>
+              </div>
 
-                        <div class="form-group" style="display: flex;">
-                            <div class="country-code">
-                                <div class="custom-select">
-                                    <select class="form-control" name="country">
-                                        {% for country in country_choices %}
-                                        <option value="{{country.0}}" {% if country.0 == initial_country %} selected {% endif %} >{{country.0}}&nbsp;&nbsp;&nbsp;&nbsp; -- &nbsp;&nbsp;&nbsp;&nbsp;{{country.1}}</option>
-                                        {% endfor %}
-                                    </select>
-                                </div>
-                            </div>
-                            <div style="position: relative;">
-                                <input type="text" class="input_field form-control" name="number" id="id_cell_phone"
-                                       placeholder="Mobile" maxlength="15" value="{{request.session.mobile_no}}">
-                                <!-- <label class="input_label" for="id_cell_phone">Mobile</label> -->
-                                <span class="error-txt position-error"></span>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <textarea class="form-control" rows="1" name="msg" placeholder="Message" maxlength="500"></textarea>
-                            <span class="error-txt"></span>
-                        </div>
+              <div class="form-group">
+                  <textarea class="form-control" rows="1" name="msg" placeholder="Message" maxlength="500"></textarea>
+                  <span class="error-txt"></span>
+              </div>
 
 
-                        <input type="hidden" name="product" value="{{category_obj.pk}}">
-                        <input type="hidden" name="prd" value="{{category_obj.heading}}">
-                        <input type="hidden" name="path" value="{{request.build_absolute_uri}}">
-                        <!-- <input type="hidden" name="email" class="form-control" value="{{request.session.email}}"> -->
-                        <input type="hidden" name="lsource" value="8">
-                        <input type="hidden" name="campaign" value="blogsonline">
-                        <button type="button" id="enquire_form" class="submit-button">Subscribe Now</button>
-                    </form>
-                </div>
+              <input type="hidden" name="product" value="{{category_obj.pk}}">
+              <input type="hidden" name="prd" value="{{category_obj.heading}}">
+              <input type="hidden" name="path" value="{{request.build_absolute_uri}}">
+              <input type="hidden" name="lsource" value="8">
+              <input type="hidden" name="campaign" value="blogsonline">
+              <button type="button" id="enquire_form" class="submit-button">Subscribe Now</button>
+          </form>
+      </div>
+        </div>
+      </div>
 
-            </div>
+
+            <!-- <div id="popup_subscribe" class="modal">
+                
+
+            </div> -->
 
       <!-- Look interesting -->
 				<!--{% include './include/look-interesting.tmpl.html' with popular_courses=popular_courses page='talenteconomy-article-details' %}-->
@@ -369,7 +372,6 @@
 {% endblock container %}
 {% block js_section %}
 <script>
-
 (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
   (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
@@ -401,7 +403,8 @@ function gaEvent(event_cat,event_lab,event_action){
       $(document).ready(function() {
         var s = $("#sticker");
         var pos = s.position(); 
-        var sticky_height = s.height()      
+        var sticky_height = s.height()  
+        if (pos === undefined) {} else {     
         $(window).scroll(function() {
           var windowpos = $(window).scrollTop();
           var footer_top = $('#footer').position().top;
@@ -416,6 +419,7 @@ function gaEvent(event_cat,event_lab,event_action){
             s.removeClass("stick");
           }
         });
+      }
       });
     </script>
     {% endcompress %}
