@@ -127,7 +127,6 @@ class CourseComponentView(APIView):
             for course in courses[:self.no_of_products]:
                 d = json.loads(course.pVrs)['var_list']
                 data = {
-                    'label':d['var_list'][0]['label'],
                     'imgUrl':course.pImg,
                     'url':course.pURL,
                     'name':course.pNm,
