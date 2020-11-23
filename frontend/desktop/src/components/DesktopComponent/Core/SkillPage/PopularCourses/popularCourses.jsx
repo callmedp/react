@@ -21,18 +21,18 @@ const PopularCourses = (props) => {
                         <>
                             <li key={course.id}>
                                 <figure>
-                                    <img src={course.img} alt={course.alt} />
+                                    <img src={course.img} alt={course.img_alt} />
                                 </figure>
                                 <div className="links">
                                     <Link to={course.url}>{course.name}</Link>
                                     <span className="mr-10">By ERB</span>
                                         <span className="rating">
                                             { 
-                                                course.stars?.map(() => {
-                                                    return (<em className="icon-fullstar"></em>)
+                                                course.stars?.map((star) => {
+                                                    return (star === '*' ? <em className="icon-fullstar"></em> : star === '+' ? <em className="icon-halfstar"></em> : <em className="icon-blankstar"></em>)
                                                 }) 
                                             }
-                                            <span>{course.ratings}/5</span>
+                                            <span>{course.rating}/5</span>
                                         </span>
                                 </div>
                             </li>

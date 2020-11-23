@@ -30,9 +30,8 @@ var data = {'pCourseList': [{
     url : 'https://learning.shine.com'
 }]}
 const populerCourses = () => {
-    // const url = ``;
-    // return BaseApiService.get(``);
-    return {'data': data}
+    const url = `trending-courses/`;
+    return BaseApiService.get(`${siteDomain}/api/v1/${url}`);
 };
 
 export default {

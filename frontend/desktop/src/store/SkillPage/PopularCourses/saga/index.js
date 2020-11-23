@@ -7,10 +7,13 @@ function* populerCourses(action) {
         // const { payload } = action;
         // console.log("payload is ", payload)
         const response = yield call(Api.populerCourses);
-        if (response["error"]) {
+        const result = response.data
+        
+        if (result["error"]) {
             return
         }
-        const item = response.data;
+        const prds = result.data;
+        const item = {'pCourseList': prds.tprds.slice(0,3)}
         yield put({ 
             type : Actions.POPULER_COURSES_FETCHED, 
             item 
