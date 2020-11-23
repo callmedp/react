@@ -10,7 +10,7 @@ const LearnersStories = (props) => {
 
 
     return (
-        <section className="container">
+        <section className="container" id="learnerStr">
             <div className="row">
                 <h2 className="heading2 m-auto pb-20">Learners stories</h2>
                 <Carousel className="learner-stories">

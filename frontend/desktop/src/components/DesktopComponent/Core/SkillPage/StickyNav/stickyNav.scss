@@ -29,13 +29,24 @@
 
     .nav-item, .nav-link {
         padding: 1rem 2rem !important;
+        font-weight: 600;
+        // &.active {
+        //     color: $blue !important;
+        //     font-weight: 600;
+        //     border-bottom: 3px solid $blue;
+        // }
+    }
 
-        &.active {
+    .navbar-nav {
+        .active {
             color: $blue !important;
-            font-weight: 600;
+            // font-weight: 600;
             border-bottom: 3px solid $blue;
         }
     }
 
+    .navbar-light .navbar-nav .show > .nav-link, .navbar-light .navbar-nav .active > .nav-link, .navbar-light .navbar-nav .nav-link.show, .navbar-light .navbar-nav .nav-link.active {
+        color: #000000;
+    }
     
 }

@@ -3,21 +3,24 @@ import './aboutSection.scss';
 import { useSelector } from 'react-redux'
 
 const AboutSection = (props) => {
-
+    
     const { name, description  } = useSelector( store => store.skillBanner)
-
+    
     return (
-        <section className="container mt-0">
-            <div id="module" className="row about-course">
-    <h2 className="heading2">About {name}</h2>
-                {/* <p className="about-course__txt collapse" id="expand-content" aria-expanded="false">Shine Learning offers online digital marketing courses which comprehensively cover the entire scope of the field. The top domains which are covered under the courses are social media optimization, search engine optimization, pay per click, email marketing, social media advertising.</p> */}
-                <div dangerouslySetInnerHTML={{ __html: description }} >
-                </div>
-                <a role="button" className="collapsed" data-toggle="collapse" href="#expand-content" aria-expanded="false" aria-controls="expand-content"></a>
+        <section className="container mt-0 pl-0" id="aboutSect">
+            <div id="module" className="about-course">
+            <h2 className="heading2">About {name}</h2>
+            {description.length > 255 ? (<input type="checkbox" className="read-more-state" id="post-1" />)
+            : ("")}
+                <p className="read-more-wrap">
+                    {!description ? null : description.slice(0, 255)}
+                    <span className="read-more-target">{description.slice(255)}</span>
+                </p>
+                <label htmlFor="post-1" className="read-more-trigger"></label>
             </div>
         </section>
-    )
-}
-
-
-export default AboutSection;
+        )
+    }
+    
+    
+    export default AboutSection;

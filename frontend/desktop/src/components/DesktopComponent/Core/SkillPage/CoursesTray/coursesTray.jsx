@@ -35,7 +35,7 @@ function CoursesTray() {
     </Popover>
   );
   return (
-    <section className="container">
+    <section className="container" id="courseTr">
         <div className="row"> 
             <div className="col courses-tray">
                 <Tabs
