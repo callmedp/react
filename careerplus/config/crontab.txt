@@ -24,7 +24,7 @@
 
 00 00 * * * export DJANGO_SETTINGS_MODULE=careerplus.config.settings_live && /var/www/virtualenvs/learning/bin/python /var/www/site/learning/current/scripts/upload_order_report_for_crm_upsell.py 31 &
 
-*/2 * * * * /var/www/virtualenvs/learning/bin/python /var/www/site/learning/current/manage.py update_sidebar_badges --settings=careerplus.config.settings_live
+# */2 * * * * /var/www/virtualenvs/learning/bin/python /var/www/site/learning/current/manage.py update_sidebar_badges --settings=careerplus.config.settings_live
 
 */30 * * * * /var/www/virtualenvs/learning/bin/python /var/www/site/learning/current/manage.py close_neo_order_items --settings=careerplus.config.settings_live
 
