@@ -84,7 +84,7 @@ class SkillPage(APIView):
             if heading.heading_choice_text == "who-should-learn":
                 heading_value = "whoShouldLearn"
             elif heading.heading_choice_text == "faq":
-                heading_value = "faq"
+                heading_value = "faqList"
                 description = get_faq_list(description)
             data.update({
                 heading_value : description
@@ -127,13 +127,14 @@ class CourseComponentView(APIView):
             for course in courses[:self.no_of_products]:
                 d = json.loads(course.pVrs)['var_list']
                 data = {
-                    'src':course.pImg,
+                    'label':d['var_list'][0]['label'],
+                    'imgUrl':course.pImg,
                     'url':course.pURL,
                     'name':course.pNm,
                     'rating': float(course.pARx),
                     'mode':course.pStM[0] if course.pStM else None,
                     'providerName':course.pPvn,
-                    'coursePrice':float(course.pPin),
+                    'price':float(course.pPin),
                     'skill': course.pSkilln,
                     'about':course.pAb,
                     'title':course.pTt,
@@ -154,11 +155,12 @@ class CourseComponentView(APIView):
             assesments = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).filter(pCtg=category.pk, pTF=16)
             for assessment in assesments[:self.no_of_products]:
                 assessment_data = {
-                    'src':assessment.pImg,
+                    'name':assessment.pNm,
+                    'imgUrl':assessment.pImg,
                     'url':assessment.pURL,
-                    'rating__output':assessment.pARx,
+                    'rating':assessment.pARx,
                     'mode': assessment.pStM,# :product_mode_choice
-                    'provider_name':assessment.pPvn if assessment.pPvn else None,
+                    'providerName':assessment.pPvn if assessment.pPvn else None,
                     'price':float(assessment.pPin),
                     'about':assessment.text,
                     'test_duration':json.loads(assessment.pAsft[0])['test_duration'] if assessment.pAsft else None,
@@ -169,9 +171,7 @@ class CourseComponentView(APIView):
             return Response({'detail':'Category not found'},status=status.HTTP_404_NOT_FOUND)
         return_data = {
             'courses':course_data,
-            'course_count':courses.count(),
-            'assesments':assessments_data,
-            'assesment_count':assesments.count(),
+            'assessments':assessments_data,
         }
         return Response(return_data,status=status.HTTP_200_OK)        
 

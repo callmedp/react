@@ -1,9 +1,14 @@
 import React from 'react';
 import Badge from 'react-bootstrap/Badge';
-import { Link } from 'react-router-dom';
 import './otherSkills.scss'
+import { useSelector } from 'react-redux';
+import { siteDomain } from 'utils/domains';
 
 const OtherSkills = (props) => {
+
+    const { otherSkills } = useSelector( store => store.skillBanner )
+
+
     return (
         <section className="container-fluid lightblue-bg mt-40">
             <div className="row">
@@ -11,10 +16,15 @@ const OtherSkills = (props) => {
                         <div className="other-skills">
                             <h2 className="heading2 mt-40">Other Skills To Explore</h2>
                             <div className="other-skills__list">
-                                <Badge pill variant="light"><Link to={"#"}>Sales Courses & Certifications</Link></Badge>{' '}
-                                <Badge pill variant="light"><Link to={"#"}>Retail Courses & Certifications</Link></Badge>{' '}
-                                <Badge pill variant="light"><Link to={"#"}>Product Marketing</Link></Badge>{' '}
-                                <Badge pill variant="light"><Link to={"#"}>Service Marketing</Link></Badge>{' '}
+                                {
+                                    otherSkills?.map((skill, index) => {
+                                        return (
+                                            <React.Fragment key={index}>
+                                            <Badge pill variant="light"><a href={`${siteDomain}${skill.url}`}>{skill.name}</a></Badge>&nbsp;
+                                            </React.Fragment>
+                                        )
+                                    })
+                                }
                             </div>
 
                         </div>

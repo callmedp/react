@@ -14,69 +14,30 @@ const FAQ = (props) => {
         setSliceFlag(state => !state)
     }
 
+    const renderAccordion = (item, index) => {
+        return (
+            <Card key={index.toString() + item.heading}>
+                <Accordion.Toggle as={Card.Header} eventKey={index === 0 ? '0' : index}>
+                    <p dangerouslySetInnerHTML={{__html : item.heading}}></p>
+                </Accordion.Toggle>
+                <Accordion.Collapse eventKey={index === 0 ? '0' : index}>
+                    <Card.Body dangerouslySetInnerHTML={{ __html: item.content }}>
+                    </Card.Body>
+                </Accordion.Collapse>
+            </Card>
+    )}
+
     return (
-        <section className="container-fluid lightblue-bg mt-40">
+        <section className="container-fluid lightblue-bg mt-40" id="faq">
             <div className="row">
                 <div className="container">
                     <h2 className="heading2 mt-40">Frequently Asked Questions</h2>
                     <div className="faq d-flex">
                         <div className="faq__list">
-                            <Accordion defaultActiveKey="0">
+                            <Accordion defaultActiveKey="0" >
                                 {
-                                    (sliceFlag ? faqList.slice(0, 4) : faqList).map((item, index) => {
-                                        return (
-                                            <Card key={index}>
-                                                <Accordion.Toggle as={Card.Header} eventKey="0">
-                                                    <strong>{item.heading}</strong>
-                                                </Accordion.Toggle>
-                                                <Accordion.Collapse eventKey="0">
-                                                    <Card.Body dangerouslySetInnerHTML={{ __html: item.content }}>
-                                                    </Card.Body>
-                                                </Accordion.Collapse>
-                                            </Card>
-                                        )
-                                    })
+                                (sliceFlag ? faqList.slice(0, 4) : faqList).map(renderAccordion)   
                                 }
-                                {/* <Card>
-                                    <Accordion.Toggle as={Card.Header} eventKey="1">
-                                    <strong>How to choose a resume format?</strong>
-                                    </Accordion.Toggle>
-                                    <Accordion.Collapse eventKey="1">
-                                    <Card.Body>A resume format is a sample resume that can be edited and filled with the required details. It is often provided with instructions or sample text and needs a rigorous edit to make it useful.</Card.Body>
-                                    </Accordion.Collapse>
-                                </Card>
-                                <Card>
-                                    <Accordion.Toggle as={Card.Header} eventKey="2">
-                                    <strong>Why are resume formats important?</strong>
-                                    </Accordion.Toggle>
-                                    <Accordion.Collapse eventKey="2">
-                                    <Card.Body>A resume format is a sample resume that can be edited and filled with the required details. It is often provided with instructions or sample text and needs a rigorous edit to make it useful.</Card.Body>
-                                    </Accordion.Collapse>
-                                </Card>
-                                <Card>
-                                    <Accordion.Toggle as={Card.Header} eventKey="3">
-                                    <strong>What makes a resume good and attractive?</strong>
-                                    </Accordion.Toggle>
-                                    <Accordion.Collapse eventKey="3">
-                                    <Card.Body>A resume format is a sample resume that can be edited and filled with the required details. It is often provided with instructions or sample text and needs a rigorous edit to make it useful.</Card.Body>
-                                    </Accordion.Collapse>
-                                </Card>
-                                <Card>
-                                    <Accordion.Toggle as={Card.Header} eventKey="4">
-                                    <strong>Why are resume formats important?</strong>
-                                    </Accordion.Toggle>
-                                    <Accordion.Collapse eventKey="4">
-                                    <Card.Body>A resume format is a sample resume that can be edited and filled with the required details. It is often provided with instructions or sample text and needs a rigorous edit to make it useful.</Card.Body>
-                                    </Accordion.Collapse>
-                                </Card>
-                                <Card>
-                                    <Accordion.Toggle as={Card.Header} eventKey="5">
-                                    <strong>What makes a resume good and attractive?</strong>
-                                    </Accordion.Toggle>
-                                    <Accordion.Collapse eventKey="5">
-                                    <Card.Body>A resume format is a sample resume that can be edited and filled with the required details. It is often provided with instructions or sample text and needs a rigorous edit to make it useful.</Card.Body>
-                                    </Accordion.Collapse>
-                                </Card> */}
                             </Accordion>
                             { sliceFlag ? <Link onClick={loadMore} to={"#"} className="load-more pt-20">Load More FAQS</Link> : '' }
                         </div>
