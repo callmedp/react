@@ -114,8 +114,7 @@ class UserDashboardApi(FieldFilterMixin, ListAPIView):
             select_type = 0
 
         last_payment_date = timezone.now() - datetime.timedelta(days=days)
-        queryset_list = OrderItem.objects.filter(no_process=False, order__site=2,
-                                                 product__type_flow__in=[1, 12, 13, 4, 5, 8, 17])
+        queryset_list = OrderItem.objects.filter(no_process=False)
 
         if select_type == 1:
             queryset_list = queryset_list.exclude(oi_status=4)
@@ -144,7 +143,7 @@ class UserDashboardApi(FieldFilterMixin, ListAPIView):
                 queryset_list = queryset_list.filter(order__email=email, order__status__in=[1, 3])
 
             queryset_list = queryset_list.filter(order__email=email, order__status__in=[1, 3], no_process=False,
-                                                 order__site=2)
+                                                 )
             return queryset_list
 
 
@@ -251,7 +250,7 @@ class DashboardNotificationBoxApi(APIView):
         try:
             # this is order__site=2 is required to get the data for resume.shine
             pending_resume_items = DashboardInfo().get_pending_resume_items(candidate_id=candidate_id,
-                                                                            email=email).filter(order__site=2)
+                                                                            email=email)
 
             pending_resume_items = [{'id':oi.id,'product_name':oi.product.get_name if oi.product else ''
                                      ,'product_get_exp_db':oi.product.get_exp_db() if oi.product else ''
@@ -612,7 +611,7 @@ class UserInboxListApiView(APIView):
         order_list = []
         for obj in orders:
             orderitems = OrderItem.objects.prefetch_related('product','product__product_class','parent').filter(
-                order__site=2, no_process=False,order=obj)
+                 no_process=False,order=obj)
             product_type_flow = None
             product_id = None
             item_count = len(orderitems)
