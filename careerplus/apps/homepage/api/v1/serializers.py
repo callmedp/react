@@ -30,6 +30,8 @@ class OrderItemDetailSerializer(SerializerFieldsMixin,serializers.ModelSerialize
     updated_from_trial_to_regular = serializers.ReadOnlyField()
     neo_mail_sent = serializers.ReadOnlyField()
     product_vendor = serializers.SerializerMethodField()
+    product_sub_type_flow = serializers.SerializerMethodField()
+
 
     
     # order = serializers.SerializerMethodField('get_order')
@@ -94,6 +96,10 @@ class OrderItemDetailSerializer(SerializerFieldsMixin,serializers.ModelSerialize
 
     def get_product_type_flow(self,obj):
         return obj.product.type_flow if obj.product else ''
+
+
+    def get_product_sub_type_flow(self,obj):
+        return obj.product.sub_type_flow if obj.product else ''
 
 
 
