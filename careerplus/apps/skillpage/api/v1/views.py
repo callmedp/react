@@ -127,7 +127,6 @@ class CourseComponentView(APIView):
             for course in courses[:self.no_of_products]:
                 d = json.loads(course.pVrs)['var_list']
                 data = {
-                    'label':d['var_list'][0]['label'],
                     'imgUrl':course.pImg,
                     'url':course.pURL,
                     'name':course.pNm,
@@ -163,6 +162,8 @@ class CourseComponentView(APIView):
                     'providerName':assessment.pPvn if assessment.pPvn else None,
                     'price':float(assessment.pPin),
                     'about':assessment.text,
+                    'tags':PRODUCT_TAG_CHOICES[assessment.pTg][1],
+                    'brochure':json.loads(assessment.pUncdl[0])['brochure'] if course.pUncdl else None,
                     'test_duration':json.loads(assessment.pAsft[0])['test_duration'] if assessment.pAsft else None,
                     'number_of_questions':json.loads(assessment.pAsft[0])['number_of_questions'] if assessment.pAsft else None,
                 }
