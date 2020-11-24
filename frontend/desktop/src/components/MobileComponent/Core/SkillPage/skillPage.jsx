@@ -1,13 +1,20 @@
 import React from 'react';
-import './skillPage.scss'
+import WhoLearn from './WhoLearn/whoLearn';
+import SkillGain from './SkillGain/skillGain';
+import WriteMyResume from './WriteMyResume/writeMyResume';
+import OtherSkills from './OtherSkills/otherSkills';
+import DomainJobs from './DomainJobs/domainJobs';
+
 
 const SkillPage = (props) => {
-
-    
-
-    return (
+    return(
         <div>
-            Mobile Component Loaded
+            <WhoLearn />
+            <SkillGain />
+            <WriteMyResume />
+            <OtherSkills />
+            <DomainJobs />
+            
         </div>
     )
 }
