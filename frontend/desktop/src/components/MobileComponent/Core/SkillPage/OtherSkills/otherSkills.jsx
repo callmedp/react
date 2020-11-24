@@ -1,31 +1,42 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './otherSkills.scss'
+import { useSelector } from 'react-redux';
+import { siteDomain } from 'utils/domains';
 
 const OtherSkills = (props) => {
-    return (
-        <section className="m-container m-lightblue-bg mt-0 mb-0">
-            <div className="d-flex">
-                <div className="m-other-skill">
-                    <h2 className="m-heading2">Other Skills To Explore</h2>
-                    <ul className="m-other-skill__list">
-                        <li>
-                            <Link to={"#"}>Sales Courses</Link>
-                        </li>
-                        <li>
-                            <Link to={"#"}>Service Marketing</Link>
-                        </li>
-                        <li>
-                            <Link to={"#"}>Retail Courses certification</Link>
-                        </li>
-                        <li>
-                            <Link to={"#"}>Product Marketing</Link>
-                        </li>
-                    </ul>
+    const { otherSkills } = useSelector( store => store.skillBanner )
+    const getOtherSkills = (skill) => {
+        return (
+            <li>
+                <a href={`${siteDomain}${skill.url}`}>{skill.name}</a>
+            </li>
+        )
+    }
 
+    const showOtherSkills = () =>{
+        return (
+            <section className="m-container m-lightblue-bg mt-0 mb-0">
+                <div className="d-flex">
+                    <div className="m-other-skill">
+                        <h2 className="m-heading2">Other Skills To Explore</h2>
+                        <ul className="m-other-skill__list">
+                            {/* <li>
+                                <Link to={"#"}>Sales Courses</Link>
+                            </li>*/}
+                            {
+                                otherSkills?.map((skill) => getOtherSkills(skill))
+                            }
+                        </ul>
+
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        )
+    }
+
+    return (
+        otherSkills.length ? showOtherSkills() : null
     )
 }
 

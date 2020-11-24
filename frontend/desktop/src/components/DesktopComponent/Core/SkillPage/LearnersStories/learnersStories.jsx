@@ -31,18 +31,23 @@ const LearnersStories = (props) => {
         )
     }
 
+    const showTestimonials = () =>{
+        return (
+            <section className="container" id="story">
+                <div className="row">
+                    <h2 className="heading2 m-auto pb-20">Learners stories</h2>
+                    <Carousel className="learner-stories">
+                        {
+                            testimonialCategory?.map(getStories)
+                        }
+                    </Carousel>
+                </div>
+            </section>
+        )
+    }
 
     return (
-        <section className="container" id="story">
-            <div className="row">
-                <h2 className="heading2 m-auto pb-20">Learners stories</h2>
-                <Carousel className="learner-stories">
-                    {
-                        testimonialCategory?.map(getStories)
-                    }
-                </Carousel>
-            </div>
-        </section>
+        testimonialCategory.length ? showTestimonials() : null
     )
 }
 

@@ -26,28 +26,33 @@ const FAQ = (props) => {
                 </Accordion.Collapse>
             </Card>
     )}
-
-    return (
-        <section className="container-fluid lightblue-bg mt-40" id="faq">
-            <div className="row">
-                <div className="container">
-                    <h2 className="heading2 mt-40">Frequently Asked Questions</h2>
-                    <div className="faq d-flex">
-                        <div className="faq__list">
-                            <Accordion defaultActiveKey="0" >
-                                {
-                                (sliceFlag ? faqList.slice(0, 4) : faqList).map(renderAccordion)   
-                                }
-                            </Accordion>
-                            { sliceFlag ? <Link onClick={loadMore} to={"#"} className="load-more pt-20">Load More FAQS</Link> : '' }
-                        </div>
-                        <div className="faq__img">
-                            <img src="/media/images/faq.svg" alt="Frequently Asked Questions" />
+    
+    const showFAQs = () =>{
+        return(
+            <section className="container-fluid lightblue-bg mt-40" id="faq">
+                <div className="row">
+                    <div className="container">
+                        <h2 className="heading2 mt-40">Frequently Asked Questions</h2>
+                        <div className="faq d-flex">
+                            <div className="faq__list">
+                                <Accordion defaultActiveKey="0" >
+                                    {
+                                    (sliceFlag ? faqList.slice(0, 4) : faqList).map(renderAccordion)   
+                                    }
+                                </Accordion>
+                                { sliceFlag ? <Link onClick={loadMore} to={"#"} className="load-more pt-20">Load More FAQS</Link> : '' }
+                            </div>
+                            <div className="faq__img">
+                                <img src="/media/images/faq.svg" alt="Frequently Asked Questions" />
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        )
+    }
+    return (
+        faqList.length ? showFAQs() : null
     )
 }
 
