@@ -56,7 +56,7 @@ const Product = (props) => {
 
                                 {Array(parseInt(rating)).fill().map((_, index) => <em key={index} className="icon-fullstar"></em>)}
                                 {halfStar && <em className="icon-halfstar"></em>}
-                                {Array(5 - parseInt(rating)).fill().map((_, index) => <em key={index} className="icon-blankstar"></em>)}
+                                {Array(5 - Math.round(rating)).fill().map((_, index) => <em key={index} className="icon-blankstar"></em>)}
 
                                 <span>{rating}/5</span>
                             </span>
