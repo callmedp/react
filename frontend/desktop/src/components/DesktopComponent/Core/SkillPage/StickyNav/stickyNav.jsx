@@ -3,9 +3,11 @@ import Navbar from 'react-bootstrap/Navbar';
 import { Nav, Form } from 'react-bootstrap';
 import './stickyNav.scss';
 import { Link as LinkScroll } from "react-scroll";
+import { useSelector } from 'react-redux'
 
 const StickyNav = (props) => {
-    const [scrolled,setScrolled] = React.useState(false);
+    const [scrolled, setScrolled] = React.useState(false);
+    const { name } = useSelector( store => store.skillBanner )
 
     const handleScroll=() => {
         const offset = window.scrollY;
@@ -14,7 +16,26 @@ const StickyNav = (props) => {
         }
         else setScrolled(false);
 
-        // console.log(window)
+        // console.log(setScrolled);
+
+        // if(document.getElementById('content')) {
+            // const hello = document.getElementById('content').children;
+
+            // hello[hello.length - 1].classList.remove('active');
+
+        
+
+        // if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+        //     // you're at the bottom of the page
+        //     alert(window.innerHeight , window.scrollY , document.body.offsetHeight);
+
+        //     for (let k = 0; k < hello.length; k++) {
+        //         // console.log(hello[k]);
+        //         hello[k].classList.remove('active');
+        //         if(k === (hello.length -1)) hello[hello.length - 1].classList.add('active');
+        //     }
+        // }
+    // }
     }
 
     useEffect(() => {
@@ -25,31 +46,33 @@ const StickyNav = (props) => {
         scrolled ? <Navbar className="container-fluid lightblue-bg sticky-nav sticky-top d-sticky" expand="lg">
            <div className="container">
                 <div className="flex-100">
-                    <h2>Digital Marketing Courses & Certification</h2>
-                    <Nav>
-                        <LinkScroll to="aboutSect" isDynamic={true} spy={true} smooth={true} hashSpy={false} offset={-150} duration={800}>
+                    <h2>{name} Courses & Certification</h2>
+                    <Nav id="content">
+                        <LinkScroll to="about" isDynamic={true} spy={true} smooth={true} offset={-120}>
                             <Nav.Link >About</Nav.Link>
                         </LinkScroll>
                         
-                        <LinkScroll to="skillG" isDynamic={true} spy={true} smooth={true} hashSpy={false} offset={-80} duration={800}>
+                        <LinkScroll to="skGain" isDynamic={true} spy={true} smooth={true} offset={-80}>
                             <Nav.Link >Skills you gain</Nav.Link>
                         </LinkScroll>
                         
-                        <LinkScroll to="courseTr" isDynamic={true} spy={true} smooth={true} hashSpy={false} offset={-130} duration={800}>
+                        <LinkScroll to="courses" isDynamic={true} spy={true} smooth={true} offset={-120}>
                             <Nav.Link >Courses</Nav.Link>
                         </LinkScroll>
                         
-                        <LinkScroll to="whyChoose" isDynamic={true} spy={true} smooth={true} hashSpy={false} offset={-130} duration={800}>
+                        <LinkScroll to="choose" isDynamic={true} spy={true} smooth={true} offset={-100}>
                             <Nav.Link >Why choose us</Nav.Link>
                         </LinkScroll>
                         
-                        <LinkScroll to="faqs" isDynamic={true} spy={true} smooth={true} hashSpy={false} offset={-80} duration={800}>
+                        <LinkScroll to="faq" isDynamic={true} spy={true} smooth={true} offset={-80}>
                             <Nav.Link >FAQs</Nav.Link>
                         </LinkScroll>
                         
-                        <LinkScroll to="learnerStr" isDynamic={true} spy={true} smooth={true} hashSpy={false} offset={0} duration={800}>
+                        <LinkScroll to="story" isDynamic={true} spy={true} smooth={true} offset={-150}>
                             <Nav.Link >Learner’s stories</Nav.Link>
                         </LinkScroll>
+
+                         <LinkScroll to="story1" className="invisible" isDynamic={true} spy={true} smooth={true} offset={0}></LinkScroll>
                     </Nav>
                 </div>
                 <Form inline>

@@ -11,7 +11,7 @@ const SkillGain = (props) => {
     const testRedirect = () => window.location.replace(`${siteDomain}/practice-tests/${slug}/sub`)
 
     return (
-        <section className="container-fluid lightblue-bg mt-40" id="skillG">
+        <section className="container-fluid lightblue-bg mt-40" id="skGain">
             <div className="row">
                 <div className="container">
                     <div className="d-flex">
@@ -25,15 +25,6 @@ const SkillGain = (props) => {
                                         </React.Fragment>)
                                     })
                                 }   
-                                {/* <Badge pill variant="light">PythonR</Badge>&nbsp;
-                                <Badge pill variant="light">Programming</Badge>&nbsp;
-                                <Badge pill variant="light">Tableau</Badge>&nbsp;
-                                <Badge pill variant="light">Data Science</Badge>&nbsp;
-                                <Badge pill variant="light">Deep Learning</Badge>&nbsp;
-                                <Badge pill variant="light">Data Visualization</Badge>&nbsp;
-                                <Badge pill variant="light">Statistical computing</Badge>&nbsp;
-                                <Badge pill variant="light">Visual Analytics</Badge>&nbsp;
-                                <Badge pill variant="light">Dashboards</Badge>&nbsp; */}
                             </div>
                             <div className="skill-gain__banner mt-30  mb-30">
                                 <p>Take our free practice test to test your skill level in <strong>heading</strong></p>

@@ -1,23 +1,29 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import './aboutSection.scss';
 import { useSelector } from 'react-redux'
 
 const AboutSection = (props) => {
-    
-    const { name, description  } = useSelector( store => store.skillBanner)
-    
+
+    const { name, about } = useSelector(store => store.skillBanner);
+
     return (
-        <section className="container mt-0 pl-0" id="aboutSect">
-            <div id="module" className="about-course">
-            <h2 className="heading2">About {name}</h2>
-            {description.length > 255 ? (<input type="checkbox" className="read-more-state" id="post-1" />)
-            : ("")}
+        <section className="container mt-0 " id="about" >
+            { about ? <div id="module" className="row about-course">
+                <h2 className="heading2">About {name}</h2>
+                {about.length > 255 ? (
+                    <input type="checkbox" className="read-more-state" id="post-10" />
+                    ) : (
+                        ""
+                        )}
+                        
                 <p className="read-more-wrap">
-                    {!description ? null : description.slice(0, 255)}
-                    <span className="read-more-target">{description.slice(255)}</span>
+                {about.replace(/<[^>]*>/g, '').slice(0, 255)}
+                    <span className="read-more-target">
+                        {about.replace(/<[^>]*>/g, '').slice(255)}
+                    </span>
                 </p>
-                <label htmlFor="post-1" className="read-more-trigger"></label>
-            </div>
+                <label htmlFor="post-10" className="read-more-trigger"></label>
+            </div> : "" }
         </section>
         )
     }

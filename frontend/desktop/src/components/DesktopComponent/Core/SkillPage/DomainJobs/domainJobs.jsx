@@ -27,11 +27,6 @@ const DomainJobs = (props) => {
                             )
                         })
                     }
-                    {/* <li><Link to={"#"}>Digital Marketing Jobs</Link></li>
-                    <li><Link to={"#"}>Online Marketing Jobs</Link></li>
-                    <li><Link to={"#"}>SEO Jobs</Link></li>
-                    <li><Link to={"#"}>Business Development Jobs</Link></li>
-                    <li><Link to={"#"}>Sales & Marketing Professionals</Link></li> */}
                 </ul>
             </div>
             <figure className="domain-jobs__img">

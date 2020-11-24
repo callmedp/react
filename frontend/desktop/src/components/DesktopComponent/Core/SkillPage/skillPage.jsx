@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import SkillBanner from './Banner/banner';
 import AboutSection from './AboutSection/aboutSection';
 import WhoLearn from './WhoLearn/whoLearn';
@@ -19,15 +19,16 @@ const SkillPage = (props) => {
 
     const pageId = props.match.params.id;
 
+
     return (
         <div>
-            <StickyNav />
+            <StickyNav  />
             <SkillBanner pageId={pageId}/>
             <section className="container">
                 <div className="row">
                     <div className="col-sm-9">
                         <div className="ml-5">
-                            <AboutSection/>
+                            <AboutSection  />
                             <WhoLearn/>
                         </div>
                     </div>
@@ -38,7 +39,7 @@ const SkillPage = (props) => {
                 </div>
             </section>
             <SkillGain />
-            <CoursesTray />
+            <CoursesTray pageId={pageId} />
             <OtherSkills />
             <section className="container">
                 <aside className="row">
@@ -51,7 +52,7 @@ const SkillPage = (props) => {
                 </aside>
             </section>
             <WhyChooseUs />
-            <FAQ />
+            <FAQ  />
             <LearnersStories />
         </div>
     )
