@@ -15,27 +15,6 @@ const StickyNav = (props) => {
             setScrolled(true);
         }
         else setScrolled(false);
-
-        // console.log(setScrolled);
-
-        // if(document.getElementById('content')) {
-            // const hello = document.getElementById('content').children;
-
-            // hello[hello.length - 1].classList.remove('active');
-
-        
-
-        // if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
-        //     // you're at the bottom of the page
-        //     alert(window.innerHeight , window.scrollY , document.body.offsetHeight);
-
-        //     for (let k = 0; k < hello.length; k++) {
-        //         // console.log(hello[k]);
-        //         hello[k].classList.remove('active');
-        //         if(k === (hello.length -1)) hello[hello.length - 1].classList.add('active');
-        //     }
-        // }
-    // }
     }
 
     useEffect(() => {
