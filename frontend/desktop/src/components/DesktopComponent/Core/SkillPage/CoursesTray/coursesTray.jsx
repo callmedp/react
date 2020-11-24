@@ -43,7 +43,7 @@ const CoursesTray = (props) => {
                                     return (
                                         <ul className="courses-tray__list" key={index}>
                                             {
-                                                courses.map((course, idx) => <Courses index={index.toString() + idx.toString()} product={course} />)
+                                                courses.map((course, idx) => <Courses listIdx={idx+1} listSize={courses.length} index={index.toString() + idx.toString()} product={course} key={index.toString() + idx.toString()} />)
                                             }
                                         </ul>
                                     )
@@ -56,9 +56,9 @@ const CoursesTray = (props) => {
                             {
                                 assessmentList.slice(0,assessmentKey).map((assessments, index) => {
                                     return (
-                                        <ul className="courses-tray__list">
+                                        <ul className="courses-tray__list" key={index}>
                                             {
-                                                assessments.map((assessment, idx) =>  <Assessments index={index.toString() + idx.toString()} product={assessment} /> )
+                                                assessments.map((assessment, idx) =>  <Assessments listIdx={idx+1} listSize={assessments.length}  index={index.toString() + idx.toString()} product={assessment} key={index.toString() + idx.toString()} /> )
                                             }
                                     </ul>
                                     )
