@@ -21,7 +21,6 @@ function* skillPageBanner(action) {
             item.testimonialCategory = storiesList.slice()
         }
         
-        console.log("breadLitem",item)
         yield put({ 
             type : Actions.SKILL_PAGE_BANNER_FETCHED, 
             item 

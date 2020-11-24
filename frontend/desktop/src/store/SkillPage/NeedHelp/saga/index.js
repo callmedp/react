@@ -6,7 +6,7 @@ import Api from './Api';
 function* createLead(action) {
     try {
         const { payload } = action;
-        console.log("reached worker saga", payload)
+        // console.log("reached worker saga", payload)
         const result = yield call(Api.createLead, payload);
 
         if (result["error"]) {

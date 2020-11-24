@@ -1,11 +1,11 @@
 import BaseApiService from 'services/BaseApiService'
 
-import { siteDomain } from 'util'
+import { siteDomain } from 'utils/domains'
 
 
 const createLead = (data) => {
-    const url = `tentative_url/`;
-    return BaseApiService.post(`${siteDomain}/api/product/v1/${url}`, data);
+    const url = `lead-management/`;
+    return BaseApiService.post(`${siteDomain}/lead/api/v1/${url}`, data);
 };
 
 
