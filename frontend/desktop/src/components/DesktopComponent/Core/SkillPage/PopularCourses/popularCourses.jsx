@@ -11,6 +11,12 @@ const PopularCourses = (props) => {
     }, [])
     const { pCourseList } = useSelector(store => store.popularCourses)
 
+    const starRatings = (star) => {
+        return (star === '*' ? <em className="icon-fullstar"></em> : star === '+' 
+            ? <em className="icon-halfstar"></em> : <em className="icon-blankstar"></em>
+        )
+    }
+
     return (
         <div className="popular-courses mt-40">
             <h2 className="heading2">Popular Courses</h2>
@@ -27,11 +33,7 @@ const PopularCourses = (props) => {
                                     <Link to={course.url}>{course.name}</Link>
                                     <span className="mr-10">By ERB</span>
                                         <span className="rating">
-                                            { 
-                                                course.stars?.map((star) => {
-                                                    return (star === '*' ? <em className="icon-fullstar"></em> : star === '+' ? <em className="icon-halfstar"></em> : <em className="icon-blankstar"></em>)
-                                                }) 
-                                            }
+                                            { course.stars?.map((star) => {starRatings(star)}) }
                                             <span>{course.rating}/5</span>
                                         </span>
                                 </div>
