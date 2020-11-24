@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { siteDomain } from 'utils/domains';
 import CustomOverlay from 'services/CustomOverlay';
-import PopoverDetail from '../PopOverDetail/popOverDetail'
+import PopoverDetail from '../PopOverDetail/popoverDetail'
 
 
 const Product = (props) => {
