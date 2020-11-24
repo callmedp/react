@@ -4,8 +4,7 @@ import Api from './Api';
 
 function* populerCourses(action) {
     try {
-        // const { payload } = action;
-        // console.log("payload is ", payload)
+        
         const response = yield call(Api.populerCourses);
         const result = response.data
         
