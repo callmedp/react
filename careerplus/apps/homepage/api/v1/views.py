@@ -759,4 +759,34 @@ class PausePlayService(UpdateAPIView):
     owner_fields = ['order.candidate_id']
 
 
+class NeoBoardUserAPI(APIView):
+    permission_classes = ()
+    authentication_classes = ()
+    serializer_classes = None
+
+    def post(self,request,*args,**kwargs):
+        from order.models import OrderItem
+        from order.tasks import board_user_on_neo
+        candidate_id = request.data.get('candidate_id')
+        oi_pk = request.data.get('oi_pk')
+        if not candidate_id:
+            return Response({'error':'candidate id is missing'},status=status.HTTP_400_BAD_REQUEST)
+        if not oi_pk:
+            return Response({'error':'orderitem id is missing'},status=status.HTTP_400_BAD_REQUEST)
+
+        oi= OrderItem.objects.select_related("order").filter(pk=oi_pk).first()
+        order = oi.order
+
+        if oi and oi.product.vendor.slug == 'neo' and order.candidate_id == candidate_id and order.status in[1,3]:
+            if not oi.neo_mail_sent:
+                boarding_type = board_user_on_neo([oi.id])
+                msg = 'Please check you mail to confirm boarding on Neo'
+                if boarding_type == 'already_trial':
+                    msg = 'You Account has been Updated from Trial To Regular'
+                return Response({'data': msg},status=status.HTTP_200_OK)
+
+
+        return Response({'data':''},status=status.HTTP_200_OK)
+
+
 
