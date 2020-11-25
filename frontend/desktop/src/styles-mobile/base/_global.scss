@@ -62,6 +62,10 @@
     margin-left: 2rem;
 }
 
+.ml-10n {
+    margin-left: -1rem;
+}
+
 .p-0 {
     padding: 0 !important;
 }
@@ -106,17 +110,6 @@
     margin-top: -4.2rem;
 }
 
-.rating-review {
-    text-align: center;
-    i {
-        margin-right: .5rem;
-        cursor: pointer;
-    }
-}
-
-.bg {
-    background: $bg;
-}
 
 .media-body {
     flex: 1;

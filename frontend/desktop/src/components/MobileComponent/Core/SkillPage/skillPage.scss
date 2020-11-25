@@ -1,24 +1,73 @@
-@import '../../../../styles/functions';
-@import '../../../../styles/variables';
-@import '../../../../styles/mixins';
+@import '../../../../styles-mobile/abstracts';
 
-section {
-    &:not(:last-of-type) {
-        margin-top: 3rem;
-        margin-bottom: 4rem;
-    }
-}
-
-.right-widget {
-    margin-top: -22%;
+.m-tabset {
+    margin-bottom: 2rem;
     position: relative;
-    z-index: 999;
-}
+    z-index: 9;
 
-.load-more {
-    font-size: 1.3rem;
-    font-weight: 700;
-    display: flex;
-    justify-content: center;
-    text-transform: uppercase;
+    &::before {
+        content: '';
+        @extend %gradient;
+        position: absolute;
+        left: 0;
+        right: 0;
+        height: 5rem;
+        z-index: -9;
+        height: 4.4rem;
+        box-shadow: 0 1px 6px 0 #7C88BF;
+    }
+    
+    > input[type="radio"] {
+        position: absolute;
+        left: -2000vw;
+        position: relative;
+        margin: 0;
+    }
+
+    .tab-panels {
+        background: $white;
+    }
+
+    .tab-panel {
+        display: none;
+    }
+
+    > label {
+        display: inline-block;
+        padding: 1rem 0;
+        // border: 3px solid transparent;
+        border-bottom: 0;
+        cursor: pointer;
+        font-weight: 400;
+        font-size: 1.4rem;
+        color: $white;
+
+        &:not(:first-of-type) {
+          margin-left: 15%;
+        }
+    }
+
+    .tab-panel {
+        padding: 0 0 1rem 0;
+    }
+
 }
+  
+  
+  .m-tabset > input:first-child:checked ~ .tab-panels > .tab-panel:first-child,
+  .m-tabset > input:nth-child(3):checked ~ .tab-panels > .tab-panel:nth-child(2),
+  .m-tabset > input:nth-child(5):checked ~ .tab-panels > .tab-panel:nth-child(3),
+  .m-tabset > input:nth-child(7):checked ~ .tab-panels > .tab-panel:nth-child(4),
+  .m-tabset > input:nth-child(9):checked ~ .tab-panels > .tab-panel:nth-child(5),
+  .m-tabset > input:nth-child(11):checked ~ .tab-panels > .tab-panel:nth-child(6) {
+    display: block;
+  }
+
+  
+  .m-tabset > input:checked + label {
+    // border-color: #ccc;
+    border-bottom: 3px solid $white;
+    margin-bottom: -2px;
+    color: $white;
+    font-weight: 600;
+  }

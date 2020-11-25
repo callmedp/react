@@ -1,0 +1,57 @@
+@import '../../../../../styles-mobile/abstracts';
+
+
+.m-learner-stories {
+
+    .m-card {
+        @extend %box-shadow1;
+        border: none;
+        padding: 2rem;
+        border-bottom: .5rem solid $card-btm-bdr;
+        @include border-radius(5px)
+
+        &__name {
+            font-size: 2.4rem;
+            width: 5.5rem;
+            height: 5.5rem;
+            border-radius: 100%;
+            margin: 1rem auto 2rem auto;
+            background-color: #F8C2C2;
+            text-align: center;
+            vertical-align: middle;
+            line-height: 5.5rem;
+            display: block;
+            color: $white;
+        }
+
+        &__txt {
+            font-size: 1.3rem;
+            height: 11.5rem;
+            overflow: hidden;
+            margin-bottom: 2rem;
+        }
+
+        strong {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: block;
+        }
+
+        &__location {
+            font-size: 1.2rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+
+    >.slick-slider {
+        .slick-list {
+            .slick-slide {
+                width: 30rem !important;
+                padding: 1.5rem 1.2rem !important;
+            }
+        }
+    }
+}

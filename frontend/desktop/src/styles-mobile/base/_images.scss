@@ -1,316 +1,61 @@
-[class^="icon-"] {
+[class^="micon-"] {
   text-indent: 200%;
   overflow: hidden;
   white-space: nowrap;
 }
 
-.icon-shine {
+.micon-round-arrow {
   background: $sprite;
-  @include icon-inblock(79px, 51px, 0 0);
+  @include icon-inblock(40px, 27px, 0 0);
 }
 
-.icon-hamburger {
+.micon-choose1 {
   background: $sprite;
-  @include icon-inblock(26px, 17px, -89px -1px);
+  @include icon-inblock(44px, 36px, -43px 0);
 }
 
-.icon-cart {
+.micon-choose2 {
   background: $sprite;
-  @include icon-inblock(22px, 22px, -129px -1px);
+  @include icon-inblock(44px, 30px, -99px -1px);
 }
 
-.icon-cart-white {
+.micon-choose3 {
   background: $sprite;
-  @include icon-inblock(22px, 22px, -505px -37px);
+  @include icon-inblock(44px, 37px, -159px 0);
 }
 
-.icon-user-pic {
+.micon-choose4 {
   background: $sprite;
-  @include icon-inblock(43px, 43px, -170px -1px);
+  @include icon-inblock(44px, 37px, -216px 0);
 }
 
-.icon-home {
+.micon-choose5 {
   background: $sprite;
-  @include icon-inblock(21px, 19px, -229px 0);
+  @include icon-inblock(44px, 32px, -269px -1px);
 }
 
-.icon-resume-service {
+.micon-choose6 {
   background: $sprite;
-  @include icon-inblock(21px, 17px, -271px 0);
+  @include icon-inblock(44px, 33px, -326px 0);
 }
 
-.icon-linkedin-service {
+.micon-fullstar {
   background: $sprite;
-  @include icon-inblock(21px, 19px, -310px 0);
+  @include icon-inblock(11px, 10px, -466px -24px);
 }
 
-.icon-recruiter-service {
+.micon-blankstar {
   background: $sprite;
-  @include icon-inblock(21px, 22px, -347px 0);
+  @include icon-inblock(11px, 10px, -484px -24px);
 }
 
-.icon-free-resources {
+.micon-halfstar {
   background: $sprite;
-  @include icon-inblock(21px, 21px, -389px 0);
+  @include icon-inblock(11px, 10px, -484px -24px);
 }
 
-.icon-other-services {
+.micon-pdf {
   background: $sprite;
-  @include icon-inblock(21px, 18px, -430px 0);
+  @include icon-inblock(15px, 20px, -476px 0);
 }
 
-.icon-courses-services {
-  background: $sprite;
-  @include icon-inblock(21px, 18px, -468px 0);
-}
-
-.icon-blog-services {
-  background: $sprite;
-  @include icon-inblock(21px, 22px, -509px 0);
-}
-
-.icon-arrow-menusm {
-  background: $sprite;
-  @include icon-inblock(7px, 13px, -584px -1px);
-}
-
-.icon-arrow-menulg {
-  background: $sprite;
-  @include icon-inblock(18px, 19px, -556px -1px);
-}
-
-.icon-tick {
-  background: $sprite;
-  @include icon-inblock(10px, 8px, -571px -33px);
-}
-
-.icon-facebook {
-  background: $sprite;
-  @include icon-inblock(6px, 11px, -599px 0);
-}
-
-.icon-twitter {
-  background: $sprite;
-  @include icon-inblock(11px, 10px, -613px 0);
-}
-
-.icon-linkedin {
-  background: $sprite;
-  @include icon-inblock(11px, 11px, -633px 0);
-}
-
-.icon-forward {
-  background: $sprite;
-  @include icon-inblock(15px, 12px, -592px -30px);
-}
-
-.icon-watch {
-  background: $sprite;
-  @include icon-inblock(17px, 11px, -616px -30px);
-}
-
-.icon-star {
-  background: $sprite;
-  @include icon-inblock(13px, 12px, -125px -33px);
-}
-
-.icon-star-blank {
-  background: $sprite;
-  @include icon-inblock(13px, 12px, -144px -33px);
-}
-
-.icon-star-half {
-  background: $sprite;
-  @include icon-inblock(13px, 12px, -596px -50px);
-}
-
-.icon-arrow-addon {
-  background: $sprite;
-  @include icon-inblock(20px, 20px, -93px -32px);
-}
-
-.icon-rating-full {
-  background: $sprite;
-  @include icon-inblock(13px, 13px, -225px -36px);
-}
-
-.icon-rating-blank {
-  background: $sprite;
-  @include icon-inblock(13px, 13px, -248px -36px);
-}
-
-.icon-rating-half {
-  background: $sprite;
-  @include icon-inblock(13px, 13px, -572px -49px);
-}
-
-.icon-writer {
-  background: $sprite;
-  @include icon-inblock(21px, 26px, -304px -39px);
-}
-
-.icon-interview {
-  background: $sprite;
-  @include icon-inblock(23px, 23px, -343px -37px);
-}
-
-.icon-bought {
-  background: $sprite;
-  @include icon-inblock(17px, 20px, -383px -37px);
-}
-
-.icon-view-all {
-  background: $sprite;
-  @include icon-inblock(5px, 9px, -281px -57px);
-}
-
-.icon-enquiry-w {
-  background: $sprite;
-  @include icon-inblock(15px, 15px, -2px -61px);
-}
-
-.icon-call-w {
-  background: $sprite;
-  @include icon-inblock(14px, 14px, -26px -61px);
-}
-
-.icon-chat-w {
-  background: $sprite;
-  @include icon-inblock(21px, 15px, -50px -58px);
-}
-
-.icon-whatsapp-w {
-  background: $sprite;
-  @include icon-inblock(15px, 15px, -82px -58px);
-}
-
-.icon-epay {
-  background: $sprite;
-  @include icon-inblock(112px, 30px, -112px -54px);
-}
-
-.icon-arrow-down {
-  background: $sprite;
-  @include icon-inblock(8px, 5px, -263px -59px);
-}
-
-.icon-off {
-  background: $sprite;
-  @include icon-inblock(18px, 19px, -1px -90px);
-}
-
-.icon-code-off {
-  background: $sprite;
-  @include icon-inblock(18px, 11px, -32px -91px);
-}
-
-.icon-add-dis {
-  background: $sprite;
-  @include icon-inblock(18px, 18px, -65px -91px);
-}
-
-.icon-rating-fullb {
-  background: $sprite;
-  @include icon-inblock(24px, 22px, -94px -90px);
-}
-
-.icon-rating-blankb {
-  background: $sprite;
-  @include icon-inblock(24px, 22px, -130px -90px);
-}
-
-.icon-rating-halfb {
-  background: $sprite;
-  @include icon-inblock(24px, 22px, -538px -38px);
-}
-
-.icon-fb-social {
-  background: $sprite;
-  @include icon-inblock(14px, 28px, -199px -88px);
-}
-
-.icon-linkedin-social {
-  background: $sprite;
-  @include icon-inblock(27px, 27px, -228px -87px);
-}
-
-.icon-google-social {
-  background: $sprite;
-  @include icon-inblock(24px, 24px, -275px -91px);
-}
-
-.icon-cms-download {
-  background: $sprite;
-  @include icon-inblock(54px, 54px, -381px -80px);
-}
-
-.icon-cms-view {
-  background: $sprite;
-  @include icon-inblock(54px, 54px, -315px -79px);
-}
-
-.icon-fb-social-cms {
-  background: $sprite;
-  @include icon-inblock(9px, 18px, -446px -77px);
-}
-
-.icon-linkedin-social-cms {
-  background: $sprite;
-  @include icon-inblock(17px, 16px, -465px -78px);
-}
-
-.icon-google-social-cms {
-  background: $sprite;
-  @include icon-inblock(15px, 14px, -492px -79px);
-}
-
-.icon-fb-social-cms1 {
-  background: $sprite;
-  @include icon-inblock(14px, 28px, -199px -88px);
-}
-
-.icon-linkedin-social-cms1 {
-  background: $sprite;
-  @include icon-inblock(27px, 27px, -228px -87px);
-}
-
-.icon-twitter-social-cms1 {
-  background: $sprite;
-  @include icon-inblock(27px, 22px, -234px -124px);
-}
-
-.icon-social-cms-share {
-  background: $sprite;
-  @include icon-inblock(30px, 33px, -193px -124px);
-}
-
-.icon-back-black {
-  background: $sprite;
-  @include icon-inblock(24px, 17px, -521px -78px);
-  border: none;
-}
-
-.icon-call {
-  background: $sprite;
-  @include icon-inblock (16px, 20px, -553px -76px);
-}
-
-.icon-location {
-  background: $sprite;
-  @include icon-inblock (16px, 20px, -580px -76px);
-}
-
-.icon-payment-success {
-  background: $sprite;
-  @include icon-inblock(41px, 42px, -448px -104px);
-}
-
-.icon-payment-failed {
-  background: $sprite;
-  @include icon-inblock(43px, 37px, -506px -108px);
-}
-
-.icon-tick-cms {
-  background: $sprite;
-  @include icon-inblock(24px, 24px,  -566px -109px);
-}
