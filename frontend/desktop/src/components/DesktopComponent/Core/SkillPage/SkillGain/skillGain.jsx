@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { siteDomain } from 'utils/domains';
 const SkillGain = (props) => {
 
-    const { skillGainList, heading, slug } = useSelector( store => store.skillBanner )
+    const { skillGainList, name, slug } = useSelector( store => store.skillBanner )
   
     const testRedirect = () => window.location.replace(`${siteDomain}/practice-tests/${slug}/sub`)
 
@@ -27,7 +27,7 @@ const SkillGain = (props) => {
                                 }   
                             </div>
                             <div className="skill-gain__banner mt-30  mb-30">
-                                <p>Take our free practice test to test your skill level in <strong>heading</strong></p>
+                                <p>Take our free practice test to test your skill level in <strong>{name}</strong></p>
                                 <Button onClick={testRedirect} variant="outline-primary" className="ml-auto">TAKE FREE TEST</Button>&nbsp;
                             </div>
                         </div>

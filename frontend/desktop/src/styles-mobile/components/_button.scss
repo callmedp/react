@@ -1,0 +1,18 @@
+.btn-blue-outline {
+    background: transparent;
+    border: 1px solid $blue;
+    color: $blue;
+    font-size: 1.3rem;
+    text-transform: uppercase;
+    padding: 1rem 1.5rem;
+    @include border-radius(30px);
+    font-weight: 700;
+    display: inline-block;
+
+    &:hover, &:focus {
+        text-decoration: none;
+        color: $blue;
+        border: 1px solid $blue;
+    }
+}
+

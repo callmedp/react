@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchCoursesAndAssessments } from 'store/SkillPage/CoursesTray/actions/index';
 import Courses from './Product/product';
 import Assessments from './Product/product';
-import { Link } from 'react-router-dom';
 
 const CoursesTray = (props) => {
     const [key, setKey] = useState('courses');
@@ -43,7 +42,7 @@ const CoursesTray = (props) => {
                                     return (
                                         <ul className="courses-tray__list" key={index}>
                                             {
-                                                courses.map((course, idx) => <Courses key={idx} index={index.toString() + idx.toString()} product={course} />)
+                                                courses.map((course, idx) => <Courses listIdx={idx+1} listSize={courses.length} index={index.toString() + idx.toString()} product={course} key={index.toString() + idx.toString()} />)
                                             }
                                         </ul>
                                     )
@@ -58,7 +57,7 @@ const CoursesTray = (props) => {
                                     return (
                                         <ul className="courses-tray__list" key={index}>
                                             {
-                                                assessments.map((assessment, idx) =>  <Assessments key={idx} index={index.toString() + idx.toString()} product={assessment} /> )
+                                                assessments.map((assessment, idx) =>  <Assessments listIdx={idx+1} listSize={assessments.length}  index={index.toString() + idx.toString()} product={assessment} key={index.toString() + idx.toString()} /> )
                                             }
                                     </ul>
                                     )

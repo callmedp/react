@@ -66,44 +66,40 @@ class SkillPage(APIView):
         if cache.get('skill_page_{}'.format(id), None):
             data = cache.get('skill_page_{}'.format(id)) 
             return Response(data, status=status.HTTP_200_OK)
-        try:
-            category = Category.objects.get(id=id)
+        data = {}
+        category = Category.objects.only('id').filter(id=id).first()
+        if category:
             subheadercategory = SubHeaderCategory.objects.filter(category=category, active=True, heading_choices__in=[2,3])
             career_outcomes = category.split_career_outcomes()
-        except Category.DoesNotExist:
-            return Response({'detail':'Category not found'}, status=status.HTTP_404_NOT_FOUND)
-        except SubHeaderCategory.DoesNotExist:
-            return Response({'detail':'SubHeaderCategory not found'},\
-                status=status.HTTP_404_NOT_FOUND)
-        data = {}
-        for heading in subheadercategory:
-            heading_description = SubHeaderCategorySerializer(heading).data
-            description = heading_description.get('description',None)
-            heading_value = heading.heading_choice_text
+            for heading in subheadercategory:
+                heading_description = SubHeaderCategorySerializer(heading).data
+                description = heading_description.get('description',None)
+                heading_value = heading.heading_choice_text
 
-            if heading.heading_choice_text == "who-should-learn":
-                heading_value = "whoShouldLearn"
-            elif heading.heading_choice_text == "faq":
-                heading_value = "faqList"
-                description = get_faq_list(description)
+                if heading.heading_choice_text == "who-should-learn":
+                    heading_value = "whoShouldLearn"
+                elif heading.heading_choice_text == "faq":
+                    heading_value = "faqList"
+                    description = get_faq_list(description)
+                data.update({
+                    heading_value : description
+                })
+            testimonialcategory = list(TestimonialCategoryRelationship.objects.filter(category=category,
+                        testimonial__is_active=True).select_related('testimonial'))
+            testimonial = [t.testimonial for t in testimonialcategory]
+            testimonialcategory_data = TestimonialSerializer(testimonial,many=True).data
+            explore_courses = []
+            exp_cour_ids = json.loads(category.ex_cour)
+            explore_courses = Category.objects.filter(id__in=exp_cour_ids).values('name','url')
             data.update({
-                heading_value : description
+                'name':category.name,
+                'slug':category.slug,
+                'about': category.description,
+                'skillGainList' : career_outcomes,
+                'breadcrumbs':self.get_breadcrumb_data(category),
+                'testimonialCategory':testimonialcategory_data,
+                'otherSkills':explore_courses,
             })
-
-        testimonialcategory = Testimonial.objects.filter(testimonialcategoryrelationship__category=id,is_active=True)
-        testimonialcategory_data = TestimonialSerializer(testimonialcategory,many=True).data
-        explore_courses = []
-        exp_cour_ids = json.loads(category.ex_cour)
-        explore_courses = Category.objects.filter(id__in=exp_cour_ids).values('name','url')
-        data.update({
-            'name':category.name,
-            'slug':category.slug,
-            'about': category.description,
-            'skillGainList' : career_outcomes,
-            'breadcrumbs':self.get_breadcrumb_data(category),
-            'testimonialCategory':testimonialcategory_data,
-            'otherSkills':explore_courses,
-        })
 
         cache.set('skill_page_{}'.format(id), data, timeout=60*60*24)
         return Response(data,status=status.HTTP_200_OK) 
@@ -121,11 +117,11 @@ class CourseComponentView(APIView):
         id = request.GET.get('id',None)
         course_data = []
         assessments_data = []
-        try:
-            category = Category.objects.get(id=id)
+        category = Category.objects.only('id').filter(id=id).first()
+        if category:
             courses = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).filter(pCtg=category.pk).exclude(pTF=16)
             for course in courses[:self.no_of_products]:
-                d = json.loads(course.pVrs)['var_list']
+                d = json.loads(course.pVrs).get('var_list')
                 data = {
                     'imgUrl':course.pImg,
                     'url':course.pURL,
@@ -134,21 +130,21 @@ class CourseComponentView(APIView):
                     'mode':course.pStM[0] if course.pStM else None,
                     'providerName':course.pPvn,
                     'price':float(course.pPin),
-                    'skill': course.pSkilln,
+                    'skillList': course.pSkilln,
                     'about':course.pAb,
                     'title':course.pTt,
                     'slug':course.pSg,
                     'jobsAvailable':course.pNJ,
-                    'tags':PRODUCT_TAG_CHOICES[course.pTg][1],
-                    'brochure':json.loads(course.pUncdl[0])['brochure'] if course.pUncdl else None,
-                    'highlights':json.loads(course.pUncdl[0])['highlighted_benefits'] if course.pUncdl else None,
+                    'tags':PRODUCT_TAG_CHOICES[course.pTg][0],
+                    'brochure':json.loads(course.pUncdl[0]).get('brochure') if course.pUncdl else None,
+                    'highlights':json.loads(course.pUncdl[0]).get('highlighted_benefits') if course.pUncdl else None,
                     }
                 if len(d)!=0:
                     data.update({
-                        'duration':d[0]['dur_days'], 
-                        'type':d[0]['type'],  
-                        'label':d[0]['label'], 
-                        'level':d[0]['level'], 
+                        'duration':d[0].get('dur_days'), 
+                        'type':d[0].get('type'),  
+                        'label':d[0].get('label'), 
+                        'level':d[0].get('level'), 
                     })
                 course_data.append(data)
             assesments = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).filter(pCtg=category.pk, pTF=16)
@@ -163,13 +159,11 @@ class CourseComponentView(APIView):
                     'price':float(assessment.pPin),
                     'about':assessment.text,
                     'tags':PRODUCT_TAG_CHOICES[assessment.pTg][1],
-                    'brochure':json.loads(assessment.pUncdl[0])['brochure'] if course.pUncdl else None,
-                    'test_duration':json.loads(assessment.pAsft[0])['test_duration'] if assessment.pAsft else None,
-                    'number_of_questions':json.loads(assessment.pAsft[0])['number_of_questions'] if assessment.pAsft else None,
+                    'brochure':json.loads(assessment.pUncdl[0]).get('brochure') if course.pUncdl else None,
+                    'test_duration':json.loads(assessment.pAsft[0]).get('test_duration') if assessment.pAsft else None,
+                    'number_of_questions':json.loads(assessment.pAsft[0]).get('number_of_questions') if assessment.pAsft else None,
                 }
                 assessments_data.append(assessment_data)
-        except Category.DoesNotExist:
-            return Response({'detail':'Category not found'},status=status.HTTP_404_NOT_FOUND)
         return_data = {
             'courses':course_data,
             'assessments':assessments_data,
@@ -186,11 +180,10 @@ class DomainJobsView(APIView):
 
     def get(self, request,*args, **kwargs):
         id = request.GET.get('id',None)
-        try:
-            category = Category.objects.get(id=id)
-        except Category.DoesNotExist:
-            return Response({'detail':'Category not found'},status=status.HTTP_404_NOT_FOUND)
-        widget_obj = DetailPageWidget.objects.filter(content_type__model='Category', listid__contains=category.pk).first()
-        widget_obj_data = widget_obj.widget.iw.indexcolumn_set.filter(column=1) if widget_obj and widget_obj.widget else []
-        data = IndexColumnSerializer(widget_obj_data,many=True).data
+        data = {}
+        category = Category.objects.only('id').filter(id=id).first()
+        if category:
+            widget_obj = DetailPageWidget.objects.filter(content_type__model='Category', listid__contains=category.pk).first()
+            widget_obj_data = widget_obj.widget.iw.indexcolumn_set.filter(column=1) if widget_obj and widget_obj.widget else []
+            data = IndexColumnSerializer(widget_obj_data,many=True).data
         return Response(data,status=status.HTTP_200_OK)

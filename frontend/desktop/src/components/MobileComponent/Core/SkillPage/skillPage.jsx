@@ -1,13 +1,27 @@
-import React from 'react';
-import './skillPage.scss'
+import React, { useEffect } from 'react';
+import WhoLearn from './WhoLearn/whoLearn';
+import SkillGain from './SkillGain/skillGain';
+import WriteMyResume from './WriteMyResume/writeMyResume';
+import OtherSkills from './OtherSkills/otherSkills';
+import DomainJobs from './DomainJobs/domainJobs';
+import { useDispatch } from 'react-redux';
+import { fetchSkillPageBanner } from 'store/SkillPage/Banner/actions';
+
 
 const SkillPage = (props) => {
-
-    
-
-    return (
+    const dispatch = useDispatch()
+    const pageId = props.match.params.id;
+    useEffect(() => {
+        dispatch(fetchSkillPageBanner({id : pageId}))
+    },[])
+    return(
         <div>
-            Mobile Component Loaded
+            <WhoLearn />
+            <SkillGain />
+            <WriteMyResume />
+            <OtherSkills />
+            <DomainJobs pageId={pageId}/>
+            
         </div>
     )
 }
