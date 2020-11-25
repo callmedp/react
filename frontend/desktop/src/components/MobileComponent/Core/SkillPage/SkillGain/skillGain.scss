@@ -1,0 +1,39 @@
+@import '../../../../../styles-mobile/abstracts';
+
+.m-skill-gain {
+
+    &__list {
+        width: auto;
+        margin: 2rem 0 1rem 0;
+
+        li {
+            display: inline-block;
+            padding: .7rem 1rem;
+            @extend %box-shadow2;
+            margin: 1rem 1rem 0 0;
+            font-size: 1.3rem;
+            background: $badge-pill-solid;
+
+            &::before {
+                content: '';
+                background: $sprite -32px 0;
+                width: 1rem;
+                height: .8rem;
+                display: inline-block;
+                margin-right: .7rem;
+            }
+        }
+    }
+
+    &__banner {
+        padding: 1.5rem;
+        border: 1px solid $free-test-banner-bdr;
+        @include border-radius(4px);
+        background: url('/media/images/mobile/take-free-test.png') $lightblue no-repeat bottom right;
+        display: block;
+
+        p {
+            width: 80%;
+        }
+    }
+}

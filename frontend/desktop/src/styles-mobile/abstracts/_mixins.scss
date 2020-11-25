@@ -1,0 +1,73 @@
+@function extend($obj, $ext-obj) {
+    @return map-merge($obj, $ext-obj);
+  }
+  
+  @function -imp($value, $inset: !important) {
+    @return $value $inset;
+  }
+  @mixin appearance($value) {
+    -webkit-appearance: $value;
+    -moz-appearance: $value;
+    appearance: $value;
+  }
+    
+  @mixin opacity($value) {
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=$value)";
+    filter: alpha(opacity=$value);
+    -khtml-opacity: $value;
+    -moz-opacity: $value;
+    opacity: $value;
+  }
+  
+  @mixin icon-details($width, $height, $position) {
+    background-position: $position;
+    width: $width;
+    height: $height;
+  }
+  
+  @mixin icon-block($width, $height, $position) {
+    @include icon-details($width, $height, $position);
+    display: block;
+  }
+  
+  @mixin icon-inblock($width, $height, $position) {
+    @include icon-details($width, $height, $position);
+    display: inline-block;
+  }
+  
+  @mixin transition($transition...) {
+    -webkit-transition: $transition;
+    -moz-transition: $transition;
+    -o-transition: $transition;
+    transition: $transition;
+  }
+  
+  @mixin border-radius($radius) {
+    -webkit-border-radius: $radius;
+    -moz-border-radius: $radius;
+    -ms-border-radius: $radius;
+    border-radius: $radius;
+  }
+
+  @mixin size($width, $height, $display) {
+    width: $width;
+    height: $height;
+    display: $display;
+  }
+  
+  @mixin flexbox {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -moz-flex;
+    display: -ms-flexbox;
+    display: flex;
+  }
+  
+  
+  @mixin transform($transforms) {
+    -moz-transform: $transforms;
+    -o-transform: $transforms;
+    -ms-transform: $transforms;
+    -webkit-transform: $transforms;
+    transform: $transforms;
+  }

@@ -1,0 +1,27 @@
+@import '../../../../../styles-mobile/abstracts';
+
+.m-other-skill {
+
+    &__list {
+        width: auto;
+        margin: 2rem 0 1rem 0;
+
+        li {
+            display: inline-block;
+            padding: .7rem 1rem;
+            @extend %box-shadow2;
+            margin: 1rem 1rem 0 0;
+            font-size: 1.3rem;
+            background: $white;
+
+            &::before {
+                content: '';
+                background: $sprite -32px 0;
+                width: 1rem;
+                height: .8rem;
+                display: inline-block;
+                margin-right: .7rem;
+            }
+        }
+    }
+}
