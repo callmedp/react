@@ -5,9 +5,12 @@ import re
 
 # Core Django Imports
 from crmapi.tasks import create_lead_crm
+from django.http import QueryDict
+
 # Third Party Imports
 from geolocation.models import Country
 from rest_framework import permissions, status
+
 # Core RestFramework Imports
 from rest_framework.views import APIView
 
@@ -17,6 +20,7 @@ from .helper import APIResponse, isValidPhone
 # Inter App Imports
 from crmapi.models import (
     UserQuries, DEFAULT_SLUG_SOURCE)
+from .serializers import LeadManagementSerializer
 
 
 class LeadManagementAPI(APIView):
@@ -58,7 +62,7 @@ class LeadManagementAPI(APIView):
                 return APIResponse(message='Something went wrong', status=status.HTTP_400_BAD_REQUEST, error=True)
 
             if not all(len(i) > 0 for i in [name, mobile]):
-                return APIResponse(message='Please fill all the fields.',
+                return APIResponse(message='Please enter all the fields.',
                                    status=status.HTTP_400_BAD_REQUEST, error=True)
 
             if not isValidPhone(mobile):
@@ -115,24 +119,35 @@ class LeadManagementAPI(APIView):
                 request.session['lead_last_name'] = last_name
 
             # Lead Storing Queries
-            lead = UserQuries.objects.create(name=name,
-                                             email=email,
-                                             country=country,
-                                             phn_number=mobile,
-                                             message=msg,
-                                             lead_source=lead_source,
-                                             product=prd,
-                                             product_id=product_id,
-                                             medium=medium,
-                                             source=source,
-                                             path=path,
-                                             utm_parameter=utm_parameter,
-                                             campaign_slug=campaign_slug,
-                                             sub_campaign_slug=sub_campaign_slug)
+            lead_data = {
+                'name': name,
+                'email': email,
+                'country': country.pk,
+                'phn_number': mobile,
+                'message': msg,
+                'lead_source': lead_source,
+                'product': prd,
+                'product_id': product_id,
+                'medium': medium,
+                'source': source,
+                'path': path,
+                'utm_parameter': utm_parameter,
+                'campaign_slug': campaign_slug,
+                'sub_campaign_slug': sub_campaign_slug
+            }
+            lead_query_dict = QueryDict('', mutable=True)
+            lead_query_dict.update(lead_data)
+            lead_serializer = LeadManagementSerializer(data=lead_query_dict)
 
-            validate = True if lead.email else False
-            create_lead_crm.delay(pk=lead.pk, validate=validate, product_offer=product_offer)
-            return APIResponse(message='Thank you for your response', status=status.HTTP_201_CREATED, error=False)
+            if lead_serializer.is_valid():
+                lead = lead_serializer.save()
+                validate = True if lead.email else False
+
+                create_lead_crm.delay(pk=lead.pk, validate=validate, product_offer=product_offer)
+
+                return APIResponse(message='Thank you for your response', status=status.HTTP_201_CREATED, error=False)
+
+            return APIResponse(message=lead_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         except Exception as e:
             logging.getLogger('error_log').error('Lead Creation failed {}'.format(str(e)))
