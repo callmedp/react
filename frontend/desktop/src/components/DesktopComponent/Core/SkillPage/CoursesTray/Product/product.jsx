@@ -15,7 +15,6 @@ const Product = (props) => {
         brochure, duration
     },
         index,
-        listSize,
         listIdx } = props
 
     const [halfStar, setHalfStar] = useState(false)
@@ -33,11 +32,11 @@ const Product = (props) => {
 
         <CustomOverlay
             component={<PopoverDetail popoverData={{ about, skillList, highlights, jobsAvailable, url, type, level }} />}
-            placement={listSize === listIdx ? 'left' : 'right'}
+            placement={ listIdx === 2  ? 'left' : 'right'}
             onMouseEnter={() => { }}
             delay={200}
         >
-            <li className="col" key={index}>
+            <li className="col-sm-4" key={index}>
                 <div className="card">
                     <div className="card__heading">
                         {tags === 2 && <span className="flag-blue">NEW</span>}

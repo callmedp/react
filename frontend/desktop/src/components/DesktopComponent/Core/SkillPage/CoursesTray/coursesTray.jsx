@@ -36,13 +36,13 @@ const CoursesTray = (props) => {
                         activeKey={key}
                         onSelect={(k) => setKey(k)} >
 
-                        <Tab eventKey="courses" title="Courses">
+                        <Tab eventKey="courses" title={<h2>Courses</h2>}>
                             {
                                 courseList.slice(0, courseKey).map((courses, index) => {
                                     return (
                                         <ul className="courses-tray__list" key={index}>
                                             {
-                                                courses.map((course, idx) => <Courses listIdx={idx+1} listSize={courses.length} index={index.toString() + idx.toString()} product={course} key={index.toString() + idx.toString()} />)
+                                                courses.map((course, idx) => <Courses listIdx={idx} index={index.toString() + idx.toString()} product={course} key={index.toString() + idx.toString()} />)
                                             }
                                         </ul>
                                     )
@@ -51,13 +51,13 @@ const CoursesTray = (props) => {
                             { courseKey < courseList.length ? <a type="button" onClick={loadMoreCourses} className="load-more pt-30">Load More Courses</a> : '' }
                         </Tab>
 
-                        <Tab eventKey="assessments" title="Assessments">
+                        <Tab eventKey="assessments" title={<h2>Assessments</h2>}>
                             {
                                 assessmentList.slice(0,assessmentKey).map((assessments, index) => {
                                     return (
                                         <ul className="courses-tray__list" key={index}>
                                             {
-                                                assessments.map((assessment, idx) =>  <Assessments listIdx={idx+1} listSize={assessments.length}  index={index.toString() + idx.toString()} product={assessment} key={index.toString() + idx.toString()} /> )
+                                                assessments.map((assessment, idx) =>  <Assessments listIdx={idx} index={index.toString() + idx.toString()} product={assessment} key={index.toString() + idx.toString()} /> )
                                             }
                                     </ul>
                                     )
