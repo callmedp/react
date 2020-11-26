@@ -18,41 +18,48 @@ const PopularCourses = (props) => {
     }
 
     return (
-    <section className="m-container m-courses mt-0 mb-0 pb-0">
-        <div className="d-flex">
-            <h2 className="m-heading2 mb-10">Popular Courses</h2>
-            <Link className="ml-auto m-view-course" to={"#"}>View all courses</Link>
-        </div>
-        <div className="d-flex m-popular-courses">
+        <>
         {
-            pCourseList?.map((course) => {
-                return (
-                    <div className="m-col" id={course.id}>
-                        <div className="m-card">
-                            <div className="m-card__heading">
-                                <figure>
-                                    <img src={course.img} alt={course.img_alt} />
-                                </figure>
-                                <h3 className="m-heading3">
-                                    <Link to={course.url}>{course.name}</Link>
-                                </h3>
-                            </div>
-                            <div className="m-card__box">
-                                <div className="m-card__rating">
-                                <span className="mr-10">By Simplilearn</span>
-                                <span className="m-rating">
-                                    { course.stars?.map((star, index) => starRatings(star, index)) }
-                                    <span>{course.rating}/5</span>
-                                </span>
-                                </div>
-                            </div>
-                        </div>
+            pCourseList.length ? 
+            (
+                <section className="m-container m-courses mt-0 mb-0 pb-0">
+                    <div className="d-flex">
+                        <h2 className="m-heading2 mb-10">Popular Courses</h2>
+                        <Link className="ml-auto m-view-course" to={"#"}>View all courses</Link>
                     </div>
-                )
-            })
+                    <div className="d-flex m-popular-courses">
+                    {
+                        pCourseList?.map((course) => {
+                            return (
+                                <div className="m-col" id={course.id}>
+                                    <div className="m-card">
+                                        <div className="m-card__heading">
+                                            <figure>
+                                                <img src={course.img} alt={course.img_alt} />
+                                            </figure>
+                                            <h3 className="m-heading3">
+                                                <Link to={course.url}>{course.name}</Link>
+                                            </h3>
+                                        </div>
+                                        <div className="m-card__box">
+                                            <div className="m-card__rating">
+                                            <span className="mr-10">By Simplilearn</span>
+                                            <span className="m-rating">
+                                                { course.stars?.map((star, index) => starRatings(star, index)) }
+                                                <span>{course.rating}/5</span>
+                                            </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            )
+                        })
+                    }
+                    </div>
+                </section>
+            ): null
         }
-        </div>
-    </section>
+        </>
     );
   }
 

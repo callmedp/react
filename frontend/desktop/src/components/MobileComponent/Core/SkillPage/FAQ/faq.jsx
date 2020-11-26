@@ -3,24 +3,26 @@ import { Link } from 'react-router-dom';
 import './faq.scss';
 import { useSelector } from 'react-redux';
 
-const renderAccordion = (item, index) => {
-    return (
-        <div className="tab" key={index.toString() + item.heading}>
-            <input type="radio" id={"rd"+index} name="rd"/><label className="tab-label" htmlFor={"rd"+index} itemProp="name"><span dangerouslySetInnerHTML={{__html : item.heading}}/></label>
-            <div id={index} className="tab-content">
-                <p itemProp="text" hidden=""><span dangerouslySetInnerHTML={{__html : item.content}}/></p>
-            </div>
-        </div>
-)}
-
 const FAQ = (props) => {
 
     const { faqList } = useSelector(store => store.skillBanner)
     const [sliceFlag, setSliceFlag] = useState(true)
+    const [checkedId, setCheckedId] = useState(null);
 
-    const loadMore = () => {
-        setSliceFlag(state => !state)
-    }
+    const accordionHandle = (index) => { (index === checkedId) ? setCheckedId(null) : setCheckedId(index) }
+
+    const renderAccordion = (item, index) => {
+        return (
+            <div className="tab" key={index.toString() + item.heading}>
+                <input type="radio" id={"rd"+index} name="rd" checked = { checkedId === index } onClick={() => accordionHandle(index)} /><label className="tab-label" htmlFor={"rd"+index} itemProp="name"><span dangerouslySetInnerHTML={{__html : item.heading}}/></label>
+                <div id={index} className="tab-content">
+                    <p itemProp="text" hidden=""><span dangerouslySetInnerHTML={{__html : item.content}}/></p>
+                </div>
+            </div>
+    )}
+
+    const loadMore = () => setSliceFlag(state => !state)
+
     return(
         faqList.length ? (
             <div className="m-container m-faq" id="m-faq">
