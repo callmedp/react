@@ -4,7 +4,7 @@ import Api from './Api';
 
 function* populerCourses(action) {
     try {
-        
+        const { payload } = action
         const response = yield call(Api.populerCourses);
         const result = response.data
         
@@ -12,7 +12,7 @@ function* populerCourses(action) {
             return
         }
         const prds = result.data;
-        const item = {'pCourseList': prds.tprds.slice(0,3)}
+        const item = {'pCourseList': payload?.medium ? prds.tprds.slice(0,2) : prds.tprds.slice(0,3)}
         yield put({ 
             type : Actions.POPULER_COURSES_FETCHED, 
             item 

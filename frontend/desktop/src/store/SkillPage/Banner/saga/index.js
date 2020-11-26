@@ -12,13 +12,15 @@ function* skillPageBanner(action) {
             return
         }
         const item = response.data;
-        
-        //converts 1D array to 2D array
-        const storiesList = item?.testimonialCategory.reduce((rows, key, index) => 
-            (index % 3 == 0 ? rows.push([key]) : rows[rows.length-1].push(key)) && rows, []);
-        
-        if(storiesList.length){
-            item.testimonialCategory = storiesList.slice()
+
+        //converts 1D array to 2D array if medium is Desktop
+        if(!payload?.medium){
+            const storiesList = item?.testimonialCategory.reduce((rows, key, index) => 
+                (index % 3 == 0 ? rows.push([key]) : rows[rows.length-1].push(key)) && rows, []);
+            
+            if(storiesList.length){
+                item.testimonialCategory = storiesList.slice()
+            }
         }
         
         yield put({ 

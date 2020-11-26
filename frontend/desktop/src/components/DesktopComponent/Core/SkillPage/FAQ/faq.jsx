@@ -21,9 +21,6 @@ const renderAccordion = (item, index) => {
 )}
 
 
-
-
-
 const FAQ = (props) => {
 
     const { faqList } = useSelector(store => store.skillBanner)
@@ -59,4 +56,4 @@ const FAQ = (props) => {
     )
 }
 
-export default FAQ;
+export default FAQ; 
