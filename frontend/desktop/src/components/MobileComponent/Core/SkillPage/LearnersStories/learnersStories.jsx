@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Slider from "react-slick";
 import 'slick-carousel/slick/slick.css';
 import './learnersStories.scss';
+import { useSelector } from 'react-redux';
 
 const LearnersStories = (props) => {
     const settings = {
@@ -14,32 +15,29 @@ const LearnersStories = (props) => {
         swipeToSlide: true,
         variableWidth: true,
     };
+    const { testimonialCategory } = useSelector(store => store.skillBanner)
+
+    const getStories = (item, index) => {
+        return (
+            <div className="m-card text-center" key={index.toString() + item.userName}>
+                <span className="m-card__name">{item.firstName ? item.firstName[0].toUpperCase() : ""}{item.lastName ? item.lastName[0].toUpperCase() : ""}</span>
+                <p className="m-card__txt">{item.review}</p>
+                <strong>{item.firstName + item.lastName}</strong>
+                <span className="m-card__location">{item.company}</span>
+            </div>
+        )
+    }
+    
     return (
-    <section className="m-container mt-0 mb-0 pb-0">
-        <h2 className="m-heading2 mb-10">Learners stories</h2>
-        <div className="m-learner-stories ml-10n">
-            <Slider {...settings}>
-                <div className="m-card text-center">
-                    <span className="m-card__name">AS</span>
-                    <p className="m-card__txt">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled.</p>
-                    <strong>Abhishek Sinha</strong>
-                    <span className="m-card__location">Sapient, Noida</span>
+        testimonialCategory.length ? (
+            <section className="m-container mt-0 mb-0 pb-0">
+                <h2 className="m-heading2 mb-10">Learners stories</h2>
+                <div className="m-learner-stories ml-10n">
+                    <Slider {...settings}>
+                        { testimonialCategory?.map(getStories) }
+                    </Slider>
                 </div>
-                <div className="m-card text-center">
-                    <span className="m-card__name">GS</span>
-                    <p className="m-card__txt">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled.</p>
-                    <strong>Gaurav Singh</strong>
-                    <span className="m-card__location">Sapient, Noida</span>
-                </div>
-                <div className="m-card text-center">
-                    <span className="m-card__name">SS</span>
-                    <p className="m-card__txt">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled.</p>
-                    <strong>Shruti Sharma</strong>
-                    <span className="m-card__location">Sapient, Noida</span>
-                </div>
-            </Slider>
-        </div>
-    </section>
+            </section>):null
     );
   }
 

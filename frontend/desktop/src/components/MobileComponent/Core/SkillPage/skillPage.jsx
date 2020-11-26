@@ -19,7 +19,7 @@ const SkillPage = (props) => {
     const dispatch = useDispatch()
     const pageId = props.match.params.id;
     useEffect(() => {
-        dispatch(fetchSkillPageBanner({id : pageId}))
+        dispatch(fetchSkillPageBanner({id : pageId, 'medium': 1}))
     },[])
     return(
 
