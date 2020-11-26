@@ -599,7 +599,7 @@ class UserInboxListApiView(APIView):
 
         orders = Order.objects.filter(
             status__in=[0, 1, 3],
-            candidate_id=candidate_id,site=2)
+            candidate_id=candidate_id)
 
         excl_txns = PaymentTxn.objects.filter(
             status__in=[0, 2, 3, 4, 5],
