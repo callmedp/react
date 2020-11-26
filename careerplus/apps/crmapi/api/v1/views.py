@@ -5,9 +5,12 @@ import re
 
 # Core Django Imports
 from crmapi.tasks import create_lead_crm
+from django.http import QueryDict
+
 # Third Party Imports
 from geolocation.models import Country
 from rest_framework import permissions, status
+
 # Core RestFramework Imports
 from rest_framework.views import APIView
 
@@ -17,6 +20,7 @@ from .helper import APIResponse, isValidPhone
 # Inter App Imports
 from crmapi.models import (
     UserQuries, DEFAULT_SLUG_SOURCE)
+from .serializers import LeadManagementSerializer
 
 
 class LeadManagementAPI(APIView):
@@ -31,26 +35,26 @@ class LeadManagementAPI(APIView):
         Variables can be dynamic but the email or mobile should be neccessary.
 
         Required Params:
-        name, email, msg, number, campaign
+        name, number, campaign
         """
 
         # Specify the lead is not created yet
         try:
-            email = request.POST.get('email', '')
-            university_course = request.POST.get('uc', 0)
-            mobile = request.POST.get('number', '')
-            name = request.POST.get('name', '')
-            msg = request.POST.get('msg', '')
-            prd = request.POST.get('prd', '')
-            product_id = request.POST.get('product', '')
-            country = request.POST.get('country', '91')
-            source = request.POST.get('source', '')
-            queried_for = request.POST.get('queried_for', '')
-            lead_source = request.POST.get('lsource', 0)
-            company = request.POST.get('cname', '')
-            path = request.POST.get('path', '')
+            email = request.data.get('email', '')
+            university_course = request.data.get('uc', 0)
+            mobile = request.data.get('number', '')
+            name = request.data.get('name', '')
+            msg = request.data.get('msg', 'None')
+            prd = request.data.get('prd', '')
+            product_id = request.data.get('product', '')
+            country = request.data.get('country', '91')
+            source = request.data.get('source', '')
+            queried_for = request.data.get('queried_for', '')
+            lead_source = request.data.get('lsource', 0)
+            company = request.data.get('cname', '')
+            path = request.data.get('path', '')
             rejectlist = ['http', 'www', 'href', '***', 'url', '<html>']
-            product_offer = request.POST.get('product_offer', True)
+            product_offer = request.data.get('product_offer', True)
             name = name + '(' + company + ')' if company else name
             medium = 0
 
@@ -58,7 +62,7 @@ class LeadManagementAPI(APIView):
                 return APIResponse(message='Something went wrong', status=status.HTTP_400_BAD_REQUEST, error=True)
 
             if not all(len(i) > 0 for i in [name, mobile]):
-                return APIResponse(message='Please fill all the fields.',
+                return APIResponse(message='Please enter all the fields.',
                                    status=status.HTTP_400_BAD_REQUEST, error=True)
 
             if not isValidPhone(mobile):
@@ -75,7 +79,7 @@ class LeadManagementAPI(APIView):
                 # In case not able to get the lead source
                 lead_source = int(lead_source)
             except Exception as e:
-                logging.getLogger('error_log').error('Unable to get lead source'.format(str(e)))
+                logging.getLogger('error_log').error('Unable to get lead source {}'.format(str(e)))
                 lead_source = 0
 
             if request.flavour == 'mobile':
@@ -92,7 +96,7 @@ class LeadManagementAPI(APIView):
                 country = Country.objects.get(phone='91')
 
             utm = request.session.get('utm', {})
-            campaign_slug = request.POST.get('campaign', utm.get('utm_campaign'))
+            campaign_slug = request.data.get('campaign', utm.get('utm_campaign'))
             sub_campaign_slug = utm.get('sub_campaign_slug')
             utm_parameter = json.dumps(utm)
 
@@ -115,24 +119,35 @@ class LeadManagementAPI(APIView):
                 request.session['lead_last_name'] = last_name
 
             # Lead Storing Queries
-            lead = UserQuries.objects.create(name=name,
-                                             email=email,
-                                             country=country,
-                                             phn_number=mobile,
-                                             message=msg,
-                                             lead_source=lead_source,
-                                             product=prd,
-                                             product_id=product_id,
-                                             medium=medium,
-                                             source=source,
-                                             path=path,
-                                             utm_parameter=utm_parameter,
-                                             campaign_slug=campaign_slug,
-                                             sub_campaign_slug=sub_campaign_slug)
+            lead_data = {
+                'name': name,
+                'email': email,
+                'country': country.pk,
+                'phn_number': mobile,
+                'message': msg,
+                'lead_source': lead_source,
+                'product': prd,
+                'product_id': product_id,
+                'medium': medium,
+                'source': source,
+                'path': path,
+                'utm_parameter': utm_parameter,
+                'campaign_slug': campaign_slug,
+                'sub_campaign_slug': sub_campaign_slug
+            }
+            lead_query_dict = QueryDict('', mutable=True)
+            lead_query_dict.update(lead_data)
+            lead_serializer = LeadManagementSerializer(data=lead_query_dict)
 
-            validate = True if lead.email else False
-            create_lead_crm.delay(pk=lead.pk, validate=validate, product_offer=product_offer)
-            return APIResponse(message='Thank you for your response', status=status.HTTP_201_CREATED, error=False)
+            if lead_serializer.is_valid():
+                lead = lead_serializer.save()
+                validate = True if lead.email else False
+
+                create_lead_crm.delay(pk=lead.pk, validate=validate, product_offer=product_offer)
+
+                return APIResponse(message='Thank you for your response', status=status.HTTP_201_CREATED, error=False)
+
+            return APIResponse(message=lead_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
         except Exception as e:
             logging.getLogger('error_log').error('Lead Creation failed {}'.format(str(e)))

@@ -19,14 +19,14 @@ export default {
         type: "text",
         name: "email",
         id: "email",
-        label: "Email*",
+        label: "Email",
         inputType: 'input',
         validation: {
-            required:true,
+            // required:true,
             pattern:/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
         },
         errorMessage: {
-            required: "This field is required",
+            // required: "This field is required",
             pattern: "Email address is invalid!",
             
         }
@@ -34,8 +34,8 @@ export default {
     'mobile': {
         className: "input_field",
         type: "number",
-        name: "cell_phone",
-        id: "cell_phone",
+        name: "number",
+        id: "number",
         label: "Mobile*",
         inputType: 'input',
         validation: {

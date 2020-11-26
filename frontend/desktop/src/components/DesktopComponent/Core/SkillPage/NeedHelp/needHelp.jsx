@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import './needHelp.scss';
 import { useForm } from 'react-hook-form';
 import { InputField, SelectBox } from 'formHandler/formFields';
@@ -9,10 +9,21 @@ import { createLead } from 'store/SkillPage/NeedHelp/actions';
 const NeedHelp = (props) => {
 
     const { register, handleSubmit, errors } = useForm()
+    const { id, heading, absolute_url } = useSelector( store => store.skillBanner )
     const dispatch = useDispatch()
 
-    const onSubmit = (value) => {
-        dispatch(createLead(value));
+    const addHiddenValues = (values) =>{
+        return {
+            ...values,
+            'lsource': 1,
+            'product': id,
+            'prd': heading,
+            'path': absolute_url
+        }
+    }
+    
+    const onSubmit = (values) => {
+        dispatch(createLead(addHiddenValues(values)));
     }
 
     return (
