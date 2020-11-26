@@ -35,26 +35,26 @@ class LeadManagementAPI(APIView):
         Variables can be dynamic but the email or mobile should be neccessary.
 
         Required Params:
-        name, email, msg, number, campaign
+        name, number, campaign
         """
 
         # Specify the lead is not created yet
         try:
-            email = request.POST.get('email', '')
-            university_course = request.POST.get('uc', 0)
-            mobile = request.POST.get('number', '')
-            name = request.POST.get('name', '')
-            msg = request.POST.get('msg', '')
-            prd = request.POST.get('prd', '')
-            product_id = request.POST.get('product', '')
-            country = request.POST.get('country', '91')
-            source = request.POST.get('source', '')
-            queried_for = request.POST.get('queried_for', '')
-            lead_source = request.POST.get('lsource', 0)
-            company = request.POST.get('cname', '')
-            path = request.POST.get('path', '')
+            email = request.data.get('email', '')
+            university_course = request.data.get('uc', 0)
+            mobile = request.data.get('number', '')
+            name = request.data.get('name', '')
+            msg = request.data.get('msg', 'None')
+            prd = request.data.get('prd', '')
+            product_id = request.data.get('product', '')
+            country = request.data.get('country', '91')
+            source = request.data.get('source', '')
+            queried_for = request.data.get('queried_for', '')
+            lead_source = request.data.get('lsource', 0)
+            company = request.data.get('cname', '')
+            path = request.data.get('path', '')
             rejectlist = ['http', 'www', 'href', '***', 'url', '<html>']
-            product_offer = request.POST.get('product_offer', True)
+            product_offer = request.data.get('product_offer', True)
             name = name + '(' + company + ')' if company else name
             medium = 0
 
@@ -79,7 +79,7 @@ class LeadManagementAPI(APIView):
                 # In case not able to get the lead source
                 lead_source = int(lead_source)
             except Exception as e:
-                logging.getLogger('error_log').error('Unable to get lead source'.format(str(e)))
+                logging.getLogger('error_log').error('Unable to get lead source {}'.format(str(e)))
                 lead_source = 0
 
             if request.flavour == 'mobile':
@@ -96,7 +96,7 @@ class LeadManagementAPI(APIView):
                 country = Country.objects.get(phone='91')
 
             utm = request.session.get('utm', {})
-            campaign_slug = request.POST.get('campaign', utm.get('utm_campaign'))
+            campaign_slug = request.data.get('campaign', utm.get('utm_campaign'))
             sub_campaign_slug = utm.get('sub_campaign_slug')
             utm_parameter = json.dumps(utm)
 

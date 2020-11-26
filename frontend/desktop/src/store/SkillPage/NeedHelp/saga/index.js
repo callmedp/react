@@ -6,9 +6,7 @@ import Api from './Api';
 function* createLead(action) {
     try {
         const { payload } = action;
-        // console.log("reached worker saga", payload)
         const result = yield call(Api.createLead, payload);
-
         if (result["error"]) {
             Swal.fire({
                 icon: 'error',
@@ -18,7 +16,7 @@ function* createLead(action) {
         }
         Swal.fire({
             icon: "success", 
-            html: "<h3>Form is submitted successfully<h3>"
+            html: "<h3>Form submitted successfully<h3>"
         });
 
     } catch (e) {

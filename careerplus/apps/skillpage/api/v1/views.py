@@ -103,6 +103,9 @@ class SkillPage(APIView):
             'breadcrumbs':self.get_breadcrumb_data(category),
             'testimonialCategory':testimonialcategory_data,
             'otherSkills':explore_courses,
+            'absolute_url': category.get_absolute_url(),
+            'heading': category.heading,
+            'id': category.pk,
         })
 
         cache.set('skill_page_{}'.format(id), data, timeout=60*60*24)
