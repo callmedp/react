@@ -24,19 +24,19 @@ const SkillPage = (props) => {
     return(
 
         <section className="m-container-fluid mt-0 mb-0 pt-0">
-            <div class="m-tabset">
+            <div className="m-tabset">
                 
                 <input type="radio" name="tabset" id="tab1" aria-controls="about" checked />
-                <label for="tab1">About</label>
+                <label htmlFor="tab1">About</label>
 
                 <input type="radio" name="tabset" id="tab2" aria-controls="courses" />
-                <label for="tab2">Courses</label>
+                <label htmlFor="tab2">Courses</label>
 
                 <input type="radio" name="tabset" id="tab3" aria-controls="assessment" />
-                <label for="tab3">Assessment</label>
+                <label htmlFor="tab3">Assessment</label>
                 
-                <div class="tab-panels">
-                    <div id="about" class="tab-panel">
+                <div className="tab-panels">
+                    <div id="about" className="tab-panel">
                         <PopularCourses />
                         <WhoLearn />
                         <SkillGain />
@@ -47,10 +47,10 @@ const SkillPage = (props) => {
                         <FAQ />
                         <DomainJobs pageId={pageId} />
                     </div>
-                    <div id="courses" class="tab-panel">
+                    <div id="courses" className="tab-panel">
                         <Courses />
                     </div>
-                    <div id="assessment" class="tab-panel">
+                    <div id="assessment" className="tab-panel">
                         <Assessment />
                     </div>
                 </div>

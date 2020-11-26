@@ -11,9 +11,9 @@ const PopularCourses = (props) => {
     }, [])
     const { pCourseList } = useSelector(store => store.popularCourses)
 
-    const starRatings = (star) => {
-        return (star === '*' ? <em className="icon-fullstar"></em> : star === '+' 
-            ? <em className="icon-halfstar"></em> : <em className="icon-blankstar"></em>
+    const starRatings = (star, index) => {
+        return (star === '*' ? <em className="icon-fullstar" key={index}></em> : star === '+' 
+            ? <em className="icon-halfstar" key={index}></em> : <em className="icon-blankstar" key={index}></em>
         )
     }
 
@@ -41,7 +41,7 @@ const PopularCourses = (props) => {
                                 <div className="m-card__rating">
                                 <span className="mr-10">By Simplilearn</span>
                                 <span className="m-rating">
-                                    { course.stars?.map((star) => starRatings(star)) }
+                                    { course.stars?.map((star, index) => starRatings(star, index)) }
                                     <span>{course.rating}/5</span>
                                 </span>
                                 </div>

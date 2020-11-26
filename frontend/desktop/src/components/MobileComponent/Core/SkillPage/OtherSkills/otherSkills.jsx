@@ -6,9 +6,9 @@ import { siteDomain } from 'utils/domains';
 
 const OtherSkills = (props) => {
     const { otherSkills } = useSelector( store => store.skillBanner )
-    const getOtherSkills = (skill) => {
+    const getOtherSkills = (skill, index) => {
         return (
-            <li>
+            <li key={index}>
                 <a href={`${siteDomain}${skill.url}`}>{skill.name}</a>
             </li>
         )
@@ -25,7 +25,7 @@ const OtherSkills = (props) => {
                                 <Link to={"#"}>Sales Courses</Link>
                             </li>*/}
                             {
-                                otherSkills?.map((skill) => getOtherSkills(skill))
+                                otherSkills?.map((skill, index) => getOtherSkills(skill, index))
                             }
                         </ul>
 

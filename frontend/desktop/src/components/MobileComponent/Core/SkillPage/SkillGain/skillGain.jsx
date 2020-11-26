@@ -16,8 +16,8 @@ const SkillGain = (props) => {
                     <h2 className="m-heading2">Skills you will gain</h2>
                     <ul className="m-skill-gain__list">
                         {
-                            skillGainList?.map((skill) => {
-                                return <li>{skill}</li>
+                            skillGainList?.map((skill, index) => {
+                                return <li key={index}>{skill}</li>
                             })
                         } 
                     </ul>
