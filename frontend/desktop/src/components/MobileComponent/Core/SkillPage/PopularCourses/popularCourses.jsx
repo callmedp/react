@@ -1,8 +1,22 @@
-import React, { Component } from "react";
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import '../CoursesTray/courses.scss';
+import { fetchPopulerCourses } from 'store/SkillPage/PopularCourses/actions'
 
 const PopularCourses = (props) => {
+    const dispatch = useDispatch()
+    useEffect(() => {
+        dispatch(fetchPopulerCourses({'medium' : 1}))
+    }, [])
+    const { pCourseList } = useSelector(store => store.popularCourses)
+
+    const starRatings = (star) => {
+        return (star === '*' ? <em className="icon-fullstar"></em> : star === '+' 
+            ? <em className="icon-halfstar"></em> : <em className="icon-blankstar"></em>
+        )
+    }
+
     return (
     <section className="m-container m-courses mt-0 mb-0 pb-0">
         <div className="d-flex">
@@ -10,61 +24,36 @@ const PopularCourses = (props) => {
             <Link className="ml-auto m-view-course" to={"#"}>View all courses</Link>
         </div>
         <div className="d-flex m-popular-courses">
-            <div className="m-col">
-                <div className="m-card">
-                    <div className="m-card__heading">
-                        <figure>
-                            <img src="https://static1.shine.com/l/m/product_image/3425/1542800087_8980.png" alt="Digital Marketing Training Course" />
-                        </figure>
-                        <h3 className="m-heading3">
-                            <Link to={"#"}>Digital Marketing Training Course</Link>
-                        </h3>
-                    </div>
-                    <div className="m-card__box">
-                        <div className="m-card__rating">
-                        <span className="mr-10">By Simplilearn</span>
-                        <span className="m-rating">
-                            <em className="micon-fullstar"></em>
-                            <em className="micon-fullstar"></em>
-                            <em className="micon-fullstar"></em>
-                            <em className="micon-fullstar"></em>
-                            <em className="micon-blankstar"></em>
-                            <span>4/5</span>
-                        </span>
+        {
+            pCourseList?.map((course) => {
+                return (
+                    <div className="m-col" id={course.id}>
+                        <div className="m-card">
+                            <div className="m-card__heading">
+                                <figure>
+                                    <img src={course.img} alt={course.img_alt} />
+                                </figure>
+                                <h3 className="m-heading3">
+                                    <Link to={course.url}>{course.name}</Link>
+                                </h3>
+                            </div>
+                            <div className="m-card__box">
+                                <div className="m-card__rating">
+                                <span className="mr-10">By Simplilearn</span>
+                                <span className="m-rating">
+                                    { course.stars?.map((star) => starRatings(star)) }
+                                    <span>{course.rating}/5</span>
+                                </span>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-            <div className="m-col">
-                <div className="m-card">
-                    <div className="m-card__heading">
-                        <figure>
-                            <img src="https://static1.shine.com/l/m/product_image/3425/1542800087_8980.png" alt="Digital Marketing Training Course" />
-                        </figure>
-                        <h3 className="m-heading3">
-                            <Link to={"#"}>Email Marketing Master Training</Link>
-                        </h3>
-                    </div>
-                    <div className="m-card__box">
-                        <div className="m-card__rating">
-                        <span className="mr-10">By Simplilearn</span>
-                        <span className="m-rating">
-                            <em className="micon-fullstar"></em>
-                            <em className="micon-fullstar"></em>
-                            <em className="micon-fullstar"></em>
-                            <em className="micon-fullstar"></em>
-                            <em className="micon-blankstar"></em>
-                            <span>4/5</span>
-                        </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                )
+            })
+        }
         </div>
-        
-
     </section>
     );
   }
 
-export default PopularCourses;
+export default PopularCourses; 
