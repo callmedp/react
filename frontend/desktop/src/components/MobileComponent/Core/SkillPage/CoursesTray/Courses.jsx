@@ -193,7 +193,7 @@ const Courses = (props) => {
         </div>
 
         {/* course list */}
-        <h2 className="m-heading2 mt-20 mb-10">More courses</h2>
+        <h2 className="m-heading2 mt-20 mb-20">More courses</h2>
         <div className="m-courses">
             <div className="m-card">
                 <div className="m-card__heading">

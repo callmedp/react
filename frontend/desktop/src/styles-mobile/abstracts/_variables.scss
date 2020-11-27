@@ -33,6 +33,7 @@ $tab-pill-color: #88A6D8;
 $course-light-bg: #F1F8FC;
 $course-badge-blue: #E0F3FF;
 $course-badge-red: #FBC1C1;
+$footer-bg: #F2F6FD;
 
 $sprite: url('/media/images/mobile/learning-sprite-mobile.svg') no-repeat;
 
@@ -72,6 +73,10 @@ $font-size-lg   : 1.6rem;
     box-shadow: 0 20px 100px -66px rgba(104,104,104,0.80);
     @include border-radius(8px);
     padding: 2rem;
+}
+
+%box-shadow-cta {
+    box-shadow: 0 -2px 19px 0 rgba(148,148,148,0.50);
 }
 
 

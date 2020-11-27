@@ -6,7 +6,7 @@
 
 .micon-round-arrow {
   background: $sprite;
-  @include icon-inblock(40px, 27px, 0 0);
+  @include icon-inblock(27px, 27px, 0 0);
 }
 
 .micon-choose1 {
@@ -51,7 +51,7 @@
 
 .micon-halfstar {
   background: $sprite;
-  @include icon-inblock(11px, 10px, -484px -24px);
+  @include icon-inblock(11px, 10px, -475px -37px);
 }
 
 .micon-pdf {
@@ -59,3 +59,52 @@
   @include icon-inblock(15px, 20px, -476px 0);
 }
 
+.micon-enquiry {
+  background: $sprite;
+  @include icon-inblock(19px, 22px, -501px 0);
+}
+
+.micon-callus {
+  background: $sprite;
+  @include icon-inblock(19px, 19px, -530px 0);
+}
+
+.micon-whatsapp {
+  background: $sprite;
+  @include icon-inblock(21px, 21px, -559px 0);
+}
+
+.micon-chat {
+  background: $sprite;
+  @include icon-inblock(20px, 20px, -588px 0);
+}
+
+.micon-facebook {
+  background: $sprite;
+  @include icon-inblock(13px, 24px, -618px 0);
+}
+
+.micon-linkedin {
+  background: $sprite;
+  @include icon-inblock(25px, 23px, -641px 0);
+}
+
+.micon-twitter {
+  background: $sprite;
+  @include icon-inblock(24px, 20px, -676px 0);
+}
+
+.micon-search {
+  background: $sprite;
+  @include icon-inblock(18px, 18px, -382px -1px);
+}
+
+.micon-cart {
+  background: $sprite;
+  @include icon-inblock(20px, 20px, -410px -1px);
+}
+
+.m-skill-banner-bg {
+  background: url(/media/images/mobile/skill-header-bg.png) no-repeat 0 0;
+  background-size: cover;
+}

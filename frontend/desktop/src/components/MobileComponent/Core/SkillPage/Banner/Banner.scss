@@ -1,0 +1,13 @@
+@import '../../../../../styles-mobile/abstracts';
+
+.m-skill-header {
+    color: $white;
+    font-size: 1.3rem;
+    padding-bottom: 5rem !important;
+
+    .m-heading1 {
+        color: $white;
+        margin-bottom: 2rem;
+        line-height: 3rem;
+    }
+}

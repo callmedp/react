@@ -2,7 +2,7 @@
 
 .m-write-resume {
     @extend %box-shadow1;
-    padding: 0 0 0 2rem;
+    padding: 0 0 0 1.5rem;
     display: flex;
     @include border-radius(5px);
     overflow: hidden;

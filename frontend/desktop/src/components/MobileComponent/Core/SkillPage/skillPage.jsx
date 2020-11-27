@@ -1,4 +1,9 @@
 import React, { useEffect } from 'react';
+import React from 'react';
+import MenuNav from '../../Common/MenuNav/menuNav';
+import Header from '../../Common/Header/Header';
+import SkillBanner from './Banner/Banner';
+import BannerSlider from './BannerSlider/bannerSlider';
 import PopularCourses from './PopularCourses/popularCourses';
 import WhoLearn from './WhoLearn/whoLearn';
 import SkillGain from './SkillGain/skillGain';
@@ -45,18 +50,19 @@ const SkillPage = (props) => {
                         <WhyChooseUs />
                         <OtherSkills />
                         <FAQ />
-                        <DomainJobs pageId={pageId} />
+                        <DomainJobs />
                     </div>
-                    <div id="courses" className="tab-panel">
+                    <div id="courses" class="tab-panel">
                         <Courses />
                     </div>
-                    <div id="assessment" className="tab-panel">
+                    <div id="assessment" class="tab-panel">
                         <Assessment />
                     </div>
                 </div>
-                
-            </div>
-        </section>
+            </section>
+            <Footer />
+            <CTA />
+        </main>
 
     )
 }

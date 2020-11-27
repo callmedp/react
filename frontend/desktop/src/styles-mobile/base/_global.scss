@@ -126,6 +126,10 @@
     position: relative;
 }
 
+.pos-rel {
+    position: relative;
+}
+
 .w-100 {
     width: 100%;
 }
@@ -133,4 +137,8 @@
 
 .m-lightblue-bg {
     background-color: $lightblue;
+}
+
+main {
+    margin-bottom: 5rem;
 }
