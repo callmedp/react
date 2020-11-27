@@ -31,7 +31,7 @@ const PopularCourses = (props) => {
                                 </figure>
                                 <div className="links">
                                     <Link to={course.url}>{course.name}</Link>
-                                    <span className="mr-10">By ERB</span>
+                                    <span className="mr-10">By {course.provider}</span>
                                         <span className="rating">
                                             { course.stars?.map((star) => starRatings(star)) }
                                             <span>{course.rating}/5</span>

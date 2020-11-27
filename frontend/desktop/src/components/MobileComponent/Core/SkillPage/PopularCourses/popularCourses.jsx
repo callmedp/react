@@ -43,7 +43,7 @@ const PopularCourses = (props) => {
                                         </div>
                                         <div className="m-card__box">
                                             <div className="m-card__rating">
-                                            <span className="mr-10">By Simplilearn</span>
+                                            <span className="mr-10">By {course.provider}</span>
                                             <span className="m-rating">
                                                 { course.stars?.map((star, index) => starRatings(star, index)) }
                                                 <span>{course.rating}/5</span>

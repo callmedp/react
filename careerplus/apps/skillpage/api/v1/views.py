@@ -123,7 +123,7 @@ class CourseComponentView(APIView):
         category = Category.objects.only('id').filter(id=id).first()
         if category:
             courses = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).filter(pCtg=category.pk).exclude(pTF=16)
-            for course in courses[:self.no_of_products]:
+            for course in courses:
                 d = json.loads(course.pVrs).get('var_list')
                 data = {
                     'imgUrl':course.pImg,
@@ -151,7 +151,7 @@ class CourseComponentView(APIView):
                     })
                 course_data.append(data)
             assesments = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).filter(pCtg=category.pk, pTF=16)
-            for assessment in assesments[:self.no_of_products]:
+            for assessment in assesments:
                 assessment_data = {
                     'name':assessment.pNm,
                     'imgUrl':assessment.pImg,
