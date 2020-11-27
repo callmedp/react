@@ -14,11 +14,13 @@ import FAQ from './FAQ/faq';
 import DomainJobs from './DomainJobs/domainJobs';
 import { useDispatch } from 'react-redux';
 import { fetchSkillPageBanner } from 'store/SkillPage/Banner/actions';
+import { fetchCoursesAndAssessments } from 'store/SkillPage/CoursesTray/actions/index';
 import Courses from './CoursesTray/Courses';
 import Assessment from './CoursesTray/Assessment';
 import '../SkillPage/skillPage.scss';
 import Footer from '../../Common/Footer/Footer';
 import CTA from '../../Common/CTA/CTA';
+import StickyNav from './StickyNav/stickyNav';
 
 
 const SkillPage = (props) => {
@@ -26,23 +28,14 @@ const SkillPage = (props) => {
     const pageId = props.match.params.id;
     useEffect(() => {
         dispatch(fetchSkillPageBanner({id : pageId, 'medium': 1}))
+        dispatch(fetchCoursesAndAssessments({ id: pageId, 'medium': 1}));
     },[])
     return(
-        <>
         <main className="m-container-fluid mt-0 pt-0">
             <MenuNav />
             <Header />
             <section class="m-tabset mt-0 mb-0 m-tabset-pos">
-                
-                <input type="radio" name="tabset" id="tab1" aria-controls="about" checked />
-                <label htmlFor="tab1">About</label>
-
-                <input type="radio" name="tabset" id="tab2" aria-controls="courses" />
-                <label htmlFor="tab2">Courses</label>
-
-                <input type="radio" name="tabset" id="tab3" aria-controls="assessment" />
-                <label htmlFor="tab3">Assessment</label>
-                
+                <StickyNav />
                 <div className="tab-panels">
                     <div id="about" className="tab-panel">
                         <SkillBanner />
@@ -64,11 +57,10 @@ const SkillPage = (props) => {
                         <Assessment />
                     </div>
                 </div>
-                </section>
+            </section>
             <Footer />
             <CTA />
         </main>
-        </>
     )
 }
 
