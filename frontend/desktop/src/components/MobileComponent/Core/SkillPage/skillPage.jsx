@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import React from 'react';
 import MenuNav from '../../Common/MenuNav/menuNav';
 import Header from '../../Common/Header/Header';
 import SkillBanner from './Banner/Banner';
@@ -18,6 +17,8 @@ import { fetchSkillPageBanner } from 'store/SkillPage/Banner/actions';
 import Courses from './CoursesTray/Courses';
 import Assessment from './CoursesTray/Assessment';
 import '../SkillPage/skillPage.scss';
+import Footer from '../../Common/Footer/Footer';
+import CTA from '../../Common/CTA/CTA';
 
 
 const SkillPage = (props) => {
@@ -27,9 +28,11 @@ const SkillPage = (props) => {
         dispatch(fetchSkillPageBanner({id : pageId, 'medium': 1}))
     },[])
     return(
-
-        <section className="m-container-fluid mt-0 mb-0 pt-0">
-            <div className="m-tabset">
+        <>
+        <main className="m-container-fluid mt-0 pt-0">
+            <MenuNav />
+            <Header />
+            <section class="m-tabset mt-0 mb-0 m-tabset-pos">
                 
                 <input type="radio" name="tabset" id="tab1" aria-controls="about" checked />
                 <label htmlFor="tab1">About</label>
@@ -42,6 +45,8 @@ const SkillPage = (props) => {
                 
                 <div className="tab-panels">
                     <div id="about" className="tab-panel">
+                        <SkillBanner />
+                        <BannerSlider />
                         <PopularCourses />
                         <WhoLearn />
                         <SkillGain />
@@ -50,7 +55,7 @@ const SkillPage = (props) => {
                         <WhyChooseUs />
                         <OtherSkills />
                         <FAQ />
-                        <DomainJobs />
+                        <DomainJobs pageId={pageId}/>
                     </div>
                     <div id="courses" class="tab-panel">
                         <Courses />
@@ -59,11 +64,11 @@ const SkillPage = (props) => {
                         <Assessment />
                     </div>
                 </div>
-            </section>
+                </section>
             <Footer />
             <CTA />
         </main>
-
+        </>
     )
 }
 

@@ -800,7 +800,7 @@ class TrendingCourseAPI(APIView):
         data = {
 
             'tprds': [{'id': tprd.id, 'heading': tprd.pHd, 'name': tprd.pNm, 'url': tprd.pURL, 'img': tprd.pImg,\
-                        'img_alt': tprd.pImA, 'rating': tprd.pARx, 'vendor': tprd.pPvn, 'stars': tprd.pStar\
+                        'img_alt': tprd.pImA, 'rating': tprd.pARx, 'vendor': tprd.pPvn, 'stars': tprd.pStar, 'provider': tprd.pPvn\
                     } for tprd in tprds],
         }
         # t_courses.append(data)
