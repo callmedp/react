@@ -564,7 +564,7 @@ class UpdatetrackingCache():
                         "utm_campaign" : utm_campaign,
                         "referal_product" : referal_product,
                         "referal_subproduct" : referal_subproduct,
-                        "popup_based_product" = popup_based_product
+                        "popup_based_product" : popup_based_product
                     },
                     "date_time" : timezone.now()
                 })
