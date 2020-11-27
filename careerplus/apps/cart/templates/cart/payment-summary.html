@@ -288,7 +288,7 @@ Payment Summary - Shine Learning
             </div><!-- // shineCredit -->
             {% else %}
             {% if candidate_in_session %}
-             <a href="javascript:void(0)" onclick="toggler('showCoupon','shineCredit',true); MyGA.SendEvent('ln_coupon_apply', 'ln_coupon_apply', 'ln_click_apply', 'apply_coupon', '', false, true);" id="show_hide_coupon">Apply
+             <a href="javascript:void(0)" onclick="toggler('showCoupon','shineCredit',true); MyGA.SendEvent('ln_coupon_apply', 'ln_coupon_apply', 'ln_click_apply', 'apply_coupon', '', false, true);" id="show_hide_coupon">Apply 
               coupon</a>
             |
             <a href="javascript:void(0)" onclick="toggler('shineCredit','showCoupon',false); MyGA.SendEvent('ln_coupon_apply', 'ln_coupon_apply', 'ln_click_apply', 'reedem_credit', '', false, true);">Redeem Shine credit</a>
@@ -296,7 +296,7 @@ Payment Summary - Shine Learning
                    <div class="form-group pr">
                 <div class="coupon__wrap">
                   <input id="discount_code" type="text" placeholder="Enter coupon code" name="code" maxlength="15" value="{% if cart_coupon %}{{cart_coupon}}{%endif%}">
-                  <button id="guest_apply_btn" type="button" class="btn btn-primary" disabled data-toggle="modal" data-target=".bs-example-modal-lg">Apply</button>
+                  <button id="guest_apply_btn" type="button" class="btn btn-primary" onclick="MyGA.SendEvent('ln_coupon_apply', 'ln_coupon_apply', 'ln_click_apply', 'apply_coupon', '', false, true);" disabled data-toggle="modal" data-target=".bs-example-modal-lg" >Apply </button>
                 </div><!-- // coupon wrap -->
                 <span class="error-txt" id="discount-alert"></span>
               </div>
@@ -307,7 +307,7 @@ Payment Summary - Shine Learning
               <div class="form-group pr">
                 <div class="coupon__wrap">
                   <input id="discount_code" type="text" placeholder="Enter coupon code" name="code" maxlength="15">
-                  <button type="button" id="discount-apply" onclick="JSApplyDiscount(event);">Apply</button>
+                  <button type="button" id="discount-apply" onclick="JSApplyDiscount(event);MyGA.SendEvent('ln_coupon_apply', 'ln_coupon_apply', 'ln_click_apply', 'apply_coupon', '', false, true);">Apply </button>
                 </div><!-- // coupon wrap -->
                 <span class="error-txt" id="discount-alert"></span>
               </div><!-- // form-group -->
