@@ -12,8 +12,8 @@ const PopularCourses = (props) => {
     const { pCourseList } = useSelector(store => store.popularCourses)
 
     const starRatings = (star) => {
-        return (star === '*' ? <em className="icon-fullstar"></em> : star === '+' 
-            ? <em className="icon-halfstar"></em> : <em className="icon-blankstar"></em>
+        return (star === '*' ? <em className="icon-fullstar" key={Math.random()}></em> : star === '+' 
+            ? <em className="icon-halfstar" key={Math.random()}></em> : <em className="icon-blankstar" key={Math.random()}></em>
         )
     }
 
@@ -24,21 +24,19 @@ const PopularCourses = (props) => {
             {
                 pCourseList?.map((course) => {
                     return (
-                        <>
-                            <li key={course.id}>
-                                <figure>
-                                    <img src={course.img} alt={course.img_alt} />
-                                </figure>
-                                <div className="links">
-                                    <Link to={course.url}>{course.name}</Link>
-                                    <span className="mr-10">By {course.provider}</span>
-                                        <span className="rating">
-                                            { course.stars?.map((star) => starRatings(star)) }
-                                            <span>{course.rating}/5</span>
-                                        </span>
-                                </div>
-                            </li>
-                        </>
+                        <li key={course.id}>
+                            <figure>
+                                <img src={course.img} alt={course.img_alt} />
+                            </figure>
+                            <div className="links">
+                                <Link to={course.url}>{course.name}</Link>
+                                <span className="mr-10">By {course.provider}</span>
+                                    <span className="rating">
+                                        { course.stars?.map((star) => starRatings(star)) }
+                                        <span>{course.rating}/5</span>
+                                    </span>
+                            </div>
+                        </li>
                     )
                 })
             }

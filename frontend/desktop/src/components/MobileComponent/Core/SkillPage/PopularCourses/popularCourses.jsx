@@ -31,7 +31,7 @@ const PopularCourses = (props) => {
                     {
                         pCourseList?.map((course) => {
                             return (
-                                <div className="m-col" id={course.id}>
+                                <div className="m-col" key={course.id}>
                                     <div className="m-card">
                                         <div className="m-card__heading">
                                             <figure>

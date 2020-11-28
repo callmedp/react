@@ -15,7 +15,7 @@ const StickyNav = (props) => {
 
     return (
         <>
-            <input type="radio" name="tabset" id="tab1" aria-controls="about" checked />
+            <input type="radio" name="tabset" id="tab1" aria-controls="about" defaultChecked />
             <label htmlFor="tab1">About</label>
 
             <input type="radio" name="tabset" id="tab2" aria-controls="courses" />

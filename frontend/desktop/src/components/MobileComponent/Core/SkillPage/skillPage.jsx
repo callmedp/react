@@ -34,7 +34,7 @@ const SkillPage = (props) => {
         <main className="m-container-fluid mt-0 pt-0">
             <MenuNav />
             <Header />
-            <section class="m-tabset mt-0 mb-0 m-tabset-pos">
+            <section className="m-tabset mt-0 mb-0 m-tabset-pos">
                 <StickyNav />
                 <div className="tab-panels">
                     <div id="about" className="tab-panel">
@@ -50,10 +50,10 @@ const SkillPage = (props) => {
                         <FAQ />
                         <DomainJobs pageId={pageId}/>
                     </div>
-                    <div id="courses" class="tab-panel">
+                    <div id="courses" className="tab-panel">
                         <Courses />
                     </div>
-                    <div id="assessment" class="tab-panel">
+                    <div id="assessment" className="tab-panel">
                         <Assessment />
                     </div>
                 </div>
