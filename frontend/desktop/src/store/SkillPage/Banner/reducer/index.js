@@ -11,7 +11,8 @@ const initState = {
     faqList : [],
     whoShouldLearn : '',
     otherSkills : [],
-    testimonialCategory : []
+    testimonialCategory : [],
+    featuresList : [],
 }
 
 

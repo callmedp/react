@@ -18,7 +18,7 @@ from rest_framework.views import APIView
 from .serializers import SubHeaderCategorySerializer,ProductSerializer,IndexColumnSerializer, TestimonialSerializer
 from review.models import DetailPageWidget
 from homepage.models import TestimonialCategoryRelationship, Testimonial
-from shop.templatetags.shop_tags import get_faq_list
+from shop.templatetags.shop_tags import get_faq_list, format_features
 import json
 from shop.choices import PRODUCT_CHOICES,PRODUCT_TAG_CHOICES
 
@@ -61,15 +61,14 @@ class SkillPage(APIView):
         return breadcrumbs
 
     def get(self,request,*args,**kwargs):
-        # id = request.GET.get('id',None)
-        id = int(kwargs.get('pk',None))
-        if cache.get('skill_page_{}'.format(id), None):
-            data = cache.get('skill_page_{}'.format(id)) 
+        skill_id = int(kwargs.get('pk',None))
+        if cache.get('skill_page_{}'.format(skill_id), None):
+            data = cache.get('skill_page_{}'.format(skill_id)) 
             return Response(data, status=status.HTTP_200_OK)
         data = {}
-        category = Category.objects.only('id').filter(id=id).first()
+        category = Category.objects.only('id').filter(id=skill_id).first()
         if category:
-            subheadercategory = SubHeaderCategory.objects.filter(category=category, active=True, heading_choices__in=[2,3])
+            subheadercategory = SubHeaderCategory.objects.filter(category=category, active=True, heading_choices__in=[2,3,4])
             career_outcomes = category.split_career_outcomes()
             for heading in subheadercategory:
                 heading_description = SubHeaderCategorySerializer(heading).data
@@ -81,6 +80,9 @@ class SkillPage(APIView):
                 elif heading.heading_choice_text == "faq":
                     heading_value = "faqList"
                     description = get_faq_list(description)
+                elif heading.heading_choice_text == 'features':
+                    heading_value = "featuresList"
+                    description = format_features(description)
                 data.update({
                     heading_value : description
                 })
@@ -104,7 +106,7 @@ class SkillPage(APIView):
                 'id': category.pk,
             })
 
-        cache.set('skill_page_{}'.format(id), data, timeout=60*60*24)
+        cache.set('skill_page_{}'.format(skill_id), data, timeout=60*60*24)
         return Response(data,status=status.HTTP_200_OK) 
 
 class CourseComponentView(APIView):
