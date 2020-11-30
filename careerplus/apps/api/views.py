@@ -2060,3 +2060,45 @@ class TrackingResumeShine(APIView):
         except Exception as e:
             logging.getLogger('error_log').error("Unable to update tracking data, tracking_id: {}, except : {}".format(t_id, e))
             return Response({ 'status': 'Unable to update on learning'}, status=status.HTTP_400_BAD_REQUEST)
+
+class ResumePromotionTrackingAPIView(APIView):
+    '''
+    API  is to track action through resume mailer
+    '''
+    serializer_class = None
+    authentication_classes = ()
+    permission_classes = ()
+
+    def post(self, request, *args, **kwargs):
+
+        candidate_id = request.data.get('candidate_id','')
+        action = request.data.get('action','')
+        response_json = dict()
+
+        if not candidate_id and not action:
+            logging.getLogger('error_log').error("Data is missing from Mailer Tracking")
+            response_json['error'] = "Data is missing from Mailer Tracking"
+            return Response(response_json, status=status.status.HTTP_400_BAD_REQUEST)
+
+        logging.getLogger('info_log').info("Mailer Tracking for resume builder and resume score checker"
+                                             "->candidate_id : {}, action: {}".format(candidate_id,  action))
+
+        response_json['data'] = 'data tracked succesfully'
+        return Response(response_json, status=status.HTTP_200_OK)
+
+    def get(self, request, *args, **kwargs):
+
+        candidate_id = request.GET.get('candidate_id', '')
+        action = request.GET.get('action', '')
+        response_json = dict()
+
+        if not candidate_id or not action:
+            logging.getLogger('error_log').error("Data is missing from Mailer Tracking")
+            response_json['error'] = "Data is missing from Mailer Tracking"
+            return Response(response_json, status=status.status.HTTP_400_BAD_REQUEST)
+
+        logging.getLogger('info_log').info("Mailer Tracking for resume builder and resume score checker"
+                                             "->candidate_id : {}, action: {}".format(candidate_id,  action))
+
+        response_json['data'] = 'data tracked succesfully'
+        return Response(response_json, status=status.HTTP_200_OK)

@@ -33,9 +33,11 @@ def send_mail_resume(email, candidate_id, name):
 
     site_domain = "https://resume.shine.com"
     shine_domain = "https://www.shine.com"
+    learning_domain = "https://learning.shine.com"
     if settings.DEBUG:
-        site_domain = "https://resumestage.shine.com"
+        site_domain = "http://localhost:3000"
         shine_domain = "https://sumosc.shine.com"
+        learning_domain = "https://learning1.shine.com"
 
     token = TokenGeneration().encode(email, 1, None)
 
@@ -52,7 +54,7 @@ def send_mail_resume(email, candidate_id, name):
 
     email_domain = ''
     email_data = email.split('@')
-    if len(email_domain) >= 2;
+    if len(email_domain) >= 2:
         email_domain = email_data[1]
 
     date = datetime.now()
@@ -63,6 +65,7 @@ def send_mail_resume(email, candidate_id, name):
                 'subject' : subject,
                 'domain_name' : site_domain,
                 'shine_domain' : shine_domain,
+                'learning_domain': learning_domain,
                 'candidate_id' : candidate_id,
                 'username' : name,
                 'email_domain' : email_domain,
