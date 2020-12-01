@@ -21,6 +21,7 @@ import '../SkillPage/skillPage.scss';
 import Footer from '../../Common/Footer/Footer';
 import CTA from '../../Common/CTA/CTA';
 import StickyNav from './StickyNav/stickyNav';
+import EnquiryModal from '../../Common/Modals/EnquiryModal';
 
 
 const SkillPage = (props) => {
@@ -60,6 +61,7 @@ const SkillPage = (props) => {
             </section>
             <Footer />
             <CTA />
+            <EnquiryModal />
         </main>
     )
 }
