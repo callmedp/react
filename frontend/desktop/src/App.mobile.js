@@ -1,10 +1,16 @@
 import React from 'react';
 import MobileAppRouter from 'routes/index.mobile';
 import './styles-mobile/main.scss';
+import { slide as Menu } from 'react-burger-menu';
 
 function MobileApp() {
   return (
-    <MobileAppRouter/>
+    <div id="outer-container">
+        <Menu pageWrapId={ "page-wrap" } outerContainerId={ "outer-container" } />
+        <main id="page-wrap">
+          <MobileAppRouter/>
+        </main>
+    </div>
   );
 }
 

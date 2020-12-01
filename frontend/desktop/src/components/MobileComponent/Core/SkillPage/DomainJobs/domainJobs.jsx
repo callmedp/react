@@ -16,7 +16,7 @@ const DomainJobs = (props) => {
 
     return (
         jobsList?.length ? (
-            <section className="m-container m-domain-jobs mb-0 mt-0">
+            <section className="m-container m-domain-jobs mb-0 mt-0 pt-0 pb-0">
                 <div className="m-domain-jobs__list">
                     <strong className="m-heading2">Jobs in this domain</strong>
                     <ul>

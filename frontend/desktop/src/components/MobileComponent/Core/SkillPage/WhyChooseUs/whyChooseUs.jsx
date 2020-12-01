@@ -4,7 +4,7 @@ import './whyChooseUs.scss';
 const WhyChooseUs = (props) => {
     return (
         <section className="m-why-choose-us mt-0 mb-0">
-        <div className="m-container">
+        <div className="m-container pt-10">
             <div className="align-items-center flex-column">
                 <h2 className="m-heading2">Why Choose us</h2>
                 <ul>

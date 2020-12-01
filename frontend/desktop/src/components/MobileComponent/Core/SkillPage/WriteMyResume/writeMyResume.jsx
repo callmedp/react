@@ -10,7 +10,7 @@ const WriteMyResume = (props) => {
 
     return (
         <section className="m-container mt-0 mb-0">
-            <div className="m-write-resume">
+            <div className="m-write-resume d-flex">
                 <div className="m-write-resume__text">
                     <strong className="m-heading3">Not getting enough calls from recruiters ?</strong>
                     <p>Make your resume stand out by letting our experts write it for you</p>

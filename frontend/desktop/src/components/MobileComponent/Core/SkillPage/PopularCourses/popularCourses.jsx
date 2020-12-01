@@ -12,8 +12,8 @@ const PopularCourses = (props) => {
     const { pCourseList } = useSelector(store => store.popularCourses)
 
     const starRatings = (star, index) => {
-        return (star === '*' ? <em className="icon-fullstar" key={index}></em> : star === '+' 
-            ? <em className="icon-halfstar" key={index}></em> : <em className="icon-blankstar" key={index}></em>
+        return (star === '*' ? <em className="micon-fullstar" key={index}></em> : star === '+' 
+            ? <em className="micon-halfstar" key={index}></em> : <em className="micon-blankstar" key={index}></em>
         )
     }
 
@@ -22,7 +22,7 @@ const PopularCourses = (props) => {
         {
             pCourseList.length ? 
             (
-                <section className="m-container m-courses mt-0 mb-0 pb-0">
+                <section className="m-container m-courses mt-0 mb-0 pt-10 pb-0">
                     <div className="d-flex">
                         <h2 className="m-heading2 mb-10">Popular Courses</h2>
                         <Link className="ml-auto m-view-course" to={"#"}>View all courses</Link>
