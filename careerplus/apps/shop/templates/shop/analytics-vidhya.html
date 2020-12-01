@@ -463,7 +463,7 @@
         data: data,
         dataType: 'json',
         success: function(json) {
-           MyGA.SendEvent('ln_enquire_now', 'ln_enquire_now', 'ln_enquire_now_clicked', JSON.stringify(data), '', false, true);
+           MyGA.SendEvent('ln_enquire_now', 'ln_enquire_now', 'ln_enquire_now_clicked', '', '', false, true);
            window.location.pathname = 'thankyou-for-query';
         }
     })
