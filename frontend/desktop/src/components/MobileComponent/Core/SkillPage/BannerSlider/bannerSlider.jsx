@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Slider from "react-slick";
 import 'slick-carousel/slick/slick.css';
 import './bannerSlider.scss';
+import { useSelector } from "react-redux";
 
 const BannerSlider = (props) => {
     const settings = {
@@ -14,27 +15,22 @@ const BannerSlider = (props) => {
         swipeToSlide: true,
         variableWidth: true,
     };
+    const { featuresList } = useSelector( store => store.skillBanner )
+
     return (
         <section className="m-banner-slider">
             <Slider {...settings}>
-                <div className="m-banner-slider__txt">
-                    <figure className="micon-round-arrow"></figure>
-                    <p>
-                         <strong>26% Annual Growth</strong> for cloud related opportunities In IT Sector
-                    </p>
-                </div>
-                <div className="m-banner-slider__txt">
-                    <figure className="micon-round-arrow"></figure>
-                    <p>
-                         <strong>26% Annual Growth</strong> for cloud related opportunities In IT Sector
-                    </p>
-                </div>
-                <div className="m-banner-slider__txt">
-                    <figure className="micon-round-arrow"></figure>
-                    <p>
-                         <strong>26% Annual Growth</strong> for cloud related opportunities In IT Sector
-                    </p>
-                </div>
+                {
+                    featuresList.map((feature) => {
+                        return (
+                            <div className="m-banner-slider__txt" key={Math.random()}>
+                                <figure className="micon-round-arrow"></figure>
+                                {/* <strong>26% Annual Growth</strong> for cloud related opportunities In IT Sector */}
+                                { feature }
+                            </div>
+                        )
+                    })
+                }
             </Slider>
         </section>
     );
