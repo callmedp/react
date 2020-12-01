@@ -1,4 +1,4 @@
-<a href="{{articlelist.url}}" title="{{articlelist.name}}">
+<a href="{{articlelist.url}}" title="{{articlelist.name}}" onclick = "MyGA.SendEvent('blog_banner','ln_blog_banner', 'ln_blog_banner_click', {{articlelist.name}},'', false, true)>
   <figure class="{% if bigtmpl %}big-image{% endif %}">
     <img loading="lazy" aria-label="{{articlelist.image_alt}}" src="{{articlelist.image.url}}" alt="{{articlelist.image_alt}}">
   </figure>

@@ -10,7 +10,7 @@
 		{% for popularCourses in popular_courses %}
 		<li>
 			<a href="{{popularCourses.url}}?itm_source=TE&itm_medium=PopularCourses&itm_campaign={{page}}&itm_content={{popularCourses.name.split|join:"-"}}"
-				title="{% if popularCourses.display_name %} {{popularCourses.display_name}} {% else %} {{popularCourses.name}} {% endif %}">
+				title="{% if popularCourses.display_name %} {{popularCourses.display_name}} {% else %} {{popularCourses.name}} {% endif %}" ;onclick="MyGA.SendEvent('ln_popular_courses','ln_popular_courses', 'ln_click_popular_course', '{{popularCourses.name}}', '', false, true)";>
 				<h3>
 					{% if popularCourses.display_name %}
 					{{popularCourses.display_name}}
@@ -42,5 +42,5 @@
 		</li>
 		{% endfor %}
 	</ul>
-	<a type="button" href="{{page_url}}" target="_blank" class="submit-button">View All</a>
+	<a type="button" href="{{page_url}}" target="_blank" class="submit-button" onclick="MyGA.SendEvent('ln_popular_courses','ln_popular_courses', 'ln_click_popular_course', 'view_all', '', false, true);">View All</a>
 </div>

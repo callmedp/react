@@ -82,9 +82,9 @@
                   <div class="col-sm-offset-2 col-sm-10">
                     <input type="hidden" name="product_id" value="{{product.pk}}" />
                     {% if not review_obj %}
-                    <button type="button" onclick="submit_feedback_form('{{is_logged_in}}')" class="submit-button">Submit</button>
+                    <button type="button" onclick="submit_feedback_form('{{is_logged_in}}');MyGA.SendEvent('ln_review', 'ln_review', 'ln_submit_review', 'review_written', '', false, true)" class="submit-button">Submit</button>
                     {% else  %}
-                    <button type="button" onclick="update_feedback_form({{product.pk}})" class="submit-button">Update</button>
+                    <button type="button" onclick="update_feedback_form({{product.pk}});MyGA.SendEvent('ln_review', 'ln_review', 'ln_submit_review', 'review_updated', '', false, true)" class="submit-button">Update</button>
                     {% endif %}
                   </div>
                 </div>
