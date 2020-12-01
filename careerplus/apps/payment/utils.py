@@ -561,7 +561,7 @@ class UpdatetrackingCache():
                         "position" : position,
                         "trigger_point" : trigger_point,
                         "utm_campaign" : utm_campaign,
-                        "referal_product" : referal_product,
+                        "referal_product" : referral_product,
                         "referal_subproduct" : referal_subproduct
                     },
                     "date_time" : timezone.now()
