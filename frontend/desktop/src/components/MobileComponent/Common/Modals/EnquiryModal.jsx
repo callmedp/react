@@ -1,34 +1,47 @@
 import React from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import ReactDOM from 'react-dom';
 import Modal from 'react-modal';
 import './modals.scss'
+import { useForm } from 'react-hook-form';
+import { InputField, SelectBox } from 'formHandler/mobileForms/mobileFormFields'
+import EnquireNowForm from 'formHandler/mobileForms/enquireNow';
+import { createLead } from 'store/SkillPage/NeedHelp/actions';
 
 const EnquiryModal = (props) => {
+    const { setEnquiryForm } = props
+    const { register, handleSubmit, errors } = useForm()
+    const { id, heading, absolute_url } = useSelector( store => store.skillBanner )
+    const dispatch = useDispatch()
+
+    const addHiddenValues = (values) =>{
+        return {
+            ...values,
+            'lsource': 1,
+            'product': id,
+            'prd': heading,
+            'path': absolute_url
+        }
+    }
+
+    const onSubmit = (values) => {
+        dispatch(createLead(addHiddenValues(values)));
+    }
+
     return(
         <div class="m-container m-enquire-now m-form-pos-btm pb-10">
-            <span className="m-close">x</span>
+            <span className="m-close" onClick={()=>setEnquiryForm(false)}>x</span>
             <h2 className="m-heading2 text-center">Enquire now!</h2>
             <p className="text-center">Share your query, our experts will help you take  your career forward!</p>
-            <form className="mt-20">
-                <div className="m-form-group">
-                    <input className="m-input_field" type="text" name="name" id="name" placeholder=" " />
-                    <label className="m-input_label" for="name">Name*</label>
-                </div>
-                <div className="m-form-group m-error">
-                    <input type="text" className="input_field" name="email" id="email" placeholder=" " />
-                    <label className="m-input_label" for="email">Email*</label>
-                </div>
+            <form className="mt-20" onSubmit={handleSubmit(onSubmit)}>
+                <InputField attributes={EnquireNowForm.name} register={register}
+                    errors={!!errors ? errors[EnquireNowForm.name.name] : ''} />
+                <InputField attributes={EnquireNowForm.email} register={register}
+                    errors={!!errors ? errors[EnquireNowForm.email.name] : ''} />
                 <div className="d-flex">
-                    <div className="m-custom-select-box">
-                        <select name="country_code" className="m-custom-select">
-                            <option value="91">+91</option>
-                            <option value="92">+92</option>
-                        </select>
-                    </div>
-                    <div className="m-form-group flex-1">
-                        <input className="input_field" type="number" name="cell_phone" id="cell_phone" placeholder=" " value="" />
-                        <label className="m-input_label" for="cell_phone">Mobile*</label>
-                    </div>
+                    <SelectBox attributes={EnquireNowForm.country_code} register={register} />
+                    <InputField attributes={EnquireNowForm.mobile} register={register}
+                        errors={!!errors ? errors[EnquireNowForm.mobile.name] : ''} />
                 </div>
                 <div className="m-form-group">
                     <button className="btn-blue">Submit</button>
