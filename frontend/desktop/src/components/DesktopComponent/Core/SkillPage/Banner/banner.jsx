@@ -13,7 +13,7 @@ const BannerSkill = (props) => {
     
     useEffect(() => {
         dispatch(fetchSkillPageBanner({id : pageId, 'medium': 0}))
-    },[])
+    },[pageId])
 
 
 

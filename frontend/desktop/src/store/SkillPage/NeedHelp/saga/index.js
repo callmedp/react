@@ -4,20 +4,22 @@ import Swal from "sweetalert2";
 import Api from './Api';
 
 function* createLead(action) {
+    const { payload: {data, resolve} } = action;
     try {
-        const { payload } = action;
-        const result = yield call(Api.createLead, payload);
+        const result = yield call(Api.createLead, data);
+        debugger
         if (result["error"]) {
             Swal.fire({
                 icon: 'error',
                 html: result.errorMessage
             })
-            return
+            return resolve(0)
         }
         Swal.fire({
             icon: "success", 
             html: "<h3>Form submitted successfully<h3>"
         });
+        return resolve(1)
 
     } catch (e) {
         Swal.fire({
@@ -25,6 +27,7 @@ function* createLead(action) {
             html: "<h3>Something went wrong</h3>"
         });
         }
+        return resolve(0)
 }
 
 

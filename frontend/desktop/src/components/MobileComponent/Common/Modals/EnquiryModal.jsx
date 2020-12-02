@@ -4,8 +4,8 @@ import ReactDOM from 'react-dom';
 import Modal from 'react-modal';
 import './modals.scss'
 import { useForm } from 'react-hook-form';
-import { InputField, SelectBox } from 'formHandler/mobileForms/mobileFormFields'
-import EnquireNowForm from 'formHandler/mobileForms/enquireNow';
+import { InputField, SelectBox } from 'formHandler/mobileFormHandler/formFields'
+import EnquireNowForm from 'formHandler/mobileFormHandler/formData/enquireNow';
 import { createLead } from 'store/SkillPage/NeedHelp/actions';
 
 const EnquiryModal = (props) => {
@@ -24,8 +24,13 @@ const EnquiryModal = (props) => {
         }
     }
 
-    const onSubmit = (values) => {
-        dispatch(createLead(addHiddenValues(values)));
+    const onSubmit = async (values, event) => {
+        const data = addHiddenValues(values)
+        const result = await new Promise((resolve) => dispatch(createLead({data, resolve})));
+        if(result){
+            event.target.reset();
+            setEnquiryForm(false);
+        }
     }
 
     return(

@@ -2,8 +2,8 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import './needHelp.scss';
 import { useForm } from 'react-hook-form';
-import { InputField, SelectBox } from 'formHandler/formFields';
-import NeedHelpForm from 'formHandler/formData/needHelp';
+import { InputField, SelectBox } from 'formHandler/desktopFormHandler/formFields';
+import NeedHelpForm from 'formHandler/desktopFormHandler/formData/needHelp';
 import { createLead } from 'store/SkillPage/NeedHelp/actions';
 
 const NeedHelp = (props) => {
@@ -22,8 +22,12 @@ const NeedHelp = (props) => {
         }
     }
     
-    const onSubmit = (values) => {
-        dispatch(createLead(addHiddenValues(values)));
+    const onSubmit = async (values, event) => {
+        const data = addHiddenValues(values)
+        const result = await new Promise((resolve) => dispatch(createLead({data, resolve})));
+        if(result){
+            event.target.reset();
+        }
     }
 
     return (
