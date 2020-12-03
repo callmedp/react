@@ -57,6 +57,9 @@
   @include font-size($navbar-brand-font-size);
   line-height: inherit;
   white-space: nowrap;
+  background: $sprite -558px 0;
+  width: 20.3rem;
+  height: 4rem;
 
   @include hover-focus() {
     text-decoration: none;
@@ -319,6 +322,63 @@
       @include hover-focus() {
         color: $navbar-dark-active-color;
       }
+    }
+  }
+}
+
+
+////// Navbar custom CSS by Sachin ///////
+.navbar-bg-light {
+  background-color: #F6FAFF;
+}
+
+.nav-pad {
+  padding: .5rem .8rem;
+}
+
+.counter {
+  width: 1.8rem;
+  height: 1.8rem;
+  font-size: 1.3rem;
+  color: $gray-100;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 100%;
+  background: $yellow;
+  position: absolute;
+  right: -.5rem;
+  top: -.5rem;
+}
+
+.zindex {
+  z-index: 9999;
+}
+
+@media (max-width: 1100px) {
+  .navbar-brand {
+      margin-right: 2%;
+  }
+}
+
+#categories {
+  > .nav-item {
+    padding-top: .3rem;
+    padding-bottom: .3rem;
+    display: flex;
+    align-items: center;
+  }
+}
+
+.navbar-right {
+  // margin: .4rem 0 -.4rem 0;
+  > .nav-item {
+    // padding-top: 0;
+    // padding-bottom: 0;
+
+    > .link-ht {
+      height: 2.4rem;
+      text-indent: -9999;
     }
   }
 }

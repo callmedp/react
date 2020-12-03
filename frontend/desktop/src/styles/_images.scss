@@ -105,3 +105,53 @@
   background: $sprite;
   @include icon-inblock(15px, 20px, -414px 0);
 }
+
+.icon-cart {
+  background: $sprite;
+  @include icon-inblock(23px, 20px, -900px 0);
+}
+
+.icon-call {
+  background: $sprite;
+  @include icon-inblock(22px, 22px, -860px 0);
+}
+
+.icon-user {
+  background: $sprite;
+  @include icon-inblock(21px, 24px, -817px 0);
+}
+
+.icon-down {
+  background: $sprite;
+  @include icon-inblock(8px, 6px, -790px -23px);
+}
+
+.icon-search {
+  background: $sprite;
+  @include icon-inblock(16px, 15px, -783px 0);
+}
+
+.icon-facebook {
+  background: $sprite;
+  @include icon-inblock(13px, 24px, -935px 0);
+}
+
+.icon-linkedin {
+  background: $sprite;
+  @include icon-inblock(25px, 23px, -962px 0);
+}
+
+.icon-twitter {
+  background: $sprite;
+  @include icon-inblock(24px, 20px, -1000px 0);
+}
+
+.icon-secure {
+  background: $sprite;
+  @include icon-inblock(29px, 40px, 0 -53px);
+}
+
+.icon-payment {
+  background: $sprite;
+  @include icon-inblock(253px, 29px, -41px -59px);
+}

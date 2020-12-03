@@ -18,7 +18,7 @@ const BannerSkill = (props) => {
 
 
     return (
-       <header className="container-fluid">
+       <header className="container-fluid pos-rel">
            <figure className="banner-img row">
                 <img src="/media/images/home-bg.svg" alt="Digital Marketing Courses & Certifications" />
             </figure>

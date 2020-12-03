@@ -13,6 +13,9 @@ import WhyChooseUs from './WhyChooseUs/whyChooseUs';
 import FAQ from './FAQ/faq';
 import LearnersStories from './LearnersStories/learnersStories';
 import StickyNav from './StickyNav/stickyNav';
+import Header from '../../Common/Header/header';
+import Footer from '../../Common/Footer/footer';
+
 import './skillPage.scss'
 
 const SkillPage = (props) => {
@@ -22,7 +25,8 @@ const SkillPage = (props) => {
 
     return (
         <div>
-            <StickyNav  />
+            <Header/>
+            {/* <StickyNav  /> */}
             <SkillBanner pageId={pageId}/>
             <section className="container">
                 <div className="row">
@@ -54,6 +58,7 @@ const SkillPage = (props) => {
             <WhyChooseUs />
             <FAQ  />
             <LearnersStories />
+            <Footer/>
         </div>
     )
 }
