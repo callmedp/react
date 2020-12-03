@@ -62,8 +62,9 @@ class SkillPage(APIView):
 
     def get(self,request,*args,**kwargs):
         skill_id = int(kwargs.get('pk',None))
-        if cache.get('skill_page_{}'.format(skill_id), None):
-            data = cache.get('skill_page_{}'.format(skill_id)) 
+        fetch_from_cache = cache.get('skill_page_{}'.format(skill_id), None)
+        if fetch_from_cache:
+            data = fetch_from_cache
             return Response(data, status=status.HTTP_200_OK)
         data = {}
         category = Category.objects.only('id').filter(id=skill_id).first()

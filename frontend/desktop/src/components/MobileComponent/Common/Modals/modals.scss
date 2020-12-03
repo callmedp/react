@@ -1,0 +1,9 @@
+@import '../../../../styles-mobile/abstracts';
+
+.m-form-pos-btm {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 99;
+}

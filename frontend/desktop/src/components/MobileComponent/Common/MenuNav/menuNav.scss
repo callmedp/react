@@ -42,7 +42,7 @@
     display: flex !important;
     align-items: center;
 
-    figure {
+    .micon-user-pic {
         width: 6rem;
         height: 6rem;
         @include border-radius(100%);
@@ -54,6 +54,12 @@
         }
     }
 
+    .micon-back-menu-white {
+        margin-right: 1.5rem;
+        font-size: 1.4rem;
+        margin-bottom: 0;
+    }
+    
     strong{
         display: block;
         margin-bottom: .5rem;

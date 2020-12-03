@@ -53,7 +53,7 @@ const ProductDetails = (props) =>{
                 <button type="submit" onClick={OpenProductPage} className="btn-yellow" role="button">Enroll now</button>
                 { icon === 'file' ?
                     <a href={brochure} className="micon-pdf ml-auto"></a> : 
-                    <span className="m-view-less d-block text-right" onClick={()=>setShowDetails(false)}>View less</span>
+                    <span className="m-view-less d-block text-right ml-auto" onClick={()=>setShowDetails(false)}>View less</span>
                 }
             </p>
         </div>

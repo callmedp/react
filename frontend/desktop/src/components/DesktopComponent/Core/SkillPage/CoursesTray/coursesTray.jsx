@@ -24,7 +24,7 @@ const CoursesTray = (props) => {
 
     useEffect(() => {
         dispatch(fetchCoursesAndAssessments({ id: pageId }));
-    }, [])
+    }, [pageId])
 
 
     return (

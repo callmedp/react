@@ -1,14 +1,21 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import Modal from 'react-modal';
 import './cta.scss'
 
 const CTA = (props) => {
+    const { setEnquiryForm } = props
+    
+    const showEnquiryForm = (event) => {
+        event.preventDefault();
+        setEnquiryForm(true)
+    }
     return(
         <section className="m-container m-cta">
-            <Link to={"#"}>
+            <a href="#" onClick={showEnquiryForm}>
                 <figure className="micon-enquiry"></figure>
                 Enquiry
-            </Link>
+            </a>
             <Link to={"#"}>
                 <figure className="micon-callus"></figure>
                 Call us

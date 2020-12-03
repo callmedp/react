@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import MenuNav from '../../Common/MenuNav/menuNav';
 import Header from '../../Common/Header/Header';
 import SkillBanner from './Banner/Banner';
@@ -21,15 +21,19 @@ import '../SkillPage/skillPage.scss';
 import Footer from '../../Common/Footer/Footer';
 import CTA from '../../Common/CTA/CTA';
 import StickyNav from './StickyNav/stickyNav';
+import EnquiryModal from '../../Common/Modals/EnquiryModal';
 
 
 const SkillPage = (props) => {
     const dispatch = useDispatch()
     const pageId = props.match.params.id;
+    const [enquiryForm, setEnquiryForm] = useState(false)
+
     useEffect(() => {
         dispatch(fetchSkillPageBanner({id : pageId, 'medium': 1}))
         dispatch(fetchCoursesAndAssessments({ id: pageId, 'medium': 1}));
-    },[])
+    },[pageId])
+
     return(
         <main className="m-container-fluid mt-0 pt-0">
             <MenuNav />
@@ -59,7 +63,10 @@ const SkillPage = (props) => {
                 </div>
             </section>
             <Footer />
-            <CTA />
+            <CTA setEnquiryForm={setEnquiryForm}/>
+            {
+                enquiryForm ? <EnquiryModal setEnquiryForm={setEnquiryForm} /> : null
+            }
         </main>
     )
 }

@@ -15,8 +15,8 @@ const Product = (props) =>{
 
     const [showDetails, setShowDetails] = useState(false)
     const starRatings = (star, index) => {
-        return (star === '*' ? <em className="icon-fullstar" key={index}></em> : star === '+' 
-            ? <em className="icon-halfstar" key={index}></em> : <em className="icon-blankstar" key={index}></em>
+        return (star === '*' ? <em className="micon-fullstar" key={index}></em> : star === '+' 
+            ? <em className="micon-halfstar" key={index}></em> : <em className="micon-blankstar" key={index}></em>
         )
     }
 
@@ -45,7 +45,7 @@ const Product = (props) =>{
                 </div>
                 <div className="m-card__price">
                     <strong>{price}/-</strong> 
-                    {(compType === "More Courses") && !showDetails ? <span onClick={()=>setShowDetails(true)} className="m-view-more" >View more</span>: null}
+                    {(compType === "More Courses") && !showDetails ? <span onClick={()=>setShowDetails(true)} className="m-view-more ml-auto" >View more</span>: null}
                 </div>
             </div>
             {

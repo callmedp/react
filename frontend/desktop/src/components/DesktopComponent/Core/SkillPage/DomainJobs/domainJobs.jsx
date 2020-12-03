@@ -10,7 +10,7 @@ const DomainJobs = (props) => {
     const pageId = props.pageId
     useEffect(() => {
         dispatch(fetchDomainJobs({id : pageId}))
-    }, [])
+    }, [pageId])
 
 
     return (
