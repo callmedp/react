@@ -35,7 +35,7 @@ const Assessment = (props) => {
             {
                 assessmentList?.map((assessment, idx)=> <Product product={assessment} key={idx + 100} compType='More Courses'/>)
             }
-            
+            <Link to={"#"} className="m-load-more mt-20 mb-20">Load More Assessments</Link>
         </div>
     </section>
     );

@@ -26,7 +26,7 @@ const BannerSlider = (props) => {
                             <div className="m-banner-slider__txt" key={Math.random()}>
                                 <figure className="micon-round-arrow"></figure>
                                 {/* <strong>26% Annual Growth</strong> for cloud related opportunities In IT Sector */}
-                                { feature }
+                                <span className="flex-1">{ feature }</span>
                             </div>
                         )
                     })

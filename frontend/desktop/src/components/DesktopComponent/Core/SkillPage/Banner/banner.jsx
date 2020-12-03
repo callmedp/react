@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import './banner.scss';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
+import Carousel from 'react-bootstrap/Carousel';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchSkillPageBanner } from 'store/SkillPage/Banner/actions';
 import { siteDomain } from 'utils/domains'; 
@@ -8,7 +9,7 @@ import { siteDomain } from 'utils/domains';
 const BannerSkill = (props) => {
     
     const dispatch = useDispatch()
-    const { name, breadcrumbs } = useSelector( store => store.skillBanner )
+    const { name, breadcrumbs, featuresList } = useSelector( store => store.skillBanner )
     const pageId = props.pageId
     
     useEffect(() => {
@@ -37,12 +38,20 @@ const BannerSkill = (props) => {
                     <h1 className="heading1">
                         { name } Courses & Certifications
                     </h1>
-                    <p>
-                        <figure className="icon-round-arrow"></figure>
-                        <span>
-                            { name } expected to <strong>create 3.3 million jobs by 2022</strong>
-                        </span>
-                    </p>
+                    <Carousel className="header-carousel">
+                        {
+                            featuresList?.map((feature) => {
+                                return (
+                                    <Carousel.Item>
+                                        <p key={Math.random()}>
+                                            <figure className="icon-round-arrow"></figure>
+                                            <span className="flex-1">{ feature }</span>
+                                        </p>
+                                    </Carousel.Item>
+                                )
+                            })
+                        }
+                    </Carousel>
                 </div>
             </div>
        </header> 

@@ -48,6 +48,10 @@
                             content: counter(strong) ". ";
                         }
                     }
+
+                    p {
+                        margin-bottom: 0;
+                    }
                 }
 
                 .collapse {

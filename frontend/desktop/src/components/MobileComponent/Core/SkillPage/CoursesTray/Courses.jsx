@@ -35,6 +35,7 @@ const Courses = (props) => {
             {
                 courseList?.map((course, idx)=> <Product product={course} key={idx + 100} compType='More Courses'/>)
             }
+            <Link to={"#"} className="m-load-more mt-20 mb-20">Load More Courses</Link>
         </div>
     </section>
     );

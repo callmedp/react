@@ -26,4 +26,14 @@ header {
             }
         }
     }
+
+    .header-carousel {
+        .carousel-indicators {
+            display: none;
+        }
+
+        .carousel-control-prev, .carousel-control-next {
+            display: none;
+        }
+    }
 }
