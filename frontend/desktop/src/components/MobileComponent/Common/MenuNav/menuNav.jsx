@@ -1,42 +1,23 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { slide as Menu } from 'react-burger-menu';
+import React, { useState } from 'react';
 import './menuNav.scss'
-import { siteDomain } from 'utils/domains'; 
+import DefaultMenuNav from './DefaultMenuNav/defaultMenuNav';
+import FreeResources from './FreeResources/freeResources';
+import OtherServices from './OtherServices/otherServices';
+import ResumeServices from './ResumeServices/resumeServices';
+import RecruiterReach from './RecruiterReach/recruiterReach';
  
  
-class MenuNav extends React.Component {
-  showSettings (event) {
-    event.preventDefault();
-  }
- 
-  render () {
-    return (
-      <Menu>
-        <div className="m-guest-section">
-          <figure className="micon-user-pic"></figure>
-          <div className="media-body">
-            <strong>Welcome Guest</strong>
-            <p>
-              <Link className="btn-white-outline" to="{#}">Login</Link>
-              <Link className="btn-white-outline" to="{#}">Register</Link>
-            </p>
-          </div>
-        </div>
-        <div className="m-menu-links">
-          <Link className="menu-item" to="{#}"><figure className="micon-home"></figure> Home</Link>
-          <Link className="menu-item" to="{#}"><figure className="micon-resume-service"></figure> Resume Services <figure className="micon-arrow-menusm ml-auto"></figure></Link>
-          <Link className="menu-item" to="{#}"><figure className="micon-linkedin-service"></figure> Linkedin Profile Writing</Link>
-          <Link className="menu-item" to="{#}"><figure className="micon-recruiter-service"></figure> Recruiter Reach <figure className="micon-arrow-menusm ml-auto"></figure></Link>
-          <Link className="menu-item" to="{#}"><figure className="micon-free-resources"></figure> Free Resources <figure className="micon-arrow-menusm ml-auto"></figure></Link>
-          <Link className="menu-item" to="{#}"><figure className="micon-other-services"></figure> Other Services <figure className="micon-arrow-menusm ml-auto"></figure></Link>
-          <a className="menu-item" href={`${siteDomain}/`}><figure className="micon-courses-services"></figure> Courses</a>
-          <a className="menu-item" href={`${siteDomain}/talenteconomy/`}><figure className="micon-blog-services"></figure> Blog</a>
-          <a className="menu-item" href={`${siteDomain}/about-us`}>About us</a>
-          <a className="menu-item" href={`${siteDomain}/contact-us`}>Contact us</a>
-        </div>
-      </Menu>
-    );
+const MenuNav = (props) => {
+  const [type, setType] = useState('menu')
+  const [open, setOpen] = useState(false)
+
+  switch (type) {
+    case 'menu': return < DefaultMenuNav open={open} setOpen={setOpen} setType={setType} />
+    case 'freeResources': return <FreeResources open={open} setOpen={setOpen} setType={setType} />
+    case 'otherServices': return < OtherServices open={open} setOpen={setOpen} setType={setType} />
+    case 'resumeServices': return <ResumeServices open={open} setOpen={setOpen} setType={setType} />
+    case 'recruiterReach': return <RecruiterReach open={open} setOpen={setOpen} setType={setType} />
+    default: return < DefaultMenuNav setType={setType} />
   }
 }
 
