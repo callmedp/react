@@ -1,12 +1,56 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './header.scss';
 import { freeResourcesList, jobAssistanceList, categoryList, navSkillList } from 'utils/constants';
 import { siteDomain } from 'utils/domains';
 import DropDown from '../DropDown/dropDown';
+import { useDispatch, useSelector } from 'react-redux';
+import { cartCount, sessionAvailability, getCandidateInfo } from 'store/Header/actions/index';
 
 const Header = (props) => {
 
+    const dispatch = useDispatch()
+    const { count } = useSelector(store => store.header)
+    const [candidateInfo, setCandidateInfo] = useState(false)
+    const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+
+
+    const fetchUserInfo = async () => {
+        try {
+            dispatch(cartCount());
+            const isSessionAvailable = await new Promise((resolve, reject) => dispatch(sessionAvailability({ resolve, reject })));
+
+            if (isSessionAvailable['result']) {
+                try {
+                    setIsLoggedIn(true)
+                    const candidateInformation = await new Promise((resolve, reject) => dispatch(getCandidateInfo({ resolve, reject })))
+                    setCandidateInfo(candidateInformation)
+                }
+                catch (e) {
+                    setIsLoggedIn(false)
+                    console.log("ERROR OCCURED", e)
+                }
+            }
+            else {
+                setIsLoggedIn(false)
+            }
+        }
+
+        catch (e) {
+            setIsLoggedIn(false)
+            console.log("ERROR OCCURED", e)
+        }
+    }
+
+    useEffect(() => {
+        fetchUserInfo();
+    }, []);
+
+    const handleLogout = () => {
+        localStorage.clear();
+        window.location.replace(`${siteDomain}/logout/?next=/resume-score-checker/`);
+    }
 
     return (
         <div>
@@ -49,7 +93,7 @@ const Header = (props) => {
                                         <figure className="icon-call"></figure>
                                     </Link>
                                     <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <Link className="dropdown-item" to={"#"}><strong>Call us:</strong> 0124-4312500/01</Link>
+                                        <a className="dropdown-item" ><strong>Call us:</strong> 0124-4312500/01</a>
                                     </div>
                                 </li>
                                 <li className="nav-item dropdown dropdown-user">
@@ -57,17 +101,28 @@ const Header = (props) => {
                                         <figure className="icon-user"></figure>
                                     </Link>
                                     <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <Link className="dropdown-item" to={"#"}>My Inbox</Link>
-                                        <Link className="dropdown-item" to={"#"}>My Orders</Link>
-                                        <Link className="dropdown-item" to={"#"}>My Wallet</Link>
-                                        <Link className="dropdown-item" to={"#"}>My Referrals</Link>
-                                        <Link className="dropdown-item" to={"#"}>abc@hindustantimes.com</Link>
-                                        <div className="dropdown-divider"></div>
-                                        <Link className="dropdown-item" to={"#"}>Logout</Link>
+                                        {
+                                            !isLoggedIn ? (
+                                                <>
+                                                    <a className="dropdown-item" href={`${siteDomain}/dashboard/`} >My Inbox</a>
+                                                    <a className="dropdown-item" href={`${siteDomain}/dashboard/myorder/`}>My Orders</a>
+                                                    <a className="dropdown-item" href={`${siteDomain}/dashboard/mywallet/`}>My Wallet</a>
+                                                    <a className="dropdown-item" href={`${siteDomain}/dashboard/roundone/`}>My Referrals</a>
+                                                    <a className="dropdown-item"  >abc@hindustantimes.com</a>
+                                                    <div className="dropdown-divider"></div>
+                                                    <a className="dropdown-item" onClick={handleLogout} >Logout</a>
+                                                </>
+                                            ) : (
+                                                    <>
+                                                        <a className="dropdown-item" href={`${siteDomain}/login`}>Login</a>
+                                                        <a className="dropdown-item" href={`${siteDomain}/register`}>Register</a>
+                                                    </>
+                                                )
+                                        }
                                     </div>
                                 </li>
                                 <li className="nav-item position-relative">
-                                    <span className="counter">4</span>
+                                    <span className="counter">{count}</span>
                                     <Link className="nav-link link-ht" to={"#"}>
                                         <figure className="icon-cart"></figure>
                                     </Link>
