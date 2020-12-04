@@ -19,6 +19,7 @@ from django.utils import timezone
 from django.conf import settings
 from django.db.models import Count, F, Prefetch
 from haystack.query import SearchQuerySet
+from django.core.cache import cache
 
 # Local Import
 from core.mixins import InvoiceGenerate
@@ -33,14 +34,14 @@ from core.library.gcloud.custom_cloud_storage import \
     GCPPrivateMediaStorage, GCPInvoiceStorage, GCPMediaStorage, GCPResumeBuilderStorage
 
 # Local Inter App Import
-from homepage.models import StaticSiteContent,TestimonialCategoryRelationship,Testimonial
+from homepage.models import StaticSiteContent,TestimonialCategoryRelationship,Testimonial,\
+    TopTrending, TrendingProduct, HomePageOffer, NavigationSpecialTag
 from shop.models import Category, Product
 from order.models import Order, OrderItem ,InternationalProfileCredential
 from dashboard.dashboard_mixin import DashboardInfo, DashboardCancelOrderMixin
 from core.api_mixin import ShineCandidateDetail
 from django.core.files.base import ContentFile
 from payment.models import PaymentTxn
-from homepage.models import TopTrending, TrendingProduct
 from .helper import APIResponse
 
 # Other Import
@@ -807,3 +808,28 @@ class TrendingCourseAPI(APIView):
 
         return APIResponse(message='Trending Course Loaded', data=data, status=status.HTTP_200_OK)
 
+
+class NavigationTagsAndOffersAPI(APIView):
+
+    permission_classes = ()
+    authentication_classes = ()
+
+    def get(self, request, format=None):
+        """
+        This will fetch the active offer and two special tags
+        from the console
+        """
+
+        active_offer = []
+        special_links = cache.get('active_homepage_navlink', [])
+        if special_links:
+            active_navlinks = special_links
+        else:
+            data_obj_list = list(NavigationSpecialTag().get_active_navlink())
+            active_navlinks  = NavigationSpecialTag().convert_data_in_list(data_obj_list[:2])
+            cache.set('active_homepage_navlink', active_navlinks, 24*60*60)
+        data = {
+            'navTags': active_navlinks,
+            'navOffer': active_offer
+        }
+        return APIResponse(message='Navigations Tags and Offers details fetched', data=data, status=status.HTTP_200_OK)

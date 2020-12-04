@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { slide as Menu } from 'react-burger-menu';
 import { Link } from 'react-router-dom';
 import { siteDomain } from 'utils/domains'; 
+import MenuNavHeader from '../MenuNavHeader/menuNavHeader';
+import './defaultMenuNav.scss'
 
 const DefaultMenuNav = (props) =>{
     const {
@@ -10,16 +12,7 @@ const DefaultMenuNav = (props) =>{
 
     return (
         <Menu className='navigation' width={ '300px' } isOpen={open} onStateChange={state => setOpen(state.isOpen)}>
-            <div className="m-guest-section">
-                <figure className="micon-user-pic"></figure>
-                <div className="media-body">
-                <strong>Welcome Guest</strong>
-                <p>
-                    <Link className="btn-white-outline" to="{#}">Login</Link>
-                    <Link className="btn-white-outline" to="{#}">Register</Link>
-                </p>
-                </div>
-            </div>
+            <MenuNavHeader />
             <div className="m-menu-links">
                 <a className="menu-item" href={`${siteDomain}/`} onClick={() => {setOpen(state => !state)}}>
                     <figure className="micon-home" /> Home 
@@ -37,6 +30,21 @@ const DefaultMenuNav = (props) =>{
                 <a className="menu-item" href={`${siteDomain}/talenteconomy/`}>
                     <figure className="micon-blog-services" /> Blog
                 </a>
+                {
+                    // getDataStorage('candidate_id') && 
+                    (
+                        <ul className="dashboard-menu">
+                            <li>
+                                <a className="dashboard-menu--item" href="#/"><figure className="icon-dashboard" /> Dashboard</a>
+                                <ul className="dashboard-menu__submmenu">
+                                    <li><Link to="/dashboard/">Inbox</Link></li>
+                                    <li><Link to="/dashboard/myorder/">My Order</Link></li>
+                                    <li><Link to="/dashboard/mywallet/">My Wallet</Link></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    )
+                }
                 <a className="menu-item" href={`${siteDomain}/about-us`}>About us</a>
                 <a className="menu-item" href={`${siteDomain}/contact-us`}>Contact us</a>
             </div>

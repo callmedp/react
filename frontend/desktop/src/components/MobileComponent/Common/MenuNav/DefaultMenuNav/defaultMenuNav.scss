@@ -1,0 +1,24 @@
+@import 'src/styles-mobile/abstracts';
+
+.dashboard-menu {
+    border-top: 1px solid rgba($gray-600, .1);
+    border-bottom: 1px solid rgba($gray-600, .1);
+    padding: 2rem 1.5rem;
+    margin: 0 -1.5rem;
+
+    &--item {
+      color: $gray-600;
+      margin-bottom: 1.5rem;
+      display: block;
+    }
+
+    &__submmenu {
+      padding-left: 3rem;
+
+      a {
+        padding: 1rem 0;
+        display: block;
+        color: $gray-600;
+      }
+    }
+  }
