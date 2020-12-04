@@ -5,6 +5,7 @@ const freeResourcesList = [
         name: 'Resume Formats', 
         url: `${resumeShineSiteDomain}/cms/resume-format/1/`, 
         id: 'resume_formats',
+        sideNavType: 'freeResources',
         children: [
             { name: 'Freshers', url: `${resumeShineSiteDomain}/cms/resume-format/freshers-2/2/` },
             { name: 'Banking Freshers', url: `${resumeShineSiteDomain}/cms/resume-format/banking-freshers/4/` },
@@ -18,6 +19,7 @@ const freeResourcesList = [
         name: 'Resignation Letter Formats',
         url: `${resumeShineSiteDomain}/cms/resignation-letter-formats-samples/3/`, 
         id:'resignation_formats',
+        sideNavType: 'freeResources',
         children:[
             { name: 'With Notice Period', url: `${resumeShineSiteDomain}/cms/resignation-letter-formats-samples/notice-period/5/` },
             { name: 'Personal Reasons', url: `${resumeShineSiteDomain}/cms/resignation-letter-formats-samples/personal-reasons/15/` },
@@ -31,6 +33,7 @@ const freeResourcesList = [
         name: 'Cover Letter Formats', 
         url: `${resumeShineSiteDomain}/cms/cover-letter-format/7/`, 
         id: 'cover_letter',
+        sideNavType: 'freeResources',
         children: [
             { name: 'Freshers', url: `${resumeShineSiteDomain}/cms/cover-letter-format/freshers/8/` },
             { name: 'Engineers', url: `${resumeShineSiteDomain}/cms/cover-letter-format/engineers/9/` },
@@ -41,6 +44,7 @@ const freeResourcesList = [
         name: 'Resume Templates', 
         url: `${resumeShineSiteDomain}/cms/resume-samples-and-templates/50/`, 
         id: 'resume_templates',
+        sideNavType: 'freeResources',
         children: [
             { name: 'Pharma', url: `${resumeShineSiteDomain}/cms/resume-samples-and-templates/pharma/34/` },
             { name: 'Freshers', url: `${resumeShineSiteDomain}/cms/resume-samples-and-templates/freshers-3/55/` },
@@ -51,8 +55,9 @@ const freeResourcesList = [
         name: 'LinkedIn Summary Example', 
         url:`${resumeShineSiteDomain}/cms/linkedin-summary-examples/43/`, 
         id: 'linkedin_summary',
+        sideNavType: 'freeResources',
         children: [
-            { name: 'HR Professtionals', url: `${resumeShineSiteDomain}/cms/linkedin-summary-examples/hr-professional/36/` },
+            { name: 'HR Professionals', url: `${resumeShineSiteDomain}/cms/linkedin-summary-examples/hr-professional/36/` },
             { name: 'View all', url:`${resumeShineSiteDomain}/cms/linkedin-summary-examples/43/`}
         ]
     },
@@ -60,6 +65,7 @@ const freeResourcesList = [
         name: 'Relieving Letter', 
         url:`${resumeShineSiteDomain}/cms/relieving-letter-format/58/`, 
         id: 'relieving_letter',
+        sideNavType: 'freeResources',
         children: []
     },
 ]
@@ -81,6 +87,7 @@ const categoryList = [
         name: 'Sales And Marketing', 
         url: `${siteDomain}/courses/sales-and-marketing/17/`, 
         id: 'sales_marketing',
+        sideNavType: 'allCourses',
         children: [
             { name: 'Digital Marketing', url: `${siteDomain}/courses/sales-and-marketing/digital-marketing/32/` },
             { name: 'Sales', url: `${siteDomain}/courses/sales-and-marketing/sales/18/` },
@@ -93,6 +100,7 @@ const categoryList = [
         name: 'Operation Management',
         url: `${siteDomain}/courses/operation-management/19/`, 
         id:'operation_management',
+        sideNavType: 'allCourses',
         children:[
             { name: 'Six Sigma', url: `${siteDomain}/courses/operation-management/six-sigma/193/` },
             { name: 'Project Management', url: `${siteDomain}/courses/operation-management/project-management/123/` },
@@ -106,6 +114,7 @@ const categoryList = [
         name: 'Banking & Finance', 
         url: `${siteDomain}/courses/banking-and-finance/20/`, 
         id: 'banking_finance',
+        sideNavType: 'allCourses',
         children: [
             { name: 'Advanced Accounting', url: `${siteDomain}/courses/banking-finance/advanced-accounting/114/` },
             { name: 'Banking', url: `${siteDomain}/courses/banking-finance/banking/113/` },
@@ -121,6 +130,7 @@ const categoryList = [
         name: 'Information Technology', 
         url: `${siteDomain}/courses/it-information-technology/22/`, 
         id: 'informaton_technology',
+        sideNavType: 'allCourses',
         children: [
             { name: 'Big Data', url: `${siteDomain}/courses/it-information-technology/big-data/84/` },
             { name: 'Project Management', url: `${siteDomain}/courses/operation-management/project-management/123/` },
@@ -137,6 +147,7 @@ const categoryList = [
         name: 'Human Resources', 
         url:`${siteDomain}/courses/hr-human-resource/25/`, 
         id: 'human_resources',
+        sideNavType: 'allCourses',
         children: [
             { name: 'Talent Aquisition', url: `${siteDomain}/courses/hr-human-resource/talent-acquisition/93/` },
             { name: 'Organisational Structure', url:`${siteDomain}/courses/hr-human-resource/organizational-structure/97/`},
@@ -148,6 +159,7 @@ const categoryList = [
         name: 'Management', 
         url:`${siteDomain}/courses/management/27/`, 
         id: 'management',
+        sideNavType: 'allCourses',
         children: [
             { name: 'General Management', url: `${siteDomain}/courses/management/general-management/102/` },
             { name: 'Business Analyst', url: `${siteDomain}/courses/management/business-analyst/58/` },
@@ -158,6 +170,7 @@ const categoryList = [
         name: 'Mass Communication', 
         url: `${siteDomain}/courses/mass-communication/29/`, 
         id: 'mass_communication',
+        sideNavType: 'allCourses',
         children: [
             { name: 'Content', url: `${siteDomain}/courses/mass-communication/content/46/` },
             { name: 'Public Relations', url: `${siteDomain}/courses/mass-communication/public-relations/96/` },
@@ -169,6 +182,7 @@ const categoryList = [
         name: 'Personal Development', 
         url: `${siteDomain}/courses/personal-development/21/`, 
         id: 'personal_development',
+        sideNavType: 'allCourses',
         children: [
             { name: 'Language Learning', url: `${siteDomain}/courses/personal-development/language-learning/40/` },
             { name: 'Leadership', url: `${siteDomain}/courses/personal-development/leadership/41/` },
@@ -181,6 +195,7 @@ const categoryList = [
         name: 'Law', 
         url: `${siteDomain}/courses/law/23/`, 
         id: 'law',
+        sideNavType: 'allCourses',
         children: [
             { name: 'Cyber Law', url: `${siteDomain}/courses/law/cyber-law/107/` },
             { name: 'Criminal Law', url: `${siteDomain}/courses/law/criminal-law/108/` },
@@ -191,6 +206,7 @@ const categoryList = [
         name: 'Course Catalogue', 
         url: `${siteDomain}/online-courses.html`, 
         id: 'course_catalogue',
+        sideNavType: 'allCourses',
         children: []
     },
 ]
