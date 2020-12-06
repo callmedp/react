@@ -39,6 +39,8 @@ from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from django_filters.rest_framework import DjangoFilterBackend
 
 from users.tasks import user_register
+from crmapi.tasks import create_lead_crm
+from crmapi.models import UserQuries
 from order.models import Order, OrderItem, RefundRequest
 from order.utils import get_ltv, BadgeAnalyticsVidhya
 from emailers.email import SendMail
@@ -2069,6 +2071,43 @@ class ResumePromotionTrackingAPIView(APIView):
     authentication_classes = ()
     permission_classes = ()
 
+    def create_crm_lead(candidate_id, action):
+        from api.choices import ACTION_LEAD_MESSAGE
+        msg = ACTION_LEAD_MESSAGE.get(action, '')
+        if not msg:
+            return False
+        campaign_slug = "resumepromotion"
+        try:
+            candidate_details = ShineCandidateDetail().get_candidate_detail(shine_id = candidate_id)
+            personal_details = candidate_details.get('personal_detail')
+            if len(personal_details) == 0:
+                raise Exception("Personal details are not available")
+            personal_detail = personal_details[0]
+            name = "{} {}".format(personal_detail.get('first_name', ''), personal_detail.get('last_name', ''))
+            email = personal_detail.get('email', '')
+            mobile = personal_detail.get('cell_phone', '')
+            product_offer = True
+
+            lead = UserQuries.objects.create(
+                name=name,
+                email=email,
+                phn_number=mobile,
+                message=msg,
+                campaign_slug=campaign_slug,
+            )
+            created = True
+            validate = True if lead.email else False
+            flag = create_lead_crm.delay(pk=lead.pk, validate=validate, product_offer=product_offer)
+            if flag:
+                logging.getLogger('info_log').info("resume promotion emailer lead created for candidate_id : {}".format(candidate_id))
+                return True
+            # create_lead_crm(pk=lead.pk, validate=validate, product_offer=product_offer)
+            return False
+        except Exception as e:
+            logging.getLogger('error_log').error("unable to fetch data for candidate_id {}, Exception: {}".format(candidate_id, e))
+        return False
+
+
     def post(self, request, *args, **kwargs):
 
         candidate_id = request.data.get('candidate_id','')
@@ -2079,6 +2118,8 @@ class ResumePromotionTrackingAPIView(APIView):
             logging.getLogger('error_log').error("Data is missing from Mailer Tracking")
             response_json['error'] = "Data is missing from Mailer Tracking"
             return Response(response_json, status=status.status.HTTP_400_BAD_REQUEST)
+
+        flag = create_crm_lead(candidate_id, action)
 
         logging.getLogger('info_log').info("Mailer Tracking for resume builder and resume score checker"
                                              "->candidate_id : {}, action: {}".format(candidate_id,  action))
@@ -2096,6 +2137,35 @@ class ResumePromotionTrackingAPIView(APIView):
             logging.getLogger('error_log').error("Data is missing from Mailer Tracking")
             response_json['error'] = "Data is missing from Mailer Tracking"
             return Response(response_json, status=status.status.HTTP_400_BAD_REQUEST)
+
+        # try:
+        #     candidate_details = ShineCandidateDetail().get_candidate_detail(shine_id = candidate_id)
+        #     personal_details = candidate_details.get('personal_detail')
+        #     if len(personal_details) == 0:
+        #         raise Exception("Personal details are not available")
+        #     personal_detail = personal_details[0]
+        #     name = "{} {}".format(personal_detail.get('first_name', ''), personal_detail.get('last_name', ''))
+        #     email = personal_detail.get('email', '')
+        #     mobile = personal_detail.get('cell_phone', '')
+        #     msg = "resume promotion emailer opened"
+        #     product_offer = True
+
+        #     lead = UserQuries.objects.create(
+        #         name=name,
+        #         email=email,
+        #         phn_number=mobile,
+        #         message=msg,
+        #         campaign_slug=self.campaign_slug,
+        #     )
+        #     created = True
+        #     validate = True if lead.email else False
+        #     create_lead_crm.delay(pk=lead.pk, validate=validate, product_offer=product_offer)
+        #     # create_lead_crm(pk=lead.pk, validate=validate, product_offer=product_offer)
+
+        # except Exception as e:
+        #     logging.getLogger('error_log').error("unable to fetch data for candidate_id {}, Exception: {}".format(candidate_id, e))
+
+        flag = create_crm_lead(candidate_id, action)
 
         logging.getLogger('info_log').info("Mailer Tracking for resume builder and resume score checker"
                                              "->candidate_id : {}, action: {}".format(candidate_id,  action))
