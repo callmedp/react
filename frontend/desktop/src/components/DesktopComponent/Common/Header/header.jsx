@@ -4,6 +4,7 @@ import './header.scss';
 import { freeResourcesList, jobAssistanceList, categoryList, navSkillList } from 'utils/constants';
 import { siteDomain } from 'utils/domains';
 import DropDown from '../DropDown/dropDown';
+import { fetchNavOffersAndTags } from 'store/Common/Navigation/actions/index';
 import { useDispatch, useSelector } from 'react-redux';
 import { cartCount, sessionAvailability, getCandidateInfo } from 'store/Header/actions/index';
 
@@ -11,6 +12,7 @@ const Header = (props) => {
 
     const dispatch = useDispatch()
     const { count } = useSelector(store => store.header)
+    const { navTags } = useSelector(store => store.navOffersAndTags)
     const [candidateInfo, setCandidateInfo] = useState(false)
     const [isLoggedIn, setIsLoggedIn] = useState(false)
 
@@ -45,6 +47,7 @@ const Header = (props) => {
 
     useEffect(() => {
         fetchUserInfo();
+        dispatch(fetchNavOffersAndTags());
     }, []);
 
     const handleLogout = () => {
@@ -156,6 +159,15 @@ const Header = (props) => {
                                     return (
                                         <li key={skill.url} className="nav-item">
                                             <Link className="nav-link" to={skill.url}>{skill.name}</Link>
+                                        </li>
+                                    )
+                                })
+                            }
+                            {
+                                navTags?.map((tag, index) => {
+                                    return (
+                                        <li key={index} className="nav-item">
+                                            <a href={`${siteDomain}${tag.skill_page_url}`} className="nav-link">{tag?.display_name}<small class="config-tag">{tag?.tag}</small></a>
                                         </li>
                                     )
                                 })

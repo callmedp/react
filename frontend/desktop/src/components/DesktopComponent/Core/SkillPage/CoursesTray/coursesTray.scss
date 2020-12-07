@@ -3,7 +3,11 @@
 @import '../../../../../styles/mixins';
 
 .courses-tray {
-
+    h2 {
+        font-size: 1.4rem;
+        margin-top: .5rem;
+    }
+    
     .nav-tabs {
         border-bottom: none;
         display: flex;

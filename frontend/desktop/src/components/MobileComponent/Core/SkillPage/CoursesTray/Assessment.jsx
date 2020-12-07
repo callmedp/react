@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import Slider from "react-slick";
 import 'slick-carousel/slick/slick.css';
 import { Link } from 'react-router-dom';
@@ -19,6 +19,9 @@ const Assessment = (props) => {
     };
 
     const { assessmentList } = useSelector(store => store.coursesTray)
+    const [sliceFlag, setSliceFlag] = useState(true)
+    const loadMore = () => setSliceFlag(state => !state)
+
     return (
     <section className="m-container mt-0 mb-0 pb-0">
         <h2 className="m-heading2 mb-10">Assessment for you</h2>
@@ -33,9 +36,9 @@ const Assessment = (props) => {
         <h2 className="m-heading2 mt-20 mb-20">More assessment</h2>
         <div className="m-courses">
             {
-                assessmentList?.map((assessment, idx)=> <Product product={assessment} key={idx + 100} compType='More Courses'/>)
+                (sliceFlag ? assessmentList.slice(0, 4) : assessmentList)?.map((assessment, idx)=> <Product product={assessment} key={idx + 100} compType='More Courses'/>)
             }
-            
+            { sliceFlag ? <Link to={"#"} onClick={loadMore} className="m-load-more mt-20 mb-20">Load More Assessments</Link> : '' }
         </div>
     </section>
     );
