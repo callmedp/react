@@ -133,14 +133,14 @@
 
           <!--a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="login-btn">{{request.session.email}}</span></a-->
           <ul class="dropdown-menu">
-            <li><a href="{% url 'dashboard:dashboard' %}" onclick="trackClickEvent()">My Inbox</a></li>
-            <li><a href="{% url 'dashboard:dashboard-myorder' %}" onclick="trackClickEvent()">My Orders</a></li>
-            <li><a href="{% url 'dashboard:dashboard-mywallet' %}" onclick="trackClickEvent()">My Wallet</a></li>
+            <li><a href="{% url 'dashboard:dashboard' %}" onclick="trackClickEvent();MyGA.SendEvent('header_icons','ln_header_icons', 'ln_account', 'ln_my_inbox','', false, true);">My Inbox</a></li>
+            <li><a href="{% url 'dashboard:dashboard-myorder' %}" onclick="trackClickEvent();MyGA.SendEvent('header_icons','ln_header_icons', 'ln_account', 'ln_my_orders','', false, true);">My Orders</a></li>
+            <li><a href="{% url 'dashboard:dashboard-mywallet' %}" onclick="trackClickEvent();MyGA.SendEvent('header_icons','ln_header_icons', 'ln_account', 'ln_my_wallet','', false, true);">My Wallet</a></li>
             {% if roundone_user %}
-              <li><a href="{% url 'dashboard:roundone-dashboard' %}" onclick="trackClickEvent()">Referrals</a></li>
+              <li><a href="{% url 'dashboard:roundone-dashboard' %}" onclick="trackClickEvent();MyGA.SendEvent('header_icons','ln_header_icons', 'ln_account', 'ln_referrals','', false, true);">Referrals</a></li>
             {% endif %}
             <li><a class="email-overflow">{{request.session.email}}</a></li>
-            <li><a onclick= "return clearLocalStorage();" href="{% url 'logout' %}" onclick="trackClickEvent()">Logout</a></li>
+            <li><a onclick= "return clearLocalStorage();" href="{% url 'logout' %}" onclick="trackClickEvent();MyGA.SendEvent('header_icons','ln_header_icons', 'ln_account', 'ln_log_out','', false, true);">Logout</a></li>
           </ul>
         </li>
         {% else %}
