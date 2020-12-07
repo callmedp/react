@@ -105,7 +105,7 @@
                     <div class="panel panel-default box-shadow1">
                     <div class="panel-heading">
                       <h4 class="panel-title">
-                        <a  class="no-bg trig-loader" id="card-netbanking" href="{% url "payment:razor-request" cart_id %}">
+                        <a  class="no-bg trig-loader" onclick="MyGA.SendEvent('ln_payment_option', 'ln_payment_option', 'ln_click_make_payment', 'Cards, Net Banking & UPI', '', false, true);" id="card-netbanking" href="{% url "payment:razor-request" cart_id %}">
                           Cards, Net Banking & UPI
                         </a>
                       </h4>
@@ -165,7 +165,7 @@
                   <div class="panel panel-default box-shadow1">
                     <div class="panel-heading" role="tab" id="headingTwo">
                       <h4 class="panel-title">
-                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        <a class="collapsed" role="button" onclick="MyGA.SendEvent('ln_payment_option', 'ln_payment_option', 'ln_click_make_payment', 'Cheque', '', false, true);" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                           Cheque
                         </a>
                       </h4>
@@ -239,7 +239,7 @@
                   <div class="panel panel-default box-shadow1">
                     <div class="panel-heading" role="tab" id="headingThree">
                       <h4 class="panel-title">
-                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#zestMoneyAccordion" aria-expanded="false" aria-controls="collapseTwo">
+                        <a class="collapsed" onclick="MyGA.SendEvent('ln_payment_option', 'ln_payment_option', 'ln_click_make_payment', 'Zest Money EMI', '', false, true);" role="button" data-toggle="collapse" data-parent="#accordion" href="#zestMoneyAccordion" aria-expanded="false" aria-controls="collapseTwo">
                           Zest Money EMI <img src="{% static 'shinelearn/images/payments/zest.png' %}" width="60" alt="zestMoney" class="ml-5">
                         </a>
                       </h4>
@@ -319,7 +319,7 @@
                              <div class="panel panel-default box-shadow1">
                     <div class="panel-heading">
                       <h4 class="panel-title">
-                        <a class="no-bg" href="{% url "payment:payu-request" cart_id %}" id="amazon-pay-payment">
+                        <a class="no-bg" onclick="MyGA.SendEvent('ln_payment_option', 'ln_payment_option', 'ln_click_make_payment', 'Amazon Pay, Paytm, PhonePe & Other Wallets', '', false, true);" href="{% url "payment:payu-request" cart_id %}" id="amazon-pay-payment">
                          Amazon Pay, Paytm, PhonePe & Other Wallets 
                         <!--  <img src="{% static 'shinelearn/images/payments/amazon-pay.png' %}" width="89" style="margin-top:8px" alt="payu" class="ml-5"> -->
                         </a>

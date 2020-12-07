@@ -14,7 +14,7 @@
   <div class="container-fluid">
     <!-- Brand and toggle get grouped for better mobile display -->
     <div class="navbar-header" itemscope itemtype="http://schema.org/Organization" >
-      <a  aria-label="shinelearning.com" class="navbar-brand" href="{% url 'homepage' %}" onclick="trackClickEvent()"></a>
+      <a  aria-label="shinelearning.com" class="navbar-brand" href="{% url 'homepage' %}" onclick="trackClickEvent();MyGA.SendEvent('logo_click', 'ln_logo_click', 'ln_logo_click', 'homepage','',false, true);"></a>
       <meta itemprop="name" content="Shine">
       <meta itemprop="url" content="https://learning.shine.com"/>
     </div>
@@ -26,7 +26,7 @@
           <li class="searchbar-dropdown"> <!--searchNavBar -->
             <form action="/search/results/" class="search cls_search top_search"> <!--searchNavBar -->
               <input class="inputTags-list key_press_js_search form-control input-sm" data-selecttype="multiple"  maxlength="64" name="q" placeholder="Search" type="text" required="true" autocomplete="off">
-              <button type="submit" class="search-button"><i class="search-icon"></i></button>
+              <button type="submit" class="search-button" onclick ="MyGA.SendEvent('click_on_search','ln_click_on_search', 'ln_search_initiated_navigation', 'ln_click_on_search', 'click_on _search','', false, true)"><i class="search-icon"></i></button>
             </form>
           </li>
           <!--li class="ms-link">
@@ -38,77 +38,77 @@
       
       <ul class="nav navbar-nav navbar-right">
         <li class="dropdown jobs-dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" >Job Assistance</a>
+          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" onclick="MyGA.SendEvent('homepage_navigation','ln_homepage_navigation', 'ln_job_assisstance', 'ln_job_assisstance', '', false, true);" >Job Assistance</a>
           <ul class="dropdown-menu">
-            <li><a href="/services/resume-writing/63/" onclick="trackClickEvent()">Resume Writing</a></li>
-            <li><a href="/services/resume-services/entry-level-freshers-4/pd-2553" onclick="trackClickEvent()">International Resume</a></li>
-            <li><a href="/services/resume-services/entry-level-freshers/pd-2052" onclick="trackClickEvent()">Visual Resume</a></li>
-            <li><a href="https://learning.shine.com/services/professional-service/jobs-on-the-move-3/pd-3411" onclick="trackClickEvent()">Jobs On The Move</a></li>
-            <li><a href="/services/linkedin-profile/180/" onclick="trackClickEvent()">LinkedIn Profile</a></li>
+            <li><a href="/services/resume-writing/63/" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_homepage_navigation', 'ln_job_assisstance', 'ln_resume_writing', '', false, true);">Resume Writing</a></li>
+            <li><a href="/services/resume-services/entry-level-freshers-4/pd-2553" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_homepage_navigation', 'ln_job_assisstance', 'ln_international_resume', '', false, true);">International Resume</a></li>
+            <li><a href="/services/resume-services/entry-level-freshers/pd-2052" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_homepage_navigation', 'ln_job_assisstance', 'ln_visual_resume', '', false, true);">Visual Resume</a></li>
+            <li><a href="https://learning.shine.com/services/professional-service/jobs-on-the-move-3/pd-3411" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_homepage_navigation', 'ln_job_assisstance', 'ln_jobs_on_the_move', '', false, true);">Jobs On The Move</a></li>
+            <li><a href="/services/linkedin-profile/180/" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_homepage_navigation', 'ln_job_assisstance', 'ln_linkedin_profile', '', false, true);">LinkedIn Profile</a></li>
 
-              <li><a href="/services/recruiter-connect/featured-profile-10/pd-1939" onclick="trackClickEvent()">Featured Profile</a></li>
+              <li><a href="/services/recruiter-connect/featured-profile-10/pd-1939" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_homepage_navigation', 'ln_job_assisstance', 'ln_feature_profile', '', false, true);">Featured Profile</a></li>
               <!-- <li><a href="/services/background-verification-2/employment-verification/pd-2618">Background Verification Services</a></li>
             <li><a href="/services/interview-preparation-3/job-interview-coaching-by-sarabjeet-sachar/pd-1284">Interview Preparation</a></li> -->
-           <li><a href="/services/recruiter-connect/application-highlighter-3/pd-4117" onclick="trackClickEvent()">Application Highlighter</a></li>
-           <li><a class="dropdown-item" href="/resume-score-checker/" onclick="trackClickEvent()">Resume Score Checker</a></li>
+           <li><a href="/services/recruiter-connect/application-highlighter-3/pd-4117" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_homepage_navigation', 'ln_job_assisstance', 'ln_application_higlighter', '', false, true);">Application Highlighter</a></li>
+           <li><a class="dropdown-item" href="/resume-score-checker/" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_homepage_navigation', 'ln_job_assisstance', 'ln_resume_score_checker', '', false, true);">Resume Score Checker</a></li>
 
               <!--<li><a href="/services/job-referral-2/job-referrals-pack/pd-2129">Job referral</a></li>-->
           </ul>
         </li>
         <li class="ms-link">
-          <a class="cls_eventtrack pr" href="/practice-tests/" data-category="" data-action="Header" data-label="learing.shine"><span class="hidden-sm" onclick="trackClickEvent()">Practice Tests</span></a>
+          <a class="cls_eventtrack pr" href="/practice-tests/" data-category="" data-action="Header" data-label="learing.shine"><span class="hidden-sm" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_homepage_navigation', 'ln_practice_tests', 'ln_practice_tests', '', false, true);">Practice Tests</span></a>
         </li>
         <li class="dropdown format-dropdown">
-           <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" onclick="trackClickEvent()">Free Resources</a>
+           <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_homepage_navigation', 'ln_free_resources', 'ln_free_resources', '', false, true);">Free Resources</a>
            <div class="dropdown-menu format-tabs">
               <ul class="nav nav-tabs" role="tablist">
-                 <li role="presentation" class="active"><a href="{{resume_shine_url}}/cms/resume-format/1/" onclick="trackClickEvent()" data-target="#format1" aria-controls="format1" role="tab">Resume Formats</a></li>
-                 <li role="presentation"><a href="{{resume_shine_url}}/cms/resignation-letter-formats-samples/3/" onclick="trackClickEvent()" data-target="#format2" aria-controls="format2" role="tab">Resignation Letter Formats</a></li>
-                 <li role="presentation"><a href="{{resume_shine_url}}/cms/cover-letter-format/7/" onclick="trackClickEvent()" data-target="#format3" aria-controls="format3"  role="tab">Cover Letter Formats</a></li>
-                 <li role="presentation"><a href="{{resume_shine_url}}/cms/resume-samples-and-templates/50/" onclick="trackClickEvent()" data-target="#format4" aria-controls="format4" role="tab">Resume Templates</a></li>
-                 <li role="presentation"><a href="{{resume_shine_url}}/cms/linkedin-summary-examples/43/" onclick="trackClickEvent()" data-target="#format5" aria-controls="format5" role="tab">LinkedIn Summary Example</a></li>
-                 <li role="presentation"><a href="{{resume_shine_url}}/cms/relieving-letter-format/58/" onclick="trackClickEvent()" data-target="#format6" aria-controls="format6" role="tab" >Relieving Letter</a></li>
+                 <li role="presentation" class="active"><a href="{{resume_shine_url}}/cms/resume-format/1/" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_homepage_navigation', 'ln_free_resources', 'ln_resume_formats', '', false, true);" data-target="#format1" aria-controls="format1" role="tab">Resume Formats</a></li>
+                 <li role="presentation"><a href="{{resume_shine_url}}/cms/resignation-letter-formats-samples/3/" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_homepage_navigation', 'ln_free_resources', 'ln_resignation_letter_formats', '', false, true);" data-target="#format2" aria-controls="format2" role="tab">Resignation Letter Formats</a></li>
+                 <li role="presentation"><a href="{{resume_shine_url}}/cms/cover-letter-format/7/" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_homepage_navigation', 'ln_free_resources', 'ln_cover_letter_formats', '', false, true);" data-target="#format3" aria-controls="format3"  role="tab">Cover Letter Formats</a></li>
+                 <li role="presentation"><a href="{{resume_shine_url}}/cms/resume-samples-and-templates/50/" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_homepage_navigation', 'ln_free_resources', 'ln_resume_templates', '', false, true);" data-target="#format4" aria-controls="format4" role="tab">Resume Templates</a></li>
+                 <li role="presentation"><a href="{{resume_shine_url}}/cms/linkedin-summary-examples/43/" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_homepage_navigation', 'ln_free_resources', 'ln_linked_summary_example', '', false, true);" data-target="#format5" aria-controls="format5" role="tab">LinkedIn Summary Example</a></li>
+                 <li role="presentation"><a href="{{resume_shine_url}}/cms/relieving-letter-format/58/" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_homepage_navigation', 'ln_free_resources', 'ln_relieving_letter', '', false, true);" data-target="#format6" aria-controls="format6" role="tab" >Relieving Letter</a></li>
               </ul>
               <!-- Tab panes -->
               <div class="tab-content">
                  <div role="tabpanel" class="tab-pane active" id="format1">
                     <ul>
-                      <li><a href="{{resume_shine_url}}/cms/resume-format/freshers-2/2/" onclick="trackClickEvent()">Freshers </a></li>
-                       <li><a href="{{resume_shine_url}}/cms/resume-format/banking-freshers/4/" onclick="trackClickEvent()">Banking Freshers  </a></li>
-                       <li><a href="{{resume_shine_url}}/cms/resume-format/experienced-professionals/6/" onclick="trackClickEvent()">Experienced Professional   </a></li>
-                       <li><a href="{{resume_shine_url}}/cms/resume-format/engineers-2/20/" onclick="trackClickEvent()">Engineers   </a></li>
-                       <li><a href="{{resume_shine_url}}/cms/resume-format/it/53/" onclick="trackClickEvent()">IT </a></li>
+                      <li><a href="{{resume_shine_url}}/cms/resume-format/freshers-2/2/" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_free_resources', 'ln_resume_formats', 'ln_freshers', '', false, true);">Freshers </a></li>
+                       <li><a href="{{resume_shine_url}}/cms/resume-format/banking-freshers/4/" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_free_resources', 'ln_resume_formats', 'ln_banking_freshers', '', false, true);">Banking Freshers  </a></li>
+                       <li><a href="{{resume_shine_url}}/cms/resume-format/experienced-professionals/6/" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_free_resources', 'ln_resume_formats', 'ln_experienced_professional', '', false, true);">Experienced Professional   </a></li>
+                       <li><a href="{{resume_shine_url}}/cms/resume-format/engineers-2/20/" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_free_resources', 'ln_resume_formats', 'ln_engineers', '', false, true);">Engineers   </a></li>
+                       <li><a href="{{resume_shine_url}}/cms/resume-format/it/53/" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_free_resources', 'ln_resume_formats', 'ln_IT', '', false, true);">IT </a></li>
 
                        <li><a href="{{resume_shine_url}}/cms/resume-format/1/ " class="view-all-detail" onclick="trackClickEvent()">View all </a></li>
                     </ul>
                  </div>
                  <div role="tabpanel" class="tab-pane" id="format2">
                     <ul>
-                       <li><a href="{{resume_shine_url}}/cms/resignation-letter-formats-samples/notice-period/5/" onclick="trackClickEvent()">With Notice Period   </a></li>
-                       <li><a href="{{resume_shine_url}}/cms/resignation-letter-formats-samples/personal-reasons/15/" onclick="trackClickEvent()">Personal Reasons  </a></li>
-                       <li><a href="{{resume_shine_url}}/cms/resignation-letter-formats-samples/higher-studies-or-going-abroad/49/ " onclick="trackClickEvent()">Higher Studies </a></li>
-                       <li><a href="{{resume_shine_url}}/cms/resignation-letter-formats-samples/without-notice-period/17/" onclick="trackClickEvent()">Without Notice Period   </a></li>
-                       <li><a href="{{resume_shine_url}}/cms/resignation-letter-formats-samples/family-illness/18/" onclick="trackClickEvent()">Family Illness </a></li>
+                       <li><a href="{{resume_shine_url}}/cms/resignation-letter-formats-samples/notice-period/5/" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_free_resources', 'ln_resignation_letter_formats', 'ln_with_notice_period', '', false, true);">With Notice Period   </a></li>
+                       <li><a href="{{resume_shine_url}}/cms/resignation-letter-formats-samples/personal-reasons/15/" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_free_resources', 'ln_resignation_letter_formats', 'ln_personal_reasons', '', false, true);">Personal Reasons  </a></li>
+                       <li><a href="{{resume_shine_url}}/cms/resignation-letter-formats-samples/higher-studies-or-going-abroad/49/ " onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_free_resources', 'ln_resignation_letter_formats', 'ln_higher_studies', '', false, true);">Higher Studies </a></li>
+                       <li><a href="{{resume_shine_url}}/cms/resignation-letter-formats-samples/without-notice-period/17/" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_free_resources', 'ln_resignation_letter_formats', 'ln_without_notice_period', '', false, true);">Without Notice Period   </a></li>
+                       <li><a href="{{resume_shine_url}}/cms/resignation-letter-formats-samples/family-illness/18/" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_free_resources', 'ln_resignation_letter_formats', 'ln_family_illness', '', false, true);">Family Illness </a></li>
                        <li><a href="{{resume_shine_url}}/cms/resignation-letter-formats-samples/3/" class="view-all-detail" onclick="trackClickEvent()"> View all </a></li>
                     </ul>
                  </div>
                  <div role="tabpanel" class="tab-pane" id="format3">
                     <ul>
-                       <li><a href="{{resume_shine_url}}/cms/cover-letter-format/freshers/8/" onclick="trackClickEvent()">Freshers </a></li>
-                       <li><a href="{{resume_shine_url}}/cms/cover-letter-format/engineers/9/" onclick="trackClickEvent()">Engineers </a></li>
+                       <li><a href="{{resume_shine_url}}/cms/cover-letter-format/freshers/8/" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_free_resources', 'ln_cover_letter_formats', 'ln_freshers', '', false, true);">Freshers </a></li>
+                       <li><a href="{{resume_shine_url}}/cms/cover-letter-format/engineers/9/" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_free_resources', 'ln_cover_letter_formats', 'ln_engineers', '', false, true);">Engineers </a></li>
                        <li><a href="{{resume_shine_url}}/cms/cover-letter-format/7/" class="view-all-detail" onclick="trackClickEvent()"> View all </a></li>
                     </ul>
                  </div>
                  <div role="tabpanel" class="tab-pane" id="format4">
                     <ul>
-                       <li><a href="{{resume_shine_url}}/cms/resume-samples-and-templates/pharma/34/" onclick="trackClickEvent()">Pharma </a></li>
-                       <li><a href="{{resume_shine_url}}/cms/resume-samples-and-templates/freshers-3/55/" onclick="trackClickEvent()">Freshers </a></li>
+                       <li><a href="{{resume_shine_url}}/cms/resume-samples-and-templates/pharma/34/" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_free_resources', 'ln_resume_templates', 'ln_pharma', '', false, true);">Pharma </a></li>
+                       <li><a href="{{resume_shine_url}}/cms/resume-samples-and-templates/freshers-3/55/" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_free_resources', 'ln_resume_templates', 'ln_freshers', '', false, true);">Freshers </a></li>
                        <li><a href="{{resume_shine_url}}/cms/resume-samples-and-templates/50/" class="view-all-detail" onclick="trackClickEvent()"> View all </a></li>
                     </ul>
                  </div>
                  <div role="tabpanel" class="tab-pane" id="format5">
                     <ul>
-                       <li><a href="{{resume_shine_url}}/cms/linkedin-summary-examples/hr-professional/36/" onclick="trackClickEvent()"> HR Professionals </a></li>
+                       <li><a href="{{resume_shine_url}}/cms/linkedin-summary-examples/hr-professional/36/" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_free_resources', 'ln_linked_summary_example', 'ln_hr_professionals', '', false, true);"> HR Professionals </a></li>
                        <li><a href="{{resume_shine_url}}/cms/linkedin-summary-examples/43/" class="view-all-detail" onclick="trackClickEvent()"> View all </a></li>
                     </ul>
                  </div>
@@ -118,18 +118,18 @@
            </div>
         </li>
         <li class="ms-link">
-          <a class="cls_eventtrack" href="/talenteconomy/" onclick="trackClickEvent()" data-category="TELINK" data-action="Header" data-label="learing.shine"><span class="hidden-sm">Blog</span></a>
+          <a class="cls_eventtrack" href="/talenteconomy/" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_homepage_navigation', 'ln_blog', 'ln_blog', '', false, true);" data-category="TELINK" data-action="Header" data-label="learing.shine"><span class="hidden-sm">Blog</span></a>
         </li>
         <li class="dropdown call-dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="call-icon"></span></a>
           <ul class="dropdown-menu">
-            <li><a class="text-center" href="tel:{{ggn_contact}}"><strong>Call us:</strong>{{ggn_contact_full}}</a></li>
+            <li><a class="text-center" href="tel:{{ggn_contact}}" onclick="MyGA.SendEvent('header_icons','ln_header_icons', 'ln_call', 'tel:{{ggn_contact}}','', false, true)"><strong>Call us:</strong>{{ggn_contact_full}}</a></li>
 
           </ul>
         </li>
         {% if request.session.candidate_id %}
         <li class="dropdown login-dropdown">
-          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="loggedin-user"></span></a>
+          <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false" onclick="MyGA.SendEvent('header_icons','ln_header_icons', 'ln_account', 'loggedin_account','', false, true)"><span class="loggedin-user"></span></a>
 
           <!--a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="login-btn">{{request.session.email}}</span></a-->
           <ul class="dropdown-menu">
@@ -147,13 +147,13 @@
         <li class="dropdown login-dropdown">
           <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="loggedin-user"></span></a>
           <ul class="dropdown-menu">
-            <li><a href="{% url 'login' %}">Login</a></li>
-            <li><a href="{% url 'register' %}">Register</a></li>
+            <li><a href="{% url 'login' %}" onclick="MyGA.SendEvent('header_icons','ln_header_icons', 'ln_login', 'login','', false, true)">Login</a></li>
+            <li><a href="{% url 'register' %}" onclick="MyGA.SendEvent('header_icons','ln_header_icons', 'ln_register', 'register','', false, true)">Register</a></li>
           </ul>
         </li>
         {% endif %}
         <li>
-            <a href="{% url "cart:payment-summary" %}"><span class="cart-icon"><span class="{% if cart_count %}cart-counter{% endif %}" id="cart-counter-id">{% if cart_count %}{{cart_count}}{% endif %}</span></span></a>
+            <a href="{% url "cart:payment-summary" %}" onclick="MyGA.SendEvent('header_icons','ln_header_icons', 'ln_cart', 'cart','', false, true)"><span class="cart-icon"><span class="{% if cart_count %}cart-counter{% endif %}" id="cart-counter-id">{% if cart_count %}{{cart_count}}{% endif %}</span></span></a>
           </li>
         </ul>
       </div><!-- /.navbar-collapse -->
@@ -169,17 +169,17 @@
             <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> <span class="explore">Explore</span>Categories <i class="cat-down-icon"></i></a>
             <div class="dropdown-menu courses-tabs">
               <ul class="nav nav-tabs" role="tablist">
-                <li role="presentation" class="active" ><a onclick="trackClickEvent()" href="/courses/sales-and-marketing/17/" data-target="#courses1" aria-controls="#courses1" role="tab">Sales &amp; Marketing</a></li>
-                <li role="presentation"><a onclick="trackClickEvent()" href="/courses/operation-management/19/" data-target="#courses2" aria-controls="courses2" role="tab">Operation Management</a></li>
-                <li role="presentation"><a onclick="trackClickEvent()" href="/courses/banking-and-finance/20/" data-target="#courses3" aria-controls="courses3" role="tab">Banking &amp; Finance</a></li>
-                <li role="presentation"><a onclick="trackClickEvent()" href="/courses/it-information-technology/22/" data-target="#courses4" aria-controls="courses4" role="tab">Information Technology</a></li>
-                <li role="presentation"><a onclick="trackClickEvent()" href="/courses/hr-human-resource/25/" data-target="#courses5" aria-controls="courses5" role="tab">Human Resources</a></li>
-                <li role="presentation"><a onclick="trackClickEvent()" href="/courses/management/27/" data-target="#courses6" aria-controls="courses6" role="tab">Management</a></li>
-                <li role="presentation"><a onclick="trackClickEvent()" href="/courses/mass-communication/29/" data-target="#courses7" aria-controls="courses7" role="tab">Mass Communication</a></li>
-                <li role="presentation"><a onclick="trackClickEvent()" href="/courses/personal-development/21/" data-target="#courses8" aria-controls="courses8" role="tab">Personal Development</a></li>
-                <li role="presentation"><a onclick="trackClickEvent()" href="/courses/law/23/"  data-target="#courses9" aria-controls="courses9" role="tab">Law</a></li>
+                <li role="presentation" class="active" ><a onclick="trackClickEvent(); MyGA.SendEvent('homepage_navigation','ln_homepage_navigation', 'ln_sales_marketing', '', '', false, true);" href="/courses/sales-and-marketing/17/" data-target="#courses1" aria-controls="#courses1" role="tab">Sales &amp; Marketing</a></li>
+                <li role="presentation"><a onclick="trackClickEvent(); MyGA.SendEvent('homepage_navigation','ln_homepage_navigation', 'ln_operation_management', '', '', false, true);" href="/courses/operation-management/19/" data-target="#courses2" aria-controls="courses2" role="tab">Operation Management</a></li>
+                <li role="presentation"><a onclick="trackClickEvent(); MyGA.SendEvent('homepage_navigation','ln_homepage_navigation', 'ln_banking_and_finance', '', '', false, true);" href="/courses/banking-and-finance/20/" data-target="#courses3" aria-controls="courses3" role="tab">Banking &amp; Finance</a></li>
+                <li role="presentation"><a onclick="trackClickEvent(); MyGA.SendEvent('homepage_navigation','ln_homepage_navigation', 'ln_information_technology', '', '', false, true);" href="/courses/it-information-technology/22/" data-target="#courses4" aria-controls="courses4" role="tab">Information Technology</a></li>
+                <li role="presentation"><a onclick="trackClickEvent(); MyGA.SendEvent('homepage_navigation','ln_homepage_navigation', 'ln_human_resources', '', '', false, true);" href="/courses/hr-human-resource/25/" data-target="#courses5" aria-controls="courses5" role="tab">Human Resources</a></li>
+                <li role="presentation"><a onclick="trackClickEvent(); MyGA.SendEvent('homepage_navigation','ln_homepage_navigation', 'ln_management', '', '', false, true);" href="/courses/management/27/" data-target="#courses6" aria-controls="courses6" role="tab">Management</a></li>
+                <li role="presentation"><a onclick="trackClickEvent(); MyGA.SendEvent('homepage_navigation','ln_homepage_navigation', 'ln_mass_communication', '', '', false, true);" href="/courses/mass-communication/29/" data-target="#courses7" aria-controls="courses7" role="tab">Mass Communication</a></li>
+                <li role="presentation"><a onclick="trackClickEvent(); MyGA.SendEvent('homepage_navigation','ln_homepage_navigation', 'ln_personal_development', '', '', false, true);" href="/courses/personal-development/21/" data-target="#courses8" aria-controls="courses8" role="tab">Personal Development</a></li>
+                <li role="presentation"><a onclick="trackClickEvent(); MyGA.SendEvent('homepage_navigation','ln_homepage_navigation', 'ln_law', '', '', false, true);" href="/courses/law/23/"  data-target="#courses9" aria-controls="courses9" role="tab">Law</a></li>
                <!--  <li role="presentation"><a href="{% url 'skillpage:func_area_results' 'other-online' 5 %}#courses10" aria-controls="courses9" role="tab">Other Online Courses</a></li> -->
-               <li role="presentation"><a onclick="trackClickEvent()" href="{% url "course-catalogoue" %}" data-target="#courses10" aria-controls="courses10" role="tab">Course Catalogue</a></li>
+               <li role="presentation"><a onclick="trackClickEvent(); MyGA.SendEvent('homepage_navigation','ln_homepage_navigation', 'ln_course_catalogue', '', '', false, true);" href="{% url "course-catalogoue" %}" data-target="#courses10" aria-controls="courses10" role="tab">Course Catalogue</a></li>
   
               </ul>
               
@@ -188,93 +188,93 @@
               <div class="tab-content">
                 <div role="tabpanel" class="tab-pane active" id="courses1">
                   <ul>
-                  <li><a href="/courses/sales-and-marketing/digital-marketing/32/" onclick="trackClickEvent()" >Digital Marketing</a></li>
-                  <li><a href="/courses/sales-and-marketing/sales/18/" onclick="trackClickEvent()">Sales</a></li>
-                  <li><a href="/courses/sales-and-marketing/retail/35/ " onclick="trackClickEvent()">  Retail </a></li>
-                  <li><a href="/courses/sales-and-marketing/product-marketing/24/" onclick="trackClickEvent()">Product Marketing</a></li>
-                  <li><a href="/courses/sales-and-marketing/service-marketing/30/" onclick="trackClickEvent()">Service Marketing</a></li>
+                  <li><a href="/courses/sales-and-marketing/digital-marketing/32/" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_sales_marketing', 'ln_Digital_marketing', '', false, true);" >Digital Marketing</a></li>
+                  <li><a href="/courses/sales-and-marketing/sales/18/" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_sales_marketing', 'ln_sales', '', false, true);">Sales</a></li>
+                  <li><a href="/courses/sales-and-marketing/retail/35/ " onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_sales_marketing', 'ln_retail', '', false, true);">  Retail </a></li>
+                  <li><a href="/courses/sales-and-marketing/product-marketing/24/" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_sales_marketing', 'ln_product_marketing', '', false, true);">Product Marketing</a></li>
+                  <li><a href="/courses/sales-and-marketing/service-marketing/30/" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_sales_marketing', 'ln_service_marketing', '', false, true);">Service Marketing</a></li>
                   <li><a href="/courses/sales-and-marketing/17/" onclick="trackClickEvent()" class="view-all-detail">View all products</a></li>
                 </ul>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="courses2">
                   <ul>
-                  <li><a href="/courses/operation-management/six-sigma/193/" onclick="trackClickEvent()">Six Sigma</a></li>
-                  <li><a href="/courses/operation-management/project-management/123/" onclick="trackClickEvent()">Project Management </a></li>
-                  <li><a href="/courses/operation-management/logistics-and-supply-chain/135/" onclick="trackClickEvent()">Logistic and Supply Chain</a></li>
-                  <li><a href="/courses/operation-management/service-quality/316/" onclick="trackClickEvent()">Service Quality</a></li>
-                  <li><a href="/courses/operation-management/production/39/" onclick="trackClickEvent()">Production </a></li>
-                  <li><a href="/courses/operation-management/customer-care/37/" onclick="trackClickEvent()">Customer Care</a></li>
+                  <li><a href="/courses/operation-management/six-sigma/193/" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_operation_management', 'ln_six_sigma', '', false, true);">Six Sigma</a></li>
+                  <li><a href="/courses/operation-management/project-management/123/" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_operation_management', 'ln_project_management','', false, true);">Project Management </a></li>
+                  <li><a href="/courses/operation-management/logistics-and-supply-chain/135/" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation',ln_navigation_explore', 'ln_operation_management', 'ln_logistic_and_supply_chain','', false, true);">Logistic and Supply Chain</a></li>
+                  <li><a href="/courses/operation-management/service-quality/316/" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_operation_management', 'ln_service_quality', '', false, true);">Service Quality</a></li>
+                  <li><a href="/courses/operation-management/production/39/" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_operation_management', 'ln_production','', false, true);">Production </a></li>
+                  <li><a href="/courses/operation-management/customer-care/37/" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_operation_management', 'ln_customer_care', '', false, true);">Customer Care</a></li>
                   <li><a href="/courses/operation-management/19/" onclick="trackClickEvent()" class="view-all-detail">View all products</a></li>
                 </ul>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="courses3">
                   <ul>
-                  <li><a href="/courses/banking-finance/advanced-accounting/114/" onclick="trackClickEvent()">Advanced Accounting</a></li>
-                  <li><a href="/courses/banking-finance/banking/113/" onclick="trackClickEvent()">Banking</a></li>
-                  <li><a href="/courses/banking-finance/risk-management/95/" onclick="trackClickEvent()">Risk Management</a></li>
-                  <li><a href="/courses/banking-finance/stock-market-trading/94/" onclick="trackClickEvent()">Stock Market Training</a></li>
-                  <li><a href="/courses/banking-finance/financial-reporting-and-management/103/" onclick="trackClickEvent()">Finanacial Reporting and Management</a></li>
-                  <li><a href="/courses/banking-finance/commercial-operation/112/" onclick="trackClickEvent()">Commercial Operation </a></li>
-                  <li><a href="/courses/banking-finance/investment-banking/100/" onclick="trackClickEvent()">Investment Banking </a></li>
-                  <li><a href="/courses/banking-finance/gst-2/507/" onclick="trackClickEvent()">GST</a></li>
+                  <li><a href="/courses/banking-finance/advanced-accounting/114/" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_banking_and_finance', 'ln_advanced_accounting', '', false, true);">Advanced Accounting</a></li>
+                  <li><a href="/courses/banking-finance/banking/113/" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_banking_and_finance', 'ln_banking', '', false, true);">Banking</a></li>
+                  <li><a href="/courses/banking-finance/risk-management/95/" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_banking_and_finance', 'ln_risk_management', '', false, true);">Risk Management</a></li>
+                  <li><a href="/courses/banking-finance/stock-market-trading/94/" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_banking_and_finance', 'ln_stock_market_training', '', false, true);">Stock Market Training</a></li>
+                  <li><a href="/courses/banking-finance/financial-reporting-and-management/103/" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_banking_and_finance', 'ln_financial_reporting_and_management', '', false, true);">Finanacial Reporting and Management</a></li>
+                  <li><a href="/courses/banking-finance/commercial-operation/112/" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_banking_and_finance', 'ln_commercial_operation', '', false, true);">Commercial Operation </a></li>
+                  <li><a href="/courses/banking-finance/investment-banking/100/" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_banking_and_finance', 'ln_investment_banking', '', false, true);">Investment Banking </a></li>
+                  <li><a href="/courses/banking-finance/gst-2/507/" onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_banking_and_finance', 'ln_GST', '', false, true);">GST</a></li>
                   <li><a href="/courses/banking-and-finance/20/"  onclick="trackClickEvent()" class="view-all-detail">View all products</a></li>
                 </ul>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="courses4">
-                  <ul>
-                  <li><a onclick="trackClickEvent()" href="/courses/it-information-technology/big-data/84/">Big Data </a></li>
-                  <li><a onclick="trackClickEvent()" href="/courses/operation-management/project-management/123/">Project Management </a></li>
-                  <li><a onclick="trackClickEvent()" href="/courses/it-information-technology/it-software/53/">IT Software</a></li>
-                  <li><a onclick="trackClickEvent()" href="/courses/it-information-technology/graphic-design/54/">Graphic Design </a></li>
-                  <li><a onclick="trackClickEvent()" href="/courses/it-information-technology/cloud-computing/82/">Cloud Computing</a></li>
-                  <li><a onclick="trackClickEvent()" href="/courses/it-information-technology/ms-skills/98/">MS Skills</a></li>
-                  <li><a onclick="trackClickEvent()" href="/courses/it-information-technology/it-language/80/">IT Language</a></li>
-                  <li><a onclick="trackClickEvent()" href="/courses/it-information-technology/blockchain/496/">Blockchain</a></li>
-                  <li><a onclick="trackClickEvent()" href="/courses/it-information-technology/data-science/497/">Data Science</a></li>
+                  <ul> 
+                  <li><a onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_information_technology', 'ln_big_data', '', false, true);" href="/courses/it-information-technology/big-data/84/">Big Data </a></li>
+                  <li><a onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_information_technology', 'ln_project_management', '', false, true);" href="/courses/operation-management/project-management/123/">Project Management </a></li>
+                  <li><a onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_information_technology', 'ln_it_software', '', false, true);" href="/courses/it-information-technology/it-software/53/">IT Software</a></li>
+                  <li><a onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_information_technology', 'ln_graphic_design', '', false, true);" href="/courses/it-information-technology/graphic-design/54/">Graphic Design </a></li>
+                  <li><a onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_information_technology', 'ln_cloud_computing', '', false, true);" href="/courses/it-information-technology/cloud-computing/82/">Cloud Computing</a></li>
+                  <li><a onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_information_technology', 'ln_ms_skills', '', false, true);" href="/courses/it-information-technology/ms-skills/98/">MS Skills</a></li>
+                  <li><a onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_information_technology', 'ln_it_language', '', false, true);" href="/courses/it-information-technology/it-language/80/">IT Language</a></li>
+                  <li><a onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_information_technology', 'ln_blockchain', '', false, true);" href="/courses/it-information-technology/blockchain/496/">Blockchain</a></li>
+                  <li><a onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_information_technology', 'ln_datascience', '', false, true);" href="/courses/it-information-technology/data-science/497/">Data Science</a></li>
                   <li><a onclick="trackClickEvent()" href="/courses/it-information-technology/22/" class="view-all-detail">View all products</a></li>
                 </ul>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="courses5">
                   <ul>
-                  <li><a onclick="trackClickEvent()" href="/courses/hr-human-resource/talent-acquisition/93/">Talent Aquistion </a></li>
-                  <li><a onclick="trackClickEvent()" href="/courses/hr-human-resource/organizational-structure/97/">Organizational Structure </a></li>
-                  <li><a onclick="trackClickEvent()" href="/courses/hr-human-resource/training-and-development/91/">Training & Development </a></li>
-                  <li><a onclick="trackClickEvent()" href="/courses/hr-human-resource/compensation-2/110/">Compensation </a></li>
+                  <li><a onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_human_resources', 'ln_talent_acquisition', '', false, true);" href="/courses/hr-human-resource/talent-acquisition/93/">Talent Aquistion </a></li>
+                  <li><a onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_human_resources', 'ln_organizational_structure', '', false, true);" href="/courses/hr-human-resource/organizational-structure/97/">Organizational Structure </a></li>
+                  <li><a onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_human_resources', 'ln_training_and_development', '', false, true);" href="/courses/hr-human-resource/training-and-development/91/">Training & Development </a></li>
+                  <li><a onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_human_resources', 'ln_compensation', '', false, true);" href="/courses/hr-human-resource/compensation-2/110/">Compensation </a></li>
                   <li><a onclick="trackClickEvent()" href="/courses/hr-human-resource/25/" class="view-all-detail">View all products</a></li>
                 </ul>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="courses6">
                   <ul>
-                  <li><a onclick="trackClickEvent()" href="/courses/management/general-management/102/">General Management </a></li>
-                  <li><a onclick="trackClickEvent()" href="/courses/management/business-analyst/58/">Business Analyst </a></li>
-                  <li><a onclick="trackClickEvent()" href="/courses/management/corporate-governance/59/">Corporate Governance </a></li>
+                  <li><a onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_management', 'ln_general_management', '', false, true);" href="/courses/management/general-management/102/">General Management </a></li>
+                  <li><a onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_management', 'ln_business_analyst', '', false, true);" href="/courses/management/business-analyst/58/">Business Analyst </a></li>
+                  <li><a onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_management', 'ln_corporate_governance', '', false, true);" href="/courses/management/corporate-governance/59/">Corporate Governance </a></li>
                   <li><a onclick="trackClickEvent()" href="/courses/management/27/" class="view-all-detail">View all products</a></li>
                 </ul>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="courses7">
                   <ul>
-                  <li><a onclick="trackClickEvent()" href="/courses/mass-communication/content/46/">Content</a></li>
-                  <li><a onclick="trackClickEvent()" href="/courses/mass-communication/public-relations/96/">Public Relations </a></li>
-                  <li><a onclick="trackClickEvent()" href="/courses/mass-communication/editor/106/">Editor </a></li>
-                  <li><a onclick="trackClickEvent()" href="/courses/mass-communication/journalism/99/">Journalism </a></li>
+                  <li><a onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_mass_communication', 'ln_content', '', false, true);" href="/courses/mass-communication/content/46/">Content</a></li>
+                  <li><a onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_mass_communication', 'ln_public_relations', '', false, true);" href="/courses/mass-communication/public-relations/96/">Public Relations </a></li>
+                  <li><a onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_mass_communication', 'ln_editor', '', false, true);" href="/courses/mass-communication/editor/106/">Editor </a></li>
+                  <li><a onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_mass_communication', 'ln_journalism', '', false, true);" href="/courses/mass-communication/journalism/99/">Journalism </a></li>
                   <li><a onclick="trackClickEvent()" tabindex="-1" href="/courses/mass-communication/29/" class="view-all-detail">View all products</a></li>
                 </ul>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="courses8">
                   <ul>
-                  <li><a onclick="trackClickEvent()" href="/courses/personal-development/language-learning/40/">Language Learning</a></li>
-                  <li><a onclick="trackClickEvent()" href="/courses/personal-development/leadership/41/">Leadership </a></li>
-                  <li><a onclick="trackClickEvent()" href="/courses/personal-development/personality-development/42/">Personality Development</a></li>
-                  <li><a onclick="trackClickEvent()" href="/courses/personal-development/interview-preparation/38/">Interview Preparation</a></li>
-                  <li><a onclick="trackClickEvent()" href="/courses/personal-development/communication-development/36/">Communication Development</a></li>
+                  <li><a onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_personal_development', 'ln_language_learning', '', false, true);" href="/courses/personal-development/language-learning/40/">Language Learning</a></li>
+                  <li><a onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_personal_development', 'ln_leadership', '', false, true);" href="/courses/personal-development/leadership/41/">Leadership </a></li>
+                  <li><a onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_personal_development', 'ln_personality_development', '', false, true);" href="/courses/personal-development/personality-development/42/">Personality Development</a></li>
+                  <li><a onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_personal_development', 'ln_personality_development', '', false, true);" href="/courses/personal-development/interview-preparation/38/">Interview Preparation</a></li>
+                  <li><a onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_personal_development', 'ln_personality_development', '', false, true);" href="/courses/personal-development/communication-development/36/">Communication Development</a></li>
                   <li><a onclick="trackClickEvent()" tabindex="-1" href="/courses/personal-development/21/" class="view-all-detail">View all products</a></li>
                 </ul>
                 </div>
                 <div role="tabpanel" class="tab-pane" id="courses9">
                   <ul>
-                  <li><a onclick="trackClickEvent()" href="/courses/law/cyber-law/107/">Cyber Law</a></li>
-                  <li><a onclick="trackClickEvent()" href="/courses/law/criminal-law/108/">Criminal Law </a></li>
-                  <li><a onclick="trackClickEvent()" href="/courses/law/company-law/111/">Company Law</a></li>
+                  <li><a onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_law', 'ln_cyber_law', '', false, true);" href="/courses/law/cyber-law/107/">Cyber Law</a></li>
+                  <li><a onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_law', 'ln_criminal_law', '', false, true);" href="/courses/law/criminal-law/108/">Criminal Law </a></li>
+                  <li><a onclick="trackClickEvent();MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_law', 'ln_company_law', '', false, true);" href="/courses/law/company-law/111/">Company Law</a></li>
                   <li><a onclick="trackClickEvent()" tabindex="-1" href="/courses/law/23/" class="view-all-detail">View all products</a></li>
                 </ul>
                 </div>
@@ -287,28 +287,30 @@
             </div>
           </li>
           <li class="ms-link">
-            <a onclick="trackClickEvent()" class="" href="/courses/sales-and-marketing/digital-marketing/32/">Digital Marketing</a>
+            <a onclick="trackClickEvent();MyGA.SendEvent('navigation_menu','ln_navigation_menu', 'ln_digital_marketing_navigation', 'ln_digital_marketing', '', false, true);
+" class="" href="/courses/sales-and-marketing/digital-marketing/32/">Digital Marketing</a>
           </li>
           <li class="ms-link">
-            <a onclick="trackClickEvent()" class="" href="/courses/operation-management/six-sigma/193/">Six Sigma</a>
+            <a onclick="trackClickEvent();MyGA.SendEvent('navigation_menu','ln_navigation_menu', 'ln_six_sigma_navigation', 'ln_six_sigma', '', false, true);
+" class="" href="/courses/operation-management/six-sigma/193/">Six Sigma</a>
           </li>
           <li class="ms-link">
-            <a onclick="trackClickEvent()" class="" href="/courses/operation-management/project-management/123/">Project Management</a>
+            <a onclick="trackClickEvent();MyGA.SendEvent('navigation_menu','ln_navigation_menu', 'ln_project_management_navigation', 'ln_project_management','', false, true);" class="" href="/courses/operation-management/project-management/123/">Project Management</a>
           </li>
           <li class="ms-link">
-            <a onclick="trackClickEvent()" class="" href="/courses/it-information-technology/big-data/84/">Big Data</a>
+            <a onclick="trackClickEvent();MyGA.SendEvent('navigation_menu','ln_navigation_menu', 'ln_big_data', 'ln_big_data', '', false, true);" class="" href="/courses/it-information-technology/big-data/84/">Big Data</a>
           </li>
           <li class="ms-link">
-            <a onclick="trackClickEvent()" class="" href="/courses/it-information-technology/it-software/53/">IT Software</a>
+            <a onclick="trackClickEvent();MyGA.SendEvent('navigation_menu','ln_navigation_menu', 'ln_it_software', 'ln_it_software', '', false, true);" class="" href="/courses/it-information-technology/it-software/53/">IT Software</a>
           </li>
           <!-- <li class="ms-link">
             <a onclick="trackClickEvent()" class="" href="/courses/management/general-management/102/">General Management</a>
           </li> -->
           <li class="nav-item">
-            <a onclick="trackClickEvent()" class="nav-link" href="/courses/it-information-technology/data-science/497/">Data Science</a>
+            <a onclick="trackClickEvent();MyGA.SendEvent('navigation_menu','ln_navigation_menu', 'ln_datascience_navigation', 'ln_datascience', '', false, true);" class="nav-link" href="/courses/it-information-technology/data-science/497/">Data Science</a>
           </li>
           <li class="nav-item">
-            <a onclick="trackClickEvent()" class="nav-link" href="/courses/it-information-technology/cloud-computing/82/">Cloud Computing</a>
+            <a onclick="trackClickEvent();MyGA.SendEvent('navigation_menu','ln_navigation_menu', 'ln_cloud_computing_navigation', 'ln_cloud_computing', '', false, true);" class="nav-link" href="/courses/it-information-technology/cloud-computing/82/">Cloud Computing</a>
           </li>
           {% if navlink_1 %}
             <li class="ms-link">
@@ -372,10 +374,6 @@
       }, i[r].l = 1 * new Date(); a = s.createElement(o),
       m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
     })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
-    ga('create', 'UA-3537905-41', 'auto', { 'name': 'a' });
-    ga('a.send', 'pageview');
-    ga('create', 'UA-3537905-41', 'auto');
-    ga('send', 'pageview');
     
     function nav1_gaEvent() {ga('send', 'event', 'Nav Bar', 'Click', 'Skillpage1');}
     function nav2_gaEvent() {ga('send', 'event', 'Nav Bar', 'Click', 'Skillpage2');}
@@ -425,7 +423,7 @@
   
   <!-- Modal Offer -->
   <div class="modal fade" id="offerModal" tabindex="-1" role="dialog" aria-labelledby="offerModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered avail-offer" role="document">
+    <div class="modal-dialog modal-dialog-centered avail-offerAvail o" role="document">
       <div class="modal-conten">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">Avail offer</h5>
@@ -499,7 +497,7 @@
                 </ul>
                 <span id = checkbox_error class="error-msg"></span>
               </div>
-              <button type="submit" id = "avail_offer_id" class="btn btn-block" role="button" onclick="gaAvail_offer()">Avail offer now!</button>
+              <button type="submit" id = "avail_offer_id" class="btn btn-block" role="button" onclick="gaAvail_offer(); MyGA.SendEvent('homepage_avail_offer','ln_homepage_avail_offer', 'avail_offer_now', '','',false,true)">Avail offer now!</button>
               <span class="tc">*T&C applied, valid only on select courses</span>
               <input type="hidden" name="product_offer" value="True">
             </form>
