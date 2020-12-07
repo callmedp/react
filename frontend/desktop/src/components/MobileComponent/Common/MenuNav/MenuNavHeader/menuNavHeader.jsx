@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { siteDomain } from 'utils/domains';
 
@@ -9,6 +9,14 @@ const menuNavHeader = (props) => {
         let path = window.location.pathname
         window.location.replace(`${siteDomain}/logout/?next=${path}`);
     }
+
+    const handleRedirect = (type) => {
+        let redirectPath = window.location.pathname
+        redirectPath ?
+            window.location.replace(`${siteDomain}/${type}/?next=${redirectPath}`) :
+            window.location.replace(`${siteDomain}/${type}/`)
+    }
+
     return(
         <>
         {
@@ -28,8 +36,8 @@ const menuNavHeader = (props) => {
                     <div className="media-body">
                         <strong>Welcome Guest</strong>
                         <p>
-                            <a href={`${siteDomain}/login/`} className="btn-white-outline" >LogIn</a>
-                            <a href={`${siteDomain}/register/`} className="btn-white-outline" >Register</a>
+                            <a href='#' onClick={(e)=>{e.preventDefault();handleRedirect('login')}} className="btn-white-outline" >LogIn</a>
+                            <a href='#' onClick={(e)=>{e.preventDefault();handleRedirect('register')}} className="btn-white-outline" >Register</a>
                         </p>
                     </div>
                 </div>

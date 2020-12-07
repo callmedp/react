@@ -47,7 +47,7 @@ const DefaultMenuNav = (props) =>{
 
     useEffect(() => {
         fetchUserInfo();
-        dispatch(fetchNavOffersAndTags())
+        dispatch(fetchNavOffersAndTags());
     },[])
 
     return (
@@ -83,11 +83,11 @@ const DefaultMenuNav = (props) =>{
                     (
                         <ul className="dashboard-menu">
                             <li>
-                                <a className="dashboard-menu--item" href="#/"><figure className="icon-dashboard" /> Dashboard</a>
+                                <a className="dashboard-menu--item" href={`${siteDomain}/dashboard/`}><figure className="icon-dashboard" /> Dashboard</a>
                                 <ul className="dashboard-menu__submmenu">
-                                    <li><Link to="/dashboard/">Inbox</Link></li>
-                                    <li><Link to="/dashboard/myorder/">My Order</Link></li>
-                                    <li><Link to="/dashboard/mywallet/">My Wallet</Link></li>
+                                    <li><a href={`${siteDomain}/dashboard/`}>Inbox</a></li>
+                                    <li><a href={`${siteDomain}/dashboard/myorder/`}>My Order</a></li>
+                                    <li><a href={`${siteDomain}/dashboard/mywallet/`}>My Wallet</a></li>
                                 </ul>
                             </li>
                         </ul>
