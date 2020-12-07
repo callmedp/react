@@ -75,7 +75,7 @@ class TalentEconomyLandingView(TemplateView, BlogMixin):
         # checking if article exists for each categories.
         article_list = Blog.objects.filter(
             status=1, visibility=2).select_related(
-            'p_cat', 'author').order_by('-publish_date')
+            'p_cat', 'author').order_by('-last_modified_on')
         p_cat = [p for p in article_list.values_list('p_cat', flat=True)]
         sec_cat = [sec for sec in article_list.values_list('sec_cat', flat=True)]
         categories_id = set(p_cat + sec_cat)
