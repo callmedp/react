@@ -800,16 +800,12 @@ class TrendingCoursesAndSkillsAPI(APIView):
         tprds = SearchQuerySet().filter(id__in=product_pks, pTP__in=[0, 1, 3]).exclude(
             id__in=settings.EXCLUDE_SEARCH_PRODUCTS
         )
-
-        p_skills = ProductSkill.objects.filter(product__id__in=product_pks).distinct() 
-            .prefetch_related('product', 'skill').exclude(product__categories__related_to__slug__isnull=True) \
-            .values('skill__name').annotate(
-            product__slug=Concat(Value('/course/'), F('product__categories__related_to__slug'), Value('/'),
-                                 F('product__slug'),
-                                 Value('/'), Value('pd-'), F('product__id'), output_field=CharField()))
-        import ipdb;ipdb.set_trace()
-        unic = ProductSkillSerializer(p_skills, many=True).data
-        unique_skills = dict((v['skill__name'],v) for v in p_skills).values()
+        p_skills = ProductSkill.objects.filter(product__id__in=product_pks).distinct().exclude(product__categories__related_to__slug__isnull=True)
+            # product__slug=Concat(Value('/course/'), F('product__categories__related_to__slug'), Value('/'),
+            #                      F('product__slug'),
+            #                      Value('/'), Value('pd-'), F('product__id'), output_field=CharField()))
+        unique_skills = ProductSkillSerializer(p_skills, many=True).data
+        # unique_skills = dict((v['skill__name'],v) for v in p_skills).values()
         data = {
 
             'trendingCourses': [{'id': tprd.id, 'heading': tprd.pHd, 'name': tprd.pNm, 'url': tprd.pURL, 'img': tprd.pImg,\
