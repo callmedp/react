@@ -1,6 +1,6 @@
-<a href="{{articlelist.url}}" title="{{articlelist.name}}" onclick = "MyGA.SendEvent('blog_banner','ln_blog_banner', 'ln_blog_banner_click', {{articlelist.name}},'', false, true)>
+<a href="{{articlelist.url}}" title="{{articlelist.name}}" onclick = "MyGA.SendEvent('blog_banner','ln_blog_banner', 'ln_blog_banner_click', '{{articlelist.name}}','', false, true)">
   <figure class="{% if bigtmpl %}big-image{% endif %}">
-    <img loading="lazy" aria-label="{{articlelist.image_alt}}" src="{{articlelist.image.url}}" alt="{{articlelist.image_alt}}">
+    <img loading="lazy" aria-label="{{articlelist.image_alt}}" src="{% if articlelist.image %}{{articlelist.image.url}}{% endif %}" alt="{{articlelist.image_alt}}">
   </figure>
   <div class="carousel-heading-container {% if mini %}b-mini{% endif %}">
     <span class="product-title">{{articlelist.p_cat.name}}</span>
