@@ -44,7 +44,7 @@ from core.api_mixin import ShineCandidateDetail
 from django.core.files.base import ContentFile
 from payment.models import PaymentTxn
 from .helper import APIResponse
-from .serializers import TrendingCoursesAndSkillsSerializer
+from .serializers import ProductSkillSerializer
 
 # Other Import
 from weasyprint import HTML
@@ -802,13 +802,13 @@ class TrendingCoursesAndSkillsAPI(APIView):
         )
 
         p_skills = ProductSkill.objects.filter(product__id__in=product_pks).distinct() 
-            # .prefetch_related('product', 'skill').exclude(product__categories__related_to__slug__isnull=True) \
-            # .values('skill__name').annotate(
-            # product__slug=Concat(Value('/course/'), F('product__categories__related_to__slug'), Value('/'),
-            #                      F('product__slug'),
-            #                      Value('/'), Value('pd-'), F('product__id'), output_field=CharField()))
+            .prefetch_related('product', 'skill').exclude(product__categories__related_to__slug__isnull=True) \
+            .values('skill__name').annotate(
+            product__slug=Concat(Value('/course/'), F('product__categories__related_to__slug'), Value('/'),
+                                 F('product__slug'),
+                                 Value('/'), Value('pd-'), F('product__id'), output_field=CharField()))
         import ipdb;ipdb.set_trace()
-        unic = TrendingCoursesAndSkillsSerializer(p_skills, many=True).data
+        unic = ProductSkillSerializer(p_skills, many=True).data
         unique_skills = dict((v['skill__name'],v) for v in p_skills).values()
         data = {
 
