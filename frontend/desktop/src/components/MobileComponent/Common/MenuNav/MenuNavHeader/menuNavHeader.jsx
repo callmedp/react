@@ -1,9 +1,14 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { siteDomain } from 'utils/domains';
 
 const menuNavHeader = (props) => {
     const { candidateInfo, isLoggedIn } = props
-    
+    const handleLogout = () => {
+        localStorage.clear();
+        let path = window.location.pathname
+        window.location.replace(`${siteDomain}/logout/?next=${path}`);
+    }
     return(
         <>
         {
@@ -13,7 +18,7 @@ const menuNavHeader = (props) => {
                     <div className="media-body">
                         <strong>Welcome {candidateInfo?.first_name}</strong>
                         <p>
-                            <Link className="btn-white-outline" to="{#}">Logout</Link>
+                            <a href="#" className="btn-white-outline" onClick={(e)=>{e.preventDefault();handleLogout()}}>Logout</a>
                         </p>
                     </div>
                 </div>
@@ -23,8 +28,8 @@ const menuNavHeader = (props) => {
                     <div className="media-body">
                         <strong>Welcome Guest</strong>
                         <p>
-                            <Link className="btn-white-outline" to="{#}">SignIn</Link>
-                            <Link className="btn-white-outline" to="{#}">Register</Link>
+                            <a href={`${siteDomain}/login/`} className="btn-white-outline" >LogIn</a>
+                            <a href={`${siteDomain}/register/`} className="btn-white-outline" >Register</a>
                         </p>
                     </div>
                 </div>
