@@ -90,7 +90,7 @@
                <!--</div>-->
                 <div id="bloodhound" class="form-inline">
                    <input id ="bloodhound_input" type="text" class="typeahead form-control" placeholder="Search popular tests">
-                   <button id="bloodhound_submit" type="submit" class="skill-jobs-btn btn"></button>
+                   <button id="bloodhound_submit" type="submit" class="skill-jobs-btn btn" onclick="MyGA.SendEvent('practicetest_search','ln_practicetest_search', 'ln_search_initiated', 'click_on_search','', false, true)"></button>
                 </div>
                 <div id="bloodhound_message" style="display: none;">
                   <p style="color:red;"> Test not available</p>
@@ -110,7 +110,7 @@ Shine learning brings to you one of the largest collection of test preps for all
                   {% for fa in test_prep_children %}
 
                    <div class="testinside-home testinside-inner">
-                    <a class="test-box" href="{% url 'assessment:vskill-subcategory' slug=fa.slug %}" title="{{fa.name}}">
+                    <a class="test-box" href="{% url 'assessment:vskill-subcategory' slug=fa.slug %}" title="{{fa.name}}" onclick="MyGA.SendEvent('test_preps_select','ln_test_preps_select', 'ln_take_free_test_{{testPrep.heading}}', 'ln_{{fa.name}}','', false, true)">
                   <span class="border-left {% cycle 'default' 'purple' 'olive' 'green' %}"></span>
                     <span>
                      {{fa.name}}

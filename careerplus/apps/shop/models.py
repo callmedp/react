@@ -1275,7 +1275,7 @@ class Product(AbstractProduct, ModelMeta):
 
     @property
     def take_free_test(self):
-        if self.test_set.all():
+        if self.test_set.exists():
             return self.test_set.first()
 
 

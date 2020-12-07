@@ -23,5 +23,6 @@ urlpatterns = [
     re_path(r'^download-invoice/$', views.DashboardResumeInvoiceDownload.as_view()),
     re_path(r'^dashboard-feedback/$', views.DashboardFeedbackSubmit.as_view()),
     re_path(r'^dashboard-pause-play/$', OrderItemPatchView.as_view()),
+    re_path(r'^dashboard-neo-board-user/$', views.NeoBoardUserAPI.as_view()),
 
 ]

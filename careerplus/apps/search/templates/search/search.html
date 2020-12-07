@@ -137,7 +137,7 @@
             <div class="listing-heading-box">
                 {% if products_found %}
                 <div class="form-group custom-select">
-                    <select name="sort" hdn="id_sort" class="form-control cls_filter">
+                    <select name="sort" hdn="id_sort" class="form-control cls_filter" onchange="MyGA.SendEvent('ProductListSort', 'ln_course_sort', 'ln_sort_course', $('option:selected', this).text(), '', false, true)">
                         <option value="">Relevance</option>
                         <option value="1" {% if search_params.sort == '1' %}selected="selected"{% endif %}>Latest</option>
                         <option value="2" {% if search_params.sort == '2' %}selected="selected"{% endif %}>Review(High to Low)</option>

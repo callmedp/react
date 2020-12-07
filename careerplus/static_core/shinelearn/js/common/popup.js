@@ -6,5 +6,5 @@ span.onclick = function() {
 $(document).ready(function() {
   setTimeout(function() {
       $("#popup_subscribe").modal('show');
-  }, 10000);
+  }, 15000);
 });
