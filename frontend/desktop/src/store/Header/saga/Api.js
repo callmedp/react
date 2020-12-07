@@ -19,11 +19,17 @@ const candidateInformation = () => {
     })
 }
 
+const navOffersAndTags = (data) => {
+    const url = `nav-offers-and-tags/`;
+    return BaseApiService.get(`${siteDomain}/api/v1/${url}`);
+};
+
 
 export default {
     sessionAvailability,
     cartCount,
-    candidateInformation
+    candidateInformation,
+    navOffersAndTags,
 }
 
 

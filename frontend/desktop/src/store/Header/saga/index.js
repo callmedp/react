@@ -44,8 +44,28 @@ function* candidateInfo(action) {
     }
 }
 
+function* navOffersAndTags(action) {
+    try {
+        const { payload } = action;
+        const response = yield call(Api.navOffersAndTags, payload);
+        if (response["error"]) {
+            return
+        }
+        const item = response?.data?.data;
+
+        yield put({ 
+            type : Actions.NAVIGATION_OFFERS_AND_SPECIAL_TAGS_FETCHED, 
+            item 
+        })
+
+    } catch (e) {
+        console.error("Exception occured ",e)
+    }
+}
+
 export default function* WatchHeader(){
     yield takeLatest(Actions.FETCH_SESSION_AVAILABILITY, sessionAvailability);
     yield takeLatest(Actions.FETCH_CART_COUNT, cartCount);
     yield takeLatest(Actions.FETCH_CANDIDATE_INFO, candidateInfo);
+    yield takeLatest(Actions.FETCH_NAVIGATION_OFFERS_AND_SPECIAL_TAGS, navOffersAndTags);
 }
