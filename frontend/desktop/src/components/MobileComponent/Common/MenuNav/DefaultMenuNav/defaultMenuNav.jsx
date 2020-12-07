@@ -5,7 +5,7 @@ import { siteDomain } from 'utils/domains';
 import MenuNavHeader from '../MenuNavHeader/menuNavHeader';
 import './defaultMenuNav.scss'
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchNavOffersAndTags } from 'store/Header/actions/index';
+import { cartCount, sessionAvailability, getCandidateInfo, fetchNavOffersAndTags } from 'store/Header/actions/index';
 
 
 const DefaultMenuNav = (props) =>{
@@ -15,13 +15,44 @@ const DefaultMenuNav = (props) =>{
     const dispatch = useDispatch()
 
     const { navTags } = useSelector(store => store.header)
+    const [candidateInfo, setCandidateInfo] = useState(false)
+    const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+    const fetchUserInfo = async () => {
+        try {
+            dispatch(cartCount());
+            const isSessionAvailable = await new Promise((resolve, reject) => dispatch(sessionAvailability({ resolve, reject })));
+
+            if (isSessionAvailable['result']) {
+                try {
+                    setIsLoggedIn(true)
+                    const candidateInformation = await new Promise((resolve, reject) => dispatch(getCandidateInfo({ resolve, reject })))
+                    setCandidateInfo(candidateInformation)
+                }
+                catch (e) {
+                    setIsLoggedIn(false)
+                    console.log("ERROR OCCURED", e)
+                }
+            }
+            else {
+                setIsLoggedIn(false)
+            }
+        }
+
+        catch (e) {
+            setIsLoggedIn(false)
+            console.log("ERROR OCCURED", e)
+        }
+    }
+
     useEffect(() => {
+        fetchUserInfo();
         dispatch(fetchNavOffersAndTags())
     },[])
 
     return (
         <Menu className='navigation' width={ '300px' } isOpen={open} onStateChange={state => setOpen(state.isOpen)}>
-            <MenuNavHeader />
+            <MenuNavHeader isLoggedIn={isLoggedIn} candidateInfo={candidateInfo}/>
             <div className="m-menu-links">
                 <a className="menu-item" href={`${siteDomain}/`} onClick={() => {setOpen(state => !state)}}>
                     <figure className="micon-home" /> Home 
@@ -48,7 +79,7 @@ const DefaultMenuNav = (props) =>{
                     ) : null
                 }
                 {
-                    // getDataStorage('candidate_id') && 
+                    isLoggedIn && 
                     (
                         <ul className="dashboard-menu">
                             <li>

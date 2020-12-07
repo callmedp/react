@@ -1,33 +1,33 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-const menuNavHeader = () => {
-
+const menuNavHeader = (props) => {
+    const { candidateInfo, isLoggedIn } = props
+    
     return(
         <>
         {
-            true ? 
-            (<div className="m-guest-section">
-                <figure className="micon-user-pic"></figure>
-                <div className="media-body">
-                    {/* <strong>Welcome {candidate_detail?.first_name}</strong> */}
-                    <strong>Welcome Gaurav</strong>
-                    <p>
-                        <Link className="btn-white-outline" to="{#}">Logout</Link>
-                    </p>
+            isLoggedIn ? 
+                <div className="m-guest-section">
+                    <figure className="micon-user-pic"></figure>
+                    <div className="media-body">
+                        <strong>Welcome {candidateInfo?.first_name}</strong>
+                        <p>
+                            <Link className="btn-white-outline" to="{#}">Logout</Link>
+                        </p>
+                    </div>
                 </div>
-            </div>)
             :
-            (<div className="m-guest-section">
-                <figure className="micon-user-pic"></figure>
-                <div className="media-body">
-                    <strong>Welcome Guest</strong>
-                    <p>
-                        <Link className="btn-white-outline" to="{#}">SignIn</Link>
-                        <Link className="btn-white-outline" to="{#}">Register</Link>
-                    </p>
+                <div className="m-guest-section">
+                    <figure className="micon-user-pic"></figure>
+                    <div className="media-body">
+                        <strong>Welcome Guest</strong>
+                        <p>
+                            <Link className="btn-white-outline" to="{#}">SignIn</Link>
+                            <Link className="btn-white-outline" to="{#}">Register</Link>
+                        </p>
+                    </div>
                 </div>
-            </div>)
         }
         </>
     )

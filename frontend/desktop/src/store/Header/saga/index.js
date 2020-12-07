@@ -5,7 +5,7 @@ function* sessionAvailability(action) {
     let { payload: { resolve } } = action;
     try {
         let resp = yield call(Api.sessionAvailability)
-        const { result } = resp;
+        const { result } = resp.data;
         resolve({ result: result });
     } catch (e) {
         return resolve(false)
