@@ -4,15 +4,13 @@ import './header.scss';
 import { freeResourcesList, jobAssistanceList, categoryList, navSkillList } from 'utils/constants';
 import { siteDomain } from 'utils/domains';
 import DropDown from '../DropDown/dropDown';
-import { fetchNavOffersAndTags } from 'store/Common/Navigation/actions/index';
 import { useDispatch, useSelector } from 'react-redux';
-import { cartCount, sessionAvailability, getCandidateInfo } from 'store/Header/actions/index';
+import { cartCount, sessionAvailability, getCandidateInfo, fetchNavOffersAndTags } from 'store/Header/actions/index';
 
 const Header = (props) => {
 
     const dispatch = useDispatch()
-    const { count } = useSelector(store => store.header)
-    const { navTags } = useSelector(store => store.navOffersAndTags)
+    const { count, navTags } = useSelector(store => store.header)
     const [candidateInfo, setCandidateInfo] = useState(false)
     const [isLoggedIn, setIsLoggedIn] = useState(false)
 

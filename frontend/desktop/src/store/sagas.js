@@ -4,7 +4,6 @@ import WatchDomainJobs from './SkillPage/DomainJobs/saga/index';
 import WatchBannerData from './SkillPage/Banner/saga/index';
 import WatchCoursesAndAssessments from './SkillPage/CoursesTray/saga';
 import WatchPopulerCourses from './SkillPage/PopularCourses/saga';
-import WatchNavOffersAndTags from './Common/Navigation/saga';
 import WatchHeader from './Header/saga/index';
 
 export default function* () {
@@ -14,7 +13,6 @@ export default function* () {
         WatchBannerData(),
         WatchCoursesAndAssessments(),
         WatchPopulerCourses(),
-        WatchNavOffersAndTags(),
         WatchHeader(),
     ])
 }

@@ -5,7 +5,7 @@ import { siteDomain } from 'utils/domains';
 import MenuNavHeader from '../MenuNavHeader/menuNavHeader';
 import './defaultMenuNav.scss'
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchNavOffersAndTags } from 'store/Common/Navigation/actions/index';
+import { fetchNavOffersAndTags } from 'store/Header/actions/index';
 
 
 const DefaultMenuNav = (props) =>{
@@ -14,7 +14,7 @@ const DefaultMenuNav = (props) =>{
     } = props
     const dispatch = useDispatch()
 
-    const { navTags } = useSelector(store => store.navOffersAndTags)
+    const { navTags } = useSelector(store => store.header)
     useEffect(() => {
         dispatch(fetchNavOffersAndTags())
     },[])

@@ -15,3 +15,8 @@ export const getCandidateInfo = (payload) => ({
     type: Actions.FETCH_CANDIDATE_INFO,
     payload
 })
+
+export const fetchNavOffersAndTags = (payload) => ({
+    type : Actions.FETCH_NAVIGATION_OFFERS_AND_SPECIAL_TAGS,
+    payload
+})
