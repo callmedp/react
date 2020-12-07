@@ -499,7 +499,7 @@ class CrmApiMixin(object):
                 'base_url') + settings.SHINECPCRM_DICT.get('create_lead_url')
 
             client_data = data_dict
-            import ipdb;ipdb.set_trace();
+            
             resp = requests.post(lead_create_api, data=json.dumps(
                 client_data), headers=headers)
             if resp.status_code == 201:
