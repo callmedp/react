@@ -1,14 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { slide as Menu } from 'react-burger-menu';
 import { Link } from 'react-router-dom';
 import { siteDomain } from 'utils/domains'; 
 import MenuNavHeader from '../MenuNavHeader/menuNavHeader';
 import './defaultMenuNav.scss'
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchNavOffersAndTags } from 'store/Common/Navigation/actions/index';
+
 
 const DefaultMenuNav = (props) =>{
     const {
         setType, setOpen, open
     } = props
+    const dispatch = useDispatch()
+
+    const { navTags } = useSelector(store => store.navOffersAndTags)
+    useEffect(() => {
+        dispatch(fetchNavOffersAndTags())
+    },[])
 
     return (
         <Menu className='navigation' width={ '300px' } isOpen={open} onStateChange={state => setOpen(state.isOpen)}>
@@ -30,6 +39,14 @@ const DefaultMenuNav = (props) =>{
                 <a className="menu-item" href={`${siteDomain}/talenteconomy/`}>
                     <figure className="micon-blog-services" /> Blog
                 </a>
+                {
+                    navTags?.length ? 
+                    (
+                        navTags.map((tag)=>{
+                            return <a className="menu-item" href={`${siteDomain}${tag.skill_page_url}`}> {tag?.display_name}&emsp;<small class="m-config-tag">{tag?.tag}</small></a>
+                        })
+                    ) : null
+                }
                 {
                     // getDataStorage('candidate_id') && 
                     (

@@ -1,12 +1,19 @@
-import React from 'react';
+import React , { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './header.scss';
 import { freeResourcesList, jobAssistanceList, categoryList, navSkillList } from 'utils/constants';
 import { siteDomain } from 'utils/domains';
 import DropDown from '../DropDown/dropDown';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchNavOffersAndTags } from 'store/Common/Navigation/actions/index';
 
 const Header = (props) => {
 
+    const dispatch = useDispatch();
+    const { navTags } = useSelector(store => store.navOffersAndTags)
+    useEffect(() => {
+        dispatch(fetchNavOffersAndTags())
+    },[])
 
     return (
         <div>
@@ -101,6 +108,15 @@ const Header = (props) => {
                                     return (
                                         <li key={skill.url} className="nav-item">
                                             <Link className="nav-link" to={skill.url}>{skill.name}</Link>
+                                        </li>
+                                    )
+                                })
+                            }
+                            {
+                                navTags?.map((tag, index) => {
+                                    return (
+                                        <li key={index} className="nav-item">
+                                            <a href={`${siteDomain}${tag.skill_page_url}`} className="nav-link">{tag?.display_name}<small class="config-tag">{tag?.tag}</small></a>
                                         </li>
                                     )
                                 })
