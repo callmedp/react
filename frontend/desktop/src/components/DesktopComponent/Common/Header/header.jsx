@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import './header.scss';
 import { freeResourcesList, jobAssistanceList, categoryList, navSkillList } from 'utils/constants';
 import { siteDomain } from 'utils/domains';
-import DropDown from '../DropDown/dropDown';
+import DropDown from './DropDown/dropDown';
 import { useDispatch, useSelector } from 'react-redux';
 import { cartCount, sessionAvailability, getCandidateInfo, fetchNavOffersAndTags } from 'store/Header/actions/index';
 

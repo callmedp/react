@@ -17,9 +17,10 @@ from shared.rest_addons.pagination import LearningCustomPagination
 from django.template.loader import get_template
 from django.utils import timezone
 from django.conf import settings
-from django.db.models import Count, F, Prefetch
+from django.db.models import Count, F, Prefetch, Value, CharField
 from haystack.query import SearchQuerySet
 from django.core.cache import cache
+from django.db.models.functions import Concat
 
 # Local Import
 from core.mixins import InvoiceGenerate
@@ -36,13 +37,14 @@ from core.library.gcloud.custom_cloud_storage import \
 # Local Inter App Import
 from homepage.models import StaticSiteContent,TestimonialCategoryRelationship,Testimonial,\
     TopTrending, TrendingProduct, HomePageOffer, NavigationSpecialTag
-from shop.models import Category, Product
+from shop.models import Category, Product, ProductSkill
 from order.models import Order, OrderItem ,InternationalProfileCredential
 from dashboard.dashboard_mixin import DashboardInfo, DashboardCancelOrderMixin
 from core.api_mixin import ShineCandidateDetail
 from django.core.files.base import ContentFile
 from payment.models import PaymentTxn
 from .helper import APIResponse
+from .serializers import TrendingCoursesAndSkillsSerializer
 
 # Other Import
 from weasyprint import HTML
@@ -765,7 +767,7 @@ class PausePlayService(UpdateAPIView):
     owner_fields = ['order.candidate_id']
 
 
-class TrendingCourseAPI(APIView):
+class TrendingCoursesAndSkillsAPI(APIView):
 
     __author__ = 'Rahul'
 
@@ -798,11 +800,22 @@ class TrendingCourseAPI(APIView):
         tprds = SearchQuerySet().filter(id__in=product_pks, pTP__in=[0, 1, 3]).exclude(
             id__in=settings.EXCLUDE_SEARCH_PRODUCTS
         )
+
+        p_skills = ProductSkill.objects.filter(product__id__in=product_pks).distinct() 
+            # .prefetch_related('product', 'skill').exclude(product__categories__related_to__slug__isnull=True) \
+            # .values('skill__name').annotate(
+            # product__slug=Concat(Value('/course/'), F('product__categories__related_to__slug'), Value('/'),
+            #                      F('product__slug'),
+            #                      Value('/'), Value('pd-'), F('product__id'), output_field=CharField()))
+        import ipdb;ipdb.set_trace()
+        unic = TrendingCoursesAndSkillsSerializer(p_skills, many=True).data
+        unique_skills = dict((v['skill__name'],v) for v in p_skills).values()
         data = {
 
-            'tprds': [{'id': tprd.id, 'heading': tprd.pHd, 'name': tprd.pNm, 'url': tprd.pURL, 'img': tprd.pImg,\
+            'trendingCourses': [{'id': tprd.id, 'heading': tprd.pHd, 'name': tprd.pNm, 'url': tprd.pURL, 'img': tprd.pImg,\
                         'img_alt': tprd.pImA, 'rating': tprd.pARx, 'vendor': tprd.pPvn, 'stars': tprd.pStar, 'provider': tprd.pPvn\
                     } for tprd in tprds],
+            'trendingSkills': unique_skills
         }
         # t_courses.append(data)
 
@@ -833,3 +846,6 @@ class NavigationTagsAndOffersAPI(APIView):
             'navOffer': active_offer
         }
         return APIResponse(message='Navigations Tags and Offers details fetched', data=data, status=status.HTTP_200_OK)
+
+
+

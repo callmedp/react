@@ -6,6 +6,7 @@ import { SkillPageBannerReducer } from './SkillPage/Banner/reducer';
 import { CourseAndAssessmentsReducer } from './SkillPage/CoursesTray/reducer';
 import { PopularCoursesReducer } from './SkillPage/PopularCourses/reducer';
 import { HeaderReducer } from './Header/reducer/index';
+import { FooterReducer } from './Footer/reducer/index';
 
 const rootReducer = combineReducers({
     needHelp : NeedHelpReducer,
@@ -13,7 +14,8 @@ const rootReducer = combineReducers({
     skillBanner : SkillPageBannerReducer,
     coursesTray : CourseAndAssessmentsReducer,
     popularCourses : PopularCoursesReducer,
-    header : HeaderReducer
+    header : HeaderReducer,
+    footer : FooterReducer,
 });
 
 

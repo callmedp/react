@@ -5,6 +5,7 @@ import WatchBannerData from './SkillPage/Banner/saga/index';
 import WatchCoursesAndAssessments from './SkillPage/CoursesTray/saga';
 import WatchPopulerCourses from './SkillPage/PopularCourses/saga';
 import WatchHeader from './Header/saga/index';
+import WatchFooter from './Footer/saga/index';
 
 export default function* () {
     yield all([
@@ -14,5 +15,6 @@ export default function* () {
         WatchCoursesAndAssessments(),
         WatchPopulerCourses(),
         WatchHeader(),
+        WatchFooter(),
     ])
 }
