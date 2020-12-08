@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useEffect } from 'react';
 import SkillBanner from './Banner/banner';
 import AboutSection from './AboutSection/aboutSection';
 import WhoLearn from './WhoLearn/whoLearn';
@@ -15,13 +15,16 @@ import LearnersStories from './LearnersStories/learnersStories';
 import StickyNav from './StickyNav/stickyNav';
 import Header from '../../Common/Header/header';
 import Footer from '../../Common/Footer/footer';
-
 import './skillPage.scss'
 
 const SkillPage = (props) => {
 
     const pageId = props.match.params.id;
-
+    useEffect(()=>{
+        setTimeout(() => {
+            window && window.$zopim &&  window.$zopim.livechat.window.show();
+        }, 7000)
+    }, [])
 
     return (
         <div>
