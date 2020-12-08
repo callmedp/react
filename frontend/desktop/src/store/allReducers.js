@@ -4,7 +4,6 @@ import { DomainJobsReducer } from './SkillPage/DomainJobs/reducer';
 import { NeedHelpReducer } from './SkillPage/NeedHelp/reducer';
 import { SkillPageBannerReducer } from './SkillPage/Banner/reducer'; 
 import { CourseAndAssessmentsReducer } from './SkillPage/CoursesTray/reducer';
-import { PopularCoursesReducer } from './SkillPage/PopularCourses/reducer';
 import { HeaderReducer } from './Header/reducer/index';
 import { FooterReducer } from './Footer/reducer/index';
 
@@ -13,7 +12,6 @@ const rootReducer = combineReducers({
     jobs : DomainJobsReducer,
     skillBanner : SkillPageBannerReducer,
     coursesTray : CourseAndAssessmentsReducer,
-    popularCourses : PopularCoursesReducer,
     header : HeaderReducer,
     footer : FooterReducer,
 });

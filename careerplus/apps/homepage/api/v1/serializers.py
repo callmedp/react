@@ -143,6 +143,7 @@ class ProductSkillSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         data = super(ProductSkillSerializer, self).to_representation(instance)
         data['skillName'] = instance.skill.name
-        data['productSlug'] = instance.product.slug
+        data['skillUrl'] = instance.product.categories.first().url
+
         return data
 

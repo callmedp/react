@@ -47,7 +47,7 @@ const Footer = (props) => {
                                 trendingCourses?.map((course, index) => {
                                     return (
                                         <React.Fragment key={index}>
-                                            <a href={`${siteDomain}/${course.url}`}>{course.name}</a>&nbsp;
+                                            <a href={`${siteDomain}${course.url}`}>{course.name}</a>&nbsp;
                                             { trendingCourses.length - 1 === index ? '' : '|'}
                                         </React.Fragment>
                                     )
@@ -61,7 +61,7 @@ const Footer = (props) => {
                                 trendingSkills?.map((skill, index) => {
                                     return (
                                         <React.Fragment key={index}>
-                                            <a href={`${siteDomain}/${skill.url}`}>{skill.name}</a>&nbsp;
+                                            <a href={`${siteDomain}${skill.productSlug}`}>{skill.skillName}</a>&nbsp;
                                             { trendingSkills.length - 1 === index ? '' : '|'}
                                         </React.Fragment>
                                     )

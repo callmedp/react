@@ -3,7 +3,6 @@ import WatchLeadForm from './SkillPage/NeedHelp/saga/index';
 import WatchDomainJobs from './SkillPage/DomainJobs/saga/index';
 import WatchBannerData from './SkillPage/Banner/saga/index';
 import WatchCoursesAndAssessments from './SkillPage/CoursesTray/saga';
-import WatchPopulerCourses from './SkillPage/PopularCourses/saga';
 import WatchHeader from './Header/saga/index';
 import WatchFooter from './Footer/saga/index';
 
@@ -13,7 +12,6 @@ export default function* () {
         WatchDomainJobs(),
         WatchBannerData(),
         WatchCoursesAndAssessments(),
-        WatchPopulerCourses(),
         WatchHeader(),
         WatchFooter(),
     ])

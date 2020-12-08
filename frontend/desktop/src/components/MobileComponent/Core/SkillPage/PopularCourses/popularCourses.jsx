@@ -2,14 +2,16 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import '../CoursesTray/courses.scss';
-import { fetchPopulerCourses } from 'store/SkillPage/PopularCourses/actions'
+import { fetchTrendingCnA } from 'store/Footer/actions/index';
 
 const PopularCourses = (props) => {
+
     const dispatch = useDispatch()
     useEffect(() => {
-        dispatch(fetchPopulerCourses({'medium' : 1}))
+        dispatch(fetchTrendingCnA())
     }, [])
-    const { pCourseList } = useSelector(store => store.popularCourses)
+
+    const { trendingCourses } = useSelector( store => store.footer )
 
     const starRatings = (star, index) => {
         return (star === '*' ? <em className="micon-fullstar" key={index}></em> : star === '+' 
@@ -20,7 +22,7 @@ const PopularCourses = (props) => {
     return (
         <>
         {
-            pCourseList.length ? 
+            trendingCourses.length ? 
             (
                 <section className="m-container m-courses mt-0 mb-0 pt-10 pb-0">
                     <div className="d-flex">
@@ -29,7 +31,7 @@ const PopularCourses = (props) => {
                     </div>
                     <div className="d-flex m-popular-courses">
                     {
-                        pCourseList?.map((course) => {
+                        trendingCourses?.slice(0,2).map((course) => {
                             return (
                                 <div className="m-col" key={course.id}>
                                     <div className="m-card">
