@@ -314,12 +314,12 @@
           </li>
           {% if navlink_1 %}
             <li class="ms-link">
-              <a onclick="trackClickEvent()" class="" href="{{navlink_1.skill_page_url}}" onclick="nav1_gaEvent();">{{navlink_1.display_name}}{% if navlink_1.tag %}<small class="config-tag">{{navlink_1.tag}}</small>{% endif %}</a>
+              <a onclick="trackClickEvent();MyGA.SendEvent('navigation_menu','ln_navigation_menu', 'ln_cloud_computing_navigation', 'ln_{{navlink_1.display_name}}', '', false, true);" class="" href="{{navlink_1.skill_page_url}}" onclick="nav1_gaEvent();">{{navlink_1.display_name}}{% if navlink_1.tag %}<small class="config-tag">{{navlink_1.tag}}</small>{% endif %}</a>
             </li>
           {% endif %}
           {% if navlink_2 %}
             <li class="ms-link">
-              <a onclick="trackClickEvent()" class="" href="{{navlink_2.skill_page_url}}" onclick="nav2_gaEvent();">{{navlink_2.display_name}}{% if navlink_2.tag %}<small class="config-tag">{{navlink_2.tag}}</small>{% endif %}</a>
+              <a onclick="trackClickEvent();MyGA.SendEvent('navigation_menu','ln_navigation_menu', 'ln_cloud_computing_navigation', 'ln_{{navlink_1.display_name}}', '', false, true);" class="" href="{{navlink_2.skill_page_url}}" onclick="nav2_gaEvent();">{{navlink_2.display_name}}{% if navlink_2.tag %}<small class="config-tag">{{navlink_2.tag}}</small>{% endif %}</a>
             </li>
           {% endif %}
         </ul>
