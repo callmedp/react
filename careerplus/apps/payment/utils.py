@@ -549,6 +549,7 @@ class UpdatetrackingCache():
             utm_campaign = data_dict.get('utm_campaign','')
             referral_product = data_dict.get('referral_product','')
             referal_subproduct = data_dict.get('referal_subproduct','')
+            popup_based_product = data_dict.get('popup_based_product', '')
 
             payment_cache = cache.get('tracking_payment_action', {})
             u_id_payment_cache = payment_cache.get(str(u_id),{})
@@ -562,7 +563,8 @@ class UpdatetrackingCache():
                         "trigger_point" : trigger_point,
                         "utm_campaign" : utm_campaign,
                         "referal_product" : referral_product,
-                        "referal_subproduct" : referal_subproduct
+                        "referal_subproduct" : referal_subproduct,
+                        "popup_based_product" : popup_based_product
                     },
                     "date_time" : timezone.now()
                 })
