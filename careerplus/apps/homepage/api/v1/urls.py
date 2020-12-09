@@ -23,6 +23,6 @@ urlpatterns = [
     re_path(r'^download-invoice/$', views.DashboardResumeInvoiceDownload.as_view()),
     re_path(r'^dashboard-feedback/$', views.DashboardFeedbackSubmit.as_view()),
     re_path(r'^dashboard-pause-play/$', OrderItemPatchView.as_view()),
-    re_path(r'^trending-courses/$', views.TrendingCourseAPI.as_view()),
+    re_path(r'^trending-courses-and-skills/$', views.TrendingCoursesAndSkillsAPI.as_view()),
     re_path(r'^nav-offers-and-tags/$', views.NavigationTagsAndOffersAPI.as_view()),
 ]

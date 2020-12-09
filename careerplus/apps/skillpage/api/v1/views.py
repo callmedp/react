@@ -67,10 +67,9 @@ class SkillPage(APIView):
             data = fetch_from_cache
             return Response(data, status=status.HTTP_200_OK)
         data = {}
-        category = Category.objects.only('id').filter(id=skill_id).first()
+        category = Category.objects.only('id','slug','career_outcomes').filter(id=skill_id).first()
         if category:
             subheadercategory = SubHeaderCategory.objects.filter(category=category, active=True, heading_choices__in=[2,3,4])
-            career_outcomes = category.split_career_outcomes()
             for heading in subheadercategory:
                 heading_description = SubHeaderCategorySerializer(heading).data
                 description = heading_description.get('description',None)
@@ -98,7 +97,7 @@ class SkillPage(APIView):
                 'name':category.name,
                 'slug':category.slug,
                 'about': category.description,
-                'skillGainList' : career_outcomes,
+                'skillGainList' : category.split_career_outcomes(),
                 'breadcrumbs':self.get_breadcrumb_data(category),
                 'testimonialCategory':testimonialcategory_data,
                 'otherSkills':explore_courses,

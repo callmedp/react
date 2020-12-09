@@ -1,9 +1,9 @@
 from rest_framework import serializers
 from homepage.models import StaticSiteContent
 from order.models import Order ,OrderItem
+from shop.models import ProductSkill
 # from api.serializers import OrderItemDetailSerializer
 from shared.rest_addons.mixins import SerializerFieldsMixin
-
 
 class StaticSiteContentSerializer(serializers.ModelSerializer):
 
@@ -133,3 +133,17 @@ class DashboardCancellationSerializer(serializers.Serializer):
     candidate_id = serializers.CharField(required=True)
     email = serializers.EmailField(required=True)
     order_id = serializers.IntegerField(required=True)
+
+
+class ProductSkillSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductSkill
+        fields = ("skill",)
+    
+    def to_representation(self, instance):
+        data = super(ProductSkillSerializer, self).to_representation(instance)
+        data['skillName'] = instance.skill.name
+        data['skillUrl'] = instance.product.categories.first().url
+
+        return data
+
