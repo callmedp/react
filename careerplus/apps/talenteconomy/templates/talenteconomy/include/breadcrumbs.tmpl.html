@@ -9,7 +9,7 @@
       </li>
 
     {% else %}
-      <li class="active">{{breadcrumb.name}}</li>
+      <li class="active" onclick="MyGA.SendEvent('ln_breadcrumbs', 'ln_breadcrumbs', 'ln_breadcrumb_click', '{{breadcrumb.label}}', '', false, true);">{{breadcrumb.name}}</li>
     {% endif %}
     
   {% endfor %}
