@@ -109,6 +109,53 @@
 
 {% block container %}
     <div class="body-wrapper">
+
+    {% if product_id == 4589 %}
+        <div class="aws-modal" id="leadCreationModal" style="display:none;z-index:9999;">
+    <div class="container pt-0">
+       <!-- <span class="close" id="close-offer-modal" onclick="gaPopup_close()"></span> -->
+       <div>
+            <img src="{% static 'shinelearn/images/mobile/common/aws-bg-mobile.jpg' %}" class="img-responsive" alt="AWS Certified Solutions Architect Associate Certification">
+       </div>
+       <div class="offer-modal--formBox">
+          <p class="fs-22 semi-bold text-center">AWS Certified Solutions Architect Associate Certification</p>
+          <p class="fs-16 text-center mb-10">Weekend/Weekday Online Live Classes</p>
+          <form id="leadCreationForm" novalidate="novalidate">
+             <ul>
+                <li class="form-group input-effect">
+                    <input type="text" id="name" name="name" class="form--control animation-input " placeholder=""  value="{{request.session.full_name}}" onfocus="gaForm_fill()">
+
+                    <label for="name">Name</label
+                    ><span class="error-txt"></span></li>
+                <li class="form-group d-flex">
+                   <div class="input-effect code">
+                      <select name="country_code" id="country_code"  class="form--control">
+                {% for country in country_choices %}
+                       <option value="{{country.0}}" {% if country.0 == initial_country %} selected {% endif %} >{{country.0}}-{{country.1}}</option>
+                  {% endfor %}
+                      </select>
+                   </div>
+                   <div class="input-effect ml-auto number-box rel">
+                       <input type="text" name="number"  value="{{request.session.mobile_no}}" id="mobile" class="form--control animation-input " placeholder="">
+                       <label for="mobile">Mobile</label>
+                       <span class="error-txt"></span></div>
+                </li>
+                <li class="form-group input-effect"><input type="email" name="email" id="email-id" value="" class="form--control animation-input " aria-describedby="email-id" placeholder="">
+                    <label for="email-id">Email id</label><span class="error-txt"></span></li>
+
+                <input type="hidden" class="form-control" id="campaign" name="campaign" value="awscloud" />
+                <input type="hidden" class="form-control" id="lsource" name="lsource" value="4" />
+                <input type="hidden" class="form-control" id="prd" name="prd" value="{{product.name}}" />
+                 <li><button class="btn btn-round btn-blue w100 semi-bold" id="leadCreationFormSubmit" type="button">Submit</button></li>
+             </ul>
+          </form>
+       </div>
+    </div>
+ </div>
+
+        {% endif %}
+
+
         <section class="content-box">
             <div class="mb-10 c6">
                 {% if prd_num_rating %}
@@ -462,6 +509,8 @@
   <!-- End Google Tag Manager (noscript) -->
 
   {% endif %}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=991709191"></script>
+
 
 
 {% endblock container %}
@@ -498,8 +547,6 @@
               (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
               m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
               })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-              ga('create', 'UA-3537905-41', 'auto', {'name': 'a'});
-              ga('a.send', 'pageview');
               ga('create', 'UA-3537905-41', 'auto');
               ga('send', 'pageview');
 
@@ -1032,6 +1079,109 @@ document.getElementById('iframe');
     });
     
 </script>
+
+
+<script type="text/javascript">
+    {% if product_id == 4589 %}
+        $(window).on('load',function(){
+            {% if product_id not in request.session.lead_create_prods or not request.session.lead_create_prods %}
+            $('#leadCreationModal').show();
+            {% endif %}
+        });
+    {% endif %}
+
+
+        $.validator.addMethod("indiaMobile", function(value, element) {
+        var country_code = $('#country_code').val();
+        if(country_code == '91'){
+            return value.length == 10;
+        }
+        return true;
+    });
+
+$('#leadCreationForm').validate({
+	rules: {
+		name: {
+			required: true,
+			maxlength: 80,
+		},
+            number:{
+                required:true,
+                number:true,
+                indiaMobile:true,
+                minlength: 4,
+                maxlength: 15,
+            },
+		email: {
+			required: true,
+			email: true,
+		}
+	},
+	        messages:{
+            number:{
+               required:"This field is required",
+               indiaMobile: 'length must be 10 digits.',
+               minlength: 'length must be greater than 3 digits.',
+               maxlength: 'length must be less than 15 digits.',
+            },
+            name:{
+                required:"This field is required"
+            },
+        },
+
+
+	highlight: function (element, errorClass) {
+		$(element).closest('.form-group').addClass('error1');
+
+	},
+	unhighlight: function (element, errorClass) {
+		$(element).closest('.form-group').removeClass('error1');
+			$(element).siblings('.error-txt').hide();
+		$(element).siblings('.error-txt').html('');
+	},
+	errorPlacement: function (error, element) {
+	$(element).siblings('.error-txt').show();
+		$(element).siblings('.error-txt').html(error.text());
+
+	},
+
+});
+
+   function setSession(data){
+        $.ajax({
+         url   : '/api/v1/set-session/',
+         data: data,
+         type  : 'post',
+         success: function(response){
+
+            return false;
+         }
+    });
+
+}
+
+
+$("#leadCreationFormSubmit").click(function(e){
+var flag=$('#leadCreationForm').valid();
+if(flag){
+    var form = $('#leadCreationForm');
+    $.ajax({
+         url   : '/lead/lead-management/',
+         type  : 'post',
+         data  : form.serialize(), // data to be submitted
+         success: function(response){
+         }
+    });
+   gtag('event', 'conversion', {'send_to': 'AW-991709191/KzvhCOuFhuoBEleQ8dgD'});
+    setSession({'lead_create_id':productId });
+
+    $('#leadCreationModal').hide();
+    return false;
+}
+ });
+
+
+    </script>
 
 
 

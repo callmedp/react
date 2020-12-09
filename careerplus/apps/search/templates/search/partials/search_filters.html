@@ -12,9 +12,9 @@
 
     <div class="col-sm-3 col-md-2 mt-40 cls_scroller_parent">
         <div id="filters" class="panel-group filters">
-            <div class="cls_scroller pr">  
+            <div class="cls_scroller pr">
                 <strong class="filter-heading">Filter</strong>
-                <a href="javascript:void(0)" class="apply-filter js_apply_filter" >Apply</a>
+                <a href="javascript:void(0)" class="apply-filter js_apply_filter" onclick="MyGA.SendEvent('ProductListFilter', 'ln_course_filters', 'ln_apply_filter', $('input:checkbox[type=checkbox]:checked').map(function(){return $(this).parent().text()}).get().join(','), '', false, true)">Apply</a>
             </div>
             {% if facets.pFA|length %}
             <div class="panel panel-default">

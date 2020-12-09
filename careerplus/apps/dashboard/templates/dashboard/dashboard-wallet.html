@@ -60,7 +60,7 @@
                     <div class="col-sm-9 bdr dashboard-tab-content">
                       <div class="row">
                         <div class="col-sm-12">
-                          <div class="notification">loyality points - {{wal_total|floatformat:2}} <small>|</small><a href="{% if cart_count %}{% url "cart:payment-summary" %}{% else %}/{% endif %}">Redeem now</a></div>
+                          <div class="notification">loyality points - {{wal_total|floatformat:2}} <small>|</small><a href="{% if cart_count %}{% url "cart:payment-summary" %}{% else %}/{% endif %}" onclick="MyGA.SendEvent('DashboardMyWallet', 'ln_dashboard_left_menu', 'ln_my_wallet', 'redeem_points', '', false, true)">Redeem now</a></div>
                         </div>
                       </div>
                       

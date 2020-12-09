@@ -26,7 +26,7 @@
               <img loading="lazy" aria-label="{{main_article.author.image_alt}}" src="{{main_article.author.image.url}}" class="author-small-pic" alt="{{main_article.author.image_alt}}">
                 {% endif %}
 
-              <a href="/talenteconomy/authors/{{main_article.author.slug}}" title="{{main_article.author.name}}">{{main_article.author.name}}</a> / <span itemprop="datePublished">{{main_article.publish_date.date}}</span>
+              <a href="/talenteconomy/authors/{{main_article.author.slug}}" title="{{main_article.author.name}}">{{main_article.author.name}}</a> / <span itemprop="datePublished">{{main_article.last_modified_on.date}}</span>
             </span>
             <meta itemprop="author" content={{main_article.author.name}}>
              {% endif %}
@@ -83,7 +83,7 @@
     </div>
 
     <meta itemprop="headline" content="{{main_article.heading}}">
-    <meta itemprop="dateModified" content="{{main_article.publish_date.date}}">
+    <meta itemprop="dateModified" content="{{main_article.last_modified_on.date}}">
     <meta itemprop="mainEntityOfPage" content="{% url 'talent:talent-landing' %}">
     
   <div itemprop="publisher" itemscope itemtype="https://schema.org/Organization" >
