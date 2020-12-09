@@ -1,5 +1,6 @@
 import logging
 from datetime import datetime
+import json
 
 from django.urls import reverse
 from django.conf import settings
@@ -15,12 +16,15 @@ from order.tasks import (
     payment_realisation_mailer,
     invoice_generation_order,
 )
-from .tasks import add_reward_point_in_wallet, make_logging_request, make_logging_sk_request
+from .tasks import (
+    add_reward_point_in_wallet, make_logging_request, 
+    make_logging_sk_request, make_logging_amount_request
+    )
 
 
 class PaymentMixin(object):
 
-    def payment_tracking(self, candidate_id, product_list, method):
+    def payment_tracking(self, candidate_id, product_list, method, total_amount, total_amount_paid):
         cache_data = cache.get("tracking_payment_action",{})
         c_id_data = cache_data.get(str(candidate_id),{})
         if not c_id_data:
@@ -42,10 +46,42 @@ class PaymentMixin(object):
             utm_campaign = prod_data.get('utm_campaign', '')
             referal_product = prod_data.get('referal_product', '')
             referal_subproduct = prod_data.get('referal_subproduct', '')
+            popup_based_product = prod_data.get('popup_based_product', '')
             if t_id and prod and method:
-                make_logging_sk_request.delay(
-                    prod, products, t_id, method, position, trigger_point, str(candidate_id), utm_campaign, domain, referal_product, referal_subproduct)
+                make_logging_amount_request.delay(
+                    prod, products, t_id, method, position, trigger_point, str(candidate_id), utm_campaign, domain, referal_product, referal_subproduct, total_amount, total_amount_paid, popup_based_product)
+                logging.getLogger('info_log').info('purchase method data: tracking_product_id: {}, product_tracking_mapping_id : {}, tracking_id: {},'
+                    'action: {}, position: {}, trigger_point: {}, u_id: {}, utm_campaign: {}, domain: {}, referal_product: {}, referal_subproduct: {},'
+                    'total_amount: {}, total_amount_paid: {}, popup_based_product:{}'.format(prod, products, t_id, method, position,\
+                     trigger_point, str(candidate_id), utm_campaign, domain, referal_product, referal_subproduct, total_amount, total_amount_paid, popup_based_product))
         return True
+
+    def paid_amount_without_tax(self, order):
+        original_amount = ''
+        tax_config = order.tax_config if order.tax_config else ''
+        if not tax_config:
+            return ''
+        try:
+            tax_config = json.loads(tax_config)
+        except Exception as e:
+            logging.getLogger('error_log').error("invalid data in tax_config for order {}".format(order.id))
+        if not isinstance(tax_config, dict):
+            return '' 
+        total_tax = 0
+        for tax in tax_config:
+            total_tax += tax_config[tax] 
+        total_tax = 1 + total_tax/100
+
+        try:
+            original_amount = order.total_incl_tax if order.total_incl_tax else ''
+            original_amount = float(original_amount)
+        except Exception as e:
+            logging.getLogger('error_log').error("invalid data in original_amount for order {}".format(order.id))
+        if not original_amount:
+            return ''
+        original_amount = original_amount/total_tax
+
+        return original_amount
 
 
     def process_payment_method(self, payment_type, request, txn_obj, data={}):
@@ -219,18 +255,26 @@ class PaymentMixin(object):
             'referal_product','')
             referal_subproduct = self.request.session.get(
                 'referal_subproduct','')
+            popup_based_product = self.request.session.get(
+                'popup_based_product','')
             
             action = 'purchase_done'
-            if tracking_id and product_availability:
-                make_logging_sk_request.delay(
-                    tracking_product_id, product_tracking_mapping_id, tracking_id, action, position, trigger_point, u_id, utm_campaign, 2, referal_product, referal_subproduct)
+            total_amount = order.total_excl_tax if order.total_excl_tax else ""
+            total_amount_paid = self.paid_amount_without_tax(order = order)
+            if tracking_id and product_availability and payment_type != "PAID FREE":
+                make_logging_amount_request.delay(
+                    tracking_product_id, product_tracking_mapping_id, tracking_id, action, position, trigger_point, u_id, utm_campaign, 2, referal_product, referal_subproduct, total_amount, total_amount_paid, popup_based_product)
+                logging.getLogger('info_log').info('purchase done data: tracking_product_id: {}, product_tracking_mapping_id : {}, tracking_id: {},'
+                    'action: {}, position: {}, trigger_point: {}, u_id: {}, utm_campaign: {}, domain: {}, referal_product: {}, referal_subproduct: {},'
+                     'total_amount: {}, total_amount_paid: {}, popup_based_product:{}'.format(tracking_product_id, product_tracking_mapping_id, tracking_id,\
+                        action, position, trigger_point, u_id, utm_campaign, 2, referal_product, referal_subproduct, total_amount, total_amount_paid, popup_based_product))
                 # if method:
                 #     make_logging_sk_request.delay(
                 #         tracking_product_id, product_tracking_mapping_id, tracking_id, method, position, trigger_point, u_id, utm_campaign, 2, referal_product, referal_subproduct)
             candidate_id = order.candidate_id
             product_ids = list(order.orderitems.values_list('product__pk',flat=True))
             if candidate_id and product_ids and method:
-                self.payment_tracking(candidate_id = candidate_id, product_list = product_ids, method = method)
+                self.payment_tracking(candidate_id = candidate_id, product_list = product_ids, method = method, total_amount = total_amount, total_amount_paid = total_amount_paid)
 
             # order = InvoiceGenerate().save_order_invoice_pdf(order=order)
             invoice_generation_order.delay(order_pk=order.pk)

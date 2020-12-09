@@ -109,6 +109,9 @@ urlpatterns = [
         name='resume-template-download'
     ),
     re_path(r'^v2/', include('api.v2.urls')),
+    re_path(r'^v1/resume_mailer_tracking/$', 
+        views.ResumePromotionTrackingAPIView.as_view(),
+        name='resume-mailer-tracking'),
 
 ]
 
