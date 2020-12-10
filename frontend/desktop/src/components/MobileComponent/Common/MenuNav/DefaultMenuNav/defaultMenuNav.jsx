@@ -42,8 +42,8 @@ const DefaultMenuNav = (props) =>{
                 {
                     navTags?.length ? 
                     (
-                        navTags.map((tag)=>{
-                            return <a className="menu-item" href={`${siteDomain}${tag.skill_page_url}`}> {tag?.display_name}&emsp;<small class="m-config-tag">{tag?.tag}</small></a>
+                        navTags.map((tag, index)=>{
+                            return <a key={index} className="menu-item" href={`${siteDomain}${tag.skill_page_url}`}> {tag?.display_name}&emsp;<small className="m-config-tag">{tag?.tag}</small></a>
                         })
                     ) : null
                 }

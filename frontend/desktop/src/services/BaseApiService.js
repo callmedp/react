@@ -89,14 +89,9 @@ async function handleResponse(response, isFetchingHTML) {
         let data;
         try {
             data = await response.json();
-            for (const key in data) {
-                message += `${data[key]} `;
-                
-            }
             return {
                 error: true,
-                errorMessage: message,
-                status: response['status'],
+                ...data
             }
             
         } catch (e) {

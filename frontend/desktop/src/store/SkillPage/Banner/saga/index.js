@@ -14,7 +14,7 @@ function* skillPageBanner(action) {
         const item = response.data;
 
         //converts 1D array to 2D array if medium is Desktop
-        if(!payload?.medium){
+        if(!!payload && !payload.medium && !!item && item.testimonialCategory instanceof Array){
             const storiesList = item?.testimonialCategory.reduce((rows, key, index) => 
                 (index % 3 == 0 ? rows.push([key]) : rows[rows.length-1].push(key)) && rows, []);
             

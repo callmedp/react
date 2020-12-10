@@ -40,9 +40,9 @@ const BannerSkill = (props) => {
                     </h1>
                     <Carousel className="header-carousel">
                         {
-                            featuresList?.map((feature) => {
+                            featuresList?.map((feature, index) => {
                                 return (
-                                    <Carousel.Item>
+                                    <Carousel.Item key={index} >
                                         <p key={Math.random()}>
                                             <figure className="icon-round-arrow"></figure>
                                             <span className="flex-1">{ feature }</span>

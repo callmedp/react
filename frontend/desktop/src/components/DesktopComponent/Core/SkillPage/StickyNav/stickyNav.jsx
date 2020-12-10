@@ -27,31 +27,31 @@ const StickyNav = (props) => {
                 <div className="flex-100">
                     <h2>{name} Courses & Certification</h2>
                     <Nav id="content">
-                        <LinkScroll to="about" isDynamic={true} spy={true} smooth={true} offset={-120}>
+                        <LinkScroll to="about" isDynamic={true} spy={true}  offset={-120}>
                             <Nav.Link >About</Nav.Link>
                         </LinkScroll>
                         
-                        <LinkScroll to="skGain" isDynamic={true} spy={true} smooth={true} offset={-80}>
+                        <LinkScroll to="skGain" isDynamic={true} spy={true} offset={-80}>
                             <Nav.Link >Skills you gain</Nav.Link>
                         </LinkScroll>
                         
-                        <LinkScroll to="courses" isDynamic={true} spy={true} smooth={true} offset={-120}>
+                        <LinkScroll to="courses" isDynamic={true} spy={true} offset={-120}>
                             <Nav.Link >Courses</Nav.Link>
                         </LinkScroll>
                         
-                        <LinkScroll to="choose" isDynamic={true} spy={true} smooth={true} offset={-100}>
+                        <LinkScroll to="choose" isDynamic={true} spy={true} offset={-100}>
                             <Nav.Link >Why choose us</Nav.Link>
                         </LinkScroll>
                         
-                        <LinkScroll to="faq" isDynamic={true} spy={true} smooth={true} offset={-80}>
+                        <LinkScroll to="faq" isDynamic={true} spy={true} offset={-80}>
                             <Nav.Link >FAQs</Nav.Link>
                         </LinkScroll>
                         
-                        <LinkScroll to="story" isDynamic={true} spy={true} smooth={true} offset={-150}>
+                        <LinkScroll to="story" isDynamic={true} spy={true} offset={-130}>
                             <Nav.Link >Learner’s stories</Nav.Link>
                         </LinkScroll>
 
-                         <LinkScroll to="story1" className="invisible" isDynamic={true} spy={true} smooth={true} offset={0}></LinkScroll>
+                         <LinkScroll to="story1" className="invisible" isDynamic={true} spy={true}  offset={0}></LinkScroll>
                     </Nav>
                 </div>
                 <Form inline>

@@ -165,7 +165,7 @@ const Header = (props) => {
                                 navTags?.map((tag, index) => {
                                     return (
                                         <li key={index} className="nav-item">
-                                            <a href={`${siteDomain}${tag.skill_page_url}`} className="nav-link">{tag?.display_name}<small class="config-tag">{tag?.tag}</small></a>
+                                            <a href={`${siteDomain}${tag.skill_page_url}`} className="nav-link">{tag?.display_name}<small className="config-tag">{tag?.tag}</small></a>
                                         </li>
                                     )
                                 })

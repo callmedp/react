@@ -97,7 +97,7 @@ export default class NeedHelpModal extends Component {
                 !!(isError) &&
                 <span className="help-message-error">{errorMessage}</span>
             }
-            <div class="text-center">
+            <div className="text-center">
             <button className="btn btn__round btn__primary mt-20" onClick={this.handleFeedback}>
             Submit
             </button>
