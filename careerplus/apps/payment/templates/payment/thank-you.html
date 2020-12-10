@@ -63,7 +63,7 @@ Thank You - Shine Learning
                         {% csrf_token %}
                         <div class="latest-resume selected" id="upload-resume-box">
                             <figure></figure>
-                            <a href="javascript:void(); MyGA.SendEvent('ln_complete_payment', 'ln_complete_payment', 'ln_thankyou_page_clicks', 'upload_resume', '', false, true);">Upload</a> new resume
+                            <a href="javascript:void();" onclick="MyGA.SendEvent('ln_complete_payment', 'ln_complete_payment', 'ln_thankyou_page_clicks', 'upload_resume', '', false, true);">Upload</a> new resume
                             <input type="file" name="resume_file">
                             <span class="db">or</span>
                             fill this <a href="{% url "dashboard:dashboard-downloadquestionnaire" %}">questionnaire</a> and
