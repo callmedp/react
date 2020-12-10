@@ -7,13 +7,13 @@
   {% endif %}
   <div class="container padlr-0">
     <div class="navbar navbar-expand-lg navbar-light padlr-0" itemscope itemtype="http://schema.org/Organization">
-      <a  class="navbar-brand" aria-label="shinelearning.com" href="{% url 'homepage' %}"></a>
+      <a  class="navbar-brand" aria-label="shinelearning.com" href="{% url 'homepage' %}" onclick="MyGA.SendEvent('logo_click', 'ln_logo_click', 'ln_logo_click', 'homepage','',false, true);trackClickEvent();"></a>
       <meta itemprop="name" content="Shine">
       <meta itemprop="url" content="https://learning.shine.com"/>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <form action="/search/results/" class="form-inline my-2 my-lg-0 mr-auto">
             <input class="form-control search-box" type="search" placeholder="Search course, assesssment…" name="q" aria-label="Search" autocomplete="off">
-            <button class="btn btn-outline-success my-2 my-sm-0 nav-pad" type="submit"><figure class="b4-icon-search mb-0"></figure></button>
+            <button class="btn btn-outline-success my-2 my-sm-0 nav-pad" type="submit" onclick="MyGA.SendEvent('click_on_search','ln_click_on_search', 'ln_search_initiated_navigation', 'ln_click_on_search', 'click_on _search','', false, true);"><figure class="b4-icon-search mb-0"></figure></button>
         </form>
         <ul class="navbar-nav navbar-right">
           <li class="nav-item dropdown dropdown-jobs">
