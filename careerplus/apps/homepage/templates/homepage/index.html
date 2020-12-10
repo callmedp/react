@@ -116,7 +116,7 @@ rel="stylesheet">
                         <ul class="listing col-sm-4">
                             <li>
                                 <a title="{{ product.pHd|default:product.pNm}}" class="box-panel"
-                                href="{{ product.pURL }}" onclick="homepageTracking('exit_home_page');homepageTracking('homepage_recommended_courses')">
+                                href="{{ product.pURL }}" onclick="homepageTracking('exit_home_page');homepageTracking('homepage_recommended_courses');MyGA.SendEvent('homepage_navigation','ln_recommended_course_select', 'ln_recommended_course_select', 'ln_{{product.pNm}}','', false, true);">
                                 <div class="media">
                                     <div class="media-body">
                                         <h3 class="listing-heading">
@@ -156,7 +156,7 @@ rel="stylesheet">
                             <ul class="listing col-sm-4">
                                 <li>
                                     <a title="{{ product.pHd|default:product.pNm}}" class="box-panel"
-                                    href="{{ product.pURL }}">
+                                    href="{{ product.pURL }}" onclick="MyGA.SendEvent('homepage_navigation','ln_popular_course_select', 'ln_popular_course_select', 'ln_{{product.pNm}}','', false, true)"">
                                     <div class="media">
                                         <div class="media-body">
                                             <h3 class="listing-heading">
