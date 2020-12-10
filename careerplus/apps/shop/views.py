@@ -66,6 +66,8 @@ from crmapi.tasks import create_lead_crm
 from crmapi.config import PRODUCT_SOURCE_MAPPING
 redis_conn = get_redis_connection("search_lookup")
 
+from users.forms import PasswordResetRequestForm
+
 
 class ProductInformationMixin(object):
 
@@ -709,6 +711,9 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         product_data = self.get_product_detail_context(
             self.product_obj, self.sqs,
             self.product_obj, self.sqs)
+        product_data.update({
+            "reset_form": PasswordResetRequestForm()
+            })
         if self.product_obj.type_flow == 16:
             product_detail_content = render_to_string(
                 'shop/product-detail-assesment.html', product_data,
