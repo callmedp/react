@@ -134,6 +134,7 @@ GA.prototype.SendEvent = function() {
         case 'take_me_to_section': /* In blog section when user clicks take me */
         case 'contributor_click': /* in blog section when user clicks contributor */
         case 'recently _added_blogs': /*recently added in blogs*/
+        case 'ln_popular_courses': /*popular courses*/
     
         
         /* Skill Page Events */
