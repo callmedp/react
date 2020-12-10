@@ -172,7 +172,7 @@ class BlogDetailView(DetailView, BlogMixin):
         # except Exception:
         #     raise Http404
         self.object.no_views += 1
-        self.object.save()
+        # self.object.save()
         self.object.update_score()
         redirect = self.redirect_if_necessary(request.path, self.object)
         if redirect:
