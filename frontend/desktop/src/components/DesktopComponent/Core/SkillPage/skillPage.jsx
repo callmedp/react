@@ -26,7 +26,7 @@ const SkillPage = (props) => {
     return (
         <div>
             <Header/>
-            {/* <StickyNav  /> */}
+            <StickyNav  />
             <SkillBanner pageId={pageId}/>
             <section className="container">
                 <div className="row">

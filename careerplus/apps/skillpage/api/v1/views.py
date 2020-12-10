@@ -66,7 +66,7 @@ class SkillPage(APIView):
         if fetch_from_cache:
             data = fetch_from_cache
             return Response(data, status=status.HTTP_200_OK)
-        data = {}
+        data = []
         category = Category.objects.only('id').filter(id=skill_id).first()
         if category:
             subheadercategory = SubHeaderCategory.objects.filter(category=category, active=True, heading_choices__in=[2,3,4])
@@ -188,7 +188,7 @@ class DomainJobsView(APIView):
 
     def get(self, request,*args, **kwargs):
         id = request.GET.get('id',None)
-        data = {}
+        data = []
         category = Category.objects.only('id').filter(id=id).first()
         if category:
             widget_obj = DetailPageWidget.objects.filter(content_type__model='Category', listid__contains=category.pk).first()

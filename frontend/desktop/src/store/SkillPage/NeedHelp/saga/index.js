@@ -7,11 +7,10 @@ function* createLead(action) {
     const { payload: {data, resolve} } = action;
     try {
         const result = yield call(Api.createLead, data);
-        debugger
         if (result["error"]) {
             Swal.fire({
                 icon: 'error',
-                html: result.errorMessage
+                html: result.message
             })
             return resolve(0)
         }

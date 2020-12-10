@@ -1,7 +1,8 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link as LinkScroll } from 'react-scroll';
 import './popularCourses.scss'
+import { siteDomain } from 'utils/domains';
 
 const PopularCourses = (props) => {
 
@@ -25,7 +26,7 @@ const PopularCourses = (props) => {
                                 <img src={course.img} alt={course.img_alt} />
                             </figure>
                             <div className="links">
-                                <Link to={course.url}>{course.name}</Link>
+                                <a href={`${siteDomain}${course.url}`}>{course.name}</a>
                                 <span className="mr-10">By {course.provider}</span>
                                     <span className="rating">
                                         { course.stars?.map((star) => starRatings(star)) }
@@ -37,7 +38,7 @@ const PopularCourses = (props) => {
                 })
             }
             </ul>
-            <Link className="view-all" to={"#"}>View all courses</Link>
+            <LinkScroll to="courses" className="view-all" isDynamic={true} spy={true}  offset={-120}>View all courses</LinkScroll>
         </div>
     )
 }

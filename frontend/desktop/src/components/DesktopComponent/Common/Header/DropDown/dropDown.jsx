@@ -29,7 +29,7 @@ const DropDown = (props) => {
         {
             tabList?.map((item) => {
                 return (
-                    <div className={`tab-pane fade ${activeTab === item.id ? 'show active' : ''}`} id="tab-links1" role="tabpanel" aria-labelledby="category-tab">
+                    <div className={`tab-pane fade ${activeTab === item.id ? 'show active' : ''}`} id="tab-links1" role="tabpanel" aria-labelledby="category-tab" key={item.id}>
                         {
                             item.children.map( child => <a key={child.url} href={child.url}>{child.name}</a> )
                         }
