@@ -46,7 +46,7 @@ const FAQ = (props) => {
                                 { sliceFlag ? <Link onClick={loadMore} to={"#"} className="load-more pt-20">Load More FAQS</Link> : '' }
                             </div>
                             <div className="faq__img">
-                                <img src="/media/images/faq.svg" alt="Frequently Asked Questions" />
+                                <img src="/media/static/react/media/images/faq.svg" alt="Frequently Asked Questions" />
                             </div>
                         </div>
                     </div>

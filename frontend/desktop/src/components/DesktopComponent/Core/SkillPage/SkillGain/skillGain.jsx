@@ -32,7 +32,7 @@ const SkillGain = (props) => {
                             </div>
                         </div>
                         <figure className="skill-gain__img mt-40">
-                            <img src="/media/images/skill-gain-bg.svg" alt="Skills you will gain" />
+                            <img src="/media/static/react/media/images/skill-gain-bg.svg" alt="Skills you will gain" />
                         </figure>
                     </div>
                 </div>

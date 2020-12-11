@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './styles/bootstrap.scss';
-import App from './App';
+import AppDesktop from './App.desktop';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import store from 'store/index';
@@ -9,7 +9,7 @@ import store from 'store/index';
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store} >
-      <App />
+      <AppDesktop />
     </Provider>
 
   </React.StrictMode>,

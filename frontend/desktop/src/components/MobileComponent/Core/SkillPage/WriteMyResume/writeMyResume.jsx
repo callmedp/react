@@ -17,7 +17,7 @@ const WriteMyResume = (props) => {
                     <Button className="btn-blue-outline" onClick={builderRedirect}>Write my resume</Button>
                 </div>
                 <figure className="m-write-resume__img">
-                    <img src="/media/images/mobile/write-resume.png" alt="Not getting enough calls from recruiters ?" />
+                    <img src="/media/static/react/media/images/mobile/write-resume.png" alt="Not getting enough calls from recruiters ?" />
                 </figure>
             </div>
         </section>

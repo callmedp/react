@@ -176,6 +176,8 @@
     border: none;
     border-radius: $border-radius;
     max-width: 36rem;
+    position: relative;
+    z-index: 9999;
     
     .popover-body {
         box-shadow: $box-shadow-lg;

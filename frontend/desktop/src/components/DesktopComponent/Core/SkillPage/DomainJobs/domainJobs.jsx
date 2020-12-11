@@ -30,7 +30,7 @@ const DomainJobs = (props) => {
                 </ul>
             </div>
             <figure className="domain-jobs__img">
-                <img src="/media/images/domain-jobs.svg" alt="Jobs in this domain" />
+                <img src="/media/static/react/media/images/domain-jobs.svg" alt="Jobs in this domain" />
             </figure>
         </section>
     )

@@ -1162,7 +1162,7 @@ $print-body-min-width:              map-get($grid-breakpoints, "lg") !default;
 
 // custom variables by Sachin K.
 
-$sprite: url('/media/images/learning-sprite.png') no-repeat;
+$sprite: url('/media/static/react/media/images/learning-sprite.png') no-repeat;
 
 %box-shadow {
   box-shadow: $box-shadow;

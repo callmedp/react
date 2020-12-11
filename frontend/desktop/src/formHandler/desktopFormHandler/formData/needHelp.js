@@ -1,6 +1,6 @@
 export default {
     'name': {
-        className: "input_field",
+        className: "input_field form-control",
         type: "text",
         name: "name",
         id: "name",
@@ -15,7 +15,7 @@ export default {
         
     },
     'email': {
-        className: "input_field",
+        className: "input_field form-control",
         type: "text",
         name: "email",
         id: "email",
@@ -32,7 +32,7 @@ export default {
         }
     },
     'mobile': {
-        className: "input_field",
+        className: "input_field form-control",
         type: "number",
         name: "number",
         id: "number",

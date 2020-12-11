@@ -69,6 +69,7 @@ class SkillPage(APIView):
         data = []
         category = Category.objects.only('id').filter(id=skill_id).first()
         if category:
+            data = {}
             subheadercategory = SubHeaderCategory.objects.filter(category=category, active=True, heading_choices__in=[2,3,4])
             career_outcomes = category.split_career_outcomes()
             for heading in subheadercategory:

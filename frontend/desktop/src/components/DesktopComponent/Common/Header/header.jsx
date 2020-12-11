@@ -103,7 +103,7 @@ const Header = (props) => {
                                     </Link>
                                     <div className="dropdown-menu" aria-labelledby="navbarDropdown">
                                         {
-                                            !isLoggedIn ? (
+                                            isLoggedIn ? (
                                                 <>
                                                     <a className="dropdown-item" href={`${siteDomain}/dashboard/`} >My Inbox</a>
                                                     <a className="dropdown-item" href={`${siteDomain}/dashboard/myorder/`}>My Orders</a>
