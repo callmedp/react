@@ -1,17 +1,23 @@
 import * as Actions from '../actions/actionTypes';
 import { takeLatest, call, put } from 'redux-saga/effects';
 import Api from './Api';
+import { startSkillPageLoader, stopSkillPageLoader } from 'store/Loader/actions/index';
 
 
 
 function* skillPageBanner(action) {
     try {
         const { payload } = action;
+
+        yield put(startSkillPageLoader())
         const response = yield call(Api.skillPageBanner, payload);
+        yield put(stopSkillPageLoader())
+
         if (response["error"]) {
             return
         }
         const item = response.data;
+        
 
         //converts 1D array to 2D array if medium is Desktop
         if(!!payload && !payload.medium && !!item && item.testimonialCategory instanceof Array){

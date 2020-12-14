@@ -1,15 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './coursesTray.scss';
 import { Tabs, Tab } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchCoursesAndAssessments } from 'store/SkillPage/CoursesTray/actions/index';
+import {  useSelector } from 'react-redux';
+
 import Courses from './Product/product';
 import Assessments from './Product/product';
 
 const CoursesTray = (props) => {
+
     const [key, setKey] = useState('courses');
-    const pageId = props.pageId
-    const dispatch = useDispatch();
     const { courseList, assessmentList } = useSelector(store => store.coursesTray)
     const [ courseKey, setCourseKey ] = useState(2)
     const [ assessmentKey, setAssessmentKey ] = useState(2)
@@ -22,9 +21,7 @@ const CoursesTray = (props) => {
         setAssessmentKey(state => state+1)
     }
 
-    useEffect(() => {
-        dispatch(fetchCoursesAndAssessments({ id: pageId }));
-    }, [pageId])
+  
 
 
     return (
