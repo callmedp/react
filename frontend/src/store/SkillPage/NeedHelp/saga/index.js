@@ -1,12 +1,16 @@
 import * as Actions from '../actions/actionTypes';
-import { takeLatest, call } from 'redux-saga/effects';
+import { takeLatest, call, put } from 'redux-saga/effects';
 import Swal from "sweetalert2";
 import Api from './Api';
+import { startSkillPageLoader, stopSkillPageLoader } from 'store/Loader/actions';
 
 function* createLead(action) {
     const { payload: {data, resolve} } = action;
     try {
+        yield put(startSkillPageLoader());
         const result = yield call(Api.createLead, data);
+        yield put(stopSkillPageLoader())
+        
         if (result["error"]) {
             Swal.fire({
                 icon: 'error',
