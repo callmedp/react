@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { slide as Menu } from 'react-burger-menu';
 import { Link } from 'react-router-dom';
-import { siteDomain } from 'utils/domains'; 
+import { siteDomain, resumeShineSiteDomain } from 'utils/domains'; 
 import MenuNavHeader from '../MenuNavHeader/menuNavHeader';
 import './defaultMenuNav.scss'
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchNavOffersAndTags } from 'store/Header/actions/index';
+import { cartCount, sessionAvailability, getCandidateInfo, fetchNavOffersAndTags } from 'store/Header/actions/index';
 
 
 const DefaultMenuNav = (props) =>{
@@ -15,13 +15,44 @@ const DefaultMenuNav = (props) =>{
     const dispatch = useDispatch()
 
     const { navTags } = useSelector(store => store.header)
+    const [candidateInfo, setCandidateInfo] = useState(false)
+    const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+    const fetchUserInfo = async () => {
+        try {
+            dispatch(cartCount());
+            const isSessionAvailable = await new Promise((resolve, reject) => dispatch(sessionAvailability({ resolve, reject })));
+
+            if (isSessionAvailable['result']) {
+                try {
+                    setIsLoggedIn(true)
+                    const candidateInformation = await new Promise((resolve, reject) => dispatch(getCandidateInfo({ resolve, reject })))
+                    setCandidateInfo(candidateInformation)
+                }
+                catch (e) {
+                    setIsLoggedIn(false)
+                    console.log("ERROR OCCURED", e)
+                }
+            }
+            else {
+                setIsLoggedIn(false)
+            }
+        }
+
+        catch (e) {
+            setIsLoggedIn(false)
+            console.log("ERROR OCCURED", e)
+        }
+    }
+
     useEffect(() => {
-        dispatch(fetchNavOffersAndTags())
+        fetchUserInfo();
+        dispatch(fetchNavOffersAndTags());
     },[])
 
     return (
         <Menu className='navigation' width={ '300px' } isOpen={open} onStateChange={state => setOpen(state.isOpen)}>
-            <MenuNavHeader />
+            <MenuNavHeader isLoggedIn={isLoggedIn} candidateInfo={candidateInfo}/>
             <div className="m-menu-links">
                 <a className="menu-item" href={`${siteDomain}/`} onClick={() => {setOpen(state => !state)}}>
                     <figure className="micon-home" /> Home 
@@ -32,7 +63,7 @@ const DefaultMenuNav = (props) =>{
                 <a href="/" className="menu-item" onClick={(e) => {e.preventDefault();setType('jobAssistanceServices')}}>
                     <figure className="micon-resume-service" /> Job Assistance Services <figure className="micon-arrow-menusm ml-auto" />
                 </a>
-                <Link className="menu-item" to="{#}"><figure className="micon-linkedin-service" /> Linkedin Profile Writing</Link>
+                <a href={`${resumeShineSiteDomain}/product/linkedin-profile-writing/entry-level-2/1926/`} className="menu-item"><figure className="micon-linkedin-service" /> Linkedin Profile Writing</a>
                 <a href="/" className="menu-item" onClick={(e) => {e.preventDefault();setType('freeResources')}}>
                     <figure className="micon-free-resources" /> Free Resources <figure className="micon-arrow-menusm ml-auto"/>
                 </a>
@@ -48,15 +79,15 @@ const DefaultMenuNav = (props) =>{
                     ) : null
                 }
                 {
-                    // getDataStorage('candidate_id') && 
+                    isLoggedIn && 
                     (
                         <ul className="dashboard-menu">
                             <li>
-                                <a className="dashboard-menu--item" href="#/"><figure className="icon-dashboard" /> Dashboard</a>
+                                <a className="dashboard-menu--item" href={`${siteDomain}/dashboard/`}><figure className="icon-dashboard" /> Dashboard</a>
                                 <ul className="dashboard-menu__submmenu">
-                                    <li><Link to="/dashboard/">Inbox</Link></li>
-                                    <li><Link to="/dashboard/myorder/">My Order</Link></li>
-                                    <li><Link to="/dashboard/mywallet/">My Wallet</Link></li>
+                                    <li><a href={`${siteDomain}/dashboard/`}>Inbox</a></li>
+                                    <li><a href={`${siteDomain}/dashboard/myorder/`}>My Order</a></li>
+                                    <li><a href={`${siteDomain}/dashboard/mywallet/`}>My Wallet</a></li>
                                 </ul>
                             </li>
                         </ul>
