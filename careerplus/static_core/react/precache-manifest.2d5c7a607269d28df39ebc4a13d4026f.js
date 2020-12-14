@@ -1,6 +1,6 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "ac1c46d29f5139753a8af5df90dea92a",
+    "revision": "49cfb8708f2fe357bd853f87cceea026",
     "url": "/media/static/react/../../templates/skillPageIndex.html"
   },
   {
@@ -8,11 +8,11 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/media/static/react/static/css/6.3d626a79.chunk.css"
   },
   {
-    "revision": "1056f37e76233400a0fb",
+    "revision": "edf9cdee1f1c996462f2",
     "url": "/media/static/react/static/css/desktop.41dffa5a.chunk.css"
   },
   {
-    "revision": "a627ad3d655a55a66bfe",
+    "revision": "80e6b586d95ac9a0d28a",
     "url": "/media/static/react/static/css/mobile.243b3f5f.chunk.css"
   },
   {
@@ -40,12 +40,12 @@ self.__precacheManifest = (self.__precacheManifest || []).concat([
     "url": "/media/static/react/static/js/7.c36c0c30.chunk.js"
   },
   {
-    "revision": "1056f37e76233400a0fb",
-    "url": "/media/static/react/static/js/desktop.d7a981bd.chunk.js"
+    "revision": "edf9cdee1f1c996462f2",
+    "url": "/media/static/react/static/js/desktop.c7e3d514.chunk.js"
   },
   {
-    "revision": "a627ad3d655a55a66bfe",
-    "url": "/media/static/react/static/js/mobile.53794ee2.chunk.js"
+    "revision": "80e6b586d95ac9a0d28a",
+    "url": "/media/static/react/static/js/mobile.51b2e769.chunk.js"
   },
   {
     "revision": "29ec915a556caf4189db",
