@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useRef, useEffect } from 'react';
 import SkillBanner from './Banner/banner';
 import AboutSection from './AboutSection/aboutSection';
 import WhoLearn from './WhoLearn/whoLearn';
@@ -33,8 +33,10 @@ const SkillPage = (props) => {
         dispatch(fetchSkillPageBanner({id : pageId, 'medium': 0}));
         dispatch(fetchCoursesAndAssessments({ id: pageId }));
         dispatch(fetchDomainJobs({id : pageId}))
+        setTimeout(() => {
+            window && window.$zopim &&  window.$zopim.livechat.window.show();
+        }, 7000)
     },[pageId])
-   
 
     return (
         <div>

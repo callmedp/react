@@ -2071,3 +2071,40 @@ class TrackingResumeShine(APIView):
         except Exception as e:
             logging.getLogger('error_log').error("Unable to update tracking data, tracking_id: {}, except : {}".format(t_id, e))
             return Response({ 'status': 'Unable to update on learning'}, status=status.HTTP_400_BAD_REQUEST)
+
+class SearchQueryAPI(APIView):
+    authentication_classes = ()
+    permission_classes = ()
+    serializer_class = None
+    conn = get_redis_connection("search_lookup")
+
+    def getSearchSet(self, redis_conn):
+        return {
+                    "product_url_set": [
+                        {'name': eval(p.decode())['name'],
+                        'url': eval(p.decode())['url']}
+                            for p in redis_conn.smembers('product_url_set')],
+                    "category_url_set": [{'name': eval(p.decode())['name'],
+                        'url': eval(p.decode())['url']}
+                            for p in redis_conn.smembers('category_url_set')],
+                    "course_url_set": [{'name': eval(p.decode())['name'],
+                        'url': eval(p.decode())['url']}
+                            for p in redis_conn.smembers('course_url_set')],
+        }
+
+    def get(self, request, *args, **kwargs):
+        query = self.request.GET.get('q', '').lower()
+        result = self.getSearchSet(self.conn)
+        data = {}
+        puset = result.get('product_url_set')
+        ctuset = result.get('category_url_set')
+        cuset = result.get('course_url_set')
+        p_u = list(filter(lambda person: query in person['name'], puset))
+        ct_u = list(filter(lambda person: query in person['name'], ctuset))
+        c_u = list(filter(lambda person: query in person['name'], cuset))
+        data = {
+            'p_u' : p_u,
+            'ct_u' : ct_u,
+            'c_u' : c_u
+        }
+        return Response(data, status=status.HTTP_200_OK)

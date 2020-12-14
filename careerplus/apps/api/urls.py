@@ -109,7 +109,9 @@ urlpatterns = [
         name='resume-template-download'
     ),
     re_path(r'^v2/', include('api.v2.urls')),
-
+    re_path(r'v1/search-query/$', views.SearchQueryAPI.as_view(),
+        name='search-query-api'
+    )
 ]
 
 if settings.DEBUG:

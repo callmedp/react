@@ -842,7 +842,8 @@ class NavigationTagsAndOffersAPI(APIView):
             cache.set('active_homepage_navlink', active_navlinks, 24*60*60)
         data = {
             'navTags': active_navlinks,
-            'navOffer': active_offer
+            'navOffer': active_offer,
+            'callUs': settings.GGN_CONTACT_FULL
         }
         return APIResponse(message='Navigations Tags and Offers details fetched', data=data, status=status.HTTP_200_OK)
 

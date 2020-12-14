@@ -1,38 +1,48 @@
 @import '../../../../styles-mobile/abstracts';
 
-.m-skill-ht {
-    height: 9rem;
-    align-items: flex-start;
+.m-skill-ht-remove {
+  top: -6rem;
 }
 .m-tabset-pos {
-    margin-top: -4.8rem !important;
+    height: 10rem;
+    padding-bottom: 0 !important;
+}
+
+.scroll-gradient {
+  @extend %gradient;
+}
+
+.selected{
+  color: black !important;
 }
 
 .m-tabset {
-    // position: relative;
-    // z-index: 9;
+    position: relative;
+    z-index: 9;
 
-    // &::before {
-    //     content: '';
-    //     // @extend %gradient;
-    //     position: absolute;
-    //     left: 0;
-    //     right: 0;
-    //     height: 5rem;
-    //     z-index: -9;
-    //     height: 4.8rem;
-    //     box-shadow: 0 2px 7px 0 #5262AD;
-    // }
+    &::before {
+      content: '';
+      // @extend %gradient;
+      position: absolute;
+      left: 0;
+      right: 0;
+      height: 5rem;
+      z-index: -9;
+      height: 4.8rem;
+      // box-shadow: 0 2px 7px 0 #5262AD;
+      background-attachment: inherit;
+      background-position: -1px;
+  }
     
-    > input[type="radio"] {
-        position: absolute;
+    input[type="radio"] {
+        // position: absolute;
         left: -2000vw;
         position: relative;
         margin: 0;
         z-index: 99;
     }
 
-    > label {
+    label {
         display: inline-block;
         padding: 1.3rem 1rem 1rem 1rem;
         border-bottom: 3px solid transparent;
@@ -57,7 +67,7 @@
         // z-index: -99;
 
         .tab-panel {
-            display: none;
+            display: block;
             padding: 0 0 1rem 0;
         }
     }

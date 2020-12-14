@@ -6,6 +6,7 @@ import MenuNavHeader from '../MenuNavHeader/menuNavHeader';
 import './defaultMenuNav.scss'
 import { useSelector, useDispatch } from 'react-redux';
 import { cartCount, sessionAvailability, getCandidateInfo, fetchNavOffersAndTags } from 'store/Header/actions/index';
+import zendeskInit from 'utils/zendeskIniti';
 
 
 const DefaultMenuNav = (props) =>{
@@ -28,6 +29,7 @@ const DefaultMenuNav = (props) =>{
                     setIsLoggedIn(true)
                     const candidateInformation = await new Promise((resolve, reject) => dispatch(getCandidateInfo({ resolve, reject })))
                     setCandidateInfo(candidateInformation)
+                    zendeskInit(candidateInformation)
                 }
                 catch (e) {
                     setIsLoggedIn(false)
@@ -48,6 +50,9 @@ const DefaultMenuNav = (props) =>{
     useEffect(() => {
         fetchUserInfo();
         dispatch(fetchNavOffersAndTags());
+        // setTimeout(() => {
+        //     zendeskInit(candidateInfo)
+        //   }, 8000)
     },[])
 
     return (
