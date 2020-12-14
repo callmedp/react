@@ -8,7 +8,7 @@ from django.http import (
     HttpResponsePermanentRedirect
 )
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.views.generic import View, DetailView
+from django.views.generic import View, DetailView, TemplateView
 from django.contrib.contenttypes.models import ContentType
 from django.utils.http import urlquote
 from core.library.haystack.query import SQS
@@ -724,5 +724,9 @@ class LocationSkillPageView(DetailView, SkillPageMixin):
         breadcrumbs.append({"url": '', "name": self.object.get_location_display()})
         data = {"breadcrumbs": breadcrumbs}
         return data
+
+
+class SkillPageReactView(TemplateView):
+    template_name = 'skillPageIndex.html'
 
 
