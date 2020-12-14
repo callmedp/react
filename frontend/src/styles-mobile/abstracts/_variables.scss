@@ -1,0 +1,86 @@
+@import '../path';
+
+$white:    #fff !default;
+$gray-100: #28303F !default;
+$gray-200: #435061 !default;
+$gray-300: #6D7886 !default;
+$gray-400: #ced4da !default;
+$gray-500: #adb5bd !default;
+$gray-600: #6c757d !default;
+$gray-700: #495057 !default;
+$gray-800: #343a40 !default;
+$gray-900: #E3E3E3 !default;
+$black:    #000 !default;
+
+$blue:    #366FD1 !default;
+$indigo:  #6610f2 !default;
+$purple:  #6f42c1 !default;
+$pink:    #e83e8c !default;
+$red:     #EC8B8B !default;
+$orange:  #fd7e14 !default;
+$yellow:  #FCB100 !default;
+$green:   #28a745 !default;
+$teal:    #20c997 !default;
+$cyan:    #17a2b8 !default;
+$lightblue: #F3F9FD !default;
+$bluehover: #5C94F5 !default;
+$input-focus: #709DE8 !default;
+$free-test-banner-bg: #F4FBFF !default;
+$free-test-banner-bdr: #D5E8F5 !default;
+$card-btm-bdr: #D9E5F8 !default;
+$badge-pill-solid: #F8F9FC;
+$tab-pill-color: #88A6D8;
+$course-light-bg: #F1F8FC;
+$course-badge-blue: #E0F3FF;
+$course-badge-red: #FBC1C1;
+$footer-bg: #F2F6FD;
+
+$sprite: url('/media/static/react/media/images/mobile/learning-sprite-mobile.svg') no-repeat;
+
+$bg: #F9FAFC;
+$border-color: #D5D5D5;
+$border: 1px solid $border-color;
+
+
+// Font Weight
+$font-weight-normal: normal;
+$font-weight-light: 400;
+$font-weight-semi-bold: 600;
+$font-weight-bold: 700;
+
+// Font size
+
+$font-size-xs   : 1.2rem;
+$font-size-base : 1.3rem;
+$font-size-md   : 1.4rem;
+$font-size-lg   : 1.6rem;
+
+
+%box-shadow1 {
+    background: $white;
+    box-shadow: 0 1px 13px 0 rgba(200,200,200,0.50);
+    @include border-radius(4px);
+}
+
+%box-shadow2 {
+    background: $white;
+    box-shadow: 0 2px 6px 0 rgba(210,210,210,0.50);
+    @include border-radius(30px);
+}
+
+%box-shadow3 {
+    background: $white;
+    box-shadow: 0 20px 100px -66px rgba(104,104,104,0.80);
+    @include border-radius(8px);
+    padding: 2rem;
+}
+
+%box-shadow-cta {
+    box-shadow: 0 -2px 19px 0 rgba(148,148,148,0.50);
+}
+
+
+%gradient {
+    background-image: linear-gradient(134deg, #849EE4 0%, #314DCC 100%, #314DCC 100%, #314DCC 100%);
+    // box-shadow: 0 2px 7px 0 #5262AD;  
+}
