@@ -28,6 +28,7 @@ const SkillPage = (props) => {
     const dispatch = useDispatch()
     const pageId = props.match.params.id;
     const [enquiryForm, setEnquiryForm] = useState(false)
+    const [tabType, setTabType] = useState('about')
 
     useEffect(() => {
         dispatch(fetchSkillPageBanner({id : pageId, 'medium': 1}))
@@ -37,29 +38,40 @@ const SkillPage = (props) => {
     return(
         <main className="m-container-fluid mt-0 pt-0">
             <MenuNav />
-            <Header />
-            <section className="m-tabset mt-0 mb-0 m-tabset-pos">
-                <StickyNav />
+            <header className="m-container m-header m-tabset-pos">
+                <Header />
+            </header>
+            <section class="m-tabset mt-0 mb-0 m-skill-ht-remove">
+                <StickyNav tabType={tabType} setTabType={setTabType} />
                 <div className="tab-panels">
-                    <div id="about" className="tab-panel">
-                        <SkillBanner />
-                        <BannerSlider />
-                        <PopularCourses />
-                        <WhoLearn />
-                        <SkillGain />
-                        <LearnersStories />
-                        <WriteMyResume />
-                        <WhyChooseUs />
-                        <OtherSkills />
-                        <FAQ />
-                        <DomainJobs pageId={pageId}/>
-                    </div>
-                    <div id="courses" className="tab-panel">
-                        <Courses />
-                    </div>
-                    <div id="assessment" className="tab-panel">
-                        <Assessment />
-                    </div>
+                    { tabType === "about" ? 
+                        (
+                            <div id="about" className="tab-panel">
+                                <SkillBanner />
+                                <BannerSlider />
+                                <PopularCourses />
+                                <WhoLearn />
+                                <SkillGain />
+                                <LearnersStories />
+                                <WriteMyResume />
+                                <WhyChooseUs />
+                                <OtherSkills />
+                                <FAQ />
+                                <DomainJobs pageId={pageId}/>
+                            </div>
+                        ) :
+                        tabType === 'courses' ? 
+                        (
+                            <div id="courses" className="tab-panel">
+                                <Courses />
+                            </div>
+                        ) :
+                        (
+                            <div id="assessment" className="tab-panel">
+                                <Assessment />
+                            </div>
+                        )
+                        }
                 </div>
             </section>
             <Footer />
