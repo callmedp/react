@@ -324,7 +324,7 @@ class Buy extends Component {
                     </div>
 
                     {free_resume_downloads ?
-                        <div class="buy__wrap mt-15">
+                        <div className="buy__wrap mt-15">
                             <div className="buy__item buy__trial">
                                 <div className="buy__recommended--tag">Trial offer</div>
                                 <div className="buy_item--left">
@@ -332,7 +332,7 @@ class Buy extends Component {
                                         "Free one time download for all 1st time users"}
                                 </div>
                                 <div className="buy_item--right">
-                                    <button class="btn btn__round btn--outline" onClick={this.freeResumeRequest}
+                                    <button className="btn btn__round btn--outline" onClick={this.freeResumeRequest}
                                         disabled={freeDownloadButtonDisable} >Download</button>
                                 </div>
                             </div>
