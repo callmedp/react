@@ -105,7 +105,7 @@
 }
 
 .m-skill-banner-bg {
-  background: url(/media/static/react/media/images/mobile/skill-header-bg.png) no-repeat 0 0;
+  background: url('#{$path}/skill-header-bg.png') no-repeat 0 0;
   background-size: cover;
 }
 
