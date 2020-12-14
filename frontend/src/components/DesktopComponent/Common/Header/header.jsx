@@ -64,8 +64,8 @@ const Header = (props) => {
                         <a className="navbar-brand" href={siteDomain}></a>
                         <div className="collapse navbar-collapse" id="navbarSupportedContent">
                             <form className="form-inline top-search my-2 my-lg-0 ml-auto">
-                                {/* <input className="form-control top-input" type="search" placeholder="Search anything" aria-label="Search" /> */}
-                                <AsyncExample />
+                                <input className="form-control top-input" type="search" placeholder="Search anything" aria-label="Search" />
+                                {/* <AsyncExample /> */}
                                 <button className="btn btn-search" type="submit"><figure className="icon-search"></figure></button>
                             </form>
                             <ul className="navbar-nav navbar-right">
