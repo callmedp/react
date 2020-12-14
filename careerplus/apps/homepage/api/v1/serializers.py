@@ -135,15 +135,15 @@ class DashboardCancellationSerializer(serializers.Serializer):
     order_id = serializers.IntegerField(required=True)
 
 
-class ProductSkillSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = ProductSkill
-        fields = ("skill",)
+# class ProductSkillSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = ProductSkill
+#         fields = ("skill",)
     
-    def to_representation(self, instance):
-        data = super(ProductSkillSerializer, self).to_representation(instance)
-        data['skillName'] = instance.skill.name
-        data['skillUrl'] = instance.product.categories.first().url
+#     def to_representation(self, instance):
+#         data = super(ProductSkillSerializer, self).to_representation(instance)
+#         data['skillName'] = instance.skill.name
+#         data['skillUrl'] = instance.product.categories.filter(is_skill=True).first().get_absolute_url()
 
-        return data
+#         return data
 

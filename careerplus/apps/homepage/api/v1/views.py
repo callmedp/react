@@ -44,7 +44,7 @@ from core.api_mixin import ShineCandidateDetail
 from django.core.files.base import ContentFile
 from payment.models import PaymentTxn
 from .helper import APIResponse
-from .serializers import ProductSkillSerializer
+# from .serializers import ProductSkillSerializer
 
 # Other Import
 from weasyprint import HTML
@@ -786,12 +786,12 @@ class TrendingCoursesAndSkillsAPI(APIView):
 
         NUM_COURSE_TO_SELECT = 2
 
-        conversion_ratio_product = Product.objects.filter(product_class__slug__in=settings.COURSE_SLUG, active=True,
-                                                          is_indexed=True).order_by('-buy_count')[
+        conversion_ratio = Product.objects.filter(product_class__slug__in=settings.COURSE_SLUG, active=True,
+                                                          is_indexed=True)
+        conversion_ratio_product = conversion_ratio.order_by('-buy_count')[
                                    :NUM_COURSE_TO_SELECT].values_list('id', flat=True)
 
-        revenue_per_mile = Product.objects.filter(product_class__slug__in=settings.COURSE_SLUG, active=True,
-                                                  is_indexed=True).annotate(
+        revenue_per_mile = conversion_ratio.annotate(
             revenue=(F('buy_count') * F('inr_price')) * 1000 / F('cp_page_view')) \
                                .exclude(id__in=list(conversion_ratio_product)).order_by('-revenue')[
                            :NUM_COURSE_TO_SELECT].values_list('id', flat=True)
@@ -800,20 +800,23 @@ class TrendingCoursesAndSkillsAPI(APIView):
         tprds = SearchQuerySet().filter(id__in=product_pks, pTP__in=[0, 1, 3]).exclude(
             id__in=settings.EXCLUDE_SEARCH_PRODUCTS
         )
-        p_skills = ProductSkill.objects.filter(product__id__in=product_pks).distinct().exclude(product__categories__related_to__slug__isnull=True)
-            # product__slug=Concat(Value('/course/'), F('product__categories__related_to__slug'), Value('/'),
-            #                      F('product__slug'),
-            #                      Value('/'), Value('pd-'), F('product__id'), output_field=CharField()))
-        unique_skills = ProductSkillSerializer(p_skills, many=True).data
-        # unique_skills = dict((v['skill__name'],v) for v in p_skills).values()
+        p_skills = ProductSkill.objects.select_related('skill').prefetch_related('product__categories').filter(product__id__in=product_pks,product__categories__is_skill=True).distinct().exclude(product__categories__related_to__slug__isnull=True)
+        #     # product__slug=Concat(Value('/course/'), F('product__categories__related_to__slug'), Value('/'),
+        #     #                      F('product__slug'),
+        #     #                      Value('/'), Value('pd-'), F('product__id'), output_field=CharField()))
+        # # unique_skills = ProductSkillSerializer(p_skills, many=True).data
+        # # unique_skills = dict((v['skill__name'],v) for v in p_skills).values()
+        skills =[]
+        for i in p_skills:
+            skills.append({'skillName':i.skill.name,'skillUrl':i.product.categories.first().get_absolute_url()})
+
         data = {
 
             'trendingCourses': [{'id': tprd.id, 'heading': tprd.pHd, 'name': tprd.pNm, 'url': tprd.pURL, 'img': tprd.pImg,\
                         'img_alt': tprd.pImA, 'rating': tprd.pARx, 'vendor': tprd.pPvn, 'stars': tprd.pStar, 'provider': tprd.pPvn\
                     } for tprd in tprds],
-            'trendingSkills': unique_skills
+            'trendingSkills': skills
         }
-        # t_courses.append(data)
 
         return APIResponse(message='Trending Course Loaded', data=data, status=status.HTTP_200_OK)
 
