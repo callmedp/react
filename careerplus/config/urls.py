@@ -148,7 +148,7 @@ urlpatterns += [
         FuncAreaPageView.as_view(), name='func_area_results'),
     re_path(r'^services/(?P<cat_slug>[\w-]+)/(?P<country>[\w-]+)/$',
         GoogleResumeAdView.as_view(), name='google-resume-ad'),
-    re_path(r'^courses/(?P<fa_slug>[-\w]+)/(?P<skill_slug>[-\w]+)/(?P<pk>\d+)/$', SkillPageReactView.as_view()),
+    # re_path(r'^courses/(?P<fa_slug>[-\w]+)/(?P<skill_slug>[-\w]+)/(?P<pk>\d+)/$', SkillPageReactView.as_view()),
     re_path(r'^courses/', include('skillpage.urls',
                               namespace='skillpage')),
     re_path(r'^university/faculty/(?P<faculty_slug>[-\w]+)/(?P<pk>\d+)/$',

@@ -19,7 +19,7 @@ const initState = {
 
 export const SkillPageBannerReducer = (state=initState, action) => {
     switch(action.type){
-        case Actions.SKILL_PAGE_BANNER_FETCHED : return {...state, ...action.item}
+        case Actions.SKILL_PAGE_BANNER_FETCHED : return { ...initState,...action.item}
         
         default: return state;
     }

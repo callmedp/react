@@ -128,9 +128,9 @@ const Header = (props) => {
                                 </li>
                                 <li className="nav-item position-relative">
                                     <span className="counter">{count}</span>
-                                    <Link className="nav-link link-ht" to={"#"}>
+                                    <a className="nav-link link-ht" href={`${siteDomain}/cart/payment-summary/`}>
                                         <figure className="icon-cart"></figure>
-                                    </Link>
+                                    </a>
                                 </li>
                             </ul>
 
@@ -160,7 +160,7 @@ const Header = (props) => {
                                 navSkillList?.map((skill) => {
                                     return (
                                         <li key={skill.url} className="nav-item">
-                                            <Link className="nav-link" to={skill.url}>{skill.name}</Link>
+                                            <a className="nav-link" href={`${siteDomain}${skill.url}`}>{skill.name}</a>
                                         </li>
                                     )
                                 })

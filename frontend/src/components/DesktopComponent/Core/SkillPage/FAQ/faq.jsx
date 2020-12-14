@@ -4,6 +4,7 @@ import Card from 'react-bootstrap/Card';
 import { Link } from 'react-router-dom';
 import './faq.scss'
 import { useSelector } from 'react-redux';
+import { imageUrl } from 'utils/domains';
 
 
 
@@ -46,7 +47,7 @@ const FAQ = (props) => {
                                 { sliceFlag ? <Link onClick={loadMore} to={"#"} className="load-more pt-20">Load More FAQS</Link> : '' }
                             </div>
                             <div className="faq__img">
-                                <img src="/media/static/react/media/images/faq.svg" alt="Frequently Asked Questions" />
+                                <img src={`${imageUrl}desktop/faq.svg`} alt="Frequently Asked Questions" />
                             </div>
                         </div>
                     </div>
