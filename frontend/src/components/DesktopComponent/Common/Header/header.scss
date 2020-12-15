@@ -41,3 +41,29 @@
     position: relative;
     top: -12px;
   }
+
+.header-search-result {
+    background: $white;
+    color: $gray-100;
+    font-size: 1.3rem;
+    position: fixed;
+    @extend %box-shadow;
+    padding: 0;
+
+    strong {
+        font-weight: 600;
+        background: $lightblue;
+        padding: 1rem 1.5rem;
+        display: block;
+    }
+    a {
+        padding: 1rem 1.5rem;
+        color: $gray-100;
+        display: block;
+
+        &:hover, &:focus {
+            background-color: $blue;
+            color: $white;
+        }
+    }
+}

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import useDebounce from './debounce';
 
 // Usage
@@ -48,32 +49,34 @@ const TypeAhead = (props) => {
   // Pretty standard UI with search input and results
   return (
     <>
-    <div className="ml-auto">
+    <div className="ml-auto pos-rel">
         <form className="form-inline top-search my-2 my-lg-0">
             <input className="form-control top-input" type="search" onChange={e => setSearchTerm(e.target.value)} placeholder="Search anything" aria-label="Search" />
             <button className="btn btn-search" type="submit"><figure className="icon-search"></figure></button>
         </form>
       {/* {isSearching && <div>Searching ...</div>} */}
-        {results?.p_u?.length ? <h6>Skills</h6> : null}
+        <div className="header-search-result">
+        {results?.p_u?.length ? <strong>Skills</strong> : null}
         {results?.p_u?.slice(0,3)?.map(result => (
             <div key={Math.random()}>
-            <p>{result.name}</p>
+            <Link>{result.name}</Link>
             </div>
         ))}
         
-        {results?.ct_u?.length ? <h6>Courses</h6> : null}
+        {results?.ct_u?.length ? <strong>Courses</strong> : null}
         {results?.ct_u?.slice(0,3)?.map(result => (
             <div key={Math.random()}>
-            <p>{result.name}</p>
+            <Link>{result.name}</Link>
             </div>
         ))}
 
-        {results?.c_u?.length ? <h6>Products</h6> : null}
+        {results?.c_u?.length ? <strong>Products</strong> : null}
         {results?.c_u?.slice(0,3)?.map(result => (
             <div key={Math.random()}>
-            <p>{result.name}</p>
+            <Link>{result.name}</Link>
             </div>
         ))}
+        </div>
     </div>
     </>
   );
