@@ -40,7 +40,7 @@ const PopularCourses = (props) => {
                                                 <img src={course.img} alt={course.img_alt} />
                                             </figure>
                                             <h3 className="m-heading3">
-                                                <Link to={course.url}>{course.name}</Link>
+                                                <a href={course.url}>{course.name}</a>
                                             </h3>
                                         </div>
                                         <div className="m-card__box">
