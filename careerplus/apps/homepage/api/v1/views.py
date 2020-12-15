@@ -830,13 +830,13 @@ class NavigationTagsAndOffersAPI(APIView):
         """
 
         active_offer = []
-        special_links = cache.get('active_homepage_navlink', [])
+        special_links = cache.get('active_homepage_navlink_new', [])
         if special_links:
             active_navlinks = special_links
         else:
             data_obj_list = list(NavigationSpecialTag().get_active_navlink())
             active_navlinks  = NavigationSpecialTag().convert_data_in_list(data_obj_list[:2])
-            cache.set('active_homepage_navlink', active_navlinks, 24*60*60)
+            cache.set('active_homepage_navlink_new', active_navlinks, 24*60*60)
         data = {
             'navTags': active_navlinks,
             'navOffer': active_offer
