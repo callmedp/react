@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { cartCount, sessionAvailability, getCandidateInfo, fetchNavOffersAndTags } from 'store/Header/actions/index';
 import zendeskInit from 'utils/zendeskIniti';
 import AsyncExample from './search';
+import TypeAhead from './Typeahead';
 
 const Header = (props) => {
 
@@ -63,11 +64,7 @@ const Header = (props) => {
                     <div className="navbar navbar-expand-lg navbar-light row">
                         <a className="navbar-brand" href={siteDomain}></a>
                         <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                            <form className="form-inline top-search my-2 my-lg-0 ml-auto">
-                                {/* <input className="form-control top-input" type="search" placeholder="Search anything" aria-label="Search" /> */}
-                                <AsyncExample />
-                                <button className="btn btn-search" type="submit"><figure className="icon-search"></figure></button>
-                            </form>
+                            <TypeAhead />
                             <ul className="navbar-nav navbar-right">
                                 <li className="nav-item dropdown dropdown-jobs">
                                     <a className="nav-link" to={"#"} id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Job assistance</a>
@@ -128,9 +125,9 @@ const Header = (props) => {
                                 </li>
                                 <li className="nav-item position-relative">
                                     <span className="counter">{count}</span>
-                                    <Link className="nav-link link-ht" to={"#"}>
+                                    <a className="nav-link link-ht" href={`${siteDomain}/cart/payment-summary/`}>
                                         <figure className="icon-cart"></figure>
-                                    </Link>
+                                    </a>
                                 </li>
                             </ul>
 
@@ -160,7 +157,7 @@ const Header = (props) => {
                                 navSkillList?.map((skill) => {
                                     return (
                                         <li key={skill.url} className="nav-item">
-                                            <Link className="nav-link" to={skill.url}>{skill.name}</Link>
+                                            <a className="nav-link" href={`${siteDomain}${skill.url}`}>{skill.name}</a>
                                         </li>
                                     )
                                 })

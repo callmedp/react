@@ -15,22 +15,35 @@ import LearnersStories from './LearnersStories/learnersStories';
 import StickyNav from './StickyNav/stickyNav';
 import Header from '../../Common/Header/header';
 import Footer from '../../Common/Footer/footer';
+import Loader from '../../Common/Loader/loader';
 import './skillPage.scss'
+import { fetchSkillPageBanner } from 'store/SkillPage/Banner/actions';
+import { fetchCoursesAndAssessments } from 'store/SkillPage/CoursesTray/actions/index';
+import { fetchDomainJobs } from 'store/SkillPage/DomainJobs/actions';
+import { useDispatch, useSelector } from 'react-redux';
 
 const SkillPage = (props) => {
 
     const pageId = props.match.params.id;
-    useEffect(()=>{
+    const dispatch = useDispatch()
+    
+    const { skillLoader } = useSelector( store => store.loader );
+
+    useEffect(() => {
+        dispatch(fetchSkillPageBanner({id : pageId, 'medium': 0}));
+        dispatch(fetchCoursesAndAssessments({ id: pageId }));
+        dispatch(fetchDomainJobs({id : pageId}))
         setTimeout(() => {
             window && window.$zopim &&  window.$zopim.livechat.window.show();
         }, 7000)
-    }, [])
+    },[pageId])
 
     return (
         <div>
+            { skillLoader ? <Loader/> : '' }
             <Header/>
             <StickyNav  />
-            <SkillBanner pageId={pageId}/>
+            <SkillBanner />
             <section className="container">
                 <div className="row">
                     <div className="col-sm-9">
@@ -46,12 +59,12 @@ const SkillPage = (props) => {
                 </div>
             </section>
             <SkillGain />
-            <CoursesTray pageId={pageId} />
+            <CoursesTray />
             <OtherSkills />
             <section className="container">
                 <aside className="row">
                     <div className="col">
-                        <DomainJobs pageId={pageId}/>
+                        <DomainJobs />
                     </div>
                     <div className="col">
                         <WriteMyResume />

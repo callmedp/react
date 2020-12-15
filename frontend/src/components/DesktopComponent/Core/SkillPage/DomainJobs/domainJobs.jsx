@@ -1,17 +1,12 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import './domainJobs.scss';
-import { fetchDomainJobs } from 'store/SkillPage/DomainJobs/actions';
+
 import { imageUrl } from 'utils/domains';
 
 const DomainJobs = (props) => {
 
-    const dispatch = useDispatch()
     const { jobsList } = useSelector(store => store.jobs) 
-    const pageId = props.pageId
-    useEffect(() => {
-        dispatch(fetchDomainJobs({id : pageId}))
-    }, [pageId])
 
 
     return (
