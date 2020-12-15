@@ -72,13 +72,13 @@ const AsyncExample = () => {
       )}
       renderMenu={(results, menuProps) => (
         <Menu key={Math.random()} id={Math.random()}>
-            <h6>Skills</h6>
+            <strong>Skills</strong>
             {results.slice(0,4).map((result, index) => (
                 <MenuItem option={result} position={index}>
                 {result.name}
                 </MenuItem>
             ))}
-            <h6>Courses</h6>
+            <strong>Courses</strong>
             {results.slice(0,4).map((result, index) => (
                 <MenuItem option={result} position={index}>
                 {result.name}
