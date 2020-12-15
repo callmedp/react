@@ -4,15 +4,15 @@ import './styles-mobile/main.scss';
 import { slide as Menu } from 'react-burger-menu';
 
 function MobileApp(props) {
-  const { waitForWidgetInitialised } = props
+  // const { waitForWidgetInitialised } = props
   
   // Zendesk Chat Script Start//
-  useEffect(()=>{
-    const timer = setTimeout(() => {
-        waitForWidgetInitialised()
-      }, 5000);
-      return () => clearTimeout(timer);
-  },[])
+  // useEffect(()=>{
+  //   const timer = setTimeout(() => {
+  //       waitForWidgetInitialised()
+  //     }, 5000);
+  //     return () => clearTimeout(timer);
+  // },[])
   //Zendesk Chat Script End//
 
   return (

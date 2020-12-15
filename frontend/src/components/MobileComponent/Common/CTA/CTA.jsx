@@ -13,14 +13,14 @@ const CTA = (props) => {
         setEnquiryForm(true)
     }
 
-    const zendeskChat = () => {
-        window.$zopim(function () {
-            window.$zopim.livechat.window.show();
-            window.$zopim.livechat.window.onHide(function () {
-                window.$zopim.livechat.hideAll()
-            })
-        });
-    }
+    // const zendeskChat = () => {
+    //     window.$zopim(function () {
+    //         window.$zopim.livechat.window.show();
+    //         window.$zopim.livechat.window.onHide(function () {
+    //             window.$zopim.livechat.hideAll()
+    //         })
+    //     });
+    // }
 
     return(
         <section className="m-container m-cta">
@@ -32,7 +32,7 @@ const CTA = (props) => {
                 <figure className="micon-callus"></figure>
                 Call us
             </a>
-            <a href="#" onClick={(e) => {e.preventDefault();zendeskChat();}}>
+            <a href="#" onClick={(e) => {e.preventDefault();}}>
                 <figure className="micon-chat"></figure>
                 Chat
             </a>

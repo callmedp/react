@@ -33,9 +33,9 @@ const SkillPage = (props) => {
         dispatch(fetchSkillPageBanner({id : pageId, 'medium': 0}));
         dispatch(fetchCoursesAndAssessments({ id: pageId }));
         dispatch(fetchDomainJobs({id : pageId}))
-        setTimeout(() => {
-            window && window.$zopim &&  window.$zopim.livechat.window.show();
-        }, 7000)
+        // setTimeout(() => {
+        //     window && window.$zopim &&  window.$zopim.livechat.window.show();
+        // }, 7000)
     },[pageId])
 
     return (
