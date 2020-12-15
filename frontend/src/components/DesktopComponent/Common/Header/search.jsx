@@ -30,7 +30,8 @@ const AsyncExample = () => {
         //     url : i.url
         // }));
         // setOptions([p_options, ct_u_options, c_u_options])
-        const options = p_u.map((i) => ({
+        const d = [{"name":"Linkedin Priya - for FR","url":"/services/level2-priya/linkedin-priya/pd-2657"},{"name":"Trading","url":"/course/other/trading/pd-7125"},{"name":"Editing","url":"/course/other/editing/pd-7123"},{"name":"Test Linkedin","url":"/services/level2-priya/test-linkedin/pd-2677"},{"name":"Resume Writing Fresher for Linkedin","url":"/services/category21-2/resume-writing-2/pd-2682"},{"name":"Linkedin combo","url":"/services/level2-priya/linkedin-combo/pd-2675"},{"name":"Linkedin Priya for 4-8 years","url":"/services/level2-priya/test-product-priya/pd-2665"},{"name":"Test Linkedin test Priya","url":"/services/level2-priya/linkedin-test-priya/pd-2676"},{"name":"Resume Writing Exp for Linkedin","url":"/services/category21-2/resume-writing-3/pd-2683"}]
+        const options = d.map((i) => ({
             name: i.name,
             url : i.url
         }));
@@ -50,7 +51,7 @@ const AsyncExample = () => {
       labelKey="name"
       minLength={2}
       delay={1000}
-      useCache={true}
+      // useCache={true}
       onSearch={handleSearch}
       options={options}
       emptyLabel="No matches found"
@@ -69,27 +70,27 @@ const AsyncExample = () => {
           }}
         />
       )}
-    //   renderMenu={(results, menuProps) => (
-    //     <Menu key={Math.random()} id={Math.random()}>
-    //         {results.length ?<h6>Skills</h6>:null}
-    //         {results.slice(0,4).map((result, index) => (
-    //             <MenuItem option={result} position={index}>
-    //             {result.name}
-    //             </MenuItem>
-    //         ))}
-    //         {/* {results.length ?<h6>Courses</h6>:null}
-    //         {results.slice(0,4).map((result, index) => (
-    //             <MenuItem option={result} position={index}>
-    //             {result.name}
-    //             </MenuItem>
-    //         ))} */}
-    //     </Menu>
-    //   )}
-    renderMenuItemChildren={(option, props) => (
-        <>
-          <span>{option.name}</span>
-        </>
+      renderMenu={(results, menuProps) => (
+        <Menu key={Math.random()} id={Math.random()}>
+            <h6>Skills</h6>
+            {results.slice(0,4).map((result, index) => (
+                <MenuItem option={result} position={index}>
+                {result.name}
+                </MenuItem>
+            ))}
+            <h6>Courses</h6>
+            {results.slice(0,4).map((result, index) => (
+                <MenuItem option={result} position={index}>
+                {result.name}
+                </MenuItem>
+            ))}
+        </Menu>
       )}
+    // renderMenuItemChildren={(option, props) => (
+    //     <>
+    //       <span>{option.name}</span>
+    //     </>
+    //   )}
     />
   );
 };
