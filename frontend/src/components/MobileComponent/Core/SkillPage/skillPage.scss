@@ -12,28 +12,16 @@
   @extend %gradient;
 }
 
-.selected{
-  color: black !important;
-}
-
 .m-tabset {
     position: relative;
     z-index: 9;
 
-    &::before {
-      content: '';
-      // @extend %gradient;
-      position: absolute;
-      left: 0;
-      right: 0;
-      height: 5rem;
-      z-index: -9;
-      height: 4.8rem;
-      // box-shadow: 0 2px 7px 0 #5262AD;
-      background-attachment: inherit;
-      background-position: -1px;
-  }
-    
+    .selected {
+      color: $white;
+      border-bottom: 3px solid $white;
+      font-weight: 600;
+    } 
+
     input[type="radio"] {
         // position: absolute;
         left: -2000vw;
