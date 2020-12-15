@@ -28,10 +28,10 @@ const CTA = (props) => {
                 <figure className="micon-chat"></figure>
                 Chat
             </a>
-            <Link to={"#"}>
+            {/* <Link to={"#"}>
                 <figure className="micon-whatsapp"></figure>
                 Whatsapp
-            </Link>
+            </Link> */}
         </section>
     )
 }
