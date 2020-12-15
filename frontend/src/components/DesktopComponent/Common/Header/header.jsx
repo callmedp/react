@@ -6,7 +6,7 @@ import { siteDomain } from 'utils/domains';
 import DropDown from './DropDown/dropDown';
 import { useDispatch, useSelector } from 'react-redux';
 import { cartCount, sessionAvailability, getCandidateInfo, fetchNavOffersAndTags } from 'store/Header/actions/index';
-import zendeskInit from 'utils/zendeskIniti';
+import { initLoggedInZendesk } from 'utils/zendeskIniti';
 import AsyncExample from './search';
 import TypeAhead from './Typeahead';
 
@@ -29,7 +29,7 @@ const Header = (props) => {
                     setIsLoggedIn(true)
                     const candidateInformation = await new Promise((resolve, reject) => dispatch(getCandidateInfo({ resolve, reject })))
                     setCandidateInfo(candidateInformation)
-                    zendeskInit(candidateInformation)
+                    initLoggedInZendesk(candidateInformation)
                 }
                 catch (e) {
                     setIsLoggedIn(false)

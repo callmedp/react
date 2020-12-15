@@ -21,6 +21,7 @@ import { fetchSkillPageBanner } from 'store/SkillPage/Banner/actions';
 import { fetchCoursesAndAssessments } from 'store/SkillPage/CoursesTray/actions/index';
 import { fetchDomainJobs } from 'store/SkillPage/DomainJobs/actions';
 import { useDispatch, useSelector } from 'react-redux';
+import { zendeskTimeControlledWindow } from 'utils/zendeskIniti'
 
 const SkillPage = (props) => {
 
@@ -33,9 +34,8 @@ const SkillPage = (props) => {
         dispatch(fetchSkillPageBanner({id : pageId, 'medium': 0}));
         dispatch(fetchCoursesAndAssessments({ id: pageId }));
         dispatch(fetchDomainJobs({id : pageId}))
-        setTimeout(() => {
-            window && window.$zopim &&  window.$zopim.livechat.window.show();
-        }, 7000)
+        //Zendesk Chat
+        zendeskTimeControlledWindow(7000)
     },[pageId])
 
     return (

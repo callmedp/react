@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Modal from 'react-modal';
 import './cta.scss'
 import { useSelector } from 'react-redux';
+import { zendeskChatShow } from 'utils/zendeskIniti';
 
 const CTA = (props) => {
     const { setEnquiryForm } = props
@@ -11,15 +12,6 @@ const CTA = (props) => {
     const showEnquiryForm = (event) => {
         event.preventDefault();
         setEnquiryForm(true)
-    }
-
-    const zendeskChat = () => {
-        window.$zopim(function () {
-            window.$zopim.livechat.window.show();
-            window.$zopim.livechat.window.onHide(function () {
-                window.$zopim.livechat.hideAll()
-            })
-        });
     }
 
     return(
@@ -32,7 +24,7 @@ const CTA = (props) => {
                 <figure className="micon-callus"></figure>
                 Call us
             </a>
-            <a href="#" onClick={(e) => {e.preventDefault();zendeskChat();}}>
+            <a href="#" onClick={(e) => {e.preventDefault();zendeskChatShow();}}>
                 <figure className="micon-chat"></figure>
                 Chat
             </a>
