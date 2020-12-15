@@ -53,7 +53,7 @@ const SkillPage = (props) => {
                             <div id="about" className="tab-panel">
                                 <SkillBanner />
                                 <BannerSlider />
-                                <PopularCourses />
+                                <PopularCourses setTabType={setTabType} />
                                 <WhoLearn />
                                 <SkillGain />
                                 <LearnersStories />

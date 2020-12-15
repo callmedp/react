@@ -46,7 +46,7 @@
     background: $white;
     color: $gray-100;
     font-size: 1.3rem;
-    position: fixed;
+    position: absolute;
     @extend %box-shadow;
     padding: 0;
 

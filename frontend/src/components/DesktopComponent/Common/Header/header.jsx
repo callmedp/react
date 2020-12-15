@@ -7,8 +7,7 @@ import DropDown from './DropDown/dropDown';
 import { useDispatch, useSelector } from 'react-redux';
 import { cartCount, sessionAvailability, getCandidateInfo, fetchNavOffersAndTags } from 'store/Header/actions/index';
 import { initLoggedInZendesk } from 'utils/zendeskIniti';
-import AsyncExample from './search';
-import TypeAhead from './Typeahead';
+import SearchBar from './SeachBar/SearchBar';
 
 const Header = (props) => {
 
@@ -64,7 +63,7 @@ const Header = (props) => {
                     <div className="navbar navbar-expand-lg navbar-light row">
                         <a className="navbar-brand" href={siteDomain}></a>
                         <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                            <TypeAhead />
+                            <SearchBar />
                             <ul className="navbar-nav navbar-right">
                                 <li className="nav-item dropdown dropdown-jobs">
                                     <a className="nav-link" to={"#"} id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Job assistance</a>
