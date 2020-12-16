@@ -24,7 +24,7 @@ const StickyNav = (props) => {
     return(
         scrolled ? <Navbar className="container-fluid lightblue-bg sticky-nav sticky-top d-sticky" expand="lg">
            <div className="container">
-                <div className="flex-100">
+                <div className="flex-1">
                     <h2>{name} Courses & Certification</h2>
                     <Nav id="content">
                         <LinkScroll to="about" isDynamic={true} spy={true}  offset={-120}>

@@ -89,14 +89,6 @@ const Header = (props) => {
                                 <li className="nav-item">
                                     <a className="nav-link" href={`${siteDomain}/talenteconomy/`} >Blog</a>
                                 </li>
-                                <li className="nav-item dropdown dropdown-call">
-                                    <Link className="nav-link link-ht" to={"#"} id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <figure className="icon-call"></figure>
-                                    </Link>
-                                    <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <a className="dropdown-item" ><strong>Call us:</strong> 0124-4312500/01</a>
-                                    </div>
-                                </li>
                                 <li className="nav-item dropdown dropdown-user">
                                     <Link className="nav-link link-ht" to={"#"} id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <figure className="icon-user"></figure>
@@ -120,6 +112,14 @@ const Header = (props) => {
                                                     </>
                                                 )
                                         }
+                                    </div>
+                                </li>
+                                <li className="nav-item dropdown dropdown-call">
+                                    <Link className="nav-link link-ht" to={"#"} id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <figure className="icon-call"></figure>
+                                    </Link>
+                                    <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <a className="dropdown-item" ><strong>Call us:</strong> 0124-4312500/01</a>
                                     </div>
                                 </li>
                                 <li className="nav-item position-relative">

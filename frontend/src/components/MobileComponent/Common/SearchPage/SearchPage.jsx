@@ -3,6 +3,7 @@ import { siteDomain } from 'utils/domains';
 import { useForm } from 'react-hook-form';
 import useDebounce from '../../../../utils/searchUtils/debouce';
 import { searchCharacters, submitData } from '../../../../utils/searchUtils/searchFunctions';
+import './SearchPage.scss';
 
 const SearchPage = (props) => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -11,37 +12,51 @@ const SearchPage = (props) => {
     const [showResults, setShowResults] = useState(false);
     const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
-    const handleScroll = () =>{
-        const offset = window.scrollY;
-        if(offset > 70){
-            setShowResults(false)
-        }
-        else{
-            setShowResults(true)
-        }
-    }
+    // const handleScroll = () =>{
+    //     const offset = window.scrollY;
+    //     if(offset > 70){
+    //         setShowResults(false)
+    //     }
+    //     else{
+    //         setShowResults(true)
+    //     }
+    // }
 
     useEffect(() => {
         // Make sure we have a value (user has entered something in input)
         if (debouncedSearchTerm) {
             searchCharacters(debouncedSearchTerm).then(results => {
-            setResults(results);
+                const data = {
+                    'products':[{
+                        'name':'Editing',
+                        'url':'https://abc.com'
+                    }],
+                    'courses': [{
+                        'name':'Editing',
+                        'url':'https://abc.com'
+                    }]
+                }
+                setResults(data);
         });
         } else {
             setResults([]);
         }
-        window.addEventListener('scroll', handleScroll);
+        // window.addEventListener('scroll', handleScroll);
     },[debouncedSearchTerm]);
 
     return (
         <>
-            <div className="ml-auto pos-rel">
-                <form className="form-inline top-search my-2 my-lg-0" onSubmit={handleSubmit(submitData)}>
-                    <input className="form-control top-input" type="search" onChange={e => setSearchTerm(e.target.value)} onFocus={()=>setShowResults(true)} 
+            <div className="m-top-search-header">
+                <figure className="micon-close-white mr-20"></figure>
+                <form className="form-inline w-100 ml-auto" onSubmit={handleSubmit(submitData)}>
+                    <figure className="m-btn-search-black d-flex"></figure>
+                    <input className="m-search-input" type="search" onChange={e => setSearchTerm(e.target.value)} onFocus={()=>setShowResults(true)} 
                         placeholder="Search anything" name="query" aria-label="Search" ref={register({required: true})} autocomplete="off" />
-                    <button className="btn btn-search" type="submit"><figure className="icon-search"></figure></button>
+                    <button className="m-btn-voice-search">
+                        <figure className="micon-voice-search d-flex"></figure>
+                    </button>
                 </form>
-                {showResults ?<div className="header-search-result">
+                {showResults ?<div className="m-header-search-result">
                     {results?.skills?.length ? 
                         <>
                             <strong>Skills</strong> 
