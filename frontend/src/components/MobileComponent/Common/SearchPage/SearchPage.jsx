@@ -1,25 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import { siteDomain } from 'utils/domains';
 import { useForm } from 'react-hook-form';
-import useDebounce from '../../../../../utils/searchUtils/debouce';
-import { searchCharacters, submitData } from '../../../../../utils/searchUtils/searchFunctions';
+import useDebounce from '../../../../utils/searchUtils/debouce';
+import { searchCharacters, submitData } from '../../../../utils/searchUtils/searchFunctions';
 
-const SearchBar = (props) => {
+const SearchPage = (props) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [results, setResults] = useState([]);
     const { register, handleSubmit, errors } = useForm()
     const [showResults, setShowResults] = useState(false);
     const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
-    // const handleScroll = () =>{
-    //     const offset = window.scrollY;
-    //     if(offset > 70){
-    //         setShowResults(false)
-    //     }
-    //     else{
-    //         setShowResults(true)
-    //     }
-    // }
+    const handleScroll = () =>{
+        const offset = window.scrollY;
+        if(offset > 70){
+            setShowResults(false)
+        }
+        else{
+            setShowResults(true)
+        }
+    }
 
     useEffect(() => {
         // Make sure we have a value (user has entered something in input)
@@ -30,7 +30,7 @@ const SearchBar = (props) => {
         } else {
             setResults([]);
         }
-        // window.addEventListener('scroll', handleScroll);
+        window.addEventListener('scroll', handleScroll);
     },[debouncedSearchTerm]);
 
     return (
@@ -80,4 +80,4 @@ const SearchBar = (props) => {
     );
 }
 
-export default SearchBar;
+export default SearchPage;
