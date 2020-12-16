@@ -2,17 +2,14 @@
 
 .m-header {
     margin: 0;
-    padding: 1.5rem 1.5rem 1.5rem 5rem !important;
+    padding: 1.5rem 1.5rem 1.5rem 0 !important;
     @extend %gradient;
     font-size: 1.4rem;
     color: $white;
-    text-align: center;
-    display: flex;
-    align-items: center;
     box-shadow: 0 2px 7px 0 #5262AD;
 
     strong {
-        margin: 0;
+        margin: 0 0 0 5.5rem;
         color: $white;
     }
 

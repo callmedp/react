@@ -1,3 +1,4 @@
+@import '../styles/path';
 // Variables
 //
 // Variables should follow the `$component-state-property-size` formula for
@@ -1162,7 +1163,7 @@ $print-body-min-width:              map-get($grid-breakpoints, "lg") !default;
 
 // custom variables by Sachin K.
 
-$sprite: url('/media/static/react/media/images/learning-sprite.png') no-repeat;
+$sprite: url('/media/static/react/media/images/desktop/learning-sprite.png') no-repeat;
 
 %box-shadow {
   box-shadow: $box-shadow;

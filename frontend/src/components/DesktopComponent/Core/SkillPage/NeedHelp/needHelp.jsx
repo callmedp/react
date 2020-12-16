@@ -31,7 +31,7 @@ const NeedHelp = (props) => {
     }
 
     return (
-        <div className="need-help">
+        <div className="need-help" id="help">
             <h2>Need Help?</h2>
             <form className="mt-20" onSubmit={handleSubmit(onSubmit)}>
                 <div className="d-flex">

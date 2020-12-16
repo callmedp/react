@@ -29,7 +29,7 @@ const Product = (props) =>{
                     <img src={imgUrl} alt={name} />
                 </figure>
                 <h3 className="m-heading3">
-                    <Link to={`${siteDomain}${url}`}>{name}</Link>
+                    <a href={`${siteDomain}${url}`}>{name}</a>
                 </h3>
             </div>
             <div className="m-card__box">

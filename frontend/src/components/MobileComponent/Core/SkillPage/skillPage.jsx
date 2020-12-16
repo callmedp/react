@@ -12,7 +12,7 @@ import WhyChooseUs from './WhyChooseUs/whyChooseUs';
 import OtherSkills from './OtherSkills/otherSkills';
 import FAQ from './FAQ/faq';
 import DomainJobs from './DomainJobs/domainJobs';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { fetchSkillPageBanner } from 'store/SkillPage/Banner/actions';
 import { fetchCoursesAndAssessments } from 'store/SkillPage/CoursesTray/actions/index';
 import Courses from './CoursesTray/Courses';
@@ -22,12 +22,16 @@ import Footer from '../../Common/Footer/Footer';
 import CTA from '../../Common/CTA/CTA';
 import StickyNav from './StickyNav/stickyNav';
 import EnquiryModal from '../../Common/Modals/EnquiryModal';
+import Loader from '../../Common/Loader/loader';
 
 
 const SkillPage = (props) => {
     const dispatch = useDispatch()
     const pageId = props.match.params.id;
     const [enquiryForm, setEnquiryForm] = useState(false)
+    const [tabType, setTabType] = useState('about')
+
+    const { skillLoader } = useSelector( store => store.loader );
 
     useEffect(() => {
         dispatch(fetchSkillPageBanner({id : pageId, 'medium': 1}))
@@ -36,30 +40,42 @@ const SkillPage = (props) => {
 
     return(
         <main className="m-container-fluid mt-0 pt-0">
+            { skillLoader ? <Loader/> : '' }
             <MenuNav />
-            <Header />
-            <section className="m-tabset mt-0 mb-0 m-tabset-pos">
-                <StickyNav />
+            <header className="m-container m-header m-tabset-pos">
+                <Header />
+            </header>
+            <section class="m-tabset mt-0 mb-0 m-skill-ht-remove">
+                <StickyNav tabType={tabType} setTabType={setTabType} />
                 <div className="tab-panels">
-                    <div id="about" className="tab-panel">
-                        <SkillBanner />
-                        <BannerSlider />
-                        <PopularCourses />
-                        <WhoLearn />
-                        <SkillGain />
-                        <LearnersStories />
-                        <WriteMyResume />
-                        <WhyChooseUs />
-                        <OtherSkills />
-                        <FAQ />
-                        <DomainJobs pageId={pageId}/>
-                    </div>
-                    <div id="courses" className="tab-panel">
-                        <Courses />
-                    </div>
-                    <div id="assessment" className="tab-panel">
-                        <Assessment />
-                    </div>
+                    { tabType === "about" ? 
+                        (
+                            <div id="about" className="tab-panel">
+                                <SkillBanner />
+                                <BannerSlider />
+                                <PopularCourses setTabType={setTabType} />
+                                <WhoLearn />
+                                <SkillGain />
+                                <LearnersStories />
+                                <WriteMyResume />
+                                <WhyChooseUs />
+                                <OtherSkills />
+                                <FAQ />
+                                <DomainJobs pageId={pageId}/>
+                            </div>
+                        ) :
+                        tabType === 'courses' ? 
+                        (
+                            <div id="courses" className="tab-panel">
+                                <Courses />
+                            </div>
+                        ) :
+                        (
+                            <div id="assessment" className="tab-panel">
+                                <Assessment />
+                            </div>
+                        )
+                        }
                 </div>
             </section>
             <Footer />
