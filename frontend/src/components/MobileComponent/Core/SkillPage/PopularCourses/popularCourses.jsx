@@ -5,7 +5,7 @@ import '../CoursesTray/courses.scss';
 import { fetchTrendingCnA } from 'store/Footer/actions/index';
 
 const PopularCourses = (props) => {
-
+    const { setTabType } = props
     const dispatch = useDispatch()
     useEffect(() => {
         dispatch(fetchTrendingCnA())
@@ -27,7 +27,7 @@ const PopularCourses = (props) => {
                 <section className="m-container m-courses mt-0 mb-0 pt-10 pb-0">
                     <div className="d-flex">
                         <h2 className="m-heading2 mb-10">Popular Courses</h2>
-                        <Link className="ml-auto m-view-course" to={"#"}>View all courses</Link>
+                        <a href="#" className="ml-auto m-view-course" onClick={(e)=>{e.preventDefault();setTabType('courses')}}>View all courses</a>
                     </div>
                     <div className="d-flex m-popular-courses">
                     {
@@ -40,7 +40,7 @@ const PopularCourses = (props) => {
                                                 <img src={course.img} alt={course.img_alt} />
                                             </figure>
                                             <h3 className="m-heading3">
-                                                <Link to={course.url}>{course.name}</Link>
+                                                <a href={course.url}>{course.name}</a>
                                             </h3>
                                         </div>
                                         <div className="m-card__box">

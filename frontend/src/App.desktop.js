@@ -1,15 +1,12 @@
 import React, { useEffect }from 'react';
 import DesktopAppRouter from './routes/index.desktop';
+import { initZendesk } from './utils/zendeskIniti';
 
 
 function DesktopApp(props) {
-  // const { waitForWidgetInitialised } = props
-
-  // Zendesk Chat Script Start//
-  // useEffect(()=>{
-  //       waitForWidgetInitialised()
-  // },[])
-  //Zendesk Chat Script End//
+  useEffect(()=>{
+      initZendesk()
+  },[])
 
   return (
     <DesktopAppRouter/>

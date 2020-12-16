@@ -2080,31 +2080,51 @@ class SearchQueryAPI(APIView):
 
     def getSearchSet(self, redis_conn):
         return {
-                    "product_url_set": [
-                        {'name': eval(p.decode())['name'],
-                        'url': eval(p.decode())['url']}
-                            for p in redis_conn.smembers('product_url_set')],
-                    "category_url_set": [{'name': eval(p.decode())['name'],
-                        'url': eval(p.decode())['url']}
-                            for p in redis_conn.smembers('category_url_set')],
-                    "course_url_set": [{'name': eval(p.decode())['name'],
-                        'url': eval(p.decode())['url']}
-                            for p in redis_conn.smembers('course_url_set')],
+            "product_url_set": [{
+                'name': eval(p.decode())['name'],
+                'url': eval(p.decode())['url']
+            } for p in redis_conn.smembers('product_url_set')],
+
+            "category_url_set": [{
+                'name': eval(p.decode())['name'],
+                'url': eval(p.decode())['url']
+            } for p in redis_conn.smembers('category_url_set')],
+                    
+            "course_url_set": [{
+                'name': eval(p.decode())['name'],
+                'url': eval(p.decode())['url']
+            } for p in redis_conn.smembers('course_url_set')],
         }
+
+    def searchQuery(self, search_set, query=''):
+        cache_data = cache.get('search_auto_complete_data', '')
+        if not cache_data:
+            cache_data = self.getSearchSet(self.conn)
+            cache.set('search_auto_complete_data', cache_data, 24*60*60)
+            
+        return list(
+            filter(
+                lambda obj: query in obj['name'].lower(),\
+                cache_data.get(search_set)
+            )
+        )
 
     def get(self, request, *args, **kwargs):
         query = self.request.GET.get('q', '').lower()
-        result = self.getSearchSet(self.conn)
+
         data = {}
-        puset = result.get('product_url_set')
-        ctuset = result.get('category_url_set')
-        cuset = result.get('course_url_set')
-        p_u = list(filter(lambda person: query in person['name'], puset))
-        ct_u = list(filter(lambda person: query in person['name'], ctuset))
-        c_u = list(filter(lambda person: query in person['name'], cuset))
-        data = {
-            'p_u' : p_u,
-            'ct_u' : ct_u,
-            'c_u' : c_u
-        }
-        return Response(data, status=status.HTTP_200_OK)
+        try:
+            products = self.searchQuery('product_url_set', query)
+            skills = self.searchQuery('category_url_set', query)
+            courses = self.searchQuery('course_url_set', query)
+            data = {
+                'products' : products,
+                'skills' : skills,
+                'courses' : courses
+            }
+            return Response(data, status=status.HTTP_200_OK)
+        except Exception as e:
+            logging.getLogger('info_log').info("Search Autocomplete Data not fetched due to {}".format(e))
+            return Response({
+                'error':'Something went Wrong'
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
