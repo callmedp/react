@@ -25,10 +25,6 @@ const MobileAppRouter = () => (
 
 export const routes = [
     {
-        path : '/skillPage',
-        component : SkillPageContainer
-    },
-    {
         path : '/courses/:func/:skill/:id',
         component : SkillPageContainer
     }

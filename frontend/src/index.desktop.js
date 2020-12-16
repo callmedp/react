@@ -9,7 +9,7 @@ import store from 'store/index';
 ReactDOM.hydrate(
   <React.StrictMode>
     <Provider store={store} >
-      <AppDesktop />
+      <AppDesktop isBrowser={true} />
     </Provider>
 
   </React.StrictMode>,

@@ -1,36 +1,39 @@
 import React from "react";
-import {BrowserRouter as Router, Route} from "react-router-dom";
+import { BrowserRouter, Route } from "react-router-dom";
 import SkillPageContainer from "components/DesktopComponent/Core/SkillPage/skillPage";
 
 
 export const RouteWithSubRoutes = route => {
-    return(
-    <Route
-        path={route.path}
-        exact={route.exact}
-        render={ props => 
-            <route.component {...props} routes={route.routes}/>
-        }
-    />
-)};
+    return (
+        <Route
+            path={route.path}
+            exact={route.exact}
+            render={props =>
+                <route.component {...props} routes={route.routes} />
+            }
+        />
+    )
+};
 
 
-const DesktopAppRouter = () => (
-    <Router>
-        <div>
-            {routes.map((route, i) => <RouteWithSubRoutes key={i} {...route} />)}
-        </div>
-    </Router>
+const DesktopAppRouter = (props) => (
+    props.isBrowser ? (
+        <BrowserRouter>
+            <div>
+                {routes.map((route, i) => <RouteWithSubRoutes key={i} {...route} />)}
+            </div>
+        </BrowserRouter>
+    ) : (
+            <div>
+                {routes.map((route, i) => <RouteWithSubRoutes key={i} {...route} />)}
+            </div>
+        )
 );
 
 export const routes = [
     {
-        path : '/skillPage',
-        component : SkillPageContainer
-    },
-    {
-        path : '/courses/:func/:skill/:id',
-        component : SkillPageContainer
+        path: '/courses/:func/:skill/:id',
+        component: SkillPageContainer
     }
 ]
 
