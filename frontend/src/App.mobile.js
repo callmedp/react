@@ -5,7 +5,7 @@ import { slide as Menu } from 'react-burger-menu';
 import { initZendesk } from './utils/zendeskIniti';
 
 function MobileApp(props) {
-  
+
   useEffect(()=>{
     const timer = setTimeout(() => {
        initZendesk()

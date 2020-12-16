@@ -63,9 +63,9 @@ class SkillPage(APIView):
     def get(self,request,*args,**kwargs):
         skill_id = int(kwargs.get('pk',None))
         fetch_from_cache = cache.get('skill_page_{}'.format(skill_id), None)
-        if fetch_from_cache:
-            data = fetch_from_cache
-            return Response(data, status=status.HTTP_200_OK)
+        # if fetch_from_cache:
+            # data = fetch_from_cache
+            # return Response(data, status=status.HTTP_200_OK)
         data = {}
         category = Category.objects.only('id','slug','career_outcomes').filter(id=skill_id).first()
         if category:
@@ -106,7 +106,7 @@ class SkillPage(APIView):
                 'id': category.pk,
             })
 
-        cache.set('skill_page_{}'.format(skill_id), data, timeout=60*60*24)
+        # cache.set('skill_page_{}'.format(skill_id), data, timeout=60*60*24)
         return Response(data,status=status.HTTP_200_OK) 
 
 class CourseComponentView(APIView):

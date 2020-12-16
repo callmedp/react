@@ -4,7 +4,6 @@ import { initZendesk } from './utils/zendeskIniti';
 
 
 function DesktopApp(props) {
-
   useEffect(()=>{
       initZendesk()
   },[])

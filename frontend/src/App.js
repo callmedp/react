@@ -8,7 +8,6 @@ const isMobileDevice = (userAgents) => {
 }
 
 function App() {
-
   if(isMobileDevice(navigator.userAgent))
     return <MobileApp />
   else
