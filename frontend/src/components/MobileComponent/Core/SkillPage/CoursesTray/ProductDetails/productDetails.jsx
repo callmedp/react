@@ -41,15 +41,15 @@ const ProductDetails = (props) =>{
                 } 
             </p>: null }
 
-            {!highlights?<p>
+            {highlights?<p>
                 <strong>Highlights</strong>
-                <ul>
+                {/* <ul>
                     <li>Anytime and anywhere access</li>
                     <li>Become a part of Job centre</li>
                     <li>Lifetime course access</li>
                     <li>Access to online e-learning</li>
-                </ul>
-                {/* <p dangerouslySetInnerHtml={{__html : highlights}}></p> */}
+                </ul> */}
+                <p dangerouslySetInnerHtml={{__html : highlights}}></p>
             </p>: null }
 
             <p className="d-flex align-items-center">

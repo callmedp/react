@@ -22,7 +22,6 @@ const Header = (props) => {
         try {
             dispatch(cartCount());
             const isSessionAvailable = await new Promise((resolve, reject) => dispatch(sessionAvailability({ resolve, reject })));
-            
             if (isSessionAvailable['result']) {
                 try {
                     setIsLoggedIn(true)

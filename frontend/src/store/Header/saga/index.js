@@ -32,8 +32,8 @@ function* cartCount(action) {
 function* candidateInfo(action) {
     const { payload: { candidateId, resolve, reject } } = action;
     try {
-        const result = yield call(Api.candidateInformation(candidateId));
-        const { candidate_id, candidate_profile: { personalInfo : { first_name, email } }} = result;
+        const result = yield call(Api.candidateInformation({ candidateId }));
+        const { candidate_id, candidate_profile: { personalInfo : { first_name, email, number } }} = result;
         localStorage.setItem('userId', candidate_id);
         localStorage.setItem('userName', first_name);
         localStorage.setItem('userEmail', email);
