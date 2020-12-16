@@ -2,6 +2,7 @@ import React from "react";
 import { siteDomain } from 'utils/domains';
 
 const ProductDetails = (props) =>{
+    const noOfWords = 120
     const { detailsData : { 
         about, highlights, 
         jobsAvailable,  skillList,
@@ -10,7 +11,7 @@ const ProductDetails = (props) =>{
     } = props
 
     const OpenProductPage = () =>{
-        window.location.replace(`${siteDomain}${url}`)
+        window.location.href = `${siteDomain}${url}`
     }
 
     return (
@@ -21,32 +22,34 @@ const ProductDetails = (props) =>{
             
             <p>
                 <strong>About</strong>
-                {about}
+                {/* { about?.slice(noOfWords)?.length ? (about?.replace(/<[^>]*>/g, '').slice(0,noOfWords)+'...') : about?.replace(/<[^>]*>/g, '')?.slice(0,noOfWords)} */}
+                <div dangerouslySetInnerHTML={{__html: (about?.slice(noOfWords)?.length ? (about?.slice(0,noOfWords)+'...') : about?.slice(0,noOfWords))}}></div>
             </p>
 
             {skillList? <p>
                 <strong>Skills you gain</strong> 
                 { 
-                    skillList?.map((skill, index) =>{
+                    skillList?.slice(0, 5)?.map((skill, index) =>{
                         return ( 
                             <React.Fragment key={index}>
                                 {skill}
-                                {index === skillList.length-1 ? '' : '  |  '}
+                                {index === skillList?.slice(0, 5).length-1 ? ' ' : '  |  '}
+                                {(skillList?.slice(0, 5)?.pop() == skill && skillList?.slice(5)?.length) ? '& Many More..' : ''}
                             </React.Fragment>
                         )
                     })
                 } 
             </p>: null }
 
-            {highlights?<p>
+            {!highlights?<p>
                 <strong>Highlights</strong>
-                {/* <ul>
+                <ul>
                     <li>Anytime and anywhere access</li>
                     <li>Become a part of Job centre</li>
                     <li>Lifetime course access</li>
                     <li>Access to online e-learning</li>
-                </ul> */}
-                <p dangerouslySetInnerHtml={{__html : highlights}}></p>
+                </ul>
+                {/* <p dangerouslySetInnerHtml={{__html : highlights}}></p> */}
             </p>: null }
 
             <p className="d-flex align-items-center">

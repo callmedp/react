@@ -7,19 +7,19 @@ import { searchCharacters, submitData } from '../../../../../utils/searchUtils/s
 const SearchBar = (props) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [results, setResults] = useState([]);
-    const { register, handleSubmit, errors } = useForm()
+    const { register, handleSubmit } = useForm()
     const [showResults, setShowResults] = useState(false);
     const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
-    // const handleScroll = () =>{
-    //     const offset = window.scrollY;
-    //     if(offset > 70){
-    //         setShowResults(false)
-    //     }
-    //     else{
-    //         setShowResults(true)
-    //     }
-    // }
+    const handleScroll = () =>{
+        const offset = window.scrollY;
+        if(offset > 70){
+            setShowResults(false)
+        }
+        else{
+            setShowResults(true)
+        }
+    }
 
     useEffect(() => {
         // Make sure we have a value (user has entered something in input)
@@ -30,7 +30,7 @@ const SearchBar = (props) => {
         } else {
             setResults([]);
         }
-        // window.addEventListener('scroll', handleScroll);
+        window.addEventListener('scroll', handleScroll);
     },[debouncedSearchTerm]);
 
     return (

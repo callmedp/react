@@ -7,7 +7,7 @@ import { siteDomain } from 'utils/domains';
 
 const SkillGain = (props) => {
     const { skillGainList, name, slug } = useSelector( store => store.skillBanner )
-    const testRedirect = () => window.location.replace(`${siteDomain}/practice-tests/${slug}/sub`)
+    const testRedirect = () => window.location.href = `${siteDomain}/practice-tests/${slug}/sub`;
 
     return (
         <section className="m-container mt-0 mb-0 pb-0">

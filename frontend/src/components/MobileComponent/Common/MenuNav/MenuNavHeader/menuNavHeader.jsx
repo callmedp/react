@@ -7,14 +7,14 @@ const menuNavHeader = (props) => {
     const handleLogout = () => {
         localStorage.clear();
         let path = window.location.pathname
-        window.location.replace(`${siteDomain}/logout/?next=${path}`);
+        window.location.href = `${siteDomain}/logout/?next=${path}`;
     }
 
     const handleRedirect = (type) => {
         let redirectPath = window.location.pathname
         redirectPath ?
-            window.location.replace(`${siteDomain}/${type}/?next=${redirectPath}`) :
-            window.location.replace(`${siteDomain}/${type}/`)
+            window.location.href = `${siteDomain}/${type}/?next=${redirectPath}` :
+            window.location.href = `${siteDomain}/${type}/`
     }
 
     return(
@@ -24,7 +24,7 @@ const menuNavHeader = (props) => {
                 <div className="m-guest-section">
                     <figure className="micon-user-pic"></figure>
                     <div className="media-body">
-                        <strong>Welcome {candidateInfo?.first_name}</strong>
+                        <strong>Welcome {candidateInfo?.name}</strong>
                         <p>
                             <a href="#" className="btn-white-outline" onClick={(e)=>{e.preventDefault();handleLogout()}}>Logout</a>
                         </p>

@@ -14,7 +14,7 @@ const searchCharacters = search =>{
 const submitData = (values, event) => {
     const searchedQuery = values?.query
     if(searchedQuery){
-        window.location.push(`${siteDomain}/search/results/?q=${searchedQuery}`);
+        window.location.href = `${siteDomain}/search/results/?q=${searchedQuery}`;
     }
 }
 

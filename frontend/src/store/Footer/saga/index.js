@@ -10,7 +10,6 @@ function* fetchTrendingCnA(action) {
             return
         }
         const item = response?.data?.data;
-        console.log("item trending", item)
         yield put({ 
             type: Actions.TRENDING_COURSES_AND_SKILLS_FETCHED, item 
         });

@@ -20,9 +20,9 @@ export const initZendesk = async () =>
 // Setting Value in the Zendesk Chat if the user is Logged in
 export const initLoggedInZendesk = (candidateDetails) => {
     if (candidateDetails) {
-        const full_name = candidateDetails?.full_name;
+        const full_name = candidateDetails?.name;
         const  email = candidateDetails?.email;
-        const mobile_no = candidateDetails?.mobile_no;
+        const mobile_no = candidateDetails?.mobile;
             
         window && window.$zopim &&  window.$zopim(function () {
             window.$zopim.livechat.set({

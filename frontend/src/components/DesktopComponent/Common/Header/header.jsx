@@ -22,11 +22,12 @@ const Header = (props) => {
         try {
             dispatch(cartCount());
             const isSessionAvailable = await new Promise((resolve, reject) => dispatch(sessionAvailability({ resolve, reject })));
-
+            
             if (isSessionAvailable['result']) {
                 try {
                     setIsLoggedIn(true)
-                    const candidateInformation = await new Promise((resolve, reject) => dispatch(getCandidateInfo({ resolve, reject })))
+                    const candidateId = isSessionAvailable['candidate_id']
+                    const candidateInformation = await new Promise((resolve, reject) => dispatch(getCandidateInfo({candidateId, resolve, reject })))
                     setCandidateInfo(candidateInformation)
                     initLoggedInZendesk(candidateInformation)
                 }
@@ -53,7 +54,7 @@ const Header = (props) => {
 
     const handleLogout = () => {
         localStorage.clear();
-        window.location.replace(`${siteDomain}/logout/?next=/resume-score-checker/`);
+        window.location.href = `${siteDomain}/logout/`;
     }
 
     return (

@@ -25,7 +25,7 @@ const StickyNav = (props) => {
             <label htmlFor="tab2" className={tabType === 'courses' ? 'selected' : ''} onClick={()=>setTabType('courses')}>Courses</label>
 
             <input type="radio" name="tabset" id="tab3" aria-controls="assessment" />
-            <label htmlFor="tab3" className={tabType === 'assessment' ? 'selected' : ''} onClick={()=>setTabType('assessment')}>Assessment</label>
+            <label htmlFor="tab3" className={tabType === 'assessment' ? 'selected' : ''} onClick={()=>setTabType('assessment')}>Assessments</label>
         </div>
     )
 }

@@ -27,7 +27,7 @@ const Assessment = (props) => {
 
     return (
     <section className="m-container mt-0 mb-0 pb-0">
-        <h2 className="m-heading2 mb-10">Assessment for you</h2>
+        <h2 className="m-heading2 mb-10">Assessments for you</h2>
         <div className="m-courses m-courses-slider ml-10n">
             <Slider {...settings}>
                 {
@@ -36,7 +36,7 @@ const Assessment = (props) => {
             </Slider>
         </div>
 
-        <h2 className="m-heading2 mt-20 mb-20">More assessment</h2>
+        <h2 className="m-heading2 mt-20 mb-20">More assessments</h2>
         <div className="m-courses">
             {
                 (sliceFlag ? assessmentList.slice(0, 4) : assessmentList)?.map((assessment, idx)=> <Product product={assessment} key={idx + 100} compType='More Courses'/>)

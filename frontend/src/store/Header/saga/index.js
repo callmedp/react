@@ -30,14 +30,14 @@ function* cartCount(action) {
 
 
 function* candidateInfo(action) {
-    const { payload: { resolve, reject } } = action;
+    const { payload: { candidateId, resolve, reject } } = action;
     try {
-        const result = yield call(Api.candidateInformation);
-        const { candidate_id, profile: { first_name, email } } = result;
+        const result = yield call(Api.candidateInformation(candidateId));
+        const { candidate_id, candidate_profile: { personalInfo : { first_name, email } }} = result;
         localStorage.setItem('userId', candidate_id);
         localStorage.setItem('userName', first_name);
         localStorage.setItem('userEmail', email);
-        resolve({ candidateId: candidate_id || '', name: first_name || '', email: email || '' });
+        resolve({ candidateId: candidate_id || '', name: first_name || '', email: email || '' , mobile: number || ''});
     }
     catch (e) {
         return reject(e);

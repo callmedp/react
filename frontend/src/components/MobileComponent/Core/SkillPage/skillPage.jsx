@@ -81,8 +81,8 @@ const SkillPage = (props) => {
                             )
                             }
                     </div>
+                    <Footer />
                 </section>
-                <Footer />
                 <CTA setEnquiryForm={setEnquiryForm}/>
                 {
                     enquiryForm ? <EnquiryModal setEnquiryForm={setEnquiryForm} /> : null
