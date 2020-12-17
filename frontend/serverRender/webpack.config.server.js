@@ -34,14 +34,13 @@ const resolveModule = (resolveFn, filePath) => {
 
 const serverIndexJs = resolveModule(resolveApp, 'serverRender/index');
 const serverBuild = resolveApp('./ssrBuild');
-const publicUrl = '/dist/';
+
 
 const entry = [serverIndexJs];
 
 const output = {
     path: serverBuild,
     filename: 'serve.js',
-    publicPath: publicUrl,
 }
 
 const externals = [

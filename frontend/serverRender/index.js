@@ -73,11 +73,16 @@ if (typeof global.sessionStorage == 'undefined') {
 
 const render = require('./render').default;
 
+app.use('/media/static/',express.static('../careerplus/media/static/'));
+
 app.get('*', (req, res) => {
    
-
+    
     const indexFile = path.resolve('serverRender/index.html');
-    const appContent =render();
+    
+    const appContent =render(req);
+    console.log("html parsed", appContent)
+    
 
     fs.readFile(indexFile, 'utf8', (err, data) => {
         if (err) {
@@ -91,7 +96,8 @@ app.get('*', (req, res) => {
     });
 });
 
-app.use(express.static('./serverRender'));
+
+
 
 app.listen(PORT, () => {
     console.log(`Server is listening on port ${PORT}`);

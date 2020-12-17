@@ -8,7 +8,7 @@
         border: none;
         padding: 2rem;
         border-bottom: .5rem solid $card-btm-bdr;
-        @include border-radius(5px)
+        @include border-radius(5px);
 
         &__name {
             font-size: 2.4rem;

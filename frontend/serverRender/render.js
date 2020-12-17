@@ -6,7 +6,8 @@ import { Provider } from 'react-redux';
 import store from '../src/store/index';
 import React from 'react';
 
-const render = () => {
+const Render = (req) => {
+    const context = {}
     const app = ReactDOMServer.renderToString(
         < Provider store={store}>
             <StaticRouter location={req.url} context={context}>
@@ -17,4 +18,4 @@ const render = () => {
     return app;
 }
 
-export default render;
+export default Render;
