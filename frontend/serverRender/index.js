@@ -71,18 +71,44 @@ if (typeof global.sessionStorage == 'undefined') {
     }
 }
 
-const render = require('./render').default;
+const renderDesktop = require('./render').RenderDesktop;
+const renderMobile = require('./render').RenderMobile;
+let userAgents = '';
+
+app.use(function (req, res, next) {
+    userAgents = req.headers['user-agent'];
+    next();
+});
 
 app.use('/media/static/',express.static('../careerplus/media/static/'));
 
+const isMobile = (userAgents) => {
+    return /Android|Phone|Mobile|Opera\sM(in|ob)i|iP[ao]d|BlackBerry|SymbianOS|Safari\.SearchHelper|SAMSUNG-(GT|C)|WAP|CFNetwork|Puffin|PlayBook|Nokia|LAVA|SonyEricsson|Karbonn|UCBrowser|ucweb|Micromax|Silk|LG(MW|-MMS)|PalmOS/i.test(userAgents)
+}
+
 app.get('*', (req, res) => {
-   
+    console.log("listening request", req.headers['user-agent'] )
+    if(isMobile(userAgents)){
+
+        const indexFile = path.resolve('serverRender/index.mobile.html');
+        const appContent =renderMobile(req);
+        
     
+        fs.readFile(indexFile, 'utf8', (err, data) => {
+            if (err) {
+                console.error('Something went wrong:', err);
+                return res.status(500).send('Oops, better luck next time!');
+            }
+    
+            return res.send(
+                data.replace('<div id="root"></div>', `<div id="root">${appContent}</div>`)
+            );
+        });
+    }
+    else{
+
     const indexFile = path.resolve('serverRender/index.html');
-    
-    const appContent =render(req);
-    console.log("html parsed", appContent)
-    
+    const appContent =renderDesktop(req);
 
     fs.readFile(indexFile, 'utf8', (err, data) => {
         if (err) {
@@ -94,6 +120,7 @@ app.get('*', (req, res) => {
             data.replace('<div id="root"></div>', `<div id="root">${appContent}</div>`)
         );
     });
+}
 });
 
 

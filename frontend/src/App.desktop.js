@@ -2,9 +2,9 @@ import React from 'react';
 import DesktopAppRouter from './routes/index.desktop';
 
 
-function DesktopApp(props) {
+function DesktopApp() {
   return (
-    <DesktopAppRouter isBrowser={props.isBrowser}/>
+    <DesktopAppRouter />
   );
 }
 

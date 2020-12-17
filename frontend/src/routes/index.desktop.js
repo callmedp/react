@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter, Route } from "react-router-dom";
+import { Route } from "react-router-dom";
 import SkillPageContainer from "components/DesktopComponent/Core/SkillPage/skillPage";
 
 
@@ -16,18 +16,12 @@ export const RouteWithSubRoutes = route => {
 };
 
 
-const DesktopAppRouter = (props) => (
-    props.isBrowser ? (
-        <BrowserRouter>
-            <div>
-                {routes.map((route, i) => <RouteWithSubRoutes key={i} {...route} />)}
-            </div>
-        </BrowserRouter>
-    ) : (
-            <div>
-                {routes.map((route, i) => <RouteWithSubRoutes key={i} {...route} />)}
-            </div>
-        )
+const DesktopAppRouter = () => (
+
+    <div>
+        {routes.map((route, i) => <RouteWithSubRoutes key={i} {...route} />)}
+    </div>
+
 );
 
 export const routes = [
