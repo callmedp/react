@@ -5,8 +5,8 @@ function* sessionAvailability(action) {
     let { payload: { resolve } } = action;
     try {
         let resp = yield call(Api.sessionAvailability)
-        const { result } = resp.data;
-        resolve({ result: result });
+        const { result, candidate_id } = resp.data;
+        resolve({ result: result, candidate_id: candidate_id });
     } catch (e) {
         return resolve(false)
     }
@@ -18,9 +18,10 @@ function* cartCount(action) {
         if (response["error"]) {
             return
         }
-        const item = response?.count;
+        const item = response?.data;
         yield put({ 
-            type: Actions.CART_COUNT_FETCHED, item 
+            type: Actions.CART_COUNT_FETCHED,
+            item 
         });
 
     }

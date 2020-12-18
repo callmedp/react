@@ -23,10 +23,6 @@ const DefaultMenuNav = (props) =>{
         try {
             dispatch(cartCount());
             const isSessionAvailable = await new Promise((resolve, reject) => dispatch(sessionAvailability({ resolve, reject })));
-            // const isSessionAvailable = {
-            //     "result": true,
-            //     "candidate_id": "5c94a7b29cbeea2c1f27fda2"
-            // }
 
             if (isSessionAvailable['result']) {
                 try {

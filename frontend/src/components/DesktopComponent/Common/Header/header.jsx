@@ -22,10 +22,6 @@ const Header = (props) => {
         try {
             dispatch(cartCount());
             const isSessionAvailable = await new Promise((resolve, reject) => dispatch(sessionAvailability({ resolve, reject })));
-            // const isSessionAvailable = {
-            //     "result": true,
-            //     "candidate_id": "5c94a7b29cbeea2c1f27fda2"
-            // }
             if (isSessionAvailable['result']) {
                 try {
                     setIsLoggedIn(true)
@@ -107,7 +103,7 @@ const Header = (props) => {
                                                     <a className="dropdown-item" href={`${siteDomain}/dashboard/roundone/`}>My Referrals</a>
                                                     <a className="dropdown-item truncate" >{candidateInfo?.name ? candidateInfo?.name?.charAt(0)?.toUpperCase() + candidateInfo?.name?.slice(1) : candidateInfo?.email}</a>
                                                     <div className="dropdown-divider"></div>
-                                                    <a className="dropdown-item" onClick={handleLogout} >Logout</a>
+                                                    <a className="dropdown-item" onClick={()=>handleLogout()} >Logout</a>
                                                 </>
                                             ) : (
                                                     <>

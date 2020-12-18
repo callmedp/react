@@ -4,6 +4,7 @@ const initState = {
     count : 0,
     navTags : [],
     navOffer : [],
+    callUs : ''
 }
 
 export const HeaderReducer = (state=initState, action) => {
