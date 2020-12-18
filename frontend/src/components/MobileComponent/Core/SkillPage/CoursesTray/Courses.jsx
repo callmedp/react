@@ -22,19 +22,25 @@ const Courses = (props) => {
     },[])
 
     const { courseList } = useSelector(store => store.coursesTray)
+    const { r_courses } = useSelector(store => store.recommendation)
     const [sliceFlag, setSliceFlag] = useState(true)
     const loadMore = () => setSliceFlag(state => !state)
 
     return (
     <section className="m-container mt-0 mb-0 pb-0">
-        <h2 className="m-heading2 mb-10">Courses for you</h2>
-        <div className="m-courses m-courses-slider ml-10n">
-            <Slider {...settings}>
-                {
-                    courseList?.map((course, idx)=> <Product product={course} key={idx} compType='For You'/>)
-                }
-            </Slider>
-        </div>
+        {
+            r_courses?.length ?
+            <>
+                <h2 className="m-heading2 mb-10">Courses for you</h2>
+                <div className="m-courses m-courses-slider ml-10n">
+                    <Slider {...settings}>
+                        {
+                            r_courses?.map((course, idx)=> <Product product={course} key={idx} compType='For You'/>)
+                        }
+                    </Slider>
+                </div>
+            </> : null
+        }
 
         <h2 className="m-heading2 mt-20 mb-20">More courses</h2>
         <div className="m-courses">

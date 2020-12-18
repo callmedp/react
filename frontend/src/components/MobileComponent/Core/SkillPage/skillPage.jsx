@@ -24,6 +24,7 @@ import StickyNav from './StickyNav/stickyNav';
 import EnquiryModal from '../../Common/Modals/EnquiryModal';
 import Loader from '../../Common/Loader/loader';
 import SearchPage from '../../Common/SearchPage/SearchPage';
+import { fetchRecommendedProducts } from 'store/RecommendedCourses/actions/index';
 
 
 const SkillPage = (props) => {
@@ -38,18 +39,19 @@ const SkillPage = (props) => {
     useEffect(() => {
         dispatch(fetchSkillPageBanner({id : pageId, 'medium': 1}))
         dispatch(fetchCoursesAndAssessments({ id: pageId, 'medium': 1}));
+        dispatch(fetchRecommendedProducts())
     },[pageId])
 
     return(
         <main className="m-container-fluid mt-0 pt-0">
             { skillLoader ? <Loader/> : '' }
-            { showSearchPage ? <SearchPage />:
+            { showSearchPage ? <SearchPage setShowSearchPage={setShowSearchPage} />:
             <>
                 <MenuNav />
                 <header className="m-container m-header m-tabset-pos">
                     <Header setShowSearchPage={setShowSearchPage}/>
                 </header>
-                <section class="m-tabset mt-0 mb-0 m-skill-ht-remove">
+                <section className="m-tabset mt-0 mb-0 m-skill-ht-remove">
                     <StickyNav tabType={tabType} setTabType={setTabType} />
                     <div className="tab-panels">
                         { tabType === "about" ? 

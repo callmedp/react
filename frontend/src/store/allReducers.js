@@ -7,6 +7,7 @@ import { CourseAndAssessmentsReducer } from './SkillPage/CoursesTray/reducer';
 import { HeaderReducer } from './Header/reducer/index';
 import { FooterReducer } from './Footer/reducer/index';
 import { LoaderReducer } from './Loader/reducer';
+import { RecommendationReducer } from './RecommendedCourses/reducer/index';
 
 const rootReducer = combineReducers({
     needHelp : NeedHelpReducer,
@@ -16,6 +17,7 @@ const rootReducer = combineReducers({
     header : HeaderReducer,
     footer : FooterReducer,
     loader : LoaderReducer,
+    recommendation : RecommendationReducer,
 });
 
 

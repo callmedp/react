@@ -4,55 +4,36 @@ import { useForm } from 'react-hook-form';
 import useDebounce from '../../../../utils/searchUtils/debouce';
 import { searchCharacters, submitData } from '../../../../utils/searchUtils/searchFunctions';
 import './SearchPage.scss';
+import { startDictation } from '../../../../utils/searchUtils/speechRecognition';
 
 const SearchPage = (props) => {
+    const { setShowSearchPage } = props
     const [searchTerm, setSearchTerm] = useState('');
     const [results, setResults] = useState([]);
     const { register, handleSubmit, errors } = useForm()
     const [showResults, setShowResults] = useState(false);
     const debouncedSearchTerm = useDebounce(searchTerm, 500);
 
-    // const handleScroll = () =>{
-    //     const offset = window.scrollY;
-    //     if(offset > 70){
-    //         setShowResults(false)
-    //     }
-    //     else{
-    //         setShowResults(true)
-    //     }
-    // }
-
     useEffect(() => {
         // Make sure we have a value (user has entered something in input)
         if (debouncedSearchTerm) {
             searchCharacters(debouncedSearchTerm).then(results => {
-                const data = {
-                    'products':[{
-                        'name':'Editing',
-                        'url':'https://abc.com'
-                    }],
-                    'courses': [{
-                        'name':'Editing',
-                        'url':'https://abc.com'
-                    }]
-                }
-                setResults(data);
+                setResults(results);
         });
         } else {
             setResults([]);
         }
-        // window.addEventListener('scroll', handleScroll);
     },[debouncedSearchTerm]);
 
     return (
         <>
             <div className="m-top-search-header">
-                <figure className="micon-close-white mr-20"></figure>
-                <form className="form-inline w-100 ml-auto" onSubmit={handleSubmit(submitData)}>
-                    <figure className="m-btn-search-black d-flex"></figure>
+                <figure className="micon-close-white mr-20" onClick={()=>setShowSearchPage(false)}></figure>
+                <form id="searchForm" className="form-inline w-100 ml-auto" onSubmit={handleSubmit(submitData)}>
+                    <figure className="m-btn-search-black d-flex search-margin"></figure>
                     <input className="m-search-input" type="search" onChange={e => setSearchTerm(e.target.value)} onFocus={()=>setShowResults(true)} 
-                        placeholder="Search anything" name="query" aria-label="Search" ref={register({required: true})} autocomplete="off" />
-                    <button className="m-btn-voice-search">
+                        placeholder="Search anything" name="query" id="transcript" aria-label="Search" ref={register({required: true})} autoComplete="off" />
+                    <button className="m-btn-voice-search" onClick={startDictation}>
                         <figure className="micon-voice-search d-flex"></figure>
                     </button>
                 </form>

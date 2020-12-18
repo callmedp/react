@@ -11,8 +11,8 @@ const cartCount = () => {
     return BaseApiService.get(`${siteDomain}/api/v1/cart/${url}`);
 }
 
-const candidateInformation = ({ candidateId }) => {
-    const url = `candidate-login/${candidateId}`;
+const candidateInformation = (candidateId) => {
+    const url = `candidate-login/${candidateId}?with_info=false`;
     return BaseApiService.get(`${siteDomain}/api/v1/${url}`, {
         "Content-Type": "application/json",
         'Authorization': ''

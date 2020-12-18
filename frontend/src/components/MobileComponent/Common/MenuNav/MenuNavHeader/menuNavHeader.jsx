@@ -24,7 +24,7 @@ const menuNavHeader = (props) => {
                 <div className="m-guest-section">
                     <figure className="micon-user-pic"></figure>
                     <div className="media-body">
-                        <strong>Welcome {candidateInfo?.name}</strong>
+                        <strong>Welcome {candidateInfo?.name?.charAt(0)?.toUpperCase() + candidateInfo?.name?.slice(1)}</strong>
                         <p>
                             <a href="#" className="btn-white-outline" onClick={(e)=>{e.preventDefault();handleLogout()}}>Logout</a>
                         </p>

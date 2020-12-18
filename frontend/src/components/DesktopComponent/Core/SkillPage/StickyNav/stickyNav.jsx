@@ -54,9 +54,9 @@ const StickyNav = (props) => {
                          <LinkScroll to="story1" className="invisible" isDynamic={true} spy={true}  offset={0}></LinkScroll>
                     </Nav>
                 </div>
-                {/* <Form inline> */}
+                <LinkScroll to="help" isDynamic={true} spy={true} offset={-120}>
                     <button type="submit" className="btn btn-primary ml-auto" role="button">Need Help?</button>
-                {/* </Form> */}
+                </LinkScroll>
             </div> 
         </Navbar>
         : ''

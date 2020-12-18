@@ -111,6 +111,9 @@ urlpatterns = [
     re_path(r'^v2/', include('api.v2.urls')),
     re_path(r'v1/search-query/$', views.SearchQueryAPI.as_view(),
         name='search-query-api'
+    ),
+    re_path(r'v1/recommended-courses-and-assesments/$', views.RecommendedCoursesAPI.as_view(),
+        name='recommended-products-api'
     )
 ]
 

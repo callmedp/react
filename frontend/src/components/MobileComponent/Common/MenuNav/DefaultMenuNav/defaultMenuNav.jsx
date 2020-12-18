@@ -23,14 +23,18 @@ const DefaultMenuNav = (props) =>{
         try {
             dispatch(cartCount());
             const isSessionAvailable = await new Promise((resolve, reject) => dispatch(sessionAvailability({ resolve, reject })));
+            // const isSessionAvailable = {
+            //     "result": true,
+            //     "candidate_id": "5c94a7b29cbeea2c1f27fda2"
+            // }
 
             if (isSessionAvailable['result']) {
                 try {
                     setIsLoggedIn(true)
                     const candidateId = isSessionAvailable['candidate_id']
                     const candidateInformation = await new Promise((resolve, reject) => dispatch(getCandidateInfo({candidateId, resolve, reject })))
-                    setCandidateInfo(candidateInformation)
                     initLoggedInZendesk(candidateInformation)
+                    setCandidateInfo(candidateInformation)
                 }
                 catch (e) {
                     setIsLoggedIn(false)
@@ -51,9 +55,6 @@ const DefaultMenuNav = (props) =>{
     useEffect(() => {
         fetchUserInfo();
         dispatch(fetchNavOffersAndTags());
-        // setTimeout(() => {
-        //     initLoggedInZendesk(candidateInfo)
-        //   }, 8000)
     },[])
 
     return (
@@ -64,7 +65,7 @@ const DefaultMenuNav = (props) =>{
                     <figure className="micon-home" /> Home 
                 </a>
                 <a href="/" className="menu-item" onClick={(e) => {e.preventDefault();setType('allCourses')}}>
-                    <figure className="micon-other-services" /> All Courses <figure className="micon-arrow-menusm ml-auto" />
+                    <figure className="micon-courses-services" /> All Courses <figure className="micon-arrow-menusm ml-auto" />
                 </a>
                 <a href="/" className="menu-item" onClick={(e) => {e.preventDefault();setType('jobAssistanceServices')}}>
                     <figure className="micon-resume-service" /> Job Assistance Services <figure className="micon-arrow-menusm ml-auto" />

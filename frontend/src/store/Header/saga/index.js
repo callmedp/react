@@ -32,12 +32,12 @@ function* cartCount(action) {
 function* candidateInfo(action) {
     const { payload: { candidateId, resolve, reject } } = action;
     try {
-        const result = yield call(Api.candidateInformation({ candidateId }));
-        const { candidate_id, candidate_profile: { personalInfo : { first_name, email, number } }} = result;
+        const result = yield call(Api.candidateInformation, candidateId);
+        const { candidate_id, profile : { first_name, email, cell_phone } } = result?.data;
         localStorage.setItem('userId', candidate_id);
         localStorage.setItem('userName', first_name);
         localStorage.setItem('userEmail', email);
-        resolve({ candidateId: candidate_id || '', name: first_name || '', email: email || '' , mobile: number || ''});
+        resolve({ candidateId: candidate_id || '', name: first_name || '', email: email || '' , mobile: cell_phone || ''});
     }
     catch (e) {
         return reject(e);

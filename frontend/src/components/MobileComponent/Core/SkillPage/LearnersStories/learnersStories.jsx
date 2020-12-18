@@ -23,7 +23,7 @@ const LearnersStories = (props) => {
                 <span className="m-card__name">{item.firstName ? item.firstName[0].toUpperCase() : ""}{item.lastName ? item.lastName[0].toUpperCase() : ""}</span>
                 <p className="m-card__txt">{item.review}</p>
                 <strong>{item.firstName + item.lastName}</strong>
-                <span className="m-card__location">{item.company}</span>
+                <span className="m-card__location">{item.company ? item.company : <br />}</span>
             </div>
         )
     }
