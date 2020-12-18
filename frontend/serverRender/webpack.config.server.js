@@ -40,7 +40,7 @@ const entry = [serverIndexJs];
 
 const output = {
     path: serverBuild,
-    filename: 'serve.js',
+    filename: 'server.js',
 }
 
 const externals = [

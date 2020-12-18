@@ -1,18 +1,19 @@
 
 import ReactDOMServer from 'react-dom/server';
-import AppDesktop from '../src/App.desktop';
-import AppMobile from '../src/App.mobile';
+import AppDesktop from 'App.desktop';
+import AppMobile from 'App.mobile';
 import { StaticRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
-import store from '../src/store/index';
+import store from 'store/index';
 import React from 'react';
+import { renderRoutes } from 'react-router-config';
 
-export const RenderDesktop = (req) => {
+export const RenderDesktop = (req, routes) => {
     const context = {}
     const app = ReactDOMServer.renderToString(
         < Provider store={store}>
             <StaticRouter location={req.url} context={context}>
-                <AppDesktop />
+                { renderRoutes(routes) }
             </StaticRouter>
         </ Provider>
     );
@@ -24,7 +25,7 @@ export const RenderMobile = (req) => {
     const context = {}
     const app = ReactDOMServer.renderToString(
         < Provider store={store}>
-            <StaticRouter location={req.url} context={context}>
+            <StaticRouter location={req.path} context={context}>
                 <AppMobile />
             </StaticRouter>
         </ Provider>

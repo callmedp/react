@@ -3,8 +3,9 @@
 const path = require('path');
 const fs = require('fs');
 const express = require('express');
+const matchRoutes = require('react-router-config').matchRoutes;
 
-
+import SkillPage from 'components/DesktopComponent/Core/SkillPage/skillPage';
 
 const PORT = process.env.PORT || 3216;
 const app = express();
@@ -73,43 +74,55 @@ if (typeof global.sessionStorage == 'undefined') {
 
 const renderDesktop = require('./render').RenderDesktop;
 const renderMobile = require('./render').RenderMobile;
-let userAgents = '';
+const store = require('store/index').default;
+
+let userAgents, indexFile, appContent, routes;
 
 app.use(function (req, res, next) {
     userAgents = req.headers['user-agent'];
     next();
 });
 
-app.use('/media/static/',express.static('../careerplus/media/static/'));
+app.use('/media/static/', express.static('../careerplus/media/static/'));
 
 const isMobile = (userAgents) => {
     return /Android|Phone|Mobile|Opera\sM(in|ob)i|iP[ao]d|BlackBerry|SymbianOS|Safari\.SearchHelper|SAMSUNG-(GT|C)|WAP|CFNetwork|Puffin|PlayBook|Nokia|LAVA|SonyEricsson|Karbonn|UCBrowser|ucweb|Micromax|Silk|LG(MW|-MMS)|PalmOS/i.test(userAgents)
 }
 
-app.get('*', (req, res) => {
-    console.log("listening request", req.headers['user-agent'] )
-    if(isMobile(userAgents)){
+app.get('*', async (req, res) => {
 
-        const indexFile = path.resolve('serverRender/index.mobile.html');
-        const appContent =renderMobile(req);
-        
-    
-        fs.readFile(indexFile, 'utf8', (err, data) => {
-            if (err) {
-                console.error('Something went wrong:', err);
-                return res.status(500).send('Oops, better luck next time!');
-            }
-    
-            return res.send(
-                data.replace('<div id="root"></div>', `<div id="root">${appContent}</div>`)
-            );
-        });
+    if (isMobile(userAgents)) {
+
+        indexFile = path.resolve('serverRender/index.mobile.html');
+        appContent = renderMobile(req);
+        routes = require('routes/index.mobile').routes;
     }
-    else{
 
-    const indexFile = path.resolve('serverRender/index.html');
-    const appContent =renderDesktop(req);
+    else {
 
+        indexFile = path.resolve('serverRender/index.html');
+        routes = require('routes/index.mobile').routes;
+        appContent = renderDesktop(req, routes);
+    }
+    
+    // const branch = matchRoutes(routes, req.path)
+    
+    // console.log("request header ", req)
+    for (const [index, { route, match }] of (matchRoutes(routes, req.path) || []).entries()) {
+        if (route && route.staticComponent && route.staticComponent.fetching) {
+            try {
+                const result = await route.staticComponent.fetching(store, match.params);
+                console.log("result is ", result)
+            } catch (e) {
+                console.log("Error in Api", e);
+            }
+        }
+    }
+
+    console.table(SkillPage)
+    
+ 
+    
     fs.readFile(indexFile, 'utf8', (err, data) => {
         if (err) {
             console.error('Something went wrong:', err);
@@ -120,7 +133,7 @@ app.get('*', (req, res) => {
             data.replace('<div id="root"></div>', `<div id="root">${appContent}</div>`)
         );
     });
-}
+
 });
 
 
