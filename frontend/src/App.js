@@ -12,9 +12,9 @@ const isMobileDevice = (userAgents) => {
 
 function App() {
   if(isMobileDevice(navigator.userAgent))
-    return <MobileApp/>
+    return <MobileApp />
   else
-    return <DesktopApp/>
+    return <DesktopApp />
 }
 
 export default App;

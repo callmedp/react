@@ -1,5 +1,6 @@
 {
   "files": {
+<<<<<<< HEAD
     "static/js/0.2ea92adc.chunk.js": "/media/static/react/static/js/0.2ea92adc.chunk.js",
     "static/js/0.2ea92adc.chunk.js.map": "/media/static/react/static/js/0.2ea92adc.chunk.js.map",
     "desktop.css": "/media/static/react/static/css/desktop.8d0aac2c.chunk.css",
@@ -38,5 +39,49 @@
     "static/js/6.6111d2c5.chunk.js",
     "static/css/mobile.2df19b3c.chunk.css",
     "static/js/mobile.dccf70b8.chunk.js"
+=======
+    "static/js/0.463c54c1.chunk.js": "/media/static/react/static/js/0.463c54c1.chunk.js",
+    "static/js/0.463c54c1.chunk.js.map": "/media/static/react/static/js/0.463c54c1.chunk.js.map",
+    "desktop.css": "/media/static/react/static/css/desktop.3c14435c.chunk.css",
+    "desktop.js": "/media/static/react/static/js/desktop.9d764446.chunk.js",
+    "desktop.js.map": "/media/static/react/static/js/desktop.9d764446.chunk.js.map",
+    "mobile.css": "/media/static/react/static/css/mobile.fd871b4b.chunk.css",
+    "mobile.js": "/media/static/react/static/js/mobile.428cf2ce.chunk.js",
+    "mobile.js.map": "/media/static/react/static/js/mobile.428cf2ce.chunk.js.map",
+    "runtime-desktop.js": "/media/static/react/static/js/runtime-desktop.6c0a9c4a.js",
+    "runtime-desktop.js.map": "/media/static/react/static/js/runtime-desktop.6c0a9c4a.js.map",
+    "runtime-mobile.js": "/media/static/react/static/js/runtime-mobile.bffb4101.js",
+    "runtime-mobile.js.map": "/media/static/react/static/js/runtime-mobile.bffb4101.js.map",
+    "static/js/5.8871ad1a.chunk.js": "/media/static/react/static/js/5.8871ad1a.chunk.js",
+    "static/js/5.8871ad1a.chunk.js.map": "/media/static/react/static/js/5.8871ad1a.chunk.js.map",
+    "static/css/6.3d626a79.chunk.css": "/media/static/react/static/css/6.3d626a79.chunk.css",
+    "static/js/6.6331e773.chunk.js": "/media/static/react/static/js/6.6331e773.chunk.js",
+    "static/js/6.6331e773.chunk.js.map": "/media/static/react/static/js/6.6331e773.chunk.js.map",
+    "static/js/7.c8ed45bf.chunk.js": "/media/static/react/static/js/7.c8ed45bf.chunk.js",
+    "static/js/7.c8ed45bf.chunk.js.map": "/media/static/react/static/js/7.c8ed45bf.chunk.js.map",
+    "../../templates/mobile/skillPageIndex.html": "/media/static/react/../../templates/mobile/skillPageIndex.html",
+    "../../templates/skillPageIndex.html": "/media/static/react/../../templates/skillPageIndex.html",
+    "precache-manifest.092f540d7529071bc2dfc8b8266d5d3f.js": "/media/static/react/precache-manifest.092f540d7529071bc2dfc8b8266d5d3f.js",
+    "service-worker.js": "/media/static/react/service-worker.js",
+    "static/css/6.3d626a79.chunk.css.map": "/media/static/react/static/css/6.3d626a79.chunk.css.map",
+    "static/css/desktop.3c14435c.chunk.css.map": "/media/static/react/static/css/desktop.3c14435c.chunk.css.map",
+    "static/css/mobile.fd871b4b.chunk.css.map": "/media/static/react/static/css/mobile.fd871b4b.chunk.css.map",
+    "static/js/0.463c54c1.chunk.js.LICENSE.txt": "/media/static/react/static/js/0.463c54c1.chunk.js.LICENSE.txt",
+    "static/js/5.8871ad1a.chunk.js.LICENSE.txt": "/media/static/react/static/js/5.8871ad1a.chunk.js.LICENSE.txt",
+    "static/js/6.6331e773.chunk.js.LICENSE.txt": "/media/static/react/static/js/6.6331e773.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-desktop.6c0a9c4a.js",
+    "static/js/0.463c54c1.chunk.js",
+    "static/js/5.8871ad1a.chunk.js",
+    "static/css/desktop.3c14435c.chunk.css",
+    "static/js/desktop.9d764446.chunk.js",
+    "static/js/runtime-mobile.bffb4101.js",
+    "static/js/0.463c54c1.chunk.js",
+    "static/css/6.3d626a79.chunk.css",
+    "static/js/6.6331e773.chunk.js",
+    "static/css/mobile.fd871b4b.chunk.css",
+    "static/js/mobile.428cf2ce.chunk.js"
+>>>>>>> skillpage_revamp
   ]
 }

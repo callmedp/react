@@ -14,7 +14,11 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
+<<<<<<< HEAD
   "/media/static/react/precache-manifest.e35cd48c7de2456da38783117ebd90e5.js"
+=======
+  "/media/static/react/precache-manifest.092f540d7529071bc2dfc8b8266d5d3f.js"
+>>>>>>> skillpage_revamp
 );
 
 self.addEventListener('message', (event) => {

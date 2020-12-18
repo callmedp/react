@@ -1,10 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import MobileAppRouter from 'routes/index.mobile';
 import './App.mobile.css';
 import './styles-mobile/main.scss';
 import { slide as Menu } from 'react-burger-menu';
+import { initZendesk } from './utils/zendeskIniti';
 
-function MobileApp() {
+function MobileApp(props) {
+
+  useEffect(()=>{
+    const timer = setTimeout(() => {
+       initZendesk()
+      }, 5000);
+      return () => clearTimeout(timer);
+  },[])
+
   return (
     <div id="outer-container">
         <Menu pageWrapId={ "page-wrap" } outerContainerId={ "outer-container" } />

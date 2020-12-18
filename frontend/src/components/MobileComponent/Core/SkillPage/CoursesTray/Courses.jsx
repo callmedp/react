@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Slider from "react-slick";
 // import 'slick-carousel/slick/slick.css';
 import { Link } from 'react-router-dom';
@@ -17,6 +17,9 @@ const Courses = (props) => {
         swipeToSlide: true,
         variableWidth: true,
     };
+    useEffect(()=>{
+        window.scrollTo(0, 0)
+    },[])
 
     const { courseList } = useSelector(store => store.coursesTray)
     const [sliceFlag, setSliceFlag] = useState(true)
@@ -38,7 +41,7 @@ const Courses = (props) => {
             {
                 (sliceFlag ? courseList.slice(0, 4) : courseList)?.map((course, idx)=> <Product product={course} key={idx + 100} compType='More Courses'/>)
             }
-            { sliceFlag ? <Link to={"#"} onClick={loadMore} className="m-load-more mt-20 mb-20">Load More Courses</Link> : '' }
+            { sliceFlag && (courseList?.length  > 4) ? <Link to={"#"} onClick={loadMore} className="m-load-more mt-20 mb-20">Load More Courses</Link> : '' }
         </div>
     </section>
     );

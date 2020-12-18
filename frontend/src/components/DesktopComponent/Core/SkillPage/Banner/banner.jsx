@@ -3,19 +3,16 @@ import './banner.scss';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import Carousel from 'react-bootstrap/Carousel';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchSkillPageBanner } from 'store/SkillPage/Banner/actions';
+
 import { siteDomain, imageUrl } from 'utils/domains'; 
 
 
 const BannerSkill = (props) => {
     
-    const dispatch = useDispatch()
+
     const { name, breadcrumbs, featuresList } = useSelector( store => store.skillBanner )
-    const pageId = props.pageId
     
-    useEffect(() => {
-        dispatch(fetchSkillPageBanner({id : pageId, 'medium': 0}))
-    },[pageId])
+    
 
 
 
