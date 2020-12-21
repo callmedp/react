@@ -6,12 +6,17 @@ import { useSelector } from 'react-redux';
 import { zendeskChatShow } from 'utils/zendeskIniti';
 
 const CTA = (props) => {
-    const { setEnquiryForm } = props
-    const { callUs } = useSelector(store => store.header)
+    const { setEnquiryForm, pageType, heading } = props
+    const { callUs, prd_course_number, prd_service_number,
+    course_skill_number, service_skill_number } = useSelector(store => store.header)
     
     const showEnquiryForm = (event) => {
         event.preventDefault();
         setEnquiryForm(true)
+    }
+
+    if(pageType === 'skill'){
+        var whatsappNo = course_skill_number
     }
 
     return(
@@ -28,10 +33,12 @@ const CTA = (props) => {
                 <figure className="micon-chat"></figure>
                 Chat
             </a>
-            {/* <Link to={"#"}>
-                <figure className="micon-whatsapp"></figure>
-                Whatsapp
-            </Link> */}
+            { whatsappNo ?
+                <a href={`https://api.whatsapp.com/send?phone=91${whatsappNo}&text=I need your help for ${heading}`}>
+                    <figure className="micon-whatsapp"></figure>
+                    Whatsapp
+                </a> : null
+            }
         </section>
     )
 }

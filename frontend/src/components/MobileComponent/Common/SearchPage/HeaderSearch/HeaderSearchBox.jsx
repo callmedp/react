@@ -25,7 +25,7 @@ const HeaderSearchBox = (props) =>{
                     <input className="m-search-input" type="search" onChange={e => setSearchTerm(e.target.value)} onFocus={()=>setShowResults(true)} 
                         placeholder="Search anything" name="query" id="transcript" aria-label="Search" ref={register({required: true})} autoComplete="off" />
                     <button className="m-btn-voice-search">
-                        <figure className="micon-voice-search d-flex" onClick={startDictation}></figure>
+                        <figure className="micon-voice-search d-flex" onClick={(e)=>{e.preventDefault();startDictation();}}></figure>
                     </button>
                 </form>
                 {showResults ?

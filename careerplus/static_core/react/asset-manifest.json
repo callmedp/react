@@ -23,16 +23,17 @@
     "precache-manifest.a2c198726e3d180da717a70276d1100b.js": "/media/static/react/precache-manifest.a2c198726e3d180da717a70276d1100b.js",
     "service-worker.js": "/media/static/react/service-worker.js",
     "static/css/desktop.3a32a5c0.chunk.css.map": "/media/static/react/static/css/desktop.3a32a5c0.chunk.css.map",
-    "static/css/mobile.fd8c0415.chunk.css.map": "/media/static/react/static/css/mobile.fd8c0415.chunk.css.map",
     "static/js/0.c6d51bed.chunk.js.LICENSE.txt": "/media/static/react/static/js/0.c6d51bed.chunk.js.LICENSE.txt",
     "static/js/6.e40c54b1.chunk.js.LICENSE.txt": "/media/static/react/static/js/6.e40c54b1.chunk.js.LICENSE.txt"
   },
-  "entrypoints": [
-    "static/js/runtime-desktop.b1b1588d.js",
-    "static/js/0.c6d51bed.chunk.js",
-    "static/js/5.4faf244a.chunk.js",
     "static/css/desktop.3a32a5c0.chunk.css",
     "static/js/desktop.5f3f1e0d.chunk.js",
+=======
+    "static/js/0.3cff48f8.chunk.js",
+    "static/js/5.dde64675.chunk.js",
+    "static/css/desktop.f894d6c0.chunk.css",
+    "static/js/desktop.1657e2b4.chunk.js",
+>>>>>>> f0173ee169a5c3a40a998a871c78c3227f851e75
     "static/js/runtime-mobile.0681226e.js",
     "static/js/0.c6d51bed.chunk.js",
     "static/js/6.e40c54b1.chunk.js",
