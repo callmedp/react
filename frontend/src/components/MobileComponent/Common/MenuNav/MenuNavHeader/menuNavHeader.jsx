@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { siteDomain } from 'utils/domains';
+import { loggedOutZendesk } from 'utils/zendeskIniti';
 
 const menuNavHeader = (props) => {
     const { candidateInfo, isLoggedIn } = props
     const handleLogout = () => {
         localStorage.clear();
+        loggedOutZendesk();
         let path = window.location.pathname
         window.location.href = `${siteDomain}/logout/?next=${path}`;
     }

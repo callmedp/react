@@ -29,7 +29,7 @@ const DefaultMenuNav = (props) =>{
                     setIsLoggedIn(true)
                     const candidateId = isSessionAvailable['candidate_id']
                     const candidateInformation = await new Promise((resolve, reject) => dispatch(getCandidateInfo({candidateId, resolve, reject })))
-                    initLoggedInZendesk(candidateInformation)
+                    initLoggedInZendesk(candidateInformation, true)
                     setCandidateInfo(candidateInformation)
                 }
                 catch (e) {

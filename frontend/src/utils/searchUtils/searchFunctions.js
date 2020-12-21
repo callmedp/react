@@ -11,7 +11,7 @@ const searchCharacters = search =>{
     );
 }
 
-const submitData = (values, event) => {
+const submitData = (values) => {
     const searchedQuery = values?.query
     if(searchedQuery){
         window.location.href = `${siteDomain}/search/results/?q=${searchedQuery}`;

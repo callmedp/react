@@ -18,7 +18,7 @@ export const initZendesk = async () =>
   });
 
 // Setting Value in the Zendesk Chat if the user is Logged in
-export const initLoggedInZendesk = (candidateDetails) => {
+export const initLoggedInZendesk = (candidateDetails, disableSound=false) => {
     if (candidateDetails) {
         const full_name = candidateDetails?.name;
         const  email = candidateDetails?.email;
@@ -30,7 +30,10 @@ export const initLoggedInZendesk = (candidateDetails) => {
                 name: full_name ? full_name.charAt(0).toUpperCase() + full_name.slice(1): '',
                 email: email ? email : '',
                 phone: mobile_no ? mobile_no : ''
-            });                
+            });
+           if(disableSound){
+               window.$zopim.livechat.setDisableSound(disableSound)
+           }
         });
     }
 }
@@ -50,4 +53,15 @@ export const zendeskTimeControlledWindow = (timeinterval = 700) => {
     setTimeout(() => {
         window && window.$zopim &&  window.$zopim.livechat.window.show();
     }, timeinterval)
+}
+
+export const loggedOutZendesk = () => {
+    window && window.$zopim &&  window.$zopim(function () {
+        window.$zopim.livechat.set({
+            language: 'en',
+            name: '',
+            email: '',
+            phone: ''
+        });             
+    });
 }

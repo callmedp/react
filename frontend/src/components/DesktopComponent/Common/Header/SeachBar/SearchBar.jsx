@@ -21,6 +21,19 @@ const SearchBar = (props) => {
         }
     }
 
+    const getMenuItems = (data, heading, noOfItems=3) => {
+        return (
+            <>
+                <strong>{heading}</strong> 
+                {data?.slice(0, noOfItems)?.map(result => (
+                    <div key={Math.random()}>
+                        <a href={`${siteDomain}${result.url}`}>{result.name}</a>
+                    </div>
+                ))}
+            </> 
+        )
+    }
+
     useEffect(() => {
         // Make sure we have a value (user has entered something in input)
         if (debouncedSearchTerm) {
@@ -41,40 +54,13 @@ const SearchBar = (props) => {
                         placeholder="Search anything" name="query" aria-label="Search" ref={register({required: true})} autoComplete="off" />
                     <button className="btn btn-search" type="submit"><figure className="icon-search"></figure></button>
                 </form>
-                {showResults ?<div className="header-search-result">
-                    {results?.skills?.length ? 
-                        <>
-                            <strong>Skills</strong> 
-                            {results?.skills?.slice(0,3)?.map(result => (
-                                <div key={Math.random()}>
-                                <a href={`${siteDomain}${result.url}`}>{result.name}</a>
-                                </div>
-                            ))}
-                        </> : null
-                    }
-
-                    {results?.courses?.length ? 
-                        <>
-                            <strong>Courses</strong> 
-                            {results?.courses?.slice(0,3)?.map(result => (
-                                <div key={Math.random()}>
-                                <a href={`${siteDomain}${result.url}`}>{result.name}</a>
-                                </div>
-                            ))}
-                        </> : null
-                    }
-
-                    {results?.products?.length ? 
-                        <>
-                            <strong>Products</strong>
-                            {results?.products?.slice(0,3)?.map(result => (
-                                <div key={Math.random()}>
-                                <a href={`${siteDomain}${result.url}`}>{result.name}</a>
-                                </div>
-                            ))}
-                        </> : null
-                    }
-                </div>:null}
+                {showResults ?
+                    <div className="header-search-result">
+                        { results?.skills?.length ? getMenuItems(results?.skills, 'Skills') : null }
+                        { results?.courses?.length ? getMenuItems(results?.courses, 'Courses') : null }
+                        { results?.products?.length ? getMenuItems(results?.products, 'Products'): null }
+                    </div> : null
+                }
             </div>
         </>
     );

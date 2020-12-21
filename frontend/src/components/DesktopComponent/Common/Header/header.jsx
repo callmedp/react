@@ -6,7 +6,7 @@ import { siteDomain } from 'utils/domains';
 import DropDown from './DropDown/dropDown';
 import { useDispatch, useSelector } from 'react-redux';
 import { cartCount, sessionAvailability, getCandidateInfo, fetchNavOffersAndTags } from 'store/Header/actions/index';
-import { initLoggedInZendesk } from 'utils/zendeskIniti';
+import { initLoggedInZendesk, loggedOutZendesk } from 'utils/zendeskIniti';
 import SearchBar from './SeachBar/SearchBar';
 
 const Header = (props) => {
@@ -16,7 +16,12 @@ const Header = (props) => {
     const [candidateInfo, setCandidateInfo] = useState(false)
     const [isLoggedIn, setIsLoggedIn] = useState(false)
 
-
+    const handleRedirect = (type) => {
+        let redirectPath = window.location.pathname
+        redirectPath ?
+            window.location.href = `${siteDomain}/${type}/?next=${redirectPath}` :
+            window.location.href = `${siteDomain}/${type}/`
+    }
 
     const fetchUserInfo = async () => {
         try {
@@ -53,7 +58,9 @@ const Header = (props) => {
 
     const handleLogout = () => {
         localStorage.clear();
-        window.location.href = `${siteDomain}/logout/`;
+        loggedOutZendesk();
+        let path = window.location.pathname
+        window.location.href = `${siteDomain}/logout/?next=${path}`;
     }
 
     return (
@@ -107,8 +114,8 @@ const Header = (props) => {
                                                 </>
                                             ) : (
                                                     <>
-                                                        <a className="dropdown-item" href={`${siteDomain}/login`}>Login</a>
-                                                        <a className="dropdown-item" href={`${siteDomain}/register`}>Register</a>
+                                                        <a className="dropdown-item" href='#' onClick={(e)=>{e.preventDefault();handleRedirect('login')}}>Login</a>
+                                                        <a className="dropdown-item" href='#' onClick={(e)=>{e.preventDefault();handleRedirect('register')}}>Register</a>
                                                     </>
                                                 )
                                         }

@@ -1,3 +1,5 @@
+import { submitData } from './searchFunctions'
+
 const startDictation = () => {
 
     if (window?.hasOwnProperty('webkitSpeechRecognition')) {
@@ -9,9 +11,13 @@ const startDictation = () => {
         recognition.start();
 
         recognition.onresult = function(e) {
-            document.getElementById('transcript').value = e.results[0][0].transcript;
+            const query = e.results[0][0].transcript
+            document.getElementById('transcript').value = query;
             recognition.stop();
             // document.getElementById('searchForm').submit();
+            submitData({
+                'query' : query
+            });
         };
         
         recognition.onerror = function(e) {
