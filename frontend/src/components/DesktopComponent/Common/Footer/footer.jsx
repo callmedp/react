@@ -44,7 +44,7 @@ const Footer = (props) => {
                         <article className="">
                             <strong>TRENDING  COURSES</strong>
                             {
-                                trendingCourses?.map((course, index) => {
+                                trendingCourses?.slice(0,25).map((course, index) => {
                                     return (
                                         <React.Fragment key={index}>
                                             <a href={`${siteDomain}${course.url}`}>{course.name}</a>&nbsp;
@@ -57,7 +57,7 @@ const Footer = (props) => {
                         <article className="">
                             <strong>TRENDING  Skills</strong>
                             {
-                                trendingSkills?.map((skill, index) => {
+                                trendingSkills?.slice(0,25).map((skill, index) => {
                                     return (
                                         <React.Fragment key={index}>
                                             <a href={`${siteDomain}${skill.skillUrl}`}>{skill.skillName}</a>&nbsp;

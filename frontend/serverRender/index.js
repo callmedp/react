@@ -1,7 +1,10 @@
 'use strict';
 require('isomorphic-fetch');
-
 const path = require('path');
+require('dotenv').config({ 
+    path: path.resolve(process.cwd(), '.env.ssr')
+})
+
 const fs = require('fs');
 const express = require('express');
 const matchRoutes = require('react-router-config').matchRoutes;
@@ -13,7 +16,9 @@ const app = express();
 if (typeof global.window == 'undefined') {
     global.window = {
         config: {
-            isServerRendered : true
+            isServerRendered : true,
+            siteDomain : process.env.SITE_DOMAIN,
+            imageUrl : process.env.IMAGE_URL
         }
     };
 }
@@ -96,14 +101,14 @@ app.get(expressRoutes, (req, res) => {
     if (isMobile(userAgents)) {
 
         console.log("<><><><><><>Entered Mobile<><><><><><>")
-        indexFile = path.resolve('serverRender/index.mobile.html');
+        indexFile = path.resolve('ssrBuild/index.mobile.html');
         routes = require('routes/index.mobile').routes;
 
     }
     else {
 
         console.log("<><><><><><>Entered Desktop<><><><><><>")
-        indexFile = path.resolve('serverRender/index.html');
+        indexFile = path.resolve('ssrBuild/index.html');
         routes = require('routes/index.desktop').routes;
 
     }

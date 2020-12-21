@@ -7,15 +7,15 @@ import React from 'react';
 import { renderRoutes } from 'react-router-config';
 
 const render = (req, routes) => {
-    const context = { serverRender : true }
+    const context = { serverRender: true }
     const app = ReactDOMServer.renderToString(
         < Provider store={store}>
             <StaticRouter location={req.url} context={context}>
-                { renderRoutes(routes) }
+                {renderRoutes(routes)}
             </StaticRouter>
         </ Provider>
     );
-    
+
     return app;
 }
 
@@ -24,7 +24,13 @@ const expressRoutes = [
 ]
 
 
-export{
+
+
+
+
+
+
+export {
     render,
     expressRoutes,
 } 

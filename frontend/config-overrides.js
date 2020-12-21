@@ -36,8 +36,8 @@ const appDesktopIndexJs = resolveModule(resolveApp, 'src/index.desktop');
 const appMobileIndexJs = resolveModule(resolveApp, 'src/index.mobile');
 const appBuild = resolveApp('../careerplus/static_core/react');
 const publicUrl = '/media/static/react/';
-const indexHtml = '../../../frontend/serverRender/index.html';
-const indexMobileHtml = '../../../frontend/serverRender/index.mobile.html';
+const indexHtml = '../../../frontend/ssrBuild/index.html';
+const indexMobileHtml = '../../../frontend/ssrBuild/index.mobile.html';
 const appHtml = resolveApp('public/index.html');
 
 module.exports = {
@@ -46,6 +46,11 @@ module.exports = {
       desktop: appDesktopIndexJs,
       mobile: appMobileIndexJs
     };
+
+    // config.output = {
+    //   ...config.output,
+    //   filename : 
+    // }
 
     config.plugins[6].opts.generate = (seed, files, entrypoints) => {
       const manifestFiles = files.reduce((manifest, file) => {
