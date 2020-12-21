@@ -19,7 +19,9 @@ const HeaderSearchBox = (props) =>{
             <div className="m-top-search-header">
                 <figure className="micon-close-white mr-20" onClick={()=>setShowSearchPage(false)}></figure>
                 <form id="searchForm" className="form-inline w-100 ml-auto" onSubmit={handleSubmit(submitData)}>
-                    <figure className="m-btn-search-black d-flex search-margin"></figure>
+                    <button className="m-btn-search-black d-flex align-items-center">
+                        <figure className="micon-search-black d-flex"></figure>
+                    </button>
                     <input className="m-search-input" type="search" onChange={e => setSearchTerm(e.target.value)} onFocus={()=>setShowResults(true)} 
                         placeholder="Search anything" name="query" id="transcript" aria-label="Search" ref={register({required: true})} autoComplete="off" />
                     <button className="m-btn-voice-search">

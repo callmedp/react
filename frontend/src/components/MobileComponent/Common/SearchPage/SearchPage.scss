@@ -35,15 +35,7 @@
         border-top-left-radius: .5rem;
         border-bottom-left-radius: .5rem;
         padding: 0 1rem;
-        
-        &::after {
-            content: '';
-            background: $sprite -636px -36px;
-            width: 1.8rem;
-            height: 1.8rem;
-            display: inline-block;
-            margin: auto;
-        }
+        margin-right: -1px;
     }
 }
 
@@ -81,8 +73,4 @@
             color: $blue;
         }
     }
-}
-
-.search-margin {
-    margin-right: -1px;
 }

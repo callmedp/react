@@ -130,7 +130,7 @@ const Header = (props) => {
                                     </div>
                                 </li>
                                 <li className="nav-item position-relative">
-                                    { candidateInfo ? <span className="counter">{count}</span> : null}
+                                    <span className="counter">{count}</span>
                                     <a className="nav-link link-ht" href={`${siteDomain}/cart/payment-summary/`}>
                                         <figure className="icon-cart"></figure>
                                     </a>
