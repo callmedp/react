@@ -47,6 +47,7 @@ const SkillPage = (props) => {
             new Promise((resolve, reject) => dispatch(fetchSkillPageBanner({id : pageId, 'medium': 1, resolve, reject})))
             new Promise((resolve, reject) => dispatch(fetchCoursesAndAssessments({ id: pageId, 'medium': 1, resolve, reject})));
             new Promise((resolve, reject) => dispatch(fetchDomainJobs({id : pageId, resolve, reject})));
+            new Promise((resolve, reject) => dispatch(fetchRecommendedProducts()))
         }
         else {
             delete window.config?.isServerRendered
