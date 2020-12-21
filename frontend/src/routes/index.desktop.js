@@ -1,7 +1,7 @@
 import React from "react";
 import { Route } from "react-router-dom";
 import SkillPageContainer from "components/DesktopComponent/Core/SkillPage/skillPage";
-
+import { getSkillPageActions } from 'apiHandler/skillPageApi';
 
 export const RouteWithSubRoutes = route => {
     return (
@@ -27,7 +27,8 @@ const DesktopAppRouter = () => (
 export const routes = [
     {
         path: '/courses/:func/:skill/:id',
-        component: SkillPageContainer
+        component: SkillPageContainer,
+        actionGroup: getSkillPageActions,
     }
 ]
 

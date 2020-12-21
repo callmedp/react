@@ -15,6 +15,7 @@ import DomainJobs from './DomainJobs/domainJobs';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchSkillPageBanner } from 'store/SkillPage/Banner/actions';
 import { fetchCoursesAndAssessments } from 'store/SkillPage/CoursesTray/actions/index';
+import { fetchDomainJobs } from 'store/SkillPage/DomainJobs/actions';
 import Courses from './CoursesTray/Courses';
 import Assessment from './CoursesTray/Assessment';
 import '../SkillPage/skillPage.scss';
@@ -26,6 +27,9 @@ import Loader from '../../Common/Loader/loader';
 
 
 const SkillPage = (props) => {
+   
+  
+
     const dispatch = useDispatch()
     const pageId = props.match.params.id;
     const [enquiryForm, setEnquiryForm] = useState(false)
@@ -34,8 +38,18 @@ const SkillPage = (props) => {
     const { skillLoader } = useSelector( store => store.loader );
 
     useEffect(() => {
-        dispatch(fetchSkillPageBanner({id : pageId, 'medium': 1}))
-        dispatch(fetchCoursesAndAssessments({ id: pageId, 'medium': 1}));
+
+        if (!(window && window.config && window.config.isServerRendered)) {
+            new Promise((resolve, reject) => dispatch(fetchSkillPageBanner({id : pageId, 'medium': 1, resolve, reject})))
+            new Promise((resolve, reject) => dispatch(fetchCoursesAndAssessments({ id: pageId, 'medium': 1, resolve, reject})));
+            new Promise((resolve, reject) => dispatch(fetchDomainJobs({id : pageId, resolve, reject})));
+        }
+        else {
+            delete window.config?.isServerRendered
+        }
+
+
+
     },[pageId])
 
     return(
@@ -45,7 +59,7 @@ const SkillPage = (props) => {
             <header className="m-container m-header m-tabset-pos">
                 <Header />
             </header>
-            <section class="m-tabset mt-0 mb-0 m-skill-ht-remove">
+            <section className="m-tabset mt-0 mb-0 m-skill-ht-remove">
                 <StickyNav tabType={tabType} setTabType={setTabType} />
                 <div className="tab-panels">
                     { tabType === "about" ? 
@@ -61,7 +75,7 @@ const SkillPage = (props) => {
                                 <WhyChooseUs />
                                 <OtherSkills />
                                 <FAQ />
-                                <DomainJobs pageId={pageId}/>
+                                <DomainJobs />
                             </div>
                         ) :
                         tabType === 'courses' ? 

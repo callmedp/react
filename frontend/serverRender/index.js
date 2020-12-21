@@ -1,18 +1,20 @@
 'use strict';
+require('isomorphic-fetch');
 
 const path = require('path');
 const fs = require('fs');
 const express = require('express');
 const matchRoutes = require('react-router-config').matchRoutes;
-
-import SkillPage from 'components/DesktopComponent/Core/SkillPage/skillPage';
+const fetchApiData = require('apiHandler/skillPageApi').default;
 
 const PORT = process.env.PORT || 3216;
 const app = express();
 
 if (typeof global.window == 'undefined') {
     global.window = {
-        config: {}
+        config: {
+            isServerRendered : true
+        }
     };
 }
 
@@ -72,11 +74,11 @@ if (typeof global.sessionStorage == 'undefined') {
     }
 }
 
-const renderDesktop = require('./render').RenderDesktop;
-const renderMobile = require('./render').RenderMobile;
+const render = require('./warehouse').render;
+const expressRoutes = require('./warehouse').expressRoutes;
 const store = require('store/index').default;
 
-let userAgents, indexFile, appContent, routes;
+let userAgents, indexFile, appContent, routes, result;
 
 app.use(function (req, res, next) {
     userAgents = req.headers['user-agent'];
@@ -89,50 +91,65 @@ const isMobile = (userAgents) => {
     return /Android|Phone|Mobile|Opera\sM(in|ob)i|iP[ao]d|BlackBerry|SymbianOS|Safari\.SearchHelper|SAMSUNG-(GT|C)|WAP|CFNetwork|Puffin|PlayBook|Nokia|LAVA|SonyEricsson|Karbonn|UCBrowser|ucweb|Micromax|Silk|LG(MW|-MMS)|PalmOS/i.test(userAgents)
 }
 
-app.get('*', async (req, res) => {
+app.get(expressRoutes, (req, res) => {
 
     if (isMobile(userAgents)) {
 
+        console.log("<><><><><><>Entered Mobile<><><><><><>")
         indexFile = path.resolve('serverRender/index.mobile.html');
-        appContent = renderMobile(req);
         routes = require('routes/index.mobile').routes;
-    }
 
+    }
     else {
 
+        console.log("<><><><><><>Entered Desktop<><><><><><>")
         indexFile = path.resolve('serverRender/index.html');
-        routes = require('routes/index.mobile').routes;
-        appContent = renderDesktop(req, routes);
+        routes = require('routes/index.desktop').routes;
+
     }
+
+    const branch = matchRoutes(routes, req.path) || []
+    console.log("branch data", branch)
     
-    // const branch = matchRoutes(routes, req.path)
+    branch.forEach(async ({ route, match }) => {
     
-    // console.log("request header ", req)
-    for (const [index, { route, match }] of (matchRoutes(routes, req.path) || []).entries()) {
-        if (route && route.staticComponent && route.staticComponent.fetching) {
+        if (route && route.actionGroup) {
+           
             try {
-                const result = await route.staticComponent.fetching(store, match.params);
-                console.log("result is ", result)
-            } catch (e) {
-                console.log("Error in Api", e);
+                
+                result = await fetchApiData(store, match.params, route.actionGroup);
+                appContent = render(req, routes);
+
+                // Grab the initial state from our Redux store at send it to the browser to hydrate the app.
+                const preloadedState = store.getState()
+                
+            
+                fs.readFile(indexFile, 'utf8', (err, data) => {
+                    if (err) {
+                        console.error('Something went wrong:', err);
+                        return res.status(500).send('Oops, better luck next time!');
+                    }
+            
+                    return res.send(
+                        data.replace('<div id="root"></div>', 
+                        `<div id="root">${appContent}</div>
+                        <script>
+                            window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g,'\\u003c')}
+                            window.config = ${JSON.stringify(window.config)}
+                        </script>`
+                        ));
+                });
+                
+            }
+            catch(e){
+                console.log("failed to fetch server api", e);
             }
         }
-    }
 
-    console.table(SkillPage)
-    
- 
-    
-    fs.readFile(indexFile, 'utf8', (err, data) => {
-        if (err) {
-            console.error('Something went wrong:', err);
-            return res.status(500).send('Oops, better luck next time!');
-        }
-
-        return res.send(
-            data.replace('<div id="root"></div>', `<div id="root">${appContent}</div>`)
-        );
     });
+    console.log("nothing found")
+  
+   
 
 });
 
