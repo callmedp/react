@@ -39,6 +39,7 @@ const SkillPage = (props) => {
     const [showSearchPage, setShowSearchPage] = useState(false)
 
     const { skillLoader } = useSelector( store => store.loader );
+    const { name } = useSelector( store => store.skillBanner )
 
     useEffect(() => {
 
@@ -98,7 +99,7 @@ const SkillPage = (props) => {
                     </div>
                     <Footer />
                 </section>
-                <CTA setEnquiryForm={setEnquiryForm}/>
+                <CTA setEnquiryForm={setEnquiryForm} pageType='skill' heading={name}/>
                 {
                     enquiryForm ? <EnquiryModal setEnquiryForm={setEnquiryForm} /> : null
                 }

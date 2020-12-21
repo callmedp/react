@@ -4,7 +4,11 @@ const initState = {
     count : 0,
     navTags : [],
     navOffer : [],
-    callUs : ''
+    callUs : '',
+    prd_course_number: '',
+    prd_service_number: '',
+    course_skill_number: '',
+    service_skill_number: ''
 }
 
 export const HeaderReducer = (state=initState, action) => {

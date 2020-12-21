@@ -834,18 +834,25 @@ class NavigationTagsAndOffersAPI(APIView):
         """
 
         active_offer = []
+        data={}
         special_links = cache.get('active_homepage_navlink_new', [])
+        whatsapp_no = cache.get('whatsapp_visibility_class', False)
         if special_links:
             active_navlinks = special_links
         else:
             data_obj_list = list(NavigationSpecialTag().get_active_navlink())
             active_navlinks  = NavigationSpecialTag().convert_data_in_list(data_obj_list[:2])
             cache.set('active_homepage_navlink_new', active_navlinks, 24*60*60)
-        data = {
+
+        data.update({
             'navTags': active_navlinks,
             'navOffer': active_offer,
-            'callUs': settings.GGN_CONTACT_FULL
-        }
+            'callUs': settings.GGN_CONTACT_FULL,
+            'prd_course_number': whatsapp_no.get('product-course-number', ''),
+            'prd_service_number': whatsapp_no.get('product-service-number', ''),
+            'course_skill_number': whatsapp_no.get('course-skill-number', ''),
+            'service_skill_number': whatsapp_no.get('service-skill-number', '')
+        })
         return APIResponse(message='Navigations Tags and Offers details fetched', data=data, status=status.HTTP_200_OK)
 
 
