@@ -36,14 +36,12 @@ const appDesktopIndexJs = resolveModule(resolveApp, 'src/index.desktop');
 const appMobileIndexJs = resolveModule(resolveApp, 'src/index.mobile');
 const appBuild = resolveApp('../careerplus/static_core/react');
 const publicUrl = '/media/static/react/';
-// const publicUrl = '/react/';
-const indexHtml = '../../templates/skillPageIndex.html';
-const indexMobileHtml = '../../templates/mobile/skillPageIndex.html';
+const indexHtml = '../../../frontend/serverRender/index.html';
+const indexMobileHtml = '../../../frontend/serverRender/index.mobile.html';
 const appHtml = resolveApp('public/index.html');
 
 module.exports = {
   webpack: function (config, env) {
-
     config.entry = {
       desktop: appDesktopIndexJs,
       mobile: appMobileIndexJs

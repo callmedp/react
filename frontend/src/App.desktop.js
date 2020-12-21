@@ -9,7 +9,7 @@ function DesktopApp(props) {
   },[])
 
   return (
-    <DesktopAppRouter/>
+    <DesktopAppRouter />
   );
 }
 

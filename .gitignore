@@ -124,6 +124,8 @@ code-learning-key.json
 # Settings files
 careerplus/config/settings_live.py
 
+#React build
+careerplus/static_core/react
 
 # ignore dupm.rdb
 

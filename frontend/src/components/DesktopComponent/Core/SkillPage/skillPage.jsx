@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import SkillBanner from './Banner/banner';
 import AboutSection from './AboutSection/aboutSection';
 import WhoLearn from './WhoLearn/whoLearn';
@@ -23,33 +23,44 @@ import { fetchDomainJobs } from 'store/SkillPage/DomainJobs/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { zendeskTimeControlledWindow } from 'utils/zendeskIniti'
 
-const SkillPage = (props) => {
 
-    const pageId = props.match.params.id;
+const SkillPage = (props) => {
+    // staticContext is passed through staticRouter by node server
+    // const { serverRender } = props?.staticContext || {}
+    const pageId = props?.match?.params?.id;
     const dispatch = useDispatch()
+
+    const { skillLoader } = useSelector(store => store.loader);
     
-    const { skillLoader } = useSelector( store => store.loader );
+
 
     useEffect(() => {
-        dispatch(fetchSkillPageBanner({id : pageId, 'medium': 0}));
-        dispatch(fetchCoursesAndAssessments({ id: pageId }));
-        dispatch(fetchDomainJobs({id : pageId}))
+    
+        if (!(window && window.config && window.config.isServerRendered)) {
+            new Promise((resolve, reject) => dispatch(fetchSkillPageBanner({ id: pageId, 'medium': 0, resolve, reject })));
+            new Promise((resolve, reject) => dispatch(fetchCoursesAndAssessments({ id: pageId, resolve, reject })));
+            new Promise((resolve, reject) => dispatch(fetchDomainJobs({ id: pageId, resolve, reject })));
+        }
+        else {
+         
+            delete window.config?.isServerRendered
+        }
         //Zendesk Chat
         zendeskTimeControlledWindow(7000)
-    },[pageId])
+    }, [pageId])
 
     return (
         <div>
-            { skillLoader ? <Loader/> : '' }
-            <Header/>
-            <StickyNav  />
+            { skillLoader ? <Loader /> : ''}
+            <Header />
+            <StickyNav />
             <SkillBanner />
             <section className="container">
                 <div className="row">
                     <div className="col-sm-9">
                         <div className="ml-5">
-                            <AboutSection  />
-                            <WhoLearn/>
+                            <AboutSection />
+                            <WhoLearn />
                         </div>
                     </div>
                     <div className="col-sm-3 right-widget">
@@ -72,9 +83,9 @@ const SkillPage = (props) => {
                 </aside>
             </section>
             <WhyChooseUs />
-            <FAQ  />
+            <FAQ />
             <LearnersStories />
-            <Footer/>
+            <Footer />
         </div>
     )
 }

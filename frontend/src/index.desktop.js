@@ -5,11 +5,14 @@ import AppDesktop from './App.desktop';
 import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux';
 import store from 'store/index';
+import { BrowserRouter } from 'react-router-dom';
 
-ReactDOM.render(
+ReactDOM.hydrate(
   <React.StrictMode>
     <Provider store={store} >
-      <AppDesktop />
+      <BrowserRouter>
+        <AppDesktop />
+      </BrowserRouter>
     </Provider>
 
   </React.StrictMode>,

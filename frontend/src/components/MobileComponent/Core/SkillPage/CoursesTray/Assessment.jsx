@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Slider from "react-slick";
-import 'slick-carousel/slick/slick.css';
+// import 'slick-carousel/slick/slick.css';
 import { Link } from 'react-router-dom';
 import './courses.scss';
 import { useDispatch, useSelector } from 'react-redux';

@@ -1,19 +1,13 @@
-import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import './domainJobs.scss';
-import { fetchDomainJobs } from 'store/SkillPage/DomainJobs/actions';
+
 
 
 const DomainJobs = (props) => {
 
-    const dispatch = useDispatch()
     const { jobsList } = useSelector(store => store.jobs) 
-    const pageId = props.pageId
-    useEffect(() => {
-        dispatch(fetchDomainJobs({id : pageId}))
-    }, [pageId])
-
+    
     return (
         jobsList?.length ? (
             <section className="m-container m-domain-jobs mb-0 mt-0 pt-0 pb-0">

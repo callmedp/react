@@ -6,15 +6,16 @@ import { startSkillPageLoader, stopSkillPageLoader } from 'store/Loader/actions/
 
 
 function* skillPageBanner(action) {
+    const { payload } = action;
     try {
-        const { payload } = action;
-
+ 
         yield put(startSkillPageLoader())
         const response = yield call(Api.skillPageBanner, payload);
         yield put(stopSkillPageLoader())
-
+        
+     
         if (response["error"]) {
-            return
+            return payload?.reject(response["error"])
         }
         const item = response.data;
         
@@ -28,14 +29,18 @@ function* skillPageBanner(action) {
                 item.testimonialCategory = storiesList.slice()
             }
         }
-        
+
         yield put({ 
             type : Actions.SKILL_PAGE_BANNER_FETCHED, 
             item 
         })
+        
+        return payload?.resolve(item);
 
     } catch (e) {
         console.error("Exception occured ",e)
+        return payload?.reject(e)
+        
     }
 }
 

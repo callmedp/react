@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import MobileAppRouter from 'routes/index.mobile';
+import './App.mobile.css';
 import './styles-mobile/main.scss';
 import { slide as Menu } from 'react-burger-menu';
 import { initZendesk } from './utils/zendeskIniti';
