@@ -836,7 +836,7 @@ class NavigationTagsAndOffersAPI(APIView):
         active_offer = []
         data={}
         special_links = cache.get('active_homepage_navlink_new', [])
-        whatsapp_no = cache.get('whatsapp_visibility_class', False)
+        whatsapp_no = cache.get('whatsapp_visibility_class', {})
         if special_links:
             active_navlinks = special_links
         else:
