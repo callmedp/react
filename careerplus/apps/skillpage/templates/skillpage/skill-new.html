@@ -176,18 +176,18 @@
                 <div class="popular-course">
                   <div class="row">
                     <h2>Popular Courses</h2>
-                    <button class="btn btn-outline-primary ml-auto" onclick="smoothScrolling('courseTab',100)" role="button">
+                    <button class="btn btn-outline-primary ml-auto" onclick="smoothScrolling('courseTab',100); MyGA.SendEvent('SkillPopularCourses', 'ln_popular_course_select', 'ln_view courses', '{{category.name|title}}', '', false, true);" role="button">
                       View Courses
                     </button>
                     <div class="d-flex mb-10 course-wd">
                       {% for course in top_3_courses %}
                         <div class="col">
                           <div class="media">
-                            <figure class="mr-20 shadow-icon">
+                            <figure class="mr-20 shadow-icon"> 
                               <img loading="lazy" aria-label="{{course.pNm}}" class="img-fluid" src="{{course.pImg}}" alt="{{course.pNm}}">
                             </figure>
                             <figcaption class="media-body">
-                                <a href="{{course.pURL}}" onclick="skillpageTracking('exit_skill_page')">{{course.pNm}}</a>
+                                <a href="{{course.pURL}}" onclick="skillpageTracking('exit_skill_page'); MyGA.SendEvent('ln_popular_course_select', 'ln_{{course.pNm}}', '{{category.name|title}}', '', false, true);">{{course.pNm}}</a>
                             </figcaption>
                           </div>
                         </div>
@@ -247,7 +247,7 @@
                       alt="Test your skills">
                   <h2>Test Your Skills</h2>
                   <p>Take our free practice test to test your skill level in <strong>{{category.heading}}</strong></p>
-                  <a class="btn btn-primary mt-10" href="{% url 'assessment:vskill-subcategory' slug=category.slug  %}" onclick="skillpageTracking('exit_skill_page')" role="button">Take free test</a>
+                  <a class="btn btn-primary mt-10" href="{% url 'assessment:vskill-subcategory' slug=category.slug  %}" onclick="skillpageTracking('exit_skill_page');MyGA.SendEvent('TestYourSkill', 'ln_skill_test', 'ln_{{category.slug}}', '{{category.name|title}}', '', false, true)" role="button">Take free test</a>
                 </div>
               </section>
             {% endif %}
@@ -323,7 +323,7 @@
                             </figure>
                             
                             <div class="media-body" >
-                              <h3><a itemprop="url" href="{{course.pURL}}" onclick="skillpageTracking('exit_skill_page')" >{{course.pNm}}</a>
+                              <h3><a itemprop="url" href="{{course.pURL}}" onclick="skillpageTracking('exit_skill_page'); MyGA.SendEvent('SkillAllCourses', 'ln_course_click', 'ln_all_{{category.name|title}}', 'ln_{{course.pNm}}', '', false, true)" >{{course.pNm}}</a>
                               </h3>
                                 <div class="rating">
                                   {% for rating in course.pStar %}
@@ -380,7 +380,7 @@
                       {% comment %} Show load more only if course count>5{% endcomment %}
                       {% if course_count > 5 %} 
                         <div class="d-flex justify-content-center mt-40 mb-30">
-                          <button class="btn btn-outline-primary" onclick="loadProduct(this,'course')" role="button">
+                          <button class="btn btn-outline-primary" onclick="loadProduct(this,'course'); MyGA.SendEvent('SkillCourseLoadMore', 'ln_course_click', 'ln_load_more_courses', '', '', false, true)" role="button">
                             Load more courses
                           </button>
                           <div class="d-none">
@@ -403,7 +403,7 @@
                             
                             <div class="media-body">
                               <h3>
-                                <a itemprop="url" href="{{assesment.pURL}}" onclick="skillpageTracking('exit_skill_page')">{{assesment.pNm}}</a>
+                                <a itemprop="url" href="{{assesment.pURL}}" onclick="skillpageTracking('exit_skill_page'); MyGA.SendEvent('SkillAllAssesments', 'ln_course_click', 'ln_Assessments', 'ln_{{assesment.pNm}}', '', false, true)">{{assesment.pNm}}</a>
                               </h3>
                                 <div class="rating">
                                   {% for rating in assesment.pStar %}
@@ -460,7 +460,7 @@
                       {% comment %} Show load more only if assessment count>5{% endcomment %}
                       {% if assesment_count > 5 %} 
                         <div class="d-flex justify-content-center mt-40 mb-30">
-                          <button class="btn btn-outline-primary" onclick="loadProduct(this,'assesment')" role="button">
+                          <button class="btn btn-outline-primary" onclick="loadProduct(this,'assesment'); MyGA.SendEvent('SkillAssesmentLoadMore', 'ln_course_click', 'ln_load_more_assesments', '', '', false, true)" role="button">
                             Load more assessments
                           </button>
                           <div class="d-none">
@@ -542,7 +542,8 @@
                           <div class="card {% if forloop.counter > 5%}d-none{% endif %}" itemscope itemprop="mainEntity" 
                               itemtype="https://schema.org/Question">
                             <div class="card__question" id="heading{{ forloop.counter }}">
-                              <button class="btn {% if forloop.counter > 1 %}collapsed{% endif %}" type="button" 
+                              <button class="btn {% if forloop.counter > 1 %}collapsed{% endif %}" type="button"
+                                  onclick="MyGA.SendEvent('SkillFAQs', 'ln_FAQ_click', 'ln_down_arrow_click', 'ln_`$(this).text()`', '', false, true)"
                                   data-toggle="collapse" data-target="#collapse{{ forloop.counter }}" 
                                   aria-expanded="{% if forloop.counter > 1%}false{% else %}true{% endif %}"
                                   aria-controls="collapse{{ forloop.counter }}" itemprop="name">
@@ -563,7 +564,7 @@
                       </div>
                       {% if faq_list|length > 2 %}
                         <div class="d-flex justify-content-center mt-30">
-                          <button class="btn btn-outline-primary" onclick="openMoreFAQ()" id="more-faq" role="button">More FAQs</button>
+                          <button class="btn btn-outline-primary" onclick="openMoreFAQ(); MyGA.SendEvent('SkillMoreFAQs', 'ln_FAQ_click', 'ln_more_FAQs', '', '', false, true)" id="more-faq" role="button">More FAQs</button>
                         </div>
                       {% endif %} 
                     {% endwith %}
@@ -593,7 +594,7 @@
                   <strong class='also-check-tag'>{{widget_name}}</strong>
                   <ul class="also-check__list">
                     {% for obj in widget_obj_data %}
-                      <li><a href="{{obj.url}}" onclick="skillpageTracking('exit_skill_page')">{{obj.name}}</a></li>
+                      <li><a href="{{obj.url}}" onclick="skillpageTracking('exit_skill_page'); MyGA.SendEvent('SkillAlsoCheck', 'ln_also_check', '{{obj.name}}', 'ln_{{category.name|title}}', '', false, true)">{{obj.name}}</a></li>
                     {% endfor %}
                   </ul>
                 </div>
@@ -622,6 +623,7 @@
       var trigger_point = "{{trigger_point}}";
       var candidate_id = "{{u_id}}";
       var utm_campaign = "{{utm_campaign}}";
+      var popup_based_product = "{{popup_based_product}}";
 
     </script>
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

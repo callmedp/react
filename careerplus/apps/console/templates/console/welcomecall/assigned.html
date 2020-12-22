@@ -133,7 +133,8 @@
           </div>
 
           <div class="x_content">
-                <b>Total {{count_follow_up}} follow up orders for today</b>
+                <b> Follow up orders Today : {{count_follow_up_today}} ,  </b>
+                <b> Follow up orders from Previous Day : {{count_follow_up_previous}}</b>
             <div class="table-responsive">
               <form autocomplete="off" id="welcome_table_form" method="post" action=".">{% csrf_token %}
               <input type="hidden" name="action_type" id="action_type_id" class="flat">

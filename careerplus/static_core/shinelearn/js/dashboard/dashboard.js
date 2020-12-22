@@ -172,6 +172,7 @@ function acceptService(oi_pk) {
 function downloadOrderInvoice(order_pk) {
     if (order_pk){
         $('#download-invoice-form' + order_pk).submit();
+        MyGA.SendEvent('DashboardMyOrders', 'ln_dashboard_left_menu', 'ln_my_orders', 'download_invoice', '', false, true)
     }
 };
 
@@ -185,6 +186,7 @@ function downloadOrderTemplate(order_pk) {
 function openCancelModal(order_pk) {
     modal_id = "#cancelorder_div" + order_pk
     $(modal_id).modal('show');
+    MyGA.SendEvent('DashboardMyOrders', 'ln_dashboard_left_menu', 'ln_my_orders', 'cancel_order', '', false, true)
 }
 
 function editTemplate(key = 'mobile'){
@@ -230,13 +232,15 @@ $(document).ready(function(){
     $(document).on('change', '#lastmonth-id', function(event) {
 
         var formData = $("#order-filter-form").serialize();
+        var filter_type = $("option:selected", this).text();
         $.ajax({
             url : "/dashboard/inbox-filter/",
             type: "POST",
             data : formData,
             success: function(data, textStatus, jqXHR)
-            {
+            {   
                 $("#orderitem-inbox-box").html(data.orderitem_list);
+                MyGA.SendEvent('DashboardInbox', 'ln_dashboard_left_menu', 'ln_my_inbox', filter_type, '', false, true)
             },
             error: function (jqXHR, textStatus, errorThrown)
             {
@@ -247,6 +251,7 @@ $(document).ready(function(){
 
     $(document).on('change', '#select-type-id', function(event) {
         var formData = $("#order-filter-form").serialize();
+        var filter_type = $("option:selected", this).text();
         $.ajax({
             url : "/dashboard/inbox-filter/",
             type: "POST",
@@ -254,6 +259,7 @@ $(document).ready(function(){
             success: function(data, textStatus, jqXHR)
             {
                 $("#orderitem-inbox-box").html(data.orderitem_list);
+                MyGA.SendEvent('DashboardInbox', 'ln_dashboard_left_menu', 'ln_my_inbox', filter_type, '', false, true)
             },
             error: function (jqXHR, textStatus, errorThrown)
             {
