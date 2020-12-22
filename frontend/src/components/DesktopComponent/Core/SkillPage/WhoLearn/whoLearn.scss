@@ -24,4 +24,15 @@
             }
         }
     }
+
+    p {
+        ul {
+            list-style-type: none;
+            li {
+                &::before {
+                    display: none;
+                }
+            }
+        }
+    }
 }

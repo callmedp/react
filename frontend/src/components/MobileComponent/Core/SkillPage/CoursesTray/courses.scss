@@ -205,12 +205,25 @@
     
             .m-type {
                 font-size: 1.1rem;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
     
                 strong {
                     display: inline;
                     margin-bottom: 0;
                     font-size: 1.1rem;
                 }
+            }
+
+            .about-ht {
+                height: 5.3rem;
+                overflow: hidden;
+            }
+
+            .skill-ht {
+                height: 5.8rem;
+                overflow: hidden;
             }
     
             ul {

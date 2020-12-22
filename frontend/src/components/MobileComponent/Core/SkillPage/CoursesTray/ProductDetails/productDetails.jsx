@@ -20,13 +20,12 @@ const ProductDetails = (props) =>{
                 <strong> {jobsAvailable}</strong> Jobs available
             </p>
             
-            <p>
-                <strong>About</strong>
+            <p className="about-ht">
                 {/* { about?.slice(noOfWords)?.length ? (about?.replace(/<[^>]*>/g, '').slice(0,noOfWords)+'...') : about?.replace(/<[^>]*>/g, '')?.slice(0,noOfWords)} */}
                 <div dangerouslySetInnerHTML={{__html: (about?.slice(noOfWords)?.length ? (about?.slice(0,noOfWords)+'...') : about?.slice(0,noOfWords))}}></div>
             </p>
 
-            {skillList? <p>
+            {skillList? <p className="skill-ht">
                 <strong>Skills you gain</strong> 
                 { 
                     skillList?.slice(0, 5)?.map((skill, index) =>{
@@ -41,18 +40,18 @@ const ProductDetails = (props) =>{
                 } 
             </p>: null }
 
-            {highlights?<p>
+            {!highlights?<p className="skill-ht">
                 <strong>Highlights</strong>
-                {/* <ul>
+                <ul>
                     <li>Anytime and anywhere access</li>
                     <li>Become a part of Job centre</li>
-                    <li>Lifetime course access</li>
-                    <li>Access to online e-learning</li>
-                </ul> */}
+                    {/* <li>Lifetime course access</li>
+                    <li>Access to online e-learning</li> */}
+                </ul>
                 <p dangerouslySetInnerHtml={{__html : highlights}}></p>
             </p>: null }
 
-            <p className="d-flex align-items-center">
+            <p className="d-flex align-items-center mt-15">
                 <button type="submit" onClick={OpenProductPage} className="btn-yellow" role="button">Enroll now</button>
                 { icon === 'file' ?
                     <a href={brochure} className="micon-pdf ml-auto"></a> : 
