@@ -848,10 +848,16 @@ class NavigationTagsAndOffersAPI(APIView):
             'navTags': active_navlinks,
             'navOffer': active_offer,
             'callUs': settings.GGN_CONTACT_FULL,
-            'prd_course_number': whatsapp_no.get('product-course-number', ''),
-            'prd_service_number': whatsapp_no.get('product-service-number', ''),
-            'course_skill_number': whatsapp_no.get('course-skill-number', ''),
-            'service_skill_number': whatsapp_no.get('service-skill-number', '')
+            'whatsappDict': {
+                "prd_course_visibility": whatsapp_no.get('product-course-visibility', False),
+                "prd_course_number": whatsapp_no.get('product-course-number'),
+                "prd_service_visibility": whatsapp_no.get('product-service-visibility', False),
+                "prd_service_number": whatsapp_no.get('product-service-number'),
+                "course_skill_visibility": whatsapp_no.get('course-skill-visibility', False),
+                "course_skill_number": whatsapp_no.get('course-skill-number'),
+                "service_skill_visibility": whatsapp_no.get('service-skill-visibility', False),
+                "service_skill_number": whatsapp_no.get('service-skill-number')
+            }
         })
         return APIResponse(message='Navigations Tags and Offers details fetched', data=data, status=status.HTTP_200_OK)
 

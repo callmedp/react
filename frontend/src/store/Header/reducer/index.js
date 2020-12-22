@@ -5,10 +5,7 @@ const initState = {
     navTags : [],
     navOffer : [],
     callUs : '',
-    prd_course_number: '',
-    prd_service_number: '',
-    course_skill_number: '',
-    service_skill_number: ''
+    whatsappDict: []
 }
 
 export const HeaderReducer = (state=initState, action) => {

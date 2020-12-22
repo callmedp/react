@@ -1,23 +1,24 @@
-import React from 'react';
+import React, { useState, useEffect }from 'react';
 import { Link } from 'react-router-dom';
 import Modal from 'react-modal';
 import './cta.scss'
 import { useSelector } from 'react-redux';
 import { zendeskChatShow } from 'utils/zendeskIniti';
+import { getWhatsAppNo } from 'utils/whatsappNo';
 
 const CTA = (props) => {
     const { setEnquiryForm, pageType, heading } = props
-    const { callUs, prd_course_number, prd_service_number,
-    course_skill_number, service_skill_number } = useSelector(store => store.header)
+    const { callUs, whatsappDict } = useSelector(store => store.header)
+    const [whatsappNo, setWhatsAppNo] = useState('')
     
     const showEnquiryForm = (event) => {
         event.preventDefault();
         setEnquiryForm(true)
     }
 
-    if(pageType === 'skill'){
-        var whatsappNo = course_skill_number
-    }
+    useEffect(()=>{
+        setWhatsAppNo(getWhatsAppNo(pageType, whatsappDict))
+    }, [heading])
 
     return(
         <section className="m-container m-cta">
