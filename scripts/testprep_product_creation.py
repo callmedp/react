@@ -6,7 +6,7 @@ import xlrd
 import sys,os,django
 
 #Settings imports
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "careerplus.config.settings_staging")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "careerplus.config.settings_live")
 ROOT_FOLDER = os.path.realpath(os.path.dirname(__file__))
 ROOT_FOLDER = ROOT_FOLDER[:ROOT_FOLDER.rindex('/')]
 if ROOT_FOLDER not in sys.path:
@@ -28,6 +28,7 @@ if __name__ == "__main__":
     file_path = sys.argv[1:]
     if not file_path:
         print('Enter the file path to read')
+        logging.getLogger('info_log').info('Enter the file path to read')
         sys.exit()
 
     file_path = file_path[0]
@@ -45,6 +46,7 @@ if __name__ == "__main__":
     setattr(request, "user", vendor)
     for i in range(1,file_data.nrows):
         print('reading line {}'.format(i))
+        logging.getLogger('info_log').info('reading line {}'.format(i))
         data = file_data.row_values(i)
         name = data[0]
         upc = int(data[2])
@@ -55,20 +57,26 @@ if __name__ == "__main__":
         price = data[8]
         if not price:
             print('price cannot be empty')
+            logging.getLogger('info_log').info('price cannot be empty')
             sys.exit()
         price = Decimal(price)
         skill = data[10]
         print('creating product screen')
-
-        prodscreen = ProductScreen.objects.get_or_create(product_class=product_class,vendor=vendor,name=name,upc=upc,
+        logging.getLogger('info_log').info('creating product screen')
+        prodscreen = ProductScreen.objects.get_or_create(product_class=product_class,vendor=vendor,upc=upc,
                                                 type_flow=16,
-                                          sub_type_flow=1602,about=about,inr_price=price)[0]
+                                          sub_type_flow=1602,inr_price=price)[0]
 
         print('product screen created ,{}'.format(prodscreen.id))
+        logging.getLogger('info_log').info('product screen created ,{}'.format(prodscreen.id))
+        prodscreen.name=name
+        prodscreen.about=about
+        prodscreen.save()
 
         test_duration_attr = Attribute.objects.only('id','name').filter(name='test_duration').first()
         if not test_duration_attr:
             print('unable to set test duration')
+            logging.getLogger('info_log').info('unable to set test duration')
             sys.exit()
         number_of_questions_attr = Attribute.objects.only('id','name').filter(name='number_of_questions').first()
 
@@ -83,6 +91,7 @@ if __name__ == "__main__":
             product,prodscreen,copy= pm.copy_to_product(request,product,prodscreen)
             print(copy)
             print('product is created , {}'.format(product.id))
+            logging.getLogger('info_log').info('product is created , {}'.format(product.id))
 
         if skill:
             skill = skill.strip().split(',')
@@ -98,14 +107,17 @@ if __name__ == "__main__":
                 s, _ = Skill.objects.get_or_create(name=sk)
             except:
                 print('s')
-                s = Skill.objects.get(slug=slugify(name))
+                s = Skill.objects.get(slug=slugify(sk))
             category = Category.objects.only('id','name','type_level').filter(name__iexact=sk,type_level=3).first()
             if not category:
                 category, created =Category.objects.get_or_create(name=default_category,type_level=3,active=True)
                 # continue
             ProductCategory.objects.get_or_create(category=category,product=product)
             primary_cat = False
-            ProductSkill.objects.get_or_create(skill=s,product=product,third_party_skill_id=upc)
+#            ProductSkill.objects.get_or_create(skill=s,product=product,third_party_skill_id=upc)
+            prodskill,_=ProductSkill.objects.get_or_create(skill=s,product=product)
+            prodskill.third_party_skill_id = upc
+            prodskill.save()
 
         if not product.is_indexed:
             product.is_indexed=True
@@ -115,17 +127,27 @@ if __name__ == "__main__":
             product.save()
         else:
             print('product is already indexed')
+            logging.getLogger('info_log').info('product is already indexed {}'.format(product.id))
+        cert=None
+        create = True
+        try:
+            cert, create = Certificate.objects.get_or_create(name=name,skill=data[10].strip(),vendor_provider=vendor)
+        
+        except:
+            pass
 
-        cert, create = Certificate.objects.get_or_create(name=name,skill=data[10].strip(),vendor_provider=vendor)
         if not create:
             cert.vendor_certificate_id = None
             cert.save()
 
-        print('cerificate id {} created {}'.format(cert.id,create))
+        if not cert:
+            print('certficate not exists')
+        else:
+            print('cerificate id {} created {}'.format(cert.id,create))
+            logging.getLogger('info_log').info('cerificate id {} created {}'.format(cert.id,create))
 
 
     print('complete')
-    
-
+    logging.getLogger('info_log').info('testprep completed')
 
 

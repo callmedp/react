@@ -17,6 +17,7 @@ from coupon.api.core.serializers import CouponSerializer
 from wallet.models import Wallet
 from wallet.api.core.serializers import (
     WalletSerializer, WalletTransactionSerializer)
+from core.api_mixin import ShineCandidateDetail
 
 # third party imports
 from rest_framework.views import APIView
@@ -41,6 +42,37 @@ class PaymentSummaryView(CartMixin, UserMixin, APIView):
                 "Unable to create cart object.")
             return Response({'errror_message': 'Unable to create cart object'},
                             status=status.HTTP_400_BAD_REQUEST)
+
+
+        candidate_id = self.request.GET.get('candidate_id',False)
+
+        if candidate_id:
+            if not cart_obj.email or not cart_obj.mobile or not cart_obj.country_code or not cart_obj.first_name or \
+                    not cart_obj.last_name:
+                candidate_detail = ShineCandidateDetail().get_status_detail(
+                    shine_id=candidate_id)
+                if not candidate_detail:
+                    if not cart_obj.email or not cart_obj.mobile:
+                        return Response({'errror_message': 'Unable to create cart object'},
+                                        status=status.HTTP_400_BAD_REQUEST)
+
+                if not cart_obj.email:
+                    cart_obj.email = candidate_detail.get('email')
+                if not cart_obj.mobile:
+                    cart_obj.mobile = candidate_detail.get('mobile_no')
+                if not cart_obj.country_code:
+                    cart_obj.country_code = candidate_detail.get('country_code')
+                if not cart_obj.first_name:
+                    cart_obj.first_name = candidate_detail.get('first_name','')
+                if not cart_obj.last_name:
+                    cart_obj.last_name = candidate_detail.get('last_name','')
+
+                cart_obj.save()
+
+
+
+
+
         wal_obj = None
         cart_coupon, cart_wallet, type_flow = None, None, None
         wal_txn, wal_total, wal_point = None, None, None
