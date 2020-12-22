@@ -459,6 +459,32 @@ rel="stylesheet">
                     $('#emailer_modal').modal('show');
                 };
             </script>
+
+               <!--  Shlearn analytics   -->
+        <script type="text/javascript">
+            (function (p, l, o, w, i, n, g)
+                {
+                    if (!p[i])
+                    {
+                        p.GlobalTrackerNamespace = p.GlobalTrackerNamespace || [];
+                        p.GlobalTrackerNamespace.push(i);
+                        p[i] = function ()
+                        {
+                            (p[i].q = p[i].q || []).push(arguments);
+                        };
+                        p[i].q = p[i].q || [];
+                        n = l.createElement(o);
+                        g = l.getElementsByTagName(o)[0];
+                        n.async = 1;
+                        n.src = w;
+                        g.parentNode.insertBefore(n, g);
+                        p['platform'] = "web";
+                        p["product_id"] = "shlearn"
+                    }
+                }
+                (window, document, "script", "https://analytics.htmedia.in/analytics-js/shinedap.js", "dapCollector"));
+            </script>
+        <!-- Shlearn Analytics End -->
             
             <script type="text/javascript">
                 var shineApiUrl = "{{shine_api_url}}"
