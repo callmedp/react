@@ -89,7 +89,7 @@ class ArticleShareView(View):
             try:
                 obj = Blog.objects.get(slug=article_slug)
                 obj.no_shares += 1
-                obj.save()
+                # obj.save()
                 obj.update_score()
             except Exception as e:
                 logging.getLogger('error_log').error("Unable to share the article: %s " % str(e))
