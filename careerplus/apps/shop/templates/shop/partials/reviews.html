@@ -143,9 +143,35 @@
               <a class="linkedin" onclick="reviewLinkedInLogin()"></a>
               <a class="gplus" onclick="reviewSocialLogin(window.location.href,'gplus');"></a>
             </div>
-            <small class="form-text text-muted text-center">Don’t have an account yet? <a role="button" data-toggle="modal" data-target=".bs-example-modal-sm2" data-dismiss="modal">Register Now</a></small>
+            <small class="form-text text-muted text-center">Don’t have an account yet? <a href="/register/" role="button">Register Now</a></small>
           </form>
 
+        </div>
+    </div>
+  </div>
+</div>
+
+<!-- forgot password box -->
+<div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" id="forgot_div">
+  <div class="modal-dialog modal-sm modal-custom" role="document">
+    <div class="modal-content">
+        <div class="register">
+            <div>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h1 class="modal-title" id="myModalLabel">Forgot Password</h1>
+            </div>
+            <div id="msg_for_user"></div>
+            <form method="post" id="forgot_form" 
+            action="{% url "users:forgot-email-sent" %}">
+            {% csrf_token %}
+                {% for field in reset_form %}
+                    <div class="form-group {% if field.errors %}error{% endif %}">
+                        {{field}}
+                        <span class="error-txt">{{ field.errors.0 }}</span>
+                    </div>
+                {% endfor %}
+              <button type="submit" class="btn btn-primary submit mt-20">Submit</button>
+            </form>
         </div>
     </div>
   </div>
