@@ -25,7 +25,7 @@ const FAQ = (props) => {
 
     return(
         faqList.length ? (
-            <div className="m-container m-faq" id="m-faq">
+            <div className="m-container m-faq" id="m-faq" data-aos="fade-up">
                 <h2 className="m-heading2">Frequently Asked Questions</h2>
                 <div className="m-tabs">
                     { (sliceFlag ? faqList.slice(0, 4) : faqList).map(renderAccordion) }

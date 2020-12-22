@@ -3,7 +3,7 @@ import './whyChooseUs.scss';
 
 const WhyChooseUs = (props) => {
     return (
-        <section className="m-why-choose-us mt-0 mb-0">
+        <section className="m-why-choose-us mt-0 mb-0" data-aos="fade-up">
         <div className="m-container pt-10">
             <div className="align-items-center flex-column">
                 <h2 className="m-heading2">Why Choose us</h2>

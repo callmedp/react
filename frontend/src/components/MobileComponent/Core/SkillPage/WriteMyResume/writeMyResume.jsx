@@ -8,7 +8,7 @@ const WriteMyResume = (props) => {
     const builderRedirect = () => window.location.href = `${resumeShineSiteDomain}/resume-builder`;
 
     return (
-        <section className="m-container mt-0 mb-0">
+        <section className="m-container mt-0 mb-0" data-aos="fade-up">
             <div className="m-write-resume d-flex">
                 <div className="m-write-resume__text">
                     <strong className="m-heading3">Not getting enough calls from recruiters ?</strong>

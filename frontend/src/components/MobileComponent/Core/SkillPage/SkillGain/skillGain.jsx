@@ -10,7 +10,7 @@ const SkillGain = (props) => {
     const testRedirect = () => window.location.href = `${siteDomain}/practice-tests/${slug}/sub`;
 
     return (
-        <section className="m-container mt-0 mb-0 pb-0">
+        <section className="m-container mt-0 mb-0 pb-0" data-aos="fade-up">
             <div className="d-flex">
                 <div className="m-skill-gain">
                     <h2 className="m-heading2">Skills you will gain</h2>

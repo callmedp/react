@@ -18,8 +18,33 @@ const BannerSkill = (props) => {
 
     return (
        <header className="container-fluid pos-rel">
-           <figure className="banner-img row">
-                <img src={`${imageUrl}desktop/home-bg.svg`} alt="Digital Marketing Courses & Certifications" />
+            <figure className="banner-img row">
+                <img src={`${imageUrl}desktop/skill-bg.png`} className="img-fluid" alt="Digital Marketing Courses & Certifications" alt="Digital Marketing Courses & Certifications" />
+                <div className="banner-right">
+                    <div className="banner-right-img">
+                        <span className="skill-banner-tween1" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="100">
+                            <img src={`${imageUrl}desktop/skill-animation-header1.svg`} />
+                        </span>
+                        <span className="skill-banner-tween2" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="300">
+                            <img src={`${imageUrl}desktop/skill-animation-header2.svg`} />
+                        </span>
+                        <span className="skill-banner-tween3" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="500">
+                            <img src={`${imageUrl}desktop/skill-animation-header3.svg`} />
+                        </span>
+                        <span className="skill-banner-tween4" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="700">
+                            <img src={`${imageUrl}desktop/skill-animation-header4.svg`} />
+                        </span>
+                        <span className="skill-banner-tween5" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="900">
+                            <img src={`${imageUrl}desktop/skill-animation-header5.svg`} />
+                        </span>
+                        <span className="skill-banner-tween6" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="1100">
+                            <img src={`${imageUrl}desktop/skill-animation-header6.svg`} />
+                        </span>
+                        <span className="skill-banner-tween7" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="1300">
+                            <img src={`${imageUrl}desktop/skill-animation-header7.svg`} />
+                        </span>
+                    </div>
+                </div>
             </figure>
             <div className="container header-content">
                 <div className="row">

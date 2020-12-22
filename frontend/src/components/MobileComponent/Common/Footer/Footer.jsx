@@ -4,7 +4,7 @@ import { siteDomain } from 'utils/domains';
 
 const Footer = (props) => {
     return(
-        <footer className="m-container m-footer">
+        <footer className="m-container m-footer" data-aos="fade-up">
             <span className="m-footer__social mb-10">
                 <a href="https://www.facebook.com/shinelearningdotcom/">
                     <figure className="micon-facebook"></figure>

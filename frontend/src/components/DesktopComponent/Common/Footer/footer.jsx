@@ -15,7 +15,7 @@ const Footer = (props) => {
     },[])
 
     return(
-        <section className="container-fluid">
+        <section className="container-fluid" data-aos="fade-up">
             <footer className="row">
                 <div className="container">
                     <div className="footer">

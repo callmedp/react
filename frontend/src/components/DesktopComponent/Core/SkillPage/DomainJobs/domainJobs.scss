@@ -39,6 +39,24 @@
     &__img {
         align-self: flex-end;
         margin-left: auto;
-        margin-bottom: 0;
+        // margin-bottom: 0;
+        width: 15.5rem;
+        height: 17.7rem;
+        position: relative;
+
+
+        .domain-tween1 {
+            position: absolute;
+            right: 1.5rem;
+            bottom: 8rem;
+            z-index: 9;
+        }
+
+        .domain-tween2 {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            z-index: 99;
+        }
     }
 }

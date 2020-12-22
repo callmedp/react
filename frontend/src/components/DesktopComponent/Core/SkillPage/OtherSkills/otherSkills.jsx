@@ -11,7 +11,7 @@ const OtherSkills = (props) => {
     
     return (
         otherSkills.length ? (
-            <section className="container-fluid lightblue-bg mt-40">
+            <section className="container-fluid lightblue-bg mt-40" data-aos="fade-up">
                 <div className="row">
                     <div className="container">
                             <div className="other-skills">

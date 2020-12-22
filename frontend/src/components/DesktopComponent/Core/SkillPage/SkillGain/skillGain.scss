@@ -3,7 +3,7 @@
 @import '../../../../../styles/mixins';
 
 .skill-gain {
-
+    flex: 1;
     &__list {
         width: auto;
         margin: 4rem 0 3rem 0;
@@ -23,6 +23,57 @@
     &__img {
         margin-left: auto;
         align-self: flex-end;
+        width: 50rem;
+        height: 37.9rem;
+        position: relative;
+
+        .skill-tween1 {
+            position: absolute;
+            left: 3rem;
+            bottom: 2rem;
+        }
+
+        .skill-tween2 {
+            position: absolute;
+            left: 15rem;
+            bottom: 0;
+        }
+
+        .skill-tween3 {
+            position: absolute;
+            left: 14.5rem;
+            top: 6.7rem;
+        }
+
+        .skill-tween4 {
+            position: absolute;
+            left: 17rem;
+            top: 2rem;
+        }
+
+        .skill-tween5 {
+            position: absolute;
+            left: 22rem;
+            top: 0rem;
+        }
+
+        .skill-tween6 {
+            position: absolute;
+            left: 27rem;
+            top: 1rem;
+        }
+
+        .skill-tween7 {
+            position: absolute;
+            left: 30.5rem;
+            top: 4.5rem;
+        }
+
+        .skill-tween8 {
+            position: absolute;
+            left: 31.5rem;
+            top: 10rem;
+        }
     }
 
     &__banner {

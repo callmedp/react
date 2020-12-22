@@ -34,7 +34,7 @@ const LearnersStories = (props) => {
 
     return (
         testimonialCategory.length ? (
-            <section className="container" id="story">
+            <section className="container" id="story" data-aos="flip-down">
                 <div className="row">
                     <h2 className="heading2 m-auto pb-20">Learners stories</h2>
                     <Carousel className="learner-stories">

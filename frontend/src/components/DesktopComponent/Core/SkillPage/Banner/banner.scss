@@ -6,6 +6,88 @@ header {
     .banner-img {
         position: relative;
         z-index: 9;
+
+        .banner-right {
+            position: absolute;
+            top: 1rem;
+            right: 27%;
+
+            .banner-right-img {
+                position: relative;
+                width: 304px;
+                height: 282px;
+
+
+                    > .skill-banner-tween1 {
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        z-index: 9;
+                        max-width: 100%;
+                    }
+                    > .skill-banner-tween2 {
+                        position: absolute;
+                        top: 6.5rem;
+                        left: 2.5rem;
+                        z-index: 99;
+                        
+                        img {
+                            max-width: 27rem;
+                        }
+                    }
+                    > .skill-banner-tween3 {
+                        position: absolute;
+                        top: 14.5rem;
+                        right: 0;
+                        z-index: 999;
+                        
+                        img {
+                            width: 8.5rem;
+                        }
+                    }
+                    > .skill-banner-tween4 {
+                        position: absolute;
+                        top: 11rem;
+                        left: 4rem;
+                        z-index: 9999;
+                        
+                        img {
+                            width: 19rem;
+                        }
+                    }
+                    > .skill-banner-tween5 {
+                        position: absolute;
+                        bottom: 1rem;
+                        right: 10.5rem;
+                        z-index: 99999;
+                        
+                        img {
+                            width: 6.5rem;
+                        }
+                    }
+                    > .skill-banner-tween6 {
+                        position: absolute;
+                        bottom: 0;
+                        left: 4rem;
+                        z-index: 999999;
+                        
+                        img {
+                            width: 7.5rem;
+                        }
+                    }
+                    > .skill-banner-tween7 {
+                        position: absolute;
+                        bottom: 10rem;
+                        left: 1rem;
+                        z-index: 9999999;
+                        
+                        img {
+                            width: 5rem;
+                        }
+                    }
+                
+            }
+        }
     }
 
     .header-content {

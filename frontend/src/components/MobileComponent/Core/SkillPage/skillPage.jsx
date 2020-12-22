@@ -26,6 +26,8 @@ import EnquiryModal from '../../Common/Modals/EnquiryModal';
 import Loader from '../../Common/Loader/loader';
 import SearchPage from '../../Common/SearchPage/SearchPage';
 import { fetchRecommendedProducts } from 'store/RecommendedCourses/actions/index';
+import Aos from "aos";
+import "aos/dist/aos.css";
 
 
 const SkillPage = (props) => {
@@ -56,6 +58,10 @@ const SkillPage = (props) => {
 
 
     },[pageId])
+
+    useEffect( () => {
+        Aos.init({ duration: 2000, once: true, offset: 10, anchorPlacement: 'bottom-bottom' });
+    }, [])
 
     return(
         <main className="m-container-fluid mt-0 pt-0">
