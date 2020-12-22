@@ -58,7 +58,7 @@ const BannerSkill = (props) => {
                             })
                         }
                     </Breadcrumb>
-                    <h1 className="heading1">
+                    <h1 className="heading1" data-aos="fade-right">
                         { name } Courses & Certifications
                     </h1>
                     <Carousel className="header-carousel">
