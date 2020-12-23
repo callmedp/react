@@ -2,7 +2,7 @@ import React from "react";
 import { siteDomain } from 'utils/domains';
 
 const ProductDetails = (props) =>{
-    const noOfWords = 120
+    const noOfWords = 100
     const { detailsData : { 
         about, highlights, 
         jobsAvailable,  skillList,
@@ -40,21 +40,20 @@ const ProductDetails = (props) =>{
                 } 
             </p>: null }
 
-            {!highlights?<p className="skill-ht">
+            {highlights?<p className="skill-ht">
                 <strong>Highlights</strong>
-                <ul>
+                {/* <ul>
                     <li>Anytime and anywhere access</li>
                     <li>Become a part of Job centre</li>
-                    {/* <li>Lifetime course access</li>
-                    <li>Access to online e-learning</li> */}
-                </ul>
-                <p dangerouslySetInnerHtml={{__html : highlights}}></p>
+                </ul> */}
+                {/* <p dangerouslySetInnerHtml={{__html : highlights}}></p> */}
+                {highlights?.replace(/<[^>]*>/g, '')?.slice(80)?.length ? (highlights?.replace(/<[^>]*>/g, '')?.slice(0,80)+'...') : highlights?.replace(/<[^>]*>/g, '')?.slice(0,80)}
             </p>: null }
 
             <p className="d-flex align-items-center mt-15">
                 <button type="submit" onClick={OpenProductPage} className="btn-yellow" role="button">Enroll now</button>
                 { icon === 'file' ?
-                    <a href={brochure} className="micon-pdf ml-auto"></a> : 
+                    (brochure ? <a href={brochure} className="micon-pdf ml-auto"></a> : '') : 
                     <span className="m-view-less d-block text-right ml-auto" onClick={()=>setShowDetails(false)}>View less</span>
                 }
             </p>
