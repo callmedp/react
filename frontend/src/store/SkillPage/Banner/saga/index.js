@@ -1,7 +1,7 @@
 import * as Actions from '../actions/actionTypes';
 import { takeLatest, call, put } from 'redux-saga/effects';
 import Api from './Api';
-import { startSkillPageLoader, stopSkillPageLoader } from 'store/Loader/actions/index';
+
 
 
 
@@ -9,10 +9,9 @@ function* skillPageBanner(action) {
     const { payload } = action;
     try {
  
-        yield put(startSkillPageLoader())
+      
         const response = yield call(Api.skillPageBanner, payload);
-        yield put(stopSkillPageLoader())
-        
+       
      
         if (response["error"]) {
             return payload?.reject(response["error"])

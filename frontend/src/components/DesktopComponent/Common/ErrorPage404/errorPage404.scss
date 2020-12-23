@@ -1,0 +1,25 @@
+@import '../../../../styles/functions';
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+.error-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    strong {
+        font-size: 2.4rem;
+        font-weight: 600;
+        color: $gray-200;
+    }
+
+    .btn {
+        color: $white;
+        border-color: $blue;
+
+        &:hover {
+            color: $blue;
+        }
+    }
+}
