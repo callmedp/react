@@ -10,7 +10,7 @@ const DomainJobs = (props) => {
 
 
     return (
-        <section className="domain-jobs">
+        <section className="domain-jobs" data-aos="fade-up">
             <div className="domain-jobs__list">
                 <strong className="heading3">Jobs in this domain</strong>
                 <ul>
@@ -26,11 +26,11 @@ const DomainJobs = (props) => {
                 </ul>
             </div>
 
-            <figure id="domain-jobs" className="domain-jobs__img" data-aos="fade-up">
-                <span className="domain-tween1" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="100">
+            <figure id="domain-jobs" className="domain-jobs__img">
+                <span className="domain-tween1" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="100" data-aos-duration="1000">
                     <img src={`${imageUrl}desktop/domain-tween1.svg`} />
                 </span>
-                <span className="domain-tween2" data-aos="zoom-out" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="200">
+                <span className="domain-tween2" data-aos="zoom-out" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="200" data-aos-duration="1000">
                     <img src={`${imageUrl}desktop/domain-tween2.svg`} />
                 </span>
             </figure>

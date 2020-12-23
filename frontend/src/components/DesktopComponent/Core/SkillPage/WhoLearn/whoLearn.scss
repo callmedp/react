@@ -9,7 +9,8 @@
         padding: 0;
 
         li {
-            
+            padding-left: 2rem;
+            position: relative;
             &:not(:last-child) {
                 margin-bottom: 1.3rem;
             }
@@ -21,18 +22,21 @@
                 height: .8rem;
                 display: inline-block;
                 margin-right: 1.5rem;
+                position: absolute;
+                left: 0;
+                top: .5rem;
             }
         }
     }
 
-    p {
-        ul {
-            list-style-type: none;
-            li {
-                &::before {
-                    display: none;
-                }
-            }
-        }
-    }
+    // p {
+    //     ul {
+    //         list-style-type: none;
+    //         li {
+    //             &::before {
+    //                 display: none;
+    //             }
+    //         }
+    //     }
+    // }
 }

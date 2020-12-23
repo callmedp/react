@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import '../CoursesTray/courses.scss';
+import './popularCourses.scss';
 import { fetchTrendingCnA } from 'store/Footer/actions/index';
 
 const PopularCourses = (props) => {
@@ -39,7 +40,7 @@ const PopularCourses = (props) => {
                                             <figure>
                                                 <img src={course.img} alt={course.img_alt} />
                                             </figure>
-                                            <h3 className="m-heading3">
+                                            <h3 className="m-heading3 m-pop">
                                                 <a href={course.url}>{course.name}</a>
                                             </h3>
                                         </div>

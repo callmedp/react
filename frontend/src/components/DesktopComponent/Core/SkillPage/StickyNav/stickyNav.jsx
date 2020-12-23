@@ -22,7 +22,7 @@ const StickyNav = (props) => {
     });
 
     return(
-        scrolled ? <Navbar className="container-fluid lightblue-bg sticky-nav sticky-top d-sticky" expand="lg">
+        scrolled ? <Navbar className="container-fluid lightblue-bg sticky-nav sticky-top d-sticky" expand="lg" data-aos="fade-down" data-aos-duration="500">
            <div className="container">
                 <div className="flex-1">
                     <h2>{name} Courses & Certification</h2>
@@ -55,7 +55,7 @@ const StickyNav = (props) => {
                     </Nav>
                 </div>
                 <LinkScroll to="help" isDynamic={true} spy={true} offset={-80}>
-                    <button type="submit" className="btn btn-primary ml-auto" role="button">Need Help?</button>
+                    <button type="submit" className="btn btn-primary ml-auto sticky-btn" role="button">Need Help?</button>
                 </LinkScroll>
             </div> 
         </Navbar>

@@ -27,7 +27,7 @@ const Assessment = (props) => {
     },[])
 
     return (
-    <section className="m-container mt-0 mb-0 pb-0">
+    <section className="m-container mt-0 mb-0 pb-0 pr-0">
         {
             r_assesments?.length ?
             <>
@@ -43,7 +43,7 @@ const Assessment = (props) => {
         }
 
         <h2 className="m-heading2 mt-20 mb-20">More assessments</h2>
-        <div className="m-courses">
+        <div className="m-courses mr-15">
             {
                 (sliceFlag ? assessmentList.slice(0, 4) : assessmentList)?.map((assessment, idx)=> <Product product={assessment} key={idx + 100} compType='More Courses'/>)
             }
