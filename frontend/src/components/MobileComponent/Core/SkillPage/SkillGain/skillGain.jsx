@@ -21,7 +21,7 @@ const SkillGain = (props) => {
                             })
                         } 
                     </ul>
-                    <div className="m-skill-gain__banner mt-30">
+                    <div className="m-skill-gain__banner mt-30" data-aos="fade-up">
                         <p>Take our free practice test to test your skill level in <strong>{name}</strong></p>
                         <Button className="btn-blue-outline" onClick={testRedirect}>Take free test</Button>
                     </div>

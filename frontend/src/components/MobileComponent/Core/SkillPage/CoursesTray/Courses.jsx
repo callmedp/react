@@ -27,7 +27,7 @@ const Courses = (props) => {
     const loadMore = () => setSliceFlag(state => !state)
 
     return (
-    <section className="m-container mt-0 mb-0 pb-0">
+    <section className="m-container mt-0 mb-0 pb-0 pr-0">
         {
             r_courses?.length ?
             <>
@@ -43,7 +43,7 @@ const Courses = (props) => {
         }
 
         <h2 className="m-heading2 mt-20 mb-20">More courses</h2>
-        <div className="m-courses">
+        <div className="m-courses mr-15">
             {
                 (sliceFlag ? courseList.slice(0, 4) : courseList)?.map((course, idx)=> <Product product={course} key={idx + 100} compType='More Courses'/>)
             }

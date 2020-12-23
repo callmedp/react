@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './Banner.scss';
 import { useSelector } from 'react-redux';
 
-const noOfWords = 230
+const noOfWords = 200
 
 const SkillBanner = (props) => {
     const { name, about } = useSelector( store => store.skillBanner )

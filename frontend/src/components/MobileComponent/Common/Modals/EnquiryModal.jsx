@@ -34,7 +34,7 @@ const EnquiryModal = (props) => {
     }
 
     return(
-        <div className="m-container m-enquire-now m-form-pos-btm pb-10">
+        <div className="m-container m-enquire-now m-form-pos-btm pb-10" data-aos="fade-up" data-aos-duration="500">
             <span className="m-close" onClick={()=>setEnquiryForm(false)}>x</span>
             <h2 className="m-heading2 text-center">Enquire now!</h2>
             <p className="text-center">Share your query, our experts will help you take  your career forward!</p>

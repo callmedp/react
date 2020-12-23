@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 
 const getStories = (story, index) => {
     return (
-        <Carousel.Item key={index}>
+        <Carousel.Item interval="1000000" key={index}>
             <div className="d-flex col">
                 {
                     story?.map((item, idx) => {
@@ -34,7 +34,7 @@ const LearnersStories = (props) => {
 
     return (
         testimonialCategory.length ? (
-            <section className="container" id="story" data-aos="flip-down">
+            <section className="container" id="story" data-aos="fade-up">
                 <div className="row">
                     <h2 className="heading2 m-auto pb-20">Learners stories</h2>
                     <Carousel className="learner-stories">

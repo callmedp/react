@@ -58,17 +58,17 @@
 
 .icon-choose1 {
   background: $sprite;
-  @include icon-inblock(36px, 46px, -49px 0);
+  @include icon-inblock(36px, 49px, -49px 0);
 }
 
 .icon-choose2 {
   background: $sprite;
-  @include icon-inblock(60px, 41px, -97px 0);
+  @include icon-inblock(60px, 49px, -97px 0);
 }
 
 .icon-choose3 {
   background: $sprite;
-  @include icon-inblock(48px, 48px, -170px 0);
+  @include icon-inblock(48px, 49px, -170px 0);
 }
 
 .icon-choose4 {
@@ -78,12 +78,12 @@
 
 .icon-choose5 {
   background: $sprite;
-  @include icon-inblock(38px, 42px, -290px 0);
+  @include icon-inblock(38px, 49px, -290px 0);
 }
 
 .icon-choose6 {
   background: $sprite;
-  @include icon-inblock(60px, 48px, -340px 0);
+  @include icon-inblock(60px, 49px, -340px 0);
 }
 
 .icon-fullstar {

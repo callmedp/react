@@ -25,7 +25,7 @@ const CoursesTray = (props) => {
 
 
     return (
-        <section className="container" id="courses">
+        <section className="container" id="courses" data-aos="fade-up" data-aos-duration="1000">
             <div className="row">
                 <div className="col courses-tray">
                     <Tabs
@@ -37,7 +37,7 @@ const CoursesTray = (props) => {
                             {
                                 courseList.slice(0, courseKey).map((courses, index) => {
                                     return (
-                                        <ul className="courses-tray__list" key={index} data-aos="fade-up">
+                                        <ul className="courses-tray__list" key={index} >
                                             {
                                                 courses.map((course, idx) => <Courses listIdx={idx} index={index.toString() + idx.toString()} product={course} key={index.toString() + idx.toString()} />)
                                             }

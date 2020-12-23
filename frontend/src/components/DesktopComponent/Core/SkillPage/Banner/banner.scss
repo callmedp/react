@@ -6,6 +6,8 @@ header {
     .banner-img {
         position: relative;
         z-index: 9;
+        margin-left: -1.5rem;
+        margin-right: -1.5rem;
 
         .banner-right {
             position: absolute;
@@ -98,7 +100,7 @@ header {
         left: 3.5rem;
 
         p {
-            width: 65%;
+            width: 95%;
             margin-top: 2rem;
             display: flex;
             align-items: center;

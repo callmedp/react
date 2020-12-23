@@ -37,7 +37,7 @@ const Product = (props) => {
             delay={200}
         >
             <li className="col-sm-4" key={index}>
-                <div className="card" data-aos="fade-zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="100">
+                <div className="card" data-aos="fade-zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay={index*50+50} data-aos-duration="1000">
                     <div className="card__heading">
                         {tags === 2 && <span className="flag-blue">NEW</span>}
                         {tags === 1 && <span className="flag-red">BESTSELLER</span>}
@@ -50,7 +50,7 @@ const Product = (props) => {
                     </div>
                     <div className="card__box">
                         <div className="card__rating mt-5">
-                            <span className="mr-10">By {providerName}</span>
+                            <span className="provider mr-10">By {providerName}</span>
                             <span className="rating">
 
                                 {Array(parseInt(rating)).fill().map((_, index) => <em key={index} className="icon-fullstar"></em>)}
