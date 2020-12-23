@@ -21,7 +21,9 @@ import { fetchSkillPageBanner } from 'store/SkillPage/Banner/actions';
 import { fetchCoursesAndAssessments } from 'store/SkillPage/CoursesTray/actions/index';
 import { fetchDomainJobs } from 'store/SkillPage/DomainJobs/actions';
 import { useDispatch, useSelector } from 'react-redux';
-import { zendeskTimeControlledWindow } from 'utils/zendeskIniti'
+import { zendeskTimeControlledWindow } from 'utils/zendeskIniti';
+import Aos from "aos";
+// import "aos/dist/aos.css";
 
 
 const SkillPage = (props) => {
@@ -30,8 +32,6 @@ const SkillPage = (props) => {
     const dispatch = useDispatch()
 
     const { skillLoader } = useSelector(store => store.loader);
-    
-
 
     useEffect(() => {
     
@@ -47,6 +47,10 @@ const SkillPage = (props) => {
         //Zendesk Chat
         zendeskTimeControlledWindow(7000)
     }, [pageId])
+
+    useEffect( () => {
+        Aos.init({ duration: 2000, once: true, offset: 10, anchorPlacement: 'bottom-bottom' });
+    }, [])
 
     return (
         <div>

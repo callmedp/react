@@ -37,7 +37,7 @@ const Product = (props) => {
             delay={200}
         >
             <li className="col-sm-4" key={index}>
-                <div className="card">
+                <div className="card" data-aos="fade-zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="100">
                     <div className="card__heading">
                         {tags === 2 && <span className="flag-blue">NEW</span>}
                         {tags === 1 && <span className="flag-red">BESTSELLER</span>}
@@ -65,7 +65,7 @@ const Product = (props) => {
                         </div>
                         <div className="card__price mt-30">
                             <strong>{price}/-</strong>
-                            <a href={brochure} className="icon-pdf"></a>
+                            { brochure ? <a href={brochure} className="icon-pdf"></a> : '' }
                         </div>
                     </div>
                 </div>

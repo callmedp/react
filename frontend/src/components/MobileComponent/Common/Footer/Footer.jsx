@@ -4,7 +4,7 @@ import { siteDomain } from 'utils/domains';
 
 const Footer = (props) => {
     return(
-        <footer className="m-container m-footer">
+        <footer className="m-container m-footer" data-aos="fade-up">
             <span className="m-footer__social mb-10">
                 <a href="https://www.facebook.com/shinelearningdotcom/">
                     <figure className="micon-facebook"></figure>
@@ -17,7 +17,7 @@ const Footer = (props) => {
                 </a>
             </span>
 
-            <p className="m-footer__txt">Copyright © 2021 HT Media Limited. <br /><a href={`${siteDomain}/privacy-policy/`}>Privacy Policy</a> |  <a href={`${siteDomain}/tnc/`}>Terms &amp; Conditions</a></p>
+            <p className="m-footer__txt">Copyright © { new Date().getFullYear()}  HT Media Limited. <br /><a href={`${siteDomain}/privacy-policy/`}>Privacy Policy</a> |  <a href={`${siteDomain}/tnc/`}>Terms &amp; Conditions</a></p>
         </footer>
     )
 }

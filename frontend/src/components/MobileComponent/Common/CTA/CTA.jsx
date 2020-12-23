@@ -21,7 +21,7 @@ const CTA = (props) => {
     }, [heading])
 
     return(
-        <section className="m-container m-cta">
+        <section className="m-container m-cta" data-aos="fade-up">
             <a href="#" onClick={showEnquiryForm}>
                 <figure className="micon-enquiry"></figure>
                 Enquiry

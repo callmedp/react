@@ -30,7 +30,7 @@ const LearnersStories = (props) => {
     
     return (
         testimonialCategory.length ? (
-            <section className="m-container mt-0 mb-0 pb-0">
+            <section className="m-container mt-0 mb-0 pb-0" data-aos="fade-up">
                 <h2 className="m-heading2 mb-10">Learners stories</h2>
                 <div className="m-learner-stories ml-10n">
                     <Slider {...settings}>

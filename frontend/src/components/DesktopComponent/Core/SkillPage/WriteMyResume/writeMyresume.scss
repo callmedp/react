@@ -28,5 +28,31 @@
         align-self: flex-end;
         margin-left: auto;
         margin-bottom: 0;
+        position: relative;
+        // background: url(/media/images/write-resume-bg.png) no-repeat right top;
+
+        .bdr-radius {
+            border-top-right-radius: .4rem;
+            border-bottom-right-radius: .4rem;
+        }
+
+        .resume-tween1 {
+            position: absolute;
+            right: 5rem;
+            bottom: 1rem;
+            z-index: 9;
+        }
+        .resume-tween2 {
+            position: absolute;
+            left: 1.5rem;
+            bottom: 6rem;
+            z-index: 99;
+        }
+        .resume-tween3 {
+            position: absolute;
+            right: 6rem;
+            bottom: 7.3rem;
+            z-index: 99;
+        }
     }
 }

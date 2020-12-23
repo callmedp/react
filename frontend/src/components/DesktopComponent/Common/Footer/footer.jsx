@@ -15,7 +15,7 @@ const Footer = (props) => {
     },[])
 
     return(
-        <section className="container-fluid">
+        <section className="container-fluid" data-aos="fade-up">
             <footer className="row">
                 <div className="container">
                     <div className="footer">
@@ -80,7 +80,7 @@ const Footer = (props) => {
                                 <figure className="icon-payment"></figure>
                             </div>
                             <div className="footer-btm__copyright">
-                                Copyright © 2019 HT Media Limited.
+                                Copyright © { new Date().getFullYear()} HT Media Limited.
                             </div>
                         </div>
                     </div>

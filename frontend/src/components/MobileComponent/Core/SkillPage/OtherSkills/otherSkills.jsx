@@ -16,7 +16,7 @@ const OtherSkills = (props) => {
 
     const showOtherSkills = () =>{
         return (
-            <section className="m-container m-lightblue-bg mt-0 mb-0">
+            <section className="m-container m-lightblue-bg mt-0 mb-0" data-aos="fade-up">
                 <div className="d-flex">
                     <div className="m-other-skill">
                         <h2 className="m-heading2">Other Skills To Explore</h2>

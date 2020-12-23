@@ -25,8 +25,14 @@ const DomainJobs = (props) => {
                     }
                 </ul>
             </div>
-            <figure className="domain-jobs__img">
-                <img src={`${imageUrl}desktop/domain-jobs.svg`} alt="Jobs in this domain" />
+
+            <figure id="domain-jobs" className="domain-jobs__img" data-aos="fade-up">
+                <span className="domain-tween1" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="100">
+                    <img src={`${imageUrl}desktop/domain-tween1.svg`} />
+                </span>
+                <span className="domain-tween2" data-aos="zoom-out" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="200">
+                    <img src={`${imageUrl}desktop/domain-tween2.svg`} />
+                </span>
             </figure>
         </section>
     )

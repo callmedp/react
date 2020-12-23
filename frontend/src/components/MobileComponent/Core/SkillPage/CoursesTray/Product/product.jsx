@@ -37,7 +37,7 @@ const Product = (props) =>{
                 <span className="mr-10">By {providerName}</span>
                 <span className="m-rating">
                     { stars?.map((star, index) => starRatings(star, index)) }
-                    <span>{rating}/5</span>
+                    <span>{rating?.toFixed(1)}/5</span>
                 </span>
                 </div>
                 <div className="m-card__duration-mode">

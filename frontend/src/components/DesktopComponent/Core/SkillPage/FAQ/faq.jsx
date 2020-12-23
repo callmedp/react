@@ -46,8 +46,32 @@ const FAQ = (props) => {
                                 </Accordion>
                                 { sliceFlag ? <Link onClick={loadMore} to={"#"} className="load-more pt-20">Load More FAQS</Link> : '' }
                             </div>
+
                             <div className="faq__img">
-                                <img src={`${imageUrl}desktop/faq.svg`} alt="Frequently Asked Questions" />
+                                <span className="faq-tween1" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="100">
+                                    <img src={`${imageUrl}desktop/faq-tween1.svg`} />
+                                </span>
+                                <span className="faq-tween2" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="200">
+                                    <img src={`${imageUrl}desktop/faq-tween2.svg`} />
+                                </span>
+                                <span className="faq-tween3" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="300">
+                                    <img src={`${imageUrl}desktop/faq-tween3.svg`} />
+                                </span>
+                                <span className="faq-tween4" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="400">
+                                    <img src={`${imageUrl}desktop/faq-tween4.svg`} />
+                                </span>
+                                <span className="faq-tween5" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="500">
+                                    <img src={`${imageUrl}desktop/faq-tween5.svg`} />
+                                </span>
+                                <span className="faq-tween6" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="600">
+                                    <img src={`${imageUrl}desktop/faq-tween6.svg`} />
+                                </span>
+                                <span className="faq-tween7" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="300">
+                                    <img src={`${imageUrl}desktop/faq-tween7.svg`} />
+                                </span>
+                                <span className="faq-tween8" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="300">
+                                    <img src={`${imageUrl}desktop/faq-tween8.svg`} />
+                                </span>
                             </div>
                         </div>
                     </div>

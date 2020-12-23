@@ -114,10 +114,10 @@ app.get(expressRoutes, (req, res) => {
     }
 
     const branch = matchRoutes(routes, req.path) || []
-   
+    
     
     branch.forEach(async ({ route, match }) => {
-    
+        console.log("routes are", route);
         if (route && route.actionGroup) {
            
             try {

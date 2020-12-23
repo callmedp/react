@@ -39,7 +39,8 @@ const PopoverDetail = (props) => {
         </p>
             <p>
                 <strong>Highlights</strong>
-                <p dangerouslySetInnerHtml={{__html : highlights}}></p>
+                {/* <p dangerouslySetInnerHtml={{__html : highlights}}></p> */}
+                {highlights?.replace(/<[^>]*>/g, '')?.slice(80)?.length ? (highlights?.replace(/<[^>]*>/g, '')?.slice(0,80)+'...') : highlights?.replace(/<[^>]*>/g, '')?.slice(0,80)}
             </p>
             <button onClick={OpenProductPage} type="submit" className="btn btn-inline btn-secondary mx-auto" role="button">Enroll now</button>
         </>

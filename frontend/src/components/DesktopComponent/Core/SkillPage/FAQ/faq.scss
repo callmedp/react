@@ -79,5 +79,56 @@
     &__img {
         margin-left: auto;
         align-self: flex-end;
+        width: 27.4rem;
+        height: 36.6rem;
+        position: relative;
+
+        .faq-tween1 {
+            position: absolute;
+            left: 2rem;
+            top:0;
+        }
+
+        .faq-tween2 {
+            position: absolute;
+            left: 14.5rem;
+            top: -.5rem;
+        }
+
+        .faq-tween3 {
+            position: absolute;
+            left: 20rem;
+            top: 2rem;
+        }
+
+        .faq-tween4 {
+            position: absolute;
+            left: 22.5rem;
+            top: 9.5rem;
+        }
+
+        .faq-tween5 {
+            position: absolute;
+            left: 8rem;
+            top: 5rem;
+        }
+
+        .faq-tween6 {
+            position: absolute;
+            left: 0rem;
+            top: 16.5rem;
+        }
+
+        .faq-tween7 {
+            position: absolute;
+            left: 4.5rem;
+            bottom: -.5rem;
+        }
+
+        .faq-tween8 {
+            position: absolute;
+            left: 0;
+            bottom: -.5rem;
+        }
     }
 }

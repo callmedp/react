@@ -37,7 +37,7 @@ const CoursesTray = (props) => {
                             {
                                 courseList.slice(0, courseKey).map((courses, index) => {
                                     return (
-                                        <ul className="courses-tray__list" key={index}>
+                                        <ul className="courses-tray__list" key={index} data-aos="fade-up">
                                             {
                                                 courses.map((course, idx) => <Courses listIdx={idx} index={index.toString() + idx.toString()} product={course} key={index.toString() + idx.toString()} />)
                                             }
