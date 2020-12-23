@@ -18,7 +18,7 @@ const CTA = (props) => {
 
     useEffect(()=>{
         setWhatsAppNo(getWhatsAppNo(pageType, whatsappDict))
-    }, [heading])
+    }, [whatsappDict])
 
     return(
         <section className="m-container m-cta" data-aos="fade-up">
