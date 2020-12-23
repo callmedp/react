@@ -114,7 +114,7 @@ app.get(expressRoutes, (req, res) => {
     }
 
     const branch = matchRoutes(routes, req.path) || []
-    console.log("branch data", branch)
+   
     
     branch.forEach(async ({ route, match }) => {
     
@@ -152,13 +152,20 @@ app.get(expressRoutes, (req, res) => {
         }
 
     });
-    console.log("nothing found")
-  
    
 
 });
 
 
+
+app.get('*', (req, res) => {
+    if(isMobile(userAgents)){
+        res.sendFile(path.resolve('ssrBuild/index.mobile.html'));
+    }
+    else{
+        res.sendFile(path.resolve('ssrBuild/index.html'));
+    }
+});
 
 
 app.listen(PORT, () => {

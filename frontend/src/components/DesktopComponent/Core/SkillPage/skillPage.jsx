@@ -25,8 +25,7 @@ import { zendeskTimeControlledWindow } from 'utils/zendeskIniti'
 
 
 const SkillPage = (props) => {
-    // staticContext is passed through staticRouter by node server
-    // const { serverRender } = props?.staticContext || {}
+    
     const pageId = props?.match?.params?.id;
     const dispatch = useDispatch()
 

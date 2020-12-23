@@ -2,6 +2,7 @@ import React from "react";
 import { Route } from "react-router-dom";
 import SkillPageContainer from "components/MobileComponent/Core/SkillPage/skillPage";
 import { getSkillPageActionsMobile } from 'apiHandler/skillPageApi'; 
+import Error404Container from 'components/MobileComponent/Common/ErrorPage404/errorPage404';
 
 export const RouteWithSubRoutes = route => {
     return (
@@ -29,6 +30,10 @@ export const routes = [
         path: '/courses/:func/:skill/:id',
         component: SkillPageContainer,
         actionGroup: getSkillPageActionsMobile,
+    },
+    {
+        path : '*',
+        component: Error404Container
     }
 ]
 
