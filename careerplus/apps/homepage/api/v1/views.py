@@ -784,7 +784,7 @@ class TrendingCoursesAndSkillsAPI(APIView):
 
         NUM_COURSE_TO_SELECT = request.GET.get('num_courses',2)
 
-        conversion_ratio = Product.objects.prefetch_related('categories').filter(product_class__slug__in=settings.COURSE_SLUG, active=True,
+        conversion_ratio = Product.objects.filter(product_class__slug__in=settings.COURSE_SLUG, active=True,
                                                           is_indexed=True)
         conversion_ratio_product = conversion_ratio.order_by('-buy_count')[
                                    :NUM_COURSE_TO_SELECT].values_list('id', flat=True)
