@@ -249,7 +249,7 @@ COMPRESS_CSS_FILTERS = (
 )
 
 COMPRESS_PRECOMPILERS = (
-    ('text/scss', 'sass --scss {infile} {outfile}'),
+    ('text/scss', 'sass {infile} {outfile}'),
 )
 
 # Static files (CSS, JavaScript, Images)
@@ -775,3 +775,4 @@ LOGGING = {
         },
     },
 }
+
