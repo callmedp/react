@@ -45,6 +45,11 @@
             // color: $black !important;
             // font-weight: 600;
             border-bottom: 3px solid $blue;
+            font-weight: 600;
+
+            .nav-link {
+                color: $blue;
+            }
         }
     }
 

@@ -10,7 +10,7 @@ const express = require('express');
 const matchRoutes = require('react-router-config').matchRoutes;
 const fetchApiData = require('apiHandler/skillPageApi').default;
 
-const PORT = process.env.PORT || 3216;
+const PORT = process.env.PORT || 8079;
 const app = express();
 
 if (typeof global.window == 'undefined') {
@@ -117,13 +117,31 @@ app.get(expressRoutes, (req, res) => {
     
     
     branch.forEach(async ({ route, match }) => {
-        console.log("routes are", route);
         if (route && route.actionGroup) {
-           
             try {
-                
                 result = await fetchApiData(store, match.params, route.actionGroup);
                 appContent = render(req, routes);
+
+                // const helmet = Helmet.renderStatic();
+                // let metaTitlesAll = "";
+
+                // try {
+                //     metaTitlesAll += '<title>' + helmet.title.toComponent()[0].key + '</title>';
+                //     metaTitlesAll += '<link rel="canonical" href= ' + helmet.link.toComponent()[0].props.href + ' />';
+
+                //     for (let m = 0; m < helmet.meta.toComponent().length; m++) {
+                //         let metaTitles = helmet.meta.toComponent()[m].props;
+
+                //         if(metaTitles.name && metaTitles.name === 'description') metaTitlesAll += '<meta name="'+ metaTitles.name +'" content="' + metaTitles.content + '" />';
+
+                //         else if(metaTitles.property && (metaTitles.property === 'og:title' || metaTitles.property === 'og:url' || metaTitles.property === 'og:description' || metaTitles.property === 'og:type' || metaTitles.property === 'og:site_name' || metaTitles.property === 'fb:profile_id')) metaTitlesAll += '<meta property="' +metaTitles.property+ '" content="' + metaTitles.content + '" />';
+
+                //         else if(metaTitles.itemprop && (metaTitles.itemprop === '' || metaTitles.itemprop === 'url' || metaTitles.itemprop === 'description')) metaTitlesAll += '<meta itemprop="' +metaTitles.name+ '" content="' + metaTitles.content + '" />';
+                //     }
+                // }
+                // catch (e) {
+                //     // pass
+                // }
 
                 // Grab the initial state from our Redux store at send it to the browser to hydrate the app.
                 const preloadedState = store.getState()
@@ -142,7 +160,9 @@ app.get(expressRoutes, (req, res) => {
                             window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g,'\\u003c')}
                             window.config = ${JSON.stringify(window.config)}
                         </script>`
-                        ));
+                        )
+                         // .replace('</head>', `${metaTitlesAll}</head>`)
+                        );
                 });
                 
             }

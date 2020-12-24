@@ -54,7 +54,7 @@ const SearchBar = (props) => {
                 <form className="form-inline top-search my-2 my-lg-0" onSubmit={handleSubmit(submitData)}>
                     <input className="form-control top-input" type="search" onChange={e => setSearchTerm(e.target.value)} onFocus={()=>setShowResults(true)} 
                         placeholder="Search anything" name="query" aria-label="Search" ref={register({required: true})} autoComplete="off" />
-                    <button className="btn btn-search" type="submit" onClick={() => MyGA.SendEvent('click_on_search','ln_click_on_search', 'ln_search_initiated_navigation', 'ln_click_on_search', 'click_on _search','', false, true)}><figure className="icon-search"></figure></button>
+                    <button className="btn btn-search" aria-label="search Button" type="submit" onClick={() => MyGA.SendEvent('click_on_search','ln_click_on_search', 'ln_search_initiated_navigation', 'ln_click_on_search', 'click_on _search','', false, true)}><figure className="icon-search"></figure></button>
                 </form>
                 {showResults ?
                     <div className="header-search-result">

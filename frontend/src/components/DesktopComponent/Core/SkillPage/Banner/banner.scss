@@ -112,6 +112,21 @@ header {
     }
 
     .header-carousel {
+        position: relative;
+        &::before {
+            content: '';
+            background: $sprite 0 0;
+            width: 3rem;
+            height: 2.7rem;
+            display: inline-block;
+            position: absolute;
+            left: 0;
+            top: 2.7rem;
+        }
+
+        .carousel-inner {
+            margin-left: 4rem;
+        }
         .carousel-indicators {
             display: none;
         }

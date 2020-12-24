@@ -30,7 +30,7 @@ const SelectBox = (props) => {
 
     return (
         <div className="custom-select-box">
-            <select name={name} className="custom-select" ref={register(validation)}>
+            <select name={name} className="custom-select" ref={register(validation)} aria-label="select country name">
                 { children?.map((item,index)=>{
                     return(
                     <option value={item.value} key={index}>{item.value}&nbsp;&nbsp; -- &emsp;{item.text}</option>
