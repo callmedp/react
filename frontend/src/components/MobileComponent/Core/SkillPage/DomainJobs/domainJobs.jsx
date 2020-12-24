@@ -1,12 +1,16 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector, connect } from 'react-redux';
 import './domainJobs.scss';
+import { getTrackingInfo } from 'utils/storage.js';
+import { trackUser } from 'store/Tracking/actions/index.js';
 
 
 
 const DomainJobs = (props) => {
 
     const { jobsList } = useSelector(store => store.jobs) 
+    const tracking_data = getTrackingInfo();
+    const dispatch = useDispatch();
     
     return (
         jobsList?.length ? (
@@ -18,7 +22,7 @@ const DomainJobs = (props) => {
                             jobsList?.map((job, index) => {
                                 return (
                                     <li key={index}>
-                                        <a href={job.url}>{job.name}</a>
+                                        <a href={job.url} onClick={() => trackUser({ "query" : tracking_data, "action" : 'exit_skill_page' })}>{job.name}</a>
                                     </li>
                                 )
                             })
@@ -30,4 +34,12 @@ const DomainJobs = (props) => {
     )
 }
 
-export default DomainJobs;
+const mapDispatchToProps = (dispatch) => {
+    return {
+        "trackUser": (data) => {
+            return dispatch(trackUser(data))
+        }
+    }
+}
+
+export default connect(null, mapDispatchToProps)(DomainJobs);

@@ -7,7 +7,9 @@ import './defaultMenuNav.scss'
 import { useSelector, useDispatch } from 'react-redux';
 import { cartCount, sessionAvailability, getCandidateInfo, fetchNavOffersAndTags } from 'store/Header/actions/index';
 import { initLoggedInZendesk } from 'utils/zendeskIniti';
-
+import { trackUser } from 'store/Tracking/actions/index.js';
+import { removeTrackingInfo } from 'utils/storage.js';
+import { MyGA } from 'utils/ga.tracking.js';
 
 const DefaultMenuNav = (props) =>{
     const {
@@ -48,6 +50,14 @@ const DefaultMenuNav = (props) =>{
         }
     }
 
+    const eventTracking = () => {
+        MyGA.SendEvent('logo_click', 'ln_logo_click', 'ln_logo_click', 'homepage','',false, true)
+        let product_tracking_mapping_id = localStorage.getItem("productTrackingMappingId");
+        if(product_tracking_mapping_id == '10'){
+            removeTrackingInfo()
+        }
+    }
+
     useEffect(() => {
         fetchUserInfo();
         dispatch(fetchNavOffersAndTags());
@@ -57,20 +67,20 @@ const DefaultMenuNav = (props) =>{
         <Menu className='navigation' width={ '300px' } isOpen={open} onStateChange={state => setOpen(state.isOpen)}>
             <MenuNavHeader isLoggedIn={isLoggedIn} candidateInfo={candidateInfo}/>
             <div className="m-menu-links">
-                <a className="menu-item" href={`${siteDomain}/`} onClick={() => {setOpen(state => !state)}}>
+                <a className="menu-item" href={`${siteDomain}/`} onClick={() => {setOpen(state => !state);eventTracking()}}>
                     <figure className="micon-home" /> Home 
                 </a>
                 <a href="/" className="menu-item" onClick={(e) => {e.preventDefault();setType('allCourses')}}>
                     <figure className="micon-courses-services" /> All Courses <figure className="micon-arrow-menusm ml-auto" />
                 </a>
-                <a href="/" className="menu-item" onClick={(e) => {e.preventDefault();setType('jobAssistanceServices')}}>
+                <a href="/" className="menu-item" onClick={(e) => {e.preventDefault();setType('jobAssistanceServices'); MyGA.SendEvent('homepage_navigation','ln_homepage_navigation', 'ln_job_assisstance', 'ln_job_assisstance', '', false, true)} }>
                     <figure className="micon-resume-service" /> Job Assistance Services <figure className="micon-arrow-menusm ml-auto" />
                 </a>
-                <a href={`${resumeShineSiteDomain}/product/linkedin-profile-writing/entry-level-2/1926/`} className="menu-item"><figure className="micon-linkedin-service" /> Linkedin Profile Writing</a>
-                <a href="/" className="menu-item" onClick={(e) => {e.preventDefault();setType('freeResources')}}>
+                <a href={`${resumeShineSiteDomain}/product/linkedin-profile-writing/entry-level-2/1926/`} className="menu-item" onClick={() => MyGA.SendEvent('homepage_navigation','ln_homepage_navigation', 'ln_linked_profile_writing', 'ln_linked_profile_writing', '', false, true)} ><figure className="micon-linkedin-service" /> Linkedin Profile Writing</a>
+                <a href="/" className="menu-item" onClick={(e) => {e.preventDefault();setType('freeResources'); MyGA.SendEvent('homepage_navigation','ln_homepage_navigation', 'ln_free_resources', 'ln_free_resources', '', false, true)}}>
                     <figure className="micon-free-resources" /> Free Resources <figure className="micon-arrow-menusm ml-auto"/>
                 </a>
-                <a className="menu-item" href={`${siteDomain}/talenteconomy/`}>
+                <a className="menu-item" href={`${siteDomain}/talenteconomy/`} onClick={() => MyGA.SendEvent('homepage_navigation','ln_homepage_navigation', 'ln_blog', 'ln_blog', '', false, true)}>
                     <figure className="micon-blog-services" /> Blog
                 </a>
                 {
@@ -96,8 +106,8 @@ const DefaultMenuNav = (props) =>{
                         </ul>
                     )
                 }
-                <a className="menu-item" href={`${siteDomain}/about-us`}>About us</a>
-                <a className="menu-item" href={`${siteDomain}/contact-us`}>Contact us</a>
+                <a className="menu-item" href={`${siteDomain}/about-us`} onClick={() => MyGA.SendEvent('homepage_footer','ln_homepage_footer', 'ln_homepage_footer_clicked', 'About Us','', false, true)}>About us</a>
+                <a className="menu-item" href={`${siteDomain}/contact-us`} onClick={() =>  MyGA.SendEvent('homepage_footer','ln_homepage_footer', 'ln_homepage_footer_clicked', 'Contact Us','', false, true)}>Contact us</a>
             </div>
         </Menu>
     );

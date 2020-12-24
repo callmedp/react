@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './faq.scss';
 import { useSelector } from 'react-redux';
+import { MyGA } from 'utils/ga.tracking.js';
 
 const FAQ = (props) => {
 
@@ -21,7 +22,10 @@ const FAQ = (props) => {
             </div>
     )}
 
-    const loadMore = () => setSliceFlag(state => !state)
+    const loadMore = () => {
+        MyGA.SendEvent('SkillMoreFAQs', 'ln_FAQ_click', 'more_FAQs', 'ln_FAQ','', false, true);
+        setSliceFlag(state => !state);
+    }
 
     return(
         faqList.length ? (
@@ -29,7 +33,7 @@ const FAQ = (props) => {
                 <h2 className="m-heading2">Frequently Asked Questions</h2>
                 <div className="m-tabs">
                     { (sliceFlag ? faqList.slice(0, 4) : faqList).map(renderAccordion) }
-                    { sliceFlag ? <Link onClick={loadMore} to={"#"} className="m-load-more mt-20">Load More FAQS</Link> : '' }
+                    { sliceFlag ? <Link onClick={loadMore} to={"#"} className="m-load-more mt-20" >Load More FAQS</Link> : '' }
                 </div>
             </div>): null
     )

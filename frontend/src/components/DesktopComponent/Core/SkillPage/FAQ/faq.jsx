@@ -3,33 +3,36 @@ import Accordion from 'react-bootstrap/Accordion';
 import Card from 'react-bootstrap/Card';
 import { Link } from 'react-router-dom';
 import './faq.scss'
-import { useSelector } from 'react-redux';
+import { useSelector, connect } from 'react-redux';
 import { imageUrl } from 'utils/domains';
+import { MyGA } from 'utils/ga.tracking.js';
 
 
-
-const renderAccordion = (item, index) => {
-    return (
-        <Card key={index.toString() + item.heading}>
-            <Accordion.Toggle as={Card.Header} eventKey={index === 0 ? '0' : index}>
-                <p dangerouslySetInnerHTML={{__html : item.heading}}></p>
-            </Accordion.Toggle>
-            <Accordion.Collapse eventKey={index === 0 ? '0' : index}>
-                <Card.Body dangerouslySetInnerHTML={{ __html: item.content }}>
-                </Card.Body>
-            </Accordion.Collapse>
-        </Card>
-)}
 
 
 const FAQ = (props) => {
 
-    const { faqList } = useSelector(store => store.skillBanner)
-    const [sliceFlag, setSliceFlag] = useState(true)
-
+    const { faqList } = useSelector(store => store.skillBanner);
+    const { gaTrack } = props;
+    const [sliceFlag, setSliceFlag] = useState(true);
+    const regex = /(<([^>]+)>)/ig;
     const loadMore = () => {
         setSliceFlag(state => !state)
     }
+
+    const renderAccordion = (item, index) => {
+        
+        return (
+            <Card key={index.toString() + item.heading}>
+                <Accordion.Toggle as={Card.Header} eventKey={index === 0 ? '0' : index}>
+                    <p dangerouslySetInnerHTML={{__html : item.heading}} onClick={() => MyGA.SendEvent('SkillFAQs','ln_FAQ_click', 'ln_down_arrow_click', 'ln_'+item.heading.replace(regex, ''),'', false, true) }></p>
+                </Accordion.Toggle>
+                <Accordion.Collapse eventKey={index === 0 ? '0' : index}>
+                    <Card.Body dangerouslySetInnerHTML={{ __html: item.content }}>
+                    </Card.Body>
+                </Accordion.Collapse>
+            </Card>
+    )}
     
     return (
         faqList.length ? (
@@ -81,4 +84,14 @@ const FAQ = (props) => {
     )
 }
 
-export default FAQ; 
+const mapDispatchToProps = (dispatch) => {
+    return {
+        "gaTrack": (data) => {
+             MyGA.SendEvent(data)
+        }
+    }
+}
+
+connect(null, mapDispatchToProps)(renderAccordion);
+
+export default connect(null, mapDispatchToProps)(FAQ);

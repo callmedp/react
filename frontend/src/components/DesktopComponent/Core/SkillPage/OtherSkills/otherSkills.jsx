@@ -1,13 +1,17 @@
 import React from 'react';
 import Badge from 'react-bootstrap/Badge';
 import './otherSkills.scss'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector, connect } from 'react-redux';
 import { siteDomain } from 'utils/domains';
+import { getTrackingInfo } from 'utils/storage.js';
+import { trackUser } from 'store/Tracking/actions/index.js';
 
 const OtherSkills = (props) => {
 
     const { otherSkills } = useSelector( store => store.skillBanner )
-    
+    const tracking_data = getTrackingInfo();
+    const dispatch = useDispatch();
+    const { userTrack } = props;
     
     return (
         otherSkills.length ? (
@@ -21,7 +25,7 @@ const OtherSkills = (props) => {
                                         otherSkills?.map((skill, index) => {
                                             return (
                                                 <React.Fragment key={index}>
-                                                <Badge pill variant="light"><a href={`${siteDomain}${skill.url}`}>{skill.name}</a></Badge>&nbsp;
+                                                <Badge pill variant="light"><a onClick={() => userTrack({"query" : tracking_data, "action" : 'exit_skill_page' })}  href={`${siteDomain}${skill.url}`} >{skill.name}</a></Badge>&nbsp;
                                                 </React.Fragment>
                                             )
                                         })
@@ -37,4 +41,12 @@ const OtherSkills = (props) => {
     )
 }
 
-export default OtherSkills;
+const mapDispatchToProps = (dispatch) => {
+    return {
+        "userTrack": (data) => {
+            return dispatch(trackUser(data))
+        }
+    }
+}
+
+export default connect(null, mapDispatchToProps)(OtherSkills);

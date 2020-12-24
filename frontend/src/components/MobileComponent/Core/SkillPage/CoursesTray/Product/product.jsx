@@ -1,7 +1,11 @@
 import React, { useState } from "react";
 import { Link } from 'react-router-dom';
+import { useDispatch, connect } from 'react-redux';
 import { siteDomain } from 'utils/domains';
 import ProductDetails from '../ProductDetails/productDetails';
+import { MyGA } from 'utils/ga.tracking.js';
+import { getTrackingInfo, getTrackingParameters } from 'utils/storage.js';
+import { trackUser } from 'store/Tracking/actions/index.js';
 
 const Product = (props) =>{
     const { product: {
@@ -21,6 +25,15 @@ const Product = (props) =>{
         )
     }
 
+    const tracking_data = getTrackingInfo();
+    const dispatch = useDispatch();
+    const { trackUser } = props;
+
+    const handleTracking = () => {
+        MyGA.SendEvent('SkillAllCourses', 'ln_course_click', 'ln_all_' + name, 'ln_' + name,'', false, true);
+        trackUser({"query" :tracking_data, "action" :'exit_skill_page'});
+    }
+
     return (
         <div className={compType === 'For You'?"m-card":"m-card-more"} key={index}>
             <div className="m-card__heading">
@@ -30,7 +43,7 @@ const Product = (props) =>{
                     <img src={imgUrl} alt={name} />
                 </figure>
                 <h3 className="m-heading3">
-                    <a href={`${siteDomain}${url}`}>{name}</a>
+                    <a href={`${siteDomain}${url}`} onClick={handleTracking} >{name}</a>
                 </h3>
             </div>
             <div className="m-card__box">
@@ -64,4 +77,12 @@ const Product = (props) =>{
     )
 }
 
-export default Product;
+const mapDispatchToProps = (dispatch) => {
+    return {
+        "trackUser": (data) => {
+            return dispatch(trackUser(data))
+        }
+    }
+}
+
+export default connect(null, mapDispatchToProps)(Product);

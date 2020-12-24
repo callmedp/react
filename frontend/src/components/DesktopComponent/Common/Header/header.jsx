@@ -7,7 +7,9 @@ import DropDown from './DropDown/dropDown';
 import { useDispatch, useSelector } from 'react-redux';
 import { cartCount, sessionAvailability, getCandidateInfo, fetchNavOffersAndTags } from 'store/Header/actions/index';
 import { initLoggedInZendesk, loggedOutZendesk } from 'utils/zendeskIniti';
+import { removeTrackingInfo } from 'utils/storage.js';
 import SearchBar from './SeachBar/SearchBar';
+import { MyGA } from 'utils/ga.tracking.js';
 
 const Header = (props) => {
 
@@ -16,7 +18,14 @@ const Header = (props) => {
     const [candidateInfo, setCandidateInfo] = useState(false)
     const [isLoggedIn, setIsLoggedIn] = useState(false)
 
-    const handleRedirect = (type) => {
+    const handleRedirect = (event, type) => {
+        event.preventDefault
+        if( type === 'login'){
+        MyGA.SendEvent('header_icons','ln_header_icons', 'ln_login', 'login','', false, true);
+        }
+        if( type === 'register'){
+        MyGA.SendEvent('header_icons','ln_header_icons', 'ln_register', 'register','', false, true);
+        }
         let redirectPath = window.location.pathname
         redirectPath ?
             window.location.href = `${siteDomain}/${type}/?next=${redirectPath}` :
@@ -63,28 +72,36 @@ const Header = (props) => {
         window.location.href = `${siteDomain}/logout/?next=${path}`;
     }
 
+    const eventTracking = () => {
+        MyGA.SendEvent('logo_click', 'ln_logo_click', 'ln_logo_click', 'homepage','',false, true)
+        let product_tracking_mapping_id = localStorage.getItem("productTrackingMappingId");
+        if(product_tracking_mapping_id == '10'){
+            removeTrackingInfo()
+        }
+    }
+
     return (
         <div>
             <nav className="container-fluid padlr-0 shadow pos-rel zindex">
                 <div className="container padlr-0">
                     <div className="navbar navbar-expand-lg navbar-light row">
-                        <a className="navbar-brand" href={siteDomain}></a>
+                        <a className="navbar-brand" href={siteDomain} onClick={eventTracking}></a>
                         <div className="collapse navbar-collapse" id="navbarSupportedContent">
                             <SearchBar />
                             <ul className="navbar-nav navbar-right">
                                 <li className="nav-item dropdown dropdown-jobs">
-                                    <a className="nav-link" to={"#"} id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Job assistance</a>
+                                    <a className="nav-link" to={"#"} id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onClick={() => MyGA.SendEvent('homepage_navigation','ln_homepage_navigation', 'ln_job_assisstance', 'ln_job_assisstance', '', false, true) }>Job assistance</a>
                                     <div className="dropdown-menu" aria-labelledby="navbarDropdown">
                                         {
-                                            jobAssistanceList?.map((job) => <a key={job.url} className="dropdown-item" href={job.url} >{job.name}</a>)
+                                            jobAssistanceList?.map((job) => <a key={job.url} className="dropdown-item" href={job.url} onClick={() => MyGA.SendEvent('homepage_navigation','ln_homepage_navigation', 'ln_job_assisstance', 'ln_'+job.id, '', false, true)}>{job.name}</a>)
                                         }
                                     </div>
                                 </li>
                                 <li className="nav-item">
-                                    <a className="nav-link" href={`${siteDomain}/practice-tests/`}>Practice test</a>
+                                    <a className="nav-link" href={`${siteDomain}/practice-tests/`} onClick={() => MyGA.SendEvent('homepage_navigation','ln_homepage_navigation', 'ln_practice_tests', 'ln_practice_tests', '', false, true)}>Practice test</a>
                                 </li>
                                 <li className="nav-item dropdown dropdown-resources">
-                                    <a className="nav-link" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Free resources</a>
+                                    <a className="nav-link" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onClick={() => MyGA.SendEvent('homepage_navigation','ln_homepage_navigation', 'ln_free_resources', 'ln_free_resources', '', false, true)}>Free resources</a>
                                     <div className="dropdown-menu category-tab" aria-labelledby="navbarDropdown">
                                         <div className="resources-tab">
 
@@ -94,11 +111,19 @@ const Header = (props) => {
                                     </div>
                                 </li>
                                 <li className="nav-item">
-                                    <a className="nav-link" href={`${siteDomain}/talenteconomy/`} >Blog</a>
+                                    <a className="nav-link" href={`${siteDomain}/talenteconomy/`} onClick={() => MyGA.SendEvent('homepage_navigation','ln_homepage_navigation', 'ln_blog', 'ln_blog', '', false, true)} >Blog</a>
+                                </li>
+                                <li className="nav-item dropdown dropdown-call">
+                                    <Link className="nav-link link-ht" to={"#"} id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <figure className="icon-call"></figure>
+                                    </Link>
+                                    <div className="dropdown-menu" aria-labelledby="navbarDropdown">
+                                        <a className="dropdown-item" onClick={ () => MyGA.SendEvent('header_icons','ln_header_icons', 'ln_call', 'tel:0124-4312500/01','', false, true) }><strong>Call us:</strong> 0124-4312500/01</a>
+                                    </div>
                                 </li>
                                 <li className="nav-item dropdown dropdown-user">
                                     <Link className="nav-link link-ht" to={"#"} id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <figure className="icon-user"></figure>
+                                        <figure className="icon-user" onClick={ () => MyGA.SendEvent('header_icons','ln_header_icons', 'ln_account', 'loggedin_account','', false, true)}></figure>
                                     </Link>
                                     <div className="dropdown-menu" aria-labelledby="navbarDropdown">
                                         {
@@ -114,8 +139,8 @@ const Header = (props) => {
                                                 </>
                                             ) : (
                                                     <>
-                                                        <a className="dropdown-item" href='#' onClick={(e)=>{e.preventDefault();handleRedirect('login')}}>Login</a>
-                                                        <a className="dropdown-item" href='#' onClick={(e)=>{e.preventDefault();handleRedirect('register')}}>Register</a>
+                                                        <a className="dropdown-item" href={`${siteDomain}/login`} onClick={ (e) => handleRedirect(e,'login')}>Login</a>
+                                                        <a className="dropdown-item" href={`${siteDomain}/register`} onClick={(e) => handleRedirect(e, 'register')}>Register</a>
                                                     </>
                                                 )
                                         }
@@ -131,7 +156,7 @@ const Header = (props) => {
                                 </li>
                                 <li className="nav-item position-relative">
                                     <span className="counter">{count}</span>
-                                    <a className="nav-link link-ht" href={`${siteDomain}/cart/payment-summary/`}>
+                                    <a className="nav-link link-ht" href={`${siteDomain}/cart/payment-summary/`} onClick={() => MyGA.SendEvent('header_icons','ln_header_icons', 'ln_cart', 'cart','', false, true)}>
                                         <figure className="icon-cart"></figure>
                                     </a>
                                 </li>
@@ -163,7 +188,7 @@ const Header = (props) => {
                                 navSkillList?.map((skill) => {
                                     return (
                                         <li key={skill.url} className="nav-item">
-                                            <a className="nav-link" href={`${siteDomain}${skill.url}`}>{skill.name}</a>
+                                            <a className="nav-link" href={`${siteDomain}${skill.url}`} onClick={() => MyGA.SendEvent('navigation_menu','ln_navigation_menu', 'ln_'+skill.id+'_navigation', 'ln_'+skill.id, '', false, true)}>{skill.name}</a>
                                         </li>
                                     )
                                 })
