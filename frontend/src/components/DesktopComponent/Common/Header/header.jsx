@@ -68,7 +68,7 @@ const Header = (props) => {
             <nav className="container-fluid padlr-0 shadow pos-rel zindex">
                 <div className="container padlr-0">
                     <div className="navbar navbar-expand-lg navbar-light row">
-                        <a className="navbar-brand" href={siteDomain}></a>
+                        <a className="navbar-brand" href={siteDomain} aria-label="brand logo"></a>
                         <div className="collapse navbar-collapse" id="navbarSupportedContent">
                             <SearchBar />
                             <ul className="navbar-nav navbar-right">
@@ -97,7 +97,7 @@ const Header = (props) => {
                                     <a className="nav-link" href={`${siteDomain}/talenteconomy/`} >Blog</a>
                                 </li>
                                 <li className="nav-item dropdown dropdown-user">
-                                    <Link className="nav-link link-ht" to={"#"} id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <Link className="nav-link link-ht" aria-label="dropdown user link" to={"#"} id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <figure className="icon-user"></figure>
                                     </Link>
                                     <div className="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -122,7 +122,7 @@ const Header = (props) => {
                                     </div>
                                 </li>
                                 <li className="nav-item dropdown dropdown-call">
-                                    <Link className="nav-link link-ht" to={"#"} id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <Link className="nav-link link-ht" to={"#"} aria-label="dropdown call link" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <figure className="icon-call"></figure>
                                     </Link>
                                     <div className="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -131,7 +131,7 @@ const Header = (props) => {
                                 </li>
                                 <li className="nav-item position-relative">
                                     <span className="counter">{count}</span>
-                                    <a className="nav-link link-ht" href={`${siteDomain}/cart/payment-summary/`}>
+                                    <a className="nav-link link-ht" href={`${siteDomain}/cart/payment-summary/`} aria-label="payment cart button">
                                         <figure className="icon-cart"></figure>
                                     </a>
                                 </li>

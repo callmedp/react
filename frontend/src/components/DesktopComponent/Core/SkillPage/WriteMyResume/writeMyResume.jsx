@@ -18,13 +18,13 @@ const WriteMyResume = (props) => {
             <figure className="write-resume__img" data-aos="fade-in">
                 <img src={`${imageUrl}desktop/write-resume-bg.png`} className="bdr-radius" alt="Not getting enough calls from recruiters ?" />
                 <span className="resume-tween1" data-aos="fade-up" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="100" data-aos-duration="1000">
-                    <img src={`${imageUrl}desktop/resume-tween1.png`} />
+                    <img src={`${imageUrl}desktop/resume-tween1.png`} alt="resume writing service banner" />
                 </span>
                 <span className="resume-tween2" data-aos="fade-right" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="200" data-aos-duration="1000">
-                    <img src={`${imageUrl}desktop/resume-tween2.svg`} />
+                    <img src={`${imageUrl}desktop/resume-tween2.svg`} alt="resume writing service banner" />
                 </span>
                 <span className="resume-tween3" data-aos="fade-left" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="300" data-aos-duration="1000">
-                    <img src={`${imageUrl}desktop/resume-tween3.svg`} />
+                    <img src={`${imageUrl}desktop/resume-tween3.svg`} alt="resume writing service banner" />
                 </span>
             </figure>
         </section>

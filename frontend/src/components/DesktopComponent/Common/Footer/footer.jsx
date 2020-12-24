@@ -36,9 +36,9 @@ const Footer = (props) => {
                             <a href={`${siteDomain}/disclaimer`}>Disclaimer</a>&nbsp;&nbsp;
                             </li>
                             <li className="social-icon">
-                                <a href="https://www.facebook.com/shinelearningdotcom/" className="icon-facebook"></a>
-                                <a  href="https://www.linkedin.com/showcase/13203963/" className="icon-linkedin"></a>
-                                <a href="https://twitter.com/shinelearning" className="icon-twitter"></a>
+                                <a href="https://www.facebook.com/shinelearningdotcom/" className="icon-facebook" aria-label="icon facebook"></a>
+                                <a  href="https://www.linkedin.com/showcase/13203963/" className="icon-linkedin" aria-label="icon linkedIn"></a>
+                                <a href="https://twitter.com/shinelearning" className="icon-twitter" aria-label="icon twitter"></a>
                             </li>
                         </ul>
                         <article className="">
