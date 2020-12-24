@@ -65,20 +65,6 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     {% endblock head %}
     {{ JS_SETTINGS|safe }}
     {% block GA %}
-        <script async src="https://www.googletagmanager.com/gtag/js?id=UA-3537905-41"></script>
-        <script>
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          {% if request.GET.itm_source or request.GET.itm_medium or request.GET.itm_campaign or request.GET.itm_content %}
-            gtag('config', 'UA-3537905-41' ,{'dimension1': '{{request.GET.itm_source}}','dimension2' : '{{request.GET.itm_medium}}','dimension3':  '{{request.GET.itm_campaign}}','dimension4':'{{request.GET.itm_content}}',
-                'useAmpClientId': true });
-          {% else%}
-            gtag('config', 'UA-3537905-41', {'useAmpClientId': true});
-
-          {%endif%}
-          gtag('config', 'UA-3537905-1',{'group':'mainProfile','useAmpClientId': true});
-        </script>
             <!--  Shlearn analytics   -->
             <script type="text/javascript">
                 (function (p, l, o, w, i, n, g)
