@@ -51,6 +51,10 @@
             border: none;
             background: $white;
 
+            &:hover {
+                box-shadow: $box-shadow-lg;
+            }
+
             &__box {
                 padding: 1rem 1.5rem 1rem 6.5rem;
                 min-height: 13rem;
@@ -256,5 +260,14 @@
 }
 
 .bs-popover-right > .arrow::before, .bs-popover-auto[x-placement^="right"] > .arrow::before {
+    display: none;
+}
+
+.bs-popover-left > .arrow::after, .bs-popover-auto[x-placement^="left"] > .arrow::after {
+    right: -.6rem;
+    border-width: 2rem 0 2rem 2rem;
+}
+
+.bs-popover-left > .arrow::before, .bs-popover-auto[x-placement^="left"] > .arrow::before {
     display: none;
 }

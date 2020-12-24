@@ -177,7 +177,7 @@
     >.slick-slider {
         .slick-list {
             .slick-slide {
-                width: 30rem !important;
+                width: 32rem !important;
                 padding: 1.5rem 1rem !important;
             }
         }
@@ -252,7 +252,22 @@
                 font-size: 1.2rem;
             }
     }
-}
+
+    .m-card-more {
+        
+            .about-ht {
+                height: auto;
+            }
+
+            .skill-ht {
+                height: auto;
+            }
+        }
+
+        .m-card__price {
+            margin-top: 1rem;
+        }
+    }
 
 .m-courses-slider {
     .m-card {
