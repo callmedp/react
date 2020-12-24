@@ -874,11 +874,12 @@ class PopularServicesAPI(PopularProductMixin, APIView):
         """
         According to the algorithm of popular Courses find out the
         trending services.
-        For detail please check TredingCourseAPI
+        For detail please check TrendingCourseAPI
         """
         quantity_to_display = int(request.GET.get('num_services', 4))
+        class_category = settings.SERVICE_SLUG + settings.WRITING_SLUG
         s_obj, s_ratio, s_revenue = PopularProductMixin(). \
-            popular_courses_algorithm(class_category=settings.SERVICE_SLUG,
+            popular_courses_algorithm(class_category=class_category,
                                       quantity=quantity_to_display)
 
         service_pks = list(s_ratio) + list(s_revenue)
@@ -888,7 +889,7 @@ class PopularServicesAPI(PopularProductMixin, APIView):
         data = {
             'popularServices': [
                 {'id': tsrvc.id, 'heading': tsrvc.pHd, 'name': tsrvc.pNm, 'url': tsrvc.pURL, 'img': tsrvc.pImg, \
-                 'img_alt': tsrvc.pImA, 'rating': tsrvc.pARx, 'vendor': tsrvc.pPvn, 'stars': tsrvc.pStar,
+                 'img_alt': tsrvc.pImA, 'rating': tsrvc.pARx, 'price': tsrvc.pPinb, 'vendor': tsrvc.pPvn, 'stars': tsrvc.pStar,
                  'provider': tsrvc.pPvn} for tsrvc in tsrvcs]
         }
         return APIResponse(message='Popular Services Loaded', data=data, status=status.HTTP_200_OK)
