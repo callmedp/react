@@ -16,7 +16,7 @@ const ProductDetails = (props) =>{
 
     return (
         <div className="m-card__popover .m-transit">
-            <p className="m-type">Type: <strong>{type}</strong>  |   <strong>Course level:</strong> {level} <br />
+            <p className="m-type">Type: <strong>{type}</strong>  |   Course level: <strong>{level}</strong> <br />
                 <strong> {jobsAvailable}</strong> Jobs available
             </p>
             

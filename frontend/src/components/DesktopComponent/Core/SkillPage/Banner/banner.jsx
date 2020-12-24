@@ -62,12 +62,12 @@ const BannerSkill = (props) => {
                         { name } Courses & Certifications
                     </h1>
                     <Carousel className="header-carousel">
+                        {/* <figure className="icon-round-arrow"></figure> */}
                         {
                             featuresList?.map((feature, index) => {
                                 return (
                                     <Carousel.Item key={index} >
                                         <p key={Math.random()}>
-                                            <figure className="icon-round-arrow"></figure>
                                             <span className="flex-1">{ feature }</span>
                                         </p>
                                     </Carousel.Item>

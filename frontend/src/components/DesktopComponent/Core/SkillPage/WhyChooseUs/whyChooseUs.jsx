@@ -6,7 +6,7 @@ const WhyChooseUs = (props) => {
         <section className="why-choose-us" id="choose">
         <div className="container">
             <div className="row align-items-center flex-column">
-                <h2 className="heading2">Why Choose us</h2>
+                <h2 className="heading2 mt-10">Why Choose us</h2>
                 <ul>
                     <li class="col">
                         <figure data-aos="fade-up" data-aos-delay="10" class="icon-choose1"></figure>
