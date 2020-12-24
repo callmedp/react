@@ -26,4 +26,5 @@ urlpatterns = [
     re_path(r'^dashboard-neo-board-user/$', views.NeoBoardUserAPI.as_view()),
     re_path(r'^trending-courses-and-skills/$', views.TrendingCoursesAndSkillsAPI.as_view()),
     re_path(r'^nav-offers-and-tags/$', views.NavigationTagsAndOffersAPI.as_view()),
+    re_path(r'^popular-services/$', views.PopularServicesAPI.as_view(), name='popular-services-api')
 ]
