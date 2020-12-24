@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="64px" height="62px" viewBox="0 0 64 62" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 57.1 (83088) - https://sketch.com -->
+    <title>Artboard</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <polygon id="path-1" points="60.0277108 0.294545455 60.0277108 47.0213397 47.3768975 47.0213397 49.3667664 58.3445455 35.237914 47.0213397 0 47.0213397 0 0.294545455"></polygon>
+        <linearGradient x1="0%" y1="49.9996675%" x2="99.9986951%" y2="49.9996675%" id="linearGradient-3">
+            <stop stop-color="#C4C4C4" offset="0%"></stop>
+            <stop stop-color="#5B5B59" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="Artboard" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="bulb-2" transform="translate(0.894498, 0.888697)">
+            <g id="bulb" transform="translate(0.105502, 0.111303)">
+                <g id="Fill-158-Clipped" transform="translate(0.000000, 0.781579)">
+                    <g>
+                        <mask id="mask-2" fill="white">
+                            <use xlink:href="#path-1"></use>
+                        </mask>
+                        <g id="path-11"></g>
+                        <polygon id="Fill-158" fill="url(#linearGradient-3)" fill-rule="nonzero" mask="url(#mask-2)" points="60.0277108 0.294545455 0 0.294545455 0 47.0213397 35.237914 47.0213397 49.3667664 58.3445455 47.3768975 47.0213397 60.0277108 47.0213397"></polygon>
+                    </g>
+                </g>
+                <polygon id="Fill-161" fill="#FF5773" fill-rule="nonzero" points="61.4721937 0 1.4444829 0 1.4444829 46.7267942 36.6823969 46.7267942 50.8112493 58.0487081 48.8226861 46.7267942 61.4708881 46.7267942 61.4721937 46.7267942"></polygon>
+                <path d="M28.9918933,35.0532345 L28.9918933,37.5245741 C28.9918933,38.268689 30.0965055,38.8732823 31.4583383,38.8732823 C32.8214769,38.8732823 33.9247833,38.268689 33.9247833,37.5245741 L33.9247833,35.0532345 L28.9918933,35.0532345 Z" id="Fill-162" fill="#061C73" fill-rule="nonzero"></path>
+                <path d="M31.4579466,11.2791531 C27.3332775,11.2791531 22.5205107,12.8009712 22.5205107,17.3664259 C22.5205107,21.9331722 26.6947959,24.307622 26.6947959,28.165134 L26.6947959,30.8018325 L31.4579466,30.8018325 L36.2210973,30.8018325 L36.2210973,28.165134 C36.2210973,24.307622 40.3966882,21.9331722 40.3966882,17.3664259 C40.3966882,12.8009712 35.5826157,11.2791531 31.4579466,11.2791531" id="Fill-163" fill="#F5E52F" fill-rule="nonzero"></path>
+                <polygon id="Fill-164" fill="#061C73" fill-rule="nonzero" points="26.7078527 36.884067 36.2106517 36.884067 36.2106517 30.8019618 26.7078527 30.8019618"></polygon>
+                <path d="M26.7069388,32.0222584 L36.2097378,32.0222584" id="Stroke-165" stroke="#FFFFFF" stroke-width="0.394"></path>
+                <path d="M26.7069388,33.8003827 L36.2097378,33.8003827" id="Stroke-166" stroke="#FFFFFF" stroke-width="0.394"></path>
+                <path d="M26.7069388,35.5779904 L36.2097378,35.5779904" id="Stroke-167" stroke="#FFFFFF" stroke-width="0.394"></path>
+                <path d="M33.5708113,30.8022201 L34.3529185,22.5523636 C34.4090632,21.7307369 34.091781,21.0408804 33.6452356,21.0408804 C33.3214249,21.0408804 33.0328678,21.4116459 32.8879363,21.9271005 C32.7756471,21.4116459 32.5105924,21.0408804 32.1867817,21.0408804 C31.862971,21.0408804 31.5861652,21.4116459 31.4582077,21.9271005 C31.3289445,21.4116459 31.0534444,21.0408804 30.7296337,21.0408804 C30.4045173,21.0408804 30.1407683,21.4116459 30.0297848,21.9271005 C29.8848534,21.4116459 29.5962963,21.0408804 29.27118,21.0408804 C28.8233289,21.0408804 28.5073524,21.7307369 28.5634969,22.5523636 L29.3469098,30.8022201" id="Stroke-168" stroke="#FF5773" stroke-width="0.335"></path>
+                <path d="M31.2589597,5.72697129 L31.2589597,8.30682775" id="Stroke-169" stroke="#FFFFFF" stroke-width="0.731" stroke-linejoin="round"></path>
+                <path d="M23.533333,7.49191866 L25.0975475,9.72555502" id="Stroke-170" stroke="#FFFFFF" stroke-width="0.731" stroke-linejoin="round"></path>
+                <path d="M17.9120841,12.204 L20.6226928,13.4932823" id="Stroke-171" stroke="#FFFFFF" stroke-width="0.731" stroke-linejoin="round"></path>
+                <path d="M42.1431769,23.733 L44.8537856,25.0222822" id="Stroke-172" stroke="#FFFFFF" stroke-width="0.731" stroke-linejoin="round"></path>
+                <path d="M15.9031521,18.6001579 L19.0328868,18.6001579" id="Stroke-173" stroke="#FFFFFF" stroke-width="0.731" stroke-linejoin="round"></path>
+                <path d="M43.8836592,18.6001579 L47.0120882,18.6001579" id="Stroke-174" stroke="#FFFFFF" stroke-width="0.731" stroke-linejoin="round"></path>
+                <path d="M18.0452642,24.9680239 L20.7545673,23.6774497" id="Stroke-175" stroke="#FFFFFF" stroke-width="0.731" stroke-linejoin="round"></path>
+                <path d="M42.2757041,13.438378 L44.9863129,12.1490958" id="Stroke-176" stroke="#FFFFFF" stroke-width="0.731" stroke-linejoin="round"></path>
+                <path d="M37.7530613,9.63099043 L39.3172758,7.39735406" id="Stroke-177" stroke="#FFFFFF" stroke-width="0.731" stroke-linejoin="round"></path>
+            </g>
+        </g>
+    </g>
+</svg>

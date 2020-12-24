@@ -1,0 +1,31 @@
+@import '../../../../../styles-mobile/abstracts';
+
+.m-banner-slider {
+    margin: -5rem 0 0 .5rem !important;
+    &__txt {
+        display: flex !important;
+        align-items: center;
+        font-size: 1.2rem;
+        color: $gray-200;
+        @extend %box-shadow1;
+        padding: 1.5rem 1rem;
+        border-bottom: 3px solid $card-btm-bdr;
+
+        figure {
+            margin-right: 1rem;
+        }
+
+        p {
+            margin: 0 0 0 1rem;
+        }
+        
+    }
+    >.slick-slider {
+        .slick-list {
+            .slick-slide {
+                width: 28.5rem !important;
+                padding: 1.5rem 1rem !important;
+            }
+        }
+    }
+}

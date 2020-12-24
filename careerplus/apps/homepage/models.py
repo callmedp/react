@@ -233,7 +233,7 @@ class NavigationSpecialTag(AbstractAutoDate):
                 'display_name': link.display_name,
                 'skill_page_url': link.skill_page_url,
                 'tag': link.tag,
-                'icon': link.icon
+                # 'icon': link.icon
             } for link in data]
             return link_info
         return []

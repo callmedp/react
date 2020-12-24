@@ -1,0 +1,134 @@
+@import '../../../../../styles/functions';
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
+
+.faq {
+    &__list {
+        width: auto;
+        margin: 3rem 5rem 3rem 0;
+        flex: 75%;
+
+        .accordion {
+            counter-reset: strong 0;
+
+            .card {
+                background-color: $white;
+                margin-bottom: 2rem;
+                border: none;
+                border-radius: .5rem;
+                padding: 2rem 2rem;
+
+                &:hover, &:focus {
+                    cursor: pointer;
+                }
+
+                .card-header {
+                    background-color: $white;
+                    border: none;
+                    padding: 0;
+                    position: relative;
+
+                    &::after {
+                        content: '';
+                        position: absolute;
+                        right: 1rem;
+                        top: 1rem;
+                        background: #fff $sprite -24px -36px;
+                        width: 1.4rem;
+                        height: 1.8rem;
+                        display: inline-block;
+                    }
+                    
+                    strong {
+                        font-size: 1.6rem;
+                        font-weight: 600;
+                        counter-increment: strong;
+
+                        &::before {
+                            content: counter(strong) ". ";
+                        }
+                    }
+
+                    p {
+                        margin-bottom: 0;
+                    }
+                }
+
+                .collapse {
+                    position: relative;
+
+                    &::after {
+                        content: '';
+                        position: absolute;
+                        right: 1rem;
+                        top: -1.5rem;
+                        background: #fff $sprite 0 -36px;
+                        width: 1.4rem;
+                        height: 1.8rem;
+                        display: inline-block
+                    }
+                }
+
+                .card-body {
+                    padding: 1.5rem 1.5rem 0 0; 
+                }
+            }
+        }
+    }
+
+    &__img {
+        margin-left: auto;
+        align-self: flex-end;
+        width: 27.4rem;
+        height: 36.6rem;
+        position: relative;
+
+        .faq-tween1 {
+            position: absolute;
+            left: 2rem;
+            top:0;
+        }
+
+        .faq-tween2 {
+            position: absolute;
+            left: 14.5rem;
+            top: -.5rem;
+        }
+
+        .faq-tween3 {
+            position: absolute;
+            left: 20rem;
+            top: 2rem;
+        }
+
+        .faq-tween4 {
+            position: absolute;
+            left: 22.5rem;
+            top: 9.5rem;
+        }
+
+        .faq-tween5 {
+            position: absolute;
+            left: 8rem;
+            top: 5rem;
+        }
+
+        .faq-tween6 {
+            position: absolute;
+            left: 0rem;
+            top: 16.5rem;
+        }
+
+        .faq-tween7 {
+            position: absolute;
+            left: 4.5rem;
+            bottom: -.5rem;
+        }
+
+        .faq-tween8 {
+            position: absolute;
+            left: 0;
+            bottom: -.5rem;
+        }
+    }
+}

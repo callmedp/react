@@ -1,0 +1,66 @@
+@import '../../../../styles-mobile/abstracts';
+
+.m-skill-ht-remove {
+  top: -6rem;
+}
+.m-tabset-pos {
+    height: 10rem;
+    padding-bottom: 0 !important;
+}
+
+.scroll-gradient {
+  @extend %gradient;
+}
+
+.m-tabset {
+    position: relative;
+    z-index: 9;
+
+    .tab-links {
+      .selected {
+        color: $white;
+        border-bottom: 3px solid $white;
+        font-weight: 600;
+      } 
+
+      input[type="radio"] {
+          // position: absolute;
+          left: -2000vw;
+          position: relative;
+          margin: 0;
+          z-index: 99;
+      }
+
+      label {
+          display: inline-block;
+          padding: 1.3rem 1rem 1rem 1rem;
+          border-bottom: 3px solid transparent;
+          cursor: pointer;
+          font-weight: 400;
+          font-size: 1.4rem;
+          color: $white;
+          margin-bottom: 0;
+
+          &:not(:first-of-type) {
+            margin-left: 9%;
+
+            @media (max-width:359px) {
+              margin-left: 5%;
+            }
+          }
+        }
+    }
+
+    .tab-panels {
+        background: $white;
+        // position: relative;
+        // z-index: -99;
+
+        .tab-panel {
+            display: block;
+            padding: 0 0 1rem 0;
+        }
+    }
+
+}
+  

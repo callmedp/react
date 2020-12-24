@@ -1,0 +1,157 @@
+// Responsive images (ensure images don't scale beyond their parents)
+//
+// This is purposefully opt-in via an explicit class rather than being the default for all `<img>`s.
+// We previously tried the "images are responsive by default" approach in Bootstrap v2,
+// and abandoned it in Bootstrap v3 because it breaks lots of third-party widgets (including Google Maps)
+// which weren't expecting the images within themselves to be involuntarily resized.
+// See also https://github.com/twbs/bootstrap/issues/18178
+
+
+.img-fluid {
+  @include img-fluid();
+}
+
+
+// Image thumbnails
+.img-thumbnail {
+  padding: $thumbnail-padding;
+  background-color: $thumbnail-bg;
+  border: $thumbnail-border-width solid $thumbnail-border-color;
+  @include border-radius($thumbnail-border-radius);
+  @include box-shadow($thumbnail-box-shadow);
+
+  // Keep them at most 100% wide
+  @include img-fluid();
+}
+
+//
+// Figures
+//
+
+.figure {
+  // Ensures the caption's text aligns with the image.
+  display: inline-block;
+}
+
+.figure-img {
+  margin-bottom: $spacer / 2;
+  line-height: 1;
+}
+
+.figure-caption {
+  @include font-size($figure-caption-font-size);
+  color: $figure-caption-color;
+}
+
+// custom css by Sachin
+
+[class^="icon-"] {
+  text-indent: 200%;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.icon-round-arrow {
+  background: $sprite;
+  @include icon-inblock(30px, 27px, 0 0);
+}
+
+.icon-choose1 {
+  background: $sprite;
+  @include icon-inblock(36px, 49px, -49px 0);
+}
+
+.icon-choose2 {
+  background: $sprite;
+  @include icon-inblock(60px, 49px, -97px 0);
+}
+
+.icon-choose3 {
+  background: $sprite;
+  @include icon-inblock(48px, 49px, -170px 0);
+}
+
+.icon-choose4 {
+  background: $sprite;
+  @include icon-inblock(49px, 49px, -229px 0);
+}
+
+.icon-choose5 {
+  background: $sprite;
+  @include icon-inblock(38px, 49px, -290px 0);
+}
+
+.icon-choose6 {
+  background: $sprite;
+  @include icon-inblock(60px, 49px, -340px 0);
+}
+
+.icon-fullstar {
+  background: $sprite;
+  @include icon-inblock(11px, 11px, -404px -24px);
+}
+
+.icon-blankstar {
+  background: $sprite;
+  @include icon-inblock(11px, 11px, -422px -24px);
+}
+
+.icon-halfstar {
+  background: $sprite;
+  @include icon-inblock(11px, 11px, -404px -24px);
+}
+
+.icon-pdf {
+  background: $sprite;
+  @include icon-inblock(15px, 20px, -414px 0);
+}
+
+.icon-cart {
+  background: $sprite;
+  @include icon-inblock(23px, 20px, -900px 0);
+}
+
+.icon-call {
+  background: $sprite;
+  @include icon-inblock(22px, 22px, -860px 0);
+}
+
+.icon-user {
+  background: $sprite;
+  @include icon-inblock(21px, 24px, -817px 0);
+}
+
+.icon-down {
+  background: $sprite;
+  @include icon-inblock(8px, 6px, -790px -23px);
+}
+
+.icon-search {
+  background: $sprite;
+  @include icon-inblock(16px, 15px, -783px 0);
+}
+
+.icon-facebook {
+  background: $sprite;
+  @include icon-inblock(13px, 24px, -935px 0);
+}
+
+.icon-linkedin {
+  background: $sprite;
+  @include icon-inblock(25px, 23px, -962px 0);
+}
+
+.icon-twitter {
+  background: $sprite;
+  @include icon-inblock(24px, 20px, -1000px 0);
+}
+
+.icon-secure {
+  background: $sprite;
+  @include icon-inblock(29px, 40px, 0 -53px);
+}
+
+.icon-payment {
+  background: $sprite;
+  @include icon-inblock(253px, 29px, -41px -59px);
+}

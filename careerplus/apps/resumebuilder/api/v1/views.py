@@ -945,14 +945,24 @@ class SessionAvailabilityAPIView(APIView):
 
     def get(self, request, *args, **kwargs):
         if (request.user and request.user.is_authenticated):
+            try:
+                candidate_id = request._request.session.get('candidate_id', '')
+            except:
+                candidate_id = ''
             return Response(
-                data={'result': True},
+                data={
+                    'result': True,
+                    'candidate_id': candidate_id
+                },
                 status=status.HTTP_200_OK
             )
         return Response(
-            data={'result': False},
+            data={
+                'result': False,
+                'candidate_id': ''
+            },
             status=status.HTTP_200_OK 
-            )
+        )
 
 
 class PDFRefreshAPIView(APIView):

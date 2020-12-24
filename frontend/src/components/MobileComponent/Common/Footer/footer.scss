@@ -1,0 +1,38 @@
+@import '../../../../styles-mobile/abstracts';
+
+.m-footer {
+    margin: 0;
+    padding: 1.5rem;
+    background: $footer-bg;
+    font-size: 1.1rem;
+    color: $gray-200;
+    text-align: center;
+    display: block;
+
+    &__social {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        a {
+            &:not(:last-child) {
+                margin-right: 3rem;
+            }
+        }
+    }
+
+    &__txt {
+        color: $gray-200;
+        font-size: 1.1rem;
+        line-height: 2rem;
+
+        a {
+            color: $gray-200;
+            text-decoration: none;
+
+            &:hover, &:focus {
+                color: $gray-200;
+            }
+        }
+    }
+}

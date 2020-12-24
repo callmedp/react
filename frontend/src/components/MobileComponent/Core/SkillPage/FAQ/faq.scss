@@ -1,0 +1,105 @@
+@import '../../../../../styles-mobile/abstracts';
+
+.m-faq {
+
+  input {
+    position: absolute;
+    opacity: 0;
+    z-index: -1;
+  }
+
+  /* Accordion styles */
+  .m-tabs {
+    overflow: hidden;
+    margin-top: 2rem;
+  }
+  .m-tab {
+    width: 100%;
+    color: $gray-200;
+    overflow: hidden;
+    @include border-radius(8px);
+    background: $bg;
+    counter-increment: section;
+
+    &:not(:last-of-type) {
+      margin-bottom: 1.5rem;
+    }
+
+    &-label {
+      color: $gray-200;
+      display: flex;
+      padding: 2rem 1rem;
+      background: $bg;
+      font-weight: 600;
+      font-size: 1.4rem;
+      cursor: pointer;
+      position: relative;
+      padding-left: 2rem;
+      padding-right: 3.5rem;
+      margin-bottom: 0;
+      
+      /* Icon */
+      &:hover {
+        background: $bg;
+      }
+      &::after {
+        content: '';
+        width: 1.4rem;
+        height: .8rem;
+        background: $sprite -24px -36px;
+        text-align: center;
+        transition: all .35s;
+        color: $blue;
+        margin-left: auto;
+        display: flex;
+        margin-top: .3rem;
+        position: absolute;
+        top: 2.2rem;
+        right: 1.5rem;
+      }
+      &::before {
+        content: counter(section) '. ';
+        padding-right: .5rem;
+      }
+      strong {
+        font-weight: 600;
+        margin-right: 2rem;
+      }
+      span {
+        p {
+            margin-bottom: 0;
+            strong {
+              color: $gray-200;
+            }
+        }
+      }
+    }
+    &-content {
+      max-height: 0;
+      padding: 0 1em;
+      color: $gray-200;
+      background: white;
+      transition: all .35s;
+      font-size: 1.3rem;
+
+      p {
+        margin: 0 1rem 1rem 1rem;
+      }
+    }
+  }
+  
+  // :checked
+  input:checked {
+    + .m-tab-label {
+      background: $bg;
+      &::after {
+        transform: rotate(180deg);
+      }
+    }
+    ~ .m-tab-content {
+      max-height: 100vh;
+      padding: 0 1rem 1rem 1rem;
+      background: $bg;
+    }
+  }
+}

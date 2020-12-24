@@ -1,0 +1,26 @@
+@import '../../../../styles-mobile/abstracts';
+
+.error-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    strong {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: $gray-200;
+        text-align: center;
+        line-height: 2.2rem;
+    }
+
+    .btn-blue {
+        font-size: 1.4rem;
+    }
+}
+
+.error-pages {
+    .icon-cart {
+        display: none;
+    }
+}

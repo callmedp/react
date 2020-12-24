@@ -1,0 +1,76 @@
+@import '../../../../../styles/functions';
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
+
+
+.learner-stories {
+    .carousel-indicators {
+        display: none;
+    }
+
+    .carousel-control-prev, .carousel-control-next {
+        width: 7%;
+    }
+
+    .carousel-control-prev-icon {
+        background: $sprite -438px 0;
+        width: 5.2rem;
+        height: 5.2rem;
+    }
+    .carousel-control-next-icon {
+        background: $sprite -498px 0;
+        width: 5.2rem;
+        height: 5.2rem;
+    }
+
+    .carousel-inner {
+        width: 90%;
+        margin: 0 auto;
+        padding: 2rem 0;
+    }
+
+    .card {
+        box-shadow: $box-shadow;
+        border: none;
+        padding: 2rem;
+        border-bottom: .5rem solid $card-btm-bdr;
+
+        &__name {
+            font-size: 2.4rem;
+            width: 5.5rem;
+            height: 5.5rem;
+            border-radius: 100%;
+            margin: 1rem auto 2rem auto;
+            background-color: #F8C2C2;
+            text-align: center;
+            vertical-align: middle;
+            line-height: 5.5rem;
+            display: block;
+            color: $white;
+        }
+
+        &__txt {
+            font-size: 1.3rem;
+            height: 11.8rem;
+            overflow: hidden;
+        }
+
+        strong {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        &__location {
+            font-size: 1.2rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+}
+
+#story {
+    // margin-bottom: 15%;
+    margin-top: 5%;
+}

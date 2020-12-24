@@ -1,0 +1,103 @@
+@import '../../../../styles/functions';
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+footer {
+    background-color: $lightblue;
+    display: flex;
+    padding: 2rem 3rem 3rem 3rem;
+    color: $gray-200;
+    font-size: 1.3rem;
+
+    .footer {
+        a {
+            color: $gray-200;
+
+            &:hover, &:focus {
+                color: $gray-200;
+            }
+        }
+        ul {
+            padding: 0 0 2rem 0;
+            display: flex;
+            margin-bottom: 2.5rem;
+            align-items: center;
+            list-style-type: none;
+            li {
+                margin-right: 2rem;
+
+                &.social-icon {
+                    margin-left: auto;
+                    margin-right: 0;
+                    a {
+                        margin-left: 2rem;
+                    }
+                }
+
+            }
+        }
+
+        article {
+            margin-bottom: 4rem;
+            strong {
+                display: block;
+                text-transform: uppercase;
+                font-weight: 700;
+                margin-bottom: 1rem;
+            }
+
+            a {
+                line-height: 2.2rem;
+                margin-right: 1rem;
+
+                &:not(:first-of-type) {
+                    margin-left: 1rem;
+                    
+                }
+            }
+        }
+
+        .footer-btm {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-top: 1px solid rgba($color: #BECCE7, $alpha: .3);
+            padding-top: 3rem;
+
+            &__secure-payment {
+                display: flex;
+                align-items: center;
+                p {
+                    margin: 0 0 0 2rem;
+                    font-size: 1.1rem;
+
+                    strong {
+                        font-size: 1.6rem;
+                        font-weight: 600;
+                        display: block;
+                    }
+                }
+            }
+
+            &__payment-option {
+                display: flex;
+                flex-direction: column;
+                font-size: 1.2rem;
+
+                figure {
+                    margin-top: .5rem;
+                }
+            }
+
+            &__copyright {
+                display: flex;
+                font-size: 1.3rem;
+                align-self: flex-end;
+            }
+        }
+
+        .footer-bdr {
+            border-bottom: 1px solid rgba($color: #BECCE7, $alpha: .3);
+        }
+    }
+}

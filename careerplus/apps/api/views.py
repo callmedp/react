@@ -91,7 +91,8 @@ from assessment.models import Question
 from assessment.utils import TestCacheUtil
 from unidecode import unidecode
 from django.template.defaultfilters import slugify
-from search.helpers import RecommendationBasedOnGaps
+from search.helpers import RecommendationBasedOnGaps, get_recommended_products
+from shop.choices import PRODUCT_CHOICES,PRODUCT_TAG_CHOICES
 
 
 class CreateOrderApiView(APIView, ProductInformationMixin):
@@ -2076,6 +2077,7 @@ class TrackingResumeShine(APIView):
             logging.getLogger('error_log').error("Unable to update tracking data, tracking_id: {}, except : {}".format(t_id, e))
             return Response({ 'status': 'Unable to update on learning'}, status=status.HTTP_400_BAD_REQUEST)
 
+
 class ResumePromotionTrackingAPIView(APIView):
     '''
     API  is to track action through resume mailer
@@ -2158,3 +2160,100 @@ class ResumePromotionTrackingAPIView(APIView):
 
         response_json['data'] = 'data tracked succesfully'
         return Response(response_json, status=status.HTTP_200_OK)
+
+
+class SearchQueryAPI(APIView):
+    authentication_classes = ()
+    permission_classes = ()
+    serializer_class = None
+    conn = get_redis_connection("search_lookup")
+
+    def getSearchSet(self, redis_conn, search_set):
+        return {
+            search_set : [{
+                'name': eval(p.decode())['name'],
+                'url': eval(p.decode())['url']
+            } for p in redis_conn.smembers(search_set)],
+        }
+
+    def searchQuery(self, search_set, query=''):
+        cache_data = self.getSearchSet(self.conn, search_set)
+
+        return list(
+            filter(
+                lambda obj: query in obj['name'].lower(),\
+                cache_data.get(search_set)
+            )
+        )
+
+    def get(self, request, *args, **kwargs):
+        query = self.request.GET.get('q', '').lower()
+
+        data = {}
+        try:
+            products = self.searchQuery('product_url_set', query)
+            skills = self.searchQuery('category_url_set', query)
+            courses = self.searchQuery('course_url_set', query)
+            data = {
+                'products' : products,
+                'skills' : skills,
+                'courses' : courses
+            }
+            return Response(data, status=status.HTTP_200_OK)
+        except Exception as e:
+            logging.getLogger('info_log').info("Search Autocomplete Data not fetched due to {}".format(e))
+            return Response({
+                'error':'Something went Wrong'
+            }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class RecommendedCoursesAPI(APIView):
+    authentication_classes = ()
+    permission_classes = ()
+    serializer_class = None
+    no_of_products = 8
+
+    def create_product_info_list(self, products_list=None):
+        if products_list:
+            products_info_list = [{
+                'id':course.id,
+                'imgUrl':course.pImg,
+                'url':course.pURL,
+                'name':course.pNm,
+                'rating': float(course.pARx),
+                'mode':course.pStM[0] if course.pStM else None,
+                'providerName':course.pPvn,
+                'price':float(course.pPin),
+                'skillList': course.pSkilln,
+                'about':course.pAb,
+                'title':course.pTt,
+                'slug':course.pSg,
+                'jobsAvailable':course.pNJ,
+                'tags':PRODUCT_TAG_CHOICES[course.pTg][0],
+                'brochure':json.loads(course.pUncdl[0]).get('brochure') if course.pUncdl else None,
+                'highlights':course.pBS,
+                'stars': course.pStar,
+            } for course in products_list]
+            return products_info_list
+
+        return []
+
+    def get_products(self):
+        jt = self.request.session.get('job_title', None)
+        skill = self.request.session.get('all_skill_ids', [])
+        farea = self.request.session.get('func_area', None)
+
+        rcourses = get_recommended_products(jt, skill, farea)
+        rassesments = get_recommended_products(jt, skill, farea, flow_type = 16)
+
+        if rcourses:
+            rcourses = rcourses[:self.no_of_products]
+        if rassesments:
+            rassesments = rassesments[:self.no_of_products]
+        return {
+            'r_courses': self.create_product_info_list(rcourses),
+            'r_assesments': self.create_product_info_list(rassesments)
+        }
+
+    def get(self, request, *args, **kwargs):
+        rproducts = self.get_products()
+        return Response(rproducts, status=status.HTTP_200_OK)

@@ -1,0 +1,28 @@
+@import '../../../../styles/functions';
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+section {
+    &:not(:last-of-type) {
+        margin-top: 3rem;
+        margin-bottom: 4rem;
+    }
+}
+
+.right-widget {
+    margin-top: -22%;
+    position: relative;
+    z-index: 999;
+}
+
+.load-more {
+    font-size: 1.3rem;
+    font-weight: 700;
+    display: flex;
+    justify-content: center;
+    text-transform: uppercase;
+}
+
+body {
+    overflow-x: hidden;
+}

@@ -1,12 +1,28 @@
-import logging ,json
-from rest_framework.generics import RetrieveAPIView ,ListAPIView ,UpdateAPIView
+# Python Core Import
+import logging, json
+import datetime
+import mimetypes
+import random
+
+# DRF Import
+from rest_framework.generics import RetrieveAPIView, ListAPIView, UpdateAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework import status
-from django.http import HttpResponse ,HttpResponsePermanentRedirect
+from rest_framework import permissions, status
+
+# Core Django Import
+from django.http import HttpResponse, HttpResponsePermanentRedirect
 from shared.rest_addons.mixins import FieldFilterMixin
 from shared.rest_addons.pagination import LearningCustomPagination
 from django.template.loader import get_template
+from django.utils import timezone
+from django.conf import settings
+from django.db.models import Count, F, Prefetch, Value, CharField
+from haystack.query import SearchQuerySet
+from django.core.cache import cache
+from django.db.models.functions import Concat
+
+# Local Import
 from core.mixins import InvoiceGenerate
 from review.models import Review
 from emailers.email import SendMail
@@ -14,33 +30,25 @@ from emailers.tasks import send_email_task
 from emailers.sms import SendSMS
 from django.contrib.contenttypes.models import ContentType
 from order.api.v1.serializers import OrderItemSerializer
-
-
-from weasyprint import HTML
-from django.template import Context
-
-import datetime
-from django.utils import timezone
-
 from .serializers import StaticSiteContentSerializer, OrderItemDetailSerializer, DashboardCancellationSerializer
-
 from core.library.gcloud.custom_cloud_storage import \
     GCPPrivateMediaStorage, GCPInvoiceStorage, GCPMediaStorage, GCPResumeBuilderStorage
-from wsgiref.util import FileWrapper
-from django.conf import settings
-import mimetypes
 
-
-
-
-from homepage.models import StaticSiteContent,TestimonialCategoryRelationship,Testimonial
-from shop.models import Category
-from order.models import Order, OrderItem ,InternationalProfileCredential
+# Local Inter App Import
+from homepage.models import StaticSiteContent, TestimonialCategoryRelationship, Testimonial, \
+    TopTrending, TrendingProduct, HomePageOffer, NavigationSpecialTag
+from shop.models import Category, Product, ProductSkill
+from order.models import Order, OrderItem, InternationalProfileCredential
 from dashboard.dashboard_mixin import DashboardInfo, DashboardCancelOrderMixin
 from core.api_mixin import ShineCandidateDetail
 from django.core.files.base import ContentFile
 from payment.models import PaymentTxn
+from .helper import APIResponse
+# from .serializers import ProductSkillSerializer
 
+# Other Import
+from weasyprint import HTML
+from wsgiref.util import FileWrapper
 
 logger = logging.getLogger('error_log')
 
@@ -64,16 +72,16 @@ class TestimonialCategoryMapping(APIView):
     permission_classes = ()
 
     def post(self, request, *args, **kwargs):
-        category_ids = eval(request.POST.get('categories','[]'))
+        category_ids = eval(request.POST.get('categories', '[]'))
         if not category_ids:
             return HttpResponse("No Changes")
-        testimonial_id = request.POST.get('testimonial','')
-        prev_category_mapping_ids = set(TestimonialCategoryRelationship.objects.\
-            filter(testimonial=testimonial_id).values_list('category',flat=True))
+        testimonial_id = request.POST.get('testimonial', '')
+        prev_category_mapping_ids = set(TestimonialCategoryRelationship.objects. \
+                                        filter(testimonial=testimonial_id).values_list('category', flat=True))
         category_ids = set(category_ids)
         # mapping testimonial to category ids and delete some relations
         category_ids_to_delete = prev_category_mapping_ids - category_ids
-        category_ids_to_add = category_ids - prev_category_mapping_ids 
+        category_ids_to_add = category_ids - prev_category_mapping_ids
         categories = Category.objects.filter(id__in=category_ids_to_add).only('id')
         testimonial = Testimonial.objects.filter(id=testimonial_id).first()
 
@@ -81,10 +89,11 @@ class TestimonialCategoryMapping(APIView):
             return HttpResponse("Failed")
 
         if category_ids_to_delete:
-            TestimonialCategoryRelationship.objects.filter(category__in=category_ids_to_delete,testimonial=testimonial_id).delete()
+            TestimonialCategoryRelationship.objects.filter(category__in=category_ids_to_delete,
+                                                           testimonial=testimonial_id).delete()
 
         for category in categories:
-            TestimonialCategoryRelationship.objects.get_or_create(category=category,testimonial=testimonial)
+            TestimonialCategoryRelationship.objects.get_or_create(category=category, testimonial=testimonial)
 
         return HttpResponse("Successful")
 
@@ -99,7 +108,6 @@ class UserDashboardApi(FieldFilterMixin, ListAPIView):
     serializer_class = OrderItemDetailSerializer
     pagination_class = LearningCustomPagination
 
-
     def get_queryset(self, *args, **kwargs):
         email = self.request.GET.get("email", None)
         candidate_id = self.request.GET.get("candidate_id", None)
@@ -110,7 +118,7 @@ class UserDashboardApi(FieldFilterMixin, ListAPIView):
             days = int(last_month_from) * 30
             select_type = int(select_type)
         except:
-            days = 18*30
+            days = 18 * 30
             select_type = 0
 
         last_payment_date = timezone.now() - datetime.timedelta(days=days)
@@ -167,7 +175,7 @@ class DashboardDetailApi(APIView):
             order_item = OrderItem.objects.select_related('order', 'product').get(
                 pk=orderitem_id, order__candidate_id=candidate_id, order__status__in=[1, 3])
         except OrderItem.DoesNotExist:
-            logger.error('OrderItem for candidate_id %s and pk %s with order status in [1, 3] does not exist' %(
+            logger.error('OrderItem for candidate_id %s and pk %s with order status in [1, 3] does not exist' % (
                 candidate_id, orderitem_id))
             return Response({'status': 'Failure', 'error': 'OrderItem does not exists.'})
 
@@ -205,11 +213,10 @@ class DashboardDetailApi(APIView):
         # ops = ops.values_list('id', 'oi_status', 'draft_counter', 'get_user_oi_status', 'created__date',
         #
         #                       'oi_draft__name')
-        ops = [{"id" : op.id, "oi_status" : op.oi_status, "draft_counter" : op.draft_counter,
-                "get_user_oi_status" : op.get_user_oi_status, "created__date" : op.created.strftime("%b %d, ""%Y"),
-                "oi_draft__name" : op.oi_draft.name if op.oi_draft else ""
+        ops = [{"id": op.id, "oi_status": op.oi_status, "draft_counter": op.draft_counter,
+                "get_user_oi_status": op.get_user_oi_status, "created__date": op.created.strftime("%b %d, ""%Y"),
+                "oi_draft__name": op.oi_draft.name if op.oi_draft else ""
                 } for op in ops]
-
 
         resp_dict = {'status': 'Success', 'error': None, 'data': {'oi': {
             'oi_status': order_item.oi_status,
@@ -218,7 +225,7 @@ class DashboardDetailApi(APIView):
             'oi_resume': order_item.oi_resume.name if order_item.oi_resume else '',
             'product_sub_type_flow': order_item.product.sub_type_flow,
             'custom_operations': list(order_item.get_item_operations().values() if order_item.get_item_operations()
-            else ''),
+                                      else ''),
             'order_id': order_item.order_id,
             'oi_id': order_item.pk,
             'order_number': order_item.order.number if order_item.order_id else '',
@@ -252,16 +259,16 @@ class DashboardNotificationBoxApi(APIView):
             pending_resume_items = DashboardInfo().get_pending_resume_items(candidate_id=candidate_id,
                                                                             email=email)
 
-            pending_resume_items = [{'id':oi.id,'product_name':oi.product.get_name if oi.product else ''
-                                     ,'product_get_exp_db':oi.product.get_exp_db() if oi.product else ''
+            pending_resume_items = [{'id': oi.id, 'product_name': oi.product.get_name if oi.product else ''
+                                        , 'product_get_exp_db': oi.product.get_exp_db() if oi.product else ''
                                      } for oi in
                                     pending_resume_items]
             res = ShineCandidateDetail().get_candidate_detail(email=None, shine_id=candidate_id)
             resumes = res['resumes']
             default_resumes = [resume for resume in resumes if resume and resume['is_default']]
-            if len(default_resumes) :
+            if len(default_resumes):
                 default_resumes = default_resumes[0]
-            else :
+            else:
                 default_resumes = {}
         except Exception as exc:
             logger.error('Error in getting notifications %s' % exc)
@@ -296,7 +303,7 @@ class DashboardCancellationApi(APIView):
                                 status=status.HTTP_417_EXPECTATION_FAILED)
 
             if order.candidate_id != candidate_id:
-                return Response({'status' : 'Failure', 'error' : 'Order not found against id'},
+                return Response({'status': 'Failure', 'error': 'Order not found against id'},
                                 status=status.HTTP_417_EXPECTATION_FAILED)
             try:
                 cancellation = DashboardCancelOrderMixin().perform_cancellation(candidate_id=candidate_id, email=email,
@@ -305,62 +312,61 @@ class DashboardCancellationApi(APIView):
                 logger.error('Dashboard cancellation error %s' % exc)
                 return Response({'status': 'Failure', 'error': exc}, status=status.HTTP_417_EXPECTATION_FAILED)
             if cancellation:
-                return Response({'status': 'Success','data':order_id, 'error': None, 'cancelled': True},
+                return Response({'status': 'Success', 'data': order_id, 'error': None, 'cancelled': True},
                                 status=status.HTTP_200_OK)
             return Response({'status': 'Failure', 'error': None, 'cancelled': False},
                             status=status.HTTP_417_EXPECTATION_FAILED)
         return Response(serializer.errors, status=status.HTTP_200_OK)
+
 
 class OrderItemCommentApi(APIView):
     authentication_classes = []
     permission_classes = []
     serializer_class = None
 
-
-    def get(self,request):
+    def get(self, request):
         candidate_id = request.GET.get('candidate_id')
         oi_pk = request.GET.get('oi_pk')
 
         if not oi_pk or not candidate_id:
-            return Response({'error' : "BAD REQUEST"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': "BAD REQUEST"}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
             oi = OrderItem.objects.get(id=oi_pk)
         except:
-            return Response({'error':'ITEM NOT FOUND'},status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'ITEM NOT FOUND'}, status=status.HTTP_400_BAD_REQUEST)
         if not oi.order.candidate_id == candidate_id or not oi.order.status in [1, 3]:
-            return Response({'error' : "BAD REQUEST"}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': "BAD REQUEST"}, status=status.HTTP_400_BAD_REQUEST)
 
         message = oi.message_set.filter(is_internal=False).order_by('created')
 
-        message = [{'added_by':msg.added_by.name if msg.added_by else '','message':msg.message,
-                    'created':msg.created.strftime("%b %d,%Y"),
-                    'candidate_id':msg.candidate_id
+        message = [{'added_by': msg.added_by.name if msg.added_by else '', 'message': msg.message,
+                    'created': msg.created.strftime("%b %d,%Y"),
+                    'candidate_id': msg.candidate_id
                     } for msg in message]
 
         data = {
-            'oi_id':oi.id,
-            'comment':message
+            'oi_id': oi.id,
+            'comment': message
         }
 
-        return Response(data,status=status.HTTP_200_OK)
-
+        return Response(data, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
 
-        candidate_id =  request.data.get('candidate_id')
+        candidate_id = request.data.get('candidate_id')
         oi_pk = request.data.get('oi_pk')
         comment = request.data.get('comment', '').strip()
-        if not oi_pk or not candidate_id or not comment :
-            return Response({'error':"BAD REQUEST"},status=status.HTTP_400_BAD_REQUEST)
+        if not oi_pk or not candidate_id or not comment:
+            return Response({'error': "BAD REQUEST"}, status=status.HTTP_400_BAD_REQUEST)
 
         try:
-            oi=OrderItem.objects.get(id=oi_pk)
+            oi = OrderItem.objects.get(id=oi_pk)
         except:
-            return Response({'error':'ITEM NOT FOUND'},status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'ITEM NOT FOUND'}, status=status.HTTP_400_BAD_REQUEST)
 
         if oi.order.candidate_id != candidate_id:
-            return Response({'error':'Un Authorized Access'},status=status.HTTP_401_UNAUTHORIZED)
+            return Response({'error': 'Un Authorized Access'}, status=status.HTTP_401_UNAUTHORIZED)
 
         oi.message_set.create(
             message=comment,
@@ -368,28 +374,28 @@ class OrderItemCommentApi(APIView):
         )
         message = oi.message_set.filter(is_internal=False).order_by('created')
 
-        message = [{'added_by' : msg.added_by.name if msg.added_by else '', 'message' : msg.message,
-                    'created' : msg.created.strftime("%b %d,%Y"),
-                    'candidate_id' : msg.candidate_id
+        message = [{'added_by': msg.added_by.name if msg.added_by else '', 'message': msg.message,
+                    'created': msg.created.strftime("%b %d,%Y"),
+                    'candidate_id': msg.candidate_id
                     } for msg in message]
 
         data = {
-            'oi_id' : oi.id,
-            'comment' : message
+            'oi_id': oi.id,
+            'comment': message
         }
 
-        return Response(data,status=status.HTTP_200_OK)
+        return Response(data, status=status.HTTP_200_OK)
 
 
 class DashboardResumeUploadApi(APIView):
     authentication_classes = ()
     permission_classes = ()
-    serializer_classes =None
+    serializer_classes = None
 
-    def post(self,request,*args,**kwargs):
+    def post(self, request, *args, **kwargs):
         candidate_id = request.POST.get('candidate_id')
         if not candidate_id:
-            return Response({'error': 'No credential Provided'},status=status.HTTP_401_UNAUTHORIZED)
+            return Response({'error': 'No credential Provided'}, status=status.HTTP_401_UNAUTHORIZED)
         file = request.FILES.get('file', '')
         list_ids = request.POST.get('resume_pending', '')
         list_ids = list_ids.split(',')
@@ -405,21 +411,21 @@ class DashboardResumeUploadApi(APIView):
                 if response.status_code == 200:
                     file = ContentFile(response.content)
                     data = {
-                        "list_ids" : list_ids,
-                        "candidate_resume" : file,
-                        'last_oi_status' : 13,
-                        'is_shine' : True,
-                        'extension' : request.session.get('resume_extn', '')
+                        "list_ids": list_ids,
+                        "candidate_resume": file,
+                        'last_oi_status': 13,
+                        'is_shine': True,
+                        'extension': request.session.get('resume_extn', '')
                     }
 
                     DashboardInfo().upload_candidate_resume(candidate_id=candidate_id, data=data)
 
-                    return Response({'success':'resumeUpload'},status=status.HTTP_200_OK)
+                    return Response({'success': 'resumeUpload'}, status=status.HTTP_200_OK)
 
-            return Response({'error' : 'Something went Wrong'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Something went Wrong'}, status=status.HTTP_400_BAD_REQUEST)
         else:
             if not file:
-                return Response({'error':'No file found'},status=status.HTTP_400_BAD_REQUEST)
+                return Response({'error': 'No file found'}, status=status.HTTP_400_BAD_REQUEST)
             extn = file.name.split('.')[-1]
             if extn in ['doc', 'docx', 'pdf'] and list_ids:
                 data = {
@@ -430,9 +436,9 @@ class DashboardResumeUploadApi(APIView):
                 try:
                     DashboardInfo().upload_candidate_resume(candidate_id=candidate_id, data=data)
                 except:
-                    return Response({'error' : 'Something went Wrong'}, status=status.HTTP_400_BAD_REQUEST)
-                return Response({'success':'resumeuploaded'},status=status.HTTP_200_OK)
-            return Response({'error' : 'Something went Wrong'}, status=status.HTTP_400_BAD_REQUEST)
+                    return Response({'error': 'Something went Wrong'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'success': 'resumeuploaded'}, status=status.HTTP_200_OK)
+            return Response({'error': 'Something went Wrong'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class DashboardResumeDownloadApi(APIView):
@@ -440,10 +446,10 @@ class DashboardResumeDownloadApi(APIView):
     permission_classes = ()
     serializer_classes = None
 
-    def get(self, request, *args, **kwargs) :
+    def get(self, request, *args, **kwargs):
 
         candidate_id = request.GET.get('candidate_id', None)
-        order_pk = request.GET.get('order_pk',None)
+        order_pk = request.GET.get('order_pk', None)
         if not candidate_id or not order_pk:
             return HttpResponsePermanentRedirect('{}/404'.format(settings.RESUME_SHINE_MAIN_DOMAIN))
         try:
@@ -451,7 +457,6 @@ class DashboardResumeDownloadApi(APIView):
         except:
             logging.getLogger('error_log').error('no order found {}'.format(order_pk))
             return HttpResponsePermanentRedirect('{}/404'.format(settings.RESUME_SHINE_MAIN_DOMAIN))
-
 
         if not order.candidate_id == candidate_id:
             return HttpResponsePermanentRedirect('{}/404'.format(settings.RESUME_SHINE_MAIN_DOMAIN))
@@ -465,9 +470,9 @@ class DashboardResumeDownloadApi(APIView):
                 file = file[1:]
             file_path = settings.RESUME_DIR + file
             try:
-                if not settings.IS_GCP :
+                if not settings.IS_GCP:
                     fsock = FileWrapper(open(file_path, 'rb'))
-                else :
+                else:
                     fsock = GCPPrivateMediaStorage().open(file_path)
             except:
                 return HttpResponsePermanentRedirect('{}/404'.format(settings.RESUME_SHINE_MAIN_DOMAIN))
@@ -479,14 +484,15 @@ class DashboardResumeDownloadApi(APIView):
         else:
             return HttpResponsePermanentRedirect('{}/404'.format(settings.RESUME_SHINE_MAIN_DOMAIN))
 
+
 class DashboardDraftDownloadApi(APIView):
     authentication_classes = ()
     permission_classes = ()
-    serializer_classes =None
+    serializer_classes = None
 
     def get(self, request, *args, **kwargs):
         candidate_id = request.GET.get('candidate_id', None)
-        orderitem_id = request.GET.get('oi_pk',None)
+        orderitem_id = request.GET.get('oi_pk', None)
         if not candidate_id or not orderitem_id:
             return HttpResponsePermanentRedirect('{}/404'.format(settings.RESUME_SHINE_MAIN_DOMAIN))
         try:
@@ -543,11 +549,11 @@ class DashboardDraftDownloadApi(APIView):
             logging.getLogger('error_log').error(str(e))
             return HttpResponsePermanentRedirect('{}/404'.format(settings.RESUME_SHINE_MAIN_DOMAIN))
 
+
 class ResumeProfileCredentialDownload(APIView):
     authentication_classes = ()
     permission_classes = ()
     serializer_classes = None
-    
 
     def get(self, request, *args, **kwargs):
         candidate_id = request.GET.get('candidate_id')
@@ -589,13 +595,12 @@ class ResumeProfileCredentialDownload(APIView):
 class UserInboxListApiView(APIView):
     permission_classes = ()
     authentication_classes = ()
-    serializer_classes=None
+    serializer_classes = None
 
-
-    def get(self,request,*args,**kwargs):
+    def get(self, request, *args, **kwargs):
         candidate_id = request.GET.get('candidate_id')
         if not candidate_id:
-            return Response({'error':'invalid request'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'invalid request'}, status=status.HTTP_400_BAD_REQUEST)
 
         orders = Order.objects.filter(
             status__in=[0, 1, 3],
@@ -610,8 +615,8 @@ class UserInboxListApiView(APIView):
         orders = orders.exclude(id__in=excl_order_list).order_by('-date_placed')
         order_list = []
         for obj in orders:
-            orderitems = OrderItem.objects.prefetch_related('product','product__product_class','parent').filter(
-                 no_process=False,order=obj)
+            orderitems = OrderItem.objects.prefetch_related('product', 'product__product_class', 'parent').filter(
+                no_process=False, order=obj)
             product_type_flow = None
             product_id = None
             item_count = len(orderitems)
@@ -624,29 +629,30 @@ class UserInboxListApiView(APIView):
                 "item_count": item_count,
                 "get_currency": obj.get_currency(),
                 'total_incl_tax': obj.total_incl_tax,
-                'number': obj.number, 'date_placed' : obj.date_placed.strftime("%b %d, ""%Y"),
-                'status': obj.status, 'id' : obj.id,
-                'orderitems':[{'product_type_flow':oi.product.type_flow if oi.product_id else '' ,
-                   'parent': oi.parent_id ,
-                   'parent_heading': oi.parent.product.heading if oi.parent_id and oi.parent.product_id else '','get_user_oi_status':oi.get_user_oi_status,'heading':oi.product.heading if oi.product_id else '',
-                   'get_name':oi.product.get_name if oi.product_id else '',
-                   'get_exp_db':oi.product.get_exp_db() if oi.product_id else '',
-                   'get_studymode_db':'',
-                   'get_coursetype_db':'',
-                   'get_duration_in_day':oi.product.get_duration_in_ddmmyy() if oi.product_id and
-                    oi.product.get_duration_in_day() else'','oi_status':oi.oi_status,} for oi in orderitems]
+                'number': obj.number, 'date_placed': obj.date_placed.strftime("%b %d, ""%Y"),
+                'status': obj.status, 'id': obj.id,
+                'orderitems': [{'product_type_flow': oi.product.type_flow if oi.product_id else '',
+                                'parent': oi.parent_id,
+                                'parent_heading': oi.parent.product.heading if oi.parent_id and oi.parent.product_id else '',
+                                'get_user_oi_status': oi.get_user_oi_status,
+                                'heading': oi.product.heading if oi.product_id else '',
+                                'get_name': oi.product.get_name if oi.product_id else '',
+                                'get_exp_db': oi.product.get_exp_db() if oi.product_id else '',
+                                'get_studymode_db': '',
+                                'get_coursetype_db': '',
+                                'get_duration_in_day': oi.product.get_duration_in_ddmmyy() if oi.product_id and
+                                                                                              oi.product.get_duration_in_day() else '',
+                                'oi_status': oi.oi_status, } for oi in orderitems]
             }
             order_list.append(data)
 
-        return Response({'data':order_list},status=status.HTTP_200_OK)
-
+        return Response({'data': order_list}, status=status.HTTP_200_OK)
 
 
 class DashboardResumeInvoiceDownload(APIView):
     permission_classes = ()
     authentication_classes = ()
-    serializer_classes=None
-
+    serializer_classes = None
 
     def get(self, request, *args, **kwargs):
         candidate_id = request.GET.get('candidate_id', None)
@@ -673,15 +679,13 @@ class DashboardResumeInvoiceDownload(APIView):
                     return response
         except Exception as e:
             logging.getLogger('error_log').error("%s" % str(e))
-        return Response({'error' : 'Something Went Wrong'})
-
+        return Response({'error': 'Something Went Wrong'})
 
 
 class DashboardFeedbackSubmit(APIView):
     permission_classes = ()
     authentication_classes = ()
     serializer_classes = None
-
 
     def post(self, request, *args, **kwargs):
         email_dict = {}
@@ -714,7 +718,7 @@ class DashboardFeedbackSubmit(APIView):
                     extra_content_obj = ContentType.objects.get(app_label="order", model="OrderItem")
 
                     review_obj.extra_content_type = extra_content_obj
-                    review_obj.extra_object_id =oi.id
+                    review_obj.extra_object_id = oi.id
                     review_obj.save()
 
                     oi.user_feedback = True
@@ -746,9 +750,9 @@ class DashboardFeedbackSubmit(APIView):
                 data['display_message'] = "select valid input for feedback"
                 return Response(data, status=status.HTTP_400_BAD_REQUEST)
 
-            return Response(data,status=status.HTTP_200_OK)
+            return Response(data, status=status.HTTP_200_OK)
         else:
-            return Response({'error':'Something went Wrong'},status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Something went Wrong'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class PausePlayService(UpdateAPIView):
@@ -764,29 +768,121 @@ class NeoBoardUserAPI(APIView):
     authentication_classes = ()
     serializer_classes = None
 
-    def post(self,request,*args,**kwargs):
+    def post(self, request, *args, **kwargs):
         from order.models import OrderItem
         from order.tasks import board_user_on_neo
         candidate_id = request.data.get('candidate_id')
         oi_pk = request.data.get('oi_pk')
         if not candidate_id:
-            return Response({'error':'candidate id is missing'},status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'candidate id is missing'}, status=status.HTTP_400_BAD_REQUEST)
         if not oi_pk:
-            return Response({'error':'orderitem id is missing'},status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'orderitem id is missing'}, status=status.HTTP_400_BAD_REQUEST)
 
-        oi= OrderItem.objects.select_related("order").filter(pk=oi_pk).first()
+        oi = OrderItem.objects.select_related("order").filter(pk=oi_pk).first()
         order = oi.order
 
-        if oi and oi.product.vendor.slug == 'neo' and order.candidate_id == candidate_id and order.status in[1,3]:
+        if oi and oi.product.vendor.slug == 'neo' and order.candidate_id == candidate_id and order.status in [1, 3]:
             if not oi.neo_mail_sent:
                 boarding_type = board_user_on_neo([oi.id])
                 msg = 'Please check you mail to confirm boarding on Neo'
                 if boarding_type == 'already_trial':
                     msg = 'You Account has been Updated from Trial To Regular'
-                return Response({'data': msg},status=status.HTTP_200_OK)
+                return Response({'data': msg}, status=status.HTTP_200_OK)
+
+        return Response({'data': ''}, status=status.HTTP_200_OK)
 
 
-        return Response({'data':''},status=status.HTTP_200_OK)
+class TrendingCoursesAndSkillsAPI(APIView):
+    __author__ = 'Rahul'
+
+    permission_classes = ()
+
+    authentication_classes = ()
+
+    def get(self, request, format=None):
+        """
+        According to the new algorithm of Trending courses
+        1. Conversion ratio - (total sales generated by that product)[:3]
+        2. Revenue per mile - (total amount of sales generated by that product * 1000 / Total views for that product) [:3]
+        """
+
+        NUM_COURSE_TO_SELECT = int(request.GET.get('num_courses', 2))
+
+        conversion_ratio = Product.objects.filter(product_class__slug__in=settings.COURSE_SLUG, active=True,
+                                                  is_indexed=True)
+        conversion_ratio_product = conversion_ratio.order_by('-buy_count')[
+                                   :NUM_COURSE_TO_SELECT].values_list('id', flat=True)
+
+        revenue_per_mile = conversion_ratio.annotate(
+            revenue=(F('buy_count') * F('inr_price')) * 1000 / F('cp_page_view')) \
+                               .exclude(id__in=list(conversion_ratio_product)).order_by('-revenue')[
+                           :NUM_COURSE_TO_SELECT].values_list('id', flat=True)
+
+        product_pks = list(conversion_ratio_product) + list(revenue_per_mile)
+        tprds = SearchQuerySet().filter(id__in=product_pks, pTP__in=[0, 1, 3]).exclude(
+            id__in=settings.EXCLUDE_SEARCH_PRODUCTS
+        )
+        p_skills = conversion_ratio.filter(id__in=product_pks, categories__is_skill=True).distinct().exclude(
+            categories__related_to__slug__isnull=True)
+        skills = []
+
+        # ids = []
+        # for i in conversion_ratio:
+        #     if i.id in product_pks and i.get_category_main().is_skill==True and i.id not in ids:
+        #         skills.append({'id':i.id,'skillName':i.get_category_main().name,'skillUrl':i.get_category_main().get_absolute_url()})
+        #         ids.append(i.id)
+
+        for i in p_skills:
+            skills.append({'id': i.id, 'skillName': i.get_category_main().name,
+                           'skillUrl': i.get_category_main().get_absolute_url()})
+
+        data = {
+
+            'trendingCourses': [
+                {'id': tprd.id, 'heading': tprd.pHd, 'name': tprd.pNm, 'url': tprd.pURL, 'img': tprd.pImg, \
+                 'img_alt': tprd.pImA, 'rating': tprd.pARx, 'vendor': tprd.pPvn, 'stars': tprd.pStar,
+                 'provider': tprd.pPvn \
+                 } for tprd in tprds],
+            'trendingSkills': skills
+        }
+
+        return APIResponse(message='Trending Course Loaded', data=data, status=status.HTTP_200_OK)
 
 
+class NavigationTagsAndOffersAPI(APIView):
+    permission_classes = ()
+    authentication_classes = ()
 
+    def get(self, request, format=None):
+        """
+        This will fetch the active offer and two special tags
+        from the console
+        """
+
+        active_offer = []
+        data = {}
+        special_links = cache.get('active_homepage_navlink_new', [])
+        whatsapp_no = cache.get('whatsapp_visibility_class', {})
+        if special_links:
+            active_navlinks = special_links
+        else:
+            data_obj_list = list(NavigationSpecialTag().get_active_navlink())
+            active_navlinks = NavigationSpecialTag().convert_data_in_list(data_obj_list[:2])
+            cache.set('active_homepage_navlink_new', active_navlinks, 24 * 60 * 60)
+
+        data.update({
+            'navTags': active_navlinks,
+            'navOffer': active_offer,
+            'callUs': settings.GGN_CONTACT_FULL,
+            'whatsappDict': {
+                "prd_course_visibility": whatsapp_no.get('product-course-visibility', False),
+                "prd_course_number": whatsapp_no.get('product-course-number'),
+                "prd_service_visibility": whatsapp_no.get('product-service-visibility', False),
+                "prd_service_number": whatsapp_no.get('product-service-number'),
+                "course_skill_visibility": whatsapp_no.get('course-skill-visibility', False),
+                "course_skill_number": whatsapp_no.get('course-skill-number'),
+                "service_skill_visibility": whatsapp_no.get('service-skill-visibility', False),
+                "service_skill_number": whatsapp_no.get('service-skill-number')
+            }
+        })
+        return APIResponse(message='Navigations Tags and Offers details fetched', data=data, status=status.HTTP_200_OK)

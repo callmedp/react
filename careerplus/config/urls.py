@@ -35,6 +35,7 @@ from linkedin.views import AutoLoginView
 from shop.views import ProductDetailView, CourseCatalogueView, GoogleResumeAdView, SmsUrlRedirect
 from users.views import LinkedinCallbackView, UserLoginTokenView,CourseServiceWhatsappBtn
 from search.views import FuncAreaPageView
+from skillpage.views import SkillPageReactView
 from blog import views as blog_view
 from skillpage.views import (
     ServiceDetailPage, UniversityPageView,
@@ -147,7 +148,7 @@ urlpatterns += [
         FuncAreaPageView.as_view(), name='func_area_results'),
     re_path(r'^services/(?P<cat_slug>[\w-]+)/(?P<country>[\w-]+)/$',
         GoogleResumeAdView.as_view(), name='google-resume-ad'),
-
+    # re_path(r'^courses/(?P<fa_slug>[-\w]+)/(?P<skill_slug>[-\w]+)/(?P<pk>\d+)/$', SkillPageReactView.as_view()),
     re_path(r'^courses/', include('skillpage.urls',
                               namespace='skillpage')),
     re_path(r'^university/faculty/(?P<faculty_slug>[-\w]+)/(?P<pk>\d+)/$',

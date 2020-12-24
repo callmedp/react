@@ -1,0 +1,320 @@
+@import '../../../../../styles-mobile/abstracts';
+
+.m-courses {
+    .m-view-course {
+        font-size: 1.2rem;
+        font-weight: 600;
+    }
+    .m-card {
+        @extend %box-shadow1;
+        border: none;
+        background: $white;
+        margin-bottom: 2rem;
+
+        &__box {
+            padding: 0 1.5rem 1rem 6rem;
+            // min-height: 13rem;
+        }
+
+        &__heading {
+            // background: $course-light-bg;
+            padding: 1.5rem 1rem 0 1rem;
+            display: flex;
+            position: relative;
+            border-top-left-radius: .5rem;
+            border-top-right-radius: .5rem;
+
+            .m-flag-red {
+                font-size: .9rem;
+                font-weight: 600;
+                text-transform: uppercase;
+                background: $course-badge-red;
+                position: absolute;
+                left: 0;
+                top: 0;
+                padding: 0 .5rem;
+                border-top-left-radius: .5rem;
+                box-shadow: 0 1px 1px 0 rgba(139,139,139,0.50);
+
+                &::after {
+                    content: '';
+                    width: 0;
+                    height: 0;
+                    border-top: .7rem solid transparent;
+                    border-left: .7rem solid $course-badge-red;
+                    border-bottom: .6rem solid transparent;
+                    position: absolute;
+                    right: -.7rem;
+                    top: 0;
+                }
+            }
+
+            .m-flag-blue {
+                font-size: .9rem;
+                font-weight: 600;
+                text-transform: uppercase;
+                background: $course-badge-blue;
+                position: absolute;
+                left: 0;
+                top: 0;
+                padding: 0 .5rem;
+                border-top-left-radius: .5rem;
+                box-shadow: 0 1px 1px 0 rgba(139,139,139,0.50);
+
+                &::after {
+                    content: '';
+                    width: 0;
+                    height: 0;
+                    border-top: .7rem solid transparent;
+                    border-left: .7rem solid $course-badge-blue;
+                    border-bottom: .6rem solid transparent;
+                    position: absolute;
+                    right: -.7rem;
+                    top: 0;
+                }
+            }
+
+            figure {
+                width: 5.1rem;
+                height: 5.1rem;
+                margin: 0 .5rem 0 0;
+
+                img {
+                    max-width: 100%;
+                }
+            }
+
+            h3 {
+                margin-top: .4rem;
+                overflow: hidden;
+                font-size: 1.4rem;
+                font-weight: 600;
+                color: $blue;
+                flex: 100%;
+                line-height: 2rem;
+
+                a, :hover, :focus {
+                    color: $blue;
+                }
+            }
+        }
+
+        &__rating {
+            display: flex;
+            align-items: center;
+            font-size: 1.1rem;
+            margin-top: 0;
+
+            .m-rating {
+                display: flex;
+                font-size: 1.1rem;
+                align-items: center;
+                em {
+                    margin: 0 .3rem 0 0;
+                }
+            }
+        }
+
+        &__duration-mode {
+            font-size: 1.1rem;
+            margin-top: 1rem;
+
+            strong {
+                font-weight: 600;
+            }
+        }
+
+        &__price {
+            display: flex;
+            align-items: center;
+            margin-top: 3rem;
+
+            strong {
+                font-size: 1.6rem;
+                font-weight: 600;
+                color: $gray-100;
+
+                &::before {
+                    content: '\20B9';
+                    margin-right: .5rem;
+                }
+            }
+
+            a {
+                margin-left: auto;
+            }
+        }
+
+        .m-view-more {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: $blue;
+            &::after {
+                content: '';
+                background: $sprite -440px 0;
+                width: .9rem;
+                height: .5rem;
+                display: inline-block;
+                margin-left: .5rem;
+            }
+        }
+
+        .m-view-less {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: $blue;
+            &::after {
+                content: '';
+                background: $sprite -440px -9px;
+                width: .9rem;
+                height: .6rem;
+                display: inline-block;
+                margin-left: .5rem;
+            }
+        }
+    }
+
+    >.slick-slider {
+        .slick-list {
+            .slick-slide {
+                width: 30rem !important;
+                padding: 1.5rem 1rem !important;
+            }
+        }
+    }
+
+    .m-card__popover {
+        position: relative;
+        // border-radius: $border-radius;
+        padding: 1rem;
+        font-size: 1.2rem;
+
+        &::before {
+            content: '';
+            border-top: 1px solid $gray-900;
+            display: block;
+            padding-top: 2rem;
+        }
+        
+            strong {
+                display: block;
+                font-size: 1.2rem;
+                font-weight: 600;
+                margin-bottom: .5rem;
+            }
+    
+            .m-type {
+                font-size: 1.1rem;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+    
+                strong {
+                    display: inline;
+                    margin-bottom: 0;
+                    font-size: 1.1rem;
+                }
+            }
+
+            .about-ht {
+                height: 5.3rem;
+                overflow: hidden;
+            }
+
+            .skill-ht {
+                height: 5.8rem;
+                overflow: hidden;
+            }
+    
+            ul {
+                list-style-type: none;
+                margin: 0 0 2rem 0;
+                padding: 0;
+        
+                li {
+                    
+                    &:not(:last-child) {
+                        margin-bottom: .3rem;
+                    }
+                    
+                    &::before {
+                        content: '';
+                        background: $sprite -32px 0;
+                        width: 1rem;
+                        height: .8rem;
+                        display: inline-block;
+                        margin-right: 1rem;
+                    }
+                }
+            }
+    
+            .btn-yellow {
+                font-size: 1.2rem;
+            }
+    }
+}
+
+.m-courses-slider {
+    .m-card {
+        border-bottom: 3px solid $card-btm-bdr;
+
+        &__heading {
+            background: $course-light-bg;
+        }
+
+        &__box {
+            padding: .5rem 1.5rem 0 6rem;
+        }
+        &__rating {
+            margin-top: .5rem;
+        }
+        &__duration-mode {
+            margin-top: .5rem;
+        }
+
+        &__price {
+            margin-top: 1.5rem;
+        }
+    }
+}
+
+.m-popular-courses {
+    .m-col {
+        &:not(:last-child){
+            margin-right: 2rem;
+        }
+    }
+    .m-card {
+        border-bottom: 3px solid $card-btm-bdr;
+        margin-top: 2rem;
+
+        &__heading {
+            flex-direction: column;
+            padding: 0 1rem 1rem 1rem;
+
+            h3 {
+                font-size: 1.3rem;
+                font-weight: 600;
+            }
+
+            figure {
+                width: 4rem;
+                height: 4rem;
+                @include border-radius(100%);
+                @extend %box-shadow1;
+                margin: -1.5rem 0 0 0;
+            }
+        }
+
+        &__box {
+            padding: 0 1rem 1rem 1rem;
+            font-size: 1rem;
+
+            .m-card__rating {
+                display: flex;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+        }
+    }
+}
