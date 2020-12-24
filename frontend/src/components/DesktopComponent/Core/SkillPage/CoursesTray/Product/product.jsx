@@ -12,7 +12,8 @@ const Product = (props) => {
         price, imgUrl, url,
         tags, about, skillList,
         highlights, type, level,
-        brochure, duration
+        brochure, duration,
+        u_courses_benefits
     },
         index,
         listIdx } = props
@@ -31,7 +32,7 @@ const Product = (props) => {
     return (
 
         <CustomOverlay
-            component={<PopoverDetail popoverData={{ about, skillList, highlights, jobsAvailable, url, type, level }} />}
+            component={<PopoverDetail popoverData={{ about, skillList, highlights, jobsAvailable, url, type, level, u_courses_benefits }} />}
             placement={ listIdx === 2  ? 'left' : 'right'}
             onMouseEnter={() => { }}
             delay={200}

@@ -142,7 +142,7 @@ class CourseComponentView(APIView):
                     'jobsAvailable':course.pNJ,
                     'tags':PRODUCT_TAG_CHOICES[course.pTg][0],
                     'brochure':json.loads(course.pUncdl[0]).get('brochure') if course.pUncdl else None,
-                    # 'highlights':json.loads(course.pUncdl[0]).get('highlighted_benefits') if course.pUncdl else None,
+                    'u_courses_benefits':json.loads(course.pUncdl[0]).get('highlighted_benefits').split(';') if course.pUncdl else None,
                     'stars': course.pStar,
                     'highlights':course.pBS,
                     'id':course.id,

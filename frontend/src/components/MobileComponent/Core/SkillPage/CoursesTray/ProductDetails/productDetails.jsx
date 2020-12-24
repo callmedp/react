@@ -7,7 +7,7 @@ const ProductDetails = (props) =>{
         about, highlights, 
         jobsAvailable,  skillList,
         url, type,level,
-        brochure }, icon, setShowDetails
+        brochure, u_courses_benefits }, icon, setShowDetails
     } = props
 
     const OpenProductPage = () =>{
@@ -40,15 +40,26 @@ const ProductDetails = (props) =>{
                 } 
             </p>: null }
 
-            {highlights?<p className="skill-ht">
+            {highlights && <p className="skill-ht">
                 <strong>Highlights</strong>
                 {/* <ul>
                     <li>Anytime and anywhere access</li>
                     <li>Become a part of Job centre</li>
                 </ul> */}
-                {/* <p dangerouslySetInnerHtml={{__html : highlights}}></p> */}
                 {highlights?.replace(/<[^>]*>/g, '')?.slice(80)?.length ? (highlights?.replace(/<[^>]*>/g, '')?.slice(0,80)+'...') : highlights?.replace(/<[^>]*>/g, '')?.slice(0,80)}
-            </p>: null }
+            </p>}
+            {u_courses_benefits && <p className="skill-ht">
+                <strong>Highlights</strong>
+                <ul>
+                    {
+                        u_courses_benefits?.slice(0, 2)?.map((value, index) =>{
+                            return (
+                                <li key={index}>{value}</li>
+                            )
+                        })
+                    }
+                </ul>
+            </p>}
 
             <p className="d-flex align-items-center mt-15">
                 <button type="submit" onClick={OpenProductPage} className="btn-yellow" role="button">Enroll now</button>

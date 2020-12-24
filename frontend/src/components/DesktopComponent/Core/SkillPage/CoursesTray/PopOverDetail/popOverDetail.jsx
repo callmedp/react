@@ -7,7 +7,7 @@ const PopoverDetail = (props) => {
                             about, highlights, 
                             jobsAvailable,  skillList,
                             url, type,
-                            level }
+                            level, u_courses_benefits }
                         } = props
     
     const OpenProductPage = () =>{
@@ -37,10 +37,23 @@ const PopoverDetail = (props) => {
                     })
                 }
         </p>
-            <p>
+            {highlights && <p>
                 <strong>Highlights</strong>
-                <p dangerouslySetInnerHtml={{__html : highlights}}></p>
-            </p>
+                {/* <p dangerouslySetInnerHtml={{__html : highlights}}></p> */}
+                {highlights?.replace(/<[^>]*>/g, '')?.slice(80)?.length ? (highlights?.replace(/<[^>]*>/g, '')?.slice(0,80)+'...') : highlights?.replace(/<[^>]*>/g, '')?.slice(0,80)}
+            </p>}
+            {u_courses_benefits && <p className="skill-ht">
+                <strong>Highlights</strong>
+                <ul>
+                    {
+                        u_courses_benefits?.slice(0, 2)?.map((value, index) =>{
+                            return (
+                                <li key={index}>{value}</li>
+                            )
+                        })
+                    }
+                </ul>
+            </p>}
             <button onClick={OpenProductPage} type="submit" className="btn btn-inline btn-secondary mx-auto" role="button">Enroll now</button>
         </>
     )
