@@ -800,6 +800,11 @@ class TrendingCoursesAndSkillsAPI(PopularProductMixin, APIView):
     authentication_classes = ()
 
     def get(self, request):
+        """
+        Aim is to find out the trending courses accross the plateform
+        Mixing is used to fetch trending course to algorithm,
+        please check "PopularProductMixin" to understand the algorithm.
+        """
         popular_course_quantity = int(request.GET.get('num_courses', 2))
         product_obj, product_converstion_ratio, product_revenue_per_mile = PopularProductMixin().\
                                                                             popular_courses_algorithm(
@@ -809,9 +814,11 @@ class TrendingCoursesAndSkillsAPI(PopularProductMixin, APIView):
         tprds = SearchQuerySet().filter(id__in=product_pks, pTP__in=[0, 1, 3]).exclude(
             id__in=settings.EXCLUDE_SEARCH_PRODUCTS
         )
+
         p_skills = product_obj.filter(id__in=product_pks, categories__is_skill=True).distinct().exclude(
             categories__related_to__slug__isnull=True)
         skills = []
+
         for i in p_skills:
             skills.append({'id': i.id, 'skillName': i.get_category_main().name,
                            'skillUrl': i.get_category_main().get_absolute_url()})
@@ -877,7 +884,10 @@ class PopularServicesAPI(PopularProductMixin, APIView):
         For detail please check TrendingCourseAPI
         """
         quantity_to_display = int(request.GET.get('num_services', 4))
+
+        # class fall into service category
         class_category = settings.SERVICE_SLUG + settings.WRITING_SLUG
+
         s_obj, s_ratio, s_revenue = PopularProductMixin(). \
             popular_courses_algorithm(class_category=class_category,
                                       quantity=quantity_to_display)
