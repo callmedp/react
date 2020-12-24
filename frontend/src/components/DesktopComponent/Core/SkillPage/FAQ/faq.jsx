@@ -92,6 +92,5 @@ const mapDispatchToProps = (dispatch) => {
     }
 }
 
-connect(null, mapDispatchToProps)(renderAccordion);
 
 export default connect(null, mapDispatchToProps)(FAQ);

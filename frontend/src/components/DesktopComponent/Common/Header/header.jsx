@@ -19,7 +19,7 @@ const Header = (props) => {
     const [isLoggedIn, setIsLoggedIn] = useState(false)
 
     const handleRedirect = (event, type) => {
-        event.preventDefault
+        event.preventDefault();
         if( type === 'login'){
         MyGA.SendEvent('header_icons','ln_header_icons', 'ln_login', 'login','', false, true);
         }

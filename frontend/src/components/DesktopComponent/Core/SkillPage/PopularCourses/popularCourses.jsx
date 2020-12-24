@@ -24,7 +24,7 @@ const PopularCourses = (props) => {
 
     const trackingParameters = getTrackingParameters(tracking_data);
 
-    const handleTracking = () => {
+    const handleTracking = (course) => {
         gaTrack('SkillPopularCourses','ln_popular_course_select', 'ln_'+ course.name, heading,'', false, true);
         userTrack({"query" : tracking_data, "action" :'exit_skill_page' });
     }
@@ -41,7 +41,7 @@ const PopularCourses = (props) => {
                                 <img src={course.img} alt={course.img_alt} />
                             </figure>
                             <div className="links">
-                                <a href={`${siteDomain}${course.url}${trackingParameters}`} onClick={handleTracking}>{course.name}</a>
+                                <a href={`${siteDomain}${course.url}${trackingParameters}`} onClick={() => handleTracking(course)}>{course.name}</a>
                                 <span className="mr-10">By {course.provider}</span>
                                     <span className="rating">
                                         { course.stars?.map((star) => starRatings(star)) }

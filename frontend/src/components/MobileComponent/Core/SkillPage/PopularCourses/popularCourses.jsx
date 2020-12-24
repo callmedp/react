@@ -7,6 +7,7 @@ import { fetchTrendingCnA } from 'store/Footer/actions/index';
 import { MyGA } from 'utils/ga.tracking.js';
 import { getTrackingInfo, getTrackingParameters } from 'utils/storage.js';
 import { trackUser } from 'store/Tracking/actions/index.js';
+import { eventChannel } from 'redux-saga';
 
 const PopularCourses = (props) => {
     const { setTabType } = props
@@ -28,8 +29,8 @@ const PopularCourses = (props) => {
     const trackingParameters = getTrackingParameters(tracking_data);
     const { trackUser } = props;
 
-    const handleTracking = () => {
-        e.preventDefault();
+    const handleTracking = (event) => {
+        event.preventDefault();
         setTabType('courses');
         MyGA.SendEvent('SkillPopularCourses','ln_popular_course_select', 'ln_view_courses', heading,'', false, true);
         trackUser({"query" : tracking_data, "action" :'exit_skill_page'});
