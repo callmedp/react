@@ -93,6 +93,9 @@ class SkillPage(APIView):
             explore_courses = []
             exp_cour_ids = json.loads(category.ex_cour)
             explore_courses = Category.objects.filter(id__in=exp_cour_ids).values('name','url')
+            meta = category.as_meta()
+            setattr(meta,'_keywords',None)
+            setattr(meta,'_url',category.get_canonical_url())
             data.update({
                 'name':category.name,
                 'slug':category.slug,
@@ -104,6 +107,7 @@ class SkillPage(APIView):
                 'absolute_url': category.get_absolute_url(),
                 'heading': category.heading,
                 'id': category.pk,
+                'meta': meta.__dict__
             })
 
         # cache.set('skill_page_{}'.format(skill_id), data, timeout=60*60*24)

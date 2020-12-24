@@ -66,7 +66,7 @@ const Product = (props) => {
                         </div>
                         <div className="card__price mt-30">
                             <strong>{price}/-</strong>
-                            { brochure ? <a href={brochure} className="icon-pdf"></a> : '' }
+                            { brochure ? <a href={brochure} className="icon-pdf" aria-label="pdf icon"></a> : '' }
                         </div>
                     </div>
                 </div>
