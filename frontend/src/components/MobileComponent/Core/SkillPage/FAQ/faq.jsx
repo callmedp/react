@@ -29,7 +29,7 @@ const FAQ = (props) => {
                 <h2 className="m-heading2">Frequently Asked Questions</h2>
                 <div className="m-tabs">
                     { (sliceFlag ? faqList.slice(0, 4) : faqList).map(renderAccordion) }
-                    { sliceFlag ? <Link onClick={loadMore} to={"#"} className="m-load-more mt-20">Load More FAQS</Link> : '' }
+                    { sliceFlag && (faqList?.length  > 4) ? <Link onClick={loadMore} to={"#"} className="m-load-more mt-20">Load More FAQS</Link> : '' }
                 </div>
             </div>): null
     )
