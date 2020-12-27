@@ -12,10 +12,13 @@ import WhyChooseUs from './WhyChooseUs/whyChooseUs';
 import OtherSkills from './OtherSkills/otherSkills';
 import FAQ from './FAQ/faq';
 import DomainJobs from './DomainJobs/domainJobs';
+import queryString from 'query-string';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchSkillPageBanner } from 'store/SkillPage/Banner/actions';
 import { fetchCoursesAndAssessments } from 'store/SkillPage/CoursesTray/actions/index';
 import { fetchDomainJobs } from 'store/SkillPage/DomainJobs/actions';
+import { trackUser } from 'store/Tracking/actions/index.js';
+import { storageTrackingInfo, removeTrackingInfo, getTrackingInfo } from 'utils/storage.js';
 import Courses from './CoursesTray/Courses';
 import Assessment from './CoursesTray/Assessment';
 import '../SkillPage/skillPage.scss';
@@ -41,8 +44,35 @@ const SkillPage = (props) => {
     const { name } = useSelector( store => store.skillBanner )
     const meta_tags = useSelector((store) => store.skillBanner.meta ? store.skillBanner.meta : '');
 
-    useEffect(() => {
+    const handleEffects = async () => {
+        const {
+            location: { search },
+            history,
+          } = props;
+        const query = queryString.parse(search);
+        if(query) {
+            query['prod_id'] = pageId;
+            query['product_tracking_mapping_id'] = 10;
+            storageTrackingInfo(query);
+            dispatch(trackUser({
+                "query" : query, 
+                "action" : "skill_page"}));
+        }
+        else{
+            let tracking_data = getTrackingInfo();
+            if (tracking_data['prod_id'] != pageId && tracking_data['product_tracking_mapping_id'] == '10'){
+                removeTrackingInfo()}
+        }
+        
+        };
 
+    useEffect(() => {
+        
+      handleEffects();
+
+        //You may notice that apis corresponding to these actions are not getting called on initial render.
+        //This is because initial render is done on node server, which is calling these apis, map the data and send it to the browser.
+        //So there is no need to fetch them again on the browser.
         if (!(window && window.config && window.config.isServerRendered)) {
             new Promise((resolve, reject) => dispatch(fetchSkillPageBanner({id : pageId, 'medium': 1, resolve, reject})))
             new Promise((resolve, reject) => dispatch(fetchCoursesAndAssessments({ id: pageId, 'medium': 1, resolve, reject})));
@@ -50,10 +80,10 @@ const SkillPage = (props) => {
             new Promise((resolve, reject) => dispatch(fetchRecommendedProducts({resolve, reject})))
         }
         else {
+            //isServerRendered is needed to be deleted because when routing is done through react and not on the node,
+            //above actions need to be dispatched.
             delete window.config?.isServerRendered
         }
-
-
 
     },[pageId])
 

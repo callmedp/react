@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import './courses.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import Product from './Product/product';
+import { MyGA } from 'utils/ga.tracking.js';
 
 const Assessment = (props) => {
     const settings = {
@@ -21,7 +22,12 @@ const Assessment = (props) => {
     const { assessmentList } = useSelector(store => store.coursesTray)
     const { r_assesments } = useSelector(store => store.recommendation)
     const [sliceFlag, setSliceFlag] = useState(true)
-    const loadMore = () => setSliceFlag(state => !state)
+
+    const loadMore = () => {
+        MyGA.SendEvent('SkillAssesmentLoadMore', 'ln_course_click', 'ln_know_more', 'ln_assessment','', false, true);
+        setSliceFlag(state => !state);
+    }
+
     useEffect(()=>{
         window.scrollTo(0, 0)
     },[])

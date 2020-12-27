@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import './coursesTray.scss';
 import { Tabs, Tab } from 'react-bootstrap';
-import {  useSelector } from 'react-redux';
+import {  useSelector, connect } from 'react-redux';
 
 import Courses from './Product/product';
 import Assessments from './Product/product';
+import { MyGA } from 'utils/ga.tracking.js';
 
 const CoursesTray = (props) => {
 
@@ -12,12 +13,15 @@ const CoursesTray = (props) => {
     const { courseList, assessmentList } = useSelector(store => store.coursesTray)
     const [ courseKey, setCourseKey ] = useState(2)
     const [ assessmentKey, setAssessmentKey ] = useState(2)
+    const { gaTrack } = props;
 
     const loadMoreCourses = () => {
+        gaTrack('SkillCourseLoadMore', 'ln_course_click', 'ln_know_more', 'ln_course','', false, true)
         setCourseKey(state => state+1)
     }
 
     const loadMoreAssessments = () => {
+        gaTrack('SkillAssesmentLoadMore', 'ln_course_click', 'ln_know_more', 'ln_assessment','', false, true)
         setAssessmentKey(state => state+1)
     }
 
@@ -69,4 +73,12 @@ const CoursesTray = (props) => {
     );
 }
 
-export default CoursesTray;
+const mapDispatchToProps = (dispatch) => {
+    return {
+        "gaTrack": (data) => {
+             MyGA.SendEvent(data)
+        }
+    }
+}
+
+export default connect(null, mapDispatchToProps)(CoursesTray);

@@ -11,9 +11,8 @@ function* skillPageBanner(action) {
  
       
         const response = yield call(Api.skillPageBanner, payload);
-       
      
-        if (response["error"]) {
+        if (response?.["error"]) {
             return payload?.reject(response["error"])
         }
         const item = response.data;

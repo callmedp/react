@@ -2,14 +2,20 @@ import React, { useEffect } from 'react';
 import './banner.scss';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import Carousel from 'react-bootstrap/Carousel';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, connect } from 'react-redux';
 
 import { siteDomain, imageUrl } from 'utils/domains'; 
+import { getTrackingInfo } from 'utils/storage.js';
+import { trackUser } from 'store/Tracking/actions/index.js';
 
 
 const BannerSkill = (props) => {
-    const { name, breadcrumbs, featuresList } = useSelector( store => store.skillBanner )
-
+    
+    const { name, breadcrumbs, featuresList } = useSelector( store => store.skillBanner );
+    const { userTrack } = props;
+    const tracking_data = getTrackingInfo();
+    const dispatch = useDispatch();
+    
     return (
        <header className="container-fluid pos-rel">
             <figure className="banner-img">
@@ -46,7 +52,7 @@ const BannerSkill = (props) => {
                         {
                             breadcrumbs?.map((bread, index) => {
                                 if(!!bread.url)
-                            return (<Breadcrumb.Item key={index} href={`${siteDomain}${bread.url}`} >{bread.name}</Breadcrumb.Item>)
+                            return (<Breadcrumb.Item key={index} href={`${siteDomain}${bread.url}`} onClick={ () => userTrack({"query" : tracking_data,"action": "exit_skill_page"})} >{bread.name}</Breadcrumb.Item>)
                                 else
                             return (<Breadcrumb.Item key={index} >{bread.name}</Breadcrumb.Item> )
                             })
@@ -75,4 +81,12 @@ const BannerSkill = (props) => {
     )
 }
 
-export default BannerSkill;
+const mapDispatchToProps = (dispatch) => {
+    return {
+        "userTrack": (data) => {
+            dispatch(trackUser(data))
+        }
+    }
+}
+
+export default connect(null, mapDispatchToProps)(BannerSkill);

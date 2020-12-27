@@ -1,15 +1,17 @@
 import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector, connect } from 'react-redux';
 import './needHelp.scss';
 import { useForm } from 'react-hook-form';
 import { InputField, SelectBox } from 'formHandler/desktopFormHandler/formFields';
 import NeedHelpForm from 'formHandler/desktopFormHandler/formData/needHelp';
 import { createLead } from 'store/SkillPage/NeedHelp/actions';
+import { MyGA } from 'utils/ga.tracking.js';
 
 const NeedHelp = (props) => {
 
     const { register, handleSubmit, errors } = useForm()
     const { id, heading, absolute_url } = useSelector( store => store.skillBanner )
+    const { gaTrack } = props;
     const dispatch = useDispatch()
 
     const addHiddenValues = (values) =>{
@@ -47,10 +49,18 @@ const NeedHelp = (props) => {
                     errors={!!errors ? errors[NeedHelpForm.name.name] : ''} />
 
                 <button type="submit" className="btn btn-inline btn-primary mx-auto submit-btn" role="button" data-toggle="modal"
-                    data-target="#thankyouModal">Submit</button>
+                    data-target="#thankyouModal" onClick={() => gaTrack('SkillNeedHelpForm','ln_need_help', 'ln_need_help_form_submitted', heading,'', false, true)}>Submit</button>
             </form>
         </div>
     )
 }
 
-export default NeedHelp;
+const mapDispatchToProps = (dispatch) => {
+    return {
+        "gaTrack": (data) => {
+             MyGA.SendEvent(data)
+        }
+    }
+}
+
+export default connect(null, mapDispatchToProps)(NeedHelp);

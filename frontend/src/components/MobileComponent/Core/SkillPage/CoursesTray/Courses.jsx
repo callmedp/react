@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import './courses.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import Product from './Product/product';
+import { MyGA } from 'utils/ga.tracking.js';
 
 const Courses = (props) => {
     const settings = {
@@ -24,7 +25,10 @@ const Courses = (props) => {
     const { courseList } = useSelector(store => store.coursesTray)
     const { r_courses } = useSelector(store => store.recommendation)
     const [sliceFlag, setSliceFlag] = useState(true)
-    const loadMore = () => setSliceFlag(state => !state)
+    const loadMore = () => {
+        MyGA.SendEvent('SkillCourseLoadMore', 'ln_course_click', 'ln_know_more', 'ln_course','', false, true);
+        setSliceFlag(state => !state);
+    }
 
     return (
     <section className="m-container mt-0 mb-0 pb-0 pr-0">

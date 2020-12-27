@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch, connect } from 'react-redux';
 import { siteDomain } from 'utils/domains';
 import CustomOverlay from 'services/CustomOverlay';
 import PopoverDetail from '../PopOverDetail/popOverDetail'
-
+import { MyGA } from 'utils/ga.tracking.js';
+import { getTrackingInfo, getTrackingParameters } from 'utils/storage.js';
+import { trackUser } from 'store/Tracking/actions/index.js';
 
 const Product = (props) => {
 
@@ -13,12 +16,17 @@ const Product = (props) => {
         tags, about, skillList,
         highlights, type, level,
         brochure, duration,
-        u_courses_benefits
+        u_courses_benefits,
     },
         index,
         listIdx } = props
 
     const [halfStar, setHalfStar] = useState(false)
+
+    const tracking_data = getTrackingInfo();
+
+    const trackingParameters = getTrackingParameters(tracking_data);
+    const { userTrack, gaTrack } = props;
 
     useEffect(() => {
         if (!Number.isInteger(rating)) {
@@ -29,10 +37,15 @@ const Product = (props) => {
         }
     }, [rating])
 
+    const handleTracking = () => {
+        gaTrack('SkillAllCourses', 'ln_course_click', 'ln_all_' + name, 'ln_' + name,'', false, true);
+        userTrack({'query' :tracking_data, 'action' :'exit_skill_page'});
+    }
+
     return (
 
         <CustomOverlay
-            component={<PopoverDetail popoverData={{ about, skillList, highlights, jobsAvailable, url, type, level, u_courses_benefits }} />}
+            component={<PopoverDetail popoverData={{ about, skillList, highlights, jobsAvailable, url, type, level, u_courses_benefits  }} />}
             placement={ listIdx === 2  ? 'left' : 'right'}
             onMouseEnter={() => { }}
             delay={200}
@@ -46,7 +59,7 @@ const Product = (props) => {
                             <img src={imgUrl} alt={name} />
                         </figure>
                         <h3 className="heading3">
-                            <a href={`${siteDomain}${url}`} >{name}</a>
+                            <a href={`${siteDomain}${url}${trackingParameters}`} onClick={handleTracking} >{name}</a>
                         </h3>
                     </div>
                     <div className="card__box">
@@ -74,4 +87,16 @@ const Product = (props) => {
         </CustomOverlay>
     )
 }
-export default Product;
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        "userTrack": (data) => {
+            return dispatch(trackUser(data))
+        },
+        "gaTrack": (data) => {
+            MyGA.SendEvent(data)
+        }
+    }
+}
+
+export default connect(null, mapDispatchToProps)(Product);

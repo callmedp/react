@@ -1,5 +1,3 @@
-//For staging
-$path : '/media/static/react/media/images/desktop/';
+$image-path : '/media/images/' !default;
+$path : $image-path;
 
-//For local
-// $path : '/media/images/desktop/';

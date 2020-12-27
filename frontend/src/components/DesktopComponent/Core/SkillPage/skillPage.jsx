@@ -15,6 +15,9 @@ import LearnersStories from './LearnersStories/learnersStories';
 import StickyNav from './StickyNav/stickyNav';
 import Header from '../../Common/Header/header';
 import Footer from '../../Common/Footer/footer';
+import queryString from 'query-string';
+import { storageTrackingInfo, removeTrackingInfo, getTrackingInfo } from 'utils/storage.js';
+import { trackUser } from 'store/Tracking/actions/index.js';
 import Loader from '../../Common/Loader/loader';
 import './skillPage.scss'
 import { fetchSkillPageBanner } from 'store/SkillPage/Banner/actions';
@@ -27,13 +30,38 @@ import Aos from "aos";
 import { Helmet } from 'react-helmet';
 
 const SkillPage = (props) => {
-    
     const pageId = props?.match?.params?.id;
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
+
+    const { skillLoader } = useSelector(store => store.loader); 
+    const { id } = useSelector( store => store.skillBanner );   
     const meta_tags = useSelector((store) => store.skillBanner.meta ? store.skillBanner.meta : '');
-    const { skillLoader } = useSelector(store => store.loader);
+
+
+    const handleEffects = async () => {
+        const {
+            location: { search },
+            history,
+          } = props;
+        const query = queryString.parse(search);
+        if(query['t_id']) {
+            query['prod_id'] = pageId;
+            query['product_tracking_mapping_id'] = 10;
+            storageTrackingInfo(query);
+            dispatch(trackUser({
+                "query" : query, 
+                "action" : "skill_page"}));
+        }else{
+            let tracking_data = getTrackingInfo();
+            if (tracking_data['prod_id'] != pageId && tracking_data['product_tracking_mapping_id'] == '10'){
+                removeTrackingInfo()}
+        }
+        
+        };
 
     useEffect(() => {
+        
+        handleEffects();
     
         if (!(window && window.config && window.config.isServerRendered)) {
             new Promise((resolve, reject) => dispatch(fetchSkillPageBanner({ id: pageId, 'medium': 0, resolve, reject })));

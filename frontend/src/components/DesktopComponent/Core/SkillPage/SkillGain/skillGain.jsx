@@ -2,14 +2,25 @@ import React, { useEffect } from 'react';
 import Badge from 'react-bootstrap/Badge';
 import Button from 'react-bootstrap/Button';
 import './skillGain.scss';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector, connect } from 'react-redux';
 import { siteDomain, imageUrl } from 'utils/domains';
+import { MyGA } from 'utils/ga.tracking.js';
+import { getTrackingInfo } from 'utils/storage.js';
+import { trackUser } from 'store/Tracking/actions/index.js';
 
 const SkillGain = (props) => {
 
-    const { skillGainList, name, slug } = useSelector( store => store.skillBanner )
+    const { skillGainList, name, slug, heading } = useSelector( store => store.skillBanner )
   
-    const testRedirect = () => window.location.replace(`${siteDomain}/practice-tests/${slug}/sub`)
+    const testRedirect = () => {
+        gaTrack('TestYourSkill','ln_skill_test', "ln" + name, heading,'', false, true);
+        userTrack({"query":tracking_data, "action":'exit_skill_page'});
+        window.location.replace(`${siteDomain}/practice-tests/${slug}/sub`);
+    }
+
+    const tracking_data = getTrackingInfo();
+    const dispatch = useDispatch();
+    const { userTrack, gaTrack } = props;
 
     return (
         <section className="container-fluid lightblue-bg mt-40" id="skGain" data-aos="fade-up">
@@ -66,4 +77,14 @@ const SkillGain = (props) => {
     )
 }
 
-export default SkillGain;
+const mapDispatchToProps = (dispatch) => {
+    return {
+        "userTrack": (data) => {
+            return dispatch(trackUser(data))
+        },
+        "gaTrack": (data) => { MyGA.SendEvent(data)
+        }
+    }
+}
+
+export default connect(null, mapDispatchToProps)(SkillGain);
