@@ -32,7 +32,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-app-rewired build",
-    "build:ssr": "webpack --config serverRender/webpack.config.server.js"
+    "build:ssr": "webpack --config serverRender/webpack.config.server.js",
+    "build:all": "npm run build && npm run build:ssr"
   },
   "eslintConfig": {
     "extends": [

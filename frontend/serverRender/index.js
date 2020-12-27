@@ -8,7 +8,7 @@ require('dotenv').config({
 const fs = require('fs');
 const express = require('express');
 const matchRoutes = require('react-router-config').matchRoutes;
-const fetchApiData = require('apiHandler/skillPageApi').default;
+const fetchApiData = require('../src/apiHandler/skillPageApi').default;
 
 const PORT = process.env.PORT || 8079;
 const app = express();
@@ -90,7 +90,7 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.use('/media/static/', express.static('../careerplus/media/static/'));
+app.use(express.static('../careerplus/static_core/react/'));
 
 const isMobile = (userAgents) => {
     return /Android|Phone|Mobile|Opera\sM(in|ob)i|iP[ao]d|BlackBerry|SymbianOS|Safari\.SearchHelper|SAMSUNG-(GT|C)|WAP|CFNetwork|Puffin|PlayBook|Nokia|LAVA|SonyEricsson|Karbonn|UCBrowser|ucweb|Micromax|Silk|LG(MW|-MMS)|PalmOS/i.test(userAgents)

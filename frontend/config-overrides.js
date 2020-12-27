@@ -35,7 +35,7 @@ const resolveModule = (resolveFn, filePath) => {
 const appDesktopIndexJs = resolveModule(resolveApp, 'src/index.desktop');
 const appMobileIndexJs = resolveModule(resolveApp, 'src/index.mobile');
 const appBuild = resolveApp('../careerplus/static_core/react');
-const publicUrl = '/media/static/react/';
+const publicUrl = '/';
 const indexHtml = '../../../frontend/ssrBuild/index.html';
 const indexMobileHtml = '../../../frontend/ssrBuild/index.mobile.html';
 const appHtml = resolveApp('public/index.html');
@@ -51,6 +51,8 @@ module.exports = {
     //   ...config.output,
     //   filename : 
     // }
+    config.module.rules[2].oneOf[5].use[4].options.prependData = '$image-path: ' + JSON.stringify(process.env.REACT_APP_IMAGE_URL) + ';';
+    
 
     config.plugins[6].opts.generate = (seed, files, entrypoints) => {
       const manifestFiles = files.reduce((manifest, file) => {
