@@ -18,7 +18,8 @@ if (typeof global.window == 'undefined') {
         config: {
             isServerRendered : true,
             siteDomain : process.env.SITE_DOMAIN,
-            imageUrl : process.env.IMAGE_URL
+            imageUrl : process.env.IMAGE_URL,
+            resumeShineSiteDomain : process.env.RESUME_SHINE_SITE_DOMAIN,
         }
     };
 }
@@ -90,7 +91,7 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.use(express.static('ssrBuild/'));
+app.use(express.static('../careerplus/media/static/react/'));
 
 const isMobile = (userAgents) => {
     return /Android|Phone|Mobile|Opera\sM(in|ob)i|iP[ao]d|BlackBerry|SymbianOS|Safari\.SearchHelper|SAMSUNG-(GT|C)|WAP|CFNetwork|Puffin|PlayBook|Nokia|LAVA|SonyEricsson|Karbonn|UCBrowser|ucweb|Micromax|Silk|LG(MW|-MMS)|PalmOS/i.test(userAgents)
