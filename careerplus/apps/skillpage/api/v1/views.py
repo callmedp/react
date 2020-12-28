@@ -18,7 +18,7 @@ from rest_framework.views import APIView
 from .serializers import SubHeaderCategorySerializer,ProductSerializer,IndexColumnSerializer, TestimonialSerializer
 from review.models import DetailPageWidget
 from homepage.models import TestimonialCategoryRelationship, Testimonial
-from shop.templatetags.shop_tags import get_faq_list, format_features
+from shop.templatetags.shop_tags import get_faq_list, format_features, format_extra_features
 import json
 from shop.choices import PRODUCT_CHOICES,PRODUCT_TAG_CHOICES
 
@@ -148,7 +148,7 @@ class CourseComponentView(APIView):
                     'brochure':json.loads(course.pUncdl[0]).get('brochure') if course.pUncdl else None,
                     'u_courses_benefits':json.loads(course.pUncdl[0]).get('highlighted_benefits').split(';') if course.pUncdl else None,
                     'stars': course.pStar,
-                    'highlights':course.pBS,
+                    'highlights':format_extra_features(course.pBS) if course.pBS else None,
                     'id':course.id,
                     }
                 if len(d)!=0:

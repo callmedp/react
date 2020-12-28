@@ -91,6 +91,7 @@ from unidecode import unidecode
 from django.template.defaultfilters import slugify
 from search.helpers import RecommendationBasedOnGaps, get_recommended_products
 from shop.choices import PRODUCT_CHOICES,PRODUCT_TAG_CHOICES
+from shop.templatetags.shop_tags import get_faq_list, format_features, format_extra_features
 
 
 class CreateOrderApiView(APIView, ProductInformationMixin):
@@ -2142,7 +2143,7 @@ class RecommendedCoursesAPI(APIView):
                 'tags':PRODUCT_TAG_CHOICES[course.pTg][0],
                 'brochure':json.loads(course.pUncdl[0]).get('brochure') if course.pUncdl else None,
                 'u_courses_benefits':json.loads(course.pUncdl[0]).get('highlighted_benefits').split(';') if course.pUncdl else None,
-                'highlights':course.pBS,
+                'highlights':format_extra_features(course.pBS) if course.pBS else None,
                 'stars': course.pStar,
             } for course in products_list]
             return products_info_list
