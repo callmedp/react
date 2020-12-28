@@ -1,0 +1,39 @@
+@import '../../../../../styles/functions';
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
+
+.services-foryou {
+    @extend %box-shadow;
+    
+    h3 {
+        font-size: 1.4rem;
+        margin-bottom: 1rem;
+        position: relative;
+
+        &::before {
+            content: '';
+            width: .5rem;
+            height: 3.2rem;
+            background: $card-btm-bdr;
+            position: absolute;
+            left: -2rem;
+            top: -.5rem;
+        }
+    }
+
+    p {
+        font-size: 1.3rem;
+        height: 6rem;
+        overflow: hidden;
+    }
+
+    a {
+        font-size: 1.2rem;
+        font-weight: 600;
+    }
+    
+    figure {
+        margin-left: auto;
+        margin-top: -1.5rem;
+    }
+}

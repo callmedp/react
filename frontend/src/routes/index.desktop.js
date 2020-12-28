@@ -1,6 +1,7 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 import SkillPageContainer from "components/DesktopComponent/Core/SkillPage/skillPage";
+import CataloguePageContainer from "components/DesktopComponent/Core/CataloguePage/cataloguePage";
 import { getSkillPageActions } from 'apiHandler/skillPageApi';
 import Error404Container from 'components/DesktopComponent/Common/ErrorPage404/errorPage404';
 
@@ -35,6 +36,12 @@ export const routes = [
         exact: true
     },
     {
+        path: '/online-courses/',
+        component: CataloguePageContainer,
+        exact: true,
+    },
+    {
+        //keep this at the bottom
         path: '*',
         component: Error404Container
     }

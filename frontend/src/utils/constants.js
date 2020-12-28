@@ -1,4 +1,4 @@
-import { resumeShineSiteDomain, siteDomain } from './domains';
+import { imageUrl, resumeShineSiteDomain, siteDomain } from './domains';
 import ReactGA from 'react-ga';
 
 const freeResourcesList = [
@@ -87,6 +87,7 @@ const categoryList = [
     { 
         name: 'Sales And Marketing', 
         url: `${siteDomain}/courses/sales-and-marketing/17/`, 
+        desktopImagePath: `${imageUrl}desktop/categories3.jpg`,
         id: 'sales_marketing',
         sideNavType: 'allCourses',
         children: [
@@ -99,7 +100,8 @@ const categoryList = [
     },
     {
         name: 'Operation Management',
-        url: `${siteDomain}/courses/operation-management/19/`, 
+        url: `${siteDomain}/courses/operation-management/19/`,
+        desktopImagePath: `${imageUrl}desktop/categories7.jpg`, 
         id:'operation_management',
         sideNavType: 'allCourses',
         children:[
@@ -113,7 +115,8 @@ const categoryList = [
     },
     { 
         name: 'Banking & Finance', 
-        url: `${siteDomain}/courses/banking-and-finance/20/`, 
+        url: `${siteDomain}/courses/banking-and-finance/20/`,
+        desktopImagePath: `${imageUrl}desktop/categories3.jpg`, 
         id: 'banking_finance',
         sideNavType: 'allCourses',
         children: [
@@ -130,6 +133,7 @@ const categoryList = [
     { 
         name: 'Information Technology', 
         url: `${siteDomain}/courses/it-information-technology/22/`, 
+        desktopImagePath: `${imageUrl}desktop/categories2.jpg`,
         id: 'informaton_technology',
         sideNavType: 'allCourses',
         children: [
@@ -147,6 +151,7 @@ const categoryList = [
     { 
         name: 'Human Resources', 
         url:`${siteDomain}/courses/hr-human-resource/25/`, 
+        desktopImagePath: `${imageUrl}desktop/categories4.jpg`,
         id: 'human_resources',
         sideNavType: 'allCourses',
         children: [
@@ -159,6 +164,7 @@ const categoryList = [
     { 
         name: 'Management', 
         url:`${siteDomain}/courses/management/27/`, 
+        desktopImagePath: `${imageUrl}desktop/categories5.jpg`,
         id: 'management',
         sideNavType: 'allCourses',
         children: [
@@ -170,6 +176,7 @@ const categoryList = [
     { 
         name: 'Mass Communication', 
         url: `${siteDomain}/courses/mass-communication/29/`, 
+        desktopImagePath: `${imageUrl}desktop/categories8.jpg`,
         id: 'mass_communication',
         sideNavType: 'allCourses',
         children: [
@@ -182,6 +189,7 @@ const categoryList = [
     { 
         name: 'Personal Development', 
         url: `${siteDomain}/courses/personal-development/21/`, 
+        desktopImagePath: `${imageUrl}desktop/categories1.jpg`,
         id: 'personal_development',
         sideNavType: 'allCourses',
         children: [
@@ -195,6 +203,7 @@ const categoryList = [
     { 
         name: 'Law', 
         url: `${siteDomain}/courses/law/23/`, 
+        desktopImagePath: `${imageUrl}desktop/categories6.jpg`,
         id: 'law',
         sideNavType: 'allCourses',
         children: [
@@ -222,6 +231,8 @@ const navSkillList = [
     { name: 'Data Science', url: '/courses/it-information-technology/data-science/497/', id:'data_science' },
     { name: 'Cloud Computing', url: '/courses/it-information-technology/cloud-computing/82/', id:'cloud_computing'}
 ]
+
+
 
 
 export {

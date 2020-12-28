@@ -155,3 +155,23 @@
   background: $sprite;
   @include icon-inblock(253px, 29px, -41px -59px);
 }
+
+.icon-service1 {
+  background: $sprite;
+  @include icon-inblock(38px, 38px, -311px -58px);
+}
+
+.icon-service2 {
+  background: $sprite;
+  @include icon-inblock(38px, 38px, 364px -58px);
+}
+
+.icon-service3 {
+  background: $sprite;
+  @include icon-inblock(32px, 33px, -417px -58px);
+}
+
+.icon-service4 {
+  background: $sprite;
+  @include icon-inblock(50px, 35px, -464px -59px);
+}

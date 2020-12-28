@@ -3,8 +3,8 @@ import './coursesTray.scss';
 import { Tabs, Tab } from 'react-bootstrap';
 import {  useSelector, connect } from 'react-redux';
 
-import Courses from './Product/product';
-import Assessments from './Product/product';
+import Courses from 'components/DesktopComponent/Common/Product/product';
+import Assessments from 'components/DesktopComponent/Common/Product/product';
 import { MyGA } from 'utils/ga.tracking.js';
 
 const CoursesTray = (props) => {
