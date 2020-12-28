@@ -36,8 +36,8 @@ const appDesktopIndexJs = resolveModule(resolveApp, 'src/index.desktop');
 const appMobileIndexJs = resolveModule(resolveApp, 'src/index.mobile');
 const appBuild = resolveApp('ssrBuild');
 const publicUrl = '/';
-const indexHtml = '../../../frontend/ssrBuild/index.html';
-const indexMobileHtml = '../../../frontend/ssrBuild/index.mobile.html';
+// const indexHtml = '../../../frontend/ssrBuild/index.html';
+const indexMobileHtml = 'index.mobile.html';
 const appHtml = resolveApp('public/index.html');
 
 module.exports = {
@@ -72,7 +72,7 @@ module.exports = {
     };
 
     config.plugins[0].options.excludeChunks = ['mobile']
-    config.plugins[0].options.filename = indexHtml
+    // config.plugins[0].options.filename = indexHtml
 
     config.plugins.push(new HtmlWebpackPlugin(
       Object.assign(
