@@ -46,11 +46,19 @@ const ProductDetails = (props) =>{
 
             <p className="skill-ht">
             {
-                highlights &&
-                <> 
+                highlights?.length ? 
+                <>
                     <strong>Highlights</strong>
-                    {highlights?.replace(/<[^>]*>/g, '')?.slice(80)?.length ? (highlights?.replace(/<[^>]*>/g, '')?.slice(0,80)+'...') : highlights?.replace(/<[^>]*>/g, '')?.slice(0,80)}
-                </>
+                    <ul>
+                        {
+                            highlights?.slice(0, 2)?.map((value, index) =>{
+                                return (
+                                    <li key={index}>{value}</li>
+                                )
+                            })
+                        }
+                    </ul>
+                </> : ''
             }
             {
                 u_courses_benefits &&

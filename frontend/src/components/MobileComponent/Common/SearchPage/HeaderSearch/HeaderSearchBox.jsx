@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 const HeaderSearchBox = (props) =>{
     const {
@@ -13,6 +13,10 @@ const HeaderSearchBox = (props) =>{
         startDictation,
         submitData
     } = props
+
+    useEffect(()=>{
+        document.getElementById("transcript").focus();
+    }, [])
 
     return(
         <>

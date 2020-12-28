@@ -92,6 +92,13 @@ def get_initials(user_name):
         initials+=name[0]
     return initials.upper()
 
+@register.filter(name='format_extra_features')
+def format_extra_features(string):
+    list_value = [strip_tags(i) for i in string.split('\n') if not i.find('<li>')==-1][:2]
+    if not list_value:
+        return [strip_tags(i) for i in string.split('\n') if not i.find('<p>')==-1][:2]
+    return list_value
+
 
 
 
