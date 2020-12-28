@@ -1,9 +1,14 @@
+# DRF Import
 from rest_framework import serializers
+from django.conf import settings
+
+# Inter-App Import
 from homepage.models import StaticSiteContent
 from order.models import Order ,OrderItem
-from shop.models import ProductSkill
+from shop.models import ProductSkill, Product
 # from api.serializers import OrderItemDetailSerializer
 from shared.rest_addons.mixins import SerializerFieldsMixin
+
 
 class StaticSiteContentSerializer(serializers.ModelSerializer):
 
@@ -159,3 +164,8 @@ class DashboardCancellationSerializer(serializers.Serializer):
 
 #         return data
 
+
+class RecentCourseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ['id']
