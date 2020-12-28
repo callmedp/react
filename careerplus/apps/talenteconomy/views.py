@@ -407,7 +407,7 @@ class TEBlogCategoryListView(TemplateView, BlogMixin):
         # checking if article exists for each categories.
         article_for_category = Blog.objects.filter(
             status=1, visibility=2).select_related(
-            'p_cat', 'author').order_by('-publish_date')
+            'p_cat', 'author').order_by('-last_modified_on')
         p_cat = [p for p in article_for_category.values_list('p_cat', flat=True)]
         sec_cat = [sec for sec in article_for_category.values_list('sec_cat', flat=True)]
         categories_id = set(p_cat + sec_cat)
@@ -426,7 +426,7 @@ class TEBlogCategoryListView(TemplateView, BlogMixin):
             visibility=2) | Blog.objects.filter(
             sec_cat__in=[cat_obj.pk], status=1, visibility=2)
         main_articles = main_articles.order_by(
-            '-publish_date').distinct().select_related('author')
+            '-last_modified_on').distinct().select_related('author')
 
         recent_articles = self.scrollPagination(
             paginated_by=self.paginated_by, page=self.page,
@@ -847,7 +847,7 @@ class AuthorDetailView(DetailView):
         context['SITEDOMAIN'] = settings.SITE_DOMAIN
 
         article_list = Blog.objects.filter(
-            status=1, visibility=2, author=author).order_by('-publish_date')
+            status=1, visibility=2, author=author).order_by('-last_modified_on')
         most_recent_cat = article_list[0].p_cat.slug if article_list else ''
 
         # popular courses..
