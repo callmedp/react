@@ -147,6 +147,7 @@ class CourseComponentView(APIView):
                     'tags':PRODUCT_TAG_CHOICES[course.pTg][0],
                     'brochure':json.loads(course.pUncdl[0]).get('brochure') if course.pUncdl else None,
                     'u_courses_benefits':json.loads(course.pUncdl[0]).get('highlighted_benefits').split(';') if course.pUncdl else None,
+                    'u_desc': course.pDsc,
                     'stars': course.pStar,
                     'highlights':format_extra_features(course.pBS) if course.pBS else None,
                     'id':course.id,
