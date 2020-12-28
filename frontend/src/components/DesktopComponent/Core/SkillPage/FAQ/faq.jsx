@@ -16,6 +16,7 @@ const FAQ = (props) => {
     const [sliceFlag, setSliceFlag] = useState(true);
     const regex = /(<([^>]+)>)/ig;
     const loadMore = () => {
+        MyGA.SendEvent('SkillMoreFAQs','ln_FAQ_click', 'more_FAQs', 'ln_FAQ','', false, true);
         setSliceFlag(state => !state)
     }
 
