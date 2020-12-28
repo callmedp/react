@@ -7,7 +7,7 @@ const PopoverDetail = (props) => {
                             about, highlights, 
                             jobsAvailable,  skillList,
                             url, type,
-                            level, u_courses_benefits }
+                            level, u_courses_benefits, u_desc }
                         } = props
     
     const OpenProductPage = () =>{
@@ -21,7 +21,11 @@ const PopoverDetail = (props) => {
         </p>
             <p>
                 <strong>About</strong>
-                <div dangerouslySetInnerHTML={{__html: (about?.slice(noOfWords)?.length ? (about?.slice(0,noOfWords)+'...') : about?.slice(0,noOfWords))}}></div>
+                {
+                    u_desc ? 
+                    <div dangerouslySetInnerHTML={{__html: (about?.replace(/<[^>]*>/g, '').slice(noOfWords)?.length ? (about?.replace(/<[^>]*>/g, '').slice(0,noOfWords)+'...') : about?.replace(/<[^>]*>/g, '').slice(0,noOfWords))}}></div> :
+                    <div dangerouslySetInnerHTML={{__html: (u_desc?.replace(/<[^>]*>/g, '').slice(noOfWords)?.length ? (u_desc?.replace(/<[^>]*>/g, '').slice(0,noOfWords)+'...') : u_desc?.replace(/<[^>]*>/g, '').slice(0,noOfWords))}}></div>
+                }
             </p>
             <p>
                 <strong>Skills you gain</strong>

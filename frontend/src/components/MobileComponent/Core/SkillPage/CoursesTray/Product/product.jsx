@@ -15,7 +15,7 @@ const Product = (props) =>{
         tags, about, skillList,
         highlights, type, level,
         brochure, duration, stars,
-        u_courses_benefits
+        u_courses_benefits, u_desc
     }, index, compType } = props
 
     const [showDetails, setShowDetails] = useState(false)
@@ -64,12 +64,12 @@ const Product = (props) =>{
             </div>
             {
                 compType === 'For You' ?
-                    <ProductDetails detailsData={{ about, skillList, highlights, jobsAvailable, url, type, level, brochure, u_courses_benefits }} icon='file' setShowDetails={setShowDetails}/>
+                    <ProductDetails detailsData={{ about, skillList, highlights, jobsAvailable, url, type, level, brochure, u_courses_benefits, u_desc }} icon='file' setShowDetails={setShowDetails}/>
                     : null
             }
             {
                 showDetails ? 
-                    <ProductDetails detailsData={{ about, skillList, highlights, jobsAvailable, url, type, level, brochure, u_courses_benefits }} icon='view less' setShowDetails={setShowDetails}/>
+                    <ProductDetails detailsData={{ about, skillList, highlights, jobsAvailable, url, type, level, brochure, u_courses_benefits, u_desc }} icon='view less' setShowDetails={setShowDetails}/>
                     : null
             }
             
