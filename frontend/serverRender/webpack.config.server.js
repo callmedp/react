@@ -1,7 +1,7 @@
 const webpackNodeExternals = require("webpack-node-externals");
 const path = require('path');
 const fs = require('fs');
-
+const CopyPlugin = require("copy-webpack-plugin");
 
 const moduleFileExtensions = [
     '.web.mjs',
@@ -60,6 +60,15 @@ const Module = {
     ]
 }
 
+const plugins = [
+    new CopyPlugin({
+        patterns: [
+            { from: path.resolve(__dirname, '../ssrBuild/media'), 
+                to: path.resolve(__dirname, '../../careerplus/static_core/react/media') 
+            },
+          ]
+        })
+]
 
 module.exports = {
     mode : 'production',
@@ -69,5 +78,6 @@ module.exports = {
     output,
     module : Module ,
     resolve,
+    plugins,
     externals,
 };

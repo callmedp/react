@@ -34,7 +34,7 @@ const resolveModule = (resolveFn, filePath) => {
 
 const appDesktopIndexJs = resolveModule(resolveApp, 'src/index.desktop');
 const appMobileIndexJs = resolveModule(resolveApp, 'src/index.mobile');
-const appBuild = resolveApp('../careerplus/static_core/react');
+const appBuild = resolveApp('ssrBuild');
 const publicUrl = '/';
 const indexHtml = '../../../frontend/ssrBuild/index.html';
 const indexMobileHtml = '../../../frontend/ssrBuild/index.mobile.html';
