@@ -45,7 +45,7 @@ function* recentlyAddedCourses(action){
     const { payload } = action;
     try{
         const response = yield call(Api.recentlyAddedCourses);
-        console.log("recently added courses", response);
+        
         if(!response || response['error']){
             return payload?.reject(response["error"]);
         }
@@ -61,10 +61,32 @@ function* recentlyAddedCourses(action){
     }
 }
 
+function* popularServices(action){
+    const { payload } = action;
+    try{
+        const response = yield call(Api.popularServices);
+        
+        if(!response || response['error']){
+            return payload?.reject(response["error"]);
+        }
+        const item = response?.data?.data;
+        yield put({ 
+            type : Actions.POPULAR_SERVICES_FETCHED,
+            item : item
+        })
+        return payload?.resolve(item);
+    }
+    catch(e){
+        return payload?.reject(e);
+    }
+}
+
+
 
 
 
 export default function* WatchCataloguePage() {
     yield takeLatest(Actions.FETCH_COURSES_AND_ASSESSMENTS, coursesAndAssessments);
     yield takeLatest(Actions.FETCH_RECENTLY_ADDED_COURSES, recentlyAddedCourses);
+    yield takeLatest(Actions.FETCH_POPULAR_SERVICES, popularServices);
 }

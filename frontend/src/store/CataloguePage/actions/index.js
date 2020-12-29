@@ -1,4 +1,6 @@
-import { FETCH_COURSES_AND_ASSESSMENTS, FETCH_RECENTLY_ADDED_COURSES  } from './actionTypes';
+import { FETCH_COURSES_AND_ASSESSMENTS, 
+        FETCH_RECENTLY_ADDED_COURSES,
+        FETCH_POPULAR_SERVICES  } from './actionTypes';
 
 const fetchCoursesAndAssessments = (payload) => {
     return {
@@ -15,7 +17,16 @@ const fetchRecentlyAddedCourses = (payload) => {
     }
 }
 
+const fetchPopularServices = (payload) => {
+   
+    return {
+        type : FETCH_POPULAR_SERVICES,
+        payload
+    }
+}
+
 export {
     fetchCoursesAndAssessments,
     fetchRecentlyAddedCourses,
+    fetchPopularServices,
 }

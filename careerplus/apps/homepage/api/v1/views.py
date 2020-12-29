@@ -927,12 +927,12 @@ class RecentCoursesAPI(APIView):
         ).order_by('-pCD')
 
         data = {
-            'recent':
+            'recentCoursesList':
                 [
                     {
                     'id': trcnts.id, 'heading': trcnts.pHd, 'name': trcnts.pNm, 'url': trcnts.pURL, 'img': trcnts.pImg, \
-                     'img_alt': trcnts.pImA, 'p_description': trcnts.pDscPt, 'rating': trcnts.pARx, 'price': trcnts.pPinb, 'vendor': trcnts.pPvn,
-                     'stars': trcnts.pStar,'provider': trcnts.pPvn, 'added_on': trcnts.pCD
+                     'img_alt': trcnts.pImA, 'rating': trcnts.pARx, 'price': trcnts.pPinb, 'vendor': trcnts.pPvn,
+                     'stars': trcnts.pStar,'provider': trcnts.pPvn
                      } for trcnts in trcntss
                 ]
         }

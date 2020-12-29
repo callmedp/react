@@ -1,52 +1,63 @@
-import React, {useState} from 'react';
+import React from 'react';
 import './recentCourses.scss';
-import { Link } from 'react-router-dom';
-   
+import { siteDomain } from 'utils/domains';
+import { useSelector } from 'react-redux';
+
 const RecentCourses = (props) => {
-    return(
+
+    const { recentCoursesList } = useSelector(store => store.recentCourses);
+
+    const starRatings = (star, index) => {
+        return (star === '*' ? <em className="icon-fullstar" key={index}></em> : star === '+'
+            ? <em className="icon-halfstar" key={index}></em> : <em className="icon-blankstar" key={index}></em>
+        )
+    }
+
+    return (
         <section className="container-fluid lightblue-bg mt-30" data-aos="fade-up">
-        <div className="row">
-            <div className="container"> 
-                <div className="recent-courses mt-40 mb-50">
-                    <h2 className="heading2 text-center">Recently added courses</h2>
+            <div className="row">
+                <div className="container">
+                    <div className="recent-courses mt-40 mb-50">
+                        <h2 className="heading2 text-center">Recently added courses</h2>
                         <ul className="recent-courses__list">
-                            {/* {
-                                RecentCoursesList?.map(() =>)
-                            } */}
-                                <li className="col">
-                                <div className="card">
-                                    <div className="card__heading">
-                                        <figure>
-                                            <img src="https://static1.shine.com/l/m/product_image/3425/1542800087_8980.png" alt="Digital Marketing Training Course" />
-                                        </figure>
-                                        <h3 className="heading3">
-                                            <Link to={"#"}>Digital Marketing & Email Marketing Training Course</Link>
-                                        </h3>
-                                    </div>
-                                    <div className="card__box">
-                                        <div className="card__rating">
-                                        <span className="mr-10">By ERB</span>
-                                        <span className="rating">
-                                            <em className="icon-fullstar"></em>
-                                            <em className="icon-fullstar"></em>
-                                            <em className="icon-fullstar"></em>
-                                            <em className="icon-fullstar"></em>
-                                            <em className="icon-blankstar"></em>
-                                            <span>4/5</span>
-                                        </span>
-                                        </div>
-                                        <div className="card__price mt-10">
-                                            <strong>12999/-</strong> 
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
+                            {
+                                recentCoursesList?.slice(0,4).map((course, index) => {
+                                    return (
+                                        <li className="col" key={index}>
+                                            <div className="card">
+                                                <div className="card__heading">
+                                                    <figure>
+                                                        <img src={course.img} alt={course.img_alt} />
+                                                    </figure>
+                                                    <h3 className="heading3">
+                                                        <a to={`${siteDomain}${course.url}`}>{course.name}</a>
+                                                    </h3>
+                                                </div>
+                                                <div className="card__box">
+                                                    <div className="card__rating">
+                                                        <span className="mr-10">{course.provider}</span>
+
+                                                        <span className="rating">
+                                                            {course.stars?.map((star, index) => starRatings(star, index))}
+                                                            <span>{course.rating?.toFixed(1)}/5</span>
+                                                        </span>
+                                                    </div>
+                                                    <div className="card__price mt-10">
+                                                        <strong>{course.price}/-</strong>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    )
+                                })
+                            }
+
                         </ul>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
     )
 }
-   
+
 export default RecentCourses;

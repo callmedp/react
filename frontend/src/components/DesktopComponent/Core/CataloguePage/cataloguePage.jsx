@@ -11,7 +11,7 @@ import './cataloguePage.scss';
 import Aos from "aos";
 import "aos/dist/aos.css";
 import { useDispatch } from 'react-redux';
-import { fetchRecentlyAddedCourses } from 'store/CataloguePage/actions/index';
+import { fetchRecentlyAddedCourses, fetchPopularServices } from 'store/CataloguePage/actions/index';
 
 const CatalogPage = (props) => {
 
@@ -20,6 +20,7 @@ const CatalogPage = (props) => {
     useEffect( () => {
         Aos.init({ duration: 2000, once: true, offset: 10, anchorPlacement: 'bottom-bottom' });
         new Promise((resolve, reject) => dispatch(fetchRecentlyAddedCourses({ resolve, reject })));
+        new Promise((resolve, reject) => dispatch(fetchPopularServices({ resolve, reject })));
     }, [])
 
     return (

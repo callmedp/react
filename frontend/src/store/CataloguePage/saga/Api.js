@@ -15,7 +15,15 @@ const recentlyAddedCourses = () => {
     return BaseApiService.get(`${siteDomain}${url}`);
 }
 
+const popularServices = () => {
+    const url = '/api/v1/popular-services/';
+    
+    return BaseApiService.get(`${siteDomain}${url}`);
+}
+
+
 export default {
     coursesAndAssessments,
     recentlyAddedCourses,
+    popularServices
 }
