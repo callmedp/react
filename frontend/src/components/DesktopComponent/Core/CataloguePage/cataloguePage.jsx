@@ -10,11 +10,18 @@ import Footer from 'components/DesktopComponent/Common/Footer/footer';
 import './cataloguePage.scss';
 import Aos from "aos";
 import "aos/dist/aos.css";
+import { useDispatch } from 'react-redux';
+import { fetchRecentlyAddedCourses } from 'store/CataloguePage/actions/index';
 
 const CatalogPage = (props) => {
+
+    const dispatch = useDispatch();
+
     useEffect( () => {
         Aos.init({ duration: 2000, once: true, offset: 10, anchorPlacement: 'bottom-bottom' });
+        new Promise((resolve, reject) => dispatch(fetchRecentlyAddedCourses({ resolve, reject })));
     }, [])
+
     return (
         <div>
             <Header />

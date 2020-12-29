@@ -9,7 +9,13 @@ const coursesAndAssessments = (data) => {
     return BaseApiService.get(`${siteDomain}/courses/api/v1/${url}`);
 };
 
+const recentlyAddedCourses = () => {
+    const url = '/api/v1/recent-course-added/';
+
+    return BaseApiService.get(`${siteDomain}${url}`);
+}
 
 export default {
     coursesAndAssessments,
+    recentlyAddedCourses,
 }

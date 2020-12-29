@@ -33,8 +33,8 @@ const SkillPage = (props) => {
     const pageId = props?.match?.params?.id;
     const dispatch = useDispatch();
 
-    const { skillLoader } = useSelector(store => store.loader); 
-    const { id } = useSelector( store => store.skillBanner );   
+    const { skillLoader } = useSelector(store => store.loader);
+    const { id } = useSelector(store => store.skillBanner);
     const meta_tags = useSelector((store) => store.skillBanner.meta ? store.skillBanner.meta : '');
 
 
@@ -42,41 +42,43 @@ const SkillPage = (props) => {
         const {
             location: { search },
             history,
-          } = props;
+        } = props;
         const query = queryString.parse(search);
-        if(query['t_id']) {
+        if (query['t_id']) {
             query['prod_id'] = pageId;
             query['product_tracking_mapping_id'] = 10;
             storageTrackingInfo(query);
             dispatch(trackUser({
-                "query" : query, 
-                "action" : "skill_page"}));
-        }else{
+                "query": query,
+                "action": "skill_page"
+            }));
+        } else {
             let tracking_data = getTrackingInfo();
-            if (tracking_data['prod_id'] != pageId && tracking_data['product_tracking_mapping_id'] == '10'){
-                removeTrackingInfo()}
+            if (tracking_data['prod_id'] != pageId && tracking_data['product_tracking_mapping_id'] == '10') {
+                removeTrackingInfo()
+            }
         }
-        
-        };
+
+    };
 
     useEffect(() => {
-        
+
         handleEffects();
-    
+
         if (!(window && window.config && window.config.isServerRendered)) {
             new Promise((resolve, reject) => dispatch(fetchSkillPageBanner({ id: pageId, 'medium': 0, resolve, reject })));
             new Promise((resolve, reject) => dispatch(fetchCoursesAndAssessments({ id: pageId, resolve, reject })));
             new Promise((resolve, reject) => dispatch(fetchDomainJobs({ id: pageId, resolve, reject })));
         }
         else {
-         
+
             delete window.config?.isServerRendered
         }
         //Zendesk Chat
         zendeskTimeControlledWindow(7000)
     }, [pageId])
 
-    useEffect( () => {
+    useEffect(() => {
         Aos.init({ duration: 2000, once: true, offset: 10, anchorPlacement: 'bottom-bottom' });
     }, [])
 

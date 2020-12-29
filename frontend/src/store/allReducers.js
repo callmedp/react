@@ -8,6 +8,7 @@ import { HeaderReducer } from './Header/reducer/index';
 import { FooterReducer } from './Footer/reducer/index';
 import { LoaderReducer } from './Loader/reducer';
 import { RecommendationReducer } from './RecommendedCourses/reducer/index';
+import { RecentlyAddedCoursesReducer } from './CataloguePage/reducer/index';
 
 const rootReducer = combineReducers({
     needHelp : NeedHelpReducer,
@@ -18,6 +19,7 @@ const rootReducer = combineReducers({
     footer : FooterReducer,
     loader : LoaderReducer,
     recommendation : RecommendationReducer,
+    recentCourses : RecentlyAddedCoursesReducer,
 });
 
 

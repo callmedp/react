@@ -2,6 +2,7 @@ import * as Actions from '../actions/actionTypes';
 import { takeLatest, call, put } from 'redux-saga/effects';
 import Api from './Api';
 
+
 function* coursesAndAssessments(action) {
     const { payload } = action;
 
@@ -40,8 +41,30 @@ function* coursesAndAssessments(action) {
 }
 
 
+function* recentlyAddedCourses(action){
+    const { payload } = action;
+    try{
+        const response = yield call(Api.recentlyAddedCourses);
+        console.log("recently added courses", response);
+        if(!response || response['error']){
+            return payload?.reject(response["error"]);
+        }
+        const item = response?.data?.data;
+        yield put({ 
+            type : Actions.RECENTLY_ADDED_COURSES_FETCHED,
+            item : item
+        })
+        return payload?.resolve(item);
+    }
+    catch(e){
+        return payload?.reject(e);
+    }
+}
 
 
-export default function* WatchCoursesAndAssessments() {
+
+
+export default function* WatchCataloguePage() {
     yield takeLatest(Actions.FETCH_COURSES_AND_ASSESSMENTS, coursesAndAssessments);
+    yield takeLatest(Actions.FETCH_RECENTLY_ADDED_COURSES, recentlyAddedCourses);
 }
