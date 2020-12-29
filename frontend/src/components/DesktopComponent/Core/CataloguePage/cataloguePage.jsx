@@ -6,7 +6,7 @@ import AllCategories from './AllCategories/allCategories';
 import ServicesForYou from './ServicesForYou/servicesForYou';
 import RecentCourses from './RecentCourses/recentCourses';
 import OurVendors from './OurVendors/ourVendors';
-import Footer from '../../Common/Footer/footer';
+import Footer from 'components/DesktopComponent/Common/Footer/footer';
 import './cataloguePage.scss';
 import Aos from "aos";
 import "aos/dist/aos.css";
@@ -22,7 +22,7 @@ const CatalogPage = (props) => {
                 <CatalogBanner />
                 {/* <CoursesTray /> */}
                 <AllCategories />
-                <ServicesForYou />
+                {/* <ServicesForYou /> */}
                 <RecentCourses />
                 <OurVendors />
             </main>
