@@ -22,7 +22,7 @@ class PaymentLoginView(APIView):
         country_code = request.data.get('country_code','+91')
         mobile = request.data.get('mobile')
 
-        if not candidate_id or not cart_pk:
+        if not candidate_id or not cart_pk or not email or not mobile:
             return Response({'error':'Unable to update the cart '},status=status.HTTP_400_BAD_REQUEST)
 
         try:

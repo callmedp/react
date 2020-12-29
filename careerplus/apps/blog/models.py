@@ -394,7 +394,7 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
         score += Decimal(self.no_shares) * Decimal(0.7)
         score = Decimal(round(score, 2))
         self.score = score
-        self.save()
+        self.save(update_fields=['score', 'no_views', 'no_shares'])
 
     @property
     def get_status(self):

@@ -1,9 +1,14 @@
+# DRF Import
 from rest_framework import serializers
+from django.conf import settings
+
+# Inter-App Import
 from homepage.models import StaticSiteContent
 from order.models import Order ,OrderItem
-from shop.models import ProductSkill
+from shop.models import ProductSkill, Product
 # from api.serializers import OrderItemDetailSerializer
 from shared.rest_addons.mixins import SerializerFieldsMixin
+
 
 class StaticSiteContentSerializer(serializers.ModelSerializer):
 
@@ -26,7 +31,12 @@ class OrderItemDetailSerializer(SerializerFieldsMixin,serializers.ModelSerialize
     service_resume_upload_shine = serializers.SerializerMethodField()
     product_is_pause_service = serializers.SerializerMethodField()
     service_pause_status = serializers.SerializerMethodField()
-    is_assigned =  serializers.SerializerMethodField()
+    is_assigned = serializers.SerializerMethodField()
+    updated_from_trial_to_regular = serializers.ReadOnlyField()
+    neo_mail_sent = serializers.ReadOnlyField()
+    product_vendor = serializers.SerializerMethodField()
+    product_sub_type_flow = serializers.SerializerMethodField()
+
 
     
     # order = serializers.SerializerMethodField('get_order')
@@ -86,8 +96,15 @@ class OrderItemDetailSerializer(SerializerFieldsMixin,serializers.ModelSerialize
     # def get_product_name(self,obj):
     #     return obj.product_name
 
+    def get_product_vendor(self,obj):
+        return obj.product.vendor.slug if obj.product and obj.product.vendor else ''
+
     def get_product_type_flow(self,obj):
         return obj.product.type_flow if obj.product else ''
+
+
+    def get_product_sub_type_flow(self,obj):
+        return obj.product.sub_type_flow if obj.product else ''
 
 
 
@@ -147,3 +164,8 @@ class DashboardCancellationSerializer(serializers.Serializer):
 
 #         return data
 
+
+class RecentCourseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ['id']

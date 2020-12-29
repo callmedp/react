@@ -1,29 +1,30 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { imageUrl } from 'utils/domains';
 import './banner.scss';
-import Breadcrumb from 'react-bootstrap/Breadcrumb';
+
 
 const CatalogBanner = (props) => {
     return (
        <header className="container-fluid pos-rel">
            <figure className="catalog-banner-img row">
-                <img src="./media/images/catalog-bg.png" className="img-fluid" alt="Digital Marketing Courses & Certifications" />
+                <img src={`${imageUrl}desktop/catalog-bg.png`} className="img-fluid" alt="Digital Marketing Courses & Certifications" />
                 <div className="banner-right">
                     <div className="banner-right-img">
                         <span className="catalog-banner-tween1" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="100" data-aos-duration="1000">
-                            <img src="./media/images/catalog-animation-header1.svg" />
+                            <img src={`${imageUrl}desktop/catalog-animation-header1.svg`} />
                         </span>
                         <span className="catalog-banner-tween2" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="300" data-aos-duration="1000">
-                            <img src="./media/images/catalog-animation-header2.svg" />
+                            <img src={`${imageUrl}desktop/catalog-animation-header2.svg`} />
                         </span>
                         <span className="catalog-banner-tween3" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="500" data-aos-duration="1000">
-                            <img src="./media/images/catalog-animation-header3.svg" />
+                            <img src={`${imageUrl}desktop/catalog-animation-header3.svg`} />
                         </span>
                         <span className="catalog-banner-tween4" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="700" data-aos-duration="1000">
-                            <img src="./media/images/catalog-animation-header4.svg" />
+                            <img src={`${imageUrl}desktop/catalog-animation-header4.svg`} />
                         </span>
                         <span className="catalog-banner-tween5" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="900" data-aos-duration="1000">
-                            <img src="./media/images/catalog-animation-header5.svg" />
+                            <img src={`${imageUrl}desktop/catalog-animation-header5.svg`} />
                         </span>
                     </div>
                 </div>

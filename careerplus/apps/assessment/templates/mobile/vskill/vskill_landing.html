@@ -91,7 +91,7 @@
 Shine learning brings to you one of the largest collection of test preps for all  business and tech certifications. Say good bye to anxiety and crack the certification exams in the first attempt !        </p>
           {% for fa in test_prep_children %}
         <div class="popular_test_inside">
-            <a href="{% url 'assessment:vskill-subcategory' slug=fa.slug %}">
+            <a href="{% url 'assessment:vskill-subcategory' slug=fa.slug %}" onclick="MyGA.SendEvent('test_preps_select','ln_test_preps_select', 'ln_take_free_test_preps', 'ln_{{fa.name}}','', false, true)">
                 <span class="border border0"></span>
                 <div>
                     <h2 class="name bold mb-0">{{fa.name}}</h2>
@@ -99,7 +99,7 @@ Shine learning brings to you one of the largest collection of test preps for all
                 </div>
                 <span>
                     {% if fa.icon %}
-                    <img src="{{fa.icon.url}}" alt="{{fa.name}}">
+                    <img src="{{fa.icon.url}}" alt="{{fa.name}}" onclick="MyGA.SendEvent('test_preps_select','ln_test_preps_select', 'ln_take_free_test_preps', 'ln_{{fa.name}}','', false, true)">
                     {% endif %}
                 </span>
             </a>
@@ -122,13 +122,13 @@ Shine learning brings to you one of the largest collection of functional tests. 
         {% for fa in func_area|slice:":8" %}
 
             <div class="functional_area_inside border-{{forloop.counter0}}">
-            <a title="{{fa.name}}" href="{% url 'assessment:vskill-category' slug=fa.slug %}">
+            <a title="{{fa.name}}" href="{% url 'assessment:vskill-category' slug=fa.slug %}" onclick="MyGA.SendEvent('test_preps_select','ln_test_preps_select', 'ln_take_free_test_functional_area', 'ln_{{fa.name}}','', false, true)">
                   {% if fa.icon %}
                      <span class="functional_area_inside--image"><img class="img-responsive" alt="{{fa.name}}" src= "{{fa.icon.url}}"></span>
                      {% else %}
                      <span class="functional_area_inside--image"><img  class="img-responsive" alt="{{fa.name}}" src="#"></span>
                      {% endif %}
-                <span class="fa_name">{{fa.name}}</span></a> </div>
+                <span class="fa_name" onclick="MyGA.SendEvent('test_preps_select','ln_test_preps_select', 'ln_take_free_test_functional_area', 'ln_{{fa.name}}','', false, true)">{{fa.name}}</span></a> </div>
               {%endfor%}
 
     </div>
@@ -142,7 +142,7 @@ Shine learning brings to you one of the largest collection of functional tests. 
          {% for test in test_list %}
 
             <div class="popular_test_inside">
-     <a id="{{test.id}}" onclick="testModal(event);" data-attr-value='{"id":"{{test.id}}","catid":"{{test.category.id}}","catname":"{{test.category.name}}","quescount":"{{test.get_question_count}}","testSlug":"{{test.slug}}","vendor":"{{test.vendor.id}}","courseName":"{{test.course.name}}","courseDuration":"{{test.course.get_duration_in_day}}","coursePrice":"{{test.course.inr_price}}","productName":"{{test.product.name}}","productDuration":"{{test.product.get_duration_day}}","productPrice":"{{test.product.inr_price}}","productId":"{{test.product.id}}","courseId":"{{test.course.id}}","courseUrl":"{{test.course.get_absolute_url}}","productUrl":"{{test.product.get_absolute_url}}" }'>
+     <a id="{{test.id}}" onclick="testModal(event);" data-attr-value='{"id":"{{test.id}}","catid":"{{test.category.id}}","catname":"{{test.category.name}}","quescount":"{{test.get_question_count}}","testSlug":"{{test.slug}}","vendor":"{{test.vendor.id}}","courseName":"{{test.course.name}}","courseDuration":"{{test.course.get_duration_in_day}}","coursePrice":"{{test.course.inr_price}}","productName":"{{test.product.name}}","productDuration":"{{test.product.get_duration_day}}","productPrice":"{{test.product.inr_price}}","productId":"{{test.product.id}}","courseId":"{{test.course.id}}","courseUrl":"{{test.course.get_absolute_url}}","productUrl":"{{test.product.get_absolute_url}}" }' onclick="MyGA.SendEvent('test_preps_select','ln_test_preps_select', 'ln_take_free_test_most_popular', 'ln_{{fa.name}}','', false, true)">
                 <span class="border border{{forloop.counter0}}"></span>
                 <span class="name">{{test.title}}</span>
                 <span class="btn btn-md btn-round-30 btn-blue" >Take free test</span>

@@ -301,9 +301,9 @@
 
             <ul class="view-comments-links col-sm-7 col-md-8">
                 <li>
-                    <a role="button" onclick="viewDetailOrderitem('{{obj.pk}}',)">View details</a>
+                    <a role="button" onclick="viewDetailOrderitem('{{obj.pk}}',); MyGA.SendEvent('DashboardInbox', 'ln_dashboard_left_menu', 'ln_my_inbox', 'view_details', '', false, true)">View details</a>
                 </li>
-                <li><a role="button" onclick="viewCommentOrderitem('{{obj.pk}}',)">Leave us a message</a></li>
+                <li><a role="button" onclick="viewCommentOrderitem('{{obj.pk}}',); MyGA.SendEvent('DashboardInbox', 'ln_dashboard_left_menu', 'ln_my_inbox', 'leave_a_message', '', false, true)">Leave us a message</a></li>
             </ul>
 
             {% if obj.oi_status == 24 or obj.oi_status == 46 %}

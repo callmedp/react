@@ -58,11 +58,11 @@
             {% block left_content %}
             <!-- left content start -->
               <div class="col-sm-3 dashboard-tab">
-                <a class="active" href="{% url "dashboard:dashboard" %}"><span class="inbox-icon"></span> Inbox</a>
-                <a href="{% url "dashboard:dashboard-myorder" %}"><span class="orders-icon"></span> My orders</a>
-                <a href="{% url "dashboard:dashboard-mywallet" %}"><span class="wallet-icon"></span> My wallet</a>
+                <a class="active" href="{% url "dashboard:dashboard" %}" onclick="MyGA.SendEvent('DashboardLeftMenu', 'ln_dashboard_left_menu', 'ln_click_menu_name', 'Inbox', '', false, true)"><span class="inbox-icon"></span> Inbox</a>
+                <a href="{% url "dashboard:dashboard-myorder" %}" onclick="MyGA.SendEvent('DashboardLeftMenu', 'ln_dashboard_left_menu', 'ln_click_menu_name', 'My orders', '', false, true)"><span class="orders-icon"></span> My orders</a>
+                <a href="{% url "dashboard:dashboard-mywallet" %}" onclick="MyGA.SendEvent('DashboardLeftMenu', 'ln_dashboard_left_menu', 'ln_click_menu_name', 'My wallet', '', false, true)"><span class="wallet-icon"></span> My wallet</a>
               {% if roundone_user %}
-                <a href="{% url "dashboard:roundone-dashboard" %}"><span class="referal-icon"></span> Referral</a>
+                <a href="{% url "dashboard:roundone-dashboard" %}" onclick="MyGA.SendEvent('DashboardLeftMenu', 'ln_dashboard_left_menu', 'ln_click_menu_name', 'Referral', '', false, true)"><span class="referal-icon"></span> Referral</a>
               {% endif %}
 
                 <div class="please-call">

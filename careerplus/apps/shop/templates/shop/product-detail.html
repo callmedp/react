@@ -177,7 +177,7 @@
                   
                     {% if prd_num_jobs %}
                       <li>
-                       <a href="{% if num_jobs_url %}{{num_jobs_url}}{% else %}javascript:void(0);{% endif %}" target="_blank">
+                       <a onClick="MyGA.SendEvent('ln_course_details', 'ln_course_details', 'ln_jobs_available', 'Jobs available', '', '', true);" href="{% if num_jobs_url %}{{num_jobs_url}}{% else %}javascript:void(0);{% endif %}" target="_blank">
                         <figure class="course-jobs-icon"></figure>
                         <span><strong class="anchor-color">&nbsp;{{prd_num_jobs}}</strong>&nbsp;Jobs available</span>
                        </a> 
@@ -194,7 +194,7 @@
                 </ul>
                 {% if prd_service == 'course' or product.type_flow == 16 %}
                 <span class="byvskills">
-                  <strong><a onclick="gaEvent('Search','{{prd_vendor}}','ViewAllProductVendor');" href="/search/results/?fvid={{product.vendor.id}}">All courses/ certification ({{prd_vendor_count}})</a></strong>
+                  <strong><a onclick="gaEvent('Search','{{prd_vendor}}','ViewAllProductVendor');MyGA.SendEvent('ln_course_details', 'ln_course_details', 'ln_all_course', '{{prd_vendor}}', '', false, true);" href="/search/results/?fvid={{product.vendor.id}}">All courses/ certification ({{prd_vendor_count}})</a></strong>
                   By {{prd_vendor}}
                 </span>
                 {% endif %}

@@ -362,7 +362,7 @@ class HRBlogDetailView(DetailView, BlogMixin):
         self.object = self.get_object()
         self.object.no_views += 1
         self.object.update_score()
-        self.object.save()
+        # self.object.save()
         context = super(self.__class__, self).get(request, args, **kwargs)
         return context
 
@@ -515,7 +515,7 @@ class HrConclaveDetailView(DetailView):
         self.obj = self.get_object()
         self.obj.no_views += 1
         self.obj.update_score()
-        self.obj.save()
+        # self.obj.save()
 
         context = super(self.__class__, self).get(request, args, **kwargs)
         return context
@@ -658,7 +658,7 @@ class HrJobFairDetailView(DetailView):
         self.obj = self.get_object()
         self.obj.no_views += 1
         self.obj.update_score()
-        self.obj.save()
+        # self.obj.save()
 
         context = super(self.__class__, self).get(request, args, **kwargs)
         return context
