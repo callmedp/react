@@ -1,9 +1,10 @@
 from rest_framework import serializers
 from homepage.models import StaticSiteContent
 from order.models import Order ,OrderItem
-from shop.models import ProductSkill
+from shop.models import ProductSkill,ProductCategory, Product,Category
 # from api.serializers import OrderItemDetailSerializer
 from shared.rest_addons.mixins import SerializerFieldsMixin
+from django.conf import settings
 
 class StaticSiteContentSerializer(serializers.ModelSerializer):
 
@@ -146,16 +147,33 @@ class DashboardCancellationSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
     order_id = serializers.IntegerField(required=True)
 
-
-# class ProductSkillSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = ProductSkill
-#         fields = ("skill",)
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ["avg_rating","inr_price"]
     
-#     def to_representation(self, instance):
-#         data = super(ProductSkillSerializer, self).to_representation(instance)
-#         data['skillName'] = instance.skill.name
-#         data['skillUrl'] = instance.product.categories.filter(is_skill=True).first().get_absolute_url()
+    def to_representation(self, instance):
+        data = super(ProductSerializer, self).to_representation(instance)
+        data['mode']=instance.get_studymode_db()
+        data['duration']=instance.get_duration_in_day()
+        return data
+   
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ["name",]
+    
+    def get_popular_courses(self,category):
+        class_category = settings.SERVICE_SLUG + settings.WRITING_SLUG
+        products = Product.objects.filter(category__id=category,product_class__slug__in=class_category,
+                                                    active=True,
+                                                   is_indexed=True).order_by('-buy_count')[:3]
+        return products     
+    
+    def to_representation(self, instance):
+        data = super(CategorySerializer, self).to_representation(instance)
+        popular_courses = self.get_popular_courses(instance.id)
+        data['product_detail'] = ProductSerializer(popular_courses,many=True).data
 
-#         return data
+        return data
 
