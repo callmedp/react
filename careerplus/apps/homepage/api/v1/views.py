@@ -883,7 +883,7 @@ class PopularServicesAPI(PopularProductMixin, APIView):
         trending services.
         For detail please check TrendingCourseAPI
         """
-        quantity_to_display = int(request.GET.get('num_services', 4))
+        quantity_to_display = int(request.GET.get('num_services', 6))
 
         # class fall into service category
         class_category = settings.SERVICE_SLUG + settings.WRITING_SLUG
@@ -899,7 +899,7 @@ class PopularServicesAPI(PopularProductMixin, APIView):
         data = {
             'popularServices': [
                 {'id': tsrvc.id, 'heading': tsrvc.pHd, 'name': tsrvc.pNm, 'url': tsrvc.pURL, 'img': tsrvc.pImg, \
-                 'img_alt': tsrvc.pImA, 'rating': tsrvc.pARx, 'price': tsrvc.pPinb, 'vendor': tsrvc.pPvn, 'stars': tsrvc.pStar,
+                 'img_alt': tsrvc.pImA, 'p_description': tsrvc.pDscPt, 'rating': tsrvc.pARx, 'price': tsrvc.pPinb, 'vendor': tsrvc.pPvn, 'stars': tsrvc.pStar,
                  'provider': tsrvc.pPvn} for tsrvc in tsrvcs]
         }
         return APIResponse(message='Popular Services Loaded', data=data, status=status.HTTP_200_OK)
@@ -914,7 +914,7 @@ class RecentCoursesAPI(APIView):
         Function must return the recent added course in the
         system with the logic according to handled by serializer
         """
-        quantity_to_display = int(request.GET.get('num_recent', 10))
+        quantity_to_display = int(request.GET.get('num_recent', 6))
 
         # class getting the recent_ids from serializer
         queryset = Product.objects.filter(product_class__slug__in=settings.COURSE_SLUG,
@@ -931,7 +931,7 @@ class RecentCoursesAPI(APIView):
                 [
                     {
                     'id': trcnts.id, 'heading': trcnts.pHd, 'name': trcnts.pNm, 'url': trcnts.pURL, 'img': trcnts.pImg, \
-                     'img_alt': trcnts.pImA, 'rating': trcnts.pARx, 'price': trcnts.pPinb, 'vendor': trcnts.pPvn,
+                     'img_alt': trcnts.pImA, 'p_description': trcnts.pDscPt, 'rating': trcnts.pARx, 'price': trcnts.pPinb, 'vendor': trcnts.pPvn,
                      'stars': trcnts.pStar,'provider': trcnts.pPvn, 'added_on': trcnts.pCD
                      } for trcnts in trcntss
                 ]
