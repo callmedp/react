@@ -6,7 +6,7 @@
 <title>shine Resume Builder</title>
 </head>
 <body style="margin:0px;">
-<img src="https://www3.shine.com/media/images/dot.gif?utm_campaign={{x_mailer_tag}}&utm_source=OwnbaseSystemEmails&utm_medium={{email_domain}}&user_id={{candidate_id}}&user_email={{encrypted_email}}&utm_campdt={{utm_campaign_date}}"/>
+<img src="https://www3.shine.com/media/images/dot.gif?utm_campaign={{utm_campaign}}&utm_source=OwnbaseSystemEmails&utm_medium={{email_domain}}&user_id={{candidate_id}}&user_email={{encrypted_email}}&utm_campdt={{utm_campaign_date}}"/>
 <table width="100%" border="0" cellspacing="0" cellpadding="0" align="" style="font-family: Arial, 'sans-serif'; font-size: 13px; color: #666;">
   <tbody>
     <tr>
@@ -48,8 +48,8 @@
           <tbody>
             <tr>
               <td align="center" valign="top">
-                <a {% if token %} href="{{domain_name}}/resume-builder/?token={{token}}&mailer=true&utm_campaign=resume&utm_source=shine&utm_medium=email" {% else %} href="{{domain_name}}/resume-builder/?utm_campaign=resume&utm_source=shine&utm_medium=email" {% endif %} target="_blank" style="margin: 8px; display: inline-block;"><button type="btn" style="background-color: #4CAF50; border:none;  color: white;  padding: 15px 32px;  padding-bottom:10px; text-align: center;  text-decoration: none;  display: inline-block;  font-size: 16px; ">Build Your Resume now</button></a>
-                <a {% if token %} href="{{domain_name}}/resume-score-checker/?token={{token}}&mailer=true&utm_campaign=resume&utm_source=shine&utm_medium=email" {% else %} href="{{domain_name}}/resume-score-checker/?utm_campaign=resume&utm_source=shine&utm_medium=email" {% endif %}  target="_blank" style="margin: 8px; display: inline-block;"><button type="btn" style="background-color: #008CBA; border:none;  color: white;  padding: 15px 32px; padding-bottom:10px; text-align: center;  text-decoration: none;  display: inline-block;  font-size: 16px; ">Check Resume Score</button></a>
+                <a {% if token %} href="{{shine_domain}}/myshine/login/?tc={{token}}&next={{domain_name}}/resume-builder/?mailer=true&utm_campaign={{utm_campaign}}&utm_source={{utm_source}}&utm_medium=email" {% else %} href="{{domain_name}}/resume-builder/?utm_campaign={{utm_campaign}}&utm_source={{utm_source}}&utm_medium=email" {% endif %} target="_blank" style="margin: 8px; display: inline-block;"><button type="btn" style="background-color: #4CAF50; border:none;  color: white;  padding: 15px 32px;  padding-bottom:10px; text-align: center;  text-decoration: none;  display: inline-block;  font-size: 16px; ">Build Your Resume now</button></a>
+                <a {% if token %} href="{{shine_domain}}/myshine/login/?tc={{token}}&next={{domain_name}}/resume-score-checker/?mailer=true&utm_campaign={{utm_campaign}}&utm_source={{utm_source}}&utm_medium=email" {% else %} href="{{domain_name}}/resume-score-checker/?utm_campaign={{utm_campaign}}&utm_source={{utm_source}}&utm_medium=email" {% endif %}  target="_blank" style="margin: 8px; display: inline-block;"><button type="btn" style="background-color: #008CBA; border:none;  color: white;  padding: 15px 32px; padding-bottom:10px; text-align: center;  text-decoration: none;  display: inline-block;  font-size: 16px; ">Check Resume Score</button></a>
                 </td>
             </tr>
           </tbody>
@@ -118,8 +118,8 @@
           <tbody>
             <tr>
               <td align="center" valign="top">
-                <a {% if token %}  href="{{domain_name}}/resume-builder/?token={{token}}&mailer=true&utm_campaign=resume&utm_source=shine&utm_medium=email" {% else %} href="{{domain_name}}/resume-builder/?utm_campaign=resume&utm_source=shine&utm_medium=email" {% endif %} target="_blank" style="margin: 8px; display: inline-block;"><button type="btn" style="background-color: #4CAF50; border:none;  color: white;  padding: 15px 32px;  padding-bottom:10px; text-align: center;  text-decoration: none;  display: inline-block;  font-size: 16px; ">Build Your Resume now</button></a>
-                <a {% if token %} href="{{domain_name}}/resume-score-checker/?token={{token}}&mailer=true&utm_campaign=resume&utm_source=shine&utm_medium=email" {% else %} href="{{domain_name}}/resume-score-checker/?utm_campaign=resume&utm_source=shine&utm_medium=email" {% endif %} target="_blank" style="margin: 8px; display: inline-block;"><button type="btn" style="background-color: #008CBA; border:none;  color: white;  padding: 15px 32px; padding-bottom:10px; text-align: center;  text-decoration: none;  display: inline-block;  font-size: 16px; ">Check Resume Score</button></a>
+                <a {% if token %}  href="{{shine_domain}}/myshine/login/?tc={{token}}&next={{domain_name}}/resume-builder/?mailer=true&utm_campaign={{utm_campaign}}&utm_source={{utm_source}}&utm_medium=email" {% else %} href="{{domain_name}}/resume-builder/?utm_campaign={{utm_campaign}}&utm_source={{utm_source}}&utm_medium=email" {% endif %} target="_blank" style="margin: 8px; display: inline-block;"><button type="btn" style="background-color: #4CAF50; border:none;  color: white;  padding: 15px 32px;  padding-bottom:10px; text-align: center;  text-decoration: none;  display: inline-block;  font-size: 16px; ">Build Your Resume now</button></a>
+                <a {% if token %} href="{{shine_domain}}/myshine/login/?tc={{token}}&next={{domain_name}}/resume-score-checker/?mailer=true&utm_campaign={{utm_campaign}}&utm_source={{utm_source}}&utm_medium=email" {% else %} href="{{domain_name}}/resume-score-checker/?utm_campaign={{utm_campaign}}&utm_source={{utm_source}}&utm_medium=email" {% endif %} target="_blank" style="margin: 8px; display: inline-block;"><button type="btn" style="background-color: #008CBA; border:none;  color: white;  padding: 15px 32px; padding-bottom:10px; text-align: center;  text-decoration: none;  display: inline-block;  font-size: 16px; ">Check Resume Score</button></a>
                 </td>
             </tr>
           </tbody>
@@ -135,7 +135,7 @@
                     <td align="left" valign="top" style="padding-top: 25px;"><table width="100%" border="0" cellspacing="0" cellpadding="0"  align="center" style="border: solid 1px #ECECEC; max-width: 220px; padding: 5px 10px 10px 10px; border-radius: 4px;">
                         <tbody>
                           <tr>
-                            <td align="center" valign="top" style=""><span style="display: inline-block; vertical-align:middle; padding-top: 12px; color: #666666; font-size: 12px;">Download Shine app</span> <span style="display: inline-block; vertical-align:top; padding:4px 12px 0 12px;"> <a href= "https://apps.apple.com/in/app/shine.com-job-search/id950558510?mt=8&utm_source=OwnbaseSystemEmails&utm_medium=email&utm_campaign=resume" target="_blank"> <img src="https://static1.shine.com/c/s1/mailers/ApplicationHighlighter/app.png" alt="app store" style="vertical-align: top;"> </a></span> <span style="display: inline-block; vertical-align:top;"> <a href="https://play.google.com/store/apps/details?id=com.net.shine&utm_source=OwnbaseSystemEmails&utm_medium=email&etm_content={{candidate_id}}|L1|{{w3c_ts}}|{{encrypted_email}}|Shineandroidapp_mailicon&utm_campaign=resume" target="_blank"> <img src="https://static1.shine.com/c/s1/mailers/ApplicationHighlighter/playstore.png" alt="play store" style="vertical-align: top; margin-top: 5px"> </a></span></td>
+                            <td align="center" valign="top" style=""><span style="display: inline-block; vertical-align:middle; padding-top: 12px; color: #666666; font-size: 12px;">Download Shine app</span> <span style="display: inline-block; vertical-align:top; padding:4px 12px 0 12px;"> <a href= "https://apps.apple.com/in/app/shine.com-job-search/id950558510?mt=8&utm_source=OwnbaseSystemEmails&utm_medium=email&utm_campaign={{utm_campaign}}" target="_blank"> <img src="https://static1.shine.com/c/s1/mailers/ApplicationHighlighter/app.png" alt="app store" style="vertical-align: top;"> </a></span> <span style="display: inline-block; vertical-align:top;"> <a href="https://play.google.com/store/apps/details?id=com.net.shine&utm_source=OwnbaseSystemEmails&utm_medium=email&etm_content={{candidate_id}}|L1|{{w3c_ts}}|{{encrypted_email}}|Shineandroidapp_mailicon&utm_campaign={{utm_campaign}}" target="_blank"> <img src="https://static1.shine.com/c/s1/mailers/ApplicationHighlighter/playstore.png" alt="play store" style="vertical-align: top; margin-top: 5px"> </a></span></td>
                           </tr>
                         </tbody>
                       </table></td>
@@ -154,5 +154,6 @@
     </tr>
   </tbody>
 </table>
+<img src="{{learning_domain}}/api/v1/resume_mailer_tracking/?candidate_id={{candidate_id}}&action=open_mail" height="1" width="1" />
 </body>
 </html>

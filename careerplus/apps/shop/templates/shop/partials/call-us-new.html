@@ -27,7 +27,7 @@
             </div>
             <div class="form-group">
             <input type="text" class="form-control input_field" id="name" name="name"
-                value="{{request.session.full_name}}" placeholder="Name">
+                value="{{request.session.full_name}}" placeholder="Name" onfocus="MyGA.SendEvent('SkillNeedHelpForm', 'ln_need_help', 'ln_need_help_form_submitted', '{{category.name|title}}', 'clicked', '', false, true)">
             <label for="name" class="input_label">Name</label>
             </div>
             <input type="hidden" name="lsource" value="1">

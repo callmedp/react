@@ -447,11 +447,11 @@ const makeTrackingRequest = (loggingData) => {
 
 const trackClickEvent = () => {
     let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'exit_cart', 'position': parseInt(position),
-     domain: 2, sub_product: trackingProductId, trigger_point : triggerPoint, utm_campaign : utmCampaign, u_id : uId };
+     domain: 2, sub_product: trackingProductId, trigger_point : triggerPoint, utm_campaign : utmCampaign, u_id : uId, popup_based_product: popup_based_product};
     if (trackingId && productAvailability) {
         if(referal_product){
             let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'exit_cart', 'position': parseInt(position),
-     domain: 2, sub_product: trackingProductId, trigger_point : triggerPoint, utm_campaign : utmCampaign, u_id : uId, referral_product:parseInt(referal_product), referal_subproduct:referal_subproduct};
+     domain: 2, sub_product: trackingProductId, trigger_point : triggerPoint, utm_campaign : utmCampaign, u_id : uId, referral_product:parseInt(referal_product), referal_subproduct:referal_subproduct, popup_based_product: popup_based_product};
             makeTrackingRequest(loggingData);
         }else{
         makeTrackingRequest(loggingData);}
@@ -465,11 +465,11 @@ $(document).ready(function () {
     $('#payment-summary-continue-id').click(function () {
         $('#payment-summary-continue-id').attr('disabled', true);
         let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'proceed_to_payments', 'position': parseInt(position),
-        domain: 2, sub_product: trackingProductId, trigger_point : triggerPoint, utm_campaign : utmCampaign, u_id : uId };
+        domain: 2, sub_product: trackingProductId, trigger_point : triggerPoint, utm_campaign : utmCampaign, u_id : uId, popup_based_product: popup_based_product };
         if (trackingId && productAvailability) {
             if(referal_product){
             let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'proceed_to_payments', 'position': parseInt(position),
-     domain: 2, sub_product: trackingProductId, trigger_point : triggerPoint, utm_campaign : utmCampaign, u_id : uId, referral_product:parseInt(referal_product), referal_subproduct:referal_subproduct};
+     domain: 2, sub_product: trackingProductId, trigger_point : triggerPoint, utm_campaign : utmCampaign, u_id : uId, referral_product:parseInt(referal_product), referal_subproduct:referal_subproduct, popup_based_product: popup_based_product};
             makeTrackingRequest(loggingData);
         }else{
         makeTrackingRequest(loggingData);}
@@ -479,11 +479,11 @@ $(document).ready(function () {
 
     $('#cart-navbar').click(function () {
         let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'exit_cart', 'position': parseInt(position),
-        domain: 2, sub_product: trackingProductId, trigger_point : triggerPoint, utm_campaign : utmCampaign, u_id : uId };
+        domain: 2, sub_product: trackingProductId, trigger_point : triggerPoint, utm_campaign : utmCampaign, u_id : uId, popup_based_product: popup_based_product };
         if (trackingId && productAvailability) {
             if(referal_product){
             let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'exit_cart', 'position': parseInt(position),
-     domain: 2, sub_product: trackingProductId, trigger_point : triggerPoint, utm_campaign : utmCampaign, u_id : uId, referral_product:parseInt(referal_product), referal_subproduct:referal_subproduct};
+     domain: 2, sub_product: trackingProductId, trigger_point : triggerPoint, utm_campaign : utmCampaign, u_id : uId, referral_product:parseInt(referal_product), referal_subproduct:referal_subproduct, popup_based_product: popup_based_product};
             makeTrackingRequest(loggingData);
         }else{
         makeTrackingRequest(loggingData);}

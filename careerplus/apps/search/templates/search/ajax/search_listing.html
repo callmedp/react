@@ -1,6 +1,6 @@
 {% load static custom_filters %}
 {% for result in page.object_list %}
-    <li class="box-panel" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+    <li class="box-panel" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem" onclick="MyGA.SendEvent('ProductListSelectProduct', 'ln_product_select', 'ln_click_course', '{{result.pHd|default:result.pNm}}', '', false, true)">
         <meta itemprop="position" content="{{forloop.counter}}" />
         <a itemprop="url" title="{{ result.pHd|default:result.pNm }}" href="{{ result.pURL }}" target="_blank">
         <div class="media">

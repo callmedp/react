@@ -14,7 +14,7 @@
         <span class="editor" itemprop="author"><a href="/talenteconomy/authors/{{main_article.author.slug}}"
                 title="{{main_article.author.name}}">{{main_article.author.name}}</a> <span
                 class="spacer c-666">/</span> <span class="c-666"
-                itemprop="datePublished">{{main_article.publish_date.date}}</span>
+                itemprop="datePublished">{{main_article.last_modified_on.date}}</span>
         </span>
         <span class="view-forward pull-right mt-0">
             {% if main_article.comment_moderated > 0 %}
@@ -58,7 +58,7 @@
             {{main_article.content|safe}}
         {%endif%}
         <meta itemprop="headline" content="{{main_article.heading}}">
-        <meta itemprop="dateModified" content="{{main_article.publish_date.date}}">
+        <meta itemprop="dateModified" content="{{main_article.last_modified_on.date}}">
         <meta itemprop="mainEntityOfPage" content="{% url 'talent:talent-landing' %}">
 
         <div itemprop="publisher" itemscope itemtype="https://schema.org/Organization">

@@ -281,17 +281,18 @@ class WelcomeAssignedView(ListView, PaginationMixin):
             today.year, today.month, today.day, 0, 0, 0, 0, today.tzinfo)
         date_end = datetime.datetime(
             today.year, today.month, today.day, 23, 59, 59, 0, today.tzinfo)
-        followup_today = Order.objects.filter(
+        followup = Order.objects.filter(
             assigned_to=self.request.user,
             welcome_call_done=False,
-            wc_cat=23,
-            wc_follow_up__range=[date_start, date_end]
-        )
+            wc_cat=23)
+        followup_today = followup.filter(wc_follow_up__range=[date_start, date_end])
+        followup_previous = followup.exclude(wc_follow_up__range=[date_start, date_end])
 
         context.update({
             "messages": alert,
             "followup_today": followup_today,
-            "count_follow_up": len(followup_today),
+            "count_follow_up_today": len(followup_today),
+            "count_follow_up_previous":len(followup_previous),
         })
 
         return context
