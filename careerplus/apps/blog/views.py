@@ -402,7 +402,7 @@ class BlogTagListView(TemplateView, PaginationMixin):
         tag_obj = self.tag_obj
         categories = Category.objects.filter(is_active=True, visibility=1)
         article_list = tag_obj.blog_set.filter(status=1, visibility=1)
-        article_list = article_list.order_by('-publish_date')
+        article_list = article_list.order_by('-last_modified_on')
 
         paginator = Paginator(article_list, self.paginated_by)
         if self.active_tab == 0:
@@ -417,7 +417,7 @@ class BlogTagListView(TemplateView, PaginationMixin):
             "recent_articles": article_list[:5]
         })
 
-        article_list = article_list.order_by('-score', '-publish_date')
+        article_list = article_list.order_by('-score', '-last_modified_on')
         paginator = Paginator(article_list, self.paginated_by)
         if self.active_tab == 1:
             page_data = self.pagination(paginator, self.page)

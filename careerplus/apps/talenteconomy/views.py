@@ -237,7 +237,7 @@ class TETagArticleView(TemplateView, BlogMixin):
         author_list = zip_longest(*[iter(authors)] * 5, fillvalue=None)
 
         main_articles = tag_obj.blog_set.filter(
-            status=1, visibility=2).order_by('-publish_date')
+            status=1, visibility=2).order_by('-last_modified_on')
 
         recent_articles = self.scrollPagination(
             paginated_by=self.paginated_by, page=self.page,
@@ -509,7 +509,7 @@ class TECategoryArticleLoadView(View, BlogMixin):
                     visibility=2) | Blog.objects.filter(
                     sec_cat__in=[self.cat_obj.pk], status=1, visibility=2)
                 main_articles = main_articles.order_by(
-                    '-publish_date').distinct().select_related('author')
+                    '-last_modified_on').distinct().select_related('author')
                 page_obj = self.scrollPagination(
                     paginated_by=self.paginated_by, page=self.page,
                     object_list=main_articles)
@@ -605,7 +605,7 @@ class TEBlogDetailView(DetailView, BlogMixin):
         p_cat = blog.p_cat
         articles = p_cat.primary_category.filter(
             status=1, visibility=2).exclude(pk=blog.pk)
-        articles = articles.order_by('-publish_date')
+        articles = articles.order_by('-last_modified_on')
         context['meta'] = blog.as_meta(self.request)
         context.update({
             "reset_form": PasswordResetRequestForm()
@@ -617,9 +617,9 @@ class TEBlogDetailView(DetailView, BlogMixin):
         main_obj_list = list(main_obj)
         article_list = Blog.objects.filter(
             p_cat=p_cat, status=1, visibility=2).order_by(
-            '-publish_date') | Blog.objects.filter(
+            '-last_modified_on') | Blog.objects.filter(
             sec_cat__in=[p_cat], status=1,
-            visibility=2).order_by('-publish_date')
+            visibility=2).order_by('-last_modified_on')
         article_list = article_list.exclude(pk=blog.pk)
         article_list = article_list.distinct().select_related(
             'created_by', 'author').prefetch_related('tags')
