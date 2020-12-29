@@ -88,6 +88,7 @@ const categoryList = [
         name: 'Sales And Marketing', 
         url: `${siteDomain}/courses/sales-and-marketing/17/`, 
         desktopImagePath: `${imageUrl}desktop/categories3.jpg`,
+        mobileImagePath: `${imageUrl}mobile/categories3.jpg`,
         id: 'sales_marketing',
         sideNavType: 'allCourses',
         children: [
@@ -102,6 +103,7 @@ const categoryList = [
         name: 'Operation Management',
         url: `${siteDomain}/courses/operation-management/19/`,
         desktopImagePath: `${imageUrl}desktop/categories7.jpg`, 
+        mobileImagePath: `${imageUrl}mobile/categories7.jpg`,
         id:'operation_management',
         sideNavType: 'allCourses',
         children:[
@@ -116,7 +118,8 @@ const categoryList = [
     { 
         name: 'Banking & Finance', 
         url: `${siteDomain}/courses/banking-and-finance/20/`,
-        desktopImagePath: `${imageUrl}desktop/categories3.jpg`, 
+        desktopImagePath: `${imageUrl}desktop/categories3.jpg`,
+        mobileImagePath: `${imageUrl}mobile/categories3.jpg`,
         id: 'banking_finance',
         sideNavType: 'allCourses',
         children: [
@@ -134,6 +137,7 @@ const categoryList = [
         name: 'Information Technology', 
         url: `${siteDomain}/courses/it-information-technology/22/`, 
         desktopImagePath: `${imageUrl}desktop/categories2.jpg`,
+        mobileImagePath: `${imageUrl}mobile/categories2.jpg`,
         id: 'informaton_technology',
         sideNavType: 'allCourses',
         children: [
@@ -152,6 +156,7 @@ const categoryList = [
         name: 'Human Resources', 
         url:`${siteDomain}/courses/hr-human-resource/25/`, 
         desktopImagePath: `${imageUrl}desktop/categories4.jpg`,
+        mobileImagePath: `${imageUrl}mobile/categories4.jpg`,
         id: 'human_resources',
         sideNavType: 'allCourses',
         children: [
@@ -165,6 +170,7 @@ const categoryList = [
         name: 'Management', 
         url:`${siteDomain}/courses/management/27/`, 
         desktopImagePath: `${imageUrl}desktop/categories5.jpg`,
+        mobileImagePath: `${imageUrl}mobile/categories5.jpg`,
         id: 'management',
         sideNavType: 'allCourses',
         children: [
@@ -177,6 +183,7 @@ const categoryList = [
         name: 'Mass Communication', 
         url: `${siteDomain}/courses/mass-communication/29/`, 
         desktopImagePath: `${imageUrl}desktop/categories8.jpg`,
+        mobileImagePath: `${imageUrl}mobile/categories8.jpg`,
         id: 'mass_communication',
         sideNavType: 'allCourses',
         children: [
@@ -190,6 +197,7 @@ const categoryList = [
         name: 'Personal Development', 
         url: `${siteDomain}/courses/personal-development/21/`, 
         desktopImagePath: `${imageUrl}desktop/categories1.jpg`,
+        mobileImagePath: `${imageUrl}mobile/categories1.jpg`,
         id: 'personal_development',
         sideNavType: 'allCourses',
         children: [
@@ -204,6 +212,7 @@ const categoryList = [
         name: 'Law', 
         url: `${siteDomain}/courses/law/23/`, 
         desktopImagePath: `${imageUrl}desktop/categories6.jpg`,
+        mobileImagePath: `${imageUrl}mobile/categories6.jpg`,
         id: 'law',
         sideNavType: 'allCourses',
         children: [
