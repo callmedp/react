@@ -16,7 +16,7 @@ const ServicesForYou = (props) => {
         swipeToSlide: true,
         variableWidth: true,
     };
-    const { popularServices } = useSelector( store => store.catalogue );
+    const { popularServices } = useSelector( store => store.popularServices );
 
     return(
         <section className="m-container mt-0 mb-0" data-aos="fade-up" id="services">

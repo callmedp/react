@@ -46,3 +46,15 @@ export const TrendingCategoriesReducer = (state=trendingCategoriesState, action)
         default : return state;
     }
 }
+
+const allCategoriesState = {
+    categoryList : [],
+    vendorList : []
+}
+
+export const AllCategoriesReducer = (state=allCategoriesState, action) => {
+    switch(action.type){
+        case Actions.ALL_CATEGORIES_AND_VENDORS_FETCHED : return {...allCategoriesState, ...action.item}
+        default : return state;
+    }
+}
