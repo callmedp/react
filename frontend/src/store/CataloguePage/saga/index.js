@@ -81,7 +81,25 @@ function* popularServices(action){
     }
 }
 
-
+function* trendingCategories(action){
+    const { payload } = action;
+    try{
+        const response = yield call(Api.trendingCategories);
+        
+        if(!response || response['error']){
+            return payload?.reject(response["error"]);
+        }
+        const item = response?.data;
+        yield put({ 
+            type : Actions.TRENDING_CATEGORIES_FETCHED,
+            item : item
+        })
+        return payload?.resolve(item);
+    }
+    catch(e){
+        return payload?.reject(e);
+    }
+}
 
 
 
@@ -89,4 +107,5 @@ export default function* WatchCataloguePage() {
     yield takeLatest(Actions.FETCH_COURSES_AND_ASSESSMENTS, coursesAndAssessments);
     yield takeLatest(Actions.FETCH_RECENTLY_ADDED_COURSES, recentlyAddedCourses);
     yield takeLatest(Actions.FETCH_POPULAR_SERVICES, popularServices);
+    yield takeLatest(Actions.FETCH_TRENDING_CATEGORIES, trendingCategories);
 }

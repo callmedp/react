@@ -21,9 +21,16 @@ const popularServices = () => {
     return BaseApiService.get(`${siteDomain}${url}`);
 }
 
+const trendingCategories = () => {
+    const url = '/api/v1/trending-categories/';
+    
+    return BaseApiService.get(`${siteDomain}${url}`);
+}
+
 
 export default {
     coursesAndAssessments,
     recentlyAddedCourses,
-    popularServices
+    popularServices,
+    trendingCategories
 }

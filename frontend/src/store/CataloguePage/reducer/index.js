@@ -35,3 +35,14 @@ export const PopularServicesReducer = (state=popularState, action) => {
         default : return state;
     }
 }
+
+const trendingCategoriesState = {
+    trendingCategories : []
+}
+
+export const TrendingCategoriesReducer = (state=trendingCategoriesState, action) => {
+    switch(action.type){
+        case Actions.TRENDING_CATEGORIES_FETCHED : return {...trendingCategoriesState, ...action.item}
+        default : return state;
+    }
+}

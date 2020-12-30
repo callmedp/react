@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Slider from "react-slick";
 // import 'slick-carousel/slick/slick.css';
 import './recommendedCourses.scss';
+import { useSelector } from 'react-redux';
 
 const RecommendedCourses = (props) => {
     const settings = {
@@ -15,6 +16,8 @@ const RecommendedCourses = (props) => {
         swipeToSlide: true,
         variableWidth: true,
     };
+    const { trendingCategories } = useSelector( store => store.popularCategories );
+
     return(
         <section className="m-container mt-0 mb-0">
             <div className="m-recomend-courses">

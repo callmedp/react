@@ -937,12 +937,17 @@ class RecentCoursesAPI(APIView):
                 ]
         }
         return APIResponse(message='Recent Course fetched', data=data, status=status.HTTP_200_OK)
+
 class TrendingCategoriesApi(PopularProductMixin, APIView):
     permission_classes = (permissions.AllowAny,)
     authentication_classes = ()
 
     def get(self, request):
+        result = {}
         categories = Category.objects.filter(id__in=[4,17,20,22]).distinct()
         data = CategorySerializer(categories,many=True).data
-        return Response(data=data, status=status.HTTP_200_OK)
+        result.update({
+            'trendingCategories' : data
+        })
+        return Response(data=result, status=status.HTTP_200_OK)
         
