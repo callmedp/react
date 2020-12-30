@@ -31,4 +31,4 @@ class WriterUsersListView(ListAPIView):
     authentication_classes = ()
     permission_classes = ()
     pagination_class = LearningCustomPagination
-    queryset = UserProfile.objects.filter(writer_type__gte=1)
+    queryset = UserProfile.objects.filter(writer_type__gte=1).order_by("-profile_photo")
