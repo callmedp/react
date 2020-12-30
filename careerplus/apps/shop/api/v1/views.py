@@ -37,6 +37,7 @@ from shared.rest_addons.mixins import FieldFilterMixin
 from review.models import Review
 from partner.models import Certificate,ProductSkill
 
+from shop.mixins import CourseCatalogueMixin
 
 # 3rd party imports
 from rest_framework.generics import ListAPIView, CreateAPIView
@@ -521,17 +522,31 @@ class SkillProductView(SkillProducts,APIView):
         return Response({'data':[]},status=status.HTTP_400_BAD_REQUEST)
 
 
+class CourseCatalogueAPI(CourseCatalogueMixin, APIView):
+    permission_classes = ()
+    authentication_classes = ()
 
+    def get(self, request):
+        """
+        This will return Course Category with
+        the vendor list
+        """
+        data = {}
+        try:
+            quantity_to_display = int(request.GET.get('num', 8))
+            # Using mixin get the category & vendor dict
+            if cache.get('course_catalogue') and cache.get('default_num') == quantity_to_display:
+                mixin_dict_value = cache.get('course_catalogue')
+                data['category_list'] = mixin_dict_value['course_fa_list']
+                data['vendor_list'] = mixin_dict_value['vendor_list']
+            else:
+                mixin_dict_value = self.get_course_catalogue_context(num=quantity_to_display)
+                data['category_list'] = mixin_dict_value['course_fa_list']
+                data['vendor_list'] = mixin_dict_value['vendor_list']
 
-
-
-
-
-
-        
-
-
-
-
-
-
+            return Response({'data': data}, status=status.HTTP_200_OK)
+        except Exception as e:
+            logging.getLogger('error_log').error(
+                'error in displaying category catalogue {}'.format(str(e))
+            )
+            return Response({'data': {}, 'message': 'Something went wrong'}, status=status.HTTP_400_BAD_REQUEST)

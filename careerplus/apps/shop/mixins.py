@@ -13,7 +13,7 @@ from partner.models import ProductSkill
 
 
 class CourseCatalogueMixin(object):
-	def get_course_catalogue_context(self):
+	def get_course_catalogue_context(self, num):
 		data = {}
 		course_products = Product.browsable.filter(
 			product_class__slug__in=settings.COURSE_SLUG,
@@ -25,7 +25,7 @@ class CourseCatalogueMixin(object):
 
 		course_fa_categories = []
 		for cat in fa_categories:
-			if len(course_fa_categories) == 8:
+			if len(course_fa_categories) == num:
 				break
 
 			skills = cat.to_category.filter(
@@ -93,7 +93,7 @@ class CourseCatalogueMixin(object):
 		vendor_list_ids = list(set(course_products.values_list('vendor', flat=True)))
 		vendors = Vendor.objects.filter(
 			id__in=vendor_list_ids).exclude(
-			image__iexact='').order_by('priority')[: 4]
+			image__iexact='').order_by('priority')[:4]
 		vendor_list = []
 		for v in vendors:
 			v_dict = {}
@@ -105,6 +105,7 @@ class CourseCatalogueMixin(object):
 		data.update({
 			"vendor_list": vendor_list})
 
+		cache.set('default_num', num, settings.COURSE_CATALOGUE_CASH_TIME)
 		cache.set(
 			'course_catalogue',
 			data, settings.COURSE_CATALOGUE_CASH_TIME)
