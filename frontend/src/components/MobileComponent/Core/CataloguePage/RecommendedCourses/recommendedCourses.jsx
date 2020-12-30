@@ -21,13 +21,13 @@ const RecommendedCourses = (props) => {
                 <h2 className="m-heading2 text-center">Recommended Courses</h2>
                 <Slider {...settings}>
                     <div className="m-recomend-courses__tab">
-                        <Link className="selected" for={"#"}>Sales and Marketing</Link>
+                        <a className="selected" href="#">Sales and Marketing</a>
                     </div>
                     <div className="m-recomend-courses__tab">
-                        <Link for={"#"}>Information Technology</Link>
+                        <a href="#">Information Technology</a>
                     </div>
                     <div className="m-recomend-courses__tab">
-                        <Link for={"#"}>Banking & Finance</Link>
+                        <a href="#">Banking & Finance</a>
                     </div>  
                 </Slider>
                 <div className="m-courses m-recent-courses">

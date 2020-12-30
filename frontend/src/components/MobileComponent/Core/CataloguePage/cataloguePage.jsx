@@ -9,15 +9,20 @@ import RecentCourses from './RecentCourses/recentCourses';
 import OurVendors from './OurVendors/ourVendors';
 import Footer from '../../Common/Footer/Footer';
 import SearchPage from '../../Common/SearchPage/SearchPage';
-import './catalogPage.scss';
+import './cataloguePage.scss';
 import Aos from "aos";
 import "aos/dist/aos.css";
+import { useDispatch } from 'react-redux';
+import { fetchRecentlyAddedCourses, fetchPopularServices } from 'store/CataloguePage/actions/index';
 
 const CatalogPage = (props) => {
     const [showSearchPage, setShowSearchPage] = useState(false)
+    const dispatch = useDispatch();
 
     useEffect( () => {
         Aos.init({ duration: 2000, once: true, offset: 10, anchorPlacement: 'bottom-bottom' });
+        new Promise((resolve, reject) => dispatch(fetchRecentlyAddedCourses({ resolve, reject })));
+        new Promise((resolve, reject) => dispatch(fetchPopularServices({ resolve, reject })));
     }, [])
 
     return (

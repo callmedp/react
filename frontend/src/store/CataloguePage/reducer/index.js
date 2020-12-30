@@ -26,7 +26,7 @@ export const RecentlyAddedCoursesReducer = (state=recentCoursesState, action) =>
 }
 
 const popularState = {
-
+    popularServices : []
 }
 
 export const PopularServicesReducer = (state=popularState, action) => {
