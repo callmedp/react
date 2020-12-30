@@ -1,10 +1,11 @@
 import React from 'react';
 import './allCategories.scss';
-import { categoryList } from 'utils/constants';
-
+import { useSelector } from 'react-redux';
 
 
 const AllCategories = () => {
+
+    const { categoryList } = useSelector( store => store.allCategories )
 
     return (
         <section id="all-categories" className="container-fluid lightblue-bg mt-30" data-aos="fade-up">
@@ -14,12 +15,12 @@ const AllCategories = () => {
                         <h2 className="heading2 text-center">All categories</h2>
                         <ul className="all-category__list">
                             {
-                                categoryList?.slice(0, 9).map(category => {
+                                categoryList.map(category => {
                                     return (
-                                        <li className="col-sm-4" key={category.id}>
+                                        <li className="col-sm-3" key={category.url}>
                                             <div className="card">
                                                 <figure>
-                                                    <img src={category.desktopImagePath} className="img-fluid" alt={category.name} />
+                                                    <img src={category.icon_image} className="img-fluid" alt={category.name} />
                                                 </figure>
                                                 <h3>{category.name}</h3>
                                                 <a href={category.url}>View courses</a>

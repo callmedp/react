@@ -16,7 +16,7 @@ const OurVendors = (props) => {
                         vendorList?.slice(0,4).map( (vendor, index) => {
                             return (
                                 <figure key={index}>
-                                <img src={vendor.icon_image} className="img-fluid" alt={vendor.name} />
+                                <img src={vendor.image} className="img-fluid" alt={vendor.name} />
                             </figure>
                             )
                         })

@@ -36,7 +36,7 @@ export const routes = [
         exact: true
     },
     {
-        path: '/online-courses/',
+        path: '/online-courses.html/',
         component: CataloguePageContainer,
         exact: true,
     },
