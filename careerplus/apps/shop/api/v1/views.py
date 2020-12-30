@@ -533,15 +533,20 @@ class CourseCatalogueAPI(CourseCatalogueMixin, APIView):
         """
         data = {}
         quantity_to_display = int(request.GET.get('num', 8))
+        try:
+            # Using mixin get the category & vendor dict
+            if cache.get('course_catalogue') and cache.get('default_num') == quantity_to_display:
+                mixin_dict_value = cache.get('course_catalogue')
+                data['category_list'] = mixin_dict_value['course_fa_list']
+                data['vendor_list'] = mixin_dict_value['vendor_list']
+            else:
+                mixin_dict_value = self.get_course_catalogue_context(num=quantity_to_display)
+                data['category_list'] = mixin_dict_value['course_fa_list']
+                data['vendor_list'] = mixin_dict_value['vendor_list']
 
-        # Using mixin get the category & vendor dict
-        if not cache.get('course_catalogue'):
-            mixin_dict_value = cache.get('course_catalogue')
-            data['category_list'] = mixin_dict_value['course_fa_list']
-            data['vendor_list'] = mixin_dict_value['vendor_list']
-        else:
-            mixin_dict_value = self.get_course_catalogue_context(num=quantity_to_display)
-            data['category_list'] = mixin_dict_value['course_fa_list']
-            data['vendor_list'] = mixin_dict_value['vendor_list']
-
-        return Response({'data': data}, status=status.HTTP_200_OK)
+            return Response({'data': data}, status=status.HTTP_200_OK)
+        except Exception as e:
+            logging.getLogger('error_log').error(
+                'error in displaying category catalogue {}'.format(str(e))
+            )
+            return Response({'data': {}, 'message': 'Something went wrong'}, status=status.HTTP_400_BAD_REQUEST)
