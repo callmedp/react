@@ -27,10 +27,16 @@ const trendingCategories = () => {
     return BaseApiService.get(`${siteDomain}${url}`);
 }
 
+const allCategories = (count) => {
+    const url = `/api/v1/course-catalogue/?num=${count}`;
+    
+    return BaseApiService.get(`${siteDomain}${url}`);
+}
 
 export default {
     coursesAndAssessments,
     recentlyAddedCourses,
     popularServices,
-    trendingCategories
+    trendingCategories,
+    allCategories
 }

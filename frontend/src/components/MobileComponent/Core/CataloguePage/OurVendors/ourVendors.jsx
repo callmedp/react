@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Slider from "react-slick";
 // import 'slick-carousel/slick/slick.css';
 import './ourVendors.scss';
+import { useSelector } from 'react-redux';
 
 const OurVendors = (props) => {
     const settings = {
@@ -14,12 +15,25 @@ const OurVendors = (props) => {
         swipeToSlide: true,
         variableWidth: true,
     };
+    const { vendor_list } = useSelector(store => store.allCategoriesAndVendors);
+
     return (
         <section className="m-container" data-aos="fade-up">
             <h2 className="m-heading2 text-center mx-auto">Our Vendors</h2>
             <div className="m-our-vendors-slider">
                 <Slider {...settings}>
-                    <div className="m-our-vendors-slider__txt">
+                    {
+                        vendor_list?.map((vendor) =>{
+                            return (
+                                <div className="m-our-vendors-slider__txt" key={vendor.pk}>
+                                    <figure>
+                                        <img src={vendor.image} className="img-fluid" alt={vendor.name} />
+                                    </figure>
+                                </div>
+                            )
+                        })
+                    }
+                    {/* <div className="m-our-vendors-slider__txt">
                         <figure>
                             <img src="./media/images/mobile/shine-learning-vendor.png" className="img-fluid" alt="Shine Learning" />
                         </figure>
@@ -43,7 +57,7 @@ const OurVendors = (props) => {
                         <figure>
                             <img src="./media/images/mobile/edurekha-vendor.png" className="img-fluid" alt="Shine Learning" />
                         </figure>
-                    </div>
+                    </div> */}
                 </Slider>
             </div>
         </section>
