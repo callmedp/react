@@ -1,11 +1,11 @@
 import React from 'react';
 import './servicesForYou.scss';
-import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { resumeShineSiteDomain } from 'utils/domains';
 
 const OurVendors = (props) => {
 
-    const { recommendedServices } = useSelector( store => store.catalog );
+    const { popularServices } = useSelector( store => store.popularServices );
     
 
     return (
@@ -14,15 +14,17 @@ const OurVendors = (props) => {
                 <h2 className="heading2 text-center mb-30 mx-auto">Services for you</h2>
                 <div className="col-sm-12 d-flex">
                     {
-                        recommendedServices?.map((service, index) => {
+                        popularServices?.slice(0,4).map((service, index) => {
                             return (
-                                <div className="col-sm-3">
+                                <div className="col-sm-3" key={service.id}>
                                     <div className="services-foryou">
-                                        <h3 className="heading3">Resume Writing</h3>
-                                        <p>Resume written by experts to increase your profile visibility</p>
+                                        <h3 className="heading3">{service.name}</h3>
+                                        <p>{service.description}</p>
                                         <span className="d-flex">
-                                            <Link to={"#"}>Know more</Link>
-                                            <figure className="icon-service1"></figure>
+                                            <a href={`${resumeShineSiteDomain}${service.url}`}>Know more</a>
+                                            <figure >
+                                            <img height="30" width="40"  src={service.img} alt={service.img_alt} />
+                                            </figure>
                                         </span>
                                     </div>
                                 </div>

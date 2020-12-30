@@ -30,7 +30,7 @@ const CatalogPage = (props) => {
                 <CatalogBanner />
                 {/* <CoursesTray /> */}
                 <AllCategories />
-                {/* <ServicesForYou /> */}
+                <ServicesForYou />
                 <RecentCourses />
                 <OurVendors />
             </main>

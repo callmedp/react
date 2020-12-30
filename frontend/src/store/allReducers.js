@@ -20,7 +20,7 @@ const rootReducer = combineReducers({
     loader : LoaderReducer,
     recommendation : RecommendationReducer,
     recentCourses : RecentlyAddedCoursesReducer,
-    catalogue : PopularServicesReducer,
+    popularServices : PopularServicesReducer,
     popularCategories : TrendingCategoriesReducer
 });
 

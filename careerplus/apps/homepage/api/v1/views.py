@@ -899,7 +899,7 @@ class PopularServicesAPI(PopularProductMixin, APIView):
         data = {
             'popularServices': [
                 {'id': tsrvc.id, 'heading': tsrvc.pHd, 'name': tsrvc.pNm, 'url': tsrvc.pURL, 'img': tsrvc.pImg, \
-                 'img_alt': tsrvc.pImA, 'p_description': tsrvc.pDscPt, 'rating': tsrvc.pARx, 'price': tsrvc.pPinb, 'vendor': tsrvc.pPvn, 'stars': tsrvc.pStar,
+                 'img_alt': tsrvc.pImA, 'description': tsrvc.pDscPt, 'rating': tsrvc.pARx, 'price': tsrvc.pPinb, 'vendor': tsrvc.pPvn, 'stars': tsrvc.pStar,
                  'provider': tsrvc.pPvn} for tsrvc in tsrvcs]
         }
         return APIResponse(message='Popular Services Loaded', data=data, status=status.HTTP_200_OK)
