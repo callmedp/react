@@ -30,14 +30,14 @@ from emailers.tasks import send_email_task
 from emailers.sms import SendSMS
 from django.contrib.contenttypes.models import ContentType
 from order.api.v1.serializers import OrderItemSerializer
-from .serializers import StaticSiteContentSerializer, OrderItemDetailSerializer, DashboardCancellationSerializer
+from .serializers import StaticSiteContentSerializer, OrderItemDetailSerializer, DashboardCancellationSerializer,CategorySerializer
 from core.library.gcloud.custom_cloud_storage import \
     GCPPrivateMediaStorage, GCPInvoiceStorage, GCPMediaStorage, GCPResumeBuilderStorage
 
 # Local Inter App Import
 from homepage.models import StaticSiteContent, TestimonialCategoryRelationship, Testimonial, \
     TopTrending, TrendingProduct, HomePageOffer, NavigationSpecialTag
-from shop.models import Category, Product, ProductSkill
+from shop.models import Category, Product, ProductSkill, ProductCategory
 from order.models import Order, OrderItem, InternationalProfileCredential
 from dashboard.dashboard_mixin import DashboardInfo, DashboardCancelOrderMixin
 from core.api_mixin import ShineCandidateDetail
@@ -937,3 +937,12 @@ class RecentCoursesAPI(APIView):
                 ]
         }
         return APIResponse(message='Recent Course fetched', data=data, status=status.HTTP_200_OK)
+class TrendingCategoriesApi(PopularProductMixin, APIView):
+    permission_classes = (permissions.AllowAny,)
+    authentication_classes = ()
+
+    def get(self, request):
+        categories = Category.objects.filter(id__in=[4,17,20,22]).distinct()
+        data = CategorySerializer(categories,many=True).data
+        return Response(data=data, status=status.HTTP_200_OK)
+        

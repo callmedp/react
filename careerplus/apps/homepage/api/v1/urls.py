@@ -28,6 +28,7 @@ urlpatterns = [
             name='trending-courses-and-skills-api'),
     re_path(r'^nav-offers-and-tags/$', views.NavigationTagsAndOffersAPI.as_view()),
     re_path(r'^popular-services/$', views.PopularServicesAPI.as_view(), name='popular-services-api'),
-    re_path(r'^recent-course-added/$', views.RecentCoursesAPI.as_view(), name='recent-course-added-api')
+    re_path(r'^recent-course-added/$', views.RecentCoursesAPI.as_view(), name='recent-course-added-api'),
+    re_path(r'^trending-categories/$', views.TrendingCategoriesApi.as_view(), name='trending-categories-api'),
 
 ]
