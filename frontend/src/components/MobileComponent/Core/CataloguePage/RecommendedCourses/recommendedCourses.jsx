@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Slider from "react-slick";
 // import 'slick-carousel/slick/slick.css';
@@ -17,21 +17,28 @@ const RecommendedCourses = (props) => {
         variableWidth: true,
     };
     const { trendingCategories } = useSelector( store => store.popularCategories );
+    const [selectedId, setSelectedId] = useState(0)
+
+    const setSelectedClass = ({index}) => {
+        if(index !== selectedId){
+            setSelectedId(index)
+        }
+    }
 
     return(
         <section className="m-container mt-0 mb-0">
             <div className="m-recomend-courses">
                 <h2 className="m-heading2 text-center">Recommended Courses</h2>
                 <Slider {...settings}>
-                    <div className="m-recomend-courses__tab">
-                        <a className="selected" href="#">Sales and Marketing</a>
-                    </div>
-                    <div className="m-recomend-courses__tab">
-                        <a href="#">Information Technology</a>
-                    </div>
-                    <div className="m-recomend-courses__tab">
-                        <a href="#">Banking & Finance</a>
-                    </div>  
+                    {
+                        trendingCategories?.map((category, index) =>{
+                            return (
+                                <div className="m-recomend-courses__tab" key={index}>
+                                    <a className={selectedId === index ? 'selected':''} href="#" onClick={() => setSelectedClass({index})} >{category.name}</a>
+                                </div>
+                            )
+                        })
+                    }
                 </Slider>
                 <div className="m-courses m-recent-courses">
                     <Slider {...settings}>
