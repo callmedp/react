@@ -149,13 +149,18 @@ class DashboardCancellationSerializer(serializers.Serializer):
 
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Product
-        fields = ["avg_rating","inr_price"]
-    
+        model = Product 
+        fields = ["avg_rating","inr_price","id", "heading", "name",]
+
     def to_representation(self, instance):
         data = super(ProductSerializer, self).to_representation(instance)
         data['mode']=instance.get_studymode_db()
         data['duration']=instance.get_duration_in_day()
+        data['url']=instance.get_url()
+        data['image_url']=instance.get_image_url()
+        data['rating']=instance.get_ratings()
+        data['price'] =instance.get_price()
+        data['vendor']=instance.get_vendor()
         return data
    
 class CategorySerializer(serializers.ModelSerializer):
