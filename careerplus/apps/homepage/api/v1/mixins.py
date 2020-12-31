@@ -39,8 +39,7 @@ class PopularProductMixin(object):
             logging.getLogger('error_log').error("%s" % str(e))
     
     def get_popular_courses(self,category,quantity=3):
-        class_category = settings.SERVICE_SLUG + settings.WRITING_SLUG
-        products = Product.objects.filter(category__id=category,product_class__slug__in=class_category,
+        products = Product.objects.filter(category__id=category,
                                                     active=True,
                                                    is_indexed=True).order_by('-buy_count')[:quantity]
         return products   
