@@ -163,17 +163,3 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = ["name",]
     
-    def get_popular_courses(self,category):
-        class_category = settings.SERVICE_SLUG + settings.WRITING_SLUG
-        products = Product.objects.filter(category__id=category,product_class__slug__in=class_category,
-                                                    active=True,
-                                                   is_indexed=True).order_by('-buy_count')[:3]
-        return products     
-    
-    def to_representation(self, instance):
-        data = super(CategorySerializer, self).to_representation(instance)
-        popular_courses = self.get_popular_courses(instance.id)
-        data['product_detail'] = ProductSerializer(popular_courses,many=True).data
-
-        return data
-
