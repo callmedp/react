@@ -30,7 +30,7 @@ from emailers.tasks import send_email_task
 from emailers.sms import SendSMS
 from django.contrib.contenttypes.models import ContentType
 from order.api.v1.serializers import OrderItemSerializer
-from .serializers import StaticSiteContentSerializer, OrderItemDetailSerializer, DashboardCancellationSerializer,CategorySerializer
+from .serializers import StaticSiteContentSerializer, OrderItemDetailSerializer, DashboardCancellationSerializer,ProductSerializer
 from core.library.gcloud.custom_cloud_storage import \
     GCPPrivateMediaStorage, GCPInvoiceStorage, GCPMediaStorage, GCPResumeBuilderStorage
 
@@ -943,11 +943,10 @@ class TrendingCategoriesApi(PopularProductMixin, APIView):
     authentication_classes = ()
 
     def get(self, request):
-        result = {}
-        categories = Category.objects.filter(id__in=[4,17,20,22]).distinct()
-        data = CategorySerializer(categories,many=True).data
-        result.update({
-            'trendingCategories' : data
-        })
-        return Response(data=result, status=status.HTTP_200_OK)
+        data = {
+            'SnMCourseList': ProductSerializer(PopularProductMixin().get_popular_courses(category=17,quantity=3),many=True).data,
+            'ITCourseList': ProductSerializer(PopularProductMixin().get_popular_courses(category=22,quantity=3),many=True).data,
+            'BnFCourseList': ProductSerializer(PopularProductMixin().get_popular_courses(category=20,quantity=3),many=True).data,
+        }
+        return Response(data=data, status=status.HTTP_200_OK)
         

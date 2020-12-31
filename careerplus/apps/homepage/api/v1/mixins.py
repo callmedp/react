@@ -37,3 +37,9 @@ class PopularProductMixin(object):
 
         except Exception as e:
             logging.getLogger('error_log').error("%s" % str(e))
+    
+    def get_popular_courses(self,category,quantity=3):
+        products = Product.objects.filter(category__id=category,
+                                                    active=True,
+                                                   is_indexed=True).order_by('-buy_count')[:quantity]
+        return products   
