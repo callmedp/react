@@ -10,6 +10,7 @@ from django.db.models import Count, F
 
 # Model Import
 from shop.models import Category, Product, ProductSkill
+from haystack.query import SearchQuerySet
 
 
 class PopularProductMixin(object):
@@ -43,3 +44,24 @@ class PopularProductMixin(object):
                                                     active=True,
                                                    is_indexed=True).order_by('-buy_count')[:quantity]
         return products   
+    
+    def get_products_json(self,product_ids):
+        products = SearchQuerySet().filter(id__in=product_ids, pTP__in=[0, 1, 3]).exclude(
+            id__in=settings.EXCLUDE_SEARCH_PRODUCTS
+        )
+        popularProducts = [
+            {
+                'id': product.id,
+                'heading': product.pHd,
+                'name': product.pNm,
+                'url': product.pURL,
+                'img': product.pImg,
+                'img_alt': product.pImA,
+                'rating': product.pARx,
+                'price': product.pPinb,
+                'vendor': product.pPvn,
+                'stars': product.pStar,
+                'provider': product.pPvn
+             } for product in products ]
+        
+        return popularProducts

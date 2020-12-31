@@ -909,10 +909,14 @@ class TrendingCategoriesApi(PopularProductMixin, APIView):
     authentication_classes = ()
 
     def get(self, request):
-        data = {
-            'SnMCourseList': ProductSerializer(PopularProductMixin().get_popular_courses(category=17,quantity=3),many=True).data,
-            'ITCourseList': ProductSerializer(PopularProductMixin().get_popular_courses(category=22,quantity=3),many=True).data,
-            'BnFCourseList': ProductSerializer(PopularProductMixin().get_popular_courses(category=20,quantity=3),many=True).data,
-        }
+        if cache.get('category_popular_courses'):
+            data = cache.get('category_popular_courses')
+        else:
+            data = {
+                'SnMCourseList': PopularProductMixin().get_products_json(PopularProductMixin().get_popular_courses(category=17,quantity=3).values_list('id',flat=True)),
+                'ITCourseList': PopularProductMixin().get_products_json(PopularProductMixin().get_popular_courses(category=22,quantity=3).values_list('id',flat=True)),
+                'BnFCourseList': PopularProductMixin().get_products_json(PopularProductMixin().get_popular_courses(category=20,quantity=3).values_list('id',flat=True)),
+            }
+            cache.set('category_popular_courses',data,86400)
         return Response(data=data, status=status.HTTP_200_OK)
         
