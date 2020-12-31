@@ -3,7 +3,7 @@ import './allCategories.scss';
 import { useSelector } from 'react-redux';
 
 const AllCategories = (props) => {
-    const { category_list } = useSelector(store => store.allCategoriesAndVendors);
+    const { categoryList } = useSelector(store => store.allCategories); 
 
     return(
         <section id="m-all-categories" className="m-container m-lightblue-bg mt-0 mb-0" data-aos="fade-up" id="categories">
@@ -11,7 +11,7 @@ const AllCategories = (props) => {
                 <h2 className="m-heading2 text-center">All categories</h2>
                 <ul className="m-all-category__list">
                     {
-                        category_list?.map((category) => {
+                        categoryList?.map((category) => {
                             return (
                                 <li key={category.pk}>
                                     <div className="m-card">

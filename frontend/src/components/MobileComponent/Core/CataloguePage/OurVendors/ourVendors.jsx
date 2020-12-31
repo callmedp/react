@@ -15,7 +15,7 @@ const OurVendors = (props) => {
         swipeToSlide: true,
         variableWidth: true,
     };
-    const { vendor_list } = useSelector(store => store.allCategoriesAndVendors);
+    const { vendorList } = useSelector(store => store.allCategories);
 
     return (
         <section className="m-container" data-aos="fade-up">
@@ -23,7 +23,7 @@ const OurVendors = (props) => {
             <div className="m-our-vendors-slider">
                 <Slider {...settings}>
                     {
-                        vendor_list?.map((vendor) =>{
+                        vendorList?.map((vendor) =>{
                             return (
                                 <div className="m-our-vendors-slider__txt" key={vendor.pk}>
                                     <figure>
