@@ -35,7 +35,7 @@ const Product = (props) =>{
     }
 
     return (
-        <div className={compType === 'For You'?"m-card":"m-card-more"} key={index}>
+        <div className={ compType === 'For You' ? "m-card" : "m-card-more m-card" } key={index}>
             <div className="m-card__heading">
                 {tags === 2 && <span className="m-flag-blue">NEW</span>}
                 {tags === 1 && <span className="m-flag-red">BESTSELLER</span>}
