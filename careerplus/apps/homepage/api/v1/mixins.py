@@ -1,6 +1,6 @@
 # Python Core Import
 import logging
-
+import json
 # Django Import
 from django.utils import timezone
 from django.conf import settings
@@ -13,6 +13,8 @@ from shop.models import Category, Product, ProductSkill
 from haystack.query import SearchQuerySet
 
 
+from shop.choices import PRODUCT_TAG_CHOICES
+from shop.templatetags.shop_tags import format_extra_features
 class PopularProductMixin(object):
 
     def popular_courses_algorithm(self, class_category=settings.COURSE_SLUG, quantity=2):
@@ -49,19 +51,42 @@ class PopularProductMixin(object):
         products = SearchQuerySet().filter(id__in=product_ids, pTP__in=[0, 1, 3]).exclude(
             id__in=settings.EXCLUDE_SEARCH_PRODUCTS
         )
-        popularProducts = [
-            {
-                'id': product.id,
-                'heading': product.pHd,
-                'name': product.pNm,
-                'url': product.pURL,
-                'img': product.pImg,
-                'img_alt': product.pImA,
-                'rating': product.pARx,
-                'price': product.pPinb,
-                'vendor': product.pPvn,
-                'stars': product.pStar,
-                'providerName': product.pPvn
-             } for product in products ]
+
+        popularProducts = []
+
+        for product in products:
+                d = json.loads(product.pVrs).get('var_list')
+                data = {
+                    'imgUrl':product.pImg,
+                    'url':product.pURL,
+                    'name':product.pNm,
+                    'imgAlt':product.pImA,
+                    'imgAlt':product.pImA,
+                    'rating': float(product.pARx),
+                    'mode':product.pStM[0] if product.pStM else None,
+                    'providerName':product.pPvn,
+                    'price':float(product.pPin),
+                    'skillList': product.pSkilln,
+                    'about':product.pAb,
+                    'title':product.pTt,
+                    'slug':product.pSg,
+                    'jobsAvailable':product.pNJ,
+                    'tags':PRODUCT_TAG_CHOICES[product.pTg][0],
+                    'brochure':json.loads(product.pUncdl[0]).get('brochure') if product.pUncdl else None,
+                    'u_courses_benefits':json.loads(product.pUncdl[0]).get('highlighted_benefits').split(';') if product.pUncdl else None,
+                    'u_desc': product.pDsc,
+                    'stars': product.pStar,
+                    'highlights':format_extra_features(product.pBS) if product.pBS else None,
+                    'id':product.id,
+                    }
+                if len(d)!=0:
+                    data.update({
+                        'duration':d[0].get('dur_days'), 
+                        'type':d[0].get('type'),  
+                        'label':d[0].get('label'), 
+                        'level':d[0].get('level'), 
+                    })
+                
+                popularProducts.append(data)
 
         return popularProducts 

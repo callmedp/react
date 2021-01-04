@@ -16,7 +16,8 @@ const Product = (props) => {
         tags, about, skillList,
         highlights, type, level,
         brochure, duration,
-        u_courses_benefits, u_desc
+        u_courses_benefits, u_desc,
+        imgAlt
     },
         index,
         listIdx } = props
@@ -56,7 +57,7 @@ const Product = (props) => {
                         {tags === 2 && <span className="flag-blue">NEW</span>}
                         {tags === 1 && <span className="flag-red">BESTSELLER</span>}
                         <figure>
-                            <img src={imgUrl} alt={name} />
+                            <img src={imgUrl} alt={imgAlt} />
                         </figure>
                         <h3 className="heading3">
                             <a href={`${siteDomain}${url}${trackingParameters}`} onClick={handleTracking} >{name}</a>

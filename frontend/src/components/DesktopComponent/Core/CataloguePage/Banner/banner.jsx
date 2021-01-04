@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link as LinkScroll } from 'react-scroll'
 import { imageUrl } from 'utils/domains';
 import './banner.scss';
 
@@ -36,8 +36,8 @@ const CatalogBanner = (props) => {
                     </h1>
                     <p>Join the club of 4mn learners with our partners like Skillsoft, ACCA etc</p>
                     <div className="d-flex w-100 mt-10">
-                        <Link to={"#all-categories"} className="btn btn-outline-white mr-10">View categories</Link>
-                        <Link to={"#services"} className="btn btn-outline-white">View services</Link>
+                        <LinkScroll to="all-categories"  isDynamic={true} spy={true} offset={-35} className="btn btn-outline-white mr-10">View categories</LinkScroll>
+                        <LinkScroll to="recommended-services" isDynamic={true} spy={true} offset={-70} className="btn btn-outline-white">View services</LinkScroll>
                     </div>
                 </div>
             </div>

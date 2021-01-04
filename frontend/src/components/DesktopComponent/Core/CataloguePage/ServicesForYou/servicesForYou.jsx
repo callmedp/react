@@ -9,7 +9,7 @@ const OurVendors = (props) => {
     
 
     return (
-        <section id="services" className="container mt-30" data-aos="fade-up">
+        <section id="recommended-services" className="container mt-30" data-aos="fade-up">
             <div className="row">
                 <h2 className="heading2 text-center mb-30 mx-auto">Services for you</h2>
                 <div className="col-sm-12 d-flex">

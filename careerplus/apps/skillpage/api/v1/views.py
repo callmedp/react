@@ -135,6 +135,7 @@ class CourseComponentView(APIView):
                     'imgUrl':course.pImg,
                     'url':course.pURL,
                     'name':course.pNm,
+                    'imgAlt':course.pImA,
                     'rating': float(course.pARx),
                     'mode':course.pStM[0] if course.pStM else None,
                     'providerName':course.pPvn,

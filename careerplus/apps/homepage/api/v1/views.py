@@ -943,8 +943,9 @@ class TrendingCategoriesApi(PopularProductMixin, APIView):
     authentication_classes = ()
 
     def get(self, request):
-        if cache.get('category_popular_courses'):
-            data = cache.get('category_popular_courses')
+        cached_data = cache.get('category_popular_courses')
+        if cached_data:
+            data = cached_data
         else:
             data = {
                 'SnMCourseList': PopularProductMixin().get_products_json(PopularProductMixin().\
