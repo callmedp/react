@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
 import Slider from "react-slick";
 // import 'slick-carousel/slick/slick.css';
 import './recommendedCourses.scss';
 import { useSelector } from 'react-redux';
+import ProductCards from '../../../Common/ProductCardsSlider/productCardsSlider';
 
 const RecommendedCourses = (props) => {
     const settings = {
@@ -16,40 +16,20 @@ const RecommendedCourses = (props) => {
         swipeToSlide: true,
         variableWidth: true,
     };
-    const { SnMCourseList, ITCourseList, BnFCourseList } = useSelector( store => store.popularCategories );
-    const trendingCategories = ['Sales and Marketing', 'Information Technology', 'Banking & Finance']
-    const [selectedId, setSelectedId] = useState(0)
-    const [showCategory1, setShowCategory1] = useState(true)
-    const [showCategory2, setShowCategory2] = useState(false)
-    const [showCategory3, setShowCategory3] = useState(false)
 
-    const starRatings = (star, index) => {
-        return (
-            star === '*' ? <em className="micon-fullstar" key={index}></em> : 
-            star === '+' ? <em className="micon-halfstar" key={index}></em> : 
-                           <em className="micon-blankstar" key={index}></em>
-        )
-    }
+    const trendingCategories = ['Sales and Marketing', 'Information Technology', 'Banking & Finance']
+    const { SnMCourseList, ITCourseList, BnFCourseList } = useSelector( store => store.popularCategories );
+    const [selectedId, setSelectedId] = useState(0)
+    const [category, setCategory] = useState('SnM')
 
     const setSelectedClass = (event, index) => {
         event.preventDefault();
-        if(index !== selectedId){
+
+        if( index !== selectedId ){
             setSelectedId(index)
-            if(index===0){
-                setShowCategory2(false)
-                setShowCategory1(true)
-                setShowCategory3(false)
-            }
-            if(index===1){
-                setShowCategory2(true)
-                setShowCategory1(false)
-                setShowCategory3(false)
-            }
-            if(index===2){
-                setShowCategory2(false)
-                setShowCategory1(false)
-                setShowCategory3(true)
-            }
+            index === 0 ?   setCategory('SnM') :
+            index === 1 ?   setCategory('IT') :
+                            setCategory('BnF')  
         }
     }
 
@@ -70,108 +50,15 @@ const RecommendedCourses = (props) => {
                 </Slider>
                 <div className="m-courses m-recent-courses">
                 {
-                    showCategory1 && (
-                        <Slider {...settings}>
-                            {
-                                SnMCourseList?.map((course, index) => {
-                                    return (
-                                        <div className="m-card" key={index}>
-                                            <div className="m-card__heading">
-                                                <figure>
-                                                    <img src={course?.img} alt={course?.img_alt} />
-                                                </figure>
-                                                <h3 className="m-heading3">
-                                                    <a href={course.url}>{course?.name}</a>
-                                                </h3>
-                                            </div>
-                                            <div className="m-card__box">
-                                                <div className="m-card__rating">
-                                                <span className="mr-10">By {course?.vendor}</span>
-                                                <span className="m-rating">
-                                                    { course?.stars?.map((star, index) => starRatings(star, index)) }
-                                                    <span>{course?.rating}/5</span>
-                                                </span>
-                                                </div>
-                                                <div className="m-card__price">
-                                                    <strong>{course?.price}/-</strong> 
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )
-                                })
-                            }
-                        </Slider>
-                    )
+                    category === 'SnM' && <ProductCards productList={SnMCourseList} />
                 }
 
                 {
-                    showCategory2 && (
-                        <Slider {...settings}>
-                            {
-                                ITCourseList?.map((course, index) => {
-                                    return (
-                                        <div className="m-card" key={index}>
-                                            <div className="m-card__heading">
-                                                <figure>
-                                                    <img src={course?.img} alt={course?.img_alt} />
-                                                </figure>
-                                                <h3 className="m-heading3">
-                                                    <a href={course.url}>{course?.name}</a>
-                                                </h3>
-                                            </div>
-                                            <div className="m-card__box">
-                                                <div className="m-card__rating">
-                                                <span className="mr-10">By {course?.vendor}</span>
-                                                <span className="m-rating">
-                                                    { course?.stars?.map((star, index) => starRatings(star, index)) }
-                                                    <span>{course?.rating}/5</span>
-                                                </span>
-                                                </div>
-                                                <div className="m-card__price">
-                                                    <strong>{course?.price}/-</strong> 
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )
-                                })
-                            }
-                        </Slider>
-                    )
+                    category === 'IT' && <ProductCards productList={ITCourseList} />
                 }
 
                 {
-                    showCategory3 && (
-                        <Slider {...settings}>
-                            {
-                                BnFCourseList?.map((course, index) => {
-                                    return (
-                                        <div className="m-card" key={index}>
-                                            <div className="m-card__heading">
-                                                <figure>
-                                                    <img src={course?.img} alt={course?.img_alt} />
-                                                </figure>
-                                                <h3 className="m-heading3">
-                                                    <a href={course.url}>{course?.name}</a>
-                                                </h3>
-                                            </div>
-                                            <div className="m-card__box">
-                                                <div className="m-card__rating">
-                                                <span className="mr-10">By {course?.vendor}</span>
-                                                <span className="m-rating">
-                                                    { course?.stars?.map((star, index) => starRatings(star, index)) }
-                                                    <span>{course?.rating}/5</span>
-                                                </span>
-                                                </div>
-                                                <div className="m-card__price">
-                                                    <strong>{course?.price}/-</strong> 
-                                                </div>
-                                            </div>
-                                        </div>
-                                    )
-                                })
-                            }
-                        </Slider>
-                    )
+                    category === 'BnF' && <ProductCards productList={BnFCourseList} />
                 }
                 </div>
             </div>
