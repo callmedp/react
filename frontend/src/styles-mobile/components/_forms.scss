@@ -58,8 +58,8 @@
 
   input, textarea {
     &:focus {
-      border: $border;
-      outline-color: $border-color;
+      border: 1px solid $blue;
+      outline-color: $blue;
       box-shadow: none;
     }
   }
