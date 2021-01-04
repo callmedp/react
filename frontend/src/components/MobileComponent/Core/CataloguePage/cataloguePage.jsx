@@ -28,7 +28,7 @@ const CatalogPage = (props) => {
         Aos.init({ duration: 2000, once: true, offset: 10, anchorPlacement: 'bottom-bottom' });
         new Promise((resolve, reject) => dispatch(fetchRecentlyAddedCourses({ resolve, reject })));
         new Promise((resolve, reject) => dispatch(fetchPopularServices({ resolve, reject })));
-        new Promise((resolve, reject) => dispatch(fetchTrendingCategories({ resolve, reject })));
+        new Promise((resolve, reject) => dispatch(fetchTrendingCategories({ 'medium': 1, resolve, reject })));
         new Promise((resolve, reject) => dispatch(fetchAllCategoriesAndVendors({ num:8, resolve, reject })));
     }, [])
 

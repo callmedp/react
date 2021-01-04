@@ -1,17 +1,9 @@
 import { 
-    FETCH_COURSES_AND_ASSESSMENTS, 
     FETCH_RECENTLY_ADDED_COURSES,
     FETCH_POPULAR_SERVICES,
     FETCH_TRENDING_CATEGORIES,
     FETCH_ALL_CATEGORIES_AND_VENDORS
 } from './actionTypes';
-
-const fetchCoursesAndAssessments = (payload) => {
-    return {
-        type : FETCH_COURSES_AND_ASSESSMENTS,
-        payload
-    }
-}
 
 const fetchRecentlyAddedCourses = (payload) => {
    
@@ -46,7 +38,6 @@ const fetchAllCategoriesAndVendors = (payload) => {
 }
 
 export {
-    fetchCoursesAndAssessments,
     fetchRecentlyAddedCourses,
     fetchPopularServices,
     fetchTrendingCategories,

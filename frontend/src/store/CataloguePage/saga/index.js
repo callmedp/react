@@ -3,33 +3,39 @@ import { takeLatest, call, put } from 'redux-saga/effects';
 import Api from './Api';
 
 
-function* coursesAndAssessments(action) {
+function* trendingCategories(action) {
     const { payload } = action;
 
     try {
 
-        const response = yield call(Api.coursesAndAssessments, payload);
+        const response = yield call(Api.trendingCategories, payload);
         
-        if (response["error"]) {
-            return payload?.reject(response["error"])
+        if(!response || response?.error){
+            return payload?.reject(response?.error);
         }
-        const item = response.data;
+        const item = response?.data;
     
-        var courseList = item.courses
-        var assessmentList = item.assessments
-        if(!!payload && !payload.medium){
-            //converts 1D array to 2D array
-            courseList = !!item && item.courses?.length ? item.courses.reduce((rows, key, index) => 
-            (index % 3 == 0 ? rows.push([key]) : rows[rows.length-1].push(key)) && rows, []) : [];
+        var SnMCourseList = item.SnMCourseList
+        var ITCourseList = item.ITCourseList
+        var BnFCourseList = item.BnFCourseList
+
+        // if(!!payload && !payload.medium){
+        //     //converts 1D array to 2D array
+        //     courseList = !!item && item.courses?.length ? item.courses.reduce((rows, key, index) => 
+        //     (index % 3 == 0 ? rows.push([key]) : rows[rows.length-1].push(key)) && rows, []) : [];
         
-            //converts 1D array to 2D array
-            assessmentList = !!item && item.assessments?.length ? item?.assessments.reduce((rows, key, index) => 
-            (index % 3 == 0 ? rows.push([key]) : rows[rows.length-1].push(key)) && rows, []) : [];
-        }
+        //     //converts 1D array to 2D array
+        //     assessmentList = !!item && item.assessments?.length ? item?.assessments.reduce((rows, key, index) => 
+        //     (index % 3 == 0 ? rows.push([key]) : rows[rows.length-1].push(key)) && rows, []) : [];
+        // }
         
         yield put({ 
-            type : Actions.COURSES_AND_ASSESSMENTS_FETCHED, 
-            item : { courseList , assessmentList }
+            type : Actions.TRENDING_CATEGORIES_FETCHED, 
+            item : {
+                SnMCourseList,
+                ITCourseList,
+                BnFCourseList
+            }
         })
 
         return payload?.resolve(item)
@@ -46,8 +52,8 @@ function* recentlyAddedCourses(action){
     try{
         const response = yield call(Api.recentlyAddedCourses);
         
-        if(!response || response['error']){
-            return payload?.reject(response["error"]);
+        if(!response || response?.error){
+            return payload?.reject(response?.error);
         }
         const item = response?.data?.data;
         yield put({ 
@@ -66,32 +72,12 @@ function* popularServices(action){
     try{
         const response = yield call(Api.popularServices);
         
-        if(!response || response['error']){
-            return payload?.reject(response["error"]);
+        if(!response || response?.error){
+            return payload?.reject(response?.error);
         }
         const item = response?.data?.data;
         yield put({ 
             type : Actions.POPULAR_SERVICES_FETCHED,
-            item : item
-        })
-        return payload?.resolve(item);
-    }
-    catch(e){
-        return payload?.reject(e);
-    }
-}
-
-function* trendingCategories(action){
-    const { payload } = action;
-    try{
-        const response = yield call(Api.trendingCategories);
-        
-        if(!response || response['error']){
-            return payload?.reject(response["error"]);
-        }
-        const item = response?.data;
-        yield put({ 
-            type : Actions.TRENDING_CATEGORIES_FETCHED,
             item : item
         })
         return payload?.resolve(item);
@@ -106,8 +92,8 @@ function* allCategories(action){
     try{
         const response = yield call(Api.allCategories, payload?.num);
         
-        if(!response || response['error']){
-            return payload?.reject(response["error"]);
+        if(!response || response?.error){
+            return payload?.reject(response?.error);
         }
         const item = response?.data?.data;
         yield put({ 
@@ -122,7 +108,6 @@ function* allCategories(action){
 }
 
 export default function* WatchCataloguePage() {
-    yield takeLatest(Actions.FETCH_COURSES_AND_ASSESSMENTS, coursesAndAssessments);
     yield takeLatest(Actions.FETCH_RECENTLY_ADDED_COURSES, recentlyAddedCourses);
     yield takeLatest(Actions.FETCH_POPULAR_SERVICES, popularServices);
     yield takeLatest(Actions.FETCH_TRENDING_CATEGORIES, trendingCategories);

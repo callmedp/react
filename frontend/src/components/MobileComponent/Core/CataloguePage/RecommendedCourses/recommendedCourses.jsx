@@ -16,12 +16,20 @@ const RecommendedCourses = (props) => {
         swipeToSlide: true,
         variableWidth: true,
     };
-    // const { trendingCategories } = useSelector( store => store.popularCategories );
+    const { SnMCourseList, ITCourseList, BnFCourseList } = useSelector( store => store.popularCategories );
     const trendingCategories = ['Sales and Marketing', 'Information Technology', 'Banking & Finance']
     const [selectedId, setSelectedId] = useState(0)
     const [showCategory1, setShowCategory1] = useState(true)
     const [showCategory2, setShowCategory2] = useState(false)
     const [showCategory3, setShowCategory3] = useState(false)
+
+    const starRatings = (star, index) => {
+        return (
+            star === '*' ? <em className="micon-fullstar" key={index}></em> : 
+            star === '+' ? <em className="micon-halfstar" key={index}></em> : 
+                           <em className="micon-blankstar" key={index}></em>
+        )
+    }
 
     const setSelectedClass = (event, index) => {
         event.preventDefault();
@@ -64,58 +72,34 @@ const RecommendedCourses = (props) => {
                 {
                     showCategory1 && (
                         <Slider {...settings}>
-                            <div className="m-card">
-                                <div className="m-card__heading">
-                                    <figure>
-                                        <img src="https://static1.shine.com/l/m/product_image/3425/1542800087_8980.png" alt="Digital Marketing Training Course" />
-                                    </figure>
-                                    <h3 className="m-heading3">
-                                        <Link to={"#"}>Digital Marketing Training Course Programme 1</Link>
-                                    </h3>
-                                </div>
-                                <div className="m-card__box">
-                                    <div className="m-card__rating">
-                                    <span className="mr-10">By ERB</span>
-                                    <span className="m-rating">
-                                        <em className="micon-fullstar"></em>
-                                        <em className="micon-fullstar"></em>
-                                        <em className="micon-fullstar"></em>
-                                        <em className="micon-fullstar"></em>
-                                        <em className="micon-blankstar"></em>
-                                        <span>4/5</span>
-                                    </span>
-                                    </div>
-                                    <div className="m-card__price">
-                                        <strong>12999/-</strong> 
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="m-card">
-                                <div className="m-card__heading">
-                                    <figure>
-                                        <img src="https://static1.shine.com/l/m/product_image/3425/1542800087_8980.png" alt="Digital Marketing Training Course" />
-                                    </figure>
-                                    <h3 className="m-heading3">
-                                        <Link to={"#"}>Digital Marketing Training Course Programme</Link>
-                                    </h3>
-                                </div>
-                                <div className="m-card__box">
-                                    <div className="m-card__rating">
-                                    <span className="mr-10">By ERB</span>
-                                    <span className="m-rating">
-                                        <em className="micon-fullstar"></em>
-                                        <em className="micon-fullstar"></em>
-                                        <em className="micon-fullstar"></em>
-                                        <em className="micon-fullstar"></em>
-                                        <em className="micon-blankstar"></em>
-                                        <span>4/5</span>
-                                    </span>
-                                    </div>
-                                    <div className="m-card__price">
-                                        <strong>12999/-</strong> 
-                                    </div>
-                                </div>
-                            </div>
+                            {
+                                SnMCourseList?.map((course, index) => {
+                                    return (
+                                        <div className="m-card" key={index}>
+                                            <div className="m-card__heading">
+                                                <figure>
+                                                    <img src={course?.img} alt={course?.img_alt} />
+                                                </figure>
+                                                <h3 className="m-heading3">
+                                                    <a href={course.url}>{course?.name}</a>
+                                                </h3>
+                                            </div>
+                                            <div className="m-card__box">
+                                                <div className="m-card__rating">
+                                                <span className="mr-10">By {course?.vendor}</span>
+                                                <span className="m-rating">
+                                                    { course?.stars?.map((star, index) => starRatings(star, index)) }
+                                                    <span>{course?.rating}/5</span>
+                                                </span>
+                                                </div>
+                                                <div className="m-card__price">
+                                                    <strong>{course?.price}/-</strong> 
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )
+                                })
+                            }
                         </Slider>
                     )
                 }
@@ -123,58 +107,34 @@ const RecommendedCourses = (props) => {
                 {
                     showCategory2 && (
                         <Slider {...settings}>
-                            <div className="m-card">
-                                <div className="m-card__heading">
-                                    <figure>
-                                        <img src="https://static1.shine.com/l/m/product_image/3425/1542800087_8980.png" alt="Digital Marketing Training Course" />
-                                    </figure>
-                                    <h3 className="m-heading3">
-                                        <Link to={"#"}>Digital Marketing Training Course Programme 2</Link>
-                                    </h3>
-                                </div>
-                                <div className="m-card__box">
-                                    <div className="m-card__rating">
-                                    <span className="mr-10">By ERB</span>
-                                    <span className="m-rating">
-                                        <em className="micon-fullstar"></em>
-                                        <em className="micon-fullstar"></em>
-                                        <em className="micon-fullstar"></em>
-                                        <em className="micon-fullstar"></em>
-                                        <em className="micon-blankstar"></em>
-                                        <span>4/5</span>
-                                    </span>
-                                    </div>
-                                    <div className="m-card__price">
-                                        <strong>12999/-</strong> 
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="m-card">
-                                <div className="m-card__heading">
-                                    <figure>
-                                        <img src="https://static1.shine.com/l/m/product_image/3425/1542800087_8980.png" alt="Digital Marketing Training Course" />
-                                    </figure>
-                                    <h3 className="m-heading3">
-                                        <Link to={"#"}>Digital Marketing Training Course Programme</Link>
-                                    </h3>
-                                </div>
-                                <div className="m-card__box">
-                                    <div className="m-card__rating">
-                                    <span className="mr-10">By ERB</span>
-                                    <span className="m-rating">
-                                        <em className="micon-fullstar"></em>
-                                        <em className="micon-fullstar"></em>
-                                        <em className="micon-fullstar"></em>
-                                        <em className="micon-fullstar"></em>
-                                        <em className="micon-blankstar"></em>
-                                        <span>4/5</span>
-                                    </span>
-                                    </div>
-                                    <div className="m-card__price">
-                                        <strong>12999/-</strong> 
-                                    </div>
-                                </div>
-                            </div>
+                            {
+                                ITCourseList?.map((course, index) => {
+                                    return (
+                                        <div className="m-card" key={index}>
+                                            <div className="m-card__heading">
+                                                <figure>
+                                                    <img src={course?.img} alt={course?.img_alt} />
+                                                </figure>
+                                                <h3 className="m-heading3">
+                                                    <a href={course.url}>{course?.name}</a>
+                                                </h3>
+                                            </div>
+                                            <div className="m-card__box">
+                                                <div className="m-card__rating">
+                                                <span className="mr-10">By {course?.vendor}</span>
+                                                <span className="m-rating">
+                                                    { course?.stars?.map((star, index) => starRatings(star, index)) }
+                                                    <span>{course?.rating}/5</span>
+                                                </span>
+                                                </div>
+                                                <div className="m-card__price">
+                                                    <strong>{course?.price}/-</strong> 
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )
+                                })
+                            }
                         </Slider>
                     )
                 }
@@ -182,58 +142,34 @@ const RecommendedCourses = (props) => {
                 {
                     showCategory3 && (
                         <Slider {...settings}>
-                            <div className="m-card">
-                                <div className="m-card__heading">
-                                    <figure>
-                                        <img src="https://static1.shine.com/l/m/product_image/3425/1542800087_8980.png" alt="Digital Marketing Training Course" />
-                                    </figure>
-                                    <h3 className="m-heading3">
-                                        <Link to={"#"}>Digital Marketing Training Course Programme 3</Link>
-                                    </h3>
-                                </div>
-                                <div className="m-card__box">
-                                    <div className="m-card__rating">
-                                    <span className="mr-10">By ERB</span>
-                                    <span className="m-rating">
-                                        <em className="micon-fullstar"></em>
-                                        <em className="micon-fullstar"></em>
-                                        <em className="micon-fullstar"></em>
-                                        <em className="micon-fullstar"></em>
-                                        <em className="micon-blankstar"></em>
-                                        <span>4/5</span>
-                                    </span>
-                                    </div>
-                                    <div className="m-card__price">
-                                        <strong>12999/-</strong> 
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="m-card">
-                                <div className="m-card__heading">
-                                    <figure>
-                                        <img src="https://static1.shine.com/l/m/product_image/3425/1542800087_8980.png" alt="Digital Marketing Training Course" />
-                                    </figure>
-                                    <h3 className="m-heading3">
-                                        <Link to={"#"}>Digital Marketing Training Course Programme</Link>
-                                    </h3>
-                                </div>
-                                <div className="m-card__box">
-                                    <div className="m-card__rating">
-                                    <span className="mr-10">By ERB</span>
-                                    <span className="m-rating">
-                                        <em className="micon-fullstar"></em>
-                                        <em className="micon-fullstar"></em>
-                                        <em className="micon-fullstar"></em>
-                                        <em className="micon-fullstar"></em>
-                                        <em className="micon-blankstar"></em>
-                                        <span>4/5</span>
-                                    </span>
-                                    </div>
-                                    <div className="m-card__price">
-                                        <strong>12999/-</strong> 
-                                    </div>
-                                </div>
-                            </div>
+                            {
+                                BnFCourseList?.map((course, index) => {
+                                    return (
+                                        <div className="m-card" key={index}>
+                                            <div className="m-card__heading">
+                                                <figure>
+                                                    <img src={course?.img} alt={course?.img_alt} />
+                                                </figure>
+                                                <h3 className="m-heading3">
+                                                    <a href={course.url}>{course?.name}</a>
+                                                </h3>
+                                            </div>
+                                            <div className="m-card__box">
+                                                <div className="m-card__rating">
+                                                <span className="mr-10">By {course?.vendor}</span>
+                                                <span className="m-rating">
+                                                    { course?.stars?.map((star, index) => starRatings(star, index)) }
+                                                    <span>{course?.rating}/5</span>
+                                                </span>
+                                                </div>
+                                                <div className="m-card__price">
+                                                    <strong>{course?.price}/-</strong> 
+                                                </div>
+                                            </div>
+                                        </div>
+                                    )
+                                })
+                            }
                         </Slider>
                     )
                 }
