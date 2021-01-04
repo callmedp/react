@@ -15,7 +15,7 @@ class DashboardMyorderApi(DashboardInfo, APIView):
 
     def get(self, request, *args, **kwargs):
         candidate_id = self.request.session.get('candidate_id', None)
-        data=[]
+        order_list=[]
         if candidate_id:
         # candidate_id='5fed060d9cbeea482331ec4b'
             orders = Order.objects.filter(
