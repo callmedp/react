@@ -234,6 +234,8 @@
         
                 li {
                     
+                    position: relative;
+                    padding-left: 1.7rem;
                     &:not(:last-child) {
                         margin-bottom: .3rem;
                     }
@@ -245,6 +247,9 @@
                         height: .8rem;
                         display: inline-block;
                         margin-right: 1rem;
+                        position: absolute;
+                        left: 0;
+                        top: .5rem;
                     }
                 }
             }
