@@ -13,7 +13,8 @@ function CoursesTray() {
     const [categoryKey2, setCategoryKey2] = useState(1);
     const [categoryKey3, setCategoryKey3] = useState(1);
 
-    const { SnMCourseList, ITCourseList, BnFCourseList } = useSelector( store => store.CoursesTray)
+    const { SnMCourseList, ITCourseList, BnFCourseList } = useSelector( store => store.popularCategories ) 
+    
 
     const loadMoreCourses = (setCategoryKey) => {
         setCategoryKey( state => state+1);

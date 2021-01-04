@@ -61,7 +61,7 @@ class PopularProductMixin(object):
                 'price': product.pPinb,
                 'vendor': product.pPvn,
                 'stars': product.pStar,
-                'provider': product.pPvn
+                'providerName': product.pPvn
              } for product in products ]
 
         return popularProducts 

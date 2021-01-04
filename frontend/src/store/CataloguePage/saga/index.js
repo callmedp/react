@@ -15,19 +15,26 @@ function* trendingCategories(action) {
         }
         const item = response?.data;
     
-        var SnMCourseList = item.SnMCourseList
-        var ITCourseList = item.ITCourseList
-        var BnFCourseList = item.BnFCourseList
+        var SnMCourseList = item?.SnMCourseList
+        var ITCourseList = item?.ITCourseList
+        var BnFCourseList = item?.BnFCourseList
+       
 
-        // if(!!payload && !payload.medium){
-        //     //converts 1D array to 2D array
-        //     courseList = !!item && item.courses?.length ? item.courses.reduce((rows, key, index) => 
-        //     (index % 3 == 0 ? rows.push([key]) : rows[rows.length-1].push(key)) && rows, []) : [];
+        if(!!payload && !payload.medium && SnMCourseList instanceof Array 
+            && ITCourseList instanceof Array && BnFCourseList instanceof Array){
+            //converts 1D array to 2D array
+            SnMCourseList = !!item && item.SnFCourseList?.length ? item.SnFCourseList.reduce((rows, key, index) => 
+            (index % 3 == 0 ? rows.push([key]) : rows[rows.length-1].push(key)) && rows, []) : [];
         
-        //     //converts 1D array to 2D array
-        //     assessmentList = !!item && item.assessments?.length ? item?.assessments.reduce((rows, key, index) => 
-        //     (index % 3 == 0 ? rows.push([key]) : rows[rows.length-1].push(key)) && rows, []) : [];
-        // }
+            //converts 1D array to 2D array
+            ITCourseList = !!item && item.ITCourseList?.length ? item?.ITCourseList.reduce((rows, key, index) => 
+            (index % 3 == 0 ? rows.push([key]) : rows[rows.length-1].push(key)) && rows, []) : [];
+
+            //converts 1D array to 2D array
+            BnFCourseList = !!item && item.BnFCourseList?.length ? item?.BnFCourseList.reduce((rows, key, index) => 
+            (index % 3 == 0 ? rows.push([key]) : rows[rows.length-1].push(key)) && rows, []) : [];
+        }
+        
         
         yield put({ 
             type : Actions.TRENDING_CATEGORIES_FETCHED, 
