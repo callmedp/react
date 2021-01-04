@@ -4,11 +4,10 @@ from rest_framework import serializers
 from order.models import OrderItem, Order
 
 class OrderItemSerializer(serializers.ModelSerializer):
-    product__name = serializers.CharField()
 
     class Meta:
         model = OrderItem
-        fields = ('id','product__name', 'oi_status')
+        fields = ('id','product', 'oi_status')
 
 class OrderSerializer(serializers.ModelSerializer):
     """
