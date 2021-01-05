@@ -5,18 +5,18 @@
 
         <div class="row">
           <div class="footer-links mb-20 col-sm-8">
-            <a href="/about-us" onclick="trackClickEvent()">About Us</a>
+            <a href="/about-us" onclick="MyGA.SendEvent('homepage_footer','ln_homepage_footer', 'ln_homepage_footer_clicked', 'About Us','', false, true);trackClickEvent();">About Us</a>
             <!--a href="/partners">Partners</a-->
-            <a href="/privacy-policy/" onclick="trackClickEvent()">Privacy Policy</a>
-            <a href="/tnc/" onclick="trackClickEvent()">Terms & Conditions</a>
-            <a href="/contact-us" onclick="trackClickEvent()">Contact Us</a>
-            <a href="/disclaimer/" onclick="trackClickEvent()">Disclaimer</a>
+            <a href="/privacy-policy/" onclick="MyGA.SendEvent('homepage_footer','ln_homepage_footer', 'ln_homepage_footer_clicked', 'Privacy Policy','', false, true);trackClickEvent();">Privacy Policy</a>
+            <a href="/tnc/" onclick="MyGA.SendEvent('homepage_footer','ln_homepage_footer', 'ln_homepage_footer_clicked', 'Terms & Conditions','', false, true);trackClickEvent();">Terms & Conditions</a>
+            <a href="/contact-us" onclick="MyGA.SendEvent('homepage_footer','ln_homepage_footer', 'ln_homepage_footer_clicked', 'Contact Us','', false, true);trackClickEvent();">Contact Us</a>
+            <a href="/disclaimer/" onclick="MyGA.SendEvent('homepage_footer','ln_homepage_footer', 'ln_homepage_footer_clicked', 'Disclaimer','', false, true);trackClickEvent();">Disclaimer</a>
           </div>
 
           <div class="footer-social-login col-sm-4">
-            <a aria-label="follow us on facebook" class="facebook mr-10" href="https://www.facebook.com/shinelearningdotcom/" onclick="trackClickEvent()" ></a>
-            <a aria-label="follow us on linkedin" class="linkedin mr-10" href="https://www.linkedin.com/showcase/13203963/" onclick="trackClickEvent()"></a>
-            <a aria-label="follow us on twitter" class="twitter" href="https://twitter.com/shinelearning" onclick="trackClickEvent()"></a>
+            <a aria-label="follow us on facebook" class="facebook mr-10" href="https://www.facebook.com/shinelearningdotcom/" onclick="MyGA.SendEvent('social_media_follow','ln_social_media_follow', 'ln_facebook', 'homepage','', false, true);trackClickEvent();" ></a>
+            <a aria-label="follow us on linkedin" class="linkedin mr-10" htrackClickEventref="https://www.linkedin.com/showcase/13203963/" onclick="MyGA.SendEvent('social_media_follow','ln_social_media_follow', 'ln_linkedin', 'homepage','', false, true);trackClickEvent();"></a>
+            <a aria-label="follow us on twitter" class="twitter" href="https://twitter.com/shinelearning" onclick="MyGA.SendEvent('social_media_follow','ln_social_media_follow', 'ln_twitter', 'homepage,'', false, true);trackClickEvent();"></a>
           </div>
 
           <span class="ftr-bdr mb-20"></span>

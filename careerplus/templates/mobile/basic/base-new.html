@@ -81,6 +81,32 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 gtag('config', 'UA-3537905-1',{'group':'mainProfile','useAmpClientId': true});
             </script>
 
+            <!--  Shlearn analytics   -->
+        <script type="text/javascript">
+            (function (p, l, o, w, i, n, g)
+                {
+                    if (!p[i])
+                    {
+                        p.GlobalTrackerNamespace = p.GlobalTrackerNamespace || [];
+                        p.GlobalTrackerNamespace.push(i);
+                        p[i] = function ()
+                        {
+                            (p[i].q = p[i].q || []).push(arguments);
+                        };
+                        p[i].q = p[i].q || [];
+                        n = l.createElement(o);
+                        g = l.getElementsByTagName(o)[0];
+                        n.async = 1;
+                        n.src = w;
+                        g.parentNode.insertBefore(n, g);
+                        p['platform'] = "web";
+                        p["product_id"] = "shlearn"
+                    }
+                }
+                (window, document, "script", "https://analytics.htmedia.in/analytics-js/shinedap.js", "dapCollector"));
+            </script>
+        <!-- Shlearn Analytics End -->
+
         {% endblock GA %}
 
    </head>

@@ -114,7 +114,11 @@ urlpatterns = [
     ),
     re_path(r'v1/recommended-courses-and-assesments/$', views.RecommendedCoursesAPI.as_view(),
         name='recommended-products-api'
-    )
+    ),
+    re_path(r'^v1/resume_mailer_tracking/$', 
+        views.ResumePromotionTrackingAPIView.as_view(),
+        name='resume-mailer-tracking'),
+
 ]
 
 if settings.DEBUG:

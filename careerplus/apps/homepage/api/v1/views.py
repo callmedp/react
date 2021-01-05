@@ -122,8 +122,7 @@ class UserDashboardApi(FieldFilterMixin, ListAPIView):
             select_type = 0
 
         last_payment_date = timezone.now() - datetime.timedelta(days=days)
-        queryset_list = OrderItem.objects.filter(no_process=False, order__site=2,
-                                                 product__type_flow__in=[1, 12, 13, 4, 5, 8, 17])
+        queryset_list = OrderItem.objects.filter(no_process=False)
 
         if select_type == 1:
             queryset_list = queryset_list.exclude(oi_status=4)
@@ -152,7 +151,7 @@ class UserDashboardApi(FieldFilterMixin, ListAPIView):
                 queryset_list = queryset_list.filter(order__email=email, order__status__in=[1, 3])
 
             queryset_list = queryset_list.filter(order__email=email, order__status__in=[1, 3], no_process=False,
-                                                 order__site=2)
+                                                 )
             return queryset_list
 
 
@@ -259,7 +258,7 @@ class DashboardNotificationBoxApi(APIView):
         try:
             # this is order__site=2 is required to get the data for resume.shine
             pending_resume_items = DashboardInfo().get_pending_resume_items(candidate_id=candidate_id,
-                                                                            email=email).filter(order__site=2)
+                                                                            email=email)
 
             pending_resume_items = [{'id':oi.id,'product_name':oi.product.get_name if oi.product else ''
                                      ,'product_get_exp_db':oi.product.get_exp_db() if oi.product else ''
@@ -608,7 +607,7 @@ class UserInboxListApiView(APIView):
 
         orders = Order.objects.filter(
             status__in=[0, 1, 3],
-            candidate_id=candidate_id,site=2)
+            candidate_id=candidate_id)
 
         excl_txns = PaymentTxn.objects.filter(
             status__in=[0, 2, 3, 4, 5],
@@ -620,7 +619,7 @@ class UserInboxListApiView(APIView):
         order_list = []
         for obj in orders:
             orderitems = OrderItem.objects.prefetch_related('product','product__product_class','parent').filter(
-                order__site=2, no_process=False,order=obj)
+                 no_process=False,order=obj)
             product_type_flow = None
             product_id = None
             item_count = len(orderitems)
@@ -860,6 +859,34 @@ class NavigationTagsAndOffersAPI(APIView):
             }
         })
         return APIResponse(message='Navigations Tags and Offers details fetched', data=data, status=status.HTTP_200_OK)
+class NeoBoardUserAPI(APIView):
+    permission_classes = ()
+    authentication_classes = ()
+    serializer_classes = None
+
+    def post(self,request,*args,**kwargs):
+        from order.models import OrderItem
+        from order.tasks import board_user_on_neo
+        candidate_id = request.data.get('candidate_id')
+        oi_pk = request.data.get('oi_pk')
+        if not candidate_id:
+            return Response({'error':'candidate id is missing'},status=status.HTTP_400_BAD_REQUEST)
+        if not oi_pk:
+            return Response({'error':'orderitem id is missing'},status=status.HTTP_400_BAD_REQUEST)
+
+        oi= OrderItem.objects.select_related("order").filter(pk=oi_pk).first()
+        order = oi.order
+
+        if oi and oi.product.vendor.slug == 'neo' and order.candidate_id == candidate_id and order.status in[1,3]:
+            if not oi.neo_mail_sent:
+                boarding_type = board_user_on_neo([oi.id])
+                msg = 'Please check you mail to confirm boarding on Neo'
+                if boarding_type == 'already_trial':
+                    msg = 'You Account has been Updated from Trial To Regular'
+                return Response({'data': msg},status=status.HTTP_200_OK)
+
+
+        return Response({'data':''},status=status.HTTP_200_OK)
 
 
 

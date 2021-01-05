@@ -109,7 +109,7 @@
                     </label>
                 </div>
 
-                <button type="submit" class="btn btn-primary submit">Login</button>
+                <button type="submit" class="btn btn-primary submit" onclick = "MyGA.SendEvent('sign_in','ln_sign_in', 'ln_login', '','', false, true);">Login</button>
 
                 <small class="form-text text-muted text-center">
                     <a href="javascript:void(0)" id="modalforgot">
@@ -117,9 +117,9 @@
                 </small>
                 <div class="social-login">
                     <span>or login with</span>
-                    <a class="facebook" onclick="Login(); soc_gaevent('Login','Facebook_BuyFlow','Sign In');"></a>
-                    <a class="linkedin" onclick="soc_gaevent('Login','Linkedin_BuyFlow','Sign In');" href="{% url 'users:linkedin-code' %}"></a>
-                    <a class="gplus" onclick="glogin();soc_gaevent('Login','GooglePlus_BuyFlow','Sign In');"></a>
+                    <a class="facebook" onclick="Login(); soc_gaevent('Login','Facebook_BuyFlow','Sign In'); MyGA.SendEvent('sign_in','ln_sign_in', 'ln_facebook', '','', false, true);"></a>
+                    <a class="linkedin" onclick="soc_gaevent('Login','Linkedin_BuyFlow','Sign In');MyGA.SendEvent('sign_in','ln_sign_in', 'ln_linkedin', '','', false, true);" href="{% url 'users:linkedin-code' %}"></a>
+                    <a class="gplus" onclick="glogin();soc_gaevent('Login','GooglePlus_BuyFlow','Sign In');MyGA.SendEvent('sign_in','ln_sign_in', 'ln_gplus, '','', false, true);"></a>
                 </div>
                 <small class="form-text text-muted text-center">Don’t have an account yet? <a href="{% url 'register' %}">Register Now</a></small>
             </form>
@@ -212,10 +212,6 @@
               (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
               m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
               })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-              ga('create', 'UA-3537905-41', 'auto', {'name': 'a'});
-              ga('a.send', 'pageview');
-              ga('create', 'UA-3537905-41', 'auto');
-              ga('send', 'pageview');
 
 
 function soc_gaevent(event_cat,event_lab,event_action){

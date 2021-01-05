@@ -87,7 +87,7 @@
 
                <div class="testinside testinside-inner">
                   <span class="border-left {% cycle 'default' 'purple' 'olive' 'green' %}"></span>
-           <a class="test-box" href="{% url 'assessment:vskill-subcategory' slug=cat.slug %}" title="{{cat.name}}">
+           <a class="test-box" href="{% url 'assessment:vskill-subcategory' slug=cat.slug %}" title="{{cat.name}}" onclick="MyGA.SendEvent('practicetest_search','ln_test_preps_select', 'ln_test_preps_select', 'ln_{{cat.name}}','', false, true);">
                      {{cat.name}}
                      <span class="test"> {{cat.get_assessment_test_count}}
                  {% if cat.get_assessment_test_count < 2 %}Test {% else %}Tests{% endif %}
