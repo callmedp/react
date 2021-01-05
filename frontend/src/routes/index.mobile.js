@@ -4,6 +4,7 @@ import SkillPageContainer from "components/MobileComponent/Core/SkillPage/skillP
 import CataloguePageContainer from "components/MobileComponent/Core/CataloguePage/cataloguePage";
 import { getSkillPageActionsMobile } from 'apiHandler/skillPageApi'; 
 import Error404Container from 'components/MobileComponent/Common/ErrorPage404/errorPage404';
+import { getCataloguePageActionsMobile } from "apiHandler/cataloguePageApi";
 
 export const RouteWithSubRoutes = route => {
     return (
@@ -38,6 +39,7 @@ export const routes = [
     {
         path: '/online-courses.html/',
         component: CataloguePageContainer,
+        actionGroup: getCataloguePageActionsMobile,
         exact: true,
     },
     {

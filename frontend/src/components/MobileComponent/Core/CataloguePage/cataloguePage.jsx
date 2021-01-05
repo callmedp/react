@@ -11,7 +11,7 @@ import Footer from '../../Common/Footer/Footer';
 import SearchPage from '../../Common/SearchPage/SearchPage';
 import './cataloguePage.scss';
 import Aos from "aos";
-import "aos/dist/aos.css";
+// import "aos/dist/aos.css";
 import { useDispatch } from 'react-redux';
 import {
     fetchRecentlyAddedCourses,

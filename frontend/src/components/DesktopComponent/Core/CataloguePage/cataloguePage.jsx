@@ -9,7 +9,7 @@ import OurVendors from './OurVendors/ourVendors';
 import Footer from 'components/DesktopComponent/Common/Footer/footer';
 import './cataloguePage.scss';
 import Aos from "aos";
-import "aos/dist/aos.css";
+// import "aos/dist/aos.css";
 import { useDispatch } from 'react-redux';
 import { fetchRecentlyAddedCourses, fetchPopularServices, 
     fetchAllCategoriesAndVendors, fetchTrendingCategories } from 'store/CataloguePage/actions/index';
