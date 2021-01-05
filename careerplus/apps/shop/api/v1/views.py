@@ -526,6 +526,14 @@ class CourseCatalogueAPI(CourseCatalogueMixin, APIView):
     permission_classes = ()
     authentication_classes = ()
 
+    def get_meta_data(self, context=None):
+        data = {
+            'title': 'Online Courses and Certifications : Free Online Education',
+            'description': 'Join India\'s Largest E-Learning Online Courses and Education Platform. Get Certifications in Top Courses under Finance, IT, Analytics, Marketing and more',
+            '_url': settings.MAIN_DOMAIN_PREFIX + '/online-courses.html'
+        }
+        return data
+
     def get(self, request):
         """
         This will return Course Category with
@@ -543,6 +551,10 @@ class CourseCatalogueAPI(CourseCatalogueMixin, APIView):
                 mixin_dict_value = self.get_course_catalogue_context(num=quantity_to_display)
                 data['categoryList'] = mixin_dict_value['course_fa_list']
                 data['vendorList'] = mixin_dict_value['vendor_list']
+
+            data.update({
+                'meta': self.get_meta_data()
+            })
 
             return Response({'data': data}, status=status.HTTP_200_OK)
         except Exception as e:
