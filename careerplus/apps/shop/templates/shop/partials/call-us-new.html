@@ -27,7 +27,7 @@
             </div>
             <div class="form-group">
             <input type="text" class="form-control input_field" id="name" name="name"
-                value="{{request.session.full_name}}" placeholder="Name" onfocus="MyGA.SendEvent('SkillNeedHelpForm', 'ln_need_help', 'ln_need_help_form_submitted', '{{category.name|title}}', 'clicked', '', false, true)">
+                value="{{request.session.full_name}}" placeholder="Name" onfocus="MyGA.SendEvent('SkillNeedHelpForm', 'ln_need_help', 'ln_need_help_form_submitted', '{{category.name|title}}', '', false, true)">
             <label for="name" class="input_label">Name</label>
             </div>
             <input type="hidden" name="lsource" value="1">
@@ -35,7 +35,7 @@
             <input type="hidden" name="prd" value="{{category.heading}}">
             <input type="hidden" name="path" value="{{category.get_absolute_url}}">
             
-            <button type="submit" class="btn btn-block btn-primary">Submit</button>
+            <button type="submit" class="btn btn-block btn-primary" onclick="MyGA.SendEvent('SkillNeedHelpForm','ln_need_help', 'ln_need_help_form_submitted', '{{category.name|title}}','', false, true);">Submit</button>
         </form>
         </div>
     </section>
