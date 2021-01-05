@@ -91,7 +91,9 @@ app.use(function (req, res, next) {
     next();
 });
 
+app.use('/media/static/',express.static('../careerplus/media/static/'));
 app.use(express.static('../careerplus/media/static/react/'));
+
 
 const isMobile = (userAgents) => {
     return /Android|Phone|Mobile|Opera\sM(in|ob)i|iP[ao]d|BlackBerry|SymbianOS|Safari\.SearchHelper|SAMSUNG-(GT|C)|WAP|CFNetwork|Puffin|PlayBook|Nokia|LAVA|SonyEricsson|Karbonn|UCBrowser|ucweb|Micromax|Silk|LG(MW|-MMS)|PalmOS/i.test(userAgents)
