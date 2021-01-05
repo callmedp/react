@@ -848,7 +848,7 @@ class NavigationTagsAndOffersAPI(APIView):
         data = {}
         special_links = cache.get('active_homepage_navlink_new', [])
         whatsapp_no = cache.get('whatsapp_visibility_class', {})
-        if special_links:
+        if not settings.DEBUG and special_links:
             active_navlinks = special_links
         else:
             data_obj_list = list(NavigationSpecialTag().get_active_navlink())
@@ -944,7 +944,7 @@ class TrendingCategoriesApi(PopularProductMixin, APIView):
 
     def get(self, request):
         cached_data = cache.get('category_popular_courses')
-        if cached_data:
+        if not settings.DEBUG and cached_data:
             data = cached_data
         else:
             data = {

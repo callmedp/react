@@ -15,12 +15,12 @@ function MobileApp(props) {
   },[])
 
   return (
-    // <div id="outer-container">
-    //     <Menu pageWrapId={ "page-wrap" } outerContainerId={ "outer-container" } />
-    //     <main id="page-wrap">
+    <div id="outer-container">
+        <Menu pageWrapId={ "page-wrap" } outerContainerId={ "outer-container" } />
+        <main id="page-wrap">
           <MobileAppRouter/>
-    //     </main>
-    // </div>
+        </main>
+    </div>
   );
 }
 
