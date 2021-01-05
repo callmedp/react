@@ -31,7 +31,9 @@ const ServicesForYou = (props) => {
                                 <p>Resume written by experts to increase your profile visibility</p>
                                 <span className="d-flex">
                                     <a href={service.url}>Know more</a>
-                                    <figure className="micon-service1"></figure>
+                                    <figure>
+                                        <img height="30" width="40" src={service.img} alt={service.img_alt} />
+                                    </figure>
                                 </span>
                             </div>
                         )
