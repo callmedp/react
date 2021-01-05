@@ -102,14 +102,14 @@ app.get(expressRoutes, (req, res) => {
 
     if (isMobile(userAgents)) {
 
-        console.log("<><><><><><>Entered Mobile<><><><><><>")
+        console.log("<><><><><><>Entered Mobile<><><><><><>   ",req.url )
         indexFile = path.resolve('ssrBuild/index.mobile.html');
         routes = require('routes/index.mobile').routes;
 
     }
     else {
 
-        console.log("<><><><><><>Entered Desktop<><><><><><>")
+        console.log("<><><><><><>Entered Desktop<><><><><><>  ", req.url)
         indexFile = path.resolve('ssrBuild/index.html');
         routes = require('routes/index.desktop').routes;
 
@@ -148,11 +148,11 @@ app.get(expressRoutes, (req, res) => {
                 // Grab the initial state from our Redux store at send it to the browser to hydrate the app.
                 const preloadedState = store.getState()
                 
-            
+                
                 fs.readFile(indexFile, 'utf8', (err, data) => {
                     if (err) {
                         console.error('Something went wrong:', err);
-                        return res.status(500).send('Oops, better luck next time!');
+                        return res.status(500).send('path of index.html file not found!');
                     }
             
                     return res.send(

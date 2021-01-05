@@ -10,6 +10,7 @@ function* trackUser(action) {
         //yield call(Api.trackUser, trackingId, productTrackingMappingId, productId, userAction, position, triggerPoint, uId, utmCampaign, popup_based_product );        
     }
     catch (e) {
+        console.error("Exception occured at trackuser Api", e);
     }
 }
 
