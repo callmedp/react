@@ -535,7 +535,7 @@ class CourseCatalogueAPI(CourseCatalogueMixin, APIView):
         try:
             quantity_to_display = int(request.GET.get('num', 8))
             # Using mixin get the category & vendor dict
-            if cache.get('course_catalogue') and cache.get('default_num') == quantity_to_display:
+            if not settings.DEBUG and cache.get('course_catalogue') and cache.get('default_num') == quantity_to_display:
                 mixin_dict_value = cache.get('course_catalogue')
                 data['categoryList'] = mixin_dict_value['course_fa_list']
                 data['vendorList'] = mixin_dict_value['vendor_list']
