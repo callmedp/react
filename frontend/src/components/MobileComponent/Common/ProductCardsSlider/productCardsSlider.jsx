@@ -42,7 +42,7 @@ const ProductCards = props => {
                             </div>
                             <div className="m-card__box">
                                 <div className="m-card__rating">
-                                <span className="mr-10">By {product?.provider}</span>
+                                <span className="mr-10">By {product?.providerName}</span>
                                 <span className="m-rating">
                                     { product?.stars?.map((star, index) => starRatings(star, index)) }
                                     <span>{product?.rating?.toFixed(1)}/5</span>

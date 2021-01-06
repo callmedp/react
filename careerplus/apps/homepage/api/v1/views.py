@@ -932,7 +932,7 @@ class RecentCoursesAPI(APIView):
                     {
                     'id': trcnts.id, 'heading': trcnts.pHd, 'name': trcnts.pNm, 'url': trcnts.pURL, 'imgUrl': trcnts.pImg, \
                      'imgAlt': trcnts.pImA, 'rating': trcnts.pARx, 'price': trcnts.pPinb, 'vendor': trcnts.pPvn,
-                     'stars': trcnts.pStar,'provider': trcnts.pPvn
+                     'stars': trcnts.pStar,'providerName': trcnts.pPvn
                      } for trcnts in trcntss
                 ]
         }
