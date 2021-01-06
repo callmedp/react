@@ -21,7 +21,7 @@ const OurVendors = (props) => {
                                         <h3 className="heading3">{service.name}</h3>
                                         <p>{service.description}</p>
                                         <span className="d-flex">
-                                            <a href={`${siteDomain}${service.url}`}>Know more</a>
+                                            <a href={service.url}>Know more</a>
                                             <figure >
                                                 <img height="30" width="40"  src={service.img} alt={service.img_alt} />
                                             </figure>

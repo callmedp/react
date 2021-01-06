@@ -43,7 +43,7 @@ const CatalogPage = (props) => {
                 <>
                     <MenuNav />
                     <header className="m-container m-header">
-                        <Header setShowSearchPage={setShowSearchPage} />
+                        <Header setShowSearchPage={setShowSearchPage} hideName={true}/>
                         <CatalogBanner />
                     </header>
                     <main className="mb-0">
