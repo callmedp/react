@@ -152,7 +152,7 @@ app.get(expressRoutes, (req, res) => {
                 fs.readFile(indexFile, 'utf8', (err, data) => {
                     if (err) {
                         console.error('Something went wrong:', err);
-                        return res.status(500).send('path of index.html file not found!');
+                        return res.status(500).send('index.html file not found!');
                     }
             
                     return res.send(
