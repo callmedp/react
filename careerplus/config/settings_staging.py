@@ -121,14 +121,14 @@ HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'core.library.haystack.custom_solr_backend.CustomSolrEngine',
         # prdt(staging learning1) # live_prod(staging learing2)
-        'URL': 'http://172.22.67.214:8983/solr/prdt',
+        'URL': 'http://172.22.67.244:8983/solr/prdt',
         'INCLUDE_SPELLING': False,
     },
 
     'index': {
         'ENGINE': 'core.library.haystack.custom_solr_backend.CustomSolrEngine',
         # prdt(staging learning1) # live_prod(staging learing2)
-        'URL': 'http://172.22.67.214:8983/solr/prdt',
+        'URL': 'http://172.22.67.244:8983/solr/prdt',
         'INCLUDE_SPELLING': False,
     }
 }
