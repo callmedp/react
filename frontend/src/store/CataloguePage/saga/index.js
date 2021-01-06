@@ -48,7 +48,7 @@ function* trendingCategories(action) {
         return payload?.resolve(item)
 
     } catch (e) {
-        console.error("Exception occured ",e)
+        console.error("Exception occured in trending categories api",e)
         return payload?.reject(e);
     }
 }
@@ -70,6 +70,7 @@ function* recentlyAddedCourses(action){
         return payload?.resolve(item);
     }
     catch(e){
+        console.error("Exception occured in recentlyAddedCourses Api", e)
         return payload?.reject(e);
     }
 }
@@ -90,6 +91,7 @@ function* popularServices(action){
         return payload?.resolve(item);
     }
     catch(e){
+        console.error("Exception occured in popularServices Api", e)
         return payload?.reject(e);
     }
 }
@@ -110,6 +112,7 @@ function* allCategories(action){
         return payload?.resolve(item);
     }
     catch(e){
+        console.error("Exception occured in allCategories Api", e)
         return payload?.reject(e);
     }
 }
