@@ -4,6 +4,7 @@ import Slider from "react-slick";
 // import 'slick-carousel/slick/slick.css';
 import './servicesForYou.scss'
 import { useSelector } from 'react-redux';
+import { siteDomain }  from 'utils/domains';
 
 const ServicesForYou = (props) => {
     const settings = {
@@ -30,8 +31,10 @@ const ServicesForYou = (props) => {
                                 <h3 className="m-heading3">{service.name}</h3>
                                 <p>Resume written by experts to increase your profile visibility</p>
                                 <span className="d-flex">
-                                    <a href={service.url}>Know more</a>
-                                    <figure className="micon-service1"></figure>
+                                    <a href={`${siteDomain}${service.url}`}>Know more</a>
+                                    <figure>
+                                        <img height="30" width="40" src={service.img} alt={service.img_alt} />
+                                    </figure>
                                 </span>
                             </div>
                         )

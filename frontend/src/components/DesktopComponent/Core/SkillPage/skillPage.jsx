@@ -27,7 +27,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { zendeskTimeControlledWindow } from 'utils/zendeskIniti';
 import Aos from "aos";
 // import "aos/dist/aos.css";
-import { Helmet } from 'react-helmet';
+import MetaContent from '../../Common/MetaContent/metaContent'
 
 const SkillPage = (props) => {
     const pageId = props?.match?.params?.id;
@@ -85,20 +85,7 @@ const SkillPage = (props) => {
     return (
         <div>
             { skillLoader ? <Loader /> : ''}
-            <Helmet>
-                <title>{meta_tags.title}</title>
-                <meta name="description" content={meta_tags.description} />
-                <meta property="og:title" content={meta_tags.title} />
-                <meta property="og:url" content={meta_tags._url} />
-                <meta property="og:description" content={meta_tags.og_description} />
-                <meta property="og:type" content={meta_tags.og_type} />
-                <meta property="og:site_name" content={meta_tags.site_name} />
-                <meta property="fb:profile_id" content={meta_tags.og_profile_id} />
-                <meta itemprop="name" content={meta_tags.title} />
-                <meta itemprop="url" content={meta_tags._url} />
-                <meta itemprop="description" content={meta_tags.og_description} />
-                <link rel="canonical" href={meta_tags._url} />
-            </Helmet>
+            { meta_tags && <MetaContent meta_tags={meta_tags}/> }
             <Header />
             <StickyNav />
             <SkillBanner />

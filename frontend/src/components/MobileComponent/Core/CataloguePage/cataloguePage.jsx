@@ -12,17 +12,19 @@ import SearchPage from '../../Common/SearchPage/SearchPage';
 import './cataloguePage.scss';
 import Aos from "aos";
 // import "aos/dist/aos.css";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
     fetchRecentlyAddedCourses,
     fetchPopularServices,
     fetchTrendingCategories,
     fetchAllCategoriesAndVendors
 } from 'store/CataloguePage/actions/index';
+import MetaContent from '../../Common/MetaContent/metaContent';
 
 const CatalogPage = (props) => {
     const [showSearchPage, setShowSearchPage] = useState(false)
     const dispatch = useDispatch();
+    const meta_tags = useSelector((store) => store.allCategories.meta ? store.allCategories.meta : '');
 
     useEffect( () => {
         Aos.init({ duration: 2000, once: true, offset: 10, anchorPlacement: 'bottom-bottom' });
@@ -34,6 +36,7 @@ const CatalogPage = (props) => {
 
     return (
         <div>
+            { meta_tags && <MetaContent meta_tags={meta_tags}/> }
             { 
                 showSearchPage ? 
                 <SearchPage setShowSearchPage={setShowSearchPage} /> :
