@@ -1,10 +1,12 @@
 from rest_framework.viewsets import ReadOnlyModelViewSet, ModelViewSet
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 from cms.api.core.mixins import IndexerWidgetViewMixin, ColumnHeadingViewMixin, IndexColumnViewMixin, WidgetViewMixin,\
 	PageViewMixin, PageWidgetViewMixin, DocumentViewMixin, CommentViewMixin, PageCounterViewMixin
 
 
-from cms.models import PageWidget,Widget
+from cms.models import PageWidget,Widget, Page
 
 
 # TODO: Will MODIFY these viewsets AFTERWARDS to limit the end point required.
@@ -97,3 +99,14 @@ class PageCounterViewSet(PageCounterViewMixin, ReadOnlyModelViewSet):
 
     authentication_classes = ()
     permission_classes = ()
+
+class PageListViewSet(APIView):
+    """
+        CRUD ViewSet for `PageCounter` model.
+    """
+
+    authentication_classes = ()
+    permission_classes = ()
+
+    def get(self, request):
+        return Response([ page.get_absolute_url() for page in Page.objects.filter(is_active=True) ])
