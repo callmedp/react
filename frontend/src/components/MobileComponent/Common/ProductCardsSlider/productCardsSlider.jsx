@@ -34,7 +34,7 @@ const ProductCards = props => {
                         <div className="m-card" key={index}>
                             <div className="m-card__heading">
                                 <figure>
-                                    <img src={product?.img} alt={product?.img_alt} />
+                                    <img src={product?.imgUrl} alt={product?.imgAlt} />
                                 </figure>
                                 <h3 className="m-heading3">
                                     <a href={`${siteDomain}${product.url}`}>{product?.name}</a>

@@ -930,8 +930,8 @@ class RecentCoursesAPI(APIView):
             'recentCoursesList':
                 [
                     {
-                    'id': trcnts.id, 'heading': trcnts.pHd, 'name': trcnts.pNm, 'url': trcnts.pURL, 'img': trcnts.pImg, \
-                     'img_alt': trcnts.pImA, 'rating': trcnts.pARx, 'price': trcnts.pPinb, 'vendor': trcnts.pPvn,
+                    'id': trcnts.id, 'heading': trcnts.pHd, 'name': trcnts.pNm, 'url': trcnts.pURL, 'imgUrl': trcnts.pImg, \
+                     'imgAlt': trcnts.pImA, 'rating': trcnts.pARx, 'price': trcnts.pPinb, 'vendor': trcnts.pPvn,
                      'stars': trcnts.pStar,'provider': trcnts.pPvn
                      } for trcnts in trcntss
                 ]
