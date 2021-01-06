@@ -917,14 +917,14 @@ class RecentCoursesAPI(APIView):
         quantity_to_display = int(request.GET.get('num_recent', 6))
 
         # class getting the recent_ids from serializer
-        queryset = Product.objects.filter(product_class__slug__in=settings.COURSE_SLUG,
-                                          active=True,
-                                          is_indexed=True).order_by('-created')[:quantity_to_display]\
-                                          .values_list('id', flat=True)
+        # queryset = Product.objects.filter(product_class__slug__in=settings.COURSE_SLUG,
+        #                                   active=True,
+        #                                   is_indexed=True).order_by('-created')[:quantity_to_display]\
+        #                                   .values_list('id', flat=True)
 
-        trcntss = SearchQuerySet().filter(id__in=list(queryset), pTP__in=[0, 1, 3]).exclude(
+        trcntss = list(SearchQuerySet().filter(pPc__in=settings.COURSE_SLUG, pTP__in=[0, 1, 3]).exclude(
             id__in=settings.EXCLUDE_SEARCH_PRODUCTS
-        ).order_by('-pCD')
+        ).order_by('-pCD'))[:quantity_to_display]
 
         data = {
             'recentCoursesList':
@@ -943,20 +943,19 @@ class TrendingCategoriesApi(PopularProductMixin, APIView):
     authentication_classes = ()
 
     def get(self, request):
+        quantity_to_display = int(request.GET.get('num', 3))
+
         cached_data = cache.get('category_popular_courses')
         if not settings.DEBUG and cached_data:
             data = cached_data
         else:
             data = {
                 'SnMCourseList': PopularProductMixin().get_products_json(PopularProductMixin().\
-                                                        get_popular_courses(category=17,quantity=3).\
-                                                            values_list('id',flat=True)),
+                                                        get_popular_courses(category=17,quantity=quantity_to_display)),
                 'ITCourseList': PopularProductMixin().get_products_json(PopularProductMixin().\
-                                                        get_popular_courses(category=22,quantity=3).\
-                                                            values_list('id',flat=True)),
+                                                        get_popular_courses(category=22,quantity=quantity_to_display)),
                 'BnFCourseList': PopularProductMixin().get_products_json(PopularProductMixin().\
-                                                        get_popular_courses(category=20,quantity=3).\
-                                                            values_list('id',flat=True)),
+                                                        get_popular_courses(category=20,quantity=quantity_to_display)),
             }
             cache.set('category_popular_courses',data,86400)
         return Response(data=data, status=status.HTTP_200_OK)
