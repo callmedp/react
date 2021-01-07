@@ -121,9 +121,9 @@ GA functions
 2. ga event raise
 */
 
-const gaEvent = (event_cat,event_lab,event_action) =>{
-    ga('send', 'event', event_cat, event_action, event_lab);
-}
+// const gaEvent = (event_cat,event_lab,event_action) =>{
+//     ga('send', 'event', event_cat, event_action, event_lab);
+// }
 
 const makeTrackingRequest = (loggingData) => {
     $.ajax({
