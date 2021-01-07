@@ -29,7 +29,7 @@ const ServicesForYou = (props) => {
                         return (
                             <div className="m-services-foryou__list" key={index}>
                                 <h3 className="m-heading3">{service.name}</h3>
-                                <p>Resume written by experts to increase your profile visibility</p>
+                                <p>{service.description}</p>
                                 <span className="d-flex">
                                     <a href={`${siteDomain}${service.url}`}>Know more</a>
                                     <figure>
