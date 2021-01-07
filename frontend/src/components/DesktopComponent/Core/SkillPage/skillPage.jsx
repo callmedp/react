@@ -94,9 +94,9 @@ const SkillPage = (props) => {
                 <meta property="og:type" content={meta_tags.og_type} />
                 <meta property="og:site_name" content={meta_tags.site_name} />
                 <meta property="fb:profile_id" content={meta_tags.og_profile_id} />
-                <meta itemprop="name" content={meta_tags.title} />
-                <meta itemprop="url" content={meta_tags._url} />
-                <meta itemprop="description" content={meta_tags.og_description} />
+                <meta itemProp="name" content={meta_tags.title} />
+                <meta itemProp="url" content={meta_tags._url} />
+                <meta itemProp="description" content={meta_tags.og_description} />
                 <link rel="canonical" href={meta_tags._url} />
             </Helmet>
             <Header />

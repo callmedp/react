@@ -13,9 +13,9 @@ const getStories = (story, index) => {
                         return (
                             <div className="col-sm-4" key={index.toString() + idx.toString() + item.userName}>
                                 <div className="card text-center">
-                                    <span itemprop="name" className="card__name" itemprop="name">{item.firstName ? item.firstName[0].toUpperCase() : ""}{item.lastName ? item.lastName[0].toUpperCase() : ""}</span>
-                                    <p className="card__txt" itemprop="description">{item.review}</p>
-                                    <strong itemprop="author">{item.firstName + item.lastName}</strong>
+                                    <span itemProp="name" className="card__name" itemProp="name">{item.firstName ? item.firstName[0].toUpperCase() : ""}{item.lastName ? item.lastName[0].toUpperCase() : ""}</span>
+                                    <p className="card__txt" itemProp="description">{item.review}</p>
+                                    <strong itemProp="author">{item.firstName + item.lastName}</strong>
                                     <span className="card__location">{item.company ? item.company : <br />}</span>
                                 </div>
                             </div>
@@ -34,7 +34,7 @@ const LearnersStories = (props) => {
 
     return (
         testimonialCategory.length ? (
-            <section className="container" id="story" data-aos="fade-up" itemscope itemtype="http://schema.org/UserReview">
+            <section className="container" id="story" data-aos="fade-up" itemScope itemType="http://schema.org/UserReview">
                 <div className="row">
                     <h2 className="heading2 m-auto pb-20">Learners stories</h2>
                     <Carousel className="learner-stories">

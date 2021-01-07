@@ -85,9 +85,9 @@ const Header = (props) => {
             <nav className="container-fluid padlr-0 shadow pos-rel zindex">
                 <div className="container padlr-0">
                     <div className="navbar navbar-expand-lg navbar-light row">
-                        <a className="navbar-brand" itemscope itemtype="http://schema.org/Organization" href={siteDomain} aria-label="brand logo" onClick={eventTracking}>
-                            <meta itemprop="name" content="Shine"/>
-                            <meta itemprop="url" content={`${siteDomain}`} />
+                        <a className="navbar-brand" itemScope itemType="http://schema.org/Organization" href={siteDomain} aria-label="brand logo" onClick={eventTracking}>
+                            <meta itemProp="name" content="Shine"/>
+                            <meta itemProp="url" content={`${siteDomain}`} />
                         </a>
 
                             <div className="collapse navbar-collapse" id="navbarSupportedContent">

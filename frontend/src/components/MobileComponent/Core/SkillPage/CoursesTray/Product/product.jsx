@@ -35,20 +35,20 @@ const Product = (props) =>{
     }
 
     return (
-        <div className={ compType === 'For You' ? "m-card" : "m-card-more m-card" } key={index} itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem">
+        <div className={ compType === 'For You' ? "m-card" : "m-card-more m-card" } key={index} itemProp="itemListElement" itemScope itemType="http://schema.org/ListItem">
             <div className="m-card__heading">
                 {tags === 2 && <span className="m-flag-blue">NEW</span>}
                 {tags === 1 && <span className="m-flag-red">BESTSELLER</span>}
                 <figure>
-                    <img itemprop="image" src={imgUrl} alt={name} />
+                    <img itemProp="image" src={imgUrl} alt={name} />
                 </figure>
                 <h3 className="m-heading3">
-                    <a itemprop="url" href={`${siteDomain}${url}`} onClick={handleTracking} >{name}</a>
+                    <a itemProp="url" href={`${siteDomain}${url}`} onClick={handleTracking} >{name}</a>
                 </h3>
             </div>
             <div className={ compType === 'More Courses' && name?.length < 36 ? "m-card__box m-remove-space" : "m-card__box" }>
                 <div className="m-card__rating">
-                <span itemprop="name" className="mr-10">By {providerName}</span>
+                <span itemProp="name" className="mr-10">By {providerName}</span>
                 <span className="m-rating">
                     { stars?.map((star, index) => starRatings(star, index)) }
                     <span>{rating?.toFixed(1)}/5</span>

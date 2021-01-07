@@ -47,16 +47,16 @@ const BannerSkill = (props) => {
                 </div>
             </figure>
             <div className="container header-content">
-                <div className="row" itemscope itemtype="http://schema.org/BreadcrumbList">
+                <div className="row" itemScope itemType="http://schema.org/BreadcrumbList">
                     <Breadcrumb>
                         {
                             breadcrumbs?.map((bread, index) => {
                                 if (!!bread.url)
-                                    return (<Breadcrumb.Item itemprop="itemListElement" itemscope
-                                        itemtype="http://schema.org/ListItem" key={index} href={`${siteDomain}${bread.url}`} onClick={() => userTrack({ "query": tracking_data, "action": "exit_skill_page" })} >{bread.name}</Breadcrumb.Item>)
+                                    return (<Breadcrumb.Item itemProp="itemListElement" itemScope
+                                        itemType="http://schema.org/ListItem" key={index} href={`${siteDomain}${bread.url}`} onClick={() => userTrack({ "query": tracking_data, "action": "exit_skill_page" })} >{bread.name}</Breadcrumb.Item>)
                                 else
-                                    return (<Breadcrumb.Item itemprop="itemListElement" itemscope
-                                    itemtype="http://schema.org/ListItem" key={index} >{bread.name}</Breadcrumb.Item>)
+                                    return (<Breadcrumb.Item itemProp="itemListElement" itemScope
+                                    itemType="http://schema.org/ListItem" key={index} >{bread.name}</Breadcrumb.Item>)
                             })
                         }
                     </Breadcrumb>
