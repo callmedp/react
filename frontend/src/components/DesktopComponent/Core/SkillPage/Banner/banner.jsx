@@ -19,7 +19,7 @@ const BannerSkill = (props) => {
     return (
         <header className="container-fluid pos-rel">
             <figure className="banner-img">
-                <img src={`${imageUrl}desktop/skill-bg-new.png`} className="img-fluid" alt={`${name} Courses & Certifications`} />
+                <img src={`${imageUrl}desktop/skill-bg-new.png`} className="img-fluid w-100" alt={`${ name } Courses & Certifications`} />
                 <div className="banner-right">
                     <div className="banner-right-img">
                         <span className="skill-banner-tween1" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="100" data-aos-duration="1000">

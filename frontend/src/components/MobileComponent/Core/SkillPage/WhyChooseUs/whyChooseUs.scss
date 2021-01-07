@@ -8,20 +8,31 @@
 
         li {
             display: flex;
+            padding: 1rem 0;
 
             &:not(:last-child) {
                 margin-bottom: 1rem;
-            }
-
-            strong {
-                color: $gray-100;
-                font-weight: 600;
-                display: block;
+                border-bottom: 1px solid $gray-900;
             }
 
             p {
-                flex: 80%;
-                margin-left: 1.5rem;
+                font-size: 1.3rem;
+
+                strong {
+                    color: $gray-100;
+                    font-weight: 700;
+                    display: block;
+                    font-size: 3.2rem;
+                    line-height: 3.5rem;
+
+                    span {
+                        font-weight: 400;
+                    }
+                }
+
+                span {
+                    font-weight: 700;
+                }
             }
 
             figure {
