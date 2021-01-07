@@ -46,7 +46,7 @@ const Courses = (props) => {
             </> : null
         }
 
-        <h2 className="m-heading2 mt-20 mb-20">More courses</h2>
+        <h2 className="m-heading2 mt-0 mb-20">More courses</h2>
         <div className="m-courses mr-15">
             {
                 (sliceFlag ? courseList.slice(0, 4) : courseList)?.map((course, idx)=> <Product product={course} key={idx + 100} compType='More Courses'/>)

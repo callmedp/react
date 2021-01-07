@@ -17,6 +17,8 @@
 
             li {
                 font-size: 1.3rem;
+                position: relative;
+                padding-left: 1.5rem;
 
                 &:not(:last-child) {
                     margin-bottom: .8rem;
@@ -28,7 +30,9 @@
                     width: .5rem;
                     height: .9rem;
                     display: inline-block;
-                    margin-right: 1rem;
+                    position: absolute;
+                    left: 0;
+                    top: .5rem;
                 }
             }
         }

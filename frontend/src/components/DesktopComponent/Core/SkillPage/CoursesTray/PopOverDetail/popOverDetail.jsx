@@ -16,7 +16,7 @@ const PopoverDetail = (props) => {
 
     return (
         <>
-            <p className="type">Type: <strong>{type}</strong>  |   <strong>Course level:</strong> {level}
+            <p className="type">Type: <strong>{type}</strong>  |   Course level: <strong>{level}</strong>
     <br /><strong>{jobsAvailable}</strong> Jobs available
         </p>
             <p>
