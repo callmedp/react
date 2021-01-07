@@ -169,9 +169,9 @@
             $('.nav-tabs > li > a').hover(function() {
               $(this).tab('show');
             });
-            $('.dropdown').hover(function(){
+            {% comment %} $('.dropdown').hover(function(){
               $('.dropdown-toggle', this).trigger('click');
-            });
+            }); {% endcomment %}
             {% if marketing_popup_html %}
             setTimeout(function() {
               $('.marketing-popup').modal();

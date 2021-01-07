@@ -146,9 +146,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         $('.nav-tabs > li > a').hover(function() {
             $(this).tab('show');
           });
-        $('.dropdown').hover(function(){
+        {% comment %} $('.dropdown').hover(function(){
             $('.dropdown-toggle', this).trigger('click');
-          });
+          }); {% endcomment %}
 
       {% if marketing_popup_html %}
         
