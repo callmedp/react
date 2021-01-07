@@ -61,7 +61,7 @@ const BannerSkill = (props) => {
                     <h1 className="heading1" data-aos="fade-right">
                         { name } Courses & Certifications
                     </h1>
-                    <Carousel className="header-carousel">
+                    <Carousel className={ featuresList?.length ? "header-carousel" : "header-carousel noslide" }>
                         {/* <figure className="icon-round-arrow"></figure> */}
                         {
                             featuresList?.map((feature, index) => {

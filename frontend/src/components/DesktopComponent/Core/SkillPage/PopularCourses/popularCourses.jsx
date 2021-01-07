@@ -9,7 +9,7 @@ import { trackUser } from 'store/Tracking/actions/index.js';
 
 const PopularCourses = (props) => {
 
-    const { trendingCourses } = useSelector( store => store.footer )
+    const { trendingCourses } = useSelector( store => store.popularCourses )
     const { userTrack, gaTrack } = props;
     const { heading } = useSelector( store => store.skillBanner )
     const tracking_data = getTrackingInfo();

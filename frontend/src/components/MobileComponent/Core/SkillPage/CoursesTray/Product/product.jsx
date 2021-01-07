@@ -46,7 +46,7 @@ const Product = (props) =>{
                     <a href={`${siteDomain}${url}`} onClick={handleTracking} >{name}</a>
                 </h3>
             </div>
-            <div className="m-card__box">
+            <div className={ compType === 'More Courses' && name?.length < 36 ? "m-card__box m-remove-space" : "m-card__box" }>
                 <div className="m-card__rating">
                 <span className="mr-10">By {providerName}</span>
                 <span className="m-rating">

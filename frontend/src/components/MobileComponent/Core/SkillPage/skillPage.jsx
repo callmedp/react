@@ -29,6 +29,7 @@ import EnquiryModal from '../../Common/Modals/EnquiryModal';
 import Loader from '../../Common/Loader/loader';
 import SearchPage from '../../Common/SearchPage/SearchPage';
 import { fetchRecommendedProducts } from 'store/RecommendedCourses/actions/index';
+import { fetchPopularCourses } from 'store/Footer/actions/index';
 import Aos from "aos";
 // import "aos/dist/aos.css";
 import { Helmet } from 'react-helmet';
@@ -77,7 +78,8 @@ const SkillPage = (props) => {
             new Promise((resolve, reject) => dispatch(fetchSkillPageBanner({id : pageId, 'medium': 1, resolve, reject})))
             new Promise((resolve, reject) => dispatch(fetchCoursesAndAssessments({ id: pageId, 'medium': 1, resolve, reject})));
             new Promise((resolve, reject) => dispatch(fetchDomainJobs({id : pageId, resolve, reject})));
-            new Promise((resolve, reject) => dispatch(fetchRecommendedProducts({resolve, reject})))
+            new Promise((resolve, reject) => dispatch(fetchRecommendedProducts({resolve, reject})));
+            new Promise((resolve, reject) => dispatch(fetchPopularCourses({ id: pageId, resolve, reject })))
         }
         else {
             //isServerRendered is needed to be deleted because when routing is done through react and not on the node,
@@ -122,7 +124,7 @@ const SkillPage = (props) => {
                                 <div id="about" className="tab-panel">
                                     <SkillBanner />
                                     <BannerSlider />
-                                    <PopularCourses setTabType={setTabType} />
+                                    <PopularCourses setTabType={setTabType} pageId={pageId}/>
                                     <WhoLearn />
                                     <SkillGain />
                                     <LearnersStories />

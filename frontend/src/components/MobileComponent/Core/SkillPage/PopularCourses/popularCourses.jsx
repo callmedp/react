@@ -3,21 +3,15 @@ import { useDispatch, useSelector, connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import '../CoursesTray/courses.scss';
 import './popularCourses.scss';
-import { fetchTrendingCnA } from 'store/Footer/actions/index';
 import { MyGA } from 'utils/ga.tracking.js';
 import { getTrackingInfo, getTrackingParameters } from 'utils/storage.js';
 import { trackUser } from 'store/Tracking/actions/index.js';
-import { eventChannel } from 'redux-saga';
 
 const PopularCourses = (props) => {
     const { setTabType } = props
-    const dispatch = useDispatch()
     const tracking_data = getTrackingInfo();
-    useEffect(() => {
-        dispatch(fetchTrendingCnA())
-    }, [])
 
-    const { trendingCourses } = useSelector( store => store.footer )
+    const { trendingCourses } = useSelector( store => store.popularCourses )
     const { heading } = useSelector( store => store.skillBanner )
 
     const starRatings = (star, index) => {

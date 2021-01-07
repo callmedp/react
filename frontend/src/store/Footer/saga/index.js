@@ -19,9 +19,30 @@ function* fetchTrendingCnA(action) {
     }
 }
 
+function* fetchPopularCourses(action) {
+    const { payload } = action
+    try {
+        const response = yield call(Api.fetchPopularCourses, payload?.id);
+        if (response["error"]) {
+            return payload?.reject(response["error"])
+        }
+        const item = response?.data?.data;
+        yield put({ 
+            type: Actions.POPULAR_COURSES_FETCHED, item 
+        });
+        return payload?.resolve(item);
+
+    }
+    catch (e) {
+        console.error("Exception occured ",e)
+        return payload?.reject(e);
+    }
+}
+
 
 
 
 export default function* WatchFooter(){
     yield takeLatest(Actions.FETCH_TRENDING_COURSES_AND_SKILLS, fetchTrendingCnA);
+    yield takeLatest(Actions.FETCH_POPULAR_COURSES, fetchPopularCourses);
 }

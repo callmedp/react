@@ -23,6 +23,7 @@ import './skillPage.scss'
 import { fetchSkillPageBanner } from 'store/SkillPage/Banner/actions';
 import { fetchCoursesAndAssessments } from 'store/SkillPage/CoursesTray/actions/index';
 import { fetchDomainJobs } from 'store/SkillPage/DomainJobs/actions';
+import { fetchPopularCourses } from 'store/Footer/actions/index';
 import { useDispatch, useSelector } from 'react-redux';
 import { zendeskTimeControlledWindow } from 'utils/zendeskIniti';
 import Aos from "aos";
@@ -67,6 +68,7 @@ const SkillPage = (props) => {
             new Promise((resolve, reject) => dispatch(fetchSkillPageBanner({ id: pageId, 'medium': 0, resolve, reject })));
             new Promise((resolve, reject) => dispatch(fetchCoursesAndAssessments({ id: pageId, resolve, reject })));
             new Promise((resolve, reject) => dispatch(fetchDomainJobs({ id: pageId, resolve, reject })));
+            new Promise((resolve, reject) => dispatch(fetchPopularCourses({ id: pageId, resolve, reject })))
         }
         else {
          
