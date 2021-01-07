@@ -2078,6 +2078,91 @@ class TrackingResumeShine(APIView):
             logging.getLogger('error_log').error("Unable to update tracking data, tracking_id: {}, except : {}".format(t_id, e))
             return Response({ 'status': 'Unable to update on learning'}, status=status.HTTP_400_BAD_REQUEST)
 
+
+class ResumePromotionTrackingAPIView(APIView):
+    '''
+    API  is to track action through resume mailer
+    '''
+    serializer_class = None
+    authentication_classes = ()
+    permission_classes = ()
+
+    def create_crm_lead(self, candidate_id, action):
+        from api.choices import ACTION_LEAD_MESSAGE
+        msg = ACTION_LEAD_MESSAGE.get(action, '')
+        if not msg:
+            return False
+        campaign_slug = "resumepromotion"
+        try:
+            candidate_details = ShineCandidateDetail().get_candidate_detail(shine_id = candidate_id)
+            personal_details = candidate_details.get('personal_detail')
+            if len(personal_details) == 0:
+                raise Exception("Personal details are not available")
+            personal_detail = personal_details[0]
+            name = "{} {}".format(personal_detail.get('first_name', ''), personal_detail.get('last_name', ''))
+            email = personal_detail.get('email', '')
+            mobile = personal_detail.get('cell_phone', '')
+            product_offer = True
+
+            lead = UserQuries.objects.create(
+                name=name,
+                email=email,
+                phn_number=mobile,
+                message=msg,
+                campaign_slug=campaign_slug,
+            )
+            created = True
+            validate = True if lead.email else False
+            flag = create_lead_crm.delay(pk=lead.pk, validate=validate, product_offer=product_offer)
+            if flag:
+                logging.getLogger('info_log').info("resume promotion emailer lead created for candidate_id : {}".format(candidate_id))
+                return True
+            # create_lead_crm(pk=lead.pk, validate=validate, product_offer=product_offer)
+            return False
+        except Exception as e:
+            logging.getLogger('error_log').error("unable to fetch data for candidate_id {}, Exception: {}".format(candidate_id, e))
+        return False
+
+
+    def post(self, request, *args, **kwargs):
+
+        candidate_id = request.data.get('candidate_id','')
+        action = request.data.get('action','')
+        response_json = dict()
+
+        if not candidate_id and not action:
+            logging.getLogger('error_log').error("Data is missing from Mailer Tracking")
+            response_json['error'] = "Data is missing from Mailer Tracking"
+            return Response(response_json, status=status.status.HTTP_400_BAD_REQUEST)
+
+        flag = self.create_crm_lead(candidate_id = candidate_id, action = action)
+
+        logging.getLogger('info_log').info("Mailer Tracking for resume builder and resume score checker"
+                                             "->candidate_id : {}, action: {}".format(candidate_id,  action))
+
+        response_json['data'] = 'data tracked succesfully'
+        return Response(response_json, status=status.HTTP_200_OK)
+
+    def get(self, request, *args, **kwargs):
+
+        candidate_id = request.GET.get('candidate_id', '')
+        action = request.GET.get('action', '')
+        response_json = dict()
+
+        if not candidate_id or not action:
+            logging.getLogger('error_log').error("Data is missing from Mailer Tracking")
+            response_json['error'] = "Data is missing from Mailer Tracking"
+            return Response(response_json, status=status.status.HTTP_400_BAD_REQUEST)
+
+        flag = self.create_crm_lead(candidate_id = candidate_id, action = action)
+
+        logging.getLogger('info_log').info("Mailer Tracking for resume builder and resume score checker"
+                                             "->candidate_id : {}, action: {}".format(candidate_id,  action))
+
+        response_json['data'] = 'data tracked succesfully'
+        return Response(response_json, status=status.HTTP_200_OK)
+
+
 class SearchQueryAPI(APIView):
     authentication_classes = ()
     permission_classes = ()
@@ -2175,85 +2260,3 @@ class RecommendedCoursesAPI(APIView):
     def get(self, request, *args, **kwargs):
         rproducts = self.get_products()
         return Response(rproducts, status=status.HTTP_200_OK)
-class ResumePromotionTrackingAPIView(APIView):
-    '''
-    API  is to track action through resume mailer
-    '''
-    serializer_class = None
-    authentication_classes = ()
-    permission_classes = ()
-
-    def create_crm_lead(self, candidate_id, action):
-        from api.choices import ACTION_LEAD_MESSAGE
-        msg = ACTION_LEAD_MESSAGE.get(action, '')
-        if not msg:
-            return False
-        campaign_slug = "resumepromotion"
-        try:
-            candidate_details = ShineCandidateDetail().get_candidate_detail(shine_id = candidate_id)
-            personal_details = candidate_details.get('personal_detail')
-            if len(personal_details) == 0:
-                raise Exception("Personal details are not available")
-            personal_detail = personal_details[0]
-            name = "{} {}".format(personal_detail.get('first_name', ''), personal_detail.get('last_name', ''))
-            email = personal_detail.get('email', '')
-            mobile = personal_detail.get('cell_phone', '')
-            product_offer = True
-
-            lead = UserQuries.objects.create(
-                name=name,
-                email=email,
-                phn_number=mobile,
-                message=msg,
-                campaign_slug=campaign_slug,
-            )
-            created = True
-            validate = True if lead.email else False
-            flag = create_lead_crm.delay(pk=lead.pk, validate=validate, product_offer=product_offer)
-            if flag:
-                logging.getLogger('info_log').info("resume promotion emailer lead created for candidate_id : {}".format(candidate_id))
-                return True
-            # create_lead_crm(pk=lead.pk, validate=validate, product_offer=product_offer)
-            return False
-        except Exception as e:
-            logging.getLogger('error_log').error("unable to fetch data for candidate_id {}, Exception: {}".format(candidate_id, e))
-        return False
-
-
-    def post(self, request, *args, **kwargs):
-
-        candidate_id = request.data.get('candidate_id','')
-        action = request.data.get('action','')
-        response_json = dict()
-
-        if not candidate_id and not action:
-            logging.getLogger('error_log').error("Data is missing from Mailer Tracking")
-            response_json['error'] = "Data is missing from Mailer Tracking"
-            return Response(response_json, status=status.status.HTTP_400_BAD_REQUEST)
-
-        flag = self.create_crm_lead(candidate_id = candidate_id, action = action)
-
-        logging.getLogger('info_log').info("Mailer Tracking for resume builder and resume score checker"
-                                             "->candidate_id : {}, action: {}".format(candidate_id,  action))
-
-        response_json['data'] = 'data tracked succesfully'
-        return Response(response_json, status=status.HTTP_200_OK)
-
-    def get(self, request, *args, **kwargs):
-
-        candidate_id = request.GET.get('candidate_id', '')
-        action = request.GET.get('action', '')
-        response_json = dict()
-
-        if not candidate_id or not action:
-            logging.getLogger('error_log').error("Data is missing from Mailer Tracking")
-            response_json['error'] = "Data is missing from Mailer Tracking"
-            return Response(response_json, status=status.status.HTTP_400_BAD_REQUEST)
-
-        flag = self.create_crm_lead(candidate_id = candidate_id, action = action)
-
-        logging.getLogger('info_log').info("Mailer Tracking for resume builder and resume score checker"
-                                             "->candidate_id : {}, action: {}".format(candidate_id,  action))
-
-        response_json['data'] = 'data tracked succesfully'
-        return Response(response_json, status=status.HTTP_200_OK)

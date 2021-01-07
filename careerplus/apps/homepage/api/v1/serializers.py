@@ -1,9 +1,15 @@
+# DRF Import
 from rest_framework import serializers
+from django.conf import settings
+
+# Inter-App Import
 from homepage.models import StaticSiteContent
 from order.models import Order ,OrderItem
-from shop.models import ProductSkill
+from shop.models import ProductSkill,ProductCategory, Product,Category
 # from api.serializers import OrderItemDetailSerializer
 from shared.rest_addons.mixins import SerializerFieldsMixin
+from django.conf import settings
+
 
 class StaticSiteContentSerializer(serializers.ModelSerializer):
 
@@ -146,16 +152,27 @@ class DashboardCancellationSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
     order_id = serializers.IntegerField(required=True)
 
-
-# class ProductSkillSerializer(serializers.ModelSerializer):
-#     class Meta:
-#         model = ProductSkill
-#         fields = ("skill",)
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product 
+        fields = ["avg_rating","inr_price","id", "heading", "name",]
     
-#     def to_representation(self, instance):
-#         data = super(ProductSkillSerializer, self).to_representation(instance)
-#         data['skillName'] = instance.skill.name
-#         data['skillUrl'] = instance.product.categories.filter(is_skill=True).first().get_absolute_url()
-
-#         return data
-
+    def to_representation(self, instance):
+        data = super(ProductSerializer, self).to_representation(instance)
+        data['mode']=instance.get_studymode_db()
+        data['duration']=instance.get_duration_in_day()
+        data['url']=instance.get_url()
+        data['image_url']=instance.get_image_url()
+        data['rating']=instance.get_ratings()
+        data['price'] =instance.get_price()
+        data['vendor']=instance.get_vendor()
+        return data
+   
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ["name",]
+class RecentCourseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ['id']
