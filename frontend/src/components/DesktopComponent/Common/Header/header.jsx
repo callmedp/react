@@ -113,14 +113,7 @@ const Header = (props) => {
                                 <li className="nav-item">
                                     <a className="nav-link" href={`${siteDomain}/talenteconomy/`} onClick={() => MyGA.SendEvent('homepage_navigation','ln_homepage_navigation', 'ln_blog', 'ln_blog', '', false, true)} >Blog</a>
                                 </li>
-                                <li className="nav-item dropdown dropdown-call">
-                                    <Link className="nav-link link-ht" to={"#"} id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <figure className="icon-call"></figure>
-                                    </Link>
-                                    <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <a className="dropdown-item" onClick={ () => MyGA.SendEvent('header_icons','ln_header_icons', 'ln_call', 'tel:0124-4312500/01','', false, true) }><strong>Call us:</strong> 0124-4312500/01</a>
-                                    </div>
-                                </li>
+                                
                                 <li className="nav-item dropdown dropdown-user">
                                     <Link className="nav-link link-ht" aria-label="dropdown user link" to={"#"} id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         <figure className="icon-user" onClick={ () => MyGA.SendEvent('header_icons','ln_header_icons', 'ln_account', 'loggedin_account','', false, true)}></figure>
@@ -151,7 +144,7 @@ const Header = (props) => {
                                         <figure className="icon-call"></figure>
                                     </Link>
                                     <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                                        <a className="dropdown-item" ><strong>Call us:</strong> 0124-4312500/01</a>
+                                        <a className="dropdown-item" onClick={ () => MyGA.SendEvent('header_icons','ln_header_icons', 'ln_call', 'tel:0124-4312500/01','', false, true) }><strong>Call us:</strong> 0124-4312500/01</a>
                                     </div>
                                 </li>
                                 <li className="nav-item position-relative">
