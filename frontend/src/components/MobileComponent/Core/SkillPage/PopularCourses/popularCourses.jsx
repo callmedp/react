@@ -31,11 +31,11 @@ const PopularCourses = (props) => {
     }
 
     return (
-        <section className="m-container m-courses mt-0 mb-0 pt-10 pb-0">
+        <section className="m-container m-courses mt-0 mb-0 pt-10 pb-0" >
         {
             trendingCourses.length ?
             <>
-                <div className="d-flex">
+                <div className="d-flex" itemscope itemtype="http://schema.org/Course"> 
                     <h2 className="m-heading2 mb-10">Popular Courses</h2>
                     <a href="#" className="ml-auto m-view-course" onClick={handleTracking}>View all courses</a>
                 </div>
@@ -47,18 +47,18 @@ const PopularCourses = (props) => {
                                 <div className="m-card">
                                     <div className="m-card__heading">
                                         <figure>
-                                            <img src={course.img} alt={course.img_alt} />
+                                            <img itemprop="image" src={course.img} alt={course.img_alt} />
                                         </figure>
                                         <h3 className="m-heading3 m-pop">
-                                            <a href={`${course.url}${trackingParameters}`} onClick={ () => MyGA.SendEvent('SkillPopularCourses','ln_popular_course_select', 'ln_'+ course.name, heading,'', false, true)}>{course.name}</a>
+                                            <a itemprop="url" href={`${course.url}${trackingParameters}`} onClick={ () => MyGA.SendEvent('SkillPopularCourses','ln_popular_course_select', 'ln_'+ course.name, heading,'', false, true)}>{course.name}</a>
                                         </h3>
                                     </div>
                                     <div className="m-card__box">
                                         <div className="m-card__rating">
-                                        <span className="mr-10">By {course.provider}</span>
+                                        <span itemprop="provider" className="mr-10">By {course.provider}</span>
                                         <span className="m-rating">
                                             { course.stars?.map((star, index) => starRatings(star, index)) }
-                                            <span>{course.rating}/5</span>
+                                            <span itemprop="aggregateRating">{course.rating}/5</span>
                                         </span>
                                         </div>
                                     </div>

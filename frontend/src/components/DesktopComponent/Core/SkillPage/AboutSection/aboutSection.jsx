@@ -7,11 +7,11 @@ const AboutSection = (props) => {
     const { name, about } = useSelector(store => store.skillBanner);
 
     return (
-        <section className="container mt-0 " id="about" >
+        <section className="container mt-0 " id="about" itemscope itemtype="https://schema.org/AboutPage" >
             { about ? <div id="module" className="row about-course">
-                <h2 className="heading2">About {name}</h2>
+                <h2 className="heading2" itemprop="headline" >About {name}</h2>
                 {about.length > 255 ? (
-                    <input type="checkbox" className="read-more-state" id="post-10" />
+                    <input type="checkbox" className="read-more-state" id="post-10" itemprop="about" />
                     ) : (
                         ""
                         )}

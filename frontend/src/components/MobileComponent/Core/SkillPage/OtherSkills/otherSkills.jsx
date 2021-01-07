@@ -13,8 +13,8 @@ const OtherSkills = (props) => {
     const { trackUser } = props;
     const getOtherSkills = (skill, index) => {
         return (
-            <li key={index}>
-                <a href={`${siteDomain}${skill.url}`} onClick={() => trackUser({"query":tracking_data, "action": 'exit_skill_page'})}>{skill.name}</a>
+            <li key={index} itemscope itemtype="http://schema.org/ItemList">
+                <a itemprop="url" href={`${siteDomain}${skill.url}`} onClick={() => trackUser({"query":tracking_data, "action": 'exit_skill_page'})}>{skill.name}</a>
             </li>
         )
     }

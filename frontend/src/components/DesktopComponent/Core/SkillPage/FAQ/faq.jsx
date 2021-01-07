@@ -23,11 +23,13 @@ const FAQ = (props) => {
     const renderAccordion = (item, index) => {
         
         return (
-            <Card key={index.toString() + item.heading}>
-                <Accordion.Toggle as={Card.Header} eventKey={index === 0 ? '0' : index}>
+            <Card key={index.toString() + item.heading} >
+                <Accordion.Toggle as={Card.Header} eventKey={index === 0 ? '0' : index} itemscope itemprop="mainEntity" 
+                              itemtype="https://schema.org/Question">
                     <p dangerouslySetInnerHTML={{__html : item.heading}} onClick={() => MyGA.SendEvent('SkillFAQs','ln_FAQ_click', 'ln_down_arrow_click', 'ln_'+item.heading.replace(regex, ''),'', false, true) }></p>
                 </Accordion.Toggle>
-                <Accordion.Collapse eventKey={index === 0 ? '0' : index}>
+                <Accordion.Collapse eventKey={index === 0 ? '0' : index} itemscope 
+                               itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
                     <Card.Body dangerouslySetInnerHTML={{ __html: item.content }}>
                     </Card.Body>
                 </Accordion.Collapse>
@@ -36,10 +38,10 @@ const FAQ = (props) => {
     
     return (
         faqList.length ? (
-            <section className="container-fluid lightblue-bg mt-40" id="faq" data-aos="fade-up">
+            <section className="container-fluid lightblue-bg mt-40" id="faq" data-aos="fade-up" itemscope itemtype="https://schema.org/FAQPage">
                 <div className="row">
                     <div className="container">
-                        <h2 className="heading2 mt-40">Frequently Asked Questions</h2>
+                        <h2 className="heading2 mt-40" itemprop="name">Frequently Asked Questions</h2>
                         <div className="faq d-flex">
                             <div className="faq__list">
                                 <Accordion defaultActiveKey="0" >
