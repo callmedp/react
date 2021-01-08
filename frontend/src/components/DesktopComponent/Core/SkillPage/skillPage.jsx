@@ -37,7 +37,9 @@ const SkillPage = (props) => {
     const { skillLoader } = useSelector(store => store.loader); 
     const { id } = useSelector( store => store.skillBanner );   
     const meta_tags = useSelector((store) => store.skillBanner.meta ? store.skillBanner.meta : '');
-
+    const [ hasFaq, setHasFaq ] = useState(false)
+    const [ hasLearnerStories, setHasLearnerStories ] = useState(false)
+ 
 
     const handleEffects = async () => {
         const {
@@ -100,7 +102,7 @@ const SkillPage = (props) => {
                 <link rel="canonical" href={meta_tags._url} />
             </Helmet>
             <Header />
-            <StickyNav />
+            <StickyNav hasFaq={hasFaq} hasLearnerStories={hasLearnerStories} />
             <SkillBanner />
             <section className="container">
                 <div className="row">
@@ -130,8 +132,8 @@ const SkillPage = (props) => {
                 </aside>
             </section>
             <WhyChooseUs />
-            <FAQ />
-            <LearnersStories />
+            <FAQ setHasFaq={setHasFaq} />
+            <LearnersStories setHasLearnerStories={setHasLearnerStories} />
             <Footer />
         </div>
     )

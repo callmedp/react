@@ -12,13 +12,18 @@ import { MyGA } from 'utils/ga.tracking.js';
 const FAQ = (props) => {
 
     const { faqList } = useSelector(store => store.skillBanner);
-    const { gaTrack } = props;
+    const { setHasFaq } = props;
     const [sliceFlag, setSliceFlag] = useState(true);
     const regex = /(<([^>]+)>)/ig;
+
     const loadMore = () => {
         MyGA.SendEvent('SkillMoreFAQs','ln_FAQ_click', 'more_FAQs', 'ln_FAQ','', false, true);
         setSliceFlag(state => !state)
     }
+
+    useEffect(()=>{
+        setHasFaq( faqList.length > 0 )
+    },[faqList])
 
     const renderAccordion = (item, index) => {
         

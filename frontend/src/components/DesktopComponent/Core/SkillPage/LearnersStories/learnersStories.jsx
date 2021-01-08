@@ -30,6 +30,11 @@ const getStories = (story, index) => {
 
 const LearnersStories = (props) => {
     const { testimonialCategory } = useSelector(store => store.skillBanner)
+    const { setHasLearnerStories } = props
+
+    useEffect(() => {
+        setHasLearnerStories( testimonialCategory.length > 0 )
+    }, [testimonialCategory])
 
 
     return (
