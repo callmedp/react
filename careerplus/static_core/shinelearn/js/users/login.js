@@ -191,6 +191,7 @@ $(document).ready(function () {
     $("#login_form").validate({
         submitHandler: function (form) {
             form.submit();
+            MyGA.SendEvent('sign_in','ln_sign_in', 'ln_facebook', '','', false, true);
             // e.preventDefault();
             /*if($(this).val() != '')
             {

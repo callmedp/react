@@ -184,10 +184,10 @@
                         <div class="col">
                           <div class="media">
                             <figure class="mr-20 shadow-icon"> 
-                              <img loading="lazy" aria-label="{{course.pNm}}" class="img-fluid" src="{{course.pImg}}" alt="{{course.pNm}}">
+                              <img loading="lazy" aria-label="{{course.pNm}}" class="img-fluid" src="{{course.pImg}}" alt="{{course.pNm}}" onclick= "MyGA.SendEvent('SkillPopularCourses', 'ln_popular_course_select', 'ln_{{course.pNm}}', '{{category.name|title}}', '', false, true);skillpageTracking('exit_skill_page');">
                             </figure>
                             <figcaption class="media-body">
-                                <a href="{{course.pURL}}" onclick="skillpageTracking('exit_skill_page'); MyGA.SendEvent('ln_popular_course_select', 'ln_{{course.pNm}}', '{{category.name|title}}', '', false, true);">{{course.pNm}}</a>
+                                <a href="{{course.pURL}}" onclick= "MyGA.SendEvent('SkillPopularCourses', 'ln_popular_course_select', 'ln_{{course.pNm}}', '{{category.name|title}}', '', false, true);skillpageTracking('exit_skill_page');">{{course.pNm}}</a>
                             </figcaption>
                           </div>
                         </div>
