@@ -3,12 +3,14 @@ import { siteDomain } from 'utils/domains';
 
 const PopoverDetail = (props) => {
     const noOfWords = 220
-    const { popoverData : { 
-                            about, highlights, 
-                            jobsAvailable,  skillList,
-                            url, type,
-                            level, u_courses_benefits, u_desc }
-                        } = props
+    const { popoverData : 
+            { 
+                about, highlights, 
+                jobsAvailable,  skillList,
+                url, type,
+                level, u_courses_benefits, u_desc,
+                number_of_questions },
+            productType } = props
     
     const OpenProductPage = () =>{
         window.location.replace(`${siteDomain}${url}`)
@@ -18,9 +20,14 @@ const PopoverDetail = (props) => {
 
     return (
         <>
-            <p className="type">Type: <strong>{type}</strong>  |   Course level: <strong>{level}</strong>
-            <br /><strong>{jobsAvailable}</strong> Jobs available
-        </p>
+            <p className="type">
+                {
+                    productType === 'assessments' ?
+                    <> Number of Questions : <strong>{number_of_questions}</strong> </>:
+                    <> Type: <strong>{type}</strong>  |   Course level: <strong>{level}</strong></>
+                }
+                <br /><strong>{jobsAvailable}</strong> Jobs available
+            </p>
             <p>
                 <strong>About</strong>
                 {

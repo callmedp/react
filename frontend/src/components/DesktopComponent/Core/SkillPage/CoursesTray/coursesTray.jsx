@@ -43,7 +43,7 @@ const CoursesTray = (props) => {
                                     return (
                                         <ul className="courses-tray__list" key={index} >
                                             {
-                                                courses.map((course, idx) => <Courses listIdx={idx} index={index.toString() + idx.toString()} product={course} key={index.toString() + idx.toString()} />)
+                                                courses.map((course, idx) => <Courses listIdx={idx} index={index.toString() + idx.toString()} product={course} key={index.toString() + idx.toString()} productType='courses'/>)
                                             }
                                         </ul>
                                     )
@@ -58,7 +58,7 @@ const CoursesTray = (props) => {
                                     return (
                                         <ul className="courses-tray__list" key={index}>
                                             {
-                                                assessments.map((assessment, idx) =>  <Assessments listIdx={idx} index={index.toString() + idx.toString()} product={assessment} key={index.toString() + idx.toString()} /> )
+                                                assessments.map((assessment, idx) =>  <Assessments listIdx={idx} index={index.toString() + idx.toString()} product={assessment} key={index.toString() + idx.toString()} productType='assessments'/> )
                                             }
                                     </ul>
                                     )

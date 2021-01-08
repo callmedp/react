@@ -16,10 +16,12 @@ const Product = (props) => {
         tags, about, skillList,
         highlights, type, level,
         brochure, duration,
-        u_courses_benefits, u_desc
+        u_courses_benefits, u_desc,
+        test_duration,
+        number_of_questions
     },
         index,
-        listIdx } = props
+        listIdx, productType } = props
 
     const [halfStar, setHalfStar] = useState(false)
 
@@ -45,7 +47,7 @@ const Product = (props) => {
     return (
 
         <CustomOverlay
-            component={<PopoverDetail popoverData={{ about, skillList, highlights, jobsAvailable, url, type, level, u_courses_benefits, u_desc }} />}
+            component={<PopoverDetail popoverData={{ about, skillList, highlights, jobsAvailable, url, type, level, u_courses_benefits, u_desc, number_of_questions }} productType={productType}/>}
             placement={ listIdx === 2  ? 'left' : 'right'}
             onMouseEnter={() => { }}
             delay={200}
@@ -74,9 +76,15 @@ const Product = (props) => {
                                 <span>{rating}/5</span>
                             </span>
                         </div>
-                        <div className="card__duration-mode mt-10">
-                            Duration: <strong>{duration} days</strong>  |   Mode: <strong>{mode}</strong>
-                        </div>
+                        {
+                            productType === 'assessments' ? 
+                            <div className="card__duration-mode mt-10">
+                                Duration: <strong>{test_duration} minutes</strong>  |   Mode: <strong>{mode}</strong>
+                            </div> :
+                            <div className="card__duration-mode mt-10">
+                                Duration: <strong>{duration} days</strong>  |   Mode: <strong>{mode}</strong>
+                            </div>
+                        }
                         <div className="card__price mt-30">
                             <strong>{price}/-</strong>
                             { brochure ? <a href={brochure} className="icon-pdf" aria-label="pdf icon"></a> : '' }
