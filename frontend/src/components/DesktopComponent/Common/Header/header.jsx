@@ -11,6 +11,7 @@ import { removeTrackingInfo } from 'utils/storage.js';
 import SearchBar from './SeachBar/SearchBar';
 import { MyGA } from 'utils/ga.tracking.js';
 
+
 const Header = (props) => {
 
     const dispatch = useDispatch()
@@ -192,7 +193,7 @@ const Header = (props) => {
                                     navSkillList?.map((skill) => {
                                         return (
                                             <li key={skill.url} className="nav-item">
-                                                <a className="nav-link" href={`${siteDomain}${skill.url}`} onClick={() => MyGA.SendEvent('navigation_menu', 'ln_navigation_menu', 'ln_' + skill.id + '_navigation', 'ln_' + skill.id, '', false, true)}>{skill.name}</a>
+                                                <Link className="nav-link" href={`${skill.url}`} onClick={() => MyGA.SendEvent('navigation_menu', 'ln_navigation_menu', 'ln_' + skill.id + '_navigation', 'ln_' + skill.id, '', false, true)}>{skill.name}</Link>
                                             </li>
                                         )
                                     })
