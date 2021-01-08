@@ -23,25 +23,25 @@ const BannerSkill = (props) => {
                 <div className="banner-right">
                     <div className="banner-right-img">
                         <span className="skill-banner-tween1" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="100" data-aos-duration="1000">
-                            <img src={`${imageUrl}desktop/skill-animation-header1.svg`} alt={`${name} Courses Banner`} />
+                            <img src={`${imageUrl}desktop/skill-animation-header1.svg`} alt={`${name} Courses Banner Header 1`} />
                         </span>
                         <span className="skill-banner-tween2" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="300" data-aos-duration="1000">
-                            <img src={`${imageUrl}desktop/skill-animation-header2.svg`} alt={`${name} Courses Banner`} />
+                            <img src={`${imageUrl}desktop/skill-animation-header2.svg`} alt={`${name} Courses Banner Header 2`} />
                         </span>
                         <span className="skill-banner-tween3" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="500" data-aos-duration="1000">
-                            <img src={`${imageUrl}desktop/skill-animation-header3.svg`} alt={`${name} Courses Banner`} />
+                            <img src={`${imageUrl}desktop/skill-animation-header3.svg`} alt={`${name} Courses Banner Header 3`} />
                         </span>
                         <span className="skill-banner-tween4" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="700" data-aos-duration="1000">
-                            <img src={`${imageUrl}desktop/skill-animation-header4.svg`} alt={`${name} Courses Banner`} />
+                            <img src={`${imageUrl}desktop/skill-animation-header4.svg`} alt={`${name} Courses Banner Header 4`} />
                         </span>
                         <span className="skill-banner-tween5" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="900" data-aos-duration="1000">
-                            <img src={`${imageUrl}desktop/skill-animation-header5.svg`} alt={`${name} Courses Banner`} />
+                            <img src={`${imageUrl}desktop/skill-animation-header5.svg`} alt={`${name} Courses Banner Header 5`} />
                         </span>
                         <span className="skill-banner-tween6" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="1100" data-aos-duration="1000">
-                            <img src={`${imageUrl}desktop/skill-animation-header6.svg`} alt={`${name} Courses Banner`} />
+                            <img src={`${imageUrl}desktop/skill-animation-header6.svg`} alt={`${name} Courses Banner Header 6`} />
                         </span>
                         <span className="skill-banner-tween7" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="1300" data-aos-duration="1000">
-                            <img src={`${imageUrl}desktop/skill-animation-header7.svg`} alt={`${name} Courses Banner`} />
+                            <img src={`${imageUrl}desktop/skill-animation-header7.svg`} alt={`${name} Courses Banner Header 7`} />
                         </span>
                     </div>
                 </div>

@@ -29,6 +29,7 @@ import { zendeskTimeControlledWindow } from 'utils/zendeskIniti';
 import Aos from "aos";
 // import "aos/dist/aos.css";
 import { Helmet } from 'react-helmet';
+import { siteDomain } from 'utils/domains';
 
 const SkillPage = (props) => {
     const pageId = props?.match?.params?.id;
@@ -97,7 +98,7 @@ const SkillPage = (props) => {
                 <meta itemProp="name" content={meta_tags.title} />
                 <meta itemProp="url" content={meta_tags._url} />
                 <meta itemProp="description" content={meta_tags.og_description} />
-                <link rel="canonical" href={meta_tags._url} />
+                <link rel="canonical" href={siteDomain + meta_tags._url} />
             </Helmet>
             <Header />
             <StickyNav />
