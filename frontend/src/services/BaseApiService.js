@@ -91,7 +91,8 @@ async function handleResponse(response, isFetchingHTML) {
             data = await response.json();
             return {
                 error: true,
-                ...data
+                ...data,
+                status : response.status,
             }
             
         } catch (e) {

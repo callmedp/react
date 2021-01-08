@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux'
 const StickyNav = (props) => {
     const [scrolled, setScrolled] = React.useState(false);
     const { name } = useSelector(store => store.skillBanner)
-    const { hasFaq, hasLearnerStories } = props
+    const { hasFaq, hasLearnerStories, hasCourses } = props
 
     const handleScroll = () => {
         const offset = window.scrollY;
@@ -36,9 +36,12 @@ const StickyNav = (props) => {
                             <Nav.Link >Skills you gain</Nav.Link>
                         </LinkScroll>
 
-                        <LinkScroll to="courses" isDynamic={true} spy={true} offset={-120}>
-                            <Nav.Link >Courses</Nav.Link>
-                        </LinkScroll>
+                        {
+                            hasCourses ? <LinkScroll to="courses" isDynamic={true} spy={true} offset={-120}>
+                                <Nav.Link >Courses</Nav.Link>
+                            </LinkScroll> : ''
+                        }
+
 
                         <LinkScroll to="choose" isDynamic={true} spy={true} offset={-100}>
                             <Nav.Link >Why choose us</Nav.Link>

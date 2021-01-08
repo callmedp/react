@@ -111,8 +111,11 @@ class SkillPage(APIView):
                 'meta': meta.__dict__
             })
 
-        cache.set('skill_page_{}'.format(skill_id), data, timeout=60*60*24)
-        return Response(data,status=status.HTTP_200_OK) 
+            cache.set('skill_page_{}'.format(skill_id), data, timeout=60*60*24)
+            return Response(data,status=status.HTTP_200_OK) 
+        
+        else:
+            return Response({ 'message' : "No page found"}, status=status.HTTP_404_NOT_FOUND)
 
 class CourseComponentView(APIView):
     '''

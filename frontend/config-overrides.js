@@ -35,7 +35,6 @@ const resolveModule = (resolveFn, filePath) => {
 const appDesktopIndexJs = resolveModule(resolveApp, 'src/index.desktop');
 const appMobileIndexJs = resolveModule(resolveApp, 'src/index.mobile');
 
-const publicUrl = '/media/static/react/';
 const appHtml = resolveApp('public/index.html');
 const appBuild = resolveApp('../careerplus/static_core/react');
 const indexHtml = '../../../frontend/ssrBuild/index.html';
@@ -115,7 +114,6 @@ module.exports = {
   paths: function (paths, env) {
 
     paths.appBuild = appBuild;
-    paths.publicUrlOrPath = publicUrl;
 
     return paths;
   }

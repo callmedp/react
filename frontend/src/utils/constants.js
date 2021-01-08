@@ -1,5 +1,5 @@
 import { resumeShineSiteDomain, siteDomain } from './domains';
-import ReactGA from 'react-ga';
+
 
 const freeResourcesList = [
     { 
@@ -90,11 +90,11 @@ const categoryList = [
         id: 'sales_marketing',
         sideNavType: 'allCourses',
         children: [
-            { name: 'Digital Marketing', url: `${siteDomain}/courses/sales-and-marketing/digital-marketing/32/`, id:'digital_marketing' },
-            { name: 'Sales', url: `${siteDomain}/courses/sales-and-marketing/sales/18/`, id:'sales' },
-            { name: 'Retail', url: `${siteDomain}/courses/sales-and-marketing/retail/35/`, id:'retail' },
-            { name: 'Product Management', url: `${siteDomain}/courses/sales-and-marketing/product-marketing/24/`, id:'product_management' },
-            { name: 'Service Management', url: `${siteDomain}/courses/sales-and-marketing/service-marketing/30/`, id:'service_management'},
+            { name: 'Digital Marketing', url: `/courses/sales-and-marketing/digital-marketing/32/`, id:'digital_marketing' },
+            { name: 'Sales', url: `/courses/sales-and-marketing/sales/18/`, id:'sales' },
+            { name: 'Retail', url: `/courses/sales-and-marketing/retail/35/`, id:'retail' },
+            { name: 'Product Management', url: `/courses/sales-and-marketing/product-marketing/24/`, id:'product_management' },
+            { name: 'Service Management', url: `/courses/sales-and-marketing/service-marketing/30/`, id:'service_management'},
         ]
     },
     {
@@ -103,12 +103,12 @@ const categoryList = [
         id:'operation_management',
         sideNavType: 'allCourses',
         children:[
-            { name: 'Six Sigma', url: `${siteDomain}/courses/operation-management/six-sigma/193/`, id:'six_sigma' },
-            { name: 'Project Management', url: `${siteDomain}/courses/operation-management/project-management/123/`, id:'project_management' },
-            { name: 'Logistic and Supply Chain', url: `${siteDomain}/courses/operation-management/logistics-and-supply-chain/135/`, id:'logistic_and_supply_chain' },
-            { name: 'Service Quality', url: `${siteDomain}/courses/operation-management/service-quality/316/`, id:'service_quality' },
-            { name: 'Production', url: `${siteDomain}/courses/operation-management/production/39/`, id:'production'},
-            { name: 'Customer Care', url:`${siteDomain}/courses/operation-management/customer-care/37/`, id:'customer_care'}
+            { name: 'Six Sigma', url: `/courses/operation-management/six-sigma/193/`, id:'six_sigma' },
+            { name: 'Project Management', url: `/courses/operation-management/project-management/123/`, id:'project_management' },
+            { name: 'Logistic and Supply Chain', url: `/courses/operation-management/logistics-and-supply-chain/135/`, id:'logistic_and_supply_chain' },
+            { name: 'Service Quality', url: `/courses/operation-management/service-quality/316/`, id:'service_quality' },
+            { name: 'Production', url: `/courses/operation-management/production/39/`, id:'production'},
+            { name: 'Customer Care', url:`/courses/operation-management/customer-care/37/`, id:'customer_care'}
         ]
     },
     { 
@@ -117,14 +117,14 @@ const categoryList = [
         id: 'banking_finance',
         sideNavType: 'allCourses',
         children: [
-            { name: 'Advanced Accounting', url: `${siteDomain}/courses/banking-finance/advanced-accounting/114/`, id:'advanced_accounting'},
-            { name: 'Banking', url: `${siteDomain}/courses/banking-finance/banking/113/`, id:'banking' },
-            { name: 'Risk Management', url:`${siteDomain}/courses/banking-finance/risk-management/95/`, id:'risk_management'},
-            { name: 'Stock Market Training', url: `${siteDomain}/courses/banking-finance/stock-trading/94/`, id:'stock_market_training' },
-            { name: 'Financial Resporting and Management', url: `${siteDomain}/courses/banking-finance/financial-reporting-and-management/103/`, id:'financial_reporting_and_management' },
-            { name: 'Commercial Operation', url:`${siteDomain}/courses/banking-finance/commercial-operation/112/`, id:'commercial_operation'},
-            { name: 'Investment Banking', url:`${siteDomain}/courses/banking-finance/investment-banking/100/`, id:'investment_banking'},
-            { name: 'GST', url: `${siteDomain}/courses/banking-finance/gst-2/507/`, id:'gst' },
+            { name: 'Advanced Accounting', url: `/courses/banking-finance/advanced-accounting/114/`, id:'advanced_accounting'},
+            { name: 'Banking', url: `/courses/banking-finance/banking/113/`, id:'banking' },
+            { name: 'Risk Management', url:`/courses/banking-finance/risk-management/95/`, id:'risk_management'},
+            { name: 'Stock Market Training', url: `/courses/banking-finance/stock-trading/94/`, id:'stock_market_training' },
+            { name: 'Financial Resporting and Management', url: `/courses/banking-finance/financial-reporting-and-management/103/`, id:'financial_reporting_and_management' },
+            { name: 'Commercial Operation', url:`/courses/banking-finance/commercial-operation/112/`, id:'commercial_operation'},
+            { name: 'Investment Banking', url:`/courses/banking-finance/investment-banking/100/`, id:'investment_banking'},
+            { name: 'GST', url: `/courses/banking-finance/gst-2/507/`, id:'gst' },
         ]
     },
     { 
@@ -133,15 +133,15 @@ const categoryList = [
         id: 'informaton_technology',
         sideNavType: 'allCourses',
         children: [
-            { name: 'Big Data', url: `${siteDomain}/courses/it-information-technology/big-data/84/`, id:'big_data' },
-            { name: 'Project Management', url: `${siteDomain}/courses/operation-management/project-management/123/`, id:'project_management' },
-            { name: 'IT Software', url:`${siteDomain}/courses/it-information-technology/it-software/53/`, id:'it_software'},
-            { name: 'Graphic Design', url: `${siteDomain}/courses/it-information-technology/graphic-design/54/`, id:'graphic_design' },
-            { name: 'Cloud Computing', url: `${siteDomain}/courses/it-information-technology/cloud-computing/82/`, id:'cloud_computing' },
-            { name: 'MS Skills', url:`${siteDomain}/courses/it-information-technology/ms-skills/98/`, id:'ms_skills'},
-            { name: 'IT Language', url: `${siteDomain}/courses/it-information-technology/it-language/80/`, id:'it_language' },
-            { name: 'Blockchain', url: `${siteDomain}/courses/it-information-technology/blockchain/496/`, id:'blockchain' },
-            { name: 'Data Science', url:`${siteDomain}/courses/it-information-technology/data-science/497/`, id:'data_science'}
+            { name: 'Big Data', url: `/courses/it-information-technology/big-data/84/`, id:'big_data' },
+            { name: 'Project Management', url: `/courses/operation-management/project-management/123/`, id:'project_management' },
+            { name: 'IT Software', url:`/courses/it-information-technology/it-software/53/`, id:'it_software'},
+            { name: 'Graphic Design', url: `/courses/it-information-technology/graphic-design/54/`, id:'graphic_design' },
+            { name: 'Cloud Computing', url: `/courses/it-information-technology/cloud-computing/82/`, id:'cloud_computing' },
+            { name: 'MS Skills', url:`/courses/it-information-technology/ms-skills/98/`, id:'ms_skills'},
+            { name: 'IT Language', url: `/courses/it-information-technology/it-language/80/`, id:'it_language' },
+            { name: 'Blockchain', url: `/courses/it-information-technology/blockchain/496/`, id:'blockchain' },
+            { name: 'Data Science', url:`/courses/it-information-technology/data-science/497/`, id:'data_science'}
         ]
     }, 
     { 
@@ -150,10 +150,10 @@ const categoryList = [
         id: 'human_resources',
         sideNavType: 'allCourses',
         children: [
-            { name: 'Talent Aquisition', url: `${siteDomain}/courses/hr-human-resource/talent-acquisition/93/`, id:'talent_acquisition' },
-            { name: 'Organisational Structure', url:`${siteDomain}/courses/hr-human-resource/organizational-structure/97/`, id:'organisational_structure'},
-            { name: 'Training & Development', url: `${siteDomain}/courses/hr-human-resource/training-and-development/91/`, id:'training_and_development' },
-            { name: 'Compensation', url:`${siteDomain}/courses/hr-human-resource/compensation-2/110/`, id:'compensation'}
+            { name: 'Talent Aquisition', url: `/courses/hr-human-resource/talent-acquisition/93/`, id:'talent_acquisition' },
+            { name: 'Organisational Structure', url:`/courses/hr-human-resource/organizational-structure/97/`, id:'organisational_structure'},
+            { name: 'Training & Development', url: `/courses/hr-human-resource/training-and-development/91/`, id:'training_and_development' },
+            { name: 'Compensation', url:`/courses/hr-human-resource/compensation-2/110/`, id:'compensation'}
         ]
     },
     { 
@@ -162,9 +162,9 @@ const categoryList = [
         id: 'management',
         sideNavType: 'allCourses',
         children: [
-            { name: 'General Management', url: `${siteDomain}/courses/management/general-management/102/`, id:'general_management' },
-            { name: 'Business Analyst', url: `${siteDomain}/courses/management/business-analyst/58/`, id:'business_analyst' },
-            { name: 'Corporate Governance', url:`${siteDomain}/courses/management/corporate-governance/59/`, id:'corporate_governance'},
+            { name: 'General Management', url: `/courses/management/general-management/102/`, id:'general_management' },
+            { name: 'Business Analyst', url: `/courses/management/business-analyst/58/`, id:'business_analyst' },
+            { name: 'Corporate Governance', url:`/courses/management/corporate-governance/59/`, id:'corporate_governance'},
         ]
     },
     { 
@@ -173,10 +173,10 @@ const categoryList = [
         id: 'mass_communication',
         sideNavType: 'allCourses',
         children: [
-            { name: 'Content', url: `${siteDomain}/courses/mass-communication/content/46/`, id:'content' },
-            { name: 'Public Relations', url: `${siteDomain}/courses/mass-communication/public-relations/96/`, id:'public_relations' },
-            { name: 'Editor', url:`${siteDomain}/courses/mass-communication/editor/106/`, id:'editor'},
-            { name: 'journalism', url:`${siteDomain}/courses/mass-communication/journalism/99/`, id:'journalism'}
+            { name: 'Content', url: `/courses/mass-communication/content/46/`, id:'content' },
+            { name: 'Public Relations', url: `/courses/mass-communication/public-relations/96/`, id:'public_relations' },
+            { name: 'Editor', url:`/courses/mass-communication/editor/106/`, id:'editor'},
+            { name: 'journalism', url:`/courses/mass-communication/journalism/99/`, id:'journalism'}
         ]
     },
     { 
@@ -185,11 +185,11 @@ const categoryList = [
         id: 'personal_development',
         sideNavType: 'allCourses',
         children: [
-            { name: 'Language Learning', url: `${siteDomain}/courses/personal-development/language-learning/40/`, id:'language_learning' },
-            { name: 'Leadership', url: `${siteDomain}/courses/personal-development/leadership/41/`, id:'leadership' },
-            { name: 'Personal Development', url:`${siteDomain}/courses/personal-development/personality-development/42/`, id:'personality_development'},
-            { name: 'Interview Preparation', url:`${siteDomain}/courses/personal-development/interview-preparation/38/`, id:'interview_preparation'},
-            { name: 'Communication Development', url:`${siteDomain}/courses/personal-development/communication-development/36/`,id:'communication_development'}
+            { name: 'Language Learning', url: `/courses/personal-development/language-learning/40/`, id:'language_learning' },
+            { name: 'Leadership', url: `/courses/personal-development/leadership/41/`, id:'leadership' },
+            { name: 'Personal Development', url:`/courses/personal-development/personality-development/42/`, id:'personality_development'},
+            { name: 'Interview Preparation', url:`/courses/personal-development/interview-preparation/38/`, id:'interview_preparation'},
+            { name: 'Communication Development', url:`/courses/personal-development/communication-development/36/`,id:'communication_development'}
         ]
     },
     { 
@@ -198,9 +198,9 @@ const categoryList = [
         id: 'law',
         sideNavType: 'allCourses',
         children: [
-            { name: 'Cyber Law', url: `${siteDomain}/courses/law/cyber-law/107/`, id:'cyber_law' },
-            { name: 'Criminal Law', url: `${siteDomain}/courses/law/criminal-law/108/`, id:'criminal_law' },
-            { name: 'Company Law', url:`${siteDomain}/courses/law/company-law/111/`, id:'company_law'}
+            { name: 'Cyber Law', url: `/courses/law/cyber-law/107/`, id:'cyber_law' },
+            { name: 'Criminal Law', url: `/courses/law/criminal-law/108/`, id:'criminal_law' },
+            { name: 'Company Law', url:`/courses/law/company-law/111/`, id:'company_law'}
         ]
     },
     { 

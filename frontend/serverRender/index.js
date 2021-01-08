@@ -16,7 +16,7 @@ const app = express();
 if (typeof global.window == 'undefined') {
     global.window = {
         config: {
-            isServerRendered : true,
+            isServerRendered : process.env.IS_SERVER_RENDERED,
             siteDomain : process.env.SITE_DOMAIN,
             imageUrl : process.env.IMAGE_URL,
             resumeShineSiteDomain : process.env.RESUME_SHINE_SITE_DOMAIN,
@@ -122,7 +122,7 @@ app.get(expressRoutes, (req, res) => {
     branch.forEach(async ({ route, match }) => {
         if (route && route.actionGroup) {
             try {
-                result = await fetchApiData(store, match.params, route.actionGroup);
+                result = await new Promise((resolve, reject) => fetchApiData(store, match.params, route.actionGroup, resolve, reject) ) ;
                 appContent = render(req, routes);
 
                 // const helmet = Helmet.renderStatic();
@@ -169,8 +169,10 @@ app.get(expressRoutes, (req, res) => {
                 });
                 
             }
-            catch(e){
-                console.log("failed to fetch server api", e);
+            catch(error){
+                if(error?.status === 404){
+                    return res.redirect('/404/');
+                }
             }
         }
 

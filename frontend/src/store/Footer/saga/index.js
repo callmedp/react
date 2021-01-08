@@ -24,7 +24,7 @@ function* fetchPopularCourses(action) {
     try {
         const response = yield call(Api.fetchPopularCourses, payload?.id);
         if (response["error"]) {
-            return payload?.reject(response["error"])
+            return payload?.reject(response)
         }
         const item = response?.data?.data;
         yield put({ 

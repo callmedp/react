@@ -10,7 +10,7 @@ function* domainJobs(action) {
         const response = yield call(Api.domainJobs, payload);
         
         if (response["error"]) {
-            return payload?.reject(response["error"])
+            return payload?.reject(response)
         }
         
         const item = response.data;
