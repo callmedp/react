@@ -594,7 +594,7 @@
                   <strong class='also-check-tag'>{{widget_name}}</strong>
                   <ul class="also-check__list">
                     {% for obj in widget_obj_data %}
-                      <li><a href="{{obj.url}}" onclick="skillpageTracking('exit_skill_page'); MyGA.SendEvent('SkillAlsoCheck', 'ln_also_check', '{{obj.name}}', 'ln_{{category.name|title}}', '', false, true)">{{obj.name}}</a></li>
+                      <li><a href="{{obj.url}}" onclick="skillpageTracking('exit_skill_page'); MyGA.SendEvent('SkillAlsoCheck', 'ln_also_check', 'ln_{{obj.name}}', '{{category.name|title}}', '', false, true)">{{obj.name}}</a></li>
                     {% endfor %}
                   </ul>
                 </div>
