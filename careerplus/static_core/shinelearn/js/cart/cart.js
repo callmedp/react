@@ -579,7 +579,12 @@ $(document).ready(function () {
         $('#add-to-cart').attr('disabled', true);
 
         var prod_id = $('#add-to-cart').attr('prod-id');
-        ga('send', 'event', 'Buy Flow', 'Enroll Now', prod_id);
+        try{
+            ga('send', 'event', 'Buy Flow', 'Enroll Now', prod_id);
+        }
+        catch{
+            console.log('Something went wrong with ga tag data send !')
+        }
         // required options ie. for countries and product varification
 
         var req_options = [];
