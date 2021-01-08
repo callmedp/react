@@ -386,7 +386,7 @@ def sort_prod_list(prod_skill_dict):
 def default_product_get_set_cache(skills=None, flow_type=2):
     if flow_type != 16:
         cache_key = cache.get('cache_key_for_static_recommend_product', '')
-        if cache_key:
+        if not settings.DEBUG and cache_key:
             return cache_key
 
         default_prod = SQS().filter(id__in=settings.DEFAULT_RECOMMEND_PRODUCT)
@@ -395,7 +395,7 @@ def default_product_get_set_cache(skills=None, flow_type=2):
         
     else:
         cache_key = cache.get('cache_key_for_static_recommend_assesment', '')
-        if cache_key:
+        if not settings.DEBUG and cache_key:
             return cache_key
 
         default_prod = SQS().filter(id__in=settings.DEFAULT_RECOMMEND_ASSESMENT)

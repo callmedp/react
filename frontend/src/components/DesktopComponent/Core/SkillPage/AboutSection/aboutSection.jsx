@@ -12,16 +12,16 @@ const AboutSection = (props) => {
         <section className="container mt-0 " id="about" itemScope itemType="https://schema.org/AboutPage" >
             { about ? <div id="module" className="row about-course">
                 <h2 className="heading2" itemProp="headline" >About {name}</h2>
-                {about.length > 420 ? (
+                {about?.replace(regex, '')?.length > 438 ? (
                     <input type="checkbox" className="read-more-state" id="post-10" itemProp="about" />
                     ) : (
                         ""
                         )}
                         
                 <p className="read-more-wrap">
-                {about.replace(regex, '').slice(0, 420)}
+                {about.replace(regex, '').slice(0, 438)}
                     <span className="read-more-target">
-                        {about.replace(regex, '').slice(420)}
+                        {about.replace(regex, '').slice(438)}
                     </span>
                 </p>
                 <label htmlFor="post-10" className="read-more-trigger"></label>
