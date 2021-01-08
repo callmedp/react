@@ -15,8 +15,9 @@ const Product = (props) =>{
         tags, about, skillList,
         highlights, type, level,
         brochure, duration, stars,
-        u_courses_benefits, u_desc
-    }, index, compType } = props
+        u_courses_benefits, u_desc,
+        test_duration, number_of_questions
+    }, index, compType, productType } = props
 
     const [showDetails, setShowDetails] = useState(false)
     const starRatings = (star, index) => {
@@ -54,9 +55,15 @@ const Product = (props) =>{
                     <span>{rating?.toFixed(1)}/5</span>
                 </span>
                 </div>
-                <div className="m-card__duration-mode">
-                    Duration: <strong>{duration} days</strong>  |   Mode: <strong>{mode}</strong>
-                </div>
+                {
+                    productType === 'Assessments' ? 
+                    <div className="m-card__duration-mode">
+                        Duration: <strong>{test_duration} minutes</strong>  |   Mode: <strong>{mode}</strong>
+                    </div> :
+                    <div className="m-card__duration-mode">
+                        Duration: <strong>{duration} days</strong>  |   Mode: <strong>{mode}</strong>
+                    </div>
+                }
                 <div className="m-card__price">
                     <strong>{price}/-</strong> 
                     {(compType === "More Courses") && !showDetails ? <span onClick={()=>setShowDetails(true)} className="m-view-more ml-auto" >View more</span>: null}
@@ -64,12 +71,12 @@ const Product = (props) =>{
             </div>
             {
                 compType === 'For You' ?
-                    <ProductDetails detailsData={{ about, skillList, highlights, jobsAvailable, url, type, level, brochure, u_courses_benefits, u_desc }} icon='file' setShowDetails={setShowDetails}/>
+                    <ProductDetails detailsData={{ about, skillList, highlights, jobsAvailable, url, type, level, brochure, u_courses_benefits, u_desc, number_of_questions }} icon='file' setShowDetails={setShowDetails} productType={productType}/>
                     : null
             }
             {
                 showDetails ? 
-                    <ProductDetails detailsData={{ about, skillList, highlights, jobsAvailable, url, type, level, brochure, u_courses_benefits, u_desc }} icon='view less' setShowDetails={setShowDetails}/>
+                    <ProductDetails detailsData={{ about, skillList, highlights, jobsAvailable, url, type, level, brochure, u_courses_benefits, u_desc, number_of_questions }} icon='view less' setShowDetails={setShowDetails} productType={productType}/>
                     : null
             }
             

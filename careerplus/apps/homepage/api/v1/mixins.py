@@ -66,7 +66,6 @@ class PopularProductMixin(object):
                     'url':product.pURL,
                     'name':product.pNm,
                     'imgAlt':product.pImA,
-                    'imgAlt':product.pImA,
                     'rating': float(product.pARx),
                     'mode':product.pStM[0] if product.pStM else None,
                     'providerName':product.pPvn,

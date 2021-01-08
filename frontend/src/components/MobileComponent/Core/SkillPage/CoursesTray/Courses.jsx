@@ -39,7 +39,7 @@ const Courses = (props) => {
                 <div className="m-courses m-courses-slider ml-10n">
                     <Slider {...settings}>
                         {
-                            r_courses?.map((course, idx)=> <Product product={course} key={idx} compType='For You'/>)
+                            r_courses?.map((course, idx)=> <Product product={course} key={idx} compType='For You' productType = 'Courses'/>)
                         }
                     </Slider>
                 </div>
