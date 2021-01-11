@@ -13,7 +13,7 @@ const CoursesTray = (props) => {
     const { courseList, assessmentList } = useSelector(store => store.coursesTray)
     const [courseKey, setCourseKey] = useState(2)
     const [assessmentKey, setAssessmentKey] = useState(2)
-    const { gaTrack, setHasCourses } = props;
+    const { gaTrack, setHasCourses, pageId } = props;
 
     const loadMoreCourses = () => {
         gaTrack('SkillCourseLoadMore', 'ln_course_click', 'ln_know_more', 'ln_course', '', false, true)
@@ -26,7 +26,7 @@ const CoursesTray = (props) => {
     }
 
     useEffect(() => {
-        setHasCourses( courseList > 0 )
+        setHasCourses( courseList.length > 0 )
     },[courseList])
 
 
@@ -41,7 +41,7 @@ const CoursesTray = (props) => {
                         activeKey={key}
                         onSelect={(k) => setKey(k)} >
                         {
-                            courseList.length ? <Tab eventKey="courses" title={<h2>Courses</h2>}>
+                            courseList.length ? <Tab eventKey="courses" title={<h2>{ pageId === '32' ? "All Digital Marketing " : ''}Courses</h2>}>
                                 {
                                     courseList.slice(0, courseKey).map((courses, index) => {
                                         return (

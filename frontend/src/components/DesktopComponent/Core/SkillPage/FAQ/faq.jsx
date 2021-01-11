@@ -31,11 +31,11 @@ const FAQ = (props) => {
             <Card key={index.toString() + item.heading} >
                 <Accordion.Toggle as={Card.Header} eventKey={index === 0 ? '0' : index} itemScope itemProp="mainEntity" 
                               itemType="https://schema.org/Question">
-                    <p dangerouslySetInnerHTML={{__html : item.heading}} onClick={() => MyGA.SendEvent('SkillFAQs','ln_FAQ_click', 'ln_down_arrow_click', 'ln_'+item.heading.replace(regex, ''),'', false, true) }></p>
+                    <p itemProp="name" dangerouslySetInnerHTML={{__html : item.heading}} onClick={() => MyGA.SendEvent('SkillFAQs','ln_FAQ_click', 'ln_down_arrow_click', 'ln_'+item.heading.replace(regex, ''),'', false, true) }></p>
                 </Accordion.Toggle>
                 <Accordion.Collapse eventKey={index === 0 ? '0' : index} itemScope 
                                itemProp="acceptedAnswer" itemType="https://schema.org/Answer">
-                    <Card.Body dangerouslySetInnerHTML={{ __html: item.content }}>
+                    <Card.Body itemProp="text" dangerouslySetInnerHTML={{ __html: item.content }}>
                     </Card.Body>
                 </Accordion.Collapse>
             </Card>

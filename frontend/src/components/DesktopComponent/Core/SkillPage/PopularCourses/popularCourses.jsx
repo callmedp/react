@@ -30,7 +30,7 @@ const PopularCourses = (props) => {
     }
 
     return (
-        <div className="popular-courses mt-40" itemScope itemType="http://schema.org/Course">
+        <div className="popular-courses mt-40" >
             <h2 className="heading2">Popular Courses</h2>
             <ul className="popular-courses__list">
             {
@@ -38,14 +38,14 @@ const PopularCourses = (props) => {
                     return (
                         <li key={course.id}>
                             <figure>
-                                <img itemProp="image" src={course.img} alt={course.img_alt} />
+                                <img  src={course.img} alt={course.img_alt} />
                             </figure>
                             <div className="links">
-                                <a itemProp="url" href={`${siteDomain}${course.url}${trackingParameters}`} onClick={() => handleTracking(course)}>{course.name}</a>
-                                <span itemProp="provider" className="mr-10">By {course.provider}</span>
+                                <a href={`${siteDomain}${course.url}${trackingParameters}`} onClick={() => handleTracking(course)}>{course.name}</a>
+                                <span  className="mr-10">By {course.provider}</span>
                                     <span className="rating">
                                         { course.stars?.map((star) => starRatings(star)) }
-                                        <span itemProp="aggregateRating">{course.rating}/5</span>
+                                        <span >{course.rating}/5</span>
                                     </span>
                             </div>
                         </li>

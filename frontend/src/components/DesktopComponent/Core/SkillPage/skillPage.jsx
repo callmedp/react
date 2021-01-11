@@ -120,7 +120,7 @@ const SkillPage = (props) => {
                 <meta itemProp="description" content={meta_tags.og_description} />
                 <link rel="canonical" href={`${siteDomain}${meta_tags._url}`} />
             </Helmet>
-            <Header />
+            <Header placeHolder = 'Search course, assessment...'/>
             <StickyNav hasFaq={hasFaq} hasLearnerStories={hasLearnerStories} hasCourses={hasCourses} />
             <SkillBanner />
             <section className="container">
@@ -138,7 +138,7 @@ const SkillPage = (props) => {
                 </div>
             </section>
             <SkillGain />
-            <CoursesTray setHasCourses={setHasCourses} />
+            <CoursesTray setHasCourses={setHasCourses} pageId={pageId} />
             <OtherSkills />
             <section className="container">
                 <aside className="row">

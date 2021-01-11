@@ -35,7 +35,7 @@ const PopularCourses = (props) => {
         {
             trendingCourses.length ?
             <>
-                <div className="d-flex" itemScope itemType="http://schema.org/Course"> 
+                <div className="d-flex" > 
                     <h2 className="m-heading2 mb-10">Popular Courses</h2>
                     <a href="#" className="ml-auto m-view-course" onClick={handleTracking}>View all courses</a>
                 </div>
@@ -47,18 +47,18 @@ const PopularCourses = (props) => {
                                 <div className="m-card">
                                     <div className="m-card__heading">
                                         <figure>
-                                            <img itemProp="image" src={course.img} alt={course.img_alt} />
+                                            <img  src={course.img} alt={course.img_alt} />
                                         </figure>
                                         <h3 className="m-heading3 m-pop">
-                                            <a itemProp="url" href={`${course.url}${trackingParameters}`} onClick={ () => MyGA.SendEvent('SkillPopularCourses','ln_popular_course_select', 'ln_'+ course.name, heading,'', false, true)}>{course.name}</a>
+                                            <a  href={`${course.url}${trackingParameters}`} onClick={ () => MyGA.SendEvent('SkillPopularCourses','ln_popular_course_select', 'ln_'+ course.name, heading,'', false, true)}>{course.name}</a>
                                         </h3>
                                     </div>
                                     <div className="m-card__box">
                                         <div className="m-card__rating">
-                                        <span itemProp="provider" className="mr-10">By {course.provider}</span>
+                                        <span  className="mr-10">By {course.provider}</span>
                                         <span className="m-rating">
                                             { course.stars?.map((star, index) => starRatings(star, index)) }
-                                            <span itemProp="aggregateRating">{course.rating}/5</span>
+                                            <span >{course.rating}/5</span>
                                         </span>
                                         </div>
                                     </div>

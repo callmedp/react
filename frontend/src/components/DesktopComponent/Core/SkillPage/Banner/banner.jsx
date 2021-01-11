@@ -19,7 +19,7 @@ const BannerSkill = (props) => {
     return (
         <header className="container-fluid pos-rel">
             <figure className="banner-img">
-                <img src={`${imageUrl}desktop/skill-bg-new.png`} className="img-fluid w-100" alt={`${ name } Courses & Certifications`} />
+                <img src={`${imageUrl}desktop/skill-bg-new.png`} className="img-fluid w-100" alt={`${name} Courses & Certifications`} />
                 <div className="banner-right">
                     <div className="banner-right-img">
                         <span className="skill-banner-tween1" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="100" data-aos-duration="1000">
@@ -53,17 +53,19 @@ const BannerSkill = (props) => {
                             breadcrumbs?.map((bread, index) => {
                                 if (!!bread.url)
                                     return (<Breadcrumb.Item itemProp="itemListElement" itemScope
-                                        itemType="http://schema.org/ListItem" key={index} href={`${siteDomain}${bread.url}`} onClick={() => userTrack({ "query": tracking_data, "action": "exit_skill_page" })} >{bread.name}</Breadcrumb.Item>)
+                                        itemType="http://schema.org/ListItem" key={index} href={`${siteDomain}${bread.url}`} onClick={() => userTrack({ "query": tracking_data, "action": "exit_skill_page" })} >{bread.name}
+                                        <meta itemProp="name" content={bread.name} />
+                                        <meta itemProp="position" content={index} /></Breadcrumb.Item>)
                                 else
-                                    return (<Breadcrumb.Item itemProp="itemListElement" itemScope
-                                    itemType="http://schema.org/ListItem" key={index} >{bread.name}</Breadcrumb.Item>)
+                                    return (<Breadcrumb.Item key={index} >{bread.name}
+                                        </Breadcrumb.Item>)
                             })
                         }
                     </Breadcrumb>
                     <h1 className="heading1" data-aos="fade-right">
                         {name} Courses & Certifications
                     </h1>
-                    <Carousel className={ featuresList?.length ? "header-carousel" : "header-carousel noslide" }>
+                    <Carousel className={featuresList?.length ? "header-carousel" : "header-carousel noslide"}>
                         {/* <figure className="icon-round-arrow"></figure> */}
                         {
                             featuresList?.map((feature, index) => {
