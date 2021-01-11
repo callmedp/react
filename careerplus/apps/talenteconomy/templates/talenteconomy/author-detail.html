@@ -89,7 +89,7 @@
 								</article>
 								<hr>
 								<span class="view-forward">
-									<figure class="calender-icon"></figure> {{article.publish_date.date}}
+									<figure class="calender-icon"></figure> {{article.last_modified_on.date}}
 									{% if article.no_shares > 0 %}
 									<figure class="forward-icon ml-20"></figure> {{article.no_shares}}
 									{% endif %}
@@ -101,9 +101,9 @@
 						</a>
 						<meta itemprop="position" content="{{forloop.counter}}">
 						<meta itemprop="headline" content="{{article.heading}}">
-						<meta itemprop="datePublished" content="{{article.publish_date.date}}">
+						<meta itemprop="datePublished" content="{{article.last_modified_on.date}}">
 						</meta>
-						<meta itemprop="dateModified" content="{{article.publish_date.date}}">
+						<meta itemprop="dateModified" content="{{article.last_modified_on.date}}">
 						<meta itemprop="mainEntityOfPage" content="{% url 'talent:talent-landing' %}">
 						<meta itemprop="author" content={{article.author.name}}>
 						<div itemprop="publisher" itemscope itemtype="https://schema.org/Organization">
