@@ -63,11 +63,11 @@
 					      itemtype="http://schema.org/ListItem">
                   <a href="{{bread.url}}" itemprop="item" content="https://{{ SITE_DOMAIN }}{{bread.url}}">{{bread.name}}</a>
                   <meta itemprop="name" content="{{bread.name}}" />
-                  <meta itemprop="position" content="{{forloop.counter}}" />
+                  <meta itemprop="position" content="{{forloop.counter}}" onclick="MyGA.SendEvent('ln_breadcrumbs', 'ln_breadcrumbs', 'ln_breadcrumb_click', '{{breadcrumb.label}}', '', false, true);" />
                 </li>
               {% else %}
                 <li class="breadcrumb-item active" aria-current="page">
-                  <span>{{bread.name}}</span>
+                  <span onclick="MyGA.SendEvent('ln_breadcrumbs', 'ln_breadcrumbs', 'ln_breadcrumb_click', '{{breadcrumb.name}}', '', false, true);">{{bread.name}}</span>
                 </li>
               {% endif %}
               
