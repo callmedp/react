@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, connect } from 'react-redux';
+import { connect } from 'react-redux';
 import { siteDomain } from 'utils/domains';
 import CustomOverlay from 'services/CustomOverlay';
 import PopoverDetail from '../PopOverDetail/popOverDetail'
@@ -18,7 +18,8 @@ const Product = (props) => {
         brochure, duration,
         u_courses_benefits, u_desc,
         test_duration,
-        number_of_questions
+        number_of_questions,
+        imageAlt
     },
         index,
         listIdx, productType } = props
@@ -58,7 +59,7 @@ const Product = (props) => {
                         {tags === 2 && <span className="flag-blue">NEW</span>}
                         {tags === 1 && <span className="flag-red">BESTSELLER</span>}
                         <figure>
-                            <img src={imgUrl} alt={name} itemProp="image" />
+                            <img src={imgUrl} alt={imageAlt} itemProp="image" />
                         </figure>
                         <h3 className="heading3">
                             <a itemProp="url" href={`${siteDomain}${url}${trackingParameters}`} onClick={handleTracking} >{name}</a>

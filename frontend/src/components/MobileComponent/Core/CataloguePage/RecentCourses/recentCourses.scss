@@ -1,0 +1,24 @@
+@import '../../../../../styles-mobile/abstracts';
+
+.m-recent-courses {
+    h2 {
+        margin-bottom: 1rem;
+    }
+    h3 {
+        a {
+            color: $gray-100 !important;
+
+            &:hover, &:focus {
+                color: $gray-100 !important;
+            }
+        }
+    }
+
+    .m-card {
+        margin-bottom: 0;
+
+        &__price {
+            margin-top: 1rem;
+        }
+    }
+}

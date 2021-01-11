@@ -1,0 +1,91 @@
+@import '../../../../../styles/functions';
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
+
+header {
+    .catalog-banner-img {
+        position: relative;
+        z-index: 9;
+
+        .banner-right {
+            position: absolute;
+            top: 2rem;
+            right: 7%;
+
+            .banner-right-img {
+                position: relative;
+                width: 21.9rem;
+                height: 20rem;
+
+                > .catalog-banner-tween1 {
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    z-index: 9;
+                    max-width: 100%;
+                }
+                > .catalog-banner-tween2 {
+                    position: absolute;
+                    bottom: -.5rem;
+                    right: 3.5rem;
+                    z-index: 99;
+                }
+                > .catalog-banner-tween3 {
+                    position: absolute;
+                    top: 14.5rem;
+                    left: -2.2rem;
+                    z-index: 999;
+
+                }
+                > .catalog-banner-tween4 {
+                    position: absolute;
+                    top: 2rem;
+                    left: 4rem;
+                    z-index: 9999;
+
+                }
+                > .catalog-banner-tween5 {
+                    position: absolute;
+                    bottom: 6rem;
+                    left: -4.2rem;
+                    z-index: 99999;
+
+                }
+                
+            }
+        }
+    }
+
+    .catalog-header-content {
+        position: absolute;
+        z-index: 99;
+        width: 68%;
+        top: 0;
+        left: 3.5rem;
+        color: $white;
+
+        h1 {
+            color: $white;
+            font-weight: 400;
+        }
+
+        p {
+            width: 65%;
+            display: flex;
+            align-items: center;
+            font-size: 1.6rem;
+        }
+    }
+}
+
+.btn-outline-white {
+    color: $white;
+    border-color: $white;
+    font-size: 1.2rem;
+    text-transform: none;
+
+    &:hover, &:focus, &:active {
+        color: $white;
+        border: 1px solid $white !important;
+    }
+}

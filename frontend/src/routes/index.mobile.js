@@ -1,8 +1,10 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
 import SkillPageContainer from "components/MobileComponent/Core/SkillPage/skillPage";
+import CataloguePageContainer from "components/MobileComponent/Core/CataloguePage/cataloguePage";
 import { getSkillPageActionsMobile } from 'apiHandler/skillPageApi'; 
 import Error404Container from 'components/MobileComponent/Common/ErrorPage404/errorPage404';
+import { getCataloguePageActionsMobile } from "apiHandler/cataloguePageApi";
 
 export const RouteWithSubRoutes = route => {
     return (
@@ -33,6 +35,12 @@ export const routes = [
         component: SkillPageContainer,
         actionGroup: getSkillPageActionsMobile,
         exact: true
+    },
+    {
+        path: '/online-courses.html/',
+        component: CataloguePageContainer,
+        actionGroup: getCataloguePageActionsMobile,
+        exact: true,
     },
     {
         path: '/404/',

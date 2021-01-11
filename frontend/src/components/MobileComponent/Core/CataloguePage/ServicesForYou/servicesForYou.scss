@@ -1,0 +1,53 @@
+@import '../../../../../styles-mobile/abstracts';
+
+.m-services-foryou {
+    h2 {
+        margin-bottom: 1rem;
+    }
+
+    &__list {
+        @extend %box-shadow1;
+        padding: 1.5rem;
+
+        h3 {
+            font-size: 1.4rem;
+            margin-bottom: 1rem;
+            position: relative;
+    
+            &::before {
+                content: '';
+                width: .5rem;
+                height: 3.2rem;
+                background: $card-btm-bdr;
+                position: absolute;
+                left: -1.5rem;
+                top: -.5rem;
+            }
+        }
+    
+        p {
+            font-size: 1.3rem;
+            height: 6rem;
+            overflow: hidden;
+        }
+    
+        a {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+        
+        figure {
+            margin-left: auto;
+            margin-top: -1.5rem;
+        }
+    }
+    >.slick-slider {
+        .slick-list {
+            .slick-slide {
+                width: 28.5rem !important;
+                padding: 1.5rem 1rem !important;
+            }
+        }
+    }
+}
+

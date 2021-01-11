@@ -36,7 +36,7 @@ function* skillPageBanner(action) {
         return payload?.resolve(item);
 
     } catch (e) {
-        console.error("Exception occured ",e)
+        console.error("Exception occured at skillPageBanner Api",e)
         return payload?.reject(e)
         
     }

@@ -28,15 +28,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { zendeskTimeControlledWindow } from 'utils/zendeskIniti';
 import Aos from "aos";
 // import "aos/dist/aos.css";
-import { Helmet } from 'react-helmet';
-import { siteDomain } from 'utils/domains';
+import MetaContent from '../../Common/MetaContent/metaContent'
 
 const SkillPage = (props) => {
     const pageId = props?.match?.params?.id;
     const dispatch = useDispatch();
 
     const { skillLoader } = useSelector(store => store.loader);
-    const { history } = props
     const meta_tags = useSelector((store) => store.skillBanner.meta ? store.skillBanner.meta : '');
     const [hasFaq, setHasFaq] = useState(false)
     const [hasLearnerStories, setHasLearnerStories] = useState(false)
@@ -45,6 +43,7 @@ const SkillPage = (props) => {
 
     const handleEffects = async () => {
 
+        const { location: { search }, history } = props;
 
         try {
             //You may notice that apis corresponding to these actions are not getting called on initial render.
@@ -70,9 +69,7 @@ const SkillPage = (props) => {
         }
 
 
-        const {
-            location: { search },
-        } = props;
+        
         const query = queryString.parse(search);
         if (query['t_id']) {
             query['prod_id'] = pageId;
@@ -106,20 +103,7 @@ const SkillPage = (props) => {
     return (
         <div>
             { skillLoader ? <Loader /> : ''}
-            <Helmet>
-                <title>{meta_tags.title}</title>
-                <meta name="description" content={meta_tags.description} />
-                <meta property="og:title" content={meta_tags.title} />
-                <meta property="og:url" content={`${siteDomain}${meta_tags._url}`} />
-                <meta property="og:description" content={meta_tags.og_description} />
-                <meta property="og:type" content={meta_tags.og_type} />
-                <meta property="og:site_name" content={meta_tags.site_name} />
-                <meta property="fb:profile_id" content={meta_tags.og_profile_id} />
-                <meta itemProp="name" content={meta_tags.title} />
-                <meta itemProp="url" content={`${siteDomain}${meta_tags._url}`} />
-                <meta itemProp="description" content={meta_tags.og_description} />
-                <link rel="canonical" href={`${siteDomain}${meta_tags._url}`} />
-            </Helmet>
+            { meta_tags && <MetaContent meta_tags={meta_tags}/> }
             <Header />
             <StickyNav hasFaq={hasFaq} hasLearnerStories={hasLearnerStories} hasCourses={hasCourses} />
             <SkillBanner />

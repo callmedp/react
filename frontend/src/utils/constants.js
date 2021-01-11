@@ -99,7 +99,7 @@ const categoryList = [
     },
     {
         name: 'Operation Management',
-        url: `${siteDomain}/courses/operation-management/19/`, 
+        url: `${siteDomain}/courses/operation-management/19/`,
         id:'operation_management',
         sideNavType: 'allCourses',
         children:[
@@ -113,7 +113,7 @@ const categoryList = [
     },
     { 
         name: 'Banking & Finance', 
-        url: `${siteDomain}/courses/banking-and-finance/20/`, 
+        url: `${siteDomain}/courses/banking-and-finance/20/`,
         id: 'banking_finance',
         sideNavType: 'allCourses',
         children: [
@@ -194,7 +194,7 @@ const categoryList = [
     },
     { 
         name: 'Law', 
-        url: `${siteDomain}/courses/law/23/`, 
+        url: `${siteDomain}/courses/law/23/`,
         id: 'law',
         sideNavType: 'allCourses',
         children: [
@@ -222,6 +222,8 @@ const navSkillList = [
     { name: 'Data Science', url: '/courses/it-information-technology/data-science/497/', id:'data_science' },
     { name: 'Cloud Computing', url: '/courses/it-information-technology/cloud-computing/82/', id:'cloud_computing'}
 ]
+
+
 
 
 export {

@@ -1,0 +1,45 @@
+@import '../../../../../styles/functions';
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
+
+.all-category {
+
+    &__list {
+        list-style-type: none;
+        margin: 3rem 0 0 0;
+        padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+
+        .card {
+            box-shadow: $box-shadow;
+            border: none;
+            background: $white;
+            padding-bottom: 1rem;
+            margin-bottom: 3rem;
+
+            figure {
+                border-top-left-radius: .5rem;
+                border-top-right-radius: .5rem;
+                overflow: hidden;
+                img {
+                    width: 100%;
+                }
+            }
+
+            h3 {
+                font-size: 1.4rem;
+                font-weight: 600;
+                margin: 1.5rem 0 2rem 2rem;
+            }
+
+            a {
+                display: block;
+                text-align: right;
+                margin-right: 2rem;
+                font-size: 1.2rem;
+                font-weight: 600;
+            }
+        }
+    }
+}
