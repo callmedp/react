@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, connect } from 'react-redux';
+import { connect } from 'react-redux';
 import { siteDomain } from 'utils/domains';
 import CustomOverlay from 'services/CustomOverlay';
 import PopoverDetail from '../PopOverDetail/popOverDetail'
@@ -17,10 +17,12 @@ const Product = (props) => {
         highlights, type, level,
         brochure, duration,
         u_courses_benefits, u_desc,
-        imgAlt
+        test_duration,
+        number_of_questions,
+        imageAlt
     },
         index,
-        listIdx } = props
+        listIdx, productType } = props
 
     const [halfStar, setHalfStar] = useState(false)
 
@@ -46,26 +48,26 @@ const Product = (props) => {
     return (
 
         <CustomOverlay
-            component={<PopoverDetail popoverData={{ about, skillList, highlights, jobsAvailable, url, type, level, u_courses_benefits, u_desc }} />}
+            component={<PopoverDetail popoverData={{ about, skillList, highlights, jobsAvailable, url, type, level, u_courses_benefits, u_desc, number_of_questions }} productType={productType}/>}
             placement={ listIdx === 2  ? 'left' : 'right'}
             onMouseEnter={() => { }}
             delay={200}
         >
-            <li className="col-sm-4" key={index}>
+            <li className="col-sm-4" key={index} itemProp="itemListElement" itemScope itemType="http://schema.org/ListItem">
                 <div className="card" data-aos="fade-zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay={index*50+50} data-aos-duration="1000">
                     <div className="card__heading">
                         {tags === 2 && <span className="flag-blue">NEW</span>}
                         {tags === 1 && <span className="flag-red">BESTSELLER</span>}
                         <figure>
-                            <img src={imgUrl} alt={imgAlt} />
+                            <img src={imgUrl} alt={imageAlt} itemProp="image" />
                         </figure>
                         <h3 className="heading3">
-                            <a href={`${siteDomain}${url}${trackingParameters}`} onClick={handleTracking} >{name}</a>
+                            <a itemProp="url" href={`${siteDomain}${url}${trackingParameters}`} onClick={handleTracking} >{name}</a>
                         </h3>
                     </div>
                     <div className="card__box">
                         <div className="card__rating mt-5">
-                            <span className="provider mr-10">By {providerName}</span>
+                            <span itemProp="name" className="provider mr-10">By {providerName}</span>
                             <span className="rating">
 
                                 {Array(parseInt(rating)).fill().map((_, index) => <em key={index} className="icon-fullstar"></em>)}
@@ -75,9 +77,15 @@ const Product = (props) => {
                                 <span>{rating}/5</span>
                             </span>
                         </div>
-                        <div className="card__duration-mode mt-10">
-                            Duration: <strong>{duration} days</strong>  |   Mode: <strong>{mode}</strong>
-                        </div>
+                        {
+                            productType === 'assessments' ? 
+                            <div className="card__duration-mode mt-10">
+                                Duration: <strong>{test_duration} minutes</strong>  |   Mode: <strong>{mode}</strong>
+                            </div> :
+                            <div className="card__duration-mode mt-10">
+                                Duration: <strong>{duration} days</strong>  |   Mode: <strong>{mode}</strong>
+                            </div>
+                        }
                         <div className="card__price mt-30">
                             <strong>{price}/-</strong>
                             { brochure ? <a href={brochure} className="icon-pdf" aria-label="pdf icon"></a> : '' }

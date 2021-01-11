@@ -11,3 +11,15 @@ export const FooterReducer = (state=initState, action) => {
         default: return state;
     }
 }
+
+const popularCoursesState = {
+    trendingCourses : [],
+    trendingSkills : []
+}
+
+export const PopularCoursesReducer = (state=popularCoursesState, action) => {
+    switch(action.type){
+        case Actions.POPULAR_COURSES_FETCHED : return {...state, ...action.item}
+        default: return state;
+    }
+}

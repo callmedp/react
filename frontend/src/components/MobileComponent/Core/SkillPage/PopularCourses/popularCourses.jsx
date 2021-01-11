@@ -3,21 +3,15 @@ import { useDispatch, useSelector, connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import '../CoursesTray/courses.scss';
 import './popularCourses.scss';
-import { fetchTrendingCnA } from 'store/Footer/actions/index';
 import { MyGA } from 'utils/ga.tracking.js';
 import { getTrackingInfo, getTrackingParameters } from 'utils/storage.js';
 import { trackUser } from 'store/Tracking/actions/index.js';
-import { eventChannel } from 'redux-saga';
 
 const PopularCourses = (props) => {
     const { setTabType } = props
-    const dispatch = useDispatch()
     const tracking_data = getTrackingInfo();
-    useEffect(() => {
-        dispatch(fetchTrendingCnA())
-    }, [])
 
-    const { trendingCourses } = useSelector( store => store.footer )
+    const { trendingCourses } = useSelector( store => store.popularCourses )
     const { heading } = useSelector( store => store.skillBanner )
 
     const starRatings = (star, index) => {
@@ -37,11 +31,11 @@ const PopularCourses = (props) => {
     }
 
     return (
-        <section className="m-container m-courses mt-0 mb-0 pt-10 pb-0">
+        <section className="m-container m-courses mt-0 mb-0 pt-10 pb-0" >
         {
             trendingCourses.length ?
             <>
-                <div className="d-flex">
+                <div className="d-flex" itemScope itemType="http://schema.org/Course"> 
                     <h2 className="m-heading2 mb-10">Popular Courses</h2>
                     <a href="#" className="ml-auto m-view-course" onClick={handleTracking}>View all courses</a>
                 </div>
@@ -53,18 +47,18 @@ const PopularCourses = (props) => {
                                 <div className="m-card">
                                     <div className="m-card__heading">
                                         <figure>
-                                            <img src={course.img} alt={course.img_alt} />
+                                            <img itemProp="image" src={course.img} alt={course.img_alt} />
                                         </figure>
                                         <h3 className="m-heading3 m-pop">
-                                            <a href={`${course.url}${trackingParameters}`} onClick={ () => MyGA.SendEvent('SkillPopularCourses','ln_popular_course_select', 'ln_'+ course.name, heading,'', false, true)}>{course.name}</a>
+                                            <a itemProp="url" href={`${course.url}${trackingParameters}`} onClick={ () => MyGA.SendEvent('SkillPopularCourses','ln_popular_course_select', 'ln_'+ course.name, heading,'', false, true)}>{course.name}</a>
                                         </h3>
                                     </div>
                                     <div className="m-card__box">
                                         <div className="m-card__rating">
-                                        <span className="mr-10">By {course.provider}</span>
+                                        <span itemProp="provider" className="mr-10">By {course.provider}</span>
                                         <span className="m-rating">
                                             { course.stars?.map((star, index) => starRatings(star, index)) }
-                                            <span>{course.rating}/5</span>
+                                            <span itemProp="aggregateRating">{course.rating}/5</span>
                                         </span>
                                         </div>
                                     </div>

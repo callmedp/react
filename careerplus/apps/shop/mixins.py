@@ -13,7 +13,7 @@ from partner.models import ProductSkill
 
 
 class CourseCatalogueMixin(object):
-	def get_course_catalogue_context(self, num):
+	def get_course_catalogue_context(self, num=8):
 		data = {}
 		course_products = Product.browsable.filter(
 			product_class__slug__in=settings.COURSE_SLUG,

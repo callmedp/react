@@ -23,6 +23,7 @@ import './skillPage.scss'
 import { fetchSkillPageBanner } from 'store/SkillPage/Banner/actions';
 import { fetchCoursesAndAssessments } from 'store/SkillPage/CoursesTray/actions/index';
 import { fetchDomainJobs } from 'store/SkillPage/DomainJobs/actions';
+import { fetchPopularCourses } from 'store/Footer/actions/index';
 import { useDispatch, useSelector } from 'react-redux';
 import { zendeskTimeControlledWindow } from 'utils/zendeskIniti';
 import Aos from "aos";
@@ -34,15 +35,41 @@ const SkillPage = (props) => {
     const dispatch = useDispatch();
 
     const { skillLoader } = useSelector(store => store.loader);
-    const { id } = useSelector(store => store.skillBanner);
     const meta_tags = useSelector((store) => store.skillBanner.meta ? store.skillBanner.meta : '');
+    const [hasFaq, setHasFaq] = useState(false)
+    const [hasLearnerStories, setHasLearnerStories] = useState(false)
+    const [hasCourses, setHasCourses] = useState(false)
 
 
     const handleEffects = async () => {
-        const {
-            location: { search },
-            history,
-        } = props;
+
+        const { location: { search }, history } = props;
+
+        try {
+            //You may notice that apis corresponding to these actions are not getting called on initial render.
+            //This is because initial render is done on node server, which is calling these apis, map the data and send it to the browser.
+            //So there is no need to fetch them again on the browser.
+            if (!(window && window.config && window.config.isServerRendered)) {
+
+                await new Promise((resolve, reject) => dispatch(fetchSkillPageBanner({ id: pageId, 'medium': 0, resolve, reject })));
+                new Promise((resolve, reject) => dispatch(fetchCoursesAndAssessments({ id: pageId, resolve, reject })));
+                new Promise((resolve, reject) => dispatch(fetchDomainJobs({ id: pageId, resolve, reject })));
+                new Promise((resolve, reject) => dispatch(fetchPopularCourses({ id: pageId, resolve, reject })))
+            }
+            else {
+                //isServerRendered is needed to be deleted because when routing is done through react and not on the node,
+                //above actions need to be dispatched.
+                delete window.config?.isServerRendered
+            }
+        }
+        catch (error) {
+            if (error?.status == 404) {
+                history.push('/404');
+            }
+        }
+
+
+        
         const query = queryString.parse(search);
         if (query['t_id']) {
             query['prod_id'] = pageId;
@@ -65,15 +92,6 @@ const SkillPage = (props) => {
 
         handleEffects();
 
-        if (!(window && window.config && window.config.isServerRendered)) {
-            new Promise((resolve, reject) => dispatch(fetchSkillPageBanner({ id: pageId, 'medium': 0, resolve, reject })));
-            new Promise((resolve, reject) => dispatch(fetchCoursesAndAssessments({ id: pageId, resolve, reject })));
-            new Promise((resolve, reject) => dispatch(fetchDomainJobs({ id: pageId, resolve, reject })));
-        }
-        else {
-
-            delete window.config?.isServerRendered
-        }
         //Zendesk Chat
         zendeskTimeControlledWindow(7000)
     }, [pageId])
@@ -87,7 +105,7 @@ const SkillPage = (props) => {
             { skillLoader ? <Loader /> : ''}
             { meta_tags && <MetaContent meta_tags={meta_tags}/> }
             <Header />
-            <StickyNav />
+            <StickyNav hasFaq={hasFaq} hasLearnerStories={hasLearnerStories} hasCourses={hasCourses} />
             <SkillBanner />
             <section className="container">
                 <div className="row">
@@ -104,7 +122,7 @@ const SkillPage = (props) => {
                 </div>
             </section>
             <SkillGain />
-            <CoursesTray />
+            <CoursesTray setHasCourses={setHasCourses} />
             <OtherSkills />
             <section className="container">
                 <aside className="row">
@@ -117,8 +135,8 @@ const SkillPage = (props) => {
                 </aside>
             </section>
             <WhyChooseUs />
-            <FAQ />
-            <LearnersStories />
+            <FAQ setHasFaq={setHasFaq} />
+            <LearnersStories setHasLearnerStories={setHasLearnerStories} />
             <Footer />
         </div>
     )

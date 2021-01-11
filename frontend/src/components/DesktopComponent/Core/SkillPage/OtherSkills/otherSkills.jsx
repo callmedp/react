@@ -24,8 +24,8 @@ const OtherSkills = (props) => {
                                     {
                                         otherSkills?.map((skill, index) => {
                                             return (
-                                                <React.Fragment key={index}>
-                                                <Badge pill variant="light"><a onClick={() => userTrack({"query" : tracking_data, "action" : 'exit_skill_page' })}  href={`${siteDomain}${skill.url}`} >{skill.name}</a></Badge>&nbsp;
+                                                <React.Fragment key={index} >
+                                                <Badge pill itemScope itemType="http://schema.org/ItemList" variant="light"><a itemProp="url" onClick={() => userTrack({"query" : tracking_data, "action" : 'exit_skill_page' })}  href={`${siteDomain}${skill.url}`} >{skill.name}</a></Badge>&nbsp;
                                                 </React.Fragment>
                                             )
                                         })

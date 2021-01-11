@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { MyGA } from 'utils/ga.tracking.js';
 
 const DropDown = (props) => {
@@ -31,7 +32,7 @@ const DropDown = (props) => {
                 return (
                     <div className={`tab-pane fade ${activeTab === item.id ? 'show active' : ''}`} id="tab-links1" role="tabpanel" aria-labelledby="category-tab" key={item.id}>
                         {
-                            item.children.map( child => <a key={child.url} href={child.url} onClick={() => MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_'+item.id, 'ln_'+child.id, '', false, true)}>{child.name}</a> )
+                            item.children.map( child => <Link key={child.url} to={child.url} onClick={() => MyGA.SendEvent('homepage_navigation','ln_navigation_explore', 'ln_'+item.id, 'ln_'+child.id, '', false, true)}>{child.name}</Link> )
                         }
                     </div>
                 )

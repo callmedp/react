@@ -8,7 +8,7 @@ require('dotenv').config({
 const fs = require('fs');
 const express = require('express');
 const matchRoutes = require('react-router-config').matchRoutes;
-const fetchApiData = require('utils/fetching').default;
+const fetchApiData = require('./fetching').default;
 
 const PORT = process.env.PORT || 8079;
 const app = express();
@@ -16,7 +16,7 @@ const app = express();
 if (typeof global.window == 'undefined') {
     global.window = {
         config: {
-            isServerRendered : true,
+            isServerRendered : process.env.IS_SERVER_RENDERED,
             siteDomain : process.env.SITE_DOMAIN,
             imageUrl : process.env.IMAGE_URL,
             resumeShineSiteDomain : process.env.RESUME_SHINE_SITE_DOMAIN,
@@ -94,6 +94,7 @@ app.use(function (req, res, next) {
 app.use('/media/static/',express.static('../careerplus/media/static/'));
 app.use(express.static('../careerplus/media/static/react/'));
 
+
 const isMobile = (userAgents) => {
     return /Android|Phone|Mobile|Opera\sM(in|ob)i|iP[ao]d|BlackBerry|SymbianOS|Safari\.SearchHelper|SAMSUNG-(GT|C)|WAP|CFNetwork|Puffin|PlayBook|Nokia|LAVA|SonyEricsson|Karbonn|UCBrowser|ucweb|Micromax|Silk|LG(MW|-MMS)|PalmOS/i.test(userAgents)
 }
@@ -121,7 +122,7 @@ app.get(expressRoutes, (req, res) => {
     branch.forEach(async ({ route, match }) => {
         if (route && route.actionGroup) {
             try {
-                result = await fetchApiData(store, match.params, route.actionGroup);
+                result = await new Promise((resolve, reject) => fetchApiData(store, match.params, route.actionGroup, resolve, reject) ) ;
                 appContent = render(req, routes);
 
                 // const helmet = Helmet.renderStatic();
@@ -168,8 +169,10 @@ app.get(expressRoutes, (req, res) => {
                 });
                 
             }
-            catch(e){
-                console.log("failed to fetch server api", e);
+            catch(error){
+                if(error?.status === 404){
+                    return res.redirect('/404/');
+                }
             }
         }
 

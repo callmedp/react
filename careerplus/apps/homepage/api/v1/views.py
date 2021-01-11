@@ -806,9 +806,16 @@ class TrendingCoursesAndSkillsAPI(PopularProductMixin, APIView):
         please check "PopularProductMixin" to understand the algorithm.
         """
         popular_course_quantity = int(request.GET.get('num_courses', 2))
+        skill_category = request.GET.get('category_id', None)
+
         product_obj, product_converstion_ratio, product_revenue_per_mile = PopularProductMixin().\
                                                                             popular_courses_algorithm(
-                                                                            quantity=popular_course_quantity)
+                                                                            quantity=popular_course_quantity,
+                                                                            category=skill_category)
+
+        if not product_obj:
+            return APIResponse(message='No Product Object Found !', status=status.HTTP_200_OK,
+                               error=False)
 
         product_pks = list(product_converstion_ratio) + list(product_revenue_per_mile)
         tprds = SearchQuerySet().filter(id__in=product_pks, pTP__in=[0, 1, 3]).exclude(

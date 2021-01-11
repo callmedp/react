@@ -1,7 +1,7 @@
 import React from 'react';
 import './servicesForYou.scss';
 import { useSelector } from 'react-redux';
-import { resumeShineSiteDomain } from 'utils/domains';
+import { siteDomain } from 'utils/domains';
 
 const OurVendors = (props) => {
 

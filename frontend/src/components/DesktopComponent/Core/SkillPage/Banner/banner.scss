@@ -23,7 +23,7 @@ header {
                     > .skill-banner-tween1 {
                         position: absolute;
                         top: 0;
-                        left: 0;
+                        left: -4rem;
                         z-index: 9;
                         max-width: 100%;
                     }
@@ -100,7 +100,7 @@ header {
         left: 3.5rem;
 
         p {
-            width: 95%;
+            width: 90%;
             margin-top: 2rem;
             display: flex;
             align-items: center;
@@ -108,6 +108,12 @@ header {
             figure {
                 margin: 0 1rem 0 0;
             }
+        }
+    }
+
+    .noslide {
+        &::before {
+            display: none !important;
         }
     }
 

@@ -42,32 +42,39 @@ const Footer = (props) => {
                                 <a href="https://twitter.com/shinelearning" className="icon-twitter" onClick={() =>  MyGA.SendEvent('social_media_follow','ln_social_media_follow', 'ln_twitter', 'homepage','', false, true)}></a>
                             </li>
                         </ul>
-                        <article className="">
-                            <strong>TRENDING  COURSES</strong>
-                            {
-                                trendingCourses?.slice(0,25).map((course, index) => {
-                                    return (
-                                        <React.Fragment key={index}>
-                                            <a href={`${siteDomain}${course.url}`}>{course.name}</a>&nbsp;
-                                            { trendingCourses.length - 1 === index ? '' : '|'}
-                                        </React.Fragment>
-                                    )
-                                })
-                            }
-                        </article>
-                        <article className="">
-                            <strong>TRENDING  Skills</strong>
-                            {
-                                trendingSkills?.slice(0,25).map((skill, index) => {
-                                    return (
-                                        <React.Fragment key={index}>
-                                            <a href={`${siteDomain}${skill.skillUrl}`}>{skill.skillName}</a>&nbsp;
-                                            { trendingSkills.length - 1 === index ? '' : '|'}
-                                        </React.Fragment>
-                                    )
-                                })
-                            }
-                        </article>
+                        {
+                            trendingCourses.length ?
+                                <article className="">
+                                    <strong>TRENDING  COURSES</strong>
+                                    {
+                                        trendingCourses?.slice(0,25).map((course, index) => {
+                                            return (
+                                                <React.Fragment key={index}>
+                                                    <a href={`${siteDomain}${course.url}`}>{course.name}</a>&nbsp;
+                                                    { trendingCourses.length - 1 === index ? '' : '|'}
+                                                </React.Fragment>
+                                            )
+                                        })
+                                    }
+                                </article> : ''
+                        }
+                        {
+                            trendingSkills ? 
+                                <article className="">
+                                    <strong>TRENDING  Skills</strong>
+                                    {
+                                        trendingSkills?.slice(0,25).map((skill, index) => {
+                                            return (
+                                                <React.Fragment key={index}>
+                                                    <a href={`${siteDomain}${skill.skillUrl}`}>{skill.skillName}</a>&nbsp;
+                                                    { trendingSkills.length - 1 === index ? '' : '|'}
+                                                </React.Fragment>
+                                            )
+                                        })
+                                    }
+                                </article> : ''
+                        }
+
                         <div className="footer-btm">
                             <div className="footer-btm__secure-payment">
                                 <figure className="icon-secure"></figure>

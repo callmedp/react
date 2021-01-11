@@ -32,10 +32,10 @@ const DomainJobs = (props) => {
 
             <figure id="domain-jobs" className="domain-jobs__img">
                 <span className="domain-tween1" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="100" data-aos-duration="1000">
-                    <img src={`${imageUrl}desktop/domain-tween1.svg`} alt="related jobs banner"/>
+                    <img src={`${imageUrl}desktop/domain-tween1.svg`} alt="related jobs banner 1"/>
                 </span>
                 <span className="domain-tween2" data-aos="zoom-out" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="200" data-aos-duration="1000">
-                    <img src={`${imageUrl}desktop/domain-tween2.svg`} alt="related jobs banner"/>
+                    <img src={`${imageUrl}desktop/domain-tween2.svg`} alt="related jobs banner 2"/>
                 </span>
             </figure>
         </section>

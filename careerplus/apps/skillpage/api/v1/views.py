@@ -21,6 +21,7 @@ from homepage.models import TestimonialCategoryRelationship, Testimonial
 from shop.templatetags.shop_tags import get_faq_list, format_features, format_extra_features
 import json
 from shop.choices import PRODUCT_CHOICES,PRODUCT_TAG_CHOICES
+from homepage.api.v1.helper import CoursesFormatter, AssesmentsFormatter
 
 class LoadMoreApiView(FieldFilterMixin, ListAPIView):
     serializer_class = LoadMoreSerializerSolr
@@ -110,8 +111,11 @@ class SkillPage(APIView):
                 'meta': meta.__dict__
             })
 
-        cache.set('skill_page_{}'.format(skill_id), data, timeout=60*60*24)
-        return Response(data,status=status.HTTP_200_OK) 
+            cache.set('skill_page_{}'.format(skill_id), data, timeout=60*60*24)
+            return Response(data,status=status.HTTP_200_OK) 
+        
+        else:
+            return Response({ 'message' : "No page found"}, status=status.HTTP_404_NOT_FOUND)
 
 class CourseComponentView(APIView):
     '''
@@ -129,55 +133,10 @@ class CourseComponentView(APIView):
         category = Category.objects.only('id').filter(id=id).first()
         if category:
             courses = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).filter(pCtg=category.pk).exclude(pTF=16)
-            for course in courses:
-                d = json.loads(course.pVrs).get('var_list')
-                data = {
-                    'imgUrl':course.pImg,
-                    'url':course.pURL,
-                    'name':course.pNm,
-                    'imgAlt':course.pImA,
-                    'rating': float(course.pARx),
-                    'mode':course.pStM[0] if course.pStM else None,
-                    'providerName':course.pPvn,
-                    'price':float(course.pPin),
-                    'skillList': course.pSkilln,
-                    'about':course.pAb,
-                    'title':course.pTt,
-                    'slug':course.pSg,
-                    'jobsAvailable':course.pNJ,
-                    'tags':PRODUCT_TAG_CHOICES[course.pTg][0],
-                    'brochure':json.loads(course.pUncdl[0]).get('brochure') if course.pUncdl else None,
-                    'u_courses_benefits':json.loads(course.pUncdl[0]).get('highlighted_benefits').split(';') if course.pUncdl else None,
-                    'u_desc': course.pDsc,
-                    'stars': course.pStar,
-                    'highlights':format_extra_features(course.pBS) if course.pBS else None,
-                    'id':course.id,
-                    }
-                if len(d)!=0:
-                    data.update({
-                        'duration':d[0].get('dur_days'), 
-                        'type':d[0].get('type'),  
-                        'label':d[0].get('label'), 
-                        'level':d[0].get('level'), 
-                    })
-                course_data.append(data)
-            assesments = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).filter(pCtg=category.pk, pTF=16)
-            for assessment in assesments:
-                assessment_data = {
-                    'name':assessment.pNm,
-                    'imgUrl':assessment.pImg,
-                    'url':assessment.pURL,
-                    'rating':assessment.pARx,
-                    'mode': assessment.pStM,# :product_mode_choice
-                    'providerName':assessment.pPvn if assessment.pPvn else None,
-                    'price':float(assessment.pPin),
-                    'about':assessment.text,
-                    'tags':PRODUCT_TAG_CHOICES[assessment.pTg][1],
-                    'brochure':json.loads(assessment.pUncdl[0]).get('brochure') if course.pUncdl else None,
-                    'test_duration':json.loads(assessment.pAsft[0]).get('test_duration') if assessment.pAsft else None,
-                    'number_of_questions':json.loads(assessment.pAsft[0]).get('number_of_questions') if assessment.pAsft else None,
-                }
-                assessments_data.append(assessment_data)
+            course_data = CoursesFormatter(courses)
+
+            assessments = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).filter(pCtg=category.pk, pTF=16)
+            assessments_data = AssesmentsFormatter(assessments)
         return_data = {
             'courses':course_data,
             'assessments':assessments_data,

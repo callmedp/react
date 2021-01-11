@@ -23,7 +23,7 @@ function* trendingCategories(action) {
         if(!!payload && !payload.medium && SnMCourseList instanceof Array 
             && ITCourseList instanceof Array && BnFCourseList instanceof Array){
             //converts 1D array to 2D array
-            SnMCourseList = !!item && item.SnFCourseList?.length ? item.SnFCourseList.reduce((rows, key, index) => 
+            SnMCourseList = !!item && item.SnMCourseList?.length ? item.SnMCourseList.reduce((rows, key, index) => 
             (index % 3 == 0 ? rows.push([key]) : rows[rows.length-1].push(key)) && rows, []) : [];
         
             //converts 1D array to 2D array

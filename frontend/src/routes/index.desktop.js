@@ -43,6 +43,10 @@ export const routes = [
         exact: true,
     },
     {
+        path: '/404/',
+        component: Error404Container
+    },
+    {
         //keep this at the bottom
         path: '*',
         component: Error404Container

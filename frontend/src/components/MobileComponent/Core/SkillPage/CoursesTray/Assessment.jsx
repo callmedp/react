@@ -41,17 +41,17 @@ const Assessment = (props) => {
                 <div className="m-courses m-courses-slider ml-10n">
                     <Slider {...settings}>
                         {
-                            r_assesments?.map((assessment, idx)=> <Product product={assessment} key={idx} compType='For You'/>)
+                            r_assesments?.map((assessment, idx)=> <Product product={assessment} key={idx} compType='For You' productType="Assessments"/>)
                         }
                     </Slider>
                 </div>
             </> : null
         }
 
-        <h2 className="m-heading2 mt-20 mb-20">More assessments</h2>
+        <h2 className="m-heading2 mt-0 mb-20">More assessments</h2>
         <div className="m-courses mr-15">
             {
-                (sliceFlag ? assessmentList.slice(0, 4) : assessmentList)?.map((assessment, idx)=> <Product product={assessment} key={idx + 100} compType='More Courses'/>)
+                (sliceFlag ? assessmentList.slice(0, 4) : assessmentList)?.map((assessment, idx)=> <Product product={assessment} key={idx + 100} compType='More Courses' productType="Assessments"/>)
             }
             { sliceFlag && (assessmentList?.length > 4) ? <Link to={"#"} onClick={loadMore} className="m-load-more mt-20 mb-20">Load More Assessments</Link> : '' }
         </div>
