@@ -29,13 +29,13 @@
                     {% if bread.url %}
                         <li itemprop="itemListElement" itemscope
 					      itemtype="http://schema.org/ListItem">
-						    <a href='{{bread.url}}' itemprop="item">{{bread.name}}
+						    <a href='{{bread.url}}' itemprop="item" onclick="MyGA.SendEvent('ln_breadcrumbs', 'ln_breadcrumbs', 'ln_breadcrumb_click', '{{bread.name}}', '', false, true);">{{bread.name}}
 	                        </a>
 							<meta itemprop="name" content="{{bread.name}}" />
 						    <meta itemprop="position" content="{{forloop.counter}}" />
 	                    </li>
                     {% else %}
-                        <li class="active">{{bread.name}}</li>
+                        <li class="active" onclick="MyGA.SendEvent('ln_breadcrumbs', 'ln_breadcrumbs', 'ln_breadcrumb_click', '{{bread.name}}', '', false, true);">{{bread.name}}</li>
                     {% endif %}
                 {% endfor %}
             </ol>
