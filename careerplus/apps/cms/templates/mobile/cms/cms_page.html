@@ -186,6 +186,15 @@ $(function() {
   });
 });
 
+function gaEvent(event_cat,event_lab,event_action){	
+  ga('send', 'event', event_cat, event_action, event_lab);	
+ }	
+
+function gaEventFunc(typeOfProduct,status){	
+    var event_cat='Form Interactions';	
+    gaEvent(event_cat,status,"Cms Enquiry");	
+ }
+
 
 $('#enquire_form').click(function(event) {
     event.preventDefault();
