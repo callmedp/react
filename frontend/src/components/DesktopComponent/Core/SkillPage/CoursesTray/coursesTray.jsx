@@ -41,7 +41,7 @@ const CoursesTray = (props) => {
                         activeKey={key}
                         onSelect={(k) => setKey(k)} >
                         {
-                            courseList.length ? <Tab eventKey="courses" title={<h2>{ pageId === '32' ? "All Digital Marketing " : ''}Courses</h2>}>
+                            courseList.length ? <Tab eventKey="courses" itemProp="name" title={<h2>{ pageId === '32' ? "All Digital Marketing " : ''}Courses</h2>}>
                                 {
                                     courseList.slice(0, courseKey).map((courses, index) => {
                                         return (
@@ -58,7 +58,7 @@ const CoursesTray = (props) => {
                         }
 
                         {
-                            assessmentList.length ? <Tab eventKey="assessments" title={<h2>Assessments</h2>}>
+                            assessmentList.length ? <Tab eventKey="assessments" itemProp="name" title={<h2>Assessments</h2>}>
                                 {
                                     assessmentList.slice(0, assessmentKey).map((assessments, index) => {
                                         return (
