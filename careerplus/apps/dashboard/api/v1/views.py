@@ -1,15 +1,23 @@
-from dashboard.dashboard_mixin import DashboardInfo
+# DRF Import
 from rest_framework.response import Response
 from rest_framework import permissions, status
 from rest_framework.views import APIView
+
+# Django Core Import
+from django.conf import settings
+from django.core.cache import cache
+
+# Inter-App Import
+from dashboard.dashboard_mixin import DashboardInfo
 from payment.models import PaymentTxn
 from order.models import Order, OrderItem
 from dashboard.api.v1.serializers import OrderSerializer,OrderItemSerializer
-from haystack.query import SearchQuerySet
-from django.core.cache import cache
 from wallet.models import Wallet
+from core.common import APIResponse
 
-from django.conf import settings
+# Other Import
+from haystack.query import SearchQuerySet
+
 
 class DashboardMyorderApi(DashboardInfo, APIView):
     permission_classes = (permissions.AllowAny,)
@@ -95,6 +103,7 @@ class MyCoursesApi(DashboardInfo, APIView):
                 cache.set('dashboard_my_courses',data,86400)
         return Response(data=data, status=status.HTTP_200_OK)
 
+
 class MyServicesApi(DashboardInfo, APIView):
     permission_classes = (permissions.AllowAny,)
     authentication_classes = ()
@@ -139,11 +148,17 @@ class DashboardMyWalletAPI(DashboardInfo, APIView):
         """
         API to return the shine loyality points specifically
         """
-        candidate_id = self.request.session.get('candidate_id')
+        candidate_id = '568a0b20cce9fb485393489b'
+        # candidate_id = self.request.session.get('candidate_id')
         if candidate_id is None:
-            return Response(data='Candidate Details required')
+            return APIResponse(message='Candidate Details required', status=status.HTTP_400_BAD_REQUEST)
 
         wal_obj, created = Wallet.objects.get_or_create(owner=candidate_id)
         wal_total = wal_obj.get_current_amount()
+        wal_txns = wal_obj.wallettxn.filter(txn_type__in=[1, 2, 3, 4, 5], point_value__gt=0).order_by('-created')
+        wal_txns = wal_txns.select_related('order', 'cart')
+
+        print(wal_txns)
+
 
 
