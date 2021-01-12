@@ -49,7 +49,8 @@ class PopularProductMixin(object):
     def get_popular_courses(self,category,quantity=3):
         products = Product.objects.filter(category__id=category,
                                                     active=True,
-                                                   is_indexed=True).order_by('-buy_count')[:quantity]
+                                                   is_indexed=True).order_by('-buy_count')[:quantity].\
+                                                    values_list('id', flat=True)
         return products   
 
     def get_products_json(self,product_ids):

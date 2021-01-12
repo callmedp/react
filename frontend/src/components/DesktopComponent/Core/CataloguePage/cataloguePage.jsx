@@ -10,15 +10,15 @@ import Footer from 'components/DesktopComponent/Common/Footer/footer';
 import './cataloguePage.scss';
 import Aos from "aos";
 // import "aos/dist/aos.css";
-import { useDispatch } from 'react-redux';
-import {
-    fetchRecentlyAddedCourses, fetchPopularServices,
-    fetchAllCategoriesAndVendors, fetchTrendingCategories
-} from 'store/CataloguePage/actions/index';
+import { useDispatch, useSelector } from 'react-redux';
+import MetaContent from '../../Common/MetaContent/metaContent';
+import { fetchRecentlyAddedCourses, fetchPopularServices, 
+    fetchAllCategoriesAndVendors, fetchTrendingCategories } from 'store/CataloguePage/actions/index';
 
 const CatalogPage = (props) => {
 
     const dispatch = useDispatch();
+    const meta_tags = useSelector((store) => store.allCategories.meta ? store.allCategories.meta : '');
 
     useEffect(() => {
         Aos.init({ duration: 2000, once: true, offset: 10, anchorPlacement: 'bottom-bottom' });
@@ -39,18 +39,21 @@ const CatalogPage = (props) => {
     }, [])
 
     return (
-        <div>
-            <Header />
-            <main>
-                <CatalogBanner />
-                <CoursesTray />
-                <AllCategories />
-                <ServicesForYou />
-                <RecentCourses />
-                <OurVendors />
-            </main>
-            <Footer />
-        </div>
+        <>
+            { meta_tags && <MetaContent meta_tags={meta_tags}/> }
+            <div>
+                <Header placeHolder = 'Search course, assessment...'/>
+                <main>
+                    <CatalogBanner />
+                    <CoursesTray />
+                    <AllCategories />
+                    <ServicesForYou />
+                    <RecentCourses />
+                    <OurVendors />
+                </main>
+                <Footer />
+            </div>
+        </>
     )
 }
 
