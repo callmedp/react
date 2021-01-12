@@ -205,7 +205,7 @@ const categoryList = [
     },
     { 
         name: 'Course Catalogue', 
-        url: `${siteDomain}/online-courses.html`, 
+        url: `/online-courses.html`, 
         id: 'course_catalogue',
         sideNavType: 'allCourses',
         children: []

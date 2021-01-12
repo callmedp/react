@@ -10,7 +10,7 @@ const Footer = (props) => {
                 <a href="https://www.facebook.com/shinelearningdotcom/" onClick={() => MyGA.SendEvent('social_media_follow','ln_social_media_follow', 'ln_facebook', 'homepage','', false, true)}>
                     <figure className="micon-facebook"></figure>
                 </a>
-                <a href="https://www.linkedin.com/showcase/13203963/" onClick={() => MyGA.SendEvent('social_media_follow','ln_social_media_follow', 'ln_linkedin', 'homepage','', false, true)}>
+                <a href="https://in.linkedin.com/company/shinelearning" onClick={() => MyGA.SendEvent('social_media_follow','ln_social_media_follow', 'ln_linkedin', 'homepage','', false, true)}>
                     <figure className="micon-linkedin"></figure>
                 </a>
                 <a href="https://twitter.com/shinelearning" onClick={() =>  MyGA.SendEvent('social_media_follow','ln_social_media_follow', 'ln_twitter', 'homepage','', false, true)}>
