@@ -16,7 +16,7 @@ const DomainJobs = (props) => {
     return (
         <section className="domain-jobs" data-aos="fade-up">
             <div className="domain-jobs__list">
-                <strong className="heading3">Jobs in this domain</strong>
+                <strong className="heading3">Also Check</strong>
                 <ul>
                     {
                         jobsList?.map((job, index) => {

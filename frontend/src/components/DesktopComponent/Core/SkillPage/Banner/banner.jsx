@@ -19,29 +19,29 @@ const BannerSkill = (props) => {
     return (
         <header className="container-fluid pos-rel">
             <figure className="banner-img">
-                <img src={`${imageUrl}desktop/skill-bg-new.png`} className="img-fluid w-100" alt={`${ name } Courses & Certifications`} />
+                <img src={`${imageUrl}desktop/skill-bg-new.png`} className="img-fluid w-100" alt={`${name} Courses & Certifications`} />
                 <div className="banner-right">
                     <div className="banner-right-img">
                         <span className="skill-banner-tween1" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="100" data-aos-duration="1000">
-                            <img src={`${imageUrl}desktop/skill-animation-header1.svg`} alt={`${name} Courses Banner Header 1`} />
+                            <img src={`${imageUrl}desktop/skill-animation-header1.svg`} alt={`${name} Courses Header Banner Animation Icon 1`} />
                         </span>
                         <span className="skill-banner-tween2" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="300" data-aos-duration="1000">
-                            <img src={`${imageUrl}desktop/skill-animation-header2.svg`} alt={`${name} Courses Banner Header 2`} />
+                            <img src={`${imageUrl}desktop/skill-animation-header2.svg`} alt={`${name} Courses  Header Banner Animation Icon 2`} />
                         </span>
                         <span className="skill-banner-tween3" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="500" data-aos-duration="1000">
-                            <img src={`${imageUrl}desktop/skill-animation-header3.svg`} alt={`${name} Courses Banner Header 3`} />
+                            <img src={`${imageUrl}desktop/skill-animation-header3.svg`} alt={`${name} Courses  Header Banner Animation Icon 3`} />
                         </span>
                         <span className="skill-banner-tween4" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="700" data-aos-duration="1000">
-                            <img src={`${imageUrl}desktop/skill-animation-header4.svg`} alt={`${name} Courses Banner Header 4`} />
+                            <img src={`${imageUrl}desktop/skill-animation-header4.svg`} alt={`${name} Courses  Header Banner Animation Icon 4`} />
                         </span>
                         <span className="skill-banner-tween5" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="900" data-aos-duration="1000">
-                            <img src={`${imageUrl}desktop/skill-animation-header5.svg`} alt={`${name} Courses Banner Header 5`} />
+                            <img src={`${imageUrl}desktop/skill-animation-header5.svg`} alt={`${name} Courses  Header Banner Animation Icon 5`} />
                         </span>
                         <span className="skill-banner-tween6" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="1100" data-aos-duration="1000">
-                            <img src={`${imageUrl}desktop/skill-animation-header6.svg`} alt={`${name} Courses Banner Header 6`} />
+                            <img src={`${imageUrl}desktop/skill-animation-header6.svg`} alt={`${name} Courses  Header Banner Animation Icon 6`} />
                         </span>
                         <span className="skill-banner-tween7" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="1300" data-aos-duration="1000">
-                            <img src={`${imageUrl}desktop/skill-animation-header7.svg`} alt={`${name} Courses Banner Header 7`} />
+                            <img src={`${imageUrl}desktop/skill-animation-header7.svg`} alt={`${name} Courses  Header Banner Animation Icon 7`} />
                         </span>
                     </div>
                 </div>
@@ -53,17 +53,22 @@ const BannerSkill = (props) => {
                             breadcrumbs?.map((bread, index) => {
                                 if (!!bread.url)
                                     return (<Breadcrumb.Item itemProp="itemListElement" itemScope
-                                        itemType="http://schema.org/ListItem" key={index} href={`${siteDomain}${bread.url}`} onClick={() => userTrack({ "query": tracking_data, "action": "exit_skill_page" })} >{bread.name}</Breadcrumb.Item>)
+                                        itemType="http://schema.org/ListItem" key={index} href={`${siteDomain}${bread.url}`} onClick={() => userTrack({ "query": tracking_data, "action": "exit_skill_page" })} >{bread.name}
+                                        <meta itemProp="name" content={bread.name} />
+                                        <meta itemProp="position" content={index} /></Breadcrumb.Item>)
                                 else
-                                    return (<Breadcrumb.Item itemProp="itemListElement" itemScope
-                                    itemType="http://schema.org/ListItem" key={index} >{bread.name}</Breadcrumb.Item>)
+                                    return (<Breadcrumb.Item key={index}  itemProp="itemListElement" itemScope
+                                    itemType="http://schema.org/ListItem" >{bread.name}
+                                    <meta itemProp="name" content={bread.name} />
+                                        <meta itemProp="position" content={index} />
+                                        </Breadcrumb.Item>)
                             })
                         }
                     </Breadcrumb>
                     <h1 className="heading1" data-aos="fade-right">
                         {name} Courses & Certifications
                     </h1>
-                    <Carousel className={ featuresList?.length ? "header-carousel" : "header-carousel noslide" }>
+                    <Carousel className={featuresList?.length ? "header-carousel" : "header-carousel noslide"}>
                         {/* <figure className="icon-round-arrow"></figure> */}
                         {
                             featuresList?.map((feature, index) => {

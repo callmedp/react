@@ -46,28 +46,28 @@ const SkillGain = (props) => {
 
                         <figure className="skill-gain__img mt-40">
                             <span className="skill-tween1">
-                                <img src={`${imageUrl}desktop/skill-tween1.svg`} alt={`${name} Course Skills 1`} />
+                                <img src={`${imageUrl}desktop/skill-tween1.svg`} alt={`${name} Course Skills Animation Icon 1`} />
                             </span>
                             <span className="skill-tween2">
-                                <img src={`${imageUrl}desktop/skill-tween2.svg`} alt={`${name} Course Skills 2`} />
+                                <img src={`${imageUrl}desktop/skill-tween2.svg`} alt={`${name} Course Skills Animation Icon 2`} />
                             </span>
                             <span className="skill-tween3" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="400">
-                                <img src={`${imageUrl}desktop/skill-tween3.svg`} alt={`${name} Course Skills 3`} />
+                                <img src={`${imageUrl}desktop/skill-tween3.svg`} alt={`${name} Course Skills Animation Icon 3`} />
                             </span>
                             <span className="skill-tween4" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="500">
-                                <img src={`${imageUrl}desktop/skill-tween4.svg`} alt={`${name} Course Skills 4`} />
+                                <img src={`${imageUrl}desktop/skill-tween4.svg`} alt={`${name} Course Skills Animation Icon 4`} />
                             </span>
                             <span className="skill-tween5" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="600">
-                                <img src={`${imageUrl}desktop/skill-tween5.svg`} alt={`${name} Course Skills 5`} />
+                                <img src={`${imageUrl}desktop/skill-tween5.svg`} alt={`${name} Course Skills Animation Icon 5`} />
                             </span>
                             <span className="skill-tween6" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="700">
-                                <img src={`${imageUrl}desktop/skill-tween6.svg`} alt={`${name} Course Skills 6`} />
+                                <img src={`${imageUrl}desktop/skill-tween6.svg`} alt={`${name} Course Skills Animation Icon 6`} />
                             </span>
                             <span className="skill-tween7" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="800">
-                                <img src={`${imageUrl}desktop/skill-tween7.svg`} alt={`${name} Course Skills 7`} />
+                                <img src={`${imageUrl}desktop/skill-tween7.svg`} alt={`${name} Course Skills Animation Icon 7`} />
                             </span>
                             <span className="skill-tween8" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="900">
-                                <img src={`${imageUrl}desktop/skill-tween8.svg`} alt={`${name} Course Skills 8`} />
+                                <img src={`${imageUrl}desktop/skill-tween8.svg`} alt={`${name} Course Skills Animation Icon 8`} />
                             </span>
                         </figure>
                     </div>

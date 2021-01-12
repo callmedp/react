@@ -21,7 +21,7 @@ from homepage.models import TestimonialCategoryRelationship, Testimonial
 from shop.templatetags.shop_tags import get_faq_list, format_features, format_extra_features
 import json
 from shop.choices import PRODUCT_CHOICES,PRODUCT_TAG_CHOICES
-from homepage.api.v1.helper import CoursesFormatter, AssesmentsFormatter
+from homepage.api.v1.mixins import ProductMixin
 
 class LoadMoreApiView(FieldFilterMixin, ListAPIView):
     serializer_class = LoadMoreSerializerSolr
@@ -131,12 +131,13 @@ class CourseComponentView(APIView):
         course_data = []
         assessments_data = []
         category = Category.objects.only('id').filter(id=id).first()
+        product_mixin = ProductMixin()
         if category:
             courses = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).filter(pCtg=category.pk).exclude(pTF=16)
-            course_data = CoursesFormatter(courses)
+            course_data = product_mixin.get_course_json(courses)
 
             assessments = SQS().exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).filter(pCtg=category.pk, pTF=16)
-            assessments_data = AssesmentsFormatter(assessments)
+            assessments_data = product_mixin.get_assessments_json(assessments)
         return_data = {
             'courses':course_data,
             'assessments':assessments_data,

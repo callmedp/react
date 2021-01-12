@@ -104,7 +104,7 @@ const SkillPage = (props) => {
         <div>
             { skillLoader ? <Loader /> : ''}
             { meta_tags && <MetaContent meta_tags={meta_tags}/> }
-            <Header />
+            <Header placeHolder = 'Search '/>
             <StickyNav hasFaq={hasFaq} hasLearnerStories={hasLearnerStories} hasCourses={hasCourses} />
             <SkillBanner />
             <section className="container">
@@ -122,7 +122,7 @@ const SkillPage = (props) => {
                 </div>
             </section>
             <SkillGain />
-            <CoursesTray setHasCourses={setHasCourses} />
+            <CoursesTray setHasCourses={setHasCourses} pageId={pageId} />
             <OtherSkills />
             <section className="container">
                 <aside className="row">
