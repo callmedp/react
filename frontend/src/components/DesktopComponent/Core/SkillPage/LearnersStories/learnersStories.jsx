@@ -11,7 +11,7 @@ const getStories = (story, index) => {
                 {
                     story?.map((item, idx) => {
                         return (
-                            <div className="col-sm-4" key={index.toString() + idx.toString() + item.userName}>
+                            <div className="col-sm-4" key={index.toString() + idx.toString() + item.userName} itemscope itemtype="http://schema.org/Review">
                                 <div className="card text-center">
                                     <span itemProp="name" className="card__name" itemProp="name">{item.firstName ? item.firstName[0].toUpperCase() : ""}{item.lastName ? item.lastName[0].toUpperCase() : ""}</span>
                                     <p className="card__txt" itemProp="description">{item.review}</p>

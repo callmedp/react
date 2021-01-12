@@ -33,7 +33,7 @@ const CoursesTray = (props) => {
 
 
     return (
-        <section className="container" id="courses" data-aos="fade-up" data-aos-duration="1000">
+        <section className="container" id="courses" data-aos="fade-up" data-aos-duration="1000" itemscope itemtype="http://schema.org/ItemList">
             <div className="row">
                 <div className="col courses-tray">
                     <Tabs
