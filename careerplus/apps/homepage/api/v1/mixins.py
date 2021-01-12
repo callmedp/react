@@ -13,8 +13,8 @@ from shop.models import Category, Product, ProductSkill
 from haystack.query import SearchQuerySet
 
 
-from shop.choices import PRODUCT_TAG_CHOICES
-from shop.templatetags.shop_tags import format_extra_features
+from shop.choices import PRODUCT_CHOICES,PRODUCT_TAG_CHOICES, STUDY_MODE, COURSE_TYPE_DICT
+from shop.templatetags.shop_tags import get_faq_list, format_features, format_extra_features
 class PopularProductMixin(object):
 
     def popular_courses_algorithm(self, class_category=settings.COURSE_SLUG, quantity=2, category=None):
@@ -58,40 +58,106 @@ class PopularProductMixin(object):
             id__in=settings.EXCLUDE_SEARCH_PRODUCTS
         )
 
-        popularProducts = []
+        popularProducts = ProductMixin().get_course_json(products)
 
-        for product in products:
-                d = json.loads(product.pVrs).get('var_list')
-                data = {
-                    'imgUrl':product.pImg,
-                    'url':product.pURL,
-                    'name':product.pNm,
-                    'imgAlt':product.pImA,
-                    'rating': float(product.pARx),
-                    'mode':product.pStM[0] if product.pStM else None,
-                    'providerName':product.pPvn,
-                    'price':float(product.pPin),
-                    'skillList': product.pSkilln,
-                    'about':product.pAb,
-                    'title':product.pTt,
-                    'slug':product.pSg,
-                    'jobsAvailable':product.pNJ,
-                    'tags':PRODUCT_TAG_CHOICES[product.pTg][0],
-                    'brochure':json.loads(product.pUncdl[0]).get('brochure') if product.pUncdl else None,
-                    'u_courses_benefits':json.loads(product.pUncdl[0]).get('highlighted_benefits').split(';') if product.pUncdl else None,
-                    'u_desc': product.pDsc,
-                    'stars': product.pStar,
-                    'highlights':format_extra_features(product.pBS) if product.pBS else None,
-                    'id':product.id,
-                    }
-                if len(d)!=0:
-                    data.update({
-                        'duration':d[0].get('dur_days'), 
-                        'type':d[0].get('type'),  
-                        'label':d[0].get('label'), 
-                        'level':d[0].get('level'), 
-                    })
+        # for product in products:
+        #         d = json.loads(product.pVrs).get('var_list')
+        #         data = {
+        #             'imgUrl':product.pImg,
+        #             'url':product.pURL,
+        #             'name':product.pNm,
+        #             'imgAlt':product.pImA,
+        #             'rating': float(product.pARx),
+        #             'mode':product.pStM[0] if product.pStM else None,
+        #             'providerName':product.pPvn,
+        #             'price':float(product.pPin),
+        #             'skillList': product.pSkilln,
+        #             'about':product.pAb,
+        #             'title':product.pTt,
+        #             'slug':product.pSg,
+        #             'jobsAvailable':product.pNJ,
+        #             'tags':PRODUCT_TAG_CHOICES[product.pTg][0],
+        #             'brochure':json.loads(product.pUncdl[0]).get('brochure') if product.pUncdl else None,
+        #             'u_courses_benefits':json.loads(product.pUncdl[0]).get('highlighted_benefits').split(';') if product.pUncdl else None,
+        #             'u_desc': product.pDsc,
+        #             'stars': product.pStar,
+        #             'highlights':format_extra_features(product.pBS) if product.pBS else None,
+        #             'id':product.id,
+        #             }
+        #         if len(d)!=0:
+        #             data.update({
+        #                 'duration':d[0].get('dur_days'), 
+        #                 'type':d[0].get('type'),  
+        #                 'label':d[0].get('label'), 
+        #                 'level':d[0].get('level'), 
+        #             })
                 
-                popularProducts.append(data)
+        #         popularProducts.append(data)
 
         return popularProducts 
+
+class ProductMixin(object):
+
+    def get_course_json(self, courses=[]):
+        course_data = []
+        mode_choices = dict(STUDY_MODE)
+        type_dict = dict(COURSE_TYPE_DICT)
+        for course in courses:
+            d = json.loads(course.pVrs).get('var_list')
+            data = {
+                'id':course.id,
+                'name':course.pNm,
+                'about':course.pAb,
+                'url':course.pURL,
+                'imgUrl':course.pImg,
+                'imgAlt':course.pImA,
+                'title':course.pTt,
+                'slug':course.pSg,
+                'jobsAvailable':course.pNJ,
+                'skillList': course.pSkilln,
+                'rating': float(course.pARx),
+                'stars': course.pStar,
+                'mode': mode_choices.get(course.pStM[0], course.pStM[0]) if course.pStM else [],
+                'providerName':course.pPvn,
+                'price':float(course.pPin),
+                'tags': PRODUCT_TAG_CHOICES[course.pTg][0],
+                'highlights':format_extra_features(course.pBS) if course.pBS else None,
+                'brochure':json.loads(course.pUncdl[0]).get('brochure') if course.pUncdl else None,
+                'u_courses_benefits':json.loads(course.pUncdl[0]).get('highlighted_benefits').split(';') if course.pUncdl else None,
+                'u_desc': course.pDsc,
+                }
+            if len(d)!=0:
+                data.update({
+                    'duration':d[0].get('dur_days'), 
+                    'type':type_dict.get(d[0].get('type'), d[0].get('type')),  
+                    'label':d[0].get('label'), 
+                    'level':d[0].get('level'), 
+                })
+            course_data.append(data)
+
+        return course_data
+
+    def get_assessments_json(self, assessments=[]):
+        assessments_data = []
+        mode_choices = dict(STUDY_MODE)
+        for assessment in assessments:
+            assessment_data = {
+                'name':assessment.pNm,
+                'about':assessment.pAb,
+                'url':assessment.pURL,
+                'imgUrl':assessment.pImg,
+                'rating':assessment.pARx,
+                'stars': assessment.pStar,
+                'jobsAvailable':assessment.pNJ,
+                'skillList': assessment.pSkilln,
+                'mode': mode_choices.get(assessment.pStM[0], assessment.pStM[0]) if assessment.pStM else [],
+                'providerName':assessment.pPvn if assessment.pPvn else None,
+                'price':float(assessment.pPin),
+                'tags':PRODUCT_TAG_CHOICES[assessment.pTg][1],
+                'brochure':json.loads(assessment.pUncdl[0]).get('brochure') if assessment.pUncdl else None,
+                'test_duration':json.loads(assessment.pAsft[0]).get('test_duration') if assessment.pAsft else None,
+                'number_of_questions':json.loads(assessment.pAsft[0]).get('number_of_questions') if assessment.pAsft else None,
+            }
+            assessments_data.append(assessment_data)
+
+        return assessments_data

@@ -94,7 +94,7 @@ from django.template.defaultfilters import slugify
 from search.helpers import RecommendationBasedOnGaps, get_recommended_products
 from shop.choices import PRODUCT_CHOICES,PRODUCT_TAG_CHOICES
 from shop.templatetags.shop_tags import get_faq_list, format_features, format_extra_features
-from homepage.api.v1.helper import CoursesFormatter, AssesmentsFormatter
+from homepage.api.v1.mixins import ProductMixin
 
 
 class CreateOrderApiView(APIView, ProductInformationMixin):
@@ -2226,9 +2226,10 @@ class RecommendedCoursesAPI(APIView):
             rcourses = rcourses[:self.no_of_products]
         if rassesments:
             rassesments = rassesments[:self.no_of_products]
+        
         return {
-            'r_courses': CoursesFormatter(rcourses),
-            'r_assesments': AssesmentsFormatter(rassesments)
+            'r_courses': ProductMixin().get_course_json(rcourses),
+            'r_assesments': ProductMixin().get_assessments_json(rassesments)
         }
 
     def get(self, request, *args, **kwargs):

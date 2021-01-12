@@ -91,7 +91,7 @@ const Header = (props) => {
                         </a>
 
                             <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                                <SearchBar />
+                                <SearchBar  placeHolder = {props.placeHolder}/>
                                 <ul className="navbar-nav navbar-right">
                                     <li className="nav-item dropdown dropdown-jobs">
                                         <a className="nav-link" to={"#"} id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onClick={() => MyGA.SendEvent('homepage_navigation', 'ln_homepage_navigation', 'ln_job_assisstance', 'ln_job_assisstance', '', false, true)}>Job assistance</a>
@@ -109,7 +109,7 @@ const Header = (props) => {
                                         <div className="dropdown-menu category-tab" aria-labelledby="navbarDropdown">
                                             <div className="resources-tab">
 
-                                                <DropDown tabList={freeResourcesList} />
+                                                <DropDown usedIn="freeResources" tabList={freeResourcesList} />
 
                                             </div>
                                         </div>
@@ -175,7 +175,7 @@ const Header = (props) => {
                                     <div className="dropdown-menu category-tab" aria-labelledby="navbarDropdown">
                                         <div className="categories-tab">
 
-                                            <DropDown tabList={categoryList} />
+                                            <DropDown usedIn="exploreCategories" tabList={categoryList} />
 
                                         </div>
                                     </div>
