@@ -7,6 +7,7 @@ from order.models import Order, OrderItem
 from dashboard.api.v1.serializers import OrderSerializer,OrderItemSerializer
 from haystack.query import SearchQuerySet
 from django.core.cache import cache
+from wallet.models import Wallet
 
 from django.conf import settings
 
@@ -127,5 +128,22 @@ class MyServicesApi(DashboardInfo, APIView):
                         'img_alt': tsrvc.pImA, 'rating': tsrvc.pARx, 'price': tsrvc.pPinb, 'vendor': tsrvc.pPvn, 'stars': tsrvc.pStar,
                         'provider': tsrvc.pPvn} for tsrvc in tsrvcs]
                 cache.set('dashboard_my_services',data,86400)
-
         return Response(data=data, status=status.HTTP_200_OK)
+
+
+class DashboardMyWalletAPI(DashboardInfo, APIView):
+    permission_classes = (permissions.AllowAny, )
+    authentication_classes = ()
+
+    def get(self, request):
+        """
+        API to return the shine loyality points specifically
+        """
+        candidate_id = self.request.session.get('candidate_id')
+        if candidate_id is None:
+            return Response(data='Candidate Details required')
+
+        wal_obj, created = Wallet.objects.get_or_create(owner=candidate_id)
+        wal_total = wal_obj.get_current_amount()
+
+
