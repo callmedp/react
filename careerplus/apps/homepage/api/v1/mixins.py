@@ -141,6 +141,7 @@ class ProductMixin(object):
         mode_choices = dict(STUDY_MODE)
         for assessment in assessments:
             assessment_data = {
+                'id':assessment.id,
                 'name':assessment.pNm,
                 'about':assessment.pAb,
                 'url':assessment.pURL,
