@@ -57,7 +57,10 @@ const BannerSkill = (props) => {
                                         <meta itemProp="name" content={bread.name} />
                                         <meta itemProp="position" content={index} /></Breadcrumb.Item>)
                                 else
-                                    return (<Breadcrumb.Item key={index} >{bread.name}
+                                    return (<Breadcrumb.Item key={index}  itemProp="itemListElement" itemScope
+                                    itemType="http://schema.org/ListItem" >{bread.name}
+                                    <meta itemProp="name" content={bread.name} />
+                                        <meta itemProp="position" content={index} />
                                         </Breadcrumb.Item>)
                             })
                         }

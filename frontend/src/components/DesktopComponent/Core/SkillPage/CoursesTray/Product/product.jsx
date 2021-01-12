@@ -58,7 +58,7 @@ const Product = (props) => {
                         {tags === 2 && <span className="flag-blue">NEW</span>}
                         {tags === 1 && <span className="flag-red">BESTSELLER</span>}
                         <figure>
-                            <img src={imgUrl} alt={name} itemProp="image" />
+                            <img src={imgUrl} alt={name}  />
                         </figure>
                         <h3 className="heading3">
                             <a itemProp="url" href={`${siteDomain}${url}${trackingParameters}`} onClick={handleTracking} >{name}</a>
