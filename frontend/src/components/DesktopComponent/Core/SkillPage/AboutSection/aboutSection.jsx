@@ -19,10 +19,8 @@ const AboutSection = (props) => {
                         )}
                         
                 <p className="read-more-wrap">
-                {about.replace(regex, '').slice(0, 438)}
-                    <span className="read-more-target">
-                        {about.replace(regex, '').slice(438)}
-                    </span>
+                    <span dangerouslySetInnerHTML={{__html:about.replace(regex, '').slice(0, 438)}} />
+                    <span className="read-more-target" dangerouslySetInnerHTML={{__html: about.replace(regex, '').slice(438)}} />
                 </p>
                 <label htmlFor="post-10" className="read-more-trigger"></label>
             </div> : "" }
