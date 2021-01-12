@@ -42,7 +42,7 @@ const CatalogPage = (props) => {
         <>
             { meta_tags && <MetaContent meta_tags={meta_tags}/> }
             <div>
-                <Header />
+                <Header placeHolder = 'Search course, assessment...'/>
                 <main>
                     <CatalogBanner />
                     <CoursesTray />

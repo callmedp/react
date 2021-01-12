@@ -104,7 +104,7 @@ const SkillPage = (props) => {
         <div>
             { skillLoader ? <Loader /> : ''}
             { meta_tags && <MetaContent meta_tags={meta_tags}/> }
-            <Header placeHolder = 'Search '/>
+            <Header placeHolder = 'Search course, assessment...'/>
             <StickyNav hasFaq={hasFaq} hasLearnerStories={hasLearnerStories} hasCourses={hasCourses} />
             <SkillBanner />
             <section className="container">
