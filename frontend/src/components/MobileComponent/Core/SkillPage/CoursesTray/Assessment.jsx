@@ -33,11 +33,11 @@ const Assessment = (props) => {
     },[])
 
     return (
-    <section className="m-container mt-0 mb-0 pb-0 pr-0">
+    <section className="m-container mt-0 mb-0 pb-0 pr-0" itemScope itemType="http://schema.org/ItemList">
         {
             r_assesments?.length ?
             <>
-                <h2 className="m-heading2 mb-10">Assessments for you</h2>
+                <h2 itemProp="name" className="m-heading2 mb-10">Assessments for you</h2>
                 <div className="m-courses m-courses-slider ml-10n">
                     <Slider {...settings}>
                         {

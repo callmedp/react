@@ -14,7 +14,7 @@ const OtherSkills = (props) => {
     const getOtherSkills = (skill, index) => {
         return (
             <li key={index} >
-                <a itemProp="url" href={`${siteDomain}${skill.url}`} onClick={() => trackUser({"query":tracking_data, "action": 'exit_skill_page'})}>{skill.name}</a>
+                <a href={`${siteDomain}${skill.url}`} onClick={() => trackUser({"query":tracking_data, "action": 'exit_skill_page'})}>{skill.name}</a>
             </li>
         )
     }
