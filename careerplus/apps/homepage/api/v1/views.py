@@ -827,7 +827,7 @@ class TrendingCoursesAndSkillsAPI(PopularProductMixin, APIView):
         skills = []
 
         for i in p_skills:
-            skills.append({'id': i.id, 'skillName': i.get_category_main().name,
+            skills.append({'id': i.get_category_main().id, 'skillName': i.get_category_main().name,
                            'skillUrl': i.get_category_main().get_absolute_url()})
 
         data = {
@@ -836,7 +836,7 @@ class TrendingCoursesAndSkillsAPI(PopularProductMixin, APIView):
                  'img_alt': tprd.pImA, 'rating': tprd.pARx, 'vendor': tprd.pPvn, 'stars': tprd.pStar,
                  'provider': tprd.pPvn \
                  } for tprd in tprds],
-            'trendingSkills': skills
+            'trendingSkills': [dict(y) for y in set(tuple(x.items()) for x in skills)]
         }
         return APIResponse(message='Trending Course Loaded', data=data, status=status.HTTP_200_OK)
 
