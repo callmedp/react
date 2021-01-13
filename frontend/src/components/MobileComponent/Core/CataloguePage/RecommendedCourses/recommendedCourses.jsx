@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import {Link} from 'react-router-dom';
 import Slider from "react-slick";
 // import 'slick-carousel/slick/slick.css';
 import './recommendedCourses.scss';
@@ -61,6 +62,7 @@ const RecommendedCourses = (props) => {
                     category === 'BnF' && <ProductCards productList={BnFCourseList} />
                 }
                 </div>
+                <Link to={"#"} className="m-load-more mt-5">View all courses</Link>
             </div>
         </section>
     )
