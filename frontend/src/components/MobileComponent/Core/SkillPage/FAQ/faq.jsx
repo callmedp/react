@@ -14,10 +14,10 @@ const FAQ = (props) => {
 
     const renderAccordion = (item, index) => {
         return (
-            <div className="m-tab" key={index.toString() + item.heading}>
-                <input itemScope itemProp="mainEntity" itemType="https://schema.org/Question" type="radio" id={"rd"+index} name="rd" checked = { checkedId === index } onClick={() => accordionHandle(index)} /><label className="m-tab-label" htmlFor={"rd"+index} itemProp="name"><span dangerouslySetInnerHTML={{__html : item.heading}}/></label>
+            <div className="m-tab" key={index.toString() + item.heading} itemScope itemProp="mainEntity" itemType="https://schema.org/Question" >
+                <input type="radio" id={"rd"+index} name="rd" checked = { checkedId === index } onClick={() => accordionHandle(index)} /><label className="m-tab-label" htmlFor={"rd"+index} ><span itemProp="name" dangerouslySetInnerHTML={{__html : item.heading}}/></label>
                 <div id={index} className="m-tab-content" itemScope itemProp="acceptedAnswer" itemType="https://schema.org/Answer">
-                    <p itemProp="text" hidden=""><span dangerouslySetInnerHTML={{__html : item.content}}/></p>
+                    <p  hidden=""><span itemProp="text" dangerouslySetInnerHTML={{__html : item.content}}/></p>
                 </div>
             </div>
     )}

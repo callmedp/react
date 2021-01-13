@@ -21,7 +21,7 @@ const SkillBanner = (props) => {
             <h1 className="m-heading1">{name} Courses & Certifications</h1>
                 <p>
                     {
-                        about?.replace(/<[^>]*>/g, '').slice(0, noOfWords)
+                        <span dangerouslySetInnerHTML={{__html: about?.replace(/<[^>]*>/g, '').slice(0, noOfWords)}} />
                     }
                     { 
                         (!showAll && about?.length > noOfWords) ? 
@@ -29,7 +29,7 @@ const SkillBanner = (props) => {
                     }
                     {
                         showAll ?
-                           <>{ about?.replace(/<[^>]*>/g, '').slice(noOfWords)} <p>{controlContent("Show less", false)}</p> </>: null
+                           <><span dangerouslySetInnerHTML={{__html: about?.replace(/<[^>]*>/g, '').slice(noOfWords)}}/><p>{controlContent("Show less", false)}</p> </>: null
                     }
                 </p>
         </div>

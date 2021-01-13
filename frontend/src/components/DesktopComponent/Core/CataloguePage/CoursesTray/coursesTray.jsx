@@ -24,7 +24,7 @@ function CoursesTray() {
         <section className="container mt-30">
             <div className="row">
                 <div className="col courses-tray" data-aos="fade-up">
-                    <h2 className="heading2 text-center mb-20">Recommended Categories</h2>
+                    <strong className="heading2 text-center mb-20 d-block">Recommended Categories</strong>
                     <Tabs
                         id="controlled-tab-example"
                         activeKey={key}

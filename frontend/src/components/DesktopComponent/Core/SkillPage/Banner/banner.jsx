@@ -47,20 +47,19 @@ const BannerSkill = (props) => {
                 </div>
             </figure>
             <div className="container header-content">
-                <div className="row" itemScope itemType="http://schema.org/BreadcrumbList">
-                    <Breadcrumb>
+                <div className="row" >
+                    <Breadcrumb itemScope itemType="http://schema.org/BreadcrumbList">
                         {
                             breadcrumbs?.map((bread, index) => {
                                 if (!!bread.url)
-                                    return (<Breadcrumb.Item itemProp="itemListElement" itemScope
-                                        itemType="http://schema.org/ListItem" key={index} href={`${siteDomain}${bread.url}`} onClick={() => userTrack({ "query": tracking_data, "action": "exit_skill_page" })} >{bread.name}
+                                    return (
+                                    <Breadcrumb.Item itemProp="itemListElement" itemScope
+                                        itemType="http://schema.org/ListItem" key={index} href={`${siteDomain}${bread.url}`} onClick={() => userTrack({ "query": tracking_data, "action": "exit_skill_page" })}  ><span itemProp="item" content={`${siteDomain}${bread.url}`}>{bread.name}</span>
                                         <meta itemProp="name" content={bread.name} />
-                                        <meta itemProp="position" content={index} /></Breadcrumb.Item>)
+                                        <meta itemProp="position" content={index} /></Breadcrumb.Item>
+                                        )
                                 else
-                                    return (<Breadcrumb.Item key={index}  itemProp="itemListElement" itemScope
-                                    itemType="http://schema.org/ListItem" >{bread.name}
-                                    <meta itemProp="name" content={bread.name} />
-                                        <meta itemProp="position" content={index} />
+                                    return (<Breadcrumb.Item key={index}  >{bread.name}
                                         </Breadcrumb.Item>)
                             })
                         }
