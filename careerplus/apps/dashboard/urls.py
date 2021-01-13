@@ -1,5 +1,6 @@
 # from django.conf.urls import url
 from django.urls import re_path
+from django.urls import re_path, include
 
 from .views import (
     RoundoneDashboardView,
@@ -49,6 +50,8 @@ urlpatterns = [
 urlpatterns += [
     re_path(r'^$',
         dashboard_view.DashboardView.as_view(), name='dashboard'),
+
+    re_path(r'^v1/', include('dashboard.api.v1.urls', namespace='dashboard-api')),
 
     re_path(r'^myorder/$',
         dashboard_view.DashboardMyorderView.as_view(),
