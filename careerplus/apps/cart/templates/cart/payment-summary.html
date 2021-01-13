@@ -367,13 +367,13 @@ Payment Summary - Shine Learning
       <span class="col-sm-7 col-md-8"></span>
       <span class="col-sm-3 col-md-4 continue">
          {% if cart.coupon_id and guest_in_session %}
-                      <a class='trig-loader' onClick="MyGA.SendEvent('ln_proceed_payment', 'ln_proceed_payment', 'ln_click_to_payment', 'course_opted', '', false, true);" href="{% url 'payment:payment-option' %}"><button type="button"
+                      <a class='trig-loader' onClick="MyGA.SendEvent('ln_proceed_payment', 'ln_proceed_payment', 'ln_click_to_payment', {{no_of_cartitems}}, '', false, true);" href="{% url 'payment:payment-option' %}"><button type="button"
             id="payment-summary-continue-id">Proceed to
             payment</button></a>
 
           {% else %}
 
-        <a class='trig-loader' onClick="MyGA.SendEvent('ln_proceed_payment', 'ln_proceed_payment', 'ln_click_to_payment', 'course_opted', '', false, true);" href="{% url 'cart:payment-login' %}"><button type="button"
+        <a class='trig-loader' onClick="MyGA.SendEvent('ln_proceed_payment', 'ln_proceed_payment', 'ln_click_to_payment', {{no_of_cartitems}}, '', false, true);" href="{% url 'cart:payment-login' %}"><button type="button"
             id="payment-summary-continue-id">Proceed to
             payment</button></a>
 

@@ -705,9 +705,9 @@ It is important to understand that these resumes are not accepted everywhere and
     });
   });
 
-  {% comment %} function hitGA(){
+function hitGA(){
     ga('send', 'event', 'Clicks', 'Write My Resume', 'Resume Static Page - Mobile');
-  } {% endcomment %}
+  }
 </script>
 <script>
 // Get the modal
@@ -795,12 +795,12 @@ $(function() {
               m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
               })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
               ga('create', 'UA-3537905-41', 'auto');
-              ga('send', 'pageview');
+              ga('send', 'pageview');{% endcomment %}
 
 
 function gaEvent(event_cat,event_lab,event_action){
   ga('send', 'event', event_cat, event_action, event_lab);
- } {% endcomment %}
+ } 
 
 function gaEventFunc(typeOfProduct,status){
     var event_cat='Form Interactions';

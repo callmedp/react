@@ -318,6 +318,9 @@ const lettersOnlyValidator = () => {
     }); 
 }
 
+function gaEvent(event_cat,event_lab,event_action){
+    ga('send', 'event', event_cat, event_action, event_lab);
+    }
 
 //gaEventFucnt for enquiry form
 const gaEventFunc = (typeOfProduct,status) =>{

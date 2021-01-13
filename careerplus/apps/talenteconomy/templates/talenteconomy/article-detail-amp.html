@@ -74,9 +74,9 @@ body,html{height:100%}.pull-left,.pull-left,.w100fl{float:left}.w100fl,header{wi
         <ul class="breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList">
           {% for bradcbs in breadcrumbs %}
             {% if bradcbs.url %}
-              <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{bradcbs.url}}" itemprop="item"><span itemprop="name">{{bradcbs.name}}</span></a></li>
+              <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{bradcbs.url}}" itemprop="item" onclick="MyGA.SendEvent('ln_breadcrumbs', 'ln_breadcrumbs', 'ln_breadcrumb_click', '{{bradcbs.name}}', '', false, true);"><span itemprop="name">{{bradcbs.name}}</span></a></li>
             {% else %}
-              <li class="active">{{bradcbs.name}}</li>
+              <li class="active" onclick="MyGA.SendEvent('ln_breadcrumbs', 'ln_breadcrumbs', 'ln_breadcrumb_click', '{{bradcbs.name}}', '', false, true);">{{bradcbs.name}}</li>
             {% endif %}
           {% endfor %} 
         </ul>
