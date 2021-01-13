@@ -7,7 +7,7 @@ import './banner.scss';
 const CatalogBanner = (props) => {
     return (
        <header className="container-fluid pos-rel">
-           <figure className="catalog-banner-img row">
+           <figure className="catalog-banner-img">
                 <img src={`${imageUrl}desktop/catalog-bg.png`} className="img-fluid" alt="Digital Marketing Courses & Certifications" />
                 <div className="banner-right">
                     <div className="banner-right-img">

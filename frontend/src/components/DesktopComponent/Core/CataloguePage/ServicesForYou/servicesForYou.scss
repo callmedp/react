@@ -4,11 +4,17 @@
 
 .services-foryou {
     @extend %box-shadow;
+
+    &:hover {
+        box-shadow: $box-shadow-hover; 
+    }
     
     h3 {
         font-size: 1.4rem;
         margin-bottom: 1rem;
         position: relative;
+        height: 3.2rem;
+        font-weight: 600;
 
         &::before {
             content: '';

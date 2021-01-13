@@ -15,7 +15,7 @@
             cursor: pointer;
             font-weight: 600;
             font-size: 1.4rem;
-            color: $tab-pill-color;
+            color: $blue;
             @include border-radius(30px);
             margin-right: 1rem;
 
@@ -23,10 +23,12 @@
                 color: $gray-100;
                 background: $tab-pill-bgcolor;
                 border: 1px solid $tab-pill-bgcolor;
+                box-shadow: 0 4px 5px -1px rgba(206,212,224,0.54);
             }
 
             &:focus {
                 border: 1px solid $tab-pill-bgcolor;
+                box-shadow: 0 4px 5px -1px rgba(206,212,224,0.54);
             }
         }
     }

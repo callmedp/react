@@ -34,7 +34,7 @@ const RecommendedCourses = (props) => {
     }
 
     return(
-        <section className="m-container mt-0 mb-0">
+        <section className="m-container mt-0 mb-0 pr-0">
             <div className="m-recomend-courses">
                 <h2 className="m-heading2 text-center">Recommended Courses</h2>
                 <Slider {...settings}>
