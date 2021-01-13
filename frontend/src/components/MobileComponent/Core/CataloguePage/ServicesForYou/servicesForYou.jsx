@@ -20,7 +20,7 @@ const ServicesForYou = (props) => {
     const { popularServices } = useSelector( store => store.popularServices );
 
     return(
-        <section className="m-container mt-0 mb-0" data-aos="fade-up" id="services">
+        <section className="m-container mt-0 mb-0 pr-0" data-aos="fade-up" id="services">
             <div className="m-services-foryou">
                 <h2 className="m-heading2 text-center">Services for you</h2>
                 <Slider {...settings}>
