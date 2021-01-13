@@ -953,7 +953,7 @@ class TrendingCategoriesApi(PopularProductMixin, APIView):
         quantity_to_display = int(request.GET.get('num', 3))
 
         cached_data = cache.get('category_popular_courses')
-        if not settings.DEBUG and cached_data:
+        if (not settings.DEBUG) and cached_data:
             data = cached_data
         else:
             data = {

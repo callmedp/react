@@ -62,7 +62,7 @@ const RecommendedCourses = (props) => {
                     category === 'BnF' && <ProductCards productList={BnFCourseList} />
                 }
                 </div>
-                <Link to={"#"} className="m-load-more mt-5">View all courses</Link>
+                {/* <Link to={"#"} className="m-load-more mt-5">View all courses</Link> */}
             </div>
         </section>
     )
