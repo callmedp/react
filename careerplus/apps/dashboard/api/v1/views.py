@@ -28,8 +28,8 @@ class DashboardMyorderApi(DashboardInfo, APIView):
     def get(self, request, *args, **kwargs):
         candidate_id = self.request.session.get('candidate_id', None)
         order_list=[]
-        if candidate_id:
         # candidate_id='5fed060d9cbeea482331ec4b'
+        if candidate_id:        
             if cache.get('dashboard_my_orders'):
                 order_list = cache.get('dashboard_my_orders')
             else:
@@ -63,7 +63,7 @@ class DashboardMyorderApi(DashboardInfo, APIView):
                         "item_count": item_count,
                         'product_type_flow': product_type_flow,
                         "product_id": product_id,
-                        "orderitems": OrderItemSerializer(orderitems).data,
+                        "orderitems": OrderItemSerializer(orderitems,many=True).data,
                     }
                     order_list.append(data)
                     cache.set('dashboard_my_orders',order_list,86400)
