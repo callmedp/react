@@ -102,7 +102,7 @@ class PageCounterViewSet(PageCounterViewMixin, ReadOnlyModelViewSet):
 
 class PageListViewSet(APIView):
     """
-        CRUD ViewSet for `PageCounter` model.
+        List of urls in pages
     """
 
     authentication_classes = ()
