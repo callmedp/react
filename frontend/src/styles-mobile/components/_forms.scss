@@ -2,12 +2,12 @@
   background: $white;
   box-shadow: 0 -2px 19px 0 rgba(148,148,148,0.50);
 
-  .m-form-group{
+  .m-form-group {
     position: relative;
     margin-bottom: 1.5rem;
   }
 
-  label {
+  .input-label {
     position: absolute;
     left: 1rem;
     top:1rem;
@@ -18,14 +18,16 @@
     pointer-events: none;
   }
 
-  input:focus + label, input:not(:placeholder-shown) + label {
+  .m-form-control:focus + .input-label, 
+  .m-form-control:not(:placeholder-shown) + .input-label {
     opacity:1;
     transform: scale(.9) translateY(-100%) translateX(-10px);
     color: $gray-300;
     left: 1.6rem;
   }
 
-  textarea:focus + label, textarea:not(:placeholder-shown) + label {
+  .m-form-control textarea:focus + .input-label, 
+  .m-form-control textarea:not(:placeholder-shown) + .input-label {
     opacity:1;
     transform: scale(.9) translateY(-100%) translateX(-10px);
     color: $gray-300;
@@ -33,38 +35,27 @@
   }
 
   .m-error {
-    label {
+    .input-label {
       opacity:1;
       transform: scale(.9) translateY(-100%) translateX(-10px);
       color: $red;
       left: 1.6rem;
     }
-  
-    input {
-      border-color: $red;
-    }
 
-    .m-error-msg {
-      background: $red;
-      font-size: 1rem;
-      padding: 0 .4rem;
-      color: $white;
-      position: absolute;
-      right: 0;
-      top: 0;
-      border-top-right-radius: .4rem;
+    .m-form-control {
+      border-color: $red;
     }
   }
 
-  input, textarea {
+  .m-form-control, textarea {
     &:focus {
-      border: 1px solid $blue;
-      outline-color: $blue;
+      border: $border;
+      outline-color: $border-color;
       box-shadow: none;
     }
   }
 
-  input {
+  .m-form-control {
     width:100%;
     padding-left: 1rem;
     height: 4.6rem;
@@ -75,19 +66,26 @@
     z-index: 0;
   }
 
-  input, label {
+  .m-form-control, .input-label {
     transition: all 0.2s;
     transition-timing-function: ease;
     transition-timing-function: cubic-bezier(0.25, 0.1, 0.25, 1);
     opacity:1;
   }
 
-  textarea {
-      height: 7rem !important;
+  .m-form-control textarea {
+      height: 8.7rem !important;
       border: $border;
       @include border-radius(4px);
       width: 100%;
       padding: 1rem;
+  }
+
+  select {
+    appearance: none;
+    background-image: url(#{$image-root}dropdownarrow.svg);
+    background-position: 100% 0px;
+    background-repeat: no-repeat;
   }
 
   .btn-blue {
@@ -104,6 +102,8 @@
     font-size: 2rem;
     font-weight: 400;
     color: $gray-300;
+    border: none;
+    background-color: transparent;
   }
 }
 
@@ -131,3 +131,9 @@
     }
   }
 }
+
+.m-password {
+  input {
+    padding-right: 30px;
+  }
+} 

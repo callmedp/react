@@ -16,6 +16,12 @@
     }
 }
 
+.btn-xs {
+    font-size: $font-size-xs;
+    padding: 0.6rem 1.5rem;
+    font-weight: $font-weight-semi-bold;
+}
+
 .btn-blue {
     background: $blue;
     border: 1px solid $blue;

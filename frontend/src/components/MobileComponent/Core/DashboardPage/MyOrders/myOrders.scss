@@ -1,0 +1,81 @@
+@import '../../../../../styles-mobile/abstracts';
+
+.my-order {
+    .head {
+        font-size: $font-size-lg;
+        font-weight: $font-weight-semi-bold;
+        color: $gray-100;
+    }
+
+    &--wrap {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        a {
+            font-size: $font-size-xs;
+            font-weight: $font-weight-bold;
+        }
+    }
+
+    &__priceWrap {
+
+        &--tAmount {
+            font-size: 1.1rem;
+            color: $gray-200;
+        }
+
+        &--price {
+            font-size: $font-size-lg;
+            font-weight: $font-weight-semi-bold;
+        }
+    }
+
+    &__order-detail {
+        border-top: 1px solid rgba($gray-300, .2);
+        margin-top: 1rem;
+        padding-top: 1rem;
+        font-size: 1.3rem;
+
+
+        .arrow-icon {
+            &::after {
+                content: '';
+                width: 8px;
+                height: 5px;
+                display: inline-block;
+                background: $spriteDb;
+                background-position: -92px -24px;
+                margin-left: 10px;
+                transition: all .3s ease-in;
+            }
+
+            &.open {
+                &::after {
+                    transform: rotate(180deg);
+                }
+            }
+        }
+
+        &--info {
+
+            li {
+                &:not(:last-child) {
+                    margin-bottom: 1.0rem;
+                }
+
+                a {
+                    font-size: 1.3rem;
+                    font-weight: 500;
+                }
+            }
+
+            
+
+            span {
+                font-size: 1.1rem;
+                color: $gray-200;
+            }
+        }
+    }
+}

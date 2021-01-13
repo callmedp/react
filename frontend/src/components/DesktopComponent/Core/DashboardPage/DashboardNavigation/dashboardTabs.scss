@@ -1,0 +1,109 @@
+@import '../../../../../styles/functions';
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
+
+.db-tabs-wrap{
+    width: 110px;
+    background-color: $white;
+    border-radius: 0.4rem;
+    box-shadow: $box-shadow;
+    overflow: hidden;
+
+    ul {
+        li {
+            text-align: center;
+
+            &:not(:last-child) {
+                &::after {
+                    content: '';
+                    height: 1px;
+                    width: 94px;
+                    margin: 0 auto;
+                    display: block;
+                    background-color: rgba($blue, 0.11);
+                }
+            }
+
+            a {
+                display: block;
+                padding: 15px 0;
+                font-size: 13px;
+
+                &::before{
+                    content: '';
+                    width: 32px;
+                    height: 32px;
+                    display: inline-block;
+                    background: $spriteDb;
+                }
+
+                &.my-courses {
+                    &::before {
+                        background-position: 4px -8px;
+                    }
+                }
+                
+                &.my-services {
+                    &::before {
+                        background-position: 0 -44px;
+                    }
+                }
+                
+                &.my-order {
+                    &::before {
+                        background-position: 5px -85px;
+                    }
+                }
+                
+                &.my-wallet {
+                    &::before {
+                        background-position: 3px -120px;
+                    }
+                }
+                
+                &.my-profile {
+                    &::before {
+                        background-position: 2px -154px;
+                    }
+                } 
+
+                &:hover,
+                &.active {
+                    background-image: linear-gradient(to right bottom, #d566ea, #b06cea, #8b6fe6, #6370dd, #366fd1);
+                    font-weight: 700;
+                    color: $white;
+
+                    &.my-courses {
+                        &::before {
+                            background-position: -25px -8px;
+                        }
+                    }
+                    
+                    &.my-services {
+                        &::before {
+                            background-position: -37px -44px;
+                        }
+                    }
+                    
+                    &.my-order {
+                        &::before {
+                            background-position: -22px -85px;
+                        }
+                    }
+                    
+                    &.my-wallet {
+                        &::before {
+                            background-position: -28px -120px;
+                        }
+                    }
+                    
+                    &.my-profile {
+                        &::before {
+                            background-position: -27px -154px;
+                        }
+                    } 
+                }
+            }
+        }
+    }
+}

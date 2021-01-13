@@ -1,0 +1,537 @@
+@import '../../../../../styles/functions';
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
+
+.db-nocourses {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 58px 0;
+
+    &--text {
+        font-size: $font-size-lg;
+        font-weight: 700;
+        text-align: center;
+        margin: 15px 0;
+    }
+}
+
+.db-my-courses-detail {
+    margin-top: 0;
+
+    .db-white-box {
+        padding: 15px 15px 15px 5px;
+    }
+
+    figure {
+        @include size(7.5rem, 7.5rem);
+        flex: 0 0 7.5rem;
+
+        img {
+            max-width: 100%;
+        }
+    }
+
+    &--wrap {
+        width: 100%;
+    }
+
+    &__leftpan {
+        flex-grow: 1;
+        display: flex;
+
+        &--box {
+            flex-grow: 1;
+            padding: 0; 
+
+            h3 {
+                font-size: $font-size-lg;
+                font-weight: 600;
+                padding-top: 8px;
+    
+                a {
+                    color: $gray-200;
+                }
+            }
+        }
+
+        &--info {
+            margin-bottom: 20px;
+            margin-top: 5px;
+            font-size: 1.1rem;
+
+
+            span {
+                &:not(:last-child) {
+                    &::after {
+                        content: '|';
+                        margin-right: 10px;
+                        margin-left: 10px;
+                    }
+                }
+
+                a {
+                    font-weight: 600;
+                }
+            }
+        }
+
+        &--session {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+
+            span {
+                &:not(:last-child) {
+                    &::after {
+                        content: '';
+                        margin-right: 10px;
+                        margin-left: 10px;
+                    }
+                }
+
+                a {
+                    font-weight: 600;
+                }
+
+                &.db-icon-date {
+                    &::before {
+                        content: '';
+                        @include size(14px, 14px);
+                        background: $spriteDb;
+                        background-position: -73px -37px;
+                        display: inline-block;
+                        position: relative;
+                        top: 2px;
+                        margin-right: 8px;
+                    }
+                }
+            }
+        }
+
+        &--alert {
+            position: relative;
+            padding-left: 40px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+
+            a {
+                font-weight: 600;
+            }
+            
+            &::before {
+                content: '';
+                @include size(28px, 28px);
+                background-color: #D8D8D8;
+                border-radius: 50%;
+                position: absolute;
+                left: 0;
+            }
+
+            &::after {
+                content: '';
+                @include size(17px, 18px);
+                display: block;
+                background: $spriteDb;
+                background-position: -93px -35px;
+                position: absolute;
+                left: 6px;
+                top: 6px;
+            }
+        }
+
+        .accept {
+            margin-left: 20px;
+            margin-right: 20px;
+
+            &::before {
+                content: '';
+                @include size(11px, 9px);
+                display: inline-block;
+                background: $spriteDb;
+                background-position: -46px -197px;
+                margin-right: 5px;
+            }
+        }
+
+        .reject {
+            &::before {
+                content: '';
+                @include size(9px, 9px);
+                display: inline-block;
+                background: $spriteDb;
+                background-position: -66px -196px;
+                margin-right: 5px;
+            }
+        }
+    }
+
+    &__rightpan {
+        flex: 0 0 190px;
+        position: relative;
+        padding-top: 10px;
+
+        .share {
+            width: 42px;
+            height: 25px;
+            position: absolute;
+            right: -5px;
+            display: block;
+            top: 0;
+
+            &__box {
+                position: absolute;
+                right: -7px;
+                width: 42px;
+                top: 25px;
+                display: none;
+
+                a {
+                    &::before {
+                        content: '';
+                        @include size(19px, 20px);
+                        display: block;
+                        background: $spriteDb;
+                        margin: 8px auto;
+                    }
+
+                    &:not(:last-child) {
+                        border-bottom: 1px solid rgba(151, 151, 151, .11);
+                        display: block;
+                    }
+                    
+                }
+
+                .facebook-icon {
+                    &::before {
+                        background-position: -71px -78px;
+                    }
+                }
+
+                .linkedin-icon {
+                    &::before {
+                        background-position: -70px -103px;
+                    }
+                }
+
+                .twitter-iocn {
+                    &::before {
+                        background-position: -70px -127px;
+                    }
+                }
+
+                .whatsup-icon {
+                    &::before {
+                        background-position: -69px -147px;
+                    }
+                }
+            }
+
+            .icon-share {
+                @include size(25px, 25px);
+                background: $spriteDb;
+                background-position: -93px -56px;
+                display: block;
+                position: absolute;
+                right: 4px;   
+                cursor: pointer;
+            }
+
+            &:hover .share__box{
+                display: block;
+            }
+        }
+
+        .day-remaning {
+            display: flex;
+
+            &--box {
+                @include size(25px, 35px);
+                border-radius: 3px;
+                border: 1px solid #C5C5C5;
+                padding: 5px;
+                font-size: 2.6rem;
+                margin-right: 5px;
+                line-height: 22px;
+            }
+
+            &--text {
+                display: block;
+                font-size: 1.1rem;
+                line-height: 14px;
+                padding-top: 3px;
+            }
+        }
+
+        .db-start-course {
+            display: flex;
+            align-items: center;
+
+            &::before {
+                content: '';
+                @include size(23px, 23px);
+                background: $spriteDb;
+                background-position: -93px -84px;
+                display: block;
+                margin-right: 10px;
+            }
+        }
+        
+        .db-view-result {
+            display: flex;
+            align-items: center;
+
+            &::before {
+                content: '';
+                @include size(19px, 15px);
+                background: $spriteDb;
+                background-position: -95px -157px;
+                display: block;
+                margin-right: 10px;
+            }
+        }
+        
+        .db-resume-course {
+            display: flex;
+            align-items: center;
+
+            &::before {
+                content: '';
+                @include size(23px, 23px);
+                background: $spriteDb;
+                background-position: -18px -189px;
+                display: block;
+                margin-right: 10px;
+            }
+        }
+    }
+
+    &__bottom {
+        border-top: 1px solid rgba(151, 151, 151, .11);
+        padding-top: 15px;
+        margin-top: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        .db-comments {
+            
+            &::before {
+                content: '';
+                @include size(15px, 15px);
+                background: $spriteDb;
+                background-position: -73px -57px;
+                display: inline-block;
+                position: relative;
+                top: 3px;
+                margin-right: 8px;
+            }
+
+            &::after {
+                content: '';
+                @include size(8px, 5px);
+                background: $spriteDb;
+                background-position: -92px -24px;
+                display: inline-block;
+                margin-left: 5px;
+                position: relative;
+                top: -1px;
+            }
+
+            &[aria-expanded="true"] {
+                &::after {
+                    transform: rotate(180deg);
+                }
+            }
+        }
+
+        .rating {
+            position: relative;
+            top: 2px;
+        }
+
+        .card__rating {
+            font-size: 1.1rem;
+        }
+
+        .db-certificate {
+            position: relative;
+
+            .db-certificate-icon {
+                @include size(23px, 20px);
+                background: $spriteDb;
+                background-position: -93px -131px;
+                display: inline-block;
+                margin-right: 30px;
+                cursor: pointer;
+            }
+
+            &--text {
+                display: none;
+                position: absolute;
+                padding: 5px 10px;
+                top: 28px;
+                left: -59px;
+                width: 146px;
+            }
+
+            &:hover .db-certificate--text {
+                display: block;
+            }
+        }
+    }
+}
+
+.db-mycourse-highlighter {
+    background-color: #FBF9F0;
+    font-size: 1.2rem;
+    margin: 10px -15px -15px -5px;
+    padding: 15px 20px 15px 20px;
+}
+
+.db-add-comments {
+    margin: 15px -15px -15px -5px;
+    padding: 15px 25px 15px 79px;
+    position: relative;
+
+    &::before {
+        content: '';
+        @include size(15px, 15px);
+        background-color: $lightblue;
+        transform: rotate(45deg);
+        display: block;
+        position: absolute;
+        top: -7px;
+        left: 140px;
+    }
+
+    .btn-close {
+        position: absolute;
+        top: 10px;
+        right: 25px;
+        z-index: 1;
+    }
+}
+
+.db-reviews-list-wrap {
+    position: absolute;
+    top: 30px;
+    right: 0;
+    z-index: 9;
+    
+
+    .btn-close {
+        position: absolute;
+        top: 5px;
+        right: 20px;
+    }
+
+    &.arrow-box.top-big::before {
+        left: auto;
+        right: 25px;
+    }
+
+    &--bottom {
+        border-top: 1px solid rgba(151, 151, 151, .11);
+        padding-top: 10px;
+        padding-bottom: 10px;
+        padding-left: 15px
+    }
+
+    .reviews-list {
+        @include size(343px, 226px);
+        @extend %custom-scroll;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 15px;
+    
+    
+        &--date {
+            color: $gray-600;
+            font-size: 1.1rem;
+            margin: 5px 0;
+            display: block;
+        }
+    
+        &--text {
+            color: $gray-200;
+            font-weight: 500;
+            font-size: 1.2rem;
+        }
+    
+        ul {
+            li {
+                &:not(:last-child) {
+                    margin-bottom: 15px;
+                }
+            }
+        }   
+    }
+}
+
+
+
+.db-view-detail {
+    position: absolute;
+    top: 92px;
+    left: 195px;
+    z-index: 9;
+
+    .db-timeline-list {
+        @include size(380px, 226px);
+        @extend %custom-scroll;
+        overflow-y: auto;
+        overflow-x: hidden;
+        margin-top: 0;
+        padding: 0px 15px 15px;
+        margin-bottom: 0;
+    }
+
+    .btn-close {
+        position: absolute;
+        right: 15px;
+        top: 5px;
+    }
+
+    .db-timeline-list li:first-child {
+        padding-top: 15px;
+    }
+
+    &.arrow-box.left-big::before {
+        left: -8px;
+        margin-top: -20px;
+    }
+}
+
+.db-modal {
+    .modal-content {
+        margin-top: 20%;
+    }
+    
+    .modal-header {
+        border-bottom: 0 none;
+    }
+}
+
+
+
+.db-rate-services {
+    // padding: 0 30px 30px;
+    box-shadow: none;
+    background-color: transparent;
+
+    &--heading {
+        font-size: 2rem;
+        font-weight: 600;
+        margin: 5px 0 10px;
+    }
+
+    &--subheading {
+        font-size: 1.2rem;
+        color: $gray-600;
+    }
+}
+
+
+  

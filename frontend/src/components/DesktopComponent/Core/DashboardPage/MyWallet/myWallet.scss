@@ -1,0 +1,59 @@
+@import '../../../../../styles/functions';
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
+
+.white-box {
+    background-color: $white;
+    box-shadow: $box-shadow;
+    border-radius: .4rem;
+}
+
+.myWallet {
+    &--heading {
+        font-size: $font-size-lg;
+    }
+
+    &__list {
+        margin-bottom: 20px;
+
+        &:first-child {
+            margin-top: 10px;
+        }
+
+        &:not(:last-child) {
+            border-bottom: 1px solid rgba($blue, 0.11);
+            padding-bottom: 20px;
+        }
+    }
+
+    .text-danger {
+        color: #C83838 !important;
+    }
+}
+
+.db-redeemnow-popup {
+    .db-green-tick {
+        transform: scale(3.8);
+        margin-top: 20px;
+    }
+
+    &--heading,
+    &--points {
+        
+        font-weight: 600;
+        color: $gray-200;
+    }
+
+    &--heading {
+        font-size: 2.2rem;
+        margin-top: 30px;
+    }
+
+    &--points {
+        font-size: 1.8rem;
+    }
+
+    &--text {
+        color: $gray-200;
+    }
+}

@@ -1,38 +1,91 @@
 .m-custom {
-    [type="radio"]:checked,
-    [type="radio"]:not(:checked) {
+
+    input[type="checkbox"]:checked,
+    input[type="checkbox"]:not(:checked),
+    input[type="radio"]:checked,
+    input[type="radio"]:not(:checked)  {
         position: absolute;
         left: -9999px;
     }
 
-    [type="radio"]:checked + label,
-    [type="radio"]:not(:checked) + label {
+    input[type="checkbox"]:checked + label,
+    input[type="checkbox"]:not(:checked) + label {
         position: relative;
-        padding-left: 28px;
+        padding-left: 20px;
         cursor: pointer;
-        line-height: 20px;
+        line-height: 13px;
         display: inline-block;
-        color: #666;
+        color: $gray-200;
         margin-bottom: 0;
+        font-size: $font-size-base;
     }
 
-    [type="radio"]:checked + label:before,
-    [type="radio"]:not(:checked) + label:before {
+     input[type="checkbox"]:checked + label:before,
+     input[type="checkbox"]:not(:checked) + label:before {
         content: '';
         position: absolute;
         left: 0;
         top: 0;
-        width: 18px;
-        height: 18px;
-        border: 1px solid $blue;
-        border-radius: 100%;
-        background: #fff;
+        @include size(13px, 13px, block);
+        border: 1px solid #B6B6B6;
+        border-radius: 3px;
+        background: $white;
+        box-shadow: inset 0 1px 2px 0 rgba($black, .1);
     }
-    [type="radio"]:checked + label:after,
-    [type="radio"]:not(:checked) + label:after {
+     input[type="checkbox"]:checked + label:after,
+     input[type="checkbox"]:not(:checked) + label:after {
         content: '';
-        width: 12px;
-        height: 12px;
+        @include size(10px, 8px, block);
+        background: $spriteDb;
+        background-position: -83px -196px;
+        position: absolute;
+        top: 3px;
+        left: 2px;
+        -webkit-transition: all 0.2s ease;
+        transition: all 0.2s ease;
+    }
+     input[type="checkbox"]:not(:checked) + label:after {
+        opacity: 0;
+        -webkit-transform: scale(0);
+        transform: scale(0);
+    }
+     input[type="checkbox"]:checked + label:after {
+        opacity: 1;
+        -webkit-transform: scale(0.8);
+        transform: scale(0.8);
+    }
+
+    
+
+
+
+    input[type="radio"]:checked + label,
+    input[type="radio"]:not(:checked) + label {
+        position: relative;
+        padding-left: 20px;
+        cursor: pointer;
+        line-height: 13px;
+        font-size: $font-size-base;
+        display: inline-block;
+        color: $gray-200;
+        margin-bottom: 0;
+    }
+
+     input[type="radio"]:checked + label:before,
+     input[type="radio"]:not(:checked) + label:before {
+        content: '';
+        @include size(11px, 11px, block);
+        position: absolute;
+        left: 0;
+        top: 0;
+        border: 1px solid #979797;
+        border-radius: 100%;
+        background: $white;
+    }
+     input[type="radio"]:checked + label:after,
+     input[type="radio"]:not(:checked) + label:after {
+        content: '';
+        @include size(5px, 5px, block);
         background: $blue;
         position: absolute;
         top: 3px;
@@ -41,12 +94,12 @@
         -webkit-transition: all 0.2s ease;
         transition: all 0.2s ease;
     }
-    [type="radio"]:not(:checked) + label:after {
+     input[type="radio"]:not(:checked) + label:after {
         opacity: 0;
         -webkit-transform: scale(0);
         transform: scale(0);
     }
-    [type="radio"]:checked + label:after {
+     input[type="radio"]:checked + label:after {
         opacity: 1;
         -webkit-transform: scale(1);
         transform: scale(1);
