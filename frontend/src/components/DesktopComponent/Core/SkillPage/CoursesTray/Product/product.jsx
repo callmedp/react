@@ -79,11 +79,12 @@ const Product = (props) => {
                         </div>
                         {
                             productType === 'assessments' ? 
+                            
                             <div className="card__duration-mode mt-10">
-                                Duration: <strong>{test_duration} minutes</strong>  |   Mode: <strong>{mode}</strong>
+                               { !!test_duration ? <>Duration: <strong>{test_duration} minutes</strong>  | </>: ''}  { !!mode ? <>Mode: <strong>{mode}</strong> </> : ''}
                             </div> :
                             <div className="card__duration-mode mt-10">
-                                Duration: <strong>{duration} days</strong>  |   Mode: <strong>{mode}</strong>
+                                { !!duration ? <>Duration: <strong>{duration} days</strong>  | </> : '' } { !!mode ? <>Mode: <strong>{mode}</strong> </> : ''}
                             </div>
                         }
                         <div className="card__price mt-30">

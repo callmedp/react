@@ -22,7 +22,8 @@ const ProductDetails = (props) =>{
             <p className="m-type">
             {
                 productType === 'Assessments' ?
-                <> Number of Questions : <strong>{number_of_questions}</strong> </>:
+                !!number_of_questions ? <> Number of Questions : <strong>{number_of_questions}</strong> </>: ''
+                :
                 <> Type: <strong>{type}</strong>  |   Course level: <strong>{level}</strong></>
             }
                 <br />
