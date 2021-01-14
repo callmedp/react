@@ -14,6 +14,7 @@ import MyProfile from './MyProfile/myProfile';
 import FAQ from './FAQ/faq';
 
 const Dashboard = () => {
+    
     return(
         <div>
            <Header />
@@ -29,13 +30,12 @@ const Dashboard = () => {
 
                         <div className="dashboard-warp--wrap">
                             <div className="dashboard-warp--content">
-                                <MyOrders />
+                                {/* <MyOrders /> */}
                             </div>
                         </div>
 
                     </div>
                 </div>
-                <FAQ />
                 <HaveQuery />
                 <PopularCourses />
 

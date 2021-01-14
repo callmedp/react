@@ -5,18 +5,9 @@ import CataloguePageContainer from "components/MobileComponent/Core/CataloguePag
 import { getSkillPageActionsMobile } from 'apiHandler/skillPageApi'; 
 import Error404Container from 'components/MobileComponent/Common/ErrorPage404/errorPage404';
 import { getCataloguePageActionsMobile } from "apiHandler/cataloguePageApi";
+import DashboardPageContainer from 'components/MobileComponent/Core/DashboardPage/dashboardPage';
+import RouteWithSubRoutes from 'routes/route';
 
-export const RouteWithSubRoutes = route => {
-    return (
-        <Route
-            path={route.path}
-            exact={route.exact}
-            render={props =>
-                <route.component {...props} routes={route.routes} />
-            }
-        />
-    )
-};
 
 
 const MobileAppRouter = () => (
@@ -40,6 +31,11 @@ export const routes = [
         path: '/online-courses.html/',
         component: CataloguePageContainer,
         actionGroup: getCataloguePageActionsMobile,
+        exact: true,
+    },
+    {
+        path: '/dashboard/myorder/',
+        component: DashboardPageContainer,
         exact: true,
     },
     {

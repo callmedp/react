@@ -5,11 +5,13 @@ import { freeResourcesList, jobAssistanceList, categoryList, navSkillList } from
 import { siteDomain } from 'utils/domains';
 import DropDown from './DropDown/dropDown';
 import { useDispatch, useSelector } from 'react-redux';
-import { cartCount, sessionAvailability, getCandidateInfo, fetchNavOffersAndTags } from 'store/Header/actions/index';
+import { cartCount, getCandidateInfo, fetchNavOffersAndTags } from 'store/Header/actions/index';
 import { initLoggedInZendesk, loggedOutZendesk } from 'utils/zendeskIniti';
 import { removeTrackingInfo } from 'utils/storage.js';
 import SearchBar from './SeachBar/SearchBar';
 import { MyGA } from 'utils/ga.tracking.js';
+// import IsAuthenticated  from 'services/authenticate';
+import { getCandidateId } from ''
 
 const Header = (props) => {
 
@@ -35,11 +37,11 @@ const Header = (props) => {
     const fetchUserInfo = async () => {
         try {
             dispatch(cartCount());
-            const isSessionAvailable = await new Promise((resolve, reject) => dispatch(sessionAvailability({ resolve, reject })));
-            if (isSessionAvailable['result']) {
+        
+            if (1){
                 try {
                     setIsLoggedIn(true)
-                    const candidateId = isSessionAvailable['candidate_id']
+                    const candidateId = getCandidateId()
                     const candidateInformation = await new Promise((resolve, reject) => dispatch(getCandidateInfo({ candidateId, resolve, reject })))
                     initLoggedInZendesk(candidateInformation)
                     setCandidateInfo(candidateInformation)

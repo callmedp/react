@@ -3,7 +3,7 @@ import './dashboardPage.scss';
 import MenuNav from '../../Common/MenuNav/menuNav';
 import Header from '../../Common/Header/Header';
 import Footer from '../../Common/Footer/Footer';
-import PopularCoursesSlider from '../../Common/PopularCoursesSlider/PopularCoursesSlider';
+// import PopularCoursesSlider from '../../Common/PopularCoursesSlider/PopularCoursesSlider';
 import HaveQuery from './HaveQuery/haveQuery';
 import DashboardNavigation from './DashboardNavigation/dashboradNav';
 import MyCourses from './MyCourses/myCourses';
@@ -31,7 +31,7 @@ const Dashboard = () => {
                 {/* <EditSkills /> */}
                 {/* <PersonalDetail /> */}
                 
-                <PopularCoursesSlider />
+                {/* <PopularCoursesSlider /> */}
                 <HaveQuery />
             </main>
             
