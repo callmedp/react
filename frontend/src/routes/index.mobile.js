@@ -2,6 +2,7 @@ import React from "react";
 import { Route, Switch } from "react-router-dom";
 import SkillPageContainer from "components/MobileComponent/Core/SkillPage/skillPage";
 import CataloguePageContainer from "components/MobileComponent/Core/CataloguePage/cataloguePage";
+import MyServices from "components/MobileComponent/Core/DashboardPage/MyServices/myServices";
 import { getSkillPageActionsMobile } from 'apiHandler/skillPageApi'; 
 import Error404Container from 'components/MobileComponent/Common/ErrorPage404/errorPage404';
 import { getCataloguePageActionsMobile } from "apiHandler/cataloguePageApi";
@@ -40,6 +41,11 @@ export const routes = [
         path: '/online-courses.html/',
         component: CataloguePageContainer,
         actionGroup: getCataloguePageActionsMobile,
+        exact: true,
+    },
+    {
+        path: '/myservices',
+        component: MyServices,
         exact: true,
     },
     {
