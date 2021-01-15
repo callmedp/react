@@ -26,5 +26,5 @@ function* recentAddedServices(action) {
 
 
 export default function* WatchServicePage() {
-    yield takeLatest(Actions.RECENTLY_ADDED_SERVICES_FETCHED, recentAddedServices);
+    yield takeLatest(Actions.FETCH_MY_SERVICE, recentAddedServices);
 }
