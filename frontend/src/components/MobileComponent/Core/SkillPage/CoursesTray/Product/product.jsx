@@ -35,6 +35,19 @@ const Product = (props) =>{
         trackUser({"query" :tracking_data, "action" :'exit_skill_page'});
     }
 
+    const getDurationMode = (duration, mode, d_type) => {
+        return (
+            <div className="m-card__duration-mode">
+            {
+                duration && mode ? <> Duration: <strong>{duration} {d_type}</strong> | Mode: <strong>{mode.split(" ")[0]}</strong> </> :
+                duration ? <> Duration: <strong>{duration} {d_type}</strong> </> :
+                mode ? <> Mode: <strong>{mode.split(" ")[0]}</strong> </> : <>&nbsp;</>
+            }
+            </div>
+        )
+        
+    }
+
     return (
         <div className={ compType === 'For You' ? "m-card" : "m-card-more m-card" } key={index} itemProp="itemListElement" itemScope itemType="http://schema.org/ListItem">
             <div className="m-card__heading">
@@ -57,12 +70,7 @@ const Product = (props) =>{
                 </div>
                 {
                     productType === 'Assessments' ? 
-                    <div className="m-card__duration-mode">
-                        { test_duration ? <>Duration: <strong>{test_duration} minutes</strong>  | </> : '' } { !!mode ? <> Mode: <strong>{mode.split(" ")[0]}</strong> </> : '' }
-                    </div> :
-                    <div className="m-card__duration-mode">
-                        { duration ? <> Duration: <strong>{duration} days</strong>  | </> : '' } { !!mode ? <> Mode: <strong>{mode}</strong> </> : '' }
-                    </div>
+                        getDurationMode(test_duration, mode, 'minutes') : getDurationMode(duration, mode, 'days')
                 }
                 <div className="m-card__price">
                     <strong>{price}/-</strong> 

@@ -47,7 +47,7 @@ const BannerSkill = (props) => {
                                     return (
                                         <Carousel.Item key={index} >
                                             <p key={Math.random()}>
-                                                <span className="flex-1">{feature}</span>
+                                                <span className="flex-1" dangerouslySetInnerHTML={{__html: feature }} />
                                             </p>
                                         </Carousel.Item>
                                     )

@@ -13,7 +13,7 @@ from shop.models import Category, Product, ProductSkill
 from haystack.query import SearchQuerySet
 
 
-from shop.choices import PRODUCT_CHOICES,PRODUCT_TAG_CHOICES, STUDY_MODE, COURSE_TYPE_DICT
+from shop.choices import PRODUCT_CHOICES,PRODUCT_TAG_CHOICES, STUDY_MODE, COURSE_TYPE_DICT, COURSE_LEVEL_DICT
 from shop.templatetags.shop_tags import get_faq_list, format_features, format_extra_features
 class PopularProductMixin(object):
 
@@ -101,6 +101,7 @@ class ProductMixin(object):
         course_data = []
         mode_choices = dict(STUDY_MODE)
         type_dict = dict(COURSE_TYPE_DICT)
+        level_type = dict(COURSE_LEVEL_DICT)
         for course in courses:
             d = json.loads(course.pVrs).get('var_list')
             data = {
@@ -130,7 +131,7 @@ class ProductMixin(object):
                     'duration':d[0].get('dur_days'), 
                     'type':type_dict.get(d[0].get('type'), d[0].get('type')),  
                     'label':d[0].get('label'), 
-                    'level':d[0].get('level'), 
+                    'level':level_type.get(d[0].get('level'), d[0].get('level')), 
                 })
             course_data.append(data)
 
