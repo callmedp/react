@@ -5,7 +5,7 @@ import { resumeShineSiteDomain, imageUrl } from 'utils/domains';
 
 const WriteMyResume = (props) => {
 
-    const builderRedirect = () => window.location.replace(`${resumeShineSiteDomain}/resume-builder`)
+    const builderRedirect = () => window.location.replace(`${resumeShineSiteDomain}`)
     
     return (
         <section className="write-resume" data-aos="fade-up">
