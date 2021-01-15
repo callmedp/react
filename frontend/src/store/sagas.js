@@ -21,5 +21,6 @@ export default function* () {
         WatchRecommendation(),
         watchTracking(),
         WatchCataloguePage(),
+        WatchServicePage(),
     ])
 }

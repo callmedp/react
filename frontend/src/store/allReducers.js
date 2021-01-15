@@ -24,7 +24,7 @@ const rootReducer = combineReducers({
     popularServices : PopularServicesReducer,
     popularCategories : TrendingCategoriesReducer,
     allCategories : AllCategoriesReducer,
-    allServices : RecentlyAddedCoursesReducer
+    allServices : RecentlyServicesReducer
 
 });
 

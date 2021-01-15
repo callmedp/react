@@ -10,3 +10,8 @@ const fetchServices = (payload) => {
         payload
     } 
 }
+
+
+export {
+    fetchServices
+}
