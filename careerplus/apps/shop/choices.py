@@ -206,6 +206,12 @@ COURSE_TYPE_DICT = dict((
     ('BS', 'Basic'),
     ('BD', 'Basic + More Deliverable'),))
 
+COURSE_LEVEL_DICT = dict((
+    ('BG', 'Beginner'),
+    ('IM', 'Intermediate'),
+    ('AD', 'Advanced'),
+))
+
 
 def convert_inr(price=Decimal(0)):
     if price:
