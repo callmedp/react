@@ -10,13 +10,14 @@ from django.core.cache import cache
 # Inter-App Import
 from dashboard.dashboard_mixin import DashboardInfo
 from payment.models import PaymentTxn
-from order.models import Order, OrderItem
+from order.models import Order, OrderItem,OrderItemOperation
 from dashboard.api.v1.serializers import OrderSerializer,OrderItemSerializer
 from wallet.models import Wallet
 from core.common import APIResponse
 
 # Other Import
 from haystack.query import SearchQuerySet
+from order.choices import OI_OPS_STATUS
 
 
 class DashboardMyorderApi(DashboardInfo, APIView):
@@ -111,36 +112,44 @@ class MyServicesApi(DashboardInfo, APIView):
     def get(self, request, *args, **kwargs):
         candidate_id = self.request.session.get('candidate_id', None)
         data = []
+        candidate_id='5fed060d9cbeea482331ec4b'
         if candidate_id:
-            if cache.get('dashboard_my_services'):
-                data = cache.get('dashboard_my_services')
-            else:
-                orders = Order.objects.filter(
-                    status__in=[0, 1, 3],
-                    candidate_id=candidate_id)
+            # if cache.get('dashboard_my_services'):
+            #     data = cache.get('dashboard_my_services')
+            # else:
+            orders = Order.objects.filter(
+                status__in=[0, 1, 3],
+                candidate_id=candidate_id)
 
-                excl_txns = PaymentTxn.objects.filter(
-                    status__in=[0, 2, 3, 4, 5],
-                    payment_mode__in=[6, 7],
-                    order__candidate_id=candidate_id)
-                excl_order_list = excl_txns.all().values_list('order_id', flat=True)
+            excl_txns = PaymentTxn.objects.filter(
+                status__in=[0, 2, 3, 4, 5],
+                payment_mode__in=[6, 7],
+                order__candidate_id=candidate_id)
+            excl_order_list = excl_txns.all().values_list('order_id', flat=True)
 
-                orders = orders.exclude(
-                    id__in=excl_order_list).order_by('-date_placed')
+            orders = orders.exclude(
+                id__in=excl_order_list).order_by('-date_placed')
+            
 
-                services = OrderItem.objects.filter(order__in=orders,product__product_class__slug__in=settings.SERVICE_SLUG).values_list('product',flat=True)
-                tsrvcs = SearchQuerySet().filter(id__in=services, pTP__in=[0, 1, 3]).exclude(
-                    id__in=settings.EXCLUDE_SEARCH_PRODUCTS
-                )
-                data = [
-                        {'id': tsrvc.id, 'heading': tsrvc.pHd, 'name': tsrvc.pNm, 'url': tsrvc.pURL, 'img': tsrvc.pImg, \
-                        'img_alt': tsrvc.pImA, 'rating': tsrvc.pARx, 'price': tsrvc.pPinb, 'vendor': tsrvc.pPvn, 'stars': tsrvc.pStar,
-                        'provider': tsrvc.pPvn} for tsrvc in tsrvcs]
-                cache.set('dashboard_my_services',data,86400)
+            services = OrderItem.objects.filter(order__in=orders,product__product_class__slug__in=settings.SERVICE_SLUG)
+            # tsrvcs = SearchQuerySet().filter(id__in=services, pTP__in=[0, 1, 3]).exclude(
+            #     id__in=settings.EXCLUDE_SEARCH_PRODUCTS
+            # )
+            data = []
+            for service in services:
+                tsrvc = SearchQuerySet().filter(id=service.id, pTP__in=[0, 1, 3]).exclude(
+                id__in=settings.EXCLUDE_SEARCH_PRODUCTS
+                )[0]
+                x = {'id': tsrvc.id, 'heading': tsrvc.pHd, 'name': tsrvc.pNm, 'url': tsrvc.pURL, 'img': tsrvc.pImg, \
+                    'img_alt': tsrvc.pImA, 'rating': tsrvc.pARx, 'price': tsrvc.pPinb, 'vendor': tsrvc.pPvn, 'stars': tsrvc.pStar,
+                    'provider': tsrvc.pPvn,'duration':service.product.get_duration_in_day(),'status':OI_OPS_STATUS[service.oi_status][1]}
+                data.append(x)
+            #  cache.set('dashboard_my_services',data,86400)
         return Response(data=data, status=status.HTTP_200_OK)
 
 
 class DashboardMyWalletAPI(DashboardInfo, APIView):
+    
     permission_classes = (permissions.AllowAny, )
     authentication_classes = ()
 
