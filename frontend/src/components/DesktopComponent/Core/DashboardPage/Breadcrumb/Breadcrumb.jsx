@@ -7,17 +7,17 @@ const BreadCrumbs = (props) => {
     return(
         <div className="d-flex align-items-center justify-content-between">
 
-            <nav aria-label="breadcrumb" class="sdsd">
-                <ol class="db-breadcrumb">
-                    <li class="db-breadcrumb-item"><a href="#" role="button">Home</a></li>
-                    <li class="db-breadcrumb-item active" aria-current="page">Dashboard</li>
+            <nav aria-label="breadcrumb">
+                <ol className="db-breadcrumb">
+                    <li className="db-breadcrumb-item"><a href="#" role="button">Home</a></li>
+                    <li className="db-breadcrumb-item active" aria-current="page">Dashboard</li>
                 </ol>
             </nav>
 
             <div className="db-filter-by">
                 Filter by
-                <div class="form-group mb-0 mx-3">
-                    <select class="form-control">
+                <div className="form-group mb-0 mx-3">
+                    <select className="form-control">
                     <option>Last six month</option>
                     <option>2</option>
                     <option>3</option>
@@ -26,8 +26,8 @@ const BreadCrumbs = (props) => {
                     </select>
                 </div>
                 
-                <div class="form-group mb-0">
-                    <select class="form-control">
+                <div className="form-group mb-0">
+                    <select className="form-control">
                     <option>All Items</option>
                     <option>2</option>
                     <option>3</option>

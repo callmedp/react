@@ -49,7 +49,6 @@ const SkillPage = (props) => {
     const meta_tags = useSelector((store) => store.skillBanner.meta ? store.skillBanner.meta : '');
 
     const handleEffects = async () => {
-
         try {
             //You may notice that apis corresponding to these actions are not getting called on initial render.
             //This is because initial render is done on node server, which is calling these apis, map the data and send it to the browser.
