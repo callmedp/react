@@ -1,6 +1,7 @@
 from django import template      
 from django.utils.html import strip_tags                                                                
 import math,numpy
+from bs4 import BeautifulSoup
 register = template.Library()
 
 
@@ -92,11 +93,20 @@ def get_initials(user_name):
         initials+=name[0]
     return initials.upper()
 
+# @register.filter(name='format_extra_features')
+# def format_extra_features(string):
+#     list_value = [strip_tags(i) for i in string.split('\n') if not i.find('<li>')==-1][:2]
+#     if not list_value:
+#         return [strip_tags(i) for i in string.split('\n') if not i.find('<p>')==-1][:2]
+#     return list_value
+
 @register.filter(name='format_extra_features')
-def format_extra_features(string):
-    list_value = [strip_tags(i) for i in string.split('\n') if not i.find('<li>')==-1][:2]
-    if not list_value:
-        return [strip_tags(i) for i in string.split('\n') if not i.find('<p>')==-1][:2]
+def format_extra_features(new_string):
+    string = new_string.replace('&bull;', '')
+    html_li_string = BeautifulSoup(string, features="html.parser").findAll('li')
+    list_value = [strip_tags(i.text) for i in html_li_string if i.text][:2]
+    if not html_li_string:
+        return [strip_tags(i) for i in string.split('\n') if not i.find('<p')==-1][:2]
     return list_value
 
 
