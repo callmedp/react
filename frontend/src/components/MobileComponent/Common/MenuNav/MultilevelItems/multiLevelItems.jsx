@@ -37,7 +37,7 @@ const MultiLevelItems = props => {
 											</a>
 										) : 
 										(
-											<a className="menu-item" to={child.url} onClick={resetNav} > {child.name} </a>
+											<a className="menu-item" href={child.url} onClick={resetNav} > {child.name} </a>
 										)
                                 }
                             </React.Fragment>
