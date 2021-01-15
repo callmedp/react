@@ -1,16 +1,23 @@
-import React from 'react';
 import { useDispatch } from 'react-redux';
 import { sessionAvailability } from 'store/Header/actions/index'; 
 
-const IsAuthenticated = async () => {
+
+
+const useAuthenticate = () => {
 
     const dispatch = useDispatch();
+
+  
 
     if(localStorage.getItem('isAuthenticated')){
         return true;
     }
-    const isSessionAvailable = await new Promise((resolve, reject) => dispatch(sessionAvailability({ resolve, reject })));
-    if(isSessionAvailable['result']){
+
+    const isSessionAvailable = async () => {
+        return await new Promise((resolve, reject) => dispatch(sessionAvailability({ resolve, reject })));
+    }
+    
+    if(isSessionAvailable()['result']){
         return true;
     }
 
@@ -18,4 +25,4 @@ const IsAuthenticated = async () => {
 
 }
 
-export default IsAuthenticated;
+export default useAuthenticate;

@@ -13,8 +13,8 @@ import MyWallet from './MyWallet/myWallet';
 import MyProfile from './MyProfile/myProfile';
 import FAQ from './FAQ/faq';
 
-const Dashboard = () => {
-    
+const Dashboard = (props) => {
+    console.log("props are", props);
     return(
         <div>
            <Header />

@@ -34,8 +34,9 @@ export const routes = [
         exact: true,
     },
     {
-        path: '/dashboard/myorder/',
+        path: '/dashboard/:name/',
         component: DashboardPageContainer,
+        private: true,
         exact: true,
     },
     {

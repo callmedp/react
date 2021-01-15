@@ -10,8 +10,8 @@ import { initLoggedInZendesk, loggedOutZendesk } from 'utils/zendeskIniti';
 import { removeTrackingInfo } from 'utils/storage.js';
 import SearchBar from './SeachBar/SearchBar';
 import { MyGA } from 'utils/ga.tracking.js';
-// import IsAuthenticated  from 'services/authenticate';
-import { getCandidateId } from ''
+import { getCandidateId } from 'utils/storage';
+import useAuthenticate  from 'services/authenticate';
 
 const Header = (props) => {
 
@@ -19,6 +19,7 @@ const Header = (props) => {
     const { count, navTags } = useSelector(store => store.header)
     const [candidateInfo, setCandidateInfo] = useState(false)
     const [isLoggedIn, setIsLoggedIn] = useState(false)
+    const isAuthenticated = useAuthenticate()
 
     const handleRedirect = (event, type) => {
         event.preventDefault();
@@ -38,7 +39,7 @@ const Header = (props) => {
         try {
             dispatch(cartCount());
         
-            if (1){
+            if (isAuthenticated){
                 try {
                     setIsLoggedIn(true)
                     const candidateId = getCandidateId()

@@ -1,19 +1,21 @@
 import React from 'react';
-import IsAuthenticated  from 'services/authenticate';
+import useAuthenticate  from 'services/authenticate';
 import { Route } from 'react-router-dom';
 import { siteDomain } from 'utils/domains';
 
 
 const RouteWithSubRoutes = route => {
 
+    const isAuthenticated = useAuthenticate();
+
     const renderComponent =  props => {
         if( route.private ){
-            // if(IsAuthenticated()){
-            //     return <route.component {...props} routes={route.routes} />
-            // }
-            // else{
-            //     window.location.replace(`${siteDomain}/login`);
-            // }
+            if(isAuthenticated){
+                return <route.component {...props} routes={route.routes} />
+            }
+            else{
+                window.location.replace(`${siteDomain}/login`);
+            }
         } 
         else{
             return <route.component {...props} routes={route.routes} />            
@@ -24,7 +26,6 @@ const RouteWithSubRoutes = route => {
         <Route
             path={route.path}
             exact={route.exact}
-            strict={true}
             render={renderComponent}
         />
     )
