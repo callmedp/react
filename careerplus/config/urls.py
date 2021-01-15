@@ -244,7 +244,7 @@ urlpatterns += [
 
                    re_path(r'^api/', include('api.urls', namespace='api')),
                    re_path(r'^api/', include('homepage.api.urls', namespace='api')),
-                   re_path(r'^api/', include('dashboard.api.urls', namespace='dashboard-api')),
+                   re_path(r'^dashboard/api/', include('dashboard.api.urls', namespace='dashboard-api')),
 
                    re_path(r'^lead/', include('crmapi.urls', namespace='crmapi')),
 

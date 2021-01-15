@@ -1,23 +1,27 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Button } from 'react-bootstrap';
 import { Modal } from 'react-bootstrap';
 import './myWallet.scss';
 
-   
+
 const MyWallet = (props) => {
+    // const dispatch = useDispatch();
+    // const { history } = props;
 
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    const { data: {loyality_txns, page, wal_total}, message } = useSelector( store => store.dashboardWallet )
 
+    console.log(loyality_txns, page, wal_total);
 
     return(
-
         <div className="myWallet">
             <div className="row">
                 <div className="col-8 myWallet--heading">
-                    Loyality point balance - <strong>248.00</strong>
+                    Loyality point balance - <strong>{wal_total ? wal_total : 0}</strong>
                     <button 
                         className="btn btn-outline-primary ml-4"
                         onClick={handleShow}
@@ -56,8 +60,29 @@ const MyWallet = (props) => {
                     <div className="col-md-2">Balance</div>
                 </div>
             </div>
-            
+
             <div className="db-white-box pb-4">
+                {
+                    loyality_txns && loyality_txns.length > 0 ?
+                        loyality_txns.map((item, index) => {
+                            return (
+                                <ul className="row myWallet__list" key={index}>
+                                    <li className="col-md-2">{item.date}</li>
+                                    <li className="col-md-2">{item.order_id}</li>
+                                    <li className="col-md-2">{item.description}</li>
+                                    <li className={`col-md-2 ${item.loyality_points > 0 ? "text-success" : "text-danger"}`}>{item.loyality_points > 0 ? '+' + item.loyality_points : '-' + item.loyality_points}</li>
+                                    <li className="col-md-2">{item.expiry_date}</li>
+                                    <li className="col-md-2">{item.balance}</li>
+                                </ul>
+                            )
+                        })
+                    : 
+                    <h6 className="text-center p-10">Start with your first order and earn loyalty points</h6>
+                }
+            </div>
+            
+            
+            {/* <div className="db-white-box pb-4">
                 <ul className="row myWallet__list">
                     <li className="col-md-2">Oct. 28, 2020</li>
                     <li className="col-md-2">CP24540</li>
@@ -110,7 +135,7 @@ const MyWallet = (props) => {
                     <li className="col-md-2">Dec. 30, 2020</li>
                     <li className="col-md-2">390.00</li>
                 </ul>
-            </div>
+            </div> */}
         </div>
     )
 }

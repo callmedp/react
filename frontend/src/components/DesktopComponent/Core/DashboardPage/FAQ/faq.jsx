@@ -1,19 +1,33 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Accordion from 'react-bootstrap/Accordion';
 import Card from 'react-bootstrap/Card';
 import { Link } from 'react-router-dom';
 import '../../SkillPage/FAQ/faq.scss';
+import FaqAccordion from '../../../Common/FaqAccordion/faqAccordion';
+import { useSelector } from 'react-redux';
 
 const FAQ = (props) => {
+    const { faqList } = useSelector(store => store.skillBanner);
+    const { setHasFaq } = props;
+
+    useEffect(()=>{
+        setHasFaq( faqList.length > 0 )
+    },[faqList])
+
     return (
         <section className="container-fluid lightgrey-bg mt-40">
-            <div className="row">
+            {faqList.length > 0 ? <div className="row">
                 <div className="container">
                     <h2 className="heading2 mt-40 text-center">Frequently Asked Questions</h2>
                     <div className="faq d-flex col-10 m-auto">
                         <div className="faq__list">
                             <Accordion defaultActiveKey="0">
-                                <Card data-aos="fade-up">
+
+                            {
+                                    faqList.map(FaqAccordion)   
+                                    }
+                                {/* <FaqAccordion {...props} faqitem={faqList}/> */}
+                                {/* <Card data-aos="fade-up">
                                     <Accordion.Toggle as={Card.Header} eventKey="0">
                                     <strong>How do I earn loyalty points?</strong>
                                     </Accordion.Toggle>
@@ -60,12 +74,13 @@ const FAQ = (props) => {
                                     <Accordion.Collapse eventKey="5">
                                     <Card.Body>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer.</Card.Body>
                                     </Accordion.Collapse>
-                                </Card>
+                                </Card> */}
                             </Accordion>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> : null 
+            }
         </section>
     )
 }

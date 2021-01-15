@@ -1,6 +1,6 @@
 import React from 'react';
 import './dashboardTabs.scss';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
    
 const DashboardNavigation = (props) => {
@@ -8,33 +8,33 @@ const DashboardNavigation = (props) => {
         <div className="db-tabs-wrap">
             <ul>
                 <li>
-                    <Link to={"#"} className="my-courses active">
+                    <NavLink activeClassName="active" exact={true} to={"/dashboard/"} className="my-courses">
                         <span className="d-block">My Courses</span>
-                    </Link>
+                    </NavLink>
                 </li>
                 
                 <li>
-                    <Link to={"#"} className="my-services">
+                    <NavLink activeClassName="active" to={"/dashboard/myservice"} className="my-services">
                         <span className="d-block">My Services</span>
-                    </Link>
+                    </NavLink>
                 </li>
                 
                 <li>
-                    <Link to={"#"} className="my-order">
+                    <NavLink activeClassName="active" to={"/dashboard/myorder"} className="my-order">
                         <span className="d-block">My Order</span>
-                    </Link>
+                    </NavLink>
                 </li>
                 
                 <li>
-                    <Link to={"#"} className="my-wallet">
+                    <NavLink activeClassName="active" to={'/dashboard/mywallet/'} className="my-wallet">
                         <span className="d-block">My Wallet</span>
-                    </Link>
+                    </NavLink>
                 </li>
                 
                 <li>
-                    <Link to={"#"} className="my-profile">
+                    <NavLink activeClassName="active" to={"/dashboard/myprofile"} className="my-profile">
                         <span className="d-block">My Profile</span>
-                    </Link>
+                    </NavLink>
                 </li>
             </ul>
         </div>

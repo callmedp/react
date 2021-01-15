@@ -23,6 +23,7 @@ const FAQ = (props) => {
 
     useEffect(()=>{
         setHasFaq( faqList.length > 0 )
+        console.log(faqList);
     },[faqList])
 
     const renderAccordion = (item, index) => {
