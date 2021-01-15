@@ -14,7 +14,7 @@ import MyProfile from './MyProfile/myProfile';
 import FAQ from './FAQ/faq';
 import { useDispatch, useSelector } from 'react-redux';
 import {fetchMyWallet} from 'store/DashboardPage/MyWallet/actions';
-import { startSkillPageLoader, stopSkillPageLoader } from 'store/Loader/actions/index';
+import { startDashboardWalletPageLoader, stopDashboardWalletPageLoader } from 'store/Loader/actions/index';
 import Loader from '../../Common/Loader/loader';
 
 const DashboardPage = (props) => {
@@ -22,7 +22,7 @@ const DashboardPage = (props) => {
     const pageId = props.match.params.id;
     const dispatch = useDispatch();
     const { history } = props;
-    const { skillLoader } = useSelector(store => store.loader);
+    const { walletLoader } = useSelector(store => store.loader);
 
     const handleEffects = async () => {
         try {
@@ -30,9 +30,9 @@ const DashboardPage = (props) => {
             //This is because initial render is done on node server, which is calling these apis, map the data and send it to the browser.
             //So there is no need to fetch them again on the browser.
             if (!(window && window.config && window.config.isServerRendered)) {
-                dispatch(startSkillPageLoader());
-                new Promise((resolve, reject) => dispatch(fetchMyWallet({ id: pageId, resolve, reject })))
-                dispatch(stopSkillPageLoader());
+                dispatch(startDashboardWalletPageLoader());
+                await new Promise((resolve, reject) => dispatch(fetchMyWallet({ id: pageId, resolve, reject })))
+                dispatch(stopDashboardWalletPageLoader());
             }
             else {
                 //isServerRendered is needed to be deleted because when routing is done through react and not on the node,
@@ -52,7 +52,7 @@ const DashboardPage = (props) => {
 
     return(
         <div>
-           { skillLoader ? <Loader /> : ''}
+           { walletLoader ? <Loader /> : ''}
 
            <Header />
             <main>
@@ -69,7 +69,6 @@ const DashboardPage = (props) => {
                                 <MyWallet />
                             </div>
                         </div>
-
                     </div>
                 </div>
                 <FAQ setHasFaq={setHasFaq}/>
