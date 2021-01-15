@@ -25,10 +25,10 @@ const ProductDetails = (props) =>{
                 !!number_of_questions ? <> Number of Questions : <strong>{number_of_questions}</strong> </>: ''
                 :
                 (type && level) ? 
-                    <> Type: <strong>{type}</strong>  |  Course level: <strong>{level}</strong> </>
+                    <> Type: <strong>{type?.length > 12 ? type?.slice(0,12)+'...' : type}</strong>  |  Course level: <strong>{level}</strong> </>
                     :
                     type ? 
-                    <> Type: <strong>{type}</strong> </> 
+                    <> Type: <strong>{type?.length > 12 ? type?.slice(0,12)+'...' : type}</strong> </> 
                     : 
                     level ? 
                     <> Course level: <strong>{level}</strong> </> : ''
