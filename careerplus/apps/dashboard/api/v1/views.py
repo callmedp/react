@@ -155,6 +155,7 @@ class DashboardMyWalletAPI(DashboardInfo, APIView):
 
         # attempting to get candidate from session
         candidate_id = self.request.session.get('candidate_id')
+        # candidate_id = '568a0b20cce9fb485393489b'
         if candidate_id is None:
             return APIResponse(data=data, message='Candidate Details required', status=status.HTTP_400_BAD_REQUEST)
 
