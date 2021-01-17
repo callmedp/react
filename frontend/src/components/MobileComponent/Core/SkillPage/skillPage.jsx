@@ -93,6 +93,7 @@ const SkillPage = (props) => {
     useEffect(() => {
 
         handleEffects();
+        setTabType('about');
 
     }, [pageId])
 

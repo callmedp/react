@@ -17,7 +17,7 @@ const BannerSkill = (props) => {
     const dispatch = useDispatch();
 
     return (
-        <header className="container-fluid pos-rel home-bg">
+        <header className="container-fluid pos-rel skill-bg">
             <div className="row">
                 <div className="container header-content">
                     <div className="w-50">
