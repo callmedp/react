@@ -8,7 +8,10 @@ import { FooterReducer, PopularCoursesReducer } from './Footer/reducer/index';
 import { LoaderReducer } from './Loader/reducer';
 import { RecommendationReducer } from './RecommendedCourses/reducer/index';
 import { RecentlyAddedCoursesReducer, PopularServicesReducer, TrendingCategoriesReducer, AllCategoriesReducer } from './CataloguePage/reducer/index';
-import { DashboardOrdersReducer } from './DashboardPage/MyOrders/reducer/index';
+import { DashboardMyWalletReducer } from './DashboardPage/MyWallet/reducer/index'; 
+import { DashboardMyOrdersReducer } from './DashboardPage/MyOrder/reducer/index'; 
+import { DashboardMyCoursesReducer } from './DashboardPage/MyCourses/reducer/index';
+
 
 const rootReducer = combineReducers({
     needHelp : NeedHelpReducer,
@@ -24,7 +27,10 @@ const rootReducer = combineReducers({
     popularServices : PopularServicesReducer,
     popularCategories : TrendingCategoriesReducer,
     allCategories : AllCategoriesReducer,
-    allOrders : DashboardOrdersReducer,
+    dashboardWallet: DashboardMyWalletReducer,
+    dashboardOrders: DashboardMyOrdersReducer,
+    dashboardCourses: DashboardMyCoursesReducer
+
 
 });
 
