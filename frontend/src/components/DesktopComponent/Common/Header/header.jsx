@@ -5,11 +5,13 @@ import { freeResourcesList, jobAssistanceList, categoryList, navSkillList } from
 import { siteDomain } from 'utils/domains';
 import DropDown from './DropDown/dropDown';
 import { useDispatch, useSelector } from 'react-redux';
-import { cartCount, sessionAvailability, getCandidateInfo, fetchNavOffersAndTags } from 'store/Header/actions/index';
+import { cartCount, getCandidateInfo, fetchNavOffersAndTags } from 'store/Header/actions/index';
 import { initLoggedInZendesk, loggedOutZendesk } from 'utils/zendeskIniti';
 import { removeTrackingInfo } from 'utils/storage.js';
 import SearchBar from './SeachBar/SearchBar';
 import { MyGA } from 'utils/ga.tracking.js';
+import { getCandidateId } from 'utils/storage';
+import useAuthenticate  from 'services/authenticate';
 
 const Header = (props) => {
 
@@ -17,6 +19,7 @@ const Header = (props) => {
     const { count, navTags } = useSelector(store => store.header)
     const [candidateInfo, setCandidateInfo] = useState(false)
     const [isLoggedIn, setIsLoggedIn] = useState(false)
+    const isAuthenticated = useAuthenticate()
 
     const handleRedirect = (event, type) => {
         event.preventDefault();
@@ -35,11 +38,11 @@ const Header = (props) => {
     const fetchUserInfo = async () => {
         try {
             dispatch(cartCount());
-            const isSessionAvailable = await new Promise((resolve, reject) => dispatch(sessionAvailability({ resolve, reject })));
-            if (isSessionAvailable['result']) {
+        
+            if (isAuthenticated){
                 try {
                     setIsLoggedIn(true)
-                    const candidateId = isSessionAvailable['candidate_id']
+                    const candidateId = getCandidateId()
                     const candidateInformation = await new Promise((resolve, reject) => dispatch(getCandidateInfo({ candidateId, resolve, reject })))
                     initLoggedInZendesk(candidateInformation)
                     setCandidateInfo(candidateInformation)

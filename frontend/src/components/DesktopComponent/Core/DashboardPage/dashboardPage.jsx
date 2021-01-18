@@ -13,7 +13,8 @@ import MyWallet from './MyWallet/myWallet';
 import MyProfile from './MyProfile/myProfile';
 import FAQ from './FAQ/faq';
 
-const Dashboard = () => {
+const Dashboard = (props) => {
+    console.log("props are", props);
     return(
         <div>
            <Header />
@@ -29,13 +30,12 @@ const Dashboard = () => {
 
                         <div className="dashboard-warp--wrap">
                             <div className="dashboard-warp--content">
-                                <MyOrders />
+                                {/* <MyOrders /> */}
                             </div>
                         </div>
 
                     </div>
                 </div>
-                <FAQ />
                 <HaveQuery />
                 <PopularCourses />
 
