@@ -5,6 +5,7 @@ from order.models import OrderItem, Order
 
 class OrderItemSerializer(serializers.ModelSerializer):
 
+    item_oi_status = serializers.ReadOnlyField(source='get_oi_status')
     class Meta:
         model = OrderItem
         fields = ('id', 'title', 'quantity', 'product', 'item_oi_status')

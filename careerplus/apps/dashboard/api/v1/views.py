@@ -28,7 +28,7 @@ class DashboardMyorderApi(DashboardInfo, APIView):
     def get(self, request, *args, **kwargs):
         candidate_id = self.request.session.get('candidate_id', None)
         order_list=[]
-        # candidate_id='5fed060d9cbeea482331ec4b'
+        candidate_id='5fed060d9cbeea482331ec4b'
 
         if candidate_id:        
             if cache.get('dashboard_my_orders'):
@@ -105,7 +105,7 @@ class MyCoursesApi(DashboardInfo, APIView):
                         'img_alt': tsrvc.pImA, 'rating': tsrvc.pARx, 'price': tsrvc.pPinb, 'vendor': tsrvc.pPvn, 'stars': tsrvc.pStar,
                         'provider': tsrvc.pPvn} for tsrvc in tsrvcs]
                 cache.set('dashboard_my_courses',data,86400)
-        return Response(data=data, status=status.HTTP_200_OK)
+        return APIResponse(data=data, message='Order data Success', status=status.HTTP_200_OK)
 
 
 class MyServicesApi(DashboardInfo, APIView):

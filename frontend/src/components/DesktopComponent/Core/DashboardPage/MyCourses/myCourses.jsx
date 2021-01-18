@@ -13,10 +13,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchMyCourses } from 'store/DashboardPage/MyCourses/actions';
    
 const MyCourses = (props) => {
-    // const [addOpen, setaddOpen] = useState('comment-1');
+    const [addOpen, setaddOpen] = useState('comment-1');
     // const [open, setOpen] = useState(false);
     // const [openReview, setOpenReview] = useState(false);
     // const [openViewDetail, setOpenViewDetail] = useState(-1);
+    let [rating, setRating] = useState(-1);
+    let [clicked, setClicked] = useState(false);
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -24,11 +26,11 @@ const MyCourses = (props) => {
     const dispatch = useDispatch();
     const { history } = props;
     const { coursesLoader } = useSelector(store => store.loader);
-    console.log(results);
-
     const [isOpen, setIsOpen] = useState(false);
     const toggleDetails = (id) => setIsOpen(isOpen == id ? false : id);
     
+    console.log(results);
+
     
     const handleEffects = async () => {
         try {
@@ -53,6 +55,46 @@ const MyCourses = (props) => {
         }
     };
 
+    // fill starts of already rated courses
+    const fillStarForCourse = (star) => {
+        if(star === '*') return "icon-fullstar";
+        else if(star === '+') return "icon-halfstar";
+        else return "icon-blankstar";
+      };
+
+    // new rating
+    const fillNewStar = (star) => {
+        if (star <= rating) return "icon-fullstar";
+        else return "icon-blankstar";
+    };
+    
+    const setStars = (e, className = "blankstar") => {
+        let data = typeof e == "number" ? e : parseInt(e.target.getAttribute("value")) - 1;
+        let children = document.getElementsByClassName("rating-review")[0].children;
+        for (let i = 0; i <= data; i++) {
+            children[i].setAttribute("class", `icon-${className}`);
+        }
+    };
+
+    const mouseOver = (e) => {
+        setStars(4);
+        setStars(e, "fullstar");
+    };
+
+    const wrapper = React.useRef(null);
+    console.log(wrapper);
+    
+    const mouseOut = (e) => (!clicked ? setStars(e) : null);
+        const onClickEvent = (e, val = 0) => {
+        setRating(
+            parseInt(e.target.getAttribute("value"))
+            ? parseInt(e.target.getAttribute("value"))
+            : val
+        );
+        setStars(e, "fullstar");
+        setClicked(true);
+    };
+
     useEffect(() => {
         handleEffects();
     }, [])
@@ -64,8 +106,8 @@ const MyCourses = (props) => {
 
             <div className="db-my-courses-detail">
 
-                {results?.length > 0 ?
-                    results.map((item, index) => {
+                {results?.data?.length > 0 ?
+                    results.data.map((item, index) => {
                         return (
                             <div className="db-white-box w-100" key={index}>
                                 <div className="d-flex">
@@ -153,6 +195,109 @@ const MyCourses = (props) => {
                                                         </div>
                                                     </Collapse>
                                                 </div>
+                                            </div>
+
+                                            <div className="db-my-courses-detail__rightpan">
+                                                <div className="share">
+                                                    <i className="icon-share"></i>
+                                                    <div className="share__box arrow-box top">
+                                                        <Link to={"#"} className="facebook-icon"></Link>
+                                                        <Link to={"#"} className="linkedin-icon"></Link>
+                                                        <Link to={"#"} className="twitter-iocn"></Link>
+                                                        <Link to={"#"} className="whatsup-icon"></Link>
+                                                    </div>
+                                                </div>
+
+                                                <div className="day-remaning mb-20">
+                                                    <span className="day-remaning--box">9</span>
+                                                    <span className="day-remaning--box">0</span>
+                                                    <span className="ml-2 day-remaning--text">Days <br/>remaning</span>
+                                                </div>
+
+                                                <div className="db-status mt-20">
+                                                    <p className="mb-0 pb-1">Status: <strong>(0% Complete)</strong> </p>
+                                                    <ProgressBar now={0} />
+                                                </div>
+
+                                                <Link to={"#"} className="db-start-course font-weight-bold mt-30">Start course</Link>
+                                            </div>
+                                        </div>
+
+                                        <div className="db-my-courses-detail__bottom">
+                                            <Link
+                                                className="db-comments font-weight-bold"
+                                                onClick={() => setaddOpen(!addOpen)}
+                                                aria-controls="addComments"
+                                                aria-expanded={addOpen}
+                                                to={"#"}
+                                            >
+                                                Add comment
+                                            </Link>
+
+                                            <div className="d-flex">
+                                                <div className="card__rating">
+                                                    <span 
+                                                        className="cursor-pointer mr-2 font-weight-bold"
+                                                        onClick={handleShow}
+                                                    >
+                                                        Rate course
+                                                    </span>
+
+                                                    <span className="rating">
+                                                        {item.stars.map((val,ind) => {
+                                                            return (
+                                                                <i
+                                                                key={ind}
+                                                                value={val}
+                                                                className={fillStarForCourse(val)}
+                                                                ></i>
+                                                            );
+                                                        })}
+                                                    </span>
+                                                </div>
+
+                                                {/* rate service modal */}
+                                                <Modal show={show} onHide={handleClose} className="db-modal">
+                                                    <Modal.Header closeButton>
+                                                    </Modal.Header>
+                                                    <Modal.Body>
+                                                        <div className="text-center db-rate-services need-help">
+                                                            <img src="/media/images/rate-services.png" className="img-fluid" alt=""/>
+                                                            <p className="db-rate-services--heading">Rate service</p>
+                                                            
+                                                            <span className="rating-review">
+                                                                {[1, 2, 3, 4, 5].map((value,indx) => {
+                                                                    return (
+                                                                        <i
+                                                                        key={indx}
+                                                                        value={value}
+                                                                        ref={wrapper}
+                                                                        className={fillNewStar(value)}
+                                                                        // onMouseOver={(e) => mouseOver(e)}
+                                                                        // onMouseOut={(e) => mouseOut(e)}
+                                                                        onClick={(e) => onClickEvent(e)}
+                                                                        ></i>
+                                                                    );
+                                                                })}
+                                                            </span>
+                                                            <p className="db-rate-services--subheading">Click on rate to scale of 1-5</p>
+                                                            <form action="">
+                                                                <div className="form-group">
+                                                                    <input type="email" className="form-control" id="email" name="email" placeholder=" "
+                                                                        value="" aria-required="true" aria-invalid="true" />
+                                                                    <label htmlFor="">Email</label>
+                                                                </div>
+                                                                
+                                                                <div className="form-group">
+                                                                    <textarea  className="form-control" name="review" id="review" cols="30" rows="3" placeholder=" "></textarea>
+                                                                    <label htmlFor="">Review</label>
+                                                                </div>
+
+                                                                <button className="btn btn-primary px-5">Submit</button>
+                                                            </form>
+                                                        </div>
+                                                    </Modal.Body>
+                                                </Modal>
                                             </div>
                                         </div>
                                     </div>
