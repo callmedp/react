@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom'
 const MultiLevelItems = props => {
 	const {
         item, parentName, setData, sideNavType,
-        setType, setOpen, open
+        setType, setOpen, open, usedIn
 	} = props
 	
 	const resetNav = () => {
@@ -37,7 +37,10 @@ const MultiLevelItems = props => {
 											</a>
 										) : 
 										(
-											<Link className="menu-item" to={child.url} onClick={resetNav} > {child.name} </Link>
+											usedIn === 'allCourses' ? 
+											child?.name === 'Course Catalogue' ? <a className="menu-item" href={child.url} onClick={resetNav} > {child.name} </a> :
+											<Link className="menu-item" to={child.url} onClick={resetNav}> {child.name} </Link> :
+											<a className="menu-item" href={child.url} onClick={resetNav} > {child.name} </a>
 										)
                                 }
                             </React.Fragment>

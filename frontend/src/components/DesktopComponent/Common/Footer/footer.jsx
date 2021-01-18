@@ -59,7 +59,7 @@ const Footer = (props) => {
                                 </article> : ''
                         }
                         {
-                            trendingSkills ? 
+                            trendingSkills.length ? 
                                 <article className="">
                                     <strong>TRENDING  Skills</strong>
                                     {

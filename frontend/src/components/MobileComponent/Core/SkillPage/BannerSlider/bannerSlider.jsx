@@ -26,7 +26,7 @@ const BannerSlider = (props) => {
                             <div className="m-banner-slider__txt" key={Math.random()}>
                                 <figure className="micon-round-arrow"></figure>
                                 {/* <strong>26% Annual Growth</strong> for cloud related opportunities In IT Sector */}
-                                <span className="flex-1">{ feature }</span>
+                                <span className="flex-1" dangerouslySetInnerHTML={{__html: feature.slice(0,56) + (feature.length > 56 ? '...' : '' ) }} />
                             </div>
                         )
                     })

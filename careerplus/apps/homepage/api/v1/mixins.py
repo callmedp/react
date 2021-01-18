@@ -13,7 +13,7 @@ from shop.models import Category, Product, ProductSkill
 from haystack.query import SearchQuerySet
 
 
-from shop.choices import PRODUCT_CHOICES,PRODUCT_TAG_CHOICES, STUDY_MODE, COURSE_TYPE_DICT
+from shop.choices import PRODUCT_CHOICES,PRODUCT_TAG_CHOICES, STUDY_MODE, COURSE_TYPE_DICT, COURSE_LEVEL_DICT
 from shop.templatetags.shop_tags import get_faq_list, format_features, format_extra_features
 class PopularProductMixin(object):
 
@@ -102,6 +102,7 @@ class ProductMixin(object):
         course_data = []
         mode_choices = dict(STUDY_MODE)
         type_dict = dict(COURSE_TYPE_DICT)
+        level_type = dict(COURSE_LEVEL_DICT)
         for course in courses:
             d = json.loads(course.pVrs).get('var_list')
             data = {
@@ -117,7 +118,7 @@ class ProductMixin(object):
                 'skillList': course.pSkilln,
                 'rating': float(course.pARx),
                 'stars': course.pStar,
-                'mode': mode_choices.get(course.pStM[0], course.pStM[0]) if course.pStM else [],
+                'mode': mode_choices.get(course.pStM[0], course.pStM[0]) if course.pStM else None,
                 'providerName':course.pPvn,
                 'price':float(course.pPin),
                 'tags': PRODUCT_TAG_CHOICES[course.pTg][0],
@@ -131,7 +132,7 @@ class ProductMixin(object):
                     'duration':d[0].get('dur_days'), 
                     'type':type_dict.get(d[0].get('type'), d[0].get('type')),  
                     'label':d[0].get('label'), 
-                    'level':d[0].get('level'), 
+                    'level':level_type.get(d[0].get('level'), d[0].get('level')), 
                 })
             course_data.append(data)
 
@@ -151,7 +152,7 @@ class ProductMixin(object):
                 'stars': assessment.pStar,
                 'jobsAvailable':assessment.pNJ,
                 'skillList': assessment.pSkilln,
-                'mode': mode_choices.get(assessment.pStM[0], assessment.pStM[0]) if assessment.pStM else [],
+                'mode': mode_choices.get(assessment.pStM[0], assessment.pStM[0]) if assessment.pStM else None,
                 'providerName':assessment.pPvn if assessment.pPvn else None,
                 'price':float(assessment.pPin),
                 'tags':PRODUCT_TAG_CHOICES[assessment.pTg][1],
