@@ -7,15 +7,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchMyOrders } from 'store/DashboardPage/MyOrder/actions';
 
 const MyOrders = (props) => {
-    // const [results, setResults] = useState({});
     const ordPageNo = '1';
     const dispatch = useDispatch();
     const { history } = props;
     const { orderLoader } = useSelector(store => store.loader);
-
     const results = useSelector(store => store.dashboardOrders);
-
-    // console.log(hello0);
 
     const handleEffects = async () => {
         try {
@@ -25,7 +21,6 @@ const MyOrders = (props) => {
             if (!(window && window.config && window.config.isServerRendered)) {
                 dispatch(startDashboardOrderPageLoader());
                 await new Promise((resolve, reject) => dispatch(fetchMyOrders({ id: ordPageNo, resolve, reject })))
-                // setResults(result);
                 dispatch(stopDashboardOrderPageLoader());
             }
             else {

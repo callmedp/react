@@ -13,24 +13,22 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchMyCourses } from 'store/DashboardPage/MyCourses/actions';
    
 const MyCourses = (props) => {
-    const [addOpen, setaddOpen] = useState('comment-1');
-    // const [open, setOpen] = useState(false);
-    // const [openReview, setOpenReview] = useState(false);
-    // const [openViewDetail, setOpenViewDetail] = useState(-1);
+    const [addOpen, setaddOpen] = useState(false);
     let [rating, setRating] = useState(-1);
     let [clicked, setClicked] = useState(false);
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    const [results, setResults] = useState({});
     const dispatch = useDispatch();
     const { history } = props;
     const { coursesLoader } = useSelector(store => store.loader);
+    const results = useSelector(store => store.dashboardCourses);
     const [isOpen, setIsOpen] = useState(false);
     const toggleDetails = (id) => setIsOpen(isOpen == id ? false : id);
-    
-    console.log(results);
 
+    useEffect(() => {
+        handleEffects();
+    }, [])
     
     const handleEffects = async () => {
         try {
@@ -39,8 +37,7 @@ const MyCourses = (props) => {
             //So there is no need to fetch them again on the browser.
             if (!(window && window.config && window.config.isServerRendered)) {
                 dispatch(startDashboardCoursesPageLoader());
-                const result = await new Promise((resolve, reject) => dispatch(fetchMyCourses({ resolve, reject })))
-                setResults(result);
+                await new Promise((resolve, reject) => dispatch(fetchMyCourses({ resolve, reject })))
                 dispatch(stopDashboardCoursesPageLoader());
             }
             else {
@@ -60,7 +57,7 @@ const MyCourses = (props) => {
         if(star === '*') return "icon-fullstar";
         else if(star === '+') return "icon-halfstar";
         else return "icon-blankstar";
-      };
+    };
 
     // new rating
     const fillNewStar = (star) => {
@@ -81,9 +78,6 @@ const MyCourses = (props) => {
         setStars(e, "fullstar");
     };
 
-    const wrapper = React.useRef(null);
-    console.log(wrapper);
-    
     const mouseOut = (e) => (!clicked ? setStars(e) : null);
         const onClickEvent = (e, val = 0) => {
         setRating(
@@ -95,13 +89,8 @@ const MyCourses = (props) => {
         setClicked(true);
     };
 
-    useEffect(() => {
-        handleEffects();
-    }, [])
-
     return(
         <div>
-            {/* <NoCourses /> */}
             { coursesLoader ? <Loader /> : ''}
 
             <div className="db-my-courses-detail">
@@ -271,10 +260,9 @@ const MyCourses = (props) => {
                                                                         <i
                                                                         key={indx}
                                                                         value={value}
-                                                                        ref={wrapper}
                                                                         className={fillNewStar(value)}
-                                                                        // onMouseOver={(e) => mouseOver(e)}
-                                                                        // onMouseOut={(e) => mouseOut(e)}
+                                                                        onMouseOver={(e) => mouseOver(e)}
+                                                                        onMouseOut={(e) => mouseOut(e)}
                                                                         onClick={(e) => onClickEvent(e)}
                                                                         ></i>
                                                                     );
@@ -302,6 +290,14 @@ const MyCourses = (props) => {
                                         </div>
                                     </div>
                                 </div>
+                                <Collapse in={addOpen}>
+                                    <div className="db-add-comments lightblue-bg" id="addComments">
+                                        <span className="btn-close"  onClick={() => setaddOpen(!addOpen)}>&#x2715;</span>
+                                        <p className="font-weight-semi-bold"> Add comment </p>
+                                        <textarea className="form-control" rows="3"></textarea>
+                                        <button type="submit" className="btn btn-outline-primary mt-20 px-5">Submit</button>
+                                    </div>
+                                </Collapse>
                             </div>
                         )
                     })
