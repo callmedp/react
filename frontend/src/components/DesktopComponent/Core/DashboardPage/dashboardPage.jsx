@@ -19,40 +19,39 @@ import Loader from '../../Common/Loader/loader';
 
 const DashboardPage = (props) => {
     const [hasFaq, setHasFaq] = useState(false);
-    const pageId = props.match.params.id;
-    const dispatch = useDispatch();
-    const { history } = props;
-    const { walletLoader } = useSelector(store => store.loader);
+    // const dispatch = useDispatch();
+    // const { history } = props;
+    // const { walletLoader } = useSelector(store => store.loader);
 
-    const handleEffects = async () => {
-        try {
-            //You may notice that apis corresponding to these actions are not getting called on initial render.
-            //This is because initial render is done on node server, which is calling these apis, map the data and send it to the browser.
-            //So there is no need to fetch them again on the browser.
-            if (!(window && window.config && window.config.isServerRendered)) {
-                dispatch(startDashboardWalletPageLoader());
-                await new Promise((resolve, reject) => dispatch(fetchMyWallet({ id: pageId, resolve, reject })))
-                dispatch(stopDashboardWalletPageLoader());
-            }
-            else {
-                //isServerRendered is needed to be deleted because when routing is done through react and not on the node,
-                //above actions need to be dispatched.
-                delete window.config?.isServerRendered
-            }
-        } catch (error) {
-            if (error?.status == 404) {
-                history.push('/404');
-            }
-        }
-    };
+    // const handleEffects = async () => {
+    //     try {
+    //         //You may notice that apis corresponding to these actions are not getting called on initial render.
+    //         //This is because initial render is done on node server, which is calling these apis, map the data and send it to the browser.
+    //         //So there is no need to fetch them again on the browser.
+    //         if (!(window && window.config && window.config.isServerRendered)) {
+    //             dispatch(startDashboardWalletPageLoader());
+    //             await new Promise((resolve, reject) => dispatch(fetchMyWallet({ id: walPageNo, resolve, reject })))
+    //             dispatch(stopDashboardWalletPageLoader());
+    //         }
+    //         else {
+    //             //isServerRendered is needed to be deleted because when routing is done through react and not on the node,
+    //             //above actions need to be dispatched.
+    //             delete window.config?.isServerRendered
+    //         }
+    //     } catch (error) {
+    //         if (error?.status == 404) {
+    //             history.push('/404');
+    //         }
+    //     }
+    // };
 
-    useEffect(() => {
-        handleEffects();
-    }, [pageId])
+    // useEffect(() => {
+    //     handleEffects();
+    // }, [walPageNo])
 
     return(
         <div>
-           { walletLoader ? <Loader /> : ''}
+           {/* { walletLoader ? <Loader /> : ''} */}
 
            <Header />
             <main>
@@ -66,7 +65,7 @@ const DashboardPage = (props) => {
 
                         <div className="dashboard-warp--wrap">
                             <div className="dashboard-warp--content">
-                                <MyWallet />
+                                <MyOrders />
                             </div>
                         </div>
                     </div>

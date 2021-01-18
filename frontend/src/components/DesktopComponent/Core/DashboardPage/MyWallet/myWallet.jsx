@@ -1,34 +1,63 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Button } from 'react-bootstrap';
+// import { Button } from 'react-bootstrap';
 import { Modal } from 'react-bootstrap';
 import './myWallet.scss';
-
+import { useDispatch, useSelector } from 'react-redux';
+import {fetchMyWallet} from 'store/DashboardPage/MyWallet/actions';
+import { startDashboardWalletPageLoader, stopDashboardWalletPageLoader } from 'store/Loader/actions/index';
+import Loader from '../../../Common/Loader/loader';
 
 const MyWallet = (props) => {
-    // const dispatch = useDispatch();
-    // const { history } = props;
-
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    const { data: {loyality_txns, page, wal_total}, message } = useSelector( store => store.dashboardWallet )
+    const [results, setResults] = useState({});
+    const walPageNo = '1';
+    const dispatch = useDispatch();
+    const { history } = props;
+    const { walletLoader } = useSelector(store => store.loader);
 
-    console.log(loyality_txns, page, wal_total);
+    const handleEffects = async () => {
+        try {
+            //You may notice that apis corresponding to these actions are not getting called on initial render.
+            //This is because initial render is done on node server, which is calling these apis, map the data and send it to the browser.
+            //So there is no need to fetch them again on the browser.
+            if (!(window && window.config && window.config.isServerRendered)) {
+                dispatch(startDashboardWalletPageLoader());
+                const result = await new Promise((resolve, reject) => dispatch(fetchMyWallet({ id: walPageNo, resolve, reject })))
+                setResults(result);
+                dispatch(stopDashboardWalletPageLoader());
+            }
+            else {
+                //isServerRendered is needed to be deleted because when routing is done through react and not on the node,
+                //above actions need to be dispatched.
+                delete window.config?.isServerRendered
+            }
+        } catch (error) {
+            if (error?.status == 404) {
+                history.push('/404');
+            }
+        }
+    };
+
+    useEffect(() => {
+        handleEffects();
+    }, [walPageNo])
 
     return(
         <div className="myWallet">
+           { walletLoader ? <Loader /> : ''}
+
             <div className="row">
                 <div className="col-8 myWallet--heading">
-                    Loyality point balance - <strong>{wal_total ? wal_total : 0}</strong>
+                    Loyality point balance - <strong>{results?.data?.wal_total ? results?.data?.wal_total : 0}</strong>
                     <button 
                         className="btn btn-outline-primary ml-4"
                         onClick={handleShow}
                     >
                         Redeem now
                     </button>
-                    
 
                     <Modal show={show} onHide={handleClose}>
                         <Modal.Header closeButton></Modal.Header>
@@ -37,7 +66,7 @@ const MyWallet = (props) => {
                             <div className="text-center db-redeemnow-popup">
                                 <i className="db-green-tick"></i> 
                                 <p className="db-redeemnow-popup--heading">Congratulations!</p>
-                                <p className="db-redeemnow-popup--points">248.00</p>
+                                <p className="db-redeemnow-popup--points">{results?.data?.wal_total ? results?.data?.wal_total : 0}</p>
                                 <p className="db-redeemnow-popup--text">loyality point is reedemed and added <br/>in your wallet</p>
                                 <button className="btn btn-link font-weight-bold">Ok</button>
                             </div>
@@ -63,8 +92,8 @@ const MyWallet = (props) => {
 
             <div className="db-white-box pb-4">
                 {
-                    loyality_txns && loyality_txns.length > 0 ?
-                        loyality_txns.map((item, index) => {
+                    results?.data?.loyality_txns && results?.data?.loyality_txns.length > 0 ?
+                        results?.data?.loyality_txns.map((item, index) => {
                             return (
                                 <ul className="row myWallet__list" key={index}>
                                     <li className="col-md-2">{item.date}</li>
@@ -80,62 +109,6 @@ const MyWallet = (props) => {
                     <h6 className="text-center p-10">Start with your first order and earn loyalty points</h6>
                 }
             </div>
-            
-            
-            {/* <div className="db-white-box pb-4">
-                <ul className="row myWallet__list">
-                    <li className="col-md-2">Oct. 28, 2020</li>
-                    <li className="col-md-2">CP24540</li>
-                    <li className="col-md-2">Redeemed</li>
-                    <li className="col-md-2 text-danger">-312.00</li>
-                    <li className="col-md-2">Nov. 27, 2020</li>
-                    <li className="col-md-2">390.00</li>
-                </ul>
-                <ul className="row myWallet__list">
-                    <li className="col-md-2">Sept. 01, 2020</li>
-                    <li className="col-md-2">CP24540</li>
-                    <li className="col-md-2">Expired</li>
-                    <li className="col-md-2 text-danger">-312.00</li>
-                    <li className="col-md-2">Sept. 27, 2020</li>
-                    <li className="col-md-2">460.00</li>
-                </ul>
-
-                <ul className="row myWallet__list">
-                    <li className="col-md-2">Oct. 28, 2020</li>
-                    <li className="col-md-2">CP24540</li>
-                    <li className="col-md-2">Reverted</li>
-                    <li className="col-md-2 text-success">+312.00</li>
-                    <li className="col-md-2">Nov. 28, 2020</li>
-                    <li className="col-md-2">390.00</li>
-                </ul>
-                
-                <ul className="row myWallet__list">
-                    <li className="col-md-2">Aug. 21, 2020</li>
-                    <li className="col-md-2">CP489201</li>
-                    <li className="col-md-2">Added</li>
-                    <li className="col-md-2 text-success">+590.00</li>
-                    <li className="col-md-2">Dec. 27, 2020</li>
-                    <li className="col-md-2">210.00</li>
-                </ul>
-
-                <ul className="row myWallet__list">
-                    <li className="col-md-2">Oct. 28, 2020</li>
-                    <li className="col-md-2">DR748210</li>
-                    <li className="col-md-2">Expired</li>
-                    <li className="col-md-2 text-danger">-390.00</li>
-                    <li className="col-md-2">Nov. 28, 2020</li>
-                    <li className="col-md-2">390.00</li>
-                </ul>
-                
-                <ul className="row myWallet__list">
-                    <li className="col-md-2">Oct. 28, 2020</li>
-                    <li className="col-md-2">CP24540</li>
-                    <li className="col-md-2">Added</li>
-                    <li className="col-md-2 text-success">+312.00</li>
-                    <li className="col-md-2">Dec. 30, 2020</li>
-                    <li className="col-md-2">390.00</li>
-                </ul>
-            </div> */}
         </div>
     )
 }
