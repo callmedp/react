@@ -1,12 +1,12 @@
 import { 
-    FETCH_MY_SERVICE
+    FETCHING_ALL_SERVICES
 } from './actionTypes';
 
 
 const fetchServices = (payload) => {
     
     return {
-        type: FETCH_MY_SERVICE,
+        type: FETCHING_ALL_SERVICES,
         payload
     } 
 }
@@ -14,4 +14,4 @@ const fetchServices = (payload) => {
 
 export {
     fetchServices
-}
+};

@@ -1,12 +1,15 @@
 import * as Actions from '../actions/actionTypes';
 
 const recentServicesState = {
-    recentServicesList: []
+    data: { },
+    error: false,
+    message: ""
 }
 
 export const RecentlyServicesReducer = (state = recentServicesState, action) => {
+    console.log(action);
     switch(action.type) {
-        case Actions.FETCH_MY_SERVICE : return {...recentServicesState, ...action.item}
+        case Actions.FETCHING_ALL_SERVICES : return {...recentServicesState, ...action.item}
         default : return state;
     }
 }

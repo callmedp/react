@@ -8,7 +8,7 @@ import WatchFooter from './Footer/saga/index';
 import WatchRecommendation from './RecommendedCourses/saga/index';
 import watchTracking from './Tracking/saga/index';
 import WatchCataloguePage from './CataloguePage/saga/index';
-import WatchServicePage from './ServicePage/saga/index';
+import WatchServicePage from './DashboardPage/Service/saga/index';
 import WatchDashboardMyWallet from './DashboardPage/MyWallet/saga/index';
 import WatchDashboardMyOrders from './DashboardPage/MyOrder/saga/index';
 import WatchDashboardMyCourses from './DashboardPage/MyCourses/saga/index';

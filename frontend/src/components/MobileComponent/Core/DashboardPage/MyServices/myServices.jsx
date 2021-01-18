@@ -12,13 +12,13 @@ import '../MyCourses/myCourses.scss'
 import './myServices.scss';
 
 // API Import
-import { fetchServices } from 'store/ServicePage/actions/index';
+import { fetchServices } from 'store/DashboardPage/Service/actions/index';
 
 
 const MyServices = (props) => {
     const dispatch = useDispatch();
     const [showSearchPage, setShowSearchPage] = useState(false)
-    const { myServices } = useSelector(store => store.allServices);
+    const { myServices } = useSelector(store => { console.log(store); return store.allServices });
 
     useEffect(() => {
         Aos.init({ duration: 2000, once: true, offset: 10, anchorPlacement: 'bottom-bottom' });
@@ -35,7 +35,6 @@ const MyServices = (props) => {
         }
         console.log(myServices)
     }, [])
-
     return (
         <div>
 
@@ -92,7 +91,7 @@ const MyServices = (props) => {
                             </div>
 
                             <div className="m-courses-detail__userInput">
-                                <Link className="m-db-comments font-weight-bold">Add comment</Link>
+                                <Link to="/404" className="m-db-comments font-weight-bold">Add comment</Link>
                                 <div className="d-flex">
                                     <span className="">Rate</span>
                                     <span className="m-rating">
@@ -150,7 +149,7 @@ const MyServices = (props) => {
                             </div>
 
                             <div className="m-courses-detail__userInput">
-                                <Link className="m-db-comments font-weight-bold">Add Comment</Link>
+                                <Link to="/404" className="m-db-comments font-weight-bold">Add Comment</Link>
                                 <div className="d-flex">
                                     <span className="">Rate</span>
                                     <span className="m-rating">
@@ -206,7 +205,7 @@ const MyServices = (props) => {
                             </div>
 
                             <div className="m-courses-detail__userInput">
-                                <Link className="m-db-comments font-weight-bold">3 Comment</Link>
+                                <Link to="/404" className="m-db-comments font-weight-bold">3 Comment</Link>
                                 <div className="d-flex">
                                     <span className="m-rating">
                                         <em className="micon-fullstar"></em>
@@ -214,7 +213,7 @@ const MyServices = (props) => {
                                         <em className="micon-fullstar"></em>
                                         <em className="micon-fullstar"></em>
                                         <em className="micon-blankstar"></em>
-                                        <span class="ml-5">4/5</span>
+                                        <span className="ml-5">4/5</span>
                                     </span>
                                     <Link to={"#"} className="font-weight-bold ml-10">2</Link>
                                 </div>
@@ -268,7 +267,7 @@ const MyServices = (props) => {
                             </div>
 
                             <div className="m-courses-detail__userInput">
-                                <Link className="m-db-comments font-weight-bold">3 Comment</Link>
+                                <Link to="/404" className="m-db-comments font-weight-bold">3 Comment</Link>
                                 <div className="d-flex">
                                     <span className="m-rating">
                                         <em className="micon-fullstar"></em>
@@ -276,7 +275,7 @@ const MyServices = (props) => {
                                         <em className="micon-fullstar"></em>
                                         <em className="micon-fullstar"></em>
                                         <em className="micon-blankstar"></em>
-                                        <span class="ml-5">4/5</span>
+                                        <span className="ml-5">4/5</span>
                                     </span>
                                     <Link to={"#"} className="font-weight-bold ml-10">2</Link>
                                 </div>
@@ -304,8 +303,8 @@ const MyServices = (props) => {
                         <h2>Upload Resume</h2>
                         <p>To initiate your services, <strong>upload resume</strong></p>
                         <div className="d-flex align-items-center justify-content-center mt-20">
-                            <div class="m-upload-btn-wrapper">
-                                <button class="btn btn-blue-outline">Upload a file</button>
+                            <div className="m-upload-btn-wrapper">
+                                <button className="btn btn-blue-outline">Upload a file</button>
                                 <input type="file" name="myfile" />
                             </div>
 
@@ -313,7 +312,7 @@ const MyServices = (props) => {
 
                             <div className="m-custom">
                                 <input type="checkbox" id="shineResume" />
-                                <label className="m-custom--label font-weight-bold mb-0" for="shineResume">Use shine resume</label>
+                                <label className="m-custom--label font-weight-bold mb-0" htmlfor="shineResume">Use shine resume</label>
                             </div>
                         </div>
 
@@ -324,17 +323,17 @@ const MyServices = (props) => {
                         <ul className="m-db-upload-resume--list">
                                 <li className="m-custom">
                                     <input type="checkbox" id="resumeBooster" />
-                                    <label className="font-weight-bold" for="resumeBooster">Resume Booster 5-10 years</label>
+                                    <label className="font-weight-bold" htmlfor="resumeBooster">Resume Booster 5-10 years</label>
                                 </li>
 
                                 <li className="m-custom">
                                     <input type="checkbox" id="resumeBuilder" />
-                                    <label className="font-weight-bold" for="resumeBuilder">Resume Builder 5-10 yrs</label>
+                                    <label className="font-weight-bold" htmlfor="resumeBuilder">Resume Builder 5-10 yrs</label>
                                 </li>
 
                                 <li className="m-custom">
                                     <input type="checkbox" id="services" />
-                                    <label className="font-weight-bold" for="services">For all services</label>
+                                    <label className="font-weight-bold" htmlfor="services">For all services</label>
                                 </li>
                             </ul>
                         </div>

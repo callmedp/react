@@ -11,10 +11,11 @@ function* recentAddedServices(action) {
         if(!response || response?.error) {
             return payload?.reject(response?.error)
         }
-        const item = response?.data?.data;
+        const item = response.data;
+        console.log(item)
         yield put({
-            type: Actions.RECENTLY_ADDED_SERVICES_FETCHED,
-            item: item
+            type: Actions.FETCHED_ALL_SERVICES,
+            item
         })
         return payload?.resolve(item)
     }
@@ -26,5 +27,5 @@ function* recentAddedServices(action) {
 
 
 export default function* WatchServicePage() {
-    yield takeLatest(Actions.FETCH_MY_SERVICE, recentAddedServices);
+    yield takeLatest(Actions.FETCHING_ALL_SERVICES, recentAddedServices);
 }
