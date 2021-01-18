@@ -67,7 +67,8 @@ class DashboardMyorderApi(DashboardInfo, APIView):
                     }
                     order_list.append(data)
                     cache.set('dashboard_my_orders',order_list,86400)
-        return Response(order_list,status=status.HTTP_200_OK)
+        return APIResponse(data=order_list, message='Order data Success', status=status.HTTP_200_OK)
+
 
 class MyCoursesApi(DashboardInfo, APIView):
     permission_classes = (permissions.AllowAny,)
