@@ -223,12 +223,26 @@ const navSkillList = [
     { name: 'Cloud Computing', url: '/courses/it-information-technology/cloud-computing/82/', id:'cloud_computing'}
 ]
 
-
+const TrendingCategoryList = [
+    { 
+        name: 'Sales And Marketing', 
+        url: `${siteDomain}/courses/sales-and-marketing/17/`,
+    },
+    {
+        name: 'Information Technology', 
+        url: `${siteDomain}/courses/it-information-technology/22/`, 
+    },
+    { 
+        name: 'Banking & Finance', 
+        url: `${siteDomain}/courses/banking-and-finance/20/`,
+    },
+]
 
 
 export {
     freeResourcesList,
     jobAssistanceList,
     categoryList,
-    navSkillList
+    navSkillList,
+    TrendingCategoryList,
 }

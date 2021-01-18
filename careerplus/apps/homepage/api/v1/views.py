@@ -956,7 +956,7 @@ class TrendingCategoriesApi(PopularProductMixin, APIView):
     authentication_classes = ()
 
     def get(self, request):
-        quantity_to_display = int(request.GET.get('num', 3))
+        quantity_to_display = int(request.GET.get('num', 6))
 
         cached_data = cache.get('category_popular_courses')
         if (not settings.DEBUG) and cached_data:
