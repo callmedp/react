@@ -37,7 +37,7 @@ export const routes = [
     {
         path: '/dashboard/:name/',
         component: DashboardPageContainer,
-        private: true,
+        private: false,
         exact: true,
     },
     {

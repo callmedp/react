@@ -55,8 +55,8 @@ const MyCourses = (props) => {
                                 <div className="m-db-status">
                                     <p className="mb-0 pb-1">Status: <strong>(0% Complete)</strong> </p>
 
-                                    <div class="m-progress">
-                                        <div role="progressbar" class="m-progress-bar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style={{width: "0"}}></div>
+                                    <div className="m-progress">
+                                        <div role="progressbar" className="m-progress-bar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style={{width: "0"}}></div>
                                     </div>
                                 </div>
                             </div>
@@ -65,7 +65,7 @@ const MyCourses = (props) => {
                         </div>
 
                         <div className="m-courses-detail__userInput">
-                            <Link className="m-db-comments font-weight-bold">Add comment</Link>
+                            <Link className="m-db-comments font-weight-bold" to={'#'}>Add comment</Link>
                             <div className="d-flex">
                                 <span className="">Rate</span>
                                 <span className="m-rating">
@@ -118,8 +118,8 @@ const MyCourses = (props) => {
                                         <i className="m-db-green-tick"></i> 
                                     </p>
 
-                                    <div class="m-progress">
-                                        <div role="progressbar" class="m-progress-bar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style={{width: "100%"}}></div>
+                                    <div className="m-progress">
+                                        <div role="progressbar" className="m-progress-bar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style={{width: "100%"}}></div>
                                     </div>
                                 </div>
                             </div>
@@ -131,7 +131,7 @@ const MyCourses = (props) => {
                         </div>
 
                         <div className="m-courses-detail__userInput">
-                            <Link className="m-db-comments font-weight-bold">3 Comment</Link>
+                            <Link to={"#"} className="m-db-comments font-weight-bold">3 Comment</Link>
                             <div className="d-flex">
                                 <span className="m-rating">
                                     <em className="micon-fullstar"></em>
@@ -139,7 +139,7 @@ const MyCourses = (props) => {
                                     <em className="micon-fullstar"></em>
                                     <em className="micon-fullstar"></em>
                                     <em className="micon-blankstar"></em>
-                                    <span class="ml-5">4/5</span>
+                                    <span className="ml-5">4/5</span>
                                 </span>
                                 <Link to={"#"} className="font-weight-bold ml-10">2</Link>
                             </div>
@@ -189,8 +189,8 @@ const MyCourses = (props) => {
                                 <div className="m-db-status">
                                     <p className="mb-0 pb-1">Status: <strong>(0% Complete)</strong> </p>
 
-                                    <div class="m-progress">
-                                        <div role="progressbar" class="m-progress-bar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style={{width: "0"}}></div>
+                                    <div className="m-progress">
+                                        <div role="progressbar" className="m-progress-bar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style={{width: "0"}}></div>
                                     </div>
                                 </div>
                             </div>
@@ -199,7 +199,7 @@ const MyCourses = (props) => {
                         </div>
 
                         <div className="m-courses-detail__userInput">
-                            <Link className="m-db-comments font-weight-bold">3 Comment</Link>
+                            <Link to={"#"} className="m-db-comments font-weight-bold">3 Comment</Link>
                             <div className="d-flex">
                                 <span className="m-rating">
                                     <em className="micon-fullstar"></em>
@@ -207,7 +207,7 @@ const MyCourses = (props) => {
                                     <em className="micon-fullstar"></em>
                                     <em className="micon-fullstar"></em>
                                     <em className="micon-blankstar"></em>
-                                    <span class="ml-5">4/5</span>
+                                    <span className="ml-5">4/5</span>
                                 </span>
                                 <Link to={"#"} className="font-weight-bold ml-10">2</Link>
                             </div>

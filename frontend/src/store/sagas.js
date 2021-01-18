@@ -8,6 +8,7 @@ import WatchFooter from './Footer/saga/index';
 import WatchRecommendation from './RecommendedCourses/saga/index';
 import watchTracking from './Tracking/saga/index';
 import WatchCataloguePage from './CataloguePage/saga/index';
+import WatchOrderDetails from './DashboardPage/MyOrders/saga/index';
 
 export default function* () {
     yield all([
@@ -20,5 +21,6 @@ export default function* () {
         WatchRecommendation(),
         watchTracking(),
         WatchCataloguePage(),
+        WatchOrderDetails(),
     ])
 }

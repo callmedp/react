@@ -38,8 +38,8 @@ const Dashboard = () => {
                         {/*<EditSkills />
                         <PersonalDetail /> */}
                         
-                        {/* <PopularCoursesSlider /> */}
-                        {/* <HaveQuery /> */}
+                        <PopularCoursesSlider />
+                        <HaveQuery />
                     </main>
                     <Footer /> 
                 </>

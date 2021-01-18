@@ -272,7 +272,7 @@ const MyServices = (props) => {
 
                         <div className="m-custom">
                             <input type="checkbox" id="shineResume" /> 
-                            <label className="m-custom--label font-weight-bold mb-0" for="shineResume">Use shine resume</label>
+                            <label className="m-custom--label font-weight-bold mb-0" htmlFor="shineResume">Use shine resume</label>
                         </div>
                     </div>
 
@@ -283,17 +283,17 @@ const MyServices = (props) => {
                         <ul className="m-db-upload-resume--list">
                             <li className="m-custom">
                                 <input type="checkbox" id="resumeBooster" /> 
-                                <label className="font-weight-bold" for="resumeBooster">Resume Booster 5-10 years</label>
+                                <label className="font-weight-bold" htmlFor="resumeBooster">Resume Booster 5-10 years</label>
                             </li>
 
                             <li className="m-custom">
                                 <input type="checkbox" id="resumeBuilder" /> 
-                                <label className="font-weight-bold" for="resumeBuilder">Resume Builder 5-10 yrs</label>
+                                <label className="font-weight-bold" htmlFor="resumeBuilder">Resume Builder 5-10 yrs</label>
                             </li>
 
                             <li className="m-custom">
                                 <input type="checkbox" id="services" /> 
-                                <label className="font-weight-bold" for="services">For all services</label>
+                                <label className="font-weight-bold" htmlFor="services">For all services</label>
                             </li>
                         </ul>
                     </div>
