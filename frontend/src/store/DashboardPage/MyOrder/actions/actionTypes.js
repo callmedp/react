@@ -1,0 +1,2 @@
+export const FETCH_MY_ORDERS = "FETCH_MY_ORDERS"
+export const MY_ORDERS_FETCHED = 'MY_ORDERS_FETCHED'

@@ -29,6 +29,7 @@ class DashboardMyorderApi(DashboardInfo, APIView):
         candidate_id = self.request.session.get('candidate_id', None)
         order_list=[]
         # candidate_id='5fed060d9cbeea482331ec4b'
+
         if candidate_id:        
             if cache.get('dashboard_my_orders'):
                 order_list = cache.get('dashboard_my_orders')
@@ -69,7 +70,6 @@ class DashboardMyorderApi(DashboardInfo, APIView):
                     cache.set('dashboard_my_orders',order_list,86400)
         return APIResponse(data=order_list, message='Order data Success', status=status.HTTP_200_OK)
 
-
 class MyCoursesApi(DashboardInfo, APIView):
     permission_classes = (permissions.AllowAny,)
     authentication_classes = ()
@@ -77,6 +77,7 @@ class MyCoursesApi(DashboardInfo, APIView):
     def get(self, request, *args, **kwargs):
         candidate_id = self.request.session.get('candidate_id', None)
         data = []
+        candidate_id='5fed060d9cbeea482331ec4b'
         if candidate_id:
             if cache.get('dashboard_my_courses'):
                 data = cache.get('dashboard_my_courses')
@@ -156,7 +157,7 @@ class DashboardMyWalletAPI(DashboardInfo, APIView):
 
         # attempting to get candidate from session
         candidate_id = self.request.session.get('candidate_id')
-        # candidate_id = '568a0b20cce9fb485393489b'
+        candidate_id = '568a0b20cce9fb485393489b'
         if candidate_id is None:
             return APIResponse(data=data, message='Candidate Details required', status=status.HTTP_400_BAD_REQUEST)
 

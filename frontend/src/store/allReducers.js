@@ -10,6 +10,9 @@ import { RecommendationReducer } from './RecommendedCourses/reducer/index';
 import { RecentlyAddedCoursesReducer, PopularServicesReducer, TrendingCategoriesReducer, AllCategoriesReducer } from './CataloguePage/reducer/index';
 import { RecentlyServicesReducer } from './ServicePage/reducer/index';
 import { DashboardMyWalletReducer } from './DashboardPage/MyWallet/reducer/index'; 
+import { DashboardMyOrdersReducer } from './DashboardPage/MyOrder/reducer/index'; 
+import { DashboardMyCoursesReducer } from './DashboardPage/MyCourses/reducer/index';
+
 
 const rootReducer = combineReducers({
     needHelp : NeedHelpReducer,
@@ -26,7 +29,11 @@ const rootReducer = combineReducers({
     popularCategories : TrendingCategoriesReducer,
     allCategories : AllCategoriesReducer,
     allServices : RecentlyServicesReducer,
-    dashboardWallet: DashboardMyWalletReducer
+    dashboardWallet: DashboardMyWalletReducer,
+    dashboardOrders: DashboardMyOrdersReducer,
+    dashboardCourses: DashboardMyCoursesReducer
+
+
 });
 
 
