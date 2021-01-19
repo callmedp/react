@@ -10,13 +10,6 @@ const MyWallet = (props) => {
     const ordersList = useSelector(store => store.dashboardOrders?.data)
     const [showOrderDetailsID, setShowOrderDetailsID] = useState('')
 
-    const getOrderStatus = (key) => {
-        return (
-            (key === 1 && "Open") || (key === 0 && "Unpaid") || 
-            (key === 3 && "Closed") || (key === 5 && "Cancelled")
-        )
-    }
-
     const getOrderDetails = (orderItems) => {
         return (
             <>
@@ -25,7 +18,7 @@ const MyWallet = (props) => {
                         return(
                             <ul className="my-order__order-detail--info mt-15" key={oi?.id}>
                                 <li>
-                                    <a href={`${siteDomain}${oi?.productUrl}`} className="d-block mb-0">{oi?.title} </a>
+                                    <a href={`${siteDomain}${oi?.productUrl}`} className="d-block mb-0">{oi?.name} </a>
                                     <span> Status: <strong>{oi?.oi_status}</strong></span>
                                 </li>
                             </ul>
@@ -46,7 +39,7 @@ const MyWallet = (props) => {
 
                             <div className="m-pipe-divides">
                                 <span>Placed on: <strong>{order?.order?.date_placed}</strong></span>
-                                <span>Status: <strong>{getOrderStatus(order?.order?.status)}</strong></span>
+                                <span>Status: <strong>{order?.order?.status}</strong></span>
                                 <span>Status: <strong>{order?.item_count}</strong> {order?.item_count > 1 ? 'items' : 'item'}</span>
                             </div>
 
@@ -55,10 +48,8 @@ const MyWallet = (props) => {
                                     <span className="my-order__priceWrap--tAmount d-block">Total amount</span>
                                     <strong className="my-order__priceWrap--price">{ order?.order?.currency === 'Rs.' ? <span>&#8377;</span> : order?.order?.currency } {order?.order?.total_incl_tax}/- </strong>
                                 </div>
-                                {
-                                    order?.order?.status === 0 ? <Link to={"#"}>Cancel order</Link> : 
-                                        (order?.order?.status === 1 || order?.order?.status === 3) ? <a href={downloadInvoice(order?.order?.id)} target="_blank">Download Invoice</a> : ''
-                                }
+                                { order?.order?.canCancel && <Link to={"#"}>Cancel order</Link> }
+                                { order?.order?.downloadInvoice && <a href={downloadInvoice(order?.order?.id)} target="_blank">Download Invoice</a> }
                                 
                             </div>
 

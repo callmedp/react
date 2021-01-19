@@ -31,43 +31,38 @@ class DashboardMyorderApi(DashboardInfo, APIView):
         candidate_id='5c94a7b29cbeea2c1f27fda2'
 
         if candidate_id:        
-            if not settings.DEBUG and cache.get('dashboard_my_orders'):
-                order_list = cache.get('dashboard_my_orders')
-            else:
-                orders = Order.objects.filter(
-                status__in=[0, 1, 3],
-                candidate_id=candidate_id)
-
-                excl_txns = PaymentTxn.objects.filter(
-                    status__in=[0, 2, 3, 4, 5],
-                    payment_mode__in=[6, 7],
-                    order__candidate_id=candidate_id)
-                # excl_txns = PaymentTxn.objects.filter(status=0, ).exclude(payment_mode__in=[1, 4])
-                excl_order_list = excl_txns.all().values_list('order_id', flat=True)
-
-                orders = orders.exclude(
-                    id__in=excl_order_list).order_by('-date_placed')
-
-                order_list = []
-                for obj in orders:
-                    orderitems = OrderItem.objects.select_related(
-                        'product').filter(no_process=False, order=obj)
-                    product_type_flow = None
-                    product_id = None
-                    item_count = len(orderitems)
-                    if item_count > 0:
-                        item_order = orderitems[0]
-                        product_type_flow = item_order and item_order.product_id and item_order.product.type_flow or 0
-                        product_id = item_order and item_order.product_id
-                    data = {
-                        "order": OrderSerializer(obj).data,
-                        "item_count": item_count,
-                        'product_type_flow': product_type_flow,
-                        "product_id": product_id,
-                        "orderitems": OrderItemSerializer(orderitems,many=True).data,
-                    }
-                    order_list.append(data)
-                    cache.set('dashboard_my_orders',order_list,86400)
+            
+            orders = Order.objects.filter(
+            status__in=[0, 1, 3],
+            candidate_id=candidate_id)
+            excl_txns = PaymentTxn.objects.filter(
+                status__in=[0, 2, 3, 4, 5],
+                payment_mode__in=[6, 7],
+                order__candidate_id=candidate_id)
+            # excl_txns = PaymentTxn.objects.filter(status=0, ).exclude(payment_mode__in=[1, 4])
+            excl_order_list = excl_txns.all().values_list('order_id', flat=True)
+            orders = orders.exclude(
+                id__in=excl_order_list).order_by('-date_placed')
+            order_list = []
+            for obj in orders:
+                orderitems = OrderItem.objects.select_related(
+                    'product').filter(no_process=False, order=obj)
+                product_type_flow = None
+                product_id = None
+                item_count = len(orderitems)
+                if item_count > 0:
+                    item_order = orderitems[0]
+                    product_type_flow = item_order and item_order.product_id and item_order.product.type_flow or 0
+                    product_id = item_order and item_order.product_id
+                data = {
+                    "order": OrderSerializer(obj).data,
+                    "item_count": item_count,
+                    'product_type_flow': product_type_flow,
+                    "product_id": product_id,
+                    "orderitems": OrderItemSerializer(orderitems,many=True).data,
+                }
+                order_list.append(data)
+                
         return APIResponse(data=order_list, message='Order data Success', status=status.HTTP_200_OK)
 
 class MyCoursesApi(DashboardInfo, APIView):

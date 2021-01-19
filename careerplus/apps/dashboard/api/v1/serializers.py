@@ -4,27 +4,54 @@ from rest_framework import serializers
 from order.models import OrderItem, Order
 from datetime import datetime
 
+OI_STATUS_DICT = {
+    0 : 'Unpaid',
+    1 : 'Service in progress',
+    4 : 'Closed',
+    5 : 'Cancelled',
+}
+
 class OrderItemSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = OrderItem
         fields = ('id', 'title', 'quantity', 'product', 'oi_status')
 
+    def get_oi_status_value(self, instance):
+        key = instance.oi_status
+        status = ''
+        if key in [161, 162, 163, 164]:
+            status = instance.get_user_oi_status
+        elif key in [0, 1, 4, 5]:
+            status = OI_STATUS_DICT.get(key)
+        return status
+
+    def get_oi_name(self, instance):
+        prd = instance.product
+        name = prd.get_name
+        exp_db = prd.get_exp_db()
+        studymode = prd.get_studymode_db()
+        coursetype = prd.get_coursetype_db()
+        duration = prd.get_duration_in_ddmmyy()
+
+        if exp_db:
+            name += ' - ' + exp_db
+        if studymode:
+            name += ' - ' + studymode
+        if coursetype:
+            name += ' - ' + coursetype
+        if duration:
+            name += ' - ' + duration
+        return name
+
     def to_representation(self, instance):
         data = super(OrderItemSerializer, self).to_representation(instance)
+        data['oi_status'] = self.get_oi_status_value(instance) if instance.oi_status else ''
         data.update({
+            'name': self.get_oi_name(instance) if instance.product_id else instance.title,
             'productUrl': instance.product.get_absolute_url() if instance.product_id else '',
-            'product_type_flow': instance.product.type_flow if instance.product_id else '', 
-            'parent': instance.parent_id,
-            'parent_heading': instance.parent.product.heading if instance.parent_id and instance.parent.product_id else '',
-            'get_user_oi_status': instance.get_user_oi_status,
+            'product_type_flow': instance.product.type_flow if instance.product_id else '',
             'heading': instance.product.heading if instance.product_id else '',
-            'get_name': instance.product.get_name if instance.product_id else '',
-            'get_exp_db': instance.product.get_exp_db() if instance.product_id else '',
-            'get_studymode_db': instance.product.get_studymode_db() if instance.product_id else '',
-            'get_coursetype_db': instance.product.get_coursetype_db() if instance.product_id else '',
-            'get_duration_in_day': instance.product.get_duration_in_ddmmyy() if instance.product_id and
-                                                                                              instance.product.get_duration_in_day() else '',
         })
         return data
 
@@ -45,4 +72,9 @@ class OrderSerializer(serializers.ModelSerializer):
         data = super(OrderSerializer, self).to_representation(instance)
         data['date_placed'] = instance.date_placed.date().strftime('%d %b %Y') if instance.date_placed else None
         data['currency'] = instance.get_currency()
+        data['status'] = instance.get_status if instance.status in [0, 1, 3, 5] else ''
+        data.update({
+            'canCancel': True if instance.status == 0 else False,
+            'downloadInvoice': True if instance.status in [1, 3] else False
+        })
         return data
