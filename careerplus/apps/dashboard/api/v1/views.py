@@ -28,10 +28,10 @@ class DashboardMyorderApi(DashboardInfo, APIView):
     def get(self, request, *args, **kwargs):
         candidate_id = self.request.session.get('candidate_id', None)
         order_list=[]
-        # candidate_id='5fed060d9cbeea482331ec4b'
+        candidate_id='5c94a7b29cbeea2c1f27fda2'
 
         if candidate_id:        
-            if cache.get('dashboard_my_orders'):
+            if not settings.DEBUG and cache.get('dashboard_my_orders'):
                 order_list = cache.get('dashboard_my_orders')
             else:
                 orders = Order.objects.filter(
