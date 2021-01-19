@@ -93,6 +93,8 @@ from unidecode import unidecode
 from django.template.defaultfilters import slugify
 from search.helpers import RecommendationBasedOnGaps, get_recommended_products
 from shop.choices import PRODUCT_CHOICES,PRODUCT_TAG_CHOICES
+from shop.templatetags.shop_tags import get_faq_list, format_features, format_extra_features
+from homepage.api.v1.mixins import ProductMixin
 
 
 class CreateOrderApiView(APIView, ProductInformationMixin):
@@ -2212,31 +2214,6 @@ class RecommendedCoursesAPI(APIView):
     serializer_class = None
     no_of_products = 8
 
-    def create_product_info_list(self, products_list=None):
-        if products_list:
-            products_info_list = [{
-                'id':course.id,
-                'imgUrl':course.pImg,
-                'url':course.pURL,
-                'name':course.pNm,
-                'rating': float(course.pARx),
-                'mode':course.pStM[0] if course.pStM else None,
-                'providerName':course.pPvn,
-                'price':float(course.pPin),
-                'skillList': course.pSkilln,
-                'about':course.pAb,
-                'title':course.pTt,
-                'slug':course.pSg,
-                'jobsAvailable':course.pNJ,
-                'tags':PRODUCT_TAG_CHOICES[course.pTg][0],
-                'brochure':json.loads(course.pUncdl[0]).get('brochure') if course.pUncdl else None,
-                'highlights':course.pBS,
-                'stars': course.pStar,
-            } for course in products_list]
-            return products_info_list
-
-        return []
-
     def get_products(self):
         jt = self.request.session.get('job_title', None)
         skill = self.request.session.get('all_skill_ids', [])
@@ -2249,9 +2226,10 @@ class RecommendedCoursesAPI(APIView):
             rcourses = rcourses[:self.no_of_products]
         if rassesments:
             rassesments = rassesments[:self.no_of_products]
+        
         return {
-            'r_courses': self.create_product_info_list(rcourses),
-            'r_assesments': self.create_product_info_list(rassesments)
+            'r_courses': ProductMixin().get_course_json(rcourses),
+            'r_assesments': ProductMixin().get_assessments_json(rassesments)
         }
 
     def get(self, request, *args, **kwargs):

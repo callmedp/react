@@ -29,46 +29,42 @@ class DashboardMyorderApi(DashboardInfo, APIView):
     def get(self, request, *args, **kwargs):
         candidate_id = self.request.session.get('candidate_id', None)
         order_list=[]
-        # candidate_id='5fed060d9cbeea482331ec4b'
+        candidate_id='5c94a7b29cbeea2c1f27fda2'
+
         if candidate_id:        
-            if cache.get('dashboard_my_orders'):
-                order_list = cache.get('dashboard_my_orders')
-            else:
-                orders = Order.objects.filter(
-                status__in=[0, 1, 3],
-                candidate_id=candidate_id)
-
-                excl_txns = PaymentTxn.objects.filter(
-                    status__in=[0, 2, 3, 4, 5],
-                    payment_mode__in=[6, 7],
-                    order__candidate_id=candidate_id)
-                # excl_txns = PaymentTxn.objects.filter(status=0, ).exclude(payment_mode__in=[1, 4])
-                excl_order_list = excl_txns.all().values_list('order_id', flat=True)
-
-                orders = orders.exclude(
-                    id__in=excl_order_list).order_by('-date_placed')
-
-                order_list = []
-                for obj in orders:
-                    orderitems = OrderItem.objects.select_related(
-                        'product').filter(no_process=False, order=obj)
-                    product_type_flow = None
-                    product_id = None
-                    item_count = len(orderitems)
-                    if item_count > 0:
-                        item_order = orderitems[0]
-                        product_type_flow = item_order and item_order.product_id and item_order.product.type_flow or 0
-                        product_id = item_order and item_order.product_id
-                    data = {
-                        "order": OrderSerializer(obj).data,
-                        "item_count": item_count,
-                        'product_type_flow': product_type_flow,
-                        "product_id": product_id,
-                        "orderitems": OrderItemSerializer(orderitems,many=True).data,
-                    }
-                    order_list.append(data)
-                    cache.set('dashboard_my_orders',order_list,86400)
-        return Response(order_list,status=status.HTTP_200_OK)
+            
+            orders = Order.objects.filter(
+            status__in=[0, 1, 3],
+            candidate_id=candidate_id)
+            excl_txns = PaymentTxn.objects.filter(
+                status__in=[0, 2, 3, 4, 5],
+                payment_mode__in=[6, 7],
+                order__candidate_id=candidate_id)
+            # excl_txns = PaymentTxn.objects.filter(status=0, ).exclude(payment_mode__in=[1, 4])
+            excl_order_list = excl_txns.all().values_list('order_id', flat=True)
+            orders = orders.exclude(
+                id__in=excl_order_list).order_by('-date_placed')
+            order_list = []
+            for obj in orders:
+                orderitems = OrderItem.objects.select_related(
+                    'product').filter(no_process=False, order=obj)
+                product_type_flow = None
+                product_id = None
+                item_count = len(orderitems)
+                if item_count > 0:
+                    item_order = orderitems[0]
+                    product_type_flow = item_order and item_order.product_id and item_order.product.type_flow or 0
+                    product_id = item_order and item_order.product_id
+                data = {
+                    "order": OrderSerializer(obj).data,
+                    "item_count": item_count,
+                    'product_type_flow': product_type_flow,
+                    "product_id": product_id,
+                    "orderitems": OrderItemSerializer(orderitems,many=True).data,
+                }
+                order_list.append(data)
+                
+        return APIResponse(data=order_list, message='Order data Success', status=status.HTTP_200_OK)
 
 class MyCoursesApi(DashboardInfo, APIView):
     permission_classes = (permissions.AllowAny,)
@@ -77,6 +73,7 @@ class MyCoursesApi(DashboardInfo, APIView):
     def get(self, request, *args, **kwargs):
         candidate_id = self.request.session.get('candidate_id', None)
         data = []
+        candidate_id='5fed060d9cbeea482331ec4b'
         if candidate_id:
             if cache.get('dashboard_my_courses'):
                 data = cache.get('dashboard_my_courses')
@@ -165,6 +162,7 @@ class DashboardMyWalletAPI(DashboardInfo, APIView):
 
         # attempting to get candidate from session
         candidate_id = self.request.session.get('candidate_id')
+        candidate_id = '568a0b20cce9fb485393489b'
         if candidate_id is None:
             return APIResponse(data=data, message='Candidate Details required', status=status.HTTP_400_BAD_REQUEST)
 

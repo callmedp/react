@@ -1,10 +1,15 @@
+# DRF Import
 from rest_framework import serializers
+from django.conf import settings
+
+# Inter-App Import
 from homepage.models import StaticSiteContent
 from order.models import Order ,OrderItem
 from shop.models import ProductSkill,ProductCategory, Product,Category
 # from api.serializers import OrderItemDetailSerializer
 from shared.rest_addons.mixins import SerializerFieldsMixin
 from django.conf import settings
+
 
 class StaticSiteContentSerializer(serializers.ModelSerializer):
 
@@ -151,7 +156,7 @@ class ProductSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product 
         fields = ["avg_rating","inr_price","id", "heading", "name",]
-
+    
     def to_representation(self, instance):
         data = super(ProductSerializer, self).to_representation(instance)
         data['mode']=instance.get_studymode_db()
@@ -167,4 +172,7 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = ["name",]
-    
+class RecentCourseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ['id']

@@ -9,45 +9,39 @@ const WhyChooseUs = (props) => {
                 <h2 className="m-heading2">Why Choose us</h2>
                 <ul>
                     <li>
-                        <figure className="micon-choose1"></figure>
                         <p>
-                            <strong>36000+ Jobs</strong>
-                            opportunities on shine
+                            <strong>1500<span>+</span></strong>
+                            jobs available in Digital Marketing
                         </p>
                     </li>
                     <li>
-                        <figure className="micon-choose2"></figure>
                         <p>
-                            <strong>Application Highlighter</strong>
-                            worth Rs 1600 Free for 90 Days
+                            <strong>100<span>+</span></strong>
+                            Hiring Partners
                         </p>
                     </li>
                     <li>
-                        <figure className="micon-choose3"></figure>
                         <p>
-                            <strong>Interview Prep Assistance</strong>
-                            Exclusive Interview Preparation Handbook & Free Mock Interview with Expert*
+                            <strong>10k<span>+</span></strong>
+                            Active learners
                         </p>
                     </li>
                     <li>
-                        <figure className="micon-choose4"></figure>
                         <p>
-                            <strong>Industry Recognized Certification</strong>
-                            Certificate by Analytics Vidhya with lifetime validity.
+                            <strong>24 X 7</strong>
+                            Customer Support
                         </p>
                     </li>
                     <li>
-                        <figure className="micon-choose5"></figure>
                         <p>
-                            <strong>Customer Support</strong>
-                            over calls and emails
+                            <strong>3x</strong>
+                            Increased Chances of Getting Hired
                         </p>
                     </li>
                     <li>
-                        <figure className="micon-choose6"></figure>
                         <p>
-                            <strong>Chat With Mentors</strong>
-                            1 Hour Chat with mentors Daily
+                            <strong>Self-Paced</strong>
+                            Learning & <span>Live Classes</span>
                         </p>
                     </li>
                 </ul>

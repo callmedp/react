@@ -1,0 +1,24 @@
+@import '../../../../../styles-mobile/abstracts';
+
+.m-our-vendors-slider {
+    &__txt {
+        display: flex;
+        align-items: center;
+        width: 100%;
+
+        figure {
+            display: flex;
+            align-items: center;
+            height: 5rem;
+        }
+    }
+
+    >.slick-slider {
+        .slick-list {
+            .slick-slide {
+                width: auto !important;
+                padding: 1rem 2rem !important;
+            }
+        }
+    }
+}

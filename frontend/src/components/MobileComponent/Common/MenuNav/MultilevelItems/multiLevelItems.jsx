@@ -6,11 +6,12 @@ const MultiLevelItems = props => {
 	const {
         item, parentName, setData, sideNavType,
         setType, setOpen, open
-    } = props
-	// const resetNav = () => {
-	// 	setOpen(state => !state);
-	// 	setType('menu')
-	// }
+	} = props
+	
+	const resetNav = () => {
+		setOpen(state => !state);
+		setType('menu')
+	}
 
 	return (
 		<Menu className={'navigation'} width={'300px'} isOpen={open} onStateChange={state => setOpen(state.isOpen)}>
@@ -36,7 +37,7 @@ const MultiLevelItems = props => {
 											</a>
 										) : 
 										(
-											<a className="menu-item" href={child.url} > {child.name} </a>
+											<Link className="menu-item" to={child.url} onClick={resetNav} > {child.name} </Link>
 										)
                                 }
                             </React.Fragment>

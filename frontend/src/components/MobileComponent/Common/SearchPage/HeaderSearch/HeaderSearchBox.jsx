@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 const HeaderSearchBox = (props) =>{
     const {
@@ -14,6 +14,10 @@ const HeaderSearchBox = (props) =>{
         submitData
     } = props
 
+    useEffect(()=>{
+        document.getElementById("transcript").focus();
+    }, [])
+
     return(
         <>
             <div className="m-top-search-header">
@@ -23,7 +27,7 @@ const HeaderSearchBox = (props) =>{
                         <figure className="micon-search-black d-flex"></figure>
                     </button>
                     <input className="m-search-input" type="search" onChange={e => setSearchTerm(e.target.value)} onFocus={()=>setShowResults(true)} 
-                        placeholder="Search anything" name="query" id="transcript" aria-label="Search" ref={register({required: true})} autoComplete="off" />
+                        placeHolder = 'Search course, assessment...' name="query" id="transcript" aria-label="Search" ref={register({required: true})} autoComplete="off" />
                     <button className="m-btn-voice-search">
                         <figure className="micon-voice-search d-flex" onClick={(e)=>{e.preventDefault();startDictation();}}></figure>
                     </button>

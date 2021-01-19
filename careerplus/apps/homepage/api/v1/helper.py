@@ -1,6 +1,5 @@
 from rest_framework.response import Response
 
-
 def APIResponse(data=None, message=None, status=None, error=False):
     resp_json = {
         'message': message,

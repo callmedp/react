@@ -11,10 +11,9 @@ function* skillPageBanner(action) {
  
       
         const response = yield call(Api.skillPageBanner, payload);
-       
-     
+
         if (response["error"]) {
-            return payload?.reject(response["error"])
+            return payload?.reject(response)
         }
         const item = response.data;
         
@@ -37,7 +36,7 @@ function* skillPageBanner(action) {
         return payload?.resolve(item);
 
     } catch (e) {
-        console.error("Exception occured ",e)
+        console.error("Exception occured at skillPageBanner Api",e)
         return payload?.reject(e)
         
     }

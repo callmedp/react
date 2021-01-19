@@ -1,0 +1,47 @@
+@import '../../../../../styles-mobile/abstracts';
+
+.m-all-category {
+
+    &__list {
+        list-style-type: none;
+        margin: 3rem 0 0 0;
+        padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+
+        li {
+            flex: 43%;
+            margin: 0 1rem;
+            .m-card {
+                @extend %box-shadow1;
+                border: none;
+                background: $white;
+                padding-bottom: 1rem;
+                margin-bottom: 2rem;
+                @include border-radius(5px);
+    
+                figure {
+                    img {
+                        width: 100%;
+                    }
+                }
+    
+                h3 {
+                    font-size: 1.4rem;
+                    font-weight: 600;
+                    margin: 1rem;
+                    height: 3.2rem;
+                    overflow: hidden;
+                }
+    
+                a {
+                    display: block;
+                    text-align: right;
+                    margin-right: 2rem;
+                    font-size: 1.2rem;
+                    font-weight: 600;
+                }
+            }
+        }
+    }
+}

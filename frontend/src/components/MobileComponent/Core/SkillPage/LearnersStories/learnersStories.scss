@@ -27,7 +27,7 @@
         &__txt {
             font-size: 1.3rem;
             height: 15.5rem;
-            overflow: hidden;
+            overflow: auto;
             margin-bottom: 2rem;
         }
 
@@ -50,7 +50,7 @@
         .slick-list {
             .slick-slide {
                 width: 30rem !important;
-                padding: 1.5rem 1.2rem !important;
+                padding: 1.5rem 1.2rem 1rem 1.2rem !important;
             }
         }
     }

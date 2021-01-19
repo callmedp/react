@@ -1,5 +1,6 @@
 import { resumeShineSiteDomain, siteDomain } from './domains';
 
+
 const freeResourcesList = [
     { 
         name: 'Resume Formats', 
@@ -7,12 +8,12 @@ const freeResourcesList = [
         id: 'resume_formats',
         sideNavType: 'freeResources',
         children: [
-            { name: 'Freshers', url: `${resumeShineSiteDomain}/cms/resume-format/freshers-2/2/` },
-            { name: 'Banking Freshers', url: `${resumeShineSiteDomain}/cms/resume-format/banking-freshers/4/` },
-            { name: 'Experienced Professional', url: `${resumeShineSiteDomain}/cms/resume-format/experienced-professionals/6/` },
-            { name: 'Engineers', url: `${resumeShineSiteDomain}/cms/resume-format/engineers-2/20/` },
-            { name: 'IT', url: `${resumeShineSiteDomain}/cms/resume-format/it/53/`},
-            { name: 'View all', url:`${resumeShineSiteDomain}/cms/resume-format/1/`},
+            { name: 'Freshers', url: `${resumeShineSiteDomain}/cms/resume-format/freshers-2/2/`, id:'freshers' },
+            { name: 'Banking Freshers', url: `${resumeShineSiteDomain}/cms/resume-format/banking-freshers/4/`, id:'banking_freshers' },
+            { name: 'Experienced Professional', url: `${resumeShineSiteDomain}/cms/resume-format/experienced-professionals/6/`, id:'experienced_professionals' },
+            { name: 'Engineers', url: `${resumeShineSiteDomain}/cms/resume-format/engineers-2/20/`, id:'engineers' },
+            { name: 'IT', url: `${resumeShineSiteDomain}/cms/resume-format/it/53/`, id:'it'},
+            { name: 'View all', url:`${resumeShineSiteDomain}/cms/resume-format/1/`, id:'view_all'},
         ]
     },
     {
@@ -21,12 +22,12 @@ const freeResourcesList = [
         id:'resignation_formats',
         sideNavType: 'freeResources',
         children:[
-            { name: 'With Notice Period', url: `${resumeShineSiteDomain}/cms/resignation-letter-formats-samples/notice-period/5/` },
-            { name: 'Personal Reasons', url: `${resumeShineSiteDomain}/cms/resignation-letter-formats-samples/personal-reasons/15/` },
-            { name: 'Higher Studies', url: `${resumeShineSiteDomain}/cms/resignation-letter-formats-samples/higher-studies-or-going-abroad/49/` },
-            { name: 'Without Notice Period', url: `${resumeShineSiteDomain}/cms/resignation-letter-formats-samples/without-notice-period/17/` },
-            { name: 'Family Illness', url: `${resumeShineSiteDomain}/cms/resignation-letter-formats-samples/family-illness/18/`},
-            { name: 'View all', url:`${resumeShineSiteDomain}/cms/resignation-letter-formats-samples/3/`}
+            { name: 'With Notice Period', url: `${resumeShineSiteDomain}/cms/resignation-letter-formats-samples/notice-period/5/`, id:'with_notice_period' },
+            { name: 'Personal Reasons', url: `${resumeShineSiteDomain}/cms/resignation-letter-formats-samples/personal-reasons/15/`, id:'personal_reasons' },
+            { name: 'Higher Studies', url: `${resumeShineSiteDomain}/cms/resignation-letter-formats-samples/higher-studies-or-going-abroad/49/`, id:'higher_studies' },
+            { name: 'Without Notice Period', url: `${resumeShineSiteDomain}/cms/resignation-letter-formats-samples/without-notice-period/17/`, id:'without_notice_period' },
+            { name: 'Family Illness', url: `${resumeShineSiteDomain}/cms/resignation-letter-formats-samples/family-illness/18/`, id:'family_illness'},
+            { name: 'View all', url:`${resumeShineSiteDomain}/cms/resignation-letter-formats-samples/3/`, id:'view_all'}
         ]
     },
     { 
@@ -35,9 +36,9 @@ const freeResourcesList = [
         id: 'cover_letter',
         sideNavType: 'freeResources',
         children: [
-            { name: 'Freshers', url: `${resumeShineSiteDomain}/cms/cover-letter-format/freshers/8/` },
-            { name: 'Engineers', url: `${resumeShineSiteDomain}/cms/cover-letter-format/engineers/9/` },
-            { name: 'View all', url:`${resumeShineSiteDomain}/cms/cover-letter-format/7/`}
+            { name: 'Freshers', url: `${resumeShineSiteDomain}/cms/cover-letter-format/freshers/8/`, id:'freshers' },
+            { name: 'Engineers', url: `${resumeShineSiteDomain}/cms/cover-letter-format/engineers/9/`, id:'engineers' },
+            { name: 'View all', url:`${resumeShineSiteDomain}/cms/cover-letter-format/7/`, id:'view_all'}
         ]
     },
     { 
@@ -46,9 +47,9 @@ const freeResourcesList = [
         id: 'resume_templates',
         sideNavType: 'freeResources',
         children: [
-            { name: 'Pharma', url: `${resumeShineSiteDomain}/cms/resume-samples-and-templates/pharma/34/` },
-            { name: 'Freshers', url: `${resumeShineSiteDomain}/cms/resume-samples-and-templates/freshers-3/55/` },
-            { name: 'View all', url:`${resumeShineSiteDomain}/cms/resume-samples-and-templates/50/`}
+            { name: 'Pharma', url: `${resumeShineSiteDomain}/cms/resume-samples-and-templates/pharma/34/`, id:'pharma' },
+            { name: 'Freshers', url: `${resumeShineSiteDomain}/cms/resume-samples-and-templates/freshers-3/55/`, id:'freshers' },
+            { name: 'View all', url:`${resumeShineSiteDomain}/cms/resume-samples-and-templates/50/`, id:'view_all'}
         ]
     }, 
     { 
@@ -57,8 +58,8 @@ const freeResourcesList = [
         id: 'linkedin_summary',
         sideNavType: 'freeResources',
         children: [
-            { name: 'HR Professionals', url: `${resumeShineSiteDomain}/cms/linkedin-summary-examples/hr-professional/36/` },
-            { name: 'View all', url:`${resumeShineSiteDomain}/cms/linkedin-summary-examples/43/`}
+            { name: 'HR Professionals', url: `${resumeShineSiteDomain}/cms/linkedin-summary-examples/hr-professional/36/`, id:'hr_professional' },
+            { name: 'View all', url:`${resumeShineSiteDomain}/cms/linkedin-summary-examples/43/`, id:'view_all'}
         ]
     },
     { 
@@ -89,41 +90,41 @@ const categoryList = [
         id: 'sales_marketing',
         sideNavType: 'allCourses',
         children: [
-            { name: 'Digital Marketing', url: `${siteDomain}/courses/sales-and-marketing/digital-marketing/32/` },
-            { name: 'Sales', url: `${siteDomain}/courses/sales-and-marketing/sales/18/` },
-            { name: 'Retail', url: `${siteDomain}/courses/sales-and-marketing/retail/35/` },
-            { name: 'Product Management', url: `${siteDomain}/courses/sales-and-marketing/product-marketing/24/` },
-            { name: 'Service Management', url: `${siteDomain}/courses/sales-and-marketing/service-marketing/30/`},
+            { name: 'Digital Marketing', url: `/courses/sales-and-marketing/digital-marketing/32/`, id:'digital_marketing' },
+            { name: 'Sales', url: `/courses/sales-and-marketing/sales/18/`, id:'sales' },
+            { name: 'Retail', url: `/courses/sales-and-marketing/retail/35/`, id:'retail' },
+            { name: 'Product Management', url: `/courses/sales-and-marketing/product-marketing/24/`, id:'product_management' },
+            { name: 'Service Management', url: `/courses/sales-and-marketing/service-marketing/30/`, id:'service_management'},
         ]
     },
     {
         name: 'Operation Management',
-        url: `${siteDomain}/courses/operation-management/19/`, 
+        url: `${siteDomain}/courses/operation-management/19/`,
         id:'operation_management',
         sideNavType: 'allCourses',
         children:[
-            { name: 'Six Sigma', url: `${siteDomain}/courses/operation-management/six-sigma/193/` },
-            { name: 'Project Management', url: `${siteDomain}/courses/operation-management/project-management/123/` },
-            { name: 'Logistic and Supply Chain', url: `${siteDomain}/courses/operation-management/logistics-and-supply-chain/135/` },
-            { name: 'Service Quality', url: `${siteDomain}/courses/operation-management/service-quality/316/` },
-            { name: 'Production', url: `${siteDomain}/courses/operation-management/production/39/`},
-            { name: 'Customer Care', url:`${siteDomain}/courses/operation-management/customer-care/37/`}
+            { name: 'Six Sigma', url: `/courses/operation-management/six-sigma/193/`, id:'six_sigma' },
+            { name: 'Project Management', url: `/courses/operation-management/project-management/123/`, id:'project_management' },
+            { name: 'Logistic and Supply Chain', url: `/courses/operation-management/logistics-and-supply-chain/135/`, id:'logistic_and_supply_chain' },
+            { name: 'Service Quality', url: `/courses/operation-management/service-quality/316/`, id:'service_quality' },
+            { name: 'Production', url: `/courses/operation-management/production/39/`, id:'production'},
+            { name: 'Customer Care', url:`/courses/operation-management/customer-care/37/`, id:'customer_care'}
         ]
     },
     { 
         name: 'Banking & Finance', 
-        url: `${siteDomain}/courses/banking-and-finance/20/`, 
+        url: `${siteDomain}/courses/banking-and-finance/20/`,
         id: 'banking_finance',
         sideNavType: 'allCourses',
         children: [
-            { name: 'Advanced Accounting', url: `${siteDomain}/courses/banking-finance/advanced-accounting/114/` },
-            { name: 'Banking', url: `${siteDomain}/courses/banking-finance/banking/113/` },
-            { name: 'Risk Management', url:`${siteDomain}/courses/banking-finance/risk-management/95/`},
-            { name: 'Stock Market Training', url: `${siteDomain}/courses/banking-finance/stock-trading/94/` },
-            { name: 'Financial Resporting and Management', url: `${siteDomain}/courses/banking-finance/financial-reporting-and-management/103/` },
-            { name: 'Commercial Operation', url:`${siteDomain}/courses/banking-finance/commercial-operation/112/`},
-            { name: 'Investment Banking', url:`${siteDomain}/courses/banking-finance/investment-banking/100/`},
-            { name: 'GST', url: `${siteDomain}/courses/banking-finance/gst-2/507/` },
+            { name: 'Advanced Accounting', url: `/courses/banking-finance/advanced-accounting/114/`, id:'advanced_accounting'},
+            { name: 'Banking', url: `/courses/banking-finance/banking/113/`, id:'banking' },
+            { name: 'Risk Management', url:`/courses/banking-finance/risk-management/95/`, id:'risk_management'},
+            { name: 'Stock Market Training', url: `/courses/banking-finance/stock-trading/94/`, id:'stock_market_training' },
+            { name: 'Financial Resporting and Management', url: `/courses/banking-finance/financial-reporting-and-management/103/`, id:'financial_reporting_and_management' },
+            { name: 'Commercial Operation', url:`/courses/banking-finance/commercial-operation/112/`, id:'commercial_operation'},
+            { name: 'Investment Banking', url:`/courses/banking-finance/investment-banking/100/`, id:'investment_banking'},
+            { name: 'GST', url: `/courses/banking-finance/gst-2/507/`, id:'gst' },
         ]
     },
     { 
@@ -132,15 +133,15 @@ const categoryList = [
         id: 'informaton_technology',
         sideNavType: 'allCourses',
         children: [
-            { name: 'Big Data', url: `${siteDomain}/courses/it-information-technology/big-data/84/` },
-            { name: 'Project Management', url: `${siteDomain}/courses/operation-management/project-management/123/` },
-            { name: 'IT Software', url:`${siteDomain}/courses/it-information-technology/it-software/53/`},
-            { name: 'Graphic Design', url: `${siteDomain}/courses/it-information-technology/graphic-design/54/` },
-            { name: 'Cloud Computing', url: `${siteDomain}/courses/it-information-technology/cloud-computing/82/` },
-            { name: 'MS Skills', url:`${siteDomain}/courses/it-information-technology/ms-skills/98/`},
-            { name: 'IT Language', url: `${siteDomain}/courses/it-information-technology/it-language/80/` },
-            { name: 'Blockchain', url: `${siteDomain}/courses/it-information-technology/blockchain/496/` },
-            { name: 'Data Science', url:`${siteDomain}/courses/it-information-technology/data-science/497/`}
+            { name: 'Big Data', url: `/courses/it-information-technology/big-data/84/`, id:'big_data' },
+            { name: 'Project Management', url: `/courses/operation-management/project-management/123/`, id:'project_management' },
+            { name: 'IT Software', url:`/courses/it-information-technology/it-software/53/`, id:'it_software'},
+            { name: 'Graphic Design', url: `/courses/it-information-technology/graphic-design/54/`, id:'graphic_design' },
+            { name: 'Cloud Computing', url: `/courses/it-information-technology/cloud-computing/82/`, id:'cloud_computing' },
+            { name: 'MS Skills', url:`/courses/it-information-technology/ms-skills/98/`, id:'ms_skills'},
+            { name: 'IT Language', url: `/courses/it-information-technology/it-language/80/`, id:'it_language' },
+            { name: 'Blockchain', url: `/courses/it-information-technology/blockchain/496/`, id:'blockchain' },
+            { name: 'Data Science', url:`/courses/it-information-technology/data-science/497/`, id:'data_science'}
         ]
     }, 
     { 
@@ -149,10 +150,10 @@ const categoryList = [
         id: 'human_resources',
         sideNavType: 'allCourses',
         children: [
-            { name: 'Talent Aquisition', url: `${siteDomain}/courses/hr-human-resource/talent-acquisition/93/` },
-            { name: 'Organisational Structure', url:`${siteDomain}/courses/hr-human-resource/organizational-structure/97/`},
-            { name: 'Training & Development', url: `${siteDomain}/courses/hr-human-resource/training-and-development/91/` },
-            { name: 'Compensation', url:`${siteDomain}/courses/hr-human-resource/compensation-2/110/`}
+            { name: 'Talent Aquisition', url: `/courses/hr-human-resource/talent-acquisition/93/`, id:'talent_acquisition' },
+            { name: 'Organisational Structure', url:`/courses/hr-human-resource/organizational-structure/97/`, id:'organisational_structure'},
+            { name: 'Training & Development', url: `/courses/hr-human-resource/training-and-development/91/`, id:'training_and_development' },
+            { name: 'Compensation', url:`/courses/hr-human-resource/compensation-2/110/`, id:'compensation'}
         ]
     },
     { 
@@ -161,9 +162,9 @@ const categoryList = [
         id: 'management',
         sideNavType: 'allCourses',
         children: [
-            { name: 'General Management', url: `${siteDomain}/courses/management/general-management/102/` },
-            { name: 'Business Analyst', url: `${siteDomain}/courses/management/business-analyst/58/` },
-            { name: 'Corporate Governance', url:`${siteDomain}/courses/management/corporate-governance/59/`},
+            { name: 'General Management', url: `/courses/management/general-management/102/`, id:'general_management' },
+            { name: 'Business Analyst', url: `/courses/management/business-analyst/58/`, id:'business_analyst' },
+            { name: 'Corporate Governance', url:`/courses/management/corporate-governance/59/`, id:'corporate_governance'},
         ]
     },
     { 
@@ -172,10 +173,10 @@ const categoryList = [
         id: 'mass_communication',
         sideNavType: 'allCourses',
         children: [
-            { name: 'Content', url: `${siteDomain}/courses/mass-communication/content/46/` },
-            { name: 'Public Relations', url: `${siteDomain}/courses/mass-communication/public-relations/96/` },
-            { name: 'Editor', url:`${siteDomain}/courses/mass-communication/editor/106/`},
-            { name: 'journalism', url:`${siteDomain}/courses/mass-communication/journalism/99/`}
+            { name: 'Content', url: `/courses/mass-communication/content/46/`, id:'content' },
+            { name: 'Public Relations', url: `/courses/mass-communication/public-relations/96/`, id:'public_relations' },
+            { name: 'Editor', url:`/courses/mass-communication/editor/106/`, id:'editor'},
+            { name: 'journalism', url:`/courses/mass-communication/journalism/99/`, id:'journalism'}
         ]
     },
     { 
@@ -184,22 +185,22 @@ const categoryList = [
         id: 'personal_development',
         sideNavType: 'allCourses',
         children: [
-            { name: 'Language Learning', url: `${siteDomain}/courses/personal-development/language-learning/40/` },
-            { name: 'Leadership', url: `${siteDomain}/courses/personal-development/leadership/41/` },
-            { name: 'Personal Development', url:`${siteDomain}/courses/personal-development/personality-development/42/`},
-            { name: 'Interview Preparation', url:`${siteDomain}/courses/personal-development/interview-preparation/38/`},
-            { name: 'Communication Development', url:`${siteDomain}/courses/personal-development/communication-development/36/`}
+            { name: 'Language Learning', url: `/courses/personal-development/language-learning/40/`, id:'language_learning' },
+            { name: 'Leadership', url: `/courses/personal-development/leadership/41/`, id:'leadership' },
+            { name: 'Personal Development', url:`/courses/personal-development/personality-development/42/`, id:'personality_development'},
+            { name: 'Interview Preparation', url:`/courses/personal-development/interview-preparation/38/`, id:'interview_preparation'},
+            { name: 'Communication Development', url:`/courses/personal-development/communication-development/36/`,id:'communication_development'}
         ]
     },
     { 
         name: 'Law', 
-        url: `${siteDomain}/courses/law/23/`, 
+        url: `${siteDomain}/courses/law/23/`,
         id: 'law',
         sideNavType: 'allCourses',
         children: [
-            { name: 'Cyber Law', url: `${siteDomain}/courses/law/cyber-law/107/` },
-            { name: 'Criminal Law', url: `${siteDomain}/courses/law/criminal-law/108/` },
-            { name: 'Company Law', url:`${siteDomain}/courses/law/company-law/111/`}
+            { name: 'Cyber Law', url: `/courses/law/cyber-law/107/`, id:'cyber_law' },
+            { name: 'Criminal Law', url: `/courses/law/criminal-law/108/`, id:'criminal_law' },
+            { name: 'Company Law', url:`/courses/law/company-law/111/`, id:'company_law'}
         ]
     },
     { 
@@ -213,18 +214,27 @@ const categoryList = [
 
 
 const navSkillList = [
-    { name : 'Digital Marketing', url: '/courses/sales-and-marketing/digital-marketing/32/' },
-    { name: 'Six Sigma', url: '/courses/operation-management/six-sigma/193/' },
-    { name: 'Project Management', url: '/courses/operation-management/project-management/123/' },
-    { name: 'Big Data', url: '/courses/it-information-technology/big-data/84/'},
-    { name: 'IT Software', url: '/courses/it-information-technology/it-software/53/' },
-    { name: 'Data Science', url: '/courses/it-information-technology/data-science/497/' },
-    { name: 'Cloud Computing', url: '/courses/it-information-technology/cloud-computing/82/'}
-] 
+    { name : 'Digital Marketing', url: '/courses/sales-and-marketing/digital-marketing/32/', id:'digital_marketing' },
+    { name: 'Six Sigma', url: '/courses/operation-management/six-sigma/193/', id:'six_sigma' },
+    { name: 'Project Management', url: '/courses/operation-management/project-management/123/', id:'project_management'},
+    { name: 'Big Data', url: '/courses/it-information-technology/big-data/84/', id:'big_data'},
+    { name: 'IT Software', url: '/courses/it-information-technology/it-software/53/', id:'it_software' },
+    { name: 'Data Science', url: '/courses/it-information-technology/data-science/497/', id:'data_science' },
+    { name: 'Cloud Computing', url: '/courses/it-information-technology/cloud-computing/82/', id:'cloud_computing'}
+]
+
+const contactData = {
+    'contactNo' : '08047105151',
+    'contactEmail' : 'resume@shine.com',
+    'contactTimings' : '9:00am to 6:30pm (Mon - Sat)',
+}
+
+
 
 export {
     freeResourcesList,
     jobAssistanceList,
     categoryList,
-    navSkillList
+    navSkillList,
+    contactData
 }

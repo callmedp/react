@@ -7,48 +7,91 @@ const ProductDetails = (props) =>{
         about, highlights, 
         jobsAvailable,  skillList,
         url, type,level,
-        brochure }, icon, setShowDetails
+        brochure, u_courses_benefits, u_desc,
+        number_of_questions }, icon,
+        setShowDetails, productType
     } = props
 
     const OpenProductPage = () =>{
         window.location.href = `${siteDomain}${url}`
     }
+    const regex = /<[^>]*>/g
 
     return (
         <div className="m-card__popover .m-transit">
-            <p className="m-type">Type: <strong>{type}</strong>  |   <strong>Course level:</strong> {level} 
+            <p className="m-type">
+            {
+                productType === 'Assessments' ?
+                <> Number of Questions : <strong>{number_of_questions}</strong> </>:
+                <> Type: <strong>{type}</strong>  |   Course level: <strong>{level}</strong></>
+            }
+                <br />
                 <strong> {jobsAvailable}</strong> Jobs available
             </p>
             
             <p className="about-ht">
-                {/* { about?.slice(noOfWords)?.length ? (about?.replace(/<[^>]*>/g, '').slice(0,noOfWords)+'...') : about?.replace(/<[^>]*>/g, '')?.slice(0,noOfWords)} */}
-                <div dangerouslySetInnerHTML={{__html: (about?.slice(noOfWords)?.length ? (about?.slice(0,noOfWords)+'...') : about?.slice(0,noOfWords))}}></div>
+                {
+                    u_desc ? 
+                    <div dangerouslySetInnerHTML={{__html: (u_desc?.replace(regex, '').slice(noOfWords)?.length ? (u_desc?.replace(regex, '').slice(0,noOfWords)+'...') : u_desc?.replace(regex, '').slice(0,noOfWords))}}></div> :
+                    <div dangerouslySetInnerHTML={{__html: (about?.replace(regex, '').slice(noOfWords)?.length ? (about?.replace(regex, '').slice(0,noOfWords)+'...') : about?.replace(regex, '').slice(0,noOfWords))}}></div> 
+                }
             </p>
 
-            {skillList? <p className="skill-ht">
-                <strong>Skills you gain</strong> 
+            <p className="skill-ht">
                 { 
-                    skillList?.slice(0, 5)?.map((skill, index) =>{
-                        return ( 
-                            <React.Fragment key={index}>
-                                {skill}
-                                {index === skillList?.slice(0, 5).length-1 ? ' ' : '  |  '}
-                                {(skillList?.slice(0, 5)?.pop() == skill && skillList?.slice(5)?.length) ? '& Many More..' : ''}
-                            </React.Fragment>
-                        )
-                    })
+                    skillList && 
+                    <>
+                        <strong>Skills you gain</strong> 
+                        { 
+                            skillList?.slice(0, 5)?.map((skill, index) =>{
+                                return ( 
+                                    <React.Fragment key={index}>
+                                        {skill}
+                                        {index === skillList?.slice(0, 5).length-1 ? ' ' : '  |  '}
+                                        {(skillList?.slice(0, 5)?.pop() == skill && skillList?.slice(5)?.length) ? '& Many More..' : ''}
+                                    </React.Fragment>
+                                )
+                            })
+                        }
+                    </>
                 } 
-            </p>: null }
+            </p>
 
-            {highlights?<p className="skill-ht">
-                <strong>Highlights</strong>
-                {/* <ul>
-                    <li>Anytime and anywhere access</li>
-                    <li>Become a part of Job centre</li>
-                </ul> */}
-                {/* <p dangerouslySetInnerHtml={{__html : highlights}}></p> */}
-                {highlights?.replace(/<[^>]*>/g, '')?.slice(80)?.length ? (highlights?.replace(/<[^>]*>/g, '')?.slice(0,80)+'...') : highlights?.replace(/<[^>]*>/g, '')?.slice(0,80)}
-            </p>: null }
+            {
+                productType === 'Courses' &&
+                <p className="skill-ht">
+                {
+                    highlights?.length ? 
+                    <>
+                        <strong>Highlights</strong>
+                        <ul>
+                            {
+                                highlights?.slice(0, 2)?.map((value, index) =>{
+                                    return (
+                                        <li key={index} dangerouslySetInnerHTML={{__html: value}}></li>
+                                    )
+                                })
+                            }
+                        </ul>
+                    </> : ''
+                }
+                {
+                    u_courses_benefits?.length ?
+                    <>
+                        <strong>Highlights</strong>
+                        <ul>
+                            {
+                                u_courses_benefits?.slice(0, 2)?.map((value, index) =>{
+                                    return (
+                                        <li key={index} dangerouslySetInnerHTML={{__html: value}}></li>
+                                    )
+                                })
+                            }
+                        </ul>
+                    </> : ''
+                }
+                </p>
+            }
 
             <p className="d-flex align-items-center mt-15">
                 <button type="submit" onClick={OpenProductPage} className="btn-yellow" role="button">Enroll now</button>

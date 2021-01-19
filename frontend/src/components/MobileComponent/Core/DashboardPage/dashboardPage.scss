@@ -1,0 +1,266 @@
+@import '../../../../styles-mobile/abstracts';
+
+.m-slide-modal {
+    background-color: $white;
+    box-shadow: 0 0px 10px 5px rgba($black, .1);
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    left: 0;
+    padding: 2rem 2rem 2rem 2rem;
+    z-index: 10;
+
+    h2 {
+        font-size: 2rem;
+        color: $gray-100;
+        text-align: center;
+    }
+
+    .m-enquire-now {
+        background-color: transparent;
+        box-shadow: none;
+
+        .btn-blue {
+            width: auto;
+        }
+    }
+
+    hr {
+        margin: 30px -20px;
+    }
+
+    .addcomments {
+        margin: 5px -20px 0;
+    }
+}
+
+.db-warp {
+    .m-card {
+        @extend %box-shadow1;
+        border: none;
+        padding: 1.5rem 1.2rem;
+        @include border-radius(5px);
+        position: relative;
+
+        &:not(:last-child) {
+            margin-bottom: 1.5rem;
+        }
+        
+    }
+}
+
+.m-pipe-divides {
+    font-size: 1.1rem;
+
+    span {
+        &:not(:last-child) {
+            &::after {
+                content: '|';
+                padding-right: .5rem;
+                margin-left: .5rem;
+            }
+        }
+    }
+}
+
+.m-db-green-tick {
+    @include size(13px, 13px, inline-block);
+    background: $spriteDb;
+    background-position: 0 -193px;
+    position: relative;
+    top: 3px;
+    margin-left: 5px;
+  }
+
+  .m-db-certificate-icon {
+    @include size(23px, 20px, inline-block);
+    background: $spriteDb;
+    background-position: -93px -131px;
+    cursor: pointer;
+}
+
+
+.m-db-status {
+    font-size: 1.1rem;
+    width: 100%;
+
+    .m-progress {
+        background-color: #fff;
+        border: 1px solid #C7D6F0;
+        display: flex;
+        width: 100%;
+        height: 0.7rem;
+        overflow: hidden;
+        line-height: 0;
+        font-size: 1.05rem;
+        border-radius: 0.4rem;
+        margin-top: 2px;
+    }
+
+    .m-progress-bar {
+        background-color: #C7D6F0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        overflow: hidden;
+        color: #fff;
+        text-align: center;
+        white-space: nowrap;
+        transition: width 0.6s ease;
+    }
+}
+
+.m-db-btn-close {
+    position: absolute;
+    right: 18px;
+    top: 15px;
+    width: 32px;
+    height: 32px;
+    opacity: 0.6;
+    z-index: 1;
+    border: 0;
+    background-color: transparent;
+
+    &:hover {
+        opacity: 1;
+    }
+
+    &::before,
+    &::after {
+        content: '';
+        position: absolute;
+        left: 15px;
+        height: 16px;
+        width: 2px;
+        background-color: #333;
+        border-radius: 5px;
+        top: 8px;
+    }
+
+    &::before {
+        transform: rotate(45deg);
+      }
+    &::after {
+        transform: rotate(-45deg);
+      }
+
+      span {
+          display: none;
+      }
+}
+
+.m-arrow-box {
+    background-color: $white;
+    box-shadow: $box-shadow;
+    border-radius: .4rem;
+
+    &.m-top {
+        &::before {
+            content: '';
+            @include size(8px, 8px, block);
+            background-color: $white;
+            box-shadow: $box-shadow;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%) rotate(45deg);
+            top: -4px;
+        }
+    }
+    
+    &.m-top-big {
+        &::before {
+            content: '';
+            @include size(15px, 15px, block);
+            background-color: $white;
+            box-shadow: -1px -1px 4px -2px rgba($gray-100, 0.2);
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%) rotate(45deg);
+            top: -7px;
+        }
+    }
+    
+    &.m-left-big {
+        &::before {
+            content: '';
+            @include size(15px, 15px, block);
+            background-color: $white;
+            box-shadow: -1px 2px 6px -2px rgba($gray-100, 0.2);
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%) rotate(45deg);
+        }
+    }
+}
+
+
+.m-timeline-list {
+    margin-bottom: 10px;
+    margin-top: -20px;
+    height: 215px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin-left: -20px;
+    margin-right: -20px;
+    padding-left: 15px;
+    padding-right: 15px;
+    @extend %custom-scroll;
+
+    li {
+        position: relative;
+        padding-left: 15px;
+        margin-left: 5px;
+        
+        &:first-child {
+            padding-top: 30px;
+        }
+
+        &:not(:last-child) {
+            border-left: 1px dashed rgba(151, 151, 151, .5);
+            padding-bottom: 15px;
+        }
+
+    }
+
+    &--dot {
+        @include size(11px, 11px, block);
+        border: 1px solid rgba(151, 151, 151, 1);
+        background-color: $white;
+        position: absolute;
+        left: -6px;
+        border-radius: 50%;
+        margin-top: 4px;
+
+        &::before {
+            content: '';
+            @include size(5px, 5px, block);
+            background-color: $blue;
+            position: absolute;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+        }
+    }
+
+    &--text {
+        font-weight: 600;
+        margin-bottom: 0;
+        color: $gray-200;
+    }
+}
+
+
+.m-upload-btn-wrapper {
+    position: relative;
+    overflow: hidden;
+    display: inline-block;
+    cursor: pointer;
+        
+    input[type=file] {
+        font-size: 100px;
+        position: absolute;
+        left: 0;
+        top: 0;
+        opacity: 0;
+    }
+}

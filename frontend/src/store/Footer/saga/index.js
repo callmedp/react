@@ -16,6 +16,27 @@ function* fetchTrendingCnA(action) {
 
     }
     catch (e) {
+        console.error("Exception occured at fetchTrendingCnA Api", e);
+    }
+}
+
+function* fetchPopularCourses(action) {
+    const { payload } = action
+    try {
+        const response = yield call(Api.fetchPopularCourses, payload?.id);
+        if (response["error"]) {
+            return payload?.reject(response)
+        }
+        const item = response?.data?.data;
+        yield put({ 
+            type: Actions.POPULAR_COURSES_FETCHED, item 
+        });
+        return payload?.resolve(item);
+
+    }
+    catch (e) {
+        console.error("Exception occured ",e)
+        return payload?.reject(e);
     }
 }
 
@@ -24,4 +45,5 @@ function* fetchTrendingCnA(action) {
 
 export default function* WatchFooter(){
     yield takeLatest(Actions.FETCH_TRENDING_COURSES_AND_SKILLS, fetchTrendingCnA);
+    yield takeLatest(Actions.FETCH_POPULAR_COURSES, fetchPopularCourses);
 }

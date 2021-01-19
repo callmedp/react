@@ -23,7 +23,7 @@ header {
                     > .skill-banner-tween1 {
                         position: absolute;
                         top: 0;
-                        left: 0;
+                        left: -4rem;
                         z-index: 9;
                         max-width: 100%;
                     }
@@ -100,7 +100,7 @@ header {
         left: 3.5rem;
 
         p {
-            width: 95%;
+            width: 90%;
             margin-top: 2rem;
             display: flex;
             align-items: center;
@@ -111,7 +111,28 @@ header {
         }
     }
 
+    .noslide {
+        &::before {
+            display: none !important;
+        }
+    }
+
     .header-carousel {
+        position: relative;
+        &::before {
+            content: '';
+            background: $sprite 0 0;
+            width: 3rem;
+            height: 2.7rem;
+            display: inline-block;
+            position: absolute;
+            left: 0;
+            top: 2.7rem;
+        }
+
+        .carousel-inner {
+            margin-left: 4rem;
+        }
         .carousel-indicators {
             display: none;
         }

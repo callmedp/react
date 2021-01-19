@@ -4,6 +4,7 @@ import { siteDomain } from 'utils/domains';
 import './footer.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchTrendingCnA } from 'store/Footer/actions/index';
+import { MyGA } from 'utils/ga.tracking.js';
 
 const Footer = (props) => {
 
@@ -21,52 +22,59 @@ const Footer = (props) => {
                     <div className="footer">
                         <ul className="footer-bdr">
                             <li>
-                                <a href={`${siteDomain}/about-us`}>About Us</a>&nbsp;&nbsp;
+                                <a href={`${siteDomain}/about-us`} onClick={() => MyGA.SendEvent('homepage_footer','ln_homepage_footer', 'ln_homepage_footer_clicked', 'About Us','', false, true)}>About Us</a>&nbsp;&nbsp;
                             </li>
                             <li>
-                            <a href={`${siteDomain}/privacy-policy`}>Privacy Policy</a>&nbsp;&nbsp;
+                            <a href={`${siteDomain}/privacy-policy`} onClick={() => MyGA.SendEvent('homepage_footer','ln_homepage_footer', 'ln_homepage_footer_clicked', 'Privacy Policy','', false, true)}>Privacy Policy</a>&nbsp;&nbsp;
                             </li>
                             <li>
-                            <a href={`${siteDomain}/tnc`}>Terms & Conditions</a>&nbsp;&nbsp;
+                            <a href={`${siteDomain}/tnc`} onClick={() => MyGA.SendEvent('homepage_footer','ln_homepage_footer', 'ln_homepage_footer_clicked', 'Terms & Conditions','', false, true)}>Terms & Conditions</a>&nbsp;&nbsp;
                             </li>
                             <li>
-                            <a href={`${siteDomain}/contact-us`}>Contact Us</a>&nbsp;&nbsp;
+                            <a href={`${siteDomain}/contact-us`} onClick={() =>  MyGA.SendEvent('homepage_footer','ln_homepage_footer', 'ln_homepage_footer_clicked', 'Contact Us','', false, true)}>Contact Us</a>&nbsp;&nbsp;
                             </li>
                             <li>
-                            <a href={`${siteDomain}/disclaimer`}>Disclaimer</a>&nbsp;&nbsp;
+                            <a href={`${siteDomain}/disclaimer`} onClick={() =>  MyGA.SendEvent('homepage_footer','ln_homepage_footer', 'ln_homepage_footer_clicked', 'Disclaimer','', false, true)}>Disclaimer</a>&nbsp;&nbsp;
                             </li>
                             <li className="social-icon">
-                                <a href="https://www.facebook.com/shinelearningdotcom/" className="icon-facebook"></a>
-                                <a  href="https://www.linkedin.com/showcase/13203963/" className="icon-linkedin"></a>
-                                <a href="https://twitter.com/shinelearning" className="icon-twitter"></a>
+                                <a href="https://www.facebook.com/shinelearningdotcom/" className="icon-facebook" onClick={() =>  MyGA.SendEvent('social_media_follow','ln_social_media_follow', 'ln_facebook', 'homepage','', false, true)}></a>
+                                <a  href="https://in.linkedin.com/company/shinelearning" className="icon-linkedin" onClick={() =>  MyGA.SendEvent('social_media_follow','ln_social_media_follow', 'ln_linkedin', 'homepage','', false, true)}></a>
+                                <a href="https://twitter.com/shinelearning" className="icon-twitter" onClick={() =>  MyGA.SendEvent('social_media_follow','ln_social_media_follow', 'ln_twitter', 'homepage','', false, true)}></a>
                             </li>
                         </ul>
-                        <article className="">
-                            <strong>TRENDING  COURSES</strong>
-                            {
-                                trendingCourses?.slice(0,25).map((course, index) => {
-                                    return (
-                                        <React.Fragment key={index}>
-                                            <a href={`${siteDomain}${course.url}`}>{course.name}</a>&nbsp;
-                                            { trendingCourses.length - 1 === index ? '' : '|'}
-                                        </React.Fragment>
-                                    )
-                                })
-                            }
-                        </article>
-                        <article className="">
-                            <strong>TRENDING  Skills</strong>
-                            {
-                                trendingSkills?.slice(0,25).map((skill, index) => {
-                                    return (
-                                        <React.Fragment key={index}>
-                                            <a href={`${siteDomain}${skill.skillUrl}`}>{skill.skillName}</a>&nbsp;
-                                            { trendingSkills.length - 1 === index ? '' : '|'}
-                                        </React.Fragment>
-                                    )
-                                })
-                            }
-                        </article>
+                        {
+                            trendingCourses.length ?
+                                <article className="">
+                                    <strong>TRENDING  COURSES</strong>
+                                    {
+                                        trendingCourses?.slice(0,25).map((course, index) => {
+                                            return (
+                                                <React.Fragment key={index}>
+                                                    <a href={`${siteDomain}${course.url}`}>{course.name}</a>&nbsp;
+                                                    { trendingCourses.length - 1 === index ? '' : '|'}
+                                                </React.Fragment>
+                                            )
+                                        })
+                                    }
+                                </article> : ''
+                        }
+                        {
+                            trendingSkills ? 
+                                <article className="">
+                                    <strong>TRENDING  Skills</strong>
+                                    {
+                                        trendingSkills?.slice(0,25).map((skill, index) => {
+                                            return (
+                                                <React.Fragment key={index}>
+                                                    <a href={`${siteDomain}${skill.skillUrl}`}>{skill.skillName}</a>&nbsp;
+                                                    { trendingSkills.length - 1 === index ? '' : '|'}
+                                                </React.Fragment>
+                                            )
+                                        })
+                                    }
+                                </article> : ''
+                        }
+
                         <div className="footer-btm">
                             <div className="footer-btm__secure-payment">
                                 <figure className="icon-secure"></figure>

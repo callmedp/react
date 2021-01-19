@@ -1,0 +1,326 @@
+@import '../../../../../styles/functions';
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
+
+.myProfile {
+    
+    .db-white-box {
+        font-size: 1.3rem;
+    }
+
+    h2 {
+        font-size: 1.6rem;
+        display: flex;
+        align-items: center;       
+    }
+
+    h3 {
+        font-size: 1.4rem;
+        margin-bottom: 3px;
+    }
+
+    p {
+        margin-bottom: 1rem;
+    }
+
+    &__leftpan {
+        flex-grow: 1;
+
+        display: flex;
+
+        &--shortName {
+            @include size(74px, 74px);
+            display: block;
+            background-color: rgba($db-light-pink, .44);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            color: rgba($gray-200, 0.2);
+            font-size: 2.8rem;
+            border-radius: 50%;
+            margin-right: 25px;
+        }
+
+        &--wrap {
+            h1 {
+                font-size: 2.4rem;
+                font-weight: 600;
+                margin-top: 15px;
+                margin-bottom: 0;
+            }
+
+            p {
+                font-size: 1.3rem;
+                color: $gray-200;
+            }
+        }
+
+        &--personInfo {
+            display: flex;
+
+            li {
+                display: flex;
+                align-items: center;
+
+                &:not(:last-child) {
+                    margin-right: 30px;
+                }
+
+                &::before {
+                    content: '';
+                    background: $spriteDb;
+                    display: block;
+                    margin-right: 10px;
+                    position: relative;
+                }
+            }
+
+            .db-mail {
+                &::before {
+                    @include size(16px, 13px);
+                    background-position: 0 -217px;
+                }
+            }
+            
+            .db-mobile {
+                &::before {
+                    @include size(11px, 19px);
+                    background-position: -21px -217px;
+                }
+            }
+        }
+    }
+
+    &__rightpan {
+        flex: 0 0 190px;
+        position: relative;
+    }
+
+    button {
+        &:focus {
+            box-shadow: none;
+        }
+    }
+
+    &--detail {
+        li {
+            display: flex;
+
+            &:not(:last-child) {
+                margin-bottom: 10px;
+            }
+
+            strong {
+                width: 150px;
+                display: inline-block;
+            }
+        }
+    }
+
+    .myProfileAdd {
+        display: flex;
+
+        &:not(:last-child) {
+            margin-bottom: 30px
+        }
+        ;
+
+        &__rightwrap {
+            position: relative;
+            padding-left: 50px;
+            flex-grow: 1;
+
+            &--iconCircle {
+                @include size(36px, 36px);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background-color: #C7D7E9;
+                border-radius: 50%;
+                position: absolute;
+                left: 0;
+
+                &::before {
+                    content: '';
+                    display: block;
+                    background: $spriteDb;
+                }
+            }
+
+            .db-experience {
+                &::before {
+                    @include size(16px, 14px);
+                    background-position: -57px -218px;
+                }
+            } 
+            
+            .db-education {
+                &::before {
+                    @include size(16px, 11px);
+                    background-position: -77px -220px;
+                }
+            } 
+            
+            .db-certification {
+                &::before {
+                    @include size(18px, 23px);
+                    background-position: -97px -213px;
+                }
+            } 
+
+            &--info {
+                display: flex;
+                margin-bottom: 3px;
+    
+                strong {
+                    display: block;
+                    width: 120px;
+                }
+            }
+
+            &--duration,
+            &--info {
+                span {
+                    &:not(:last-child) {
+                        &::after {
+                            content: '|';
+                            padding-right: 8px;
+                            margin-left: 8px;
+                        }
+                    }
+                }
+            }
+
+            &--name {
+                font-size: 1.4rem;
+                font-weight: 600;
+                margin-bottom: 0;
+            }
+        }
+
+        &__leftwrap {
+            max-width: 90px;
+            flex: 0 0 90px;
+
+            .bd-btn-close {
+                position: relative;
+                top: 0;
+                left: auto;
+                right: auto;
+
+                &::before,
+                &::after {
+                    top: 0;
+                }
+            }
+        }  
+    }
+}
+
+.skills-tag {
+    display: block;
+    margin-bottom: 10px;
+
+    span {
+        background-color: #F4F8FF;
+        border: 1px solid #DADADA;
+        border-radius: 30px;
+        padding: 10px 40px 10px 20px;
+        position: relative;
+        display: inline-block;
+        margin: 5px 0;
+
+        &:not(:last-child) {
+            margin-right: 15px;
+        }
+
+        &::after {
+            content: '\00d7';
+            cursor: pointer;
+            font-size: 2.2rem;
+            color: rgba($gray-200, 0.7);
+            position: absolute;
+            top: 4px;
+            right: 12px;
+        }
+    }
+
+    &.add-skill {
+        span {
+            padding: 4px 40px 4px 20px;
+
+            &::after {
+                transform: rotate(45deg);
+                top: -2px;
+            }
+        }
+    }
+}
+
+.db-edit-icon {
+    @include size(15px, 15px);
+    display: inline-block;
+    background: $spriteDb;
+    background-position: -37px -218px;
+}
+
+.edit-view{
+    .modal-dialog {
+        max-width: 690px;
+
+        .heading-fs-16 {
+            font-size: 1.6rem;
+            color: $gray-200;
+        }
+
+        .modal-body {
+            padding: 0 3rem;
+
+            .edit-form {
+                ul {
+                    display: flex;
+                    margin: 30px -10px 0;
+                    flex-wrap: wrap;
+
+                    li {
+                        padding: 0 10px;
+                        max-width: 50%;
+                        flex: 0 0 50%;
+                    }
+                }
+
+                
+
+                .db-custom-select-form {
+                    display: flex;
+                    flex-wrap: wrap;
+                    padding-left: 10px;
+
+                    .custom-control {
+                        flex: 0 0 95px;
+
+                        &:last-child {
+                            flex: 0 0 150px;
+                        }
+
+                        label {
+                            padding: 0;
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.db-eye-icon {
+    @include size(19px, 15px);
+    background: $spriteDb;
+    background-position: -95px -157px;
+    display: block;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}

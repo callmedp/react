@@ -1,15 +1,20 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './otherSkills.scss'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector, connect } from 'react-redux';
 import { siteDomain } from 'utils/domains';
+import { getTrackingInfo } from 'utils/storage.js';
+import { trackUser } from 'store/Tracking/actions/index.js';
 
 const OtherSkills = (props) => {
     const { otherSkills } = useSelector( store => store.skillBanner )
+    const tracking_data = getTrackingInfo();
+    const dispatch = useDispatch();
+    const { trackUser } = props;
     const getOtherSkills = (skill, index) => {
         return (
-            <li key={index}>
-                <a href={`${siteDomain}${skill.url}`}>{skill.name}</a>
+            <li key={index} >
+                <a href={`${siteDomain}${skill.url}`} onClick={() => trackUser({"query":tracking_data, "action": 'exit_skill_page'})}>{skill.name}</a>
             </li>
         )
     }
@@ -25,7 +30,7 @@ const OtherSkills = (props) => {
                                 <Link to={"#"}>Sales Courses</Link>
                             </li>*/}
                             {
-                                otherSkills?.map((skill, index) => getOtherSkills(skill, index))
+                                otherSkills?.map(getOtherSkills)
                             }
                         </ul>
 
@@ -40,4 +45,12 @@ const OtherSkills = (props) => {
     )
 }
 
-export default OtherSkills;
+const mapDispatchToProps = (dispatch) => {
+    return {
+        "trackUser": (data) => {
+            return dispatch(trackUser(data))
+        }
+    }
+}
+
+export default connect(null, mapDispatchToProps)(OtherSkills);

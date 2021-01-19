@@ -37,6 +37,7 @@
       padding-left: 2rem;
       padding-right: 3.5rem;
       margin-bottom: 0;
+      -webkit-appearance: none;
       
       /* Icon */
       &:hover {
@@ -84,6 +85,10 @@
 
       p {
         margin: 0 1rem 1rem 1rem;
+      }
+
+      p:not(:root:root){ 
+        margin-bottom: 0;
       }
     }
   }

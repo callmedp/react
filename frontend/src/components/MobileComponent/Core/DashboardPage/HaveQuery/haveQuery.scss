@@ -1,0 +1,68 @@
+@import '../../../../../styles-mobile/abstracts';
+
+.m-have-query {
+    background-color: #F3F6FB;
+    width: 100%;
+    border-radius: .4rem;
+
+    &--curve {
+        background-image: url(#{$image-root}have-query.png);
+        flex: 0 0 286px;
+        height: 60px;
+        width: 286px;
+        display: block;
+        font-size: 1.8rem;
+        font-weight: 600;
+        margin: 0;
+        padding: 15px 0 0 15px;
+    }
+
+    ul {
+        flex-grow: 1;
+        padding: 15px;
+
+        li {
+            &:not(:last-child) {
+                margin-bottom: 10px;
+            }
+        }
+
+    }
+
+    .m-call-us,
+    .m-mail-us {
+        font-weight: 600;
+
+        a {
+            &::before {
+                content: '';
+                background:$spriteDb;
+                width: 18px;
+                height: 18px;
+                display: inline-block;
+                position: relative;
+                margin-right: 10px;
+            }
+        }
+    }
+
+    .m-call-us a {
+        &::before {
+            background-position: -73px 0;
+            top: 3px;
+        }
+    }
+    
+    .m-mail-us a {
+        &::before {
+            background-position: -99px 0;
+            top: 7px;
+        }
+    }
+
+
+}
+
+.m-have-query-wrap {
+    padding-left: 156px;
+}

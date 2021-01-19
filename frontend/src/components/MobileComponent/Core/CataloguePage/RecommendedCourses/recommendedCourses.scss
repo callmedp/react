@@ -1,0 +1,37 @@
+@import '../../../../../styles-mobile/abstracts';
+
+.m-recomend-courses {
+    display: block;
+
+    h2 {
+        margin-bottom: 1rem;
+    }
+
+    &__tab {
+        padding: 2rem 0;
+        a {
+            padding: 1rem 2rem;
+            border: 1px solid $tab-pill-color;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.4rem;
+            color: $tab-pill-color;
+            @include border-radius(30px);
+            margin-right: 1rem;
+
+            &.selected {
+                color: $gray-100;
+                background: $tab-pill-bgcolor;
+                border: 1px solid $tab-pill-bgcolor;
+            }
+
+            &:focus {
+                border: 1px solid $tab-pill-bgcolor;
+            }
+        }
+    }
+
+    &__content {
+
+    }
+}

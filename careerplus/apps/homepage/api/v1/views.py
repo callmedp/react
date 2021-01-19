@@ -44,7 +44,7 @@ from core.api_mixin import ShineCandidateDetail
 from django.core.files.base import ContentFile
 from payment.models import PaymentTxn
 from .helper import APIResponse
-# from .serializers import ProductSkillSerializer
+from .serializers import RecentCourseSerializer
 from .mixins import PopularProductMixin
 
 # Other Import
@@ -632,7 +632,7 @@ class UserInboxListApiView(APIView):
                 'total_incl_tax': obj.total_incl_tax,
                 'number': obj.number, 'date_placed': obj.date_placed.strftime("%b %d, ""%Y"),
                 'status': obj.status, 'id': obj.id,
-                'orderitems': [{'product_type_flow': oi.product.type_flow if oi.product_id else '',
+                'orderitems': [{'product_type_flow': oi.product.type_flow if oi.product_id else '', 
                                 'parent': oi.parent_id,
                                 'parent_heading': oi.parent.product.heading if oi.parent_id and oi.parent.product_id else '',
                                 'get_user_oi_status': oi.get_user_oi_status,
@@ -806,9 +806,16 @@ class TrendingCoursesAndSkillsAPI(PopularProductMixin, APIView):
         please check "PopularProductMixin" to understand the algorithm.
         """
         popular_course_quantity = int(request.GET.get('num_courses', 2))
+        skill_category = request.GET.get('category_id', None)
+
         product_obj, product_converstion_ratio, product_revenue_per_mile = PopularProductMixin().\
                                                                             popular_courses_algorithm(
-                                                                            quantity=popular_course_quantity)
+                                                                            quantity=popular_course_quantity,
+                                                                            category=skill_category)
+
+        if not product_obj:
+            return APIResponse(message='No Product Object Found !', status=status.HTTP_200_OK,
+                               error=False)
 
         product_pks = list(product_converstion_ratio) + list(product_revenue_per_mile)
         tprds = SearchQuerySet().filter(id__in=product_pks, pTP__in=[0, 1, 3]).exclude(
@@ -848,7 +855,7 @@ class NavigationTagsAndOffersAPI(APIView):
         data = {}
         special_links = cache.get('active_homepage_navlink_new', [])
         whatsapp_no = cache.get('whatsapp_visibility_class', {})
-        if special_links:
+        if not settings.DEBUG and special_links:
             active_navlinks = special_links
         else:
             data_obj_list = list(NavigationSpecialTag().get_active_navlink())
@@ -883,7 +890,7 @@ class PopularServicesAPI(PopularProductMixin, APIView):
         trending services.
         For detail please check TrendingCourseAPI
         """
-        quantity_to_display = int(request.GET.get('num_services', 4))
+        quantity_to_display = int(request.GET.get('num_services', 6))
 
         # class fall into service category
         class_category = settings.SERVICE_SLUG + settings.WRITING_SLUG
@@ -899,23 +906,63 @@ class PopularServicesAPI(PopularProductMixin, APIView):
         data = {
             'popularServices': [
                 {'id': tsrvc.id, 'heading': tsrvc.pHd, 'name': tsrvc.pNm, 'url': tsrvc.pURL, 'img': tsrvc.pImg, \
-                 'img_alt': tsrvc.pImA, 'rating': tsrvc.pARx, 'price': tsrvc.pPinb, 'vendor': tsrvc.pPvn, 'stars': tsrvc.pStar,
+                 'img_alt': tsrvc.pImA, 'description': tsrvc.pDscPt, 'rating': tsrvc.pARx, 'price': tsrvc.pPinb, 'vendor': tsrvc.pPvn, 'stars': tsrvc.pStar,
                  'provider': tsrvc.pPvn} for tsrvc in tsrvcs]
         }
         return APIResponse(message='Popular Services Loaded', data=data, status=status.HTTP_200_OK)
-    
+
+
+class RecentCoursesAPI(APIView):
+    permission_classes = (permissions.AllowAny,)
+    authentication_classes = ()
+
+    def get(self, request):
+        """
+        Function must return the recent added course in the
+        system with the logic according to handled by serializer
+        """
+        quantity_to_display = int(request.GET.get('num_recent', 6))
+
+        # class getting the recent_ids from serializer
+        # queryset = Product.objects.filter(product_class__slug__in=settings.COURSE_SLUG,
+        #                                   active=True,
+        #                                   is_indexed=True).order_by('-created')[:quantity_to_display]\
+        #                                   .values_list('id', flat=True)
+
+        trcntss = list(SearchQuerySet().filter(pPc__in=settings.COURSE_SLUG, pTP__in=[0, 1, 3]).exclude(
+            id__in=settings.EXCLUDE_SEARCH_PRODUCTS
+        ).order_by('-pCD'))[:quantity_to_display]
+
+        data = {
+            'recentCoursesList':
+                [
+                    {
+                    'id': trcnts.id, 'heading': trcnts.pHd, 'name': trcnts.pNm, 'url': trcnts.pURL, 'imgUrl': trcnts.pImg, \
+                     'imgAlt': trcnts.pImA, 'rating': trcnts.pARx, 'price': trcnts.pPinb, 'vendor': trcnts.pPvn,
+                     'stars': trcnts.pStar,'providerName': trcnts.pPvn
+                     } for trcnts in trcntss
+                ]
+        }
+        return APIResponse(message='Recent Course fetched', data=data, status=status.HTTP_200_OK)
+
 class TrendingCategoriesApi(PopularProductMixin, APIView):
     permission_classes = (permissions.AllowAny,)
     authentication_classes = ()
 
     def get(self, request):
-        if cache.get('category_popular_courses'):
-            data = cache.get('category_popular_courses')
+        quantity_to_display = int(request.GET.get('num', 3))
+
+        cached_data = cache.get('category_popular_courses')
+        if not settings.DEBUG and cached_data:
+            data = cached_data
         else:
             data = {
-                'SnMCourseList': PopularProductMixin().get_products_json(PopularProductMixin().get_popular_courses(category=17,quantity=3).values_list('id',flat=True)),
-                'ITCourseList': PopularProductMixin().get_products_json(PopularProductMixin().get_popular_courses(category=22,quantity=3).values_list('id',flat=True)),
-                'BnFCourseList': PopularProductMixin().get_products_json(PopularProductMixin().get_popular_courses(category=20,quantity=3).values_list('id',flat=True)),
+                'SnMCourseList': PopularProductMixin().get_products_json(PopularProductMixin().\
+                                                        get_popular_courses(category=17,quantity=quantity_to_display)),
+                'ITCourseList': PopularProductMixin().get_products_json(PopularProductMixin().\
+                                                        get_popular_courses(category=22,quantity=quantity_to_display)),
+                'BnFCourseList': PopularProductMixin().get_products_json(PopularProductMixin().\
+                                                        get_popular_courses(category=20,quantity=quantity_to_display)),
             }
             cache.set('category_popular_courses',data,86400)
         return Response(data=data, status=status.HTTP_200_OK)

@@ -2,7 +2,6 @@ const webpackNodeExternals = require("webpack-node-externals");
 const path = require('path');
 const fs = require('fs');
 
-
 const moduleFileExtensions = [
     '.web.mjs',
     '.mjs',

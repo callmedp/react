@@ -24,7 +24,7 @@ const get = (url, headers = getHeaders()
     .then(async (response) => {
         return await handleResponse(response, isFetchingHTML)
     })
-    .catch(err => console.log(err))
+    .catch(err => { throw err })
 };
 
 
@@ -91,7 +91,8 @@ async function handleResponse(response, isFetchingHTML) {
             data = await response.json();
             return {
                 error: true,
-                ...data
+                ...data,
+                status : response.status,
             }
             
         } catch (e) {

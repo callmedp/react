@@ -1,11 +1,14 @@
 import * as Actions from '../actions/actionTypes';
 import { takeLatest, call, put } from 'redux-saga/effects';
 import Api from './Api';
+
 function* sessionAvailability(action) {
     let { payload: { resolve } } = action;
     try {
         let resp = yield call(Api.sessionAvailability)
         const { result, candidate_id } = resp.data;
+        localStorage.setItem('isAuthenticated', result);
+        localStorage.setItem('candidateId', candidate_id);
         resolve({ result: result, candidate_id: candidate_id });
     } catch (e) {
         return resolve(false)
@@ -26,6 +29,7 @@ function* cartCount(action) {
 
     }
     catch (e) {
+        console.error("Exception occured at cartCount Api", e);
     }
 }
 
@@ -41,6 +45,7 @@ function* candidateInfo(action) {
         resolve({ candidateId: candidate_id || '', name: first_name || '', email: email || '' , mobile: cell_phone || ''});
     }
     catch (e) {
+        console.error("Exception occured at candidateInfo Api", e);
         return reject(e);
     }
 }
@@ -60,7 +65,7 @@ function* navOffersAndTags(action) {
         })
 
     } catch (e) {
-        console.error("Exception occured ",e)
+        console.error("Exception occured at navOffersAndTags ",e)
     }
 }
 

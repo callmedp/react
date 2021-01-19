@@ -8,17 +8,18 @@ require('dotenv').config({
 const fs = require('fs');
 const express = require('express');
 const matchRoutes = require('react-router-config').matchRoutes;
-const fetchApiData = require('apiHandler/skillPageApi').default;
+const fetchApiData = require('./fetching').default;
 
-const PORT = process.env.PORT || 3216;
+const PORT = process.env.PORT || 8079;
 const app = express();
 
 if (typeof global.window == 'undefined') {
     global.window = {
         config: {
-            isServerRendered : true,
+            isServerRendered : process.env.IS_SERVER_RENDERED,
             siteDomain : process.env.SITE_DOMAIN,
-            imageUrl : process.env.IMAGE_URL
+            imageUrl : process.env.IMAGE_URL,
+            resumeShineSiteDomain : process.env.RESUME_SHINE_SITE_DOMAIN,
         }
     };
 }
@@ -90,7 +91,9 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.use('/media/static/', express.static('../careerplus/media/static/'));
+app.use('/media/static/',express.static('../careerplus/media/static/'));
+app.use(express.static('../careerplus/media/static/react/'));
+
 
 const isMobile = (userAgents) => {
     return /Android|Phone|Mobile|Opera\sM(in|ob)i|iP[ao]d|BlackBerry|SymbianOS|Safari\.SearchHelper|SAMSUNG-(GT|C)|WAP|CFNetwork|Puffin|PlayBook|Nokia|LAVA|SonyEricsson|Karbonn|UCBrowser|ucweb|Micromax|Silk|LG(MW|-MMS)|PalmOS/i.test(userAgents)
@@ -100,14 +103,14 @@ app.get(expressRoutes, (req, res) => {
 
     if (isMobile(userAgents)) {
 
-        console.log("<><><><><><>Entered Mobile<><><><><><>")
+        console.log("<><><><><><>Entered Mobile<><><><><><>   ",req.url )
         indexFile = path.resolve('ssrBuild/index.mobile.html');
         routes = require('routes/index.mobile').routes;
 
     }
     else {
 
-        console.log("<><><><><><>Entered Desktop<><><><><><>")
+        console.log("<><><><><><>Entered Desktop<><><><><><>  ", req.url)
         indexFile = path.resolve('ssrBuild/index.html');
         routes = require('routes/index.desktop').routes;
 
@@ -117,22 +120,40 @@ app.get(expressRoutes, (req, res) => {
     
     
     branch.forEach(async ({ route, match }) => {
-        console.log("routes are", route);
         if (route && route.actionGroup) {
-           
             try {
-                
-                result = await fetchApiData(store, match.params, route.actionGroup);
+                result = await new Promise((resolve, reject) => fetchApiData(store, match.params, route.actionGroup, resolve, reject) ) ;
                 appContent = render(req, routes);
+
+                // const helmet = Helmet.renderStatic();
+                // let metaTitlesAll = "";
+
+                // try {
+                //     metaTitlesAll += '<title>' + helmet.title.toComponent()[0].key + '</title>';
+                //     metaTitlesAll += '<link rel="canonical" href= ' + helmet.link.toComponent()[0].props.href + ' />';
+
+                //     for (let m = 0; m < helmet.meta.toComponent().length; m++) {
+                //         let metaTitles = helmet.meta.toComponent()[m].props;
+
+                //         if(metaTitles.name && metaTitles.name === 'description') metaTitlesAll += '<meta name="'+ metaTitles.name +'" content="' + metaTitles.content + '" />';
+
+                //         else if(metaTitles.property && (metaTitles.property === 'og:title' || metaTitles.property === 'og:url' || metaTitles.property === 'og:description' || metaTitles.property === 'og:type' || metaTitles.property === 'og:site_name' || metaTitles.property === 'fb:profile_id')) metaTitlesAll += '<meta property="' +metaTitles.property+ '" content="' + metaTitles.content + '" />';
+
+                //         else if(metaTitles.itemprop && (metaTitles.itemprop === '' || metaTitles.itemprop === 'url' || metaTitles.itemprop === 'description')) metaTitlesAll += '<meta itemprop="' +metaTitles.name+ '" content="' + metaTitles.content + '" />';
+                //     }
+                // }
+                // catch (e) {
+                //     // pass
+                // }
 
                 // Grab the initial state from our Redux store at send it to the browser to hydrate the app.
                 const preloadedState = store.getState()
                 
-            
+                
                 fs.readFile(indexFile, 'utf8', (err, data) => {
                     if (err) {
                         console.error('Something went wrong:', err);
-                        return res.status(500).send('Oops, better luck next time!');
+                        return res.status(500).send('index.html file not found!');
                     }
             
                     return res.send(
@@ -142,12 +163,16 @@ app.get(expressRoutes, (req, res) => {
                             window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g,'\\u003c')}
                             window.config = ${JSON.stringify(window.config)}
                         </script>`
-                        ));
+                        )
+                         // .replace('</head>', `${metaTitlesAll}</head>`)
+                        );
                 });
                 
             }
-            catch(e){
-                console.log("failed to fetch server api", e);
+            catch(error){
+                if(error?.status === 404){
+                    return res.redirect('/404/');
+                }
             }
         }
 

@@ -1,0 +1,29 @@
+@import '../../../../../styles/functions';
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
+
+.rejectModal {
+    padding: 30px 50px;
+
+    &--heading {
+        font-size: $font-size-lg;
+        font-weight: 600;
+        margin-bottom: 15px;
+    }
+}
+
+.db-upload-resume {
+
+    &--list {
+        text-align: left;
+        width: 225px;
+        margin: 20px auto 0;
+
+        li {
+            &:not(:last-child) {
+                margin-bottom: 10px;
+            }
+        }
+    }
+}
+

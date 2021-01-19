@@ -1163,10 +1163,16 @@ $print-body-min-width:              map-get($grid-breakpoints, "lg") !default;
 
 // custom variables by Sachin K.
 
-$sprite: url('#{$path}learning-sprite.png') no-repeat;
+$sprite: url('#{$path}desktop/learning-sprite.png') no-repeat;
+$spriteDb: url('#{$path}desktop/learning-spriteDB.svg') no-repeat;
+$image-root: '#{$path}desktop/';
 
 %box-shadow {
   box-shadow: $box-shadow;
   padding: 2rem;
   border-radius: .4rem;
 }
+
+// DB Variable
+
+$db-light-pink: #FFDEDE;

@@ -73,7 +73,7 @@ class ArticleCommentView(View):
                         Comment.objects.create(blog=blog, message=message, name=name, candidate_id=request.session.get('candidate_id'))
                         status = 1
                         blog.no_comment += 1
-                    blog.save()
+                    blog.save(update_fields=['no_comment'])
             except Exception as e:
                 logging.getLogger('error_log').error("Unable to comment on article %s " % str(e))
             data = {"status": status}

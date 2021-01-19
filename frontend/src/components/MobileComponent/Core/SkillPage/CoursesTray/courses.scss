@@ -177,7 +177,7 @@
     >.slick-slider {
         .slick-list {
             .slick-slide {
-                width: 30rem !important;
+                width: 32rem !important;
                 padding: 1.5rem 1rem !important;
             }
         }
@@ -204,10 +204,11 @@
             }
     
             .m-type {
-                font-size: 1.1rem;
+                font-size: 1.2rem;
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
+                line-height: 2rem;
     
                 strong {
                     display: inline;
@@ -233,6 +234,8 @@
         
                 li {
                     
+                    position: relative;
+                    padding-left: 1.7rem;
                     &:not(:last-child) {
                         margin-bottom: .3rem;
                     }
@@ -244,6 +247,9 @@
                         height: .8rem;
                         display: inline-block;
                         margin-right: 1rem;
+                        position: absolute;
+                        left: 0;
+                        top: .5rem;
                     }
                 }
             }
@@ -252,7 +258,22 @@
                 font-size: 1.2rem;
             }
     }
-}
+
+    .m-card-more {
+        
+            .about-ht {
+                height: auto;
+            }
+
+            .skill-ht {
+                height: auto;
+            }
+        }
+
+        .m-card__price {
+            margin-top: 1rem;
+        }
+    }
 
 .m-courses-slider {
     .m-card {
@@ -317,4 +338,8 @@
             }
         }
     }
+}
+
+.m-remove-space {
+    margin-top: -2rem;
 }

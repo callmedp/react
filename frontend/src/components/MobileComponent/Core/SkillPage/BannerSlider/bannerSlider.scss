@@ -2,6 +2,8 @@
 
 .m-banner-slider {
     margin: -5rem 0 0 .5rem !important;
+    min-height: 6.5rem;
+
     &__txt {
         display: flex !important;
         align-items: center;
@@ -10,6 +12,7 @@
         @extend %box-shadow1;
         padding: 1.5rem 1rem;
         border-bottom: 3px solid $card-btm-bdr;
+        height: 7rem;
 
         figure {
             margin-right: 1rem;

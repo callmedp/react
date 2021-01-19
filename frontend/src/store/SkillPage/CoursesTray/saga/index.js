@@ -10,7 +10,7 @@ function* coursesAndAssessments(action) {
         const response = yield call(Api.coursesAndAssessments, payload);
         
         if (response["error"]) {
-            return payload?.reject(response["error"])
+            return payload?.reject(response)
         }
         const item = response.data;
     
@@ -34,7 +34,7 @@ function* coursesAndAssessments(action) {
         return payload?.resolve(item)
 
     } catch (e) {
-        console.error("Exception occured ",e)
+        console.error("Exception occured at CourseAndAssessments Api",e)
         return payload?.reject(e);
     }
 }

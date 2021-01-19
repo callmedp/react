@@ -2,14 +2,25 @@ import React, { useEffect } from 'react';
 import Badge from 'react-bootstrap/Badge';
 import Button from 'react-bootstrap/Button';
 import './skillGain.scss';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector, connect } from 'react-redux';
 import { siteDomain, imageUrl } from 'utils/domains';
+import { MyGA } from 'utils/ga.tracking.js';
+import { getTrackingInfo } from 'utils/storage.js';
+import { trackUser } from 'store/Tracking/actions/index.js';
 
 const SkillGain = (props) => {
 
-    const { skillGainList, name, slug } = useSelector( store => store.skillBanner )
+    const { skillGainList, name, slug, heading } = useSelector( store => store.skillBanner )
   
-    const testRedirect = () => window.location.replace(`${siteDomain}/practice-tests/${slug}/sub`)
+    const testRedirect = () => {
+        gaTrack('TestYourSkill','ln_skill_test', "ln" + name, heading,'', false, true);
+        userTrack({"query":tracking_data, "action":'exit_skill_page'});
+        window.location.replace(`${siteDomain}/practice-tests/${slug}/sub`);
+    }
+
+    const tracking_data = getTrackingInfo();
+    const dispatch = useDispatch();
+    const { userTrack, gaTrack } = props;
 
     return (
         <section className="container-fluid lightblue-bg mt-40" id="skGain" data-aos="fade-up">
@@ -35,28 +46,28 @@ const SkillGain = (props) => {
 
                         <figure className="skill-gain__img mt-40">
                             <span className="skill-tween1">
-                                <img src={`${imageUrl}desktop/skill-tween1.svg`} />
+                                <img src={`${imageUrl}desktop/skill-tween1.svg`} alt={`${name} Course Skills Animation Icon 1`} />
                             </span>
                             <span className="skill-tween2">
-                                <img src={`${imageUrl}desktop/skill-tween2.svg`} />
+                                <img src={`${imageUrl}desktop/skill-tween2.svg`} alt={`${name} Course Skills Animation Icon 2`} />
                             </span>
                             <span className="skill-tween3" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="400">
-                                <img src={`${imageUrl}desktop/skill-tween3.svg`} alt="Skills you will gain" />
+                                <img src={`${imageUrl}desktop/skill-tween3.svg`} alt={`${name} Course Skills Animation Icon 3`} />
                             </span>
                             <span className="skill-tween4" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="500">
-                                <img src={`${imageUrl}desktop/skill-tween4.svg`} alt="Skills you will gain" />
+                                <img src={`${imageUrl}desktop/skill-tween4.svg`} alt={`${name} Course Skills Animation Icon 4`} />
                             </span>
                             <span className="skill-tween5" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="600">
-                                <img src={`${imageUrl}desktop/skill-tween5.svg`} alt="Skills you will gain" />
+                                <img src={`${imageUrl}desktop/skill-tween5.svg`} alt={`${name} Course Skills Animation Icon 5`} />
                             </span>
                             <span className="skill-tween6" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="700">
-                                <img src={`${imageUrl}desktop/skill-tween6.svg`} alt="Skills you will gain" />
+                                <img src={`${imageUrl}desktop/skill-tween6.svg`} alt={`${name} Course Skills Animation Icon 6`} />
                             </span>
                             <span className="skill-tween7" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="800">
-                                <img src={`${imageUrl}desktop/skill-tween7.svg`} alt="Skills you will gain" />
+                                <img src={`${imageUrl}desktop/skill-tween7.svg`} alt={`${name} Course Skills Animation Icon 7`} />
                             </span>
                             <span className="skill-tween8" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="900">
-                                <img src={`${imageUrl}desktop/skill-tween8.svg`} alt="Skills you will gain" />
+                                <img src={`${imageUrl}desktop/skill-tween8.svg`} alt={`${name} Course Skills Animation Icon 8`} />
                             </span>
                         </figure>
                     </div>
@@ -66,4 +77,14 @@ const SkillGain = (props) => {
     )
 }
 
-export default SkillGain;
+const mapDispatchToProps = (dispatch) => {
+    return {
+        "userTrack": (data) => {
+            return dispatch(trackUser(data))
+        },
+        "gaTrack": (data) => { MyGA.SendEvent(data)
+        }
+    }
+}
+
+export default connect(null, mapDispatchToProps)(SkillGain);

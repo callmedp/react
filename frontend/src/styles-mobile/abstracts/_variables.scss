@@ -30,12 +30,15 @@ $free-test-banner-bdr: #D5E8F5 !default;
 $card-btm-bdr: #D9E5F8 !default;
 $badge-pill-solid: #F8F9FC;
 $tab-pill-color: #88A6D8;
+$tab-pill-bgcolor: #CFE1FE;
 $course-light-bg: #F1F8FC;
 $course-badge-blue: #E0F3FF;
 $course-badge-red: #FBC1C1;
 $footer-bg: #F2F6FD;
 
-$sprite: url('#{$path}learning-sprite-mobile.svg') no-repeat;
+$sprite: url('#{$path}mobile/learning-sprite-mobile.svg') no-repeat;
+$spriteDb: url('#{$path}mobile/learning-spriteDB.svg') no-repeat;
+$image-root: '#{$path}mobile/';
 
 $bg: #F9FAFC;
 $border-color: #D5D5D5;
@@ -54,6 +57,8 @@ $font-size-xs   : 1.2rem;
 $font-size-base : 1.3rem;
 $font-size-md   : 1.4rem;
 $font-size-lg   : 1.6rem;
+
+$box-shadow: 0 1px 13px 0 rgba(200,200,200,0.50);
 
 
 %box-shadow1 {
@@ -84,3 +89,8 @@ $font-size-lg   : 1.6rem;
     background-image: linear-gradient(134deg, #849EE4 0%, #314DCC 100%, #314DCC 100%, #314DCC 100%);
     // box-shadow: 0 2px 7px 0 #5262AD;  
 }
+
+
+// DB Variable
+
+$db-light-pink: #FFDEDE;

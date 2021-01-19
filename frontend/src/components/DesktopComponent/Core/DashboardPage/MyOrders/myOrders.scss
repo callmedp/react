@@ -1,0 +1,111 @@
+@import '../../../../../styles/functions';
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
+
+.db-my-order {
+    &-box {
+        border-radius: 0.4rem;
+        background-color: $white;
+        padding: 15px 30px;
+        box-shadow: $box-shadow;
+        font-size: 12px;
+        color: $gray-200;
+
+        &:not(:last-child) {
+            margin-bottom: 15px;
+        }
+    }
+
+    .order-detail {
+        &--id {
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        &__content {
+            border-top: 1px solid rgba($blue, 0.11);
+            margin-top: 15px;
+            padding-top: 15px;
+
+            &--btnWrap {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+
+                a {
+                    font-size: 13px;
+                    font-weight: 600;
+                }
+
+                .arrow-icon {
+                    &::after {
+                        content: '';
+                        width: 8px;
+                        height: 5px;
+                        display: inline-block;
+                        background: $spriteDb;
+                        background-position: -92px -24px;
+                        margin-left: 10px;
+                        transition: all .3s ease-in;
+                    }
+
+                    &.open {
+                        &::after {
+                            transform: rotate(180deg);
+                        }
+                    }
+                }
+                
+                .download-icon {
+                    &::before {
+                        content: '';
+                        width: 10px;
+                        height: 10px;
+                        display: inline-block;
+                        background: $spriteDb;
+                        background-position: -74px -21px;
+                        margin-right: 10px;
+                    }
+                }
+            }
+
+            &--detail {
+                padding-left: 59px;
+                padding-right: 59px;
+                padding-top: 30px;
+
+                ul {
+                    li {
+                        display: flex;
+                        align-items: center;
+                        justify-content: space-between;
+                        font-size: 13px;
+                        font-weight: 500;
+                        color: $gray-100;
+
+                        &:not(:last-child) {
+                            border-bottom: 1px solid rgba($blue, 0.11); 
+                            padding-bottom: 5px;
+                            margin-bottom: 5px;
+                        }
+
+                        &.head {
+                            font-size: 12px;
+                            color: $gray-200;
+                        }
+                    }
+                }
+
+                .unpaid {
+                    color: $gray-100;
+                    font-weight: 500;
+                }
+            }
+        }
+    }
+
+    .noLink {
+        cursor: unset;
+    }
+}
+
