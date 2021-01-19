@@ -13,6 +13,12 @@ const MultiLevelItems = props => {
 		setType('menu')
 	}
 
+	const handleLevel = (event, child) => {
+		event.preventDefault();
+		setData([child?.children, child?.name, child?.sideNavType]);
+		setType('thirdLevel');
+	}
+
 	return (
 		<Menu className={'navigation'} width={'300px'} isOpen={open} onStateChange={state => setOpen(state.isOpen)}>
 			<div className="m-guest-section " >
@@ -31,13 +37,13 @@ const MultiLevelItems = props => {
                                 {
                                     child?.children?.length ? 
 										(
-											<a className="menu-item" href='/' onClick={(e)=>{e.preventDefault();setData([child?.children, child?.name, child?.sideNavType]); setType('thirdLevel')}} >
+											<a className="menu-item" href='/' onClick={(event)=>handleLevel(event, child)} >
 												{child.name} 
 												<figure className="micon-arrow-menusm ml-auto"></figure>
 											</a>
 										) : 
 										(
-											usedIn === 'allCourses' ? 
+											child?.sideNavType === 'courses' ? 
 											child?.name === 'Course Catalogue' ? <a className="menu-item" href={child.url} onClick={resetNav} > {child.name} </a> :
 											<Link className="menu-item" to={child.url} onClick={resetNav}> {child.name} </Link> :
 											<a className="menu-item" href={child.url} onClick={resetNav} > {child.name} </a>
