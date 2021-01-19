@@ -1,9 +1,9 @@
 'use strict';
 require('isomorphic-fetch');
 const path = require('path');
-require('dotenv').config({ 
-    path: path.resolve(process.cwd(), '.env.ssr')
-})
+// require('dotenv').config({ 
+//     path: path.resolve(process.cwd(), '.env.ssr')
+// })
 
 const fs = require('fs');
 const express = require('express');
@@ -13,16 +13,16 @@ const fetchApiData = require('../src/apiHandler/skillPageApi').default;
 const PORT = process.env.PORT || 8079;
 const app = express();
 
-if (typeof global.window == 'undefined') {
-    global.window = {
-        config: {
-            isServerRendered : process.env.IS_SERVER_RENDERED,
-            siteDomain : process.env.SITE_DOMAIN,
-            imageUrl : process.env.IMAGE_URL,
-            resumeShineSiteDomain : process.env.RESUME_SHINE_SITE_DOMAIN,
-        }
-    };
-}
+// if (typeof global.window == 'undefined') {
+//     global.window = {
+//         config: {
+//             isServerRendered : process.env.IS_SERVER_RENDERED,
+//             siteDomain : process.env.SITE_DOMAIN,
+//             imageUrl : process.env.IMAGE_URL,
+//             resumeShineSiteDomain : process.env.RESUME_SHINE_SITE_DOMAIN,
+//         }
+//     };
+// }
 
 if (typeof global.localStorage == "undefined") {
 
