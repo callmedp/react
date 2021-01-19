@@ -17,7 +17,7 @@ const MenuNav = (props) => {
     case 'menu': return < DefaultMenuNav open={open} setOpen={setOpen} setType={setType} />
     case 'freeResources': return <FreeResources open={open} setOpen={setOpen} setType={setType} item={freeResourcesList} parentName="Free Resources" setData={setData}/>
     case 'jobAssistanceServices': return <ResumeServices open={open} setOpen={setOpen} setType={setType} item={jobAssistanceList} parentName="Resume Services"/>
-    case 'allCourses': return <AllCourses usedIn = 'allCourses' open={open} setOpen={setOpen} setType={setType} item={categoryList} parentName="All Courses" setData={setData}/>
+    case 'allCourses': return <AllCourses open={open} setOpen={setOpen} setType={setType} item={categoryList} parentName="All Courses" setData={setData}/>
     case 'thirdLevel': return <ThirdLevel open={open} setOpen={setOpen} setType={setType} item={data[0]} parentName={data[1]} sideNavType={data[2]}/>
     default: return < DefaultMenuNav setType={setType} />
   }
