@@ -125,7 +125,7 @@ class MyServicesApi(DashboardInfo, APIView):
                 
 
                 services = OrderItem.objects.filter(order__in=orders,product__product_class__slug__in=settings.SERVICE_SLUG)
-                pending_resume_items = DashboardInfo().get_pending_resume_items(candidate_id=candidate_id)
+                pending_resume_items = DashboardInfo().get_pending_resume_items(candidate_id=candidate_id,
                                                                             email=email)
 
                 pending_resume_items = [{'id': oi.id, 'product_name': oi.product.get_name if oi.product else ''
