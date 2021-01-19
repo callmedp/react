@@ -2,7 +2,9 @@ from rest_framework import serializers
 
 # app imports
 from order.models import OrderItem, Order
-from datetime import datetime
+from datetime import datetime,timedelta
+from order.choices import OI_OPS_STATUS
+from django.conf import settings
 
 OI_STATUS_DICT = {
     0 : 'Unpaid',
@@ -53,8 +55,34 @@ class OrderItemSerializer(serializers.ModelSerializer):
             'product_type_flow': instance.product.type_flow if instance.product_id else '',
             'heading': instance.product.heading if instance.product_id else '',
         })
-        return data
+        if self.context.get("send_course_detail", None):
+            date_placed =instance.order.date_placed.strftime("%b %d, ""%Y")
+            data.update({
+                'img': instance.product.get_image_url(), 
+                'rating': instance.product.get_ratings(),
+                'avg_rating':instance.product.get_avg_ratings(),
+                'price': instance.product.get_price(),
+                'vendor': instance.product.vendor.name, 
+                'duration':instance.product.get_duration_in_ddmmyy() if instance.product_id and instance.product.get_duration_in_day() else None,
+                'enroll_date':date_placed,
+                # 'remaining_days':instance.order.date_placed + timedelta(days=instance.product.get_duration_in_day())-datetime.now(),
+                'status':OI_OPS_STATUS[instance.oi_status][1] if instance.oi_status else None,
+                'mode':instance.product.get_studymode_db(),
+                'jobs':instance.product.num_jobs,
+            })
+            detail = []
+            max_draft_limit=settings.DRAFT_MAX_LIMIT
+            if instance.oi_status == 24 and instance.draft_counter == 1 :
+                 detail.append(instance.get_user_oi_status)
+            elif instance.oi_status == 24 and instance.draft_counter < max_draft_limit:
+                detail.append('Revised Document is ready')
+            elif instance.oi_status == 24 and instance.draft_counter == max_draft_limit:
+                detail.append('Final Document is ready')
+            elif instance.oi_status == 181 :
+                detail.append('Waiting For Input')
+            data.update({'view_details':{date_placed:detail}})
 
+        return data
 
 class OrderSerializer(serializers.ModelSerializer):
     """
