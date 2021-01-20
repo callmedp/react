@@ -93,6 +93,7 @@ const SkillPage = (props) => {
     useEffect(() => {
 
         handleEffects();
+        setTabType('about');
 
     }, [pageId])
 
@@ -129,7 +130,7 @@ const SkillPage = (props) => {
                             {tabType === "about" ?
                                 (
                                     <div id="about" className="tab-panel">
-                                        <SkillBanner />
+                                        <SkillBanner pageId={pageId} />
                                         <BannerSlider />
                                         <PopularCourses setTabType={setTabType} pageId={pageId} />
                                         <WhoLearn />

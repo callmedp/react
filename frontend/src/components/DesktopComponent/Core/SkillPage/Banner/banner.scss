@@ -3,7 +3,7 @@
 @import '../../../../../styles/mixins';
 
 header {
-    &.home-bg {
+    &.skill-bg {
         background: url('#{$path}desktop/skill-bg-new1.png') no-repeat center top;
         background-size: cover;
     }
