@@ -47,10 +47,9 @@ class OrderItemSerializer(serializers.ModelSerializer):
         return name
     
     def get_courses_detail(self,instance):
-        detail = []
         max_draft_limit=settings.DRAFT_MAX_LIMIT
         ops=[]
-        
+
         if instance.product.type_flow in [1, 12, 13]:
             ops = instance.orderitemoperation_set.filter(oi_status__in=[2, 5, 24, 26, 27, 161, 162, 163, 164, 181])
         elif instance.product.vendor.slug == 'neo':
