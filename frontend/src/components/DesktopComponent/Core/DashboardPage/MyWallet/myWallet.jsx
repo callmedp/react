@@ -98,8 +98,8 @@ const MyWallet = (props) => {
                                 <ul className="row myWallet__list" key={index}>
                                     <li className="col-md-2">{item.date}</li>
                                     <li className="col-md-2">{item.order_id}</li>
-                                    <li className="col-md-2">{item.description}</li>
-                                    <li className={`col-md-2 ${item.loyality_points > 0 ? "text-success" : "text-danger"}`}>{item.loyality_points > 0 ? '+' + item.loyality_points : '-' + item.loyality_points}</li>
+                                    <li className="col-md-2">{item.get_txn_type}</li>
+                                    <li className={`col-md-2 ${item.txn_sign > '+' ? "text-success" : "text-danger"}`}>{item.txn_sign}{item.loyality_points}</li>
                                     <li className="col-md-2">{item.expiry_date}</li>
                                     <li className="col-md-2">{item.balance}</li>
                                 </ul>

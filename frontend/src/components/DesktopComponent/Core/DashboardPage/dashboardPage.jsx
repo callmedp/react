@@ -36,7 +36,7 @@ const DashboardPage = (props) => {
 
                         <div className="dashboard-warp--wrap">
                             <div className="dashboard-warp--content">
-                                <MyOrders />
+                                <MyServices {...props} />
                             </div>
                         </div>
                     </div>

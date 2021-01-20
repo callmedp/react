@@ -24,10 +24,18 @@ const uploadResumeDashboardForm = (data) => {
     }, true);
 }
 
+const submitDashboardReviews = (data) => {
+    console.log(data)
+    const url = `${siteDomain}/api/v1/dashboard-feedback/`;
+    return BaseApiService.post(url, data)
+}
+
+
 
 export default {
     myServicesData,
     uploadResumeDashboardForm,
     getOiComment,
-    postOiComment
+    postOiComment,
+    submitDashboardReviews
 }

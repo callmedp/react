@@ -13,15 +13,23 @@ const uploadResumeForm = (payload) => ({
 })
 
 // oi comment
-export const getoiComment = (payload) => {
+const getoiComment = (payload) => {
     return {
         type: Actions.GET_OI_COMMENT,
         payload
     }
 }
 
+const SubmitDashboardFeedback = (payload) => {
+    return {
+        type: Actions.SUBMIT_DASHBOARD_REVIEWS,
+        payload
+    }
+}
 
 export {
     fetchMyServices,
-    uploadResumeForm
+    uploadResumeForm,
+    getoiComment,
+    SubmitDashboardFeedback
 }

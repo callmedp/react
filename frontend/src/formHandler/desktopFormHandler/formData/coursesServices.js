@@ -4,7 +4,8 @@ export default {
         type: "text",
         name: "comment",
         id: "name",
-        label: "Comment*",
+        label: "",
+        placeholder: "Type Here",
         inputType: 'input',
         rows: 3,
         validation: {
@@ -16,7 +17,7 @@ export default {
         
     },
     'email': {
-        className: "input_field form-control",
+        className: "form-control",
         type: "text",
         name: "email",
         id: "email",
@@ -32,8 +33,25 @@ export default {
             
         }
     },
+
+    'review': {
+        className: "form-control",
+        type: "text",
+        name: "review",
+        id: "name",
+        label: "Email",
+        inputType: 'input',
+        rows: 3,
+        validation: {
+            required:true,
+        },
+        errorMessage: {
+            required: "This field is required",
+        }
+        
+    },
     'mobile': {
-        className: "input_field form-control",
+        className: "form-control",
         type: "number",
         name: "number",
         id: "number",
