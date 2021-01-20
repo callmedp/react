@@ -49,7 +49,8 @@ class OrderItemSerializer(serializers.ModelSerializer):
     def get_courses_detail(self,instance):
         detail = []
         max_draft_limit=settings.DRAFT_MAX_LIMIT
-
+        ops=[]
+        
         if instance.product.type_flow in [1, 12, 13]:
             ops = instance.orderitemoperation_set.filter(oi_status__in=[2, 5, 24, 26, 27, 161, 162, 163, 164, 181])
         elif instance.product.vendor.slug == 'neo':
@@ -146,13 +147,15 @@ class OrderItemSerializer(serializers.ModelSerializer):
                     options['oi.pk']=oi.pk
         elif oi.product.type_flow == 5:
             if oi.product.sub_type_flow == 502:
-                with oi.get_item_operations as custom_ops:
+                custom_ops=oi.get_item_operations()
+                if custom_ops is not None:
                     for op in custom_ops:
-                        date_created =op.created
-                        if op.oi_status == 31:
-                            datalist.append('Service is Under Progress')
-                        else:
-                            datalist.append(op.get_user_oi_status)
+                        if op:
+                            date_created =op.created
+                            if op.oi_status == 31:
+                                datalist.append('Service is Under Progress')
+                            else:
+                                datalist.append(op.get_user_oi_status)
             else:
                 for op in ops:
                     date_created =op.created
@@ -217,7 +220,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
             'product_type_flow': instance.product.type_flow if instance.product_id else '',
             'heading': instance.product.heading if instance.product_id else '',
         })
-        if self.context.get("send_course_detail", None):
+        if self.context.get("get_details", None):
             date_placed =instance.order.date_placed.strftime("%b %d, ""%Y")
             data.update({
                 'img': instance.product.get_image_url(), 

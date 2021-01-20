@@ -128,15 +128,15 @@ class MyServicesApi(DashboardInfo, APIView):
                                     } for oi in
                                 pending_resume_items]
             data = []
-            # data = OrderItemSerializer(services,many=True,context= {"send_course_detail": True}).data
-            for serv in services:
-                tsrvc = SearchQuerySet().filter(id__in=serv.id, pTP__in=[0, 1, 3]).exclude(
-                id__in=settings.EXCLUDE_SEARCH_PRODUCTS
-                )[0]
-                tsrvc_data = {'id': tsrvc.id, 'heading': tsrvc.pHd, 'name': tsrvc.pNm, 'url': tsrvc.pURL, 'img': tsrvc.pImg, \
-                    'img_alt': tsrvc.pImA, 'rating': tsrvc.pARx, 'price': tsrvc.pPinb, 'vendor': tsrvc.pPvn, 'stars': tsrvc.pStar,
-                    'provider': tsrvc.pPvn,'duration':serv.product.get_duration_in_day(),'status':OI_OPS_STATUS[serv.oi_status][1] if serv.oi_status else None}
-                data.append(tsrvc_data)
+            data = OrderItemSerializer(services,many=True,context= {"get_details": True}).data
+            # for serv in services:
+            #     tsrvc = SearchQuerySet().filter(id__in=serv.id, pTP__in=[0, 1, 3]).exclude(
+            #     id__in=settings.EXCLUDE_SEARCH_PRODUCTS
+            #     )[0]
+            #     tsrvc_data = {'id': tsrvc.id, 'heading': tsrvc.pHd, 'name': tsrvc.pNm, 'url': tsrvc.pURL, 'img': tsrvc.pImg, \
+            #         'img_alt': tsrvc.pImA, 'rating': tsrvc.pARx, 'price': tsrvc.pPinb, 'vendor': tsrvc.pPvn, 'stars': tsrvc.pStar,
+            #         'provider': tsrvc.pPvn,'duration':serv.product.get_duration_in_day(),'status':OI_OPS_STATUS[serv.oi_status][1] if serv.oi_status else None}
+            #     data.append(tsrvc_data)
             data.append({'pending_resume_items':pending_resume_items})
         return Response(data=data, status=status.HTTP_200_OK)
 
