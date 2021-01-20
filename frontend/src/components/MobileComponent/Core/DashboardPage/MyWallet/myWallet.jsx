@@ -1,21 +1,44 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './myWallet.scss';
+import { useDispatch, useSelector } from 'react-redux';
 
    
 const MyWallet = (props) => {
+    const loyalityTxn = useSelector(store => store.dashboardWallet?.data)
+
     return(
         <div className="m-wallet db-warp">
             <div className="m-card">
                 <div className="m-wallet__firstCard">
                     <div className="m-wallet__firstCard--rhs">
                         <span>Loyality point balance</span>
-                        <h2>248.00 </h2>
+                        <h2> { loyalityTxn?.wal_total?.toFixed(2) } </h2>
                     </div>
 
                     <button className="btn-blue-outline btn-xs">Redeem now</button>
                 </div>
             </div>
+
+            {
+                loyalityTxn?.loyality_txns?.map((txn) => {
+                    return (
+                        <div className="m-card" key={ txn?.order_id }>
+                            <span className="m-wallet--date">{ txn?.date }</span>
+                            <ul className="m-wallet--info">
+                                <li className="head">{ txn?.order_id }</li>
+                                <li className="lPoints text-red">{ txn?.loyality_points }</li>
+                                <li className="blance">{ txn?.balance }</li>
+                            </ul>
+
+                            <div className="m-pipe-divides">
+                                <span>Expired</span>
+                                <span>Expiry date: <strong>{ txn?.expiry_date }</strong></span>
+                            </div>
+                        </div>
+                    )
+                })
+            }
             
             <div className="m-card">
                 <span className="m-wallet--date">27 Oct 2020</span>
@@ -82,7 +105,7 @@ const MyWallet = (props) => {
                         <strong className="redeem-now--lPoints d-block">248.00</strong>
                         loyality point is reedemed and added <br/>in your wallet
                     </p>
-                    <Link className="font-weight-bold">Ok</Link>
+                    <Link to={'#'} className="font-weight-bold">Ok</Link>
                </div>
             </div>
         </div>
