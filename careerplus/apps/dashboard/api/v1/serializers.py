@@ -6,14 +6,14 @@ from datetime import datetime
 
 OI_STATUS_DICT = {
     0 : 'Unpaid',
-    1 : 'Service in progress',
+    1 : 'In progress',
     4 : 'Closed',
     5 : 'Cancelled',
 }
 
 class OrderItemSerializer(serializers.ModelSerializer):
 
-    item_oi_status = serializers.ReadOnlyField(source='get_oi_status')
+    # item_oi_status = serializers.ReadOnlyField(source='get_oi_status')
     class Meta:
         model = OrderItem
         fields = ('id', 'title', 'quantity', 'product', 'oi_status')
@@ -62,12 +62,10 @@ class OrderSerializer(serializers.ModelSerializer):
         Serializer for `Order` model
     """
 
-    order_status = serializers.ReadOnlyField(source='get_status')
+    # order_status = serializers.ReadOnlyField(source='get_status')
     class Meta:
         model = Order
-        exclude = ('co_id', 'archive_json', 'site', 'assigned_to', 'wc_cat', 'wc_sub_cat', 'wc_status',
-            'wc_follow_up', 'welcome_call_done', 'welcome_call_records', 'midout_sent_on', 'paid_by', 'invoice',
-            'crm_sales_id', 'crm_lead_id', 'sales_user_info', 'auto_upload', 'created', 'modified')
+        fields = ('id', 'number', 'total_incl_tax', 'status', 'currency', 'date_placed')
 
     def to_representation(self, instance):
         data = super(OrderSerializer, self).to_representation(instance)

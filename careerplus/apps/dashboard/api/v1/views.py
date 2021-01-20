@@ -152,6 +152,7 @@ class DashboardMyWalletAPI(DashboardInfo, APIView):
         """
         page = request.GET.get('page', 1)
         data = {}
+        reward_type = ['Added', 'Refund']
 
         # attempting to get candidate from session
         candidate_id = self.request.session.get('candidate_id')
@@ -184,7 +185,9 @@ class DashboardMyWalletAPI(DashboardInfo, APIView):
                                   'order_id': None if obj.order is None else obj.order.number,
                                   'loyality_points': obj.point_value,
                                   'expiry_date': obj.added_point_expiry().strftime(
-                                      '%b. %d, %Y') if obj.txn_type == 1 or obj.txn_type == 5 else '',
+                                      '%d %b %Y') if obj.txn_type == 1 or obj.txn_type == 5 else '',
+                                  'get_txn_type': obj.get_txn_type(),
+                                  'txn_sign': '+' if obj.get_txn_type() in reward_type else '-',
                                   'balance': obj.current_value} for obj in wal_txns_page_obj.object_list]
         # -------------------------------------------------------------------------------------------------------------#
         rcourses = get_recommendations(

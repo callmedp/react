@@ -60,7 +60,7 @@ const MyOrders = (props) => {
             </div>
             
             {results?.data?.length > 0 ?
-                results.data.map((item, index) => {
+                results?.data?.map((item, index) => {
                     return (
                         <div className="db-white-box order-detail" key={index}>
                             <div className="row">
