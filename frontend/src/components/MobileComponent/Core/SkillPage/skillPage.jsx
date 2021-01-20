@@ -58,7 +58,7 @@ const SkillPage = (props) => {
                 new Promise((resolve, reject) => dispatch(fetchCoursesAndAssessments({ id: pageId, 'medium': 1, resolve, reject })));
                 new Promise((resolve, reject) => dispatch(fetchDomainJobs({ id: pageId, resolve, reject })));
                 new Promise((resolve, reject) => dispatch(fetchRecommendedProducts({ resolve, reject })));
-                new Promise((resolve, reject) => dispatch(fetchPopularCourses({ id: pageId, resolve, reject })))
+                new Promise((resolve, reject) => dispatch(fetchPopularCourses({ id: pageId, courseOnly: true, resolve, reject })))
                 await new Promise((resolve, reject) => dispatch(fetchSkillPageBanner({ id: pageId, 'medium': 1, resolve, reject })))
                 dispatch(stopSkillPageLoader());
             }

@@ -54,7 +54,7 @@ const SkillPage = (props) => {
                 await new Promise((resolve, reject) => dispatch(fetchSkillPageBanner({ id: pageId, 'medium': 0, resolve, reject })));
                 new Promise((resolve, reject) => dispatch(fetchCoursesAndAssessments({ id: pageId, resolve, reject })));
                 new Promise((resolve, reject) => dispatch(fetchDomainJobs({ id: pageId, resolve, reject })));
-                new Promise((resolve, reject) => dispatch(fetchPopularCourses({ id: pageId, resolve, reject })))
+                new Promise((resolve, reject) => dispatch(fetchPopularCourses({ id: pageId, courseOnly : true, resolve, reject })))
             }
             else {
                 //isServerRendered is needed to be deleted because when routing is done through react and not on the node,

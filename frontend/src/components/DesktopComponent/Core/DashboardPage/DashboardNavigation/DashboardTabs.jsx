@@ -8,19 +8,19 @@ const DashboardNavigation = (props) => {
         <div className="db-tabs-wrap">
             <ul>
                 <li>
-                    <NavLink activeClassName="active" exact={true} to={"/dashboard/"} className="my-courses">
+                    <NavLink activeClassName="active" exact={true} to={"/dashboard/mycourses/"} className="my-courses">
                         <span className="d-block">My Courses</span>
                     </NavLink>
                 </li>
                 
                 <li>
-                    <NavLink activeClassName="active" to={"/dashboard/myservice"} className="my-services">
+                    <NavLink activeClassName="active" to={"/dashboard/myservices/"} className="my-services">
                         <span className="d-block">My Services</span>
                     </NavLink>
                 </li>
                 
                 <li>
-                    <NavLink activeClassName="active" to={"/dashboard/myorder"} className="my-order">
+                    <NavLink activeClassName="active" to={"/dashboard/myorder/"} className="my-order">
                         <span className="d-block">My Order</span>
                     </NavLink>
                 </li>
@@ -31,11 +31,11 @@ const DashboardNavigation = (props) => {
                     </NavLink>
                 </li>
                 
-                <li>
-                    <NavLink activeClassName="active" to={"/dashboard/myprofile"} className="my-profile">
+                {/* <li>
+                    <NavLink activeClassName="active" to={"/dashboard/myprofile/"} className="my-profile">
                         <span className="d-block">My Profile</span>
                     </NavLink>
-                </li>
+                </li> */}
             </ul>
         </div>
     )

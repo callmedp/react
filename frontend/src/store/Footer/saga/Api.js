@@ -8,8 +8,9 @@ const fetchTrendingCnA = () => {
 }
 
 const fetchPopularCourses = (data) => {
-    const categoryId = data
-    const url = `trending-courses-and-skills/?category_id=${categoryId}`;
+    const categoryId = data?.id
+    const courseOnly = data?.courseOnly
+    const url = `trending-courses-and-skills/?category_id=${categoryId}&course_only=${courseOnly}`;
     return BaseApiService.get(`${siteDomain}/api/v1/${url}`);
 }
 

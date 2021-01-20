@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchMyCourses } from 'store/DashboardPage/MyCourses/actions';
    
 const MyCourses = (props) => {
+    console.log("this is my courses")
     const [addOpen, setaddOpen] = useState(false);
     let [rating, setRating] = useState(-1);
     let [clicked, setClicked] = useState(false);
