@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ProgressBar } from 'react-bootstrap';
 import { Collapse } from 'react-bootstrap';
-import { Button } from 'react-bootstrap';
 import { Modal } from 'react-bootstrap';
 import '../MyCourses/myCourses.scss';
 import './myServices.scss';
@@ -14,6 +13,8 @@ import { useForm } from "react-hook-form";
 import fileUpload from "utils/fileUpload";
 import Swal from 'sweetalert2';
 import {getCandidateId} from 'utils/storage';
+import {TextArea} from 'formHandler/desktopFormHandler/formFields';
+import CoursesServicesForm from 'formHandler/desktopFormHandler/formData/coursesServices';
 
 const MyServices = (props) => {
     const [addOpen, setaddOpen] = useState(false);
@@ -21,8 +22,6 @@ const MyServices = (props) => {
     const [open, setOpen] = useState(false);
     const [openReview, setOpenReview] = useState(false);
     const toggleReviews = (id) => setOpenReview(openReview == id ? false : id);
-
-    // const [openViewDetail, setOpenViewDetail] = useState(false);
 
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -40,10 +39,7 @@ const MyServices = (props) => {
     const dispatch = useDispatch();
     const { history } = props;
     const { serviceLoader } = useSelector(store => store.loader);
-    let comment_id = null;
 
-    const comm = useSelector(store => console.log(store));
-    
     const [isOpen, setIsOpen] = useState(false);
     const toggleDetails = (id) => setIsOpen(isOpen == id ? false : id);
 
@@ -64,22 +60,20 @@ const MyServices = (props) => {
         }
         if(!addOpen) {
             dispatch(getoiComment(commVal));
-            comment_id = id;
         }
     };
 
     // add new comment
     const submitComment = (values) => {
-        console.log(values)
         let new_values = {
           ...values,
           candidate_id: getCandidateId(),
-          oi_pk: comment_id,
+          oi_pk: results.oi_comment[0].oi_id,
           type: "POST",
         };
 
         dispatch(getoiComment(new_values));
-      };
+    };
 
     // fill starts of already rated courses
     const fillStarForCourse = (star) => {
@@ -503,31 +497,44 @@ const MyServices = (props) => {
                             <Collapse in={addOpen}>
                                 <div className="position-relative" id="threeComments">
                                     <div className="db-add-comments lightblue-bg border-bottom-gray">
-                                        <span className="btn-close"  onClick={() => setOpen(!open)}>&#x2715;</span>
+                                        {/* <span className="btn-close" onClick={() => setOpen(!open)}>&#x2715;</span> */}
                                         <ul className="db-timeline-list">
                                             {results.oi_comment && results.oi_comment.length > 0 ?
-                                                results.oi_comment.map((comm,index) => {
+                                                results.oi_comment.map((comm, index) => {
                                                     return (
-                                                        <li>
-                                                            <i className="db-timeline-list--dot"></i>
-                                                            <span>{comm.comment.created} {comm.comment.addedBy != "" ?  '   |   By ' + comm.comment.addedBy : ""} </span>
-                                                            <p className="db-timeline-list--text">{comm.comment.message ? comm.comment.message : ""}</p>
-                                                        </li>
+                                                        comm.comment.map((item, ind) => {
+                                                            return (
+                                                                <li key={ind}>
+                                                                    <i className="db-timeline-list--dot"></i>
+                                                                    <span>{item.created} {item.addedBy ?  '   |   By ' + item.addedBy : ""} </span>
+                                                                    <p className="db-timeline-list--text">{item.message ? item.message : ""}</p>
+                                                                </li>
+                                                            )
+                                                        })
                                                     )
                                                 })
                                                 : null
                                             }
-                                            
                                         </ul>
                                     </div>
+
+                                    <form onSubmit={handleSubmit(submitComment)}>
+                                        <div className="db-add-comments disabled-before lightblue-bg" id="addComments">
+                                            <span className="btn-close" onClick={() => setaddOpen(!addOpen)}>&#x2715;</span>
+                                            <p className="font-weight-semi-bold"> Add comment </p>
+                                            <TextArea attributes={CoursesServicesForm.name} register={register}
+                                                errors={!!errors ? errors[CoursesServicesForm.name.name] : ''} />
+                                             <button type="submit" class="btn btn-outline-primary mt-20 px-5">Submit</button>
+                                        </div>
+                                    </form>
                                 
-                                    <form onSubmit={handleSubmit(submitComment())}>
+                                    {/* <form>
                                         <div className="db-add-comments disabled-before lightblue-bg">
                                             <p className="font-weight-semi-bold"> Add comment </p>
                                             <textarea class="form-control" rows="3"></textarea>
                                             <button type="submit" class="btn btn-outline-primary mt-20 px-5">Submit</button>
                                         </div>
-                                    </form>
+                                    </form> */}
                                 </div>
                                 {/* <form onSubmit={handleSubmit(submitComment())}>
                                     <div className="db-add-comments lightblue-bg" id="addComments">

@@ -41,7 +41,19 @@ const SelectBox = (props) => {
     )
 }
 
+const TextArea = (props) => {
+    const { attributes: { className, type, name, value, validation, defaultValue, id, rows }, register } = props;
+
+    return (
+        <React.Fragment>
+            <textarea className={className} type={type} name={name} id={id} placeholder=" " ref={register(validation)} value={value} defaultValue={defaultValue} rows={rows} />
+            {/* { !!errors ? <span className="error-msg">{errorMessage[errors.type]}</span> : ''} */}
+        </React.Fragment>
+    )
+}
+
 export {
     InputField,
     SelectBox,
+    TextArea
 }

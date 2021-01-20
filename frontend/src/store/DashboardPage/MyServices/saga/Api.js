@@ -15,10 +15,7 @@ const getOiComment = (data) => {
 
 const postOiComment = (data) => {
     const url = `${siteDomain}/api/v1/order-item-comment/`
-    return BaseApiService.post(url, {candidate_id: "53461c6e6cca0763532d4b09",
-    comment: "   fg fg fg",
-    oi_pk: 501736,
-    type: "POST"})
+    return BaseApiService.post(url, data)
 }
 
 const uploadResumeDashboardForm = (data) => {
