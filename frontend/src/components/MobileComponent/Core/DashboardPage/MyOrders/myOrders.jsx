@@ -10,25 +10,20 @@ import Loader from '../../../Common/Loader/loader';
 
    
 const MyWallet = (props) => {
-    const ordPageNo = '1';
     const dispatch = useDispatch();
+    const [ordPageNo, setOrdPageNo] = useState(1)
     const ordersList = useSelector(store => store.dashboardOrders?.data)
     const { orderLoader } = useSelector(store => store.loader);
     const [showOrderDetailsID, setShowOrderDetailsID] = useState('')
 
     const handleEffects = async () => {
         try {
-            //You may notice that apis corresponding to these actions are not getting called on initial render.
-            //This is because initial render is done on node server, which is calling these apis, map the data and send it to the browser.
-            //So there is no need to fetch them again on the browser.
             if (!(window && window.config && window.config.isServerRendered)) {
                 dispatch(startDashboardOrderPageLoader());
-                await new Promise((resolve, reject) => dispatch(fetchMyOrders({ id: ordPageNo, resolve, reject })))
+                await new Promise((resolve, reject) => dispatch(fetchMyOrders({ page: ordPageNo, resolve, reject })))
                 dispatch(stopDashboardOrderPageLoader());
             }
             else {
-                //isServerRendered is needed to be deleted because when routing is done through react and not on the node,
-                //above actions need to be dispatched.
                 delete window.config?.isServerRendered
             }
         } catch (error) {
@@ -71,7 +66,7 @@ const MyWallet = (props) => {
             { orderLoader && <Loader /> }
             <div className="my-order db-warp mb-20">
                 {
-                    ordersList?.map((order) => {
+                    ordersList?.slice(1).map((order) => {
                         return (
                             <div className="m-card" key={order?.order?.number}>
                                 <p className="head mb-5">{order?.order?.number}</p>
@@ -182,6 +177,7 @@ const MyWallet = (props) => {
 
 
             </div> 
+            <span onClick={()=>setOrdPageNo(ordPageNo + 1)}>&emsp; &emsp; &emsp;{ ordPageNo }</span>
         </>
     )
 }

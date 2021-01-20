@@ -8,16 +8,17 @@ import Loader from '../../../Common/Loader/loader';
 
    
 const MyWallet = (props) => {
-    const ordPageNo = '1';
     const loyalityTxn = useSelector(store => store.dashboardWallet?.data)
     const { walletLoader } = useSelector(store => store.loader);
+    const [showModal, setShowModal] = useState(false)
+    const [ordPageNo, setOrdPageNo] = useState(1)
     const dispatch = useDispatch();
 
     const handleEffects = async () => {
         try {
             if (!(window && window.config && window.config.isServerRendered)) {
                 dispatch(startDashboardWalletPageLoader());
-                await new Promise((resolve, reject) => dispatch(fetchMyWallet({ page: 1, resolve, reject })))
+                await new Promise((resolve, reject) => dispatch(fetchMyWallet({ page: ordPageNo, resolve, reject })))
                 dispatch(stopDashboardWalletPageLoader());
             }
             else {
@@ -45,7 +46,7 @@ const MyWallet = (props) => {
                             <h2> { loyalityTxn?.wal_total?.toFixed(2) } </h2>
                         </div>
 
-                        <button className="btn-blue-outline btn-xs">Redeem now</button>
+                        <button className="btn-blue-outline btn-xs" onClick={() => setShowModal(true)}>Redeem now</button>
                     </div>
                 </div>
 
@@ -125,18 +126,23 @@ const MyWallet = (props) => {
                     </div>
                 </div> */}
 
-                {/* <div className="m-slide-modal">
-                <div className="text-center redeem-now">
-                        <span className="m-db-close">&#x2715;</span>
-                        <i className="redeem-now--icon"></i>
-                        <h2>Congratulations!</h2>
-                        <p>
-                            <strong className="redeem-now--lPoints d-block">248.00</strong>
-                            loyality point is reedemed and added <br/>in your wallet
-                        </p>
-                        <Link to={'#'} className="font-weight-bold">Ok</Link>
-                </div>
-                </div> */}
+                { 
+                    showModal &&
+                        <div className="m-slide-modal">
+                            <div className="text-center redeem-now">
+                                    <span className="m-db-close" onClick={() => setShowModal(false)}>&#x2715;</span>
+                                    <i className="redeem-now--icon"></i>
+                                    <h2>Congratulations!</h2>
+                                    <p>
+                                        <strong className="redeem-now--lPoints d-block">{ loyalityTxn?.wal_total?.toFixed(2) }</strong>
+                                        loyality point is reedemed and added <br/>in your wallet
+                                    </p>
+                                    <a href="/payment/payment-summary" className="font-weight-bold">Ok</a>
+                            </div>
+                        </div>
+                }
+                <br />
+                <span onClick={()=>setOrdPageNo(ordPageNo + 1)}>&emsp; &emsp; &emsp;{ ordPageNo }</span>
             </div>
         </>
     )

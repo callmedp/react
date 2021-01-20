@@ -22,11 +22,12 @@ class OrderItemSerializer(serializers.ModelSerializer):
 
     def get_oi_status_value(self, instance):
         key = instance.oi_status
+        order_key = instance.order.status
         status = ''
         if key in [161, 162, 163, 164]:
             status = instance.get_user_oi_status
-        elif key in [0, 1, 4, 5]:
-            status = OI_STATUS_DICT.get(key)
+        elif order_key in [0, 1, 4, 5]:
+            status = OI_STATUS_DICT.get(order_key)
         return status
 
     def get_oi_name(self, instance):
@@ -256,9 +257,13 @@ class OrderSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         data = super(OrderSerializer, self).to_representation(instance)
+        data['status'] = ''
+        if instance.status  in [0, 3, 5] :
+            data['status'] = instance.get_status
+        elif instance.status == 1:
+            data['status'] = 'Open'
         data['date_placed'] = instance.date_placed.date().strftime('%d %b %Y') if instance.date_placed else None
         data['currency'] = instance.get_currency()
-        data['status'] = instance.get_status if instance.status in [0, 1, 3, 5] else ''
         data.update({
             'canCancel': True if instance.status == 0 else False,
             'downloadInvoice': True if instance.status in [1, 3] else False

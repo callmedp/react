@@ -31,7 +31,7 @@ class DashboardMyorderApi(DashboardInfo, APIView):
         candidate_id = self.request.session.get('candidate_id', None)
         order_list=[]
         # candidate_id='568a0b20cce9fb485393489b'
-        # candidate_id='5c94a7b29cbeea2c1f27fda2'
+        candidate_id='5c94a7b29cbeea2c1f27fda2'
         page = request.GET.get("page", 1)
 
         if candidate_id:         
@@ -48,6 +48,15 @@ class DashboardMyorderApi(DashboardInfo, APIView):
                 id__in=excl_order_list).order_by('-date_placed')
             order_list = []
             paginated_data = offset_paginator(page, orders)
+            #pagination info
+            order_list.append({
+                'page': {
+                    'current_page':paginated_data['current_page'],
+                    'total':paginated_data['total_pages'],
+                    'has_prev': True if paginated_data['current_page'] >1 else False,
+                    'has_next':True if (paginated_data['total_pages']-paginated_data['current_page'])>0 else False
+                }
+            })
             for obj in paginated_data["data"]:
                 orderitems = OrderItem.objects.select_related(
                     'product').filter(no_process=False, order=obj)
@@ -66,13 +75,6 @@ class DashboardMyorderApi(DashboardInfo, APIView):
                     "orderitems": OrderItemSerializer(orderitems,many=True).data,
                 }
                 order_list.append(data)
-                #pagination info
-                order_list.append({'page':
-                {'current_page':paginated_data['current_page'],
-                'total':paginated_data['total_pages'],
-                'has_prev': True if paginated_data['current_page'] >1 else False,
-                'has_next':True if (paginated_data['total_pages']-paginated_data['current_page'])>0 else False
-                }})
                 
         return APIResponse(data=order_list, message='Order data Success', status=status.HTTP_200_OK)
 

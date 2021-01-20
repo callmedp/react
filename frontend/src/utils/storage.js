@@ -73,3 +73,11 @@ export function getTrackingParameters(tracking_data){
     }
     return url_parameter
 }
+
+export const getDataStorage = (key) => {
+    return localStorage.getItem(key) ? localStorage.getItem(key) : getSession(key)
+}
+
+const getSession = (name) => {
+   return  sessionStorage.getItem(name)
+}
