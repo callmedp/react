@@ -73,7 +73,7 @@ class MyCoursesApi(DashboardInfo, APIView):
     def get(self, request, *args, **kwargs):
         candidate_id = self.request.session.get('candidate_id', None)
         data = []
-        # candidate_id='568a0b20cce9fb485393489b'
+        candidate_id='568a0b20cce9fb485393489b'
         # candidate_id='5fed060d9cbeea482331ec4b'
         if candidate_id:
             orders = Order.objects.filter(
@@ -90,7 +90,7 @@ class MyCoursesApi(DashboardInfo, APIView):
                 id__in=excl_order_list).order_by('-date_placed')
 
             courses = OrderItem.objects.filter(order__in=orders,product__type_flow=2)
-            data = OrderItemSerializer(courses,many=True,context= {"send_course_detail": True}).data
+            data = OrderItemSerializer(courses,many=True,context= {"get_details": True}).data
         return Response(data=data, status=status.HTTP_200_OK)
 
 
