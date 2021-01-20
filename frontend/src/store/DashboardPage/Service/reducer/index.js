@@ -7,9 +7,8 @@ const recentServicesState = {
 }
 
 export const RecentlyServicesReducer = (state = recentServicesState, action) => {
-    console.log(action);
     switch(action.type) {
-        case Actions.FETCHING_ALL_SERVICES : return {...recentServicesState, ...action.item}
+        case Actions.FETCHED_ALL_SERVICES : return {...recentServicesState, ...action.item}
         default : return state;
     }
 }

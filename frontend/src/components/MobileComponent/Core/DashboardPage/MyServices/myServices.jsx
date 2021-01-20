@@ -18,7 +18,7 @@ import { fetchServices } from 'store/DashboardPage/Service/actions/index';
 const MyServices = (props) => {
     const dispatch = useDispatch();
     const [showSearchPage, setShowSearchPage] = useState(false)
-    const { myServices } = useSelector(store => { console.log(store); return store.allServices });
+    const { myServices } = useSelector(store => store.allServices );
 
     useEffect(() => {
         Aos.init({ duration: 2000, once: true, offset: 10, anchorPlacement: 'bottom-bottom' });
