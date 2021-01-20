@@ -229,6 +229,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
                 'vendor': instance.product.vendor.name, 
                 'duration':instance.product.get_duration_in_ddmmyy() if instance.product_id and instance.product.get_duration_in_day() else None,
                 'enroll_date':date_placed,
+                'remaining_days':'',
                 # 'remaining_days':instance.order.date_placed + timedelta(days=instance.product.get_duration_in_day())-datetime.now(),
                 'status':self.get_oi_status_value(instance) if instance.oi_status else None,
                 'mode':instance.product.get_studymode_db(),
