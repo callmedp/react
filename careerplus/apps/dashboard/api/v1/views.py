@@ -102,7 +102,7 @@ class MyServicesApi(DashboardInfo, APIView):
         candidate_id = self.request.session.get('candidate_id', None)
         email = request.GET.get('email', None)
         data = []
-        candidate_id='568a0b20cce9fb485393489b'
+        # candidate_id='568a0b20cce9fb485393489b'
         # candidate_id='5fed060d9cbeea482331ec4b'
         if candidate_id:
             orders = Order.objects.filter(

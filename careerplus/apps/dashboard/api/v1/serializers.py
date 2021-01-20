@@ -75,10 +75,9 @@ class OrderItemSerializer(serializers.ModelSerializer):
             ops = instance.orderitemoperation_set.filter(oi_status__in=[5, 6, 4])
         
         datalist = []
-        options = []
+        options = {}
         oi = instance
         date_created = ''
-        
         if oi.product.type_flow == 1 or  oi.product.type_flow == 12 or oi.product.type_flow == 13:
             for op in ops:
                 date_created =op.created
@@ -93,9 +92,11 @@ class OrderItemSerializer(serializers.ModelSerializer):
                 else:
                         datalist.append(op.get_user_oi_status)
                 if oi.oi_status == 2 and op.oi_status == 2:
-                    options.append('Upload Resume')
+                    options['Upload Resume']=True
                 elif op.oi_status == 24 or op.oi_status == 27:
-                    options.append({'Download':"dashboard:dashboard-resumedownload"+oi.order.pk+':+?path='+op.oi_draft.name})
+                    options['Download']=True
+                    options['order_pk']=oi.order.pk
+                    options['oi_draftname']=op.oi_draft.name
 
         elif oi.product.type_flow == 8:
             for op in ops:
@@ -111,32 +112,38 @@ class OrderItemSerializer(serializers.ModelSerializer):
                 else:
                     datalist.append(op.get_user_oi_status)
                 if op.oi_status == 2 and oi.oi_status == 2:
-                    options.append('Upload Resume')
+                    options['Upload Resume']=True
                 elif op.oi_status == 46 or op.oi_status == 27:
-                    options.append({'Download':"linkedin-draf-download"+oi.pk+" "+ op.pk})
+                    options['Download']=True
+                    options['oi.pk']=oi.pk
+                    options['op.pk']=op.pk
 
         elif oi.product.type_flow == 3:
             for op in ops:
                 date_created =op.created
                 datalist.append(op.get_user_oi_status)
                 if op.oi_draft:
-                    options.append({'Download':"dashboard:dashboard-resumedownload"+oi.order.pk+':+?='+op.oi_draft.name})
+                    options['Download']=True
+                    options['order_pk']=oi.order.pk
+                    options['oi_draftname']=op.oi_draft.name
                 elif oi.oi_status == 2 and op.oi_status == 2:
-                    options.append('Upload Resume')
+                    options['Upload Resume']=True
         elif oi.product.type_flow == 2 or  oi.product.type_flow == 14:
             for op in ops:
                 date_created =op.created
                 datalist.append(op.get_user_oi_status)
                 if op.oi_status == 6:
-                    options.append({'Download':"dashboard:dashboard-resumedownload"+oi.order.pk+':?='+op.oi_draft.name})
+                    options['Download']=True
+                    options['order_pk']=oi.order.pk
+                    options['oi_draftname']=op.oi_draft.name
         elif oi.product.type_flow == 4:
             for op in ops:
                 date_created =op.created
                 datalist.append(op.get_user_oi_status)
                 if oi.oi_status == 2 and not oi.oi_resume:
-                    options.append('Upload Resume')
+                    options['Upload Resume']=True
                 elif op.oi_status == 6:
-                    options.append({'Download Credential':"url 'console:profile_credentials' oi.pk"})
+                    options['oi.pk']=oi.pk
         elif oi.product.type_flow == 5:
             if oi.product.sub_type_flow == 502:
                 with oi.get_item_operations as custom_ops:
@@ -151,44 +158,50 @@ class OrderItemSerializer(serializers.ModelSerializer):
                     date_created =op.created
                     datalist.append(op.get_user_oi_status)
                     if oi.oi_status == 2 and not oi.oi_resume and op.oi_status == 2:
-                        options.append('Upload Resume')
+                        options['Upload Resume']=True
 
         elif oi.product.type_flow == 6:
             for op in ops:
                 date_created =op.created
                 datalist.append(op.get_user_oi_status)
                 if op.oi_draft:
-                    options.append({'Download':"dashboard:dashboard-resumedownload"+oi.order.pk+':?path='+op.oi_draft.name})
+                    options['Download']=True
+                    options['order_pk']=oi.order.pk
+                    options['oi_draftname']=op.oi_draft.name
         elif oi.product.type_flow == 7 or oi.product.type_flow == 15:
             for op in ops:
                 date_created =op.created
                 datalist.append(op.get_user_oi_status)
                 if oi.oi_status == 2 and not oi.oi_resume and op.oi_status == 2:
-                    options.append('Upload Resume')
+                    options['Upload Resume']=True
         elif oi.product.type_flow == 9:
             for op in ops:
                 date_created =op.created
                 datalist.append(op.get_user_oi_status)
                 if op.oi_status == 141:
-                    options.append('Complete Profile')
+                    options['Complete Profile']=True
                 elif op.oi_status == 142:
-                    options.append('Edit your profile')
+                    options['Edit your profile']=True
         elif oi.product.type_flow == 10:
             for op in ops:
                 date_created =op.created
                 datalist.append(op.get_user_oi_status)
                 if op.oi_status == 101:
-                    options.append('Take Test')
+                    options['Take Test']=True
                 elif op.oi_draft:
-                    options.append({'Download':"dashboard:dashboard-resumedownload"+oi.order.pk+':?path='+op.oi_draft.name})
+                    options['Download']=True
+                    options['order_pk']=oi.order.pk
+                    options['oi_draftname']=op.oi_draft.name
         elif oi.product.type_flow == 17:
             for op in ops:
                 date_created =op.created
                 datalist.append(op.get_user_oi_status)
                 if op.oi_status == 101:
-                    options.append('Take Test')
+                    options['Take Test']=True
                 elif op.oi_draft:
-                    options.append({'Download':"dashboard:dashboard-resumedownload"+oi.order.pk+':?path='+op.oi_draft.name})
+                    options['Download']=True
+                    options['order_pk']=oi.order.pk
+                    options['oi_draftname']=op.oi_draft.name
         return {
                 'date_created':date_created,
                 'datalist':datalist,
@@ -219,12 +232,12 @@ class OrderItemSerializer(serializers.ModelSerializer):
                 'mode':instance.product.get_studymode_db(),
                 'jobs':instance.product.num_jobs,
             })
-            # course_detail = self.get_courses_detail(instance)
-            # data.update({
-            #     'date_created':course_detail['date_created'],
-            #     'datalist':course_detail['datalist'],
-            #     'options':course_detail['options']
-            #     })
+            course_detail = self.get_courses_detail(instance)
+            data.update({
+                'date_created':course_detail['date_created'],
+                'datalist':course_detail['datalist'],
+                'options':course_detail['options']
+                })
         return data
 
 class OrderSerializer(serializers.ModelSerializer):
