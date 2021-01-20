@@ -10,6 +10,11 @@ const MyWallet = (props) => {
     const ordersList = useSelector(store => store.dashboardOrders?.data)
     const [showOrderDetailsID, setShowOrderDetailsID] = useState('')
 
+    const showDetails = (id) => {
+        id == showOrderDetailsID ?
+            setShowOrderDetailsID('') : setShowOrderDetailsID(id)
+    }
+
     const getOrderDetails = (orderItems) => {
         return (
             <>
@@ -54,7 +59,7 @@ const MyWallet = (props) => {
                             </div>
 
                             <div className="my-order__order-detail">
-                                <Link to={"#"} onClick={() => setShowOrderDetailsID(order?.order?.id)} className={(showOrderDetailsID === order?.order?.id) ? "font-weight-bold open arrow-icon" : "font-weight-bold arrow-icon"}>Order Details</Link>
+                                <Link to={"#"} onClick={() => showDetails(order?.order?.id)} className={(showOrderDetailsID === order?.order?.id) ? "font-weight-bold open arrow-icon" : "font-weight-bold arrow-icon"}>Order Details</Link>
                                 { (showOrderDetailsID === order?.order?.id) && getOrderDetails(order?.orderitems) }
                             </div>
                         </div>
