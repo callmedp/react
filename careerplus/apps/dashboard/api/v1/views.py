@@ -73,6 +73,7 @@ class MyCoursesApi(DashboardInfo, APIView):
     def get(self, request, *args, **kwargs):
         candidate_id = self.request.session.get('candidate_id', None)
         data = []
+        # candidate_id='568a0b20cce9fb485393489b'
         # candidate_id='5fed060d9cbeea482331ec4b'
         if candidate_id:
             orders = Order.objects.filter(
@@ -101,6 +102,7 @@ class MyServicesApi(DashboardInfo, APIView):
         candidate_id = self.request.session.get('candidate_id', None)
         email = request.GET.get('email', None)
         data = []
+        candidate_id='568a0b20cce9fb485393489b'
         # candidate_id='5fed060d9cbeea482331ec4b'
         if candidate_id:
             orders = Order.objects.filter(
@@ -133,7 +135,7 @@ class MyServicesApi(DashboardInfo, APIView):
                 )[0]
                 tsrvc_data = {'id': tsrvc.id, 'heading': tsrvc.pHd, 'name': tsrvc.pNm, 'url': tsrvc.pURL, 'img': tsrvc.pImg, \
                     'img_alt': tsrvc.pImA, 'rating': tsrvc.pARx, 'price': tsrvc.pPinb, 'vendor': tsrvc.pPvn, 'stars': tsrvc.pStar,
-                    'provider': tsrvc.pPvn,'duration':serv.product.get_duration_in_day(),'status':OI_OPS_STATUS[serv.oi_status][1]}
+                    'provider': tsrvc.pPvn,'duration':serv.product.get_duration_in_day(),'status':OI_OPS_STATUS[serv.oi_status][1] if serv.oi_status else None}
                 data.append(tsrvc_data)
             data.append({'pending_resume_items':pending_resume_items})
         return Response(data=data, status=status.HTTP_200_OK)

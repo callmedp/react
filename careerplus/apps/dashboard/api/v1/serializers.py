@@ -215,16 +215,16 @@ class OrderItemSerializer(serializers.ModelSerializer):
                 'duration':instance.product.get_duration_in_ddmmyy() if instance.product_id and instance.product.get_duration_in_day() else None,
                 'enroll_date':date_placed,
                 # 'remaining_days':instance.order.date_placed + timedelta(days=instance.product.get_duration_in_day())-datetime.now(),
-                'status':OI_OPS_STATUS[instance.oi_status][1] if instance.oi_status else None,
+                'status':self.get_oi_status_value(instance) if instance.oi_status else None,
                 'mode':instance.product.get_studymode_db(),
                 'jobs':instance.product.num_jobs,
             })
-            course_detail = self.get_courses_detail(instance)
-            data.update({
-                'date_created':course_detail['date_created'],
-                'datalist':course_detail['datalist'],
-                'options':course_detail['options']
-                })
+            # course_detail = self.get_courses_detail(instance)
+            # data.update({
+            #     'date_created':course_detail['date_created'],
+            #     'datalist':course_detail['datalist'],
+            #     'options':course_detail['options']
+            #     })
         return data
 
 class OrderSerializer(serializers.ModelSerializer):
