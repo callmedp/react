@@ -7,10 +7,10 @@ from order.choices import OI_OPS_STATUS
 from django.conf import settings
 
 OI_STATUS_DICT = {
-    0 : 'Unpaid',
-    1 : 'Service in progress',
-    4 : 'Closed',
-    5 : 'Cancelled',
+    0: 'Unpaid',
+    1: 'Service in progress',
+    4: 'Closed',
+    5: 'Cancelled',
 }
 
 class OrderItemSerializer(serializers.ModelSerializer):
@@ -45,6 +45,155 @@ class OrderItemSerializer(serializers.ModelSerializer):
         if duration:
             name += ' - ' + duration
         return name
+    
+    def get_courses_detail(self,instance):
+        detail = []
+        max_draft_limit=settings.DRAFT_MAX_LIMIT
+
+        if instance.product.type_flow in [1, 12, 13]:
+            ops = instance.orderitemoperation_set.filter(oi_status__in=[2, 5, 24, 26, 27, 161, 162, 163, 164, 181])
+        elif instance.product.vendor.slug == 'neo':
+            ops = instance.orderitemoperation_set.filter(oi_status__in=[5, 33, 4, 161, 162, 163, 164])
+        elif instance.product.type_flow in [2, 14]:
+            ops = instance.orderitemoperation_set.filter(oi_status__in=[5, 6, 161, 162, 163, 164])
+        elif instance.product.type_flow == 3:
+            ops = instance.orderitemoperation_set.filter(oi_status__in=[2, 5, 121, 161, 162, 163, 164])
+        elif instance.product.type_flow == 4:
+            ops = instance.orderitemoperation_set.filter(oi_status__in=[2, 5, 6, 61, 161, 162, 163, 164])
+        elif instance.product.type_flow == 5:
+            ops = instance.orderitemoperation_set.filter(oi_status__in=[2, 5, 6, 36, 37, 61, 161, 162, 163, 164])
+        elif instance.product.type_flow == 6:
+            ops = instance.oi.orderitemoperation_set.filter(oi_status__in=[6, 81, 82, 161, 162, 163, 164])
+        elif instance.product.type_flow in [7, 15]:
+            ops = instance.orderitemoperation_set.filter(oi_status__in=[2, 4, 5, 6, 61, 161, 162, 163, 164])
+        elif instance.product.type_flow == 8:
+            oi_status_list = [2, 49, 5, 46, 48, 27, 4, 161, 162, 163, 181, 164]
+            ops = instance.orderitemoperation_set.filter(oi_status__in=oi_status_list)
+        elif instance.product.type_flow == 10:
+            ops = instance.orderitemoperation_set.filter(oi_status__in=[5, 6, 101, 161, 162, 163, 164])
+        elif instance.product.type_flow == 16:
+            ops = instance.orderitemoperation_set.filter(oi_status__in=[5, 6, 4])
+        
+        datalist = []
+        options = []
+        oi = instance
+        date_created = ''
+        
+        if oi.product.type_flow == 1 or  oi.product.type_flow == 12 or oi.product.type_flow == 13:
+            for op in ops:
+                date_created =op.created
+                if op.oi_status == 24 and op.draft_counter == 1:
+                    datalist.append(op.get_user_oi_status)
+                elif op.oi_status == 24 and op.draft_counter < max_draft_limit:
+                    datalist.append('Revised Document is ready')
+                elif op.oi_status == 24 and op.draft_counter == max_draft_limit:
+                    datalist.append('Final Document is ready')
+                elif op.oi_status == 181:
+                    datalist.append('Waiting For Input')
+                else:
+                        datalist.append(op.get_user_oi_status)
+                if oi.oi_status == 2 and op.oi_status == 2:
+                    options.append('Upload Resume')
+                elif op.oi_status == 24 or op.oi_status == 27:
+                    options.append({'Download':"dashboard:dashboard-resumedownload"+oi.order.pk+':+?path='+op.oi_draft.name})
+
+        elif oi.product.type_flow == 8:
+            for op in ops:
+                date_created =op.created
+                if op.oi_status == 46 and op.draft_counter == 1:
+                    datalist.append(op.get_user_oi_status)
+                elif op.oi_status == 46 and op.draft_counter < max_draft_limit:
+                    datalist.append('Revised Document is ready')
+                elif op.oi_status == 4:
+                    datalist.append('Document is finalized')
+                elif op.oi_status == 181:
+                    datalist.append('Waiting for input')
+                else:
+                    datalist.append(op.get_user_oi_status)
+                if op.oi_status == 2 and oi.oi_status == 2:
+                    options.append('Upload Resume')
+                elif op.oi_status == 46 or op.oi_status == 27:
+                    options.append({'Download':"linkedin-draf-download"+oi.pk+" "+ op.pk})
+
+        elif oi.product.type_flow == 3:
+            for op in ops:
+                date_created =op.created
+                datalist.append(op.get_user_oi_status)
+                if op.oi_draft:
+                    options.append({'Download':"dashboard:dashboard-resumedownload"+oi.order.pk+':+?='+op.oi_draft.name})
+                elif oi.oi_status == 2 and op.oi_status == 2:
+                    options.append('Upload Resume')
+        elif oi.product.type_flow == 2 or  oi.product.type_flow == 14:
+            for op in ops:
+                date_created =op.created
+                datalist.append(op.get_user_oi_status)
+                if op.oi_status == 6:
+                    options.append({'Download':"dashboard:dashboard-resumedownload"+oi.order.pk+':?='+op.oi_draft.name})
+        elif oi.product.type_flow == 4:
+            for op in ops:
+                date_created =op.created
+                datalist.append(op.get_user_oi_status)
+                if oi.oi_status == 2 and not oi.oi_resume:
+                    options.append('Upload Resume')
+                elif op.oi_status == 6:
+                    options.append({'Download Credential':"url 'console:profile_credentials' oi.pk"})
+        elif oi.product.type_flow == 5:
+            if oi.product.sub_type_flow == 502:
+                with oi.get_item_operations as custom_ops:
+                    for op in custom_ops:
+                        date_created =op.created
+                        if op.oi_status == 31:
+                            datalist.append('Service is Under Progress')
+                        else:
+                            datalist.append(op.get_user_oi_status)
+            else:
+                for op in ops:
+                    date_created =op.created
+                    datalist.append(op.get_user_oi_status)
+                    if oi.oi_status == 2 and not oi.oi_resume and op.oi_status == 2:
+                        options.append('Upload Resume')
+
+        elif oi.product.type_flow == 6:
+            for op in ops:
+                date_created =op.created
+                datalist.append(op.get_user_oi_status)
+                if op.oi_draft:
+                    options.append({'Download':"dashboard:dashboard-resumedownload"+oi.order.pk+':?path='+op.oi_draft.name})
+        elif oi.product.type_flow == 7 or oi.product.type_flow == 15:
+            for op in ops:
+                date_created =op.created
+                datalist.append(op.get_user_oi_status)
+                if oi.oi_status == 2 and not oi.oi_resume and op.oi_status == 2:
+                    options.append('Upload Resume')
+        elif oi.product.type_flow == 9:
+            for op in ops:
+                date_created =op.created
+                datalist.append(op.get_user_oi_status)
+                if op.oi_status == 141:
+                    options.append('Complete Profile')
+                elif op.oi_status == 142:
+                    options.append('Edit your profile')
+        elif oi.product.type_flow == 10:
+            for op in ops:
+                date_created =op.created
+                datalist.append(op.get_user_oi_status)
+                if op.oi_status == 101:
+                    options.append('Take Test')
+                elif op.oi_draft:
+                    options.append({'Download':"dashboard:dashboard-resumedownload"+oi.order.pk+':?path='+op.oi_draft.name})
+        elif oi.product.type_flow == 17:
+            for op in ops:
+                date_created =op.created
+                datalist.append(op.get_user_oi_status)
+                if op.oi_status == 101:
+                    options.append('Take Test')
+                elif op.oi_draft:
+                    options.append({'Download':"dashboard:dashboard-resumedownload"+oi.order.pk+':?path='+op.oi_draft.name})
+        return {
+                'date_created':date_created,
+                'datalist':datalist,
+                'options':options
+                }
 
     def to_representation(self, instance):
         data = super(OrderItemSerializer, self).to_representation(instance)
@@ -70,18 +219,12 @@ class OrderItemSerializer(serializers.ModelSerializer):
                 'mode':instance.product.get_studymode_db(),
                 'jobs':instance.product.num_jobs,
             })
-            detail = []
-            max_draft_limit=settings.DRAFT_MAX_LIMIT
-            if instance.oi_status == 24 and instance.draft_counter == 1 :
-                 detail.append(instance.get_user_oi_status)
-            elif instance.oi_status == 24 and instance.draft_counter < max_draft_limit:
-                detail.append('Revised Document is ready')
-            elif instance.oi_status == 24 and instance.draft_counter == max_draft_limit:
-                detail.append('Final Document is ready')
-            elif instance.oi_status == 181 :
-                detail.append('Waiting For Input')
-            data.update({'view_details':{date_placed:detail}})
-
+            course_detail = self.get_courses_detail(instance)
+            data.update({
+                'date_created':course_detail['date_created'],
+                'datalist':course_detail['datalist'],
+                'options':course_detail['options']
+                })
         return data
 
 class OrderSerializer(serializers.ModelSerializer):
