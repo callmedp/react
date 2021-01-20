@@ -1,7 +1,7 @@
 import * as Actions from '../actions/actionTypes';
 
 const recentServicesState = {
-    data: { },
+    data: [],
     error: false,
     message: ""
 }

@@ -16,210 +16,44 @@ import { fetchServices } from 'store/DashboardPage/Service/actions/index';
 
 
 const MyServices = (props) => {
+    const [showUpload, setShowUpload] = React.useState(false)
+    const onClickActiveUpload = () => setShowUpload(true)
+    const onClickInActiveUpload = () => setShowUpload(false)
     const dispatch = useDispatch();
     const [showSearchPage, setShowSearchPage] = useState(false)
-    const { myServices } = useSelector(store => store.allServices );
-
-    useEffect(() => {
+    const myServicesList = useSelector(store => store.allServices?.data);
+    console.log(myServicesList)
+    const handleEffects = async () => {
         Aos.init({ duration: 2000, once: true, offset: 10, anchorPlacement: 'bottom-bottom' });
         //You may notice that apis corresponding to these actions are not getting called on initial render.
         //This is because initial render is done on node server, which is calling these apis, map the data and send it to the browser.
         //So there is no need to fetch them again on the browser.
         if (!(window && window.config && window.config.isServerRendered)) {
-            new Promise((resolve, reject) => dispatch(fetchServices({ resolve, reject })));
+            await new Promise((resolve, reject) => dispatch(fetchServices({ resolve, reject })));
         }
         else {
             //isServerRendered is needed to be deleted because when routing is done through react and not on the node,
             //above actions need to be dispatched.
             delete window.config?.isServerRendered
         }
-        console.log(myServices)
+
+    };
+
+    useEffect(() => {
+        handleEffects();
     }, [])
+
     return (
         <div>
 
-
-            <MenuNav />
-            <header className="m-container m-header">
-                <Header setShowSearchPage={setShowSearchPage} hideName={true} />
-
-            </header>
             <main className="mb-0">
 
 
                 <div className="m-courses-detail db-warp">
-                    <div className="m-card pl-0">
-                        <div className="m-share" aria-haspopup="true">
-                            <i className="icon-share"></i>
-                            <div className="m-share__box m-arrow-box m-top">
-                                <Link to={"#"} className="m-facebook-icon"></Link>
-                                <Link to={"#"} className="m-linkedin-icon"></Link>
-                                <Link to={"#"} className="m-twitter-iocn"></Link>
-                                <Link to={"#"} className="m-whatsup-icon"></Link>
-                            </div>
-                        </div>
-
-                        <div className="d-flex">
-                            <figure>
-                                <img src="https://static1.shine.com/l/m/product_image/3425/1542800087_8980.png" alt="Digital Marketing Training Course" />
-                            </figure>
-                            <div className="m-courses-detail__info">
-                                <h2>Resume Booster 5-10 years</h2>
-                                <p className="m-pipe-divides mb-5">Provider: <strong>Shine learning</strong> </p>
-                                <p className="m-pipe-divides mb-5"><span>Bought on: <strong>27 Oct 2020</strong> </span> <span>Duration: <strong>90 days</strong> </span></p>
-                            </div>
-                        </div>
-
-                        <div className="m-courses-detail--alert mt-15">
-                            To initiate your service upload your latest resume
-                    </div>
-
-                        <div className="pl-15 mt-15 fs-12">
-                            Status: <strong>Upload your resume</strong><Link to={"#"} className="font-weight-bold ml-10">upload</Link>
-                            <Link to={"#"} className="d-block font-weight-bold mt-10">View Details</Link>
-                        </div>
-
-                        <div className="pl-15">
-                            <div className="m-courses-detail__bottomWrap">
-                                <div>
-                                    <div className="m-day-remaning">
-                                        <span className="m-day-remaning--box">9</span>
-                                        <span className="m-day-remaning--box">0</span>
-                                        <span className="ml-2 m-day-remaning--text">Days <br />remaning</span>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div className="m-courses-detail__userInput">
-                                <Link to="/404" className="m-db-comments font-weight-bold">Add comment</Link>
-                                <div className="d-flex">
-                                    <span className="">Rate</span>
-                                    <span className="m-rating">
-                                        <em className="micon-blankstar"></em>
-                                        <em className="micon-blankstar"></em>
-                                        <em className="micon-blankstar"></em>
-                                        <em className="micon-blankstar"></em>
-                                        <em className="micon-blankstar"></em>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
 
-                    <div className="m-card pl-0">
-                        <div className="m-share" aria-haspopup="true">
-                            <i className="icon-share"></i>
-                            <div className="m-share__box m-arrow-box m-top">
-                                <Link to={"#"} className="m-facebook-icon"></Link>
-                                <Link to={"#"} className="m-linkedin-icon"></Link>
-                                <Link to={"#"} className="m-twitter-iocn"></Link>
-                                <Link to={"#"} className="m-whatsup-icon"></Link>
-                            </div>
-                        </div>
-
-                        <div className="d-flex">
-                            <figure>
-                                <img src="https://static1.shine.com/l/m/product_image/3425/1542800087_8980.png" alt="Digital Marketing Training Course" />
-                            </figure>
-                            <div className="m-courses-detail__info">
-                                <h2>Profile Booster</h2>
-                                <p className="m-pipe-divides mb-5">Provider: <strong>Shine learning</strong> </p>
-                                <p className="m-pipe-divides mb-5"><span>Bought on: <strong>27 Oct 2020</strong> </span> <span>Duration: <strong>90 days</strong> </span></p>
-                            </div>
-                        </div>
 
 
-                        <div className="pl-15 mt-15 fs-12">
-                            Status: <strong>Service under progress</strong>
-                            <Link to={"#"} className="d-block font-weight-bold mt-10">View Details</Link>
-                        </div>
-
-                        <div className="pl-15">
-                            <div className="m-courses-detail__bottomWrap">
-                                <div>
-                                    <div className="m-day-remaning">
-                                        <span className="m-day-remaning--box">9</span>
-                                        <span className="m-day-remaning--box">0</span>
-                                        <span className="ml-2 m-day-remaning--text">Days <br />remaning</span>
-                                    </div>
-                                </div>
-
-                                <Link to={"#"} className="m-db-start-course font-weight-bold pr-10">Start Service</Link>
-                            </div>
-
-                            <div className="m-courses-detail__userInput">
-                                <Link to="/404" className="m-db-comments font-weight-bold">Add Comment</Link>
-                                <div className="d-flex">
-                                    <span className="">Rate</span>
-                                    <span className="m-rating">
-                                        <em className="micon-blankstar"></em>
-                                        <em className="micon-blankstar"></em>
-                                        <em className="micon-blankstar"></em>
-                                        <em className="micon-blankstar"></em>
-                                        <em className="micon-blankstar"></em>
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="m-card pl-0">
-                        <div className="m-share" aria-haspopup="true">
-                            <i className="icon-share"></i>
-                            <div className="m-share__box m-arrow-box m-top">
-                                <Link to={"#"} className="m-facebook-icon"></Link>
-                                <Link to={"#"} className="m-linkedin-icon"></Link>
-                                <Link to={"#"} className="m-twitter-iocn"></Link>
-                                <Link to={"#"} className="m-whatsup-icon"></Link>
-                            </div>
-                        </div>
-
-                        <div className="d-flex">
-                            <figure>
-                                <img src="https://static1.shine.com/l/m/product_image/3425/1542800087_8980.png" alt="Digital Marketing Training Course" />
-                            </figure>
-                            <div className="m-courses-detail__info">
-                                <h2>Linkedin Profile Writing</h2>
-                                <p className="m-pipe-divides mb-5">Provider: <strong>Shine learning</strong> </p>
-                                <p className="m-pipe-divides mb-5"><span>Bought on: <strong>27 Oct 2020</strong> </span> <span>Duration: <strong>90 days</strong> </span></p>
-                            </div>
-                        </div>
-
-                        <div className="pl-15 mt-15 fs-12">
-                            Status: <strong>Service under progress</strong>
-                            <Link to={"#"} className="d-block font-weight-bold mt-10">View Details</Link>
-                        </div>
-
-                        <div className="pl-15">
-                            <div className="m-courses-detail__bottomWrap">
-                                <div>
-                                    <div className="m-day-remaning">
-                                        <span className="m-day-remaning--box">9</span>
-                                        <span className="m-day-remaning--box">0</span>
-                                        <span className="ml-2 m-day-remaning--text">Days <br />remaning</span>
-                                    </div>
-                                </div>
-
-                                <Link to={"#"} className="m-db-start-course font-weight-bold pr-10">Start Service</Link>
-                            </div>
-
-                            <div className="m-courses-detail__userInput">
-                                <Link to="/404" className="m-db-comments font-weight-bold">3 Comment</Link>
-                                <div className="d-flex">
-                                    <span className="m-rating">
-                                        <em className="micon-fullstar"></em>
-                                        <em className="micon-fullstar"></em>
-                                        <em className="micon-fullstar"></em>
-                                        <em className="micon-fullstar"></em>
-                                        <em className="micon-blankstar"></em>
-                                        <span className="ml-5">4/5</span>
-                                    </span>
-                                    <Link to={"#"} className="font-weight-bold ml-10">2</Link>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
 
                     <div className="m-card pl-0">
@@ -282,6 +116,100 @@ const MyServices = (props) => {
                             </div>
                         </div>
                     </div>
+
+
+
+                    {
+                        myServicesList?.map((service, key) => {
+                            if (key == 10 || key == 11) {
+                                return (
+                                    <>
+                                    </>
+                                )
+
+                            }
+                            else {
+                                return (
+                                    <div className="m-card pl-0" key={key}>
+                                        <div className="m-share" aria-haspopup="true">
+                                            <i className="icon-share"></i>
+                                            <div className="m-share__box m-arrow-box m-top">
+                                                <Link to={"#"} className="m-facebook-icon"></Link>
+                                                <Link to={"#"} className="m-linkedin-icon"></Link>
+                                                <Link to={"#"} className="m-twitter-iocn"></Link>
+                                                <Link to={"#"} className="m-whatsup-icon"></Link>
+                                            </div>
+                                        </div>
+
+                                        <div className="d-flex">
+                                            <figure>
+                                                <img src="https://learning-media-staging-189607.storage.googleapis.com/l/m/product_image/1/1532923787_9385.png" alt={service.heading} />
+                                                {/* <img src={ service.img } alt={ service.heading } /> */}
+                                            </figure>
+                                            <div className="m-courses-detail__info">
+                                                <Link to={service.productUrl}><h2>{service.heading}</h2></Link>
+                                                <p className="m-pipe-divides mb-5">Provider: <strong>{service.vendor}</strong> </p>
+                                                <p className="m-pipe-divides mb-5"><span>Bought on: <strong>{service.enroll_date}</strong> </span> <span>Duration: <strong>{service.remaining_days}</strong> </span></p>
+                                            </div>
+                                        </div>
+
+                                        { service.status === 'Cancelled' ? '' :
+                                            <div className="m-courses-detail--alert mt-15">
+                                                To initiate your service upload your latest resume
+                                            </div>
+                                        }
+
+                                        { service.status === 'Cancelled' ?
+
+                                            <div className="pl-15 mt-15 fs-12">
+                                                Status: <strong>{service.status}</strong>
+                                                <Link to={"#"} className="d-block font-weight-bold mt-10">View Details</Link>
+                                            </div>
+                                            :
+                                            <>
+                                                <div className="pl-15 mt-15 fs-12">
+                                                    Status: <strong> {service.datalist} </strong>
+
+                                                    {/* { service.options } */}
+                                                    {Object.keys(service.options).length === 0 && service.options.constructor === Object ? '' : service.options['Upload Resume'] === true ?
+                                                        <a onClick={onClickActiveUpload} className="font-weight-bold">Upload</a> : ''
+                                                    }
+                                                    <Link to={"#"} className="d-block font-weight-bold mt-10">View Details</Link>
+                                                </div>
+                                                <div className="pl-15">
+                                                    <div className="m-courses-detail__bottomWrap">
+                                                        <div>
+                                                            <div className="m-day-remaning">
+                                                                <span className="m-day-remaning--box">9</span>
+                                                                <span className="m-day-remaning--box">0</span>
+                                                                <span className="ml-2 m-day-remaning--text">Days <br />remaning</span>
+                                                            </div>
+                                                        </div>
+                                                        <Link to={"#"} className="m-db-start-course font-weight-bold pr-10">Start Service</Link>
+                                                    </div>
+
+                                                    <div className="m-courses-detail__userInput">
+                                                        <Link to="/404" className="m-db-comments font-weight-bold">3 Comment</Link>
+                                                        <div className="d-flex">
+                                                            <span className="m-rating">
+                                                                <em className="micon-fullstar"></em>
+                                                                <em className="micon-fullstar"></em>
+                                                                <em className="micon-fullstar"></em>
+                                                                <em className="micon-fullstar"></em>
+                                                                <em className="micon-blankstar"></em>
+                                                                <span className="ml-5">4/5</span>
+                                                            </span>
+                                                            <Link to={"#"} className="font-weight-bold ml-10">2</Link>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </>
+                                        }
+                                    </div>
+                                )
+                            }
+                        })
+                    }
                 </div>
 
                 <div className="m-slide-modal">
@@ -298,8 +226,8 @@ const MyServices = (props) => {
                         </div>
                     </div>
 
-                    <div className="text-center" style={{ display: 'none' }}>
-                        <span className="m-db-close">&#x2715;</span>
+                    <div className="text-center" style={showUpload ? { display: 'block' } : { display: 'none' }}>
+                        <span onClick={onClickInActiveUpload} className="m-db-close">&#x2715;</span>
                         <h2>Upload Resume</h2>
                         <p>To initiate your services, <strong>upload resume</strong></p>
                         <div className="d-flex align-items-center justify-content-center mt-20">
@@ -340,12 +268,12 @@ const MyServices = (props) => {
 
                         <button className="btn btn-primary px-5 mt-30">Save</button>
                     </div>
+
                 </div>
             </main>
-            <Footer />
-
         </div>
     )
 }
+
 
 export default MyServices;

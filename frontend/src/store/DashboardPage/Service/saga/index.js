@@ -12,7 +12,6 @@ function* recentAddedServices(action) {
             return payload?.reject(response?.error)
         }
         const item = response.data;
-        console.log(item)
         yield put({
             type: Actions.FETCHED_ALL_SERVICES,
             item
