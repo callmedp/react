@@ -1,13 +1,72 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './myOrders.scss';
+import { useDispatch, useSelector } from 'react-redux';
+import { siteDomain } from 'utils/domains';
+import { downloadInvoice } from 'utils/dashboardUtils/myOrderUtils';
 
    
 const MyWallet = (props) => {
+    const ordersList = useSelector(store => store.dashboardOrders?.data)
+    const [showOrderDetailsID, setShowOrderDetailsID] = useState('')
+
+    const showDetails = (id) => {
+        id == showOrderDetailsID ?
+            setShowOrderDetailsID('') : setShowOrderDetailsID(id)
+    }
+
+    const getOrderDetails = (orderItems) => {
+        return (
+            <>
+                {
+                    orderItems?.map((oi) => {
+                        return(
+                            <ul className="my-order__order-detail--info mt-15" key={oi?.id}>
+                                <li>
+                                    <a href={`${siteDomain}${oi?.productUrl}`} className="d-block mb-0">{oi?.name} </a>
+                                    <span> Status: <strong>{oi?.oi_status}</strong></span>
+                                </li>
+                            </ul>
+                        )
+                    })
+                }
+            </>
+        )
+    }
+
     return(
         <div className="my-order db-warp mb-20">
+            {
+                ordersList?.map((order) => {
+                    return (
+                        <div className="m-card" key={order?.order?.number}>
+                            <p className="head mb-5">{order?.order?.number}</p>
 
-            <div className="m-card">
+                            <div className="m-pipe-divides">
+                                <span>Placed on: <strong>{order?.order?.date_placed}</strong></span>
+                                <span>Status: <strong>{order?.order?.status}</strong></span>
+                                <span>Status: <strong>{order?.item_count}</strong> {order?.item_count > 1 ? 'items' : 'item'}</span>
+                            </div>
+
+                            <div className="my-order--wrap mt-20">
+                                <div className="my-order__priceWrap">
+                                    <span className="my-order__priceWrap--tAmount d-block">Total amount</span>
+                                    <strong className="my-order__priceWrap--price">{ order?.order?.currency === 'Rs.' ? <span>&#8377;</span> : order?.order?.currency } {order?.order?.total_incl_tax}/- </strong>
+                                </div>
+                                { order?.order?.canCancel && <Link to={"#"}>Cancel order</Link> }
+                                { order?.order?.downloadInvoice && <a href={downloadInvoice(order?.order?.id)} target="_blank">Download Invoice</a> }
+                                
+                            </div>
+
+                            <div className="my-order__order-detail">
+                                <Link to={"#"} onClick={() => showDetails(order?.order?.id)} className={(showOrderDetailsID === order?.order?.id) ? "font-weight-bold open arrow-icon" : "font-weight-bold arrow-icon"}>Order Details</Link>
+                                { (showOrderDetailsID === order?.order?.id) && getOrderDetails(order?.orderitems) }
+                            </div>
+                        </div>
+                    )
+                })
+            }
+            {/* <div className="m-card">
                 <p className="head mb-5">CP279912</p>
 
                 <div className="m-pipe-divides">
@@ -85,10 +144,10 @@ const MyWallet = (props) => {
                 <div className="my-order__order-detail">
                     <Link to={"#"} className="font-weight-bold arrow-icon">Order Details</Link>
                 </div>
-            </div>
+            </div>*/}
 
 
-        </div>
+        </div> 
     )
 }
    

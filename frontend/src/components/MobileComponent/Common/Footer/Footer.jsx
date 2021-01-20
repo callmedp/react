@@ -5,7 +5,7 @@ import { MyGA } from 'utils/ga.tracking.js';
 
 const Footer = (props) => {
     return(
-        <footer className="m-container m-footer" data-aos="fade-up">
+        <footer className="m-container m-footer">
             <span className="m-footer__social mb-10">
                 <a href="https://www.facebook.com/shinelearningdotcom/" onClick={() => MyGA.SendEvent('social_media_follow','ln_social_media_follow', 'ln_facebook', 'homepage','', false, true)}>
                     <figure className="micon-facebook"></figure>
