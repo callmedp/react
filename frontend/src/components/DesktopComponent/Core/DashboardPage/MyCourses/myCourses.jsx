@@ -26,6 +26,10 @@ const MyCourses = (props) => {
     const [isOpen, setIsOpen] = useState(false);
     const toggleDetails = (id) => setIsOpen(isOpen == id ? false : id);
 
+    // add new reviews
+    const [openReview, setOpenReview] = useState(false);
+    const toggleReviews = (id) => setOpenReview(openReview == id ? false : id);
+
     useEffect(() => {
         handleEffects();
     }, [])
@@ -110,7 +114,7 @@ const MyCourses = (props) => {
                                                 <div className="db-my-courses-detail__leftpan--box">
                                                     <h3><Link to={item.url}>{item.heading}</Link></h3>
                                                     <div className="db-my-courses-detail__leftpan--info">
-                                                        <span>Provider: <Link to={"#"}>{item.provider}</Link></span>
+                                                        <span>Provider: <Link className="noLink" to={"#"}>{item.provider}</Link></span>
                                                         <span>Enrolled on: <strong>27 Oct 2020</strong></span>
                                                         <span>Duration: <strong>90 days</strong></span>
                                                         <span>Mode: <strong>Online</strong></span>
@@ -224,13 +228,20 @@ const MyCourses = (props) => {
                                             </Link>
 
                                             <div className="d-flex">
+                                                <div className="db-certificate">
+                                                    <i className="db-certificate-icon"></i>
+                                                    <span className="db-certificate--text arrow-box top">Download certificate</span>
+                                                </div>
                                                 <div className="card__rating">
-                                                    <span 
-                                                        className="cursor-pointer mr-2 font-weight-bold"
-                                                        onClick={handleShow}
-                                                    >
-                                                        Rate course
-                                                    </span>
+                                                    {item.stars === null ?
+                                                        <span 
+                                                            className="cursor-pointer mr-2 font-weight-bold"
+                                                            onClick={handleShow}
+                                                        >
+                                                            Rate course
+                                                        </span>
+                                                        : null
+                                                    }
 
                                                     <span className="rating">
                                                         {item.stars.map((val,ind) => {
@@ -243,6 +254,52 @@ const MyCourses = (props) => {
                                                             );
                                                         })}
                                                     </span>
+
+                                                    {item.stars != null && item.stars.length > 0 ? 
+                                                    <React.Fragment>
+                                                        <span>{item.rating}/5</span> 
+                                                        <Link 
+                                                            className="ml-15"
+                                                            onClick={() => toggleReviews(item.id)}
+                                                            aria-controls="threeComments"
+                                                            aria-expanded={`openReview` + index}
+                                                        >
+                                                            <strong>{item.review}</strong> { item.review > 1 ? 'Reviews' : 'Review' }
+                                                        </Link>
+
+                                                        {/* modal for filled in reviews */}
+                                                        <Collapse in={openReview == item.id}>
+                                                            <div className="db-reviews-list-wrap arrow-box top-big">
+                                                                <span className="btn-close"  onClick={() => setOpenReview(!openReview)}>&#x2715;</span>
+                                                                <div className="reviews-list">
+                                                                    <ul>
+                                                                        <li>
+                                                                            <div className="card__rating">
+                                                                                <span className="rating">
+                                                                                    <em className="icon-fullstar"></em>
+                                                                                    <em className="icon-fullstar"></em>
+                                                                                    <em className="icon-fullstar"></em>
+                                                                                    <em className="icon-fullstar"></em>
+                                                                                    <em className="icon-blankstar"></em>
+                                                                                    <span> <strong>4</strong> /5</span>
+                                                                                </span>
+                                                                            </div>
+
+                                                                            <span className="reviews-list--date">Dec. 21, 2020</span>
+                                                                            <p className="reviews-list--text">Great product for your career.  It helped alot to enhance my career</p>
+                                                                        </li>
+                                                                    </ul>
+                                                                </div>
+                                                                
+                                                                <div className="db-reviews-list-wrap--bottom">
+                                                                    <button className="btn btn-outline-primary" onClick={handleShow}>Add new</button>
+                                                                </div>
+                                                            </div>
+                                                        </Collapse>
+                                    
+                                                    </React.Fragment>
+                                                    : null
+                                                    }
                                                 </div>
 
                                                 {/* rate service modal */}
@@ -298,6 +355,8 @@ const MyCourses = (props) => {
                                         <button type="submit" className="btn btn-outline-primary mt-20 px-5">Submit</button>
                                     </div>
                                 </Collapse>
+
+                                <div className="db-mycourse-highlighter">Next course to take: <Link to={"#"} className="font-weight-bold ml-2">Seo Specialist</Link> </div>
                             </div>
                         )
                     })

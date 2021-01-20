@@ -115,6 +115,8 @@ class MyServicesApi(DashboardInfo, APIView):
     def get(self, request, *args, **kwargs):
         candidate_id = self.request.session.get('candidate_id', None)
         data = []
+        candidate_id='5fed060d9cbeea482331ec4b'
+
         if candidate_id:
             if cache.get('dashboard_my_services'):
                 data = cache.get('dashboard_my_services')
@@ -141,7 +143,7 @@ class MyServicesApi(DashboardInfo, APIView):
                         'img_alt': tsrvc.pImA, 'rating': tsrvc.pARx, 'price': tsrvc.pPinb, 'vendor': tsrvc.pPvn, 'stars': tsrvc.pStar,
                         'provider': tsrvc.pPvn} for tsrvc in tsrvcs]
                 cache.set('dashboard_my_services',data,86400)
-        return Response(data=data, status=status.HTTP_200_OK)
+        return APIResponse(data=data, message='Service data Success', status=status.HTTP_200_OK)
 
 
 class DashboardMyWalletAPI(DashboardInfo, APIView):

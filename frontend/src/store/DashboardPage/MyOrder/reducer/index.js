@@ -2,9 +2,11 @@ import * as Actions from '../actions/actionTypes';
 
 const initState = {
     data: {
-        wal_total: 0,
-        page: [],
-        loyality_txns: []
+        item_count: 0,
+        order: {},
+        orderitems: {},
+        product_id: 0,
+        product_type_flow: 0
     },
     error: false,
     message: ""
