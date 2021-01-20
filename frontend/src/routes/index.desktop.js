@@ -9,15 +9,12 @@ import DashboardPageContainer from 'components/DesktopComponent/Core/DashboardPa
 import RouteWithSubRoutes from 'routes/route';
 
 
-
 const DesktopAppRouter = () => (
-
     <div>
         <Switch>
         {routes.map((route, i) => <RouteWithSubRoutes key={i} {...route} />)}
         </Switch>
     </div>
-
 );
 
 

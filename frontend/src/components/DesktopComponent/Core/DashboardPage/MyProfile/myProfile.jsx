@@ -114,7 +114,7 @@ const MyProfile = (props) => {
                                         <div className="form-group error">
                                             <input type="text" className="form-control" id="name" name="name" value="Amit Kumar" placeholder=" " aria-required="true" aria-invalid="true" />
                                             <label for="">Name</label>
-                                            <span class="error-msg">Required</span>
+                                            <span className="error-msg">Required</span>
                                         </div>
 
                                         <div className="form-group">
@@ -149,7 +149,7 @@ const MyProfile = (props) => {
                                         </div>
 
                                         <div className="form-group">
-                                            <select class="form-control" id="exampleFormControlSelect1">
+                                            <select className="form-control" id="exampleFormControlSelect1">
                                                 <option>1</option>
                                                 <option>2</option>
                                                 <option>3</option>
@@ -195,25 +195,25 @@ const MyProfile = (props) => {
                 <div className="row mb-10">
                     <h2 className="col-9">Resume</h2>
                     <div className="col-3 text-right">
-                        <div class="upload-btn-wrapper">
-                            <button class="btn btn-outline-primary">Upload new resume</button>
+                        <div className="upload-btn-wrapper">
+                            <button className="btn btn-outline-primary">Upload new resume</button>
                             <input type="file" name="myfile" />
                         </div>
                     </div>
                 </div>
 
                 <div className="db-custom-select-form">
-                    <div class="custom-control custom-radio mb-10">
-                        <input type="radio" id="dResume" name="resume" class="custom-control-input" />
-                        <label class="custom-control-label" for="dResume">
+                    <div className="custom-control custom-radio mb-10">
+                        <input type="radio" id="dResume" name="resume" className="custom-control-input" />
+                        <label className="custom-control-label" for="dResume">
                             <Link to={"#"} className="font-weight-bold mr-2">Newresume25-May.doc</Link>
                             (Default resume)
                         </label>
                     </div>
 
-                    <div class="custom-control custom-radio">
-                        <input type="radio" id="resume" name="resume" class="custom-control-input" />
-                        <label class="custom-control-label" for="resume">
+                    <div className="custom-control custom-radio">
+                        <input type="radio" id="resume" name="resume" className="custom-control-input" />
+                        <label className="custom-control-label" for="resume">
                             <Link to={"#"} className="font-weight-bold mr-2">Salemanagerresume.doc</Link>
                         </label>
                     </div>

@@ -632,7 +632,7 @@ class UserInboxListApiView(APIView):
                 'total_incl_tax': obj.total_incl_tax,
                 'number': obj.number, 'date_placed': obj.date_placed.strftime("%b %d, ""%Y"),
                 'status': obj.status, 'id': obj.id,
-                'orderitems': [{'product_type_flow': oi.product.type_flow if oi.product_id else '',
+                'orderitems': [{'product_type_flow': oi.product.type_flow if oi.product_id else '', 
                                 'parent': oi.parent_id,
                                 'parent_heading': oi.parent.product.heading if oi.parent_id and oi.parent.product_id else '',
                                 'get_user_oi_status': oi.get_user_oi_status,
