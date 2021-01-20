@@ -12,8 +12,8 @@ export const getAccessKey = () => {
 }
 
 export const getCandidateId = () => {
-    if (localStorage.getItem('candidate_id')) return localStorage.getItem('candidate_id');
-    if (sessionStorage.getItem('candidate_id')) return sessionStorage.getItem('candidate_id');
+    if (!!localStorage.getItem('candidateId')) return localStorage.getItem('candidateId');
+    if (!!sessionStorage.getItem('candidateId')) return sessionStorage.getItem('candidateId');
     return false;
 }
 

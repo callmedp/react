@@ -2,21 +2,13 @@ import React from "react";
 import { Route, Switch } from "react-router-dom";
 import SkillPageContainer from "components/MobileComponent/Core/SkillPage/skillPage";
 import CataloguePageContainer from "components/MobileComponent/Core/CataloguePage/cataloguePage";
+import DashboardContainer from "components/MobileComponent/Core/DashboardPage/dashboardPage";
 import { getSkillPageActionsMobile } from 'apiHandler/skillPageApi'; 
 import Error404Container from 'components/MobileComponent/Common/ErrorPage404/errorPage404';
 import { getCataloguePageActionsMobile } from "apiHandler/cataloguePageApi";
+import DashboardPageContainer from 'components/MobileComponent/Core/DashboardPage/dashboardPage';
+import RouteWithSubRoutes from 'routes/route';
 
-export const RouteWithSubRoutes = route => {
-    return (
-        <Route
-            path={route.path}
-            exact={route.exact}
-            render={props =>
-                <route.component {...props} routes={route.routes} />
-            }
-        />
-    )
-};
 
 
 const MobileAppRouter = () => (
@@ -40,6 +32,12 @@ export const routes = [
         path: '/online-courses.html/',
         component: CataloguePageContainer,
         actionGroup: getCataloguePageActionsMobile,
+        exact: true,
+    },
+    {
+        path: '/dashboard/:name/',
+        component: DashboardPageContainer,
+        private: false,
         exact: true,
     },
     {
