@@ -22,10 +22,11 @@
                            placeholder="Search for courses, services etc.."
                            type="text"
                            autocomplete="off"
-                           required=""/>
+                           required=""
+                           onkeypress="MyGA.SendEvent('search_course','ln_search_course', 'ln_search_initiated', 'ln_click_on_search','', false, true)"/>
                     <span class="error-txt"></span>
                 </div>
-                <button type="submit" onclick ="MyGA.SendEvent('search_course','ln_search_course', 'ln_search_initiated_navigation', 'ln_click_on_course', 'click_on _search','', false, true)" class="find-jobs-btn btn"></button>
+                <button type="submit" onclick ="MyGA.SendEvent('search_course','ln_search_course', 'ln_search_initiated', 'ln_click_on_search','', false, true)"  class="find-jobs-btn btn"></button>
             </form>    
         </div>
         {% comment %}

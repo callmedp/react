@@ -1,12 +1,17 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Banner.scss';
 import { useSelector } from 'react-redux';
 
 const noOfWords = 200
 
 const SkillBanner = (props) => {
+    const { pageId } = props
     const { name, about } = useSelector( store => store.skillBanner )
     const [showAll, setShowAll] = useState(false)
+    
+    useEffect(() => {
+        setShowAll(false)
+    }, [pageId])
     
     const controlContent = (content, state) =>{
         return (

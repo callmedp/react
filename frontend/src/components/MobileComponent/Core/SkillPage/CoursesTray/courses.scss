@@ -80,7 +80,8 @@
                 margin: 0 .5rem 0 0;
 
                 img {
-                    max-width: 100%;
+                    max-width: 120%;
+                    margin-left: -1rem;
                 }
             }
 
@@ -324,6 +325,12 @@
                 @include border-radius(100%);
                 @extend %box-shadow1;
                 margin: -1.5rem 0 0 0;
+                overflow: hidden;
+
+                img {
+                    width: 100%;
+                    margin: .5rem 0 0 0;
+                }
             }
         }
 

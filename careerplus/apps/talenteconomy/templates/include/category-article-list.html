@@ -3,7 +3,7 @@
 
 {% for artList in page_obj %}
   <div class="article-list col-sm-6" itemprop="itemListElement" itemscope itemtype="http://schema.org/Article">
-    	<a class="box-panel" href="{% url 'talent:te-articles-detail' artList.p_cat.slug artList.slug %}" title="{{artList.heading}}" itemprop="url">
+    	<a class="box-panel" href="{% url 'talent:te-articles-detail' artList.p_cat.slug artList.slug %}" title="{{artList.heading}}" itemprop="url" onclick="MyGA.SendEvent('recently _added_blogs','ln_recently _added_blogs', 'ln_{{artList.heading}}', 'ln_{{artList.heading}}', '', false, true);">
       	<figure class="pr">
       		{% if artList.image  %}
         			<img aria-label="{{artList.image_alt}}" src="{{artList.image.url}}" alt="{{artList.image_alt}}" itemprop="image">

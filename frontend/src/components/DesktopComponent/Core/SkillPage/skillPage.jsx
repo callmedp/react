@@ -111,7 +111,7 @@ const SkillPage = (props) => {
                 <div className="row">
                     <div className="col-sm-9">
                         <div className="ml-5">
-                            <AboutSection />
+                            <AboutSection pageId={pageId} />
                             <WhoLearn />
                         </div>
                     </div>
