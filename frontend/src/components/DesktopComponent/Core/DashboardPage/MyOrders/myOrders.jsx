@@ -7,12 +7,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchMyOrders } from 'store/DashboardPage/MyOrder/actions';
 
 const MyOrders = (props) => {
-    const [results, setResults] = useState({});
     const ordPageNo = '1';
     const dispatch = useDispatch();
     const { history } = props;
     const { orderLoader } = useSelector(store => store.loader);
-    console.log(results);
+    const results = useSelector(store => store.dashboardOrders);
+
     const handleEffects = async () => {
         try {
             //You may notice that apis corresponding to these actions are not getting called on initial render.
@@ -20,8 +20,7 @@ const MyOrders = (props) => {
             //So there is no need to fetch them again on the browser.
             if (!(window && window.config && window.config.isServerRendered)) {
                 dispatch(startDashboardOrderPageLoader());
-                const result = await new Promise((resolve, reject) => dispatch(fetchMyOrders({ id: ordPageNo, resolve, reject })))
-                setResults(result);
+                await new Promise((resolve, reject) => dispatch(fetchMyOrders({ id: ordPageNo, resolve, reject })))
                 dispatch(stopDashboardOrderPageLoader());
             }
             else {
@@ -67,7 +66,7 @@ const MyOrders = (props) => {
                             <div className="row">
                                 <div className="col-md-4 order-detail--id">{item.order.number}</div>
                                 <div className="col-md-2 font-weight-bold">{ (new Date(item.order.date_placed)).toLocaleDateString() }</div>
-                                <div className="col-md-2 font-weight-bold">{item.order.status === 0 ? 'Unpaid' : item.order.status === 1 ? 'Open' : item.order.status === 3 ? 'Closed' : item.order.status === 5 ? 'Cancelled' : '' }</div>
+                                <div className="col-md-2 font-weight-bold">{item.order.order_status ? item.order.order_status : ""}</div>
                                 <div className="col-md-2 font-weight-bold">{item.item_count > 1 ? item.item_count + ' items' : item.item_count + ' item'}</div>
                                 <div className="col-md-2 font-weight-bold">&#8377; {parseInt(item.order.currency) + parseInt(item.order.total_incl_tax)}/- </div>
                             </div>
@@ -75,7 +74,7 @@ const MyOrders = (props) => {
                             <div className="order-detail__content">
                                 <div className="order-detail__content--btnWrap">
                                     <Link to={'#orderDetails' + index} className="arrow-icon" onClick={() => openOrderDetail(index)}>Order Details</Link>
-                                    <Link to={"#"} className="download-icon">{item.order.status === 0 ? 'Cancel Order' : (item.order.status === 1 || item.order.status === 3) ? 'Download Invoice' : null}</Link>
+                                    <Link to={"#"} className="download-icon">{item.order.status === 'Unpaid' ? 'Cancel Order' : (item.order.status === 'Paid' || item.order.status === 'Closed') ? 'Download Invoice' : null}</Link>
                                 </div>
                             </div>
 
@@ -95,8 +94,7 @@ const MyOrders = (props) => {
                                                             <Link to={"#"} className="col-11 pl-0 noLink">
                                                                 {innItem.title}
                                                             </Link>
-                                                            {/* {% elif obj.oi_status == 161 or obj.oi_status == 162 or obj.oi_status == 163 or obj.oi_status == 164 %} */}
-                                                            <span className="col-1 unpaid">{item.order.status === 0 ? 'Unpaid' : item.order.status === 1 ? 'Service in progress' : innItem.oi_status === 4 ? 'Closed' : item.order.status === 5 ? 'Cancelled' : ""}</span>
+                                                            <span className="col-1 unpaid">{innItem.item_oi_status}</span>
                                                         </li>
                                                     )
                                                 })
