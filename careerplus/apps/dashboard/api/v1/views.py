@@ -20,6 +20,7 @@ from search.helpers import get_recommendations
 # Other Import
 from haystack.query import SearchQuerySet
 from order.choices import OI_OPS_STATUS
+from .helpers import offset_paginator
 
 
 class DashboardMyorderApi(DashboardInfo, APIView):
@@ -30,9 +31,9 @@ class DashboardMyorderApi(DashboardInfo, APIView):
         candidate_id = self.request.session.get('candidate_id', None)
         order_list=[]
         candidate_id='5c94a7b29cbeea2c1f27fda2'
+        page = request.GET.get("page", 1)
 
-        if candidate_id:        
-            
+        if candidate_id:         
             orders = Order.objects.filter(
             status__in=[0, 1, 3],
             candidate_id=candidate_id)
@@ -45,7 +46,8 @@ class DashboardMyorderApi(DashboardInfo, APIView):
             orders = orders.exclude(
                 id__in=excl_order_list).order_by('-date_placed')
             order_list = []
-            for obj in orders:
+            paginated_data = offset_paginator(page, orders)
+            for obj in paginated_data["data"]:
                 orderitems = OrderItem.objects.select_related(
                     'product').filter(no_process=False, order=obj)
                 product_type_flow = None
@@ -73,7 +75,8 @@ class MyCoursesApi(DashboardInfo, APIView):
     def get(self, request, *args, **kwargs):
         candidate_id = self.request.session.get('candidate_id', None)
         data = []
-        candidate_id='568a0b20cce9fb485393489b'
+        page = request.GET.get("page", 1)
+        # candidate_id='568a0b20cce9fb485393489b'
         # candidate_id='5fed060d9cbeea482331ec4b'
         if candidate_id:
             orders = Order.objects.filter(
@@ -90,7 +93,8 @@ class MyCoursesApi(DashboardInfo, APIView):
                 id__in=excl_order_list).order_by('-date_placed')
 
             courses = OrderItem.objects.filter(order__in=orders,product__type_flow=2)
-            data = OrderItemSerializer(courses,many=True,context= {"get_details": True}).data
+            paginated_data = offset_paginator(page, courses)
+            data = OrderItemSerializer(paginated_data["data"],many=True,context= {"get_details": True}).data
         return Response(data=data, status=status.HTTP_200_OK)
 
 
@@ -102,6 +106,7 @@ class MyServicesApi(DashboardInfo, APIView):
         candidate_id = self.request.session.get('candidate_id', None)
         email = request.GET.get('email', None)
         data = []
+        page = request.GET.get("page", 1)
         # candidate_id='568a0b20cce9fb485393489b'
         # candidate_id='5fed060d9cbeea482331ec4b'
         if candidate_id:
@@ -120,6 +125,7 @@ class MyServicesApi(DashboardInfo, APIView):
             
 
             services = OrderItem.objects.filter(order__in=orders,product__product_class__slug__in=settings.SERVICE_SLUG)
+            paginated_data = offset_paginator(page, services)
             pending_resume_items = DashboardInfo().get_pending_resume_items(candidate_id=candidate_id,
                                                                         email=email)
 
@@ -128,7 +134,7 @@ class MyServicesApi(DashboardInfo, APIView):
                                     } for oi in
                                 pending_resume_items]
             data = []
-            data = OrderItemSerializer(services,many=True,context= {"get_details": True}).data
+            data = OrderItemSerializer(paginated_data["data"],many=True,context= {"get_details": True}).data
             data.append({'pending_resume_items':pending_resume_items})
         return Response(data=data, status=status.HTTP_200_OK)
 
