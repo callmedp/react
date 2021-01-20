@@ -11,7 +11,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 # Inter-App Import
 from dashboard.dashboard_mixin import DashboardInfo
 from payment.models import PaymentTxn
-from order.models import Order, OrderItem
+from order.models import Order, OrderItem,OrderItemOperation
 from dashboard.api.v1.serializers import OrderSerializer,OrderItemSerializer
 from wallet.models import Wallet
 from core.common import APIResponse
@@ -19,6 +19,8 @@ from search.helpers import get_recommendations
 
 # Other Import
 from haystack.query import SearchQuerySet
+from order.choices import OI_OPS_STATUS
+from .helpers import offset_paginator
 
 
 class DashboardMyorderApi(DashboardInfo, APIView):
@@ -28,11 +30,11 @@ class DashboardMyorderApi(DashboardInfo, APIView):
     def get(self, request, *args, **kwargs):
         candidate_id = self.request.session.get('candidate_id', None)
         order_list=[]
-        candidate_id='5c94a7b29cbeea2c1f27fda2'
-        # candidate_id='5fed060d9cbeea482331ec4b'
+        # candidate_id='568a0b20cce9fb485393489b'
+        # candidate_id='5c94a7b29cbeea2c1f27fda2'
+        page = request.GET.get("page", 1)
 
-        if candidate_id:        
-            
+        if candidate_id:         
             orders = Order.objects.filter(
             status__in=[0, 1, 3],
             candidate_id=candidate_id)
@@ -45,7 +47,8 @@ class DashboardMyorderApi(DashboardInfo, APIView):
             orders = orders.exclude(
                 id__in=excl_order_list).order_by('-date_placed')
             order_list = []
-            for obj in orders:
+            paginated_data = offset_paginator(page, orders)
+            for obj in paginated_data["data"]:
                 orderitems = OrderItem.objects.select_related(
                     'product').filter(no_process=False, order=obj)
                 product_type_flow = None
@@ -63,6 +66,13 @@ class DashboardMyorderApi(DashboardInfo, APIView):
                     "orderitems": OrderItemSerializer(orderitems,many=True).data,
                 }
                 order_list.append(data)
+                #pagination info
+                order_list.append({'page':
+                {'current_page':paginated_data['current_page'],
+                'total':paginated_data['total_pages'],
+                'has_prev': True if paginated_data['current_page'] >1 else False,
+                'has_next':True if (paginated_data['total_pages']-paginated_data['current_page'])>0 else False
+                }})
                 
         return APIResponse(data=order_list, message='Order data Success', status=status.HTTP_200_OK)
 
@@ -73,35 +83,34 @@ class MyCoursesApi(DashboardInfo, APIView):
     def get(self, request, *args, **kwargs):
         candidate_id = self.request.session.get('candidate_id', None)
         data = []
-        candidate_id='5fed060d9cbeea482331ec4b'
+        page = request.GET.get("page", 1)
+        # candidate_id='568a0b20cce9fb485393489b'
+        # candidate_id='5fed060d9cbeea482331ec4b'
         if candidate_id:
-            if cache.get('dashboard_my_courses'):
-                data = cache.get('dashboard_my_courses')
-            else:
-                orders = Order.objects.filter(
-                    status__in=[0, 1, 3],
-                    candidate_id=candidate_id)
-                    
-                excl_txns = PaymentTxn.objects.filter(
-                    status__in=[0, 2, 3, 4, 5],
-                    payment_mode__in=[6, 7],
-                    order__candidate_id=candidate_id)
-                # excl_txns = PaymentTxn.objects.filter(status=0, ).exclude(payment_mode__in=[1, 4])
-                excl_order_list = excl_txns.all().values_list('order_id', flat=True)
+            orders = Order.objects.filter(
+                status__in=[0, 1, 3],
+                candidate_id=candidate_id)
+                
+            excl_txns = PaymentTxn.objects.filter(
+                status__in=[0, 2, 3, 4, 5],
+                payment_mode__in=[6, 7],
+                order__candidate_id=candidate_id)
+            excl_order_list = excl_txns.all().values_list('order_id', flat=True)
 
-                orders = orders.exclude(
-                    id__in=excl_order_list).order_by('-date_placed')
+            orders = orders.exclude(
+                id__in=excl_order_list).order_by('-date_placed')
 
-                courses = OrderItem.objects.filter(order__in=orders,product__type_flow=2).values_list('product',flat=True)
-                tsrvcs = SearchQuerySet().filter(id__in=courses, pTP__in=[0, 1, 3]).exclude(
-                    id__in=settings.EXCLUDE_SEARCH_PRODUCTS
-                )
-                data = [
-                        {'id': tsrvc.id, 'heading': tsrvc.pHd, 'name': tsrvc.pNm, 'url': tsrvc.pURL, 'img': tsrvc.pImg, \
-                        'img_alt': tsrvc.pImA, 'rating': tsrvc.pARx, 'price': tsrvc.pPinb, 'vendor': tsrvc.pPvn, 'stars': tsrvc.pStar,
-                        'provider': tsrvc.pPvn} for tsrvc in tsrvcs]
-                cache.set('dashboard_my_courses',data,86400)
-        return APIResponse(data=data, message='Order data Success', status=status.HTTP_200_OK)
+            courses = OrderItem.objects.filter(order__in=orders,product__type_flow=2)
+            paginated_data = offset_paginator(page, courses)
+            data = OrderItemSerializer(paginated_data["data"],many=True,context= {"get_details": True}).data
+            #pagination info
+            data.append({'page':
+            {'current_page':paginated_data['current_page'],
+            'total':paginated_data['total_pages'],
+            'has_prev': True if paginated_data['current_page'] >1 else False,
+            'has_next':True if (paginated_data['total_pages']-paginated_data['current_page'])>0 else False
+            }})
+        return APIResponse(data=data,message='Courses data Success',status=status.HTTP_200_OK)
 
 
 class MyServicesApi(DashboardInfo, APIView):
@@ -110,36 +119,46 @@ class MyServicesApi(DashboardInfo, APIView):
 
     def get(self, request, *args, **kwargs):
         candidate_id = self.request.session.get('candidate_id', None)
+        email = request.GET.get('email', None)
         data = []
-        candidate_id='5fed060d9cbeea482331ec4b'
-
+        page = request.GET.get("page", 1)
+        # candidate_id='568a0b20cce9fb485393489b'
+        # candidate_id='5fed060d9cbeea482331ec4b'
         if candidate_id:
-            if cache.get('dashboard_my_services'):
-                data = cache.get('dashboard_my_services')
-            else:
-                orders = Order.objects.filter(
-                    status__in=[0, 1, 3],
-                    candidate_id=candidate_id)
+            orders = Order.objects.filter(
+                status__in=[0, 1, 3],
+                candidate_id=candidate_id)
 
-                excl_txns = PaymentTxn.objects.filter(
-                    status__in=[0, 2, 3, 4, 5],
-                    payment_mode__in=[6, 7],
-                    order__candidate_id=candidate_id)
-                excl_order_list = excl_txns.all().values_list('order_id', flat=True)
+            excl_txns = PaymentTxn.objects.filter(
+                status__in=[0, 2, 3, 4, 5],
+                payment_mode__in=[6, 7],
+                order__candidate_id=candidate_id)
+            excl_order_list = excl_txns.all().values_list('order_id', flat=True)
 
-                orders = orders.exclude(
-                    id__in=excl_order_list).order_by('-date_placed')
+            orders = orders.exclude(
+                id__in=excl_order_list).order_by('-date_placed')
+            
 
-                services = OrderItem.objects.filter(order__in=orders,product__product_class__slug__in=settings.SERVICE_SLUG).values_list('product',flat=True)
-                tsrvcs = SearchQuerySet().filter(id__in=services, pTP__in=[0, 1, 3]).exclude(
-                    id__in=settings.EXCLUDE_SEARCH_PRODUCTS
-                )
-                data = [
-                        {'id': tsrvc.id, 'heading': tsrvc.pHd, 'name': tsrvc.pNm, 'url': tsrvc.pURL, 'img': tsrvc.pImg, \
-                        'img_alt': tsrvc.pImA, 'rating': tsrvc.pARx, 'price': tsrvc.pPinb, 'vendor': tsrvc.pPvn, 'stars': tsrvc.pStar,
-                        'provider': tsrvc.pPvn} for tsrvc in tsrvcs]
-                cache.set('dashboard_my_services',data,86400)
-        return APIResponse(data=data, message='Service data Success', status=status.HTTP_200_OK)
+            services = OrderItem.objects.filter(order__in=orders,product__product_class__slug__in=settings.SERVICE_SLUG)
+            paginated_data = offset_paginator(page, services)
+            pending_resume_items = DashboardInfo().get_pending_resume_items(candidate_id=candidate_id,
+                                                                        email=email)
+
+            pending_resume_items = [{'id': oi.id, 'product_name': oi.product.get_name if oi.product else ''
+                                    , 'product_get_exp_db': oi.product.get_exp_db() if oi.product else ''
+                                    } for oi in
+                                pending_resume_items]
+            data = OrderItemSerializer(paginated_data["data"],many=True,context= {"get_details": True}).data
+            data.append({'pending_resume_items':pending_resume_items})
+
+            #pagination info
+            data.append({'page':
+            {'current_page':paginated_data['current_page'],
+            'total':paginated_data['total_pages'],
+            'has_prev': True if paginated_data['current_page'] >1 else False,
+            'has_next':True if (paginated_data['total_pages']-paginated_data['current_page'])>0 else False
+            }})
+        return APIResponse(data=data,message='Services data Success', status=status.HTTP_200_OK)
 
 
 class DashboardMyWalletAPI(DashboardInfo, APIView):
