@@ -17,12 +17,20 @@ import { fetchServices } from 'store/DashboardPage/Service/actions/index';
 
 const MyServices = (props) => {
     const [showUpload, setShowUpload] = React.useState(false)
-    const onClickActiveUpload = () => setShowUpload(true)
-    const onClickInActiveUpload = () => setShowUpload(false)
+    const [isActive, setActive] = useState(false);
+    const [datalist, setDatalist] = useState([]);
+    const [data_id, setDataid] = useState(null);
+    const showDetailtoggle = (data, id) => {
+        setDataid(id);
+        setDatalist(data);
+        setActive(!isActive);
+    };
+    const showUploadToggle = () => {
+        setShowUpload(!showUpload);
+    };
     const dispatch = useDispatch();
     const [showSearchPage, setShowSearchPage] = useState(false)
     const myServicesList = useSelector(store => store.allServices?.data);
-    console.log(myServicesList)
     const handleEffects = async () => {
         Aos.init({ duration: 2000, once: true, offset: 10, anchorPlacement: 'bottom-bottom' });
         //You may notice that apis corresponding to these actions are not getting called on initial render.
@@ -47,78 +55,7 @@ const MyServices = (props) => {
         <div>
 
             <main className="mb-0">
-
-
                 <div className="m-courses-detail db-warp">
-
-
-
-
-
-
-                    <div className="m-card pl-0">
-                        <div className="m-share" aria-haspopup="true">
-                            <i className="icon-share"></i>
-                            <div className="m-share__box m-arrow-box m-top">
-                                <Link to={"#"} className="m-facebook-icon"></Link>
-                                <Link to={"#"} className="m-linkedin-icon"></Link>
-                                <Link to={"#"} className="m-twitter-iocn"></Link>
-                                <Link to={"#"} className="m-whatsup-icon"></Link>
-                            </div>
-                        </div>
-
-                        <div className="d-flex">
-                            <figure>
-                                <img src="https://static1.shine.com/l/m/product_image/3425/1542800087_8980.png" alt="Digital Marketing Training Course" />
-                            </figure>
-                            <div className="m-courses-detail__info">
-                                <h2>Resume Builder 0-2 years</h2>
-                                <p className="m-pipe-divides mb-5">Provider: <strong>Shine learning</strong> </p>
-                                <p className="m-pipe-divides mb-5"><span>Bought on: <strong>27 Oct 2020</strong> </span> <span>Duration: <strong>90 days</strong> </span></p>
-                            </div>
-                        </div>
-
-                        <div className="pl-15 mt-15 fs-12">
-                            Status: <Link to={"#"} className="font-weight-bold">Newresume.pdf</Link> <strong> uploaded by Shine</strong>
-                            <p className="mt-10 mb-25">
-                                <Link className="m-accept" to={"#"}>Accept</Link>
-                                <Link className="m-reject" to={"#"}>Reject</Link>
-                            </p>
-                            <Link to={"#"} className="d-block font-weight-bold mt-10">View Details</Link>
-                        </div>
-
-                        <div className="pl-15">
-                            <div className="m-courses-detail__bottomWrap">
-                                <div>
-                                    <div className="m-day-remaning">
-                                        <span className="m-day-remaning--box">9</span>
-                                        <span className="m-day-remaning--box">0</span>
-                                        <span className="ml-2 m-day-remaning--text">Days <br />remaning</span>
-                                    </div>
-                                </div>
-
-                                <Link to={"#"} className="m-db-start-course font-weight-bold pr-10">Start Service</Link>
-                            </div>
-
-                            <div className="m-courses-detail__userInput">
-                                <Link to="/404" className="m-db-comments font-weight-bold">3 Comment</Link>
-                                <div className="d-flex">
-                                    <span className="m-rating">
-                                        <em className="micon-fullstar"></em>
-                                        <em className="micon-fullstar"></em>
-                                        <em className="micon-fullstar"></em>
-                                        <em className="micon-fullstar"></em>
-                                        <em className="micon-blankstar"></em>
-                                        <span className="ml-5">4/5</span>
-                                    </span>
-                                    <Link to={"#"} className="font-weight-bold ml-10">2</Link>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-
                     {
                         myServicesList?.map((service, key) => {
                             if (key == 10 || key == 11) {
@@ -163,7 +100,21 @@ const MyServices = (props) => {
 
                                             <div className="pl-15 mt-15 fs-12">
                                                 Status: <strong>{service.status}</strong>
-                                                <Link to={"#"} className="d-block font-weight-bold mt-10">View Details</Link>
+
+
+                                                <div className="my-order__order-detail">
+                                                    <a onClick={() => showDetailtoggle(service.datalist, key)} className={`arrow-icon ${isActive && key === data_id ? 'open' : ''} font-weight-bold`}>Views Details</a>
+                                                    <ul className="my-order__order-detail--info mt-15" style={isActive && key === data_id ? { display: 'block' } : { display: 'none' }}>
+                                                        {
+                                                            datalist.map((data, key) =>
+                                                                <li key={key}>
+                                                                    {/* <Link to={"#"} className="d-block mb-0"> { data } </Link> */}
+                                                                    <span> <strong> {data} </strong></span>
+                                                                </li>)
+                                                        }
+                                                    </ul>
+                                                </div>
+
                                             </div>
                                             :
                                             <>
@@ -172,9 +123,20 @@ const MyServices = (props) => {
 
                                                     {/* { service.options } */}
                                                     {Object.keys(service.options).length === 0 && service.options.constructor === Object ? '' : service.options['Upload Resume'] === true ?
-                                                        <a onClick={onClickActiveUpload} className="font-weight-bold">Upload</a> : ''
+                                                        <a onClick={showUploadToggle} className="font-weight-bold">Upload</a> : ''
                                                     }
-                                                    <Link to={"#"} className="d-block font-weight-bold mt-10">View Details</Link>
+                                                    <div className="my-order__order-detail">
+                                                        <a onClick={() => showDetailtoggle(service.datalist, key)} className={`arrow-icon ${isActive && key === data_id ? 'open' : ''} font-weight-bold`}>Views Details</a>
+                                                        <ul className="my-order__order-detail--info mt-15" style={isActive && key === data_id ? { display: 'block' } : { display: 'none' }}>
+                                                            {
+                                                                datalist.map((data, key) =>
+                                                                    <li key={key}>
+                                                                        {/* <Link to={"#"} className="d-block mb-0"> { data } </Link> */}
+                                                                        <span> <strong> {data} </strong></span>
+                                                                    </li>)
+                                                            }
+                                                        </ul>
+                                                    </div>
                                                 </div>
                                                 <div className="pl-15">
                                                     <div className="m-courses-detail__bottomWrap">
@@ -227,7 +189,7 @@ const MyServices = (props) => {
                     </div>
 
                     <div className="text-center" style={showUpload ? { display: 'block' } : { display: 'none' }}>
-                        <span onClick={onClickInActiveUpload} className="m-db-close">&#x2715;</span>
+                        <span onClick={showUploadToggle} className="m-db-close">&#x2715;</span>
                         <h2>Upload Resume</h2>
                         <p>To initiate your services, <strong>upload resume</strong></p>
                         <div className="d-flex align-items-center justify-content-center mt-20">
@@ -240,7 +202,7 @@ const MyServices = (props) => {
 
                             <div className="m-custom">
                                 <input type="checkbox" id="shineResume" />
-                                <label className="m-custom--label font-weight-bold mb-0" htmlfor="shineResume">Use shine resume</label>
+                                <label className="m-custom--label font-weight-bold mb-0" htmlFor="shineResume">Use shine resume</label>
                             </div>
                         </div>
 
@@ -251,17 +213,17 @@ const MyServices = (props) => {
                         <ul className="m-db-upload-resume--list">
                                 <li className="m-custom">
                                     <input type="checkbox" id="resumeBooster" />
-                                    <label className="font-weight-bold" htmlfor="resumeBooster">Resume Booster 5-10 years</label>
+                                    <label className="font-weight-bold" htmlFor="resumeBooster">Resume Booster 5-10 years</label>
                                 </li>
 
                                 <li className="m-custom">
                                     <input type="checkbox" id="resumeBuilder" />
-                                    <label className="font-weight-bold" htmlfor="resumeBuilder">Resume Builder 5-10 yrs</label>
+                                    <label className="font-weight-bold" htmlFor="resumeBuilder">Resume Builder 5-10 yrs</label>
                                 </li>
 
                                 <li className="m-custom">
                                     <input type="checkbox" id="services" />
-                                    <label className="font-weight-bold" htmlfor="services">For all services</label>
+                                    <label className="font-weight-bold" htmlFor="services">For all services</label>
                                 </li>
                             </ul>
                         </div>
