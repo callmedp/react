@@ -807,6 +807,7 @@ class TrendingCoursesAndSkillsAPI(PopularProductMixin, APIView):
         """
         popular_course_quantity = int(request.GET.get('num_courses', 2))
         skill_category = request.GET.get('category_id', None)
+        course_only = request.GET.get('course_only', False)
 
         product_obj, product_converstion_ratio, product_revenue_per_mile = PopularProductMixin().\
                                                                             popular_courses_algorithm(
@@ -838,12 +839,16 @@ class TrendingCoursesAndSkillsAPI(PopularProductMixin, APIView):
 
         data = {
             'trendingCourses': [
-                {'id': tprd.id, 'heading': tprd.pHd, 'name': tprd.pNm, 'url': tprd.pURL, 'img': tprd.pImg, \
-                 'img_alt': tprd.pImA, 'rating': tprd.pARx, 'vendor': tprd.pPvn, 'stars': tprd.pStar,
-                 'provider': tprd.pPvn \
-                 } for tprd in tprds],
-            'trendingSkills': skills
+                {'id': tprd.id, 'heading': tprd.pHd, 'name': tprd.pNm, 'url': tprd.pURL, 'imgUrl': tprd.pImg, \
+                 'imgAlt': tprd.pImA, 'rating': tprd.pARx, 'vendor': tprd.pPvn, 'stars': tprd.pStar,'price': tprd.pPinb, 
+                 'providerName': tprd.pPvn \
+                 } for tprd in tprds]
         }
+        if not course_only :
+            data.update({
+                'trendingSkills': skills
+            })
+
         return APIResponse(message='Trending Course Loaded', data=data, status=status.HTTP_200_OK)
 
 
