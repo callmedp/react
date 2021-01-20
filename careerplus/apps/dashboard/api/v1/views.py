@@ -30,6 +30,7 @@ class DashboardMyorderApi(DashboardInfo, APIView):
     def get(self, request, *args, **kwargs):
         candidate_id = self.request.session.get('candidate_id', None)
         order_list=[]
+        # candidate_id='568a0b20cce9fb485393489b'
         # candidate_id='5c94a7b29cbeea2c1f27fda2'
         page = request.GET.get("page", 1)
 
@@ -65,6 +66,13 @@ class DashboardMyorderApi(DashboardInfo, APIView):
                     "orderitems": OrderItemSerializer(orderitems,many=True).data,
                 }
                 order_list.append(data)
+                #pagination info
+                order_list.append({'page':
+                {'current_page':paginated_data['current_page'],
+                'total':paginated_data['total_pages'],
+                'has_prev': True if paginated_data['current_page'] >1 else False,
+                'has_next':True if (paginated_data['total_pages']-paginated_data['current_page'])>0 else False
+                }})
                 
         return APIResponse(data=order_list, message='Order data Success', status=status.HTTP_200_OK)
 
@@ -95,7 +103,14 @@ class MyCoursesApi(DashboardInfo, APIView):
             courses = OrderItem.objects.filter(order__in=orders,product__type_flow=2)
             paginated_data = offset_paginator(page, courses)
             data = OrderItemSerializer(paginated_data["data"],many=True,context= {"get_details": True}).data
-        return Response(data=data, status=status.HTTP_200_OK)
+            #pagination info
+            data.append({'page':
+            {'current_page':paginated_data['current_page'],
+            'total':paginated_data['total_pages'],
+            'has_prev': True if paginated_data['current_page'] >1 else False,
+            'has_next':True if (paginated_data['total_pages']-paginated_data['current_page'])>0 else False
+            }})
+        return APIResponse(data=data,message='Courses data Success',status=status.HTTP_200_OK)
 
 
 class MyServicesApi(DashboardInfo, APIView):
@@ -133,10 +148,17 @@ class MyServicesApi(DashboardInfo, APIView):
                                     , 'product_get_exp_db': oi.product.get_exp_db() if oi.product else ''
                                     } for oi in
                                 pending_resume_items]
-            data = []
             data = OrderItemSerializer(paginated_data["data"],many=True,context= {"get_details": True}).data
             data.append({'pending_resume_items':pending_resume_items})
-        return Response(data=data, status=status.HTTP_200_OK)
+
+            #pagination info
+            data.append({'page':
+            {'current_page':paginated_data['current_page'],
+            'total':paginated_data['total_pages'],
+            'has_prev': True if paginated_data['current_page'] >1 else False,
+            'has_next':True if (paginated_data['total_pages']-paginated_data['current_page'])>0 else False
+            }})
+        return APIResponse(data=data,message='Services data Success', status=status.HTTP_200_OK)
 
 
 class DashboardMyWalletAPI(DashboardInfo, APIView):
