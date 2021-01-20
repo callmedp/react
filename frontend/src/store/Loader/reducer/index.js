@@ -23,6 +23,10 @@ export const LoaderReducer = (state=initState, action) => {
         // dashboard courses loader
         case Actions.START_DASHBOARD_COURSES_PAGE_LOADER : return {...state, ...action.payload}
         case Actions.STOP_DASHBOARD_COURSES_PAGE_LOADER : return {...state, ...action.payload}
+
+        // dashboard service loader
+        case Actions.START_DASHBOARD_SERVICES_PAGE_LOADER : return {...state, ...action.payload}
+        case Actions.STOP_DASHBOARD_SERVICES_PAGE_LOADER : return {...state, ...action.payload}
         
         default: return state;
     }

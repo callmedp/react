@@ -2,9 +2,16 @@ import * as Actions from '../actions/actionTypes';
 
 const initState = {
     data: {
-        wal_total: 0,
-        page: [],
-        loyality_txns: []
+        heading: "",
+        id: 0,
+        img: "",
+        img_alt: "",
+        name: "",
+        price: 0,
+        provider: "",
+        rating: 0,
+        stars: [],
+        url: ""
     },
     error: false,
     message: ""

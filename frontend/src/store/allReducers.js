@@ -11,7 +11,7 @@ import { RecentlyAddedCoursesReducer, PopularServicesReducer, TrendingCategories
 import { DashboardMyWalletReducer } from './DashboardPage/MyWallet/reducer/index'; 
 import { DashboardMyOrdersReducer } from './DashboardPage/MyOrder/reducer/index'; 
 import { DashboardMyCoursesReducer } from './DashboardPage/MyCourses/reducer/index';
-
+import { DashboardMyServicesReducer } from './DashboardPage/MyServices/reducer/index';
 
 const rootReducer = combineReducers({
     needHelp : NeedHelpReducer,
@@ -29,7 +29,9 @@ const rootReducer = combineReducers({
     allCategories : AllCategoriesReducer,
     dashboardWallet: DashboardMyWalletReducer,
     dashboardOrders: DashboardMyOrdersReducer,
-    dashboardCourses: DashboardMyCoursesReducer
+    dashboardCourses: DashboardMyCoursesReducer,
+    dashboardServices: DashboardMyServicesReducer
+
 
 
 });
