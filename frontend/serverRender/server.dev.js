@@ -1,10 +1,10 @@
 if (typeof global.window == 'undefined') {
     global.window = {
         config: {
-            isServerRendered : true,
-            siteDomain : 'https://learning.shine.com',
+            isServerRendered : false,
+            siteDomain : 'https://pp-learning.shine.com',
             imageUrl : 'https://static1.shine.com/l/s/react/media/images/',
-            resumeShineSiteDomain : 'https://resume.shine.com',
+            resumeShineSiteDomain : 'https://pp-resume.shine.com',
             shineSiteDomain : 'https://mapi.shine.com',
         }
     };
@@ -13,3 +13,5 @@ if (typeof global.window == 'undefined') {
 
 
 module.exports = require('../ssrBuild/server.js')
+
+

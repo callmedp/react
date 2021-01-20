@@ -3,8 +3,9 @@ if (typeof global.window == 'undefined') {
         config: {
             isServerRendered : false,
             siteDomain : 'https://pp-learning.shine.com',
-            imageUrl : 'https://static1.shine.com/l/s/media/images/',
+            imageUrl : 'https://static1.shine.com/l/s/react/media/images/',
             resumeShineSiteDomain : 'https://pp-resume.shine.com',
+            shineSiteDomain : 'https://mapi.shine.com',
         }
     };
 }
