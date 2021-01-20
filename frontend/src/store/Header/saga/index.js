@@ -38,11 +38,12 @@ function* candidateInfo(action) {
     const { payload: { candidateId, resolve, reject } } = action;
     try {
         const result = yield call(Api.candidateInformation, candidateId);
-        const { candidate_id, profile : { first_name, email, cell_phone } } = result?.data;
+        const { candidate_id, profile : { first_name, last_name, email, cell_phone } } = result?.data;
         localStorage.setItem('userId', candidate_id);
         localStorage.setItem('userName', first_name);
+        localStorage.setItem('lastName', last_name);
         localStorage.setItem('userEmail', email);
-        resolve({ candidateId: candidate_id || '', name: first_name || '', email: email || '' , mobile: cell_phone || ''});
+        resolve({ candidateId: candidate_id || '', name: first_name || '', lastname: last_name || "", email: email || '' , mobile: cell_phone || ''});
     }
     catch (e) {
         console.error("Exception occured at candidateInfo Api", e);

@@ -41,7 +41,7 @@ const DashboardPage = (props) => {
                                 {
                                     'myorder' : <MyOrders />,
                                     'mywallet' : <MyWallet/>,
-                                    'myservices' : <MyServices/>,
+                                    'myservices' : <MyServices {...props} />,
                                     'mycourses' : <MyCourses/>
                                 }[dbContainer]
                               }  

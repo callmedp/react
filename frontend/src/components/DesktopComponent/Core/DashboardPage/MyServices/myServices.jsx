@@ -2,18 +2,19 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ProgressBar } from 'react-bootstrap';
 import { Collapse } from 'react-bootstrap';
-import { Button } from 'react-bootstrap';
 import { Modal } from 'react-bootstrap';
 import '../MyCourses/myCourses.scss';
 import './myServices.scss';
 import { startDashboardServicesPageLoader, stopDashboardServicesPageLoader } from 'store/Loader/actions/index';
 import Loader from '../../../Common/Loader/loader';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchMyServices, uploadResumeForm, getoiComment } from 'store/DashboardPage/MyServices/actions';
+import { fetchMyServices, uploadResumeForm, getoiComment,SubmitDashboardFeedback } from 'store/DashboardPage/MyServices/actions';
 import { useForm } from "react-hook-form";
 import fileUpload from "utils/fileUpload";
 import Swal from 'sweetalert2';
 import {getCandidateId} from 'utils/storage';
+import {InputField, TextArea} from 'formHandler/desktopFormHandler/formFields';
+import CoursesServicesForm from 'formHandler/desktopFormHandler/formData/coursesServices';
 
 const MyServices = (props) => {
     const [addOpen, setaddOpen] = useState(false);
@@ -21,8 +22,6 @@ const MyServices = (props) => {
     const [open, setOpen] = useState(false);
     const [openReview, setOpenReview] = useState(false);
     const toggleReviews = (id) => setOpenReview(openReview == id ? false : id);
-
-    // const [openViewDetail, setOpenViewDetail] = useState(false);
 
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -40,17 +39,14 @@ const MyServices = (props) => {
     const dispatch = useDispatch();
     const { history } = props;
     const { serviceLoader } = useSelector(store => store.loader);
-    let comment_id = null;
 
-    const comm = useSelector(store => console.log(store));
-    
     const [isOpen, setIsOpen] = useState(false);
     const toggleDetails = (id) => setIsOpen(isOpen == id ? false : id);
 
-    let [rating, setRating] = useState(-1);
+    let [newRating, setRating] = useState(5);
     let [clicked, setClicked] = useState(false);
 
-    const { register, handleSubmit, errors, getValues } = useForm();
+    const { register, handleSubmit, errors } = useForm();
     let [filename, setFileName] = useState("Upload a file");
     const [file, setFile] = useState(undefined);
 
@@ -64,22 +60,39 @@ const MyServices = (props) => {
         }
         if(!addOpen) {
             dispatch(getoiComment(commVal));
-            comment_id = id;
         }
     };
 
     // add new comment
     const submitComment = (values) => {
-        console.log(values)
         let new_values = {
           ...values,
           candidate_id: getCandidateId(),
-          oi_pk: comment_id,
+          oi_pk: results.oi_comment[0].oi_id,
           type: "POST",
         };
 
-        dispatch(getoiComment(new_values));
-      };
+        dispatch(startDashboardServicesPageLoader());
+            new Promise((resolve, reject) => dispatch(getoiComment({ data: new_values, resolve, reject })))
+        dispatch(stopDashboardServicesPageLoader());
+        // dispatch(getoiComment(new_values));
+    };
+
+    // add new review
+    const submitReview = (values) => {
+        // console.log(values, newRating)
+        const new_review = {
+            ...values,
+            candidate_id: getCandidateId(),
+            oi_pk: 503247,
+            rating: newRating,
+            full_name: (localStorage.getItem('first_name') || '') + (localStorage.getItem('last_name') || ''),
+            // review: "test",
+        };
+
+        // new Promise((resolve, reject) => dispatch(SubmitDashboardFeedback({ data: new_review, resolve, reject })))
+        dispatch(SubmitDashboardFeedback(new_review, resolve, reject));
+    };
 
     // fill starts of already rated courses
     const fillStarForCourse = (star) => {
@@ -90,7 +103,7 @@ const MyServices = (props) => {
 
     // new rating
     const fillNewStar = (star) => {
-        if (star <= rating) return "icon-fullstar";
+        if (star <= newRating) return "icon-fullstar";
         else return "icon-blankstar";
     };
     
@@ -135,12 +148,12 @@ const MyServices = (props) => {
     const onSubmit = async (values, event) => {
         try {
             values = { ...values, file: file };
-            console.log(values)
+            // console.log(values)
             let response = await new Promise((resolve, reject) => {
                 dispatch(uploadResumeForm({ values, resolve, reject }));
             });
             if (!response.error) {
-                props.setUploadPopup(false);
+                // props.setUploadPopup(false);
                 event.target.reset();
                 Swal.fire({
                     icon: "success",
@@ -213,9 +226,9 @@ const MyServices = (props) => {
                                             <div className="my-courses-detail__leftpan--box">
                                                 <h3><Link to={item.url}>{item.heading}</Link></h3>
                                                 <div className="my-courses-detail__leftpan--info">
-                                                    <span>Provider: <strong>{item.provider}</strong> </span>
-                                                    <span>Bought on: <strong>27 Oct 2020</strong></span>
-                                                    <span>Duration: <strong>90 days</strong></span>
+                                                    <span>Provider: <strong>{item.vendor}</strong> </span>
+                                                    <span>Bought on: <strong>{item.enroll_date}</strong></span>
+                                                    <span>Duration: <strong>{item.duration ? item.duration : ""}</strong></span>
                                                 </div>
 
                                                 <div className="my-courses-detail__leftpan--alert">
@@ -300,54 +313,35 @@ const MyServices = (props) => {
                                                     </Modal>
                                                 </div>
 
-                                                <Link 
-                                                    to={'#'}
-                                                    className="font-weight-bold"
-                                                    onClick={() => toggleDetails(item.id)}
-                                                    aria-controls="addComments"
-                                                    aria-expanded={`openViewDetail`+index}
-                                                >
-                                                    View Details
-                                                </Link>
+                                                {item.datalist && item.datalist.length > 0 ?
+                                                    <Link 
+                                                        to={'#'}
+                                                        className="font-weight-bold"
+                                                        onClick={() => toggleDetails(item.id)}
+                                                        aria-controls="addComments"
+                                                        aria-expanded={`openViewDetail`+index}
+                                                    >
+                                                        View Details
+                                                    </Link>
+                                                    : null 
+                                                }
 
                                                 <Collapse in={isOpen == item.id}>
                                                     <div className="view-detail arrow-box left-big" id={`openViewDetail`+index}>
                                                     <span className="btn-close"  onClick={() => toggleDetails(item.id)}>&#x2715;</span>
                                                         <ul className="timeline-list">
-                                                            <li>
-                                                                <i className="timeline-list--dot"></i>
-                                                                <span>Dec. 11, 2020    |   By Amit Kumar</span>
-                                                                <p className="timeline-list--text">Need help to understand this service.</p>
-                                                            </li>
-                                                            
-                                                            <li>
-                                                                <i className="timeline-list--dot"></i>
-                                                                <span>Dec. 12, 2020    |   By Sumit Sharme</span>
-                                                                <p className="timeline-list--text">We will call you for detailed info of this service</p>
-                                                            </li>
-                                                            
-                                                            <li>
-                                                                <i className="timeline-list--dot"></i>
-                                                                <span>Dec. 18, 2020    |   By Amit Kumar</span>
-                                                                <p className="timeline-list--text">Thanks for your confirmation!</p>
-                                                            </li>
-                                                            <li>
-                                                                <i className="timeline-list--dot"></i>
-                                                                <span>Dec. 11, 2020    |   By Amit Kumar</span>
-                                                                <p className="timeline-list--text">Need help to understand this service.</p>
-                                                            </li>
-                                                            
-                                                            <li>
-                                                                <i className="timeline-list--dot"></i>
-                                                                <span>Dec. 12, 2020    |   By Sumit Sharme</span>
-                                                                <p className="timeline-list--text">We will call you for detailed info of this service</p>
-                                                            </li>
-                                                            
-                                                            <li>
-                                                                <i className="timeline-list--dot"></i>
-                                                                <span>Dec. 18, 2020    |   By Amit Kumar</span>
-                                                                <p className="timeline-list--text">Thanks for your confirmation!</p>
-                                                            </li>
+                                                            {item.datalist && item.datalist.length > 0 ?
+                                                                item.datalist.map((det,ind) => {
+                                                                    return(
+                                                                        <li>
+                                                                            <i className="timeline-list--dot"></i>
+                                                                            <span>Dec. 11, 2020    |   By Kumar</span>
+                                                                            <p className="timeline-list--text">{det}</p>
+                                                                        </li>
+                                                                    )
+                                                                })
+                                                                : null
+                                                            }   
                                                         </ul>
                                                     </div>
                                                 </Collapse>
@@ -387,7 +381,7 @@ const MyServices = (props) => {
 
                                         <div className="d-flex">
                                             <div className="card__rating">
-                                                {item.stars === null ?
+                                                {(item.rating === undefined && item.rating === null) ?
                                                     <span 
                                                         className="cursor-pointer mr-2 font-weight-bold"
                                                         onClick={handleShow}
@@ -397,7 +391,7 @@ const MyServices = (props) => {
                                                 : null
                                                 }
                                                 <span className="rating">
-                                                    {item.stars.map((val,ind) => {
+                                                    {item.rating && item.rating.map((val,ind) => {
                                                         return (
                                                             <i
                                                             key={ind}
@@ -407,9 +401,9 @@ const MyServices = (props) => {
                                                         );
                                                     })}
                                                 </span>
-                                                {item.stars != null && item.stars.length > 0 ? 
+                                                {item.rating && item.rating.length > 0 ? 
                                                     <React.Fragment>
-                                                        <span>{item.rating}/5</span> 
+                                                        <span>{item.avg_rating}/5</span> 
                                                         <Link 
                                                             className="ml-15"
                                                             onClick={() => toggleReviews(item.id)}
@@ -475,7 +469,31 @@ const MyServices = (props) => {
                                                             })}
                                                         </span>
                                                         <p className="rate-services--subheading">Click on rate to scale of 1-5</p>
-                                                        <form action="">
+
+                                                        <form onSubmit={handleSubmit(submitReview)}>
+                                                            <div className="form-group error">
+                                                                <InputField attributes={CoursesServicesForm.review} register={register}
+                                                                    errors={!!errors ? errors[CoursesServicesForm.review.name] : ''} />
+                                                                    {/* <label htmlFor="">Email</label> */}
+                                                            </div>
+
+                                                            <div className="form-group">
+                                                                <TextArea id={`review_${index}`} name={`review_${index}`} attributes={CoursesServicesForm.name} register={register}
+                                                                    errors={!!errors ? errors[CoursesServicesForm.name.name] : ''} />
+                                                                {/* <label htmlFor="">Review</label> */}
+                                                            </div>
+
+                                                            <button className="btn btn-primary px-5" type="submit">Submit</button>
+                                                            {/* <div className="db-add-comments disabled-before lightblue-bg" id="addComments">
+                                                                <span className="btn-close" onClick={() => setaddOpen(!addOpen)}>&#x2715;</span>
+                                                                <p className="font-weight-semi-bold"> Add comment </p>
+                                                                <TextArea attributes={CoursesServicesForm.name} register={register}
+                                                                    errors={!!errors ? errors[CoursesServicesForm.name.name] : ''} />
+                                                                <button type="submit" class="btn btn-outline-primary mt-20 px-5">Submit</button>
+                                                            </div> */}
+                                                        </form>
+
+                                                        {/* <form action="">
                                                             <div className="form-group error">
                                                                 <input type="email" className="form-control" id="email" name="email" placeholder=" "
                                                                     value="" aria-required="true" aria-invalid="true" />
@@ -488,8 +506,8 @@ const MyServices = (props) => {
                                                                 <label htmlFor="">Review</label>
                                                             </div>
 
-                                                            <button className="btn btn-primary px-5">Submit</button>
-                                                        </form>
+                                                            <button className="btn btn-primary px-5" onClick={submitReview()}>Submit</button>
+                                                        </form> */}
                                                     </div>
                                                 </Modal.Body>
                                             </Modal>
@@ -503,31 +521,44 @@ const MyServices = (props) => {
                             <Collapse in={addOpen}>
                                 <div className="position-relative" id="threeComments">
                                     <div className="db-add-comments lightblue-bg border-bottom-gray">
-                                        <span className="btn-close"  onClick={() => setOpen(!open)}>&#x2715;</span>
+                                        {/* <span className="btn-close" onClick={() => setOpen(!open)}>&#x2715;</span> */}
                                         <ul className="db-timeline-list">
                                             {results.oi_comment && results.oi_comment.length > 0 ?
-                                                results.oi_comment.map((comm,index) => {
+                                                results.oi_comment.map((comm) => {
                                                     return (
-                                                        <li>
-                                                            <i className="db-timeline-list--dot"></i>
-                                                            <span>{comm.comment.created} {comm.comment.addedBy != "" ?  '   |   By ' + comm.comment.addedBy : ""} </span>
-                                                            <p className="db-timeline-list--text">{comm.comment.message ? comm.comment.message : ""}</p>
-                                                        </li>
+                                                        comm.comment.map((item, ind) => {
+                                                            return (
+                                                                <li key={ind}>
+                                                                    <i className="db-timeline-list--dot"></i>
+                                                                    <span>{item.created} {item.addedBy ?  '   |   By ' + item.addedBy : ""} </span>
+                                                                    <p className="db-timeline-list--text">{item.message ? item.message : ""}</p>
+                                                                </li>
+                                                            )
+                                                        })
                                                     )
                                                 })
                                                 : null
                                             }
-                                            
                                         </ul>
                                     </div>
+
+                                    <form onSubmit={handleSubmit(submitComment)}>
+                                        <div className="db-add-comments disabled-before lightblue-bg" id="addComments">
+                                            <span className="btn-close" onClick={() => setaddOpen(!addOpen)}>&#x2715;</span>
+                                            <p className="font-weight-semi-bold"> Add comment </p>
+                                            <TextArea id={`review_${index}`} name={`review_${index}`} attributes={CoursesServicesForm.name} register={register}
+                                                errors={!!errors ? errors[CoursesServicesForm.name.name] : ''} />
+                                             <button type="submit" class="btn btn-outline-primary mt-20 px-5">Submit</button>
+                                        </div>
+                                    </form>
                                 
-                                    <form onSubmit={handleSubmit(submitComment())}>
+                                    {/* <form>
                                         <div className="db-add-comments disabled-before lightblue-bg">
                                             <p className="font-weight-semi-bold"> Add comment </p>
                                             <textarea class="form-control" rows="3"></textarea>
                                             <button type="submit" class="btn btn-outline-primary mt-20 px-5">Submit</button>
                                         </div>
-                                    </form>
+                                    </form> */}
                                 </div>
                                 {/* <form onSubmit={handleSubmit(submitComment())}>
                                     <div className="db-add-comments lightblue-bg" id="addComments">
@@ -547,5 +578,14 @@ const MyServices = (props) => {
         </div>
     )
 }
+
+
+// const mapDispatchToProps = (dispatch) => {
+//     return {
+//       onSubmitReview: (values) => {
+//         dispatch(getoiComment(values));
+//       },
+//     };
+//   };
    
 export default MyServices;
