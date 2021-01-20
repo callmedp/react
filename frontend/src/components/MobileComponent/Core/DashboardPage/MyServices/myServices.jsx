@@ -5,28 +5,43 @@ import { Link } from 'react-router-dom';
 import Aos from "aos";
 
 // Local Import 
-import MenuNav from '../../../Common/MenuNav/menuNav';
-import Header from '../../../Common/Header/Header';
-import Footer from '../../../Common/Footer/Footer';
 import '../MyCourses/myCourses.scss'
 import './myServices.scss';
 
 // API Import
 import { fetchServices } from 'store/DashboardPage/Service/actions/index';
 
+function preventDefault(e) {
+    e.preventDefault();
+  }
 
 const MyServices = (props) => {
     const [showUpload, setShowUpload] = React.useState(false)
     const [isActive, setActive] = useState(false);
     const [datalist, setDatalist] = useState([]);
     const [data_id, setDataid] = useState(null);
+    const [service_id, setServiceId] = useState(null);
     const showDetailtoggle = (data, id) => {
         setDataid(id);
         setDatalist(data);
         setActive(!isActive);
     };
-    const showUploadToggle = () => {
+    var supportsPassive = false;
+    try {
+    window.addEventListener("test", null, Object.defineProperty({}, 'passive', {
+        get: function () { supportsPassive = true; } 
+    }));
+    } catch(e) {}
+    var wheelOpt = supportsPassive ? { passive: false } : false;
+    const showUploadToggle = (id) => {
+        setServiceId(id);
         setShowUpload(!showUpload);
+        if (!showUpload) {
+            window.addEventListener('touchmove', preventDefault, wheelOpt); // mobile
+        }
+        else {
+            window.removeEventListener('touchmove', preventDefault, wheelOpt); // mobile
+        }
     };
     const dispatch = useDispatch();
     const [showSearchPage, setShowSearchPage] = useState(false)
@@ -80,30 +95,31 @@ const MyServices = (props) => {
 
                                         <div className="d-flex">
                                             <figure>
-                                                <img src="https://learning-media-staging-189607.storage.googleapis.com/l/m/product_image/1/1532923787_9385.png" alt={service.heading} />
-                                                {/* <img src={ service.img } alt={ service.heading } /> */}
+                                                {/* <img src="https://learning-media-staging-189607.storage.googleapis.com/l/m/product_image/1/1532923787_9385.png" alt={service?.heading} /> */}
+                                                <img src={ service?.img } alt={ service?.heading } />
                                             </figure>
                                             <div className="m-courses-detail__info">
-                                                <Link to={service.productUrl}><h2>{service.heading}</h2></Link>
-                                                <p className="m-pipe-divides mb-5">Provider: <strong>{service.vendor}</strong> </p>
-                                                <p className="m-pipe-divides mb-5"><span>Bought on: <strong>{service.enroll_date}</strong> </span> <span>Duration: <strong>{service.remaining_days}</strong> </span></p>
+                                                <Link to={service?.productUrl}><h2>{service?.name}</h2></Link>
+                                                <p className="m-pipe-divides mb-5">Provider: <strong>{service?.vendor}</strong> </p>
+                                                <p className="m-pipe-divides mb-5"><span>Bought on: <strong>{service?.enroll_date}</strong> </span> <span>Duration: <strong>{service?.duration}</strong> </span></p>
                                             </div>
                                         </div>
+                                         
+                                        <StatusFlow product_flow={service?.product_type_flow} status={service?.status} history={service?.datalist} />
 
-                                        { service.status === 'Cancelled' ? '' :
+                                        { service?.status === 'Cancelled' ? '' :
                                             <div className="m-courses-detail--alert mt-15">
                                                 To initiate your service upload your latest resume
                                             </div>
                                         }
-
-                                        { service.status === 'Cancelled' ?
+                                        { service?.status === 'Cancelled' ?
 
                                             <div className="pl-15 mt-15 fs-12">
-                                                Status: <strong>{service.status}</strong>
+                                                Status: <strong>{service?.status}</strong>
 
 
                                                 <div className="my-order__order-detail">
-                                                    <a onClick={() => showDetailtoggle(service.datalist, key)} className={`arrow-icon ${isActive && key === data_id ? 'open' : ''} font-weight-bold`}>Views Details</a>
+                                                    <a onClick={() => showDetailtoggle(service?.datalist, key)} className={`arrow-icon ${isActive && key === data_id ? 'open' : ''} font-weight-bold`}>Views Details</a>
                                                     <ul className="my-order__order-detail--info mt-15" style={isActive && key === data_id ? { display: 'block' } : { display: 'none' }}>
                                                         {
                                                             datalist.map((data, key) =>
@@ -119,14 +135,14 @@ const MyServices = (props) => {
                                             :
                                             <>
                                                 <div className="pl-15 mt-15 fs-12">
-                                                    Status: <strong> {service.datalist} </strong>
+                                                    Status: <strong> {service?.datalist} </strong>
 
-                                                    {/* { service.options } */}
-                                                    {Object.keys(service.options).length === 0 && service.options.constructor === Object ? '' : service.options['Upload Resume'] === true ?
-                                                        <a onClick={showUploadToggle} className="font-weight-bold">Upload</a> : ''
+                                                    {/* { service?.options } */}
+                                                    {Object.keys(service?.options).length === 0 && service?.options.constructor === Object ? '' : service?.options['Upload Resume'] === true ?
+                                                        <a onClick={() => showUploadToggle(service?.id)} className="font-weight-bold">Upload</a> : ''
                                                     }
                                                     <div className="my-order__order-detail">
-                                                        <a onClick={() => showDetailtoggle(service.datalist, key)} className={`arrow-icon ${isActive && key === data_id ? 'open' : ''} font-weight-bold`}>Views Details</a>
+                                                        <a onClick={() => showDetailtoggle(service?.datalist, key)} className={`arrow-icon ${isActive && key === data_id ? 'open' : ''} font-weight-bold`}>Views Details</a>
                                                         <ul className="my-order__order-detail--info mt-15" style={isActive && key === data_id ? { display: 'block' } : { display: 'none' }}>
                                                             {
                                                                 datalist.map((data, key) =>
@@ -167,6 +183,7 @@ const MyServices = (props) => {
                                                 </div>
                                             </>
                                         }
+
                                     </div>
                                 )
                             }
@@ -190,7 +207,7 @@ const MyServices = (props) => {
 
                     <div className="text-center" style={showUpload ? { display: 'block' } : { display: 'none' }}>
                         <span onClick={showUploadToggle} className="m-db-close">&#x2715;</span>
-                        <h2>Upload Resume</h2>
+                        <h2>Upload Resume </h2>
                         <p>To initiate your services, <strong>upload resume</strong></p>
                         <div className="d-flex align-items-center justify-content-center mt-20">
                             <div className="m-upload-btn-wrapper">
@@ -235,6 +252,23 @@ const MyServices = (props) => {
             </main>
         </div>
     )
+}
+
+const StatusFlow = (props) => {
+
+    if (props.product_flow === 1 || props.product_flow === 12 || props.product_flow) {
+        return (
+            <>
+            </>
+        )
+    }
+    else {
+    return (
+        <>
+        
+        </>
+    )
+    }
 }
 
 
