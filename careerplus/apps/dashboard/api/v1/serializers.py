@@ -5,6 +5,7 @@ from order.models import OrderItem, Order
 from datetime import datetime,timedelta
 from order.choices import OI_OPS_STATUS
 from django.conf import settings
+import pytz
 
 OI_STATUS_DICT = {
     0 : 'Unpaid',
@@ -212,6 +213,25 @@ class OrderItemSerializer(serializers.ModelSerializer):
                 'options':options
                 }
 
+    def convert_to_month(self,duration):
+        months = duration//30
+        days = duration%30
+        if months >1:
+            month_str = "months"
+        else: 
+            month_str = "month"
+        if days >1:
+            days_str = "days"
+        else:
+            days_str = "day"
+        if months ==0:
+            return str(days)+" day"
+        elif days ==0:
+            return str(months)
+        elif months ==0 and days==0:
+            return 0+" day" 
+        return str(months)+" "+month_str+" "+str(days)+" "+days_str
+
     def to_representation(self, instance):
         data = super(OrderItemSerializer, self).to_representation(instance)
         data['oi_status'] = self.get_oi_status_value(instance) if instance.oi_status else ''
@@ -229,11 +249,10 @@ class OrderItemSerializer(serializers.ModelSerializer):
                 'avg_rating':instance.product.get_avg_ratings(),
                 'price': instance.product.get_price(),
                 'vendor': instance.product.vendor.name, 
-                'duration':instance.product.get_duration_in_ddmmyy() if instance.product_id and instance.product.get_duration_in_day() else None,
+                'duration' : self.convert_to_month(int(instance.product.get_duration_in_day())) if instance.product_id and instance.product.get_duration_in_day() else None,
                 'enroll_date':date_placed,
-                'remaining_days':0,
-                # 'remaining_days':instance.order.date_placed + timedelta(days=instance.product.get_duration_in_day())-datetime.now(),
-                'status':self.get_oi_status_value(instance) if instance.oi_status else None,
+                'remaining_days':(instance.order.date_placed + timedelta(days=instance.product.get_duration_in_day())-datetime.now(pytz.utc) if not (instance.product.get_duration_in_day()=='' and instance.product.get_duration_in_day()==0) else 0).days,
+                'no_review':instance.product.no_review,
                 'mode':instance.product.get_studymode_db(),
                 'jobs':instance.product.num_jobs,
             })
