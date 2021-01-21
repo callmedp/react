@@ -91,7 +91,7 @@ const MyServices = (props) => {
         };
 
         // new Promise((resolve, reject) => dispatch(SubmitDashboardFeedback({ data: new_review, resolve, reject })))
-        dispatch(SubmitDashboardFeedback(new_review, resolve, reject));
+        // dispatch(SubmitDashboardFeedback(new_review, resolve, reject));
     };
 
     // fill starts of already rated courses

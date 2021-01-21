@@ -76,7 +76,7 @@ class MyCoursesApi(DashboardInfo, APIView):
         candidate_id = self.request.session.get('candidate_id', None)
         data = []
         page = request.GET.get("page", 1)
-        # candidate_id='568a0b20cce9fb485393489b'
+        candidate_id='568a0b20cce9fb485393489b'
         # candidate_id='5fed060d9cbeea482331ec4b'
         if candidate_id:
             orders = Order.objects.filter(
@@ -95,7 +95,7 @@ class MyCoursesApi(DashboardInfo, APIView):
             courses = OrderItem.objects.filter(order__in=orders,product__type_flow=2)
             paginated_data = offset_paginator(page, courses)
             data = OrderItemSerializer(paginated_data["data"],many=True,context= {"get_details": True}).data
-        return Response(data=data, status=status.HTTP_200_OK)
+        return Response({ 'myCourses' : data}, status=status.HTTP_200_OK)
 
 
 class MyServicesApi(DashboardInfo, APIView):

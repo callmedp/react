@@ -1,20 +1,7 @@
 import * as Actions from '../actions/actionTypes';
 
 const initState = {
-    data: {
-        heading: "",
-        id: 0,
-        img: "",
-        img_alt: "",
-        name: "",
-        price: 0,
-        provider: "",
-        rating: 0,
-        stars: [],
-        url: ""
-    },
-    error: false,
-    message: ""
+    myCourses : []
 }
 
 export const DashboardMyCoursesReducer = (state=initState, action) => {

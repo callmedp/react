@@ -5,9 +5,8 @@ import CataloguePageContainer from "components/DesktopComponent/Core/CataloguePa
 import { getSkillPageActions } from 'apiHandler/skillPageApi';
 import Error404Container from 'components/DesktopComponent/Common/ErrorPage404/errorPage404';
 import { getCataloguePageActions } from "apiHandler/cataloguePageApi";
-import DashboardContainer from 'components/DesktopComponent/Core/DashboardPage/dashboardPage';
-import DashboardWalletContainer from 'components/DesktopComponent/Core/DashboardPage/MyWallet/myWallet';
-import { getDashboardPageActions } from 'apiHandler/dashboardPageApi';
+import DashboardPageContainer from 'components/DesktopComponent/Core/DashboardPage/dashboardPage';
+
 
 export const RouteWithSubRoutes = route => {
     return (
