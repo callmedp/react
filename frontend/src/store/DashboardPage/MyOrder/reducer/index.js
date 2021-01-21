@@ -2,9 +2,9 @@ import * as Actions from '../actions/actionTypes';
 
 const initState = {
     data: [],
-    wal_total: 0,
-    page: [],
-    loyality_txns: []
+    page: {},
+    error: false,
+    message: ""
 }
 
 export const DashboardMyOrdersReducer = (state=initState, action) => {

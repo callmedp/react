@@ -58,3 +58,18 @@ export const stopDashboardCoursesPageLoader = () => {
         payload: { coursesLoader: false }
     }
 }
+
+// Dashboard services loader
+export const startDashboardServicesPageLoader = () => {
+    return {
+        type: Actions.START_DASHBOARD_SERVICES_PAGE_LOADER,
+        payload: { coursesLoader: true } 
+    }
+}
+
+export const stopDashboardServicesPageLoader = () => {
+    return {
+        type: Actions.STOP_DASHBOARD_SERVICES_PAGE_LOADER,
+        payload: { coursesLoader: false }
+    }
+}
