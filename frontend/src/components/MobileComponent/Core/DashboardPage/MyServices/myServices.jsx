@@ -7,16 +7,20 @@ import Aos from "aos";
 // Local Import 
 import '../MyCourses/myCourses.scss'
 import './myServices.scss';
+import AddCommentModal from '../AddCommentModal/addCommentModal';
+import RateProductModal from '../RateProductModal/rateProductModal'
 
 // API Import
 import { fetchServices } from 'store/DashboardPage/Service/actions/index';
 
 function preventDefault(e) {
     e.preventDefault();
-  }
+}
 
 const MyServices = (props) => {
     const [showUpload, setShowUpload] = React.useState(false)
+    const [showCommentModal, setShowCommentModal] = useState(false) 
+    const [showRateModal, setShowRateModal] = useState(false) 
     const [isActive, setActive] = useState(false);
     const [datalist, setDatalist] = useState([]);
     const [data_id, setDataid] = useState(null);
@@ -28,10 +32,10 @@ const MyServices = (props) => {
     };
     var supportsPassive = false;
     try {
-    window.addEventListener("test", null, Object.defineProperty({}, 'passive', {
-        get: function () { supportsPassive = true; } 
-    }));
-    } catch(e) {}
+        window.addEventListener("test", null, Object.defineProperty({}, 'passive', {
+            get: function () { supportsPassive = true; }
+        }));
+    } catch (e) { }
     var wheelOpt = supportsPassive ? { passive: false } : false;
     const showUploadToggle = (id) => {
         setServiceId(id);
@@ -45,7 +49,7 @@ const MyServices = (props) => {
     };
     const dispatch = useDispatch();
     const [showSearchPage, setShowSearchPage] = useState(false)
-    const myServicesList = useSelector(store => store.allServices?.data);
+    const myServicesList = useSelector(store => store.allServices?.data.data);
     const handleEffects = async () => {
         Aos.init({ duration: 2000, once: true, offset: 10, anchorPlacement: 'bottom-bottom' });
         //You may notice that apis corresponding to these actions are not getting called on initial render.
@@ -73,51 +77,66 @@ const MyServices = (props) => {
                 <div className="m-courses-detail db-warp">
                     {
                         myServicesList?.map((service, key) => {
-                            if (key == 10 || key == 11) {
-                                return (
-                                    <>
-                                    </>
-                                )
-
-                            }
-                            else {
-                                return (
-                                    <div className="m-card pl-0" key={key}>
-                                        <div className="m-share" aria-haspopup="true">
-                                            <i className="icon-share"></i>
-                                            <div className="m-share__box m-arrow-box m-top">
-                                                <Link to={"#"} className="m-facebook-icon"></Link>
-                                                <Link to={"#"} className="m-linkedin-icon"></Link>
-                                                <Link to={"#"} className="m-twitter-iocn"></Link>
-                                                <Link to={"#"} className="m-whatsup-icon"></Link>
-                                            </div>
+                            return (
+                                <div className="m-card pl-0" key={key}>
+                                    <div className="m-share" aria-haspopup="true">
+                                        <i className="icon-share"></i>
+                                        <div className="m-share__box m-arrow-box m-top">
+                                            <Link to={"#"} className="m-facebook-icon"></Link>
+                                            <Link to={"#"} className="m-linkedin-icon"></Link>
+                                            <Link to={"#"} className="m-twitter-iocn"></Link>
+                                            <Link to={"#"} className="m-whatsup-icon"></Link>
                                         </div>
+                                    </div>
 
-                                        <div className="d-flex">
-                                            <figure>
-                                                {/* <img src="https://learning-media-staging-189607.storage.googleapis.com/l/m/product_image/1/1532923787_9385.png" alt={service?.heading} /> */}
-                                                <img src={ service?.img } alt={ service?.heading } />
-                                            </figure>
-                                            <div className="m-courses-detail__info">
-                                                <Link to={service?.productUrl}><h2>{service?.name}</h2></Link>
-                                                <p className="m-pipe-divides mb-5">Provider: <strong>{service?.vendor}</strong> </p>
-                                                <p className="m-pipe-divides mb-5"><span>Bought on: <strong>{service?.enroll_date}</strong> </span> <span>Duration: <strong>{service?.duration}</strong> </span></p>
-                                            </div>
+                                    <div className="d-flex">
+                                        <figure>
+                                            {/* <img src="https://learning-media-staging-189607.storage.googleapis.com/l/m/product_image/1/1532923787_9385.png" alt={service?.heading} /> */}
+                                            <img src={service?.img} alt={service?.heading} />
+                                        </figure>
+                                        <div className="m-courses-detail__info">
+                                            <Link to={service?.productUrl}><h2>{service?.name}</h2></Link>
+                                            <p className="m-pipe-divides mb-5">Provider: <strong>{service?.vendor}</strong> </p>
+                                            <p className="m-pipe-divides mb-5"><span>Bought on: <strong>{service?.enroll_date}</strong> </span> <span>Duration: <strong>{service?.duration}</strong> </span></p>
                                         </div>
-                                         
-                                        <StatusFlow product_flow={service?.product_type_flow} status={service?.status} history={service?.datalist} />
+                                    </div>
 
-                                        { service?.status === 'Cancelled' ? '' :
-                                            <div className="m-courses-detail--alert mt-15">
-                                                To initiate your service upload your latest resume
+                                    <StatusFlow product_flow={service?.product_type_flow} status={service?.status} history={service?.datalist} />
+
+                                    { service?.status === 'Cancelled' ? '' :
+                                        <div className="m-courses-detail--alert mt-15">
+                                            To initiate your service upload your latest resume
                                             </div>
-                                        }
-                                        { service?.status === 'Cancelled' ?
+                                    }
+                                    { service?.status === 'Cancelled' ?
 
+                                        <div className="pl-15 mt-15 fs-12">
+                                            Status: <strong>{service?.status}</strong>
+
+
+                                            <div className="my-order__order-detail">
+                                                <a onClick={() => showDetailtoggle(service?.datalist, key)} className={`arrow-icon ${isActive && key === data_id ? 'open' : ''} font-weight-bold`}>Views Details</a>
+                                                <ul className="my-order__order-detail--info mt-15" style={isActive && key === data_id ? { display: 'block' } : { display: 'none' }}>
+                                                    {
+                                                        datalist.map((data, key) =>
+                                                            <li key={key}>
+                                                                {/* <Link to={"#"} className="d-block mb-0"> { data } </Link> */}
+                                                                <span> <strong> {data} </strong></span>
+                                                            </li>)
+                                                    }
+                                                </ul>
+                                            </div>
+
+                                        </div>
+                                        :
+                                        <>
                                             <div className="pl-15 mt-15 fs-12">
-                                                Status: <strong>{service?.status}</strong>
+                                                Status: <strong> {service?.datalist} </strong>
 
-
+                                                {/* { service?.options } */}
+                                                {Object.keys(service?.options).length === 0 && service?.options.constructor === Object ? '' : service?.options['Upload Resume'] === true ?
+                                                    <a onClick={() => showUploadToggle(service?.id)} className="font-weight-bold">Upload</a> : ''
+                                                }
                                                 <div className="my-order__order-detail">
                                                     <a onClick={() => showDetailtoggle(service?.datalist, key)} className={`arrow-icon ${isActive && key === data_id ? 'open' : ''} font-weight-bold`}>Views Details</a>
                                                     <ul className="my-order__order-detail--info mt-15" style={isActive && key === data_id ? { display: 'block' } : { display: 'none' }}>
@@ -130,81 +149,48 @@ const MyServices = (props) => {
                                                         }
                                                     </ul>
                                                 </div>
-
                                             </div>
-                                            :
-                                            <>
-                                                <div className="pl-15 mt-15 fs-12">
-                                                    Status: <strong> {service?.datalist} </strong>
-
-                                                    {/* { service?.options } */}
-                                                    {Object.keys(service?.options).length === 0 && service?.options.constructor === Object ? '' : service?.options['Upload Resume'] === true ?
-                                                        <a onClick={() => showUploadToggle(service?.id)} className="font-weight-bold">Upload</a> : ''
-                                                    }
-                                                    <div className="my-order__order-detail">
-                                                        <a onClick={() => showDetailtoggle(service?.datalist, key)} className={`arrow-icon ${isActive && key === data_id ? 'open' : ''} font-weight-bold`}>Views Details</a>
-                                                        <ul className="my-order__order-detail--info mt-15" style={isActive && key === data_id ? { display: 'block' } : { display: 'none' }}>
+                                            <div className="pl-15">
+                                                <div className="m-courses-detail__bottomWrap">
+                                                    <div>
+                                                        <div className="m-day-remaning">
                                                             {
-                                                                datalist.map((data, key) =>
-                                                                    <li key={key}>
-                                                                        {/* <Link to={"#"} className="d-block mb-0"> { data } </Link> */}
-                                                                        <span> <strong> {data} </strong></span>
-                                                                    </li>)
+                                                                service.remaining_days.toString().split('').map((digit) => {
+                                                                    return (
+                                                                        <span className="m-day-remaning--box"> { digit }</span>
+                                                                    )
+                                                                })
                                                             }
-                                                        </ul>
-                                                    </div>
-                                                </div>
-                                                <div className="pl-15">
-                                                    <div className="m-courses-detail__bottomWrap">
-                                                        <div>
-                                                            <div className="m-day-remaning">
-                                                                <span className="m-day-remaning--box">9</span>
-                                                                <span className="m-day-remaning--box">0</span>
-                                                                <span className="ml-2 m-day-remaning--text">Days <br />remaning</span>
-                                                            </div>
-                                                        </div>
-                                                        <Link to={"#"} className="m-db-start-course font-weight-bold pr-10">Start Service</Link>
-                                                    </div>
-
-                                                    <div className="m-courses-detail__userInput">
-                                                        <Link to="/404" className="m-db-comments font-weight-bold">3 Comment</Link>
-                                                        <div className="d-flex">
-                                                            <span className="m-rating">
-                                                                <em className="micon-fullstar"></em>
-                                                                <em className="micon-fullstar"></em>
-                                                                <em className="micon-fullstar"></em>
-                                                                <em className="micon-fullstar"></em>
-                                                                <em className="micon-blankstar"></em>
-                                                                <span className="ml-5">4/5</span>
-                                                            </span>
-                                                            <Link to={"#"} className="font-weight-bold ml-10">2</Link>
+                                                            <span className="ml-2 m-day-remaning--text">Days <br />remaning</span>
                                                         </div>
                                                     </div>
+                                                    <Link to={"#"} className="m-db-start-course font-weight-bold pr-10">Start Service</Link>
                                                 </div>
-                                            </>
-                                        }
 
-                                    </div>
-                                )
-                            }
+                                                <div className="m-courses-detail__userInput">
+                                                    <Link to={'#'} onClick={(e) => {e.preventDefault();setShowCommentModal(true)}} className="m-db-comments font-weight-bold">3 Comment</Link>
+                                                    <div className="d-flex" onClick={()=>{setShowRateModal(true)}}>
+                                                        <span className="m-rating">
+                                                            <em className="micon-fullstar"></em>
+                                                            <em className="micon-fullstar"></em>
+                                                            <em className="micon-fullstar"></em>
+                                                            <em className="micon-fullstar"></em>
+                                                            <em className="micon-blankstar"></em>
+                                                            <span className="ml-5">4/5</span>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </>
+                                    }
+
+                                </div>
+                            )
                         })
                     }
                 </div>
 
                 <div className="m-slide-modal">
-                    <div className="text-center" style={{ display: 'none' }}>
-                        <span className="m-db-close">&#x2715;</span>
-                        <h2 className="mt-15">Get a Better resume by sharing us the feedback for resume</h2>
-                        <div className="m-enquire-now mt-15">
-                            <div className="m-form-group">
-                                <textarea id="addComments" placeholder=" " rows="4"></textarea>
-                                <label htmlFor="addComments">Enter feedback here</label>
-                            </div>
-
-                            <button className="btn btn-blue">Submit</button>
-                        </div>
-                    </div>
-
                     <div className="text-center" style={showUpload ? { display: 'block' } : { display: 'none' }}>
                         <span onClick={showUploadToggle} className="m-db-close">&#x2715;</span>
                         <h2>Upload Resume </h2>
@@ -250,6 +236,12 @@ const MyServices = (props) => {
 
                 </div>
             </main>
+            {
+                showCommentModal && <AddCommentModal setShowCommentModal = {setShowCommentModal} />
+            }
+            {
+                showRateModal && <RateProductModal setShowRateModal={setShowRateModal} />
+            }
         </div>
     )
 }
@@ -263,11 +255,11 @@ const StatusFlow = (props) => {
         )
     }
     else {
-    return (
-        <>
-        
-        </>
-    )
+        return (
+            <>
+
+            </>
+        )
     }
 }
 
