@@ -4,7 +4,8 @@ const initState = {
     skillLoader : false,
     walletLoader: false,
     orderLoader: false,
-    coursesLoader: false
+    coursesLoader: false,
+    serviceLoader: false,
 }
 
 export const LoaderReducer = (state=initState, action) => {

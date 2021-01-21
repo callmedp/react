@@ -250,7 +250,6 @@ class OrderSerializer(serializers.ModelSerializer):
     """
         Serializer for `Order` model
     """
-    order_status = serializers.ReadOnlyField(source='get_status')
     # order_status = serializers.ReadOnlyField(source='get_status')
     class Meta:
         model = Order

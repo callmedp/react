@@ -51,9 +51,9 @@ const MyWallet = (props) => {
                 </div>
 
                 {
-                    loyalityTxn?.loyality_txns?.map((txn) => {
+                    loyalityTxn?.loyality_txns?.map((txn, index) => {
                         return (
-                            <div className="m-card" key={ txn?.order_id }>
+                            <div className="m-card" key={ index }>
                                 <span className="m-wallet--date">{ txn?.date }</span>
                                 <ul className="m-wallet--info">
                                     <li className="head">{ txn?.order_id }</li>

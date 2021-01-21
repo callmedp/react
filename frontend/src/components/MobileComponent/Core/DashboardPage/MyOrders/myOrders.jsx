@@ -66,9 +66,9 @@ const MyWallet = (props) => {
             { orderLoader && <Loader /> }
             <div className="my-order db-warp mb-20">
                 {
-                    data?.map((order) => {
+                    data?.map((order, index) => {
                         return (
-                            <div className="m-card" key={order?.order?.number}>
+                            <div className="m-card" key={ index }>
                                 <p className="head mb-5">{order?.order?.number}</p>
 
                                 <div className="m-pipe-divides">

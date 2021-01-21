@@ -11,7 +11,7 @@ import AddCommentModal from '../AddCommentModal/addCommentModal';
 import RateProductModal from '../RateProductModal/rateProductModal';
 import UploadResume from '../UploadResume/uploadResume';
 import Loader from '../../../Common/Loader/loader';
-import { startDashboardWalletPageLoader, stopDashboardWalletPageLoader } from 'store/Loader/actions/index';
+import { startDashboardServicesPageLoader, stopDashboardServicesPageLoader } from 'store/Loader/actions/index';
 
 // API Import
 import { fetchMyServices } from 'store/DashboardPage/MyServices/actions/index';
@@ -52,13 +52,14 @@ const MyServices = (props) => {
     };
     const dispatch = useDispatch();
     const { data, page } = useSelector(store => store?.dashboardServices);
-    const { walletLoader } = useSelector(store => store.loader);
+    const { serviceLoader } = useSelector(store => store.loader);
     const myServicesList = data
+    
     const handleEffects = async () => {
         if (!(window && window.config && window.config.isServerRendered)) {
-            dispatch(startDashboardWalletPageLoader());
+            dispatch(startDashboardServicesPageLoader());
             await new Promise((resolve, reject) => dispatch(fetchMyServices({ resolve, reject })));
-            dispatch(stopDashboardWalletPageLoader());
+            dispatch(stopDashboardServicesPageLoader());
         }
         else {
             delete window.config?.isServerRendered
@@ -72,7 +73,7 @@ const MyServices = (props) => {
 
     return (
         <>
-        { walletLoader && <Loader />}
+        { serviceLoader && <Loader />}
         <div>
 
             <main className="mb-0">
@@ -93,7 +94,6 @@ const MyServices = (props) => {
 
                                     <div className="d-flex">
                                         <figure>
-                                            {/* <img src="https://learning-media-staging-189607.storage.googleapis.com/l/m/product_image/1/1532923787_9385.png" alt={service?.heading} /> */}
                                             <img src={service?.img} alt={service?.heading} />
                                         </figure>
                                         <div className="m-courses-detail__info">
@@ -103,12 +103,12 @@ const MyServices = (props) => {
                                         </div>
                                     </div>
 
-                                    <StatusFlow product_flow={service?.product_type_flow} status={service?.status} history={service?.datalist} />
+                                    {/* <StatusFlow product_flow={service?.product_type_flow} status={service?.status} history={service?.datalist} /> */}
 
                                     { service?.status === 'Cancelled' ? '' :
                                         <div className="m-courses-detail--alert mt-15">
                                             To initiate your service upload your latest resume
-                                            </div>
+                                        </div>
                                     }
                                     { service?.status === 'Cancelled' ?
 
@@ -117,7 +117,7 @@ const MyServices = (props) => {
 
 
                                             <div className="my-order__order-detail">
-                                                <a onClick={() => showDetailtoggle(service?.datalist, key)} className={`arrow-icon ${isActive && key === data_id ? 'open' : ''} font-weight-bold`}>Views Details</a>
+                                                <a onClick={() => showDetailtoggle(service?.datalist, key)} className={`arrow-icon ${isActive && key === data_id ? 'open' : ''} font-weight-bold`}>View Details</a>
                                                 <ul className="my-order__order-detail--info mt-15" style={isActive && key === data_id ? { display: 'block' } : { display: 'none' }}>
                                                     {
                                                         datalist.map((data, key) =>
@@ -133,7 +133,7 @@ const MyServices = (props) => {
                                         :
                                         <>
                                             <div className="pl-15 mt-15 fs-12">
-                                                Status: <strong> {service?.datalist} </strong>
+                                                Status: <strong> {service?.status} </strong>
 
                                                 {/* { service?.options } */}
                                                 {Object.keys(service?.options).length === 0 && service?.options.constructor === Object ? '' : service?.options['Upload Resume'] === true ?
