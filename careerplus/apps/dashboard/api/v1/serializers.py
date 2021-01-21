@@ -5,6 +5,7 @@ from order.models import OrderItem, Order
 from datetime import datetime,timedelta
 from order.choices import OI_OPS_STATUS
 from django.conf import settings
+import pytz
 
 OI_STATUS_DICT = {
     0: 'Unpaid',
@@ -248,7 +249,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
                 'vendor': instance.product.vendor.name, 
                 'duration' : self.convert_to_month(int(instance.product.get_duration_in_day())) if instance.product_id and instance.product.get_duration_in_day() else None,
                 'enroll_date':date_placed,
-                'remaining_days':None,
+                'remaining_days':(instance.order.date_placed + timedelta(days=instance.product.get_duration_in_day())-datetime.now(pytz.utc) if not (instance.product.get_duration_in_day()=='' and instance.product.get_duration_in_day()==0) else 0).days,
                 'no_review':instance.product.no_review,
                 'status':self.get_oi_status_value(instance) if instance.oi_status else None,
                 'mode':instance.product.get_studymode_db(),
