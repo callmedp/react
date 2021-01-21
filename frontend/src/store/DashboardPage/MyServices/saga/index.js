@@ -6,11 +6,10 @@ function* DashboardServicesApi(action) {
     const { payload } = action;
     try {
         const response = yield call(Api.myServicesData);
-
         if (response["error"]) {
             return payload?.reject(response)
         }
-        const item = response.data;
+        const item = response?.data?.data;
 
         yield put({ 
             type : Actions.MY_SERVICES_FETCHED, 

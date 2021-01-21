@@ -1,9 +1,9 @@
 import * as Actions from '../actions/actionTypes';
 
 const initState = {
-    data: {},
-    error: false,
-    message: ""
+    data: [],
+    pending_resume_items: [],
+    page: {},
 }
 
 export const DashboardMyServicesReducer = (state=initState, action) => {
