@@ -15,10 +15,10 @@
 	                    </article>
                     	<hr>
                     </a>
-                    <a href="/talenteconomy/authors/{{artList.author.slug}}" class="db">
+                    <a href="/talenteconomy/authors/{{artList.author.slug}}" class="db" onclick="MyGA.SendEvent('recently _added_blogs','ln_recently _added_blogs', 'ln_{{artList.heading}}', 'ln_{{artList.heading}}', '', false, true);">
                       <span class="view-forward">
-                        <figure class="forward-icon"></figure> {{artList.no_shares}}
-                        <figure class="view-icon ml-20"></figure> {{artList.no_views}}
+                        <figure class="forward-icon" onclick="MyGA.SendEvent('recently _added_blogs','ln_recently _added_blogs', 'ln_{{artList.heading}}', 'ln_{{artList.heading}}', '', false, true);"></figure> {{artList.no_shares}}
+                        <figure class="view-icon ml-20" onclick="MyGA.SendEvent('recently _added_blogs','ln_recently _added_blogs', 'ln_{{artList.heading}}', 'ln_{{artList.heading}}', '', false, true);"></figure> {{artList.no_views}}
                     </span>
 		                <div class="author author-secondary">
 		                  <figure>

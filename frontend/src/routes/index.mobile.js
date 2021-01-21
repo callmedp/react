@@ -41,7 +41,6 @@ export const routes = [
         path: '/dashboard/:name/',
         component: DashboardPageContainer,
         private: false,
-        exact: true,
     },
     {
         path: '/404/',

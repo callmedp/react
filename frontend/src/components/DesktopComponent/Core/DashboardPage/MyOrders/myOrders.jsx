@@ -20,7 +20,7 @@ const MyOrders = (props) => {
             //So there is no need to fetch them again on the browser.
             if (!(window && window.config && window.config.isServerRendered)) {
                 dispatch(startDashboardOrderPageLoader());
-                await new Promise((resolve, reject) => dispatch(fetchMyOrders({ id: ordPageNo, resolve, reject })))
+                await new Promise((resolve, reject) => dispatch(fetchMyOrders({ page: ordPageNo, resolve, reject })))
                 dispatch(stopDashboardOrderPageLoader());
             }
             else {
@@ -66,15 +66,15 @@ const MyOrders = (props) => {
                             <div className="row">
                                 <div className="col-md-4 order-detail--id">{item.order.number}</div>
                                 <div className="col-md-2 font-weight-bold">{ (new Date(item.order.date_placed)).toLocaleDateString() }</div>
-                                <div className="col-md-2 font-weight-bold">{item.order.order_status ? item.order.order_status : ""}</div>
+                                <div className="col-md-2 font-weight-bold">{item.order.status ? item.order.status : ""}</div>
                                 <div className="col-md-2 font-weight-bold">{item.item_count > 1 ? item.item_count + ' items' : item.item_count + ' item'}</div>
-                                <div className="col-md-2 font-weight-bold">&#8377; {parseInt(item.order.currency) + parseInt(item.order.total_incl_tax)}/- </div>
+                                <div className="col-md-2 font-weight-bold">{item.order.currency} {item.order.total_incl_tax}/- </div>
                             </div>
 
                             <div className="order-detail__content">
                                 <div className="order-detail__content--btnWrap">
                                     <Link to={'#orderDetails' + index} className="arrow-icon" onClick={() => openOrderDetail(index)}>Order Details</Link>
-                                    <Link to={"#"} className="download-icon">{item.order.status === 'Unpaid' ? 'Cancel Order' : (item.order.status === 'Paid' || item.order.status === 'Closed') ? 'Download Invoice' : null}</Link>
+                                    <Link to={"#"} className="download-icon">{item.order.downloadInvoice ? 'Download Invoice' : item.order.canCancel ? 'Cancel Order' : ""}</Link>
                                 </div>
                             </div>
 
@@ -94,7 +94,7 @@ const MyOrders = (props) => {
                                                             <Link to={"#"} className="col-11 pl-0 noLink">
                                                                 {innItem.title}
                                                             </Link>
-                                                            <span className="col-1 unpaid">{innItem.item_oi_status}</span>
+                                                            <span className="col-1 unpaid">{innItem.oi_status}</span>
                                                         </li>
                                                     )
                                                 })

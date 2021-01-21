@@ -47,7 +47,7 @@ const PopularCourses = (props) => {
                                 <div className="m-card">
                                     <div className="m-card__heading">
                                         <figure>
-                                            <img  src={course.img} alt={course.img_alt} />
+                                            <img  src={course.imgUrl} alt={course.imgAlt} />
                                         </figure>
                                         <h3 className="m-heading3 m-pop">
                                             <a  href={`${course.url}${trackingParameters}`} onClick={ () => MyGA.SendEvent('SkillPopularCourses','ln_popular_course_select', 'ln_'+ course.name, heading,'', false, true)}>{course.name}</a>
@@ -55,7 +55,7 @@ const PopularCourses = (props) => {
                                     </div>
                                     <div className="m-card__box">
                                         <div className="m-card__rating">
-                                        <span  className="mr-10">By {course.provider}</span>
+                                        <span  className="mr-10">By {course.providerName}</span>
                                         <span className="m-rating">
                                             { course.stars?.map((star, index) => starRatings(star, index)) }
                                             <span >{course.rating}/5</span>

@@ -30,7 +30,6 @@ class DashboardMyorderApi(DashboardInfo, APIView):
     def get(self, request, *args, **kwargs):
         candidate_id = self.request.session.get('candidate_id', None)
         order_list=[]
-        # candidate_id='568a0b20cce9fb485393489b'
         candidate_id='5c94a7b29cbeea2c1f27fda2'
         page = request.GET.get("page", 1)
 
@@ -76,6 +75,7 @@ class DashboardMyorderApi(DashboardInfo, APIView):
                 
         return APIResponse(data={'data':order_list,'page':page_info}, message='Order data Success', status=status.HTTP_200_OK)
 
+
 class MyCoursesApi(DashboardInfo, APIView):
     permission_classes = (permissions.AllowAny,)
     authentication_classes = ()
@@ -110,7 +110,8 @@ class MyCoursesApi(DashboardInfo, APIView):
             'has_prev': True if paginated_data['current_page'] >1 else False,
             'has_next':True if (paginated_data['total_pages']-paginated_data['current_page'])>0 else False
             }}
-        return APIResponse(data={'data':data,'page':page_info},message='Courses data Success',status=status.HTTP_200_OK)
+        return APIResponse({'myCourses':data,'page':page_info},message='Courses data Success',status=status.HTTP_200_OK)
+
 
 
 class MyServicesApi(DashboardInfo, APIView):
@@ -161,6 +162,7 @@ class MyServicesApi(DashboardInfo, APIView):
         return APIResponse(data={'data':data,'pending_resume_items':pending_resume_items,'page':page_info},message='Services data Success', status=status.HTTP_200_OK)
 
 
+
 class DashboardMyWalletAPI(DashboardInfo, APIView):
     permission_classes = (permissions.AllowAny,)
     authentication_classes = ()
@@ -188,8 +190,8 @@ class DashboardMyWalletAPI(DashboardInfo, APIView):
             select_related('order', 'cart').order_by('-created')
 
         # pagination for large queryset
+        page_obj = Paginator(wal_txns, 10)
         try:
-            page_obj = Paginator(wal_txns, 10)
             wal_txns_page_obj = page_obj.page(page)
         except PageNotAnInteger:
             wal_txns_page_obj = page_obj.page(1)

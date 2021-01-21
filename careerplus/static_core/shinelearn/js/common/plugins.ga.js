@@ -93,7 +93,7 @@ GA.prototype.SendEvent = function() {
     if(typeof arguments[5] != "undefined") {
         noninteraction = arguments[5];
     }
-    name = fn;
+    // name = fn;
     //vars = Array.prototype.slice.call(arguments, 1);
     //return fn.apply(this, vars);
     switch(fn) {

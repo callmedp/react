@@ -22,8 +22,16 @@ const ProductDetails = (props) =>{
             <p className="m-type">
             {
                 productType === 'Assessments' ?
-                <> Number of Questions : <strong>{number_of_questions}</strong> </>:
-                <> Type: <strong>{type}</strong>  |   Course level: <strong>{level}</strong></>
+                !!number_of_questions ? <> Number of Questions : <strong>{number_of_questions}</strong> </>: ''
+                :
+                (type && level) ? 
+                    <> Type: <strong>{type?.length > 12 ? type?.slice(0,12)+'...' : type}</strong>  |  Course level: <strong>{level}</strong> </>
+                    :
+                    type ? 
+                    <> Type: <strong>{type?.length > 12 ? type?.slice(0,12)+'...' : type}</strong> </> 
+                    : 
+                    level ? 
+                    <> Course level: <strong>{level}</strong> </> : ''
             }
                 <br />
                 <strong> {jobsAvailable}</strong> Jobs available

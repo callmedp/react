@@ -186,8 +186,7 @@ function downloadOrderTemplate(order_pk) {
 function openCancelModal(order_pk) {
     modal_id = "#cancelorder_div" + order_pk
     $(modal_id).modal('show');
-    MyGA.SendEvent('DashboardMyOrders', 'ln_dashboard_left_menu', 'ln_my_orders', 'cancel_order', '', false, true)
-}
+    }
 
 function editTemplate(key = 'mobile'){
     if(localStorage.getItem('personalInfo')){

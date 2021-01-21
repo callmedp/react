@@ -67,9 +67,22 @@ function* uploadResume(action) {
     }
 }
 
+function* submitFeedBack(action) {
+    const { payload: { values, resolve, reject } } = action;
+    try {
+        const response = yield call(Api.submitDashboardReviews, values);
+        return resolve(response)
+    }
+    catch (error) {
+        return reject(error)
+    }
+}
+
 export default function* WatchDashboardMyServices() {
     yield takeLatest(Actions.FETCH_MY_SERVICES, DashboardServicesApi);
     yield takeLatest(Actions.GET_OI_COMMENT, oi_comment);
     yield takeLatest(Actions.UPLOAD_RESUME_FORM, uploadResume);
+    yield takeLatest(Actions.SUBMIT_DASHBOARD_REVIEWS, submitFeedBack);
+
 
 }

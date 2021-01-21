@@ -23,8 +23,9 @@ const PopoverDetail = (props) => {
             <p className="type">
                 {
                     productType === 'assessments' ?
-                    <> Number of Questions : <strong>{number_of_questions}</strong> </>:
-                    <> Type: <strong>{type}</strong>  |   Course level: <strong>{level}</strong></>
+                     !!number_of_questions ? <> Number of Questions : <strong>{number_of_questions}</strong> </> : '' 
+                    :
+                    <> { !!type ?  <>Type: <strong>{type}</strong></>:''}{!!type && !!level ? ' | ':''}{ !!level ? <>Course level: <strong>{level}</strong></> : ''} </>
                 }
                 <br /><strong>{jobsAvailable}</strong> Jobs available
             </p>

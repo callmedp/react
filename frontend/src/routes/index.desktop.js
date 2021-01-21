@@ -1,13 +1,24 @@
 import React from "react";
-import { Switch } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import SkillPageContainer from "components/DesktopComponent/Core/SkillPage/skillPage";
 import CataloguePageContainer from "components/DesktopComponent/Core/CataloguePage/cataloguePage";
 import { getSkillPageActions } from 'apiHandler/skillPageApi';
 import Error404Container from 'components/DesktopComponent/Common/ErrorPage404/errorPage404';
 import { getCataloguePageActions } from "apiHandler/cataloguePageApi";
 import DashboardPageContainer from 'components/DesktopComponent/Core/DashboardPage/dashboardPage';
-import RouteWithSubRoutes from 'routes/route';
 
+
+export const RouteWithSubRoutes = route => {
+    return (
+        <Route
+            path={route.path}
+            exact={route.exact}
+            render={props =>
+                <route.component {...props} routes={route.routes} />
+            }
+        />
+    )
+};
 
 const DesktopAppRouter = () => (
     <div>
@@ -16,7 +27,6 @@ const DesktopAppRouter = () => (
         </Switch>
     </div>
 );
-
 
 export const routes = [
     {
@@ -34,8 +44,6 @@ export const routes = [
     {
         path: '/dashboard/:name/',
         component: DashboardPageContainer,
-        private: true,
-        exact: true,
     },
     {
         path: '/404/',
