@@ -2,7 +2,7 @@ import BaseApiService from 'services/BaseApiService';
 import { siteDomain } from 'utils/domains';
 
 const myWalletData = (data) => {
-    const url = `my-wallet/?page=${data.id}`;
+    const url = `my-wallet/?page=${data.page}`;
     return BaseApiService.get(`${siteDomain}/dashboard/api/v1/${url}`);
 };
 

@@ -30,4 +30,4 @@ def offset_paginator(page, data, **kwargs):
         if page > count:
             page = count
     offset = page * size - size
-    return {"data": data[offset : size * page], "total": total}
+    return {"data": data[offset : size * page], "total": total,"total_pages":count,"current_page":page}
