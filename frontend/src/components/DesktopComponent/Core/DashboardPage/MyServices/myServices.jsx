@@ -52,46 +52,40 @@ const MyServices = (props) => {
 
     // hit api when clicked on add comment
     const addCommentDataFetch = (id) => {
-        setaddOpen(!addOpen);
+        setaddOpen(addOpen == id ? false : id);
+        
         let commVal = {
             cid: getCandidateId(),
             oi_id: id,
             type: 'GET'
         }
-        if(!addOpen) {
-            dispatch(getoiComment(commVal));
-        }
+        if(!addOpen) dispatch(getoiComment(commVal));
     };
 
     // add new comment
     const submitComment = (values) => {
-        let new_values = {
+        console.log(values)
+        const new_values = {
           ...values,
           candidate_id: getCandidateId(),
           oi_pk: results.oi_comment[0].oi_id,
           type: "POST",
         };
 
-        dispatch(startDashboardServicesPageLoader());
-            new Promise((resolve, reject) => dispatch(getoiComment({ data: new_values, resolve, reject })))
-        dispatch(stopDashboardServicesPageLoader());
-        // dispatch(getoiComment(new_values));
+        dispatch(getoiComment(new_values));
     };
 
     // add new review
     const submitReview = (values) => {
-        // console.log(values, newRating)
         const new_review = {
             ...values,
             candidate_id: getCandidateId(),
             oi_pk: 503247,
             rating: newRating,
             full_name: (localStorage.getItem('first_name') || '') + (localStorage.getItem('last_name') || ''),
-            // review: "test",
         };
 
-        // new Promise((resolve, reject) => dispatch(SubmitDashboardFeedback({ data: new_review, resolve, reject })))
-        dispatch(SubmitDashboardFeedback(new_review, resolve, reject));
+        dispatch(SubmitDashboardFeedback(new_review));
     };
 
     // fill starts of already rated courses
@@ -110,8 +104,9 @@ const MyServices = (props) => {
     const setStars = (e, className = "blankstar") => {
         let data = typeof e == "number" ? e : parseInt(e.target.getAttribute("value")) - 1;
         let children = document.getElementsByClassName("rating-review")[0].children;
+        console.log(data, children);
         for (let i = 0; i <= data; i++) {
-            children[i].setAttribute("class", `icon-${className}`);
+            children[i].setAttribute("className", `icon-${className}`);
         }
     };
 
@@ -177,9 +172,6 @@ const MyServices = (props) => {
         }
     };
 
-    
-    
-
     useEffect(() => {
         handleEffects();
     }, [])
@@ -224,7 +216,7 @@ const MyServices = (props) => {
                                     <div className="d-flex w-100">
                                         <div className="my-courses-detail__leftpan">
                                             <div className="my-courses-detail__leftpan--box">
-                                                <h3><Link to={item.url}>{item.heading}</Link></h3>
+                                                <h3><Link to={item.url ? item.url : '#'}>{item.heading}</Link></h3>
                                                 <div className="my-courses-detail__leftpan--info">
                                                     <span>Provider: <strong>{item.vendor}</strong> </span>
                                                     <span>Bought on: <strong>{item.enroll_date}</strong></span>
@@ -333,7 +325,7 @@ const MyServices = (props) => {
                                                             {item.datalist && item.datalist.length > 0 ?
                                                                 item.datalist.map((det,ind) => {
                                                                     return(
-                                                                        <li>
+                                                                        <li key={ind}>
                                                                             <i className="timeline-list--dot"></i>
                                                                             <span>Dec. 11, 2020    |   By Kumar</span>
                                                                             <p className="timeline-list--text">{det}</p>
@@ -374,7 +366,7 @@ const MyServices = (props) => {
                                             className="db-comments font-weight-bold"
                                             onClick={() => addCommentDataFetch(item.id)}
                                             aria-controls="addComments"
-                                            aria-expanded={addOpen}
+                                            aria-expanded={`openComment`+index}
                                         >
                                             Add comment
                                         </Link>
@@ -472,14 +464,14 @@ const MyServices = (props) => {
 
                                                         <form onSubmit={handleSubmit(submitReview)}>
                                                             <div className="form-group error">
-                                                                <InputField attributes={CoursesServicesForm.review} register={register}
-                                                                    errors={!!errors ? errors[CoursesServicesForm.review.name] : ''} />
+                                                                <InputField attributes={CoursesServicesForm.email} register={register}
+                                                                    errors={!!errors ? errors[CoursesServicesForm.email.name] : ''} />
                                                                     {/* <label htmlFor="">Email</label> */}
                                                             </div>
 
                                                             <div className="form-group">
-                                                                <TextArea id={`review_${index}`} name={`review_${index}`} attributes={CoursesServicesForm.name} register={register}
-                                                                    errors={!!errors ? errors[CoursesServicesForm.name.name] : ''} />
+                                                                <TextArea attributes={CoursesServicesForm.review} register={register}
+                                                                    errors={!!errors ? errors[CoursesServicesForm.review.name] : ''} />
                                                                 {/* <label htmlFor="">Review</label> */}
                                                             </div>
 
@@ -518,37 +510,31 @@ const MyServices = (props) => {
                             </div>
 
                             {/* add comment dropdown */}
-                            <Collapse in={addOpen}>
-                                <div className="position-relative" id="threeComments">
+                            <Collapse in={addOpen == item.id}>
+                                <div className="position-relative" id={`openComment`+index}>
                                     <div className="db-add-comments lightblue-bg border-bottom-gray">
-                                        {/* <span className="btn-close" onClick={() => setOpen(!open)}>&#x2715;</span> */}
                                         <ul className="db-timeline-list">
-                                            {results.oi_comment && results.oi_comment.length > 0 ?
-                                                results.oi_comment.map((comm) => {
-                                                    return (
-                                                        comm.comment.map((item, ind) => {
-                                                            return (
-                                                                <li key={ind}>
-                                                                    <i className="db-timeline-list--dot"></i>
-                                                                    <span>{item.created} {item.addedBy ?  '   |   By ' + item.addedBy : ""} </span>
-                                                                    <p className="db-timeline-list--text">{item.message ? item.message : ""}</p>
-                                                                </li>
-                                                            )
-                                                        })
+                                            {results?.oi_comment && results?.oi_comment[0]?.comment.length > 0 ?
+                                                results.oi_comment[0].comment.map((comm, idx) => {
+                                                    return(
+                                                        <li key={idx}>
+                                                            <i className="db-timeline-list--dot"></i>
+                                                            <span>{comm.created} {comm.addedBy ?  '   |   By ' + comm.addedBy : ""} </span>
+                                                            <p className="db-timeline-list--text">{comm.message ? comm.message : ""}</p>
+                                                        </li>
                                                     )
                                                 })
-                                                : null
+                                                : ""
                                             }
                                         </ul>
                                     </div>
 
                                     <form onSubmit={handleSubmit(submitComment)}>
                                         <div className="db-add-comments disabled-before lightblue-bg" id="addComments">
-                                            <span className="btn-close" onClick={() => setaddOpen(!addOpen)}>&#x2715;</span>
+                                            <span className="btn-close" onClick={() => addCommentDataFetch(item.id)}>&#x2715;</span>
                                             <p className="font-weight-semi-bold"> Add comment </p>
-                                            <TextArea id={`review_${index}`} name={`review_${index}`} attributes={CoursesServicesForm.name} register={register}
-                                                errors={!!errors ? errors[CoursesServicesForm.name.name] : ''} />
-                                             <button type="submit" class="btn btn-outline-primary mt-20 px-5">Submit</button>
+                                            <TextArea attributes={CoursesServicesForm.name} register={register} errors={!!errors ? errors[CoursesServicesForm.name.name] : ''} />
+                                             <button type="submit" className="btn btn-outline-primary mt-20 px-5">Submit</button>
                                         </div>
                                     </form>
                                 

@@ -27,6 +27,18 @@ export const DashboardMyServicesReducer = (state=initState, action) => {
             }
         }
 
+        case Actions.SUBMIT_DASHBOARD_SUCCESS: {
+            return {
+                ...state, error: 'Something went Wrong'
+            }
+        }
+
+        case Actions.SUBMIT_DASHBOARD_FAILED: {
+            return {
+                ...state, ...action.item
+            }
+        }
+
         default: return state;
     }
 }
