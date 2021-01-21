@@ -48,7 +48,6 @@ function* oi_comment(action) {
     catch (e) {
         return yield put({ type: Actions.OI_COMMENT_FAILED, error: 500 });
     }
-
 }
 
 
@@ -69,14 +68,30 @@ function* uploadResume(action) {
 }
 
 function* submitFeedBack(action) {
-    const { payload: { values, resolve, reject } } = action;
+
     try {
-        const response = yield call(Api.submitDashboardReviews, values);
-        return resolve(response)
+        const { payload } = action;
+        let result = null;
+
+        result = yield call(Api.submitDashboardReviews, payload);
+        if (result["error"]) {
+            return yield put({ type: Actions.SUBMIT_DASHBOARD_FAILED, error: 'Something went wrong' });
+        }
+        else {
+            return yield put({ type: Actions.SUBMIT_DASHBOARD_SUCCESS });
+        }
     }
-    catch (error) {
-        return reject(error)
+    catch (e) {
     }
+
+    //   const { payload: { values, resolve, reject } } = action;
+    // try {
+    //     const response = yield call(Api.submitDashboardReviews, values);
+    //     return resolve(response)
+    // }
+    // catch (error) {
+    //     return reject(error)
+    // }
 }
 
 export default function* WatchDashboardMyServices() {

@@ -47,7 +47,7 @@ const TextArea = (props) => {
 
     return (
         <React.Fragment>
-            <textarea className={className} type={type} placeholder={placeholder} ref={register(validation)} value={value} defaultValue={defaultValue} rows={rows} />
+            <textarea className={className} name={name} type={type} placeholder={placeholder} ref={register(validation)} value={value} defaultValue={defaultValue} rows={rows} />
             {/* <label htmlFor={name}>{label}</label> */}
             {/* { !!errors ? <span className="error-msg">{errorMessage[errors.type]}</span> : ''} */}
         </React.Fragment>
