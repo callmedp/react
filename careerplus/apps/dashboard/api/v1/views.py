@@ -67,12 +67,12 @@ class DashboardMyorderApi(DashboardInfo, APIView):
                 }
                 order_list.append(data)
                 #pagination info
-                page_info = {'page':
-                {'current_page':paginated_data['current_page'],
+                page_info ={
+                'current_page':paginated_data['current_page'],
                 'total':paginated_data['total_pages'],
                 'has_prev': True if paginated_data['current_page'] >1 else False,
                 'has_next':True if (paginated_data['total_pages']-paginated_data['current_page'])>0 else False
-                }}
+                }
                 
         return APIResponse(data={'data':order_list,'page':page_info}, message='Order data Success', status=status.HTTP_200_OK)
 
@@ -104,12 +104,12 @@ class MyCoursesApi(DashboardInfo, APIView):
             paginated_data = offset_paginator(page, courses)
             data = OrderItemSerializer(paginated_data["data"],many=True,context= {"get_details": True}).data
             #pagination info
-            page_info = {'page':
-            {'current_page':paginated_data['current_page'],
+            page_info ={
+            'current_page':paginated_data['current_page'],
             'total':paginated_data['total_pages'],
             'has_prev': True if paginated_data['current_page'] >1 else False,
             'has_next':True if (paginated_data['total_pages']-paginated_data['current_page'])>0 else False
-            }}
+            }
         return APIResponse(data={'data':data,'page':page_info},message='Courses data Success',status=status.HTTP_200_OK)
 
 
@@ -152,12 +152,12 @@ class MyServicesApi(DashboardInfo, APIView):
             data = OrderItemSerializer(paginated_data["data"],many=True,context= {"get_details": True}).data
 
             #pagination info
-            page_info = {'page':
-            {'current_page':paginated_data['current_page'],
+            page_info ={
+            'current_page':paginated_data['current_page'],
             'total':paginated_data['total_pages'],
             'has_prev': True if paginated_data['current_page'] >1 else False,
             'has_next':True if (paginated_data['total_pages']-paginated_data['current_page'])>0 else False
-            }}
+            }
         return APIResponse(data={'data':data,'pending_resume_items':pending_resume_items,'page':page_info},message='Services data Success', status=status.HTTP_200_OK)
 
 
