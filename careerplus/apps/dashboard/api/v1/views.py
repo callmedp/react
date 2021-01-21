@@ -109,7 +109,7 @@ class MyCoursesApi(DashboardInfo, APIView):
             'total':paginated_data['total_pages'],
             'has_prev': True if paginated_data['current_page'] >1 else False,
             'has_next':True if (paginated_data['total_pages']-paginated_data['current_page'])>0 else False
-            }}
+            }
         return APIResponse({'myCourses':data,'page':page_info},message='Courses data Success',status=status.HTTP_200_OK)
 
 

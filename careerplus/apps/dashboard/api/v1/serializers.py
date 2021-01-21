@@ -82,7 +82,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
         date_created = ''
         if oi.product.type_flow == 1 or  oi.product.type_flow == 12 or oi.product.type_flow == 13:
             for op in ops:
-                date_created =op.created
+                date_created =op.created.strftime("%b %d, %Y")
                 if op.oi_status == 24 and op.draft_counter == 1:
                     datalist.append({'date':date_created,'status':op.get_user_oi_status})
                 elif op.oi_status == 24 and op.draft_counter < max_draft_limit:
@@ -102,7 +102,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
 
         elif oi.product.type_flow == 8:
             for op in ops:
-                date_created =op.created
+                date_created =op.created.strftime("%b %d, %Y")
                 if op.oi_status == 46 and op.draft_counter == 1:
                     datalist.append({'date':date_created,'status':op.get_user_oi_status})
                 elif op.oi_status == 46 and op.draft_counter < max_draft_limit:
@@ -122,7 +122,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
 
         elif oi.product.type_flow == 3:
             for op in ops:
-                date_created =op.created
+                date_created =op.created.strftime("%b %d, %Y")
                 datalist.append({'date':date_created,'status':op.get_user_oi_status})
                 if op.oi_draft:
                     options['Download']=True
@@ -132,7 +132,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
                     options['Upload Resume']=True
         elif oi.product.type_flow == 2 or  oi.product.type_flow == 14:
             for op in ops:
-                date_created =op.created
+                date_created =op.created.strftime("%b %d, %Y")
                 datalist.append({'date':date_created,'status':op.get_user_oi_status})
                 if op.oi_status == 6:
                     options['Download']=True
@@ -140,7 +140,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
                     options['oi_draftname']=op.oi_draft.name
         elif oi.product.type_flow == 4:
             for op in ops:
-                date_created =op.created
+                date_created =op.created.strftime("%b %d, %Y")
                 datalist.append({'date':date_created,'status':op.get_user_oi_status})
                 if oi.oi_status == 2 and not oi.oi_resume:
                     options['Upload Resume']=True
@@ -152,21 +152,21 @@ class OrderItemSerializer(serializers.ModelSerializer):
                 if custom_ops is not None:
                     for op in custom_ops:
                         if op:
-                            date_created =op.created
+                            date_created =op.created.strftime("%b %d, %Y")
                             if op.oi_status == 31:
                                 datalist.append({'date':date_created,'status':'Service is Under Progress'})
                             else:
                                 datalist.append({'date':date_created,'status':op.get_user_oi_status})
             else:
                 for op in ops:
-                    date_created =op.created
+                    date_created =op.created.strftime("%b %d, %Y")
                     datalist.append({'date':date_created,'status':op.get_user_oi_status})
                     if oi.oi_status == 2 and not oi.oi_resume and op.oi_status == 2:
                         options['Upload Resume']=True
 
         elif oi.product.type_flow == 6:
             for op in ops:
-                date_created =op.created
+                date_created =op.created.strftime("%b %d, %Y")
                 datalist.append({'date':date_created,'status':op.get_user_oi_status})
                 if op.oi_draft:
                     options['Download']=True
@@ -174,13 +174,13 @@ class OrderItemSerializer(serializers.ModelSerializer):
                     options['oi_draftname']=op.oi_draft.name
         elif oi.product.type_flow == 7 or oi.product.type_flow == 15:
             for op in ops:
-                date_created =op.created
+                date_created =op.created.strftime("%b %d, %Y")
                 datalist.append({'date':date_created,'status':op.get_user_oi_status})
                 if oi.oi_status == 2 and not oi.oi_resume and op.oi_status == 2:
                     options['Upload Resume']=True
         elif oi.product.type_flow == 9:
             for op in ops:
-                date_created =op.created
+                date_created =op.created.strftime("%b %d, %Y")
                 datalist.append({'date':date_created,'status':op.get_user_oi_status})
                 if op.oi_status == 141:
                     options['Complete Profile']=True
@@ -188,7 +188,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
                     options['Edit your profile']=True
         elif oi.product.type_flow == 10:
             for op in ops:
-                date_created =op.created
+                date_created =op.created.strftime("%b %d, %Y")
                 datalist.append({'date':date_created,'status':op.get_user_oi_status})
                 if op.oi_status == 101:
                     options['Take Test']=True
@@ -198,7 +198,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
                     options['oi_draftname']=op.oi_draft.name
         elif oi.product.type_flow == 17:
             for op in ops:
-                date_created =op.created
+                date_created =op.created.strftime("%b %d, %Y")
                 datalist.append({'date':date_created,'status':op.get_user_oi_status})
                 if op.oi_status == 101:
                     options['Take Test']=True
@@ -222,7 +222,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
             'heading': instance.product.heading if instance.product_id else '',
         })
         if self.context.get("get_details", None):
-            date_placed =instance.order.date_placed.strftime("%b %d, ""%Y")
+            date_placed =instance.order.date_placed.strftime("%b %d, %Y")
             data.update({
                 'img': instance.product.get_image_url(), 
                 'rating': instance.product.get_ratings(),
@@ -231,7 +231,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
                 'vendor': instance.product.vendor.name, 
                 'duration':instance.product.get_duration_in_ddmmyy() if instance.product_id and instance.product.get_duration_in_day() else None,
                 'enroll_date':date_placed,
-                'remaining_days':None,
+                'remaining_days':0,
                 # 'remaining_days':instance.order.date_placed + timedelta(days=instance.product.get_duration_in_day())-datetime.now(),
                 'status':self.get_oi_status_value(instance) if instance.oi_status else None,
                 'mode':instance.product.get_studymode_db(),
