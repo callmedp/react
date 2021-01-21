@@ -5,10 +5,9 @@ const AddCommentModal = (props) => {
 
     return (
         <div className="m-slide-modal">
-
+            <span className="m-db-close" onClick={() => {setShowCommentModal(false)}}>X</span>
+            <br /><br />
             <div className="">
-                <span className="m-db-close" onClick={() => {setShowCommentModal(false)}}>X</span>
-                <br />
                 <ul className="m-timeline-list">
                     <li>
                         <i className="m-timeline-list--dot"></i>
