@@ -12,7 +12,7 @@ import Loader from '../../../Common/Loader/loader';
 const MyWallet = (props) => {
     const dispatch = useDispatch();
     const [ordPageNo, setOrdPageNo] = useState(1)
-    const ordersList = useSelector(store => store.dashboardOrders?.data)
+    const { data, page } = useSelector(store => store.dashboardOrders)
     const { orderLoader } = useSelector(store => store.loader);
     const [showOrderDetailsID, setShowOrderDetailsID] = useState('')
 
@@ -66,7 +66,7 @@ const MyWallet = (props) => {
             { orderLoader && <Loader /> }
             <div className="my-order db-warp mb-20">
                 {
-                    ordersList?.slice(1).map((order) => {
+                    data?.map((order) => {
                         return (
                             <div className="m-card" key={order?.order?.number}>
                                 <p className="head mb-5">{order?.order?.number}</p>

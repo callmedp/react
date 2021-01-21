@@ -2,6 +2,7 @@ import * as Actions from '../actions/actionTypes';
 
 const initState = {
     data: [],
+    page: {},
     error: false,
     message: ""
 }
