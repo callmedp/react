@@ -15,7 +15,6 @@ OI_STATUS_DICT = {
 
 
 class OrderItemSerializer(serializers.ModelSerializer):
-    item_oi_status = serializers.ReadOnlyField(source='get_oi_status')
 
     class Meta:
         model = OrderItem
