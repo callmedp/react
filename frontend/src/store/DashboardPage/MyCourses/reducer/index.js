@@ -1,7 +1,8 @@
 import * as Actions from '../actions/actionTypes';
 
 const initState = {
-    myCourses : []
+    myCourses : [],
+    page : []
 }
 
 export const DashboardMyCoursesReducer = (state=initState, action) => {
