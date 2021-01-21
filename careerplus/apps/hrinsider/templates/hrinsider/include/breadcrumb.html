@@ -4,9 +4,9 @@
         <ol class="breadcrumb">
             {% for breadcrumb in breadcrumbs %}
                 {% if breadcrumb.url %}
-                    <li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{breadcrumb.url}}" itemprop="item"><span itemprop="name">{{breadcrumb.name}}</span></a></li>
+                    <li class="breadcrumb-item" itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{breadcrumb.url}}" itemprop="item" onclick="MyGA.SendEvent('ln_breadcrumbs', 'ln_breadcrumbs', 'ln_breadcrumb_click', '{{breadcrumb.label}}', '', false, true);"><span itemprop="name">{{breadcrumb.name}}</span></a></li>
                 {% else %}
-                    <li class="breadcrumb-item active" aria-current="page">{{breadcrumb.name}}</li>
+                    <li class="breadcrumb-item active" aria-current="page" onclick="MyGA.SendEvent('ln_breadcrumbs', 'ln_breadcrumbs', 'ln_breadcrumb_click', '{{breadcrumb.label}}', '', false, true);">{{breadcrumb.name}}</li>
                 {% endif %}
             {% endfor %}
         </ol>

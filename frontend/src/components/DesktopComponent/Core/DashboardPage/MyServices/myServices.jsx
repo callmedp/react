@@ -35,7 +35,7 @@ const MyServices = (props) => {
     const uploadHandelClose = () => setUploadShow(false);
     const uploadHandelShow = () => setUploadShow(true);
 
-    const results = useSelector(store => store.dashboardServices);
+    const results = useSelector(store => store.dashboardServices.data);
     const dispatch = useDispatch();
     const { history } = props;
     const { serviceLoader } = useSelector(store => store.loader);
@@ -172,6 +172,8 @@ const MyServices = (props) => {
         }
     };
 
+    console.log(results)
+
     useEffect(() => {
         handleEffects();
     }, [])
@@ -202,376 +204,58 @@ const MyServices = (props) => {
         <div>
             {serviceLoader ? <Loader /> : ''}
             <div className="my-courses-detail">
+                {results?.data && results.data.length > 0 ?
+                    results.data.map((item,index) => {
+                        return(
+                            <div className="db-white-box w-100" key={index}>
+                                <div className="d-flex">
+                                    <figure>
+                                        <img src={item.img} alt={item.img_alt} />
+                                    </figure>
 
-            {results?.data && results?.data.length > 0 ?
-                results.data.map((item, index) => {
-                    return (
-                        <div className="db-white-box w-100" key={index}>
-                            <div className="d-flex">
-                                <figure>
-                                    <img src={item.img} alt={item.img_alt} />
-                                </figure>
-
-                                <div className="my-courses-detail--wrap">
-                                    <div className="d-flex w-100">
-                                        <div className="my-courses-detail__leftpan">
-                                            <div className="my-courses-detail__leftpan--box">
-                                                <h3><Link to={item.url ? item.url : '#'}>{item.heading}</Link></h3>
-                                                <div className="my-courses-detail__leftpan--info">
-                                                    <span>Provider: <strong>{item.vendor}</strong> </span>
-                                                    <span>Bought on: <strong>{item.enroll_date}</strong></span>
-                                                    <span>Duration: <strong>{item.duration ? item.duration : ""}</strong></span>
-                                                </div>
-
-                                                <div className="my-courses-detail__leftpan--alert">
-                                                Hi, the recording for the session you missed is available now
-                                                </div>
-
-                                                <div className="my-courses-detail__leftpan--status mb-2">
-                                                    Status:
-                                                    <strong className="ml-1">Upload your resume 
-                                                        <Link to={"#"} className="ml-2" onClick={uploadHandelShow}>Upload</Link> 
-                                                    </strong> 
-
-                                                    <Modal show={uploadShow} onHide={uploadHandelClose}>
-                                                        <Modal.Header closeButton>
-                                                        </Modal.Header>
-                                                        <Modal.Body>
-                                                            <div className="text-center rate-services db-custom-select-form db-upload-resume">
-                                                                <img src="/media/images/upload-resume.png" className="img-fluid" alt=""/>
-                                                                <p className="rate-services--heading mb-0 mt-0">Upload Resume</p>
-                                                            
-                                                                <p className="">To initiate your services, <strong>upload resume</strong></p>
-                                                                
-                                                                <div className="d-flex align-items-center justify-content-center mt-20">
-                                                                    <div className="upload-btn-wrapper">
-                                                                        {/* <button className="btn btn-outline-primary">Upload a file</button> */}
-                                                                        <form onSubmit={handleSubmit(onSubmit)}>
-                                                                            <div className="form-group d-flex align-items-center mt-5">
-                                                                                <div className="upload-btn-wrapper">
-                                                                                    <button className="btn btn-outline-primary" >{filename}</button>
-                                                                                    <input
-                                                                                        type="file"
-                                                                                        name="file"
-                                                                                        onChange={(e) => {
-                                                                                            e.preventDefault();
-                                                                                            getFile(e)
-                                                                                        }}
-                                                                                        ref={register()}
-                                                                                    />
-                                                                                </div>
-                                                                            </div>
-                                                                            <div>
-                                                                                <span>
-                                                                                    {errors.shine_resume &&
-                                                                                        "* Either Upload Resume or use shine resume"}
-                                                                                </span>
-                                                                            </div>
-                                                                        </form>
-                                                                    </div>
-
-                                                                    <span className="mx-4">Or</span>
-
-                                                                    <div className="custom-control custom-checkbox">
-                                                                        <input type="checkbox" className="custom-control-input" id="shineResume" /> 
-                                                                        <label className="custom-control-label font-weight-bold" htmlFor="shineResume">Use shine resume</label>
-                                                                    </div>
-                                                                </div>
-                                                                <hr className="my-5"/>
-
-                                                                <div className="db-upload-resume--services">
-                                                                    <strong>Select services</strong> for which you want to use this resume
-                                                                    <ul className="db-upload-resume--list">
-                                                                        <li className="custom-control custom-checkbox">
-                                                                            <input type="checkbox" className="custom-control-input" id="resumeBooster" /> 
-                                                                            <label className="custom-control-label font-weight-bold" htmlFor="resumeBooster">Resume Booster 5-10 years</label>
-                                                                        </li>
-
-                                                                        <li className="custom-control custom-checkbox">
-                                                                            <input type="checkbox" className="custom-control-input" id="resumeBuilder" /> 
-                                                                            <label className="custom-control-label font-weight-bold" htmlFor="resumeBuilder">Resume Builder 5-10 yrs</label>
-                                                                        </li>
-
-                                                                        <li className="custom-control custom-checkbox">
-                                                                            <input type="checkbox" className="custom-control-input" id="services" /> 
-                                                                            <label className="custom-control-label font-weight-bold" htmlFor="services">For all services</label>
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
-
-                                                                <button className="btn btn-primary px-5 mt-30" onClick={handleSubmit(onSubmit)}>Save</button>
-                                                            </div>
-                                                        </Modal.Body>
-                                                    </Modal>
-                                                </div>
-
-                                                {item.datalist && item.datalist.length > 0 ?
-                                                    <Link 
-                                                        to={'#'}
-                                                        className="font-weight-bold"
-                                                        onClick={() => toggleDetails(item.id)}
-                                                        aria-controls="addComments"
-                                                        aria-expanded={`openViewDetail`+index}
-                                                    >
-                                                        View Details
-                                                    </Link>
-                                                    : null 
-                                                }
-
-                                                <Collapse in={isOpen == item.id}>
-                                                    <div className="view-detail arrow-box left-big" id={`openViewDetail`+index}>
-                                                    <span className="btn-close"  onClick={() => toggleDetails(item.id)}>&#x2715;</span>
-                                                        <ul className="timeline-list">
-                                                            {item.datalist && item.datalist.length > 0 ?
-                                                                item.datalist.map((det,ind) => {
-                                                                    return(
-                                                                        <li key={ind}>
-                                                                            <i className="timeline-list--dot"></i>
-                                                                            <span>Dec. 11, 2020    |   By Kumar</span>
-                                                                            <p className="timeline-list--text">{det}</p>
-                                                                        </li>
-                                                                    )
-                                                                })
-                                                                : null
-                                                            }   
-                                                        </ul>
+                                    <div className="my-courses-detail--wrap">
+                                        <div className="d-flex w-100">
+                                            <div className="my-courses-detail__leftpan">
+                                                <div className="my-courses-detail__leftpan--box">
+                                                    <h3><Link to={item.productUrl ? item.productUrl : '#'}>{item.heading}</Link></h3>
+                                                    <div className="my-courses-detail__leftpan--info">
+                                                        <span>Provider: <strong>{item.vendor}</strong> </span>
+                                                        <span>Bought on: <strong>{item.enroll_date}</strong></span>
+                                                        <span>Duration: <strong>{item.duration ? item.duration : ""}</strong></span>
                                                     </div>
-                                                </Collapse>
-                                            </div>
-                                        </div>
 
-                                        <div className="my-courses-detail__rightpan">
-                                            <div className="share">
-                                                <i className="icon-share"></i>
-                                                <div className="share__box arrow-box top">
-                                                    <Link to={"#"} className="facebook-icon"></Link>
-                                                    <Link to={"#"} className="linkedin-icon"></Link>
-                                                    <Link to={"#"} className="twitter-iocn"></Link>
-                                                    <Link to={"#"} className="whatsup-icon"></Link>
+                                                    <div className="my-courses-detail__leftpan--alert">
+                                                        Hi, the recording for the session you missed is available now
+                                                    </div>
+
+                                                    <div className="my-courses-detail__leftpan--status mb-2">
+                                                        Status:
+                                                        <strong className="ml-1">Upload your resume 
+                                                            <Link to={"#"} className="ml-2" onClick={uploadHandelShow}>Upload</Link> 
+                                                        </strong> 
+
+                                                        <Modal show={uploadShow} onHide={uploadHandelClose}>
+                                                            <Modal.Header closeButton></Modal.Header>
+                                                            <Modal.Body>
+                                                                <div className="text-center rate-services db-custom-select-form db-upload-resume">
+                                                                    
+                                                                </div>
+                                                            </Modal.Body>
+                                                        </Modal>
+                                                    </div>
                                                 </div>
                                             </div>
-
-                                            <div className="day-remaning mb-20">
-                                                <span className="day-remaning--box">9</span>
-                                                <span className="day-remaning--box">0</span>
-                                                <span className="ml-2 day-remaning--text">Days <br/>remaning</span>
-                                            </div>
                                         </div>
-                                    </div>
-
-
-                                    <div className="my-courses-detail__bottom">
-                                        <Link
-                                            to={"#"}
-                                            className="db-comments font-weight-bold"
-                                            onClick={() => addCommentDataFetch(item.id)}
-                                            aria-controls="addComments"
-                                            aria-expanded={`openComment`+index}
-                                        >
-                                            Add comment
-                                        </Link>
-
-                                        <div className="d-flex">
-                                            <div className="card__rating">
-                                                {(item.rating === undefined && item.rating === null) ?
-                                                    <span 
-                                                        className="cursor-pointer mr-2 font-weight-bold"
-                                                        onClick={handleShow}
-                                                    >
-                                                        Rate Services
-                                                    </span>
-                                                : null
-                                                }
-                                                <span className="rating">
-                                                    {item.rating && item.rating.map((val,ind) => {
-                                                        return (
-                                                            <i
-                                                            key={ind}
-                                                            value={val}
-                                                            className={fillStarForCourse(val)}
-                                                            ></i>
-                                                        );
-                                                    })}
-                                                </span>
-                                                {item.rating && item.rating.length > 0 ? 
-                                                    <React.Fragment>
-                                                        <span>{item.avg_rating}/5</span> 
-                                                        <Link 
-                                                            className="ml-15"
-                                                            onClick={() => toggleReviews(item.id)}
-                                                            aria-controls="threeComments"
-                                                            aria-expanded={`openReview` + index}
-                                                            to={'#'}
-                                                        >
-                                                            <strong>{item.review}</strong> { item.review > 1 ? 'Reviews' : 'Review' }
-                                                        </Link>
-
-                                                        <Collapse in={openReview == item.id}>
-                                                            <div className="reviews-list-wrap arrow-box top-big">
-                                                                <span className="btn-close"  onClick={() => toggleReviews(item.id)}>&#x2715;</span>
-                                                                <div className="reviews-list">
-                                                                    <ul>
-                                                                        <li>
-                                                                            <div className="card__rating">
-                                                                                <span className="rating">
-                                                                                    <em className="icon-fullstar"></em>
-                                                                                    <em className="icon-fullstar"></em>
-                                                                                    <em className="icon-fullstar"></em>
-                                                                                    <em className="icon-fullstar"></em>
-                                                                                    <em className="icon-blankstar"></em>
-                                                                                    <span> <strong>4</strong> /5</span>
-                                                                                </span>
-                                                                            </div>
-
-                                                                            <span className="reviews-list--date">Dec. 21, 2020</span>
-                                                                            <p className="reviews-list--text">Great product for your career.  It helped alot to enhance my career</p>
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
-                                                                
-                                                                <div className="reviews-list-wrap--bottom">
-                                                                    <button className="btn btn-outline-primary" onClick={handleShow}>Add new</button>
-                                                                </div>
-                                                            </div>
-                                                        </Collapse>
-                                                    </React.Fragment>
-                                                : null}
-                                            </div>
-
-                                            <Modal show={show} onHide={handleClose}>
-                                                <Modal.Header closeButton>
-                                                </Modal.Header>
-                                                <Modal.Body>
-                                                    <div className="text-center rate-services need-help">
-                                                        <img src="/media/images/rate-services.png" className="img-fluid" alt=""/>
-                                                        <p className="rate-services--heading">Rate service</p>
-                                                        
-                                                        <span className="rating-review">
-                                                        {[1, 2, 3, 4, 5].map((value,indx) => {
-                                                                return (
-                                                                    <i
-                                                                    key={indx}
-                                                                    value={value}
-                                                                    className={fillNewStar(value)}
-                                                                    onMouseOver={(e) => mouseOver(e)}
-                                                                    onMouseOut={(e) => mouseOut(e)}
-                                                                    onClick={(e) => onClickEvent(e)}
-                                                                    ></i>
-                                                                );
-                                                            })}
-                                                        </span>
-                                                        <p className="rate-services--subheading">Click on rate to scale of 1-5</p>
-
-                                                        <form onSubmit={handleSubmit(submitReview)}>
-                                                            <div className="form-group error">
-                                                                <InputField attributes={CoursesServicesForm.email} register={register}
-                                                                    errors={!!errors ? errors[CoursesServicesForm.email.name] : ''} />
-                                                                    {/* <label htmlFor="">Email</label> */}
-                                                            </div>
-
-                                                            <div className="form-group">
-                                                                <TextArea attributes={CoursesServicesForm.review} register={register}
-                                                                    errors={!!errors ? errors[CoursesServicesForm.review.name] : ''} />
-                                                                {/* <label htmlFor="">Review</label> */}
-                                                            </div>
-
-                                                            <button className="btn btn-primary px-5" type="submit">Submit</button>
-                                                            {/* <div className="db-add-comments disabled-before lightblue-bg" id="addComments">
-                                                                <span className="btn-close" onClick={() => setaddOpen(!addOpen)}>&#x2715;</span>
-                                                                <p className="font-weight-semi-bold"> Add comment </p>
-                                                                <TextArea attributes={CoursesServicesForm.name} register={register}
-                                                                    errors={!!errors ? errors[CoursesServicesForm.name.name] : ''} />
-                                                                <button type="submit" class="btn btn-outline-primary mt-20 px-5">Submit</button>
-                                                            </div> */}
-                                                        </form>
-
-                                                        {/* <form action="">
-                                                            <div className="form-group error">
-                                                                <input type="email" className="form-control" id="email" name="email" placeholder=" "
-                                                                    value="" aria-required="true" aria-invalid="true" />
-                                                                <label htmlFor="">Email</label>
-                                                                <span className="error-msg">Required</span>
-                                                            </div>
-                                                            
-                                                            <div className="form-group">
-                                                                <textarea  className="form-control" name="review" id="review" cols="30" rows="3" placeholder=" "></textarea>
-                                                                <label htmlFor="">Review</label>
-                                                            </div>
-
-                                                            <button className="btn btn-primary px-5" onClick={submitReview()}>Submit</button>
-                                                        </form> */}
-                                                    </div>
-                                                </Modal.Body>
-                                            </Modal>
-                                        </div>
-
                                     </div>
                                 </div>
                             </div>
-
-                            {/* add comment dropdown */}
-                            <Collapse in={addOpen == item.id}>
-                                <div className="position-relative" id={`openComment`+index}>
-                                    <div className="db-add-comments lightblue-bg border-bottom-gray">
-                                        <ul className="db-timeline-list">
-                                            {results?.oi_comment && results?.oi_comment[0]?.comment.length > 0 ?
-                                                results.oi_comment[0].comment.map((comm, idx) => {
-                                                    return(
-                                                        <li key={idx}>
-                                                            <i className="db-timeline-list--dot"></i>
-                                                            <span>{comm.created} {comm.addedBy ?  '   |   By ' + comm.addedBy : ""} </span>
-                                                            <p className="db-timeline-list--text">{comm.message ? comm.message : ""}</p>
-                                                        </li>
-                                                    )
-                                                })
-                                                : ""
-                                            }
-                                        </ul>
-                                    </div>
-
-                                    <form onSubmit={handleSubmit(submitComment)}>
-                                        <div className="db-add-comments disabled-before lightblue-bg" id="addComments">
-                                            <span className="btn-close" onClick={() => addCommentDataFetch(item.id)}>&#x2715;</span>
-                                            <p className="font-weight-semi-bold"> Add comment </p>
-                                            <TextArea attributes={CoursesServicesForm.name} register={register} errors={!!errors ? errors[CoursesServicesForm.name.name] : ''} />
-                                             <button type="submit" className="btn btn-outline-primary mt-20 px-5">Submit</button>
-                                        </div>
-                                    </form>
-                                
-                                    {/* <form>
-                                        <div className="db-add-comments disabled-before lightblue-bg">
-                                            <p className="font-weight-semi-bold"> Add comment </p>
-                                            <textarea class="form-control" rows="3"></textarea>
-                                            <button type="submit" class="btn btn-outline-primary mt-20 px-5">Submit</button>
-                                        </div>
-                                    </form> */}
-                                </div>
-                                {/* <form onSubmit={handleSubmit(submitComment())}>
-                                    <div className="db-add-comments lightblue-bg" id="addComments">
-                                        <span className="btn-close" onClick={() => setaddOpen(!addOpen)}>&#x2715;</span>
-                                        <p className="font-weight-semi-bold"> Add comment </p>
-                                        <textarea className="form-control" rows="3"></textarea>
-                                        <button type="submit" className="btn btn-outline-primary mt-20 px-5">Submit</button>
-                                    </div>
-                                </form> */}
-                            </Collapse>
-                        </div>
-                    )
-                })
-            : null
-            }
+                        )
+                    })
+                    :null
+                }
             </div>
         </div>
     )
 }
-
-
-// const mapDispatchToProps = (dispatch) => {
-//     return {
-//       onSubmitReview: (values) => {
-//         dispatch(getoiComment(values));
-//       },
-//     };
-//   };
    
 export default MyServices;

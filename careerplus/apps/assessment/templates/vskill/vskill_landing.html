@@ -89,7 +89,7 @@
                   <!--<button type="submit" class=" skill-jobs-btn btn no-bgcol"></button>-->
                <!--</div>-->
                 <div id="bloodhound" class="form-inline">
-                   <input id ="bloodhound_input" type="text" class="typeahead form-control" placeholder="Search popular tests">
+                   <input id ="bloodhound_input" type="text" class="typeahead form-control" placeholder="Search popular tests" onkeypress="MyGA.SendEvent('practicetest_search','ln_practicetest_search', 'ln_search_initiated', 'click_on_search','', false, true)">
                    <button id="bloodhound_submit" type="submit" class="skill-jobs-btn btn" onclick="MyGA.SendEvent('practicetest_search','ln_practicetest_search', 'ln_search_initiated', 'click_on_search','', false, true)"></button>
                 </div>
                 <div id="bloodhound_message" style="display: none;">

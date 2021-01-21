@@ -15,39 +15,10 @@ import MyProfile from './MyProfile/myProfile';
 import PersonalDetail from './MyProfile/PersonalDetail';
 import EditSkills from './MyProfile/EditSkills';
 import SearchPage from '../../Common/SearchPage/SearchPage';
-import { fetchMyOrders } from 'store/DashboardPage/MyOrder/actions/index';
 
 const Dashboard = () => {
     const [showSearchPage, setShowSearchPage] = useState(false);
     const [activeTab, setActiveTab] = useState('Courses');
-
-    const dispatch = useDispatch();
-    // const { history } = props;
-    // const { walletLoader } = useSelector(store => store.loader);
-
-    const handleEffects = async () => {
-        try {
-            //You may notice that apis corresponding to these actions are not getting called on initial render.
-            //This is because initial render is done on node server, which is calling these apis, map the data and send it to the browser.
-            //So there is no need to fetch them again on the browser.
-            if (!(window && window.config && window.config.isServerRendered)) {
-                await new Promise((resolve, reject) => dispatch(fetchMyOrders({ page: 1, resolve, reject })))
-            }
-            else {
-                //isServerRendered is needed to be deleted because when routing is done through react and not on the node,
-                //above actions need to be dispatched.
-                delete window.config?.isServerRendered
-            }
-        } catch (error) {
-            // if (error?.status == 404) {
-            //     history.push('/404');
-            // }
-        }
-    };
-
-    useEffect(() => {
-        handleEffects();
-    }, [])
 
     return(
         <div>
@@ -69,6 +40,7 @@ const Dashboard = () => {
                         <PersonalDetail /> */}
                         
                         <PopularCoursesSlider />
+                        <br />
                         <HaveQuery />
                     </main>
                     <Footer /> 

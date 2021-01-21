@@ -1,9 +1,14 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import './myCourses.scss';
+import AddCommentModal from '../AddCommentModal/addCommentModal';
+import RateProductModal from '../RateProductModal/rateProductModal'
 
    
 const MyCourses = (props) => {
+    const [showCommentModal, setShowCommentModal] = useState(false) 
+    const [showRateModal, setShowRateModal] = useState(false) 
+
     return(
         <div>
             <div className="m-courses-detail db-warp">
@@ -65,8 +70,8 @@ const MyCourses = (props) => {
                         </div>
 
                         <div className="m-courses-detail__userInput">
-                            <Link className="m-db-comments font-weight-bold" to={'#'}>Add comment</Link>
-                            <div className="d-flex">
+                            <Link className="m-db-comments font-weight-bold" to={'#'} onClick={(e) => {e.preventDefault();setShowCommentModal(true)}}>Add comment</Link>
+                            <div className="d-flex" onClick={()=>{setShowRateModal(true)}}>
                                 <span className="">Rate</span>
                                 <span className="m-rating">
                                     <em className="micon-blankstar"></em>
@@ -215,146 +220,12 @@ const MyCourses = (props) => {
                     </div>
                 </div>
             </div>
-
-            <div className="m-slide-modal">
-                <div className="text-center"  style={{display: 'none'}}>
-                    <span className="m-db-close">&#x2715;</span>
-                    <h2>Add comment</h2>
-                    <div className="m-enquire-now mt-15">
-                        <div className="m-form-group">
-                            <textarea id="addComments" placeholder=" " rows="4"></textarea>
-                            <label htmlFor="addComments">Enter comment here</label>
-                        </div>
-
-                        <button className="btn btn-blue">Submit</button>
-                    </div>
-                </div>
-
-                <div className="" style={{display: 'none'}}>
-                    <span className="m-db-close">&#x2715;</span>
-                    <ul className="m-timeline-list">
-                        <li>
-                            <i className="m-timeline-list--dot"></i>
-                            <span>Dec. 11, 2020    |   By Amit Kumar</span>
-                            <p className="m-timeline-list--text">Need help to understand this service.</p>
-                        </li>
-                        
-                        <li>
-                            <i className="m-timeline-list--dot"></i>
-                            <span>Dec. 12, 2020    |   By Sumit Sharme</span>
-                            <p className="m-timeline-list--text">We will call you for detailed info of this service</p>
-                        </li>
-                        
-                        <li>
-                            <i className="m-timeline-list--dot"></i>
-                            <span>Dec. 18, 2020    |   By Amit Kumar</span>
-                            <p className="m-timeline-list--text">Thanks for your confirmation!</p>
-                        </li>
-                        <li>
-                            <i className="m-timeline-list--dot"></i>
-                            <span>Dec. 11, 2020    |   By Amit Kumar</span>
-                            <p className="m-timeline-list--text">Need help to understand this service.</p>
-                        </li>
-                        
-                        <li>
-                            <i className="m-timeline-list--dot"></i>
-                            <span>Dec. 12, 2020    |   By Sumit Sharme</span>
-                            <p className="m-timeline-list--text">We will call you for detailed info of this service</p>
-                        </li>
-                        
-                        <li>
-                            <i className="m-timeline-list--dot"></i>
-                            <span>Dec. 18, 2020    |   By Amit Kumar</span>
-                            <p className="m-timeline-list--text">Thanks for your confirmation!</p>
-                        </li>
-                    </ul>
-                    <hr />
-                    <div className="m-enquire-now mt-15 text-center">
-                        <div className="m-form-group">
-                            <textarea id="addComments" placeholder=" " rows="4"></textarea>
-                            <label htmlFor="addComments">Enter comment here</label>
-                        </div>
-
-                        <button className="btn btn-blue">Submit</button>
-                    </div>
-                </div>
-
-                <div className="addcomments" style={{display: 'block'}}>
-                    <span className="m-db-close">&#x2715;</span>
-                    
-                    <div className="m-reviews-list">
-                        <ul>
-                            <li>
-                                <div className="card__rating">
-                                    <span className="rating">
-                                        <em className="icon-fullstar"></em>
-                                        <em className="icon-fullstar"></em>
-                                        <em className="icon-fullstar"></em>
-                                        <em className="icon-fullstar"></em>
-                                        <em className="icon-blankstar"></em>
-                                        <span> <strong>4</strong> /5</span>
-                                    </span>
-                                </div>
-
-                                <span className="m-reviews-list--date">Dec. 21, 2020</span>
-                                <p className="m-reviews-list--text">Great product for your career.  It helped alot to enhance my career</p>
-                            </li>
-                            
-                            <li>
-                                <div className="card__rating">
-                                    <span className="rating">
-                                        <em className="icon-fullstar"></em>
-                                        <em className="icon-fullstar"></em>
-                                        <em className="icon-fullstar"></em>
-                                        <em className="icon-fullstar"></em>
-                                        <em className="icon-blankstar"></em>
-                                        <span> <strong>4</strong> /5</span>
-                                    </span>
-                                </div>
-
-                                <span className="m-reviews-list--date">Oct. 14, 2020</span>
-                                <p className="m-reviews-list--text">Good Mentors with good experience</p>
-                            </li>
-                            <li>
-                                <div className="card__rating">
-                                    <span className="rating">
-                                        <em className="icon-fullstar"></em>
-                                        <em className="icon-fullstar"></em>
-                                        <em className="icon-fullstar"></em>
-                                        <em className="icon-fullstar"></em>
-                                        <em className="icon-blankstar"></em>
-                                        <span> <strong>4</strong> /5</span>
-                                    </span>
-                                </div>
-
-                                <span className="m-reviews-list--date">Dec. 21, 2020</span>
-                                <p className="m-reviews-list--text">Great product for your career.  It helped alot to enhance my career</p>
-                            </li>
-                            
-                            <li>
-                                <div className="card__rating">
-                                    <span className="rating">
-                                        <em className="icon-fullstar"></em>
-                                        <em className="icon-fullstar"></em>
-                                        <em className="icon-fullstar"></em>
-                                        <em className="icon-fullstar"></em>
-                                        <em className="icon-blankstar"></em>
-                                        <span> <strong>4</strong> /5</span>
-                                    </span>
-                                </div>
-
-                                <span className="m-reviews-list--date">Oct. 14, 2020</span>
-                                <p className="m-reviews-list--text">Good Mentors with good experience</p>
-                            </li>
-                        </ul>
-                    </div>
-                    
-                    <div className="m-reviews-list-wrap--bottom">
-                        <button className="btn btn-blue-outline px-30">Add new</button>
-                    </div>
-                </div>
-
-            </div>
+            {
+                showCommentModal && <AddCommentModal setShowCommentModal = {setShowCommentModal} />
+            }
+            {
+                showRateModal && <RateProductModal setShowRateModal={setShowRateModal} />
+            }
         </div>
     )
 }

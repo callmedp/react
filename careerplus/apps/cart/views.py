@@ -937,7 +937,8 @@ class PaymentSummaryView(TemplateView, CartMixin):
 
         context.update({
             "cart_items": cart_items,
-            "cart_contain_items": True if len(cart_items) else False
+            "cart_contain_items": True if len(cart_items) else False,
+            'no_of_cartitems':len(cart_items),
         })
 
         if cart_obj and cart_obj.lineitems.filter(product__vendor__slug='neo').exists():

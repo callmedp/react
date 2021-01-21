@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import './dashboardPage.scss';
 import Header from '../../Common/Header/header';
 import Footer from '../../Common/Footer/footer';
-import PopularCourses from './PopularSourses/PopularCourses';
+import PopularCourses from './PopularCourses/PopularCourses';
 import DashboardNavigation from './DashboardNavigation/DashboardTabs';
 import HaveQuery from './HaveQuery/HaveQuery';
 import BreadCrumbs from './Breadcrumb/Breadcrumb';
@@ -17,13 +17,14 @@ import {fetchMyWallet} from 'store/DashboardPage/MyWallet/actions';
 import { startDashboardWalletPageLoader, stopDashboardWalletPageLoader } from 'store/Loader/actions/index';
 import Loader from '../../Common/Loader/loader';
 
+
 const DashboardPage = (props) => {
     const [hasFaq, setHasFaq] = useState(false);
+    const dbContainer = props.match.params.name;
+
 
     return(
         <div>
-           {/* { walletLoader ? <Loader /> : ''} */}
-
            <Header />
             <main>
                 <div className="container">
@@ -36,7 +37,14 @@ const DashboardPage = (props) => {
 
                         <div className="dashboard-warp--wrap">
                             <div className="dashboard-warp--content">
-                                <MyServices {...props} />
+                              {
+                                {
+                                    'myorder' : <MyOrders />,
+                                    'mywallet' : <MyWallet/>,
+                                    'myservices' : <MyServices {...props} />,
+                                    'mycourses' : <MyCourses/>
+                                }[dbContainer]
+                              }  
                             </div>
                         </div>
                     </div>

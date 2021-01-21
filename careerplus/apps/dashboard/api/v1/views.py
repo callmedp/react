@@ -65,8 +65,16 @@ class DashboardMyorderApi(DashboardInfo, APIView):
                     "orderitems": OrderItemSerializer(orderitems,many=True).data,
                 }
                 order_list.append(data)
+                #pagination info
+                page_info = {'page':
+                {'current_page':paginated_data['current_page'],
+                'total':paginated_data['total_pages'],
+                'has_prev': True if paginated_data['current_page'] >1 else False,
+                'has_next':True if (paginated_data['total_pages']-paginated_data['current_page'])>0 else False
+                }}
                 
-        return APIResponse(data=order_list, message='Order data Success', status=status.HTTP_200_OK)
+        return APIResponse(data={'data':order_list,'page':page_info}, message='Order data Success', status=status.HTTP_200_OK)
+
 
 class MyCoursesApi(DashboardInfo, APIView):
     permission_classes = (permissions.AllowAny,)
@@ -76,7 +84,7 @@ class MyCoursesApi(DashboardInfo, APIView):
         candidate_id = self.request.session.get('candidate_id', None)
         data = []
         page = request.GET.get("page", 1)
-        # candidate_id='568a0b20cce9fb485393489b'
+        candidate_id='568a0b20cce9fb485393489b'
         # candidate_id='5fed060d9cbeea482331ec4b'
         if candidate_id:
             orders = Order.objects.filter(
@@ -95,7 +103,15 @@ class MyCoursesApi(DashboardInfo, APIView):
             courses = OrderItem.objects.filter(order__in=orders,product__type_flow=2)
             paginated_data = offset_paginator(page, courses)
             data = OrderItemSerializer(paginated_data["data"],many=True,context= {"get_details": True}).data
-        return Response(data=data, status=status.HTTP_200_OK)
+            #pagination info
+            page_info = {'page':
+            {'current_page':paginated_data['current_page'],
+            'total':paginated_data['total_pages'],
+            'has_prev': True if paginated_data['current_page'] >1 else False,
+            'has_next':True if (paginated_data['total_pages']-paginated_data['current_page'])>0 else False
+            }}
+        return APIResponse({'myCourses':data,'page':page_info},message='Courses data Success',status=status.HTTP_200_OK)
+
 
 
 class MyServicesApi(DashboardInfo, APIView):
@@ -106,6 +122,7 @@ class MyServicesApi(DashboardInfo, APIView):
         candidate_id = self.request.session.get('candidate_id', None)
         email = request.GET.get('email', None)
         data = []
+        pending_resume_items = []
         page = request.GET.get("page", 1)
         candidate_id='568a0b20cce9fb485393489b'
         # candidate_id='5fed060d9cbeea482331ec4b'
@@ -133,10 +150,17 @@ class MyServicesApi(DashboardInfo, APIView):
                                     , 'product_get_exp_db': oi.product.get_exp_db() if oi.product else ''
                                     } for oi in
                                 pending_resume_items]
-            data = []
             data = OrderItemSerializer(paginated_data["data"],many=True,context= {"get_details": True}).data
-            data.append({'pending_resume_items':pending_resume_items})
-        return APIResponse(data=data, message='Loyality Points Success', status=status.HTTP_200_OK)
+
+            #pagination info
+            page_info = {'page':
+            {'current_page':paginated_data['current_page'],
+            'total':paginated_data['total_pages'],
+            'has_prev': True if paginated_data['current_page'] >1 else False,
+            'has_next':True if (paginated_data['total_pages']-paginated_data['current_page'])>0 else False
+            }}
+        return APIResponse(data={'data':data,'pending_resume_items':pending_resume_items,'page':page_info},message='Services data Success', status=status.HTTP_200_OK)
+
 
 
 class DashboardMyWalletAPI(DashboardInfo, APIView):
@@ -150,6 +174,7 @@ class DashboardMyWalletAPI(DashboardInfo, APIView):
         page = request.GET.get('page', 1)
         data = {}
         reward_type = ['Added', 'Refund']
+
         # attempting to get candidate from session
         candidate_id = self.request.session.get('candidate_id')
         candidate_id = '568a0b20cce9fb485393489b'
@@ -181,9 +206,9 @@ class DashboardMyWalletAPI(DashboardInfo, APIView):
                                   'order_id': None if obj.order is None else obj.order.number,
                                   'loyality_points': obj.point_value,
                                   'expiry_date': obj.added_point_expiry().strftime(
-                                      '%b. %d, %Y') if obj.txn_type == 1 or obj.txn_type == 5 else '',
-                                      'get_txn_type': obj.get_txn_type(),
-                                      'txn_sign': '+' if obj.get_txn_type() in reward_type else '-',
+                                      '%d %b %Y') if obj.txn_type == 1 or obj.txn_type == 5 else '',
+                                  'get_txn_type': obj.get_txn_type(),
+                                  'txn_sign': '+' if obj.get_txn_type() in reward_type else '-',
                                   'balance': obj.current_value} for obj in wal_txns_page_obj.object_list]
         # -------------------------------------------------------------------------------------------------------------#
         rcourses = get_recommendations(

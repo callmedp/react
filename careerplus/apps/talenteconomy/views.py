@@ -619,7 +619,7 @@ class TEBlogDetailView(DetailView, BlogMixin):
             p_cat=p_cat, status=1, visibility=2).order_by(
             '-last_modified_on') | Blog.objects.filter(
             sec_cat__in=[p_cat], status=1,
-            visibility=2).order_by('-publish_date')
+            visibility=2).order_by('-last_modified_on')
         article_list = article_list.exclude(pk=blog.pk)
         article_list = article_list.distinct().select_related(
             'created_by', 'author').prefetch_related('tags')

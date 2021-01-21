@@ -5,12 +5,18 @@ import { Link } from 'react-router-dom'
 const MultiLevelItems = props => {
 	const {
         item, parentName, setData, sideNavType,
-        setType, setOpen, open
+        setType, setOpen, open, usedIn
 	} = props
 	
 	const resetNav = () => {
 		setOpen(state => !state);
 		setType('menu')
+	}
+
+	const handleLevel = (event, child) => {
+		event.preventDefault();
+		setData([child?.children, child?.name, child?.sideNavType]);
+		setType('thirdLevel');
 	}
 
 	return (
@@ -31,13 +37,16 @@ const MultiLevelItems = props => {
                                 {
                                     child?.children?.length ? 
 										(
-											<a className="menu-item" href='/' onClick={(e)=>{e.preventDefault();setData([child?.children, child?.name, child?.sideNavType]); setType('thirdLevel')}} >
+											<a className="menu-item" href='/' onClick={(event)=>handleLevel(event, child)} >
 												{child.name} 
 												<figure className="micon-arrow-menusm ml-auto"></figure>
 											</a>
 										) : 
 										(
-											<Link className="menu-item" to={child.url} onClick={resetNav} > {child.name} </Link>
+											child?.sideNavType === 'courses' ? 
+											child?.name === 'Course Catalogue' ? <a className="menu-item" href={child.url} onClick={resetNav} > {child.name} </a> :
+											<Link className="menu-item" to={child.url} onClick={resetNav}> {child.name} </Link> :
+											<a className="menu-item" href={child.url} onClick={resetNav} > {child.name} </a>
 										)
                                 }
                             </React.Fragment>

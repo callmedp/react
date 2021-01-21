@@ -41,13 +41,6 @@ $(function() {
 });
 
 
-          (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-              (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-              m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-              })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-              ga('create', 'UA-3537905-41', 'auto');
-              ga('send', 'pageview');
-
 function gaEvent(event_cat,event_lab,event_action){
   ga('send', 'event', event_cat, event_action, event_lab);
  }

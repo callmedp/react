@@ -142,7 +142,7 @@
                     <div class="row">
                       <div class="col-md-6 text-center">
                         <strong>
-                          <button class="btn btn-primary reject "><a role="button" id="cancel-order-btn{{order.pk}}">Yes</a>
+                          <button class="btn btn-primary reject " onclick="MyGA.SendEvent('DashboardMyOrders', 'ln_dashboard_left_menu', 'ln_my_orders', 'cancel_order', '', false, true)"><a role="button" id="cancel-order-btn{{order.pk}}">Yes</a>
                         </strong></button>
                       </div>
                       <div class="col-md-6 text-center">

@@ -7,10 +7,10 @@ from order.choices import OI_OPS_STATUS
 from django.conf import settings
 
 OI_STATUS_DICT = {
-    0: 'Unpaid',
-    1: 'Service in progress',
-    4: 'Closed',
-    5: 'Cancelled',
+    0 : 'Unpaid',
+    1 : 'In progress',
+    4 : 'Closed',
+    5 : 'Cancelled',
 }
 
 class OrderItemSerializer(serializers.ModelSerializer):
@@ -22,11 +22,12 @@ class OrderItemSerializer(serializers.ModelSerializer):
 
     def get_oi_status_value(self, instance):
         key = instance.oi_status
+        order_key = instance.order.status
         status = ''
         if key in [161, 162, 163, 164]:
             status = instance.get_user_oi_status
-        elif key in [0, 1, 4, 5]:
-            status = OI_STATUS_DICT.get(key)
+        elif order_key in [0, 1, 4, 5]:
+            status = OI_STATUS_DICT.get(order_key)
         return status
 
     def get_oi_name(self, instance):
@@ -85,11 +86,11 @@ class OrderItemSerializer(serializers.ModelSerializer):
                 if op.oi_status == 24 and op.draft_counter == 1:
                     datalist.append(op.get_user_oi_status)
                 elif op.oi_status == 24 and op.draft_counter < max_draft_limit:
-                    datalist.append('Revised Document is ready')
+                    datalist.append({'date':date_created,'status':'Revised Document is ready'})
                 elif op.oi_status == 24 and op.draft_counter == max_draft_limit:
-                    datalist.append('Final Document is ready')
+                    datalist.append({'date':date_created,'status':'Final Document is ready'})
                 elif op.oi_status == 181:
-                    datalist.append('Waiting For Input')
+                    datalist.append({'date':date_created,'status':'Waiting For Input'})
                 else:
                         datalist.append(op.get_user_oi_status)
                 if oi.oi_status == 2 and op.oi_status == 2:
@@ -105,11 +106,11 @@ class OrderItemSerializer(serializers.ModelSerializer):
                 if op.oi_status == 46 and op.draft_counter == 1:
                     datalist.append(op.get_user_oi_status)
                 elif op.oi_status == 46 and op.draft_counter < max_draft_limit:
-                    datalist.append('Revised Document is ready')
+                    datalist.append({'date':date_created,'status':'Revised Document is ready'})
                 elif op.oi_status == 4:
-                    datalist.append('Document is finalized')
+                    datalist.append({'date':date_created,'status':'Document is finalized'})
                 elif op.oi_status == 181:
-                    datalist.append('Waiting for input')
+                    datalist.append({'date':date_created,'status':'Waiting for input'})
                 else:
                     datalist.append(op.get_user_oi_status)
                 if op.oi_status == 2 and oi.oi_status == 2:
@@ -153,7 +154,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
                         if op:
                             date_created =op.created
                             if op.oi_status == 31:
-                                datalist.append('Service is Under Progress')
+                                datalist.append({'date':date_created,'status':'Service is Under Progress'})
                             else:
                                 datalist.append(op.get_user_oi_status)
             else:
@@ -249,18 +250,20 @@ class OrderSerializer(serializers.ModelSerializer):
         Serializer for `Order` model
     """
 
-    order_status = serializers.ReadOnlyField(source='get_status')
+    # order_status = serializers.ReadOnlyField(source='get_status')
     class Meta:
         model = Order
-        exclude = ('co_id', 'archive_json', 'site', 'assigned_to', 'wc_cat', 'wc_sub_cat', 'wc_status',
-            'wc_follow_up', 'welcome_call_done', 'welcome_call_records', 'midout_sent_on', 'paid_by', 'invoice',
-            'crm_sales_id', 'crm_lead_id', 'sales_user_info', 'auto_upload', 'created', 'modified')
+        fields = ('id', 'number', 'total_incl_tax', 'status', 'currency', 'date_placed')
 
     def to_representation(self, instance):
         data = super(OrderSerializer, self).to_representation(instance)
+        data['status'] = ''
+        if instance.status  in [0, 3, 5] :
+            data['status'] = instance.get_status
+        elif instance.status == 1:
+            data['status'] = 'Open'
         data['date_placed'] = instance.date_placed.date().strftime('%d %b %Y') if instance.date_placed else None
         data['currency'] = instance.get_currency()
-        data['status'] = instance.get_status if instance.status in [0, 1, 3, 5] else ''
         data.update({
             'canCancel': True if instance.status == 0 else False,
             'downloadInvoice': True if instance.status in [1, 3] else False
