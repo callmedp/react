@@ -252,10 +252,10 @@ class OrderItemSerializer(serializers.ModelSerializer):
             remaining_days = ((instance.order.date_placed + timedelta(days=instance.product.get_duration_in_day()))-datetime.now(pytz.utc)).days
             return remaining_days
     
-    def service_pause_status(self):
-        pause_resume_ops_count = self.orderitemoperation_set.filter(oi_status__in=[
+    def service_pause_status(self,instance):
+        pause_resume_ops_count = instance.orderitemoperation_set.filter(oi_status__in=[
                                                                     34, 35]).count()
-        if pause_resume_ops_count & 1 and self.oi_status == 34:
+        if pause_resume_ops_count & 1 and instance.oi_status == 34:
             return False
         return True
     
@@ -289,7 +289,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
                 'status':self.get_oi_status_value(instance) if instance.oi_status else None,
                 'jobs':instance.product.num_jobs,
                 'no_of_comments':instance.message_set.filter(is_internal=False).count(),
-                'service_pause_status':instance.service_pause_status(),
+                'service_pause_status':self.service_pause_status(instance),
                 'get_product_is_pause_service':self.get_product_is_pause_service(instance),
             })
             course_detail = self.get_courses_detail(instance)
