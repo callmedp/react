@@ -975,7 +975,7 @@ class TrendingCategoriesApi(PopularProductMixin, APIView):
             }
             cache.set('category_popular_courses',data,86400)
         return Response(data=data, status=status.HTTP_200_OK)
-        
+        assessments
 class LatestBlogAPI(APIView):
     permission_classes = (permissions.AllowAny,)
     authentication_classes = ()
@@ -1020,3 +1020,49 @@ class MostViewedCourseAPI(APIView):
                 ]
         }
         return APIResponse(message='Most viewed Courses fetched', data=data, status=status.HTTP_200_OK)
+
+
+class PopularInDemandProductsAPI(APIView):
+    permission_classes = (permissions.AllowAny,)
+    authentication_classes = ()
+
+    def get(self, request):
+        quantity = 4
+        class_category = settings.COURSE_SLUG
+        data= []
+        certifications = PopularProductMixin().popular_certifications(quantity=quantity,
+                                                                            type_flow=16,
+                                                                            sub_type_flow=201)
+        data.update({'certifications':certifications})
+
+        s_obj, s_ratio, s_revenue = PopularProductMixin(). \
+            popular_courses_algorithm(class_category=class_category,
+                                      quantity=quantity)
+
+        course_pks = list(s_ratio) + list(s_revenue)
+        courses = SearchQuerySet().filter(id__in=service_pks, pTP__in=[0, 1, 3]).exclude(
+            id__in=settings.EXCLUDE_SEARCH_PRODUCTS
+        )
+        data = {
+            'courses': [
+                {'id': tsrvc.id, 'heading': tsrvc.pHd, 'name': tsrvc.pNm, 'url': tsrvc.pURL, 'img': tsrvc.pImg, \
+                 'img_alt': tsrvc.pImA, 'description': tsrvc.pDscPt, 'rating': tsrvc.pARx, 'price': tsrvc.pPinb, 'vendor': tsrvc.pPvn, 'stars': tsrvc.pStar,
+                 'provider': tsrvc.pPvn} for tsrvc in tsrvcs]
+        }
+
+        return APIResponse(message='Popular certifications and courses Loaded', data=data, status=status.HTTP_200_OK)
+
+
+
+
+
+
+
+
+
+        return APIResponse(message='Most viewed Courses fetched', data=data, status=status.HTTP_200_OK)
+
+
+        
+
+
