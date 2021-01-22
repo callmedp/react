@@ -1,6 +1,7 @@
 import * as Actions from '../actions/actionTypes';
 import { takeLatest, call, put } from 'redux-saga/effects';
 import Api from './Api';
+import {getCandidateId} from 'utils/storage';
 
 function* DashboardServicesApi(action) {
     const { payload } = action;
@@ -35,10 +36,13 @@ function* oi_comment(action) {
         }
         else {
             result = yield call(Api.postOiComment, payload);
+            if (!result["error"]) {
+                result = yield call(Api.getOiComment, payload);
+                return yield put({ type: Actions.OI_COMMENT_SUCCESS, oi_comment: result.data });
+            }
         }
         if (result["error"]) {
             return yield put({ type: Actions.OI_COMMENT_FAILED, error: 404 });
-
         }
         else {
             return yield put({ type: Actions.OI_COMMENT_SUCCESS, oi_comment: result.data });
@@ -47,7 +51,6 @@ function* oi_comment(action) {
     catch (e) {
         return yield put({ type: Actions.OI_COMMENT_FAILED, error: 500 });
     }
-
 }
 
 
@@ -58,7 +61,8 @@ function* uploadResume(action) {
         formData.append('file', values.file);
         formData.append('resume_shine', values.shine_resume ? values.shine_resume : '');
         formData.append('resume_pending', values.resume_course);
-        formData.append('candidate_id', '568a0b20cce9fb485393489b');
+        formData.append('candidate_id', getCandidateId());
+        
         const response = yield call(Api.uploadResumeDashboardForm, formData);
         return resolve(response)
     }
@@ -68,13 +72,20 @@ function* uploadResume(action) {
 }
 
 function* submitFeedBack(action) {
-    const { payload: { values, resolve, reject } } = action;
+
     try {
-        const response = yield call(Api.submitDashboardReviews, values);
-        return resolve(response)
+        const { payload } = action;
+        let result = null;
+
+        result = yield call(Api.submitDashboardReviews, payload);
+        if (result["error"]) {
+            return yield put({ type: Actions.SUBMIT_DASHBOARD_FAILED, error: 'Something went wrong' });
+        }
+        else {
+            return yield put({ type: Actions.SUBMIT_DASHBOARD_SUCCESS });
+        }
     }
-    catch (error) {
-        return reject(error)
+    catch (e) {
     }
 }
 

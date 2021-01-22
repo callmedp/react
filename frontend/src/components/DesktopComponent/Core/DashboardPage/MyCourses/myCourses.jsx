@@ -167,10 +167,11 @@ const MyCourses = (props) => {
                                                     handleShow={handleShow}
                                                     toggleReviews={toggleReviews} 
                                                     setOpenReview={setOpenReview}
-                                                    openReview={openReview}/>
+                                                    openReview={openReview}
+                                                    name="Course"/>
 
                                                 {/* rate service modal */}
-                                                <RateModal handleClose={handleClose} show={show} />
+                                                <RateModal handleClose={handleClose} show={show} name="Course"/>
                                             </div>
                                         </div>
                                     </div>

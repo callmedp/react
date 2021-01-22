@@ -4,7 +4,7 @@ import { Modal } from 'react-bootstrap';
 
 const RateModal =(props) => {
 
-    const { handleClose, show } = props;
+    const { handleClose, show, name } = props;
     
     let [rating, setRating] = useState(-1);
     let [clicked, setClicked] = useState(false);
@@ -35,11 +35,9 @@ const RateModal =(props) => {
         let data = typeof e == "number" ? e : parseInt(e.target.getAttribute("value")) - 1;
         let children = document.getElementsByClassName("rating-review")[0].children;
         for (let i = 0; i <= data; i++) {
-            children[i].setAttribute("class", `icon-${className}`);
+            children[i].setAttribute("className", `icon-${className}`);
         }
     };
-
-
 
     return (
         <Modal show={show} onHide={handleClose} className="db-modal">
@@ -48,7 +46,7 @@ const RateModal =(props) => {
         <Modal.Body>
             <div className="text-center db-rate-services need-help">
                 <img src="/media/images/rate-services.png" className="img-fluid" alt=""/>
-                <p className="db-rate-services--heading">Rate service</p>
+                <p className="db-rate-services--heading">Rate {name}</p>
                 
                 <span className="rating-review">
                     {[1, 2, 3, 4, 5].map((value,indx) => {

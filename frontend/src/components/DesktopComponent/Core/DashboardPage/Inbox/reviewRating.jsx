@@ -6,7 +6,7 @@ const ReviewRating = (props) => {
 
     const { item, handleShow, 
         toggleReviews, setOpenReview,
-        openReview } = props;
+        openReview, name } = props;
 
       // fill starts of already rated courses
       const fillStarForCourse = (star) => {
@@ -24,7 +24,7 @@ const ReviewRating = (props) => {
                 className="cursor-pointer mr-2 font-weight-bold"
                 onClick={handleShow}
             >
-                Rate course
+                Rate {name}
             </span>
             : null
         }
@@ -41,6 +41,7 @@ const ReviewRating = (props) => {
                     onClick={() => toggleReviews(item.id)}
                     aria-controls="threeComments"
                     aria-expanded={`openReview` + item.id}
+                    to={'#'}
                 >
                     <strong>{item.review}</strong> {item.review > 1 ? 'Reviews' : 'Review'}
                 </Link>
