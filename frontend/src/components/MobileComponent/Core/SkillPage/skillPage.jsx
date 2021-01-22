@@ -109,7 +109,7 @@ const SkillPage = (props) => {
                 <>
                     <MenuNav />
                     <header className="m-container m-header m-tabset-pos">
-                        <Header setShowSearchPage={setShowSearchPage} />
+                        <Header setShowSearchPage={setShowSearchPage} name={name} />
                     </header>
                     <section className="m-tabset mt-0 mb-0 m-skill-ht-remove">
                         <StickyNav tabType={tabType} setTabType={setTabType} />

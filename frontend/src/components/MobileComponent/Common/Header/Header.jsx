@@ -6,8 +6,7 @@ import { siteDomain } from 'utils/domains';
 import { MyGA } from 'utils/ga.tracking.js';
 
 const Header = (props) => {
-    const { setShowSearchPage, hideName } = props
-    const { name } = useSelector( store => store.skillBanner )
+    const { setShowSearchPage, hideName, name } = props
     const { count } = useSelector(store => store.header)
     return(
         <div className="d-flex pl-50">

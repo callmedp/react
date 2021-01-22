@@ -2,7 +2,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import Aos from "aos";
 
 // Local Import 
 import '../MyCourses/myCourses.scss'
@@ -16,49 +15,52 @@ import { startDashboardServicesPageLoader, stopDashboardServicesPageLoader } fro
 // API Import
 import { fetchMyServices } from 'store/DashboardPage/MyServices/actions/index';
 
-function preventDefault(e) {
-    e.preventDefault();
-}
-
 const MyServices = (props) => {
-    const [showUpload, setShowUpload] = React.useState(false)
-    const [showCommentModal, setShowCommentModal] = useState(false) 
-    const [showRateModal, setShowRateModal] = useState(false) 
-    const [isActive, setActive] = useState(false);
-    const [datalist, setDatalist] = useState([]);
-    const [data_id, setDataid] = useState(null);
-    const [service_id, setServiceId] = useState(null);
-    const showDetailtoggle = (data, id) => {
-        setDataid(id);
-        setDatalist(data);
-        setActive(!isActive);
-    };
-    var supportsPassive = false;
-    try {
-        window.addEventListener("test", null, Object.defineProperty({}, 'passive', {
-            get: function () { supportsPassive = true; }
-        }));
-    } catch (e) { }
-    var wheelOpt = supportsPassive ? { passive: false } : false;
-    const showUploadToggle = (id) => {
-        setServiceId(id);
-        setShowUpload(!showUpload);
-        if (!showUpload) {
-            window.addEventListener('touchmove', preventDefault, wheelOpt); // mobile
-        }
-        else {
-            window.removeEventListener('touchmove', preventDefault, wheelOpt); // mobile
-        }
-    };
+
     const dispatch = useDispatch();
     const { data, page } = useSelector(store => store?.dashboardServices);
     const { serviceLoader } = useSelector(store => store.loader);
     const myServicesList = data
     
+    const [showUpload, setShowUpload] = useState(false)
+    const [showCommentModal, setShowCommentModal] = useState(false) 
+    const [showRateModal, setShowRateModal] = useState(false) 
+    const [showOrderDetailsID, setShowOrderDetailsID] = useState('')
+    const [ordPageNo, setOrdPageNo] = useState(1)
+    const [oiId, setOiId] = useState('')
+
+    const showDetails = (id) => {
+        id == showOrderDetailsID ?
+            setShowOrderDetailsID('') : setShowOrderDetailsID(id)
+    }
+
+    const getOrderDetails = (dataList) => {
+        return (
+            <ul className="my-order__order-detail--info mt-15">
+                {
+                    dataList.map((data, index) =>
+                        <li key={index}>
+                            <span> 
+                                <hr />
+                                {data?.date} <br />
+                                <strong> {data?.status} </strong>
+                            </span>
+                        </li>)
+                }
+            </ul>
+        )
+    }
+
+    const starRatings = (star, index) => {
+        return (star === '*' ? <em className="micon-fullstar" key={index}></em> : star === '+' 
+            ? <em className="micon-halfstar" key={index}></em> : <em className="micon-blankstar" key={index}></em>
+        )
+    }
+
     const handleEffects = async () => {
         if (!(window && window.config && window.config.isServerRendered)) {
             dispatch(startDashboardServicesPageLoader());
-            await new Promise((resolve, reject) => dispatch(fetchMyServices({ resolve, reject })));
+            await new Promise((resolve, reject) => dispatch(fetchMyServices({page: ordPageNo, resolve, reject })));
             dispatch(stopDashboardServicesPageLoader());
         }
         else {
@@ -69,7 +71,7 @@ const MyServices = (props) => {
 
     useEffect(() => {
         handleEffects();
-    }, [])
+    }, [ordPageNo])
 
     return (
         <>
@@ -99,13 +101,11 @@ const MyServices = (props) => {
                                         <div className="m-courses-detail__info">
                                             <Link to={service?.productUrl}><h2>{service?.name}</h2></Link>
                                             <p className="m-pipe-divides mb-5">Provider: <strong>{service?.vendor}</strong> </p>
-                                            <p className="m-pipe-divides mb-5"><span>Bought on: <strong>{service?.enroll_date}</strong> </span> <span>Duration: <strong>{service?.duration}</strong> </span></p>
+                                            <p className="m-pipe-divides mb-5"><span>Bought on: <strong>{service?.enroll_date}</strong> </span> {service?.oi_duration && <span>Duration: <strong>{service?.oi_duration > 1 ? service?.oi_duration + ' days' : service?.oi_duration + ' day' } </strong> </span>}</p>
                                         </div>
                                     </div>
 
-                                    {/* <StatusFlow product_flow={service?.product_type_flow} status={service?.status} history={service?.datalist} /> */}
-
-                                    { service?.status === 'Cancelled' ? '' :
+                                    { service?.options?.upload_resume &&
                                         <div className="m-courses-detail--alert mt-15">
                                             To initiate your service upload your latest resume
                                         </div>
@@ -116,18 +116,13 @@ const MyServices = (props) => {
                                             Status: <strong>{service?.status}</strong>
 
 
-                                            <div className="my-order__order-detail">
-                                                <a onClick={() => showDetailtoggle(service?.datalist, key)} className={`arrow-icon ${isActive && key === data_id ? 'open' : ''} font-weight-bold`}>View Details</a>
-                                                <ul className="my-order__order-detail--info mt-15" style={isActive && key === data_id ? { display: 'block' } : { display: 'none' }}>
-                                                    {
-                                                        datalist.map((data, key) =>
-                                                            <li key={key}>
-                                                                {/* <Link to={"#"} className="d-block mb-0"> { data } </Link> */}
-                                                                <span> <strong> {data} </strong></span>
-                                                            </li>)
-                                                    }
-                                                </ul>
-                                            </div>
+                                            {
+                                                service?.datalist?.length ? 
+                                                    <div className="my-order__order-detail">
+                                                        <a onClick={(e) => {e.preventDefault();showDetails(service?.id)}} className={(showOrderDetailsID === service?.id) ? "font-weight-bold open arrow-icon" : "font-weight-bold arrow-icon"}>View Details</a>
+                                                        { (showOrderDetailsID === service?.id) && getOrderDetails(service?.datalist) }
+                                                    </div> : ''
+                                            }
 
                                         </div>
                                         :
@@ -135,24 +130,21 @@ const MyServices = (props) => {
                                             <div className="pl-15 mt-15 fs-12">
                                                 Status: <strong> {service?.status} </strong>
 
-                                                {/* { service?.options } */}
-                                                {Object.keys(service?.options).length === 0 && service?.options.constructor === Object ? '' : service?.options['Upload Resume'] === true ?
-                                                    <a onClick={() => showUploadToggle(service?.id)} className="font-weight-bold">Upload</a> : ''
+                                                {
+                                                    service?.options?.upload_resume && <a onClick={() => setShowUpload(true)} className="font-weight-bold">Upload</a> 
                                                 }
-                                                <div className="my-order__order-detail">
-                                                    <a onClick={() => showDetailtoggle(service?.datalist, key)} className={`arrow-icon ${isActive && key === data_id ? 'open' : ''} font-weight-bold`}>Views Details</a>
-                                                    <ul className="my-order__order-detail--info mt-15" style={isActive && key === data_id ? { display: 'block' } : { display: 'none' }}>
-                                                        {
-                                                            datalist.map((data, key) =>
-                                                                <li key={key}>
-                                                                    {/* <Link to={"#"} className="d-block mb-0"> { data } </Link> */}
-                                                                    <span> <strong> {data} </strong></span>
-                                                                </li>)
-                                                        }
-                                                    </ul>
-                                                </div>
+                                                {
+                                                    service?.datalist?.length ? 
+                                                        <div className="my-order__order-detail">
+                                                            <a onClick={(e) => {e.preventDefault();showDetails(service?.id)}} className={(showOrderDetailsID === service?.id) ? "font-weight-bold open arrow-icon" : "font-weight-bold arrow-icon"}>View Details</a>
+                                                            { (showOrderDetailsID === service?.id) && getOrderDetails(service?.datalist) }
+                                                            
+                                                        </div> : ''
+                                                }
                                             </div>
                                             <div className="pl-15">
+                                            {
+                                                service?.oi_duration &&
                                                 <div className="m-courses-detail__bottomWrap">
                                                     <div>
                                                         <div className="m-day-remaning">
@@ -163,23 +155,21 @@ const MyServices = (props) => {
                                                                     )
                                                                 })
                                                             }
-                                                            <span className="ml-2 m-day-remaning--text">Days <br />remaning</span>
+                                                            <span className="ml-2 m-day-remaning--text">{ service?.remaining_days > 1 ? 'Days' : 'Day'}<br />remaining</span>
                                                         </div>
                                                     </div>
                                                     <Link to={"#"} className="m-db-start-course font-weight-bold pr-10">Start Service</Link>
                                                 </div>
+                                            }
 
                                                 <div className="m-courses-detail__userInput">
-                                                    <Link to={'#'} onClick={(e) => {e.preventDefault();setShowCommentModal(true)}} className="m-db-comments font-weight-bold">3 Comment</Link>
+                                                    <Link to={'#'} onClick={(e) => {e.preventDefault();setShowCommentModal(true);setOiId(service?.id)}} className="m-db-comments font-weight-bold">Add Comments</Link>
                                                     <div className="d-flex" onClick={()=>{setShowRateModal(true)}}>
                                                         <span className="m-rating">
-                                                            <em className="micon-fullstar"></em>
-                                                            <em className="micon-fullstar"></em>
-                                                            <em className="micon-fullstar"></em>
-                                                            <em className="micon-fullstar"></em>
-                                                            <em className="micon-blankstar"></em>
-                                                            <span className="ml-5">4/5</span>
+                                                            { service?.rating?.map((star, index) => starRatings(star, index)) }
+                                                            <span className="ml-5">{service?.avg_rating?.toFixed(1)}/5</span>
                                                         </span>
+                                                        <Link to={"#"} className="font-weight-bold ml-10">2</Link>
                                                     </div>
                                                 </div>
                                             </div>
@@ -192,35 +182,20 @@ const MyServices = (props) => {
                     }
                 </div>
                 
-                <UploadResume showUpload={showUpload} showUploadToggle={showUploadToggle}/>
-                
             </main>
             {
-                showCommentModal && <AddCommentModal setShowCommentModal = {setShowCommentModal} />
+                showCommentModal && <AddCommentModal setShowCommentModal = {setShowCommentModal} oi_id={oiId} />
             }
             {
                 showRateModal && <RateProductModal setShowRateModal={setShowRateModal} />
             }
+            {
+                showUpload && <UploadResume setShowUpload={setShowUpload}/>
+            }
+            <span onClick={()=>setOrdPageNo(ordPageNo + 1)}>&emsp; &emsp; &emsp;{ ordPageNo }</span>
         </div>
         </>
     )
-}
-
-const StatusFlow = (props) => {
-
-    if (props.product_flow === 1 || props.product_flow === 12 || props.product_flow) {
-        return (
-            <>
-            </>
-        )
-    }
-    else {
-        return (
-            <>
-
-            </>
-        )
-    }
 }
 
 
