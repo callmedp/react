@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import './myCourses.scss';
 import AddCommentModal from '../AddCommentModal/addCommentModal';
 import RateProductModal from '../RateProductModal/rateProductModal'
+import Pagination from '../../../Common/Pagination/pagination';
 
    
 const MyCourses = (props) => {
@@ -226,6 +227,7 @@ const MyCourses = (props) => {
             {
                 showRateModal && <RateProductModal setShowRateModal={setShowRateModal} />
             }
+            <Pagination />
         </div>
     )
 }

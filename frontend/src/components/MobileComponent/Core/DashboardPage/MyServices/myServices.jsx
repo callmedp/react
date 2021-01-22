@@ -10,6 +10,7 @@ import AddCommentModal from '../AddCommentModal/addCommentModal';
 import RateProductModal from '../RateProductModal/rateProductModal';
 import UploadResume from '../UploadResume/uploadResume';
 import Loader from '../../../Common/Loader/loader';
+import Pagination from '../../../Common/Pagination/pagination';
 import { startDashboardServicesPageLoader, stopDashboardServicesPageLoader } from 'store/Loader/actions/index';
 
 // API Import
@@ -192,6 +193,17 @@ const MyServices = (props) => {
             {
                 showUpload && <UploadResume setShowUpload={setShowUpload}/>
             }
+            <Pagination />
+            {/* <div className="text-center" style={{display: 'none'}}>
+                <span className="m-db-close">&#x2715;</span>
+                <h2 className="mt-15">Do you wish to cancel the order?</h2>
+                <div className="m-enquire-now mt-15">
+                    <div className="m-form-group">
+                        <p>Any credit points reedemed against this order will be refunded back to your wallet shortly. These points will be valid for next 10 days. </p>
+                    </div>
+                    <button className="btn btn-blue">Yes</button> <button className="btn btn-blue-outline ml-10">No</button>
+                </div>
+            </div> */}
             <span onClick={()=>setOrdPageNo(ordPageNo + 1)}>&emsp; &emsp; &emsp;{ ordPageNo }</span>
         </div>
         </>
