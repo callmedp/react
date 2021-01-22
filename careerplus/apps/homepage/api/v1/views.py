@@ -46,6 +46,8 @@ from payment.models import PaymentTxn
 from .helper import APIResponse
 from .serializers import RecentCourseSerializer
 from .mixins import PopularProductMixin
+from blog.models import Blog, Comment
+
 
 # Other Import
 from weasyprint import HTML
@@ -974,3 +976,19 @@ class TrendingCategoriesApi(PopularProductMixin, APIView):
             cache.set('category_popular_courses',data,86400)
         return Response(data=data, status=status.HTTP_200_OK)
         
+class LatestBlogAPI(APIView):
+    permission_classes = (permissions.AllowAny,)
+    authentication_classes = ()
+
+    def get(self, request):
+        article_list = Blog.objects.filter(
+            status=1, visibility=2).order_by('-last_modified_on')[:3]
+        data = [
+            {
+            # 'display_name':article.display_name(),
+            'title':article.get_title(),
+            'image':article.image,
+            'url':article.get_absolute_url()
+            } for article in article_list]
+        return APIResponse(message='Latest articles fetched',data=data, status=status.HTTP_200_OK)
+
