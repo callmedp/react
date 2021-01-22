@@ -42,7 +42,7 @@
         position: relative;
 
         &--box {
-            flex-grow: 1;
+            flex-grow: 0;
             padding: 0; 
 
             h3 {
@@ -474,8 +474,8 @@
 
 
 .db-view-detail {
-    position: absolute;
-    top: 94px;
+    position: relative;
+    top: -101px;
     left: 96px;
     z-index: 9;
 
