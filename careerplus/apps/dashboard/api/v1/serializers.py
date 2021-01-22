@@ -254,6 +254,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
                 'status':self.get_oi_status_value(instance) if instance.oi_status else None,
                 'mode':instance.product.get_studymode_db(),
                 'jobs':instance.product.num_jobs,
+                'no_of_comments':instance.message_set.filter(is_internal=False).count(),
             })
             course_detail = self.get_courses_detail(instance)
             data.update({
