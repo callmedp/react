@@ -163,13 +163,13 @@ const MyServices = (props) => {
                                             }
 
                                                 <div className="m-courses-detail__userInput">
-                                                    <Link to={'#'} onClick={(e) => {e.preventDefault();setShowCommentModal(true);setOiId(service?.id)}} className="m-db-comments font-weight-bold">Add Comments</Link>
+                                                    <Link to={'#'} onClick={(e) => {e.preventDefault();setShowCommentModal(true);setOiId(service?.id)}} className="m-db-comments font-weight-bold">{ service?.no_of_comments ? service?.no_of_comments > 1 ? 'Comments' : 'Comment' : 'Add Comment' }</Link>
                                                     <div className="d-flex" onClick={()=>{setShowRateModal(true)}}>
                                                         <span className="m-rating">
                                                             { service?.rating?.map((star, index) => starRatings(star, index)) }
                                                             <span className="ml-5">{service?.avg_rating?.toFixed(1)}/5</span>
                                                         </span>
-                                                        <Link to={"#"} className="font-weight-bold ml-10">2</Link>
+                                                        <Link to={"#"} className="font-weight-bold ml-10">{ service?.no_review }</Link>
                                                     </div>
                                                 </div>
                                             </div>

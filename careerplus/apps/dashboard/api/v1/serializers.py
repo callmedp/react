@@ -250,7 +250,8 @@ class OrderItemSerializer(serializers.ModelSerializer):
     def get_remaining_days(self,instance):
         remaining_days = 0
         if instance.product.get_duration_in_day():
-            remaining_days = ((instance.order.date_placed + timedelta(days=instance.product.get_duration_in_day()))-datetime.now(pytz.utc)).days
+            rem_days = ((instance.order.date_placed + timedelta(days=instance.product.get_duration_in_day()))-datetime.now(pytz.utc)).days
+            remaining_days = rem_days if rem_days > 0 else 0
         return remaining_days
     
     def service_pause_status(self):
