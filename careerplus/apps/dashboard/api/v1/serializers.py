@@ -103,7 +103,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
                     options['Download']=True
                     options['order_pk']=oi.order.pk
                     options['oi_draftname']=op.oi_draft.name
-                    options['download_url'] = reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})
+                    options['download_url'] = reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})+'?path='+op.oi_draft.name
 
         elif oi.product.type_flow == 8:
             for op in ops:
@@ -124,7 +124,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
                     options['Download']=True
                     options['oi.pk']=oi.pk
                     options['op.pk']=op.pk
-                    options['download_url']="draft-download/linkedin/"+'?order_item='+str(oi.pk)+'&op_id='+str(op.pk)
+                    options['download_url']= reverse("linkedin-draf-download",kwargs={'order_item':oi.pk,'op_id':op.pk})
 
         elif oi.product.type_flow == 3:
             for op in ops:
@@ -134,7 +134,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
                     options['Download']=True
                     options['order_pk']=oi.order.pk
                     options['oi_draftname']=op.oi_draft.name
-                    options['download_url']= reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})
+                    options['download_url']= reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})+'?path='+op.oi_draft.name
                 elif oi.oi_status == 2 and op.oi_status == 2:
                     options['Upload Resume']=True
         elif oi.product.type_flow == 2 or  oi.product.type_flow == 14:
@@ -145,7 +145,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
                     options['Download']=True
                     options['order_pk']=oi.order.pk
                     options['oi_draftname']=op.oi_draft.name
-                    options['download_url']=reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})
+                    options['download_url']=reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})+'?path='+op.oi_draft.name
         elif oi.product.type_flow == 4:
             for op in ops:
                 date_created =op.created
@@ -154,7 +154,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
                     options['Upload Resume']=True
                 elif op.oi_status == 6:
                     options['Download_credential']=True
-                    options['download_url']='console:profile_credentials'+str(oi.pk)
+                    options['download_url']=reverse("console:profile_credentials",kwargs={'oi':oi.pk})
                     options['oi.pk']=oi.pk
         elif oi.product.type_flow == 5:
             if oi.product.sub_type_flow == 502:
@@ -182,7 +182,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
                     options['Download']=True
                     options['order_pk']=oi.order.pk
                     options['oi_draftname']=op.oi_draft.name
-                    options['download_url']= reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})
+                    options['download_url']= reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})+'?path='+op.oi_draft.name
         elif oi.product.type_flow == 7 or oi.product.type_flow == 15:
             for op in ops:
                 date_created =op.created
@@ -207,7 +207,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
                     options['Download']=True
                     options['order_pk']=oi.order.pk
                     options['oi_draftname']=op.oi_draft.name
-                    options['download_url']= reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})
+                    options['download_url']= reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})+'?path='+op.oi_draft.name
         elif oi.product.type_flow == 17:
             for op in ops:
                 date_created =op.created
@@ -218,7 +218,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
                     options['Download']=True
                     options['order_pk']=oi.order.pk
                     options['oi_draftname']=op.oi_draft.name
-                    options['download_url']= reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})
+                    options['download_url']= reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})+'?path='+op.oi_draft.name
 
         return {
                 'date_created':date_created,
