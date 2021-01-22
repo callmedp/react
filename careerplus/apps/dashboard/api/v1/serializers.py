@@ -6,6 +6,7 @@ from datetime import datetime,timedelta
 from order.choices import OI_OPS_STATUS
 from django.conf import settings
 import pytz
+from django.urls import reverse
 
 OI_STATUS_DICT = {
     0: 'Unpaid',
@@ -14,6 +15,7 @@ OI_STATUS_DICT = {
     5: 'Cancelled',
 }
 
+OI_OPS_STATUS_dict=dict(OI_OPS_STATUS)
 class OrderItemSerializer(serializers.ModelSerializer):
 
     class Meta:
@@ -28,6 +30,9 @@ class OrderItemSerializer(serializers.ModelSerializer):
         elif key in [0, 1, 4, 5]:
             status = OI_STATUS_DICT.get(key)
         return status
+    
+    # def get_product_is_pause_service(self,obj):
+    #     return obj.product.is_pause_service if obj.product_id else ''
 
     def get_oi_name(self, instance):
         prd = instance.product
@@ -98,6 +103,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
                     options['Download']=True
                     options['order_pk']=oi.order.pk
                     options['oi_draftname']=op.oi_draft.name
+                    options['download_url'] = reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})
 
         elif oi.product.type_flow == 8:
             for op in ops:
@@ -118,6 +124,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
                     options['Download']=True
                     options['oi.pk']=oi.pk
                     options['op.pk']=op.pk
+                    options['download_url']="draft-download/linkedin/"+'?order_item='+str(oi.pk)+'&op_id='+str(op.pk)
 
         elif oi.product.type_flow == 3:
             for op in ops:
@@ -127,6 +134,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
                     options['Download']=True
                     options['order_pk']=oi.order.pk
                     options['oi_draftname']=op.oi_draft.name
+                    options['download_url']= reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})
                 elif oi.oi_status == 2 and op.oi_status == 2:
                     options['Upload Resume']=True
         elif oi.product.type_flow == 2 or  oi.product.type_flow == 14:
@@ -137,6 +145,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
                     options['Download']=True
                     options['order_pk']=oi.order.pk
                     options['oi_draftname']=op.oi_draft.name
+                    options['download_url']=reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})
         elif oi.product.type_flow == 4:
             for op in ops:
                 date_created =op.created
@@ -144,6 +153,8 @@ class OrderItemSerializer(serializers.ModelSerializer):
                 if oi.oi_status == 2 and not oi.oi_resume:
                     options['Upload Resume']=True
                 elif op.oi_status == 6:
+                    options['Download_credential']=True
+                    options['download_url']='console:profile_credentials'+str(oi.pk)
                     options['oi.pk']=oi.pk
         elif oi.product.type_flow == 5:
             if oi.product.sub_type_flow == 502:
@@ -171,6 +182,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
                     options['Download']=True
                     options['order_pk']=oi.order.pk
                     options['oi_draftname']=op.oi_draft.name
+                    options['download_url']= reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})
         elif oi.product.type_flow == 7 or oi.product.type_flow == 15:
             for op in ops:
                 date_created =op.created
@@ -195,6 +207,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
                     options['Download']=True
                     options['order_pk']=oi.order.pk
                     options['oi_draftname']=op.oi_draft.name
+                    options['download_url']= reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})
         elif oi.product.type_flow == 17:
             for op in ops:
                 date_created =op.created
@@ -205,6 +218,8 @@ class OrderItemSerializer(serializers.ModelSerializer):
                     options['Download']=True
                     options['order_pk']=oi.order.pk
                     options['oi_draftname']=op.oi_draft.name
+                    options['download_url']= reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})
+
         return {
                 'date_created':date_created,
                 'datalist':datalist,
@@ -229,6 +244,24 @@ class OrderItemSerializer(serializers.ModelSerializer):
         elif months ==0 and days==0:
             return 0+" day" 
         return str(months)+" "+month_str+" "+str(days)+" "+days_str
+    
+    def get_remaining_days(self,instance):
+        if instance.product.get_duration_in_day()=='' or instance.product.get_duration_in_day()==0:
+            return 0
+        else:
+            remaining_days = ((instance.order.date_placed + timedelta(days=instance.product.get_duration_in_day()))-datetime.now(pytz.utc)).days
+            return remaining_days
+    
+    def service_pause_status(self):
+        pause_resume_ops_count = self.orderitemoperation_set.filter(oi_status__in=[
+                                                                    34, 35]).count()
+        if pause_resume_ops_count & 1 and self.oi_status == 34:
+            return False
+        return True
+    
+    def get_product_is_pause_service(self,obj):
+        return obj.product.is_pause_service if obj.product_id else ''
+
 
     def to_representation(self, instance):
         data = super(OrderItemSerializer, self).to_representation(instance)
@@ -248,13 +281,16 @@ class OrderItemSerializer(serializers.ModelSerializer):
                 'price': instance.product.get_price(),
                 'vendor': instance.product.vendor.name, 
                 'duration' : self.convert_to_month(int(instance.product.get_duration_in_day())) if instance.product_id and instance.product.get_duration_in_day() else None,
-                'enroll_date':date_placed,
-                'remaining_days':(instance.order.date_placed + timedelta(days=instance.product.get_duration_in_day())-datetime.now(pytz.utc) if not (instance.product.get_duration_in_day()=='' and instance.product.get_duration_in_day()==0) else 0).days,
+                'enroll_date': date_placed,
+                'remaining_days': self.get_remaining_days(instance),
                 'no_review':instance.product.no_review,
-                'status':self.get_oi_status_value(instance) if instance.oi_status else None,
+                'new_oi_status':OI_OPS_STATUS_dict.get(instance.oi_status) if instance.oi_status else None,
                 'mode':instance.product.get_studymode_db(),
+                'status':self.get_oi_status_value(instance) if instance.oi_status else None,
                 'jobs':instance.product.num_jobs,
                 'no_of_comments':instance.message_set.filter(is_internal=False).count(),
+                'service_pause_status':instance.service_pause_status(),
+                'get_product_is_pause_service':self.get_product_is_pause_service(instance),
             })
             course_detail = self.get_courses_detail(instance)
             data.update({
