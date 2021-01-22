@@ -6,7 +6,7 @@ import {getCandidateId} from 'utils/storage';
 function* DashboardServicesApi(action) {
     const { payload } = action;
     try {
-        const response = yield call(Api.myServicesData);
+        const response = yield call(Api.myServicesData, payload);
 
         if (response["error"]) {
             return payload?.reject(response)
@@ -90,11 +90,40 @@ function* submitFeedBack(action) {
     }
 }
 
+// fetch and submit reviews
+function* reviews(action) {
+    try {
+        const { payload } = action;
+        let result = null;
+
+        if (payload.type === 'GET') {
+            result = yield call(Api.myReviewsData, payload);
+        }
+        else {
+            result = yield call(Api.saveReviewsData, payload);
+            if (!result["error"]) {
+                result = yield call(Api.myReviewsData, payload);
+                return yield put({ type: Actions.MY_REVIEWS_FETCHED, reviews: result.data });
+            }
+        }
+        if (result["error"]) {
+            return yield put({ type: Actions.SUBMIT_DASHBOARD_FAILED, error: 404 });
+        }
+        else {
+            return yield put({ type: Actions.MY_REVIEWS_FETCHED, reviews: result.data });
+        }
+    }
+    catch (e) {
+        return yield put({ type: Actions.SUBMIT_DASHBOARD_FAILED, error: 500 });
+    }
+}
+
 export default function* WatchDashboardMyServices() {
     yield takeLatest(Actions.FETCH_MY_SERVICES, DashboardServicesApi);
     yield takeLatest(Actions.GET_OI_COMMENT, oi_comment);
     yield takeLatest(Actions.UPLOAD_RESUME_FORM, uploadResume);
     yield takeLatest(Actions.SUBMIT_DASHBOARD_REVIEWS, submitFeedBack);
+    yield takeLatest(Actions.FETCH_MY_REVIEWS, reviews);
 
 
 }

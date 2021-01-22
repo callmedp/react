@@ -299,3 +299,42 @@
     }
 }
   
+.db-pagination {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: $gray-200;
+
+    span {
+        background: transparent;
+        border-radius: .5rem;
+        padding: .1rem .8rem;
+        margin: 0 .5rem;
+        cursor: pointer;
+
+        &.active {
+            background: $blue;
+            color: $white;
+        }
+    }
+
+    .icon-db-arrow-left {
+        @include size(7px, 12px);
+        background: $spriteDb;
+        background-position: -97px -194px;
+        display: inline-block;
+        margin-right: 3rem;
+        cursor: pointer;
+    }
+    
+    .icon-db-arrow-right {
+        @include size(7px, 12px);
+        background: $spriteDb;
+        background-position: -108px -194px;
+        display: inline-block;
+        margin-left: 3rem;
+        cursor: pointer;
+    }
+}

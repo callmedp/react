@@ -3,10 +3,10 @@ import { Collapse } from 'react-bootstrap';
 
 const ReviewModal = (props) => {
 
-    const { handleShow, setOpenReview, openReview, id } = props;
-
+    const { handleShow, setOpenReview, openReview, item } = props;
+    console.log(handleShow, setOpenReview, openReview, item)
     return (
-        <Collapse in={openReview == id}>
+        <Collapse in={openReview == item.id}>
         <div className="db-reviews-list-wrap arrow-box top-big">
             <span className="btn-close"  onClick={() => setOpenReview(state => !state)}>&#x2715;</span>
             <div className="reviews-list">

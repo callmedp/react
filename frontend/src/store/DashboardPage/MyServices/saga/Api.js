@@ -2,7 +2,7 @@ import BaseApiService from 'services/BaseApiService';
 import { siteDomain } from 'utils/domains';
 
 const myServicesData = (data) => {
-    const url = `my-services/`;
+    const url = `my-services/?page=${data.page}`;
     return BaseApiService.get(`${siteDomain}/dashboard/api/v1/${url}`);
 };
 
@@ -30,12 +30,23 @@ const submitDashboardReviews = (data) => {
     return BaseApiService.post(url, data)
 }
 
+// fetch reviews
+const myReviewsData = (data) => {
+    const url = `review/?page=${data.page}`;
+    return BaseApiService.get(`${siteDomain}/dashboard/api/v1/${url}`);
+};
 
+const saveReviewsData = (data) => {
+    const url = `review/?page=${data.page}`;
+    return BaseApiService.post(`${siteDomain}/dashboard/api/v1/${url}`);
+};
 
 export default {
     myServicesData,
     uploadResumeDashboardForm,
     getOiComment,
     postOiComment,
-    submitDashboardReviews
+    submitDashboardReviews,
+    myReviewsData,
+    saveReviewsData
 }

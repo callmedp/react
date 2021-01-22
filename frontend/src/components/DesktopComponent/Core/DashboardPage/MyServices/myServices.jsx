@@ -8,7 +8,7 @@ import './myServices.scss';
 import { startDashboardServicesPageLoader, stopDashboardServicesPageLoader } from 'store/Loader/actions/index';
 import Loader from '../../../Common/Loader/loader';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchMyServices, getoiComment,SubmitDashboardFeedback } from 'store/DashboardPage/MyServices/actions';
+import { fetchMyServices, getoiComment,fetchMyReview } from 'store/DashboardPage/MyServices/actions';
 import { useForm } from "react-hook-form";
 import Swal from 'sweetalert2';
 import {getCandidateId} from 'utils/storage';
@@ -19,11 +19,15 @@ import ReviewRating from '../Inbox/reviewRating';
 import AddCommentModal from '../Inbox/addCommentModal';
 
 const MyServices = (props) => {
+    let servPage = '3';
     const [addOpen, setaddOpen] = useState(false);
     
     // const [open, setOpen] = useState(false);
     const [openReview, setOpenReview] = useState(false);
-    const toggleReviews = (id) => setOpenReview(openReview == id ? false : id);
+    const toggleReviews = (id) => {
+        new Promise((resolve, reject) => dispatch(fetchMyReviews({ data: id, resolve, reject })));
+        setOpenReview(openReview == id ? false : id);
+    }
 
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -47,11 +51,6 @@ const MyServices = (props) => {
     const [isOpen, setIsOpen] = useState(false);
     const toggleDetails = (id) => setIsOpen(isOpen == id ? false : id);
 
-    // let [newRating, setRating] = useState(5);
-    // let [clicked, setClicked] = useState(false);
-
-    const { register, handleSubmit, errors } = useForm();
-
     // hit api when clicked on add comment
     const addCommentDataFetch = (id) => {
         setaddOpen(addOpen == id ? false : id);
@@ -64,72 +63,6 @@ const MyServices = (props) => {
         if(!addOpen) dispatch(getoiComment(commVal));
     };
 
-    // add new comment
-    // const submitComment = (values) => {
-    //     console.log(values)
-    //     const new_values = {
-    //       ...values,
-    //       candidate_id: getCandidateId(),
-    //       oi_pk: results.oi_comment[0].oi_id,
-    //       type: "POST",
-    //     };
-
-    //     dispatch(getoiComment(new_values));
-    // };
-
-    // // add new review
-    // const submitReview = (values) => {
-    //     const new_review = {
-    //         ...values,
-    //         candidate_id: getCandidateId(),
-    //         oi_pk: 503247,
-    //         rating: newRating,
-    //         full_name: (localStorage.getItem('first_name') || '') + (localStorage.getItem('last_name') || ''),
-    //     };
-
-    //     dispatch(SubmitDashboardFeedback(new_review));
-    // };
-
-    // // fill starts of already rated courses
-    // const fillStarForCourse = (star) => {
-    //     if(star === '*') return "icon-fullstar";
-    //     else if(star === '+') return "icon-halfstar";
-    //     else return "icon-blankstar";
-    // };
-
-    // new rating
-    // const fillNewStar = (star) => {
-    //     if (star <= newRating) return "icon-fullstar";
-    //     else return "icon-blankstar";
-    // };
-    
-    // const setStars = (e, className = "blankstar") => {
-    //     let data = typeof e == "number" ? e : parseInt(e.target.getAttribute("value")) - 1;
-    //     let children = document.getElementsByClassName("rating-review")[0].children;
-    //     console.log(data, children);
-    //     for (let i = 0; i <= data; i++) {
-    //         children[i].setAttribute("className", `icon-${className}`);
-    //     }
-    // };
-
-    // const mouseOver = (e) => {
-    //     setStars(4);
-    //     setStars(e, "fullstar");
-    // };
-
-    // const mouseOut = (e) => (!clicked ? setStars(e) : null);
-    //     const onClickEvent = (e, val = 0) => {
-    //     setRating(
-    //         parseInt(e.target.getAttribute("value"))
-    //         ? parseInt(e.target.getAttribute("value"))
-    //         : val
-    //     );
-    //     setStars(e, "fullstar");
-    //     setClicked(true);
-    // };
-
-    // console.log(results)
-
     useEffect(() => {
         handleEffects();
     }, [])
@@ -141,7 +74,7 @@ const MyServices = (props) => {
             //So there is no need to fetch them again on the browser.
             if (!(window && window.config && window.config.isServerRendered)) {
                 dispatch(startDashboardServicesPageLoader());
-                await new Promise((resolve, reject) => dispatch(fetchMyServices({ resolve, reject })))
+                await new Promise((resolve, reject) => dispatch(fetchMyServices({ page: servPage, resolve, reject })))
                 dispatch(stopDashboardServicesPageLoader());
             }
             else {
@@ -242,18 +175,16 @@ const MyServices = (props) => {
 
                                             {/* ratings start here */}
                                             <div className="d-flex">
-                                                {/* <div className="card__rating"> */}
-                                                    <ReviewRating
-                                                        item={item}
-                                                        handleShow={handleShow}
-                                                        toggleReviews={toggleReviews} 
-                                                        setOpenReview={setOpenReview}
-                                                        openReview={openReview}
-                                                        name="Service"/>
+                                                <ReviewRating
+                                                    item={item}
+                                                    handleShow={handleShow}
+                                                    toggleReviews={toggleReviews} 
+                                                    setOpenReview={setOpenReview}
+                                                    openReview={openReview}
+                                                    name="Service"/>
 
-                                                    {/* rate service modal */}
-                                                    <RateModal handleClose={handleClose} show={show} name="Service"/>
-                                                {/* </div> */}
+                                                {/* rate service modal */}
+                                                <RateModal handleClose={handleClose} show={show} name="Service"/>
                                             </div>
                                         </div>
                                     </div>

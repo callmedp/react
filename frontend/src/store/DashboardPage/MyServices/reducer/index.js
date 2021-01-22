@@ -39,6 +39,8 @@ export const DashboardMyServicesReducer = (state=initState, action) => {
             }
         }
 
+        case Actions.MY_REVIEWS_FETCHED : return { ...initState,...action.item}
+
         default: return state;
     }
 }

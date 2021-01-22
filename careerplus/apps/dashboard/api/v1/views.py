@@ -12,16 +12,20 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from dashboard.dashboard_mixin import DashboardInfo
 from payment.models import PaymentTxn
 from order.models import Order, OrderItem,OrderItemOperation
-from dashboard.api.v1.serializers import OrderSerializer,OrderItemSerializer
+from dashboard.api.v1.serializers import OrderSerializer,OrderItemSerializer,ReviewSerializer
 from wallet.models import Wallet
 from core.common import APIResponse
 from search.helpers import get_recommendations
-
+from shop.models import Product
 # Other Import
 from haystack.query import SearchQuerySet
 from order.choices import OI_OPS_STATUS
 from .helpers import offset_paginator
-
+from django.contrib.contenttypes.models import ContentType
+from review.models import Review
+from emailers.email import SendMail
+import logging
+logger = logging.getLogger('error_log')
 
 class DashboardMyorderApi(DashboardInfo, APIView):
     permission_classes = (permissions.AllowAny,)
@@ -221,3 +225,112 @@ class DashboardMyWalletAPI(DashboardInfo, APIView):
             data['recommended_products'] = rcourses
 
         return APIResponse(data=data, message='Loyality Points Success', status=status.HTTP_200_OK)
+
+class DashboardReviewApi(APIView):
+    permission_classes = ()
+    authentication_classes = ()
+    serializer_classes = None
+
+    def get(self,request):
+        page = request.GET.get('page', 1)
+        product_id = request.GET.get('product_id',None)
+        try:
+            product = Product.objects.get(id=product_id)
+        except Product.DoesNotExist:
+            return APIResponse(error='Product not found', status=status.HTTP_404_NOT_FOUND)
+        product_type = ContentType.objects.get(
+            app_label='shop', model='product')
+        prd_list = []
+        if product.type_product in [0, 2, 4, 5]:
+            prd_list = [product.pk]
+        elif product.type_product == 1:
+            prd_id = product.variation.filter(
+                siblingproduct__active=True,
+                active=True).values_list('id', flat=True)
+            prd_list = list(prd_id)
+            prd_list.append(product.pk)
+        elif product.type_product == 3:
+            prd_id = product.childs.filter(
+                childrenproduct__active=True,
+                active=True).values_list('id', flat=True)
+            prd_list = list(prd_id)
+            prd_list.append(product.pk)
+        review_list = Review.objects.filter(
+            content_type__id=product_type.id,
+            object_id__in=prd_list, status=1)
+        paginated_data = offset_paginator(page, review_list)
+        data = ReviewSerializer(paginated_data['data'],many=True).data
+        page_info ={
+        'current_page':paginated_data['current_page'],
+        'total':paginated_data['total_pages'],
+        'has_prev': True if paginated_data['current_page'] >1 else False,
+        'has_next':True if (paginated_data['total_pages']-paginated_data['current_page'])>0 else False
+        }
+        return APIResponse(data={'data':data,'page':page_info},message='Review data Success',status=status.HTTP_200_OK)
+
+    def post(self, request, *args, **kwargs):
+        email_dict = {}
+        candidate_id = request.data.get('candidate_id', None)
+        oi_pk = request.data.get('oi_pk')
+        email = request.data.get('email')
+        data = {
+            "display_message": 'Thank you for sharing your valuable feedback',
+        }
+        if oi_pk and candidate_id:
+            try:
+                oi = OrderItem.objects.select_related("order").get(id=oi_pk)
+                review = request.data.get('review', '').strip()
+                rating = int(request.data.get('rating', 1))
+                title = request.data.get('title', '').strip()
+                name = request.data.get('full_name')
+                if rating and oi and oi.order.candidate_id == candidate_id and oi.order.status in [1, 3]:
+                    content_type = ContentType.objects.get(app_label="shop", model="product")
+                    review_obj = Review.objects.create(
+                        content_type=content_type,
+                        object_id=oi.product_id,
+                        user_name=name,
+                        user_email=email,
+                        user_id=candidate_id,
+                        content=review,
+                        average_rating=rating,
+                        title=title
+                    )
+
+                    extra_content_obj = ContentType.objects.get(app_label="order", model="OrderItem")
+
+                    review_obj.extra_content_type = extra_content_obj
+                    review_obj.extra_object_id = oi.id
+                    review_obj.save()
+
+                    oi.user_feedback = True
+                    oi.save()
+                    # send mail for coupon
+                    if oi.user_feedback:
+                        mail_type = "FEEDBACK_COUPON"
+                        to_emails = [oi.order.get_email()]
+                        email_dict.update({
+                            "username": oi.order.first_name if oi.order.first_name else oi.order.candidate_id,
+                            "subject": 'You earned a discount coupon worth Rs. <500>',
+                            "coupon_code": '',
+                            'valid': '',
+                        })
+
+                        try:
+                            SendMail().send(to_emails, mail_type, email_dict)
+                        except Exception as e:
+                            logging.getLogger('error_log').error(
+                                "%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
+
+                else:
+                    data['display_message'] = "select valid input for feedback"
+                    return Response(data, status=status.HTTP_400_BAD_REQUEST)
+
+
+            except Exception as e:
+                logging.getLogger('error_log').error(str(e))
+                data['display_message'] = "select valid input for feedback"
+                return Response(data, status=status.HTTP_400_BAD_REQUEST)
+
+            return Response(data, status=status.HTTP_200_OK)
+        else:
+            return Response({'error': 'Something went Wrong'}, status=status.HTTP_400_BAD_REQUEST)
