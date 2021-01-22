@@ -985,7 +985,7 @@ class LatestBlogAPI(APIView):
             status=1, visibility=2).order_by('-last_modified_on')[:3]
         data = [
             {
-            # 'display_name':article.display_name(),
+            'display_name':article.heading if article.heading else article.name,
             'title':article.get_title(),
             'image':article.image,
             'url':article.get_absolute_url()
