@@ -1,308 +1,214 @@
-import React from 'react';
+// React Core Import
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+
+// Local Import 
 import '../MyCourses/myCourses.scss'
 import './myServices.scss';
+import AddCommentModal from '../AddCommentModal/addCommentModal';
+import RateProductModal from '../RateProductModal/rateProductModal';
+import UploadResume from '../UploadResume/uploadResume';
+import Loader from '../../../Common/Loader/loader';
+import Pagination from '../../../Common/Pagination/pagination';
+import { startDashboardServicesPageLoader, stopDashboardServicesPageLoader } from 'store/Loader/actions/index';
 
-   
+// API Import
+import { fetchMyServices } from 'store/DashboardPage/MyServices/actions/index';
+
 const MyServices = (props) => {
-    return(
+
+    const dispatch = useDispatch();
+    const { data, page } = useSelector(store => store?.dashboardServices);
+    const { serviceLoader } = useSelector(store => store.loader);
+    const myServicesList = data
+    
+    const [showUpload, setShowUpload] = useState(false)
+    const [showCommentModal, setShowCommentModal] = useState(false) 
+    const [showRateModal, setShowRateModal] = useState(false) 
+    const [showOrderDetailsID, setShowOrderDetailsID] = useState('')
+    const [ordPageNo, setOrdPageNo] = useState(1)
+    const [oiId, setOiId] = useState('')
+
+    const showDetails = (id) => {
+        id == showOrderDetailsID ?
+            setShowOrderDetailsID('') : setShowOrderDetailsID(id)
+    }
+
+    const getOrderDetails = (dataList) => {
+        return (
+            <ul className="my-order__order-detail--info mt-15">
+                {
+                    dataList.map((data, index) =>
+                        <li key={index}>
+                            <span> 
+                                <hr />
+                                {data?.date} <br />
+                                <strong> {data?.status} </strong>
+                            </span>
+                        </li>)
+                }
+            </ul>
+        )
+    }
+
+    const starRatings = (star, index) => {
+        return (star === '*' ? <em className="micon-fullstar" key={index}></em> : star === '+' 
+            ? <em className="micon-halfstar" key={index}></em> : <em className="micon-blankstar" key={index}></em>
+        )
+    }
+
+    const handleEffects = async () => {
+        if (!(window && window.config && window.config.isServerRendered)) {
+            dispatch(startDashboardServicesPageLoader());
+            await new Promise((resolve, reject) => dispatch(fetchMyServices({page: ordPageNo, resolve, reject })));
+            dispatch(stopDashboardServicesPageLoader());
+        }
+        else {
+            delete window.config?.isServerRendered
+        }
+
+    };
+
+    useEffect(() => {
+        handleEffects();
+    }, [ordPageNo])
+
+    return (
+        <>
+        { serviceLoader && <Loader />}
         <div>
-            <div className="m-courses-detail db-warp">
-                <div className="m-card pl-0">
-                    <div className="m-share" aria-haspopup="true">
-                        <i className="icon-share"></i>
-                        <div className="m-share__box m-arrow-box m-top">
-                            <Link to={"#"} className="m-facebook-icon"></Link>
-                            <Link to={"#"} className="m-linkedin-icon"></Link>
-                            <Link to={"#"} className="m-twitter-iocn"></Link>
-                            <Link to={"#"} className="m-whatsup-icon"></Link>
-                        </div>
-                    </div>
 
-                    <div className="d-flex">
-                        <figure>
-                            <img src="https://static1.shine.com/l/m/product_image/3425/1542800087_8980.png" alt="Digital Marketing Training Course" />
-                        </figure>
-                        <div className="m-courses-detail__info">
-                            <h2>Resume Booster 5-10 years</h2>
-                            <p className="m-pipe-divides mb-5">Provider: <strong>Shine learning</strong> </p>
-                            <p className="m-pipe-divides mb-5"><span>Bought on: <strong>27 Oct 2020</strong> </span> <span>Duration: <strong>90 days</strong> </span></p>
-                        </div>
-                    </div>
-                    
-                    <div className="m-courses-detail--alert mt-15">
-                        To initiate your service upload your latest resume
-                    </div>
+            <main className="mb-0">
+                <div className="m-courses-detail db-warp">
+                    {
+                        myServicesList?.map((service, key) => {
+                            return (
+                                <div className="m-card pl-0" key={key}>
+                                    <div className="m-share" aria-haspopup="true">
+                                        <i className="icon-share"></i>
+                                        <div className="m-share__box m-arrow-box m-top">
+                                            <Link to={"#"} className="m-facebook-icon"></Link>
+                                            <Link to={"#"} className="m-linkedin-icon"></Link>
+                                            <Link to={"#"} className="m-twitter-iocn"></Link>
+                                            <Link to={"#"} className="m-whatsup-icon"></Link>
+                                        </div>
+                                    </div>
 
-                    <div className="pl-15 mt-15 fs-12">
-                        Status: <strong>Upload your resume</strong><Link to={"#"} className="font-weight-bold ml-10">upload</Link>
-                        <Link to={"#"} className="d-block font-weight-bold mt-10">View Details</Link>
-                    </div>
+                                    <div className="d-flex">
+                                        <figure>
+                                            <img src={service?.img} alt={service?.heading} />
+                                        </figure>
+                                        <div className="m-courses-detail__info">
+                                            <Link to={service?.productUrl}><h2>{service?.name}</h2></Link>
+                                            <p className="m-pipe-divides mb-5">Provider: <strong>{service?.vendor}</strong> </p>
+                                            <p className="m-pipe-divides mb-5"><span>Bought on: <strong>{service?.enroll_date}</strong> </span> {service?.oi_duration && <span>Duration: <strong>{service?.oi_duration > 1 ? service?.oi_duration + ' days' : service?.oi_duration + ' day' } </strong> </span>}</p>
+                                        </div>
+                                    </div>
 
-                    <div className="pl-15">
-                        <div className="m-courses-detail__bottomWrap">
-                            <div>
-                                <div className="m-day-remaning">
-                                    <span className="m-day-remaning--box">9</span>
-                                    <span className="m-day-remaning--box">0</span>
-                                    <span className="ml-2 m-day-remaning--text">Days <br/>remaning</span>
+                                    { service?.options?.upload_resume &&
+                                        <div className="m-courses-detail--alert mt-15">
+                                            To initiate your service upload your latest resume
+                                        </div>
+                                    }
+                                    { service?.status === 'Cancelled' ?
+
+                                        <div className="pl-15 mt-15 fs-12">
+                                            Status: <strong>{service?.status}</strong>
+
+
+                                            {
+                                                service?.datalist?.length ? 
+                                                    <div className="my-order__order-detail">
+                                                        <a onClick={(e) => {e.preventDefault();showDetails(service?.id)}} className={(showOrderDetailsID === service?.id) ? "font-weight-bold open arrow-icon" : "font-weight-bold arrow-icon"}>View Details</a>
+                                                        { (showOrderDetailsID === service?.id) && getOrderDetails(service?.datalist) }
+                                                    </div> : ''
+                                            }
+
+                                        </div>
+                                        :
+                                        <>
+                                            <div className="pl-15 mt-15 fs-12">
+                                                Status: <strong> {service?.status} </strong>
+
+                                                {
+                                                    service?.options?.upload_resume && <a onClick={() => setShowUpload(true)} className="font-weight-bold">Upload</a> 
+                                                }
+                                                {
+                                                    service?.datalist?.length ? 
+                                                        <div className="my-order__order-detail">
+                                                            <a onClick={(e) => {e.preventDefault();showDetails(service?.id)}} className={(showOrderDetailsID === service?.id) ? "font-weight-bold open arrow-icon" : "font-weight-bold arrow-icon"}>View Details</a>
+                                                            { (showOrderDetailsID === service?.id) && getOrderDetails(service?.datalist) }
+                                                            
+                                                        </div> : ''
+                                                }
+                                            </div>
+                                            <div className="pl-15">
+                                            {
+                                                service?.oi_duration &&
+                                                <div className="m-courses-detail__bottomWrap">
+                                                    <div>
+                                                        <div className="m-day-remaning">
+                                                            {
+                                                                service.remaining_days.toString().split('').map((digit) => {
+                                                                    return (
+                                                                        <span className="m-day-remaning--box"> { digit }</span>
+                                                                    )
+                                                                })
+                                                            }
+                                                            <span className="ml-2 m-day-remaning--text">{ service?.remaining_days > 1 ? 'Days' : 'Day'}<br />remaining</span>
+                                                        </div>
+                                                    </div>
+                                                    <Link to={"#"} className="m-db-start-course font-weight-bold pr-10">Start Service</Link>
+                                                </div>
+                                            }
+
+                                                <div className="m-courses-detail__userInput">
+                                                    <Link to={'#'} onClick={(e) => {e.preventDefault();setShowCommentModal(true);setOiId(service?.id)}} className="m-db-comments font-weight-bold">{ service?.no_of_comments ? service?.no_of_comments > 1 ? 'Comments' : 'Comment' : 'Add Comment' }</Link>
+                                                    <div className="d-flex" onClick={()=>{setShowRateModal(true)}}>
+                                                        <span className="m-rating">
+                                                            { service?.rating?.map((star, index) => starRatings(star, index)) }
+                                                            <span className="ml-5">{service?.avg_rating?.toFixed(1)}/5</span>
+                                                        </span>
+                                                        <Link to={"#"} className="font-weight-bold ml-10">{ service?.no_review }</Link>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </>
+                                    }
+
                                 </div>
-                            </div>
-                        </div>
-
-                        <div className="m-courses-detail__userInput">
-                            <Link className="m-db-comments font-weight-bold">Add comment</Link>
-                            <div className="d-flex">
-                                <span className="">Rate</span>
-                                <span className="m-rating">
-                                    <em className="micon-blankstar"></em>
-                                    <em className="micon-blankstar"></em>
-                                    <em className="micon-blankstar"></em>
-                                    <em className="micon-blankstar"></em>
-                                    <em className="micon-blankstar"></em>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
+                            )
+                        })
+                    }
                 </div>
                 
-                
-                <div className="m-card pl-0">
-                    <div className="m-share" aria-haspopup="true">
-                        <i className="icon-share"></i>
-                        <div className="m-share__box m-arrow-box m-top">
-                            <Link to={"#"} className="m-facebook-icon"></Link>
-                            <Link to={"#"} className="m-linkedin-icon"></Link>
-                            <Link to={"#"} className="m-twitter-iocn"></Link>
-                            <Link to={"#"} className="m-whatsup-icon"></Link>
-                        </div>
+            </main>
+            {
+                showCommentModal && <AddCommentModal setShowCommentModal = {setShowCommentModal} oi_id={oiId} />
+            }
+            {
+                showRateModal && <RateProductModal setShowRateModal={setShowRateModal} />
+            }
+            {
+                showUpload && <UploadResume setShowUpload={setShowUpload}/>
+            }
+            <Pagination />
+            {/* <div className="text-center" style={{display: 'none'}}>
+                <span className="m-db-close">&#x2715;</span>
+                <h2 className="mt-15">Do you wish to cancel the order?</h2>
+                <div className="m-enquire-now mt-15">
+                    <div className="m-form-group">
+                        <p>Any credit points reedemed against this order will be refunded back to your wallet shortly. These points will be valid for next 10 days. </p>
                     </div>
-
-                    <div className="d-flex">
-                        <figure>
-                            <img src="https://static1.shine.com/l/m/product_image/3425/1542800087_8980.png" alt="Digital Marketing Training Course" />
-                        </figure>
-                        <div className="m-courses-detail__info">
-                            <h2>Profile Booster</h2>
-                            <p className="m-pipe-divides mb-5">Provider: <strong>Shine learning</strong> </p>
-                            <p className="m-pipe-divides mb-5"><span>Bought on: <strong>27 Oct 2020</strong> </span> <span>Duration: <strong>90 days</strong> </span></p>
-                        </div>
-                    </div>
-
-
-                    <div className="pl-15 mt-15 fs-12">
-                        Status: <strong>Service under progress</strong>
-                        <Link to={"#"} className="d-block font-weight-bold mt-10">View Details</Link>
-                    </div>
-
-                    <div className="pl-15">
-                        <div className="m-courses-detail__bottomWrap">
-                            <div>
-                                <div className="m-day-remaning">
-                                    <span className="m-day-remaning--box">9</span>
-                                    <span className="m-day-remaning--box">0</span>
-                                    <span className="ml-2 m-day-remaning--text">Days <br/>remaning</span>
-                                </div>
-                            </div>
-                            
-                            <Link to={"#"} className="m-db-start-course font-weight-bold pr-10">Start Service</Link>
-                        </div>
-
-                        <div className="m-courses-detail__userInput">
-                            <Link className="m-db-comments font-weight-bold">Add Comment</Link>
-                            <div className="d-flex">
-                                <span className="">Rate</span>
-                                <span className="m-rating">
-                                    <em className="micon-blankstar"></em>
-                                    <em className="micon-blankstar"></em>
-                                    <em className="micon-blankstar"></em>
-                                    <em className="micon-blankstar"></em>
-                                    <em className="micon-blankstar"></em>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
+                    <button className="btn btn-blue">Yes</button> <button className="btn btn-blue-outline ml-10">No</button>
                 </div>
-
-                <div className="m-card pl-0">
-                    <div className="m-share" aria-haspopup="true">
-                        <i className="icon-share"></i>
-                        <div className="m-share__box m-arrow-box m-top">
-                            <Link to={"#"} className="m-facebook-icon"></Link>
-                            <Link to={"#"} className="m-linkedin-icon"></Link>
-                            <Link to={"#"} className="m-twitter-iocn"></Link>
-                            <Link to={"#"} className="m-whatsup-icon"></Link>
-                        </div>
-                    </div>
-
-                    <div className="d-flex">
-                        <figure>
-                            <img src="https://static1.shine.com/l/m/product_image/3425/1542800087_8980.png" alt="Digital Marketing Training Course" />
-                        </figure>
-                        <div className="m-courses-detail__info">
-                            <h2>Linkedin Profile Writing</h2>
-                            <p className="m-pipe-divides mb-5">Provider: <strong>Shine learning</strong> </p>
-                            <p className="m-pipe-divides mb-5"><span>Bought on: <strong>27 Oct 2020</strong> </span> <span>Duration: <strong>90 days</strong> </span></p>
-                        </div>
-                    </div>
-
-                    <div className="pl-15 mt-15 fs-12">
-                        Status: <strong>Service under progress</strong>
-                        <Link to={"#"} className="d-block font-weight-bold mt-10">View Details</Link>
-                    </div>
-
-                    <div className="pl-15">
-                        <div className="m-courses-detail__bottomWrap">
-                            <div>
-                                <div className="m-day-remaning">
-                                    <span className="m-day-remaning--box">9</span>
-                                    <span className="m-day-remaning--box">0</span>
-                                    <span className="ml-2 m-day-remaning--text">Days <br/>remaning</span>
-                                </div>
-                            </div>
-                            
-                            <Link to={"#"} className="m-db-start-course font-weight-bold pr-10">Start Service</Link>
-                        </div>
-
-                        <div className="m-courses-detail__userInput">
-                            <Link className="m-db-comments font-weight-bold">3 Comment</Link>
-                            <div className="d-flex">
-                                <span className="m-rating">
-                                    <em className="micon-fullstar"></em>
-                                    <em className="micon-fullstar"></em>
-                                    <em className="micon-fullstar"></em>
-                                    <em className="micon-fullstar"></em>
-                                    <em className="micon-blankstar"></em>
-                                    <span class="ml-5">4/5</span>
-                                </span>
-                                <Link to={"#"} className="font-weight-bold ml-10">2</Link>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                
-                <div className="m-card pl-0">
-                    <div className="m-share" aria-haspopup="true">
-                        <i className="icon-share"></i>
-                        <div className="m-share__box m-arrow-box m-top">
-                            <Link to={"#"} className="m-facebook-icon"></Link>
-                            <Link to={"#"} className="m-linkedin-icon"></Link>
-                            <Link to={"#"} className="m-twitter-iocn"></Link>
-                            <Link to={"#"} className="m-whatsup-icon"></Link>
-                        </div>
-                    </div>
-
-                    <div className="d-flex">
-                        <figure>
-                            <img src="https://static1.shine.com/l/m/product_image/3425/1542800087_8980.png" alt="Digital Marketing Training Course" />
-                        </figure>
-                        <div className="m-courses-detail__info">
-                            <h2>Resume Builder 0-2 years</h2>
-                            <p className="m-pipe-divides mb-5">Provider: <strong>Shine learning</strong> </p>
-                            <p className="m-pipe-divides mb-5"><span>Bought on: <strong>27 Oct 2020</strong> </span> <span>Duration: <strong>90 days</strong> </span></p>
-                        </div>
-                    </div>
-
-                    <div className="pl-15 mt-15 fs-12">
-                        Status: <Link to={"#"} className="font-weight-bold">Newresume.pdf</Link> <strong> uploaded by Shine</strong>
-                        <p className="mt-10 mb-25">
-                            <Link className="m-accept" to={"#"}>Accept</Link>
-                            <Link className="m-reject" to={"#"}>Reject</Link>
-                        </p>
-                        <Link to={"#"} className="d-block font-weight-bold mt-10">View Details</Link>
-                    </div>
-
-                    <div className="pl-15">
-                        <div className="m-courses-detail__bottomWrap">
-                            <div>
-                                <div className="m-day-remaning">
-                                    <span className="m-day-remaning--box">9</span>
-                                    <span className="m-day-remaning--box">0</span>
-                                    <span className="ml-2 m-day-remaning--text">Days <br/>remaning</span>
-                                </div>
-                            </div>
-                            
-                            <Link to={"#"} className="m-db-start-course font-weight-bold pr-10">Start Service</Link>
-                        </div>
-
-                        <div className="m-courses-detail__userInput">
-                            <Link className="m-db-comments font-weight-bold">3 Comment</Link>
-                            <div className="d-flex">
-                                <span className="m-rating">
-                                    <em className="micon-fullstar"></em>
-                                    <em className="micon-fullstar"></em>
-                                    <em className="micon-fullstar"></em>
-                                    <em className="micon-fullstar"></em>
-                                    <em className="micon-blankstar"></em>
-                                    <span class="ml-5">4/5</span>
-                                </span>
-                                <Link to={"#"} className="font-weight-bold ml-10">2</Link>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div className="m-slide-modal">
-                <div className="text-center" style={{display: 'none'}}>
-                    <span className="m-db-close">&#x2715;</span>
-                    <h2 className="mt-15">Get a Better resume by sharing us the feedback for resume</h2>
-                    <div className="m-enquire-now mt-15">
-                        <div className="m-form-group">
-                            <textarea id="addComments" placeholder=" " rows="4"></textarea>
-                            <label htmlFor="addComments">Enter feedback here</label>
-                        </div>
-
-                        <button className="btn btn-blue">Submit</button>
-                    </div>
-                </div>
-                
-                <div className="text-center" style={{display: 'none'}}>
-                    <span className="m-db-close">&#x2715;</span>
-                    <h2>Upload Resume</h2>
-                    <p>To initiate your services, <strong>upload resume</strong></p>
-                    <div className="d-flex align-items-center justify-content-center mt-20">
-                        <div class="m-upload-btn-wrapper">
-                            <button class="btn btn-blue-outline">Upload a file</button>
-                            <input type="file" name="myfile" />
-                        </div>
-
-                        <span className="mx-4">Or</span>
-
-                        <div className="m-custom">
-                            <input type="checkbox" id="shineResume" /> 
-                            <label className="m-custom--label font-weight-bold mb-0" htmlFor="shineResume">Use shine resume</label>
-                        </div>
-                    </div>
-
-                    <hr className="my-20"/>
-
-                    <div className="m-db-upload-resume">
-                        <strong>Select services</strong> for which you want to use this resume
-                        <ul className="m-db-upload-resume--list">
-                            <li className="m-custom">
-                                <input type="checkbox" id="resumeBooster" /> 
-                                <label className="font-weight-bold" htmlFor="resumeBooster">Resume Booster 5-10 years</label>
-                            </li>
-
-                            <li className="m-custom">
-                                <input type="checkbox" id="resumeBuilder" /> 
-                                <label className="font-weight-bold" htmlFor="resumeBuilder">Resume Builder 5-10 yrs</label>
-                            </li>
-
-                            <li className="m-custom">
-                                <input type="checkbox" id="services" /> 
-                                <label className="font-weight-bold" htmlFor="services">For all services</label>
-                            </li>
-                        </ul>
-                    </div>
-
-                    <button className="btn btn-primary px-5 mt-30">Save</button>
-                </div>
-            </div>
+            </div> */}
+            <span onClick={()=>setOrdPageNo(ordPageNo + 1)}>&emsp; &emsp; &emsp;{ ordPageNo }</span>
         </div>
+        </>
     )
 }
-   
+
+
 export default MyServices;

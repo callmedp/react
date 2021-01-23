@@ -201,9 +201,9 @@ class DashboardMyWalletAPI(DashboardInfo, APIView):
             wal_txns_page_obj = page_obj.page(1)
         except EmptyPage:
             wal_txns_page_obj = page_obj.page(1)
-        data['page'] = [{'total_page': page_obj.num_pages, 'current_page': wal_txns_page_obj.number,
+        data['page'] = {'total': page_obj.num_pages, 'current_page': wal_txns_page_obj.number,
                          'has_next': wal_txns_page_obj.has_next(),
-                         'has_prev': wal_txns_page_obj.has_previous()}]
+                         'has_prev': wal_txns_page_obj.has_previous()}
 
         # -------------------------------------------------------------------------------------------------------------#
         data['loyality_txns'] = [{'date': obj.created.strftime('%b. %d, %Y'), 'description': obj.get_txn_type(),

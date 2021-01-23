@@ -7,18 +7,24 @@ import { useDispatch, useSelector } from 'react-redux';
 import {fetchMyWallet} from 'store/DashboardPage/MyWallet/actions';
 import { startDashboardWalletPageLoader, stopDashboardWalletPageLoader } from 'store/Loader/actions/index';
 import Loader from '../../../Common/Loader/loader';
+import Pagination from '../../../Common/Pagination/pagination';
 
 const MyWallet = (props) => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    let walPageNo = '1';
+    const [walPageNo, setWalletPageNo] = useState(1);
+    // when page changes
+    const changePageNumber = (page) => {
+        setWalletPageNo(page);
+        handleEffects(page);
+    }
     const dispatch = useDispatch();
     const { history } = props;
     const { walletLoader } = useSelector(store => store.loader);
     const walletResult = useSelector(store => store.dashboardWallet.data);
 
-    const handleEffects = async () => {
+    const handleEffects = async (walPageNo) => {
         try {
             //You may notice that apis corresponding to these actions are not getting called on initial render.
             //This is because initial render is done on node server, which is calling these apis, map the data and send it to the browser.
@@ -40,25 +46,9 @@ const MyWallet = (props) => {
         }
     };
 
-    // const [dataArray, setDataArray] = useState([]);
-
-    // const handlePg = (val) => {
-    //     console.log(val);
-    // }
-
     useEffect(() => {
-        handleEffects();
-        // console.log(walletResult);
+        handleEffects(walPageNo);
     },[])
-
-    useEffect(() => {
-        console.log(walletResult.page[0]);
-        if(walletResult.page[0] != undefined) {
-        for (let index = 0; index < walletResult.page[0].total_page.length; index++) {
-            console.log(walletResult.page[0].total_page[index]);
-            }
-        }
-    },[walletResult])
 
     return(
         <div className="myWallet">
@@ -125,15 +115,7 @@ const MyWallet = (props) => {
                 }
             </div>
 
-            <div className="db-pagination mt-20">
-                { walletResult?.page[0]?.has_prev ? <figure className="icon-db-arrow-left"></figure> : "" }
-                {/* {walletResult?.page[0]?.total_page.map((num, idx) => {
-                    return (<span className={walletResult.page[0].current_page === walPageNo ? 'active' : ""}>{num}</span>)
-                })} */}
-                {/* <span className={walletResult.page[0].current_page === walPageNo ? 'active' : ""}></span> */}
-                <span>1</span> <span>2</span> <span>3</span> <span>4</span> <span>....</span> <span>9</span>
-                { walletResult?.page[0]?.has_next ? <figure className="icon-db-arrow-right"></figure> : "" }
-            </div>
+            {walletResult?.page ? <Pagination total={walletResult?.page} currentPage={walPageNo} setCurrentPage={setWalletPageNo} changePageNumber={changePageNumber} /> : ""}
         </div>
     )
 }

@@ -8,7 +8,7 @@ import './myServices.scss';
 import { startDashboardServicesPageLoader, stopDashboardServicesPageLoader } from 'store/Loader/actions/index';
 import Loader from '../../../Common/Loader/loader';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchMyServices, getoiComment,fetchMyReview } from 'store/DashboardPage/MyServices/actions';
+import { fetchMyServices, getoiComment,fetchMyReviews } from 'store/DashboardPage/MyServices/actions';
 import { useForm } from "react-hook-form";
 import Swal from 'sweetalert2';
 import {getCandidateId} from 'utils/storage';
@@ -17,57 +17,15 @@ import ViewDetailModal from '../Inbox/viewDetailModal';
 import RateModal from '../Inbox/rateModal';
 import ReviewRating from '../Inbox/reviewRating';
 import AddCommentModal from '../Inbox/addCommentModal';
+import Pagination from '../../../Common/Pagination/pagination';
 
 const MyServices = (props) => {
-    let servPage = '3';
-    const [addOpen, setaddOpen] = useState(false);
-    
-    // const [open, setOpen] = useState(false);
-    const [openReview, setOpenReview] = useState(false);
-    const toggleReviews = (id) => {
-        new Promise((resolve, reject) => dispatch(fetchMyReviews({ data: id, resolve, reject })));
-        setOpenReview(openReview == id ? false : id);
-    }
-
-    const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
-    
-    // const [rejectShow, setRejectShow] = useState(false);
-    // const rejectHandelClose = () => setRejectShow(false);
-    // const rejectHandelShow = () => setRejectShow(true);
-    
-    const [uploadShow, setUploadShow] = useState(false);
-    const uploadHandelClose = () => setUploadShow(false);
-    const uploadHandelShow = () => setUploadShow(true);
-
-    const results = useSelector(store => store.dashboardServices.data);
-    const oiComments = useSelector(store => store.dashboardServices.oi_comment);
-
     const dispatch = useDispatch();
     const { history } = props;
     const { serviceLoader } = useSelector(store => store.loader);
 
-    const [isOpen, setIsOpen] = useState(false);
-    const toggleDetails = (id) => setIsOpen(isOpen == id ? false : id);
-
-    // hit api when clicked on add comment
-    const addCommentDataFetch = (id) => {
-        setaddOpen(addOpen == id ? false : id);
-        
-        let commVal = {
-            cid: getCandidateId(),
-            oi_id: id,
-            type: 'GET'
-        }
-        if(!addOpen) dispatch(getoiComment(commVal));
-    };
-
-    useEffect(() => {
-        handleEffects();
-    }, [])
-    
-    const handleEffects = async () => {
+    // main service api hit
+    const handleEffects = async (servPage) => {
         try {
             //You may notice that apis corresponding to these actions are not getting called on initial render.
             //This is because initial render is done on node server, which is calling these apis, map the data and send it to the browser.
@@ -88,6 +46,61 @@ const MyServices = (props) => {
             }
         }
     };
+
+    // page no. set here
+    const [servPage, setServPageNo] = useState(1);
+    // when page changes
+    const changePageNumber = (page) => {
+        setServPageNo(page);
+        handleEffects(page);
+    }
+
+    // review open close set here
+    const [openReview, setOpenReview] = useState(false);
+    const [show, setShow] = useState(false);
+    // if reviews exists then show
+    const toggleReviews = (id, prod) => {
+        new Promise((resolve, reject) => dispatch(fetchMyReviews({ prod: prod, page: servPage, type: 'GET', resolve, reject })));
+
+        setOpenReview(openReview == id ? false : id);
+    }
+
+    // if view detail then show
+    const [isOpen, setIsOpen] = useState(false);
+    const toggleDetails = (id) => setIsOpen(isOpen == id ? false : id);
+
+    // if upload then show
+    const [uploadShow, setUploadShow] = useState(false);
+    const uploadHandelClose = () => setUploadShow(false);
+    const uploadHandelShow = () => setUploadShow(true);
+
+    // main api result state here
+    const results = useSelector(store => store.dashboardServices);
+    const setProductReview = useSelector(store => store.dashboardServices.reviews);
+    const oiComments = useSelector(store => store.dashboardServices.oi_comment);
+
+
+    // comment open close set here
+    const [addOpen, setaddOpen] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+    // hit api when clicked on add comment
+    const addCommentDataFetch = (id) => {
+        setaddOpen(addOpen == id ? false : id);
+        
+        let commVal = {
+            // cid: getCandidateId(),
+            oi_id: id,
+            type: 'GET'
+        }
+        if(!addOpen) dispatch(getoiComment(commVal));
+    };
+
+    // console.log(results)
+
+    useEffect(() => {
+        handleEffects(servPage);
+    }, [])
 
     return(
         <div>
@@ -181,10 +194,11 @@ const MyServices = (props) => {
                                                     toggleReviews={toggleReviews} 
                                                     setOpenReview={setOpenReview}
                                                     openReview={openReview}
+                                                    setProductReview={setProductReview}
                                                     name="Service"/>
 
                                                 {/* rate service modal */}
-                                                <RateModal handleClose={handleClose} show={show} name="Service"/>
+                                                <RateModal handleClose={handleClose} show={show} id={item.id} name="Service"/>
                                             </div>
                                         </div>
                                     </div>
@@ -196,6 +210,8 @@ const MyServices = (props) => {
                     })
                     :null
                 }
+                <Pagination total={results?.page} currentPage={servPage} setCurrentPage={setServPageNo} changePageNumber={changePageNumber}/>
+
             </div>
         </div>
     )

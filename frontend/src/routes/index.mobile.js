@@ -2,6 +2,7 @@ import React from "react";
 import { Route, Switch } from "react-router-dom";
 import SkillPageContainer from "components/MobileComponent/Core/SkillPage/skillPage";
 import CataloguePageContainer from "components/MobileComponent/Core/CataloguePage/cataloguePage";
+import MyServices from "components/MobileComponent/Core/DashboardPage/MyServices/myServices";
 import DashboardContainer from "components/MobileComponent/Core/DashboardPage/dashboardPage";
 import { getSkillPageActionsMobile } from 'apiHandler/skillPageApi'; 
 import Error404Container from 'components/MobileComponent/Common/ErrorPage404/errorPage404';
@@ -35,6 +36,8 @@ export const routes = [
         exact: true,
     },
     {
+        path: '/myservices',
+        component: MyServices,
         path: '/dashboard/:name/',
         component: DashboardPageContainer,
         private: false,

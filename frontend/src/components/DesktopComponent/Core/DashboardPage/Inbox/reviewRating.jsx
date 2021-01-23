@@ -3,10 +3,7 @@ import { Link } from 'react-router-dom';
 import ReviewModal from '../Inbox/reviewModal';
 
 const ReviewRating = (props) => {
-
-    const { item, handleShow, 
-        toggleReviews, setOpenReview,
-        openReview, name } = props;
+    const { item, handleShow, toggleReviews, setOpenReview, openReview, name, setProductReview } = props;
 
       // fill starts of already rated courses
       const fillStarForCourse = (star) => {
@@ -29,7 +26,7 @@ const ReviewRating = (props) => {
                 
                 <Link
                     className="ml-15"
-                    onClick={() => toggleReviews(item.id)}
+                    onClick={() => toggleReviews(item.id, item.product)}
                     aria-controls="threeComments"
                     aria-expanded={`openReview` + item.id}
                     to={'#'}
@@ -42,7 +39,8 @@ const ReviewRating = (props) => {
                     handleShow={handleShow}
                     setOpenReview={setOpenReview} 
                     openReview={openReview}
-                    item={item}/>
+                    item={item}
+                    setProductReview={setProductReview}/>
 
             </React.Fragment>
             :

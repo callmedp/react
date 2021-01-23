@@ -7,6 +7,7 @@ import { downloadInvoice } from 'utils/dashboardUtils/myOrderUtils';
 import { fetchMyOrders } from 'store/DashboardPage/MyOrder/actions/index';
 import { startDashboardOrderPageLoader, stopDashboardOrderPageLoader } from 'store/Loader/actions/index';
 import Loader from '../../../Common/Loader/loader';
+import Pagination from '../../../Common/Pagination/pagination';
 
    
 const MyWallet = (props) => {
@@ -66,9 +67,9 @@ const MyWallet = (props) => {
             { orderLoader && <Loader /> }
             <div className="my-order db-warp mb-20">
                 {
-                    data?.map((order) => {
+                    data?.map((order, index) => {
                         return (
-                            <div className="m-card" key={order?.order?.number}>
+                            <div className="m-card" key={ index }>
                                 <p className="head mb-5">{order?.order?.number}</p>
 
                                 <div className="m-pipe-divides">
@@ -178,6 +179,7 @@ const MyWallet = (props) => {
 
             </div> 
             <span onClick={()=>setOrdPageNo(ordPageNo + 1)}>&emsp; &emsp; &emsp;{ ordPageNo }</span>
+            <Pagination totalPage={page?.total} currentPage={ordPageNo} setCurrentPage={setOrdPageNo}/>
         </>
     )
 }

@@ -2,30 +2,34 @@ import React from 'react';
 import { Collapse } from 'react-bootstrap';
 
 const ReviewModal = (props) => {
+    const { handleShow, setOpenReview, openReview, item, setProductReview } = props;
+    // console.log(setProductReview)
 
-    const { handleShow, setOpenReview, openReview, item } = props;
-    console.log(handleShow, setOpenReview, openReview, item)
     return (
         <Collapse in={openReview == item.id}>
         <div className="db-reviews-list-wrap arrow-box top-big">
             <span className="btn-close"  onClick={() => setOpenReview(state => !state)}>&#x2715;</span>
             <div className="reviews-list">
                 <ul>
-                    <li>
-                        <div className="card__rating">
-                            <span className="rating">
-                                <em className="icon-fullstar"></em>
-                                <em className="icon-fullstar"></em>
-                                <em className="icon-fullstar"></em>
-                                <em className="icon-fullstar"></em>
-                                <em className="icon-blankstar"></em>
-                                <span> <strong>4</strong> /5</span>
-                            </span>
-                        </div>
+                    {setProductReview && setProductReview[0]?.data?.data?.map((rev, idx) => {
+                        return (
+                            <li key={idx}>
+                                <div className="card__rating">
+                                    <span className="rating">
+                                        <em className="icon-fullstar"></em>
+                                        <em className="icon-fullstar"></em>
+                                        <em className="icon-fullstar"></em>
+                                        <em className="icon-fullstar"></em>
+                                        <em className="icon-blankstar"></em>
+                                        <span> <strong>{rev.average_rating}</strong> /5</span>
+                                    </span>
+                                </div>
 
-                        <span className="reviews-list--date">Dec. 21, 2020</span>
-                        <p className="reviews-list--text">Great product for your career.  It helped alot to enhance my career</p>
-                    </li>
+                                <span className="reviews-list--date">{rev.title ? rev.title : ""} {rev.created}</span>
+                                <p className="reviews-list--text">{rev.content ? rev.content : ""}</p>
+                            </li>
+                        )
+                    })}
                 </ul>
             </div>
             

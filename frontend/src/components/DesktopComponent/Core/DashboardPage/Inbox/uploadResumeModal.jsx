@@ -31,7 +31,6 @@ const UploadResumeModal =(props) => {
         let response = await new Promise((resolve, reject) => {
             dispatch(uploadResumeForm({ values, resolve, reject }));
         });
-        console.log(getValues);
 
         if (!response.error) {
             reset();

@@ -28,19 +28,9 @@ const fetchMyReviews = (payload) => {
     }
 }
 
-// submit review
-const SubmitMyReview = (payload) => {
-    return {
-        type: Actions.SUBMIT_DASHBOARD_REVIEWS,
-        payload
-    }
-}
-
-
 export {
     fetchMyServices,
     uploadResumeForm,
     getoiComment,
-    SubmitMyReview,
     fetchMyReviews
 }

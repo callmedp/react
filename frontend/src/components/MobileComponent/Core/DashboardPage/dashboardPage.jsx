@@ -26,7 +26,7 @@ const Dashboard = () => {
                 <>
                     <MenuNav />
                     <header className="m-container m-header pb-0">
-                        <Header setShowSearchPage={setShowSearchPage} />
+                        <Header setShowSearchPage={setShowSearchPage} name='Dashboard' />
                         <DashboardNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
                     </header>
                     <main className="m-container">
