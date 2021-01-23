@@ -34,7 +34,7 @@ class DashboardMyorderApi(DashboardInfo, APIView):
     def get(self, request, *args, **kwargs):
         candidate_id = self.request.session.get('candidate_id', None)
         order_list=[]
-        candidate_id='5c94a7b29cbeea2c1f27fda2'
+        candidate_id='568a0b20cce9fb485393489b'
         page = request.GET.get("page", 1)
 
         if candidate_id:         
@@ -126,7 +126,7 @@ class MyServicesApi(DashboardInfo, APIView):
         candidate_id = self.request.session.get('candidate_id', None)
         email = request.GET.get('email', None)
         data = []
-        pending_resume_items = []
+        # pending_resume_items = []
         page = request.GET.get("page", 1)
         candidate_id='568a0b20cce9fb485393489b'
         # candidate_id='5fed060d9cbeea482331ec4b'
@@ -163,7 +163,7 @@ class MyServicesApi(DashboardInfo, APIView):
             'has_prev': True if paginated_data['current_page'] >1 else False,
             'has_next':True if (paginated_data['total_pages']-paginated_data['current_page'])>0 else False
             }
-        return APIResponse(data={'data':data,'pending_resume_items':pending_resume_items,'page':page_info},message='Services data Success', status=status.HTTP_200_OK)
+        return APIResponse(data={'data':data,'page':page_info, 'pending_resume_items': pending_resume_items},message='Services data Success', status=status.HTTP_200_OK)
 
 
 
@@ -233,7 +233,7 @@ class DashboardReviewApi(APIView):
 
     def get(self,request):
         page = request.GET.get('page', 1)
-        product_id = request.GET.get('product_id',None)
+        product_id = request.GET.get('product_id',None) or self.request.session.get('candidate_id', None)
         try:
             product = Product.objects.get(id=product_id)
         except Product.DoesNotExist:
@@ -270,7 +270,7 @@ class DashboardReviewApi(APIView):
 
     def post(self, request, *args, **kwargs):
         email_dict = {}
-        candidate_id = request.data.get('candidate_id', None)
+        candidate_id = request.data.get('candidate_id', None) or self.request.session.get('candidate_id', None)
         oi_pk = request.data.get('oi_pk')
         email = request.data.get('email')
         data = {

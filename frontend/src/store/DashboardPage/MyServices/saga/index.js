@@ -7,16 +7,28 @@ function* DashboardServicesApi(action) {
     const { payload } = action;
     try {
         const response = yield call(Api.myServicesData, payload);
+
         if (response["error"]) {
             return payload?.reject(response)
         }
-        const item = response?.data?.data;
+        let item = response?.data?.data;
+
+        // const result = yield call(Api.getPendingOrderItems);
+
+
+        // // console.log(result?.data?.data)
+        // let modifiedData = {
+        //     ...item,
+        //     ...{
+        //         'pending_resume_items': result.data.data.pending_resume_items ? result.data.data.pending_resume_items : []
+        //     }
+        // }
 
         yield put({ 
             type : Actions.MY_SERVICES_FETCHED, 
             item 
         })
-        
+
         return payload?.resolve(item);
 
     } catch (e) {
@@ -75,7 +87,7 @@ function* reviews(action) {
     try {
         const { payload } = action;
         let result = null;
-        console.log(payload)
+
         if (payload.type === 'GET') {
             result = yield call(Api.myReviewsData, payload);
         }

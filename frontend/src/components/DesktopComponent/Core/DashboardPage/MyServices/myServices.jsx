@@ -79,7 +79,6 @@ const MyServices = (props) => {
     const setProductReview = useSelector(store => store.dashboardServices.reviews);
     const oiComments = useSelector(store => store.dashboardServices.oi_comment);
 
-
     // comment open close set here
     const [addOpen, setaddOpen] = useState(false);
     const handleClose = () => setShow(false);
@@ -89,11 +88,11 @@ const MyServices = (props) => {
         setaddOpen(addOpen == id ? false : id);
         
         let commVal = {
-            // cid: getCandidateId(),
             oi_id: id,
             type: 'GET'
         }
-        if(!addOpen) dispatch(getoiComment(commVal));
+
+        if(addOpen != id) dispatch(getoiComment(commVal));
     };
 
     // console.log(results)
@@ -105,7 +104,14 @@ const MyServices = (props) => {
     return(
         <div>
             {serviceLoader ? <Loader /> : ''}
-            <div className="my-courses-detail">
+            <div className="db-my-courses-detail">
+
+            {
+                results.pending_resume_items.length > 0 ? 
+                    <div class="alert alert-primary py-4 px-5 fs-16 w-100 text-center mb-0" role="alert">To initiate your services.<span class="resume-upload--btn">&nbsp;<strong onClick={uploadHandelShow} className="cursor">Upload Resume</strong></span></div>
+                : null
+            }
+
                 {results?.data && results.data.length > 0 ?
                     results.data.map((item,index) => {
                         return(
@@ -115,25 +121,26 @@ const MyServices = (props) => {
                                         <img src={item.img} alt={item.img_alt} />
                                     </figure>
 
-                                    <div className="my-courses-detail--wrap">
+                                    <div className="db-my-courses-detail--wrap">
                                         <div className="d-flex w-100">
-                                            <div className="my-courses-detail__leftpan">
-                                                <div className="my-courses-detail__leftpan--box">
+                                            <div className="db-my-courses-detail__leftpan">
+                                                <div className="db-my-courses-detail__leftpan--box">
                                                     <h3><Link to={item.productUrl ? item.productUrl : '#'}>{item.heading}</Link></h3>
-                                                    <div className="my-courses-detail__leftpan--info">
+                                                    <div className="db-my-courses-detail__leftpan--info">
                                                         <span>Provider: <strong>{item.vendor}</strong> </span>
                                                         <span>Bought on: <strong>{item.enroll_date}</strong></span>
                                                         <span>Duration: <strong>{item.duration ? item.duration : ""}</strong></span>
                                                     </div>
 
-                                                    <div className="my-courses-detail__leftpan--alert">
+                                                    <div className="db-my-courses-detail__leftpan--alert">
                                                         Hi, the recording for the session you missed is available now
                                                     </div>
 
-                                                    <div className="my-courses-detail__leftpan--status mb-2">
+                                                    <div className="db-my-courses-detail__leftpan--status mb-2">
                                                         Status:
                                                         <strong className="ml-1">{item.status}
-                                                            <Link to={"#"} className="ml-2" onClick={uploadHandelShow}>Upload</Link> 
+                                                            {results.pending_resume_items.length > 0 ? <Link to={"#"} className="ml-2" onClick={uploadHandelShow}>Upload</Link>
+                                                            : null}
                                                         </strong> 
 
                                                         <UploadResumeModal uploadHandelClose={uploadHandelClose} show={uploadShow} data={results.pending_resume_items} />
@@ -156,7 +163,7 @@ const MyServices = (props) => {
                                                     <ViewDetailModal id={item.id} toggleDetails={toggleDetails} isOpen={isOpen} data={item.datalist}/>
                                                 </div>
                                             </div>
-                                            <div className="my-courses-detail__rightpan">
+                                            <div className="db-my-courses-detail__rightpan">
                                                 <div className="share">
                                                     <i className="icon-share"></i>
                                                     <div className="share__box arrow-box top">
@@ -168,15 +175,16 @@ const MyServices = (props) => {
                                                 </div>
 
                                                 <div className="day-remaning mb-20">
-                                                    <span className="day-remaning--box">9</span>
-                                                    <span className="day-remaning--box">0</span>
+                                                    {[...(item.remaining_days + '')].map((day, idx) => <span key={idx} className="day-remaning--box">{day}</span>)}
+                                                    {/* <span className="day-remaning--box">9</span> */}
+                                                    {/* <span className="day-remaning--box">0</span> */}
                                                     <span className="ml-2 day-remaning--text">Days <br/>remaning</span>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div className="my-courses-detail__bottom">
-                                            <Link
+                                        <div className="db-my-courses-detail__bottom">
+                                            {item.status !== 'Unpaid' ? <Link
                                                 to={"#"}
                                                 className="db-comments font-weight-bold"
                                                 onClick={() => addCommentDataFetch(item.id)}
@@ -185,9 +193,10 @@ const MyServices = (props) => {
                                             >
                                                 Add comment
                                             </Link>
+                                            : null}
 
                                             {/* ratings start here */}
-                                            <div className="d-flex">
+                                            {item.status !== 'Unpaid' ? <div className="d-flex">
                                                 <ReviewRating
                                                     item={item}
                                                     handleShow={handleShow}
@@ -200,6 +209,7 @@ const MyServices = (props) => {
                                                 {/* rate service modal */}
                                                 <RateModal handleClose={handleClose} show={show} id={item.id} name="Service"/>
                                             </div>
+                                            : null}
                                         </div>
                                     </div>
                                 </div>
