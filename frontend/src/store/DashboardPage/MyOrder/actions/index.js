@@ -1,4 +1,4 @@
-import { FETCH_MY_ORDERS  } from './actionTypes';
+import { FETCH_MY_ORDERS, CANCEL_ORDER  } from './actionTypes';
 
 const fetchMyOrders = (payload) => {
     return {
@@ -7,6 +7,14 @@ const fetchMyOrders = (payload) => {
     }
 }
 
+const cancelOrder = payload => {
+    return {
+        type : CANCEL_ORDER,
+        payload
+    }
+}
+
 export {
     fetchMyOrders,
+    cancelOrder
 }

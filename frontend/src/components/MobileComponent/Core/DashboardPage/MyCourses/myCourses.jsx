@@ -227,7 +227,7 @@ const MyCourses = (props) => {
             {
                 showRateModal && <RateProductModal setShowRateModal={setShowRateModal} />
             }
-            <Pagination />
+            <Pagination currentPage={1} totalPage={9}/>
         </div>
     )
 }

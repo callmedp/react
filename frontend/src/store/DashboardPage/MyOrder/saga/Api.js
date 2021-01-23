@@ -6,7 +6,13 @@ const myOrdersData = (data) => {
     return BaseApiService.get(`${siteDomain}/dashboard/api/v1/${url}`);
 };
 
+const cancelOrder = (data) => {
+    const url = `${siteDomain}/api/v1/dashboard-cancellation/`
+    return BaseApiService.post(url, data)
+}
+
 
 export default {
     myOrdersData,
+    cancelOrder
 }

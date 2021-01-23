@@ -27,7 +27,7 @@ const MyServices = (props) => {
     const [showCommentModal, setShowCommentModal] = useState(false) 
     const [showRateModal, setShowRateModal] = useState(false) 
     const [showOrderDetailsID, setShowOrderDetailsID] = useState('')
-    const [ordPageNo, setOrdPageNo] = useState(1)
+    const [currentPage, setCurrentPage] = useState(1)
     const [oiId, setOiId] = useState('')
 
     const showDetails = (id) => {
@@ -61,7 +61,7 @@ const MyServices = (props) => {
     const handleEffects = async () => {
         if (!(window && window.config && window.config.isServerRendered)) {
             dispatch(startDashboardServicesPageLoader());
-            await new Promise((resolve, reject) => dispatch(fetchMyServices({page: ordPageNo, resolve, reject })));
+            await new Promise((resolve, reject) => dispatch(fetchMyServices({page: currentPage, resolve, reject })));
             dispatch(stopDashboardServicesPageLoader());
         }
         else {
@@ -72,7 +72,7 @@ const MyServices = (props) => {
 
     useEffect(() => {
         handleEffects();
-    }, [ordPageNo])
+    }, [currentPage])
 
     return (
         <>
@@ -164,14 +164,21 @@ const MyServices = (props) => {
                                             }
 
                                                 <div className="m-courses-detail__userInput">
-                                                    <Link to={'#'} onClick={(e) => {e.preventDefault();setShowCommentModal(true);setOiId(service?.id)}} className="m-db-comments font-weight-bold">{ service?.no_of_comments ? service?.no_of_comments > 1 ? 'Comments' : 'Comment' : 'Add Comment' }</Link>
-                                                    <div className="d-flex" onClick={()=>{setShowRateModal(true)}}>
-                                                        <span className="m-rating">
-                                                            { service?.rating?.map((star, index) => starRatings(star, index)) }
-                                                            <span className="ml-5">{service?.avg_rating?.toFixed(1)}/5</span>
-                                                        </span>
-                                                        <Link to={"#"} className="font-weight-bold ml-10">{ service?.no_review }</Link>
-                                                    </div>
+                                                    <Link to={'#'} onClick={(e) => {e.preventDefault();setShowCommentModal(true);setOiId(service?.id)}} className="m-db-comments font-weight-bold">
+                                                        { service?.no_of_comments ? service?.no_of_comments > 1 ? 'Comments' : 'Comment' : 'Add Comment' }
+                                                    </Link>
+                                                    
+                                                    {
+                                                        service?.no_review ?
+                                                            <div className="d-flex" onClick={()=>{setShowRateModal(true)}}>
+                                                                <span className="m-rating">
+                                                                    { service?.rating?.map((star, index) => starRatings(star, index)) }
+                                                                    <span className="ml-5">{service?.avg_rating?.toFixed(1)}/5</span>
+                                                                </span>
+                                                                <Link to={"#"} className="font-weight-bold ml-10">{ service?.no_review }</Link>
+                                                            </div> : ''
+                                                    }
+
                                                 </div>
                                             </div>
                                         </>
@@ -193,18 +200,9 @@ const MyServices = (props) => {
             {
                 showUpload && <UploadResume setShowUpload={setShowUpload}/>
             }
-            <Pagination />
-            {/* <div className="text-center" style={{display: 'none'}}>
-                <span className="m-db-close">&#x2715;</span>
-                <h2 className="mt-15">Do you wish to cancel the order?</h2>
-                <div className="m-enquire-now mt-15">
-                    <div className="m-form-group">
-                        <p>Any credit points reedemed against this order will be refunded back to your wallet shortly. These points will be valid for next 10 days. </p>
-                    </div>
-                    <button className="btn btn-blue">Yes</button> <button className="btn btn-blue-outline ml-10">No</button>
-                </div>
-            </div> */}
-            <span onClick={()=>setOrdPageNo(ordPageNo + 1)}>&emsp; &emsp; &emsp;{ ordPageNo }</span>
+            {
+                page?.total > 1 ? <Pagination totalPage={page?.total} currentPage={currentPage} setCurrentPage={setCurrentPage}/> : ''
+            }
         </div>
         </>
     )
