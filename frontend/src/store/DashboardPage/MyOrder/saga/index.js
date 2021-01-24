@@ -26,6 +26,30 @@ function* DashboardOrdersApi(action) {
     }
 }
 
+function* CancelOrder(action) {
+    const { payload : { payload, resolve, reject} } = action
+    try {
+        const response = yield call(Api.cancelOrder, payload);
+        if (response?.error) {
+            return resolve(response?.error)
+        }
+        const item = response?.data?.data;
+
+        // yield put({ 
+        //     type : Actions.ORDER_CANCELLED, 
+        //     item 
+        // })
+        
+        return resolve(item);
+
+    } catch (e) {
+        console.error("Exception occured in Order Cancellation",e)
+        return reject(e)
+        
+    }
+}
+
 export default function* WatchDashboardMyOrders() {
     yield takeLatest(Actions.FETCH_MY_ORDERS, DashboardOrdersApi);
+    yield takeLatest(Actions.CANCEL_ORDER, CancelOrder)
 }

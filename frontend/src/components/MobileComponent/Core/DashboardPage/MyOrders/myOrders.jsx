@@ -1,27 +1,31 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import Swal from 'sweetalert2';
 import './myOrders.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { siteDomain } from 'utils/domains';
 import { downloadInvoice } from 'utils/dashboardUtils/myOrderUtils';
-import { fetchMyOrders } from 'store/DashboardPage/MyOrder/actions/index';
+import { fetchMyOrders, cancelOrder } from 'store/DashboardPage/MyOrder/actions/index';
 import { startDashboardOrderPageLoader, stopDashboardOrderPageLoader } from 'store/Loader/actions/index';
 import Loader from '../../../Common/Loader/loader';
 import Pagination from '../../../Common/Pagination/pagination';
+import { getDataStorage } from 'utils/storage';
 
    
 const MyWallet = (props) => {
     const dispatch = useDispatch();
-    const [ordPageNo, setOrdPageNo] = useState(1)
+    const [currentPage, setCurrentPage] = useState(1)
     const { data, page } = useSelector(store => store.dashboardOrders)
     const { orderLoader } = useSelector(store => store.loader);
     const [showOrderDetailsID, setShowOrderDetailsID] = useState('')
+    const [showCancelModal, setShowCancelModal] = useState(false)
+    const [cancelOrderId, setCancelOrderId] = useState('')
 
     const handleEffects = async () => {
         try {
             if (!(window && window.config && window.config.isServerRendered)) {
                 dispatch(startDashboardOrderPageLoader());
-                await new Promise((resolve, reject) => dispatch(fetchMyOrders({ page: ordPageNo, resolve, reject })))
+                await new Promise((resolve, reject) => dispatch(fetchMyOrders({ page: currentPage, resolve, reject })))
                 dispatch(stopDashboardOrderPageLoader());
             }
             else {
@@ -36,11 +40,30 @@ const MyWallet = (props) => {
 
     useEffect(() => {
         handleEffects();
-    }, [ordPageNo])
+    }, [currentPage])
 
     const showDetails = (id) => {
         id == showOrderDetailsID ?
             setShowOrderDetailsID('') : setShowOrderDetailsID(id)
+    }
+
+    const handleCancellation = async (orderId) => {
+        setShowCancelModal(false)
+        dispatch(startDashboardOrderPageLoader());
+        var result = await new Promise((resolve, reject) => dispatch(
+            cancelOrder({
+                payload: {
+                    order_id: orderId,
+                    candidate_id: getDataStorage('candidate_id'),
+                    email: getDataStorage('email')
+                }, resolve, reject
+            })
+        ));
+        Swal.fire({
+            html: result,
+            icon: 'info'
+        })
+        dispatch(stopDashboardOrderPageLoader());
     }
 
     const getOrderDetails = (orderItems) => {
@@ -83,7 +106,7 @@ const MyWallet = (props) => {
                                         <span className="my-order__priceWrap--tAmount d-block">Total amount</span>
                                         <strong className="my-order__priceWrap--price">{ order?.order?.currency === 'Rs.' ? <span>&#8377;</span> : order?.order?.currency } {order?.order?.total_incl_tax}/- </strong>
                                     </div>
-                                    { order?.order?.canCancel && <Link to={"#"}>Cancel order</Link> }
+                                    { order?.order?.canCancel && <a href='/' onClick={(e) => {e.preventDefault();setShowCancelModal(true);setCancelOrderId(order?.order?.id)}}>Cancel order</a> }
                                     { order?.order?.downloadInvoice && <a href={downloadInvoice(order?.order?.id)} target="_blank">Download Invoice</a> }
                                     
                                 </div>
@@ -96,90 +119,25 @@ const MyWallet = (props) => {
                         )
                     })
                 }
-                {/* <div className="m-card">
-                    <p className="head mb-5">CP279912</p>
-
-                    <div className="m-pipe-divides">
-                        <span>Placed on: <strong>27 Oct 2020</strong></span>
-                        <span>Status: <strong>Open</strong></span>
-                        <span>Status: <strong>2</strong> items</span>
-                    </div>
-
-                    <div className="my-order--wrap mt-20">
-                        <div className="my-order__priceWrap">
-                            <span className="my-order__priceWrap--tAmount d-block">Total amount</span>
-                            <strong className="my-order__priceWrap--price">&#8377; 19922/- </strong>
-                        </div>
-
-                        <Link to={"#"}>Download Invoice</Link>
-                    </div>
-
-                    <div className="my-order__order-detail">
-                        <Link to={"#"} className="font-weight-bold arrow-icon">Order Details</Link>
-                    </div>
-                </div>
-                
-                <div className="m-card">
-                    <p className="head mb-5">CP279912</p>
-
-                    <div className="m-pipe-divides">
-                        <span>Placed on: <strong>27 Oct 2020</strong></span>
-                        <span>Status: <strong>Open</strong></span>
-                        <span>Status: <strong>2</strong> items</span>
-                    </div>
-
-                    <div className="my-order--wrap mt-20">
-                        <div className="my-order__priceWrap">
-                            <span className="my-order__priceWrap--tAmount d-block">Total amount</span>
-                            <strong className="my-order__priceWrap--price">&#8377; 19922/- </strong>
-                        </div>
-
-                        <Link to={"#"}>Download Invoice</Link>
-                    </div>
-
-                    <div className="my-order__order-detail">
-                        <Link to={"#"} className="arrow-icon open font-weight-bold">Order Details</Link>
-
-                        <ul className="my-order__order-detail--info mt-15">
-                            <li>
-                                <Link to={"#"} className="d-block mb-0">Prince2 Foundation Training </Link>
-                                <span> Status: <strong>In progress</strong></span>
-                            </li>
-                            <li>
-                                <Link to={"#"} className="d-block mb-0">Resume Builder - 14 days @ Rs 199 Unpaid</Link>
-                                <span> Status: <strong>In progress</strong></span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div className="m-card">
-                    <p className="head mb-5">CP279912</p>
-
-                    <div className="m-pipe-divides">
-                        <span>Placed on: <strong>27 Oct 2020</strong></span>
-                        <span>Status: <strong>Open</strong></span>
-                        <span>Status: <strong>2</strong> items</span>
-                    </div>
-
-                    <div className="my-order--wrap mt-20">
-                        <div className="my-order__priceWrap">
-                            <span className="my-order__priceWrap--tAmount d-block">Total amount</span>
-                            <strong className="my-order__priceWrap--price">&#8377; 19922/- </strong>
-                        </div>
-
-                        <Link to={"#"}>Cancel order</Link>
-                    </div>
-
-                    <div className="my-order__order-detail">
-                        <Link to={"#"} className="font-weight-bold arrow-icon">Order Details</Link>
-                    </div>
-                </div>*/}
-
-
             </div> 
-            <span onClick={()=>setOrdPageNo(ordPageNo + 1)}>&emsp; &emsp; &emsp;{ ordPageNo }</span>
-            <Pagination totalPage={page?.total} currentPage={ordPageNo} setCurrentPage={setOrdPageNo}/>
+
+            {
+                page?.total > 1 ? <Pagination totalPage={page?.total} currentPage={currentPage} setCurrentPage={setCurrentPage}/> : ''
+            }
+
+            { 
+                showCancelModal &&  
+                    <div className="m-slide-modal text-center">
+                        <h2 className="mt-15">Do you wish to cancel the order?</h2>
+                        <div className="m-enquire-now mt-15 text-center">
+                            <div className="m-form-group">
+                                <p>Any credit points reedemed against this order will be refunded back to your wallet shortly. These points will be valid for next 10 days. </p>
+                            </div>
+                            <button className="btn btn-blue" onClick={() => handleCancellation(cancelOrderId)}>Yes</button> 
+                            <button className="btn btn-blue-outline ml-10" onClick={() => {setShowCancelModal(false)}}>No</button>
+                        </div>
+                    </div>
+            }
         </>
     )
 }

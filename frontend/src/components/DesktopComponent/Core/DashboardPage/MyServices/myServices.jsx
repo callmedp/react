@@ -23,16 +23,18 @@ const MyServices = (props) => {
     const dispatch = useDispatch();
     const { history } = props;
     const { serviceLoader } = useSelector(store => store.loader);
+    // page no. set here
+    const [currentPage, setCurrentPage] = useState(1)
 
     // main service api hit
-    const handleEffects = async (servPage) => {
+    const handleEffects = async () => {
         try {
             //You may notice that apis corresponding to these actions are not getting called on initial render.
             //This is because initial render is done on node server, which is calling these apis, map the data and send it to the browser.
             //So there is no need to fetch them again on the browser.
             if (!(window && window.config && window.config.isServerRendered)) {
                 dispatch(startDashboardServicesPageLoader());
-                await new Promise((resolve, reject) => dispatch(fetchMyServices({ page: servPage, resolve, reject })))
+                await new Promise((resolve, reject) => dispatch(fetchMyServices({ page: currentPage, resolve, reject })))
                 dispatch(stopDashboardServicesPageLoader());
             }
             else {
@@ -47,20 +49,14 @@ const MyServices = (props) => {
         }
     };
 
-    // page no. set here
-    const [servPage, setServPageNo] = useState(1);
-    // when page changes
-    const changePageNumber = (page) => {
-        setServPageNo(page);
-        handleEffects(page);
-    }
 
     // review open close set here
     const [openReview, setOpenReview] = useState(false);
     const [show, setShow] = useState(false);
+    
     // if reviews exists then show
     const toggleReviews = (id, prod) => {
-        new Promise((resolve, reject) => dispatch(fetchMyReviews({ prod: prod, page: servPage, type: 'GET', resolve, reject })));
+        new Promise((resolve, reject) => dispatch(fetchMyReviews({ prod: prod, page: currentPage, type: 'GET', resolve, reject })));
 
         setOpenReview(openReview == id ? false : id);
     }
@@ -98,8 +94,8 @@ const MyServices = (props) => {
     // console.log(results)
 
     useEffect(() => {
-        handleEffects(servPage);
-    }, [])
+        handleEffects();
+    }, [currentPage])
 
     return(
         <div>
@@ -108,7 +104,7 @@ const MyServices = (props) => {
 
             {
                 results.pending_resume_items.length > 0 ? 
-                    <div class="alert alert-primary py-4 px-5 fs-16 w-100 text-center mb-0" role="alert">To initiate your services.<span class="resume-upload--btn">&nbsp;<strong onClick={uploadHandelShow} className="cursor">Upload Resume</strong></span></div>
+                    <div class="alert alert-primary py-4 px-5 fs-16 w-100 text-center mb-0" role="alert">To initiate your services.<span className="resume-upload--btn">&nbsp;<strong onClick={uploadHandelShow} className="cursor">Upload Resume</strong></span></div>
                 : null
             }
 
@@ -196,7 +192,7 @@ const MyServices = (props) => {
                                             : null}
 
                                             {/* ratings start here */}
-                                            {item.status !== 'Unpaid' ? <div className="d-flex">
+                                            <div className="d-flex">
                                                 <ReviewRating
                                                     item={item}
                                                     handleShow={handleShow}
@@ -209,7 +205,6 @@ const MyServices = (props) => {
                                                 {/* rate service modal */}
                                                 <RateModal handleClose={handleClose} show={show} id={item.id} name="Service"/>
                                             </div>
-                                            : null}
                                         </div>
                                     </div>
                                 </div>
@@ -220,7 +215,8 @@ const MyServices = (props) => {
                     })
                     :null
                 }
-                <Pagination total={results?.page} currentPage={servPage} setCurrentPage={setServPageNo} changePageNumber={changePageNumber}/>
+
+                {results?.page?.total > 1 ? <Pagination totalPage={results?.page?.total} currentPage={currentPage} setCurrentPage={setCurrentPage}/> : ''}
 
             </div>
         </div>
