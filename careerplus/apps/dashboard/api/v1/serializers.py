@@ -7,6 +7,7 @@ from order.choices import OI_OPS_STATUS
 from django.conf import settings
 import pytz
 from django.urls import reverse
+from review.models import Review
 
 OI_STATUS_DICT = {
     0: 'Unpaid',
@@ -327,3 +328,11 @@ class OrderSerializer(serializers.ModelSerializer):
             'downloadInvoice': True if instance.status in [1, 3] else False
         })
         return data
+
+class ReviewSerializer(serializers.ModelSerializer):
+    """
+    Review serializer
+    """
+    class Meta:
+        model = Review
+        fields = ('__all__' )

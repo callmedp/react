@@ -8,7 +8,7 @@ import './myServices.scss';
 import { startDashboardServicesPageLoader, stopDashboardServicesPageLoader } from 'store/Loader/actions/index';
 import Loader from '../../../Common/Loader/loader';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchMyServices, getoiComment,SubmitDashboardFeedback } from 'store/DashboardPage/MyServices/actions';
+import { fetchMyServices, getoiComment,fetchMyReviews } from 'store/DashboardPage/MyServices/actions';
 import { useForm } from "react-hook-form";
 import Swal from 'sweetalert2';
 import {getCandidateId} from 'utils/storage';
@@ -17,131 +17,22 @@ import ViewDetailModal from '../Inbox/viewDetailModal';
 import RateModal from '../Inbox/rateModal';
 import ReviewRating from '../Inbox/reviewRating';
 import AddCommentModal from '../Inbox/addCommentModal';
+import Pagination from '../../../Common/Pagination/pagination';
 
 const MyServices = (props) => {
-    const [addOpen, setaddOpen] = useState(false);
-    
-    // const [open, setOpen] = useState(false);
-    const [openReview, setOpenReview] = useState(false);
-    const toggleReviews = (id) => setOpenReview(openReview == id ? false : id);
-
-    const [show, setShow] = useState(false);
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
-    
-    // const [rejectShow, setRejectShow] = useState(false);
-    // const rejectHandelClose = () => setRejectShow(false);
-    // const rejectHandelShow = () => setRejectShow(true);
-    
-    const [uploadShow, setUploadShow] = useState(false);
-    const uploadHandelClose = () => setUploadShow(false);
-    const uploadHandelShow = () => setUploadShow(true);
-
-    const results = useSelector(store => store.dashboardServices.data);
-    const oiComments = useSelector(store => store.dashboardServices.oi_comment);
-
     const dispatch = useDispatch();
     const { history } = props;
     const { serviceLoader } = useSelector(store => store.loader);
 
-    const [isOpen, setIsOpen] = useState(false);
-    const toggleDetails = (id) => setIsOpen(isOpen == id ? false : id);
-
-    // let [newRating, setRating] = useState(5);
-    // let [clicked, setClicked] = useState(false);
-
-    const { register, handleSubmit, errors } = useForm();
-
-    // hit api when clicked on add comment
-    const addCommentDataFetch = (id) => {
-        setaddOpen(addOpen == id ? false : id);
-        
-        let commVal = {
-            cid: getCandidateId(),
-            oi_id: id,
-            type: 'GET'
-        }
-        if(!addOpen) dispatch(getoiComment(commVal));
-    };
-
-    // add new comment
-    // const submitComment = (values) => {
-    //     console.log(values)
-    //     const new_values = {
-    //       ...values,
-    //       candidate_id: getCandidateId(),
-    //       oi_pk: results.oi_comment[0].oi_id,
-    //       type: "POST",
-    //     };
-
-    //     dispatch(getoiComment(new_values));
-    // };
-
-    // // add new review
-    // const submitReview = (values) => {
-    //     const new_review = {
-    //         ...values,
-    //         candidate_id: getCandidateId(),
-    //         oi_pk: 503247,
-    //         rating: newRating,
-    //         full_name: (localStorage.getItem('first_name') || '') + (localStorage.getItem('last_name') || ''),
-    //     };
-
-    //     dispatch(SubmitDashboardFeedback(new_review));
-    // };
-
-    // // fill starts of already rated courses
-    // const fillStarForCourse = (star) => {
-    //     if(star === '*') return "icon-fullstar";
-    //     else if(star === '+') return "icon-halfstar";
-    //     else return "icon-blankstar";
-    // };
-
-    // new rating
-    // const fillNewStar = (star) => {
-    //     if (star <= newRating) return "icon-fullstar";
-    //     else return "icon-blankstar";
-    // };
-    
-    // const setStars = (e, className = "blankstar") => {
-    //     let data = typeof e == "number" ? e : parseInt(e.target.getAttribute("value")) - 1;
-    //     let children = document.getElementsByClassName("rating-review")[0].children;
-    //     console.log(data, children);
-    //     for (let i = 0; i <= data; i++) {
-    //         children[i].setAttribute("className", `icon-${className}`);
-    //     }
-    // };
-
-    // const mouseOver = (e) => {
-    //     setStars(4);
-    //     setStars(e, "fullstar");
-    // };
-
-    // const mouseOut = (e) => (!clicked ? setStars(e) : null);
-    //     const onClickEvent = (e, val = 0) => {
-    //     setRating(
-    //         parseInt(e.target.getAttribute("value"))
-    //         ? parseInt(e.target.getAttribute("value"))
-    //         : val
-    //     );
-    //     setStars(e, "fullstar");
-    //     setClicked(true);
-    // };
-
-    // console.log(results)
-
-    useEffect(() => {
-        handleEffects();
-    }, [])
-    
-    const handleEffects = async () => {
+    // main service api hit
+    const handleEffects = async (servPage) => {
         try {
             //You may notice that apis corresponding to these actions are not getting called on initial render.
             //This is because initial render is done on node server, which is calling these apis, map the data and send it to the browser.
             //So there is no need to fetch them again on the browser.
             if (!(window && window.config && window.config.isServerRendered)) {
                 dispatch(startDashboardServicesPageLoader());
-                await new Promise((resolve, reject) => dispatch(fetchMyServices({ resolve, reject })))
+                await new Promise((resolve, reject) => dispatch(fetchMyServices({ page: servPage, resolve, reject })))
                 dispatch(stopDashboardServicesPageLoader());
             }
             else {
@@ -156,10 +47,71 @@ const MyServices = (props) => {
         }
     };
 
+    // page no. set here
+    const [servPage, setServPageNo] = useState(1);
+    // when page changes
+    const changePageNumber = (page) => {
+        setServPageNo(page);
+        handleEffects(page);
+    }
+
+    // review open close set here
+    const [openReview, setOpenReview] = useState(false);
+    const [show, setShow] = useState(false);
+    // if reviews exists then show
+    const toggleReviews = (id, prod) => {
+        new Promise((resolve, reject) => dispatch(fetchMyReviews({ prod: prod, page: servPage, type: 'GET', resolve, reject })));
+
+        setOpenReview(openReview == id ? false : id);
+    }
+
+    // if view detail then show
+    const [isOpen, setIsOpen] = useState(false);
+    const toggleDetails = (id) => setIsOpen(isOpen == id ? false : id);
+
+    // if upload then show
+    const [uploadShow, setUploadShow] = useState(false);
+    const uploadHandelClose = () => setUploadShow(false);
+    const uploadHandelShow = () => setUploadShow(true);
+
+    // main api result state here
+    const results = useSelector(store => store.dashboardServices);
+    const setProductReview = useSelector(store => store.dashboardServices.reviews);
+    const oiComments = useSelector(store => store.dashboardServices.oi_comment);
+
+    // comment open close set here
+    const [addOpen, setaddOpen] = useState(false);
+    const handleClose = () => setShow(false);
+    const handleShow = () => setShow(true);
+    // hit api when clicked on add comment
+    const addCommentDataFetch = (id) => {
+        setaddOpen(addOpen == id ? false : id);
+        
+        let commVal = {
+            oi_id: id,
+            type: 'GET'
+        }
+
+        if(addOpen != id) dispatch(getoiComment(commVal));
+    };
+
+    // console.log(results)
+
+    useEffect(() => {
+        handleEffects(servPage);
+    }, [])
+
     return(
         <div>
             {serviceLoader ? <Loader /> : ''}
-            <div className="my-courses-detail">
+            <div className="db-my-courses-detail">
+
+            {
+                results.pending_resume_items.length > 0 ? 
+                    <div class="alert alert-primary py-4 px-5 fs-16 w-100 text-center mb-0" role="alert">To initiate your services.<span class="resume-upload--btn">&nbsp;<strong onClick={uploadHandelShow} className="cursor">Upload Resume</strong></span></div>
+                : null
+            }
+
                 {results?.data && results.data.length > 0 ?
                     results.data.map((item,index) => {
                         return(
@@ -169,25 +121,26 @@ const MyServices = (props) => {
                                         <img src={item.img} alt={item.img_alt} />
                                     </figure>
 
-                                    <div className="my-courses-detail--wrap">
+                                    <div className="db-my-courses-detail--wrap">
                                         <div className="d-flex w-100">
-                                            <div className="my-courses-detail__leftpan">
-                                                <div className="my-courses-detail__leftpan--box">
+                                            <div className="db-my-courses-detail__leftpan">
+                                                <div className="db-my-courses-detail__leftpan--box">
                                                     <h3><Link to={item.productUrl ? item.productUrl : '#'}>{item.heading}</Link></h3>
-                                                    <div className="my-courses-detail__leftpan--info">
+                                                    <div className="db-my-courses-detail__leftpan--info">
                                                         <span>Provider: <strong>{item.vendor}</strong> </span>
                                                         <span>Bought on: <strong>{item.enroll_date}</strong></span>
                                                         <span>Duration: <strong>{item.duration ? item.duration : ""}</strong></span>
                                                     </div>
 
-                                                    <div className="my-courses-detail__leftpan--alert">
+                                                    <div className="db-my-courses-detail__leftpan--alert">
                                                         Hi, the recording for the session you missed is available now
                                                     </div>
 
-                                                    <div className="my-courses-detail__leftpan--status mb-2">
+                                                    <div className="db-my-courses-detail__leftpan--status mb-2">
                                                         Status:
                                                         <strong className="ml-1">{item.status}
-                                                            <Link to={"#"} className="ml-2" onClick={uploadHandelShow}>Upload</Link> 
+                                                            {results.pending_resume_items.length > 0 ? <Link to={"#"} className="ml-2" onClick={uploadHandelShow}>Upload</Link>
+                                                            : null}
                                                         </strong> 
 
                                                         <UploadResumeModal uploadHandelClose={uploadHandelClose} show={uploadShow} data={results.pending_resume_items} />
@@ -210,7 +163,7 @@ const MyServices = (props) => {
                                                     <ViewDetailModal id={item.id} toggleDetails={toggleDetails} isOpen={isOpen} data={item.datalist}/>
                                                 </div>
                                             </div>
-                                            <div className="my-courses-detail__rightpan">
+                                            <div className="db-my-courses-detail__rightpan">
                                                 <div className="share">
                                                     <i className="icon-share"></i>
                                                     <div className="share__box arrow-box top">
@@ -222,15 +175,16 @@ const MyServices = (props) => {
                                                 </div>
 
                                                 <div className="day-remaning mb-20">
-                                                    <span className="day-remaning--box">9</span>
-                                                    <span className="day-remaning--box">0</span>
+                                                    {[...(item.remaining_days + '')].map((day, idx) => <span key={idx} className="day-remaning--box">{day}</span>)}
+                                                    {/* <span className="day-remaning--box">9</span> */}
+                                                    {/* <span className="day-remaning--box">0</span> */}
                                                     <span className="ml-2 day-remaning--text">Days <br/>remaning</span>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div className="my-courses-detail__bottom">
-                                            <Link
+                                        <div className="db-my-courses-detail__bottom">
+                                            {item.status !== 'Unpaid' ? <Link
                                                 to={"#"}
                                                 className="db-comments font-weight-bold"
                                                 onClick={() => addCommentDataFetch(item.id)}
@@ -239,22 +193,23 @@ const MyServices = (props) => {
                                             >
                                                 Add comment
                                             </Link>
+                                            : null}
 
                                             {/* ratings start here */}
-                                            <div className="d-flex">
-                                                {/* <div className="card__rating"> */}
-                                                    <ReviewRating
-                                                        item={item}
-                                                        handleShow={handleShow}
-                                                        toggleReviews={toggleReviews} 
-                                                        setOpenReview={setOpenReview}
-                                                        openReview={openReview}
-                                                        name="Service"/>
+                                            {item.status !== 'Unpaid' ? <div className="d-flex">
+                                                <ReviewRating
+                                                    item={item}
+                                                    handleShow={handleShow}
+                                                    toggleReviews={toggleReviews} 
+                                                    setOpenReview={setOpenReview}
+                                                    openReview={openReview}
+                                                    setProductReview={setProductReview}
+                                                    name="Service"/>
 
-                                                    {/* rate service modal */}
-                                                    <RateModal handleClose={handleClose} show={show} name="Service"/>
-                                                {/* </div> */}
+                                                {/* rate service modal */}
+                                                <RateModal handleClose={handleClose} show={show} id={item.id} name="Service"/>
                                             </div>
+                                            : null}
                                         </div>
                                     </div>
                                 </div>
@@ -265,6 +220,8 @@ const MyServices = (props) => {
                     })
                     :null
                 }
+                <Pagination total={results?.page} currentPage={servPage} setCurrentPage={setServPageNo} changePageNumber={changePageNumber}/>
+
             </div>
         </div>
     )

@@ -15,12 +15,21 @@ const AddCommentModal = (props) => {
     const submitComment = (values) => {
         const new_values = {
           ...values,
-          candidate_id: getCandidateId(),
+        //   candidate_id: getCandidateId(),
           oi_pk: data.oi_id,
           type: "POST",
         };
 
-        dispatch(getoiComment(new_values));
+        let addedComment = dispatch(getoiComment(new_values));
+        if(addedComment.data) {
+            const get_new_values = {
+                ...values,
+                oi_id: addedComment.data.oi_id,
+                type: "GET",
+            };
+            dispatch(getoiComment(get_new_values));
+        }
+
         reset();
     };
 

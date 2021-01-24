@@ -7,16 +7,28 @@ function* DashboardServicesApi(action) {
     const { payload } = action;
     try {
         const response = yield call(Api.myServicesData, payload);
+
         if (response["error"]) {
             return payload?.reject(response)
         }
-        const item = response?.data?.data;
+        let item = response?.data?.data;
+
+        // const result = yield call(Api.getPendingOrderItems);
+
+
+        // // console.log(result?.data?.data)
+        // let modifiedData = {
+        //     ...item,
+        //     ...{
+        //         'pending_resume_items': result.data.data.pending_resume_items ? result.data.data.pending_resume_items : []
+        //     }
+        // }
 
         yield put({ 
             type : Actions.MY_SERVICES_FETCHED, 
             item 
         })
-        
+
         return payload?.resolve(item);
 
     } catch (e) {
@@ -30,15 +42,14 @@ function* oi_comment(action) {
     try {
         const { payload } = action;
         let result = null;
-
+        console.log(result)
         if (payload.type === 'GET') {
             result = yield call(Api.getOiComment, payload);
         }
         else {
             result = yield call(Api.postOiComment, payload);
             if (!result["error"]) {
-                result = yield call(Api.getOiComment, payload);
-                return yield put({ type: Actions.OI_COMMENT_SUCCESS, oi_comment: result.data });
+                return payload?.resolve(result);
             }
         }
         if (result["error"]) {
@@ -71,21 +82,30 @@ function* uploadResume(action) {
     }
 }
 
-function* submitFeedBack(action) {
-
+// fetch and submit reviews
+function* reviews(action) {
     try {
         const { payload } = action;
         let result = null;
 
-        result = yield call(Api.submitDashboardReviews, payload);
-        if (result["error"]) {
-            return yield put({ type: Actions.SUBMIT_DASHBOARD_FAILED, error: 'Something went wrong' });
+        if (payload.type === 'GET') {
+            result = yield call(Api.myReviewsData, payload);
         }
         else {
-            return yield put({ type: Actions.SUBMIT_DASHBOARD_SUCCESS });
+            result = yield call(Api.saveReviewsData, {'rating': payload.rating, 'review': payload.review, 'title': payload.title});
+            if (!result["error"]) {
+                return payload?.resolve(result);
+            }
+        }
+        if (result["error"]) {
+            return yield put({ type: Actions.SUBMIT_DASHBOARD_FAILED, error: 404 });
+        }
+        else {
+            return yield put({ type: Actions.SUBMIT_DASHBOARD_SUCCESS, reviews: result.data });
         }
     }
     catch (e) {
+        return yield put({ type: Actions.SUBMIT_DASHBOARD_FAILED, error: 500 });
     }
 }
 
@@ -93,7 +113,7 @@ export default function* WatchDashboardMyServices() {
     yield takeLatest(Actions.FETCH_MY_SERVICES, DashboardServicesApi);
     yield takeLatest(Actions.GET_OI_COMMENT, oi_comment);
     yield takeLatest(Actions.UPLOAD_RESUME_FORM, uploadResume);
-    yield takeLatest(Actions.SUBMIT_DASHBOARD_REVIEWS, submitFeedBack);
+    yield takeLatest(Actions.FETCH_MY_REVIEWS, reviews);
 
 
 }

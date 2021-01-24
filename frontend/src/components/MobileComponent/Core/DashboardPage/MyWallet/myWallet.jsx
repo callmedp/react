@@ -14,7 +14,7 @@ const MyWallet = (props) => {
     const [showModal, setShowModal] = useState(false)
     const [currentPage, setCurrentPage] = useState(1)
     const dispatch = useDispatch();
-    
+
     const handleEffects = async () => {
         try {
             if (!(window && window.config && window.config.isServerRendered)) {
@@ -144,7 +144,7 @@ const MyWallet = (props) => {
                 }
                 <br />
                 {
-                    page?.total_page > 1 ? <Pagination totalPage={page?.total_page} currentPage={currentPage} setCurrentPage={setCurrentPage}/> : ''
+                    page?.total > 1 ? <Pagination totalPage={page?.total_page} currentPage={currentPage} setCurrentPage={setCurrentPage}/> : ''
                 }
             </div>
         </>

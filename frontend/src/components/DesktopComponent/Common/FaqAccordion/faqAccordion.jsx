@@ -8,7 +8,7 @@ const regex = /(<([^>]+)>)/ig;
 const FaqAccordion = (item, index) => {
     // console.log(props);
     // const item = props.faqitem;
-    console.log(item, index);
+    // console.log(item, index);
 
     return (
         // <div></div>
