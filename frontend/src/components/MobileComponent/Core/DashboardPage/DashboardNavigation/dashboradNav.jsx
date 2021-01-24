@@ -4,36 +4,29 @@ import { Link } from 'react-router-dom';
 
    
 const DashboardNavigation = (props) => {
-    const {
-        activeTab, setActiveTab
-    } = props
-
-    const showTab = (tabType) => {
-        setActiveTab(tabType)
-    }
-
+    const { activeTab } = props
     return(
         <div className="m-db-tabs-wrap">
             <ul>
                 <li>
-                    <Link to={"#"} className={activeTab === 'Courses' ? 'active' : ''}  onClick={() => showTab('Courses')}>My Courses</Link>
+                    <Link to={"/dashboard/my-courses"} className={activeTab === 'my-courses' ? 'active' : ''}>My Courses</Link>
                 </li>
                 
                 <li>
-                    <Link to={"#"} className={activeTab === 'Services' ? 'active' : ''} onClick={() => showTab('Services')}>My Services</Link>
+                    <Link to={"/dashboard/my-services"} className={activeTab === 'my-services' ? 'active' : ''}>My Services</Link>
                 </li>
                 
                 <li>
-                    <Link to={"#"} className={activeTab === 'Orders' ? 'active' : ''} onClick={() => showTab('Orders')}>My Orders</Link>
+                    <Link to={"/dashboard/my-orders"} className={activeTab === 'my-orders' ? 'active' : ''}>My Orders</Link>
                 </li>
                 
                 <li>
-                    <Link to={"#"} className={activeTab === 'Wallet' ? 'active' : ''} onClick={() => showTab('Wallet')}>My Wallet</Link>
+                    <Link to={"/dashboard/my-wallet"} className={activeTab === 'my-wallet' ? 'active' : ''}>My Wallet</Link>
                 </li>
                 
-                <li>
-                    <Link to={"#"} className={activeTab === 'Profile' ? 'active' : ''} onClick={() => showTab('Profile')}>My Profile</Link>
-                </li>
+                {/* <li>
+                    <Link to={"#"} className='active'>My Profile</Link>
+                </li> */}
             </ul>
         </div>
     )

@@ -28,7 +28,11 @@ const MyServices = (props) => {
     const [showRateModal, setShowRateModal] = useState(false) 
     const [showOrderDetailsID, setShowOrderDetailsID] = useState('')
     const [currentPage, setCurrentPage] = useState(1)
-    const [oiId, setOiId] = useState('')
+    const [oiCommentId, setOiCommentId] = useState('')
+    const [oiUploadData, setOiUploadData] = useState({
+        'id': '',
+        'pendingResumeItems': []
+    })
 
     const showDetails = (id) => {
         id == showOrderDetailsID ?
@@ -132,7 +136,7 @@ const MyServices = (props) => {
                                                 Status: <strong> {service?.status} </strong>
 
                                                 {
-                                                    service?.options?.upload_resume && <a onClick={() => setShowUpload(true)} className="font-weight-bold">Upload</a> 
+                                                    service?.options?.upload_resume && <a onClick={() => {setShowUpload(true);setOiUploadData({'id':service?.id, 'pendingResumeItems':service?.pending_resume_items})}} className="font-weight-bold">Upload</a> 
                                                 }
                                                 {
                                                     service?.datalist?.length ? 
@@ -150,34 +154,31 @@ const MyServices = (props) => {
                                                     <div>
                                                         <div className="m-day-remaning">
                                                             {
-                                                                service.remaining_days.toString().split('').map((digit) => {
+                                                                service.remaining_days.toString().split('').map((digit, index) => {
                                                                     return (
-                                                                        <span className="m-day-remaning--box"> { digit }</span>
+                                                                        <span className="m-day-remaning--box" key={index}> { digit }</span>
                                                                     )
                                                                 })
                                                             }
                                                             <span className="ml-2 m-day-remaning--text">{ service?.remaining_days > 1 ? 'Days' : 'Day'}<br />remaining</span>
                                                         </div>
                                                     </div>
-                                                    <Link to={"#"} className="m-db-start-course font-weight-bold pr-10">Start Service</Link>
+                                                    {/* <Link to={"#"} className="m-db-start-course font-weight-bold pr-10">Start Service</Link> */}
                                                 </div>
                                             }
 
                                                 <div className="m-courses-detail__userInput">
-                                                    <Link to={'#'} onClick={(e) => {e.preventDefault();setShowCommentModal(true);setOiId(service?.id)}} className="m-db-comments font-weight-bold">
+                                                    <Link to={'#'} onClick={(e) => {e.preventDefault();setShowCommentModal(true);setOiCommentId(service?.id)}} className="m-db-comments font-weight-bold">
                                                         { service?.no_of_comments ? service?.no_of_comments > 1 ? 'Comments' : 'Comment' : 'Add Comment' }
                                                     </Link>
                                                     
-                                                    {
-                                                        service?.no_review ?
-                                                            <div className="d-flex" onClick={()=>{setShowRateModal(true)}}>
-                                                                <span className="m-rating">
-                                                                    { service?.rating?.map((star, index) => starRatings(star, index)) }
-                                                                    <span className="ml-5">{service?.avg_rating?.toFixed(1)}/5</span>
-                                                                </span>
-                                                                <Link to={"#"} className="font-weight-bold ml-10">{ service?.no_review }</Link>
-                                                            </div> : ''
-                                                    }
+                                                    <div className="d-flex" onClick={()=>{setShowRateModal(true)}}>
+                                                        <span className="m-rating">
+                                                            { service?.rating?.map((star, index) => starRatings(star, index)) }
+                                                            <span className="ml-5">{service?.avg_rating?.toFixed(1)}/5</span>
+                                                        </span>
+                                                        <Link to={"#"} className="font-weight-bold ml-10">{ service?.no_review }</Link>
+                                                    </div>
 
                                                 </div>
                                             </div>
@@ -192,16 +193,20 @@ const MyServices = (props) => {
                 
             </main>
             {
-                showCommentModal && <AddCommentModal setShowCommentModal = {setShowCommentModal} oi_id={oiId} />
+                showCommentModal && <AddCommentModal setShowCommentModal = {setShowCommentModal} oi_id={oiCommentId} />
             }
             {
                 showRateModal && <RateProductModal setShowRateModal={setShowRateModal} />
             }
             {
-                showUpload && <UploadResume setShowUpload={setShowUpload}/>
+                showUpload && <UploadResume setShowUpload={setShowUpload} oiUploadData={oiUploadData} />
             }
             {
-                page?.total > 1 ? <Pagination totalPage={page?.total} currentPage={currentPage} setCurrentPage={setCurrentPage}/> : ''
+                page?.total > 1 ? 
+                    <Pagination 
+                        totalPage={page?.total}
+                        currentPage={currentPage}
+                        setCurrentPage={setCurrentPage} /> : ''
             }
         </div>
         </>

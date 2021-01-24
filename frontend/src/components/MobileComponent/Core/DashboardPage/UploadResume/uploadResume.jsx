@@ -1,7 +1,11 @@
 import React from 'react';
 
 const UploadResume = (props) => {
-    const { setShowUpload } = props
+    const {
+        setShowUpload, 
+        oiUploadData 
+    } = props
+
     return (
         <div className="m-slide-modal">
             <div className="text-center">

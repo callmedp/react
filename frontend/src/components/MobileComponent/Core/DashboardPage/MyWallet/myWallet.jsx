@@ -144,7 +144,7 @@ const MyWallet = (props) => {
                 }
                 <br />
                 {
-                    page?.total > 1 ? <Pagination totalPage={page?.total_page} currentPage={currentPage} setCurrentPage={setCurrentPage}/> : ''
+                    page?.total > 1 ? <Pagination totalPage={page?.total} currentPage={currentPage} setCurrentPage={setCurrentPage}/> : ''
                 }
             </div>
         </>

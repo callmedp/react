@@ -28,7 +28,6 @@ const MyCourses = (props) => {
     const { history } = props;
     const { coursesLoader } = useSelector(store => store.loader);
     const { myCourses } = useSelector(store => store.dashboardCourses);
-    console.log("courses are ", myCourses)
     const [isOpen, setIsOpen] = useState(false);
     const toggleDetails = (id) => setIsOpen(isOpen == id ? false : id);
 
