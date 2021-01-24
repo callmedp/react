@@ -14,7 +14,7 @@ const MyWallet = (props) => {
     const [showModal, setShowModal] = useState(false)
     const [currentPage, setCurrentPage] = useState(1)
     const dispatch = useDispatch();
-
+    
     const handleEffects = async () => {
         try {
             if (!(window && window.config && window.config.isServerRendered)) {

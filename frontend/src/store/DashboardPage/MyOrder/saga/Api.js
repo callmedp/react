@@ -11,7 +11,6 @@ const cancelOrder = (data) => {
     return BaseApiService.post(url, data)
 }
 
-
 export default {
     myOrdersData,
     cancelOrder

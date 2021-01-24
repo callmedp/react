@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link as LinkScroll } from 'react-scroll';
 // import { Button } from 'react-bootstrap';
 import { Modal } from 'react-bootstrap';
 import './myWallet.scss';
@@ -13,25 +13,20 @@ const MyWallet = (props) => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    const [walPageNo, setWalletPageNo] = useState(1);
-    // when page changes
-    const changePageNumber = (page) => {
-        setWalletPageNo(page);
-        handleEffects(page);
-    }
+    const [currentPage, setCurrentPage] = useState(1);
     const dispatch = useDispatch();
     const { history } = props;
     const { walletLoader } = useSelector(store => store.loader);
     const walletResult = useSelector(store => store.dashboardWallet.data);
 
-    const handleEffects = async (walPageNo) => {
+    const handleEffects = async () => {
         try {
             //You may notice that apis corresponding to these actions are not getting called on initial render.
             //This is because initial render is done on node server, which is calling these apis, map the data and send it to the browser.
             //So there is no need to fetch them again on the browser.
             if (!(window && window.config && window.config.isServerRendered)) {
                 dispatch(startDashboardWalletPageLoader());
-                await new Promise((resolve, reject) => dispatch(fetchMyWallet({ page: walPageNo, resolve, reject })))
+                await new Promise((resolve, reject) => dispatch(fetchMyWallet({ page: currentPage, resolve, reject })))
                 dispatch(stopDashboardWalletPageLoader());
             }
             else {
@@ -47,8 +42,8 @@ const MyWallet = (props) => {
     };
 
     useEffect(() => {
-        handleEffects(walPageNo);
-    },[])
+        handleEffects();
+    },[currentPage])
 
     return(
         <div className="myWallet">
@@ -80,7 +75,7 @@ const MyWallet = (props) => {
                     </Modal>
                 </div>
                 <div className="col-4 text-right">
-                    <Link to={"#"} className="btn btn-link font-weight-bold">FAQs</Link>
+                    <LinkScroll to='Faq' className="btn btn-link font-weight-bold">FAQs</LinkScroll>
                 </div>
             </div>
 
@@ -115,7 +110,7 @@ const MyWallet = (props) => {
                 }
             </div>
 
-            {walletResult?.page ? <Pagination total={walletResult?.page} currentPage={walPageNo} setCurrentPage={setWalletPageNo} changePageNumber={changePageNumber} /> : ""}
+            {walletResult?.page ? <Pagination totalPage={walletResult?.page?.total} currentPage={currentPage} setCurrentPage={setCurrentPage}/> : ''}
         </div>
     )
 }

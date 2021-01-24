@@ -1,4 +1,4 @@
-import { FETCH_MY_ORDERS, CANCEL_ORDER  } from './actionTypes';
+import { FETCH_MY_ORDERS, CANCEL_ORDER } from './actionTypes';
 
 const fetchMyOrders = (payload) => {
     return {

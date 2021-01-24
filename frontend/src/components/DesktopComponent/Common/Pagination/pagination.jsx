@@ -1,27 +1,41 @@
 import React from 'react'
+import { getPaginationList } from 'utils/dashboardUtils/myOrderUtils'
+import { useState } from 'react'
 
 const Pagination = (props) => {
-    const { total, currentPage, setCurrentPage, changePageNumber } = props;
+    const { 
+        totalPage, currentPage, setCurrentPage
+    } = props
 
-//     console.log(total, currentPage)
+    const [startPage, setStartPage] = useState(1)
+    const paginationList = getPaginationList(startPage, totalPage)
+    const length = paginationList?.length
 
-    const sortedArr = Array.apply(null, Array(total.total)).map(function (x, i) { return i+1; })
+    const getPrev = () => {
+        !paginationList.includes(currentPage - 1) &&
+            setStartPage(currentPage - 4);
+            setCurrentPage(currentPage - 1)
+        }
+
+    const getNext = () => {
+        !paginationList.includes(currentPage + 1) &&
+            setStartPage(currentPage + 1);
+            setCurrentPage(currentPage + 1)
+    }
 
     return (
-        <div className="db-pagination mt-20">
-            { total.has_prev && sortedArr.length > 6 ? <figure className="icon-db-arrow-left" onClick={() => changePageNumber(currentPage-1)}></figure> : "" }
-            { sortedArr.length <= 6 ? 
-                sortedArr.map((item, idx) => {
-                    return <span key={idx} className={currentPage === item ? 'active' : ""} onClick={() => changePageNumber(item)}>{item}</span>
-                })
-                :
-                sortedArr.map((item, idx) => {
-                    return <span key={idx} className={currentPage === item ? 'active' : ""} onClick={() => changePageNumber(item)}>{item}</span>
+        <div className="m-db-pagination mt-20">
+            { startPage > 1 && <figure className="icon-db-arrow-left" onClick={getPrev} /> }
+            {
+                paginationList?.map((item, i) => {
+                    return <span key={i} className={ item === currentPage ? 'active' : '' } onClick={() => { item !== '....' && setCurrentPage(item)}}>{item}</span>
                 })
             }
-            { total.has_next && sortedArr.length > 6 ? <figure className="icon-db-arrow-right" onClick={() => changePageNumber(currentPage+1)}></figure> : "" }
-
-            {/* <span>1</span> <span>2</span> <span>3</span> <span className="active">4</span> <span>....</span> <span>8</span> */}
+            { 
+                paginationList[length -2] === '....' &&
+                paginationList[length -1] === totalPage &&
+                    <figure className="icon-db-arrow-right" onClick={getNext} />
+            }
         </div>
     )
 }
