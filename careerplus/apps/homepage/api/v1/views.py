@@ -326,7 +326,9 @@ class OrderItemCommentApi(APIView):
     serializer_class = None
 
     def get(self, request):
-        candidate_id = request.GET.get('candidate_id')
+        # import ipdb; ipdb.set_trace()
+        candidate_id = request.GET.get('candidate_id') or self.request.session.get('candidate_id', None)
+        # self.request.session.get('candidate_id', None)
         oi_pk = request.GET.get('oi_pk')
 
         if not oi_pk or not candidate_id:
@@ -336,6 +338,7 @@ class OrderItemCommentApi(APIView):
             oi = OrderItem.objects.get(id=oi_pk)
         except:
             return Response({'error': 'ITEM NOT FOUND'}, status=status.HTTP_400_BAD_REQUEST)
+        
         if not oi.order.candidate_id == candidate_id or not oi.order.status in [1, 3]:
             return Response({'error': "BAD REQUEST"}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -355,7 +358,7 @@ class OrderItemCommentApi(APIView):
 
     def post(self, request, *args, **kwargs):
 
-        candidate_id = request.data.get('candidate_id')
+        candidate_id = request.data.get('candidate_id') or self.request.session.get('candidate_id', None)
         oi_pk = request.data.get('oi_pk')
         comment = request.data.get('comment', '').strip()
         if not oi_pk or not candidate_id or not comment:

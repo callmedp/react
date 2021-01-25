@@ -20,9 +20,10 @@ const getoiComment = (payload) => {
     }
 }
 
-const SubmitDashboardFeedback = (payload) => {
+// fetch reviews
+const fetchMyReviews = (payload) => {
     return {
-        type: Actions.SUBMIT_DASHBOARD_REVIEWS,
+        type : Actions.FETCH_MY_REVIEWS,
         payload
     }
 }
@@ -31,5 +32,5 @@ export {
     fetchMyServices,
     uploadResumeForm,
     getoiComment,
-    SubmitDashboardFeedback
+    fetchMyReviews
 }

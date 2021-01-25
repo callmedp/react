@@ -63,13 +63,13 @@ export const stopDashboardCoursesPageLoader = () => {
 export const startDashboardServicesPageLoader = () => {
     return {
         type: Actions.START_DASHBOARD_SERVICES_PAGE_LOADER,
-        payload: { coursesLoader: true } 
+        payload: { serviceLoader: true } 
     }
 }
 
 export const stopDashboardServicesPageLoader = () => {
     return {
         type: Actions.STOP_DASHBOARD_SERVICES_PAGE_LOADER,
-        payload: { coursesLoader: false }
+        payload: { serviceLoader: false }
     }
 }

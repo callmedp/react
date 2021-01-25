@@ -133,7 +133,7 @@ const MyCourses = (props) => {
                                                 </div>
 
                                                 <div className="day-remaning mb-20">
-                                                    {[...course.remaining_days+''].map((day, idx) => <span key={idx} className="day-remaning--box">{day}</span>)}
+                                                    {[...(course.remaining_days + '')].map((day, idx) => <span key={idx} className="day-remaning--box">{day}</span>)}
 
                                                     <span className="ml-2 day-remaning--text">Days <br />remaning</span>
                                                 </div>
@@ -168,10 +168,11 @@ const MyCourses = (props) => {
                                                     handleShow={handleShow}
                                                     toggleReviews={toggleReviews} 
                                                     setOpenReview={setOpenReview}
-                                                    openReview={openReview}/>
+                                                    openReview={openReview}
+                                                    name="Course"/>
 
                                                 {/* rate service modal */}
-                                                <RateModal handleClose={handleClose} show={show} />
+                                                <RateModal handleClose={handleClose} show={show} name="Course"/>
                                             </div>
                                         </div>
                                     </div>

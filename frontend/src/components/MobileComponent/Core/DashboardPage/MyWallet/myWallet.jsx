@@ -5,20 +5,21 @@ import './myWallet.scss';
 import { fetchMyWallet } from 'store/DashboardPage/MyWallet/actions/index';
 import { startDashboardWalletPageLoader, stopDashboardWalletPageLoader } from 'store/Loader/actions/index';
 import Loader from '../../../Common/Loader/loader';
+import Pagination from '../../../Common/Pagination/pagination';
 
    
 const MyWallet = (props) => {
-    const loyalityTxn = useSelector(store => store.dashboardWallet?.data)
+    const { loyality_txns, page, wal_total } = useSelector(store => store.dashboardWallet?.data)
     const { walletLoader } = useSelector(store => store.loader);
     const [showModal, setShowModal] = useState(false)
-    const [ordPageNo, setOrdPageNo] = useState(1)
+    const [currentPage, setCurrentPage] = useState(1)
     const dispatch = useDispatch();
-
+    
     const handleEffects = async () => {
         try {
             if (!(window && window.config && window.config.isServerRendered)) {
                 dispatch(startDashboardWalletPageLoader());
-                await new Promise((resolve, reject) => dispatch(fetchMyWallet({ page: ordPageNo, resolve, reject })))
+                await new Promise((resolve, reject) => dispatch(fetchMyWallet({ page: currentPage, resolve, reject })))
                 dispatch(stopDashboardWalletPageLoader());
             }
             else {
@@ -33,7 +34,7 @@ const MyWallet = (props) => {
 
     useEffect(() => {
         handleEffects();
-    }, [ordPageNo])
+    }, [currentPage])
 
     return(
         <>
@@ -43,7 +44,7 @@ const MyWallet = (props) => {
                     <div className="m-wallet__firstCard">
                         <div className="m-wallet__firstCard--rhs">
                             <span>Loyality point balance</span>
-                            <h2> { loyalityTxn?.wal_total?.toFixed(2) } </h2>
+                            <h2> { wal_total?.toFixed(2) } </h2>
                         </div>
 
                         <button className="btn-blue-outline btn-xs" onClick={() => setShowModal(true)}>Redeem now</button>
@@ -51,9 +52,9 @@ const MyWallet = (props) => {
                 </div>
 
                 {
-                    loyalityTxn?.loyality_txns?.map((txn) => {
+                    loyality_txns?.map((txn, index) => {
                         return (
-                            <div className="m-card" key={ txn?.order_id }>
+                            <div className="m-card" key={ index }>
                                 <span className="m-wallet--date">{ txn?.date }</span>
                                 <ul className="m-wallet--info">
                                     <li className="head">{ txn?.order_id }</li>
@@ -134,7 +135,7 @@ const MyWallet = (props) => {
                                     <i className="redeem-now--icon"></i>
                                     <h2>Congratulations!</h2>
                                     <p>
-                                        <strong className="redeem-now--lPoints d-block">{ loyalityTxn?.wal_total?.toFixed(2) }</strong>
+                                        <strong className="redeem-now--lPoints d-block">{ wal_total?.toFixed(2) }</strong>
                                         loyality point is reedemed and added <br/>in your wallet
                                     </p>
                                     <a href="/payment/payment-summary" className="font-weight-bold">Ok</a>
@@ -142,7 +143,9 @@ const MyWallet = (props) => {
                         </div>
                 }
                 <br />
-                <span onClick={()=>setOrdPageNo(ordPageNo + 1)}>&emsp; &emsp; &emsp;{ ordPageNo }</span>
+                {
+                    page?.total_page > 1 ? <Pagination totalPage={page?.total_page} currentPage={currentPage} setCurrentPage={setCurrentPage}/> : ''
+                }
             </div>
         </>
     )

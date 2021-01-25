@@ -26,7 +26,7 @@ const RateProductModal = (props) => {
             {
                 showAllRatings && 
                 <div className="addcomments" style={{display: 'block'}}>
-                    <span className="m-db-close" onClick={() => {setShowRateModal(false)}}>X</span>
+                    <span className="m-db-close" style={{ marginLeft: '13px' }} onClick={() => {setShowRateModal(false)}}>X</span>
                     
                     <div className="m-reviews-list">
                         <ul>

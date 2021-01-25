@@ -49,7 +49,20 @@ export default {
         errorMessage: {
             required: "This field is required",
         }
-        
+    },
+    'title': {
+        className: "form-control",
+        type: "text",
+        name: "title",
+        id: "title",
+        placeholder: "Type Here",
+        inputType: 'input',
+        validation: {
+            required:true,
+        },
+        errorMessage: {
+            required: "This field is required",
+        }
     },
     'mobile': {
         className: "form-control",

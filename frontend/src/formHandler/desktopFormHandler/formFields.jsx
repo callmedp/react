@@ -6,7 +6,7 @@ const InputField = (props) => {
                             name, value, 
                             validation, 
                             label,defaultValue,
-                            errorMessage, id, 
+                            errorMessage, id, placeholder
                         }, 
             errors,
             register } = props
@@ -14,7 +14,7 @@ const InputField = (props) => {
     return (
         <div className={ !!errors ? "form-group error" : "form-group"}>
             <input className={className} type={type} name={name}
-                id={id} placeholder=" " ref={register(validation)} value={value}
+                placeholder={placeholder} ref={register(validation)} value={value}
                 defaultValue={defaultValue} />
             <label htmlFor={name}>{label}</label>
             { !!errors ? <span className="error-msg">{errorMessage[errors.type]}</span> : ''}

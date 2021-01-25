@@ -8,4 +8,5 @@ urlpatterns = [
     re_path(r'^my-courses/$', views.MyCoursesApi.as_view(), name='my-courses'),
     re_path(r'^my-services/$', views.MyServicesApi.as_view(), name='my-services'),
     re_path(r'^my-wallet/$', views.DashboardMyWalletAPI.as_view(), name='my-wallet'),
+    re_path(r'^review/$', views.DashboardReviewApi.as_view(),name='dashboard-feedback'),
 ]

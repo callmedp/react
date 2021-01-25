@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link as LinkScroll } from 'react-scroll';
 // import { Button } from 'react-bootstrap';
 import { Modal } from 'react-bootstrap';
 import './myWallet.scss';
@@ -7,16 +7,17 @@ import { useDispatch, useSelector } from 'react-redux';
 import {fetchMyWallet} from 'store/DashboardPage/MyWallet/actions';
 import { startDashboardWalletPageLoader, stopDashboardWalletPageLoader } from 'store/Loader/actions/index';
 import Loader from '../../../Common/Loader/loader';
+import Pagination from '../../../Common/Pagination/pagination';
 
 const MyWallet = (props) => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    const walPageNo = '1';
+    const [currentPage, setCurrentPage] = useState(1);
     const dispatch = useDispatch();
     const { history } = props;
     const { walletLoader } = useSelector(store => store.loader);
-    const walletResult = useSelector(store => store.dashboardWallet);
+    const walletResult = useSelector(store => store.dashboardWallet.data);
 
     const handleEffects = async () => {
         try {
@@ -25,7 +26,7 @@ const MyWallet = (props) => {
             //So there is no need to fetch them again on the browser.
             if (!(window && window.config && window.config.isServerRendered)) {
                 dispatch(startDashboardWalletPageLoader());
-                await new Promise((resolve, reject) => dispatch(fetchMyWallet({ id: walPageNo, resolve, reject })))
+                await new Promise((resolve, reject) => dispatch(fetchMyWallet({ page: currentPage, resolve, reject })))
                 dispatch(stopDashboardWalletPageLoader());
             }
             else {
@@ -40,10 +41,9 @@ const MyWallet = (props) => {
         }
     };
 
-
     useEffect(() => {
         handleEffects();
-    }, [])
+    },[currentPage])
 
     return(
         <div className="myWallet">
@@ -51,7 +51,7 @@ const MyWallet = (props) => {
 
             <div className="row">
                 <div className="col-8 myWallet--heading">
-                    Loyality point balance - <strong>{walletResult?.data?.wal_total ? walletResult?.data?.wal_total : 0}</strong>
+                    Loyality point balance - <strong>{walletResult?.wal_total ? walletResult?.wal_total : 0}</strong>
                     <button 
                         className="btn btn-outline-primary ml-4"
                         onClick={handleShow}
@@ -66,7 +66,7 @@ const MyWallet = (props) => {
                             <div className="text-center db-redeemnow-popup">
                                 <i className="db-green-tick"></i> 
                                 <p className="db-redeemnow-popup--heading">Congratulations!</p>
-                                <p className="db-redeemnow-popup--points">{walletResult?.data?.wal_total ? walletResult?.data?.wal_total : 0}</p>
+                                <p className="db-redeemnow-popup--points">{walletResult?.wal_total ? walletResult?.wal_total : 0}</p>
                                 <p className="db-redeemnow-popup--text">loyality point is reedemed and added <br/>in your wallet</p>
                                 <button className="btn btn-link font-weight-bold">Ok</button>
                             </div>
@@ -75,7 +75,7 @@ const MyWallet = (props) => {
                     </Modal>
                 </div>
                 <div className="col-4 text-right">
-                    <Link to={"#"} className="btn btn-link font-weight-bold">FAQs</Link>
+                    <LinkScroll to='Faq' className="btn btn-link font-weight-bold">FAQs</LinkScroll>
                 </div>
             </div>
 
@@ -92,8 +92,8 @@ const MyWallet = (props) => {
 
             <div className="db-white-box pb-4">
                 {
-                    walletResult?.data && walletResult?.data?.loyality_txns.length > 0 ?
-                        walletResult?.data?.loyality_txns.map((item, index) => {
+                    walletResult && walletResult?.loyality_txns.length > 0 ?
+                        walletResult?.loyality_txns.map((item, index) => {
                             return (
                                 <ul className="row myWallet__list" key={index}>
                                     <li className="col-md-2">{item.date}</li>
@@ -109,6 +109,8 @@ const MyWallet = (props) => {
                     <h6 className="text-center p-10">Start with your first order and earn loyalty points</h6>
                 }
             </div>
+
+            {walletResult?.page ? <Pagination totalPage={walletResult?.page?.total} currentPage={currentPage} setCurrentPage={setCurrentPage}/> : ''}
         </div>
     )
 }
