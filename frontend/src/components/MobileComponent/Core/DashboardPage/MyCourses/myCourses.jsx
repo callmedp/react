@@ -80,9 +80,9 @@ const MyCourses = (props) => {
                                     <div className="m-share" aria-haspopup="true">
                                         <i className="icon-share"></i>
                                         <div className="m-share__box m-arrow-box m-top">
-                                            <Link to={"#"} className="m-facebook-icon"></Link>
-                                            <Link to={"#"} className="m-linkedin-icon"></Link>
-                                            <Link to={"#"} className="m-twitter-iocn"></Link>
+                                            <a target="_blank" href={`https://www.facebook.com/sharer/sharer.php?u=${course?.productUrl}`} className="m-facebook-icon"></a>
+                                            <a target="_blank" href={`https://www.linkedin.com/shareArticle?mini=true&url=${course?.productUrl}&title=${course?.title}&summary=${course.name}&source=`} className="m-linkedin-icon"></a>
+                                            <a target="_blank" href={`https://twitter.com/intent/tweet?url=${course?.productUrl}/&text=${course.name}`} className="m-twitter-iocn"></a>
                                             <Link to={"#"} className="m-whatsup-icon"></Link>
                                         </div>
                                     </div>
