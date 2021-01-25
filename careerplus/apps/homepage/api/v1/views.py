@@ -300,24 +300,25 @@ class DashboardCancellationApi(APIView):
             try:
                 order = Order.objects.get(pk=order_id)
             except Order.DoesNotExist:
-                return Response({'status': 'Failure', 'error': 'Order not found against id'},
+                return Response({'status': 'Failure', 'cancelled': False, 'error': 'Order not found against id'},
                                 status=status.HTTP_417_EXPECTATION_FAILED)
 
             if order.candidate_id != candidate_id:
-                return Response({'status': 'Failure', 'error': 'Order not found against id'},
+                return Response({'status': 'Failure', 'cancelled': False, 'error': 'Order not found against id'},
                                 status=status.HTTP_417_EXPECTATION_FAILED)
             try:
                 cancellation = DashboardCancelOrderMixin().perform_cancellation(candidate_id=candidate_id, email=email,
                                                                                 order=order)
+
             except Exception as exc:
                 logger.error('Dashboard cancellation error %s' % exc)
-                return Response({'status': 'Failure', 'error': exc}, status=status.HTTP_417_EXPECTATION_FAILED)
+                return Response({'status': 'Failure', 'error': str(exc), 'cancelled': False}, status=status.HTTP_417_EXPECTATION_FAILED)
             if cancellation:
-                return Response({'status': 'Success', 'data': order_id, 'error': None, 'cancelled': True},
+                return Response({'status': 'Success', 'data': 'Order Successfully Cancelled', 'error': None, 'cancelled': True},
                                 status=status.HTTP_200_OK)
-            return Response({'status': 'Failure', 'error': None, 'cancelled': False},
+            return Response({'status': 'Failure', 'error': 'Something went wrong', 'cancelled': False},
                             status=status.HTTP_417_EXPECTATION_FAILED)
-        return Response(serializer.errors, status=status.HTTP_200_OK)
+        return Response({'status': 'Failure', 'error': 'Required data is missing', 'cancelled': False}, status=status.HTTP_200_OK)
 
 
 class OrderItemCommentApi(APIView):
