@@ -21,6 +21,7 @@ const MyCourses = (props) => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    const handleComment = (id) => setAddOpen( addOpen === id ? false : id );
     const dispatch = useDispatch();
     const { history } = props;
     const { coursesLoader } = useSelector(store => store.loader);
@@ -175,9 +176,9 @@ const MyCourses = (props) => {
                                         </div>
                                     </div>
                                 </div>
-                                <Collapse in={addOpen}>
-                                    <div className="db-add-comments lightblue-bg" id="addComments">
-                                        <span className="btn-close" onClick={() => setAddOpen(!addOpen)}>&#x2715;</span>
+                                <Collapse in={addOpen === course.id}>
+                                    <div className="db-add-comments lightblue-bg" id={`addComments ${course.id}`}>
+                                        <span className="btn-close" onClick={() => handleComment(course.id)}>&#x2715;</span>
                                         <p className="font-weight-semi-bold"> Add comment </p>
                                         <textarea className="form-control" rows="3"></textarea>
                                         <button type="submit" className="btn btn-outline-primary mt-20 px-5">Submit</button>
