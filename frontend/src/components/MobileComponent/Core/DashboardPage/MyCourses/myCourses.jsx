@@ -9,13 +9,12 @@ import Loader from '../../../Common/Loader/loader';
 import { fetchMyCourses } from 'store/DashboardPage/MyCourses/actions/index'
 import { startDashboardCoursesPageLoader, stopDashboardCoursesPageLoader } from 'store/Loader/actions/index';
 
-   
 const MyCourses = (props) => {
-    const [showCommentModal, setShowCommentModal] = useState(false) 
-    const [showRateModal, setShowRateModal] = useState(false) 
+    const [showCommentModal, setShowCommentModal] = useState(false)
+    const [showRateModal, setShowRateModal] = useState(false)
     const [currentPage, setCurrentPage] = useState(1)
     const [showOrderDetailsID, setShowOrderDetailsID] = useState('')
-    
+
     const dispatch = useDispatch();
     const { myCourses, page } = useSelector(store => store?.dashboardCourses);
     const { coursesLoader } = useSelector(store => store.loader);
@@ -31,7 +30,7 @@ const MyCourses = (props) => {
                 {
                     dataList.map((data, index) =>
                         <li key={index}>
-                            <span> 
+                            <span>
                                 <hr />
                                 {data?.date} <br />
                                 <strong> {data?.status} </strong>
@@ -45,7 +44,7 @@ const MyCourses = (props) => {
     const handleEffects = async () => {
         if (!(window && window.config && window.config.isServerRendered)) {
             dispatch(startDashboardCoursesPageLoader());
-            await new Promise((resolve, reject) => dispatch(fetchMyCourses({page: currentPage, resolve, reject })));
+            await new Promise((resolve, reject) => dispatch(fetchMyCourses({ page: currentPage, resolve, reject })));
             dispatch(stopDashboardCoursesPageLoader());
         }
         else {
@@ -55,12 +54,17 @@ const MyCourses = (props) => {
     };
 
     const starRatings = (star, index) => {
-        return (star === '*' ? <em className="micon-fullstar" key={index}></em> : star === '+' 
+        return (star === '*' ? <em className="micon-fullstar" key={index}></em> : star === '+'
             ? <em className="micon-halfstar" key={index}></em> : <em className="micon-blankstar" key={index}></em>
         )
     }
 
     useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: "smooth"
+        });
         handleEffects();
     }, [currentPage])
 
@@ -91,90 +95,107 @@ const MyCourses = (props) => {
                                             <h2>{course?.name}</h2>
                                             <p className="m-pipe-divides mb-5">Provider: <Link to={"#"} className="font-weight-bold">{course?.vendor}</Link></p>
                                             <p className="m-pipe-divides mb-5"><span>Enrolled on: <strong>{course?.enroll_date}</strong> </span> <span>Mode: <strong>{course?.mode}</strong> </span></p>
-                                            <p className="m-pipe-divides mb-5"><span>Duration: <strong>{course?.oi_duration} {course?.oi_duration > 1 ? 'days' : 'day'}</strong> </span> <span>Jobs: <strong>{course?.jobs}</strong> </span></p>
+                                            <p className="m-pipe-divides mb-5">{ course?.status === 'Cancelled' || course?.status === 'Unpaid' || course.status === 'Yet to Update' ? '' : <span> Duration: <strong>{course?.oi_duration} {course?.oi_duration > 1 ? 'days' : 'day'}</strong> </span> } <span>Jobs: <strong>{course?.jobs}</strong> </span></p>
                                         </div>
                                     </div>
                                     {/* <div className="m-courses-detail--session pl-15 d-flex mb-15 mt-10">
                                         <span>Next session :</span> 
                                         <strong>Basic of Digital Marketing 3PM |  29 nov 2020</strong> 
                                     </div> */}
-                                    
+
                                     {/* <div className="m-courses-detail--alert">
                                     Hi, the recording for the session you missed is available now <Link to={"#"} className="font-weight-semi-bold">Check here</Link>
                                     </div> */}
+                                    { course?.status === 'Cancelled' || course?.status === 'Unpaid' || course.status === 'Yet to Update' ?
 
-                                    <div className="pl-15 mt-15 fs-12">
-                                        Status: <strong>Course yet to start</strong>
-                                        {/* <Link to={"#"} className="d-block font-weight-bold">View Details</Link> */}
-                                        {
-                                            course?.datalist?.length ? 
-                                                <>
-                                                    <a onClick={(e) => {e.preventDefault();showDetails(course?.id)}} className={(showOrderDetailsID === course?.id) ? "d-block font-weight-bold open arrow-icon" : "d-block font-weight-bold arrow-icon"}>View Details</a>
-                                                    { (showOrderDetailsID === course?.id) && getOrderDetails(course?.datalist) }
-                                                    
-                                                </> : ''
-                                        }
-                                    </div>
+                                        <div className="pl-15 mt-15 fs-12">
+                                            Status: <strong> { course?.status } </strong>
+                                            {/* <Link to={"#"} className="d-block font-weight-bold">View Details</Link> */}
+                                            {
+                                                course?.datalist?.length ?
+                                                    <div className="my-order__order-detail">
+                                                        <a onClick={(e) => { e.preventDefault(); showDetails(course?.id) }} className={(showOrderDetailsID === course?.id) ? "d-block font-weight-bold open arrow-icon" : "d-block font-weight-bold arrow-icon"}>View Details</a>
+                                                        {(showOrderDetailsID === course?.id) && getOrderDetails(course?.datalist)}
 
-                                    <div className="pl-15">
-                                        <div className="m-courses-detail__bottomWrap">
-                                            <div>
-                                                <div className="m-day-remaning mb-20">
-                                                    {
-                                                        course?.remaining_days?.toString().split('').map((digit, index) => {
-                                                            return (
-                                                                <span className="m-day-remaning--box" key={index}> { digit }</span>
-                                                            )
-                                                        })
-                                                    }
-                                                    <span className="ml-2 m-day-remaning--text">{ course?.remaining_days > 1 ? 'Days' : 'Day'} <br/>remaning</span>
-                                                </div>
+                                                    </div> : ''
+                                            }
+                                        </div>
+                                        :
+                                        <>
+                                            <div className="pl-15 mt-15 fs-12">
+                                                Status: <strong> { course?.status } </strong>
+                                                {/* <Link to={"#"} className="d-block font-weight-bold">View Details</Link> */}
+                                                {
+                                                    course?.datalist?.length ?
+                                                        <div className="my-order__order-detail">
+                                                            <a onClick={(e) => { e.preventDefault(); showDetails(course?.id) }} className={(showOrderDetailsID === course?.id) ? "d-block font-weight-bold open arrow-icon" : "d-block font-weight-bold arrow-icon"}>View Details</a>
+                                                            {(showOrderDetailsID === course?.id) && getOrderDetails(course?.datalist)}
 
-                                                {/* <div className="m-db-status">
+                                                        </div> : ''
+                                                }
+                                            </div>
+
+                                            <div className="pl-15">
+                                                <div className="m-courses-detail__bottomWrap" style={{ paddingBottom: '0' }}>
+                                                    <div>
+                                                        <div className="m-day-remaning mb-20">
+                                                            {
+                                                                course?.remaining_days?.toString().split('').map((digit, index) => {
+                                                                    return (
+                                                                        <span className="m-day-remaning--box" key={index}> { digit}</span>
+                                                                    )
+                                                                })
+                                                            }
+                                                            <span className="ml-2 m-day-remaning--text">{course?.remaining_days > 1 ? 'Days' : 'Day'} <br />remaning</span>
+                                                        </div>
+
+                                                        {/* <div className="m-db-status">
                                                     <p className="mb-0 pb-1">Status: <strong>(0% Complete)</strong> </p>
 
                                                     <div className="m-progress">
                                                         <div role="progressbar" className="m-progress-bar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style={{width: "0"}}></div>
                                                     </div>
                                                 </div> */}
-                                            </div>
+                                                    </div>
 
-                                            {/* <Link to={"#"} className="m-db-start-course font-weight-bold pr-10">Start course</Link> */}
-                                        </div>
+                                                    {/* <Link to={"#"} className="m-db-start-course font-weight-bold pr-10">Start course</Link> */}
+                                                </div>
 
-                                        <div className="m-courses-detail__userInput">
-                                            <Link className="m-db-comments font-weight-bold" to={'#'} onClick={(e) => {e.preventDefault();setShowCommentModal(true)}}>Add comment</Link>
-                                            <div className="d-flex" onClick={()=>{setShowRateModal(true)}}>
-                                                {
-                                                    course?.no_review ? 
-                                                        <>
-                                                            <span className="m-rating">
-                                                                {
-                                                                    course?.rating?.map((star, index) => starRatings(star, index))
-                                                                }
-                                                                <span className="ml-5">{course?.avg_rating?.toFixed(1)}/5</span>
-                                                            </span>
-                                                            <Link to={"#"} className="font-weight-bold ml-10">{ course?.no_review }</Link>
-                                                        </> :
-                                                        <>
-                                                            <span className="">Rate</span>
-                                                            <span className="m-rating">
-                                                                {
-                                                                    [1, 2, 3, 4, 5].map((item, index) => {
-                                                                        return <em className="micon-blankstar" key={index} />
-                                                                    })
-                                                                }
-                                                            </span>
-                                                        </>
-                                                }
+                                                <div className="m-courses-detail__userInput">
+                                                    <Link className="m-db-comments font-weight-bold" to={'#'} onClick={(e) => { e.preventDefault(); setShowCommentModal(true) }}>Add comment</Link>
+                                                    <div className="d-flex" onClick={() => { setShowRateModal(true) }}>
+                                                        {
+                                                            course?.no_review ?
+                                                                <>
+                                                                    <span className="m-rating">
+                                                                        {
+                                                                            course?.rating?.map((star, index) => starRatings(star, index))
+                                                                        }
+                                                                        <span className="ml-5">{course?.avg_rating?.toFixed(1)}/5</span>
+                                                                    </span>
+                                                                    <Link to={"#"} className="font-weight-bold ml-10">{course?.no_review}</Link>
+                                                                </> :
+                                                                <>
+                                                                    <span className="">Rate</span>
+                                                                    <span className="m-rating">
+                                                                        {
+                                                                            [1, 2, 3, 4, 5].map((item, index) => {
+                                                                                return <em className="micon-blankstar" key={index} />
+                                                                            })
+                                                                        }
+                                                                    </span>
+                                                                </>
+                                                        }
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
+                                        </>
+                                    }
                                 </div>
                             )
                         })
                     }
-                    
+
                     {/* <div className="m-card pl-0">
                         <div className="m-share" aria-haspopup="true">
                             <i className="icon-share"></i>
@@ -310,14 +331,14 @@ const MyCourses = (props) => {
                     </div> */}
                 </div>
                 {
-                    showCommentModal && <AddCommentModal setShowCommentModal = {setShowCommentModal} />
+                    showCommentModal && <AddCommentModal setShowCommentModal={setShowCommentModal} />
                 }
                 {
                     showRateModal && <RateProductModal setShowRateModal={setShowRateModal} />
                 }
                 {
-                    page?.total > 1 ? 
-                        <Pagination 
+                    page?.total > 1 ?
+                        <Pagination
                             totalPage={page?.total}
                             currentPage={currentPage}
                             setCurrentPage={setCurrentPage} /> : ''
@@ -326,5 +347,5 @@ const MyCourses = (props) => {
         </>
     )
 }
-   
+
 export default MyCourses;
