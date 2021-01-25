@@ -145,7 +145,7 @@ class MyServicesApi(DashboardInfo, APIView):
                 id__in=excl_order_list).order_by('-date_placed')
             
 
-            services = OrderItem.objects.filter(order__in=orders,product__product_class__slug__in=settings.SERVICE_SLUG)
+            services = OrderItem.objects.filter(order__in=orders,product__product_class__slug__in=settings.SERVICE_SLUG).exclude(oi_status=0)
             paginated_data = offset_paginator(page, services)
             pending_resume_items = DashboardInfo().get_pending_resume_items(candidate_id=candidate_id,
                                                                         email=email)
@@ -260,13 +260,13 @@ class DashboardReviewApi(APIView):
             object_id__in=prd_list, status=1)
         paginated_data = offset_paginator(page, review_list)
         data = ReviewSerializer(paginated_data['data'],many=True).data
-        page_info ={
-        'current_page':paginated_data['current_page'],
-        'total':paginated_data['total_pages'],
-        'has_prev': True if paginated_data['current_page'] >1 else False,
-        'has_next':True if (paginated_data['total_pages']-paginated_data['current_page'])>0 else False
-        }
-        return APIResponse(data={'data':data,'page':page_info},message='Review data Success',status=status.HTTP_200_OK)
+        # page_info ={
+        # 'current_page':paginated_data['current_page'],
+        # 'total':paginated_data['total_pages'],
+        # 'has_prev': True if paginated_data['current_page'] >1 else False,
+        # 'has_next':True if (paginated_data['total_pages']-paginated_data['current_page'])>0 else False
+        # }
+        return APIResponse(data={'data':data},message='Review data Success',status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
         email_dict = {}

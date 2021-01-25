@@ -56,7 +56,8 @@ const MyServices = (props) => {
     
     // if reviews exists then show
     const toggleReviews = (id, prod) => {
-        new Promise((resolve, reject) => dispatch(fetchMyReviews({ prod: prod, page: currentPage, type: 'GET', resolve, reject })));
+
+        if(openReview != id) new Promise((resolve, reject) => dispatch(fetchMyReviews({ prod: prod, page: currentPage, type: 'GET', resolve, reject })));
 
         setOpenReview(openReview == id ? false : id);
     }
@@ -125,7 +126,7 @@ const MyServices = (props) => {
                                                     <div className="db-my-courses-detail__leftpan--info">
                                                         <span>Provider: <strong>{item.vendor}</strong> </span>
                                                         <span>Bought on: <strong>{item.enroll_date}</strong></span>
-                                                        <span>Duration: <strong>{item.duration ? item.duration : ""}</strong></span>
+                                                        {item.duration ? <span>Duration: <strong>{item.duration}</strong></span> : "" }
                                                     </div>
 
                                                     <div className="db-my-courses-detail__leftpan--alert">

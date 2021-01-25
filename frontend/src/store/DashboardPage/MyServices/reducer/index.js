@@ -11,7 +11,7 @@ export const DashboardMyServicesReducer = (state=initState, action) => {
         case Actions.MY_SERVICES_FETCHED : return { ...initState,...action.item}
 
         case Actions.GET_OI_COMMENT: {
-            return { ...state, oi_comment_loading: true, loading: false, };
+            return { ...state, };
         }
 
         case Actions.OI_COMMENT_SUCCESS: {

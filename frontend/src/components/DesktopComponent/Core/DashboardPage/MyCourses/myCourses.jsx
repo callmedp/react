@@ -177,14 +177,7 @@ const MyCourses = (props) => {
                                         </div>
                                     </div>
                                 </div>
-                                <Collapse in={addOpen === course.id}>
-                                    <div className="db-add-comments lightblue-bg" id={`addComments ${course.id}`}>
-                                        <span className="btn-close" onClick={() => handleComment(course.id)}>&#x2715;</span>
-                                        <p className="font-weight-semi-bold"> Add comment </p>
-                                        <textarea className="form-control" rows="3"></textarea>
-                                        <button type="submit" className="btn btn-outline-primary mt-20 px-5">Submit</button>
-                                    </div>
-                                </Collapse>
+                                {/* {oiComments ? <AddCommentModal id={item.id} data={oiComments[0]} addOpen={addOpen} /> : null } */}
 
                                 <div className="db-mycourse-highlighter">Next course to take: <Link to={"#"} className="font-weight-bold ml-2">Seo Specialist</Link> </div>
                             </div>

@@ -330,6 +330,7 @@ class OrderItemCommentApi(APIView):
         candidate_id = request.GET.get('candidate_id') or self.request.session.get('candidate_id', None)
         # self.request.session.get('candidate_id', None)
         oi_pk = request.GET.get('oi_pk')
+        candidate_id='568a0b20cce9fb485393489b'
 
         if not oi_pk or not candidate_id:
             return Response({'error': "BAD REQUEST"}, status=status.HTTP_400_BAD_REQUEST)
