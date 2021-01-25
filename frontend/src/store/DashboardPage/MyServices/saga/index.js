@@ -39,8 +39,8 @@ function* DashboardServicesApi(action) {
 }
 
 function* oi_comment(action) {
+    const { payload : { payload, resolve, reject } } = action;
     try {
-        const { payload } = action;
         let result = null;
 
         if (payload.type === 'GET') {
@@ -49,18 +49,24 @@ function* oi_comment(action) {
         else {
             result = yield call(Api.postOiComment, payload);
             if (!result["error"]) {
-                return payload?.resolve(result);
+                return resolve(result);
             }
         }
         if (result["error"]) {
-            return yield put({ type: Actions.OI_COMMENT_FAILED, error: 404 });
+            yield put({ type: Actions.OI_COMMENT_FAILED, error: 404 });
+            return resolve(result);
         }
         else {
-            return yield put({ type: Actions.OI_COMMENT_SUCCESS, oi_comment: result.data });
+            yield put({ type: Actions.OI_COMMENT_SUCCESS, oi_comment: result.data });
+            return resolve(result);
         }
     }
     catch (e) {
-        return yield put({ type: Actions.OI_COMMENT_FAILED, error: 500 });
+        yield put({ type: Actions.OI_COMMENT_FAILED, error: 500 });
+        return resolve({
+            message:'Something went wrong',
+            error: true
+        })
     }
 }
 

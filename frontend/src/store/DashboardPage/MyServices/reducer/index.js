@@ -24,7 +24,7 @@ export const DashboardMyServicesReducer = (state=initState, action) => {
         
         case Actions.OI_COMMENT_FAILED: {
             return {
-                ...state, oi_comment_loading: false, oi_comment_error: 'Something went Wrong'
+                ...state, oi_comment_loading: false, oi_comment_error: 'Something went Wrong', oi_comment: []
             }
         }
 

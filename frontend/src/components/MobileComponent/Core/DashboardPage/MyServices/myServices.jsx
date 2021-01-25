@@ -1,6 +1,7 @@
 // React Core Import
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import Swal from 'sweetalert2';
 import { Link } from 'react-router-dom';
 
 // Local Import 
@@ -64,16 +65,24 @@ const MyServices = (props) => {
     }
 
     const handleEffects = async () => {
-        if (!(window && window.config && window.config.isServerRendered)) {
-            dispatch(startDashboardServicesPageLoader());
-            new Promise((resolve, reject) => dispatch(fetchPendingResumes({ resolve, reject })));
-            await new Promise((resolve, reject) => dispatch(fetchMyServices({page: currentPage, resolve, reject })));
+        try{
+            if (!(window && window.config && window.config.isServerRendered)) {
+                dispatch(startDashboardServicesPageLoader());
+                new Promise((resolve, reject) => dispatch(fetchPendingResumes({ resolve, reject })));
+                await new Promise((resolve, reject) => dispatch(fetchMyServices({page: currentPage, resolve, reject })));
+                dispatch(stopDashboardServicesPageLoader());
+            }
+            else {
+                delete window.config?.isServerRendered
+            }
+        }
+        catch(e){
             dispatch(stopDashboardServicesPageLoader());
+            Swal.fire({
+                icon: 'error',
+                text: 'Sorry! we are unable to fecth your data.'
+            })
         }
-        else {
-            delete window.config?.isServerRendered
-        }
-
     };
 
     useEffect(() => {
@@ -171,7 +180,7 @@ const MyServices = (props) => {
 
                                                 <div className="m-courses-detail__userInput">
                                                     <Link to={'#'} onClick={(e) => {e.preventDefault();setShowCommentModal(true);setOiCommentId(service?.id)}} className="m-db-comments font-weight-bold">
-                                                        { service?.no_of_comments ? service?.no_of_comments > 1 ? 'Comments' : 'Comment' : 'Add Comment' }
+                                                        { service?.no_of_comments ? service?.no_of_comments > 1 ? `${service?.no_of_comments} Comments` : `${service?.no_of_comments} Comment` : 'Add Comment' }
                                                     </Link>
                                                     
                                                     <div className="d-flex" onClick={()=>{setShowRateModal(true)}}>

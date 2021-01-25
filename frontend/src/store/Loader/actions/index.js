@@ -73,3 +73,17 @@ export const stopDashboardServicesPageLoader = () => {
         payload: { serviceLoader: false }
     }
 }
+
+export const startCommentLoader = () => {
+    return {
+        type: Actions.START_COMMENT_LOADER,
+        payload: { commentLoader: true } 
+    }
+}
+
+export const stopCommentLoader = () => {
+    return {
+        type: Actions.STOP_COMMENT_LOADER,
+        payload: { commentLoader: false }
+    }
+}

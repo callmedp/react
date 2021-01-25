@@ -15,6 +15,7 @@ const MyCourses = (props) => {
     const [showRateModal, setShowRateModal] = useState(false) 
     const [currentPage, setCurrentPage] = useState(1)
     const [showOrderDetailsID, setShowOrderDetailsID] = useState('')
+    const [oiCommentId, setOiCommentId] = useState('')
     
     const dispatch = useDispatch();
     const { myCourses, page } = useSelector(store => store?.dashboardCourses);
@@ -143,7 +144,9 @@ const MyCourses = (props) => {
                                         </div>
 
                                         <div className="m-courses-detail__userInput">
-                                            <Link className="m-db-comments font-weight-bold" to={'#'} onClick={(e) => {e.preventDefault();setShowCommentModal(true)}}>Add comment</Link>
+                                            <Link className="m-db-comments font-weight-bold" to={'#'} onClick={(e) => {e.preventDefault();setShowCommentModal(true);setOiCommentId(course?.id)}}>
+                                                { course?.no_of_comments ? course?.no_of_comments > 1 ? `${course?.no_of_comments} Comments` : `${course?.no_of_comments} Comment` : 'Add Comment' }
+                                            </Link>
                                             <div className="d-flex" onClick={()=>{setShowRateModal(true)}}>
                                                 {
                                                     course?.no_review ? 
@@ -310,7 +313,7 @@ const MyCourses = (props) => {
                     </div> */}
                 </div>
                 {
-                    showCommentModal && <AddCommentModal setShowCommentModal = {setShowCommentModal} />
+                    showCommentModal && <AddCommentModal setShowCommentModal = {setShowCommentModal} oi_id={oiCommentId}/>
                 }
                 {
                     showRateModal && <RateProductModal setShowRateModal={setShowRateModal} />

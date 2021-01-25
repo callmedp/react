@@ -377,7 +377,7 @@ class OrderItemCommentApi(APIView):
         message = oi.message_set.filter(is_internal=False).order_by('created')
 
         message = [{'added_by': msg.added_by.name if msg.added_by else '', 'message': msg.message,
-                    'created': msg.created.strftime("%b %d,%Y"),
+                    'created': msg.created.strftime("%b %d, %Y"),
                     'candidate_id': msg.candidate_id
                     } for msg in message]
 
