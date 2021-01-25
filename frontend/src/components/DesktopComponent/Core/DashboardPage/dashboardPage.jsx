@@ -12,16 +12,11 @@ import MyOrders from './MyOrders/myOrders';
 import MyWallet from './MyWallet/myWallet';
 import MyProfile from './MyProfile/myProfile';
 import FAQ from './FAQ/faq';
-import { useDispatch, useSelector } from 'react-redux';
-import {fetchMyWallet} from 'store/DashboardPage/MyWallet/actions';
-import { startDashboardWalletPageLoader, stopDashboardWalletPageLoader } from 'store/Loader/actions/index';
-import Loader from '../../Common/Loader/loader';
-
+// import { useDispatch, useSelector } from 'react-redux';
 
 const DashboardPage = (props) => {
     const [hasFaq, setHasFaq] = useState(false);
     const dbContainer = props.match.params.name;
-
 
     return(
         <div>
@@ -53,7 +48,7 @@ const DashboardPage = (props) => {
                 <HaveQuery />
                 <PopularCourses />
             </main>
-           <Footer /> 
+            <Footer /> 
         </div>
     )
 }
