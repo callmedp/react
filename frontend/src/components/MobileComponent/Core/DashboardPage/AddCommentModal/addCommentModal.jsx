@@ -1,7 +1,20 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getoiComment } from 'store/DashboardPage/MyServices/actions';
 
 const AddCommentModal = (props) => {
-    const { setShowCommentModal }  = props
+    const { setShowCommentModal, oi_id }  = props
+    const dispatch = useDispatch();
+    const oiComments = useSelector(store => store.dashboardServices.oi_comment);
+    console.log(oiComments, oi_id)
+
+    useEffect(() => {
+        let commVal = {
+            oi_id: oi_id,
+            type: 'GET'
+        }
+        dispatch(getoiComment(commVal));
+    }, [oi_id])
 
     return (
         <div className="m-slide-modal">

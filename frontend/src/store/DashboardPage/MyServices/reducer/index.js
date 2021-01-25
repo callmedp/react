@@ -46,17 +46,11 @@ export const DashboardMyServicesReducer = (state=initState, action) => {
             }
         }
 
-        default: return state;
-    }
-}
-
-const commentInitState = {
-    comment: [],
-}
-
-export const CommentReducer = (state=commentInitState, action) => {
-    switch(action.type){
-        
+        case Actions.PENDING_RESUMES_FETCHED: {
+            return {
+                ...state, ...action.item
+            }
+        }
 
         default: return state;
     }

@@ -244,8 +244,8 @@ class DashboardNotificationBoxApi(APIView):
     serializer_class = None
 
     def get(self, request):
-        candidate_id = request.GET.get('candidate_id', None)
-        email = request.GET.get('email', None)
+        candidate_id = request.GET.get('candidate_id', None) or request.session.get('candidate_id', None)
+        email = request.GET.get('email', None) or request.session.get('email', None)
 
         if not candidate_id:
             return Response({'status': 'Failure', 'error': 'candidate_id is required.'},
@@ -326,9 +326,7 @@ class OrderItemCommentApi(APIView):
     serializer_class = None
 
     def get(self, request):
-        # import ipdb; ipdb.set_trace()
         candidate_id = request.GET.get('candidate_id') or self.request.session.get('candidate_id', None)
-        # self.request.session.get('candidate_id', None)
         oi_pk = request.GET.get('oi_pk')
 
         if not oi_pk or not candidate_id:

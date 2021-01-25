@@ -42,7 +42,7 @@ function* oi_comment(action) {
     try {
         const { payload } = action;
         let result = null;
-        console.log(result)
+
         if (payload.type === 'GET') {
             result = yield call(Api.getOiComment, payload);
         }
@@ -109,11 +109,30 @@ function* reviews(action) {
     }
 }
 
+function* getPendingResume(action) {
+    const { payload } = action;
+    try {
+        const response = yield call(Api.getPendingResumes, payload);
+
+        if (response["error"]) {
+            return payload?.resolve(response);
+        }
+        const item = response?.data?.data
+        yield put({
+            type: Actions.PENDING_RESUMES_FETCHED,
+            item
+        })
+        return payload?.resolve(response);
+    }
+    catch (e) {
+        return payload?.resolve('Something went wrong!');
+    }
+}
+
 export default function* WatchDashboardMyServices() {
     yield takeLatest(Actions.FETCH_MY_SERVICES, DashboardServicesApi);
     yield takeLatest(Actions.GET_OI_COMMENT, oi_comment);
     yield takeLatest(Actions.UPLOAD_RESUME_FORM, uploadResume);
     yield takeLatest(Actions.FETCH_MY_REVIEWS, reviews);
-
-
+    yield takeLatest(Actions.FETCH_PENDING_RESUMES, getPendingResume)
 }

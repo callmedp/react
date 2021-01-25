@@ -6,12 +6,6 @@ const myServicesData = (data) => {
     return BaseApiService.get(`${siteDomain}/dashboard/api/v1/${url}`);
 };
 
-// // if pending items exists then show upload resume api
-// const getPendingOrderItems = (data) => {
-//     const url = `${siteDomain}/api/v1/dashboard-notification-box/?candidate_id=568a0b20cce9fb485393489b&email=priya.kharb@hindustantimes.com`;
-//     return BaseApiService.get(url)
-// }
-
 const getOiComment = (data) => {
     const url = `${siteDomain}/api/v1/order-item-comment/?oi_pk=${data.oi_id}`
     return BaseApiService.get(url)
@@ -39,12 +33,18 @@ const saveReviewsData = (data) => {
     return BaseApiService.post(`${siteDomain}/dashboard/api/v1/${url}`, data);
 };
 
+//fetch Pending Resumes
+const getPendingResumes = (data) => {
+    const url = `${siteDomain}/api/v1/dashboard-notification-box/`
+    return BaseApiService.get(url)
+}
+
 export default {
     myServicesData,
-    // getPendingOrderItems,
     uploadResumeDashboardForm,
     getOiComment,
     postOiComment,
     myReviewsData,
-    saveReviewsData
+    saveReviewsData,
+    getPendingResumes
 }

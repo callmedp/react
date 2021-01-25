@@ -14,14 +14,15 @@ import Pagination from '../../../Common/Pagination/pagination';
 import { startDashboardServicesPageLoader, stopDashboardServicesPageLoader } from 'store/Loader/actions/index';
 
 // API Import
-import { fetchMyServices } from 'store/DashboardPage/MyServices/actions/index';
+import { fetchMyServices, fetchPendingResumes } from 'store/DashboardPage/MyServices/actions/index';
 
 const MyServices = (props) => {
 
     const dispatch = useDispatch();
-    const { data, page } = useSelector(store => store?.dashboardServices);
+    const serviceData= useSelector(store => store?.dashboardServices);
     const { serviceLoader } = useSelector(store => store.loader);
-    const myServicesList = data
+    const myServicesList = serviceData?.data
+    const page = serviceData?.page
     
     const [showUpload, setShowUpload] = useState(false)
     const [showCommentModal, setShowCommentModal] = useState(false) 
@@ -29,10 +30,10 @@ const MyServices = (props) => {
     const [showOrderDetailsID, setShowOrderDetailsID] = useState('')
     const [currentPage, setCurrentPage] = useState(1)
     const [oiCommentId, setOiCommentId] = useState('')
-    const [oiUploadData, setOiUploadData] = useState({
-        'id': '',
-        'pendingResumeItems': []
-    })
+    // const [oiUploadData, setOiUploadData] = useState({
+    //     'id': '',
+    //     'pendingResumeItems': []
+    // })
 
     const showDetails = (id) => {
         id == showOrderDetailsID ?
@@ -65,6 +66,7 @@ const MyServices = (props) => {
     const handleEffects = async () => {
         if (!(window && window.config && window.config.isServerRendered)) {
             dispatch(startDashboardServicesPageLoader());
+            new Promise((resolve, reject) => dispatch(fetchPendingResumes({ resolve, reject })));
             await new Promise((resolve, reject) => dispatch(fetchMyServices({page: currentPage, resolve, reject })));
             dispatch(stopDashboardServicesPageLoader());
         }
@@ -136,7 +138,7 @@ const MyServices = (props) => {
                                                 Status: <strong> {service?.status} </strong>
 
                                                 {
-                                                    service?.options?.upload_resume && <a onClick={() => {setShowUpload(true);setOiUploadData({'id':service?.id, 'pendingResumeItems':service?.pending_resume_items})}} className="font-weight-bold">Upload</a> 
+                                                    service?.options?.upload_resume && <a onClick={() => setShowUpload(true)} className="font-weight-bold">Upload</a> 
                                                 }
                                                 {
                                                     service?.datalist?.length ? 
@@ -148,24 +150,24 @@ const MyServices = (props) => {
                                                 }
                                             </div>
                                             <div className="pl-15">
-                                            {
-                                                service?.oi_duration &&
-                                                <div className="m-courses-detail__bottomWrap">
-                                                    <div>
-                                                        <div className="m-day-remaning">
-                                                            {
-                                                                service.remaining_days.toString().split('').map((digit, index) => {
-                                                                    return (
-                                                                        <span className="m-day-remaning--box" key={index}> { digit }</span>
-                                                                    )
-                                                                })
-                                                            }
-                                                            <span className="ml-2 m-day-remaning--text">{ service?.remaining_days > 1 ? 'Days' : 'Day'}<br />remaining</span>
+                                                {
+                                                    service?.oi_duration &&
+                                                    <div className="m-courses-detail__bottomWrap">
+                                                        <div>
+                                                            <div className="m-day-remaning">
+                                                                {
+                                                                    service.remaining_days.toString().split('').map((digit, index) => {
+                                                                        return (
+                                                                            <span className="m-day-remaning--box" key={index}> { digit }</span>
+                                                                        )
+                                                                    })
+                                                                }
+                                                                <span className="ml-2 m-day-remaning--text">{ service?.remaining_days > 1 ? 'Days' : 'Day'}<br />remaining</span>
+                                                            </div>
                                                         </div>
+                                                        {/* <Link to={"#"} className="m-db-start-course font-weight-bold pr-10">Start Service</Link> */}
                                                     </div>
-                                                    {/* <Link to={"#"} className="m-db-start-course font-weight-bold pr-10">Start Service</Link> */}
-                                                </div>
-                                            }
+                                                }
 
                                                 <div className="m-courses-detail__userInput">
                                                     <Link to={'#'} onClick={(e) => {e.preventDefault();setShowCommentModal(true);setOiCommentId(service?.id)}} className="m-db-comments font-weight-bold">
@@ -173,13 +175,29 @@ const MyServices = (props) => {
                                                     </Link>
                                                     
                                                     <div className="d-flex" onClick={()=>{setShowRateModal(true)}}>
-                                                        <span className="m-rating">
-                                                            { service?.rating?.map((star, index) => starRatings(star, index)) }
-                                                            <span className="ml-5">{service?.avg_rating?.toFixed(1)}/5</span>
-                                                        </span>
-                                                        <Link to={"#"} className="font-weight-bold ml-10">{ service?.no_review }</Link>
+                                                        {
+                                                            service?.no_review ?
+                                                                <>
+                                                                    
+                                                                        <span className="m-rating">
+                                                                            { service?.rating?.map((star, index) => starRatings(star, index)) }
+                                                                            <span className="ml-5">{service?.avg_rating?.toFixed(1)}/5</span>
+                                                                        </span>
+                                                                        <Link to={"#"} className="font-weight-bold ml-10">{ service?.no_review }</Link>
+                                                                    
+                                                                </> : 
+                                                                <>
+                                                                    <span className="">Rate</span>
+                                                                    <span className="m-rating">
+                                                                        {
+                                                                            [1, 2, 3, 4, 5].map((item, index) => {
+                                                                                return <em className="micon-blankstar" key={index} />
+                                                                            })
+                                                                        }
+                                                                    </span>
+                                                                </>
+                                                        }
                                                     </div>
-
                                                 </div>
                                             </div>
                                         </>
@@ -199,7 +217,7 @@ const MyServices = (props) => {
                 showRateModal && <RateProductModal setShowRateModal={setShowRateModal} />
             }
             {
-                showUpload && <UploadResume setShowUpload={setShowUpload} oiUploadData={oiUploadData} />
+                showUpload && <UploadResume setShowUpload={setShowUpload} data={serviceData?.pending_resume_items} />
             }
             {
                 page?.total > 1 ? 

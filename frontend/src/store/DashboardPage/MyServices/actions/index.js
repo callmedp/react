@@ -28,9 +28,17 @@ const fetchMyReviews = (payload) => {
     }
 }
 
+const fetchPendingResumes = (payload) => {
+    return {
+        type: Actions.FETCH_PENDING_RESUMES,
+        payload
+    }
+}
+
 export {
     fetchMyServices,
     uploadResumeForm,
     getoiComment,
-    fetchMyReviews
+    fetchMyReviews,
+    fetchPendingResumes
 }
