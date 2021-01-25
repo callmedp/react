@@ -292,6 +292,9 @@ class DashboardCancellationApi(APIView):
     serializer_class = DashboardCancellationSerializer
 
     def post(self, request):
+        candidate_id = self.request.data.get('candidate_id', None) or self.request.session.get('candidate_id', None)
+        email_id = self.request.data.get('email', None) or self.request.session.get('email', None)
+        self.request.data.update({'candidate_id': candidate_id, 'email': email_id})
         serializer = DashboardCancellationSerializer(data=request.data)
         if serializer.is_valid():
             candidate_id = serializer.data.get('candidate_id')

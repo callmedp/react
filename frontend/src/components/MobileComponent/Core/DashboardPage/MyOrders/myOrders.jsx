@@ -59,8 +59,8 @@ const MyWallet = (props) => {
             cancelOrder({
                 payload: {
                     order_id: orderId,
-                    candidate_id: getDataStorage('candidate_id'),
-                    email: getDataStorage('email')
+                    // candidate_id: getDataStorage('candidate_id'),
+                    // email: getDataStorage('email')
                 }, resolve, reject
             })
         ));
