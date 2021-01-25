@@ -146,7 +146,7 @@ class MyServicesApi(DashboardInfo, APIView):
                 id__in=excl_order_list).order_by('-date_placed')
             
 
-            services = OrderItem.objects.filter(order__in=orders,product__product_class__slug__in=settings.SERVICE_SLUG)
+            services = OrderItem.objects.filter(order__in=orders,product__product_class__slug__in=settings.SERVICE_SLUG).exclude(oi_status=0)
             paginated_data = offset_paginator(page, services)
             pending_resume_items = DashboardInfo().get_pending_resume_items(candidate_id=candidate_id,
                                                                         email=email)
