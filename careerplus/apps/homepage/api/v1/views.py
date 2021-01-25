@@ -975,7 +975,6 @@ class TrendingCategoriesApi(PopularProductMixin, APIView):
             }
             cache.set('category_popular_courses',data,86400)
         return Response(data=data, status=status.HTTP_200_OK)
-        assessments
 class LatestBlogAPI(APIView):
     permission_classes = (permissions.AllowAny,)
     authentication_classes = ()
@@ -1029,7 +1028,7 @@ class PopularInDemandProductsAPI(APIView):
     def get(self, request):
         quantity = 4
         class_category = settings.COURSE_SLUG
-        data= []
+        data= {}
         certifications = PopularProductMixin().popular_certifications(quantity=quantity,
                                                                             type_flow=16,
                                                                             sub_type_flow=201)
@@ -1040,29 +1039,40 @@ class PopularInDemandProductsAPI(APIView):
                                       quantity=quantity)
 
         course_pks = list(s_ratio) + list(s_revenue)
-        courses = SearchQuerySet().filter(id__in=service_pks, pTP__in=[0, 1, 3]).exclude(
+        courses = SearchQuerySet().filter(id__in=course_pks, pTP__in=[0, 1, 3]).exclude(
             id__in=settings.EXCLUDE_SEARCH_PRODUCTS
         )
         data = {
             'courses': [
-                {'id': tsrvc.id, 'heading': tsrvc.pHd, 'name': tsrvc.pNm, 'url': tsrvc.pURL, 'img': tsrvc.pImg, \
-                 'img_alt': tsrvc.pImA, 'description': tsrvc.pDscPt, 'rating': tsrvc.pARx, 'price': tsrvc.pPinb, 'vendor': tsrvc.pPvn, 'stars': tsrvc.pStar,
-                 'provider': tsrvc.pPvn} for tsrvc in tsrvcs]
+                {'id': course.id, 'heading': course.pHd, 'name': course.pNm, 'url': course.pURL, 'img': course.pImg, \
+                 'img_alt': course.pImA, 'description': course.pDscPt, 'rating': course.pARx, 'price': course.pPinb, 'vendor': course.pPvn, 'stars': course.pStar,
+                 'provider': course.pPvn} for course in courses]
         }
 
         return APIResponse(message='Popular certifications and courses Loaded', data=data, status=status.HTTP_200_OK)
 
-
-
-
-
-
-
-
-
-        return APIResponse(message='Most viewed Courses fetched', data=data, status=status.HTTP_200_OK)
-
-
+class JobAssistanceServicesAPI(APIView):
+    permission_classes = (permissions.AllowAny,)
+    authentication_classes = ()
         
+    def get(self,request):
+        quantity = 4
+        try:
+            tjob = TopTrending.objects.filter(
+                is_active=True, is_jobassistance=True).first()  
+            job_services_pks = list(tjob.get_all_active_trending_products_ids())
+            job_services = SearchQuerySet().filter(id__in=job_services_pks, pTP__in=[0, 1, 3]).exclude(
+                id__in=settings.EXCLUDE_SEARCH_PRODUCTS)[:quantity]
+
+            data = {
+            'jobAssistanceServices': [
+                {'id': tsrvc.id, 'heading': tsrvc.pHd, 'name': tsrvc.pNm, 'url': tsrvc.pURL, 'img': tsrvc.pImg, \
+                 'img_alt': tsrvc.pImA, 'description': tsrvc.pDscPt, 'rating': tsrvc.pARx, 'price': tsrvc.pPinb, 'vendor': tsrvc.pPvn, 'stars': tsrvc.pStar,
+                 'provider': tsrvc.pPvn} for tsrvc in job_services]
+        }
+        except Exception as e:
+            logging.getLogger('error_log').error(
+                "unable to load job assistance services%s " % str(e))
+        return APIResponse(message='Job assistance services Loaded', data=data, status=status.HTTP_200_OK)
 
 

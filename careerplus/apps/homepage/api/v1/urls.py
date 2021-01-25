@@ -33,5 +33,6 @@ urlpatterns = [
     re_path(r'^latest-blogs/$', views.LatestBlogAPI.as_view(), name='latest-blog-api'),
     re_path(r'^most-viewed-courses/$', views.MostViewedCourseAPI.as_view(), name='most-viewed-course-api'),
     re_path(r'^in-demand-product/$', views.PopularInDemandProductsAPI.as_view(), name='most-viewed-course-api'),
+    re_path(r'^job-assistance-services/$', views.JobAssistanceServicesAPI.as_view(), name='job-assistance-services-api'),
 
 ]
