@@ -106,7 +106,7 @@ class MyCoursesApi(DashboardInfo, APIView):
             orders = orders.exclude(
                 id__in=excl_order_list).order_by('-date_placed')
 
-            courses = OrderItem.objects.filter(order__in=orders,product__type_flow=2)
+            courses = OrderItem.objects.filter(order__in=orders,product__type_flow=2).exclude(order__status=0)
             paginated_data = offset_paginator(page, courses)
             data = OrderItemSerializer(paginated_data["data"],many=True,context= {"get_details": True}).data
             #pagination info
