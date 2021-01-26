@@ -6,6 +6,8 @@ import { CourseAndAssessmentsReducer } from './SkillPage/CoursesTray/reducer';
 import { HeaderReducer } from './Header/reducer/index';
 import { FooterReducer, PopularCoursesReducer } from './Footer/reducer/index';
 import { LoaderReducer } from './Loader/reducer';
+import { CommentReducer } from './AddSubmitComment/reducer/index';
+import { ReviewsReducer } from './AddSubmitReview/reducer/index';
 import { RecommendationReducer } from './RecommendedCourses/reducer/index';
 import { RecentlyAddedCoursesReducer, PopularServicesReducer, TrendingCategoriesReducer, AllCategoriesReducer } from './CataloguePage/reducer/index';
 // import { RecentlyServicesReducer } from './DashboardPage/Service/reducer/index';
@@ -22,6 +24,8 @@ const rootReducer = combineReducers({
     header : HeaderReducer,
     footer : FooterReducer,
     loader : LoaderReducer,
+    getComment: CommentReducer,
+    getReviews: ReviewsReducer,
     recommendation : RecommendationReducer,
     popularCourses : PopularCoursesReducer,
     recentCourses : RecentlyAddedCoursesReducer,
