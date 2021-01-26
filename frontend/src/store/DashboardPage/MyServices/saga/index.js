@@ -44,8 +44,6 @@ function* uploadResume(action) {
     }
 }
 
-
-
 export default function* WatchDashboardMyServices() {
     yield takeLatest(Actions.FETCH_MY_SERVICES, DashboardServicesApi);
     yield takeLatest(Actions.UPLOAD_RESUME_FORM, uploadResume);
