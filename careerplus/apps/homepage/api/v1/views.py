@@ -359,7 +359,7 @@ class OrderItemCommentApi(APIView):
         return Response(data, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
-
+        # import ipdb;ipdb.set_trace()
         candidate_id = request.data.get('candidate_id') or self.request.session.get('candidate_id', None)
         oi_pk = request.data.get('oi_pk')
         comment = request.data.get('comment', '').strip()

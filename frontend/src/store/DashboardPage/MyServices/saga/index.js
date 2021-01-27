@@ -13,17 +13,6 @@ function* DashboardServicesApi(action) {
         }
         let item = response?.data?.data;
 
-        // const result = yield call(Api.getPendingOrderItems);
-
-
-        // // console.log(result?.data?.data)
-        // let modifiedData = {
-        //     ...item,
-        //     ...{
-        //         'pending_resume_items': result.data.data.pending_resume_items ? result.data.data.pending_resume_items : []
-        //     }
-        // }
-
         yield put({ 
             type : Actions.MY_SERVICES_FETCHED, 
             item 
@@ -32,44 +21,11 @@ function* DashboardServicesApi(action) {
         return payload?.resolve(item);
 
     } catch (e) {
-        console.error("Exception occured at skillPageBanner Api",e)
+        console.error("Exception occured at My service Api",e)
         return payload?.reject(e)
         
     }
 }
-
-function* oi_comment(action) {
-    const { payload : { payload, resolve, reject } } = action;
-    try {
-        let result = null;
-
-        if (payload.type === 'GET') {
-            result = yield call(Api.getOiComment, payload);
-        }
-        else {
-            result = yield call(Api.postOiComment, payload);
-            if (!result["error"]) {
-                return resolve(result);
-            }
-        }
-        if (result["error"]) {
-            yield put({ type: Actions.OI_COMMENT_FAILED, error: 404 });
-            return resolve(result);
-        }
-        else {
-            yield put({ type: Actions.OI_COMMENT_SUCCESS, oi_comment: result.data });
-            return resolve(result);
-        }
-    }
-    catch (e) {
-        yield put({ type: Actions.OI_COMMENT_FAILED, error: 500 });
-        return resolve({
-            message:'Something went wrong',
-            error: true
-        })
-    }
-}
-
 
 function* uploadResume(action) {
     const { payload: { values, resolve, reject } } = action;
@@ -85,36 +41,6 @@ function* uploadResume(action) {
     }
     catch (error) {
         return reject(error)
-    }
-}
-
-// fetch and submit reviews
-function* reviews(action) {
-    const { payload: { payload, resolve, reject } } = action;
-    try {
-        let result = null;
-
-        if (payload.type === 'GET') {
-            result = yield call(Api.myReviewsData, payload);
-        }
-        else {
-            result = yield call(Api.saveReviewsData, {'rating': payload.rating, 'review': payload.review, 'title': payload.title, 'oi_pk':payload.oi_pk});
-            if (!result["error"]) {
-                return resolve(result);
-            }
-        }
-        if (result["error"]) {
-            yield put({ type: Actions.SUBMIT_DASHBOARD_FAILED, error: 404 });
-            return resolve(result)
-        }
-        else {
-            yield put({ type: Actions.SUBMIT_DASHBOARD_SUCCESS, reviews: result.data });
-            return resolve(result)
-        }
-    }
-    catch (e) {
-        yield put({ type: Actions.SUBMIT_DASHBOARD_FAILED, error: 500 });
-        return resolve('Something went wrong')
     }
 }
 
@@ -137,11 +63,10 @@ function* getPendingResume(action) {
         return payload?.resolve('Something went wrong!');
     }
 }
-
 export default function* WatchDashboardMyServices() {
     yield takeLatest(Actions.FETCH_MY_SERVICES, DashboardServicesApi);
-    yield takeLatest(Actions.GET_OI_COMMENT, oi_comment);
     yield takeLatest(Actions.UPLOAD_RESUME_FORM, uploadResume);
-    yield takeLatest(Actions.FETCH_MY_REVIEWS, reviews);
     yield takeLatest(Actions.FETCH_PENDING_RESUMES, getPendingResume)
+
+
 }

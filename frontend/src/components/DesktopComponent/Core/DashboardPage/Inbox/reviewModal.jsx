@@ -3,6 +3,14 @@ import { Collapse } from 'react-bootstrap';
 
 const ReviewModal = (props) => {
     const { handleShow, setOpenReview, openReview, item, setProductReview } = props;
+
+    const fillStarForCourse = (star) => {
+        return {
+            '*': 'icon-fullstar',
+            '+': 'icon-halfstar',
+            '-': 'icon-blankstar'
+        }[star];
+    }
     // console.log(setProductReview)
 
     return (
@@ -11,18 +19,11 @@ const ReviewModal = (props) => {
             <span className="btn-close"  onClick={() => setOpenReview(state => !state)}>&#x2715;</span>
             <div className="reviews-list">
                 <ul>
-                    {setProductReview && setProductReview[0]?.data?.data?.map((rev, idx) => {
+                    {setProductReview?.length > 0 && setProductReview.map((rev, idx) => {
                         return (
                             <li key={idx}>
                                 <div className="card__rating">
-                                    <span className="rating">
-                                        <em className="icon-fullstar"></em>
-                                        <em className="icon-fullstar"></em>
-                                        <em className="icon-fullstar"></em>
-                                        <em className="icon-fullstar"></em>
-                                        <em className="icon-blankstar"></em>
-                                        <span> <strong>{rev.average_rating}</strong> /5</span>
-                                    </span>
+                                    { rev.rating.map((val, ind) => <i key={ind} value={val} className={fillStarForCourse(val)}></i>)}
                                 </div>
 
                                 <span className="reviews-list--date">{rev.title ? rev.title : ""} {rev.created}</span>

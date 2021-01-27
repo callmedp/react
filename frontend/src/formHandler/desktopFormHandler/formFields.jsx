@@ -42,14 +42,11 @@ const SelectBox = (props) => {
 }
 
 const TextArea = (props) => {
-    // console.log(props);
     const { attributes: { className, type, name, value, validation, defaultValue, id, rows, placeholder }, register } = props;
 
     return (
         <React.Fragment>
             <textarea className={className} name={name} type={type} placeholder={placeholder} ref={register(validation)} value={value} defaultValue={defaultValue} rows={rows} />
-            {/* <label htmlFor={name}>{label}</label> */}
-            {/* { !!errors ? <span className="error-msg">{errorMessage[errors.type]}</span> : ''} */}
         </React.Fragment>
     )
 }
