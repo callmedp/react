@@ -1,35 +1,24 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Collapse } from 'react-bootstrap';
 import { useForm } from "react-hook-form";
-import {getCandidateId} from 'utils/storage';
-import { useDispatch, useSelector } from 'react-redux';
-import { getoiComment } from 'store/DashboardPage/MyServices/actions';
-import {InputField, TextArea} from 'formHandler/desktopFormHandler/formFields';
+import { useDispatch } from 'react-redux';
+import { fetchOiComment } from 'store/AddSubmitComment/actions';
+import { TextArea} from 'formHandler/desktopFormHandler/formFields';
 import CoursesServicesForm from 'formHandler/desktopFormHandler/formData/coursesServices';
 
 const AddCommentModal = (props) => {
-    const { addOpen, id, data }  = props;
+    const { addOpen, id, data, addCommentDataFetch }  = props;
     const dispatch = useDispatch();
     const { register, handleSubmit, errors, reset } = useForm();
 
     const submitComment = (values) => {
         const new_values = {
           ...values,
-        //   candidate_id: getCandidateId(),
           oi_pk: data.oi_id,
           type: "POST",
         };
 
-        let addedComment = dispatch(getoiComment(new_values));
-        if(addedComment.data) {
-            const get_new_values = {
-                ...values,
-                oi_id: addedComment.data.oi_id,
-                type: "GET",
-            };
-            dispatch(getoiComment(get_new_values));
-        }
-
+        dispatch(fetchOiComment(new_values));
         reset();
     };
 
@@ -55,7 +44,7 @@ const AddCommentModal = (props) => {
 
                 <form onSubmit={handleSubmit(submitComment)}>
                     <div className="db-add-comments disabled-before lightblue-bg" id="addComments">
-                        <span className="btn-close" onClick={() => !addOpen}>&#x2715;</span>
+                        <span className="btn-close" onClick={() => addCommentDataFetch(false)}>&#x2715;</span>
                         <p className="font-weight-semi-bold"> Add comment </p>
                         <TextArea attributes={CoursesServicesForm.name} register={register} errors={!!errors ? errors[CoursesServicesForm.name.name] : ''} />
                         <button type="submit" className="btn btn-outline-primary mt-20 px-5">Submit</button>
@@ -66,4 +55,4 @@ const AddCommentModal = (props) => {
     )
 }
 
-export default AddCommentModal
+export default AddCommentModal;

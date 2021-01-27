@@ -19,19 +19,11 @@ const ReviewModal = (props) => {
             <span className="btn-close"  onClick={() => setOpenReview(state => !state)}>&#x2715;</span>
             <div className="reviews-list">
                 <ul>
-                    {setProductReview && setProductReview[0]?.data?.data?.map((rev, idx) => {
+                    {setProductReview?.length > 0 && setProductReview.map((rev, idx) => {
                         return (
                             <li key={idx}>
                                 <div className="card__rating">
                                     { rev.rating.map((val, ind) => <i key={ind} value={val} className={fillStarForCourse(val)}></i>)}
-                                    {/* <span className="rating">
-                                        <em className="icon-fullstar"></em>
-                                        <em className="icon-fullstar"></em>
-                                        <em className="icon-fullstar"></em>
-                                        <em className="icon-fullstar"></em>
-                                        <em className="icon-blankstar"></em>
-                                        <span> <strong>{rev.average_rating}</strong> /5</span>
-                                    </span> */}
                                 </div>
 
                                 <span className="reviews-list--date">{rev.title ? rev.title : ""} {rev.created}</span>

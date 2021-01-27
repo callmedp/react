@@ -1,30 +1,39 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ProgressBar } from 'react-bootstrap';
-import { Collapse } from 'react-bootstrap';
-import { Modal } from 'react-bootstrap';
+// import { ProgressBar } from 'react-bootstrap';
+// import { Collapse } from 'react-bootstrap';
+// import { Modal } from 'react-bootstrap';
 import '../MyCourses/myCourses.scss';
 import './myServices.scss';
 import { startDashboardServicesPageLoader, stopDashboardServicesPageLoader } from 'store/Loader/actions/index';
 import Loader from '../../../Common/Loader/loader';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchMyServices, getoiComment,fetchMyReviews } from 'store/DashboardPage/MyServices/actions';
-import { useForm } from "react-hook-form";
-import Swal from 'sweetalert2';
-import {getCandidateId} from 'utils/storage';
+import { fetchMyServices } from 'store/DashboardPage/MyServices/actions';
+import { fetchOiComment } from 'store/AddSubmitComment/actions/index';
+import { fetchReviews } from 'store/AddSubmitReview/actions/index';
+
+// import Swal from 'sweetalert2';
+// import {getCandidateId} from 'utils/storage';
 import UploadResumeModal from '../Inbox/uploadResumeModal';
 import ViewDetailModal from '../Inbox/viewDetailModal';
 import RateModal from '../Inbox/rateModal';
 import ReviewRating from '../Inbox/reviewRating';
 import AddCommentModal from '../Inbox/addCommentModal';
 import Pagination from '../../../Common/Pagination/pagination';
+import { siteDomain } from 'utils/domains';
 
 const MyServices = (props) => {
     const dispatch = useDispatch();
     const { history } = props;
     const { serviceLoader } = useSelector(store => store.loader);
+    
     // page no. set here
-    const [currentPage, setCurrentPage] = useState(1)
+    const [currentPage, setCurrentPage] = useState(2);
+    
+    // main api result state here
+    const results = useSelector(store => store.dashboardServices);
+    const oiComments = useSelector(store => store.getComment);
+    const setProductReview = useSelector(store => store.getReviews.data);
 
     // main service api hit
     const handleEffects = async () => {
@@ -49,16 +58,13 @@ const MyServices = (props) => {
         }
     };
 
-
     // review open close set here
     const [openReview, setOpenReview] = useState(false);
     const [show, setShow] = useState(false);
     
     // if reviews exists then show
     const toggleReviews = (id, prod) => {
-
-        if(openReview != id) new Promise((resolve, reject) => dispatch(fetchMyReviews({ prod: prod, page: currentPage, type: 'GET', resolve, reject })));
-
+        if(openReview != id) dispatch(fetchReviews({ prod: prod, page: currentPage, type: 'GET'}));
         setOpenReview(openReview == id ? false : id);
     }
 
@@ -71,11 +77,6 @@ const MyServices = (props) => {
     const uploadHandelClose = () => setUploadShow(false);
     const uploadHandelShow = () => setUploadShow(true);
 
-    // main api result state here
-    const results = useSelector(store => store.dashboardServices);
-    const setProductReview = useSelector(store => store.dashboardServices.reviews);
-    const oiComments = useSelector(store => store.dashboardServices.oi_comment);
-
     // comment open close set here
     const [addOpen, setaddOpen] = useState(false);
     const handleClose = () => setShow(false);
@@ -83,16 +84,15 @@ const MyServices = (props) => {
     // hit api when clicked on add comment
     const addCommentDataFetch = (id) => {
         setaddOpen(addOpen == id ? false : id);
-        
         let commVal = {
             oi_id: id,
             type: 'GET'
         }
-
-        if(addOpen != id) dispatch(getoiComment(commVal));
+        if(addOpen != id) dispatch(fetchOiComment(commVal));
     };
 
-    // console.log(results)
+    // if resume download option is there
+    const createResumeDownloadLink = (id, data) => `${siteDomain}/dashboard/order-resumedownload/${id}&path=${id}`;
 
     useEffect(() => {
         handleEffects();
@@ -102,12 +102,11 @@ const MyServices = (props) => {
         <div>
             {serviceLoader ? <Loader /> : ''}
             <div className="db-my-courses-detail">
-
-            {
-                results.pending_resume_items.length > 0 ? 
-                    <div class="alert alert-primary py-4 px-5 fs-16 w-100 text-center mb-0" role="alert">To initiate your services.<span className="resume-upload--btn">&nbsp;<strong onClick={uploadHandelShow} className="cursor">Upload Resume</strong></span></div>
-                : null
-            }
+                {
+                    results.pending_resume_items.length > 0 ? 
+                        <div className="alert alert-primary py-4 px-5 fs-16 w-100 text-center mb-0" role="alert">To initiate your services.<span className="resume-upload--btn">&nbsp;<strong onClick={uploadHandelShow} className="cursor">Upload Resume</strong></span></div>
+                    : null
+                }
 
                 {results?.data && results.data.length > 0 ?
                     results.data.map((item,index) => {
@@ -135,8 +134,11 @@ const MyServices = (props) => {
 
                                                     <div className="db-my-courses-detail__leftpan--status mb-2">
                                                         Status:
-                                                        <strong className="ml-1">{item.status}
-                                                            {results.pending_resume_items.length > 0 ? <Link to={"#"} className="ml-2" onClick={uploadHandelShow}>Upload</Link>
+                                                        <strong className="ml-1">{item.status ? item.status : item.new_oi_status}
+                                                            {results.pending_resume_items?.length > 0 ? <Link to={"#"} className="ml-2" onClick={uploadHandelShow}>Upload</Link>
+                                                            : null}
+
+                                                            {item.options.Download ? <a className="ml-2" target="_blank" href={createResumeDownloadLink(item.options.download_url)}>Download</a>
                                                             : null}
                                                         </strong> 
 
@@ -173,25 +175,28 @@ const MyServices = (props) => {
 
                                                 <div className="day-remaning mb-20">
                                                     {[...(item.remaining_days + '')].map((day, idx) => <span key={idx} className="day-remaning--box">{day}</span>)}
-                                                    {/* <span className="day-remaning--box">9</span> */}
-                                                    {/* <span className="day-remaning--box">0</span> */}
                                                     <span className="ml-2 day-remaning--text">Days <br/>remaning</span>
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div className="db-my-courses-detail__bottom">
-                                            {item.status !== 'Unpaid' ? <Link
+                                            <Link
                                                 to={"#"}
                                                 className="db-comments font-weight-bold"
                                                 onClick={() => addCommentDataFetch(item.id)}
                                                 aria-controls="addComments"
                                                 aria-expanded={`openComment`+item.id}
-                                            >
-                                                Add comment
+                                                >
+                                                    {item.no_of_comments > 0 && item.no_of_comments > 1 ?
+                                                        item.no_of_comments + ' Comments'
+                                                        :
+                                                        item.no_of_comments > 0 && item.no_of_comments < 1 ?
+                                                        item.no_of_comments + ' Comment'
+                                                        :
+                                                        'Add comment'
+                                                    }
                                             </Link>
-                                            : null}
-
                                             {/* ratings start here */}
                                             <div className="d-flex">
                                                 <ReviewRating
@@ -210,15 +215,15 @@ const MyServices = (props) => {
                                     </div>
                                 </div>
                                 {/* add comment dropdown */}
-                                {oiComments ? <AddCommentModal id={item.id} data={oiComments[0]} addOpen={addOpen} /> : null }
+                                <AddCommentModal id={item.id} addCommentDataFetch={addCommentDataFetch} data={oiComments} addOpen={addOpen} />
                             </div>
                         )
                     })
                     :null
                 }
 
+                {/* pagination set here */}
                 {results?.page?.total > 1 ? <Pagination totalPage={results?.page?.total} currentPage={currentPage} setCurrentPage={setCurrentPage}/> : ''}
-
             </div>
         </div>
     )
