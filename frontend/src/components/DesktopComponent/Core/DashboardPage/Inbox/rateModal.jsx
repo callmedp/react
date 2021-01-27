@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import { Modal } from 'react-bootstrap';
 import {InputField, TextArea} from 'formHandler/desktopFormHandler/formFields';
 import CoursesServicesForm from 'formHandler/desktopFormHandler/formData/coursesServices';
-import { fetchReviews } from 'store/AddSubmitReview/actions/index';
+import { fetchReviews } from 'store/DashboardPage/AddSubmitReview/actions/index';
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
