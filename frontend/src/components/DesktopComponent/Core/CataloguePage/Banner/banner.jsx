@@ -8,13 +8,13 @@ const CatalogBanner = (props) => {
     return (
        <header className="container-fluid pos-rel catalog-bg">
             <div className="row">
-                <div className="container catalog-header-content mt-30">
-                    <div className="w-50 mb-50">
+                <div className="container catalog-header-content mt-10">
+                    <div className="w-75 mt-20">
                         <h1 className="heading1" data-aos="fade-right">
                             <strong>India's largest</strong> e-learning platform
                         </h1>
                         <p>Join the club of 4mn learners with our partners like Skillsoft, ACCA etc</p>
-                        <div className="d-flex w-100 mt-10">
+                        <div className="d-flex w-100 mt-20">
                             <LinkScroll to="all-categories"  isDynamic={true} spy={true} offset={-35} className="btn btn-outline-white mr-10">View categories</LinkScroll>
                             <LinkScroll to="recommended-services" isDynamic={true} spy={true} offset={-70} className="btn btn-outline-white">View services</LinkScroll>
                         </div>

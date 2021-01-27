@@ -14,7 +14,7 @@ const RecentCourses = (props) => {
     }
 
     return (
-        <section className="container-fluid lightblue-bg mt-30" data-aos="fade-up">
+        <section className="container-fluid lightblue-bg mt-60" data-aos="fade-up">
             <div className="row">
                 <div className="container">
                     <div className="recent-courses mt-40 mb-50">
@@ -35,7 +35,7 @@ const RecentCourses = (props) => {
                                                 </div>
                                                 <div className="card__box">
                                                     <div className="card__rating">
-                                                        <span className="mr-10">By {course.providerName?.length > 12 ? course.providerName?.slice(0,12) + '...' : course.providerName }</span>
+                                                        <span className="mr-10">By {course.providerName?.length > 10 ? course.providerName?.slice(0,10) + '...' : course.providerName }</span>
 
                                                         <span className="rating">
                                                             {course.stars?.map((star, index) => starRatings(star, index))}
