@@ -2,7 +2,7 @@ import React from 'react';
 import { Collapse } from 'react-bootstrap';
 import { useForm } from "react-hook-form";
 import { useDispatch } from 'react-redux';
-import { fetchOiComment } from 'store/AddSubmitComment/actions';
+import { fetchOiComment } from 'store/DashboardPage/AddSubmitComment/actions';
 import { TextArea} from 'formHandler/desktopFormHandler/formFields';
 import CoursesServicesForm from 'formHandler/desktopFormHandler/formData/coursesServices';
 
