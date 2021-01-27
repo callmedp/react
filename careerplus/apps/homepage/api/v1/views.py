@@ -956,18 +956,18 @@ class TrendingCategoriesApi(PopularProductMixin, APIView):
     def get(self, request):
         quantity_to_display = int(request.GET.get('num', 6))
 
-        cached_data = cache.get('category_popular_courses')
-        if (not settings.DEBUG) and cached_data:
-            data = cached_data
-        else:
-            data = {
-                'SnMCourseList': PopularProductMixin().get_products_json(PopularProductMixin().\
-                                                        get_popular_courses(category=17,quantity=quantity_to_display)),
-                'ITCourseList': PopularProductMixin().get_products_json(PopularProductMixin().\
-                                                        get_popular_courses(category=22,quantity=quantity_to_display)),
-                'BnFCourseList': PopularProductMixin().get_products_json(PopularProductMixin().\
-                                                        get_popular_courses(category=20,quantity=quantity_to_display)),
-            }
-            cache.set('category_popular_courses',data,86400)
+        # cached_data = cache.get('category_popular_courses')
+        # if (not settings.DEBUG) and cached_data:
+        #     data = cached_data
+        # else:
+        data = {
+            'SnMCourseList': PopularProductMixin().get_products_json(PopularProductMixin().\
+                                                    get_popular_courses(category=17,quantity=quantity_to_display)),
+            'ITCourseList': PopularProductMixin().get_products_json(PopularProductMixin().\
+                                                    get_popular_courses(category=22,quantity=quantity_to_display)),
+            'BnFCourseList': PopularProductMixin().get_products_json(PopularProductMixin().\
+                                                    get_popular_courses(category=20,quantity=quantity_to_display)),
+        }
+            # cache.set('category_popular_courses',data,86400)
         return Response(data=data, status=status.HTTP_200_OK)
         
