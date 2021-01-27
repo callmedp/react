@@ -7,6 +7,14 @@ const fetchReviews = (payload) => {
     }
 }
 
+const submitReview = (payload) => {
+    return {
+        type : Actions.REVIEW_SUBMIT,
+        payload
+    }
+}
+
 export {
     fetchReviews,
+    submitReview
 }
