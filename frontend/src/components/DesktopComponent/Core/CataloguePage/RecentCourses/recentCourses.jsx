@@ -14,7 +14,7 @@ const RecentCourses = (props) => {
     }
 
     return (
-        <section className="container-fluid lightblue-bg mt-30" data-aos="fade-up">
+        <section className="container-fluid lightblue-bg mt-60" data-aos="fade-up">
             <div className="row">
                 <div className="container">
                     <div className="recent-courses mt-40 mb-50">

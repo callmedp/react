@@ -23,7 +23,7 @@ const OurVendors = (props) => {
                                         <span className="d-flex">
                                             <a href={service.url}>Know more</a>
                                             <figure >
-                                                <img height="30" width="40"  src={service.img} alt={service.img_alt} />
+                                                <img src={service.img} alt={service.img_alt} />
                                             </figure>
                                         </span>
                                     </div>
