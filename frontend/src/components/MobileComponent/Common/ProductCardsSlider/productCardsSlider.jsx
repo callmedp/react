@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Slider from "react-slick";
 import { siteDomain } from 'utils/domains';
+import './productCardsSlider.scss';
 
 const ProductCards = props => {
     const {
@@ -27,6 +28,7 @@ const ProductCards = props => {
     }
 
     return (
+        <section className="m-courses mt-0 mb-0 pt-10 pb-0" >
         <Slider {...settings}>
             {
                 productList?.map((product, index) => {
@@ -34,7 +36,7 @@ const ProductCards = props => {
                         <div className="m-card" key={index}>
                             <div className="m-card__heading">
                                 <figure>
-                                    <img src={product?.imgUrl} alt={product?.imgAlt} />
+                                    <img src={product?.img} alt={product?.imgAlt} />
                                 </figure>
                                 <h3 className="m-heading3">
                                     <a href={`${siteDomain}${product.url}`}>{product?.name}</a>
@@ -57,6 +59,7 @@ const ProductCards = props => {
                 })
             }
         </Slider>
+        </section>
     )
 }
 
