@@ -25,7 +25,7 @@ const ServicesForYou = (props) => {
                 <h2 className="m-heading2 text-center">Services for you</h2>
                 <Slider {...settings}>
                 {
-                    popularServices?.map((service, index) => {
+                    popularServices?.slice(0,4).map((service, index) => {
                         return (
                             <div className="m-services-foryou__list" key={index}>
                                 <h3 className="m-heading3">{service.name}</h3>
