@@ -4,7 +4,7 @@ import Swal from 'sweetalert2';
 import { useForm } from "react-hook-form";
 import inboxForm from 'formHandler/mobileFormHandler/formData/inboxForm';
 import { TextArea } from 'formHandler/mobileFormHandler/formFields';
-import { fetchMyReviews } from 'store/DashboardPage/MyServices/actions';
+import { fetchReviews } from 'store/DashboardPage/AddSubmitReview/actions/index';
 import { startReviewLoader, stopReviewLoader } from 'store/Loader/actions/index';
 import Loader from '../../../Common/Loader/loader';
 
@@ -15,9 +15,8 @@ const RateProductModal = (props) => {
     const [showAllRatings, setShowAllRatings] = useState(true)
     const { register, handleSubmit, errors, reset } = useForm();
 
-    const setProductReview = useSelector(store => store.dashboardServices.reviews);
+    const reviews = useSelector(store => store?.getReviews?.data);
     const { reviewLoader } = useSelector(store => store.loader);
-    const reviews = setProductReview?.length && setProductReview[setProductReview?.length-1]?.data?.data
 
     const submitReview = async values => {
         const new_review = {
@@ -28,7 +27,7 @@ const RateProductModal = (props) => {
         };
 
         dispatch(startReviewLoader());
-        let addedReview = await new Promise((resolve, reject) => dispatch(fetchMyReviews({payload: new_review, resolve, reject })));
+        let addedReview = await new Promise((resolve, reject) => dispatch(fetchReviews({payload: new_review, resolve, reject })));
         dispatch(stopReviewLoader());
         reset(addedReview);
         Swal.fire({
@@ -53,7 +52,7 @@ const RateProductModal = (props) => {
         try{
             if (!(window && window.config && window.config.isServerRendered)) {
                 dispatch(startReviewLoader());
-                await new Promise((resolve, reject) => dispatch(fetchMyReviews({payload: new_review, resolve, reject })));
+                await new Promise((resolve, reject) => dispatch(fetchReviews({payload: new_review, resolve, reject })));
                 dispatch(stopReviewLoader());
             }
             else {
@@ -78,7 +77,7 @@ const RateProductModal = (props) => {
             { reviewLoader && <Loader /> }
             <div className="m-slide-modal">
                 {
-                    showAllRatings && reviews &&
+                    showAllRatings &&
                     <div className="addcomments" style={{display: 'block'}}>
                         <span className="m-db-close" style={{ marginLeft: '13px' }} onClick={() => {setShowRateModal(false)}}>X</span>
                         
@@ -90,7 +89,7 @@ const RateProductModal = (props) => {
                                             <li key={index}>
                                                 <div className="card__rating">
                                                     <span className="rating">
-                                                        { review?.stars?.map((star, index) => starRatings(star, index)) }
+                                                        { review?.rating?.map((star, index) => starRatings(star, index)) }
                                                         <span className="ml-5">{review?.average_rating?.toFixed(0)}/5</span>
                                                     </span>
                                                 </div>

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from "react-hook-form";
 import Swal from 'sweetalert2';
-import { getoiComment } from 'store/DashboardPage/MyServices/actions';
+import { fetchOiComment } from 'store/DashboardPage/AddSubmitComment/actions/index';
 import inboxForm from 'formHandler/mobileFormHandler/formData/inboxForm';
 import { TextArea } from 'formHandler/mobileFormHandler/formFields';
 import { startCommentLoader, stopCommentLoader } from 'store/Loader/actions/index';
@@ -11,10 +11,9 @@ import Loader from '../../../Common/Loader/loader';
 const AddCommentModal = (props) => {
     const { setShowCommentModal, oi_id }  = props
     const dispatch = useDispatch();
-    const oiComments = useSelector(store => store?.dashboardServices?.oi_comment);
+    const comments = useSelector(store => store?.getComment?.comment);
     const { commentLoader } = useSelector(store => store.loader);
     const { register, handleSubmit, errors, reset } = useForm();
-    const comments = oiComments?.length && oiComments[oiComments?.length-1]?.comment
 
     const submitComment = async values => {
         const new_values = {
@@ -24,7 +23,7 @@ const AddCommentModal = (props) => {
         };
 
         dispatch(startCommentLoader());
-        let addedComment = await new Promise((resolve, reject) => dispatch(getoiComment({payload: new_values, resolve, reject })));
+        let addedComment = await new Promise((resolve, reject) => dispatch(fetchOiComment({payload: new_values, resolve, reject })));
         dispatch(stopCommentLoader());
         reset(addedComment);
         Swal.fire({
@@ -42,7 +41,7 @@ const AddCommentModal = (props) => {
         try{
             if (!(window && window.config && window.config.isServerRendered)) {
                 dispatch(startCommentLoader());
-                await new Promise((resolve, reject) => dispatch(getoiComment({payload: commVal, resolve, reject })));
+                await new Promise((resolve, reject) => dispatch(fetchOiComment({payload: commVal, resolve, reject })));
                 dispatch(stopCommentLoader());
             }
             else {

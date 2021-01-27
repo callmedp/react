@@ -13,6 +13,7 @@ import UploadResume from '../UploadResume/uploadResume';
 import Loader from '../../../Common/Loader/loader';
 import Pagination from '../../../Common/Pagination/pagination';
 import { startDashboardServicesPageLoader, stopDashboardServicesPageLoader } from 'store/Loader/actions/index';
+import { siteDomain } from 'utils/domains';
 
 // API Import
 import { fetchMyServices, fetchPendingResumes } from 'store/DashboardPage/MyServices/actions/index';
@@ -84,6 +85,11 @@ const MyServices = (props) => {
     };
 
     useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: "smooth"
+        });
         handleEffects();
     }, [currentPage])
 
@@ -101,9 +107,9 @@ const MyServices = (props) => {
                                     <div className="m-share" aria-haspopup="true">
                                         <i className="icon-share"></i>
                                         <div className="m-share__box m-arrow-box m-top">
-                                            <Link to={"#"} className="m-facebook-icon"></Link>
-                                            <Link to={"#"} className="m-linkedin-icon"></Link>
-                                            <Link to={"#"} className="m-twitter-iocn"></Link>
+                                            <a target="_blank" href={`https://www.facebook.com/sharer/sharer.php?u=${siteDomain}${service?.productUrl}`} className="m-facebook-icon"></a>
+                                            <a target="_blank" href={`https://www.linkedin.com/shareArticle?mini=true&url=${siteDomain}${service?.productUrl}&title=${service?.title}&summary=${service?.name}&source=`} className="m-linkedin-icon"></a>
+                                            <a target="_blank" href={`https://twitter.com/intent/tweet?url=${siteDomain}${service?.productUrl}/&text=${service?.name}`} className="m-twitter-iocn"></a>
                                             <Link to={"#"} className="m-whatsup-icon"></Link>
                                         </div>
                                     </div>

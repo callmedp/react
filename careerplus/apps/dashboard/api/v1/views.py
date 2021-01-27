@@ -273,14 +273,15 @@ class DashboardReviewApi(APIView):
         candidate_id = request.data.get('candidate_id', None) or self.request.session.get('candidate_id', None)
         oi_pk = request.data.get('oi_pk')
         email = request.data.get('email') or self.request.session.get('email', None)
+        name = self.request.session.get('name', email)
 
         # candidate_id = '568a0b20cce9fb485393489b'
         # email = 'priya.kharb@hindustantimes.com'
+        # name = 'priya'
+
         data = {
             "display_message": 'Thank you for sharing your valuable feedback',
         }
-
-        # import ipdb;ipdb.set_trace()
 
         if oi_pk and candidate_id:
             try:
@@ -288,7 +289,6 @@ class DashboardReviewApi(APIView):
                 review = request.data.get('review', '').strip()
                 rating = int(request.data.get('rating', 1))
                 title = request.data.get('title', '').strip()
-                name = request.data.get('full_name')
                 if rating and oi and oi.order.candidate_id == candidate_id and oi.order.status in [1, 3]:
                     content_type = ContentType.objects.get(app_label="shop", model="product")
                     review_obj = Review.objects.create(
