@@ -9,4 +9,5 @@ urlpatterns = [
     re_path(r'^my-services/$', views.MyServicesApi.as_view(), name='my-services'),
     re_path(r'^my-wallet/$', views.DashboardMyWalletAPI.as_view(), name='my-wallet'),
     re_path(r'^review/$', views.DashboardReviewApi.as_view(),name='dashboard-feedback'),
+    re_path(r'^pending-resume_items/$', views.DashboardPendingResumeItemsApi.as_view(),name='pending-resume-item'),
 ]

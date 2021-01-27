@@ -104,7 +104,7 @@ class MyCoursesApi(DashboardInfo, APIView):
             excl_order_list = excl_txns.all().values_list('order_id', flat=True)
 
             orders = orders.exclude(
-                id__in=excl_order_list).order_by('-date_placed')
+                id__in=excl_order_list)
 
             courses = OrderItem.objects.filter(order__in=orders,product__type_flow=2).exclude(order__status__in=[0,5])
             paginated_data = offset_paginator(page, courses)
@@ -132,29 +132,14 @@ class MyServicesApi(DashboardInfo, APIView):
         candidate_id='568a0b20cce9fb485393489b'
         # candidate_id='5fed060d9cbeea482331ec4b'
         if candidate_id:
-            orders = Order.objects.filter(
-                status__in=[0, 1, 3],
-                candidate_id=candidate_id)
-
             excl_txns = PaymentTxn.objects.filter(
                 status__in=[0, 2, 3, 4, 5],
                 payment_mode__in=[6, 7],
                 order__candidate_id=candidate_id)
             excl_order_list = excl_txns.all().values_list('order_id', flat=True)
 
-            orders = orders.exclude(
-                id__in=excl_order_list).order_by('-date_placed')
-            
-
-            services = OrderItem.objects.filter(order__in=orders,product__product_class__slug__in=settings.SERVICE_SLUG).exclude(order__status__in=[0,5])
+            services = OrderItem.objects.filter(order__candidate_id=candidate_id, order__status__in=[1, 3],product__product_class__slug__in=['writing','service','other']).exclude(order__in=excl_order_list)
             paginated_data = offset_paginator(page, services)
-            pending_resume_items = DashboardInfo().get_pending_resume_items(candidate_id=candidate_id,
-                                                                        email=email)
-
-            pending_resume_items = [{'id': oi.id, 'product_name': oi.product.get_name if oi.product else ''
-                                    , 'product_get_exp_db': oi.product.get_exp_db() if oi.product else ''
-                                    } for oi in
-                                pending_resume_items]
             data = OrderItemSerializer(paginated_data["data"],many=True,context= {"get_details": True}).data
 
             #pagination info
@@ -164,7 +149,7 @@ class MyServicesApi(DashboardInfo, APIView):
             'has_prev': True if paginated_data['current_page'] >1 else False,
             'has_next':True if (paginated_data['total_pages']-paginated_data['current_page'])>0 else False
             }
-        return APIResponse(data={'data':data,'pending_resume_items':pending_resume_items,'page':page_info},message='Services data Success', status=status.HTTP_200_OK)
+        return APIResponse(data={'data':data,'page':page_info},message='Services data Success', status=status.HTTP_200_OK)
 
 
 class DashboardMyWalletAPI(DashboardInfo, APIView):
@@ -331,3 +316,24 @@ class DashboardReviewApi(APIView):
             return Response(data, status=status.HTTP_200_OK)
         else:
             return Response({'error': 'Something went Wrong'}, status=status.HTTP_400_BAD_REQUEST)
+
+class DashboardPendingResumeItemsApi(APIView):
+    permission_classes = ()
+    authentication_classes = ()
+    serializer_classes = None
+
+    def get(self,request):
+        candidate_id = self.request.session.get('candidate_id', None)
+        email = request.GET.get('email', None)
+        pending_resume_items = []
+        candidate_id='568a0b20cce9fb485393489b'
+
+        pending_resume_items = DashboardInfo().get_pending_resume_items(candidate_id=candidate_id,
+                                                                        email=email)
+
+        pending_resume_items = [{'id': oi.id, 'product_name': oi.product.get_name if oi.product else ''
+                                    , 'product_get_exp_db': oi.product.get_exp_db() if oi.product else ''
+                                    } for oi in
+                                pending_resume_items]
+
+        return APIResponse(data={'data':pending_resume_items},message='Pending resume items data Success', status=status.HTTP_200_OK)

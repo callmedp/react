@@ -128,7 +128,7 @@ class DashboardInfo(object):
     def get_pending_resume_items(self, candidate_id=None, email=None):
         if candidate_id:
             resume_pending_items = OrderItem.objects.\
-                filter(order__candidate_id=candidate_id, order__status__in=[1, 3], no_process=False).\
+                filter(order__candidate_id=candidate_id, order__status__in=[1, 3], no_process=False,product__product_class__slug__in=['writing','service','other']).\
                 filter(Q(oi_status=2) | Q(order__auto_upload=True,
                                           assigned_to=None)).exclude(oi_status__in=[4, 24])
 
