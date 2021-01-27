@@ -87,3 +87,17 @@ export const stopCommentLoader = () => {
         payload: { commentLoader: false }
     }
 }
+
+export const startReviewLoader = () => {
+    return {
+        type: Actions.START_REVIEW_LOADER,
+        payload: { reviewLoader: true } 
+    }
+}
+
+export const stopReviewLoader = () => {
+    return {
+        type: Actions.STOP_REVIEW_LOADER,
+        payload: { reviewLoader: false }
+    }
+}

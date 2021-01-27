@@ -336,3 +336,10 @@ class ReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = Review
         fields = ('__all__' )
+
+    def to_representation(self, instance):
+        data = super(ReviewSerializer, self).to_representation(instance)
+        data['created'] = instance.created.date().strftime('%b %d, %Y') if instance.created else None
+        data['stars'] = instance.get_ratings()
+
+        return data

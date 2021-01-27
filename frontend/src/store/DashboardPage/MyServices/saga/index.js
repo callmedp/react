@@ -90,28 +90,31 @@ function* uploadResume(action) {
 
 // fetch and submit reviews
 function* reviews(action) {
+    const { payload: { payload, resolve, reject } } = action;
     try {
-        const { payload } = action;
         let result = null;
 
         if (payload.type === 'GET') {
             result = yield call(Api.myReviewsData, payload);
         }
         else {
-            result = yield call(Api.saveReviewsData, {'rating': payload.rating, 'review': payload.review, 'title': payload.title});
+            result = yield call(Api.saveReviewsData, {'rating': payload.rating, 'review': payload.review, 'title': payload.title, 'oi_pk':payload.oi_pk});
             if (!result["error"]) {
-                return payload?.resolve(result);
+                return resolve(result);
             }
         }
         if (result["error"]) {
-            return yield put({ type: Actions.SUBMIT_DASHBOARD_FAILED, error: 404 });
+            yield put({ type: Actions.SUBMIT_DASHBOARD_FAILED, error: 404 });
+            return resolve(result)
         }
         else {
-            return yield put({ type: Actions.SUBMIT_DASHBOARD_SUCCESS, reviews: result.data });
+            yield put({ type: Actions.SUBMIT_DASHBOARD_SUCCESS, reviews: result.data });
+            return resolve(result)
         }
     }
     catch (e) {
-        return yield put({ type: Actions.SUBMIT_DASHBOARD_FAILED, error: 500 });
+        yield put({ type: Actions.SUBMIT_DASHBOARD_FAILED, error: 500 });
+        return resolve('Something went wrong')
     }
 }
 

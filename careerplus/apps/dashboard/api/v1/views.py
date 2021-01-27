@@ -233,7 +233,7 @@ class DashboardReviewApi(APIView):
 
     def get(self,request):
         page = request.GET.get('page', 1)
-        product_id = request.GET.get('product_id',None) or self.request.session.get('candidate_id', None)
+        product_id = request.GET.get('product_id',None)
         try:
             product = Product.objects.get(id=product_id)
         except Product.DoesNotExist:
@@ -272,7 +272,10 @@ class DashboardReviewApi(APIView):
         email_dict = {}
         candidate_id = request.data.get('candidate_id', None) or self.request.session.get('candidate_id', None)
         oi_pk = request.data.get('oi_pk')
-        email = request.data.get('email')
+        email = request.data.get('email') or self.request.session.get('email', None)
+
+        # candidate_id = '568a0b20cce9fb485393489b'
+        # email = 'priya.kharb@hindustantimes.com'
         data = {
             "display_message": 'Thank you for sharing your valuable feedback',
         }

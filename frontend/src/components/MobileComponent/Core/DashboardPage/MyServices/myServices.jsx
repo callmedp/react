@@ -31,10 +31,8 @@ const MyServices = (props) => {
     const [showOrderDetailsID, setShowOrderDetailsID] = useState('')
     const [currentPage, setCurrentPage] = useState(1)
     const [oiCommentId, setOiCommentId] = useState('')
-    // const [oiUploadData, setOiUploadData] = useState({
-    //     'id': '',
-    //     'pendingResumeItems': []
-    // })
+    const [oiReviewId, setOiReviewId] = useState('')
+    
 
     const showDetails = (id) => {
         id == showOrderDetailsID ?
@@ -183,7 +181,7 @@ const MyServices = (props) => {
                                                         { service?.no_of_comments ? service?.no_of_comments > 1 ? `${service?.no_of_comments} Comments` : `${service?.no_of_comments} Comment` : 'Add Comment' }
                                                     </Link>
                                                     
-                                                    <div className="d-flex" onClick={()=>{setShowRateModal(true)}}>
+                                                    <div className="d-flex" onClick={()=>{setShowRateModal(true);setOiReviewId(service?.product)}}>
                                                         {
                                                             service?.no_review ?
                                                                 <>
@@ -223,7 +221,7 @@ const MyServices = (props) => {
                 showCommentModal && <AddCommentModal setShowCommentModal = {setShowCommentModal} oi_id={oiCommentId} />
             }
             {
-                showRateModal && <RateProductModal setShowRateModal={setShowRateModal} />
+                showRateModal && <RateProductModal setShowRateModal={setShowRateModal} oi_id={oiReviewId}/>
             }
             {
                 showUpload && <UploadResume setShowUpload={setShowUpload} data={serviceData?.pending_resume_items} />
