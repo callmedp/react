@@ -4,7 +4,7 @@ import Swal from 'sweetalert2';
 import { useForm } from "react-hook-form";
 import inboxForm from 'formHandler/mobileFormHandler/formData/inboxForm';
 import { TextArea } from 'formHandler/mobileFormHandler/formFields';
-import { fetchReviews } from 'store/DashboardPage/AddSubmitReview/actions/index';
+import { fetchReviews, submitReview } from 'store/DashboardPage/AddSubmitReview/actions/index';
 import { startReviewLoader, stopReviewLoader } from 'store/Loader/actions/index';
 import Loader from '../../../Common/Loader/loader';
 
@@ -18,7 +18,7 @@ const RateProductModal = (props) => {
     const reviews = useSelector(store => store?.getReviews?.data);
     const { reviewLoader } = useSelector(store => store.loader);
 
-    const submitReview = async values => {
+    const submitReviews = async values => {
         const new_review = {
             ...values,
             oi_pk: idDict?.orderId,
@@ -27,13 +27,13 @@ const RateProductModal = (props) => {
         };
 
         dispatch(startReviewLoader());
-        let addedReview = await new Promise((resolve, reject) => dispatch(fetchReviews({payload: new_review, resolve, reject })));
+        let addedReview = await new Promise((resolve, reject) => dispatch(submitReview({ payload: new_review, resolve, reject })));
         dispatch(stopReviewLoader());
-        reset(addedReview);
         Swal.fire({
             icon: 'success',
             text: 'Thanks for your valuable feedback !'
         })
+        reset(addedReview);
         setShowRateModal(false)
     };
 
@@ -50,14 +50,9 @@ const RateProductModal = (props) => {
             type: 'GET'
         };
         try{
-            if (!(window && window.config && window.config.isServerRendered)) {
-                dispatch(startReviewLoader());
-                await new Promise((resolve, reject) => dispatch(fetchReviews({payload: new_review, resolve, reject })));
-                dispatch(stopReviewLoader());
-            }
-            else {
-                delete window.config?.isServerRendered
-            }
+            dispatch(startReviewLoader());
+            await new Promise((resolve, reject) => dispatch(fetchReviews({ payload: new_review, resolve, reject })));
+            dispatch(stopReviewLoader());
         }
         catch(e){
             dispatch(stopReviewLoader());
@@ -100,68 +95,6 @@ const RateProductModal = (props) => {
                                         )
                                     })
                                 }
-                                {/* <li>
-                                    <div className="card__rating">
-                                        <span className="rating">
-                                            <em className="icon-fullstar"></em>
-                                            <em className="icon-fullstar"></em>
-                                            <em className="icon-fullstar"></em>
-                                            <em className="icon-fullstar"></em>
-                                            <em className="icon-blankstar"></em>
-                                            <span> <strong>4</strong> /5</span>
-                                        </span>
-                                    </div>
-
-                                    <span className="m-reviews-list--date">Dec. 21, 2020</span>
-                                    <p className="m-reviews-list--text">Great product for your career.  It helped alot to enhance my career</p>
-                                </li>
-                                
-                                <li>
-                                    <div className="card__rating">
-                                        <span className="rating">
-                                            <em className="icon-fullstar"></em>
-                                            <em className="icon-fullstar"></em>
-                                            <em className="icon-fullstar"></em>
-                                            <em className="icon-fullstar"></em>
-                                            <em className="icon-blankstar"></em>
-                                            <span> <strong>4</strong> /5</span>
-                                        </span>
-                                    </div>
-
-                                    <span className="m-reviews-list--date">Oct. 14, 2020</span>
-                                    <p className="m-reviews-list--text">Good Mentors with good experience</p>
-                                </li>
-                                <li>
-                                    <div className="card__rating">
-                                        <span className="rating">
-                                            <em className="icon-fullstar"></em>
-                                            <em className="icon-fullstar"></em>
-                                            <em className="icon-fullstar"></em>
-                                            <em className="icon-fullstar"></em>
-                                            <em className="icon-blankstar"></em>
-                                            <span> <strong>4</strong> /5</span>
-                                        </span>
-                                    </div>
-
-                                    <span className="m-reviews-list--date">Dec. 21, 2020</span>
-                                    <p className="m-reviews-list--text">Great product for your career.  It helped alot to enhance my career</p>
-                                </li>
-                                
-                                <li>
-                                    <div className="card__rating">
-                                        <span className="rating">
-                                            <em className="icon-fullstar"></em>
-                                            <em className="icon-fullstar"></em>
-                                            <em className="icon-fullstar"></em>
-                                            <em className="icon-fullstar"></em>
-                                            <em className="icon-blankstar"></em>
-                                            <span> <strong>4</strong> /5</span>
-                                        </span>
-                                    </div>
-
-                                    <span className="m-reviews-list--date">Oct. 14, 2020</span>
-                                    <p className="m-reviews-list--text">Good Mentors with good experience</p>
-                                </li> */}
                             </ul>
                         </div>
                         
@@ -173,7 +106,7 @@ const RateProductModal = (props) => {
 
                 {
                     showRatingModal &&
-                        <form onSubmit={handleSubmit(submitReview)}>
+                        <form onSubmit={handleSubmit(submitReviews)}>
                             <div className="text-center">
                                 <span className="m-db-close" onClick={() => {setShowRateModal(false)}}>X</span>
                                 <h2>Add Review</h2>
@@ -182,7 +115,7 @@ const RateProductModal = (props) => {
                                         <TextArea attributes={inboxForm.review} register={register} errors={!!errors ? errors[inboxForm.review.name] : ''} />
                                     </div>
 
-                                    <button className="btn btn-blue" onClick={handleSubmit(submitReview)}>Submit</button>
+                                    <button className="btn btn-blue" onClick={handleSubmit(submitReviews)}>Submit</button>
                                 </div>
                             </div>
                         </form>
