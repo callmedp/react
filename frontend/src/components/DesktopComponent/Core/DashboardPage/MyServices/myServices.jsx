@@ -9,8 +9,8 @@ import { startDashboardServicesPageLoader, stopDashboardServicesPageLoader } fro
 import Loader from '../../../Common/Loader/loader';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchMyServices } from 'store/DashboardPage/MyServices/actions';
-import { fetchOiComment } from 'store/AddSubmitComment/actions/index';
-import { fetchReviews } from 'store/AddSubmitReview/actions/index';
+import { fetchOiComment } from 'store/DashboardPage/AddSubmitComment/actions/index';
+import { fetchReviews } from 'store/DashboardPage/AddSubmitReview/actions/index';
 
 // import Swal from 'sweetalert2';
 // import {getCandidateId} from 'utils/storage';
