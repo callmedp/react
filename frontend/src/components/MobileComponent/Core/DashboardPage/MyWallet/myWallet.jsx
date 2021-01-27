@@ -6,6 +6,8 @@ import { fetchMyWallet } from 'store/DashboardPage/MyWallet/actions/index';
 import { startDashboardWalletPageLoader, stopDashboardWalletPageLoader } from 'store/Loader/actions/index';
 import Loader from '../../../Common/Loader/loader';
 import Pagination from '../../../Common/Pagination/pagination';
+import FAQ from '../../../Common/FAQ/faq';
+import { faqList } from 'utils/dashboardUtils/faqListUtils';
 
    
 const MyWallet = (props) => {
@@ -33,6 +35,11 @@ const MyWallet = (props) => {
     };
 
     useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: "smooth"
+        });
         handleEffects();
     }, [currentPage])
 
@@ -147,6 +154,7 @@ const MyWallet = (props) => {
                     page?.total > 1 ? <Pagination totalPage={page?.total} currentPage={currentPage} setCurrentPage={setCurrentPage}/> : ''
                 }
             </div>
+            <FAQ faqList={faqList} />
         </>
     )
 }

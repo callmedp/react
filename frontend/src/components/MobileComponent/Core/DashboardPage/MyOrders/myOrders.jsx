@@ -39,6 +39,11 @@ const MyWallet = (props) => {
     };
 
     useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: "smooth"
+        });
         handleEffects();
     }, [currentPage])
 
@@ -50,20 +55,32 @@ const MyWallet = (props) => {
     const handleCancellation = async (orderId) => {
         setShowCancelModal(false)
         dispatch(startDashboardOrderPageLoader());
-        var result = await new Promise((resolve, reject) => dispatch(
+        var result = await new Promise((resolve, reject) => dispatch( 
             cancelOrder({
                 payload: {
                     order_id: orderId,
-                    candidate_id: getDataStorage('candidate_id'),
-                    email: getDataStorage('email')
+                    // candidate_id: getDataStorage('candidate_id'),
+                    // email: getDataStorage('email')
                 }, resolve, reject
             })
         ));
-        Swal.fire({
-            html: result,
-            icon: 'info'
-        })
-        dispatch(stopDashboardOrderPageLoader());
+        if (result.cancelled) {
+            Swal.fire({
+                // html: result,
+                title: result.data,
+                icon: 'success'
+            })
+            handleEffects();
+            dispatch(stopDashboardOrderPageLoader());
+        }
+        else {
+            Swal.fire({
+                // html: result,
+                title: result.error,
+                icon: 'error'
+            })
+            dispatch(stopDashboardOrderPageLoader());
+        }
     }
 
     const getOrderDetails = (orderItems) => {

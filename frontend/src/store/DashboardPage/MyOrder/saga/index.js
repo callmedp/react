@@ -33,7 +33,7 @@ function* CancelOrder(action) {
         if (response?.error) {
             return resolve(response?.error)
         }
-        const item = response?.data?.data;
+        const item = response?.data;
 
         // yield put({ 
         //     type : Actions.ORDER_CANCELLED, 
