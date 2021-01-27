@@ -40,13 +40,14 @@ const BannerSkill = (props) => {
                         <h1 className="heading1" data-aos="fade-right">
                             {name} Courses & Certifications
                         </h1>
-                        <Carousel className={featuresList?.length ? "header-carousel" : "header-carousel noslide"}>
-                            {/* <figure className="icon-round-arrow"></figure> */}
+                        <Carousel className={featuresList?.length ? "header-carousel carousel-fade" : "header-carousel carousel-fade noslide"}>
+                            
                             {
                                 featuresList?.map((feature, index) => {
                                     return (
                                         <Carousel.Item key={index} >
                                             <p key={Math.random()}>
+                                                <figure className="icon-round-arrow"></figure>
                                                 <span className="flex-1" dangerouslySetInnerHTML={{__html: feature }} />
                                             </p>
                                         </Carousel.Item>
