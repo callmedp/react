@@ -34,7 +34,9 @@ const MyServices = (props) => {
     // main api result state here
     const results = useSelector(store => store.dashboardServices);
     const oiComments = useSelector(store => store.getComment);
-    const setProductReview = useSelector(store => store.getReviews.data);
+    const setProductReview = useSelector(store => {console.log(store.getReviews); return store.getReviews.data});
+
+    console.log(setProductReview)
 
     // main service api hit
     const handleEffects = async () => {
@@ -65,7 +67,7 @@ const MyServices = (props) => {
     
     // if reviews exists then show
     const toggleReviews = (id, prod) => {
-        if(openReview != id) dispatch(fetchReviews({ prod: prod, page: currentPage, type: 'GET'}));
+        if(openReview != id) dispatch(fetchReviews({ prod: prod, page: currentPage}));
         setOpenReview(openReview == id ? false : id);
     }
 

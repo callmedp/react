@@ -2,16 +2,15 @@ import React, {useState} from 'react';
 import { Modal } from 'react-bootstrap';
 import {InputField, TextArea} from 'formHandler/desktopFormHandler/formFields';
 import CoursesServicesForm from 'formHandler/desktopFormHandler/formData/coursesServices';
-import { fetchReviews } from 'store/DashboardPage/AddSubmitReview/actions/index';
+import { submitReview } from 'store/DashboardPage/AddSubmitReview/actions/index';
 import { useForm } from "react-hook-form";
-import { useDispatch, useSelector } from 'react-redux';
-import Swal from 'sweetalert2';
+import { useDispatch } from 'react-redux';
+import {Toast} from '../../../Common/Toast/toast';
 
 const RateModal =(props) => {
     const { handleClose, show, name, id } = props;
     const { register, handleSubmit, errors } = useForm();
     const dispatch = useDispatch();
-    
     let [rating, setRating] = useState(5);
     let [clicked, setClicked] = useState(false);
 
@@ -45,22 +44,25 @@ const RateModal =(props) => {
         }
     };
 
-    // const reviewResponse = useSelector(store => console.log(store));
-
     // add new review
-    const submitReview = (values) => {
+    const submitReviewFunc = async(values) => {
         const new_review = {
             ...values,
             oi_pk: id,
             rating: rating,
-            type: 'POST',
-            // full_name: localStorage.getItem('first_name') || '' + ' ' + localStorage.getItem('last_name') || '';
-            full_name: 'Priya kharb'
+            full_name: localStorage.getItem('first_name') || '' + ' ' + localStorage.getItem('last_name') || ''
+            // full_name: 'Priya kharb'
         };
 
-        dispatch(fetchReviews(new_review));
+        const response = await new Promise((resolve, reject) => dispatch(submitReview({new_review, resolve, reject})));
 
-        // console.log(handleClose)
+        if(response) {
+            handleClose(false);
+            Toast.fire({
+                type: 'success',
+                title: response.display_message
+            });
+        }
     };
 
     return (
@@ -87,7 +89,7 @@ const RateModal =(props) => {
                     })}
                 </span>
                 <p className="db-rate-services--subheading">Click on rate to scale of 1-5</p>
-                    <form onSubmit={handleSubmit(submitReview)}>
+                    <form onSubmit={handleSubmit(submitReviewFunc)}>
                         <div className="form-group error">
                             <InputField attributes={CoursesServicesForm.title} register={register}
                                 errors={!!errors ? errors[CoursesServicesForm.title.name] : ''} />
