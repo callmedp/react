@@ -17,8 +17,20 @@ const uploadResumeDashboardForm = (data) => {
     }, true);
 }
 
+const candidateAccept = (data) => {
+    const url = `${siteDomain}/dashboard/inbox-acceptservice/`
+    return BaseApiService.post(url, data)
+}
+
+const candidateReject = (data) => {
+    const url = `${siteDomain}/dashboard/inbox-rejectservice/`
+    return BaseApiService.post(url, data, {}, true)
+}
+
 export default {
     myServicesData,
+    uploadResumeDashboardForm,
     getPendingOrderItems,
-    uploadResumeDashboardForm
+    candidateAccept,
+    candidateReject
 }
