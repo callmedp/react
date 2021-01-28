@@ -197,12 +197,13 @@ class TaskListView(ListView, PaginationMixin):
 
         if 'order.can_download_discount_report' in self.request.user.get_all_permissions():
             task_types_allowed.append(8)
+            task_types_allowed.append(9)
 
         if self.request.user.groups.filter(name__in=settings.MARKETING_GROUP_LIST).exists():
             task_types_allowed.extend([1,4,5,6,7])
 
         if self.request.user.is_superuser:
-            task_types_allowed = [1,4,5,6,7,8]
+            task_types_allowed = [1,4,5,6,7,8,9]
 
         queryset = queryset.filter(task_type__in=task_types_allowed)
         return queryset.order_by('-modified')
