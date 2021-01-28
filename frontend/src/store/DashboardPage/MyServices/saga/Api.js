@@ -6,16 +6,15 @@ const myServicesData = (data) => {
     return BaseApiService.get(`${siteDomain}/dashboard/api/v1/${url}`);
 };
 
+const getPendingOrderItems = () => {
+    const url = `${siteDomain}/dashboard/api/v1/pending-resume_items/`
+    return BaseApiService.get(url)
+}
+
 const uploadResumeDashboardForm = (data) => {
     const url = `${siteDomain}/api/v1/dashboard-resume-upload/`;
     return BaseApiService.post(`${url}`, data, {
     }, true);
-}
-
-//fetch Pending Resumes
-const getPendingResumes = (data) => {
-    const url = `${siteDomain}/api/v1/dashboard-notification-box/`
-    return BaseApiService.get(url)
 }
 
 const candidateAccept = (data) => {
@@ -30,8 +29,8 @@ const candidateReject = (data) => {
 
 export default {
     myServicesData,
+    getPendingOrderItems,
     uploadResumeDashboardForm,
-    getPendingResumes,
     candidateAccept,
     candidateReject
 }

@@ -8,7 +8,7 @@ import './myServices.scss';
 import { startDashboardServicesPageLoader, stopDashboardServicesPageLoader } from 'store/Loader/actions/index';
 import Loader from '../../../Common/Loader/loader';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchMyServices } from 'store/DashboardPage/MyServices/actions';
+import { fetchMyServices, fetchPendingResume } from 'store/DashboardPage/MyServices/actions';
 import { fetchOiComment } from 'store/DashboardPage/AddSubmitComment/actions/index';
 import { fetchReviews } from 'store/DashboardPage/AddSubmitReview/actions/index';
 
@@ -21,7 +21,6 @@ import RateModal from '../Inbox/rateModal';
 import ReviewRating from '../Inbox/reviewRating';
 import AddCommentModal from '../Inbox/addCommentModal';
 import Pagination from '../../../Common/Pagination/pagination';
-import { siteDomain } from 'utils/domains';
 
 const MyServices = (props) => {
     const dispatch = useDispatch();
@@ -34,9 +33,8 @@ const MyServices = (props) => {
     // main api result state here
     const results = useSelector(store => store.dashboardServices);
     const oiComments = useSelector(store => store.getComment);
-    const setProductReview = useSelector(store => {console.log(store.getReviews); return store.getReviews.data});
-
-    console.log(setProductReview)
+    const setProductReview = useSelector(store => store.getReviews.data);
+    const pending_resume_items = useSelector(store => store.dashboardPendingResume.data);
 
     // main service api hit
     const handleEffects = async () => {
@@ -67,7 +65,7 @@ const MyServices = (props) => {
     
     // if reviews exists then show
     const toggleReviews = (id, prod) => {
-        if(openReview != id) dispatch(fetchReviews({ prod: prod, page: currentPage}));
+        if(openReview != id) dispatch(fetchReviews({ payload: {prod: prod, page: currentPage}}));
         setOpenReview(openReview == id ? false : id);
     }
 
@@ -84,6 +82,7 @@ const MyServices = (props) => {
     const [addOpen, setaddOpen] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    
     // hit api when clicked on add comment
     const addCommentDataFetch = (id) => {
         setaddOpen(addOpen == id ? false : id);
@@ -94,11 +93,9 @@ const MyServices = (props) => {
         if(addOpen != id) dispatch(fetchOiComment(commVal));
     };
 
-    // if resume download option is there
-    const createResumeDownloadLink = (id, data) => `${siteDomain}/dashboard/order-resumedownload/${id}&path=${id}`;
-
     useEffect(() => {
         handleEffects();
+        dispatch(fetchPendingResume())
     }, [currentPage])
 
     return(
@@ -106,13 +103,13 @@ const MyServices = (props) => {
             {serviceLoader ? <Loader /> : ''}
             <div className="db-my-courses-detail">
                 {
-                    results.pending_resume_items.length > 0 ? 
+                    pending_resume_items?.length > 0 ? 
                         <div className="alert alert-primary py-4 px-5 fs-16 w-100 text-center mb-0" role="alert">To initiate your services.<span className="resume-upload--btn">&nbsp;<strong onClick={uploadHandelShow} className="cursor">Upload Resume</strong></span></div>
                     : null
                 }
 
-                {results?.data && results.data.length > 0 ?
-                    results.data.map((item,index) => {
+                {results?.data && results?.data?.length > 0 ?
+                    results?.data?.map((item,index) => {
                         return(
                             <div className="db-white-box w-100" key={index}>
                                 <div className="d-flex">
@@ -137,15 +134,15 @@ const MyServices = (props) => {
 
                                                     <div className="db-my-courses-detail__leftpan--status mb-2">
                                                         Status:
-                                                        <strong className="ml-1">{item.status ? item.status : item.new_oi_status}
-                                                            {results.pending_resume_items?.length > 0 ? <Link to={"#"} className="ml-2" onClick={uploadHandelShow}>Upload</Link>
+                                                        <strong className="ml-1">{item.new_oi_status ? item.new_oi_status : ""}
+                                                            {item.options?.uploadResume ? <Link to={"#"} className="ml-2" onClick={uploadHandelShow}>Upload</Link>
                                                             : null}
 
-                                                            {item.options.Download ? <a className="ml-2" target="_blank" href={createResumeDownloadLink(item.options.download_url)}>Download</a>
+                                                            {item.options?.Download ? <a className="ml-2" target="_blank" href={item.options?.download_url}>Download</a>
                                                             : null}
                                                         </strong> 
 
-                                                        <UploadResumeModal uploadHandelClose={uploadHandelClose} show={uploadShow} data={results.pending_resume_items} />
+                                                        <UploadResumeModal uploadHandelClose={uploadHandelClose} show={uploadShow} data={pending_resume_items} />
                                                     </div>
 
                                                     {item.datalist && item.datalist.length > 0 ?

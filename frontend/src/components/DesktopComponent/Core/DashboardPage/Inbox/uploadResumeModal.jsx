@@ -1,15 +1,13 @@
 import React, {useState} from 'react';
 import { Modal } from 'react-bootstrap';
 import fileUpload from "utils/fileUpload";
-import Swal from 'sweetalert2';
 import { useDispatch } from 'react-redux';
 import { useForm } from "react-hook-form";
 import { uploadResumeForm } from 'store/DashboardPage/MyServices/actions';
-
+import {Toast} from '../../../Common/Toast/toast';
 
 const UploadResumeModal =(props) => {
     const { uploadHandelClose, show, data } = props;
-    // console.log(data)
     const dispatch = useDispatch();
     let [filename, setFileName] = useState("Upload a file");
     const [file, setFile] = useState(undefined);
@@ -34,18 +32,19 @@ const UploadResumeModal =(props) => {
 
         if (!response.error) {
             reset();
-            Swal.fire({
-                icon: "success",
+            Toast.fire({
+                type: 'success',
                 title: "Form Submitted Successfully"
-            })
+            });
+            
             setFile(undefined)
             setFileName("Upload a file");
         }
         else {
-            Swal.fire({
-                icon: "error",
+            Toast.fire({
+                type: 'error',
                 title: "Oops! <br> Something went wrong! Try Again"
-            })
+            });
         }
     }
 

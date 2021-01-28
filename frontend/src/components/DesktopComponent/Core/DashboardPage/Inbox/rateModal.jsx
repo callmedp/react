@@ -50,16 +50,15 @@ const RateModal =(props) => {
             ...values,
             oi_pk: id,
             rating: rating,
-            full_name: localStorage.getItem('first_name') || '' + ' ' + localStorage.getItem('last_name') || ''
-            // full_name: 'Priya kharb'
         };
 
-        const response = await new Promise((resolve, reject) => dispatch(submitReview({new_review, resolve, reject})));
+        const response = await new Promise((resolve, reject) => dispatch(submitReview({payload: new_review, resolve, reject})));
 
         if(response) {
-            handleClose(false);
+            if(!response?.error) handleClose(false);
+
             Toast.fire({
-                type: 'success',
+                type: response?.error ? 'error' : 'success',
                 title: response.display_message
             });
         }

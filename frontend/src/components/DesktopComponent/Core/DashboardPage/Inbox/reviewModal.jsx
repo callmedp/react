@@ -11,7 +11,6 @@ const ReviewModal = (props) => {
             '-': 'icon-blankstar'
         }[star];
     }
-    console.log(setProductReview)
 
     return (
         <Collapse in={openReview == item.id}>

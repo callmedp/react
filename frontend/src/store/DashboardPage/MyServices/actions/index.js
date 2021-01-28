@@ -7,6 +7,13 @@ const fetchMyServices = (payload) => {
     }
 }
 
+export const fetchPendingResume = payload => {
+    return {
+        type: Actions.GET_PENDING_RESUME,
+        payload: payload,
+    }
+}
+
 const uploadResumeForm = (payload) => ({
     type: Actions.UPLOAD_RESUME_FORM,
     payload

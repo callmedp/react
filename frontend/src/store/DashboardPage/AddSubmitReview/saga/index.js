@@ -10,7 +10,10 @@ function* GetReviews(action) {
 
         result = yield call(Api.myReviewsData, payload);
 
-        if (result["error"]) return resolve(result?.data);
+        if (result["error"]){
+            yield put({ type: Actions.REVIEWS_FETCHED, reviews: result?.data?.data });
+            return resolve(result?.data);
+        }
         else{
             yield put({ type: Actions.REVIEWS_FETCHED, reviews: result?.data?.data });
             return resolve(result)
