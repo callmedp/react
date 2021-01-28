@@ -6,9 +6,7 @@ import AddCommentModal from '../InboxModals/addCommentModal';
 import RateProductModal from '../InboxModals/rateProductModal'
 import Pagination from '../../../Common/Pagination/pagination';
 import Loader from '../../../Common/Loader/loader';
-import ProductCards from '../../../Common/ProductCardsSlider/productCardsSlider';
 import { fetchMyCourses } from 'store/DashboardPage/MyCourses/actions/index'
-import { fetchPopularServices } from 'store/CataloguePage/actions/index';
 import { startDashboardCoursesPageLoader, stopDashboardCoursesPageLoader } from 'store/Loader/actions/index';
 import { siteDomain } from 'utils/domains';
 
@@ -22,7 +20,6 @@ const MyCourses = (props) => {
     
     const dispatch = useDispatch();
     const { myCourses, page } = useSelector(store => store?.dashboardCourses);
-    const { popularServices } = useSelector(store => store?.popularServices );
     const { coursesLoader } = useSelector(store => store.loader);
 
     const showDetails = (id) => {
@@ -51,7 +48,6 @@ const MyCourses = (props) => {
         if (!(window && window.config && window.config.isServerRendered)) {
             dispatch(startDashboardCoursesPageLoader());
             await new Promise((resolve, reject) => dispatch(fetchMyCourses({ page: currentPage, resolve, reject })));
-            await new Promise((resolve, reject) => dispatch(fetchPopularServices({ resolve, reject })));
             dispatch(stopDashboardCoursesPageLoader());
         }
         else {
@@ -335,7 +331,6 @@ const MyCourses = (props) => {
                             setCurrentPage={setCurrentPage} /> : ''
                 }
             </div>
-            <ProductCards productList={popularServices} />
         </>
     )
 }
