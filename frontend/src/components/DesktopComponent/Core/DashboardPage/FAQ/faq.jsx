@@ -21,7 +21,7 @@ const FAQ = (props) => {
                             <div className="faq__list">
                                 <Accordion defaultActiveKey="0">
                                     {
-                                        faqList.map((item, index) => <FaqAccordion item={item} index={index}/>)   
+                                        faqList.map((item, index) => <FaqAccordion item={item} key={index} index={index}/>)   
                                     }
                                 </Accordion>
                             </div>

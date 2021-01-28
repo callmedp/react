@@ -11,7 +11,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchMyServices } from 'store/DashboardPage/MyServices/actions';
 import { fetchOiComment } from 'store/DashboardPage/AddSubmitComment/actions/index';
 import { fetchReviews } from 'store/DashboardPage/AddSubmitReview/actions/index';
-
 // import Swal from 'sweetalert2';
 // import {getCandidateId} from 'utils/storage';
 import UploadResumeModal from '../Inbox/uploadResumeModal';
@@ -33,7 +32,9 @@ const MyServices = (props) => {
     // main api result state here
     const results = useSelector(store => store.dashboardServices);
     const oiComments = useSelector(store => store.getComment);
-    const setProductReview = useSelector(store => store.getReviews.data);
+    const setProductReview = useSelector(store => {console.log(store.getReviews); return store.getReviews.data});
+
+    console.log(setProductReview)
 
     // main service api hit
     const handleEffects = async () => {
@@ -64,7 +65,7 @@ const MyServices = (props) => {
     
     // if reviews exists then show
     const toggleReviews = (id, prod) => {
-        if(openReview != id) dispatch(fetchReviews({ prod: prod, page: currentPage, type: 'GET'}));
+        if(openReview != id) dispatch(fetchReviews({ prod: prod, page: currentPage}));
         setOpenReview(openReview == id ? false : id);
     }
 
