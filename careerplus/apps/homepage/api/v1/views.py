@@ -164,7 +164,6 @@ class DashboardDetailApi(APIView):
     def get(self, request):
         candidate_id = request.GET.get('candidate_id', '')
         orderitem_id = request.GET.get('orderitem_id')
-        # import ipdb;ipdb.set_trace()
         if not candidate_id:
             return Response({'status': 'Failure', 'error': 'candidate_id is required'},
                             status=status.HTTP_400_BAD_REQUEST)
@@ -359,7 +358,6 @@ class OrderItemCommentApi(APIView):
         return Response(data, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
-        # import ipdb;ipdb.set_trace()
         candidate_id = request.data.get('candidate_id') or self.request.session.get('candidate_id', None)
         oi_pk = request.data.get('oi_pk')
         comment = request.data.get('comment', '').strip()

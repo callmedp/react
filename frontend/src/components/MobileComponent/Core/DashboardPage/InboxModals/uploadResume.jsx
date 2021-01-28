@@ -26,6 +26,7 @@ const UploadResume = (props) => {
 
     const onSubmit = async (values) => {
         values = { ...values, file: file };
+        console.log(values)
         let response = await new Promise((resolve, reject) => {
             dispatch(uploadResumeForm({ values, resolve, reject }));
         });
@@ -93,7 +94,7 @@ const UploadResume = (props) => {
                             data?.map((service) => {
                                 return (
                                     <li className="m-custom" key={service?.id}>
-                                        <input type="checkbox" id={service?.id} name="resume_course" defaultChecked={true} ref={register({validate: () => !getValues("resume_course").length ? errors.resume_course === true : null })}/>
+                                        <input type="checkbox" id={service?.id} name="resume_course" defaultChecked={true} value={service?.id} ref={register({validate: () => !getValues("resume_course").length ? errors.resume_course === true : null })}/>
                                         <label className="font-weight-bold" htmlFor={service?.id}>{service?.product_name}</label>
                                     </li>
                                 )

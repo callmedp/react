@@ -15,6 +15,13 @@ export const DashboardMyServicesReducer = (state=initState, action) => {
                 ...state, ...action.item
             }
         }
+
+        case Actions.CANDIDATE_OI_ACCEPT_REJECT_SUCCESS: {
+            return {
+                ...state, error: false
+            };
+        }
+
         default: return state;
     }
 }

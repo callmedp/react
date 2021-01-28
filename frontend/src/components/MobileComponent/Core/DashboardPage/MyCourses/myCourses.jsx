@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import './myCourses.scss';
-import AddCommentModal from '../AddCommentModal/addCommentModal';
-import RateProductModal from '../RateProductModal/rateProductModal'
+import AddCommentModal from '../InboxModals/addCommentModal';
+import RateProductModal from '../InboxModals/rateProductModal'
 import Pagination from '../../../Common/Pagination/pagination';
 import Loader from '../../../Common/Loader/loader';
 import { fetchMyCourses } from 'store/DashboardPage/MyCourses/actions/index'
@@ -86,7 +86,7 @@ const MyCourses = (props) => {
                                             <a target="_blank" href={`https://www.facebook.com/sharer/sharer.php?u=${siteDomain}${course?.productUrl}`} className="m-facebook-icon"></a>
                                             <a target="_blank" href={`https://www.linkedin.com/shareArticle?mini=true&url=${siteDomain}${course?.productUrl}&title=${course?.title}&summary=${course.name}&source=`} className="m-linkedin-icon"></a>
                                             <a target="_blank" href={`https://twitter.com/intent/tweet?url=${siteDomain}${course?.productUrl}/&text=${course.name}`} className="m-twitter-iocn"></a>
-                                            <Link to={"#"} className="m-whatsup-icon"></Link>
+                                            <a target="_blank" href={`https://api.whatsapp.com/send?text=Hi! Check this useful product on Shine. ${siteDomain}${course?.productUrl}`} data-action="share/whatsapp/share" className="m-whatsup-icon"></a>
                                         </div>
                                     </div>
 

@@ -84,4 +84,20 @@ export default {
             mobLength : "Mobile number is invalid!"
         }
     },
+
+    'message': {
+        className: "form-control",
+        type: "text",
+        name: "message",
+        id: "message",
+        placeholder: "Leave us a message",
+        inputType: 'input',
+        rows: 3,
+        validation: {
+            required:true,
+        },
+        errorMessage: {
+            required: "This field is required",
+        }
+    },
 }

@@ -2,6 +2,7 @@ import * as Actions from '../actions/actionTypes';
 import { takeLatest, call, put } from 'redux-saga/effects';
 import Api from './Api';
 import {getCandidateId} from 'utils/storage';
+import Swal from 'sweetalert2';
 
 function* DashboardServicesApi(action) {
     const { payload } = action;
@@ -63,10 +64,52 @@ function* getPendingResume(action) {
         return payload?.resolve('Something went wrong!');
     }
 }
+
+function* acceptrejectcandidate(action) {
+    const { payload: { payload, resolve, reject } } = action;
+    try {
+        let result = undefined
+
+        if (payload.type === 'accept') {
+            result = yield call(Api.candidateAccept, payload);
+        }
+        else {
+            let formData = new FormData();
+            formData.append('reject_file', payload.file);
+            formData.append('comment', payload.message);
+            formData.append('oi_pk', payload.oi);
+            result = yield call(Api.candidateReject, formData);
+        }
+
+        if (result["error"]) {
+            Swal.fire({
+                icon : 'error',
+                html : result.errorMessage
+            })
+            return reject()
+        }
+        else {
+            yield put({ type: Actions.CANDIDATE_OI_ACCEPT_REJECT_SUCCESS, result });
+            Swal.fire({
+                icon: 'success',
+                title: 'Reject Request Sent!'
+            })
+            return resolve()
+        }
+    }
+    catch (e) {
+        Swal.fire({
+            icon : 'error',
+            html : "<h3>Something went wrong.</h3>"
+        })
+        return reject()
+    }
+
+}
+
 export default function* WatchDashboardMyServices() {
     yield takeLatest(Actions.FETCH_MY_SERVICES, DashboardServicesApi);
     yield takeLatest(Actions.UPLOAD_RESUME_FORM, uploadResume);
-    yield takeLatest(Actions.FETCH_PENDING_RESUMES, getPendingResume)
-
-
+    yield takeLatest(Actions.FETCH_PENDING_RESUMES, getPendingResume);
+    yield takeLatest(Actions.REQUEST_CANDIDATE_OI_ACCEPT_REJECT, acceptrejectcandidate);
 }

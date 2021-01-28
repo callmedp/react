@@ -101,3 +101,17 @@ export const stopReviewLoader = () => {
         payload: { reviewLoader: false }
     }
 }
+
+export const startAcceptRejectLoader = () => {
+    return {
+        type: Actions.START_ACCEPT_REJECT_LOADER,
+        payload: { acceptRejectLoader: true }
+    }
+}
+
+export const stopAcceptRejectLoader = () => {
+    return {
+        type: Actions.STOP_ACCEPT_REJECT_LOADER,
+        payload: { acceptRejectLoader: false }
+    }
+}

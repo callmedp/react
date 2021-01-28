@@ -9,10 +9,11 @@ import { startReviewLoader, stopReviewLoader } from 'store/Loader/actions/index'
 import Loader from '../../../Common/Loader/loader';
 
 const RateProductModal = (props) => {
-    const { setShowRateModal, idDict } = props
+    const { setShowRateModal, oi_id, idDict } = props
     const dispatch = useDispatch()
     const [showRatingModal, setShowRatingModal] = useState(false)
     const [showAllRatings, setShowAllRatings] = useState(true)
+    const [inputStar, setInputStar] = useState(5);
     const { register, handleSubmit, errors, reset } = useForm();
 
     const reviews = useSelector(store => store?.getReviews?.data);
@@ -21,8 +22,8 @@ const RateProductModal = (props) => {
     const submitReviews = async values => {
         const new_review = {
             ...values,
-            oi_pk: idDict?.orderId,
-            rating: 5,
+            oi_pk: oi_id ? oi_id : idDict?.orderId,
+            rating: inputStar ? inputStar : 5,
             type: 'POST'
         };
 
@@ -46,7 +47,7 @@ const RateProductModal = (props) => {
     const handleEffects = async (values) => {
         const new_review = {
             ...values,
-            prod: idDict?.prdId,
+            prod: oi_id ? oi_id : idDict?.prdId,
             type: 'GET'
         };
         try{
@@ -65,7 +66,7 @@ const RateProductModal = (props) => {
 
     useEffect(() => {
         handleEffects();
-    }, [idDict])
+    }, [oi_id ? oi_id : idDict])
 
     return (
         <>
@@ -109,7 +110,22 @@ const RateProductModal = (props) => {
                         <form onSubmit={handleSubmit(submitReviews)}>
                             <div className="text-center">
                                 <span className="m-db-close" onClick={() => {setShowRateModal(false)}}>X</span>
-                                <h2>Add Review</h2>
+                                <h2>Write a Review</h2>
+
+                                <span className="rating">
+                                {
+                                    [1, 2, 3, 4, 5].map((value,indx) => {
+                                        return (
+                                            <em
+                                            key={indx}
+                                            value={value}
+                                            className={value <= inputStar? "micon-fullstar ml-5" : "micon-blankstar ml-5"}
+                                            onClick={() => setInputStar(value)} />
+                                        );
+                                })}
+                                </span>
+                                <br />
+                                <span>Tap on rate to scale of 1-5</span>
                                 <div className="m-enquire-now mt-15">
                                     <div className="m-form-group">
                                         <TextArea attributes={inboxForm.review} register={register} errors={!!errors ? errors[inboxForm.review.name] : ''} />
