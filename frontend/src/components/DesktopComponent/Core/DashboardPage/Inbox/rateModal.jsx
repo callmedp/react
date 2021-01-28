@@ -2,16 +2,15 @@ import React, {useState} from 'react';
 import { Modal } from 'react-bootstrap';
 import {InputField, TextArea} from 'formHandler/desktopFormHandler/formFields';
 import CoursesServicesForm from 'formHandler/desktopFormHandler/formData/coursesServices';
-import { fetchMyReviews } from 'store/DashboardPage/MyServices/actions';
+import { submitReview } from 'store/DashboardPage/AddSubmitReview/actions/index';
 import { useForm } from "react-hook-form";
 import { useDispatch } from 'react-redux';
+import {Toast} from '../../../Common/Toast/toast';
 
 const RateModal =(props) => {
     const { handleClose, show, name, id } = props;
-    // console.log(props);
     const { register, handleSubmit, errors } = useForm();
     const dispatch = useDispatch();
-    
     let [rating, setRating] = useState(5);
     let [clicked, setClicked] = useState(false);
 
@@ -40,28 +39,36 @@ const RateModal =(props) => {
     const setStars = (e, className = "blankstar") => {
         let data = typeof e == "number" ? e : parseInt(e.target.getAttribute("value")) - 1;
         let children = document.getElementsByClassName("rating-review")[0].children;
-        console.log(document.getElementsByClassName("rating-review")[0]);
         for (let i = 0; i <= data; i++) {
             children[i].setAttribute("class", `icon-${className}`);
         }
     };
 
     // add new review
-    const submitReview = (values) => {
+    const submitReviewFunc = async(values) => {
         const new_review = {
             ...values,
             oi_pk: id,
             rating: rating,
-            type: 'POST'
+            full_name: localStorage.getItem('first_name') || '' + ' ' + localStorage.getItem('last_name') || ''
+            // full_name: 'Priya kharb'
         };
 
-        dispatch(fetchMyReviews(new_review));
+        const response = await new Promise((resolve, reject) => dispatch(submitReview({new_review, resolve, reject})));
+
+        if(response) {
+            handleClose(false);
+            Toast.fire({
+                type: 'success',
+                title: response.display_message
+            });
+        }
     };
 
     return (
         <Modal show={show} onHide={handleClose} className="db-modal">
-        <Modal.Header closeButton>
-        </Modal.Header>
+        <Modal.Header closeButton></Modal.Header>
+        
         <Modal.Body>
             <div className="text-center db-rate-services need-help">
                 <img src="/media/images/rate-services.png" className="img-fluid" alt=""/>
@@ -82,11 +89,11 @@ const RateModal =(props) => {
                     })}
                 </span>
                 <p className="db-rate-services--subheading">Click on rate to scale of 1-5</p>
-                    <form onSubmit={handleSubmit(submitReview)}>
+                    <form onSubmit={handleSubmit(submitReviewFunc)}>
                         <div className="form-group error">
                             <InputField attributes={CoursesServicesForm.title} register={register}
                                 errors={!!errors ? errors[CoursesServicesForm.title.name] : ''} />
-                                <label htmlFor="">Title</label>
+                            <label htmlFor="">Title</label>
                         </div>
 
                         <div className="form-group">
@@ -96,23 +103,9 @@ const RateModal =(props) => {
 
                         <button className="btn btn-primary px-5" type="submit">Submit</button>
                     </form>
-                {/* <form action="">
-                    <div className="form-group">
-                        <input type="email" className="form-control" id="email" name="email" placeholder=" "
-                            value="" aria-required="true" aria-invalid="true" />
-                        <label htmlFor="">Email</label>
-                    </div>
-                    
-                    <div className="form-group">
-                        <textarea  className="form-control" name="review" id="review" cols="30" rows="3" placeholder=" "></textarea>
-                        <label htmlFor="">Review</label>
-                    </div>
-
-                    <button className="btn btn-primary px-5">Submit</button>
-                </form> */}
-            </div>
-        </Modal.Body>
-    </Modal>
+                </div>
+            </Modal.Body>
+        </Modal>
     )
 }
 

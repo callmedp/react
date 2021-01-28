@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Accordion from 'react-bootstrap/Accordion';
-import Card from 'react-bootstrap/Card';
 import { Link } from 'react-router-dom';
 import './faq.scss'
 import { useSelector, connect } from 'react-redux';
 import { imageUrl } from 'utils/domains';
 import { MyGA } from 'utils/ga.tracking.js';
-
+import FaqAccordion from '../../../Common/FaqAccordion/faqAccordion';
 
 
 const FAQ = (props) => {
@@ -14,7 +13,7 @@ const FAQ = (props) => {
     const { faqList } = useSelector(store => store.skillBanner);
     const { setHasFaq } = props;
     const [sliceFlag, setSliceFlag] = useState(true);
-    const regex = /(<([^>]+)>)/ig;
+   
 
     const loadMore = () => {
         MyGA.SendEvent('SkillMoreFAQs','ln_FAQ_click', 'more_FAQs', 'ln_FAQ','', false, true);
@@ -24,24 +23,6 @@ const FAQ = (props) => {
     useEffect(()=>{
         setHasFaq( faqList.length > 0 )
     },[faqList])
-
-    const renderAccordion = (item, index) => {
-        
-        return (
-            <Card key={index.toString() + item.heading} itemScope itemProp="mainEntity" 
-            itemType="https://schema.org/Question" >
-                <Accordion.Toggle as={Card.Header} eventKey={index === 0 ? '0' : index} >
-                                 
-                    <p dangerouslySetInnerHTML={{__html : item.heading}} onClick={() => MyGA.SendEvent('SkillFAQs','ln_FAQ_click', 'ln_down_arrow_click', 'ln_'+item.heading.replace(regex, ''),'', false, true) }></p>
-                    <meta itemProp="name" content={item.heading} />
-                </Accordion.Toggle>
-                <Accordion.Collapse eventKey={index === 0 ? '0' : index} itemProp="acceptedAnswer" itemScope 
-                                itemType="https://schema.org/Answer">
-                    <Card.Body itemProp="text" dangerouslySetInnerHTML={{ __html: item.content }}>
-                    </Card.Body>
-                </Accordion.Collapse>
-            </Card>
-    )}
     
     return (
         faqList.length ? (
@@ -53,7 +34,7 @@ const FAQ = (props) => {
                             <div className="faq__list">
                                 <Accordion defaultActiveKey="0" >
                                     {
-                                    (sliceFlag ? faqList.slice(0, 4) : faqList).map(renderAccordion)   
+                                    (sliceFlag ? faqList.slice(0, 4) : faqList).map((item, index) => <FaqAccordion item={item} index={index}/>)   
                                     }
                                 </Accordion>
                                 { sliceFlag ? <Link onClick={loadMore} to={"#"} className="load-more pt-20">Load More FAQS</Link> : '' }

@@ -104,7 +104,7 @@ class MyCoursesApi(DashboardInfo, APIView):
             orders = orders.exclude(
                 id__in=excl_order_list).order_by('-date_placed')
 
-            courses = OrderItem.objects.filter(order__in=orders,product__type_flow=2)
+            courses = OrderItem.objects.filter(order__in=orders,product__type_flow=2).exclude(order__status__in=[0,5])
             paginated_data = offset_paginator(page, courses)
             data = OrderItemSerializer(paginated_data["data"],many=True,context= {"get_details": True}).data
             #pagination info
@@ -145,7 +145,7 @@ class MyServicesApi(DashboardInfo, APIView):
                 id__in=excl_order_list).order_by('-date_placed')
             
 
-            services = OrderItem.objects.filter(order__in=orders,product__product_class__slug__in=settings.SERVICE_SLUG)
+            services = OrderItem.objects.filter(order__in=orders,product__product_class__slug__in=settings.SERVICE_SLUG).exclude(order__status__in=[0,5])
             paginated_data = offset_paginator(page, services)
             pending_resume_items = DashboardInfo().get_pending_resume_items(candidate_id=candidate_id,
                                                                         email=email)
@@ -258,34 +258,37 @@ class DashboardReviewApi(APIView):
         review_list = Review.objects.filter(
             content_type__id=product_type.id,
             object_id__in=prd_list, status=1)
-        paginated_data = offset_paginator(page, review_list)
-        data = ReviewSerializer(paginated_data['data'],many=True).data
-        page_info ={
-        'current_page':paginated_data['current_page'],
-        'total':paginated_data['total_pages'],
-        'has_prev': True if paginated_data['current_page'] >1 else False,
-        'has_next':True if (paginated_data['total_pages']-paginated_data['current_page'])>0 else False
-        }
-        return APIResponse(data={'data':data,'page':page_info},message='Review data Success',status=status.HTTP_200_OK)
+        # paginated_data = offset_paginator(page, review_list)
+        data = ReviewSerializer(review_list,many=True).data
+        # page_info ={
+        # 'current_page':paginated_data['current_page'],
+        # 'total':paginated_data['total_pages'],
+        # 'has_prev': True if paginated_data['current_page'] >1 else False,
+        # 'has_next':True if (paginated_data['total_pages']-paginated_data['current_page'])>0 else False
+        # }
+        return APIResponse(data={'data':data},message='Review data Success',status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
         email_dict = {}
         candidate_id = request.data.get('candidate_id', None) or self.request.session.get('candidate_id', None)
         oi_pk = request.data.get('oi_pk')
         email = request.data.get('email') or self.request.session.get('email', None)
+        name = self.request.session.get('name', email)
 
         # candidate_id = '568a0b20cce9fb485393489b'
         # email = 'priya.kharb@hindustantimes.com'
+        # name = 'priya'
+
         data = {
             "display_message": 'Thank you for sharing your valuable feedback',
         }
+
         if oi_pk and candidate_id:
             try:
                 oi = OrderItem.objects.select_related("order").get(id=oi_pk)
                 review = request.data.get('review', '').strip()
                 rating = int(request.data.get('rating', 1))
                 title = request.data.get('title', '').strip()
-                name = request.data.get('full_name')
                 if rating and oi and oi.order.candidate_id == candidate_id and oi.order.status in [1, 3]:
                     content_type = ContentType.objects.get(app_label="shop", model="product")
                     review_obj = Review.objects.create(

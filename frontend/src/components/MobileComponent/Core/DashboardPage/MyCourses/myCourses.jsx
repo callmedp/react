@@ -2,14 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import './myCourses.scss';
-import AddCommentModal from '../AddCommentModal/addCommentModal';
-import RateProductModal from '../RateProductModal/rateProductModal'
+import AddCommentModal from '../InboxModals/addCommentModal';
+import RateProductModal from '../InboxModals/rateProductModal'
 import Pagination from '../../../Common/Pagination/pagination';
 import Loader from '../../../Common/Loader/loader';
 import ProductCards from '../../../Common/ProductCardsSlider/productCardsSlider';
 import { fetchMyCourses } from 'store/DashboardPage/MyCourses/actions/index'
 import { fetchPopularServices } from 'store/CataloguePage/actions/index';
 import { startDashboardCoursesPageLoader, stopDashboardCoursesPageLoader } from 'store/Loader/actions/index';
+import { siteDomain } from 'utils/domains';
 
 const MyCourses = (props) => {
     const [showCommentModal, setShowCommentModal] = useState(false)
@@ -86,10 +87,10 @@ const MyCourses = (props) => {
                                     <div className="m-share" aria-haspopup="true">
                                         <i className="icon-share"></i>
                                         <div className="m-share__box m-arrow-box m-top">
-                                            <a target="_blank" href={`https://www.facebook.com/sharer/sharer.php?u=${course?.productUrl}`} className="m-facebook-icon"></a>
-                                            <a target="_blank" href={`https://www.linkedin.com/shareArticle?mini=true&url=${course?.productUrl}&title=${course?.title}&summary=${course.name}&source=`} className="m-linkedin-icon"></a>
-                                            <a target="_blank" href={`https://twitter.com/intent/tweet?url=${course?.productUrl}/&text=${course.name}`} className="m-twitter-iocn"></a>
-                                            <Link to={"#"} className="m-whatsup-icon"></Link>
+                                            <a target="_blank" href={`https://www.facebook.com/sharer/sharer.php?u=${siteDomain}${course?.productUrl}`} className="m-facebook-icon"></a>
+                                            <a target="_blank" href={`https://www.linkedin.com/shareArticle?mini=true&url=${siteDomain}${course?.productUrl}&title=${course?.title}&summary=${course.name}&source=`} className="m-linkedin-icon"></a>
+                                            <a target="_blank" href={`https://twitter.com/intent/tweet?url=${siteDomain}${course?.productUrl}/&text=${course.name}`} className="m-twitter-iocn"></a>
+                                            <a target="_blank" href={`https://api.whatsapp.com/send?text=Hi! Check this useful product on Shine. ${siteDomain}${course?.productUrl}`} data-action="share/whatsapp/share" className="m-whatsup-icon"></a>
                                         </div>
                                     </div>
 
@@ -112,22 +113,6 @@ const MyCourses = (props) => {
                                     {/* <div className="m-courses-detail--alert">
                                     Hi, the recording for the session you missed is available now <Link to={"#"} className="font-weight-semi-bold">Check here</Link>
                                     </div> */}
-                                    { course?.status === 'Cancelled' || course?.status === 'Unpaid' || course.status === 'Yet to Update' ?
-
-                                        <div className="pl-15 mt-15 fs-12">
-                                            Status: <strong> { course?.status } </strong>
-                                            {/* <Link to={"#"} className="d-block font-weight-bold">View Details</Link> */}
-                                            {
-                                                course?.datalist?.length ?
-                                                    <div className="my-order__order-detail">
-                                                        <a onClick={(e) => { e.preventDefault(); showDetails(course?.id) }} className={(showOrderDetailsID === course?.id) ? "d-block font-weight-bold open arrow-icon" : "d-block font-weight-bold arrow-icon"}>View Details</a>
-                                                        {(showOrderDetailsID === course?.id) && getOrderDetails(course?.datalist)}
-
-                                                    </div> : ''
-                                            }
-                                        </div>
-                                        :
-                                        <>
                                             <div className="pl-15 mt-15 fs-12">
                                                 Status: <strong> { course?.status } </strong>
                                                 {/* <Link to={"#"} className="d-block font-weight-bold">View Details</Link> */}
@@ -197,8 +182,6 @@ const MyCourses = (props) => {
                                                 }
                                             </div>
                                         </div>
-                                        </>
-                                    }
                                 </div>
                             )
                         })

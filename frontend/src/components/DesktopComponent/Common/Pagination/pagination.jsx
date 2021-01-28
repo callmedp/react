@@ -3,13 +3,10 @@ import { getPaginationList } from 'utils/dashboardUtils/myOrderUtils'
 import { useState } from 'react'
 
 const Pagination = (props) => {
-    const { 
-        totalPage, currentPage, setCurrentPage
-    } = props
-
-    const [startPage, setStartPage] = useState(1)
-    const paginationList = getPaginationList(startPage, totalPage)
-    const length = paginationList?.length
+    const { totalPage, currentPage, setCurrentPage } = props;
+    const [startPage, setStartPage] = useState(1);
+    const paginationList = getPaginationList(startPage, totalPage);
+    const length = paginationList?.length;
 
     const getPrev = () => {
         !paginationList.includes(currentPage - 1) &&

@@ -1,37 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ProgressBar } from 'react-bootstrap';
-
-import { Button } from 'react-bootstrap';
-import { Modal } from 'react-bootstrap';
 import NoCourses from './noCourses';
 import './myCourses.scss';
 import '../../SkillPage/NeedHelp/needHelp.scss';
-import { startDashboardCoursesPageLoader, stopDashboardCoursesPageLoader } from 'store/Loader/actions/index';
+import { startDashboardCoursesPageLoader, 
+    stopDashboardCoursesPageLoader } from 'store/Loader/actions/index';
 import Loader from '../../../Common/Loader/loader';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchMyCourses } from 'store/DashboardPage/MyCourses/actions';
 import { siteDomain } from 'utils/domains';
 import ViewDetailModal from '../Inbox/viewDetailModal';
-
 import RateModal from '../Inbox/rateModal';
 import ReviewRating from '../Inbox/reviewRating';
 import { Collapse } from 'react-bootstrap';
 
 const MyCourses = (props) => {
+    
     const [addOpen, setAddOpen] = useState(false);
-
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
+    const handleComment = (id) => setAddOpen( addOpen === id ? false : id );
     const dispatch = useDispatch();
     const { history } = props;
     const { coursesLoader } = useSelector(store => store.loader);
     const { myCourses } = useSelector(store => store.dashboardCourses);
     const [isOpen, setIsOpen] = useState(false);
-    const toggleDetails = (id) => setIsOpen(isOpen == id ? false : id);
-
-    // add new reviews
+    const toggleDetails = (id) => setIsOpen(isOpen === id ? false : id);
     const [openReview, setOpenReview] = useState(false);
     const toggleReviews = (id) => setOpenReview(openReview == id ? false : id);
 
@@ -55,6 +51,7 @@ const MyCourses = (props) => {
                 delete window.config?.isServerRendered
             }
         } catch (error) {
+            dispatch(stopDashboardCoursesPageLoader());
             if (error?.status == 404) {
                 history.push('/404');
             }
@@ -83,11 +80,11 @@ const MyCourses = (props) => {
                                                 <div className="db-my-courses-detail__leftpan--box">
                                                     <h3><a href={`${siteDomain}${course.productUrl}`}>{course.heading}</a></h3>
                                                     <div className="db-my-courses-detail__leftpan--info">
-                                                        <span>Provider: <Link className="noLink" to={"#"}>{course.vendor}</Link></span>
-                                                        <span>Enrolled on: <strong>{course.enroll_date}</strong></span>
-                                                        <span>Duration: <strong>{course.duration}</strong></span>
-                                                        <span>Mode: <strong>{course.mode}</strong></span>
-                                                        <span>Jobs: <strong>{course.jobs}</strong></span>
+                                                        { !!course.vendor && <span>Provider: <Link className="noLink" to={"#"}>{course.vendor}</Link></span> }
+                                                        { !!course.enroll_date && <span>Enrolled on: <strong>{course.enroll_date}</strong></span> }
+                                                        { !!course.duration && <span>Duration: <strong>{course.duration}</strong></span> }
+                                                        { !!course.mode && <span>Mode: <strong>{course.mode}</strong></span> }
+                                                        { !!course.jobs && <span>Jobs: <strong>{course.jobs}</strong></span> }
                                                     </div>
 
                                                     <div className="db-my-courses-detail__leftpan--session">
@@ -115,7 +112,12 @@ const MyCourses = (props) => {
                                                     </Link>
 
                                                     {/* course detail modal open */}
-                                                    <ViewDetailModal id={course.id} toggleDetails={toggleDetails}  isOpen={isOpen}/>
+                                                    <ViewDetailModal 
+                                                        id={course.id} 
+                                                        toggleDetails={toggleDetails}  
+                                                        isOpen={isOpen}
+                                                        datalist={course.datalist}
+                                                    />
                                                 </div>
                                             </div>
 
@@ -175,14 +177,7 @@ const MyCourses = (props) => {
                                         </div>
                                     </div>
                                 </div>
-                                <Collapse in={addOpen}>
-                                    <div className="db-add-comments lightblue-bg" id="addComments">
-                                        <span className="btn-close" onClick={() => setAddOpen(!addOpen)}>&#x2715;</span>
-                                        <p className="font-weight-semi-bold"> Add comment </p>
-                                        <textarea className="form-control" rows="3"></textarea>
-                                        <button type="submit" className="btn btn-outline-primary mt-20 px-5">Submit</button>
-                                    </div>
-                                </Collapse>
+                                {/* {oiComments ? <AddCommentModal id={item.id} data={oiComments[0]} addOpen={addOpen} /> : null } */}
 
                                 <div className="db-mycourse-highlighter">Next course to take: <Link to={"#"} className="font-weight-bold ml-2">Seo Specialist</Link> </div>
                             </div>

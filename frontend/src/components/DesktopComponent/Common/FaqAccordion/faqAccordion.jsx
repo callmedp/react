@@ -1,10 +1,13 @@
 import React from 'react';
 import Card from 'react-bootstrap/Card';
 import Accordion from 'react-bootstrap/Accordion';
-import { MyGA } from '../../../../utils/ga.tracking.js';
-const regex = /(<([^>]+)>)/ig;
+import { MyGA } from 'utils/ga.tracking.js';
 
-const FaqAccordion = (item, index) => {
+const FaqAccordion = (props) => {
+
+    const { item, index } =props;
+    const regex = /(<([^>]+)>)/ig;
+
     return (
         <Card key={index.toString() + item.heading} itemScope itemProp="mainEntity" 
         itemType="https://schema.org/Question" >

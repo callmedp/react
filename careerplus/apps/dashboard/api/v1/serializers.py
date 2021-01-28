@@ -196,15 +196,15 @@ class OrderItemSerializer(serializers.ModelSerializer):
                 date_created =op.created.strftime('%d %b %Y') if op.created else ''
                 datalist.append({'date':date_created,'status':op.get_user_oi_status})
                 if op.oi_status == 141:
-                    options['Complete Profile']=True
+                    options['complete_profile']=True
                 elif op.oi_status == 142:
-                    options['Edit your profile']=True
+                    options['edit_your_profile']=True
         elif oi.product.type_flow == 10:
             for op in ops:
                 date_created =op.created.strftime('%d %b %Y') if op.created else ''
                 datalist.append({'date':date_created,'status':op.get_user_oi_status})
                 if op.oi_status == 101:
-                    options['Take Test']=True
+                    options['take_test']=True
                 elif op.oi_draft:
                     options['Download']=True
                     options['order_pk']=oi.order.pk
@@ -215,7 +215,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
                 date_created =op.created.strftime('%d %b %Y') if op.created else ''
                 datalist.append({'date':date_created,'status':op.get_user_oi_status})
                 if op.oi_status == 101:
-                    options['Take Test']=True
+                    options['take_test']=True
                 elif op.oi_draft:
                     options['Download']=True
                     options['order_pk']=oi.order.pk
@@ -289,6 +289,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
                 'no_review':instance.product.no_review,
                 'new_oi_status':OI_OPS_STATUS_dict.get(instance.oi_status) if instance.oi_status else None,
                 'mode':instance.product.get_studymode_db(),
+                'oi_status':instance.oi_status if instance.oi_status else None,
                 'status':self.get_oi_status_value(instance) if instance.oi_status else 'Yet to Update',
                 'jobs':instance.product.num_jobs,
                 'no_of_comments':instance.message_set.filter(is_internal=False).count(),
@@ -339,7 +340,7 @@ class ReviewSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         data = super(ReviewSerializer, self).to_representation(instance)
+        data['rating'] = instance.get_ratings()
         data['created'] = instance.created.date().strftime('%b %d, %Y') if instance.created else None
-        data['stars'] = instance.get_ratings()
-
+        data['modified'] = instance.modified.date().strftime('%d %b %Y') if instance.modified else None
         return data
