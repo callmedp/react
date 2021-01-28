@@ -6,6 +6,8 @@ const initState = {
     orderLoader: false,
     coursesLoader: false,
     serviceLoader: false,
+    commentLoader: false,
+    reviewLoader: false
 }
 
 export const LoaderReducer = (state=initState, action) => {
@@ -28,7 +30,15 @@ export const LoaderReducer = (state=initState, action) => {
         // dashboard service loader
         case Actions.START_DASHBOARD_SERVICES_PAGE_LOADER : return {...state, ...action.payload}
         case Actions.STOP_DASHBOARD_SERVICES_PAGE_LOADER : return {...state, ...action.payload}
-        
+
+        // comment loader
+        case Actions.START_COMMENT_LOADER : return {...state, ...action.payload}
+        case Actions.STOP_COMMENT_LOADER : return {...state, ...action.payload}
+
+        // review loader
+        case Actions.START_REVIEW_LOADER : return {...state, ...action.payload}
+        case Actions.STOP_REVIEW_LOADER : return {...state, ...action.payload}
+
         default: return state;
     }
 }

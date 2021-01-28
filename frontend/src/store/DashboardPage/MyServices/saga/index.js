@@ -27,6 +27,16 @@ function* DashboardServicesApi(action) {
     }
 }
 
+function* getPendingOrder() {
+    try {
+        const result = yield call(Api.getPendingOrderItems);
+        return yield put({ type: Actions.PENDING_RESUME_FETCHED, data: result.data.data });
+    }
+    catch (e) {
+        return e;
+    }
+}
+
 function* uploadResume(action) {
     const { payload: { values, resolve, reject } } = action;
     try {
@@ -47,6 +57,5 @@ function* uploadResume(action) {
 export default function* WatchDashboardMyServices() {
     yield takeLatest(Actions.FETCH_MY_SERVICES, DashboardServicesApi);
     yield takeLatest(Actions.UPLOAD_RESUME_FORM, uploadResume);
-
-
+    yield takeLatest(Actions.GET_PENDING_RESUME, getPendingOrder);
 }

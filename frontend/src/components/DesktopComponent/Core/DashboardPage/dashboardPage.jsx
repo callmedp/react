@@ -44,7 +44,7 @@ const DashboardPage = (props) => {
                         </div>
                     </div>
                 </div>
-                <FAQ setHasFaq={setHasFaq}/>
+                { dbContainer === 'mywallet' ? <FAQ setHasFaq={setHasFaq}/> : null }
                 <HaveQuery />
                 <PopularCourses />
             </main>

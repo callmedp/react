@@ -3,6 +3,7 @@ import { siteDomain } from 'utils/domains';
 
 // fetch reviews
 const myReviewsData = (data) => {
+    console.log(data)
     const url = `review/?product_id=${data.prod}&page=${data.page}`;
     return BaseApiService.get(`${siteDomain}/dashboard/api/v1/${url}`);
 };

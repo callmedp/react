@@ -6,6 +6,11 @@ const myServicesData = (data) => {
     return BaseApiService.get(`${siteDomain}/dashboard/api/v1/${url}`);
 };
 
+const getPendingOrderItems = () => {
+    const url = `${siteDomain}/dashboard/api/v1/pending-resume_items/`
+    return BaseApiService.get(url)
+}
+
 const uploadResumeDashboardForm = (data) => {
     const url = `${siteDomain}/api/v1/dashboard-resume-upload/`;
     return BaseApiService.post(`${url}`, data, {
@@ -14,5 +19,6 @@ const uploadResumeDashboardForm = (data) => {
 
 export default {
     myServicesData,
+    getPendingOrderItems,
     uploadResumeDashboardForm
 }
