@@ -88,7 +88,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
         date_created = ''
         if oi.product.type_flow == 1 or  oi.product.type_flow == 12 or oi.product.type_flow == 13:
             for op in ops:
-                date_created =op.created.strftime('%d %b %Y') if op.created else ''
+                date_created =op.created.strftime('%d %b, %Y') if op.created else ''
                 if op.oi_status == 24 and op.draft_counter == 1:
                     datalist.append({'date':date_created,'status':op.get_user_oi_status})
                 elif op.oi_status == 24 and op.draft_counter < max_draft_limit:
@@ -109,7 +109,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
 
         elif oi.product.type_flow == 8:
             for op in ops:
-                date_created =op.created.strftime('%d %b %Y') if op.created else ''
+                date_created =op.created.strftime('%d %b, %Y') if op.created else ''
                 if op.oi_status == 46 and op.draft_counter == 1:
                     datalist.append({'date':date_created,'status':op.get_user_oi_status})
                 elif op.oi_status == 46 and op.draft_counter < max_draft_limit:
@@ -130,7 +130,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
 
         elif oi.product.type_flow == 3:
             for op in ops:
-                date_created =op.created.strftime('%d %b %Y') if op.created else ''
+                date_created =op.created.strftime('%d %b, %Y') if op.created else ''
                 datalist.append({'date':date_created,'status':op.get_user_oi_status})
                 if op.oi_draft:
                     options['Download']=True
@@ -141,7 +141,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
                     options['upload_resume']=True
         elif oi.product.type_flow == 2 or  oi.product.type_flow == 14:
             for op in ops:
-                date_created =op.created.strftime('%d %b %Y') if op.created else ''
+                date_created =op.created.strftime('%d %b, %Y') if op.created else ''
                 datalist.append({'date':date_created,'status':op.get_user_oi_status})
                 if op.oi_status == 6:
                     options['Download']=True
@@ -150,7 +150,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
                     options['download_url']=reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})+'?path='+op.oi_draft.name
         elif oi.product.type_flow == 4:
             for op in ops:
-                date_created =op.created.strftime('%d %b %Y') if op.created else ''
+                date_created =op.created.strftime('%d %b, %Y') if op.created else ''
                 datalist.append({'date':date_created,'status':op.get_user_oi_status})
                 if oi.oi_status == 2 and not oi.oi_resume:
                     options['upload_resume']=True
@@ -164,21 +164,21 @@ class OrderItemSerializer(serializers.ModelSerializer):
                 if custom_ops is not None:
                     for op in custom_ops:
                         if op:
-                            date_created =op.created.strftime('%d %b %Y') if op.created else ''
+                            date_created =op.created.strftime('%d %b, %Y') if op.created else ''
                             if op.oi_status == 31:
                                 datalist.append({'date':date_created,'status':'Service is Under Progress'})
                             else:
                                 datalist.append({'date':date_created,'status':op.get_user_oi_status})
             else:
                 for op in ops:
-                    date_created =op.created.strftime('%d %b %Y') if op.created else ''
+                    date_created =op.created.strftime('%d %b, %Y') if op.created else ''
                     datalist.append({'date':date_created,'status':op.get_user_oi_status})
                     if oi.oi_status == 2 and not oi.oi_resume and op.oi_status == 2:
                         options['upload_resume']=True
 
         elif oi.product.type_flow == 6:
             for op in ops:
-                date_created =op.created.strftime('%d %b %Y') if op.created else ''
+                date_created =op.created.strftime('%d %b, %Y') if op.created else ''
                 datalist.append({'date':date_created,'status':op.get_user_oi_status})
                 if op.oi_draft:
                     options['Download']=True
@@ -187,13 +187,13 @@ class OrderItemSerializer(serializers.ModelSerializer):
                     options['download_url']= reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})+'?path='+op.oi_draft.name
         elif oi.product.type_flow == 7 or oi.product.type_flow == 15:
             for op in ops:
-                date_created =op.created.strftime('%d %b %Y') if op.created else ''
+                date_created =op.created.strftime('%d %b, %Y') if op.created else ''
                 datalist.append({'date':date_created,'status':op.get_user_oi_status})
                 if oi.oi_status == 2 and not oi.oi_resume and op.oi_status == 2:
                     options['upload_resume']=True
         elif oi.product.type_flow == 9:
             for op in ops:
-                date_created =op.created.strftime('%d %b %Y') if op.created else ''
+                date_created =op.created.strftime('%d %b, %Y') if op.created else ''
                 datalist.append({'date':date_created,'status':op.get_user_oi_status})
                 if op.oi_status == 141:
                     options['Complete Profile']=True
@@ -201,7 +201,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
                     options['Edit your profile']=True
         elif oi.product.type_flow == 10:
             for op in ops:
-                date_created =op.created.strftime('%d %b %Y') if op.created else ''
+                date_created =op.created.strftime('%d %b, %Y') if op.created else ''
                 datalist.append({'date':date_created,'status':op.get_user_oi_status})
                 if op.oi_status == 101:
                     options['Take Test']=True
@@ -212,7 +212,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
                     options['download_url']= reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})+'?path='+op.oi_draft.name
         elif oi.product.type_flow == 17:
             for op in ops:
-                date_created =op.created.strftime('%d %b %Y') if op.created else ''
+                date_created =op.created.strftime('%d %b, %Y') if op.created else ''
                 datalist.append({'date':date_created,'status':op.get_user_oi_status})
                 if op.oi_status == 101:
                     options['Take Test']=True

@@ -88,16 +88,11 @@ const RateModal =(props) => {
                 </span>
                 <p className="db-rate-services--subheading">Click on rate to scale of 1-5</p>
                     <form onSubmit={handleSubmit(submitReview)}>
-                        <div className="form-group error">
                             <InputField attributes={CoursesServicesForm.title} register={register}
-                                errors={!!errors ? errors[CoursesServicesForm.title.name] : ''} />
-                            <label htmlFor="">Title</label>
-                        </div>
+                                errors={!!errors ? errors[CoursesServicesForm.title.name] : false} />            
 
-                        <div className="form-group">
                             <TextArea attributes={CoursesServicesForm.review} register={register}
                                 errors={!!errors ? errors[CoursesServicesForm.review.name] : ''} />
-                        </div>
 
                         <button className="btn btn-primary px-5" type="submit">Submit</button>
                     </form>

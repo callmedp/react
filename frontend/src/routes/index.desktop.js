@@ -6,6 +6,7 @@ import { getSkillPageActions } from 'apiHandler/skillPageApi';
 import Error404Container from 'components/DesktopComponent/Common/ErrorPage404/errorPage404';
 import { getCataloguePageActions } from "apiHandler/cataloguePageApi";
 import DashboardPageContainer from 'components/DesktopComponent/Core/DashboardPage/dashboardPage';
+import { getDashboardPageActions } from "apiHandler/dashboardPageApi";
 
 
 export const RouteWithSubRoutes = route => {
@@ -44,6 +45,7 @@ export const routes = [
     {
         path: '/dashboard/:name/',
         component: DashboardPageContainer,
+        actionGroup: getDashboardPageActions,
     },
     {
         path: '/404/',

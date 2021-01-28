@@ -28,7 +28,7 @@ const MyServices = (props) => {
     const { serviceLoader } = useSelector(store => store.loader);
     
     // page no. set here
-    const [currentPage, setCurrentPage] = useState(2);
+    const [currentPage, setCurrentPage] = useState(1);
     
     // main api result state here
     const results = useSelector(store => store.dashboardServices);
@@ -159,7 +159,7 @@ const MyServices = (props) => {
                                                     }
 
                                                     {/* course detail modal open */}
-                                                    <ViewDetailModal id={item.id} toggleDetails={toggleDetails} isOpen={isOpen} data={item.datalist}/>
+                                                    <ViewDetailModal id={item.id} toggleDetails={toggleDetails} isOpen={isOpen} datalist={item.datalist || []}/>
                                                 </div>
                                             </div>
                                             <div className="db-my-courses-detail__rightpan">
