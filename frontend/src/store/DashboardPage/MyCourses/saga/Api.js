@@ -6,7 +6,12 @@ const myCoursesData = (data) => {
     return BaseApiService.get(`${siteDomain}/dashboard/api/v1/${url}`);
 };
 
+const boardNeoUser = (data) =>{
+    const url = `${siteDomain}/api/v1/dashboard-neo-board-user/`
+    return BaseApiService.post(url, data)
+}
 
 export default {
     myCoursesData,
+    boardNeoUser
 }
