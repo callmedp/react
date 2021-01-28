@@ -1,4 +1,4 @@
-import { FETCH_MY_COURSES  } from './actionTypes';
+import { FETCH_MY_COURSES, BOARD_NEO_USER  } from './actionTypes';
 
 const fetchMyCourses = (payload) => {
     return {
@@ -7,6 +7,14 @@ const fetchMyCourses = (payload) => {
     }
 }
 
+const boardNeoUser = (payload) =>{
+    return{
+        type: BOARD_NEO_USER,
+        payload
+    }
+}
+
 export {
     fetchMyCourses,
+    boardNeoUser
 }

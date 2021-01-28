@@ -5,7 +5,7 @@ import Api from './Api';
 function* DashboardCoursesApi(action) {
     const { payload } = action;
     try {
-        const response = yield call(Api.myCoursesData, payload);
+        const response = yield call(Api.myCoursesData, payload?.page);
        
         if (response["error"]) {
             return payload?.reject(response)
@@ -25,6 +25,18 @@ function* DashboardCoursesApi(action) {
     }
 }
 
+function* submitBoardNeoUser(action) {
+    const { payload: { values, resolve, reject } } = action;
+    try {
+        const response = yield call(Api.boardNeoUser, values);
+        return resolve(response)
+    }
+    catch (error) {
+        return reject(error)
+    }
+}
+
 export default function* WatchDashboardMyOrders() {
     yield takeLatest(Actions.FETCH_MY_COURSES, DashboardCoursesApi);
+    yield takeLatest(Actions.BOARD_NEO_USER, submitBoardNeoUser);
 }

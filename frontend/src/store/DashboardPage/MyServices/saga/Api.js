@@ -12,7 +12,26 @@ const uploadResumeDashboardForm = (data) => {
     }, true);
 }
 
+//fetch Pending Resumes
+const getPendingResumes = (data) => {
+    const url = `${siteDomain}/api/v1/dashboard-notification-box/`
+    return BaseApiService.get(url)
+}
+
+const candidateAccept = (data) => {
+    const url = `${siteDomain}/dashboard/inbox-acceptservice/`
+    return BaseApiService.post(url, data)
+}
+
+const candidateReject = (data) => {
+    const url = `${siteDomain}/dashboard/inbox-rejectservice/`
+    return BaseApiService.post(url, data, {}, true)
+}
+
 export default {
     myServicesData,
-    uploadResumeDashboardForm
+    uploadResumeDashboardForm,
+    getPendingResumes,
+    candidateAccept,
+    candidateReject
 }

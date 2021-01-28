@@ -3,25 +3,39 @@ import { takeLatest, call, put } from 'redux-saga/effects';
 import Api from './Api';
 
 // fetch and submit reviews
-function* Reviews(action) {
+function* GetReviews(action) {
+    const { payload: { payload, resolve, reject } } = action;
     try {
-        const { payload } = action;
         let result = null;
 
-        if (payload.type === 'GET') result = yield call(Api.myReviewsData, payload);
-        else {
-            result = yield call(Api.saveReviewsData, {'rating': payload.rating, 'review': payload.review, 'title': payload.title, 'oi_pk': payload.oi_pk, 'full_name' : payload.full_name});
-            if (!result["error"]) yield put({ type: Actions.REVIEWS_FETCHED, reviews: result });
-        }
+        result = yield call(Api.myReviewsData, payload);
 
-        if (result["error"]) return payload?.reject(result.data);
-        else return yield put({ type: Actions.REVIEWS_FETCHED, reviews: result.data.data });
+        if (result["error"]) return resolve(result?.data);
+        else{
+            yield put({ type: Actions.REVIEWS_FETCHED, reviews: result?.data?.data });
+            return resolve(result)
+        }
     }
     catch (e) {
-        return e;
+        return resolve(e);
+    }
+}
+
+function* SubmitReview(action) {
+    const { payload: { payload, resolve, reject } } = action;
+
+    try {
+        const response = yield call(Api.saveReviewsData, payload);
+
+        if(response['error']) return resolve(response?.data)
+        return resolve(response?.data)
+    }
+    catch (error) {
+        return resolve(error)
     }
 }
 
 export default function* WatchReviews() {
-    yield takeLatest(Actions.FETCH_REVIEWS, Reviews);
+    yield takeLatest(Actions.FETCH_REVIEWS, GetReviews);
+    yield takeLatest(Actions.REVIEW_SUBMIT, SubmitReview);
 }

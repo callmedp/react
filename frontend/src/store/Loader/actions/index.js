@@ -73,3 +73,45 @@ export const stopDashboardServicesPageLoader = () => {
         payload: { serviceLoader: false }
     }
 }
+
+export const startCommentLoader = () => {
+    return {
+        type: Actions.START_COMMENT_LOADER,
+        payload: { commentLoader: true } 
+    }
+}
+
+export const stopCommentLoader = () => {
+    return {
+        type: Actions.STOP_COMMENT_LOADER,
+        payload: { commentLoader: false }
+    }
+}
+
+export const startReviewLoader = () => {
+    return {
+        type: Actions.START_REVIEW_LOADER,
+        payload: { reviewLoader: true } 
+    }
+}
+
+export const stopReviewLoader = () => {
+    return {
+        type: Actions.STOP_REVIEW_LOADER,
+        payload: { reviewLoader: false }
+    }
+}
+
+export const startAcceptRejectLoader = () => {
+    return {
+        type: Actions.START_ACCEPT_REJECT_LOADER,
+        payload: { acceptRejectLoader: true }
+    }
+}
+
+export const stopAcceptRejectLoader = () => {
+    return {
+        type: Actions.STOP_ACCEPT_REJECT_LOADER,
+        payload: { acceptRejectLoader: false }
+    }
+}

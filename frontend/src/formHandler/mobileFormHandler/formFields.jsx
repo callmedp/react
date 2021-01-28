@@ -41,7 +41,19 @@ const SelectBox = (props) => {
     )
 }
 
+const TextArea = (props) => {
+    const { attributes: { className, type, name, value, validation, defaultValue, rows, placeholder, label }, register } = props;
+
+    return (
+        <>
+            <textarea className={className} name={name} type={type} placeholder={placeholder} ref={register(validation)} value={value} defaultValue={defaultValue} id={name} rows={rows} />
+            {/* <label htmlFor={name}>{label}</label> */}
+        </>
+    )
+}
+
 export {
     InputField,
     SelectBox,
+    TextArea
 }

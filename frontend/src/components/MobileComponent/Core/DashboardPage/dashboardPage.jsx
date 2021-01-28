@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState } from 'react';
 import './dashboardPage.scss';
 import MenuNav from '../../Common/MenuNav/menuNav';
 import Header from '../../Common/Header/Header';
@@ -16,9 +15,9 @@ import PersonalDetail from './MyProfile/PersonalDetail';
 import EditSkills from './MyProfile/EditSkills';
 import SearchPage from '../../Common/SearchPage/SearchPage';
 
-const Dashboard = () => {
+const Dashboard = (props) => {
+    const dbContainer = props.match.params.name;
     const [showSearchPage, setShowSearchPage] = useState(false);
-    const [activeTab, setActiveTab] = useState('Courses');
 
     return(
         <div>
@@ -27,14 +26,17 @@ const Dashboard = () => {
                     <MenuNav />
                     <header className="m-container m-header pb-0">
                         <Header setShowSearchPage={setShowSearchPage} name='Dashboard' />
-                        <DashboardNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
+                        <DashboardNavigation activeTab={dbContainer}/>
                     </header>
                     <main className="m-container">
-                        { activeTab === 'Courses' && <MyCourses /> }
-                        { activeTab === 'Services' && <MyServices /> }
-                        { activeTab === 'Orders' && <MyOrders /> }
-                        { activeTab === 'Wallet' && <MyWallet /> }
-                        { activeTab === 'Profile' && <MyProfile /> }
+                        {
+                            {
+                                'my-services' : <MyServices />,
+                                'my-courses' : <MyCourses/>,
+                                'my-orders' : <MyOrders />,
+                                'my-wallet' : <MyWallet/>
+                            }[dbContainer]
+                        }
                         
                         {/*<EditSkills />
                         <PersonalDetail /> */}
