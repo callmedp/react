@@ -164,7 +164,6 @@ class DashboardDetailApi(APIView):
     def get(self, request):
         candidate_id = request.GET.get('candidate_id', '')
         orderitem_id = request.GET.get('orderitem_id')
-        # import ipdb;ipdb.set_trace()
         if not candidate_id:
             return Response({'status': 'Failure', 'error': 'candidate_id is required'},
                             status=status.HTTP_400_BAD_REQUEST)
@@ -244,8 +243,8 @@ class DashboardNotificationBoxApi(APIView):
     serializer_class = None
 
     def get(self, request):
-        candidate_id = request.GET.get('candidate_id', None)
-        email = request.GET.get('email', None)
+        candidate_id = request.GET.get('candidate_id', None) or request.session.get('candidate_id', None)
+        email = request.GET.get('email', None) or request.session.get('email', None)
 
         if not candidate_id:
             return Response({'status': 'Failure', 'error': 'candidate_id is required.'},
@@ -292,6 +291,9 @@ class DashboardCancellationApi(APIView):
     serializer_class = DashboardCancellationSerializer
 
     def post(self, request):
+        candidate_id = self.request.data.get('candidate_id', None) or self.request.session.get('candidate_id', None)
+        email_id = self.request.data.get('email', None) or self.request.session.get('email', None)
+        self.request.data.update({'candidate_id': candidate_id, 'email': email_id})
         serializer = DashboardCancellationSerializer(data=request.data)
         if serializer.is_valid():
             candidate_id = serializer.data.get('candidate_id')
@@ -300,24 +302,25 @@ class DashboardCancellationApi(APIView):
             try:
                 order = Order.objects.get(pk=order_id)
             except Order.DoesNotExist:
-                return Response({'status': 'Failure', 'error': 'Order not found against id'},
+                return Response({'status': 'Failure', 'cancelled': False, 'error': 'Order not found against id'},
                                 status=status.HTTP_417_EXPECTATION_FAILED)
 
             if order.candidate_id != candidate_id:
-                return Response({'status': 'Failure', 'error': 'Order not found against id'},
+                return Response({'status': 'Failure', 'cancelled': False, 'error': 'Order not found against id'},
                                 status=status.HTTP_417_EXPECTATION_FAILED)
             try:
                 cancellation = DashboardCancelOrderMixin().perform_cancellation(candidate_id=candidate_id, email=email,
                                                                                 order=order)
+
             except Exception as exc:
                 logger.error('Dashboard cancellation error %s' % exc)
-                return Response({'status': 'Failure', 'error': exc}, status=status.HTTP_417_EXPECTATION_FAILED)
+                return Response({'status': 'Failure', 'error': str(exc), 'cancelled': False}, status=status.HTTP_417_EXPECTATION_FAILED)
             if cancellation:
-                return Response({'status': 'Success', 'data': order_id, 'error': None, 'cancelled': True},
+                return Response({'status': 'Success', 'data': 'Order Successfully Cancelled', 'error': None, 'cancelled': True},
                                 status=status.HTTP_200_OK)
-            return Response({'status': 'Failure', 'error': None, 'cancelled': False},
+            return Response({'status': 'Failure', 'error': 'Something went wrong', 'cancelled': False},
                             status=status.HTTP_417_EXPECTATION_FAILED)
-        return Response(serializer.errors, status=status.HTTP_200_OK)
+        return Response({'status': 'Failure', 'error': 'Required data is missing', 'cancelled': False}, status=status.HTTP_200_OK)
 
 
 class OrderItemCommentApi(APIView):
@@ -326,7 +329,6 @@ class OrderItemCommentApi(APIView):
     serializer_class = None
 
     def get(self, request):
-        # import ipdb; ipdb.set_trace()
         candidate_id = request.GET.get('candidate_id') or self.request.session.get('candidate_id', None)
         oi_pk = request.GET.get('oi_pk')
 
@@ -356,7 +358,6 @@ class OrderItemCommentApi(APIView):
         return Response(data, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
-        # import ipdb;ipdb.set_trace()
         candidate_id = request.data.get('candidate_id') or self.request.session.get('candidate_id', None)
         oi_pk = request.data.get('oi_pk')
         comment = request.data.get('comment', '').strip()
@@ -378,7 +379,7 @@ class OrderItemCommentApi(APIView):
         message = oi.message_set.filter(is_internal=False).order_by('created')
 
         message = [{'added_by': msg.added_by.name if msg.added_by else '', 'message': msg.message,
-                    'created': msg.created.strftime("%b %d,%Y"),
+                    'created': msg.created.strftime("%b %d, %Y"),
                     'candidate_id': msg.candidate_id
                     } for msg in message]
 

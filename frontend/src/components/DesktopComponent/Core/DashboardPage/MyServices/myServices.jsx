@@ -65,7 +65,7 @@ const MyServices = (props) => {
     
     // if reviews exists then show
     const toggleReviews = (id, prod) => {
-        if(openReview != id) dispatch(fetchReviews({ payload: {prod: prod, page: currentPage}}));
+        if(openReview != id) dispatch(fetchReviews({ payload: {prod: prod}}));
         setOpenReview(openReview == id ? false : id);
     }
 
@@ -134,7 +134,7 @@ const MyServices = (props) => {
 
                                                     <div className="db-my-courses-detail__leftpan--status mb-2">
                                                         Status:
-                                                        <strong className="ml-1">{item.new_oi_status ? item.new_oi_status : ""}
+                                                        <strong className="ml-1">{item.new_oi_status ? item.new_oi_status : "Yet to Update"}
                                                             {item.options?.uploadResume ? <Link to={"#"} className="ml-2" onClick={uploadHandelShow}>Upload</Link>
                                                             : null}
 

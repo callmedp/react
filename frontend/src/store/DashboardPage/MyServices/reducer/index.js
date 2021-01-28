@@ -11,11 +11,13 @@ const resInitState = {
 export const DashboardMyServicesReducer = (state=initState, action) => {
     switch(action.type){
         case Actions.MY_SERVICES_FETCHED : return { ...initState,...action.item}
+        
         case Actions.CANDIDATE_OI_ACCEPT_REJECT_SUCCESS: {
             return {
                 ...state, error: false
             };
         }
+        
         default: return state;
     }
 }

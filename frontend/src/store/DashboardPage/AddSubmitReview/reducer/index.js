@@ -1,7 +1,7 @@
 import * as Actions from '../actions/actionTypes';
 
 const initState = {
-    // reviews: [],
+    data: [],
 }
 
 export const ReviewsReducer = (state = initState, action) => {

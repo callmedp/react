@@ -216,8 +216,8 @@ class DashboardReviewApi(APIView):
     serializer_classes = None
 
     def get(self,request):
-        page = request.GET.get('page', 1)
-        product_id = request.GET.get('product_id',None) or self.request.session.get('candidate_id', None) or '568a0b20cce9fb485393489b'
+        # page = request.GET.get('page', 1)
+        product_id = request.GET.get('product_id',None)
         try:
             product = Product.objects.get(id=product_id)
         except Product.DoesNotExist:
@@ -269,7 +269,6 @@ class DashboardReviewApi(APIView):
                 review = request.data.get('review', '').strip()
                 rating = int(request.data.get('rating', 1))
                 title = request.data.get('title', '').strip()
-                name = request.data.get('full_name')
                 if rating and oi and oi.order.candidate_id == candidate_id and oi.order.status in [1, 3]:
                     content_type = ContentType.objects.get(app_label="shop", model="product")
                     review_obj = Review.objects.create(
