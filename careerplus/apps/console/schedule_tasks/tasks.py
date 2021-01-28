@@ -7,6 +7,7 @@ import time
 import sys,gzip
 import datetime
 import xlwt
+import ast
 
 #django imports
 from django.contrib.auth import get_user_model
@@ -619,18 +620,20 @@ def generate_feedback_report(sid,start_date,end_date):
 
     scheduler_obj = Scheduler.objects.get(id=sid)
     today_date_str = datetime.now().date().strftime("%Y_%m_%d")
-    file_name = "scheduler/{}/{}_discount_report.xls".format(today_date_str,sid)
+    file_name = "scheduler/{}/{}_feedback_report.xls".format(today_date_str,sid)
     file_obj = get_file_obj(file_name)
     workbook = xlwt.Workbook()
     sheet = workbook.add_sheet("Sheet 1",cell_overwrite_ok=True) 
-    heading = ['Feedback Call Assigned Date Time','CustomerID','Status','Agent Name','LTV','Follow Up Date Time','Item Name',\
-                'Feedaback Call Attempted Date Time', 'Satisfaction Status', 'Resolution', 'Payment Date Time']
+    heading = ['Stage', 'Email', 'Owner_name', 'Sales_executive', 'Sales_TL', 'Branch_Head', 'Assigned date', 'Order_Date', 'Payment_Date'\
+                ,'Product_Name', 'Actual collection of order', 'Attempt on', 'Item Utilized Status', 'Satisfaction Status']
+    # heading = ['Feedback Call Assigned Date Time','CustomerID','Status','Agent Name','LTV','Follow Up Date Time','Item Name',\
+    #             'Feedaback Call Attempted Date Time', 'Satisfaction Status', 'Resolution', 'Payment Date Time']
     write_row(sheet,heading,)
     oi_feedbacks = OrderItemFeedback.objects.filter(created__gte=start_date,created__lte=end_date)
     logging.getLogger('info_log').info(\
         "Total Order Item Feedback Found {}".format(oi_feedbacks.count()))
     
-    merged_row_data = {'merge_fields':['assigned_date','candidate_id','status','agent_name','ltv','follow_up']}
+    merged_row_data = {'merge_fields':['stage', 'email', 'owner_name', 'sales_executive', 'sales_tl', 'branch_head', 'assigned_date']}
     row = 1
     merge_row_start_pos = None
     previous_feedback_id = None
@@ -658,25 +661,40 @@ def generate_feedback_report(sid,start_date,end_date):
 
             assigned_to = oi_feedback.customer_feedback.assigned_to.name if oi_feedback.customer_feedback and \
                         oi_feedback.customer_feedback.assigned_to else ''
-            ltv = oi_feedback.customer_feedback.ltv
+            # ltv = oi_feedback.customer_feedback.ltv
 
-            follow_up = ''
-            follow_up_list = OrderItemFeedbackOperation.objects.filter(customer_feedback=oi_feedback.customer_feedback.id,oi_type=5)\
-                        .values_list('follow_up_date',flat=True)
+            # follow_up = ''
+            # follow_up_list = OrderItemFeedbackOperation.objects.filter(customer_feedback=oi_feedback.customer_feedback.id,oi_type=5)\
+            #             .values_list('follow_up_date',flat=True)
 
-            for date in follow_up_list:
-                if not date:
-                    continue
-                follow_up += date.strftime('%d/%m/%Y, %H:%M:%S') + ' | '
+            # for date in follow_up_list:
+            #     if not date:
+            #         continue
+            #     follow_up += date.strftime('%d/%m/%Y, %H:%M:%S') + ' | '
+
+            try:
+                sales_user_info = ast.literal_eval(oi_feedback.order_item.order.sales_user_info)
+            except:
+                sales_user_info = {}
 
             merged_row_data.update({
-                'assigned_date': assigned_date,
-                'candidate_id': oi_feedback.customer_feedback.candidate_id, 
-                'status': oi_feedback.customer_feedback.status_text,
-                'agent_name':assigned_to,
-                'ltv':ltv,
-                'follow_up':follow_up
+                'stage' : oi_feedback.customer_feedback.status_text,
+                'email' : oi_feedback.customer_feedback.email,
+                'owner_name' : oi_feedback.customer_feedback.full_name,
+                'sales_executive' : assigned_to,
+                'sales_tl' : sales_user_info.get('team_lead',''),
+                'branch_head': sales_user_info.get('branch_head',''),
+                'assigned_date': assigned_date
             })
+
+            # merged_row_data.update({
+            #     'assigned_date': assigned_date,
+            #     'candidate_id': oi_feedback.customer_feedback.candidate_id, 
+            #     'status': oi_feedback.customer_feedback.status_text,
+            #     'agent_name':assigned_to,
+            #     'ltv':ltv,
+            #     'follow_up':follow_up
+            # })
             previous_feedback_id =  oi_feedback.customer_feedback.id
 
             merge_row_start_pos = row
@@ -691,10 +709,20 @@ def generate_feedback_report(sid,start_date,end_date):
                      and oi_feedback.order_item.order and oi_feedback.order_item.order.payment_date else ''
        
         product_name = oi_feedback.order_item.product.name if oi_feedback.order_item and oi_feedback.order_item.product else ''
+
+        order_date = oi_feedback.order_item.order.created.strftime('%d/%m/%Y, %H:%M:%S') if  oi_feedback.order_item.order.created else ''
+        actual_amount = str(oi_feedback.order_item.order.total_incl_tax) if oi_feedback.order_item.order.total_incl_tax else ''
+
         excel_row = [
-                        None, None, None,None,None, None, product_name, feedback_attempted_date_time\
-                        , oi_feedback.category_text,oi_feedback.resolution_text, payment_date
+                        None, None, None, None, None, None, None, order_date, payment_date\
+                        , product_name, actual_amount, feedback_attempted_date_time\
+                        , oi_feedback.order_item.get_oi_status, oi_feedback.category_text
                     ]
+        
+        # excel_row = [
+        #                 None, None, None,None,None, None, product_name, feedback_attempted_date_time\
+        #                 , oi_feedback.category_text,oi_feedback.resolution_text, payment_date
+        #             ]
         write_row(sheet,excel_row,row)
         row += 1
 

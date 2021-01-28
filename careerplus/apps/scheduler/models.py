@@ -15,7 +15,8 @@ TASK_TYPE = (
     (5, 'Encrypted URLs for Mailer'),
     (6, 'Generate Compliance Report'),
     (7, 'Pixel Report Generation'),
-    (8, "Discount Report Generation")
+    (8, 'Discount Report Generation'),
+    (9, 'Generate Feedback Report')
 )
 
 TASK_STATUS = (

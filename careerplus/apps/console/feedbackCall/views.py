@@ -48,7 +48,7 @@ class FeedbackReportView(UserGroupMixin, TemplateView):
             return render(self.request,template_name=self.template_name)
 
         scheduler_obj = Scheduler()
-        scheduler_obj.task_type = 8
+        scheduler_obj.task_type = 9
         scheduler_obj.status = 3
         scheduler_obj.created_by = self.request.user
         scheduler_obj.save()
