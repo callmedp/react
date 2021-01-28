@@ -4,7 +4,7 @@ import './dashboardPage.scss';
 import MenuNav from '../../Common/MenuNav/menuNav';
 import Header from '../../Common/Header/Header';
 import Footer from '../../Common/Footer/Footer';
-import PopularCoursesSlider from '../../Common/ProductCardsSlider/productCardsSlider';
+import {default as ProductCardsSlider} from '../../Common/ProductCardsSlider/productCardsSlider';
 import HaveQuery from './HaveQuery/haveQuery';
 import DashboardNavigation from './DashboardNavigation/dashboradNav';
 import MyCourses from './MyCourses/myCourses';
@@ -15,10 +15,27 @@ import MyProfile from './MyProfile/myProfile';
 import PersonalDetail from './MyProfile/PersonalDetail';
 import EditSkills from './MyProfile/EditSkills';
 import SearchPage from '../../Common/SearchPage/SearchPage';
+import { fetchPopularServices } from 'store/CataloguePage/actions/index';
 
-const Dashboard = () => {
+const Dashboard = (props) => {
+    const dbContainer = props.match.params.name;
+    const dispatch = useDispatch();
     const [showSearchPage, setShowSearchPage] = useState(false);
-    const [activeTab, setActiveTab] = useState('Courses');
+    const { popularServices } = useSelector(store => store?.popularServices );
+
+    const handleEffects = async () => {
+        if (!(window && window.config && window.config.isServerRendered)) {
+            await new Promise((resolve, reject) => dispatch(fetchPopularServices({ resolve, reject })));
+        }
+        else {
+            delete window.config?.isServerRendered
+        }
+
+    };
+
+    useEffect(() => {
+        handleEffects();
+    }, [])
 
     return(
         <div>
@@ -27,20 +44,22 @@ const Dashboard = () => {
                     <MenuNav />
                     <header className="m-container m-header pb-0">
                         <Header setShowSearchPage={setShowSearchPage} name='Dashboard' />
-                        <DashboardNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
+                        <DashboardNavigation activeTab={dbContainer}/>
                     </header>
                     <main className="m-container">
-                        { activeTab === 'Courses' && <MyCourses /> }
-                        { activeTab === 'Services' && <MyServices /> }
-                        { activeTab === 'Orders' && <MyOrders /> }
-                        { activeTab === 'Wallet' && <MyWallet /> }
-                        { activeTab === 'Profile' && <MyProfile /> }
+                        {
+                            {
+                                'my-services' : <MyServices />,
+                                'my-courses' : <MyCourses/>,
+                                'my-orders' : <MyOrders />,
+                                'my-wallet' : <MyWallet/>
+                            }[dbContainer]
+                        }
                         
                         {/*<EditSkills />
                         <PersonalDetail /> */}
                         
-                        <PopularCoursesSlider />
-                        <br />
+                        <ProductCardsSlider productList={popularServices} />
                         <HaveQuery />
                     </main>
                     <Footer /> 

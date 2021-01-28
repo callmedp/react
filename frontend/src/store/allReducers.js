@@ -33,7 +33,6 @@ const rootReducer = combineReducers({
     popularServices : PopularServicesReducer,
     popularCategories : TrendingCategoriesReducer,
     allCategories : AllCategoriesReducer,
-    // allServices : RecentlyServicesReducer,
     dashboardWallet: DashboardMyWalletReducer,
     dashboardOrders: DashboardMyOrdersReducer,
     dashboardCourses: DashboardMyCoursesReducer,

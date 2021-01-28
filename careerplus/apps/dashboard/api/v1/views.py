@@ -125,13 +125,12 @@ class MyServicesApi(DashboardInfo, APIView):
     authentication_classes = ()
 
     def get(self, request, *args, **kwargs):
-        candidate_id = self.request.session.get('candidate_id', None)
+        candidate_id = self.request.session.get('candidate_id', None) or '568a0b20cce9fb485393489b'
         # email = request.GET.get('email', None)
         data = []
         pending_resume_items = []
         page = request.GET.get("page", 1)
-        candidate_id='568a0b20cce9fb485393489b'
-        # candidate_id='5fed060d9cbeea482331ec4b'
+
         if candidate_id:
             excl_txns = PaymentTxn.objects.filter(
                 status__in=[0, 2, 3, 4, 5],
@@ -218,7 +217,7 @@ class DashboardReviewApi(APIView):
 
     def get(self,request):
         page = request.GET.get('page', 1)
-        product_id = request.GET.get('product_id',None) or self.request.session.get('candidate_id', None)
+        product_id = request.GET.get('product_id',None) or self.request.session.get('candidate_id', None) or '568a0b20cce9fb485393489b'
         try:
             product = Product.objects.get(id=product_id)
         except Product.DoesNotExist:
@@ -255,12 +254,14 @@ class DashboardReviewApi(APIView):
 
     def post(self, request, *args, **kwargs):
         email_dict = {}
-        candidate_id = request.data.get('candidate_id', None) or self.request.session.get('candidate_id', None)
+        candidate_id = request.data.get('candidate_id', None) or self.request.session.get('candidate_id', None) or '568a0b20cce9fb485393489b'
         oi_pk = request.data.get('oi_pk')
-        email = request.data.get('email') or self.request.session.get('email', None)
+        email = request.data.get('email') or self.request.session.get('email', None) or 'priya.kharb@hindustantimes.com'
         data = {
             "display_message": 'Thank you for sharing your valuable feedback',
         }
+
+        # import ipdb;ipdb.set_trace()
 
         if oi_pk and candidate_id:
             try:
@@ -328,8 +329,8 @@ class DashboardPendingResumeItemsApi(APIView):
     serializer_classes = None
 
     def get(self,request):
-        candidate_id = self.request.session.get('candidate_id', None)
-        email = self.request.session.get('email', None)
+        candidate_id = self.request.session.get('candidate_id', None) or '568a0b20cce9fb485393489b'
+        email = self.request.session.get('email', None) or 'priya.kharb@hindustantimes.com'
         pending_resume_items = []
 
         pending_resume_items = DashboardInfo().get_pending_resume_items(candidate_id=candidate_id,

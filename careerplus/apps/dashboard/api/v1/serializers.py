@@ -88,7 +88,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
         date_created = ''
         if oi.product.type_flow == 1 or  oi.product.type_flow == 12 or oi.product.type_flow == 13:
             for op in ops:
-                date_created =op.created.strftime('%d %b %Y') if op.created else ''
+                date_created =op.created.strftime('%d %b, %Y') if op.created else ''
                 if op.oi_status == 24 and op.draft_counter == 1:
                     datalist.append({'date':date_created,'status':op.get_user_oi_status})
                 elif op.oi_status == 24 and op.draft_counter < max_draft_limit:
@@ -196,15 +196,15 @@ class OrderItemSerializer(serializers.ModelSerializer):
                 date_created =op.created.strftime('%d %b %Y') if op.created else ''
                 datalist.append({'date':date_created,'status':op.get_user_oi_status})
                 if op.oi_status == 141:
-                    options['Complete Profile']=True
+                    options['complete_profile']=True
                 elif op.oi_status == 142:
-                    options['Edit your profile']=True
+                    options['edit_your_profile']=True
         elif oi.product.type_flow == 10:
             for op in ops:
                 date_created =op.created.strftime('%d %b %Y') if op.created else ''
                 datalist.append({'date':date_created,'status':op.get_user_oi_status})
                 if op.oi_status == 101:
-                    options['Take Test']=True
+                    options['take_test']=True
                 elif op.oi_draft:
                     options['Download']=True
                     options['order_pk']=oi.order.pk
@@ -215,7 +215,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
                 date_created =op.created.strftime('%d %b %Y') if op.created else ''
                 datalist.append({'date':date_created,'status':op.get_user_oi_status})
                 if op.oi_status == 101:
-                    options['Take Test']=True
+                    options['take_test']=True
                 elif op.oi_draft:
                     options['Download']=True
                     options['order_pk']=oi.order.pk
