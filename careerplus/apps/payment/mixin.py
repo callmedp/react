@@ -243,19 +243,19 @@ class PaymentMixin(object):
             tracking_id = request.session.get('tracking_id', '')
             product_availability = request.session.get(
                 'product_availability', tracking_product_id)
-            trigger_point = self.request.session.get(
+            trigger_point = request.session.get(
                 'trigger_point','')
-            u_id = self.request.session.get(
+            u_id = request.session.get(
                 'u_id','')
-            position = self.request.session.get(
+            position = request.session.get(
                 'position',1)
-            utm_campaign = self.request.session.get(
+            utm_campaign = request.session.get(
                 'utm_campaign','')
-            referal_product = self.request.session.get(
+            referal_product = request.session.get(
             'referal_product','')
-            referal_subproduct = self.request.session.get(
+            referal_subproduct = request.session.get(
                 'referal_subproduct','')
-            popup_based_product = self.request.session.get(
+            popup_based_product = request.session.get(
                 'popup_based_product','')
             
             action = 'purchase_done'
