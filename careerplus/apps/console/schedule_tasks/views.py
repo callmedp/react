@@ -216,12 +216,13 @@ class DownloadTaskView(View):
         task_types_allowed = []
         if 'order.can_download_discount_report' in request.user.get_all_permissions():
             task_types_allowed.append(8)
+            task_types_allowed.append(9)
 
         if request.user.groups.filter(name__in=settings.MARKETING_GROUP_LIST).exists():
             task_types_allowed.extend([1,4,5,6,7])
 
         if self.request.user.is_superuser:
-            task_types_allowed = [1,4,5,6,7,8]
+            task_types_allowed = [1,4,5,6,7,8,9]
 
         try:
             task = request.GET.get('task', None)
