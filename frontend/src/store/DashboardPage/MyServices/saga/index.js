@@ -31,7 +31,7 @@ function* DashboardServicesApi(action) {
 function* getPendingOrder() {
     try {
         const result = yield call(Api.getPendingOrderItems);
-        return yield put({ type: Actions.PENDING_RESUME_FETCHED, data: result.data.data });
+        return yield put({ type: Actions.PENDING_RESUME_FETCHED, data: result?.data?.data });
     }
     catch (e) {
         return e;

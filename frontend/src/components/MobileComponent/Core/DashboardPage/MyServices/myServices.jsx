@@ -18,12 +18,13 @@ import AcceptModal from '../InboxModals/acceptModal';
 import RejectModal from '../InboxModals/rejectModal';
 
 // API Import
-import { fetchMyServices, fetchPendingResumes } from 'store/DashboardPage/MyServices/actions/index';
+import { fetchMyServices, fetchPendingResume } from 'store/DashboardPage/MyServices/actions/index';
 
 const MyServices = (props) => {
 
     const dispatch = useDispatch();
     const serviceData= useSelector(store => store?.dashboardServices);
+    const pendingResumes = useSelector(store => store?.dashboardPendingResume);
     const { serviceLoader } = useSelector(store => store.loader);
     const myServicesList = serviceData?.data
     const page = serviceData?.page
@@ -73,7 +74,7 @@ const MyServices = (props) => {
         try{
             if (!(window && window.config && window.config.isServerRendered)) {
                 dispatch(startDashboardServicesPageLoader());
-                new Promise((resolve, reject) => dispatch(fetchPendingResumes({ resolve, reject })));
+                new Promise((resolve, reject) => dispatch(fetchPendingResume({ resolve, reject })));
                 await new Promise((resolve, reject) => dispatch(fetchMyServices({page: currentPage, resolve, reject })));
                 dispatch(stopDashboardServicesPageLoader());
             }
@@ -104,7 +105,7 @@ const MyServices = (props) => {
         { serviceLoader && <Loader />}
         <div>
             {
-                serviceData?.pending_resume_items &&
+                pendingResumes?.data?.length > 0 &&
                     <div>
                         <strong><center>To initiate your service <br /><a href="/" onClick={(e) => {e.preventDefault();setShowUpload(true)}}>Upload your latest resume</a></center></strong><br />
                     </div>
@@ -144,7 +145,7 @@ const MyServices = (props) => {
                                     }
 
                                             <div className="pl-15 mt-15 fs-12">
-                                                Status: <strong> {service?.status ? service?.status : service?.new_oi_status} </strong>
+                                                Status: <strong> {service?.new_oi_status ? service?.new_oi_status : service?.status} </strong>
                                                 {
                                                     false &&
                                                         <div className="d-flex justify-content-center mt-10">
@@ -236,7 +237,7 @@ const MyServices = (props) => {
                 showRateModal && <RateProductModal setShowRateModal={setShowRateModal} oi_id={oiReviewId}/>
             }
             {
-                showUpload && <UploadResume setShowUpload={setShowUpload} data={serviceData?.pending_resume_items} />
+                showUpload && <UploadResume setShowUpload={setShowUpload} data={pendingResumes?.data} />
             }
             {
                 acceptModal && <AcceptModal setAcceptModal={setAcceptModal} oi_id={acceptModalId}/>

@@ -110,7 +110,7 @@ const MyCourses = (props) => {
                                     Hi, the recording for the session you missed is available now <Link to={"#"} className="font-weight-semi-bold">Check here</Link>
                                     </div> */}
                                             <div className="pl-15 mt-15 fs-12">
-                                                Status: <strong> { course?.status } </strong>
+                                                Status: <strong> {course?.new_oi_status ? course?.new_oi_status : course?.status} </strong>
                                                 {/* <Link to={"#"} className="d-block font-weight-bold">View Details</Link> */}
                                                 {
                                                     course?.datalist?.length ?
