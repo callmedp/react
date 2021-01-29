@@ -27,6 +27,9 @@ from review.models import Review
 from emailers.email import SendMail
 import logging
 logger = logging.getLogger('error_log')
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
+
 
 
 class DashboardMyorderApi(DashboardInfo, APIView):
@@ -34,24 +37,31 @@ class DashboardMyorderApi(DashboardInfo, APIView):
     authentication_classes = ()
 
     def get(self, request, *args, **kwargs):
+        data = []
+        types = {"in_process":2,
+                'closed':3,
+                'all':'all'
+                }
+        page = request.GET.get("page", 1)
         candidate_id = self.request.session.get('candidate_id', None)
-        order_list=[]
+        last_month_from = request.GET.get("last_month_from",18 )
+        select_type = request.GET.get('select_type','all')
+        selected_type = types.get(select_type)
+
+        #time filter
+        from_datetime = datetime.utcnow() - relativedelta(months=int(last_month_from))
+        modified_from_datetime = from_datetime.replace(day=1, hour=0, minute=0, second=0, microsecond=0) 
+
         candidate_id='568a0b20cce9fb485393489b'
         # candidate_id='5c94a7b29cbeea2c1f27fda2'
-        page = request.GET.get("page", 1)
-
         if candidate_id:         
             orders = Order.objects.filter(
             status__in=[0, 1, 3],
             candidate_id=candidate_id)
-            # excl_txns = PaymentTxn.objects.filter(
-            #     status__in=[0, 2, 3, 4, 5],
-            #     payment_mode__in=[6, 7],
-            #     order__candidate_id=candidate_id)
-            # # excl_txns = PaymentTxn.objects.filter(status=0, ).exclude(payment_mode__in=[1, 4])
-            # excl_order_list = excl_txns.all().values_list('order_id', flat=True)
-            # orders = orders.exclude(
-            #     id__in=excl_order_list).order_by('-date_placed')
+            orders = orders.filter(date_placed__gte=modified_from_datetime)
+            if selected_type is not 'all':
+                orders = orders.filter(status=selected_type)
+
             order_list = []
             paginated_data = offset_paginator(page, orders)
             for obj in paginated_data["data"]:
@@ -87,9 +97,21 @@ class MyCoursesApi(DashboardInfo, APIView):
     authentication_classes = ()
 
     def get(self, request, *args, **kwargs):
-        candidate_id = self.request.session.get('candidate_id', None)
         data = []
+        types = {"in_process":2,
+                'closed':3,
+                'all':'all'
+                }
         page = request.GET.get("page", 1)
+        candidate_id = self.request.session.get('candidate_id', None)
+        last_month_from = request.GET.get("last_month_from",18 )
+        select_type = request.GET.get('select_type','all')
+        selected_type = types.get(select_type)
+
+        #time filter
+        from_datetime = datetime.utcnow() - relativedelta(months=int(last_month_from))
+        modified_from_datetime = from_datetime.replace(day=1, hour=0, minute=0, second=0, microsecond=0) 
+
         candidate_id='568a0b20cce9fb485393489b'
         # candidate_id='5fed060d9cbeea482331ec4b'
         if candidate_id:
@@ -107,6 +129,9 @@ class MyCoursesApi(DashboardInfo, APIView):
                 id__in=excl_order_list)
 
             courses = OrderItem.objects.filter(order__in=orders,product__type_flow=2).exclude(order__status__in=[0,5])
+            courses = courses.filter(order__date_placed__gte=modified_from_datetime)
+            if selected_type is not 'all':
+                courses = courses.filter(order__status=selected_type)
             paginated_data = offset_paginator(page, courses)
             data = OrderItemSerializer(paginated_data["data"],many=True,context= {"get_details": True}).data
             #pagination info
@@ -118,25 +143,38 @@ class MyCoursesApi(DashboardInfo, APIView):
             }
         return APIResponse(data={'data':data,'page':page_info},message='Courses data Success',status=status.HTTP_200_OK)
 
-
 class MyServicesApi(DashboardInfo, APIView):
     permission_classes = (permissions.AllowAny,)
     authentication_classes = ()
 
     def get(self, request, *args, **kwargs):
-        candidate_id = self.request.session.get('candidate_id', None)
         data = []
+        types = {"in_process":2,
+                'closed':3,
+                'all':'all'
+                }
         page = request.GET.get("page", 1)
+        candidate_id = self.request.session.get('candidate_id', None)
+        last_month_from = request.GET.get("last_month_from",18 )
+        select_type = request.GET.get('select_type','all')
+        selected_type = types.get(select_type)
+
+        #time filter
+        from_datetime = datetime.utcnow() - relativedelta(months=int(last_month_from))
+        modified_from_datetime = from_datetime.replace(day=1, hour=0, minute=0, second=0, microsecond=0) 
+
         candidate_id='568a0b20cce9fb485393489b'
-        # candidate_id='5fed060d9cbeea482331ec4b'
+
         if candidate_id:
             excl_txns = PaymentTxn.objects.filter(
                 status__in=[0, 2, 3, 4, 5,6],
                 payment_mode__in=[6, 7],
                 order__candidate_id=candidate_id)
             excl_order_list = excl_txns.all().values_list('order_id', flat=True)
-
             services = OrderItem.objects.filter(order__candidate_id=candidate_id, order__status__in=[1, 3],product__product_class__slug__in=['writing','service','other']).exclude(order__in=excl_order_list)
+            services = services.filter(order__date_placed__gte=modified_from_datetime)
+            if selected_type is not 'all':
+                services = services.filter(order__status=selected_type)
             paginated_data = offset_paginator(page, services)
             data = OrderItemSerializer(paginated_data["data"],many=True,context= {"get_details": True}).data
 

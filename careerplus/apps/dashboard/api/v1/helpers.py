@@ -167,11 +167,11 @@ def get_courses_detail(instance):
             date_created =op.created
             # datalist.append({'date':date_created,'status':op.get_user_oi_status})
             if op.oi_status == 5:
-                if  op.product.type_flow == 2 and op.product.vendor.slug == 'neo'  and not op.neo_mail_sent and not op.updated_from_trial_to_regular:
+                if  oi.product.type_flow == 2 and oi.product.vendor.slug == 'neo'  and not op.neo_mail_sent and not op.updated_from_trial_to_regular:
                     options['BoardOnNeo'] = True
-                if  op.product.type_flow == 2 and op.product.vendor.slug == 'neo'  and op.neo_mail_sent:
+                if  oi.product.type_flow == 2 and oi.product.vendor.slug == 'neo'  and op.neo_mail_sent:
                     options['please_confirm_boarding_on_mail_sent_to_you']=True
-                if op.product.type_flow == 2 and op.product.vendor.slug == 'neo'  and op.updated_from_trial_to_regular:
+                if oi.product.type_flow == 2 and oi.product.vendor.slug == 'neo'  and op.updated_from_trial_to_regular:
                     options['updated_account_from_trial_to_regular'] = True
             elif op.oi_status == 6 or op.oi_status == 4 and op.oi_draft.name:
                 options['Download']=True
