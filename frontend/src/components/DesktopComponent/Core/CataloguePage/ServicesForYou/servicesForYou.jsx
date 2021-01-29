@@ -18,8 +18,8 @@ const OurVendors = (props) => {
                             return (
                                 <div className="col-sm-3" key={service.id}>
                                     <div className="services-foryou">
-                                        <h3 className="heading3">{service.name?.length > 56 ? (service.name?.slice(0,56) + '...') : service.name}</h3>
-                                        <p>{service.description}</p>
+                                        <h3 className="heading3">{service.heading?.length > 56 ? (service.heading?.slice(0,56) + '...') : service.heading}</h3>
+                                        <p>{service.description?.length > 85 ? service.description?.slice(0, 85) + '...' : service.description}</p>
                                         <span className="d-flex">
                                             <a href={service.url}>Know more</a>
                                             <figure >

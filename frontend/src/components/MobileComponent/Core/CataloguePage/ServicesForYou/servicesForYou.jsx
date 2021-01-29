@@ -29,7 +29,7 @@ const ServicesForYou = (props) => {
                         return (
                             <div className="m-services-foryou__list" key={index}>
                                 <h3 className="m-heading3">{service?.heading ? service?.heading : service?.name}</h3>
-                                <p>{ service.description?.length > 80 ? service.description?.slice(0, 80) + '...' :  service.description }</p>
+                                <p>{ service.description?.length > 85 ? service.description?.slice(0, 85) + '...' :  service.description }</p>
                                 <span className="d-flex">
                                     <a href={`${siteDomain}${service.url}`}>Know more</a>
                                     <figure>

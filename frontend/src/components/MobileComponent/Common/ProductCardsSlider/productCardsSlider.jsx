@@ -37,12 +37,12 @@ const ProductCards = props => {
                                     <img src={product?.imgUrl} alt={product?.imgAlt} />
                                 </figure>
                                 <h3 className="m-heading3">
-                                    <a href={`${siteDomain}${product.url}`}>{product?.name}</a>
+                                    <a href={`${siteDomain}${product.url}`}>{product?.name?.length > 42 ? product?.name?.slice(0, 42) + '...' : product?.name }</a>
                                 </h3>
                             </div>
                             <div className="m-card__box">
                                 <div className="m-card__rating">
-                                <span className="mr-10">By { product?.providerName?.length > 13 ? product?.providerName?.slice(0, 13) + '...' : product?.providerName }</span>
+                                <span className="mr-10">By { product?.providerName?.split(' ')[0]?.length > 13 ? product?.providerName?.split(' ')[0]?.slice(0, 13) + '...' : product?.providerName?.split(' ')[0] }</span>
                                 <span className="m-rating">
                                     { product?.stars?.map((star, index) => starRatings(star, index)) }
                                     <span>{product?.rating?.toFixed(1)}/5</span>

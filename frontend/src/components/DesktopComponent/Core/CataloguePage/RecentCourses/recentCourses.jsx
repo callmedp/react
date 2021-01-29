@@ -35,7 +35,7 @@ const RecentCourses = (props) => {
                                                 </div>
                                                 <div className="card__box">
                                                     <div className="card__rating">
-                                                        <span className="mr-10">By {course.providerName?.length > 10 ? course.providerName?.slice(0,10) + '...' : course.providerName }</span>
+                                                        <span className="mr-10">By {course.providerName?.split(' ')[0]?.length > 10 ? course.providerName?.split(' ')[0]?.slice(0,10) + '...' : course.providerName?.split(' ')[0] }</span>
 
                                                         <span className="rating">
                                                             {course.stars?.map((star, index) => starRatings(star, index))}
