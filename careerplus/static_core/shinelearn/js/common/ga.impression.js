@@ -4,19 +4,36 @@ function GALayer() {
     that.fireGaEvent = function(options) {
         var event = options.event || '';
         var product = options.product || [];
-        currencyCode = options.currencyCode || 'INR';
+        var currencyCode = options.currencyCode || 'INR';
+        var actionField = options.actionField || null;
 
         window.dataLayer = window.dataLayer || [];
         
         try{
             console.log(product);
-            window.dataLayer.push({
+            if (event === 'productdetail') {
+            window.dataLayer.push(
+                {
                 "event": event,
                 'ecommerce': {
-                    'currencyCode': 'INR',
-                    'impressions': product
+                    'currencyCode': currencyCode,
+                    'details': {   
+                        'actionField': { 'list': actionField},
+                        'products': product
+                    }
                 }
             });
+        }
+            else {
+                window.dataLayer.push(
+                    {
+                    "event": event,
+                    'ecommerce': {
+                        'currencyCode': currencyCode,
+                        'impressions': product
+                    }
+                });
+        }
 
 
         }
@@ -36,11 +53,13 @@ GALayer.prototype.SendImpression = function() {
     eventName = arguments[0];
     ecommerce = arguments[1];
     currencyCode = arguments[2];
+    actionField = arguments[3] || null;
     
     that.fireGaEvent({
         'event': eventName,
         'product': ecommerce,
-        'currencyCode': currencyCode
+        'currencyCode': currencyCode,
+        'actionField' : actionField
     })
 };
 

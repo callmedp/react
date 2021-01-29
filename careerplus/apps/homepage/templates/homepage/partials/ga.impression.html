@@ -19,17 +19,20 @@ asyncCall();
 </script> -->
 
 <script>
-    var event_name = "{{ event }}";
+    function GAImpression(event, options=null) {
+    if (event) { var event_name = event; } else { var event_name = "{{ page }}" || event; }
     switch(event_name){
         case 'Product':
-            ProductImpressionPush();
+            HomeImpressionPush();
+        case 'Search':
+            SearchPageImpressionPush(list='Search Results');
+        case 'productDetail':
+            ProductDetailImpressionPush(list='Product', options);
     }
-    // {{ rcoureses|safe }}
-    // {{ pcourses|safe }}
-    // {% if candidate %} console.log(true) {% else %} console.log(false) {% endif %}
-    // {{ tcourses|safe }}
+}
+    {% if used_as %}
 
-    function ProductImpressionPush() {
+    function HomeImpressionPush() {
         const p_r_products = [];
         const t_products = [];
         {% if request.session.candidate_id and rcourses %}
@@ -87,8 +90,80 @@ asyncCall();
             {% endfor %}
         {% endfor %}
     GALayer.SendImpression('productImpression', t_products, 'INR')
-    console.log(t_products);
-    console.log(p_r_products);
+    GALayer.SendImpression('productImpression', p_r_products, 'INR')
     }
 
+    function SearchPageImpressionPush(list) {
+        s_products = []
+        {% for product in products %}
+            s_products.push({
+                'name': '{{ product.pHd|default:product.pNm|truncatechars:40 }}',
+                'id': '{{ product.id }}',
+                'brand': '{{ product.pPvn }}',
+                'category': '{{ product.pCat }}',
+                'variant': '{{ product.pPc }}',
+                'price': '{{ product.pPin }}',
+                'list': list,
+                'position': '{{ forloop.counter }}',
+                'dimensions15': 'Search Page',
+                'dimensions16': '{% if product.pRC %} {{product.pARx|floatformat}} {% else %} null {% endif %}',
+                'dimensions17': '{{ product.pBC|default:"10" }}'
+            });
+        {% endfor %}
+        GALayer.SendImpression('productImpression', s_products, 'INR');
+    }
+
+    function ProductDetailImpressionPush(list, options) {
+        p_detail = []
+        
+        if (options) {
+            var actionField = options[0].actionField;
+            GALayer.SendImpression('productdetail', options, 'INR', actionField);
+        }
+
+        {% if product %}
+            p_detail.push({
+                'name': '{{ prd_H1 }}',
+                'id': '{{ product.id }}',
+                'brand': '{{ prd_vendor }}',
+                'category': '{{ product.get_category_main }}',
+                'variant': '{{ product.product_class }}',
+                'price': '{% if selected_var %}{{var_list.0.inr_price|floatformat}}{% else %}{{sqs.pPinb|floatformat}} {% endif %}',
+                'position': '1',
+                'dimensions15': 'Product Page',
+                'dimensions16': '{{ prd_rating }}',
+                'dimensions17': '{{ prd_num_bought|default:"10" }}'
+        })
+        {% endif %}
+        GALayer.SendImpression('productdetail', p_detail, 'INR', 'Product Page');
+    }
+
+    {% else %}
+
+    function ProductDetailImpressionPush(list, options) {
+        p_detail = []
+        
+        if (options) {
+            var actionField = options[0].actionField;
+            GALayer.SendImpression('productdetail', options, 'INR', actionField);
+        }
+
+        {% if product %}
+            p_detail.push({
+                'name': '{{ prd_H1 }}',
+                'id': '{{ product.id }}',
+                'brand': '{{ prd_vendor }}',
+                'category': '{{ product.get_category_main }}',
+                'variant': '{{ product.product_class }}',
+                'price': '{% if selected_var %}{{var_list.0.inr_price|floatformat}}{% else %}{{sqs.pPinb|floatformat}} {% endif %}',
+                'position': '0',
+                'dimensions15': 'Product Page',
+                'dimensions16': '{{ prd_rating }}',
+                'dimensions17': '{{ prd_num_bought|default:"10" }}'
+        })
+        {% endif %}
+        GALayer.SendImpression('productdetail', p_detail, 'INR', 'Product Page');
+    }
+    {% endif %}
+GAImpression();
 </script>
