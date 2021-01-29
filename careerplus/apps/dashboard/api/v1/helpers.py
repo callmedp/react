@@ -131,13 +131,13 @@ def get_courses_detail(instance):
             else:
                 datalist.append({'date':date_created,'status':op.get_user_oi_status})
                 datalist.append({'date':date_created,'status':'Service is under progress'})
-            if op.oi_status == 2 and oi.oi_status == 2:
-                options['upload_resume']=True
-            elif op.oi_status == 46 or op.oi_status == 27:
-                options['Download']=True
-                options['oi.pk']=oi.pk
-                options['op.pk']=op.pk
-                options['download_url']= reverse("linkedin-draf-download",kwargs={'order_item':oi.pk,'op_id':op.pk})
+            # if op.oi_status == 2 and oi.oi_status == 2:
+            #     options['upload_resume']=True
+            # elif op.oi_status == 46 or op.oi_status == 27:
+            #     options['Download']=True
+            #     options['oi.pk']=oi.pk
+            #     options['op.pk']=op.pk
+            #     options['download_url']= reverse("linkedin-draf-download",kwargs={'order_item':oi.pk,'op_id':op.pk})
 
     elif oi.product.type_flow == 3:
         for op in ops:
@@ -173,7 +173,7 @@ def get_courses_detail(instance):
                     options['please_confirm_boarding_on_mail_sent_to_you']=True
                 if op.product.type_flow == 2 and op.product.vendor.slug == 'neo'  and op.updated_from_trial_to_regular:
                     options['updated_account_from_trial_to_regular'] = True
-            elif op.oi_status == 6 or op.oi_status == 4:
+            elif op.oi_status == 6 or op.oi_status == 4 and op.oi_draft.name:
                 options['Download']=True
                 options['order_pk']=oi.order.pk
                 options['oi_draftname']=op.oi_draft.name
@@ -232,7 +232,7 @@ def get_courses_detail(instance):
         for op in ops:
             date_created =op.created
             # datalist.append({'date':date_created,'status':op.get_user_oi_status})
-            if op.oi_draft:
+            if op.oi_draft and op.oi_draft.name:
                 options['Download']=True
                 options['order_pk']=oi.order.pk
                 options['oi_draftname']=op.oi_draft.name
@@ -244,7 +244,7 @@ def get_courses_detail(instance):
             if oi.oi_status == 2 and not oi.oi_resume and op.oi_status == 2:
                 options['upload_resume']=True
                 options['uploaded_resume_will_be_boosted']=True
-            else:
+            elif op.oi_draft.name:
                 options['Download']=True
                 options['order_pk']=oi.order.pk
                 options['oi_draftname']=op.oi_draft.name
@@ -274,16 +274,17 @@ def get_courses_detail(instance):
                 datalist.append({'date':date_created,'status':op.get_user_oi_status})
             elif op.oi_status == 4:
                 datalist.append({'date':date_created,'status':'Service has been processed'})
-                options['Download']=True
-                options['order_pk']=oi.order.pk
-                options['oi_draftname']=op.oi_draft.name
-                options['download_url']= reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})+'?path='+op.oi_draft.name
+                if op.oi_draft.name:
+                    options['Download']=True
+                    options['order_pk']=oi.order.pk
+                    options['oi_draftname']=op.oi_draft.name
+                    options['download_url']= reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})+'?path='+op.oi_draft.name
             elif op.oi_status == 161 or op.oi_status == 162 or op.oi_status == 163:
                 datalist.append({'date':date_created,'status':op.get_user_oi_status})
             if op.oi_status == 101:
                 datalist.append({'date':date_created,'status':op.get_user_oi_status})
                 options['take_test']=True
-            elif op.oi_draft:
+            elif op.oi_draft and op.oi_draft.name:
                 options['Download']=True
                 options['order_pk']=oi.order.pk
                 options['oi_draftname']=op.oi_draft.name
@@ -303,7 +304,7 @@ def get_courses_detail(instance):
             datalist.append({'date':date_created,'status':op.get_user_oi_status})
             if op.oi_status == 101:
                 options['take_test']=True
-            elif op.oi_draft:
+            elif op.oi_draft and op.oi_draft.name:
                 options['Download']=True
                 options['order_pk']=oi.order.pk
                 options['oi_draftname']=op.oi_draft.name
