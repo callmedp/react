@@ -43,14 +43,14 @@ class DashboardMyorderApi(DashboardInfo, APIView):
             orders = Order.objects.filter(
             status__in=[0, 1, 3],
             candidate_id=candidate_id)
-            excl_txns = PaymentTxn.objects.filter(
-                status__in=[0, 2, 3, 4, 5],
-                payment_mode__in=[6, 7],
-                order__candidate_id=candidate_id)
-            # excl_txns = PaymentTxn.objects.filter(status=0, ).exclude(payment_mode__in=[1, 4])
-            excl_order_list = excl_txns.all().values_list('order_id', flat=True)
-            orders = orders.exclude(
-                id__in=excl_order_list).order_by('-date_placed')
+            # excl_txns = PaymentTxn.objects.filter(
+            #     status__in=[0, 2, 3, 4, 5],
+            #     payment_mode__in=[6, 7],
+            #     order__candidate_id=candidate_id)
+            # # excl_txns = PaymentTxn.objects.filter(status=0, ).exclude(payment_mode__in=[1, 4])
+            # excl_order_list = excl_txns.all().values_list('order_id', flat=True)
+            # orders = orders.exclude(
+            #     id__in=excl_order_list).order_by('-date_placed')
             order_list = []
             paginated_data = offset_paginator(page, orders)
             for obj in paginated_data["data"]:
@@ -98,7 +98,7 @@ class MyCoursesApi(DashboardInfo, APIView):
                 candidate_id=candidate_id)
                 
             excl_txns = PaymentTxn.objects.filter(
-                status__in=[0, 2, 3, 4, 5],
+                status__in=[0, 2, 3, 4, 5, 6],
                 payment_mode__in=[6, 7],
                 order__candidate_id=candidate_id)
             excl_order_list = excl_txns.all().values_list('order_id', flat=True)
@@ -126,14 +126,12 @@ class MyServicesApi(DashboardInfo, APIView):
 
     def get(self, request, *args, **kwargs):
         candidate_id = self.request.session.get('candidate_id', None) or '568a0b20cce9fb485393489b'
-        # email = request.GET.get('email', None)
         data = []
-        pending_resume_items = []
         page = request.GET.get("page", 1)
 
         if candidate_id:
             excl_txns = PaymentTxn.objects.filter(
-                status__in=[0, 2, 3, 4, 5],
+                status__in=[0, 2, 3, 4, 5, 6],
                 payment_mode__in=[6, 7],
                 order__candidate_id=candidate_id)
             excl_order_list = excl_txns.all().values_list('order_id', flat=True)

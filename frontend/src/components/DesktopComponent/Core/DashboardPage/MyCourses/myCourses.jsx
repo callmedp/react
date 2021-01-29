@@ -13,7 +13,10 @@ import { siteDomain } from 'utils/domains';
 import ViewDetailModal from '../Inbox/viewDetailModal';
 import RateModal from '../Inbox/rateModal';
 import ReviewRating from '../Inbox/reviewRating';
-import { Collapse } from 'react-bootstrap';
+import AddCommentModal from '../Inbox/addCommentModal';
+import { fetchOiComment } from 'store/DashboardPage/AddSubmitComment/actions/index';
+import { fetchReviews } from 'store/DashboardPage/AddSubmitReview/actions/index';
+import Pagination from '../../../Common/Pagination/pagination';
 
 const MyCourses = (props) => {
     
@@ -25,15 +28,32 @@ const MyCourses = (props) => {
     const dispatch = useDispatch();
     const { history } = props;
     const { coursesLoader } = useSelector(store => store.loader);
-    const { myCourses } = useSelector(store => store.dashboardCourses);
+    const { myCourses, page } = useSelector(store => store.dashboardCourses);
     const [isOpen, setIsOpen] = useState(false);
     const toggleDetails = (id) => setIsOpen(isOpen === id ? false : id);
     const [openReview, setOpenReview] = useState(false);
-    const toggleReviews = (id) => setOpenReview(openReview == id ? false : id);
+    const oiComments = useSelector(store => store.getComment);
+    const { setProductReview } = useSelector(store => store.getReviews );
+    const [currentPage, setCurrentPage] = useState(1);
+
 
     useEffect(() => {
         handleEffects();
-    }, [])
+    }, [currentPage])
+
+    const toggleReviews = (id, prod) => {
+        if(openReview != id) dispatch(fetchReviews({ prod: prod, page: currentPage, type: 'GET'}));
+        setOpenReview(openReview == id ? false : id);
+    }
+
+    const addCommentDataFetch = (id) => {
+        setAddOpen(addOpen == id ? false : id);
+        let commVal = {
+            oi_id: id,
+            type: 'GET'
+        }
+        if(addOpen != id) dispatch(fetchOiComment(commVal));
+    };
 
     const handleEffects = async () => {
         try {
@@ -42,7 +62,7 @@ const MyCourses = (props) => {
             //So there is no need to fetch them again on the browser.
             if (!(window && window.config && window.config.isServerRendered)) {
                 dispatch(startDashboardCoursesPageLoader());
-                await new Promise((resolve, reject) => dispatch(fetchMyCourses({ resolve, reject })))
+                await new Promise((resolve, reject) => dispatch(fetchMyCourses({ page: currentPage, resolve, reject })))
                 dispatch(stopDashboardCoursesPageLoader());
             }
             else {
@@ -97,8 +117,8 @@ const MyCourses = (props) => {
                                                     </div>
 
                                                     <div className="db-my-courses-detail__leftpan--status mb-2">
-                                                        Status:
-                                                        <strong className="ml-1">{course.oi_status}</strong>
+                                                        { course.status || course.new_oi_status ? 'Status':''}
+                                                        <strong className="ml-1">{course.status ?? course.new_oi_status}</strong>
                                                     </div>
 
                                                     <Link
@@ -116,7 +136,7 @@ const MyCourses = (props) => {
                                                         id={course.id} 
                                                         toggleDetails={toggleDetails}  
                                                         isOpen={isOpen}
-                                                        datalist={course.datalist}
+                                                        datalist={course.datalist || []}
                                                     />
                                                 </div>
                                             </div>
@@ -150,12 +170,19 @@ const MyCourses = (props) => {
                                         <div className="db-my-courses-detail__bottom">
                                             <Link
                                                 className="db-comments font-weight-bold"
-                                                onClick={() => setAddOpen(!addOpen)}
+                                                onClick={() => addCommentDataFetch(course.id)}
                                                 aria-controls="addComments"
                                                 aria-expanded={addOpen}
                                                 to={"#"}
                                             >
-                                                Add comment
+                                                  { course.no_of_comments > 0 && course.no_of_comments > 1 ?
+                                                        course.no_of_comments + ' Comments'
+                                                        :
+                                                        course.no_of_comments > 0 && course.no_of_comments < 1 ?
+                                                        course.no_of_comments + ' Comment'
+                                                        :
+                                                        'Add comment'
+                                                    }
                                             </Link>
 
                                             <div className="d-flex">
@@ -169,6 +196,7 @@ const MyCourses = (props) => {
                                                     toggleReviews={toggleReviews} 
                                                     setOpenReview={setOpenReview}
                                                     openReview={openReview}
+                                                    setProductReview={setProductReview}
                                                     name="Course"/>
 
                                                 {/* rate service modal */}
@@ -177,13 +205,15 @@ const MyCourses = (props) => {
                                         </div>
                                     </div>
                                 </div>
-                                {/* {oiComments ? <AddCommentModal id={item.id} data={oiComments[0]} addOpen={addOpen} /> : null } */}
+                                <AddCommentModal id={course.id} addCommentDataFetch={addCommentDataFetch} data={oiComments} addOpen={addOpen} />
 
                                 <div className="db-mycourse-highlighter">Next course to take: <Link to={"#"} className="font-weight-bold ml-2">Seo Specialist</Link> </div>
                             </div>
                         )
                     })
                 }
+                  {/* pagination set here */}
+                  { page?.total > 1 ? <Pagination totalPage={ page?.total} currentPage={currentPage} setCurrentPage={setCurrentPage}/> : ''}
             </div>
         </div>
     )

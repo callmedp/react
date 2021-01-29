@@ -91,8 +91,7 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.use('/media/static/',express.static('../careerplus/media/static/'));
-app.use(express.static('../careerplus/media/static/react/'));
+app.use(express.static('../careerplus/static_core/react/'));
 
 
 const isMobile = (userAgents) => {
@@ -152,7 +151,8 @@ app.get(expressRoutes, (req, res) => {
                 
                 fs.readFile(indexFile, 'utf8', (err, data) => {
                     if (err) {
-                        console.error('Something went wrong:', err);
+                        console.error("Error in reading index.html",err)
+                        console.log('make sure you are in frontend directory when use run pm2 start');
                         return res.status(500).send('index.html file not found!');
                     }
             

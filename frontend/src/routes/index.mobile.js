@@ -9,6 +9,7 @@ import Error404Container from 'components/MobileComponent/Common/ErrorPage404/er
 import { getCataloguePageActionsMobile } from "apiHandler/cataloguePageApi";
 import DashboardPageContainer from 'components/MobileComponent/Core/DashboardPage/dashboardPage';
 import RouteWithSubRoutes from 'routes/route';
+import { getDashboardPageActionsMobile } from "apiHandler/dashboardPageApi";
 
 
 
@@ -36,10 +37,9 @@ export const routes = [
         exact: true,
     },
     {
-        path: '/myservices',
-        component: MyServices,
         path: '/dashboard/:name/',
         component: DashboardPageContainer,
+        actionGroup: getDashboardPageActionsMobile,
         private: false,
     },
     {

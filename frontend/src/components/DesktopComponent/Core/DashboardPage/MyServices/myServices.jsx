@@ -21,6 +21,8 @@ import RateModal from '../Inbox/rateModal';
 import ReviewRating from '../Inbox/reviewRating';
 import AddCommentModal from '../Inbox/addCommentModal';
 import Pagination from '../../../Common/Pagination/pagination';
+import AcceptModal from '../Inbox/acceptModal';
+import RejectModal from '../Inbox/rejectModal';
 
 const MyServices = (props) => {
     const dispatch = useDispatch();
@@ -28,7 +30,7 @@ const MyServices = (props) => {
     const { serviceLoader } = useSelector(store => store.loader);
     
     // page no. set here
-    const [currentPage, setCurrentPage] = useState(2);
+    const [currentPage, setCurrentPage] = useState(4);
     
     // main api result state here
     const results = useSelector(store => store.dashboardServices);
@@ -93,6 +95,12 @@ const MyServices = (props) => {
         if(addOpen != id) dispatch(fetchOiComment(commVal));
     };
 
+    // accept/reject
+    const [acceptModal, setAcceptModal] = useState(false)
+    const [acceptModalId, setAcceptModalId] = useState(false)
+    const [rejectModal, setRejectModal] = useState(false)
+    const [rejectModalId, setRejectModalId] = useState(false)
+
     useEffect(() => {
         handleEffects();
         dispatch(fetchPendingResume())
@@ -134,15 +142,22 @@ const MyServices = (props) => {
 
                                                     <div className="db-my-courses-detail__leftpan--status mb-2">
                                                         Status:
-                                                        <strong className="ml-1">{item.new_oi_status ? item.new_oi_status : "Yet to Update"}
-                                                            {item.options?.uploadResume ? <Link to={"#"} className="ml-2" onClick={uploadHandelShow}>Upload</Link>
+                                                        <strong className="ml-1">{item.new_oi_status ? item.oi_status === 4 ? 'Service has been processed and Document is finalized' : item.new_oi_status : "Yet to Update"}
+                                                            {item.options?.upload_resume ? <Link to={"#"} className="ml-2" onClick={uploadHandelShow}>Upload</Link>
                                                             : null}
 
                                                             {item.options?.Download ? <a className="ml-2" target="_blank" href={item.options?.download_url}>Download</a>
                                                             : null}
-                                                        </strong> 
 
-                                                        <UploadResumeModal uploadHandelClose={uploadHandelClose} show={uploadShow} data={pending_resume_items} />
+                                                            {
+                                                                (item.oi_status === 24 || item.oi_status === 46) &&
+                                                                    <React.Fragment>
+                                                                        {/* <Link to={"#"} className="mx-2"></Link> uploaded by Shine */}
+                                                                        <Link className="accept" to={"#"} onClick={() => {setAcceptModal(true);setAcceptModalId(item?.id)}}>Accept</Link>
+                                                                        <Link className="ml-2 reject" to={"#"} onClick={() => {setRejectModal(true);setRejectModalId(item?.id)}}>Reject</Link>
+                                                                    </React.Fragment>
+                                                            }
+                                                        </strong> 
                                                     </div>
 
                                                     {item.datalist && item.datalist.length > 0 ?
@@ -159,7 +174,7 @@ const MyServices = (props) => {
                                                     }
 
                                                     {/* course detail modal open */}
-                                                    <ViewDetailModal id={item.id} toggleDetails={toggleDetails} isOpen={isOpen} data={item.datalist}/>
+                                                    { isOpen && <ViewDetailModal id={item.id} toggleDetails={toggleDetails} isOpen={isOpen} datalist={item.datalist || []}/> }
                                                 </div>
                                             </div>
                                             <div className="db-my-courses-detail__rightpan">
@@ -198,19 +213,21 @@ const MyServices = (props) => {
                                                     }
                                             </Link>
                                             {/* ratings start here */}
-                                            <div className="d-flex">
-                                                <ReviewRating
-                                                    item={item}
-                                                    handleShow={handleShow}
-                                                    toggleReviews={toggleReviews} 
-                                                    setOpenReview={setOpenReview}
-                                                    openReview={openReview}
-                                                    setProductReview={setProductReview}
-                                                    name="Service"/>
+                                            { (item.oi_status === 4) && 
+                                                <div className="d-flex">
+                                                    <ReviewRating
+                                                        item={item}
+                                                        handleShow={handleShow}
+                                                        toggleReviews={toggleReviews} 
+                                                        setOpenReview={setOpenReview}
+                                                        openReview={openReview}
+                                                        setProductReview={setProductReview}
+                                                        name="Service"/>
 
-                                                {/* rate service modal */}
-                                                <RateModal handleClose={handleClose} show={show} id={item.id} name="Service"/>
-                                            </div>
+                                                    {/* rate service modal */}
+                                                    <RateModal handleClose={handleClose} show={show} id={item.id} name="Service"/>
+                                                </div>
+                                            }
                                         </div>
                                     </div>
                                 </div>
@@ -220,6 +237,16 @@ const MyServices = (props) => {
                         )
                     })
                     :null
+                }
+
+                {
+                    uploadShow && <UploadResumeModal uploadHandelClose={uploadHandelClose} show={uploadShow} data={pending_resume_items} />
+                }
+                {
+                    acceptModal && <AcceptModal acceptModal={acceptModal} setAcceptModal={setAcceptModal} oi_id={acceptModalId}/>
+                }
+                {
+                    rejectModal && <RejectModal rejectModal={rejectModal} setRejectModal={setRejectModal} oi_id={rejectModalId}/>
                 }
 
                 {/* pagination set here */}
