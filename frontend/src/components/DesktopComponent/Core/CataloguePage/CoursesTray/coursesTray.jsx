@@ -65,6 +65,7 @@ function CoursesTray() {
                                 })
                             }
                             { categoryKey2 < ITCourseList.length ? <a type="button" onClick={() => loadMoreCourses(setCategoryKey2)} className="load-more pt-30">Load More Courses</a> : ''}
+                            { categoryKey2 > 1 ? <a type="button" onClick={() => viewLessCourses(setCategoryKey2)} className="load-more pt-30">View Less Courses</a> : ''}
                         </Tab>
                         <Tab eventKey="categories3" title={<h2>Banking & Finance</h2>}>
                             {
@@ -79,6 +80,7 @@ function CoursesTray() {
                                 })
                             }
                             { categoryKey3 < BnFCourseList.length ? <a type="button" onClick={() => loadMoreCourses(setCategoryKey3)} className="load-more pt-30">Load More Courses</a> : ''}
+                            { categoryKey3 > 1 ? <a type="button" onClick={() => viewLessCourses(setCategoryKey3)} className="load-more pt-30">View Less Courses</a> : ''}
                         </Tab>
 
                     </Tabs>
