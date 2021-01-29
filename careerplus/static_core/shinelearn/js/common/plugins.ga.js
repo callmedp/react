@@ -15,6 +15,26 @@ function GA(){
         name = options.name || '',
         custom_event = options.custom_event || false;
         window.dataLayer = window.dataLayer || [];
+        candidate_id=''
+        
+        $.ajax({
+            url: '/api/v1/resume/session/',
+            type: 'GET',
+            data: {
+              candidate_id: $(this).attr('candidate_id'),
+              result:$(this).attr('result')
+            },
+            success: function(data) {
+                console.log('success');
+            },
+            failure: function(response){
+                console.log('failure');
+                alert("Something went wrong, Please try again")
+            },
+        });
+        
+        userId = candidate_id
+        user_type = candidate_id? 'loggedin' : "guest";
 
         try{
             if(custom_event==false){
@@ -30,7 +50,9 @@ function GA(){
                 'event': 'LearningEvents',
                 'event_category': category,
                 'event_label': label,
-                'event_action':action
+                'event_action':action,
+                'userID': userId,
+                'user_type': user_type
                 });
         }
         }catch(e)
