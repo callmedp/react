@@ -28,8 +28,8 @@ const ServicesForYou = (props) => {
                     popularServices?.slice(0,4).map((service, index) => {
                         return (
                             <div className="m-services-foryou__list" key={index}>
-                                <h3 className="m-heading3">{service.name}</h3>
-                                <p>{service.description}</p>
+                                <h3 className="m-heading3">{service?.heading ? service?.heading : service?.name}</h3>
+                                <p>{ service.description?.length > 80 ? service.description?.slice(0, 80) + '...' :  service.description }</p>
                                 <span className="d-flex">
                                     <a href={`${siteDomain}${service.url}`}>Know more</a>
                                     <figure>

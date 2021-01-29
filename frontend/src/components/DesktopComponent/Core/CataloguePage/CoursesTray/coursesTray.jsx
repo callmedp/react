@@ -17,7 +17,11 @@ function CoursesTray() {
     
 
     const loadMoreCourses = (setCategoryKey) => {
-        setCategoryKey( state => state+1);
+        setCategoryKey( state => state + 1 );
+    }
+
+    const viewLessCourses = (setCategoryKey) => {
+        setCategoryKey( state => state - 1 );
     }
 
     return (
@@ -45,6 +49,7 @@ function CoursesTray() {
                                 })
                             }
                             { categoryKey1 < SnMCourseList.length ? <a type="button" onClick={() => loadMoreCourses(setCategoryKey1)} className="load-more pt-30">Load More Courses</a> : ''}
+                            { categoryKey1 > 1 ? <a type="button" onClick={() => viewLessCourses(setCategoryKey1)} className="load-more pt-30">View Less Courses</a> : ''}
 
                         </Tab>
                         <Tab eventKey="categories2" title={<h2>Information Technology</h2>}>
