@@ -1,0 +1,94 @@
+{% load static %}
+<script src="{% static 'shinelearn/js/common/ga.impression.js' %}"></script>
+<!-- <script>
+function resolveAfterSeconds() {
+    return new Promise(resolve => {
+        setTimeout(() => {
+            resolve('resolved');
+        }, 2000);
+    });
+}
+
+async function asyncCall() {
+    console.log('calling');
+    const result = await resolveAfterSeconds();
+    console.log(result);
+}
+
+asyncCall();
+</script> -->
+
+<script>
+    var event_name = "{{ event }}";
+    switch(event_name){
+        case 'Product':
+            ProductImpressionPush();
+    }
+    // {{ rcoureses|safe }}
+    // {{ pcourses|safe }}
+    // {% if candidate %} console.log(true) {% else %} console.log(false) {% endif %}
+    // {{ tcourses|safe }}
+
+    function ProductImpressionPush() {
+        const p_r_products = [];
+        const t_products = [];
+        {% if request.session.candidate_id and rcourses %}
+            {% for course_list in rcourses %}
+                {% for product in course_list %}
+                p_r_products.push({
+                        'name': '{{ product.pHd|default:product.pNm|truncatechars:40 }}',
+                        'id': '{{ product.id }}',
+                        'brand': ' {{ product.pPvn }}',
+                        'category': '{{ product.pCat }}',
+                        'variant': ' {{ product.pPc }}',
+                        'price': '{{ product.pPin }}',
+                        'list': 'Recommendations',
+                        'position': '{{ forloop.counter }}',
+                        'dimensions15': 'HomePage',
+                        'dimensions16': '{% if product.pRC %} {{product.pARx|floatformat}} {% else %} null {% endif %}',
+                        'dimensions17': '{{ product.pBC|default:"10" }}'
+                    });
+                {% endfor %}
+            {% endfor %}
+        {% else %}
+        {% for course_list in pcourses %}
+                {% for product in course_list %}
+                p_r_products.push({
+                        'name': '{{ product.pHd|default:product.pNm|truncatechars:40 }}',
+                        'id': '{{ product.id }}',
+                        'brand': ' {{ product.pPvn }}',
+                        'category': '{{ product.pCat }}',
+                        'variant': ' {{ product.pPc }}',
+                        'price': '{{ product.pPin }}',
+                        'list': 'Recommendations',
+                        'position': '{{ forloop.counter }}',
+                        'dimensions15': 'HomePage',
+                        'dimensions16': '{% if product.pRC %}{{product.pARx|floatformat}}{% else %}null{% endif %}',
+                        'dimensions17': '{{ product.pBC|default:"10" }}'
+                    });
+                {% endfor %}
+            {% endfor %}
+        {% endif %}        
+        {% for course in tcourses %}
+            {% for product in course.tprds %}
+                t_products.push({
+                        'name': '{{ product.pHd|default:product.pNm|truncatechars:40 }}',
+                        'id': '{{ product.id }}',
+                        'brand': ' {{ product.pPvn }}',
+                        'category': '{{ product.pCat }}',
+                        'variant': '{{ product.pPc }}',
+                        'price': '{{ product.pPin }}',
+                        'list': 'Trending Courses',
+                        'position': '{{ forloop.counter }}',
+                        'dimensions15': 'HomePage',
+                        'dimensions16': '{% if product.pRC %} {{product.pARx|floatformat}} {% else %} null {% endif %}',
+                        'dimensions17': '{{ product.pBC|default:"10" }}'
+                });
+            {% endfor %}
+        {% endfor %}
+    GALayer.SendImpression('productImpression', t_products, 'INR')
+    console.log(t_products);
+    console.log(p_r_products);
+    }
+
+</script>

@@ -4,11 +4,12 @@ function GALayer() {
     that.fireGaEvent = function(options) {
         var event = options.event || '';
         var product = options.product || [];
+        currencyCode = options.currencyCode || 'INR';
 
         window.dataLayer = window.dataLayer || [];
         
         try{
-            console.log('I am being logged');
+            console.log(product);
             window.dataLayer.push({
                 "event": event,
                 'ecommerce': {
@@ -32,53 +33,14 @@ function GALayer() {
 
 GALayer.prototype.SendImpression = function() {
     var that = this;
-    fn = arguments[0];
-    product = [
-        {
-            'name': 'Programming in HTML5 with JavaScript and CSS3 70-480 Practice Test',
-            'id': '12345',
-            'price': '999',
-            'brand': 'testprep',
-            'category': 'IT Language',
-            'variant': 'Product',
-            'list': 'Search Results',
-            'position': 1,
-            'dimension15': 'Search page',//Page type (e.g Category page,Product Pages, Homepage, Checkout Pages)
-            'dimension16': 'rating',
-            'dimension17': 'people bought',
-        },
-        {
-            'name': 'Programming in HTML5 with JavaScript and CSS3 70-480 Practice Test',
-            'id': '12345',
-            'price': '999',
-            'brand': 'testprep',
-            'category': 'IT Language',
-            'variant': 'Product',
-            'list': 'Search Results',
-            'position': 1,
-            'dimension15': 'Search page',//Page type (e.g Category page,Product Pages, Homepage, Checkout Pages)
-            'dimension16': 'rating',
-            'dimension17': 'people bought',
-        },
-        {
-            'name': 'Programming in HTML5 with JavaScript and CSS3 70-480 Practice Test',
-            'id': '12345',
-            'price': '999',
-            'brand': 'testprep',
-            'category': 'IT Language',
-            'variant': 'Product',
-            'list': 'Search Results',
-            'position': 1,
-            'dimension15': 'Search page',//Page type (e.g Category page,Product Pages, Homepage, Checkout Pages)
-            'dimension16': 'rating',
-            'dimension17': 'people bought',
-        },
-    ]
+    eventName = arguments[0];
+    ecommerce = arguments[1];
+    currencyCode = arguments[2];
     
     that.fireGaEvent({
-        'event': 'productImpression',
-        'product': product
-
+        'event': eventName,
+        'product': ecommerce,
+        'currencyCode': currencyCode
     })
 };
 
