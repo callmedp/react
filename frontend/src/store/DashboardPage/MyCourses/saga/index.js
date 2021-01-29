@@ -5,8 +5,9 @@ import Api from './Api';
 function* DashboardCoursesApi(action) {
     const { payload } = action;
     try {
+ 
         const response = yield call(Api.myCoursesData, payload?.page);
-       
+    
         if (response["error"]) {
             return payload?.reject(response)
         }

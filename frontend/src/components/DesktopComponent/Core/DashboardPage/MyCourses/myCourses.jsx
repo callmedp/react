@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ProgressBar } from 'react-bootstrap';
-import NoCourses from './noCourses';
+import NoCourses from '../Inbox/emptyInbox';
 import './myCourses.scss';
 import '../../SkillPage/NeedHelp/needHelp.scss';
 import { startDashboardCoursesPageLoader, 

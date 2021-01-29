@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './dashboardPage.scss';
 import MenuNav from '../../Common/MenuNav/menuNav';
 import Header from '../../Common/Header/Header';
@@ -17,7 +17,16 @@ import SearchPage from '../../Common/SearchPage/SearchPage';
 
 const Dashboard = (props) => {
     const dbContainer = props.match.params.name;
+    const { history } = props;
     const [showSearchPage, setShowSearchPage] = useState(false);
+    const dashboardRoutes = ['mycourses', 'myorder', 'mywallet', 'myservices']
+
+    useEffect(()=>{
+        if(!dashboardRoutes.includes(dbContainer)){
+            history.push('/404/');
+        }
+    },[dashboardRoutes])
+
 
     return(
         <div>
@@ -31,10 +40,10 @@ const Dashboard = (props) => {
                     <main className="m-container">
                         {
                             {
-                                'my-services' : <MyServices />,
-                                'my-courses' : <MyCourses/>,
-                                'my-orders' : <MyOrders />,
-                                'my-wallet' : <MyWallet/>
+                                'myservices' : <MyServices />,
+                                'mycourses' : <MyCourses/>,
+                                'myorder' : <MyOrders />,
+                                'mywallet' : <MyWallet/>
                             }[dbContainer]
                         }
                         

@@ -6,7 +6,7 @@ import { fetchMyServices } from 'store/DashboardPage/MyServices/actions';
 export const getDashboardPageActions = (params) => {
 
   const actionList = {
-    'mycourse': [
+    'mycourses': [
       { action: fetchMyCourses, payload: { page: 1 } },
     ],
     'myorder': [
@@ -15,7 +15,7 @@ export const getDashboardPageActions = (params) => {
     'mywallet': [
       { action: fetchMyWallet, payload: { page: 1 } },
     ],
-    'myservice': [
+    'myservices': [
       { action: fetchMyServices, payload: { page: 1 } },
     ]
     }[params.name];
@@ -26,7 +26,7 @@ export const getDashboardPageActions = (params) => {
 
 export const getDashboardPageActionsMobile = (params) => {
   const actionList = {
-    'mycourse': [
+    'mycourses': [
       { action: fetchMyCourses, payload: { page: 1 } },
     ],
     'myorder': [
@@ -35,7 +35,7 @@ export const getDashboardPageActionsMobile = (params) => {
     'mywallet': [
       { action: fetchMyWallet, payload: { page: 1 } },
     ],
-    'myservice': [
+    'myservices': [
       { action: fetchMyServices, payload: { page: 1 } },
     ]
     }[params.name];

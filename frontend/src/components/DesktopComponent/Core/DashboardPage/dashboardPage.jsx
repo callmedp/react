@@ -16,7 +16,15 @@ import FAQ from './FAQ/faq';
 
 const DashboardPage = (props) => {
     const [hasFaq, setHasFaq] = useState(false);
+    const { history } = props;
     const dbContainer = props.match.params.name;
+    const dashboardRoutes = ['mycourses', 'myorder', 'mywallet', 'myservices']
+
+    useEffect(()=>{
+        if(!dashboardRoutes.includes(dbContainer)){
+            history.push('/404/');
+        }
+    },[dashboardRoutes])
 
     return(
         <div>

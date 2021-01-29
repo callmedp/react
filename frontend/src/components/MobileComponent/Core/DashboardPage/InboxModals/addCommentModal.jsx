@@ -9,7 +9,7 @@ import { startCommentLoader, stopCommentLoader } from 'store/Loader/actions/inde
 import Loader from '../../../Common/Loader/loader';
 
 const AddCommentModal = (props) => {
-    const { setShowCommentModal, oi_id }  = props
+    const { setShowCommentModal, oi_id } = props
     const dispatch = useDispatch();
     const comments = useSelector(store => store?.getComment?.comment);
     const { commentLoader } = useSelector(store => store.loader);
@@ -17,13 +17,13 @@ const AddCommentModal = (props) => {
 
     const submitComment = async values => {
         const new_values = {
-          ...values,
-          oi_pk: oi_id,
-          type: "POST",
+            ...values,
+            oi_pk: oi_id,
+            type: "POST",
         };
 
         dispatch(startCommentLoader());
-        let addedComment = await new Promise((resolve, reject) => dispatch(fetchOiComment({payload: new_values, resolve, reject })));
+        let addedComment = await new Promise((resolve, reject) => dispatch(fetchOiComment({ payload: new_values, resolve, reject })));
         dispatch(stopCommentLoader());
         reset(addedComment);
         Swal.fire({
@@ -38,17 +38,14 @@ const AddCommentModal = (props) => {
             oi_id: oi_id,
             type: 'GET'
         }
-        try{
-            if (!(window && window.config && window.config.isServerRendered)) {
-                dispatch(startCommentLoader());
-                await new Promise((resolve, reject) => dispatch(fetchOiComment({payload: commVal, resolve, reject })));
-                dispatch(stopCommentLoader());
-            }
-            else {
-                delete window.config?.isServerRendered
-            }
+        try {
+
+            dispatch(startCommentLoader());
+            await new Promise((resolve, reject) => dispatch(fetchOiComment({ payload: commVal, resolve, reject })));
+            dispatch(stopCommentLoader());
+
         }
-        catch(e){
+        catch (e) {
             dispatch(stopCommentLoader());
             Swal.fire({
                 icon: 'error',
@@ -65,28 +62,28 @@ const AddCommentModal = (props) => {
         <>
             { commentLoader && <Loader />}
             <div className="m-slide-modal">
-                <span className="m-db-close" onClick={() => {setShowCommentModal(false)}}>X</span>
-                { comments?.length ? <><br /><br /></> : ''}
+                <span className="m-db-close" onClick={() => { setShowCommentModal(false) }}>X</span>
+                {comments?.length ? <><br /><br /></> : ''}
                 <div className="">
-                {
-                    comments?.length ?
-                        <>
-                        <ul className="m-timeline-list">
-                            {
-                                comments?.map((comment, idx) => {
-                                    return(
-                                        <li key={idx}>
-                                            <i className="m-timeline-list--dot"></i>
-                                            <span>{comment.created} {comment.addedBy ?  '   |   By ' + comment.added_by : ""} </span>
-                                            <p className="m-timeline-list--text">{comment?.message}</p>
-                                        </li>
-                                    )
-                                })
-                            }
-                        </ul>
-                        <hr />
-                        </> : ''
-                }
+                    {
+                        comments?.length ?
+                            <>
+                                <ul className="m-timeline-list">
+                                    {
+                                        comments?.map((comment, idx) => {
+                                            return (
+                                                <li key={idx}>
+                                                    <i className="m-timeline-list--dot"></i>
+                                                    <span>{comment.created} {comment.addedBy ? '   |   By ' + comment.added_by : ""} </span>
+                                                    <p className="m-timeline-list--text">{comment?.message}</p>
+                                                </li>
+                                            )
+                                        })
+                                    }
+                                </ul>
+                                <hr />
+                            </> : ''
+                    }
                     <form onSubmit={handleSubmit(submitComment)}>
                         <div className="m-enquire-now mt-15 text-center">
                             <div className="m-form-group">
