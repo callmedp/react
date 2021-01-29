@@ -15,16 +15,20 @@ function GA(){
         name = options.name || '',
         custom_event = options.custom_event || false;
         window.dataLayer = window.dataLayer || [];
+        user_obj ={}
         candidate_id=''
+        result=false
         
         $.ajax({
             url: '/api/v1/resume/session/',
+            async:false,
             type: 'GET',
             data: {
-              candidate_id: $(this).attr('candidate_id'),
+              user: $(this).attr('candidate_id'),
               result:$(this).attr('result')
             },
             success: function(data) {
+                user_obj = Object.assign({},data)
                 console.log('success');
             },
             failure: function(response){
@@ -32,9 +36,10 @@ function GA(){
                 alert("Something went wrong, Please try again")
             },
         });
-        
-        userId = candidate_id
-        user_type = candidate_id? 'loggedin' : "guest";
+
+        candidate_id = user_obj['candidate_id']
+        result = user_obj['result']
+        user_type = result? 'loggedin' : "guest";
 
         try{
             if(custom_event==false){
@@ -51,7 +56,7 @@ function GA(){
                 'event_category': category,
                 'event_label': label,
                 'event_action':action,
-                'userID': userId,
+                'userID': candidate_id,
                 'user_type': user_type
                 });
         }
