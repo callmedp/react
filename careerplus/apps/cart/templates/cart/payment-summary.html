@@ -560,6 +560,7 @@ Payment Summary - Shine Learning
 
 
 {% block js_section %}
+{% include 'homepage/partials/ga.impression.html' with page="addToCart" used_as='fn' %}
 {{ block.super }}
 <script>
   var shineApiUrl = "{{shine_api_url}}"

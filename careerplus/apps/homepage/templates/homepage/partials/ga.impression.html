@@ -28,6 +28,8 @@ asyncCall();
             SearchPageImpressionPush(list='Search Results');
         case 'productDetail':
             ProductDetailImpressionPush(list='Product', options);
+        case 'addToCart':
+            CartImpressionPush();
     }
 }
     {% if used_as %}
@@ -138,6 +140,26 @@ asyncCall();
         GALayer.SendImpression('productdetail', p_detail, 'INR', 'Product Page');
     }
 
+    function CartImpressionPush() {
+        c_product = []
+        {% if cart_items %}
+            {% for item in cart_items %}
+                c_product.push({
+                    'name': '{{ item.name }}',
+                    'id': '{{ item.id }}',
+                    'brand': '{{ item.vendor }}',
+                    'category': '{{ item.category }}',
+                    'variant': '{{ item.product_class }}',
+                    'price': '{{ item.price }}',
+                    'dimensions15': 'Cart Page',
+                    'dimensions16': '{{ item.ratings }}',
+                    'dimensions17': ' {{ item.buy_count }}'
+                })
+            {% endfor %}
+        {% endif %}
+        GALayer.SendImpression('addToCart', c_product, 'INR');
+    }
+    
     {% else %}
 
     function ProductDetailImpressionPush(list, options) {
