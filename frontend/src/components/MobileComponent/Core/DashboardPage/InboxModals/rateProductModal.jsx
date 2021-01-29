@@ -16,7 +16,7 @@ const RateProductModal = (props) => {
     const [inputStar, setInputStar] = useState(5);
     const { register, handleSubmit, errors, reset } = useForm();
 
-    const reviews = useSelector(store => store?.getReviews?.data);
+    const { reviewList } = useSelector( store => store.getReviews );
     const { reviewLoader } = useSelector(store => store.loader);
 
     const submitReviews = async values => {
@@ -80,7 +80,7 @@ const RateProductModal = (props) => {
                         <div className="m-reviews-list">
                             <ul>
                                 {
-                                    reviews?.map((review, index) => {
+                                    reviewList?.map((review, index) => {
                                         return(
                                             <li key={index}>
                                                 <div className="card__rating">

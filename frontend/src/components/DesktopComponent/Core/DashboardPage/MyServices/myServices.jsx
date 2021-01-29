@@ -20,6 +20,9 @@ import ReviewRating from '../Inbox/reviewRating';
 import AddCommentModal from '../Inbox/addCommentModal';
 import Pagination from '../../../Common/Pagination/pagination';
 import { siteDomain } from 'utils/domains';
+import EmptyInbox from '../Inbox/emptyInbox';
+import { startCommentLoader, stopCommentLoader } from 'store/Loader/actions/index';
+import { startReviewLoader, stopReviewLoader } from 'store/Loader/actions/index';
 
 const MyServices = (props) => {
     const dispatch = useDispatch();
@@ -32,9 +35,6 @@ const MyServices = (props) => {
     // main api result state here
     const results = useSelector(store => store.dashboardServices);
     const oiComments = useSelector(store => store.getComment);
-    const setProductReview = useSelector(store => {console.log(store.getReviews); return store.getReviews.data});
-
-    console.log(setProductReview)
 
     // main service api hit
     const handleEffects = async () => {
@@ -64,8 +64,12 @@ const MyServices = (props) => {
     const [show, setShow] = useState(false);
     
     // if reviews exists then show
-    const toggleReviews = (id, prod) => {
-        if(openReview != id) dispatch(fetchReviews({ prod: prod, page: currentPage}));
+    const toggleReviews = async (id, prod) => {
+        if(openReview != id) {
+            dispatch(startReviewLoader());
+            await new Promise((resolve, reject) => dispatch(fetchReviews({ payload: { prod: prod, page: currentPage}, resolve, reject })));
+            dispatch(stopReviewLoader());
+        }
         setOpenReview(openReview == id ? false : id);
     }
 
@@ -83,13 +87,17 @@ const MyServices = (props) => {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     // hit api when clicked on add comment
-    const addCommentDataFetch = (id) => {
+    const addCommentDataFetch = async (id) => {
         setaddOpen(addOpen == id ? false : id);
         let commVal = {
             oi_id: id,
             type: 'GET'
         }
-        if(addOpen != id) dispatch(fetchOiComment(commVal));
+        if(addOpen != id){
+            dispatch(startCommentLoader());
+            await new Promise((resolve, reject) => dispatch(fetchOiComment({payload: commVal, resolve, reject})));
+            dispatch(stopCommentLoader());
+        }
     };
 
     // if resume download option is there
@@ -102,6 +110,7 @@ const MyServices = (props) => {
     return(
         <div>
             {serviceLoader ? <Loader /> : ''}
+            { results?.page.total === 0 ? <EmptyInbox/> : '' }
             <div className="db-my-courses-detail">
                 {
                     results.pending_resume_items.length > 0 ? 
@@ -206,7 +215,6 @@ const MyServices = (props) => {
                                                     toggleReviews={toggleReviews} 
                                                     setOpenReview={setOpenReview}
                                                     openReview={openReview}
-                                                    setProductReview={setProductReview}
                                                     name="Service"/>
 
                                                 {/* rate service modal */}

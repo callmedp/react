@@ -1,8 +1,10 @@
 import React from 'react';
 import { Collapse } from 'react-bootstrap';
+import { useSelector } from 'react-redux';
+import Loader from '../../../Common/Loader/loader';
 
 const ReviewModal = (props) => {
-    const { handleShow, setOpenReview, openReview, item, setProductReview } = props;
+    const { handleShow, setOpenReview, openReview, item } = props;
 
     const fillStarForCourse = (star) => {
         return {
@@ -11,15 +13,19 @@ const ReviewModal = (props) => {
             '-': 'icon-blankstar'
         }[star];
     }
-    console.log(setProductReview)
+
+    const { reviewList } = useSelector(store => store.getReviews );
+    const { reviewLoader } = useSelector(store => store.loader);
 
     return (
+        <>
+            { reviewLoader && <Loader /> }
         <Collapse in={openReview == item.id}>
         <div className="db-reviews-list-wrap arrow-box top-big">
             <span className="btn-close"  onClick={() => setOpenReview(state => !state)}>&#x2715;</span>
             <div className="reviews-list">
                 <ul>
-                    {setProductReview?.length > 0 && setProductReview.map((rev, idx) => {
+                    { reviewList?.map((rev, idx) => {
                         return (
                             <li key={idx}>
                                 <div className="card__rating">
@@ -39,6 +45,7 @@ const ReviewModal = (props) => {
             </div>
         </div>
     </Collapse>
+    </>
     )
 }
 

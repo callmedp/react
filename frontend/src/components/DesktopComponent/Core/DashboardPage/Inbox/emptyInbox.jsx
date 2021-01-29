@@ -1,21 +1,22 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import './myCourses.scss'
-
+import { resumeShineSiteDomain, imageUrl } from 'utils/domains';
+import '../MyCourses/myCourses.scss';
    
-const MyCourses = (props) => {
+const EmptyInbox = (props) => {
 
     const { inboxType } = props;
 
     return(
         <div>
             <div className="db-nocourses">
-                <img src="/media/images/no-courses.png" alt=""/>
+                <img src={`${imageUrl}desktop/no-courses.png`} alt=""/>
                 <p className="db-nocourses--text">Seems like no {inboxType === 'courses' ? 'courses / certification' : 'services'}<br/>added to your profile</p>
-                <Link to={"#"} className="btn btn-outline-primary font-weight-bold">Browse { inboxType === 'courses' ? 'courses' : 'services' }</Link>
+                { inboxType === 'services' ? <a href={resumeShineSiteDomain} className="btn btn-outline-primary font-weight-bold">Browse courses</a> :
+                    <Link to="/online-courses.html" className="btn btn-outline-primary font-weight-bold">Browse courses</Link> }
             </div>
         </div>
     )
 }
    
-export default MyCourses;
+export default EmptyInbox;

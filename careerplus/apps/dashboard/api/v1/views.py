@@ -266,7 +266,7 @@ class DashboardReviewApi(APIView):
         # 'has_prev': True if paginated_data['current_page'] >1 else False,
         # 'has_next':True if (paginated_data['total_pages']-paginated_data['current_page'])>0 else False
         # }
-        return APIResponse(data={'data':data},message='Review data Success',status=status.HTTP_200_OK)
+        return APIResponse(data={'reviewList':data},message='Review data Success',status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
         email_dict = {}
