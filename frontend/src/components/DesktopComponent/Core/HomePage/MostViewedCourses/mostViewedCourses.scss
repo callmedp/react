@@ -1,0 +1,52 @@
+@import '../../../../../styles/functions';
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
+
+.recent-courses {
+
+    .nav-tabs {
+        border-bottom: none;
+        display: flex;
+        justify-content: center;
+
+        span {
+            font-size: 1.3rem;
+            margin-top: .5rem;
+        }
+
+        .nav-link {
+            background: $white;
+            border: 1px solid $tab-pill-solid;
+            padding: .5rem 1.5rem;
+            font-weight: 400;
+            color: $blue;
+            border-radius: 3rem;
+            margin: 0 .5rem 1rem .5rem;
+
+            &.active {
+                background: $tab-pill-solid;
+                border: 1px solid $tab-pill-solid;
+                color: $gray-100;
+                font-weight: 600;
+            }
+        }
+    }
+
+    &__list {
+        margin: 2rem 0 0 0;
+        .card {
+
+            &__rating {
+
+                .mode {
+                    font-size: 1.1rem;
+                    color: $gray-200;
+                    background: rgba($color: $gray-900, $alpha: .5);
+                    border-radius: 2rem;
+                    padding: .1rem .7rem;
+                    margin-left: auto;
+                }
+            }
+        }
+    }
+}

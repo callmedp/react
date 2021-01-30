@@ -175,3 +175,49 @@
   background: $sprite;
   @include icon-inblock(50px, 35px, -464px -59px);
 }
+
+
+.icon-advantage1 {
+  background: $sprite;
+  @include icon-inblock(48px, 64px, 0 -101px);
+}
+
+.icon-advantage2 {
+  background: $sprite;
+  @include icon-inblock(58px, 64px, -63px -103px);
+}
+
+.icon-advantage3 {
+  background: $sprite;
+  @include icon-inblock(46px, 64px, -136px -101px);
+}
+
+.icon-advantage4 {
+  background: $sprite;
+  @include icon-inblock(48px, 64px, -197px -103px);
+}
+
+.icon-advantage5 {
+  background: $sprite;
+  @include icon-inblock(55px, 64px, -260px -103px);
+}
+
+.icon-become-expert1 {
+  background: $sprite;
+  @include icon-inblock(27px, 39px, -431px -109px);
+}
+
+.icon-become-expert2 {
+  background: $sprite;
+  @include icon-inblock(39px, 39px, -340px -109px);
+}
+
+.icon-become-expert3 {
+  background: $sprite;
+  @include icon-inblock(23px, 39px, -394px -109px);
+}
+
+.icon-arrow-right {
+  background: $sprite;
+  @include icon-inblock(6px, 11px, -566px -52px);
+}

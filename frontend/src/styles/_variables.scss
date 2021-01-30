@@ -56,6 +56,8 @@ $tab-pill-color: #88A6D8;
 $course-light-bg: #F1F8FC;
 $course-badge-blue: #E0F3FF;
 $course-badge-red: #FBC1C1;
+$offer-bg: #FCEECD;
+$offer-badge: #E6D3A7;
 
 $colors: () !default;
 $colors: map-merge(
@@ -265,6 +267,7 @@ $rounded-pill:                50rem !default;
 $box-shadow-sm:               0 2px 6px 0 rgba(210,210,210,0.50) !default;
 $box-shadow:                  0 3px 14px 0 rgba(212,209,209,0.50) !default;
 $box-shadow-lg:               0 3px 21px 0 rgba(179,179,179,0.50) !default;
+$box-shadow-hover:            0 3px 14px 3px #D9E2EB !default;
 
 $component-active-color:      $white !default;
 $component-active-bg:         theme-color("primary") !default;

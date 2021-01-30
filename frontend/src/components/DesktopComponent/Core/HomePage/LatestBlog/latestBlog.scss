@@ -1,0 +1,77 @@
+@import '../../../../../styles/functions';
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
+
+.latest-blog {
+
+    &__list {
+        list-style-type: none;
+        margin: 3rem 0 0 0;
+        padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+
+        .card {
+            box-shadow: $box-shadow;
+            border: none;
+            background: $white;
+            padding-bottom: 1rem;
+            margin-bottom: 3rem;
+
+            &:hover {
+                box-shadow: $box-shadow-hover;
+            }
+
+            figure {
+                border-top-left-radius: .5rem;
+                border-top-right-radius: .5rem;
+                overflow: hidden;
+                position: relative;
+
+                img {
+                    width: 100%;
+                }
+
+                &::after {
+                    content: '';
+                    position: absolute;
+                    left: 0;
+                    right: 0;
+                    top: 0;
+                    bottom: 0;
+                    background: rgba($color: $black, $alpha: 0.3);
+                    z-index: 9;
+                }
+
+                span {
+                    background: $black;
+                    font-size: .9rem;
+                    font-weight: 600;
+                    color: $white;
+                    border-radius: 2rem;
+                    text-transform: uppercase;
+                    position: absolute;
+                    left: 1rem;
+                    bottom: 1rem;
+                    z-index: 99;
+                    padding: .3rem .6rem;
+                }
+            }
+
+            strong {
+                font-size: 1.6rem;
+                font-weight: 600;
+                color: $gray-100;
+                margin: 1rem 1.5rem 0 1.5rem;
+                display: block;
+                height: 5rem;
+                overflow: hidden;
+            }
+
+            a {
+                display: block;
+                color: $gray-100;
+            }
+        }
+    }
+}
