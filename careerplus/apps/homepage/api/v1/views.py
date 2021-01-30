@@ -46,6 +46,8 @@ from payment.models import PaymentTxn
 from .helper import APIResponse
 from .serializers import RecentCourseSerializer
 from .mixins import PopularProductMixin
+from blog.models import Blog, Comment
+
 
 # Other Import
 from weasyprint import HTML
@@ -981,4 +983,104 @@ class TrendingCategoriesApi(PopularProductMixin, APIView):
             }
             cache.set('category_popular_courses',data,86400)
         return Response(data=data, status=status.HTTP_200_OK)
+class LatestBlogAPI(APIView):
+    permission_classes = (permissions.AllowAny,)
+    authentication_classes = ()
+
+    def get(self, request):
+        article_list = Blog.objects.filter(
+            status=1, visibility=2).order_by('-last_modified_on')[:3]
+        data = [
+            {
+            'display_name':article.heading if article.heading else article.name,
+            'title':article.get_title(),
+            'image':article.image,
+            'url':article.get_absolute_url()
+            } for article in article_list]
+        return APIResponse(message='Latest articles fetched',data=data, status=status.HTTP_200_OK)
+
+
+class MostViewedCourseAPI(APIView):
+    permission_classes = (permissions.AllowAny,)
+    authentication_classes = ()
+
+    def get(self, request):
+        quantity_to_display = int(request.GET.get('num_recent', 6))
+
+        queryset = Product.objects.filter(product_class__slug__in=settings.COURSE_SLUG,
+                                          active=True,
+                                          is_indexed=True).order_by('cp_page_view')[:quantity_to_display]\
+                                          .values_list('id', flat=True)
+
+        trcntss = SearchQuerySet().filter(id__in=list(queryset), pTP__in=[0, 1, 3]).exclude(
+            id__in=settings.EXCLUDE_SEARCH_PRODUCTS
+        ).order_by('-pCD')
+
+        data = {
+            'mostViewedCourseList':
+                [
+                    {
+                    'id': trcnts.id, 'heading': trcnts.pHd, 'name': trcnts.pNm, 'url': trcnts.pURL, 'imgUrl': trcnts.pImg, \
+                     'imgAlt': trcnts.pImA, 'rating': trcnts.pARx, 'price': trcnts.pPinb, 'vendor': trcnts.pPvn,
+                     'stars': trcnts.pStar,'provider': trcnts.pPvn
+                     } for trcnts in trcntss
+                ]
+        }
+        return APIResponse(message='Most viewed Courses fetched', data=data, status=status.HTTP_200_OK)
+
+
+class PopularInDemandProductsAPI(APIView):
+    permission_classes = (permissions.AllowAny,)
+    authentication_classes = ()
+
+    def get(self, request):
+        quantity = 4
+        class_category = settings.COURSE_SLUG
+        data= {}
+        certifications = PopularProductMixin().popular_certifications(quantity=quantity,
+                                                                            type_flow=16,
+                                                                            sub_type_flow=201)
+        data.update({'certifications':certifications})
+
+        s_obj, s_ratio, s_revenue = PopularProductMixin(). \
+            popular_courses_algorithm(class_category=class_category,
+                                      quantity=quantity)
+
+        course_pks = list(s_ratio) + list(s_revenue)
+        courses = SearchQuerySet().filter(id__in=course_pks, pTP__in=[0, 1, 3]).exclude(
+            id__in=settings.EXCLUDE_SEARCH_PRODUCTS
+        )
+        data = {
+            'courses': [
+                {'id': course.id, 'heading': course.pHd, 'name': course.pNm, 'url': course.pURL, 'img': course.pImg, \
+                 'img_alt': course.pImA, 'description': course.pDscPt, 'rating': course.pARx, 'price': course.pPinb, 'vendor': course.pPvn, 'stars': course.pStar,
+                 'provider': course.pPvn} for course in courses]
+        }
+
+        return APIResponse(message='Popular certifications and courses Loaded', data=data, status=status.HTTP_200_OK)
+
+class JobAssistanceServicesAPI(APIView):
+    permission_classes = (permissions.AllowAny,)
+    authentication_classes = ()
         
+    def get(self,request):
+        quantity = 4
+        try:
+            tjob = TopTrending.objects.filter(
+                is_active=True, is_jobassistance=True).first()  
+            job_services_pks = list(tjob.get_all_active_trending_products_ids())
+            job_services = SearchQuerySet().filter(id__in=job_services_pks, pTP__in=[0, 1, 3]).exclude(
+                id__in=settings.EXCLUDE_SEARCH_PRODUCTS)[:quantity]
+
+            data = {
+            'jobAssistanceServices': [
+                {'id': tsrvc.id, 'heading': tsrvc.pHd, 'name': tsrvc.pNm, 'url': tsrvc.pURL, 'img': tsrvc.pImg, \
+                 'img_alt': tsrvc.pImA, 'description': tsrvc.pDscPt, 'rating': tsrvc.pARx, 'price': tsrvc.pPinb, 'vendor': tsrvc.pPvn, 'stars': tsrvc.pStar,
+                 'provider': tsrvc.pPvn} for tsrvc in job_services]
+        }
+        except Exception as e:
+            logging.getLogger('error_log').error(
+                "unable to load job assistance services%s " % str(e))
+        return APIResponse(message='Job assistance services Loaded', data=data, status=status.HTTP_200_OK)
+
+
