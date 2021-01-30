@@ -14,6 +14,7 @@ import WatchDashboardMyWallet from './DashboardPage/MyWallet/saga/index';
 import WatchDashboardMyOrders from './DashboardPage/MyOrder/saga/index';
 import WatchDashboardMyCourses from './DashboardPage/MyCourses/saga/index';
 import WatchDashboardMyServices from './DashboardPage/MyServices/saga/index';
+import WatchHomePage from './HomePage/saga';
 
 export default function* () {
     yield all([
@@ -31,6 +32,7 @@ export default function* () {
         WatchDashboardMyWallet(),
         WatchDashboardMyOrders(),
         WatchDashboardMyCourses(),
-        WatchDashboardMyServices()
+        WatchDashboardMyServices(),
+        WatchHomePage()
     ])
 }

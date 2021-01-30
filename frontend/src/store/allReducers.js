@@ -15,6 +15,7 @@ import { DashboardMyWalletReducer } from './DashboardPage/MyWallet/reducer/index
 import { DashboardMyOrdersReducer } from './DashboardPage/MyOrder/reducer/index'; 
 import { DashboardMyCoursesReducer } from './DashboardPage/MyCourses/reducer/index';
 import { DashboardMyServicesReducer } from './DashboardPage/MyServices/reducer/index';
+import { InDemandProductsReducer, JobAssistanceServicesReducer, MostViewedCoursesReducer, LatestBlogReducer } from './HomePage/reducer';
 
 const rootReducer = combineReducers({
     needHelp : NeedHelpReducer,
@@ -36,9 +37,11 @@ const rootReducer = combineReducers({
     dashboardWallet: DashboardMyWalletReducer,
     dashboardOrders: DashboardMyOrdersReducer,
     dashboardCourses: DashboardMyCoursesReducer,
-    dashboardServices: DashboardMyServicesReducer
-
-
+    dashboardServices: DashboardMyServicesReducer,
+    blog : LatestBlogReducer,
+    mostViewed: MostViewedCoursesReducer,
+    inDemand: InDemandProductsReducer,
+    jobAssistance: JobAssistanceServicesReducer,
 
 });
 

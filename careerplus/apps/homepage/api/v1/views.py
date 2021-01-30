@@ -983,6 +983,7 @@ class TrendingCategoriesApi(PopularProductMixin, APIView):
             }
             cache.set('category_popular_courses',data,86400)
         return Response(data=data, status=status.HTTP_200_OK)
+        
 class LatestBlogAPI(APIView):
     permission_classes = (permissions.AllowAny,)
     authentication_classes = ()
