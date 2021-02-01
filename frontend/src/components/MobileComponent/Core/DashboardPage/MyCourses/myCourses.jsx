@@ -137,13 +137,13 @@ const MyCourses = (props) => {
                                                     course?.options?.take_test && <a href={course?.options?.auto_login_url} target="_blank" className="font-weight-bold"> Take test</a>
                                                 }
                                                 {
-                                                    !course?.options?.BoardOnNeo && <a href='/' className="font-weight-bold" onClick={(event) => boardOnNeo(event, course?.id)}> :- Board on Neo</a>
+                                                    course?.options?.BoardOnNeo && <a href='/' className="font-weight-bold" onClick={(event) => boardOnNeo(event, course?.id)}> :- Board on Neo</a>
                                                 }
                                                 {
-                                                    course?.options?.please_confirm_boarding_on_mail_sent_to_you && ':- Please Confirm Boarding on Mail Sent to you'
+                                                    course?.options?.neo_mail_sent && ':- Please Confirm Boarding on Mail Sent to you'
                                                 }
                                                 {
-                                                    course?.options?.updated_account_from_trial_to_regular && ':- Updated Account from Trial To Regular'
+                                                    course?.options?.updated_from_trial_to_regular && ':- Updated Account from Trial To Regular'
                                                 }
                                                 </strong>
                                                 {/* <Link to={"#"} className="d-block font-weight-bold">View Details</Link> */}

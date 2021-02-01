@@ -14,7 +14,7 @@ import RejectModal from '../InboxModals/rejectModal';
 import Loader from '../../../Common/Loader/loader';
 import Pagination from '../../../Common/Pagination/pagination';
 import EmptyInbox from '../InboxModals/emptyInbox';
-import { siteDomain } from 'utils/domains';
+import { siteDomain, resumeShineSiteDomain } from 'utils/domains';
 import { startDashboardServicesPageLoader, stopDashboardServicesPageLoader } from 'store/Loader/actions/index';
 import { showSwal } from 'utils/swal'
 
@@ -88,6 +88,10 @@ const MyServices = (props) => {
         }
         dispatch(pausePlayResume(pausePlayValues))
     }
+
+    // download resume builder resume
+    const createBuilderResumeDownloadLink = (orderId, productId) =>
+        `${siteDomain}/api/v1/resumetemplatedownload/?order_pk=${orderId}&product_id=${productId}`;
 
     //View Details Data
     const getOrderDetails = (dataList) => {
@@ -211,6 +215,14 @@ const MyServices = (props) => {
                                         }
                                         {
                                             service?.options?.complete_profile && <a href={`${siteDomain}/dashboard/roundone/profile/`} target="_blank" className="font-weight-bold"> Complete Profile</a>
+                                        }
+                                        {
+                                            service?.options?.edit_template &&
+                                                <>
+                                                    <br />
+                                                    <a href={createBuilderResumeDownloadLink(service?.id, service?.product)} target="_blank" className="font-weight-bold"> Download</a>
+                                                    <a className="ml-15" target="_blank" href={`${resumeShineSiteDomain}/resume-builder/edit/?type=profile`}>Edit Template</a>
+                                                </>
                                         }
                                         {
                                             (service?.oi_status === 24 || service?.oi_status === 46) &&
