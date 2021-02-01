@@ -837,7 +837,7 @@ class TrendingCoursesAndSkillsAPI(PopularProductMixin, APIView):
                     'skillUrl': i.get_absolute_url()}
                 if homepage :
                     skill_data.update({
-                        'image':i.image if i.image else None,
+                        # 'image':i.image if i.image else None,
                         'no_courses':i.categoryproducts.count()
                         })
                 skills.append(skill_data)
