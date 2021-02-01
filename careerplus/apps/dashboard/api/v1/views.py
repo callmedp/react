@@ -65,7 +65,7 @@ class DashboardMyorderApi(DashboardInfo, APIView):
                 orders = orders.filter(status=selected_type)
 
             order_list = []
-            paginated_data = offset_paginator(page, orders)
+            paginated_data = offset_paginator(page, orders,size=7)
             for obj in paginated_data["data"]:
                 orderitems = OrderItem.objects.select_related(
                     'product').filter(no_process=False, order=obj)
@@ -136,7 +136,7 @@ class MyCoursesApi(DashboardInfo, APIView):
                 courses = courses.filter(order__date_placed__gte=modified_from_datetime)
             if selected_type is not 'all':
                 courses = courses.filter(order__status=selected_type)
-            paginated_data = offset_paginator(page, courses)
+            paginated_data = offset_paginator(page, courses,size=7)
             data = OrderItemSerializer(paginated_data["data"],many=True,context= {"get_details": True}).data
             #pagination info
             page_info ={
@@ -182,7 +182,7 @@ class MyServicesApi(DashboardInfo, APIView):
                 services = services.filter(order__date_placed__gte=modified_from_datetime)
             if selected_type is not 'all':
                 services = services.filter(order__status=selected_type)
-            paginated_data = offset_paginator(page, services)
+            paginated_data = offset_paginator(page, services,size=7)
             data = OrderItemSerializer(paginated_data["data"],many=True,context= {"get_details": True}).data
 
             #pagination info
