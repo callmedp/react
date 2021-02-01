@@ -54,6 +54,8 @@ class DashboardMyorderApi(DashboardInfo, APIView):
 
         # candidate_id='568a0b20cce9fb485393489b'
         # candidate_id='5c94a7b29cbeea2c1f27fda2'
+
+        order_list = []
         if candidate_id:         
             orders = Order.objects.filter(
             status__in=[0, 1, 3],
@@ -63,7 +65,6 @@ class DashboardMyorderApi(DashboardInfo, APIView):
             if selected_type is not 'all':
                 orders = orders.filter(status=selected_type)
 
-            order_list = []
             paginated_data = offset_paginator(page, orders,size=7)
             for obj in paginated_data["data"]:
                 orderitems = OrderItem.objects.select_related(

@@ -33,7 +33,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
         elif key in [161, 162, 163, 164]:
             status = instance.get_user_oi_status
         elif order_key in [0, 1, 5]:
-            status = OI_STATUS_DICT.get(key)
+            status = OI_STATUS_DICT.get(order_key)
         return status
     # def get_product_is_pause_service(self,obj):
     #     return obj.product.is_pause_service if obj.product_id else ''
