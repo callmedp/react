@@ -167,13 +167,18 @@ const MyServices = (props) => {
 
                                                     <div className="db-my-courses-detail__leftpan--status mb-2">
                                                         Status:
-                                                            <strong className="ml-1">{item.new_oi_status ? item.oi_status === 4 ? 'Service has been processed and Document is finalized' : item.oi_status == 141 ? 'Your profile to be shared with interviewer is pending -' : item.oi_status === 142 ? 'Service is under progress -' : item.oi_status === 143 ? 'Service has been expired' : item.new_oi_status : "Yet to Update"}
+                                                            <strong className="ml-1">{item.new_oi_status ? item.oi_status === 4 ? 'Service has been processed and Document is finalized' : item.oi_status === 101 ? 'Take Test' : item.oi_status == 141 ? 'Your profile to be shared with interviewer is pending -' : item.oi_status === 142 ? 'Service is under progress -' : item.oi_status === 143 ? 'Service has been expired' : item.new_oi_status : "Yet to Update"}
                                                             
                                                             {/* upload link */}
                                                             {item.options?.upload_resume ? <Link to={"#"} className="ml-2" onClick={uploadHandelShow}>Upload</Link>
                                                             : null}
 
+                                                            {/* download option if draft file exists */}
                                                             {item.options?.Download ? <a className="ml-2" target="_blank" href={item.options?.download_url}>Download</a>
+                                                            : null}
+
+                                                            {/* take test when type flow is 16 */}
+                                                            {item?.options?.take_test ? <a className="ml-2" target="_blank" href={ item?.autologin_url}>Take Test</a>
                                                             : null}
 
                                                             {item.product_type_flow === 17 && item?.options?.edit_template ? 
