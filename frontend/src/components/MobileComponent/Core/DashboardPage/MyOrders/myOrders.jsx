@@ -32,6 +32,7 @@ const MyWallet = (props) => {
                 delete window.config?.isServerRendered
             }
         } catch (error) {
+            dispatch(stopDashboardOrderPageLoader());
             if (error?.status == 404) {
                 // history.push('/404');
             }
