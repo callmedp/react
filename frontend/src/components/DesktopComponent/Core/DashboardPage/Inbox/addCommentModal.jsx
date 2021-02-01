@@ -13,14 +13,14 @@ const AddCommentModal = (props) => {
     const { register, handleSubmit, errors, reset } = useForm();
     const { commentLoader } = useSelector(store => store.loader);
 
-    const submitComment = (values) => {
+    const submitComment = async (values) => {
         const new_values = {
           ...values,
           oi_pk: data.oi_id,
           type: "POST",
         };
 
-        dispatch(fetchOiComment(new_values));
+        await new Promise((resolve, reject) => dispatch(fetchOiComment({payload: new_values, resolve, reject})));
         reset();
     };
 
