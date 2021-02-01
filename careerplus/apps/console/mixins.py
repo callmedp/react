@@ -321,7 +321,7 @@ class ActionUserMixin(object):
                             else 'file'
                         extention = file_name.split('.')[-1] if file_name else ''
 
-                        file_name = 'resumeupload_' + str(order_id) + '_' + str(int(random() * 9999)) \
+                        file_name = 'resumeupload_' + str(order.pk) + '_' + str(int(random() * 9999)) \
                             + '_' + timezone.now().strftime('%Y%m%d') + '.' + extention
 
                         shine_resume = open(file_name, 'wb+')
