@@ -38,7 +38,7 @@ class DashboardMyorderApi(DashboardInfo, APIView):
     def get(self, request, *args, **kwargs):
         candidate_id = self.request.session.get('candidate_id', None)
         order_list=[]
-        candidate_id='568a0b20cce9fb485393489b'
+        # candidate_id='568a0b20cce9fb485393489b'
         page = request.GET.get("page", 1)
 
         if candidate_id:         
@@ -103,7 +103,7 @@ class MyCoursesApi(DashboardInfo, APIView):
         from_datetime = datetime.utcnow() - relativedelta(months=int(last_month_from))
         modified_from_datetime = from_datetime.replace(day=1, hour=0, minute=0, second=0, microsecond=0) 
 
-        candidate_id='568a0b20cce9fb485393489b'
+        # candidate_id='568a0b20cce9fb485393489b'
         # candidate_id='5fed060d9cbeea482331ec4b'
         if candidate_id:
             orders = Order.objects.filter(
@@ -154,7 +154,7 @@ class MyServicesApi(DashboardInfo, APIView):
         from_datetime = datetime.utcnow() - relativedelta(months=int(last_month_from))
         modified_from_datetime = from_datetime.replace(day=1, hour=0, minute=0, second=0, microsecond=0) 
 
-        candidate_id='568a0b20cce9fb485393489b'
+        # candidate_id='568a0b20cce9fb485393489b'
 
         if candidate_id:
             excl_txns = PaymentTxn.objects.filter(
@@ -193,7 +193,7 @@ class DashboardMyWalletAPI(DashboardInfo, APIView):
 
         # attempting to get candidate from session
         candidate_id = self.request.session.get('candidate_id')
-        candidate_id = '568a0b20cce9fb485393489b'
+        # candidate_id = '568a0b20cce9fb485393489b'
         if candidate_id is None:
             return APIResponse(data=data, message='Candidate Details required', status=status.HTTP_400_BAD_REQUEST)
 
@@ -352,7 +352,7 @@ class DashboardPendingResumeItemsApi(APIView):
         candidate_id = self.request.session.get('candidate_id', None)
         email = request.GET.get('email', None)
         pending_resume_items = []
-        candidate_id='568a0b20cce9fb485393489b'
+        # candidate_id='568a0b20cce9fb485393489b'
 
         pending_resume_items = DashboardInfo().get_pending_resume_items(candidate_id=candidate_id,
                                                                         email=email)

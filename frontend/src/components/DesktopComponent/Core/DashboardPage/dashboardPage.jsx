@@ -25,7 +25,7 @@ const DashboardPage = (props) => {
         if(!dashboardRoutes.includes(dbContainer)){
             history.push('/404/');
         }
-    },[dashboardRoutes])
+    },[dbContainer])
 
     return(
         <div>

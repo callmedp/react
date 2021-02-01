@@ -7,19 +7,8 @@ import Error404Container from 'components/DesktopComponent/Common/ErrorPage404/e
 import { getCataloguePageActions } from "apiHandler/cataloguePageApi";
 import DashboardPageContainer from 'components/DesktopComponent/Core/DashboardPage/dashboardPage';
 import { getDashboardPageActions } from "apiHandler/dashboardPageApi";
+import RouteWithSubRoutes from './route';
 
-
-export const RouteWithSubRoutes = route => {
-    return (
-        <Route
-            path={route.path}
-            exact={route.exact}
-            render={props =>
-                <route.component {...props} routes={route.routes} />
-            }
-        />
-    )
-};
 
 const DesktopAppRouter = () => (
     <div>
@@ -46,6 +35,7 @@ export const routes = [
         path: '/dashboard/:name/',
         component: DashboardPageContainer,
         actionGroup: getDashboardPageActions,
+        private: true
     },
     {
         path: '/404/',
