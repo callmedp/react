@@ -284,6 +284,7 @@ def get_courses_detail(instance):
             if op.oi_status == 101:
                 datalist.append({'date':date_created,'status':op.get_user_oi_status})
                 options['take_test']=True
+                options['auto_login_url'] = oi.autologin_url
             elif op.oi_draft and op.oi_draft.name:
                 options['Download']=True
                 options['order_pk']=oi.order.pk
