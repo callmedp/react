@@ -183,7 +183,7 @@ const MyServices = (props) => {
                                                 <span>Bought on: <strong>{service?.enroll_date}</strong> </span> 
                                                 {
                                                     service?.duration_in_days && 
-                                                        <span>Duration: <strong>{service?.duration_in_days > 1 ? service?.duration_in_days + ' days' : service?.duration_in_days + ' day' } </strong> </span>
+                                                    <span>Duration: <strong>{service?.duration_in_days > 1 ? service?.duration_in_days + ' days' : service?.duration_in_days + ' day' } </strong> </span>
                                                 }
                                             </p>
                                         </div>
