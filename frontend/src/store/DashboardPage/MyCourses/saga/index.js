@@ -5,12 +5,13 @@ import Api from './Api';
 function* DashboardCoursesApi(action) {
     const { payload } = action;
     try {
- 
-        const response = yield call(Api.myCoursesData, payload?.page);
-    
+
+        const response = yield call(Api.myCoursesData, payload);
+
         if (response["error"]) {
             return payload?.reject(response)
         }
+        console.log(response.data.data)
         const item = response?.data?.data;
         yield put({ 
             type : Actions.MY_COURSES_FETCHED, 

@@ -14,6 +14,7 @@ const ReviewModal = (props) => {
         }[star];
     }
 
+
     const { reviewList } = useSelector(store => store.getReviews );
     const { reviewLoader } = useSelector(store => store.loader);
 

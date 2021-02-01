@@ -29,6 +29,16 @@ function* DashboardServicesApi(action) {
     }
 }
 
+function* getPendingOrder() {
+    try {
+        const result = yield call(Api.getPendingOrderItems);
+        return yield put({ type: Actions.PENDING_RESUME_FETCHED, data: result?.data?.data });
+    }
+    catch (e) {
+        return e;
+    }
+}
+
 function* uploadResume(action) {
     const { payload: { values, resolve, reject } } = action;
     try {
@@ -43,26 +53,6 @@ function* uploadResume(action) {
     }
     catch (error) {
         return reject(error)
-    }
-}
-
-function* getPendingResume(action) {
-    const { payload } = action;
-    try {
-        const response = yield call(Api.getPendingResumes, payload);
-
-        if (response["error"]) {
-            return payload?.resolve(response);
-        }
-        const item = response?.data?.data
-        yield put({
-            type: Actions.PENDING_RESUMES_FETCHED,
-            item
-        })
-        return payload?.resolve(response);
-    }
-    catch (e) {
-        return payload?.resolve('Something went wrong!');
     }
 }
 
@@ -108,9 +98,28 @@ function* acceptrejectcandidate(action) {
 
 }
 
+function* pauseResumeService(action) {
+    try {
+        const { payload } = action;
+        const result = yield call(Api.pauseResumeService, payload);
+        
+        if (result["error"]) {
+            return result
+            
+        }
+        return yield put({ type: Actions.PAUSE_AND_RESUME_SERVICE_SUCCESS, oi: result.data });
+    }
+    catch (e) {
+        return e
+        
+    }
+    
+}
+
 export default function* WatchDashboardMyServices() {
     yield takeLatest(Actions.FETCH_MY_SERVICES, DashboardServicesApi);
     yield takeLatest(Actions.UPLOAD_RESUME_FORM, uploadResume);
-    yield takeLatest(Actions.FETCH_PENDING_RESUMES, getPendingResume);
+    yield takeLatest(Actions.GET_PENDING_RESUME, getPendingOrder);
     yield takeLatest(Actions.REQUEST_CANDIDATE_OI_ACCEPT_REJECT, acceptrejectcandidate);
+    yield takeLatest(Actions.PAUSE_AND_RESUME_SERVICE_REQUEST, pauseResumeService);
 }
