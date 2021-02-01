@@ -43,7 +43,7 @@ const Dashboard = (props) => {
             history.push('/404/');
         }
         handleEffects();
-    }, [dashboardRoutes])
+    }, [dbContainer])
 
 
     return(
