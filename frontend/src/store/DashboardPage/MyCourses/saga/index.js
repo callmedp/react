@@ -11,7 +11,6 @@ function* DashboardCoursesApi(action) {
         if (response["error"]) {
             return payload?.reject(response)
         }
-        console.log(response.data.data)
         const item = response?.data?.data;
         yield put({ 
             type : Actions.MY_COURSES_FETCHED, 

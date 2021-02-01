@@ -40,7 +40,6 @@ export const routes = [
         path: '/dashboard/:name/',
         component: DashboardPageContainer,
         actionGroup: getDashboardPageActionsMobile,
-        private: false,
     },
     {
         path: '/404/',

@@ -26,9 +26,17 @@ const CandidateAcceptRejectResume = (payload) => {
     }
 }
 
+const pausePlayResume = (payload) => {
+    return {
+        type: Actions.PAUSE_AND_RESUME_SERVICE_REQUEST,
+        payload
+    }
+}
+
 export {
     fetchMyServices,
     uploadResumeForm,
     fetchPendingResume,
-    CandidateAcceptRejectResume
+    CandidateAcceptRejectResume,
+    pausePlayResume,
 }

@@ -6,6 +6,7 @@ import AddCommentModal from '../InboxModals/addCommentModal';
 import RateProductModal from '../InboxModals/rateProductModal'
 import Pagination from '../../../Common/Pagination/pagination';
 import Loader from '../../../Common/Loader/loader';
+import EmptyInbox from '../InboxModals/emptyInbox';
 import { fetchMyCourses } from 'store/DashboardPage/MyCourses/actions/index'
 import { startDashboardCoursesPageLoader, stopDashboardCoursesPageLoader } from 'store/Loader/actions/index';
 import { siteDomain } from 'utils/domains';
@@ -74,6 +75,9 @@ const MyCourses = (props) => {
     return(
         <>
             { coursesLoader && <Loader />}
+            {
+                page?.total === 0 ? <EmptyInbox inboxType="courses"/> :
+
             <div>
                 <div className="m-courses-detail db-warp">
                     {
@@ -97,8 +101,8 @@ const MyCourses = (props) => {
                                         <div className="m-courses-detail__info">
                                             <h2>{course?.name}</h2>
                                             <p className="m-pipe-divides mb-5">Provider: <Link to={"#"} className="font-weight-bold">{course?.vendor}</Link></p>
-                                            <p className="m-pipe-divides mb-5"><span>Enrolled on: <strong>{course?.enroll_date}</strong> </span> <span>Mode: <strong>{course?.mode}</strong> </span></p>
-                                            <p className="m-pipe-divides mb-5">{ course?.status === 'Cancelled' || course?.status === 'Unpaid' || course.status === 'Yet to Update' ? '' : <span> Duration: <strong>{course?.oi_duration} {course?.oi_duration > 1 ? 'days' : 'day'}</strong> </span> } <span>Jobs: <strong>{course?.jobs}</strong> </span></p>
+                                            <p className="m-pipe-divides mb-5">{ !!course?.enroll_date && <span>Enrolled on: <strong>{course?.enroll_date}</strong> </span> } { !!course?.mode && <span>Mode: <strong>{course?.mode}</strong> </span> }</p>
+                                            <p className="m-pipe-divides mb-5">{ !!course?.duration_in_days && <span> Duration: <strong>{ course?.duration_in_days } { course?.duration_in_days > 1 ? 'days' : 'day' }</strong> </span> } { !!course?.jobs && <span>Jobs: <strong>{course?.jobs}</strong> </span>}</p>
                                         </div>
                                     </div>
                                     {/* <div className="m-courses-detail--session pl-15 d-flex mb-15 mt-10">
@@ -110,10 +114,14 @@ const MyCourses = (props) => {
                                     Hi, the recording for the session you missed is available now <Link to={"#"} className="font-weight-semi-bold">Check here</Link>
                                     </div> */}
                                             <div className="pl-15 mt-15 fs-12">
-                                                Status: <strong> {course?.new_oi_status ? course?.new_oi_status : course?.status} </strong>
+                                                Status: <strong> {course?.new_oi_status ? course?.new_oi_status : 'Yet to Update'} </strong>
+
+                                                {
+                                                    course?.options?.take_test && <a href={course?.options?.auto_login_url} target="_blank" className="font-weight-bold"> Take test</a>
+                                                }
                                                 {/* <Link to={"#"} className="d-block font-weight-bold">View Details</Link> */}
                                                 {
-                                                    course?.datalist?.length ?
+                                                    course?.datalist?.length > 0 ?
                                                         <div className="my-order__order-detail">
                                                             <a onClick={(e) => { e.preventDefault(); showDetails(course?.id) }} className={(showOrderDetailsID === course?.id) ? "d-block font-weight-bold open arrow-icon" : "d-block font-weight-bold arrow-icon"}>View Details</a>
                                                             {(showOrderDetailsID === course?.id) && getOrderDetails(course?.datalist)}
@@ -331,6 +339,7 @@ const MyCourses = (props) => {
                             setCurrentPage={setCurrentPage} /> : ''
                 }
             </div>
+            }
         </>
     )
 }

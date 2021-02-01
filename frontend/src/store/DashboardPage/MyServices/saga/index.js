@@ -97,9 +97,28 @@ function* acceptrejectcandidate(action) {
 
 }
 
+function* pauseResumeService(action) {
+    try {
+        const { payload } = action;
+        const result = yield call(Api.pauseResumeService, payload);
+        
+        if (result["error"]) {
+            return result
+            
+        }
+        return yield put({ type: Actions.PAUSE_AND_RESUME_SERVICE_SUCCESS, oi: result.data });
+    }
+    catch (e) {
+        return e
+        
+    }
+    
+}
+
 export default function* WatchDashboardMyServices() {
     yield takeLatest(Actions.FETCH_MY_SERVICES, DashboardServicesApi);
     yield takeLatest(Actions.UPLOAD_RESUME_FORM, uploadResume);
     yield takeLatest(Actions.GET_PENDING_RESUME, getPendingOrder);
     yield takeLatest(Actions.REQUEST_CANDIDATE_OI_ACCEPT_REJECT, acceptrejectcandidate);
+    yield takeLatest(Actions.PAUSE_AND_RESUME_SERVICE_REQUEST, pauseResumeService);
 }

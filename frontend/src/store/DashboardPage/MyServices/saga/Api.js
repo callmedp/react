@@ -29,10 +29,16 @@ const candidateReject = (data) => {
     return BaseApiService.post(url, data, {}, true)
 }
 
+const pauseResumeService = (data) => {
+    const url = `${siteDomain}/api/v1/dashboard-pause-play/`
+    return BaseApiService.patch(url, data)
+}
+
 export default {
     myServicesData,
     uploadResumeDashboardForm,
     getPendingOrderItems,
     candidateAccept,
-    candidateReject
+    candidateReject,
+    pauseResumeService
 }

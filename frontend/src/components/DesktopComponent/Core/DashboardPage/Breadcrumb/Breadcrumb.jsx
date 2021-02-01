@@ -1,8 +1,5 @@
-import React, {useState} from 'react';
+import React from 'react';
 import './breadcrumb.scss';
-import { startDashboardServicesPageLoader, stopDashboardServicesPageLoader } from 'store/Loader/actions/index';
-import { fetchMyServices } from 'store/DashboardPage/MyServices/actions';
-import { useDispatch } from 'react-redux';
    
 const BreadCrumbs = (props) => {
     const {filterState, setfilterState} = props;
@@ -28,6 +25,7 @@ const BreadCrumbs = (props) => {
                     <select className="form-control" onChange={(e) => FilterChecks(e)}
                     name="last_month_from"
                     value={filterState.last_month_from}>
+                        <option value="all">All</option>
                         <option value="18">Last eighteen months</option>
                         <option value="6">Last six months</option>
                         <option value="3">Last three months</option>

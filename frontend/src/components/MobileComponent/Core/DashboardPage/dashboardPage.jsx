@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import './dashboardPage.scss';
@@ -15,15 +16,19 @@ import MyProfile from './MyProfile/myProfile';
 import PersonalDetail from './MyProfile/PersonalDetail';
 import EditSkills from './MyProfile/EditSkills';
 import SearchPage from '../../Common/SearchPage/SearchPage';
+import { Helmet } from 'react-helmet';
 import { fetchPopularServices } from 'store/CataloguePage/actions/index';
 
 const Dashboard = (props) => {
     const dbContainer = props.match.params.name;
+    const { history } = props;
+    const dashboardRoutes = ['mycourses', 'myorder', 'mywallet', 'myservices']
     const dispatch = useDispatch();
     const [showSearchPage, setShowSearchPage] = useState(false);
     const { popularServices } = useSelector(store => store?.popularServices );
 
     const handleEffects = async () => {
+       
         if (!(window && window.config && window.config.isServerRendered)) {
             await new Promise((resolve, reject) => dispatch(fetchPopularServices({ resolve, reject })));
         }
@@ -34,11 +39,28 @@ const Dashboard = (props) => {
     };
 
     useEffect(() => {
+        if(!dashboardRoutes.includes(dbContainer)){
+            history.push('/404/');
+        }
         handleEffects();
-    }, [])
+    }, [dashboardRoutes])
+
 
     return(
         <div>
+            <Helmet>
+                <title>
+                {
+                    {
+                        'myservices' : 'My Services | Shine Learning',
+                        'mycourses' : 'My Courses | Shine Learning',
+                        'myorder' : 'My Orders | Shine Learning',
+                        'mywallet' : 'My Wallet | Shine Learning'
+                    }[dbContainer]
+                }
+                </title>
+            </Helmet>
+
             { showSearchPage ? <SearchPage setShowSearchPage={setShowSearchPage} /> :
                 <>
                     <MenuNav />
@@ -49,10 +71,10 @@ const Dashboard = (props) => {
                     <main className="m-container">
                         {
                             {
-                                'my-services' : <MyServices />,
-                                'my-courses' : <MyCourses/>,
-                                'my-orders' : <MyOrders />,
-                                'my-wallet' : <MyWallet/>
+                                'myservices' : <MyServices />,
+                                'mycourses' : <MyCourses/>,
+                                'myorder' : <MyOrders />,
+                                'mywallet' : <MyWallet/>
                             }[dbContainer]
                         }
                         

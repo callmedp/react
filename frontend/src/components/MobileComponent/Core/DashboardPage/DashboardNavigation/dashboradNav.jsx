@@ -9,19 +9,19 @@ const DashboardNavigation = (props) => {
         <div className="m-db-tabs-wrap">
             <ul>
                 <li>
-                    <Link to={"/dashboard/my-courses"} className={activeTab === 'my-courses' ? 'active' : ''}>My Courses</Link>
+                    <Link to={"/dashboard/mycourses"} className={activeTab === 'mycourses' ? 'active' : ''}>My Courses</Link>
                 </li>
                 
                 <li>
-                    <Link to={"/dashboard/my-services"} className={activeTab === 'my-services' ? 'active' : ''}>My Services</Link>
+                    <Link to={"/dashboard/myservices"} className={activeTab === 'myservices' ? 'active' : ''}>My Services</Link>
                 </li>
                 
                 <li>
-                    <Link to={"/dashboard/my-orders"} className={activeTab === 'my-orders' ? 'active' : ''}>My Orders</Link>
+                    <Link to={"/dashboard/myorder"} className={activeTab === 'myorder' ? 'active' : ''}>My Orders</Link>
                 </li>
                 
                 <li>
-                    <Link to={"/dashboard/my-wallet"} className={activeTab === 'my-wallet' ? 'active' : ''}>My Wallet</Link>
+                    <Link to={"/dashboard/mywallet"} className={activeTab === 'mywallet' ? 'active' : ''}>My Wallet</Link>
                 </li>
                 
                 {/* <li>
