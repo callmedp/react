@@ -813,7 +813,7 @@ class TrendingCoursesAndSkillsAPI(PopularProductMixin, APIView):
         """
         popular_course_quantity = int(request.GET.get('num_courses', 2))
         skill_category = request.GET.get('category_id', None)
-        course_only = request.GET.get('course_only', False)
+        homepage = request.GET.get('homepage',False)
 
         product_obj, product_converstion_ratio, product_revenue_per_mile = PopularProductMixin().\
                                                                             popular_courses_algorithm(
@@ -828,20 +828,23 @@ class TrendingCoursesAndSkillsAPI(PopularProductMixin, APIView):
         tprds = SearchQuerySet().filter(id__in=product_pks, pTP__in=[0, 1, 3]).exclude(
             id__in=settings.EXCLUDE_SEARCH_PRODUCTS
         )
-        # p_skills = product_obj.filter(id__in=product_pks, categories__is_skill=True).distinct().exclude(
-        #     categories__related_to__slug__isnull=True)
-        
-        p_skills = ProductCategory.objects.filter(product__id__in=product_pks,category__is_skill=True).exclude(
-            category__related_to__slug__isnull=True)
-        
-        skills = []
-        skills_ids = []
+        p_skills = product_obj.filter(id__in=product_pks, categories__is_skill=True).exclude(
+            categories__related_to__slug__isnull=True).values_list('categories',flat=True)
+        categories = Category.objects.filter(type_level=3,id__in=p_skills)
 
-        for i in p_skills:
-            if i.category.id not in skills_ids:
-                skills_ids.append(i.category.id)
-                skills.append({'id': i.category.id, 'skillName': i.category.name,
-                           'skillUrl': i.category.get_absolute_url()})
+        skills = []
+        skill_data = {}
+        for i in categories:
+                skill_data ={
+                    'id': i.id,
+                    'skillName': i.name,
+                    'skillUrl': i.get_absolute_url()}
+                if homepage :
+                    skill_data.update({
+                        # 'image':i.image if i.image else None,
+                        'no_courses':i.categoryproducts.count()
+                        })
+                skills.append(skill_data)
 
         data = {
             'trendingCourses': [
@@ -983,23 +986,6 @@ class TrendingCategoriesApi(PopularProductMixin, APIView):
             }
             cache.set('category_popular_courses',data,86400)
         return Response(data=data, status=status.HTTP_200_OK)
-        
-class LatestBlogAPI(APIView):
-    permission_classes = (permissions.AllowAny,)
-    authentication_classes = ()
-
-    def get(self, request):
-        article_list = Blog.objects.filter(
-            status=1, visibility=2).order_by('-last_modified_on')[:3]
-        data = [
-            {
-            'display_name':article.heading if article.heading else article.name,
-            'title':article.get_title(),
-            'image':article.image,
-            'url':article.get_absolute_url()
-            } for article in article_list]
-        return APIResponse(message='Latest articles fetched',data=data, status=status.HTTP_200_OK)
-
 
 class MostViewedCourseAPI(APIView):
     permission_classes = (permissions.AllowAny,)
@@ -1060,7 +1046,7 @@ class PopularInDemandProductsAPI(APIView):
 
         return APIResponse(message='Popular certifications and courses Loaded', data=data, status=status.HTTP_200_OK)
 
-class JobAssistanceServicesAPI(APIView):
+class JobAssistanceAndLatestBlogAPI(APIView):
     permission_classes = (permissions.AllowAny,)
     authentication_classes = ()
         
@@ -1078,10 +1064,19 @@ class JobAssistanceServicesAPI(APIView):
                 {'id': tsrvc.id, 'heading': tsrvc.pHd, 'name': tsrvc.pNm, 'url': tsrvc.pURL, 'img': tsrvc.pImg, \
                  'img_alt': tsrvc.pImA, 'description': tsrvc.pDscPt, 'rating': tsrvc.pARx, 'price': tsrvc.pPinb, 'vendor': tsrvc.pPvn, 'stars': tsrvc.pStar,
                  'provider': tsrvc.pPvn} for tsrvc in job_services]
-        }
+            }
+            article_list = Blog.objects.filter(
+            status=1, visibility=2).order_by('-last_modified_on')[:3]
+            latest_blog_data = [
+                {
+                'display_name':article.heading if article.heading else article.name,
+                'title':article.get_title(),
+                # 'image':article.image,
+                'url':article.get_absolute_url()
+                } for article in article_list]
+            data.update({'latest_blog_data':latest_blog_data})
+
         except Exception as e:
             logging.getLogger('error_log').error(
                 "unable to load job assistance services%s " % str(e))
-        return APIResponse(message='Job assistance services Loaded', data=data, status=status.HTTP_200_OK)
-
-
+        return APIResponse(message='Job assistance services and latest blog data Loaded', data=data, status=status.HTTP_200_OK)
