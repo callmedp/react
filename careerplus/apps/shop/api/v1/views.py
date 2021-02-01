@@ -530,7 +530,7 @@ class CourseCatalogueAPI(CourseCatalogueMixin, APIView):
         data = {
             'title': 'Online Course & Certifications Catalogue - Shine Learning',
             'description': 'Select from hundreds of courses & certifications to earn a high-demand course certificate. Explore our catalogue of online courses, certifications in data science, digital marketing, and many others.',
-            '_url': settings.MAIN_DOMAIN_PREFIX + '/online-courses.html'
+            '_url': '/online-courses.html'
         }
         return data
 
