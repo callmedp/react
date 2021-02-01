@@ -153,7 +153,6 @@ class MyServicesApi(DashboardInfo, APIView):
         selected_type = types.get(select_type)
 
         #time filter
-        print(last_month_from)
         if not last_month_from=='all':
             from_datetime = datetime.utcnow() - relativedelta(months=int(last_month_from))
             modified_from_datetime = from_datetime.replace(day=1, hour=0, minute=0, second=0, microsecond=0) 

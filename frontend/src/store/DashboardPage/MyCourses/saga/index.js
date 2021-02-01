@@ -5,12 +5,13 @@ import Api from './Api';
 function* DashboardCoursesApi(action) {
     const { payload } = action;
     try {
-        console.log(payload)
+
         const response = yield call(Api.myCoursesData, payload);
-       
+
         if (response["error"]) {
             return payload?.reject(response)
         }
+        console.log(response.data.data)
         const item = response?.data?.data;
         yield put({ 
             type : Actions.MY_COURSES_FETCHED, 
@@ -27,9 +28,9 @@ function* DashboardCoursesApi(action) {
 }
 
 function* submitBoardNeoUser(action) {
-    const { payload: { values, resolve, reject } } = action;
+    const { payload: { payload, resolve, reject } } = action;
     try {
-        const response = yield call(Api.boardNeoUser, values);
+        const response = yield call(Api.boardNeoUser, payload);
         return resolve(response)
     }
     catch (error) {
