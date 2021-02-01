@@ -104,7 +104,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
             'heading': instance.product.heading if instance.product_id else '',
         })
         if self.context.get("get_details", None):
-            date_placed =instance.order.date_placed.strftime("%b %d, ""%Y")
+            date_placed =instance.order.date_placed.strftime("%d %b %Y")
             data.update({
                 'img': instance.product.get_image_url(), 
                 'rating': instance.product.get_ratings(),

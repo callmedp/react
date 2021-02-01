@@ -68,7 +68,7 @@ const Dashboard = (props) => {
                         <Header setShowSearchPage={setShowSearchPage} name='Dashboard' />
                         <DashboardNavigation activeTab={dbContainer}/>
                     </header>
-                    <main className="m-container">
+                    <div className="m-container">
                         {
                             {
                                 'myservices' : <MyServices />,
@@ -83,7 +83,7 @@ const Dashboard = (props) => {
                         
                         <ProductCardsSlider productList={popularServices} />
                         <HaveQuery />
-                    </main>
+                    </div>
                     <Footer /> 
                 </>
             }
