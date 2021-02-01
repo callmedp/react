@@ -305,11 +305,15 @@
             <div class="modal-body">
               <div class="row modal-item">
                 <form autocomplete="off" data-parsley-validate method="POST" action="." enctype="multipart/form-data" id="resume-upload-form">
-					{% csrf_token %}
-					{{form.oi_resume}}
-					</br>
+                	<div style="padding-bottom: 25px">
+						{% csrf_token %}
+						{{form.oi_resume}}
+						{{form.resume_from_shine}} Upload resume from shine
+						</br>
+						<!-- &ensp; -->
+					</div>
 					<div>
-                    	<input type="hidden" name="oi_ids" id="oi_ids" value="">
+                    	<input type="hidden" name="oi_ids" id="oi_ids" value=""> 
                 	</div>
 				</form>
 				<div id="order-items">

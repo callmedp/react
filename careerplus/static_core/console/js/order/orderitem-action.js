@@ -188,6 +188,23 @@ $(document).ready(function(){
             }
         } 
     });
+
+    $("input[id='id_resume_from_shine']").change(function(){
+        if(this.checked) {
+            $('#id_oi_resume').val('');
+        }
+    })
+
+    // $("input[id='id_resume_from_shine']").click(function(){
+    //         if($(this).prop("checked") == true){
+    //             $('#resume_shine').val('true')
+    //         }
+    //         else if($(this).prop("checked") == false){
+    //             $('#resume_shine').val('false')
+    //         }
+    //         debugger;
+    //         $('#id_oi_resume').val(''); 
+    //     });
     
     
 })
@@ -213,3 +230,14 @@ const upload_click = ()=>{
     $("#resume-upload-form").submit();
     $('#upload-doc-modal').modal('hide')
  }
+
+ // const resume_from_shine = ()=>{
+ //    $('#id_io_resume').click(function(){
+ //            if($(this).prop("checked") == true){
+ //                console.log("Checkbox is checked.");
+ //            }
+ //            else if($(this).prop("checked") == false){
+ //                console.log("Checkbox is unchecked.");
+ //            }
+ //        });
+ // }
