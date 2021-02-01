@@ -170,9 +170,9 @@ def get_courses_detail(instance):
                 if  oi.product.type_flow == 2 and oi.product.vendor.slug == 'neo'  and not op.neo_mail_sent and not op.updated_from_trial_to_regular:
                     options['BoardOnNeo'] = True
                 if  oi.product.type_flow == 2 and oi.product.vendor.slug == 'neo'  and op.neo_mail_sent:
-                    options['please_confirm_boarding_on_mail_sent_to_you']=True
+                    options['neo_mail_sent']=True
                 if oi.product.type_flow == 2 and oi.product.vendor.slug == 'neo'  and op.updated_from_trial_to_regular:
-                    options['updated_account_from_trial_to_regular'] = True
+                    options['updated_from_trial_to_regular'] = True
             elif op.oi_status == 6 or op.oi_status == 4 and op.oi_draft.name:
                 options['Download']=True
                 options['order_pk']=oi.order.pk
