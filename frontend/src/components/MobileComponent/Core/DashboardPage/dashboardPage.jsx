@@ -15,6 +15,7 @@ import MyProfile from './MyProfile/myProfile';
 import PersonalDetail from './MyProfile/PersonalDetail';
 import EditSkills from './MyProfile/EditSkills';
 import SearchPage from '../../Common/SearchPage/SearchPage';
+import { Helmet } from 'react-helmet';
 import { fetchPopularServices } from 'store/CataloguePage/actions/index';
 
 const Dashboard = (props) => {
@@ -39,6 +40,19 @@ const Dashboard = (props) => {
 
     return(
         <div>
+            <Helmet>
+                <title>
+                {
+                    {
+                        'myservices' : 'My Services | Shine Learning',
+                        'mycourses' : 'My Courses | Shine Learning',
+                        'myorder' : 'My Orders | Shine Learning',
+                        'mywallet' : 'My Wallet | Shine Learning'
+                    }[dbContainer]
+                }
+                </title>
+            </Helmet>
+
             { showSearchPage ? <SearchPage setShowSearchPage={setShowSearchPage} /> :
                 <>
                     <MenuNav />
@@ -49,10 +63,10 @@ const Dashboard = (props) => {
                     <main className="m-container">
                         {
                             {
-                                'my-services' : <MyServices />,
-                                'my-courses' : <MyCourses/>,
-                                'my-orders' : <MyOrders />,
-                                'my-wallet' : <MyWallet/>
+                                'myservices' : <MyServices />,
+                                'mycourses' : <MyCourses/>,
+                                'myorder' : <MyOrders />,
+                                'mywallet' : <MyWallet/>
                             }[dbContainer]
                         }
                         

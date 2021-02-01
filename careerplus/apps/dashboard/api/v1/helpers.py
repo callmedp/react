@@ -312,9 +312,9 @@ def get_courses_detail(instance):
     if oi.oi_status == 28 or oi.oi_status == 34 or oi.oi_status == 35:
         if oi.days_left_oi_product > 0 and oi.product.is_pause_service:
             if oi.service_pause_status:
-                options['Pause Service'] = True
+                options['pause_service'] = True
             else:
-                options['Resume Service'] = True
+                options['resume_service'] = True
 
     if oi.product.type_flow == 5:
         if oi.oi_status == 28 or oi.oi_status == 34 or oi.oi_status == 35:

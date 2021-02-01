@@ -17,6 +17,12 @@ export const DashboardMyServicesReducer = (state=initState, action) => {
                 ...state, error: false
             };
         }
+
+        case Actions.PAUSE_AND_RESUME_SERVICE_SUCCESS: {
+            return {
+                ...state, loading: false,
+            }
+        }
         
         default: return state;
     }

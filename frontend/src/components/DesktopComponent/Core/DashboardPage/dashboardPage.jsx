@@ -12,6 +12,7 @@ import MyOrders from './MyOrders/myOrders';
 import MyWallet from './MyWallet/myWallet';
 import MyProfile from './MyProfile/myProfile';
 import FAQ from './FAQ/faq';
+import { Helmet } from 'react-helmet';
 // import { useDispatch, useSelector } from 'react-redux';
 
 const DashboardPage = (props) => {
@@ -20,6 +21,18 @@ const DashboardPage = (props) => {
 
     return(
         <div>
+            <Helmet>
+                <title>
+                {
+                    {
+                        'myservices' : 'My Services | Shine Learning',
+                        'mycourses' : 'My Courses | Shine Learning',
+                        'myorder' : 'My Orders | Shine Learning',
+                        'mywallet' : 'My Wallet | Shine Learning'
+                    }[dbContainer]
+                }
+                </title>
+            </Helmet>
            <Header />
             <main>
                 <div className="container">

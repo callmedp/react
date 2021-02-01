@@ -19,6 +19,7 @@ import { startDashboardServicesPageLoader, stopDashboardServicesPageLoader } fro
 
 // API Import
 import { fetchMyServices, fetchPendingResume } from 'store/DashboardPage/MyServices/actions/index';
+import { pausePlayResume } from 'store/DashboardPage/MyServices/actions/index';
 
 const MyServices = (props) => {
 
@@ -79,6 +80,15 @@ const MyServices = (props) => {
     const showDetails = (id) => {
         id == showOrderDetailsID ?
             setShowOrderDetailsID('') : setShowOrderDetailsID(id)
+    }
+
+    //Pause service
+    const pauseResumeService = (oiStatus, orderId) => {
+        let pausePlayValues = {
+            oi_status: oiStatus,
+            order_item_id: orderId
+        }
+        dispatch(pausePlayResume(pausePlayValues))
     }
 
     //View Details Data
@@ -240,7 +250,12 @@ const MyServices = (props) => {
                                                     </span>
                                                 </div>
                                             </div>
-                                            <Link to={"#"} className="m-db-start-course font-weight-bold pr-10">Start Service</Link>
+                                            {
+                                                service?.options?.pause_service && <Link to={"#"} className="m-db-start-course font-weight-bold pr-10" onClick={() => pauseResumeService(34, service?.id)}>Pause Service</Link>
+                                            }
+                                            {
+                                                service?.options?.resume_service && <Link to={"#"} className="m-db-start-course font-weight-bold pr-10" onClick={() => pauseResumeService(35, service?.id)}>Resume Service</Link>
+                                            }
                                         </div>
                                         
                                         {/* Comment and Rating Block start */}
