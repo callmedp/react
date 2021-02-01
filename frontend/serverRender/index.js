@@ -91,8 +91,8 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.use('/media/static/',express.static('../careerplus/media/static/'));
-app.use(express.static('../careerplus/media/static/react/'));
+// app.use('/media/static/',express.static('../careerplus/media/static/'));
+app.use(express.static('../careerplus/static_core/react/'));
 
 
 const isMobile = (userAgents) => {
