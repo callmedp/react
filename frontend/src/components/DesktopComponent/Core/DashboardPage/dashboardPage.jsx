@@ -44,7 +44,7 @@ const DashboardPage = (props) => {
            <Header />
             <main>
                 <div className="container">
-                    {/* <BreadCrumbs filterState={filterState} setfilterState={setfilterState} /> */}
+                    {/* <BreadCrumbs /> */}
                     
                     <div className="dashboard-warp">
                         <div className="dashboard-warp--tab">
