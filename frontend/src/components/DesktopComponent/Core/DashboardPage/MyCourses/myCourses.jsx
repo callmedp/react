@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ProgressBar } from 'react-bootstrap';
-import NoCourses from './noCourses';
 import './myCourses.scss';
 import '../../SkillPage/NeedHelp/needHelp.scss';
 import { startDashboardCoursesPageLoader, 
@@ -17,6 +16,10 @@ import AddCommentModal from '../Inbox/addCommentModal';
 import { fetchOiComment } from 'store/DashboardPage/AddSubmitComment/actions/index';
 import { fetchReviews } from 'store/DashboardPage/AddSubmitReview/actions/index';
 import Pagination from '../../../Common/Pagination/pagination';
+import EmptyInbox from '../Inbox/emptyInbox';
+import { startReviewLoader, stopReviewLoader } from 'store/Loader/actions/index';
+import { startCommentLoader, stopCommentLoader } from 'store/Loader/actions/index';
+import BreadCrumbs from '../Breadcrumb/Breadcrumb';
 
 const MyCourses = (props) => {
     
@@ -33,26 +36,33 @@ const MyCourses = (props) => {
     const toggleDetails = (id) => setIsOpen(isOpen === id ? false : id);
     const [openReview, setOpenReview] = useState(false);
     const oiComments = useSelector(store => store.getComment);
-    const { setProductReview } = useSelector(store => store.getReviews );
     const [currentPage, setCurrentPage] = useState(1);
-
+    const [filterState, setfilterState] = useState({ 'last_month_from': 18, 'select_type' : 'all' });
 
     useEffect(() => {
         handleEffects();
     }, [currentPage])
 
-    const toggleReviews = (id, prod) => {
-        if(openReview != id) dispatch(fetchReviews({ prod: prod, page: currentPage, type: 'GET'}));
+    const toggleReviews = async (id, prod) => {
+        if(openReview != id) {
+            dispatch(startReviewLoader());
+            await new Promise((resolve, reject) => dispatch(fetchReviews({ payload: { prod: prod, page: currentPage, isDesk: true, ...filterState, type: 'GET'}, resolve, reject })));
+            dispatch(stopReviewLoader());
+        }
         setOpenReview(openReview == id ? false : id);
     }
 
-    const addCommentDataFetch = (id) => {
+    const addCommentDataFetch = async (id) => {
         setAddOpen(addOpen == id ? false : id);
         let commVal = {
             oi_id: id,
             type: 'GET'
         }
-        if(addOpen != id) dispatch(fetchOiComment(commVal));
+        if(addOpen != id){
+            dispatch(startCommentLoader())
+            await new Promise((resolve, reject) => dispatch(fetchOiComment({payload: commVal, resolve, reject})));
+            dispatch(stopCommentLoader())
+        }
     };
 
     const handleEffects = async () => {
@@ -62,7 +72,7 @@ const MyCourses = (props) => {
             //So there is no need to fetch them again on the browser.
             if (!(window && window.config && window.config.isServerRendered)) {
                 dispatch(startDashboardCoursesPageLoader());
-                await new Promise((resolve, reject) => dispatch(fetchMyCourses({ page: currentPage, resolve, reject })))
+                await new Promise((resolve, reject) => dispatch(fetchMyCourses({ page: currentPage, isDesk: true, ...filterState, resolve, reject })))
                 dispatch(stopDashboardCoursesPageLoader());
             }
             else {
@@ -82,6 +92,8 @@ const MyCourses = (props) => {
     return (
         <div>
             { coursesLoader ? <Loader /> : ''}
+            { page.total === 0 ? <EmptyInbox/> : '' }
+            <BreadCrumbs filterState={filterState} setfilterState={setfilterState} />
 
             <div className="db-my-courses-detail">
 
@@ -196,7 +208,6 @@ const MyCourses = (props) => {
                                                     toggleReviews={toggleReviews} 
                                                     setOpenReview={setOpenReview}
                                                     openReview={openReview}
-                                                    setProductReview={setProductReview}
                                                     name="Course"/>
 
                                                 {/* rate service modal */}
