@@ -44,13 +44,14 @@ class DashboardMyorderApi(DashboardInfo, APIView):
                 }
         page = request.GET.get("page", 1)
         candidate_id = self.request.session.get('candidate_id', None)
-        last_month_from = request.GET.get("last_month_from",18 )
+        last_month_from = request.GET.get("last_month_from",'all' )
         select_type = request.GET.get('select_type','all')
         selected_type = types.get(select_type)
 
         #time filter
-        from_datetime = datetime.utcnow() - relativedelta(months=int(last_month_from))
-        modified_from_datetime = from_datetime.replace(day=1, hour=0, minute=0, second=0, microsecond=0) 
+        if last_month_from is not 'all':
+            from_datetime = datetime.utcnow() - relativedelta(months=int(last_month_from))
+            modified_from_datetime = from_datetime.replace(day=1, hour=0, minute=0, second=0, microsecond=0) 
 
         candidate_id='568a0b20cce9fb485393489b'
         # candidate_id='5c94a7b29cbeea2c1f27fda2'
@@ -58,7 +59,8 @@ class DashboardMyorderApi(DashboardInfo, APIView):
             orders = Order.objects.filter(
             status__in=[0, 1, 3],
             candidate_id=candidate_id)
-            orders = orders.filter(date_placed__gte=modified_from_datetime)
+            if if last_month_from is not 'all':
+                orders = orders.filter(date_placed__gte=modified_from_datetime)
             if selected_type is not 'all':
                 orders = orders.filter(status=selected_type)
 
@@ -104,13 +106,14 @@ class MyCoursesApi(DashboardInfo, APIView):
                 }
         page = request.GET.get("page", 1)
         candidate_id = self.request.session.get('candidate_id', None)
-        last_month_from = request.GET.get("last_month_from",18 )
+        last_month_from = request.GET.get("last_month_from",'all' )
         select_type = request.GET.get('select_type','all')
         selected_type = types.get(select_type)
 
         #time filter
-        from_datetime = datetime.utcnow() - relativedelta(months=int(last_month_from))
-        modified_from_datetime = from_datetime.replace(day=1, hour=0, minute=0, second=0, microsecond=0) 
+        if last_month_from is not 'all':
+            from_datetime = datetime.utcnow() - relativedelta(months=int(last_month_from))
+            modified_from_datetime = from_datetime.replace(day=1, hour=0, minute=0, second=0, microsecond=0) 
 
         candidate_id='568a0b20cce9fb485393489b'
         # candidate_id='5fed060d9cbeea482331ec4b'
@@ -129,7 +132,8 @@ class MyCoursesApi(DashboardInfo, APIView):
                 id__in=excl_order_list)
 
             courses = OrderItem.objects.filter(order__in=orders,product__type_flow=2).exclude(order__status__in=[0,5])
-            courses = courses.filter(order__date_placed__gte=modified_from_datetime)
+            if last_month_from is not 'all':
+                courses = courses.filter(order__date_placed__gte=modified_from_datetime)
             if selected_type is not 'all':
                 courses = courses.filter(order__status=selected_type)
             paginated_data = offset_paginator(page, courses)
@@ -155,13 +159,14 @@ class MyServicesApi(DashboardInfo, APIView):
                 }
         page = request.GET.get("page", 1)
         candidate_id = self.request.session.get('candidate_id', None)
-        last_month_from = request.GET.get("last_month_from",18 )
+        last_month_from = request.GET.get("last_month_from",'all' )
         select_type = request.GET.get('select_type','all')
         selected_type = types.get(select_type)
 
         #time filter
-        from_datetime = datetime.utcnow() - relativedelta(months=int(last_month_from))
-        modified_from_datetime = from_datetime.replace(day=1, hour=0, minute=0, second=0, microsecond=0) 
+        if last_month_from is not 'all':
+            from_datetime = datetime.utcnow() - relativedelta(months=int(last_month_from))
+            modified_from_datetime = from_datetime.replace(day=1, hour=0, minute=0, second=0, microsecond=0) 
 
         candidate_id='568a0b20cce9fb485393489b'
 
@@ -172,7 +177,8 @@ class MyServicesApi(DashboardInfo, APIView):
                 order__candidate_id=candidate_id)
             excl_order_list = excl_txns.all().values_list('order_id', flat=True)
             services = OrderItem.objects.filter(order__candidate_id=candidate_id, order__status__in=[1, 3],product__product_class__slug__in=['writing','service','other']).exclude(order__in=excl_order_list)
-            services = services.filter(order__date_placed__gte=modified_from_datetime)
+            if last_month_from is not 'all':
+                services = services.filter(order__date_placed__gte=modified_from_datetime)
             if selected_type is not 'all':
                 services = services.filter(order__status=selected_type)
             paginated_data = offset_paginator(page, services)
