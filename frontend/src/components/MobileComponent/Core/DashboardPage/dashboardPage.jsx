@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import './dashboardPage.scss';
@@ -43,7 +42,7 @@ const Dashboard = (props) => {
             history.push('/404/');
         }
         handleEffects();
-    }, [dashboardRoutes])
+    }, [dbContainer])
 
 
     return(

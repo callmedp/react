@@ -28,9 +28,9 @@ function* DashboardCoursesApi(action) {
 }
 
 function* submitBoardNeoUser(action) {
-    const { payload: { values, resolve, reject } } = action;
+    const { payload: { payload, resolve, reject } } = action;
     try {
-        const response = yield call(Api.boardNeoUser, values);
+        const response = yield call(Api.boardNeoUser, payload);
         return resolve(response)
     }
     catch (error) {

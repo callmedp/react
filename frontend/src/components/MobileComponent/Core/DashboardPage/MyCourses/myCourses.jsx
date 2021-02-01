@@ -7,9 +7,10 @@ import RateProductModal from '../InboxModals/rateProductModal'
 import Pagination from '../../../Common/Pagination/pagination';
 import Loader from '../../../Common/Loader/loader';
 import EmptyInbox from '../InboxModals/emptyInbox';
-import { fetchMyCourses } from 'store/DashboardPage/MyCourses/actions/index'
+import { fetchMyCourses, boardNeoUser } from 'store/DashboardPage/MyCourses/actions/index'
 import { startDashboardCoursesPageLoader, stopDashboardCoursesPageLoader } from 'store/Loader/actions/index';
 import { siteDomain } from 'utils/domains';
+import { showSwal } from 'utils/swal'
 
 const MyCourses = (props) => {
     const [showCommentModal, setShowCommentModal] = useState(false)
@@ -43,6 +44,21 @@ const MyCourses = (props) => {
                 }
             </ul>
         )
+    }
+
+    const boardOnNeo = async (event, oiId) => {
+        event.preventDefault();
+        try {
+            const response = await new Promise((resolve, reject) => { dispatch(boardNeoUser({ payload: { oi_pk: oiId }, resolve, reject }));
+            });
+            if (response["error"]) {
+                return showSwal('error', response['error'])
+            }
+            return showSwal('success', response.data)
+        } 
+        catch (e) {
+            return showSwal('error', e)
+        }
     }
 
     const handleEffects = async () => {
@@ -114,11 +130,22 @@ const MyCourses = (props) => {
                                     Hi, the recording for the session you missed is available now <Link to={"#"} className="font-weight-semi-bold">Check here</Link>
                                     </div> */}
                                             <div className="pl-15 mt-15 fs-12">
-                                                Status: <strong> {course?.new_oi_status ? course?.new_oi_status : 'Yet to Update'} </strong>
+                                                Status: <strong> 
+                                                {course?.new_oi_status ? course?.new_oi_status : 'Yet to Update'}
 
                                                 {
                                                     course?.options?.take_test && <a href={course?.options?.auto_login_url} target="_blank" className="font-weight-bold"> Take test</a>
                                                 }
+                                                {
+                                                    !course?.options?.BoardOnNeo && <a href='/' className="font-weight-bold" onClick={(event) => boardOnNeo(event, course?.id)}> :- Board on Neo</a>
+                                                }
+                                                {
+                                                    course?.options?.please_confirm_boarding_on_mail_sent_to_you && ':- Please Confirm Boarding on Mail Sent to you'
+                                                }
+                                                {
+                                                    course?.options?.updated_account_from_trial_to_regular && ':- Updated Account from Trial To Regular'
+                                                }
+                                                </strong>
                                                 {/* <Link to={"#"} className="d-block font-weight-bold">View Details</Link> */}
                                                 {
                                                     course?.datalist?.length > 0 ?
@@ -161,30 +188,33 @@ const MyCourses = (props) => {
                                             <Link className="m-db-comments font-weight-bold" to={'#'} onClick={(e) => {e.preventDefault();setShowCommentModal(true);setOiCommentId(course?.id)}}>
                                                 { course?.no_of_comments ? course?.no_of_comments > 1 ? `${course?.no_of_comments} Comments` : `${course?.no_of_comments} Comment` : 'Add Comment' }
                                             </Link>
-                                            <div className="d-flex" onClick={()=>{setShowRateModal(true);setOiReviewId({'prdId' :course?.product, 'orderId':course?.id})}}>
-                                                {
-                                                    course?.no_review ? 
-                                                        <>
-                                                            <span className="m-rating">
-                                                                {
-                                                                    course?.rating?.map((star, index) => starRatings(star, index))
-                                                                }
-                                                                <span className="ml-5">{course?.avg_rating?.toFixed(1)}/5</span>
-                                                            </span>
-                                                            <Link to={"#"} className="font-weight-bold ml-10">{ course?.no_review }</Link>
-                                                        </> :
-                                                        <>
-                                                            <span className="">Rate</span>
-                                                            <span className="m-rating">
-                                                                {
-                                                                    [1, 2, 3, 4, 5].map((item, index) => {
-                                                                        return <em className="micon-blankstar" key={index} />
-                                                                    })
-                                                                }
-                                                            </span>
-                                                        </>
-                                                }
-                                            </div>
+                                            {
+                                                (course?.oi_status === 4) &&
+                                                    <div className="d-flex" onClick={()=>{setShowRateModal(true);setOiReviewId({'prdId' :course?.product, 'orderId':course?.id})}}>
+                                                        {
+                                                            course?.no_review ? 
+                                                                <>
+                                                                    <span className="m-rating">
+                                                                        {
+                                                                            course?.rating?.map((star, index) => starRatings(star, index))
+                                                                        }
+                                                                        <span className="ml-5">{course?.avg_rating?.toFixed(1)}/5</span>
+                                                                    </span>
+                                                                    <Link to={"#"} className="font-weight-bold ml-10">{ course?.no_review }</Link>
+                                                                </> :
+                                                                <>
+                                                                    <span className="">Rate</span>
+                                                                    <span className="m-rating">
+                                                                        {
+                                                                            [1, 2, 3, 4, 5].map((item, index) => {
+                                                                                return <em className="micon-blankstar" key={index} />
+                                                                            })
+                                                                        }
+                                                                    </span>
+                                                                </>
+                                                        }
+                                                    </div>
+                                            }
                                         </div>
                                 </div>
                             )

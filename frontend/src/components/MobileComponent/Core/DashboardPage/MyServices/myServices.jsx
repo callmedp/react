@@ -1,7 +1,6 @@
 // React Core Import
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import Swal from 'sweetalert2';
 import { Link } from 'react-router-dom';
 
 // Local Import 
@@ -17,6 +16,7 @@ import Pagination from '../../../Common/Pagination/pagination';
 import EmptyInbox from '../InboxModals/emptyInbox';
 import { siteDomain } from 'utils/domains';
 import { startDashboardServicesPageLoader, stopDashboardServicesPageLoader } from 'store/Loader/actions/index';
+import { showSwal } from 'utils/swal'
 
 // API Import
 import { fetchMyServices, fetchPendingResume } from 'store/DashboardPage/MyServices/actions/index';
@@ -41,10 +41,7 @@ const MyServices = (props) => {
         }
         catch(e){
             dispatch(stopDashboardServicesPageLoader());
-            Swal.fire({
-                icon: 'error',
-                text: 'Sorry! we are unable to fecth your data.'
-            })
+            showSwal('error', 'Sorry! we are unable to fecth your data.')
         }
     };
 
