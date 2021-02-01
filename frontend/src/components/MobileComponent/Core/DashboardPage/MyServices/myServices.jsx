@@ -138,7 +138,7 @@ const MyServices = (props) => {
         <div>
             {/* Pending resume block Start*/}
             {
-                pending_resume_items?.length > 0 &&
+                myServicesList?.length > 0 && pending_resume_items?.length > 0 &&
                     <div>
                         <strong>
                             <center>To initiate your service <br />
@@ -182,8 +182,8 @@ const MyServices = (props) => {
                                             <p className="m-pipe-divides mb-5">
                                                 <span>Bought on: <strong>{service?.enroll_date}</strong> </span> 
                                                 {
-                                                    service?.duration && 
-                                                        <span>Duration: <strong>{service?.duration > 1 ? service?.duration + ' days' : service?.duration + ' day' } </strong> </span>
+                                                    service?.duration_in_days && 
+                                                        <span>Duration: <strong>{service?.duration_in_days > 1 ? service?.duration_in_days + ' days' : service?.duration_in_days + ' day' } </strong> </span>
                                                 }
                                             </p>
                                         </div>
@@ -205,6 +205,15 @@ const MyServices = (props) => {
                                         }
                                         {
                                             service?.options?.Download && <a href={service?.options?.download_url} target="_blank" className="font-weight-bold"> Download</a> 
+                                        }
+                                        {
+                                            service?.options?.Download_credential && <a href={service?.options?.download_url} target="_blank" className="font-weight-bold"> Download Credential</a> 
+                                        }
+                                        {
+                                            service?.options?.edit_your_profile && <a href={`${siteDomain}/dashboard/roundone/profile/`} target="_blank" className="font-weight-bold"> Edit Profile</a>
+                                        }
+                                        {
+                                            service?.options?.complete_profile && <a href={`${siteDomain}/dashboard/roundone/profile/`} target="_blank" className="font-weight-bold"> Complete Profile</a>
                                         }
                                         {
                                             (service?.oi_status === 24 || service?.oi_status === 46) &&

@@ -81,3 +81,9 @@ export const getDataStorage = (key) => {
 const getSession = (name) => {
    return  sessionStorage.getItem(name)
 }
+
+export const setInLocalStorage = (info, candidate_id) => {
+    let email = info.get('email', '')
+    localStorage.setItem('candidate_id', candidate_id)
+    localStorage.setItem('email', email)
+}

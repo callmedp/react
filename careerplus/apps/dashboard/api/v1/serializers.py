@@ -26,10 +26,13 @@ class OrderItemSerializer(serializers.ModelSerializer):
 
     def get_oi_status_value(self, instance):
         key = instance.oi_status
+        order_key = instance.order.status
         status = ''
-        if key in [161, 162, 163, 164]:
+        if key == 4:
+            status = 'Closed'
+        elif key in [161, 162, 163, 164]:
             status = instance.get_user_oi_status
-        elif key in [0, 1, 4, 5]:
+        elif order_key in [0, 1, 5]:
             status = OI_STATUS_DICT.get(key)
         return status
     
@@ -120,6 +123,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
                 'no_of_comments':instance.message_set.filter(is_internal=False).count(),
                 'service_pause_status':self.service_pause_status(instance),
                 'get_product_is_pause_service':self.get_product_is_pause_service(instance),
+                'duration_in_days': int(instance.product.get_duration_in_day()) if instance.product_id and instance.product.get_duration_in_day() else '',
             })
             course_detail = get_courses_detail(instance)
             data.update({
@@ -145,12 +149,17 @@ class OrderSerializer(serializers.ModelSerializer):
         data = super(OrderSerializer, self).to_representation(instance)
         data['date_placed'] = instance.date_placed.date().strftime('%d %b %Y') if instance.date_placed else None
         data['currency'] = instance.get_currency()
-        data['status'] = instance.get_status if instance.status in [0, 1, 3, 5] else ''
+        data['status'] = self.get_order_status(instance) if instance.status in [0, 1, 3, 5] else ''
         data.update({
             'canCancel': True if instance.status == 0 else False,
             'downloadInvoice': True if instance.status in [1, 3] else False
         })
         return data
+
+    def get_order_status(self, instance):
+        if instance.status == 1:
+            return 'Open'
+        return instance.get_status
 
 class ReviewSerializer(serializers.ModelSerializer):
     """

@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { cartCount, sessionAvailability, getCandidateInfo, fetchNavOffersAndTags } from 'store/Header/actions/index';
 import { initLoggedInZendesk } from 'utils/zendeskIniti';
 import { trackUser } from 'store/Tracking/actions/index.js';
-import { removeTrackingInfo } from 'utils/storage.js';
+import { removeTrackingInfo, setInLocalStorage } from 'utils/storage.js';
 import { MyGA } from 'utils/ga.tracking.js';
 
 const DefaultMenuNav = (props) =>{
@@ -31,6 +31,7 @@ const DefaultMenuNav = (props) =>{
                     setIsLoggedIn(true)
                     const candidateId = isSessionAvailable['candidate_id']
                     const candidateInformation = await new Promise((resolve, reject) => dispatch(getCandidateInfo({candidateId, resolve, reject })))
+                    setInLocalStorage(candidateInformation, candidateId)
                     initLoggedInZendesk(candidateInformation, true)
                     setCandidateInfo(candidateInformation)
                 }

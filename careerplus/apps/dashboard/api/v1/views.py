@@ -35,7 +35,7 @@ class DashboardMyorderApi(DashboardInfo, APIView):
     permission_classes = (permissions.AllowAny,)
     authentication_classes = ()
 
-def get(self, request, *args, **kwargs):
+    def get(self, request, *args, **kwargs):
         candidate_id = self.request.session.get('candidate_id', None)
         order_list=[]
         candidate_id='568a0b20cce9fb485393489b'
