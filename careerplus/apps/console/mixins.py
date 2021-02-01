@@ -307,7 +307,7 @@ class ActionUserMixin(object):
 
                 elif resume_id:
                     candidate_id = order.candidate_id
-                    
+
                     response = ShineCandidateDetail().get_shine_candidate_resume(
                         candidate_id=candidate_id,
                         resume_id=resume_id
@@ -336,9 +336,10 @@ class ActionUserMixin(object):
                                 dest.write(chunk)
                             dest.close()
                         else:
-                            GCPPrivateMediaStorage().save(
-                                settings.RESUME_DIR + full_path + file_name, shine_resume
-                            )
+                            try:
+                                GCPPrivateMediaStorage().save(settings.RESUME_DIR + full_path + file_name, shine_resume)
+                            except Exception as e:
+                                logging.getLogger('error_log').error("%s-%s" % ('resume_upload', str(e)))
 
                         shine_resume.close()
                         resume_path = full_path + file_name
