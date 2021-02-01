@@ -33,7 +33,7 @@ const MyCourses = (props) => {
     const dispatch = useDispatch();
     const { history } = props;
     const { coursesLoader } = useSelector(store => store.loader);
-    const { myCourses, page } = useSelector(store => store.dashboardCourses);
+    const { data, page } = useSelector(store => store.dashboardCourses);
     const [isOpen, setIsOpen] = useState(false);
     const toggleDetails = (id) => setIsOpen(isOpen === id ? false : id);
     const [openReview, setOpenReview] = useState(false);
@@ -101,7 +101,7 @@ const MyCourses = (props) => {
             <div className="db-my-courses-detail">
 
                 {
-                    myCourses?.map((course, index) => {
+                    data?.map((course, index) => {
                         return (
                             <div className="db-white-box w-100" key={index}>
                                 <div className="d-flex">

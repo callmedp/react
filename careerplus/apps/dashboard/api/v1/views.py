@@ -36,26 +36,35 @@ class DashboardMyorderApi(DashboardInfo, APIView):
     authentication_classes = ()
 
     def get(self, request, *args, **kwargs):
-        candidate_id = self.request.session.get('candidate_id', None)
-        order_list=[]
-        # candidate_id='568a0b20cce9fb485393489b'
+        data = []
+        types = {"in_process":2,
+                'closed':3,
+                'all':'all'
+                }
         page = request.GET.get("page", 1)
-        page_info = {}
+        candidate_id = self.request.session.get('candidate_id', None)
+        last_month_from = request.GET.get("last_month_from",'all' )
+        select_type = request.GET.get('select_type','all')
+        selected_type = types.get(select_type)
 
+        #time filter
+        if not last_month_from=='all':
+            from_datetime = datetime.utcnow() - relativedelta(months=int(last_month_from))
+            modified_from_datetime = from_datetime.replace(day=1, hour=0, minute=0, second=0, microsecond=0) 
+
+        # candidate_id='568a0b20cce9fb485393489b'
+        # candidate_id='5c94a7b29cbeea2c1f27fda2'
         if candidate_id:         
             orders = Order.objects.filter(
             status__in=[0, 1, 3],
             candidate_id=candidate_id)
-            # excl_txns = PaymentTxn.objects.filter(
-            #     status__in=[0, 2, 3, 4, 5],
-            #     payment_mode__in=[6, 7],
-            #     order__candidate_id=candidate_id)
-            # # excl_txns = PaymentTxn.objects.filter(status=0, ).exclude(payment_mode__in=[1, 4])
-            # excl_order_list = excl_txns.all().values_list('order_id', flat=True)
-            # orders = orders.exclude(
-            #     id__in=excl_order_list).order_by('-date_placed')
+            if not last_month_from=='all':
+                orders = orders.filter(date_placed__gte=modified_from_datetime)
+            if selected_type is not 'all':
+                orders = orders.filter(status=selected_type)
+
             order_list = []
-            paginated_data = offset_paginator(page, orders)
+            paginated_data = offset_paginator(page, orders,size=7)
             for obj in paginated_data["data"]:
                 orderitems = OrderItem.objects.select_related(
                     'product').filter(no_process=False, order=obj)
@@ -127,7 +136,7 @@ class MyCoursesApi(DashboardInfo, APIView):
                 courses = courses.filter(order__date_placed__gte=modified_from_datetime)
             if selected_type is not 'all':
                 courses = courses.filter(order__status=selected_type)
-            paginated_data = offset_paginator(page, courses)
+            paginated_data = offset_paginator(page, courses,size=7)
             data = OrderItemSerializer(paginated_data["data"],many=True,context= {"get_details": True}).data
             #pagination info
             page_info ={
@@ -136,7 +145,7 @@ class MyCoursesApi(DashboardInfo, APIView):
             'has_prev': True if paginated_data['current_page'] >1 else False,
             'has_next':True if (paginated_data['total_pages']-paginated_data['current_page'])>0 else False
             }
-        return APIResponse({'myCourses':data,'page':page_info},message='Courses data Success',status=status.HTTP_200_OK)
+        return APIResponse(data={'data':data,'page':page_info},message='Courses data Success',status=status.HTTP_200_OK)
 
 class MyServicesApi(DashboardInfo, APIView):
     permission_classes = (permissions.AllowAny,)
@@ -156,6 +165,7 @@ class MyServicesApi(DashboardInfo, APIView):
         page_info = {}
 
         #time filter
+        print(last_month_from)
         if not last_month_from=='all':
             from_datetime = datetime.utcnow() - relativedelta(months=int(last_month_from))
             modified_from_datetime = from_datetime.replace(day=1, hour=0, minute=0, second=0, microsecond=0) 
@@ -173,7 +183,7 @@ class MyServicesApi(DashboardInfo, APIView):
                 services = services.filter(order__date_placed__gte=modified_from_datetime)
             if selected_type is not 'all':
                 services = services.filter(order__status=selected_type)
-            paginated_data = offset_paginator(page, services)
+            paginated_data = offset_paginator(page, services,size=7)
             data = OrderItemSerializer(paginated_data["data"],many=True,context= {"get_details": True}).data
 
             #pagination info
@@ -251,6 +261,7 @@ class DashboardReviewApi(APIView):
     serializer_classes = None
 
     def get(self,request):
+        page = request.GET.get('page', 1)
         product_id = request.GET.get('product_id',None)
         try:
             product = Product.objects.get(id=product_id)
@@ -276,10 +287,15 @@ class DashboardReviewApi(APIView):
         review_list = Review.objects.filter(
             content_type__id=product_type.id,
             object_id__in=prd_list, status=1)
-
-        data = ReviewSerializer(review_list,many=True).data
-
-        return APIResponse(data={'reviewList':data},message='Review data Success',status=status.HTTP_200_OK)
+        paginated_data = offset_paginator(page, review_list)
+        data = ReviewSerializer(paginated_data['data'],many=True).data
+        page_info ={
+        'current_page':paginated_data['current_page'],
+        'total':paginated_data['total_pages'],
+        'has_prev': True if paginated_data['current_page'] >1 else False,
+        'has_next':True if (paginated_data['total_pages']-paginated_data['current_page'])>0 else False
+        }
+        return APIResponse(data={'data':data,'page':page_info},message='Review data Success',status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
         email_dict = {}
@@ -329,8 +345,7 @@ class DashboardReviewApi(APIView):
                         })
 
                         try:
-                            send_email_task.delay(to_emails, mail_type, email_dict, status=42, oi=oi_pk)
-                            # SendMail().send(to_emails, mail_type, email_dict)
+                            SendMail().send(to_emails, mail_type, email_dict)
                         except Exception as e:
                             logging.getLogger('error_log').error(
                                 "%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
