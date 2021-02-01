@@ -142,6 +142,9 @@ class UserProfile(models.Model):
     profile_photo = models.ImageField(
         _('Profile Photo'), upload_to=get_upload_path_user_profile_photo,
         blank=True, null=True)
+    valid_profile_photo = models.BooleanField(
+        _('Is this a valid profile photo'),
+        default=False)
     description = models.TextField(blank=True, null=True)
     writer_type = models.PositiveIntegerField(
         choices=WRITER_TYPE,

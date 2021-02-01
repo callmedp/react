@@ -16,6 +16,7 @@ function* fetchTrendingCnA(action) {
 
     }
     catch (e) {
+        console.error("Exception occured at fetchTrendingCnA Api", e);
     }
 }
 

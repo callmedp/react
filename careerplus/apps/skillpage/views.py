@@ -40,7 +40,7 @@ from shop.choices import STUDY_MODE
 
 class SkillPageView(DetailView, SkillPageMixin):
     model = Category
-    template_name = "skillPageIndex.html"
+    template_name = "skillpage/skill-new.html"
     no_of_products = 5
 
     def remove_tracking(self):

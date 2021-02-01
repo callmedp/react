@@ -99,7 +99,7 @@ const categoryList = [
     },
     {
         name: 'Operation Management',
-        url: `${siteDomain}/courses/operation-management/19/`, 
+        url: `${siteDomain}/courses/operation-management/19/`,
         id:'operation_management',
         sideNavType: 'allCourses',
         children:[
@@ -113,7 +113,7 @@ const categoryList = [
     },
     { 
         name: 'Banking & Finance', 
-        url: `${siteDomain}/courses/banking-and-finance/20/`, 
+        url: `${siteDomain}/courses/banking-and-finance/20/`,
         id: 'banking_finance',
         sideNavType: 'allCourses',
         children: [
@@ -194,7 +194,7 @@ const categoryList = [
     },
     { 
         name: 'Law', 
-        url: `${siteDomain}/courses/law/23/`, 
+        url: `${siteDomain}/courses/law/23/`,
         id: 'law',
         sideNavType: 'allCourses',
         children: [
@@ -205,7 +205,7 @@ const categoryList = [
     },
     { 
         name: 'Course Catalogue', 
-        url: `${siteDomain}/online-courses.html`, 
+        url: `/online-courses.html`, 
         id: 'course_catalogue',
         sideNavType: 'allCourses',
         children: []
@@ -223,10 +223,26 @@ const navSkillList = [
     { name: 'Cloud Computing', url: '/courses/it-information-technology/cloud-computing/82/', id:'cloud_computing'}
 ]
 
+const TrendingCategoryList = [
+    { 
+        name: 'Sales And Marketing', 
+        url: `${siteDomain}/courses/sales-and-marketing/17/`,
+    },
+    {
+        name: 'Information Technology', 
+        url: `${siteDomain}/courses/it-information-technology/22/`, 
+    },
+    { 
+        name: 'Banking & Finance', 
+        url: `${siteDomain}/courses/banking-and-finance/20/`,
+    },
+]
+
 
 export {
     freeResourcesList,
     jobAssistanceList,
     categoryList,
-    navSkillList
+    navSkillList,
+    TrendingCategoryList,
 }

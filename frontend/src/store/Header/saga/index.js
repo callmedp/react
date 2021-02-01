@@ -26,6 +26,7 @@ function* cartCount(action) {
 
     }
     catch (e) {
+        console.error("Exception occured at cartCount Api", e);
     }
 }
 
@@ -41,6 +42,7 @@ function* candidateInfo(action) {
         resolve({ candidateId: candidate_id || '', name: first_name || '', email: email || '' , mobile: cell_phone || ''});
     }
     catch (e) {
+        console.error("Exception occured at candidateInfo Api", e);
         return reject(e);
     }
 }
@@ -60,7 +62,7 @@ function* navOffersAndTags(action) {
         })
 
     } catch (e) {
-        console.error("Exception occured ",e)
+        console.error("Exception occured at navOffersAndTags ",e)
     }
 }
 
