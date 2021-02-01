@@ -1,15 +1,17 @@
 import React from 'react';
 import { Collapse } from 'react-bootstrap';
 import { useForm } from "react-hook-form";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { fetchOiComment } from 'store/DashboardPage/AddSubmitComment/actions';
 import { TextArea} from 'formHandler/desktopFormHandler/formFields';
 import CoursesServicesForm from 'formHandler/desktopFormHandler/formData/coursesServices';
+import Loader from '../../../Common/Loader/loader';
 
 const AddCommentModal = (props) => {
     const { addOpen, id, data, addCommentDataFetch }  = props;
     const dispatch = useDispatch();
     const { register, handleSubmit, errors, reset } = useForm();
+    const { commentLoader } = useSelector(store => store.loader);
 
     const submitComment = (values) => {
         const new_values = {
@@ -23,6 +25,7 @@ const AddCommentModal = (props) => {
     };
 
     return (
+        <> { commentLoader && <Loader />}
         <Collapse in={addOpen == id}>
             <div className="position-relative" id={`openComment`+id}>
                 <div className="db-add-comments lightblue-bg border-bottom-gray">
@@ -52,6 +55,7 @@ const AddCommentModal = (props) => {
                 </form>
             </div>
         </Collapse>
+        </>
     )
 }
 

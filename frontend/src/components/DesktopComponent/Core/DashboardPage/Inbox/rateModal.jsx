@@ -59,7 +59,7 @@ const RateModal =(props) => {
 
             Toast.fire({
                 type: response?.error ? 'error' : 'success',
-                title: response.display_message
+                title: response.display_message ? response.display_message : response.error
             });
         }
     };

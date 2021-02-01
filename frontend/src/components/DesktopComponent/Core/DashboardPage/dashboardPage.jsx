@@ -1,11 +1,11 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import './dashboardPage.scss';
 import Header from '../../Common/Header/header';
 import Footer from '../../Common/Footer/footer';
 import PopularCourses from './PopularCourses/PopularCourses';
 import DashboardNavigation from './DashboardNavigation/DashboardTabs';
 import HaveQuery from './HaveQuery/HaveQuery';
-import BreadCrumbs from './Breadcrumb/Breadcrumb';
+// import BreadCrumbs from './Breadcrumb/Breadcrumb';
 import MyCourses from './MyCourses/myCourses';
 import MyServices from './MyServices/myServices';
 import MyOrders from './MyOrders/myOrders';
@@ -36,7 +36,7 @@ const DashboardPage = (props) => {
            <Header />
             <main>
                 <div className="container">
-                    <BreadCrumbs />
+                    {/* <BreadCrumbs filterState={filterState} setfilterState={setfilterState} /> */}
                     
                     <div className="dashboard-warp">
                         <div className="dashboard-warp--tab">

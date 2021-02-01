@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-// import { ProgressBar } from 'react-bootstrap';
-// import { Collapse } from 'react-bootstrap';
-// import { Modal } from 'react-bootstrap';
 import '../MyCourses/myCourses.scss';
 import './myServices.scss';
 import { startDashboardServicesPageLoader, stopDashboardServicesPageLoader } from 'store/Loader/actions/index';
@@ -11,10 +8,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchMyServices, fetchPendingResume } from 'store/DashboardPage/MyServices/actions';
 import { fetchOiComment } from 'store/DashboardPage/AddSubmitComment/actions/index';
 import { fetchReviews } from 'store/DashboardPage/AddSubmitReview/actions/index';
-
-
-// import Swal from 'sweetalert2';
-// import {getCandidateId} from 'utils/storage';
 import UploadResumeModal from '../Inbox/uploadResumeModal';
 import ViewDetailModal from '../Inbox/viewDetailModal';
 import RateModal from '../Inbox/rateModal';
@@ -23,6 +16,10 @@ import AddCommentModal from '../Inbox/addCommentModal';
 import Pagination from '../../../Common/Pagination/pagination';
 import AcceptModal from '../Inbox/acceptModal';
 import RejectModal from '../Inbox/rejectModal';
+import EmptyInbox from '../Inbox/emptyInbox';
+import { startCommentLoader, stopCommentLoader } from 'store/Loader/actions/index';
+import { startReviewLoader, stopReviewLoader } from 'store/Loader/actions/index';
+import BreadCrumbs from '../Breadcrumb/Breadcrumb';
 
 const MyServices = (props) => {
     const dispatch = useDispatch();
@@ -30,12 +27,12 @@ const MyServices = (props) => {
     const { serviceLoader } = useSelector(store => store.loader);
     
     // page no. set here
-    const [currentPage, setCurrentPage] = useState(4);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [filterState, setfilterState] = useState({ 'last_month_from': 18, 'select_type' : 'all' });
     
     // main api result state here
     const results = useSelector(store => store.dashboardServices);
     const oiComments = useSelector(store => store.getComment);
-    const setProductReview = useSelector(store => store.getReviews.data);
     const pending_resume_items = useSelector(store => store.dashboardPendingResume.data);
 
     // main service api hit
@@ -46,7 +43,7 @@ const MyServices = (props) => {
             //So there is no need to fetch them again on the browser.
             if (!(window && window.config && window.config.isServerRendered)) {
                 dispatch(startDashboardServicesPageLoader());
-                await new Promise((resolve, reject) => dispatch(fetchMyServices({ page: currentPage, resolve, reject })))
+                await new Promise((resolve, reject) => dispatch(fetchMyServices({ page: currentPage, isDesk: true, ...filterState, resolve, reject })))
                 dispatch(stopDashboardServicesPageLoader());
             }
             else {
@@ -66,8 +63,12 @@ const MyServices = (props) => {
     const [show, setShow] = useState(false);
     
     // if reviews exists then show
-    const toggleReviews = (id, prod) => {
-        if(openReview != id) dispatch(fetchReviews({ payload: {prod: prod}}));
+    const toggleReviews = async (id, prod) => {
+        if(openReview != id) {
+            dispatch(startReviewLoader());
+            await new Promise((resolve, reject) => dispatch(fetchReviews({ payload: { prod: prod, page: currentPage}, resolve, reject })));
+            dispatch(stopReviewLoader());
+        }
         setOpenReview(openReview == id ? false : id);
     }
 
@@ -86,13 +87,17 @@ const MyServices = (props) => {
     const handleShow = () => setShow(true);
     
     // hit api when clicked on add comment
-    const addCommentDataFetch = (id) => {
+    const addCommentDataFetch = async (id) => {
         setaddOpen(addOpen == id ? false : id);
         let commVal = {
             oi_id: id,
             type: 'GET'
         }
-        if(addOpen != id) dispatch(fetchOiComment(commVal));
+        if(addOpen != id){
+            dispatch(startCommentLoader());
+            await new Promise((resolve, reject) => dispatch(fetchOiComment({payload: commVal, resolve, reject})));
+            dispatch(stopCommentLoader());
+        }
     };
 
     // accept/reject
@@ -103,15 +108,19 @@ const MyServices = (props) => {
 
     useEffect(() => {
         handleEffects();
-        dispatch(fetchPendingResume())
-    }, [currentPage])
+        dispatch(fetchPendingResume());
+    }, [currentPage, filterState])
 
     return(
+        <React.Fragment>
+        <BreadCrumbs filterState={filterState} setfilterState={setfilterState} />
+
         <div>
             {serviceLoader ? <Loader /> : ''}
+            { results?.page?.total === 0 ? <EmptyInbox/> : '' }
             <div className="db-my-courses-detail">
                 {
-                    pending_resume_items?.length > 0 ? 
+                    results?.data?.length > 0 && pending_resume_items?.length > 0 ? 
                         <div className="alert alert-primary py-4 px-5 fs-16 w-100 text-center mb-0" role="alert">To initiate your services.<span className="resume-upload--btn">&nbsp;<strong onClick={uploadHandelShow} className="cursor">Upload Resume</strong></span></div>
                     : null
                 }
@@ -221,7 +230,6 @@ const MyServices = (props) => {
                                                         toggleReviews={toggleReviews} 
                                                         setOpenReview={setOpenReview}
                                                         openReview={openReview}
-                                                        setProductReview={setProductReview}
                                                         name="Service"/>
 
                                                     {/* rate service modal */}
@@ -253,6 +261,7 @@ const MyServices = (props) => {
                 {results?.page?.total > 1 ? <Pagination totalPage={results?.page?.total} currentPage={currentPage} setCurrentPage={setCurrentPage}/> : ''}
             </div>
         </div>
+        </React.Fragment>
     )
 }
    
