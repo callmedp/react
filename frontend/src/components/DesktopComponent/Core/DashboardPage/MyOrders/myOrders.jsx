@@ -106,7 +106,7 @@ const MyOrders = (props) => {
                             <div className="order-detail__content">
                                 <div className="order-detail__content--btnWrap">
                                     <Link to={'#orderDetails' + index} className="arrow-icon" onClick={() => openOrderDetail(index)}>Order Details</Link>
-                                    {item.order.downloadInvoice ? <a target="_blank" onClick={() => downloadInvoice(item?.order?.id)} className="download-icon">Download Invoice</a> :
+                                    {item.order.downloadInvoice ? <a target="_blank" href={downloadInvoice(item?.order?.id)} className="download-icon">Download Invoice</a> :
                                     item.order.canCancel ? <Link to={"#"} onClick={(e) => {e.preventDefault();setShowCancelModal(true);setCancelOrderId(item?.order?.id)}}>Cancel Order</Link> : null}
                                 </div>
                             </div>
@@ -143,6 +143,8 @@ const MyOrders = (props) => {
             :
             <h6 className="text-center p-10">Start with your first order and earn loyalty points</h6>
             }
+
+            {/* cancel order confirmation modal */}
             { 
                 showCancelModal &&  
                 <Modal show={showCancelModal} onHide={setShowCancelModal}>

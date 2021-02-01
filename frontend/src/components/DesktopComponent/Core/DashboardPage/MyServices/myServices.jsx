@@ -178,7 +178,7 @@ const MyServices = (props) => {
                                                             : null}
 
                                                             {/* take test when type flow is 16 */}
-                                                            {item?.options?.take_test ? <a className="ml-2" target="_blank" href={ item?.autologin_url}>Take Test</a>
+                                                            {item?.options?.take_test ? <a className="ml-2" target="_blank" href={ item?.options?.auto_login_url}>Take Test</a>
                                                             : null}
 
                                                             {item.product_type_flow === 17 && item?.options?.edit_template ? 

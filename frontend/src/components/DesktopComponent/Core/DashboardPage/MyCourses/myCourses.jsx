@@ -169,10 +169,10 @@ const MyCourses = (props) => {
                                                                     : null}
                                                             </React.Fragment>
                                                         : null}
+
+                                                        {/* take test when type flow is 16 */}
+                                                        {course?.options?.take_test ? <a className="ml-2" target="_blank" href={ course?.options?.auto_login_url}>Take Test</a> : null}
                                                     </div>
-
-                                                    
-
 
                                                     <Link
                                                         className="font-weight-bold"
@@ -198,17 +198,17 @@ const MyCourses = (props) => {
                                                 <div className="share">
                                                     <i className="icon-share"></i>
                                                     <div className="share__box arrow-box top">
-                                                        <Link to={"#"} className="facebook-icon"></Link>
-                                                        <Link to={"#"} className="linkedin-icon"></Link>
-                                                        <Link to={"#"} className="twitter-iocn"></Link>
-                                                        <Link to={"#"} className="whatsup-icon"></Link>
+                                                        <Link target="_blank" to={{ pathname: `https://www.facebook.com/sharer/sharer.php?u=${siteDomain}${course?.productUrl}`}} className="facebook-icon"></Link>
+                                                        <Link target="_blank" to={{ pathname: `https://www.linkedin.com/shareArticle?mini=true&url=${siteDomain}${course?.productUrl}&title=${course?.title}&summary=${course?.name}&source=`}} className="linkedin-icon"></Link>
+                                                        <Link target="_blank" to={{ pathname: `https://twitter.com/intent/tweet?url=${siteDomain}${course?.productUrl}/&text=${course?.name}`}} className="twitter-iocn"></Link>
+                                                        <Link target="_blank" to={{ pathname: `https://api.whatsapp.com/send?text=Hi! Check this useful product on Shine. ${siteDomain}${course?.productUrl}`}} data-action="share/whatsapp/share" className="whatsup-icon"></Link>
                                                     </div>
                                                 </div>
 
                                                 <div className="day-remaning mb-20">
                                                     {[...(course.remaining_days + '')].map((day, idx) => <span key={idx} className="day-remaning--box">{day}</span>)}
 
-                                                    <span className="ml-2 day-remaning--text">Days <br />remaning</span>
+                                                    <span className="ml-2 day-remaning--text">{course.remaining_days > 1 ? 'Days' : 'Day'} <br />remaning</span>
                                                 </div>
 
                                                 <div className="db-status mt-20">
