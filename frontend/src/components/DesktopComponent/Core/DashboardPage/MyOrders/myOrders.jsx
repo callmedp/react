@@ -4,7 +4,10 @@ import './myOrders.scss';
 import { startDashboardOrderPageLoader, stopDashboardOrderPageLoader } from 'store/Loader/actions/index';
 import Loader from '../../../Common/Loader/loader';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchMyOrders } from 'store/DashboardPage/MyOrder/actions';
+import { fetchMyOrders, cancelOrder } from 'store/DashboardPage/MyOrder/actions';
+import { downloadInvoice } from 'utils/dashboardUtils/myOrderUtils';
+import {Toast} from '../../../Common/Toast/toast';
+import { Modal } from 'react-bootstrap';
 
 const MyOrders = (props) => {
     const ordPageNo = '1';
@@ -12,6 +15,9 @@ const MyOrders = (props) => {
     const { history } = props;
     const { orderLoader } = useSelector(store => store.loader);
     const results = useSelector(store => store.dashboardOrders);
+    const [ selectedOrderIndex, toggleQuestion ] = useState(0);
+    const [showCancelModal, setShowCancelModal] = useState(false)
+    const [cancelOrderId, setCancelOrderId] = useState('')
 
     const handleEffects = async () => {
         try {
@@ -39,10 +45,36 @@ const MyOrders = (props) => {
         handleEffects();
     }, [ordPageNo])
 
-    const [ selectedOrderIndex, toggleQuestion ] = useState(0);
   
     function openOrderDetail(index) {
         toggleQuestion(selectedOrderIndex === index ? -1 : index);
+    }
+
+    const handleCancellation = async (orderId) => {
+        setShowCancelModal(false)
+        dispatch(startDashboardOrderPageLoader());
+        var result = await new Promise((resolve, reject) => dispatch( 
+            cancelOrder({
+                payload: {
+                    order_id: orderId,
+                }, resolve, reject
+            })
+        ));
+        if (result.cancelled) {
+            Toast.fire({
+                title: result.data,
+                icon: 'success'
+            })
+            handleEffects();
+            dispatch(stopDashboardOrderPageLoader());
+        }
+        else {
+            Toast.fire({
+                title: result.error,
+                icon: 'error'
+            })
+            dispatch(stopDashboardOrderPageLoader());
+        }
     }
 
     return(
@@ -74,7 +106,8 @@ const MyOrders = (props) => {
                             <div className="order-detail__content">
                                 <div className="order-detail__content--btnWrap">
                                     <Link to={'#orderDetails' + index} className="arrow-icon" onClick={() => openOrderDetail(index)}>Order Details</Link>
-                                    <Link to={"#"} className="download-icon">{item.order.downloadInvoice ? 'Download Invoice' : item.order.canCancel ? 'Cancel Order' : ""}</Link>
+                                    {item.order.downloadInvoice ? <a target="_blank" onClick={() => downloadInvoice(item?.order?.id)} className="download-icon">Download Invoice</a> :
+                                    item.order.canCancel ? <Link to={"#"} onClick={(e) => {e.preventDefault();setShowCancelModal(true);setCancelOrderId(item?.order?.id)}}>Cancel Order</Link> : null}
                                 </div>
                             </div>
 
@@ -109,6 +142,22 @@ const MyOrders = (props) => {
                 })
             :
             <h6 className="text-center p-10">Start with your first order and earn loyalty points</h6>
+            }
+            { 
+                showCancelModal &&  
+                <Modal show={showCancelModal} onHide={setShowCancelModal}>
+                    <Modal.Header closeButton></Modal.Header>
+                    <Modal.Body></Modal.Body>
+                    <div className="text-center pl-30 pr-30 pb-30">
+                        <h2>Cancel Order Confirmation </h2>
+                        <strong>Do you wish to cancel the order?</strong>
+                        <br />
+                        <span>Note: Any credit points reedemed against this order will be refunded back to your wallet shortly. These points will be valid for next 10 days.</span>
+                        <br /> <br/>
+                        <button className="btn btn-blue" onClick={() => handleCancellation(cancelOrderId)}>Yes</button>&emsp;
+                        <button className="btn btn-blue" onClick={() => setShowCancelModal(false)}>No</button>
+                    </div>
+                </Modal>
             }
         </div>
     )
