@@ -21,10 +21,11 @@ import EmptyInbox from '../Inbox/emptyInbox';
 import { startReviewLoader, stopReviewLoader } from 'store/Loader/actions/index';
 import { startCommentLoader, stopCommentLoader } from 'store/Loader/actions/index';
 import BreadCrumbs from '../Breadcrumb/Breadcrumb';
+import {Toast} from '../../../Common/Toast/toast';
+import {boardNeoUser} from 'store/DashboardPage/MyCourses/actions/index';
 
 
 const MyCourses = (props) => {
-    
     const [addOpen, setAddOpen] = useState(false);
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -43,7 +44,7 @@ const MyCourses = (props) => {
 
     useEffect(() => {
         handleEffects();
-    }, [currentPage])
+    }, [currentPage, filterState])
 
     const toggleReviews = async (id, prod) => {
         if(openReview != id) {
@@ -66,6 +67,32 @@ const MyCourses = (props) => {
             dispatch(stopCommentLoader())
         }
     };
+
+    // for neo products
+    const NeoBoardUser = async (oi) => {
+        try {
+            const response = await new Promise((resolve, reject) => {
+            dispatch(
+                boardNeoUser({
+                payload: {
+                    oi_pk: oi,
+                },
+                resolve,
+                reject,
+                })
+            );
+            });
+            if (response["error"]) {
+            return Toast("error", response["error"]);
+            }
+            Toast("success", response.data);
+            // dispatch(fetchInboxOiDetails({ cid: cid, id: oi }));
+        
+            return;
+        } catch (e) {
+            return Toast("error",e);
+        }
+        };
 
     const handleEffects = async () => {
         try {
@@ -134,6 +161,20 @@ const MyCourses = (props) => {
                                                     <div className="db-my-courses-detail__leftpan--status mb-2">
                                                         { course.status || course.new_oi_status ? 'Status':''}
                                                         <strong className="ml-1">{course.status ?? course.new_oi_status}</strong>
+                                                        &emsp;
+                                                        {course.product_type_flow === 2 || course.product_type_flow === 14 ?
+                                                            <React.Fragment>
+                                                                {(course?.vendor === 'neo' && course?.oi_status === 5) ? 
+                                                                    course?.BoardOnNeo ? <a className="ml-2" onClick={NeoBoardUser(course.id)}>Board On Neo</a> : 
+                                                                    (course?.neo_mail_sent) ? <strong className="ml-1">Please Confirm Boarding on Mail Sent to you</strong> :
+                                                                    (course?.updated_from_trial_to_regular) ? <strong className="ml-1">Updated Account from Trial To Regular</strong> 
+                                                                    : null
+                                                                    : null}
+                                                            </React.Fragment>
+                                                        : null}
+
+                                                        {/* take test when type flow is 16 */}
+                                                        {course?.options?.take_test ? <a className="ml-2" target="_blank" href={ course?.options?.auto_login_url}>Take Test</a> : null}
                                                     </div>
 
                                                     <Link
@@ -160,17 +201,17 @@ const MyCourses = (props) => {
                                                 <div className="share">
                                                     <i className="icon-share"></i>
                                                     <div className="share__box arrow-box top">
-                                                        <Link to={"#"} className="facebook-icon"></Link>
-                                                        <Link to={"#"} className="linkedin-icon"></Link>
-                                                        <Link to={"#"} className="twitter-iocn"></Link>
-                                                        <Link to={"#"} className="whatsup-icon"></Link>
+                                                        <Link target="_blank" to={{ pathname: `https://www.facebook.com/sharer/sharer.php?u=${siteDomain}${course?.productUrl}`}} className="facebook-icon"></Link>
+                                                        <Link target="_blank" to={{ pathname: `https://www.linkedin.com/shareArticle?mini=true&url=${siteDomain}${course?.productUrl}&title=${course?.title}&summary=${course?.name}&source=`}} className="linkedin-icon"></Link>
+                                                        <Link target="_blank" to={{ pathname: `https://twitter.com/intent/tweet?url=${siteDomain}${course?.productUrl}/&text=${course?.name}`}} className="twitter-iocn"></Link>
+                                                        <Link target="_blank" to={{ pathname: `https://api.whatsapp.com/send?text=Hi! Check this useful product on Shine. ${siteDomain}${course?.productUrl}`}} data-action="share/whatsapp/share" className="whatsup-icon"></Link>
                                                     </div>
                                                 </div>
 
                                                 <div className="day-remaning mb-20">
                                                     {[...(course.remaining_days + '')].map((day, idx) => <span key={idx} className="day-remaning--box">{day}</span>)}
 
-                                                    <span className="ml-2 day-remaning--text">Days <br />remaning</span>
+                                                    <span className="ml-2 day-remaning--text">{course.remaining_days > 1 ? 'Days' : 'Day'} <br />remaning</span>
                                                 </div>
 
                                                 <div className="db-status mt-20">

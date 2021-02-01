@@ -21,9 +21,8 @@ import { startCommentLoader, stopCommentLoader } from 'store/Loader/actions/inde
 import { startReviewLoader, stopReviewLoader } from 'store/Loader/actions/index';
 import BreadCrumbs from '../Breadcrumb/Breadcrumb';
 import { pausePlayResume } from 'store/DashboardPage/MyServices/actions/index';
-import {siteDomain} from '../../../../../utils/domains';
-import {Toast} from '../../../Common/Toast/toast';
-import {boardNeoUser} from 'store/DashboardPage/MyCourses/actions/index';
+import {siteDomain, resumeShineSiteDomain} from '../../../../../utils/domains';
+
 
 const MyServices = (props) => {
     const dispatch = useDispatch();
@@ -119,32 +118,6 @@ const MyServices = (props) => {
         dispatch(pausePlayResume(pausePlayValues))
     }
 
-    // for neo products
-    const NeoBoardUser = async (oi) => {
-        try {
-          const response = await new Promise((resolve, reject) => {
-            dispatch(
-              boardNeoUser({
-                payload: {
-                  oi_pk: oi,
-                },
-                resolve,
-                reject,
-              })
-            );
-          });
-          if (response["error"]) {
-            return Toast("error", response["error"]);
-          }
-          Toast("success", response.data);
-          // dispatch(fetchInboxOiDetails({ cid: cid, id: oi }));
-      
-          return;
-        } catch (e) {
-          return Toast("error",e);
-        }
-      };
-
     // download resume builder resume
     const createBuilderResumeDownloadLink = (orderId, productId) =>
   `${siteDomain}/api/v1/resumetemplatedownload/?order_pk=${orderId}&product_id=${productId}`;
@@ -196,52 +169,44 @@ const MyServices = (props) => {
 
                                                     <div className="db-my-courses-detail__leftpan--status mb-2">
                                                         Status:
-                                                            <strong className="ml-1">{item.new_oi_status ? item.oi_status === 4 ? 'Service has been processed and Document is finalized' : item.oi_status == 141 ? 'Your profile to be shared with interviewer is pending -' : item.oi_status === 142 ? 'Service is under progress -' : item.oi_status === 143 ? 'Service has been expired' : item.new_oi_status : "Yet to Update"}
+                                                            <strong className="ml-1">{item.new_oi_status ? item.oi_status === 4 ? 'Service has been processed and Document is finalized' : item.oi_status === 101 ? 'Take Test' : item.oi_status == 141 ? 'Your profile to be shared with interviewer is pending -' : item.oi_status === 142 ? 'Service is under progress -' : item.oi_status === 143 ? 'Service has been expired' : item.new_oi_status : "Yet to Update"}
                                                             
                                                             {/* upload link */}
                                                             {item.options?.upload_resume ? <Link to={"#"} className="ml-2" onClick={uploadHandelShow}>Upload</Link>
                                                             : null}
 
+                                                            {/* download option if draft file exists */}
                                                             {item.options?.Download ? <a className="ml-2" target="_blank" href={item.options?.download_url}>Download</a>
                                                             : null}
 
-                                                            {item.product_type_flow === 17 ? 
+                                                            {/* take test when type flow is 16 */}
+                                                            {item?.options?.take_test ? <a className="ml-2" target="_blank" href={ item?.options?.auto_login_url}>Take Test</a>
+                                                            : null}
+
+                                                            {item.product_type_flow === 17 && item?.options?.edit_template ? 
                                                                 <React.Fragment>
                                                                     <a className="ml-2" target="_blank" href={createBuilderResumeDownloadLink(item.id, item.product)}>Download</a>
 
-                                                                    {item?.options?.edit_template ? <Link className="ml-15" target="_blank" to={{ pathname:"https://resumestage.shine.com/resume-builder/edit/?type=profile"}}>Edit Template</Link> : null}
+                                                                    <Link className="ml-15" target="_blank" to={{ pathname: `${resumeShineSiteDomain}/resume-builder/edit/?type=profile`}}>Edit Template</Link>
                                                                 </React.Fragment>
                                                             : null}
 
                                                             {item.product_type_flow === 9 ? 
                                                                 <React.Fragment>
                                                                     {item.oi_status == 141 ? (
-                                                                        <a className="ml-2" target="_blank" href={{pathname: "https://learning.shine.com/dashboard/roundone/profile/"}}>Complete Profile</a>
+                                                                        <a className="ml-2" target="_blank" href={{pathname: `${siteDomain}/dashboard/roundone/profile/`}}>Complete Profile</a>
                                                                     ) : item.oi_status == 142 ? (
-                                                                        <a className="ml-2" target="_blank" href={{pathname: "https://learning.shine.com/dashboard/roundone/profile/"}}>Edit Profile</a>
+                                                                        <a className="ml-2" target="_blank" href={{pathname: `${siteDomain}/dashboard/roundone/profile/`}}>Edit Profile</a>
                                                                     ) : null}
                                                                 </React.Fragment>
                                                             : null}
 
-                                                            {item.product_type_flow === 2 || item.product_type_flow === 14 ?
-                                                                <React.Fragment>
-                                                                    {(item?.vendor === 'neo' && item?.oi_status === 5) ? 
-                                                                        item?.BoardOnNeo ? <a className="ml-2" onClick={NeoBoardUser(item.id)}>Board On Neo</a> : 
-                                                                        (item?.neo_mail_sent) ? <strong className="ml-1">Please Confirm Boarding on Mail Sent to you</strong> :
-                                                                        (item?.updated_from_trial_to_regular) ? <strong className="ml-1">Updated Account from Trial To Regular</strong> 
-                                                                        : null
-                                                                     : null}
-                                                                <React.Fragment>
-                                                                </React.Fragment>
-                                                            </React.Fragment>
-                                                            : null}
-
                                                             {
                                                                 (item.oi_status === 24 || item.oi_status === 46) &&
-                                                                    <React.Fragment>
-                                                                        <Link className="accept" to={"#"} onClick={() => {setAcceptModal(true);setAcceptModalId(item?.id)}}>Accept</Link>
-                                                                        <Link className="ml-2 reject" to={"#"} onClick={() => {setRejectModal(true);setRejectModalId(item?.id)}}>Reject</Link>
-                                                                    </React.Fragment>
+                                                                <React.Fragment>
+                                                                    <Link className="accept" to={"#"} onClick={() => {setAcceptModal(true);setAcceptModalId(item?.id)}}>Accept</Link>
+                                                                    <Link className="ml-2 reject" to={"#"} onClick={() => {setRejectModal(true);setRejectModalId(item?.id)}}>Reject</Link>
+                                                                </React.Fragment>
                                                             }
                                                         </strong> 
                                                     </div>
