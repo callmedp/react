@@ -39,7 +39,7 @@ const MyCourses = (props) => {
     const [openReview, setOpenReview] = useState(false);
     const oiComments = useSelector(store => store.getComment);
     const [currentPage, setCurrentPage] = useState(1);
-    const [filterState, setfilterState] = useState({ 'last_month_from': 18, 'select_type' : 'all' });
+    const [filterState, setfilterState] = useState({ 'last_month_from': 'all', 'select_type' : 'all' });
 
     useEffect(() => {
         handleEffects();

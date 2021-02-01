@@ -1962,9 +1962,9 @@ class ResumeTemplateDownload(APIView):
     serializer_class = None
 
     def get(self, request, *args, **kwargs):
-        from django.http.response import HttpResponse
-        candidate_id = request.GET.get('candidate_id', None)
-        email = request.GET.get('email', None)
+        from django.http.response import HttpResponse                                                                      
+        candidate_id = request.GET.get('candidate_id', None) or self.request.session.get('candidate_id', None)
+        email = request.GET.get('email', None) or self.request.session.get('email', None)
         product_id = request.GET.get('product_id', None)
         product = Product.objects.filter(id=product_id).first()
         if product.sub_type_flow == 1701:
