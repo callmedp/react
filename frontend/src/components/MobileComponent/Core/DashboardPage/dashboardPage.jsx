@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import './dashboardPage.scss';
@@ -20,11 +21,14 @@ import { fetchPopularServices } from 'store/CataloguePage/actions/index';
 
 const Dashboard = (props) => {
     const dbContainer = props.match.params.name;
+    const { history } = props;
+    const dashboardRoutes = ['mycourses', 'myorder', 'mywallet', 'myservices']
     const dispatch = useDispatch();
     const [showSearchPage, setShowSearchPage] = useState(false);
     const { popularServices } = useSelector(store => store?.popularServices );
 
     const handleEffects = async () => {
+       
         if (!(window && window.config && window.config.isServerRendered)) {
             await new Promise((resolve, reject) => dispatch(fetchPopularServices({ resolve, reject })));
         }
@@ -35,8 +39,12 @@ const Dashboard = (props) => {
     };
 
     useEffect(() => {
+        if(!dashboardRoutes.includes(dbContainer)){
+            history.push('/404/');
+        }
         handleEffects();
-    }, [])
+    }, [dashboardRoutes])
+
 
     return(
         <div>

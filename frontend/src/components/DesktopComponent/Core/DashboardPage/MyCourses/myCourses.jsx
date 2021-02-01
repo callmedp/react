@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ProgressBar } from 'react-bootstrap';
+import NoCourses from '../Inbox/emptyInbox';
 import './myCourses.scss';
 import '../../SkillPage/NeedHelp/needHelp.scss';
 import { startDashboardCoursesPageLoader, 
@@ -20,6 +21,7 @@ import EmptyInbox from '../Inbox/emptyInbox';
 import { startReviewLoader, stopReviewLoader } from 'store/Loader/actions/index';
 import { startCommentLoader, stopCommentLoader } from 'store/Loader/actions/index';
 import BreadCrumbs from '../Breadcrumb/Breadcrumb';
+
 
 const MyCourses = (props) => {
     
@@ -93,6 +95,7 @@ const MyCourses = (props) => {
         <div>
             { coursesLoader ? <Loader /> : ''}
             { page.total === 0 ? <EmptyInbox/> : '' }
+
             <BreadCrumbs filterState={filterState} setfilterState={setfilterState} />
 
             <div className="db-my-courses-detail">

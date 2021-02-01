@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import './dashboardPage.scss';
 import Header from '../../Common/Header/header';
 import Footer from '../../Common/Footer/footer';
@@ -17,7 +17,15 @@ import { Helmet } from 'react-helmet';
 
 const DashboardPage = (props) => {
     const [hasFaq, setHasFaq] = useState(false);
+    const { history } = props;
     const dbContainer = props.match.params.name;
+    const dashboardRoutes = ['mycourses', 'myorder', 'mywallet', 'myservices']
+
+    useEffect(()=>{
+        if(!dashboardRoutes.includes(dbContainer)){
+            history.push('/404/');
+        }
+    },[dashboardRoutes])
 
     return(
         <div>

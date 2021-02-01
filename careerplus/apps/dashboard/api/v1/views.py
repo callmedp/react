@@ -272,6 +272,7 @@ class DashboardReviewApi(APIView):
             object_id__in=prd_list, status=1)
 
         data = ReviewSerializer(review_list,many=True).data
+
         return APIResponse(data={'reviewList':data},message='Review data Success',status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):

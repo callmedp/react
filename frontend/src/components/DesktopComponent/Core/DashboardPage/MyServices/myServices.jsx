@@ -20,6 +20,8 @@ import EmptyInbox from '../Inbox/emptyInbox';
 import { startCommentLoader, stopCommentLoader } from 'store/Loader/actions/index';
 import { startReviewLoader, stopReviewLoader } from 'store/Loader/actions/index';
 import BreadCrumbs from '../Breadcrumb/Breadcrumb';
+import { siteDomain } from 'utils/domains';
+
 
 const MyServices = (props) => {
     const dispatch = useDispatch();
@@ -34,6 +36,7 @@ const MyServices = (props) => {
     const results = useSelector(store => store.dashboardServices);
     const oiComments = useSelector(store => store.getComment);
     const pending_resume_items = useSelector(store => store.dashboardPendingResume.data);
+
 
     // main service api hit
     const handleEffects = async () => {
@@ -117,7 +120,9 @@ const MyServices = (props) => {
 
         <div>
             {serviceLoader ? <Loader /> : ''}
+
             { results?.page?.total === 0 ? <EmptyInbox/> : '' }
+
             <div className="db-my-courses-detail">
                 {
                     results?.data?.length > 0 && pending_resume_items?.length > 0 ? 
@@ -222,6 +227,7 @@ const MyServices = (props) => {
                                                     }
                                             </Link>
                                             {/* ratings start here */}
+
                                             { (item.oi_status === 4) && 
                                                 <div className="d-flex">
                                                     <ReviewRating
