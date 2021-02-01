@@ -14,6 +14,7 @@ import AcceptModal from '../InboxModals/acceptModal';
 import RejectModal from '../InboxModals/rejectModal';
 import Loader from '../../../Common/Loader/loader';
 import Pagination from '../../../Common/Pagination/pagination';
+import EmptyInbox from '../InboxModals/emptyInbox';
 import { siteDomain } from 'utils/domains';
 import { startDashboardServicesPageLoader, stopDashboardServicesPageLoader } from 'store/Loader/actions/index';
 
@@ -131,6 +132,9 @@ const MyServices = (props) => {
     return (
         <>
         { serviceLoader && <Loader />}
+        {
+            page?.total === 0 ? <EmptyInbox inboxType="services" /> :
+
         <div>
             {/* Pending resume block Start*/}
             {
@@ -345,6 +349,7 @@ const MyServices = (props) => {
             { page?.total > 1 && <Pagination totalPage={page?.total} currentPage={currentPage} setCurrentPage={setCurrentPage} /> }
 
         </div>
+        }
         </>
     )
 }

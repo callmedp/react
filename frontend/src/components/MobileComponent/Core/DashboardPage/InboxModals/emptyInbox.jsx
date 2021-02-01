@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { resumeShineSiteDomain, imageUrl } from 'utils/domains';
-import '../MyServices/myServices.scss';
+import '../MyCourses/myCourses.scss';
    
 const EmptyInbox = (props) => {
 

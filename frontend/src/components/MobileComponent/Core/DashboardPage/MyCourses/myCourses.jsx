@@ -6,6 +6,7 @@ import AddCommentModal from '../InboxModals/addCommentModal';
 import RateProductModal from '../InboxModals/rateProductModal'
 import Pagination from '../../../Common/Pagination/pagination';
 import Loader from '../../../Common/Loader/loader';
+import EmptyInbox from '../InboxModals/emptyInbox';
 import { fetchMyCourses } from 'store/DashboardPage/MyCourses/actions/index'
 import { startDashboardCoursesPageLoader, stopDashboardCoursesPageLoader } from 'store/Loader/actions/index';
 import { siteDomain } from 'utils/domains';
@@ -74,6 +75,9 @@ const MyCourses = (props) => {
     return(
         <>
             { coursesLoader && <Loader />}
+            {
+                page?.total === 0 ? <EmptyInbox inboxType="courses"/> :
+
             <div>
                 <div className="m-courses-detail db-warp">
                     {
@@ -331,6 +335,7 @@ const MyCourses = (props) => {
                             setCurrentPage={setCurrentPage} /> : ''
                 }
             </div>
+            }
         </>
     )
 }
