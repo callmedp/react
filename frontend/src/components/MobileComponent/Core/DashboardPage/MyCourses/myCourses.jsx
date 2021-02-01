@@ -21,7 +21,7 @@ const MyCourses = (props) => {
     const [oiReviewId, setOiReviewId] = useState({})
     
     const dispatch = useDispatch();
-    const { myCourses, page } = useSelector(store => store?.dashboardCourses);
+    const { data, page } = useSelector(store => store?.dashboardCourses);
     const { coursesLoader } = useSelector(store => store.loader);
 
     const showDetails = (id) => {
@@ -97,7 +97,7 @@ const MyCourses = (props) => {
             <div>
                 <div className="m-courses-detail db-warp">
                     {
-                        myCourses?.map((course, index) => {
+                        data?.map((course, index) => {
                             return(
                                 <div className="m-card pl-0" key={index}>
                                     <div className="m-share" aria-haspopup="true">
