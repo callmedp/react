@@ -57,12 +57,13 @@ export const InDemandProductsReducer = (state=inDemandProductsState, action) => 
 }
 
 const jobAssistanceAndBlogsState = {
-    recentCoursesList : []
+    jobAssistanceServices : [],
+    latest_blog_data: []
 }
 
 export const JobAssistanceAndBlogsReducer = (state=jobAssistanceAndBlogsState, action) => {
     switch(action.type){
-        case jobAssistanceAndBlogsFetched.type : return {...jobAssistanceAndBlogsState, ...action.item}
+        case jobAssistanceAndBlogsFetched.type : return {...jobAssistanceAndBlogsState, ...action.payload.item}
         default : return state;
     }
 }

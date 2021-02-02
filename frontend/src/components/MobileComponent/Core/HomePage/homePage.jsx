@@ -19,7 +19,7 @@ import Footer from '../../Common/Footer/Footer';
 // import CTAhome from '../../Common/CTA/CTAhome';
 import Aos from "aos";
 import "aos/dist/aos.css";
-import { fetchTestimonials } from 'store/HomePage/actions';
+import { fetchTestimonials, fetchJobAssistanceAndBlogs } from 'store/HomePage/actions';
 import { startHomePageLoader, stopHomePageLoader } from 'store/Loader/actions/index';
 import Loader from '../../Common/Loader/loader';
 
@@ -32,6 +32,7 @@ const HomePage = (props) => {
         try {
                 dispatch(startHomePageLoader());
                 new Promise((resolve, reject) => dispatch(fetchTestimonials({resolve, reject})))
+                new Promise((resolve, reject) => dispatch(fetchJobAssistanceAndBlogs({resolve, reject})))
                 dispatch(stopHomePageLoader());
             }
         catch{

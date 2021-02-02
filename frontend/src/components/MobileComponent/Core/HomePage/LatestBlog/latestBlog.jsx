@@ -1,15 +1,35 @@
-import React, {useState} from 'react';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import './latestBlog.scss';
 import { Link } from 'react-router-dom';
-
+import { siteDomain } from 'utils/domains';
    
 const LatestBlog = (props) => {
+    const { latest_blog_data } = useSelector(store => store.jobAssistance)
+
     return(
         <section className="m-container mt-0 mb-0 pl-0 pr-0" data-aos="fade-up">
             <div className="m-latest-blog">
                 <h2 className="m-heading2-home mb-5 text-center">Latest from blog</h2>
                 <ul className="m-latest-blog__list">
-                    <li className="col">
+                    {
+                        latest_blog_data?.slice(0, 2)?.map((blog, index) => {
+                            return (
+                                <li className="col pl-0" key={ index }>
+                                    <div className="m-card">
+                                        <Link to={`${siteDomain}${blog?.url}`}>
+                                            <figure>
+                                                <img src={blog?.image} className="img-fluid" alt={blog?.display_name} />
+                                                <span>{ blog?.display_name?.length > 13 ? blog?.display_name?.slice(0, 13) + '...' : blog?.display_name }</span>
+                                            </figure>
+                                            <strong>{ blog?.title?.length > 40 ? blog?.title?.slice(0, 40) + '...' : blog?.title }</strong>
+                                        </Link>
+                                    </div>
+                                </li>
+                            )
+                        })
+                    }
+                    {/* <li className="col">
                         <div className="m-card">
                             <Link to={"#"}>
                                 <figure>
@@ -30,7 +50,7 @@ const LatestBlog = (props) => {
                                 <strong>Careers that can be opt by learning Autocad</strong>
                             </Link>
                         </div>
-                    </li>
+                    </li> */}
                 </ul>
             </div>
         </section>
