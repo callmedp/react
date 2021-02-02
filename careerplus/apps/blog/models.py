@@ -404,6 +404,11 @@ class Blog(AbstractCommonModel, AbstractSEO, ModelMeta):
     @property
     def display_name(self):
         return self.heading if self.heading else self.name
+    
+    def get_absolute_image_url(self):
+        if self.image:
+            return r'{}'.format(self.image)
+        return settings.MEDIA_URL + 'attachment/default_product_image.jpg'
 
 
 class Comment(AbstractCommonModel):

@@ -60,10 +60,10 @@ class PopularProductMixin(object):
         popularProducts = ProductMixin().get_course_json(products)
         return popularProducts 
     
-    def popular_certifications(self, class_category=settings.COURSE_SLUG, quantity=4,type_flow=None,sub_type_flow=None):
+    def popular_certifications(self,quantity=4,type_flow=None):#,sub_type_flow=None):
         try:
             product_obj = Product.objects.filter(type_flow=type_flow,
-                                                    sub_type_flow=sub_type_flow,
+                                                    # sub_type_flow=sub_type_flow,
                                                      active=True,
                                                      is_indexed=True)
 
