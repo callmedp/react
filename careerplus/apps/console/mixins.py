@@ -332,7 +332,7 @@ class ActionUserMixin(object):
                                 os.makedirs(settings.RESUME_DIR + full_path)
                             dest = open(
                                 settings.RESUME_DIR + full_path + file_name, 'wb')
-                            for chunk in shine_resume.chunks():
+                            for chunk in shine_resume:
                                 dest.write(chunk)
                             dest.close()
                         else:
