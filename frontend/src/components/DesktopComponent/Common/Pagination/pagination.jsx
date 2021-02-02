@@ -21,7 +21,7 @@ const Pagination = (props) => {
     }
 
     return (
-        <div className="m-db-pagination mt-20">
+        <div className="db-pagination mt-20">
             { startPage > 1 && <figure className="icon-db-arrow-left" onClick={getPrev} /> }
             {
                 paginationList?.map((item, i) => {
