@@ -76,7 +76,9 @@ const MyWallet = (props) => {
 
                                     <div className="m-pipe-divides">
                                         <span>{ txn?.get_txn_type }</span>
-                                        <span>Expiry date: <strong>{ txn?.expiry_date }</strong></span>
+                                        {
+                                            txn?.expiry_date && <span>Expiry date: <strong>{ txn?.expiry_date }</strong></span>
+                                        }
                                     </div>
                                 </div>
                             )
