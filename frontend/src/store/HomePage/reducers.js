@@ -18,10 +18,19 @@ const inDemandProductsState = {
     certifications : []
 }
 
-const getProduct = (state, action) => {
-    if( action.device === 'mobile' )
-    return {
-        // gaurav, write mobile logic to store product
+const appendProduct = (state, action) => {
+    if( action.device === 'mobile' ){
+        if(!!action.courses){
+            let courses = [...state.courses,...action.courses];
+            return { courses : courses };
+        }
+        else if(!!action.certifications){
+            let certifications = [...state.certifications, ...action.certifications];
+            return { certifications: certifications }
+        }
+        else{
+            return { }
+        }
     }
     else {
 
@@ -50,7 +59,7 @@ const getProduct = (state, action) => {
 
 export const InDemandProductsReducer = (state=inDemandProductsState, action) => {
     switch(action.type){
-        case inDemandProductsFetched.type : return {...state, ...getProduct(state, action)}
+        case inDemandProductsFetched.type : return {...state, ...appendProduct(state, action)}
         default : return state;
     }
 }
