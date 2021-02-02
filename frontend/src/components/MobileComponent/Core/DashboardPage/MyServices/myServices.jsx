@@ -257,28 +257,36 @@ const MyServices = (props) => {
                                     <div className="pl-15">
 
                                         {/* Days Reamianing and Start Stop Service Block */}
-                                        <div className="m-courses-detail__bottomWrap">
-                                            <div>
-                                                <div className="m-day-remaning">
+                                        {
+                                            (service?.options?.day_remaining || service?.options?.pause_service || service?.options?.resume_service) &&
+                                                <div className="m-courses-detail__bottomWrap">
                                                     {
-                                                        service?.remaining_days?.toString()?.split('')?.map((digit, index) => {
-                                                            return (
-                                                                <span className="m-day-remaning--box" key={index}> { digit }</span>
-                                                            )
-                                                        })
+                                                        service?.options?.day_remaining && 
+                                                            <div>
+                                                                <div className="m-day-remaning">
+                                                                    {
+                                                                        (service?.options?.day_remaining > 0 ? service?.options?.day_remaining : '00')?.toString()?.split('')?.map((digit, index) => {
+                                                                            return (
+                                                                                <span className="m-day-remaning--box" key={index}> { digit }</span>
+                                                                            )
+                                                                        })
+                                                                    }
+                                                                    <span className="ml-2 m-day-remaning--text">
+                                                                        { service?.options?.day_remaining > 1 ? 'Days' : 'Day'} <br />remaining
+                                                                    </span>
+                                                                </div>
+                                                            </div>
                                                     }
-                                                    <span className="ml-2 m-day-remaning--text">
-                                                        { service?.remaining_days > 1 ? 'Days' : 'Day'} <br />remaining
-                                                    </span>
+                                                    
+                                                    {
+                                                        service?.options?.pause_service && <Link to={"#"} className="m-db-start-course font-weight-bold pr-10" onClick={() => pauseResumeService(34, service?.id)}>Pause Service</Link>
+                                                    }
+                                                    {
+                                                        service?.options?.resume_service && <Link to={"#"} className="m-db-start-course font-weight-bold pr-10" onClick={() => pauseResumeService(35, service?.id)}>Resume Service</Link>
+                                                    }
                                                 </div>
-                                            </div>
-                                            {
-                                                service?.options?.pause_service && <Link to={"#"} className="m-db-start-course font-weight-bold pr-10" onClick={() => pauseResumeService(34, service?.id)}>Pause Service</Link>
-                                            }
-                                            {
-                                                service?.options?.resume_service && <Link to={"#"} className="m-db-start-course font-weight-bold pr-10" onClick={() => pauseResumeService(35, service?.id)}>Resume Service</Link>
-                                            }
-                                        </div>
+                                        }
+                                        
                                         
                                         {/* Comment and Rating Block start */}
                                         <div className="m-courses-detail__userInput">

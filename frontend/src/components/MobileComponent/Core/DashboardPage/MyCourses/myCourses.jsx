@@ -160,32 +160,54 @@ const MyCourses = (props) => {
                                                 }
                                             </div>
 
-                                            <div className="pl-15">
+                                            {
+                                                course?.options?.day_remaining &&
+                                                    <div className="pl-15">
+                                                        <div className="m-courses-detail__bottomWrap" style={{ paddingBottom: '0' }}>
+                                                            <div>
+                                                                <div className="m-day-remaning mb-20">
+                                                                    {
+                                                                        (course?.options?.day_remaining > 0 ? course?.options?.day_remaining : '0')?.toString()?.split('')?.map((digit, index) => {
+                                                                            return (
+                                                                                <span className="m-day-remaning--box" key={index}> { digit }</span>
+                                                                            )
+                                                                        })
+                                                                    }
+                                                                    <span className="ml-2 m-day-remaning--text">
+                                                                        { course?.options?.day_remaining > 1 ? 'Days' : 'Day'} <br />remaining
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                            }
+
+                                            {/*<div className="pl-15">
                                                 <div className="m-courses-detail__bottomWrap" style={{ paddingBottom: '0' }}>
                                                     <div>
                                                         <div className="m-day-remaning mb-20">
                                                             {
-                                                                course?.remaining_days?.toString().split('').map((digit, index) => {
+                                                                (course?.options?.day_remaining > 0 ? course?.options?.day_remaining : '00')?.toString().split('').map((digit, index) => {
                                                                     return (
                                                                         <span className="m-day-remaning--box" key={index}> { digit}</span>
                                                                     )
                                                                 })
                                                             }
-                                                            <span className="ml-2 m-day-remaning--text">{course?.remaining_days > 1 ? 'Days' : 'Day'} <br />remaning</span>
+                                                            <span className="ml-2 m-day-remaning--text">{course?.options?.day_remaining > 1 ? 'Days' : 'Day'} <br />remaning</span>
                                                         </div>
 
-                                                        {/* <div className="m-db-status">
+                                                        <div className="m-db-status">
                                                     <p className="mb-0 pb-1">Status: <strong>(0% Complete)</strong> </p>
 
                                                     <div className="m-progress">
                                                         <div role="progressbar" className="m-progress-bar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style={{width: "0"}}></div>
                                                     </div>
-                                                </div> */}
+                                                </div> 
                                                     </div>
 
-                                                    {/* <Link to={"#"} className="m-db-start-course font-weight-bold pr-10">Start course</Link> */}
+                                                    <Link to={"#"} className="m-db-start-course font-weight-bold pr-10">Start course</Link>
                                                 </div>
-                                            </div>
+                                            </div>*/}
 
                                         <div className="m-courses-detail__userInput">
                                             <Link className="m-db-comments font-weight-bold" to={'#'} onClick={(e) => {e.preventDefault();setShowCommentModal(true);setOiCommentId(course?.id)}}>
