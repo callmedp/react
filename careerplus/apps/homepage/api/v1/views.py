@@ -1089,3 +1089,15 @@ class JobAssistanceAndLatestBlogAPI(APIView):
             logging.getLogger('error_log').error(
                 "unable to load job assistance services%s " % str(e))
         return APIResponse(message='Job assistance services and latest blog data Loaded', data=data, status=status.HTTP_200_OK)
+
+class TestimonialsApi(APIView):
+    permission_classes = (permissions.AllowAny,)
+    authentication_classes = ()
+
+    def get(self,request):
+        data = cache.get('testimonial_homepage')
+        if not data:
+            data = Testimonial.objects.filter(page=1, is_active=True)[:5]
+            data = TestimonialSerializer(data,many=True).data
+            cache.set('testimonial_homepage', data, timeout=None)
+        return Response(data=data, status=status.HTTP_200_OK)
