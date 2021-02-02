@@ -16,10 +16,10 @@ const ReviewRating = (props) => {
 
     return (
         <div className="card__rating">
-        { item.no_review != 0 ?
+        { item?.no_review != 0 ?
             <React.Fragment>
                 <span className="rating">
-                    { item.rating.map((val, ind) => <i key={ind} value={val} className={fillStarForCourse(val)}></i>)}
+                    { item?.rating?.map((val, ind) => <i key={ind} value={val} className={fillStarForCourse(val)}></i>)}
                 </span>
 
                 <span>{item.avg_rating}/5</span>

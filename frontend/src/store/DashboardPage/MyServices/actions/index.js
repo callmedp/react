@@ -7,21 +7,28 @@ const fetchMyServices = (payload) => {
     }
 }
 
+const fetchPendingResume = payload => {
+    return {
+        type: Actions.GET_PENDING_RESUME,
+        payload: payload,
+    }
+}
+
 const uploadResumeForm = (payload) => ({
     type: Actions.UPLOAD_RESUME_FORM,
     payload
 })
 
-const fetchPendingResumes = (payload) => {
+const CandidateAcceptRejectResume = (payload) => {
     return {
-        type: Actions.FETCH_PENDING_RESUMES,
+        type: Actions.REQUEST_CANDIDATE_OI_ACCEPT_REJECT,
         payload
     }
 }
 
-export const CandidateAcceptRejectResume = (payload) => {
+const pausePlayResume = (payload) => {
     return {
-        type: Actions.REQUEST_CANDIDATE_OI_ACCEPT_REJECT,
+        type: Actions.PAUSE_AND_RESUME_SERVICE_REQUEST,
         payload
     }
 }
@@ -29,5 +36,7 @@ export const CandidateAcceptRejectResume = (payload) => {
 export {
     fetchMyServices,
     uploadResumeForm,
-    fetchPendingResumes
+    fetchPendingResume,
+    CandidateAcceptRejectResume,
+    pausePlayResume,
 }

@@ -778,7 +778,7 @@ class NeoBoardUserAPI(APIView):
     def post(self, request, *args, **kwargs):
         from order.models import OrderItem
         from order.tasks import board_user_on_neo
-        candidate_id = request.data.get('candidate_id')
+        candidate_id = request.data.get('candidate_id') or self.request.session.get('candidate_id', None)
         oi_pk = request.data.get('oi_pk')
         if not candidate_id:
             return Response({'error': 'candidate id is missing'}, status=status.HTTP_400_BAD_REQUEST)
