@@ -77,3 +77,20 @@
         border: 1px solid $white;
     }
 }
+
+.btn-white-outline-round {
+    background: transparent;
+    border: 1px solid $white;
+    color: $white;
+    font-size: 1.2rem;
+    padding: .8rem 1.5rem;
+    @include border-radius(30px);
+    font-weight: 600;
+    display: inline-block;
+
+    &:hover, &:focus {
+        text-decoration: none;
+        color: $white;
+        border: 1px solid $white;
+    }
+}

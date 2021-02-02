@@ -22,5 +22,5 @@
 @mixin icon-inblock($width, $height, $position) {
   @include icon-details($width, $height, $position);
   display: inline-block;
-
+  vertical-align: text-top;
 }
