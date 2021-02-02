@@ -837,7 +837,7 @@ class TrendingCoursesAndSkillsAPI(PopularProductMixin, APIView):
                     'skillUrl': i.get_absolute_url()}
                 if homepage :
                     skill_data.update({
-                        # 'image':i.image if i.image else None,
+                        'image':i.get_absolute_image_url(),
                         'no_courses':i.categoryproducts.count()
                         })
                 skills.append(skill_data)
@@ -1016,26 +1016,31 @@ class PopularInDemandProductsAPI(APIView):
     def get(self, request):
         quantity = 4
         class_category = settings.COURSE_SLUG
+        page = request.GET.get('page',1)
+        tab_type = request.GET.get('tab_type','master')
+
         data= {}
-        certifications = PopularProductMixin().popular_certifications(quantity=quantity,
-                                                                            type_flow=16,
-                                                                            sub_type_flow=201)
-        data.update({'certifications':certifications})
+        if tab_type=='certifications':
+            certifications = PopularProductMixin().popular_certifications(quantity=quantity,
+                                                                                type_flow=16,
+                                                                                sub_type_flow=201)
+            data.update({'certifications':certifications})
+        
+        elif tab_type == 'master':
+            s_obj, s_ratio, s_revenue = PopularProductMixin(). \
+                popular_courses_algorithm(class_category=class_category,
+                                        quantity=quantity)
 
-        s_obj, s_ratio, s_revenue = PopularProductMixin(). \
-            popular_courses_algorithm(class_category=class_category,
-                                      quantity=quantity)
-
-        course_pks = list(s_ratio) + list(s_revenue)
-        courses = SearchQuerySet().filter(id__in=course_pks, pTP__in=[0, 1, 3]).exclude(
-            id__in=settings.EXCLUDE_SEARCH_PRODUCTS
-        )
-        data = {
-            'courses': [
-                {'id': course.id, 'heading': course.pHd, 'name': course.pNm, 'url': course.pURL, 'img': course.pImg, \
-                 'img_alt': course.pImA, 'description': course.pDscPt, 'rating': course.pARx, 'price': course.pPinb, 'vendor': course.pPvn, 'stars': course.pStar,
-                 'provider': course.pPvn} for course in courses]
-        }
+            course_pks = list(s_ratio) + list(s_revenue)
+            courses = SearchQuerySet().filter(id__in=course_pks, pTP__in=[0, 1, 3]).exclude(
+                id__in=settings.EXCLUDE_SEARCH_PRODUCTS
+            )
+            data = {
+                'courses': [
+                    {'id': course.id, 'heading': course.pHd, 'name': course.pNm, 'url': course.pURL, 'img': course.pImg, \
+                    'img_alt': course.pImA, 'description': course.pDscPt, 'rating': course.pARx, 'price': course.pPinb, 'vendor': course.pPvn, 'stars': course.pStar,
+                    'provider': course.pPvn} for course in courses]
+            }
 
         return APIResponse(message='Popular certifications and courses Loaded', data=data, status=status.HTTP_200_OK)
 
@@ -1044,7 +1049,7 @@ class JobAssistanceAndLatestBlogAPI(APIView):
     authentication_classes = ()
         
     def get(self,request):
-        quantity = 4
+        quantity = 4        
         try:
             tjob = TopTrending.objects.filter(
                 is_active=True, is_jobassistance=True).first()  
@@ -1064,7 +1069,7 @@ class JobAssistanceAndLatestBlogAPI(APIView):
                 {
                 'display_name':article.heading if article.heading else article.name,
                 'title':article.get_title(),
-                # 'image':article.image,
+                'image':article.get_absolute_image_url(),
                 'url':article.get_absolute_url()
                 } for article in article_list]
             data.update({'latest_blog_data':latest_blog_data})
