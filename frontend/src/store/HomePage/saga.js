@@ -75,7 +75,6 @@ function* skillwithDemands(action) {
     const { payload } = action;
     try {
         const response = yield call(Api.skillwithDemands);
-        console.log(response)
 
         if (response?.error){
             return payload?.reject(response?.error);

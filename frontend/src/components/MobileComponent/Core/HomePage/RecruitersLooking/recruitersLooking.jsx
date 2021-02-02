@@ -10,15 +10,16 @@ import Slider from "react-slick";
 // Inter-App Import
 import './recruitersLooking.scss';
 import 'slick-carousel/slick/slick.css';
+import { siteDomain } from 'utils/domains';
 
 // API Import
 import { fetchSkillwithDemands } from 'store/HomePage/actions';
 
-   
+
 const RecruitersLooking = (props) => {
     const dispatch = useDispatch();
 
-    const { trendingSkills } = useSelector(store => { console.log(store); return store?.skillDemand });
+    const { trendingSkills } = useSelector(store => store?.skillDemand );
 
     const settings = {
         dots: false,
@@ -35,7 +36,7 @@ const RecruitersLooking = (props) => {
 
 
     const handleEffects = async () => {
-        try{
+        try {
             if (!(window && window.config && window.config.isServerRendered)) {
                 await new Promise((resolve, reject) => dispatch(fetchSkillwithDemands({ resolve, reject })));
             }
@@ -43,7 +44,7 @@ const RecruitersLooking = (props) => {
                 delete window.config?.isServerRendered
             }
         }
-        catch(e){
+        catch (e) {
             Swal.fire({
                 icon: 'error',
                 text: 'Sorry! we are load data from server.'
@@ -52,27 +53,35 @@ const RecruitersLooking = (props) => {
     };
 
 
-    useEffect( () => {
+    useEffect(() => {
         handleEffects();
     }, [])
 
-    console.log(trendingSkills)
 
-    return(
+
+    return (
         <section className="m-container m-lightblue-bg mt-0 mb-0 pb-0 pl-0 pr-0" data-aos="fade-up">
             <div className="m-all-category">
                 <h2 className="m-heading2-home text-center mb-5">What recruiters are looking at</h2>
                 <p className="fs-13 text-center">Browse the skills with high demands</p>
                 <Slider {...settings}>
-                    <div className="m-card">
-                        <figure>
-                            <img src="./media/images/mobile/categories1.jpg" className="img-fluid" alt="Personal Development" />
-                        </figure>
-                        <h3>Personal Development</h3>
-                        <span>30 courses</span>
-                        <Link to={"#"}>Know more</Link>
-                    </div>
-                    <div className="m-card">
+
+                    {
+                        trendingSkills?.map((skill, index) => {
+                            return (
+                                <div className="m-card" key={index}>
+                                    <figure>
+                                        <img src={`${skill.image}`} className="img-fluid" alt={ skill.skillName } />
+                                    </figure>
+                                    <h3>{ skill.skillName }</h3>
+                                    <span>{ skill.no_courses } courses</span>
+                                    <a href={`${siteDomain}${skill.skillUrl}`}>Know more</a>
+                                </div>
+                            )
+                        })
+                    }
+
+                    {/* <div className="m-card">
                         <figure>
                             <img src="./media/images/mobile/categories2.jpg" className="img-fluid" alt="Information Technology" />
                         </figure>
@@ -127,11 +136,11 @@ const RecruitersLooking = (props) => {
                         <h3>Mass Communication</h3>
                         <span>30 courses</span>
                         <Link to={"#"}>Know more</Link>
-                    </div>
+                    </div> */}
                 </Slider>
             </div>
         </section>
     )
 }
-   
+
 export default RecruitersLooking;
