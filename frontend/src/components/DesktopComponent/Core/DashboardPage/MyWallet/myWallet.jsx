@@ -8,6 +8,8 @@ import {fetchMyWallet} from 'store/DashboardPage/MyWallet/actions';
 import { startDashboardWalletPageLoader, stopDashboardWalletPageLoader } from 'store/Loader/actions/index';
 import Loader from '../../../Common/Loader/loader';
 import Pagination from '../../../Common/Pagination/pagination';
+import {siteDomain} from '../../../../../utils/domains';
+import { Link } from 'react-router-dom';
 
 const MyWallet = (props) => {
     const [show, setShow] = useState(false);
@@ -52,12 +54,10 @@ const MyWallet = (props) => {
             <div className="row">
                 <div className="col-8 myWallet--heading">
                     Loyality point balance - <strong>{walletResult?.wal_total ? walletResult?.wal_total : 0}</strong>
-                    <button 
-                        className="btn btn-outline-primary ml-4"
-                        onClick={handleShow}
-                    >
-                        Redeem now
-                    </button>
+                    {/* <a className="btn btn-outline-primary ml-4" onClick={handleShow}>Redeem now</a> */}
+                    
+                    {walletResult?.wal_total > 0 ? <a href={`${siteDomain}/cart/payment-summary/`} className="btn btn-outline-primary ml-4" >Redeem now</a> : null}
+
 
                     <Modal show={show} onHide={handleClose}>
                         <Modal.Header closeButton></Modal.Header>

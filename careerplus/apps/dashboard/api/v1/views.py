@@ -52,7 +52,6 @@ class DashboardMyorderApi(DashboardInfo, APIView):
             from_datetime = datetime.utcnow() - relativedelta(months=int(last_month_from))
             modified_from_datetime = from_datetime.replace(day=1, hour=0, minute=0, second=0, microsecond=0) 
 
-        # candidate_id='568a0b20cce9fb485393489b'
         # candidate_id='5c94a7b29cbeea2c1f27fda2'
 
         order_list = []
@@ -116,8 +115,7 @@ class MyCoursesApi(DashboardInfo, APIView):
             from_datetime = datetime.utcnow() - relativedelta(months=int(last_month_from))
             modified_from_datetime = from_datetime.replace(day=1, hour=0, minute=0, second=0, microsecond=0) 
 
-        # candidate_id='568a0b20cce9fb485393489b'
-        # candidate_id='5fed060d9cbeea482331ec4b'
+        candidate_id='568a0b20cce9fb485393489b'
         if candidate_id:
             orders = Order.objects.filter(
                 status__in=[0, 1, 3],
@@ -171,7 +169,7 @@ class MyServicesApi(DashboardInfo, APIView):
             from_datetime = datetime.utcnow() - relativedelta(months=int(last_month_from))
             modified_from_datetime = from_datetime.replace(day=1, hour=0, minute=0, second=0, microsecond=0) 
 
-        # candidate_id='568a0b20cce9fb485393489b'
+        candidate_id='568a0b20cce9fb485393489b'
 
         if candidate_id:
             excl_txns = PaymentTxn.objects.filter(
@@ -210,7 +208,8 @@ class DashboardMyWalletAPI(DashboardInfo, APIView):
 
         # attempting to get candidate from session
         candidate_id = self.request.session.get('candidate_id')
-        # candidate_id = '568a0b20cce9fb485393489b'
+        # candidate_id='5c94a7b29cbeea2c1f27fda2'
+
         if candidate_id is None:
             return APIResponse(data=data, message='Candidate Details required', status=status.HTTP_400_BAD_REQUEST)
 
@@ -262,7 +261,7 @@ class DashboardReviewApi(APIView):
     serializer_classes = None
 
     def get(self,request):
-        page = request.GET.get('page', 1)
+        # page = request.GET.get('page', 1)
         product_id = request.GET.get('product_id',None)
         try:
             product = Product.objects.get(id=product_id)
@@ -288,19 +287,21 @@ class DashboardReviewApi(APIView):
         review_list = Review.objects.filter(
             content_type__id=product_type.id,
             object_id__in=prd_list, status=1)
-        paginated_data = offset_paginator(page, review_list)
-        data = ReviewSerializer(paginated_data['data'],many=True).data
-        page_info ={
-        'current_page':paginated_data['current_page'],
-        'total':paginated_data['total_pages'],
-        'has_prev': True if paginated_data['current_page'] >1 else False,
-        'has_next':True if (paginated_data['total_pages']-paginated_data['current_page'])>0 else False
-        }
-        return APIResponse(data={'data':data,'page':page_info},message='Review data Success',status=status.HTTP_200_OK)
+        # paginated_data = offset_paginator(page, review_list)
+        data = ReviewSerializer(review_list, many=True).data
+        # page_info ={
+        # 'current_page':paginated_data['current_page'],
+        # 'total':paginated_data['total_pages'],
+        # 'has_prev': True if paginated_data['current_page'] >1 else False,
+        # 'has_next':True if (paginated_data['total_pages']-paginated_data['current_page'])>0 else False
+        # }
+        return APIResponse(data={'data':data},message='Review data Success',status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
         email_dict = {}
         candidate_id = request.data.get('candidate_id', None)
+        # candidate_id='568a0b20cce9fb485393489b'
+
         oi_pk = request.data.get('oi_pk')
         email = request.data.get('email')
         data = {

@@ -23,7 +23,6 @@ import BreadCrumbs from '../Breadcrumb/Breadcrumb';
 import { pausePlayResume } from 'store/DashboardPage/MyServices/actions/index';
 import {siteDomain, resumeShineSiteDomain} from '../../../../../utils/domains';
 
-
 const MyServices = (props) => {
     const dispatch = useDispatch();
     const { history } = props;
@@ -89,7 +88,7 @@ const MyServices = (props) => {
     const toggleReviews = async (id, prod) => {
         if(openReview != id) {
             dispatch(startReviewLoader());
-            await new Promise((resolve, reject) => dispatch(fetchReviews({ payload: { prod: prod, page: currentPage}, resolve, reject })));
+            await new Promise((resolve, reject) => dispatch(fetchReviews({ payload: { prod: prod }, resolve, reject })));
             dispatch(stopReviewLoader());
         }
         setOpenReview(openReview == id ? false : id);
@@ -160,12 +159,15 @@ const MyServices = (props) => {
                                                     <div className="db-my-courses-detail__leftpan--info">
                                                         <span>Provider: <strong>{item.vendor}</strong> </span>
                                                         <span>Bought on: <strong>{item.enroll_date}</strong></span>
-                                                        {item.duration ? <span>Duration: <strong>{item.duration}</strong></span> : "" }
+                                                        {
+                                                            item?.duration_in_days && 
+                                                                <span>Duration: <strong>{item?.duration_in_days > 1 ? item?.duration_in_days + ' days' : item?.duration_in_days + ' day' } </strong> </span>
+                                                        }
                                                     </div>
 
-                                                    <div className="db-my-courses-detail__leftpan--alert">
+                                                    {/* <div className="db-my-courses-detail__leftpan--alert">
                                                         Hi, the recording for the session you missed is available now
-                                                    </div>
+                                                    </div> */}
 
                                                     <div className="db-my-courses-detail__leftpan--status mb-2">
                                                         Status:
@@ -239,13 +241,24 @@ const MyServices = (props) => {
                                                     </div>
                                                 </div>
 
-                                                <div className="day-remaning mb-20">
-                                                    {[...(item.remaining_days + '')].map((day, idx) => <span key={idx} className="day-remaning--box">{day}</span>)}
-                                                    <span className="ml-2 day-remaning--text"> {item?.remaining_days > 1 ? 'Days' : 'Day'} <br/>remaning</span>
-                                                </div>
+                                                {
+                                                    item?.options?.day_remaining ? 
+                                                        <div className="day-remaning mb-20">
+                                                            {/* {[...(item.remaining_days + '')].map((day, idx) => <span key={idx} className="day-remaning--box">{day}</span>)} */}
+                                                            {
+                                                                (item?.options?.day_remaining > 0 ? item?.options?.day_remaining : '00')?.toString()?.split('')?.map((digit, index) => {
+                                                                    console.log(digit)
+                                                                    return (
+                                                                        <span className="day-remaning--box" key={index}> { digit }</span>
+                                                                    )
+                                                                })
+                                                            }
+                                                            <span className="ml-2 day-remaning--text"> { item?.options?.day_remaining > 1 ? 'Days' : 'Day'} <br/>remaning</span>
+                                                        </div>
+                                                : null}
 
                                                 {
-                                                item?.options?.pause_service && <Link to={"#"} className="m-db-start-course font-weight-bold pr-10" onClick={() => pauseResumeService(34, item?.id)}>Pause Service</Link>
+                                                    item?.options?.pause_service && <Link to={"#"} className="m-db-start-course font-weight-bold pr-10" onClick={() => pauseResumeService(34, item?.id)}>Pause Service</Link>
                                                 }
                                                 {
                                                     item?.options?.resume_service && <Link to={"#"} className="m-db-start-course font-weight-bold pr-10" onClick={() => pauseResumeService(35, item?.id)}>Resume Service</Link>
