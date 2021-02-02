@@ -62,15 +62,13 @@ class PopularProductMixin(object):
         popularProducts = ProductMixin().get_course_json(products)
         return popularProducts 
     
-    def popular_certifications(self, class_category=settings.COURSE_SLUG, quantity=4,type_flow=None,sub_type_flow=None):
+    def popular_certifications(self):
         try:
-            product_obj = Product.objects.filter(type_flow=type_flow,
-                                                    sub_type_flow=sub_type_flow,
-                                                     active=True,
-                                                     is_indexed=True)
+            product_obj = Product.objects.filter(sub_type_flow=201,
+                                                     active=True,)
+                                                    #  is_indexed=True)
 
-            product_conversion_ratio = product_obj.order_by('-buy_count')[
-                                       :quantity].values_list('id', flat=True)
+            product_conversion_ratio = product_obj.order_by('-buy_count').values_list('id', flat=True)
             products = SearchQuerySet().filter(id__in=product_conversion_ratio, pTP__in=[0, 1, 3]).exclude(
             id__in=settings.EXCLUDE_SEARCH_PRODUCTS
             )
