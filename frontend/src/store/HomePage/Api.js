@@ -21,9 +21,16 @@ const jobAssistanceAndBlogs = () => {
     return BaseApiService.get(`${siteDomain}${url}`);
 }
 
+const testimonialsApi = () => {
+    const url = '/api/v1/testimonials/';
+
+    return BaseApiService.get(`${siteDomain}${url}`);
+}
+
 export default {
     mostViewedCourse,
     inDemandProducts,
     jobAssistanceAndBlogs,
+    testimonialsApi
 }   
 

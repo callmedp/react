@@ -30,7 +30,8 @@ from emailers.tasks import send_email_task
 from emailers.sms import SendSMS
 from django.contrib.contenttypes.models import ContentType
 from order.api.v1.serializers import OrderItemSerializer
-from .serializers import StaticSiteContentSerializer, OrderItemDetailSerializer, DashboardCancellationSerializer,ProductSerializer,TestimonialSerializer
+from .serializers import StaticSiteContentSerializer, OrderItemDetailSerializer, DashboardCancellationSerializer,ProductSerializer
+from skillpage.api.v1.serializers import TestimonialSerializer
 from core.library.gcloud.custom_cloud_storage import \
     GCPPrivateMediaStorage, GCPInvoiceStorage, GCPMediaStorage, GCPResumeBuilderStorage
 

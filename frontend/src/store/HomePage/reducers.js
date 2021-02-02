@@ -1,6 +1,7 @@
 import { mostViewedCoursesFetched,
     inDemandProductsFetched,
-    jobAssistanceAndBlogsFetched } from './actions';
+    jobAssistanceAndBlogsFetched,
+    testimonialsFetched } from './actions';
 
 const mostViewedCoursesState = {
     recentCoursesList : []
@@ -62,6 +63,17 @@ const jobAssistanceAndBlogsState = {
 export const JobAssistanceAndBlogsReducer = (state=jobAssistanceAndBlogsState, action) => {
     switch(action.type){
         case jobAssistanceAndBlogsFetched.type : return {...jobAssistanceAndBlogsState, ...action.item}
+        default : return state;
+    }
+}
+
+const testimonialsState = {
+    // data : []
+}
+
+export const TestimonialsReducer = (state=testimonialsState, action) => {
+    switch(action.type){
+        case testimonialsFetched.type : return {...testimonialsState, ...action?.payload?.item}
         default : return state;
     }
 }

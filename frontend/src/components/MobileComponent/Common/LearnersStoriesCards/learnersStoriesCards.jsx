@@ -5,7 +5,7 @@ import './learnersStories.scss';
 import { useSelector } from 'react-redux';
 
 const LearnersStoriesCards = (props) => {
-    const { learnersData } = props
+    const { learnersData, page } = props
     const settings = {
         dots: false,
         arrows: false,
@@ -31,7 +31,11 @@ const LearnersStoriesCards = (props) => {
     return (
         learnersData.length ? (
             <section className="m-container mt-0 mb-0 pb-0 pr-0" data-aos="fade-up" >
-                <h2 className="m-heading2 mb-10">Learners stories</h2>
+                {
+                    page === 'homePage' ? <h2 className="m-heading2-home mb-10 w-70 text-center mx-auto">See how they boosted their careers</h2> :
+                                 <h2 className="m-heading2 mb-10">Learners stories</h2>
+                }
+                    
                 <div className="m-learner-stories ml-10n">
                     <Slider {...settings}>
                         { learnersData?.map(getStories) }

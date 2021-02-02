@@ -5,7 +5,9 @@ import { mostViewedCoursesFetched,
     jobAssistanceAndBlogsFetched, 
     fetchMostViewedCourses,
     fetchInDemandProducts, 
-    fetchJobAssistanceAndBlogs } from './actions';
+    fetchJobAssistanceAndBlogs,
+    fetchTestimonials, 
+    testimonialsFetched} from './actions';
 
 
 
@@ -68,8 +70,28 @@ function* jobAssistanceAndBlogs(action){
     }
 }
 
+function* fetchTestimonialsData(action){
+    const { payload } = action;
+    try{
+        const response = yield call(Api.testimonialsApi);
+        
+        if(response?.error){
+            return payload?.reject(response?.error);
+        }
+        const item = response?.data?.data;
+
+        yield put(testimonialsFetched({ item }))
+        return payload?.resolve(item);
+    }
+    catch(e){
+        console.error("Exception occured in jobAssistanceServices Api", e)
+        return payload?.reject(e);
+    }
+}
+
 export default function* WatchHomePage() {
     yield takeLatest(fetchMostViewedCourses.type, mostViewedCourse);
     yield takeLatest(fetchInDemandProducts.type, inDemandProducts);
     yield takeLatest(fetchJobAssistanceAndBlogs.type, jobAssistanceAndBlogs);
+    yield takeLatest(fetchTestimonials.type, fetchTestimonialsData);
 }

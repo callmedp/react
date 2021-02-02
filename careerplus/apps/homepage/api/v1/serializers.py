@@ -177,8 +177,3 @@ class RecentCourseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = ['id']
-
-class TestimonialSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Testimonial
-        fields = '__all__'

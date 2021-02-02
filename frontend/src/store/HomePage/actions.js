@@ -9,6 +9,9 @@ const inDemandProductsFetched = createAction('IN_DEMAND_PRODUCTS_FETCHED');
 const fetchJobAssistanceAndBlogs = createAction('FETCH_JOB_ASSISTANCE_AND_BLOGS');
 const jobAssistanceAndBlogsFetched = createAction('JOB_ASSISTANCE_AND_BLOGS_FETCHED');
 
+const fetchTestimonials = createAction('FETCH_TESTIMONIALS');
+const testimonialsFetched = createAction('TESTIMONIALS_FETCHED');
+
 export {
     fetchMostViewedCourses,
     fetchInDemandProducts,
@@ -16,4 +19,6 @@ export {
     mostViewedCoursesFetched,
     inDemandProductsFetched,
     jobAssistanceAndBlogsFetched,
+    fetchTestimonials,
+    testimonialsFetched,
 }

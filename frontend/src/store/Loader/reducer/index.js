@@ -8,7 +8,8 @@ const initState = {
     serviceLoader: false,
     commentLoader: false,
     reviewLoader: false,
-    acceptRejectLoader: false
+    acceptRejectLoader: false,
+    homePageLoader: false
 }
 
 export const LoaderReducer = (state=initState, action) => {
@@ -40,9 +41,13 @@ export const LoaderReducer = (state=initState, action) => {
         case Actions.START_REVIEW_LOADER : return {...state, ...action.payload}
         case Actions.STOP_REVIEW_LOADER : return {...state, ...action.payload}
 
-        // review loader
+        // accept reject loader
         case Actions.START_ACCEPT_REJECT_LOADER : return {...state, ...action.payload}
         case Actions.STOP_ACCEPT_REJECT_LOADER : return {...state, ...action.payload}
+
+        //Home Page Loader
+        case Actions.START_HOME_PAGE_LOADER : return {...state, ...action.payload}
+        case Actions.STOP_HOME_PAGE_LOADER : return {...state, ...action.payload}
 
         default: return state;
     }
