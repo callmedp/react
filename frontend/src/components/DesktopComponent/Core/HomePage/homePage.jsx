@@ -15,20 +15,22 @@ import Footer from '../../Common/Footer/footer';
 import '../CataloguePage/cataloguePage.scss';
 import Aos from "aos";
 import "aos/dist/aos.css";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
     fetchMostViewedCourses,
     fetchInDemandProducts,
     fetchJobAssistanceAndBlogs,
 } from 'store/HomePage/actions';
+import Loader from '../../Common/Loader/loader';
 
 const HomePage = (props) => {
 
     const dispatch = useDispatch();
+    const { homeLoader } = useSelector( store => store.loader )
 
     const handleEffect = async () => {
-        new Promise((resolve, reject) => dispatch(fetchMostViewedCourses({ numRecent: 1, resolve, reject})));
-        new Promise((resolve, reject) => dispatch(fetchInDemandProducts({ pageId: 0, tabType: 'master', device:'desktop', resolve, reject})));
+        new Promise((resolve, reject) => dispatch(fetchMostViewedCourses({ categoryId: -1, resolve, reject})));
+        new Promise((resolve, reject) => dispatch(fetchInDemandProducts({ pageId: 1, tabType: 'master', device:'desktop', resolve, reject})));
         new Promise((resolve, reject) => dispatch(fetchJobAssistanceAndBlogs({ resolve, reject})));
     }
 
@@ -41,6 +43,7 @@ const HomePage = (props) => {
 
     return (
         <div>
+            { homeLoader ? <Loader/> : ''}
             <OfferEnds />
             <Header />
             <main>

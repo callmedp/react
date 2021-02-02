@@ -3,12 +3,12 @@ import { mostViewedCoursesFetched,
     jobAssistanceAndBlogsFetched } from './actions';
 
 const mostViewedCoursesState = {
-    recentCoursesList : []
+    mostViewedCourses : []
 }
 
 export const MostViewedCoursesReducer = (state=mostViewedCoursesState, action) => {
     switch(action.type){
-        case mostViewedCoursesFetched.type  : return {...mostViewedCoursesState, ...action.item}
+        case mostViewedCoursesFetched.type  : return {...mostViewedCoursesState, ...action.payload}
         default : return state;
     }
 }
@@ -18,14 +18,14 @@ const inDemandProductsState = {
     certifications : []
 }
 
-const appendProduct = (state, action) => {
-    if( action.device === 'mobile' ){
-        if(!!action.courses){
-            let courses = [...state.courses,...action.courses];
+const appendProduct = ( state, {payload} ) => {
+    if( payload.device === 'mobile' ){
+        if(!!payload.courses){
+            let courses = [...state.courses,...payload.courses];
             return { courses : courses };
         }
-        else if(!!action.certifications){
-            let certifications = [...state.certifications, ...action.certifications];
+        else if(!!payload.certifications){
+            let certifications = [...state.certifications, ...payload.certifications];
             return { certifications: certifications }
         }
         else{
@@ -33,21 +33,20 @@ const appendProduct = (state, action) => {
         }
     }
     else {
-
-        if(!!action.courses){
+        if(!!payload.courses){
 
             let courses = [...state.courses];
-            if(courses.length === 0)    courses = Array.from(Array(action.pages), () => new Array());
-            courses[action.id] = [...action.courses]
+            if(courses.length === 0)    courses = Array.from(Array(payload.pages), () => new Array());
+            courses[payload.id-1] = [...payload.courses]
             
             return { courses: courses }
 
         }
-        else if(!!action.certifications){
+        else if(!!payload.certifications){
 
             let certifications = [...state.certifications];
-            if(certifications.length === 0)   certifications = Array.from(Array(action.pages), () => new Array());
-            certifications[action.id] = [...action.certifications]
+            if(certifications.length === 0)   certifications = Array.from(Array(payload.pages), () => new Array());
+            certifications[payload.id-1] = [...payload.certifications]
 
             return { certifications: certifications}
         }
@@ -59,18 +58,19 @@ const appendProduct = (state, action) => {
 
 export const InDemandProductsReducer = (state=inDemandProductsState, action) => {
     switch(action.type){
-        case inDemandProductsFetched.type : return {...state, ...appendProduct(state, action)}
+        case inDemandProductsFetched.type : return {...state, ...appendProduct(state, action )}
         default : return state;
     }
 }
 
 const jobAssistanceAndBlogsState = {
-    recentCoursesList : []
+    jobAssistanceServices : [],
+    latestBlog : []
 }
 
 export const JobAssistanceAndBlogsReducer = (state=jobAssistanceAndBlogsState, action) => {
     switch(action.type){
-        case jobAssistanceAndBlogsFetched.type : return {...jobAssistanceAndBlogsState, ...action.item}
+        case jobAssistanceAndBlogsFetched.type : return {...jobAssistanceAndBlogsState, ...action.payload}
         default : return state;
     }
 }

@@ -815,6 +815,7 @@ class TrendingCoursesAndSkillsAPI(PopularProductMixin, APIView):
         popular_course_quantity = int(request.GET.get('num_courses', 2))
         skill_category = request.GET.get('category_id', None)
         homepage = request.GET.get('homepage',False)
+        course_only = request.GET.get('course_only', False)
 
         product_obj, product_converstion_ratio, product_revenue_per_mile = PopularProductMixin().\
                                                                             popular_courses_algorithm(
@@ -1005,7 +1006,7 @@ class MostViewedCourseAPI(APIView):
         ).order_by('-pCD')
 
         data = {
-            'mostViewedCourseList':
+            'mostViewedCourses':
                 [
                     {
                     'id': trcnts.id, 'heading': trcnts.pHd, 'name': trcnts.pNm, 'url': trcnts.pURL, 'imgUrl': trcnts.pImg, \
@@ -1090,7 +1091,7 @@ class JobAssistanceAndLatestBlogAPI(APIView):
                 'image':article.get_absolute_image_url(),
                 'url':article.get_absolute_url()
                 } for article in article_list]
-            data.update({'latest_blog_data':latest_blog_data})
+            data.update({'latestBlog':latest_blog_data})
 
         except Exception as e:
             logging.getLogger('error_log').error(

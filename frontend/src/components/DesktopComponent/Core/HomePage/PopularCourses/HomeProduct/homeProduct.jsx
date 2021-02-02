@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import Carousel from 'react-bootstrap/Carousel';
 import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { fetchInDemandProducts } from 'store/HomePage/actions';
+import { startHomePageLoader, stopHomePageLoader } from 'store/Loader/actions';
 
 
 const HomeProduct = (props) => {
@@ -11,9 +12,11 @@ const HomeProduct = (props) => {
     const { tabType, popularProducts } = props;
     const dispatch = useDispatch()
 
-    const handleSelect = (selectedIndex, e) => {
-        if (popularProducts[selectedIndex].length === 0) {
-            new Promise((resolve, reject) => dispatch(fetchInDemandProducts({ pageId: selectedIndex, tabType, device: 'desktop', resolve, reject })));
+    const handleSelect = async (selectedIndex, e) => {
+        if (popularProducts.length === 0 || popularProducts[selectedIndex].length === 0) {
+            dispatch(startHomePageLoader())
+            await new Promise((resolve, reject) => dispatch(fetchInDemandProducts({ pageId: selectedIndex + 1, tabType, device: 'desktop', resolve, reject })));
+            dispatch(stopHomePageLoader())
         }
         setIndex(selectedIndex);
     };

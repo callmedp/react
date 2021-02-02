@@ -115,3 +115,17 @@ export const stopAcceptRejectLoader = () => {
         payload: { acceptRejectLoader: false }
     }
 }
+
+export const startHomePageLoader = () => {
+    return {
+        type: Actions.START_HOME_PAGE_LOADER,
+        payload: { homeLoader: true } 
+    }
+}
+
+export const stopHomePageLoader = () => {
+    return {
+        type: Actions.STOP_HOME_PAGE_LOADER,
+        payload: { homeLoader: false }
+    }
+}

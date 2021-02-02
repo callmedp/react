@@ -229,6 +229,19 @@ const contactData = {
     'contactTimings' : '9:00am to 6:30pm (Mon - Sat)',
 }
 
+const categoryTabs = [
+    { name : 'All', id: '-1'},
+    { name: 'Banking & Finance', id: '20'},
+    { name: 'Sales & Marketing', id: '17'},
+    { name: 'HR', id: '25'},
+    { name: 'Operations', id: '19'},
+    { name: 'Personal Development', id: '21'},
+    { name: 'IT', id: '22'},
+    { name: 'Mass comm', id: '29'},
+    { name: 'Management', id: '27'},
+    { name: 'LAW', id: '23'}
+]
+
 
 
 export {
@@ -236,5 +249,6 @@ export {
     jobAssistanceList,
     categoryList,
     navSkillList,
-    contactData
+    contactData,
+    categoryTabs,
 }

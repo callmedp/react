@@ -12,7 +12,7 @@ const PracticeTestBanner = (props) => {
                                 <img src="./media/images/practice-test-bg.png" className="img-fluid" alt="Practice Test" />
                             </figure>
                             <strong>Take our free practice test to help you choose the right course.</strong>
-                            <button type="button" class="btn btn-outline-primary mr-30">TAKE FREE TEST</button>
+                            <button type="button" className="btn btn-outline-primary mr-30">TAKE FREE TEST</button>
                         </div>
                     </div>
                 </div>

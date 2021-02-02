@@ -20,15 +20,15 @@ const PopularCourses = (props) => {
             <div className="m-courses m-popular-course-demand">
                 <h2 className="m-heading2-home text-center">Popular courses in demand</h2>
 
-                <div class="m-tabset-pop">
+                <div className="m-tabset-pop">
                     <input type="radio" name="tabset" id="tab1" aria-controls="Master’s" checked />
                     <label for="tab1">Master’s</label>
 
                     <input type="radio" name="tabset" id="tab2" aria-controls="Certifications" />
                     <label for="tab2">Certifications</label>
 
-                    <div class="tab-panels">
-                        <div id="tab1" class="tab-panel">
+                    <div className="tab-panels">
+                        <div id="tab1" className="tab-panel">
                             <div className="m-courses">
                                 <Slider {...settings}>
                                     <div className="m-card">
@@ -146,7 +146,7 @@ const PopularCourses = (props) => {
                                 </Slider>
                             </div>
                         </div>
-                        <div id="tab2" class="tab-panel">
+                        <div id="tab2" className="tab-panel">
                         <div className="m-courses">
                                 <Slider {...settings}>
                                     <div className="m-card">
