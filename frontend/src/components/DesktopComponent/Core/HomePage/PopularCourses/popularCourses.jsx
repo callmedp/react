@@ -1,14 +1,15 @@
 import React, {useState} from 'react';
 import '../../SkillPage/CoursesTray/coursesTray.scss';
 import './popularCourses.scss'
-import { Tabs, Tab, CarouselItem } from 'react-bootstrap';
-import Carousel from 'react-bootstrap/Carousel';
-import { Link } from 'react-router-dom';
+import { Tabs, Tab } from 'react-bootstrap';
 import MasterProduct from './HomeProduct/homeProduct';
 import CertificationProduct from './HomeProduct/homeProduct';
-   
+import { useSelector } from 'react-redux';   
+
 function PopularCourses() {
   const [key, setKey] = useState('categories1');
+
+  const { courses, certifications } = useSelector( store => store.inDemand )
 
   return (
     <section className="container mt-30 mb-0">
@@ -23,10 +24,10 @@ function PopularCourses() {
                 >
         
                 <Tab eventKey="categories1" title={<h2>Master’s</h2>}>
-                    <MasterProduct/>
+                    <MasterProduct tabType="master" popularProducts={courses} />
                 </Tab>
                 <Tab eventKey="categories2" title={<h2>Certifications</h2>}>
-                    <CertificationProduct/>
+                    <CertificationProduct tabType="certification" popularProducts={certifications} />
                 </Tab>
                 
                 </Tabs>

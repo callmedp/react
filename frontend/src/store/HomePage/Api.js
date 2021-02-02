@@ -2,11 +2,6 @@ import BaseApiService from 'services/BaseApiService'
 
 import { siteDomain } from 'utils/domains'
 
-const latestBlog = () => {
-    const url = '/api/v1/latest-blogs/';
-
-    return BaseApiService.get(`${siteDomain}${url}`);
-}
 
 const mostViewedCourse = () => {
     const url = '/api/v1/most-viewed-courses/';
@@ -14,22 +9,21 @@ const mostViewedCourse = () => {
     return BaseApiService.get(`${siteDomain}${url}`);
 }
 
-const inDemandProducts = () => {
-    const url = '/api/v1/in-demand-product/';
+const inDemandProducts = (data) => {
+    const url = `/api/v1/in-demand-product/?page_id=${data.pageId}&tab_type=${data.tabType}`;
 
     return BaseApiService.get(`${siteDomain}${url}`);
 }
 
-const jobAssistanceServices = () => {
-    const url = '/api/v1/job-assistance-services/';
+const jobAssistanceAndBlogs = () => {
+    const url = '/api/v1/job-assistance-latest-blogs/';
 
     return BaseApiService.get(`${siteDomain}${url}`);
 }
 
 export default {
-    latestBlog,
     mostViewedCourse,
     inDemandProducts,
-    jobAssistanceServices,
+    jobAssistanceAndBlogs,
 }   
 

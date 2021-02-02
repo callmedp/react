@@ -17,21 +17,19 @@ import Aos from "aos";
 import "aos/dist/aos.css";
 import { useDispatch } from 'react-redux';
 import {
-    fetchLatestBlog,
     fetchMostViewedCourses,
     fetchInDemandProducts,
-    fetchJobAssistanceServices,
-} from 'store/HomePage/actions/index';
+    fetchJobAssistanceAndBlogs,
+} from 'store/HomePage/actions';
 
 const HomePage = (props) => {
 
     const dispatch = useDispatch();
 
     const handleEffect = async () => {
-        new Promise((resolve, reject) => dispatch(fetchLatestBlog({ resolve, reject})));
         new Promise((resolve, reject) => dispatch(fetchMostViewedCourses({ numRecent: 1, resolve, reject})));
-        new Promise((resolve, reject) => dispatch(fetchInDemandProducts({ resolve, reject})));
-        new Promise((resolve, reject) => dispatch(fetchJobAssistanceServices({ resolve, reject})));
+        new Promise((resolve, reject) => dispatch(fetchInDemandProducts({ pageId: 0, tabType: 'master', device:'desktop', resolve, reject})));
+        new Promise((resolve, reject) => dispatch(fetchJobAssistanceAndBlogs({ resolve, reject})));
     }
 
     useEffect( () => {
