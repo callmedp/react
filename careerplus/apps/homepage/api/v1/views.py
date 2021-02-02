@@ -828,30 +828,26 @@ class TrendingCoursesAndSkillsAPI(PopularProductMixin, APIView):
         tprds = SearchQuerySet().filter(id__in=product_pks, pTP__in=[0, 1, 3]).exclude(
             id__in=settings.EXCLUDE_SEARCH_PRODUCTS
         )
-        p_skills = product_obj.filter(id__in=product_pks, categories__is_skill=True).exclude(
+        p_skills = product_obj.filter(id__in=product_pks, categories__is_skill=True).distinct().exclude(
             categories__related_to__slug__isnull=True).values_list('categories',flat=True)
-        categories = Category.objects.filter(type_level=3,id__in=p_skills)
+
+        categories = Category.objects.filter(id__in=p_skills)
 
         skills = []
-        skill_data = {}
+        skills_ids = []
         for i in categories:
-                skill_data ={
-                    'id': i.id,
-                    'skillName': i.name,
-                    'skillUrl': i.get_absolute_url()}
-                if homepage :
-                    skill_data.update({
-                        # 'image':i.image if i.image else None,
-                        'no_courses':i.categoryproducts.count()
-                        })
-                skills.append(skill_data)
+            if i.id not in skills_ids:
+                skills_ids.append(i.id)
+                skills.append({'id': i.id, 'skillName': i.name,
+                        'skillUrl': i.get_absolute_url()})
 
         data = {
             'trendingCourses': [
-                {'id': tprd.id, 'heading': tprd.pHd, 'name': tprd.pNm, 'url': tprd.pURL, 'imgUrl': tprd.pImg, \
-                 'imgAlt': tprd.pImA, 'rating': tprd.pARx, 'vendor': tprd.pPvn, 'stars': tprd.pStar,'price': tprd.pPinb, 
-                 'providerName': tprd.pPvn \
-                 } for tprd in tprds]
+                {'id': tprd.id, 'heading': tprd.pHd, 'name': tprd.pNm, 'url': tprd.pURL, 'img': tprd.pImg, \
+                 'img_alt': tprd.pImA, 'rating': tprd.pARx, 'vendor': tprd.pPvn, 'stars': tprd.pStar,
+                 'provider': tprd.pPvn \
+                 } for tprd in tprds],
+            'trendingSkills': [dict(y) for y in set(tuple(x.items()) for x in skills)]
         }
         if not course_only :
             data.update({
@@ -970,21 +966,21 @@ class TrendingCategoriesApi(PopularProductMixin, APIView):
     authentication_classes = ()
 
     def get(self, request):
-        quantity_to_display = int(request.GET.get('num', 3))
+        quantity_to_display = int(request.GET.get('num', 6))
 
-        cached_data = cache.get('category_popular_courses')
-        if not settings.DEBUG and cached_data:
-            data = cached_data
-        else:
-            data = {
-                'SnMCourseList': PopularProductMixin().get_products_json(PopularProductMixin().\
-                                                        get_popular_courses(category=17,quantity=quantity_to_display)),
-                'ITCourseList': PopularProductMixin().get_products_json(PopularProductMixin().\
-                                                        get_popular_courses(category=22,quantity=quantity_to_display)),
-                'BnFCourseList': PopularProductMixin().get_products_json(PopularProductMixin().\
-                                                        get_popular_courses(category=20,quantity=quantity_to_display)),
-            }
-            cache.set('category_popular_courses',data,86400)
+        # cached_data = cache.get('category_popular_courses')
+        # if (not settings.DEBUG) and cached_data:
+        #     data = cached_data
+        # else:
+        data = {
+            'SnMCourseList': PopularProductMixin().get_products_json(PopularProductMixin().\
+                                                    get_popular_courses(category=17,quantity=quantity_to_display)),
+            'ITCourseList': PopularProductMixin().get_products_json(PopularProductMixin().\
+                                                    get_popular_courses(category=22,quantity=quantity_to_display)),
+            'BnFCourseList': PopularProductMixin().get_products_json(PopularProductMixin().\
+                                                    get_popular_courses(category=20,quantity=quantity_to_display)),
+        }
+            # cache.set('category_popular_courses',data,86400)
         return Response(data=data, status=status.HTTP_200_OK)
 
 class MostViewedCourseAPI(APIView):

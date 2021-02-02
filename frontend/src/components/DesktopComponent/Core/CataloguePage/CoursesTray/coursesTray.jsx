@@ -17,14 +17,18 @@ function CoursesTray() {
     
 
     const loadMoreCourses = (setCategoryKey) => {
-        setCategoryKey( state => state+1);
+        setCategoryKey( state => state + 1 );
+    }
+
+    const viewLessCourses = (setCategoryKey) => {
+        setCategoryKey( state => state - 1 );
     }
 
     return (
         <section className="container mt-30">
             <div className="row">
                 <div className="col courses-tray" data-aos="fade-up">
-                    <h2 className="heading2 text-center mb-20">Recommended Categories</h2>
+                    <strong className="heading2 text-center mb-20 d-block">Recommended Categories</strong>
                     <Tabs
                         id="controlled-tab-example"
                         activeKey={key}
@@ -45,6 +49,7 @@ function CoursesTray() {
                                 })
                             }
                             { categoryKey1 < SnMCourseList.length ? <a type="button" onClick={() => loadMoreCourses(setCategoryKey1)} className="load-more pt-30">Load More Courses</a> : ''}
+                            { categoryKey1 > 1 ? <a type="button" onClick={() => viewLessCourses(setCategoryKey1)} className="load-more pt-30">View Less Courses</a> : ''}
 
                         </Tab>
                         <Tab eventKey="categories2" title={<h2>Information Technology</h2>}>
@@ -60,6 +65,7 @@ function CoursesTray() {
                                 })
                             }
                             { categoryKey2 < ITCourseList.length ? <a type="button" onClick={() => loadMoreCourses(setCategoryKey2)} className="load-more pt-30">Load More Courses</a> : ''}
+                            { categoryKey2 > 1 ? <a type="button" onClick={() => viewLessCourses(setCategoryKey2)} className="load-more pt-30">View Less Courses</a> : ''}
                         </Tab>
                         <Tab eventKey="categories3" title={<h2>Banking & Finance</h2>}>
                             {
@@ -74,6 +80,7 @@ function CoursesTray() {
                                 })
                             }
                             { categoryKey3 < BnFCourseList.length ? <a type="button" onClick={() => loadMoreCourses(setCategoryKey3)} className="load-more pt-30">Load More Courses</a> : ''}
+                            { categoryKey3 > 1 ? <a type="button" onClick={() => viewLessCourses(setCategoryKey3)} className="load-more pt-30">View Less Courses</a> : ''}
                         </Tab>
 
                     </Tabs>

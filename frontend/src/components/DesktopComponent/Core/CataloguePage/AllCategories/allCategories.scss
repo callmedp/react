@@ -18,10 +18,17 @@
             padding-bottom: 1rem;
             margin-bottom: 3rem;
 
+            &:hover {
+                box-shadow: $box-shadow-hover; 
+            }
+
             figure {
                 border-top-left-radius: .5rem;
                 border-top-right-radius: .5rem;
                 overflow: hidden;
+                height: 16.5rem;
+                margin: 0;
+                
                 img {
                     width: 100%;
                 }

@@ -38,8 +38,8 @@ const CatalogPage = (props) => {
         new Promise((resolve, reject) => dispatch(fetchAllCategoriesAndVendors({ num:8, resolve, reject })));
     }
     else {
-        //isServerRendered is needed to be deleted because when routing is done through react and not on the node,
-        //above actions need to be dispatched.
+        // isServerRendered is needed to be deleted because when routing is done through react and not on the node,
+        // above actions need to be dispatched.
         delete window.config?.isServerRendered
     }
     }, [])
