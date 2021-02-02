@@ -1092,9 +1092,7 @@ class TestimonialsApi(APIView):
     authentication_classes = ()
 
     def get(self,request):
-        data = cache.get('testimonial_homepage')
-        if not data:
-            data = Testimonial.objects.filter(page=1, is_active=True)[:5]
-            data = TestimonialSerializer(data,many=True).data
-            cache.set('testimonial_homepage', data, timeout=None)
-        return Response(data=data, status=status.HTTP_200_OK)
+        quantity = request.GET.get('quantity',5)
+        testimonials = Testimonial.objects.filter(is_active=True).order_by('-rating')[:quantity]
+        data = TestimonialSerializer(testimonials,many=True).data
+        return APIResponse(message='Testimonials data loaded', data=data, status=status.HTTP_200_OK)
