@@ -8,6 +8,7 @@ import Loader from '../../../Common/Loader/loader';
 import Pagination from '../../../Common/Pagination/pagination';
 import FAQ from '../../../Common/FAQ/faq';
 import { faqList } from 'utils/dashboardUtils/faqListUtils';
+import { siteDomain } from 'utils/domains'
 
    
 const MyWallet = (props) => {
@@ -57,7 +58,8 @@ const MyWallet = (props) => {
                                 <h2> { wal_total?.toFixed(2) } </h2>
                             </div>
 
-                            <button className="btn-blue-outline btn-xs" onClick={() => setShowModal(true)}>Redeem now</button>
+                            {/* <button className="btn-blue-outline btn-xs" onClick={() => setShowModal(true)}>Redeem now</button> */}
+                            <a href={`${siteDomain}/cart/payment-summary/`} className="btn-blue-outline btn-xs" >Redeem now</a>
                         </div>
                     </div>
 
@@ -80,62 +82,6 @@ const MyWallet = (props) => {
                             )
                         })
                     }
-                    
-                    {/* <div className="m-card">
-                        <span className="m-wallet--date">27 Oct 2020</span>
-                        <ul className="m-wallet--info">
-                            <li className="head">CT2456912</li>
-                            <li className="lPoints text-red">-47.00</li>
-                            <li className="blance">47.00</li>
-                        </ul>
-
-                        <div className="m-pipe-divides">
-                            <span>Expierd</span>
-                            <span>Expiry date: <strong>27 Oct 2020</strong></span>
-                        </div>
-                    </div>
-                    
-                    <div className="m-card">
-                        <span className="m-wallet--date">27 Oct 2020</span>
-                        <ul className="m-wallet--info">
-                            <li className="head">CT2456912</li>
-                            <li className="lPoints text-green">-470.00</li>
-                            <li className="blance">450.00</li>
-                        </ul>
-
-                        <div className="m-pipe-divides">
-                            <span>Added</span>
-                            <span>Expiry date: <strong>27 Oct 2020</strong></span>
-                        </div>
-                    </div>
-                    
-                    <div className="m-card">
-                        <span className="m-wallet--date">27 Oct 2020</span>
-                        <ul className="m-wallet--info">
-                            <li className="head">CT2456912</li>
-                            <li className="lPoints text-green">+437.00</li>
-                            <li className="blance">389.00</li>
-                        </ul>
-
-                        <div className="m-pipe-divides">
-                            <span>Reverted</span>
-                            <span>Expiry date: <strong>27 Oct 2020</strong></span>
-                        </div>
-                    </div>
-                    
-                    <div className="m-card">
-                        <span className="m-wallet--date">27 Oct 2020</span>
-                        <ul className="m-wallet--info">
-                            <li className="head">CT2456912</li>
-                            <li className="lPoints text-red">-47.00</li>
-                            <li className="blance">47.00</li>
-                        </ul>
-
-                        <div className="m-pipe-divides">
-                            <span>Reedemed</span>
-                            <span>Expiry date: <strong>27 Oct 2020</strong></span>
-                        </div>
-                    </div> */}
 
                     { 
                         showModal &&
@@ -148,7 +94,7 @@ const MyWallet = (props) => {
                                             <strong className="redeem-now--lPoints d-block">{ wal_total?.toFixed(2) }</strong>
                                             loyality point is reedemed and added <br/>in your wallet
                                         </p>
-                                        <a href="/payment/payment-summary" className="font-weight-bold">Ok</a>
+                                        <a href="/cart/payment-summary/" className="font-weight-bold">Ok</a>
                                 </div>
                             </div>
                     }
