@@ -1025,7 +1025,7 @@ class PopularInDemandProductsAPI(APIView):
         if tab_type=='certifications':
             certifications = PopularProductMixin().popular_certifications(quantity=quantity,
                                                                                 type_flow=16,
-                                                                                sub_type_flow=201)
+                                                                               )
             paginated_data = offset_paginator(page, certifications,size=4)                                                                    
             data.update({'certifications':paginated_data["data"]})
         
