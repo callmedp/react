@@ -33,7 +33,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
         elif key in [161, 162, 163, 164]:
             status = instance.get_user_oi_status
         elif order_key in [0, 1, 5]:
-            status = OI_STATUS_DICT.get(key)
+            status = OI_STATUS_DICT.get(order_key)
         return status
     # def get_product_is_pause_service(self,obj):
     #     return obj.product.is_pause_service if obj.product_id else ''
@@ -104,7 +104,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
             'heading': instance.product.heading if instance.product_id else '',
         })
         if self.context.get("get_details", None):
-            date_placed =instance.order.date_placed.strftime("%b %d, ""%Y")
+            date_placed =instance.order.date_placed.strftime("%d %b %Y")
             data.update({
                 'img': instance.product.get_image_url(), 
                 'rating': instance.product.get_ratings(),
