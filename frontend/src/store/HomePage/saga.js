@@ -5,7 +5,9 @@ import { mostViewedCoursesFetched,
     jobAssistanceAndBlogsFetched, 
     fetchMostViewedCourses,
     fetchInDemandProducts, 
-    fetchJobAssistanceAndBlogs } from './actions';
+    fetchJobAssistanceAndBlogs, 
+    skillwithDemandsFetched,
+    fetchSkillwithDemands} from './actions';
 
 
 
@@ -68,8 +70,29 @@ function* jobAssistanceAndBlogs(action){
     }
 }
 
+
+function* skillwithDemands(action) {
+    const { payload } = action;
+    try {
+        const response = yield call(Api.skillwithDemands);
+        console.log(response)
+
+        if (response?.error){
+            return payload?.reject(response?.error);
+        }
+        const item = response?.data?.data;
+        yield put(skillwithDemandsFetched({ item }))
+        return payload?.resolve(item);
+    }
+    catch(e) {
+        console.log("Exception occured in skillWithDemads Api", e)
+        return payload?.reject(e);
+    }
+}
+
 export default function* WatchHomePage() {
     yield takeLatest(fetchMostViewedCourses.type, mostViewedCourse);
     yield takeLatest(fetchInDemandProducts.type, inDemandProducts);
     yield takeLatest(fetchJobAssistanceAndBlogs.type, jobAssistanceAndBlogs);
+    yield takeLatest(fetchSkillwithDemands.type, skillwithDemands);
 }

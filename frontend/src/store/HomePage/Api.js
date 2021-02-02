@@ -21,9 +21,16 @@ const jobAssistanceAndBlogs = () => {
     return BaseApiService.get(`${siteDomain}${url}`);
 }
 
+const skillwithDemands = () => {
+    const url = '/api/v1/trending-courses-and-skills/?homepage=True';
+
+    return BaseApiService.get(`${siteDomain}${url}`);
+}
+
 export default {
     mostViewedCourse,
     inDemandProducts,
     jobAssistanceAndBlogs,
+    skillwithDemands
 }   
 

@@ -15,7 +15,7 @@ import { DashboardMyWalletReducer } from './DashboardPage/MyWallet/reducer/index
 import { DashboardMyOrdersReducer } from './DashboardPage/MyOrder/reducer/index'; 
 import { DashboardMyCoursesReducer } from './DashboardPage/MyCourses/reducer/index';
 import { DashboardMyServicesReducer } from './DashboardPage/MyServices/reducer/index';
-import { InDemandProductsReducer, JobAssistanceAndBlogsReducer, MostViewedCoursesReducer  } from './HomePage/reducers';
+import { InDemandProductsReducer, JobAssistanceAndBlogsReducer, MostViewedCoursesReducer, SkillwithDemandsReducer  } from './HomePage/reducers';
 
 const rootReducer = combineReducers({
     needHelp : NeedHelpReducer,
@@ -41,6 +41,7 @@ const rootReducer = combineReducers({
     mostViewed: MostViewedCoursesReducer,
     inDemand: InDemandProductsReducer,
     jobAssistance: JobAssistanceAndBlogsReducer,
+    skillDemand: SkillwithDemandsReducer,
 
 });
 
