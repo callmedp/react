@@ -134,7 +134,7 @@ const MyServices = (props) => {
         <>
         { serviceLoader && <Loader />}
         {
-            page?.total === 0 ? <EmptyInbox inboxType="services" /> :
+            !page?.total || page?.total === 0 ? <EmptyInbox inboxType="services" /> :
 
         <div>
             {/* Pending resume block Start*/}

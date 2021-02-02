@@ -134,14 +134,14 @@ const MyServices = (props) => {
         <div>
             {serviceLoader ? <Loader /> : ''}
 
-            { results?.page?.total === 0 ? <EmptyInbox/> : '' }
-
             <div className="db-my-courses-detail">
                 {
                     results?.data?.length > 0 && pending_resume_items?.length > 0 ? 
                         <div className="alert alert-primary py-4 px-5 fs-16 w-100 text-center mb-0" role="alert">To initiate your services.<span className="resume-upload--btn">&nbsp;<strong onClick={uploadHandelShow} className="cursor">Upload Resume</strong></span></div>
                     : null
                 }
+
+                { !results?.page?.total || results?.page?.total === 0 ? <EmptyInbox/> : '' }
 
                 {results?.data && results?.data?.length > 0 ?
                     results?.data?.map((item,index) => {

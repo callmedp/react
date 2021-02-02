@@ -62,9 +62,15 @@ const MyCourses = (props) => {
             type: 'GET'
         }
         if(addOpen != id){
-            dispatch(startCommentLoader())
-            await new Promise((resolve, reject) => dispatch(fetchOiComment({payload: commVal, resolve, reject})));
-            dispatch(stopCommentLoader())
+            try{
+                dispatch(startCommentLoader())
+                await new Promise((resolve, reject) => dispatch(fetchOiComment({payload: commVal, resolve, reject})));
+                dispatch(stopCommentLoader())
+            }
+            catch{
+                dispatch(stopCommentLoader())
+            }
+            
         }
     };
 
@@ -121,11 +127,12 @@ const MyCourses = (props) => {
     return (
         <div>
             { coursesLoader ? <Loader /> : ''}
-            { page.total === 0 ? <EmptyInbox/> : '' }
 
             <BreadCrumbs filterState={filterState} setfilterState={setfilterState} />
 
             <div className="db-my-courses-detail">
+
+                { !page?.total || page?.total === 0 ? <EmptyInbox inboxType="courses"/> : '' }
 
                 {
                     data?.map((course, index) => {
@@ -144,30 +151,30 @@ const MyCourses = (props) => {
                                                     <div className="db-my-courses-detail__leftpan--info">
                                                         { !!course.vendor && <span>Provider: <Link className="noLink" to={"#"}>{course.vendor}</Link></span> }
                                                         { !!course.enroll_date && <span>Enrolled on: <strong>{course.enroll_date}</strong></span> }
-                                                        { !!course.duration && <span>Duration: <strong>{course.duration}</strong></span> }
+                                                        { !!course?.duration_in_days && <span>Duration: <strong>{course?.duration_in_days} {course?.duration_in_days > 1 ? 'days': 'day'}</strong></span> }
                                                         { !!course.mode && <span>Mode: <strong>{course.mode}</strong></span> }
                                                         { !!course.jobs && <span>Jobs: <strong>{course.jobs}</strong></span> }
                                                     </div>
 
-                                                    <div className="db-my-courses-detail__leftpan--session">
+                                                    {/* <div className="db-my-courses-detail__leftpan--session">
                                                         <span>Next session : <strong>Basic of Digital Marketing</strong></span>
                                                         <span className="db-icon-date font-weight-bold">3PM |  29 nov 2020</span>
-                                                    </div>
+                                                    </div> */}
 
-                                                    <div className="db-my-courses-detail__leftpan--alert">
+                                                    {/* <div className="db-my-courses-detail__leftpan--alert">
                                                         Hi, the recording for the session you missed is available now <Link to={"#"} className="ml-2">Click here</Link>
-                                                    </div>
+                                                    </div> */}
 
                                                     <div className="db-my-courses-detail__leftpan--status mb-2">
-                                                        { course.status || course.new_oi_status ? 'Status':''}
-                                                        <strong className="ml-1">{course.status ?? course.new_oi_status}</strong>
+                                                        Status :
+                                                        <strong className="ml-1">{course?.new_oi_status ? course?.new_oi_status : 'Yet to Update'}</strong>
                                                         &emsp;
                                                         {course.product_type_flow === 2 || course.product_type_flow === 14 ?
                                                             <React.Fragment>
                                                                 {(course?.vendor === 'neo' && course?.oi_status === 5) ? 
-                                                                    course?.BoardOnNeo ? <a className="ml-2" onClick={NeoBoardUser(course.id)}>Board On Neo</a> : 
-                                                                    (course?.neo_mail_sent) ? <strong className="ml-1">Please Confirm Boarding on Mail Sent to you</strong> :
-                                                                    (course?.updated_from_trial_to_regular) ? <strong className="ml-1">Updated Account from Trial To Regular</strong> 
+                                                                    course?.BoardOnNeo ? <a className="ml-2" onClick={NeoBoardUser(course.id)}> :- Board On Neo</a> : 
+                                                                    (course?.neo_mail_sent) ? <strong className="ml-1"> :- Please Confirm Boarding on Mail Sent to you</strong> :
+                                                                    (course?.updated_from_trial_to_regular) ? <strong className="ml-1"> :- Updated Account from Trial To Regular</strong> 
                                                                     : null
                                                                     : null}
                                                             </React.Fragment>
@@ -176,24 +183,29 @@ const MyCourses = (props) => {
                                                         {/* take test when type flow is 16 */}
                                                         {course?.options?.take_test ? <a className="ml-2" target="_blank" href={ course?.options?.auto_login_url}>Take Test</a> : null}
                                                     </div>
+                                                    {
+                                                        course?.datalist?.length > 0 &&
+                                                        <>
+                                                            <Link
+                                                                className="font-weight-bold"
+                                                                onClick={() => toggleDetails(course.id)}
+                                                                aria-controls="addComments"
+                                                                aria-expanded={`openViewDetail` + index}
+                                                                to={'#'}
+                                                            >
+                                                                View Details
+                                                            </Link>
 
-                                                    <Link
-                                                        className="font-weight-bold"
-                                                        onClick={() => toggleDetails(course.id)}
-                                                        aria-controls="addComments"
-                                                        aria-expanded={`openViewDetail` + index}
-                                                        to={'#'}
-                                                    >
-                                                        View Details
-                                                    </Link>
+                                                            {/* course detail modal open */}
+                                                            <ViewDetailModal 
+                                                                id={course.id} 
+                                                                toggleDetails={toggleDetails}  
+                                                                isOpen={isOpen}
+                                                                datalist={course.datalist || []}
+                                                            />
+                                                        </>
+                                                    }
 
-                                                    {/* course detail modal open */}
-                                                    <ViewDetailModal 
-                                                        id={course.id} 
-                                                        toggleDetails={toggleDetails}  
-                                                        isOpen={isOpen}
-                                                        datalist={course.datalist || []}
-                                                    />
                                                 </div>
                                             </div>
 
@@ -214,12 +226,12 @@ const MyCourses = (props) => {
                                                     <span className="ml-2 day-remaning--text">{course.remaining_days > 1 ? 'Days' : 'Day'} <br />remaning</span>
                                                 </div>
 
-                                                <div className="db-status mt-20">
+                                                {/* <div className="db-status mt-20">
                                                     <p className="mb-0 pb-1">Status: <strong>(0% Complete)</strong> </p>
                                                     <ProgressBar now={0} />
                                                 </div>
 
-                                                <Link to={"#"} className="db-start-course font-weight-bold mt-30">Start course</Link>
+                                                <Link to={"#"} className="db-start-course font-weight-bold mt-30">Start course</Link> */}
                                             </div>
                                         </div>
 
@@ -240,29 +252,32 @@ const MyCourses = (props) => {
                                                         'Add comment'
                                                     }
                                             </Link>
+                                            
+                                            {
+                                                (course?.oi_status === 4) &&
+                                                    <div className="d-flex">
+                                                        {/* <div className="db-certificate">
+                                                            <i className="db-certificate-icon"></i>
+                                                            <span className="db-certificate--text arrow-box top">Download certificate</span>
+                                                        </div> */}
+                                                        <ReviewRating
+                                                            item={course}
+                                                            handleShow={handleShow}
+                                                            toggleReviews={toggleReviews} 
+                                                            setOpenReview={setOpenReview}
+                                                            openReview={openReview}
+                                                            name="Course"/>
 
-                                            <div className="d-flex">
-                                                <div className="db-certificate">
-                                                    <i className="db-certificate-icon"></i>
-                                                    <span className="db-certificate--text arrow-box top">Download certificate</span>
-                                                </div>
-                                                <ReviewRating
-                                                    item={course}
-                                                    handleShow={handleShow}
-                                                    toggleReviews={toggleReviews} 
-                                                    setOpenReview={setOpenReview}
-                                                    openReview={openReview}
-                                                    name="Course"/>
-
-                                                {/* rate service modal */}
-                                                <RateModal handleClose={handleClose} show={show} name="Course"/>
-                                            </div>
+                                                        {/* rate service modal */}
+                                                        <RateModal handleClose={handleClose} show={show} name="Course"/>
+                                                    </div>
+                                            }
                                         </div>
                                     </div>
                                 </div>
                                 <AddCommentModal id={course.id} addCommentDataFetch={addCommentDataFetch} data={oiComments} addOpen={addOpen} />
 
-                                <div className="db-mycourse-highlighter">Next course to take: <Link to={"#"} className="font-weight-bold ml-2">Seo Specialist</Link> </div>
+                                {/* <div className="db-mycourse-highlighter">Next course to take: <Link to={"#"} className="font-weight-bold ml-2">Seo Specialist</Link> </div> */}
                             </div>
                         )
                     })

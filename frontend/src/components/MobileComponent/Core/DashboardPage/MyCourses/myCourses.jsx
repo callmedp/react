@@ -95,7 +95,7 @@ const MyCourses = (props) => {
         <>
             { coursesLoader && <Loader />}
             {
-                page?.total === 0 ? <EmptyInbox inboxType="courses"/> :
+                !page?.total || page?.total === 0 ? <EmptyInbox inboxType="courses"/> :
 
             <div>
                 <div className="m-courses-detail db-warp">
