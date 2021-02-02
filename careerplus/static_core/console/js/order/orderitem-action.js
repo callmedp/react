@@ -224,6 +224,12 @@ const updateSelectedOI = (checkbox,oi_id)=>{
 }
 
 const upload_click = ()=>{
+    if($('#id_oi_resume').val()=='' && $("input[id='id_resume_from_shine']").is(':checked') == false){
+        $('#oi_resume_error').show();
+        $('#upload-doc-modal').modal('show');
+        return;
+    }
+    $('#oi_resume_error').hide();
     if(!selected_order_items.length)
         return
     $('#oi_ids').attr("value",()=>{return selected_order_items.join(" ")})
