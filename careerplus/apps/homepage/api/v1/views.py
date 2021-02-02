@@ -814,6 +814,7 @@ class TrendingCoursesAndSkillsAPI(PopularProductMixin, APIView):
         popular_course_quantity = int(request.GET.get('num_courses', 2))
         skill_category = request.GET.get('category_id', None)
         homepage = request.GET.get('homepage',False)
+        course_only = request.GET.get('course_only', False)
 
         product_obj, product_converstion_ratio, product_revenue_per_mile = PopularProductMixin().\
                                                                             popular_courses_algorithm(
@@ -828,30 +829,34 @@ class TrendingCoursesAndSkillsAPI(PopularProductMixin, APIView):
         tprds = SearchQuerySet().filter(id__in=product_pks, pTP__in=[0, 1, 3]).exclude(
             id__in=settings.EXCLUDE_SEARCH_PRODUCTS
         )
-        p_skills = product_obj.filter(id__in=product_pks, categories__is_skill=True).distinct().exclude(
+        p_skills = product_obj.filter(id__in=product_pks, categories__is_skill=True).exclude(
             categories__related_to__slug__isnull=True).values_list('categories',flat=True)
-
-        categories = Category.objects.filter(id__in=p_skills)
+        categories = Category.objects.filter(type_level=3,id__in=p_skills)
 
         skills = []
-        skills_ids = []
+        skill_data = {}
         for i in categories:
-            if i.id not in skills_ids:
-                skills_ids.append(i.id)
-                skills.append({'id': i.id, 'skillName': i.name,
-                        'skillUrl': i.get_absolute_url()})
+                skill_data ={
+                    'id': i.id,
+                    'skillName': i.name,
+                    'skillUrl': i.get_absolute_url()}
+                if homepage :
+                    skill_data.update({
+                        # 'image':i.image if i.image else None,
+                        'no_courses':i.categoryproducts.count()
+                        })
+                skills.append(skill_data)
 
         data = {
             'trendingCourses': [
-                {'id': tprd.id, 'heading': tprd.pHd, 'name': tprd.pNm, 'url': tprd.pURL, 'img': tprd.pImg, \
-                 'img_alt': tprd.pImA, 'rating': tprd.pARx, 'vendor': tprd.pPvn, 'stars': tprd.pStar,
-                 'provider': tprd.pPvn \
+                {'id': tprd.id, 'heading': tprd.pHd, 'name': tprd.pNm, 'url': tprd.pURL, 'imgUrl': tprd.pImg, \
+                 'imgAlt': tprd.pImA, 'rating': tprd.pARx, 'vendor': tprd.pPvn, 'stars': tprd.pStar,'price': tprd.pPinb, 
+                 'providerName': tprd.pPvn \
                  } for tprd in tprds],
-            'trendingSkills': [dict(y) for y in set(tuple(x.items()) for x in skills)]
         }
         if not course_only :
             data.update({
-                'trendingSkills': skills
+                'trendingSkills': [dict(y) for y in set(tuple(x.items()) for x in skills)]
             })
 
         return APIResponse(message='Trending Course Loaded', data=data, status=status.HTTP_200_OK)
