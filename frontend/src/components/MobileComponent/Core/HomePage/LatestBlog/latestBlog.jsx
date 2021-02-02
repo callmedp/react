@@ -13,7 +13,7 @@ const LatestBlog = (props) => {
                         <div className="m-card">
                             <Link to={"#"}>
                                 <figure>
-                                    <img src="./media/images/blog-pic1.jpg" className="img-fluid" alt="Latest from blog" />
+                                    <img src="/media/images/blog-pic1.jpg" className="img-fluid" alt="Latest from blog" />
                                     <span>Career prospects</span>
                                 </figure>
                                 <strong>Planning required before re- locating to a new city…</strong>
@@ -24,7 +24,7 @@ const LatestBlog = (props) => {
                         <div className="m-card">
                             <Link to={"#"}>
                                 <figure>
-                                    <img src="./media/images/blog-pic2.jpg" className="img-fluid" alt="Latest from blog" />
+                                    <img src="/media/images/blog-pic2.jpg" className="img-fluid" alt="Latest from blog" />
                                     <span>Career prospects</span>
                                 </figure>
                                 <strong>Careers that can be opt by learning Autocad</strong>

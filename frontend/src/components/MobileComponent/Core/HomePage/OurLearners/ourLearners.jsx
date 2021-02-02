@@ -8,32 +8,32 @@ const OurVendors = (props) => {
             <div className="m-our-learners-slider">
                     <div className="m-our-learners-slider__txt">
                         <figure>
-                            <img src="./media/images/mobile/logo-google.png" className="img-fluid" alt="Google" />
+                            <img src="/media/images/mobile/logo-google.png" className="img-fluid" alt="Google" />
                         </figure>
                     </div>
                     <div className="m-our-learners-slider__txt">
                         <figure>
-                            <img src="./media/images/mobile/logo-people-strong.png" className="img-fluid" alt="People Strong" />
+                            <img src="/media/images/mobile/logo-people-strong.png" className="img-fluid" alt="People Strong" />
                         </figure>
                     </div>
                     <div className="m-our-learners-slider__txt">
                         <figure>
-                            <img src="./media/images/mobile/logo-infosys.png" className="img-fluid" alt="Infosys" />
+                            <img src="/media/images/mobile/logo-infosys.png" className="img-fluid" alt="Infosys" />
                         </figure>
                     </div>
                     <div className="m-our-learners-slider__txt">
                         <figure>
-                            <img src="./media/images/mobile/logo-fujitsu.png" className="img-fluid" alt="Fujitsu" />
+                            <img src="/media/images/mobile/logo-fujitsu.png" className="img-fluid" alt="Fujitsu" />
                         </figure>
                     </div>
                     <div className="m-our-learners-slider__txt">
                         <figure>
-                            <img src="./media/images/mobile/logo-ibm.png" className="img-fluid" alt="IBM" />
+                            <img src="/media/images/mobile/logo-ibm.png" className="img-fluid" alt="IBM" />
                         </figure>
                     </div>
                     <div className="m-our-learners-slider__txt">
                         <figure>
-                            <img src="./media/images/mobile/logo-genpact.png" className="img-fluid" alt="Genpact" />
+                            <img src="/media/images/mobile/logo-genpact.png" className="img-fluid" alt="Genpact" />
                         </figure>
                     </div>
             </div>

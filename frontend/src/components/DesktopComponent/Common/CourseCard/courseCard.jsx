@@ -3,7 +3,7 @@ import { siteDomain } from 'utils/domains';
 
 const CourseCard = (props) => {
 
-    const { course } = props;
+    const { course, key } = props;
     
     const starRatings = (star, index) => {
         return (star === '*' ? <em className="icon-fullstar" key={index}></em> : star === '+'
@@ -12,7 +12,7 @@ const CourseCard = (props) => {
     }
 
     return (
-        <li className="col" key={index}>
+        <li className="col" key={key}>
             <div className="card">
                 <div className="card__heading">
                     <figure>

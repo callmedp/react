@@ -10,6 +10,7 @@ import { getCataloguePageActionsMobile } from "apiHandler/cataloguePageApi";
 import DashboardPageContainer from 'components/MobileComponent/Core/DashboardPage/dashboardPage';
 import RouteWithSubRoutes from 'routes/route';
 import { getDashboardPageActionsMobile } from "apiHandler/dashboardPageApi";
+import HomePageContainer from 'components/MobileComponent/Core/HomePage/homePage';
 
 
 
@@ -24,6 +25,11 @@ const MobileAppRouter = () => (
 );
 
 export const routes = [
+    {
+        path: '/',
+        component: HomePageContainer,
+        exact: true
+    },
     {
         path: '/courses/:func/:skill/:id/',
         component: SkillPageContainer,
