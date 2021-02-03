@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import MenuNav from '../../Common/MenuNav/menuNav';
 import Header from '../../Common/Header/Header';
@@ -22,11 +22,13 @@ import "aos/dist/aos.css";
 import { fetchTestimonials, fetchJobAssistanceAndBlogs } from 'store/HomePage/actions';
 import { startHomePageLoader, stopHomePageLoader } from 'store/Loader/actions/index';
 import Loader from '../../Common/Loader/loader';
+import SearchPage from '../../Common/SearchPage/SearchPage'
 
 const HomePage = (props) => {
 
     const dispatch = useDispatch()
     const { homeLoader } = useSelector(store => store.loader);
+    const [showSearch, setShowSearch] = useState(false)
 
     const handleEffects = async () => {
         try {
@@ -48,29 +50,32 @@ const HomePage = (props) => {
     return (
         <>
             { homeLoader && <Loader /> }
-            <div className="mb-100">
-                {/* <OfferEnds /> */}
-                <MenuNav />
-                <header className="m-container m-header">
-                    <Header showSearchButton={false} icon={true} />
-                    <HomeBanner />
-                </header>
-                <CareerGuidance />
-                <main className="mb-0">
-                    <PopularCourses />
-                    <UpgradeSkills />
-                    <RecruitersLooking />
-                    <ServicesForYou />
-                    <MostViewedCourses />
-                    <LearningAdvantage />
-                    <BoostedCareers />
-                    <PracticeTestBanner />
-                    <OurLearners />
-                    <LatestBlog />
-                </main>
-                <Footer />
-                {/* <CTAhome /> */}
-            </div>
+            {
+                showSearch ? <SearchPage setShowSearchPage={setShowSearch} /> :
+                    <div className="mb-100">
+                        {/* <OfferEnds /> */}
+                        <MenuNav />
+                        <header className="m-container m-header">
+                            <Header showSearchButton={false} icon={true} />
+                            <HomeBanner setShowSearch={setShowSearch} />
+                        </header>
+                        <CareerGuidance />
+                        <main className="mb-0">
+                            <PopularCourses />
+                            <UpgradeSkills />
+                            <RecruitersLooking />
+                            <ServicesForYou />
+                            <MostViewedCourses />
+                            <LearningAdvantage />
+                            <BoostedCareers />
+                            <PracticeTestBanner />
+                            <OurLearners />
+                            <LatestBlog />
+                        </main>
+                        <Footer />
+                        {/* <CTAhome /> */}
+                    </div>
+            }
         </>
     )
 }
