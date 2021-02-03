@@ -5,10 +5,10 @@ import { siteDomain, resumeShineSiteDomain } from 'utils/domains';
 import MenuNavHeader from '../MenuNavHeader/menuNavHeader';
 import './defaultMenuNav.scss'
 import { useSelector, useDispatch } from 'react-redux';
-import { cartCount, sessionAvailability, getCandidateInfo, fetchNavOffersAndTags } from 'store/Header/actions/index';
+import { cartCount, fetchNavOffersAndTags } from 'store/Header/actions/index';
 import { initLoggedInZendesk } from 'utils/zendeskIniti';
 // import { trackUser } from 'store/Tracking/actions/index.js';
-import { removeTrackingInfo } from 'utils/storage.js';
+import { removeTrackingInfo, getCandidateInformation } from 'utils/storage.js';
 import { MyGA } from 'utils/ga.tracking.js';
 
 const DefaultMenuNav = (props) =>{
@@ -24,13 +24,14 @@ const DefaultMenuNav = (props) =>{
     const fetchUserInfo = async () => {
         try {
             dispatch(cartCount());
-            const isSessionAvailable = await new Promise((resolve, reject) => dispatch(sessionAvailability({ resolve, reject })));
+            // const isSessionAvailable = await new Promise((resolve, reject) => dispatch(sessionAvailability({ resolve, reject })));
 
-            if (isSessionAvailable['result']) {
+            if (localStorage.getItem('isAuthenticated') === true) {
                 try {
                     setIsLoggedIn(true)
-                    const candidateId = isSessionAvailable['candidate_id']
-                    const candidateInformation = await new Promise((resolve, reject) => dispatch(getCandidateInfo({candidateId, resolve, reject })))
+                    // const candidateId = isSessionAvailable['candidate_id']
+                    // const candidateInformation = await new Promise((resolve, reject) => dispatch(getCandidateInfo({candidateId, resolve, reject })))
+                    const candidateInformation = getCandidateInformation()
                     initLoggedInZendesk(candidateInformation, true)
                     setCandidateInfo(candidateInformation)
                 }

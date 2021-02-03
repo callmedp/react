@@ -19,8 +19,8 @@ const DashboardPage = (props) => {
     const [hasFaq, setHasFaq] = useState(false);
     const { history } = props;
     const dbContainer = props.match.params.name;
-    const dashboardRoutes = ['mycourses', 'myorder', 'mywallet', 'myservices']
-
+    const dashboardRoutes = [undefined, 'myorder', 'mywallet', 'myservices']
+    
     useEffect(()=>{
         if(!dashboardRoutes.includes(dbContainer)){
             history.push('/404/');
@@ -58,7 +58,7 @@ const DashboardPage = (props) => {
                                     'myorder' : <MyOrders />,
                                     'mywallet' : <MyWallet/>,
                                     'myservices' : <MyServices {...props} />,
-                                    'mycourses' : <MyCourses/>
+                                    undefined : <MyCourses/>
                                 }[dbContainer]
                               }  
                             </div>

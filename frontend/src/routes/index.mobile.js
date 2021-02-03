@@ -37,9 +37,8 @@ export const routes = [
         exact: true,
     },
     {
-        path: '/dashboard/:name/',
+        path: '/dashboard/:name?',
         component: DashboardPageContainer,
-        actionGroup: getDashboardPageActionsMobile,
         private: true
     },
     {
