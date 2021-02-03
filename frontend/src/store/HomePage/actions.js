@@ -12,6 +12,9 @@ const jobAssistanceAndBlogsFetched = createAction('JOB_ASSISTANCE_AND_BLOGS_FETC
 const fetchTestimonials = createAction('FETCH_TESTIMONIALS');
 const testimonialsFetched = createAction('TESTIMONIALS_FETCHED');
 
+const fetchSkillwithDemands = createAction('FETCH_SKILL_WITH_DEMANDS');
+const skillwithDemandsFetched = createAction('SKILL_WITH_DEMANDS_FETCHED');
+
 export {
     fetchMostViewedCourses,
     fetchInDemandProducts,
@@ -21,4 +24,6 @@ export {
     jobAssistanceAndBlogsFetched,
     fetchTestimonials,
     testimonialsFetched,
+    fetchSkillwithDemands,
+    skillwithDemandsFetched
 }
