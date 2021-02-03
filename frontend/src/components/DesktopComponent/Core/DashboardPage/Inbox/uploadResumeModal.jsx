@@ -5,6 +5,8 @@ import { useDispatch } from 'react-redux';
 import { useForm } from "react-hook-form";
 import { uploadResumeForm } from 'store/DashboardPage/MyServices/actions';
 import {Toast} from '../../../Common/Toast/toast';
+import { useSelector } from 'react-redux';
+import Loader from '../../../Common/Loader/loader';
 
 const UploadResumeModal =(props) => {
     const { uploadHandelClose, show, data } = props;
@@ -12,6 +14,8 @@ const UploadResumeModal =(props) => {
     let [filename, setFileName] = useState("Upload a file");
     const [file, setFile] = useState(undefined);
     const { register, handleSubmit, errors, getValues, reset } = useForm();
+    const { uploadLoader } = useSelector(store => store.loader);
+
 
     // for resume upload
     const getFile = (event) => {
@@ -49,6 +53,8 @@ const UploadResumeModal =(props) => {
     }
 
     return (
+        <>
+        { uploadLoader && <Loader /> }
         <Modal show={show} onHide={uploadHandelClose}>
             <Modal.Header closeButton></Modal.Header>
             <Modal.Body>
@@ -123,6 +129,7 @@ const UploadResumeModal =(props) => {
                 </div>
             </Modal.Body>
         </Modal>
+        </>
     )
 }
 

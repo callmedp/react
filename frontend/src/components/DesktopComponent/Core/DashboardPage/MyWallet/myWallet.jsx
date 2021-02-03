@@ -9,7 +9,8 @@ import { startDashboardWalletPageLoader, stopDashboardWalletPageLoader } from 's
 import Loader from '../../../Common/Loader/loader';
 import Pagination from '../../../Common/Pagination/pagination';
 import {siteDomain} from '../../../../../utils/domains';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
+import EmptyInbox from '../Inbox/emptyInbox';
 
 const MyWallet = (props) => {
     const [show, setShow] = useState(false);
@@ -106,7 +107,7 @@ const MyWallet = (props) => {
                             )
                         })
                     : 
-                    <h6 className="text-center p-10">Start with your first order and earn loyalty points</h6>
+                    <EmptyInbox inboxType="wallet" inboxText="Start with your first order and earn loyalty points" />
                 }
             </div>
 

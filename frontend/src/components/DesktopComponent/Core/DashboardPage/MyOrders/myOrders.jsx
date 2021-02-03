@@ -8,6 +8,7 @@ import { fetchMyOrders, cancelOrder } from 'store/DashboardPage/MyOrder/actions'
 import { downloadInvoice } from 'utils/dashboardUtils/myOrderUtils';
 import {Toast} from '../../../Common/Toast/toast';
 import { Modal } from 'react-bootstrap';
+import EmptyInbox from '../Inbox/emptyInbox';
 
 const MyOrders = (props) => {
     const ordPageNo = '1';
@@ -142,7 +143,7 @@ const MyOrders = (props) => {
                     )
                 })
             :
-            <h6 className="text-center p-10">Start with your first order and earn loyalty points</h6>
+            <EmptyInbox inboxType="order" inboxText="Start with your first order and earn loyalty points" />
             }
 
             {/* cancel order confirmation modal */}

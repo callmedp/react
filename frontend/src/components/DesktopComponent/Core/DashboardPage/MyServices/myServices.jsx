@@ -17,8 +17,7 @@ import Pagination from '../../../Common/Pagination/pagination';
 import AcceptModal from '../Inbox/acceptModal';
 import RejectModal from '../Inbox/rejectModal';
 import EmptyInbox from '../Inbox/emptyInbox';
-import { startCommentLoader, stopCommentLoader } from 'store/Loader/actions/index';
-import { startReviewLoader, stopReviewLoader } from 'store/Loader/actions/index';
+import { startCommentLoader, stopCommentLoader, startUploadLoader, stopUploadLoader, startReviewLoader, stopReviewLoader } from 'store/Loader/actions/index';
 import BreadCrumbs from '../Breadcrumb/Breadcrumb';
 import { pausePlayResume } from 'store/DashboardPage/MyServices/actions/index';
 import {siteDomain, resumeShineSiteDomain} from '../../../../../utils/domains';
@@ -27,9 +26,11 @@ const MyServices = (props) => {
     const dispatch = useDispatch();
     const { history } = props;
     const { serviceLoader } = useSelector(store => store.loader);
+    // const { uploadLoader } = useSelector(store => store.loader);
+
     
     // page no. set here
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(5);
     const [filterState, setfilterState] = useState({ 'last_month_from': 'all', 'select_type' : 'all' });
     
     // main api result state here
@@ -48,7 +49,14 @@ const MyServices = (props) => {
     // if upload then show
     const [uploadShow, setUploadShow] = useState(false);
     const uploadHandelClose = () => setUploadShow(false);
-    const uploadHandelShow = () => setUploadShow(true);
+    // const uploadHandelShow = () => setUploadShow(true);
+
+    const uploadToggleService = async () => {
+        setUploadShow(true);
+        dispatch(startUploadLoader());
+        await new Promise((resolve, reject) => dispatch(fetchPendingResume({payload : {}, resolve, reject})));
+        dispatch(stopUploadLoader());
+    }
 
     // comment open close set here
     const [addOpen, setaddOpen] = useState(false);
@@ -123,7 +131,7 @@ const MyServices = (props) => {
 
     useEffect(() => {
         handleEffects();
-        dispatch(fetchPendingResume());
+        // dispatch(fetchPendingResume());
     }, [currentPage, filterState])
 
     return(
@@ -132,15 +140,16 @@ const MyServices = (props) => {
 
         <div>
             {serviceLoader ? <Loader /> : ''}
+            {/* { startUploadLoader ? <Loader /> : '' } */}
 
             <div className="db-my-courses-detail">
-                {
+                {/* {
                     results?.data?.length > 0 && pending_resume_items?.length > 0 ? 
                         <div className="alert alert-primary py-4 px-5 fs-16 w-100 text-center mb-0" role="alert">To initiate your services.<span className="resume-upload--btn">&nbsp;<strong onClick={uploadHandelShow} className="cursor">Upload Resume</strong></span></div>
                     : null
-                }
+                } */}
 
-                { !results?.page?.total || results?.page?.total === 0 ? <EmptyInbox/> : '' }
+                { !results?.page?.total || results?.page?.total === 0 ? <EmptyInbox inboxType="services" inboxText=""/> : '' }
 
                 {results?.data && results?.data?.length > 0 ?
                     results?.data?.map((item,index) => {
@@ -174,7 +183,7 @@ const MyServices = (props) => {
                                                             <strong className="ml-1">{item.new_oi_status ? item.oi_status === 4 ? 'Service has been processed and Document is finalized' : item.oi_status === 101 ? 'Take Test' : item.oi_status == 141 ? 'Your profile to be shared with interviewer is pending -' : item.oi_status === 142 ? 'Service is under progress -' : item.oi_status === 143 ? 'Service has been expired' : item.new_oi_status : "Yet to Update"}
                                                             
                                                             {/* upload link */}
-                                                            {item.options?.upload_resume ? <Link to={"#"} className="ml-2" onClick={uploadHandelShow}>Upload</Link>
+                                                            {item.options?.upload_resume ? <Link to={"#"} className="ml-2" onClick={() => uploadToggleService()}>Upload</Link>
                                                             : null}
 
                                                             {/* download option if draft file exists */}

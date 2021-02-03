@@ -132,7 +132,7 @@ const MyCourses = (props) => {
 
             <div className="db-my-courses-detail">
 
-                { !page?.total || page?.total === 0 ? <EmptyInbox inboxType="courses"/> : '' }
+                { !page?.total || page?.total === 0 ? <EmptyInbox inboxType="courses / certification" inboxText=""/> : '' }
 
                 {
                     data?.map((course, index) => {
