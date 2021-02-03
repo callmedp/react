@@ -95,7 +95,7 @@ const skillwithDemandsState = {
 
 export const SkillwithDemandsReducer = (state=skillwithDemandsState, action) => {
     switch(action.type) {
-        case skillwithDemandsFetched.type : return {...skillwithDemandsFetched, ...action.payload.item}
+        case skillwithDemandsFetched.type : return {...skillwithDemandsFetched, ...action?.payload?.item}
         default : return state;
     }
 }
