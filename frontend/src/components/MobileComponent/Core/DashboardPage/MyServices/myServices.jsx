@@ -358,7 +358,7 @@ const MyServices = (props) => {
 
             {/* Pagination */}
             { page?.total > 1 && <Pagination totalPage={page?.total} currentPage={currentPage} setCurrentPage={setCurrentPage} /> }
-
+            
         </div>
         }
         </>
