@@ -18,11 +18,10 @@ const BoostedCareers = (props) => {
         variableWidth: true,
     };
     
-    const data = useSelector(store => store.testimonials)
-    const testimonials = Object.values(data) 
+    const { data } = useSelector(store => store.testimonials)
     
     return (
-        testimonials?.length ? <LearnersStoriesCards learnersData = {testimonials} page="homePage" /> : ''
+        data?.length ? <LearnersStoriesCards learnersData = {data} page="homePage" /> : ''
     ) 
 
     // return (

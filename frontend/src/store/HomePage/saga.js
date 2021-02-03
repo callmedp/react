@@ -81,9 +81,9 @@ function* fetchTestimonialsData(action){
         if(response?.error){
             return payload?.reject(response?.error);
         }
-        const item = response?.data?.data;
+        const item = response?.data;
 
-        yield put(testimonialsFetched({ item }))
+        yield put(testimonialsFetched({ ...item }))
         return payload?.resolve(item);
     }
     catch(e){

@@ -1106,4 +1106,5 @@ class TestimonialsApi(APIView):
         quantity = request.GET.get('quantity',5)
         testimonials = Testimonial.objects.filter(is_active=True).order_by('-rating')[:quantity]
         data = TestimonialSerializer(testimonials,many=True).data
-        return APIResponse(message='Testimonials data loaded', data=data, status=status.HTTP_200_OK)
+        testimonials = list(data)
+        return APIResponse(message='Testimonials data loaded', data=testimonials, status=status.HTTP_200_OK)

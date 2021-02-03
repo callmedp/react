@@ -78,12 +78,12 @@ export const JobAssistanceAndBlogsReducer = (state=jobAssistanceAndBlogsState, a
 }
 
 const testimonialsState = {
-    // data : []
+    data : []
 }
 
 export const TestimonialsReducer = (state=testimonialsState, action) => {
     switch(action.type){
-        case testimonialsFetched.type : return {...testimonialsState, ...action?.payload?.item}
+        case testimonialsFetched.type : return {...testimonialsState, ...action?.payload}
         default : return state;
     }
 }

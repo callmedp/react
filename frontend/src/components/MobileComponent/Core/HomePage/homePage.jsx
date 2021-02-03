@@ -26,7 +26,7 @@ import Loader from '../../Common/Loader/loader';
 const HomePage = (props) => {
 
     const dispatch = useDispatch()
-    const { homePageLoader } = useSelector(store => store.loader);
+    const { homeLoader } = useSelector(store => store.loader);
 
     const handleEffects = async () => {
         try {
@@ -47,7 +47,7 @@ const HomePage = (props) => {
 
     return (
         <>
-            { homePageLoader && <Loader /> }
+            { homeLoader && <Loader /> }
             <div className="mb-100">
                 {/* <OfferEnds /> */}
                 <MenuNav />
