@@ -123,31 +123,16 @@ const MyServices = (props) => {
         });
 
         handleEffects();
-        dispatch(fetchPendingResume())
+        // dispatch(fetchPendingResume())
     }, [currentPage])
 
     return (
         <>
         { serviceLoader && <Loader />}
         {
-            page?.total === 0 ? <EmptyInbox inboxType="services" /> :
+            page?.total || page?.total === 0 ? <EmptyInbox inboxType="services" /> :
 
         <div>
-            {/* Pending resume block Start*/}
-            {
-                myServicesList?.length > 0 && pending_resume_items?.length > 0 &&
-                    <div>
-                        <strong>
-                            <center>To initiate your service <br />
-                                <a href="/" onClick={(e) => {e.preventDefault();setShowUpload(true)}}>
-                                    Upload your latest resume
-                                </a>
-                            </center>
-                        </strong>
-                        <br />
-                    </div>
-            }
-            {/* Pending resume block End*/}
 
             {/* My Services Block Start */}
             <main className="mb-0">

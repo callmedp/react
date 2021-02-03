@@ -8,6 +8,7 @@ import Loader from '../../../Common/Loader/loader';
 import Pagination from '../../../Common/Pagination/pagination';
 import FAQ from '../../../Common/FAQ/faq';
 import { faqList } from 'utils/dashboardUtils/faqListUtils';
+import EmptyInbox from '../InboxModals/emptyInbox';
 
    
 const MyWallet = (props) => {
