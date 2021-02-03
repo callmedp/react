@@ -22,7 +22,7 @@ import { fetchPopularServices } from 'store/CataloguePage/actions/index';
 const Dashboard = (props) => {
     const dbContainer = props.match.params.name;
     const { history } = props;
-    const dashboardRoutes = ['mycourses', 'myorder', 'mywallet', 'myservices']
+    const dashboardRoutes = [undefined, 'myorder', 'mywallet', 'myservices']
     const dispatch = useDispatch();
     const [showSearchPage, setShowSearchPage] = useState(false);
     const { popularServices } = useSelector(store => store?.popularServices );
@@ -53,7 +53,7 @@ const Dashboard = (props) => {
                 {
                     {
                         'myservices' : 'My Services | Shine Learning',
-                        'mycourses' : 'My Courses | Shine Learning',
+                        undefined : 'My Courses | Shine Learning',
                         'myorder' : 'My Orders | Shine Learning',
                         'mywallet' : 'My Wallet | Shine Learning'
                     }[dbContainer]
@@ -72,7 +72,7 @@ const Dashboard = (props) => {
                         {
                             {
                                 'myservices' : <MyServices />,
-                                'mycourses' : <MyCourses/>,
+                                undefined : <MyCourses/>,
                                 'myorder' : <MyOrders />,
                                 'mywallet' : <MyWallet/>
                             }[dbContainer]

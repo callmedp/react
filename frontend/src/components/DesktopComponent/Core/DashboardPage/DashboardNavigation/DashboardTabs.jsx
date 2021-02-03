@@ -8,7 +8,7 @@ const DashboardNavigation = (props) => {
         <div className="db-tabs-wrap">
             <ul>
                 <li>
-                    <NavLink activeClassName="active" exact={true} to={"/dashboard/mycourses/"} className="my-courses">
+                    <NavLink activeClassName="active" exact={true} to={"/dashboard/"} className="my-courses">
                         <span className="d-block">My Courses</span>
                     </NavLink>
                 </li>
