@@ -54,7 +54,7 @@ const RouteWithSubRoutes = route => {
         // console.log("this should come second", isAuthenticated)
 
         if (!!route.private) {
-            if (localStorage.getItem('isAuthenticated') === true) {
+            if (localStorage.getItem('isAuthenticated') === 'true') {
                 return <route.component {...props} routes={route.routes} />
             }
             else {
