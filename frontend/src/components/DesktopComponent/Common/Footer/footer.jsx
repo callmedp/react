@@ -1,5 +1,5 @@
 import React, { useEffect} from 'react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import { siteDomain } from 'utils/domains';
 import './footer.scss';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,7 +16,7 @@ const Footer = (props) => {
     },[])
 
     return(
-        <section className="container-fluid" data-aos="fade-up">
+        <section className="container-fluid">
             <footer className="row">
                 <div className="container">
                     <div className="footer">
