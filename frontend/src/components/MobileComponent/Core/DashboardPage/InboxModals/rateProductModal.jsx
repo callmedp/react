@@ -77,30 +77,32 @@ const RateProductModal = (props) => {
                     showAllRatings &&
                     <div className="addcomments" style={{display: 'block'}}>
                         <span className="m-db-close" style={{ marginLeft: '13px' }} onClick={() => {setShowRateModal(false)}}>&#x2715;</span>
-                        
-                        {/* <div className="m-reviews-list">
-                            <ul>
-                                {
-                                    reviewList?.map((review, index) => {
-                                        return(
-                                            <li key={index}>
-                                                <div className="card__rating">
-                                                    <span className="rating">
-                                                        { review?.rating?.map((star, index) => starRatings(star, index)) }
-                                                        <span className="ml-5">{review?.average_rating?.toFixed(0)}/5</span>
-                                                    </span>
-                                                </div>
+                        {
+                            reviewList ? 
+                                <div className="m-reviews-list">
+                                    <ul>
+                                        {
+                                            reviewList?.map((review, index) => {
+                                                return(
+                                                    <li key={index}>
+                                                        <div className="card__rating">
+                                                            <span className="rating">
+                                                                { review?.rating?.map((star, index) => starRatings(star, index)) }
+                                                                <span className="ml-5">{review?.average_rating?.toFixed(0)}/5</span>
+                                                            </span>
+                                                        </div>
 
-                                                <span className="m-reviews-list--date">{review?.created}</span>
-                                                <p className="m-reviews-list--text">{review?.content}</p>
-                                            </li>
-                                        )
-                                    })
-                                }
-                            </ul>
-                        </div> */}
-
-                        <p className="text-center px-30 py-30">No rating yet, please review it by clicking add new button</p>
+                                                        <span className="m-reviews-list--date">{review?.created}</span>
+                                                        <p className="m-reviews-list--text">{review?.content}</p>
+                                                    </li>
+                                                )
+                                            })
+                                        }
+                                    </ul>
+                                </div>  
+                                :
+                                <p className="text-center px-30 py-30">No rating yet, please review it by clicking add new button</p>
+                        }
                         <div className="m-reviews-list-wrap--bottom">
                             <button className="btn btn-blue-outline px-30" onClick={() => {setShowAllRatings(false);setShowRatingModal(true)}}>Add new</button>
                         </div>

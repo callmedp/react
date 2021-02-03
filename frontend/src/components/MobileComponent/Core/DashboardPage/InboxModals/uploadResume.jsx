@@ -124,15 +124,7 @@ const UploadResume = (props) => {
                                     </li>
                                 )
                             })
-                        } */}
-                        <li className="m-custom">
-                            <input type="checkbox" id='1' name="resume_course" defaultChecked={true} value='1' />
-                            <label className="font-weight-bold" htmlFor='1'>Resume Service</label>
-                        </li>
-                        <li className="m-custom">
-                            <input type="checkbox" id='2' name="resume_course" defaultChecked={true} value='2' />
-                            <label className="font-weight-bold" htmlFor='2'>Resume Service</label>
-                        </li>
+                        }
                     </ul>
                 </div>
 
