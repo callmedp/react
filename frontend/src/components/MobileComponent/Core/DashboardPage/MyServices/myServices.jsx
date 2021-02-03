@@ -127,7 +127,7 @@ const MyServices = (props) => {
         });
 
         handleEffects();
-        // dispatch(fetchPendingResume())
+        dispatch(fetchPendingResume())
     }, [currentPage])
 
     return (
