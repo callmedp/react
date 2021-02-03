@@ -35,7 +35,7 @@ const PersonalDetail = (props) => {
                         </li>
                         
                         <li className="m-form-group">
-                            <select class="m-form-control" id="exampleFormControlSelect1">
+                            <select className="m-form-control" id="exampleFormControlSelect1">
                                 <option>New Delhi</option>
                                 <option>2</option>
                                 <option>3</option>

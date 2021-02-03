@@ -16,6 +16,7 @@ import { DashboardMyOrdersReducer } from './DashboardPage/MyOrder/reducer/index'
 import { DashboardMyCoursesReducer } from './DashboardPage/MyCourses/reducer/index';
 import { DashboardMyServicesReducer } from './DashboardPage/MyServices/reducer/index';
 import { InDemandProductsReducer, JobAssistanceAndBlogsReducer, MostViewedCoursesReducer, TestimonialsReducer, SkillwithDemandsReducer   } from './HomePage/reducers';
+import { DashboardMyServicesResumeReducer } from './DashboardPage/MyServices/reducer/index';
 
 const rootReducer = combineReducers({
     needHelp : NeedHelpReducer,
@@ -33,7 +34,6 @@ const rootReducer = combineReducers({
     popularServices : PopularServicesReducer,
     popularCategories : TrendingCategoriesReducer,
     allCategories : AllCategoriesReducer,
-    // allServices : RecentlyServicesReducer,
     dashboardWallet: DashboardMyWalletReducer,
     dashboardOrders: DashboardMyOrdersReducer,
     dashboardCourses: DashboardMyCoursesReducer,
@@ -43,6 +43,8 @@ const rootReducer = combineReducers({
     jobAssistance: JobAssistanceAndBlogsReducer,
     testimonials: TestimonialsReducer,
     skillDemand: SkillwithDemandsReducer,
+    dashboardPendingResume: DashboardMyServicesResumeReducer
+
 
 });
 

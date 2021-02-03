@@ -780,7 +780,7 @@ class NeoBoardUserAPI(APIView):
     def post(self, request, *args, **kwargs):
         from order.models import OrderItem
         from order.tasks import board_user_on_neo
-        candidate_id = request.data.get('candidate_id')
+        candidate_id = request.data.get('candidate_id') or self.request.session.get('candidate_id', None)
         oi_pk = request.data.get('oi_pk')
         if not candidate_id:
             return Response({'error': 'candidate id is missing'}, status=status.HTTP_400_BAD_REQUEST)
@@ -1007,7 +1007,7 @@ class MostViewedCourseAPI(APIView):
         ).order_by('-pCD')
 
         data = {
-            'mostViewedCourseList':
+            'mostViewedCourses':
                 [
                     {
                     'id': trcnts.id, 'heading': trcnts.pHd, 'name': trcnts.pNm, 'url': trcnts.pURL, 'imgUrl': trcnts.pImg, \
@@ -1091,7 +1091,7 @@ class JobAssistanceAndLatestBlogAPI(APIView):
                 'url':article.get_absolute_url(),
                 'p_category': article.p_cat.name
                 } for article in article_list]
-            data.update({'latest_blog_data':latest_blog_data})
+            data.update({'latestBlog':latest_blog_data})
 
         except Exception as e:
             logging.getLogger('error_log').error(

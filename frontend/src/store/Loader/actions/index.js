@@ -116,17 +116,16 @@ export const stopAcceptRejectLoader = () => {
     }
 }
 
-//Home Page loader
 export const startHomePageLoader = () => {
     return {
         type: Actions.START_HOME_PAGE_LOADER,
-        payload: { homePageLoader: true }
+        payload: { homeLoader: true } 
     }
 }
 
 export const stopHomePageLoader = () => {
     return {
         type: Actions.STOP_HOME_PAGE_LOADER,
-        payload: { homePageLoader: false }
+        payload: { homeLoader: false }
     }
 }

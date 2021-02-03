@@ -45,9 +45,9 @@ export const LoaderReducer = (state=initState, action) => {
         case Actions.START_ACCEPT_REJECT_LOADER : return {...state, ...action.payload}
         case Actions.STOP_ACCEPT_REJECT_LOADER : return {...state, ...action.payload}
 
-        //Home Page Loader
-        case Actions.START_HOME_PAGE_LOADER : return {...state, ...action.payload}
-        case Actions.STOP_HOME_PAGE_LOADER : return {...state, ...action.payload}
+        // homepage loader
+        case Actions.START_HOME_PAGE_LOADER : return { ...state, ...action.payload }
+        case Actions.STOP_HOME_PAGE_LOADER : return { ...state, ...action.payload }
 
         default: return state;
     }

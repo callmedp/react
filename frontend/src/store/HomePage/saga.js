@@ -17,13 +17,13 @@ import { mostViewedCoursesFetched,
 function* mostViewedCourse(action){
     const { payload } = action;
     try{
-        const response = yield call(Api.mostViewedCourse);
+        const response = yield call(Api.mostViewedCourse, payload);
         
         if(response?.error){
             return payload?.reject(response?.error);
         }
         const item = response?.data?.data;
-        yield put(mostViewedCoursesFetched({ item }))
+        yield put(mostViewedCoursesFetched({ ...item }))
         return payload?.resolve(item);
     }
     catch(e){
@@ -37,13 +37,14 @@ function* inDemandProducts(action){
     const { payload } = action;
     try{
         const response = yield call(Api.inDemandProducts, payload);
+      
         
         if(response?.error){
             return payload?.reject(response);
         }
         const item = response?.data?.data;
         yield put(inDemandProductsFetched({ courses : item.courses, certifications: item.certifications, 
-            id: payload?.pageId, pages:item.pages, device: payload?.device }))
+            id: payload?.pageId, pages:item.page?.total, device: payload?.device }))
         return payload?.resolve(item);
     }
     catch(e){
@@ -63,7 +64,7 @@ function* jobAssistanceAndBlogs(action){
             return payload?.reject(response?.error);
         }
         const item = response?.data?.data;
-        yield put(jobAssistanceAndBlogsFetched({ item }))
+        yield put(jobAssistanceAndBlogsFetched({ ...item }))
         return payload?.resolve(item);
     }
     catch(e){

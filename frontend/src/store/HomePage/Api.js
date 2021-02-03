@@ -3,8 +3,8 @@ import BaseApiService from 'services/BaseApiService'
 import { siteDomain } from 'utils/domains'
 
 
-const mostViewedCourse = () => {
-    const url = '/api/v1/most-viewed-courses/';
+const mostViewedCourse = (data) => {
+    const url = `/api/v1/most-viewed-courses/?category_id=${data.categoryId}`;
 
     return BaseApiService.get(`${siteDomain}${url}`);
 }

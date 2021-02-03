@@ -5,9 +5,9 @@ import Api from './Api';
 function* DashboardCoursesApi(action) {
     const { payload } = action;
     try {
- 
-        const response = yield call(Api.myCoursesData, payload?.page);
-    
+
+        const response = yield call(Api.myCoursesData, payload);
+
         if (response["error"]) {
             return payload?.reject(response)
         }
@@ -27,9 +27,9 @@ function* DashboardCoursesApi(action) {
 }
 
 function* submitBoardNeoUser(action) {
-    const { payload: { values, resolve, reject } } = action;
+    const { payload: { payload, resolve, reject } } = action;
     try {
-        const response = yield call(Api.boardNeoUser, values);
+        const response = yield call(Api.boardNeoUser, payload);
         return resolve(response)
     }
     catch (error) {

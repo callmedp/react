@@ -20,6 +20,8 @@ import Pagination from '../../../Common/Pagination/pagination';
 import EmptyInbox from '../Inbox/emptyInbox';
 import { startReviewLoader, stopReviewLoader } from 'store/Loader/actions/index';
 import { startCommentLoader, stopCommentLoader } from 'store/Loader/actions/index';
+import BreadCrumbs from '../Breadcrumb/Breadcrumb';
+
 
 const MyCourses = (props) => {
     
@@ -37,7 +39,7 @@ const MyCourses = (props) => {
     const [openReview, setOpenReview] = useState(false);
     const oiComments = useSelector(store => store.getComment);
     const [currentPage, setCurrentPage] = useState(1);
-
+    const [filterState, setfilterState] = useState({ 'last_month_from': 'all', 'select_type' : 'all' });
 
     useEffect(() => {
         handleEffects();
@@ -46,7 +48,7 @@ const MyCourses = (props) => {
     const toggleReviews = async (id, prod) => {
         if(openReview != id) {
             dispatch(startReviewLoader());
-            await new Promise((resolve, reject) => dispatch(fetchReviews({ payload: { prod: prod, page: currentPage, type: 'GET'}, resolve, reject })));
+            await new Promise((resolve, reject) => dispatch(fetchReviews({ payload: { prod: prod, page: currentPage, isDesk: true, ...filterState, type: 'GET'}, resolve, reject })));
             dispatch(stopReviewLoader());
         }
         setOpenReview(openReview == id ? false : id);
@@ -72,7 +74,7 @@ const MyCourses = (props) => {
             //So there is no need to fetch them again on the browser.
             if (!(window && window.config && window.config.isServerRendered)) {
                 dispatch(startDashboardCoursesPageLoader());
-                await new Promise((resolve, reject) => dispatch(fetchMyCourses({ page: currentPage, resolve, reject })))
+                await new Promise((resolve, reject) => dispatch(fetchMyCourses({ page: currentPage, isDesk: true, ...filterState, resolve, reject })))
                 dispatch(stopDashboardCoursesPageLoader());
             }
             else {
@@ -93,6 +95,8 @@ const MyCourses = (props) => {
         <div>
             { coursesLoader ? <Loader /> : ''}
             { page.total === 0 ? <EmptyInbox/> : '' }
+
+            <BreadCrumbs filterState={filterState} setfilterState={setfilterState} />
 
             <div className="db-my-courses-detail">
 
