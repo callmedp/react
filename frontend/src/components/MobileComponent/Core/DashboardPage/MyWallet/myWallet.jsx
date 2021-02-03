@@ -33,6 +33,7 @@ const MyWallet = (props) => {
             // if (error?.status == 404) {
             //     history.push('/404');
             // }
+            dispatch(stopDashboardWalletPageLoader());
         }
     };
 

@@ -47,7 +47,7 @@ const MyServices = (props) => {
 
     //Data fetch from myservices API
     const serviceData= useSelector(store => store?.dashboardServices);
-    const pending_resume_items = useSelector(store => store.dashboardPendingResume.data);
+    // const pending_resume_items = useSelector(store => store.dashboardPendingResume.data);
     const myServicesList = serviceData?.data
     const page = serviceData?.page
 
@@ -127,7 +127,7 @@ const MyServices = (props) => {
         });
 
         handleEffects();
-        dispatch(fetchPendingResume())
+        // dispatch(fetchPendingResume())
     }, [currentPage])
 
     return (
@@ -350,7 +350,7 @@ const MyServices = (props) => {
             { showRateModal && <RateProductModal setShowRateModal={setShowRateModal} oi_id={oiReviewId}/> }
 
             {/* Upload Modal */}
-            { showUpload && <UploadResume setShowUpload={setShowUpload} data={pending_resume_items} /> }
+            { showUpload && <UploadResume setShowUpload={setShowUpload} /> }
 
             {/* Accept Reject Modal */}
             { acceptModal && <AcceptModal setAcceptModal={setAcceptModal} oi_id={acceptModalId}/> }

@@ -7,11 +7,16 @@ const EmptyInbox = (props) => {
 
     const { inboxType } = props;
 
+    const serviceMessage = 'There is no service added to your profile!'
+    const courseMesaage = 'Seems like no courses / certification added to your profile!'
+    const orderMessage = 'You have not ordered any product till now!'
+    const walletMessage = 'Your wallet is empty!'
+
     return(
         <div>
             <div className="db-nocourses">
                 <img src={`${imageUrl}mobile/no-courses.png`} alt=""/>
-                <p className="db-nocourses--text">Seems like no {inboxType === 'courses' ? 'courses / certification' : inboxType === 'services' ? 'services' : inboxType === 'orders' ? 'Order' : inboxType === 'wallet' ? 'loyality points' : ''}<br/>added to your profile</p>
+                <p className="db-nocourses--text">{inboxType === 'courses' ? courseMesaage : inboxType === 'services' ? serviceMessage : inboxType === 'orders' ? orderMessage : inboxType === 'wallet' ? walletMessage : ''}</p>
                 { 
                     inboxType === 'services' ? <a href={resumeShineSiteDomain} className="btn btn-outline-primary font-weight-bold">Browse Services</a> :
                         inboxType === 'courses' ? <Link to="/online-courses.html" className="btn btn-outline-primary font-weight-bold">Browse Courses</Link> :

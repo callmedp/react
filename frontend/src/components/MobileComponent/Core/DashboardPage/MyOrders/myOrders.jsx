@@ -56,31 +56,36 @@ const MyWallet = (props) => {
 
     const handleCancellation = async (orderId) => {
         setShowCancelModal(false)
-        dispatch(startDashboardOrderPageLoader());
-        var result = await new Promise((resolve, reject) => dispatch( 
-            cancelOrder({
-                payload: {
-                    order_id: orderId,
-                    // candidate_id: getDataStorage('candidate_id'),
-                    // email: getDataStorage('email')
-                }, resolve, reject
-            })
-        ));
-        if (result.cancelled) {
-            Swal.fire({
-                // html: result,
-                title: result.data,
-                icon: 'success'
-            })
-            handleEffects();
-            dispatch(stopDashboardOrderPageLoader());
+        try{
+            dispatch(startDashboardOrderPageLoader());
+            var result = await new Promise((resolve, reject) => dispatch( 
+                cancelOrder({
+                    payload: {
+                        order_id: orderId,
+                        // candidate_id: getDataStorage('candidate_id'),
+                        // email: getDataStorage('email')
+                    }, resolve, reject
+                })
+            ));
+            if (result.cancelled) {
+                Swal.fire({
+                    // html: result,
+                    title: result.data,
+                    icon: 'success'
+                })
+                handleEffects();
+                dispatch(stopDashboardOrderPageLoader());
+            }
+            else {
+                Swal.fire({
+                    // html: result,
+                    title: result.error,
+                    icon: 'error'
+                })
+                dispatch(stopDashboardOrderPageLoader());
+            }
         }
-        else {
-            Swal.fire({
-                // html: result,
-                title: result.error,
-                icon: 'error'
-            })
+        catch{
             dispatch(stopDashboardOrderPageLoader());
         }
     }
