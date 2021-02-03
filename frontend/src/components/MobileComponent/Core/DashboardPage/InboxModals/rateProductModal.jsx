@@ -7,6 +7,7 @@ import { TextArea } from 'formHandler/mobileFormHandler/formFields';
 import { fetchReviews, submitReview } from 'store/DashboardPage/AddSubmitReview/actions/index';
 import { startReviewLoader, stopReviewLoader } from 'store/Loader/actions/index';
 import Loader from '../../../Common/Loader/loader';
+import './rating.scss';
 
 const RateProductModal = (props) => {
     const { setShowRateModal, oi_id, idDict } = props
@@ -75,9 +76,9 @@ const RateProductModal = (props) => {
                 {
                     showAllRatings &&
                     <div className="addcomments" style={{display: 'block'}}>
-                        <span className="m-db-close" style={{ marginLeft: '13px' }} onClick={() => {setShowRateModal(false)}}>X</span>
+                        <span className="m-db-close" style={{ marginLeft: '13px' }} onClick={() => {setShowRateModal(false)}}>&#x2715;</span>
                         
-                        <div className="m-reviews-list">
+                        {/* <div className="m-reviews-list">
                             <ul>
                                 {
                                     reviewList?.map((review, index) => {
@@ -97,8 +98,9 @@ const RateProductModal = (props) => {
                                     })
                                 }
                             </ul>
-                        </div>
-                        
+                        </div> */}
+
+                        <p className="text-center px-30 py-30">No rating yet, please review it by clicking add new button</p>
                         <div className="m-reviews-list-wrap--bottom">
                             <button className="btn btn-blue-outline px-30" onClick={() => {setShowAllRatings(false);setShowRatingModal(true)}}>Add new</button>
                         </div>
@@ -109,10 +111,10 @@ const RateProductModal = (props) => {
                     showRatingModal &&
                         <form onSubmit={handleSubmit(submitReviews)}>
                             <div className="text-center">
-                                <span className="m-db-close" onClick={() => {setShowRateModal(false)}}>X</span>
+                                <span className="m-db-close" onClick={() => {setShowRateModal(false)}}>&#x2715;</span>
                                 <h2>Write a Review</h2>
 
-                                <span className="rating">
+                                <span className="m-rating m-rate-review">
                                 {
                                     [1, 2, 3, 4, 5].map((value,indx) => {
                                         return (
@@ -124,8 +126,7 @@ const RateProductModal = (props) => {
                                         );
                                 })}
                                 </span>
-                                <br />
-                                <span>Tap on rate to scale of 1-5</span>
+                                <p>Tap on rate to scale of 1-5</p>
                                 <div className="m-enquire-now mt-15">
                                     <div className="m-form-group">
                                         <TextArea attributes={inboxForm.review} register={register} errors={!!errors ? errors[inboxForm.review.name] : ''} />

@@ -100,3 +100,11 @@
         border: 1px solid $white;
     }
 }
+
+.m-db-close {
+    position: absolute;
+    right: 15px;
+    top: 5px;
+    font-size: 2rem;
+    color: rgba($gray-100, .5);
+}
