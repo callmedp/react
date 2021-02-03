@@ -299,11 +299,11 @@ class DashboardReviewApi(APIView):
 
     def post(self, request, *args, **kwargs):
         email_dict = {}
-        candidate_id = request.data.get('candidate_id', None)
+        candidate_id = request.data.get('candidate_id', None) or self.request.session.get('candidate_id', None)
         # candidate_id='568a0b20cce9fb485393489b'
 
         oi_pk = request.data.get('oi_pk')
-        email = request.data.get('email')
+        email = request.data.get('email') or self.request.session.get('candidate_id', None)
         data = {
             "display_message": 'Thank you for sharing your valuable feedback',
         }
@@ -313,7 +313,14 @@ class DashboardReviewApi(APIView):
                 review = request.data.get('review', '').strip()
                 rating = int(request.data.get('rating', 1))
                 title = request.data.get('title', '').strip()
-                name = request.data.get('full_name')
+                name = request.data.get('full_name') or self.request.session.get('name', email)
+                error_msg = ''
+                if not oi:
+                    error_msg + 'missing order_item,'
+                if not (oi.order.candidate_id == candidate_id):
+                    error_msg + 'order_item candidate id and candidate id not matched,'
+                if not (oi.order.status in [1, 3]):
+                    error_msg + "order item's order status not matched"
                 if rating and oi and oi.order.candidate_id == candidate_id and oi.order.status in [1, 3]:
                     content_type = ContentType.objects.get(app_label="shop", model="product")
                     review_obj = Review.objects.create(
@@ -353,7 +360,9 @@ class DashboardReviewApi(APIView):
                                 "%s - %s - %s" % (str(to_emails), str(e), str(mail_type)))
 
                 else:
-                    data['display_message'] = "select valid input for feedback"
+                    if not error_msg:
+                        data['display_message'] = "select valid input for feedback"
+                    data['display_message'] = error_msg
                     return Response(data, status=status.HTTP_400_BAD_REQUEST)
 
 

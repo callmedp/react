@@ -143,7 +143,7 @@ const MyOrders = (props) => {
                     )
                 })
             :
-            <EmptyInbox inboxType="order" inboxText="Start with your first order and earn loyalty points" />
+            <EmptyInbox inboxButton="Browse Courses" inboxText="You have not ordered any product till now!" />
             }
 
             {/* cancel order confirmation modal */}

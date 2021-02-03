@@ -107,7 +107,7 @@ const MyWallet = (props) => {
                             )
                         })
                     : 
-                    <EmptyInbox inboxType="wallet" inboxText="Start with your first order and earn loyalty points" />
+                    <EmptyInbox inboxButton="Go To Home" inboxText="Your wallet is empty!" />
                 }
             </div>
 

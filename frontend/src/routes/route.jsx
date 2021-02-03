@@ -15,14 +15,14 @@ const RouteWithSubRoutes = route => {
     const isSessionAvailable = async () => {
         localStorage.clear();
         try {
-            // console.log("api session hi tinit")
+            console.log("api session hi tinit")
             const session = await new Promise((resolve, reject) => dispatch(sessionAvailability({ resolve, reject })));
-            // console.log("api session hit end")
+            console.log("api session hit end")
             if (session['result'] === false){
                 setLoader(false);
                 return;
             }
-            // console.log("getting candidate info")
+            console.log("getting candidate info")
             const candidateId = session['candidate_id'];
             await new Promise((resolve, reject) => dispatch(getCandidateInfo({ candidateId, resolve, reject })));
             setLoader(false)
