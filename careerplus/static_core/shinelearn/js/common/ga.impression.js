@@ -10,8 +10,6 @@ function GALayer() {
         window.dataLayer = window.dataLayer || [];
 
         try {
-            console.log(event);
-            console.log(product);
             if (event === 'productdetail') {
                 window.dataLayer.push(
                     {
@@ -36,6 +34,34 @@ function GALayer() {
                             }
                         }
                     });
+            }
+            else if (event === 'checkout') {
+                window.dataLayer.push(
+                    {
+                        "event": event,
+                        'ecommerce': {
+                            'currencyCode': currencyCode,
+                            'checkout': {
+                                'actionField': actionField,
+                                'products': product[0].products
+                            }
+                        }
+                    }
+                )
+            }
+            else if (event === 'checkout-complete') {
+                window.dataLayer.push(
+                    {
+                        "event": event,
+                        'ecommerce': {
+                            'currencyCode': currencyCode,
+                            'purchase': {
+                                'actionField': actionField,
+                                'products': product
+                            }
+                        }
+                    }
+                )
             }
             else {
                 window.dataLayer.push(

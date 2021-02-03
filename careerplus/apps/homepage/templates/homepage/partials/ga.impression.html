@@ -30,6 +30,10 @@ asyncCall();
             ProductDetailImpressionPush(list='Product', options);
         case 'addToCart':
             CartImpressionPush();
+        case 'checkout':
+            checkoutImpression(list='checkout', options);
+        case 'checkout-complete':
+            OrderConfirmationImpression();
     }
 }
     {% if used_as %}
@@ -159,6 +163,27 @@ asyncCall();
         {% endif %}
         GALayer.SendImpression('addToCart', c_product, 'INR');
     }
+
+    function OrderConfirmationImpression() {
+        o_product = []
+        {% if oi_products %}
+         console.log({{ oi_products.oi }})
+         {% for item in oi_products %}
+            o_product.push ({
+                'name': '{{ item.oi.product.name }}',
+                'id': '{{ item.oi.product.id }}',
+                'brand': '{{ item.oi.product.vendor.name }}',
+                'category': '{{ item.oi.product.get_category_main }}',
+                'variant': '{{ item.oi.product.get_product_class }}',
+                'price': '{{ item.oi.product.get_price }}',
+                'dimensions15': 'Order Confirmation Page',
+                'dimensions16': '{{ item.oi.product.get_ratings }}',
+                'dimensions17': ''
+            })
+          {% endfor %}
+        {% endif %}
+        GALayer.SendImpression('checkout-complete', o_product, 'INR', actionField=[{'id': '{{ order_id }}', 'affiliation': 'Oneline Store', 'revenue': '{{ total_price }}', 'coupon': '', 'Tax': '{{ tax_exlude }}'}]);
+    }
     
     {% else %}
 
@@ -186,6 +211,15 @@ asyncCall();
         {% endif %}
         GALayer.SendImpression('productdetail', p_detail, 'INR', 'Product Page');
     }
+
+    function checkoutImpression(list, options) {
+
+        if (options) {
+            var actionField = options[0].actionField;
+            GALayer.SendImpression('checkout', options, 'INR', actionField);
+        }
+    }
+
     {% endif %}
 GAImpression();
 </script>
