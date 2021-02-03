@@ -1,28 +1,50 @@
 import { useDispatch } from 'react-redux';
-import { sessionAvailability } from 'store/Header/actions/index'; 
+import { sessionAvailability, getCandidateInfo } from 'store/Header/actions/index'; 
+import {  Toast } from "services/Toast";
+import { useEffect, useState } from 'react';
 
-
-
-const useAuthenticate = () => {
+const useAuthenticate = async () => {
 
     const dispatch = useDispatch();
+    const [authenticate, setAuthenticate] = useState(false)
 
-  
-
-    if(localStorage.getItem('isAuthenticated')){
-        return true;
-    }
+    
 
     const isSessionAvailable = async () => {
-        return await new Promise((resolve, reject) => dispatch(sessionAvailability({ resolve, reject })));
-    }
-    
-    if(isSessionAvailable()['result']){
-        return true;
+        localStorage.clear();
+        try{
+            const session = await new Promise((resolve, reject) => dispatch(sessionAvailability({ resolve, reject })));
+            console.log("session hit", session)
+            if(session['result'] === false){
+                setAuthenticate(false);
+            }
+            else{
+            const candidateId = session['candidate_id'];
+            await new Promise((resolve, reject) => dispatch(getCandidateInfo({ candidateId, resolve, reject })));
+            setAuthenticate(true);
+            }
+         
+        }
+        catch(e){
+            console.log("error occured in fetching user session");
+            Toast('error','Something went wrong. Cannot login')
+            setAuthenticate(false)
+           
+        }
+       
     }
 
-    return false;
-
+    useEffect(() => {
+        if(localStorage.getItem('isAuthenticated') === true){
+            setAuthenticate(true);
+        }
+        else{
+            isSessionAvailable();
+        }
+        
+    },[])
+    console.log("authenticate system", authenticate)
+    return authenticate;
 }
 
 export default useAuthenticate;

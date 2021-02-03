@@ -52,9 +52,8 @@ const RejectModal = (props) => {
     return (
         <div className="m-slide-modal">
             <div className="text-center">
-                <span onClick={() => setRejectModal(false)} className="m-db-close">X</span>
-                <h2>Reject Confirmation </h2>
-                <br/>
+                <span onClick={() => setRejectModal(false)} className="m-db-close">&#x2715;</span>
+                <h2>Reject Confirmations</h2>
                 <p>If you have made changes to document, please upload here</p>
 
                 <span className="error_cls">
@@ -66,15 +65,16 @@ const RejectModal = (props) => {
                             <button className="btn btn-blue-outline">{filename}</button>
                             <input type="file" name="file" onChange={(e) => {e.preventDefault(); getFile(e);}} ref={register()}/>
                         </div>
-
                     </div>
 
-                    <hr className="my-20" />
-                    <span className="mx-4"><strong>Or</strong></span>
+                    <div className="or">
+                        <span>or</span>
+                        <hr />
+                    </div>
+
+                    
 
                     <div className="m-db-upload-resume">
-                        <br /> 
-                        
                         <div className="m-form-group">
                             <textarea className="form-control" placeholder="Leave us your message" rows="3" name="message" ref={register({
                                 validate: () =>

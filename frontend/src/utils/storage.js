@@ -81,3 +81,14 @@ export const getDataStorage = (key) => {
 const getSession = (name) => {
    return  sessionStorage.getItem(name)
 }
+
+
+export const getCandidateInformation = () => {
+    return {
+        candidateId: localStorage.getItem('userId') || '',
+        name: localStorage.getItem('userName') || '',
+        lastname: localStorage.getItem('lastName') || '',
+        email: localStorage.getItem('userEmail') || '',
+        mobile:  localStorage.getItem('mobile') || '',
+    }
+}

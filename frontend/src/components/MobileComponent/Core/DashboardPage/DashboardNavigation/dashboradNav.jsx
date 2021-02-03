@@ -9,7 +9,7 @@ const DashboardNavigation = (props) => {
         <div className="m-db-tabs-wrap">
             <ul>
                 <li>
-                    <Link to={"/dashboard/mycourses/"} className={activeTab === 'mycourses' ? 'active' : ''}>My Courses</Link>
+                    <Link to={"/dashboard/"} className={activeTab === undefined ? 'active' : ''}>My Courses</Link>
                 </li>
                 
                 <li>

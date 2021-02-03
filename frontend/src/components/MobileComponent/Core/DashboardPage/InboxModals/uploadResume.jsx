@@ -76,7 +76,7 @@ const UploadResume = (props) => {
         }
         <div className="m-slide-modal">
             <div className="text-center">
-                <span onClick={() => setShowUpload(false)} className="m-db-close">X</span>
+                <span onClick={() => setShowUpload(false)} className="m-db-close">&#x2715;</span>
                 <h2>Upload Resume </h2>
                 <p>To initiate your services, <strong>upload resume</strong></p>
 
