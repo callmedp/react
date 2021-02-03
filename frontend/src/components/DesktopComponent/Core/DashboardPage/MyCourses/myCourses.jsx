@@ -21,10 +21,11 @@ import EmptyInbox from '../Inbox/emptyInbox';
 import { startReviewLoader, stopReviewLoader } from 'store/Loader/actions/index';
 import { startCommentLoader, stopCommentLoader } from 'store/Loader/actions/index';
 import BreadCrumbs from '../Breadcrumb/Breadcrumb';
+import {Toast} from '../../../Common/Toast/toast';
+import {boardNeoUser} from 'store/DashboardPage/MyCourses/actions/index';
 
 
 const MyCourses = (props) => {
-    
     const [addOpen, setAddOpen] = useState(false);
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -33,7 +34,7 @@ const MyCourses = (props) => {
     const dispatch = useDispatch();
     const { history } = props;
     const { coursesLoader } = useSelector(store => store.loader);
-    const { myCourses, page } = useSelector(store => store.dashboardCourses);
+    const { data, page } = useSelector(store => store.dashboardCourses);
     const [isOpen, setIsOpen] = useState(false);
     const toggleDetails = (id) => setIsOpen(isOpen === id ? false : id);
     const [openReview, setOpenReview] = useState(false);
@@ -43,7 +44,7 @@ const MyCourses = (props) => {
 
     useEffect(() => {
         handleEffects();
-    }, [currentPage])
+    }, [currentPage, filterState])
 
     const toggleReviews = async (id, prod) => {
         if(openReview != id) {
@@ -61,11 +62,43 @@ const MyCourses = (props) => {
             type: 'GET'
         }
         if(addOpen != id){
-            dispatch(startCommentLoader())
-            await new Promise((resolve, reject) => dispatch(fetchOiComment({payload: commVal, resolve, reject})));
-            dispatch(stopCommentLoader())
+            try{
+                dispatch(startCommentLoader())
+                await new Promise((resolve, reject) => dispatch(fetchOiComment({payload: commVal, resolve, reject})));
+                dispatch(stopCommentLoader())
+            }
+            catch{
+                dispatch(stopCommentLoader())
+            }
+            
         }
     };
+
+    // for neo products
+    const NeoBoardUser = async (oi) => {
+        try {
+            const response = await new Promise((resolve, reject) => {
+            dispatch(
+                boardNeoUser({
+                payload: {
+                    oi_pk: oi,
+                },
+                resolve,
+                reject,
+                })
+            );
+            });
+            if (response["error"]) {
+            return Toast("error", response["error"]);
+            }
+            Toast("success", response.data);
+            // dispatch(fetchInboxOiDetails({ cid: cid, id: oi }));
+        
+            return;
+        } catch (e) {
+            return Toast("error",e);
+        }
+        };
 
     const handleEffects = async () => {
         try {
@@ -94,14 +127,15 @@ const MyCourses = (props) => {
     return (
         <div>
             { coursesLoader ? <Loader /> : ''}
-            { page.total === 0 ? <EmptyInbox/> : '' }
 
             <BreadCrumbs filterState={filterState} setfilterState={setfilterState} />
 
             <div className="db-my-courses-detail">
 
+                { !page?.total || page?.total === 0 ? <EmptyInbox inboxType="courses"/> : '' }
+
                 {
-                    myCourses?.map((course, index) => {
+                    data?.map((course, index) => {
                         return (
                             <div className="db-white-box w-100" key={index}>
                                 <div className="d-flex">
@@ -117,42 +151,61 @@ const MyCourses = (props) => {
                                                     <div className="db-my-courses-detail__leftpan--info">
                                                         { !!course.vendor && <span>Provider: <Link className="noLink" to={"#"}>{course.vendor}</Link></span> }
                                                         { !!course.enroll_date && <span>Enrolled on: <strong>{course.enroll_date}</strong></span> }
-                                                        { !!course.duration && <span>Duration: <strong>{course.duration}</strong></span> }
+                                                        { !!course?.duration_in_days && <span>Duration: <strong>{course?.duration_in_days} {course?.duration_in_days > 1 ? 'days': 'day'}</strong></span> }
                                                         { !!course.mode && <span>Mode: <strong>{course.mode}</strong></span> }
                                                         { !!course.jobs && <span>Jobs: <strong>{course.jobs}</strong></span> }
                                                     </div>
 
-                                                    <div className="db-my-courses-detail__leftpan--session">
+                                                    {/* <div className="db-my-courses-detail__leftpan--session">
                                                         <span>Next session : <strong>Basic of Digital Marketing</strong></span>
                                                         <span className="db-icon-date font-weight-bold">3PM |  29 nov 2020</span>
-                                                    </div>
+                                                    </div> */}
 
-                                                    <div className="db-my-courses-detail__leftpan--alert">
+                                                    {/* <div className="db-my-courses-detail__leftpan--alert">
                                                         Hi, the recording for the session you missed is available now <Link to={"#"} className="ml-2">Click here</Link>
-                                                    </div>
+                                                    </div> */}
 
                                                     <div className="db-my-courses-detail__leftpan--status mb-2">
-                                                        { course.status || course.new_oi_status ? 'Status':''}
-                                                        <strong className="ml-1">{course.status ?? course.new_oi_status}</strong>
+                                                        Status :
+                                                        <strong className="ml-1">{course?.new_oi_status ? course?.new_oi_status : 'Yet to Update'}</strong>
+                                                        &emsp;
+                                                        {course.product_type_flow === 2 || course.product_type_flow === 14 ?
+                                                            <React.Fragment>
+                                                                {(course?.vendor === 'neo' && course?.oi_status === 5) ? 
+                                                                    course?.BoardOnNeo ? <a className="ml-2" onClick={NeoBoardUser(course.id)}> :- Board On Neo</a> : 
+                                                                    (course?.neo_mail_sent) ? <strong className="ml-1"> :- Please Confirm Boarding on Mail Sent to you</strong> :
+                                                                    (course?.updated_from_trial_to_regular) ? <strong className="ml-1"> :- Updated Account from Trial To Regular</strong> 
+                                                                    : null
+                                                                    : null}
+                                                            </React.Fragment>
+                                                        : null}
+
+                                                        {/* take test when type flow is 16 */}
+                                                        {course?.options?.take_test ? <a className="ml-2" target="_blank" href={ course?.options?.auto_login_url}>Take Test</a> : null}
                                                     </div>
+                                                    {
+                                                        course?.datalist?.length > 0 &&
+                                                        <>
+                                                            <Link
+                                                                className="font-weight-bold"
+                                                                onClick={() => toggleDetails(course.id)}
+                                                                aria-controls="addComments"
+                                                                aria-expanded={`openViewDetail` + index}
+                                                                to={'#'}
+                                                            >
+                                                                View Details
+                                                            </Link>
 
-                                                    <Link
-                                                        className="font-weight-bold"
-                                                        onClick={() => toggleDetails(course.id)}
-                                                        aria-controls="addComments"
-                                                        aria-expanded={`openViewDetail` + index}
-                                                        to={'#'}
-                                                    >
-                                                        View Details
-                                                    </Link>
+                                                            {/* course detail modal open */}
+                                                            <ViewDetailModal 
+                                                                id={course.id} 
+                                                                toggleDetails={toggleDetails}  
+                                                                isOpen={isOpen}
+                                                                datalist={course.datalist || []}
+                                                            />
+                                                        </>
+                                                    }
 
-                                                    {/* course detail modal open */}
-                                                    <ViewDetailModal 
-                                                        id={course.id} 
-                                                        toggleDetails={toggleDetails}  
-                                                        isOpen={isOpen}
-                                                        datalist={course.datalist || []}
-                                                    />
                                                 </div>
                                             </div>
 
@@ -160,25 +213,25 @@ const MyCourses = (props) => {
                                                 <div className="share">
                                                     <i className="icon-share"></i>
                                                     <div className="share__box arrow-box top">
-                                                        <Link to={"#"} className="facebook-icon"></Link>
-                                                        <Link to={"#"} className="linkedin-icon"></Link>
-                                                        <Link to={"#"} className="twitter-iocn"></Link>
-                                                        <Link to={"#"} className="whatsup-icon"></Link>
+                                                        <Link target="_blank" to={{ pathname: `https://www.facebook.com/sharer/sharer.php?u=${siteDomain}${course?.productUrl}`}} className="facebook-icon"></Link>
+                                                        <Link target="_blank" to={{ pathname: `https://www.linkedin.com/shareArticle?mini=true&url=${siteDomain}${course?.productUrl}&title=${course?.title}&summary=${course?.name}&source=`}} className="linkedin-icon"></Link>
+                                                        <Link target="_blank" to={{ pathname: `https://twitter.com/intent/tweet?url=${siteDomain}${course?.productUrl}/&text=${course?.name}`}} className="twitter-iocn"></Link>
+                                                        <Link target="_blank" to={{ pathname: `https://api.whatsapp.com/send?text=Hi! Check this useful product on Shine. ${siteDomain}${course?.productUrl}`}} data-action="share/whatsapp/share" className="whatsup-icon"></Link>
                                                     </div>
                                                 </div>
 
                                                 <div className="day-remaning mb-20">
                                                     {[...(course.remaining_days + '')].map((day, idx) => <span key={idx} className="day-remaning--box">{day}</span>)}
 
-                                                    <span className="ml-2 day-remaning--text">Days <br />remaning</span>
+                                                    <span className="ml-2 day-remaning--text">{course.remaining_days > 1 ? 'Days' : 'Day'} <br />remaning</span>
                                                 </div>
 
-                                                <div className="db-status mt-20">
+                                                {/* <div className="db-status mt-20">
                                                     <p className="mb-0 pb-1">Status: <strong>(0% Complete)</strong> </p>
                                                     <ProgressBar now={0} />
                                                 </div>
 
-                                                <Link to={"#"} className="db-start-course font-weight-bold mt-30">Start course</Link>
+                                                <Link to={"#"} className="db-start-course font-weight-bold mt-30">Start course</Link> */}
                                             </div>
                                         </div>
 
@@ -199,29 +252,32 @@ const MyCourses = (props) => {
                                                         'Add comment'
                                                     }
                                             </Link>
+                                            
+                                            {
+                                                (course?.oi_status === 4) &&
+                                                    <div className="d-flex">
+                                                        {/* <div className="db-certificate">
+                                                            <i className="db-certificate-icon"></i>
+                                                            <span className="db-certificate--text arrow-box top">Download certificate</span>
+                                                        </div> */}
+                                                        <ReviewRating
+                                                            item={course}
+                                                            handleShow={handleShow}
+                                                            toggleReviews={toggleReviews} 
+                                                            setOpenReview={setOpenReview}
+                                                            openReview={openReview}
+                                                            name="Course"/>
 
-                                            <div className="d-flex">
-                                                <div className="db-certificate">
-                                                    <i className="db-certificate-icon"></i>
-                                                    <span className="db-certificate--text arrow-box top">Download certificate</span>
-                                                </div>
-                                                <ReviewRating
-                                                    item={course}
-                                                    handleShow={handleShow}
-                                                    toggleReviews={toggleReviews} 
-                                                    setOpenReview={setOpenReview}
-                                                    openReview={openReview}
-                                                    name="Course"/>
-
-                                                {/* rate service modal */}
-                                                <RateModal handleClose={handleClose} show={show} name="Course"/>
-                                            </div>
+                                                        {/* rate service modal */}
+                                                        <RateModal handleClose={handleClose} show={show} name="Course"/>
+                                                    </div>
+                                            }
                                         </div>
                                     </div>
                                 </div>
                                 <AddCommentModal id={course.id} addCommentDataFetch={addCommentDataFetch} data={oiComments} addOpen={addOpen} />
 
-                                <div className="db-mycourse-highlighter">Next course to take: <Link to={"#"} className="font-weight-bold ml-2">Seo Specialist</Link> </div>
+                                {/* <div className="db-mycourse-highlighter">Next course to take: <Link to={"#"} className="font-weight-bold ml-2">Seo Specialist</Link> </div> */}
                             </div>
                         )
                     })

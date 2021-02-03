@@ -86,6 +86,9 @@ const AddCommentModal = (props) => {
                     }
                     <form onSubmit={handleSubmit(submitComment)}>
                         <div className="m-enquire-now mt-15 text-center">
+                            <span className="error_cls">
+                                {errors.comment && "* Please write something to post comment."}
+                            </span><br />
                             <div className="m-form-group">
                                 <TextArea attributes={inboxForm.name} register={register} errors={!!errors ? errors[inboxForm.name.name] : ''} />
                             </div>

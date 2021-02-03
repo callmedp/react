@@ -106,38 +106,43 @@ const MyWallet = (props) => {
     return(
         <>
             { orderLoader && <Loader /> }
-            <div className="my-order db-warp mb-20">
-                {
-                    data?.map((order, index) => {
-                        return (
-                            <div className="m-card" key={ index }>
-                                <p className="head mb-5">{order?.order?.number}</p>
+            {
+                !(data?.length) ? <h6 className="text-center p-10">Start with your first order and earn loyalty points</h6>  
+                :
+                <div className="my-order db-warp mb-20">
+                    {
+                        data?.map((order, index) => {
+                            return (
+                                <div className="m-card" key={ index }>
+                                    <p className="head mb-5">{order?.order?.number}</p>
 
-                                <div className="m-pipe-divides">
-                                    <span>Placed on: <strong>{order?.order?.date_placed}</strong></span>
-                                    <span>Status: <strong>{order?.order?.status}</strong></span>
-                                    <span><strong>{order?.item_count}</strong> {order?.item_count > 1 ? 'items' : 'item'}</span>
-                                </div>
-
-                                <div className="my-order--wrap mt-20">
-                                    <div className="my-order__priceWrap">
-                                        <span className="my-order__priceWrap--tAmount d-block">Total amount</span>
-                                        <strong className="my-order__priceWrap--price">{ order?.order?.currency === 'Rs.' ? <span>&#8377;</span> : order?.order?.currency } {order?.order?.total_incl_tax}/- </strong>
+                                    <div className="m-pipe-divides">
+                                        <span>Placed on: <strong>{order?.order?.date_placed}</strong></span>
+                                        <span>Status: <strong>{order?.order?.status}</strong></span>
+                                        <span><strong>{order?.item_count}</strong> {order?.item_count > 1 ? 'items' : 'item'}</span>
                                     </div>
-                                    { order?.order?.canCancel && <a href='/' onClick={(e) => {e.preventDefault();setShowCancelModal(true);setCancelOrderId(order?.order?.id)}}>Cancel order</a> }
-                                    { order?.order?.downloadInvoice && <a href={downloadInvoice(order?.order?.id)} target="_blank">Download Invoice</a> }
-                                    
-                                </div>
 
-                                <div className="my-order__order-detail">
-                                    <Link to={"#"} onClick={() => showDetails(order?.order?.id)} className={(showOrderDetailsID === order?.order?.id) ? "font-weight-bold open arrow-icon" : "font-weight-bold arrow-icon"}>Order Details</Link>
-                                    { (showOrderDetailsID === order?.order?.id) && getOrderDetails(order?.orderitems) }
+                                    <div className="my-order--wrap mt-20">
+                                        <div className="my-order__priceWrap">
+                                            <span className="my-order__priceWrap--tAmount d-block">Total amount</span>
+                                            <strong className="my-order__priceWrap--price">{ order?.order?.currency === 'Rs.' ? <span>&#8377;</span> : order?.order?.currency } {order?.order?.total_incl_tax}/- </strong>
+                                        </div>
+                                        { order?.order?.canCancel && <a href='/' onClick={(e) => {e.preventDefault();setShowCancelModal(true);setCancelOrderId(order?.order?.id)}}>Cancel order</a> }
+                                        { order?.order?.downloadInvoice && <a href={downloadInvoice(order?.order?.id)} target="_blank">Download Invoice</a> }
+                                        
+                                    </div>
+
+                                    <div className="my-order__order-detail">
+                                        <Link to={"#"} onClick={() => showDetails(order?.order?.id)} className={(showOrderDetailsID === order?.order?.id) ? "font-weight-bold open arrow-icon" : "font-weight-bold arrow-icon"}>Order Details</Link>
+                                        { (showOrderDetailsID === order?.order?.id) && getOrderDetails(order?.orderitems) }
+                                    </div>
                                 </div>
-                            </div>
-                        )
-                    })
-                }
-            </div> 
+                            )
+                        })
+                    }
+                </div>
+
+            } 
 
             {
                 page?.total > 1 ? <Pagination totalPage={page?.total} currentPage={currentPage} setCurrentPage={setCurrentPage}/> : ''
