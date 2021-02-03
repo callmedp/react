@@ -47,7 +47,7 @@ const RecruitersLooking = (props) => {
         catch (e) {
             Swal.fire({
                 icon: 'error',
-                text: 'Sorry! we are load data from server.'
+                text: 'Sorry! we are unable to load data from server.'
             })
         }
     };
