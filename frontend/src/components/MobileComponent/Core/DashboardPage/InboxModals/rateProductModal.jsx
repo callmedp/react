@@ -17,7 +17,7 @@ const RateProductModal = (props) => {
     const [inputStar, setInputStar] = useState(5);
     const { register, handleSubmit, errors, reset } = useForm();
 
-    const { reviewList } = useSelector( store => store.getReviews );
+    const reviewList = useSelector( store => store.getReviews );
     const { reviewLoader } = useSelector(store => store.loader);
 
     const submitReviews = async values => {

@@ -299,7 +299,7 @@ class DashboardReviewApi(APIView):
 
     def post(self, request, *args, **kwargs):
         email_dict = {}
-        candidate_id = request.data.get('candidate_id', None)
+        candidate_id = request.data.get('candidate_id', None) or self.request.session.get('candidate_id', None)
         # candidate_id='568a0b20cce9fb485393489b'
 
         oi_pk = request.data.get('oi_pk')
