@@ -9,13 +9,12 @@ import { useSelector } from 'react-redux';
 import Loader from '../../../Common/Loader/loader';
 
 const UploadResumeModal =(props) => {
-    const { uploadHandelClose, show, data } = props;
+    const { uploadHandelClose, show, pending_resume_items } = props;
     const dispatch = useDispatch();
     let [filename, setFileName] = useState("Upload a file");
     const [file, setFile] = useState(undefined);
     const { register, handleSubmit, errors, getValues, reset } = useForm();
     const { uploadLoader } = useSelector(store => store.loader);
-
 
     // for resume upload
     const getFile = (event) => {
@@ -73,7 +72,7 @@ const UploadResumeModal =(props) => {
                                 <div className="form-group d-flex align-items-center mt-5">
                                     <div className="upload-btn-wrapper">
                                         <button className="btn btn-outline-primary" >{filename}</button>
-                                        <input
+                                        <input disabled={pending_resume_items && pending_resume_items.length === 0}
                                             type="file"
                                             name="file"
                                             onChange={(e) => {
@@ -90,7 +89,7 @@ const UploadResumeModal =(props) => {
                         <span className="mx-4">Or</span>
 
                         <div className="custom-control custom-checkbox">
-                            <input type="checkbox" className="custom-control-input" id="shineResume" value="True" name="shine_resume" ref={register({
+                            <input type="checkbox" className="custom-control-input" disabled={pending_resume_items && pending_resume_items.length === 0} id="shineResume" value="True" name="shine_resume" ref={register({
                                 validate: () =>
                                 filename !== "Upload a file"
                                     ? null
@@ -103,13 +102,13 @@ const UploadResumeModal =(props) => {
                     </div>
                     <hr className="my-5"/>
 
-                    {data && data.length > 0 ?
+                    {pending_resume_items && pending_resume_items.length > 0 ?
                         <div className="db-upload-resume--services">
                             <strong>Select services</strong> for which you want to use this resume
                             <br/>{errors.resume_course && "* Please Select Atlest One"}
 
                             <ul className="db-upload-resume--list">
-                                {data.map((res,ind) => {
+                                {pending_resume_items.map((res,ind) => {
                                     return (
                                         <li className="custom-control custom-checkbox" key={ind}>
                                             <input type="checkbox" className="custom-control-input" name="resume_course" id={res.id} value={res.id} ref={register({validate: () => !getValues("resume_course").length ? errors.resume_course === true : null })}/> 
@@ -125,7 +124,7 @@ const UploadResumeModal =(props) => {
                         : null 
                     }
 
-                    <button className="btn btn-primary px-5 mt-30" onClick={handleSubmit(onSubmit)}>Save</button>
+                    <button disabled={pending_resume_items && pending_resume_items.length === 0} className="btn btn-primary px-5 mt-30" onClick={handleSubmit(onSubmit)}>Save</button>
                 </div>
             </Modal.Body>
         </Modal>

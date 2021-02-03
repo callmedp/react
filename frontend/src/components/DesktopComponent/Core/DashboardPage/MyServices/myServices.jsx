@@ -26,8 +26,6 @@ const MyServices = (props) => {
     const dispatch = useDispatch();
     const { history } = props;
     const { serviceLoader } = useSelector(store => store.loader);
-    // const { uploadLoader } = useSelector(store => store.loader);
-
     
     // page no. set here
     const [currentPage, setCurrentPage] = useState(5);
@@ -131,7 +129,6 @@ const MyServices = (props) => {
 
     useEffect(() => {
         handleEffects();
-        // dispatch(fetchPendingResume());
     }, [currentPage, filterState])
 
     return(
@@ -140,7 +137,6 @@ const MyServices = (props) => {
 
         <div>
             {serviceLoader ? <Loader /> : ''}
-            {/* { startUploadLoader ? <Loader /> : '' } */}
 
             <div className="db-my-courses-detail">
                 {/* {
@@ -320,7 +316,7 @@ const MyServices = (props) => {
                 }
 
                 {
-                    uploadShow && <UploadResumeModal uploadHandelClose={uploadHandelClose} show={uploadShow} data={pending_resume_items} />
+                    uploadShow && <UploadResumeModal uploadHandelClose={uploadHandelClose} show={uploadShow} pending_resume_items={pending_resume_items} />
                 }
                 {
                     acceptModal && <AcceptModal acceptModal={acceptModal} setAcceptModal={setAcceptModal} oi_id={acceptModalId}/>
