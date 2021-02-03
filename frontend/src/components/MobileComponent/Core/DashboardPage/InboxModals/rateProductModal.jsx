@@ -17,7 +17,7 @@ const RateProductModal = (props) => {
     const [inputStar, setInputStar] = useState(5);
     const { register, handleSubmit, errors, reset } = useForm();
 
-    const reviewList = useSelector( store => store.getReviews );
+    const reviewList = useSelector( store => store?.getReviews?.data );
     const { reviewLoader } = useSelector(store => store.loader);
 
     const submitReviews = async values => {
@@ -78,7 +78,7 @@ const RateProductModal = (props) => {
                     <div className="addcomments" style={{display: 'block'}}>
                         <span className="m-db-close" style={{ marginLeft: '13px' }} onClick={() => {setShowRateModal(false)}}>&#x2715;</span>
                         {
-                            reviewList ? 
+                            reviewList?.length > 0 ? 
                                 <div className="m-reviews-list">
                                     <ul>
                                         {

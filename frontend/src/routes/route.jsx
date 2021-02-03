@@ -15,14 +15,14 @@ const RouteWithSubRoutes = route => {
     const isSessionAvailable = async () => {
         localStorage.clear();
         try {
-            // console.log("api session hi tinit")
+            console.log("api session hi tinit")
             const session = await new Promise((resolve, reject) => dispatch(sessionAvailability({ resolve, reject })));
-            // console.log("api session hit end")
+            console.log("api session hit end")
             if (session['result'] === false){
                 setLoader(false);
                 return;
             }
-            // console.log("getting candidate info")
+            console.log("getting candidate info")
             const candidateId = session['candidate_id'];
             await new Promise((resolve, reject) => dispatch(getCandidateInfo({ candidateId, resolve, reject })));
             setLoader(false)
@@ -40,8 +40,8 @@ const RouteWithSubRoutes = route => {
     useEffect(() => {
         if (!!localStorage.getItem('isAuthenticated')) {
             const session = isSessionAvailable();
-            // console.log("session is ", session)
-            return session;
+            console.log("session is ", session)
+            // return session;
         }
         setLoader(false);
     }, [])
@@ -58,7 +58,7 @@ const RouteWithSubRoutes = route => {
                 return <route.component {...props} routes={route.routes} />
             }
             else {
-                window.location.replace(`${siteDomain}/login`);
+                window.location.replace(`${siteDomain}/login?next=${props.match.url}`);
             }
         }
         else {
