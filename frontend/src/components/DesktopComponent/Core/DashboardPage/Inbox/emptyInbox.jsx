@@ -12,7 +12,7 @@ const EmptyInbox = (props) => {
             <div className="db-nocourses">
                 <img src={`${imageUrl}desktop/no-courses.png`} alt="Empty Dashboard Image"/>
                 <p className="db-nocourses--text">{inboxText}</p>
-                <Link to={siteDomain} className="btn btn-outline-primary font-weight-bold">{inboxButton}</Link>
+                <a href={siteDomain} className="btn btn-outline-primary font-weight-bold">{inboxButton}</a>
             </div>
         </div>
     )
