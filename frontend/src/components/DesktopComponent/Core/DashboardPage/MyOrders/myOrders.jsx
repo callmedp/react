@@ -38,7 +38,7 @@ const MyOrders = (props) => {
         } catch (error) {
             dispatch(stopDashboardOrderPageLoader());
             if (error?.status == 404) {
-                history.push('/404');
+                // history.push('/404');
             }
         }
     };
