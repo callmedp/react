@@ -38,12 +38,15 @@ const RouteWithSubRoutes = route => {
 
 
     useEffect(() => {
-        if (!!localStorage.getItem('isAuthenticated')) {
+        if (!(localStorage.getItem('isAuthenticated') === "true")) {
             const session = isSessionAvailable();
             // console.log("session is ", session)
-            return session;
+            // return session;
         }
-        setLoader(false);
+        else{
+		setLoader(false);
+}
+	// console.log("this is the loader")
     }, [])
 
 
@@ -51,14 +54,14 @@ const RouteWithSubRoutes = route => {
     const renderComponent = props => {
 
         // const isAuthenticated = getAuthentication();
-        // console.log("this should come second", isAuthenticated)
+        // console.log("this should come second", localStorage.getItem('isAuthenticated'))
 
         if (!!route.private) {
-            if (localStorage.getItem('isAuthenticated') === true) {
+            if (localStorage.getItem('isAuthenticated') === 'true') {
                 return <route.component {...props} routes={route.routes} />
             }
             else {
-                window.location.replace(`${siteDomain}/login`);
+                window.location.replace(`${siteDomain}/login?next=${props.match.url}`);
             }
         }
         else {
