@@ -20,9 +20,9 @@ const LatestBlog = (props) => {
                                         <Link to={`${siteDomain}${blog?.url}`}>
                                             <figure>
                                                 <img src={blog?.image} className="img-fluid" alt={blog?.display_name} />
-                                                <span>{ blog?.display_name?.length > 13 ? blog?.display_name?.slice(0, 13) + '...' : blog?.display_name }</span>
+                                                <span>{ blog?.p_category?.length > 13 ? blog?.p_category?.slice(0, 13) + '...' : blog?.p_category }</span>
                                             </figure>
-                                            <strong>{ blog?.title?.length > 40 ? blog?.title?.slice(0, 40) + '...' : blog?.title }</strong>
+                                            <strong>{ blog?.display_name?.length > 40 ? blog?.display_name?.slice(0, 40) + '...' : blog?.display_name }</strong>
                                         </Link>
                                     </div>
                                 </li>

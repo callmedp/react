@@ -1088,7 +1088,8 @@ class JobAssistanceAndLatestBlogAPI(APIView):
                 'display_name':article.heading if article.heading else article.name,
                 'title':article.get_title(),
                 'image':article.get_absolute_image_url(),
-                'url':article.get_absolute_url()
+                'url':article.get_absolute_url(),
+                'p_category': article.p_cat.name
                 } for article in article_list]
             data.update({'latest_blog_data':latest_blog_data})
 
