@@ -115,7 +115,7 @@ class MyCoursesApi(DashboardInfo, APIView):
             from_datetime = datetime.utcnow() - relativedelta(months=int(last_month_from))
             modified_from_datetime = from_datetime.replace(day=1, hour=0, minute=0, second=0, microsecond=0) 
 
-        candidate_id='568a0b20cce9fb485393489b'
+        # candidate_id='568a0b20cce9fb485393489b'
         if candidate_id:
             orders = Order.objects.filter(
                 status__in=[0, 1, 3],
@@ -164,12 +164,12 @@ class MyServicesApi(DashboardInfo, APIView):
         page_info = {}
 
         #time filter
-        print(last_month_from)
+        # print(last_month_from)
         if not last_month_from=='all':
             from_datetime = datetime.utcnow() - relativedelta(months=int(last_month_from))
             modified_from_datetime = from_datetime.replace(day=1, hour=0, minute=0, second=0, microsecond=0) 
 
-        candidate_id='568a0b20cce9fb485393489b'
+        # candidate_id='568a0b20cce9fb485393489b'
 
         if candidate_id:
             excl_txns = PaymentTxn.objects.filter(
@@ -375,7 +375,7 @@ class DashboardPendingResumeItemsApi(APIView):
         candidate_id = self.request.session.get('candidate_id', None)
         email = request.GET.get('email', None)
         pending_resume_items = []
-        # candidate_id='568a0b20cce9fb485393489b'
+        # candidate_id='5c6661f7a9da9b3891e72729'
 
         pending_resume_items = DashboardInfo().get_pending_resume_items(candidate_id=candidate_id,
                                                                         email=email)

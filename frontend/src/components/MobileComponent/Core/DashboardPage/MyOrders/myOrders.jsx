@@ -10,6 +10,7 @@ import { startDashboardOrderPageLoader, stopDashboardOrderPageLoader } from 'sto
 import Loader from '../../../Common/Loader/loader';
 import Pagination from '../../../Common/Pagination/pagination';
 import { getDataStorage } from 'utils/storage';
+import EmptyInbox from '../InboxModals/emptyInbox';
 
    
 const MyWallet = (props) => {
@@ -107,7 +108,7 @@ const MyWallet = (props) => {
         <>
             { orderLoader && <Loader /> }
             {
-                !(data?.length) ? <h6 className="text-center p-10">Start with your first order and earn loyalty points</h6>  
+                !(data?.length) ? <EmptyInbox inboxType="orders"/> 
                 :
                 <div className="my-order db-warp mb-20">
                     {
