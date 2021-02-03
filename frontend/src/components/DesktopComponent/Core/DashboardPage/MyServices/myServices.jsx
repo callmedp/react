@@ -28,7 +28,7 @@ const MyServices = (props) => {
     const { serviceLoader } = useSelector(store => store.loader);
     
     // page no. set here
-    const [currentPage, setCurrentPage] = useState(5);
+    const [currentPage, setCurrentPage] = useState(1);
     const [filterState, setfilterState] = useState({ 'last_month_from': 'all', 'select_type' : 'all' });
     
     // main api result state here
@@ -145,7 +145,7 @@ const MyServices = (props) => {
                     : null
                 } */}
 
-                { !results?.page?.total || results?.page?.total === 0 ? <EmptyInbox inboxType="services" inboxText=""/> : '' }
+                { !results?.page?.total || results?.page?.total === 0 ? <EmptyInbox inboxButton="Go To Home" inboxText="There is no service added to your profile!"/> : '' }
 
                 {results?.data && results?.data?.length > 0 ?
                     results?.data?.map((item,index) => {
