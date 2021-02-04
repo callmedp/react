@@ -8,6 +8,7 @@ import { fetchMyOrders, cancelOrder } from 'store/DashboardPage/MyOrder/actions'
 import { downloadInvoice } from 'utils/dashboardUtils/myOrderUtils';
 import {Toast} from '../../../Common/Toast/toast';
 import { Modal } from 'react-bootstrap';
+import EmptyInbox from '../Inbox/emptyInbox';
 
 const MyOrders = (props) => {
     const ordPageNo = '1';
@@ -37,7 +38,7 @@ const MyOrders = (props) => {
         } catch (error) {
             dispatch(stopDashboardOrderPageLoader());
             if (error?.status == 404) {
-                history.push('/404');
+                // history.push('/404');
             }
         }
     };
@@ -142,7 +143,7 @@ const MyOrders = (props) => {
                     )
                 })
             :
-            <h6 className="text-center p-10">Start with your first order and earn loyalty points</h6>
+            <EmptyInbox inboxButton="Browse Courses" inboxText="You have not ordered any product till now!" />
             }
 
             {/* cancel order confirmation modal */}

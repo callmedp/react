@@ -47,7 +47,7 @@ const MyServices = (props) => {
 
     //Data fetch from myservices API
     const serviceData= useSelector(store => store?.dashboardServices);
-    const pending_resume_items = useSelector(store => store.dashboardPendingResume.data);
+    // const pending_resume_items = useSelector(store => store.dashboardPendingResume.data);
     const myServicesList = serviceData?.data
     const page = serviceData?.page
 
@@ -127,7 +127,7 @@ const MyServices = (props) => {
         });
 
         handleEffects();
-        dispatch(fetchPendingResume())
+        // dispatch(fetchPendingResume())
     }, [currentPage])
 
     return (
@@ -137,21 +137,6 @@ const MyServices = (props) => {
             !page?.total || page?.total === 0 ? <EmptyInbox inboxType="services" /> :
 
         <div>
-            {/* Pending resume block Start*/}
-            {
-                myServicesList?.length > 0 && pending_resume_items?.length > 0 &&
-                    <div>
-                        <strong>
-                            <center>To initiate your service <br />
-                                <a href="/" onClick={(e) => {e.preventDefault();setShowUpload(true)}}>
-                                    Upload your latest resume
-                                </a>
-                            </center>
-                        </strong>
-                        <br />
-                    </div>
-            }
-            {/* Pending resume block End*/}
 
             {/* My Services Block Start */}
             <main className="mb-0">
@@ -365,7 +350,7 @@ const MyServices = (props) => {
             { showRateModal && <RateProductModal setShowRateModal={setShowRateModal} oi_id={oiReviewId}/> }
 
             {/* Upload Modal */}
-            { showUpload && <UploadResume setShowUpload={setShowUpload} data={pending_resume_items} /> }
+            { showUpload && <UploadResume setShowUpload={setShowUpload} /> }
 
             {/* Accept Reject Modal */}
             { acceptModal && <AcceptModal setAcceptModal={setAcceptModal} oi_id={acceptModalId}/> }
@@ -373,7 +358,7 @@ const MyServices = (props) => {
 
             {/* Pagination */}
             { page?.total > 1 && <Pagination totalPage={page?.total} currentPage={currentPage} setCurrentPage={setCurrentPage} /> }
-
+            
         </div>
         }
         </>

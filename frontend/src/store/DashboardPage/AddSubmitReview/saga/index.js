@@ -11,7 +11,7 @@ function* GetReviews(action) {
         let result = null;
 
         result = yield call(Api.myReviewsData, payload);
-
+        
         if (result["error"]){
             yield put({ type: Actions.REVIEWS_FETCHED, reviews: result?.data?.data });
             return resolve(result?.data);

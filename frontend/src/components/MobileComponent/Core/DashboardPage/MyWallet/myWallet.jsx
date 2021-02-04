@@ -8,6 +8,7 @@ import Loader from '../../../Common/Loader/loader';
 import Pagination from '../../../Common/Pagination/pagination';
 import FAQ from '../../../Common/FAQ/faq';
 import { faqList } from 'utils/dashboardUtils/faqListUtils';
+import EmptyInbox from '../InboxModals/emptyInbox';
 import { siteDomain } from 'utils/domains'
 
    
@@ -32,6 +33,7 @@ const MyWallet = (props) => {
             // if (error?.status == 404) {
             //     history.push('/404');
             // }
+            dispatch(stopDashboardWalletPageLoader());
         }
     };
 
@@ -48,7 +50,7 @@ const MyWallet = (props) => {
         <>
             { walletLoader && <Loader />}
             {
-                !(loyality_txns?.length) ? <h6 className="text-center p-10">Start with your first order and earn loyalty points</h6> 
+                !(loyality_txns?.length) ? <EmptyInbox inboxType="wallet" /> 
                 :
                 <div className="m-wallet db-warp">
                     <div className="m-card">

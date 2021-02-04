@@ -41,14 +41,15 @@ const AcceptModal = (props) => {
         <>
             { acceptRejectLoader && <Loader /> }
             <div className="m-slide-modal">
+                <span className="m-db-close">&#x2715;</span>
                 <div className="text-center">
-                    <h2>Accept Confirmation</h2><br/>
+                    <h2>Accept Confirmation</h2>
                     <strong>Are you sure you want to accept?</strong><br />
-                    <span>Note: Once you accept, your service will be closed.</span>
+                    <span className="d-block mt-15">Note: Once you accept, your service will be closed.</span>
                     <br/><br/>
                     <div className="m-form-group">
-                        <button className="btn btn-blue" onClick={() => acceptRejectHandler("accept", oi_id)}>Accept</button>&emsp;
-                        <button className="btn btn-blue" onClick={() => setAcceptModal(false)}>Skip</button>
+                        <button className="btn btn-blue px-30" onClick={() => acceptRejectHandler("accept", oi_id)}>Accept</button>&emsp;
+                        <button className="btn btn-blue-outline px-30" onClick={() => setAcceptModal(false)}>Skip</button>
                     </div>
                 </div>
             </div>

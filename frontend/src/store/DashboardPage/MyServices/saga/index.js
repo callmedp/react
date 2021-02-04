@@ -29,13 +29,22 @@ function* DashboardServicesApi(action) {
     }
 }
 
-function* getPendingOrder() {
+function* getPendingOrder(action) {
+    const { payload: { resolve, reject } } = action;
+
     try {
         const result = yield call(Api.getPendingOrderItems);
-        return yield put({ type: Actions.PENDING_RESUME_FETCHED, data: result?.data?.data });
+
+        let data = result?.data?.data;
+
+        yield put({ 
+            type : Actions.PENDING_RESUME_FETCHED, 
+            data 
+        })
+        return resolve(data);
     }
     catch (e) {
-        return e;
+        return reject(e);
     }
 }
 

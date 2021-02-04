@@ -66,9 +66,14 @@ const MyCourses = (props) => {
 
     const handleEffects = async () => {
         if (!(window && window.config && window.config.isServerRendered)) {
-            dispatch(startDashboardCoursesPageLoader());
-            await new Promise((resolve, reject) => dispatch(fetchMyCourses({ page: currentPage, resolve, reject })));
-            dispatch(stopDashboardCoursesPageLoader());
+            try{
+                dispatch(startDashboardCoursesPageLoader());
+                await new Promise((resolve, reject) => dispatch(fetchMyCourses({ page: currentPage, resolve, reject })));
+                dispatch(stopDashboardCoursesPageLoader());
+            }
+            catch{
+                dispatch(stopDashboardCoursesPageLoader());
+            }
         }
         else {
             delete window.config?.isServerRendered

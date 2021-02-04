@@ -1,13 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';
 import './uploadResume.scss';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from "react-hook-form";
 import fileUpload from "utils/fileUpload";
 import { uploadResumeForm } from 'store/DashboardPage/MyServices/actions';
+import { fetchPendingResume } from 'store/DashboardPage/MyServices/actions/index';
+import { startUploadLoader, stopUploadLoader } from 'store/Loader/actions/index';
+import Loader from '../../../Common/Loader/loader';
 
 const UploadResume = (props) => {
-    const { setShowUpload, data } = props
+    const { setShowUpload } = props
 
     let [filename, setFileName] = useState("Upload a file");
     const [file, setFile] = useState(undefined);
@@ -23,6 +26,20 @@ const UploadResume = (props) => {
             setFile(fileUploadValue)
         }
     }
+
+    const handleEffects = async () => {
+        try{
+            dispatch(startUploadLoader());
+            await new Promise((resolve, reject) => dispatch(fetchPendingResume({payload : {}, resolve, reject})));
+            dispatch(stopUploadLoader());
+        }
+        catch(e){
+            dispatch(stopUploadLoader());
+        }
+    };
+
+    const pending_resume_items = useSelector(store => store.dashboardPendingResume.data);
+    const { uploadLoader } = useSelector(store => store.loader);
 
     const onSubmit = async (values) => {
         values = { ...values, file: file };
@@ -48,10 +65,18 @@ const UploadResume = (props) => {
         }
     }
 
+    useEffect(() => {
+        handleEffects()
+    }, [])
+
     return (
+        <>
+        {
+            uploadLoader && <Loader />
+        }
         <div className="m-slide-modal">
             <div className="text-center">
-                <span onClick={() => setShowUpload(false)} className="m-db-close">X</span>
+                <span onClick={() => setShowUpload(false)} className="m-db-close">&#x2715;</span>
                 <h2>Upload Resume </h2>
                 <p>To initiate your services, <strong>upload resume</strong></p>
 
@@ -91,7 +116,7 @@ const UploadResume = (props) => {
                     </span>
                     <ul className="m-db-upload-resume--list">
                         {
-                            data?.map((service) => {
+                            pending_resume_items?.map((service) => {
                                 return (
                                     <li className="m-custom" key={service?.id}>
                                         <input type="checkbox" id={service?.id} name="resume_course" defaultChecked={true} value={service?.id} ref={register({validate: () => !getValues("resume_course").length ? errors.resume_course === true : null })}/>
@@ -107,6 +132,7 @@ const UploadResume = (props) => {
             </div>
 
         </div>
+        </>
     )
 }
 

@@ -49,7 +49,7 @@ const MyCourses = (props) => {
     const toggleReviews = async (id, prod) => {
         if(openReview != id) {
             dispatch(startReviewLoader());
-            await new Promise((resolve, reject) => dispatch(fetchReviews({ payload: { prod: prod, page: currentPage, isDesk: true, ...filterState, type: 'GET'}, resolve, reject })));
+            await new Promise((resolve, reject) => dispatch(fetchReviews({ payload: { prod: prod}, resolve, reject })));
             dispatch(stopReviewLoader());
         }
         setOpenReview(openReview == id ? false : id);
@@ -132,7 +132,7 @@ const MyCourses = (props) => {
 
             <div className="db-my-courses-detail">
 
-                { !page?.total || page?.total === 0 ? <EmptyInbox inboxType="courses"/> : '' }
+                { !page?.total || page?.total === 0 ? <EmptyInbox inboxButton="Browse Courses" inboxText="Seems like no courses / certification added to your profile"/> : '' }
 
                 {
                     data?.map((course, index) => {
@@ -220,11 +220,21 @@ const MyCourses = (props) => {
                                                     </div>
                                                 </div>
 
-                                                <div className="day-remaning mb-20">
-                                                    {[...(course.remaining_days + '')].map((day, idx) => <span key={idx} className="day-remaning--box">{day}</span>)}
+                                                {course?.options?.day_remaining ?
+                                                    <div className="day-remaning mb-20">
+                                                        {/* {[...(course.remaining_days + '')].map((day, idx) => <span key={idx} className="day-remaning--box">{day}</span>)} */}
 
-                                                    <span className="ml-2 day-remaning--text">{course.remaining_days > 1 ? 'Days' : 'Day'} <br />remaning</span>
-                                                </div>
+                                                        {
+                                                            (course?.options?.day_remaining > 0 ? course?.options?.day_remaining : '0')?.toString()?.split('')?.map((digit, index) => {
+                                                                return (
+                                                                    <span className="day-remaning--box" key={index}> { digit }</span>
+                                                                )
+                                                            })
+                                                        }
+
+                                                        <span className="ml-2 day-remaning--text">{ course?.options?.day_remaining > 1 ? 'Days' : 'Day'} <br />remaining<br />remaning</span>
+                                                    </div>
+                                                : null}
 
                                                 {/* <div className="db-status mt-20">
                                                     <p className="mb-0 pb-1">Status: <strong>(0% Complete)</strong> </p>
@@ -260,18 +270,22 @@ const MyCourses = (props) => {
                                                             <i className="db-certificate-icon"></i>
                                                             <span className="db-certificate--text arrow-box top">Download certificate</span>
                                                         </div> */}
-                                                        <ReviewRating
-                                                            item={course}
-                                                            handleShow={handleShow}
-                                                            toggleReviews={toggleReviews} 
-                                                            setOpenReview={setOpenReview}
-                                                            openReview={openReview}
-                                                            name="Course"/>
+                                                        { (course.oi_status === 4) && 
+                                                            <React.Fragment>
+                                                                <ReviewRating
+                                                                    item={course}
+                                                                    handleShow={handleShow}
+                                                                    toggleReviews={toggleReviews} 
+                                                                    setOpenReview={setOpenReview}
+                                                                    openReview={openReview}
+                                                                    name="Course"/>
 
-                                                        {/* rate service modal */}
-                                                        <RateModal handleClose={handleClose} show={show} name="Course"/>
+                                                                {/* rate service modal */}
+                                                                <RateModal handleClose={handleClose} show={show} name="Course"/>
+                                                            </React.Fragment>
+                                                        }
                                                     </div>
-                                            }
+                                                }
                                         </div>
                                     </div>
                                 </div>

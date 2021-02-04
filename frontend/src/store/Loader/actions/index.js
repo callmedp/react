@@ -115,3 +115,17 @@ export const stopAcceptRejectLoader = () => {
         payload: { acceptRejectLoader: false }
     }
 }
+
+export const startUploadLoader = () => {
+    return {
+        type: Actions.START_UPLOAD_LOADER,
+        payload: { uploadLoader: true }
+    }
+}
+
+export const stopUploadLoader = () => {
+    return {
+        type: Actions.STOP_UPLOAD_LOADER,
+        payload: { uploadLoader: false }
+    }
+}
