@@ -119,8 +119,8 @@ const MyOrders = (props) => {
                                     {item?.orderitems?.length > 0 ? 
                                         <ul>
                                             <li className="head row">
-                                                <span className="col-11 pl-0">Item</span>
-                                                <span className="col-1">status</span>
+                                                <span className="col-9 pl-0">Item</span>
+                                                <span className="col-3 text-right">status</span>
                                             </li>
                                             {
                                                 item.orderitems.map((innItem, ind) => {
