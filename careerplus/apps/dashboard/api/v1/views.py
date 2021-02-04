@@ -303,7 +303,7 @@ class DashboardReviewApi(APIView):
         # candidate_id='568a0b20cce9fb485393489b'
 
         oi_pk = request.data.get('oi_pk')
-        email = request.data.get('email') or self.request.session.get('candidate_id', None)
+        email = request.data.get('email') or self.request.session.get('email', None)
         data = {
             "display_message": 'Thank you for sharing your valuable feedback',
         }
@@ -315,8 +315,10 @@ class DashboardReviewApi(APIView):
                 title = request.data.get('title', '').strip()
                 name = request.data.get('full_name') or self.request.session.get('name', email)
                 error_msg = ''
+                if not name:
+                    error_msg + 'name missing,'
                 if not oi:
-                    error_msg + 'missing order_item,'
+                    error_msg + 'order_item missing ,'
                 if not (oi.order.candidate_id == candidate_id):
                     error_msg + 'order_item candidate id and candidate id not matched,'
                 if not (oi.order.status in [1, 3]):
@@ -368,7 +370,7 @@ class DashboardReviewApi(APIView):
 
             except Exception as e:
                 logging.getLogger('error_log').error(str(e))
-                data['display_message'] = "select valid input for feedback"
+                data['display_message'] = str(e)
                 return Response(data, status=status.HTTP_400_BAD_REQUEST)
 
             return Response(data, status=status.HTTP_200_OK)
