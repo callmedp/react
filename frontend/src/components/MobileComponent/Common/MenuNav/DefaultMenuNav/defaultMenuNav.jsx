@@ -26,7 +26,7 @@ const DefaultMenuNav = (props) =>{
             dispatch(cartCount());
             // const isSessionAvailable = await new Promise((resolve, reject) => dispatch(sessionAvailability({ resolve, reject })));
 
-            if (localStorage.getItem('isAuthenticated') === true) {
+            if (localStorage.getItem('isAuthenticated') === 'true') {
                 try {
                     setIsLoggedIn(true)
                     // const candidateId = isSessionAvailable['candidate_id']

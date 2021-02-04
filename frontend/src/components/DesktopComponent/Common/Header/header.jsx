@@ -36,7 +36,7 @@ const Header = (props) => {
         try {
             dispatch(cartCount());
         
-            if (localStorage.getItem('isAuthenticated') === true){
+            if (localStorage.getItem('isAuthenticated') === 'true'){
                 try {
                     setIsLoggedIn(true)
                     // const candidateId = getCandidateId()
