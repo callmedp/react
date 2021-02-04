@@ -21,7 +21,7 @@ const DashboardNavigation = (props) => {
                 
                 <li>
                     <NavLink activeClassName="active" to={"/dashboard/myorder/"} className="my-order">
-                        <span className="d-block">My Order</span>
+                        <span className="d-block">My Orders</span>
                     </NavLink>
                 </li>
                 

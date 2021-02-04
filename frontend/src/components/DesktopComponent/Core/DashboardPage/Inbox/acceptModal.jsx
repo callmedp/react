@@ -39,7 +39,7 @@ const AcceptModal = (props) => {
     };
 
     return (
-        <Modal show={acceptModal} onHide={setAcceptModal}>
+        <Modal show={acceptModal} onHide={setAcceptModal} className="db-page">
             <Modal.Header closeButton></Modal.Header>
             <Modal.Body></Modal.Body>
             <div className="text-center pl-30 pr-30 py-30">

@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { ProgressBar } from 'react-bootstrap';
-import NoCourses from '../Inbox/emptyInbox';
+// import { ProgressBar } from 'react-bootstrap';
 import './myCourses.scss';
 import '../../SkillPage/NeedHelp/needHelp.scss';
 import { startDashboardCoursesPageLoader, 
@@ -23,7 +22,6 @@ import { startCommentLoader, stopCommentLoader } from 'store/Loader/actions/inde
 import BreadCrumbs from '../Breadcrumb/Breadcrumb';
 import {Toast} from '../../../Common/Toast/toast';
 import {boardNeoUser} from 'store/DashboardPage/MyCourses/actions/index';
-
 
 const MyCourses = (props) => {
     const [addOpen, setAddOpen] = useState(false);
@@ -128,7 +126,7 @@ const MyCourses = (props) => {
         <div>
             { coursesLoader ? <Loader /> : ''}
 
-            <BreadCrumbs filterState={filterState} setfilterState={setfilterState} />
+            <BreadCrumbs filterState={filterState} setfilterState={setfilterState}  filterStateShow={true}/>
 
             <div className="db-my-courses-detail">
 
@@ -167,8 +165,12 @@ const MyCourses = (props) => {
 
                                                     <div className="db-my-courses-detail__leftpan--status mb-2">
                                                         Status :
-                                                        <strong className="ml-1">{course?.new_oi_status ? course?.new_oi_status : 'Yet to Update'}</strong>
-                                                        &emsp;
+                                                        <strong className="ml-1">{course?.new_oi_status ? course?.new_oi_status : 'Yet to Update'}</strong>&emsp;
+
+                                                        {/* download or download credentials option if draft file exists */}
+                                                        {course.options?.Download ? <a className="ml-2" target="_blank" href={course.options?.download_url}>Download</a>
+                                                        : null}
+
                                                         {course.product_type_flow === 2 || course.product_type_flow === 14 ?
                                                             <React.Fragment>
                                                                 {(course?.vendor === 'neo' && course?.oi_status === 5) ? 

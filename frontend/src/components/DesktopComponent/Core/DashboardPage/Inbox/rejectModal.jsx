@@ -53,7 +53,7 @@ const RejectModal = (props) => {
     };
 
     return (
-        <Modal show={rejectModal} onHide={setRejectModal}>
+        <Modal show={rejectModal} onHide={setRejectModal} className="db-page">
             <Modal.Header closeButton></Modal.Header>
             <Modal.Body>
                 <div className="text-center">

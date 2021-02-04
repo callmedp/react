@@ -133,8 +133,7 @@ const MyServices = (props) => {
 
     return(
         <React.Fragment>
-        <BreadCrumbs filterState={filterState} setfilterState={setfilterState} />
-
+        <BreadCrumbs filterState={filterState} setfilterState={setfilterState} filterStateShow={true}/>
         <div>
             {serviceLoader ? <Loader /> : ''}
 
@@ -184,6 +183,10 @@ const MyServices = (props) => {
 
                                                             {/* download option if draft file exists */}
                                                             {item.options?.Download ? <a className="ml-2" target="_blank" href={item.options?.download_url}>Download</a>
+                                                            : null}
+
+                                                            {/* download credential option if oi_status == 4 */}
+                                                            {item.options?.Download_credential ? <a className="ml-2" target="_blank" href={item.options?.download_url}>Download Credential</a>
                                                             : null}
 
                                                             {/* take test when type flow is 16 */}
