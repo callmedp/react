@@ -42,14 +42,10 @@ const AcceptModal = (props) => {
         <Modal show={acceptModal} onHide={setAcceptModal}>
             <Modal.Header closeButton></Modal.Header>
             <Modal.Body></Modal.Body>
-            <div className="text-center pl-30 pr-30 pb-30">
-                <h2>Accept Confirmation </h2>
-                <strong>Are you sure you want to accept?</strong>
-                <br />
-                <span>Note: Once you accept, your service will be closed.</span>
-                <br /> <br/>
-                <button className="btn btn-blue" onClick={() => acceptRejectHandler("accept", oi_id)}>Accept</button>&emsp;
-                <button className="btn btn-blue" onClick={() => setAcceptModal(false)}>Skip</button>
+            <div className="text-center pl-30 pr-30 py-30">
+                <p className="font-weight-bold mb-0 fs-16">Are you sure you want to accept?</p>
+                <p className="mb-4">once you accept it , this service will be closed</p>
+                <button className="btn btn-blue px-5" onClick={() => acceptRejectHandler("accept", oi_id)}>Accept</button>
             </div>
         </Modal>
     )

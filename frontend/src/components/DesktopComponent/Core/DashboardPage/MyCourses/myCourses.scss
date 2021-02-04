@@ -474,13 +474,13 @@
 
 
 .db-view-detail {
-    position: relative;
-    top: -101px;
+    position: absolute;
+    top: 57px;
     left: 96px;
     z-index: 9;
 
     .db-timeline-list {
-        @include size(380px, 226px);
+        @include size(398px, 226px);
         @extend %custom-scroll;
         overflow-y: auto;
         overflow-x: hidden;
