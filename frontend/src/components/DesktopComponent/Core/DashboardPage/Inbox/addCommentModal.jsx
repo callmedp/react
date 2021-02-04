@@ -8,7 +8,7 @@ import CoursesServicesForm from 'formHandler/desktopFormHandler/formData/courses
 import Loader from '../../../Common/Loader/loader';
 
 const AddCommentModal = (props) => {
-    const { addOpen, id, data, addCommentDataFetch }  = props;
+    const { addOpen, id, data, setAddOpen }  = props;
     const dispatch = useDispatch();
     const { register, handleSubmit, errors, reset } = useForm();
     const { commentLoader } = useSelector(store => store.loader);
@@ -47,7 +47,7 @@ const AddCommentModal = (props) => {
 
                 <form onSubmit={handleSubmit(submitComment)}>
                     <div className="db-add-comments disabled-before lightblue-bg" id="addComments">
-                        <span className="btn-close" onClick={() => addCommentDataFetch(false)}>&#x2715;</span>
+                        <span className="btn-close" onClick={() => setAddOpen(state => !state)}>&#x2715;</span>
                         <p className="font-weight-semi-bold"> Add comment </p>
                         <TextArea attributes={CoursesServicesForm.name} register={register} errors={!!errors ? errors[CoursesServicesForm.name.name] : ''} />
                         <button type="submit" className="btn btn-outline-primary mt-20 px-5">Submit</button>

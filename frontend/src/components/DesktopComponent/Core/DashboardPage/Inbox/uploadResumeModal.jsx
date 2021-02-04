@@ -54,7 +54,7 @@ const UploadResumeModal =(props) => {
     return (
         <>
         { uploadLoader && <Loader /> }
-        <Modal show={show} onHide={uploadHandelClose}>
+        <Modal show={show} onHide={uploadHandelClose} className="db-page">
             <Modal.Header closeButton></Modal.Header>
             <Modal.Body>
                 <div className="text-center rate-services db-custom-select-form db-upload-resume">
@@ -62,7 +62,7 @@ const UploadResumeModal =(props) => {
                     <p className="rate-services--heading mb-0 mt-0">Upload Resume</p>
                 
                     <p className="">To initiate your services, <strong>upload resume</strong></p>
-                    {errors.shine_resume && "* Either Upload Resume or use shine resume"}
+                    <span className="error_cls">{errors.shine_resume && "* Either Upload Resume or use shine resume"}</span>
 
                     <div className="d-flex align-items-center justify-content-center mt-20">
                         <div className="upload-btn-wrapper">

@@ -65,7 +65,7 @@ const RateModal =(props) => {
     };
 
     return (
-        <Modal show={show} onHide={handleClose} className="db-modal">
+        <Modal show={show} onHide={handleClose} className="db-modal db-page">
         <Modal.Header closeButton></Modal.Header>
         
         <Modal.Body>
