@@ -142,7 +142,6 @@ def get_courses_detail(instance):
 
     elif oi.product.type_flow == 2 or  oi.product.type_flow == 14:
         date_created =oi.created.strftime("%d %b %y")
-        # datalist.append({'date':date_created,'status':oi.get_user_oi_status})
         if oi.oi_status == 5:
             current_status.update({'status':oi.get_user_oi_status})
             if  oi.product.type_flow == 2 and oi.product.vendor.slug == 'neo'  and not oi.neo_mail_sent and not oi.updated_from_trial_to_regular:
@@ -164,7 +163,6 @@ def get_courses_detail(instance):
 
     elif oi.product.type_flow == 4:
         date_created =oi.created.strftime("%d %b %y")
-        # datalist.append({'date':date_created,'status':oi.get_user_oi_status})
         if oi.oi_status == 2:
             current_status.update({'status':oi.get_user_oi_status})
             current_status.update({'upload_resume':True})
@@ -298,42 +296,9 @@ def get_courses_detail(instance):
     return current_status
 
 
-# def get_review_details(product_id, candidate_id):
-#     try:
-#         product = Product.objects.get(id=product_id)
-#     except Product.DoesNotExist:
-#         return APIResponse(error='Product not found', status=status.HTTP_404_NOT_FOUND)
-#     product_type = ContentType.objects.get(
-#         app_label='shop', model='product')
-#     prd_list = []
-#     if product.type_product in [0, 2, 4, 5]:
-#         prd_list = [product.pk]
-#     elif product.type_product == 1:
-#         prd_id = product.variation.filter(
-#             siblingproduct__active=True,
-#             active=True).values_list('id', flat=True)
-#         prd_list = list(prd_id)
-#         prd_list.append(product.pk)
-#     elif product.type_product == 3:
-#         prd_id = product.childs.filter(
-#             childrenproduct__active=True,
-#             active=True).values_list('id', flat=True)
-#         prd_list = list(prd_id)
-#         prd_list.append(product.pk)
-#     review_list = Review.objects.filter(
-#         content_type__id=product_type.id,
-#         object_id__in=prd_list, status=1,user_id=candidate_id)
-    
-#     # paginated_data = offset_paginator(page, review_list)
-#     data = ReviewSerializer(review_list, many=True).data
-#     data.update({'no_review':len(review_list)})
-
-
 def get_history(instance):
     max_draft_limit=settings.DRAFT_MAX_LIMIT
     ops=[]
-    #oi = instance
-    #ops
 
     if instance.product.type_flow in [1, 12, 13]:
         ops = instance.orderitemoperation_set.filter(oi_status__in=[2, 5, 24, 26, 27, 161, 162, 163, 164, 181])
