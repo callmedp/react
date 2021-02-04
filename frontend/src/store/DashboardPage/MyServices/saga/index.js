@@ -125,10 +125,31 @@ function* pauseResumeService(action) {
     
 }
 
+function* fetchOiDetails(action) {
+    const { payload: {payload, resolve, reject} } = action;
+    try {
+        const result = yield call(Api.fetchOiDetailsApi, payload);
+    
+        if (result["error"]) {
+            return resolve(result)
+            
+        }
+        const item = result?.data
+
+        yield put({ type: Actions.OI_DETAILS_FETCHED, item });
+        return resolve(result?.data)
+    }
+    catch (e) {
+        return resolve(e)
+    }
+    
+}
+
 export default function* WatchDashboardMyServices() {
     yield takeLatest(Actions.FETCH_MY_SERVICES, DashboardServicesApi);
     yield takeLatest(Actions.UPLOAD_RESUME_FORM, uploadResume);
     yield takeLatest(Actions.GET_PENDING_RESUME, getPendingOrder);
     yield takeLatest(Actions.REQUEST_CANDIDATE_OI_ACCEPT_REJECT, acceptrejectcandidate);
     yield takeLatest(Actions.PAUSE_AND_RESUME_SERVICE_REQUEST, pauseResumeService);
+    yield takeLatest(Actions.FETCH_OI_DETAILS, fetchOiDetails);
 }

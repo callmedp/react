@@ -267,7 +267,7 @@ def get_courses_detail(instance):
 
     elif oi.product.type_flow == 17:
         # resumetemplate option to be shown on frontend if editTemplate option is True
-        options['edit_template']=True 
+        current_status.update({'edit_template':True})
         date_created =oi.created.strftime("%d %b %y")
         current_status.update({'status':oi.get_user_oi_status})
         if oi.oi_status == 101:

@@ -15,7 +15,7 @@ import { DashboardMyWalletReducer } from './DashboardPage/MyWallet/reducer/index
 import { DashboardMyOrdersReducer } from './DashboardPage/MyOrder/reducer/index'; 
 import { DashboardMyCoursesReducer } from './DashboardPage/MyCourses/reducer/index';
 import { DashboardMyServicesReducer } from './DashboardPage/MyServices/reducer/index';
-import { DashboardMyServicesResumeReducer } from './DashboardPage/MyServices/reducer/index';
+import { DashboardMyServicesResumeReducer, OiDetailsReducer } from './DashboardPage/MyServices/reducer/index';
 
 const rootReducer = combineReducers({
     needHelp : NeedHelpReducer,
@@ -37,7 +37,8 @@ const rootReducer = combineReducers({
     dashboardOrders: DashboardMyOrdersReducer,
     dashboardCourses: DashboardMyCoursesReducer,
     dashboardServices: DashboardMyServicesReducer,
-    dashboardPendingResume: DashboardMyServicesResumeReducer
+    dashboardPendingResume: DashboardMyServicesResumeReducer,
+    oiDetails: OiDetailsReducer
 
 
 });

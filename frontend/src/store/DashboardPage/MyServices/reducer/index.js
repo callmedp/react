@@ -8,6 +8,10 @@ const initState = {
 const resInitState = {
 }
 
+const oiDetailsInit = {
+    // data: []
+}
+
 export const DashboardMyServicesReducer = (state=initState, action) => {
     switch(action.type){
         case Actions.MY_SERVICES_FETCHED : return { ...initState, ...action.item}
@@ -32,6 +36,16 @@ export const DashboardMyServicesResumeReducer = (state=resInitState, action) => 
     switch(action.type){
         case Actions.PENDING_RESUME_FETCHED: {
             return { ...state, ...action.data };
+        }
+
+        default: return state;
+    }
+}
+
+export const OiDetailsReducer = (state=oiDetailsInit, action) => {
+    switch(action.type){
+        case Actions.OI_DETAILS_FETCHED: {
+            return { ...state, ...action.item };
         }
 
         default: return state;
