@@ -362,7 +362,7 @@ def get_history(instance):
     datalist = []
     oi = instance
     date_created = ''
-    current_status ={}
+    current_status ={}   
     if oi.product.type_flow == 1 or  oi.product.type_flow == 12 or oi.product.type_flow == 13:
         for op in ops:
             current_status ={}
@@ -453,6 +453,8 @@ def get_history(instance):
                                 current_status={'date':date_created,'status':'Service is Under Progress'}
                             else:
                                 current_status={'date':date_created,'status':op.get_user_oi_status}
+                        if current_status:
+                            datalist.append(current_status)
         else:
             for op in ops:
                 current_status={}
@@ -460,8 +462,8 @@ def get_history(instance):
                 current_status={'date':date_created,'status':op.get_user_oi_status}
                 if oi.oi_status == 2 and not oi.oi_resume and op.oi_status == 2:
                     current_status.update({'upload_resume':True})
-        if current_status:
-                datalist.append(current_status)
+                if current_status:
+                        datalist.append(current_status)
 
     elif oi.product.type_flow == 6:
         for op in ops:
