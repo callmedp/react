@@ -107,10 +107,15 @@ const MyServices = (props) => {
             oi_id: id,
             type: 'GET'
         }
-        if(addOpen != id){
-            dispatch(startCommentLoader());
-            await new Promise((resolve, reject) => dispatch(fetchOiComment({payload: commVal, resolve, reject})));
-            dispatch(stopCommentLoader());
+        if(addOpen != id) {
+            try{
+                dispatch(startCommentLoader())
+                await new Promise((resolve, reject) => dispatch(fetchOiComment({payload: commVal, resolve, reject})));
+                dispatch(stopCommentLoader())
+            }
+            catch{
+                dispatch(stopCommentLoader())
+            }
         }
     };
 
@@ -181,7 +186,7 @@ const MyServices = (props) => {
                                                             {item.options?.upload_resume ? <Link to={"#"} className="ml-2" onClick={() => uploadToggleService()}>Upload</Link>
                                                             : null}
 
-                                                            {/* download option if draft file exists */}
+                                                            {/* download or download credentials option if draft file exists */}
                                                             {item.options?.Download ? <a className="ml-2" target="_blank" href={item.options?.download_url}>Download</a>
                                                             : null}
 
@@ -221,21 +226,20 @@ const MyServices = (props) => {
                                                         </strong> 
                                                     </div>
 
-                                                    {item.datalist && item.datalist.length > 0 ?
-                                                        <Link 
-                                                            to={'#'}
-                                                            className="font-weight-bold"
-                                                            onClick={() => toggleDetails(item.id)}
-                                                            aria-controls="addComments"
-                                                            aria-expanded={`openViewDetail`+item.id}
-                                                        >
-                                                            View Details
-                                                        </Link>
-                                                        : null 
-                                                    }
+                                                    <Link 
+                                                        to={'#'}
+                                                        className="font-weight-bold"
+                                                        onClick={() => toggleDetails(item.id)}
+                                                        aria-controls="addComments"
+                                                        aria-expanded={`openViewDetail`+item.id}
+                                                    >
+                                                        View Details
+                                                    </Link>
 
                                                     {/* course detail modal open */}
-                                                    { isOpen && <ViewDetailModal id={item.id} toggleDetails={toggleDetails} isOpen={isOpen} datalist={item.datalist || []}/> }
+                                                    {
+                                                        (isOpen === item?.id) && <ViewDetailModal id={item.id} toggleDetails={toggleDetails} isOpen={isOpen}/>
+                                                    }
                                                 </div>
                                             </div>
                                             <div className="db-my-courses-detail__rightpan">
@@ -278,7 +282,7 @@ const MyServices = (props) => {
                                             <Link
                                                 to={"#"}
                                                 className="db-comments font-weight-bold"
-                                                onClick={() => addCommentDataFetch(item.id)}
+                                                onClick={() => addCommentDataFetch(item.id, item.no_of_comments)}
                                                 aria-controls="addComments"
                                                 aria-expanded={`openComment`+item.id}
                                                 >
