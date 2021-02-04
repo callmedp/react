@@ -49,7 +49,7 @@ const AcceptModal = (props) => {
                 <span>Note: Once you accept, your service will be closed.</span>
                 <br /> <br/>
                 <button className="btn btn-blue" onClick={() => acceptRejectHandler("accept", oi_id)}>Accept</button>&emsp;
-                <button className="btn btn-blue" onClick={() => setAcceptModal(false)}>Skip</button>
+                <button className="btn btn-blue-outline" onClick={() => setAcceptModal(false)}>Skip</button>
             </div>
         </Modal>
     )

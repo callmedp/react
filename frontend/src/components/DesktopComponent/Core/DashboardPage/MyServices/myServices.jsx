@@ -202,7 +202,7 @@ const MyServices = (props) => {
                                                             : null}
 
                                                             {
-                                                                (item.oi_status === 24 || item.oi_status === 46) &&
+                                                                !(item.oi_status === 24 || item.oi_status === 46) &&
                                                                 <React.Fragment>
                                                                     <Link className="accept" to={"#"} onClick={() => {setAcceptModal(true);setAcceptModalId(item?.id)}}>Accept</Link>
                                                                     <Link className="ml-2 reject" to={"#"} onClick={() => {setRejectModal(true);setRejectModalId(item?.id)}}>Reject</Link>

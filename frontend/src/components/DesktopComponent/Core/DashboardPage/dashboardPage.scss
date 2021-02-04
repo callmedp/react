@@ -338,3 +338,14 @@
         cursor: pointer;
     }
 }
+
+.db-reject-upload-here {
+    font-size: 12px;
+    font-weight: 700;
+    color: $blue;
+    top: -4px;
+    margin-left: 5px;
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
