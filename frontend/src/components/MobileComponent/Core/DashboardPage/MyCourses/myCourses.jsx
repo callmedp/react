@@ -13,7 +13,8 @@ import EmptyInbox from '../InboxModals/emptyInbox';
 import { fetchMyCourses, boardNeoUser } from 'store/DashboardPage/MyCourses/actions/index'
 import { startDashboardCoursesPageLoader, stopDashboardCoursesPageLoader } from 'store/Loader/actions/index';
 import { siteDomain } from 'utils/domains';
-import { showSwal } from 'utils/swal'
+import { showSwal } from 'utils/swal';
+import ViewDetails from '../MyServices/oiViewDetails';
 
 const MyCourses = (props) => {
     const [showCommentModal, setShowCommentModal] = useState(false)
@@ -32,22 +33,22 @@ const MyCourses = (props) => {
             setShowOrderDetailsID('') : setShowOrderDetailsID(id)
     }
 
-    const getOrderDetails = (dataList) => {
-        return (
-            <ul className="my-order__order-detail--info mt-15">
-                {
-                    dataList.map((data, index) =>
-                        <li key={index}>
-                            <span>
-                                <hr />
-                                {data?.date} <br />
-                                <strong> {data?.status} </strong>
-                            </span>
-                        </li>)
-                }
-            </ul>
-        )
-    }
+    // const getOrderDetails = (dataList) => {
+    //     return (
+    //         <ul className="my-order__order-detail--info mt-15">
+    //             {
+    //                 dataList.map((data, index) =>
+    //                     <li key={index}>
+    //                         <span>
+    //                             <hr />
+    //                             {data?.date} <br />
+    //                             <strong> {data?.status} </strong>
+    //                         </span>
+    //                     </li>)
+    //             }
+    //         </ul>
+    //     )
+    // }
 
     const boardOnNeo = async (event, oiId) => {
         event.preventDefault();
@@ -138,48 +139,60 @@ const MyCourses = (props) => {
                                     Hi, the recording for the session you missed is available now <Link to={"#"} className="font-weight-semi-bold">Check here</Link>
                                     </div> */}
                                             <div className="pl-15 mt-15 fs-12">
-                                                Status: <strong> 
-                                                {course?.new_oi_status ? course?.new_oi_status : 'Yet to Update'}
+                                            {
+                                                course?.updated_status?.status && 
+                                                    <>
+                                                        Status: <strong> 
+                                                        { course?.updated_status?.status } 
 
-                                                {
-                                                    course?.options?.take_test && <a href={course?.options?.auto_login_url} target="_blank" className="font-weight-bold"> Take test</a>
-                                                }
-                                                {
-                                                    course?.options?.BoardOnNeo && <a href='/' className="font-weight-bold" onClick={(event) => boardOnNeo(event, course?.id)}> :- Board on Neo</a>
-                                                }
-                                                {
-                                                    course?.options?.neo_mail_sent && ':- Please Confirm Boarding on Mail Sent to you'
-                                                }
-                                                {
-                                                    course?.options?.updated_from_trial_to_regular && ':- Updated Account from Trial To Regular'
-                                                }
-                                                </strong>
+                                                        {
+                                                            course?.updated_status?.take_test && <a href={course?.options?.auto_login_url} target="_blank" className="font-weight-bold"> Take test</a>
+                                                        }
+                                                        {
+                                                            course?.updated_status?.BoardOnNeo && <a href='/' className="font-weight-bold" onClick={(event) => boardOnNeo(event, course?.id)}> :- Board on Neo</a>
+                                                        }
+                                                        {
+                                                            course?.updated_status?.neo_mail_sent && ':- Please Confirm Boarding on Mail Sent to you'
+                                                        }
+                                                        {
+                                                            course?.updated_status?.updated_from_trial_to_regular && ':- Updated Account from Trial To Regular'
+                                                        }
+                                                        {
+                                                            course?.updated_status?.download_url && <a href={course?.updated_status?.download_url} target="_blank" className="font-weight-bold"> Download</a> 
+                                                        }
+                                                        {
+                                                            course?.updated_status?.download_credentials_url && <a href={course?.updated_status?.download_credentials_url} target="_blank" className="font-weight-bold"> Download Credential</a> 
+                                                        }
+                                                        </strong>
+                                                    </>
+                                            }
+                                                
                                                 {/* <Link to={"#"} className="d-block font-weight-bold">View Details</Link> */}
-                                                {
-                                                    course?.datalist?.length > 0 ?
-                                                        <div className="my-order__order-detail">
-                                                            <a onClick={(e) => { e.preventDefault(); showDetails(course?.id) }} className={(showOrderDetailsID === course?.id) ? "d-block font-weight-bold open arrow-icon" : "d-block font-weight-bold arrow-icon"}>View Details</a>
-                                                            {(showOrderDetailsID === course?.id) && getOrderDetails(course?.datalist)}
 
-                                                        </div> : ''
-                                                }
+                                                <div className="my-order__order-detail">
+                                                    <a onClick={(e) => { e.preventDefault(); showDetails(course?.id) }} className={(showOrderDetailsID === course?.id) ? "d-block font-weight-bold open arrow-icon" : "d-block font-weight-bold arrow-icon"}>View Details</a>
+                                                    {   
+                                                        (showOrderDetailsID === course?.id) && <ViewDetails id={course?.id} />
+                                                    }
+                                                </div> 
+
                                             </div>
 
                                             {
-                                                course?.options?.day_remaining &&
+                                                course?.updated_status?.day_remaining &&
                                                     <div className="pl-15">
                                                         <div className="m-courses-detail__bottomWrap" style={{ paddingBottom: '0' }}>
                                                             <div>
                                                                 <div className="m-day-remaning mb-20">
                                                                     {
-                                                                        (course?.options?.day_remaining > 0 ? course?.options?.day_remaining : '0')?.toString()?.split('')?.map((digit, index) => {
+                                                                        (course?.updated_status?.day_remaining > 0 ? course?.options?.day_remaining : '0')?.toString()?.split('')?.map((digit, index) => {
                                                                             return (
                                                                                 <span className="m-day-remaning--box" key={index}> { digit }</span>
                                                                             )
                                                                         })
                                                                     }
                                                                     <span className="ml-2 m-day-remaning--text">
-                                                                        { course?.options?.day_remaining > 1 ? 'Days' : 'Day'} <br />remaining
+                                                                        { course?.updated_status?.day_remaining > 1 ? 'Days' : 'Day'} <br />remaining
                                                                     </span>
                                                                 </div>
                                                             </div>
@@ -219,7 +232,7 @@ const MyCourses = (props) => {
                                                 { course?.no_of_comments ? course?.no_of_comments > 1 ? `${course?.no_of_comments} Comments` : `${course?.no_of_comments} Comment` : 'Add Comment' }
                                             </Link>
                                             {
-                                                (course?.oi_status === 4) &&
+                                                course?.updated_status?.your_feedback &&
                                                     <div className="d-flex" onClick={()=>{setShowRateModal(true);setOiReviewId({'prdId' :course?.product, 'orderId':course?.id})}}>
                                                         {
                                                             course?.no_review ? 

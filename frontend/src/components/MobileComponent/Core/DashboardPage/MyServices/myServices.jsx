@@ -245,31 +245,31 @@ const MyServices = (props) => {
 
                                         {/* Days Reamianing and Start Stop Service Block */}
                                         {
-                                            (service?.options?.day_remaining || service?.options?.pause_service || service?.options?.resume_service) &&
+                                            (service?.updated_status?.day_remaining || service?.updated_status?.pause_service || service?.updated_status?.resume_service) &&
                                                 <div className="m-courses-detail__bottomWrap">
                                                     {
-                                                        service?.options?.day_remaining && 
+                                                        service?.updated_status?.day_remaining && 
                                                             <div>
                                                                 <div className="m-day-remaning">
                                                                     {
-                                                                        (service?.options?.day_remaining > 0 ? service?.options?.day_remaining : '00')?.toString()?.split('')?.map((digit, index) => {
+                                                                        (service?.updated_status?.day_remaining > 0 ? service?.updated_status?.day_remaining : '00')?.toString()?.split('')?.map((digit, index) => {
                                                                             return (
                                                                                 <span className="m-day-remaning--box" key={index}> { digit }</span>
                                                                             )
                                                                         })
                                                                     }
                                                                     <span className="ml-2 m-day-remaning--text">
-                                                                        { service?.options?.day_remaining > 1 ? 'Days' : 'Day'} <br />remaining
+                                                                        { service?.updated_status?.day_remaining > 1 ? 'Days' : 'Day'} <br />remaining
                                                                     </span>
                                                                 </div>
                                                             </div>
                                                     }
                                                     
                                                     {
-                                                        service?.options?.pause_service && <Link to={"#"} className="m-db-start-course font-weight-bold pr-10" onClick={() => pauseResumeService(34, service?.id)}>Pause Service</Link>
+                                                        service?.updated_status?.pause_service && <Link to={"#"} className="m-db-start-course font-weight-bold pr-10" onClick={() => pauseResumeService(34, service?.id)}>Pause Service</Link>
                                                     }
                                                     {
-                                                        service?.options?.resume_service && <Link to={"#"} className="m-db-start-course font-weight-bold pr-10" onClick={() => pauseResumeService(35, service?.id)}>Resume Service</Link>
+                                                        service?.updated_status?.resume_service && <Link to={"#"} className="m-db-start-course font-weight-bold pr-10" onClick={() => pauseResumeService(35, service?.id)}>Resume Service</Link>
                                                     }
                                                 </div>
                                         }
@@ -296,7 +296,7 @@ const MyServices = (props) => {
 
                                             {/* Rating Block start*/}    
                                             {
-                                                (service?.your_feedback) && 
+                                                (service?.updated_status?.your_feedback) && 
                                                     <div className="d-flex" onClick={()=>{
                                                             setShowRateModal(true);
                                                             setOiReviewId(service?.product)

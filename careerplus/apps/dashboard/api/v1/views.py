@@ -218,7 +218,7 @@ class DashboardMyWalletAPI(DashboardInfo, APIView):
         """
         page = request.GET.get('page', 1)
         data = {}
-        reward_type = ['Added', 'Refund']
+        reward_type = ['Added', 'Refund', 'Reverted']
 
         # attempting to get candidate from session
         candidate_id = self.request.session.get('candidate_id')
