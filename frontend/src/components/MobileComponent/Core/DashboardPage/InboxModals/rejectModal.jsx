@@ -11,7 +11,7 @@ import fileUpload from 'utils/fileUpload';
 
 const RejectModal = (props) => {
     const { setRejectModal, oi_id } = props
-    const [filename, setFileName] = useState("Upload Your Resume");
+    const [filename, setFileName] = useState("Upload Resume");
     const [file, setFile] = useState(undefined);
 
     const dispatch = useDispatch()
@@ -37,7 +37,7 @@ const RejectModal = (props) => {
         try {
             await new Promise((resolve, reject) => { dispatch(CandidateAcceptRejectResume({ payload: rejectValues, resolve, reject }));});
             event.target.reset();
-            setFileName("Upload Your Resume");
+            setFileName("Upload Resume");
             setFile(undefined)
             setRejectModal(false)
         }
@@ -54,13 +54,13 @@ const RejectModal = (props) => {
             <div className="text-center">
                 <span onClick={() => setRejectModal(false)} className="m-db-close">&#x2715;</span>
                 <h2>Reject Confirmations</h2>
-                <p>If you have made changes to document, please upload here</p>
+                <p className="fs-16 font-weight-bold mt-30 px-30">Get a better resume by sharing us the feedback</p>
 
                 <span className="error_cls">
                     { errors.message && "* Either Upload Resume or Leave your comments" }
                 </span>
                 <form onSubmit={handleSubmit(onSubmit)}>
-                    <div className="d-flex align-items-center justify-content-center mt-20">
+                    {/* <div className="d-flex align-items-center justify-content-center mt-20">
                         <div className="m-upload-btn-wrapper">
                             <button className="btn btn-blue-outline">{filename}</button>
                             <input type="file" name="file" onChange={(e) => {e.preventDefault(); getFile(e);}} ref={register()}/>
@@ -70,15 +70,15 @@ const RejectModal = (props) => {
                     <div className="or">
                         <span>or</span>
                         <hr />
-                    </div>
+                    </div> */}
 
                     
 
                     <div className="m-db-upload-resume">
                         <div className="m-form-group">
-                            <textarea className="form-control" placeholder="Leave us your message" rows="3" name="message" ref={register({
+                            <textarea className="form-control" placeholder="Enter Feedback here" rows="3" name="message" ref={register({
                                 validate: () =>
-                                    filename !== "Upload Your Resume"
+                                    filename !== "Upload Resume"
                                     ? null
                                     : !getValues("message")
                                         ? errors.message === true
@@ -88,6 +88,13 @@ const RejectModal = (props) => {
                         
                     </div>
 
+                    <div className="mt-20">
+                        <p className="mb-0">If you have made any changes resume</p>
+                        <div className="m-upload-btn-wrapper">
+                            <button className="btn btn-link">{filename}</button>
+                            <input type="file" name="file" onChange={(e) => {e.preventDefault(); getFile(e);}} ref={register()}/>
+                        </div>
+                    </div>
                     <button className="btn btn-primary px-5 mt-30" >Submit</button>
                 </form>
             </div>

@@ -172,6 +172,7 @@ class MyServicesApi(DashboardInfo, APIView):
             modified_from_datetime = from_datetime.replace(day=1, hour=0, minute=0, second=0, microsecond=0) 
 
         # candidate_id='568a0b20cce9fb485393489b'
+        # candidate_id = '601b8120ca3f418906a889a8'
 
         if candidate_id:
             excl_txns = PaymentTxn.objects.filter(
