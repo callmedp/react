@@ -18,7 +18,7 @@ const EmptyInbox = (props) => {
                 <img src={`${imageUrl}mobile/no-courses.png`} alt=""/>
                 <p className="db-nocourses--text">{inboxType === 'courses' ? courseMesaage : inboxType === 'services' ? serviceMessage : inboxType === 'orders' ? orderMessage : inboxType === 'wallet' ? walletMessage : ''}</p>
                 { 
-                    inboxType === 'services' ? <a href={resumeShineSiteDomain} className="btn btn-outline-primary font-weight-bold">Browse Services</a> :
+                    inboxType === 'services' ? <a href={resumeShineSiteDomain} className="btn btn-outline-primary font-weight-bold">Go to Home</a> :
                         inboxType === 'courses' ? <Link to="/online-courses.html" className="btn btn-outline-primary font-weight-bold">Browse Courses</Link> :
                             <a href={siteDomain} className="btn btn-outline-primary font-weight-bold">Go to Home</a>  
                 }
