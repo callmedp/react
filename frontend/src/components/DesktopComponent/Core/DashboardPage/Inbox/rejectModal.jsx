@@ -81,10 +81,6 @@ const RejectModal = (props) => {
                                 <input type="file" name="file" onChange={(e) => {e.preventDefault(); getFile(e);}} ref={register()}/>
                             </div>
                         </div>
-
-                        <div className="m-db-upload-resume">
-                            
-                        </div>
                         <button className="btn btn-primary px-5 mt-30" >Submit</button>
                     </form>
                 </div>

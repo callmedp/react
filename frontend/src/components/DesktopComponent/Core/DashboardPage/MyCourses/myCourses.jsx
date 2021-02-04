@@ -3,8 +3,7 @@ import { Link } from 'react-router-dom';
 // import { ProgressBar } from 'react-bootstrap';
 import './myCourses.scss';
 import '../../SkillPage/NeedHelp/needHelp.scss';
-import { startDashboardCoursesPageLoader, 
-    stopDashboardCoursesPageLoader } from 'store/Loader/actions/index';
+import { startDashboardCoursesPageLoader, stopDashboardCoursesPageLoader } from 'store/Loader/actions/index';
 import Loader from '../../../Common/Loader/loader';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchMyCourses } from 'store/DashboardPage/MyCourses/actions';
@@ -126,7 +125,7 @@ const MyCourses = (props) => {
         <div>
             { coursesLoader ? <Loader /> : ''}
 
-            <BreadCrumbs filterState={filterState} setfilterState={setfilterState}  filterStateShow={true}/>
+            <BreadCrumbs filterState={filterState} setfilterState={setfilterState} filterStateShow={true}/>
 
             <div className="db-my-courses-detail">
 
@@ -291,7 +290,7 @@ const MyCourses = (props) => {
                                         </div>
                                     </div>
                                 </div>
-                                <AddCommentModal id={course.id} addCommentDataFetch={addCommentDataFetch} data={oiComments} addOpen={addOpen} />
+                                <AddCommentModal id={course.id} setAddOpen={setAddOpen} data={oiComments} addOpen={addOpen} />
 
                                 {/* <div className="db-mycourse-highlighter">Next course to take: <Link to={"#"} className="font-weight-bold ml-2">Seo Specialist</Link> </div> */}
                             </div>

@@ -57,7 +57,7 @@ const MyServices = (props) => {
     }
 
     // comment open close set here
-    const [addOpen, setaddOpen] = useState(false);
+    const [addOpen, setAddOpen] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
@@ -102,7 +102,7 @@ const MyServices = (props) => {
     
     // hit api when clicked on add comment
     const addCommentDataFetch = async (id) => {
-        setaddOpen(addOpen == id ? false : id);
+        setAddOpen(addOpen == id ? false : id);
         let commVal = {
             oi_id: id,
             type: 'GET'
@@ -212,7 +212,7 @@ const MyServices = (props) => {
                                                             : null}
 
                                                             {
-                                                                !(item.oi_status === 24 || item.oi_status === 46) &&
+                                                                (item.oi_status === 24 || item.oi_status === 46) &&
                                                                 <React.Fragment>
                                                                     <Link className="accept" to={"#"} onClick={() => {setAcceptModal(true);setAcceptModalId(item?.id)}}>Accept</Link>
                                                                     <Link className="ml-2 reject" to={"#"} onClick={() => {setRejectModal(true);setRejectModalId(item?.id)}}>Reject</Link>
@@ -311,7 +311,7 @@ const MyServices = (props) => {
                                     </div>
                                 </div>
                                 {/* add comment dropdown */}
-                                <AddCommentModal id={item.id} addCommentDataFetch={addCommentDataFetch} data={oiComments} addOpen={addOpen} />
+                                <AddCommentModal id={item.id} setAddOpen={setAddOpen} data={oiComments} addOpen={addOpen} />
                             </div>
                         )
                     })
