@@ -8,7 +8,7 @@ function GALayer() {
         var actionField = options.actionField || null;
 
         window.dataLayer = window.dataLayer || [];
-
+        
         try {
             if (event === 'productdetail') {
                 window.dataLayer.push(
@@ -57,6 +57,19 @@ function GALayer() {
                             'currencyCode': currencyCode,
                             'purchase': {
                                 'actionField': actionField,
+                                'products': product
+                            }
+                        }
+                    }
+                )
+            }
+            else if (event === 'removeFromCart') {
+                window.dataLayer.push(
+                    {
+                        "event": event,
+                        "ecommerce": {
+                            'currencyCode': currencyCode,
+                            'remove': {
                                 'products': product
                             }
                         }

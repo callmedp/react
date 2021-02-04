@@ -1,39 +1,36 @@
-{% load static %}
+{% load static compress %}
+{% compress js %}
 <script src="{% static 'shinelearn/js/common/ga.impression.js' %}"></script>
-<!-- <script>
-function resolveAfterSeconds() {
-    return new Promise(resolve => {
-        setTimeout(() => {
-            resolve('resolved');
-        }, 2000);
-    });
-}
-
-async function asyncCall() {
-    console.log('calling');
-    const result = await resolveAfterSeconds();
-    console.log(result);
-}
-
-asyncCall();
-</script> -->
-
 <script>
     function GAImpression(event, options=null) {
     if (event) { var event_name = event; } else { var event_name = "{{ page }}" || event; }
     switch(event_name){
+        
         case 'Product':
             HomeImpressionPush();
+            break;
         case 'Search':
             SearchPageImpressionPush(list='Search Results');
+            break;
         case 'productDetail':
             ProductDetailImpressionPush(list='Product', options);
+            break;
         case 'addToCart':
             CartImpressionPush();
+            break;
         case 'checkout':
             checkoutImpression(list='checkout', options);
+            break;
         case 'checkout-complete':
             OrderConfirmationImpression();
+            break;
+        case 'removeFromCart':
+            RemoveCartImpression(list='removeFromCart', options);
+            break;
+        default:
+            break;
+
+
     }
 }
     {% if used_as %}
@@ -119,6 +116,8 @@ asyncCall();
         GALayer.SendImpression('productImpression', s_products, 'INR');
     }
 
+    function checkoutImpression() {}
+
     function ProductDetailImpressionPush(list, options) {
         p_detail = []
         
@@ -162,6 +161,12 @@ asyncCall();
             {% endfor %}
         {% endif %}
         GALayer.SendImpression('addToCart', c_product, 'INR');
+    }
+
+    function RemoveCartImpression(list, options) {
+        if (options) {
+            GALayer.SendImpression(list, options, 'INR');
+        }
     }
 
     function OrderConfirmationImpression() {
@@ -223,3 +228,4 @@ asyncCall();
     {% endif %}
 GAImpression();
 </script>
+{% endcompress %}
