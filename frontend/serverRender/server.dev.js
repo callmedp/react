@@ -2,8 +2,8 @@ if (typeof global.window == 'undefined') {
     global.window = {
         config: {
             isServerRendered : false,
-            siteDomain : 'https://learning2.shine.com',
-            imageUrl : 'https://learning-static-staging-189607.storage.googleapis.com/l2/s/react/media/images/',
+            siteDomain : 'http://127.0.0.1:8000',
+            imageUrl : '/media/images/',
             resumeShineSiteDomain : 'https://resume.shine.com',
             shineSiteDomain : 'https://mapi.shine.com',
         }
