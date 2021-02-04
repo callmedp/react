@@ -55,6 +55,7 @@ class DashboardMyorderApi(DashboardInfo, APIView):
         # candidate_id='5c94a7b29cbeea2c1f27fda2'
 
         order_list = []
+        page_info={}
         if candidate_id:         
             orders = Order.objects.filter(
             status__in=[0, 1, 3],
@@ -116,7 +117,8 @@ class MyCoursesApi(DashboardInfo, APIView):
             from_datetime = datetime.utcnow() - relativedelta(months=int(last_month_from))
             modified_from_datetime = from_datetime.replace(day=1, hour=0, minute=0, second=0, microsecond=0) 
 
-        # candidate_id='568a0b20cce9fb485393489b'
+        # candidate_id='601b8120ca3f418906a889a8'
+        page_info={}
         if candidate_id:
             # orders = Order.objects.filter(
             #     status__in=[0, 1, 3],
@@ -138,7 +140,7 @@ class MyCoursesApi(DashboardInfo, APIView):
             if selected_type is not 'all':
                 courses = courses.filter(order__status=selected_type)
             paginated_data = offset_paginator(page, courses,size=7)
-            data = OrderItemSerializer(paginated_data["data"],many=True,context= {"get_details": True}).data
+            data = OrderItemSerializer(paginated_data["data"],many=True,context= {"get_details": True, "candidate_id":candidate_id}).data
             #pagination info
             page_info ={
             'current_page':paginated_data['current_page'],
@@ -186,7 +188,7 @@ class MyServicesApi(DashboardInfo, APIView):
             if selected_type is not 'all':
                 services = services.filter(order__status=selected_type)
             paginated_data = offset_paginator(page, services,size=7)
-            data = OrderItemSerializer(paginated_data["data"],many=True,context= {"get_details": True}).data
+            data = OrderItemSerializer(paginated_data["data"],many=True,context= {"get_details": True, "candidate_id":candidate_id}).data
             # orders = Order.objects.filter(
             #     status__in=[0, 1, 3],
             #     candidate_id=candidate_id)

@@ -9,6 +9,7 @@ import pytz
 from django.urls import reverse
 from review.models import Review
 from .helpers import get_courses_detail
+from .helpers import get_courses_detail,get_review_details,get_ratings
 
 OI_STATUS_DICT = {
     0: 'Unpaid',
@@ -105,20 +106,26 @@ class OrderItemSerializer(serializers.ModelSerializer):
         })
         
         if instance.oi_status == 4:
-            pass
-            #call review details
+            candidate_id = self.context.get("candidate_id", None)
+            if candidate_id:
+                review = get_review_details(instance.product, candidate_id)
+                if review['review_list']:
+                    review_data = ReviewSerializer(review['review_list'], many=True).data
+                    data.update({'review_data':review_data,'len_review':len(review['review_list']),'avg_rating':review['avg_rating']})
+                    data.update({'rating':get_ratings(review['avg_rating'])})
+                    
         if self.context.get("get_details", None):
             date_placed =instance.order.date_placed.strftime("%d %b %Y")
             data.update({
                 'img': instance.product.get_image_url(), 
-                'rating': instance.product.get_ratings(),
-                'avg_rating':instance.product.get_avg_ratings(),
+                # 'rating': instance.product.get_ratings(),
+                # 'avg_rating':instance.product.get_avg_ratings(),
                 'price': instance.product.get_price(),
                 'vendor': instance.product.vendor.name, 
                 'duration' : self.convert_to_month(int(instance.product.get_duration_in_day())) if instance.product_id and instance.product.get_duration_in_day() else None,
                 'enroll_date': date_placed,
                 'remaining_days': self.get_remaining_days(instance),
-                'no_review':instance.product.no_review,
+                # 'no_review':instance.product.no_review,
                 'new_oi_status':OI_OPS_STATUS_dict.get(instance.oi_status) if instance.oi_status else None,
                 'mode':instance.product.get_studymode_db(),
                 'oi_status':instance.oi_status if instance.oi_status else None,
@@ -165,8 +172,8 @@ class ReviewSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = Review
-        fields = ('__all__' )
-    
+        fields = ('title','content','average_rating' )
+   
     def to_representation(self, instance):
         data = super(ReviewSerializer, self).to_representation(instance)
         data['rating'] = instance.get_ratings()

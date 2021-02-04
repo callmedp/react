@@ -6,7 +6,9 @@ from django.contrib.contenttypes.models import ContentType
 from review.models import Review
 from core.common import APIResponse
 from shop.models import Product
-# from .serializers import ReviewSerializer
+from rest_framework import status
+from django.db.models import Avg
+from decimal import Decimal
 
 
 def offset_paginator(page, data, **kwargs):
@@ -507,3 +509,42 @@ def get_history(instance):
 
     return datalist
     
+def get_review_details(product, candidate_id):
+    product_type = ContentType.objects.get(
+        app_label='shop', model='product')
+    prd_list = []
+    if product.type_product in [0, 2, 4, 5]:
+        prd_list = [product.pk]
+    elif product.type_product == 1:
+        prd_id = product.variation.filter(
+            siblingproduct__active=True,
+            active=True).values_list('id', flat=True)
+        prd_list = list(prd_id)
+        prd_list.append(product.pk)
+    elif product.type_product == 3:
+        prd_id = product.childs.filter(
+            childrenproduct__active=True,
+            active=True).values_list('id', flat=True)
+        prd_list = list(prd_id)
+        prd_list.append(product.pk)
+    review_list = Review.objects.filter(
+        content_type__id=product_type.id,status=1,
+        object_id__in=prd_list, user_id=candidate_id)
+    avg_rating = review_list.aggregate(Avg('average_rating'))['average_rating__avg'] if len(review_list)>0 else 0
+    return {'review_list':review_list,'avg_rating':avg_rating}
+
+def get_ratings(avg_rating):
+        pure_rating = int(avg_rating)
+        decimal_part = avg_rating - pure_rating
+        final_score = ['*' for i in range(pure_rating)]
+        rest_part = int(Decimal(5.0) - Decimal(avg_rating))
+        res_decimal_part = Decimal(5.0) - Decimal(avg_rating) - Decimal(rest_part)
+        if decimal_part >= 0.75:
+            final_score.append("*")
+        elif decimal_part >= 0.25:
+            final_score.append("+")
+        if res_decimal_part >= 0.75:
+            final_score.append('-')
+        for i in range(rest_part):
+            final_score.append('-')
+        return final_score

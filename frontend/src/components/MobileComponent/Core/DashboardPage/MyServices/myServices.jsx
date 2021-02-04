@@ -193,10 +193,10 @@ const MyServices = (props) => {
                                                         service?.updated_status?.upload_resume && <a href="/" onClick={(e) => {e.preventDefault();setShowUpload(true)}} className="font-weight-bold"> Upload</a> 
                                                     }
                                                     {
-                                                        service?.updated_status?.download_url && <a href={service?.updated_status?.download_url} target="_blank" className="font-weight-bold"> Download</a> 
+                                                        service?.updated_status?.download_url && <a href={`${siteDomain}${service?.updated_status?.download_url}`} target="_blank" className="font-weight-bold"> Download</a> 
                                                     }
                                                     {
-                                                        service?.updated_status?.download_credentials_url && <a href={service?.updated_status?.download_credentials_url} target="_blank" className="font-weight-bold"> Download Credential</a> 
+                                                        service?.updated_status?.download_credentials_url && <a href={`${siteDomain}${service?.updated_status?.download_credentials_url}`} target="_blank" className="font-weight-bold"> Download Credential</a> 
                                                     }
                                                     {
                                                         service?.updated_status?.edit_your_profile && <a href={`${siteDomain}/dashboard/roundone/profile/`} target="_blank" className="font-weight-bold"> Edit Profile</a>

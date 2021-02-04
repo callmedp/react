@@ -149,7 +149,7 @@ const MyCourses = (props) => {
                                                             course?.updated_status?.take_test && <a href={course?.options?.auto_login_url} target="_blank" className="font-weight-bold"> Take test</a>
                                                         }
                                                         {
-                                                            course?.updated_status?.BoardOnNeo && <a href='/' className="font-weight-bold" onClick={(event) => boardOnNeo(event, course?.id)}> :- Board on Neo</a>
+                                                            course?.updated_status?.BoardOnNeo && <a href='/' className="font-weight-bold" onClick={(event) => {event.preventDefault();boardOnNeo(event, course?.id)}}> :- Board on Neo</a>
                                                         }
                                                         {
                                                             course?.updated_status?.neo_mail_sent && ':- Please Confirm Boarding on Mail Sent to you'
@@ -158,10 +158,10 @@ const MyCourses = (props) => {
                                                             course?.updated_status?.updated_from_trial_to_regular && ':- Updated Account from Trial To Regular'
                                                         }
                                                         {
-                                                            course?.updated_status?.download_url && <a href={course?.updated_status?.download_url} target="_blank" className="font-weight-bold"> Download</a> 
+                                                            course?.updated_status?.download_url && <a href={`${siteDomain}${course?.updated_status?.download_url}`} target="_blank" className="font-weight-bold"> Download</a> 
                                                         }
                                                         {
-                                                            course?.updated_status?.download_credentials_url && <a href={course?.updated_status?.download_credentials_url} target="_blank" className="font-weight-bold"> Download Credential</a> 
+                                                            course?.updated_status?.download_credentials_url && <a href={`${siteDomain}${course?.updated_status?.download_credentials_url}`} target="_blank" className="font-weight-bold"> Download Credential</a> 
                                                         }
                                                         </strong>
                                                     </>
