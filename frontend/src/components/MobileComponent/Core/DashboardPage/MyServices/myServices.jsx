@@ -17,6 +17,7 @@ import EmptyInbox from '../InboxModals/emptyInbox';
 import { siteDomain, resumeShineSiteDomain } from 'utils/domains';
 import { startDashboardServicesPageLoader, stopDashboardServicesPageLoader } from 'store/Loader/actions/index';
 import { showSwal } from 'utils/swal'
+import ViewDetails from './oiViewDetails'
 
 // API Import
 import { fetchMyServices, fetchPendingResume } from 'store/DashboardPage/MyServices/actions/index';
@@ -94,22 +95,22 @@ const MyServices = (props) => {
         `${siteDomain}/api/v1/resumetemplatedownload/?order_pk=${orderId}&product_id=${productId}`;
 
     //View Details Data
-    const getOrderDetails = (dataList) => {
-        return (
-            <ul className="my-order__order-detail--info mt-15">
-                {
-                    dataList.map((data, index) =>
-                        <li key={index}>
-                            <span> 
-                                <hr />
-                                {data?.date} <br />
-                                <strong> {data?.status} </strong>
-                            </span>
-                        </li>)
-                }
-            </ul>
-        )
-    }
+    // const getOrderDetails = (dataList) => {
+    //     return (
+    //         <ul className="my-order__order-detail--info mt-15">
+    //             {
+    //                 dataList.map((data, index) =>
+    //                     <li key={index}>
+    //                         <span> 
+    //                             <hr />
+    //                             {data?.date} <br />
+    //                             <strong> {data?.status} </strong>
+    //                         </span>
+    //                     </li>)
+    //             }
+    //         </ul>
+    //     )
+    // }
 
     const starRatings = (star, index) => {
         return (star === '*' ? <em className="micon-fullstar" key={index}></em> : star === '+' 
@@ -176,7 +177,7 @@ const MyServices = (props) => {
                                     </div>
                                     {/* Details of Service Block End*/}
 
-                                    { service?.options?.upload_resume &&
+                                    { service?.updated_status?.upload_resume &&
                                         <div className="m-courses-detail--alert mt-15">
                                             To initiate your service upload your latest resume
                                         </div>
@@ -184,58 +185,59 @@ const MyServices = (props) => {
                                     
                                     {/* Status of Service Block */}
                                     <div className="pl-15 mt-15 fs-12">
-                                        Status: <strong> {service?.new_oi_status ? service?.oi_status === 4 ? 'Service has been processed and Document is finalized' : service?.new_oi_status : "Yet to Update"}
-
                                         {
-                                            service?.options?.upload_resume && <a href="/" onClick={(e) => {e.preventDefault();setShowUpload(true)}} className="font-weight-bold"> Upload</a> 
-                                        }
-                                        {
-                                            service?.options?.Download && <a href={service?.options?.download_url} target="_blank" className="font-weight-bold"> Download</a> 
-                                        }
-                                        {
-                                            service?.options?.Download_credential && <a href={service?.options?.download_url} target="_blank" className="font-weight-bold"> Download Credential</a> 
-                                        }
-                                        {
-                                            service?.options?.edit_your_profile && <a href={`${siteDomain}/dashboard/roundone/profile/`} target="_blank" className="font-weight-bold"> Edit Profile</a>
-                                        }
-                                        {
-                                            service?.options?.complete_profile && <a href={`${siteDomain}/dashboard/roundone/profile/`} target="_blank" className="font-weight-bold"> Complete Profile</a>
-                                        }
-                                        {
-                                            service?.options?.edit_template &&
+                                            service?.updated_status?.status && 
                                                 <>
-                                                    <br />
-                                                    <a href={createBuilderResumeDownloadLink(service?.id, service?.product)} target="_blank" className="font-weight-bold"> Download</a>
-                                                    <a className="ml-15" target="_blank" href={`${resumeShineSiteDomain}/resume-builder/edit/?type=profile`}>Edit Template</a>
+                                                    Status: <strong> { service?.updated_status?.status } 
+                                                    {
+                                                        service?.updated_status?.upload_resume && <a href="/" onClick={(e) => {e.preventDefault();setShowUpload(true)}} className="font-weight-bold"> Upload</a> 
+                                                    }
+                                                    {
+                                                        service?.updated_status?.download_url && <a href={service?.updated_status?.download_url} target="_blank" className="font-weight-bold"> Download</a> 
+                                                    }
+                                                    {
+                                                        service?.updated_status?.download_credentials_url && <a href={service?.updated_status?.download_credentials_url} target="_blank" className="font-weight-bold"> Download Credential</a> 
+                                                    }
+                                                    {
+                                                        service?.updated_status?.edit_your_profile && <a href={`${siteDomain}/dashboard/roundone/profile/`} target="_blank" className="font-weight-bold"> Edit Profile</a>
+                                                    }
+                                                    {
+                                                        service?.updated_status?.complete_profile && <a href={`${siteDomain}/dashboard/roundone/profile/`} target="_blank" className="font-weight-bold"> Complete Profile</a>
+                                                    }
+                                                    {
+                                                        service?.updated_status?.edit_template &&
+                                                            <>
+                                                                <br />
+                                                                <a href={createBuilderResumeDownloadLink(service?.id, service?.product)} target="_blank" className="font-weight-bold"> Download</a>
+                                                                <a className="ml-15" target="_blank" href={`${resumeShineSiteDomain}/resume-builder/edit/?type=profile`}>Edit Template</a>
+                                                            </>
+                                                    }
+                                                    {
+                                                        (service?.oi_status === 24 || service?.oi_status === 46) &&
+                                                        <>
+                                                            <br /><br />
+                                                            <a className="m-accept" href="/" onClick={(e) => {e.preventDefault();setAcceptModal(true);setAcceptModalId(service?.id)}}>Accept</a>
+                                                            <a className="ml-2 m-reject" href="/" onClick={(e) => {e.preventDefault();setRejectModal(true);setRejectModalId(service?.id)}}>Reject</a>
+                                                        </>
+                                                    }
+                                                    </strong>
                                                 </>
                                         }
-                                        {
-                                            (service?.oi_status === 24 || service?.oi_status === 46) &&
-                                            <>
-                                                <br /><br />
-                                                <a className="m-accept" href="/" onClick={(e) => {e.preventDefault();setAcceptModal(true);setAcceptModalId(service?.id)}}>Accept</a>
-                                                <a className="ml-2 m-reject" href="/" onClick={(e) => {e.preventDefault();setRejectModal(true);setRejectModalId(service?.id)}}>Reject</a>
-                                            </>
-                                        }
-                                        </strong>
 
                                         {/* View Details Block */}
-                                        {
-                                            service?.datalist?.length > 0 &&
-                                                <div className="my-order__order-detail">
-                                                    <a onClick={(e) => {
-                                                            e.preventDefault();
-                                                            showDetails(service?.id)
-                                                        }} 
-                                                        className={(showOrderDetailsID === service?.id) 
-                                                            ? "font-weight-bold open arrow-icon" : "font-weight-bold arrow-icon"
-                                                        }> View Details
-                                                    </a>
-                                                    {
-                                                        (showOrderDetailsID === service?.id) && getOrderDetails(service?.datalist)
-                                                    }
-                                                </div>
-                                        }
+                                        <div className="my-order__order-detail">
+                                            <a onClick={(e) => {
+                                                    e.preventDefault();
+                                                    showDetails(service?.id)
+                                                }} 
+                                                className={(showOrderDetailsID === service?.id) 
+                                                    ? "font-weight-bold open arrow-icon" : "font-weight-bold arrow-icon"
+                                                }> View Details
+                                            </a>
+                                            {
+                                                (showOrderDetailsID === service?.id) && <ViewDetails id={service?.id} />
+                                            }
+                                        </div>
                                     </div>
                                     {/* End of Status Service Block */}
 
@@ -294,7 +296,7 @@ const MyServices = (props) => {
 
                                             {/* Rating Block start*/}    
                                             {
-                                                (service?.oi_status === 4) && 
+                                                (service?.your_feedback) && 
                                                     <div className="d-flex" onClick={()=>{
                                                             setShowRateModal(true);
                                                             setOiReviewId(service?.product)

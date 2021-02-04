@@ -21,7 +21,7 @@ from shop.models import Product
 # Other Import
 from haystack.query import SearchQuerySet
 from order.choices import OI_OPS_STATUS
-from .helpers import offset_paginator
+from .helpers import offset_paginator, get_history
 from django.contrib.contenttypes.models import ContentType
 from review.models import Review
 from emailers.email import SendMail
@@ -59,6 +59,7 @@ class DashboardMyorderApi(DashboardInfo, APIView):
             orders = Order.objects.filter(
             status__in=[0, 1, 3],
             candidate_id=candidate_id)
+            
             if not last_month_from=='all':
                 orders = orders.filter(date_placed__gte=modified_from_datetime)
             if selected_type is not 'all':
@@ -117,20 +118,21 @@ class MyCoursesApi(DashboardInfo, APIView):
 
         # candidate_id='568a0b20cce9fb485393489b'
         if candidate_id:
-            orders = Order.objects.filter(
-                status__in=[0, 1, 3],
-                candidate_id=candidate_id)
+            # orders = Order.objects.filter(
+            #     status__in=[0, 1, 3],
+            #     candidate_id=candidate_id)
                 
-            excl_txns = PaymentTxn.objects.filter(
-                status__in=[0, 2, 3, 4, 5,6],
-                payment_mode__in=[6, 7],
-                order__candidate_id=candidate_id)
-            excl_order_list = excl_txns.all().values_list('order_id', flat=True)
+            # excl_txns = PaymentTxn.objects.filter(
+            #     status__in=[0, 2, 3, 4, 5,6],
+            #     payment_mode__in=[6, 7],
+            #     order__candidate_id=candidate_id)
+            # excl_order_list = excl_txns.all().values_list('order_id', flat=True)
 
-            orders = orders.exclude(
-                id__in=excl_order_list)
+            # orders = orders.exclude(
+            #     id__in=excl_order_list)
 
-            courses = OrderItem.objects.filter(order__in=orders,product__type_flow=2).exclude(order__status__in=[0,5])
+            courses_oi = OrderItem.objects.filter(product__type_flow=2,no_process=False,order__candidate_id=candidate_id,order__status__in=[1, 3])
+            courses = courses_oi.prefetch_related('product','order', 'product__attributes')
             if not last_month_from=='all':
                 courses = courses.filter(order__date_placed__gte=modified_from_datetime)
             if selected_type is not 'all':
@@ -177,13 +179,25 @@ class MyServicesApi(DashboardInfo, APIView):
                 payment_mode__in=[6, 7],
                 order__candidate_id=candidate_id)
             excl_order_list = excl_txns.all().values_list('order_id', flat=True)
-            services = OrderItem.objects.filter(order__candidate_id=candidate_id, order__status__in=[1, 3],product__product_class__slug__in=['writing','service','other']).exclude(order__in=excl_order_list)
+            services = OrderItem.objects.filter(order__candidate_id=candidate_id, no_process=False,order__status__in=[1, 3],product__product_class__slug__in=['writing','service','other']).exclude(order__in=excl_order_list)
             if not last_month_from=='all':
                 services = services.filter(order__date_placed__gte=modified_from_datetime)
             if selected_type is not 'all':
                 services = services.filter(order__status=selected_type)
             paginated_data = offset_paginator(page, services,size=7)
             data = OrderItemSerializer(paginated_data["data"],many=True,context= {"get_details": True}).data
+            # orders = Order.objects.filter(
+            #     status__in=[0, 1, 3],
+            #     candidate_id=candidate_id)
+                
+            # excl_txns = PaymentTxn.objects.filter(
+            #     status__in=[0, 2, 3, 4, 5,6],
+            #     payment_mode__in=[6, 7],
+            #     order__candidate_id=candidate_id)
+            # excl_order_list = excl_txns.all().values_list('order_id', flat=True)
+
+            # orders = orders.exclude(
+            #     id__in=excl_order_list)
 
             #pagination info
             page_info ={
@@ -263,6 +277,11 @@ class DashboardReviewApi(APIView):
     def get(self,request):
         # page = request.GET.get('page', 1)
         product_id = request.GET.get('product_id',None)
+        data=[]
+        candidate_id = self.request.session.get('candidate_id', None)
+        if candidate_id is None:
+            return APIResponse(data=data, message='Candidate Details required', status=status.HTTP_400_BAD_REQUEST)
+
         try:
             product = Product.objects.get(id=product_id)
         except Product.DoesNotExist:
@@ -286,7 +305,9 @@ class DashboardReviewApi(APIView):
             prd_list.append(product.pk)
         review_list = Review.objects.filter(
             content_type__id=product_type.id,
-            object_id__in=prd_list, status=1)
+            object_id__in=prd_list, status=1,user_id=candidate_id)
+
+        review_list.update({'no_review':len(review_list)})
         # paginated_data = offset_paginator(page, review_list)
         data = ReviewSerializer(review_list, many=True).data
         # page_info ={
@@ -397,3 +418,24 @@ class DashboardPendingResumeItemsApi(APIView):
                                 pending_resume_items]
 
         return APIResponse(data={'data':pending_resume_items},message='Pending resume items data Success', status=status.HTTP_200_OK)
+
+
+class ViewOrderDetailsApi(APIView):
+    permission_classes = ()
+    authentication_classes = ()
+    serializer_classes = None
+
+    def get(self,request):
+        candidate_id = self.request.session.get('candidate_id', None)
+        oi_id = request.GET.get('oi_id',None)
+        if candidate_id is None:
+            return APIResponse(data='', error='Candidate Details required', status=status.HTTP_400_BAD_REQUEST)
+        if oi_id is None:
+            return APIResponse(data='', error='Order Item required', status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            oi= OrderItem.objects.get(id=oi_id)
+        except OrderItem.DoesNotExist:
+            return APIResponse(data='',error='Order item not found', status=status.HTTP_404_NOT_FOUND)
+        datalist = get_history(oi)
+        return APIResponse(data=datalist,message='Details data loaded', status=status.HTTP_200_OK)

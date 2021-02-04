@@ -103,6 +103,10 @@ class OrderItemSerializer(serializers.ModelSerializer):
             'product_type_flow': instance.product.type_flow if instance.product_id else '',
             'heading': instance.product.heading if instance.product_id else '',
         })
+        
+        if instance.oi_status == 4:
+            pass
+            #call review details
         if self.context.get("get_details", None):
             date_placed =instance.order.date_placed.strftime("%d %b %Y")
             data.update({
@@ -124,12 +128,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
                 'get_product_is_pause_service':self.get_product_is_pause_service(instance),
                 'duration_in_days': int(instance.product.get_duration_in_day()) if instance.product_id and instance.product.get_duration_in_day() else '',
             })
-            course_detail = get_courses_detail(instance)
-            data.update({
-                'date_created':course_detail['date_created'],
-                'datalist':course_detail['datalist'],
-                'options':course_detail['options']
-                })
+            data.update({'updated_status':get_courses_detail(instance)})
         return data
 
 class OrderSerializer(serializers.ModelSerializer):

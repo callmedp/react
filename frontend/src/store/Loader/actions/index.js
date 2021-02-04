@@ -129,3 +129,17 @@ export const stopUploadLoader = () => {
         payload: { uploadLoader: false }
     }
 }
+
+export const startOiDetailsLoader = () => {
+    return {
+        type: Actions.START_OI_DETAILS_LOADER,
+        payload: { oiDetailsLoader: true }
+    }
+}
+
+export const stopOiDetailsLoader = () => {
+    return {
+        type: Actions.STOP_OI_DETAILS_LOADER,
+        payload: { oiDetailsLoader: false }
+    }
+}

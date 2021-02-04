@@ -33,10 +33,18 @@ const pausePlayResume = (payload) => {
     }
 }
 
+const fetchOiDetails = (payload) => {
+    return {
+        type: Actions.FETCH_OI_DETAILS,
+        payload
+    }
+}
+
 export {
     fetchMyServices,
     uploadResumeForm,
     fetchPendingResume,
     CandidateAcceptRejectResume,
     pausePlayResume,
+    fetchOiDetails
 }
