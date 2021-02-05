@@ -10,6 +10,12 @@ from django.urls import reverse
 from review.models import Review
 from .helpers import get_courses_detail
 from .helpers import get_courses_detail,get_review_details,get_ratings
+from homepage.api.v1.mixins import ProductMixin
+from core.library.haystack.query import SQS
+from shop.choices import STUDY_MODE
+import json
+
+mode_choices = dict(STUDY_MODE)
 
 OI_STATUS_DICT = {
     0: 'Unpaid',
@@ -77,10 +83,12 @@ class OrderItemSerializer(serializers.ModelSerializer):
             return 0+" day" 
         return str(months)+" "+month_str+" "+str(days)+" "+days_str
     
-    def get_remaining_days(self,instance):
+    def get_remaining_days(self,instance,dur_days=None):
         remaining_days = 0
-        if instance.product.get_duration_in_day():
-            rem_days = ((instance.order.date_placed + timedelta(days=instance.product.get_duration_in_day()))-datetime.now(pytz.utc)).days
+        if not dur_days:
+            dur_days = instance.product.get_duration_in_day()
+        if dur_days:
+            rem_days = ((instance.order.date_placed + timedelta(days=dur_days))-datetime.now(pytz.utc)).days
             remaining_days = rem_days if rem_days > 0 else 0
         return remaining_days
     
@@ -115,25 +123,50 @@ class OrderItemSerializer(serializers.ModelSerializer):
                     data.update({'rating':get_ratings(review['avg_rating'])})
                     
         if self.context.get("get_details", None):
-            date_placed =instance.order.date_placed.strftime("%d %b %Y")
-            data.update({
+            product = SQS().filter(id=instance.product.id)
+            dur_days = instance.product.get_duration_in_day()
+            if product:
+                product=product[0]
+                d = json.loads(product.pVrs).get('var_list')
+                if len(d)!=0:
+                    dur_days = d[0].get('dur_days')
+
+                data.update({
+                    'solr_id':product.id,
+                    'url':product.pURL,
+                    'img':product.pImg if product.pImg else instance.product.get_image_url(),
+                    'imgAlt':product.pImA,
+                    'title':product.pTt,
+                    'slug':product.pSg,
+                    'price':float(product.pPin),
+                    'vendor': product.pPvn,
+                    'mode': mode_choices.get(product.pStM[0], product.pStM[0]) if product.pStM else None,
+                    'jobs':product.pNJ,
+                    'duration' : self.convert_to_month(int(dur_days)) if instance.product_id and dur_days else None,
+                    'remaining_days': self.get_remaining_days(instance,dur_days),
+                    'duration_in_days': int(dur_days) if instance.product_id and dur_days else '',
+                })
+            else:
+                data.update({
                 'img': instance.product.get_image_url(), 
-                # 'rating': instance.product.get_ratings(),
-                # 'avg_rating':instance.product.get_avg_ratings(),
                 'price': instance.product.get_price(),
                 'vendor': instance.product.vendor.name, 
                 'duration' : self.convert_to_month(int(instance.product.get_duration_in_day())) if instance.product_id and instance.product.get_duration_in_day() else None,
-                'enroll_date': date_placed,
                 'remaining_days': self.get_remaining_days(instance),
-                # 'no_review':instance.product.no_review,
-                'new_oi_status':OI_OPS_STATUS_dict.get(instance.oi_status) if instance.oi_status else None,
                 'mode':instance.product.get_studymode_db(),
-                'oi_status':instance.oi_status if instance.oi_status else None,
                 'jobs':instance.product.num_jobs,
+                'duration_in_days':int(instance.product.get_duration_in_day()) if instance.product_id and instance.product.get_duration_in_day() else '',
+            })
+
+            date_placed =instance.order.date_placed.strftime("%d %b %Y")
+            # Add orderItem information
+            data.update({
+                'enroll_date': date_placed,
+                'new_oi_status':OI_OPS_STATUS_dict.get(instance.oi_status) if instance.oi_status else None,
+                'oi_status':instance.oi_status if instance.oi_status else None,
                 'no_of_comments':instance.message_set.filter(is_internal=False).count(),
                 'service_pause_status':self.service_pause_status(instance),
                 'get_product_is_pause_service':self.get_product_is_pause_service(instance),
-                'duration_in_days': int(instance.product.get_duration_in_day()) if instance.product_id and instance.product.get_duration_in_day() else '',
             })
             data.update({'updated_status':get_courses_detail(instance)})
         return data
