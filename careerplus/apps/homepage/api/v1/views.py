@@ -399,7 +399,7 @@ class DashboardResumeUploadApi(APIView):
     serializer_classes = None
 
     def post(self, request, *args, **kwargs):
-        candidate_id = request.POST.get('candidate_id')
+        candidate_id = request.POST.get('candidate_id', None) or self.request.session.get('candidate_id', None)
         if not candidate_id:
             return Response({'error': 'Please login through valid user'}, status=status.HTTP_401_UNAUTHORIZED)
         file = request.FILES.get('file', '')
@@ -428,7 +428,7 @@ class DashboardResumeUploadApi(APIView):
 
                     return Response({'success': 'resumeUpload'}, status=status.HTTP_200_OK)
 
-            return Response({'error': 'Oops! <br> Something went wrong! Try Again'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Resume not found on shine'}, status=status.HTTP_400_BAD_REQUEST)
         else:
             if not file:
                 return Response({'error': 'Please select the file'}, status=status.HTTP_400_BAD_REQUEST)
@@ -442,7 +442,7 @@ class DashboardResumeUploadApi(APIView):
                 try:
                     DashboardInfo().upload_candidate_resume(candidate_id=candidate_id, data=data)
                 except Exception as e:
-                    return Response({'error': 'Oops! <br> Something went wrong! Try Again'}, status=status.HTTP_400_BAD_REQUEST)
+                    return Response({'error': 'File could not be uploaded for some reason. Try Again'}, status=status.HTTP_400_BAD_REQUEST)
                 return Response({'success': 'resumeuploaded'}, status=status.HTTP_200_OK)
             return Response({'error': 'Please select the file in the format PDF,DOC,DOCX only'}, status=status.HTTP_400_BAD_REQUEST)
 
