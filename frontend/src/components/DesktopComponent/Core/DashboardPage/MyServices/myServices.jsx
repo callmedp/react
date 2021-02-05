@@ -28,7 +28,7 @@ const MyServices = (props) => {
     const { serviceLoader } = useSelector(store => store.loader);
     
     // page no. set here
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(3);
     const [filterState, setfilterState] = useState({ 'last_month_from': 'all', 'select_type' : 'all' });
     
     // main api result state here
@@ -42,7 +42,7 @@ const MyServices = (props) => {
 
     // rating modal handling
     const [showRatingModal, setShowRatingModal] = useState(false) 
-
+    const toggleRatingsModal = (id) => setShowRatingModal(showRatingModal == id ? false : id);
     //Rate Modal Handling
     const [showRateModal, setShowRateModal] = useState(false) 
     const [oiReviewId, setOiReviewId] = useState('')
@@ -124,10 +124,12 @@ const MyServices = (props) => {
             type: 'GET'
         }
         if(addOpen != id) {
-            try{
-                dispatch(startCommentLoader())
-                await new Promise((resolve, reject) => dispatch(fetchOiComment({payload: commVal, resolve, reject})));
-                dispatch(stopCommentLoader())
+            try {
+                if(!addOpen) {
+                    dispatch(startCommentLoader())
+                    await new Promise((resolve, reject) => dispatch(fetchOiComment({payload: commVal, resolve, reject})));
+                    dispatch(stopCommentLoader())
+                }
             }
             catch{
                 dispatch(stopCommentLoader())
@@ -199,7 +201,7 @@ const MyServices = (props) => {
                                                         Hi, the recording for the session you missed is available now
                                                     </div> */}
 
-<div className="db-my-courses-detail__leftpan--status mb-2">
+                                                    <div className="db-my-courses-detail__leftpan--status mb-2">
                                                         Status:
                                                         <strong className="ml-1">{ service?.updated_status?.status }
                                                             {
@@ -227,9 +229,8 @@ const MyServices = (props) => {
                                                             {
                                                                 (service?.oi_status === 24 || service?.oi_status === 46) &&
                                                                 <>
-                                                                    <br /><br/>
-                                                                    <a className="m-accep" href="/" onClick={(e) => {e.preventDefault();setAcceptModal(true);setAcceptModalId(service?.id)}}>Accept</a>
-                                                                    <a className="ml-2 m-rejec" href="/" onClick={(e) => {e.preventDefault();setRejectModal(true);setRejectModalId(service?.id)}}>Reject</a>
+                                                                    <a className="accept" href="/" onClick={(e) => {e.preventDefault();setAcceptModal(true);setAcceptModalId(service?.id)}}>Accept</a>
+                                                                    <a className="ml-2 reject" href="/" onClick={(e) => {e.preventDefault();setRejectModal(true);setRejectModalId(service?.id)}}>Reject</a>
                                                                 </>
                                                             }
                                                         </strong>
@@ -310,17 +311,17 @@ const MyServices = (props) => {
                                                         'Add comment'
                                                     }
                                             </Link>
+                                            
                                             {/* ratings start here */}
-
                                             { 
                                                 (service?.updated_status?.your_feedback) && 
                                                     <div className="d-flex" id={service?.product}>
                                                         {
                                                             service?.len_review ?
                                                                 <div onClick={()=>{
-                                                                    setShowRateModal(true);
-                                                                    setOiReviewId(service?.product);
-                                                                    setReviewData(service?.review_data);
+                                                                    toggleRatingsModal(service?.id);
+                                                                    // setOiReviewId(service?.id);
+                                                                    // setReviewData(service?.review_data);
                                                                 }}>
                                                                     <span className="rating">
                                                                         {
@@ -348,7 +349,10 @@ const MyServices = (props) => {
                                                                         }
                                                                     </span>
                                                                 </div>
+
+                                                            
                                                         }
+                                                        {showRatingModal && <ReviewModal showRatingModal={showRatingModal} toggleRatingsModal={toggleRatingsModal} setShowRateModal={setShowRateModal} oi_id={service?.id} reviewData={service?.review_data} />}
                                                     </div>
                                             }
                                         </div>
@@ -374,10 +378,6 @@ const MyServices = (props) => {
 
                 {
                     showRateModal && <RateModal showRateModal={showRateModal} setShowRateModal={setShowRateModal} oi_id={oiReviewId} name="Service" />
-                }
-
-                {
-                    showRatingModal && <ReviewModal setShowRateModal={setShowRateModal} showRatingModal={showRatingModal} setShowRatingModal={setShowRatingModal} oi_id={oiReviewId} reviewData={reviewData} />
                 }
 
                 {/* pagination set here */}

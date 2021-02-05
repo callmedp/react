@@ -1,10 +1,10 @@
 import React from 'react';
 import { Collapse } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
-import Loader from '../../../Common/Loader/loader';
 
 const ReviewModal = (props) => {
-    const { showRatingModal, setShowRatingModal, reviewData, oi_id, setShowRateModal } = props;
+    const { showRatingModal, toggleRatingsModal, setShowRateModal, reviewData, oi_id } = props;
+
+    console.log(props);
 
     const fillStarForCourse = (star) => {
         return {
@@ -14,16 +14,10 @@ const ReviewModal = (props) => {
         }[star];
     }
 
-
-    // const reviewList = useSelector(store => store.getReviews.data);
-    // const { reviewLoader } = useSelector(store => store.loader);
-
     return (
-        <>
-            {/* { reviewLoader && <Loader /> } */}
-            <Collapse>
+            <Collapse in={showRatingModal === oi_id}>
                 <div className="db-reviews-list-wrap arrow-box top-big">
-                    <span className="btn-close"  onClick={() => setShowRatingModal(state => !state)}>&#x2715;</span>
+                    <span className="btn-close"  onClick={() => toggleRatingsModal(oi_id)}>&#x2715;</span>
                     <div className="reviews-list">
                         <ul>
                             { reviewData?.map((rev, idx) => {
@@ -40,14 +34,12 @@ const ReviewModal = (props) => {
                             })}
                         </ul>
                     </div>
-                    
                     <div className="db-reviews-list-wrap--bottom">
-                        <button className="btn btn-outline-primary" onClick={setShowRateModal(state => !state)}>Add new</button>
+                        <button className="btn btn-outline-primary" onClick={setShowRateModal}>Add new</button>
                     </div>
                 </div>
             </Collapse>
-        </>
-    )
+        )
 }
 
 export default ReviewModal;
