@@ -100,9 +100,9 @@ class MyCoursesApi(DashboardInfo, APIView):
             if not last_month_from=='all':
                 courses = courses.filter(order__date_placed__gte=modified_from_datetime)
             if select_type == 'in_process':
-                services = services.exclude(oi_status=4)
+                courses = courses.exclude(oi_status=4)
             elif select_type == 'closed':
-                services = services.filter(oi_status=4)
+                courses = courses.filter(oi_status=4)
             paginated_data = offset_paginator(page, courses,size=7)
             data = OrderItemSerializer(paginated_data["data"],many=True,context= {"get_details": True, "candidate_id":candidate_id}).data
             #pagination info
