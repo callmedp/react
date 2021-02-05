@@ -18,6 +18,7 @@ import { siteDomain, resumeShineSiteDomain } from 'utils/domains';
 import { startDashboardServicesPageLoader, stopDashboardServicesPageLoader } from 'store/Loader/actions/index';
 import { showSwal } from 'utils/swal'
 import ViewDetails from './oiViewDetails'
+import Filter from '../Filter/filter';
 
 // API Import
 import { fetchMyServices, fetchPendingResume } from 'store/DashboardPage/MyServices/actions/index';
@@ -143,6 +144,7 @@ const MyServices = (props) => {
         <div>
 
             {/* My Services Block Start */}
+            {/* <Filter /> */}
             <main className="mb-0">
                 <div className="m-courses-detail db-warp">
                     {
