@@ -37,23 +37,8 @@ class DashboardMyorderApi(DashboardInfo, APIView):
 
     def get(self, request, *args, **kwargs):
         data = []
-        types = {"in_process":2,
-                'closed':3,
-                'all':'all'
-                }
         page = request.GET.get("page", 1)
         candidate_id = self.request.session.get('candidate_id', None)
-        last_month_from = request.GET.get("last_month_from",'all' )
-        select_type = request.GET.get('select_type','all')
-        selected_type = types.get(select_type)
-
-        #time filter
-        if not last_month_from=='all':
-            from_datetime = datetime.utcnow() - relativedelta(months=int(last_month_from))
-            modified_from_datetime = from_datetime.replace(day=1, hour=0, minute=0, second=0, microsecond=0) 
-
-        # candidate_id='5c94a7b29cbeea2c1f27fda2'
-
         order_list = []
         page_info={}
         if candidate_id:         
@@ -61,11 +46,6 @@ class DashboardMyorderApi(DashboardInfo, APIView):
             status__in=[0, 1, 3],
             candidate_id=candidate_id)
             
-            if not last_month_from=='all':
-                orders = orders.filter(date_placed__gte=modified_from_datetime)
-            if selected_type is not 'all':
-                orders = orders.filter(status=selected_type)
-
             paginated_data = offset_paginator(page, orders,size=7)
             for obj in paginated_data["data"]:
                 orderitems = OrderItem.objects.select_related(
@@ -101,15 +81,10 @@ class MyCoursesApi(DashboardInfo, APIView):
 
     def get(self, request, *args, **kwargs):
         data = []
-        types = {"in_process":2,
-                'closed':3,
-                'all':'all'
-                }
         page = request.GET.get("page", 1)
         candidate_id = self.request.session.get('candidate_id', None)
         last_month_from = request.GET.get("last_month_from",'all' )
         select_type = request.GET.get('select_type','all')
-        selected_type = types.get(select_type)
         page_info = {}
 
         #time filter
@@ -120,25 +95,14 @@ class MyCoursesApi(DashboardInfo, APIView):
         # candidate_id='601b8120ca3f418906a889a8'
         page_info={}
         if candidate_id:
-            # orders = Order.objects.filter(
-            #     status__in=[0, 1, 3],
-            #     candidate_id=candidate_id)
-                
-            # excl_txns = PaymentTxn.objects.filter(
-            #     status__in=[0, 2, 3, 4, 5,6],
-            #     payment_mode__in=[6, 7],
-            #     order__candidate_id=candidate_id)
-            # excl_order_list = excl_txns.all().values_list('order_id', flat=True)
-
-            # orders = orders.exclude(
-            #     id__in=excl_order_list)
-
             courses_oi = OrderItem.objects.filter(product__type_flow=2,no_process=False,order__candidate_id=candidate_id,order__status__in=[1, 3])
             courses = courses_oi.prefetch_related('product','order', 'product__attributes')
             if not last_month_from=='all':
                 courses = courses.filter(order__date_placed__gte=modified_from_datetime)
-            if selected_type is not 'all':
-                courses = courses.filter(order__status=selected_type)
+            if select_type == 'in_process':
+                services = services.exclude(oi_status=4)
+            elif select_type == 'closed':
+                services = services.filter(oi_status=4)
             paginated_data = offset_paginator(page, courses,size=7)
             data = OrderItemSerializer(paginated_data["data"],many=True,context= {"get_details": True, "candidate_id":candidate_id}).data
             #pagination info
@@ -156,15 +120,10 @@ class MyServicesApi(DashboardInfo, APIView):
 
     def get(self, request, *args, **kwargs):
         data = []
-        types = {"in_process":2,
-                'closed':3,
-                'all':'all'
-                }
         page = request.GET.get("page", 1)
         candidate_id = self.request.session.get('candidate_id', None)
         last_month_from = request.GET.get("last_month_from",'all' )
         select_type = request.GET.get('select_type','all')
-        selected_type = types.get(select_type)
         page_info = {}
 
         #time filter
@@ -172,9 +131,6 @@ class MyServicesApi(DashboardInfo, APIView):
         if not last_month_from=='all':
             from_datetime = datetime.utcnow() - relativedelta(months=int(last_month_from))
             modified_from_datetime = from_datetime.replace(day=1, hour=0, minute=0, second=0, microsecond=0) 
-
-        # candidate_id='568a0b20cce9fb485393489b'
-        # candidate_id = '601b8120ca3f418906a889a8'
 
         if candidate_id:
             excl_txns = PaymentTxn.objects.filter(
@@ -185,23 +141,12 @@ class MyServicesApi(DashboardInfo, APIView):
             services = OrderItem.objects.filter(order__candidate_id=candidate_id, no_process=False,order__status__in=[1, 3],product__product_class__slug__in=['writing','service','other']).exclude(order__in=excl_order_list)
             if not last_month_from=='all':
                 services = services.filter(order__date_placed__gte=modified_from_datetime)
-            if selected_type is not 'all':
-                services = services.filter(order__status=selected_type)
+            if select_type == 'in_process':
+                services = services.exclude(oi_status=4)
+            elif select_type == 'closed':
+                services = services.filter(oi_status=4)
             paginated_data = offset_paginator(page, services,size=7)
             data = OrderItemSerializer(paginated_data["data"],many=True,context= {"get_details": True, "candidate_id":candidate_id}).data
-            # orders = Order.objects.filter(
-            #     status__in=[0, 1, 3],
-            #     candidate_id=candidate_id)
-                
-            # excl_txns = PaymentTxn.objects.filter(
-            #     status__in=[0, 2, 3, 4, 5,6],
-            #     payment_mode__in=[6, 7],
-            #     order__candidate_id=candidate_id)
-            # excl_order_list = excl_txns.all().values_list('order_id', flat=True)
-
-            # orders = orders.exclude(
-            #     id__in=excl_order_list)
-
             #pagination info
             page_info ={
             'current_page':paginated_data['current_page'],
