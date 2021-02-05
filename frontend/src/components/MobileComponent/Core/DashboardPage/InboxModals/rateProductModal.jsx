@@ -31,10 +31,16 @@ const RateProductModal = (props) => {
         dispatch(startReviewLoader());
         let addedReview = await new Promise((resolve, reject) => dispatch(submitReview({ payload: new_review, resolve, reject })));
         dispatch(stopReviewLoader());
-        Swal.fire({
-            icon: 'success',
-            text: 'Thanks for your valuable feedback !'
-        })
+
+        if(addedReview) {
+            if(!addedReview?.error) setShowRateModal(false);
+
+            Swal.fire({
+                icon: addedReview?.error ? 'error' : 'success',
+                text: addedReview.display_message ? addedReview.display_message : addedReview.error
+            });
+        }
+        
         reset(addedReview);
         setShowRateModal(false)
     };

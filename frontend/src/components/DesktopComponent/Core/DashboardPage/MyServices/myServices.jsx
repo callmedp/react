@@ -11,7 +11,7 @@ import { fetchReviews } from 'store/DashboardPage/AddSubmitReview/actions/index'
 import UploadResumeModal from '../Inbox/uploadResumeModal';
 import ViewDetailModal from '../Inbox/viewDetailModal';
 import RateModal from '../Inbox/rateModal';
-import ReviewRating from '../Inbox/reviewRating';
+import ReviewModal from '../Inbox/reviewModal';
 import AddCommentModal from '../Inbox/addCommentModal';
 import Pagination from '../../../Common/Pagination/pagination';
 import AcceptModal from '../Inbox/acceptModal';
@@ -39,6 +39,22 @@ const MyServices = (props) => {
     // review open close set here
     const [openReview, setOpenReview] = useState(false);
     const [show, setShow] = useState(false);
+
+    // rating modal handling
+    const [showRatingModal, setShowRatingModal] = useState(false) 
+
+    //Rate Modal Handling
+    const [showRateModal, setShowRateModal] = useState(false) 
+    const [oiReviewId, setOiReviewId] = useState('')
+
+    //set review data
+    const [reviewData, setReviewData] = useState([]);
+
+    const starRatings = (star, index) => {
+        return (star === '*' ? <em className="micon-fullstar" key={index}></em> : star === '+' 
+            ? <em className="micon-halfstar" key={index}></em> : <em className="micon-blankstar" key={index}></em>
+        )
+    }
 
     // if view detail then show
     const [isOpen, setIsOpen] = useState(false);
@@ -91,14 +107,14 @@ const MyServices = (props) => {
     };
 
     // if reviews exists then show
-    const toggleReviews = async (id, prod) => {
-        if(openReview != id) {
-            dispatch(startReviewLoader());
-            await new Promise((resolve, reject) => dispatch(fetchReviews({ payload: { prod: prod }, resolve, reject })));
-            dispatch(stopReviewLoader());
-        }
-        setOpenReview(openReview == id ? false : id);
-    }
+    // const toggleReviews = async (id, prod) => {
+    //     if(openReview != id) {
+    //         dispatch(startReviewLoader());
+    //         await new Promise((resolve, reject) => dispatch(fetchReviews({ payload: { prod: prod }, resolve, reject })));
+    //         dispatch(stopReviewLoader());
+    //     }
+    //     setOpenReview(openReview == id ? false : id);
+    // }
     
     // hit api when clicked on add comment
     const addCommentDataFetch = async (id) => {
@@ -133,6 +149,11 @@ const MyServices = (props) => {
   `${siteDomain}/api/v1/resumetemplatedownload/?order_pk=${orderId}&product_id=${productId}`;
 
     useEffect(() => {
+        window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: "smooth"
+        });
         handleEffects();
     }, [currentPage, filterState])
 
@@ -152,25 +173,25 @@ const MyServices = (props) => {
                 { !results?.page?.total || results?.page?.total === 0 ? <EmptyInbox inboxButton="Go To Home" inboxText="There is no service added to your profile!"/> : '' }
 
                 {results?.data && results?.data?.length > 0 ?
-                    results?.data?.map((item,index) => {
+                    results?.data?.map((service,index) => {
                         return(
                             <div className="db-white-box w-100" key={index}>
                                 <div className="d-flex">
                                     <figure>
-                                        <img src={item.img} alt={item.img_alt} />
+                                        <img src={service.img} alt={service.img_alt} />
                                     </figure>
 
                                     <div className="db-my-courses-detail--wrap">
                                         <div className="d-flex w-100">
                                             <div className="db-my-courses-detail__leftpan">
                                                 <div className="db-my-courses-detail__leftpan--box">
-                                                    <h3><Link to={item.productUrl ? item.productUrl : '#'}>{item.heading}</Link></h3>
+                                                    <h3><Link to={service.productUrl ? service.productUrl : '#'}>{service.heading}</Link></h3>
                                                     <div className="db-my-courses-detail__leftpan--info">
-                                                        <span>Provider: <strong>{item.vendor}</strong> </span>
-                                                        <span>Bought on: <strong>{item.enroll_date}</strong></span>
+                                                        <span>Provider: <strong>{service.vendor}</strong> </span>
+                                                        <span>Bought on: <strong>{service.enroll_date}</strong></span>
                                                         {
-                                                            item?.duration_in_days && 
-                                                                <span>Duration: <strong>{item?.duration_in_days > 1 ? item?.duration_in_days + ' days' : item?.duration_in_days + ' day' } </strong> </span>
+                                                            service?.duration_in_days && 
+                                                                <span>Duration: <strong>{service?.duration_in_days > 1 ? service?.duration_in_days + ' days' : service?.duration_in_days + ' day' } </strong> </span>
                                                         }
                                                     </div>
 
@@ -178,67 +199,55 @@ const MyServices = (props) => {
                                                         Hi, the recording for the session you missed is available now
                                                     </div> */}
 
-                                                    <div className="db-my-courses-detail__leftpan--status mb-2">
+<div className="db-my-courses-detail__leftpan--status mb-2">
                                                         Status:
-                                                            <strong className="ml-1">{item.new_oi_status ? item.oi_status === 4 ? 'Service has been processed and Document is finalized' : item.oi_status === 101 ? 'Take Test' : item.oi_status == 141 ? 'Your profile to be shared with interviewer is pending -' : item.oi_status === 142 ? 'Service is under progress -' : item.oi_status === 143 ? 'Service has been expired' : item.new_oi_status : "Yet to Update"}
-                                                            
-                                                            {/* upload link */}
-                                                            {item.options?.upload_resume ? <Link to={"#"} className="ml-2" onClick={() => uploadToggleService()}>Upload</Link>
-                                                            : null}
-
-                                                            {/* download or download credentials option if draft file exists */}
-                                                            {item.options?.Download ? <a className="ml-2" target="_blank" href={item.options?.download_url}>Download</a>
-                                                            : null}
-
-                                                            {/* download credential option if oi_status == 4 */}
-                                                            {item.options?.Download_credential ? <a className="ml-2" target="_blank" href={item.options?.download_url}>Download Credential</a>
-                                                            : null}
-
-                                                            {/* take test when type flow is 16 */}
-                                                            {item?.options?.take_test ? <a className="ml-2" target="_blank" href={ item?.options?.auto_login_url}>Take Test</a>
-                                                            : null}
-
-                                                            {item.product_type_flow === 17 && item?.options?.edit_template ? 
-                                                                <React.Fragment>
-                                                                    <a className="ml-2" target="_blank" href={createBuilderResumeDownloadLink(item.id, item.product)}>Download</a>
-
-                                                                    <Link className="ml-15" target="_blank" to={{ pathname: `${resumeShineSiteDomain}/resume-builder/edit/?type=profile`}}>Edit Template</Link>
-                                                                </React.Fragment>
-                                                            : null}
-
-                                                            {item.product_type_flow === 9 ? 
-                                                                <React.Fragment>
-                                                                    {item.oi_status == 141 ? (
-                                                                        <a className="ml-2" target="_blank" href={{pathname: `${siteDomain}/dashboard/roundone/profile/`}}>Complete Profile</a>
-                                                                    ) : item.oi_status == 142 ? (
-                                                                        <a className="ml-2" target="_blank" href={{pathname: `${siteDomain}/dashboard/roundone/profile/`}}>Edit Profile</a>
-                                                                    ) : null}
-                                                                </React.Fragment>
-                                                            : null}
-
+                                                        <strong className="ml-1">{ service?.updated_status?.status }
                                                             {
-                                                                (item.oi_status === 24 || item.oi_status === 46) &&
-                                                                <React.Fragment>
-                                                                    <Link className="accept" to={"#"} onClick={() => {setAcceptModal(true);setAcceptModalId(item?.id)}}>Accept</Link>
-                                                                    <Link className="ml-2 reject" to={"#"} onClick={() => {setRejectModal(true);setRejectModalId(item?.id)}}>Reject</Link>
-                                                                </React.Fragment>
+                                                                service?.updated_status?.upload_resume && <Link to={"#"} className="ml-2" onClick={() => uploadToggleService()}>Upload</Link> 
                                                             }
-                                                        </strong> 
+                                                            {
+                                                                service?.updated_status?.download_url && <a href={`${service?.updated_status?.download_url}`} target="_blank" className="ml-2"> Download</a> 
+                                                            }
+                                                            {
+                                                                service?.updated_status?.download_credentials_url && <a href={`${siteDomain}${service?.updated_status?.download_credentials_url}`} target="_blank" className="ml-2"> Download Credential</a> 
+                                                            }
+                                                            {
+                                                                service?.updated_status?.edit_your_profile && <a href={`${siteDomain}/dashboard/roundone/profile/`} target="_blank" className="ml-2"> Edit Profile</a>
+                                                            }
+                                                            {
+                                                                service?.updated_status?.complete_profile && <a href={`${siteDomain}/dashboard/roundone/profile/`} target="_blank" className="ml-2"> Complete Profile</a>
+                                                            }
+                                                            {
+                                                                service?.updated_status?.edit_template &&
+                                                                    <>
+                                                                        <a href={createBuilderResumeDownloadLink(service?.id, service?.product)} target="_blank" className="ml-2"> Download</a>
+                                                                        <a className="ml-15" target="_blank" href={`${resumeShineSiteDomain}/resume-builder/edit/?type=profile`}>Edit Template</a>
+                                                                    </>
+                                                            }
+                                                            {
+                                                                (service?.oi_status === 24 || service?.oi_status === 46) &&
+                                                                <>
+                                                                    <br /><br/>
+                                                                    <a className="m-accep" href="/" onClick={(e) => {e.preventDefault();setAcceptModal(true);setAcceptModalId(service?.id)}}>Accept</a>
+                                                                    <a className="ml-2 m-rejec" href="/" onClick={(e) => {e.preventDefault();setRejectModal(true);setRejectModalId(service?.id)}}>Reject</a>
+                                                                </>
+                                                            }
+                                                        </strong>
                                                     </div>
 
                                                     <Link 
                                                         to={'#'}
                                                         className="font-weight-bold"
-                                                        onClick={() => toggleDetails(item.id)}
+                                                        onClick={() => toggleDetails(service.id)}
                                                         aria-controls="addComments"
-                                                        aria-expanded={`openViewDetail`+item.id}
+                                                        aria-expanded={`openViewDetail`+service.id}
                                                     >
                                                         View Details
                                                     </Link>
 
                                                     {/* course detail modal open */}
                                                     {
-                                                        (isOpen === item?.id) && <ViewDetailModal id={item.id} toggleDetails={toggleDetails} isOpen={isOpen}/>
+                                                        (isOpen === service?.id) && <ViewDetailModal id={service.id} toggleDetails={toggleDetails} isOpen={isOpen}/>
                                                     }
                                                 </div>
                                             </div>
@@ -246,34 +255,40 @@ const MyServices = (props) => {
                                                 <div className="share">
                                                     <i className="icon-share"></i>
                                                     <div className="share__box arrow-box top">
-                                                        <Link target="_blank" to={{ pathname: `https://www.facebook.com/sharer/sharer.php?u=${siteDomain}${item?.productUrl}`}} className="facebook-icon"></Link>
-                                                        <Link target="_blank" to={{ pathname: `https://www.linkedin.com/shareArticle?mini=true&url=${siteDomain}${item?.productUrl}&title=${item?.title}&summary=${item?.name}&source=`}} className="linkedin-icon"></Link>
-                                                        <Link target="_blank" to={{ pathname: `https://twitter.com/intent/tweet?url=${siteDomain}${item?.productUrl}/&text=${item?.name}`}} className="twitter-iocn"></Link>
-                                                        <Link target="_blank" to={{ pathname: `https://api.whatsapp.com/send?text=Hi! Check this useful product on Shine. ${siteDomain}${item?.productUrl}`}} data-action="share/whatsapp/share" className="whatsup-icon"></Link>
+                                                        <Link target="_blank" to={{ pathname: `https://www.facebook.com/sharer/sharer.php?u=${siteDomain}${service?.productUrl}`}} className="facebook-icon"></Link>
+                                                        <Link target="_blank" to={{ pathname: `https://www.linkedin.com/shareArticle?mini=true&url=${siteDomain}${service?.productUrl}&title=${service?.title}&summary=${service?.name}&source=`}} className="linkedin-icon"></Link>
+                                                        <Link target="_blank" to={{ pathname: `https://twitter.com/intent/tweet?url=${siteDomain}${service?.productUrl}/&text=${service?.name}`}} className="twitter-iocn"></Link>
+                                                        <Link target="_blank" to={{ pathname: `https://api.whatsapp.com/send?text=Hi! Check this useful product on Shine. ${siteDomain}${service?.productUrl}`}} data-action="share/whatsapp/share" className="whatsup-icon"></Link>
                                                     </div>
                                                 </div>
 
                                                 {
-                                                    item?.options?.day_remaining ? 
+                                                    (service?.updated_status?.day_remaining || service?.updated_status?.pause_service || service?.updated_status?.resume_service) &&
+                                                    <>
                                                         <div className="day-remaning mb-20">
-                                                            {/* {[...(item.remaining_days + '')].map((day, idx) => <span key={idx} className="day-remaning--box">{day}</span>)} */}
                                                             {
-                                                                (item?.options?.day_remaining > 0 ? item?.options?.day_remaining : '00')?.toString()?.split('')?.map((digit, index) => {
-                                                                    console.log(digit)
-                                                                    return (
-                                                                        <span className="day-remaning--box" key={index}> { digit }</span>
-                                                                    )
-                                                                })
+                                                                service?.updated_status?.day_remaining &&
+                                                                <>
+                                                                    {
+                                                                        (service?.updated_status?.day_remaining > 0 ? service?.updated_status?.day_remaining : '00')?.toString()?.split('')?.map((digit, index) => {
+                                                                            return (
+                                                                                <span className="day-remaning--box" key={index}> { digit }</span>
+                                                                            )
+                                                                        })
+                                                                    }
+                                                                    <span className="ml-2 day-remaning--text">
+                                                                        { service?.updated_status?.day_remaining > 1 ? 'Days' : 'Day'} <br />remaining
+                                                                    </span>
+                                                                </>
                                                             }
-                                                            <span className="ml-2 day-remaning--text"> { item?.options?.day_remaining > 1 ? 'Days' : 'Day'} <br/>remaning</span>
                                                         </div>
-                                                : null}
-
-                                                {
-                                                    item?.options?.pause_service && <Link to={"#"} className="m-db-start-course font-weight-bold pr-10" onClick={() => pauseResumeService(34, item?.id)}>Pause Service</Link>
-                                                }
-                                                {
-                                                    item?.options?.resume_service && <Link to={"#"} className="m-db-start-course font-weight-bold pr-10" onClick={() => pauseResumeService(35, item?.id)}>Resume Service</Link>
+                                                        {
+                                                        service?.updated_status?.pause_service && <Link to={"#"} className="db-start-course font-weight-bold pr-10" onClick={() => pauseResumeService(34, service?.id)}>Pause Service</Link>
+                                                        }
+                                                        {
+                                                            service?.updated_status?.resume_service && <Link to={"#"} className="db-resume-course font-weight-bold pr-10" onClick={() => pauseResumeService(35, service?.id)}>Resume Service</Link>
+                                                        }
+                                                    </>
                                                 }
                                             </div>
                                         </div>
@@ -282,40 +297,65 @@ const MyServices = (props) => {
                                             <Link
                                                 to={"#"}
                                                 className="db-comments font-weight-bold"
-                                                onClick={() => addCommentDataFetch(item.id, item.no_of_comments)}
+                                                onClick={() => addCommentDataFetch(service.id, service.no_of_comments)}
                                                 aria-controls="addComments"
-                                                aria-expanded={`openComment`+item.id}
+                                                aria-expanded={`openComment`+service.id}
                                                 >
-                                                    {item.no_of_comments > 0 && item.no_of_comments > 1 ?
-                                                        item.no_of_comments + ' Comments'
+                                                    {service.no_of_comments > 0 && service.no_of_comments > 1 ?
+                                                        service.no_of_comments + ' Comments'
                                                         :
-                                                        item.no_of_comments > 0 && item.no_of_comments < 1 ?
-                                                        item.no_of_comments + ' Comment'
+                                                        service.no_of_comments > 0 && service.no_of_comments < 1 ?
+                                                        service.no_of_comments + ' Comment'
                                                         :
                                                         'Add comment'
                                                     }
                                             </Link>
                                             {/* ratings start here */}
 
-                                            { (item.oi_status === 4) && 
-                                                <div className="d-flex">
-                                                    <ReviewRating
-                                                        item={item}
-                                                        handleShow={handleShow}
-                                                        toggleReviews={toggleReviews} 
-                                                        setOpenReview={setOpenReview}
-                                                        openReview={openReview}
-                                                        name="Service"/>
-
-                                                    {/* rate service modal */}
-                                                    <RateModal handleClose={handleClose} show={show} id={item.id} name="Service"/>
-                                                </div>
+                                            { 
+                                                (service?.updated_status?.your_feedback) && 
+                                                    <div className="d-flex" id={service?.product}>
+                                                        {
+                                                            service?.len_review ?
+                                                                <div onClick={()=>{
+                                                                    setShowRateModal(true);
+                                                                    setOiReviewId(service?.product);
+                                                                    setReviewData(service?.review_data);
+                                                                }}>
+                                                                    <span className="rating">
+                                                                        {
+                                                                            service?.rating?.map((star, index) => starRatings(star, index))
+                                                                        }
+                                                                        <span className="ml-5">
+                                                                            { service?.avg_rating?.toFixed() }/5 
+                                                                        </span>
+                                                                    </span>
+                                                                    <a className="font-weight-bold ml-10">
+                                                                        { service?.len_review > 1 ? service?.len_review + ' Reviews' : service?.len_review + ' Review' }
+                                                                    </a>
+                                                                </div> : 
+                                                                <div onClick={()=>{
+                                                                    setShowRateModal(true);
+                                                                    setOiReviewId(service?.product);
+                                                                    setReviewData(service?.review_data)
+                                                                }}>
+                                                                    <span className="">Rate Service&nbsp;</span>
+                                                                    <span className="rating">
+                                                                        {
+                                                                            [1, 2, 3, 4, 5].map((item, index) => {
+                                                                                return <em className="icon-blankstar" key={index} />
+                                                                            })
+                                                                        }
+                                                                    </span>
+                                                                </div>
+                                                        }
+                                                    </div>
                                             }
                                         </div>
                                     </div>
                                 </div>
                                 {/* add comment dropdown */}
-                                <AddCommentModal id={item.id} addCommentDataFetch={addCommentDataFetch} data={oiComments} addOpen={addOpen} type="myservices" />
+                                <AddCommentModal id={service.id} addCommentDataFetch={addCommentDataFetch} data={oiComments} addOpen={addOpen} type="myservices" />
                             </div>
                         )
                     })
@@ -330,6 +370,14 @@ const MyServices = (props) => {
                 }
                 {
                     rejectModal && <RejectModal rejectModal={rejectModal} setRejectModal={setRejectModal} oi_id={rejectModalId}/>
+                }
+
+                {
+                    showRateModal && <RateModal showRateModal={showRateModal} setShowRateModal={setShowRateModal} oi_id={oiReviewId} name="Service" />
+                }
+
+                {
+                    showRatingModal && <ReviewModal setShowRateModal={setShowRateModal} showRatingModal={showRatingModal} setShowRatingModal={setShowRatingModal} oi_id={oiReviewId} reviewData={reviewData} />
                 }
 
                 {/* pagination set here */}

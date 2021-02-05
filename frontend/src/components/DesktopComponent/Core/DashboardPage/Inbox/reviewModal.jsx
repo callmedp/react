@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import Loader from '../../../Common/Loader/loader';
 
 const ReviewModal = (props) => {
-    const { handleShow, setOpenReview, openReview, item } = props;
+    const { showRatingModal, setShowRatingModal, reviewData, oi_id, setShowRateModal } = props;
 
     const fillStarForCourse = (star) => {
         return {
@@ -15,18 +15,18 @@ const ReviewModal = (props) => {
     }
 
 
-    const reviewList = useSelector(store => store.getReviews.data);
-    const { reviewLoader } = useSelector(store => store.loader);
+    // const reviewList = useSelector(store => store.getReviews.data);
+    // const { reviewLoader } = useSelector(store => store.loader);
 
     return (
         <>
-            { reviewLoader && <Loader /> }
-            <Collapse in={openReview == item.id}>
+            {/* { reviewLoader && <Loader /> } */}
+            <Collapse>
                 <div className="db-reviews-list-wrap arrow-box top-big">
-                    <span className="btn-close"  onClick={() => setOpenReview(state => !state)}>&#x2715;</span>
+                    <span className="btn-close"  onClick={() => setShowRatingModal(state => !state)}>&#x2715;</span>
                     <div className="reviews-list">
                         <ul>
-                            { reviewList?.map((rev, idx) => {
+                            { reviewData?.map((rev, idx) => {
                                 return (
                                     <li key={idx}>
                                         <div className="card__rating">
@@ -42,7 +42,7 @@ const ReviewModal = (props) => {
                     </div>
                     
                     <div className="db-reviews-list-wrap--bottom">
-                        <button className="btn btn-outline-primary" onClick={handleShow}>Add new</button>
+                        <button className="btn btn-outline-primary" onClick={setShowRateModal(state => !state)}>Add new</button>
                     </div>
                 </div>
             </Collapse>

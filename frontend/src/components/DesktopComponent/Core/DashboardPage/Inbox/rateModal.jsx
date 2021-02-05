@@ -1,14 +1,19 @@
 import React, {useState} from 'react';
 import { Modal } from 'react-bootstrap';
+import { useDispatch } from 'react-redux';
+// import Swal from 'sweetalert2';
 import {InputField, TextArea} from 'formHandler/desktopFormHandler/formFields';
 import CoursesServicesForm from 'formHandler/desktopFormHandler/formData/coursesServices';
 import { submitReview } from 'store/DashboardPage/AddSubmitReview/actions/index';
 import { useForm } from "react-hook-form";
-import { useDispatch } from 'react-redux';
-import {Toast} from '../../../Common/Toast/toast';
+// import { startReviewLoader, stopReviewLoader } from 'store/Loader/actions/index';
+// import Loader from '../../../Common/Loader/loader';
+
 
 const RateModal =(props) => {
     const { handleClose, show, name, id } = props;
+    const { showRateModal, setShowRateModal, oi_id, idDict, name } = props;
+
     const { register, handleSubmit, errors } = useForm();
     const dispatch = useDispatch();
     let [rating, setRating] = useState(5);
@@ -48,14 +53,14 @@ const RateModal =(props) => {
     const submitReviewFunc = async(values) => {
         const new_review = {
             ...values,
-            oi_pk: id,
+            oi_pk: oi_id,
             rating: rating,
         };
 
         const response = await new Promise((resolve, reject) => dispatch(submitReview({payload: new_review, resolve, reject})));
 
         if(response) {
-            if(!response?.error) handleClose(false);
+            if(!response?.error) setShowRateModal(false);
 
             Toast.fire({
                 type: response?.error ? 'error' : 'success',
@@ -65,7 +70,7 @@ const RateModal =(props) => {
     };
 
     return (
-        <Modal show={show} onHide={handleClose} className="db-modal db-page">
+        <Modal show={showRateModal} onHide={setShowRateModal} className="db-modal db-page">
         <Modal.Header closeButton></Modal.Header>
         
         <Modal.Body>
@@ -94,7 +99,7 @@ const RateModal =(props) => {
 
                             <TextArea attributes={CoursesServicesForm.review} register={register}
                                 errors={!!errors ? errors[CoursesServicesForm.review.name] : ''} />
-
+                        <br/>
                         <button className="btn btn-primary px-5" type="submit">Submit</button>
                     </form>
                 </div>

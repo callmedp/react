@@ -33,9 +33,9 @@ function* SubmitReview(action) {
     try {
         const response = yield call(Api.saveReviewsData, payload);
 
-        if(response['error']) return resolve(response?.data)
+        if(response['error']) return resolve(response)
 
-        return resolve(response?.data)
+        return resolve(response)
     }
     catch (error) {
         return resolve(error)
