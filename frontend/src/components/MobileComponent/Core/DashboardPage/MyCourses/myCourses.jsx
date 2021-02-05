@@ -235,7 +235,7 @@ const MyCourses = (props) => {
                                                 { course?.no_of_comments ? course?.no_of_comments > 1 ? `${course?.no_of_comments} Comments` : `${course?.no_of_comments} Comment` : 'Add Comment' }
                                             </Link>
                                             {
-                                                !course?.updated_status?.your_feedback &&
+                                                course?.updated_status?.your_feedback &&
                                                     <div className="d-flex" onClick={()=>{setShowRateModal(true);setOiReviewId({'prdId' :course?.product, 'orderId':course?.id});setReviewData(course?.review_data);}}>
                                                         {
                                                             course?.len_review ? 
