@@ -400,7 +400,7 @@ class DashboardResumeUploadApi(APIView):
     def post(self, request, *args, **kwargs):
         candidate_id = request.POST.get('candidate_id')
         if not candidate_id:
-            return Response({'error': 'No credential Provided'}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({'error': 'Please login through valid user'}, status=status.HTTP_401_UNAUTHORIZED)
         file = request.FILES.get('file', '')
         list_ids = request.POST.get('resume_pending', '')
         list_ids = list_ids.split(',')
@@ -427,10 +427,10 @@ class DashboardResumeUploadApi(APIView):
 
                     return Response({'success': 'resumeUpload'}, status=status.HTTP_200_OK)
 
-            return Response({'error': 'Something went Wrong'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Oops! <br> Something went wrong! Try Again'}, status=status.HTTP_400_BAD_REQUEST)
         else:
             if not file:
-                return Response({'error': 'No file found'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'error': 'Please select the file'}, status=status.HTTP_400_BAD_REQUEST)
             extn = file.name.split('.')[-1]
             if extn in ['doc', 'docx', 'pdf'] and list_ids:
                 data = {
@@ -440,10 +440,10 @@ class DashboardResumeUploadApi(APIView):
                 }
                 try:
                     DashboardInfo().upload_candidate_resume(candidate_id=candidate_id, data=data)
-                except:
-                    return Response({'error': 'Something went Wrong'}, status=status.HTTP_400_BAD_REQUEST)
+                except Exception as e:
+                    return Response({'error': 'Oops! <br> Something went wrong! Try Again'}, status=status.HTTP_400_BAD_REQUEST)
                 return Response({'success': 'resumeuploaded'}, status=status.HTTP_200_OK)
-            return Response({'error': 'Something went Wrong'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Please select the file in the format PDF,DOC,DOCX only'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class DashboardResumeDownloadApi(APIView):

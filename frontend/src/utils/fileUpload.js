@@ -11,10 +11,12 @@ const fileUpload = event => {
         })
         return false
     }
-    if (!(file1.name.slice(-4).toLowerCase() === '.pdf' || file1.name.slice(-4).toLowerCase() === '.doc' || file1.name.slice(-5).toLowerCase() === '.docx' || file1.name.slice(-4).toLowerCase() === '.txt')) {
+    // || file1.name.slice(-4).toLowerCase() === '.txt'
+    if (!(file1.name.slice(-4).toLowerCase() === '.pdf' || file1.name.slice(-4).toLowerCase() === '.doc' || file1.name.slice(-5).toLowerCase() === '.docx')) {
+    // if (!(file1.name.slice(-4).toLowerCase() === '.pdf' || file1.name.slice(-4).toLowerCase() === '.doc' || file1.name.slice(-5).toLowerCase() === '.docx' || file1.name.slice(-4).toLowerCase() === '.txt')) {
         Swal.fire({
             icon: 'error',
-            title: 'Please select the file in the format PDF,DOC,DOCX,TXT only'
+            title: 'Please select the file in the format PDF,DOC,DOCX only'
         })
         return false
     }

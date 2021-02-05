@@ -60,7 +60,7 @@ const UploadResume = (props) => {
         else {
             Swal.fire({
                 icon: "error",
-                title: "Oops! <br> Something went wrong! Try Again"
+                title: response.error
             })
         }
     }
@@ -90,7 +90,7 @@ const UploadResume = (props) => {
                         <input type="file" name="file" onChange={(e) => { e.preventDefault(); getFile(e) }} ref={register()}/>
                     </div>
 
-                    <span className="mx-3">Or</span>
+                    <span className="mx-4">Or</span>
 
                     <div className="m-custom">
                         <input type="checkbox" id="shine_resume" name='shine_resume' ref={register({
