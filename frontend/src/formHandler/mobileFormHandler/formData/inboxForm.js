@@ -55,7 +55,7 @@ export default {
         type: "text",
         name: "title",
         id: "title",
-        placeholder: "Type Here",
+        placeholder: "Add Title",
         inputType: 'input',
         validation: {
             required:true,
