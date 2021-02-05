@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom';
 import './myCourses.scss';
 import AddCommentModal from '../InboxModals/addCommentModal';
 import RateProductModal from '../InboxModals/rateProductModal'
+import ShowRatingsModal from '../InboxModals/showRatingsModal'
 import Pagination from '../../../Common/Pagination/pagination';
 import Loader from '../../../Common/Loader/loader';
 import EmptyInbox from '../InboxModals/emptyInbox';
@@ -19,6 +20,7 @@ import ViewDetails from '../MyServices/oiViewDetails';
 const MyCourses = (props) => {
     const [showCommentModal, setShowCommentModal] = useState(false)
     const [showRateModal, setShowRateModal] = useState(false)
+    const [showRatingsModal, setShowRatingsModal] = useState(false)
     const [currentPage, setCurrentPage] = useState(1)
     const [showOrderDetailsID, setShowOrderDetailsID] = useState('')
     const [oiCommentId, setOiCommentId] = useState('')
@@ -238,11 +240,11 @@ const MyCourses = (props) => {
                                                 </Link>
                                                 {
                                                     course?.updated_status?.your_feedback &&
-                                                        <div className="d-flex" onClick={()=>{setShowRateModal(true);setOiReviewId({'prdId' :course?.product, 'orderId':course?.id});setReviewData(course?.review_data);}}>
+                                                        <div className="d-flex">
                                                             {
                                                                 course?.len_review ? 
                                                                     <>
-                                                                        <span className="m-rating">
+                                                                        <span className="m-rating" onClick={()=>{setShowRatingsModal(true);setOiReviewId({'prdId' :course?.product, 'orderId':course?.id});setReviewData(course?.review_data);}}>
                                                                             {
                                                                                 course?.rating?.map((star, index) => starRatings(star, index))
                                                                             }
@@ -252,7 +254,7 @@ const MyCourses = (props) => {
                                                                     </> :
                                                                     <>
                                                                         <span className="">Rate</span>
-                                                                        <span className="m-rating">
+                                                                        <span className="m-rating" onClick={()=>{setShowRateModal(true);setOiReviewId({'prdId' :course?.product, 'orderId':course?.id})}}>
                                                                             {
                                                                                 [1, 2, 3, 4, 5].map((item, index) => {
                                                                                     return <em className="micon-blankstar" key={index} />
@@ -274,7 +276,10 @@ const MyCourses = (props) => {
                     showCommentModal && <AddCommentModal setShowCommentModal = {setShowCommentModal} oi_id={oiCommentId} type="mycourses"/>
                 }
                 {
-                    showRateModal && <RateProductModal setShowRateModal={setShowRateModal} idDict={oiReviewId} reviewData={reviewData}/>
+                    showRateModal && <RateProductModal setShowRateModal={setShowRateModal} idDict={oiReviewId} />
+                }
+                {
+                    showRatingsModal && <ShowRatingsModal setShowRateModal={setShowRateModal} setShowRatingsModal={setShowRatingsModal} idDict={oiReviewId} reviewData={reviewData}/>
                 }
                 {
                     page?.total > 1 ?

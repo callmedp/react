@@ -1,55 +1,55 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import Swal from 'sweetalert2';
-import { useForm } from "react-hook-form";
-import inboxForm from 'formHandler/mobileFormHandler/formData/inboxForm';
-import { TextArea, InputField } from 'formHandler/mobileFormHandler/formFields';
-import { fetchReviews, submitReview } from 'store/DashboardPage/AddSubmitReview/actions/index';
-import { startReviewLoader, stopReviewLoader } from 'store/Loader/actions/index';
-import Loader from '../../../Common/Loader/loader';
+// import { useDispatch, useSelector } from 'react-redux';
+// import Swal from 'sweetalert2';
+// import { useForm } from "react-hook-form";
+// import inboxForm from 'formHandler/mobileFormHandler/formData/inboxForm';
+// import { TextArea, InputField } from 'formHandler/mobileFormHandler/formFields';
+// import { fetchReviews, submitReview } from 'store/DashboardPage/AddSubmitReview/actions/index';
+// import { startReviewLoader, stopReviewLoader } from 'store/Loader/actions/index';
+// import Loader from '../../../Common/Loader/loader';
 import './rating.scss';
 
 const RateProductModal = (props) => {
-    const { setShowRateModal, oi_id, idDict } = props
-    const dispatch = useDispatch()
+    const { setShowRateModal, setShowRatingsModal, oi_id, idDict, reviewData } = props
+    // const dispatch = useDispatch()
     // const [showRatingModal, setShowRatingModal] = useState(false)
     // const [showAllRatings, setShowAllRatings] = useState(true)
-    const [inputStar, setInputStar] = useState(5);
-    const { register, handleSubmit, errors, reset } = useForm();
+    // const [inputStar, setInputStar] = useState(5);
+    // const { register, handleSubmit, errors, reset } = useForm();
 
     // const reviewList = useSelector( store => store?.getReviews?.data );
-    const { reviewLoader } = useSelector(store => store.loader);
+    // const { reviewLoader } = useSelector(store => store.loader);
 
-    const submitReviews = async values => {
-        const new_review = {
-            ...values,
-            oi_pk: oi_id ? oi_id : idDict?.orderId,
-            rating: inputStar ? inputStar : 5,
-            type: 'POST'
-        };
+    // const submitReviews = async values => {
+    //     const new_review = {
+    //         ...values,
+    //         oi_pk: oi_id ? oi_id : idDict?.orderId,
+    //         rating: inputStar ? inputStar : 5,
+    //         type: 'POST'
+    //     };
 
-        dispatch(startReviewLoader());
-        let addedReview = await new Promise((resolve, reject) => dispatch(submitReview({ payload: new_review, resolve, reject })));
-        dispatch(stopReviewLoader());
+    //     dispatch(startReviewLoader());
+    //     let addedReview = await new Promise((resolve, reject) => dispatch(submitReview({ payload: new_review, resolve, reject })));
+    //     dispatch(stopReviewLoader());
 
-        if(addedReview) {
-            if(!addedReview?.error) setShowRateModal(false);
+    //     if(addedReview) {
+    //         if(!addedReview?.error) setShowRateModal(false);
 
-            Swal.fire({
-                icon: addedReview?.error ? 'error' : 'success',
-                text: addedReview.display_message ? addedReview.display_message : addedReview.error
-            });
-        }
+    //         Swal.fire({
+    //             icon: addedReview?.error ? 'error' : 'success',
+    //             text: addedReview.display_message ? addedReview.display_message : addedReview.error
+    //         });
+    //     }
         
-        reset(addedReview);
-        setShowRateModal(false)
-    };
+    //     reset(addedReview);
+    //     setShowRateModal(false)
+    // };
 
-    // const starRatings = (star, index) => {
-    //     return (star === '*' ? <em className="micon-fullstar" key={index}></em> : star === '+' 
-    //         ? <em className="micon-halfstar" key={index}></em> : <em className="micon-blankstar" key={index}></em>
-    //     )
-    // }
+    const starRatings = (star, index) => {
+        return (star === '*' ? <em className="micon-fullstar" key={index}></em> : star === '+' 
+            ? <em className="micon-halfstar" key={index}></em> : <em className="micon-blankstar" key={index}></em>
+        )
+    }
 
     // const handleEffects = async (values) => {
     //     const new_review = {
@@ -77,18 +77,18 @@ const RateProductModal = (props) => {
 
     return (
         <>
-            { reviewLoader && <Loader /> }
+            {/* { reviewLoader && <Loader /> } */}
             <div className="m-slide-modal">
                 {/* {
-                    showAllRatings &&
+                    showAllRatings && */}
                     <div className="addcomments" style={{display: 'block'}}>
-                        <span className="m-db-close" style={{ marginLeft: '13px' }} onClick={() => {setShowRateModal(false)}}>&#x2715;</span>
-                        {
-                            reviewList?.length > 0 ? 
+                        <span className="m-db-close" style={{ marginLeft: '13px' }} onClick={() => {setShowRatingsModal(false)}}>&#x2715;</span>
+                        {/* {
+                            reviewList?.length > 0 ?  */}
                                 <div className="m-reviews-list">
                                     <ul>
                                         {
-                                            reviewList?.map((review, index) => {
+                                            reviewData?.map((review, index) => {
                                                 return(
                                                     <li key={index}>
                                                         <div className="card__rating">
@@ -98,26 +98,26 @@ const RateProductModal = (props) => {
                                                             </span>
                                                         </div>
 
-                                                        <span className="m-reviews-list--date">{review?.created}</span>
-                                                        <p className="m-reviews-list--text">{review?.content}</p>
+                                                        <span className="m-reviews-list--date">{review?.title ? review?.title + ' - ' : ""}{review?.created}</span>
+                                                        <p className="m-reviews-list--text">{review?.content ? review?.content : ''}</p>
                                                     </li>
                                                 )
                                             })
                                         }
                                     </ul>
                                 </div>  
-                                :
+                                {/* :
                                 <p className="text-center px-30 py-30">No rating yet, please review it by clicking add new button</p>
-                        }
+                        } */}
                         <div className="m-reviews-list-wrap--bottom">
-                            <button className="btn btn-blue-outline px-30" onClick={() => {setShowAllRatings(false);setShowRatingModal(true)}}>Add new</button>
+                            <button className="btn btn-blue-outline px-30" onClick={() => {setShowRatingsModal(false);setShowRateModal(true)}}>Add new</button>
                         </div>
                     </div>
-                } */}
+                {/* } */}
 
                 {/* {
                     // showRatingModal &&
-                    // showAllRatings && */}
+                    showAllRatings &&
                         <form onSubmit={handleSubmit(submitReviews)}>
                             <div className="text-center">
                                 <span className="m-db-close" onClick={() => {setShowRateModal(false)}}>&#x2715;</span>
@@ -145,7 +145,7 @@ const RateProductModal = (props) => {
                                 </div>
                             </div>
                         </form>
-                {/* } */}
+                } */}
 
             </div>
         </>
