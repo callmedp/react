@@ -28,6 +28,9 @@ const MyCourses = (props) => {
     const { data, page } = useSelector(store => store?.dashboardCourses);
     const { coursesLoader } = useSelector(store => store.loader);
 
+    //set review data
+    const [reviewData, setReviewData] = useState([])
+
     const showDetails = (id) => {
         id == showOrderDetailsID ?
             setShowOrderDetailsID('') : setShowOrderDetailsID(id)
@@ -232,10 +235,10 @@ const MyCourses = (props) => {
                                                 { course?.no_of_comments ? course?.no_of_comments > 1 ? `${course?.no_of_comments} Comments` : `${course?.no_of_comments} Comment` : 'Add Comment' }
                                             </Link>
                                             {
-                                                course?.updated_status?.your_feedback &&
-                                                    <div className="d-flex" onClick={()=>{setShowRateModal(true);setOiReviewId({'prdId' :course?.product, 'orderId':course?.id})}}>
+                                                !course?.updated_status?.your_feedback &&
+                                                    <div className="d-flex" onClick={()=>{setShowRateModal(true);setOiReviewId({'prdId' :course?.product, 'orderId':course?.id});setReviewData(course?.review_data);}}>
                                                         {
-                                                            course?.no_review ? 
+                                                            course?.len_review ? 
                                                                 <>
                                                                     <span className="m-rating">
                                                                         {
@@ -243,7 +246,7 @@ const MyCourses = (props) => {
                                                                         }
                                                                         <span className="ml-5">{course?.avg_rating?.toFixed(1)}/5</span>
                                                                     </span>
-                                                                    <Link to={"#"} className="font-weight-bold ml-10">{ course?.no_review }</Link>
+                                                                    <Link to={"#"} className="font-weight-bold ml-10">{ course?.len_review }</Link>
                                                                 </> :
                                                                 <>
                                                                     <span className="">Rate</span>
@@ -268,7 +271,7 @@ const MyCourses = (props) => {
                     showCommentModal && <AddCommentModal setShowCommentModal = {setShowCommentModal} oi_id={oiCommentId}/>
                 }
                 {
-                    showRateModal && <RateProductModal setShowRateModal={setShowRateModal} idDict={oiReviewId}/>
+                    showRateModal && <RateProductModal setShowRateModal={setShowRateModal} idDict={oiReviewId} reviewData={reviewData}/>
                 }
                 {
                     page?.total > 1 ?

@@ -74,6 +74,9 @@ const MyServices = (props) => {
     const [rejectModal, setRejectModal] = useState(false)
     const [rejectModalId, setRejectModalId] = useState(false)
 
+    //set review data
+    const [reviewData, setReviewData] = useState([])
+
     //View Details Handling
     const [showOrderDetailsID, setShowOrderDetailsID] = useState('')
     const showDetails = (id) => {
@@ -296,13 +299,14 @@ const MyServices = (props) => {
 
                                             {/* Rating Block start*/}    
                                             {
-                                                (service?.updated_status?.your_feedback) && 
+                                                !(service?.updated_status?.your_feedback) && 
                                                     <div className="d-flex" onClick={()=>{
                                                             setShowRateModal(true);
-                                                            setOiReviewId(service?.product)
+                                                            setOiReviewId(service?.product);
+                                                            setReviewData(service?.review_data);
                                                         }} id={service?.product} >
                                                         {
-                                                            service?.no_review ?
+                                                            service?.len_review ?
                                                                 <>
                                                                     <span className="m-rating">
                                                                         {
@@ -314,7 +318,7 @@ const MyServices = (props) => {
                                                                     </span>
 
                                                                     <Link to={"#"} className="font-weight-bold ml-10">
-                                                                        { service?.no_review }
+                                                                        { service?.len_review }
                                                                     </Link>
                                                                 </> : 
                                                                 <>
@@ -349,7 +353,7 @@ const MyServices = (props) => {
             { showCommentModal && <AddCommentModal setShowCommentModal = {setShowCommentModal} oi_id={oiCommentId} /> }
 
             {/* Rate Modal */}
-            { showRateModal && <RateProductModal setShowRateModal={setShowRateModal} oi_id={oiReviewId}/> }
+            { showRateModal && <RateProductModal setShowRateModal={setShowRateModal} oi_id={oiReviewId} reviewData={reviewData}/> }
 
             {/* Upload Modal */}
             { showUpload && <UploadResume setShowUpload={setShowUpload} /> }

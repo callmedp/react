@@ -10,14 +10,14 @@ import Loader from '../../../Common/Loader/loader';
 import './rating.scss';
 
 const RateProductModal = (props) => {
-    const { setShowRateModal, oi_id, idDict } = props
+    const { setShowRateModal, oi_id, idDict, reviewData } = props
     const dispatch = useDispatch()
-    const [showRatingModal, setShowRatingModal] = useState(false)
+    // const [showRatingModal, setShowRatingModal] = useState(false)
     const [showAllRatings, setShowAllRatings] = useState(true)
     const [inputStar, setInputStar] = useState(5);
     const { register, handleSubmit, errors, reset } = useForm();
 
-    const reviewList = useSelector( store => store?.getReviews?.data );
+    // const reviewList = useSelector( store => store?.getReviews?.data );
     const { reviewLoader } = useSelector(store => store.loader);
 
     const submitReviews = async values => {
@@ -45,35 +45,35 @@ const RateProductModal = (props) => {
         )
     }
 
-    const handleEffects = async (values) => {
-        const new_review = {
-            ...values,
-            prod: oi_id ? oi_id : idDict?.prdId,
-            type: 'GET'
-        };
-        try{
-            dispatch(startReviewLoader());
-            await new Promise((resolve, reject) => dispatch(fetchReviews({ payload: new_review, resolve, reject })));
-            dispatch(stopReviewLoader());
-        }
-        catch(e){
-            dispatch(stopReviewLoader());
-            Swal.fire({
-                icon: 'error',
-                text: 'Sorry! we are unable to fecth your data.'
-            })
-        }
-    };
+    // const handleEffects = async (values) => {
+    //     const new_review = {
+    //         ...values,
+    //         prod: oi_id ? oi_id : idDict?.prdId,
+    //         type: 'GET'
+    //     };
+    //     try{
+    //         dispatch(startReviewLoader());
+    //         await new Promise((resolve, reject) => dispatch(fetchReviews({ payload: new_review, resolve, reject })));
+    //         dispatch(stopReviewLoader());
+    //     }
+    //     catch(e){
+    //         dispatch(stopReviewLoader());
+    //         Swal.fire({
+    //             icon: 'error',
+    //             text: 'Sorry! we are unable to fecth your data.'
+    //         })
+    //     }
+    // };
 
-    useEffect(() => {
-        handleEffects();
-    }, [oi_id ? oi_id : idDict])
+    // useEffect(() => {
+    //     handleEffects();
+    // }, [oi_id ? oi_id : idDict])
 
     return (
         <>
             { reviewLoader && <Loader /> }
             <div className="m-slide-modal">
-                {
+                {/* {
                     showAllRatings &&
                     <div className="addcomments" style={{display: 'block'}}>
                         <span className="m-db-close" style={{ marginLeft: '13px' }} onClick={() => {setShowRateModal(false)}}>&#x2715;</span>
@@ -107,10 +107,11 @@ const RateProductModal = (props) => {
                             <button className="btn btn-blue-outline px-30" onClick={() => {setShowAllRatings(false);setShowRatingModal(true)}}>Add new</button>
                         </div>
                     </div>
-                }
+                } */}
 
                 {
-                    showRatingModal &&
+                    // showRatingModal &&
+                    showAllRatings &&
                         <form onSubmit={handleSubmit(submitReviews)}>
                             <div className="text-center">
                                 <span className="m-db-close" onClick={() => {setShowRateModal(false)}}>&#x2715;</span>

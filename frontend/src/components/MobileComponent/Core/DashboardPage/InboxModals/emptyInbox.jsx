@@ -20,6 +20,7 @@ const EmptyInbox = (props) => {
                 { 
                     inboxType === 'services' ? <a href={resumeShineSiteDomain} className="btn btn-outline-primary font-weight-bold">Go to Home</a> :
                         inboxType === 'courses' ? <Link to="/online-courses.html" className="btn btn-outline-primary font-weight-bold">Browse Courses</Link> :
+                            inboxType === 'orders' ? <Link to="/online-courses.html" className="btn btn-outline-primary font-weight-bold">Browse Courses</Link> :
                             <a href={siteDomain} className="btn btn-outline-primary font-weight-bold">Go to Home</a>  
                 }
             </div>

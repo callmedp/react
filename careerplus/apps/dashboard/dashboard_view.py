@@ -439,7 +439,7 @@ class DashboardRejectService(APIView):
     
 
     def post(self, request, *args, **kwargs):
-        candidate_id = request.session.get('candidate_id', None) or '5c6661f7a9da9b3891e72729'
+        candidate_id = request.session.get('candidate_id', None)
         if not candidate_id:
             candidate_id = request.data.get('candidate_id', None)
 
