@@ -133,7 +133,9 @@
 
           <!--a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="login-btn">{{request.session.email}}</span></a-->
           <ul class="dropdown-menu">
-            <li><a href="{% url 'dashboard:dashboard' %}" onclick="MyGA.SendEvent('header_icons','ln_header_icons', 'ln_account', 'ln_my_inbox','', false, true);trackClickEvent();">My Inbox</a></li>
+            <!-- <li><a href="{% url 'dashboard:dashboard' %}" onclick="MyGA.SendEvent('header_icons','ln_header_icons', 'ln_account', 'ln_my_inbox','', false, true);trackClickEvent();">My Inbox</a></li> -->
+            <li><a href="/dashboard/mycourses" onclick="MyGA.SendEvent('header_icons','ln_header_icons', 'ln_account', 'ln_my_courses','', false, true);trackClickEvent();">My Courses</a></li>
+            <li><a href="/dashboard/myservices" onclick="MyGA.SendEvent('header_icons','ln_header_icons', 'ln_account', 'ln_my_services','', false, true);trackClickEvent();">My Services</a></li>
             <li><a href="{% url 'dashboard:dashboard-myorder' %}" onclick="MyGA.SendEvent('header_icons','ln_header_icons', 'ln_account', 'ln_my_orders','', false, true);trackClickEvent();">My Orders</a></li>
             <li><a href="{% url 'dashboard:dashboard-mywallet' %}" onclick="MyGA.SendEvent('header_icons','ln_header_icons', 'ln_account', 'ln_my_wallet','', false, true);trackClickEvent();">My Wallet</a></li>
             {% if roundone_user %}

@@ -8,6 +8,7 @@ import '../MyCourses/myCourses.scss'
 import './myServices.scss';
 import AddCommentModal from '../InboxModals/addCommentModal';
 import RateProductModal from '../InboxModals/rateProductModal';
+import ShowRatingsModal from '../InboxModals/showRatingsModal'
 import UploadResume from '../InboxModals/uploadResume';
 import AcceptModal from '../InboxModals/acceptModal';
 import RejectModal from '../InboxModals/rejectModal';
@@ -84,6 +85,9 @@ const MyServices = (props) => {
         id == showOrderDetailsID ?
             setShowOrderDetailsID('') : setShowOrderDetailsID(id)
     }
+
+    //view ratings modal
+    const [showRatingsModal, setShowRatingsModal] = useState(false)
 
     //Pause service
     const pauseResumeService = (oiStatus, orderId) => {
@@ -302,15 +306,11 @@ const MyServices = (props) => {
                                             {/* Rating Block start*/}    
                                             {
                                                 (service?.updated_status?.your_feedback) && 
-                                                    <div className="d-flex" onClick={()=>{
-                                                            setShowRateModal(true);
-                                                            setOiReviewId(service?.product);
-                                                            setReviewData(service?.review_data);
-                                                        }} id={service?.product} >
+                                                    <div className="d-flex">
                                                         {
                                                             service?.len_review ?
                                                                 <>
-                                                                    <span className="m-rating">
+                                                                    <span className="m-rating" onClick={()=>{setShowRatingsModal(true);setOiReviewId({'prdId' :service?.product, 'orderId':service?.id});setReviewData(service?.review_data);}}>
                                                                         {
                                                                             service?.rating?.map((star, index) => starRatings(star, index))
                                                                         }
@@ -325,7 +325,7 @@ const MyServices = (props) => {
                                                                 </> : 
                                                                 <>
                                                                     <span className="">Rate</span>
-                                                                    <span className="m-rating">
+                                                                    <span className="m-rating" onClick={()=>{setShowRateModal(true);setOiReviewId({'prdId' :service?.product, 'orderId':service?.id})}}>
                                                                         {
                                                                             [1, 2, 3, 4, 5].map((item, index) => {
                                                                                 return <em className="micon-blankstar" key={index} />
@@ -355,7 +355,8 @@ const MyServices = (props) => {
             { showCommentModal && <AddCommentModal setShowCommentModal = {setShowCommentModal} oi_id={oiCommentId} type="myservices" /> }
 
             {/* Rate Modal */}
-            { showRateModal && <RateProductModal setShowRateModal={setShowRateModal} oi_id={oiReviewId} reviewData={reviewData}/> }
+            {   showRateModal && <RateProductModal setShowRateModal={setShowRateModal} idDict={oiReviewId} /> }
+            {   showRatingsModal && <ShowRatingsModal setShowRateModal={setShowRateModal} setShowRatingsModal={setShowRatingsModal} idDict={oiReviewId} reviewData={reviewData}/> }
 
             {/* Upload Modal */}
             { showUpload && <UploadResume setShowUpload={setShowUpload} /> }
