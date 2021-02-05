@@ -98,8 +98,8 @@ const RateProductModal = (props) => {
                                                             </span>
                                                         </div>
 
-                                                        <span className="m-reviews-list--date">{review?.created}</span>
-                                                        <p className="m-reviews-list--text">{review?.content}</p>
+                                                        <span className="m-reviews-list--date">{review?.title ? review?.title + ' - ' : ""}{review?.created}</span>
+                                                        <p className="m-reviews-list--text">{review?.content ? review?.content : ''}</p>
                                                     </li>
                                                 )
                                             })
