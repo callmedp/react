@@ -8,9 +8,10 @@ import Loader from '../../../Common/Loader/loader';
 import inboxForm from 'formHandler/mobileFormHandler/formData/inboxForm';
 import { TextArea } from 'formHandler/mobileFormHandler/formFields';
 import fileUpload from 'utils/fileUpload';
+import { fetchMyServices } from 'store/DashboardPage/MyServices/actions/index';
 
 const RejectModal = (props) => {
-    const { setRejectModal, oi_id } = props
+    const { setRejectModal, oi_id, currentPage } = props
     const [filename, setFileName] = useState("Upload Resume");
     const [file, setFile] = useState(undefined);
 
@@ -36,6 +37,7 @@ const RejectModal = (props) => {
         }
         try {
             await new Promise((resolve, reject) => { dispatch(CandidateAcceptRejectResume({ payload: rejectValues, resolve, reject }));});
+            await new Promise((resolve, reject) => dispatch(fetchMyServices({page: currentPage, resolve, reject })));
             event.target.reset();
             setFileName("Upload Resume");
             setFile(undefined)

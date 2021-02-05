@@ -361,8 +361,8 @@ const MyServices = (props) => {
             { showUpload && <UploadResume setShowUpload={setShowUpload} /> }
 
             {/* Accept Reject Modal */}
-            { acceptModal && <AcceptModal setAcceptModal={setAcceptModal} oi_id={acceptModalId}/> }
-            { rejectModal && <RejectModal setRejectModal={setRejectModal} oi_id={rejectModalId}/> }
+            { acceptModal && <AcceptModal setAcceptModal={setAcceptModal} oi_id={acceptModalId} currentPage={currentPage}/> }
+            { rejectModal && <RejectModal setRejectModal={setRejectModal} oi_id={rejectModalId} currentPage={currentPage}/> }
 
             {/* Pagination */}
             { page?.total > 1 && <Pagination totalPage={page?.total} currentPage={currentPage} setCurrentPage={setCurrentPage} /> }

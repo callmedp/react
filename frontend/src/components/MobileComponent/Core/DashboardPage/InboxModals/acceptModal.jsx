@@ -4,9 +4,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { CandidateAcceptRejectResume } from 'store/DashboardPage/MyServices/actions/index';
 import { startAcceptRejectLoader, stopAcceptRejectLoader } from 'store/Loader/actions/index';
 import Loader from '../../../Common/Loader/loader';
+import { fetchMyServices } from 'store/DashboardPage/MyServices/actions';
 
 const AcceptModal = (props) => {
-    const { setAcceptModal, oi_id } = props
+    const { setAcceptModal, oi_id, currentPage } = props
 
     const dispatch = useDispatch()
     const { acceptRejectLoader } = useSelector(store => store.loader);
@@ -20,6 +21,7 @@ const AcceptModal = (props) => {
           try {
                 dispatch(startAcceptRejectLoader());
                 await new Promise((resolve, reject) => { dispatch(CandidateAcceptRejectResume({ payload: acceptValues, resolve, reject })); });
+                await new Promise((resolve, reject) => dispatch(fetchMyServices({page: currentPage, resolve, reject })));
                 dispatch(stopAcceptRejectLoader());
 
                 setAcceptModal(false)

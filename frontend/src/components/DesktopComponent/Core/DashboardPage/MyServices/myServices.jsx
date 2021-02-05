@@ -366,10 +366,10 @@ const MyServices = (props) => {
                     uploadShow && <UploadResumeModal uploadHandelClose={uploadHandelClose} show={uploadShow} pending_resume_items={pending_resume_items} />
                 }
                 {
-                    acceptModal && <AcceptModal acceptModal={acceptModal} setAcceptModal={setAcceptModal} oi_id={acceptModalId}/>
+                    acceptModal && <AcceptModal acceptModal={acceptModal} setAcceptModal={setAcceptModal} oi_id={acceptModalId} filterState={filterState} currentPage={currentPage} />
                 }
                 {
-                    rejectModal && <RejectModal rejectModal={rejectModal} setRejectModal={setRejectModal} oi_id={rejectModalId}/>
+                    rejectModal && <RejectModal rejectModal={rejectModal} setRejectModal={setRejectModal} oi_id={rejectModalId} filterState={filterState } currentPage={currentPage} />
                 }
 
                 {
