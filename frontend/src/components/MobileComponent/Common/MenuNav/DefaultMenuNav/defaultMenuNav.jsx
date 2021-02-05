@@ -99,8 +99,9 @@ const DefaultMenuNav = (props) =>{
                             <li>
                                 <a className="dashboard-menu--item" href={`${siteDomain}/dashboard/`}><figure className="icon-dashboard" /> Dashboard</a>
                                 <ul className="dashboard-menu__submmenu">
-                                    <li><a href={`${siteDomain}/dashboard/`}>Inbox</a></li>
-                                    <li><a href={`${siteDomain}/dashboard/myorder/`}>My Order</a></li>
+                                    <li><a href={`${siteDomain}/dashboard/`}>My Courses</a></li>
+                                    <li><a href={`${siteDomain}/dashboard/myservices`}>My Services</a></li>
+                                    <li><a href={`${siteDomain}/dashboard/myorder/`}>My Orders</a></li>
                                     <li><a href={`${siteDomain}/dashboard/mywallet/`}>My Wallet</a></li>
                                 </ul>
                             </li>
