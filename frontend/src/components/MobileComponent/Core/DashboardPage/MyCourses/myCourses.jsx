@@ -230,38 +230,40 @@ const MyCourses = (props) => {
                                                 </div>
                                             </div>*/}
 
-                                        <div className="m-courses-detail__userInput">
-                                            <Link className="m-db-comments font-weight-bold" to={'#'} onClick={(e) => {e.preventDefault();setShowCommentModal(true);setOiCommentId(course?.id)}}>
-                                                {/* { course?.no_of_comments ? course?.no_of_comments > 1 ? `${course?.no_of_comments} Comments` : `${course?.no_of_comments} Comment` : 'Add Comment' } */}
-                                                { course?.no_of_comments === 0 || !course?.no_of_comments ? 'Add Comment' : course?.no_of_comments === 1 ? course?.no_of_comments + ' Comment' : course?.no_of_comments + ' Comments' }
-                                            </Link>
-                                            {
-                                                course?.updated_status?.your_feedback &&
-                                                    <div className="d-flex" onClick={()=>{setShowRateModal(true);setOiReviewId({'prdId' :course?.product, 'orderId':course?.id});setReviewData(course?.review_data);}}>
-                                                        {
-                                                            course?.len_review ? 
-                                                                <>
-                                                                    <span className="m-rating">
-                                                                        {
-                                                                            course?.rating?.map((star, index) => starRatings(star, index))
-                                                                        }
-                                                                        <span className="ml-5">{course?.avg_rating?.toFixed(1)}/5</span>
-                                                                    </span>
-                                                                    <Link to={"#"} className="font-weight-bold ml-10">{ course?.len_review }</Link>
-                                                                </> :
-                                                                <>
-                                                                    <span className="">Rate</span>
-                                                                    <span className="m-rating">
-                                                                        {
-                                                                            [1, 2, 3, 4, 5].map((item, index) => {
-                                                                                return <em className="micon-blankstar" key={index} />
-                                                                            })
-                                                                        }
-                                                                    </span>
-                                                                </>
-                                                        }
-                                                    </div>
-                                            }
+                                        <div className="pl-15">
+                                            <div className="m-courses-detail__userInput">
+                                                <Link className="m-db-comments font-weight-bold" to={'#'} onClick={(e) => {e.preventDefault();setShowCommentModal(true);setOiCommentId(course?.id)}}>
+                                                    {/* { course?.no_of_comments ? course?.no_of_comments > 1 ? `${course?.no_of_comments} Comments` : `${course?.no_of_comments} Comment` : 'Add Comment' } */}
+                                                    { course?.no_of_comments === 0 || !course?.no_of_comments ? 'Add Comment' : course?.no_of_comments === 1 ? course?.no_of_comments + ' Comment' : course?.no_of_comments + ' Comments' }
+                                                </Link>
+                                                {
+                                                    course?.updated_status?.your_feedback &&
+                                                        <div className="d-flex" onClick={()=>{setShowRateModal(true);setOiReviewId({'prdId' :course?.product, 'orderId':course?.id});setReviewData(course?.review_data);}}>
+                                                            {
+                                                                course?.len_review ? 
+                                                                    <>
+                                                                        <span className="m-rating">
+                                                                            {
+                                                                                course?.rating?.map((star, index) => starRatings(star, index))
+                                                                            }
+                                                                            <span className="ml-5">{course?.avg_rating?.toFixed(1)}/5</span>
+                                                                        </span>
+                                                                        <Link to={"#"} className="font-weight-bold ml-10">{ course?.len_review }</Link>
+                                                                    </> :
+                                                                    <>
+                                                                        <span className="">Rate</span>
+                                                                        <span className="m-rating">
+                                                                            {
+                                                                                [1, 2, 3, 4, 5].map((item, index) => {
+                                                                                    return <em className="micon-blankstar" key={index} />
+                                                                                })
+                                                                            }
+                                                                        </span>
+                                                                    </>
+                                                            }
+                                                        </div>
+                                                }
+                                            </div>
                                         </div>
                                 </div>
                             )
