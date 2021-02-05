@@ -37,7 +37,7 @@ const RateProductModal = (props) => {
 
             Swal.fire({
                 icon: addedReview?.error ? 'error' : 'success',
-                text: addedReview.display_message ? addedReview.display_message : addedReview.error
+                text: addedReview?.data?.display_message ? addedReview?.data?.display_message : addedReview.error
             });
         }
         
