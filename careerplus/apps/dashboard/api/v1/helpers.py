@@ -166,13 +166,14 @@ def get_courses_detail(instance):
         if oi.oi_status == 2:
             current_status.update({'status':oi.get_user_oi_status})
             current_status.update({'upload_resume':True})
-        elif oi.oi_status == 6:
-            current_status.update({'status':oi.get_user_oi_status})
-            current_status.update({'download_url':reverse("console:profile_credentials",kwargs={'oi':oi.pk})})
+        # elif oi.oi_status == 6:
+        #     current_status.update({'status':oi.get_user_oi_status})
+        #     current_status.update({'download_url':reverse("console:profile_credentials",kwargs={'oi':oi.pk})})
 
         elif oi.oi_status == 4:
             current_status.update({'status':'Service has been processed'})
-            current_status.update({'download_url':reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})+'?path='+oi.oi_draft.name})
+            # current_status.update({'download_url':reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})+'?path='+oi.oi_draft.name})
+            current_status.update({'download_credentials_url':reverse("console:profile_credentials",kwargs={'oi':oi.pk})})
 
             if not oi.order.service_resume_upload_shine:
                 current_status.update({'UploadResumeToShine': True})
@@ -180,9 +181,8 @@ def get_courses_detail(instance):
             current_status.update({'status':oi.get_user_oi_status})
         elif oi.oi_status == 161 or oi.oi_status == 162 or oi.oi_status == 163 or oi.oi_status == 164:
             current_status.update({'status':oi.get_user_oi_status})
-        #REMOVED--
-        # elif oi.oi.waiting_for_input:
-        #     datalist.append({'date':date_created,'status':'Waiting for input'})
+        elif oi.oi.waiting_for_input:
+            datalist.append({'date':date_created,'status':'Waiting for input'})
         elif oi.order.auto_upload and not oi.is_assigned and not oi.is_resume_candidate_upload:
             current_status.update({'status':'Service is under progress'})
             current_status.update({'upload_resume':True})
