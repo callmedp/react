@@ -8,10 +8,11 @@ import { submitReview } from 'store/DashboardPage/AddSubmitReview/actions/index'
 import { useForm } from "react-hook-form";
 // import { startReviewLoader, stopReviewLoader } from 'store/Loader/actions/index';
 // import Loader from '../../../Common/Loader/loader';
+import { Toast } from '../../../Common/Toast/toast'
 
 
 const RateModal =(props) => {
-    const { handleClose, show, name, id } = props;
+    // const { handleClose, show, name, id } = props;
     const { showRateModal, setShowRateModal, oi_id, idDict, name } = props;
 
     const { register, handleSubmit, errors } = useForm();
