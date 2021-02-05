@@ -232,7 +232,8 @@ const MyCourses = (props) => {
 
                                         <div className="m-courses-detail__userInput">
                                             <Link className="m-db-comments font-weight-bold" to={'#'} onClick={(e) => {e.preventDefault();setShowCommentModal(true);setOiCommentId(course?.id)}}>
-                                                { course?.no_of_comments ? course?.no_of_comments > 1 ? `${course?.no_of_comments} Comments` : `${course?.no_of_comments} Comment` : 'Add Comment' }
+                                                {/* { course?.no_of_comments ? course?.no_of_comments > 1 ? `${course?.no_of_comments} Comments` : `${course?.no_of_comments} Comment` : 'Add Comment' } */}
+                                                { course?.no_of_comments === 0 || !course?.no_of_comments ? 'Add Comment' : course?.no_of_comments === 1 ? course?.no_of_comments + ' Comment' : course?.no_of_comments + ' Comments' }
                                             </Link>
                                             {
                                                 course?.updated_status?.your_feedback &&
@@ -268,7 +269,7 @@ const MyCourses = (props) => {
                     }
                 </div>
                 {
-                    showCommentModal && <AddCommentModal setShowCommentModal = {setShowCommentModal} oi_id={oiCommentId}/>
+                    showCommentModal && <AddCommentModal setShowCommentModal = {setShowCommentModal} oi_id={oiCommentId} type="mycourses"/>
                 }
                 {
                     showRateModal && <RateProductModal setShowRateModal={setShowRateModal} idDict={oiReviewId} reviewData={reviewData}/>

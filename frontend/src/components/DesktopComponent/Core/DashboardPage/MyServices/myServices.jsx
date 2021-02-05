@@ -315,7 +315,7 @@ const MyServices = (props) => {
                                     </div>
                                 </div>
                                 {/* add comment dropdown */}
-                                <AddCommentModal id={item.id} setAddOpen={setAddOpen} data={oiComments} addOpen={addOpen} />
+                                <AddCommentModal id={item.id} addCommentDataFetch={addCommentDataFetch} data={oiComments} addOpen={addOpen} type="myservices" />
                             </div>
                         )
                     })

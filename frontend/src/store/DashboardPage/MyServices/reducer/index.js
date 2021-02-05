@@ -12,6 +12,19 @@ const oiDetailsInit = {
     // data: []
 }
 
+const updateComment = (state, {payload}) => {
+
+    const updatedState = state.data.map((item) => {
+        if(item.id === payload.id){
+            return {...item, no_of_comments: payload.no_of_comments }
+        }
+        else {
+            return { ...item };
+        }
+    })
+    return {...state, data : updatedState}; 
+}
+
 export const DashboardMyServicesReducer = (state=initState, action) => {
     switch(action.type){
         case Actions.MY_SERVICES_FETCHED : return { ...initState, ...action.item}
@@ -27,6 +40,8 @@ export const DashboardMyServicesReducer = (state=initState, action) => {
                 ...state, loading: false,
             }
         }
+
+        case Actions.UPDATE_SERVICE_COMMENT_COUNT : return updateComment(state, action)
         
         default: return state;
     }

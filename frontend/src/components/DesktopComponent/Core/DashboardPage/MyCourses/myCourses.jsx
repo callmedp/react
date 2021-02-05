@@ -290,7 +290,7 @@ const MyCourses = (props) => {
                                         </div>
                                     </div>
                                 </div>
-                                <AddCommentModal id={course.id} setAddOpen={setAddOpen} data={oiComments} addOpen={addOpen} />
+                                <AddCommentModal id={course.id} addCommentDataFetch={addCommentDataFetch} data={oiComments} addOpen={addOpen} type="mycourses" />
 
                                 {/* <div className="db-mycourse-highlighter">Next course to take: <Link to={"#"} className="font-weight-bold ml-2">Seo Specialist</Link> </div> */}
                             </div>

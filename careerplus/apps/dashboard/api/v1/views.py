@@ -122,6 +122,7 @@ class MyServicesApi(DashboardInfo, APIView):
         data = []
         page = request.GET.get("page", 1)
         candidate_id = self.request.session.get('candidate_id', None)
+        # candidate_id='601b8120ca3f418906a889a8'
         last_month_from = request.GET.get("last_month_from",'all' )
         select_type = request.GET.get('select_type','all')
         page_info = {}
@@ -357,13 +358,20 @@ class DashboardPendingResumeItemsApi(APIView):
         pending_resume_items = []
         # candidate_id='5c6661f7a9da9b3891e72729'
 
-        pending_resume_items = DashboardInfo().get_pending_resume_items(candidate_id=candidate_id,
-                                                                        email=email)
+        try:
+            pending_resume_items = DashboardInfo().get_pending_resume_items(candidate_id=candidate_id,
+                                                                            email=email)
 
-        pending_resume_items = [{'id': oi.id, 'product_name': oi.product.get_name if oi.product else ''
-                                    , 'product_get_exp_db': oi.product.get_exp_db() if oi.product else ''
-                                    } for oi in
-                                pending_resume_items]
+            pending_resume_items = [{'id': oi.id, 'product_name': oi.product.get_name if oi.product else ''
+                                        , 'product_get_exp_db': oi.product.get_exp_db() if oi.product else ''
+                                        } for oi in
+                                    pending_resume_items]
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
+            pending_resume_items = []
+            return APIResponse(data={'data': pending_resume_items},
+                               message="We can't retrieve pending resumes at moment.", error=True,
+                               status=status.HTTP_400_BAD_REQUEST)
 
         return APIResponse(data={'data':pending_resume_items},message='Pending resume items data Success', status=status.HTTP_200_OK)
 

@@ -7,9 +7,11 @@ import inboxForm from 'formHandler/mobileFormHandler/formData/inboxForm';
 import { TextArea } from 'formHandler/mobileFormHandler/formFields';
 import { startCommentLoader, stopCommentLoader } from 'store/Loader/actions/index';
 import Loader from '../../../Common/Loader/loader';
+import { updateServiceCommentCount } from 'store/DashboardPage/MyServices/actions/index';
+import { updateCourseCommentCount } from 'store/DashboardPage/MyCourses/actions/index';
 
 const AddCommentModal = (props) => {
-    const { setShowCommentModal, oi_id } = props
+    const { setShowCommentModal, oi_id, type } = props
     const dispatch = useDispatch();
     const comments = useSelector(store => store?.getComment?.comment);
     const { commentLoader } = useSelector(store => store.loader);
@@ -23,13 +25,27 @@ const AddCommentModal = (props) => {
         };
 
         dispatch(startCommentLoader());
-        let addedComment = await new Promise((resolve, reject) => dispatch(fetchOiComment({ payload: new_values, resolve, reject })));
+        let response = await new Promise((resolve, reject) => dispatch(fetchOiComment({ payload: new_values, resolve, reject })));
         dispatch(stopCommentLoader());
-        reset(addedComment);
+        reset();
         Swal.fire({
             icon: 'success',
             text: 'Comment sent successfully !'
         })
+        if (response?.error) {
+            Swal.fire({
+                title: response?.error,
+                type: 'error'
+            })
+        }
+        else {
+            if(type === "myservices"){
+                dispatch(updateServiceCommentCount({ id: response.oi_id, no_of_comments: response.comment.length}));
+            }
+            else{
+                dispatch(updateCourseCommentCount({ id: response.oi_id, no_of_comments: response.comment.length}));
+            }
+        }
         setShowCommentModal(false)
     };
 

@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
 import { useForm } from "react-hook-form";
 import inboxForm from 'formHandler/mobileFormHandler/formData/inboxForm';
-import { TextArea } from 'formHandler/mobileFormHandler/formFields';
+import { TextArea, InputField } from 'formHandler/mobileFormHandler/formFields';
 import { fetchReviews, submitReview } from 'store/DashboardPage/AddSubmitReview/actions/index';
 import { startReviewLoader, stopReviewLoader } from 'store/Loader/actions/index';
 import Loader from '../../../Common/Loader/loader';
@@ -131,9 +131,9 @@ const RateProductModal = (props) => {
                                 </span>
                                 <p>Tap on rate to scale of 1-5</p>
                                 <div className="m-enquire-now mt-15">
-                                    <div className="m-form-group">
-                                        <TextArea attributes={inboxForm.review} register={register} errors={!!errors ? errors[inboxForm.review.name] : ''} />
-                                    </div>
+                                    <InputField attributes={inboxForm.title} register={register} customClass='m-form-group mb-0' errors={!!errors ? errors[inboxForm.title.name] : false} />  
+                                    
+                                    <TextArea attributes={inboxForm.review} register={register} errors={!!errors ? errors[inboxForm.review.name] : ''} />
 
                                     <button className="btn btn-blue" onClick={handleSubmit(submitReviews)}>Submit</button>
                                 </div>

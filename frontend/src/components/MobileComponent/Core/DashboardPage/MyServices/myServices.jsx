@@ -18,6 +18,7 @@ import { siteDomain, resumeShineSiteDomain } from 'utils/domains';
 import { startDashboardServicesPageLoader, stopDashboardServicesPageLoader } from 'store/Loader/actions/index';
 import { showSwal } from 'utils/swal'
 import ViewDetails from './oiViewDetails'
+import Filter from '../Filter/filter';
 
 // API Import
 import { fetchMyServices, fetchPendingResume } from 'store/DashboardPage/MyServices/actions/index';
@@ -143,6 +144,7 @@ const MyServices = (props) => {
         <div>
 
             {/* My Services Block Start */}
+            {/* <Filter /> */}
             <main className="mb-0">
                 <div className="m-courses-detail db-warp">
                     {
@@ -350,7 +352,7 @@ const MyServices = (props) => {
             {/* My Services Block End */}
             
             {/* Comment Modal */}
-            { showCommentModal && <AddCommentModal setShowCommentModal = {setShowCommentModal} oi_id={oiCommentId} /> }
+            { showCommentModal && <AddCommentModal setShowCommentModal = {setShowCommentModal} oi_id={oiCommentId} type="myservices" /> }
 
             {/* Rate Modal */}
             { showRateModal && <RateProductModal setShowRateModal={setShowRateModal} oi_id={oiReviewId} reviewData={reviewData}/> }

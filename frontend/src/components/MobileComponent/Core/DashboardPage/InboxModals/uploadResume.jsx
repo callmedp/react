@@ -60,7 +60,7 @@ const UploadResume = (props) => {
         else {
             Swal.fire({
                 icon: "error",
-                title: "Oops! <br> Something went wrong! Try Again"
+                title: response.error
             })
         }
     }

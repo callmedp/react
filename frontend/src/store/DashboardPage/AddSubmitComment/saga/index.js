@@ -14,9 +14,9 @@ function* oi_comment(action) {
                 yield put({ type: Actions.OI_COMMENT_FETCHED, comment : result.data });
                 return resolve(result?.data)
             }
-            else return reject(result);
+            else return resolve(result);
         }
-        if (result["error"]) return reject(result);
+        if (result["error"]) return resolve(result);
         else{
             yield put({ type: Actions.OI_COMMENT_FETCHED, comment : result.data });
             return resolve(result?.data)

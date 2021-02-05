@@ -17,7 +17,7 @@ import PersonalDetail from './MyProfile/PersonalDetail';
 import EditSkills from './MyProfile/EditSkills';
 import SearchPage from '../../Common/SearchPage/SearchPage';
 import { Helmet } from 'react-helmet';
-import { fetchPopularServices } from 'store/CataloguePage/actions/index';
+import { fetchTrendingCnA } from 'store/Footer/actions/index';
 
 const Dashboard = (props) => {
     const dbContainer = props.match.params.name;
@@ -25,24 +25,13 @@ const Dashboard = (props) => {
     const dashboardRoutes = [undefined, 'myorder', 'mywallet', 'myservices']
     const dispatch = useDispatch();
     const [showSearchPage, setShowSearchPage] = useState(false);
-    const { popularServices } = useSelector(store => store?.popularServices );
-
-    const handleEffects = async () => {
-       
-        if (!(window && window.config && window.config.isServerRendered)) {
-            await new Promise((resolve, reject) => dispatch(fetchPopularServices({ resolve, reject })));
-        }
-        else {
-            delete window.config?.isServerRendered
-        }
-
-    };
+    const { trendingCourses } = useSelector( store => store.footer )
 
     useEffect(() => {
         if(!dashboardRoutes.includes(dbContainer)){
             history.push('/404/');
         }
-        handleEffects();
+        dispatch(fetchTrendingCnA())
     }, [dbContainer])
 
 
@@ -81,7 +70,7 @@ const Dashboard = (props) => {
                         {/*<EditSkills />
                         <PersonalDetail /> */}
                         
-                        <ProductCardsSlider productList={popularServices} />
+                        <ProductCardsSlider productList={trendingCourses} />
                         <HaveQuery />
                     </div>
                     <Footer /> 
