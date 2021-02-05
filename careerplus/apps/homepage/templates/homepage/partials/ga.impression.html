@@ -1,5 +1,4 @@
-{% load static compress %}
-{% compress js %}
+{% load static %}
 <script src="{% static 'shinelearn/js/common/ga.impression.js' %}"></script>
 <script>
     function GAImpression(event, options=null) {
@@ -228,4 +227,3 @@
     {% endif %}
 GAImpression();
 </script>
-{% endcompress %}
