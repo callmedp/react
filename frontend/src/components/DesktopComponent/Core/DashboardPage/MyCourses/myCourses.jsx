@@ -287,7 +287,7 @@ const MyCourses = (props) => {
                                             </Link>
                                             {
                                                 (course?.updated_status?.your_feedback) && 
-                                                    <div className="d-flex" id={course?.product}>
+                                                    <div className="d-flex" id={course?.id}>
                                                         {
                                                         course?.len_review ?
                                                             <div onClick={()=>{
@@ -307,7 +307,7 @@ const MyCourses = (props) => {
                                                             </div> : 
                                                             <div onClick={()=>{
                                                                 setShowRateModal(true);
-                                                                setOiReviewId(course?.product);
+                                                                setOiReviewId(course?.id);
                                                                 setReviewData(course?.review_data)
                                                             }}>
                                                                 <span className="">Rate Course&nbsp;</span>

@@ -4,8 +4,6 @@ import { Collapse } from 'react-bootstrap';
 const ReviewModal = (props) => {
     const { showRatingModal, toggleRatingsModal, setShowRateModal, reviewData, oi_id } = props;
 
-    console.log(props);
-
     const fillStarForCourse = (star) => {
         return {
             '*': 'icon-fullstar',

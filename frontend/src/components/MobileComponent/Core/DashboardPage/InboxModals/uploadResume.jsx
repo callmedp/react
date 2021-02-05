@@ -43,7 +43,6 @@ const UploadResume = (props) => {
 
     const onSubmit = async (values) => {
         values = { ...values, file: file };
-        console.log(values)
         let response = await new Promise((resolve, reject) => {
             dispatch(uploadResumeForm({ values, resolve, reject }));
         });

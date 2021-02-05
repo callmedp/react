@@ -28,7 +28,7 @@ const MyServices = (props) => {
     const { serviceLoader } = useSelector(store => store.loader);
     
     // page no. set here
-    const [currentPage, setCurrentPage] = useState(3);
+    const [currentPage, setCurrentPage] = useState(1);
     const [filterState, setfilterState] = useState({ 'last_month_from': 'all', 'select_type' : 'all' });
     
     // main api result state here
@@ -36,16 +36,13 @@ const MyServices = (props) => {
     const oiComments = useSelector(store => store.getComment);
     const pending_resume_items = useSelector(store => store.dashboardPendingResume.data);
 
-    // review open close set here
-    const [openReview, setOpenReview] = useState(false);
-    const [show, setShow] = useState(false);
-
     // rating modal handling
     const [showRatingModal, setShowRatingModal] = useState(false) 
     const toggleRatingsModal = (id) => setShowRatingModal(showRatingModal == id ? false : id);
+   
     //Rate Modal Handling
     const [showRateModal, setShowRateModal] = useState(false) 
-    const [oiReviewId, setOiReviewId] = useState('')
+    const [oiReviewId, setOiReviewId] = useState('');
 
     //set review data
     const [reviewData, setReviewData] = useState([]);
@@ -63,7 +60,6 @@ const MyServices = (props) => {
     // if upload then show
     const [uploadShow, setUploadShow] = useState(false);
     const uploadHandelClose = () => setUploadShow(false);
-    // const uploadHandelShow = () => setUploadShow(true);
 
     const uploadToggleService = async () => {
         setUploadShow(true);
@@ -74,8 +70,6 @@ const MyServices = (props) => {
 
     // comment open close set here
     const [addOpen, setAddOpen] = useState(false);
-    const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
 
     // accept/reject
     const [acceptModal, setAcceptModal] = useState(false)
@@ -105,16 +99,6 @@ const MyServices = (props) => {
             }
         }
     };
-
-    // if reviews exists then show
-    // const toggleReviews = async (id, prod) => {
-    //     if(openReview != id) {
-    //         dispatch(startReviewLoader());
-    //         await new Promise((resolve, reject) => dispatch(fetchReviews({ payload: { prod: prod }, resolve, reject })));
-    //         dispatch(stopReviewLoader());
-    //     }
-    //     setOpenReview(openReview == id ? false : id);
-    // }
     
     // hit api when clicked on add comment
     const addCommentDataFetch = async (id) => {
@@ -315,13 +299,11 @@ const MyServices = (props) => {
                                             {/* ratings start here */}
                                             { 
                                                 (service?.updated_status?.your_feedback) && 
-                                                    <div className="d-flex" id={service?.product}>
+                                                    <div className="d-flex" id={service?.id}>
                                                         {
                                                             service?.len_review ?
                                                                 <div onClick={()=>{
                                                                     toggleRatingsModal(service?.id);
-                                                                    // setOiReviewId(service?.id);
-                                                                    // setReviewData(service?.review_data);
                                                                 }}>
                                                                     <span className="rating">
                                                                         {
@@ -337,7 +319,7 @@ const MyServices = (props) => {
                                                                 </div> : 
                                                                 <div onClick={()=>{
                                                                     setShowRateModal(true);
-                                                                    setOiReviewId(service?.product);
+                                                                    setOiReviewId(service?.id);
                                                                     setReviewData(service?.review_data)
                                                                 }}>
                                                                     <span className="">Rate Service&nbsp;</span>
