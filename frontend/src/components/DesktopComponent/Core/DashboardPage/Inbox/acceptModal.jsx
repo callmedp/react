@@ -4,9 +4,10 @@ import { Modal } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { CandidateAcceptRejectResume } from 'store/DashboardPage/MyServices/actions/index';
 import { startAcceptRejectLoader, stopAcceptRejectLoader } from 'store/Loader/actions/index';
+import { fetchMyServices } from 'store/DashboardPage/MyServices/actions';
 
 const AcceptModal = (props) => {
-    const { acceptModal, setAcceptModal, oi_id } = props
+    const { acceptModal, setAcceptModal, oi_id, filterState, currentPage } = props
     const dispatch = useDispatch()
 
     const acceptRejectHandler = async (type, id) => {
@@ -18,6 +19,7 @@ const AcceptModal = (props) => {
         try {
                 dispatch(startAcceptRejectLoader());
                 await new Promise((resolve, reject) => { dispatch(CandidateAcceptRejectResume({ payload: acceptValues, resolve, reject })); });
+                await new Promise((resolve, reject) => dispatch(fetchMyServices({ page: currentPage, isDesk: true, ...filterState, resolve, reject })))
                 dispatch(stopAcceptRejectLoader());
 
                 Toast.fire({

@@ -275,10 +275,10 @@ const MyServices = (props) => {
                                                     }
                                                     
                                                     {
-                                                        service?.updated_status?.pause_service && <Link to={"#"} className="m-db-resume-course font-weight-bold pr-10" onClick={() => pauseResumeService(34, service?.id)}>Pause Service</Link>
+                                                        service?.updated_status?.pause_service && <Link to={"#"} className="m-db-start-course font-weight-bold pr-10" onClick={() => pauseResumeService(34, service?.id)}>Pause Service</Link>
                                                     }
                                                     {
-                                                        service?.updated_status?.resume_service && <Link to={"#"} className="m-db-start-course font-weight-bold pr-10" onClick={() => pauseResumeService(35, service?.id)}>Resume Service</Link>
+                                                        service?.updated_status?.resume_service && <Link to={"#"} className="m-db-resume-course font-weight-bold pr-10" onClick={() => pauseResumeService(35, service?.id)}>Resume Service</Link>
                                                     }
                                                 </div>
                                         }
@@ -362,8 +362,8 @@ const MyServices = (props) => {
             { showUpload && <UploadResume setShowUpload={setShowUpload} /> }
 
             {/* Accept Reject Modal */}
-            { acceptModal && <AcceptModal setAcceptModal={setAcceptModal} oi_id={acceptModalId}/> }
-            { rejectModal && <RejectModal setRejectModal={setRejectModal} oi_id={rejectModalId}/> }
+            { acceptModal && <AcceptModal setAcceptModal={setAcceptModal} oi_id={acceptModalId} currentPage={currentPage}/> }
+            { rejectModal && <RejectModal setRejectModal={setRejectModal} oi_id={rejectModalId} currentPage={currentPage}/> }
 
             {/* Pagination */}
             { page?.total > 1 && <Pagination totalPage={page?.total} currentPage={currentPage} setCurrentPage={setCurrentPage} /> }
