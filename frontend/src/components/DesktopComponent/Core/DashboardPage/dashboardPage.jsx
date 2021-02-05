@@ -14,12 +14,13 @@ import MyProfile from './MyProfile/myProfile';
 import FAQ from './FAQ/faq';
 import { Helmet } from 'react-helmet';
 // import { useDispatch, useSelector } from 'react-redux';
+import StartCourse from './StartCourse/startCourse';
 
 const DashboardPage = (props) => {
     const [hasFaq, setHasFaq] = useState(false);
     const { history } = props;
     const dbContainer = props.match.params.name;
-    const dashboardRoutes = [undefined, 'myorder', 'mywallet', 'myservices']
+    const dashboardRoutes = [undefined, 'myorder', 'mywallet', 'myservices', 'startcourse']
     
     useEffect(()=>{
         if(!dashboardRoutes.includes(dbContainer)){
@@ -36,21 +37,24 @@ const DashboardPage = (props) => {
                         'myservices' : 'My Services | Shine Learning',
                         'mycourses' : 'My Courses | Shine Learning',
                         'myorder' : 'My Orders | Shine Learning',
-                        'mywallet' : 'My Wallet | Shine Learning'
+                        'mywallet' : 'My Wallet | Shine Learning',
+                        'startcourse' : 'Start Course | Shine Learning'
                     }[dbContainer]
                 }
                 </title>
             </Helmet>
            <Header />
-            <main>
+           <main>
                 <div className="container">
                     {/* <BreadCrumbs /> */}
                     
                     <div className="dashboard-warp">
+                        { dbContainer != 'startcourse' ?
                         <div className="dashboard-warp--tab">
-                            <DashboardNavigation />
-                        </div>
+                         <DashboardNavigation /> 
+                        </div>: '' }
 
+                        {dbContainer != 'startcourse' ?
                         <div className="dashboard-warp--wrap">
                             <div className="dashboard-warp--content">
                               {
@@ -58,16 +62,21 @@ const DashboardPage = (props) => {
                                     'myorder' : <MyOrders />,
                                     'mywallet' : <MyWallet/>,
                                     'myservices' : <MyServices {...props} />,
-                                    undefined : <MyCourses/>
+                                    undefined : <MyCourses history={history} />
                                 }[dbContainer]
                               }  
                             </div>
-                        </div>
+                        </div>: '' }
+                        {
+                            {
+                                'startcourse' : <StartCourse />,
+                            }[dbContainer]
+                        }  
                     </div>
                 </div>
                 { dbContainer === 'mywallet' ? <FAQ setHasFaq={setHasFaq}/> : '' }
-                <HaveQuery />
-                <PopularCourses />
+                { dbContainer != 'startcourse' ? <HaveQuery /> : '' }
+                { dbContainer != 'startcourse' ? <PopularCourses /> : '' }
             </main>
             <Footer /> 
         </div>

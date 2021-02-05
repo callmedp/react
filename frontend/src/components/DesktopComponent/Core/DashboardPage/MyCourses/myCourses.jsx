@@ -21,6 +21,9 @@ import { startCommentLoader, stopCommentLoader } from 'store/Loader/actions/inde
 import BreadCrumbs from '../Breadcrumb/Breadcrumb';
 import {Toast} from '../../../Common/Toast/toast';
 import {boardNeoUser} from 'store/DashboardPage/MyCourses/actions/index';
+import { getCandidateId } from 'utils/storage.js';
+import { getVendorUrl } from 'store/DashboardPage/StartCourse/actions/index';
+import { useHistory } from "react-router-dom";
 
 const MyCourses = (props) => {
     const [addOpen, setAddOpen] = useState(false);
@@ -38,6 +41,11 @@ const MyCourses = (props) => {
     const oiComments = useSelector(store => store.getComment);
     const [currentPage, setCurrentPage] = useState(1);
     const [filterState, setfilterState] = useState({ 'last_month_from': 'all', 'select_type' : 'all' });
+    const [showIframe, setShowIframe] = useState(false);
+    const handleIframeShow = () => setShowIframe(true);
+    const handleIframeClose = () => setShowIframe(false);
+    const [openIframe, setOpenIframe] = useState(false);
+    const toggleIframe = (id) => setOpenIframe(id);
 
     // rating modal handling
     const [showRatingModal, setShowRatingModal] = useState(false) 
@@ -118,6 +126,48 @@ const MyCourses = (props) => {
             return Toast("error",e);
         }
         };
+    
+    const autoLogin = async (oi, ci, lm) => {
+        try {
+           dispatch(startDashboardCoursesPageLoader());
+           const response = await new Promise((resolve, reject) => {
+           dispatch(
+               getVendorUrl({
+               payload: {
+                   candidate_id: getCandidateId(),
+                   order_id: oi,
+                   course_id: ci,
+               },
+               resolve,
+               reject,
+               })
+           );
+           });
+           dispatch(stopDashboardCoursesPageLoader());
+           let url = response?.vendor_url;
+           if(url === undefined || url === ''){
+               Toast.fire({
+                   type: 'error',
+                   title: 'Something went wrong! Try Again'
+               });
+               return;
+           } 
+           if(lm === 1){ history.push({ pathname : '/dashboard/startcourse/' , url : url}); return; }
+           if(lm === 2){ window.open(url); return; }
+           Toast.fire({
+                   type: 'error',
+                   title: 'Something went wrong! Try Again'
+               });
+           return;
+        }catch (e) {
+           dispatch(stopDashboardCoursesPageLoader());
+           Toast.fire({
+                   type: 'error',
+                   title: 'Something went wrong! Try Again'
+               });
+           return;
+       }
+    };
 
     const handleEffects = async () => {
         try {
@@ -265,6 +315,9 @@ const MyCourses = (props) => {
                                                 </div>
 
                                                 <Link to={"#"} className="db-start-course font-weight-bold mt-30">Start course</Link> */}
+                                                { [1, 2].includes(course?.auto_login_method) ?
+                                                   <Link to={"#"} className="db-start-course font-weight-bold mt-30" onClick={()=>autoLogin(course?.order_id, course?.id, course?.auto_login_method )}>Start course</Link> : null
+                                                }
                                             </div>
                                         </div>
 

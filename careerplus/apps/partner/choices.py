@@ -11,3 +11,9 @@ USER_CERTITIFICATE_STATUS = (
     (2, 'Badging Done on Shine'),
     (3, 'Certificate Expired')
 )
+
+AUTO_LOGIC_METHOD = (
+    (0, None),
+    (1, 'Iframe'),
+    (2, 'New Tab')
+)

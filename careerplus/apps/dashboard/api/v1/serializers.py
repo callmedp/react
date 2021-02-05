@@ -111,6 +111,8 @@ class OrderItemSerializer(serializers.ModelSerializer):
             'productUrl': instance.product.get_absolute_url() if instance.product_id else '',
             'product_type_flow': instance.product.type_flow if instance.product_id else '',
             'heading': instance.product.heading if instance.product_id else '',
+            'order_id':instance.order.id,
+            'auto_login_method':instance.product.vendor.auto_login_method if instance.product and  instance.product.vendor and instance.product.vendor.auto_login_method else 0
         })
         
         if instance.oi_status == 4:

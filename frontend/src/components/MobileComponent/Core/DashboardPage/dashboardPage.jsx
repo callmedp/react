@@ -18,11 +18,12 @@ import EditSkills from './MyProfile/EditSkills';
 import SearchPage from '../../Common/SearchPage/SearchPage';
 import { Helmet } from 'react-helmet';
 import { fetchTrendingCnA } from 'store/Footer/actions/index';
+import StartCourse from './StartCourse/startCourse';
 
 const Dashboard = (props) => {
     const dbContainer = props.match.params.name;
     const { history } = props;
-    const dashboardRoutes = [undefined, 'myorder', 'mywallet', 'myservices']
+    const dashboardRoutes = [undefined, 'myorder', 'mywallet', 'myservices', 'startcourse']
     const dispatch = useDispatch();
     const [showSearchPage, setShowSearchPage] = useState(false);
     const { trendingCourses } = useSelector( store => store.footer )
@@ -44,7 +45,8 @@ const Dashboard = (props) => {
                         'myservices' : 'My Services | Shine Learning',
                         undefined : 'My Courses | Shine Learning',
                         'myorder' : 'My Orders | Shine Learning',
-                        'mywallet' : 'My Wallet | Shine Learning'
+                        'mywallet' : 'My Wallet | Shine Learning',
+                        'startcourse' : 'Start Course | Shine Learning'
                     }[dbContainer]
                 }
                 </title>
@@ -61,17 +63,18 @@ const Dashboard = (props) => {
                         {
                             {
                                 'myservices' : <MyServices />,
-                                undefined : <MyCourses/>,
+                                undefined : <MyCourses history={history}/>,
                                 'myorder' : <MyOrders />,
-                                'mywallet' : <MyWallet/>
+                                'mywallet' : <MyWallet/>,
+                                'startcourse' : <StartCourse history={history}/>
                             }[dbContainer]
                         }
                         
                         {/*<EditSkills />
                         <PersonalDetail /> */}
                         
-                        <ProductCardsSlider productList={trendingCourses} />
-                        <HaveQuery />
+                        { dbContainer != 'startcourse' ? <ProductCardsSlider productList={popularServices} /> : '' }
+                        { dbContainer != 'startcourse' ? <HaveQuery /> : '' }
                     </div>
                     <Footer /> 
                 </>
