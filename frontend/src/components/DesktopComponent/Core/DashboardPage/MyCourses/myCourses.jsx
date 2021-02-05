@@ -41,6 +41,7 @@ const MyCourses = (props) => {
 
     // rating modal handling
     const [showRatingModal, setShowRatingModal] = useState(false) 
+    const toggleRatingsModal = (id) => setShowRatingModal(showRatingModal == id ? false : id);
 
     //Rate Modal Handling
     const [showRateModal, setShowRateModal] = useState(false) 
@@ -290,9 +291,7 @@ const MyCourses = (props) => {
                                                         {
                                                         course?.len_review ?
                                                             <div onClick={()=>{
-                                                                setShowRateModal(true);
-                                                                setOiReviewId(course?.product);
-                                                                setReviewData(course?.review_data);
+                                                                toggleRatingsModal(course?.id);
                                                             }}>
                                                                 <span className="rating">
                                                                     {
@@ -321,6 +320,7 @@ const MyCourses = (props) => {
                                                                 </span>
                                                             </div>
                                                         }
+                                                        {showRatingModal && <ReviewModal showRatingModal={showRatingModal} toggleRatingsModal={toggleRatingsModal} setShowRateModal={setShowRateModal} oi_id={course?.id} reviewData={course?.review_data} />}
                                                     </div>
                                             }
                                         </div>
