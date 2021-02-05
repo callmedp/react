@@ -130,7 +130,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
                 'mode':instance.product.get_studymode_db(),
                 'oi_status':instance.oi_status if instance.oi_status else None,
                 'jobs':instance.product.num_jobs,
-                'no_of_comments':instance.message_set.filter(is_internal=False).count(),
+                'no_of_comments':int(instance.message_set.filter(is_internal=False).count()),
                 'service_pause_status':self.service_pause_status(instance),
                 'get_product_is_pause_service':self.get_product_is_pause_service(instance),
                 'duration_in_days': int(instance.product.get_duration_in_day()) if instance.product_id and instance.product.get_duration_in_day() else '',

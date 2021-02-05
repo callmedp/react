@@ -350,7 +350,7 @@ const MyServices = (props) => {
             {/* My Services Block End */}
             
             {/* Comment Modal */}
-            { showCommentModal && <AddCommentModal setShowCommentModal = {setShowCommentModal} oi_id={oiCommentId} /> }
+            { showCommentModal && <AddCommentModal setShowCommentModal = {setShowCommentModal} oi_id={oiCommentId} type="myservices" /> }
 
             {/* Rate Modal */}
             { showRateModal && <RateProductModal setShowRateModal={setShowRateModal} oi_id={oiReviewId} reviewData={reviewData}/> }

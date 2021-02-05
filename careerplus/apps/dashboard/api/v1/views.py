@@ -122,6 +122,7 @@ class MyServicesApi(DashboardInfo, APIView):
         data = []
         page = request.GET.get("page", 1)
         candidate_id = self.request.session.get('candidate_id', None)
+        # candidate_id='601b8120ca3f418906a889a8'
         last_month_from = request.GET.get("last_month_from",'all' )
         select_type = request.GET.get('select_type','all')
         page_info = {}

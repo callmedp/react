@@ -40,11 +40,19 @@ const fetchOiDetails = (payload) => {
     }
 }
 
+const updateServiceCommentCount = payload => {
+    return {
+        type: Actions.UPDATE_SERVICE_COMMENT_COUNT,
+        payload
+    }
+}
+
 export {
     fetchMyServices,
     uploadResumeForm,
     fetchPendingResume,
     CandidateAcceptRejectResume,
     pausePlayResume,
-    fetchOiDetails
+    fetchOiDetails,
+    updateServiceCommentCount
 }

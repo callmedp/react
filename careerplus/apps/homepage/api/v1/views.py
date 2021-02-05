@@ -331,7 +331,7 @@ class OrderItemCommentApi(APIView):
     def get(self, request):
         candidate_id = request.GET.get('candidate_id') or self.request.session.get('candidate_id', None)
         oi_pk = request.GET.get('oi_pk')
-        # candidate_id='568a0b20cce9fb485393489b'
+        # candidate_id='601b8120ca3f418906a889a8'
 
         if not oi_pk or not candidate_id:
             return Response({'error': "BAD REQUEST"}, status=status.HTTP_400_BAD_REQUEST)
@@ -360,6 +360,7 @@ class OrderItemCommentApi(APIView):
 
     def post(self, request, *args, **kwargs):
         candidate_id = request.data.get('candidate_id') or self.request.session.get('candidate_id', None)
+        # candidate_id='601b8120ca3f418906a889a8'
         oi_pk = request.data.get('oi_pk')
         comment = request.data.get('comment', '').strip()
         if not oi_pk or not candidate_id or not comment:
