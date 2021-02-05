@@ -17,7 +17,7 @@ import { showSwal } from 'utils/swal';
 import ViewDetails from '../MyServices/oiViewDetails';
 import { getCandidateId } from 'utils/storage.js';
 import { getVendorUrl } from 'store/DashboardPage/StartCourse/actions/index';
-import { useHistory } from "react-router-dom";
+
 
 const MyCourses = (props) => {
     const { history } = props;
@@ -109,6 +109,7 @@ const MyCourses = (props) => {
                getVendorUrl({
                payload: {
                    candidate_id: getCandidateId(),
+                   //candidate_id: "5ebacd1472bebb294db0b7cd",
                    order_id: oi,
                    course_id: ci,
                },
@@ -119,11 +120,11 @@ const MyCourses = (props) => {
            });
            dispatch(stopDashboardCoursesPageLoader());
            let url = response?.vendor_url;
-           if(url === undefined || url === ''){
+           if(url === undefined || url === '' || !url){
                return showSwal('error', "Technical Issue, Please try after Sometime")
            }
-           if (lm === 2) {window.open(url); return};
-           if (lm === 1) {history.push({ pathname : '/dashboard/startcourse/' , url : url}); return };
+           if (lm === 2) { window.open(url); return };
+           if (lm === 1) { history.push({ pathname : '/dashboard/startcourse/' , url : url}); return };
            return showSwal('error', "Technical Issue, Please try after Sometime")
         }catch (e) {
            dispatch(stopDashboardCoursesPageLoader());
@@ -221,10 +222,11 @@ const MyCourses = (props) => {
 
                                             </div>
 
-                                            {
-                                                course?.updated_status?.day_remaining &&
+                                            
                                                     <div className="pl-15">
                                                         <div className="m-courses-detail__bottomWrap" style={{ paddingBottom: '0' }}>
+                                                        {
+                                                            course?.updated_status?.day_remaining &&
                                                             <div>
                                                                 <div className="m-day-remaning mb-20">
                                                                     {
@@ -239,13 +241,13 @@ const MyCourses = (props) => {
                                                                     </span>
                                                                 </div>
                                                             </div>
+                                                            }
                                                             { 
                                                                 [1,2].includes(course?.auto_login_method)  ?
-                                                                    <Link to={"#"} className="db-start-course font-weight-bold mt-30" onClick={()=>autoLogin(course?.order_id, course?.id, course?.auto_login_method )}>Start course</Link> : null
+                                                                    <Link to={"#"} className="m-db-start-course font-weight-bold pr-10" onClick={()=>autoLogin(course?.order_id, course?.product, course?.auto_login_method )}>Start course</Link> : null
                                                             }
                                                         </div>
                                                     </div>
-                                            }
 
                                             {/*<div className="pl-15">
                                                 <div className="m-courses-detail__bottomWrap" style={{ paddingBottom: '0' }}>

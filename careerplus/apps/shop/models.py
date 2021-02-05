@@ -81,7 +81,8 @@ from .choices import (
     convert_inr,
     convert_usd,
     convert_aed,
-    convert_gbp)
+    convert_gbp,
+    IFRAME_VENDOR_CHOICES)
 from search.choices import EXP_DICT
 from .config import RELATION_TYPE_CHOICES
 
@@ -1086,6 +1087,7 @@ class Product(AbstractProduct, ModelMeta):
     visible_on_resume_shine =  models.BooleanField(default=False)
     product_tag = models.SmallIntegerField(default=0,choices=PRODUCT_TAG_CHOICES)
     image_class = models.CharField(_('product image class'), max_length=100,blank=True)
+    auto_login_url = models.SmallIntegerField(default=0,choices=IFRAME_VENDOR_CHOICES)
     
     #associated model managers
     objects = ProductManager()

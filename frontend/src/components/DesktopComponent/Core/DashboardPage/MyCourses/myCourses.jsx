@@ -23,7 +23,6 @@ import {Toast} from '../../../Common/Toast/toast';
 import {boardNeoUser} from 'store/DashboardPage/MyCourses/actions/index';
 import { getCandidateId } from 'utils/storage.js';
 import { getVendorUrl } from 'store/DashboardPage/StartCourse/actions/index';
-import { useHistory } from "react-router-dom";
 
 const MyCourses = (props) => {
     const [addOpen, setAddOpen] = useState(false);
@@ -145,7 +144,7 @@ const MyCourses = (props) => {
            });
            dispatch(stopDashboardCoursesPageLoader());
            let url = response?.vendor_url;
-           if(url === undefined || url === ''){
+           if(url === undefined || url === '' || !url){
                Toast.fire({
                    type: 'error',
                    title: 'Something went wrong! Try Again'
@@ -316,7 +315,7 @@ const MyCourses = (props) => {
 
                                                 <Link to={"#"} className="db-start-course font-weight-bold mt-30">Start course</Link> */}
                                                 { [1, 2].includes(course?.auto_login_method) ?
-                                                   <Link to={"#"} className="db-start-course font-weight-bold mt-30" onClick={()=>autoLogin(course?.order_id, course?.id, course?.auto_login_method )}>Start course</Link> : null
+                                                   <Link to={"#"} className="db-start-course font-weight-bold mt-30" onClick={()=>autoLogin(course?.order_id, course?.product, course?.auto_login_method )}>Start course</Link> : null
                                                 }
                                             </div>
                                         </div>

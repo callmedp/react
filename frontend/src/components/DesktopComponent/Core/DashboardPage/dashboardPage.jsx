@@ -69,7 +69,7 @@ const DashboardPage = (props) => {
                         </div>: '' }
                         {
                             {
-                                'startcourse' : <StartCourse />,
+                                'startcourse' : <StartCourse history={history} />,
                             }[dbContainer]
                         }  
                     </div>
@@ -78,7 +78,7 @@ const DashboardPage = (props) => {
                 { dbContainer != 'startcourse' ? <HaveQuery /> : '' }
                 { dbContainer != 'startcourse' ? <PopularCourses /> : '' }
             </main>
-            <Footer /> 
+            { dbContainer != 'startcourse' ? <Footer />  : '' }
         </div>
     )
 }

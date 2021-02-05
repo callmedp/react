@@ -8,7 +8,6 @@ import { getCandidateId } from 'utils/storage.js';
 import {Link, useLocation} from "react-router-dom";
 import Loader from '../../../Common/Loader/loader';
 import Iframe from 'react-iframe';
-import { useHistory } from "react-router-dom";
 
 const StartCourse = (props) => {
     const location = useLocation();
@@ -16,7 +15,7 @@ const StartCourse = (props) => {
     const { url } = location;
     const [showLoader, setShowLoader] = useState(true);
     const handleClose = () => setShowLoader(false);
-    if(url === undefined || url === ''){
+    if(url === undefined || url === '' || !url){
         history.push("/404/")
     }
 
