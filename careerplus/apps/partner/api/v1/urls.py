@@ -9,6 +9,7 @@ router.register(r'vendor', views.VendorViewSet)
 router.register(r'vendorhierarchy', views.VendorHierarchyViewSet)
 app_name = 'partner'
 urlpatterns = router.urls + \
-    [re_path(r'^vendor-list', views.VendorListApiView.as_view())
+    [re_path(r'^vendor-list', views.VendorListApiView.as_view()),
+     re_path(r'^vendor-url/', views.VendorUrlApiView.as_view())
 
 ]

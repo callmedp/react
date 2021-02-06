@@ -775,3 +775,23 @@ LOGGING = {
     },
 }
 
+ISEL_GLOBAL_URLS = {
+    "default_url" : "http://lms.iselglobal.in/",
+    "authentication" : "Bearer AD66B-1BD9-49E0-9BD21-56784",
+    "get_course_list" : "https://api.infoneotech.com/isel/api/GetCourses",
+    "register_candidate" : "https://api.infoneotech.com/isel/api/RegisterCandidate",
+    "check_candidate_exists" : "https://api.infoneotech.com/isel/api/CheckCandidateExists",
+    "get_assigned_courses" : "https://api.infoneotech.com/isel/api/GetAssignedCourse",
+    "get_login_token" : "https://api.infoneotech.com/isel/api/GetToken"
+} 
+
+ERB_ACADEMY_URLS = {
+    "default_url": "https://erbacademy.com/lms/", 
+    "username": "shinecom",
+    "password": "i1JRM5AvwZb7nBLU8ch0sTImVrH2j46D",
+    "header_api" : "https://erbacademy.com/beta/api/index.php/api/login",
+    "get_product_list" : "https://erbacademy.com/beta/api/index.php/api/getProducts",
+    "register_new_product" : "https://erbacademy.com/beta/api/index.php/api/newOrder",
+    "get_course_progress" : "https://erbacademy.com/beta/api/index.php/api/getCourseProgress",
+    "get_login_token": "https://erbacademy.com/beta/api/index.php/api/refreshUserToken"
+}

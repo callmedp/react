@@ -16,8 +16,12 @@ import { startDashboardCoursesPageLoader, stopDashboardCoursesPageLoader } from 
 import { siteDomain } from 'utils/domains';
 import { showSwal } from 'utils/swal';
 import ViewDetails from '../MyServices/oiViewDetails';
+import { getCandidateId } from 'utils/storage.js';
+import { getVendorUrl } from 'store/DashboardPage/StartCourse/actions/index';
+
 
 const MyCourses = (props) => {
+    const { history } = props;
     const [showCommentModal, setShowCommentModal] = useState(false)
     const [showRateModal, setShowRateModal] = useState(false)
     const [showRatingsModal, setShowRatingsModal] = useState(false)
@@ -25,6 +29,11 @@ const MyCourses = (props) => {
     const [showOrderDetailsID, setShowOrderDetailsID] = useState('')
     const [oiCommentId, setOiCommentId] = useState('')
     const [oiReviewId, setOiReviewId] = useState({})
+    const [showIframe, setShowIframe] = useState(false);
+    const [openIframe, setOpenIframe] = useState(false);
+    const toggleIframe = (id) => setOpenIframe(id);
+    const handleIframeShow = () => setShowIframe(true);
+    const handleIframeClose = () => setShowIframe(false);
     
     const dispatch = useDispatch();
     const { data, page } = useSelector(store => store?.dashboardCourses);
@@ -92,6 +101,38 @@ const MyCourses = (props) => {
             ? <em className="micon-halfstar" key={index}></em> : <em className="micon-blankstar" key={index}></em>
         )
     }
+
+    //Iframe function
+    const autoLogin = async (oi, ci, lm) => {
+        try {
+           dispatch(startDashboardCoursesPageLoader());
+           const response = await new Promise((resolve, reject) => {
+           dispatch(
+               getVendorUrl({
+               payload: {
+                   candidate_id: getCandidateId(),
+                   //candidate_id: "5ebacd1472bebb294db0b7cd",
+                   order_id: oi,
+                   course_id: ci,
+               },
+               resolve,
+               reject,
+               })
+           );
+           });
+           dispatch(stopDashboardCoursesPageLoader());
+           let url = response?.vendor_url;
+           if(url === undefined || url === '' || !url){
+               return showSwal('error', "Technical Issue, Please try after Sometime")
+           }
+           if (lm === 2) { window.open(url); return };
+           if (lm === 1) { history.push({ pathname : '/dashboard/startcourse/' , url : url}); return };
+           return showSwal('error', "Technical Issue, Please try after Sometime")
+        }catch (e) {
+           dispatch(stopDashboardCoursesPageLoader());
+           return null
+       }
+    };
 
     useEffect(() => {
         window.scrollTo({
@@ -183,10 +224,11 @@ const MyCourses = (props) => {
 
                                             </div>
 
-                                            {
-                                                course?.updated_status?.day_remaining &&
+                                            
                                                     <div className="pl-15">
                                                         <div className="m-courses-detail__bottomWrap" style={{ paddingBottom: '0' }}>
+                                                        {
+                                                            course?.updated_status?.day_remaining &&
                                                             <div>
                                                                 <div className="m-day-remaning mb-20">
                                                                     {
@@ -201,9 +243,13 @@ const MyCourses = (props) => {
                                                                     </span>
                                                                 </div>
                                                             </div>
+                                                            }
+                                                            { 
+                                                                [1,2].includes(course?.auto_login_method)  ?
+                                                                    <Link to={"#"} className="m-db-start-course font-weight-bold pr-10" onClick={()=>autoLogin(course?.order_id, course?.product, course?.auto_login_method )}>Start course</Link> : null
+                                                            }
                                                         </div>
                                                     </div>
-                                            }
 
                                             {/*<div className="pl-15">
                                                 <div className="m-courses-detail__bottomWrap" style={{ paddingBottom: '0' }}>
@@ -220,12 +266,12 @@ const MyCourses = (props) => {
                                                         </div>
 
                                                         <div className="m-db-status">
-                                                    <p className="mb-0 pb-1">Status: <strong>(0% Complete)</strong> </p>
+                                                            <p className="mb-0 pb-1">Status: <strong>(0% Complete)</strong> </p>
 
-                                                    <div className="m-progress">
-                                                        <div role="progressbar" className="m-progress-bar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style={{width: "0"}}></div>
-                                                    </div>
-                                                </div> 
+                                                            <div className="m-progress">
+                                                                <div role="progressbar" className="m-progress-bar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style={{width: "0"}}></div>
+                                                            </div>
+                                                        </div> 
                                                     </div>
 
                                                     <Link to={"#"} className="m-db-start-course font-weight-bold pr-10">Start course</Link>
