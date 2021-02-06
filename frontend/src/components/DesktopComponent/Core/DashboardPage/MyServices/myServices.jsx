@@ -21,6 +21,7 @@ import BreadCrumbs from '../Breadcrumb/Breadcrumb';
 import { pausePlayResume } from 'store/DashboardPage/MyServices/actions/index';
 import {siteDomain, resumeShineSiteDomain} from '../../../../../utils/domains';
 import {Toast} from '../../../Common/Toast/toast';
+import { showSwal } from '../../../../../utils/swal';
 
 const MyServices = (props) => {
     const dispatch = useDispatch();
@@ -79,24 +80,19 @@ const MyServices = (props) => {
 
     // main service api hit
     const handleEffects = async () => {
-        try {
-            //You may notice that apis corresponding to these actions are not getting called on initial render.
-            //This is because initial render is done on node server, which is calling these apis, map the data and send it to the browser.
-            //So there is no need to fetch them again on the browser.
+        try{
             if (!(window && window.config && window.config.isServerRendered)) {
                 dispatch(startDashboardServicesPageLoader());
                 await new Promise((resolve, reject) => dispatch(fetchMyServices({ page: currentPage, isDesk: true, ...filterState, resolve, reject })))
                 dispatch(stopDashboardServicesPageLoader());
             }
             else {
-                //isServerRendered is needed to be deleted because when routing is done through react and not on the node,
-                //above actions need to be dispatched.
                 delete window.config?.isServerRendered
             }
-        } catch (error) {
-            if (error?.status == 404) {
-                history.push('/404');
-            }
+        }
+        catch(e){
+            dispatch(stopDashboardServicesPageLoader());
+            showSwal('error', 'Sorry! we are unable to fecth your data.')
         }
     };
     
@@ -215,7 +211,7 @@ const MyServices = (props) => {
                                                                 service?.updated_status?.download_url && <a href={`${service?.updated_status?.download_url}`} target="_blank" className="ml-2"> Download</a> 
                                                             }
                                                             {
-                                                                !service?.updated_status?.UploadResumeToShine && 
+                                                                service?.updated_status?.UploadResumeToShine && 
                                                                 <>
                                                                     <input type="checkbox" className="ml-3 align-middle" id={`uploadResumeToShine${service?.id}`} value="True" name="service_resume_upload_shine" onClick={(event) => updateResumeUploadShine(event, service?.id)}/>
                                                                     <label className="font-weight-bold ml-2" htmlFor={`uploadResumeToShine${service?.id}`}>Upload Resume to Shine</label>

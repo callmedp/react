@@ -40,7 +40,7 @@ const fetchOiDetailsApi = (data) => {
 }
 
 const updateResumeShineApi = (data) => {
-    const url = `${siteDomain}/api/v1/order/245860/update/`;
+    const url = `${siteDomain}/api/v1/order/${data.order_id}/update/`
     return BaseApiService.patch(url, data)
 }
 
