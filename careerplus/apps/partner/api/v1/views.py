@@ -64,7 +64,6 @@ class VendorUrlApiView(APIView):
                 vendor = product.vendor
                 vendor_slug = vendor.slug
         except Exception as e:
-            print('error')
             return Response({"vendor_url":""}, status=status.HTTP_200_OK)
 
         if not vendor_slug:
@@ -72,4 +71,7 @@ class VendorUrlApiView(APIView):
 
         site_url = VendorUrlMixins().get_vendor_mapping(vendor_slug=vendor_slug, data_dict=data_dict)
         #site_url = "http://lms.iselglobal.in/index.aspx?e=sahil.singla@hindustantimes.com&p=F9F77FB3-9710-48A6-924E-4FB6C0ACF0C6"
+        if isinstance(site_url, dict):
+            if site_url.get('error_message', ''):
+                return Response(site_url, status=status.HTTP_400_BAD_REQUEST)  
         return Response({"vendor_url": site_url}, status=status.HTTP_200_OK)
