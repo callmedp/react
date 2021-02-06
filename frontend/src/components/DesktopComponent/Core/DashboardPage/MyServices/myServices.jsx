@@ -206,7 +206,7 @@ const MyServices = (props) => {
                                                             {
                                                                 service?.updated_status?.edit_template &&
                                                                     <>
-                                                                        <a href={createBuilderResumeDownloadLink(service?.id, service?.product)} target="_blank" className="ml-2"> Download</a>
+                                                                        <a href={createBuilderResumeDownloadLink(service?.order_id, service?.product)} target="_blank" className="ml-2"> Download</a>
                                                                         <a className="ml-15" target="_blank" href={`${resumeShineSiteDomain}/resume-builder/edit/?type=profile`}>Edit Template</a>
                                                                     </>
                                                             }

@@ -30,7 +30,7 @@ const Pagination = (props) => {
             }
             { 
                 paginationList[length -2] === '....' &&
-                paginationList[length -1] === totalPage &&
+                paginationList[length -1] === totalPage && currentPage !== totalPage &&
                     <figure className="icon-db-arrow-right" onClick={getNext} />
             }
         </div>
