@@ -318,3 +318,15 @@
     text-transform: uppercase;
     font-weight: 700;
 }
+
+.mdb-share-toggle {
+    display: none;
+}
+.mdb-share-toggle ~ label {
+    @include size(30px, 30px, block);
+}
+.mdb-share-toggle:checked ~ label ~ .content { 
+    opacity: 0;
+    height: 0;
+    display: none;
+}

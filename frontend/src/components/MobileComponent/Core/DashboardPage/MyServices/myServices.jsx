@@ -157,8 +157,9 @@ const MyServices = (props) => {
                                 <div className="m-card pl-0" key={key}>
                                     {/* Social Sharing Block Start */}
                                     <div className="m-share" aria-haspopup="true">
-                                        <i className="icon-share"></i>
-                                        <div className="m-share__box m-arrow-box m-top">
+                                    <input type="checkbox" id="toggle" className="mdb-share-toggle" />
+                                        <label for="toggle" className="mdb-share-label"><i className="icon-share"></i></label>
+                                        <div className="m-share__box m-arrow-box m-top content">
                                             <a target="_blank" href={`https://www.facebook.com/sharer/sharer.php?u=${siteDomain}${service?.productUrl}`} className="m-facebook-icon"></a>
                                             <a target="_blank" href={`https://www.linkedin.com/shareArticle?mini=true&url=${siteDomain}${service?.productUrl}&title=${service?.title}&summary=${service?.name}&source=`} className="m-linkedin-icon"></a>
                                             <a target="_blank" href={`https://twitter.com/intent/tweet?url=${siteDomain}${service?.productUrl}/&text=${service?.name}`} className="m-twitter-iocn"></a>
