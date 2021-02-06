@@ -174,7 +174,7 @@ const MyServices = (props) => {
                                             <img src={service?.img} alt={service?.heading} />
                                         </figure>
                                         <div className="m-courses-detail__info">
-                                            <Link to={service?.productUrl}><h2>{service?.name}</h2></Link>
+                                            <a href={`${siteDomain}${service?.productUrl}`}><h2>{service?.heading ? service?.heading  : service?.name }</h2></a>
                                             <p className="m-pipe-divides mb-5">Provider: <strong>{service?.vendor}</strong> </p>
                                             <p className="m-pipe-divides mb-5">
                                                 <span>Bought on: <strong>{service?.enroll_date}</strong> </span> 

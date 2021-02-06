@@ -14,7 +14,7 @@ const RateProductModal = (props) => {
     const dispatch = useDispatch()
     // const [showRatingModal, setShowRatingModal] = useState(false)
     // const [showAllRatings, setShowAllRatings] = useState(true)
-    const [inputStar, setInputStar] = useState(5);
+    const [inputStar, setInputStar] = useState(1);
     const { register, handleSubmit, errors, reset } = useForm();
 
     // const reviewList = useSelector( store => store?.getReviews?.data );
