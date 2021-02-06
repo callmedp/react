@@ -143,7 +143,7 @@ const MyServices = (props) => {
         <>
         { serviceLoader && <Loader />}
         {
-            !page?.total || page?.total === 0 ? <EmptyInbox inboxType="services" /> :
+            page?.total === 0 ? <EmptyInbox inboxType="services" /> :
 
         <div>
 

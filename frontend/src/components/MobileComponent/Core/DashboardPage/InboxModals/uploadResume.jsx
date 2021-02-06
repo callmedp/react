@@ -127,7 +127,7 @@ const UploadResume = (props) => {
                     </ul>
                 </div>
 
-                <button className="btn btn-primary px-5 mt-30" onClick={handleSubmit(onSubmit)}>Upload</button>
+                <button className="btn btn-primary px-5 mt-30" onClick={handleSubmit(onSubmit)}>Save</button>
             </div>
 
         </div>

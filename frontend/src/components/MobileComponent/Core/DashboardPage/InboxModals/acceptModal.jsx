@@ -46,7 +46,7 @@ const AcceptModal = (props) => {
                 <span className="m-db-close" onClick={() => setAcceptModal(false)}>&#x2715;</span>
                 <div className="text-center">
                     <strong>Are you sure you want to accept?</strong><br />
-                    <span className="d-block mt-15">Note: Once you accept, your service will be closed.</span>
+                    <span className="d-block mt-15">Once you accept, your service will be closed.</span>
                     <br/><br/>
                     <div className="m-form-group">
                         <button className="btn btn-blue px-30" onClick={() => acceptRejectHandler("accept", oi_id)}>Accept</button>&emsp;
