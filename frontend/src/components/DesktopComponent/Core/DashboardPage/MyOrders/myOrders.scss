@@ -70,7 +70,7 @@
             }
 
             &--detail {
-                padding-left: 59px;
+                padding-left: 20px;
                 padding-right: 59px;
                 padding-top: 30px;
 
@@ -105,3 +105,11 @@
     }
 }
 
+.cancel-order {
+
+    h2 {
+        font-weight: 600;
+        font-size: 16px;
+        margin-bottom: 30px;
+    }
+}

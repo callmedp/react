@@ -4,6 +4,7 @@
 
 .dashboard-warp {
     display: flex;
+    margin-top: 30px;
 
     &--tab {
         max-width: 140px;
@@ -38,6 +39,10 @@
 
     &:not(:last-child) {
         margin-bottom: 20px;
+    }
+
+    &.db-white-box-wallet {
+        padding: 15px;
     }
 }
 
@@ -93,8 +98,9 @@
     .custom-checkbox .custom-control-input:checked ~ .custom-control-label::after {
         background: $spriteDb;
         background-position: -83px -196px;
-        left: -17px;
-        top: 6px;
+        left: -18px;
+        top: 5px;
+        transform: scale(.8);
     }
 
     .custom-radio {
@@ -353,4 +359,5 @@
 
 .error_cls {
     color: red;
+    font-size: 12px;
 }

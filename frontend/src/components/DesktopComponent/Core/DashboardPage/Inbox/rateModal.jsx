@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form";
 // import { startReviewLoader, stopReviewLoader } from 'store/Loader/actions/index';
 // import Loader from '../../../Common/Loader/loader';
 import { Toast } from '../../../Common/Toast/toast'
+import '../../SkillPage/NeedHelp/needHelp.scss';
 
 
 const RateModal =(props) => {

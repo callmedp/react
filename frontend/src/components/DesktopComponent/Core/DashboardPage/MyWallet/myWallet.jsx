@@ -97,7 +97,7 @@ const MyWallet = (props) => {
                     </div>
                 </div>
 
-                <div className="db-white-box pb-4">
+                <div className="db-white-box db-white-box-wallet pb-4">
                     {
                         walletResult && walletResult?.loyality_txns.length > 0 ?
                             walletResult?.loyality_txns.map((item, index) => {
