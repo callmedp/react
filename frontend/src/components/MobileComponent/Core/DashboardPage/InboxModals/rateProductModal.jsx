@@ -14,35 +14,41 @@ const RateProductModal = (props) => {
     const dispatch = useDispatch()
     // const [showRatingModal, setShowRatingModal] = useState(false)
     // const [showAllRatings, setShowAllRatings] = useState(true)
-    const [inputStar, setInputStar] = useState(1);
+    const [inputStar, setInputStar] = useState(0);
     const { register, handleSubmit, errors, reset } = useForm();
+    const [showError, setShowError] = useState(false)
 
     // const reviewList = useSelector( store => store?.getReviews?.data );
     const { reviewLoader } = useSelector(store => store.loader);
 
     const submitReviews = async values => {
-        const new_review = {
-            ...values,
-            oi_pk: oi_id ? oi_id : idDict?.orderId,
-            rating: inputStar ? inputStar : 5,
-            type: 'POST'
-        };
-
-        dispatch(startReviewLoader());
-        let addedReview = await new Promise((resolve, reject) => dispatch(submitReview({ payload: new_review, resolve, reject })));
-        dispatch(stopReviewLoader());
-
-        if(addedReview) {
-            if(!addedReview?.error) setShowRateModal(false);
-
-            Swal.fire({
-                icon: addedReview?.error ? 'error' : 'success',
-                text: addedReview?.data?.display_message ? addedReview?.data?.display_message : addedReview.error
-            });
+        if(inputStar === 0){
+            setShowError(true)
         }
-        
-        reset(addedReview);
-        setShowRateModal(false)
+        else{
+            const new_review = {
+                ...values,
+                oi_pk: oi_id ? oi_id : idDict?.orderId,
+                rating: inputStar ? inputStar : 5,
+                type: 'POST'
+            };
+
+            dispatch(startReviewLoader());
+            let addedReview = await new Promise((resolve, reject) => dispatch(submitReview({ payload: new_review, resolve, reject })));
+            dispatch(stopReviewLoader());
+
+            if(addedReview) {
+                if(!addedReview?.error) setShowRateModal(false);
+
+                Swal.fire({
+                    icon: addedReview?.error ? 'error' : 'success',
+                    text: addedReview?.data?.display_message ? addedReview?.data?.display_message : addedReview.error
+                });
+            }
+            
+            reset(addedReview);
+            setShowRateModal(false)
+        }
     };
 
     // const starRatings = (star, index) => {
@@ -135,7 +141,8 @@ const RateProductModal = (props) => {
                                         );
                                 })}
                                 </span>
-                                <p>Tap on rate to scale of 1-5</p>
+                                { showError && <p className="error_cls">* Please click on star for ratings</p> }
+                                <p>Click on rate to scale of 1-5</p>
                                 <div className="mdb-enquire-now mt-15">
                                     <InputField attributes={inboxForm.title} register={register} customClass='m-form-group' errors={!!errors ? errors[inboxForm.title.name] : false} />  
                                     
