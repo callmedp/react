@@ -143,7 +143,15 @@ const MyCourses = (props) => {
            );
            });
            dispatch(stopDashboardCoursesPageLoader());
-           let url = response?.vendor_url;
+           let url = response?.data?.vendor_url;
+           let error_message = response?.error_message;
+           if(error_message){
+               Toast.fire({
+                   type: 'error',
+                   title: error_message
+               });
+               return;
+           }
            if(url === undefined || url === '' || !url){
                Toast.fire({
                    type: 'error',

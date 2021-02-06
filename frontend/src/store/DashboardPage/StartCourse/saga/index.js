@@ -6,10 +6,9 @@ function* getVendorUrl(action) {
     const { payload: { payload, resolve, reject } } = action;
     try {
         const response = yield call(Api.getCourseURL, payload);
-        return resolve(response.data)
+        return resolve(response)
     }
     catch (error) {
-        debugger;
         return reject(error)
     }
 }

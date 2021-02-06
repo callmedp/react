@@ -94,7 +94,6 @@ const MyCourses = (props) => {
                getVendorUrl({
                payload: {
                    candidate_id: getCandidateId(),
-                   //candidate_id: "5ebacd1472bebb294db0b7cd",
                    order_id: oi,
                    course_id: ci,
                },
@@ -104,7 +103,12 @@ const MyCourses = (props) => {
            );
            });
            dispatch(stopDashboardCoursesPageLoader());
-           let url = response?.vendor_url;
+           let url = response?.data?.vendor_url;
+           let error_message = response?.error_message;
+           if(error_message){
+               showSwal('error', error_message)
+               return;
+           }
            if(url === undefined || url === '' || !url){
                return showSwal('error', "Technical Issue, Please try after Sometime")
            }
