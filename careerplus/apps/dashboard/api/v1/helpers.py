@@ -181,7 +181,7 @@ def get_courses_detail(instance):
             current_status.update({'status':oi.get_user_oi_status})
         elif oi.oi_status == 161 or oi.oi_status == 162 or oi.oi_status == 163 or oi.oi_status == 164:
             current_status.update({'status':oi.get_user_oi_status})
-        elif oi.oi.waiting_for_input:
+        elif oi.waiting_for_input:
             datalist.append({'date':date_created,'status':'Waiting for input'})
         elif oi.order.auto_upload and not oi.is_assigned and not oi.is_resume_candidate_upload:
             current_status.update({'status':'Service is under progress'})
