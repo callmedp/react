@@ -35,7 +35,7 @@ const ViewDetails = (props) => {
                     oiDetailsData?.map((data, index) =>
                         <li key={index}>
                             <span> 
-                                <hr />
+                                {/* <hr /> */}
                                 {data?.date} <br />
                                 <strong> {data?.status} </strong>
                             </span>
