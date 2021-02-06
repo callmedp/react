@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form";
 // import Loader from '../../../Common/Loader/loader';
 import { Toast } from '../../../Common/Toast/toast'
 import '../../SkillPage/NeedHelp/needHelp.scss';
+import { imageUrl } from 'utils/domains';
 
 
 const RateModal =(props) => {
@@ -83,7 +84,7 @@ const RateModal =(props) => {
         
         <Modal.Body>
             <div className="text-center db-rate-services need-help">
-                <img src="/media/images/rate-services.png" className="img-fluid" alt=""/>
+                <img src={`${imageUrl}/desktop/rate-services.png`} className="img-fluid" alt=""/>
                 <p className="db-rate-services--heading">Rate {name}</p>
                 
                 <span className="rating-review">
