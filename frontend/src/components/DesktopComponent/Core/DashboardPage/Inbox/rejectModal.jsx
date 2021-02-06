@@ -6,10 +6,9 @@ import { useForm } from "react-hook-form";
 import { CandidateAcceptRejectResume } from 'store/DashboardPage/MyServices/actions/index';
 import { startAcceptRejectLoader, stopAcceptRejectLoader } from 'store/Loader/actions/index';
 import fileUpload from 'utils/fileUpload';
-import { fetchMyServices } from 'store/DashboardPage/MyServices/actions';
 
 const RejectModal = (props) => {
-    const { rejectModal, setRejectModal, oi_id, filterState, currentPage } = props
+    const { rejectModal, setRejectModal, oi_id } = props
     const [filename, setFileName] = useState("Upload here");
     const [file, setFile] = useState(undefined);
     const dispatch = useDispatch();
@@ -36,7 +35,6 @@ const RejectModal = (props) => {
         try {
             dispatch(startAcceptRejectLoader());
             await new Promise((resolve, reject) => { dispatch(CandidateAcceptRejectResume({ payload: rejectValues, resolve, reject }));});
-            await new Promise((resolve, reject) => dispatch(fetchMyServices({ page: currentPage, isDesk: true, ...filterState, resolve, reject })));
             dispatch(stopAcceptRejectLoader());
 
             event.target.reset();
@@ -55,7 +53,7 @@ const RejectModal = (props) => {
     };
 
     return (
-        <Modal show={rejectModal} onHide={setRejectModal} className="db-page">
+        <Modal show={rejectModal} onHide={setRejectModal} className="db-page modal-dialog-centered">
             <Modal.Header closeButton></Modal.Header>
             <Modal.Body>
                 <div className="text-center">

@@ -101,7 +101,7 @@ const AddCommentModal = (props) => {
                             </> : ''
                     }
                     <form onSubmit={handleSubmit(submitComment)}>
-                        <div className="m-enquire-now mt-15 text-center">
+                        <div className="mdb-enquire-now mt-15 text-center">
                             {/* <span className="error_cls">
                                 {errors.comment && "* Please write something to post comment."}
                             </span><br /> */}

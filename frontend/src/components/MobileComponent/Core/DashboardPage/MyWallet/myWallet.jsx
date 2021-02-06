@@ -98,7 +98,7 @@ const MyWallet = (props) => {
                                             <strong className="redeem-now--lPoints d-block">{ wal_total?.toFixed(2) }</strong>
                                             loyality point is reedemed and added <br/>in your wallet
                                         </p>
-                                        <a href="/cart/payment-summary/" className="font-weight-bold">Ok</a>
+                                        <a href="/cart/payment-summary/" className="btn btn-blue px-30 font-weight-bold">Ok</a>
                                 </div>
                             </div>
                     }

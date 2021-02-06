@@ -56,7 +56,7 @@ const RejectModal = (props) => {
             <div className="text-center">
                 <span onClick={() => setRejectModal(false)} className="m-db-close">&#x2715;</span>
                 {/* <h2>Reject Confirmations</h2> */}
-                <p className="fs-16 font-weight-bold mt-30 px-30">Get a better resume by sharing us the feedback</p>
+                <p className="fs-16 font-weight-bold mt-20 px-30 mb-15">Get a better resume by sharing us the feedback</p>
 
                 <span className="error_cls">
                     { errors.message && "* Either Upload Resume or Leave your comments" }
@@ -76,9 +76,9 @@ const RejectModal = (props) => {
 
                     
 
-                    <div className="m-db-upload-resume">
+                    <div className="m-db-upload-resume mdb-enquire-now">
                         <div className="m-form-group">
-                            <textarea className="form-control" placeholder="Enter Feedback here" rows="3" name="message" ref={register({
+                            <textarea className="m-form-control" id="feedback" placeholder=" " rows="3" name="message" ref={register({
                                 validate: () =>
                                     filename !== "Upload Resume"
                                     ? null
@@ -86,6 +86,7 @@ const RejectModal = (props) => {
                                         ? errors.message === true
                                         : null,
                                 })} />
+                                <label className="input-label" htmlFor="feedback">Enter Feedback here</label>
                         </div>
                         
                     </div>
@@ -97,7 +98,7 @@ const RejectModal = (props) => {
                             <input type="file" name="file" onChange={(e) => {e.preventDefault(); getFile(e);}} ref={register()}/>
                         </div>
                     </div>
-                    <button className="btn btn-primary px-5 mt-30" >Submit</button>
+                    <button className="btn btn-primary px-5 mt-10" >Submit</button>
                 </form>
             </div>
 

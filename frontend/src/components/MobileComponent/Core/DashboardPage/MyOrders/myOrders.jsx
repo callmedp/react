@@ -159,12 +159,12 @@ const MyWallet = (props) => {
                     <div className="m-slide-modal text-center">
                         <span className="m-db-close" onClick={() => setShowCancelModal(false)}>&#x2715;</span>
                         <h2 className="mt-15">Do you wish to cancel the order?</h2>
-                        <div className="m-enquire-now mt-15 text-center">
+                        <div className="mdb-enquire-now mt-15 text-center">
                             <div className="m-form-group">
                                 <p>Any credit points reedemed against this order will be refunded back to your wallet shortly. These points will be valid for next 10 days. </p>
                             </div>
                             <button className="btn btn-blue" onClick={() => handleCancellation(cancelOrderId)}>Yes</button> 
-                            <button className="btn btn-blue-outline ml-10" onClick={() => {setShowCancelModal(false)}}>No</button>
+                            {/* <button className="btn btn-blue-outline ml-10" onClick={() => {setShowCancelModal(false)}}>No</button> */}
                         </div>
                     </div>
             }

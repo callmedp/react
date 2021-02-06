@@ -485,8 +485,9 @@
     z-index: 9;
 
     .db-timeline-list {
-        @include size(398px, 226px);
+        @include size(398px, auto);
         @extend %custom-scroll;
+        max-height: 226px;
         overflow-y: auto;
         overflow-x: hidden;
         margin-top: 0;

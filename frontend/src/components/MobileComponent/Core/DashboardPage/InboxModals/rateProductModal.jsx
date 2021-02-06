@@ -136,8 +136,8 @@ const RateProductModal = (props) => {
                                 })}
                                 </span>
                                 <p>Tap on rate to scale of 1-5</p>
-                                <div className="m-enquire-now mt-15">
-                                    <InputField attributes={inboxForm.title} register={register} customClass='m-form-group mb-0' errors={!!errors ? errors[inboxForm.title.name] : false} />  
+                                <div className="mdb-enquire-now mt-15">
+                                    <InputField attributes={inboxForm.title} register={register} customClass='m-form-group' errors={!!errors ? errors[inboxForm.title.name] : false} />  
                                     
                                     <TextArea attributes={inboxForm.review} register={register} errors={!!errors ? errors[inboxForm.review.name] : ''} />
 

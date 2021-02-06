@@ -18,7 +18,7 @@ const InputField = (props) => {
             <input className={className} type={type} name={name} 
             id={id} placeholder={placeholder ? placeholder : ' '} ref={register(validation)} value={value}
             defaultValue={defaultValue}/>
-            <label className="m-input_label" htmlFor={name}>{label}</label>
+            <label className="input-label" htmlFor={name}>{label}</label>
             { !!errors ? <span className="error_cls">{errorMessage[errors.type]}</span> : ''}
         </div>
     )
@@ -50,7 +50,7 @@ const TextArea = (props) => {
         <>  
             <div className="m-form-group">
                 <textarea className={className} name={name} type={type} placeholder={placeholder} ref={register(validation)} value={value} defaultValue={defaultValue} id={name} rows={rows} />
-                {/* <label htmlFor={name}>{label}</label> */}
+                <label className="input-label" htmlFor={name}>{label}</label>
                 { !!errors ? <span className="error_cls">{errorMessage[errors.type]}</span> : ''}
             </div>
         </>

@@ -134,10 +134,10 @@ const MyOrders = (props) => {
                                                     item.orderitems.map((innItem, ind) => {
                                                         return (
                                                             <li className="row" key={ind}>
-                                                                <Link to={"#"} className="col-11 pl-0 noLink">
+                                                                <Link to={"#"} className="col-9 pl-0 noLink">
                                                                     {innItem.title}
                                                                 </Link>
-                                                                <span className="col-1 unpaid">{innItem.oi_status}</span>
+                                                                <span className="col-3 unpaid">{innItem.oi_status}</span>
                                                             </li>
                                                         )
                                                     })
