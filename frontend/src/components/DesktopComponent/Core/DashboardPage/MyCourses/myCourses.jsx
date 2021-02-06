@@ -208,8 +208,8 @@ const MyCourses = (props) => {
 
             <div className="db-my-courses-detail">
 
-                { page?.total === 0 ? <EmptyInbox inboxButton="Browse Courses" inboxText="Seems like no courses / certification added to your profile"/> : '' }
 
+                { page.total === 0 ? <EmptyInbox inboxButton="Browse Courses" redirectUrl={`${siteDomain}/online-courses.html`} inboxText="Seems like no courses / certification added to your profile"/> : '' }
                 {
                     data?.map((course, index) => {
                         return (

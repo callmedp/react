@@ -5,14 +5,14 @@ import '../MyCourses/myCourses.scss';
 import '../MyServices/myServices.scss';
    
 const EmptyInbox = (props) => {
-    const { inboxButton, inboxText } = props;
+    const { inboxButton, inboxText, redirectUrl } = props;
 
     return(
         <div>
             <div className="db-nocourses">
                 <img src={`${imageUrl}desktop/no-courses.png`} alt="Empty Dashboard Image"/>
                 <p className="db-nocourses--text">{inboxText}</p>
-                <a href={siteDomain} className="btn btn-outline-primary font-weight-bold">{inboxButton}</a>
+                <a href={redirectUrl} className="btn btn-outline-primary font-weight-bold">{inboxButton}</a>
             </div>
         </div>
     )

@@ -156,7 +156,7 @@ const MyServices = (props) => {
                     : null
                 } */}
 
-                { !results?.page?.total || results?.page?.total === 0 ? <EmptyInbox inboxButton="Go To Home" inboxText="There is no service added to your profile!"/> : '' }
+                {  results.page.total === 0 ? <EmptyInbox inboxButton="Go To Home" redirectUrl={resumeShineSiteDomain} inboxText="There is no service added to your profile!"/> : '' }
 
                 {results?.data && results?.data?.length > 0 ?
                     results?.data?.map((service,index) => {
