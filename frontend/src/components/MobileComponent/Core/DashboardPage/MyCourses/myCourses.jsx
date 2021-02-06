@@ -138,7 +138,7 @@ const MyCourses = (props) => {
                         data?.map((course, index) => {
                             return(
                                 <div className="m-card pl-0" key={index}>
-                                    <div className="m-share" aria-haspopup="true">
+                                    <div className="m-share" aria-haspopup="true" aria-expanded="true">
                                         <i className="icon-share"></i>
                                         <div className="m-share__box m-arrow-box m-top">
                                             <a target="_blank" href={`https://www.facebook.com/sharer/sharer.php?u=${siteDomain}${course?.productUrl}`} className="m-facebook-icon"></a>

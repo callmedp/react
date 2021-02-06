@@ -21,6 +21,10 @@
 
     .db-white-box {
         padding: 15px 15px 15px 5px;
+
+        &:hover {
+            box-shadow: $box-shadow-lg;
+        }
     }
 
     figure {

@@ -16,7 +16,7 @@
         font-size: 2rem;
         color: $gray-100;
         text-align: center;
-        padding-top: 1.5rem;
+        padding-top: .5rem;
     }
 
     .m-enquire-now {
@@ -200,7 +200,7 @@
 .m-timeline-list {
     margin-bottom: 10px;
     margin-top: -20px;
-    height: 215px;
+    max-height: 215px;
     overflow-y: auto;
     overflow-x: hidden;
     margin-left: -20px;
@@ -214,9 +214,9 @@
         padding-left: 15px;
         margin-left: 5px;
         
-        &:first-child {
-            padding-top: 30px;
-        }
+        // &:first-child {
+        //     padding-top: 30px;
+        // }
 
         &:not(:last-child) {
             border-left: 1px dashed rgba(151, 151, 151, .5);
@@ -308,4 +308,13 @@
         margin-left: 3rem;
         cursor: pointer;
     }
-} 
+}
+
+.swal2-styled.swal2-confirm {
+    background: $blue;
+    border-radius: 2rem;
+    box-shadow: none;
+    padding: 1.3rem 4rem;
+    text-transform: uppercase;
+    font-weight: 700;
+}

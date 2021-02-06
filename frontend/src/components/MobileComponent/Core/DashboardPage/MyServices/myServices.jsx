@@ -306,7 +306,7 @@ const MyServices = (props) => {
 
                                             {/* Rating Block start*/}    
                                             {
-                                                (service?.updated_status?.your_feedback) && 
+                                                !(service?.updated_status?.your_feedback) && 
                                                     <div className="d-flex">
                                                         {
                                                             service?.len_review ?
