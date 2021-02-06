@@ -195,9 +195,10 @@ const MyServices = (props) => {
                                     {/* Status of Service Block */}
                                     <div className="pl-15 mt-15 fs-12">
                                         {
-                                            service?.updated_status?.status && 
+                                            service?.updated_status?.status  && 
                                                 <>
-                                                    Status: <strong> { service?.updated_status?.status } 
+                                                    { service?.updated_status?.status && service?.updated_status?.status !== 'Default' && <>Status: <strong> { service?.updated_status?.status } </strong></> }
+                                                    <strong>
                                                     {
                                                         service?.updated_status?.upload_resume && <a href="/" onClick={(e) => {e.preventDefault();setShowUpload(true)}} className="font-weight-bold"> Upload</a> 
                                                     }

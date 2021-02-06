@@ -154,7 +154,7 @@ const MyCourses = (props) => {
                                         </figure>
                                         <div className="m-courses-detail__info">
                                             <h2>{course?.name}</h2>
-                                            <p className="m-pipe-divides mb-5">Provider: <Link to={"#"} className="font-weight-bold">{course?.vendor}</Link></p>
+                                            <p className="m-pipe-divides mb-5">Provider: <strong>{course?.vendor}</strong></p>
                                             <p className="m-pipe-divides mb-5">{ !!course?.enroll_date && <span>Enrolled on: <strong>{course?.enroll_date}</strong> </span> } { !!course?.mode && <span>Mode: <strong>{course?.mode}</strong> </span> }</p>
                                             <p className="m-pipe-divides mb-5">{ !!course?.duration_in_days && <span> Duration: <strong>{ course?.duration_in_days } { course?.duration_in_days > 1 ? 'days' : 'day' }</strong> </span> } { !!course?.jobs && <span>Jobs: <strong>{course?.jobs}</strong> </span>}</p>
                                         </div>
@@ -171,8 +171,8 @@ const MyCourses = (props) => {
                                             {
                                                 course?.updated_status?.status && 
                                                     <>
-                                                        Status: <strong> 
-                                                        { course?.updated_status?.status } 
+                                                        { course?.updated_status?.status && course?.updated_status?.status !== 'Default' && <>Status: <strong> { course?.updated_status?.status } </strong></> }
+                                                        <strong>
 
                                                         {
                                                             course?.updated_status?.take_test && <a href={course?.options?.auto_login_url} target="_blank" className="font-weight-bold"> Take test</a>
@@ -207,7 +207,8 @@ const MyCourses = (props) => {
 
                                             </div>
 
-                                            
+                                            {
+                                                (course?.updated_status?.day_remaining || [1,2].includes(course?.auto_login_method)) &&
                                                     <div className="pl-15">
                                                         <div className="m-courses-detail__bottomWrap" style={{ paddingBottom: '0' }}>
                                                         {
@@ -226,13 +227,15 @@ const MyCourses = (props) => {
                                                                     </span>
                                                                 </div>
                                                             </div>
-                                                            }
-                                                            { 
-                                                                [1,2].includes(course?.auto_login_method)  ?
-                                                                    <Link to={"#"} className="m-db-start-course font-weight-bold pr-10" onClick={()=>autoLogin(course?.order_id, course?.product, course?.auto_login_method )}>Start course</Link> : null
-                                                            }
+                                                        }
+
+                                                        { 
+                                                            [1,2].includes(course?.auto_login_method)  ?
+                                                                <Link to={"#"} className="m-db-start-course font-weight-bold pr-10" onClick={()=>autoLogin(course?.order_id, course?.product, course?.auto_login_method )}>Start course</Link> : null
+                                                        }
                                                         </div>
                                                     </div>
+                                            }
 
                                             {/*<div className="pl-15">
                                                 <div className="m-courses-detail__bottomWrap" style={{ paddingBottom: '0' }}>
