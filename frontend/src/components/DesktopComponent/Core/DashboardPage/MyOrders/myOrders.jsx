@@ -10,6 +10,7 @@ import {Toast} from '../../../Common/Toast/toast';
 import { Modal } from 'react-bootstrap';
 import EmptyInbox from '../Inbox/emptyInbox';
 import BreadCrumbs from '../Breadcrumb/Breadcrumb';
+import { siteDomain } from 'utils/domains';
 
 const MyOrders = (props) => {
     const ordPageNo = '1';
@@ -151,7 +152,7 @@ const MyOrders = (props) => {
                         )
                     })
                 :
-                <EmptyInbox inboxButton="Browse Courses" inboxText="You have not ordered any product till now!" />
+                <EmptyInbox inboxButton="Browse Courses" redirectUrl={`${siteDomain}/online-courses.html`} inboxText="You have not ordered any product till now!" />
                 }
 
                 {/* cancel order confirmation modal */}

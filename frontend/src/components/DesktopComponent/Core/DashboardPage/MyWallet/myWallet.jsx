@@ -3,11 +3,11 @@ import { Link as LinkScroll } from 'react-scroll';
 import { Modal } from 'react-bootstrap';
 import './myWallet.scss';
 import { useDispatch, useSelector } from 'react-redux';
-import {fetchMyWallet} from 'store/DashboardPage/MyWallet/actions';
+import { fetchMyWallet } from 'store/DashboardPage/MyWallet/actions';
 import { startDashboardWalletPageLoader, stopDashboardWalletPageLoader } from 'store/Loader/actions/index';
 import Loader from '../../../Common/Loader/loader';
 import Pagination from '../../../Common/Pagination/pagination';
-import {siteDomain} from '../../../../../utils/domains';
+import { siteDomain } from '../../../../../utils/domains';
 import EmptyInbox from '../Inbox/emptyInbox';
 import BreadCrumbs from '../Breadcrumb/Breadcrumb';
 
@@ -50,19 +50,19 @@ const MyWallet = (props) => {
             behavior: "smooth"
         });
         handleEffects();
-    },[currentPage])
+    }, [currentPage])
 
-    return(
+    return (
         <div>
-           <BreadCrumbs filterStateShow={false} />
+            <BreadCrumbs filterStateShow={false} />
             <div className="myWallet">
-            { walletLoader ? <Loader /> : ''}
+                {walletLoader ? <Loader /> : ''}
 
                 <div className="row">
                     <div className="col-8 myWallet--heading">
                         Loyality point balance - <strong>{walletResult?.wal_total ? walletResult?.wal_total : 0}</strong>
                         {/* <a className="btn btn-outline-primary ml-4" onClick={handleShow}>Redeem now</a> */}
-                        
+
                         {walletResult?.wal_total > 0 ? <a href={`${siteDomain}/cart/payment-summary/`} className="btn btn-outline-primary ml-4" >Redeem now</a> : null}
 
 
@@ -71,14 +71,14 @@ const MyWallet = (props) => {
 
                             <Modal.Body>
                                 <div className="text-center db-redeemnow-popup">
-                                    <i className="db-green-tick"></i> 
+                                    <i className="db-green-tick"></i>
                                     <p className="db-redeemnow-popup--heading">Congratulations!</p>
                                     <p className="db-redeemnow-popup--points">{walletResult?.wal_total ? walletResult?.wal_total : 0}</p>
-                                    <p className="db-redeemnow-popup--text">loyality point is reedemed and added <br/>in your wallet</p>
+                                    <p className="db-redeemnow-popup--text">loyality point is reedemed and added <br />in your wallet</p>
                                     <button className="btn btn-link font-weight-bold">Ok</button>
                                 </div>
                             </Modal.Body>
-                        
+
                         </Modal>
                     </div>
                     <div className="col-4 text-right">
@@ -86,16 +86,19 @@ const MyWallet = (props) => {
                     </div>
                 </div>
 
-                <div className="db-white-box mt-30">
-                    <div className="row">
-                        <div className="col-md-2">Date</div>
-                        <div className="col-md-2">Order id</div>
-                        <div className="col-md-2">Description</div>
-                        <div className="col-md-2">Loyality points</div>
-                        <div className="col-md-2">Expiry date</div>
-                        <div className="col-md-2">Balance</div>
-                    </div>
-                </div>
+                {
+                    walletResult && walletResult?.loyality_txns.length > 0 ?
+                    <div className="db-white-box mt-30">
+                        <div className="row">
+                            <div className="col-md-2">Date</div>
+                            <div className="col-md-2">Order id</div>
+                            <div className="col-md-2">Description</div>
+                            <div className="col-md-2">Loyality points</div>
+                            <div className="col-md-2">Expiry date</div>
+                            <div className="col-md-2">Balance</div>
+                        </div>
+                    </div> : ''
+                }
 
                 <div className="db-white-box pb-4">
                     {
@@ -112,15 +115,15 @@ const MyWallet = (props) => {
                                     </ul>
                                 )
                             })
-                        : 
-                        <EmptyInbox inboxButton="Go To Home" inboxText="Your wallet is empty!" />
+                            :
+                            <EmptyInbox inboxButton="Go To Home" redirectUrl={siteDomain} inboxText="Your wallet is empty!" />
                     }
                 </div>
 
-                {walletResult?.page?.total > 1 ? <Pagination totalPage={walletResult?.page?.total} currentPage={currentPage} setCurrentPage={setCurrentPage}/> : ''}
+                {walletResult?.page?.total > 1 ? <Pagination totalPage={walletResult?.page?.total} currentPage={currentPage} setCurrentPage={setCurrentPage} /> : ''}
             </div>
         </div>
     )
 }
-   
+
 export default MyWallet;
