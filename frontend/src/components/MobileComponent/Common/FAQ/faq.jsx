@@ -6,6 +6,7 @@ import { MyGA } from 'utils/ga.tracking.js';
 
 const FAQ = (props) => {
     const faqList = props.faqList;
+    const { pageType } = props;
     const [sliceFlag, setSliceFlag] = useState(true)
     const [checkedId, setCheckedId] = useState(null);
 
@@ -28,7 +29,7 @@ const FAQ = (props) => {
 
     return(
         faqList.length ? (
-            <div className="m-container m-faq" id="m-faq" itemScope itemType="https://schema.org/FAQPage">
+            <div className={ pageType ? 'm-faq' : 'm-container m-faq' } id="m-faq" itemScope itemType="https://schema.org/FAQPage">
                 <h2 className="m-heading2" itemProp="name">Frequently Asked Questions</h2>
                 <div className="m-tabs">
                     { (sliceFlag ? faqList.slice(0, 4) : faqList).map(renderAccordion) }

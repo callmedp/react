@@ -286,7 +286,7 @@ const MyServices = (props) => {
                                         
                                         
                                         {/* Comment and Rating Block start */}
-                                        <div className="m-courses-detail__userInput">
+                                        <div className="m-courses-detail__userInput m-db-bdrtop mt-15">
 
                                             {/* Comment Block start */}
                                             <Link to={'#'} onClick={(e) => {
