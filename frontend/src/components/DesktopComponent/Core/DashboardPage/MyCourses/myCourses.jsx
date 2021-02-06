@@ -143,7 +143,15 @@ const MyCourses = (props) => {
            );
            });
            dispatch(stopDashboardCoursesPageLoader());
-           let url = response?.vendor_url;
+           let url = response?.data?.vendor_url;
+           let error_message = response?.error_message;
+           if(error_message){
+               Toast.fire({
+                   type: 'error',
+                   title: error_message
+               });
+               return;
+           }
            if(url === undefined || url === '' || !url){
                Toast.fire({
                    type: 'error',
@@ -200,8 +208,8 @@ const MyCourses = (props) => {
 
             <div className="db-my-courses-detail">
 
-                { page?.total === 0 ? <EmptyInbox inboxButton="Browse Courses" inboxText="Seems like no courses / certification added to your profile"/> : '' }
 
+                { page.total === 0 ? <EmptyInbox inboxButton="Browse Courses" redirectUrl={`${siteDomain}/online-courses.html`} inboxText="Seems like no courses / certification added to your profile"/> : '' }
                 {
                     data?.map((course, index) => {
                         return (

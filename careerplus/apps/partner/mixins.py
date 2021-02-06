@@ -9,7 +9,7 @@ from shop.models import Product
 class VendorUrlMixins():
     def get_candidate_details(self, candidate_id):
         if not candidate_id:
-            return None
+            return {"error_message":"Please Complete your registeration on Shine to Access the Course"}
 
         personal_detail = None
         try:
@@ -22,8 +22,11 @@ class VendorUrlMixins():
             personal_detail = personal_details[0]
 
         if not personal_detail:
-            return None
-        
+            return {"error_message":"Please Complete your registeration on Shine to Access the Course"}
+        if not personal_detail.get('first_name', '') or not personal_detail.get('email', '') or \
+            not personal_detail.get('cell_phone', ''):
+                return {"error_message":"Please Complete your registeration on Shine to Access the Course"}
+    
         return personal_detail
 
 
@@ -41,8 +44,8 @@ class VendorUrlMixins():
         
         candidate_details = self.get_candidate_details(candidate_id = candidate_id)
 
-        if not candidate_details:
-            return default_url
+        if candidate_details.get('error_message', ''):
+            return candidate_details
 
 
         data = {"Email" : candidate_details.get('email', '')}
@@ -53,7 +56,6 @@ class VendorUrlMixins():
                 return default_url
         except Exception as e:
             logging.getLogger('error_log').error("vendor api response error {}".format(e))
-            print("error")
 
         response_data = response.json()
         user_name = '{} {}'.format(candidate_details.get('first_name', ''), 
@@ -64,7 +66,7 @@ class VendorUrlMixins():
             if course:
                 course_name = course.name
                 if not course_name:
-                    print('error')
+                    logging.getLogger('error_log').error("No universal product code provided for course: {}".format(course.id))
                     return default_url
 
         except Exception as e:
@@ -147,21 +149,16 @@ class VendorUrlMixins():
             if course:
                 product_id = course.upc
                 if not product_id:
-                    print('error')
+                    logging.getLogger('error_log').error("No universal product code provided for course: {}".format(course.id))
                     return default_url
         except Exception as e:
             logging.getLogger('error_log').error("vendor api response error {}".format(e))
-        # product_id = 6
-        # data_dict.update({
-        #     "order_id" : 123,
-        #     "candidate_id" : "568a0b20cce9fb485393489b"
-        #     })
 
         candidate_id = data_dict.get('candidate_id')
         candidate_details = self.get_candidate_details(candidate_id = candidate_id)
 
-        if not candidate_details:
-            return default_url
+        if candidate_details.get('error_message', ''):
+            return candidate_details
 
         data = {
             "candidate_email" : candidate_details.get('email', ''),

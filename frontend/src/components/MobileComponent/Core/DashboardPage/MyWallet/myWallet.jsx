@@ -108,7 +108,9 @@ const MyWallet = (props) => {
                     }
                 </div>
             }
-            <FAQ faqList={faqList} />
+            <br />
+            <br />
+            <FAQ pageType="mywallet" faqList={faqList} />
         </>
     )
 }

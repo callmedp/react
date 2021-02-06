@@ -39,8 +39,8 @@ export default {
         type: "text",
         name: "review",
         id: "review",
-        placeholder: "Type Here",
-        // label: "Email",
+        placeholder: " ",
+        label: "Type Here",
         inputType: 'input',
         rows: 3,
         validation: {
@@ -55,7 +55,8 @@ export default {
         type: "text",
         name: "title",
         id: "title",
-        placeholder: "Title",
+        placeholder: " ",
+        label: "Title",
         inputType: 'input',
         validation: {
             required:true,

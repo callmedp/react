@@ -94,7 +94,6 @@ const MyCourses = (props) => {
                getVendorUrl({
                payload: {
                    candidate_id: getCandidateId(),
-                   //candidate_id: "5ebacd1472bebb294db0b7cd",
                    order_id: oi,
                    course_id: ci,
                },
@@ -104,7 +103,12 @@ const MyCourses = (props) => {
            );
            });
            dispatch(stopDashboardCoursesPageLoader());
-           let url = response?.vendor_url;
+           let url = response?.data?.vendor_url;
+           let error_message = response?.error_message;
+           if(error_message){
+               showSwal('error', error_message)
+               return;
+           }
            if(url === undefined || url === '' || !url){
                return showSwal('error', "Technical Issue, Please try after Sometime")
            }
@@ -138,7 +142,7 @@ const MyCourses = (props) => {
                         data?.map((course, index) => {
                             return(
                                 <div className="m-card pl-0" key={index}>
-                                    <div className="m-share" aria-haspopup="true">
+                                    <div className="m-share" aria-haspopup="true" aria-expanded="true">
                                         <i className="icon-share"></i>
                                         <div className="m-share__box m-arrow-box m-top">
                                             <a target="_blank" href={`https://www.facebook.com/sharer/sharer.php?u=${siteDomain}${course?.productUrl}`} className="m-facebook-icon"></a>
@@ -265,7 +269,7 @@ const MyCourses = (props) => {
                                             </div>*/}
 
                                         <div className="pl-15">
-                                            <div className="m-courses-detail__userInput">
+                                            <div className="m-courses-detail__userInput m-db-bdrtop mt-15">
                                                 <Link className="m-db-comments font-weight-bold" to={'#'} onClick={(e) => {e.preventDefault();setShowCommentModal(true);setOiCommentId(course?.id)}}>
                                                     {/* { course?.no_of_comments ? course?.no_of_comments > 1 ? `${course?.no_of_comments} Comments` : `${course?.no_of_comments} Comment` : 'Add Comment' } */}
                                                     { course?.no_of_comments === 0 || !course?.no_of_comments ? 'Add Comment' : course?.no_of_comments === 1 ? course?.no_of_comments + ' Comment' : course?.no_of_comments + ' Comments' }

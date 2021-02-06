@@ -142,3 +142,8 @@
 body.swal2-toast-shown .swal2-container.swal2-top-end, body.swal2-toast-shown .swal2-container.swal2-top-right {
     z-index: 999999 !important;
 }
+.modal-dialog {
+    min-height: calc(100% - 3.5rem);
+    display: flex;
+    align-items: center;
+}

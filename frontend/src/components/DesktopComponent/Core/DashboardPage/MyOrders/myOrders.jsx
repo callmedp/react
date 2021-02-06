@@ -10,6 +10,7 @@ import {Toast} from '../../../Common/Toast/toast';
 import { Modal } from 'react-bootstrap';
 import EmptyInbox from '../Inbox/emptyInbox';
 import BreadCrumbs from '../Breadcrumb/Breadcrumb';
+import { siteDomain } from 'utils/domains';
 
 const MyOrders = (props) => {
     const ordPageNo = '1';
@@ -151,7 +152,7 @@ const MyOrders = (props) => {
                         )
                     })
                 :
-                <EmptyInbox inboxButton="Browse Courses" inboxText="You have not ordered any product till now!" />
+                <EmptyInbox inboxButton="Browse Courses" redirectUrl={`${siteDomain}/online-courses.html`} inboxText="You have not ordered any product till now!" />
                 }
 
                 {/* cancel order confirmation modal */}
@@ -159,16 +160,19 @@ const MyOrders = (props) => {
                     showCancelModal &&  
                     <Modal show={showCancelModal} onHide={setShowCancelModal} className="db-page">
                         <Modal.Header closeButton></Modal.Header>
-                        <Modal.Body></Modal.Body>
-                        <div className="text-center pl-30 pr-30 pb-30">
-                            <h2>Cancel Order Confirmation </h2>
-                            <strong>Do you wish to cancel the order?</strong>
+                        <Modal.Body className="cancel-order">
+                        <div className="text-center pl-30 pr-30 pb-3">
+                            <h2>Do you wish to cancel the order?</h2>
+                            <p className="pb-4">Any credit points reedemed against this order will be refunded back to your wallet shortly. These points will be valid for next 10 days. </p>
+                            {/* <strong>Do you wish to cancel the order?</strong>
                             <br />
                             <span>Note: Any credit points reedemed against this order will be refunded back to your wallet shortly. These points will be valid for next 10 days.</span>
-                            <br /> <br/>
-                            <button className="btn btn-blue" onClick={() => handleCancellation(cancelOrderId)}>Yes</button>&emsp;
-                            <button className="btn btn-blue" onClick={() => setShowCancelModal(false)}>No</button>
+                            <br /> <br/> */}
+
+                            <button className="btn btn-blue px-5" onClick={() => handleCancellation(cancelOrderId)}>Yes</button>&emsp;
+                            <button className="btn btn-blue-outline px-5" onClick={() => setShowCancelModal(false)}>No</button>
                         </div>
+                        </Modal.Body>
                     </Modal>
                 }
             </div>

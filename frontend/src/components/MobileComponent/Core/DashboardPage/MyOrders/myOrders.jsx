@@ -138,7 +138,7 @@ const MyWallet = (props) => {
                                         
                                     </div>
 
-                                    <div className="my-order__order-detail">
+                                    <div className="my-order__order-detail m-db-bdrtop mt-15 pt-10">
                                         <Link to={"#"} onClick={() => showDetails(order?.order?.id)} className={(showOrderDetailsID === order?.order?.id) ? "font-weight-bold open arrow-icon" : "font-weight-bold arrow-icon"}>Order Details</Link>
                                         { (showOrderDetailsID === order?.order?.id) && getOrderDetails(order?.orderitems) }
                                     </div>
