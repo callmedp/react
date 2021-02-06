@@ -47,22 +47,25 @@ const AddCommentModal = (props) => {
         
         <Collapse in={addOpen == id}>
                 <div className="position-relative" id={`openComment` + id}>
-                    <div className="db-add-comments lightblue-bg border-bottom-gray">
-                        <ul className="db-timeline-list">
-                            {data && data.comment.length > 0 ?
-                                data.comment.map((comm, idx) => {
-                                    return (
-                                        <li key={idx}>
-                                            <i className="db-timeline-list--dot"></i>
-                                            <span>{comm.created} {comm.addedBy ? '   |   By ' + comm.addedBy : ""} </span>
-                                            <p className="db-timeline-list--text">{comm.message ? comm.message : ""}</p>
-                                        </li>
-                                    )
-                                })
-                                : ""
-                            }
-                        </ul>
-                    </div>
+                    {
+                        data && data.comment.length > 0 ?
+                            <div className="db-add-comments lightblue-bg border-bottom-gray">
+                                <ul className="db-timeline-list">
+                                    {data.comment.map((comm, idx) => {
+                                        return (
+                                            <li key={idx}>
+                                                <i className="db-timeline-list--dot"></i>
+                                                <span>{comm.created} {comm.addedBy ? ' | By ' + comm.addedBy : ""} </span>
+                                                <p className="db-timeline-list--text">{comm.message ? comm.message : ""}</p>
+                                            </li>
+                                        )
+                                    })
+                                    }
+                                </ul>
+                            </div>
+                            : ""
+                    }
+                    
                     <form onSubmit={handleSubmit(submitComment)}>
                         <div className="db-add-comments disabled-before lightblue-bg" id="addComments">
                             <span className="btn-close" onClick={() => addCommentDataFetch(false)}>&#x2715;</span>

@@ -1,0 +1,1 @@
+export const GET_VENDOR_URL = 'GET_VENDOR_URL';

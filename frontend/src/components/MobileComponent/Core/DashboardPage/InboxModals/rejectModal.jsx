@@ -55,7 +55,7 @@ const RejectModal = (props) => {
         <div className="m-slide-modal">
             <div className="text-center">
                 <span onClick={() => setRejectModal(false)} className="m-db-close">&#x2715;</span>
-                <h2>Reject Confirmations</h2>
+                {/* <h2>Reject Confirmations</h2> */}
                 <p className="fs-16 font-weight-bold mt-30 px-30">Get a better resume by sharing us the feedback</p>
 
                 <span className="error_cls">

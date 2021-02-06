@@ -3,6 +3,7 @@ import { Modal } from 'react-bootstrap';
 import fileUpload from "utils/fileUpload";
 import { useDispatch } from 'react-redux';
 import { useForm } from "react-hook-form";
+import { imageUrl, siteDomain } from 'utils/domains';
 import { uploadResumeForm } from 'store/DashboardPage/MyServices/actions';
 import {Toast} from '../../../Common/Toast/toast';
 import { useSelector } from 'react-redux';
@@ -57,9 +58,9 @@ const UploadResumeModal =(props) => {
         <Modal show={show} onHide={uploadHandelClose} className="db-page">
             <Modal.Header closeButton></Modal.Header>
             <Modal.Body>
-                <div className="text-center rate-services db-custom-select-form db-upload-resume">
-                    <img src="/media/images/upload-resume.png" className="img-fluid" alt=""/>
-                    <p className="rate-services--heading mb-0 mt-0">Upload Resume</p>
+                <div className="text-center db-rate-services db-custom-select-form db-upload-resume">
+                    <img src={`${imageUrl}desktop/upload-resume.png`} alt="Empty Dashboard Image"/>
+                    <p className="db-rate-services--heading mb-0 mt-0">Upload Resume</p>
                 
                     <p className="">To initiate your services, <strong>upload resume</strong></p>
                     <span className="error_cls">{errors.shine_resume && "* Either Upload Resume or use shine resume"}</span>
@@ -105,7 +106,7 @@ const UploadResumeModal =(props) => {
                     {pending_resume_items && pending_resume_items.length > 0 ?
                         <div className="db-upload-resume--services">
                             <strong>Select services</strong> for which you want to use this resume
-                            <br/>{errors.resume_course && "* Please Select Atlest One"}
+                            <p className="error_cls">{errors.resume_course && "* Please Select Atlest One"}</p>
 
                             <ul className="db-upload-resume--list">
                                 {pending_resume_items.map((res,ind) => {

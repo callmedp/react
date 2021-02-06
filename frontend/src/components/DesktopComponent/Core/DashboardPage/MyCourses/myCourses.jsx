@@ -21,6 +21,8 @@ import { startCommentLoader, stopCommentLoader } from 'store/Loader/actions/inde
 import BreadCrumbs from '../Breadcrumb/Breadcrumb';
 import {Toast} from '../../../Common/Toast/toast';
 import {boardNeoUser} from 'store/DashboardPage/MyCourses/actions/index';
+import { getCandidateId } from 'utils/storage.js';
+import { getVendorUrl } from 'store/DashboardPage/StartCourse/actions/index';
 
 const MyCourses = (props) => {
     const [addOpen, setAddOpen] = useState(false);
@@ -38,9 +40,15 @@ const MyCourses = (props) => {
     const oiComments = useSelector(store => store.getComment);
     const [currentPage, setCurrentPage] = useState(1);
     const [filterState, setfilterState] = useState({ 'last_month_from': 'all', 'select_type' : 'all' });
+    const [showIframe, setShowIframe] = useState(false);
+    const handleIframeShow = () => setShowIframe(true);
+    const handleIframeClose = () => setShowIframe(false);
+    const [openIframe, setOpenIframe] = useState(false);
+    const toggleIframe = (id) => setOpenIframe(id);
 
     // rating modal handling
     const [showRatingModal, setShowRatingModal] = useState(false) 
+    const toggleRatingsModal = (id) => setShowRatingModal(showRatingModal == id ? false : id);
 
     //Rate Modal Handling
     const [showRateModal, setShowRateModal] = useState(false) 
@@ -117,6 +125,56 @@ const MyCourses = (props) => {
             return Toast("error",e);
         }
         };
+    
+    const autoLogin = async (oi, ci, lm) => {
+        try {
+           dispatch(startDashboardCoursesPageLoader());
+           const response = await new Promise((resolve, reject) => {
+           dispatch(
+               getVendorUrl({
+               payload: {
+                   candidate_id: getCandidateId(),
+                   order_id: oi,
+                   course_id: ci,
+               },
+               resolve,
+               reject,
+               })
+           );
+           });
+           dispatch(stopDashboardCoursesPageLoader());
+           let url = response?.data?.vendor_url;
+           let error_message = response?.error_message;
+           if(error_message){
+               Toast.fire({
+                   type: 'error',
+                   title: error_message
+               });
+               return;
+           }
+           if(url === undefined || url === '' || !url){
+               Toast.fire({
+                   type: 'error',
+                   title: 'Something went wrong! Try Again'
+               });
+               return;
+           } 
+           if(lm === 1){ history.push({ pathname : '/dashboard/startcourse/' , url : url}); return; }
+           if(lm === 2){ window.open(url); return; }
+           Toast.fire({
+                   type: 'error',
+                   title: 'Something went wrong! Try Again'
+               });
+           return;
+        }catch (e) {
+           dispatch(stopDashboardCoursesPageLoader());
+           Toast.fire({
+                   type: 'error',
+                   title: 'Something went wrong! Try Again'
+               });
+           return;
+       }
+    };
 
     const handleEffects = async () => {
         try {
@@ -150,8 +208,8 @@ const MyCourses = (props) => {
 
             <div className="db-my-courses-detail">
 
-                { page.total === 0 ? <EmptyInbox inboxButton="Browse Courses" redirectUrl={`${siteDomain}/online-courses.html`} inboxText="Seems like no courses / certification added to your profile"/> : '' }
 
+                { page.total === 0 ? <EmptyInbox inboxButton="Browse Courses" redirectUrl={`${siteDomain}/online-courses.html`} inboxText="Seems like no courses / certification added to your profile"/> : '' }
                 {
                     data?.map((course, index) => {
                         return (
@@ -264,6 +322,9 @@ const MyCourses = (props) => {
                                                 </div>
 
                                                 <Link to={"#"} className="db-start-course font-weight-bold mt-30">Start course</Link> */}
+                                                { [1, 2].includes(course?.auto_login_method) ?
+                                                   <Link to={"#"} className="db-start-course font-weight-bold mt-30" onClick={()=>autoLogin(course?.order_id, course?.product, course?.auto_login_method )}>Start course</Link> : null
+                                                }
                                             </div>
                                         </div>
 
@@ -286,13 +347,11 @@ const MyCourses = (props) => {
                                             </Link>
                                             {
                                                 (course?.updated_status?.your_feedback) && 
-                                                    <div className="d-flex" id={course?.product}>
+                                                    <div className="d-flex" id={course?.id}>
                                                         {
                                                         course?.len_review ?
                                                             <div onClick={()=>{
-                                                                setShowRateModal(true);
-                                                                setOiReviewId(course?.product);
-                                                                setReviewData(course?.review_data);
+                                                                toggleRatingsModal(course?.id);
                                                             }}>
                                                                 <span className="rating">
                                                                     {
@@ -308,7 +367,7 @@ const MyCourses = (props) => {
                                                             </div> : 
                                                             <div onClick={()=>{
                                                                 setShowRateModal(true);
-                                                                setOiReviewId(course?.product);
+                                                                setOiReviewId(course?.id);
                                                                 setReviewData(course?.review_data)
                                                             }}>
                                                                 <span className="">Rate Course&nbsp;</span>
@@ -321,6 +380,7 @@ const MyCourses = (props) => {
                                                                 </span>
                                                             </div>
                                                         }
+                                                        {showRatingModal && <ReviewModal showRatingModal={showRatingModal} toggleRatingsModal={toggleRatingsModal} setShowRateModal={setShowRateModal} oi_id={course?.id} reviewData={course?.review_data} />}
                                                     </div>
                                             }
                                         </div>

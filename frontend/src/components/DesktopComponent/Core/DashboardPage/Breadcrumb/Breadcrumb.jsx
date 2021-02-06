@@ -38,8 +38,8 @@ const BreadCrumbs = (props) => {
                     name="select_type"
                     value={filterState.select_type}>
                         <option value="all">All Items</option>
-                        <option value="2">In Process</option>
-                        <option value="3">Closed</option>
+                        <option value="in_process">In Process</option>
+                        <option value="closed">Closed</option>
                     </select>
                 </div>
             </div>

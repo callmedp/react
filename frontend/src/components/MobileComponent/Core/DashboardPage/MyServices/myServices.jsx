@@ -8,6 +8,7 @@ import '../MyCourses/myCourses.scss'
 import './myServices.scss';
 import AddCommentModal from '../InboxModals/addCommentModal';
 import RateProductModal from '../InboxModals/rateProductModal';
+import ShowRatingsModal from '../InboxModals/showRatingsModal'
 import UploadResume from '../InboxModals/uploadResume';
 import AcceptModal from '../InboxModals/acceptModal';
 import RejectModal from '../InboxModals/rejectModal';
@@ -85,6 +86,9 @@ const MyServices = (props) => {
             setShowOrderDetailsID('') : setShowOrderDetailsID(id)
     }
 
+    //view ratings modal
+    const [showRatingsModal, setShowRatingsModal] = useState(false)
+
     //Pause service
     const pauseResumeService = (oiStatus, orderId) => {
         let pausePlayValues = {
@@ -139,7 +143,7 @@ const MyServices = (props) => {
         <>
         { serviceLoader && <Loader />}
         {
-            !page?.total || page?.total === 0 ? <EmptyInbox inboxType="services" /> :
+            page?.total === 0 ? <EmptyInbox inboxType="services" /> :
 
         <div>
 
@@ -191,9 +195,10 @@ const MyServices = (props) => {
                                     {/* Status of Service Block */}
                                     <div className="pl-15 mt-15 fs-12">
                                         {
-                                            service?.updated_status?.status && 
+                                            service?.updated_status?.status  && 
                                                 <>
-                                                    Status: <strong> { service?.updated_status?.status } 
+                                                    { service?.updated_status?.status && service?.updated_status?.status !== 'Default' && <>Status: <strong> { service?.updated_status?.status } </strong></> }
+                                                    <strong>
                                                     {
                                                         service?.updated_status?.upload_resume && <a href="/" onClick={(e) => {e.preventDefault();setShowUpload(true)}} className="font-weight-bold"> Upload</a> 
                                                     }
@@ -281,7 +286,7 @@ const MyServices = (props) => {
                                         
                                         
                                         {/* Comment and Rating Block start */}
-                                        <div className="m-courses-detail__userInput">
+                                        <div className="m-courses-detail__userInput m-db-bdrtop mt-15">
 
                                             {/* Comment Block start */}
                                             <Link to={'#'} onClick={(e) => {
@@ -301,16 +306,12 @@ const MyServices = (props) => {
 
                                             {/* Rating Block start*/}    
                                             {
-                                                (service?.updated_status?.your_feedback) && 
-                                                    <div className="d-flex" onClick={()=>{
-                                                            setShowRateModal(true);
-                                                            setOiReviewId(service?.product);
-                                                            setReviewData(service?.review_data);
-                                                        }} id={service?.product} >
+                                                !(service?.updated_status?.your_feedback) && 
+                                                    <div className="d-flex">
                                                         {
                                                             service?.len_review ?
                                                                 <>
-                                                                    <span className="m-rating">
+                                                                    <span className="m-rating" onClick={()=>{setShowRatingsModal(true);setOiReviewId({'prdId' :service?.product, 'orderId':service?.id});setReviewData(service?.review_data);}}>
                                                                         {
                                                                             service?.rating?.map((star, index) => starRatings(star, index))
                                                                         }
@@ -325,7 +326,7 @@ const MyServices = (props) => {
                                                                 </> : 
                                                                 <>
                                                                     <span className="">Rate</span>
-                                                                    <span className="m-rating">
+                                                                    <span className="m-rating" onClick={()=>{setShowRateModal(true);setOiReviewId({'prdId' :service?.product, 'orderId':service?.id})}}>
                                                                         {
                                                                             [1, 2, 3, 4, 5].map((item, index) => {
                                                                                 return <em className="micon-blankstar" key={index} />
@@ -355,7 +356,8 @@ const MyServices = (props) => {
             { showCommentModal && <AddCommentModal setShowCommentModal = {setShowCommentModal} oi_id={oiCommentId} type="myservices" /> }
 
             {/* Rate Modal */}
-            { showRateModal && <RateProductModal setShowRateModal={setShowRateModal} oi_id={oiReviewId} reviewData={reviewData}/> }
+            {   showRateModal && <RateProductModal setShowRateModal={setShowRateModal} idDict={oiReviewId} /> }
+            {   showRatingsModal && <ShowRatingsModal setShowRateModal={setShowRateModal} setShowRatingsModal={setShowRatingsModal} idDict={oiReviewId} reviewData={reviewData}/> }
 
             {/* Upload Modal */}
             { showUpload && <UploadResume setShowUpload={setShowUpload} /> }

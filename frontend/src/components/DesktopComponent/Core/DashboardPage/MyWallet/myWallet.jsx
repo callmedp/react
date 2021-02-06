@@ -100,7 +100,7 @@ const MyWallet = (props) => {
                     </div> : ''
                 }
 
-                <div className="db-white-box pb-4">
+                <div className="db-white-box db-white-box-wallet pb-4">
                     {
                         walletResult && walletResult?.loyality_txns.length > 0 ?
                             walletResult?.loyality_txns.map((item, index) => {
@@ -109,7 +109,7 @@ const MyWallet = (props) => {
                                         <li className="col-md-2">{item.date}</li>
                                         <li className="col-md-2">{item.order_id}</li>
                                         <li className="col-md-2">{item.get_txn_type}</li>
-                                        <li className={`col-md-2 ${item.txn_sign > '+' ? "text-success" : "text-danger"}`}>{item.txn_sign}{item.loyality_points}</li>
+                                        <li className={`col-md-2 ${item.txn_sign === '+' ? "text-success" : "text-danger"}`}>{item.txn_sign}{item.loyality_points}</li>
                                         <li className="col-md-2">{item.expiry_date}</li>
                                         <li className="col-md-2">{item.balance}</li>
                                     </ul>

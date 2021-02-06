@@ -10,10 +10,10 @@ import Loader from '../../../Common/Loader/loader';
 import './rating.scss';
 
 const RateProductModal = (props) => {
-    const { setShowRateModal, oi_id, idDict, reviewData } = props
+    const { setShowRateModal, oi_id, idDict } = props
     const dispatch = useDispatch()
     // const [showRatingModal, setShowRatingModal] = useState(false)
-    const [showAllRatings, setShowAllRatings] = useState(true)
+    // const [showAllRatings, setShowAllRatings] = useState(true)
     const [inputStar, setInputStar] = useState(5);
     const { register, handleSubmit, errors, reset } = useForm();
 
@@ -37,7 +37,7 @@ const RateProductModal = (props) => {
 
             Swal.fire({
                 icon: addedReview?.error ? 'error' : 'success',
-                text: addedReview.display_message ? addedReview.display_message : addedReview.error
+                text: addedReview?.data?.display_message ? addedReview?.data?.display_message : addedReview.error
             });
         }
         
@@ -45,11 +45,11 @@ const RateProductModal = (props) => {
         setShowRateModal(false)
     };
 
-    const starRatings = (star, index) => {
-        return (star === '*' ? <em className="micon-fullstar" key={index}></em> : star === '+' 
-            ? <em className="micon-halfstar" key={index}></em> : <em className="micon-blankstar" key={index}></em>
-        )
-    }
+    // const starRatings = (star, index) => {
+    //     return (star === '*' ? <em className="micon-fullstar" key={index}></em> : star === '+' 
+    //         ? <em className="micon-halfstar" key={index}></em> : <em className="micon-blankstar" key={index}></em>
+    //     )
+    // }
 
     // const handleEffects = async (values) => {
     //     const new_review = {
@@ -115,9 +115,9 @@ const RateProductModal = (props) => {
                     </div>
                 } */}
 
-                {
+                {/* {
                     // showRatingModal &&
-                    showAllRatings &&
+                    // showAllRatings && */}
                         <form onSubmit={handleSubmit(submitReviews)}>
                             <div className="text-center">
                                 <span className="m-db-close" onClick={() => {setShowRateModal(false)}}>&#x2715;</span>
@@ -145,7 +145,7 @@ const RateProductModal = (props) => {
                                 </div>
                             </div>
                         </form>
-                }
+                {/* } */}
 
             </div>
         </>

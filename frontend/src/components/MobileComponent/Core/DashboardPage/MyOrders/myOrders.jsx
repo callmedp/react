@@ -113,7 +113,7 @@ const MyWallet = (props) => {
         <>
             { orderLoader && <Loader /> }
             {
-                !(data?.length) ? <EmptyInbox inboxType="orders"/> 
+                (data?.length < 1) ? <EmptyInbox inboxType="orders"/> 
                 :
                 <div className="my-order db-warp mb-20">
                     {
@@ -138,7 +138,7 @@ const MyWallet = (props) => {
                                         
                                     </div>
 
-                                    <div className="my-order__order-detail">
+                                    <div className="my-order__order-detail m-db-bdrtop mt-15 pt-10">
                                         <Link to={"#"} onClick={() => showDetails(order?.order?.id)} className={(showOrderDetailsID === order?.order?.id) ? "font-weight-bold open arrow-icon" : "font-weight-bold arrow-icon"}>Order Details</Link>
                                         { (showOrderDetailsID === order?.order?.id) && getOrderDetails(order?.orderitems) }
                                     </div>
@@ -157,6 +157,7 @@ const MyWallet = (props) => {
             { 
                 showCancelModal &&  
                     <div className="m-slide-modal text-center">
+                        <span className="m-db-close" onClick={() => setShowCancelModal(false)}>&#x2715;</span>
                         <h2 className="mt-15">Do you wish to cancel the order?</h2>
                         <div className="m-enquire-now mt-15 text-center">
                             <div className="m-form-group">

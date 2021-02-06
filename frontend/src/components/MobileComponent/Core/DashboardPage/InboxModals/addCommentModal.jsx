@@ -78,7 +78,7 @@ const AddCommentModal = (props) => {
         <>
             { commentLoader && <Loader />}
             <div className="m-slide-modal">
-                <span className="m-db-close" onClick={() => { setShowCommentModal(false) }}>X</span>
+                <span className="m-db-close" onClick={() => { setShowCommentModal(false) }}>&#x2715;</span>
                 {comments?.length ? <><br /><br /></> : ''}
                 <div className="">
                     {
@@ -102,9 +102,10 @@ const AddCommentModal = (props) => {
                     }
                     <form onSubmit={handleSubmit(submitComment)}>
                         <div className="m-enquire-now mt-15 text-center">
-                            <span className="error_cls">
+                            {/* <span className="error_cls">
                                 {errors.comment && "* Please write something to post comment."}
-                            </span><br />
+                            </span><br /> */}
+                            <h2 classname="pt-0">Add Comment</h2><br />
                             <div className="m-form-group">
                                 <TextArea attributes={inboxForm.name} register={register} errors={!!errors ? errors[inboxForm.name.name] : ''} />
                             </div>

@@ -61,7 +61,7 @@ const RejectModal = (props) => {
                 <div className="text-center">
                     <p className="fs-16 font-weight-bold px-5">Get a better resume by sharing us the feedback</p>
 
-                    <div className="m-form-group">
+                    <div className="form-group">
                         <textarea className="form-control" placeholder="Leave us your message" rows="3" name="message" ref={register({
                             validate: () =>
                                 filename !== "Upload here"
@@ -78,7 +78,7 @@ const RejectModal = (props) => {
                     <form onSubmit={handleSubmit(onSubmit)}>
                         <div className="d-flex align-items-center justify-content-center mt-20">
                             <p className="fs-12">If you have made changes in resume</p>
-                            <div className="m-upload-btn-wrapper">
+                            <div className="upload-btn-wrapper">
                                 <span className="db-reject-upload-here">{filename}</span>
                                 <input type="file" name="file" onChange={(e) => {e.preventDefault(); getFile(e);}} ref={register()}/>
                             </div>

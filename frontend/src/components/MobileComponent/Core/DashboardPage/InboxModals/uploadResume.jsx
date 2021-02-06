@@ -43,7 +43,6 @@ const UploadResume = (props) => {
 
     const onSubmit = async (values) => {
         values = { ...values, file: file };
-        console.log(values)
         let response = await new Promise((resolve, reject) => {
             dispatch(uploadResumeForm({ values, resolve, reject }));
         });
@@ -128,7 +127,7 @@ const UploadResume = (props) => {
                     </ul>
                 </div>
 
-                <button className="btn btn-primary px-5 mt-30" onClick={handleSubmit(onSubmit)}>Upload</button>
+                <button className="btn btn-primary px-5 mt-30" onClick={handleSubmit(onSubmit)}>Save</button>
             </div>
 
         </div>

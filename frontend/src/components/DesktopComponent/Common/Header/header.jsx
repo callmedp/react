@@ -126,7 +126,8 @@ const Header = (props) => {
                                             {
                                                 isLoggedIn ? (
                                                     <>
-                                                        <a className="dropdown-item" href={`${siteDomain}/dashboard/`} >My Inbox</a>
+                                                        <a className="dropdown-item" href={`${siteDomain}/dashboard/`} >My Courses</a>
+                                                        <a className="dropdown-item" href={`${siteDomain}/dashboard/myservices`} >My Services</a>
                                                         <a className="dropdown-item" href={`${siteDomain}/dashboard/myorder/`}>My Orders</a>
                                                         <a className="dropdown-item" href={`${siteDomain}/dashboard/mywallet/`}>My Wallet</a>
                                                         <a className="dropdown-item" href={`${siteDomain}/dashboard/roundone/`}>My Referrals</a>

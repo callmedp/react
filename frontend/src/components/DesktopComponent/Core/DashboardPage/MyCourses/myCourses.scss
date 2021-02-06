@@ -21,6 +21,10 @@
 
     .db-white-box {
         padding: 15px 15px 15px 5px;
+
+        &:hover {
+            box-shadow: $box-shadow-lg;
+        }
     }
 
     figure {
@@ -187,6 +191,7 @@
                 width: 42px;
                 top: 25px;
                 display: none;
+                z-index: 99;
 
                 a {
                     &::before {
@@ -493,6 +498,7 @@
         position: absolute;
         right: 15px;
         top: 5px;
+        z-index: 9;
     }
 
     .db-timeline-list li:first-child {
@@ -502,6 +508,8 @@
     &.arrow-box.left-big::before {
         left: -8px;
         margin-top: -20px;
+        top: 43px;
+        margin-top: 0;
     }
 }
 
@@ -531,7 +539,34 @@
     &--subheading {
         font-size: 1.2rem;
         color: $gray-600;
+        margin-top: 15px;
     }
+
+    .custom-control-input {
+        opacity: 0;
+    }
+
+    .rating-review {
+        i {
+            margin: 0 12px;
+            transform: scale(1.2);
+            cursor: pointer;
+        }
+    }
+
+    .icon-fullstar,
+    .icon-blankstar {
+        background: $spriteDb;
+        @include size(24px, 22px);
+    }
+    .icon-fullstar {
+        background-position: -30px -241px;
+    }
+
+    .icon-blankstar {
+        background-position: 0 -241px;
+    }
+
 }
 
 

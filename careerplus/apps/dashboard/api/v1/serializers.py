@@ -105,12 +105,15 @@ class OrderItemSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         data = super(OrderItemSerializer, self).to_representation(instance)
+        parent_product = instance.product.get_parent()
         data['oi_status'] = self.get_oi_status_value(instance) if instance.oi_status else ''
         data.update({
             'name': self.get_oi_name(instance) if instance.product_id else instance.title,
-            'productUrl': instance.product.get_absolute_url() if instance.product_id else '',
+            'productUrl': parent_product.get_absolute_url() if parent_product else (instance.product.get_absolute_url() if instance.product else ''),
             'product_type_flow': instance.product.type_flow if instance.product_id else '',
             'heading': instance.product.heading if instance.product_id else '',
+            'order_id':instance.order.id,
+            'auto_login_method':instance.product.vendor.auto_login_method if instance.product and  instance.product.vendor and instance.product.vendor.auto_login_method else 0
         })
         
         if instance.oi_status == 4:
@@ -127,6 +130,9 @@ class OrderItemSerializer(serializers.ModelSerializer):
             dur_days = instance.product.get_duration_in_day()
             if product:
                 product=product[0]
+                if parent_product:
+                    parent_product = SQS().filter(id=parent_product.id)
+                    parent_product = parent_product[0]
                 d = json.loads(product.pVrs).get('var_list')
                 if len(d)!=0:
                     dur_days = d[0].get('dur_days')
@@ -134,8 +140,8 @@ class OrderItemSerializer(serializers.ModelSerializer):
                 data.update({
                     'solr_id':product.id,
                     'url':product.pURL,
-                    'img':product.pImg if product.pImg else instance.product.get_image_url(),
-                    'imgAlt':product.pImA,
+                    'img':parent_product.pImg if parent_product else product.pImg,
+                    'imgAlt':parent_product.pImA if parent_product else product.pImA,
                     'title':product.pTt,
                     'slug':product.pSg,
                     'price':float(product.pPin),
@@ -148,7 +154,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
                 })
             else:
                 data.update({
-                'img': instance.product.get_image_url(), 
+                'img': parent_product.get_image_url() if parent_product else instance.product.get_image_url(), 
                 'price': instance.product.get_price(),
                 'vendor': instance.product.vendor.name, 
                 'duration' : self.convert_to_month(int(instance.product.get_duration_in_day())) if instance.product_id and instance.product.get_duration_in_day() else None,
