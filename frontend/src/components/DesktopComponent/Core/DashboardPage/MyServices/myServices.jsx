@@ -5,9 +5,8 @@ import './myServices.scss';
 import { startDashboardServicesPageLoader, stopDashboardServicesPageLoader } from 'store/Loader/actions/index';
 import Loader from '../../../Common/Loader/loader';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchMyServices, fetchPendingResume } from 'store/DashboardPage/MyServices/actions';
+import { fetchMyServices, fetchPendingResume, updateResumeShine } from 'store/DashboardPage/MyServices/actions';
 import { fetchOiComment } from 'store/DashboardPage/AddSubmitComment/actions/index';
-import { fetchReviews } from 'store/DashboardPage/AddSubmitReview/actions/index';
 import UploadResumeModal from '../Inbox/uploadResumeModal';
 import ViewDetailModal from '../Inbox/viewDetailModal';
 import RateModal from '../Inbox/rateModal';
@@ -17,10 +16,12 @@ import Pagination from '../../../Common/Pagination/pagination';
 import AcceptModal from '../Inbox/acceptModal';
 import RejectModal from '../Inbox/rejectModal';
 import EmptyInbox from '../Inbox/emptyInbox';
-import { startCommentLoader, stopCommentLoader, startUploadLoader, stopUploadLoader, startReviewLoader, stopReviewLoader } from 'store/Loader/actions/index';
+import { startCommentLoader, stopCommentLoader, startUploadLoader, stopUploadLoader } from 'store/Loader/actions/index';
 import BreadCrumbs from '../Breadcrumb/Breadcrumb';
 import { pausePlayResume } from 'store/DashboardPage/MyServices/actions/index';
 import {siteDomain, resumeShineSiteDomain} from '../../../../../utils/domains';
+import {Toast} from '../../../Common/Toast/toast';
+import { showSwal } from '../../../../../utils/swal';
 
 const MyServices = (props) => {
     const dispatch = useDispatch();
@@ -79,24 +80,19 @@ const MyServices = (props) => {
 
     // main service api hit
     const handleEffects = async () => {
-        try {
-            //You may notice that apis corresponding to these actions are not getting called on initial render.
-            //This is because initial render is done on node server, which is calling these apis, map the data and send it to the browser.
-            //So there is no need to fetch them again on the browser.
+        try{
             if (!(window && window.config && window.config.isServerRendered)) {
                 dispatch(startDashboardServicesPageLoader());
                 await new Promise((resolve, reject) => dispatch(fetchMyServices({ page: currentPage, isDesk: true, ...filterState, resolve, reject })))
                 dispatch(stopDashboardServicesPageLoader());
             }
             else {
-                //isServerRendered is needed to be deleted because when routing is done through react and not on the node,
-                //above actions need to be dispatched.
                 delete window.config?.isServerRendered
             }
-        } catch (error) {
-            if (error?.status == 404) {
-                history.push('/404');
-            }
+        }
+        catch(e){
+            dispatch(stopDashboardServicesPageLoader());
+            showSwal('error', 'Sorry! we are unable to fecth your data.')
         }
     };
     
@@ -134,6 +130,26 @@ const MyServices = (props) => {
     const createBuilderResumeDownloadLink = (orderId, productId) =>
   `${siteDomain}/api/v1/resumetemplatedownload/?order_pk=${orderId}&product_id=${productId}`;
 
+    const updateResumeUploadShine = async(ev, order_id) => {
+        let updatedValue = {
+            'service_resume_upload_shine' : ev.target.checked,
+            'order_id' : order_id
+        }
+        dispatch(startDashboardServicesPageLoader());
+        let response = await new Promise((resolve, reject) => {
+            dispatch(updateResumeShine({ updatedValue, resolve, reject }));
+        });
+
+        dispatch(stopDashboardServicesPageLoader());
+
+        if(response) {
+            Toast.fire({
+                type: response.service_resume_upload_shine ? 'success' : 'error',
+                title: response.service_resume_upload_shine ? "Resume will be updated" : "Resume will not be updated"
+            });
+        }
+    }
+
     useEffect(() => {
         window.scrollTo({
             top: 0,
@@ -148,7 +164,7 @@ const MyServices = (props) => {
         <BreadCrumbs filterState={filterState} setfilterState={setfilterState} filterStateShow={true}/>
         <div>
             {serviceLoader ? <Loader /> : ''}
-
+            
             <div className="db-my-courses-detail">
                 {/* {
                     results?.data?.length > 0 && pending_resume_items?.length > 0 ? 
@@ -156,7 +172,7 @@ const MyServices = (props) => {
                     : null
                 } */}
 
-                { !results?.page?.total || results?.page?.total === 0 ? <EmptyInbox inboxButton="Go To Home" inboxText="There is no service added to your profile!"/> : '' }
+                {  results.page.total === 0 ? <EmptyInbox inboxButton="Go To Home" redirectUrl={resumeShineSiteDomain} inboxText="There is no service added to your profile!"/> : '' }
 
                 {results?.data && results?.data?.length > 0 ?
                     results?.data?.map((service,index) => {
@@ -186,13 +202,20 @@ const MyServices = (props) => {
                                                     </div> */}
 
                                                     <div className="db-my-courses-detail__leftpan--status mb-2">
-                                                        Status:
-                                                        <strong className="ml-1">{ service?.updated_status?.status }
+                                                        <strong className="ml-1">
+                                                            {service?.updated_status?.status && service?.updated_status?.status !== 'Default' && <>Status: <strong> { service?.updated_status?.status } </strong></>}
                                                             {
                                                                 service?.updated_status?.upload_resume && <Link to={"#"} className="ml-2" onClick={() => uploadToggleService()}>Upload</Link> 
                                                             }
                                                             {
                                                                 service?.updated_status?.download_url && <a href={`${service?.updated_status?.download_url}`} target="_blank" className="ml-2"> Download</a> 
+                                                            }
+                                                            {
+                                                                service?.updated_status?.UploadResumeToShine && 
+                                                                <>
+                                                                    <input type="checkbox" className="ml-3 align-middle" id={`uploadResumeToShine${service?.id}`} value="True" name="service_resume_upload_shine" onClick={(event) => updateResumeUploadShine(event, service?.id)}/>
+                                                                    <label className="font-weight-bold ml-2" htmlFor={`uploadResumeToShine${service?.id}`}>Upload Resume to Shine</label>
+                                                                </>
                                                             }
                                                             {
                                                                 service?.updated_status?.download_credentials_url && <a href={`${siteDomain}${service?.updated_status?.download_credentials_url}`} target="_blank" className="ml-2"> Download Credential</a> 
@@ -206,7 +229,7 @@ const MyServices = (props) => {
                                                             {
                                                                 service?.updated_status?.edit_template &&
                                                                     <>
-                                                                        <a href={createBuilderResumeDownloadLink(service?.id, service?.product)} target="_blank" className="ml-2"> Download</a>
+                                                                        <a href={createBuilderResumeDownloadLink(service?.order_id, service?.product)} target="_blank" className="ml-2"> Download</a>
                                                                         <a className="ml-15" target="_blank" href={`${resumeShineSiteDomain}/resume-builder/edit/?type=profile`}>Edit Template</a>
                                                                     </>
                                                             }

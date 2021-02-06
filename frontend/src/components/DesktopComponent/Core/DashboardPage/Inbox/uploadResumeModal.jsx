@@ -8,6 +8,7 @@ import { uploadResumeForm } from 'store/DashboardPage/MyServices/actions';
 import {Toast} from '../../../Common/Toast/toast';
 import { useSelector } from 'react-redux';
 import Loader from '../../../Common/Loader/loader';
+import { startUploadLoader, stopUploadLoader } from 'store/Loader/actions/index';
 
 const UploadResumeModal =(props) => {
     const { uploadHandelClose, show, pending_resume_items } = props;
@@ -30,9 +31,12 @@ const UploadResumeModal =(props) => {
 
     const onSubmit = async (values) => {
         values = { ...values, file: file };
+        dispatch(startUploadLoader());
         let response = await new Promise((resolve, reject) => {
             dispatch(uploadResumeForm({ values, resolve, reject }));
         });
+
+        dispatch(stopUploadLoader());
 
         if (!response.error) {
             reset();
