@@ -39,6 +39,11 @@ const fetchOiDetailsApi = (data) => {
     return BaseApiService.get(url)
 }
 
+const updateResumeShineApi = (data) => {
+    const url = `${siteDomain}/api/v1/order/245860/update/`;
+    return BaseApiService.patch(url, data)
+}
+
 export default {
     myServicesData,
     uploadResumeDashboardForm,
@@ -46,5 +51,6 @@ export default {
     candidateAccept,
     candidateReject,
     pauseResumeService,
-    fetchOiDetailsApi
+    fetchOiDetailsApi,
+    updateResumeShineApi
 }

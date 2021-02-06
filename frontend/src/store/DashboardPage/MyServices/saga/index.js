@@ -145,6 +145,16 @@ function* fetchOiDetails(action) {
     
 }
 
+function* updateResume(action) {
+    const { payload: { updatedValue, resolve, reject } } = action;
+    try {
+        const response = yield call(Api.updateResumeShineApi, updatedValue);
+        return resolve(response)
+    }
+    catch (error) {
+        return reject(error)
+    }
+}
 export default function* WatchDashboardMyServices() {
     yield takeLatest(Actions.FETCH_MY_SERVICES, DashboardServicesApi);
     yield takeLatest(Actions.UPLOAD_RESUME_FORM, uploadResume);
@@ -152,4 +162,6 @@ export default function* WatchDashboardMyServices() {
     yield takeLatest(Actions.REQUEST_CANDIDATE_OI_ACCEPT_REJECT, acceptrejectcandidate);
     yield takeLatest(Actions.PAUSE_AND_RESUME_SERVICE_REQUEST, pauseResumeService);
     yield takeLatest(Actions.FETCH_OI_DETAILS, fetchOiDetails);
+    yield takeLatest(Actions.UPDATE_RESUME_SHINE, updateResume);
+
 }

@@ -235,9 +235,9 @@ const MyCourses = (props) => {
 
                                                     <div className="db-my-courses-detail__leftpan--status mb-2">
                                                     {
-                                                            course?.updated_status?.status && 
+                                                             course?.updated_status?.status && course?.updated_status?.status !== 'Default' && <>Status: <strong> { course?.updated_status?.status } </strong></>  &&
                                                             <>
-                                                                Status: <strong> 
+                                                                <strong> 
                                                                 { course?.updated_status?.status } 
                                                                 {
                                                                     course?.updated_status?.take_test && <a href={course?.updated_status?.auto_login_url} target="_blank" className="font-weight-bold"> Take test</a>

@@ -47,6 +47,11 @@ const updateServiceCommentCount = payload => {
     }
 }
 
+const updateResumeShine = (payload) => ({
+    type: Actions.UPDATE_RESUME_SHINE,
+    payload
+})
+
 export {
     fetchMyServices,
     uploadResumeForm,
@@ -54,5 +59,6 @@ export {
     CandidateAcceptRejectResume,
     pausePlayResume,
     fetchOiDetails,
-    updateServiceCommentCount
+    updateServiceCommentCount,
+    updateResumeShine
 }

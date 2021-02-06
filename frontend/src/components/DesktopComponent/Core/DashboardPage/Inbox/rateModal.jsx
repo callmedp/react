@@ -59,12 +59,13 @@ const RateModal =(props) => {
         };
 
         const response = await new Promise((resolve, reject) => dispatch(submitReview({payload: new_review, resolve, reject})));
+
         if(response) {
             if(!response?.error) setShowRateModal(false);
 
             Toast.fire({
                 type: response?.error ? 'error' : 'success',
-                title: response.display_message ? response.display_message : response.error
+                title: response?.data.display_message ? response?.data.display_message : response.error
             });
         }
     };
