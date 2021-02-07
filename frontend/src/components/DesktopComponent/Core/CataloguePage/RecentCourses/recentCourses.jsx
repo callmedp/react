@@ -2,12 +2,17 @@ import React from 'react';
 import './recentCourses.scss';
 import { useSelector } from 'react-redux';
 import CourseCard from 'components/DesktopComponent/Common/CourseCard/courseCard';
+import { siteDomain } from 'utils/domains';
 
 const RecentCourses = (props) => {
 
     const { recentCoursesList } = useSelector(store => store.recentCourses);
 
-    
+    const starRatings = (star, index) => {
+        return (star === '*' ? <em className="icon-fullstar" key={index}></em> : star === '+'
+            ? <em className="icon-halfstar" key={index}></em> : <em className="icon-blankstar" key={index}></em>
+        )
+    }
 
     return (
         <section className="container-fluid lightblue-bg mt-60" data-aos="fade-up">

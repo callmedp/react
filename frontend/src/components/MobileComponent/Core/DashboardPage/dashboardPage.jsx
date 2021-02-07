@@ -73,7 +73,13 @@ const Dashboard = (props) => {
                         {/*<EditSkills />
                         <PersonalDetail /> */}
                         
-                        { dbContainer != 'startcourse' ? <ProductCardsSlider productList={trendingCourses} /> : '' }
+                        { dbContainer != 'startcourse' ? 
+                            <>
+                                <section className="m-courses mt-0 mb-0 pt-10 pb-0" >
+                                    <h2 className="m-heading centered">Popular Courses</h2>
+                                        <ProductCardsSlider productList={trendingCourses} />
+                                </section>
+                            </> : '' }
                         { dbContainer != 'startcourse' ? <HaveQuery /> : '' }
                     </div>
                     <Footer /> 
