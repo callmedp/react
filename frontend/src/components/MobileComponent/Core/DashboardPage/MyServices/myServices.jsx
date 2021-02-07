@@ -22,7 +22,7 @@ import ViewDetails from './oiViewDetails'
 import Filter from '../Filter/filter';
 
 // API Import
-import { fetchMyServices, fetchPendingResume } from 'store/DashboardPage/MyServices/actions/index';
+import { fetchMyServices, fetchPendingResume, updateResumeShine } from 'store/DashboardPage/MyServices/actions/index';
 import { pausePlayResume } from 'store/DashboardPage/MyServices/actions/index';
 
 const MyServices = (props) => {
@@ -102,23 +102,22 @@ const MyServices = (props) => {
     const createBuilderResumeDownloadLink = (orderId, productId) =>
         `${siteDomain}/api/v1/resumetemplatedownload/?order_pk=${orderId}&product_id=${productId}`;
 
-    //View Details Data
-    // const getOrderDetails = (dataList) => {
-    //     return (
-    //         <ul className="my-order__order-detail--info mt-15">
-    //             {
-    //                 dataList.map((data, index) =>
-    //                     <li key={index}>
-    //                         <span> 
-    //                             <hr />
-    //                             {data?.date} <br />
-    //                             <strong> {data?.status} </strong>
-    //                         </span>
-    //                     </li>)
-    //             }
-    //         </ul>
-    //     )
-    // }
+    const updateResumeUploadShine = async(ev, order_id) => {
+        let updatedValue = {
+            'service_resume_upload_shine' : ev.target.checked,
+            'order_id' : order_id
+        }
+        dispatch(startDashboardServicesPageLoader());
+        let response = await new Promise((resolve, reject) => {
+            dispatch(updateResumeShine({ updatedValue, resolve, reject }));
+        });
+    
+        dispatch(stopDashboardServicesPageLoader());
+    
+        if(response) {
+            showSwal((response.service_resume_upload_shine ? 'success' : 'error'), (response.service_resume_upload_shine ? "Resume will be updated" : "Resume will not be updated"))
+        }
+    }
 
     const starRatings = (star, index) => {
         return (star === '*' ? <em className="micon-fullstar" key={index}></em> : star === '+' 
@@ -229,6 +228,14 @@ const MyServices = (props) => {
                                                             <br /><br />
                                                             <a className="m-accept" href="/" onClick={(e) => {e.preventDefault();setAcceptModal(true);setAcceptModalId(service?.id)}}>Accept</a>
                                                             <a className="ml-2 m-reject" href="/" onClick={(e) => {e.preventDefault();setRejectModal(true);setRejectModalId(service?.id)}}>Reject</a>
+                                                        </>
+                                                    }
+                                                    {
+                                                        service?.updated_status?.UploadResumeToShine && 
+                                                        <>
+                                                            <br />
+                                                            <input type="checkbox" className="align-middle" id={`uploadResumeToShine${service?.id}`} value="True" name="service_resume_upload_shine" onClick={(event) => updateResumeUploadShine(event, service?.id)}/>
+                                                            <label className="font-weight-bold ml-2" htmlFor={`uploadResumeToShine${service?.id}`}>Upload Resume to Shine</label>
                                                         </>
                                                     }
                                                     </strong>
