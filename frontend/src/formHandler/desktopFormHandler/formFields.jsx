@@ -48,7 +48,7 @@ const TextArea = (props) => {
 
         
         <React.Fragment>
-            <div className="form-group">
+            <div className="form-group add-comments">
                 <textarea className={className} name={name} type={type} placeholder={placeholder} ref={register(validation)} value={value} defaultValue={defaultValue} rows={rows} id={id} />
                 <label htmlFor={name}>{label}</label>
             </div>

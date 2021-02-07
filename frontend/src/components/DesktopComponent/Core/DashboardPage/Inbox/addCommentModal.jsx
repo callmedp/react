@@ -69,7 +69,7 @@ const AddCommentModal = (props) => {
                     <form onSubmit={handleSubmit(submitComment)}>
                         <div className="db-add-comments disabled-before lightblue-bg" id="addComments">
                             <span className="btn-close" onClick={() => addCommentDataFetch(false)}>&#x2715;</span>
-                            <p className="font-weight-semi-bold"> Add comment </p>
+                            <p className="font-weight-semi-bold pr-5"> Add comment </p>
                             <TextArea attributes={CoursesServicesForm.name} register={register} errors={!!errors ? errors[CoursesServicesForm.name.name] : ''} />
                             <button type="submit" className="btn btn-outline-primary px-5">Submit</button>
                         </div>
