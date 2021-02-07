@@ -1,10 +1,11 @@
 import React from 'react';
-import Swal from 'sweetalert2';
+// import Swal from 'sweetalert2';
 import { useDispatch, useSelector } from 'react-redux';
 import { CandidateAcceptRejectResume } from 'store/DashboardPage/MyServices/actions/index';
 import { startAcceptRejectLoader, stopAcceptRejectLoader } from 'store/Loader/actions/index';
 import Loader from '../../../Common/Loader/loader';
 import { fetchMyServices } from 'store/DashboardPage/MyServices/actions';
+import { showSwal } from 'utils/swal';
 
 const AcceptModal = (props) => {
     const { setAcceptModal, oi_id, currentPage } = props
@@ -25,16 +26,10 @@ const AcceptModal = (props) => {
                 dispatch(stopAcceptRejectLoader());
 
                 setAcceptModal(false)
-                Swal.fire({
-                icon: 'success',
-                title: 'Accept Request Sent!'
-                })
+                showSwal('success', 'Accept Request Sent!')
             } catch (e) {
                 dispatch(stopAcceptRejectLoader());
-                Swal.fire({
-                icon: "error",
-                title: "Something went wrong! Try Again",
-                });
+                showSwal('error', 'Something went wrong! Try Again')
             }
         }
     };

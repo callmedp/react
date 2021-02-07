@@ -9,7 +9,7 @@ from shop.models import Product
 class VendorUrlMixins():
     def get_candidate_details(self, candidate_id):
         if not candidate_id:
-            return {"error_message":"Please Complete your registeration on Shine to Access the Course"}
+            return {"error_message":"Please Complete your Registration on Shine to Access the Course"}
 
         personal_detail = None
         try:
@@ -22,10 +22,10 @@ class VendorUrlMixins():
             personal_detail = personal_details[0]
 
         if not personal_detail:
-            return {"error_message":"Please Complete your registeration on Shine to Access the Course"}
+            return {"error_message":"Please Complete your Registration on Shine to Access the Course"}
         if not personal_detail.get('first_name', '') or not personal_detail.get('email', '') or \
             not personal_detail.get('cell_phone', ''):
-                return {"error_message":"Please Complete your registeration on Shine to Access the Course"}
+                return {"error_message":"Please Complete your Registration on Shine to Access the Course"}
     
         return personal_detail
 

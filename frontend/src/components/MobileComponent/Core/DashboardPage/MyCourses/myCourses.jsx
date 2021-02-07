@@ -159,7 +159,7 @@ const MyCourses = (props) => {
                                             <img src={course?.img} alt={course?.title} />
                                         </figure>
                                         <div className="m-courses-detail__info">
-                                            <h2>{course?.name}</h2>
+                                            <a href={`${siteDomain}${course?.productUrl}`}><h2>{course?.heading ? course?.heading  : course?.name }</h2></a>
                                             <p className="m-pipe-divides mb-5">Provider: <strong>{course?.vendor}</strong></p>
                                             <p className="m-pipe-divides mb-5">{ !!course?.enroll_date && <span>Enrolled on: <strong>{course?.enroll_date}</strong> </span> } { !!course?.mode && <span>Mode: <strong>{course?.mode}</strong> </span> }</p>
                                             <p className="m-pipe-divides mb-5">{ !!course?.duration_in_days && <span> Duration: <strong>{ course?.duration_in_days } { course?.duration_in_days > 1 ? 'days' : 'day' }</strong> </span> } { !!course?.jobs && <span>Jobs: <strong>{course?.jobs}</strong> </span>}</p>

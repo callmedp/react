@@ -138,7 +138,7 @@ const MyOrders = (props) => {
                                                                 <Link to={"#"} className="col-9 pl-0 noLink">
                                                                     {innItem.title}
                                                                 </Link>
-                                                                <span className="col-3 unpaid">{innItem.oi_status}</span>
+                                                                <span className="col-3 unpaid text-right">{innItem.oi_status}</span>
                                                             </li>
                                                         )
                                                     })

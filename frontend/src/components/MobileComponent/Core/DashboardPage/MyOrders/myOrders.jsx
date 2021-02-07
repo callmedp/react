@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import Swal from 'sweetalert2';
+// import Swal from 'sweetalert2';
 import './myOrders.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { siteDomain } from 'utils/domains';
@@ -11,6 +11,7 @@ import Loader from '../../../Common/Loader/loader';
 import Pagination from '../../../Common/Pagination/pagination';
 import { getDataStorage } from 'utils/storage';
 import EmptyInbox from '../InboxModals/emptyInbox';
+import { showSwal } from 'utils/swal';
 
    
 const MyWallet = (props) => {
@@ -68,20 +69,12 @@ const MyWallet = (props) => {
                 })
             ));
             if (result.cancelled) {
-                Swal.fire({
-                    // html: result,
-                    title: result.data,
-                    icon: 'success'
-                })
+                showSwal('success', result?.data)
                 handleEffects();
                 dispatch(stopDashboardOrderPageLoader());
             }
             else {
-                Swal.fire({
-                    // html: result,
-                    title: result.error,
-                    icon: 'error'
-                })
+                showSwal('error', result?.error)
                 dispatch(stopDashboardOrderPageLoader());
             }
         }
