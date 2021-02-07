@@ -38,11 +38,11 @@ const PopularCourses = (props) => {
                     return (
                         <li key={course.id}>
                             <figure>
-                                <img  src={course.img} alt={course.img_alt} />
+                                <img  src={course.imgUrl} alt={course.imgAlt} />
                             </figure>
                             <div className="links">
                                 <a href={`${siteDomain}${course.url}${trackingParameters}`} onClick={() => handleTracking(course)}>{course.name}</a>
-                                <span  className="mr-10">By {course.provider}</span>
+                                <span className="mr-10">By {course.provider}</span>
                                     <span className="rating">
                                         { course.stars?.map((star) => starRatings(star)) }
                                         <span >{course.rating}/5</span>
