@@ -29,7 +29,7 @@ const MyServices = (props) => {
     const { serviceLoader } = useSelector(store => store.loader);
     
     // page no. set here
-    const [currentPage, setCurrentPage] = useState(1);
+    const [currentPage, setCurrentPage] = useState(5);
     const [filterState, setfilterState] = useState({ 'last_month_from': 'all', 'select_type' : 'all' });
     
     // main api result state here
@@ -202,6 +202,9 @@ const MyServices = (props) => {
                                                     </div> */}
 
                                                     <div className="db-my-courses-detail__leftpan--status mb-2">
+                                                        <div className="db-my-courses-detail__leftpan--alert">
+                                                            To initiate your service upload your latest resume
+                                                        </div>
                                                         <strong className="ml-1">
                                                             {service?.updated_status?.status && service?.updated_status?.status !== 'Default' && <>Status: <strong> { service?.updated_status?.status } </strong></>}
                                                             {
@@ -229,7 +232,7 @@ const MyServices = (props) => {
                                                             {
                                                                 service?.updated_status?.edit_template &&
                                                                     <>
-                                                                        <a href={createBuilderResumeDownloadLink(service?.order_id, service?.product)} target="_blank" className="ml-2"> Download</a>
+                                                                        <a href={createBuilderResumeDownloadLink(service?.order_id, service?.product)} target="_blank" className=""> Download</a>
                                                                         <a className="ml-15" target="_blank" href={`${resumeShineSiteDomain}/resume-builder/edit/?type=profile`}>Edit Template</a>
                                                                     </>
                                                             }

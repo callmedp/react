@@ -225,7 +225,7 @@ const MyCourses = (props) => {
                                                 <div className="db-my-courses-detail__leftpan--box">
                                                     <h3><a href={`${siteDomain}${course.productUrl}`}>{course.heading}</a></h3>
                                                     <div className="db-my-courses-detail__leftpan--info">
-                                                        { !!course.vendor && <span>Provider: <Link className="noLink" to={"#"}>{course.vendor}</Link></span> }
+                                                        { !!course.vendor && <span>Provider: <strong className="text-gray-dark noLink" to={"#"}>{course.vendor}</strong></span> }
                                                         { !!course.enroll_date && <span>Enrolled on: <strong>{course.enroll_date}</strong></span> }
                                                         { !!course?.duration_in_days && <span>Duration: <strong>{course?.duration_in_days} {course?.duration_in_days > 1 ? 'days': 'day'}</strong></span> }
                                                         { !!course.mode && <span>Mode: <strong>{course.mode}</strong></span> }
@@ -243,10 +243,9 @@ const MyCourses = (props) => {
 
                                                     <div className="db-my-courses-detail__leftpan--status mb-2">
                                                     {
-                                                             course?.updated_status?.status && course?.updated_status?.status !== 'Default' && <>Status: <strong> { course?.updated_status?.status } </strong></>  &&
                                                             <>
                                                                 <strong> 
-                                                                { course?.updated_status?.status } 
+                                                                { course?.updated_status?.status && course?.updated_status?.status !== 'Default' && <> Status: {course?.updated_status?.status} </>} 
                                                                 {
                                                                     course?.updated_status?.take_test && <a href={course?.updated_status?.auto_login_url} target="_blank" className="font-weight-bold"> Take test</a>
                                                                 }
