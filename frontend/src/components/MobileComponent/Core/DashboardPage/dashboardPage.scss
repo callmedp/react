@@ -311,8 +311,8 @@
 }
 
 .swal2-styled.swal2-confirm {
-    background: $blue;
-    border-radius: 2rem;
+    background: $blue !important;
+    border-radius: 2rem !important;
     box-shadow: none;
     padding: 1.3rem 4rem;
     text-transform: uppercase;
