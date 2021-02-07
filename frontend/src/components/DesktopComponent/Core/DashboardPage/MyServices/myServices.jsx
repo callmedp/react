@@ -29,7 +29,7 @@ const MyServices = (props) => {
     const { serviceLoader } = useSelector(store => store.loader);
     
     // page no. set here
-    const [currentPage, setCurrentPage] = useState(5);
+    const [currentPage, setCurrentPage] = useState(1);
     const [filterState, setfilterState] = useState({ 'last_month_from': 'all', 'select_type' : 'all' });
     
     // main api result state here
@@ -202,9 +202,9 @@ const MyServices = (props) => {
                                                     </div> */}
 
                                                     <div className="db-my-courses-detail__leftpan--status mb-2">
-                                                        <div className="db-my-courses-detail__leftpan--alert">
+                                                        {service?.updated_status?.upload_resume && <div className="db-my-courses-detail__leftpan--alert">
                                                             To initiate your service upload your latest resume
-                                                        </div>
+                                                        </div>}
                                                         <strong className="ml-1">
                                                             {service?.updated_status?.status && service?.updated_status?.status !== 'Default' && <>Status: <strong> { service?.updated_status?.status } </strong></>}
                                                             {
