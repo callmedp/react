@@ -35,7 +35,7 @@ const DashboardPage = (props) => {
                 {
                     {
                         'myservices' : 'My Services | Shine Learning',
-                        'mycourses' : 'My Courses | Shine Learning',
+                        undefined : 'My Courses | Shine Learning',
                         'myorder' : 'My Orders | Shine Learning',
                         'mywallet' : 'My Wallet | Shine Learning',
                         'startcourse' : 'Start Course | Shine Learning'
