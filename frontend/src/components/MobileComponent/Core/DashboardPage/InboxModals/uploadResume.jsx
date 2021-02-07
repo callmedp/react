@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Swal from 'sweetalert2';
+// import Swal from 'sweetalert2';
 import './uploadResume.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from "react-hook-form";
@@ -8,6 +8,7 @@ import { uploadResumeForm } from 'store/DashboardPage/MyServices/actions';
 import { fetchPendingResume } from 'store/DashboardPage/MyServices/actions/index';
 import { startUploadLoader, stopUploadLoader } from 'store/Loader/actions/index';
 import Loader from '../../../Common/Loader/loader';
+import { showSwal } from 'utils/swal'
 
 const UploadResume = (props) => {
     const { setShowUpload } = props
@@ -49,18 +50,12 @@ const UploadResume = (props) => {
 
         if (!response.error) {
             reset();
-            Swal.fire({
-                icon: "success",
-                title: "Form Submitted Successfully"
-            })
+            showSwal('success', 'Form Submitted Successfully')
             setFile(undefined)
             setFileName("Upload a file");
         }
         else {
-            Swal.fire({
-                icon: "error",
-                title: response.error
-            })
+            showSwal('error', response?.error)
         }
     }
 

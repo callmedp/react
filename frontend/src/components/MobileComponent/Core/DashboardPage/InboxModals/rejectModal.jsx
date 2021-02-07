@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
-import Swal from 'sweetalert2';
+// import Swal from 'sweetalert2';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from "react-hook-form";
 import { CandidateAcceptRejectResume } from 'store/DashboardPage/MyServices/actions/index';
-import { startAcceptRejectLoader, stopAcceptRejectLoader } from 'store/Loader/actions/index';
-import Loader from '../../../Common/Loader/loader';
-import inboxForm from 'formHandler/mobileFormHandler/formData/inboxForm';
-import { TextArea } from 'formHandler/mobileFormHandler/formFields';
+// import { startAcceptRejectLoader, stopAcceptRejectLoader } from 'store/Loader/actions/index';
+// import Loader from '../../../Common/Loader/loader';
+// import inboxForm from 'formHandler/mobileFormHandler/formData/inboxForm';
+// import { TextArea } from 'formHandler/mobileFormHandler/formFields';
 import fileUpload from 'utils/fileUpload';
 import { fetchMyServices } from 'store/DashboardPage/MyServices/actions/index';
+import { showSwal } from 'utils/swal';
 
 const RejectModal = (props) => {
     const { setRejectModal, oi_id, currentPage } = props
@@ -44,10 +45,7 @@ const RejectModal = (props) => {
             setRejectModal(false)
         }
         catch {
-            Swal.fire({
-                icon: "error",
-                title: "Something went wrong! Try Again",
-            });
+            showSwal('error', 'Something went wrong! Try Again')
         }
     };
 
@@ -58,9 +56,9 @@ const RejectModal = (props) => {
                 {/* <h2>Reject Confirmations</h2> */}
                 <p className="fs-16 font-weight-bold mt-20 px-30 mb-15">Get a better resume by sharing us the feedback</p>
 
-                <span className="error_cls">
+                <p className="error_cls mb-20">
                     { errors.message && "* Either Upload Resume or Leave your comments" }
-                </span>
+                </p>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     {/* <div className="d-flex align-items-center justify-content-center mt-20">
                         <div className="m-upload-btn-wrapper">

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from "react-hook-form";
-import Swal from 'sweetalert2';
+// import Swal from 'sweetalert2';
 import { fetchOiComment } from 'store/DashboardPage/AddSubmitComment/actions/index';
 import inboxForm from 'formHandler/mobileFormHandler/formData/inboxForm';
 import { TextArea } from 'formHandler/mobileFormHandler/formFields';
@@ -9,6 +9,7 @@ import { startCommentLoader, stopCommentLoader } from 'store/Loader/actions/inde
 import Loader from '../../../Common/Loader/loader';
 import { updateServiceCommentCount } from 'store/DashboardPage/MyServices/actions/index';
 import { updateCourseCommentCount } from 'store/DashboardPage/MyCourses/actions/index';
+import { showSwal } from 'utils/swal';
 
 const AddCommentModal = (props) => {
     const { setShowCommentModal, oi_id, type } = props
@@ -28,15 +29,9 @@ const AddCommentModal = (props) => {
         let response = await new Promise((resolve, reject) => dispatch(fetchOiComment({ payload: new_values, resolve, reject })));
         dispatch(stopCommentLoader());
         reset();
-        Swal.fire({
-            icon: 'success',
-            text: 'Comment sent successfully !'
-        })
+        showSwal('success', 'Comment sent successfully !')
         if (response?.error) {
-            Swal.fire({
-                title: response?.error,
-                type: 'error'
-            })
+            showSwal('error', response?.error)
         }
         else {
             if(type === "myservices"){
@@ -63,10 +58,7 @@ const AddCommentModal = (props) => {
         }
         catch (e) {
             dispatch(stopCommentLoader());
-            Swal.fire({
-                icon: 'error',
-                text: 'Sorry! we are unable to fecth your data.'
-            })
+            showSwal('error', 'Sorry! we are unable to fecth your data.')
         }
     };
 
