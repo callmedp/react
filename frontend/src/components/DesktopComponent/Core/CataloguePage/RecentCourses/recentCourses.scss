@@ -18,6 +18,10 @@
                 box-shadow: $box-shadow-lg;
             }
 
+            &:hover {
+                box-shadow: $box-shadow-hover; 
+            }
+
             &__box {
                 padding: 0 1.5rem 1rem 6.5rem;
                 min-height: 6rem;

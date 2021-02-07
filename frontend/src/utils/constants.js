@@ -205,7 +205,7 @@ const categoryList = [
     },
     { 
         name: 'Course Catalogue', 
-        url: `${siteDomain}/online-courses.html`, 
+        url: `/online-courses.html`, 
         id: 'course_catalogue',
         sideNavType: 'allCourses',
         children: []
@@ -229,6 +229,20 @@ const contactData = {
     'contactTimings' : '9:00am to 6:30pm (Mon - Sat)',
 }
 
+const TrendingCategoryList = [
+    { 
+        name: 'Sales And Marketing', 
+        url: `${siteDomain}/courses/sales-and-marketing/17/`,
+    },
+    {
+        name: 'Information Technology', 
+        url: `${siteDomain}/courses/it-information-technology/22/`, 
+    },
+    { 
+        name: 'Banking & Finance', 
+        url: `${siteDomain}/courses/banking-and-finance/20/`,
+    },
+]
 
 
 export {
@@ -236,5 +250,6 @@ export {
     jobAssistanceList,
     categoryList,
     navSkillList,
-    contactData
+    contactData,
+    TrendingCategoryList,
 }

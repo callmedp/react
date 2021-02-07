@@ -8,7 +8,7 @@ const RecentCourses = (props) => {
     const { recentCoursesList } = useSelector(store => store.recentCourses);
 
     return(
-        <section className="m-container m-lightblue-bg mt-0 mb-0" data-aos="fade-up">
+        <section className="m-container m-lightblue-bg mt-0 mb-0 pr-0" data-aos="fade-up">
             <div className="m-courses m-recent-courses">
                 <h2 className="m-heading2 text-center">Recently added courses</h2>
                 <ProductCards productList={recentCoursesList?.slice(0,4)} />

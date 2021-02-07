@@ -4,13 +4,13 @@ import Slider from "react-slick";
 // import 'slick-carousel/slick/slick.css';
 import './servicesForYou.scss'
 import { useSelector } from 'react-redux';
-import { siteDomain }  from 'utils/domains';
+import { siteDomain, resumeShineSiteDomain }  from 'utils/domains';
 
 const ServicesForYou = (props) => {
     const settings = {
         dots: false,
         arrows: false,
-        infinite: true,
+        infinite: false,
         speed: 500,
         slidesToShow: 1,
         slidesToScroll: 1,
@@ -20,20 +20,20 @@ const ServicesForYou = (props) => {
     const { popularServices } = useSelector( store => store.popularServices );
 
     return(
-        <section className="m-container mt-0 mb-0" data-aos="fade-up" id="services">
+        <section className="m-container mt-0 mb-0 pr-0" data-aos="fade-up" id="services">
             <div className="m-services-foryou">
                 <h2 className="m-heading2 text-center">Services for you</h2>
                 <Slider {...settings}>
                 {
-                    popularServices?.map((service, index) => {
+                    popularServices?.slice(0,4).map((service, index) => {
                         return (
                             <div className="m-services-foryou__list" key={index}>
-                                <h3 className="m-heading3">{service.name}</h3>
-                                <p>{service.description}</p>
+                                <h3 className="m-heading3">{service?.heading ? service?.heading : service?.name}</h3>
+                                <p>{ service.description?.length > 85 ? service.description?.slice(0, 85) + '...' :  service.description }</p>
                                 <span className="d-flex">
-                                    <a href={`${siteDomain}${service.url}`}>Know more</a>
+                                    <a href={`${resumeShineSiteDomain}${service.url}`}>Know more</a>
                                     <figure>
-                                        <img height="30" width="40" src={service.img} alt={service.img_alt} />
+                                        <img src={service.img} alt={service.img_alt} />
                                     </figure>
                                 </span>
                             </div>
