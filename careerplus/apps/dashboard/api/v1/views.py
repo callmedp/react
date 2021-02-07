@@ -72,6 +72,10 @@ class DashboardMyorderApi(DashboardInfo, APIView):
                 'has_prev': True if paginated_data['current_page'] >1 else False,
                 'has_next':True if (paginated_data['total_pages']-paginated_data['current_page'])>0 else False
                 }
+        if not page_info:
+            page_info = {
+                'total': 0
+            }
                 
         return APIResponse(data={'data':order_list,'page':page_info}, message='Order data Success', status=status.HTTP_200_OK)
 
@@ -111,6 +115,10 @@ class MyCoursesApi(DashboardInfo, APIView):
             'total':paginated_data['total_pages'],
             'has_prev': True if paginated_data['current_page'] >1 else False,
             'has_next':True if (paginated_data['total_pages']-paginated_data['current_page'])>0 else False
+            }
+        if not page_info:
+            page_info = {
+                'total': 0
             }
         return APIResponse(data={'data':data,'page':page_info},message='Courses data Success',status=status.HTTP_200_OK)
 
@@ -154,6 +162,10 @@ class MyServicesApi(DashboardInfo, APIView):
             'total':paginated_data['total_pages'],
             'has_prev': True if paginated_data['current_page'] >1 else False,
             'has_next':True if (paginated_data['total_pages']-paginated_data['current_page'])>0 else False
+            }
+        if not page_info:
+            page_info = {
+                'total': 0
             }
         return APIResponse(data={'data':data,'page':page_info},message='Services data Success', status=status.HTTP_200_OK)
 

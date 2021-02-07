@@ -82,7 +82,7 @@ const AddCommentModal = (props) => {
                                             return (
                                                 <li key={idx}>
                                                     <i className="m-timeline-list--dot"></i>
-                                                    <span>{comment.created} {comment.addedBy ? '   |   By ' + comment.added_by : ""} </span>
+                                                    <span>{comment.created} {comment.added_by ? '   |   By ' + comment.added_by : ""} </span>
                                                     <p className="m-timeline-list--text">{comment?.message}</p>
                                                 </li>
                                             )
