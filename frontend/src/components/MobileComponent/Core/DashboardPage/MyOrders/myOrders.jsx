@@ -91,7 +91,7 @@ const MyWallet = (props) => {
                         return(
                             <ul className="my-order__order-detail--info mt-15" key={oi?.id}>
                                 <li>
-                                    <a href={`${siteDomain}${oi?.productUrl}`} className="d-block mb-0">{oi?.name} </a>
+                                    <p className="d-block mb-0">{oi?.name} </p>
                                     <span> Status: <strong>{oi?.oi_status}</strong></span>
                                 </li>
                             </ul>
