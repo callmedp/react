@@ -3,7 +3,7 @@ import { Modal } from 'react-bootstrap';
 import fileUpload from "utils/fileUpload";
 import { useDispatch } from 'react-redux';
 import { useForm } from "react-hook-form";
-import { imageUrl, siteDomain } from 'utils/domains';
+import { imageUrl } from 'utils/domains';
 import { uploadResumeForm } from 'store/DashboardPage/MyServices/actions';
 import {Toast} from '../../../Common/Toast/toast';
 import { useSelector } from 'react-redux';

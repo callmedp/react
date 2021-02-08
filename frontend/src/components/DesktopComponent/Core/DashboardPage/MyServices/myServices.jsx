@@ -140,7 +140,7 @@ const MyServices = (props) => {
             dispatch(updateResumeShine({ updatedValue, resolve, reject }));
         });
 
-        dispatch(stopDashboardServicesPageLoader());
+        // dispatch(stopDashboardServicesPageLoader());
 
         if(response) {
             Toast.fire({
@@ -208,7 +208,7 @@ const MyServices = (props) => {
                                                         <strong className="ml-1">
                                                             {service?.updated_status?.status && service?.updated_status?.status !== 'Default' && <>Status: <strong> { service?.updated_status?.status } </strong></>}
                                                             {
-                                                                service?.updated_status?.upload_resume && <Link to={"#"} className="ml-2" onClick={() => uploadToggleService()}>Upload</Link> 
+                                                                !service?.updated_status?.upload_resume && <Link to={"#"} className="ml-2" onClick={() => uploadToggleService()}>Upload</Link> 
                                                             }
                                                             {
                                                                 service?.updated_status?.download_url && <a href={`${service?.updated_status?.download_url}`} target="_blank" className="ml-2"> Download</a> 
@@ -330,6 +330,8 @@ const MyServices = (props) => {
                                                             service?.len_review ?
                                                                 <div onClick={()=>{
                                                                     toggleRatingsModal(service?.id);
+                                                                    setOiReviewId(service?.id);
+                                                                    setReviewData(service?.review_data)
                                                                 }}>
                                                                     <span className="rating">
                                                                         {

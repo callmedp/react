@@ -72,14 +72,14 @@ const MyCourses = (props) => {
         handleEffects();
     }, [currentPage, filterState])
 
-    const toggleReviews = async (id, prod) => {
-        if(openReview != id) {
-            dispatch(startReviewLoader());
-            await new Promise((resolve, reject) => dispatch(fetchReviews({ payload: { prod: prod}, resolve, reject })));
-            dispatch(stopReviewLoader());
-        }
-        setOpenReview(openReview == id ? false : id);
-    }
+    // const toggleReviews = async (id, prod) => {
+    //     if(openReview != id) {
+    //         dispatch(startReviewLoader());
+    //         await new Promise((resolve, reject) => dispatch(fetchReviews({ payload: { prod: prod}, resolve, reject })));
+    //         dispatch(stopReviewLoader());
+    //     }
+    //     setOpenReview(openReview == id ? false : id);
+    // }
 
     const addCommentDataFetch = async (id) => {
         setAddOpen(addOpen == id ? false : id);

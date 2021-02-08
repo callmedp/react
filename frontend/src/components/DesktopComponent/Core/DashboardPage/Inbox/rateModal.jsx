@@ -1,22 +1,21 @@
 import React, {useState} from 'react';
 import { Modal } from 'react-bootstrap';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 // import Swal from 'sweetalert2';
 import {InputField, TextArea} from 'formHandler/desktopFormHandler/formFields';
 import CoursesServicesForm from 'formHandler/desktopFormHandler/formData/coursesServices';
 import { submitReview } from 'store/DashboardPage/AddSubmitReview/actions/index';
 import { useForm } from "react-hook-form";
-// import { startReviewLoader, stopReviewLoader } from 'store/Loader/actions/index';
-// import Loader from '../../../Common/Loader/loader';
+import { startReviewLoader, stopReviewLoader } from 'store/Loader/actions/index';
+import Loader from '../../../Common/Loader/loader';
 import { Toast } from '../../../Common/Toast/toast'
 import '../../SkillPage/NeedHelp/needHelp.scss';
 import { imageUrl } from 'utils/domains';
 
 
 const RateModal =(props) => {
-    // const { handleClose, show, name, id } = props;
     const { showRateModal, setShowRateModal, oi_id, name } = props;
-
+    const { reviewLoader } = useSelector(store => store.loader);
     const { register, handleSubmit, errors } = useForm();
     const dispatch = useDispatch();
     let [rating, setRating] = useState(0);
@@ -55,10 +54,11 @@ const RateModal =(props) => {
 
     // add new review
     const submitReviewFunc = async(values) => {
+        dispatch(startReviewLoader())
         if(rating === 0){
             setShowError(true)
         }
-        else{
+        else {
             const new_review = {
                 ...values,
                 oi_pk: oi_id,
@@ -67,18 +67,22 @@ const RateModal =(props) => {
     
             const response = await new Promise((resolve, reject) => dispatch(submitReview({payload: new_review, resolve, reject})));
     
+            dispatch(stopReviewLoader())
+
             if(response) {
                 if(!response?.error) setShowRateModal(false);
     
                 Toast.fire({
                     type: response?.error ? 'error' : 'success',
-                    title: response?.data.display_message ? response?.data.display_message : response.error
+                    title: response?.data?.display_message ? response?.data?.display_message : response?.display_message
                 });
             }
         }
     };
 
     return (
+        <>
+        { reviewLoader ? <Loader /> : ''}
         <Modal show={showRateModal} onHide={setShowRateModal} className="db-modal db-page">
         <Modal.Header closeButton></Modal.Header>
         
@@ -115,6 +119,7 @@ const RateModal =(props) => {
                 </div>
             </Modal.Body>
         </Modal>
+        </>
     )
 }
 
