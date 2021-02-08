@@ -21,7 +21,7 @@ const render = (req, routes) => {
 
 const expressRoutes = [
     '/courses/:func/:skill/:id/',
-    '/online-courses.html/'
+    '/online-courses.html/',
 ]
 
 

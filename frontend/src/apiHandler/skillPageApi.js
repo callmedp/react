@@ -9,7 +9,7 @@ export const getSkillPageActions = (params) => {
     { action: fetchSkillPageBanner, payload: { id: params?.id, 'medium': 0 } },
     { action: fetchCoursesAndAssessments, payload: { id: params?.id } },
     { action: fetchDomainJobs, payload: { id: params?.id } },
-    { action: fetchPopularCourses, payload: { id: params?.id } },
+    { action: fetchPopularCourses, payload: { id: params?.id, courseOnly : true } },
   ]
 }
 
@@ -19,7 +19,7 @@ export const getSkillPageActionsMobile = (params) => {
     { action: fetchCoursesAndAssessments, payload: { id: params?.id, 'medium': 1 } },
     { action: fetchDomainJobs, payload: { id: params?.id } },
     { action: fetchRecommendedProducts, payload: {} },
-    { action: fetchPopularCourses, payload: { id: params?.id } },
+    { action: fetchPopularCourses, payload: { id: params?.id, courseOnly : true } },
   ]
 }
 

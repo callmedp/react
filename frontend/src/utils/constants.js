@@ -223,6 +223,12 @@ const navSkillList = [
     { name: 'Cloud Computing', url: '/courses/it-information-technology/cloud-computing/82/', id:'cloud_computing'}
 ]
 
+const contactData = {
+    'contactNo' : '08047105151',
+    'contactEmail' : 'resume@shine.com',
+    'contactTimings' : '9:00am to 6:30pm (Mon - Sat)',
+}
+
 const TrendingCategoryList = [
     { 
         name: 'Sales And Marketing', 
@@ -244,5 +250,6 @@ export {
     jobAssistanceList,
     categoryList,
     navSkillList,
+    contactData,
     TrendingCategoryList,
 }

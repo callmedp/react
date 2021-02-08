@@ -5,28 +5,17 @@ import CataloguePageContainer from "components/DesktopComponent/Core/CataloguePa
 import { getSkillPageActions } from 'apiHandler/skillPageApi';
 import Error404Container from 'components/DesktopComponent/Common/ErrorPage404/errorPage404';
 import { getCataloguePageActions } from "apiHandler/cataloguePageApi";
-
-export const RouteWithSubRoutes = route => {
-    return (
-        <Route
-            path={route.path}
-            exact={route.exact}
-            render={props =>
-                <route.component {...props} routes={route.routes} />
-            }
-        />
-    )
-};
+import DashboardPageContainer from 'components/DesktopComponent/Core/DashboardPage/dashboardPage';
+import { getDashboardPageActions } from "apiHandler/dashboardPageApi";
+import RouteWithSubRoutes from './route';
 
 
 const DesktopAppRouter = () => (
-
     <div>
         <Switch>
         {routes.map((route, i) => <RouteWithSubRoutes key={i} {...route} />)}
         </Switch>
     </div>
-
 );
 
 export const routes = [
@@ -41,6 +30,11 @@ export const routes = [
         component: CataloguePageContainer,
         actionGroup: getCataloguePageActions,
         exact: true,
+    },
+    {
+        path: '/dashboard/:name?',
+        component: DashboardPageContainer,
+        private: true
     },
     {
         path: '/404/',

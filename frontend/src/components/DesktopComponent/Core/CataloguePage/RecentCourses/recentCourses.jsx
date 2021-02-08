@@ -1,7 +1,8 @@
 import React from 'react';
 import './recentCourses.scss';
-import { siteDomain } from 'utils/domains';
 import { useSelector } from 'react-redux';
+import CourseCard from 'components/DesktopComponent/Common/CourseCard/courseCard';
+import { siteDomain } from 'utils/domains';
 
 const RecentCourses = (props) => {
 

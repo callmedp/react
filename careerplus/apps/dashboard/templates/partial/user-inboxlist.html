@@ -222,7 +222,7 @@
                 {% if obj.oi_status == 28 or obj.oi_status == 36 or obj.oi_status == 34 or obj.oi_status == 35 %}
                     {% if obj.days_left_oi_product > 0 and obj.product.is_pause_service  %}
                         {% if obj.service_pause_status %}
-                            <p class="pause-play-services">
+                        <p class="pause-play-services">
                                 <a role="button" onclick="pause_resume_service(this,{{obj.id}},34)">
                                     <i class="pause"> </i> Pause Service
                                 </a>

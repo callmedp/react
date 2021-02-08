@@ -6,8 +6,17 @@ import { CourseAndAssessmentsReducer } from './SkillPage/CoursesTray/reducer';
 import { HeaderReducer } from './Header/reducer/index';
 import { FooterReducer, PopularCoursesReducer } from './Footer/reducer/index';
 import { LoaderReducer } from './Loader/reducer';
+import { CommentReducer } from './DashboardPage/AddSubmitComment/reducer/index';
+import { ReviewsReducer } from './DashboardPage/AddSubmitReview/reducer/index';
 import { RecommendationReducer } from './RecommendedCourses/reducer/index';
 import { RecentlyAddedCoursesReducer, PopularServicesReducer, TrendingCategoriesReducer, AllCategoriesReducer } from './CataloguePage/reducer/index';
+// import { RecentlyServicesReducer } from './DashboardPage/Service/reducer/index';
+import { DashboardMyWalletReducer } from './DashboardPage/MyWallet/reducer/index'; 
+import { DashboardMyOrdersReducer } from './DashboardPage/MyOrder/reducer/index'; 
+import { DashboardMyCoursesReducer } from './DashboardPage/MyCourses/reducer/index';
+import { DashboardMyServicesReducer } from './DashboardPage/MyServices/reducer/index';
+import { DashboardMyServicesResumeReducer, OiDetailsReducer } from './DashboardPage/MyServices/reducer/index';
+import { VendorUrlReducer } from './DashboardPage/StartCourse/reducer/index';
 
 const rootReducer = combineReducers({
     needHelp : NeedHelpReducer,
@@ -17,12 +26,22 @@ const rootReducer = combineReducers({
     header : HeaderReducer,
     footer : FooterReducer,
     loader : LoaderReducer,
+    getComment: CommentReducer,
+    getReviews: ReviewsReducer,
     recommendation : RecommendationReducer,
     popularCourses : PopularCoursesReducer,
     recentCourses : RecentlyAddedCoursesReducer,
     popularServices : PopularServicesReducer,
     popularCategories : TrendingCategoriesReducer,
     allCategories : AllCategoriesReducer,
+    dashboardWallet: DashboardMyWalletReducer,
+    dashboardOrders: DashboardMyOrdersReducer,
+    dashboardCourses: DashboardMyCoursesReducer,
+    dashboardServices: DashboardMyServicesReducer,
+    dashboardPendingResume: DashboardMyServicesResumeReducer,
+    oiDetails: OiDetailsReducer,
+    vendorUrl: VendorUrlReducer
+
 
 });
 

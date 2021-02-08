@@ -37,6 +37,8 @@ $course-badge-red: #FBC1C1;
 $footer-bg: #F2F6FD;
 
 $sprite: url('#{$path}mobile/learning-sprite-mobile.svg') no-repeat;
+$spriteDb: url('#{$path}mobile/learning-spriteDB.svg') no-repeat;
+$image-root: '#{$path}mobile/';
 
 $bg: #F9FAFC;
 $border-color: #D5D5D5;
@@ -55,6 +57,8 @@ $font-size-xs   : 1.2rem;
 $font-size-base : 1.3rem;
 $font-size-md   : 1.4rem;
 $font-size-lg   : 1.6rem;
+
+$box-shadow: 0 1px 13px 0 rgba(200,200,200,0.50);
 
 
 %box-shadow1 {
@@ -85,3 +89,8 @@ $font-size-lg   : 1.6rem;
     background-image: linear-gradient(134deg, #849EE4 0%, #314DCC 100%, #314DCC 100%, #314DCC 100%);
     // box-shadow: 0 2px 7px 0 #5262AD;  
 }
+
+
+// DB Variable
+
+$db-light-pink: #FFDEDE;

@@ -16,6 +16,12 @@
     }
 }
 
+.btn-xs {
+    font-size: $font-size-xs;
+    padding: 0.6rem 1.5rem;
+    font-weight: $font-weight-semi-bold;
+}
+
 .btn-blue {
     background: $blue;
     border: 1px solid $blue;
@@ -32,6 +38,12 @@
         color: $white;
         border: 1px solid $blue;
     }
+}
+
+.btn-link {
+    color: $blue;
+    font-weight: $font-weight-bold;
+    text-transform: capitalize;
 }
 
 .btn-yellow {
@@ -93,4 +105,13 @@
         color: $white;
         border: 1px solid $white;
     }
+}
+
+.m-db-close {
+    position: absolute;
+    right: 15px;
+    top: 5px;
+    font-size: 2rem;
+    color: rgba($gray-100, .5);
+    z-index: 9;
 }

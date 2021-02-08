@@ -152,7 +152,8 @@ app.get(expressRoutes, (req, res) => {
                 
                 fs.readFile(indexFile, 'utf8', (err, data) => {
                     if (err) {
-                        console.error('Something went wrong:', err);
+                        console.error("Error in reading index.html",err)
+                        console.log('make sure you are in frontend directory when use run pm2 start');
                         return res.status(500).send('index.html file not found!');
                     }
             

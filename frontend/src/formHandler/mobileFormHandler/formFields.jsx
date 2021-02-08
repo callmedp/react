@@ -7,17 +7,19 @@ const InputField = (props) => {
                             validation, 
                             label,defaultValue,
                             errorMessage, id, 
+                            placeholder
                         }, 
             errors,
-            register } = props
+            register,
+            customClass } = props
     
     return (
-        <div className={ !!errors ? "m-form-group m-error flex-1" : "m-form-group flex-1"}>
+        <div className={ customClass ? customClass : !!errors ? "m-form-group m-error flex-1" : "m-form-group flex-1" }>
             <input className={className} type={type} name={name} 
-            id={id} placeholder=" " ref={register(validation)} value={value}
+            id={id} placeholder={placeholder ? placeholder : ' '} ref={register(validation)} value={value}
             defaultValue={defaultValue}/>
-            <label className="m-input_label" htmlFor={name}>{label}</label>
-            { !!errors ? <span className="m-error-msg">{errorMessage[errors.type]}</span> : ''}
+            <label className="input-label" htmlFor={name}>{label}</label>
+            { !!errors ? <span className="error_cls">{errorMessage[errors.type]}</span> : ''}
         </div>
     )
 }
@@ -41,7 +43,22 @@ const SelectBox = (props) => {
     )
 }
 
+const TextArea = (props) => {
+    const { attributes: { className, type, name, value, validation, defaultValue, rows, placeholder, label, errorMessage }, register, errors } = props;
+
+    return (
+        <>  
+            <div className="m-form-group">
+                <textarea className={className} name={name} type={type} placeholder={placeholder} ref={register(validation)} value={value} defaultValue={defaultValue} id={name} rows={rows} />
+                <label className="input-label" htmlFor={name}>{label}</label>
+                { !!errors ? <span className="error_cls">{errorMessage[errors.type]}</span> : ''}
+            </div>
+        </>
+    )
+}
+
 export {
     InputField,
     SelectBox,
+    TextArea,
 }

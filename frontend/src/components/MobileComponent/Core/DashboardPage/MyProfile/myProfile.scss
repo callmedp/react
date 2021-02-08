@@ -1,0 +1,246 @@
+@import '../../../../../styles-mobile/abstracts';
+
+.m-profileFirst-card {
+    background-image: linear-gradient(to left bottom, #b0c1f9, #bdcaf9, #cad4f9, #d7ddf8, #e3e7f8) !important;
+
+    .m-db-status {
+        .m-progress {
+            height: 1rem;
+            border-color: #BCC7F0;
+
+            .m-progress-bar {
+                background-color: #8A9DE8;
+            }
+        }
+    }
+    
+}
+
+.m-myProfile {
+
+    font-size: $font-size-xs;
+
+    h2 {
+        font-size: 1.6rem;
+        display: flex;
+        align-items: center;       
+    }
+
+    h3 {
+        font-size: 1.4rem;
+        margin-bottom: 3px;
+    }
+
+    p {
+        margin-bottom: 1rem;
+        
+    }
+
+    &--heading {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    &__leftpan {
+        flex-grow: 1;
+
+        display: flex;
+
+        &--shortName {
+            @include size(50px, 50px, flex);
+            background-color: rgba($white, .77);
+            align-items: center;
+            justify-content: center;
+
+            color: rgba($gray-200, 0.6);
+            font-size: 1.9rem;
+            border-radius: 50%;
+            margin-right: 15px;
+        }
+
+        &--wrap {
+            h1 {
+                font-size: 2rem;
+                font-weight: 600;
+                margin-bottom: 0;
+            }
+        }
+    }
+
+    &--detail {
+        font-size: $font-size-base;
+
+        li {
+            display: flex;
+
+            &:not(:last-child) {
+                margin-bottom: 15px;
+            }
+
+            strong {
+                width: 140px;
+                flex: 0 0 140px;
+                display: inline-block;
+            }
+        }
+    }
+
+    .m-myProfileAdd {
+        padding-left: 37px;
+
+        &:not(:last-child) {
+            margin-bottom: 30px
+        }
+
+        &--iconCircle {
+            @include size(30px, 30px, flex);
+            align-items: center;
+            justify-content: center;
+            background-color: #C7D7E9;
+            border-radius: 50%;
+            position: absolute;
+            left: 12px;
+
+            &::before {
+                content: '';
+                display: block;
+                background: $spriteDb;
+            }
+
+            &.m-db-experience {
+                &::before {
+                    @include size(16px, 14px, block);
+                    background-position: -57px -218px;
+                }
+            } 
+            
+            &.m-db-education {
+                &::before {
+                    @include size(16px, 11px, block);
+                    background-position: -77px -220px;
+                }
+            } 
+            
+            &.m-db-certification {
+                &::before {
+                    @include size(18px, 23px, block);
+                    background-position: -97px -213px;
+                }
+            } 
+        }
+
+        &__info {
+            &--heading {
+                display: flex;
+                align-items: flex-start;
+                justify-content: space-between;
+                font-size: $font-size-base;
+            }
+
+            &--action {
+                display: flex;
+                align-items: center;
+
+                .m-db-btn-close {
+                    position: relative;
+                    right: -8px;
+                    top: -3px;
+                }
+            }
+
+            &--duration,
+            &--info {
+                display: flex;
+
+                strong {
+                    display: block;
+                    flex: 0 0 120px;
+                }
+
+                .infoItem {
+                    &:not(:last-child) {
+                        &::after {
+                            content: '|';
+                            padding-right: 8px;
+                            margin-left: 8px;
+                        }
+                    }
+                }
+            }
+
+            &--content {
+                display: flex;
+                flex-direction: column;
+            }
+        }
+
+
+        &__rightwrap {
+            position: relative;
+            padding-left: 50px;
+            flex-grow: 1;
+
+            
+
+            
+
+            
+
+            
+
+            &--name {
+                font-size: 1.4rem;
+                font-weight: 600;
+                margin-bottom: 0;
+            }
+        }
+    }
+}
+
+
+.m-db-edit-icon {
+    @include size(15px, 15px, inline-block);
+    background: $spriteDb;
+    background-position: -37px -218px;
+}
+
+.m-skills-tag {
+    display: block;
+    margin-bottom: 10px;
+
+    span {
+        background-color: #F4F8FF;
+        border: 1px solid #DADADA;
+        border-radius: 30px;
+        padding: 10px 40px 10px 20px;
+        position: relative;
+        display: inline-block;
+        margin: 5px 0;
+
+        &:not(:last-child) {
+            margin-right: 10px;
+        }
+
+        &::after {
+            content: '\00d7';
+            cursor: pointer;
+            font-size: 2.2rem;
+            color: rgba($gray-200, 0.7);
+            position: absolute;
+            top: 4px;
+            right: 12px;
+        }
+    }
+
+    &.m-add-skill {
+        span {
+            padding: 4px 40px 4px 20px;
+
+            &::after {
+                transform: rotate(45deg);
+                top: -2px;
+            }
+        }
+    }
+}

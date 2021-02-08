@@ -12,8 +12,8 @@ export const getAccessKey = () => {
 }
 
 export const getCandidateId = () => {
-    if (localStorage.getItem('candidate_id')) return localStorage.getItem('candidate_id');
-    if (sessionStorage.getItem('candidate_id')) return sessionStorage.getItem('candidate_id');
+    if (!!localStorage.getItem('candidateId')) return localStorage.getItem('candidateId');
+    if (!!sessionStorage.getItem('candidateId')) return sessionStorage.getItem('candidateId');
     return false;
 }
 
@@ -72,4 +72,23 @@ export function getTrackingParameters(tracking_data){
         }
     }
     return url_parameter
+}
+
+export const getDataStorage = (key) => {
+    return localStorage.getItem(key) ? localStorage.getItem(key) : getSession(key)
+}
+
+const getSession = (name) => {
+   return  sessionStorage.getItem(name)
+}
+
+
+export const getCandidateInformation = () => {
+    return {
+        candidateId: localStorage.getItem('userId') || '',
+        name: localStorage.getItem('userName') || '',
+        lastname: localStorage.getItem('lastName') || '',
+        email: localStorage.getItem('userEmail') || '',
+        mobile:  localStorage.getItem('mobile') || '',
+    }
 }

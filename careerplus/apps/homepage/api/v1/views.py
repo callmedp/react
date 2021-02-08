@@ -164,7 +164,6 @@ class DashboardDetailApi(APIView):
     def get(self, request):
         candidate_id = request.GET.get('candidate_id', '')
         orderitem_id = request.GET.get('orderitem_id')
-        # import ipdb;ipdb.set_trace()
         if not candidate_id:
             return Response({'status': 'Failure', 'error': 'candidate_id is required'},
                             status=status.HTTP_400_BAD_REQUEST)
@@ -244,8 +243,8 @@ class DashboardNotificationBoxApi(APIView):
     serializer_class = None
 
     def get(self, request):
-        candidate_id = request.GET.get('candidate_id', None)
-        email = request.GET.get('email', None)
+        candidate_id = request.GET.get('candidate_id', None) or request.session.get('candidate_id', None)
+        email = request.GET.get('email', None) or request.session.get('email', None)
 
         if not candidate_id:
             return Response({'status': 'Failure', 'error': 'candidate_id is required.'},
@@ -292,6 +291,9 @@ class DashboardCancellationApi(APIView):
     serializer_class = DashboardCancellationSerializer
 
     def post(self, request):
+        candidate_id = self.request.data.get('candidate_id', None) or self.request.session.get('candidate_id', None)
+        email_id = self.request.data.get('email', None) or self.request.session.get('email', None)
+        self.request.data.update({'candidate_id': candidate_id, 'email': email_id})
         serializer = DashboardCancellationSerializer(data=request.data)
         if serializer.is_valid():
             candidate_id = serializer.data.get('candidate_id')
@@ -300,24 +302,25 @@ class DashboardCancellationApi(APIView):
             try:
                 order = Order.objects.get(pk=order_id)
             except Order.DoesNotExist:
-                return Response({'status': 'Failure', 'error': 'Order not found against id'},
+                return Response({'status': 'Failure', 'cancelled': False, 'error': 'Order not found against id'},
                                 status=status.HTTP_417_EXPECTATION_FAILED)
 
             if order.candidate_id != candidate_id:
-                return Response({'status': 'Failure', 'error': 'Order not found against id'},
+                return Response({'status': 'Failure', 'cancelled': False, 'error': 'Order not found against id'},
                                 status=status.HTTP_417_EXPECTATION_FAILED)
             try:
                 cancellation = DashboardCancelOrderMixin().perform_cancellation(candidate_id=candidate_id, email=email,
                                                                                 order=order)
+
             except Exception as exc:
                 logger.error('Dashboard cancellation error %s' % exc)
-                return Response({'status': 'Failure', 'error': exc}, status=status.HTTP_417_EXPECTATION_FAILED)
+                return Response({'status': 'Failure', 'error': str(exc), 'cancelled': False}, status=status.HTTP_417_EXPECTATION_FAILED)
             if cancellation:
-                return Response({'status': 'Success', 'data': order_id, 'error': None, 'cancelled': True},
+                return Response({'status': 'Success', 'data': 'Order Successfully Cancelled', 'error': None, 'cancelled': True},
                                 status=status.HTTP_200_OK)
-            return Response({'status': 'Failure', 'error': None, 'cancelled': False},
+            return Response({'status': 'Failure', 'error': 'Something went wrong', 'cancelled': False},
                             status=status.HTTP_417_EXPECTATION_FAILED)
-        return Response(serializer.errors, status=status.HTTP_200_OK)
+        return Response({'status': 'Failure', 'error': 'Required data is missing', 'cancelled': False}, status=status.HTTP_200_OK)
 
 
 class OrderItemCommentApi(APIView):
@@ -326,8 +329,9 @@ class OrderItemCommentApi(APIView):
     serializer_class = None
 
     def get(self, request):
-        candidate_id = request.GET.get('candidate_id')
+        candidate_id = request.GET.get('candidate_id') or self.request.session.get('candidate_id', None)
         oi_pk = request.GET.get('oi_pk')
+        # candidate_id='601b8120ca3f418906a889a8'
 
         if not oi_pk or not candidate_id:
             return Response({'error': "BAD REQUEST"}, status=status.HTTP_400_BAD_REQUEST)
@@ -336,6 +340,7 @@ class OrderItemCommentApi(APIView):
             oi = OrderItem.objects.get(id=oi_pk)
         except:
             return Response({'error': 'ITEM NOT FOUND'}, status=status.HTTP_400_BAD_REQUEST)
+        
         if not oi.order.candidate_id == candidate_id or not oi.order.status in [1, 3]:
             return Response({'error': "BAD REQUEST"}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -354,8 +359,8 @@ class OrderItemCommentApi(APIView):
         return Response(data, status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
-
-        candidate_id = request.data.get('candidate_id')
+        candidate_id = request.data.get('candidate_id') or self.request.session.get('candidate_id', None)
+        # candidate_id='601b8120ca3f418906a889a8'
         oi_pk = request.data.get('oi_pk')
         comment = request.data.get('comment', '').strip()
         if not oi_pk or not candidate_id or not comment:
@@ -376,7 +381,7 @@ class OrderItemCommentApi(APIView):
         message = oi.message_set.filter(is_internal=False).order_by('created')
 
         message = [{'added_by': msg.added_by.name if msg.added_by else '', 'message': msg.message,
-                    'created': msg.created.strftime("%b %d,%Y"),
+                    'created': msg.created.strftime("%b %d, %Y"),
                     'candidate_id': msg.candidate_id
                     } for msg in message]
 
@@ -394,9 +399,9 @@ class DashboardResumeUploadApi(APIView):
     serializer_classes = None
 
     def post(self, request, *args, **kwargs):
-        candidate_id = request.POST.get('candidate_id')
+        candidate_id = request.POST.get('candidate_id', None) or self.request.session.get('candidate_id', None)
         if not candidate_id:
-            return Response({'error': 'No credential Provided'}, status=status.HTTP_401_UNAUTHORIZED)
+            return Response({'error': 'Please login through valid user'}, status=status.HTTP_401_UNAUTHORIZED)
         file = request.FILES.get('file', '')
         list_ids = request.POST.get('resume_pending', '')
         list_ids = list_ids.split(',')
@@ -423,10 +428,10 @@ class DashboardResumeUploadApi(APIView):
 
                     return Response({'success': 'resumeUpload'}, status=status.HTTP_200_OK)
 
-            return Response({'error': 'Something went Wrong'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Resume not found on shine'}, status=status.HTTP_400_BAD_REQUEST)
         else:
             if not file:
-                return Response({'error': 'No file found'}, status=status.HTTP_400_BAD_REQUEST)
+                return Response({'error': 'Please select the file'}, status=status.HTTP_400_BAD_REQUEST)
             extn = file.name.split('.')[-1]
             if extn in ['doc', 'docx', 'pdf'] and list_ids:
                 data = {
@@ -436,10 +441,10 @@ class DashboardResumeUploadApi(APIView):
                 }
                 try:
                     DashboardInfo().upload_candidate_resume(candidate_id=candidate_id, data=data)
-                except:
-                    return Response({'error': 'Something went Wrong'}, status=status.HTTP_400_BAD_REQUEST)
+                except Exception as e:
+                    return Response({'error': 'File could not be uploaded for some reason. Try Again'}, status=status.HTTP_400_BAD_REQUEST)
                 return Response({'success': 'resumeuploaded'}, status=status.HTTP_200_OK)
-            return Response({'error': 'Something went Wrong'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'error': 'Please select the file in the format PDF,DOC,DOCX only'}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class DashboardResumeDownloadApi(APIView):
@@ -632,7 +637,7 @@ class UserInboxListApiView(APIView):
                 'total_incl_tax': obj.total_incl_tax,
                 'number': obj.number, 'date_placed': obj.date_placed.strftime("%b %d, ""%Y"),
                 'status': obj.status, 'id': obj.id,
-                'orderitems': [{'product_type_flow': oi.product.type_flow if oi.product_id else '',
+                'orderitems': [{'product_type_flow': oi.product.type_flow if oi.product_id else '', 
                                 'parent': oi.parent_id,
                                 'parent_heading': oi.parent.product.heading if oi.parent_id and oi.parent.product_id else '',
                                 'get_user_oi_status': oi.get_user_oi_status,
@@ -772,7 +777,7 @@ class NeoBoardUserAPI(APIView):
     def post(self, request, *args, **kwargs):
         from order.models import OrderItem
         from order.tasks import board_user_on_neo
-        candidate_id = request.data.get('candidate_id')
+        candidate_id = request.data.get('candidate_id') or self.request.session.get('candidate_id', None)
         oi_pk = request.data.get('oi_pk')
         if not candidate_id:
             return Response({'error': 'candidate id is missing'}, status=status.HTTP_400_BAD_REQUEST)
@@ -807,6 +812,7 @@ class TrendingCoursesAndSkillsAPI(PopularProductMixin, APIView):
         """
         popular_course_quantity = int(request.GET.get('num_courses', 2))
         skill_category = request.GET.get('category_id', None)
+        course_only = request.GET.get('course_only', False)
 
         product_obj, product_converstion_ratio, product_revenue_per_mile = PopularProductMixin().\
                                                                             popular_courses_algorithm(
@@ -836,12 +842,16 @@ class TrendingCoursesAndSkillsAPI(PopularProductMixin, APIView):
 
         data = {
             'trendingCourses': [
-                {'id': tprd.id, 'heading': tprd.pHd, 'name': tprd.pNm, 'url': tprd.pURL, 'img': tprd.pImg, \
-                 'img_alt': tprd.pImA, 'rating': tprd.pARx, 'vendor': tprd.pPvn, 'stars': tprd.pStar,
-                 'provider': tprd.pPvn \
+                {'id': tprd.id, 'heading': tprd.pHd, 'name': tprd.pNm, 'url': tprd.pURL, 'imgUrl': tprd.pImg, \
+                 'imgAlt': tprd.pImA, 'rating': tprd.pARx, 'vendor': tprd.pPvn, 'stars': tprd.pStar,'price': tprd.pPinb, 
+                 'providerName': tprd.pPvn \
                  } for tprd in tprds],
-            'trendingSkills': [dict(y) for y in set(tuple(x.items()) for x in skills)]
         }
+        if not course_only :
+            data.update({
+                'trendingSkills': [dict(y) for y in set(tuple(x.items()) for x in skills)]
+            })
+
         return APIResponse(message='Trending Course Loaded', data=data, status=status.HTTP_200_OK)
 
 

@@ -1,0 +1,87 @@
+@import '../../../../../styles-mobile/abstracts';
+
+.m-wallet {
+
+    &__firstCard {
+        display: flex;
+        align-items: center;
+
+        &--rhs {
+            flex-grow: 1;
+            padding-right: 1.5rem;
+
+            span {
+                font-weight: 500;
+                font-size: $font-size-xs;
+            }
+
+            h2 {
+                font-size: 2.0;
+            }
+        }
+
+        button {
+            flex: 0 0 130px;
+        }
+    }
+
+    &--date {
+        display: block;
+        font-size: 1.1rem;
+        color: $gray-200;
+    }
+
+    &--info {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: .2rem 0 1rem;
+
+        .head {
+            font-size: $font-size-md;
+            font-weight: $font-weight-semi-bold;
+            color: $gray-100;
+        }
+
+        .lPoints {
+            &.text-red {
+             color: #C83838;   
+            }
+
+            &.text-green {
+                color: #28a745;
+            }
+
+
+        }
+
+        .blance {
+            font-weight: $font-weight-bold;
+        }
+    }
+}
+
+.redeem-now {
+    h2 {
+        font-size: 2.2rem;
+        font-weight: $font-weight-semi-bold;
+    }
+
+    p {
+        margin-top: -10px;
+    }
+
+    &--icon {
+        background: $spriteDb;
+        @include icon-block(13px, 13px, 0 -193px);
+        transform: scale(3.8);
+        margin: 15px auto 30px;
+    }
+
+    &--lPoints {
+        font-size: 1.8rem;
+        font-weight: $font-weight-bold;
+        color: $gray-100;
+        margin-top: 2rem;
+    }
+}

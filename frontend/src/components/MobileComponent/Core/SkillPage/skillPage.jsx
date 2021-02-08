@@ -49,7 +49,6 @@ const SkillPage = (props) => {
     const meta_tags = useSelector((store) => store.skillBanner.meta ? store.skillBanner.meta : '');
 
     const handleEffects = async () => {
-
         try {
             //You may notice that apis corresponding to these actions are not getting called on initial render.
             //This is because initial render is done on node server, which is calling these apis, map the data and send it to the browser.
@@ -59,7 +58,7 @@ const SkillPage = (props) => {
                 new Promise((resolve, reject) => dispatch(fetchCoursesAndAssessments({ id: pageId, 'medium': 1, resolve, reject })));
                 new Promise((resolve, reject) => dispatch(fetchDomainJobs({ id: pageId, resolve, reject })));
                 new Promise((resolve, reject) => dispatch(fetchRecommendedProducts({ resolve, reject })));
-                new Promise((resolve, reject) => dispatch(fetchPopularCourses({ id: pageId, resolve, reject })))
+                new Promise((resolve, reject) => dispatch(fetchPopularCourses({ id: pageId, courseOnly: true, resolve, reject })))
                 await new Promise((resolve, reject) => dispatch(fetchSkillPageBanner({ id: pageId, 'medium': 1, resolve, reject })))
                 dispatch(stopSkillPageLoader());
             }
@@ -110,7 +109,7 @@ const SkillPage = (props) => {
                 <>
                     <MenuNav />
                     <header className="m-container m-header m-tabset-pos">
-                        <Header setShowSearchPage={setShowSearchPage} />
+                        <Header setShowSearchPage={setShowSearchPage} name={name} />
                     </header>
                     <section className="m-tabset mt-0 mb-0 m-skill-ht-remove">
                         <StickyNav tabType={tabType} setTabType={setTabType} />

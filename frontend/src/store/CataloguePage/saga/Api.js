@@ -31,4 +31,4 @@ export default {
     popularServices,
     trendingCategories,
     allCategories
-}
+}   

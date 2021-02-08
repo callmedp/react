@@ -1,14 +1,17 @@
 import * as Actions from '../actions/actionTypes';
 import { takeLatest, call, put } from 'redux-saga/effects';
 import Api from './Api';
+
 function* sessionAvailability(action) {
-    let { payload: { resolve } } = action;
+    let { payload } = action;
     try {
         let resp = yield call(Api.sessionAvailability)
         const { result, candidate_id } = resp.data;
-        resolve({ result: result, candidate_id: candidate_id });
+        localStorage.setItem('isAuthenticated', result);
+        localStorage.setItem('candidateId', candidate_id);
+        return payload?.resolve({ result: result, candidate_id: candidate_id });
     } catch (e) {
-        return resolve(false)
+        return payload?.resolve(false)
     }
 }
 
@@ -35,11 +38,13 @@ function* candidateInfo(action) {
     const { payload: { candidateId, resolve, reject } } = action;
     try {
         const result = yield call(Api.candidateInformation, candidateId);
-        const { candidate_id, profile : { first_name, email, cell_phone } } = result?.data;
+        const { candidate_id, profile : { first_name, last_name, email, cell_phone } } = result?.data;
         localStorage.setItem('userId', candidate_id);
         localStorage.setItem('userName', first_name);
+        localStorage.setItem('lastName', last_name);
         localStorage.setItem('userEmail', email);
-        resolve({ candidateId: candidate_id || '', name: first_name || '', email: email || '' , mobile: cell_phone || ''});
+        localStorage.setItem('mobile',cell_phone)
+        return resolve({ candidateId: candidate_id || '', name: first_name || '', lastname: last_name || "", email: email || '' , mobile: cell_phone || ''});
     }
     catch (e) {
         console.error("Exception occured at candidateInfo Api", e);

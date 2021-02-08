@@ -7,6 +7,7 @@ import Api from './Api';
 
 function* skillPageBanner(action) {
     const { payload } = action;
+    
     try {
  
       

@@ -21,7 +21,7 @@ const OurVendors = (props) => {
                                         <h3 className="heading3">{service.heading?.length > 56 ? (service.heading?.slice(0,56) + '...') : service.heading}</h3>
                                         <p>{service.description?.length > 85 ? service.description?.slice(0, 85) + '...' : service.description}</p>
                                         <span className="d-flex">
-                                            <a href={`${resumeShineSiteDomain}${service.url}`}>Know more</a>
+                                            <a href={`${siteDomain}${service.url}`}>Know more</a>
                                             <figure >
                                                 <img src={service.img} alt={service.img_alt} />
                                             </figure>
