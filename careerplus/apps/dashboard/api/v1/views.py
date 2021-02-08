@@ -99,8 +99,8 @@ class MyCoursesApi(DashboardInfo, APIView):
         # candidate_id='601b8120ca3f418906a889a8'
         page_info={}
         if candidate_id:
-            courses_oi = OrderItem.objects.filter(product__type_flow=2,no_process=False,order__candidate_id=candidate_id,order__status__in=[1, 3])
-            courses = courses_oi.prefetch_related('product','order', 'product__attributes')
+            courses = OrderItem.objects.prefetch_related('product','order', 'product__attributes').filter(product__type_flow=2,no_process=False,order__candidate_id=candidate_id,order__status__in=[1, 3])
+            # courses = courses_oi.prefetch_related('product','order', 'product__attributes')
             if not last_month_from=='all':
                 courses = courses.filter(order__date_placed__gte=modified_from_datetime)
             if select_type == 'in_process':
