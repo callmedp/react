@@ -284,10 +284,10 @@ const MyServices = (props) => {
                                                     }
                                                     
                                                     {
-                                                        service?.updated_status?.pause_service && <Link to={"#"} className="m-db-start-course font-weight-bold pr-10" onClick={() => pauseResumeService(34, service?.id)}>Pause Service</Link>
+                                                        service?.updated_status?.pause_service && <Link to={"#"} className="m-db-resume-course font-weight-bold pr-10" onClick={() => pauseResumeService(34, service?.id)}>Pause Service</Link>
                                                     }
                                                     {
-                                                        service?.updated_status?.resume_service && <Link to={"#"} className="m-db-resume-course font-weight-bold pr-10" onClick={() => pauseResumeService(35, service?.id)}>Resume Service</Link>
+                                                        service?.updated_status?.resume_service && <Link to={"#"} className="m-db-start-course font-weight-bold pr-10" onClick={() => pauseResumeService(35, service?.id)}>Resume Service</Link>
                                                     }
                                                 </div>
                                         }
