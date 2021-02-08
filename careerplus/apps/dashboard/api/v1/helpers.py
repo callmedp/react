@@ -277,7 +277,7 @@ def get_courses_detail(instance):
 
     if oi.oi_status == 28 or oi.oi_status == 34 or oi.oi_status == 36 or oi.oi_status == 35:
         if oi.days_left_oi_product > 0 and oi.product.is_pause_service:
-            if oi.service_pause_status:
+            if oi.service_pause_status():
                 current_status.update({'pause_service':True})
             else:
                 current_status.update({'resume_service': True})
