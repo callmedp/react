@@ -81,7 +81,16 @@ function* fetchTestimonialsData(action){
         if(response?.error){
             return payload?.reject(response?.error);
         }
-        const item = response?.data;
+        const item = response?.data?.data;
+
+        if(!!payload && payload.device === 'desktop' && !!item && item.testimonialCategory instanceof Array){
+            const storiesList = item.testimonialCategory.reduce((rows, key, index) => 
+                (index % 2 == 0 ? rows.push([key]) : rows[rows.length-1].push(key)) && rows, []);
+            
+            if(storiesList.length){
+                item.testimonialCategory = storiesList.slice()
+            }
+        }
 
         yield put(testimonialsFetched({ ...item }))
         return payload?.resolve(item);

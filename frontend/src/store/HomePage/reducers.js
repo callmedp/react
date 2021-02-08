@@ -78,7 +78,7 @@ export const JobAssistanceAndBlogsReducer = (state=jobAssistanceAndBlogsState, a
 }
 
 const testimonialsState = {
-    data : []
+    testimonialCategory : []
 }
 
 export const TestimonialsReducer = (state=testimonialsState, action) => {

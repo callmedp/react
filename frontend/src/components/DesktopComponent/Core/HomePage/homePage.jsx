@@ -20,6 +20,7 @@ import {
     fetchMostViewedCourses,
     fetchInDemandProducts,
     fetchJobAssistanceAndBlogs,
+    fetchTestimonials,
 } from 'store/HomePage/actions';
 import Loader from '../../Common/Loader/loader';
 
@@ -32,6 +33,7 @@ const HomePage = (props) => {
         new Promise((resolve, reject) => dispatch(fetchMostViewedCourses({ categoryId: -1, resolve, reject})));
         new Promise((resolve, reject) => dispatch(fetchInDemandProducts({ pageId: 1, tabType: 'master', device:'desktop', resolve, reject})));
         new Promise((resolve, reject) => dispatch(fetchJobAssistanceAndBlogs({ resolve, reject})));
+        new Promise((resolve, reject) => dispatch(fetchTestimonials({ device : 'desktop', resolve, reject})));
     }
 
     useEffect( () => {
