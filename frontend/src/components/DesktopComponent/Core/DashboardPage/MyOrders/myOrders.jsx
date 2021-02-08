@@ -129,7 +129,7 @@ const MyOrders = (props) => {
                                             <ul>
                                                 <li className="head row">
                                                     <span className="col-9 pl-0">Item</span>
-                                                    <span className="col-3 text-right">status</span>
+                                                    <span className="col-3 text-right">Status</span>
                                                 </li>
                                                 {
                                                     item.orderitems.map((innItem, ind) => {
@@ -169,8 +169,8 @@ const MyOrders = (props) => {
                             <span>Note: Any credit points reedemed against this order will be refunded back to your wallet shortly. These points will be valid for next 10 days.</span>
                             <br /> <br/> */}
 
-                            <button className="btn btn-blue px-5" onClick={() => handleCancellation(cancelOrderId)}>Yes</button>&emsp;
-                            <button className="btn btn-blue-outline px-5" onClick={() => setShowCancelModal(false)}>No</button>
+                            <button className="btn btn-outline-primary px-5" onClick={() => handleCancellation(cancelOrderId)}>Yes</button>&emsp;
+                            <button className="btn btn-outline-primary px-5" onClick={() => setShowCancelModal(false)}>No</button>
                         </div>
                         </Modal.Body>
                     </Modal>
