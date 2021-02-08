@@ -49,7 +49,9 @@ from .serializers import RecentCourseSerializer
 from .mixins import PopularProductMixin
 from blog.models import Blog, Comment
 from api.helpers import offset_paginator
+from .helper import get_home_offer_values
 
+from .mixins import ProductMixin
 
 # Other Import
 from weasyprint import HTML
@@ -878,6 +880,7 @@ class NavigationTagsAndOffersAPI(APIView):
         data = {}
         special_links = cache.get('active_homepage_navlink_new', [])
         whatsapp_no = cache.get('whatsapp_visibility_class', {})
+        active_offer = get_home_offer_values()
         if not settings.DEBUG and special_links:
             active_navlinks = special_links
         else:
@@ -1047,19 +1050,21 @@ class PopularInDemandProductsAPI(APIView):
             )
             paginated_data = offset_paginator(page, courses,size=4)                                                                    
             courses = paginated_data["data"]
-            data = {
-                'courses': [
-                    {'id': course.id, 'heading': course.pHd, 'name': course.pNm, 'url': course.pURL, 'img': course.pImg, \
-                    'img_alt': course.pImA, 'description': course.pDscPt, 'rating': course.pARx, 'price': course.pPinb, 'vendor': course.pPvn, 'stars': course.pStar,
-                    'provider': course.pPvn} for course in courses]
-            }
+            data = ProductMixin().get_course_json(courses)
+            # {
+            #     'courses': [
+            #         {'id': course.id, 'heading': course.pHd, 'name': course.pNm, 'url': course.pURL, 'img': course.pImg, \
+            #         'img_alt': course.pImA, 'description': course.pDscPt, 'rating': course.pARx, 'price': course.pPinb, 'vendor': course.pPvn, 'stars': course.pStar,
+            #         'provider': course.pPvn} for course in courses]
+            # }
         page_info ={
                 'current_page':paginated_data['current_page']if paginated_data else 0,
                 'total':paginated_data['total_pages'] if paginated_data else 0,
                 'has_prev': True if paginated_data['current_page'] >1 else False,
                 'has_next':True if (paginated_data['total_pages']-paginated_data['current_page'])>0 else False
                 }
-        data.update({'page':page_info})
+        data.append({'page':page_info})
+        # data.update({'page':page_info})
         return APIResponse(message='Popular certifications and courses Loaded', data=data, status=status.HTTP_200_OK)
 
 class JobAssistanceAndLatestBlogAPI(APIView):
