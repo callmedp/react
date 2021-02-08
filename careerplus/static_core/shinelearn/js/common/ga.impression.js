@@ -63,6 +63,20 @@ function GALayer() {
                     }
                 )
             }
+            else if (event === 'productClick') {
+                window.dataLayer.push(
+                    {
+                        "event": event,
+                        "ecommerce": {
+                            "currencyCode": currencyCode,
+                            "click": {
+                                "actionField": actionField,
+                                'products': product[0].product
+                            }
+                        }
+                    }
+                )
+            }
             else if (event === 'removeFromCart') {
                 window.dataLayer.push(
                     {

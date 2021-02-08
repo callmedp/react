@@ -152,7 +152,7 @@ Payment Summary - Shine Learning
             <input type="hidden" name="product_reference"
               value="{% if item.product_class == 'course' and variations|length  or item.type_flow == 17 and variations|length %}{{variations.0.reference}}{% else %}{{item.reference}}{% endif %}">
             <span class="close-icon item-list" name="{{item.id}}"
-              id="id-remove-cart{{item.id}}" onclick="GAImpression('removeFromCart', options=[{'name': '{{ item.name }}', 'id': '{{ item.id }}', 'brand': '{{ item.vendor }}', 'category': '{{ item.get_category_main }}', 'variant': '{{ item.product_class }}', 'price': '{{ item.price }}','position': '{{ forloop.counter }}', 'dimensions15': 'Cart Page', 'dimensions16': '{{item.ratings}}', 'dimensions17': '{{ item.buy_count }}'}]);"></span>
+              id="id-remove-cart{{item.id}}" onclick="GAImpression('removeFromCart', options=[{'name': '{{ item.name }}', 'id': '{{ item.id }}', 'brand': '{{ item.vendor }}', 'category': '{% if item.variations|length %}{{ item.variations.0.li.product.get_category_main }}{% else %}{{ item.li.product.get_category_main }}{% endif %}', 'variant': '{{ item.product_class }}', 'price': '{% if item.variations|length %} {{ item.variations.0.price }} {% else %} {{ item.price }} {% endif %}','position': '{{ forloop.counter }}', 'dimensions15': 'Cart Page', 'dimensions16': '{% if item.variations|length %} {{ item.variations.0.li.product.avg_rating }}{% else %}{{ item.li.product.avg_rating }}{% endif %}', 'dimensions17': '{% if item.variations|length %} {{ item.variations.0.li.product.buy_count }}{% else %}{{ item.li.product.buy_count }}{% endif %}'}]);"></span>
           </form>
 
           <!-- delivery section -->

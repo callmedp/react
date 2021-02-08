@@ -26,6 +26,9 @@
         case 'removeFromCart':
             RemoveCartImpression(list='removeFromCart', options);
             break;
+        case 'productClick':
+            productClickImpression(list='productClick', options);
+            break;
         default:
             break;
 
@@ -157,7 +160,7 @@
                 'variant': '{{ product.product_class }}',
                 'price': '{% if selected_var %}{{var_list.0.inr_price|floatformat}}{% else %}{{sqs.pPinb|floatformat}} {% endif %}',
                 'position': '1',
-                'dimensions15': 'Product Page',
+                'dimensions15': '{{ request.META.HTTP_REFERER }}',
                 'dimensions16': '{{ prd_rating }}',
                 'dimensions17': '{{ prd_num_bought|default:"10" }}'
         })
@@ -173,12 +176,12 @@
                     'name': '{{ item.name }}',
                     'id': '{{ item.id }}',
                     'brand': '{{ item.vendor }}',
-                    'category': '{{ item.category }}',
+                    'category': '{% if item.variations|length %}{{ item.variations.0.li.product.get_category_main }}{% else %}{{ item.li.product.get_category_main }}{% endif %}',
                     'variant': '{{ item.product_class }}',
-                    'price': '{{ item.price }}',
+                    'price': '{% if item.variations|length %} {{ item.variations.0.price }} {% else %} {{ item.price }} {% endif %}',
                     'dimensions15': 'Cart Page',
-                    'dimensions16': '{{ item.ratings }}',
-                    'dimensions17': ' {{ item.buy_count }}'
+                    'dimensions16': '{% if item.variations|length %} {{ item.variations.0.li.product.avg_rating }}{% else %}{{ item.li.product.avg_rating }}{% endif %}',
+                    'dimensions17': '{% if item.variations|length %} {{ item.variations.0.li.product.buy_count }}{% else %}{{ item.li.product.buy_count }}{% endif %}'
                 })
             {% endfor %}
         {% endif %}
@@ -202,14 +205,21 @@
                 'brand': '{{ item.oi.product.vendor.name }}',
                 'category': '{{ item.oi.product.get_category_main }}',
                 'variant': '{{ item.oi.product.get_product_class }}',
-                'price': '{{ item.oi.product.get_price }}',
+                'price': '{% if item.variations|length %} {{ item.oi.product.get_variations.last.get_price }} {% else %} {{ item.oi.product.get_price }}{% endif %}',
                 'dimensions15': 'Order Confirmation Page',
-                'dimensions16': '{{ item.oi.product.get_ratings }}',
-                'dimensions17': ''
+                'dimensions16': '{{ item.oi.product.avg_rating }}',
+                'dimensions17': '{{ item.oi.product.buy_count }}'
             })
           {% endfor %}
         {% endif %}
         GALayer.SendImpression('checkout-complete', o_product, 'INR', actionField=[{'id': '{{ order_id }}', 'affiliation': 'Oneline Store', 'revenue': '{{ total_price }}', 'coupon': '', 'Tax': '{{ tax_exlude }}'}]);
+    }
+
+    function productClickImpression(list, options) {
+        if(options) {
+            var actionField = options[0].actionField;
+            GALayer.SendImpression(list, options, 'INR', actionField);
+        }
     }
     
     {% else %}
@@ -244,6 +254,13 @@
         if (options) {
             var actionField = options[0].actionField;
             GALayer.SendImpression('checkout', options, 'INR', actionField);
+        }
+    }
+
+    function productClickImpression(list, options) {
+        if(options) {
+            var actionField = options[0].actionField;
+            GALayer.SendImpression(list, options, 'INR', actionField);
         }
     }
 
