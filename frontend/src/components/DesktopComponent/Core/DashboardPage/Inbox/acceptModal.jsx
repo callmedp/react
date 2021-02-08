@@ -47,7 +47,7 @@ const AcceptModal = (props) => {
             <div className="text-center pl-30 pr-30 pb-30">
                 <p className="font-weight-bold mb-0 fs-16">Are you sure you want to accept?</p>
                 <p className="mb-4">Once you accept it , this service will be closed</p>
-                <button className="btn btn-blue px-5" onClick={() => acceptRejectHandler("accept", oi_id)}>Accept</button>
+                <button className="btn btn-outline-primary px-5" onClick={() => acceptRejectHandler("accept", oi_id)}>Accept</button>
             </div>
         </Modal>
     )

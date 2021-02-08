@@ -245,7 +245,7 @@ const MyCourses = (props) => {
                                                     {
                                                             <>
                                                                 <strong> 
-                                                                { course?.updated_status?.status && course?.updated_status?.status !== 'Default' && <> Status: {course?.updated_status?.status} </>} 
+                                                                { course?.updated_status?.status && course?.updated_status?.status !== 'Default' && <> <span className="font-weight-normal">Status:</span> {course?.updated_status?.status} </>} 
                                                                 {
                                                                     course?.updated_status?.take_test && <a href={course?.updated_status?.auto_login_url} target="_blank" className="font-weight-bold"> Take test</a>
                                                                 }
