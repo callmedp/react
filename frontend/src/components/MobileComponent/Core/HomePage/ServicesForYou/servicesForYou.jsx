@@ -16,7 +16,7 @@ import { siteDomain } from 'utils/domains';
 
 
 const ServicesForYou = (props) => {
-    const jobAssistanceLists = useSelector(store => store?.jobAssistance?.jobAssistanceServices)
+    const { jobAssistanceServices } = useSelector(store => store?.jobAssistance)
 
     const settings = {
         dots: false,
@@ -37,14 +37,17 @@ const ServicesForYou = (props) => {
                 <Slider {...settings}>
 
                     {
-                        jobAssistanceLists?.map((job, index) => {
+                        jobAssistanceServices?.map((job, index) => {
                             return (
                                 <div className="m-services-foryou__list" key={index}>
                                     <h3 className="m-heading3">{ job?.heading }</h3>
-                                    <p>{ job?.description?.length > 61 ? job?.description?.slice(0, 58) + '...' : job?.description }</p>
+                                    <p>{ job?.description?.length > 80 ? job?.description?.slice(0, 80) + '...' : job?.description }</p>
                                     <span className="d-flex">
                                         <a href={`${siteDomain}${job?.url}`}>Know more</a>
-                                        <figure className={`micon-service${index + 1}`}></figure>
+                                        {/* <figure className={`micon-service${index + 1}`}></figure> */}
+                                        <figure>
+                                            <img src={job?.img} />
+                                        </figure>
                                     </span>
                                 </div>
                             )
