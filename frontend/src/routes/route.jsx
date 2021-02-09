@@ -15,6 +15,7 @@ const RouteWithSubRoutes = route => {
     const isSessionAvailable = async () => {
         localStorage.clear();
         try {
+            console.log("these console logs are written intentionally and will be removed as soon as the app becomes stable");
             console.log("api session hi tinit")
             const session = await new Promise((resolve, reject) => dispatch(sessionAvailability({ resolve, reject })));
             console.log("api session hit end")
