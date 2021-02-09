@@ -444,7 +444,7 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
     
     def get_absolute_image_url(self):
         if self.image:
-            return r'{}'.format(self.image)
+            return r'{}{}'.format(settings.MEDIA_URL, self.image)
         return settings.MEDIA_URL + 'attachment/default_product_image.jpg'
 
     @classmethod

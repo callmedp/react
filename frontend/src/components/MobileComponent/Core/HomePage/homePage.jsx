@@ -16,7 +16,7 @@ import PracticeTestBanner from './PracticeTestBanner/practiceTestBanner';
 import OurLearners from './OurLearners/ourLearners';
 import LatestBlog from './LatestBlog/latestBlog';
 import Footer from '../../Common/Footer/Footer';
-// import CTAhome from '../../Common/CTA/CTAhome';
+import CTAhome from '../../Common/CTA/CTAhome';
 import Aos from "aos";
 import "aos/dist/aos.css";
 import { fetchTestimonials, fetchJobAssistanceAndBlogs } from 'store/HomePage/actions';
@@ -73,7 +73,7 @@ const HomePage = (props) => {
                             <LatestBlog />
                         </main>
                         <Footer />
-                        {/* <CTAhome /> */}
+                        <CTAhome />
                     </div>
             }
         </>
