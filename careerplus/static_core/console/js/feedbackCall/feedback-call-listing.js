@@ -9,6 +9,7 @@ $(document).ready(() => {
 
     $('#feedback-type').val('1') //default Feedback Type dropdown selected to Fresh (Requirement from Product)
     
+    $('#feedback-category').val('')
     $('.feedback_users').select2({    //create searchable dropdown
         width:'100%',
     });
@@ -28,6 +29,10 @@ $(document).ready(() => {
         customerFeedbackList(1)
     })
     $('#feedback-type').change(()=>{
+        customerFeedbackList(1)
+    })
+
+    $('#feedback-category').change(()=>{
         customerFeedbackList(1)
     })
 
@@ -96,6 +101,7 @@ const customerFeedbackList = (page_no,filter_data) => {
         page:page_no,
         status:status,
         type:$('#feedback-type').val(),
+        category:$('#feedback-category').val(),
         follow_up_date_range : $('#filter-follow-up').val(),
         added_on_range : $('#filter-added-on').val(),
         last_payment_range : $('#filter-payment-on').val(),
@@ -234,6 +240,7 @@ const redirectFeedbackUpdatePage = (id) => {
 const searchNameOrEmail = () => {
     $('#filter-status').val('')
     $('#feedback-type').val('')
+    $('#feedback-category').val('')
     customerFeedbackList(1)
 }
 
