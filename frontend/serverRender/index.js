@@ -103,7 +103,7 @@ app.get(expressRoutes, (req, res) => {
 
     if (isMobile(userAgents)) {
 
-        console.log("<><><><><><>Entered Mobile<><><><><><>   ",req.url )
+        console.log("<><><><><><>Entered Mobile<><><><><><>   ", req.url)
         indexFile = path.resolve('ssrBuild/index.mobile.html');
         routes = require('routes/index.mobile').routes;
 
@@ -117,80 +117,105 @@ app.get(expressRoutes, (req, res) => {
     }
 
     const branch = matchRoutes(routes, req.path) || []
-    
-    
+
+
     branch.forEach(async ({ route, match }) => {
         if (route && route.actionGroup) {
             try {
-                result = await new Promise((resolve, reject) => fetchApiData(store, match.params, route.actionGroup, resolve, reject) ) ;
-                appContent = render(req, routes);
-
-                // const helmet = Helmet.renderStatic();
-                // let metaTitlesAll = "";
-
-                // try {
-                //     metaTitlesAll += '<title>' + helmet.title.toComponent()[0].key + '</title>';
-                //     metaTitlesAll += '<link rel="canonical" href= ' + helmet.link.toComponent()[0].props.href + ' />';
-
-                //     for (let m = 0; m < helmet.meta.toComponent().length; m++) {
-                //         let metaTitles = helmet.meta.toComponent()[m].props;
-
-                //         if(metaTitles.name && metaTitles.name === 'description') metaTitlesAll += '<meta name="'+ metaTitles.name +'" content="' + metaTitles.content + '" />';
-
-                //         else if(metaTitles.property && (metaTitles.property === 'og:title' || metaTitles.property === 'og:url' || metaTitles.property === 'og:description' || metaTitles.property === 'og:type' || metaTitles.property === 'og:site_name' || metaTitles.property === 'fb:profile_id')) metaTitlesAll += '<meta property="' +metaTitles.property+ '" content="' + metaTitles.content + '" />';
-
-                //         else if(metaTitles.itemprop && (metaTitles.itemprop === '' || metaTitles.itemprop === 'url' || metaTitles.itemprop === 'description')) metaTitlesAll += '<meta itemprop="' +metaTitles.name+ '" content="' + metaTitles.content + '" />';
-                //     }
-                // }
-                // catch (e) {
-                //     // pass
-                // }
-
-                // Grab the initial state from our Redux store at send it to the browser to hydrate the app.
-                const preloadedState = store.getState()
-                
-                
-                fs.readFile(indexFile, 'utf8', (err, data) => {
-                    if (err) {
-                        console.error("Error in reading index.html",err)
-                        console.log('make sure you are in frontend directory when use run pm2 start');
-                        return res.status(500).send('index.html file not found!');
-                    }
-            
-                    return res.send(
-                        data.replace('<div id="root"></div>', 
-                        `<div id="root">${appContent}</div>
-                        <script>
-                            window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g,'\\u003c')}
-                            window.config = ${JSON.stringify(window.config)}
-                        </script>`
-                        )
-                         // .replace('</head>', `${metaTitlesAll}</head>`)
-                        );
-                });
-                
+                result = await new Promise((resolve, reject) => fetchApiData(store, match.params, route.actionGroup, resolve, reject));
             }
-            catch(error){
-                if(error?.status === 404){
+            catch (error) {
+                if (error?.status === 404) {
                     return res.redirect('/404/');
                 }
             }
+
+
+            appContent = render(req, routes);
+
+            // const helmet = Helmet.renderStatic();
+            // let metaTitlesAll = "";
+
+            // try {
+            //     metaTitlesAll += '<title>' + helmet.title.toComponent()[0].key + '</title>';
+            //     metaTitlesAll += '<link rel="canonical" href= ' + helmet.link.toComponent()[0].props.href + ' />';
+
+            //     for (let m = 0; m < helmet.meta.toComponent().length; m++) {
+            //         let metaTitles = helmet.meta.toComponent()[m].props;
+
+            //         if(metaTitles.name && metaTitles.name === 'description') metaTitlesAll += '<meta name="'+ metaTitles.name +'" content="' + metaTitles.content + '" />';
+
+            //         else if(metaTitles.property && (metaTitles.property === 'og:title' || metaTitles.property === 'og:url' || metaTitles.property === 'og:description' || metaTitles.property === 'og:type' || metaTitles.property === 'og:site_name' || metaTitles.property === 'fb:profile_id')) metaTitlesAll += '<meta property="' +metaTitles.property+ '" content="' + metaTitles.content + '" />';
+
+            //         else if(metaTitles.itemprop && (metaTitles.itemprop === '' || metaTitles.itemprop === 'url' || metaTitles.itemprop === 'description')) metaTitlesAll += '<meta itemprop="' +metaTitles.name+ '" content="' + metaTitles.content + '" />';
+            //     }
+            // }
+            // catch (e) {
+            //     // pass
+            // }
+
+            // Grab the initial state from our Redux store at send it to the browser to hydrate the app.
+            const preloadedState = store.getState()
+
+
+            fs.readFile(indexFile, 'utf8', (err, data) => {
+                if (err) {
+                    console.error("Error in reading index.html", err)
+                    console.log('make sure you are in frontend directory when you run pm2 start');
+                    return res.status(500).send('index.html file not found!');
+                }
+
+                return res.send(
+                    data.replace('<div id="root"></div>',
+                        `<div id="root">${appContent}</div>
+                        <script>
+                            window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, '\\u003c')}
+                            window.config = ${JSON.stringify(window.config)}
+                        </script>`
+                    )
+                    // .replace('</head>', `${metaTitlesAll}</head>`)
+                );
+            });
+
+
         }
 
     });
-   
+
 
 });
 
 
 
 app.get('*', (req, res) => {
-    if(isMobile(userAgents)){
-        res.sendFile(path.resolve('ssrBuild/index.mobile.html'));
+
+    window.config.isServerRendered = false
+    
+    if (isMobile(userAgents)) {
+        console.log("************Entered Mobile***********", req.url)
+        indexFile = path.resolve('ssrBuild/index.mobile.html');
     }
-    else{
-        res.sendFile(path.resolve('ssrBuild/index.html'));
+    else {
+        console.log("************Entered Desktop***********", req.url)
+        indexFile = path.resolve('ssrBuild/index.html');
     }
+    fs.readFile(indexFile, 'utf8', (err, data) => {
+        if (err) {
+            console.error("Error in reading index.html", err)
+            console.log('make sure you are in frontend directory when you run pm2 start');
+            return res.status(500).send('index.html file not found!');
+        }
+
+        return res.send(
+            data.replace('<div id="root"></div>',
+                `<div id="root"></div>
+                <script>
+                    window.config = ${JSON.stringify(window.config)}
+                </script>`
+            )
+        );
+    });
+
 });
 
 

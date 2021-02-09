@@ -81,14 +81,9 @@ const MyServices = (props) => {
     // main service api hit
     const handleEffects = async () => {
         try{
-            if (!(window && window.config && window.config.isServerRendered)) {
                 dispatch(startDashboardServicesPageLoader());
                 await new Promise((resolve, reject) => dispatch(fetchMyServices({ page: currentPage, isDesk: true, ...filterState, resolve, reject })))
                 dispatch(stopDashboardServicesPageLoader());
-            }
-            else {
-                delete window.config?.isServerRendered
-            }
         }
         catch(e){
             dispatch(stopDashboardServicesPageLoader());
