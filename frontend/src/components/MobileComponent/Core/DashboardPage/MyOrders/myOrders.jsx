@@ -25,14 +25,9 @@ const MyWallet = (props) => {
 
     const handleEffects = async () => {
         try {
-            if (!(window && window.config && window.config.isServerRendered)) {
                 dispatch(startDashboardOrderPageLoader());
                 await new Promise((resolve, reject) => dispatch(fetchMyOrders({ page: currentPage, resolve, reject })))
                 dispatch(stopDashboardOrderPageLoader());
-            }
-            else {
-                delete window.config?.isServerRendered
-            }
         } catch (error) {
             dispatch(stopDashboardOrderPageLoader());
             if (error?.status == 404) {

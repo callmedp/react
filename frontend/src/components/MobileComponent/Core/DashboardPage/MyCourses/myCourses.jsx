@@ -63,7 +63,6 @@ const MyCourses = (props) => {
     }
 
     const handleEffects = async () => {
-        if (!(window && window.config && window.config.isServerRendered)) {
             try{
                 dispatch(startDashboardCoursesPageLoader());
                 await new Promise((resolve, reject) => dispatch(fetchMyCourses({ page: currentPage, resolve, reject })));
@@ -72,10 +71,6 @@ const MyCourses = (props) => {
             catch{
                 dispatch(stopDashboardCoursesPageLoader());
             }
-        }
-        else {
-            delete window.config?.isServerRendered
-        }
 
     };
 
