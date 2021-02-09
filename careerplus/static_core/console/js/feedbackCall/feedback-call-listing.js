@@ -27,13 +27,16 @@ $(document).ready(() => {
 
     $('#filter-status').change(()=>{
         customerFeedbackList(1)
+        feedback_id_selected = []
     })
     $('#feedback-type').change(()=>{
         customerFeedbackList(1)
+        feedback_id_selected = []
     })
 
     $('#feedback-category').change(()=>{
         customerFeedbackList(1)
+        feedback_id_selected = []
     })
 
     $('#filter-follow-up').daterangepicker({
@@ -215,6 +218,7 @@ const assignFeedbackIdsUser = () => {
                 title: 'Feedback calls assigned to user Successfully'
             })
             customerFeedbackList(1)
+            feedback_id_selected = []
             
         }
     }).fail(()=>{
@@ -228,6 +232,7 @@ const assignFeedbackIdsUser = () => {
 
 const filterFeedbackList = () => {
     customerFeedbackList(1)
+    feedback_id_selected = []
 }
 
 const redirectFeedbackUpdatePage = (id) => {
@@ -242,6 +247,7 @@ const searchNameOrEmail = () => {
     $('#feedback-type').val('')
     $('#feedback-category').val('')
     customerFeedbackList(1)
+    feedback_id_selected = []
 }
 
 const searchBoxKeyEnter = (event) =>{
