@@ -1050,7 +1050,9 @@ class PopularInDemandProductsAPI(APIView):
             )
             paginated_data = offset_paginator(page, courses,size=4)                                                                    
             courses = paginated_data["data"]
-            data = ProductMixin().get_course_json(courses)
+            course_data = ProductMixin().get_course_json(courses)
+            data.update({ 'courses': course_data})
+
             # {
             #     'courses': [
             #         {'id': course.id, 'heading': course.pHd, 'name': course.pNm, 'url': course.pURL, 'img': course.pImg, \
@@ -1063,8 +1065,8 @@ class PopularInDemandProductsAPI(APIView):
                 'has_prev': True if paginated_data['current_page'] >1 else False,
                 'has_next':True if (paginated_data['total_pages']-paginated_data['current_page'])>0 else False
                 }
-        data.append({'page':page_info})
-        # data.update({'page':page_info})
+        # data.append({'page':page_info})
+        data.update({'page':page_info})
         return APIResponse(message='Popular certifications and courses Loaded', data=data, status=status.HTTP_200_OK)
 
 class JobAssistanceAndLatestBlogAPI(APIView):
