@@ -276,7 +276,7 @@ const MyServices = (props) => {
                                                                 service?.updated_status?.day_remaining &&
                                                                 <>
                                                                     {
-                                                                        (service?.updated_status?.day_remaining > 0 ? service?.updated_status?.day_remaining : '00')?.toString()?.split('')?.map((digit, index) => {
+                                                                        (service?.updated_status?.day_remaining > 0 ? service?.updated_status?.day_remaining > 9 ? service?.updated_status?.day_remaining : '0' + service?.updated_status?.day_remaining : '00')?.toString()?.split('')?.map((digit, index) => {
                                                                             return (
                                                                                 <span className="day-remaning--box" key={index}> { digit }</span>
                                                                             )
@@ -289,10 +289,10 @@ const MyServices = (props) => {
                                                             }
                                                         </div>
                                                         {
-                                                        service?.updated_status?.pause_service && <Link to={"#"} className="db-resume-course font-weight-bold pr-10" onClick={() => pauseResumeService(34, service?.id)}>Pause Service</Link>
+                                                        service?.updated_status?.pause_service && <Link to={"#"} className="db-resume-course font-weight-bold pr-10 mt-20" onClick={() => pauseResumeService(34, service?.id)}>Pause Service</Link>
                                                         }
                                                         {
-                                                            service?.updated_status?.resume_service && <Link to={"#"} className="db-start-course font-weight-bold pr-10" onClick={() => pauseResumeService(35, service?.id)}>Resume Service</Link>
+                                                            service?.updated_status?.resume_service && <Link to={"#"} className="db-start-course font-weight-bold pr-10 mt-20" onClick={() => pauseResumeService(35, service?.id)}>Resume Service</Link>
                                                         }
                                                     </>
                                                 }

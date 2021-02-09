@@ -265,7 +265,7 @@ const MyServices = (props) => {
                                                             <div>
                                                                 <div className="m-day-remaning">
                                                                     {
-                                                                        (service?.updated_status?.day_remaining > 0 ? service?.updated_status?.day_remaining : '00')?.toString()?.split('')?.map((digit, index) => {
+                                                                        (service?.updated_status?.day_remaining > 0 ? service?.updated_status?.day_remaining > 9 ? service?.updated_status?.day_remaining : '0' + service?.updated_status?.day_remaining : '00')?.toString()?.split('')?.map((digit, index) => {
                                                                             return (
                                                                                 <span className="m-day-remaning--box" key={index}> { digit }</span>
                                                                             )
