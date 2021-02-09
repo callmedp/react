@@ -203,7 +203,7 @@ class OrderItemPatchView(APIView):
             order_item.oi_status = oi_status
 
             order_item.save()
-            return Response({'status': 1},
+            return Response({'status': 1, 'oi_status': oi_status},
                             status=status.HTTP_200_OK)
 
         except Exception as e:

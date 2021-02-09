@@ -110,12 +110,24 @@ function* acceptrejectcandidate(action) {
 function* pauseResumeService(action) {
     try {
         const { payload } = action;
+        const oi_status = payload?.oi_status
         const result = yield call(Api.pauseResumeService, payload);
         
         if (result["error"]) {
+            Swal.fire({
+                icon : 'error',
+                html : 'Something went wrong!'
+            })
             return result
             
         }
+        const item = result?.data?.oi_status
+        const error = item !== oi_status ? true : false
+        Swal.fire({
+            icon: error ? 'error' : 'success',
+            title: error ? `Please wait 24 hours before ${ oi_status === 34 ? 'pausing' : 'resuming'} ` : 
+                    item ===34 ? 'Service is Paused' : 'Service is Resumed'
+        })
         return yield put({ type: Actions.PAUSE_AND_RESUME_SERVICE_SUCCESS, oi: result.data });
     }
     catch (e) {
