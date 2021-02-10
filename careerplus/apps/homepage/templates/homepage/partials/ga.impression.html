@@ -152,6 +152,8 @@
         }
 
         {% if product %}
+        var referrer = '{{ request.META.HTTP_REFERER }}';
+        var actionField = typeof referrer.split('/')[3] === "undefined" ? 'Home Page' : referrer.split('/')[3] === 'search' ? 'Search Lists' : referrer.split('/')[3] === 'course' ? 'Course Page' : ''; 
             p_detail.push({
                 'name': '{{ prd_H1 }}',
                 'id': '{{ product.id }}',
@@ -160,12 +162,12 @@
                 'variant': '{{ product.product_class }}',
                 'price': '{% if selected_var %}{{var_list.0.inr_price|floatformat}}{% else %}{{sqs.pPinb|floatformat}} {% endif %}',
                 'position': '1',
-                'dimensions15': '{{ request.META.HTTP_REFERER }}',
+                'dimensions15': 'Product Page',
                 'dimensions16': '{{ prd_rating }}',
                 'dimensions17': '{{ prd_num_bought|default:"10" }}'
         })
         {% endif %}
-        GALayer.SendImpression('productdetail', p_detail, 'INR', 'Product Page');
+        GALayer.SendImpression('productdetail', p_detail, 'INR', actionField);
     }
 
     function CartImpressionPush() {
@@ -185,7 +187,9 @@
                 })
             {% endfor %}
         {% endif %}
+        if (c_product.length > 0) {
         GALayer.SendImpression('addToCart', c_product, 'INR');
+        }
     }
 
     function RemoveCartImpression(list, options) {
@@ -205,14 +209,14 @@
                 'brand': '{{ item.oi.product.vendor.name }}',
                 'category': '{{ item.oi.product.get_category_main }}',
                 'variant': '{{ item.oi.product.get_product_class }}',
-                'price': '{% if item.variations|length %} {{ item.oi.product.get_variations.last.get_price }} {% else %} {{ item.oi.product.get_price }}{% endif %}',
+                'price': '{% if item.oi.variations|length %} {{ item.oi.product.get_variations.last.get_price }} {% else %} {{ item.oi.product.get_price|safe }}{% endif %}',
                 'dimensions15': 'Order Confirmation Page',
                 'dimensions16': '{{ item.oi.product.avg_rating }}',
                 'dimensions17': '{{ item.oi.product.buy_count }}'
             })
           {% endfor %}
         {% endif %}
-        GALayer.SendImpression('checkout-complete', o_product, 'INR', actionField=[{'id': '{{ order_id }}', 'affiliation': 'Oneline Store', 'revenue': '{{ total_price }}', 'coupon': '', 'Tax': '{{ tax_exlude }}'}]);
+        GALayer.SendImpression('checkout-complete', o_product, 'INR', actionField=[{'id': '{{ order_id }}', 'affiliation': 'Oneline Store', 'revenue': '{{ total_price }}', 'coupon': '', 'Tax': (parseFloat({{ total_price }}) - parseFloat({{ tax_exlude }})).toFixed(2) }]);
     }
 
     function productClickImpression(list, options) {

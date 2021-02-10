@@ -537,10 +537,8 @@ function ajax_call(authen, prod_id) {
               'dimensions15': 'Product Page',
               'dimensions16': data.results[i].pARx,
               'dimensions17': data.results[i].pBC
-          });
-          if(r_products.length > 0) {
-          GALayer.SendImpression('productImpression', r_products, 'INR');
-          }
+            });
+
             var first = '<li class="col-sm-6 col-md-4">' +
               '<a title="' + (data.results[i].pHd).substring(0, 40) + '"class="box-panel" href="' + data.results[i].pURL + '">' +
               '<div class="media">' +
@@ -587,7 +585,9 @@ function ajax_call(authen, prod_id) {
             + '</div>'
             + '</div>';
 
-
+          if (r_products.length > 0) {
+            GALayer.SendImpression('productImpression', r_products, 'INR');
+          }
           document.getElementById('recommended_product').innerHTML = recom;
         }
         else {
