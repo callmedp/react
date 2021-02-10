@@ -441,11 +441,11 @@ class Category(AbstractAutoDate, AbstractSEO, ModelMeta):
     @property
     def get_free_test(self):
         return self.test_set.first() if self.test_set.first() else None
-    
+        
     def get_absolute_image_url(self):
         if self.image:
-            return r'{}{}'.format(settings.MEDIA_URL, self.image)
-        return settings.MEDIA_URL + 'attachment/default_product_image.jpg'
+            return r'{}{}'.format(settings.MEDIA_URL,self.image)
+        return settings.MEDIA_URL +'attachment/default_product_image.jpg'
 
     @classmethod
     def post_save_category(cls, sender, instance, **kwargs):
