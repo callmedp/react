@@ -25,7 +25,7 @@ const PopularTab = props => {
         swipeToSlide: true,
         variableWidth: true,
         afterChange: function(index) {
-            if (index % 2 === 0) {
+            if (index % 3 === 0) {
             new Promise((resolve, reject) => dispatch(fetchInDemandProducts({ pageId: pageId, tabType, device: 'mobile', resolve, reject })));
             updatePageId(pageId + 1);
             }
