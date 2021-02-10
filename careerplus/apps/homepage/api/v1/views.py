@@ -1000,17 +1000,18 @@ class MostViewedCourseAPI(APIView):
 
     def get(self, request):
         quantity = int(request.GET.get('quantity', 4))
-        category_id = int(request.GET.get('category_id',None)) if request.GET.get('category_id',None) else None
+        category_id = int(request.GET.get('category_id',-1))
         data = {}
         product_mixin = ProductMixin()
         if category_id and category_id != -1:
             try:
-                Category.objects.get(id=category_id)
+                category = Category.objects.get(id=category_id)
+                child_categories = category.get_childrens().values_list('id',flat=True)
             except Category.DoesNotExist:
                 return APIResponse(error= 'Category not found', status=status.HTTP_404_NOT_FOUND)
 
             queryset = Product.objects.filter(product_class__slug__in=settings.COURSE_SLUG,
-                                                category__id=category_id,
+                                                category__id__in=child_categories,
                                                 active=True,
                                                 is_indexed=True).order_by('-cp_page_view')[:quantity].\
                                                 values_list('id', flat=True)

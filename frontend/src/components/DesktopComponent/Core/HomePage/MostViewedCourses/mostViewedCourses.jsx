@@ -13,7 +13,7 @@ function MostViewedCourses() {
 
     const handleTabChange = async (tabType) => {
         dispatch(startHomePageLoader())
-        await new Promise((resolve, reject) => dispatch(fetchMostViewedCourses({ categoryId: -1, resolve, reject})));
+        await new Promise((resolve, reject) => dispatch(fetchMostViewedCourses({ categoryId: tabType, resolve, reject})));
         dispatch(stopHomePageLoader())
         setKey(tabType)
     }
@@ -39,7 +39,7 @@ function MostViewedCourses() {
                                         <Tab eventKey={category.id} title={<span>{category.name}</span>} key={category.id}>
                                             <ul className="recent-courses__list">
                                                 {
-                                                    mostViewedCourses?.map((course, idx) =>  <PopularCourse /> )
+                                                    mostViewedCourses?.map((course, idx) =>  <PopularCourse course={course} /> )
                                                 } 
                                             </ul>
                                         </Tab>
