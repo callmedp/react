@@ -5,11 +5,22 @@ import Api from './Api';
 
 function* fetchTrendingCnA(action) {
     try {
-        const response = yield call(Api.fetchTrendingCnA);
+        const { payload } = action;
+        const response = yield call(Api.fetchTrendingCnA, payload);
         if (response["error"]) {
             return
         }
         const item = response?.data?.data;
+
+        if(!!payload && !!payload.homepage && !!item && item.trendingSkills instanceof Array){
+            const skillList = item?.trendingSkills.reduce((rows, key, index) => 
+                (index % 4 == 0 ? rows.push([key]) : rows[rows.length-1].push(key)) && rows, []);
+            
+            if(skillList.length){
+                item.recruiterList = skillList.slice()
+            }
+        }
+
         yield put({ 
             type: Actions.TRENDING_COURSES_AND_SKILLS_FETCHED, item 
         });

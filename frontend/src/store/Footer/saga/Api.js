@@ -2,8 +2,12 @@ import BaseApiService from 'services/BaseApiService';
 import { siteDomain } from 'utils/domains';
 
 
-const fetchTrendingCnA = () => {
-    const url = `trending-courses-and-skills/`;
+const fetchTrendingCnA = (data) => {
+    let query='';
+    if(!!data.homepage){
+        query='homepage=True'
+    }
+    const url = `trending-courses-and-skills/?${query}`;
     return BaseApiService.get(`${siteDomain}/api/v1/${url}`);
 }
 

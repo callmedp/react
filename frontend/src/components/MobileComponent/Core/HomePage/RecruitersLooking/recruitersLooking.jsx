@@ -71,11 +71,11 @@ const RecruitersLooking = (props) => {
                             return (
                                 <div className="m-card" key={index}>
                                     <figure>
-                                        <img src={`${skill.image}`} className="img-fluid" alt={ skill.skillName } />
+                                        <img src={`${skill?.image}`} className="img-fluid" alt={ skill?.skillName } />
                                     </figure>
-                                    <h3>{ skill.skillName }</h3>
-                                    <span>{ skill.no_courses } courses</span>
-                                    <a href={`${siteDomain}${skill.skillUrl}`}>Know more</a>
+                                    <h3>{ skill?.skillName }</h3>
+                                    <span>{ skill?.no_courses } courses</span>
+                                    <a href={`${siteDomain}${skill?.skillUrl}`}>Know more</a>
                                 </div>
                             )
                         })

@@ -24,6 +24,7 @@ import {
 } from 'store/HomePage/actions';
 import Loader from '../../Common/Loader/loader';
 
+
 const HomePage = (props) => {
 
     const dispatch = useDispatch();
@@ -56,11 +57,11 @@ const HomePage = (props) => {
                 <MostViewedCourses />
                 <LearningAdvantage />
                 <BoostedCareers />
-                <PracticeTestBanner />
+                <PracticeTestBanner/>
                 <OurLearners />
                 <LatestBlog />
             </main>
-            <Footer />
+            <Footer homepage={true}/>
         </div>
     )
 }

@@ -9,7 +9,7 @@
     right: 0;
     background: $white;
     display: flex;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
     @extend %box-shadow-cta;
     z-index: 9;
@@ -22,5 +22,11 @@
             display: block;
             margin: 0 auto .5rem auto;
         }
+    }
+}
+
+.m-cta-home {
+    a {
+        color: $gray-200;
     }
 }
