@@ -21,11 +21,11 @@ const PopularCourses = (props) => {
                 <h2 className="m-heading2-home text-center">Popular courses in demand</h2>
 
                 <div className="m-tabset-pop">
-                    <input type="radio" name="tabset" id="tab1" aria-controls="Master’s" checked />
-                    <label for="tab1">Master’s</label>
+                    <input type="radio" name="tabset" id="tab1" aria-controls="Master’s" defaultChecked={true} />
+                    <label htmlFor="tab1">Master’s</label>
 
                     <input type="radio" name="tabset" id="tab2" aria-controls="Certifications" />
-                    <label for="tab2">Certifications</label>
+                    <label htmlFor="tab2">Certifications</label>
 
                     <div className="tab-panels">
                         <div id="tab1" className="tab-panel">

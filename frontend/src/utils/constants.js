@@ -254,7 +254,7 @@ const categoryTabs = [
     { name: 'IT', id: '22'},
     { name: 'Mass comm', id: '29'},
     { name: 'Management', id: '27'},
-    { name: 'LAW', id: '23'}
+    { name: 'Law', id: '23'}
 ]
 
 

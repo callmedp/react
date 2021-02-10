@@ -5,7 +5,7 @@ import './productCardsSlider.scss';
 
 const ProductCards = props => {
     const {
-        productList
+        productList, noProvider, showMode
     } = props
 
     const settings = {
@@ -45,21 +45,29 @@ const ProductCards = props => {
                             </div>
                             <div className="m-card__box">
                                 <div className="m-card__rating">
-                                <span className="mr-10">By { product?.providerName?.split(' ')[0]?.length > 13 ? product?.providerName?.split(' ')[0]?.slice(0, 13) + '...' : product?.providerName?.split(' ')[0] }</span>
-                                <span className="m-rating">
-                                    { product?.stars?.map((star, index) => starRatings(star, index)) }
-                                    <span>{product?.rating?.toFixed(1)}/5</span>
-                                </span>
-                                    </div>
-                                    <div className="m-card__price">
-                                        <strong>{product?.price}/-</strong>
-                                    </div>
+                                    {
+                                        !!noProvider ? '' :
+                                            <span className="mr-10">
+                                                By { product?.providerName?.split(' ')[0]?.length > 13 ? product?.providerName?.split(' ')[0]?.slice(0, 13) + '...' : product?.providerName?.split(' ')[0] }
+                                            </span>
+                                    }
+                                    <span className="m-rating">
+                                        { product?.stars?.map((star, index) => starRatings(star, index)) }
+                                        <span>{product?.rating?.toFixed(1)}/5</span>
+                                    </span>
+                                    {
+                                        !!showMode ? <span className="m-mode">Online</span> : ''
+                                    }
                                 </div>
-                            </div>
-                        )
-                    })
-                }
-            </Slider>
+                                <div className="m-card__price">
+                                    <strong>{product?.price}/-</strong>
+                                </div>
+                                </div>
+                        </div>
+                    )
+                })
+            }
+        </Slider>
         // </section>
     )
 }

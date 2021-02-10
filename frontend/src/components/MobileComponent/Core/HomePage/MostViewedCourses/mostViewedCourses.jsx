@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Slider from "react-slick";
 import 'slick-carousel/slick/slick.css';
 import './mostViewedCourses.scss';
+import { categoryTabs } from 'utils/constants';
 
 const MostViewedCourses = (props) => {
     const settings = {
@@ -15,12 +16,23 @@ const MostViewedCourses = (props) => {
         swipeToSlide: true,
         variableWidth: true,
     };
+    const [selectedIndex, setSelectedIndex] = useState(0)
+
     return(
         <section className="m-container mt-0 mb-0 m-lightblue-bg pr-0" data-aos="fade-up">
             <div className="m-recomend-courses">
                 <h2 className="m-heading2-home text-center">Most Viewed Courses</h2>
                 <Slider {...settings}>
-                    <div className="m-recomend-courses__tab">
+                    {
+                        categoryTabs?.map((category, index) => {
+                            return (
+                                <div className="m-recomend-courses__tab" key={category?.id} >
+                                    <Link className={ selectedIndex === index ? 'selected' : '' } to={'#'} htmlFor={"#"} onClick={() => setSelectedIndex(index)}>{category?.name}</Link>
+                                </div>
+                            )
+                        })
+                    }
+                    {/* <div className="m-recomend-courses__tab">
                         <Link className="selected" for={"#"}>All</Link>
                     </div>
                     <div className="m-recomend-courses__tab">
@@ -31,7 +43,7 @@ const MostViewedCourses = (props) => {
                     </div>
                     <div className="m-recomend-courses__tab">
                         <Link for={"#"}>Banking & Finance</Link>
-                    </div>  
+                    </div>   */}
                 </Slider>
                 <div className="m-courses m-recent-courses">
                     <Slider {...settings}>
