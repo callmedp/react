@@ -9,7 +9,7 @@ const initState = {
     commentLoader: false,
     reviewLoader: false,
     acceptRejectLoader: false,
-    homePageLoader: false
+    homeLoader: false
 }
 
 export const LoaderReducer = (state=initState, action) => {

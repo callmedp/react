@@ -19,7 +19,7 @@ import Footer from '../../Common/Footer/Footer';
 import CTAhome from '../../Common/CTA/CTAhome';
 import Aos from "aos";
 import "aos/dist/aos.css";
-import { fetchTestimonials, fetchJobAssistanceAndBlogs } from 'store/HomePage/actions';
+import { fetchTestimonials, fetchJobAssistanceAndBlogs, fetchMostViewedCourses } from 'store/HomePage/actions';
 import { startHomePageLoader, stopHomePageLoader } from 'store/Loader/actions/index';
 import Loader from '../../Common/Loader/loader';
 import SearchPage from '../../Common/SearchPage/SearchPage'
@@ -28,7 +28,7 @@ import './homePage.scss';
 const HomePage = (props) => {
 
     const dispatch = useDispatch()
-    const { homeLoader } = useSelector(store => store.loader);
+    const { homeLoader } = useSelector( store => store.loader )
     const [showSearch, setShowSearch] = useState(false)
     const [stickSearchBar, showStickSearchBar] = useState(false)
 
@@ -36,7 +36,8 @@ const HomePage = (props) => {
         try {
                 dispatch(startHomePageLoader());
                 new Promise((resolve, reject) => dispatch(fetchTestimonials({resolve, reject})))
-                new Promise((resolve, reject) => dispatch(fetchJobAssistanceAndBlogs({resolve, reject})))
+                new Promise((resolve, reject) => dispatch(fetchMostViewedCourses({categoryId: -1, resolve, reject})))
+                await new Promise((resolve, reject) => dispatch(fetchJobAssistanceAndBlogs({resolve, reject})))
                 dispatch(stopHomePageLoader());
             }
         catch{
@@ -46,7 +47,6 @@ const HomePage = (props) => {
 
     const handleScroll=() => {
         const offset = window.scrollY;
-        // console.log(offset)
         if(offset > 164 ) {
             showStickSearchBar(true)
         }

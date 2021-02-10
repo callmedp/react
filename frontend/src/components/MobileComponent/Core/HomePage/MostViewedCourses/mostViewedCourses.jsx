@@ -1,9 +1,13 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Slider from "react-slick";
 import 'slick-carousel/slick/slick.css';
 import './mostViewedCourses.scss';
 import { categoryTabs } from 'utils/constants';
+import { fetchMostViewedCourses } from 'store/HomePage/actions';
+import ProductCardsSlider from '../../../Common/ProductCardsSlider/productCardsSlider';
+import { startHomePageLoader, stopHomePageLoader } from 'store/Loader/actions/index';
 
 const MostViewedCourses = (props) => {
     const settings = {
@@ -16,7 +20,27 @@ const MostViewedCourses = (props) => {
         swipeToSlide: true,
         variableWidth: true,
     };
+
+    const dispatch = useDispatch()
     const [selectedIndex, setSelectedIndex] = useState(0)
+    const { mostViewedCourses } = useSelector(store => store.mostViewed);
+
+    const handleCategory = (categoryId, index) => {
+        setSelectedIndex(index)
+        handleEffects(categoryId)
+    }
+
+    const handleEffects = async (categoryId) => {
+        try {
+                dispatch(startHomePageLoader());
+                await new Promise((resolve, reject) => dispatch(fetchMostViewedCourses({categoryId: categoryId, resolve, reject})))
+                dispatch(stopHomePageLoader());
+            }
+        catch(e) {
+            dispatch(stopHomePageLoader());
+            console.log(e)
+        }
+    };
 
     return(
         <section className="m-container mt-0 mb-0 m-lightblue-bg pr-0" data-aos="fade-up">
@@ -27,7 +51,7 @@ const MostViewedCourses = (props) => {
                         categoryTabs?.map((category, index) => {
                             return (
                                 <div className="m-recomend-courses__tab" key={category?.id} >
-                                    <Link className={ selectedIndex === index ? 'selected' : '' } to={'#'} htmlFor={"#"} onClick={() => setSelectedIndex(index)}>{category?.name}</Link>
+                                    <Link className={ selectedIndex === index ? 'selected' : '' } to={'#'} onClick={() => handleCategory(category?.id, index)}>{category?.name}</Link>
                                 </div>
                             )
                         })
@@ -46,8 +70,11 @@ const MostViewedCourses = (props) => {
                     </div>   */}
                 </Slider>
                 <div className="m-courses m-recent-courses">
-                    <Slider {...settings}>
-                    <div className="m-card">
+                    {
+                        <ProductCardsSlider productList={mostViewedCourses} noProvider={true} showMode={true} />
+                    }
+                    {/* <Slider {...settings}> 
+                        <div className="m-card">
                             <div className="m-card__heading">
                                 <figure>
                                     <img src="https://static1.shine.com/l/m/product_image/3425/1542800087_8980.png" alt="Digital Marketing Training Course" />
@@ -99,7 +126,7 @@ const MostViewedCourses = (props) => {
                                 </div>
                             </div>
                         </div>  
-                    </Slider>
+                    </Slider> */}
                 </div>
             </div>
         </section>
