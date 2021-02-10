@@ -94,8 +94,8 @@ const Header = (props) => {
                         </a>
 
                             <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                                {(redirectPath != '/' || '') && <SearchBar placeHolder = {props.placeHolder}/>}
-                                <ul className="navbar-nav navbar-right">
+                                {(redirectPath !== '/' || '') && <SearchBar place="topHeader" placeHolder = {props.placeHolder}/>}
+                                <ul className={`navbar-nav navbar-right ${(redirectPath === '/' || '') ? ' ml-auto' : ''}`}>
                                     <li className="nav-item dropdown dropdown-jobs">
                                         <a className="nav-link" to={"#"} id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onClick={() => MyGA.SendEvent('homepage_navigation', 'ln_homepage_navigation', 'ln_job_assisstance', 'ln_job_assisstance', '', false, true)}>Job assistance</a>
                                         <div className="dropdown-menu" aria-labelledby="navbarDropdown">

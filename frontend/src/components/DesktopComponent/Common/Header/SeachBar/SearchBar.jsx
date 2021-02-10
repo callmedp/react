@@ -7,18 +7,25 @@ import { MyGA } from 'utils/ga.tracking.js';
 
 const SearchBar = (props) => {
     const [searchTerm, setSearchTerm] = useState('');
+    const {place} = props;
     const [results, setResults] = useState([]);
     const { register, handleSubmit } = useForm()
     const [showResults, setShowResults] = useState(false);
     const debouncedSearchTerm = useDebounce(searchTerm, 500);
+    let redirectPath = window.location.pathname;
 
     const handleScroll = () =>{
         const offset = window.scrollY;
-        if(offset > 70){
-            setShowResults(false)
+        if(place === 'banner') {
+            if(offset > 430) setShowResults(false)
         }
-        else{
-            setShowResults(true)
+        else {
+            if(offset > 70) {
+                setShowResults(false)
+            }
+            else{
+                setShowResults(true)
+            }
         }
     }
 
@@ -49,8 +56,8 @@ const SearchBar = (props) => {
 
     return (
         <>
-            <div className="ml-auto pos-rel">
-                <form className="form-inline top-search my-2 my-lg-0" onSubmit={handleSubmit(submitData)}>
+            <div className={`pos-rel ${(redirectPath !== '/' || '') ? ' ml-auto' : ''}`}>
+                <form className={`form-inline my-2 my-lg-0 ${place === 'banner' ? 'top-search1': 'top-search'}`} onSubmit={handleSubmit(submitData)}>
                     <input className="form-control top-input" type="search" onChange={e => setSearchTerm(e.target.value)} onFocus={()=>setShowResults(true)} 
                         placeholder={props.placeHolder} name="query" aria-label="Search" ref={register({required: true})} autoComplete="off" />
                     <button className="btn btn-search" aria-label="search Button" type="submit" onClick={() => MyGA.SendEvent('click_on_search','ln_click_on_search', 'ln_search_initiated_navigation', 'ln_click_on_search', 'click_on _search','', false, true)}><figure className="icon-search"></figure></button>
