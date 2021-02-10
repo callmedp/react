@@ -1,10 +1,37 @@
-import React, {useState} from 'react';
+// React-Core Import
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Slider from "react-slick";
+import { useSelector, useDispatch } from 'react-redux';
+
+// Inter-App Import
 import 'slick-carousel/slick/slick.css';
 import './popularCourses.scss';
+import { populartabType } from 'utils/constants';
+import { siteDomain } from 'utils/domains';
+
+// API Import
+import { fetchInDemandProducts } from 'store/HomePage/actions';
+import { startHomePageLoader, stopHomePageLoader } from 'store/Loader/actions';
 
 const PopularCourses = (props) => {
+
+    const [key, setKey] = useState('master');
+    const { courses, certifications } = useSelector(store => store.inDemand)
+    const dispatch = useDispatch()
+
+    const handleTabChange = async (tabType, id) => {
+        try {
+            dispatch(startHomePageLoader())
+            await new Promise((resolve, reject) => dispatch(fetchInDemandProducts({ pageId: 1, tabType, device: 'mobile', resolve, reject })));
+            dispatch(stopHomePageLoader())
+            setKey(tabType)
+        }
+        catch (e) {
+            dispatch(stopHomePageLoader());
+        }
+    };
+
     const settings = {
         dots: false,
         arrows: false,
@@ -15,51 +42,75 @@ const PopularCourses = (props) => {
         swipeToSlide: true,
         variableWidth: true,
     };
-    return(
+
+    const starRatings = (star, index) => {
+        return (star === '*' ? <em className="micon-fullstar" key={index}></em> : star === '+'
+            ? <em className="micon-halfstar" key={index}></em> : <em className="micon-blankstar" key={index}></em>
+        )
+    }
+
+    return (
         <section className="m-container mt-0 mb-0 pr-0 pt-20">
             <div className="m-courses m-popular-course-demand">
                 <h2 className="m-heading2-home text-center">Popular courses in demand</h2>
 
                 <div className="m-tabset-pop">
-                    <input type="radio" name="tabset" id="tab1" aria-controls="Master’s" defaultChecked={true} />
-                    <label htmlFor="tab1">Master’s</label>
+                    {populartabType?.map((tab, index) => {
+                        return (
+                            <>
+                                <input key={index} type="radio" name="tabset" id={`tab${index}`} aria-controls={tab?.visible} defaultChecked={key === tab?.slug ? true : false} onClick={() => handleTabChange(tab?.slug, index)} />
+                                <label htmlFor={`tab${index}`}>{tab?.visible}</label>
+                            </>
+                        )
+                    })
+                    }
 
-                    <input type="radio" name="tabset" id="tab2" aria-controls="Certifications" />
-                    <label htmlFor="tab2">Certifications</label>
+                    {/* <input type="radio" name="tabset" id="tab2" aria-controls="Certifications" />
+                    <label htmlFor="tab2">Certifications</label> */}
 
                     <div className="tab-panels">
                         <div id="tab1" className="tab-panel">
                             <div className="m-courses">
                                 <Slider {...settings}>
-                                    <div className="m-card">
-                                        <div className="m-card__heading colbg1">
-                                            <span className="m-flag-yellow">BESTSELLER</span>
-                                            <figure>
-                                                <img src="https://static1.shine.com/l/m/product_image/3425/1542800087_8980.png" alt="Digital Marketing Training Course" />
-                                            </figure>
-                                            <h3 className="m-heading3">
-                                                <Link to={"#"}>Digital Marketing Training Course</Link>
-                                            </h3>
-                                        </div>
-                                        <div className="m-card__box">
-                                            <div className="m-card__rating mt-5">
-                                            <span className="m-rating">
-                                                <em className="micon-fullstar"></em>
-                                                <em className="micon-fullstar"></em>
-                                                <em className="micon-fullstar"></em>
-                                                <em className="micon-fullstar"></em>
-                                                <em className="micon-blankstar"></em>
-                                                <span>4/5</span>
-                                            </span>
-                                            <span className="m-mode">Online</span>
-                                            </div>
-                                            <div className="m-card__duration-mode mt-10">
-                                                <strong>2819</strong> Jobs available | Duration: <strong>90 days</strong>
-                                            </div>
-                                            <Link className="m-view-program mt-10" to={"#"}>View program</Link>
-                                        </div>
-                                    </div>
-                                    <div className="m-card">
+
+                                    {
+                                        courses?.map((product, index) => {
+                                            return (
+                                                <div className="m-card" key={index}>
+                                                    <div className={`m-card__heading colbg${index + 1}`}>
+                                                        {/* <span className="m-flag-yellow">BESTSELLER</span> */}
+                                                        {product.tags === 2 && <span className="m-flag-yellow">NEW</span>}
+                                                        {product.tags === 1 && <span className="m-flag-yellow">BESTSELLER</span>}
+                                                        <figure>
+                                                            <img src={product.imgUrl} alt={product.imageAlt} itemProp="image" />
+                                                        </figure>
+                                                        <h3 className="m-heading3">
+                                                            <a href={`${siteDomain}${product.url}`} itemProp="url"> {product?.name?.length > 25 ? product?.name?.slice(0, 25) + '...' : product?.name} </a>
+                                                        </h3>
+                                                    </div>
+                                                    <div className="m-card__box">
+                                                        <div className="m-card__rating mt-5">
+                                                            <span className="m-rating">
+                                                                {product.stars?.map((star, index) => starRatings(star, index))}
+                                                                <span>{product.rating?.toFixed(1)}/5</span>
+                                                            </span>
+                                                            {/* <span className="m-mode">Online</span> */}
+                                                            {product.mode ? <span className="m-mode">{product.mode}</span> : ''}
+                                                        </div>
+                                                        <div className="m-card__duration-mode mt-10">
+                                                            {product.jobsAvailable ? <> <strong>{product.jobsAvailable}</strong> Jobs available </> : ''} {product.jobsAvailable && product.duration ? '|' : ''} {product.duration ? <>Duration: <strong>{product.duration} days</strong> </> : ''}
+                                                        </div>
+                                                        <a className="m-view-program mt-10" href={`${siteDomain}${product.url}`}>View program</a>
+                                                    </div>
+                                                </div>
+                                            )
+                                        })
+                                    }
+
+
+
+
+                                    {/* <div className="m-card">
                                         <div className="m-card__heading colbg2">
                                             <span className="m-flag-yellow">BESTSELLER</span>
                                             <figure>
@@ -142,42 +193,51 @@ const PopularCourses = (props) => {
                                             </div>
                                             <Link className="m-view-program mt-10" to={"#"}>View program</Link>
                                         </div>
-                                    </div>
+                                    </div> */}
                                 </Slider>
                             </div>
                         </div>
                         <div id="tab2" className="tab-panel">
-                        <div className="m-courses">
+                            <div className="m-courses">
                                 <Slider {...settings}>
-                                    <div className="m-card">
-                                        <div className="m-card__heading colbg1">
-                                            <span className="m-flag-yellow">BESTSELLER</span>
-                                            <figure>
-                                                <img src="https://static1.shine.com/l/m/product_image/3425/1542800087_8980.png" alt="Digital Marketing Training Course" />
-                                            </figure>
-                                            <h3 className="m-heading3">
-                                                <Link to={"#"}>2 Digital Marketing Training Course</Link>
-                                            </h3>
-                                        </div>
-                                        <div className="m-card__box">
-                                            <div className="m-card__rating mt-5">
-                                            <span className="m-rating">
-                                                <em className="micon-fullstar"></em>
-                                                <em className="micon-fullstar"></em>
-                                                <em className="micon-fullstar"></em>
-                                                <em className="micon-fullstar"></em>
-                                                <em className="micon-blankstar"></em>
-                                                <span>4/5</span>
-                                            </span>
-                                            <span className="m-mode">Online</span>
-                                            </div>
-                                            <div className="m-card__duration-mode mt-10">
-                                                <strong>2819</strong> Jobs available | Duration: <strong>90 days</strong>
-                                            </div>
-                                            <Link className="m-view-program mt-10" to={"#"}>View program</Link>
-                                        </div>
-                                    </div>
-                                    <div className="m-card">
+
+
+                                    {
+                                        certifications?.map((product, index) => {
+                                            return (
+                                                <div className="m-card" key={index}>
+                                                    <div className={`m-card__heading colbg${index + 1}`}>
+                                                        {/* <span className="m-flag-yellow">BESTSELLER</span> */}
+                                                        {product.tags === 2 && <span className="m-flag-yellow">NEW</span>}
+                                                        {product.tags === 1 && <span className="m-flag-yellow">BESTSELLER</span>}
+                                                        <figure>
+                                                            <img src={product.imgUrl} alt={product.imageAlt} itemProp="image" />
+                                                        </figure>
+                                                        <h3 className="m-heading3">
+                                                            <a href={`${siteDomain}${product.url}`} itemProp="url"> {product?.name?.length > 25 ? product?.name?.slice(0, 25) + '...' : product?.name} </a>
+                                                        </h3>
+                                                    </div>
+                                                    <div className="m-card__box">
+                                                        <div className="m-card__rating mt-5">
+                                                            <span className="m-rating">
+                                                                {product.stars?.map((star, index) => starRatings(star, index))}
+                                                                <span>{product.rating?.toFixed(1)}/5</span>
+                                                            </span>
+                                                            {/* <span className="m-mode">Online</span> */}
+                                                            {product.mode ? <span className="m-mode">{product.mode}</span> : ''}
+                                                        </div>
+                                                        <div className="m-card__duration-mode mt-10">
+                                                            {product.jobsAvailable ? <> <strong>{product.jobsAvailable}</strong> Jobs available </> : ''} {product.jobsAvailable && product.duration ? '|' : ''} {product.duration ? <>Duration: <strong>{product.duration} days</strong> </> : ''}
+                                                        </div>
+                                                        <a className="m-view-program mt-10" href={`${siteDomain}${product.url}`}>View program</a>
+                                                    </div>
+                                                </div>
+                                            )
+                                        })
+                                    }
+
+
+                                    {/* <div className="m-card">
                                         <div className="m-card__heading colbg2">
                                             <span className="m-flag-yellow">BESTSELLER</span>
                                             <figure>
@@ -260,7 +320,7 @@ const PopularCourses = (props) => {
                                             </div>
                                             <Link className="m-view-program mt-10" to={"#"}>View program</Link>
                                         </div>
-                                    </div>
+                                    </div> */}
                                 </Slider>
                             </div>
                         </div>
@@ -272,5 +332,5 @@ const PopularCourses = (props) => {
         </section>
     )
 }
-   
+
 export default PopularCourses;

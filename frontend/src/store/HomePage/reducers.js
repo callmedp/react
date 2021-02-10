@@ -60,7 +60,7 @@ const appendProduct = ( state, {payload} ) => {
 
 export const InDemandProductsReducer = (state=inDemandProductsState, action) => {
     switch(action.type){
-        case inDemandProductsFetched.type : return {...state, ...appendProduct(state, action )}
+        case inDemandProductsFetched.type : return {...inDemandProductsState, ...appendProduct(inDemandProductsState, action )}
         default : return state;
     }
 }

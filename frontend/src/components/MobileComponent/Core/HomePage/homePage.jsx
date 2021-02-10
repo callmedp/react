@@ -19,7 +19,7 @@ import Footer from '../../Common/Footer/Footer';
 import CTAhome from '../../Common/CTA/CTAhome';
 import Aos from "aos";
 import "aos/dist/aos.css";
-import { fetchTestimonials, fetchJobAssistanceAndBlogs, fetchMostViewedCourses } from 'store/HomePage/actions';
+import { fetchTestimonials, fetchJobAssistanceAndBlogs, fetchMostViewedCourses, fetchInDemandProducts } from 'store/HomePage/actions';
 import { startHomePageLoader, stopHomePageLoader } from 'store/Loader/actions/index';
 import Loader from '../../Common/Loader/loader';
 import SearchPage from '../../Common/SearchPage/SearchPage'
@@ -37,6 +37,7 @@ const HomePage = (props) => {
                 dispatch(startHomePageLoader());
                 new Promise((resolve, reject) => dispatch(fetchTestimonials({resolve, reject})))
                 new Promise((resolve, reject) => dispatch(fetchMostViewedCourses({categoryId: -1, resolve, reject})))
+                new Promise((resolve, reject) => dispatch(fetchInDemandProducts({ pageId: 1, tabType: 'master', device:'mobile', resolve, reject})));
                 await new Promise((resolve, reject) => dispatch(fetchJobAssistanceAndBlogs({resolve, reject})))
                 dispatch(stopHomePageLoader());
             }
