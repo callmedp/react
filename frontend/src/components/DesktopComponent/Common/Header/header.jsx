@@ -20,6 +20,7 @@ const Header = (props) => {
     const [candidateInfo, setCandidateInfo] = useState(false)
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const isAuthenticated = useAuthenticate()
+    let redirectPath = window.location.pathname;
 
     const handleRedirect = (event, type) => {
         event.preventDefault();
@@ -29,7 +30,6 @@ const Header = (props) => {
         if (type === 'register') {
             MyGA.SendEvent('header_icons', 'ln_header_icons', 'ln_register', 'register', '', false, true);
         }
-        let redirectPath = window.location.pathname
         redirectPath ?
             window.location.href = `${siteDomain}/${type}/?next=${redirectPath}` :
             window.location.href = `${siteDomain}/${type}/`
@@ -94,7 +94,7 @@ const Header = (props) => {
                         </a>
 
                             <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                                <SearchBar  placeHolder = {props.placeHolder}/>
+                                {(redirectPath != '/' || '') && <SearchBar placeHolder = {props.placeHolder}/>}
                                 <ul className="navbar-nav navbar-right">
                                     <li className="nav-item dropdown dropdown-jobs">
                                         <a className="nav-link" to={"#"} id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onClick={() => MyGA.SendEvent('homepage_navigation', 'ln_homepage_navigation', 'ln_job_assisstance', 'ln_job_assisstance', '', false, true)}>Job assistance</a>

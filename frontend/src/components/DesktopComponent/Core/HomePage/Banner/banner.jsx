@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import './banner.scss';
 import Carousel from 'react-bootstrap/Carousel';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
+import SearchBar from '../../../Common/Header/SeachBar/SearchBar.jsx';
 
 const HomeBanner = (props) => {
     return (
@@ -34,10 +35,11 @@ const HomeBanner = (props) => {
                             </Carousel>
                         </div>
                         <div className="banner-search mt-20">
-                            <form className="form-inline top-search my-2 my-lg-0">
+                            <SearchBar placeHolder = 'Search course, assessment...'/>
+                            {/* <form className="form-inline top-search my-2 my-lg-0">
                                 <input className="form-control top-input" type="search" placeholder="Search courses" aria-label="Search" />
                                 <button className="btn btn-search" type="submit"><figure className="icon-search"></figure></button>
-                            </form>
+                            </form> */}
                             {/* OR
                             <Link to={"#services"} className="btn btn-gradient ml-10">GET CAREER GUIDANCE <figure className="icon-arrow-right ml-10"></figure></Link> */}
                         </div>
