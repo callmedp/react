@@ -1,12 +1,11 @@
 import React from 'react';
 import './servicesForYou.scss';
-import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { imageUrl } from 'utils/domains';
+import { imageUrl, siteDomain } from 'utils/domains';
 
 const JobAssistanceServices = (props) => {
 
-    const { jobAssistanceServices } = useSelector( store => store.jobAssistance )
+    const { jobAssistanceServices } = useSelector(store => store.jobAssistance)
 
     return (
         <aside id="services" className="container-fluid lightblue-bg" data-aos="fade-up">
@@ -21,13 +20,16 @@ const JobAssistanceServices = (props) => {
                                     {
                                         jobAssistanceServices?.map((service, index) => {
                                             return (
-                                                <div className="col-sm-6">
+                                                <div className="col-sm-6" key={service.id}>
                                                     <div className="services-foryou">
-                                                        <h3 className="heading3">Resume Writing</h3>
-                                                        <p>Resume written by experts to increase your profile visibility</p>
+                                                        <h3 className="heading3">{service.heading}</h3>
+                                                        <p>{ service.description.length > 100 ? service.description.slice(0,100)+"..." : service.description }</p>
                                                         <span className="d-flex">
-                                                            <Link to={"#"}>Know more</Link>
-                                                            <figure className="icon-service1"></figure>
+                                                            <a href={`${siteDomain}${service.url}`}>Know more</a>
+                                                            {/* <figure className="icon-service1"></figure> */}
+                                                            <figure >
+                                                                <img src={service.img} className="img-fluid" alt={service.img_alt} />
+                                                            </figure>
                                                         </span>
                                                     </div>
                                                 </div>

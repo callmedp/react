@@ -5,7 +5,6 @@ import useDebounce from '../../../../../utils/searchUtils/debouce';
 import { searchCharacters, submitData } from '../../../../../utils/searchUtils/searchFunctions';
 import { MyGA } from 'utils/ga.tracking.js';
 
-
 const SearchBar = (props) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [results, setResults] = useState([]);

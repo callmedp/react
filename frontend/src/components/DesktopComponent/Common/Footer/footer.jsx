@@ -12,7 +12,7 @@ const Footer = (props) => {
     const { trendingSkills, trendingCourses } = useSelector( store => store.footer )
 
     useEffect(() => {
-        dispatch(fetchTrendingCnA())
+        dispatch(fetchTrendingCnA({...props}))
     },[])
 
     return(
