@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import { siteDomain } from 'utils/domains';
    
 const LatestBlog = (props) => {
-    const { latest_blog_data } = useSelector(store => store.jobAssistance)
+    const { latestBlog } = useSelector(store => store.jobAssistance)
 
     return(
         <section className="m-container mt-0 mb-0 pl-0 pr-0" data-aos="fade-up">
@@ -13,7 +13,7 @@ const LatestBlog = (props) => {
                 <h2 className="m-heading2-home mb-5 text-center">Latest from blog</h2>
                 <ul className="m-latest-blog__list">
                     {
-                        latest_blog_data?.slice(0, 2)?.map((blog, index) => {
+                        latestBlog?.slice(0, 2)?.map((blog, index) => {
                             return (
                                 <li className="col pl-0" key={ index }>
                                     <div className="m-card">
