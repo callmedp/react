@@ -21,7 +21,7 @@ const AcceptModal = (props) => {
             }
           try {
                 dispatch(startAcceptRejectLoader());
-                await new Promise((resolve, reject) => { dispatch(CandidateAcceptRejectResume({ payload: acceptValues, resolve, reject })); });
+                new Promise((resolve, reject) => { dispatch(CandidateAcceptRejectResume({ payload: acceptValues, resolve, reject })); });
                 await new Promise((resolve, reject) => dispatch(fetchMyServices({page: currentPage, resolve, reject })));
                 dispatch(stopAcceptRejectLoader());
 
