@@ -11,6 +11,7 @@ const SearchBar = (props) => {
     const { register, handleSubmit } = useForm()
     const [showResults, setShowResults] = useState(false);
     const debouncedSearchTerm = useDebounce(searchTerm, 500);
+    let redirectPath = window.location.pathname;
 
     const handleScroll = () =>{
         const offset = window.scrollY;
@@ -49,7 +50,7 @@ const SearchBar = (props) => {
 
     return (
         <>
-            <div className="ml-auto pos-rel">
+            <div className={`pos-rel ${(redirectPath !== '/' || '') ? ' ml-auto' : ''}`}>
                 <form className="form-inline top-search my-2 my-lg-0" onSubmit={handleSubmit(submitData)}>
                     <input className="form-control top-input" type="search" onChange={e => setSearchTerm(e.target.value)} onFocus={()=>setShowResults(true)} 
                         placeholder={props.placeHolder} name="query" aria-label="Search" ref={register({required: true})} autoComplete="off" />
