@@ -999,24 +999,32 @@ class MostViewedCourseAPI(APIView):
     authentication_classes = ()
 
     def get(self, request):
-        quantity = int(request.GET.get('quantity', 6))
-        category_id = request.GET.get('category_id',None)
+        quantity = int(request.GET.get('quantity', 4))
+        category_id = int(request.GET.get('category_id',-1))
         data = {}
-        try:
-            Category.objects.get(id=category_id)
-        except Category.DoesNotExist:
-            return APIResponse(error= 'Category not found', status=status.HTTP_404_NOT_FOUND)
         product_mixin = ProductMixin()
-        queryset = Product.objects.filter(product_class__slug__in=settings.COURSE_SLUG,
-                                                    category__id=category_id,
-                                                    active=True,
+        if category_id and category_id != -1:
+            try:
+                category = Category.objects.get(id=category_id)
+                child_categories = category.get_childrens().values_list('id',flat=True)
+            except Category.DoesNotExist:
+                return APIResponse(error= 'Category not found', status=status.HTTP_404_NOT_FOUND)
+
+            queryset = Product.objects.filter(product_class__slug__in=settings.COURSE_SLUG,
+                                                category__id__in=child_categories,
+                                                active=True,
                                                 is_indexed=True).order_by('-cp_page_view')[:quantity].\
-                                                    values_list('id', flat=True)
+                                                values_list('id', flat=True)
+        else:
+            queryset = Product.objects.filter(product_class__slug__in=settings.COURSE_SLUG,
+                                                active=True,
+                                                is_indexed=True).order_by('-cp_page_view')[:quantity].\
+                                                values_list('id', flat=True)
 
         most_viewed_courses = SearchQuerySet().filter(id__in=list(queryset), pTP__in=[0, 1, 3]).exclude(
             id__in=settings.EXCLUDE_SEARCH_PRODUCTS
         )
-        data.update({'course_data': product_mixin.get_course_json(most_viewed_courses)})
+        data.update({'mostViewedCourses': product_mixin.get_course_json(most_viewed_courses)})
         return APIResponse(message='Most viewed Courses fetched', data=data, status=status.HTTP_200_OK)
 
 
