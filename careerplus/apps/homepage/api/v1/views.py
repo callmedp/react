@@ -50,6 +50,7 @@ from .mixins import PopularProductMixin
 from blog.models import Blog, Comment
 from api.helpers import offset_paginator
 from .helper import get_home_offer_values
+from homepage.api.v1.mixins import ProductMixin
 
 from .mixins import ProductMixin
 
@@ -998,27 +999,31 @@ class MostViewedCourseAPI(APIView):
     authentication_classes = ()
 
     def get(self, request):
-        quantity_to_display = int(request.GET.get('num_recent', 6))
+        quantity = int(request.GET.get('quantity', 4))
+        category_id = int(request.GET.get('category_id',None)) if request.GET.get('category_id',None) else None
+        data = {}
+        product_mixin = ProductMixin()
+        if category_id and category_id != -1:
+            try:
+                Category.objects.get(id=category_id)
+            except Category.DoesNotExist:
+                return APIResponse(error= 'Category not found', status=status.HTTP_404_NOT_FOUND)
 
-        queryset = Product.objects.filter(product_class__slug__in=settings.COURSE_SLUG,
-                                          active=True,
-                                          is_indexed=True).order_by('cp_page_view')[:quantity_to_display]\
-                                          .values_list('id', flat=True)
+            queryset = Product.objects.filter(product_class__slug__in=settings.COURSE_SLUG,
+                                                category__id=category_id,
+                                                active=True,
+                                                is_indexed=True).order_by('-cp_page_view')[:quantity].\
+                                                values_list('id', flat=True)
+        else:
+            queryset = Product.objects.filter(product_class__slug__in=settings.COURSE_SLUG,
+                                                active=True,
+                                                is_indexed=True).order_by('-cp_page_view')[:quantity].\
+                                                values_list('id', flat=True)
 
-        trcntss = SearchQuerySet().filter(id__in=list(queryset), pTP__in=[0, 1, 3]).exclude(
+        most_viewed_courses = SearchQuerySet().filter(id__in=list(queryset), pTP__in=[0, 1, 3]).exclude(
             id__in=settings.EXCLUDE_SEARCH_PRODUCTS
-        ).order_by('-pCD')
-
-        data = {
-            'mostViewedCourses':
-                [
-                    {
-                    'id': trcnts.id, 'heading': trcnts.pHd, 'name': trcnts.pNm, 'url': trcnts.pURL, 'imgUrl': trcnts.pImg, \
-                     'imgAlt': trcnts.pImA, 'rating': trcnts.pARx, 'price': trcnts.pPinb, 'vendor': trcnts.pPvn,
-                     'stars': trcnts.pStar,'provider': trcnts.pPvn
-                     } for trcnts in trcntss
-                ]
-        }
+        )
+        data.update({'mostViewedCourses': product_mixin.get_course_json(most_viewed_courses)})
         return APIResponse(message='Most viewed Courses fetched', data=data, status=status.HTTP_200_OK)
 
 

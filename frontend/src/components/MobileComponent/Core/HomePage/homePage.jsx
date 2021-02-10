@@ -19,22 +19,25 @@ import Footer from '../../Common/Footer/Footer';
 import CTAhome from '../../Common/CTA/CTAhome';
 import Aos from "aos";
 import "aos/dist/aos.css";
-import { fetchTestimonials, fetchJobAssistanceAndBlogs } from 'store/HomePage/actions';
+import { fetchTestimonials, fetchJobAssistanceAndBlogs, fetchMostViewedCourses } from 'store/HomePage/actions';
 import { startHomePageLoader, stopHomePageLoader } from 'store/Loader/actions/index';
 import Loader from '../../Common/Loader/loader';
 import SearchPage from '../../Common/SearchPage/SearchPage'
+import './homePage.scss';
 
 const HomePage = (props) => {
 
     const dispatch = useDispatch()
-    const { homeLoader } = useSelector(store => store.loader);
+    const { homeLoader } = useSelector( store => store.loader )
     const [showSearch, setShowSearch] = useState(false)
+    const [stickSearchBar, showStickSearchBar] = useState(false)
 
     const handleEffects = async () => {
         try {
                 dispatch(startHomePageLoader());
                 new Promise((resolve, reject) => dispatch(fetchTestimonials({resolve, reject})))
-                new Promise((resolve, reject) => dispatch(fetchJobAssistanceAndBlogs({resolve, reject})))
+                new Promise((resolve, reject) => dispatch(fetchMostViewedCourses({categoryId: -1, resolve, reject})))
+                await new Promise((resolve, reject) => dispatch(fetchJobAssistanceAndBlogs({resolve, reject})))
                 dispatch(stopHomePageLoader());
             }
         catch{
@@ -42,8 +45,17 @@ const HomePage = (props) => {
         }
     };
 
+    const handleScroll=() => {
+        const offset = window.scrollY;
+        if(offset > 164 ) {
+            showStickSearchBar(true)
+        }
+        else showStickSearchBar(false)
+    }
+
     useEffect( () => {
         handleEffects();
+        window.addEventListener('scroll', handleScroll);
         Aos.init({ duration: 2000, once: true, offset: 10, anchorPlacement: 'bottom-bottom' });
     }, [])
 
@@ -60,6 +72,12 @@ const HomePage = (props) => {
                             <HomeBanner setShowSearch={setShowSearch} />
                         </header>
                         <CareerGuidance />
+                        {
+                            stickSearchBar && 
+                                <div className="stick-search-header" onClick={() => setShowSearch(true)}>
+                                    <SearchPage crossSearch={false} />
+                                </div>
+                        }
                         <main className="mb-0">
                             <PopularCourses />
                             <UpgradeSkills />
@@ -72,7 +90,7 @@ const HomePage = (props) => {
                             <OurLearners />
                             <LatestBlog />
                         </main>
-                        <Footer />
+                        <Footer pageType='homePage'/>
                         <CTAhome />
                     </div>
             }
