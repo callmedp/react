@@ -195,6 +195,12 @@ $(document).ready(function(){
         }
     })
 
+    $("input[id='id_oi_resume']").change(function(){
+        if($('#id_oi_resume').val()){
+            $("#id_resume_from_shine").prop('checked', false);
+        }
+    })
+
     // $("input[id='id_resume_from_shine']").click(function(){
     //         if($(this).prop("checked") == true){
     //             $('#resume_shine').val('true')

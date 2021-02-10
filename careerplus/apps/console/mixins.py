@@ -7,6 +7,7 @@ from random import random
 from django.utils import timezone
 from django.conf import settings
 from django.core.files.uploadedfile import UploadedFile
+from django.core.files.base import ContentFile
 
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 from emailers.email import SendMail
@@ -321,27 +322,25 @@ class ActionUserMixin(object):
                             else 'file'
                         extention = file_name.split('.')[-1] if file_name else ''
 
+                        file = ContentFile(response.content)
+
                         file_name = 'resumeupload_' + str(order.pk) + '_' + str(int(random() * 9999)) \
                             + '_' + timezone.now().strftime('%Y%m%d') + '.' + extention
 
-                        shine_resume = open(file_name, 'wb+')
-                        shine_resume.write(response.content)
-                        shine_resume.seek(0)
                         if not settings.IS_GCP:
                             if not os.path.exists(settings.RESUME_DIR + full_path):
                                 os.makedirs(settings.RESUME_DIR + full_path)
                             dest = open(
                                 settings.RESUME_DIR + full_path + file_name, 'wb')
-                            for chunk in shine_resume:
+                            for chunk in file.chunks():
                                 dest.write(chunk)
                             dest.close()
                         else:
                             try:
-                                GCPPrivateMediaStorage().save(settings.RESUME_DIR + full_path + file_name, shine_resume)
+                                GCPPrivateMediaStorage().save(settings.RESUME_DIR + full_path + file_name, file)
                             except Exception as e:
                                 logging.getLogger('error_log').error("%s-%s" % ('resume_upload', str(e)))
 
-                        shine_resume.close()
                         resume_path = full_path + file_name
             
             if not oi.oi_resume:
