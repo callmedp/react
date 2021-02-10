@@ -257,7 +257,10 @@ const categoryTabs = [
     { name: 'Law', id: '23'}
 ]
 
-
+const populartabType = [
+    { visible: "Master's", slug: "master", id: '0'},
+    { visible: "Certifications", slug: "certifications", id: '1'}
+]
 
 export {
     freeResourcesList,
@@ -267,4 +270,5 @@ export {
     contactData,
     TrendingCategoryList,
     categoryTabs,
+    populartabType
 }
