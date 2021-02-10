@@ -23,9 +23,11 @@ const PopularCourses = (props) => {
 
     const handleTabChange = async (tabType, id) => {
         try {
-            dispatch(startHomePageLoader())
-            await new Promise((resolve, reject) => dispatch(fetchInDemandProducts({ pageId: 1, tabType, device: 'mobile', resolve, reject })));
-            dispatch(stopHomePageLoader())
+            if (tabType === 'certifications' && certifications.length === 0) {
+                dispatch(startHomePageLoader())
+                await new Promise((resolve, reject) => dispatch(fetchInDemandProducts({ pageId: 1, tabType, device: 'mobile', resolve, reject })));
+                dispatch(stopHomePageLoader())
+            }
             setKey(tabType)
         }
         catch (e) {
@@ -58,9 +60,9 @@ const PopularCourses = (props) => {
                                     <div className="m-courses">
 
                                         {key === 'master' ?
-                                            <PopularTab productList={courses} />
+                                            <PopularTab productList={courses} tabType={key}/>
                                             :
-                                            <PopularTab productList={certifications} />
+                                            <PopularTab productList={certifications} tabType={key}/>
                                         }
 
                                     </div>
