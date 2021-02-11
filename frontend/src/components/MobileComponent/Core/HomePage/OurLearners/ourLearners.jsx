@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import './ourLearners.scss';
-import { imageUrl } from 'utils/doimains';
+import { imageUrl } from 'utils/domains';
 
 const OurVendors = (props) => {
     return (
