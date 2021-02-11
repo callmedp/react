@@ -23,7 +23,7 @@ function* mostViewedCourse(action){
             return payload?.reject(response?.error);
         }
         const item = response?.data?.data;
-        yield put(mostViewedCoursesFetched({ ...item }))
+        yield put(mostViewedCoursesFetched({ [payload.categoryId]: item.mostViewedCourses }))
         return payload?.resolve(item);
     }
     catch(e){

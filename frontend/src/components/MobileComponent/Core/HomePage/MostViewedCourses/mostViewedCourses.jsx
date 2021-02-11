@@ -22,27 +22,25 @@ const MostViewedCourses = (props) => {
     };
 
     const dispatch = useDispatch()
-    const [selectedIndex, setSelectedIndex] = useState(0)
+    const [selectedIndex, setSelectedIndex] = useState('-1')
     const { mostViewedCourses } = useSelector(store => store.mostViewed);
 
-    const handleCategory = (categoryId, index) => {
-        setSelectedIndex(index)
-        handleEffects(categoryId)
-    }
-
-    const handleEffects = async (categoryId) => {
+    const handleCategory = async tabType => {
         try {
+            if (!mostViewedCourses[tabType] || mostViewedCourses[tabType].length === 0) {
                 dispatch(startHomePageLoader());
-                await new Promise((resolve, reject) => dispatch(fetchMostViewedCourses({categoryId: categoryId, resolve, reject})))
+                await new Promise((resolve, reject) => dispatch(fetchMostViewedCourses({ categoryId: tabType, resolve, reject })))
                 dispatch(stopHomePageLoader());
             }
-        catch(e) {
-            dispatch(stopHomePageLoader());
-            console.log(e)
         }
-    };
+        catch (e) {
+            dispatch(stopHomePageLoader());
+        }
+        setSelectedIndex(tabType);
+    }
 
-    return(
+
+    return (
         <section className="m-container mt-0 mb-0 m-lightblue-bg pr-0" data-aos="fade-up">
             <div className="m-recomend-courses">
                 <h2 className="m-heading2-home text-center">Most Viewed Courses</h2>
@@ -51,7 +49,7 @@ const MostViewedCourses = (props) => {
                         categoryTabs?.map((category, index) => {
                             return (
                                 <div className="m-recomend-courses__tab" key={category?.id} >
-                                    <Link className={ selectedIndex === index ? 'selected' : '' } to={'#'} onClick={() => handleCategory(category?.id, index)}>{category?.name}</Link>
+                                    <Link className={selectedIndex === category.id ? 'selected' : ''} to={'#'} onClick={() => handleCategory(category.id)}>{category?.name}</Link>
                                 </div>
                             )
                         })
@@ -71,7 +69,7 @@ const MostViewedCourses = (props) => {
                 </Slider>
                 <div className="m-courses m-recent-courses">
                     {
-                        <ProductCardsSlider productList={mostViewedCourses} noProvider={true} showMode={true} />
+                        <ProductCardsSlider productList={mostViewedCourses[selectedIndex]} noProvider={true} showMode={true} />
                     }
                     {/* <Slider {...settings}> 
                         <div className="m-card">
@@ -132,5 +130,5 @@ const MostViewedCourses = (props) => {
         </section>
     )
 }
-   
+
 export default MostViewedCourses;

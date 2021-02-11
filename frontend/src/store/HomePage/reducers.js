@@ -5,12 +5,12 @@ import { mostViewedCoursesFetched,
     skillwithDemandsFetched } from './actions';
 
 const mostViewedCoursesState = {
-    mostViewedCourses : []
+    mostViewedCourses : {}
 }
 
 export const MostViewedCoursesReducer = (state=mostViewedCoursesState, action) => {
     switch(action.type){
-        case mostViewedCoursesFetched.type  : return {...mostViewedCoursesState, ...action.payload}
+        case mostViewedCoursesFetched.type  : return { mostViewedCourses : {...state.mostViewedCourses, ...action.payload}}
         default : return state;
     }
 }
