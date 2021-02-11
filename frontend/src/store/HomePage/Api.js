@@ -10,7 +10,7 @@ const mostViewedCourse = (data) => {
 }
 
 const inDemandProducts = (data) => {
-    const url = `/api/v1/in-demand-product/?page_id=${data.pageId}&tab_type=${data.tabType}`;
+    const url = `/api/v1/in-demand-product/?page=${data.pageId}&tab_type=${data.tabType}`;
 
     return BaseApiService.get(`${siteDomain}${url}`);
 }

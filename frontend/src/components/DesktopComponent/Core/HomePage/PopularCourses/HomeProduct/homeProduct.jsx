@@ -14,7 +14,7 @@ const HomeProduct = (props) => {
 
 
     const handleSelect = async (selectedIndex, e) => {
-        if (selectedIndex !== index) {
+        if (e !== undefined) {
             if (popularProducts.length === 0 || popularProducts[selectedIndex].length === 0) {
                 dispatch(startHomePageLoader())
                 await new Promise((resolve, reject) => dispatch(fetchInDemandProducts({ pageId: selectedIndex + 1, tabType, device: 'desktop', resolve, reject })));
@@ -45,7 +45,7 @@ const HomeProduct = (props) => {
                                         return (
                                             <li className="col-sm-3" key={product.id}>
                                                 <div className="card">
-                                                    <div className="card__heading colbg1">
+                                                    <div className={`card__heading colbg${idx+1}`}>
                                                         {product.tags === 2 && <span className="flag-blue">NEW</span>}
                                                         {product.tags === 1 && <span className="flag-yellow">BESTSELLER</span>}
                                                         <figure>

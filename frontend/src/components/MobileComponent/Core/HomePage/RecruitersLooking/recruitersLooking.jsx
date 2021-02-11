@@ -19,7 +19,7 @@ import { fetchSkillwithDemands } from 'store/HomePage/actions';
 const RecruitersLooking = (props) => {
     const dispatch = useDispatch();
 
-    const { trendingSkills } = useSelector(store => store?.skillDemand );
+    const { trendingSkills } = useSelector(store => store?.skillDemand);
 
     const settings = {
         dots: false,
@@ -71,10 +71,10 @@ const RecruitersLooking = (props) => {
                             return (
                                 <div className="m-card" key={index}>
                                     <figure>
-                                        <img src={`${skill?.image}`} className="img-fluid" alt={ skill?.skillName } />
+                                        <img src={`${skill?.image}`} className="img-fluid" alt={skill?.skillName} />
                                     </figure>
-                                    <h3>{ skill?.skillName }</h3>
-                                    <span>{ skill?.no_courses } courses</span>
+                                    <h3>{skill?.skillName}</h3>
+                                    { !!skill.no_courses ? <strong>{skill.no_courses} { skill.no_courses == 1 ? 'course': 'courses'}</strong> : ''}
                                     <a href={`${siteDomain}${skill?.skillUrl}`}>Know more</a>
                                 </div>
                             )
