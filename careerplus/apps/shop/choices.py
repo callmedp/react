@@ -446,3 +446,9 @@ av_status_choices = {av_status_choices[k]: k for k in av_status_choices}
 SMS_URL_LIST = {
     1: "https://learning.shine.com/services/recruiter-connect/application-highlighter-3/pd-4117?utm_campaign=IVRCampaign",
 }
+
+IFRAME_VENDOR_CHOICES = (
+    (0, None),
+    (1, 'isel_global'),
+    (2, 'erb_academy')
+)

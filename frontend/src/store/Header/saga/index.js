@@ -3,15 +3,15 @@ import { takeLatest, call, put } from 'redux-saga/effects';
 import Api from './Api';
 
 function* sessionAvailability(action) {
-    let { payload: { resolve } } = action;
+    let { payload } = action;
     try {
         let resp = yield call(Api.sessionAvailability)
         const { result, candidate_id } = resp.data;
         localStorage.setItem('isAuthenticated', result);
         localStorage.setItem('candidateId', candidate_id);
-        resolve({ result: result, candidate_id: candidate_id });
+        return payload?.resolve({ result: result, candidate_id: candidate_id });
     } catch (e) {
-        return resolve(false)
+        return payload?.resolve(false)
     }
 }
 
@@ -43,7 +43,8 @@ function* candidateInfo(action) {
         localStorage.setItem('userName', first_name);
         localStorage.setItem('lastName', last_name);
         localStorage.setItem('userEmail', email);
-        resolve({ candidateId: candidate_id || '', name: first_name || '', lastname: last_name || "", email: email || '' , mobile: cell_phone || ''});
+        localStorage.setItem('mobile',cell_phone)
+        return resolve({ candidateId: candidate_id || '', name: first_name || '', lastname: last_name || "", email: email || '' , mobile: cell_phone || ''});
     }
     catch (e) {
         console.error("Exception occured at candidateInfo Api", e);

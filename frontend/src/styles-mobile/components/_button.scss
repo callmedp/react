@@ -40,6 +40,12 @@
     }
 }
 
+.btn-link {
+    color: $blue;
+    font-weight: $font-weight-bold;
+    text-transform: capitalize;
+}
+
 .btn-yellow {
     background: $yellow;
     border: 1px solid $yellow;
@@ -99,4 +105,13 @@
         color: $white;
         border: 1px solid $white;
     }
+}
+
+.m-db-close {
+    position: absolute;
+    right: 15px;
+    top: 5px;
+    font-size: 2rem;
+    color: rgba($gray-100, .5);
+    z-index: 9;
 }

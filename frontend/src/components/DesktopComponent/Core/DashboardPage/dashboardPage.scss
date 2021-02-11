@@ -4,6 +4,7 @@
 
 .dashboard-warp {
     display: flex;
+    margin-top: 30px;
 
     &--tab {
         max-width: 140px;
@@ -21,7 +22,7 @@
     &--content {
         background-color: #F9F9F9;
         border-radius: 0.4rem;
-        padding: 20px;
+        padding: 0px 20px 20px 20px;
         position: relative;
         width: 100%;
     }
@@ -38,6 +39,10 @@
 
     &:not(:last-child) {
         margin-bottom: 20px;
+    }
+
+    &.db-white-box-wallet {
+        padding: 15px;
     }
 }
 
@@ -93,8 +98,9 @@
     .custom-checkbox .custom-control-input:checked ~ .custom-control-label::after {
         background: $spriteDb;
         background-position: -83px -196px;
-        left: -17px;
-        top: 6px;
+        left: -18px;
+        top: 5px;
+        transform: scale(.8);
     }
 
     .custom-radio {
@@ -171,6 +177,7 @@
 .db-timeline-list {
     margin-bottom: 10px;
     margin-top: -14px;
+    list-style-type: none;
 
     li {
         position: relative;
@@ -327,6 +334,7 @@
         display: inline-block;
         margin-right: 3rem;
         cursor: pointer;
+        flex: 0 0 auto;
     }
     
     .icon-db-arrow-right {
@@ -337,4 +345,34 @@
         margin-left: 3rem;
         cursor: pointer;
     }
+}
+
+.db-reject-upload-here {
+    font-size: 12px;
+    font-weight: 700;
+    color: $blue;
+    top: -4px;
+    margin-left: 5px;
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.error_cls {
+    color: red;
+    font-size: 12px;
+    display: block;
+    margin-bottom: 20px;
+}
+
+.swal2-styled.swal2-confirm {
+    background: $blue !important;
+    border-radius: 2rem !important;
+    box-shadow: none;
+    padding: 1.3rem 4rem;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+.font-weight-normal {
+    font-weight: $font-weight-normal;
 }

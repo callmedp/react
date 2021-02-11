@@ -6,55 +6,76 @@ import { fetchOiComment } from 'store/DashboardPage/AddSubmitComment/actions';
 import { TextArea} from 'formHandler/desktopFormHandler/formFields';
 import CoursesServicesForm from 'formHandler/desktopFormHandler/formData/coursesServices';
 import Loader from '../../../Common/Loader/loader';
+import { Toast } from '../../../Common/Toast/toast';
+import { updateServiceCommentCount } from 'store/DashboardPage/MyServices/actions/index';
+import { updateCourseCommentCount } from 'store/DashboardPage/MyCourses/actions/index';
 
 const AddCommentModal = (props) => {
-    const { addOpen, id, data, addCommentDataFetch }  = props;
+    const { addOpen, id, data, addCommentDataFetch, type } = props;
     const dispatch = useDispatch();
     const { register, handleSubmit, errors, reset } = useForm();
     const { commentLoader } = useSelector(store => store.loader);
 
-    const submitComment = (values) => {
+    const submitComment = async (values) => {
         const new_values = {
           ...values,
           oi_pk: data.oi_id,
           type: "POST",
         };
 
-        dispatch(fetchOiComment(new_values));
+        let response = await new Promise((resolve, reject) => dispatch(fetchOiComment({ payload: new_values, resolve, reject })));
+
+        if (response?.error) {
+            Toast.fire({
+                title: response?.error,
+                type: 'error'
+            })
+        }
+        else {
+            if(type === "myservices"){
+                dispatch(updateServiceCommentCount({ id: response.oi_id, no_of_comments: response.comment.length}));
+            }
+            else{
+                dispatch(updateCourseCommentCount({ id: response.oi_id, no_of_comments: response.comment.length}));
+            }
+        }
         reset();
     };
 
     return (
         <> { commentLoader && <Loader />}
+        
         <Collapse in={addOpen == id}>
-            <div className="position-relative" id={`openComment`+id}>
-                <div className="db-add-comments lightblue-bg border-bottom-gray">
-                    <ul className="db-timeline-list">
-                        {data && data.comment.length > 0 ?
-                            data.comment.map((comm, idx) => {
-                                return(
-                                    <li key={idx}>
-                                        <i className="db-timeline-list--dot"></i>
-                                        <span>{comm.created} {comm.addedBy ?  '   |   By ' + comm.addedBy : ""} </span>
-                                        <p className="db-timeline-list--text">{comm.message ? comm.message : ""}</p>
-                                    </li>
-                                )
-                            })
+                <div className="position-relative" id={`openComment` + id}>
+                    {
+                        data && data.comment.length > 0 ?
+                            <div className="db-add-comments lightblue-bg border-bottom-gray">
+                                <ul className="db-timeline-list">
+                                    {data.comment.map((comm, idx) => {
+                                        return (
+                                            <li key={idx}>
+                                                <i className="db-timeline-list--dot"></i>
+                                                <span>{comm.created} {comm.added_by ? ' | By ' + comm.added_by : ""} </span>
+                                                <p className="db-timeline-list--text">{comm.message ? comm.message : ""}</p>
+                                            </li>
+                                        )
+                                    })
+                                    }
+                                </ul>
+                            </div>
                             : ""
-                        }
-                    </ul>
+                    }
+                    
+                    <form onSubmit={handleSubmit(submitComment)}>
+                        <div className="db-add-comments disabled-before lightblue-bg" id="addComments">
+                            <span className="btn-close" onClick={() => addCommentDataFetch(false)}>&#x2715;</span>
+                            <p className="font-weight-semi-bold pr-5"> Add comment </p>
+                            <TextArea attributes={CoursesServicesForm.name} register={register} errors={!!errors ? errors[CoursesServicesForm.name.name] : ''} />
+                            <button type="submit" className="btn btn-outline-primary px-5">Submit</button>
+                        </div>
+                    </form>
                 </div>
-
-                <form onSubmit={handleSubmit(submitComment)}>
-                    <div className="db-add-comments disabled-before lightblue-bg" id="addComments">
-                        <span className="btn-close" onClick={() => addCommentDataFetch(false)}>&#x2715;</span>
-                        <p className="font-weight-semi-bold"> Add comment </p>
-                        <TextArea attributes={CoursesServicesForm.name} register={register} errors={!!errors ? errors[CoursesServicesForm.name.name] : ''} />
-                        <button type="submit" className="btn btn-outline-primary mt-20 px-5">Submit</button>
-                    </div>
-                </form>
-            </div>
-        </Collapse>
+            </Collapse>
         </>
     )
 }

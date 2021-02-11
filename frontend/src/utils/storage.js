@@ -82,8 +82,13 @@ const getSession = (name) => {
    return  sessionStorage.getItem(name)
 }
 
-export const setInLocalStorage = (info, candidate_id) => {
-    let email = info.get('email', '')
-    localStorage.setItem('candidate_id', candidate_id)
-    localStorage.setItem('email', email)
+
+export const getCandidateInformation = () => {
+    return {
+        candidateId: localStorage.getItem('userId') || '',
+        name: localStorage.getItem('userName') || '',
+        lastname: localStorage.getItem('lastName') || '',
+        email: localStorage.getItem('userEmail') || '',
+        mobile:  localStorage.getItem('mobile') || '',
+    }
 }

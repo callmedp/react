@@ -129,3 +129,31 @@ export const stopHomePageLoader = () => {
         payload: { homeLoader: false }
     }
 }
+
+export const startUploadLoader = () => {
+    return {
+        type: Actions.START_UPLOAD_LOADER,
+        payload: { uploadLoader: true }
+    }
+}
+
+export const stopUploadLoader = () => {
+    return {
+        type: Actions.STOP_UPLOAD_LOADER,
+        payload: { uploadLoader: false }
+    }
+}
+
+export const startOiDetailsLoader = () => {
+    return {
+        type: Actions.START_OI_DETAILS_LOADER,
+        payload: { oiDetailsLoader: true }
+    }
+}
+
+export const stopOiDetailsLoader = () => {
+    return {
+        type: Actions.STOP_OI_DETAILS_LOADER,
+        payload: { oiDetailsLoader: false }
+    }
+}

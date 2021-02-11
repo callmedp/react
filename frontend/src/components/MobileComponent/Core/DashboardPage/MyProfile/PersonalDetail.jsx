@@ -12,7 +12,7 @@ const PersonalDetail = (props) => {
             </div>
 
             <div className="m-container">
-                <div className="m-enquire-now personal-detail__form">
+                <div className="mdb-enquire-now personal-detail__form">
                     <ul>
                         <li className="m-form-group">
                             <input type="text" id="name" className="m-form-control" name="name"  placeholder=" " aria-required="true" aria-invalid="true" value="Amit Kumar" />

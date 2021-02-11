@@ -8,18 +8,21 @@ import '../MyCourses/myCourses.scss'
 import './myServices.scss';
 import AddCommentModal from '../InboxModals/addCommentModal';
 import RateProductModal from '../InboxModals/rateProductModal';
+import ShowRatingsModal from '../InboxModals/showRatingsModal'
 import UploadResume from '../InboxModals/uploadResume';
 import AcceptModal from '../InboxModals/acceptModal';
 import RejectModal from '../InboxModals/rejectModal';
 import Loader from '../../../Common/Loader/loader';
 import Pagination from '../../../Common/Pagination/pagination';
 import EmptyInbox from '../InboxModals/emptyInbox';
-import { siteDomain } from 'utils/domains';
+import { siteDomain, resumeShineSiteDomain } from 'utils/domains';
 import { startDashboardServicesPageLoader, stopDashboardServicesPageLoader } from 'store/Loader/actions/index';
 import { showSwal } from 'utils/swal'
+import ViewDetails from './oiViewDetails'
+import Filter from '../Filter/filter';
 
 // API Import
-import { fetchMyServices, fetchPendingResume } from 'store/DashboardPage/MyServices/actions/index';
+import { fetchMyServices, fetchPendingResume, updateResumeShine } from 'store/DashboardPage/MyServices/actions/index';
 import { pausePlayResume } from 'store/DashboardPage/MyServices/actions/index';
 
 const MyServices = (props) => {
@@ -30,14 +33,9 @@ const MyServices = (props) => {
     //My Services Api hit
     const handleEffects = async () => {
         try{
-            if (!(window && window.config && window.config.isServerRendered)) {
                 dispatch(startDashboardServicesPageLoader());
                 await new Promise((resolve, reject) => dispatch(fetchMyServices({page: currentPage, resolve, reject })));
                 dispatch(stopDashboardServicesPageLoader());
-            }
-            else {
-                delete window.config?.isServerRendered
-            }
         }
         catch(e){
             dispatch(stopDashboardServicesPageLoader());
@@ -47,7 +45,7 @@ const MyServices = (props) => {
 
     //Data fetch from myservices API
     const serviceData= useSelector(store => store?.dashboardServices);
-    const pending_resume_items = useSelector(store => store.dashboardPendingResume.data);
+    // const pending_resume_items = useSelector(store => store.dashboardPendingResume.data);
     const myServicesList = serviceData?.data
     const page = serviceData?.page
 
@@ -73,12 +71,18 @@ const MyServices = (props) => {
     const [rejectModal, setRejectModal] = useState(false)
     const [rejectModalId, setRejectModalId] = useState(false)
 
+    //set review data
+    const [reviewData, setReviewData] = useState([])
+
     //View Details Handling
     const [showOrderDetailsID, setShowOrderDetailsID] = useState('')
     const showDetails = (id) => {
         id == showOrderDetailsID ?
             setShowOrderDetailsID('') : setShowOrderDetailsID(id)
     }
+
+    //view ratings modal
+    const [showRatingsModal, setShowRatingsModal] = useState(false)
 
     //Pause service
     const pauseResumeService = (oiStatus, orderId) => {
@@ -89,22 +93,25 @@ const MyServices = (props) => {
         dispatch(pausePlayResume(pausePlayValues))
     }
 
-    //View Details Data
-    const getOrderDetails = (dataList) => {
-        return (
-            <ul className="my-order__order-detail--info mt-15">
-                {
-                    dataList.map((data, index) =>
-                        <li key={index}>
-                            <span> 
-                                <hr />
-                                {data?.date} <br />
-                                <strong> {data?.status} </strong>
-                            </span>
-                        </li>)
-                }
-            </ul>
-        )
+    // download resume builder resume
+    const createBuilderResumeDownloadLink = (orderId, productId) =>
+        `${siteDomain}/api/v1/resumetemplatedownload/?order_pk=${orderId}&product_id=${productId}`;
+
+    const updateResumeUploadShine = async(ev, order_id) => {
+        let updatedValue = {
+            'service_resume_upload_shine' : ev.target.checked,
+            'order_id' : order_id
+        }
+        dispatch(startDashboardServicesPageLoader());
+        let response = await new Promise((resolve, reject) => {
+            dispatch(updateResumeShine({ updatedValue, resolve, reject }));
+        });
+    
+        dispatch(stopDashboardServicesPageLoader());
+    
+        if(response) {
+            showSwal((response.service_resume_upload_shine ? 'success' : 'error'), (response.service_resume_upload_shine ? "Resume will be updated" : "Resume will not be updated"))
+        }
     }
 
     const starRatings = (star, index) => {
@@ -123,7 +130,7 @@ const MyServices = (props) => {
         });
 
         handleEffects();
-        dispatch(fetchPendingResume())
+        // dispatch(fetchPendingResume())
     }, [currentPage])
 
     return (
@@ -133,23 +140,9 @@ const MyServices = (props) => {
             page?.total === 0 ? <EmptyInbox inboxType="services" /> :
 
         <div>
-            {/* Pending resume block Start*/}
-            {
-                myServicesList?.length > 0 && pending_resume_items?.length > 0 &&
-                    <div>
-                        <strong>
-                            <center>To initiate your service <br />
-                                <a href="/" onClick={(e) => {e.preventDefault();setShowUpload(true)}}>
-                                    Upload your latest resume
-                                </a>
-                            </center>
-                        </strong>
-                        <br />
-                    </div>
-            }
-            {/* Pending resume block End*/}
 
             {/* My Services Block Start */}
+            {/* <Filter /> */}
             <main className="mb-0">
                 <div className="m-courses-detail db-warp">
                     {
@@ -158,8 +151,9 @@ const MyServices = (props) => {
                                 <div className="m-card pl-0" key={key}>
                                     {/* Social Sharing Block Start */}
                                     <div className="m-share" aria-haspopup="true">
-                                        <i className="icon-share"></i>
-                                        <div className="m-share__box m-arrow-box m-top">
+                                    <input type="checkbox" id="toggle" className="mdb-share-toggle" />
+                                        <label for="toggle" className="mdb-share-label"><i className="icon-share"></i></label>
+                                        <div className="m-share__box m-arrow-box m-top content">
                                             <a target="_blank" href={`https://www.facebook.com/sharer/sharer.php?u=${siteDomain}${service?.productUrl}`} className="m-facebook-icon"></a>
                                             <a target="_blank" href={`https://www.linkedin.com/shareArticle?mini=true&url=${siteDomain}${service?.productUrl}&title=${service?.title}&summary=${service?.name}&source=`} className="m-linkedin-icon"></a>
                                             <a target="_blank" href={`https://twitter.com/intent/tweet?url=${siteDomain}${service?.productUrl}/&text=${service?.name}`} className="m-twitter-iocn"></a>
@@ -174,7 +168,7 @@ const MyServices = (props) => {
                                             <img src={service?.img} alt={service?.heading} />
                                         </figure>
                                         <div className="m-courses-detail__info">
-                                            <Link to={service?.productUrl}><h2>{service?.name}</h2></Link>
+                                            <a href={`${siteDomain}${service?.productUrl}`}><h2>{service?.heading ? service?.heading  : service?.name }</h2></a>
                                             <p className="m-pipe-divides mb-5">Provider: <strong>{service?.vendor}</strong> </p>
                                             <p className="m-pipe-divides mb-5">
                                                 <span>Bought on: <strong>{service?.enroll_date}</strong> </span> 
@@ -187,7 +181,7 @@ const MyServices = (props) => {
                                     </div>
                                     {/* Details of Service Block End*/}
 
-                                    { service?.options?.upload_resume &&
+                                    { service?.updated_status?.upload_resume &&
                                         <div className="m-courses-detail--alert mt-15">
                                             To initiate your service upload your latest resume
                                         </div>
@@ -195,81 +189,107 @@ const MyServices = (props) => {
                                     
                                     {/* Status of Service Block */}
                                     <div className="pl-15 mt-15 fs-12">
-                                        Status: <strong> {service?.new_oi_status ? service?.oi_status === 4 ? 'Service has been processed and Document is finalized' : service?.new_oi_status : "Yet to Update"}
-
                                         {
-                                            service?.options?.upload_resume && <a href="/" onClick={(e) => {e.preventDefault();setShowUpload(true)}} className="font-weight-bold"> Upload</a> 
+                                            service?.updated_status?.status  && 
+                                                <>
+                                                    { service?.updated_status?.status && service?.updated_status?.status !== 'Default' && <>Status: <strong> { service?.updated_status?.status } </strong></> }
+                                                    <strong>
+                                                    {
+                                                        service?.updated_status?.upload_resume && <a href="/" onClick={(e) => {e.preventDefault();setShowUpload(true)}} className="font-weight-bold"> Upload</a> 
+                                                    }
+                                                    {
+                                                        service?.updated_status?.download_url && <a href={`${siteDomain}${service?.updated_status?.download_url}`} target="_blank" className="font-weight-bold"> Download</a> 
+                                                    }
+                                                    {
+                                                        service?.updated_status?.download_credentials_url && <a href={`${siteDomain}${service?.updated_status?.download_credentials_url}`} target="_blank" className="font-weight-bold"> Download Credential</a> 
+                                                    }
+                                                    {
+                                                        service?.updated_status?.edit_your_profile && <a href={`${siteDomain}/dashboard/roundone/profile/`} target="_blank" className="font-weight-bold"> Edit Profile</a>
+                                                    }
+                                                    {
+                                                        service?.updated_status?.complete_profile && <a href={`${siteDomain}/dashboard/roundone/profile/`} target="_blank" className="font-weight-bold"> Complete Profile</a>
+                                                    }
+                                                    {
+                                                        service?.updated_status?.edit_template &&
+                                                            <>
+                                                                <br />
+                                                                <a href={createBuilderResumeDownloadLink(service?.order_id, service?.product)} target="_blank" className="font-weight-bold"> Download</a>
+                                                                <a className="ml-15" target="_blank" href={`${resumeShineSiteDomain}/resume-builder/edit/?type=profile`}>Edit Template</a>
+                                                            </>
+                                                    }
+                                                    {
+                                                        (service?.oi_status === 24 || service?.oi_status === 46) &&
+                                                        <>
+                                                            <br /><br />
+                                                            <a className="m-accept" href="/" onClick={(e) => {e.preventDefault();setAcceptModal(true);setAcceptModalId(service?.id)}}>Accept</a>
+                                                            <a className="ml-2 m-reject" href="/" onClick={(e) => {e.preventDefault();setRejectModal(true);setRejectModalId(service?.id)}}>Reject</a>
+                                                        </>
+                                                    }
+                                                    {
+                                                        service?.updated_status?.UploadResumeToShine && 
+                                                        <>
+                                                            <br />
+                                                            <input type="checkbox" className="align-middle" id={`uploadResumeToShine${service?.id}`} value="True" name="service_resume_upload_shine" onClick={(event) => updateResumeUploadShine(event, service?.id)}/>
+                                                            <label className="font-weight-bold ml-2" htmlFor={`uploadResumeToShine${service?.id}`}>Upload Resume to Shine</label>
+                                                        </>
+                                                    }
+                                                    </strong>
+                                                </>
                                         }
-                                        {
-                                            service?.options?.Download && <a href={service?.options?.download_url} target="_blank" className="font-weight-bold"> Download</a> 
-                                        }
-                                        {
-                                            service?.options?.Download_credential && <a href={service?.options?.download_url} target="_blank" className="font-weight-bold"> Download Credential</a> 
-                                        }
-                                        {
-                                            service?.options?.edit_your_profile && <a href={`${siteDomain}/dashboard/roundone/profile/`} target="_blank" className="font-weight-bold"> Edit Profile</a>
-                                        }
-                                        {
-                                            service?.options?.complete_profile && <a href={`${siteDomain}/dashboard/roundone/profile/`} target="_blank" className="font-weight-bold"> Complete Profile</a>
-                                        }
-                                        {
-                                            (service?.oi_status === 24 || service?.oi_status === 46) &&
-                                            <>
-                                                <br /><br />
-                                                <a className="m-accept" href="/" onClick={(e) => {e.preventDefault();setAcceptModal(true);setAcceptModalId(service?.id)}}>Accept</a>
-                                                <a className="ml-2 m-reject" href="/" onClick={(e) => {e.preventDefault();setRejectModal(true);setRejectModalId(service?.id)}}>Reject</a>
-                                            </>
-                                        }
-                                        </strong>
 
                                         {/* View Details Block */}
-                                        {
-                                            service?.datalist?.length > 0 &&
-                                                <div className="my-order__order-detail">
-                                                    <a onClick={(e) => {
-                                                            e.preventDefault();
-                                                            showDetails(service?.id)
-                                                        }} 
-                                                        className={(showOrderDetailsID === service?.id) 
-                                                            ? "font-weight-bold open arrow-icon" : "font-weight-bold arrow-icon"
-                                                        }> View Details
-                                                    </a>
-                                                    {
-                                                        (showOrderDetailsID === service?.id) && getOrderDetails(service?.datalist)
-                                                    }
-                                                </div>
-                                        }
+                                        <div className="my-order__order-detail">
+                                            <a onClick={(e) => {
+                                                    e.preventDefault();
+                                                    showDetails(service?.id)
+                                                }} 
+                                                className={(showOrderDetailsID === service?.id) 
+                                                    ? "font-weight-bold open arrow-icon" : "font-weight-bold arrow-icon"
+                                                }> View Details
+                                            </a>
+                                            {
+                                                (showOrderDetailsID === service?.id) && <ViewDetails id={service?.id} />
+                                            }
+                                        </div>
                                     </div>
                                     {/* End of Status Service Block */}
 
                                     <div className="pl-15">
 
                                         {/* Days Reamianing and Start Stop Service Block */}
-                                        <div className="m-courses-detail__bottomWrap">
-                                            <div>
-                                                <div className="m-day-remaning">
+                                        {
+                                            (service?.updated_status?.day_remaining || service?.updated_status?.pause_service || service?.updated_status?.resume_service) &&
+                                                <div className="m-courses-detail__bottomWrap">
                                                     {
-                                                        service?.remaining_days?.toString()?.split('')?.map((digit, index) => {
-                                                            return (
-                                                                <span className="m-day-remaning--box" key={index}> { digit }</span>
-                                                            )
-                                                        })
+                                                        service?.updated_status?.day_remaining && 
+                                                            <div>
+                                                                <div className="m-day-remaning">
+                                                                    {
+                                                                        (service?.updated_status?.day_remaining > 0 ? service?.updated_status?.day_remaining > 9 ? service?.updated_status?.day_remaining : '0' + service?.updated_status?.day_remaining : '00')?.toString()?.split('')?.map((digit, index) => {
+                                                                            return (
+                                                                                <span className="m-day-remaning--box" key={index}> { digit }</span>
+                                                                            )
+                                                                        })
+                                                                    }
+                                                                    <span className="ml-2 m-day-remaning--text">
+                                                                        { service?.updated_status?.day_remaining > 1 ? 'Days' : 'Day'} <br />remaining
+                                                                    </span>
+                                                                </div>
+                                                            </div>
                                                     }
-                                                    <span className="ml-2 m-day-remaning--text">
-                                                        { service?.remaining_days > 1 ? 'Days' : 'Day'} <br />remaining
-                                                    </span>
+                                                    
+                                                    {
+                                                        service?.updated_status?.pause_service && <Link to={"#"} className="m-db-resume-course font-weight-bold pr-10 mt-20" onClick={() => pauseResumeService(34, service?.id)}>Pause Service</Link>
+                                                    }
+                                                    {
+                                                        service?.updated_status?.resume_service && <Link to={"#"} className="m-db-start-course font-weight-bold pr-10 mt-20" onClick={() => pauseResumeService(35, service?.id)}>Resume Service</Link>
+                                                    }
                                                 </div>
-                                            </div>
-                                            {
-                                                service?.options?.pause_service && <Link to={"#"} className="m-db-start-course font-weight-bold pr-10" onClick={() => pauseResumeService(34, service?.id)}>Pause Service</Link>
-                                            }
-                                            {
-                                                service?.options?.resume_service && <Link to={"#"} className="m-db-start-course font-weight-bold pr-10" onClick={() => pauseResumeService(35, service?.id)}>Resume Service</Link>
-                                            }
-                                        </div>
+                                        }
+                                        
                                         
                                         {/* Comment and Rating Block start */}
-                                        <div className="m-courses-detail__userInput">
+                                        <div className="m-courses-detail__userInput m-db-bdrtop mt-15">
 
                                             {/* Comment Block start */}
                                             <Link to={'#'} onClick={(e) => {
@@ -289,15 +309,12 @@ const MyServices = (props) => {
 
                                             {/* Rating Block start*/}    
                                             {
-                                                (service?.oi_status === 4) && 
-                                                    <div className="d-flex" onClick={()=>{
-                                                            setShowRateModal(true);
-                                                            setOiReviewId(service?.product)
-                                                        }} id={service?.product} >
+                                                (service?.updated_status?.your_feedback) && 
+                                                    <div className="d-flex">
                                                         {
-                                                            service?.no_review ?
+                                                            service?.len_review ?
                                                                 <>
-                                                                    <span className="m-rating">
+                                                                    <span className="m-rating" onClick={()=>{setShowRatingsModal(true);setOiReviewId({'prdId' :service?.product, 'orderId':service?.id});setReviewData(service?.review_data);}}>
                                                                         {
                                                                             service?.rating?.map((star, index) => starRatings(star, index))
                                                                         }
@@ -307,12 +324,12 @@ const MyServices = (props) => {
                                                                     </span>
 
                                                                     <Link to={"#"} className="font-weight-bold ml-10">
-                                                                        { service?.no_review }
+                                                                        { service?.len_review }
                                                                     </Link>
                                                                 </> : 
                                                                 <>
                                                                     <span className="">Rate</span>
-                                                                    <span className="m-rating">
+                                                                    <span className="m-rating" onClick={()=>{setShowRateModal(true);setOiReviewId({'prdId' :service?.product, 'orderId':service?.id})}}>
                                                                         {
                                                                             [1, 2, 3, 4, 5].map((item, index) => {
                                                                                 return <em className="micon-blankstar" key={index} />
@@ -339,21 +356,22 @@ const MyServices = (props) => {
             {/* My Services Block End */}
             
             {/* Comment Modal */}
-            { showCommentModal && <AddCommentModal setShowCommentModal = {setShowCommentModal} oi_id={oiCommentId} /> }
+            { showCommentModal && <AddCommentModal setShowCommentModal = {setShowCommentModal} oi_id={oiCommentId} type="myservices" /> }
 
             {/* Rate Modal */}
-            { showRateModal && <RateProductModal setShowRateModal={setShowRateModal} oi_id={oiReviewId}/> }
+            {   showRateModal && <RateProductModal setShowRateModal={setShowRateModal} idDict={oiReviewId} /> }
+            {   showRatingsModal && <ShowRatingsModal setShowRateModal={setShowRateModal} setShowRatingsModal={setShowRatingsModal} idDict={oiReviewId} reviewData={reviewData}/> }
 
             {/* Upload Modal */}
-            { showUpload && <UploadResume setShowUpload={setShowUpload} data={pending_resume_items} /> }
+            { showUpload && <UploadResume setShowUpload={setShowUpload} /> }
 
             {/* Accept Reject Modal */}
-            { acceptModal && <AcceptModal setAcceptModal={setAcceptModal} oi_id={acceptModalId}/> }
-            { rejectModal && <RejectModal setRejectModal={setRejectModal} oi_id={rejectModalId}/> }
+            { acceptModal && <AcceptModal setAcceptModal={setAcceptModal} oi_id={acceptModalId} currentPage={currentPage}/> }
+            { rejectModal && <RejectModal setRejectModal={setRejectModal} oi_id={rejectModalId} currentPage={currentPage}/> }
 
             {/* Pagination */}
             { page?.total > 1 && <Pagination totalPage={page?.total} currentPage={currentPage} setCurrentPage={setCurrentPage} /> }
-
+            
         </div>
         }
         </>

@@ -2,6 +2,13 @@ import math
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.conf import settings
 from django.urls import reverse
+from django.contrib.contenttypes.models import ContentType
+from review.models import Review
+from core.common import APIResponse
+from shop.models import Product
+from rest_framework import status
+from django.db.models import Avg
+from decimal import Decimal
 
 
 def offset_paginator(page, data, **kwargs):
@@ -35,6 +42,262 @@ def offset_paginator(page, data, **kwargs):
 
 def get_courses_detail(instance):
     max_draft_limit=settings.DRAFT_MAX_LIMIT
+
+    datalist = []
+    options = {}
+    oi = instance
+    date_created = ''
+    current_status={}
+    
+    if oi.product.type_flow == 1 or  oi.product.type_flow == 12 or oi.product.type_flow == 13:
+        date_created =oi.created.strftime("%d %b %y")
+        if oi.oi_status==2:
+            current_status.update({'status':oi.get_user_oi_status})
+            current_status.update({'upload_resume':True})
+        elif (oi.oi_status==23 or oi.oi_status==25 or oi.oi_status==26) and oi.draft_counter:
+            current_status.update({'status':'Modifications requested'})
+        elif oi.oi_status == 24 and oi.draft_counter == 1:
+            current_status.update({'status':'Document is ready'})
+            current_status.update({'download_url':reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})+'?path='+oi.oi_draft.name})
+
+        elif oi.oi_status == 24 and oi.draft_counter < max_draft_limit:
+            current_status.update({'status':'Revised Document is ready'})
+            current_status.update({'download_url':reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})+'?path='+oi.oi_draft.name})
+
+        elif oi.oi_status == 4 and oi.draft_counter == max_draft_limit:
+            current_status.update({'status':'Final Document is ready'})
+            current_status.update({'download_url':reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})+'?path='+oi.oi_draft.name})
+            if not oi.order.service_resume_upload_shine:
+                current_status.update({'UploadResumeToShine':True})
+
+        elif oi.oi_status == 4 and oi.draft_counter < max_draft_limit:
+            current_status.update({'status':'Service has been processed and Document is finalized'})
+            current_status.update({'download_url':reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})+'?path='+oi.oi_draft.name})
+            if not oi.order.service_resume_upload_shine:
+                current_status.update({'UploadResumeToShine':True})
+
+        elif oi.oi_status == 161 or oi.oi_status == 162 or oi.oi_status == 163:
+            current_status.update({'status':oi.get_user_oi_status})
+        elif oi.waiting_for_input:
+             current_status.update({'status':'Waiting for input'})
+        elif oi.order.auto_upload and not oi.is_assigned() and not oi.is_resume_candidate_upload:
+            current_status.update({'status':'Service is under progress'})
+            current_status.update({'upload_resume':True})
+        else:
+            current_status.update({'status':'Service is under progress'})
+
+    elif oi.product.type_flow == 8:
+        date_created =oi.created.strftime("%d %b %y")
+        if oi.oi_status == 2:
+            current_status.update({'status':oi.get_user_oi_status})
+            current_status.update({'upload_resume':True})
+        elif (oi.oi_status == 45 or oi.oi_status == 47 or oi.oi_status == 48)and oi.draft_counter:
+            current_status.update({'status':'Modifications requested'})
+        if oi.oi_status == 46 and oi.draft_counter == 1:
+            current_status.update({'status':'Document is ready'})
+            current_status.update({'download_url':reverse("dashboard-draf-download",kwargs={'order_item':oi.order.pk})})
+        elif oi.oi_status == 46 and oi.draft_counter < max_draft_limit:
+            current_status.update({'status':'Revised Document is ready'})
+            current_status.update({'download_url':reverse("dashboard-draf-download",kwargs={'order_item':oi.order.pk})})
+        elif oi.oi_status == 4 and oi.draft_counter == max_draft_limit :
+            current_status.update({'status':'Final Document is ready'})
+            current_status.update({'download_url':reverse("dashboard-draf-download",kwargs={'order_item':oi.order.pk})})
+
+            if not oi.order.service_resume_upload_shine:
+                current_status.update({'UploadResumeToShine':True})
+        elif oi.oi_status == 4 and oi.draft_counter < max_draft_limit :
+            current_status.update({'status':'Service has been processed and Document is finalized'})
+            current_status.update({'download_url':reverse("dashboard-draf-download",kwargs={'order_item':oi.order.pk})})
+
+            if not oi.order.service_resume_upload_shine:
+                current_status.update({'UploadResumeToShine':True})
+        elif oi.waiting_for_input:
+            current_status.update({'status':'Waiting for input'})
+
+        elif oi.oi_status == 161 or oi.oi_status == 162 or oi.oi_status == 163:
+            current_status.update({'status':oi.get_user_oi_status})
+        elif oi.order.auto_upload and not oi.is_assigned() and not oi.is_resume_candidate_upload:
+            current_status.update({'status':'Service is under progress'})
+            current_status.update({'upload_resume':True})
+        else:
+            current_status.update({'status':'Service is under progress'})
+
+    elif oi.product.type_flow == 3:
+        date_created =oi.created.strftime("%d %b %y")
+        if oi.oi_status == 2:
+            current_status.update({'status':oi.get_user_oi_status})
+            current_status.update({'upload_resume':True})
+        elif oi.oi_status == 4:
+            current_status.update({'status':'Service has been processed and Final document is ready'})
+            current_status.update({'download_url': reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})+'?path='+oi.oi_draft.name})
+            if not oi.order.service_resume_upload_shine:
+                current_status.update({'UploadResumeToShine':True})
+        elif oi.oi_status == 161 or oi.oi_status == 162 or oi.oi_status == 163:
+            current_status.update({'status':oi.get_user_oi_status})
+        elif oi.order.auto_upload and not oi.is_assigned() and not oi.is_resume_candidate_upload:
+            current_status.update({'status':'Service is under progress'})
+            current_status.update({'upload_resume':True})
+        else:
+            current_status.update({'status':'Service is under progress'})
+
+    elif oi.product.type_flow == 2 or  oi.product.type_flow == 14:
+        date_created =oi.created.strftime("%d %b %y")
+        if oi.oi_status == 5:
+            current_status.update({'status':oi.get_user_oi_status})
+            if  oi.product.type_flow == 2 and oi.product.vendor.slug == 'neo'  and not oi.neo_mail_sent and not oi.updated_from_trial_to_regular:
+                current_status.update({'BoardOnNeo':True})
+            if  oi.product.type_flow == 2 and oi.product.vendor.slug == 'neo'  and oi.neo_mail_sent:
+                current_status.update({'neo_mail_sent':True})
+            if oi.product.type_flow == 2 and oi.product.vendor.slug == 'neo'  and oi.updated_from_trial_to_regular:
+                current_status.update({'updated_from_trial_to_regular':True})
+        elif oi.oi_status == 6:
+            current_status.update({'status':oi.get_user_oi_status})
+            current_status.update({'download_url':reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})+'?path='+oi.oi_draft.name})
+        elif oi.waiting_for_input:
+            current_status.update({'status':'Waiting for input'})
+        elif oi.oi_status == 4:
+            current_status.update({'status':'Service has been processed'})
+            current_status.update({'download_url':reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})+'?path='+oi.oi_draft.name})
+        elif oi.oi_status == 161 or oi.oi_status == 162 or oi.oi_status == 163:
+            current_status.update({'status':oi.get_user_oi_status})
+
+    elif oi.product.type_flow == 4:
+        date_created =oi.created.strftime("%d %b %y")
+        if oi.oi_status == 2:
+            current_status.update({'status':oi.get_user_oi_status})
+            current_status.update({'upload_resume':True})
+        # elif oi.oi_status == 6:
+        #     current_status.update({'status':oi.get_user_oi_status})
+        #     current_status.update({'download_url':reverse("console:profile_credentials",kwargs={'oi':oi.pk})})
+
+        elif oi.oi_status == 4:
+            current_status.update({'status':'Service has been processed'})
+            # current_status.update({'download_url':reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})+'?path='+oi.oi_draft.name})
+            current_status.update({'download_credentials_url':reverse("console:profile_credentials",kwargs={'oi':oi.pk})})
+
+            if not oi.order.service_resume_upload_shine:
+                current_status.update({'UploadResumeToShine': True})
+        elif oi.oi_status == 61:
+            current_status.update({'status':oi.get_user_oi_status})
+        elif oi.oi_status == 161 or oi.oi_status == 162 or oi.oi_status == 163 or oi.oi_status == 164:
+            current_status.update({'status':oi.get_user_oi_status})
+        elif oi.waiting_for_input:
+            datalist.append({'date':date_created,'status':'Waiting for input'})
+        elif oi.order.auto_upload and not oi.is_assigned() and not oi.is_resume_candidate_upload:
+            current_status.update({'status':'Service is under progress'})
+            current_status.update({'upload_resume':True})
+        else:
+            current_status.update({'status':'Service is under progress'})
+
+    elif oi.product.type_flow == 5:
+        date_created =oi.created.strftime("%d %b %y")
+        if oi.oi_status == 2:
+            current_status.update({'status':oi.get_user_oi_status})
+            current_status.update({'upload_resume':True})
+        elif oi.oi_status == 4 or oi.oi_status == 28 or oi.oi_status == 29 or oi.oi_status == 34 or oi.oi_status == 35:
+            current_status.update({'status':'Service has been processed'})
+        elif oi.oi_status == 61 or oi.oi_status == 36 or oi.oi_status == 37 or oi.oi_status == 161 or oi.oi_status == 162 or oi.oi_status == 163 or oi.oi_status == 164 or oi.oi_status==6:
+            current_status.update({'status':oi.get_user_oi_status})
+        else:
+            current_status.update({'status':'Service is under progress'})
+
+    elif oi.product.type_flow == 6:
+        date_created =oi.created.strftime("%d %b %y")
+        # datalist.append({'date':date_created,'status':oi.get_user_oi_status})
+        if oi.oi_status ==81:
+            current_status.update({'status':oi.get_user_oi_status})
+            current_status.update({'download_url':reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})+'?path='+oi.oi_draft.name})
+        elif oi.oi_status ==4:
+            current_status.update({'status':'Service has been processed'})
+            current_status.update({'download_url':reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})+'?path='+oi.oi_draft.name})
+        elif oi.oi_status == 161 or oi.oi_status == 162 or oi.oi_status == 163:
+            current_status.update({'status':oi.get_user_oi_status})
+        else:
+            current_status.update({'status':oi.get_user_oi_status})
+
+    elif oi.product.type_flow == 7 or oi.product.type_flow == 15:
+        date_created =oi.created.strftime("%d %b %y")
+        if oi.oi_status == 2 :
+            current_status.update({'status':oi.get_user_oi_status})
+            current_status.update({'upload_resume':True})
+            current_status.update({'uploaded_resume_will_be_boosted':True})
+        else:
+            current_status.update({'status':oi.get_user_oi_status})
+            current_status.update({'download_url':reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})+'?path='+oi.oi_draft.name})
+
+    elif oi.product.type_flow == 9:
+        op_status = oi.get_roundone_status()
+        date_created =oi.created.strftime("%d %b %y")
+        if op_status == 141:
+            current_status.update({'status':'Your profile to be shared with interviewer is pending'})
+            current_status.update({'complete_profile':True})
+        elif oi.oi_status == 142:
+            current_status.update({'status':'Service is under progress'})
+            current_status.update({'edit_your_profile':True})
+        elif oi.oi_status == 143:
+            current_status.update({'status':'Service has been expired'})
+        elif oi.oi_status == 161 or oi.oi_status == 162 or oi.oi_status == 163:
+            current_status.update({'status':oi.get_user_oi_status})
+            datalist.append({'date':date_created,'status':oi.get_user_oi_status})
+
+    elif oi.product.type_flow == 10:
+        date_created =oi.created.strftime("%d %b %y")
+        # datalist.append({'date':date_created,'status':oi.get_user_oi_status})
+        if oi.oi_status == 5:
+            current_status.update({'status':oi.get_user_oi_status})
+        elif oi.oi_status == 4:
+            current_status.update({'status':'Service has been processed'})
+            if oi.oi_draft.name:
+                current_status.update({'download_url':reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})+'?path='+oi.oi_draft.name})
+        elif oi.oi_status == 161 or oi.oi_status == 162 or oi.oi_status == 163:
+            current_status.update({'status':oi.get_user_oi_status})
+        if oi.oi_status == 101:
+            current_status.update({'status':oi.get_user_oi_status})
+            current_status.update({'take_test':True})
+            current_status.update({'auto_login_url': oi.autologin_url})
+    
+    elif oi.product.type_flow == 16 and oi.product.sub_type_flow == 1602:
+        date_created =oi.created.strftime("%d %b %y")
+        if oi.oi_status == 5:
+            current_status.update({'take_test':True})
+            current_status.update({'auto_login_url': oi.autologin_url})
+            current_status.update({'status':oi.get_user_oi_status})
+        elif oi.oi_status == 4:
+            current_status.update({'status':oi.get_user_oi_status})
+
+    elif oi.product.type_flow == 17:
+        # resumetemplate option to be shown on frontend if editTemplate option is True
+        current_status.update({'edit_template':True})
+        date_created =oi.created.strftime("%d %b %y")
+        current_status.update({'status':oi.get_user_oi_status})
+        if oi.oi_status == 101:
+            current_status.update({'take_test':True})
+        elif oi.oi_draft and oi.oi_draft.name:
+            current_status.update({'download_url':reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})+'?path='+oi.oi_draft.name})
+
+    if oi.oi_status == 28 or oi.oi_status == 34 or oi.oi_status == 36 or oi.oi_status == 35:
+        if oi.days_left_oi_product > 0 and oi.product.is_pause_service:
+            if oi.service_pause_status():
+                current_status.update({'pause_service':True})
+            else:
+                current_status.update({'resume_service': True})
+
+    if oi.product.type_flow == 5:
+        if oi.oi_status == 28 or oi.oi_status == 34 or oi.oi_status == 35:
+            if oi.days_left_oi_product >= 0:
+                current_status.update({'day_remaining':oi.days_left_oi_product})
+    
+    if oi.oi_status == 24 or oi.oi_status==46:
+        current_status.update({'accept_reject':True})
+
+    if oi.oi_status == 4 and not oi.user_feedback:
+        current_status.update({'your_feedback':True})
+
+    return current_status
+
+
+def get_history(instance):
+    max_draft_limit=settings.DRAFT_MAX_LIMIT
     ops=[]
 
     if instance.product.type_flow in [1, 12, 13]:
@@ -50,7 +313,7 @@ def get_courses_detail(instance):
     elif instance.product.type_flow == 5:
         ops = instance.orderitemoperation_set.filter(oi_status__in=[2, 5, 6, 36, 37, 61, 161, 162, 163, 164])
     elif instance.product.type_flow == 6:
-        ops = instance.oi.orderitemoperation_set.filter(oi_status__in=[6, 81, 82, 161, 162, 163, 164])
+        ops = instance.orderitemoperation_set.filter(oi_status__in=[6, 81, 82, 161, 162, 163, 164])
     elif instance.product.type_flow in [7, 15]:
         ops = instance.orderitemoperation_set.filter(oi_status__in=[2, 4, 5, 6, 61, 161, 162, 163, 164])
     elif instance.product.type_flow == 8:
@@ -62,274 +325,193 @@ def get_courses_detail(instance):
         ops = instance.orderitemoperation_set.filter(oi_status__in=[5, 6, 4])
     
     datalist = []
-    options = {}
     oi = instance
     date_created = ''
+    current_status ={}   
     if oi.product.type_flow == 1 or  oi.product.type_flow == 12 or oi.product.type_flow == 13:
         for op in ops:
-            date_created =op.created
-            if (op.oi_status==23 or op.oi_status==25 or op.oi_status==26) and op.draft_counter:
-                datalist.append({'date':date_created,'status':'Modifications requested'})
+            current_status ={}
+            date_created =op.created.strftime("%d %b %y")
             if op.oi_status == 24 and op.draft_counter == 1:
-                datalist.append({'date':date_created,'status':op.get_user_oi_status})
+                current_status = {'date':date_created,'status':op.get_user_oi_status}
             elif op.oi_status == 24 and op.draft_counter < max_draft_limit:
-                datalist.append({'date':date_created,'status':'Revised Document is ready'})
-            elif op.oi_status == 4 and op.draft_counter == max_draft_limit:
-                datalist.append({'date':date_created,'status':'Final Document is ready'})
-                if not oi.order.service_resume_upload_shine:
-                    options['UploadResumeToShine'] = True
-            elif op.oi_status == 4 and op.draft_counter < max_draft_limit:
-                datalist.append({'date':date_created,'status':'Service has been processed and Document is finalized'})
-                if not oi.order.service_resume_upload_shine:
-                    options['UploadResumeToShine'] = True
-
-
-            elif op.oi_status == 161 or op.oi_status == 162 or op.oi_status == 163:
-                datalist.append({'date':date_created,'status':op.get_user_oi_status})
-            elif oi.order.auto_upload and not oi.is_assigned and not oi.is_resume_candidate_upload:
-                datalist.append({'date':date_created,'status':'Service is under progress'})
-                options['upload_resume']=True
+                current_status = {'date':date_created,'status':'Revised Document is ready'}
+            elif op.oi_status == 24 and op.draft_counter == max_draft_limit:
+                current_status ={'date':date_created,'status':'Final Document is ready'}
             elif op.oi_status == 181:
-                datalist.append({'date':date_created,'status':'Waiting For Input'})
+                current_status ={'date':date_created,'status':'Waiting For Input'}
             else:
-                datalist.append({'date':date_created,'status':op.get_user_oi_status})
+                current_status ={'date':date_created,'status':op.get_user_oi_status}
             if oi.oi_status == 2 and op.oi_status == 2:
-                options['upload_resume']=True
+                current_status.update({'upload_resume':True})
             elif op.oi_status == 24 or op.oi_status == 27:
-                options['Download']=True
-                options['order_pk']=oi.order.pk
-                options['oi_draftname']=op.oi_draft.name
-                options['download_url'] = reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})+'?path='+op.oi_draft.name
+                current_status.update({'download_url':reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})+'?path='+op.oi_draft.name})
+            if current_status:
+                datalist.append(current_status)
 
     elif oi.product.type_flow == 8:
         for op in ops:
-            date_created =op.created
-            if op.oi_status == 2:
-                datalist.append({'date':date_created,'status':op.get_user_oi_status})
-            elif (op.oi_status == 45 or op.oi_status == 47 or op.oi_status == 48)and op.draft_counter:
-                datalist.append({'date':date_created,'status':'Modifications requested'})
+            current_status ={}
+            date_created =op.created.strftime("%d %b %y")
             if op.oi_status == 46 and op.draft_counter == 1:
-                datalist.append({'date':date_created,'status':op.get_user_oi_status})
+                current_status = {'date':date_created,'status':op.get_user_oi_status}
             elif op.oi_status == 46 and op.draft_counter < max_draft_limit:
-                datalist.append({'date':date_created,'status':'Revised Document is ready'})
-            elif op.oi_status == 4 and op.draft_counter == max_draft_limit :
-                datalist.append({'date':date_created,'status':'Document is finalized'})
-                if not oi.order.service_resume_upload_shine:
-                    options['UploadResumeToShine'] = True
-            elif op.oi_status == 4 and op.draft_counter < max_draft_limit :
-                datalist.append({'date':date_created,'status':'Service has been processed and Document is finalized'})
-                if not oi.order.service_resume_upload_shine:
-                    options['UploadResumeToShine'] = True
+                current_status ={'date':date_created,'status':'Revised Document is ready'}
+            elif op.oi_status == 4:
+                current_status ={'date':date_created,'status':'Document is finalized'}
             elif op.oi_status == 181:
-                datalist.append({'date':date_created,'status':'Waiting for input'})
-
-            elif op.oi_status == 161 or op.oi_status == 162 or op.oi_status == 163:
-                datalist.append({'date':date_created,'status':op.get_user_oi_status})
-            elif oi.order.auto_upload and not oi.is_assigned and not oi.is_resume_candidate_upload:
-                datalist.append({'date':date_created,'status':'Service is under progress'})
-                options['upload_resume']=True
+                current_status ={'date':date_created,'status':'Waiting for input'}
             else:
-                datalist.append({'date':date_created,'status':op.get_user_oi_status})
-                datalist.append({'date':date_created,'status':'Service is under progress'})
-            # if op.oi_status == 2 and oi.oi_status == 2:
-            #     options['upload_resume']=True
-            # elif op.oi_status == 46 or op.oi_status == 27:
-            #     options['Download']=True
-            #     options['oi.pk']=oi.pk
-            #     options['op.pk']=op.pk
-            #     options['download_url']= reverse("linkedin-draf-download",kwargs={'order_item':oi.pk,'op_id':op.pk})
+                current_status = {'date':date_created,'status':op.get_user_oi_status}
+
+            if op.oi_status == 2 and oi.oi_status == 2:
+                current_status.update({'upload_resume':True})
+            elif op.oi_status == 46 or op.oi_status == 27:
+                current_status.update({'download_url':reverse("linkedin-draf-download",kwargs={'order_item':oi.pk,'op_id':op.pk})})
+            if current_status:
+                datalist.append(current_status)
 
     elif oi.product.type_flow == 3:
         for op in ops:
-            date_created =op.created
-            # datalist.append({'date':date_created,'status':op.get_user_oi_status})
+            current_status={}
+            date_created =op.created.strftime("%d %b %y")
+            current_status = {'date':date_created,'status':op.get_user_oi_status}
             if op.oi_draft:
-                options['Download']=True
-                options['order_pk']=oi.order.pk
-                options['oi_draftname']=op.oi_draft.name
-                options['download_url']= reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})+'?path='+op.oi_draft.name
-            elif op.oi_status == 2 and op.oi_status == 2:
-                options['upload_resume']=True
-            elif op.oi_status == 4:
-                datalist.append({'date':date_created,'status':'Service has been processed and Final document is ready'})
-                if not oi.order.service_resume_upload_shine:
-                    options['UploadResumeToShine'] = True
-            elif op.oi_status == 161 or op.oi_status == 162 or op.oi_status == 163:
-                datalist.append({'date':date_created,'status':op.get_user_oi_status})
-            elif oi.order.auto_upload and not oi.is_assigned and not oi.is_resume_candidate_upload:
-                datalist.append({'date':date_created,'status':'Service is under progress'})
-                options['upload_resume']=True
-            else:
-                datalist.append({'date':date_created,'status':'Service is under progress'})
+                current_status.update({'download_url':reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})+'?path='+op.oi_draft.name})
+            elif oi.oi_status == 2 and op.oi_status == 2:
+                current_status.update({'upload_resume':True})
+            if current_status:
+                datalist.append(current_status)
 
     elif oi.product.type_flow == 2 or  oi.product.type_flow == 14:
         for op in ops:
-            date_created =op.created
-            # datalist.append({'date':date_created,'status':op.get_user_oi_status})
-            if op.oi_status == 5:
-                if  oi.product.type_flow == 2 and oi.product.vendor.slug == 'neo'  and not op.neo_mail_sent and not op.updated_from_trial_to_regular:
-                    options['BoardOnNeo'] = True
-                if  oi.product.type_flow == 2 and oi.product.vendor.slug == 'neo'  and op.neo_mail_sent:
-                    options['neo_mail_sent']=True
-                if oi.product.type_flow == 2 and oi.product.vendor.slug == 'neo'  and op.updated_from_trial_to_regular:
-                    options['updated_from_trial_to_regular'] = True
-            elif op.oi_status == 6 or op.oi_status == 4 and op.oi_draft.name:
-                options['Download']=True
-                options['order_pk']=oi.order.pk
-                options['oi_draftname']=op.oi_draft.name
-                options['download_url']=reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})+'?path='+op.oi_draft.name
-            elif op.oi_status == 161 or op.oi_status == 162 or op.oi_status == 163:
-                datalist.append({'date':date_created,'status':op.get_user_oi_status})
+            current_status={}
+            date_created =op.created.strftime("%d %b %y")
+            current_status = {'date':date_created,'status':op.get_user_oi_status}
+            if op.oi_status == 6:
+                current_status.update({'download_url':reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})+'?path='+op.oi_draft.name})
+            if current_status:
+                datalist.append(current_status)
 
     elif oi.product.type_flow == 4:
         for op in ops:
-            date_created =op.created
-            # datalist.append({'date':date_created,'status':op.get_user_oi_status})
+            current_status={}
+            date_created =op.created.strftime("%d %b %y")
+            current_status = {'date':date_created,'status':op.get_user_oi_status}
             if oi.oi_status == 2 and not oi.oi_resume:
-                options['upload_resume']=True
+                current_status.update({'upload_resume':True})
             elif op.oi_status == 6:
-                options['Download_credential']=True
-                options['download_url']=reverse("console:profile_credentials",kwargs={'oi':oi.pk})
-                options['oi.pk']=oi.pk
-
-            elif op.oi_status == 4:
-                options['Download_credential']=True
-                if not oi.order.service_resume_upload_shine:
-                    options['UploadResumeToShine'] = True
-                elif op.oi_status == 61:
-                    datalist.append({'date':date_created,'status':op.get_user_oi_status})
-                elif op.oi_status == 161 or op.oi_status == 162 or op.oi_status == 163:
-                    datalist.append({'date':date_created,'status':op.get_user_oi_status})
-                elif oi.order.auto_upload and not oi.is_assigned and not oi.is_resume_candidate_upload:
-                    datalist.append({'date':date_created,'status':'Service is under progress'})
-                    options['upload_resume']=True
+                current_status.update({'download_credentials_url':reverse("console:profile_credentials",kwargs={'oi':oi.pk})})
+            if current_status:
+                datalist.append(current_status)
 
     elif oi.product.type_flow == 5:
+
         if oi.product.sub_type_flow == 502:
                 custom_ops=oi.get_item_operations()
                 if custom_ops is not None:
+                    current_status={}
                     for op in custom_ops:
                         if op:
-                            date_created =op.created
+                            date_created =op.created.strftime("%d %b %y")
                             if op.oi_status == 31:
-                                datalist.append({'date':date_created,'status':'Service is Under Progress'})
+                                current_status={'date':date_created,'status':'Service is Under Progress'}
                             else:
-                                datalist.append({'date':date_created,'status':op.get_user_oi_status})
+                                current_status={'date':date_created,'status':op.get_user_oi_status}
+                        if current_status:
+                            datalist.append(current_status)
         else:
             for op in ops:
-                date_created =op.created
-                datalist.append({'date':date_created,'status':op.get_user_oi_status})
+                current_status={}
+                date_created =op.created.strftime("%d %b %y")
+                current_status={'date':date_created,'status':op.get_user_oi_status}
                 if oi.oi_status == 2 and not oi.oi_resume and op.oi_status == 2:
-                    options['upload_resume']=True
-                elif op.oi_status == 4 or op.oi_status == 28 or op.oi_status == 29 or op.oi_status == 34 or op.oi_status == 35:
-                    datalist.append({'date':date_created,'status':'Service has been processed'})
-                elif op.oi_status == 61 or op.oi_status == 36 or op.oi_status == 37 or op.oi_status == 161 or op.oi_status == 162 or op.oi_status == 163:
-                    datalist.append({'date':date_created,'status':op.get_user_oi_status})
-                else:
-                    datalist.append({'date':date_created,'status':'Service is under progress'})
+                    current_status.update({'upload_resume':True})
+                if current_status:
+                        datalist.append(current_status)
 
     elif oi.product.type_flow == 6:
         for op in ops:
-            date_created =op.created
-            # datalist.append({'date':date_created,'status':op.get_user_oi_status})
-            if op.oi_draft and op.oi_draft.name:
-                options['Download']=True
-                options['order_pk']=oi.order.pk
-                options['oi_draftname']=op.oi_draft.name
-                options['download_url']= reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})+'?path='+op.oi_draft.name
+            current_status={}
+            date_created =op.created.strftime("%d %b %y")
+            current_status={'date':date_created,'status':op.get_user_oi_status}
+            if op.oi_draft:
+                current_status.update({'download_url':reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})+'?path='+op.oi_draft.name})
+            if current_status:
+                datalist.append(current_status)
+
     elif oi.product.type_flow == 7 or oi.product.type_flow == 15:
         for op in ops:
-            date_created =op.created
-            datalist.append({'date':date_created,'status':op.get_user_oi_status})
+            current_status={}
+            date_created =op.created.strftime("%d %b %y")
+            current_status={'date':date_created,'status':op.get_user_oi_status}
             if oi.oi_status == 2 and not oi.oi_resume and op.oi_status == 2:
-                options['upload_resume']=True
-                options['uploaded_resume_will_be_boosted']=True
-            elif op.oi_draft.name:
-                options['Download']=True
-                options['order_pk']=oi.order.pk
-                options['oi_draftname']=op.oi_draft.name
-                options['download_url']= reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})+'?path='+op.oi_draft.name
+                current_status.update({'upload_resume':True})
+            if current_status:
+                datalist.append(current_status)
 
     elif oi.product.type_flow == 9:
         for op in ops:
-            date_created =op.created
-            # datalist.append({'date':date_created,'status':op.get_user_oi_status})
+            current_status={}
+            date_created =op.created.strftime("%d %b %y")
+            current_status={'date':date_created,'status':op.get_user_oi_status}
             if op.oi_status == 141:
-                datalist.append({'date':date_created,'status':'Your profile to be shared with interviewer is pending'})
-                options['complete_profile']=True
+                current_status.update({'complete_profile':True})
             elif op.oi_status == 142:
-                datalist.append({'date':date_created,'status':'Service is under progress'})
-                options['edit_your_profile']=True
-            elif op.oi_status == 143:
-                datalist.append({'date':date_created,'status':'Service has been expired'})
-            elif op.oi_status == 161 or op.oi_status == 162 or op.oi_status == 163:
-                datalist.append({'date':date_created,'status':op.get_user_oi_status})
+                current_status.update({'edit_profile':True})
+            if current_status:
+                datalist.append(current_status)
 
-
-    elif oi.product.type_flow == 10:
+    elif oi.product.type_flow == 10 or oi.product.type_flow == 17:
         for op in ops:
-            date_created =op.created
-            # datalist.append({'date':date_created,'status':op.get_user_oi_status})
-            if op.oi_status == 5:
-                datalist.append({'date':date_created,'status':op.get_user_oi_status})
-            elif op.oi_status == 4:
-                datalist.append({'date':date_created,'status':'Service has been processed'})
-                if op.oi_draft.name:
-                    options['Download']=True
-                    options['order_pk']=oi.order.pk
-                    options['oi_draftname']=op.oi_draft.name
-                    options['download_url']= reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})+'?path='+op.oi_draft.name
-            elif op.oi_status == 161 or op.oi_status == 162 or op.oi_status == 163:
-                datalist.append({'date':date_created,'status':op.get_user_oi_status})
+            current_status={}
+            date_created =op.created.strftime("%d %b %y")
+            current_status={'date':date_created,'status':op.get_user_oi_status}
             if op.oi_status == 101:
-                datalist.append({'date':date_created,'status':op.get_user_oi_status})
-                options['take_test']=True
-            elif op.oi_draft and op.oi_draft.name:
-                options['Download']=True
-                options['order_pk']=oi.order.pk
-                options['oi_draftname']=op.oi_draft.name
-                options['download_url']= reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})+'?path='+op.oi_draft.name
+                current_status.update({'take_test':True})
+            elif op.oi_draft:
+                current_status.update({'download_url':reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})+'?path='+op.oi_draft.name})
+            if current_status:
+                datalist.append(current_status)
+
+    return datalist
     
-    elif oi.product.type_flow == 16 and oi.product.sub_type_flow == 1602:
-        if oi.oi_status == 5:
-            options['take_test']=True
-            datalist.append({'date':date_created,'status':op.get_user_oi_status})
-        elif op.oi_status == 4:
-            datalist.append({'date':date_created,'status':op.get_user_oi_status})
-    elif oi.product.type_flow == 17:
-        # resumetemplate option to be shown on frontend if editTemplate option is True
-        options['edit_template']=True 
-        for op in ops:
-            date_created =op.created
-            datalist.append({'date':date_created,'status':op.get_user_oi_status})
-            if op.oi_status == 101:
-                options['take_test']=True
-            elif op.oi_draft and op.oi_draft.name:
-                options['Download']=True
-                options['order_pk']=oi.order.pk
-                options['oi_draftname']=op.oi_draft.name
-                options['download_url']= reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})+'?path='+op.oi_draft.name
+def get_review_details(product, candidate_id):
+    product_type = ContentType.objects.get(
+        app_label='shop', model='product')
+    prd_list = []
+    if product.type_product in [0, 2, 4, 5]:
+        prd_list = [product.pk]
+    elif product.type_product == 1:
+        prd_id = product.variation.filter(
+            siblingproduct__active=True,
+            active=True).values_list('id', flat=True)
+        prd_list = list(prd_id)
+        prd_list.append(product.pk)
+    elif product.type_product == 3:
+        prd_id = product.childs.filter(
+            childrenproduct__active=True,
+            active=True).values_list('id', flat=True)
+        prd_list = list(prd_id)
+        prd_list.append(product.pk)
+    review_list = Review.objects.filter(
+        content_type__id=product_type.id,status=1,
+        object_id__in=prd_list, user_id=candidate_id)
+    avg_rating = review_list.aggregate(Avg('average_rating'))['average_rating__avg'] if len(review_list)>0 else 0
+    return {'review_list':review_list,'avg_rating':avg_rating}
 
-    if oi.oi_status == 28 or oi.oi_status == 34 or oi.oi_status == 35:
-        if oi.days_left_oi_product > 0 and oi.product.is_pause_service:
-            if oi.service_pause_status:
-                options['pause_service'] = True
-            else:
-                options['resume_service'] = True
-
-    if oi.product.type_flow == 5:
-        if oi.oi_status == 28 or oi.oi_status == 34 or oi.oi_status == 35:
-            if oi.days_left_oi_product >= 0:
-                options['day_remaining']=oi.days_left_oi_product 
-    
-    if oi.oi_status == 24 or instance.oi_status==46:
-        options['accept_reject']=True
-
-    if oi.oi_status == 4 and not instance.user_feedback:
-        options['your_feedback']=True
-
-    return {
-            'date_created':date_created,
-            'datalist':datalist,
-            'options':options
-            }
+def get_ratings(avg_rating):
+        pure_rating = int(avg_rating)
+        decimal_part = avg_rating - pure_rating
+        final_score = ['*' for i in range(pure_rating)]
+        rest_part = int(Decimal(5.0) - Decimal(avg_rating))
+        res_decimal_part = Decimal(5.0) - Decimal(avg_rating) - Decimal(rest_part)
+        if decimal_part >= 0.75:
+            final_score.append("*")
+        elif decimal_part >= 0.25:
+            final_score.append("+")
+        if res_decimal_part >= 0.75:
+            final_score.append('-')
+        for i in range(rest_part):
+            final_score.append('-')
+        return final_score

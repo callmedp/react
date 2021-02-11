@@ -17,32 +17,22 @@ import PersonalDetail from './MyProfile/PersonalDetail';
 import EditSkills from './MyProfile/EditSkills';
 import SearchPage from '../../Common/SearchPage/SearchPage';
 import { Helmet } from 'react-helmet';
-import { fetchPopularServices } from 'store/CataloguePage/actions/index';
+import { fetchTrendingCnA } from 'store/Footer/actions/index';
+import StartCourse from './StartCourse/startCourse';
 
 const Dashboard = (props) => {
     const dbContainer = props.match.params.name;
     const { history } = props;
-    const dashboardRoutes = ['mycourses', 'myorder', 'mywallet', 'myservices']
+    const dashboardRoutes = [undefined, 'myorder', 'mywallet', 'myservices', 'startcourse']
     const dispatch = useDispatch();
     const [showSearchPage, setShowSearchPage] = useState(false);
-    const { popularServices } = useSelector(store => store?.popularServices );
-
-    const handleEffects = async () => {
-       
-        if (!(window && window.config && window.config.isServerRendered)) {
-            await new Promise((resolve, reject) => dispatch(fetchPopularServices({ resolve, reject })));
-        }
-        else {
-            delete window.config?.isServerRendered
-        }
-
-    };
+    const { trendingCourses } = useSelector( store => store.footer )
 
     useEffect(() => {
         if(!dashboardRoutes.includes(dbContainer)){
             history.push('/404/');
         }
-        handleEffects();
+        dispatch(fetchTrendingCnA())
     }, [dbContainer])
 
 
@@ -53,9 +43,10 @@ const Dashboard = (props) => {
                 {
                     {
                         'myservices' : 'My Services | Shine Learning',
-                        'mycourses' : 'My Courses | Shine Learning',
+                        undefined : 'My Courses | Shine Learning',
                         'myorder' : 'My Orders | Shine Learning',
-                        'mywallet' : 'My Wallet | Shine Learning'
+                        'mywallet' : 'My Wallet | Shine Learning',
+                        'startcourse' : 'Start Course | Shine Learning'
                     }[dbContainer]
                 }
                 </title>
@@ -68,22 +59,29 @@ const Dashboard = (props) => {
                         <Header setShowSearchPage={setShowSearchPage} name='Dashboard' />
                         <DashboardNavigation activeTab={dbContainer}/>
                     </header>
-                    <main className="m-container">
+                    <div className="m-container">
                         {
                             {
                                 'myservices' : <MyServices />,
-                                'mycourses' : <MyCourses/>,
+                                undefined : <MyCourses history={history}/>,
                                 'myorder' : <MyOrders />,
-                                'mywallet' : <MyWallet/>
+                                'mywallet' : <MyWallet/>,
+                                'startcourse' : <StartCourse history={history}/>
                             }[dbContainer]
                         }
                         
                         {/*<EditSkills />
                         <PersonalDetail /> */}
                         
-                        <ProductCardsSlider productList={popularServices} />
-                        <HaveQuery />
-                    </main>
+                        { dbContainer != 'startcourse' ? 
+                            <>
+                                <section className="m-courses mt-0 mb-0 pt-10 pb-0" >
+                                    <h2 className="m-heading centered">Popular Courses</h2>
+                                        <ProductCardsSlider productList={trendingCourses} />
+                                </section>
+                            </> : '' }
+                        { dbContainer != 'startcourse' ? <HaveQuery /> : '' }
+                    </div>
                     <Footer /> 
                 </>
             }

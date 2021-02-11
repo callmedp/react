@@ -1,11 +1,11 @@
 export default {
     'name': {
-        className: "form-control",
+        className: "m-form-control",
         type: "text",
         name: "comment",
         id: "comment",
-        // label: "Enter your Comment",
-        placeholder: "Leave us your message",
+        placeholder: " ",
+        label: "Leave us your message",
         inputType: 'input',
         rows: 3,
         validation: {
@@ -17,10 +17,11 @@ export default {
         
     },
     'email': {
-        className: "form-control",
+        className: "m-form-control",
         type: "text",
         name: "email",
         id: "email",
+        placeholder: " ",
         label: "Email",
         inputType: 'input',
         validation: {
@@ -35,12 +36,12 @@ export default {
     },
 
     'review': {
-        className: "form-control",
+        className: "m-form-control",
         type: "text",
         name: "review",
         id: "review",
-        placeholder: "Give us your valuable feedback",
-        // label: "Email",
+        placeholder: " ",
+        label: "Give us your valuable feedback",
         inputType: 'input',
         rows: 3,
         validation: {
@@ -51,11 +52,12 @@ export default {
         }
     },
     'title': {
-        className: "form-control",
+        className: "m-form-control",
         type: "text",
         name: "title",
         id: "title",
-        placeholder: "Type Here",
+        placeholder: " ",
+        label: "Add Title",
         inputType: 'input',
         validation: {
             required:true,
@@ -65,10 +67,11 @@ export default {
         }
     },
     'mobile': {
-        className: "form-control",
+        className: "m-form-control",
         type: "number",
         name: "number",
         id: "number",
+        placeholder: " ",
         label: "Mobile*",
         inputType: 'input',
         validation: {
@@ -86,11 +89,12 @@ export default {
     },
 
     'message': {
-        className: "form-control",
+        className: "m-form-control",
         type: "text",
         name: "message",
+        placeholder: " ",
         id: "message",
-        placeholder: "Leave us a message",
+        label: "Leave us a message",
         inputType: 'input',
         rows: 3,
         validation: {

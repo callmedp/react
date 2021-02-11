@@ -33,10 +33,32 @@ const pausePlayResume = (payload) => {
     }
 }
 
+const fetchOiDetails = (payload) => {
+    return {
+        type: Actions.FETCH_OI_DETAILS,
+        payload
+    }
+}
+
+const updateServiceCommentCount = payload => {
+    return {
+        type: Actions.UPDATE_SERVICE_COMMENT_COUNT,
+        payload
+    }
+}
+
+const updateResumeShine = (payload) => ({
+    type: Actions.UPDATE_RESUME_SHINE,
+    payload
+})
+
 export {
     fetchMyServices,
     uploadResumeForm,
     fetchPendingResume,
     CandidateAcceptRejectResume,
     pausePlayResume,
+    fetchOiDetails,
+    updateServiceCommentCount,
+    updateResumeShine
 }

@@ -21,7 +21,7 @@ const Pagination = (props) => {
     }
 
     return (
-        <div className="m-db-pagination mt-20">
+        <div className="db-pagination mt-20">
             { startPage > 1 && <figure className="icon-db-arrow-left" onClick={getPrev} /> }
             {
                 paginationList?.map((item, i) => {
@@ -30,7 +30,7 @@ const Pagination = (props) => {
             }
             { 
                 paginationList[length -2] === '....' &&
-                paginationList[length -1] === totalPage &&
+                paginationList[length -1] === totalPage && currentPage !== totalPage &&
                     <figure className="icon-db-arrow-right" onClick={getNext} />
             }
         </div>

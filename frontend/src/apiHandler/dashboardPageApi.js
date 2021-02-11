@@ -7,7 +7,7 @@ export const getDashboardPageActions = (params) => {
 
   const actionList = {
     'mycourses': [
-      { action: fetchMyCourses, payload: { page: 1 } },
+      { action: fetchMyCourses, payload: { page: 1,isDesk: true, last_month_from: 18, select_type : 'all'  } },
     ],
     'myorder': [
       { action: fetchMyOrders, payload: { page: '1' } },
@@ -16,7 +16,7 @@ export const getDashboardPageActions = (params) => {
       { action: fetchMyWallet, payload: { page: 1 } },
     ],
     'myservices': [
-      { action: fetchMyServices, payload: { page: 1 } },
+      { action: fetchMyServices, payload: { page: 1, isDesk: true, last_month_from: 18, select_type : 'all'  } },
     ]
     }[params.name];
 

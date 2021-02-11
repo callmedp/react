@@ -11,7 +11,7 @@ function* GetReviews(action) {
         let result = null;
 
         result = yield call(Api.myReviewsData, payload);
-
+        
         if (result["error"]){
             yield put({ type: Actions.REVIEWS_FETCHED, reviews: result?.data?.data });
             return resolve(result?.data);
@@ -33,9 +33,9 @@ function* SubmitReview(action) {
     try {
         const response = yield call(Api.saveReviewsData, payload);
 
-        if(response['error']) return resolve(response?.data)
+        if(response['error']) return resolve(response)
 
-        return resolve(response?.data)
+        return resolve(response)
     }
     catch (error) {
         return resolve(error)

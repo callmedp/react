@@ -5,13 +5,11 @@ import { freeResourcesList, jobAssistanceList, categoryList, navSkillList } from
 import { siteDomain } from 'utils/domains';
 import DropDown from './DropDown/dropDown';
 import { useDispatch, useSelector } from 'react-redux';
-import { cartCount, getCandidateInfo, fetchNavOffersAndTags } from 'store/Header/actions/index';
+import { cartCount, fetchNavOffersAndTags } from 'store/Header/actions/index';
 import { initLoggedInZendesk, loggedOutZendesk } from 'utils/zendeskIniti';
-import { removeTrackingInfo } from 'utils/storage.js';
+import { removeTrackingInfo, getCandidateInformation } from 'utils/storage.js';
 import SearchBar from './SeachBar/SearchBar';
 import { MyGA } from 'utils/ga.tracking.js';
-import { getCandidateId } from 'utils/storage';
-import useAuthenticate  from 'services/authenticate';
 
 const Header = (props) => {
 
@@ -19,7 +17,6 @@ const Header = (props) => {
     const { count, navTags } = useSelector(store => store.header)
     const [candidateInfo, setCandidateInfo] = useState(false)
     const [isLoggedIn, setIsLoggedIn] = useState(false)
-    const isAuthenticated = useAuthenticate()
     let redirectPath = window.location.pathname;
 
     const handleRedirect = (event, type) => {
@@ -39,11 +36,12 @@ const Header = (props) => {
         try {
             dispatch(cartCount());
         
-            if (isAuthenticated){
+            if (localStorage.getItem('isAuthenticated') === 'true'){
                 try {
                     setIsLoggedIn(true)
-                    const candidateId = getCandidateId()
-                    const candidateInformation = await new Promise((resolve, reject) => dispatch(getCandidateInfo({ candidateId, resolve, reject })))
+                    // const candidateId = getCandidateId()
+                    // const candidateInformation = await new Promise((resolve, reject) => dispatch(getCandidateInfo({ candidateId, resolve, reject })))
+                    const candidateInformation = getCandidateInformation()
                     initLoggedInZendesk(candidateInformation)
                     setCandidateInfo(candidateInformation)
                 }
@@ -128,7 +126,8 @@ const Header = (props) => {
                                             {
                                                 isLoggedIn ? (
                                                     <>
-                                                        <a className="dropdown-item" href={`${siteDomain}/dashboard/`} >My Inbox</a>
+                                                        <a className="dropdown-item" href={`${siteDomain}/dashboard/`} >My Courses</a>
+                                                        <a className="dropdown-item" href={`${siteDomain}/dashboard/myservices`} >My Services</a>
                                                         <a className="dropdown-item" href={`${siteDomain}/dashboard/myorder/`}>My Orders</a>
                                                         <a className="dropdown-item" href={`${siteDomain}/dashboard/mywallet/`}>My Wallet</a>
                                                         <a className="dropdown-item" href={`${siteDomain}/dashboard/roundone/`}>My Referrals</a>
@@ -196,7 +195,7 @@ const Header = (props) => {
                                     navTags?.map((tag, index) => {
                                         return (
                                             <li key={index} className="nav-item">
-                                                <a href={`${siteDomain}${tag.skill_page_url}`} className="nav-link">{tag?.display_name}<small className="config-tag">{tag?.tag}</small></a>
+                                                <a href={tag.skill_page_url} className="nav-link">{tag?.display_name}<small className="config-tag">{tag?.tag}</small></a>
                                             </li>
                                         )
                                     })

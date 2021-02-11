@@ -1,8 +1,9 @@
 import React from 'react';
+import { siteDomain } from 'utils/domains';
 import './breadcrumb.scss';
    
 const BreadCrumbs = (props) => {
-    const {filterState, setfilterState} = props;
+    const {filterState, setfilterState, filterStateShow} = props;
 
     const FilterChecks = async(e) => {
         const name = e.target.name;
@@ -14,12 +15,12 @@ const BreadCrumbs = (props) => {
         <div className="d-flex align-items-center justify-content-between">
             <nav aria-label="breadcrumb">
                 <ol className="db-breadcrumb">
-                    <li className="db-breadcrumb-item"><a href="#" role="button">Home</a></li>
+                    <li className="db-breadcrumb-item"><a href={siteDomain} role="button">Home</a></li>
                     <li className="db-breadcrumb-item active" aria-current="page">Dashboard</li>
                 </ol>
             </nav>
 
-            <div className="db-filter-by">
+            {filterStateShow && <div className="db-filter-by">
                 Filter by
                 <div className="form-group mb-0 mx-3">
                     <select className="form-control" onChange={(e) => FilterChecks(e)}
@@ -37,11 +38,12 @@ const BreadCrumbs = (props) => {
                     name="select_type"
                     value={filterState.select_type}>
                         <option value="all">All Items</option>
-                        <option value="2">In Process</option>
-                        <option value="3">Closed</option>
+                        <option value="in_process">In Process</option>
+                        <option value="closed">Closed</option>
                     </select>
                 </div>
             </div>
+            }
         </div>
     )
 }

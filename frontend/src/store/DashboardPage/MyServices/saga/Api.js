@@ -34,11 +34,23 @@ const pauseResumeService = (data) => {
     return BaseApiService.patch(url, data)
 }
 
+const fetchOiDetailsApi = (data) => {
+    const url = `${siteDomain}/dashboard/api/v1/view-order-details/?oi_id=${data}`
+    return BaseApiService.get(url)
+}
+
+const updateResumeShineApi = (data) => {
+    const url = `${siteDomain}/api/v1/order/${data.order_id}/update/`
+    return BaseApiService.patch(url, data)
+}
+
 export default {
     myServicesData,
     uploadResumeDashboardForm,
     getPendingOrderItems,
     candidateAccept,
     candidateReject,
-    pauseResumeService
+    pauseResumeService,
+    fetchOiDetailsApi,
+    updateResumeShineApi
 }

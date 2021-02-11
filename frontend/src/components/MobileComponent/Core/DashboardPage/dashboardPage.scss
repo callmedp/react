@@ -9,14 +9,17 @@
     left: 0;
     padding: 2rem 2rem 2rem 2rem;
     z-index: 10;
+    max-height: calc(100vh - 120px);
+    overflow: auto;
 
     h2 {
         font-size: 2rem;
         color: $gray-100;
         text-align: center;
+        padding-top: .5rem;
     }
 
-    .m-enquire-now {
+    .mdb-enquire-now {
         background-color: transparent;
         box-shadow: none;
 
@@ -197,7 +200,7 @@
 .m-timeline-list {
     margin-bottom: 10px;
     margin-top: -20px;
-    height: 215px;
+    max-height: 215px;
     overflow-y: auto;
     overflow-x: hidden;
     margin-left: -20px;
@@ -211,9 +214,9 @@
         padding-left: 15px;
         margin-left: 5px;
         
-        &:first-child {
-            padding-top: 30px;
-        }
+        // &:first-child {
+        //     padding-top: 30px;
+        // }
 
         &:not(:last-child) {
             border-left: 1px dashed rgba(151, 151, 151, .5);
@@ -305,4 +308,25 @@
         margin-left: 3rem;
         cursor: pointer;
     }
-} 
+}
+
+.swal2-styled.swal2-confirm {
+    background: $blue !important;
+    border-radius: 2rem !important;
+    box-shadow: none;
+    padding: 1.3rem 4rem;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+.mdb-share-toggle {
+    display: none;
+}
+.mdb-share-toggle ~ label {
+    @include size(30px, 30px, block);
+}
+.mdb-share-toggle:checked ~ label ~ .content { 
+    opacity: 0;
+    height: 0;
+    display: none;
+}

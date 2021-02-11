@@ -1,17 +1,21 @@
 import React, { useState } from 'react';
+import Swal from 'sweetalert2';
 import { Modal } from 'react-bootstrap';
 import {Toast} from '../../../Common/Toast/toast';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useForm } from "react-hook-form";
 import { CandidateAcceptRejectResume } from 'store/DashboardPage/MyServices/actions/index';
 import { startAcceptRejectLoader, stopAcceptRejectLoader } from 'store/Loader/actions/index';
 import fileUpload from 'utils/fileUpload';
+import { fetchMyServices } from 'store/DashboardPage/MyServices/actions';
+import Loader from '../../../Common/Loader/loader';
 
 const RejectModal = (props) => {
-    const { rejectModal, setRejectModal, oi_id } = props
-    const [filename, setFileName] = useState("Upload Your Resume");
+    const { rejectModal, setRejectModal, oi_id, currentPage, filterState } = props
+    const [filename, setFileName] = useState("Upload here");
     const [file, setFile] = useState(undefined);
     const dispatch = useDispatch();
+    const { acceptRejectLoader } = useSelector(store => store.loader);
     const { register, handleSubmit, errors, reset, getValues } = useForm();
 
     const getFile = (event) => {
@@ -35,12 +39,17 @@ const RejectModal = (props) => {
         try {
             dispatch(startAcceptRejectLoader());
             await new Promise((resolve, reject) => { dispatch(CandidateAcceptRejectResume({ payload: rejectValues, resolve, reject }));});
+            await new Promise((resolve, reject) => dispatch(fetchMyServices({ page: currentPage, isDesk: true, ...filterState, resolve, reject })))
             dispatch(stopAcceptRejectLoader());
 
             event.target.reset();
-            setFileName("Upload Your Resume");
+            setFileName("Upload here");
             setFile(undefined);
             setRejectModal(false);
+            Swal.fire({
+                icon: 'success',
+                title: 'Reject Request Sent!'
+            });
         }
         catch {
             dispatch(stopAcceptRejectLoader());
@@ -53,47 +62,42 @@ const RejectModal = (props) => {
     };
 
     return (
-        <Modal show={rejectModal} onHide={setRejectModal}>
-            <Modal.Header closeButton></Modal.Header>
-            <Modal.Body>
-                <div className="text-center">
-                    <h2>Reject Confirmation </h2>
-                    <br/>
-                    <p>If you have made changes to document, please upload here</p>
+        <>
+            { acceptRejectLoader && <Loader /> }
+            <Modal show={rejectModal} onHide={setRejectModal} className="db-page modal-dialog-centered">
+                <Modal.Header closeButton></Modal.Header>
+                <Modal.Body>
+                    <div className="text-center">
+                        <p className="fs-16 font-weight-bold px-5">Get a better resume by sharing us the feedback</p>
 
-                    <span className="error_cls">
-                        { errors.message && "* Either Upload Resume or Leave your comments" }
-                    </span>
-                    <form onSubmit={handleSubmit(onSubmit)}>
-                        <div className="d-flex align-items-center justify-content-center mt-20">
-                            <div className="m-upload-btn-wrapper">
-                                <button className="btn btn-blue-outline">{filename}</button>
-                                <input type="file" name="file" onChange={(e) => {e.preventDefault(); getFile(e);}} ref={register()}/>
-                            </div>
-                        </div>
-
-                        <hr className="my-20" />
-                        <span className="mx-4"><strong>Or</strong></span>
-
-                        <div className="m-db-upload-resume">
-                            <br /> 
-                            
-                            <div className="m-form-group">
-                                <textarea className="form-control" placeholder="Leave us your message" rows="3" name="message" ref={register({
-                                    validate: () =>
-                                        filename !== "Upload Your Resume"
+                        <div className="form-group">
+                            <textarea className="form-control" placeholder="Leave us your message" rows="3" name="message" ref={register({
+                                validate: () =>
+                                    filename !== "Upload here"
                                         ? null
                                         : !getValues("message")
                                             ? errors.message === true
                                             : null,
-                                    })} />
-                            </div>
+                            })} />
                         </div>
-                        <button className="btn btn-primary px-5 mt-30" >Submit</button>
-                    </form>
-                </div>
-            </Modal.Body>
-        </Modal>
+
+                        <span className="error_cls">
+                            { errors.message && "* Either Upload Resume or Leave your comments" }
+                        </span>
+                        <form onSubmit={handleSubmit(onSubmit)}>
+                            <div className="d-flex align-items-center justify-content-center mt-20">
+                                <p className="fs-12">If you have made changes in resume</p>
+                                <div className="upload-btn-wrapper">
+                                    <span className="db-reject-upload-here">{filename}</span>
+                                    <input type="file" name="file" onChange={(e) => {e.preventDefault(); getFile(e);}} ref={register()}/>
+                                </div>
+                            </div>
+                            <button className="btn btn-primary px-5 mt-30" >Submit</button>
+                        </form>
+                    </div>
+                </Modal.Body>
+            </Modal>
+        </>
     )
 }
 
