@@ -366,7 +366,7 @@ class DashboardPendingResumeItemsApi(APIView):
 
     def get(self,request):
         candidate_id = self.request.session.get('candidate_id', None)
-        email = request.GET.get('email', None)
+        email = self.request.session.get('email', None)
         pending_resume_items = []
         # candidate_id='5c6661f7a9da9b3891e72729'
 

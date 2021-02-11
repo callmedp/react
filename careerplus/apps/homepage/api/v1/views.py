@@ -423,10 +423,15 @@ class DashboardResumeUploadApi(APIView):
                         'is_shine': True,
                         'extension': request.session.get('resume_extn', '')
                     }
-
-                    DashboardInfo().upload_candidate_resume(candidate_id=candidate_id, data=data)
-
-                    return Response({'success': 'resumeUpload'}, status=status.HTTP_200_OK)
+                    try:
+                        DashboardInfo().upload_candidate_resume(candidate_id=candidate_id, data=data)
+                        return Response({'success': 'resumeUpload'}, status=status.HTTP_200_OK)
+                    except Exception as e:
+                        logger.error(
+                            'Dashboard Upload resume error | candidate_id - {} | error - {}'.format(candidate_id,
+                                                                                                    str(e)))
+                        return Response({'error': 'File could not be uploaded for some reason. Try Again'},
+                                        status=status.HTTP_400_BAD_REQUEST)
 
             return Response({'error': 'Resume not found on shine'}, status=status.HTTP_400_BAD_REQUEST)
         else:
@@ -442,6 +447,7 @@ class DashboardResumeUploadApi(APIView):
                 try:
                     DashboardInfo().upload_candidate_resume(candidate_id=candidate_id, data=data)
                 except Exception as e:
+                    logger.error('Dashboard Upload resume error | candidate_id - {} | error - {}'.format(candidate_id, str(e)))
                     return Response({'error': 'File could not be uploaded for some reason. Try Again'}, status=status.HTTP_400_BAD_REQUEST)
                 return Response({'success': 'resumeuploaded'}, status=status.HTTP_200_OK)
             return Response({'error': 'Please select the file in the format PDF,DOC,DOCX only'}, status=status.HTTP_400_BAD_REQUEST)

@@ -91,10 +91,10 @@ function* acceptrejectcandidate(action) {
         }
         else {
             yield put({ type: Actions.CANDIDATE_OI_ACCEPT_REJECT_SUCCESS, result });
-            Swal.fire({
-                icon: 'success',
-                title: 'Reject Request Sent!'
-            })
+            // Swal.fire({
+            //     icon: 'success',
+            //     title: 'Reject Request Sent!'
+            // })
             return resolve()
         }
     }

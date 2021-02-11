@@ -48,7 +48,7 @@ def get_courses_detail(instance):
     oi = instance
     date_created = ''
     current_status={}
-
+    
     if oi.product.type_flow == 1 or  oi.product.type_flow == 12 or oi.product.type_flow == 13:
         date_created =oi.created.strftime("%d %b %y")
         if oi.oi_status==2:
@@ -80,7 +80,7 @@ def get_courses_detail(instance):
             current_status.update({'status':oi.get_user_oi_status})
         elif oi.waiting_for_input:
              current_status.update({'status':'Waiting for input'})
-        elif oi.order.auto_upload and not oi.is_assigned and not oi.is_resume_candidate_upload:
+        elif oi.order.auto_upload and not oi.is_assigned() and not oi.is_resume_candidate_upload:
             current_status.update({'status':'Service is under progress'})
             current_status.update({'upload_resume':True})
         else:
@@ -116,7 +116,7 @@ def get_courses_detail(instance):
 
         elif oi.oi_status == 161 or oi.oi_status == 162 or oi.oi_status == 163:
             current_status.update({'status':oi.get_user_oi_status})
-        elif oi.order.auto_upload and not oi.is_assigned and not oi.is_resume_candidate_upload:
+        elif oi.order.auto_upload and not oi.is_assigned() and not oi.is_resume_candidate_upload:
             current_status.update({'status':'Service is under progress'})
             current_status.update({'upload_resume':True})
         else:
@@ -134,7 +134,7 @@ def get_courses_detail(instance):
                 current_status.update({'UploadResumeToShine':True})
         elif oi.oi_status == 161 or oi.oi_status == 162 or oi.oi_status == 163:
             current_status.update({'status':oi.get_user_oi_status})
-        elif oi.order.auto_upload and not oi.is_assigned and not oi.is_resume_candidate_upload:
+        elif oi.order.auto_upload and not oi.is_assigned() and not oi.is_resume_candidate_upload:
             current_status.update({'status':'Service is under progress'})
             current_status.update({'upload_resume':True})
         else:
@@ -183,7 +183,7 @@ def get_courses_detail(instance):
             current_status.update({'status':oi.get_user_oi_status})
         elif oi.waiting_for_input:
             datalist.append({'date':date_created,'status':'Waiting for input'})
-        elif oi.order.auto_upload and not oi.is_assigned and not oi.is_resume_candidate_upload:
+        elif oi.order.auto_upload and not oi.is_assigned() and not oi.is_resume_candidate_upload:
             current_status.update({'status':'Service is under progress'})
             current_status.update({'upload_resume':True})
         else:
@@ -313,7 +313,7 @@ def get_history(instance):
     elif instance.product.type_flow == 5:
         ops = instance.orderitemoperation_set.filter(oi_status__in=[2, 5, 6, 36, 37, 61, 161, 162, 163, 164])
     elif instance.product.type_flow == 6:
-        ops = instance.oi.orderitemoperation_set.filter(oi_status__in=[6, 81, 82, 161, 162, 163, 164])
+        ops = instance.orderitemoperation_set.filter(oi_status__in=[6, 81, 82, 161, 162, 163, 164])
     elif instance.product.type_flow in [7, 15]:
         ops = instance.orderitemoperation_set.filter(oi_status__in=[2, 4, 5, 6, 61, 161, 162, 163, 164])
     elif instance.product.type_flow == 8:
