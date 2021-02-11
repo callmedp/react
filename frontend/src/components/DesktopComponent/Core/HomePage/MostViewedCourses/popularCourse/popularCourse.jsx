@@ -14,7 +14,7 @@ const popularCourse = (props) => {
         <div className="card">
             <div className="card__heading">
                 <figure>
-                    <img src={course.img} alt={course.img_alt} />
+                    <img src={course.imgUrl} alt={course.imgAlt} />
                 </figure>
                 <h3 className="heading3">
                     <a to={`${siteDomain}${course.url}`}>{course.name}</a>
@@ -26,7 +26,7 @@ const popularCourse = (props) => {
                     { course.stars?.map((star) => starRatings(star)) }
                     <span>{course.rating}/5</span>
                 </span>
-                <span className={course.mode}>Online</span>
+                <span className="mode">{course?.mode}</span>
                 </div>
                 <div className="card__price mt-10">
                     <strong>{course.price}/-</strong> 
