@@ -1,10 +1,17 @@
+// React-Core Import
 import React, { useState } from 'react';
 import Slider from "react-slick";
 import { siteDomain } from 'utils/domains';
+import { useSelector, useDispatch } from 'react-redux';
+
+// API Import 
+import { fetchInDemandProducts } from 'store/HomePage/actions';
 
 const PopularTab = props => {
+    const [pageId, updatePageId] = useState(2)
+    const dispatch = useDispatch()
     const {
-        productList
+        productList, tabType
     } = props
 
     const settings = {
@@ -13,10 +20,18 @@ const PopularTab = props => {
         infinite: true,
         speed: 500,
         slidesToShow: 1,
+        autoplay: false,
         slidesToScroll: 1,
         swipeToSlide: true,
         variableWidth: true,
+        afterChange: function(index) {
+            if (index % 3 === 0) {
+            new Promise((resolve, reject) => dispatch(fetchInDemandProducts({ pageId: pageId, tabType, device: 'mobile', resolve, reject })));
+            updatePageId(pageId + 1);
+            }
+          }
     };
+
 
     const starRatings = (star, index) => {
         return (star === '*' ? <em className="micon-fullstar" key={index}></em> : star === '+'

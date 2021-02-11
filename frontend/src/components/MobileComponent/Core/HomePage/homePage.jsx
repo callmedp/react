@@ -48,7 +48,7 @@ const HomePage = (props) => {
 
     const handleScroll=() => {
         const offset = window.scrollY;
-        if(offset > 164 ) {
+        if(offset > 140 ) {
             showStickSearchBar(true)
         }
         else showStickSearchBar(false)
@@ -75,7 +75,7 @@ const HomePage = (props) => {
                         <CareerGuidance />
                         {
                             stickSearchBar && 
-                                <div className="stick-search-header" onClick={() => setShowSearch(true)}>
+                                <div className="stick-search-header" onClick={() => setShowSearch(true)} data-aos='fade-down'>
                                     <SearchPage crossSearch={false} />
                                 </div>
                         }
