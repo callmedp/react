@@ -9,6 +9,7 @@ import DashboardPageContainer from 'components/DesktopComponent/Core/DashboardPa
 import { getDashboardPageActions } from "apiHandler/dashboardPageApi";
 import HomePageContainer from 'components/DesktopComponent/Core/HomePage/homePage';
 import RouteWithSubRoutes from './route';
+import { getHomepageActions } from "apiHandler/homepageApi";
 
 const DesktopAppRouter = () => (
     <div>
@@ -22,6 +23,7 @@ export const routes = [
     {
         path: '/',
         component: HomePageContainer,
+        actionGroup: getHomepageActions,
         exact: true
     },
     {

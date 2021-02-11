@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './Banner.scss';
 import Slider from "react-slick";
-import 'slick-carousel/slick/slick.css';
+// import 'slick-carousel/slick/slick.css';
 import SearchPage from '../../../Common/SearchPage/SearchPage'
 import { categoryList } from 'utils/constants';
 

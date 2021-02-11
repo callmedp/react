@@ -7,12 +7,12 @@ import { MyGA } from 'utils/ga.tracking.js';
 
 const SearchBar = (props) => {
     const [searchTerm, setSearchTerm] = useState('');
-    const {place} = props;
+    const { place, isHomepage } = props;
     const [results, setResults] = useState([]);
     const { register, handleSubmit } = useForm()
     const [showResults, setShowResults] = useState(false);
     const debouncedSearchTerm = useDebounce(searchTerm, 500);
-    let redirectPath = window.location.pathname;
+    // let redirectPath = props.location.pathname;
 
     const handleScroll = () =>{
         const offset = window.scrollY;
@@ -56,7 +56,7 @@ const SearchBar = (props) => {
 
     return (
         <>
-            <div className={`pos-rel ${(redirectPath !== '/' || '') ? ' ml-auto' : ''}`}>
+            <div className={`pos-rel ${ !isHomepage ? ' ml-auto' : ''}`}>
                 <form className={`form-inline my-2 my-lg-0 ${place === 'banner' ? 'top-search1': 'top-search'}`} onSubmit={handleSubmit(submitData)}>
                     <input className="form-control top-input" type="search" onChange={e => setSearchTerm(e.target.value)} onFocus={()=>setShowResults(true)} 
                         placeholder={props.placeHolder ? props.placeHolder : 'Search course, assessment...'} name="query" aria-label="Search" ref={register({required: true})} autoComplete="off" />

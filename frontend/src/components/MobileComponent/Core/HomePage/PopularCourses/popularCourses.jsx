@@ -5,7 +5,7 @@ import Slider from "react-slick";
 import { useSelector, useDispatch } from 'react-redux';
 
 // Inter-App Import
-import 'slick-carousel/slick/slick.css';
+// import 'slick-carousel/slick/slick.css';
 import './popularCourses.scss';
 import { populartabType } from 'utils/constants';
 import { siteDomain } from 'utils/domains';

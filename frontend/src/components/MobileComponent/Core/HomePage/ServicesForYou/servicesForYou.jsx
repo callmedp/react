@@ -8,7 +8,7 @@ import Slider from "react-slick";
 import Swal from 'sweetalert2';
 
 // Inter-App Import
-import 'slick-carousel/slick/slick.css';
+// import 'slick-carousel/slick/slick.css';
 import './servicesForYou.scss'
 import { siteDomain } from 'utils/domains';
 

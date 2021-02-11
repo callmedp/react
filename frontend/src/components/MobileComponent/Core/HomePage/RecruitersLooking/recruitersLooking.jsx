@@ -9,7 +9,7 @@ import Slider from "react-slick";
 
 // Inter-App Import
 import './recruitersLooking.scss';
-import 'slick-carousel/slick/slick.css';
+// import 'slick-carousel/slick/slick.css';
 import { siteDomain } from 'utils/domains';
 
 // API Import

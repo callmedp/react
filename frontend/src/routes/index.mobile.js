@@ -11,6 +11,7 @@ import DashboardPageContainer from 'components/MobileComponent/Core/DashboardPag
 import RouteWithSubRoutes from 'routes/route';
 import { getDashboardPageActionsMobile } from "apiHandler/dashboardPageApi";
 import HomePageContainer from 'components/MobileComponent/Core/HomePage/homePage';
+import { getHomepageActionsMobile } from "apiHandler/homepageApi";
 
 
 
@@ -28,6 +29,7 @@ export const routes = [
     {
         path: '/',
         component: HomePageContainer,
+        actionGroup: getHomepageActionsMobile,
         exact: true
     },
     {

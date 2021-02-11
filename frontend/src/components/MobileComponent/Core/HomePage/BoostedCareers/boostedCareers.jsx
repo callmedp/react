@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { useSelector } from 'react-redux';
 import Slider from "react-slick";
-import 'slick-carousel/slick/slick.css';
+// import 'slick-carousel/slick/slick.css';
 import '../../SkillPage/LearnersStories/learnersStories.scss';
 import './boostedCareers.scss'
 import LearnersStoriesCards from '../../../Common/LearnersStoriesCards/learnersStoriesCards'

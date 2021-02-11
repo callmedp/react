@@ -17,7 +17,7 @@ const Header = (props) => {
     const { count, navTags } = useSelector(store => store.header)
     const [candidateInfo, setCandidateInfo] = useState(false)
     const [isLoggedIn, setIsLoggedIn] = useState(false)
-    let redirectPath = window.location.pathname;
+    const { isHomepage } = props;
 
     const handleRedirect = (event, type) => {
         event.preventDefault();
@@ -27,6 +27,7 @@ const Header = (props) => {
         if (type === 'register') {
             MyGA.SendEvent('header_icons', 'ln_header_icons', 'ln_register', 'register', '', false, true);
         }
+        let redirectPath = props.location?.pathname;
         redirectPath ?
             window.location.href = `${siteDomain}/${type}/?next=${redirectPath}` :
             window.location.href = `${siteDomain}/${type}/`
@@ -92,8 +93,8 @@ const Header = (props) => {
                         </Link>
 
                             <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                                {(redirectPath !== '/' || '') && <SearchBar place="topHeader" placeHolder = {props.placeHolder}/>}
-                                <ul className={`navbar-nav navbar-right ${(redirectPath === '/' || '') ? ' ml-auto' : ''}`}>
+                                { !isHomepage ? <SearchBar place="topHeader" placeHolder = {props.placeHolder} location={props.location}/> : ''}
+                                <ul className={`navbar-nav navbar-right ${ !!isHomepage ? ' ml-auto' : ''}`}>
                                     <li className="nav-item dropdown dropdown-jobs">
                                         <a className="nav-link" to={"#"} id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onClick={() => MyGA.SendEvent('homepage_navigation', 'ln_homepage_navigation', 'ln_job_assisstance', 'ln_job_assisstance', '', false, true)}>Job assistance</a>
                                         <div className="dropdown-menu" aria-labelledby="navbarDropdown">

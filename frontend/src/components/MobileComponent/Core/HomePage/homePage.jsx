@@ -28,41 +28,51 @@ import './homePage.scss';
 const HomePage = (props) => {
 
     const dispatch = useDispatch()
-    const { homeLoader } = useSelector( store => store.loader )
+    const { homeLoader } = useSelector(store => store.loader)
     const [showSearch, setShowSearch] = useState(false)
     const [stickSearchBar, showStickSearchBar] = useState(false)
 
     const handleEffects = async () => {
         try {
-                dispatch(startHomePageLoader());
-                new Promise((resolve, reject) => dispatch(fetchTestimonials({resolve, reject})))
-                new Promise((resolve, reject) => dispatch(fetchMostViewedCourses({categoryId: -1, resolve, reject})))
-                new Promise((resolve, reject) => dispatch(fetchInDemandProducts({ pageId: 1, tabType: 'master', device:'mobile', resolve, reject})));
-                await new Promise((resolve, reject) => dispatch(fetchJobAssistanceAndBlogs({resolve, reject})))
-                dispatch(stopHomePageLoader());
-            }
-        catch{
+            dispatch(startHomePageLoader());
+            new Promise((resolve, reject) => dispatch(fetchTestimonials({ device: 'mobile', resolve, reject })))
+            new Promise((resolve, reject) => dispatch(fetchMostViewedCourses({ categoryId: -1, resolve, reject })))
+            new Promise((resolve, reject) => dispatch(fetchInDemandProducts({ pageId: 1, tabType: 'master', device: 'mobile', resolve, reject })));
+            await new Promise((resolve, reject) => dispatch(fetchJobAssistanceAndBlogs({ resolve, reject })))
+            dispatch(stopHomePageLoader());
+        }
+        catch {
             dispatch(stopHomePageLoader());
         }
     };
 
-    const handleScroll=() => {
+    const handleScroll = () => {
         const offset = window.scrollY;
-        if(offset > 140 ) {
+        if (offset > 140) {
             showStickSearchBar(true)
         }
         else showStickSearchBar(false)
     }
 
-    useEffect( () => {
-        handleEffects();
+    useEffect(() => {
+        //You may notice that apis corresponding to these actions are not getting called on initial render.
+        //This is because initial render is done on node server, which is calling these apis, map the data and send it to the browser.
+        //So there is no need to fetch them again on the browser.
+        if (!(window && window.config && window.config.isServerRendered)) {
+            handleEffects();
+        }
+        else {
+            // isServerRendered is needed to be deleted because when routing is done through react and not on the node,
+            // above actions need to be dispatched.
+            delete window.config?.isServerRendered
+        }
         window.addEventListener('scroll', handleScroll);
         Aos.init({ duration: 2000, once: true, offset: 10, anchorPlacement: 'bottom-bottom' });
     }, [])
 
     return (
         <>
-            { homeLoader && <Loader /> }
+            { homeLoader && <Loader />}
             {
                 showSearch ? <SearchPage setShowSearchPage={setShowSearch} /> :
                     <div className="mb-100">
@@ -74,10 +84,10 @@ const HomePage = (props) => {
                         </header>
                         {/* <CareerGuidance /> */}
                         {
-                            stickSearchBar && 
-                                <div className="stick-search-header" onClick={() => setShowSearch(true)} data-aos='fade-down'>
-                                    <SearchPage crossSearch={false} />
-                                </div>
+                            stickSearchBar &&
+                            <div className="stick-search-header" onClick={() => setShowSearch(true)} data-aos='fade-down'>
+                                <SearchPage crossSearch={false} />
+                            </div>
                         }
                         <main className="mb-0">
                             <PopularCourses />
@@ -91,7 +101,7 @@ const HomePage = (props) => {
                             <OurLearners />
                             <LatestBlog />
                         </main>
-                        <Footer pageType='homePage'/>
+                        <Footer pageType='homePage' />
                         <CTAhome />
                     </div>
             }

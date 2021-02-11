@@ -28,16 +28,26 @@ import Loader from '../../Common/Loader/loader';
 const HomePage = (props) => {
 
     const dispatch = useDispatch();
-    const { homeLoader } = useSelector( store => store.loader )
+    const { homeLoader } = useSelector(store => store.loader)
 
     const handleEffect = async () => {
-        new Promise((resolve, reject) => dispatch(fetchMostViewedCourses({ categoryId: -1, resolve, reject})));
-        new Promise((resolve, reject) => dispatch(fetchInDemandProducts({ pageId: 1, tabType: 'master', device:'desktop', resolve, reject})));
-        new Promise((resolve, reject) => dispatch(fetchJobAssistanceAndBlogs({ resolve, reject})));
-        new Promise((resolve, reject) => dispatch(fetchTestimonials({ device : 'desktop', resolve, reject})));
+        //You may notice that apis corresponding to these actions are not getting called on initial render.
+        //This is because initial render is done on node server, which is calling these apis, map the data and send it to the browser.
+        //So there is no need to fetch them again on the browser.
+        if (!(window && window.config && window.config.isServerRendered)) {
+            new Promise((resolve, reject) => dispatch(fetchMostViewedCourses({ categoryId: -1, resolve, reject })));
+            new Promise((resolve, reject) => dispatch(fetchInDemandProducts({ pageId: 1, tabType: 'master', device: 'desktop', resolve, reject })));
+            new Promise((resolve, reject) => dispatch(fetchJobAssistanceAndBlogs({ resolve, reject })));
+            new Promise((resolve, reject) => dispatch(fetchTestimonials({ device: 'desktop', resolve, reject })));
+        }
+        else {
+            // isServerRendered is needed to be deleted because when routing is done through react and not on the node,
+            // above actions need to be dispatched.
+            delete window.config?.isServerRendered
+        }
     }
 
-    useEffect( () => {
+    useEffect(() => {
 
         handleEffect()
 
@@ -46,9 +56,9 @@ const HomePage = (props) => {
 
     return (
         <div>
-            { homeLoader ? <Loader/> : ''}
+            { homeLoader ? <Loader /> : ''}
             {/* <OfferEnds /> */}
-            <Header />
+            <Header isHomepage={true} />
             <main>
                 <HomeBanner />
                 <PopularCourses />
@@ -57,11 +67,11 @@ const HomePage = (props) => {
                 <MostViewedCourses />
                 <LearningAdvantage />
                 <BoostedCareers />
-                <PracticeTestBanner/>
+                <PracticeTestBanner />
                 <OurLearners />
                 <LatestBlog />
             </main>
-            <Footer homepage={true}/>
+            <Footer homepage={true} />
         </div>
     )
 }
