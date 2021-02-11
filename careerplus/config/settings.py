@@ -452,6 +452,7 @@ TINYMCE_DEFAULT_CONFIG = {
 RESUME_SHINE_URL = "https://resume.shine.com"
 PAGINATOR_PAGE_SIZE = 10
 
+# trying to import local settings
 try:
     from .settings_local import *
 except:
