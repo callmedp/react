@@ -1,9 +1,9 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import './banner.scss';
 import Carousel from 'react-bootstrap/Carousel';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import SearchBar from '../../../Common/Header/SeachBar/SearchBar.jsx';
+import { imageUrl } from 'utils/domains';
 
 const HomeBanner = (props) => {
     return (
@@ -48,25 +48,25 @@ const HomeBanner = (props) => {
                     <div className="banner-home-right">
                         <div className="banner-right-img">
                             <span className="home-banner-tween1" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="100" data-aos-duration="1000">
-                                <img src="./media/images/desktop/home-animation-header1.svg" />
+                                <img src={`${imageUrl}desktop/home-animation-header1.svg`} />
                             </span>
                             <span className="home-banner-tween2" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="300" data-aos-duration="1000">
-                                <img src="./media/images/desktop/home-animation-header2.png" />
+                                <img src={`${imageUrl}desktop/home-animation-header2.png`} />
                             </span>
                             <span className="home-banner-tween3" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="500" data-aos-duration="1000">
-                                <img id="start" src="./media/images/desktop/home-animation-header3.svg" />
+                                <img id="start" src={`${imageUrl}desktop/home-animation-header3.svg`} />
                             </span>
                             <span className="home-banner-tween4" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="700" data-aos-duration="1000">
-                                <img src="./media/images/desktop/home-animation-header4.svg" />
+                                <img src={`${imageUrl}desktop/home-animation-header4.svg`} />
                             </span>
                             {/* <span className="home-banner-tween5" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="700" data-aos-duration="1000" id="bounce">
-                                <img src="./media/images/desktop/home-animation-header5.svg" />
+                                <img src={`${imageUrl}desktop/home-animation-header5.svg`} />
                             </span> */}
                             <span className="home-banner-tween6" data-aos="fade-zoom-in" data-aos-easing="ease-in-back-out" data-aos-offset="0" data-aos-delay="1500" data-aos-duration="1500" id="start">
-                                <img src="./media/images/desktop/home-animation-header2.png" />
+                                <img src={`${imageUrl}desktop/home-animation-header2.png`} />
                             </span>
                             <span className="home-banner-tween7" data-aos="fade-zoom-in" data-aos-easing="ease-in-back-out" data-aos-offset="0" data-aos-delay="2500" data-aos-duration="2500" data-aos-anchor="#start">
-                                <img src="./media/images/desktop/home-animation-header6.png" />
+                                <img src={`${imageUrl}desktop/home-animation-header6.png`} />
                             </span>
 
                         </div>
