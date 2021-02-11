@@ -14,7 +14,7 @@ import LatestBlog from './LatestBlog/latestBlog';
 import Footer from '../../Common/Footer/footer';
 import '../CataloguePage/cataloguePage.scss';
 import Aos from "aos";
-import "aos/dist/aos.css";
+// import "aos/dist/aos.css";
 import { useDispatch, useSelector } from 'react-redux';
 import {
     fetchMostViewedCourses,
