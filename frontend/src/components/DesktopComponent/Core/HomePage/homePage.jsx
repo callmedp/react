@@ -47,7 +47,7 @@ const HomePage = (props) => {
     return (
         <div>
             { homeLoader ? <Loader/> : ''}
-            <OfferEnds />
+            {/* <OfferEnds /> */}
             <Header />
             <main>
                 <HomeBanner />

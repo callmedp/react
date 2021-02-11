@@ -26,8 +26,8 @@ const PopularTab = props => {
         variableWidth: true,
         afterChange: function(index) {
             if (index % 3 === 0) {
-            new Promise((resolve, reject) => dispatch(fetchInDemandProducts({ pageId: pageId, tabType, device: 'mobile', resolve, reject })));
-            updatePageId(pageId + 1);
+                new Promise((resolve, reject) => dispatch(fetchInDemandProducts({ pageId: pageId, tabType, device: 'mobile', resolve, reject })));
+                updatePageId(pageId + 1);
             }
           }
     };

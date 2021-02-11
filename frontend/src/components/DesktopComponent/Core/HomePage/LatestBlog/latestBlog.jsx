@@ -1,8 +1,9 @@
 import React from 'react';
 import './latestBlog.scss';
-import { imageUrl } from "utils/domains";
+// import { imageUrl } from "utils/domains";
 import { useSelector } from 'react-redux';
-   
+import { siteDomain } from 'utils/domains';
+
 const LatestBlog = (props) => {
 
     const { latestBlog } = useSelector( store => store.jobAssistance )
@@ -19,12 +20,12 @@ const LatestBlog = (props) => {
                                 return (
                                     <li className="col-sm-4" key={idx}>
                                     <div className="card">
-                                        <a href={'#'}>
+                                        <a href={`${siteDomain}${blog?.url}`}>
                                             <figure>
-                                                <img src={`${imageUrl}desktop/blog-pic1.jpg`} className="img-fluid" alt="Latest from blog" />
-                                                <span>Career prospects</span>
+                                                <img src={blog?.image} className="img-fluid" alt={blog?.display_name} />
+                                                <span>{ blog?.p_category?.length > 13 ? blog?.p_category?.slice(0, 13) + '...' : blog?.p_category }</span>
                                             </figure>
-                                            <strong>Planning required before re- locating to a new city…</strong>
+                                            <strong>{ blog?.display_name?.length > 40 ? blog?.display_name?.slice(0, 40) + '...' : blog?.display_name }</strong>
                                         </a>
                                     </div>
                                 </li>

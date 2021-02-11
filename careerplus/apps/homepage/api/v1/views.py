@@ -1035,7 +1035,7 @@ class PopularInDemandProductsAPI(APIView):
     def get(self, request):
         quantity = 4
         class_category = settings.COURSE_SLUG
-        page = request.GET.get('page',1)
+        page = request.GET.get('page_id',1)
         tab_type = request.GET.get('tab_type','master')
         paginated_data = []
 

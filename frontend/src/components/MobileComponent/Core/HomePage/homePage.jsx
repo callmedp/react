@@ -72,7 +72,7 @@ const HomePage = (props) => {
                             <Header showSearchButton={false} icon={true} />
                             <HomeBanner setShowSearch={setShowSearch} />
                         </header>
-                        <CareerGuidance />
+                        {/* <CareerGuidance /> */}
                         {
                             stickSearchBar && 
                                 <div className="stick-search-header" onClick={() => setShowSearch(true)} data-aos='fade-down'>
