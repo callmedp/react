@@ -4,7 +4,6 @@
     function GAImpression(event, options=null) {
     if (event) { var event_name = event; } else { var event_name = "{{ page }}" || event; }
     switch(event_name){
-        
         case 'Product':
             HomeImpressionPush();
             break;
@@ -29,14 +28,14 @@
         case 'productClick':
             productClickImpression(list='productClick', options);
             break;
+        case 'checkout-product':
+            checkoutProductStorage();
+            break;
         default:
             break;
-
-
     }
 }
     {% if used_as %}
-
     function HomeImpressionPush() {
         const p_r_products = [];
         const t_products = [];
@@ -77,7 +76,7 @@
                     });
                 {% endfor %}
             {% endfor %}
-        {% endif %}        
+        {% endif %}
         {% for course in tcourses %}
             {% for product in course.tprds %}
                 t_products.push({
@@ -95,7 +94,7 @@
                 });
             {% endfor %}
         {% endfor %}
-        
+
         {% if job_assistance|length %}
            {% for j_course in job_assistance %}
                 j_products.push({
@@ -113,14 +112,13 @@
                 })
             {% endfor %}
         {% endif %}
-
     if(p_r_products.length || t_products.length || j_products.length > 0) {
     GALayer.SendImpression('productImpression', t_products, 'INR');
     GALayer.SendImpression('productImpression', p_r_products, 'INR');
     GALayer.SendImpression('productImpression', j_products, 'INR');
+    sessionStorage.clear();
     }
     }
-
     function SearchPageImpressionPush(list) {
         s_products = []
         {% for product in products %}
@@ -140,20 +138,15 @@
         {% endfor %}
         GALayer.SendImpression('productImpression', s_products, 'INR');
     }
-
-    function checkoutImpression() {}
-
     function ProductDetailImpressionPush(list, options) {
         p_detail = []
-        
         if (options) {
             var actionField = options[0].actionField;
             GALayer.SendImpression('productdetail', options, 'INR', actionField);
         }
-
         {% if product %}
         var referrer = '{{ request.META.HTTP_REFERER }}';
-        var actionField = typeof referrer.split('/')[3] === "undefined" ? 'Home Page' : referrer.split('/')[3] === 'search' ? 'Search Lists' : referrer.split('/')[3] === 'course' ? 'Course Page' : ''; 
+        var actionField = typeof referrer.split('/')[3] === "undefined" ? 'Home Page' : referrer.split('/')[3] === 'search' ? 'Search Lists' : referrer.split('/')[3] === 'course' ? 'Course Page' : '';
             p_detail.push({
                 'name': '{{ prd_H1 }}',
                 'id': '{{ product.id }}',
@@ -169,7 +162,6 @@
         {% endif %}
         GALayer.SendImpression('productdetail', p_detail, 'INR', actionField);
     }
-
     function CartImpressionPush() {
         c_product = []
         {% if cart_items %}
@@ -189,6 +181,30 @@
         {% endif %}
         if (c_product.length > 0) {
         GALayer.SendImpression('addToCart', c_product, 'INR');
+        sessionStorage.setItem("ck_product", JSON.stringify(c_product));
+        }
+    }
+
+    function checkoutProductStorage()
+    {
+        ck_product = []
+        {% if cart_items %}
+            {% for item in cart_items %}
+                ck_product.push({
+                    'name': '{{ item.product.name }}',
+                    'id': '{{ item.product.id }}',
+                    'brand': '{{ item.product.vendor.name }}',
+                    'category': '{{ item.product.get_category_main }}',
+                    'variant': '{{ item.product.get_product_class }}',
+                    'price': '{% if item.product.variations|length %} {{ item.product.get_variations.last.get_price }} {% else %} {{ item.product.get_price|safe }}{% endif %}',
+                    'dimensions15': 'Checkout Page',
+                    'dimensions16': '{{ item.product.avg_rating }}',
+                    'dimensions17': '{{ item.product.buy_count }}'
+                })
+            {% endfor %}
+        {% endif %}
+        if (ck_product.length > 0) {
+
         }
     }
 
@@ -225,12 +241,12 @@
             GALayer.SendImpression(list, options, 'INR', actionField);
         }
     }
-    
+
     {% else %}
 
     function ProductDetailImpressionPush(list, options) {
         p_detail = []
-        
+
         if (options) {
             var actionField = options[0].actionField;
             GALayer.SendImpression('productdetail', options, 'INR', actionField);
