@@ -47,11 +47,9 @@ export const LoaderReducer = (state=initState, action) => {
         case Actions.START_ACCEPT_REJECT_LOADER : return {...state, ...action.payload}
         case Actions.STOP_ACCEPT_REJECT_LOADER : return {...state, ...action.payload}
 
-<<<<<<< HEAD
         // homepage loader
         case Actions.START_HOME_PAGE_LOADER : return { ...state, ...action.payload }
         case Actions.STOP_HOME_PAGE_LOADER : return { ...state, ...action.payload }
-=======
         // upload loader
         case Actions.START_UPLOAD_LOADER : return {...state, ...action.payload}
         case Actions.STOP_UPLOAD_LOADER : return {...state, ...action.payload}
@@ -59,7 +57,6 @@ export const LoaderReducer = (state=initState, action) => {
         // oi details loader
         case Actions.START_OI_DETAILS_LOADER : return {...state, ...action.payload}
         case Actions.STOP_OI_DETAILS_LOADER : return {...state, ...action.payload}
->>>>>>> 207a2a3846a89d8ae158c21f3e487aa8ee114d90
 
         default: return state;
     }

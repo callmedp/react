@@ -269,9 +269,6 @@ export {
     navSkillList,
     contactData,
     TrendingCategoryList,
-<<<<<<< HEAD
     categoryTabs,
     populartabType
-=======
->>>>>>> 207a2a3846a89d8ae158c21f3e487aa8ee114d90
 }
