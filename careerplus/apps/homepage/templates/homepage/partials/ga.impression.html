@@ -231,7 +231,7 @@
             })
           {% endfor %}
         {% endif %}
-        GALayer.SendImpression('checkout-complete', o_product, 'INR', actionField=[{'id': '{{ order_id }}', 'affiliation': 'Oneline Store', 'revenue': '{{ total_price }}', 'coupon': '', 'Tax': (parseFloat({{ total_price }}) - parseFloat({{ tax_exlude }})).toFixed(2) }]);
+        GALayer.SendImpression('checkout-complete', o_product, 'INR', actionField={'id': '{{ order_id }}', 'affiliation': 'Oneline Store', 'revenue': '{{ total_price }}', 'coupon': '', 'Tax': (parseFloat({{ total_price }}) - parseFloat({{ tax_exlude }})).toFixed(2) });
     }
 
     function productClickImpression(list, options) {

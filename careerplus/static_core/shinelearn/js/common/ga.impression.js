@@ -16,7 +16,7 @@ function GALayer() {
                         "event": event,
                         'ecommerce': {
                             'currencyCode': currencyCode,
-                            'details': {
+                            'detail': {
                                 'actionField': { 'list': actionField },
                                 'products': product
                             }
