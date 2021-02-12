@@ -66,7 +66,7 @@ const HomeBanner = (props) => {
                             <span className="home-banner-tween7" data-aos="fade-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="1100" data-aos-duration="1000" data-aos-anchor="#start">
                                 <img src={`${imageUrl}desktop/home-animation-header6.png`} />
                             </span>
-                            <span className="home-banner-tween2" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="1300" data-aos-duration="1000">
+                            <span className="home-banner-tween2" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="900" data-aos-duration="1000">
                                 <img src={`${imageUrl}desktop/home-animation-header2.png`} />
                             </span>
                         </div>

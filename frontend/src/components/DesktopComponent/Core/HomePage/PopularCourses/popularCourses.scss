@@ -57,7 +57,8 @@
                 right: 0;
                 top: 1rem;
                 padding: 0 .5rem;
-                border-top-left-radius: .5rem;
+                border-top-left-radius: 0;
+                border-bottom-left-radius: 0;
                 box-shadow: 0 1px 1px 0 rgba(139,139,139,0.50);
 
                 &::after {
@@ -66,6 +67,32 @@
                     height: 0;
                     border-top: .7rem solid transparent;
                     border-right: .7rem solid $yellow;
+                    border-bottom: .6rem solid transparent;
+                    position: absolute;
+                    left: -.7rem;
+                    top: 0;
+                }
+            }
+
+            .flag-blue1 {
+                font-size: .9rem;
+                font-weight: 600;
+                text-transform: uppercase;
+                background: $course-badge-blue;
+                position: absolute;
+                right: 0;
+                top: 1rem;
+                padding: 0 .5rem;
+                border-top-right-radius: 0;
+                border-bottom-right-radius: 0;
+                box-shadow: 0 1px 1px 0 rgba(139,139,139,0.50);
+
+                &::after {
+                    content: '';
+                    width: 0;
+                    height: 0;
+                    border-top: .7rem solid transparent;
+                    border-right: .7rem solid $course-badge-blue;
                     border-bottom: .6rem solid transparent;
                     position: absolute;
                     left: -.7rem;

@@ -46,7 +46,7 @@ const HomeProduct = (props) => {
                                             <li className="col-sm-3" key={product.id}>
                                                 <div className="card">
                                                     <div className={`card__heading colbg${idx+1}`}>
-                                                        {product.tags === 2 && <span className="flag-blue">NEW</span>}
+                                                        {product.tags === 2 && <span className="flag-blue1">NEW</span>}
                                                         {product.tags === 1 && <span className="flag-yellow">BESTSELLER</span>}
                                                         <figure>
                                                             <img src={product.imgUrl} alt={product.imageAlt} itemProp="image" />
