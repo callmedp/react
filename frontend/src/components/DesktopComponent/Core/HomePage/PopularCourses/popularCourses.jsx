@@ -42,7 +42,7 @@ function PopularCourses() {
                         </Tab>
 
                     </Tabs>
-                    <span className="pink-circle1" data-aos="fade-right"></span>
+                    {/* <span className="pink-circle1" data-aos="fade-right"></span> */}
                 </div>
             </div>
         </section>

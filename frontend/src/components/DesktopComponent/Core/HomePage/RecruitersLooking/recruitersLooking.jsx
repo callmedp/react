@@ -48,8 +48,8 @@ const RecruitersLooking = (props) => {
                                 })
                             }
                         </Carousel>
-                        <span className="pink-circle2" data-aos="fade-right"></span>
-                        <span className="pink-circle3" data-aos="fade-left"></span>
+                        {/* <span className="pink-circle2" data-aos="fade-right"></span>
+                        <span className="pink-circle3" data-aos="fade-left"></span> */}
                     </div>
                 </div>
             </div>

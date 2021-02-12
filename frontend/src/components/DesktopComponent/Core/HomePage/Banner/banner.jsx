@@ -50,9 +50,7 @@ const HomeBanner = (props) => {
                             <span className="home-banner-tween1" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="100" data-aos-duration="1000">
                                 <img src={`${imageUrl}desktop/home-animation-header1.svg`} />
                             </span>
-                            <span className="home-banner-tween2" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="300" data-aos-duration="1000">
-                                <img src={`${imageUrl}desktop/home-animation-header2.png`} />
-                            </span>
+                            
                             <span className="home-banner-tween3" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="500" data-aos-duration="1000">
                                 <img id="start" src={`${imageUrl}desktop/home-animation-header3.svg`} />
                             </span>
@@ -62,13 +60,15 @@ const HomeBanner = (props) => {
                             {/* <span className="home-banner-tween5" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="700" data-aos-duration="1000" id="bounce">
                                 <img src={`${imageUrl}desktop/home-animation-header5.svg`} />
                             </span> */}
-                            <span className="home-banner-tween6" data-aos="fade-zoom-in" data-aos-easing="ease-in-back-out" data-aos-offset="0" data-aos-delay="1500" data-aos-duration="1500" id="start">
+                            <span className="home-banner-tween6" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="900" data-aos-duration="1000" id="start">
                                 <img src={`${imageUrl}desktop/home-animation-header2.png`} />
                             </span>
-                            <span className="home-banner-tween7" data-aos="fade-zoom-in" data-aos-easing="ease-in-back-out" data-aos-offset="0" data-aos-delay="2500" data-aos-duration="2500" data-aos-anchor="#start">
+                            <span className="home-banner-tween7" data-aos="fade-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="1100" data-aos-duration="1000" data-aos-anchor="#start">
                                 <img src={`${imageUrl}desktop/home-animation-header6.png`} />
                             </span>
-
+                            <span className="home-banner-tween2" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="1300" data-aos-duration="1000">
+                                <img src={`${imageUrl}desktop/home-animation-header2.png`} />
+                            </span>
                         </div>
                     </div>
 
