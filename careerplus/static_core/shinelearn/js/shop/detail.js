@@ -534,9 +534,9 @@ function ajax_call(authen, prod_id) {
               'price': data.results[i].pPin,
               'list': authen ? 'Recommended Products' : 'Related Products',
               'position': i,
-              'dimensions15': 'Product Page',
-              'dimensions16': data.results[i].pARx,
-              'dimensions17': data.results[i].pBC
+              'dimension15': 'Product Page',
+              'dimension16': data.results[i].pARx,
+              'dimension17': data.results[i].pBC
             });
 
             var first = '<li class="col-sm-6 col-md-4">' +

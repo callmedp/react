@@ -116,7 +116,7 @@ rel="stylesheet">
                         <ul class="listing col-sm-4">
                             <li>
                                 <a title="{{ product.pHd|default:product.pNm}}" class="box-panel"
-                                href="{{ product.pURL }}" onclick="homepageTracking('exit_home_page');homepageTracking('homepage_recommended_courses');MyGA.SendEvent('homepage_navigation','ln_recommended_course_select', 'ln_recommended_course_select', 'ln_{{product.pNm}}','', false, true); GAImpression('productClick', options=[{'product': [{'name': '{{ product.pHd }}', 'id': '{{ product.id }}', 'brand': '{{ product.pPvn }}', 'category': '{{ product.pCat }}', 'variant': '{{ product.pPc }}', 'price': '{{ product.pPin }}','position': '{{ forloop.counter }}', 'dimensions15': 'Home Page', 'dimensions16': '{{product.pARx|floatformat}}', 'dimensions17': '{{ product.pBC }}' }], 'actionField': [{ 'list': 'Recommended Course' }] }]);">
+                                href="{{ product.pURL }}" onclick="homepageTracking('exit_home_page');homepageTracking('homepage_recommended_courses');MyGA.SendEvent('homepage_navigation','ln_recommended_course_select', 'ln_recommended_course_select', 'ln_{{product.pNm}}','', false, true); GAImpression('productClick', options=[{'product': [{'name': '{{ product.pHd }}', 'id': '{{ product.id }}', 'brand': '{{ product.pPvn }}', 'category': '{{ product.pCat }}', 'variant': '{{ product.pPc }}', 'price': '{{ product.pPin }}','position': '{{ forloop.counter }}', 'dimension15': 'Home Page', 'dimension16': '{{product.pARx|floatformat}}', 'dimension17': '{{ product.pBC }}' }], 'actionField': [{ 'list': 'Recommended Course' }] }]);">
                                 <div class="media">
                                     <div class="media-body">
                                         <h3 class="listing-heading">
@@ -156,7 +156,7 @@ rel="stylesheet">
                             <ul class="listing col-sm-4">
                                 <li>
                                     <a title="{{ product.pHd|default:product.pNm}}" class="box-panel"
-                                    href="{{ product.pURL }}" onclick="MyGA.SendEvent('homepage_navigation','ln_popular_course_select', 'ln_popular_course_select', 'ln_{{product.pNm}}','', false, true); GAImpression('productClick', options=[{'product': [{'name': '{{ product.pHd }}', 'id': '{{ product.id }}', 'brand': '{{ product.pPvn }}', 'category': '{{ product.pCat }}', 'variant': '{{ product.pPc }}', 'price': '{{ product.pPin }}','position': '{{ forloop.counter }}', 'dimensions15': 'Home Page', 'dimensions16': '{{product.pARx|floatformat}}', 'dimensions17': '{{ product.pBC }}' }], 'actionField': [{ 'list': 'Most Popular Course' }] }]);">
+                                    href="{{ product.pURL }}" onclick="MyGA.SendEvent('homepage_navigation','ln_popular_course_select', 'ln_popular_course_select', 'ln_{{product.pNm}}','', false, true); GAImpression('productClick', options=[{'product': [{'name': '{{ product.pHd }}', 'id': '{{ product.id }}', 'brand': '{{ product.pPvn }}', 'category': '{{ product.pCat }}', 'variant': '{{ product.pPc }}', 'price': '{{ product.pPin }}','position': '{{ forloop.counter }}', 'dimension15': 'Home Page', 'dimension16': '{{product.pARx|floatformat}}', 'dimension17': '{{ product.pBC }}' }], 'actionField': [{ 'list': 'Most Popular Course' }] }]);">
                                     <div class="media">
                                         <div class="media-body">
                                             <h3 class="listing-heading">
@@ -248,7 +248,7 @@ rel="stylesheet">
                                     {% for tprd in course.tprds %}
                                     <li class="col-sm-6 col-md-4">
                                         <a title="{{tprd.pHd|default:tprd.pNm}}" class="box-panel" href="{{tprd.pURL}}" 
-                                        onclick="homepageTracking('exit_home_page');homepageTracking('trending_courses_subheading'); GAImpression('productClick', options=[{'product': [{'name': '{{ tprd.pHd }}', 'id': '{{ tprd.id }}', 'brand': '{{ tprd.pPvn }}', 'category': '{{ tprd.pCat }}', 'variant': '{{ tprd.pPc }}', 'price': '{{ tprd.pPin }}','position': '{{ forloop.counter }}', 'dimensions15': 'Home Page', 'dimensions16': '{{tprd.pARx|floatformat}}', 'dimensions17': '{{ tprd.pBC }}' }], 'actionField': [{ 'list': 'Trending Course' }] }]);">
+                                        onclick="homepageTracking('exit_home_page');homepageTracking('trending_courses_subheading'); GAImpression('productClick', options=[{'product': [{'name': '{{ tprd.pHd }}', 'id': '{{ tprd.id }}', 'brand': '{{ tprd.pPvn }}', 'category': '{{ tprd.pCat }}', 'variant': '{{ tprd.pPc }}', 'price': '{{ tprd.pPin }}','position': '{{ forloop.counter }}', 'dimension15': 'Home Page', 'dimension16': '{{tprd.pARx|floatformat}}', 'dimension17': '{{ tprd.pBC }}' }], 'actionField': [{ 'list': 'Trending Course' }] }]);">
                                         <div class="media">
                                             <div class="media-body">
                                                 <h3 class="listing-heading">{{tprd.pHd|default:tprd.pNm|truncatechars:40}}</h3>
@@ -300,7 +300,7 @@ rel="stylesheet">
                             {% for tprd in job_asst_services %}
                             <li>
                                 <a title="{{tprd.pHd|default:tprd.pNm}}" class="box-panel" href="{{tprd.pURL}}"
-                                onclick="homepageTracking('exit_home_page');homepageTracking('job_assistance_service');MyGA.SendEvent('popular_course_select','ln_assistance_services_select', 'ln_click_assistance_services', '{{tprd.pHd}}','', false, true);GAImpression('productClick', options=[{'product': [{'name': '{{ tprd.pHd }}', 'id': '{{ tprd.id }}', 'brand': '{{ tprd.pPvn }}', 'category': '{{ tprd.pCat }}', 'variant': '{{ tprd.pPc }}', 'price': '{{ tprd.pPin }}','position': '{{ forloop.counter }}', 'dimensions15': 'Home Page', 'dimensions16': '{{tprd.pARx|floatformat}}', 'dimensions17': '{{ tprd.pBC }}' }], 'actionField': [{ 'list': 'Job Assistance' }] }]);">
+                                onclick="homepageTracking('exit_home_page');homepageTracking('job_assistance_service');MyGA.SendEvent('popular_course_select','ln_assistance_services_select', 'ln_click_assistance_services', '{{tprd.pHd}}','', false, true);GAImpression('productClick', options=[{'product': [{'name': '{{ tprd.pHd }}', 'id': '{{ tprd.id }}', 'brand': '{{ tprd.pPvn }}', 'category': '{{ tprd.pCat }}', 'variant': '{{ tprd.pPc }}', 'price': '{{ tprd.pPin }}','position': '{{ forloop.counter }}', 'dimension15': 'Home Page', 'dimension16': '{{tprd.pARx|floatformat}}', 'dimension17': '{{ tprd.pBC }}' }], 'actionField': [{ 'list': 'Job Assistance' }] }]);">
                                 <figure class="media-object">
                                     
                                     {% thumbnail tprd.pImg "120x120" as im %}

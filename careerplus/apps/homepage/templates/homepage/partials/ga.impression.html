@@ -52,9 +52,9 @@
                         'price': '{{ product.pPin }}',
                         'list': 'Recommendations Courses',
                         'position': '{{ forloop.counter }}',
-                        'dimensions15': 'HomePage',
-                        'dimensions16': '{% if product.pRC %} {{product.pARx|floatformat}} {% else %} null {% endif %}',
-                        'dimensions17': '{{ product.pBC|default:"10" }}'
+                        'dimension15': 'HomePage',
+                        'dimension16': '{% if product.pRC %} {{product.pARx|floatformat}} {% else %} null {% endif %}',
+                        'dimension17': '{{ product.pBC|default:"10" }}'
                     });
                 {% endfor %}
             {% endfor %}
@@ -70,9 +70,9 @@
                         'price': '{{ product.pPin }}',
                         'list': 'Most popular Courses',
                         'position': '{{ forloop.counter }}',
-                        'dimensions15': 'HomePage',
-                        'dimensions16': '{% if product.pRC %}{{product.pARx|floatformat}}{% else %}null{% endif %}',
-                        'dimensions17': '{{ product.pBC|default:"10" }}'
+                        'dimension15': 'HomePage',
+                        'dimension16': '{% if product.pRC %}{{product.pARx|floatformat}}{% else %}null{% endif %}',
+                        'dimension17': '{{ product.pBC|default:"10" }}'
                     });
                 {% endfor %}
             {% endfor %}
@@ -88,9 +88,9 @@
                         'price': '{{ product.pPin }}',
                         'list': 'Trending Courses',
                         'position': '{{ forloop.counter }}',
-                        'dimensions15': 'HomePage',
-                        'dimensions16': '{% if product.pRC %} {{product.pARx|floatformat}} {% else %} null {% endif %}',
-                        'dimensions17': '{{ product.pBC|default:"10" }}'
+                        'dimension15': 'HomePage',
+                        'dimension16': '{% if product.pRC %} {{product.pARx|floatformat}} {% else %} null {% endif %}',
+                        'dimension17': '{{ product.pBC|default:"10" }}'
                 });
             {% endfor %}
         {% endfor %}
@@ -106,9 +106,9 @@
                         'price': '{{ j_course.pPin }}',
                         'list': 'Job assistance services',
                         'position': '{{ forloop.counter }}',
-                        'dimensions15': 'HomePage',
-                        'dimensions16': '{% if j_course.pRC %} {{j_course.pARx|floatformat}} {% else %} null {% endif %}',
-                        'dimensions17': '{{ j_course.pBC|default:"10" }}'
+                        'dimension15': 'HomePage',
+                        'dimension16': '{% if j_course.pRC %} {{j_course.pARx|floatformat}} {% else %} null {% endif %}',
+                        'dimension17': '{{ j_course.pBC|default:"10" }}'
                 })
             {% endfor %}
         {% endif %}
@@ -131,9 +131,9 @@
                 'price': '{{ product.pPin }}',
                 'list': list,
                 'position': '{{ forloop.counter }}',
-                'dimensions15': 'Search Page',
-                'dimensions16': '{% if product.pRC %} {{product.pARx|floatformat}} {% else %} null {% endif %}',
-                'dimensions17': '{{ product.pBC|default:"10" }}'
+                'dimension15': 'Search Page',
+                'dimension16': '{% if product.pRC %} {{product.pARx|floatformat}} {% else %} null {% endif %}',
+                'dimension17': '{{ product.pBC|default:"10" }}'
             });
         {% endfor %}
         GALayer.SendImpression('productImpression', s_products, 'INR');
@@ -155,9 +155,9 @@
                 'variant': '{{ product.product_class }}',
                 'price': '{% if selected_var %}{{var_list.0.inr_price|floatformat}}{% else %}{{sqs.pPinb|floatformat}} {% endif %}',
                 'position': '1',
-                'dimensions15': 'Product Page',
-                'dimensions16': '{{ prd_rating }}',
-                'dimensions17': '{{ prd_num_bought|default:"10" }}'
+                'dimension15': 'Product Page',
+                'dimension16': '{{ prd_rating }}',
+                'dimension17': '{{ prd_num_bought|default:"10" }}'
         })
         {% endif %}
         GALayer.SendImpression('productdetail', p_detail, 'INR', actionField);
@@ -173,9 +173,9 @@
                     'category': '{% if item.variations|length %}{{ item.variations.0.li.product.get_category_main }}{% else %}{{ item.li.product.get_category_main }}{% endif %}',
                     'variant': '{{ item.product_class }}',
                     'price': '{% if item.variations|length %} {{ item.variations.0.price }} {% else %} {{ item.price }} {% endif %}',
-                    'dimensions15': 'Cart Page',
-                    'dimensions16': '{% if item.variations|length %} {{ item.variations.0.li.product.avg_rating }}{% else %}{{ item.li.product.avg_rating }}{% endif %}',
-                    'dimensions17': '{% if item.variations|length %} {{ item.variations.0.li.product.buy_count }}{% else %}{{ item.li.product.buy_count }}{% endif %}'
+                    'dimension15': 'Cart Page',
+                    'dimension16': '{% if item.variations|length %} {{ item.variations.0.li.product.avg_rating }}{% else %}{{ item.li.product.avg_rating }}{% endif %}',
+                    'dimension17': '{% if item.variations|length %} {{ item.variations.0.li.product.buy_count }}{% else %}{{ item.li.product.buy_count }}{% endif %}'
                 })
             {% endfor %}
         {% endif %}
@@ -197,9 +197,9 @@
                     'category': '{{ item.product.get_category_main }}',
                     'variant': '{{ item.product.get_product_class }}',
                     'price': '{% if item.product.variations|length %} {{ item.product.get_variations.last.get_price }} {% else %} {{ item.product.get_price|safe }}{% endif %}',
-                    'dimensions15': 'Checkout Page',
-                    'dimensions16': '{{ item.product.avg_rating }}',
-                    'dimensions17': '{{ item.product.buy_count }}'
+                    'dimension15': 'Checkout Page',
+                    'dimension16': '{{ item.product.avg_rating }}',
+                    'dimension17': '{{ item.product.buy_count }}'
                 })
             {% endfor %}
         {% endif %}
@@ -225,9 +225,9 @@
                 'category': '{{ item.oi.product.get_category_main }}',
                 'variant': '{{ item.oi.product.get_product_class }}',
                 'price': '{% if item.oi.variations|length %} {{ item.oi.product.get_variations.last.get_price }} {% else %} {{ item.oi.product.get_price|safe }}{% endif %}',
-                'dimensions15': 'Order Confirmation Page',
-                'dimensions16': '{{ item.oi.product.avg_rating }}',
-                'dimensions17': '{{ item.oi.product.buy_count }}'
+                'dimension15': 'Order Confirmation Page',
+                'dimension16': '{{ item.oi.product.avg_rating }}',
+                'dimension17': '{{ item.oi.product.buy_count }}'
             })
           {% endfor %}
         {% endif %}
@@ -260,9 +260,9 @@
                 'variant': '{{ product.product_class }}',
                 'price': '{% if selected_var %}{{var_list.0.inr_price|floatformat}}{% else %}{{sqs.pPinb|floatformat}} {% endif %}',
                 'position': '0',
-                'dimensions15': 'Product Page',
-                'dimensions16': '{{ prd_rating }}',
-                'dimensions17': '{{ prd_num_bought|default:"10" }}'
+                'dimension15': 'Product Page',
+                'dimension16': '{{ prd_rating }}',
+                'dimension17': '{{ prd_num_bought|default:"10" }}'
         })
         {% endif %}
         GALayer.SendImpression('productdetail', p_detail, 'INR', 'Product Page');
