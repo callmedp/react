@@ -146,7 +146,7 @@
         }
         {% if product %}
         var referrer = '{{ request.META.HTTP_REFERER }}';
-        var actionField = typeof referrer.split('/')[3] === "undefined" ? 'Home Page' : referrer.split('/')[3] === 'search' ? 'Search Lists' : referrer.split('/')[3] === 'course' ? 'Course Page' : '';
+        var actionField = referrer.split('/')[3] === "" ? 'Home Page' : referrer.split('/')[3] === 'search' ? 'Search Lists' : referrer.split('/')[3] === 'course' ? 'Course Page' : '';
             p_detail.push({
                 'name': '{{ prd_H1 }}',
                 'id': '{{ product.id }}',
@@ -217,7 +217,6 @@
     function OrderConfirmationImpression() {
         o_product = []
         {% if oi_products %}
-         console.log({{ oi_products.oi }})
          {% for item in oi_products %}
             o_product.push ({
                 'name': '{{ item.oi.product.name }}',
