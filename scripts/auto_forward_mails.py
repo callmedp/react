@@ -112,7 +112,7 @@ def auto_forward_emails():
     logging.getLogger('error_log').error("total messages forward failed - %s" % (str(total_msg_forward_failed)))
 
 auto_forward_emails()
-# script ends
+# script ends and forwarded mails
 
 
 
