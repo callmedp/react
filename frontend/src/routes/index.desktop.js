@@ -10,6 +10,7 @@ import { getDashboardPageActions } from "apiHandler/dashboardPageApi";
 import HomePageContainer from 'components/DesktopComponent/Core/HomePage/homePage';
 import RouteWithSubRoutes from './route';
 import { getHomepageActions } from "apiHandler/homepageApi";
+import UserIntentPageContainer from 'components/DesktopComponent/Core/UserIntentPage/userIntentPage';
 
 const DesktopAppRouter = () => (
     <div>
@@ -42,6 +43,11 @@ export const routes = [
         path: '/dashboard/:name?',
         component: DashboardPageContainer,
         private: true
+    },
+    {
+        path: '/user-intent',
+        component: UserIntentPageContainer,
+        exact: true
     },
     {
         path: '/404/',

@@ -221,3 +221,63 @@
   background: $sprite;
   @include icon-inblock(6px, 11px, -566px -52px);
 }
+
+.icon-ui1 {
+  background: $sprite;
+  @include icon-inblock(35px, 36px, 0 -174px);
+}
+
+.icon-ui2 {
+  background: $sprite;
+  @include icon-inblock(29px, 26px, -49px -175px);
+}
+
+.icon-white-tick {
+  background: $sprite;
+  @include icon-inblock(15px, 12px, -88px -184px);
+}
+
+.icon-back-goal {
+  background: $sprite;
+  @include icon-inblock(13px, 15px, -113px -180px);
+}
+
+.icon-arrow-down-sm {
+  background: $sprite;
+  @include icon-inblock(8px, 5px, -795px -116px);
+}
+
+.icon-arrow-up-sm {
+  background: $sprite;
+  @include icon-inblock(8px, 5px, -795px -128px);
+}
+
+.icon-hot {
+  background: $sprite;
+  @include icon-inblock(9px, 11px, -811px -115px);
+}
+
+.icon-upload-resume {
+  background: $sprite;
+  @include icon-inblock(33px, 37px, -941px -156px);
+}
+
+.icon-update-profile {
+  background: $sprite;
+  @include icon-inblock(35px, 39px, -988px -156px);
+}
+
+.icon-close {
+  background: $sprite;
+  @include icon-inblock(16px, 16px, -796px -82px);
+}
+
+.icon-close-sm {
+  background: $sprite;
+  @include icon-inblock(12px, 12px, -472px -138px);
+}
+
+.icon-search-arrow {
+  background: $sprite;
+  @include icon-inblock(15px, 12px, -183px -187px);
+}
