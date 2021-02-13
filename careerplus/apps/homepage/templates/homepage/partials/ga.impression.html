@@ -1,0 +1,288 @@
+{% load static %}
+<script src="{% static 'shinelearn/js/common/ga.impression.js' %}"></script>
+<script>
+    function GAImpression(event, options=null) {
+    if (event) { var event_name = event; } else { var event_name = "{{ page }}" || event; }
+    switch(event_name){
+        case 'Product':
+            HomeImpressionPush();
+            break;
+        case 'Search':
+            SearchPageImpressionPush(list='Search Results');
+            break;
+        case 'productDetail':
+            ProductDetailImpressionPush(list='Product', options);
+            break;
+        case 'addToCart':
+            CartImpressionPush();
+            break;
+        case 'checkout':
+            checkoutImpression(list='checkout', options);
+            break;
+        case 'checkout-complete':
+            OrderConfirmationImpression();
+            break;
+        case 'removeFromCart':
+            RemoveCartImpression(list='removeFromCart', options);
+            break;
+        case 'productClick':
+            productClickImpression(list='productClick', options);
+            break;
+        case 'checkout-product':
+            checkoutProductStorage();
+            break;
+        default:
+            break;
+    }
+}
+    {% if used_as %}
+    function HomeImpressionPush() {
+        const p_r_products = [];
+        const t_products = [];
+        const j_products = [];
+        {% if request.session.candidate_id and rcourses %}
+            {% for course_list in rcourses %}
+                {% for product in course_list %}
+                p_r_products.push({
+                        'name': '{{ product.pHd|default:product.pNm|truncatechars:40 }}',
+                        'id': '{{ product.id }}',
+                        'brand': ' {{ product.pPvn }}',
+                        'category': '{{ product.pCat }}',
+                        'variant': ' {{ product.pPc }}',
+                        'price': '{{ product.pPin }}',
+                        'list': 'Recommendations Courses',
+                        'position': '{{ forloop.counter }}',
+                        'dimension15': 'HomePage',
+                        'dimension16': '{% if product.pRC %} {{product.pARx|floatformat}} {% else %} null {% endif %}',
+                        'dimension17': '{{ product.pBC|default:"10" }}'
+                    });
+                {% endfor %}
+            {% endfor %}
+        {% else %}
+        {% for course_list in pcourses %}
+                {% for product in course_list %}
+                p_r_products.push({
+                        'name': '{{ product.pHd|default:product.pNm|truncatechars:40 }}',
+                        'id': '{{ product.id }}',
+                        'brand': ' {{ product.pPvn }}',
+                        'category': '{{ product.pCat }}',
+                        'variant': ' {{ product.pPc }}',
+                        'price': '{{ product.pPin }}',
+                        'list': 'Most popular Courses',
+                        'position': '{{ forloop.counter }}',
+                        'dimension15': 'HomePage',
+                        'dimension16': '{% if product.pRC %}{{product.pARx|floatformat}}{% else %}null{% endif %}',
+                        'dimension17': '{{ product.pBC|default:"10" }}'
+                    });
+                {% endfor %}
+            {% endfor %}
+        {% endif %}
+        {% for course in tcourses %}
+            {% for product in course.tprds %}
+                t_products.push({
+                        'name': '{{ product.pHd|default:product.pNm|truncatechars:40 }}',
+                        'id': '{{ product.id }}',
+                        'brand': ' {{ product.pPvn }}',
+                        'category': '{{ product.pCat }}',
+                        'variant': '{{ product.pPc }}',
+                        'price': '{{ product.pPin }}',
+                        'list': 'Trending Courses',
+                        'position': '{{ forloop.counter }}',
+                        'dimension15': 'HomePage',
+                        'dimension16': '{% if product.pRC %} {{product.pARx|floatformat}} {% else %} null {% endif %}',
+                        'dimension17': '{{ product.pBC|default:"10" }}'
+                });
+            {% endfor %}
+        {% endfor %}
+
+        {% if job_assistance|length %}
+           {% for j_course in job_assistance %}
+                j_products.push({
+                        'name': '{{ j_course.pHd|default:j_course.pNm|truncatechars:40 }}',
+                        'id': '{{ j_course.id }}',
+                        'brand': ' {{ j_course.pPvn }}',
+                        'category': '{{ j_course.pCat }}',
+                        'variant': '{{ j_course.pPc }}',
+                        'price': '{{ j_course.pPin }}',
+                        'list': 'Job assistance services',
+                        'position': '{{ forloop.counter }}',
+                        'dimension15': 'HomePage',
+                        'dimension16': '{% if j_course.pRC %} {{j_course.pARx|floatformat}} {% else %} null {% endif %}',
+                        'dimension17': '{{ j_course.pBC|default:"10" }}'
+                })
+            {% endfor %}
+        {% endif %}
+    if(p_r_products.length || t_products.length || j_products.length > 0) {
+    GALayer.SendImpression('productImpression', t_products, 'INR');
+    GALayer.SendImpression('productImpression', p_r_products, 'INR');
+    GALayer.SendImpression('productImpression', j_products, 'INR');
+    sessionStorage.clear();
+    }
+    }
+    function SearchPageImpressionPush(list) {
+        s_products = []
+        {% for product in products %}
+            s_products.push({
+                'name': '{{ product.pHd|default:product.pNm|truncatechars:40 }}',
+                'id': '{{ product.id }}',
+                'brand': '{{ product.pPvn }}',
+                'category': '{{ product.pCat }}',
+                'variant': '{{ product.pPc }}',
+                'price': '{{ product.pPin }}',
+                'list': list,
+                'position': '{{ forloop.counter }}',
+                'dimension15': 'Search Page',
+                'dimension16': '{% if product.pRC %} {{product.pARx|floatformat}} {% else %} null {% endif %}',
+                'dimension17': '{{ product.pBC|default:"10" }}'
+            });
+        {% endfor %}
+        GALayer.SendImpression('productImpression', s_products, 'INR');
+    }
+    function ProductDetailImpressionPush(list, options) {
+        p_detail = []
+        if (options) {
+            var actionField = options[0].actionField;
+            GALayer.SendImpression('productdetail', options, 'INR', actionField);
+        }
+        {% if product %}
+        var referrer = '{{ request.META.HTTP_REFERER }}';
+        var actionField = referrer.split('/')[3] === "" ? 'Home Page' : referrer.split('/')[3] === 'search' ? 'Search Lists' : referrer.split('/')[3] === 'course' ? 'Course Page' : '';
+            p_detail.push({
+                'name': '{{ prd_H1 }}',
+                'id': '{{ product.id }}',
+                'brand': '{{ prd_vendor }}',
+                'category': '{{ product.get_category_main }}',
+                'variant': '{{ product.product_class }}',
+                'price': '{% if selected_var %}{{var_list.0.inr_price|floatformat}}{% else %}{{sqs.pPinb|floatformat}} {% endif %}',
+                'position': '1',
+                'dimension15': 'Product Page',
+                'dimension16': '{{ prd_rating }}',
+                'dimension17': '{{ prd_num_bought|default:"10" }}'
+        })
+        {% endif %}
+        GALayer.SendImpression('productdetail', p_detail, 'INR', actionField);
+    }
+    function CartImpressionPush() {
+        c_product = []
+        {% if cart_items %}
+            {% for item in cart_items %}
+                c_product.push({
+                    'name': '{{ item.name }}',
+                    'id': '{{ item.id }}',
+                    'brand': '{{ item.vendor }}',
+                    'category': '{% if item.variations|length %}{{ item.variations.0.li.product.get_category_main }}{% else %}{{ item.li.product.get_category_main }}{% endif %}',
+                    'variant': '{{ item.product_class }}',
+                    'price': '{% if item.variations|length %} {{ item.variations.0.price }} {% else %} {{ item.price }} {% endif %}',
+                    'dimension15': 'Cart Page',
+                    'dimension16': '{% if item.variations|length %} {{ item.variations.0.li.product.avg_rating }}{% else %}{{ item.li.product.avg_rating }}{% endif %}',
+                    'dimension17': '{% if item.variations|length %} {{ item.variations.0.li.product.buy_count }}{% else %}{{ item.li.product.buy_count }}{% endif %}'
+                })
+            {% endfor %}
+        {% endif %}
+        if (c_product.length > 0) {
+        GALayer.SendImpression('addToCart', c_product, 'INR');
+        sessionStorage.setItem("ck_product", JSON.stringify(c_product));
+        }
+    }
+
+    function checkoutProductStorage()
+    {
+        ck_product = []
+        {% if cart_items %}
+            {% for item in cart_items %}
+                ck_product.push({
+                    'name': '{{ item.product.name }}',
+                    'id': '{{ item.product.id }}',
+                    'brand': '{{ item.product.vendor.name }}',
+                    'category': '{{ item.product.get_category_main }}',
+                    'variant': '{{ item.product.get_product_class }}',
+                    'price': '{% if item.product.variations|length %} {{ item.product.get_variations.last.get_price }} {% else %} {{ item.product.get_price|safe }}{% endif %}',
+                    'dimension15': 'Checkout Page',
+                    'dimension16': '{{ item.product.avg_rating }}',
+                    'dimension17': '{{ item.product.buy_count }}'
+                })
+            {% endfor %}
+        {% endif %}
+        if (ck_product.length > 0) {
+
+        }
+    }
+
+    function RemoveCartImpression(list, options) {
+        if (options) {
+            GALayer.SendImpression(list, options, 'INR');
+        }
+    }
+
+    function OrderConfirmationImpression() {
+        o_product = []
+        {% if oi_products %}
+         {% for item in oi_products %}
+            o_product.push ({
+                'name': '{{ item.oi.product.name }}',
+                'id': '{{ item.oi.product.id }}',
+                'brand': '{{ item.oi.product.vendor.name }}',
+                'category': '{{ item.oi.product.get_category_main }}',
+                'variant': '{{ item.oi.product.get_product_class }}',
+                'price': '{% if item.oi.variations|length %} {{ item.oi.product.get_variations.last.get_price }} {% else %} {{ item.oi.product.get_price|safe }}{% endif %}',
+                'dimension15': 'Order Confirmation Page',
+                'dimension16': '{{ item.oi.product.avg_rating }}',
+                'dimension17': '{{ item.oi.product.buy_count }}'
+            })
+          {% endfor %}
+        {% endif %}
+        GALayer.SendImpression('checkout-complete', o_product, 'INR', actionField={'id': '{{ order_id }}', 'affiliation': 'Oneline Store', 'revenue': '{{ total_price }}', 'coupon': '', 'Tax': (parseFloat({{ total_price }}) - parseFloat({{ tax_exlude }})).toFixed(2) });
+    }
+
+    function productClickImpression(list, options) {
+        if(options) {
+            var actionField = options[0].actionField;
+            GALayer.SendImpression(list, options, 'INR', actionField);
+        }
+    }
+
+    {% else %}
+
+    function ProductDetailImpressionPush(list, options) {
+        p_detail = []
+
+        if (options) {
+            var actionField = options[0].actionField;
+            GALayer.SendImpression('productdetail', options, 'INR', actionField);
+        }
+
+        {% if product %}
+            p_detail.push({
+                'name': '{{ prd_H1 }}',
+                'id': '{{ product.id }}',
+                'brand': '{{ prd_vendor }}',
+                'category': '{{ product.get_category_main }}',
+                'variant': '{{ product.product_class }}',
+                'price': '{% if selected_var %}{{var_list.0.inr_price|floatformat}}{% else %}{{sqs.pPinb|floatformat}} {% endif %}',
+                'position': '0',
+                'dimension15': 'Product Page',
+                'dimension16': '{{ prd_rating }}',
+                'dimension17': '{{ prd_num_bought|default:"10" }}'
+        })
+        {% endif %}
+        GALayer.SendImpression('productdetail', p_detail, 'INR', 'Product Page');
+    }
+
+    function checkoutImpression(list, options) {
+
+        if (options) {
+            var actionField = options[0].actionField;
+            GALayer.SendImpression('checkout', options, 'INR', actionField);
+        }
+    }
+
+    function productClickImpression(list, options) {
+        if(options) {
+            var actionField = options[0].actionField;
+            GALayer.SendImpression(list, options, 'INR', actionField);
+        }
+    }
+
+    {% endif %}
+GAImpression();
+</script>
