@@ -15,7 +15,7 @@
               {% if result.pNJ %}<span class="certification-jobs"><figure class="jobs-icon"></figure> <span class="jobs-number">{{ result.pNJ }}</span> jobs available</span>{% endif %}
             </div>
 
-            <h3 class="listing-heading" itemprop="name">{{ result.pHd|default:result.pNm }}</h3>
+            <h3 class="listing-heading" itemprop="name" onclick="GAImpression('productClick', options=[{'product': [{'name': '{{ result.pHd }}', 'id': '{{ result.id }}', 'brand': '{{ result.pPvn }}', 'category': '{{ result.pCat }}', 'variant': '{{ result.pPc }}', 'price': '{{ result.pPin }}','position': '{{ forloop.counter }}', 'dimension15': 'Search Page', 'dimension16': '{{result.pARx|floatformat}}', 'dimension17': '{{ result.pBC }}' }], 'actionField': [{ 'list': 'Search Results'}] }]);">{{ result.pHd|default:result.pNm }}</h3>
 
             <div class="rating-review-box">
                 {% if result.pRC %}

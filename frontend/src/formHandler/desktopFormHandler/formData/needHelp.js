@@ -5,6 +5,7 @@ export default {
         name: "name",
         id: "name",
         label: "Name*",
+        placeholder: " ",
         inputType: 'input',
         validation: {
             required:true,
@@ -20,6 +21,7 @@ export default {
         name: "email",
         id: "email",
         label: "Email",
+        placeholder: " ",
         inputType: 'input',
         validation: {
             // required:true,
@@ -36,6 +38,7 @@ export default {
         type: "number",
         name: "number",
         id: "number",
+        placeholder: " ",
         label: "Mobile*",
         inputType: 'input',
         validation: {

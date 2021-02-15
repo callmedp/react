@@ -5,10 +5,10 @@ import { siteDomain, resumeShineSiteDomain } from 'utils/domains';
 import MenuNavHeader from '../MenuNavHeader/menuNavHeader';
 import './defaultMenuNav.scss'
 import { useSelector, useDispatch } from 'react-redux';
-import { cartCount, sessionAvailability, getCandidateInfo, fetchNavOffersAndTags } from 'store/Header/actions/index';
+import { cartCount, fetchNavOffersAndTags } from 'store/Header/actions/index';
 import { initLoggedInZendesk } from 'utils/zendeskIniti';
-import { trackUser } from 'store/Tracking/actions/index.js';
-import { removeTrackingInfo } from 'utils/storage.js';
+// import { trackUser } from 'store/Tracking/actions/index.js';
+import { removeTrackingInfo, getCandidateInformation } from 'utils/storage.js';
 import { MyGA } from 'utils/ga.tracking.js';
 
 const DefaultMenuNav = (props) =>{
@@ -24,13 +24,14 @@ const DefaultMenuNav = (props) =>{
     const fetchUserInfo = async () => {
         try {
             dispatch(cartCount());
-            const isSessionAvailable = await new Promise((resolve, reject) => dispatch(sessionAvailability({ resolve, reject })));
+            // const isSessionAvailable = await new Promise((resolve, reject) => dispatch(sessionAvailability({ resolve, reject })));
 
-            if (isSessionAvailable['result']) {
+            if (localStorage.getItem('isAuthenticated') === 'true') {
                 try {
                     setIsLoggedIn(true)
-                    const candidateId = isSessionAvailable['candidate_id']
-                    const candidateInformation = await new Promise((resolve, reject) => dispatch(getCandidateInfo({candidateId, resolve, reject })))
+                    // const candidateId = isSessionAvailable['candidate_id']
+                    // const candidateInformation = await new Promise((resolve, reject) => dispatch(getCandidateInfo({candidateId, resolve, reject })))
+                    const candidateInformation = getCandidateInformation()
                     initLoggedInZendesk(candidateInformation, true)
                     setCandidateInfo(candidateInformation)
                 }
@@ -87,7 +88,7 @@ const DefaultMenuNav = (props) =>{
                     navTags?.length ? 
                     (
                         navTags.map((tag, index)=>{
-                            return <a key={index} className="menu-item" href={`${siteDomain}${tag.skill_page_url}`}> {tag?.display_name}&emsp;<small className="m-config-tag">{tag?.tag}</small></a>
+                            return <a key={index} className="menu-item" href={tag.skill_page_url}> {tag?.display_name}&emsp;<small className="m-config-tag">{tag?.tag}</small></a>
                         })
                     ) : null
                 }
@@ -98,8 +99,9 @@ const DefaultMenuNav = (props) =>{
                             <li>
                                 <a className="dashboard-menu--item" href={`${siteDomain}/dashboard/`}><figure className="icon-dashboard" /> Dashboard</a>
                                 <ul className="dashboard-menu__submmenu">
-                                    <li><a href={`${siteDomain}/dashboard/`}>Inbox</a></li>
-                                    <li><a href={`${siteDomain}/dashboard/myorder/`}>My Order</a></li>
+                                    <li><a href={`${siteDomain}/dashboard/`}>My Courses</a></li>
+                                    <li><a href={`${siteDomain}/dashboard/myservices`}>My Services</a></li>
+                                    <li><a href={`${siteDomain}/dashboard/myorder/`}>My Orders</a></li>
                                     <li><a href={`${siteDomain}/dashboard/mywallet/`}>My Wallet</a></li>
                                 </ul>
                             </li>

@@ -32,8 +32,9 @@ import { fetchRecommendedProducts } from 'store/RecommendedCourses/actions/index
 import { fetchPopularCourses } from 'store/Footer/actions/index';
 import Aos from "aos";
 // import "aos/dist/aos.css";
-import { Helmet } from 'react-helmet';
 import { startSkillPageLoader, stopSkillPageLoader } from 'store/Loader/actions/index';
+import MetaContent from '../../Common/MetaContent/metaContent'
+
 
 const SkillPage = (props) => {
 
@@ -48,7 +49,6 @@ const SkillPage = (props) => {
     const meta_tags = useSelector((store) => store.skillBanner.meta ? store.skillBanner.meta : '');
 
     const handleEffects = async () => {
-
         try {
             //You may notice that apis corresponding to these actions are not getting called on initial render.
             //This is because initial render is done on node server, which is calling these apis, map the data and send it to the browser.
@@ -58,7 +58,7 @@ const SkillPage = (props) => {
                 new Promise((resolve, reject) => dispatch(fetchCoursesAndAssessments({ id: pageId, 'medium': 1, resolve, reject })));
                 new Promise((resolve, reject) => dispatch(fetchDomainJobs({ id: pageId, resolve, reject })));
                 new Promise((resolve, reject) => dispatch(fetchRecommendedProducts({ resolve, reject })));
-                new Promise((resolve, reject) => dispatch(fetchPopularCourses({ id: pageId, resolve, reject })))
+                new Promise((resolve, reject) => dispatch(fetchPopularCourses({ id: pageId, courseOnly: true, resolve, reject })))
                 await new Promise((resolve, reject) => dispatch(fetchSkillPageBanner({ id: pageId, 'medium': 1, resolve, reject })))
                 dispatch(stopSkillPageLoader());
             }
@@ -104,25 +104,12 @@ const SkillPage = (props) => {
     return (
         <main className="m-container-fluid mt-0 pt-0">
             { skillLoader ? <Loader /> : ''}
-            <Helmet>
-                <title>{meta_tags.title}</title>
-                <meta name="description" content={meta_tags.description} />
-                <meta property="og:title" content={meta_tags.title} />
-                <meta property="og:url" content={meta_tags._url} />
-                <meta property="og:description" content={meta_tags.og_description} />
-                <meta property="og:type" content={meta_tags.og_type} />
-                <meta property="og:site_name" content={meta_tags.site_name} />
-                <meta property="fb:profile_id" content={meta_tags.og_profile_id} />
-                <meta itemProp="name" content={meta_tags.title} />
-                <meta itemProp="url" content={meta_tags._url} />
-                <meta itemProp="description" content={meta_tags.og_description} />
-                <link rel="canonical" href={meta_tags._url} />
-            </Helmet>
+            { meta_tags && <MetaContent meta_tags={meta_tags}/> }
             { showSearchPage ? <SearchPage setShowSearchPage={setShowSearchPage} /> :
                 <>
                     <MenuNav />
                     <header className="m-container m-header m-tabset-pos">
-                        <Header setShowSearchPage={setShowSearchPage} />
+                        <Header setShowSearchPage={setShowSearchPage} name={name} />
                     </header>
                     <section className="m-tabset mt-0 mb-0 m-skill-ht-remove">
                         <StickyNav tabType={tabType} setTabType={setTabType} />

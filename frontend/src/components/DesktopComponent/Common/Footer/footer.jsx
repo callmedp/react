@@ -1,5 +1,5 @@
 import React, { useEffect} from 'react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import { siteDomain } from 'utils/domains';
 import './footer.scss';
 import { useDispatch, useSelector } from 'react-redux';
@@ -16,7 +16,7 @@ const Footer = (props) => {
     },[])
 
     return(
-        <section className="container-fluid" data-aos="fade-up">
+        <section className="container-fluid">
             <footer className="row">
                 <div className="container">
                     <div className="footer">
@@ -38,7 +38,7 @@ const Footer = (props) => {
                             </li>
                             <li className="social-icon">
                                 <a href="https://www.facebook.com/shinelearningdotcom/" className="icon-facebook" onClick={() =>  MyGA.SendEvent('social_media_follow','ln_social_media_follow', 'ln_facebook', 'homepage','', false, true)}></a>
-                                <a  href="https://www.linkedin.com/showcase/13203963/" className="icon-linkedin" onClick={() =>  MyGA.SendEvent('social_media_follow','ln_social_media_follow', 'ln_linkedin', 'homepage','', false, true)}></a>
+                                <a  href="https://in.linkedin.com/company/shinelearning" className="icon-linkedin" onClick={() =>  MyGA.SendEvent('social_media_follow','ln_social_media_follow', 'ln_linkedin', 'homepage','', false, true)}></a>
                                 <a href="https://twitter.com/shinelearning" className="icon-twitter" onClick={() =>  MyGA.SendEvent('social_media_follow','ln_social_media_follow', 'ln_twitter', 'homepage','', false, true)}></a>
                             </li>
                         </ul>

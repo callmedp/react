@@ -225,6 +225,7 @@ Thank You - Shine Learning
     var ResumeBuilderBuy = "{{order.order_contains_resume_builder}}"
 </script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.14.0/dist/sweetalert2.all.min.js"></script>
+{% include 'homepage/partials/ga.impression.html' with page="checkout-complete" used_as="script" oi_products=orderitems order_id=order.ordertxns.last.txn total_price=order.total_incl_tax tax_exlude=order.total_excl_tax  %}
 {% compress js %}
 <script src="{% static 'shinelearn/js/payment/thank-you.js' %}"></script>
 <script type="text/javascript" src="{% static 'shinelearn/js/common/toast.js' %}"></script>

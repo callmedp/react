@@ -1,0 +1,32 @@
+@import '../../../../../styles-mobile/abstracts';
+
+.m-db-tabs-wrap{
+    margin-top: 20px;
+    overflow: hidden;
+    width: 100%;
+
+    ul {
+        display: flex;
+        overflow-x: auto;
+        overflow-y: hidden;
+
+        li {
+            flex: 0 0 auto;
+            padding: 0 15px;
+
+            a {
+                display: block;
+                color: $white;
+                border-bottom: 3px solid transparent;
+                padding-bottom: 10px;
+
+                &.active {
+                    border-color: $white;
+                    font-weight: 700;
+                }
+            }
+
+            
+        }
+    }
+}

@@ -1,0 +1,73 @@
+@import '../../../../../styles-mobile/abstracts';
+
+.personal-detail {
+    background-color: $white;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: 1;
+
+    &__heading {
+        padding: 15px;
+        display: flex;
+        align-items: center;
+        position: relative;
+        @extend %gradient;
+        height: 6.4rem;
+        box-shadow: 0 1px 6px 0 rgba(124, 136, 191, 1);
+
+        h2 {
+            font-size: 1.8rem;
+            color: $white;
+            margin-left: 20px;
+            position: relative;
+            top: 3px;
+        }
+
+        &--save {
+            position: absolute;
+            right: 15px;
+            color: $white;
+            font-size: $font-size-base;
+            font-weight: $font-weight-semi-bold;
+        }
+
+        .m-db-btn-close {
+            left: 0;
+            right: auto;
+
+            &::after,
+            &::before {
+                background-color: rgba($white, 1);
+            }
+        }
+    }
+
+    &__form {
+        box-shadow: none !important;
+        background-color: transparent !important;
+
+        &--gender {
+            display: flex;
+            flex-wrap: wrap;
+            margin: 0 -15px;
+            font-size: $font-size-base;
+
+            .m-custom {
+                flex: 0 0 50%;
+                padding: 5px 15px;
+            }
+        }
+    }
+}
+
+.m-db-eye-icon {
+    @include size(19px, 15px,block);
+    background: $spriteDb;
+    background-position: -95px -157px;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+}

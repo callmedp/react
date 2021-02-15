@@ -16,6 +16,12 @@
     }
 }
 
+.btn-xs {
+    font-size: $font-size-xs;
+    padding: 0.6rem 1.5rem;
+    font-weight: $font-weight-semi-bold;
+}
+
 .btn-blue {
     background: $blue;
     border: 1px solid $blue;
@@ -32,6 +38,12 @@
         color: $white;
         border: 1px solid $blue;
     }
+}
+
+.btn-link {
+    color: $blue;
+    font-weight: $font-weight-bold;
+    text-transform: capitalize;
 }
 
 .btn-yellow {
@@ -76,4 +88,30 @@
         color: $white;
         border: 1px solid $white;
     }
+}
+
+.btn-white-outline-round {
+    background: transparent;
+    border: 1px solid $white;
+    color: $white;
+    font-size: 1.2rem;
+    padding: .8rem 1.5rem;
+    @include border-radius(30px);
+    font-weight: 600;
+    display: inline-block;
+
+    &:hover, &:focus {
+        text-decoration: none;
+        color: $white;
+        border: 1px solid $white;
+    }
+}
+
+.m-db-close {
+    position: absolute;
+    right: 15px;
+    top: 5px;
+    font-size: 2rem;
+    color: rgba($gray-100, .5);
+    z-index: 9;
 }

@@ -23,7 +23,7 @@ from geolocation.models import (
     State,
     City,)
 from order.choices import BOOSTER_RECRUITER_TYPE
-from .choices import SCORE_TYPE_CHOICES
+from .choices import SCORE_TYPE_CHOICES, AUTO_LOGIC_METHOD
 
 
 class Vendor(AbstractAutoDate, AbstractSEO, ModelMeta):
@@ -97,6 +97,8 @@ class Vendor(AbstractAutoDate, AbstractSEO, ModelMeta):
         through_fields=('vendee', 'employee'),
         verbose_name=_('Vendor Hierarchy'),
         blank=True)
+    auto_login_method = models.PositiveSmallIntegerField(default=0,
+        choices=AUTO_LOGIC_METHOD)
 
     priority = models.IntegerField(default=0)
     url_slug_fix = "fix_field"

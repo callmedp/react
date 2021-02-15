@@ -528,9 +528,9 @@ class CourseCatalogueAPI(CourseCatalogueMixin, APIView):
 
     def get_meta_data(self, context=None):
         data = {
-            'title': 'Online Courses and Certifications : Free Online Education',
-            'description': 'Join India\'s Largest E-Learning Online Courses and Education Platform. Get Certifications in Top Courses under Finance, IT, Analytics, Marketing and more',
-            '_url': settings.MAIN_DOMAIN_PREFIX + '/online-courses.html'
+            'title': 'Online Course & Certifications Catalogue - Shine Learning',
+            'description': 'Select from hundreds of courses & certifications to earn a high-demand course certificate. Explore our catalogue of online courses, certifications in data science, digital marketing, and many others.',
+            '_url': '/online-courses.html'
         }
         return data
 

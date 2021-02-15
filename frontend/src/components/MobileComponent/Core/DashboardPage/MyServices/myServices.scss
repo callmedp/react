@@ -1,0 +1,44 @@
+@import '../../../../../styles-mobile/abstracts';
+
+.m-accept,
+.m-reject {
+    &::before {
+        content: '';
+        background: $spriteDb;
+        margin-right: 5px;
+    }
+}
+
+
+.m-accept {
+    margin-right: 20px;
+
+    &::before {
+        @include size(11px, 9px, inline-block);
+        background-position: -46px -197px;
+    }
+}
+
+.m-reject {
+    &::before {
+        @include size(9px, 9px, inline-block);
+        background-position: -66px -196px;
+        
+    }
+}
+
+
+.m-db-upload-resume {
+
+    &--list {
+        text-align: left;
+        width: 225px;
+        margin: 20px auto 0;
+
+        li {
+            &:not(:last-child) {
+                margin-bottom: 10px;
+            }
+        }
+    }
+}

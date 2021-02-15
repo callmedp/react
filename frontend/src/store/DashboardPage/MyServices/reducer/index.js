@@ -1,0 +1,68 @@
+import * as Actions from '../actions/actionTypes';
+
+const initState = {
+    data: [],
+    page: {},
+}
+
+const resInitState = {
+}
+
+const oiDetailsInit = {
+    // data: []
+}
+
+const updateComment = (state, {payload}) => {
+
+    const updatedState = state.data.map((item) => {
+        if(item.id === payload.id){
+            return {...item, no_of_comments: payload.no_of_comments }
+        }
+        else {
+            return { ...item };
+        }
+    })
+    return {...state, data : updatedState}; 
+}
+
+export const DashboardMyServicesReducer = (state=initState, action) => {
+    switch(action.type){
+        case Actions.MY_SERVICES_FETCHED : return { ...initState, ...action.item}
+        
+        case Actions.CANDIDATE_OI_ACCEPT_REJECT_SUCCESS: {
+            return {
+                ...state, error: false
+            };
+        }
+
+        case Actions.PAUSE_AND_RESUME_SERVICE_SUCCESS: {
+            return {
+                ...state, loading: false,
+            }
+        }
+
+        case Actions.UPDATE_SERVICE_COMMENT_COUNT : return updateComment(state, action)
+        
+        default: return state;
+    }
+}
+
+export const DashboardMyServicesResumeReducer = (state=resInitState, action) => {
+    switch(action.type){
+        case Actions.PENDING_RESUME_FETCHED: {
+            return { ...state, ...action.data };
+        }
+
+        default: return state;
+    }
+}
+
+export const OiDetailsReducer = (state=oiDetailsInit, action) => {
+    switch(action.type){
+        case Actions.OI_DETAILS_FETCHED: {
+            return { ...state, ...action.item };
+        }
+
+        default: return state;
+    }
+}

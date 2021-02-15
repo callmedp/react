@@ -5,8 +5,16 @@ import WatchBannerData from './SkillPage/Banner/saga/index';
 import WatchCoursesAndAssessments from './SkillPage/CoursesTray/saga';
 import WatchHeader from './Header/saga/index';
 import WatchFooter from './Footer/saga/index';
+import WatchComments from './DashboardPage/AddSubmitComment/saga/index';
+import WatchReviews from './DashboardPage/AddSubmitReview/saga/index';
 import WatchRecommendation from './RecommendedCourses/saga/index';
 import watchTracking from './Tracking/saga/index';
+import WatchCataloguePage from './CataloguePage/saga/index';
+import WatchDashboardMyWallet from './DashboardPage/MyWallet/saga/index';
+import WatchDashboardMyOrders from './DashboardPage/MyOrder/saga/index';
+import WatchDashboardMyCourses from './DashboardPage/MyCourses/saga/index';
+import WatchDashboardMyServices from './DashboardPage/MyServices/saga/index';
+import WatchDashboardStartCourse from './DashboardPage/StartCourse/saga/index';
 
 export default function* () {
     yield all([
@@ -16,7 +24,15 @@ export default function* () {
         WatchCoursesAndAssessments(),
         WatchHeader(),
         WatchFooter(),
+        WatchComments(),
+        WatchReviews(),
         WatchRecommendation(),
-        watchTracking()
+        watchTracking(),
+        WatchCataloguePage(),
+        WatchDashboardMyWallet(),
+        WatchDashboardMyOrders(),
+        WatchDashboardMyCourses(),
+        WatchDashboardMyServices(),
+        WatchDashboardStartCourse(),
     ])
 }

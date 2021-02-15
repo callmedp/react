@@ -16,13 +16,14 @@ function* fetchTrendingCnA(action) {
 
     }
     catch (e) {
+        console.error("Exception occured at fetchTrendingCnA Api", e);
     }
 }
 
 function* fetchPopularCourses(action) {
     const { payload } = action
     try {
-        const response = yield call(Api.fetchPopularCourses, payload?.id);
+        const response = yield call(Api.fetchPopularCourses, payload);
         if (response["error"]) {
             return payload?.reject(response)
         }

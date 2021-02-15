@@ -173,7 +173,7 @@ class OrderItemPatchView(APIView):
     serializer_class = None
 
     def patch(self, request, *args, **kwargs):
-        candidate_id = request.data.get('candidate_id')
+        candidate_id = request.data.get('candidate_id') or self.request.session.get('candidate_id', '')
         order_item_id = request.data.get('order_item_id')
         oi_status = request.data.get('oi_status')
         missing_list = []
@@ -203,7 +203,7 @@ class OrderItemPatchView(APIView):
             order_item.oi_status = oi_status
 
             order_item.save()
-            return Response({'status': 1},
+            return Response({'status': 1, 'oi_status': oi_status},
                             status=status.HTTP_200_OK)
 
         except Exception as e:

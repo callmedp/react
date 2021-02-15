@@ -7,15 +7,34 @@
 }
 
 .pt-20 {
-    padding-top: 2rem;
+    padding-top: 2rem !important;
 }
 
 .pt-30 {
     padding-top: 3rem;
 }
 
+.pb-30 {
+    padding-bottom: 3rem !important;
+}
+
+
+
+.pr-10 {
+    padding-right: 10px !important;
+}
+
+
 .pr-40 {
     padding-right: 40px;
+}
+
+.pl-10 {
+    padding-left: 10px !important;
+}
+
+.pl-15 {
+    padding-left: 15px !important;
 }
 
 .pl-40 {
@@ -72,9 +91,10 @@
 }
 
 .py-20 {
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding-top: 20px !important;
+    padding-bottom: 20px !important;
 }
+
 
 .py-25 {
     padding-top: 25px;
@@ -82,8 +102,8 @@
 }
 
 .py-30 {
-    padding-top: 30px;
-    padding-bottom: 30px;
+    padding-top: 30px !important;
+    padding-bottom: 30px !important;
 }
 
 .py-35 {

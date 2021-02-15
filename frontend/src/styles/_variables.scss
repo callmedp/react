@@ -265,6 +265,7 @@ $rounded-pill:                50rem !default;
 $box-shadow-sm:               0 2px 6px 0 rgba(210,210,210,0.50) !default;
 $box-shadow:                  0 3px 14px 0 rgba(212,209,209,0.50) !default;
 $box-shadow-lg:               0 3px 21px 0 rgba(179,179,179,0.50) !default;
+$box-shadow-hover:            0 3px 14px 3px #D9E2EB !default;
 
 $component-active-color:      $white !default;
 $component-active-bg:         theme-color("primary") !default;
@@ -1164,10 +1165,15 @@ $print-body-min-width:              map-get($grid-breakpoints, "lg") !default;
 // custom variables by Sachin K.
 
 $sprite: url('#{$path}desktop/learning-sprite.png') no-repeat;
-
+$spriteDb: url('#{$path}desktop/learning-spriteDB1.svg') no-repeat;
+$image-root: '#{$path}desktop/';
 
 %box-shadow {
   box-shadow: $box-shadow;
   padding: 2rem;
   border-radius: .4rem;
 }
+
+// DB Variable
+
+$db-light-pink: #FFDEDE;

@@ -1962,9 +1962,9 @@ class ResumeTemplateDownload(APIView):
     serializer_class = None
 
     def get(self, request, *args, **kwargs):
-        from django.http.response import HttpResponse
-        candidate_id = request.GET.get('candidate_id', None)
-        email = request.GET.get('email', None)
+        from django.http.response import HttpResponse                                                                      
+        candidate_id = request.GET.get('candidate_id', None) or self.request.session.get('candidate_id', None)
+        email = request.GET.get('email', None) or self.request.session.get('email', None)
         product_id = request.GET.get('product_id', None)
         product = Product.objects.filter(id=product_id).first()
         if product.sub_type_flow == 1701:
@@ -1974,7 +1974,13 @@ class ResumeTemplateDownload(APIView):
         order_pk = request.GET.get('order_pk', None)
         candidate_obj = Candidate.objects.filter(candidate_id=candidate_id).first()
         selected_template = candidate_obj.selected_template if candidate_obj and candidate_obj.selected_template else 1
-        order = Order.objects.get(pk=order_pk)
+        try:
+            order = Order.objects.get(pk=order_pk)
+        except Order.DoesNotExist:
+            return Response(
+                {'success': '',
+                 'error_message': 'Order not found'
+                 },  status=status.HTTP_404_NOT_FOUND)
 
         if not candidate_id or not order.status in [1, 3, 0] or not (order.email == email) \
                 or not (order.candidate_id == candidate_id):
