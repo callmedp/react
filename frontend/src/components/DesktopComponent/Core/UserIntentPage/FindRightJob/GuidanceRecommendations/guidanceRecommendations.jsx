@@ -20,7 +20,7 @@ const GuidanceRecommendations = (props) => {
 
                         <ul className="ui-list mt-40 mb-30">
                             <li className="active">
-                                <Link to={"#"}>
+                                <Link to={"/user-intent/find-right-job/"}>
                                     <figure>
                                         <img src="/media/images/desktop/ui-list-icon1.png" alt="Find the right job" />
                                     </figure>
@@ -28,7 +28,7 @@ const GuidanceRecommendations = (props) => {
                                 </Link>
                             </li>
                             <li>
-                                <Link to={"#"}>
+                                <Link to={"/user-intent/make-career-change/"}>
                                     <figure>
                                         <img src="/media/images/desktop/ui-list-icon2.png" alt="Make a career change" />
                                     </figure>
@@ -36,7 +36,7 @@ const GuidanceRecommendations = (props) => {
                                 </Link>
                             </li>
                             <li>
-                                <Link to={"#"}>
+                                <Link to={"/user-intent/improve-profile/"}>
                                     <figure>
                                         <img src="/media/images/desktop/ui-list-icon3.png" alt="Improve your profile" />
                                     </figure>
@@ -44,7 +44,7 @@ const GuidanceRecommendations = (props) => {
                                 </Link>
                             </li>
                             <li>
-                                <Link to={"#"}>
+                                <Link to={"/user-intent/progress-career"}>
                                     <figure>
                                         <img src="/media/images/desktop/ui-list-icon4.png" alt="Progress your career" />
                                     </figure>

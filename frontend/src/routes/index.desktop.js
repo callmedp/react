@@ -45,7 +45,7 @@ export const routes = [
         private: true
     },
     {
-        path: '/user-intent',
+        path: '/user-intent/:name?',
         component: UserIntentPageContainer,
         exact: true
     },

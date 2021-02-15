@@ -19,6 +19,7 @@ const ShineServices = (props) => {
                         <div className="ui-steps">
                             <Link className="completed" to={"#"}>1</Link>
                             <Link className="completed" to={"#"}>2</Link>
+                            <Link to={"#"}>3</Link>
                         </div>
                         <h2 className="heading3 mt-20">Get an edge over others with shine services</h2>
                         <div className="shine-services w-70">
