@@ -1,15 +1,14 @@
 import React, { useRef, useEffect } from 'react';
 import UIBanner from '../../../Common/UIBanner/UIbanner';
-import FindJob from './FindJob/findJob';
+import GuidanceRecommendations from './GuidanceRecommendations/guidanceRecommendations';
 
-const FindRightJob = (props) => {
-    
+const UserGuidance = (props) => {
     return (
         <div>
             <UIBanner {...props} />
-            <FindJob />
+            <GuidanceRecommendations />
         </div>
     )
 }
 
-export default FindRightJob;
+export default UserGuidance;

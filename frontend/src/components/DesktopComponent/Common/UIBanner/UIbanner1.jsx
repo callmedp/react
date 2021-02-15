@@ -8,10 +8,9 @@ const UIBanner1 = (props) => {
             <div className="row">
                 <div className="container ui-header-content mt-30">
                     <figure className="mr-20">
-                        <i className="icon-ui2"></i>
+                        <i className="icon-ui1"></i>
                     </figure>
-                    <h1 className="heading1">Find the right job</h1>
-                    <Link className="goal btn btn-outline-white" to={"#"}><i className="icon-back-goal mr-10"></i>Back to goal</Link>
+                    <h1 className="heading1">Career Guidance with personalized recommendations</h1>
                 </div>
             </div>
        </header> 

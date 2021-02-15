@@ -19,7 +19,8 @@ const GuidanceRecommendations = (props) => {
                         <p>Make your choice to go ahead</p>
 
                         <ul className="ui-list mt-40 mb-30">
-                            <li className="active">
+                        {/* className="active" */}
+                            <li> 
                                 <Link to={"/user-intent/find-right-job/"}>
                                     <figure>
                                         <img src="/media/images/desktop/ui-list-icon1.png" alt="Find the right job" />
