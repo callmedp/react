@@ -9,6 +9,7 @@ $(document).ready(() => {
 
     $('#feedback-type').val('1') //default Feedback Type dropdown selected to Fresh (Requirement from Product)
     
+    $('#feedback-category').val('')
     $('.feedback_users').select2({    //create searchable dropdown
         width:'100%',
     });
@@ -26,9 +27,16 @@ $(document).ready(() => {
 
     $('#filter-status').change(()=>{
         customerFeedbackList(1)
+        feedback_id_selected = []
     })
     $('#feedback-type').change(()=>{
         customerFeedbackList(1)
+        feedback_id_selected = []
+    })
+
+    $('#feedback-category').change(()=>{
+        customerFeedbackList(1)
+        feedback_id_selected = []
     })
 
     $('#filter-follow-up').daterangepicker({
@@ -96,6 +104,7 @@ const customerFeedbackList = (page_no,filter_data) => {
         page:page_no,
         status:status,
         type:$('#feedback-type').val(),
+        category:$('#feedback-category').val(),
         follow_up_date_range : $('#filter-follow-up').val(),
         added_on_range : $('#filter-added-on').val(),
         last_payment_range : $('#filter-payment-on').val(),
@@ -209,6 +218,7 @@ const assignFeedbackIdsUser = () => {
                 title: 'Feedback calls assigned to user Successfully'
             })
             customerFeedbackList(1)
+            feedback_id_selected = []
             
         }
     }).fail(()=>{
@@ -222,6 +232,7 @@ const assignFeedbackIdsUser = () => {
 
 const filterFeedbackList = () => {
     customerFeedbackList(1)
+    feedback_id_selected = []
 }
 
 const redirectFeedbackUpdatePage = (id) => {
@@ -234,7 +245,9 @@ const redirectFeedbackUpdatePage = (id) => {
 const searchNameOrEmail = () => {
     $('#filter-status').val('')
     $('#feedback-type').val('')
+    $('#feedback-category').val('')
     customerFeedbackList(1)
+    feedback_id_selected = []
 }
 
 const searchBoxKeyEnter = (event) =>{

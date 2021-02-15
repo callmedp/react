@@ -46,6 +46,7 @@ class FeedbackQueueView(ListAPIView):
         last_payment_range = self.request.GET.get('last_payment_range')
         min_ltv = self.request.GET.get('min_ltv')
         search_text = self.request.GET.get('search_text')
+        category = self.request.GET.get('category')
 
         if status:
             queryset = queryset.filter(status=status)
@@ -78,6 +79,10 @@ class FeedbackQueueView(ListAPIView):
             start_date = datetime.strptime(date_range[0],'%Y-%m-%d')
             end_date = datetime.strptime(date_range[1],'%Y-%m-%d')
             queryset = queryset.filter(added_on__range=(start_date,end_date+timedelta(days=1)))
+
+        if category:
+            queryset = queryset.filter(category=category)
+
         user = self.request.user
         ops_head_group = settings.OPS_HEAD_GROUP_LIST
         feedback_call_group = settings.WELCOMECALL_GROUP_LIST
