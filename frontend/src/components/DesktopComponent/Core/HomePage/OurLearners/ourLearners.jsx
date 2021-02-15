@@ -12,22 +12,22 @@ const OurLearners = (props) => {
                         <h2 className="heading2 text-center mx-auto mt-50">Our learners are now at these amazing places</h2>
                         <div className="our-vendors mb-50">
                             <figure>
-                                <img src={`${imageUrl}/desktop/logo-google.png`} className="img-fluid" alt="Google" />
+                                <img src={`${imageUrl}desktop/logo-google.png`} className="img-fluid" alt="Google" />
                             </figure>
                             <figure>
-                                <img src={`${imageUrl}/desktop/logo-ibm.png`} className="img-fluid" alt="IBM" />
+                                <img src={`${imageUrl}desktop/logo-ibm.png`} className="img-fluid" alt="IBM" />
                             </figure>
                             <figure>
-                                <img src={`${imageUrl}/desktop/logo-infosys.png`} className="img-fluid" alt="Infosys" />
+                                <img src={`${imageUrl}desktop/logo-infosys.png`} className="img-fluid" alt="Infosys" />
                             </figure>
                             <figure>
-                                <img src={`${imageUrl}/desktop/logo-genpact.png`} className="img-fluid" alt="Genpact" />
+                                <img src={`${imageUrl}desktop/logo-genpact.png`} className="img-fluid" alt="Genpact" />
                             </figure>
                             <figure>
-                                <img src={`${imageUrl}/desktop/logo-fujitsu.png`} className="img-fluid" alt="Fujitsu" />
+                                <img src={`${imageUrl}desktop/logo-fujitsu.png`} className="img-fluid" alt="Fujitsu" />
                             </figure>
                             <figure>
-                                <img src={`${imageUrl}/desktop/logo-people-strong.png`} className="img-fluid" alt="People Strong" />
+                                <img src={`${imageUrl}desktop/logo-people-strong.png`} className="img-fluid" alt="People Strong" />
                             </figure>
                         </div>
                     </div>
