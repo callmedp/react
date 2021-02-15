@@ -7,15 +7,15 @@ import FeedbackResult from './ViewCourses/feedbackResult';
 
 
 const MakeCareerChange = (props) => {
-
-    
+    const params = new URLSearchParams(window.location.search);
+    const job = params.get('job')
 
     return (
         <div>
             {/* <UIBanner /> */}
             <UIBanner {...props}/>
             {/* <GuidanceRecommendations /> */}
-            <FindJob />
+            { job === null ? <FindJob /> : <ViewCourses /> } 
             {/* <ViewCourses /> */}
             {/* <FeedbackResult /> */}
         </div>

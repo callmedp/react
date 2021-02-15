@@ -4,6 +4,8 @@ import './guidanceRecommendations.scss';
 
 
 const GuidanceRecommendations = (props) => {
+    
+
     return (
         <section className="container-fluid mt-30n mb-0">
             <div className="row">
