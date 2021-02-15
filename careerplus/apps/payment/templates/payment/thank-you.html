@@ -39,6 +39,7 @@ Thank You - Shine Learning
                 <h1>
                     {% if order.status == 1 %}
                     <figure class="greenTick-icon"></figure>
+                    <script>MyGA.SendEvent('ln_complete_payment', 'ln_complete_payment', 'ln_thankyou_page_clicks', 'thankyou_page', '', false, true);</script>
                     You have made the payment <br />successfully!
                     {% else %}
                     <figure class="waiting-icon"></figure>

@@ -833,8 +833,9 @@ class TrendingCoursesAndSkillsAPI(PopularProductMixin, APIView):
         tprds = SearchQuerySet().filter(id__in=product_pks, pTP__in=[0, 1, 3]).exclude(
             id__in=settings.EXCLUDE_SEARCH_PRODUCTS
         )
-        p_skills = product_obj.filter(id__in=product_pks, categories__is_skill=True).distinct().exclude(
-            categories__related_to__slug__isnull=True).values_list('categories',flat=True)
+        p_skills = ProductCategory.objects.filter(product__id__in=product_pks,category__is_skill=True).distinct().exclude(category__related_to__slug__isnull=True).values_list('category',flat=True)
+        # p_skills1 = product_obj.filter(id__in=product_pks, categories__category__is_skill=True).distinct().exclude(
+        #     categories__related_to__slug__isnull=True).values_list('categories',flat=True)
 
         categories = Category.objects.filter(id__in=p_skills)
 
