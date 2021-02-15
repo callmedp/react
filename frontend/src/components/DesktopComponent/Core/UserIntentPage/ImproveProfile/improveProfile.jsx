@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import UIBanner from '../../../Common/UIBanner/UIbanner';
-import GuidanceRecommendations from '../FindRightJob/GuidanceRecommendations/guidanceRecommendations';
+import UserGuidance from '../UserGuidance/UserGuidance';
 import ShineServices from './ShineServices/shineServices';
 import ShineServicesStatus from './ShineServices/shineServicesStatus'
 
