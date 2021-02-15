@@ -9,7 +9,7 @@ const sagaMiddleware = createSagaMiddleware();
 
 
 
-const composeEnhancers = (typeof window !== 'undefined') && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+const composeEnhancers = (typeof window !== 'undefined') && compose;
 
 // Grab the state from a global variable injected into the server-generated HTML
 const preloadedState = window.__PRELOADED_STATE__

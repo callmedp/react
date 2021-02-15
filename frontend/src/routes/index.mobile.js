@@ -27,7 +27,7 @@ const MobileAppRouter = () => (
 
 export const routes = [
     {
-        path: '/homepage/',
+        path: '/',
         component: HomePageContainer,
         actionGroup: getHomepageActionsMobile,
         exact: true
