@@ -59,6 +59,7 @@ from review.models import Review
 from partner.models import BoosterRecruiter
 from shop.choices import S_ATTR_DICT, A_ATTR_DICT
 from partner.models import BoosterRecruiter,VendorHierarchy
+from core.api_mixin import ShineCandidateDetail
 
 from .decorators import (
     Decorate,
@@ -378,13 +379,37 @@ class MidOutQueueView(TemplateView, PaginationMixin):
         self.payment_date = request.GET.get('payment_date', '')
         return super(MidOutQueueView, self).get(request, args, **kwargs)
 
+    def get_resume_id(self, candidate_id):
+
+        response = ShineCandidateDetail().get_candidate_detail(shine_id=candidate_id)
+        resumes = response.get('resumes', [])
+
+        if len(resumes) > 0:
+            shine_resume_details = resumes[0]
+            return shine_resume_details.get('id')
+        else:
+            return ''
+
+
     def post(self, request, *args, **kwargs):
         form = ResumeUploadForm(request.POST, request.FILES)
         oi_ids = request.POST.get('oi_ids', None)
+        resume_from_shine = request.POST.get('resume_from_shine', None)
+        resume_id = None
         if form.is_valid():
             orderitems = OrderItem.objects.filter(id__in=oi_ids.split())
+            if resume_from_shine and orderitems:
+                order = orderitems.first().order
+                candidate_id = order.candidate_id
+                resume_id = self.get_resume_id(candidate_id=candidate_id)
+                if not resume_id:
+                    error_message = "No resume Uploaded with shine"
+                    messages.add_message(request, messages.ERROR, error_message)
+                    return HttpResponseRedirect(reverse("console:queue-midout"))
             data = {
                 "candidate_resume": request.FILES.get('oi_resume', ''),
+                "resume_from_shine": resume_from_shine,
+                "resume_id": resume_id
             }
 
             ActionUserMixin().upload_candidate_resume(
@@ -392,6 +417,8 @@ class MidOutQueueView(TemplateView, PaginationMixin):
             messages.add_message(request, messages.SUCCESS, 'resume uploaded Successfully')
         else:
             error_message = form.errors.get('oi_resume')
+            if isinstance(error_message, list):
+                error_message = ', '.join(error_message)
             if error_message:
                 messages.add_message(request, messages.ERROR, error_message)
         return HttpResponseRedirect(reverse("console:queue-midout"))

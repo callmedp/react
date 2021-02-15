@@ -188,6 +188,29 @@ $(document).ready(function(){
             }
         } 
     });
+
+    $("input[id='id_resume_from_shine']").change(function(){
+        if(this.checked) {
+            $('#id_oi_resume').val('');
+        }
+    })
+
+    $("input[id='id_oi_resume']").change(function(){
+        if($('#id_oi_resume').val()){
+            $("#id_resume_from_shine").prop('checked', false);
+        }
+    })
+
+    // $("input[id='id_resume_from_shine']").click(function(){
+    //         if($(this).prop("checked") == true){
+    //             $('#resume_shine').val('true')
+    //         }
+    //         else if($(this).prop("checked") == false){
+    //             $('#resume_shine').val('false')
+    //         }
+    //         debugger;
+    //         $('#id_oi_resume').val(''); 
+    //     });
     
     
 })
@@ -207,9 +230,26 @@ const updateSelectedOI = (checkbox,oi_id)=>{
 }
 
 const upload_click = ()=>{
+    if($('#id_oi_resume').val()=='' && $("input[id='id_resume_from_shine']").is(':checked') == false){
+        $('#oi_resume_error').show();
+        $('#upload-doc-modal').modal('show');
+        return;
+    }
+    $('#oi_resume_error').hide();
     if(!selected_order_items.length)
         return
     $('#oi_ids').attr("value",()=>{return selected_order_items.join(" ")})
     $("#resume-upload-form").submit();
     $('#upload-doc-modal').modal('hide')
  }
+
+ // const resume_from_shine = ()=>{
+ //    $('#id_io_resume').click(function(){
+ //            if($(this).prop("checked") == true){
+ //                console.log("Checkbox is checked.");
+ //            }
+ //            else if($(this).prop("checked") == false){
+ //                console.log("Checkbox is unchecked.");
+ //            }
+ //        });
+ // }
