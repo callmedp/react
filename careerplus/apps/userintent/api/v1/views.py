@@ -57,11 +57,10 @@ class CourseRecommendationAPI(APIView):
         #         "user_exp": "0 yr 4 months"
         #     }
         course_ids = RecommendationMixin().get_courses_from_analytics_recommendation_engine(data=data)
-        if course_ids:
-            user_purchased_courses = OrderItem.objects.filter(product__type_flow=2,no_process=False,order__candidate_id=candidate_id,order__status__in=[1, 3]).values_list('product__id')
-            courses = SearchQuerySet().filter(id__in=course_ids).exclude(id__in=user_purchased_courses)
-            course_data = ProductMixin().get_course_json(courses)
-        return APIResponse(data={'course_data':course_data,'course_ids':course_ids},message='recommended courses fetched', status=status.HTTP_200_OK)
+        user_purchased_courses = OrderItem.objects.filter(product__type_flow=2,no_process=False,order__candidate_id=candidate_id,order__status__in=[1, 3]).values_list('product__id')
+        courses = SearchQuerySet().filter(id__in=course_ids).exclude(id__in=user_purchased_courses)
+        course_data = ProductMixin().get_course_json(courses)
+        return APIResponse(data={'course_data':course_data,'course_ids':course_ids,'user_purchased_courses':user_purchased_courses},message='recommended courses fetched', status=status.HTTP_200_OK)
 
 class JobsSearchAPI(APIView):
     permission_classes = ()
