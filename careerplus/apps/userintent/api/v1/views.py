@@ -28,7 +28,7 @@ class CourseRecommendationAPI(APIView):
         'user_exp' : request.GET.get('experience',None),
         'user_app_skills': request.GET.get('skills',None),
         'user_imp_skills':request.GET.get('user_imp_skills',None),
-        'user_skills':request.GET.get('user_skills',None),'
+        'user_skills':request.GET.get('user_skills',None),
         'user_jobtitle':request.GET.get('user_jobtitle',None)
         }
         #Capturing user intent request made
