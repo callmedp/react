@@ -23,7 +23,7 @@ class RecommendationMixin(object):
         data = json.dumps(data)
         headers = {"Content-type": "application/json"}
         course_ids = []
-        status="failure"
+        # status="failure"
 
         try:
             response = requests.post(
@@ -33,7 +33,8 @@ class RecommendationMixin(object):
                 auth=settings.ANALYTICS_COURSES_RECOMMENDATION_API_AUTH,
             )
             course_ids = response.json().get("course_ids", [])
-            status = response.json().get("status", None)
+            # course_ids = response.json().get("course_ids", [])
+            # status = response.json().get("status", None)
         except ValueError as e:
             logger.info(
                 f"Unable to parse JSON Response from analytics courses recommended api:{repr(e)}"
@@ -49,4 +50,4 @@ class RecommendationMixin(object):
                 f"Timeout Error Occured Unable to connect to analytics courses recommended api {repr(e)}"
             )
 
-        return course_ids,status
+        return course_ids
