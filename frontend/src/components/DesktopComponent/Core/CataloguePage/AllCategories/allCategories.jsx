@@ -15,7 +15,7 @@ const AllCategories = () => {
                         <h2 className="heading2 text-center">All categories</h2>
                         <ul className="all-category__list">
                             {
-                                categoryList.map(category => {
+                                categoryList?.map(category => {
                                     return (
                                         <li className="col-sm-3" key={category.url}>
                                             <div className="card">

@@ -33,7 +33,7 @@ const DropDown = (props) => {
                         return (
                             <div className={`tab-pane fade ${activeTab === item.id ? 'show active' : ''}`} id="tab-links1" role="tabpanel" aria-labelledby="category-tab" key={item.id}>
                                 {
-                                    item.children.map(child => {
+                                    item.children?.map(child => {
                                         return (
                                             usedIn === 'exploreCategories' ?
                                                 <Link key={child.url} to={child.url}

@@ -34,7 +34,7 @@ const PopularCourses = (props) => {
             <h2 className="heading2">Popular Courses</h2>
             <ul className="popular-courses__list">
             {
-                trendingCourses?.slice(0,3).map((course) => {
+                trendingCourses.slice(0,3)?.map((course) => {
                     return (
                         <li key={course.id}>
                             <figure>

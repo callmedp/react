@@ -20,7 +20,7 @@ function* mostViewedCourse(action){
         const response = yield call(Api.mostViewedCourse, payload);
         
         if(response?.error){
-            return payload?.reject(response?.error);
+            return payload?.reject(response);
         }
         const item = response?.data?.data;
         yield put(mostViewedCoursesFetched({ [payload.categoryId]: item.mostViewedCourses }))
@@ -61,7 +61,7 @@ function* jobAssistanceAndBlogs(action){
         const response = yield call(Api.jobAssistanceAndBlogs);
         
         if(response?.error){
-            return payload?.reject(response?.error);
+            return payload?.reject(response);
         }
         const item = response?.data?.data;
         yield put(jobAssistanceAndBlogsFetched({ ...item }))
@@ -79,7 +79,7 @@ function* fetchTestimonialsData(action){
         const response = yield call(Api.testimonialsApi);
         
         if(response?.error){
-            return payload?.reject(response?.error);
+            return payload?.reject(response);
         }
         const item = response?.data?.data;
 
@@ -107,7 +107,7 @@ function* skillwithDemands(action) {
         const response = yield call(Api.skillwithDemands);
 
         if (response?.error){
-            return payload?.reject(response?.error);
+            return payload?.reject(response);
         }
         const item = response?.data?.data;
         yield put(skillwithDemandsFetched({ item }))

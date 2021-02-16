@@ -42,7 +42,7 @@ const PopularTab = props => {
     return (
         <Slider {...settings}>
             {
-                productList.map((product, index) => {
+                productList?.map((product, index) => {
                     return (
                         <div className="m-card" key={index}>
                             <div className={`m-card__heading colbg${index + 1}`}>

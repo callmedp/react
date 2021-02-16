@@ -122,7 +122,7 @@ const MyOrders = (props) => {
                                                     <span className="col-3 text-right">Status</span>
                                                 </li>
                                                 {
-                                                    item.orderitems.map((innItem, ind) => {
+                                                    item.orderitems?.map((innItem, ind) => {
                                                         return (
                                                             <li className="row" key={ind}>
                                                                 <span className="col-9 pl-0 noLink">
