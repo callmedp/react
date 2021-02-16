@@ -27,6 +27,7 @@ class CourseRecommendationAPI(APIView):
         'user_functionalarea':request.GET.get("department",None),
         'user_exp' : request.GET.get('experience',None),
         'user_app_skills': request.GET.get('skills',None),
+        #below fields are not used in intent capture form
         'user_imp_skills':request.GET.get('user_imp_skills',None),
         'user_skills':request.GET.get('user_skills',None),
         'user_jobtitle':request.GET.get('user_jobtitle',None)
@@ -60,7 +61,7 @@ class CourseRecommendationAPI(APIView):
             user_purchased_courses = OrderItem.objects.filter(product__type_flow=2,no_process=False,order__candidate_id=candidate_id,order__status__in=[1, 3]).values_list('product__id')
             courses = SearchQuerySet().filter(id__in=course_ids).exclude(id__in=user_purchased_courses)
             course_data = ProductMixin().get_course_json(courses)
-        return APIResponse(data=course_data,message='recommended courses fetched', status=status.HTTP_200_OK)
+        return APIResponse(data={'course_data':course_data,'course_ids':course_ids},message='recommended courses fetched', status=status.HTTP_200_OK)
 
 class JobsSearchAPI(APIView):
     permission_classes = ()
