@@ -11,7 +11,8 @@ const ImproveProfile = (props) => {
             <UIBanner {...props} />
             {/* <GuidanceRecommendations /> */}
             {/* <ShineServices /> */}
-            <ShineServicesStatus />
+            <ShineServices />
+            {/* <ShineServicesStatus /> */}
         </div>
     )
 }
