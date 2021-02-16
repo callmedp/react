@@ -452,6 +452,10 @@ TINYMCE_DEFAULT_CONFIG = {
 RESUME_SHINE_URL = "https://resume.shine.com"
 PAGINATOR_PAGE_SIZE = 10
 
+#recommendation engine apis
+ANALYTICS_COURSES_RECOMMENDATION_API = "http://10.136.1.4:5000/courses"
+ANALYTICS_COURSES_RECOMMENDATION_API_AUTH = ("admin", "learningcourse@111")
+
 try:
     from .settings_local import *
 except:

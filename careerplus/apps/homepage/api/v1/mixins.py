@@ -62,41 +62,7 @@ class PopularProductMixin(object):
 
         popularProducts = ProductMixin().get_course_json(products)
 
-        # for product in products:
-        #         d = json.loads(product.pVrs).get('var_list')
-        #         data = {
-        #             'imgUrl':product.pImg,
-        #             'url':product.pURL,
-        #             'name':product.pNm,
-        #             'imgAlt':product.pImA,
-        #             'rating': float(product.pARx),
-        #             'mode':product.pStM[0] if product.pStM else None,
-        #             'providerName':product.pPvn,
-        #             'price':float(product.pPin),
-        #             'skillList': product.pSkilln,
-        #             'about':product.pAb,
-        #             'title':product.pTt,
-        #             'slug':product.pSg,
-        #             'jobsAvailable':product.pNJ,
-        #             'tags':PRODUCT_TAG_CHOICES[product.pTg][0],
-        #             'brochure':json.loads(product.pUncdl[0]).get('brochure') if product.pUncdl else None,
-        #             'u_courses_benefits':json.loads(product.pUncdl[0]).get('highlighted_benefits').split(';') if product.pUncdl else None,
-        #             'u_desc': product.pDsc,
-        #             'stars': product.pStar,
-        #             'highlights':format_extra_features(product.pBS) if product.pBS else None,
-        #             'id':product.id,
-        #             }
-        #         if len(d)!=0:
-        #             data.update({
-        #                 'duration':d[0].get('dur_days'), 
-        #                 'type':d[0].get('type'),  
-        #                 'label':d[0].get('label'), 
-        #                 'level':d[0].get('level'), 
-        #             })
-                
-        #         popularProducts.append(data)
-
-        return popularProducts 
+        return popularProducts
 
 class ProductMixin(object):
 
