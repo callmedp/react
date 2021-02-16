@@ -313,7 +313,33 @@ class ShineCandidateDetail(ShineToken):
             logging.getLogger('error_log').error(
                 'unable to return candidate resume response  %s' % str(e))
         return None
+    
+    # Intent capture search jobs
+    def get_jobs(self,data={},email=None, shine_id=None, token=None):
+        try:
+            headers = self.get_api_headers()
+            if email and not shine_id:
+                shine_id = self.get_shine_id(email=email, headers=headers)
+            if shine_id:
+                headers = self.get_api_headers()
+                jobs_url = "{}/api/v2/search/candidate/{}/simple/?format=json".format(
+                    settings.SHINE_SITE, shine_id)
+                jobs_response = requests.get(
+                    jobs_url, headers=headers,data=data, timeout=settings.SHINE_API_TIMEOUT)
+                if jobs_response.status_code == 401:
+                    logging.getLogger('error_log').error(
+                        'Token validity compromised, trying again')
+                    cache.set('shine_client_access_token', None)
+                    cache.set('shine_user_access_token', None)
+                    headers = self.get_api_headers()
+                    jobs_response = requests.get(
+                        jobs_url, headers=headers,data=data, timeout=settings.SHINE_API_TIMEOUT)
+                if jobs_response.status_code == 200 and jobs_response.json():
+                    return jobs_response.json()
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get status details %s'%str(e))
 
+        return None
 
 class FeatureProfileUpdate(ShineToken):
 

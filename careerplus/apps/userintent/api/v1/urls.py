@@ -4,4 +4,5 @@ app_name = "userintent"
 
 urlpatterns = [
     re_path(r'^course-recommendation/$',views.CourseRecommendationAPI.as_view(), name='course-recommendation'),
+    re_path(r'^jobs/$',views.JobsSearchAPI.as_view(), name='search-jobs'),
 ]
