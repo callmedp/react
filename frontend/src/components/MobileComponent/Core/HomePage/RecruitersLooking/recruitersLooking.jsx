@@ -49,7 +49,7 @@ const RecruitersLooking = (props) => {
                                         <img src={`${skill?.image}`} className="img-fluid" alt={skill?.skillName} />
                                     </figure>
                                     <h3>{skill?.skillName}</h3>
-                                    { !!skill.no_courses ? <strong>{skill.no_courses} { skill.no_courses == 1 ? 'course': 'courses'}</strong> : ''}
+                                    { !!skill.no_courses ? <span>{skill.no_courses} { skill.no_courses == 1 ? 'course': 'courses'}</span> : ''}
                                     <a href={`${siteDomain}${skill?.skillUrl}`}>Know more</a>
                                 </div>
                             )
