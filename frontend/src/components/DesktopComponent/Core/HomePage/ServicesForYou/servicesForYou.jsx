@@ -1,5 +1,6 @@
 import React from 'react';
 import './servicesForYou.scss';
+import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { imageUrl, siteDomain } from 'utils/domains';
 
@@ -12,8 +13,8 @@ const JobAssistanceServices = (props) => {
             <div className="row">
                 <div className="container mt-40 mb-0">
                     <div className="row d-block">
-                        <h2 className="heading2 text-center mb-5">Job assistance services</h2>
-                        <p className="mb-30 text-center">Find your next job faster by using our services.</p>
+                        <h2 className="heading2 text-center mb-0">Job assistance services</h2>
+                        <p className="mb-30 text-center mt-5">Find your next job faster by using our services.</p>
                         <div className="col-sm-12 d-flex">
                             <div className="flex-1">
                                 <div className="d-flex flex-wrap mb-40">
@@ -21,6 +22,7 @@ const JobAssistanceServices = (props) => {
                                         jobAssistanceServices?.map((service, index) => {
                                             return (
                                                 <div className="col-sm-6" key={service.id}>
+                                                    <Link to={"#"}>
                                                     <div className="services-foryou">
                                                         <h3 className="heading3">{service.heading}</h3>
                                                         <p>{ service.description.length > 100 ? service.description.slice(0,100)+"..." : service.description }</p>
@@ -32,6 +34,7 @@ const JobAssistanceServices = (props) => {
                                                             </figure>
                                                         </span>
                                                     </div>
+                                                    </Link>
                                                 </div>
                                             )
                                         })

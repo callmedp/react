@@ -7,7 +7,7 @@ const LatestBlog = (props) => {
     const { latestBlog } = useSelector(store => store.jobAssistance)
 
     return(
-        <section className="m-container mt-0 mb-0 pl-0 pr-0" data-aos="fade-up">
+        <section className="m-container mt-0 mb-0 pb-0 pr-0" data-aos="fade-up">
             <div className="m-latest-blog">
                 <h2 className="m-heading2-home mb-5 text-center">Latest from blog</h2>
                 <ul className="m-latest-blog__list">

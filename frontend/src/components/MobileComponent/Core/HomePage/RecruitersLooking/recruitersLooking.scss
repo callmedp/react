@@ -29,14 +29,16 @@
         span {
             font-size: 1.2rem;
             margin-left: 1rem;
+            color: $gray-100;
         }
 
-        a {
+        em {
             display: block;
             text-align: right;
             margin-right: 2rem;
             font-size: 1.2rem;
             font-weight: 600;
+            font-style: normal;
         }
     }
 

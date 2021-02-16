@@ -14,6 +14,7 @@ const RecruitersLooking = (props) => {
     const getSlide = (recruiterSlide) => recruiterSlide?.map((skill, index) => {
         return (
             <li className="col-sm-3" key={index}>
+            <Link to={skill.skillUrl}>
                 <div className="card">
                     <figure>
                         <img src={skill.image} className="img-fluid" alt={skill.name} />
@@ -22,6 +23,7 @@ const RecruitersLooking = (props) => {
                     { !!skill.no_courses ? <strong>{skill.no_courses} { skill.no_courses == 1 ? 'course': 'courses'}</strong> : ''}
                     <Link to={skill.skillUrl}>Know more</Link>
                 </div>
+            </Link>
             </li>
         )
     })
@@ -31,8 +33,8 @@ const RecruitersLooking = (props) => {
             <div className="row">
                 <div className="container">
                     <div className="all-category mt-40 mb-30 pos-rel">
-                        <h2 className="heading2 mb-5 text-center">What recruiters are looking at</h2>
-                        <p className="text-center">Browse the skills with high demands to enhance your career</p>
+                        <h2 className="heading2 mb-0 text-center">What recruiters are looking at</h2>
+                        <p className="text-center mt-5">Browse the skills with high demands to enhance your career</p>
                         <Carousel>
                             {
                                 recruiterList?.map((recruiterSlide, inx) => {
