@@ -4,13 +4,20 @@ import './findJob.scss';
 import { useForm } from 'react-hook-form';
 import { InputField, SelectExperienceBox } from 'formHandler/desktopFormHandler/formFields';
 import UserIntentForm from 'formHandler/desktopFormHandler/formData/userIntent';
+import { useDispatch } from 'react-redux';
 
 const FindJob = (props) => {
 
     const { register, handleSubmit, errors } = useForm();
+    const dispatch = useDispatch();
+    const { history, type } = props;
 
     const onSubmit = async (values, event) => {
-        console.log(values)
+        // await new Promise((resolve) => dispatch());
+        history.push({
+            search: `?job=${values.job}&experience=${values.experience}&location=${values.location}&skills=${values.skills}`
+          })
+          
     }
 
     return (

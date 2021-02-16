@@ -13,7 +13,6 @@ const InputField = (props) => {
     
     return (
         <div className={ !!errors ? "form-group error" : "form-group" }>
-            { register(validation) }
             <input className={className} type={type} name={name}
                 placeholder={placeholder} ref={register(validation)} value={value}
                 defaultValue={defaultValue} id={id} />
