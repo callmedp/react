@@ -113,7 +113,7 @@ const UploadResumeModal =(props) => {
                             <p className="error_cls">{errors.resume_course && "* Please Select Atlest One"}</p>
 
                             <ul className="db-upload-resume--list">
-                                {pending_resume_items.map((res,ind) => {
+                                {pending_resume_items?.map((res,ind) => {
                                     return (
                                         <li className="custom-control custom-checkbox" key={ind}>
                                             <input type="checkbox" className="custom-control-input" name="resume_course" id={res.id} value={res.id} ref={register({validate: () => !getValues("resume_course").length ? errors.resume_course === true : null })}/> 

@@ -18,7 +18,7 @@ const handleTestimonialList = (testimonialList) => testimonialList?.map((testimo
 });
 
 const BoostedCareers = (props) => {
-
+    
     const { testimonialCategory } = useSelector(store => store.testimonials)
 
     return (

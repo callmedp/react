@@ -4,6 +4,7 @@ import { imageUrl } from 'utils/domains';
 
    
 const OurLearners = (props) => {
+    
     return(
         <section className="container-fluid lightblue-bg mt-50 mb-0" data-aos="fade-up">
             <div className="row"> 

@@ -12,8 +12,6 @@ import './recruitersLooking.scss';
 // import 'slick-carousel/slick/slick.css';
 import { siteDomain } from 'utils/domains';
 
-// API Import
-import { fetchSkillwithDemands } from 'store/HomePage/actions';
 
 
 const RecruitersLooking = (props) => {
@@ -33,29 +31,6 @@ const RecruitersLooking = (props) => {
         variableWidth: true,
         variableHeight: true,
     };
-
-
-    const handleEffects = async () => {
-        try {
-            if (!(window && window.config && window.config.isServerRendered)) {
-                await new Promise((resolve, reject) => dispatch(fetchSkillwithDemands({ resolve, reject })));
-            }
-            else {
-                delete window.config?.isServerRendered
-            }
-        }
-        catch (e) {
-            Swal.fire({
-                icon: 'error',
-                text: 'Sorry! we are unable to load data from server.'
-            })
-        }
-    };
-
-
-    useEffect(() => {
-        handleEffects();
-    }, [])
 
 
 

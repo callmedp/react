@@ -6,6 +6,7 @@ import SearchBar from '../../../Common/Header/SeachBar/SearchBar.jsx';
 import { imageUrl } from 'utils/domains';
 
 const HomeBanner = (props) => {
+
     return (
        <header className="container-fluid pos-rel home-bg">
            

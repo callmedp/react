@@ -43,10 +43,10 @@ const PopularCourses = (props) => {
                 <div className="m-tabset-pop">
                     {populartabType?.map((tab, index) => {
                         return (
-                            <>
-                                <input key={index} type="radio" name="tabset" id={`tab${index}`} aria-controls={tab?.visible} defaultChecked={key === tab?.slug ? true : false} onClick={() => handleTabChange(tab?.slug, index)} />
+                            <React.Fragment key={index}>
+                                <input  type="radio" name="tabset" id={`tab${index}`} aria-controls={tab?.visible} defaultChecked={key === tab?.slug ? true : false} onClick={() => handleTabChange(tab?.slug, index)} />
                                 <label htmlFor={`tab${index}`}>{tab?.visible}</label>
-                            </>
+                            </React.Fragment>
                         )
                     })
                     }
@@ -56,7 +56,7 @@ const PopularCourses = (props) => {
                     <div className="tab-panels">
                         {populartabType?.map((tab, index) => {
                             return (
-                                <div id={`tab${index}`} className="tab-panel">
+                                <div id={`tab${index}`} className="tab-panel" key={index}>
                                     <div className="m-courses">
 
                                         {key === 'master' ?

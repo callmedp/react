@@ -22,7 +22,7 @@ const ReviewModal = (props) => {
                                 return (
                                     <li key={idx}>
                                         <div className="card__rating">
-                                            { rev.rating.map((val, ind) => <i key={ind} value={val} className={fillStarForCourse(val)}></i>)}
+                                            { rev.rating?.map((val, ind) => <i key={ind} value={val} className={fillStarForCourse(val)}></i>)}
                                         </div>
 
                                         <span className="reviews-list--date">{rev.title ? rev.title : ""} {rev.created}</span>

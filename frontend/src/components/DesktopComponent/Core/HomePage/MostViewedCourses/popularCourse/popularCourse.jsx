@@ -10,7 +10,7 @@ const popularCourse = (props) => {
         )
     }
     return (
-        <li className="col">
+        <li className="col-sm-3">
         <div className="card">
             <div className="card__heading">
                 <figure>

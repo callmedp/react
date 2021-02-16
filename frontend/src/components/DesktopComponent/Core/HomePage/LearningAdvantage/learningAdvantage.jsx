@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 
    
 const LearningAdvantage = (props) => {
+    
     return(
         <section className="container-fluid learning-advantage" data-aos="fade-up">
             <div className="row">

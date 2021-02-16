@@ -9,6 +9,7 @@ import { fetchInDemandProducts } from 'store/HomePage/actions';
 import { startHomePageLoader, stopHomePageLoader } from 'store/Loader/actions';
 
 function PopularCourses() {
+    
     const [key, setKey] = useState('master');
     const { courses, certifications } = useSelector( store => store.inDemand )
     const dispatch = useDispatch()
