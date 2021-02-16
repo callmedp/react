@@ -38,11 +38,11 @@ function CoursesTray() {
 
                         <Tab eventKey="categories1" title={<h2>Sales and Marketing</h2>}>
                             {
-                                SnMCourseList.slice(0, categoryKey1).map((courses, index) => {
+                                SnMCourseList.slice(0, categoryKey1)?.map((courses, index) => {
                                     return (
                                         <ul className="courses-tray__list" key={index} >
                                             {
-                                                courses.map((course, idx) => <SnMCourses listIdx={idx} index={index.toString() + idx.toString()} product={course} key={index.toString() + idx.toString()} />)
+                                                courses?.map((course, idx) => <SnMCourses listIdx={idx} index={index.toString() + idx.toString()} product={course} key={index.toString() + idx.toString()} />)
                                             }
                                         </ul>
                                     )
@@ -54,11 +54,11 @@ function CoursesTray() {
                         </Tab>
                         <Tab eventKey="categories2" title={<h2>Information Technology</h2>}>
                             {
-                                ITCourseList.slice(0, categoryKey2).map((courses, index) => {
+                                ITCourseList.slice(0, categoryKey2)?.map((courses, index) => {
                                     return (
                                         <ul className="courses-tray__list" key={index} >
                                             {
-                                                courses.map((course, idx) => <ITCourses listIdx={idx} index={index.toString() + idx.toString()} product={course} key={index.toString() + idx.toString()} />)
+                                                courses?.map((course, idx) => <ITCourses listIdx={idx} index={index.toString() + idx.toString()} product={course} key={index.toString() + idx.toString()} />)
                                             }
                                         </ul>
                                     )
@@ -73,7 +73,7 @@ function CoursesTray() {
                                     return (
                                         <ul className="courses-tray__list" key={index} >
                                             {
-                                                courses.map((course, idx) => <BnFCourses listIdx={idx} index={index.toString() + idx.toString()} product={course} key={index.toString() + idx.toString()} />)
+                                                courses?.map((course, idx) => <BnFCourses listIdx={idx} index={index.toString() + idx.toString()} product={course} key={index.toString() + idx.toString()} />)
                                             }
                                         </ul>
                                     )

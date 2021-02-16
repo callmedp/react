@@ -12,8 +12,6 @@ import './recruitersLooking.scss';
 // import 'slick-carousel/slick/slick.css';
 import { siteDomain } from 'utils/domains';
 
-// API Import
-import { fetchSkillwithDemands } from 'store/HomePage/actions';
 
 
 const RecruitersLooking = (props) => {
@@ -35,29 +33,6 @@ const RecruitersLooking = (props) => {
     };
 
 
-    const handleEffects = async () => {
-        try {
-            if (!(window && window.config && window.config.isServerRendered)) {
-                await new Promise((resolve, reject) => dispatch(fetchSkillwithDemands({ resolve, reject })));
-            }
-            else {
-                delete window.config?.isServerRendered
-            }
-        }
-        catch (e) {
-            Swal.fire({
-                icon: 'error',
-                text: 'Sorry! we are unable to load data from server.'
-            })
-        }
-    };
-
-
-    useEffect(() => {
-        handleEffects();
-    }, [])
-
-
 
     return (
         <section className="m-container m-lightblue-bg mt-0 mb-0 pb-0 pl-0 pr-0" data-aos="fade-up">
@@ -74,7 +49,7 @@ const RecruitersLooking = (props) => {
                                         <img src={`${skill?.image}`} className="img-fluid" alt={skill?.skillName} />
                                     </figure>
                                     <h3>{skill?.skillName}</h3>
-                                    { !!skill.no_courses ? <strong>{skill.no_courses} { skill.no_courses == 1 ? 'course': 'courses'}</strong> : ''}
+                                    { !!skill.no_courses ? <span>{skill.no_courses} { skill.no_courses == 1 ? 'course': 'courses'}</span> : ''}
                                     <a href={`${siteDomain}${skill?.skillUrl}`}>Know more</a>
                                 </div>
                             )

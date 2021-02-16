@@ -13,7 +13,7 @@ const OurVendors = (props) => {
                 <h2 className="heading2 text-center mx-auto">Our Vendors</h2>
                 <div className="our-vendors">
                     {
-                        vendorList?.slice(0,4).map( (vendor, index) => {
+                        vendorList.slice(0,4)?.map( (vendor, index) => {
                             return (
                                 <figure key={index}>
                                 <img src={vendor.image} className="img-fluid" alt={vendor.name} />

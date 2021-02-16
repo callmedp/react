@@ -9,7 +9,6 @@ import Error404Container from 'components/MobileComponent/Common/ErrorPage404/er
 import { getCataloguePageActionsMobile } from "apiHandler/cataloguePageApi";
 import DashboardPageContainer from 'components/MobileComponent/Core/DashboardPage/dashboardPage';
 import RouteWithSubRoutes from 'routes/route';
-import { getDashboardPageActionsMobile } from "apiHandler/dashboardPageApi";
 import HomePageContainer from 'components/MobileComponent/Core/HomePage/homePage';
 import { getHomepageActionsMobile } from "apiHandler/homepageApi";
 
@@ -27,7 +26,7 @@ const MobileAppRouter = () => (
 
 export const routes = [
     {
-        path: '/homepage/',
+        path: '/',
         component: HomePageContainer,
         actionGroup: getHomepageActionsMobile,
         exact: true

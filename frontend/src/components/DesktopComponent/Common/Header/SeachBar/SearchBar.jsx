@@ -42,13 +42,12 @@ const SearchBar = (props) => {
         )
     }
 
-    const k={"products":[{"name":"Editing","url":"/course/other/editing/pd-7123"},{"name":"LinkedIn Resume","url":"/services/level2-priya/linkedin-resume/pd-8"},{"name":"Linkedin Priya -  for FR","url":"/services/level2-priya/linkedin-priya/pd-2657"},{"name":"Distribution","url":"/course/other/distribution/pd-7120"},{"name":"Test Linkedin","url":"/services/level2-priya/test-linkedin/pd-2677"},{"name":"Direct Sales","url":"/course/other/direct-sales/pd-7084"},{"name":"Trading","url":"/course/other/trading/pd-7125"},{"name":"Test Linkedin test Priya","url":"/services/level2-priya/linkedin-test-priya/pd-2676"},{"name":"Linkedin Priya for  4-8 years","url":"/services/level2-priya/test-product-priya/pd-2665"},{"name":"Linkedin combo","url":"/services/level2-priya/linkedin-combo/pd-2675"},{"name":"Resume Writing Fresher for Linkedin","url":"/services/category21-2/resume-writing-2/pd-2682"},{"name":"Resume Writing Exp for Linkedin","url":"/services/category21-2/resume-writing-3/pd-2683"}],"skills":[{"name":"digital-marketing","url":"/courses/category21-2/digital-marketing-2/3/"},{"name":"Digital Marketing","url":"/courses/sales-and-marketing/digital-marketing/32/"}],"courses":[{"name":"Digital marketing expert","url":"/"},{"name":"India","url":"/course/category21-2/india/pd-9"},{"name":"new linkedin product","url":"/"}]}
 
     useEffect(() => {
         // Make sure we have a value (user has entered something in input)
         if (debouncedSearchTerm) {
             searchCharacters(debouncedSearchTerm).then(results => {
-            setResults(k);
+            setResults(results);
         });
         } else {
             setResults([]);

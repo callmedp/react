@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchMostViewedCourses } from 'store/HomePage/actions';
 
 function MostViewedCourses() {
+    
     const [key, setKey] = useState('-1');
     const dispatch = useDispatch()
     const { mostViewedCourses } = useSelector(store => store.mostViewed)
@@ -43,7 +44,7 @@ function MostViewedCourses() {
                                         <Tab eventKey={category.id} title={<span>{category.name}</span>} key={category.id}>
                                             <ul className="recent-courses__list">
                                                 {
-                                                    mostViewedCourses[key]?.map((course, idx) => <PopularCourse course={course} />)
+                                                    mostViewedCourses[key]?.map((course, idx) => <PopularCourse course={course} key={idx}/>)
                                                 }
                                             </ul>
                                         </Tab>

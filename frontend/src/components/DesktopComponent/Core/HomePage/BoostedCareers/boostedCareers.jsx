@@ -10,7 +10,7 @@ const handleTestimonialList = (testimonialList) => testimonialList?.map((testimo
             <div className="card text-center">
                 <span className="card__name">{ testimonial.firstName ?  testimonial.firstName[0].toUpperCase() : ""}{ testimonial.lastName ? testimonial.lastName[0].toUpperCase() : ""}</span>
                 <p className="card__txt">{ testimonial.review}</p>
-                <strong>{ testimonial.firstName +  testimonial.lastName}</strong>
+                <strong>{testimonial.firstName} {testimonial.lastName}</strong>
                 <span className="card__location">{ testimonial.company ?  testimonial.company : <br />}</span>
             </div>
         </div>
@@ -18,7 +18,7 @@ const handleTestimonialList = (testimonialList) => testimonialList?.map((testimo
 });
 
 const BoostedCareers = (props) => {
-
+    
     const { testimonialCategory } = useSelector(store => store.testimonials)
 
     return (

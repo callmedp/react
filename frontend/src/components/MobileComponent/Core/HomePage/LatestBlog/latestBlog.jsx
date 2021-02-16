@@ -1,7 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import './latestBlog.scss';
-import { Link } from 'react-router-dom';
 import { siteDomain } from 'utils/domains';
    
 const LatestBlog = (props) => {
@@ -17,13 +16,13 @@ const LatestBlog = (props) => {
                             return (
                                 <li className="col pl-0" key={ index }>
                                     <div className="m-card">
-                                        <Link to={`${siteDomain}${blog?.url}`}>
+                                        <a href={`${siteDomain}${blog?.url}`}>
                                             <figure>
                                                 <img src={blog?.image} className="img-fluid" alt={blog?.display_name} />
                                                 <span>{ blog?.p_category?.length > 13 ? blog?.p_category?.slice(0, 13) + '...' : blog?.p_category }</span>
                                             </figure>
                                             <strong>{ blog?.display_name?.length > 40 ? blog?.display_name?.slice(0, 40) + '...' : blog?.display_name }</strong>
-                                        </Link>
+                                        </a>
                                     </div>
                                 </li>
                             )

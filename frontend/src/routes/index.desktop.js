@@ -21,7 +21,7 @@ const DesktopAppRouter = () => (
 
 export const routes = [
     {
-        path: '/homepage/',
+        path: '/',
         component: HomePageContainer,
         actionGroup: getHomepageActions,
         exact: true

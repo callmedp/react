@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { siteDomain } from 'utils/domains';
 
 const LatestBlog = (props) => {
-
+    
     const { latestBlog } = useSelector( store => store.jobAssistance )
 
     return(

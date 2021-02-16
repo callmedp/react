@@ -13,7 +13,7 @@ const RecruitersLooking = (props) => {
 
     const getSlide = (recruiterSlide) => recruiterSlide?.map((skill, index) => {
         return (
-            <li className="col-sm-3">
+            <li className="col-sm-3" key={index}>
                 <div className="card">
                     <figure>
                         <img src={skill.image} className="img-fluid" alt={skill.name} />
@@ -37,7 +37,7 @@ const RecruitersLooking = (props) => {
                             {
                                 recruiterList?.map((recruiterSlide, inx) => {
                                     return (
-                                        <Carousel.Item interval={10000000000}>
+                                        <Carousel.Item interval={10000000000} key={inx}>
                                             <ul className="all-category__list">
                                                 {
                                                     getSlide(recruiterSlide)
