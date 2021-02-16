@@ -7,7 +7,6 @@ from django.utils.translation import ugettext_lazy as _
 from shop.models import FunctionalArea, Skill
 from .choices import INTENT_CHOICES
 
-
 # Create your models here.
 class UserIntent(AbstractAutoDate):
     candidate_id = models.CharField(
@@ -17,21 +16,12 @@ class UserIntent(AbstractAutoDate):
         verbose_name=_("Customer ID"))
     intent = models.PositiveSmallIntegerField(
         default=0, choices=INTENT_CHOICES)
-    preferred_role = models.CharField(max_length=200, unique=True, blank=True, null=True)
-    current_job_title = models.CharField(max_length=200, unique=True, blank=True, null=True)
-    preferred_location = models.CharField(
-        'Candidate Location', max_length=300, blank=True, null=True)
-    experience = models.IntegerField(
-        blank=True,
-        null=True,
-        editable=False)
-    department = models.ForeignKey(FunctionalArea,on_delete=models.DO_NOTHING,
-        to_field="id",
-        null=True,
-        blank=True,
-        verbose_name=_("Department"))
-    skills = models.ForeignKey(
-        Skill,
-        verbose_name=_('Skill'),
-        on_delete=models.CASCADE,
-        blank=True, null=True)
+    current_job_title = models.CharField(max_length=255, blank=True, null=True)
+    preferred_role = models.TextField(blank=True,null=True)
+    preferred_location = models.TextField(blank=True,null=True)
+    department = models.TextField(blank=True,null=True)
+    skills = models.TextField(blank=True,null=True)
+    experience = models.CharField(max_length=255, blank=True, null=True)
+
+    def __str__(self):
+        return dict(INTENT_CHOICES).get(self.intent)

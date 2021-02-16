@@ -3,5 +3,5 @@ from . import views
 app_name = "userintent"
 
 urlpatterns = [
-    # re_path(r'^abc/$',, name='abc'),
+    re_path(r'^course-recommendation/$',views.CourseRecommendationAPI.as_view(), name='course-recommendation'),
 ]
