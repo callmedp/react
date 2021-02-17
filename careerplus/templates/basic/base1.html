@@ -160,6 +160,7 @@
           <script src="{% static 'shinelearn/js/common/plugins.ga.js' %}"></script>
           <script src="{% static 'shinelearn/js/webmobile/webmobile.js' %}"> </script>
           {% endcompress %}
+          {% include 'homepage/partials/ga.impression.html'%}
           <script>
             
             function gaEvent(event_cat,event_lab,event_action){
