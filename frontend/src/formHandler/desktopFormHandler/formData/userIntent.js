@@ -4,7 +4,6 @@ export default {
         type: "text",
         name: "job",
         id: "job",
-        value: "Python",
         placeholder: " ",
         label: "Current job title",
         inputType: 'input',
@@ -50,7 +49,6 @@ export default {
         placeholder: " ",
         label: "Preferred location",
         inputType: "input",
-        value: "Gurugram",
         validation: {
             required: true
         },
@@ -63,7 +61,6 @@ export default {
         name: "skills",
         type: "text",
         placeholder: " ",
-        value: "Django",
         label: "Your skills",
         inputType: "input",
         validation: {

@@ -88,7 +88,7 @@ const FindJob = (props) => {
                                             errors={!!errors ?errors[UserIntentForm.skills.name] : ''} />
                                         
                                         <button type="submit" className="btn btn-inline btn-primary submit-btn mt-30" role="button" data-toggle="modal"
-                                        data-target="#thankyouModal">View jobs</button>
+                                        data-target="#thankyouModal">{ type === 'job' ? 'View jobs' : 'View courses' }</button>
                                     </form>
                                 </div>
                             </div>
