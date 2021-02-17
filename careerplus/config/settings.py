@@ -466,8 +466,8 @@ LEARNING_MONGO_DB = 'analyticsLearning'
 #Default products to be recommended
 DEFAULT_LEARNING_COURSE_RECOMMENDATION_PRODUCT_ID = [2634, 2787, 1, 4]
 
-# this maps learning products as per flow and sub type flow at analytics side.
 # product of Resume Critique flow is not included in recommendation engine.
+# Analytics product groups mapped with learning flows and sub type flows.
 ANALYTIC_PRODUCT_ID_TO_SHINE_PRODUCT_ID = {
     1: "application_highlighter",
     2: "skills_assessment",

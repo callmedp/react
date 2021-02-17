@@ -70,7 +70,7 @@ class ServiceRecommendationAPI(APIView):
         #     candidate_id = '5e4c0b5f5d0795517fd73c08'
         # data = cache.get(f"analytics_recommendations_services{candidate_id}",None)
         # if data is None:
-        recommended_services_ids = RecommendationMixin().get_services_from_analytics_recommendation_engine()#)(candidate_id=candidate_id)
+        recommended_services_ids = RecommendationMixin().get_services_from_analytics_recommendation_engine(candidate_id=candidate_id)
         services = SearchQuerySet().filter(id__in=recommended_services_ids)
         data = ProductMixin().get_course_json(services)
     #     cache.set(
