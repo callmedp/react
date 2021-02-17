@@ -38,7 +38,7 @@ const appMobileIndexJs = resolveModule(resolveApp, 'src/index.mobile');
 const appHtml = '!!raw-loader!public/serverIndex.ejs';
 const appBuild = resolveApp('../careerplus/static_core/react');
 const indexHtml = '../../../frontend/views/index.ejs';
-const indexMobileHtml = '../../../frontend/views/index.mobile.ejs';
+const indexMobileHtml = '../../../frontend/views/indexMobile.ejs';
 
 module.exports = {
   webpack: function (config, env) {

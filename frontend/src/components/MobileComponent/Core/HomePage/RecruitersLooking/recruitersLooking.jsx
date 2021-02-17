@@ -22,12 +22,12 @@ const RecruitersLooking = (props) => {
     const settings = {
         dots: false,
         arrows: false,
-        infinite: true,
+        infinite: false,
         speed: 500,
         slidesToShow: 1,
         slidesToScroll: 1,
         swipeToSlide: true,
-        centerMode: true,
+        // centerMode: true,
         variableWidth: true,
         variableHeight: true,
     };
@@ -35,7 +35,7 @@ const RecruitersLooking = (props) => {
 
 
     return (
-        <section className="m-container m-lightblue-bg mt-0 mb-0 pb-0 pl-0 pr-0" data-aos="fade-up">
+        <section className="m-container m-lightblue-bg mt-0 mb-0 pb-0 pr-0" data-aos="fade-up">
             <div className="m-all-category">
                 <h2 className="m-heading2-home text-center mb-5">What recruiters are looking at</h2>
                 <p className="fs-13 text-center">Browse the skills with high demands</p>
@@ -44,14 +44,18 @@ const RecruitersLooking = (props) => {
                     {
                         trendingSkills?.map((skill, index) => {
                             return (
-                                <div className="m-card" key={index}>
+                                <Link to={skill.skillUrl} key={index}>
+                                <div className="m-card" >
+                                    
                                     <figure>
                                         <img src={`${skill?.image}`} className="img-fluid" alt={skill?.skillName} />
                                     </figure>
                                     <h3>{skill?.skillName}</h3>
                                     { !!skill.no_courses ? <span>{skill.no_courses} { skill.no_courses == 1 ? 'course': 'courses'}</span> : ''}
-                                    <a href={`${siteDomain}${skill?.skillUrl}`}>Know more</a>
+                                    <em>Know more</em>
+                                    
                                 </div>
+                                </Link>
                             )
                         })
                     }

@@ -92,7 +92,7 @@ app.get(expressRoutes, (req, res) => {
     if (isMobile(userAgents)) {
 
         console.log("<><><><><><>Entered Mobile<><><><><><>   ", req.url)
-        indexFile = 'index.mobile';
+        indexFile = 'indexMobile';
         routes = require('routes/index.mobile').routes;
 
     }
@@ -118,9 +118,8 @@ app.get(expressRoutes, (req, res) => {
                 }
             }
 
-
+          
             appContent = render(req, routes);
-
             // const helmet = Helmet.renderStatic();
             // let metaTitlesAll = "";
 
@@ -168,11 +167,11 @@ app.get('*', (req, res) => {
 
     if (isMobile(userAgents)) {
         console.log("************Entered Mobile***********", req.url)
-        indexFile = 'index.mobile.html';
+        indexFile = 'indexMobile';
     }
     else {
         console.log("************Entered Desktop***********", req.url)
-        indexFile = 'index.html';
+        indexFile = 'index';
     }
    
     return res.render(indexFile, {

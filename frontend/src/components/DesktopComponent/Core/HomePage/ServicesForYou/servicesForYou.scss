@@ -5,6 +5,11 @@
 .services-foryou {
     background: $white;
     margin: 1.5rem 0;
+
+    p {
+        color: $gray-100;
+        font-weight: 400;
+    }
 }
 
 .services-img {
