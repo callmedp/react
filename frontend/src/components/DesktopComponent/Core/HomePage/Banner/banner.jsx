@@ -36,7 +36,7 @@ const HomeBanner = (props) => {
                             </Carousel>
                         </div>
                         <div className="banner-search mt-20">
-                            <SearchBar place="banner" placeHolder = 'Search course, assessment...'/>
+                            <SearchBar place="banner" placeHolder = 'Search course, assessment...' isHomepage={true} />
                             {/* <form className="form-inline top-search my-2 my-lg-0">
                                 <input className="form-control top-input" type="search" placeholder="Search courses" aria-label="Search" />
                                 <button className="btn btn-search" type="submit"><figure className="icon-search"></figure></button>
