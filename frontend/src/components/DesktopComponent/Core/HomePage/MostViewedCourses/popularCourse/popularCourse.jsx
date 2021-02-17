@@ -26,7 +26,9 @@ const popularCourse = (props) => {
                     { course.stars?.map((star) => starRatings(star)) }
                     <span>{course.rating}/5</span>
                 </span>
-                <span className="mode">{course?.mode}</span>
+                {
+                    course?.mode && <span className="mode">{course?.mode}</span>
+                }
                 </div>
                 <div className="card__price mt-10">
                     <strong>{course.price}/-</strong> 
