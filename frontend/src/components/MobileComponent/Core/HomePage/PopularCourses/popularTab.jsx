@@ -66,7 +66,7 @@ const PopularTab = props => {
                                     {product.mode ? <span className="m-mode">{product.mode}</span> : ''}
                                 </div>
                                 <div className="m-card__duration-mode mt-10">
-                                    {product.jobsAvailable ? <> <strong>{product.jobsAvailable}</strong> Jobs available </> : ''} {product.jobsAvailable && product.duration ? '|' : ''} {product.duration ? <>Duration: <strong>{product.duration} days</strong> </> : ''}
+                                    {product.jobsAvailable ? <> <strong>{product.jobsAvailable}</strong> Jobs available </> : ''} {product.jobsAvailable && product.duration ? '|' : ''} {product.duration ? <>Duration: <strong>{product.duration} days</strong> </> : <strong>&nbsp;</strong>}
                                 </div>
                                 <a className="m-view-program mt-10" href={`${siteDomain}${product.url}`}>View program</a>
                             </div>
