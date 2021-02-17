@@ -8,7 +8,7 @@ const UpgradeSkills = (props) => {
     const settings = {
         dots: false,
         arrows: false,
-        infinite: true,
+        infinite: false,
         speed: 500,
         slidesToShow: 1,
         slidesToScroll: 1,
@@ -16,7 +16,7 @@ const UpgradeSkills = (props) => {
         variableWidth: true,
     };
     return(
-        <section className="m-container mt-0 mb-0 pr-0 pt-0" data-aos="fade-up">
+        <section className="m-container mt-0 mb-0 pr-0 pt-0">
             <div className="m-upgrade-skills">
                 <h2 className="m-heading2-home text-center mb-5">Why upgrade your skills </h2>
                 <p className="fs-13 text-center">Top reasons to upgrade your skills</p>

@@ -37,9 +37,9 @@ const Footer = (props) => {
                             <a href={`${siteDomain}/disclaimer`} onClick={() =>  MyGA.SendEvent('homepage_footer','ln_homepage_footer', 'ln_homepage_footer_clicked', 'Disclaimer','', false, true)}>Disclaimer</a>&nbsp;&nbsp;
                             </li>
                             <li className="social-icon">
-                                <a href="https://www.facebook.com/shinelearningdotcom/" className="icon-facebook" onClick={() =>  MyGA.SendEvent('social_media_follow','ln_social_media_follow', 'ln_facebook', 'homepage','', false, true)}></a>
+                                <a href="https://www.facebook.com/shinelearningdotcom/" className="icon-facebook mt-0" onClick={() =>  MyGA.SendEvent('social_media_follow','ln_social_media_follow', 'ln_facebook', 'homepage','', false, true)}></a>
                                 <a  href="https://in.linkedin.com/company/shinelearning" className="icon-linkedin" onClick={() =>  MyGA.SendEvent('social_media_follow','ln_social_media_follow', 'ln_linkedin', 'homepage','', false, true)}></a>
-                                <a href="https://twitter.com/shinelearning" className="icon-twitter" onClick={() =>  MyGA.SendEvent('social_media_follow','ln_social_media_follow', 'ln_twitter', 'homepage','', false, true)}></a>
+                                <a href="https://twitter.com/shinelearning" className="icon-twitter mt-5" onClick={() =>  MyGA.SendEvent('social_media_follow','ln_social_media_follow', 'ln_twitter', 'homepage','', false, true)}></a>
                             </li>
                         </ul>
                         {

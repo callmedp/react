@@ -21,7 +21,7 @@ const ServicesForYou = (props) => {
     const settings = {
         dots: false,
         arrows: false,
-        infinite: true,
+        infinite: false,
         speed: 500,
         slidesToShow: 1,
         slidesToScroll: 1,
@@ -39,17 +39,19 @@ const ServicesForYou = (props) => {
                     {
                         jobAssistanceServices?.map((job, index) => {
                             return (
+                                <Link to={`${siteDomain}${job?.url}`}>
                                 <div className="m-services-foryou__list" key={index}>
                                     <h3 className="m-heading3">{ job?.heading }</h3>
                                     <p>{ job?.description?.length > 80 ? job?.description?.slice(0, 80) + '...' : job?.description }</p>
                                     <span className="d-flex">
-                                        <a href={`${siteDomain}${job?.url}`}>Know more</a>
+                                        <a>Know more</a>
                                         {/* <figure className={`micon-service${index + 1}`}></figure> */}
                                         <figure>
                                             <img src={job?.img} />
                                         </figure>
                                     </span>
                                 </div>
+                                </Link>
                             )
                         })
                     }

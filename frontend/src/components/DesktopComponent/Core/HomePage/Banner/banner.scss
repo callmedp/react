@@ -202,7 +202,7 @@ header {
 
             form {
                 margin-right: 1rem;
-                width: 32rem;
+                width: 35rem;
 
                 .top-input {
                     height: 5rem;
@@ -213,6 +213,10 @@ header {
                 .btn-search {
                     height: 5rem;
                     padding-right: 1.5rem;
+
+                    .icon-search {
+                        margin-top: .7rem;
+                    }
                 }
             }
 
