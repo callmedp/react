@@ -57,9 +57,9 @@ const SearchBar = (props) => {
 
     return (
         <>
-            <div className={`pos-rel ${ !!isHomepage ? ' ml-auto' : ''}`}>
+            <div className={`pos-rel ${ !isHomepage ? ' ml-auto' : ''}`}>
                 <form className={`form-inline my-2 my-lg-0 ${place === 'banner' ? 'top-search': 'top-search'}`} onSubmit={handleSubmit(submitData)}>
-                    <input className="form-control top-input" type="search" onChange={e => setSearchTerm(e.target.value)} onFocus={()=>setShowResults(true)} 
+                    <input className="form-control top-input" type="search" id={ !!isHomepage ? 'Search' : 'Search-Box' } onChange={e => setSearchTerm(e.target.value)} onFocus={()=>setShowResults(true)} 
                         placeholder={props.placeHolder ? props.placeHolder : 'Search course, assessment...'} name="query" aria-label="Search" ref={register({required: true})} autoComplete="off" />
                     <button className="btn btn-search" aria-label="search Button" type="submit" onClick={() => MyGA.SendEvent('click_on_search','ln_click_on_search', 'ln_search_initiated_navigation', 'ln_click_on_search', 'click_on _search','', false, true)}><figure className="icon-search"></figure></button>
                 </form>

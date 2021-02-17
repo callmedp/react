@@ -56,7 +56,7 @@ const ProductCards = props => {
                                         <span>{product?.rating?.toFixed(1)}/5</span>
                                     </span>
                                     {
-                                        !!showMode ? <span className="m-mode">{product.mode}</span> : ''
+                                        !!showMode && product?.mode ? <span className="m-mode">{product.mode}</span> : ''
                                     }
                                 </div>
                                 <div className="m-card__price">

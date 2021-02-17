@@ -47,7 +47,7 @@ const PopularTab = props => {
                         <div className="m-card" key={index}>
                             <div className={`m-card__heading colbg${index + 1}`}>
                                 {/* <span className="m-flag-yellow">BESTSELLER</span> */}
-                                {product.tags === 2 && <span className="m-flag-yellow">NEW</span>}
+                                {product.tags === 2 && <span className="m-flag-blue">NEW</span>}
                                 {product.tags === 1 && <span className="m-flag-yellow">BESTSELLER</span>}
                                 <figure>
                                     <img src={product.imgUrl} alt={product.imageAlt} itemProp="image" />

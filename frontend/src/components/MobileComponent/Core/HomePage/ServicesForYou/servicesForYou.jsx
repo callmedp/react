@@ -39,7 +39,7 @@ const ServicesForYou = (props) => {
                     {
                         jobAssistanceServices?.map((job, index) => {
                             return (
-                                <a to={`${siteDomain}${job?.url}`}>
+                                <a href={`${siteDomain}${job?.url}`}>
                                 <div className="m-services-foryou__list" key={index}>
                                     <h3 className="m-heading3">{ job?.heading }</h3>
                                     <p>{ job?.description?.length > 80 ? job?.description?.slice(0, 80) + '...' : job?.description }</p>
