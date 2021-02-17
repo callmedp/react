@@ -463,6 +463,9 @@ LEARNING_MONGO_PASSWORD = '@n@lyt!c$'
 LEARNING_MONGO_INSTANCE_STR = '172.22.65.150:27017'
 LEARNING_MONGO_DB = 'analyticsLearning'
 
+#Default products to be recommended
+DEFAULT_LEARNING_COURSE_RECOMMENDATION_PRODUCT_ID = [2634, 2787, 1, 4]
+
 # this maps learning products as per flow and sub type flow at analytics side.
 # product of Resume Critique flow is not included in recommendation engine.
 ANALYTIC_PRODUCT_ID_TO_SHINE_PRODUCT_ID = {
