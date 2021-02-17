@@ -11,7 +11,7 @@ const PopularTab = props => {
     const [pageId, updatePageId] = useState(2)
     const dispatch = useDispatch()
     const {
-        productList, tabType
+        productList, tabType, total_page
     } = props
 
     const settings = {
@@ -25,7 +25,7 @@ const PopularTab = props => {
         swipeToSlide: true,
         variableWidth: true,
         afterChange: function(index) {
-            if (index % 3 === 0) {
+            if ((index % 3 === 0 && pageId < index ) && pageId <= total_page) {
                 new Promise((resolve, reject) => dispatch(fetchInDemandProducts({ pageId: pageId, tabType, device: 'mobile', resolve, reject })));
                 updatePageId(pageId + 1);
             }

@@ -19,11 +19,13 @@ export const MostViewedCoursesReducer = (state = mostViewedCoursesState, action)
 
 const inDemandProductsState = {
     courses: [],
+    pages: 1,
     certifications: []
 }
 
 const appendProduct = (state, { payload }) => {
     if (payload.device === 'mobile') {
+        let pages = payload.pages;
         if (!!payload.courses) {
             let courses;
             if (state.type === 'desktop') {
@@ -32,7 +34,7 @@ const appendProduct = (state, { payload }) => {
             else {
                 courses = [...state.courses, ...payload.courses];
             }
-            return { courses, type: 'mobile' };
+            return { courses, pages, type: 'mobile' };
         }
         else if (!!payload.certifications) {
             let certifications;
@@ -42,7 +44,7 @@ const appendProduct = (state, { payload }) => {
             else{
                 certifications = [...state.certifications, ...payload.certifications];
             }
-            return { certifications, type: 'mobile' }
+            return { certifications, pages, type: 'mobile' }
         }
         else {
             return {}

@@ -18,7 +18,7 @@ import { startHomePageLoader, stopHomePageLoader } from 'store/Loader/actions';
 const PopularCourses = (props) => {
 
     const [key, setKey] = useState('master');
-    const { courses, certifications } = useSelector(store => store.inDemand)
+    const { courses, certifications, pages } = useSelector(store => store.inDemand)
     const dispatch = useDispatch()
 
     const handleTabChange = async (tabType, id) => {
@@ -60,9 +60,9 @@ const PopularCourses = (props) => {
                                     <div className="m-courses">
 
                                         {key === 'master' ?
-                                            <PopularTab productList={courses} tabType={key}/>
+                                            <PopularTab productList={courses} total_page={pages} tabType={key}/>
                                             :
-                                            <PopularTab productList={certifications} tabType={key}/>
+                                            <PopularTab productList={certifications} total_page={pages} tabType={key}/>
                                         }
 
                                     </div>
