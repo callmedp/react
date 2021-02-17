@@ -27,7 +27,7 @@ const ViewCourses = (props) => {
                             <h2 className="heading3">Here’s how you can make a new career</h2>
                             <ul className="courses-listing ml-10n mt-30">
                             {
-                                userIntent.map((product, index) => {
+                                userIntent?.map((product, index) => {
                                     return (
                                         <li className="col" key={index}>
                                     <div className="course">
