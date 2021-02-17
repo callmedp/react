@@ -64,7 +64,7 @@ const HomeProduct = (props) => {
                                                             {product.mode ? <span className="mode">{product.mode}</span> : ''}
                                                         </div>
                                                         <div className="card__duration-mode mt-10">
-                                                            {product.jobsAvailable ? <> <strong>{product.jobsAvailable}</strong> Jobs available </> : ''} {product.jobsAvailable && product.duration ? '|' : ''} {product.duration ? <>Duration: <strong>{product.duration} days</strong> </> : ''}
+                                                            {product.jobsAvailable ? <> <strong>{product.jobsAvailable}</strong> Jobs available </> : ''} {product.jobsAvailable && product.duration ? '|' : ''} {product.duration ? <>Duration: <strong>{product.duration} days</strong> </> : <strong>&nbsp;</strong>}
                                                         </div>
                                                         <a className="view-program mt-10" href={`${siteDomain}${product.url}`}>View program</a>
                                                     </div>
