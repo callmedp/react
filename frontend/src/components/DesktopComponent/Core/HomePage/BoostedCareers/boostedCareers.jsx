@@ -21,6 +21,7 @@ const BoostedCareers = (props) => {
     
     const { testimonialCategory } = useSelector(store => store.testimonials)
 
+
     return (
         <section className="container" data-aos="fade-up">
             <div className="row">

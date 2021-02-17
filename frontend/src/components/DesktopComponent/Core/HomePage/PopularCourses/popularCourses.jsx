@@ -39,7 +39,7 @@ function PopularCourses() {
                             <MasterProduct tabType="master" popularProducts={courses} />
                         </Tab>
                         <Tab eventKey="certifications" title={<h2>Certifications</h2>}>
-                            <CertificationProduct tabType="certification" popularProducts={certifications} />
+                            <CertificationProduct tabType="certifications" popularProducts={certifications} />
                         </Tab>
 
                     </Tabs>

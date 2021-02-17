@@ -11,7 +11,7 @@ const RecruitersLooking = (props) => {
     const { recruiterList } = useSelector(store => store.footer)
     
 
-    const getSlide = (recruiterSlide) => recruiterSlide?.map((skill, index) => {
+    const getSlide = (recruiterSlide) => recruiterSlide.slice(0,12)?.map((skill, index) => {
         return (
             <li className="col-sm-3" key={index}>
             <Link to={skill.skillUrl}>

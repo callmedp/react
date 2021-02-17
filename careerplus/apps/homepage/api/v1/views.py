@@ -1042,7 +1042,7 @@ class PopularInDemandProductsAPI(APIView):
     def get(self, request):
         quantity = 4
         class_category = settings.COURSE_SLUG
-        page = request.GET.get('page',1)
+        page = int(request.GET.get('page',1))
         tab_type = request.GET.get('tab_type','master')
         paginated_data = []
 
@@ -1125,18 +1125,16 @@ class TestimonialsApi(APIView,MetadataMixin):
     use_og = True
     use_twitter = False
 
-    def get_meta_title(self, context):
+    def get_meta_title(self, context=None):
         # return 'Best Resume Writing Services | Online Courses | Linkedin Profile - Shine Learning'
         # return 'Online Courses, Practice Tests, Job Assistance Services | Shine Learning'
         return 'Best Online Courses  & Certification Trainings | Shine Learning'
 
-    def get_meta_description(self, context):
+    def get_meta_description(self, context=None):
         # return 'Pick up the Best Resume Services - Check out the Latest Resume Format or Templates - Online Professional Certification Courses'
         # return 'Discover a variety of online courses and certification training, practice tests, job assistance services with 24X7 support.'
         return 'Discover a comprehensive variety of online courses, certification training programs, practice tests with 24X7 support to build a successful career or grow your business.'
 
-    def get_meta_url(self, context):
-        return 'https://learning.shine.com'
 
     def get(self,request):
         quantity = request.GET.get('quantity',6)
@@ -1144,4 +1142,4 @@ class TestimonialsApi(APIView,MetadataMixin):
         data = TestimonialSerializer(testimonials,many=True).data
         meta = self.get_meta().__dict__
         testimonials = list(data)
-        return APIResponse(message='Testimonials data loaded', data={'testimonials':testimonials,'meta':meta}, status=status.HTTP_200_OK)
+        return APIResponse(message='Testimonials data loaded', data={'testimonialCategory':testimonials,'meta':meta}, status=status.HTTP_200_OK)
