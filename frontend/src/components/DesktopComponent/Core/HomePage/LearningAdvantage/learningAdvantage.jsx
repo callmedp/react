@@ -10,7 +10,7 @@ const LearningAdvantage = (props) => {
             <div className="row">
                 <div className="container mt-40 mb-20"> 
                     <div className="row">
-                        <h2 className="heading2 mx-auto mb-5">Shine learning advantage</h2>
+                        <h2 className="heading2 mx-auto mb-5">Shine learning advantages</h2>
                         <ul className="mt-50">
                             <li className="col">
                                 <div className="learning-advantage__txt">
