@@ -24,12 +24,14 @@ import { startHomePageLoader, stopHomePageLoader } from 'store/Loader/actions/in
 import Loader from '../../Common/Loader/loader';
 import SearchPage from '../../Common/SearchPage/SearchPage'
 import './homePage.scss';
+import MetaContent from '../../Common/MetaContent/metaContent';
 
 const HomePage = (props) => {
     const dispatch = useDispatch()
     const { homeLoader } = useSelector(store => store.loader)
     const [showSearch, setShowSearch] = useState(false)
     const [stickSearchBar, showStickSearchBar] = useState(false)
+    const { meta } = useSelector( store => store.testimonials )
 
     const handleEffects = async () => {
         //You may notice that apis corresponding to these actions are not getting called on initial render.
@@ -74,6 +76,7 @@ const HomePage = (props) => {
 
     return (
         <>
+            { meta && <MetaContent meta_tags={meta}/> }
             { homeLoader && <Loader />}
             {
                 showSearch ? <SearchPage setShowSearchPage={setShowSearch} /> :

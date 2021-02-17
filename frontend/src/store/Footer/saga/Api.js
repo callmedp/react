@@ -7,7 +7,7 @@ const fetchTrendingCnA = (data) => {
     if(!!data.homepage){
         query='homepage=True'
     }
-    const url = `trending-courses-and-skills/?${query}`;
+    const url = `trending-courses-and-skills/?${query}&num_courses=${data.numCourses}`;
     return BaseApiService.get(`${siteDomain}/api/v1/${url}`);
 }
 

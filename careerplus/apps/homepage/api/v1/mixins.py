@@ -71,7 +71,7 @@ class PopularProductMixin(object):
             product_conversion_ratio = product_obj.order_by('-buy_count').values_list('id', flat=True)
             products = SearchQuerySet().filter(id__in=product_conversion_ratio, pTP__in=[0, 1, 3]).exclude(
             id__in=settings.EXCLUDE_SEARCH_PRODUCTS
-            )
+            )[:20]
             popular_certification = ProductMixin().get_course_json(products)
 
             return popular_certification

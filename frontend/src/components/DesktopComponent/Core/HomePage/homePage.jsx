@@ -23,12 +23,14 @@ import {
     fetchTestimonials,
 } from 'store/HomePage/actions';
 import Loader from '../../Common/Loader/loader';
+import MetaContent from '../../Common/MetaContent/metaContent';
 
 
 const HomePage = (props) => {
 
     const dispatch = useDispatch();
     const { homeLoader } = useSelector(store => store.loader)
+    const { meta } = useSelector( store => store.testimonials )
 
     const handleEffect = async () => {
         //You may notice that apis corresponding to these actions are not getting called on initial render.
@@ -61,6 +63,7 @@ const HomePage = (props) => {
 
     return (
         <div>
+            { meta && <MetaContent meta_tags={meta}/> }
             { homeLoader ? <Loader /> : ''}
             {/* <OfferEnds /> */}
             <Header isHomepage={true} />

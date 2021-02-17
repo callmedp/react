@@ -20,7 +20,7 @@ const MetaContent = props => {
             <meta itemprop="name" content={meta_tags.title} />
             <meta itemprop="url" content={`${siteDomain}${meta_tags._url}`} />
             <meta itemprop="description" content={meta_tags.og_description || meta_tags.description} />
-            <link rel="canonical" href={`${siteDomain}${meta_tags._url}`} />
+            <link rel="canonical" href={`${siteDomain}${meta_tags._url ?? '/' }`} />
             <meta name="twitter:card" content="summary" />
             <meta name="twitter:domain" content={siteDomain} />
             <meta name="twitter:site" content="@shinelearning" />

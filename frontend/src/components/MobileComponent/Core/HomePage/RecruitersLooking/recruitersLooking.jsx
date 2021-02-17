@@ -42,7 +42,7 @@ const RecruitersLooking = (props) => {
                 <Slider {...settings}>
 
                     {
-                        trendingSkills?.map((skill, index) => {
+                        trendingSkills.slice(0,12)?.map((skill, index) => {
                             return (
                                 <Link to={skill.skillUrl} key={index}>
                                 <div className="m-card" >
