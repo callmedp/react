@@ -29,14 +29,14 @@ class CourseRecommendationAPI(APIView):
         intent = request.GET.get('intent',None)
         course_data = []
         data = {
-        'user_desiredjt': request.GET.get("preferred_role",None),
-        'user_functionalarea':request.GET.get("department",None),
-        'user_exp' : request.GET.get('experience',None),
-        'user_app_skills': request.GET.get('skills',None),
+        'user_desiredjt': request.GET.get("preferred_role",''),
+        'user_functionalarea':request.GET.get("department",''),
+        'user_exp' : request.GET.get('experience',''),
+        'user_app_skills': request.GET.get('skills',''),
         #below fields are not used in intent capture form
-        'user_imp_skills':request.GET.get('user_imp_skills',None),
-        'user_skills':request.GET.get('user_skills',None),
-        'user_jobtitle':request.GET.get('user_jobtitle',None)
+        'user_imp_skills':request.GET.get('user_imp_skills',''),
+        'user_skills':request.GET.get('user_skills',''),
+        'user_jobtitle':request.GET.get('user_jobtitle','')
         }
         #Capturing user intent request made
         try:
@@ -55,9 +55,10 @@ class CourseRecommendationAPI(APIView):
 
         course_ids = RecommendationMixin().get_courses_from_analytics_recommendation_engine(data=data)
         user_purchased_courses = OrderItem.objects.filter(product__type_flow=2,no_process=False,order__candidate_id=candidate_id,order__status__in=[1, 3]).values_list('product__id',flat=True)
+        course_ids = [4,1,1568,570,2,7]
         courses = SearchQuerySet().filter(id__in=course_ids).exclude(id__in=user_purchased_courses)
         course_data = ProductMixin().get_course_json(courses)
-        return APIResponse(data={'course_data':course_data,'course_ids':course_ids,'user_purchased_courses':user_purchased_courses},message='recommended courses fetched', status=HTTP_200_OK)
+        return APIResponse(data={'course_data':course_data,'recommended_course_ids':course_ids},message='recommended courses fetched', status=HTTP_200_OK)
 
 class ServiceRecommendationAPI(APIView):
     permission_classes = ()
