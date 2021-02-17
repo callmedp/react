@@ -9,6 +9,9 @@ from .choices import INTENT_CHOICES
 
 # Create your models here.
 class UserIntent(AbstractAutoDate):
+    """
+    Capture user intent like career_change, career_progress, findjob and improve_profile.
+    """
     candidate_id = models.CharField(
         null=True,
         blank=True,

@@ -465,6 +465,7 @@ LEARNING_MONGO_DB = 'analyticsLearning'
 
 #Default products to be recommended
 DEFAULT_LEARNING_COURSE_RECOMMENDATION_PRODUCT_ID = [2634, 2787, 1, 4]
+DEFAULT_LEARNING_SERVICE_RECOMMENDATION_CANDIDATE_ID = '000000000000000000000000'
 
 # product of Resume Critique flow is not included in recommendation engine.
 # Analytics product groups mapped with learning flows and sub type flows.

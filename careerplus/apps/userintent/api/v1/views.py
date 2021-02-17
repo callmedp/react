@@ -1,24 +1,35 @@
+# Django imports
 from rest_framework.response import Response
 from rest_framework import permissions
 from rest_framework.views import APIView
 from core.common import APIResponse
+from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_200_OK
+from django.core.cache import cache
+from django.conf import settings
+
 from haystack.query import SearchQuerySet
 
+# Inter app imports
 from .mixins import RecommendationMixin
 from homepage.api.v1.mixins import ProductMixin
 from order.models import OrderItem
 from userintent.models import UserIntent
 from shine.core import ShineCandidateDetail
 
-from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_200_OK
-from django.core.cache import cache
-from django.conf import settings
-
 #Logger import
 import logging
 logger = logging.getLogger('error_log')
 
 class CourseRecommendationAPI(APIView):
+    """
+    fetches recommended courses based on parameters like preferred role, skills etc from recommendaton engine.
+    Method: GET
+    Input:
+    get parameters: preferred_role, department, experience, skills
+    other parameters based on user profile(not mandatory): user_imp_skills, user_skills, user_jobtitle
+
+    Response :list of recommended courses based on input parameters
+    """
     permission_classes = ()
     authentication_classes = ()
 
@@ -55,30 +66,35 @@ class CourseRecommendationAPI(APIView):
 
         course_id = RecommendationMixin().get_courses_from_analytics_recommendation_engine(data=data)
         user_purchased_courses = OrderItem.objects.filter(product__type_flow=2,no_process=False,order__candidate_id=candidate_id,order__status__in=[1, 3]).values_list('product__id',flat=True)
-        course_ids = [4,1,1568,570,2,7]
+        course_ids = [4,1,1568,570,2]
         courses = SearchQuerySet().filter(id__in=course_ids).exclude(id__in=user_purchased_courses)
-        course_data = ProductMixin().get_course_json(courses)
+        if courses:
+            course_data = ProductMixin().get_course_json(courses)
         return APIResponse(data={'course_data':course_data,'recommended_course_ids':course_id},message='recommended courses fetched', status=HTTP_200_OK)
 
 class ServiceRecommendationAPI(APIView):
+    """
+    fetches recommended services from recommedation enginge database.
+    """
     permission_classes = ()
     authentication_classes = ()
 
     def get(self,request):
         candidate_id = request.GET.get('candidate_id', None)
-        # if not candidate_id:
-        #     candidate_id = '5e4c0b5f5d0795517fd73c08'
         # data = cache.get(f"analytics_recommendations_services{candidate_id}",None)
         # if data is None:
+        data = []
         recommended_services_ids = RecommendationMixin().get_services_from_analytics_recommendation_engine(candidate_id=candidate_id)
         services = SearchQuerySet().filter(id__in=recommended_services_ids)
-        data = ProductMixin().get_course_json(services)
-    #     cache.set(
-    #     f"analytics_recommendations_services{candidate_id}", data, timeout=86400
-    # )
+        if services:
+            data = ProductMixin().get_course_json(services)
         return APIResponse(data=data,message='recommended services fetched', status=HTTP_200_OK)
+        # cache.set(f"analytics_recommendations_services{candidate_id}", data, timeout=86400)
 
 class JobsSearchAPI(APIView):
+    """
+    returns list of available jobs based on parameters like location, experience etc.
+    """
     permission_classes = ()
     authentication_classes = ()
 

@@ -1,18 +1,19 @@
-    
-import requests
-import logging  
+# Django imports 
 from django.conf import settings    
-logger = logging.getLogger('error_log')
-import json
-from pymongo import MongoClient
 from django.core.cache import cache
-from core.common import APIResponse
 from rest_framework.status import HTTP_400_BAD_REQUEST
+# Inter app imports
 from shop.models import Product
 from order.models import OrderItem
 from payment.models import PaymentTxn
-import urllib
+from core.common import APIResponse
 
+import requests
+import json
+from pymongo import MongoClient
+import urllib
+import logging  
+logger = logging.getLogger('error_log')
 
 class RecommendationMixin(object):
     LEARNING_MONGO_PORT = settings.LEARNING_MONGO_PORT
@@ -33,8 +34,9 @@ class RecommendationMixin(object):
 
     def get_services_from_analytics_recommendation_engine(self, candidate_id=None):
         recommended_services_ids = []
+        add_assessment = False
         if candidate_id is None:
-            recommendation = self.coll.find_one({"fcu": '000000000000000000000000'})
+            recommendation = self.coll.find_one({"fcu": settings.DEFAULT_LEARNING_SERVICE_RECOMMENDATION_CANDIDATE_ID})
         else:
             recommendation = self.coll.find_one({"fcu": candidate_id})
         if recommendation:
@@ -45,14 +47,15 @@ class RecommendationMixin(object):
                 assessments= (
                     assessments if isinstance(assessments, list) else []
                 )
+                #Get product against fetched assessment and services category id as per mapping ANALYTIC_TO_LEARNING_PRODUCTFLOWS
                 type_flows =[]
                 sub_type_flows=[]
                 for service_id in services:
                     type_flows.extend(settings.ANALYTIC_TO_LEARNING_PRODUCTFLOWS[service_id]['type_flow'])
                     sub_type_flows.extend(settings.ANALYTIC_TO_LEARNING_PRODUCTFLOWS[service_id]['sub_type_flow'])
 
-                if 2 in services and len(assessments)is not 0:
-                    first_assessment_product = assessments[0]
+                if 2 in services and assessments:
+                    add_assessment = True
 
                 # Get services already purchased by user
                 excl_txns = PaymentTxn.objects.filter(
@@ -62,8 +65,8 @@ class RecommendationMixin(object):
                 excl_order_list = excl_txns.all().values_list('order_id', flat=True)
                 user_purchased_items = OrderItem.objects.filter(order__candidate_id=candidate_id, no_process=False,order__status__in=[1, 3]).exclude(order__in=excl_order_list).values_list('product__id',flat=True)
                 recommended_services_ids = list(Product.objects.filter(type_flow__in=type_flows,sub_type_flow__in=sub_type_flows).exclude(id__in=user_purchased_items).values_list('id',flat=True))
-                recommended_services_ids.append(first_assessment_product)
-                print(recommended_services_ids)
+                if add_assessment:
+                    recommended_services_ids.append(assessments[0])
                 return recommended_services_ids
             except:
                 recommended_services_ids = []
