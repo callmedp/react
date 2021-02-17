@@ -176,7 +176,7 @@ app.get('*', (req, res) => {
    
     return res.render(indexFile, {
         appContent: '',
-        preloadedState: '',
+        preloadedState: JSON.stringify(preloadedState),
         config: JSON.stringify(window.config)
     });
 
