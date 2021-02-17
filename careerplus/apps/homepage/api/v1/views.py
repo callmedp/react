@@ -51,9 +51,9 @@ from blog.models import Blog, Comment
 from api.helpers import offset_paginator
 from .helper import get_home_offer_values
 from homepage.api.v1.mixins import ProductMixin
+from meta.views import MetadataMixin
 
 from .mixins import ProductMixin
-
 # Other Import
 from weasyprint import HTML
 from wsgiref.util import FileWrapper
@@ -1118,13 +1118,30 @@ class JobAssistanceAndLatestBlogAPI(APIView):
                 "unable to load job assistance services%s " % str(e))
         return APIResponse(message='Job assistance services and latest blog data Loaded', data=data, status=status.HTTP_200_OK)
 
-class TestimonialsApi(APIView):
+class TestimonialsApi(APIView,MetadataMixin):
     permission_classes = (permissions.AllowAny,)
     authentication_classes = ()
+    use_title_tag = False
+    use_og = True
+    use_twitter = False
+
+    def get_meta_title(self, context):
+        # return 'Best Resume Writing Services | Online Courses | Linkedin Profile - Shine Learning'
+        # return 'Online Courses, Practice Tests, Job Assistance Services | Shine Learning'
+        return 'Best Online Courses  & Certification Trainings | Shine Learning'
+
+    def get_meta_description(self, context):
+        # return 'Pick up the Best Resume Services - Check out the Latest Resume Format or Templates - Online Professional Certification Courses'
+        # return 'Discover a variety of online courses and certification training, practice tests, job assistance services with 24X7 support.'
+        return 'Discover a comprehensive variety of online courses, certification training programs, practice tests with 24X7 support to build a successful career or grow your business.'
+
+    def get_meta_url(self, context):
+        return 'https://learning.shine.com'
 
     def get(self,request):
         quantity = request.GET.get('quantity',6)
         testimonials = Testimonial.objects.filter(is_active=True).order_by('-rating')[:quantity]
         data = TestimonialSerializer(testimonials,many=True).data
+        meta = self.get_meta().__dict__
         testimonials = list(data)
-        return APIResponse(message='Testimonials data loaded', data={ 'testimonialCategory' : testimonials}, status=status.HTTP_200_OK)
+        return APIResponse(message='Testimonials data loaded', data={'testimonials':testimonials,'meta':meta}, status=status.HTTP_200_OK)
