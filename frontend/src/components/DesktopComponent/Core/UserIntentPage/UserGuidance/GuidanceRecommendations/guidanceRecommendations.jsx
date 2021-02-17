@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './guidanceRecommendations.scss';
 
 
 const GuidanceRecommendations = (props) => {
-    
-
+    const [activeId, setActiveId] = useState(0)
     return (
         <section className="container-fluid mt-30n mb-0">
             <div className="row">
@@ -22,7 +21,7 @@ const GuidanceRecommendations = (props) => {
 
                         <ul className="ui-list mt-40 mb-30">
                         {/* className="active" */}
-                            <li> 
+                            <li className={ activeId === 1 && 'active'} onMouseEnter={() => setActiveId(1)} onMouseLeave={() => setActiveId(0)}> 
                                 <Link to={"/user-intent/find-right-job/"}>
                                     <figure>
                                         <img src="/media/images/desktop/ui-list-icon1.png" alt="Find the right job" />
@@ -30,7 +29,7 @@ const GuidanceRecommendations = (props) => {
                                     <h3>Find the right job</h3>
                                 </Link>
                             </li>
-                            <li>
+                            <li className={ activeId === 2 && 'active'} onMouseEnter={() => setActiveId(2)} onMouseLeave={() => setActiveId(0)}>
                                 <Link to={"/user-intent/make-career-change/"}>
                                     <figure>
                                         <img src="/media/images/desktop/ui-list-icon2.png" alt="Make a career change" />
@@ -38,7 +37,7 @@ const GuidanceRecommendations = (props) => {
                                     <h3>Make a career change</h3>
                                 </Link>
                             </li>
-                            <li>
+                            <li className={ activeId === 3 && 'active'} onMouseEnter={() => setActiveId(3)} onMouseLeave={() => setActiveId(0)}>
                                 <Link to={"/user-intent/improve-profile/"}>
                                     <figure>
                                         <img src="/media/images/desktop/ui-list-icon3.png" alt="Improve your profile" />
@@ -46,7 +45,7 @@ const GuidanceRecommendations = (props) => {
                                     <h3>Improve your profile</h3>
                                 </Link>
                             </li>
-                            <li>
+                            <li className={ activeId === 4 && 'active'} onMouseEnter={() => setActiveId(4)} onMouseLeave={() => setActiveId(0)}>
                                 <Link to={"/user-intent/progress-career"}>
                                     <figure>
                                         <img src="/media/images/desktop/ui-list-icon4.png" alt="Progress your career" />
