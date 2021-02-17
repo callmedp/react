@@ -53,12 +53,12 @@ class CourseRecommendationAPI(APIView):
             logging.getLogger('error_log').error('response for {} - {}'.format(candidate_id, str(e)))
             return APIResponse(error=True,message='Error in user intent object creation',status=HTTP_400_BAD_REQUEST)
 
-        course_ids = RecommendationMixin().get_courses_from_analytics_recommendation_engine(data=data)
+        course_id = RecommendationMixin().get_courses_from_analytics_recommendation_engine(data=data)
         user_purchased_courses = OrderItem.objects.filter(product__type_flow=2,no_process=False,order__candidate_id=candidate_id,order__status__in=[1, 3]).values_list('product__id',flat=True)
         course_ids = [4,1,1568,570,2,7]
         courses = SearchQuerySet().filter(id__in=course_ids).exclude(id__in=user_purchased_courses)
         course_data = ProductMixin().get_course_json(courses)
-        return APIResponse(data={'course_data':course_data,'recommended_course_ids':course_ids},message='recommended courses fetched', status=HTTP_200_OK)
+        return APIResponse(data={'course_data':course_data,'recommended_course_ids':course_id},message='recommended courses fetched', status=HTTP_200_OK)
 
 class ServiceRecommendationAPI(APIView):
     permission_classes = ()
