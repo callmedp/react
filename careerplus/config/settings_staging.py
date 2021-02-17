@@ -510,3 +510,5 @@ CORS_ALLOW_HEADERS = [
 
 RESUME_SHINE_URL = "https://resumestage.shine.com"
 
+#recommendation
+DEFAULT_LEARNING_COURSE_RECOMMENDATION_PRODUCT_ID = [2634, 2787, 1, 4]

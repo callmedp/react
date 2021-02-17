@@ -1,25 +1,31 @@
 from rest_framework.response import Response
-from rest_framework import permissions, status
+from rest_framework import permissions
 from rest_framework.views import APIView
 from core.common import APIResponse
-from .mixins import RecommendationMixin
 from haystack.query import SearchQuerySet
+
+from .mixins import RecommendationMixin
 from homepage.api.v1.mixins import ProductMixin
 from order.models import OrderItem
 from userintent.models import UserIntent
 from shine.core import ShineCandidateDetail
 
+from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_200_OK
+from django.core.cache import cache
+from django.conf import settings
+
+#Logger import
 import logging
 logger = logging.getLogger('error_log')
+
 class CourseRecommendationAPI(APIView):
     permission_classes = ()
     authentication_classes = ()
-    serializer_classes = None
 
     def get(self,request):
         candidate_id = request.GET.get('candidate_id', None)
         if not candidate_id:
-            candidate_id = '601b8120ca3f418906a889a8'
+            course_ids = settings.DEFAULT_LEARNING_COURSE_RECOMMENDATION_PRODUCT_ID
         intent = request.GET.get('intent',None)
         course_data = []
         data = {
@@ -45,18 +51,35 @@ class CourseRecommendationAPI(APIView):
             logging.getLogger('info_log').info('userintent obj created')
         except Exception as e:
             logging.getLogger('error_log').error('response for {} - {}'.format(candidate_id, str(e)))
-            return APIResponse(error=True,message='Error in user intent object creation',status=status.HTTP_400_BAD_REQUEST)
+            return APIResponse(error=True,message='Error in user intent object creation',status=HTTP_400_BAD_REQUEST)
 
         course_ids = RecommendationMixin().get_courses_from_analytics_recommendation_engine(data=data)
-        user_purchased_courses = OrderItem.objects.filter(product__type_flow=2,no_process=False,order__candidate_id=candidate_id,order__status__in=[1, 3]).values_list('product__id')
+        user_purchased_courses = OrderItem.objects.filter(product__type_flow=2,no_process=False,order__candidate_id=candidate_id,order__status__in=[1, 3]).values_list('product__id',flat=True)
         courses = SearchQuerySet().filter(id__in=course_ids).exclude(id__in=user_purchased_courses)
         course_data = ProductMixin().get_course_json(courses)
-        return APIResponse(data={'course_data':course_data,'course_ids':course_ids,'user_purchased_courses':user_purchased_courses},message='recommended courses fetched', status=status.HTTP_200_OK)
+        return APIResponse(data={'course_data':course_data,'course_ids':course_ids,'user_purchased_courses':user_purchased_courses},message='recommended courses fetched', status=HTTP_200_OK)
+
+class ServiceRecommendationAPI(APIView):
+    permission_classes = ()
+    authentication_classes = ()
+
+    def get(self,request):
+        candidate_id = request.GET.get('candidate_id', None)
+        # if not candidate_id:
+        #     candidate_id = '5e4c0b5f5d0795517fd73c08'
+        # data = cache.get(f"analytics_recommendations_services{candidate_id}",None)
+        # if data is None:
+        recommended_services_ids = RecommendationMixin().get_services_from_analytics_recommendation_engine()#)(candidate_id=candidate_id)
+        services = SearchQuerySet().filter(id__in=recommended_services_ids)
+        data = ProductMixin().get_course_json(services)
+    #     cache.set(
+    #     f"analytics_recommendations_services{candidate_id}", data, timeout=86400
+    # )
+        return APIResponse(data=data,message='recommended services fetched', status=HTTP_200_OK)
 
 class JobsSearchAPI(APIView):
     permission_classes = ()
     authentication_classes = ()
-    serializer_classes = None
 
     def get(self,request):
         candidate_id = request.GET.get('candidate_id', None)
@@ -86,7 +109,7 @@ class JobsSearchAPI(APIView):
                     intent=intent,
                     candidate_id=candidate_id
                 )
-                return APIResponse(data=jobs_response,message='Jobs fetched', status=status.HTTP_200_OK)
+                return APIResponse(data=jobs_response,message='Jobs fetched', status=HTTP_200_OK)
             except Exception as e:
                 logging.getLogger('error_log').error('response for {} - {}'.format(candidate_id, str(e)))
-                return APIResponse(error=True,message='Error in user intent object creation',status=status.HTTP_400_BAD_REQUEST)
+                return APIResponse(error=True,message='Error in user intent object creation',status=HTTP_400_BAD_REQUEST)
