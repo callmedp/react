@@ -60,7 +60,7 @@ export default {
         className: "form-control",
         name: "skills",
         type: "text",
-        placeholder: " ",
+        placeholder: "Your Skills",
         label: "Your skills",
         inputType: "input",
         validation: {
@@ -68,7 +68,8 @@ export default {
         },
         errorMessage: {
             required: "This field is required"
-        }
+        },
+        children: []
     }
     
 }
