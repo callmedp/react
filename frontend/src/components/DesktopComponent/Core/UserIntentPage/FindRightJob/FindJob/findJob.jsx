@@ -40,7 +40,7 @@ const FindJob = (props) => {
                             <Link>3</Link>
                         </div>
 
-                        <h2 className="heading3 mt-20">Let’s get you to the right job</h2>
+                        <h2 className="heading3 mt-20">{ type === 'job' ? 'Let’s get you to the right job' : type === 'pcareer' ? 'Get to next level with shine' : 'What do you have in mind' } </h2>
                         <div className="d-flex">
                             <div className="w-50">
                                 <div className="find-job">

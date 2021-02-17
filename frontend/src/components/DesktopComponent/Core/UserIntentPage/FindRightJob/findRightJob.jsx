@@ -6,13 +6,13 @@ import FindJobEdit from './FindJob/findJobEdit';
 
 
 const FindRightJob = (props) => {
-    const params = new URLSearchParams(window.location.search);
+    const params = new URLSearchParams(props.location.search);
     const job = params.get('job')
 
     return (
         <div>
             <UIBanner {...props} />
-            { job === null ? <FindJob type={"job"} {...props}/> : <JobsUpskills /> }
+            { !!job ? <JobsUpskills /> : <FindJob type={"job"} {...props}/> }
         </div>
     )
 }
