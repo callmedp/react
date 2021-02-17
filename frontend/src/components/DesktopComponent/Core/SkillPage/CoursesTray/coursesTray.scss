@@ -27,14 +27,7 @@
             }
 
             &:hover {
-                background: $tab-pill-solid;
-                border: 1px solid $tab-pill-solid;
-                color: $gray-100;
                 box-shadow: 0 4px 5px -1px rgba(206,212,224,0.54);
-
-                h2 {
-                    color: $gray-100;
-                }
             }
 
             &.active {
