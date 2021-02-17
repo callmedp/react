@@ -22,7 +22,7 @@ const JobAssistanceServices = (props) => {
                                         jobAssistanceServices?.map((service, index) => {
                                             return (
                                                 <div className="col-sm-6" key={service.id}>
-                                                    <Link to={"#"}>
+                                                    <a href={`${siteDomain}${service.url}`}>
                                                     <div className="services-foryou">
                                                         <h3 className="heading3">{service.heading}</h3>
                                                         <p>{ service.description.length > 100 ? service.description.slice(0,100)+"..." : service.description }</p>
@@ -34,7 +34,7 @@ const JobAssistanceServices = (props) => {
                                                             </figure>
                                                         </span>
                                                     </div>
-                                                    </Link>
+                                                    </a>
                                                 </div>
                                             )
                                         })

@@ -44,8 +44,8 @@ const RecruitersLooking = (props) => {
                     {
                         trendingSkills?.map((skill, index) => {
                             return (
-                                <Link to={`${siteDomain}${skill?.skillUrl}`}>
-                                <div className="m-card" key={index}>
+                                <Link to={skill.skillUrl} key={index}>
+                                <div className="m-card" >
                                     
                                     <figure>
                                         <img src={`${skill?.image}`} className="img-fluid" alt={skill?.skillName} />
