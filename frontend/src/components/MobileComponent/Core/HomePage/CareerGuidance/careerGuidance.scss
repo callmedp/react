@@ -1,0 +1,16 @@
+@import '../../../../../styles-mobile/abstracts';
+
+.m-career-guidance {
+    background: #B8A4EF;
+    padding: 1rem !important;
+    font-size: 1.3rem;
+    color: $white;
+    background-image: linear-gradient(90deg, #B8A4EF 0%, #8E3E59 100%);
+    text-align: center;
+
+    a {
+        color: $white;
+        font-weight: 700;
+        margin-left: .5rem;
+    }
+}

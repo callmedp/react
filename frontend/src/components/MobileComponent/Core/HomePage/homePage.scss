@@ -1,0 +1,17 @@
+@import '../../../../styles-mobile/abstracts';
+
+.courses-tray {
+    .category {
+        .nav-link {
+            text-transform: none;
+        }
+    }
+}
+
+.stick-search-header {
+    position: fixed;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: 9999;
+}

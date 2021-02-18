@@ -54,7 +54,7 @@ const ReviewRating = (props) => {
                 </span>
 
                 <span className="rating">
-                    { item.rating.map((val, ind) => <i key={ind} value={val} className="icon-blankstar"></i>)}
+                    { item.rating?.map((val, ind) => <i key={ind} value={val} className="icon-blankstar"></i>)}
                 </span>
             </React.Fragment>
         }

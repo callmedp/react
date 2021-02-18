@@ -14,6 +14,7 @@ import WatchDashboardMyWallet from './DashboardPage/MyWallet/saga/index';
 import WatchDashboardMyOrders from './DashboardPage/MyOrder/saga/index';
 import WatchDashboardMyCourses from './DashboardPage/MyCourses/saga/index';
 import WatchDashboardMyServices from './DashboardPage/MyServices/saga/index';
+import WatchHomePage from './HomePage/saga';
 import WatchDashboardStartCourse from './DashboardPage/StartCourse/saga/index';
 
 export default function* () {
@@ -34,5 +35,6 @@ export default function* () {
         WatchDashboardMyCourses(),
         WatchDashboardMyServices(),
         WatchDashboardStartCourse(),
+        WatchHomePage()
     ])
 }

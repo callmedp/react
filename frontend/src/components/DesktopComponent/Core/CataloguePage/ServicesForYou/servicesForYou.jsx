@@ -14,7 +14,7 @@ const OurVendors = (props) => {
                 <h2 className="heading2 text-center mb-30 mx-auto">Services for you</h2>
                 <div className="col-sm-12 d-flex">
                     {
-                        popularServices?.slice(0,4).map((service, index) => {
+                        popularServices.slice(0,4)?.map((service, index) => {
                             return (
                                 <div className="col-sm-3" key={service.id}>
                                     <div className="services-foryou">

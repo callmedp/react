@@ -14,7 +14,8 @@ export const FooterReducer = (state=initState, action) => {
 
 const popularCoursesState = {
     trendingCourses : [],
-    trendingSkills : []
+    trendingSkills : [],
+    recruiterList : [],
 }
 
 export const PopularCoursesReducer = (state=popularCoursesState, action) => {

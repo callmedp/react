@@ -21,7 +21,7 @@ const BannerSlider = (props) => {
         <section className="m-banner-slider">
             <Slider {...settings}>
                 {
-                    featuresList.map((feature) => {
+                    featuresList?.map((feature) => {
                         return (
                             <div className="m-banner-slider__txt" key={Math.random()}>
                                 <figure className="micon-round-arrow"></figure>

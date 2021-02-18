@@ -8,7 +8,7 @@ import { startDictation } from '../../../../utils/searchUtils/speechRecognition'
 import HeaderSearchBox from './HeaderSearch/HeaderSearchBox';
 
 const SearchPage = (props) => {
-    const { setShowSearchPage } = props
+    const { setShowSearchPage, crossSearch=true, placeholder } = props
     const [searchTerm, setSearchTerm] = useState('');
     const [results, setResults] = useState([]);
     const { register, handleSubmit, errors } = useForm()
@@ -42,7 +42,8 @@ const SearchPage = (props) => {
     return (
         <HeaderSearchBox setShowSearchPage={setShowSearchPage} handleSubmit={handleSubmit} setSearchTerm={setSearchTerm}
                         register={register} setShowResults={setShowResults} showResults={showResults} results={results} 
-                        getMenuItems={getMenuItems} startDictation={startDictation} submitData={submitData}/>
+                        getMenuItems={getMenuItems} startDictation={startDictation} submitData={submitData} crossSearch={crossSearch} 
+                        placeholder={ placeholder ? placeholder : 'Search course, assessment...' }/>
     );
 }
 

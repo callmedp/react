@@ -42,6 +42,10 @@
     margin-right: 1rem;
 }
 
+.mr-30 {
+    margin-right: 3rem;
+}
+
 .mb-30 {
     margin-bottom: 3rem;
 }
@@ -75,7 +79,7 @@
 }
 
 @media (min-width:1201px) and (max-width:1500px) {
-    max-width: 95%;
+    // max-width: 95%;
 }
 
 .lightblue-bg {
@@ -169,4 +173,8 @@ main {
 
 .w-75 {
     width: 75%;
+}
+
+#Search::-webkit-search-cancel-button{
+    font-size: 1.5rem;   
 }

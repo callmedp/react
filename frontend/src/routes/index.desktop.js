@@ -7,8 +7,9 @@ import Error404Container from 'components/DesktopComponent/Common/ErrorPage404/e
 import { getCataloguePageActions } from "apiHandler/cataloguePageApi";
 import DashboardPageContainer from 'components/DesktopComponent/Core/DashboardPage/dashboardPage';
 import { getDashboardPageActions } from "apiHandler/dashboardPageApi";
+import HomePageContainer from 'components/DesktopComponent/Core/HomePage/homePage';
 import RouteWithSubRoutes from './route';
-
+import { getHomepageActions } from "apiHandler/homepageApi";
 
 const DesktopAppRouter = () => (
     <div>
@@ -19,6 +20,12 @@ const DesktopAppRouter = () => (
 );
 
 export const routes = [
+    {
+        path: '/',
+        component: HomePageContainer,
+        actionGroup: getHomepageActions,
+        exact: true
+    },
     {
         path: '/courses/:func/:skill/:id/',
         component: SkillPageContainer,

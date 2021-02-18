@@ -9,6 +9,7 @@ from shop.models import ProductSkill,ProductCategory, Product,Category
 # from api.serializers import OrderItemDetailSerializer
 from shared.rest_addons.mixins import SerializerFieldsMixin
 from django.conf import settings
+from homepage.models import Testimonial
 
 
 class StaticSiteContentSerializer(serializers.ModelSerializer):

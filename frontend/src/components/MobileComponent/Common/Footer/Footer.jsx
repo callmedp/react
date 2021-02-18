@@ -4,8 +4,9 @@ import { siteDomain } from 'utils/domains';
 import { MyGA } from 'utils/ga.tracking.js';
 
 const Footer = (props) => {
+    const { pageType } = props
     return(
-        <footer className="m-container m-footer">
+        <footer className={`m-container m-footer ${ pageType === 'homePage' ? 'pb-100' : '' }`}>
             <span className="m-footer__social mb-10">
                 <a href="https://www.facebook.com/shinelearningdotcom/" onClick={() => MyGA.SendEvent('social_media_follow','ln_social_media_follow', 'ln_facebook', 'homepage','', false, true)}>
                     <figure className="micon-facebook"></figure>

@@ -51,7 +51,7 @@ const AddCommentModal = (props) => {
                         data && data.comment.length > 0 ?
                             <div className="db-add-comments lightblue-bg border-bottom-gray">
                                 <ul className="db-timeline-list">
-                                    {data.comment.map((comm, idx) => {
+                                    {data.comment?.map((comm, idx) => {
                                         return (
                                             <li key={idx}>
                                                 <i className="db-timeline-list--dot"></i>

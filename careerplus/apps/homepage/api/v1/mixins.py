@@ -59,10 +59,26 @@ class PopularProductMixin(object):
         products = SearchQuerySet().filter(id__in=product_ids, pTP__in=[0, 1, 3]).exclude(
             id__in=settings.EXCLUDE_SEARCH_PRODUCTS
         )
-
         popularProducts = ProductMixin().get_course_json(products)
+        return popularProducts 
+    
+    def popular_certifications(self):
+        try:
+            product_obj = Product.objects.filter(type_flow=16,
+                                                     active=True,
+                                                     is_indexed=True)
 
-        return popularProducts
+            product_conversion_ratio = product_obj.order_by('-buy_count').values_list('id', flat=True)
+            products = SearchQuerySet().filter(id__in=product_conversion_ratio, pTP__in=[0, 1, 3]).exclude(
+            id__in=settings.EXCLUDE_SEARCH_PRODUCTS
+            )[:20]
+            popular_certification = ProductMixin().get_course_json(products)
+
+            return popular_certification
+
+        except Exception as e:
+            logging.getLogger('error_log').error("%s" % str(e))
+            return False, '', ''
 
 class ProductMixin(object):
 
