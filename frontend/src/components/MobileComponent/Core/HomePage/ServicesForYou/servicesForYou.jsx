@@ -30,7 +30,7 @@ const ServicesForYou = (props) => {
     };
 
     return (
-        <section className="m-container mt-0 mb-0 pr-0" data-aos="fade-up">
+        <section className="m-container mt-0 mb-0 pr-0 ml-10n" data-aos="fade-up">
             <div className="m-services-foryou">
                 <h2 className="m-heading2-home text-center mb-5">Job assistance services</h2>
                 <p className="fs-13 text-center">Find your next job faster by using our services</p>

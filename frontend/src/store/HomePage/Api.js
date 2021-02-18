@@ -25,8 +25,8 @@ const testimonialsApi = () => {
     const url = '/api/v1/testimonials/';
     return BaseApiService.get(`${siteDomain}${url}`);
 }
-const skillwithDemands = () => {
-    const url = '/api/v1/trending-courses-and-skills/?homepage=True';
+const skillwithDemands = (data) => {
+    const url = `/api/v1/trending-courses-and-skills/?homepage=True${ data ? `&num_courses=${data}` : ''}`;
 
     return BaseApiService.get(`${siteDomain}${url}`);
 }
