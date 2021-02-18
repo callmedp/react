@@ -77,3 +77,31 @@
     text-overflow: ellipsis;
     display: inline-block;
 }
+
+.user-intent-search-result {
+    background: $white;
+    color: $gray-100;
+    font-size: 1.3rem;
+    position: absolute;
+    @extend %box-shadow;
+    padding: 0;
+    z-index: 99999;
+    width: -webkit-fill-available;
+
+    strong {
+        font-weight: 600;
+        background: $lightblue;
+        padding: 1rem 1.5rem;
+        display: block;
+    }
+    span {
+        padding: 1rem 1.5rem;
+        color: $gray-100;
+        display: block;
+
+        &:hover, &:focus {
+            background-color: $blue;
+            color: $white;
+        }
+    }
+}
