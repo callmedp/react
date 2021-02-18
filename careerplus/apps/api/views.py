@@ -95,6 +95,7 @@ from search.helpers import RecommendationBasedOnGaps, get_recommended_products
 from shop.choices import PRODUCT_CHOICES,PRODUCT_TAG_CHOICES
 from shop.templatetags.shop_tags import get_faq_list, format_features, format_extra_features
 from homepage.api.v1.mixins import ProductMixin
+from core.common import APIResponse
 
 
 class CreateOrderApiView(APIView, ProductInformationMixin):
@@ -1451,6 +1452,7 @@ class ImportCertificateApiView(APIView, AmcatApiMixin):
     def post(self, request, *args, **kwargs):
         email = request.data.get('email', '')
         vendor_name = self.kwargs.get('vendor_name')
+        success = False
         if vendor_name not in self.allowed_vendors:
             return Response({
                 "status": 1,
@@ -1463,19 +1465,21 @@ class ImportCertificateApiView(APIView, AmcatApiMixin):
                 "msg": "Email is required"},
                 status=status.HTTP_400_BAD_REQUEST
             )
-
         parser = CertiticateParser(parse_type=1)
         data = {
             'check_type': 'certificate',
             'candidate_email': email
         }
-
-        if vendor_name == 'testprep':
-            data = TestPrepApiMixin().get_all_test_for_email(email=email)
-            if data:
-                success = True
-        else:
-            success, data = self.get_all_certiticate_data(data)
+        try:
+            if vendor_name == 'testprep':
+                data = TestPrepApiMixin().get_all_test_for_email(email=email)
+                if data:
+                    success = True
+            else:
+                success, data = self.get_all_certiticate_data(data)
+        except Exception as e:
+            logging.getLogger('error_log').error('response for {} - {}'.format(email, str(e)))
+            return APIResponse(error=True,message='Error in fetching certificate data',status=status.HTTP_400_BAD_REQUEST)
         if success:
             if not data:
                 data = {'certificates': []}
@@ -1495,9 +1499,12 @@ class ImportCertificateApiView(APIView, AmcatApiMixin):
                 resp['count'] = len(certificates.data)
                 resp['results'] = certificates.data
                 return Response(resp, status=status.HTTP_200_OK)
-            return Response(data, status=data['code'])
+            return Response(data, status=data.get('code'))
         else:
-            return Response(data, status=data['code'])
+            if data:
+                return Response(data, status=data.get('code'))
+            else:
+                return Response(data=[], status=status.HTTP_400_BAD_REQUEST)
 
 
 class TalentEconomyApiView(FieldFilterMixin, ListAPIView):

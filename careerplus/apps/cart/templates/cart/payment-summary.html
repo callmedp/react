@@ -152,7 +152,7 @@ Payment Summary - Shine Learning
             <input type="hidden" name="product_reference"
               value="{% if item.product_class == 'course' and variations|length  or item.type_flow == 17 and variations|length %}{{variations.0.reference}}{% else %}{{item.reference}}{% endif %}">
             <span class="close-icon item-list" name="{{item.id}}"
-              id="id-remove-cart{{item.id}}"></span>
+              id="id-remove-cart{{item.id}}" onclick="GAImpression('removeFromCart', options=[{'name': '{{ item.name }}', 'id': '{{ item.id }}', 'brand': '{{ item.vendor }}', 'category': '{% if item.variations|length %}{{ item.variations.0.li.product.get_category_main }}{% else %}{{ item.li.product.get_category_main }}{% endif %}', 'variant': '{{ item.product_class }}', 'price': '{% if item.variations|length %} {{ item.variations.0.price }} {% else %} {{ item.price }} {% endif %}','position': '{{ forloop.counter }}', 'dimension15': 'Cart Page', 'dimension16': '{% if item.variations|length %} {{ item.variations.0.li.product.avg_rating }}{% else %}{{ item.li.product.avg_rating }}{% endif %}', 'dimension17': '{% if item.variations|length %} {{ item.variations.0.li.product.buy_count }}{% else %}{{ item.li.product.buy_count }}{% endif %}'}]);"></span>
           </form>
 
           <!-- delivery section -->
@@ -560,6 +560,7 @@ Payment Summary - Shine Learning
 
 
 {% block js_section %}
+{% include 'homepage/partials/ga.impression.html' with page="addToCart" used_as='fn' %}
 {{ block.super }}
 <script>
   var shineApiUrl = "{{shine_api_url}}"

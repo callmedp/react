@@ -250,11 +250,14 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
         if settings.DEBUG:
             debug_mode = True
 
+        cart_items = Cart.objects.get(id=self.request.session.get('cart_pk')).lineitems.all()
+
         context.update({
             "state_form": StateForm(),
             "check_form": PayByCheckForm(),
             "total_amount": payment_dict.get('total_payable_amount'),
             "cart_id": self.request.session.get('cart_pk'),
+            "cart_items": cart_items,
             "type_flow": type_flow,
             "email_id": ''.join(email_id),
             "first_name": first_name,
