@@ -25,8 +25,10 @@ class CourseRecommendationAPI(APIView):
     """
     Fetches recommended courses based on parameters like preferred role, skills etc from recommendaton engine.
     Method: GET
+    ==================================================================================
     Input:
     get parameters: preferred_role, department, experience, skills
+    
     other parameters based on user profile(not mandatory): user_imp_skills, user_skills, user_jobtitle
 
     Response :list of recommended courses based on input parameters
