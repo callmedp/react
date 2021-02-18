@@ -35,7 +35,7 @@ const RecruitersLooking = (props) => {
                     <div className="all-category mt-40 mb-30 pos-rel">
                         <h2 className="heading2 mb-0 text-center">What recruiters are looking at</h2>
                         <p className="text-center mt-5">Browse the skills with high demands to enhance your career</p>
-                        <Carousel>
+                        <Carousel controls={ recruiterList?.length > 1 ? true : false }>
                             {
                                 recruiterList?.map((recruiterSlide, inx) => {
                                     return (
