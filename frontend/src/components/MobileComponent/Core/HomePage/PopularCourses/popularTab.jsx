@@ -53,7 +53,7 @@ const PopularTab = props => {
                                     <img src={product.imgUrl} alt={product.imageAlt} itemProp="image" />
                                 </figure>
                                 <h3 className="m-heading3">
-                                    <a href={`${siteDomain}${product.url}`} itemProp="url"> {product?.name?.length > 25 ? product?.name?.slice(0, 25) + '...' : product?.name} </a>
+                                    <a href={`${siteDomain}${product.url}`} itemProp="url"> {product?.name?.length > 22 ? product?.name?.slice(0, 22) + '...' : product?.name} </a>
                                 </h3>
                             </div>
                             <div className="m-card__box">
