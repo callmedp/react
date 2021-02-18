@@ -12,7 +12,7 @@ const InputField = (props) => {
             register } = props
     
     return (
-        <div className={ !!errors ? "form-group error" : "form-group"}>
+        <div className={ !!errors ? "form-group error" : "form-group" }>
             <input className={className} type={type} name={name}
                 placeholder={placeholder} ref={register(validation)} value={value}
                 defaultValue={defaultValue} id={id} />
@@ -56,8 +56,31 @@ const TextArea = (props) => {
     )
 }
 
+const SelectExperienceBox = (props) => {
+
+    const { attributes: {
+                            name, children, validation
+                        }, register } = props
+
+    return (
+        <div className="form-group">
+        <div className="custom-select-box">
+            <select name={name} className="custom-select" ref={register(validation)} aria-label="select experience level">
+                { children?.map((item,index)=>{
+                    return(
+                    <option value={item.value} key={index}>{item.text}</option>
+                    )
+                })}
+            </select>
+        </div>
+        </div>
+    )
+}
+
+
 export {
     InputField,
     SelectBox,
-    TextArea
+    TextArea,
+    SelectExperienceBox
 }

@@ -1,0 +1,42 @@
+@import '../../../../styles/functions';
+@import '../../../../styles/variables';
+@import '../../../../styles/mixins';
+
+header {
+    &.ui-bg {
+        background-image: linear-gradient(90deg, #A68BF2 0%, #8E3E59 100%);
+        height: 14rem;
+    }
+
+    // &.ui-bg2 {
+    //     background-image: linear-gradient(178deg, #A68BF2 0%, #8E3E59 100%);
+    // }
+
+    .ui-header-content {
+        position: relative;
+        display: flex;
+        color: $white;
+        align-items: center;
+
+        h1 {
+            font-size: 2.8rem;
+            color: $white;
+        }
+
+        figure {
+            width: 6rem;
+            height: 6rem;
+            border-radius: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba($color: #7969A7, $alpha: 0.2)
+        }
+
+        .btn-outline-white {
+            text-transform: uppercase;
+            display: flex;
+            margin-left: auto;
+        }
+    }
+}
