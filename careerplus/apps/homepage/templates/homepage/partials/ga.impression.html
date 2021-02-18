@@ -146,7 +146,7 @@
         }
         {% if product %}
         var referrer = '{{ request.META.HTTP_REFERER }}';
-        var actionField = referrer.split('/')[3] === "" ? 'Home Page' : referrer.split('/')[3] === 'search' ? 'Search Lists' : referrer.split('/')[3] === 'course' ? 'Course Page' : referrer.split('/')[3] === 'courses' ? 'Courses Page' : '';
+        var actionField = referrer.split('/')[3] === "" ? 'Home Page' : referrer.split('/')[3] === 'search' ? 'Search Lists' : referrer.split('/')[3] === 'course' ? 'Course Page' : referrer.split('/')[3] === 'courses' ? 'Courses Page' : 'Home Page';
             p_detail.push({
                 'name': '{{ prd_H1 }}',
                 'id': '{{ product.id }}',
