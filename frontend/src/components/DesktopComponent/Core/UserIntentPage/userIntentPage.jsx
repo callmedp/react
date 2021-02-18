@@ -46,7 +46,7 @@ const UserIntentPage = (props) => {
                         'find-right-job': <FindRightJob icon="icon-ui2" title="Find the right job" back={true} {...props}/>,
                         'make-career-change': <MakeCareerChange icon="icon-ui2" title="Make a career change" back={true} {...props}/>,
                         'improve-profile': <ImproveProfile icon="icon-ui2" title="Improve your profile" back={true}/>,
-                        'progress-career': <ProgressCareer icon="icon-ui2" title="Progress your career" back={true}/>,
+                        'progress-career': <ProgressCareer icon="icon-ui2" title="Progress your career" back={true} {...props}/>,
                         undefined: <UserGuidance icon="icon-ui1" title="Career Guidance with personalized recommendations" back={false}/>
                     }[UIContainer]
                 }
