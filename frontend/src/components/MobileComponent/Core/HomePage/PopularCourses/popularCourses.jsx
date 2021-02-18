@@ -36,7 +36,7 @@ const PopularCourses = (props) => {
     };
 
     return (
-        <section className="m-container mt-0 mb-0 pr-0 pt-20 pb-0">
+        <section className="m-container mt-0 mb-0 pr-0 pt-20 pb-0 ml-10n">
             <div className="m-courses m-popular-course-demand">
                 <h2 className="m-heading2-home text-center">Popular courses in demand</h2>
 

@@ -8,7 +8,7 @@ const LearningAdvantage = (props) => {
     return(
         <section className="container-fluid learning-advantage" data-aos="fade-up">
             <div className="row">
-                <div className="container mt-40 mb-20"> 
+                <div className="container mt-50 mb-30"> 
                     <div className="row">
                         <h2 className="heading2 mx-auto mb-5">Shine learning advantages</h2>
                         <ul className="mt-50">
