@@ -93,40 +93,59 @@ class ServiceRecommendationAPI(APIView):
 
 class JobsSearchAPI(APIView):
     """
-    returns list of available jobs based on parameters like location, experience etc.
+    Returns list of available jobs based on parameters like location, experience etc.
+
+    Input fields :
+    ==================================================================================
+    q -> The main query parameter i.e. the keyword for search for non logged in user.
+
+    loc -> Location for which the job is to be searched.
+
+    area -> Functional Area of the job(Integer value from lookup)
+
+    minexp -> Minimum experience of the jobs to be searched.
+
+    page -> Page no of the search results to be requested.
+    ==================================================================================
     """
     permission_classes = ()
     authentication_classes = ()
 
     def get(self,request):
         candidate_id = request.GET.get('candidate_id', None)
-        if not candidate_id:
-            candidate_id = '601b8120ca3f418906a889a8'
         intent = request.GET.get('intent',None)
+        page = int(request.GET.get('page',1))
         data = {
-        'job_title': request.GET.get("job_title",None),
-        'loc':request.GET.get("loc",None),
-        'minexp' : request.GET.get('minexp',None),
-        'skill': request.GET.get('skill',None),
-        'farea': request.GET.get("area", ""),
-        # 'q': request.GET.get("q", "")
-        }  
-        if candidate_id:
-            try:
-                jobs_response = ShineCandidateDetail().get_jobs(shine_id=candidate_id,data=data)
-            except Exception as e:
-                logging.getLogger('error_log').error(
-                    "Data fetch from shine.com jobs search api failed  - {}".format(e))
-            try:
-                UserIntent.objects.create(
-                    preferred_role=data['job_title'],
-                    department=data['farea'],
-                    experience=data['minexp'],
-                    skills=data['skill'],
-                    intent=intent,
-                    candidate_id=candidate_id
-                )
-                return APIResponse(data=jobs_response,message='Jobs fetched', status=HTTP_200_OK)
-            except Exception as e:
-                logging.getLogger('error_log').error('response for {} - {}'.format(candidate_id, str(e)))
-                return APIResponse(error=True,message='Error in user intent object creation',status=HTTP_400_BAD_REQUEST)
+        'job_title': request.GET.get("job_title",''),
+        'loc':request.GET.get("loc",''),
+        'minexp' : request.GET.get('minexp',''),
+        'skill': request.GET.get('skill',''),
+        'farea': request.GET.get("area", ''),
+        # 'q': request.GET.get("q", ''),
+        'page':page
+        } 
+        if not candidate_id:
+            if data['job_title'] and data['skill']:
+                data['q'] = data['job_title']+'-'+data['skill']
+            elif data['skill']:
+                data['q']=data['skill']
+            elif data['job_title']:
+                data['q'] = data['job_title']
+        try:
+            jobs_response = ShineCandidateDetail().get_jobs(shine_id=candidate_id,data=data)
+        except Exception as e:
+            logging.getLogger('error_log').error(
+                "Data fetch from shine.com jobs search api failed  - {}".format(e))
+        try:
+            UserIntent.objects.create(
+                preferred_role=data['job_title'],
+                department=data['farea'],
+                experience=data['minexp'],
+                skills=data['skill'],
+                intent=intent,
+                candidate_id=candidate_id
+            )
+            return APIResponse(data=jobs_response,message='Jobs fetched', status=HTTP_200_OK)
+        except Exception as e:
+            logging.getLogger('error_log').error('response for {} - {}'.format(candidate_id, str(e)))
+            return APIResponse(error=True,message='Error in user intent object creation..Passing intent value as 0,1 etc?',status=HTTP_400_BAD_REQUEST)
