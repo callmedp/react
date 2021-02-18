@@ -15,6 +15,7 @@ from homepage.api.v1.mixins import ProductMixin
 from order.models import OrderItem
 from userintent.models import UserIntent
 from shine.core import ShineCandidateDetail
+from api.helpers import offset_paginator
 
 #Logger import
 import logging
@@ -22,7 +23,7 @@ logger = logging.getLogger('error_log')
 
 class CourseRecommendationAPI(APIView):
     """
-    fetches recommended courses based on parameters like preferred role, skills etc from recommendaton engine.
+    Fetches recommended courses based on parameters like preferred role, skills etc from recommendaton engine.
     Method: GET
     Input:
     get parameters: preferred_role, department, experience, skills
@@ -35,6 +36,7 @@ class CourseRecommendationAPI(APIView):
 
     def get(self,request):
         candidate_id = request.GET.get('candidate_id', None)
+        page = int(request.GET.get('page',1))
         if not candidate_id:
             course_ids = settings.DEFAULT_LEARNING_COURSE_RECOMMENDATION_PRODUCT_ID
         intent = request.GET.get('intent',None)
@@ -68,27 +70,47 @@ class CourseRecommendationAPI(APIView):
         user_purchased_courses = OrderItem.objects.filter(product__type_flow=2,no_process=False,order__candidate_id=candidate_id,order__status__in=[1, 3]).values_list('product__id',flat=True)
         course_ids = [4,1,1568,570,2]
         courses = SearchQuerySet().filter(id__in=course_ids).exclude(id__in=user_purchased_courses)
-        if courses:
-            course_data = ProductMixin().get_course_json(courses)
-        return APIResponse(data={'course_data':course_data,'recommended_course_ids':course_id},message='recommended courses fetched', status=HTTP_200_OK)
+        paginated_data = offset_paginator(page, courses,size=3)
+        course_data = ProductMixin().get_course_json(paginated_data["data"])
+        #pagination
+        page_info ={
+                'current_page':paginated_data['current_page']if paginated_data else 0,
+                'total':paginated_data['total_pages'] if paginated_data else 0,
+                'has_prev': True if paginated_data['current_page'] >1 else False,
+                'has_next':True if (paginated_data['total_pages']-paginated_data['current_page'])>0 else False
+                }
+        data ={
+            'course_data':course_data,
+            'recommended_course_ids':course_id,
+            'page':page_info
+        }
+        return APIResponse(data=data,message='recommended courses fetched', status=HTTP_200_OK)
 
 class ServiceRecommendationAPI(APIView):
     """
-    fetches recommended services from recommedation enginge database.
+    Fetches recommended services from recommedation enginge database.
     """
     permission_classes = ()
     authentication_classes = ()
 
     def get(self,request):
         candidate_id = request.GET.get('candidate_id', None)
+        page = int(request.GET.get('page',1))
         # data = cache.get(f"analytics_recommendations_services{candidate_id}",None)
         # if data is None:
         data = []
         recommended_services_ids = RecommendationMixin().get_services_from_analytics_recommendation_engine(candidate_id=candidate_id)
         services = SearchQuerySet().filter(id__in=recommended_services_ids)
-        if services:
-            data = ProductMixin().get_course_json(services)
-        return APIResponse(data=data,message='recommended services fetched', status=HTTP_200_OK)
+        paginated_data = offset_paginator(page, services,size=3)
+        data = ProductMixin().get_course_json(paginated_data["data"])
+        #pagination
+        page_info ={
+                'current_page':paginated_data['current_page']if paginated_data else 0,
+                'total':paginated_data['total_pages'] if paginated_data else 0,
+                'has_prev': True if paginated_data['current_page'] >1 else False,
+                'has_next':True if (paginated_data['total_pages']-paginated_data['current_page'])>0 else False
+                }
+        return APIResponse(data={'services':data,'page':page_info},message='recommended services fetched', status=HTTP_200_OK)
         # cache.set(f"analytics_recommendations_services{candidate_id}", data, timeout=86400)
 
 class JobsSearchAPI(APIView):
@@ -106,6 +128,7 @@ class JobsSearchAPI(APIView):
     minexp -> Minimum experience of the jobs to be searched.
 
     page -> Page no of the search results to be requested.
+
     ==================================================================================
     """
     permission_classes = ()
