@@ -171,3 +171,38 @@ class JobsSearchAPI(APIView):
         except Exception as e:
             logging.getLogger('error_log').error('response for {} - {}'.format(candidate_id, str(e)))
             return APIResponse(error=True,message='Error in user intent object creation..Passing intent value as 0,1 etc?',status=HTTP_400_BAD_REQUEST)
+
+class KeywordSuggestionAPI(APIView):
+    """
+    Returns skills and jobs suggestions as per the query entered.
+
+    Input fields :
+    ==================================================================================
+    q -> The main query parameter i.e. the keyword for search.
+
+    ==================================================================================
+    """
+    permission_classes = ()
+    authentication_classes = ()
+
+    def get(self,request):
+        candidate_id = request.GET.get('candidate_id', None)
+        skill_only = request.GET.get('skill_only', False)
+        q = request.GET.get('q', '')
+        skills = []
+        data = []
+        try:
+            response = ShineCandidateDetail().get_keyword_sugesstion(shine_id=candidate_id,query=q)
+            if response:
+                data = response
+                if skill_only:
+                    for item in response:
+                        item_type = item.get('type',None)
+                        if item_type == 'skill':
+                            skills.append(item)
+                    data = skills 
+            return APIResponse(data=data,message='suggested words fetched', status=HTTP_200_OK)
+        except Exception as e:
+            logging.getLogger('error_log').error(
+                "Data fetch from shine.com jobs search api failed  - {}".format(e))
+            return APIResponse(error=True,message='Data fetch from shine.com api failed : {}'.format(e),status=HTTP_400_BAD_REQUEST)

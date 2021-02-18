@@ -343,6 +343,23 @@ class ShineCandidateDetail(ShineToken):
 
         return None
 
+    #Keyword suggestion for skills and job titles used in Intent capture
+    def get_keyword_sugesstion(self,query='',email=None, shine_id=None, token=None):
+        if not query:
+            return None
+        try:
+            headers = self.get_api_headers()
+            keyword_suggestion_url = "{}/api/v3/search/lookup/keyword-suggestions/query?format=json&q={}".format(
+                    settings.SHINE_SITE, query)
+            keyword_suggestion_response = requests.get(
+                keyword_suggestion_url, headers=headers, timeout=settings.SHINE_API_TIMEOUT)
+            if keyword_suggestion_response.status_code == 200 and keyword_suggestion_response.json():
+                return keyword_suggestion_response.json()
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get status details %s'%str(e))
+
+        return None
+
 class FeatureProfileUpdate(ShineToken):
 
     def update_feature_profile(self, candidate_id=None, data={}, headers=None):
