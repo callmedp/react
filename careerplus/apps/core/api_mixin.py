@@ -349,7 +349,7 @@ class ShineCandidateDetail(ShineToken):
             return None
         try:
             headers = self.get_api_headers()
-            keyword_suggestion_url = "{}/api/v3/search/lookup/keyword-suggestions/query?format=json&q={}".format(
+            keyword_suggestion_url = "{}/api/v3/search/lookup/keyword-suggestions/query?q={}".format(
                     settings.SHINE_SITE, query)
             keyword_suggestion_response = requests.get(
                 keyword_suggestion_url, headers=headers, timeout=settings.SHINE_API_TIMEOUT)
