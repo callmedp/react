@@ -23,30 +23,35 @@ const BoostedCareers = (props) => {
 
 
     return (
-        <section className="container" data-aos="fade-up">
-            <div className="row">
-                <div className="container d-flex align-items-center">
-                    <div className="col-sm-2">
-                        <figure className="icon-quote mb-20"></figure>
-                        <h2 className="heading2">See how they boosted their careers</h2>
+        <>
+            {
+                testimonialCategory?.length > 0 && 
+                <section className="container" data-aos="fade-up">
+                    <div className="row">
+                        <div className="container d-flex align-items-center">
+                            <div className="col-sm-2">
+                                <figure className="icon-quote mb-20"></figure>
+                                <h2 className="heading2">See how they boosted their careers</h2>
+                            </div>
+                            <Carousel className="boosted-careers">
+                                {
+                                    testimonialCategory?.map((testimonialList, idx) => {
+                                        return (
+                                            <Carousel.Item interval={10000000000} key={idx}>
+                                                <div className="d-flex col">
+                                                    {
+                                                        handleTestimonialList(testimonialList)
+                                                    }
+                                                </div>
+                                            </Carousel.Item>
+                                        )
+                                    })}
+                            </Carousel>
+                        </div>
                     </div>
-                    <Carousel className="boosted-careers">
-                        {
-                            testimonialCategory?.map((testimonialList, idx) => {
-                                return (
-                                    <Carousel.Item interval={10000000000} key={idx}>
-                                        <div className="d-flex col">
-                                            {
-                                                handleTestimonialList(testimonialList)
-                                            }
-                                        </div>
-                                    </Carousel.Item>
-                                )
-                            })}
-                    </Carousel>
-                </div>
-            </div>
-        </section>
+                </section>
+            }
+        </>
     )
 }
 
