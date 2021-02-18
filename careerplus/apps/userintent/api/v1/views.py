@@ -114,7 +114,6 @@ class JobsSearchAPI(APIView):
     def get(self,request):
         candidate_id = request.GET.get('candidate_id', None)
         intent = request.GET.get('intent',None)
-        page = int(request.GET.get('page',1))
         data = {
         'job_title': request.GET.get("job_title",''),
         'loc':request.GET.get("loc",''),
@@ -122,7 +121,7 @@ class JobsSearchAPI(APIView):
         'skill': request.GET.get('skill',''),
         'farea': request.GET.get("area", ''),
         # 'q': request.GET.get("q", ''),
-        'page':page
+        'page':int(request.GET.get('page',1))
         } 
         if not candidate_id:
             if data['job_title'] and data['skill']:
