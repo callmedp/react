@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import './findJob.scss';
 import { useForm } from 'react-hook-form';
@@ -6,12 +6,20 @@ import { InputField, SelectExperienceBox } from 'formHandler/desktopFormHandler/
 import UserIntentForm from 'formHandler/desktopFormHandler/formData/userIntent';
 import { fetchedUserIntentData } from 'store/UserIntentPage/actions';
 import { useDispatch } from 'react-redux';
+import useDebounce from 'utils/searchUtils/debouce';
+import { userSearch } from 'utils/searchUtils/searchFunctions';
 
 const FindJob = (props) => {
 
     const { register, handleSubmit, errors } = useForm();
     const dispatch = useDispatch();
+    const textInput = useRef();
     const { history, type } = props;
+    const [searchTerm, setSearchTerm] = useState('');
+    const [results, setResults] = useState([]);
+    const [showResults, setShowResults] = useState(false);
+    const debouncedSearchTerm = useDebounce(searchTerm, 700);
+    const [relatedSearch, setRelatedSearch] = useState(false)
 
     const addValues = (values) =>{
         return {
@@ -28,6 +36,35 @@ const FindJob = (props) => {
           })
           
     }
+
+    const appendData = (e) => {
+        textInput.current.value = textInput.current.value + e.target.textContent + ", "
+        // setSearchTerm(textInput.current.value)
+        // setRelatedSearch(true)
+    }
+
+    const getMenuItems = (data, noOfItems=6) => {
+        return (
+            <>
+                {data?.slice(0, noOfItems)?.map(result => (
+                    <div key={result.pid} onClick={(e) => appendData(e)}>
+                        <span>{result?.pdesc?.replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())))}</span>
+                    </div>
+                ))}
+            </> 
+        )
+    }
+
+    useEffect(() => {
+        // Make sure we have a value (user has entered something in input)
+        if (debouncedSearchTerm) {
+            (relatedSearch ? userSearch(debouncedSearchTerm, true) : userSearch(debouncedSearchTerm)).then(results => {
+            setResults(results);
+        });
+        } else {
+            setResults([]);
+        }
+    },[debouncedSearchTerm]);
 
     return (
         <section className="container-fluid mt-30n mb-0">
@@ -46,14 +83,20 @@ const FindJob = (props) => {
                                 <div className="find-job">
                                     <form className="mt-20" onSubmit={handleSubmit(onSubmit)}>
 
-                                        {/* <div className="form-group">
-                                            <input type="text" className="form-control" id="job" name="job" placeholder=" "
-                                                aria-required="true" aria-invalid="true" />
+                                        <div className="form-group">
+                                            <input type="text" className="form-control" id="job" name="job" placeholder=" " ref={textInput} autoComplete="off"
+                                                aria-required="true" aria-invalid="true" onChange={e => setSearchTerm(e.target.value)} onFocus={()=>setShowResults(true)} onBlur={() => setShowResults(false)}/>
                                             <label for="">Current job title</label>
-                                        </div> */}
+
+                                            {showResults ?
+                                                <div className="user-intent-search-result">
+                                                    { results?.length ? getMenuItems(results) : null }
+                                                </div> : null
+                                            }
+                                        </div>
                                         
-                                        <InputField attributes={UserIntentForm.job} register={register}
-                                                errors={!!errors ? errors[UserIntentForm.job.name] : ''} />
+                                        {/* <InputField attributes={UserIntentForm.job} register={register}
+                                                errors={!!errors ? errors[UserIntentForm.job.name] : ''} /> */}
                                         
                                         {/*                                         
                                         <div className="form-group">        

@@ -12,6 +12,7 @@ const FindRightJob = (props) => {
     return (
         <div>
             <UIBanner {...props} />
+            {/* <FindJobEdit /> */}
             { job === null ? <FindJob type={"job"} {...props}/> : <JobsUpskills /> }
         </div>
     )
