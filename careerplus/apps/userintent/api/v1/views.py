@@ -179,6 +179,7 @@ class KeywordSuggestionAPI(APIView):
     Input fields :
     ==================================================================================
     q -> The main query parameter i.e. the keyword for search.
+    skill_only -> returns only suggested skills
 
     ==================================================================================
     """
