@@ -17,6 +17,7 @@ const Header = (props) => {
     const { count, navTags } = useSelector(store => store.header)
     const [candidateInfo, setCandidateInfo] = useState(false)
     const [isLoggedIn, setIsLoggedIn] = useState(false)
+    const { isHomepage } = props;
 
     const handleRedirect = (event, type) => {
         event.preventDefault();
@@ -26,7 +27,7 @@ const Header = (props) => {
         if (type === 'register') {
             MyGA.SendEvent('header_icons', 'ln_header_icons', 'ln_register', 'register', '', false, true);
         }
-        let redirectPath = window.location.pathname
+        let redirectPath = props.location?.pathname;
         redirectPath ?
             window.location.href = `${siteDomain}/${type}/?next=${redirectPath}` :
             window.location.href = `${siteDomain}/${type}/`
@@ -86,14 +87,14 @@ const Header = (props) => {
             <nav className="container-fluid padlr-0 shadow pos-rel zindex">
                 <div className="container padlr-0">
                     <div className="navbar navbar-expand-lg navbar-light row">
-                        <a className="navbar-brand" itemScope itemType="http://schema.org/Organization" href={siteDomain} aria-label="brand logo" onClick={eventTracking}>
+                        <Link className="navbar-brand" itemScope itemType="http://schema.org/Organization" to="/" aria-label="brand logo" onClick={eventTracking}>
                             <meta itemProp="name" content="Shine"/>
                             <meta itemProp="url" content={`${siteDomain}`} />
-                        </a>
+                        </Link>
 
                             <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                                <SearchBar  placeHolder = {props.placeHolder}/>
-                                <ul className="navbar-nav navbar-right">
+                                { !isHomepage ? <SearchBar place="topHeader" placeHolder = {props.placeHolder} isHomepage={isHomepage} /> : ''}
+                                <ul className={`navbar-nav navbar-right ${ !!isHomepage ? ' ml-auto' : ''}`}>
                                     <li className="nav-item dropdown dropdown-jobs">
                                         <a className="nav-link" to={"#"} id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onClick={() => MyGA.SendEvent('homepage_navigation', 'ln_homepage_navigation', 'ln_job_assisstance', 'ln_job_assisstance', '', false, true)}>Job assistance</a>
                                         <div className="dropdown-menu" aria-labelledby="navbarDropdown">

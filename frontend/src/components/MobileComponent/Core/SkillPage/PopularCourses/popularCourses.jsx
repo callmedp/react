@@ -41,7 +41,7 @@ const PopularCourses = (props) => {
                 </div>
                 <div className="d-flex m-popular-courses">
                 {
-                    trendingCourses?.slice(0,2).map((course) => {
+                    trendingCourses.slice(0,2)?.map((course) => {
                         return (
                             <div className="m-col" key={course.id}>
                                 <div className="m-card">

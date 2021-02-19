@@ -1,0 +1,125 @@
+// React Core Import
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+
+// Third-Party Import
+import Swal from 'sweetalert2';
+import Slider from "react-slick";
+
+// Inter-App Import
+import './recruitersLooking.scss';
+// import 'slick-carousel/slick/slick.css';
+import { siteDomain } from 'utils/domains';
+
+
+
+const RecruitersLooking = (props) => {
+    const dispatch = useDispatch();
+
+    const { trendingSkills } = useSelector(store => store?.skillDemand);
+
+    const settings = {
+        dots: false,
+        arrows: false,
+        infinite: false,
+        speed: 500,
+        slidesToShow: 1,
+        slidesToScroll: 1,
+        swipeToSlide: true,
+        // centerMode: true,
+        variableWidth: true,
+        variableHeight: true,
+    };
+
+
+
+    return (
+        <section className="m-container m-lightblue-bg mt-0 mb-0 pb-0 pr-0 ml-10n" data-aos="fade-up">
+            <div className="m-recruiters-looking">
+                <h2 className="m-heading2-home text-center mb-5">What recruiters are looking at</h2>
+                <p className="fs-13 text-center">Browse the skills with high demands</p>
+                <Slider {...settings}>
+
+                    {
+                        trendingSkills?.slice(0,12)?.map((skill, index) => {
+                            return (
+                                <Link to={skill.skillUrl} key={index}>
+                                <div className="m-card" >
+                                    
+                                    <figure>
+                                        <img src={`${skill?.image}`} className="img-fluid" alt={skill?.skillName} />
+                                    </figure>
+                                    <h3>{skill?.skillName}</h3>
+                                    { !!skill.no_courses ? <span>{skill.no_courses} { skill.no_courses == 1 ? 'course': 'courses'}</span> : ''}
+                                    <em>Know more</em>
+                                    
+                                </div>
+                                </Link>
+                            )
+                        })
+                    }
+
+                    {/* <div className="m-card">
+                        <figure>
+                            <img src="./media/images/mobile/categories2.jpg" className="img-fluid" alt="Information Technology" />
+                        </figure>
+                        <h3>Information Technology</h3>
+                        <span>30 courses</span>
+                        <Link to={"#"}>Know more</Link>
+                    </div>
+                    <div className="m-card">
+                        <figure>
+                            <img src="./media/images/mobile/categories3.jpg" className="img-fluid" alt="Sales and Marketing" />
+                        </figure>
+                        <h3>Sales and Marketing</h3>
+                        <span>30 courses</span>
+                        <Link to={"#"}>Know more</Link>
+                    </div>
+                    <div className="m-card">
+                        <figure>
+                            <img src="./media/images/mobile/categories4.jpg" className="img-fluid" alt="Human Resources (HR)" />
+                        </figure>
+                        <h3>Human Resources (HR)</h3>
+                        <span>30 courses</span>
+                        <Link to={"#"}>Know more</Link>
+                    </div>
+                    <div className="m-card">
+                        <figure>
+                            <img src="./media/images/mobile/categories5.jpg" className="img-fluid" alt="Management" />
+                        </figure>
+                        <h3>Management</h3>
+                        <span>30 courses</span>
+                        <Link to={"#"}>Know more</Link>
+                    </div>
+                    <div className="m-card">
+                        <figure>
+                            <img src="./media/images/mobile/categories6.jpg" className="img-fluid" alt="Law" />
+                        </figure>
+                        <h3>Law</h3>
+                        <span>30 courses</span>
+                        <Link to={"#"}>Know more</Link>
+                    </div>
+                    <div className="m-card">
+                        <figure>
+                            <img src="./media/images/mobile/categories7.jpg" className="img-fluid" alt="Operation Management" />
+                        </figure>
+                        <h3>Operation Management</h3>
+                        <span>30 courses</span>
+                        <Link to={"#"}>Know more</Link>
+                    </div>
+                    <div className="m-card">
+                        <figure>
+                            <img src="./media/images/mobile/categories8.jpg" className="img-fluid" alt="Mass Communication" />
+                        </figure>
+                        <h3>Mass Communication</h3>
+                        <span>30 courses</span>
+                        <Link to={"#"}>Know more</Link>
+                    </div> */}
+                </Slider>
+            </div>
+        </section>
+    )
+}
+
+export default RecruitersLooking;

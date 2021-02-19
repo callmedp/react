@@ -3,7 +3,7 @@ import { siteDomain } from 'utils/domains';
 
 const CourseCard = (props) => {
 
-    const { course } = props;
+    const { course, key } = props;
     
     const starRatings = (star, index) => {
         return (star === '*' ? <em className="icon-fullstar" key={index}></em> : star === '+'
@@ -12,31 +12,31 @@ const CourseCard = (props) => {
     }
 
     return (
-        <li className="col">
-        <div className="card">
-            <div className="card__heading">
-                <figure>
-                    <img src={course.imgUrl} alt={course.imgAlt} />
-                </figure>
-                <h3 className="heading3">
-                    <a href={`${siteDomain}${course.url}`}>{course.name}</a>
-                </h3>
-            </div>
-            <div className="card__box">
-                <div className="card__rating">
-                    <span className="mr-10">By {course.providerName}</span>
+        <li className="col" key={key}>
+            <div className="card">
+                <div className="card__heading">
+                    <figure>
+                        <img src={course.imgUrl} alt={course.imgAlt} />
+                    </figure>
+                    <h3 className="heading3">
+                        <a href={`${siteDomain}${course.url}`}>{course.name}</a>
+                    </h3>
+                </div>
+                <div className="card__box">
+                    <div className="card__rating">
+                        <span className="mr-10">By {course.providerName?.split(' ')[0]?.length > 10 ? course.providerName?.split(' ')[0]?.slice(0,10) + '...' : course.providerName?.split(' ')[0] }</span>
 
-                    <span className="rating">
-                        {course.stars?.map((star, index) => starRatings(star, index))}
-                        <span>{course.rating?.toFixed(1)}/5</span>
-                    </span>
-                </div>
-                <div className="card__price mt-10">
-                    <strong>{course.price}/-</strong>
+                        <span className="rating">
+                            {course.stars?.map((star, index) => starRatings(star, index))}
+                            <span>{course.rating?.toFixed(1)}/5</span>
+                        </span>
+                    </div>
+                    <div className="card__price mt-10">
+                        <strong>{course.price}/-</strong>
+                    </div>
                 </div>
             </div>
-        </div>
-    </li>
+        </li>
     )
 }
 

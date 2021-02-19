@@ -1,0 +1,38 @@
+@import '../../../../../styles-mobile/abstracts';
+
+.m-offer-ends {
+    margin: 0;
+    background: $offer-bg;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+    position: relative;
+    z-index: 9;
+
+    p {
+        margin: 0;
+        font-size: 1.3rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        line-height: 2rem;
+
+        span {
+            font-weight: 400;
+        }
+
+        strong {
+            font-weight: 600;
+            background: $offer-badge;
+            padding: .3rem .5rem;
+        }
+    }
+
+    .m-close-offer {
+        position: absolute;
+        right: 1rem;
+        top: 1rem;
+        border: none;
+        font-size: 1.6rem;
+    }
+}

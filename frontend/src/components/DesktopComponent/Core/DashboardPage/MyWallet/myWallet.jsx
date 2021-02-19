@@ -94,7 +94,7 @@ const MyWallet = (props) => {
                 <div className="db-white-box db-white-box-wallet pb-4">
                     {
                         walletResult && walletResult?.loyality_txns.length > 0 ?
-                            walletResult?.loyality_txns.map((item, index) => {
+                            walletResult?.loyality_txns?.map((item, index) => {
                                 return (
                                     <ul className="row myWallet__list" key={index}>
                                         <li className="col-md-2">{item.date}</li>

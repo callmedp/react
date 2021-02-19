@@ -31,6 +31,7 @@ from emailers.sms import SendSMS
 from django.contrib.contenttypes.models import ContentType
 from order.api.v1.serializers import OrderItemSerializer
 from .serializers import StaticSiteContentSerializer, OrderItemDetailSerializer, DashboardCancellationSerializer,ProductSerializer
+from skillpage.api.v1.serializers import TestimonialSerializer
 from core.library.gcloud.custom_cloud_storage import \
     GCPPrivateMediaStorage, GCPInvoiceStorage, GCPMediaStorage, GCPResumeBuilderStorage
 
@@ -46,7 +47,13 @@ from payment.models import PaymentTxn
 from .helper import APIResponse
 from .serializers import RecentCourseSerializer
 from .mixins import PopularProductMixin
+from blog.models import Blog, Comment
+from api.helpers import offset_paginator
+from .helper import get_home_offer_values
+from homepage.api.v1.mixins import ProductMixin
+from meta.views import MetadataMixin
 
+from .mixins import ProductMixin
 # Other Import
 from weasyprint import HTML
 from wsgiref.util import FileWrapper
@@ -818,6 +825,7 @@ class TrendingCoursesAndSkillsAPI(PopularProductMixin, APIView):
         """
         popular_course_quantity = int(request.GET.get('num_courses', 2))
         skill_category = request.GET.get('category_id', None)
+        homepage = request.GET.get('homepage',False)
         course_only = request.GET.get('course_only', False)
 
         product_obj, product_converstion_ratio, product_revenue_per_mile = PopularProductMixin().\
@@ -840,12 +848,18 @@ class TrendingCoursesAndSkillsAPI(PopularProductMixin, APIView):
         categories = Category.objects.filter(id__in=p_skills)
 
         skills = []
-        skills_ids = []
+        skill_data = {}
         for i in categories:
-            if i.id not in skills_ids:
-                skills_ids.append(i.id)
-                skills.append({'id': i.id, 'skillName': i.name,
-                        'skillUrl': i.get_absolute_url()})
+                skill_data ={
+                    'id': i.id,
+                    'skillName': i.name,
+                    'skillUrl': i.get_absolute_url()}
+                if homepage :
+                    skill_data.update({
+                        'image':i.get_absolute_image_url(),
+                        'no_courses':i.categoryproducts.count()
+                        })
+                skills.append(skill_data)
 
         data = {
             'trendingCourses': [
@@ -876,6 +890,7 @@ class NavigationTagsAndOffersAPI(APIView):
         data = {}
         special_links = cache.get('active_homepage_navlink_new', [])
         whatsapp_no = cache.get('whatsapp_visibility_class', {})
+        active_offer = get_home_offer_values()
         if not settings.DEBUG and special_links:
             active_navlinks = special_links
         else:
@@ -987,4 +1002,146 @@ class TrendingCategoriesApi(PopularProductMixin, APIView):
         }
             # cache.set('category_popular_courses',data,86400)
         return Response(data=data, status=status.HTTP_200_OK)
+
+class MostViewedCourseAPI(APIView):
+    permission_classes = (permissions.AllowAny,)
+    authentication_classes = ()
+
+    def get(self, request):
+        quantity = int(request.GET.get('quantity', 4))
+        category_id = int(request.GET.get('category_id',-1))
+        data = {}
+        product_mixin = ProductMixin()
+        if category_id and category_id != -1:
+            try:
+                category = Category.objects.get(id=category_id)
+                child_categories = category.get_childrens().values_list('id',flat=True)
+            except Category.DoesNotExist:
+                return APIResponse(error= 'Category not found', status=status.HTTP_404_NOT_FOUND)
+
+            queryset = Product.objects.filter(product_class__slug__in=settings.COURSE_SLUG,
+                                                category__id__in=child_categories,
+                                                active=True,
+                                                is_indexed=True).order_by('-cp_page_view')[:quantity].\
+                                                values_list('id', flat=True)
+        else:
+            queryset = Product.objects.filter(product_class__slug__in=settings.COURSE_SLUG,
+                                                active=True,
+                                                is_indexed=True).order_by('-cp_page_view')[:quantity].\
+                                                values_list('id', flat=True)
+
+        most_viewed_courses = SearchQuerySet().filter(id__in=list(queryset), pTP__in=[0, 1, 3]).exclude(
+            id__in=settings.EXCLUDE_SEARCH_PRODUCTS
+        )
+        data.update({'mostViewedCourses': product_mixin.get_course_json(most_viewed_courses)})
+        return APIResponse(message='Most viewed Courses fetched', data=data, status=status.HTTP_200_OK)
+
+
+class PopularInDemandProductsAPI(APIView):
+    permission_classes = (permissions.AllowAny,)
+    authentication_classes = ()
+
+    def get(self, request):
+        quantity = 4
+        class_category = settings.COURSE_SLUG
+        page = int(request.GET.get('page',1))
+        tab_type = request.GET.get('tab_type','master')
+        paginated_data = []
+
+        data= {}
+        if tab_type=='certifications':
+            certifications = PopularProductMixin().popular_certifications()                                                                              
+            paginated_data = offset_paginator(page, certifications,size=4)                                                                    
+            data.update({'certifications':paginated_data["data"]})
         
+        elif tab_type == 'master':
+            s_obj, s_ratio, s_revenue = PopularProductMixin(). \
+                popular_courses_algorithm(class_category=class_category,
+                                        quantity=quantity)
+
+            course_pks = list(s_ratio) + list(s_revenue)
+            courses = SearchQuerySet().filter(id__in=course_pks, pTP__in=[0, 1, 3]).exclude(
+                id__in=settings.EXCLUDE_SEARCH_PRODUCTS
+            )
+            paginated_data = offset_paginator(page, courses,size=4)                                                                    
+            courses = paginated_data["data"]
+            course_data = ProductMixin().get_course_json(courses)
+            data.update({ 'courses': course_data})
+
+            # {
+            #     'courses': [
+            #         {'id': course.id, 'heading': course.pHd, 'name': course.pNm, 'url': course.pURL, 'img': course.pImg, \
+            #         'img_alt': course.pImA, 'description': course.pDscPt, 'rating': course.pARx, 'price': course.pPinb, 'vendor': course.pPvn, 'stars': course.pStar,
+            #         'provider': course.pPvn} for course in courses]
+            # }
+        page_info ={
+                'current_page':paginated_data['current_page']if paginated_data else 0,
+                'total':paginated_data['total_pages'] if paginated_data else 0,
+                'has_prev': True if paginated_data['current_page'] >1 else False,
+                'has_next':True if (paginated_data['total_pages']-paginated_data['current_page'])>0 else False
+                }
+        # data.append({'page':page_info})
+        data.update({'page':page_info})
+        return APIResponse(message='Popular certifications and courses Loaded', data=data, status=status.HTTP_200_OK)
+
+class JobAssistanceAndLatestBlogAPI(APIView):
+    permission_classes = (permissions.AllowAny,)
+    authentication_classes = ()
+        
+    def get(self,request):
+        quantity = 4        
+        try:
+            tjob = TopTrending.objects.filter(
+                is_active=True, is_jobassistance=True).first()  
+            job_services_pks = list(tjob.get_all_active_trending_products_ids())
+            job_services = SearchQuerySet().filter(id__in=job_services_pks, pTP__in=[0, 1, 3]).exclude(
+                id__in=settings.EXCLUDE_SEARCH_PRODUCTS)[:quantity]
+
+            data = {
+            'jobAssistanceServices': [
+                {'id': tsrvc.id, 'heading': tsrvc.pHd, 'name': tsrvc.pNm, 'url': tsrvc.pURL, 'img': tsrvc.pImg, \
+                 'img_alt': tsrvc.pImA, 'description': tsrvc.pDscPt, 'rating': tsrvc.pARx, 'price': tsrvc.pPinb, 'vendor': tsrvc.pPvn, 'stars': tsrvc.pStar,
+                 'provider': tsrvc.pPvn} for tsrvc in job_services]
+            }
+            article_list = Blog.objects.filter(
+            status=1, visibility=2).order_by('-last_modified_on')[:3]
+            latest_blog_data = [
+                {
+                'display_name':article.heading if article.heading else article.name,
+                'title':article.get_title(),
+                'image':article.get_absolute_image_url(),
+                'url':article.get_absolute_url(),
+                'p_category': article.p_cat.name
+                } for article in article_list]
+            data.update({'latestBlog':latest_blog_data})
+
+        except Exception as e:
+            logging.getLogger('error_log').error(
+                "unable to load job assistance services%s " % str(e))
+        return APIResponse(message='Job assistance services and latest blog data Loaded', data=data, status=status.HTTP_200_OK)
+
+class TestimonialsApi(APIView,MetadataMixin):
+    permission_classes = (permissions.AllowAny,)
+    authentication_classes = ()
+    use_title_tag = False
+    use_og = True
+    use_twitter = False
+
+    def get_meta_title(self, context=None):
+        # return 'Best Resume Writing Services | Online Courses | Linkedin Profile - Shine Learning'
+        # return 'Online Courses, Practice Tests, Job Assistance Services | Shine Learning'
+        return 'Best Online Courses  & Certification Trainings | Shine Learning'
+
+    def get_meta_description(self, context=None):
+        # return 'Pick up the Best Resume Services - Check out the Latest Resume Format or Templates - Online Professional Certification Courses'
+        # return 'Discover a variety of online courses and certification training, practice tests, job assistance services with 24X7 support.'
+        return 'Discover a comprehensive variety of online courses, certification training programs, practice tests with 24X7 support to build a successful career or grow your business.'
+
+
+    def get(self,request):
+        quantity = request.GET.get('quantity',6)
+        testimonials = Testimonial.objects.filter(is_active=True).order_by('-rating')[:quantity]
+        data = TestimonialSerializer(testimonials,many=True).data
+        meta = self.get_meta().__dict__
+        testimonials = list(data)
+        return APIResponse(message='Testimonials data loaded', data={'testimonialCategory':testimonials,'meta':meta}, status=status.HTTP_200_OK)

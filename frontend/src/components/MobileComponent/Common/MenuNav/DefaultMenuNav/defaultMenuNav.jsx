@@ -68,9 +68,9 @@ const DefaultMenuNav = (props) =>{
         <Menu className='navigation' width={ '300px' } isOpen={open} onStateChange={state => setOpen(state.isOpen)}>
             <MenuNavHeader isLoggedIn={isLoggedIn} candidateInfo={candidateInfo}/>
             <div className="m-menu-links">
-                <a className="menu-item" href={`${siteDomain}/`} onClick={() => {setOpen(state => !state);eventTracking()}}>
+                <Link className="menu-item" to="/" onClick={() => {setOpen(state => !state);eventTracking()}}>
                     <figure className="micon-home" /> Home 
-                </a>
+                </Link>
                 <a href="/" className="menu-item" onClick={(e) => {e.preventDefault();setType('allCourses')}}>
                     <figure className="micon-courses-services" /> All Courses <figure className="micon-arrow-menusm ml-auto" />
                 </a>

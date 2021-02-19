@@ -30,5 +30,8 @@ urlpatterns = [
     re_path(r'^popular-services/$', views.PopularServicesAPI.as_view(), name='popular-services-api'),
     re_path(r'^recent-course-added/$', views.RecentCoursesAPI.as_view(), name='recent-course-added-api'),
     re_path(r'^trending-categories/$', views.TrendingCategoriesApi.as_view(), name='trending-categories-api'),
-
+    re_path(r'^most-viewed-courses/$', views.MostViewedCourseAPI.as_view(), name='most-viewed-course-api'),
+    re_path(r'^in-demand-product/$', views.PopularInDemandProductsAPI.as_view(), name='most-viewed-course-api'),
+    re_path(r'^job-assistance-latest-blogs/$', views.JobAssistanceAndLatestBlogAPI.as_view(), name='job-assistance-services-api'),
+    re_path(r'^testimonials/$', views.TestimonialsApi.as_view(), name='testimonials-api'),
 ]

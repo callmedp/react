@@ -1,0 +1,242 @@
+@import '../../../../../styles/functions';
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
+
+header {
+    &.home-bg {
+        background: url('#{$path}desktop/home-bg.png') no-repeat center top;
+        background-size: cover;
+    }
+
+    .banner-home-right {
+        position: relative;
+        bottom: .4rem;
+        right: 12rem;
+        margin-left: auto;
+
+
+        .banner-right-img {
+            position: relative;
+            width: 27.5rem;
+            height: 35rem;
+
+            > .home-banner-tween1 {
+                position: absolute;
+                top: 2rem;
+                left: 0;
+                z-index: 8;
+                max-width: 100%;
+                animation: rotation 10s infinite linear;
+                    
+                @keyframes rotation {
+                    from {
+                        transform: rotate(0deg);
+                    }
+                    to {
+                        transform: rotate(359deg);
+                    }
+                }
+            }
+            > .home-banner-tween2 {
+                position: absolute;
+                bottom: 0rem;
+                left: 4.5rem;
+                z-index: 8;
+            }
+            > .home-banner-tween3 {
+                position: absolute;
+                bottom: 7rem;
+                left: 0rem;
+                z-index: 999;
+
+            }
+            > .home-banner-tween4 {
+                position: relative;
+                top: 4rem;
+                left: -26px;
+                z-index: 999;
+            }
+            > .home-banner-tween5 {
+                position: absolute;
+                top: 4rem;
+                left: -26px;
+                z-index: 999;
+                -webkit-animation: moverB 1s infinite  alternate;
+                animation: moverB 1s infinite  alternate;
+                transition-timing-function: ease;
+                -webkit-transition-timing-function: ease;
+
+                @keyframes moverB {
+                    0% {
+                      opacity: 0;
+                    }
+
+                   100% {
+                      opacity: 1;
+                    }
+                }
+            }
+            > .home-banner-tween6 {
+                position: absolute;
+                bottom: 0rem;
+                left: 4.5rem;
+                z-index: 8;
+                // opacity: 0;
+                // -webkit-animation: showhideA 2s infinite  alternate;
+                // animation: showhideA 2s infinite  alternate;
+                // transition-timing-function: ease;
+                // -webkit-transition-timing-function: ease;
+
+                // @keyframes showhideA {
+                //     0% {
+                //       opacity: 0;
+                //     }
+
+                //    100% {
+                //       opacity: 1;
+                //     }
+                // }
+            }
+
+            > .home-banner-tween7 {
+                position: absolute;
+                bottom: 0rem;
+                left: 4.5rem;
+                z-index: 88;
+                opacity: 0;
+                -webkit-animation: showhideB 3s infinite  alternate;
+                animation: showhideB 5s infinite  alternate;
+                transition-timing-function: ease;
+                -webkit-transition-timing-function: ease;
+                animation-delay: 3s;
+
+                @keyframes showhideB {
+                    0% {
+                      opacity: 0;
+                    }
+
+                    80% {
+                        opacity: 0;
+                      } 
+
+                   100% {
+                      opacity: 1;
+                    }
+                }
+            }
+
+            > .home-banner-tween8 {
+                position: absolute;
+                bottom: 0rem;
+                left: 4.5rem;
+                z-index: 888;
+                opacity: 0;
+                -webkit-animation: showhideB 2s infinite  alternate;
+                animation: showhideB 2s infinite  alternate;
+                transition-timing-function: ease;
+                -webkit-transition-timing-function: ease;
+
+                @keyframes showhideB {
+                    0% {
+                      opacity: 1;
+                    }
+
+                    50% {
+                        opacity: 1;
+                      }
+
+                   100% {
+                      opacity: 0;
+                    }
+                }
+            }
+            
+        }
+    }
+
+    .home-header-content {
+        position: relative;
+        display: flex;
+        color: $white;
+
+        h1 {
+            color: $white;
+            font-weight: 400;
+            line-height: 5rem;
+            font-size: 4.8rem;
+
+            strong {
+                display: block;
+            }
+        }
+
+        .banner-txt {
+            width: 100%;
+            
+            strong {
+                font-weight: 400;
+                display: flex;
+                align-items: center;
+                
+                span {
+                    font-size: 1.6rem;
+                    font-weight: 600;
+                    margin-right: .5rem;
+                    margin-left: .5rem;
+                }
+            }
+
+            .carousel {
+                .carousel-control-prev, .carousel-control-next {
+                    display: none;
+                }
+                .carousel-indicators {
+                    display: none;
+                }
+            }
+        }
+
+        .banner-search {
+            display: flex;
+            align-items: center;
+
+            form {
+                margin-right: 1rem;
+                width: 35rem;
+
+                .top-input {
+                    height: 5rem;
+                    box-shadow: none;
+                    flex: 1;
+                }
+
+                .btn-search {
+                    height: 5rem;
+                    padding-right: 1.5rem;
+
+                    .icon-search {
+                        margin-top: .7rem;
+                    }
+                }
+            }
+
+            .btn-gradient {
+                height: 5rem;
+                display: flex;
+                align-items: center;
+                font-size: 1.4rem;
+                text-transform: uppercase;
+                color: $white;
+                padding: 0.8rem 2rem;
+                background-image: linear-gradient(114deg, #3664D1 3%, #813EB3 100%);
+                border: 1px solid #699BE2;
+            }
+
+            .header-search-result {
+                margin-left: 2rem;
+                width: 28.5rem;
+                z-index: 9999;
+            }
+        }
+    }
+}

@@ -9,6 +9,7 @@ const initState = {
     commentLoader: false,
     reviewLoader: false,
     acceptRejectLoader: false,
+    homeLoader: false,
     uploadLoader: false,
     oiDetailsLoader: false
 }
@@ -42,10 +43,13 @@ export const LoaderReducer = (state=initState, action) => {
         case Actions.START_REVIEW_LOADER : return {...state, ...action.payload}
         case Actions.STOP_REVIEW_LOADER : return {...state, ...action.payload}
 
-        // review loader
+        // accept reject loader
         case Actions.START_ACCEPT_REJECT_LOADER : return {...state, ...action.payload}
         case Actions.STOP_ACCEPT_REJECT_LOADER : return {...state, ...action.payload}
 
+        // homepage loader
+        case Actions.START_HOME_PAGE_LOADER : return { ...state, ...action.payload }
+        case Actions.STOP_HOME_PAGE_LOADER : return { ...state, ...action.payload }
         // upload loader
         case Actions.START_UPLOAD_LOADER : return {...state, ...action.payload}
         case Actions.STOP_UPLOAD_LOADER : return {...state, ...action.payload}

@@ -1,0 +1,21 @@
+@import '../../../../../styles-mobile/abstracts';
+
+.m-recomend-courses {
+    .m-card {
+
+        &__rating {
+
+            .m-mode {
+                font-size: 1.1rem;
+                color: $gray-200;
+                background: rgba($color: $gray-900, $alpha: .5);
+                border-radius: 2rem;
+                padding: .1rem .7rem;
+                margin-left: auto;
+            }
+        }
+    }
+    .slick-slider {
+        margin-left: 1rem;
+    }
+}

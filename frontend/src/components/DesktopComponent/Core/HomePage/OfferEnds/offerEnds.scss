@@ -1,0 +1,44 @@
+@import '../../../../../styles/functions';
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
+
+.offer-ends {
+    max-width: 100%;
+    box-shadow: none;
+    border: none;
+    margin: 0 !important;
+
+    .toast-header {
+        background: $offer-bg;
+        text-align: center;
+        box-shadow: none;
+        border: none;
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        padding: 0;
+        
+        p {
+            margin: 0;
+            font-size: 1.4rem;
+            font-weight: 600;
+            flex: 1;
+            text-transform: uppercase;
+
+            strong {
+                font-weight: 600;
+                background: $offer-badge;
+                padding: .3rem .5rem;
+            }
+        }
+
+        button {
+            margin-right: 1rem;
+            font-size: 3.2rem;
+            font-weight: 400;
+            .close {
+                margin-left: auto !important;
+            }
+        }
+    }
+}

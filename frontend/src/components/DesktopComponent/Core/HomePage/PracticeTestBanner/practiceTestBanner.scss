@@ -1,0 +1,19 @@
+@import '../../../../../styles/functions';
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
+
+.practice-test {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: $box-shadow;
+    height: 16.3rem;
+    overflow: hidden;
+
+    strong {
+        font-size: 2rem;
+        color: $gray-100;
+        font-weight: 600;
+        width: 35%;
+    }
+}

@@ -18,8 +18,8 @@ const MyProfile = (props) => {
                         <div className="m-db-status">
                             <p className="mb-0 pb-1">Profile Status: <strong>(50% Complete)</strong> </p>
 
-                            <div class="m-progress">
-                                <div role="progressbar" class="m-progress-bar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style={{width: "50%"}}></div>
+                            <div className="m-progress">
+                                <div role="progressbar" className="m-progress-bar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style={{width: "50%"}}></div>
                             </div>
                             <p className="fs-10 mb-0">Last update: 23 jan 2020</p>
                         </div>
@@ -74,7 +74,7 @@ const MyProfile = (props) => {
                 <div className="m-myProfile--heading mb-15 w-100">
                     <h2>Resume</h2>
                 </div>
-                <div class="m-custom mb-10">
+                <div className="m-custom mb-10">
                     <input type="radio" id="dResume" name="resume" />
                     <label for="dResume">
                         <Link to={"#"} className="font-weight-bold mr-10">Newresume25-May.doc</Link>
@@ -82,15 +82,15 @@ const MyProfile = (props) => {
                     </label>
                 </div>
 
-                <div class="m-custom">
+                <div className="m-custom">
                     <input type="radio" id="resume" name="resume" />
                     <label for="resume">
                         <Link to={"#"} className="font-weight-bold mr-10">Salemanagerresume.doc</Link>
                     </label>
                 </div>
 
-                <div class="m-upload-btn-wrapper mt-30">
-                    <button class="btn-blue-outline">Upload new resume</button>
+                <div className="m-upload-btn-wrapper mt-30">
+                    <button className="btn-blue-outline">Upload new resume</button>
                     <input type="file" name="myfile" />
                 </div>
             </div>

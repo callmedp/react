@@ -1,0 +1,181 @@
+@import '../../../../../styles-mobile/abstracts';
+
+.m-popular-course-demand {
+    position: relative;
+    
+    .m-card {
+        margin-bottom: 0;
+    }
+
+    .m-card__heading {
+        display: block;
+        padding-top: 0;
+        background: #F7899A;
+        position: relative;
+
+        &.colbg1 {
+            background: #F7899A;
+        }
+        &.colbg2 {
+            background: #94B0D5;
+        }
+        &.colbg3 {
+            background: #98C494;
+        }
+        &.colbg4 {
+            background: #D7B675;
+        }
+
+        .m-flag-yellow {
+            font-size: .9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            background: $yellow;
+            position: absolute;
+            right: 0;
+            top: 1.5rem;
+            padding: 0 .5rem;
+            border-top-left-radius: .5rem;
+            box-shadow: 0 1px 1px 0 rgba(139,139,139,0.50);
+
+            &::after {
+                content: '';
+                width: 0;
+                height: 0;
+                border-top: .7rem solid transparent;
+                border-right: .7rem solid $yellow;
+                border-bottom: .6rem solid transparent;
+                position: absolute;
+                left: -.7rem;
+                top: 0;
+            }
+        }
+
+        figure {
+            width: 5rem;
+            height: 5rem;
+            background: $white;
+            border-radius: 100%;
+            @extend %box-shadow1;
+            margin: 0 0 0 .5rem;
+            position: relative;
+            top: -2rem;
+            overflow: hidden;
+
+            img {
+                margin-top: 0;
+                padding-top: .5rem;
+            }
+        }
+
+        h3 {
+            margin-left: .5rem;
+            color: $white;
+            padding-bottom: 1.5rem;
+            font-size: 1.6rem;
+            margin-top: -.7rem;
+            text-align: left;
+
+            a {
+                color: $white;
+            }
+        }
+    }
+    .m-card__box {
+        padding-left: 1.5rem;
+        padding-top: 1rem;
+        min-height: auto;
+        text-align: left;
+
+        .m-card__rating {
+            .m-mode {
+                font-size: 1.1rem;
+                color: $gray-200;
+                background: rgba($color: $gray-900, $alpha: .5);
+                border-radius: 2rem;
+                padding: .1rem .7rem;
+                margin-left: auto;
+            }
+        }
+
+        .m-view-program {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: $blue;
+            border-top: 1px solid $border-color;
+            display: flex;
+            justify-content: flex-end;
+            padding-top: .7rem;
+            text-align: left;
+        }
+    }
+
+    .m-courses {
+        .slick-slider {
+            .slick-list {
+                height: 23.5rem;
+                .slick-slide {
+                    width: 28.5rem !important;
+                    padding: 2.5rem 1rem 1.5rem 1rem !important;
+                }
+            }
+        }
+    }
+
+    .m-tabset-pop {
+        position: relative;
+        z-index: 9;
+        text-align: center;
+    
+        input[type="radio"] {
+            // position: absolute;
+            left: -2000vw;
+            position: relative;
+            margin: 0;
+            z-index: 99;
+        }
+    
+        label {
+            padding: .7rem 2rem;
+            border: 1px solid $tab-pill-color;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            color: $blue;
+            @include border-radius(30px);
+            margin: 0 0 1rem 0;
+        }
+    
+        .tab-panels {
+            background: $white;
+            // position: relative;
+            // z-index: -99;
+    
+            .tab-panel {
+                display: none;
+                padding: 0 0 1rem 0;
+            }
+        }
+    
+    }
+      
+      
+      .m-tabset-pop > input:first-child:checked ~ .tab-panels > .tab-panel:first-child,
+      .m-tabset-pop > input:nth-child(3):checked ~ .tab-panels > .tab-panel:nth-child(2),
+      .m-tabset-pop > input:nth-child(5):checked ~ .tab-panels > .tab-panel:nth-child(3),
+      .m-tabset-pop > input:nth-child(7):checked ~ .tab-panels > .tab-panel:nth-child(4),
+      .m-tabset-pop > input:nth-child(9):checked ~ .tab-panels > .tab-panel:nth-child(5),
+      .m-tabset-pop > input:nth-child(11):checked ~ .tab-panels > .tab-panel:nth-child(6) {
+        display: block;
+      }
+    
+      
+      .m-tabset-pop > input:checked + label {
+        // border-color: #ccc;
+        color: $gray-100;
+        background: $tab-pill-bgcolor;
+        border: 1px solid $tab-pill-bgcolor;
+        box-shadow: 0 4px 5px -1px rgba(206,212,224,0.54);
+      }
+}
