@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import './findJob.scss';
 import { useForm } from 'react-hook-form';
-import { InputField, SelectExperienceBox } from 'formHandler/desktopFormHandler/formFields';
+import { InputField, SelectExperienceBox, MultiSelectBox } from 'formHandler/desktopFormHandler/formFields';
 import UserIntentForm from 'formHandler/desktopFormHandler/formData/userIntent';
 import { fetchedUserIntentData } from 'store/UserIntentPage/actions';
 import { useDispatch } from 'react-redux';
@@ -10,7 +10,7 @@ import useDebounce from 'utils/searchUtils/debouce';
 import { userSearch } from 'utils/searchUtils/searchFunctions';
 
 const FindJob = (props) => {
-
+    const [chips, setChips] = useState([]);
     const { register, handleSubmit, errors } = useForm();
     const dispatch = useDispatch();
     const textInput = useRef();
@@ -36,6 +36,27 @@ const FindJob = (props) => {
           
     }
 
+    function handleAppend(data, id) {
+        // UserIntentForm.skills.children.push(data);
+        // console.log(UserIntentForm.skills.children)
+        setChips([...chips, data])
+
+    }
+
+    const skill_data = [
+        {
+            name: 'Advanced Accounting', id: 1
+        },
+        {
+            name: 'Risk Mangement', id: 2
+        },
+        {
+            name: 'GST', id: 3
+        },
+        {
+            name: 'Data Science', id: 4
+        }
+    ]
     const appendData = (e) => {
         textInput.current.value = e.target.textContent
         setShowResults(false)
@@ -75,7 +96,7 @@ const FindJob = (props) => {
                             <Link>3</Link>
                         </div>
 
-                        <h2 className="heading3 mt-20">Let’s get you to the right job</h2>
+                        <h2 className="heading3 mt-20">{ type === 'job' ? 'Let’s get you to the right job' : type === 'pcareer' ? 'Get to next level with shine' : 'What do you have in mind' } </h2>
                         <div className="d-flex">
                             <div className="w-50">
                                 <div className="find-job">
@@ -125,8 +146,22 @@ const FindJob = (props) => {
                                             <label for="">Your skills</label>
                                         </div> */}
 
-                                        <InputField attributes={UserIntentForm.skills} register={register}
-                                            errors={!!errors ?errors[UserIntentForm.skills.name] : ''} />
+                                        {/* <InputField attributes={UserIntentForm.skills} register={register}
+                                            errors={!!errors ?errors[UserIntentForm.skills.name] : ''} /> */}
+
+                                        
+                                        <MultiSelectBox attributes={UserIntentForm.skills} data={chips} register={register}
+                                            errors={!!errors ? errors[UserIntentForm.skills.name] : ''} />
+
+                                        <div className="form-group-custom">
+                                            {skill_data?.map((skill, indx) => {
+                                                return (
+                                                    <label className="label-add" onClick={() => handleAppend(skill.name, indx)} for="">{skill.name}</label>
+                                                )
+                                            })
+                                            }
+                                        </div>
+                                        
                                         
                                         <button type="submit" className="btn btn-inline btn-primary submit-btn mt-30" role="button" data-toggle="modal"
                                         data-target="#thankyouModal">{ type === 'job' ? 'View jobs' : 'View courses' }</button>
