@@ -26,7 +26,9 @@ class Autocomplete extends Component {
         this.state = {
             filterSuggestion: [],
             showSuggestion: false,
-            input: ""
+            input: "",
+            Activeclass: "form-group"
+            
         };
     }
 
@@ -50,7 +52,8 @@ class Autocomplete extends Component {
         this.setState({
             filterSuggestion,
             showSuggestion: true,
-            input: e.currentTarget.value
+            input: e.currentTarget.value,
+            Activeclass: "form-group checked"
         });
     };
 
@@ -62,7 +65,8 @@ class Autocomplete extends Component {
             state: {
                 filterSuggestion,
                 showSuggestion,
-                input
+                input,
+                Activeclass
             }
         } = this;
 
@@ -94,7 +98,7 @@ class Autocomplete extends Component {
         }
 
         return (
-            <div className="form-group">
+            <div className={Activeclass}>
                 <input
                 type={type}
                 id={name}
