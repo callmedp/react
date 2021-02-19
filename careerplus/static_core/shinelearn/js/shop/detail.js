@@ -510,6 +510,7 @@ function ajax_call(authen, prod_id) {
       success: function (data, textStatus, jqXHR) {
         var count = ((data.results).length);
         var i;
+        var r_products = [];
         if (count) {
           document.getElementById('heads').style.display = "block";
           var recom = "";
@@ -523,6 +524,20 @@ function ajax_call(authen, prod_id) {
             '<ul class="listing">';
 
           for (i = 0; i < count; i++) {
+
+            r_products.push({
+              'name': data.results[i].pHd,
+              'id': data.results[i].id,
+              'brand': data.results[i].pPvn,
+              'category': data.results[i].pFAn[0],
+              'variant': data.results[i].pPc,
+              'price': data.results[i].pPin,
+              'list': authen ? 'Recommended Products' : 'Related Products',
+              'position': i,
+              'dimension15': 'Product Page',
+              'dimension16': data.results[i].pARx,
+              'dimension17': data.results[i].pBC
+            });
 
             var first = '<li class="col-sm-6 col-md-4">' +
               '<a title="' + (data.results[i].pHd).substring(0, 40) + '"class="box-panel" href="' + data.results[i].pURL + '">' +
@@ -570,7 +585,9 @@ function ajax_call(authen, prod_id) {
             + '</div>'
             + '</div>';
 
-
+          if (r_products.length > 0) {
+            GALayer.SendImpression('productImpression', r_products, 'INR');
+          }
           document.getElementById('recommended_product').innerHTML = recom;
         }
         else {

@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 const LearningAdvantage = (props) => {
     return(
         <section className="m-container m-learning-advantage mt-0 mb-0 pr-0" data-aos="fade-up">
-            <h2 className="m-heading2-home text-center mt-20">Shine learning advantage</h2>
+            <h2 className="m-heading2-home text-center mt-20">Shine learning advantages</h2>
             <ul className="mt-40">
                 <li className="col">
                     <div className="learning-advantage__txt">

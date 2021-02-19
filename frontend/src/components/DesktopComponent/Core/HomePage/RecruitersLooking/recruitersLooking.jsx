@@ -11,9 +11,10 @@ const RecruitersLooking = (props) => {
     const { recruiterList } = useSelector(store => store.footer)
     
 
-    const getSlide = (recruiterSlide) => recruiterSlide?.map((skill, index) => {
+    const getSlide = (recruiterSlide) => recruiterSlide.slice(0,12)?.map((skill, index) => {
         return (
-            <li className="col-sm-3">
+            <li className="col-sm-3" key={index}>
+            <Link to={skill.skillUrl}>
                 <div className="card">
                     <figure>
                         <img src={skill.image} className="img-fluid" alt={skill.name} />
@@ -22,6 +23,7 @@ const RecruitersLooking = (props) => {
                     { !!skill.no_courses ? <strong>{skill.no_courses} { skill.no_courses == 1 ? 'course': 'courses'}</strong> : ''}
                     <Link to={skill.skillUrl}>Know more</Link>
                 </div>
+            </Link>
             </li>
         )
     })
@@ -31,13 +33,13 @@ const RecruitersLooking = (props) => {
             <div className="row">
                 <div className="container">
                     <div className="all-category mt-40 mb-30 pos-rel">
-                        <h2 className="heading2 mb-5 text-center">What recruiters are looking at</h2>
-                        <p className="text-center">Browse the skills with high demands to enhance your career</p>
-                        <Carousel>
+                        <h2 className="heading2 mb-0 text-center">What recruiters are looking at</h2>
+                        <p className="text-center mt-5">Browse the skills with high demands to enhance your career</p>
+                        <Carousel controls={ recruiterList?.length > 1 ? true : false }>
                             {
                                 recruiterList?.map((recruiterSlide, inx) => {
                                     return (
-                                        <Carousel.Item interval={10000000000}>
+                                        <Carousel.Item interval={10000000000} key={inx}>
                                             <ul className="all-category__list">
                                                 {
                                                     getSlide(recruiterSlide)
@@ -48,8 +50,8 @@ const RecruitersLooking = (props) => {
                                 })
                             }
                         </Carousel>
-                        <span className="pink-circle2" data-aos="fade-right"></span>
-                        <span className="pink-circle3" data-aos="fade-left"></span>
+                        {/* <span className="pink-circle2" data-aos="fade-right"></span>
+                        <span className="pink-circle3" data-aos="fade-left"></span> */}
                     </div>
                 </div>
             </div>

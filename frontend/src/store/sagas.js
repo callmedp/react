@@ -36,6 +36,7 @@ export default function* () {
         WatchDashboardMyCourses(),
         WatchDashboardMyServices(),
         WatchHomePage(),
+        WatchDashboardStartCourse(),
         WatchUserIntentPage()
     ])
 }

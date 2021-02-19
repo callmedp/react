@@ -15,15 +15,11 @@ const RouteWithSubRoutes = route => {
     const isSessionAvailable = async () => {
         localStorage.clear();
         try {
-            console.log("these console logs are written intentionally and will be removed as soon as the app becomes stable");
-            console.log("api session hi tinit")
             const session = await new Promise((resolve, reject) => dispatch(sessionAvailability({ resolve, reject })));
-            console.log("api session hit end")
-            if (session['result'] === false){
+            if (session['result'] === false) {
                 setLoader(false);
                 return;
             }
-            console.log("getting candidate info")
             const candidateId = session['candidate_id'];
             await new Promise((resolve, reject) => dispatch(getCandidateInfo({ candidateId, resolve, reject })));
             setLoader(false)
@@ -31,8 +27,6 @@ const RouteWithSubRoutes = route => {
         }
         catch (e) {
             console.log("error occured in fetching user session");
-            // Toast('error', 'Something went wrong. Cannot login')
-            // return resolve(false);
             setLoader(false)
         }
     }
@@ -41,22 +35,15 @@ const RouteWithSubRoutes = route => {
     useEffect(() => {
         if (!(localStorage.getItem('isAuthenticated') === "true")) {
             const session = isSessionAvailable();
-            // console.log("session is ", session)
-            // return session;
         }
-        else{
-		setLoader(false);
-}
-	// console.log("this is the loader")
+        else {
+            setLoader(false);
+        }
     }, [])
 
 
 
     const renderComponent = props => {
-
-        // const isAuthenticated = getAuthentication();
-        // console.log("this should come second", localStorage.getItem('isAuthenticated'))
-
         if (!!route.private) {
             if (localStorage.getItem('isAuthenticated') === 'true') {
                 return <route.component {...props} routes={route.routes} />
@@ -72,17 +59,17 @@ const RouteWithSubRoutes = route => {
 
     return (
         <>
-        {!!loader && <Loader />}
-        {
-            !loader ?  
-            <Route
-            path={route.path}
-            exact={route.exact}
-            render={renderComponent}
-        /> : null
-        }
+            {!!loader && <Loader />}
+            {
+                !loader ?
+                    <Route
+                        path={route.path}
+                        exact={route.exact}
+                        render={renderComponent}
+                    /> : null
+            }
         </>
-       
+
     )
 };
 

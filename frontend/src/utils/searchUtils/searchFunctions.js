@@ -30,8 +30,34 @@ const userSearch = (search ) =>{
 
 }
 
+const relatedSearch = (query) =>{
+    return fetch(`https://www.shine.com/api/v3/search/lookup/keyword-suggestions/query/?q=${query}`,
+        { method: 'GET' }).then(r => r.json())
+        .catch(error => {
+            console.error(error);
+            return [
+                {
+                    name: 'Advanced Accounting', id: 1
+                },
+                {
+                    name: 'Risk Mangement', id: 2
+                },
+                {
+                    name: 'GST', id: 3
+                },
+                {
+                    name: 'Data Science', id: 4
+                }
+            ]
+            // return [];
+        }
+    );
+
+}
+
 export {
     searchCharacters,
     submitData,
-    userSearch
+    userSearch,
+    relatedSearch
 }

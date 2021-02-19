@@ -8,8 +8,8 @@ import UserIntentForm from 'formHandler/desktopFormHandler/formData/userIntent';
 import { fetchedUserIntentData } from 'store/UserIntentPage/actions';
 import { useDispatch } from 'react-redux';
 import useDebounce from 'utils/searchUtils/debouce';
-import { userSearch } from 'utils/searchUtils/searchFunctions';
 import { IndianState } from 'utils/constants';
+import { userSearch, relatedSearch } from 'utils/searchUtils/searchFunctions';
 
 const FindJob = (props) => {
     const [chips, setChips] = useState([]);
@@ -20,7 +20,9 @@ const FindJob = (props) => {
     const [searchTerm, setSearchTerm] = useState('');
     const [results, setResults] = useState([]);
     const [showResults, setShowResults] = useState(false);
-    const debouncedSearchTerm = useDebounce(searchTerm, 700);
+    const debouncedSearchTerm = useDebounce(searchTerm, 500);
+    const [skillSet, setSkillSet] = useState([])
+    const [checkedClass, setCheckedClass] = useState('form-group')
 
     const addValues = (values) =>{
         return {
@@ -45,23 +47,17 @@ const FindJob = (props) => {
 
     }
 
-    const skill_data = [
-        {
-            name: 'Advanced Accounting', id: 1
-        },
-        {
-            name: 'Risk Mangement', id: 2
-        },
-        {
-            name: 'GST', id: 3
-        },
-        {
-            name: 'Data Science', id: 4
-        }
-    ]
-    const appendData = (e) => {
+    const appendData = async (e) => {
         textInput.current.value = e.target.textContent
+        setSkillSet(await relatedSearch(textInput.current.value))
         setShowResults(false)
+    }
+
+    const handleInput = (e) => {
+        setSearchTerm(e.target.value);
+        e.target.value ?    
+            setCheckedClass('form-group checked') : 
+                setCheckedClass('form-group')
     }
 
     const getMenuItems = (data, noOfItems=6) => {
@@ -104,9 +100,9 @@ const FindJob = (props) => {
                                 <div className="find-job">
                                     <form className="mt-20" onSubmit={handleSubmit(onSubmit)}>
 
-                                        <div className="form-group">
+                                        <div className={checkedClass}>
                                             <input type="text" className="form-control" id="job" name="job" placeholder=" " ref={textInput} autoComplete="off"
-                                                aria-required="true" aria-invalid="true" onChange={e => setSearchTerm(e.target.value)} onFocus={()=>setShowResults(true)} />
+                                                aria-required="true" aria-invalid="true" onChange={e => handleInput(e)} onFocus={()=>setShowResults(true)} />
                                             <label for="">Current job title</label>
 
                                             {showResults ?
@@ -161,7 +157,7 @@ const FindJob = (props) => {
                                             errors={!!errors ? errors[UserIntentForm.skills.name] : ''} />
 
                                         <div className="form-group-custom">
-                                            {skill_data?.map((skill, indx) => {
+                                            {skillSet?.map((skill, indx) => {
                                                 return (
                                                     <label className="label-add" onClick={() => handleAppend(skill.name, indx)} for="">{skill.name}</label>
                                                 )

@@ -15,7 +15,7 @@ const PopularCourses = (props) => {
                             <h2 className="heading2 text-center">Popular Courses</h2>
                             <ul className="recent-courses__list">
                                 {
-                                    trendingCourses?.slice(0, 4).map((course, index) => <CourseCard key={index} course={course} />)
+                                    trendingCourses.slice(0, 4)?.map((course, index) => <CourseCard key={index} course={course} />)
                                 }
                             </ul>
                         </div>

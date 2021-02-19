@@ -23,6 +23,10 @@
             border-radius: 3rem;
             margin: 0 .5rem 1rem .5rem;
 
+            &:hover {
+                box-shadow: 0 4px 5px -1px rgba(206,212,224,0.54);
+            }
+
             &.active {
                 background: $tab-pill-solid;
                 border: 1px solid $tab-pill-solid;

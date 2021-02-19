@@ -1,9 +1,6 @@
 'use strict';
 require('isomorphic-fetch');
 const path = require('path');
-// require('dotenv').config({ 
-//     path: path.resolve(process.cwd(), '.env.ssr')
-// })
 
 const fs = require('fs');
 const express = require('express');
@@ -12,17 +9,6 @@ const fetchApiData = require('./fetching').default;
 
 const PORT = process.env.PORT || 8079;
 const app = express();
-
-// if (typeof global.window == 'undefined') {
-//     global.window = {
-//         config: {
-//             isServerRendered : process.env.IS_SERVER_RENDERED,
-//             siteDomain : process.env.SITE_DOMAIN,
-//             imageUrl : process.env.IMAGE_URL,
-//             resumeShineSiteDomain : process.env.RESUME_SHINE_SITE_DOMAIN,
-//         }
-//     };
-// }
 
 if (typeof global.localStorage == "undefined") {
 
@@ -99,19 +85,21 @@ const isMobile = (userAgents) => {
     return /Android|Phone|Mobile|Opera\sM(in|ob)i|iP[ao]d|BlackBerry|SymbianOS|Safari\.SearchHelper|SAMSUNG-(GT|C)|WAP|CFNetwork|Puffin|PlayBook|Nokia|LAVA|SonyEricsson|Karbonn|UCBrowser|ucweb|Micromax|Silk|LG(MW|-MMS)|PalmOS/i.test(userAgents)
 }
 
+app.set('view engine', 'ejs');
+
 app.get(expressRoutes, (req, res) => {
 
     if (isMobile(userAgents)) {
 
         console.log("<><><><><><>Entered Mobile<><><><><><>   ", req.url)
-        indexFile = path.resolve('ssrBuild/index.mobile.html');
+        indexFile = 'indexMobile';
         routes = require('routes/index.mobile').routes;
 
     }
     else {
 
         console.log("<><><><><><>Entered Desktop<><><><><><>  ", req.url)
-        indexFile = path.resolve('ssrBuild/index.html');
+        indexFile = 'index';
         routes = require('routes/index.desktop').routes;
 
     }
@@ -130,9 +118,8 @@ app.get(expressRoutes, (req, res) => {
                 }
             }
 
-
+          
             appContent = render(req, routes);
-
             // const helmet = Helmet.renderStatic();
             // let metaTitlesAll = "";
 
@@ -157,25 +144,12 @@ app.get(expressRoutes, (req, res) => {
             // Grab the initial state from our Redux store at send it to the browser to hydrate the app.
             const preloadedState = store.getState()
 
-
-            fs.readFile(indexFile, 'utf8', (err, data) => {
-                if (err) {
-                    console.error("Error in reading index.html", err)
-                    console.log('make sure you are in frontend directory when you run pm2 start');
-                    return res.status(500).send('index.html file not found!');
-                }
-
-                return res.send(
-                    data.replace('<div id="root"></div>',
-                        `<div id="root">${appContent}</div>
-                        <script>
-                            window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(/</g, '\\u003c')}
-                            window.config = ${JSON.stringify(window.config)}
-                        </script>`
-                    )
-                    // .replace('</head>', `${metaTitlesAll}</head>`)
-                );
+            return res.render(indexFile, {
+                appContent,
+                preloadedState: JSON.stringify(preloadedState).replace(/</g, '\\u003c'),
+                config: JSON.stringify(window.config)
             });
+
 
 
         }
@@ -190,30 +164,20 @@ app.get(expressRoutes, (req, res) => {
 app.get('*', (req, res) => {
 
     window.config.isServerRendered = false
-    
+
     if (isMobile(userAgents)) {
         console.log("************Entered Mobile***********", req.url)
-        indexFile = path.resolve('ssrBuild/index.mobile.html');
+        indexFile = 'indexMobile';
     }
     else {
         console.log("************Entered Desktop***********", req.url)
-        indexFile = path.resolve('ssrBuild/index.html');
+        indexFile = 'index';
     }
-    fs.readFile(indexFile, 'utf8', (err, data) => {
-        if (err) {
-            console.error("Error in reading index.html", err)
-            console.log('make sure you are in frontend directory when you run pm2 start');
-            return res.status(500).send('index.html file not found!');
-        }
-
-        return res.send(
-            data.replace('<div id="root"></div>',
-                `<div id="root"></div>
-                <script>
-                    window.config = ${JSON.stringify(window.config)}
-                </script>`
-            )
-        );
+   
+    return res.render(indexFile, {
+        appContent: '',
+        preloadedState: JSON.stringify(''),
+        config: JSON.stringify(window.config)
     });
 
 });

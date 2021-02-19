@@ -7,6 +7,7 @@ from random import random
 from django.utils import timezone
 from django.conf import settings
 from django.core.files.uploadedfile import UploadedFile
+from django.core.files.base import ContentFile
 
 from core.library.gcloud.custom_cloud_storage import GCPPrivateMediaStorage
 from emailers.email import SendMail
@@ -15,6 +16,7 @@ from emailers.sms import SendSMS
 from order.models import OrderItem, Order
 from linkedin.models import Draft, Organization, Education
 from quizs.models import QuizResponse
+from core.api_mixin import ShineCandidateDetail
 
 
 class ActionUserMixin(object):
@@ -271,34 +273,75 @@ class ActionUserMixin(object):
     def upload_candidate_resume(self, order_items=None, data={}, user=None):
        
         oi_resume = data.get('candidate_resume', '')
+        resume_from_shine = data.get('resume_from_shine', '')
+        resume_id = data.get('resume_id', '')
         resume_path = None
-        if not oi_resume:
+        if not oi_resume and not resume_from_shine:
             return
         for oi in order_items:
             if not resume_path:
                 order = oi.order
-                filename = os.path.splitext(oi_resume.name)
-                extention = filename[len(filename) - 1] if len(
-                    filename) > 1 else ''
-                file_name = 'resumeupload_' + str(order.pk)  + '_' + str(int(random()*9999)) \
-                    + '_' + timezone.now().strftime('%Y%m%d') + extention
                 full_path = '%s/' % str(order.pk)
-                oi_resume = UploadedFile(oi_resume)
-                oi_resume.seek(0)
-                if not settings.IS_GCP:
-                    if not os.path.exists(settings.RESUME_DIR + full_path):
-                        os.makedirs(settings.RESUME_DIR + full_path)
-                    dest = open(
-                        settings.RESUME_DIR + full_path + file_name, 'wb')
-                    for chunk in oi_resume.chunks():
-                        dest.write(chunk)
-                    dest.close()
-                else:
-                    try:
-                        GCPPrivateMediaStorage().save(settings.RESUME_DIR + full_path + file_name, oi_resume)
-                    except Exception as e:
-                        logging.getLogger('error_log').error("%s-%s" % ('resume_upload', str(e))) 
-                resume_path = full_path + file_name
+                if oi_resume:
+                    filename = os.path.splitext(oi_resume.name)
+                    extention = filename[len(filename) - 1] if len(
+                        filename) > 1 else ''
+                    file_name = 'resumeupload_' + str(order.pk)  + '_' + str(int(random()*9999)) \
+                        + '_' + timezone.now().strftime('%Y%m%d') + extention
+                    
+                    oi_resume = UploadedFile(oi_resume)
+                    oi_resume.seek(0)
+                    if not settings.IS_GCP:
+                        if not os.path.exists(settings.RESUME_DIR + full_path):
+                            os.makedirs(settings.RESUME_DIR + full_path)
+                        dest = open(
+                            settings.RESUME_DIR + full_path + file_name, 'wb')
+                        for chunk in oi_resume.chunks():
+                            dest.write(chunk)
+                        dest.close()
+                    else:
+                        try:
+                            GCPPrivateMediaStorage().save(settings.RESUME_DIR + full_path + file_name, oi_resume)
+                        except Exception as e:
+                            logging.getLogger('error_log').error("%s-%s" % ('resume_upload', str(e))) 
+                    resume_path = full_path + file_name
+
+                elif resume_id:
+                    candidate_id = order.candidate_id
+
+                    response = ShineCandidateDetail().get_shine_candidate_resume(
+                        candidate_id=candidate_id,
+                        resume_id=resume_id
+                    )
+
+                    if response.status_code == 200:
+                        content_disposition_header = response.headers.get(
+                            'Content-Disposition')
+                        file_name_pos = content_disposition_header.find('filename=')
+                        file_name = content_disposition_header[file_name_pos + 9:] if file_name_pos != -1\
+                            else 'file'
+                        extention = file_name.split('.')[-1] if file_name else ''
+
+                        file = ContentFile(response.content)
+
+                        file_name = 'resumeupload_' + str(order.pk) + '_' + str(int(random() * 9999)) \
+                            + '_' + timezone.now().strftime('%Y%m%d') + '.' + extention
+
+                        if not settings.IS_GCP:
+                            if not os.path.exists(settings.RESUME_DIR + full_path):
+                                os.makedirs(settings.RESUME_DIR + full_path)
+                            dest = open(
+                                settings.RESUME_DIR + full_path + file_name, 'wb')
+                            for chunk in file.chunks():
+                                dest.write(chunk)
+                            dest.close()
+                        else:
+                            try:
+                                GCPPrivateMediaStorage().save(settings.RESUME_DIR + full_path + file_name, file)
+                            except Exception as e:
+                                logging.getLogger('error_log').error("%s-%s" % ('resume_upload', str(e)))
+
+                        resume_path = full_path + file_name
             
             if not oi.oi_resume:
                 oi.oi_resume = resume_path

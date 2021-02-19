@@ -18,7 +18,7 @@ import { startHomePageLoader, stopHomePageLoader } from 'store/Loader/actions';
 const PopularCourses = (props) => {
 
     const [key, setKey] = useState('master');
-    const { courses, certifications } = useSelector(store => store.inDemand)
+    const { courses, certifications, pages } = useSelector(store => store.inDemand)
     const dispatch = useDispatch()
 
     const handleTabChange = async (tabType, id) => {
@@ -36,17 +36,17 @@ const PopularCourses = (props) => {
     };
 
     return (
-        <section className="m-container mt-0 mb-0 pr-0 pt-20">
+        <section className="m-container mt-0 mb-0 pr-0 pt-20 pb-0">
             <div className="m-courses m-popular-course-demand">
                 <h2 className="m-heading2-home text-center">Popular courses in demand</h2>
 
                 <div className="m-tabset-pop">
                     {populartabType?.map((tab, index) => {
                         return (
-                            <>
-                                <input key={index} type="radio" name="tabset" id={`tab${index}`} aria-controls={tab?.visible} defaultChecked={key === tab?.slug ? true : false} onClick={() => handleTabChange(tab?.slug, index)} />
+                            <React.Fragment key={index}>
+                                <input  type="radio" name="tabset" id={`tab${index}`} aria-controls={tab?.visible} defaultChecked={key === tab?.slug ? true : false} onClick={() => handleTabChange(tab?.slug, index)} />
                                 <label htmlFor={`tab${index}`}>{tab?.visible}</label>
-                            </>
+                            </React.Fragment>
                         )
                     })
                     }
@@ -56,13 +56,13 @@ const PopularCourses = (props) => {
                     <div className="tab-panels">
                         {populartabType?.map((tab, index) => {
                             return (
-                                <div id={`tab${index}`} className="tab-panel">
+                                <div id={`tab${index}`} className="tab-panel" key={index}>
                                     <div className="m-courses">
 
                                         {key === 'master' ?
-                                            <PopularTab productList={courses} tabType={key}/>
+                                            <PopularTab productList={courses} total_page={pages} tabType={key}/>
                                             :
-                                            <PopularTab productList={certifications} tabType={key}/>
+                                            <PopularTab productList={certifications} total_page={pages} tabType={key}/>
                                         }
 
                                     </div>

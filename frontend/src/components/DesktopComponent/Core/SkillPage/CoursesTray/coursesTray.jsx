@@ -43,11 +43,11 @@ const CoursesTray = (props) => {
                         {
                             courseList.length ? <Tab eventKey="courses"  title={<h2 itemProp="name">{ pageId === '32' ? "All Digital Marketing " : ''}Courses</h2>}>
                                 {
-                                    courseList.slice(0, courseKey).map((courses, index) => {
+                                    courseList.slice(0, courseKey)?.map((courses, index) => {
                                         return (
                                             <ul className="courses-tray__list" key={index} >
                                                 {
-                                                    courses.map((course, idx) => <Courses listIdx={idx} index={index.toString() + idx.toString()} product={course} key={index.toString() + idx.toString()} productType='courses'/>)
+                                                    courses?.map((course, idx) => <Courses listIdx={idx} index={index.toString() + idx.toString()} product={course} key={index.toString() + idx.toString()} productType='courses'/>)
                                                 }
                                             </ul>
                                         )
@@ -60,11 +60,11 @@ const CoursesTray = (props) => {
                         {
                             assessmentList.length ? <Tab eventKey="assessments"  title={<h2 itemProp="name">Assessments</h2>}>
                                 {
-                                    assessmentList.slice(0, assessmentKey).map((assessments, index) => {
+                                    assessmentList.slice(0, assessmentKey)?.map((assessments, index) => {
                                         return (
                                             <ul className="courses-tray__list" key={index}>
                                                 {
-                                                    assessments.map((assessment, idx) => <Assessments listIdx={idx} index={index.toString() + idx.toString()} product={assessment} key={index.toString() + idx.toString()} productType='assessments'/>)
+                                                    assessments?.map((assessment, idx) => <Assessments listIdx={idx} index={index.toString() + idx.toString()} product={assessment} key={index.toString() + idx.toString()} productType='assessments'/>)
                                                 }
                                             </ul>
                                         )

@@ -55,35 +55,6 @@ header {
                 top: 4rem;
                 left: -26px;
                 z-index: 999;
-
-                // g #Group-2 {
-                //     -webkit-animation: mover 1s infinite  alternate;
-                //     animation: mover 1s infinite  alternate;
-                //     -webkit-animation-delay: 4s;
-                //     animation-delay: 4s;
-                //     transition-timing-function: ease;
-                //     -webkit-transition-timing-function: ease;
-                //     transform: translate3d(2px, 111px, 100px) ;
-                //     -webkit-transform: translate3d(2px, 111px, 100px);
-
-                //     // @-webkit-keyframes mover {
-                //     //     0% { transform: rotate(0deg); }
-                //     //     100% { transform: rotate(100deg); }
-                //     // }
-                //     // @keyframes mover {
-                //     //     0% { transform: rotate(0deg); }
-                //     //     100% { transform: rotate(100deg); }
-                //     // }
-
-                //     // @-webkit-keyframes mover {
-                //     //     0% { transform: translate3d(1px, 111px, 100px); }
-                //     //     100% { transform: translate3d(-1px, 111px, 100px); }
-                //     // }
-                //     // @keyframes mover {
-                //     //     0% { transform: translate3d(-1px, 111px, 100px);}
-                //     //     100% { transform: translate3d(1px, 111px, 100px); }
-                //     // }
-                // }
             }
             > .home-banner-tween5 {
                 position: absolute;
@@ -110,21 +81,21 @@ header {
                 bottom: 0rem;
                 left: 4.5rem;
                 z-index: 8;
-                opacity: 0;
-                -webkit-animation: showhideA 2s infinite  alternate;
-                animation: showhideA 2s infinite  alternate;
-                transition-timing-function: ease;
-                -webkit-transition-timing-function: ease;
+                // opacity: 0;
+                // -webkit-animation: showhideA 2s infinite  alternate;
+                // animation: showhideA 2s infinite  alternate;
+                // transition-timing-function: ease;
+                // -webkit-transition-timing-function: ease;
 
-                @keyframes showhideA {
-                    0% {
-                      opacity: 0;
-                    }
+                // @keyframes showhideA {
+                //     0% {
+                //       opacity: 0;
+                //     }
 
-                   100% {
-                      opacity: 1;
-                    }
-                }
+                //    100% {
+                //       opacity: 1;
+                //     }
+                // }
             }
 
             > .home-banner-tween7 {
@@ -132,18 +103,24 @@ header {
                 bottom: 0rem;
                 left: 4.5rem;
                 z-index: 88;
+                opacity: 0;
                 -webkit-animation: showhideB 3s infinite  alternate;
-                animation: showhideB 3s infinite  alternate;
+                animation: showhideB 5s infinite  alternate;
                 transition-timing-function: ease;
                 -webkit-transition-timing-function: ease;
+                animation-delay: 3s;
 
                 @keyframes showhideB {
                     0% {
-                      opacity: 1;
+                      opacity: 0;
                     }
 
+                    80% {
+                        opacity: 0;
+                      } 
+
                    100% {
-                      opacity: 0;
+                      opacity: 1;
                     }
                 }
             }
@@ -225,7 +202,7 @@ header {
 
             form {
                 margin-right: 1rem;
-                width: 32rem;
+                width: 35rem;
 
                 .top-input {
                     height: 5rem;
@@ -236,6 +213,10 @@ header {
                 .btn-search {
                     height: 5rem;
                     padding-right: 1.5rem;
+
+                    .icon-search {
+                        margin-top: .7rem;
+                    }
                 }
             }
 
@@ -249,6 +230,12 @@ header {
                 padding: 0.8rem 2rem;
                 background-image: linear-gradient(114deg, #3664D1 3%, #813EB3 100%);
                 border: 1px solid #699BE2;
+            }
+
+            .header-search-result {
+                margin-left: 2rem;
+                width: 28.5rem;
+                z-index: 9999;
             }
         }
     }
