@@ -1,13 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import MenuNav from '../../Common/MenuNav/menuNav';
 import Header from '../../Common/Header/Header';
-import UIBanner from './FindRightJob/UIBanner/UIbanner'
-import UIBanner1 from './FindRightJob/UIBanner/UIbanner1'
 import FindRightJob from './FindRightJob/findRightJob';
 import MakeCareerChange from './MakeCareerChange/makeCareerChange';
 import UserGuidance from './UserGuidance/UserGuidance';
 import ImproveProfile from './ImproveProfile/improveProfile';
 import ProgressCareer from './ProgressCareer/progressCareer';
+import UIBanner from '../../Common/UIBanner/UIbanner';
 import './userIntentPage.scss';
 import Footer from '../../Common/Footer/Footer';
 import Aos from "aos";
@@ -20,6 +19,7 @@ const UserIntentPage = (props) => {
     const UserIntentRoutes = [undefined, 'find-right-job', 'make-career-change', 'improve-profile', 'progress-career']
 
     useEffect(() => {
+
         if (!UserIntentRoutes.includes(UIContainer)) {
             history.push('/404');
         }
@@ -44,8 +44,17 @@ const UserIntentPage = (props) => {
             <MenuNav />
             <header className="m-container m-header">
                 <Header />
-            
-                <UIBanner1 />
+                {
+                    {
+                        'find-right-job': <UIBanner heading={'<strong> Find <strong> right job'} />,
+                        undefined: <UIBanner heading={'<strong> Career </strong> Guidance'} />,
+                        'make-career-change': <UIBanner heading={'<strong> Make </strong> career change'} />,
+                        'improve-profile': <UIBanner heading={'<strong> Improve </strong> profile'} />,
+                        'progress-career': <UIBanner heading={'<strong> Progress </strong> career'} />
+                    }[UIContainer]
+                }
+
+                {/* <UIBanner heading={headingTitle} /> */}
             </header>
             <main className="mb-0">
                 {

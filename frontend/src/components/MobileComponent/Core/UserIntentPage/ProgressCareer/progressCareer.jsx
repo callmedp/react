@@ -1,5 +1,4 @@
 import React, { useRef, useEffect } from 'react';
-import GuidanceRecommendations from '../UserGuidance/Guidance/guidanceRecommendations';
 import FindJob from '../FindRightJob/FindJob/findJob';
 import ViewCourses from '../MakeCareerChange/ViewCourses/viewCourses';
 
