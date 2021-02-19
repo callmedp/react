@@ -8,6 +8,7 @@ import { fetchedUserIntentData } from 'store/UserIntentPage/actions';
 import { useDispatch } from 'react-redux';
 import useDebounce from 'utils/searchUtils/debouce';
 import { userSearch } from 'utils/searchUtils/searchFunctions';
+import { IndianState } from 'utils/constants';
 
 const FindJob = (props) => {
     const [chips, setChips] = useState([]);
