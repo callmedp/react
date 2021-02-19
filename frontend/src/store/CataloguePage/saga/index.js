@@ -55,9 +55,9 @@ function* trendingCategories(action) {
 
 
 function* recentlyAddedCourses(action){
-    const { payload: { payload: resolve, reject } } = action;
+    const { payload: { payload, resolve, reject } } = action;
     try{
-        const response = yield call(Api.recentlyAddedCourses);
+        const response = yield call(Api.recentlyAddedCourses, payload);
         
         if(!response || response?.error){
             return reject(response?.error);
@@ -78,7 +78,7 @@ function* recentlyAddedCourses(action){
 function* popularServices(action){
     const { payload: { payload, resolve, reject } } = action;
     try{
-        const response = yield call(Api.popularServices);
+        const response = yield call(Api.popularServices, payload);
         
         if(!response || response?.error){
             return reject(response?.error);
