@@ -6,7 +6,7 @@ import Api from './Api';
 
 
 function* skillPageBanner(action) {
-    const { payload } = action;
+    const { payload: { payload, resolve, reject } } = action;
     
     try {
  
@@ -14,7 +14,7 @@ function* skillPageBanner(action) {
         const response = yield call(Api.skillPageBanner, payload);
 
         if (response["error"]) {
-            return payload?.reject(response)
+            return reject(response)
         }
         const item = response.data;
         
@@ -34,11 +34,11 @@ function* skillPageBanner(action) {
             item 
         })
         
-        return payload?.resolve(item);
+        return resolve(item);
 
     } catch (e) {
         console.error("Exception occured at skillPageBanner Api",e)
-        return payload?.reject(e)
+        return reject(e)
         
     }
 }

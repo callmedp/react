@@ -32,22 +32,21 @@ function* fetchTrendingCnA(action) {
 }
 
 function* fetchPopularCourses(action) {
-    const { payload } = action
+    const { payload: { payload, resolve, reject } } = action
     try {
         const response = yield call(Api.fetchPopularCourses, payload);
         if (response["error"]) {
-            return payload?.reject(response)
+            return reject(response)
         }
         const item = response?.data?.data;
         yield put({ 
             type: Actions.POPULAR_COURSES_FETCHED, item 
         });
-        return payload?.resolve(item);
-
+        return resolve(item);
     }
     catch (e) {
         console.error("Exception occured ",e)
-        return payload?.reject(e);
+        return reject(e);
     }
 }
 
