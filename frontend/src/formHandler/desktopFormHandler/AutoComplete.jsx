@@ -49,6 +49,33 @@ class Autocomplete extends Component {
             }
         } = this;
 
+        let suggestionList;
+
+        if (showSuggestion && input) {
+            if(filterSuggestion?.length) {
+                suggestionList = (
+                    <div className="user-intent-search-result">
+                        {
+                            filterSuggestion?.slice(0, 8)?.map((suggestion, index) => {
+                                return(
+                                    <span key={suggestion} onClick={onClick}>
+                                        {suggestion}
+                                    </span>
+                                );
+                            })
+                        }
+                    </div>
+                )
+            }
+            else {
+                suggestionList = (
+                    <div>
+                        <i> No suggestions, type manually</i>
+                    </div>
+                );
+            }
+        }
+
         return (
             <div className="form-group">
                 <input
