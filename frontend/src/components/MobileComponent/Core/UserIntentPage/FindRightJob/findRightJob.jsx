@@ -6,12 +6,12 @@ import JobsUpskills from './JobsUpskills/jobsUpskills';
 
 
 const FindRightJob = (props) => {
+    const params = new URLSearchParams(props.location.search);
+    const job = params.get('job')
+
     return (
         <div>
-            <GuidanceRecommendations />
-            {/* <FindJob /> */}
-            {/* <FindJobEdit /> */}
-            {/* <JobsUpskills /> */}
+            { !!job ? <JobsUpskills /> : <FindJob type={"job"} {...props}/> }
         </div>
     )
 }
