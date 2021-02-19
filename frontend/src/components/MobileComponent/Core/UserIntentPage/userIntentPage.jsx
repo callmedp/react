@@ -45,7 +45,7 @@ const UserIntentPage = (props) => {
             <header className="m-container m-header">
                 <Header />
             
-                {/* <UIBanner1 /> */}
+                <UIBanner1 />
             </header>
             <main className="mb-0">
                 {

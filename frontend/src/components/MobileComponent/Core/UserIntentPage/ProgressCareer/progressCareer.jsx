@@ -5,11 +5,14 @@ import ViewCourses from '../MakeCareerChange/ViewCourses/viewCourses';
 
 
 const ProgressCareer = (props) => {
+    const params = new URLSearchParams(props.location.search);
+    const job = params.get('job')
+
     return (
         <div>
             {/* <GuidanceRecommendations /> */}
             {/* <FindJob /> */}
-            <ViewCourses />
+            { !!job ? <ViewCourses /> : <FindJob type={"pcareer"} {...props}/> }
         </div>
     )
 }
