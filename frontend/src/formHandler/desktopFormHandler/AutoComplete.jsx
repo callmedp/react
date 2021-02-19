@@ -14,11 +14,18 @@ class Autocomplete extends Component {
         super(props);
 
         this.state = {
-            activeSuggestion: 0,
             filterSuggestion: [],
             showSuggestion: false,
             input: ""
         };
+    }
+
+    onClick = e => {
+        this.setState({
+            filterSuggestion: [],
+            showSuggestion: false,
+            input: e.currentTarget.innerText
+        })
     }
    
     onChange = e => {
@@ -31,7 +38,6 @@ class Autocomplete extends Component {
         );
 
         this.setState({
-            activeSuggestion: 0,
             filterSuggestion,
             showSuggestion: true,
             input: e.currentTarget.value
@@ -41,8 +47,8 @@ class Autocomplete extends Component {
     render() {
         const {
             onChange,
+            onClick,
             state: {
-                activeSuggestion,
                 filterSuggestion,
                 showSuggestion,
                 input
@@ -90,6 +96,9 @@ class Autocomplete extends Component {
                 onChange={onChange}
                 value={input}
                 />
+                <label htmlFor=""> Preferred Location </label>
+
+                { suggestionList }
             </div>
         );
     }
