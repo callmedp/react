@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 class Autocomplete extends Component {
-    static PropTypes = {
+    static propTypes = {
         suggestions: PropTypes.instanceOf(Array)
     };
     
@@ -22,10 +22,32 @@ class Autocomplete extends Component {
     }
    
     onChange = e => {
+        const { suggestions } = this.props;
+        const input = e.currentTarget.value;
         
-    }
+        // Filter suggestion
+        const filterSuggestion = suggestions.filter(
+            suggestion => suggestion.toLowerCase().indexOf(input.toLowerCase()) > -1
+        );
+
+        this.setState({
+            activeSuggestion: 0,
+            filterSuggestion,
+            showSuggestion: true,
+            input: e.currentTarget.value
+        });
+    };
 
     render() {
+        const {
+            onChange,
+            state: {
+                activeSuggestion,
+                filterSuggestion,
+                showSuggestion,
+                input
+            }
+        } = this;
 
         return (
             <div className="form-group">
@@ -39,7 +61,7 @@ class Autocomplete extends Component {
                 aria-required="true"
                 aria-invalid="true"
                 onChange={onChange}
-                value={userInput}
+                value={input}
                 />
             </div>
         );
