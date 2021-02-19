@@ -3,11 +3,21 @@ import PropTypes from "prop-types";
 
 class Autocomplete extends Component {
     static propTypes = {
-        suggestions: PropTypes.instanceOf(Array)
+        suggestions: PropTypes.instanceOf(Array),
+        name: PropTypes.string,
+        className: PropTypes.string,
+        autoComplete: PropTypes.string,
+        lableFor: PropTypes.string,
+        type: PropTypes.string,
+        placeholder: PropTypes.string
     };
     
     static defaultProps = {
-        suggestions: []
+        suggestions: [],
+        name: 'input',
+        className: 'form-control',
+        autoComplete: "",
+        labelFor: ""
     };
 
     constructor(props) {
@@ -45,6 +55,7 @@ class Autocomplete extends Component {
     };
 
     render() {
+        const { name, className, autoComplete, lableFor, type, placeholder } = this.props;
         const {
             onChange,
             onClick,
@@ -85,18 +96,18 @@ class Autocomplete extends Component {
         return (
             <div className="form-group">
                 <input
-                type="text"
-                id="location"
-                name="location"
-                placeholder=" "
-                autoComplete="off"
-                className="form-control"
+                type={type}
+                id={name}
+                name={name}
+                placeholder={placeholder}
+                autoComplete={autoComplete}
+                className={className}
                 aria-required="true"
                 aria-invalid="true"
                 onChange={onChange}
                 value={input}
                 />
-                <label htmlFor=""> Preferred Location </label>
+                <label htmlFor=""> {lableFor} </label>
 
                 { suggestionList }
             </div>

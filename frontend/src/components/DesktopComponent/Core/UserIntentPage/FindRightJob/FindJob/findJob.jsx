@@ -139,8 +139,13 @@ const FindJob = (props) => {
                                             <span class="error-msg">Required</span>
                                         </div> */}
 
-                                        <InputField attributes={UserIntentForm.location} register={register}
-                                                errors={!!errors ? errors[UserIntentForm.location.name] : ''} />
+                                        <Autocomplete id={"location"} name={"location"} className={"form-control"} autoComplete={"off"}
+                                            lableFor={"Preferred Location"} type={"text"} placeholder={" "}
+                                            suggestions={IndianState}
+                                        />
+                                        
+                                        {/* <InputField attributes={UserIntentForm.location} register={register}
+                                                errors={!!errors ? errors[UserIntentForm.location.name] : ''} /> */}
 
                                         {/* <div className="form-group">
                                             <input type="text" className="form-control" id="skills" name="skills" placeholder=" "
