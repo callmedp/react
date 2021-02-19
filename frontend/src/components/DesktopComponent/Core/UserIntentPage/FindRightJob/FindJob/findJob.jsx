@@ -19,7 +19,6 @@ const FindJob = (props) => {
     const [results, setResults] = useState([]);
     const [showResults, setShowResults] = useState(false);
     const debouncedSearchTerm = useDebounce(searchTerm, 700);
-    const [relatedSearch, setRelatedSearch] = useState(false)
 
     const addValues = (values) =>{
         return {
@@ -38,16 +37,15 @@ const FindJob = (props) => {
     }
 
     const appendData = (e) => {
-        textInput.current.value = textInput.current.value + e.target.textContent + ", "
-        // setSearchTerm(textInput.current.value)
-        // setRelatedSearch(true)
+        textInput.current.value = e.target.textContent
+        setShowResults(false)
     }
 
     const getMenuItems = (data, noOfItems=6) => {
         return (
             <>
                 {data?.slice(0, noOfItems)?.map(result => (
-                    <div key={result.pid} onClick={(e) => appendData(e)}>
+                    <div key={result?.pid} onClick={e => appendData(e)}>
                         <span>{result?.pdesc?.replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())))}</span>
                     </div>
                 ))}
@@ -58,9 +56,9 @@ const FindJob = (props) => {
     useEffect(() => {
         // Make sure we have a value (user has entered something in input)
         if (debouncedSearchTerm) {
-            (relatedSearch ? userSearch(debouncedSearchTerm, true) : userSearch(debouncedSearchTerm)).then(results => {
-            setResults(results);
-        });
+            userSearch(debouncedSearchTerm).then(results => {
+                setResults(results);
+            });
         } else {
             setResults([]);
         }
@@ -85,7 +83,7 @@ const FindJob = (props) => {
 
                                         <div className="form-group">
                                             <input type="text" className="form-control" id="job" name="job" placeholder=" " ref={textInput} autoComplete="off"
-                                                aria-required="true" aria-invalid="true" onChange={e => setSearchTerm(e.target.value)} onFocus={()=>setShowResults(true)} onBlur={() => setShowResults(false)}/>
+                                                aria-required="true" aria-invalid="true" onChange={e => setSearchTerm(e.target.value)} onFocus={()=>setShowResults(true)} />
                                             <label for="">Current job title</label>
 
                                             {showResults ?
