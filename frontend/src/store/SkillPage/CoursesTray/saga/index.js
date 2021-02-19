@@ -3,14 +3,13 @@ import { takeLatest, call, put } from 'redux-saga/effects';
 import Api from './Api';
 
 function* coursesAndAssessments(action) {
-    const { payload } = action;
-
+    const { payload: { payload, resolve, reject } } = action;
     try {
 
         const response = yield call(Api.coursesAndAssessments, payload);
-        
+
         if (response["error"]) {
-            return payload?.reject(response)
+            return reject(response)
         }
         const item = response.data;
     
@@ -31,11 +30,10 @@ function* coursesAndAssessments(action) {
             item : { courseList , assessmentList }
         })
 
-        return payload?.resolve(item)
+        return resolve(item)
 
     } catch (e) {
-        console.error("Exception occured at CourseAndAssessments Api",e)
-        return payload?.reject(e);
+        return reject(e);
     }
 }
 

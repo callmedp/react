@@ -16,6 +16,7 @@ import WatchDashboardMyCourses from './DashboardPage/MyCourses/saga/index';
 import WatchDashboardMyServices from './DashboardPage/MyServices/saga/index';
 import WatchHomePage from './HomePage/saga';
 import WatchDashboardStartCourse from './DashboardPage/StartCourse/saga/index';
+import WatchFetchUserInfo from './Authentication/saga/index';
 
 export default function* () {
     yield all([
@@ -35,6 +36,8 @@ export default function* () {
         WatchDashboardMyCourses(),
         WatchDashboardMyServices(),
         WatchDashboardStartCourse(),
-        WatchHomePage()
+        WatchHomePage(),
+        WatchFetchUserInfo(),
+
     ])
 }

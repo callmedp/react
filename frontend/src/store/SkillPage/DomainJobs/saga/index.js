@@ -3,14 +3,14 @@ import { takeLatest, call, put } from 'redux-saga/effects';
 import Api from './Api';
 
 function* domainJobs(action) {
-    const { payload } = action;
-    
+    const { payload: { payload, resolve, reject } } = action;
+
     try {
    
         const response = yield call(Api.domainJobs, payload);
         
         if (response["error"]) {
-            return payload?.reject(response)
+            return reject(response)
         }
         
         const item = response.data;
@@ -18,11 +18,10 @@ function* domainJobs(action) {
             type : Actions.DOMAIN_JOBS_FETCHED, 
             item
         })
-        return payload?.resolve(item);
+        return resolve(item);
 
     } catch (e) {
-        console.error("Exception occured at domainJobs Api",e)
-        return payload?.reject(e);
+        return reject(e);
     }
 }
 
