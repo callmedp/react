@@ -2269,7 +2269,11 @@ class FetchInfoAPIView(APIView):
             return Response({'msg': 'Not Found'}, status=status.HTTP_400_BAD_REQUEST)
         code2 = detail.get('country_code', '91')
         candidate_id = detail.get('candidate_id', '')
-        if not request.session.get('candidate_id') or not request.session.get('candidate_id') == candidate_id:
-            request.session.update(detail)
         data = {'country_code': code2, 'candidate_id': candidate_id}
+        rrequest = getattr(request,'_request')
+        if not rrequest:
+            return Response(data, status=status.HTTP_200_OK)
+
+        if not rrequest.session.get('candidate_id') or not rrequest.session.get('candidate_id') == candidate_id:
+            rrequest.session.update(detail)
         return Response(data, status=status.HTTP_200_OK)

@@ -143,9 +143,6 @@ app.get(expressRoutes, (req, res) => {
                 console.log('promise resolved');
                 global.sessionStorage.setItem('code2', json.code2);
                 global.sessionStorage.setItem('candidate_id', json.candidate_id);
-                global.localStorage.setItem('code2', json.code2);
-                global.localStorage.setItem('candidate_id', json.candidate_id);
-              global.localStorage.setItem('isAuthenticated', true);
             })
             .catch(err => console.log(err))
             .finally(() => {

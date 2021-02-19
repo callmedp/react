@@ -69,6 +69,7 @@ const Header = (props) => {
 
     const handleLogout = () => {
         localStorage.clear();
+        sessionStorage.clear();
         loggedOutZendesk();
         let path = window.location.pathname
         window.location.href = `${siteDomain}/logout/?next=${path}`;
