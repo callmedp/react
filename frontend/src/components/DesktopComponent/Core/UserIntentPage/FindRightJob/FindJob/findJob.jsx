@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import './findJob.scss';
 import { useForm } from 'react-hook-form';
 import { InputField, SelectExperienceBox, MultiSelectBox } from 'formHandler/desktopFormHandler/formFields';
+import Autocomplete from 'formHandler/desktopFormHandler/AutoComplete';
 import UserIntentForm from 'formHandler/desktopFormHandler/formData/userIntent';
 import { fetchedUserIntentData } from 'store/UserIntentPage/actions';
 import { useDispatch } from 'react-redux';

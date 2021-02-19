@@ -28,8 +28,19 @@ class Autocomplete extends Component {
     render() {
 
         return (
-            <div>
-                
+            <div className="form-group">
+                <input
+                type="text"
+                id="location"
+                name="location"
+                placeholder=" "
+                autoComplete="off"
+                className="form-control"
+                aria-required="true"
+                aria-invalid="true"
+                onChange={onChange}
+                value={userInput}
+                />
             </div>
         );
     }
