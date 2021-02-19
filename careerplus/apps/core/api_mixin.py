@@ -344,17 +344,26 @@ class ShineCandidateDetail(ShineToken):
         return None
 
     #Keyword suggestion for skills and job titles used in Intent capture
-    def get_keyword_sugesstion(self,query='',email=None, shine_id=None, token=None):
+    def get_keyword_sugesstion(self,query='',skill_only =False, token=None):
         if not query:
             return None
         try:
+            response = {}
             headers = self.get_api_headers()
-            keyword_suggestion_url = "{}/api/v3/search/lookup/keyword-suggestions/query?q={}".format(
+            keyword_suggestion_url = "{}/api/v3/search/lookup/keyword-suggestions/query?&q={}".format(
                     settings.SHINE_SITE, query)
             keyword_suggestion_response = requests.get(
                 keyword_suggestion_url, headers=headers, timeout=settings.SHINE_API_TIMEOUT)
             if keyword_suggestion_response.status_code == 200 and keyword_suggestion_response.json():
-                return keyword_suggestion_response.json()
+                response['keyword_suggestion']=keyword_suggestion_response.json()
+            if skill_only:
+                related_skill_url = "{}/api/v3/search/skill-to-related-skills/?q={}".format(
+                    settings.SHINE_SITE, query)
+                related_skill_response = requests.get(
+                related_skill_url, headers=headers, timeout=settings.SHINE_API_TIMEOUT)
+                if related_skill_response.status_code == 200 and related_skill_response.json():
+                    response['related_skill'] = related_skill_response.json()
+            return response
         except Exception as e:
             logging.getLogger('error_log').error('unable to get status details %s'%str(e))
 

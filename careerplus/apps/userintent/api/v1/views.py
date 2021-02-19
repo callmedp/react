@@ -189,21 +189,23 @@ class KeywordSuggestionAPI(APIView):
     authentication_classes = ()
 
     def get(self,request):
-        candidate_id = request.GET.get('candidate_id', None)
+        # candidate_id = request.GET.get('candidate_id', None)
         skill_only = request.GET.get('skill_only', False)
         q = request.GET.get('q', '')
         skills = []
-        data = []
+        data = {}
         try:
-            response = ShineCandidateDetail().get_keyword_sugesstion(shine_id=candidate_id,query=q)
+            response = ShineCandidateDetail().get_keyword_sugesstion(query=q,skill_only=skill_only)
             if response:
-                data = response
+                keyword_suggestions = response.get('keyword_suggestion',None)
+                data['keyword_suggestion'] = keyword_suggestions
                 if skill_only:
-                    for item in response:
-                        item_type = item.get('type',None)
-                        if item_type == 'skill':
-                            skills.append(item)
-                    data = skills 
+                    for word in keyword_suggestions:
+                        word_type = word.get('type',None)
+                        if word_type == 'skill':
+                            skills.append(word)
+                    data['keyword_suggestion'] = skills
+                    data['related_skill'] = response.get('related_skill',None)
             return APIResponse(data=data,message='suggested words fetched', status=HTTP_200_OK)
         except Exception as e:
             logging.getLogger('error_log').error(
