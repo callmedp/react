@@ -947,19 +947,23 @@ class SessionAvailabilityAPIView(APIView):
         if (request.user and request.user.is_authenticated):
             try:
                 candidate_id = request._request.session.get('candidate_id', '')
+                code2 = request._request.session.get('country_code2')
+
             except:
                 candidate_id = ''
+                code2 = 'IN'
             return Response(
                 data={
                     'result': True,
-                    'candidate_id': candidate_id
+                    'candidate_id': candidate_id,
+                    'code2':code2
                 },
                 status=status.HTTP_200_OK
             )
         return Response(
             data={
                 'result': False,
-                'candidate_id': ''
+                'candidate_id': '',
             },
             status=status.HTTP_200_OK 
         )

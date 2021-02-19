@@ -4,17 +4,17 @@ import Api from './Api';
 
 
 function* trendingCategories(action) {
-    const { payload: {payload, resolve, reject} } = action;
+    const { payload: { payload, resolve, reject } } = action;
 
     try {
 
         const response = yield call(Api.trendingCategories, payload);
-        
-        if(!response || response?.error){
+
+        if (!response || response?.error) {
             return reject(response?.error);
         }
         const item = response?.data;
-    
+
         var SnMCourseList = item?.SnMCourseList
         var ITCourseList = item?.ITCourseList
         var BnFCourseList = item?.BnFCourseList
@@ -54,12 +54,12 @@ function* trendingCategories(action) {
 }
 
 
-function* recentlyAddedCourses(action){
+function* recentlyAddedCourses(action) {
     const { payload: { payload, resolve, reject } } = action;
-    try{
+    try {
         const response = yield call(Api.recentlyAddedCourses, payload);
-        
-        if(!response || response?.error){
+
+        if (!response || response?.error) {
             return reject(response?.error);
         }
         const item = response?.data?.data;
@@ -75,12 +75,12 @@ function* recentlyAddedCourses(action){
     }
 }
 
-function* popularServices(action){
+function* popularServices(action) {
     const { payload: { payload, resolve, reject } } = action;
-    try{
+    try {
         const response = yield call(Api.popularServices, payload);
-        
-        if(!response || response?.error){
+
+        if (!response || response?.error) {
             return reject(response?.error);
         }
         const item = response?.data?.data;
@@ -96,18 +96,18 @@ function* popularServices(action){
     }
 }
 
-function* allCategories(action){
+function* allCategories(action) {
     const { payload: { payload, resolve, reject } } = action;
-    try{
-        const response = yield call(Api.allCategories, payload );
-        
-        if(!response || response?.error){
+    try {
+        const response = yield call(Api.allCategories, payload);
+
+        if (!response || response?.error) {
             return reject(response?.error);
         }
         const item = response?.data?.data;
-        yield put({ 
-            type : Actions.ALL_CATEGORIES_AND_VENDORS_FETCHED,
-            item : item
+        yield put({
+            type: Actions.ALL_CATEGORIES_AND_VENDORS_FETCHED,
+            item: item
         })
         return resolve(item);
     }

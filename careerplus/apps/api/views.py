@@ -8,8 +8,6 @@ import math
 import datetime
 import json
 import traceback
-
-
 import requests
 from decimal import Decimal
 from datetime import timedelta
@@ -95,6 +93,9 @@ from search.helpers import RecommendationBasedOnGaps, get_recommended_products
 from shop.choices import PRODUCT_CHOICES,PRODUCT_TAG_CHOICES
 from shop.templatetags.shop_tags import get_faq_list, format_features, format_extra_features
 from homepage.api.v1.mixins import ProductMixin
+
+
+from django.views.decorators.csrf import csrf_exempt
 from core.common import APIResponse
 
 
@@ -2248,3 +2249,27 @@ class RecommendedCoursesAPI(APIView):
     def get(self, request, *args, **kwargs):
         rproducts = self.get_products()
         return Response(rproducts, status=status.HTTP_200_OK)
+
+
+class FetchInfoAPIView(APIView):
+    authentication_classes = ()
+    permission_classes = ()
+    serializer_class = None
+
+    @csrf_exempt
+    def post(self, request, *args, **kwargs):
+        em = request.data.get('em', '')
+        if not em or not isinstance(em, str):
+            return Response({'msg': 'error'}, status=status.HTTP_400_BAD_REQUEST)
+        em = em.split('|')[0]
+
+        detail = ShineCandidateDetail().get_status_detail(
+            email=em, token=None)
+        if not detail:
+            return Response({'msg': 'Not Found'}, status=status.HTTP_400_BAD_REQUEST)
+        code2 = detail.get('country_code', '91')
+        candidate_id = detail.get('candidate_id', '')
+        if not request.session.get('candidate_id') or not request.session.get('candidate_id') == candidate_id:
+            request.session.update(detail)
+        data = {'country_code': code2, 'candidate_id': candidate_id}
+        return Response(data, status=status.HTTP_200_OK)

@@ -7,7 +7,7 @@ import DropDown from './DropDown/dropDown';
 import { useDispatch, useSelector } from 'react-redux';
 import { cartCount, fetchNavOffersAndTags } from 'store/Header/actions/index';
 import { initLoggedInZendesk, loggedOutZendesk } from 'utils/zendeskIniti';
-import { removeTrackingInfo, getCandidateInformation } from 'utils/storage.js';
+import { removeTrackingInfo, getCandidateInformation,getCandidateId } from 'utils/storage.js';
 import SearchBar from './SeachBar/SearchBar';
 import { MyGA } from 'utils/ga.tracking.js';
 
@@ -37,7 +37,7 @@ const Header = (props) => {
         try {
             dispatch(cartCount());
         
-            if (localStorage.getItem('isAuthenticated') === 'true'){
+            if (getCandidateId()){
                 try {
                     setIsLoggedIn(true)
                     // const candidateId = getCandidateId()

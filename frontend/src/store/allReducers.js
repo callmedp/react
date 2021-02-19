@@ -10,6 +10,7 @@ import { CommentReducer } from './DashboardPage/AddSubmitComment/reducer/index';
 import { ReviewsReducer } from './DashboardPage/AddSubmitReview/reducer/index';
 import { RecommendationReducer } from './RecommendedCourses/reducer/index';
 import { RecentlyAddedCoursesReducer, PopularServicesReducer, TrendingCategoriesReducer, AllCategoriesReducer } from './CataloguePage/reducer/index';
+import {FetchUserInfoReducer} from './Authentication/reducer/index'
 // import { RecentlyServicesReducer } from './DashboardPage/Service/reducer/index';
 import { DashboardMyWalletReducer } from './DashboardPage/MyWallet/reducer/index'; 
 import { DashboardMyOrdersReducer } from './DashboardPage/MyOrder/reducer/index'; 
@@ -35,6 +36,7 @@ const rootReducer = combineReducers({
     popularServices : PopularServicesReducer,
     popularCategories : TrendingCategoriesReducer,
     allCategories : AllCategoriesReducer,
+    authentication: FetchUserInfoReducer,
     dashboardWallet: DashboardMyWalletReducer,
     dashboardOrders: DashboardMyOrdersReducer,
     dashboardCourses: DashboardMyCoursesReducer,

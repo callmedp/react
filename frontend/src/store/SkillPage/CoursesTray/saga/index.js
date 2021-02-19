@@ -4,11 +4,10 @@ import Api from './Api';
 
 function* coursesAndAssessments(action) {
     const { payload: { payload, resolve, reject } } = action;
-
     try {
 
         const response = yield call(Api.coursesAndAssessments, payload);
-        
+
         if (response["error"]) {
             return reject(response)
         }

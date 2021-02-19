@@ -43,9 +43,9 @@ function* fetchPopularCourses(action) {
             type: Actions.POPULAR_COURSES_FETCHED, item 
         });
         return resolve(item);
+
     }
     catch (e) {
-        console.error("Exception occured ",e)
         return reject(e);
     }
 }
