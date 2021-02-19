@@ -43,7 +43,6 @@ const SkillPage = (props) => {
   const [hasLearnerStories, setHasLearnerStories] = useState(false);
   const [hasCourses, setHasCourses] = useState(false);
   let cookies = "";
-  console.log(props)
   try {
     cookies = props.cookies || document.cookie.split(";");
     for (let i = 0; i < cookies.length; i++) {

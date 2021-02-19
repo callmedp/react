@@ -9,7 +9,6 @@ const code2 = CountryCode2()
 
 export const getCataloguePageActions = () => {
     return [
-        {action: sessionAvailability,payload:{}},
         { action: fetchRecentlyAddedCourses, payload: { code2: code2 } },
         { action: fetchPopularServices, payload: { code2: code2 } },
         { action: fetchAllCategoriesAndVendors, payload: { num: 8 } },
@@ -19,7 +18,6 @@ export const getCataloguePageActions = () => {
 
 export const getCataloguePageActionsMobile = () => {
     return [
-        {action: sessionAvailability,payload:{}},
         { action: fetchRecentlyAddedCourses, payload: { code2: code2 } },
         { action: fetchPopularServices, payload: { code2: code2 } },
         { action: fetchAllCategoriesAndVendors, payload: { num: 8 } },
