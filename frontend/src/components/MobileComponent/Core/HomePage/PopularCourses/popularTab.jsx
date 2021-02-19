@@ -11,13 +11,13 @@ const PopularTab = props => {
     const [pageId, updatePageId] = useState(2)
     const dispatch = useDispatch()
     const {
-        productList, tabType
+        productList, tabType, total_page
     } = props
 
     const settings = {
         dots: false,
         arrows: false,
-        infinite: true,
+        infinite: false,
         speed: 500,
         slidesToShow: 1,
         autoplay: false,
@@ -25,7 +25,7 @@ const PopularTab = props => {
         swipeToSlide: true,
         variableWidth: true,
         afterChange: function(index) {
-            if (index % 3 === 0) {
+            if ((index % 3 === 0 && pageId < index ) && pageId <= total_page) {
                 new Promise((resolve, reject) => dispatch(fetchInDemandProducts({ pageId: pageId, tabType, device: 'mobile', resolve, reject })));
                 updatePageId(pageId + 1);
             }
@@ -42,7 +42,7 @@ const PopularTab = props => {
     return (
         <Slider {...settings}>
             {
-                productList.map((product, index) => {
+                productList?.map((product, index) => {
                     return (
                         <div className="m-card" key={index}>
                             <div className={`m-card__heading colbg${index + 1}`}>
@@ -66,7 +66,7 @@ const PopularTab = props => {
                                     {product.mode ? <span className="m-mode">{product.mode}</span> : ''}
                                 </div>
                                 <div className="m-card__duration-mode mt-10">
-                                    {product.jobsAvailable ? <> <strong>{product.jobsAvailable}</strong> Jobs available </> : ''} {product.jobsAvailable && product.duration ? '|' : ''} {product.duration ? <>Duration: <strong>{product.duration} days</strong> </> : ''}
+                                    {product.jobsAvailable ? <> <strong>{product.jobsAvailable}</strong> Jobs available </> : ''} {product.jobsAvailable && product.duration ? '|' : ''} {product.duration ? <>Duration: <strong>{product.duration} days</strong> </> : <strong>&nbsp;</strong>}
                                 </div>
                                 <a className="m-view-program mt-10" href={`${siteDomain}${product.url}`}>View program</a>
                             </div>

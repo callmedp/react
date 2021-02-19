@@ -57,14 +57,18 @@ class DashboardMyorderApi(DashboardInfo, APIView):
                     item_order = orderitems[0]
                     product_type_flow = item_order and item_order.product_id and item_order.product.type_flow or 0
                     product_id = item_order and item_order.product_id
-                data = {
+                try:
+                    data = {
                     "order": OrderSerializer(obj).data,
                     "item_count": item_count,
                     'product_type_flow': product_type_flow,
                     "product_id": product_id,
                     "orderitems": OrderItemSerializer(orderitems,many=True).data,
-                }
-                order_list.append(data)
+                    }
+                    order_list.append(data)
+                except Exception as e:
+                    logging.getLogger('error_log').error('response for {} - {}'.format(candidate_id, str(e)))
+                    return APIResponse(error=True,message='Error in fetching order data',status=status.HTTP_400_BAD_REQUEST)
                 #pagination info
                 page_info ={
                 'current_page':paginated_data['current_page'],
@@ -99,7 +103,7 @@ class MyCoursesApi(DashboardInfo, APIView):
         # candidate_id='601b8120ca3f418906a889a8'
         page_info={}
         if candidate_id:
-            courses = OrderItem.objects.prefetch_related('product','order', 'product__attributes').filter(product__type_flow=2,no_process=False,order__candidate_id=candidate_id,order__status__in=[1, 3])
+            courses = OrderItem.objects.prefetch_related('product','order', 'product__attributes').filter(product__type_flow__in=[2,16],no_process=False,order__candidate_id=candidate_id,order__status__in=[1, 3])
             # courses = courses_oi.prefetch_related('product','order', 'product__attributes')
             if not last_month_from=='all':
                 courses = courses.filter(order__date_placed__gte=modified_from_datetime)
@@ -108,7 +112,11 @@ class MyCoursesApi(DashboardInfo, APIView):
             elif select_type == 'closed':
                 courses = courses.filter(oi_status=4)
             paginated_data = offset_paginator(page, courses,size=7)
-            data = OrderItemSerializer(paginated_data["data"],many=True,context= {"get_details": True, "candidate_id":candidate_id}).data
+            try:
+                data = OrderItemSerializer(paginated_data["data"],many=True,context= {"get_details": True, "candidate_id":candidate_id}).data
+            except Exception as e:
+                    logging.getLogger('error_log').error('response for {} - {}'.format(candidate_id, str(e)))
+                    return APIResponse(error=True,message='Error in fetching orderitem courses data',status=status.HTTP_400_BAD_REQUEST)
             #pagination info
             page_info ={
             'current_page':paginated_data['current_page'],
@@ -155,7 +163,11 @@ class MyServicesApi(DashboardInfo, APIView):
             elif select_type == 'closed':
                 services = services.filter(oi_status=4)
             paginated_data = offset_paginator(page, services,size=7)
-            data = OrderItemSerializer(paginated_data["data"],many=True,context= {"get_details": True, "candidate_id":candidate_id}).data
+            try:
+                data = OrderItemSerializer(paginated_data["data"],many=True,context= {"get_details": True, "candidate_id":candidate_id}).data
+            except Exception as e:
+                logging.getLogger('error_log').error('response for {} - {}'.format(candidate_id, str(e)))
+                return APIResponse(error=True,message='Error in fetching orderitem services data',status=status.HTTP_400_BAD_REQUEST)
             #pagination info
             page_info ={
             'current_page':paginated_data['current_page'],

@@ -9,6 +9,7 @@ import { fetchInDemandProducts } from 'store/HomePage/actions';
 import { startHomePageLoader, stopHomePageLoader } from 'store/Loader/actions';
 
 function PopularCourses() {
+    
     const [key, setKey] = useState('master');
     const { courses, certifications } = useSelector( store => store.inDemand )
     const dispatch = useDispatch()
@@ -38,11 +39,11 @@ function PopularCourses() {
                             <MasterProduct tabType="master" popularProducts={courses} />
                         </Tab>
                         <Tab eventKey="certifications" title={<h2>Certifications</h2>}>
-                            <CertificationProduct tabType="certification" popularProducts={certifications} />
+                            <CertificationProduct tabType="certifications" popularProducts={certifications} />
                         </Tab>
 
                     </Tabs>
-                    <span className="pink-circle1" data-aos="fade-right"></span>
+                    {/* <span className="pink-circle1" data-aos="fade-right"></span> */}
                 </div>
             </div>
         </section>

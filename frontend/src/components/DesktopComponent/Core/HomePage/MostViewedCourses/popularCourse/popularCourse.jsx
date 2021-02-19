@@ -10,14 +10,14 @@ const popularCourse = (props) => {
         )
     }
     return (
-        <li className="col">
+        <li className="col-sm-3">
         <div className="card">
             <div className="card__heading">
                 <figure>
                     <img src={course.imgUrl} alt={course.imgAlt} />
                 </figure>
                 <h3 className="heading3">
-                    <a to={`${siteDomain}${course.url}`}>{course.name}</a>
+                    <a href={`${siteDomain}${course.url}`}>{course.name}</a>
                 </h3>
             </div>
             <div className="card__box">
@@ -26,7 +26,9 @@ const popularCourse = (props) => {
                     { course.stars?.map((star) => starRatings(star)) }
                     <span>{course.rating}/5</span>
                 </span>
-                <span className="mode">{course?.mode}</span>
+                {
+                    course?.mode && <span className="mode">{course?.mode}</span>
+                }
                 </div>
                 <div className="card__price mt-10">
                     <strong>{course.price}/-</strong> 

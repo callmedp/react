@@ -24,7 +24,7 @@ const HomeBanner = (props) => {
             <div className="m-top-search-header-home" onClick={() => setShowSearch(true)}>
                 <form id="searchForm" className="form-inline w-100 ml-auto">
                     <button className="m-btn-search-black d-flex align-items-center"><figure className="micon-search-black d-flex"></figure></button>
-                    <input className="m-search-input" type="search" placeholder="Try Digital marketing certificate" name="query" id="transcript" aria-label="Search" autoComplete="off" />
+                    <input className="m-search-input" type="search" placeholder="Search course, assessment..." name="query" id="transcript" aria-label="Search" autoComplete="off" />
                     <button className="m-btn-voice-search">
                         <figure className="micon-voice-search d-flex"></figure>
                     </button>

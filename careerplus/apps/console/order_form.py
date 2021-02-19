@@ -17,18 +17,21 @@ User = get_user_model()
 
 
 class ResumeUploadForm(forms.ModelForm):
+    resume_from_shine = forms.BooleanField(
+        label="Upload resume from shine", required = False)
 
     class Meta:
         model = OrderItem
-        fields = ['oi_resume', ]
+        fields = ['oi_resume', 'resume_from_shine']
 
     def __init__(self, *args, **kwargs):
         super(ResumeUploadForm, self).__init__(*args, **kwargs)
-        self.fields['oi_resume'].required = True
+        # self.fields['oi_resume'].required = True
 
     def clean_oi_resume(self):
         resume = self.files.get('oi_resume', '')
-        if not resume:
+        resume_from_shine = self.data.get('resume_from_shine', None)
+        if not resume and not resume_from_shine:
             raise forms.ValidationError(
                 "resume is required.")
         elif resume:

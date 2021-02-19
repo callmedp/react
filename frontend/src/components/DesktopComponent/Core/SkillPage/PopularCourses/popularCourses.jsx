@@ -34,7 +34,7 @@ const PopularCourses = (props) => {
             <h2 className="heading2">Popular Courses</h2>
             <ul className="popular-courses__list">
             {
-                trendingCourses?.slice(0,3).map((course) => {
+                trendingCourses.slice(0,3)?.map((course) => {
                     return (
                         <li key={course.id}>
                             <figure>
@@ -42,7 +42,7 @@ const PopularCourses = (props) => {
                             </figure>
                             <div className="links">
                                 <a href={`${siteDomain}${course.url}${trackingParameters}`} onClick={() => handleTracking(course)}>{course.name}</a>
-                                <span className="mr-10">By {course.provider}</span>
+                                <span className="mr-10">By {course.providerName}</span>
                                     <span className="rating">
                                         { course.stars?.map((star) => starRatings(star)) }
                                         <span >{course.rating}/5</span>

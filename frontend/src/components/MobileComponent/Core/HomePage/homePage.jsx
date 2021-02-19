@@ -19,30 +19,42 @@ import Footer from '../../Common/Footer/Footer';
 import CTAhome from '../../Common/CTA/CTAhome';
 import Aos from "aos";
 // import "aos/dist/aos.css";
-import { fetchTestimonials, fetchJobAssistanceAndBlogs, fetchMostViewedCourses, fetchInDemandProducts } from 'store/HomePage/actions';
+import { fetchTestimonials, fetchJobAssistanceAndBlogs, fetchMostViewedCourses, fetchInDemandProducts, fetchSkillwithDemands } from 'store/HomePage/actions';
 import { startHomePageLoader, stopHomePageLoader } from 'store/Loader/actions/index';
 import Loader from '../../Common/Loader/loader';
 import SearchPage from '../../Common/SearchPage/SearchPage'
 import './homePage.scss';
+import MetaContent from '../../Common/MetaContent/metaContent';
 
 const HomePage = (props) => {
-
     const dispatch = useDispatch()
     const { homeLoader } = useSelector(store => store.loader)
     const [showSearch, setShowSearch] = useState(false)
     const [stickSearchBar, showStickSearchBar] = useState(false)
+    const { meta } = useSelector( store => store.testimonials )
 
     const handleEffects = async () => {
-        try {
-            dispatch(startHomePageLoader());
-            new Promise((resolve, reject) => dispatch(fetchTestimonials({ device: 'mobile', resolve, reject })))
-            new Promise((resolve, reject) => dispatch(fetchMostViewedCourses({ categoryId: -1, resolve, reject })))
-            new Promise((resolve, reject) => dispatch(fetchInDemandProducts({ pageId: 1, tabType: 'master', device: 'mobile', resolve, reject })));
-            await new Promise((resolve, reject) => dispatch(fetchJobAssistanceAndBlogs({ resolve, reject })))
-            dispatch(stopHomePageLoader());
+        //You may notice that apis corresponding to these actions are not getting called on initial render.
+        //This is because initial render is done on node server, which is calling these apis, map the data and send it to the browser.
+        //So there is no need to fetch them again on the browser.
+        if (!(window && window.config && window.config.isServerRendered)) {
+            try {
+                dispatch(startHomePageLoader());
+                new Promise((resolve, reject) => dispatch(fetchTestimonials({ device: 'mobile', resolve, reject })))
+                new Promise((resolve, reject) => dispatch(fetchMostViewedCourses({ categoryId: -1, resolve, reject })))
+                new Promise((resolve, reject) => dispatch(fetchInDemandProducts({ pageId: 1, tabType: 'master', device: 'mobile', resolve, reject })));
+                new Promise((resolve, reject) => dispatch(fetchSkillwithDemands({ numCourses:8, resolve, reject })));
+                await new Promise((resolve, reject) => dispatch(fetchJobAssistanceAndBlogs({ resolve, reject })))
+                dispatch(stopHomePageLoader());
+            }
+            catch {
+                dispatch(stopHomePageLoader());
+            }
         }
-        catch {
-            dispatch(stopHomePageLoader());
+        else {
+            // isServerRendered is needed to be deleted because when routing is done through react and not on the node,
+            // above actions need to be dispatched.
+            delete window.config?.isServerRendered
         }
     };
 
@@ -55,23 +67,16 @@ const HomePage = (props) => {
     }
 
     useEffect(() => {
-        //You may notice that apis corresponding to these actions are not getting called on initial render.
-        //This is because initial render is done on node server, which is calling these apis, map the data and send it to the browser.
-        //So there is no need to fetch them again on the browser.
-        if (!(window && window.config && window.config.isServerRendered)) {
-            handleEffects();
-        }
-        else {
-            // isServerRendered is needed to be deleted because when routing is done through react and not on the node,
-            // above actions need to be dispatched.
-            delete window.config?.isServerRendered
-        }
+
+        handleEffects();
+
         window.addEventListener('scroll', handleScroll);
         Aos.init({ duration: 2000, once: true, offset: 10, anchorPlacement: 'bottom-bottom' });
     }, [])
 
     return (
         <>
+            { meta && <MetaContent meta_tags={meta}/> }
             { homeLoader && <Loader />}
             {
                 showSearch ? <SearchPage setShowSearchPage={setShowSearch} /> :

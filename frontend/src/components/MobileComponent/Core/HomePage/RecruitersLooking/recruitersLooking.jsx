@@ -12,8 +12,6 @@ import './recruitersLooking.scss';
 // import 'slick-carousel/slick/slick.css';
 import { siteDomain } from 'utils/domains';
 
-// API Import
-import { fetchSkillwithDemands } from 'store/HomePage/actions';
 
 
 const RecruitersLooking = (props) => {
@@ -24,59 +22,40 @@ const RecruitersLooking = (props) => {
     const settings = {
         dots: false,
         arrows: false,
-        infinite: true,
+        infinite: false,
         speed: 500,
         slidesToShow: 1,
         slidesToScroll: 1,
         swipeToSlide: true,
-        centerMode: true,
+        // centerMode: true,
         variableWidth: true,
         variableHeight: true,
     };
 
 
-    const handleEffects = async () => {
-        try {
-            if (!(window && window.config && window.config.isServerRendered)) {
-                await new Promise((resolve, reject) => dispatch(fetchSkillwithDemands({ resolve, reject })));
-            }
-            else {
-                delete window.config?.isServerRendered
-            }
-        }
-        catch (e) {
-            Swal.fire({
-                icon: 'error',
-                text: 'Sorry! we are unable to load data from server.'
-            })
-        }
-    };
-
-
-    useEffect(() => {
-        handleEffects();
-    }, [])
-
-
 
     return (
-        <section className="m-container m-lightblue-bg mt-0 mb-0 pb-0 pl-0 pr-0" data-aos="fade-up">
+        <section className="m-container m-lightblue-bg mt-0 mb-0 pb-0 pr-0" data-aos="fade-up">
             <div className="m-all-category">
                 <h2 className="m-heading2-home text-center mb-5">What recruiters are looking at</h2>
                 <p className="fs-13 text-center">Browse the skills with high demands</p>
                 <Slider {...settings}>
 
                     {
-                        trendingSkills?.map((skill, index) => {
+                        trendingSkills?.slice(0,12)?.map((skill, index) => {
                             return (
-                                <div className="m-card" key={index}>
+                                <Link to={skill.skillUrl} key={index}>
+                                <div className="m-card" >
+                                    
                                     <figure>
                                         <img src={`${skill?.image}`} className="img-fluid" alt={skill?.skillName} />
                                     </figure>
                                     <h3>{skill?.skillName}</h3>
-                                    { !!skill.no_courses ? <strong>{skill.no_courses} { skill.no_courses == 1 ? 'course': 'courses'}</strong> : ''}
-                                    <a href={`${siteDomain}${skill?.skillUrl}`}>Know more</a>
+                                    { !!skill.no_courses ? <span>{skill.no_courses} { skill.no_courses == 1 ? 'course': 'courses'}</span> : ''}
+                                    <em>Know more</em>
+                                    
                                 </div>
+                                </Link>
                             )
                         })
                     }
