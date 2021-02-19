@@ -47,7 +47,8 @@ const FindJob = (props) => {
 
     const appendData = async (e) => {
         textInput.current.value = e.target.textContent
-        setSkillSet(await relatedSearch(textInput.current.value))
+        var data = await relatedSearch(textInput.current.value)
+        setSkillSet(data?.data?.related_skill ? data?.data?.related_skill?.slice(0,10) : [])
         setShowResults(false)
     }
 
@@ -74,7 +75,7 @@ const FindJob = (props) => {
         // Make sure we have a value (user has entered something in input)
         if (debouncedSearchTerm) {
             userSearch(debouncedSearchTerm).then(results => {
-                setResults(results);
+                setResults(results?.data?.keyword_suggestion);
             });
         } else {
             setResults([]);
@@ -152,7 +153,7 @@ const FindJob = (props) => {
                                         <div className="form-group-custom">
                                             {skillSet?.map((skill, indx) => {
                                                 return (
-                                                    <label className="label-add" onClick={() => handleAppend(skill.name, indx)} for="">{skill.name}</label>
+                                                    <label className="label-add" onClick={() => handleAppend(skill, indx)} for="">{skill}</label>
                                                 )
                                             })
                                             }
