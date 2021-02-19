@@ -4,9 +4,9 @@ import './UIbanner.scss';
 
 const UIBanner1 = (props) => {
     return (
-        <div className="m-container mt-0 mb-0 m-ui-header-content">
-            <h1 className="m-heading1"><strong>Progress</strong> your career</h1>
-        </div> 
+       <div className="m-container mt-0 mb-0 m-ui-header-content">
+            <h1 className="m-heading1"><strong>Career Guidance</strong> with personalized recommendations</h1>
+       </div> 
     )
 }
 
