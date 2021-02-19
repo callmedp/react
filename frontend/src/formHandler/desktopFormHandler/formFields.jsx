@@ -62,17 +62,19 @@ const SelectExperienceBox = (props) => {
                             name, children, validation
                         }, register } = props
 
+    const [checkedClass, setCheckedClass] = useState('form-group')
+
     return (
-        <div className="form-group">
-        <div className="custom-select-box">
-            <select name={name} className="custom-select" ref={register(validation)} aria-label="select experience level">
-                { children?.map((item,index)=>{
-                    return(
-                    <option value={item.value} key={index}>{item.text}</option>
-                    )
-                })}
-            </select>
-        </div>
+        <div className={checkedClass}>
+            <div className="custom-select-box">
+                <select name={name} className="custom-select" ref={register(validation)} aria-label="select experience level" onChange={() => setCheckedClass('form-group checked')}>
+                    { children?.map((item,index)=>{
+                        return(
+                        <option value={item.value} key={index}>{item.text}</option>
+                        )
+                    })}
+                </select>
+            </div>
         </div>
     )
 }
