@@ -3,10 +3,12 @@ import { Link } from 'react-router-dom';
 import './findJob.scss';
 import { useForm } from 'react-hook-form';
 import { InputField, SelectExperienceBox, MultiSelectBox } from 'formHandler/desktopFormHandler/formFields';
+import Autocomplete from 'formHandler/desktopFormHandler/AutoComplete';
 import UserIntentForm from 'formHandler/desktopFormHandler/formData/userIntent';
 import { fetchedUserIntentData } from 'store/UserIntentPage/actions';
 import { useDispatch } from 'react-redux';
 import useDebounce from 'utils/searchUtils/debouce';
+import { IndianState } from 'utils/constants';
 import { userSearch, relatedSearch } from 'utils/searchUtils/searchFunctions';
 
 const FindJob = (props) => {
@@ -134,8 +136,13 @@ const FindJob = (props) => {
                                             <span class="error-msg">Required</span>
                                         </div> */}
 
-                                        <InputField attributes={UserIntentForm.location} register={register}
-                                                errors={!!errors ? errors[UserIntentForm.location.name] : ''} />
+                                        <Autocomplete id={"location"} name={"location"} className={"form-control"} autoComplete={"off"}
+                                            lableFor={"Preferred Location"} type={"text"} placeholder={" "}
+                                            suggestions={IndianState}
+                                        />
+                                        
+                                        {/* <InputField attributes={UserIntentForm.location} register={register}
+                                                errors={!!errors ? errors[UserIntentForm.location.name] : ''} /> */}
 
                                         {/* <div className="form-group">
                                             <input type="text" className="form-control" id="skills" name="skills" placeholder=" "
