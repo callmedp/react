@@ -30,7 +30,7 @@ function MostViewedCourses() {
             <div className="row">
                 <div className="container">
                     <div className="recent-courses mt-20 mb-30">
-                        <h2 className="heading2 text-center mb-20">Most viewed courses</h2>
+                        <h2 className="heading2 text-center mb-25">Most viewed courses</h2>
                         <Tabs
                             id="controlled-tab-example"
                             activeKey={key}
