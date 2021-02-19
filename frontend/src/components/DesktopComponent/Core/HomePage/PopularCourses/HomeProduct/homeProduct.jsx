@@ -16,7 +16,7 @@ const HomeProduct = (props) => {
         if (e !== undefined) {
             if (popularProducts.length === 0 || popularProducts[selectedIndex].length === 0) {
                 dispatch(startHomePageLoader())
-                await new Promise((resolve, reject) => dispatch(fetchInDemandProducts({ pageId: selectedIndex + 1, tabType, device: 'desktop', resolve, reject })));
+                await new Promise((resolve, reject) => dispatch(fetchInDemandProducts({ payload: {pageId: selectedIndex + 1, tabType, device: 'desktop'}, resolve, reject })));
                 dispatch(stopHomePageLoader())
             }
             setIndex(selectedIndex);

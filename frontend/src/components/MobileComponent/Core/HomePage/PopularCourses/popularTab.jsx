@@ -26,7 +26,7 @@ const PopularTab = props => {
         variableWidth: true,
         afterChange: function(index) {
             if ((index % 3 === 0 && pageId < index ) && pageId <= total_page) {
-                new Promise((resolve, reject) => dispatch(fetchInDemandProducts({ pageId: pageId, tabType, device: 'mobile', resolve, reject })));
+                new Promise((resolve, reject) => dispatch(fetchInDemandProducts({ payload:{ pageId: pageId, tabType, device: 'mobile'}, resolve, reject })));
                 updatePageId(pageId + 1);
             }
           }

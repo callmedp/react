@@ -25,7 +25,7 @@ const PopularCourses = (props) => {
         try {
             if (tabType === 'certifications' && certifications.length === 0) {
                 dispatch(startHomePageLoader())
-                await new Promise((resolve, reject) => dispatch(fetchInDemandProducts({ pageId: 1, tabType, device: 'mobile', resolve, reject })));
+                await new Promise((resolve, reject) => dispatch(fetchInDemandProducts({ payload: {pageId: 1, tabType, device: 'mobile'}, resolve, reject })));
                 dispatch(stopHomePageLoader())
             }
             setKey(tabType)

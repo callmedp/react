@@ -38,10 +38,10 @@ const HomePage = (props) => {
         //So there is no need to fetch them again on the browser.
         if (!(window && window.config && window.config.isServerRendered)) {
             try {
-                new Promise((resolve, reject) => dispatch(fetchMostViewedCourses({ categoryId: -1, resolve, reject })));
-                new Promise((resolve, reject) => dispatch(fetchInDemandProducts({ pageId: 1, tabType: 'master', device: 'desktop', resolve, reject })));
+                new Promise((resolve, reject) => dispatch(fetchMostViewedCourses({ payload:{categoryId: -1}, resolve, reject })));
+                new Promise((resolve, reject) => dispatch(fetchInDemandProducts({ payload: {pageId: 1, tabType: 'master', device: 'desktop'}, resolve, reject })));
                 new Promise((resolve, reject) => dispatch(fetchJobAssistanceAndBlogs({ resolve, reject })));
-                new Promise((resolve, reject) => dispatch(fetchTestimonials({ device: 'desktop', resolve, reject })));
+                new Promise((resolve, reject) => dispatch(fetchTestimonials({ payload:{device: 'desktop'}, resolve, reject })));
             }
             catch (err) {
                 console.log("error occured at Homepage", err)
