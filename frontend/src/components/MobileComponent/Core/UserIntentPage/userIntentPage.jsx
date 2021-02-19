@@ -5,7 +5,7 @@ import UIBanner from './FindRightJob/UIBanner/UIbanner'
 import UIBanner1 from './FindRightJob/UIBanner/UIbanner1'
 import FindRightJob from './FindRightJob/findRightJob';
 import MakeCareerChange from './MakeCareerChange/makeCareerChange';
-// import UserGuidance from './UserGuidance/UserGuidance';
+import UserGuidance from './UserGuidance/UserGuidance';
 import ImproveProfile from './ImproveProfile/improveProfile';
 import ProgressCareer from './ProgressCareer/progressCareer';
 import './userIntentPage.scss';
@@ -45,7 +45,7 @@ const UserIntentPage = (props) => {
             <header className="m-container m-header">
                 <Header />
             
-                <UIBanner1 />
+                {/* <UIBanner1 /> */}
             </header>
             <main className="mb-0">
                 {
@@ -54,7 +54,7 @@ const UserIntentPage = (props) => {
                         'make-career-change': <MakeCareerChange icon="icon-ui2" title="Make a career change" back={true} {...props} />,
                         'improve-profile': <ImproveProfile icon="icon-ui2" title="Improve your profile" back={true} />,
                         'progress-career': <ProgressCareer icon="icon-ui2" title="Progress your career" back={true} {...props} />,
-                        undefined: <UIBanner1 icon="icon-ui1" title="Career Guidance with personalized recommendations" back={false} />
+                        undefined: <UserGuidance icon="icon-ui1" title="Career Guidance with personalized recommendations" back={false} />
                     }[UIContainer]
                 }
             </main>
