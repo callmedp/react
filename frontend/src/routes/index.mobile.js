@@ -11,6 +11,7 @@ import DashboardPageContainer from 'components/MobileComponent/Core/DashboardPag
 import RouteWithSubRoutes from 'routes/route';
 import HomePageContainer from 'components/MobileComponent/Core/HomePage/homePage';
 import { getHomepageActionsMobile } from "apiHandler/homepageApi";
+import UserIntentPageContainer from 'components/MobileComponent/Core/UserIntentPage/userIntentPage';
 
 
 
@@ -47,6 +48,11 @@ export const routes = [
         path: '/dashboard/:name?',
         component: DashboardPageContainer,
         private: true
+    },
+    {
+        path: '/user-intent/:name?',
+        component: UserIntentPageContainer,
+        exact: true
     },
     {
         path: '/404/',

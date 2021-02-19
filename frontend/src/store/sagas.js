@@ -16,6 +16,7 @@ import WatchDashboardMyCourses from './DashboardPage/MyCourses/saga/index';
 import WatchDashboardMyServices from './DashboardPage/MyServices/saga/index';
 import WatchHomePage from './HomePage/saga';
 import WatchDashboardStartCourse from './DashboardPage/StartCourse/saga/index';
+import WatchUserIntentPage from './UserIntentPage/saga';
 
 export default function* () {
     yield all([
@@ -34,7 +35,7 @@ export default function* () {
         WatchDashboardMyOrders(),
         WatchDashboardMyCourses(),
         WatchDashboardMyServices(),
-        WatchDashboardStartCourse(),
-        WatchHomePage()
+        WatchHomePage(),
+        WatchUserIntentPage()
     ])
 }
