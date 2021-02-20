@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './findJob.scss';
 import { useForm } from 'react-hook-form';
@@ -9,12 +9,23 @@ import Autocomplete from 'formHandler/mobileFormHandler/AutoComplete';
 import { fetchedUserIntentData } from 'store/UserIntentPage/actions';
 import { IndianState } from 'utils/constants';
 
+// Debouncing
+import useDebounce from 'utils/searchUtils/debouce';
+import { userSearch, relatedSearch } from 'utils/searchUtils/searchFunctions';
+
 const FindJob = (props) => {
     const { history, type } = props;
     const dispatch = useDispatch();
     const [chips, setChips] = useState([]);
     const [skillSet, setSkillSet] = useState([])
     const { register, handleSubmit, errors } = useForm();
+
+    const textInput = useRef();
+    const [searchTerm, setSearchTerm] = useState('');
+    const [results, setResults] = useState([]);
+    const [showResults, setShowResults] = useState(false);
+    const debouncedSearchTerm = useDebounce(searchTerm, 500);
+    const [checkedClass, setCheckedClass] = useState('form-group')
 
     const addValues = (values) => {
         return {
