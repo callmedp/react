@@ -5,7 +5,9 @@ import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import { InputField, SelectExperienceBox, MultiSelectBox } from 'formHandler/mobileFormHandler/formFields';
 import UserIntentForm from 'formHandler/mobileFormHandler/formData/userIntent';
+import Autocomplete from 'formHandler/mobileFormHandler/AutoComplete';
 import { fetchedUserIntentData } from 'store/UserIntentPage/actions';
+import { IndianState } from 'utils/constants';
 
 const FindJob = (props) => {
     const { history, type } = props;
@@ -66,11 +68,18 @@ const FindJob = (props) => {
                                 </div> */}
                         <SelectExperienceBox attributes={UserIntentForm.experience} register={register}
                             errors={!!errors ? errors[UserIntentForm.experience.name] : ''} />
-                        <div className="form-group">
+
+
+                        {/* <div className="form-group">
                             <input type="text" className="form-control" id="location" name="location" placeholder=" "
                                 aria-required="true" aria-invalid="true" />
                             <label for="">Preferred location</label>
-                        </div>
+                        </div> */}
+
+                        <Autocomplete id={"location"} name={"location"} className={"form-control"} autoComplete={"off"}
+                            lableFor={"Preferred Location"} type={"text"} placeholder={" "}
+                            suggestions={IndianState}
+                        />
 
                         {/* <div className="form-group">
                                     <input type="text" className="form-control" id="skills" name="skills" placeholder=" "
