@@ -20,7 +20,7 @@ const FindJob = (props) => {
     const [skillSet, setSkillSet] = useState([])
     const { register, handleSubmit, errors } = useForm();
 
-    const textInput = useRef();
+    const jobTitle = useRef();
     const [searchTerm, setSearchTerm] = useState('');
     const [results, setResults] = useState([]);
     const [showResults, setShowResults] = useState(false);
@@ -31,16 +31,20 @@ const FindJob = (props) => {
         return {
             ...values,
             'type': type,
+            'job': jobTitle.current.value,
+            'location': document.getElementById('location').value,
+            'skills': chips
         }
     }
 
     function handleAppend(data, id) {
         setChips([...chips, data])
+        delete skillSet[id];
     }
 
     const appendData = async (e) => {
-        textInput.current.value = e.target.textContent
-        setSkillSet(await relatedSearch(textInput.current.value))
+        jobTitle.current.value = e.target.textContent
+        setSkillSet(await relatedSearch(jobTitle.current.value))
         setShowResults(false)
     }
 
@@ -79,7 +83,7 @@ const FindJob = (props) => {
         const data = addValues(values)
         await new Promise((resolve) => dispatch(fetchedUserIntentData({ data, resolve })));
         history.push({
-            search: `?job=${values.job}&experience=${values.experience}&location=${values.location}&skills=${values.skills}`
+            search: `?job=${data.job}&experience=${data.experience}&location=${data.location}&skills=${data.skills.join()}`
         })
     }
 
@@ -107,7 +111,7 @@ const FindJob = (props) => {
                         </div> */}
 
                         <div className={checkedClass}>
-                            <input type="text" className="form-control" id="job" name="job" placeholder=" " ref={textInput} autoComplete="off"
+                            <input type="text" className="form-control" id="job" name="job" required="required" placeholder=" " ref={jobTitle} autoComplete="off"
                                 aria-required="true" aria-invalid="true" onChange={e => handleInput(e)} onFocus={() => setShowResults(true)} />
                             <label for="">Current job title</label>
 
