@@ -38,6 +38,42 @@ const FindJob = (props) => {
         setChips([...chips, data])
     }
 
+    const appendData = async (e) => {
+        textInput.current.value = e.target.textContent
+        setSkillSet(await relatedSearch(textInput.current.value))
+        setShowResults(false)
+    }
+
+    const handleInput = (e) => {
+        setSearchTerm(e.target.value);
+        e.target.value ?
+            setCheckedClass('form-group checked') :
+            setCheckedClass('form-group')
+    }
+
+
+    const getMenuItems = (data, noOfItems = 6) => {
+        return (
+            <>
+                {data?.slice(0, noOfItems)?.map(result => (
+                    <div key={result?.pid} onClick={e => appendData(e)}>
+                        <span>{result?.pdesc?.replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())))}</span>
+                    </div>
+                ))}
+            </>
+        )
+    }
+
+    useEffect(() => {
+        // Make sure we have a value (user has entered something in input)
+        if (debouncedSearchTerm) {
+            userSearch(debouncedSearchTerm).then(results => {
+                setResults(results);
+            });
+        } else {
+            setResults([]);
+        }
+    }, [debouncedSearchTerm]);
 
     const onSubmit = async (values, event) => {
         const data = addValues(values)
@@ -62,11 +98,26 @@ const FindJob = (props) => {
 
                 <div className="m-find-job">
                     <form className="mt-20" onSubmit={handleSubmit(onSubmit)}>
-                        <div className="form-group">
+
+
+                        {/* <div className="form-group">
                             <input type="text" className="form-control" id="job" name="job" placeholder=" "
                                 aria-required="true" aria-invalid="true" />
                             <label for="">Current job title</label>
+                        </div> */}
+
+                        <div className={checkedClass}>
+                            <input type="text" className="form-control" id="job" name="job" placeholder=" " ref={textInput} autoComplete="off"
+                                aria-required="true" aria-invalid="true" onChange={e => handleInput(e)} onFocus={() => setShowResults(true)} />
+                            <label for="">Current job title</label>
+
+                            {showResults ?
+                                <div className="user-intent-search-result">
+                                    {results?.length ? getMenuItems(results) : null}
+                                </div> : null
+                            }
                         </div>
+
                         {/* <div className="form-group">
                                     <div className="custom-select-box">
                                         <select className="select" className="custom-select">
