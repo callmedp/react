@@ -32,7 +32,7 @@ const FindJob = (props) => {
             ...values,
             'type': type,
             'job': jobTitle.current.value,
-            'location': document.getElementById('location').value,
+            'location': document.getElementById('location').value, //Is document work on SSR?
             'skills': chips
         }
     }
