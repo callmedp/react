@@ -197,13 +197,15 @@ class KeywordSuggestionAPI(APIView):
         try:
             response = ShineCandidateDetail().get_keyword_sugesstion(query=q,skill_only=skill_only)
             if response:
-                keyword_suggestions = response.get('keyword_suggestion',None)
+                keyword_suggestions = response.get('related_skill', None) if response.get('keyword_suggestion',
+                                                                                          None) is None else response.get(
+                    'keyword_suggestion', None)
                 data['keyword_suggestion'] = keyword_suggestions
                 if skill_only:
                     for word in keyword_suggestions:
-                        word_type = word.get('type',None)
-                        if word_type == 'skill':
-                            skills.append(word)
+                        # word_type = word.get('type',None)
+                        # if word_type == 'skill':
+                        skills.append(word)
                     data['keyword_suggestion'] = skills
                     data['related_skill'] = response.get('related_skill',None)
             return APIResponse(data=data,message='suggested words fetched', status=HTTP_200_OK)
