@@ -50,10 +50,9 @@ const FindJob = (props) => {
 
     const appendData = async (e) => {
         jobTitle.current.value = e.target.textContent
+        setShowResults(false)
         var data = await relatedSearch(jobTitle.current.value)
         setSkillSet(data?.data?.related_skill?.slice(0,10))
-        setShowResults(false)
-        
     }
 
     const handleInput = (e) => {

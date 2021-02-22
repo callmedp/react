@@ -25,7 +25,7 @@ const FindJob = (props) => {
     const [results, setResults] = useState([]);
     const [showResults, setShowResults] = useState(false);
     const debouncedSearchTerm = useDebounce(searchTerm, 500);
-    const [checkedClass, setCheckedClass] = useState('form-group')
+    // const [checkedClass, setCheckedClass] = useState('form-group')
 
     const addValues = (values) => {
         return {
@@ -44,15 +44,13 @@ const FindJob = (props) => {
 
     const appendData = async (e) => {
         jobTitle.current.value = e.target.textContent
-        setSkillSet(await relatedSearch(jobTitle.current.value))
         setShowResults(false)
+        var data = await relatedSearch(jobTitle.current.value)
+        setSkillSet(data?.data?.related_skill?.slice(0,10))
     }
 
     const handleInput = (e) => {
         setSearchTerm(e.target.value);
-        e.target.value ?
-            setCheckedClass('form-group checked') :
-            setCheckedClass('form-group')
     }
 
 
@@ -72,7 +70,7 @@ const FindJob = (props) => {
         // Make sure we have a value (user has entered something in input)
         if (debouncedSearchTerm) {
             userSearch(debouncedSearchTerm).then(results => {
-                setResults(results);
+                setResults(results?.data?.keyword_suggestion);
             });
         } else {
             setResults([]);
@@ -110,7 +108,7 @@ const FindJob = (props) => {
                             <label for="">Current job title</label>
                         </div> */}
 
-                        <div className={checkedClass}>
+                        <div className="form-group">
                             <input type="text" className="form-control" id="job" name="job" required="required" placeholder=" " ref={jobTitle} autoComplete="off"
                                 aria-required="true" aria-invalid="true" onChange={e => handleInput(e)} onFocus={() => setShowResults(true)} />
                             <label for="">Current job title</label>
@@ -159,7 +157,7 @@ const FindJob = (props) => {
                         <div className="form-group-custom">
                             {skillSet?.map((skill, indx) => {
                                 return (
-                                    <label className="label-add" onClick={() => handleAppend(skill.name, indx)} for="">{skill.name}</label>
+                                    <label className="label-add" onClick={() => handleAppend(skill, indx)} for="">{skill}</label>
                                 )
                             })
                             }
