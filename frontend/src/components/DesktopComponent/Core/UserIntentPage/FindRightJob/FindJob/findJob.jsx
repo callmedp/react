@@ -159,7 +159,7 @@ const FindJob = (props) => {
                                             errors={!!errors ? errors[UserIntentForm.skills.name] : ''} />
 
                                         <div className="form-group-custom">
-                                            {skillSet?.map((skill, indx) => {
+                                            {skillSet?.filter(item => !chips?.includes(item))?.map((skill, indx) => {
                                                 return (
                                                     <label className="label-add" onClick={() => handleAppend(skill, indx)} htmlFor="" key={indx}>{skill}</label>
                                                 )
