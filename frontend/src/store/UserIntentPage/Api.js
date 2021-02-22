@@ -159,7 +159,13 @@ const careerChangeData = () => {
     }
 }
 
+const findRightJobsData = (data) => {
+    const url = `/intent/api/v1/jobs/?job_title=${data?.job}&loc=${data?.location}&minexp=${data?.experience}&skill=${data?.skills?.length > 0 ? data.skills.join() : ''}&intent=2`;
+    return BaseApiService.get(`${siteDomain}${url}`);
+}
+
 export default {
     userIntentData,
-    careerChangeData
+    careerChangeData,
+    findRightJobsData
 }

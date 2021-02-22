@@ -5,10 +5,28 @@ import 'slick-carousel/slick/slick.css';
 import Button from 'react-bootstrap/Button';
 import '../../../SkillPage/CoursesTray/courses.scss'
 import './jobsUpskills.scss';
-
+import { useSelector } from 'react-redux';
+import { fetchFindRightJobsData } from 'store/UserIntentPage/actions';
+import { useDispatch } from 'react-redux';
 
 const JobsUpskills = (props) => {
     const [key, setKey] = useState('categories1');
+    const dispatch = useDispatch();
+
+    const findJobsData = useSelector(store => store.findRightJob.jobsList); 
+
+    if(!findJobsData?.results) {
+        const params = new URLSearchParams(props.location.search);
+
+        const data = {
+            'job': params.get('job_title'),
+            'location': params.get('loc'), //Is document work on SSR?
+            'skills': params.get('skill'),
+            'experience': params.get('minexp')
+        };
+        new Promise((resolve) => dispatch(fetchFindRightJobsData({ data, resolve })));
+    }
+
     return (
         <section className="m-container mt-0 mb-0 pl-0 pr-0">
             <div className="m-ui-main col">
@@ -31,7 +49,37 @@ const JobsUpskills = (props) => {
                         <div class="tab-panels">
                             <div id="tab1" class="tab-panel">
                                 <ul className="m-shine-courses-listing mt-20">
-                                    <li>
+                                    {findJobsData?.results?.map((jData,indx) => {
+                                        return(
+                                            <li>
+                                                <div className="course">
+                                                    <div className="d-flex p-15">
+                                                        <div className="course__content">
+                                                            <span className="hot-badge">
+                                                                <figure className="icon-hot"></figure> Hot
+                                                            </span>
+                                                            <h3 className="heading3">
+                                                                <Link to={"#"}>{jData.jJT}</Link>
+                                                            </h3>
+                                                            <strong>{jData.jCName}</strong>
+                                                            <div className="d-flex">
+                                                                <ul>
+                                                                    <li>{jData.jExp}</li>
+                                                                    <li>{jData.jLoc.join(',')}</li>
+                                                                    <li>{jData.jKwd}</li>
+                                                                </ul>
+                                                                <div className="m-price-date">
+                                                                    <Link to={"#"} class="btn-blue-outline mb-10">Apply</Link>
+                                                                    <span>{jData.jPDate}</span> 
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        )
+                                    })}
+                                    {/* <li>
                                         <div className="course">
                                             <div className="d-flex p-15">
                                                 <div className="course__content">
@@ -56,8 +104,8 @@ const JobsUpskills = (props) => {
                                                 </div>
                                             </div>
                                         </div>
-                                    </li>
-                                    <li>
+                                    </li> */}
+                                    {/* <li>
                                         <div className="course">
                                             <div className="d-flex p-15">
                                                 <div className="course__content">
@@ -82,7 +130,7 @@ const JobsUpskills = (props) => {
                                                 </div>
                                             </div>
                                         </div>
-                                    </li>
+                                    </li> */}
                                 </ul>
                                     
                             </div>
