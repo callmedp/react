@@ -1,4 +1,4 @@
-import { fetchedUserIntentData } from './actions';
+import { fetchedUserIntentData, careerChangeDataFetched } from './actions';
 
 const userIntentState = {
     userIntent: [
@@ -49,6 +49,18 @@ const userIntentState = {
 export const userIntentReducer = (state=userIntentState, action) => {
     switch(action.type) {
         case fetchedUserIntentData.type : return {...state.userIntent, ...action.payload}
+        default: return state;
+    }
+}
+
+const careerChangeState = {
+    course_data: [],
+    page: {}
+}
+
+export const careerChangeReducer = (state=careerChangeState, action) => {
+    switch(action.type) {
+        case careerChangeDataFetched.type : return {...state.careerChangeDataFetched, ...action?.payload?.item}
         default: return state;
     }
 }

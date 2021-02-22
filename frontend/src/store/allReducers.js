@@ -18,7 +18,7 @@ import { DashboardMyServicesReducer } from './DashboardPage/MyServices/reducer/i
 import { InDemandProductsReducer, JobAssistanceAndBlogsReducer, MostViewedCoursesReducer, TestimonialsReducer, SkillwithDemandsReducer   } from './HomePage/reducers';
 import { DashboardMyServicesResumeReducer, OiDetailsReducer } from './DashboardPage/MyServices/reducer/index';
 import { VendorUrlReducer } from './DashboardPage/StartCourse/reducer/index';
-import { userIntentReducer } from './UserIntentPage/reducers';
+import { userIntentReducer, careerChangeReducer } from './UserIntentPage/reducers';
 
 const rootReducer = combineReducers({
     needHelp : NeedHelpReducer,
@@ -48,7 +48,8 @@ const rootReducer = combineReducers({
     dashboardPendingResume: DashboardMyServicesResumeReducer,
     oiDetails: OiDetailsReducer,
     vendorUrl: VendorUrlReducer,
-    userIntent: userIntentReducer
+    userIntent: userIntentReducer,
+    careerChange: careerChangeReducer
 
 
 

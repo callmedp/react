@@ -10,7 +10,8 @@ import './viewCourses.scss';
 const ViewCourses = (props) => {
     const [key, setKey] = useState('categories1');
 
-    const { userIntent } = useSelector( store => store.userIntent )
+    const { course_data } = useSelector( store => store.careerChange )
+    console.log(course_data)
 
     return (
         <section className="container-fluid mt-30n mb-0">
@@ -27,7 +28,7 @@ const ViewCourses = (props) => {
                             <h2 className="heading3">Here’s how you can make a new career</h2>
                             <ul className="courses-listing ml-10n mt-30">
                             {
-                                userIntent?.map((product, index) => {
+                                course_data?.map((product, index) => {
                                     return (
                                         <li className="col" key={index}>
                                     <div className="course">

@@ -3,17 +3,19 @@ import { Link } from 'react-router-dom';
 import './findJob.scss';
 import { useForm } from 'react-hook-form';
 import { InputField, SelectExperienceBox, MultiSelectBox } from 'formHandler/desktopFormHandler/formFields';
+import Autocomplete from 'formHandler/desktopFormHandler/AutoComplete';
 import UserIntentForm from 'formHandler/desktopFormHandler/formData/userIntent';
-import { fetchedUserIntentData } from 'store/UserIntentPage/actions';
+import { fetchCareerChangeData } from 'store/UserIntentPage/actions';
 import { useDispatch } from 'react-redux';
 import useDebounce from 'utils/searchUtils/debouce';
+import { IndianState } from 'utils/constants';
 import { userSearch, relatedSearch } from 'utils/searchUtils/searchFunctions';
 
 const FindJob = (props) => {
     const [chips, setChips] = useState([]);
     const { register, handleSubmit, errors } = useForm();
     const dispatch = useDispatch();
-    const textInput = useRef();
+    const jobTitle = useRef();
     const { history, type } = props;
     const [searchTerm, setSearchTerm] = useState('');
     const [results, setResults] = useState([]);
@@ -26,29 +28,32 @@ const FindJob = (props) => {
         return {
             ...values,
             'type': type,
+            'job': jobTitle.current.value,
+            'location': document.getElementById('location').value, //Is document work on SSR?
+            'skills': chips
         }
     }
 
     const onSubmit = async (values, event) => {
         const data = addValues(values)
-        await new Promise((resolve) => dispatch(fetchedUserIntentData({data, resolve})));
+        await new Promise((resolve) => dispatch(fetchCareerChangeData({data, resolve})));
         history.push({
-            search: `?job=${values.job}&experience=${values.experience}&location=${values.location}&skills=${values.skills}`
+            search: `?job=${data.job}&experience=${data.experience}&location=${data.location}&skills=${data.skills.join()}`
           })
           
     }
 
     function handleAppend(data, id) {
-        // UserIntentForm.skills.children.push(data);
-        // console.log(UserIntentForm.skills.children)
         setChips([...chips, data])
-
+        delete skillSet[id];
     }
 
     const appendData = async (e) => {
-        textInput.current.value = e.target.textContent
-        setSkillSet(await relatedSearch(textInput.current.value))
+        jobTitle.current.value = e.target.textContent
+        var data = await relatedSearch(jobTitle.current.value)
+        setSkillSet(data?.data?.related_skill?.slice(0,10))
         setShowResults(false)
+        
     }
 
     const handleInput = (e) => {
@@ -61,8 +66,8 @@ const FindJob = (props) => {
     const getMenuItems = (data, noOfItems=6) => {
         return (
             <>
-                {data?.slice(0, noOfItems)?.map(result => (
-                    <div key={result?.pid} onClick={e => appendData(e)}>
+                {data?.slice(0, noOfItems)?.map((result, idx) => (
+                    <div key={idx} onClick={e => appendData(e)}>
                         <span>{result?.pdesc?.replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())))}</span>
                     </div>
                 ))}
@@ -74,7 +79,7 @@ const FindJob = (props) => {
         // Make sure we have a value (user has entered something in input)
         if (debouncedSearchTerm) {
             userSearch(debouncedSearchTerm).then(results => {
-                setResults(results);
+                setResults(results?.data?.keyword_suggestion);
             });
         } else {
             setResults([]);
@@ -89,7 +94,7 @@ const FindJob = (props) => {
                         <div className="ui-steps">
                             <Link className="completed" to={"#"}>1</Link>
                             <Link className="current" to={"#"}>2</Link>
-                            <Link>3</Link>
+                            <Link to={'#'}>3</Link>
                         </div>
 
                         <h2 className="heading3 mt-20">{ type === 'job' ? 'Let’s get you to the right job' : type === 'pcareer' ? 'Get to next level with shine' : 'What do you have in mind' } </h2>
@@ -99,9 +104,9 @@ const FindJob = (props) => {
                                     <form className="mt-20" onSubmit={handleSubmit(onSubmit)}>
 
                                         <div className={checkedClass}>
-                                            <input type="text" className="form-control" id="job" name="job" placeholder=" " ref={textInput} autoComplete="off"
+                                            <input type="text" className="form-control" id="job" name="job" placeholder=" " ref={jobTitle} autoComplete="off"
                                                 aria-required="true" aria-invalid="true" onChange={e => handleInput(e)} onFocus={()=>setShowResults(true)} />
-                                            <label for="">Current job title</label>
+                                            <label htmlFor="">Current job title</label>
 
                                             {showResults ?
                                                 <div className="user-intent-search-result">
@@ -133,8 +138,13 @@ const FindJob = (props) => {
                                             <span class="error-msg">Required</span>
                                         </div> */}
 
-                                        <InputField attributes={UserIntentForm.location} register={register}
-                                                errors={!!errors ? errors[UserIntentForm.location.name] : ''} />
+                                        <Autocomplete id={"location"} name={"location"} className={"form-control"} autoComplete={"off"}
+                                            lableFor={"Preferred Location"} type={"text"} placeholder={" "}
+                                            suggestions={IndianState}
+                                        />
+                                        
+                                        {/* <InputField attributes={UserIntentForm.location} register={register}
+                                                errors={!!errors ? errors[UserIntentForm.location.name] : ''} /> */}
 
                                         {/* <div className="form-group">
                                             <input type="text" className="form-control" id="skills" name="skills" placeholder=" "
@@ -152,7 +162,7 @@ const FindJob = (props) => {
                                         <div className="form-group-custom">
                                             {skillSet?.map((skill, indx) => {
                                                 return (
-                                                    <label className="label-add" onClick={() => handleAppend(skill.name, indx)} for="">{skill.name}</label>
+                                                    <label className="label-add" onClick={() => handleAppend(skill, indx)} htmlFor="" key={indx}>{skill}</label>
                                                 )
                                             })
                                             }

@@ -1,16 +1,18 @@
 import React, { useRef, useEffect } from 'react';
-import GuidanceRecommendations from '../FindRightJob/GuidanceRecommendations/guidanceRecommendations';
-import FindJob from './FindJob/findJob';
+import FindJob from '../FindRightJob/FindJob/findJob';
 import ViewCourses from './ViewCourses/viewCourses';
 import FeedbackResult from './ViewCourses/feedbackResult';
 
 
 const MakeCareerChange = (props) => {
+    const params = new URLSearchParams(props.location.search);
+    const job = params.get('job')
+
     return (
         <div>
             {/* <GuidanceRecommendations /> */}
             {/* <FindJob /> */}
-            <ViewCourses />
+            { !!job ? <ViewCourses /> : <FindJob type={"career"} {...props}/> } 
             {/* <FeedbackResult /> */}
         </div>
     )
