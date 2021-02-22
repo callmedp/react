@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { InputField, SelectExperienceBox, MultiSelectBox } from 'formHandler/desktopFormHandler/formFields';
 import Autocomplete from 'formHandler/desktopFormHandler/AutoComplete';
 import UserIntentForm from 'formHandler/desktopFormHandler/formData/userIntent';
-import { fetchedUserIntentData } from 'store/UserIntentPage/actions';
+import { fetchCareerChangeData } from 'store/UserIntentPage/actions';
 import { useDispatch } from 'react-redux';
 import useDebounce from 'utils/searchUtils/debouce';
 import { IndianState } from 'utils/constants';
@@ -33,9 +33,9 @@ const FindJob = (props) => {
 
     const onSubmit = async (values, event) => {
         const data = addValues(values)
-        await new Promise((resolve) => dispatch(fetchedUserIntentData({data, resolve})));
+        await new Promise((resolve) => dispatch(fetchCareerChangeData({data, resolve})));
         history.push({
-            search: `?job=${values.job}&experience=${values.experience}&location=${values.location}&skills=${values.skills}`
+            search: `?job='Python'&experience=${values.experience}&location=${values.location}&skills=${values.skills}`
           })
           
     }
@@ -49,9 +49,9 @@ const FindJob = (props) => {
 
     const appendData = async (e) => {
         textInput.current.value = e.target.textContent
-        var data = await relatedSearch(textInput.current.value)
-        setSkillSet(data?.data?.related_skill ? data?.data?.related_skill?.slice(0,10) : [])
         setShowResults(false)
+        var data = await relatedSearch(textInput.current.value)
+        setSkillSet(data?.data?.related_skill?.slice(0,10))
     }
 
     const handleInput = (e) => {
@@ -64,8 +64,8 @@ const FindJob = (props) => {
     const getMenuItems = (data, noOfItems=6) => {
         return (
             <>
-                {data?.slice(0, noOfItems)?.map(result => (
-                    <div key={result?.pid} onClick={e => appendData(e)}>
+                {data?.slice(0, noOfItems)?.map((result, idx) => (
+                    <div key={idx} onClick={e => appendData(e)}>
                         <span>{result?.pdesc?.replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())))}</span>
                     </div>
                 ))}
@@ -92,7 +92,7 @@ const FindJob = (props) => {
                         <div className="ui-steps">
                             <Link className="completed" to={"#"}>1</Link>
                             <Link className="current" to={"#"}>2</Link>
-                            <Link>3</Link>
+                            <Link to={'#'}>3</Link>
                         </div>
 
                         <h2 className="heading3 mt-20">{ type === 'job' ? 'Let’s get you to the right job' : type === 'pcareer' ? 'Get to next level with shine' : 'What do you have in mind' } </h2>
@@ -104,7 +104,7 @@ const FindJob = (props) => {
                                         <div className={checkedClass}>
                                             <input type="text" className="form-control" id="job" name="job" placeholder=" " ref={textInput} autoComplete="off"
                                                 aria-required="true" aria-invalid="true" onChange={e => handleInput(e)} onFocus={()=>setShowResults(true)} />
-                                            <label for="">Current job title</label>
+                                            <label htmlFor="">Current job title</label>
 
                                             {showResults ?
                                                 <div className="user-intent-search-result">
@@ -160,7 +160,7 @@ const FindJob = (props) => {
                                         <div className="form-group-custom">
                                             {skillSet?.map((skill, indx) => {
                                                 return (
-                                                    <label className="label-add" onClick={() => handleAppend(skill, indx)} for="">{skill}</label>
+                                                    <label className="label-add" onClick={() => handleAppend(skill, indx)} htmlFor="" key={indx}>{skill}</label>
                                                 )
                                             })
                                             }
