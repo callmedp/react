@@ -163,6 +163,9 @@ class TestimonialSerializer(ModelSerializer):
     
     def to_representation(self, instance):
         data = super(TestimonialSerializer, self).to_representation(instance)
-        data['firstName'],data['lastName'] = data['user_name'].split(' ',1)
+        if ' ' in data['user_name']:
+            data['firstName'],data['lastName'] = data['user_name'].split(' ',1)
+        else:
+            data['firstName'] = data['user_name']
         data.pop('user_name')
         return data
