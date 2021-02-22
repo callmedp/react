@@ -10,7 +10,6 @@ const code2 = CountryCode2()
 
 export const getSkillPageActions = (params) => {
   return [
-    { action: sessionAvailability, payload: {}},
     { action: fetchSkillPageBanner, payload: { id: params?.id, 'medium': 0, code2: code2  } },
     { action: fetchCoursesAndAssessments, payload: { id: params?.id, code2: code2  } },
     { action: fetchDomainJobs, payload: { id: params?.id, code2: code2  } },
@@ -20,7 +19,6 @@ export const getSkillPageActions = (params) => {
 
 export const getSkillPageActionsMobile = (params) => {
   return [
-    { action: sessionAvailability, payload: {}},
     { action: fetchSkillPageBanner, payload: { id: params?.id, 'medium': 1, code2: code2  } },
     { action: fetchCoursesAndAssessments, payload: { id: params?.id, 'medium': 1, code2: code2  } },
     { action: fetchDomainJobs, payload: { id: params?.id, code2: code2  } },

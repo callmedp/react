@@ -62,6 +62,11 @@ const Header = (props) => {
         }
     }
 
+        useEffect(() => {
+        fetchUserInfo();
+    }, [getCandidateId()]);
+
+
     useEffect(() => {
         fetchUserInfo();
         dispatch(fetchNavOffersAndTags());
