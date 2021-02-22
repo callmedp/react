@@ -116,7 +116,7 @@ export default {
         className: "form-control",
         name: "skills",
         type: "text",
-        placeholder: "Your Skills",
+        placeholder: "Keyword Research",
         label: "Your skills",
         inputType: "input",
         validation: {

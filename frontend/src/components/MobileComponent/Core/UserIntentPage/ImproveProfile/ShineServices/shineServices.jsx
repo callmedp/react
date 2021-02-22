@@ -24,7 +24,7 @@ const ShineServices = (props) => {
                         <Link className="m-completed" to={"#"}>1</Link>
                         <Link className="m-completed" to={"#"}>2</Link>
                     </div>
-                    <Link className="btn-blue-outline m-back-goal-btn">Back to goal</Link>
+                    <Link className="btn-blue-outline m-back-goal-btn" to={"/user-intent/"}>Back to goal</Link>
                 </div>
                 <h2 className="m-heading3 mt-20">Get an edge over others with shine services</h2>
                 <div className="m-shine-services mt-20">

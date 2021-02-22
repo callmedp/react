@@ -286,3 +286,8 @@
   background: $sprite;
   @include icon-inblock(15px, 12px, -183px -187px);
 }
+
+.icon-quote {
+  background: $sprite;
+  @include icon-inblock(85px, 72px, -939px -35px);
+}

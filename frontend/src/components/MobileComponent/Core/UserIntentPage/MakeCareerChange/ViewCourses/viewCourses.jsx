@@ -18,7 +18,7 @@ const ViewCourses = (props) => {
                         <Link className="m-completed" to={"#"}>2</Link>
                         <Link className="m-current" to={"#"}>3</Link>
                     </div>
-                    <Link className="btn-blue-outline m-back-goal-btn">Back to goal</Link>
+                    <Link className="btn-blue-outline m-back-goal-btn" to={"/user-intent/"}>Back to goal</Link>
                 </div>
                 <h2 className="m-heading3 mt-20">Here’s how you can make a new career</h2>
                 <div className="m-jobs-upskills mt-20">

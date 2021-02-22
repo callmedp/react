@@ -18,7 +18,7 @@ const JobsUpskills = (props) => {
                         <Link className="m-completed" to={"#"}>2</Link>
                         <Link className="m-current" to={"#"}>3</Link>
                     </div>
-                    <Link className="btn-blue-outline m-back-goal-btn">Back to goal</Link>
+                    <Link className="btn-blue-outline m-back-goal-btn" to={"/user-intent/"}>Back to goal</Link>
                 </div>
                 <div className="m-jobs-upskills mt-20">
                     <div class="m-tabset-intent">
