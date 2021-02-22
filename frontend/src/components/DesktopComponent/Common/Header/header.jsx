@@ -90,7 +90,7 @@ const Header = (props) => {
 
         useEffect(() => {
         fetchUserInfo();
-    }, [getCandidateId(),cookies]);
+    }, [getCandidateId(),cookies=='']);
 
 
     useEffect(() => {

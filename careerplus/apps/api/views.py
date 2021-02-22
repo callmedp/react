@@ -2261,7 +2261,7 @@ class FetchInfoAPIView(APIView):
         em = request.data.get('em', '')
         if not em or not isinstance(em, str):
             return Response({'msg': 'error'}, status=status.HTTP_400_BAD_REQUEST)
-        em = em.split('|')[0]
+        em = em.split('|')[0].replace('"','')
 
         detail = ShineCandidateDetail().get_status_detail(
             email=em, token=None)
