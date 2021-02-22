@@ -8,7 +8,7 @@ const JobListing = (props) => {
     return (
         <ul className="shine-courses-listing ml-10n mt-30">
             {
-                jobList?.map((job, index) => {
+                jobList?.map((jData, index) => {
                     return (
                         <li className="col" key={index}>
                             <div className="course">
@@ -18,13 +18,13 @@ const JobListing = (props) => {
                                             <figure className="icon-hot"></figure> Hot
                                                             </span>
                                         <h3 className="heading3">
-                                            <Link to={"#"}>UI UX Designer Web,HTML5,CSS3,Adobe suite, Sketch, Invision</Link>
+                                            <Link to={"#"}>{jData.jJT}</Link>
                                         </h3>
-                                        <strong>eInfochips</strong>
+                                        <strong>{jData.jCName}</strong>
 
                                         <ul>
-                                            <li>2 - 4 Years </li>
-                                            <li>Gurgaon</li>
+                                            <li>{jData.jExp}</li>
+                                            <li>{jData.jLoc.join(',')}</li>
                                         </ul>
 
                                         <p className="mt-10">Prospects Should Build stunning UI / UX experience in our products that will enable in get more customer engagement. Identify blockers in the current user experience and provide a better</p>

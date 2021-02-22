@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Tabs, Tab, CarouselItem } from 'react-bootstrap';
 import Button from 'react-bootstrap/Button';
@@ -6,49 +6,73 @@ import '../../../SkillPage/CoursesTray/coursesTray.scss';
 import './jobsUpskills.scss';
 import JobListing from './JobListing/jobListing';
 import CourseListing from '../../CourseListing/courseListing';
+import { fetchFindRightJobsData } from 'store/UserIntentPage/actions';
+import { useDispatch, useSelector } from 'react-redux';
 
 const JobsUpskills = (props) => {
-    const [key, setKey] = useState('categories1');
-    return (
-        <section className="container-fluid mt-30n mb-0">
-            <div className="row">
-                <div className="container">
-                    <div className="ui-main col">
-                        <div className="ui-steps">
-                            <Link className="completed" to={"#"}>1</Link>
-                            <Link className="completed" to={"#"}>2</Link>
-                            <Link className="current" to={"#"}>3</Link>
-                        </div>
-                        <div className="jobs-upskills courses-tray mt-20 mr-15p">
-                            <Tabs
-                            id="controlled-tab-example"
-                            activeKey={key}
-                            onSelect={(k) => setKey(k)}
-                            className="jobs-upskills"
-                            >
-                    
-                                <Tab eventKey="categories1" title={<h2>Jobs for you</h2>}>
-                                    <JobListing/>
-                                    <Link to={"#"} className="load-more">View More Jobs</Link>
-                                </Tab>
-                                <Tab eventKey="categories2" title={<h2>Upskill yourself</h2>}>
-                                    <CourseListing courseList={[]} />
-                                    <Link to={"#"} className="load-more">View More Courses</Link>
-                                </Tab>
-                            </Tabs>
-                        </div>
-                        <div className="courses-feedback mt-50 mr-15p">
-                            <strong>Are these courses recommendation relevant to your profile?</strong>
-                            <span className="ml-auto">
-                                <Button variant="outline-primary">Yes</Button>{' '}
-                                <Button variant="outline-primary">No</Button>{' '}
-                            </span>
-                        </div>
-                    </div>
-                </div>
+  const [key, setKey] = useState('Jobs');
+  const { jobsList: { results } } = useSelector(store => store.findRightJob)
+  const dispatch = useDispatch()
+  const params = new URLSearchParams(props.location.search);
+  const filterData = {
+    'job': params.get('job_title'),
+    'location': params.get('loc'), //Is document work on SSR?
+    'skills': params.get('skill'),
+    'experience': params.get('minexp')
+  };
+  const handleSelect = async (tabType) => {
+    if (key !== tabType) {
+      // if( tabType === "Courses" && jobsList.length === 0 ){
+      //   await new Promise((resolve, reject) => dispatch(fetchFindRightJobsData({resolve, reject})));
+      // }
+      setKey(tabType)
+    }
+  }
+
+  useEffect(() => {
+    new Promise((resolve, reject) => dispatch(fetchFindRightJobsData({ filterData, resolve, reject })));
+  }, [results, filterData])
+
+  return (
+    <section className="container-fluid mt-30n mb-0">
+      <div className="row">
+        <div className="container">
+          <div className="ui-main col">
+            <div className="ui-steps">
+              <Link className="completed" to={"#"}>1</Link>
+              <Link className="completed" to={"#"}>2</Link>
+              <Link className="current" to={"#"}>3</Link>
             </div>
-        </section>
-    )
+            <div className="jobs-upskills courses-tray mt-20 mr-15p">
+              <Tabs
+                id="controlled-tab-example"
+                activeKey={key}
+                onSelect={handleSelect}
+                className="jobs-upskills"
+              >
+
+                <Tab eventKey="Jobs" title={<h2>Jobs for you</h2>}>
+                  <JobListing jobList={results} />
+                  <Link to={"#"} className="load-more">View More Jobs</Link>
+                </Tab>
+                <Tab eventKey="Courses" title={<h2>Upskill yourself</h2>}>
+                  <CourseListing courseList={[]} />
+                  <Link to={"#"} className="load-more">View More Courses</Link>
+                </Tab>
+              </Tabs>
+            </div>
+            <div className="courses-feedback mt-50 mr-15p">
+              <strong>Are these courses recommendation relevant to your profile?</strong>
+              <span className="ml-auto">
+                <Button variant="outline-primary">Yes</Button>{' '}
+                <Button variant="outline-primary">No</Button>{' '}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
 }
 
 export default JobsUpskills;
