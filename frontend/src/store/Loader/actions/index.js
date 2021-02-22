@@ -157,3 +157,17 @@ export const stopOiDetailsLoader = () => {
         payload: { oiDetailsLoader: false }
     }
 }
+
+export const startJobsUpskillsLoader = () => {
+    return {
+        type: Actions.START_OI_DETAILS_LOADER,
+        payload: { jobsUpskillsLoader: true }
+    }
+}
+
+export const stopJobsUpskillsLoader = () => {
+    return {
+        type: Actions.STOP_OI_DETAILS_LOADER,
+        payload: { jobsUpskillsLoader: false }
+    }
+}

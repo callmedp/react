@@ -47,9 +47,7 @@ function* findJobsData(action) {
     try {
         const response = yield call(Api.findRightJobsData, payload.data);
 
-        if (response?.error) {
-            return payload?.reject(response?.error);
-        }
+        if (response?.error) return payload?.reject(response?.error);
 
         const item = response?.data.data;
         yield put(findRightJobsDataFetched({ ...item }))
@@ -66,10 +64,7 @@ function* upskillData(action) {
     try {
         const response = yield call(Api.upskillYourselfData, payload.dataUpskill);
 
-        if (response?.error) {
-            return payload?.reject(response?.error);
-        }
-        console.log(response);
+        if (response?.error) return payload?.reject(response?.error);
 
         const item = response?.data.data;
         yield put(upskillYourselfDataFetched({ ...item }))
@@ -86,6 +81,4 @@ export default function* WatchUserIntentPage() {
     yield takeLatest(fetchCareerChangeData.type, careerChangeData);
     yield takeLatest(fetchFindRightJobsData.type, findJobsData);
     yield takeLatest(fetchUpskillYourselfData.type, upskillData);
-
-
 }
