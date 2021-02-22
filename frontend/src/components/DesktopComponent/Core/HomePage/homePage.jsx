@@ -24,13 +24,27 @@ import {
 } from 'store/HomePage/actions';
 import Loader from '../../Common/Loader/loader';
 import MetaContent from '../../Common/MetaContent/metaContent';
-
+import { fetchAlreadyLoggedInUser } from "store/Authentication/actions/index";
 
 const HomePage = (props) => {
 
     const dispatch = useDispatch();
     const { homeLoader } = useSelector(store => store.loader)
-    const { meta } = useSelector( store => store.testimonials )
+    const { meta } = useSelector(store => store.testimonials)
+
+    let cookies = "";
+    try {
+        cookies = document.cookie.split(";");
+        for (let i = 0; i < cookies.length; i++) {
+            let cookie = cookies[i].trim();
+            if (cookie.substring(0, "_em_".length + 1) === "_em_=") {
+                cookies = cookie.substring("_em_".length + 1);
+                break;
+            }
+        }
+    } catch (err) {
+        cookies = "";
+    }
 
     const handleEffect = async () => {
         //You may notice that apis corresponding to these actions are not getting called on initial render.
@@ -38,10 +52,28 @@ const HomePage = (props) => {
         //So there is no need to fetch them again on the browser.
         if (!(window && window.config && window.config.isServerRendered)) {
             try {
-                new Promise((resolve, reject) => dispatch(fetchMostViewedCourses({ categoryId: -1, resolve, reject })));
-                new Promise((resolve, reject) => dispatch(fetchInDemandProducts({ pageId: 1, tabType: 'master', device: 'desktop', resolve, reject })));
-                new Promise((resolve, reject) => dispatch(fetchJobAssistanceAndBlogs({ resolve, reject })));
-                new Promise((resolve, reject) => dispatch(fetchTestimonials({ device: 'desktop', resolve, reject })));
+                let code2 = "IN";
+                const result = await new Promise((resolve, reject) => {
+                    dispatch(
+                        fetchAlreadyLoggedInUser({
+                            resolve,
+                            reject,
+                            payload: { em: cookies },
+                        })
+                    );
+                })
+                    .then((json) => {
+                        code2 = json["code2"];
+                    })
+                    .catch((err) => {
+                        code2 = "IN";
+                    })
+                    .finally(() => {
+                        new Promise((resolve, reject) => dispatch(fetchMostViewedCourses({ payload: { categoryId: -1 }, resolve, reject })));
+                        new Promise((resolve, reject) => dispatch(fetchInDemandProducts({ payload: { pageId: 1, tabType: 'master', device: 'desktop' }, resolve, reject })));
+                        new Promise((resolve, reject) => dispatch(fetchJobAssistanceAndBlogs({ resolve, reject })));
+                        new Promise((resolve, reject) => dispatch(fetchTestimonials({ payload: { device: 'desktop' }, resolve, reject })));
+                    })
             }
             catch (err) {
                 console.log("error occured at Homepage", err)
@@ -63,7 +95,7 @@ const HomePage = (props) => {
 
     return (
         <div>
-            { meta && <MetaContent meta_tags={meta}/> }
+            { meta && <MetaContent meta_tags={meta} />}
             { homeLoader ? <Loader /> : ''}
             {/* <OfferEnds /> */}
             <Header isHomepage={true} />

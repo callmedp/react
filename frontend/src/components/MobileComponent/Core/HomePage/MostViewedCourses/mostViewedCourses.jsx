@@ -29,7 +29,7 @@ const MostViewedCourses = (props) => {
         try {
             if (!mostViewedCourses[tabType] || mostViewedCourses[tabType].length === 0) {
                 dispatch(startHomePageLoader());
-                await new Promise((resolve, reject) => dispatch(fetchMostViewedCourses({ categoryId: tabType, resolve, reject })))
+                await new Promise((resolve, reject) => dispatch(fetchMostViewedCourses({ payload: {categoryId: tabType}, resolve, reject })))
                 dispatch(stopHomePageLoader());
             }
         }

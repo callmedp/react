@@ -1,7 +1,7 @@
 if (typeof global.window == "undefined") {
   global.window = {
     config: {
-        isServerRendered: false,
+        isServerRendered: true,
         siteDomain: "http://127.0.0.1:8000",
         imageUrl: "/media/images/",
         resumeShineSiteDomain: "https://pp-resume.shine.com",

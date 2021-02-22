@@ -13,7 +13,10 @@ export const getAccessKey = () => {
 
 export const getCandidateId = () => {
     if (!!localStorage.getItem('candidateId')) return localStorage.getItem('candidateId');
+    if (!!localStorage.getItem('candidate_id')) return localStorage.getItem('candidate_id');
     if (!!sessionStorage.getItem('candidateId')) return sessionStorage.getItem('candidateId');
+    if (!!sessionStorage.getItem('candidate_id')) return sessionStorage.getItem('candidate_id');
+
     return false;
 }
 
@@ -85,10 +88,16 @@ const getSession = (name) => {
 
 export const getCandidateInformation = () => {
     return {
-        candidateId: localStorage.getItem('userId') || '',
+        candidateId: getCandidateId() || '',
         name: localStorage.getItem('userName') || '',
         lastname: localStorage.getItem('lastName') || '',
         email: localStorage.getItem('userEmail') || '',
         mobile:  localStorage.getItem('mobile') || '',
     }
+}
+
+export const CountryCode2 = () => {
+    if (localStorage.getItem('code2')) return localStorage.getItem('code2');
+    if (sessionStorage.getItem('code2')) return sessionStorage.getItem('code2');
+    return false;
 }

@@ -6,39 +6,36 @@ import Api from './Api';
 
 
 function* skillPageBanner(action) {
-    const { payload } = action;
+    const { payload: { payload, resolve, reject } } = action;
     
     try {
- 
-      
         const response = yield call(Api.skillPageBanner, payload);
-
         if (response["error"]) {
-            return payload?.reject(response)
+            return reject(response)
         }
         const item = response.data;
-        
+
 
         //converts 1D array to 2D array if medium is Desktop
-        if(!!payload && !payload.medium && !!item && item.testimonialCategory instanceof Array){
-            const storiesList = item?.testimonialCategory.reduce((rows, key, index) => 
-                (index % 3 == 0 ? rows.push([key]) : rows[rows.length-1].push(key)) && rows, []);
-            
-            if(storiesList.length){
+        if (!!payload && !payload.medium && !!item && item.testimonialCategory instanceof Array) {
+            const storiesList = item?.testimonialCategory.reduce((rows, key, index) =>
+                (index % 3 == 0 ? rows.push([key]) : rows[rows.length - 1].push(key)) && rows, []);
+
+            if (storiesList.length) {
                 item.testimonialCategory = storiesList.slice()
             }
         }
 
-        yield put({ 
-            type : Actions.SKILL_PAGE_BANNER_FETCHED, 
-            item 
+        yield put({
+            type: Actions.SKILL_PAGE_BANNER_FETCHED,
+            item
         })
         
-        return payload?.resolve(item);
+        return resolve(item);
 
     } catch (e) {
         console.error("Exception occured at skillPageBanner Api",e)
-        return payload?.reject(e)
+        return reject(e)
         
     }
 }

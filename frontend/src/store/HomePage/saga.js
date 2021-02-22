@@ -15,71 +15,76 @@ import { mostViewedCoursesFetched,
 
 
 function* mostViewedCourse(action){
-    const { payload } = action;
+    const { payload: { payload, resolve, reject} } = action;
     try{
+    
         const response = yield call(Api.mostViewedCourse, payload);
-        
+   
         if(response?.error){
-            return payload?.reject(response);
+            return reject(response);
         }
         const item = response?.data?.data;
         yield put(mostViewedCoursesFetched({ [payload.categoryId]: item.mostViewedCourses }))
-        return payload?.resolve(item);
+        return resolve(item);
     }
     catch(e){
-        console.error("Exception occured in mostViewedCourse Api", e)
-        return payload?.reject(e);
+     
+        return reject(e);
     }
 }
 
 
 function* inDemandProducts(action){
-    const { payload } = action;
+    const { payload:{ payload, resolve, reject } } = action;
     try{
+   
         const response = yield call(Api.inDemandProducts, payload);
-      
+        
         
         if(response?.error){
-            return payload?.reject(response);
+            return reject(response);
         }
         const item = response?.data?.data;
         yield put(inDemandProductsFetched({ courses : item.courses, certifications: item.certifications, 
             id: payload?.pageId, pages:item.page?.total, device: payload?.device }))
-        return payload?.resolve(item);
+        return resolve(item);
     }
     catch(e){
-        console.error("Exception occured in inDemandProducts Api", e)
-        return payload?.reject(e);
+        return reject(e);
     }
 }
 
 
 
 function* jobAssistanceAndBlogs(action){
-    const { payload } = action;
+    const { payload: {payload, resolve, reject} } = action;
     try{
+       
         const response = yield call(Api.jobAssistanceAndBlogs);
+       
         
         if(response?.error){
-            return payload?.reject(response);
+            return reject(response);
         }
         const item = response?.data?.data;
         yield put(jobAssistanceAndBlogsFetched({ ...item }))
-        return payload?.resolve(item);
+        return resolve(item);
     }
     catch(e){
-        console.error("Exception occured in jobAssistanceServices Api", e)
-        return payload?.reject(e);
+       
+        return reject(e);
     }
 }
 
 function* fetchTestimonialsData(action){
-    const { payload } = action;
+    const { payload: { payload, resolve, reject }} = action;
     try{
+       
         const response = yield call(Api.testimonialsApi);
         
+        
         if(response?.error){
-            return payload?.reject(response);
+            return reject(response);
         }
         const item = response?.data?.data;
 
@@ -93,29 +98,30 @@ function* fetchTestimonialsData(action){
         }
 
         yield put(testimonialsFetched({ ...item }))
-        return payload?.resolve(item);
+        return resolve(item);
     }
     catch(e){
-        console.error("Exception occured in jobAssistanceServices Api", e)
-        return payload?.reject(e);
+       
+        return reject(e);
     }
 }
 
 function* skillwithDemands(action) {
-    const { payload } = action;
+    const { payload: {payload, resolve, reject } } = action;
     try {
+        
         const response = yield call(Api.skillwithDemands, payload?.numCourses);
 
         if (response?.error){
-            return payload?.reject(response);
+            return reject(response);
         }
         const item = response?.data?.data;
         yield put(skillwithDemandsFetched({ item }))
-        return payload?.resolve(item);
+        return resolve(item);
     }
     catch(e) {
-        console.log("Exception occured in skillWithDemads Api", e)
-        return payload?.reject(e);
+  
+        return reject(e);
     }
 }
 
