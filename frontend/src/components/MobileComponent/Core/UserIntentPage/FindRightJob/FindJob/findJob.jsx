@@ -32,7 +32,7 @@ const FindJob = (props) => {
             'type': type,
             'job': jobTitle.current.value,
             'location': document.getElementById('location').value, //Is document work on SSR?
-            'skills': chips
+            'skills': chips.join()
         }
     }
 
@@ -80,7 +80,7 @@ const FindJob = (props) => {
 
     const onSubmit = async (values, event) => {
         const data = addValues(values);
-        await new Promise((resolve) => dispatch(fetchFindRightJobsData({ data, resolve })));
+        // await new Promise((resolve) => dispatch(fetchFindRightJobsData({ data, resolve })));
         history.push({
             search: `?job_title=${data.job}&minexp=${data.experience}&loc=${data.location}&skill=${data.skills.join()}`
         });
