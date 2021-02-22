@@ -198,12 +198,12 @@ class KeywordSuggestionAPI(APIView):
         q = request.GET.get('q', '')
         skills = []
         job_titles = []
-        data = {}
+        data = []
         try:
             response = ShineCandidateDetail().get_keyword_sugesstion(query=q,skill_only=skill_only)
             if response:
                 keyword_suggestions = response.get('keyword_suggestion',None)[:suggestion_quantity]
-                data['keyword_suggestion'] = keyword_suggestions
+                data = keyword_suggestions
                 if not(skill_only and job_title_only):
                     for word in keyword_suggestions:
                         word_type = word.get('type',None)
@@ -213,9 +213,9 @@ class KeywordSuggestionAPI(APIView):
                         elif len(job_titles)<job_title_quantity:
                             job_titles.append(word)
                     if skill_only:                   
-                        data['keyword_suggestion'] = skills
+                        data = skills
                     elif job_title_only:
-                        data['keyword_suggestion'] = job_titles
+                        data = job_titles
 
             return APIResponse(data=data,message='suggested words fetched', status=HTTP_200_OK)
         except Exception as e:
