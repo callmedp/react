@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import UIBanner from '../../../Common/UIBanner/UIbanner';
 import UserGuidance from '../UserGuidance/UserGuidance';
 import FindJob from '../FindRightJob/FindJob/findJob';
-import ViewCourses from '../MakeCareerChange/ViewCourses/viewCourses';
+import ViewCourses from './ViewCourses/viewCourses';
 
 
 const ProgressCareer = (props) => {
