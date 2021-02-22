@@ -37,7 +37,7 @@ class CourseRecommendationAPI(APIView):
     authentication_classes = ()
 
     def get(self,request):
-        candidate_id = request.GET.get('candidate_id', None)
+        candidate_id = request.GET.get('candidate_id', None) or self.request.session.get('candidate_id', None)
         page = int(request.GET.get('page',1))
         if not candidate_id:
             course_ids = settings.DEFAULT_LEARNING_COURSE_RECOMMENDATION_PRODUCT_ID

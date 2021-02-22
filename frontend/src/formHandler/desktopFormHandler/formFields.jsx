@@ -111,7 +111,7 @@ const MultiSelectBox = (props) => {
                         })
                         }
                         <span className="d-flex align-items-center mt-10">
-                            <input type="text" className="form-control custom-input" ref={register(validation)} defaultValue={defaultValue} id={id} placeholder={placeholder} />
+                            <input type="text" className="form-control custom-input" name={name} ref={register(validation)} defaultValue={defaultValue} id={id} placeholder={placeholder} />
                             <button className="custom-btn" type="submit"><figure className="icon-search-arrow"></figure></button>
                         </span>
                     </div>
