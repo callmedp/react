@@ -15,7 +15,7 @@ const FindJob = (props) => {
     const [chips, setChips] = useState([]);
     const { register, handleSubmit, errors } = useForm();
     const dispatch = useDispatch();
-    const textInput = useRef();
+    const jobTitle = useRef();
     const { history, type } = props;
     const [searchTerm, setSearchTerm] = useState('');
     const [results, setResults] = useState([]);
@@ -28,6 +28,9 @@ const FindJob = (props) => {
         return {
             ...values,
             'type': type,
+            'job': jobTitle.current.value,
+            'location': document.getElementById('location').value, //Is document work on SSR?
+            'skills': chips
         }
     }
 
@@ -35,23 +38,22 @@ const FindJob = (props) => {
         const data = addValues(values)
         await new Promise((resolve) => dispatch(fetchCareerChangeData({data, resolve})));
         history.push({
-            search: `?job='Python'&experience=${values.experience}&location=${values.location}&skills=${values.skills}`
+            search: `?job=${data.job}&experience=${data.experience}&location=${data.location}&skills=${data.skills.join()}`
           })
           
     }
 
     function handleAppend(data, id) {
-        // UserIntentForm.skills.children.push(data);
-        // console.log(UserIntentForm.skills.children)
         setChips([...chips, data])
-
+        delete skillSet[id];
     }
 
     const appendData = async (e) => {
-        textInput.current.value = e.target.textContent
-        setShowResults(false)
-        var data = await relatedSearch(textInput.current.value)
+        jobTitle.current.value = e.target.textContent
+        var data = await relatedSearch(jobTitle.current.value)
         setSkillSet(data?.data?.related_skill?.slice(0,10))
+        setShowResults(false)
+        
     }
 
     const handleInput = (e) => {
@@ -102,7 +104,7 @@ const FindJob = (props) => {
                                     <form className="mt-20" onSubmit={handleSubmit(onSubmit)}>
 
                                         <div className={checkedClass}>
-                                            <input type="text" className="form-control" id="job" name="job" placeholder=" " ref={textInput} autoComplete="off"
+                                            <input type="text" className="form-control" id="job" name="job" placeholder=" " ref={jobTitle} autoComplete="off"
                                                 aria-required="true" aria-invalid="true" onChange={e => handleInput(e)} onFocus={()=>setShowResults(true)} />
                                             <label htmlFor="">Current job title</label>
 

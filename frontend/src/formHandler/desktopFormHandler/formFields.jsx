@@ -101,7 +101,7 @@ const MultiSelectBox = (props) => {
 
                 :
 
-                <div className="form-group-custom checked" >
+                <div className={data?.length ? "form-group-custom checked" : "form-group-custom"}>
                     <label className="sticky-label" htmlFor="">Your skills</label>
                     <div className="custom-textarea">
                         {data?.map((data, i) => {
