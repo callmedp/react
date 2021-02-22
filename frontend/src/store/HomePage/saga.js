@@ -104,7 +104,7 @@ function* fetchTestimonialsData(action){
 function* skillwithDemands(action) {
     const { payload } = action;
     try {
-        const response = yield call(Api.skillwithDemands);
+        const response = yield call(Api.skillwithDemands, payload?.numCourses);
 
         if (response?.error){
             return payload?.reject(response);
