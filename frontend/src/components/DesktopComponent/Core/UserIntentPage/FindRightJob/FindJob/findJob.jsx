@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import { InputField, SelectExperienceBox, MultiSelectBox } from 'formHandler/desktopFormHandler/formFields';
 import Autocomplete from 'formHandler/desktopFormHandler/AutoComplete';
 import UserIntentForm from 'formHandler/desktopFormHandler/formData/userIntent';
-import { fetchCareerChangeData } from 'store/UserIntentPage/actions';
+import { fetchCareerChangeData, fetchFindRightJobsData } from 'store/UserIntentPage/actions';
 import { useDispatch } from 'react-redux';
 import useDebounce from 'utils/searchUtils/debouce';
 import { IndianState } from 'utils/constants';
@@ -30,15 +30,16 @@ const FindJob = (props) => {
             'type': type,
             'job': jobTitle.current.value,
             'location': document.getElementById('location').value, //Is document work on SSR?
-            'skills': chips?.concat(document.getElementById('skills').value.split(","))
+            'skills': chips?.concat(document.getElementById('skills').value.split(",")),
+            'page': 1
         }
     }
 
     const onSubmit = async (values, event) => {
         const data = addValues(values)
-        await new Promise((resolve) => dispatch(fetchCareerChangeData({ data, resolve })));
+        await new Promise((resolve) => dispatch(fetchFindRightJobsData({ data, resolve })));
         history.push({
-            search: `?job=${data.job}&experience=${data.experience}&location=${data.location}&skills=${data.skills.join()}`
+            search: `?job=${data?.job}&experience=${data?.experience}&location=${data?.location}&skills=${data?.skills.join()}&page=${data?.page}`
         })
 
     }

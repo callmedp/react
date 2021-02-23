@@ -15,13 +15,13 @@ import { useDispatch, useSelector } from 'react-redux';
 
 
 const JobsUpskills = (props) => {
+    const params = new URLSearchParams(props.location.search);
     const [key, setKey] = useState('categories1');
     const dispatch = useDispatch();
-    const [ currentJobPage, setJobPage ] = useState(18);
+    const [ currentJobPage, setJobPage ] = useState(!!params.get('page') ? parseInt(params.get('page')) + 1 : 1);
     const { jobsUpskillsLoader } = useSelector(store => store?.loader);
     const { jobsList, num_pages } = useSelector(store => store?.findRightJob);
     const { course_data, page, recommendate_ids} = useSelector(store => store?.upskillYourself.upskillList);
-    const params = new URLSearchParams(props.location.search);
 
     
 
