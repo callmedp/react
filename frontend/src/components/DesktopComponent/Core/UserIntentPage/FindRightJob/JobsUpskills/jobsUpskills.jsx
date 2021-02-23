@@ -8,23 +8,25 @@ import JobListing from './JobListing/jobListing';
 import CourseListing from '../../CourseListing/courseListing';
 import { fetchFindRightJobsData, fetchUpskillYourselfData } from 'store/UserIntentPage/actions';
 import { useDispatch, useSelector } from 'react-redux';
-import {startJobsUpskillsLoader, stopJobsUpskillsLoader} from 'store/Loader/actions/index';
+import { startJobsUpskillsLoader, stopJobsUpskillsLoader } from 'store/Loader/actions/index';
 import Loader from 'components/DesktopComponent/Common/Loader/loader';
 
 const JobsUpskills = (props) => {
   const [key, setKey] = useState('Jobs');
-  const { jobsList: { results } } = useSelector(store => store.findRightJob)
-  const dispatch = useDispatch()
   const params = new URLSearchParams(props?.location?.search);
-  const { upskillList: {course_data, page, recommended_course_ids}} = useSelector(store => store.upskillYourself);
-  const { jobsUpskillsLoader } = useSelector( store => store.loader )
+  const dispatch = useDispatch();
+  const [currentJobPage, setJobPage] = useState(!!params.get('page') ? parseInt(params.get('page')) + 1 : 1);
+  const { jobsUpskillsLoader } = useSelector(store => store.loader);
+  const { jobsList: { results, num_pages } } = useSelector(store => store.findRightJob)
+  const { upskillList: { course_data, page, recommended_course_ids } } = useSelector(store => store.upskillYourself);
+
   const handleSelect = async (tabType) => {
     if (key !== tabType) {
       if (tabType === "Courses" && (!course_data || (Array.isArray(course_data) && course_data.length === 0))) {
         const dataUpskill = {
           'preferred_role': params.get('job_title'),
-          'skills': params.get('skill'),
-          'experience': params.get('minexp')
+          'skills': params.get('skills'),
+          'experience': params.get('experience')
         };
         dispatch(startJobsUpskillsLoader())
         await new Promise((resolve) => dispatch(fetchUpskillYourselfData({ dataUpskill, resolve })));
@@ -32,14 +34,16 @@ const JobsUpskills = (props) => {
       }
       setKey(tabType)
     }
+
   }
 
-  const handleEffect =async () => {
+  const handleEffect = async () => {
     const filterData = {
-      'job': params.get('job_title'),
-      'location': params.get('loc'), //Is document work on SSR?
-      'skills': params.get('skill'),
-      'experience': params.get('minexp')
+      'job': params.get('job'),
+      'location': params.get('location'), //Is document work on SSR?
+      'skills': params.get('skills'),
+      'experience': params.get('experience'),
+      'page': currentJobPage
     };
     dispatch(startJobsUpskillsLoader())
     await new Promise((resolve, reject) => dispatch(fetchFindRightJobsData({ filterData, resolve, reject })));
@@ -50,9 +54,49 @@ const JobsUpskills = (props) => {
     handleEffect()
   }, [])
 
+
+  const handleNextPage = async () => {
+    const data = {
+      'job': params.get('job'),
+      'location': params.get('location'), //Is document work on SSR?
+      'skills': params.get('skills'),
+      'experience': params.get('experience'),
+      'page': currentJobPage
+    };
+    dispatch(startJobsUpskillsLoader());
+    await new Promise((resolve) => dispatch(fetchFindRightJobsData({ data, resolve })));
+    dispatch(stopJobsUpskillsLoader());
+    setJobPage(currentJobPage + 1);
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth"
+    });
+  }
+
+  const handleGotoFirstPage = async () => {
+    const data = {
+      'job': params.get('job'),
+      'location': params.get('location'), //Is document work on SSR?
+      'skills': params.get('skills'),
+      'experience': params.get('experience'),
+      'page': currentJobPage
+    };
+    dispatch(startJobsUpskillsLoader());
+    await new Promise((resolve) => dispatch(fetchFindRightJobsData({ data, resolve })));
+    dispatch(stopJobsUpskillsLoader());
+    setJobPage(1);
+    window.scrollTo({
+      top: 0,
+      left: 0,
+      behavior: "smooth"
+    });
+  }
+
+
   return (
     <section className="container-fluid mt-30n mb-0">
-      { jobsUpskillsLoader ? <Loader/> : ''}
+      { jobsUpskillsLoader ? <Loader /> : ''}
       <div className="row">
         <div className="container">
           <div className="ui-main col">
@@ -71,7 +115,7 @@ const JobsUpskills = (props) => {
 
                 <Tab eventKey="Jobs" title={<h2>Jobs for you</h2>}>
                   <JobListing jobList={results} />
-                  <Link to={"#"} className="load-more">View More Jobs</Link>
+                  { num_pages === currentJobPage ? <a onClick={handleGotoFirstPage} className="load-more" style={{ cursor: 'pointer' }}>View first Page</a> : <a onClick={handleNextPage} className="load-more" style={{ cursor: 'pointer' }}>View More Jobs</a>}
                 </Tab>
                 <Tab eventKey="Courses" title={<h2>Upskill yourself</h2>}>
                   <CourseListing courseList={course_data} />
@@ -89,7 +133,7 @@ const JobsUpskills = (props) => {
           </div>
         </div>
       </div>
-    </section>
+    </section >
   )
 }
 

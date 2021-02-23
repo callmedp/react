@@ -115,6 +115,7 @@ export default {
     'skills': {
         className: "form-control",
         name: "skills",
+        id: "skills",
         type: "text",
         placeholder: "Your Skills",
         label: "Your skills",

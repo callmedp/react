@@ -27,7 +27,6 @@ function* careerChangeData(action) {
     
     try {
         const response = yield call(Api.careerChangeData);
-        debugger
         if (response?.error) {
             return payload?.resolve(response.error)
         }
