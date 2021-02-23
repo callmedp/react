@@ -8,39 +8,51 @@ import JobListing from './JobListing/jobListing';
 import CourseListing from '../../CourseListing/courseListing';
 import { fetchFindRightJobsData, fetchUpskillYourselfData } from 'store/UserIntentPage/actions';
 import { useDispatch, useSelector } from 'react-redux';
+import {startJobsUpskillsLoader, stopJobsUpskillsLoader} from 'store/Loader/actions/index';
+import Loader from 'components/DesktopComponent/Common/Loader/loader';
 
 const JobsUpskills = (props) => {
   const [key, setKey] = useState('Jobs');
   const { jobsList: { results } } = useSelector(store => store.findRightJob)
   const dispatch = useDispatch()
-  const params = new URLSearchParams(props.location.search);
+  const params = new URLSearchParams(props?.location?.search);
   const { upskillList: {course_data, page, recommended_course_ids}} = useSelector(store => store.upskillYourself);
-  const filterData = {
-    'job': params.get('job_title'),
-    'location': params.get('loc'), //Is document work on SSR?
-    'skills': params.get('skill'),
-    'experience': params.get('minexp')
-  };
+  const { jobsUpskillsLoader } = useSelector( store => store.loader )
   const handleSelect = async (tabType) => {
     if (key !== tabType) {
-      if (tabType === "Courses" && results?.length === 0) {
+      if (tabType === "Courses" && (!course_data || (Array.isArray(course_data) && course_data.length === 0))) {
         const dataUpskill = {
           'preferred_role': params.get('job_title'),
           'skills': params.get('skill'),
           'experience': params.get('minexp')
         };
-        new Promise((resolve) => dispatch(fetchUpskillYourselfData({ dataUpskill, resolve })));
+        dispatch(startJobsUpskillsLoader())
+        await new Promise((resolve) => dispatch(fetchUpskillYourselfData({ dataUpskill, resolve })));
+        dispatch(stopJobsUpskillsLoader())
       }
       setKey(tabType)
     }
   }
 
+  const handleEffect =async () => {
+    const filterData = {
+      'job': params.get('job_title'),
+      'location': params.get('loc'), //Is document work on SSR?
+      'skills': params.get('skill'),
+      'experience': params.get('minexp')
+    };
+    dispatch(startJobsUpskillsLoader())
+    await new Promise((resolve, reject) => dispatch(fetchFindRightJobsData({ filterData, resolve, reject })));
+    dispatch(stopJobsUpskillsLoader())
+  }
+
   useEffect(() => {
-    new Promise((resolve, reject) => dispatch(fetchFindRightJobsData({ filterData, resolve, reject })));
-  }, [results, filterData])
+    handleEffect()
+  }, [])
 
   return (
     <section className="container-fluid mt-30n mb-0">
+      { jobsUpskillsLoader ? <Loader/> : ''}
       <div className="row">
         <div className="container">
           <div className="ui-main col">

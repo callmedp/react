@@ -31,7 +31,7 @@ const CourseLisiting = (props) => {
                                         <span className="mr-10">By {course.providerName}</span>
                                         <span className="rating">
                                         {course.stars?.map((star, index) => starRatings(star, index))}
-                                            <span className="ml-10">{course.rating?.tofixed(1)}/5</span>
+                                            <span className="ml-10">{course.rating}/5</span>
                                         </span>
                                         <p className="course__duration-mode mt-20">
                                             {course.duration ? <>Duration: <strong>{ +course.duration > 1 ? course.duration+" days":
@@ -52,8 +52,8 @@ const CourseLisiting = (props) => {
                                             <li>Earn a certificate after completion</li>
                                             <li>Get Access on mobile </li>
                                         </ul>
-                                        <Link to={"#"} className="more-popover ml-30">More <figure className="icon-arrow-down-sm"></figure></Link>
-                                        <Link to={"#"} className="icon-pdf ml-auto"></Link>
+                                        <Link onClick={(e) => e.preventDefault()} className="more-popover ml-30">More <figure className="icon-arrow-down-sm"></figure></Link>
+                                        <Link onClick={(e) => e.preventDefault()}className="icon-pdf ml-auto"></Link>
                                     </div>
                                 </div>
                             </div>
