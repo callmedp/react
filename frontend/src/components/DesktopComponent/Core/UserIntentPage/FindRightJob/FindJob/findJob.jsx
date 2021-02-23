@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import './findJob.scss';
 import { useForm } from 'react-hook-form';
-import { InputField, SelectExperienceBox, MultiSelectBox } from 'formHandler/desktopFormHandler/formFields';
+import { InputField, SelectIntentBox, MultiSelectBox } from 'formHandler/desktopFormHandler/formFields';
 import Autocomplete from 'formHandler/desktopFormHandler/AutoComplete';
 import UserIntentForm from 'formHandler/desktopFormHandler/formData/userIntent';
 import { fetchCareerChangeData, fetchFindRightJobsData } from 'store/UserIntentPage/actions';
@@ -25,18 +25,30 @@ const FindJob = (props) => {
     const [checkedClass, setCheckedClass] = useState('form-group')
 
     const addValues = (values) => {
-        return {
-            ...values,
-            'type': type,
-            'job': jobTitle.current.value,
-            'location': document.getElementById('location').value, //Is document work on SSR?
-            'skills': chips?.concat(document.getElementById('skills').value.split(",")),
-            'page': 1
+        if (type === 'job') {
+            return {
+                ...values,
+                'type': type,
+                'job': jobTitle.current.value,
+                'location': document.getElementById('location').value, //Is document work on SSR?
+                'skills': chips?.concat(document.getElementById('skills').value.split(",")),
+                'page': 1
+            }
+        }
+        else {
+            return {
+                ...values,
+                'type': type,
+                'job': jobTitle.current.value,
+                'skills': chips?.concat(document.getElementById('skills').value.split(",")),
+                'page': 1
+            }
         }
     }
 
     const onSubmit = async (values, event) => {
         const data = addValues(values)
+        console.log(data)
         await new Promise((resolve) => dispatch(fetchFindRightJobsData({ data, resolve })));
         history.push({
             search: `?job=${data?.job}&experience=${data?.experience}&location=${data?.location}&skills=${data?.skills.join()}&page=${data?.page}`
@@ -133,7 +145,7 @@ const FindJob = (props) => {
                                                 </select>
                                         </div> */}
 
-                                        <SelectExperienceBox attributes={UserIntentForm.experience} register={register}
+                                        <SelectIntentBox attributes={UserIntentForm.experience} register={register}
                                             errors={!!errors ? errors[UserIntentForm.experience.name] : ''} />
 
                                         {/* <div className="form-group">
@@ -142,11 +154,15 @@ const FindJob = (props) => {
                                             <label for="">Preferred location</label>
                                             <span class="error-msg">Required</span>
                                         </div> */}
-
-                                        <Autocomplete id={"location"} name={"location"} className={"form-control"} autoComplete={"off"}
-                                            lableFor={"Preferred Location"} type={"text"} placeholder={" "}
-                                            suggestions={IndianState}
-                                        />
+                                        {type === 'job' ?
+                                            <Autocomplete id={"location"} name={"location"} className={"form-control"} autoComplete={"off"}
+                                                lableFor={"Preferred Location"} type={"text"} placeholder={" "}
+                                                suggestions={IndianState}
+                                            />
+                                            :
+                                            <SelectIntentBox attributes={UserIntentForm.department} register={register}
+                                                errors={!!errors ? errors[UserIntentForm.department.name] : ''} />
+                                        }
 
                                         {/* <InputField attributes={UserIntentForm.location} register={register}
                                                 errors={!!errors ? errors[UserIntentForm.location.name] : ''} /> */}

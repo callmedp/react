@@ -14,6 +14,30 @@ export default {
             required: "This field is required"
         }
     },
+    'department': {
+        className: "form-control",
+        type: "text",
+        name: "department",
+        id: "department",
+        label: "Department",
+        inputType: 'input',
+        validation: {
+            required: true
+        },
+        errorMessage: {
+            required: "This field is required"
+        },
+        children: [
+            {
+                text: 'Department',
+                value: ''
+            },
+            {
+                text: 'IT Department',
+                value: 'it-department'
+            }
+        ]
+    },
     'experience': {
         name: 'experience',
         inputType: 'select',
