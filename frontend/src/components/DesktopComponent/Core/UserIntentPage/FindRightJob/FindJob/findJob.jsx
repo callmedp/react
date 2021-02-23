@@ -30,7 +30,7 @@ const FindJob = (props) => {
             'type': type,
             'job': jobTitle.current.value,
             'location': document.getElementById('location').value, //Is document work on SSR?
-            'skills': chips
+            'skills': chips?.concat(document.getElementById('skills').value.split(","))
         }
     }
 
@@ -48,8 +48,6 @@ const FindJob = (props) => {
     }
 
     function handleDelete(value) {
-        console.log(chips)
-        console.log(value);
         setChips(chips.filter(function (chip) {
             return chip !== value
         }));

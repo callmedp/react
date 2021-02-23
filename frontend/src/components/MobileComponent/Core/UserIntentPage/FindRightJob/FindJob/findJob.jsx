@@ -33,7 +33,7 @@ const FindJob = (props) => {
             'type': type,
             'job': jobTitle.current.value,
             'location': document.getElementById('location').value, //Is document work on SSR?
-            'skills': chips
+            'skills': chips?.concat(document.getElementById('skills').value.split(","))
         }
     }
 
@@ -46,11 +46,17 @@ const FindJob = (props) => {
         jobTitle.current.value = e.target.textContent
         setShowResults(false)
         var data = await relatedSearch(jobTitle.current.value)
-        setSkillSet(data?.data?.related_skill?.slice(0,10))
+        setSkillSet(data?.data?.related_skill?.slice(0, 10))
     }
 
     const handleInput = (e) => {
         setSearchTerm(e.target.value);
+    }
+
+    function handleDelete(value) {
+        setChips(chips.filter(function (chip) {
+            return chip !== value
+        }))
     }
 
 
@@ -81,7 +87,7 @@ const FindJob = (props) => {
         const data = addValues(values)
         await new Promise((resolve) => dispatch(fetchedUserIntentData({ data, resolve })));
         history.push({
-            search: `?job=${data.job}&experience=${data.experience}&location=${data.location}&skills=${data.skills.join()}`
+            search: `?job=${data?.job}&experience=${data?.experience}&location=${data?.location}&skills=${data?.skills.join()}`
         })
     }
 
@@ -151,11 +157,23 @@ const FindJob = (props) => {
                                     <label for="">Your skills</label>
                                 </div> */}
 
-                        <MultiSelectBox attributes={UserIntentForm.skills} data={chips} register={register}
-                            errors={!!errors ? errors[UserIntentForm.skills.name] : ''} />
+                        <div className={"form-group-custom pos-rel"}>
+                            <label className="sticky-label" htmlFor="">Your skills</label>
+                            <div className="custom-textarea">
+                                {chips?.map((data, i) => {
+                                    return (
+                                        <label className="label-added" onClick={() => handleDelete(data)} for="">{data}</label>
+                                    )
+                                })
+                                }
+                                <span className="d-flex align-items-center mt-10">
+                                    <input type="text" className="form-control custom-input" name="skills" placeholder="Keyword Research" id="skills" autoComplete="off" />
+                                </span>
+                            </div>
+                        </div>
 
                         <div className="form-group-custom">
-                            {skillSet?.map((skill, indx) => {
+                            {skillSet?.filter(item => !chips?.includes(item))?.map((skill, indx) => {
                                 return (
                                     <label className="label-add" onClick={() => handleAppend(skill, indx)} for="">{skill}</label>
                                 )
