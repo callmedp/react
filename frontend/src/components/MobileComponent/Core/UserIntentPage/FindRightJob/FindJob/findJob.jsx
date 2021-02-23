@@ -84,9 +84,9 @@ const FindJob = (props) => {
 
     const onSubmit = async (values, event) => {
         const data = addValues(values);
-        // await new Promise((resolve) => dispatch(fetchFindRightJobsData({ data, resolve })));
+        await new Promise((resolve) => dispatch(fetchFindRightJobsData({ data, resolve })));
         history.push({
-            search: `?job=${data?.job}&experience=${data?.experience}&location=${data?.location}&skills=${data?.skills.join()}`
+            search: `?job_title=${data?.job}&experience=${data?.experience}&location=${data?.location}&skills=${data?.skills.join()}`
         })
     }
 
