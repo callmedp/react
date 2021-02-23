@@ -1,9 +1,16 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
-
+import { siteDomain } from 'utils/domains';
+ 
 const CourseLisiting = (props) => {
 
     const { courseList } = props;
+
+    const starRatings = (star, index) => {
+        return (star === '*' ? <em className="icon-fullstar" key={index}></em> : star === '+'
+            ? <em className="icon-halfstar" key={index}></em> : <em className="icon-blankstar" key={index}></em>
+        )
+    }
 
     return (
         <ul className="courses-listing ml-10n mt-30">
@@ -14,28 +21,27 @@ const CourseLisiting = (props) => {
                             <div className="course">
                                 <div className="d-flex align-items-center">
                                     <figure className="course__icon">
-                                        <img src="https://static1.shine.com/l/m/product_image/3425/1542800087_8980.png" alt="Digital Marketing Training Course" />
+                                        <img src={course.imgUrl} alt={course.imgAlt} />
                                     </figure>
                                     <div className="course__content">
                                         <span className="flag-red">BESTSELLER</span>
                                         <h3 className="heading3">
-                                            <Link to={"#"}>Digital Marketing Training Course</Link>
+                                            <a href={`${siteDomain}${course.url}`}>{course.name}</a>
                                         </h3>
-                                        <span className="mr-10">By ERB</span>
+                                        <span className="mr-10">By {course.providerName}</span>
                                         <span className="rating">
-                                            <em className="icon-fullstar"></em>
-                                            <em className="icon-fullstar"></em>
-                                            <em className="icon-fullstar"></em>
-                                            <em className="icon-fullstar"></em>
-                                            <em className="icon-blankstar"></em>
-                                            <span className="ml-10">4/5</span>
+                                        {course.stars?.map((star, index) => starRatings(star, index))}
+                                            <span className="ml-10">{course.rating?.tofixed(1)}/5</span>
                                         </span>
                                         <p className="course__duration-mode mt-20">
-                                            Duration: <strong>90 days</strong>  |   Mode: <strong>Online</strong>  |   <strong>2819</strong> Jobs available
+                                            {course.duration ? <>Duration: <strong>{ +course.duration > 1 ? course.duration+" days":
+                                             course.duration+" day"}</strong></>: ''}  { course.duration && course.mode ? '|': ''}  { course.mode ? <>Mode: <strong>{course.mode}</strong></>:
+                                             ''}  { course.mode && course.jobsAvailable ? '|' : ''}  { course.jobsAvailable ? <strong>{ +course.jobsAvailable > 1 ? course.jobsAvailable+' Jobs available':
+                                              course.jobsAvailable+' Job available'}</strong>: '' }
                                                             </p>
                                     </div>
                                     <div className="course__price-enrol mr-20 mt-20">
-                                        <strong>12999/-</strong>
+                                        <strong>{course.price}/-</strong>
                                         <Link to={"#"} class="btn btn-secondary mt-10">Enroll now</Link>
                                     </div>
                                 </div>

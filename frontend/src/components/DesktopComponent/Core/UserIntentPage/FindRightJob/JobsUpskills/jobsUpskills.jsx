@@ -6,7 +6,7 @@ import '../../../SkillPage/CoursesTray/coursesTray.scss';
 import './jobsUpskills.scss';
 import JobListing from './JobListing/jobListing';
 import CourseListing from '../../CourseListing/courseListing';
-import { fetchFindRightJobsData } from 'store/UserIntentPage/actions';
+import { fetchFindRightJobsData, fetchUpskillYourselfData } from 'store/UserIntentPage/actions';
 import { useDispatch, useSelector } from 'react-redux';
 
 const JobsUpskills = (props) => {
@@ -14,6 +14,7 @@ const JobsUpskills = (props) => {
   const { jobsList: { results } } = useSelector(store => store.findRightJob)
   const dispatch = useDispatch()
   const params = new URLSearchParams(props.location.search);
+  const { upskillList: {course_data, page, recommended_course_ids}} = useSelector(store => store.upskillYourself);
   const filterData = {
     'job': params.get('job_title'),
     'location': params.get('loc'), //Is document work on SSR?
@@ -22,9 +23,14 @@ const JobsUpskills = (props) => {
   };
   const handleSelect = async (tabType) => {
     if (key !== tabType) {
-      // if( tabType === "Courses" && jobsList.length === 0 ){
-      //   await new Promise((resolve, reject) => dispatch(fetchFindRightJobsData({resolve, reject})));
-      // }
+      if (tabType === "Courses" && results?.length === 0) {
+        const dataUpskill = {
+          'preferred_role': params.get('job_title'),
+          'skills': params.get('skill'),
+          'experience': params.get('minexp')
+        };
+        new Promise((resolve) => dispatch(fetchUpskillYourselfData({ dataUpskill, resolve })));
+      }
       setKey(tabType)
     }
   }
@@ -56,7 +62,7 @@ const JobsUpskills = (props) => {
                   <Link to={"#"} className="load-more">View More Jobs</Link>
                 </Tab>
                 <Tab eventKey="Courses" title={<h2>Upskill yourself</h2>}>
-                  <CourseListing courseList={[]} />
+                  <CourseListing courseList={course_data} />
                   <Link to={"#"} className="load-more">View More Courses</Link>
                 </Tab>
               </Tabs>
