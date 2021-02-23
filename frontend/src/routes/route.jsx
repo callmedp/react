@@ -70,7 +70,7 @@ const RouteWithSubRoutes = (route) => {
     } catch (e) {
       //
     }
-    if (getCandidateId()) {
+    if (!getCandidateId()|| getCandidateId() == '' ) {
       const session = isSessionAvailable();
     } else {
       setLoader(false);
