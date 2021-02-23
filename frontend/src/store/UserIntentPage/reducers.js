@@ -1,4 +1,4 @@
-import { fetchedUserIntentData, careerChangeDataFetched } from './actions';
+import { fetchedUserIntentData, careerChangeDataFetched, findRightJobsDataFetched, upskillYourselfDataFetched } from './actions';
 
 const userIntentState = {
     userIntent: [
@@ -61,6 +61,30 @@ const careerChangeState = {
 export const careerChangeReducer = (state=careerChangeState, action) => {
     switch(action.type) {
         case careerChangeDataFetched.type : return {...state.careerChangeDataFetched, ...action?.payload?.item}
+        default: return state;
+    }
+}
+
+const findRightJobsState = {
+    jobsList: {},
+    page: {}
+}
+
+export const findRightJobsReducer = (state=findRightJobsState, action) => {
+    switch(action.type) {
+        case findRightJobsDataFetched.type : return {...state.findRightJobsDataFetched, ...action?.payload}
+        default: return state;
+    }
+}
+
+const upskillYourselfState = {
+    upskillList: {},
+    page: {}
+}
+
+export const upskillYourselfReducer = (state=upskillYourselfState, action) => {
+    switch(action.type) {
+        case upskillYourselfDataFetched.type : return {...state.upskillYourselfDataFetched, ...action?.payload}
         default: return state;
     }
 }

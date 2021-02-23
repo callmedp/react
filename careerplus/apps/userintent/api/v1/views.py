@@ -86,7 +86,7 @@ class CourseRecommendationAPI(APIView):
             'recommended_course_ids':course_id,
             'page':page_info
         }
-        return APIResponse(data=data,message='recommended courses fetched', status=HTTP_200_OK)
+        return APIResponse(data={'upskillList' : data},message='recommended courses fetched', status=HTTP_200_OK)
 
 class ServiceRecommendationAPI(APIView):
     """
@@ -169,7 +169,7 @@ class JobsSearchAPI(APIView):
                 intent=intent,
                 candidate_id=candidate_id
             )
-            return APIResponse(data=jobs_response,message='Jobs fetched', status=HTTP_200_OK)
+            return APIResponse(data={'jobsList' : jobs_response},message='Jobs fetched', status=HTTP_200_OK)
         except Exception as e:
             logging.getLogger('error_log').error('response for {} - {}'.format(candidate_id, str(e)))
             return APIResponse(error=True,message='Error in user intent object creation..Passing intent value as 0,1 etc?',status=HTTP_400_BAD_REQUEST)

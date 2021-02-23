@@ -150,6 +150,7 @@
             font-size: 1.2rem;
             font-weight: 700;
             color: $blue;
+            width: 100%;
             &::after {
                 content: '';
                 background: $sprite -440px 0;

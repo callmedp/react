@@ -11,7 +11,8 @@ const initState = {
     acceptRejectLoader: false,
     homeLoader: false,
     uploadLoader: false,
-    oiDetailsLoader: false
+    oiDetailsLoader: false,
+    jobsUpSkillsLoader: false
 }
 
 export const LoaderReducer = (state=initState, action) => {
@@ -57,6 +58,10 @@ export const LoaderReducer = (state=initState, action) => {
         // oi details loader
         case Actions.START_OI_DETAILS_LOADER : return {...state, ...action.payload}
         case Actions.STOP_OI_DETAILS_LOADER : return {...state, ...action.payload}
+
+        // jobs upskill loader
+        case Actions.START_JOBS_UPSKILLS_LOADER : return {...state, ...action.payload}
+        case Actions.STOP_JOBS_UPSKILLS_LOADER : return {...state, ...action.payload}
 
         default: return state;
     }

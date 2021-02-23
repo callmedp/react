@@ -159,7 +159,19 @@ const careerChangeData = () => {
     }
 }
 
+const findRightJobsData = (data) => {
+    const url = `/intent/api/v1/jobs/?job_title=${data?.job}&loc=${data?.location}&minexp=${data?.experience}&skill=${data?.skills}&intent=2`;
+    return BaseApiService.get(`${siteDomain}${url}`);
+}
+
+const upskillYourselfData = (data) => {
+    const url = `/intent/api/v1/course-recommendation/?preferred_role=${data?.preferred_role}&experience=${data?.experience}&skills=${data?.skills}&intent=2`;
+    return BaseApiService.get(`${siteDomain}${url}`);
+}
+
 export default {
     userIntentData,
-    careerChangeData
+    careerChangeData,
+    findRightJobsData,
+    upskillYourselfData
 }
