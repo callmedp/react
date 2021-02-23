@@ -29,7 +29,7 @@ import { zendeskTimeControlledWindow } from 'utils/zendeskIniti';
 import Aos from "aos";
 // import "aos/dist/aos.css";
 import MetaContent from "../../Common/MetaContent/metaContent";
-import { fetchAlreadyLoggedInUser } from "store/Authentication/actions";
+import { startSkillPageLoader, stopSkillPageLoader } from 'store/Loader/actions';
 
 const SkillPage = (props) => {
   const pageId = props?.match?.params?.id;
@@ -42,39 +42,15 @@ const SkillPage = (props) => {
   const [hasFaq, setHasFaq] = useState(false);
   const [hasLearnerStories, setHasLearnerStories] = useState(false);
   const [hasCourses, setHasCourses] = useState(false);
-  let cookies = "";
-  try {
-    cookies = props.cookies || document.cookie.split(";");
-    for (let i = 0; i < cookies.length; i++) {
-      let cookie = cookies[i].trim();
-      if (cookie.substring(0, "_em_".length + 1) === "_em_=") {
-        cookies = cookie.substring("_em_".length + 1);
-        break;
-      }
-    }
-  } catch (err) {
-    cookies = "";
-  }
 
     const handleEffects = async () => {
-
-        const { location: { search }, history } = props;
-
+    const { location: { search }, history } = props;
     try {
       //You may notice that apis corresponding to these actions are not getting called on initial render.
       //This is because initial render is done on node server, which is calling these apis, map the data and send it to the browser.
       //So there is no need to fetch them again on the browser.
       if (!(window && window.config && window.config.isServerRendered)) {
-        await new Promise((resolve, reject) =>
-          dispatch(
-            fetchAlreadyLoggedInUser({
-              resolve,
-              reject,
-              payload: { em: cookies },
-            })
-          )
-        );
-
+        dispatch(startSkillPageLoader());
         await new Promise((resolve, reject) =>
           dispatch(
             fetchSkillPageBanner({
@@ -103,6 +79,7 @@ const SkillPage = (props) => {
             fetchPopularCourses({ payload: { id: pageId, courseOnly : true }, resolve, reject })
           )
         );
+        dispatch(stopSkillPageLoader());
       } else {
         //isServerRendered is needed to be deleted because when routing is done through react and not on the node,
         //above actions need to be dispatched.
@@ -154,7 +131,7 @@ const SkillPage = (props) => {
 
   return (
     <div>
-      {skillLoader ? <Loader /> : ""}
+      {skillLoader ? <Loader /> : <React.Fragment>
       {meta_tags && <MetaContent meta_tags={meta_tags} />}
       <Header placeHolder="Search course, assessment..." />
       <StickyNav
@@ -194,6 +171,7 @@ const SkillPage = (props) => {
       <FAQ setHasFaq={setHasFaq} />
       <LearnersStories setHasLearnerStories={setHasLearnerStories} />
       <Footer />
+      </React.Fragment>}
     </div>
   );
 };

@@ -121,10 +121,8 @@ app.get(expressRoutes, (req, res) => {
         console.log("<><><><><><>Entered Mobile<><><><><><>   ", req.url)
         indexFile = 'indexMobile';
         routes = require('routes/index.mobile').routes;
-
     }
     else {
-
         console.log("<><><><><><>Entered Desktop<><><><><><>  ", req.url)
         indexFile = 'index';
         routes = require('routes/index.desktop').routes;
@@ -141,8 +139,6 @@ app.get(expressRoutes, (req, res) => {
             }).then(res => res.json())
             .then(json => {
                 console.log('promise resolved');
-                global.sessionStorage.setItem('code2', json.code2);
-                global.sessionStorage.setItem('candidate_id', json.candidate_id);
             })
             .catch(err => console.log(err))
             .finally(() => {
