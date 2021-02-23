@@ -43,7 +43,7 @@ const HomePage = (props) => {
                 new Promise((resolve, reject) => dispatch(fetchTestimonials({ payload: {device: 'mobile'}, resolve, reject })))
                 new Promise((resolve, reject) => dispatch(fetchMostViewedCourses({ payload: {categoryId: -1}, resolve, reject })))
                 new Promise((resolve, reject) => dispatch(fetchInDemandProducts({ payload: {pageId: 1, tabType: 'master', device: 'mobile'}, resolve, reject })));
-                new Promise((resolve, reject) => dispatch(fetchSkillwithDemands({ numCourses:8, resolve, reject })));
+                new Promise((resolve, reject) => dispatch(fetchSkillwithDemands({ payload: {numCourses:8}, resolve, reject })));
                 await new Promise((resolve, reject) => dispatch(fetchJobAssistanceAndBlogs({ resolve, reject })))
                 dispatch(stopHomePageLoader());
             }

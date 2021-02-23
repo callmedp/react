@@ -13,20 +13,6 @@ import SearchBar from './SeachBar/SearchBar';
 import { MyGA } from 'utils/ga.tracking.js';
 
 const Header = (props) => {
-  let cookies = "";
-  try {
-    cookies = document.cookie.split(";");
-    for (let i = 0; i < cookies.length; i++) {
-      let cookie = cookies[i].trim();
-      if (cookie.substring(0, "_em_".length + 1) === "_em_=") {
-        cookies = cookie.substring("_em_".length + 1);
-        break;
-      }
-    }
-  } catch (err) {
-    cookies = "";
-  }
-
     const dispatch = useDispatch()
     const { count, navTags } = useSelector(store => store.header)
     const [candidateInfo, setCandidateInfo] = useState(false)
@@ -65,18 +51,7 @@ const Header = (props) => {
                     console.log("ERROR OCCURED", e)
                 }
             }
-            else if(cookies != '' && Array.isArray(cookies) == false){
-
-            let res = await new Promise((resolve, reject) => {
-        dispatch(
-          fetchAlreadyLoggedInUser({
-            resolve,
-            reject,
-            payload: { em: cookies },
-          })
-        );
-      });
-            }
+           
             else {
                 setIsLoggedIn(false)
             }
@@ -87,11 +62,6 @@ const Header = (props) => {
             console.log("ERROR OCCURED", e)
         }
     }
-
-        useEffect(() => {
-        fetchUserInfo();
-    }, [getCandidateId(),cookies=='']);
-
 
     useEffect(() => {
         fetchUserInfo();
