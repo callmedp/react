@@ -82,7 +82,7 @@ const FindJob = (props) => {
         const data = addValues(values);
         // await new Promise((resolve) => dispatch(fetchFindRightJobsData({ data, resolve })));
         history.push({
-            search: `?job_title=${data.job}&minexp=${data.experience}&loc=${data.location}&skill=${data.skills.join()}`
+            search: `?job_title=${data.job}&minexp=${data.experience}&loc=${data.location}&skill=${data.skills}`
         });
     }
 
