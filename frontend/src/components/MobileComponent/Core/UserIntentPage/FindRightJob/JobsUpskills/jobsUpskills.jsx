@@ -120,9 +120,12 @@ const JobsUpskills = (props) => {
                                         return (
                                             <div className="m-card" key={indx}>
                                                 <div className="m-card__heading">
+                                                    {cour.tags === 2 && <span className="m-flag-yellow">NEW</span>}
+                                                    {cour.tags === 1 && <span className="m-flag-yellow">BESTSELLER</span>}
                                                     <figure>
                                                         <img src={cour.imgUrl} alt={cour.imgAlt} />
                                                     </figure>
+                                                    
                                                     <h3 className="m-heading3">
                                                         <Link to={cour.url}>{cour.name}</Link>
                                                     </h3>
