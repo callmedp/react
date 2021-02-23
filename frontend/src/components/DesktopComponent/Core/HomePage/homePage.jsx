@@ -71,7 +71,7 @@ const HomePage = (props) => {
                     .finally(() => {
                         new Promise((resolve, reject) => dispatch(fetchMostViewedCourses({ payload: { categoryId: -1 }, resolve, reject })));
                         new Promise((resolve, reject) => dispatch(fetchInDemandProducts({ payload: { pageId: 1, tabType: 'master', device: 'desktop' }, resolve, reject })));
-                        new Promise((resolve, reject) => dispatch(fetchJobAssistanceAndBlogs({ resolve, reject })));
+                        new Promise((resolve, reject) => dispatch(fetchJobAssistanceAndBlogs({payload:{}, resolve, reject })));
                         new Promise((resolve, reject) => dispatch(fetchTestimonials({ payload: { device: 'desktop' }, resolve, reject })));
                     })
             }
