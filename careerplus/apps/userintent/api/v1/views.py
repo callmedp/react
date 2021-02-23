@@ -190,7 +190,7 @@ class KeywordSuggestionAPI(APIView):
 
     def get(self,request):
         skill_only = request.GET.get('skill_only', False)
-        job_title_only = request.GET.get('job_title_only',False)
+        job_title_only = request.GET.get('jt_only',False)
         skill_quantity = request.GET.get('skill_quantity',7)
         job_title_quantity = request.GET.get('job_title_quantity',7)
         suggestion_quantity = request.GET.get('suggestion_quantity',7)

@@ -83,7 +83,7 @@ const FindJob = (props) => {
         // Make sure we have a value (user has entered something in input)
         if (debouncedSearchTerm) {
             userSearch(debouncedSearchTerm).then(results => {
-                setResults(results?.data?.keyword_suggestion);
+                setResults(results?.data);
             });
         } else {
             setResults([]);
