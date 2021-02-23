@@ -44,7 +44,7 @@ class CourseRecommendationAPI(APIView):
         intent = request.GET.get('intent',None)
         course_data = []
         data = {
-        'user_desiredjt': request.GET.get("preferred_role",''),
+        'user_desiredjt': request.GET.get("job_title",''),
         'user_functionalarea':request.GET.get("department",''),
         'user_exp' : request.GET.get('experience',''),
         'user_app_skills': request.GET.get('skills',''),
@@ -140,10 +140,10 @@ class JobsSearchAPI(APIView):
         candidate_id = request.GET.get('candidate_id', None)
         intent = request.GET.get('intent',None)
         data = {
-        'job_title': request.GET.get("job_title",''),
-        'loc':request.GET.get("loc",''),
-        'minexp' : request.GET.get('minexp',''),
-        'skill': request.GET.get('skill',''),
+        'job_title': request.GET.get("job",''),
+        'loc':request.GET.get("location",''),
+        'minexp' : request.GET.get('experience',''),
+        'skill': request.GET.get('skills',''),
         'farea': request.GET.get("area", ''),
         # 'q': request.GET.get("q", ''),
         'page':int(request.GET.get('page',1))

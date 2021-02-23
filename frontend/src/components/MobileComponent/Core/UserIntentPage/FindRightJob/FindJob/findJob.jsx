@@ -2,11 +2,11 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './findJob.scss';
 import { useForm } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
-import { InputField, SelectExperienceBox, MultiSelectBox } from 'formHandler/mobileFormHandler/formFields';
+// import { useDispatch } from 'react-redux';
+import { SelectExperienceBox, MultiSelectBox } from 'formHandler/mobileFormHandler/formFields';
 import UserIntentForm from 'formHandler/mobileFormHandler/formData/userIntent';
 import Autocomplete from 'formHandler/mobileFormHandler/AutoComplete';
-import { fetchFindRightJobsData } from 'store/UserIntentPage/actions';
+// import { fetchFindRightJobsData } from 'store/UserIntentPage/actions';
 import { IndianState } from 'utils/constants';
 
 // Debouncing
@@ -15,7 +15,7 @@ import { userSearch, relatedSearch } from 'utils/searchUtils/searchFunctions';
 
 const FindJob = (props) => {
     const { history, type } = props;
-    const dispatch = useDispatch();
+    // const dispatch = useDispatch();
     const [chips, setChips] = useState([]);
     const [skillSet, setSkillSet] = useState([])
     const { register, handleSubmit, errors } = useForm();
@@ -32,7 +32,8 @@ const FindJob = (props) => {
             'type': type,
             'job': jobTitle.current.value,
             'location': document.getElementById('location').value, //Is document work on SSR?
-            'skills': chips.join()
+            'skills': chips.length > 0 ? chips?.concat(document.getElementById('skills').value.split(",")) : [],
+            'page': 1
         }
     }
 
@@ -53,7 +54,6 @@ const FindJob = (props) => {
             setCheckedClass('form-group checked') :
             setCheckedClass('form-group')
     }
-
 
     const getMenuItems = (data, noOfItems = 6) => {
         return (
@@ -80,9 +80,8 @@ const FindJob = (props) => {
 
     const onSubmit = async (values, event) => {
         const data = addValues(values);
-        // await new Promise((resolve) => dispatch(fetchFindRightJobsData({ data, resolve })));
         history.push({
-            search: `?job_title=${data.job}&minexp=${data.experience}&loc=${data.location}&skill=${data.skills}`
+            search: `?job=${data?.job}&experience=${data?.experience}&location=${data?.location}&skills=${data?.skills.join()}&page=${data?.page}`
         });
     }
 
@@ -101,14 +100,6 @@ const FindJob = (props) => {
 
                 <div className="m-find-job">
                     <form className="mt-20" onSubmit={handleSubmit(onSubmit)}>
-
-
-                        {/* <div className="form-group">
-                            <input type="text" className="form-control" id="job" name="job" placeholder=" "
-                                aria-required="true" aria-invalid="true" />
-                            <label for="">Current job title</label>
-                        </div> */}
-
                         <div className={checkedClass}>
                             <input type="text" className="form-control" id="job" name="job" required="required" placeholder=" " ref={jobTitle} autoComplete="off"
                                 aria-required="true" aria-invalid="true" onChange={e => handleInput(e)} onFocus={() => setShowResults(true)} />
@@ -121,36 +112,13 @@ const FindJob = (props) => {
                             }
                         </div>
 
-                        {/* <div className="form-group">
-                                    <div className="custom-select-box">
-                                        <select className="select" className="custom-select">
-                                            <option selected>Total experience </option>
-                                            <option value="+91">1 - 2</option>
-                                            <option value="+92">3 - 5</option>
-                                            <option value="+93">6+</option>
-                                        </select>
-                                    </div>
-                                </div> */}
                         <SelectExperienceBox attributes={UserIntentForm.experience} register={register}
                             errors={!!errors ? errors[UserIntentForm.experience.name] : ''} />
-
-
-                        {/* <div className="form-group">
-                            <input type="text" className="form-control" id="location" name="location" placeholder=" "
-                                aria-required="true" aria-invalid="true" />
-                            <label for="">Preferred location</label>
-                        </div> */}
 
                         <Autocomplete id={"location"} name={"location"} className={"form-control"} autoComplete={"off"}
                             lableFor={"Preferred Location"} type={"text"} placeholder={" "}
                             suggestions={IndianState}
                         />
-
-                        {/* <div className="form-group">
-                                    <input type="text" className="form-control" id="skills" name="skills" placeholder=" "
-                                        aria-required="true" aria-invalid="true" />
-                                    <label for="">Your skills</label>
-                                </div> */}
 
                         <MultiSelectBox attributes={UserIntentForm.skills} data={chips} register={register}
                             errors={!!errors ? errors[UserIntentForm.skills.name] : ''} />
@@ -160,12 +128,10 @@ const FindJob = (props) => {
                                 return (
                                     <label className="label-add" onClick={() => handleAppend(skill.name, indx)} for="">{skill.name}</label>
                                 )
-                            })
-                            }
+                            })}
                         </div>
 
-                        <button type="submit" className="btn btn-inline btn-primary submit-btn mt-30" role="button" data-toggle="modal"
-                            data-target="#thankyouModal">{type === 'job' ? 'View jobs' : 'View courses'}</button>
+                        <button type="submit" className="btn btn-inline btn-primary submit-btn mt-30" role="button" data-toggle="modal" data-target="#thankyouModal">{type === 'job' ? 'View jobs' : 'View courses'}</button>
                     </form>
                 </div>
             </div>

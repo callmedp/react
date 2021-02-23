@@ -9,15 +9,19 @@ import { useSelector } from 'react-redux';
 import Loader from '../../../../Common/Loader/loader';
 import { fetchFindRightJobsData, fetchUpskillYourselfData } from 'store/UserIntentPage/actions';
 import { useDispatch } from 'react-redux';
-import { fetchPopularServices } from 'store/CataloguePage/actions';
+import { shineSiteUrl } from 'utils/domains';
+// import { fetchPopularServices } from 'store/CataloguePage/actions';
 import { startJobsUpskillsLoader, stopJobsUpskillsLoader } from 'store/Loader/actions';
+import { siteDomain } from 'utils/domains';
 
 const JobsUpskills = (props) => {
     // const [key, setKey] = useState('categories1');
     const dispatch = useDispatch();
+    const { history } = props;
+    // const [currentPage, setCurrentPage] = useState(1);
     const { jobsUpskillsLoader } = useSelector(store => store.loader);
-    const findJobsData = useSelector(store => store.findRightJob.jobsList);
-    const {course_data, page, recommended_course_ids} = useSelector(store => store.upskillYourself.upskillList);
+    const { jobsList : { results, next } } = useSelector(store => store.findRightJob);
+    const { upskillList: { course_data, page, recommended_course_ids } } = useSelector(store => store.upskillYourself);
     const params = new URLSearchParams(props.location.search);
 
     const starRatings = (star, index) => {
@@ -33,22 +37,26 @@ const JobsUpskills = (props) => {
     const openSelectedTab = (id) => tabSelected(id);
 
     useEffect(() => {
-        resultApiFunc();
+        resultApiFunc(window.location.search);
     }, []);
 
-    const resultApiFunc = async() => {
-        const data = {
-            'job': params.get('job_title'),
-            'location': params.get('loc'), //Is document work on SSR?
-            'skills': params.get('skill'),
-            'experience': params.get('minexp')
-        };
+    const resultApiFunc = async(data) => {
+        // console.log(params, window.location);
+        // const data = window.location.search;
+            // 'job': params.get('job_title'),
+            // 'location': params.get('loc'), //Is document work on SSR?
+            // 'skills': params.get('skill'),
+            // 'experience': params.get('minexp'),
+            // 'page': currentPage
+        // };
 
-        const dataUpskill = {
-            'preferred_role': params.get('job_title'),
-            'skills': params.get('skill'),
-            'experience': params.get('minexp')
-        };
+        // const dataUpskill = {
+        //     'preferred_role': params.get('job_title'),
+        //     'skills': params.get('skill'),
+        //     'experience': params.get('minexp'),
+        //     'page': currentPage
+
+        // };
 
         // api hit for jobs for you
         dispatch(startJobsUpskillsLoader());
@@ -56,7 +64,33 @@ const JobsUpskills = (props) => {
         dispatch(stopJobsUpskillsLoader());
         
         // api hit for upskill yourself
-        new Promise((resolve) => dispatch(fetchUpskillYourselfData({ dataUpskill, resolve })));
+        // new Promise((resolve) => dispatch(fetchUpskillYourselfData({ data, resolve })));
+    }
+
+    function handleUpskillData(tab) {
+        const dataUpskill = {
+            'preferred_role': params.get('job'),
+            'skills': params.get('skills') || '',
+            'experience': params.get('experience')
+        };
+        // api hit for upskill yourself
+        if(!course_data) {
+            dispatch(startJobsUpskillsLoader());
+            new Promise((resolve) => dispatch(fetchUpskillYourselfData({ dataUpskill, resolve })));
+            dispatch(stopJobsUpskillsLoader());
+        }
+        openSelectedTab('tab2');
+    }
+
+    const loadMoreJobs = (url_next) => {
+        console.log(url_next)
+        let next_data = url_next.split('json&');
+        console.log(next_data)
+        history.push({
+            search: `?${next_data[1]}`
+        });
+
+        resultApiFunc(`?${next_data[1]}`);
     }
 
     return (
@@ -76,23 +110,32 @@ const JobsUpskills = (props) => {
                         <input checked={selectTab === 'tab1'} onClick={() => openSelectedTab('tab1')} type="radio" name="tabset" id="tab1" aria-controls="Jobs for you" />
                         <label htmlFor="tab1">Jobs for you</label>
 
-                        <input checked={selectTab === 'tab2'} onClick={() => openSelectedTab('tab2')} type="radio" name="tabset" id="tab2" aria-controls="Upskill yourself" />
+                        <input checked={selectTab === 'tab2'} onClick={() => handleUpskillData('tab2')} type="radio" name="tabset" id="tab2" aria-controls="Upskill yourself" />
                         <label htmlFor="tab2">Upskill yourself</label>
 
                         <div className="tab-panels">
                             <div id="tab1" className="tab-panel">
                                 <ul className="m-shine-courses-listing mt-20">
-                                    {findJobsData?.results?.map((jData,indx) => {
+                                    {results?.map((jData,indx) => {
                                         return(
                                             <li key={indx}>
                                                 <div className="course">
                                                     <div className="d-flex p-15">
                                                         <div className="course__content">
-                                                            {/* <span className="hot-badge">
-                                                                <figure className="icon-hot"></figure> Hot
-                                                            </span> */}
+                                                            {
+                                                                jData.jHJ === 1 && 
+                                                                <span className="hot-badge">
+                                                                    <figure className="micon-hot"></figure> Hot
+                                                                </span>
+                                                            }
+                                                            {
+                                                                jData.jPJ === 1 && 
+                                                                <span className="premium-badge">
+                                                                    <figure className="micon-premium"></figure> Premium
+                                                                </span>
+                                                            }
                                                             <h3 className="heading3">
-                                                                <Link to={"#"}>{jData.jJT}</Link>
+                                                                <a href={`${shineSiteUrl}${jData.jSlug}`} target="_blank">{jData.jJT}</a>
                                                             </h3>
                                                             <strong>{jData.jCName}</strong>
                                                             <div className="d-flex">
@@ -102,7 +145,7 @@ const JobsUpskills = (props) => {
                                                                     <li>{jData.jKwd}</li>
                                                                 </ul>
                                                                 <div className="m-price-date">
-                                                                    <Link to={jData.jSlug} className="btn-blue-outline mb-10">Apply</Link>
+                                                                    <a href={jData.jRUrl} target="_blank" className="btn-blue-outline mb-10">Apply</a>
                                                                     <span>{new Date(jData.jPDate).toLocaleDateString()}</span> 
                                                                 </div>
                                                             </div>
@@ -113,6 +156,7 @@ const JobsUpskills = (props) => {
                                         )
                                     })}
                                 </ul>
+                                <span className="load-more" onClick={() => loadMoreJobs(next)}>View More Jobs</span>
                             </div>
                             <div id="tab2" className="tab-panel">
                                 <div className="m-courses mt-20">
@@ -120,7 +164,7 @@ const JobsUpskills = (props) => {
                                         return (
                                             <div className="m-card" key={indx}>
                                                 <div className="m-card__heading">
-                                                    {cour.tags === 2 && <span className="m-flag-yellow">NEW</span>}
+                                                    {cour.tags === 2 && <span className="m-flag-blue">NEW</span>}
                                                     {cour.tags === 1 && <span className="m-flag-yellow">BESTSELLER</span>}
                                                     <figure>
                                                         <img src={cour.imgUrl} alt={cour.imgAlt} />
@@ -145,7 +189,7 @@ const JobsUpskills = (props) => {
                                                     </div>
                                                     <div className="m-card__price">
                                                         <strong>{cour.price}/-</strong> 
-                                                        {setOpen !== ('upSkill' + cour.id) && <span id={'upSk' + cour.id} className="m-view-more" onClick={() => openCourseDetails(cour.id)}>View more</span>}
+                                                        {setOpen !== ('upSkill' + cour.id) && <span id={'upSk' + cour.id} className="m-view-more text-right" onClick={() => openCourseDetails(cour.id)}>View more</span>}
                                                     </div>
                                                 </div>
 

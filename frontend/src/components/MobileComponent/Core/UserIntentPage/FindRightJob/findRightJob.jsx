@@ -1,11 +1,10 @@
-import React, { useRef, useEffect } from 'react';
+import React from 'react';
 import FindJob from './FindJob/findJob';
-// import FindJobEdit from './FindJob/findJobEdit';
 import JobsUpskills from './JobsUpskills/jobsUpskills';
 
 const FindRightJob = (props) => {
     const params = new URLSearchParams(props.location.search);
-    const job = params.get('job_title');
+    const job = params.get('job');
 
     return (
         <div>
