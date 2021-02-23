@@ -11,12 +11,13 @@ import { fetchFindRightJobsData, fetchUpskillYourselfData } from 'store/UserInte
 import { useDispatch } from 'react-redux';
 import { fetchPopularServices } from 'store/CataloguePage/actions';
 import { startJobsUpskillsLoader, stopJobsUpskillsLoader } from 'store/Loader/actions';
+import { siteDomain } from 'utils/domains';
 
 const JobsUpskills = (props) => {
     // const [key, setKey] = useState('categories1');
     const dispatch = useDispatch();
-    const { jobsUpskillsLoader } = useSelector(store => store.loader);
-    const findJobsData = useSelector(store => store.findRightJob.jobsList);
+    const { jobsUpskillsLoader } = useSelector(store => store?.loader);
+    const findJobsData = useSelector(store => store.findRightJob?.jobsList);
     const {course_data, page, recommended_course_ids} = useSelector(store => store.upskillYourself.upskillList);
     const params = new URLSearchParams(props.location.search);
 
@@ -44,19 +45,29 @@ const JobsUpskills = (props) => {
             'experience': params.get('minexp')
         };
 
-        const dataUpskill = {
-            'preferred_role': params.get('job_title'),
-            'skills': params.get('skill'),
-            'experience': params.get('minexp')
-        };
-
         // api hit for jobs for you
+        if (!findJobsData?.results){
         dispatch(startJobsUpskillsLoader());
             await new Promise((resolve) => dispatch(fetchFindRightJobsData({ data, resolve })));
         dispatch(stopJobsUpskillsLoader());
+        }
         
+        
+    }
+
+    function handleUpskillData(tab) {
+        const dataUpskill = {
+            'preferred_role': params.get('job_title'),
+            'skills': params.get('skills'),
+            'experience': params.get('experience')
+        };
         // api hit for upskill yourself
+        if(!course_data) {
+        dispatch(startJobsUpskillsLoader());
         new Promise((resolve) => dispatch(fetchUpskillYourselfData({ dataUpskill, resolve })));
+        dispatch(stopJobsUpskillsLoader());
+        }
+        openSelectedTab('tab2');
     }
 
     return (
@@ -76,7 +87,7 @@ const JobsUpskills = (props) => {
                         <input checked={selectTab === 'tab1'} onClick={() => openSelectedTab('tab1')} type="radio" name="tabset" id="tab1" aria-controls="Jobs for you" />
                         <label htmlFor="tab1">Jobs for you</label>
 
-                        <input checked={selectTab === 'tab2'} onClick={() => openSelectedTab('tab2')} type="radio" name="tabset" id="tab2" aria-controls="Upskill yourself" />
+                        <input checked={selectTab === 'tab2'} onClick={() => handleUpskillData('tab2')} type="radio" name="tabset" id="tab2" aria-controls="Upskill yourself" />
                         <label htmlFor="tab2">Upskill yourself</label>
 
                         <div className="tab-panels">
@@ -102,7 +113,7 @@ const JobsUpskills = (props) => {
                                                                     <li>{jData.jKwd}</li>
                                                                 </ul>
                                                                 <div className="m-price-date">
-                                                                    <Link to={jData.jSlug} className="btn-blue-outline mb-10">Apply</Link>
+                                                                    <a href={`${siteDomain}/${jData.jSlug}`} className="btn-blue-outline mb-10">Apply</a>
                                                                     <span>{new Date(jData.jPDate).toLocaleDateString()}</span> 
                                                                 </div>
                                                             </div>
