@@ -7,8 +7,17 @@ import './jobsUpskills.scss';
 import JobListing from './JobListing/jobListing';
 import CourseListing from '../../CourseListing/courseListing';
 
+import Loader from '../../../../Common/Loader/loader';
+import { fetchFindRightJobsData, fetchUpskillYourselfData } from 'store/UserIntentPage/actions';
+import { startJobsUpskillsLoader, stopJobsUpskillsLoader } from 'store/Loader/actions';
+import { siteDomain } from 'utils/domains';
+import { useDispatch } from 'react-redux';
+
+
 const JobsUpskills = (props) => {
     const [key, setKey] = useState('categories1');
+    const dispatch = useDispatch();
+
     return (
         <section className="container-fluid mt-30n mb-0">
             <div className="row">
