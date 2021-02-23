@@ -47,9 +47,9 @@ const JobsUpskills = (props) => {
 
         // api hit for jobs for you
         if (!findJobsData?.results){
-        dispatch(startJobsUpskillsLoader());
-            await new Promise((resolve) => dispatch(fetchFindRightJobsData({ data, resolve })));
-        dispatch(stopJobsUpskillsLoader());
+            dispatch(startJobsUpskillsLoader());
+                await new Promise((resolve) => dispatch(fetchFindRightJobsData({ data, resolve })));
+            dispatch(stopJobsUpskillsLoader());
         }
         
         

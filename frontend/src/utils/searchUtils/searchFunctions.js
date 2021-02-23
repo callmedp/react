@@ -19,7 +19,7 @@ const submitData = (values) => {
 }
 
 const userSearch = (search ) =>{
-    return fetch(`${siteDomain}/intent/api/v1/keyword-suggestion/?q="${search}"&jt_only=true`,
+    return fetch(`${siteDomain}/intent/api/v1/keyword-suggestion/?q=${search}&jt_only=true`,
         { method: 'GET' }).then(r => r.json())
         .catch(error => {
             console.error(error);
