@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import { InputField, SelectExperienceBox, MultiSelectBox } from 'formHandler/mobileFormHandler/formFields';
 import UserIntentForm from 'formHandler/mobileFormHandler/formData/userIntent';
 import Autocomplete from 'formHandler/mobileFormHandler/AutoComplete';
-import { fetchedUserIntentData } from 'store/UserIntentPage/actions';
+import { fetchFindRightJobsData } from 'store/UserIntentPage/actions';
 import { IndianState } from 'utils/constants';
 
 // Debouncing
@@ -19,7 +19,6 @@ const FindJob = (props) => {
     const [chips, setChips] = useState([]);
     const [skillSet, setSkillSet] = useState([])
     const { register, handleSubmit, errors } = useForm();
-
     const jobTitle = useRef();
     const [searchTerm, setSearchTerm] = useState('');
     const [results, setResults] = useState([]);
@@ -84,10 +83,10 @@ const FindJob = (props) => {
     }, [debouncedSearchTerm]);
 
     const onSubmit = async (values, event) => {
-        const data = addValues(values)
-        await new Promise((resolve) => dispatch(fetchedUserIntentData({ data, resolve })));
+        const data = addValues(values);
+        await new Promise((resolve) => dispatch(fetchFindRightJobsData({ data, resolve })));
         history.push({
-            search: `?job=${data?.job}&experience=${data?.experience}&location=${data?.location}&skills=${data?.skills.join()}`
+            search: `?job_title=${data?.job}&experience=${data?.experience}&location=${data?.location}&skills=${data?.skills.join()}`
         })
     }
 
@@ -180,7 +179,6 @@ const FindJob = (props) => {
                             })
                             }
                         </div>
-
 
                         <button type="submit" className="btn btn-inline btn-primary submit-btn mt-30" role="button" data-toggle="modal"
                             data-target="#thankyouModal">{type === 'job' ? 'View jobs' : 'View courses'}</button>
