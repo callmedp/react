@@ -32,10 +32,10 @@ const CatalogPage = (props) => {
         //This is because initial render is done on node server, which is calling these apis, map the data and send it to the browser.
         //So there is no need to fetch them again on the browser.
         if (!(window && window.config && window.config.isServerRendered)) {
-        new Promise((resolve, reject) => dispatch(fetchRecentlyAddedCourses({ resolve, reject })));
-        new Promise((resolve, reject) => dispatch(fetchPopularServices({ resolve, reject })));
-        new Promise((resolve, reject) => dispatch(fetchTrendingCategories({ 'medium': 1, resolve, reject })));
-        new Promise((resolve, reject) => dispatch(fetchAllCategoriesAndVendors({ num:8, resolve, reject })));
+        new Promise((resolve, reject) => dispatch(fetchRecentlyAddedCourses({payload:{}, resolve, reject })));
+        new Promise((resolve, reject) => dispatch(fetchPopularServices({payload:{}, resolve, reject })));
+        new Promise((resolve, reject) => dispatch(fetchTrendingCategories({payload:{ 'medium': 1}, resolve, reject })));
+        new Promise((resolve, reject) => dispatch(fetchAllCategoriesAndVendors({payload:{ num:8}, resolve, reject })));
     }
     else {
         // isServerRendered is needed to be deleted because when routing is done through react and not on the node,
