@@ -12,7 +12,7 @@ const FindRightJob = (props) => {
     return (
         <div>
             <UIBanner {...props} />
-            { !!job ? <JobsUpskills /> : <FindJob type={"job"} {...props}/> }
+            { !!job ? <JobsUpskills {...props} /> : <FindJob type={"job"} {...props}/> }
         </div>
     )
 }
