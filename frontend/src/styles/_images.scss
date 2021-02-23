@@ -222,6 +222,11 @@
   @include icon-inblock(6px, 11px, -566px -52px);
 }
 
+.icon-quote {
+  background: $sprite;
+  @include icon-inblock(85px, 72px, -939px -35px);
+}
+
 .icon-ui1 {
   background: $sprite;
   @include icon-inblock(35px, 36px, 0 -174px);

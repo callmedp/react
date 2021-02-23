@@ -44,7 +44,7 @@ class CourseRecommendationAPI(APIView):
         intent = request.GET.get('intent',None)
         course_data = []
         data = {
-        'user_desiredjt': request.GET.get("job_title",''),
+        'user_desiredjt': request.GET.get("preferred_role",''),
         'user_functionalarea':request.GET.get("department",''),
         'user_exp' : request.GET.get('experience',''),
         'user_app_skills': request.GET.get('skills',''),
@@ -140,10 +140,10 @@ class JobsSearchAPI(APIView):
         candidate_id = request.GET.get('candidate_id', None)
         intent = request.GET.get('intent',None)
         data = {
-        'job_title': request.GET.get("job",''),
-        'loc':request.GET.get("location",''),
-        'minexp' : request.GET.get('experience',''),
-        'skill': request.GET.get('skills',''),
+        'job_title': request.GET.get("job_title",''),
+        'loc':request.GET.get("loc",''),
+        'minexp' : request.GET.get('minexp',''),
+        'skill': request.GET.get('skill',''),
         'farea': request.GET.get("area", ''),
         # 'q': request.GET.get("q", ''),
         'page':int(request.GET.get('page',1))
@@ -189,23 +189,46 @@ class KeywordSuggestionAPI(APIView):
     authentication_classes = ()
 
     def get(self,request):
-        # candidate_id = request.GET.get('candidate_id', None)
         skill_only = request.GET.get('skill_only', False)
+        job_title_only = request.GET.get('jt_only',False)
+        skill_quantity = request.GET.get('skill_quantity',7)
+        job_title_quantity = request.GET.get('job_title_quantity',7)
+        suggestion_quantity = request.GET.get('suggestion_quantity',7)
+
         q = request.GET.get('q', '')
         skills = []
-        data = {}
+        job_titles = []
+        data = []
         try:
             response = ShineCandidateDetail().get_keyword_sugesstion(query=q,skill_only=skill_only)
             if response:
-                keyword_suggestions = response.get('keyword_suggestion',None)
-                data['keyword_suggestion'] = keyword_suggestions
-                if skill_only:
+                # keyword_suggestions = response.get('related_skill', None) if response.get('keyword_suggestion',
+                #                                                                           None) is None else response.get(
+                #     'keyword_suggestion', None)
+                # data['keyword_suggestion'] = keyword_suggestions
+                # if skill_only:
+                #     for word in keyword_suggestions:
+                #         # word_type = word.get('type',None)
+                #         # if word_type == 'skill':
+                #         skills.append(word)
+                #     data['keyword_suggestion'] = skills
+                #     data['related_skill'] = response.get('related_skill',None)
+                
+                keyword_suggestions = response.get('keyword_suggestion',None)[:suggestion_quantity]
+                data = keyword_suggestions
+                if not(skill_only and job_title_only):
                     for word in keyword_suggestions:
                         word_type = word.get('type',None)
                         if word_type == 'skill':
-                            skills.append(word)
-                    data['keyword_suggestion'] = skills
-                    data['related_skill'] = response.get('related_skill',None)
+                            if len(skills)<skill_quantity:
+                                skills.append(word)
+                        elif len(job_titles)<job_title_quantity:
+                            job_titles.append(word)
+                    if skill_only:                   
+                        data = skills
+                    elif job_title_only:
+                        data = job_titles
+
             return APIResponse(data=data,message='suggested words fetched', status=HTTP_200_OK)
         except Exception as e:
             logging.getLogger('error_log').error(

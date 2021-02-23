@@ -24,7 +24,7 @@ const FindJob = (props) => {
     const [results, setResults] = useState([]);
     const [showResults, setShowResults] = useState(false);
     const debouncedSearchTerm = useDebounce(searchTerm, 500);
-    const [checkedClass, setCheckedClass] = useState('form-group');
+    const [checkedClass, setCheckedClass] = useState('form-group')
 
     const addValues = (values) => {
         return {
@@ -44,15 +44,19 @@ const FindJob = (props) => {
 
     const appendData = async (e) => {
         jobTitle.current.value = e.target.textContent
-        setSkillSet(await relatedSearch(jobTitle.current.value))
         setShowResults(false)
+        var data = await relatedSearch(jobTitle.current.value)
+        setSkillSet(data?.data?.related_skill?.slice(0, 10))
     }
 
     const handleInput = (e) => {
         setSearchTerm(e.target.value);
-        e.target.value ?
-            setCheckedClass('form-group checked') :
-            setCheckedClass('form-group')
+    }
+
+    function handleDelete(value) {
+        setChips(chips.filter(function (chip) {
+            return chip !== value
+        }))
     }
 
     const getMenuItems = (data, noOfItems = 6) => {
@@ -71,7 +75,7 @@ const FindJob = (props) => {
         // Make sure we have a value (user has entered something in input)
         if (debouncedSearchTerm) {
             userSearch(debouncedSearchTerm).then(results => {
-                setResults(results);
+                setResults(results?.data);
             });
         } else {
             setResults([]);
@@ -81,7 +85,7 @@ const FindJob = (props) => {
     const onSubmit = async (values, event) => {
         const data = addValues(values);
         history.push({
-            search: `?job=${data?.job}&experience=${data?.experience}&location=${data?.location}&skills=${data?.skills.join()}&page=${data?.page}`
+            search: `?job_title=${data?.job}&minexp=${data?.experience}&loc=${data?.location}&skill=${data?.skills}`
         });
     }
 
@@ -124,9 +128,9 @@ const FindJob = (props) => {
                             errors={!!errors ? errors[UserIntentForm.skills.name] : ''} />
 
                         <div className="form-group-custom">
-                            {skillSet?.map((skill, indx) => {
+                            {skillSet?.filter(item => !chips?.includes(item))?.map((skill, indx) => {
                                 return (
-                                    <label className="label-add" onClick={() => handleAppend(skill.name, indx)} for="">{skill.name}</label>
+                                    <label className="label-add" onClick={() => handleAppend(skill, indx)} for="">{skill}</label>
                                 )
                             })}
                         </div>

@@ -35,6 +35,7 @@ export default function* () {
         WatchDashboardMyOrders(),
         WatchDashboardMyCourses(),
         WatchDashboardMyServices(),
+        WatchDashboardStartCourse(),
         WatchHomePage(),
         WatchDashboardStartCourse(),
         WatchUserIntentPage()

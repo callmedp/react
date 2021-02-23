@@ -11,8 +11,7 @@ import CourseLisiting from '../../CourseListing/courseListing';
 const ViewCourses = (props) => {
     const [key, setKey] = useState('categories1');
 
-    const { course_data } = useSelector( store => store.careerChange )
-    console.log(course_data)
+    const { userIntent } = useSelector(store => store.userIntent)
 
     return (
         <section className="container-fluid mt-30n mb-0">
@@ -27,7 +26,7 @@ const ViewCourses = (props) => {
 
                         <div className="jobs-upskills courses-tray mt-20 mr-15p">
                             <h2 className="heading3">Here’s how you can make a new career</h2>
-                            <CourseLisiting courseList={course_data} />
+                            <CourseLisiting courseList={userIntent} />
                             <Link to={"#"} className="load-more">View More Courses</Link>
                         </div>
                         <div className="courses-feedback mt-50 mr-15p">

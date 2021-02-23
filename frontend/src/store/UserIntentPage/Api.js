@@ -165,7 +165,7 @@ const findRightJobsData = (data) => {
 }
 
 const upskillYourselfData = (data) => {
-    const url = `/intent/api/v1/course-recommendation/?preferred_role=${data?.preferred_role}&experience=${data?.experience}&skills=${data?.skills}&intent=2`;
+    const url = `/intent/api/v1/course-recommendation/${data}&intent=2`;
     return BaseApiService.get(`${siteDomain}${url}`);
 }
 
