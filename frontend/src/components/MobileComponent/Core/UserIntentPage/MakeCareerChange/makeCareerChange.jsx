@@ -6,13 +6,13 @@ import FeedbackResult from './ViewCourses/feedbackResult';
 
 const MakeCareerChange = (props) => {
     const params = new URLSearchParams(props.location.search);
-    const job = params.get('job')
+    const job = params.get('job_title')
 
     return (
         <div>
             {/* <GuidanceRecommendations /> */}
             {/* <FindJob /> */}
-            { !!job ? <ViewCourses /> : <FindJob type={"career"} {...props}/> } 
+            { !!job ? <ViewCourses {...props} /> : <FindJob type={"career"} {...props}/> } 
             {/* <FeedbackResult /> */}
         </div>
     )

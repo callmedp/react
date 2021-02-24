@@ -291,3 +291,8 @@
   background: $sprite;
   @include icon-inblock(85px, 72px, -939px -35px);
 }
+
+.icon-premium {
+  background: $sprite;
+  @include icon-inblock(16px, 14px, -225px -187px);
+}

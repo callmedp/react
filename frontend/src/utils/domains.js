@@ -9,4 +9,6 @@ export const imageUrl = window?.config?.imageUrl ||  process.env.REACT_APP_IMAGE
 
 export const shineSiteDomain = window?.config?.shineSiteDomain || process.env.REACT_APP_SHINE_SITE_DOMAIN || 'https://mapi.shine.com';
 
+export const shineDomain = 'https://www.shine.com';
+
 export const shineSiteUrl = 'https://www.shine.com/jobs/';

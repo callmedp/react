@@ -24,7 +24,7 @@ const FindJob = (props) => {
     const [results, setResults] = useState([]);
     const [showResults, setShowResults] = useState(false);
     const debouncedSearchTerm = useDebounce(searchTerm, 500);
-    const [checkedClass, setCheckedClass] = useState('form-group')
+    const [checkedClass, setCheckedClass] = useState('form-group');
 
     const addValues = (values) => {
         return {
@@ -33,7 +33,6 @@ const FindJob = (props) => {
             'job': jobTitle.current.value,
             'location': document.getElementById('location').value, //Is document work on SSR?
             'skills': chips.length > 0 ? chips?.concat(document.getElementById('skills').value.split(",")) : [],
-            'page': 1
         }
     }
 

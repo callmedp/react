@@ -15,7 +15,7 @@ const MakeCareerChange = (props) => {
             {/* <UIBanner /> */}
             <UIBanner {...props}/>
             {/* <GuidanceRecommendations /> */}
-            { !!job ? <ViewCourses /> : <FindJob type={"career"} {...props}/> } 
+            { !!job ? <ViewCourses {...props}/> : <FindJob type={"career"} {...props}/> } 
             {/* <ViewCourses /> */}
             {/* <FeedbackResult /> */}
         </div>

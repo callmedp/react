@@ -1,8 +1,6 @@
-import React, { useRef, useEffect } from 'react';
+import React from 'react';
 import UIBanner from '../../../Common/UIBanner/UIbanner';
-import UserGuidance from '../UserGuidance/UserGuidance';
 import ShineServices from './ShineServices/shineServices';
-import ShineServicesStatus from './ShineServices/shineServicesStatus'
 
 const ImproveProfile = (props) => {
     return (
@@ -11,7 +9,7 @@ const ImproveProfile = (props) => {
             <UIBanner {...props} />
             {/* <GuidanceRecommendations /> */}
             {/* <ShineServices /> */}
-            <ShineServices />
+            <ShineServices /> 
             {/* <ShineServicesStatus /> */}
         </div>
     )

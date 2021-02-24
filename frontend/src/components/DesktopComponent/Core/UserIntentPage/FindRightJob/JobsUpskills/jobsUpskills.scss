@@ -96,6 +96,22 @@
                         margin-right: .3rem;
                     }
                 }
+
+                .premium-badge {
+                    font-size: 1rem;
+                    color: $gray-100;
+                    font-weight: 600;
+                    border: .1rem solid $border-color;
+                    border-radius: 2rem;
+                    padding: .1rem .5rem;
+                    margin-bottom: 1rem;
+                    display: inline-flex;
+                    align-items: center;
+
+                    figure {
+                        margin-right: .3rem;
+                    }
+                }
     
                 h3 {
                     margin: 0;

@@ -31,15 +31,14 @@ const FindJob = (props) => {
             'job': jobTitle.current.value,
             'location': document.getElementById('location').value, //Is document work on SSR?
             'skills': chips?.concat(document.getElementById('skills').value.split(",")),
-            'page': 1
         }
     }
 
     const onSubmit = async (values, event) => {
         const data = addValues(values)
-        await new Promise((resolve) => dispatch(fetchFindRightJobsData({ data, resolve })));
+        // await new Promise((resolve) => dispatch(fetchFindRightJobsData({ data, resolve })));
         history.push({
-            search: `?job=${data?.job}&experience=${data?.experience}&location=${data?.location}&skills=${data?.skills.join()}&page=${data?.page}`
+            search: `?job_title=${data?.job}&minexp=${data?.experience}&loc=${data?.location}&skill=${data?.skills}`
         })
 
     }

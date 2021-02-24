@@ -129,18 +129,19 @@ const MyCourses = (props) => {
     const autoLogin = async (oi, ci, lm) => {
         try {
            dispatch(startDashboardCoursesPageLoader());
+           const candidate_id =  getCandidateId();
            const response = await new Promise((resolve, reject) => {
-           dispatch(
-               getVendorUrl({
-               payload: {
-                   candidate_id: getCandidateId(),
-                   order_id: oi,
-                   course_id: ci,
-               },
-               resolve,
-               reject,
-               })
-           );
+            dispatch(
+                getVendorUrl({
+                    payload: {
+                        candidate_id: candidate_id,
+                        order_id: oi,
+                        course_id: ci,
+                    },
+                resolve,
+                reject,
+                })
+            );
            });
            dispatch(stopDashboardCoursesPageLoader());
            let url = response?.data?.vendor_url;

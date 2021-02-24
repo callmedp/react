@@ -119,4 +119,4 @@ const CourseLisiting = (props) => {
     )
 }
 
-export default CourseLisiting
+export default CourseLisiting;

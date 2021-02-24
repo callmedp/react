@@ -9,17 +9,18 @@ import { fetchFindRightJobsData, fetchUpskillYourselfData } from 'store/UserInte
 import { useDispatch } from 'react-redux';
 import { startJobsUpskillsLoader, stopJobsUpskillsLoader } from 'store/Loader/actions';
 import JobListing from './JobListing/jobListing';
-import CourseLisiting from '../../CourseListing/courseListing';
+import CourseLisiting from '../../IntentUtil/courseListing';
 import { showSwal } from 'utils/swal';
 
 const JobsUpskills = (props) => {
+	const [key, setKey] = useState('Jobs');
     const dispatch = useDispatch();
     const { history } = props;
     const { jobsUpskillsLoader } = useSelector(store => store.loader);
     const { jobsList : { results, next } } = useSelector(store => store.findRightJob);
     const { course_data, page }  = useSelector(store => store.upskillYourself);
     const params = new URLSearchParams(props.location.search);
-    const [currentJobPage, setJobPage] = useState(0);
+    const [currentJobPage, setJobPage] = useState(1);
 
     const [selectTab, tabSelected] = useState('tab1');
     const openSelectedTab = (id) => tabSelected(id);
@@ -43,14 +44,23 @@ const JobsUpskills = (props) => {
         dispatch(stopJobsUpskillsLoader());
     }
 
-    const handleUpskillData = async (tab, num) => {
-        const dataUpskill = `?preferred_role=${params.get('job_title')}&experience=${params.get('minexp')}&skills=${params.get('skill') || ''}&page=${num}&intent=2`;
-        
+    const handleUpskillData = async (tabType) => {
+        if (key !== tabType) {
+			if (tabType === "Courses" && (!course_data || (Array.isArray(course_data) && course_data.length === 0))) {
+                const dataUpskill = `?preferred_role=${params.get('job_title')}&experience=${params.get('minexp')}&skills=${params.get('skill') || ''}&page=${currentJobPage}&intent=2`;
+                courseDispatchHit(dataUpskill);
+            }
+            setKey(tabType);
+        }
+    }
+
+    const courseDispatchHit = async (dataUpskill) => {
+        dispatch(startJobsUpskillsLoader());
+
         // api hit for upskill yourself
         try {
-            dispatch(startJobsUpskillsLoader());
             await new Promise((resolve, reject) => dispatch(fetchUpskillYourselfData({ dataUpskill, resolve, reject })));
-            openSelectedTab(tab);
+            openSelectedTab('tab2');
         }
         catch(e) {
             showSwal('error', 'Something went wrong! Try Again');
@@ -68,10 +78,11 @@ const JobsUpskills = (props) => {
         resultApiFunc(`?${next_data[1]}`);
     }
 
-    const loadMoreCourses = (ev, num) => {
+    const loadMoreCourses = (ev) => {
         ev.preventDefault();
         setJobPage(state => state+1);
-        handleUpskillData('tab2', num+1);
+        const dataUpskill = `?preferred_role=${params.get('job_title')}&experience=${params.get('minexp')}&skills=${params.get('skill') || ''}&page=${currentJobPage + 1}&intent=2`;
+        courseDispatchHit(dataUpskill);
     }
 
     return (
@@ -91,7 +102,7 @@ const JobsUpskills = (props) => {
                         <input checked={selectTab === 'tab1'} onClick={() => openSelectedTab('tab1')} type="radio" name="tabset" id="tab1" aria-controls="Jobs for you" />
                         <label htmlFor="tab1">Jobs for you</label>
 
-                        <input checked={selectTab === 'tab2'} onClick={() => handleUpskillData('tab2', 1)} type="radio" name="tabset" id="tab2" aria-controls="Upskill yourself" />
+                        <input checked={selectTab === 'tab2'} onClick={() => handleUpskillData('Courses')} type="radio" name="tabset" id="tab2" aria-controls="Upskill yourself" />
                         <label htmlFor="tab2">Upskill yourself</label>
 
                         <div className="tab-panels">
@@ -103,7 +114,7 @@ const JobsUpskills = (props) => {
                                 <div className="m-courses mt-20">
                                     <CourseLisiting courseList={course_data} />
                                 </div>
-                                {page?.has_next && <span className="m-load-more btn-col" onClick={(event) => loadMoreCourses(event, page?.current_page)}>View More Courses</span>}
+                                {page?.has_next && <span className="m-load-more btn-col" onClick={loadMoreCourses}>View More Courses</span>}
                             </div>
                         </div>
                     </div>

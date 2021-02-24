@@ -14,6 +14,14 @@ const findRightJobsDataFetched = createAction('FIND_RIGHT_JOBS_DATA_FETCHED');
 const fetchUpskillYourselfData = createAction('FETCH_UPSKILL_YOURSELF_DATA');
 const upskillYourselfDataFetched = createAction('UPSKILL_YOURSELF_DATA_FETCHED');
 
+const fetchServiceRecommendation = createAction('FETCH_SERVICE_RECOMMENDATION');
+const serviceRecommendationFetched = createAction('SERVICE_RECOMMENDATION_FETCHED');
+
+const uploadFileUrl = createAction('UPLOAD_FILE_URL');
+
+// send feedback
+const sendFeedback = createAction('SEND_FEEDBACK');
+
 export {
     sendUserIntentData,
     fetchedUserIntentData,
@@ -22,5 +30,9 @@ export {
     fetchFindRightJobsData,
     findRightJobsDataFetched,
     fetchUpskillYourselfData,
-    upskillYourselfDataFetched
+    upskillYourselfDataFetched,
+    serviceRecommendationFetched,
+    fetchServiceRecommendation,
+    uploadFileUrl,
+    sendFeedback
 }

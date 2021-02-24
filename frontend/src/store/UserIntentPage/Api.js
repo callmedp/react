@@ -8,6 +8,26 @@ const userIntentData = (data) => {
     return BaseApiService.post(`${siteDomain}${url}`, data);
 }
 
+const fetchServiceRecommendation = (data) => {
+
+    const url = '/intent/api/v1/service-recommendation/'
+
+    if(data?.candidate_id != false){
+        const candidate_id = data?.candidate_id;
+        url = url + '?candidate_id=' + candidate_id
+    }
+
+    return BaseApiService.get(`${siteDomain}${url}`);
+}
+
+const uploadFileUrlAPI = (data) => {
+    const url = 'api/resume-score-checker/get-score';
+
+    return BaseApiService.post(`${siteDomain}/${url}`, data,
+        {}, true);
+
+};
+
 const careerChangeData = () => {
     const url = `/intent/api/v1/course-recommendation/`
     // return BaseApiService.get(`${siteDomain}${url}`);
@@ -169,9 +189,17 @@ const upskillYourselfData = (data) => {
     return BaseApiService.get(`${siteDomain}${url}`);
 }
 
+const sendFeedback = (data) => {
+    const url = `/intent/api/v1/recommendation-feedback/`;
+    return BaseApiService.get(`${siteDomain}${url}`);
+}
+
 export default {
     userIntentData,
     careerChangeData,
     findRightJobsData,
-    upskillYourselfData
+    upskillYourselfData,
+    fetchServiceRecommendation,
+    uploadFileUrlAPI,
+    sendFeedback
 }

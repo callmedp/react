@@ -1,4 +1,4 @@
-import { fetchedUserIntentData, careerChangeDataFetched, findRightJobsDataFetched, upskillYourselfDataFetched } from './actions';
+import { fetchedUserIntentData, careerChangeDataFetched, findRightJobsDataFetched, serviceRecommendationFetched, uploadFileUrl, upskillYourselfDataFetched } from './actions';
 
 const userIntentState = {
     userIntent: [
@@ -95,3 +95,34 @@ export const upskillYourselfReducer = (state=upskillYourselfState, action) => {
         default: return state;
     }
 }
+
+const serviceRecommendationState = {
+    services: [],
+    page: {}
+}
+
+export const serviceRecommendationReducer = (state=serviceRecommendationState, action) => {
+    switch(action.type) {
+        case serviceRecommendationFetched.type : return {...state.serviceRecommendationFetched, ...action.payload}
+        default: return state;
+    }
+}
+
+const initialState = {
+    total_score : 0
+};
+
+
+export const ResumeScoreReducer = (state = initialState, action) => {
+    switch (action.type) {
+        case uploadFileUrl.type : {
+            return {
+                ...state,
+                ...action.payload
+            }
+        }
+        default: {
+            return state;
+        }
+    }
+};

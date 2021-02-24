@@ -50,7 +50,7 @@ const CourseLisiting = (props) => {
                                     <span className="mr-10">By {course?.providerName}</span>
                                     <span className="m-rating">
                                         {course?.stars?.map((star, indx) => starRatings(star, indx))}
-                                        <span>{course?.rating}</span>
+                                        <span>{course?.rating}/5</span>
                                     </span>
                                 </div>
                                     {course?.test_duration ? getDurationMode(course?.test_duration, course?.mode, 'minutes') : getDurationMode(course?.duration, course?.mode, 'days')}

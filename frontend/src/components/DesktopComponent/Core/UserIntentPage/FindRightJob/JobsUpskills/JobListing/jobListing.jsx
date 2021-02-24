@@ -15,9 +15,18 @@ const JobListing = (props) => {
                             <div className="course">
                                 <div className="d-flex p-20">
                                     <div className="course__content">
-                                        {/* <span className="hot-badge">
-                                            <figure className="icon-hot"></figure> Hot
-                                        </span> */}
+                                    {
+                                            job.jHJ === 1 && 
+                                            <span className="hot-badge">
+                                                <figure className="icon-hot"></figure> Hot
+                                            </span>
+                                        }
+                                        {
+                                            job.jPJ === 1 && 
+                                            <span className="premium-badge">
+                                                <figure className="icon-premium"></figure> Premium
+                                            </span>
+                                        }
                                         <h3 className="heading3">
                                             <a href={`${siteDomain}/${job.jSlug}`}>{ job?.jJT }</a>
                                         </h3>

@@ -1,8 +1,8 @@
 # python imports
 import logging
-
+import requests
 # django imports
-
+from django.conf import settings
 # local imports
 from resumescorechecker.models import ResumeScoreCheckerUserDetails
 from resumescorechecker.choices import section_mapping
@@ -12,7 +12,6 @@ from core.api_mixin import ShineCandidateDetail
 # third party imports
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
 
 class SaveResumeDetailsApiView(APIView):
     authentication_classes = ()
@@ -80,3 +79,23 @@ class SaveResumeDetailsApiView(APIView):
             logging.getLogger("error_log").error("Error in adding user to resume score checker, reason - {}".format(e))
             return Response({"status": "Failure to add user"})
         return Response({"status": "SUCCESS"})
+
+class GetResumeScoreApiView(APIView):
+    authentication_classes = ()
+    permission_classes = []
+
+    def post(self, request, *args, **kwargs):
+        file = self.request.FILES
+        url = settings.RESUME_SHINE_URL + '/api/resume-score-checker/get-score/'
+        response = requests.post(url, files=file)
+
+        if response.status_code == 200:
+            result = response.json()
+            data = result.get('data',{})
+            total_score = data.get('total_score', None)
+            if not total_score:
+                return Response({"status": "ERROR", "error": "Unable to Parse Resume"})
+            return Response({"status": "SUCCESS", "total_score":total_score})
+
+        return Response({"status": "ERROR", "error": "Unable to Parse Resume"})
+

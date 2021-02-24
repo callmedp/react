@@ -11,7 +11,7 @@ const ShineServicesStatus = (props) => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    const value = 0.69;
+    const value = 0.50;
 
     return (
         <section className="container-fluid mt-30n mb-0">
@@ -26,7 +26,7 @@ const ShineServicesStatus = (props) => {
                         <div className="shine-services w-70">
                             <CircularProgressbar value={value} maxValue={1} text={`${value * 100}`} />
                             <span className="fs-13">
-                                <strong className="heading3 d-block">Your resume Scored 69 out of 100 </strong> 
+                                <strong className="heading3 d-block">Your resume Scored {value * 100} out of 100  </strong> 
                                 Check out the detailed reviews to improve the score. <strong className="fs-13">Score more to get perfect job match your profile</strong>
                                 <span className="d-flex mt-20">
                                     <Link to={"#"}>View details</Link>
