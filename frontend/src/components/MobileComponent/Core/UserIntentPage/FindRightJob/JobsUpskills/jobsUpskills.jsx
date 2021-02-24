@@ -16,7 +16,7 @@ const JobsUpskills = (props) => {
     const { history } = props;
     const { jobsUpskillsLoader } = useSelector(store => store.loader);
     const { jobsList : { results, next } } = useSelector(store => store.findRightJob);
-    const { upskillList: { course_data, page } } = useSelector(store => store.upskillYourself);
+    const { course_data, page }  = useSelector(store => store.upskillYourself);
     const params = new URLSearchParams(props.location.search);
     let currentPage = 1;
 

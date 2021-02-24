@@ -86,7 +86,7 @@ class CourseRecommendationAPI(APIView):
             'recommended_course_ids':course_id,
             'page':page_info
         }
-        return APIResponse(data={'upskillList' : data},message='recommended courses fetched', status=HTTP_200_OK)
+        return APIResponse(data=data,message='recommended courses fetched', status=HTTP_200_OK)
 
 class ServiceRecommendationAPI(APIView):
     """
