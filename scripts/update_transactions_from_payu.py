@@ -5,7 +5,7 @@ import os,django,sys,json,ast,re,pytz,logging
 from hashlib import sha512
 
 #Settings imports
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "careerplus.config.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "careerplus.config.settings_live")
 ROOT_FOLDER = os.path.realpath(os.path.dirname(__file__))
 ROOT_FOLDER = ROOT_FOLDER[:ROOT_FOLDER.rindex('/')]
 if ROOT_FOLDER not in sys.path:
@@ -74,7 +74,7 @@ if __name__ == "__main__":
     command = "verify_payment"
     utc_tz = pytz.timezone('UTC')
     current_utc_time = datetime.utcnow().replace(tzinfo=utc_tz)
-    time_intervals_to_check = [5]
+    time_intervals_to_check = [5, 15, 240, 1440]
 
     for interval in time_intervals_to_check:
         sdt = (current_utc_time - timedelta(days=7)).replace(
