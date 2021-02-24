@@ -29,9 +29,9 @@ const JobsUpskills = (props) => {
 
     const resultApiFunc = async (parameters) => {
         // api hit for jobs for you
-        let data = parameters + `&page=1`;
+        let jobParams = parameters + `&page=1`;
         dispatch(startJobsUpskillsLoader());
-            await new Promise((resolve) => dispatch(fetchFindRightJobsData({ data, resolve })));
+            await new Promise((resolve) => dispatch(fetchFindRightJobsData({ jobParams, resolve })));
         dispatch(stopJobsUpskillsLoader());
     }
 

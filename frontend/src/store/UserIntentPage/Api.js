@@ -160,7 +160,7 @@ const careerChangeData = () => {
 }
 
 const findRightJobsData = (data) => {
-    const url = `/intent/api/v1/jobs/${data}&intent=2`;
+    const url = `/intent/api/v1/jobs/${data?.jobParams}&intent=2`;
     return BaseApiService.get(`${siteDomain}${url}`);
 }
 

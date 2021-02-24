@@ -44,11 +44,12 @@ function* careerChangeData(action) {
 function* findJobsData(action) {
     const { payload } = action;
     try {
-        const response = yield call(Api.findRightJobsData, payload.data);
+        const response = yield call(Api.findRightJobsData, payload);
 
         if (response?.error) return payload?.reject(response?.error);
 
-        const item = response?.data.data;
+        const item = response?.data?.data;
+        item.jobsList = item?.jobsList ?? {};
         yield put(findRightJobsDataFetched({ ...item }))
         return payload?.resolve(item);
     }
@@ -65,7 +66,7 @@ function* upskillData(action) {
 
         if (response?.error) return payload?.reject(response?.error);
 
-        const item = response?.data.data;
+        const item = response?.data?.data;
         yield put(upskillYourselfDataFetched({ ...item }))
         return payload?.resolve(item);
     }

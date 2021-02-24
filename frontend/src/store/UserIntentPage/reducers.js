@@ -72,7 +72,7 @@ const findRightJobsState = {
 
 export const findRightJobsReducer = (state=findRightJobsState, action) => {
     switch(action.type) {
-        case findRightJobsDataFetched.type : return {...state.findRightJobsDataFetched, ...action?.payload}
+        case findRightJobsDataFetched.type : return {...state, ...action?.payload}
         default: return state;
     }
 }
