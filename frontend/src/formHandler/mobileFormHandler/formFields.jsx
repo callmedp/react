@@ -58,18 +58,18 @@ const TextArea = (props) => {
 }
 
 
-const SelectExperienceBox = (props) => {
+const SelectIntentBox = (props) => {
 
     const { attributes: {
-                            name, children, validation
-                        }, register } = props
+        name, children, validation, label, errorMessage
+    }, register, errors } = props
 
     const [checkedClass, setCheckedClass] = useState('form-group')
 
     return (
-        <div className={checkedClass}>
+        <div className={!!errors ? 'form-group error' : checkedClass}>
             <div className="custom-select-box">
-                <select name={name} className="custom-select" ref={register(validation)} aria-label="select experience level" onChange={() => setCheckedClass('form-group checked')}>
+            <select name={name} className="custom-select" ref={register(validation)} aria-label={label} onChange={() => setCheckedClass('form-group checked')}>
                     { children?.map((item,index)=>{
                         return(
                         <option value={item.value} key={index}>{item.text}</option>
@@ -97,7 +97,7 @@ const MultiSelectBox = (props) => {
 
                 <div className="form-group" onClick={() => setMouse(false)}>
                     <label for="">Your skills</label>
-                    <input className="form-control" type="text" name={name} ref={register(validation)} />
+                    <input className="form-control" type="text" name={name} ref={register(validation)} autoComplete="off"/>
                 </div>
 
                 :
@@ -112,7 +112,7 @@ const MultiSelectBox = (props) => {
                         })
                         }
                         <span className="d-flex align-items-center mt-10">
-                            <input type="text" name={name} className="form-control custom-input" ref={register(validation)} defaultValue={defaultValue} id={id} placeholder={placeholder} />
+                            <input type="text" name={name} className="form-control custom-input" ref={register(validation)} defaultValue={defaultValue} id={id} placeholder={placeholder} autoComplete="off"/>
                         </span>
                     </div>
                 { !!errors ? <span className="error-msg">{errorMessage[errors.type]}</span> : ''}
@@ -126,6 +126,6 @@ export {
     InputField,
     SelectBox,
     TextArea,
-    SelectExperienceBox,
+    SelectIntentBox,
     MultiSelectBox
 }

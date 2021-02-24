@@ -14,7 +14,7 @@ import { showSwal } from 'utils/swal';
 
 const JobsUpskills = (props) => {
 	const [key, setKey] = useState('Jobs');
-	const { history } = props
+	const { history } = props;
 	const dispatch = useDispatch();
 	const params = new URLSearchParams(props.location?.search);
 	const [currentJobPage, setJobPage] = useState(1);

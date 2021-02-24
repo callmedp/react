@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux';
 import { startJobsUpskillsLoader, stopJobsUpskillsLoader } from 'store/Loader/actions';
 import JobListing from './JobListing/jobListing';
 import CourseLisiting from '../../IntentUtil/courseListing';
+import Feedback from '../../IntentUtil/feedback';
 import { showSwal } from 'utils/swal';
 
 const JobsUpskills = (props) => {
@@ -119,13 +120,7 @@ const JobsUpskills = (props) => {
                         </div>
                     </div>
                 </div>
-                <div className="m-courses-feedback">
-                    <strong>Are these courses recommendation relevant to your profile?</strong>
-                    <span className="mt-15">
-                        <Link className="btn-blue-outline" to={'#'}>Yes</Link>
-                        <Link className="btn-blue-outline" to={'#'}>No</Link>
-                    </span>
-                </div>
+                <Feedback />
             </div>
         </section>
     )

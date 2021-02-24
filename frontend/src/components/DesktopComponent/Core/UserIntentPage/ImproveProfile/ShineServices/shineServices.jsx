@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { shineDomain, resumeShineSiteDomain } from '../../../../../../utils/domains.js';
 import { getCandidateId } from '../../../../../../utils/storage.js';
 import Modal from 'react-bootstrap/Modal';
-import Button from 'react-bootstrap/Button';
 import '../../../CataloguePage/ServicesForYou/servicesForYou.scss';
 import {uploadFileUrl} from 'store/UserIntentPage/actions';
 import { startGetResumeScoreLoader, stopGetResumeScoreLoader } from 'store/Loader/actions/index';
@@ -21,8 +20,6 @@ const ShineServices = (props) => {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
     const dispatch = useDispatch();
-
-
     const [alert, setAlert] = useState(false);
     const handleAlert = () => setAlert(true);
     const [filename, setFilename] = useState("Choose file");
@@ -34,8 +31,6 @@ const ShineServices = (props) => {
     const resetFileDetails = () => {resetFileName(); resetFile(); resetTotalScore();}
     const { resumeScoreLoader } = useSelector(store => store.loader);
     const { services , page } = useSelector(store => store.serviceRecommend);
-    console.log('services')
-    console.log(services)
 
     useEffect(() => {
         handleEffects();
@@ -120,7 +115,7 @@ const ShineServices = (props) => {
                                     Check out the detailed reviews to improve the score. <strong className="fs-13">Score more to get perfect job match your profile</strong>
                                     <span className="d-flex mt-20">
                                         <a href={`${resumeShineSiteDomain}/resume-score-checker`}>View details</a>
-                                        <Link className="file-close">{filename} <i className="icon-close-sm ml-10" onClick="resetFileDetails()" ></i></Link>
+                                        <Link className="file-close">{filename} <i className="icon-close-sm ml-10" onClick={() => resetFileDetails()} ></i></Link>
                                     </span>
                                 </span>
                             </div> :

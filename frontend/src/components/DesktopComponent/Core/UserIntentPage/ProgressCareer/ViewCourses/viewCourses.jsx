@@ -12,29 +12,28 @@ import Loader from 'components/DesktopComponent/Common/Loader/loader';
 const ViewCourses = (props) => {
     const { course_data, page } = useSelector(store => store.upskillYourself);
     const dispatch = useDispatch()
-    const { location } = props
     const { careerChangeLoader } = useSelector(store => store.loader);
     const [currentJobPage, setJobPage] = useState(1);
     const params = new URLSearchParams(props.location?.search);
 
-    const handleEffect = async (page) => {
-		const dataUpskill = `?preferred_role=${params.get('job_title')}&experience=${params.get('minexp')}&skills=${params.get('skill') || ''}&page=${page}&intent=1&department=${params.get('department')}`; //need to revied
+    const handleEffect = async () => {
+		const dataUpskill = `?preferred_role=${params.get('job_title')}&experience=${params.get('minexp')}&skills=${params.get('skill') || ''}&page=${currentJobPage}&intent=1&department=${params.get('department')}`; //need to revied
 		dispatch(startCareerChangeLoader())
             await new Promise((resolve) => dispatch(fetchUpskillYourselfData({ dataUpskill, resolve })));
 		dispatch(stopCareerChangeLoader())
 	}
     
     useEffect(() => {
-        handleEffect(1)
+        handleEffect()
     },[])
 
-    const loadMoreCourses = async (eve, page) => {
+    const loadMoreCourses = async (eve) => {
         eve.preventDefault();
-        handleEffect(page+1);
-		// const dataUpskill = `?preferred_role=${params.get('job_title')}&experience=${params.get('minexp')}&skills=${params.get('skill') || ''}&page=${currentJobPage + 1}`;
-		// dispatch(startCareerChangeLoader())
-        // await new Promise((resolve) => dispatch(fetchUpskillYourselfData({ dataUpskill, resolve })));
-		// dispatch(stopCareerChangeLoader())
+		const dataUpskill =  `?preferred_role=${params.get('job_title')}&experience=${params.get('minexp')}&skills=${params.get('skill') || ''}&page=${currentJobPage + 1}&intent=1&department=${params.get('department')}`;
+        
+        dispatch(startCareerChangeLoader())
+            await new Promise((resolve) => dispatch(fetchUpskillYourselfData({ dataUpskill, resolve })));
+		dispatch(stopCareerChangeLoader())
 		setJobPage(state => state + 1)
 	}
 
@@ -53,7 +52,7 @@ const ViewCourses = (props) => {
                         <div className="jobs-upskills courses-tray mt-20 mr-15p">
                             <h2 className="heading3">Here’s how you can make a new career</h2>
                             <CourseLisiting courseList={course_data} />
-                            {page && page.has_next ? <Link onClick={(event) => loadMoreCourses(event, page.current_page)} className="load-more">View More Courses</Link> : ''}
+                            {page && page.has_next ? <Link onClick={loadMoreCourses} className="load-more">View More Courses</Link> : ''}
                         </div>
                         <Feedback/>
                     </div>

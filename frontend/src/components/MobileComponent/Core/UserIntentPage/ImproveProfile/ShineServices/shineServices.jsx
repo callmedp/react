@@ -125,7 +125,7 @@ const ShineServices = (props) => {
                             <CircularProgressbar value={totalScore/100} maxValue={1} text={`${totalScore}`} />
                             <span>
                                 <strong className="heading3 d-block">Your resume Scored <br />{totalScore} out of 100 </strong> 
-                                <Link className="file-close mt-10" to={"#"}>{filename} <i className="icon-close-sm ml-10" onClick="resetFileDetails()"></i></Link>
+                                <Link className="file-close mt-10" to={"#"}>{filename} <i className="icon-close-sm ml-10" onClick={() => resetFileDetails()}></i></Link>
                             </span>
                         </span>
                         <span className="fs-13 d-block mt-20">

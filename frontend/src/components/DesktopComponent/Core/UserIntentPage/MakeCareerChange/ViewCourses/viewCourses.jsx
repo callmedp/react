@@ -7,13 +7,12 @@ import CourseLisiting from '../../IntentUtil/courseListing';
 import Feedback from '../../IntentUtil/feedback';
 import { fetchUpskillYourselfData } from 'store/UserIntentPage/actions';
 import { startCareerChangeLoader, stopCareerChangeLoader } from 'store/Loader/actions/index';
-import queryString from "query-string";
 import Loader from '../../../../Common/Loader/loader';
 
 const ViewCourses = (props) => {
     const { course_data, page } = useSelector(store => store.upskillYourself);
     const dispatch = useDispatch()
-    const { location } = props
+    // const { location } = props
     const { careerChangeLoader } = useSelector(store => store.loader);
     const [currentJobPage, setJobPage] = useState(1);
     const params = new URLSearchParams(props.location?.search);
@@ -31,7 +30,7 @@ const ViewCourses = (props) => {
 
     const loadMoreCourses = async (eve) => {
 		eve.preventDefault();
-		const dataUpskill = `?preferred_role=${params.get('job_title')}&experience=${params.get('minexp')}&skills=${params.get('skill') || ''}&page=${currentJobPage + 1}`;
+		const dataUpskill = `?preferred_role=${params.get('job_title')}&experience=${params.get('minexp')}&skills=${params.get('skill') || ''}&page=${currentJobPage+1}&intent=0&department=${params.get('department')}`;
 		dispatch(startCareerChangeLoader())
         await new Promise((resolve) => dispatch(fetchUpskillYourselfData({ dataUpskill, resolve })));
 		dispatch(stopCareerChangeLoader())
