@@ -9,21 +9,56 @@ import { fetchCareerChangeData, fetchFindRightJobsData } from 'store/UserIntentP
 import { useDispatch } from 'react-redux';
 import useDebounce from 'utils/searchUtils/debouce';
 import { IndianState } from 'utils/constants';
-import { userSearch, relatedSearch } from 'utils/searchUtils/searchFunctions';
+import { userSearch, relatedSearch, userSkillSearch } from 'utils/searchUtils/searchFunctions';
 
 const FindJob = (props) => {
     const [chips, setChips] = useState([]);
     const { register, handleSubmit, errors } = useForm();
     const dispatch = useDispatch();
-    const jobTitle = useRef();
     const { history, type } = props;
-    const [searchTerm, setSearchTerm] = useState('');
+
+    //Job title events handling
+    //-------------------------------------------------------------------
+    const jobTitle = useRef();
     const [results, setResults] = useState([]);
+    const [jtError, setJtError] = useState(false)
     const [showResults, setShowResults] = useState(false);
+    const [searchTerm, setSearchTerm] = useState('');
     const debouncedSearchTerm = useDebounce(searchTerm, 500);
     const [skillSet, setSkillSet] = useState([])
-    const [checkedClass, setCheckedClass] = useState('form-group')
 
+    const handleInput = (e) => {
+        setJtError(false)
+        setSearchTerm(e.target.value);
+        e.target.value ?
+            setCheckedClass('form-group checked') :
+            setCheckedClass('form-group')
+    }
+    //-------------------------------------------------------------------
+
+    //Skill Options handling
+    //-------------------------------------------------------------------
+    const skillsKey = useRef();
+    const [skillResults, setSkillResults] = useState([]);
+    const [searchSkillTerm, setSearchSkillTerm] = useState('');
+    const [showSkillResults, setShowSkillResults] = useState(false);
+    const debounceSkillSearch = useDebounce(searchSkillTerm, 500);
+
+    const handleSkillsClick = () => {
+        handleAppend(skillsKey.current.value)
+        skillsKey.current.value = ''
+    }
+
+    const suggestSkills = (e) => {
+        setSearchSkillTerm(e.target.value);
+    }
+
+    //-------------------------------------------------------------------
+
+    //Handling of Green ticks
+    const [checkedClass, setCheckedClass] = useState('form-group')
+    
+    //Getting Form values
     const addValues = (values) => {
         if (type === 'job') {
             return {
@@ -46,16 +81,24 @@ const FindJob = (props) => {
         }
     }
 
+    //Form Submission Handling
     const onSubmit = async (values, event) => {
-        const data = addValues(values)
-        console.log(data)
-        await new Promise((resolve) => dispatch(fetchFindRightJobsData({ data, resolve })));
-        history.push({
-            search: `?job=${data?.job}&experience=${data?.experience}&location=${data?.location}&skills=${data?.skills.join()}&page=${data?.page}`
-        })
 
+        //Empty Job title case handling
+        if(!jobTitle.current.value){
+            setJtError(true)
+            setCheckedClass('form-group error')
+        }
+        else{
+            const data = addValues(values)
+            await new Promise((resolve) => dispatch(fetchFindRightJobsData({ data, resolve })));
+            history.push({
+                search: `?job=${data?.job}&experience=${data?.experience}&location=${data?.location}&skills=${data?.skills.join()}&page=${data?.page}`
+            })
+        }
     }
 
+    //Skills Append and Remove function
     function handleAppend(data, id) {
         setChips([...chips, data])
     }
@@ -66,25 +109,29 @@ const FindJob = (props) => {
         }));
     }
 
-    const appendData = async (e) => {
-        jobTitle.current.value = e.target.textContent
-        setShowResults(false)
-        var data = await relatedSearch(jobTitle.current.value)
-        setSkillSet(data?.data?.related_skill?.slice(0, 10))
+    //Data Append Handling
+    const appendData = async (e, refr) => {
+        if(refr){
+            refr.current.value = e.target.textContent
+            if(refr.current.id === 'job'){
+                setShowResults(false)
+                var data = await relatedSearch(jobTitle.current.value)
+                setSkillSet(data?.slice(0, 10))
+            }
+            else{
+                handleSkillsClick()
+                setSkillResults([])
+                setShowSkillResults(false)
+            }
+        }
     }
 
-    const handleInput = (e) => {
-        setSearchTerm(e.target.value);
-        e.target.value ?
-            setCheckedClass('form-group checked') :
-            setCheckedClass('form-group')
-    }
-
-    const getMenuItems = (data, noOfItems = 6) => {
+    //Return result format
+    const getMenuItems = (data, refr, noOfItems = 6) => {
         return (
             <>
                 {data?.slice(0, noOfItems)?.map((result, idx) => (
-                    <div key={idx} onClick={e => appendData(e)}>
+                    <div key={idx} onClick={e => appendData(e, refr)}>
                         <span>{result?.pdesc?.replace(/\w\S*/g, (w) => (w.replace(/^\w/, (c) => c.toUpperCase())))}</span>
                     </div>
                 ))}
@@ -94,14 +141,21 @@ const FindJob = (props) => {
 
     useEffect(() => {
         // Make sure we have a value (user has entered something in input)
-        if (debouncedSearchTerm) {
+        if(debounceSkillSearch) {
+            userSkillSearch(debounceSkillSearch).then(results => {
+                setSkillResults(results?.data);
+            });
+        }
+        else if (debouncedSearchTerm) {
             userSearch(debouncedSearchTerm).then(results => {
                 setResults(results?.data);
             });
-        } else {
+        } 
+        else {
             setResults([]);
+            setSkillResults([]);
         }
-    }, [debouncedSearchTerm]);
+    }, [debouncedSearchTerm, debounceSkillSearch]);
 
     return (
         <section className="container-fluid mt-30n mb-0">
@@ -124,10 +178,11 @@ const FindJob = (props) => {
                                             <input type="text" className="form-control" id="job" name="job" placeholder=" " ref={jobTitle} autoComplete="off"
                                                 aria-required="true" aria-invalid="true" onChange={e => handleInput(e)} onFocus={() => setShowResults(true)} />
                                             <label htmlFor="">Current job title</label>
+                                            { !!jtError ? <span className="error-msg">Job Title is Required</span> : ''}
 
                                             {showResults ?
                                                 <div className="user-intent-search-result">
-                                                    {results?.length ? getMenuItems(results) : null}
+                                                    {results?.length ? getMenuItems(results, jobTitle) : null}
                                                 </div> : null
                                             }
                                         </div>
@@ -190,10 +245,16 @@ const FindJob = (props) => {
                                                 })
                                                 }
                                                 <span className="d-flex align-items-center mt-10">
-                                                    <input type="text" className="form-control custom-input" name="skills" placeholder="Keyword Research" id="skills" autoComplete="off" />
-                                                    <button className="custom-btn" type="submit"><figure className="icon-search-arrow"></figure></button>
+                                                    <input type="text" className="form-control custom-input" name="skills" placeholder="Keyword Research" id="skills" autoComplete="off" ref={skillsKey} onChange={ e => suggestSkills(e) } onFocus={() => setShowSkillResults(true)} />
+                                                    <button className="custom-btn" type="button" onClick={ handleSkillsClick }><figure className="icon-search-arrow"></figure></button>
                                                 </span>
                                             </div>
+                                            {   
+                                                showSkillResults ?
+                                                    <div className="user-intent-search-result">
+                                                        {skillResults?.length ? getMenuItems(skillResults, skillsKey) : null}
+                                                    </div> : null
+                                            }
                                         </div>
 
                                         <div className="form-group-custom">
@@ -207,7 +268,7 @@ const FindJob = (props) => {
 
 
                                         <button type="submit" className="btn btn-inline btn-primary submit-btn mt-30" role="button" data-toggle="modal"
-                                            data-target="#thankyouModal">{type === 'job' ? 'View jobs' : 'View courses'}</button>
+                                            data-target="#thankyouModal" type='submit'>{type === 'job' ? 'View Jobs' : 'View Courses'}</button>
                                     </form>
                                 </div>
                             </div>

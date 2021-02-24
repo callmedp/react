@@ -97,7 +97,7 @@ const MultiSelectBox = (props) => {
 
                 <div className="form-group" onClick={() => setMouse(false)}>
                     <label for="">Your skills</label>
-                    <input className="form-control" type="text" name={name} ref={register(validation)} />
+                    <input className="form-control" type="text" name={name} ref={register(validation)} autoComplete="off"/>
                 </div>
 
                 :
@@ -112,7 +112,7 @@ const MultiSelectBox = (props) => {
                         })
                         }
                         <span className="d-flex align-items-center mt-10">
-                            <input type="text" name={name} className="form-control custom-input" ref={register(validation)} defaultValue={defaultValue} id={id} placeholder={placeholder} />
+                            <input type="text" name={name} className="form-control custom-input" ref={register(validation)} defaultValue={defaultValue} id={id} placeholder={placeholder} autoComplete="off"/>
                         </span>
                     </div>
                 { !!errors ? <span className="error-msg">{errorMessage[errors.type]}</span> : ''}

@@ -22,7 +22,7 @@ export default {
         label: "Department",
         inputType: 'input',
         validation: {
-            required: true
+            required: false
         },
         errorMessage: {
             required: "This field is required"
@@ -240,7 +240,7 @@ export default {
             },
         ],
         validation: {
-            required: true
+            required: false
         },
         errorMessage: {
             required: "This field is required"
@@ -254,7 +254,7 @@ export default {
         label: "Preferred location",
         inputType: "input",
         validation: {
-            required: true
+            required: false
         },
         errorMessage: {
             required: "This field is required"
@@ -269,7 +269,7 @@ export default {
         label: "Your skills",
         inputType: "input",
         validation: {
-            required: true
+            required: false
         },
         errorMessage: {
             required: "This field is required"

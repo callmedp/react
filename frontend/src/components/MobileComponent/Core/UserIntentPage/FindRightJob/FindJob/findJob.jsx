@@ -25,6 +25,7 @@ const FindJob = (props) => {
     const [showResults, setShowResults] = useState(false);
     const debouncedSearchTerm = useDebounce(searchTerm, 500);
     const [checkedClass, setCheckedClass] = useState('form-group')
+    const [jtError, setJtError] = useState(false)
 
     const addValues = (values) => {
         if (type === 'job') {
@@ -57,10 +58,12 @@ const FindJob = (props) => {
         jobTitle.current.value = e.target.textContent
         setShowResults(false)
         var data = await relatedSearch(jobTitle.current.value)
-        setSkillSet(data?.data?.related_skill?.slice(0, 10))
+        setSkillSet(data?.slice(0, 10))
     }
 
     const handleInput = (e) => {
+        setJtError(false)
+        setCheckedClass('form-group')
         setSearchTerm(e.target.value);
     }
 
@@ -94,10 +97,16 @@ const FindJob = (props) => {
     }, [debouncedSearchTerm]);
 
     const onSubmit = async (values, event) => {
-        const data = addValues(values);
-        history.push({
-            search: `?job_title=${data?.job}&minexp=${data?.experience}&loc=${data?.location}&skill=${data?.skills}`
-        });
+        if(!jobTitle.current.value){
+            setJtError(true)
+            setCheckedClass('form-group error')
+        }
+        else{
+            const data = addValues(values);
+            history.push({
+                search: `?job_title=${data?.job}&minexp=${data?.experience}&loc=${data?.location}&skill=${data?.skills}`
+            });
+        }
     }
 
     return (
@@ -116,9 +125,10 @@ const FindJob = (props) => {
                 <div className="m-find-job">
                     <form className="mt-20" onSubmit={handleSubmit(onSubmit)}>
                         <div className={checkedClass}>
-                            <input type="text" className="form-control" id="job" name="job" required="required" placeholder=" " ref={jobTitle} autoComplete="off"
+                            <input type="text" className="form-control" id="job" name="job" placeholder=" " ref={jobTitle} autoComplete="off"
                                 aria-required="true" aria-invalid="true" onChange={e => handleInput(e)} onFocus={() => setShowResults(true)} />
                             <label for="">Current job title</label>
+                            { !!jtError ? <span className="error_cls">Job Title is Required</span> : ''}
 
                             {showResults ?
                                 <div className="user-intent-search-result">
