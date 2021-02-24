@@ -166,18 +166,36 @@ const FindJob = (props) => {
                                 errors={!!errors ? errors[UserIntentForm.department.name] : ''} />
                         }
 
-                        <MultiSelectBox attributes={UserIntentForm.skills} data={chips} register={register}
-                            errors={!!errors ? errors[UserIntentForm.skills.name] : ''} />
+                        {/* <MultiSelectBox attributes={UserIntentForm.skills} data={chips} register={register}
+                            errors={!!errors ? errors[UserIntentForm.skills.name] : ''} /> */}
+
+                        <div className={"form-group-custom pos-rel"}>
+                            <label className="sticky-label" htmlFor="">Your skills</label>
+                            <div className="custom-textarea">
+                                {chips?.map((data, i) => {
+                                    return (
+                                        <label className="label-added" onClick={() => handleDelete(data)} for="">{data}</label>
+                                    )
+                                })
+                                }
+                                <span className="d-flex align-items-center mt-10">
+                                    <input type="text" className="form-control custom-input" name="skills" placeholder="Keyword Research" id="skills" autoComplete="off" />
+                                </span>
+                            </div>
+                        </div>
 
                         <div className="form-group-custom">
                             {skillSet?.filter(item => !chips?.includes(item))?.map((skill, indx) => {
                                 return (
                                     <label className="label-add" onClick={() => handleAppend(skill, indx)} for="">{skill}</label>
                                 )
-                            })}
+                            })
+                            }
                         </div>
 
-                        <button type="submit" className="btn btn-inline btn-primary submit-btn mt-30" role="button" data-toggle="modal" data-target="#thankyouModal">{type === 'job' ? 'View jobs' : 'View courses'}</button>
+                        <button type="submit" className="btn btn-inline btn-primary submit-btn mt-30" role="button" data-toggle="modal"
+                            data-target="#thankyouModal">{type === 'job' ? 'View jobs' : 'View courses'}
+                        </button>
                     </form>
                 </div>
             </div>

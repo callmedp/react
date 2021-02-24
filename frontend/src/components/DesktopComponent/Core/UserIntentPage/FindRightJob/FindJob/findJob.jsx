@@ -177,7 +177,7 @@ const FindJob = (props) => {
                                         <div className={checkedClass}>
                                             <input type="text" className="form-control" id="job" name="job" placeholder=" " ref={jobTitle} autoComplete="off"
                                                 aria-required="true" aria-invalid="true" onChange={e => handleInput(e)} onFocus={() => setShowResults(true)} />
-                                            <label htmlFor="">Current job title</label>
+                                            <label htmlFor="">{ type === 'career' ? 'Preferred Role' : 'Current job title'}</label>
                                             { !!jtError ? <span className="error-msg">Job Title is Required</span> : ''}
 
                                             {showResults ?
