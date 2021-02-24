@@ -160,7 +160,7 @@ const careerChangeData = () => {
 }
 
 const findRightJobsData = (data) => {
-    const url = `/intent/api/v1/jobs/${data}&intent=2`;
+    const url = `/intent/api/v1/jobs/${data?.jobParams}&intent=2`;
     return BaseApiService.get(`${siteDomain}${url}`);
 }
 
@@ -169,9 +169,15 @@ const upskillYourselfData = (data) => {
     return BaseApiService.get(`${siteDomain}${url}`);
 }
 
+const sendFeedback = (data) => {
+    const url = `/intent/api/v1/recommendation-feedback/`;
+    return BaseApiService.get(`${siteDomain}${url}`);
+}
+
 export default {
     userIntentData,
     careerChangeData,
     findRightJobsData,
-    upskillYourselfData
+    upskillYourselfData,
+    sendFeedback,
 }

@@ -1,6 +1,9 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
 import Api from './Api';
-import { fetchedUserIntentData, fetchCareerChangeData, careerChangeDataFetched, fetchFindRightJobsData, findRightJobsDataFetched, fetchUpskillYourselfData, upskillYourselfDataFetched } from './actions';
+import { fetchedUserIntentData, fetchCareerChangeData, 
+    careerChangeDataFetched, fetchFindRightJobsData, 
+    findRightJobsDataFetched, fetchUpskillYourselfData, 
+    upskillYourselfDataFetched, sendFeedback } from './actions';
 
 function* userIntentData(action) {
     const { payload } = action;
@@ -44,11 +47,12 @@ function* careerChangeData(action) {
 function* findJobsData(action) {
     const { payload } = action;
     try {
-        const response = yield call(Api.findRightJobsData, payload.data);
+        const response = yield call(Api.findRightJobsData, payload);
 
         if (response?.error) return payload?.reject(response?.error);
 
-        const item = response?.data.data;
+        const item = response?.data?.data;
+        item.jobsList = item?.jobsList ?? {};
         yield put(findRightJobsDataFetched({ ...item }))
         return payload?.resolve(item);
     }
@@ -65,7 +69,7 @@ function* upskillData(action) {
 
         if (response?.error) return payload?.reject(response?.error);
 
-        const item = response?.data.data;
+        const item = response?.data?.data;
         yield put(upskillYourselfDataFetched({ ...item }))
         return payload?.resolve(item);
     }
@@ -75,9 +79,25 @@ function* upskillData(action) {
     }
 }
 
+function* sendFeedbackData(action) {
+    const { payload } = action;
+    try {
+        const response = yield call(Api.sendFeedback, payload);
+
+        if (response.error) return ;
+
+        return ;
+    }
+    catch(e) {
+        console.error("Exception occured in userIntent data", e);
+        return ;
+    }
+}
+
 export default function* WatchUserIntentPage() {
     yield takeLatest(fetchedUserIntentData.type, userIntentData);
     yield takeLatest(fetchCareerChangeData.type, careerChangeData);
     yield takeLatest(fetchFindRightJobsData.type, findJobsData);
     yield takeLatest(fetchUpskillYourselfData.type, upskillData);
+    yield takeLatest(sendFeedback.type, sendFeedbackData);
 }
