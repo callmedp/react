@@ -100,10 +100,10 @@ function* serviceRecommendation(action) {
 }
 
 function* uploadFile(action) {
-    const { payload: { file, resolve, reject } } = action;
+    const { payload: { file1, resolve, reject } } = action;
     try {
         var fileData = new FormData();
-        fileData.append('resume', file);
+        fileData.append('resume', file1);
         const result = yield call(Api.uploadFileUrlAPI, fileData);
 
         return resolve(result.data)

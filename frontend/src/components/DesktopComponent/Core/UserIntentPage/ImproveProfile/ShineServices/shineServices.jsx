@@ -27,7 +27,7 @@ const ShineServices = (props) => {
     const handleAlert = () => setAlert(true);
     const [filename, setFilename] = useState("Choose file");
     const resetFileName = () => setFilename("Choose file");
-    const [file, setFile] = useState(undefined);
+    const [file1, setFile] = useState(undefined);
     const resetFile = () => setFile(undefined);
     const [totalScore, setTotalScore] = useState(undefined);
     const resetTotalScore = () => setTotalScore(undefined);
@@ -42,24 +42,24 @@ const ShineServices = (props) => {
     }, []);
 
     const fileUploadName = async event => {
-        let file1 = await event.target.files[0];
-        if(file1 === undefined){return;}
+        let file2 = await event.target.files[0];
+        if(file2 === undefined){return;}
         let fileName = event.target.files[0].name;
         //event.target.value = null
-        if (file1.size / (1024 * 1024) > 5) {handleAlert()}
-        else if (file1.name.slice(-4).toLowerCase() === '.pdf' || file1.name.slice(-4).toLowerCase() === '.doc' || file1.name.slice(-5).toLowerCase() === '.docx' || file1.name.slice(-4).toLowerCase() === '.txt') {
+        if (file2.size / (1024 * 1024) > 5) {handleAlert()}
+        else if (file2.name.slice(-4).toLowerCase() === '.pdf' || file2.name.slice(-4).toLowerCase() === '.doc' || file2.name.slice(-5).toLowerCase() === '.docx' || file2.name.slice(-4).toLowerCase() === '.txt') {
             setFilename(fileName);
-            setFile(file1);
+            setFile(file2);
         }
         else {handleAlert()}
     }
 
-    const fileUpload = async event => {
-        if(!file){handleAlert(); return;}
+    const fileUpload = async (event) => {
+        if(!file1){handleAlert(); return;}
         else{
             try {
                 dispatch(startGetResumeScoreLoader());
-                const response = await new Promise((resolve, reject) => {dispatch(uploadFileUrl({ file, resolve, reject }));})
+                const response = await new Promise((resolve, reject) => {dispatch(uploadFileUrl({ file1, resolve, reject }));})
                 if(response.status == 'SUCCESS'){
                     const total_score = response.total_score;
                     setTotalScore(total_score);

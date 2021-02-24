@@ -66,10 +66,10 @@ const ShineServices = (props) => {
         else if (file1.name.slice(-4).toLowerCase() === '.pdf' || file1.name.slice(-4).toLowerCase() === '.doc' || file1.name.slice(-5).toLowerCase() === '.docx' || file1.name.slice(-4).toLowerCase() === '.txt') {
             setFilename(fileName);
             setFile(file1);
-
+            console.log(file1);
             try {
                 dispatch(startGetResumeScoreLoader());
-                const response = await new Promise((resolve, reject) => {dispatch(uploadFileUrl({ file, resolve, reject }));})
+                const response = await new Promise((resolve, reject) => {dispatch(uploadFileUrl({ file1, resolve, reject }));})
                 if(response.status == 'SUCCESS'){
                     const total_score = response.total_score;
                     setTotalScore(total_score);
