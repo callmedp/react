@@ -14,6 +14,8 @@ const findRightJobsDataFetched = createAction('FIND_RIGHT_JOBS_DATA_FETCHED');
 const fetchUpskillYourselfData = createAction('FETCH_UPSKILL_YOURSELF_DATA');
 const upskillYourselfDataFetched = createAction('UPSKILL_YOURSELF_DATA_FETCHED');
 
+const sendFeedback = createAction('SEND_FEEDBACK');
+
 export {
     sendUserIntentData,
     fetchedUserIntentData,
@@ -22,5 +24,6 @@ export {
     fetchFindRightJobsData,
     findRightJobsDataFetched,
     fetchUpskillYourselfData,
-    upskillYourselfDataFetched
+    upskillYourselfDataFetched,
+    sendFeedback,
 }

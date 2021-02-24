@@ -169,9 +169,15 @@ const upskillYourselfData = (data) => {
     return BaseApiService.get(`${siteDomain}${url}`);
 }
 
+const sendFeedback = (data) => {
+    const url = `/intent/api/v1/recommendation-feedback/`;
+    return BaseApiService.get(`${siteDomain}${url}`);
+}
+
 export default {
     userIntentData,
     careerChangeData,
     findRightJobsData,
-    upskillYourselfData
+    upskillYourselfData,
+    sendFeedback,
 }

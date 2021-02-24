@@ -171,3 +171,17 @@ export const stopJobsUpskillsLoader = () => {
         payload: { jobsUpskillsLoader: false }
     }
 }
+
+export const startCareerChangeLoader = () => {
+    return {
+        type: Actions.START_CAREER_CHANGE_LOADER,
+        payload: { careerChangeLoader: true }
+    }
+}
+
+export const stopCareerChangeLoader = () => {
+    return {
+        type: Actions.STOP_CAREER_CHANGE_LOADER,
+        payload: { careerChangeLoader: false }
+    }
+}

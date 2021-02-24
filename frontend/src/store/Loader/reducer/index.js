@@ -12,7 +12,8 @@ const initState = {
     homeLoader: false,
     uploadLoader: false,
     oiDetailsLoader: false,
-    jobsUpSkillsLoader: false
+    jobsUpSkillsLoader: false,
+    careerChangeLoader: false
 }
 
 export const LoaderReducer = (state=initState, action) => {
@@ -62,6 +63,12 @@ export const LoaderReducer = (state=initState, action) => {
         // jobs upskill loader
         case Actions.START_JOBS_UPSKILLS_LOADER : return {...state, ...action.payload}
         case Actions.STOP_JOBS_UPSKILLS_LOADER : return {...state, ...action.payload}
+
+        case Actions.START_CAREER_CHANGE_LOADER : return {...state, ...action.payload}
+        case Actions.STOP_CAREER_CHANGE_LOADER : return {...state, ...action.payload}
+
+        
+        
 
         default: return state;
     }
