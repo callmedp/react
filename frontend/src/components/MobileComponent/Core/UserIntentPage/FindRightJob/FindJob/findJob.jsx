@@ -51,7 +51,6 @@ const FindJob = (props) => {
 
     function handleAppend(data, id) {
         setChips([...chips, data])
-        delete skillSet[id];
     }
 
     const appendData = async (e) => {
@@ -103,9 +102,16 @@ const FindJob = (props) => {
         }
         else{
             const data = addValues(values);
+            if(type === 'job') {
             history.push({
                 search: `?job_title=${data?.job}&minexp=${data?.experience}&loc=${data?.location}&skill=${data?.skills}`
             });
+        }
+        else{
+            history.push({
+                search: `?job_title=${data?.job}&minexp=${data?.experience}&department=${data?.department}&skill=${data?.skills}`
+            });
+        }
         }
     }
 
