@@ -96,7 +96,7 @@ const FindJob = (props) => {
                     <div className="m-ui-steps">
                         <Link className="m-completed" to={"#"}>1</Link>
                         <Link className="m-current" to={"#"}>2</Link>
-                        <Link>3</Link>
+                        <a>3</a>
                     </div>
                     <Link className="btn-blue-outline m-back-goal-btn" to={"/user-intent/"}>Back to goal</Link>
                 </div>
@@ -107,7 +107,7 @@ const FindJob = (props) => {
                         <div className={checkedClass}>
                             <input type="text" className="form-control" id="job" name="job" required="required" placeholder=" " ref={jobTitle} autoComplete="off"
                                 aria-required="true" aria-invalid="true" onChange={e => handleInput(e)} onFocus={() => setShowResults(true)} />
-                            <label for="">Current job title</label>
+                            <label htmlFor="">Current job title</label>
 
                             {showResults ?
                                 <div className="user-intent-search-result">
@@ -130,7 +130,7 @@ const FindJob = (props) => {
                         <div className="form-group-custom">
                             {skillSet?.filter(item => !chips?.includes(item))?.map((skill, indx) => {
                                 return (
-                                    <label className="label-add" onClick={() => handleAppend(skill, indx)} for="">{skill}</label>
+                                    <label className="label-add" onClick={() => handleAppend(skill, indx)} htmlFor="">{skill}</label>
                                 )
                             })}
                         </div>

@@ -33,8 +33,13 @@ const JobListing = (props) => {
                                         <div className="d-flex">
                                             <ul>
                                                 <li>{jData.jExp}</li>
-                                                <li>{jData.jLoc.join(',')}</li>
-                                                <li>{jData.jKwd}</li>
+                                                <li>{jData.jLoc.join(', ')}</li>
+                                                <li>
+                                                    {jData.jKwd.split(',').slice(0,5).map((skls, indx) => {
+                                                        return <span>{skls},</span>
+                                                    })}
+                                                    </li>
+                                                    {/* {jData.jKwd} {jData.jKwd.length}</li> */}
                                             </ul>
                                             <div className="m-price-date">
                                                 <a href={jData.jRUrl} target="_blank" className="btn-blue-outline mb-10">Apply</a>

@@ -10,12 +10,13 @@ import { useDispatch } from 'react-redux';
 import { startJobsUpskillsLoader, stopJobsUpskillsLoader } from 'store/Loader/actions';
 import JobListing from './JobListing/jobListing';
 import CourseLisiting from '../../CourseListing/courseListing';
+import { showSwal } from 'utils/swal';
 
 const JobsUpskills = (props) => {
     const dispatch = useDispatch();
     const { history } = props;
     const { jobsUpskillsLoader } = useSelector(store => store.loader);
-    const { jobsList : { results, next } } = useSelector(store => store.findRightJob);
+    const { jobsList : { results, next } } = useSelector(store => {console.log(store.findRightJob); return store.findRightJob});
     const { upskillList: { course_data, page } } = useSelector(store => store.upskillYourself);
     const params = new URLSearchParams(props.location.search);
     let currentPage = 1;
@@ -24,27 +25,38 @@ const JobsUpskills = (props) => {
     const openSelectedTab = (id) => tabSelected(id);
 
     useEffect(() => {
-        resultApiFunc(history.location.search);
+        resultApiFunc(history.location.search + `&page=1`);
     }, []);
 
-    const resultApiFunc = async (parameters) => {
+    const resultApiFunc = async (jobParams) => {
         // api hit for jobs for you
-        let jobParams = parameters + `&page=1`;
-        dispatch(startJobsUpskillsLoader());
-            await new Promise((resolve) => dispatch(fetchFindRightJobsData({ jobParams, resolve })));
+        try {
+            dispatch(startJobsUpskillsLoader());
+            await new Promise((resolve, reject) => dispatch(fetchFindRightJobsData({ jobParams, resolve, reject })));
+        }
+        catch (e) {
+            history.push({
+                search: ``
+            });
+            showSwal('error', 'Something went wrong! Try Again')
+        }
         dispatch(stopJobsUpskillsLoader());
     }
 
-    const handleUpskillData = async(tab) => {
-        console.log(currentPage);
+    const handleUpskillData = async (tab) => {
         const dataUpskill = `?preferred_role=${params.get('job_title')}&experience=${params.get('minexp')}&skills=${params.get('skill') || ''}&page=${currentPage}`;
         
         // api hit for upskill yourself
-        dispatch(startJobsUpskillsLoader());
-            await new Promise((resolve) => dispatch(fetchUpskillYourselfData({ dataUpskill, resolve })));
+        try {
+            dispatch(startJobsUpskillsLoader());
+            await new Promise((resolve, reject) => dispatch(fetchUpskillYourselfData({ dataUpskill, resolve, reject })));
+            openSelectedTab(tab);
+        }
+        catch(e) {
+            showSwal('error', 'Something went wrong! Try Again');
+            openSelectedTab('tab1');
+        }
         dispatch(stopJobsUpskillsLoader());
-
-        openSelectedTab(tab);
     }
 
     const loadMoreJobs = (url_next) => {
