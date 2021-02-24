@@ -28,15 +28,139 @@ export default {
             required: "This field is required"
         },
         children: [
-            {
-                text: 'Department',
-                value: ''
-            },
-            {
-                text: 'IT Department',
-                value: 'it-department'
-            }
-        ]
+                {
+                  text: "Department",
+                  value: ""
+                },
+                {
+                  text: "Finance / Accounts / Investment Banking",
+                  value: "10007"
+                },
+                {
+                  text: "Customer Service / Back Office Operations",
+                  value: "10014"
+                },
+                {
+                  text: "IT - Software",
+                  value: "10013"
+                },
+                {
+                  text: "Production / Maintenance / Service",
+                  value: "10018"
+                },
+                {
+                  text: "Sales / BD",
+                  value: "10033"
+                },
+                {
+                  text: "IT - Hardware / Networking / Telecom Engineer",
+                  value: "10012"
+                },
+                {
+                  text: "Engineering Design / Construction",
+                  value: "10011"
+                },
+                {
+                  text: "Administration / Front Office / Secretary",
+                  value: "10001"
+                },
+                {
+                  text: "Marketing / Advertising / MR / PR / Events",
+                  value: "10020"
+                },
+                {
+                  text: "Quality / Testing (QA-QC)",
+                  value: "10028"
+                },
+                {
+                  text: "Architecture / Interior Design",
+                  value: "10055"
+                },
+                {
+                  text: "Civil Services / Military / Police",
+                  value: "10004"
+                },
+                {
+                  text: "Education / Training / Language",
+                  value: "10005"
+                },
+                {
+                  text: "Environment / Health / Safety",
+                  value: "10050"
+                },
+                {
+                  text: "Graphic Design / Web Design / Copywriting",
+                  value: "10056"
+                },
+                {
+                  text: "Hotel / Restaurant",
+                  value: "10009"
+                },
+                {
+                  text: "HR / Recruitment",
+                  value: "10010"
+                },
+                {
+                  text: "Journalism / Content / Writing",
+                  value: "10015"
+                },
+                {
+                  text: "Legal / Company Secretary",
+                  value: "10016"
+                },
+                {
+                  text: "Management Consulting / Strategy / EA",
+                  value: "10017"
+                },
+                {
+                  text: "Medical / Healthcare",
+                  value: "10008"
+                },
+                {
+                  text: "Oil & Gas Engineering / Mining / Geology",
+                  value: "10047"
+                },
+                {
+                  text: "R&D / Product Design",
+                  value: "10034"
+                },
+                {
+                  text: "Real Estate",
+                  value: "10030"
+                },
+                {
+                  text: "Retail / Export-Import / Trading",
+                  value: "10042"
+                },
+                {
+                  text: "SBU Head / CEO / Director / Entrepreneur",
+                  value: "10040"
+                },
+                {
+                  text: "Security / Detective Services",
+                  value: "10035"
+                },
+                {
+                  text: "Statistics / Analytics / Acturial Science",
+                  value: "10049"
+                },
+                {
+                  text: "Supply Chain / Purchase / Inventory",
+                  value: "10038"
+                },
+                {
+                  text: "Travel / Aviation / Merchant Navy",
+                  value: "10003"
+                },
+                {
+                  text: "TV / Film / Radio / Entertainment",
+                  value: "10046"
+                },
+                {
+                  text: "Other",
+                  value: "10044"
+                }
+              ]
     },
     'experience': {
         name: 'experience',
