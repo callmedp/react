@@ -70,7 +70,7 @@ const RouteWithSubRoutes = (route) => {
     } catch (e) {
       //
     }
-    if (getCandidateId()) {
+    if (!(localStorage.getItem('isAuthenticated') === "true")) {
       const session = isSessionAvailable();
     } else {
       setLoader(false);
