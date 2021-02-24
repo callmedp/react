@@ -19,7 +19,7 @@ const JobsUpskills = (props) => {
   const [currentJobPage, setJobPage] = useState(1);
   const { jobsUpskillsLoader } = useSelector(store => store.loader);
   const { jobsList: { results, num_pages } } = useSelector(store => store.findRightJob)
-  const { upskillList: { course_data, page, recommended_course_ids } } = useSelector(store => store.upskillYourself);
+  const { course_data, page } = useSelector(store => store.upskillYourself);
 
   const handleSelect = async (tabType) => {
     if (key !== tabType) {
@@ -84,6 +84,14 @@ const JobsUpskills = (props) => {
   //   });
   }
 
+  const loadMoreCourses =async (eve) => {
+    eve.preventDefault();
+    const dataUpskill = `?preferred_role=${params.get('job_title')}&experience=${params.get('minexp')}&skills=${params.get('skill') || ''}&page=${currentJobPage+1}`;
+        dispatch(startJobsUpskillsLoader())
+        await new Promise((resolve) => dispatch(fetchUpskillYourselfData({ dataUpskill,resolve })));
+        dispatch(stopJobsUpskillsLoader())
+        setJobPage(state => state+1)
+  }
 
   return (
     <section className="container-fluid mt-30n mb-0">
@@ -110,7 +118,7 @@ const JobsUpskills = (props) => {
                 </Tab>
                 <Tab eventKey="Courses" title={<h2>Upskill yourself</h2>}>
                   <CourseListing courseList={course_data} />
-                  <Link to={"#"} className="load-more">View More Courses</Link>
+                  { page && page.has_next ? <Link onClick={loadMoreCourses} className="load-more">View More Courses</Link> : ''}
                 </Tab>
               </Tabs>
             </div>

@@ -70,6 +70,7 @@ const findRightJobsState = {
     page: {}
 }
 
+
 export const findRightJobsReducer = (state=findRightJobsState, action) => {
     switch(action.type) {
         case findRightJobsDataFetched.type : return {...state, ...action?.payload}
@@ -78,13 +79,19 @@ export const findRightJobsReducer = (state=findRightJobsState, action) => {
 }
 
 const upskillYourselfState = {
-    upskillList: {},
-    page: {}
+    course_data: [],
+    page: {},
+    recommended_course_ids: []
 }
 
 export const upskillYourselfReducer = (state=upskillYourselfState, action) => {
     switch(action.type) {
-        case upskillYourselfDataFetched.type : return {...state.upskillYourselfDataFetched, ...action?.payload}
+        case upskillYourselfDataFetched.type : return {
+            ...state,
+            page:action.payload.page ?? {},
+            recommended_course_ids: action.payload.recommended_course_ids ?? [],
+            course_data: [...state.course_data, ...(action.payload.course_data ?? [])]
+        }
         default: return state;
     }
 }

@@ -16,10 +16,10 @@ const JobsUpskills = (props) => {
     const dispatch = useDispatch();
     const { history } = props;
     const { jobsUpskillsLoader } = useSelector(store => store.loader);
-    const { jobsList : { results, next } } = useSelector(store => {console.log(store.findRightJob); return store.findRightJob});
-    const { upskillList: { course_data, page } } = useSelector(store => store.upskillYourself);
+    const { jobsList : { results, next } } = useSelector(store => store.findRightJob);
+    const { course_data, page }  = useSelector(store => store.upskillYourself);
     const params = new URLSearchParams(props.location.search);
-    let currentPage = 1;
+    const [currentJobPage, setJobPage] = useState(0);
 
     const [selectTab, tabSelected] = useState('tab1');
     const openSelectedTab = (id) => tabSelected(id);
@@ -43,8 +43,8 @@ const JobsUpskills = (props) => {
         dispatch(stopJobsUpskillsLoader());
     }
 
-    const handleUpskillData = async (tab) => {
-        const dataUpskill = `?preferred_role=${params.get('job_title')}&experience=${params.get('minexp')}&skills=${params.get('skill') || ''}&page=${currentPage}`;
+    const handleUpskillData = async (tab, num) => {
+        const dataUpskill = `?preferred_role=${params.get('job_title')}&experience=${params.get('minexp')}&skills=${params.get('skill') || ''}&page=${num}&intent=2`;
         
         // api hit for upskill yourself
         try {
@@ -68,9 +68,10 @@ const JobsUpskills = (props) => {
         resultApiFunc(`?${next_data[1]}`);
     }
 
-    const loadMoreCourses = (curr_page) => {
-        currentPage = curr_page+1;
-        handleUpskillData('tab2');
+    const loadMoreCourses = (ev, num) => {
+        ev.preventDefault();
+        setJobPage(state => state+1);
+        handleUpskillData('tab2', num+1);
     }
 
     return (
@@ -90,19 +91,19 @@ const JobsUpskills = (props) => {
                         <input checked={selectTab === 'tab1'} onClick={() => openSelectedTab('tab1')} type="radio" name="tabset" id="tab1" aria-controls="Jobs for you" />
                         <label htmlFor="tab1">Jobs for you</label>
 
-                        <input checked={selectTab === 'tab2'} onClick={() => handleUpskillData('tab2')} type="radio" name="tabset" id="tab2" aria-controls="Upskill yourself" />
+                        <input checked={selectTab === 'tab2'} onClick={() => handleUpskillData('tab2', 1)} type="radio" name="tabset" id="tab2" aria-controls="Upskill yourself" />
                         <label htmlFor="tab2">Upskill yourself</label>
 
                         <div className="tab-panels">
                             <div id="tab1" className="tab-panel">
                                 <JobListing jobList={results}/>
-                                {next && <span className="load-more btn-col" onClick={() => loadMoreJobs(next)}>View More Jobs</span>}
+                                {next && <span className="m-load-more btn-col" onClick={() => loadMoreJobs(next)}>View More Jobs</span>}
                             </div>
                             <div id="tab2" className="tab-panel">
                                 <div className="m-courses mt-20">
                                     <CourseLisiting courseList={course_data} />
                                 </div>
-                                {page?.has_next && <span className="load-more btn-col" onClick={() => loadMoreCourses(page?.current_page)}>View More Courses</span>}
+                                {page?.has_next && <span className="m-load-more btn-col" onClick={(event) => loadMoreCourses(event, page?.current_page)}>View More Courses</span>}
                             </div>
                         </div>
                     </div>

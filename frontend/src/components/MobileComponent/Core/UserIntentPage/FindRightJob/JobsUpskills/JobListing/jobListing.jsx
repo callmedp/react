@@ -35,9 +35,8 @@ const JobListing = (props) => {
                                                 <li>{jData.jExp}</li>
                                                 <li>{jData.jLoc.join(', ')}</li>
                                                 <li>
-                                                    {jData.jKwd.split(',').slice(0,5).map((skls, indx) => {
-                                                        return <span>{skls},</span>
-                                                    })}
+                                                    {jData.jKwd.split(',').slice(0,5).join(', ')}...
+                                                    
                                                     </li>
                                                     {/* {jData.jKwd} {jData.jKwd.length}</li> */}
                                             </ul>
