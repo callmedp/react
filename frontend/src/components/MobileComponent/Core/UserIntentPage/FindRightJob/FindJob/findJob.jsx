@@ -2,8 +2,8 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './findJob.scss';
 import { useForm } from 'react-hook-form';
-// import { useDispatch } from 'react-redux';
-import { SelectExperienceBox, MultiSelectBox } from 'formHandler/mobileFormHandler/formFields';
+import { useDispatch } from 'react-redux';
+import { InputField, SelectIntentBox, SelectExperienceBox, MultiSelectBox } from 'formHandler/mobileFormHandler/formFields';
 import UserIntentForm from 'formHandler/mobileFormHandler/formData/userIntent';
 import Autocomplete from 'formHandler/mobileFormHandler/AutoComplete';
 // import { fetchFindRightJobsData } from 'store/UserIntentPage/actions';
@@ -27,13 +27,24 @@ const FindJob = (props) => {
     const [checkedClass, setCheckedClass] = useState('form-group')
 
     const addValues = (values) => {
-        return {
-            ...values,
-            'type': type,
-            'job': jobTitle.current.value,
-            'location': document.getElementById('location').value, //Is document work on SSR?
-            'skills': chips.length > 0 ? chips?.concat(document.getElementById('skills').value.split(",")) : [],
-            'page': 1
+        if (type === 'job') {
+            return {
+                ...values,
+                'type': type,
+                'job': jobTitle.current.value,
+                'location': document.getElementById('location').value, //Is document work on SSR?
+                'skills': chips?.concat(document.getElementById('skills').value.split(",")),
+                'page': 1
+            }
+        }
+        else {
+            return {
+                ...values,
+                'type': type,
+                'job': jobTitle.current.value,
+                'skills': chips?.concat(document.getElementById('skills').value.split(",")),
+                'page': 1
+            }
         }
     }
 
@@ -116,13 +127,34 @@ const FindJob = (props) => {
                             }
                         </div>
 
-                        <SelectExperienceBox attributes={UserIntentForm.experience} register={register}
+                        {/* <div className="form-group">
+                                    <div className="custom-select-box">
+                                        <select className="select" className="custom-select">
+                                            <option selected>Total experience </option>
+                                            <option value="+91">1 - 2</option>
+                                            <option value="+92">3 - 5</option>
+                                            <option value="+93">6+</option>
+                                        </select>
+                                    </div>
+                                </div> */}
+                        <SelectIntentBox attributes={UserIntentForm.experience} register={register}
                             errors={!!errors ? errors[UserIntentForm.experience.name] : ''} />
 
-                        <Autocomplete id={"location"} name={"location"} className={"form-control"} autoComplete={"off"}
-                            lableFor={"Preferred Location"} type={"text"} placeholder={" "}
-                            suggestions={IndianState}
-                        />
+
+                        {/* <div className="form-group">
+                            <input type="text" className="form-control" id="location" name="location" placeholder=" "
+                                aria-required="true" aria-invalid="true" />
+                            <label for="">Preferred location</label>
+                        </div> */}
+                        {type === 'job' ?
+                            <Autocomplete id={"location"} name={"location"} className={"form-control"} autoComplete={"off"}
+                                lableFor={"Preferred Location"} type={"text"} placeholder={" "}
+                                suggestions={IndianState}
+                            />
+                            :
+                            <SelectIntentBox attributes={UserIntentForm.department} register={register}
+                                errors={!!errors ? errors[UserIntentForm.department.name] : ''} />
+                        }
 
                         <MultiSelectBox attributes={UserIntentForm.skills} data={chips} register={register}
                             errors={!!errors ? errors[UserIntentForm.skills.name] : ''} />
