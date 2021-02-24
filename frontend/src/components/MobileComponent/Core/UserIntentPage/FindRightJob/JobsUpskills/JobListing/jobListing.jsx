@@ -36,9 +36,7 @@ const JobListing = (props) => {
                                                 <li>{jData.jLoc.join(', ')}</li>
                                                 <li>
                                                     {jData.jKwd.split(',').slice(0,5).join(', ')}...
-                                                    
-                                                    </li>
-                                                    {/* {jData.jKwd} {jData.jKwd.length}</li> */}
+                                                </li>
                                             </ul>
                                             <div className="m-price-date">
                                                 <a href={jData.jRUrl} target="_blank" className="btn-blue-outline mb-10">Apply</a>
