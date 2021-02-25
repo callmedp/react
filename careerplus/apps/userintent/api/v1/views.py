@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework import permissions
 from rest_framework.views import APIView
 from core.common import APIResponse
-from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_200_OK
+from rest_framework.status import HTTP_400_BAD_REQUEST, HTTP_200_OK,HTTP_201_CREATED
 from django.core.cache import cache
 from django.conf import settings
 
@@ -15,7 +15,8 @@ from homepage.api.v1.mixins import ProductMixin
 from order.models import OrderItem
 from userintent.models import UserIntent
 from shine.core import ShineCandidateDetail
-from api.helpers import offset_paginator
+from api.helpers import offset_paginator,JsonValidationHelper
+from .serializers import RecommendationFeedbackSerializer
 
 #Logger import
 import logging
@@ -234,3 +235,34 @@ class KeywordSuggestionAPI(APIView):
             logging.getLogger('error_log').error(
                 "Data fetch from shine.com jobs search api failed  - {}".format(e))
             return APIResponse(error=True,message='Data fetch from shine.com api failed : {}'.format(e),status=HTTP_400_BAD_REQUEST)
+
+class RecommendationFeedbackAPI(APIView):
+    permission_classes = ()
+    authentication_classes = ()
+
+    def post(self,request):
+        expected_json_keys = {
+        "intent": None,
+        "candidate_id": None,
+        "recommendation_relevant": None,
+        "recommended_products": None,
+        "context":None
+    }
+        try:
+            data = JsonValidationHelper.validate(request.data, expected_json_keys)
+        except JsonValidationHelper.MalformedDataException as exception:
+            return APIResponse(error = str(exception), status=HTTP_400_BAD_REQUEST)
+        if data["candidate_id"] is None:
+            return APIResponse(data=data, message='Candidate Details required', status=HTTP_400_BAD_REQUEST)
+        recommendation_feedback_data = {
+            "intent": data["intent"],
+            "candidate_id": data["candidate_id"],
+            "recommendation_relevant": data["recommendation_relevant"],
+            "recommended_products": data["recommended_products"],
+            "context":data["context"]   
+        }
+        serializer = RecommendationFeedbackSerializer(data=recommendation_feedback_data)
+        if serializer.is_valid():
+            serializer.save()
+            return APIResponse(message="Feedback created",data=serializer.data, status=HTTP_201_CREATED)
+        return APIResponse(error=serializer.errors,status=HTTP_400_BAD_REQUEST)

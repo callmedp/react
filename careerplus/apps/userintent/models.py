@@ -28,3 +28,18 @@ class UserIntent(AbstractAutoDate):
 
     def __str__(self):
         return dict(INTENT_CHOICES).get(self.intent)
+
+class RecommendationFeedback(AbstractAutoDate):
+    """
+    captures if the user found the recommendations made useful or not.
+    """
+    candidate_id = models.CharField(
+        null=True,
+        blank=True,
+        max_length=255,
+        verbose_name=_("Customer ID"))
+    intent = models.PositiveSmallIntegerField(
+        default=0, choices=INTENT_CHOICES)
+    recommendation_relevant = models.BooleanField(default=False)
+    recommended_products = models.TextField(blank=True,null=True)
+    context = models.CharField(max_length=255, blank=True, null=True)
