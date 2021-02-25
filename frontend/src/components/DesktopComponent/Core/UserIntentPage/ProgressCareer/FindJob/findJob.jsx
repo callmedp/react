@@ -53,7 +53,7 @@ const FindJob = (props) => {
                                 </div>
                             </div>
                             <figure className="find-job-bg">
-                                <img src="/media/images/desktop/find-right-job.png" className="img-fluid" alt="Let’s get you to the right job" />
+                                <img src={`${imageUrl}desktop/find-right-job.png`} className="img-fluid" alt="Let’s get you to the right job" />
                             </figure>
                         </div>
                         

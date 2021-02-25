@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux';
 import useDebounce from 'utils/searchUtils/debouce';
 import { IndianState } from 'utils/constants';
 import { userSearch, relatedSearch, userSkillSearch } from 'utils/searchUtils/searchFunctions';
+import {imageUrl} from 'utils/domains'
 
 const FindJob = (props) => {
     const [chips, setChips] = useState([]);
@@ -278,7 +279,7 @@ const FindJob = (props) => {
                                 </div>
                             </div>
                             <figure className="find-job-bg">
-                                <img src="/media/images/desktop/find-right-job.png" className="img-fluid" alt="Let’s get you to the right job" />
+                                <img src={`${imageUrl}desktop/find-right-job.png`} className="img-fluid" alt="Let’s get you to the right job" />
                             </figure>
                         </div>
 
