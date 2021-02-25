@@ -143,16 +143,21 @@ const FindJob = (props) => {
         )
     }
 
+    function uniqueResult(result) {
+        // get an object check for the duplicate pid and pdesc
+        return result.filter((v,i,a)=>a.findIndex(t=>(t.pid === v.pid && t.pdesc === v.pdesc))===i)
+    }
+
     useEffect(() => {
         // Make sure we have a value (user has entered something in input)
         if(debounceSkillSearch) {
             userSkillSearch(debounceSkillSearch).then(results => {
-                setSkillResults(results?.data);
+                setSkillResults(uniqueResult(results?.data));
             });
         }
         else if (debouncedSearchTerm) {
             userSearch(debouncedSearchTerm).then(results => {
-                setResults(results?.data);
+                setResults(uniqueResult(results?.data));
             });
         } 
         else {
