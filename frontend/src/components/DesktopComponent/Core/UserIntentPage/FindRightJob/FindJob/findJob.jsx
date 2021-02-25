@@ -43,9 +43,11 @@ const FindJob = (props) => {
     const debounceSkillSearch = useDebounce(searchSkillTerm, 500);
 
     const handleSkillsClick = () => {
-        handleAppend(skillsKey.current.value)
-        skillsKey.current.value = ''
-        setShowSkillResults(false)
+        if(skillsKey.current.value){
+            handleAppend(skillsKey.current.value)
+            skillsKey.current.value = ''
+            setShowSkillResults(false)
+        }
     }
 
     const suggestSkills = (e) => {
