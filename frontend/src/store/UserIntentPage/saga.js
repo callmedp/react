@@ -1,6 +1,6 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
 import Api from './Api';
-import { fetchedUserIntentData, fetchCareerChangeData, careerChangeDataFetched, fetchFindRightJobsData, findRightJobsDataFetched, fetchUpskillYourselfData, upskillYourselfDataFetched, uploadFileUrl, fetchServiceRecommendation, serviceRecommendationFetched, sendFeedback } from './actions';
+import { fetchedUserIntentData, fetchFindRightJobsData, findRightJobsDataFetched, fetchUpskillYourselfData, upskillYourselfDataFetched, uploadFileUrl, fetchServiceRecommendation, serviceRecommendationFetched, sendFeedback } from './actions';
 
 function* userIntentData(action) {
     const { payload } = action;
@@ -13,25 +13,6 @@ function* userIntentData(action) {
         }
         const item = response?.data.data;
         yield put(fetchedUserIntentData({ [payload.categoryId]: item.mostViewCourses }))
-        return payload?.resolve(item);
-    }
-    catch(e) {
-        console.error("Exception occured in userIntent data", e);
-        return payload?.resolve(e);
-
-    }
-}
-
-function* careerChangeData(action) {
-    const { payload } = action;
-    
-    try {
-        const response = yield call(Api.careerChangeData);
-        if (response?.error) {
-            return payload?.resolve(response.error)
-        }
-        const item = response?.data;
-        yield put(careerChangeDataFetched({ ...item }))
         return payload?.resolve(item);
     }
     catch(e) {
@@ -130,7 +111,6 @@ function* sendFeedbackData(action) {
 
 export default function* WatchUserIntentPage() {
     yield takeLatest(fetchedUserIntentData.type, userIntentData);
-    yield takeLatest(fetchCareerChangeData.type, careerChangeData);
     yield takeLatest(fetchFindRightJobsData.type, findJobsData);
     yield takeLatest(fetchUpskillYourselfData.type, upskillData);
     yield takeLatest(fetchServiceRecommendation.type, serviceRecommendation);
