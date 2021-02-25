@@ -4,17 +4,17 @@ import Api from './Api';
 
 
 function* trendingCategories(action) {
-    const { payload } = action;
+    const { payload: { payload, resolve, reject } } = action;
 
     try {
 
         const response = yield call(Api.trendingCategories, payload);
-        
-        if(!response || response?.error){
-            return payload?.reject(response?.error);
+
+        if (!response || response?.error) {
+            return reject(response?.error);
         }
         const item = response?.data;
-    
+
         var SnMCourseList = item?.SnMCourseList
         var ITCourseList = item?.ITCourseList
         var BnFCourseList = item?.BnFCourseList
@@ -45,75 +45,75 @@ function* trendingCategories(action) {
             }
         })
 
-        return payload?.resolve(item)
+        return resolve(item)
 
     } catch (e) {
         console.error("Exception occured in trending categories api",e)
-        return payload?.reject(e);
+        return reject(e);
     }
 }
 
 
-function* recentlyAddedCourses(action){
-    const { payload } = action;
-    try{
-        const response = yield call(Api.recentlyAddedCourses);
-        
-        if(!response || response?.error){
-            return payload?.reject(response?.error);
+function* recentlyAddedCourses(action) {
+    const { payload: { payload, resolve, reject } } = action;
+    try {
+        const response = yield call(Api.recentlyAddedCourses, payload);
+
+        if (!response || response?.error) {
+            return reject(response?.error);
         }
         const item = response?.data?.data;
         yield put({ 
             type : Actions.RECENTLY_ADDED_COURSES_FETCHED,
             item : item
         })
-        return payload?.resolve(item);
+        return resolve(item);
     }
     catch(e){
         console.error("Exception occured in recentlyAddedCourses Api", e)
-        return payload?.reject(e);
+        return reject(e);
     }
 }
 
-function* popularServices(action){
-    const { payload } = action;
-    try{
-        const response = yield call(Api.popularServices);
-        
-        if(!response || response?.error){
-            return payload?.reject(response?.error);
+function* popularServices(action) {
+    const { payload: { payload, resolve, reject } } = action;
+    try {
+        const response = yield call(Api.popularServices, payload);
+
+        if (!response || response?.error) {
+            return reject(response?.error);
         }
         const item = response?.data?.data;
         yield put({ 
             type : Actions.POPULAR_SERVICES_FETCHED,
             item : item
         })
-        return payload?.resolve(item);
+        return resolve(item);
     }
     catch(e){
         console.error("Exception occured in popularServices Api", e)
-        return payload?.reject(e);
+        return reject(e);
     }
 }
 
-function* allCategories(action){
-    const { payload } = action;
-    try{
-        const response = yield call(Api.allCategories, payload?.num);
-        
-        if(!response || response?.error){
-            return payload?.reject(response?.error);
+function* allCategories(action) {
+    const { payload: { payload, resolve, reject } } = action;
+    try {
+        const response = yield call(Api.allCategories, payload);
+
+        if (!response || response?.error) {
+            return reject(response?.error);
         }
         const item = response?.data?.data;
-        yield put({ 
-            type : Actions.ALL_CATEGORIES_AND_VENDORS_FETCHED,
-            item : item
+        yield put({
+            type: Actions.ALL_CATEGORIES_AND_VENDORS_FETCHED,
+            item: item
         })
-        return payload?.resolve(item);
+        return resolve(item);
     }
     catch(e){
         console.error("Exception occured in allCategories Api", e)
-        return payload?.reject(e);
+        return reject(e);
     }
 }
 

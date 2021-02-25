@@ -1,6 +1,7 @@
 // Initialize Zendesk Chat
-export const initZendesk = async () =>
-  new Promise(resolve => {
+export const initZendesk = async () =>{
+try{
+    new Promise(resolve => {
         window.$zopim || (function (d, s) {
           var z = window.$zopim = function (c) { z._.push(c) }, $ = z.s =
               d.createElement(s), e = d.getElementsByTagName(s)[0]; z.set = function (o) {
@@ -16,6 +17,11 @@ export const initZendesk = async () =>
             resolve(true);
         });
   });
+}catch(err){
+    //
+}
+}
+
 
 // Setting Value in the Zendesk Chat if the user is Logged in
 export const initLoggedInZendesk = (candidateDetails, disableSound=false) => {
@@ -23,7 +29,7 @@ export const initLoggedInZendesk = (candidateDetails, disableSound=false) => {
         const full_name = candidateDetails?.name;
         const  email = candidateDetails?.email;
         const mobile_no = candidateDetails?.mobile;
-            
+    try{
         window && window.$zopim &&  window.$zopim(function () {
             window.$zopim.livechat.set({
                 language: 'en',
@@ -35,33 +41,53 @@ export const initLoggedInZendesk = (candidateDetails, disableSound=false) => {
                window.$zopim.livechat.setDisableSound(disableSound)
            }
         });
+    }catch(err){
+        //
+    }
+            
+
     }
 }
 
 //Show Zendesk Chat Window on Click
 export const zendeskChatShow = () => {
-    window.$zopim(function () {
-        window.$zopim.livechat.window.show();
-        window.$zopim.livechat.window.onHide(function () {
-            window.$zopim.livechat.hideAll()
-        })
-    });
+    try{
+        window.$zopim(function () {
+            window.$zopim.livechat.window.show();
+            window.$zopim.livechat.window.onHide(function () {
+                window.$zopim.livechat.hideAll()
+            })
+        });
+    }catch(err){
+        //
+    }
+
 }
 
 //Show Zendesk Chat Window after "time interval" 
 export const zendeskTimeControlledWindow = (timeinterval = 700) => {
-    setTimeout(() => {
-        window && window.$zopim &&  window.$zopim.livechat.window.show();
-    }, timeinterval)
+    try{
+        setTimeout(() => {
+            window && window.$zopim &&  window.$zopim.livechat.window.show();
+        }, timeinterval)
+    }catch(err){
+        //
+    }
+
 }
 
 export const loggedOutZendesk = () => {
-    window && window.$zopim &&  window.$zopim(function () {
-        window.$zopim.livechat.set({
-            language: 'en',
-            name: '',
-            email: '',
-            phone: ''
-        });             
-    });
+    try{
+        window && window.$zopim &&  window.$zopim(function () {
+            window.$zopim.livechat.set({
+                language: 'en',
+                name: '',
+                email: '',
+                phone: ''
+            });             
+        });
+    }catch(err){
+//
+    }
+
 }

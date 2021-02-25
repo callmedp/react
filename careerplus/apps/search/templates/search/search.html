@@ -172,8 +172,8 @@
     <script src="{% static 'shinelearn/js/search/bootstrap-slider.min.js' %}"></script>
     <script src="{% static 'shinelearn/js/common/inputTags.jquery.js' %}"></script>
     <script src="{% static 'shinelearn/js/search/search.js' %}"></script>
-    {% include 'homepage/partials/ga.impression.html' with page="Search" products=page.object_list used_as='fn' %}
     {% endcompress %}
+    {% include 'homepage/partials/ga.impression.html' with page="Search" products=page.object_list used_as='fn' %}
     <script>
         {% if facets.fields.pFA|length > 5%}
             $(window).on("load",function(){

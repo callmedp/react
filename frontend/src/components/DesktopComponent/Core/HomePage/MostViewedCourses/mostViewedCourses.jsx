@@ -17,7 +17,7 @@ function MostViewedCourses() {
         
         if (!mostViewedCourses[tabType] || mostViewedCourses[tabType].length === 0)  {
             dispatch(startHomePageLoader())
-            await new Promise((resolve, reject) => dispatch(fetchMostViewedCourses({ categoryId: tabType, resolve, reject })));
+            await new Promise((resolve, reject) => dispatch(fetchMostViewedCourses({ payload:{categoryId: tabType}, resolve, reject })));
             dispatch(stopHomePageLoader())
         }
         setKey(tabType)
@@ -30,7 +30,7 @@ function MostViewedCourses() {
             <div className="row">
                 <div className="container">
                     <div className="recent-courses mt-20 mb-30">
-                        <h2 className="heading2 text-center">Most viewed courses</h2>
+                        <h2 className="heading2 text-center mb-25">Most viewed courses</h2>
                         <Tabs
                             id="controlled-tab-example"
                             activeKey={key}

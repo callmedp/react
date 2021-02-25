@@ -1,6 +1,6 @@
 @import '../../../../../styles-mobile/abstracts';
 
-.m-all-category {
+.m-recruiters-looking {
     overflow: hidden;
     .m-card {
         @extend %box-shadow1;
@@ -12,6 +12,7 @@
 
         figure {
             height: 16.5rem;
+            overflow: hidden;
             img {
                 width: 100%;
             }

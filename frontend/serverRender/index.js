@@ -1,5 +1,9 @@
 'use strict';
-require('isomorphic-fetch');
+global.fetch = require('node-fetch');
+
+// const fetch = require('isomorphic-fetch');
+let Promise = require("bluebird");
+
 const path = require('path');
 
 const fs = require('fs');
@@ -70,12 +74,35 @@ const render = require('./warehouse').render;
 const expressRoutes = require('./warehouse').expressRoutes;
 const store = require('store/index').default;
 
-let userAgents, indexFile, appContent, routes, result;
+let userAgents, indexFile, appContent, routes, result, cookies;
 
 app.use(function (req, res, next) {
     userAgents = req.headers['user-agent'];
     next();
 });
+
+app.use(function (req, res, next) {
+    try {
+        cookies = req.headers.cookie;
+        cookies = cookies.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            let cookie = cookies[i].trim();
+            if (cookie.substring(0, '_em_'.length + 1) === ('_em_=')) {
+                cookies = cookie.substring('_em_'.length + 1);
+                break;
+            }
+        }
+    } catch (err) {
+        cookies = '';
+        console.log('error in cookie reading', err);
+    }
+
+    next();
+});
+
+
+
+
 
 // app.use('/media/static/',express.static('../careerplus/media/static/'));
 app.use(express.static('../careerplus/static_core/react/'));
@@ -94,23 +121,32 @@ app.get(expressRoutes, (req, res) => {
         console.log("<><><><><><>Entered Mobile<><><><><><>   ", req.url)
         indexFile = 'indexMobile';
         routes = require('routes/index.mobile').routes;
-
     }
     else {
-
         console.log("<><><><><><>Entered Desktop<><><><><><>  ", req.url)
         indexFile = 'index';
         routes = require('routes/index.desktop').routes;
 
     }
+    const branch = matchRoutes(routes, req.path) || [] ;
 
-    const branch = matchRoutes(routes, req.path) || []
-
-
+       const data = async () => await new Promise((resolve, reject) => {
+        fetch(`${window.config?.siteDomain || 'https://learning.shine.com'}/api/v1/fetch-info/`,
+            {
+                method: 'POST',
+                body: JSON.stringify({ "em": cookies }),
+                headers: { 'Content-Type': 'application/json' }
+            }).then(res => res.json())
+            .then(json => {
+                console.log('promise resolved');
+            })
+            .catch(err => console.log(err))
+            .finally(() => {
+                console.log('here in finally');
     branch.forEach(async ({ route, match }) => {
         if (route && route.actionGroup) {
             try {
-                result = await new Promise((resolve, reject) => fetchApiData(store, match.params, route.actionGroup, resolve, reject));
+                result = await new Promise((resolve, reject) => fetchApiData(store, match.params,cookies, route.actionGroup, resolve, reject));
             }
             catch (error) {
                 if (error?.status === 404) {
@@ -118,30 +154,8 @@ app.get(expressRoutes, (req, res) => {
                 }
             }
 
-          
+
             appContent = render(req, routes);
-            // const helmet = Helmet.renderStatic();
-            // let metaTitlesAll = "";
-
-            // try {
-            //     metaTitlesAll += '<title>' + helmet.title.toComponent()[0].key + '</title>';
-            //     metaTitlesAll += '<link rel="canonical" href= ' + helmet.link.toComponent()[0].props.href + ' />';
-
-            //     for (let m = 0; m < helmet.meta.toComponent().length; m++) {
-            //         let metaTitles = helmet.meta.toComponent()[m].props;
-
-            //         if(metaTitles.name && metaTitles.name === 'description') metaTitlesAll += '<meta name="'+ metaTitles.name +'" content="' + metaTitles.content + '" />';
-
-            //         else if(metaTitles.property && (metaTitles.property === 'og:title' || metaTitles.property === 'og:url' || metaTitles.property === 'og:description' || metaTitles.property === 'og:type' || metaTitles.property === 'og:site_name' || metaTitles.property === 'fb:profile_id')) metaTitlesAll += '<meta property="' +metaTitles.property+ '" content="' + metaTitles.content + '" />';
-
-            //         else if(metaTitles.itemprop && (metaTitles.itemprop === '' || metaTitles.itemprop === 'url' || metaTitles.itemprop === 'description')) metaTitlesAll += '<meta itemprop="' +metaTitles.name+ '" content="' + metaTitles.content + '" />';
-            //     }
-            // }
-            // catch (e) {
-            //     // pass
-            // }
-
-            // Grab the initial state from our Redux store at send it to the browser to hydrate the app.
             const preloadedState = store.getState()
 
             return res.render(indexFile, {
@@ -155,8 +169,10 @@ app.get(expressRoutes, (req, res) => {
         }
 
     });
+});
+});
 
-
+    data();
 });
 
 

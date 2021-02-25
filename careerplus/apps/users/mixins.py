@@ -36,7 +36,7 @@ from .choices import (
     PORTFOLIO_PRICE_MATRIX_DICT, VISUAL_RESUME_MATRIX_DICT,
     INTERNATIONAL_RESUME_MATRIX_DICT, COUNTRY_SPCIFIC_VARIATION_MATRIX_DICT,
     SECOND_REGULAR_RESUME_MATRIX_DICT, COMBO_DISCOUNT_OF_TWO,
-    COMBO_DISCOUNT_OF_THREE, EXECUTIVE_BIO_PRICE_MATRIX_DICT
+    COMBO_DISCOUNT_OF_THREE, EXECUTIVE_BIO_PRICE_MATRIX_DICT,MAX_INCENTIVE
 )
 
 VISUAL_RESUME_PRODUCT_LIST = settings.VISUAL_RESUME_PRODUCT_LIST
@@ -900,8 +900,8 @@ class WriterInvoiceMixin(object):
             if success_per >= INCENTIVE_PASS_PERCENTAGE:
                 incentive = (total * INCENTIVE_PERCENTAGE) / 100
                 incentive = int(incentive)
-                if incentive > 2000:
-                    incentive = 2000
+                if incentive > MAX_INCENTIVE:
+                    incentive = MAX_INCENTIVE
                 total_payable += incentive
             elif success_per < PASS_PERCENTAGE:
                 penalty = (total * PENALTY_PERCENTAGE) / 100
