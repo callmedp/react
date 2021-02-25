@@ -9,10 +9,10 @@ import { startGetResumeScoreLoader, stopGetResumeScoreLoader } from 'store/Loade
 import { fetchServiceRecommendation } from 'store/UserIntentPage/actions.js';
 import { CircularProgressbar } from 'react-circular-progressbar';
 import './shineServices.scss';
-import Swal from 'sweetalert2';
 import { useDispatch, useSelector } from 'react-redux';
 import Loader from '../../../../Common/Loader/loader';
 import RecommendServices from './serviceRecommend.jsx';
+import { showSwal } from 'utils/swal';
 
 const ShineServices = (props) => {
     const { history } = props;
@@ -50,47 +50,41 @@ const ShineServices = (props) => {
     }
 
     const fileUpload = async (event) => {
-        if(!file1){handleAlert(); return;}
-        else{
+        if(!file1) {
+            handleAlert(); return;
+        }
+        else {
             try {
                 dispatch(startGetResumeScoreLoader());
                 const response = await new Promise((resolve, reject) => {dispatch(uploadFileUrl({ file1, resolve, reject }));})
-                if(response.status == 'SUCCESS'){
+                if(response.status == 'SUCCESS') {
                     const total_score = response.total_score;
                     setTotalScore(total_score);
-                    handleClose();
-
-                }else{
-                    Swal.fire({
-                        icon: 'error',
-                        html: '<h3>Something went wrong! Try again.<h3>'
-                    })
                 }
-                dispatch(stopGetResumeScoreLoader());
-            } catch (err) {
-                if (!err['error_message']) {
-                   Swal.fire({
-                        icon: 'error',
-                        html: '<h3>Something went wrong! Try again.<h3>'
-                    })
+                else {
+                    showSwal('error', 'Something went wrong! Try Again')
                 }
                 dispatch(stopGetResumeScoreLoader());
             }
+            catch (err) {
+                if (!err['error_message']) showSwal('error', 'Something went wrong! Try Again')
+                dispatch(stopGetResumeScoreLoader());
+            }
+
+            handleClose();
         }
     }
 
     const handleEffects = async () => {
         try {
-
-                dispatch(startGetResumeScoreLoader());
-                const candidate_id = getCandidateId();
-                await new Promise((resolve, reject) => dispatch(fetchServiceRecommendation({ candidate_id: candidate_id, resolve, reject })));
-                dispatch(stopGetResumeScoreLoader());
-        } catch (error) {
+            dispatch(startGetResumeScoreLoader());
+            const candidate_id = getCandidateId();
+            await new Promise((resolve, reject) => dispatch(fetchServiceRecommendation({ candidate_id: candidate_id, resolve, reject })));
             dispatch(stopGetResumeScoreLoader());
-            if (error?.status == 404) {
-                history.push('/404');
-            }
+        }
+        catch (error) {
+            dispatch(stopGetResumeScoreLoader());
+            if (error?.status == 404) history.push('/404');
         }
     };
 

@@ -1,13 +1,11 @@
 import React, {useState, useEffect, useRef} from 'react';
 import { Link } from 'react-router-dom';
-// import Slider from "react-slick";
 import 'slick-carousel/slick/slick.css';
 import '../../../CataloguePage/ServicesForYou/servicesForYou.scss';
 import { shineDomain, resumeShineSiteDomain } from '../../../../../../utils/domains.js';
 import './shineServices.scss';
 import { CircularProgressbar } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
-
 import { getCandidateId } from '../../../../../../utils/storage.js';
 import { uploadFileUrl } from 'store/UserIntentPage/actions';
 import { startGetResumeScoreLoader, stopGetResumeScoreLoader } from 'store/Loader/actions/index';
@@ -35,14 +33,12 @@ const ShineServices = (props) => {
     const handleShow = () => setShow(true);
     const dispatch = useDispatch();
     const fileInput = useRef(null);
-
     const handleClick = () => {
         fileInput.current.click()
     }
 
-
-    const [alert, setAlert] = useState(false);
-    const handleAlert = () => setAlert(true);
+    // const [alert, setAlert] = useState(false);
+    // const handleAlert = () => setAlert(true);
     const [filename, setFilename] = useState(undefined);
     const resetFileName = () => setFilename(undefined);
     const [file, setFile] = useState(undefined);
@@ -59,9 +55,9 @@ const ShineServices = (props) => {
 
     const fileUpload = async event => {
         let file1 = await event.target.files[0];
-        if(file1 === undefined){return;}
+        if(file1 === undefined) return;
         let fileName = event.target.files[0].name;
-        if (file1.size / (1024 * 1024) > 5) {return showSwal('error', 'File size should not exceed 5MB')}
+        if (file1.size / (1024 * 1024) > 5) return showSwal('error', 'File size should not exceed 5MB');
         else if (file1.name.slice(-4).toLowerCase() === '.pdf' || file1.name.slice(-4).toLowerCase() === '.doc' || file1.name.slice(-5).toLowerCase() === '.docx' || file1.name.slice(-4).toLowerCase() === '.txt') {
             setFilename(fileName);
             setFile(file1);
@@ -69,41 +65,43 @@ const ShineServices = (props) => {
             try {
                 dispatch(startGetResumeScoreLoader());
                 const response = await new Promise((resolve, reject) => {dispatch(uploadFileUrl({ file1, resolve, reject }));})
-                if(response.status == 'SUCCESS'){
+                if(response.status == 'SUCCESS') {
                     const total_score = response.total_score;
                     setTotalScore(total_score);
-                    handleClose();
+                }
+                else {
+                    showSwal('error', 'Something went wrong! Try again.')
+                }
 
-                }else{
-                    return showSwal('error', 'Something went wrong! Try again.')
-                }
+                handleClose();
                 dispatch(stopGetResumeScoreLoader());
-            } catch (err) {
+            }
+            catch (err) {
                 if (!err['error_message']) {
-                    return showSwal('error', 'Something went wrong! Try again.')
+                    showSwal('error', 'Something went wrong! Try again.')
                 }
+
+                handleClose();
                 dispatch(stopGetResumeScoreLoader());
             }
         }
-        else {return showSwal('error', 'File size should be in .doc, PDF, .docx format only')}
+        else {
+            return showSwal('error', 'File size should be in .doc, PDF, .docx format only')
+        };
     }
 
     const handleEffects = async () => {
         try {
-
-                dispatch(startGetResumeScoreLoader());
-                const candidate_id = getCandidateId();
-                await new Promise((resolve, reject) => dispatch(fetchServiceRecommendation({ candidate_id: candidate_id, resolve, reject })));
-                dispatch(stopGetResumeScoreLoader());
+            dispatch(startGetResumeScoreLoader());
+            const candidate_id = getCandidateId();
+            await new Promise((resolve, reject) => dispatch(fetchServiceRecommendation({ candidate_id: candidate_id, resolve, reject })));
+            dispatch(stopGetResumeScoreLoader());
 
         } catch (error) {
             dispatch(stopGetResumeScoreLoader());
-            if (error?.status == 404) {
-                history.push('/404');
-            }
+            if (error?.status == 404) history.push('/404');
         }
     };
-
 
     return (
         <>
