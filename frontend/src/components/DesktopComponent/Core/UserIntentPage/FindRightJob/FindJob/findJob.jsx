@@ -2,11 +2,9 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import './findJob.scss';
 import { useForm } from 'react-hook-form';
-import { InputField, SelectIntentBox, MultiSelectBox } from 'formHandler/desktopFormHandler/formFields';
+import { SelectIntentBox } from 'formHandler/desktopFormHandler/formFields';
 import Autocomplete from 'formHandler/desktopFormHandler/AutoComplete';
 import UserIntentForm from 'formHandler/desktopFormHandler/formData/userIntent';
-import { fetchCareerChangeData, fetchFindRightJobsData } from 'store/UserIntentPage/actions';
-import { useDispatch } from 'react-redux';
 import useDebounce from 'utils/searchUtils/debouce';
 import { IndianState } from 'utils/constants';
 import { userSearch, relatedSearch, userSkillSearch } from 'utils/searchUtils/searchFunctions';
@@ -14,7 +12,6 @@ import { userSearch, relatedSearch, userSkillSearch } from 'utils/searchUtils/se
 const FindJob = (props) => {
     const [chips, setChips] = useState([]);
     const { register, handleSubmit, errors } = useForm();
-    const dispatch = useDispatch();
     const { history, type } = props;
 
     //Job title events handling
@@ -192,28 +189,9 @@ const FindJob = (props) => {
                                             }
                                         </div>
 
-                                        {/* <InputField attributes={UserIntentForm.job} register={register}
-                                                errors={!!errors ? errors[UserIntentForm.job.name] : ''} /> */}
-
-                                        {/*                                         
-                                        <div className="form-group">        
-                                                <select className="select" className="custom-select">
-                                                    <option selected>Total experience </option>
-                                                    <option value="+91">1 - 2</option>
-                                                    <option value="+92">3 - 5</option>
-                                                    <option value="+93">6+</option>
-                                                </select>
-                                        </div> */}
-
                                         <SelectIntentBox attributes={UserIntentForm.experience} register={register}
                                             errors={!!errors ? errors[UserIntentForm.experience.name] : ''} />
 
-                                        {/* <div className="form-group">
-                                            <input type="text" className="form-control" id="location" name="location" placeholder=" "
-                                                aria-required="true" aria-invalid="true" />
-                                            <label for="">Preferred location</label>
-                                            <span class="error-msg">Required</span>
-                                        </div> */}
                                         {type === 'job' ?
                                             <Autocomplete id={"location"} name={"location"} className={"form-control"} autoComplete={"off"}
                                                 lableFor={"Preferred Location"} type={"text"} placeholder={" "}
@@ -223,22 +201,6 @@ const FindJob = (props) => {
                                             <SelectIntentBox attributes={UserIntentForm.department} register={register}
                                                 errors={!!errors ? errors[UserIntentForm.department.name] : ''} />
                                         }
-
-                                        {/* <InputField attributes={UserIntentForm.location} register={register}
-                                                errors={!!errors ? errors[UserIntentForm.location.name] : ''} /> */}
-
-                                        {/* <div className="form-group">
-                                            <input type="text" className="form-control" id="skills" name="skills" placeholder=" "
-                                                aria-required="true" aria-invalid="true" />
-                                            <label for="">Your skills</label>
-                                        </div> */}
-
-                                        {/* <InputField attributes={UserIntentForm.skills} register={register}
-                                            errors={!!errors ?errors[UserIntentForm.skills.name] : ''} /> */}
-
-
-                                        {/* <MultiSelectBox attributes={UserIntentForm.skills} data={chips} register={register}
-                                            errors={!!errors ? errors[UserIntentForm.skills.name] : ''} /> */}
 
                                         <div className={chips?.length ? "form-group-custom checked" : !!errors ? "form-group-custom error" : "form-group-custom"}>
                                             <label className="sticky-label" htmlFor="" style={!!errors ? { top: '1rem' } : { top: '-1rem' }}>Your skills</label>
@@ -271,7 +233,6 @@ const FindJob = (props) => {
                                             }
                                         </div>
 
-
                                         <button type="submit" className="btn btn-inline btn-primary submit-btn mt-30" role="button" data-toggle="modal"
                                             data-target="#thankyouModal" type='submit'>{type === 'job' ? 'View Jobs' : 'View Courses'}</button>
                                     </form>
@@ -281,7 +242,6 @@ const FindJob = (props) => {
                                 <img src="/media/images/desktop/find-right-job.png" className="img-fluid" alt="Let’s get you to the right job" />
                             </figure>
                         </div>
-
                     </div>
                 </div>
             </div>
