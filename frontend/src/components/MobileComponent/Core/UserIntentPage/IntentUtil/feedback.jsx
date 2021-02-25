@@ -15,7 +15,7 @@ const Feedback = props => {
             "intent": intent,
             'candidate_id': getCandidateId(),
             "recommendation_relevant": eve.target.innerHTML === 'Yes' ? true : false,
-            "recommended_products": recommended_course_ids,
+            "recommended_products": recommended_course_ids.join(),
             "context": context
         }
         await new Promise(() => dispatch(sendFeedback({ feedData })));
