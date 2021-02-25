@@ -13,18 +13,21 @@ import { showSwal } from 'utils/swal';
 
 const ViewCourses = (props) => {
     const dispatch = useDispatch();
-	const { history } = props;
+    const { history, match } = props;
+    console.log(props);
     const params = new URLSearchParams(props.location?.search);
-    const { course_data, page } = useSelector(store => store.upskillYourself);
+    const { course_data, page,recommended_course_ids } = useSelector(store => store.upskillYourself);
     const { careerChangeLoader } = useSelector(store => store.loader);
     let currentPage = 1;
+    let intentValue = match?.params?.name === 'make-career-change' ? 0 : 1;
+    const feedD = {'recommended_course_ids': recommended_course_ids, 'intent': intentValue, 'context': 'Make a career change'};
 
     useEffect(() => {
         handleUpskillData();
     }, []);
 
     const handleUpskillData = async() => {
-        const dataUpskill = `?preferred_role=${params.get('job_title')}&experience=${params.get('minexp')}&skills=${params.get('skill') || ''}&page=${currentPage}&intent=0&department=${params.get('department')}`;
+        const dataUpskill = `?preferred_role=${params.get('job_title')}&experience=${params.get('minexp')}&skills=${params.get('skill') || ''}&page=${currentPage}&intent=${intentValue}&department=${params.get('department')}`;
         dispatch(startCareerChangeLoader());
         
         // api hit for upskill yourself
@@ -66,7 +69,7 @@ const ViewCourses = (props) => {
                         {page?.has_next && <span className="load-more btn-col" onClick={() => loadMoreCourses(page?.current_page)}>View More Courses</span>}
                         <br/>
                     </div>
-                    <Feedback />
+                    <Feedback feedbackData={feedD}/>
                 </div>
             </section>
         </>

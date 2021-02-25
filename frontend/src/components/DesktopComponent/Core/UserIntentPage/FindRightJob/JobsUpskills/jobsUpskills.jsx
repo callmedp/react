@@ -20,7 +20,8 @@ const JobsUpskills = (props) => {
 	const [currentJobPage, setJobPage] = useState(1);
 	const { jobsUpskillsLoader } = useSelector(store => store.loader);
 	const { jobsList: { results, next } } = useSelector(store => store.findRightJob);
-	const { course_data, page } = useSelector(store => store.upskillYourself);
+	const { course_data, page, recommended_course_ids } = useSelector(store => store.upskillYourself);
+    const feedD = {'recommended_course_ids': recommended_course_ids, 'intent': 2, 'context': 'Find the right job'};
   
 	const courseDispatchHit = async (dataUpskill) => {
 		dispatch(startJobsUpskillsLoader())
@@ -94,7 +95,7 @@ const JobsUpskills = (props) => {
 
 									<Tab eventKey="Jobs" title={<h2>Jobs for you</h2>}>
 										<JobListing jobList={results} />
-										{next && <span className="m-load-more btn-col" onClick={() => loadMoreJobs(next)}>View More Jobs</span>}
+										{next && <a className="load-more btn-col" onClick={() => loadMoreJobs(next)}>View More Jobs</a>}
 										{/* {num_pages === currentJobPage ? <a onClick={handleGotoFirstPage} className="load-more" style={{ cursor: 'pointer' }}>View first Page</a> : <a onClick={handleNextPage} className="load-more" style={{ cursor: 'pointer' }}>View More Jobs</a>} */}
 									</Tab>
 									<Tab eventKey="Courses" title={<h2>Upskill yourself</h2>}>
@@ -103,7 +104,7 @@ const JobsUpskills = (props) => {
 									</Tab>
 								</Tabs>
 							</div>
-							<Feedback/>
+							<Feedback feedbackData={feedD} />
 						</div>
 					</div>
 				</div>

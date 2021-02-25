@@ -191,7 +191,7 @@ const upskillYourselfData = (data) => {
 
 const sendFeedback = (data) => {
     const url = `/intent/api/v1/recommendation-feedback/`;
-    return BaseApiService.get(`${siteDomain}${url}`);
+    return BaseApiService.post(`${siteDomain}${url}`, data);
 }
 
 export default {

@@ -1,16 +1,24 @@
 import React, {useState} from 'react'
 import { sendFeedback } from 'store/UserIntentPage/actions';
 import { useDispatch } from 'react-redux';
+import { getCandidateId } from 'utils/storage.js';
 
 const Feedback = props => {
 
     const [feedback, setFeedback] = useState(false)
     const dispatch = useDispatch()
-
-    const handleFeedback = (eve) => {
+    const {feedbackData : {intent, recommended_course_ids, context}} = props;
+    const handleFeedback = async (eve) => {
 		eve.preventDefault();
 		setFeedback(true);
-		dispatch(sendFeedback())
+		const feedData = {
+            "intent": intent,
+            'candidate_id': getCandidateId(),
+            "recommendation_relevant": eve.target.innerHTML === 'Yes' ? true : false,
+            "recommended_products": recommended_course_ids,
+            "context": context
+        }
+        await new Promise(() => dispatch(sendFeedback({ feedData })));
 	}
 
 

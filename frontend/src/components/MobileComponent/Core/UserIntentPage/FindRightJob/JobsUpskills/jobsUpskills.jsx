@@ -19,12 +19,13 @@ const JobsUpskills = (props) => {
     const { history } = props;
     const { jobsUpskillsLoader } = useSelector(store => store.loader);
     const { jobsList : { results, next } } = useSelector(store => store.findRightJob);
-    const { course_data, page }  = useSelector(store => store.upskillYourself);
+    const { course_data, page, recommended_course_ids }  = useSelector(store => store.upskillYourself);
     const params = new URLSearchParams(props.location.search);
     const [currentJobPage, setJobPage] = useState(1);
 
     const [selectTab, tabSelected] = useState('tab1');
     const openSelectedTab = (id) => tabSelected(id);
+    const feedD = {'recommended_course_ids': recommended_course_ids, 'intent': 2, 'context': 'Find the right job'};
 
     useEffect(() => {
         resultApiFunc(history.location.search + `&page=1`);
@@ -120,7 +121,7 @@ const JobsUpskills = (props) => {
                         </div>
                     </div>
                 </div>
-                <Feedback />
+                <Feedback feedbackData={feedD}/>
             </div>
         </section>
     )

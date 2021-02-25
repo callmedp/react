@@ -116,7 +116,7 @@ function* uploadFile(action) {
 function* sendFeedbackData(action) {
     const { payload } = action;
     try {
-        const response = yield call(Api.sendFeedback, payload);
+        const response = yield call(Api.sendFeedback, payload.feedData);
 
         if (response.error) return ;
 

@@ -10,13 +10,13 @@ import { startCareerChangeLoader, stopCareerChangeLoader } from 'store/Loader/ac
 import Loader from 'components/DesktopComponent/Common/Loader/loader';
 
 const ViewCourses = (props) => {
-    const { course_data, page } = useSelector(store => store.upskillYourself);
+    const { course_data, page, recommended_course_ids } = useSelector(store => store.upskillYourself);
     const dispatch = useDispatch()
     // const { location } = props
     const { careerChangeLoader } = useSelector(store => store.loader);
     const [currentJobPage, setJobPage] = useState(1);
     const params = new URLSearchParams(props.location?.search);
-
+    const feedD = {'recommended_course_ids': recommended_course_ids, 'intent': 0, 'context': 'Make a career change'};
     const handleEffect = async () => {
 		const dataUpskill = `?preferred_role=${params.get('job_title')}&experience=${params.get('minexp')}&skills=${params.get('skill') || ''}&page=${currentJobPage}&intent=0&department=${params.get('department')}`; //need to revied
 		dispatch(startCareerChangeLoader())
@@ -54,7 +54,7 @@ const ViewCourses = (props) => {
                                         <CourseLisiting courseList={course_data} />
                                         {page && page.has_next ? <Link onClick={loadMoreCourses} className="load-more">View More Courses</Link> : ''}
                                     </div>
-                                    <Feedback/>
+                                    <Feedback feedbackData={feedD}/>
                                 </div>
                             </div>
                         </div>
