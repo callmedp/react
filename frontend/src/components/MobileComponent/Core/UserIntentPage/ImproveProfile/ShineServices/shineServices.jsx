@@ -93,8 +93,8 @@ const ShineServices = (props) => {
     const handleEffects = async () => {
         try {
             dispatch(startGetResumeScoreLoader());
-            const candidate_id = getCandidateId();
-            await new Promise((resolve, reject) => dispatch(fetchServiceRecommendation({ candidate_id: candidate_id, resolve, reject })));
+            // const candidate_id = getCandidateId();
+            await new Promise((resolve, reject) => dispatch(fetchServiceRecommendation({ resolve, reject })));
             dispatch(stopGetResumeScoreLoader());
 
         } catch (error) {

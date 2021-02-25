@@ -60,8 +60,8 @@ function* upskillData(action) {
 function* serviceRecommendation(action) {
     const { payload } = action;
     try {
-        const data = {candidate_id: payload?.candidate_id}
-        const response = yield call(Api.fetchServiceRecommendation, data);
+        // const data = {candidate_id: payload?.candidate_id}
+        const response = yield call(Api.fetchServiceRecommendation);
         if (response?.error) {
             return payload?.resolve(response.error)
         }
