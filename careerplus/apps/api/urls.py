@@ -117,7 +117,10 @@ urlpatterns = [
     ),
     re_path(r'v1/recommended-courses-and-assesments/$', views.RecommendedCoursesAPI.as_view(),
         name='recommended-products-api'
-    )
+    ),
+    re_path(r'v1/fetch-info/$', views.FetchInfoAPIView.as_view(),
+            name='fetch-info'
+            ),
 ]
 
 if settings.DEBUG:

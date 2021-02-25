@@ -16,7 +16,7 @@ const UpgradeSkills = (props) => {
         variableWidth: true,
     };
     return(
-        <section className="m-container mt-0 mb-0 pr-0 pt-0">
+        <section className="m-container mt-0 mb-0 pr-0 pt-0 ml-10n">
             <div className="m-upgrade-skills">
                 <h2 className="m-heading2-home text-center mb-5">Why upgrade your skills </h2>
                 <p className="fs-13 text-center">Top reasons to upgrade your skills</p>
@@ -31,7 +31,7 @@ const UpgradeSkills = (props) => {
                     </div>
                     <div className="m-upgrade-skills__list">
                         <figure className="micon-become-expert3"></figure> 
-                        <p>Create a brand for yourself, differentiating yourself</p>
+                        <p>Create a brand for yourself, to differentiate</p>
                     </div>
                 </Slider>
             </div>

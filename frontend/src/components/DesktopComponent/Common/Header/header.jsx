@@ -7,12 +7,12 @@ import DropDown from './DropDown/dropDown';
 import { useDispatch, useSelector } from 'react-redux';
 import { cartCount, fetchNavOffersAndTags } from 'store/Header/actions/index';
 import { initLoggedInZendesk, loggedOutZendesk } from 'utils/zendeskIniti';
-import { removeTrackingInfo, getCandidateInformation } from 'utils/storage.js';
+import { fetchAlreadyLoggedInUser } from "store/Authentication/actions/index";
+import { removeTrackingInfo, getCandidateInformation,getCandidateId } from 'utils/storage.js';
 import SearchBar from './SeachBar/SearchBar';
 import { MyGA } from 'utils/ga.tracking.js';
 
 const Header = (props) => {
-
     const dispatch = useDispatch()
     const { count, navTags } = useSelector(store => store.header)
     const [candidateInfo, setCandidateInfo] = useState(false)
@@ -37,7 +37,7 @@ const Header = (props) => {
         try {
             dispatch(cartCount());
         
-            if (localStorage.getItem('isAuthenticated') === 'true'){
+            if (getCandidateId()){
                 try {
                     setIsLoggedIn(true)
                     // const candidateId = getCandidateId()
@@ -51,6 +51,7 @@ const Header = (props) => {
                     console.log("ERROR OCCURED", e)
                 }
             }
+           
             else {
                 setIsLoggedIn(false)
             }
@@ -69,6 +70,7 @@ const Header = (props) => {
 
     const handleLogout = () => {
         localStorage.clear();
+        sessionStorage.clear();
         loggedOutZendesk();
         let path = window.location.pathname
         window.location.href = `${siteDomain}/logout/?next=${path}`;

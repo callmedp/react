@@ -8,8 +8,6 @@ const useAuthenticate = async () => {
     const dispatch = useDispatch();
     const [authenticate, setAuthenticate] = useState(false)
 
-    
-
     const isSessionAvailable = async () => {
         localStorage.clear();
         try{

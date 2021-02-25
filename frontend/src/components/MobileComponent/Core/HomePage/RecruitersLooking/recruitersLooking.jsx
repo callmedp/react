@@ -35,8 +35,8 @@ const RecruitersLooking = (props) => {
 
 
     return (
-        <section className="m-container m-lightblue-bg mt-0 mb-0 pb-0 pr-0" data-aos="fade-up">
-            <div className="m-all-category">
+        <section className="m-container m-lightblue-bg mt-0 mb-0 pb-0 pr-0 ml-10n" data-aos="fade-up">
+            <div className="m-recruiters-looking">
                 <h2 className="m-heading2-home text-center mb-5">What recruiters are looking at</h2>
                 <p className="fs-13 text-center">Browse the skills with high demands</p>
                 <Slider {...settings}>

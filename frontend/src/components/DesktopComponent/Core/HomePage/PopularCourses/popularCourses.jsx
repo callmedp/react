@@ -17,7 +17,7 @@ function PopularCourses() {
     const handleTabChange = async (tabType) => {
         if (tabType === 'certifications' && certifications.length === 0) {
             dispatch(startHomePageLoader())
-            await new Promise((resolve, reject) => dispatch(fetchInDemandProducts({ pageId: 1, tabType, device: 'desktop', resolve, reject })));
+            await new Promise((resolve, reject) => dispatch(fetchInDemandProducts({ payload: { pageId: 1, tabType, device: 'desktop'}, resolve, reject })));
             dispatch(stopHomePageLoader())
         }
         setKey(tabType)

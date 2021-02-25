@@ -5,7 +5,7 @@ import {
     fetchTestimonials,
     fetchSkillwithDemands,
 } from 'store/HomePage/actions';
-
+import { sessionAvailability } from 'store/Header/actions/index';
 
 export const getHomepageActions = () => {
     return [

@@ -55,11 +55,11 @@ const SkillPage = (props) => {
             //So there is no need to fetch them again on the browser.
             if (!(window && window.config && window.config.isServerRendered)) {
                 dispatch(startSkillPageLoader());
-                new Promise((resolve, reject) => dispatch(fetchCoursesAndAssessments({ id: pageId, 'medium': 1, resolve, reject })));
-                new Promise((resolve, reject) => dispatch(fetchDomainJobs({ id: pageId, resolve, reject })));
-                new Promise((resolve, reject) => dispatch(fetchRecommendedProducts({ resolve, reject })));
-                new Promise((resolve, reject) => dispatch(fetchPopularCourses({ id: pageId, courseOnly: true, resolve, reject })))
-                await new Promise((resolve, reject) => dispatch(fetchSkillPageBanner({ id: pageId, 'medium': 1, resolve, reject })))
+                new Promise((resolve, reject) => dispatch(fetchCoursesAndAssessments({payload:{ id: pageId, 'medium': 1}, resolve, reject })));
+                new Promise((resolve, reject) => dispatch(fetchDomainJobs({payload:{ id: pageId}, resolve, reject })));
+                new Promise((resolve, reject) => dispatch(fetchRecommendedProducts({payload:{}, resolve, reject })));
+                new Promise((resolve, reject) => dispatch(fetchPopularCourses({payload:{ id: pageId, courseOnly: true}, resolve, reject })))
+                await new Promise((resolve, reject) => dispatch(fetchSkillPageBanner({payload:{ id: pageId, 'medium': 1}, resolve, reject })))
                 dispatch(stopSkillPageLoader());
             }
             else {

@@ -29,7 +29,7 @@ const MostViewedCourses = (props) => {
         try {
             if (!mostViewedCourses[tabType] || mostViewedCourses[tabType].length === 0) {
                 dispatch(startHomePageLoader());
-                await new Promise((resolve, reject) => dispatch(fetchMostViewedCourses({ categoryId: tabType, resolve, reject })))
+                await new Promise((resolve, reject) => dispatch(fetchMostViewedCourses({ payload: {categoryId: tabType}, resolve, reject })))
                 dispatch(stopHomePageLoader());
             }
         }
@@ -41,7 +41,7 @@ const MostViewedCourses = (props) => {
 
 
     return (
-        <section className="m-container mt-0 mb-0 m-lightblue-bg pr-0" data-aos="fade-up">
+        <section className="m-container mt-0 mb-0 m-lightblue-bg pr-0 ml-10n" data-aos="fade-up">
             <div className="m-recomend-courses">
                 <h2 className="m-heading2-home text-center">Most Viewed Courses</h2>
                 <Slider {...settings}>
