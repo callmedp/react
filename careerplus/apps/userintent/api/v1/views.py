@@ -195,7 +195,7 @@ class KeywordSuggestionAPI(APIView):
         job_title_quantity = request.GET.get('job_title_quantity',7)
         suggestion_quantity = request.GET.get('suggestion_quantity',7)
 
-        q = request.GET.get('q', '')
+        q = request.GET.get('q', '').replace(' ','_')
         skills = []
         job_titles = []
         data = []
