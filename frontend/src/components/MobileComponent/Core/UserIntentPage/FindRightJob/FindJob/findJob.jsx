@@ -47,6 +47,7 @@ const FindJob = (props) => {
     const handleSkillsClick = () => {
         handleAppend(skillsKey.current.value)
         skillsKey.current.value = ''
+        setShowSkillResults(false)
     }
 
     const suggestSkills = (e) => {
