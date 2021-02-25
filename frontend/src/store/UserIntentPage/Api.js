@@ -12,10 +12,10 @@ const fetchServiceRecommendation = (data) => {
 
     const url = '/intent/api/v1/service-recommendation/'
 
-    if(data?.candidate_id != false){
-        let candidate_id = data?.candidate_id;
-        url = url + '?candidate_id=' + candidate_id
-    }
+    // if(data?.candidate_id != false){
+    //     let candidate_id = data?.candidate_id;
+    //     url = url + '?candidate_id=' + candidate_id
+    // }
 
     return BaseApiService.get(`${siteDomain}${url}`);
 }

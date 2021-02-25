@@ -97,7 +97,7 @@ class ServiceRecommendationAPI(APIView):
     authentication_classes = ()
 
     def get(self,request):
-        candidate_id = request.GET.get('candidate_id', None)
+        candidate_id = request.GET.get('candidate_id', None) or self.request.session.get('candidate_id', None)
         page = int(request.GET.get('page',1))
         # data = cache.get(f"analytics_recommendations_services{candidate_id}",None)
         # if data is None:
