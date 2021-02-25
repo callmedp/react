@@ -7,7 +7,7 @@ import CourseLisiting from '../../IntentUtil/courseListing';
 import Feedback from '../../IntentUtil/feedback';
 import { fetchUpskillYourselfData } from 'store/UserIntentPage/actions';
 import { startCareerChangeLoader, stopCareerChangeLoader } from 'store/Loader/actions/index';
-import Loader from '../../../../Common/Loader/loader';
+import Loader from 'components/DesktopComponent/Common/Loader/loader';
 
 const ViewCourses = (props) => {
     const { course_data, page } = useSelector(store => store.upskillYourself);

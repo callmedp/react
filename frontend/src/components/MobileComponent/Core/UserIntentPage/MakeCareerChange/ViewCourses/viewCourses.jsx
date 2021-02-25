@@ -18,14 +18,12 @@ const ViewCourses = (props) => {
     const { course_data, page } = useSelector(store => store.upskillYourself);
     const { careerChangeLoader } = useSelector(store => store.loader);
     let currentPage = 1;
-    console.log(props.location)
 
     useEffect(() => {
         handleUpskillData();
     }, []);
 
     const handleUpskillData = async() => {
-        console.log(params.get('job_title'))
         const dataUpskill = `?preferred_role=${params.get('job_title')}&experience=${params.get('minexp')}&skills=${params.get('skill') || ''}&page=${currentPage}&intent=0&department=${params.get('department')}`;
         dispatch(startCareerChangeLoader());
         

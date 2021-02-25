@@ -61,15 +61,15 @@ const TextArea = (props) => {
 const SelectIntentBox = (props) => {
 
     const { attributes: {
-        name, children, validation, label, errorMessage
-    }, register, errors } = props
+                            name, children, validation, label, errorMessage
+                        }, register, errors } = props;
 
     const [checkedClass, setCheckedClass] = useState('form-group')
 
     return (
         <div className={!!errors ? 'form-group error' : checkedClass}>
             <div className="custom-select-box">
-            <select name={name} className="custom-select" ref={register(validation)} aria-label={label} onChange={() => setCheckedClass('form-group checked')}>
+                <select name={name} className="custom-select" ref={register(validation)} aria-label={label} onChange={() => setCheckedClass('form-group checked')}>
                     { children?.map((item,index)=>{
                         return(
                         <option value={item.value} key={index}>{item.text}</option>

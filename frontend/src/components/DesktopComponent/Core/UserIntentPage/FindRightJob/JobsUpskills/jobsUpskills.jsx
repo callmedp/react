@@ -19,7 +19,7 @@ const JobsUpskills = (props) => {
 	const params = new URLSearchParams(props.location?.search);
 	const [currentJobPage, setJobPage] = useState(1);
 	const { jobsUpskillsLoader } = useSelector(store => store.loader);
-	const { jobsList: { results, num_pages, next } } = useSelector(store => store.findRightJob)
+	const { jobsList: { results, next } } = useSelector(store => store.findRightJob);
 	const { course_data, page } = useSelector(store => store.upskillYourself);
   
 	const courseDispatchHit = async (dataUpskill) => {

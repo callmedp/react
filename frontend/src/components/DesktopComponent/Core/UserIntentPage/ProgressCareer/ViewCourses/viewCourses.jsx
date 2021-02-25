@@ -19,7 +19,7 @@ const ViewCourses = (props) => {
     const handleEffect = async () => {
 		const dataUpskill = `?preferred_role=${params.get('job_title')}&experience=${params.get('minexp')}&skills=${params.get('skill') || ''}&page=${currentJobPage}&intent=1&department=${params.get('department')}`; //need to revied
 		dispatch(startCareerChangeLoader())
-            await new Promise((resolve) => dispatch(fetchUpskillYourselfData({ dataUpskill, resolve })));
+        await new Promise((resolve) => dispatch(fetchUpskillYourselfData({ dataUpskill, resolve })));
 		dispatch(stopCareerChangeLoader())
 	}
     

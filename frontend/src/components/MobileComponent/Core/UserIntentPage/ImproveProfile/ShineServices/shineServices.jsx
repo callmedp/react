@@ -52,7 +52,6 @@ const ShineServices = (props) => {
     const resetFileDetails = () => {resetFileName(); resetFile(); resetTotalScore();}
     const { resumeScoreLoader } = useSelector(store => store.loader);
     const { services , page } = useSelector(store => store.serviceRecommend);
-    console.log(services)
 
     useEffect(() => {
         handleEffects();
@@ -66,7 +65,7 @@ const ShineServices = (props) => {
         else if (file1.name.slice(-4).toLowerCase() === '.pdf' || file1.name.slice(-4).toLowerCase() === '.doc' || file1.name.slice(-5).toLowerCase() === '.docx' || file1.name.slice(-4).toLowerCase() === '.txt') {
             setFilename(fileName);
             setFile(file1);
-            console.log(file1);
+
             try {
                 dispatch(startGetResumeScoreLoader());
                 const response = await new Promise((resolve, reject) => {dispatch(uploadFileUrl({ file1, resolve, reject }));})

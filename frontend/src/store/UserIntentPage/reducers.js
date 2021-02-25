@@ -66,14 +66,24 @@ export const careerChangeReducer = (state=careerChangeState, action) => {
 }
 
 const findRightJobsState = {
-    jobsList: {},
-    page: {}
+    jobsList: {
+        page: 1,
+        results: [],
+        next: ""
+    },
 }
 
 
 export const findRightJobsReducer = (state=findRightJobsState, action) => {
     switch(action.type) {
-        case findRightJobsDataFetched.type : return {...state, ...action?.payload}
+        case findRightJobsDataFetched.type : return {
+            ...state,
+            jobsList: {
+                page: action.payload.jobsList.page ?? 1,
+                next: action.payload.jobsList.next ?? '',
+                results: [...state.jobsList.results, ...(action.payload.jobsList.results ?? [])]
+            }
+        }
         default: return state;
     }
 }
