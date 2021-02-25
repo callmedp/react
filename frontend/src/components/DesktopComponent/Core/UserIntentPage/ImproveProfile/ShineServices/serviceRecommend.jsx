@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import { Link } from 'react-router-dom';
-import { shineDomain } from '../../../../../../utils/domains.js';
+import { shineDomain, siteDomain } from '../../../../../../utils/domains.js';
 import '../../../CataloguePage/ServicesForYou/servicesForYou.scss';
 import './shineServices.scss';
 
@@ -17,11 +17,13 @@ const RecommendServices = (props) => {
                 return (
                     <div className="col">
                         <div className="services-foryou">
-                            <h3 className="heading3">{service.title}</h3>
-                            <p>{service.about}</p>
+                            <h3 className="heading3">{service.title?.length > 50 ? service.title?.slice(0, 50) + '...' :  service.title}</h3>
+                            <p>{ service.about?.length > 85 ? service.about?.slice(0, 85) + '...' :  service.about }</p>
                             <span className="d-flex">
-                                <Link to={`${service.url}`}>Know more</Link>
-                                <figure className={"icon-service1"}></figure>
+                                <a href={`${siteDomain}${service.url}`}>Know more</a>
+                                <figure>
+                                    <img src={service?.imgUrl} alt={service?.imgAlt} />
+                                </figure>
                             </span>
                         </div>
                     </div>

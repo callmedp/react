@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import Slider from "react-slick";
 import 'slick-carousel/slick/slick.css';
 import { Link } from 'react-router-dom';
-import { shineDomain } from '../../../../../../utils/domains.js';
+import { shineDomain, siteDomain } from '../../../../../../utils/domains.js';
 import '../../../CataloguePage/ServicesForYou/servicesForYou.scss';
 import './shineServices.scss';
 import { showSwal } from 'utils/swal';
@@ -17,12 +17,14 @@ const RecommendServices = (props) => {
                 <Slider {...settings}>
                     { services?.map((service, index) => {
                             return (
-                                <div className="m-services-foryou__list">
-                                    <h3 className="m-heading3">{service.title}</h3>
-                                    <p>{service.about}</p>
+                                <div className="m-services-foryou__list" key={index}>
+                                    <h3 className="m-heading3">{service.title?.length > 50 ? service.title?.slice(0, 50) + '...' :  service.title}</h3>
+                                    <p>{ service.about?.length > 85 ? service.about?.slice(0, 85) + '...' :  service.about }</p>
                                     <span className="d-flex">
-                                        <Link to={`${service.url}`}>Know more</Link>
-                                        <figure className="micon-service1"></figure>
+                                        <a href={`${siteDomain}${service.url}`}>Know more</a>
+                                        <figure>
+                                            <img src={service?.imgUrl} alt={service?.imgAlt} />
+                                        </figure>
                                     </span>
                                 </div>
                     )})}
