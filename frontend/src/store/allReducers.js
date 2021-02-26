@@ -11,7 +11,6 @@ import { ReviewsReducer } from './DashboardPage/AddSubmitReview/reducer/index';
 import { RecommendationReducer } from './RecommendedCourses/reducer/index';
 import { RecentlyAddedCoursesReducer, PopularServicesReducer, TrendingCategoriesReducer, AllCategoriesReducer } from './CataloguePage/reducer/index';
 import {FetchUserInfoReducer} from './Authentication/reducer/index'
-// import { RecentlyServicesReducer } from './DashboardPage/Service/reducer/index';
 import { DashboardMyWalletReducer } from './DashboardPage/MyWallet/reducer/index'; 
 import { DashboardMyOrdersReducer } from './DashboardPage/MyOrder/reducer/index'; 
 import { DashboardMyCoursesReducer } from './DashboardPage/MyCourses/reducer/index';
@@ -19,7 +18,7 @@ import { DashboardMyServicesReducer } from './DashboardPage/MyServices/reducer/i
 import { InDemandProductsReducer, JobAssistanceAndBlogsReducer, MostViewedCoursesReducer, TestimonialsReducer, SkillwithDemandsReducer   } from './HomePage/reducers';
 import { DashboardMyServicesResumeReducer, OiDetailsReducer } from './DashboardPage/MyServices/reducer/index';
 import { VendorUrlReducer } from './DashboardPage/StartCourse/reducer/index';
-import { userIntentReducer, findRightJobsReducer, upskillYourselfReducer,  serviceRecommendationReducer, ResumeScoreReducer } from './UserIntentPage/reducers';
+import { findRightJobsReducer, upskillYourselfReducer,  serviceRecommendationReducer, ResumeScoreReducer } from './UserIntentPage/reducers';
 
 const rootReducer = combineReducers({
     needHelp : NeedHelpReducer,
@@ -50,7 +49,6 @@ const rootReducer = combineReducers({
     dashboardPendingResume: DashboardMyServicesResumeReducer,
     oiDetails: OiDetailsReducer,
     vendorUrl: VendorUrlReducer,
-    userIntent: userIntentReducer,
     resumeScore: ResumeScoreReducer,
     findRightJob: findRightJobsReducer,
     upskillYourself: upskillYourselfReducer,

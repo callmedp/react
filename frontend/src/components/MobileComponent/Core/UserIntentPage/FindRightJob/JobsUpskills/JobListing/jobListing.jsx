@@ -39,8 +39,8 @@ const JobListing = (props) => {
                                                 </li>
                                             </ul>
                                             <div className="m-price-date">
-                                                <a href={jData.jRUrl} target="_blank" className="btn-blue-outline mb-10">Apply</a>
-                                                <span>{new Date(jData.jPDate).toLocaleDateString()}</span> 
+                                                {jData.jRUrl && <a href={jData.jRUrl} target="_blank" className="btn-blue-outline mb-10">Apply</a>}
+                                                <span>{new Date(jData.jPDate).toLocaleString('en-us',{month:'short', year:'numeric', day:'numeric'})}</span> 
                                             </div>
                                         </div>
                                     </div>

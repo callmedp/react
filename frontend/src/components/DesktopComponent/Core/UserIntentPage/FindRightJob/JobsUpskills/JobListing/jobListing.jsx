@@ -1,6 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { siteDomain } from 'utils/domains';
+import { shineSiteUrl } from 'utils/domains';
 
 const JobListing = (props) => {
 
@@ -28,7 +27,7 @@ const JobListing = (props) => {
                                             </span>
                                         }
                                         <h3 className="heading3">
-                                            <a href={`${siteDomain}/${job.jSlug}`}>{ job?.jJT }</a>
+                                            <a target="_blank" href={`${shineSiteUrl}${job.jSlug}`}>{ job?.jJT }</a>
                                         </h3>
                                         <strong>{job?.jCName}</strong>
 
@@ -43,7 +42,7 @@ const JobListing = (props) => {
                                         <span>
                                         {new Date(job?.jPDate).toLocaleString('en-us',{month:'short', year:'numeric', day:'numeric'})}
                                         </span>
-                                        <a href={`${siteDomain}/${job?.jSlug}`} class="btn btn-secondary mt-10">Apply now</a>
+                                        <a target="_blank" href={`${shineSiteUrl}${job?.jSlug}`} className="btn btn-secondary mt-10">Apply now</a>
                                     </div>
                                 </div>
                                 <div className="course__bottom">

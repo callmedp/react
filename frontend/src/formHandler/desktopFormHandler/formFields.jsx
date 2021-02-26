@@ -96,7 +96,7 @@ const MultiSelectBox = (props) => {
             mouse ?
 
                 <div className="form-group" onClick={() => setMouse(false)}>
-                    <label for="">Your skills</label>
+                    <label htmlFor="">Your skills</label>
                     <input className="form-control" type="text" name={name} ref={register(validation)} autoComplete="off" />
                 </div>
 
@@ -107,7 +107,7 @@ const MultiSelectBox = (props) => {
                     <div className="custom-textarea">
                         {data?.map((data, i) => {
                             return (
-                                <label className="label-added" for="">{data}</label>
+                                <label className="label-added" htmlFor="">{data}</label>
                             )
                         })
                         }

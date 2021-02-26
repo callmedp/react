@@ -4,28 +4,17 @@ import { siteDomain } from 'utils/domains'
 
 const userIntentData = (data) => {
     const url = `/api/v1/user-intent/?${data.data.type}`
-    
     return BaseApiService.post(`${siteDomain}${url}`, data);
 }
 
 const fetchServiceRecommendation = (data) => {
-
     const url = '/intent/api/v1/service-recommendation/'
-
-    // if(data?.candidate_id != false){
-    //     let candidate_id = data?.candidate_id;
-    //     url = url + '?candidate_id=' + candidate_id
-    // }
-
     return BaseApiService.get(`${siteDomain}${url}`);
 }
 
 const uploadFileUrlAPI = (data) => {
     const url = 'api/resume-score-checker/get-score';
-
-    return BaseApiService.post(`${siteDomain}/${url}`, data,
-        {}, true);
-
+    return BaseApiService.post(`${siteDomain}/${url}`, data, {}, true);
 };
 
 const findRightJobsData = (data) => {
