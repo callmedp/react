@@ -87,15 +87,16 @@ class GetResumeScoreApiView(APIView):
     def post(self, request, *args, **kwargs):
         file = self.request.FILES
         url = settings.RESUME_SHINE_URL + '/api/resume-score-checker/get-score/'
-        response = requests.post(url, files=file)
-
-        if response.status_code == 200:
-            result = response.json()
-            data = result.get('data',{})
-            total_score = data.get('total_score', None)
-            if not total_score:
-                return Response({"status": "ERROR", "error": "Unable to Parse Resume"})
-            return Response({"status": "SUCCESS", "total_score":total_score})
-
-        return Response({"status": "ERROR", "error": "Unable to Parse Resume"})
+        try:
+            response = requests.post(url, files=file)
+            if response.status_code == 200:
+                result = response.json()
+                data = result.get('data',{})
+                total_score = data.get('total_score', None)
+                if not total_score:
+                    return Response({"status": "ERROR", "error": "unable to Parse Resume"})
+                return Response({"status": "SUCCESS", "total_score":total_score})
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to Parse Resume %s'%str(e))
+            return Response({"status": "ERROR", "error": "Unable to Parse Resume"})
 
