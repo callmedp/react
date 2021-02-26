@@ -110,7 +110,6 @@ class Autocomplete extends Component {
                 aria-invalid="true"
                 onChange={onChange}
                 value={input}
-                required="required"
                 />
                 <label htmlFor=""> {lableFor} </label>
 
