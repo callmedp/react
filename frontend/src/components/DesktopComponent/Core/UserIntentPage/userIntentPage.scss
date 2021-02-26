@@ -112,7 +112,6 @@
 // course listing global css
 .courses-listing {
     list-style-type: none;
-    margin: 0;
     padding: 0;
 
     .col {
@@ -304,7 +303,7 @@
                     align-items: center;
 
                     figure {
-                        margin-left: .7rem;
+                        margin: 0 0 0 .7rem;
                     }
                 }
     
@@ -313,6 +312,7 @@
                     font-size: 1.2rem;
                     border-top: .1rem solid $border-color;
                     width: 100%;
+                    margin-top: 1rem;
     
                     p {
                         font-size: 1.2rem;
