@@ -216,7 +216,7 @@ const FindJob = (props) => {
                                             <div className="custom-textarea">
                                                 {chips?.map((data, i) => {
                                                     return (
-                                                        <label className="label-added" onClick={() => handleDelete(data)} for="">{data}</label>
+                                                        <label key={i} className="label-added" onClick={() => handleDelete(data)} htmlFor="">{data}</label>
                                                     )
                                                 })
                                                 }

@@ -1,26 +1,26 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
 import Api from './Api';
-import { fetchedUserIntentData, fetchFindRightJobsData, findRightJobsDataFetched, fetchUpskillYourselfData, upskillYourselfDataFetched, uploadFileUrl, fetchServiceRecommendation, serviceRecommendationFetched, sendFeedback } from './actions';
+import { fetchFindRightJobsData, findRightJobsDataFetched, fetchUpskillYourselfData, upskillYourselfDataFetched, uploadFileUrl, fetchServiceRecommendation, serviceRecommendationFetched, sendFeedback } from './actions';
 
-function* userIntentData(action) {
-    const { payload } = action;
+// function* userIntentData(action) {
+//     const { payload } = action;
     
-    try {
-        const response = yield call(Api.userIntentData, payload);
+//     try {
+//         const response = yield call(Api.userIntentData, payload);
 
-        if (response?.error) {
-            return payload?.reject(response?.error);
-        }
-        const item = response?.data.data;
-        yield put(fetchedUserIntentData({ [payload.categoryId]: item.mostViewCourses }))
-        return payload?.resolve(item);
-    }
-    catch(e) {
-        console.error("Exception occured in userIntent data", e);
-        return payload?.resolve(e);
+//         if (response?.error) {
+//             return payload?.reject(response?.error);
+//         }
+//         const item = response?.data.data;
+//         yield put(fetchedUserIntentData({ [payload.categoryId]: item.mostViewCourses }))
+//         return payload?.resolve(item);
+//     }
+//     catch(e) {
+//         console.error("Exception occured in userIntent data", e);
+//         return payload?.resolve(e);
 
-    }
-}
+//     }
+// }
 
 function* findJobsData(action) {
     const { payload } = action;
@@ -60,8 +60,8 @@ function* upskillData(action) {
 function* serviceRecommendation(action) {
     const { payload } = action;
     try {
-        const data = {candidate_id: payload?.candidate_id}
-        const response = yield call(Api.fetchServiceRecommendation, data);
+        // const data = {candidate_id: payload?.candidate_id}
+        const response = yield call(Api.fetchServiceRecommendation);
         if (response?.error) {
             return payload?.resolve(response.error)
         }
@@ -110,7 +110,6 @@ function* sendFeedbackData(action) {
 }
 
 export default function* WatchUserIntentPage() {
-    yield takeLatest(fetchedUserIntentData.type, userIntentData);
     yield takeLatest(fetchFindRightJobsData.type, findJobsData);
     yield takeLatest(fetchUpskillYourselfData.type, upskillData);
     yield takeLatest(fetchServiceRecommendation.type, serviceRecommendation);

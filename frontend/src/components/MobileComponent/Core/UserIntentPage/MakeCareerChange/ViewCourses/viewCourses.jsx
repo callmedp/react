@@ -14,13 +14,12 @@ import { showSwal } from 'utils/swal';
 const ViewCourses = (props) => {
     const dispatch = useDispatch();
     const { history, match } = props;
-    console.log(props);
     const params = new URLSearchParams(props.location?.search);
     const { course_data, page,recommended_course_ids } = useSelector(store => store.upskillYourself);
     const { careerChangeLoader } = useSelector(store => store.loader);
     let currentPage = 1;
     let intentValue = match?.params?.name === 'make-career-change' ? 0 : 1;
-    const feedD = {'recommended_course_ids': recommended_course_ids, 'intent': intentValue, 'context': 'Make a career change'};
+    const feedD = {'recommended_course_ids': recommended_course_ids, 'intent': intentValue, 'context': match?.params?.name === 'make-career-change' ? 'Make a career change' : 'Progress your career' };
 
     useEffect(() => {
         handleUpskillData();
@@ -66,7 +65,7 @@ const ViewCourses = (props) => {
                         <div className="m-courses mt-20">
                             <CourseLisiting courseList={course_data} />
                         </div>
-                        {page?.has_next && <span className="load-more btn-col" onClick={() => loadMoreCourses(page?.current_page)}>View More Courses</span>}
+                        {page?.has_next && <span className="m-load-more btn-col" onClick={() => loadMoreCourses(page?.current_page)}>View More Courses</span>}
                         <br/>
                     </div>
                     <Feedback feedbackData={feedD}/>
