@@ -7,7 +7,7 @@ const Feedback = props => {
 
     const [feedback, setFeedback] = useState(false)
     const dispatch = useDispatch()
-    const {feedbackData : {intent, recommended_course_ids, context}} = props;
+    const {feedbackData : {intent, recommended_course_ids, context}, heading} = props;
     const handleFeedback = async (eve) => {
 		eve.preventDefault();
 		setFeedback(true);
@@ -29,7 +29,7 @@ const Feedback = props => {
             </div>
         ) : (
                 <div className="m-courses-feedback">
-                    <strong>Are these courses recommendation relevant to your profile?</strong>
+                    <strong>Are these {heading} recommendation relevant to your profile?</strong>
                     <span className="mt-15">
                         <a className="btn-blue-outline" onClick={handleFeedback}>Yes</a>
                         <a className="btn-blue-outline" onClick={handleFeedback}>No</a>

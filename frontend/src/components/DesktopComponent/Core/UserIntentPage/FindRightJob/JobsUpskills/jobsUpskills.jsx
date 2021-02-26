@@ -102,7 +102,7 @@ const JobsUpskills = (props) => {
 									</Tab>
 								</Tabs>
 							</div>
-							<Feedback feedbackData={feedD} />
+							<Feedback feedbackData={feedD} heading={key} />
 						</div>
 					</div>
 				</div>

@@ -8,7 +8,7 @@ const Feedback = props => {
 
     const [feedback, setFeedback] = useState(false)
     const dispatch = useDispatch()
-    const {feedbackData : {intent, recommended_course_ids, context}} = props;
+    const {feedbackData : {intent, recommended_course_ids, context}, heading } = props;
 
     const handleFeedback = async (eve) => {
         eve.preventDefault();
@@ -31,7 +31,7 @@ const Feedback = props => {
             </div>
         ) : (
                 <div className="courses-feedback mt-50 mr-15p">
-                    <strong>Are these courses recommendation relevant to your profile?</strong>
+                    <strong>Are these {heading?.toLowerCase()} recommendation relevant to your profile?</strong>
                     <span className="ml-auto">
                         <Button onClick={handleFeedback} variant="outline-primary">Yes</Button>{' '}
                         <Button onClick={handleFeedback} variant="outline-primary">No</Button>{' '}
