@@ -212,7 +212,7 @@ const FindJob = (props) => {
                                         }
 
                                         <div className={chips?.length ? "form-group-custom checked" : !!errors ? "form-group-custom error" : "form-group-custom"}>
-                                            <label className="sticky-label" htmlFor="" style={!!errors ? { top: '1rem' } : { top: '-1rem' }}>Your skills</label>
+                                            <label className="sticky-label" htmlFor="" style={chips?.length > 0 ? { top: '-1rem' } : { top: '1rem' }}>Your skills</label>
                                             <div className="custom-textarea">
                                                 {chips?.map((data, i) => {
                                                     return (
