@@ -13,7 +13,7 @@ const HomeBanner = (props) => {
            
             <div className="row">
                 <div className="container home-header-content mt-30">
-                    <div className="w-50">
+                    <div className="w-75">
                         <h1 className="heading1 mt-20" data-aos="fade-right">
                             <strong>Learn the right skills,</strong> be future ready
                         </h1>

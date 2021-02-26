@@ -46,11 +46,11 @@ const UserIntentPage = (props) => {
                 <Header />
                 {
                     {
-                        'find-right-job': <UIBanner heading={'<strong> Find <strong> right job'} />,
-                        undefined: <UIBanner heading={'<strong> Career </strong> Guidance'} />,
-                        'make-career-change': <UIBanner heading={'<strong> Make </strong> career change'} />,
-                        'improve-profile': <UIBanner heading={'<strong> Improve </strong> profile'} />,
-                        'progress-career': <UIBanner heading={'<strong> Progress </strong> career'} />
+                        'find-right-job': <UIBanner heading={'Find the <strong> right job<strong>'} />,
+                        undefined: <UIBanner heading={'<strong> Career Guidance</strong> with personalized recommendations'} />,
+                        'make-career-change': <UIBanner heading={'Make a <strong>  career change</strong>'} />,
+                        'improve-profile': <UIBanner heading={'<strong> Improve your profile</strong> with shine'} />,
+                        'progress-career': <UIBanner heading={'<strong> Progress </strong> your career'} />
                     }[UIContainer]
                 }
 

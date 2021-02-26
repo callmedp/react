@@ -14,7 +14,6 @@ import Feedback from '../../IntentUtil/feedback';
 import { showSwal } from 'utils/swal';
 
 const JobsUpskills = (props) => {
-	const [key, setKey] = useState('Jobs');
     const dispatch = useDispatch();
     const { history } = props;
     const { jobsUpskillsLoader } = useSelector(store => store.loader);
@@ -22,7 +21,6 @@ const JobsUpskills = (props) => {
     const { course_data, page, recommended_course_ids }  = useSelector(store => store.upskillYourself);
     const params = new URLSearchParams(props.location.search);
     const [currentJobPage, setJobPage] = useState(1);
-
     const [selectTab, tabSelected] = useState('tab1');
     const openSelectedTab = (id) => tabSelected(id);
     const feedD = {'recommended_course_ids': recommended_course_ids, 'intent': 2, 'context': 'Find the right job'};
@@ -47,13 +45,11 @@ const JobsUpskills = (props) => {
     }
 
     const handleUpskillData = async (tabType) => {
-        if (key !== tabType) {
-			if (tabType === "Courses" && (!course_data || (Array.isArray(course_data) && course_data.length === 0))) {
-                const dataUpskill = `?preferred_role=${params.get('job_title')}&experience=${params.get('minexp')}&skills=${params.get('skill') || ''}&page=${currentJobPage}&intent=2`;
-                courseDispatchHit(dataUpskill);
-            }
-            setKey(tabType);
+        if (tabType === "tab2" && (!course_data || (Array.isArray(course_data) && course_data.length === 0))) {
+            const dataUpskill = `?preferred_role=${params.get('job_title')}&experience=${params.get('minexp')}&skills=${params.get('skill') || ''}&page=${currentJobPage}&intent=2`;
+            courseDispatchHit(dataUpskill);
         }
+        openSelectedTab(tabType);
     }
 
     const courseDispatchHit = async (dataUpskill) => {
@@ -104,7 +100,7 @@ const JobsUpskills = (props) => {
                         <input checked={selectTab === 'tab1'} onClick={() => openSelectedTab('tab1')} type="radio" name="tabset" id="tab1" aria-controls="Jobs for you" />
                         <label htmlFor="tab1">Jobs for you</label>
 
-                        <input checked={selectTab === 'tab2'} onClick={() => handleUpskillData('Courses')} type="radio" name="tabset" id="tab2" aria-controls="Upskill yourself" />
+                        <input checked={selectTab === 'tab2'} onClick={() => handleUpskillData('tab2')} type="radio" name="tabset" id="tab2" aria-controls="Upskill yourself" />
                         <label htmlFor="tab2">Upskill yourself</label>
 
                         <div className="tab-panels">

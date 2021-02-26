@@ -124,7 +124,7 @@ const CourseLisiting = (props) => {
                                         }
                                     </p>
                                     <p className="d-flex align-items-center">
-                                        <button type="submit" className="btn-yellow" role="button" href={course?.url}>Enroll now</button>
+                                        <a type="submit" className="btn-yellow" role="button" href={course?.url}>Enroll now</a>
                                         {course?.brochure && <Link to={"#"} className="micon-pdf ml-auto"></Link>}
                                     </p>
                                     <span to={"#"} className="m-view-less d-block text-right" onClick={() => openCourseDetails(false)}>View less</span>

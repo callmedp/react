@@ -92,11 +92,9 @@ const JobsUpskills = (props) => {
 									onSelect={handleSelect}
 									className="jobs-upskills"
 								>
-
 									<Tab eventKey="Jobs" title={<h2>Jobs for you</h2>}>
 										<JobListing jobList={results} />
 										{next && <a className="load-more btn-col" onClick={() => loadMoreJobs(next)}>View More Jobs</a>}
-										{/* {num_pages === currentJobPage ? <a onClick={handleGotoFirstPage} className="load-more" style={{ cursor: 'pointer' }}>View first Page</a> : <a onClick={handleNextPage} className="load-more" style={{ cursor: 'pointer' }}>View More Jobs</a>} */}
 									</Tab>
 									<Tab eventKey="Courses" title={<h2>Upskill yourself</h2>}>
 										<CourseListing courseList={course_data} />
