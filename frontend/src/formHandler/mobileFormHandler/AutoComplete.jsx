@@ -91,7 +91,7 @@ class Autocomplete extends Component {
             else {
                 suggestionList = (
                     <div>
-                        <i> No suggestions, type manually</i>
+                        {/* <i> No suggestions, type manually</i> */}
                     </div>
                 );
             }
