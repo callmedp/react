@@ -147,7 +147,7 @@ const FindJob = (props) => {
 
     function uniqueResult(result) {
         // get an object check for the duplicate pid and pdesc
-        return result.filter((v,i,a)=>a.findIndex(t=>(t.pid === v.pid && t.pdesc === v.pdesc))===i)
+        return result?.filter((v,i,a)=>a.findIndex(t=>(t.pid === v.pid && t.pdesc === v.pdesc))===i)
     }
 
     useEffect(() => {
