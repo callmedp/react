@@ -204,7 +204,7 @@ const FindJob = (props) => {
                             { !!jtError ? <span className="error_cls">Job Title is Required</span> : ''}
 
                             {showResults ?
-                                <div className="user-intent-search-result">
+                                <div className="m-user-intent-search-result">
                                     {results?.length ? getMenuItems(results, jobTitle) : null}
                                 </div> : null
                             }
@@ -260,7 +260,7 @@ const FindJob = (props) => {
 
                             {
                                 showSkillResults ?
-                                    <div className="user-intent-search-result">
+                                    <div className="m-user-intent-search-result">
                                         {skillResults?.length ? getMenuItems(skillResults, skillsKey) : null}
                                     </div> : null
                             }

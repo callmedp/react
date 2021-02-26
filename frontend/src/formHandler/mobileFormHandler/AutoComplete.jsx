@@ -75,7 +75,7 @@ class Autocomplete extends Component {
         if (showSuggestion && input) {
             if(filterSuggestion?.length) {
                 suggestionList = (
-                    <div className="user-intent-search-result">
+                    <div className="m-user-intent-search-result">
                         {
                             filterSuggestion?.slice(0, 8)?.map((suggestion, index) => {
                                 return(
