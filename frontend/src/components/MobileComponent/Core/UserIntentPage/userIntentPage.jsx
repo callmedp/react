@@ -50,11 +50,11 @@ const UserIntentPage = (props) => {
                         <Header setShowSearchPage={setShowSearchPage} />
                         {
                             {
-                                'find-right-job': <UIBanner heading={'<strong> Find <strong> right job'} />,
-                                undefined: <UIBanner heading={'<strong> Career </strong> Guidance'} />,
-                                'make-career-change': <UIBanner heading={'<strong> Make </strong> career change'} />,
-                                'improve-profile': <UIBanner heading={'<strong> Improve </strong> profile'} />,
-                                'progress-career': <UIBanner heading={'<strong> Progress </strong> career'} />
+                                'find-right-job': <UIBanner heading={'Find the <strong> right job </strong>'} />,
+                                undefined: <UIBanner heading={'<strong>Career Guidance</strong> with personalized recommendations'} />,
+                                'make-career-change': <UIBanner heading={'Make a <strong> career change </strong>'} />,
+                                'improve-profile': <UIBanner heading={'<strong> Improve your</strong> profile'} />,
+                                'progress-career': <UIBanner heading={'<strong> Progress your</strong> career'} />
                             }[UIContainer]
                         }
 
