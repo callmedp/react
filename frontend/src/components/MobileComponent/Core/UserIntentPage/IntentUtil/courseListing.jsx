@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
 import { Link } from 'react-router-dom';
+import { siteDomain } from 'utils/domains';
  
 const CourseLisiting = (props) => {
 
@@ -42,7 +43,7 @@ const CourseLisiting = (props) => {
                                 </figure>
                                 
                                 <h3 className="m-heading3">
-                                    <Link to={course?.url}>{course?.name}</Link>
+                                    <a href={`${siteDomain}${course?.url}`}>{course?.name}</a>
                                 </h3>
                             </div>
                             <div className="m-card__box">
@@ -124,7 +125,7 @@ const CourseLisiting = (props) => {
                                         }
                                     </p>
                                     <p className="d-flex align-items-center">
-                                        <button type="submit" className="btn-yellow" role="button" href={course?.url}>Enroll now</button>
+                                        <a className="btn-yellow" role="button" href={`${siteDomain}${course?.url}`}>Enroll now</a>
                                         {course?.brochure && <Link to={"#"} className="micon-pdf ml-auto"></Link>}
                                     </p>
                                     <span to={"#"} className="m-view-less d-block text-right" onClick={() => openCourseDetails(false)}>View less</span>
