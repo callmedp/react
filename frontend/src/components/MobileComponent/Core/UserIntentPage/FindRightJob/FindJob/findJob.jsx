@@ -201,7 +201,7 @@ const FindJob = (props) => {
                             <input type="text" className="form-control" id="job" name="job" placeholder=" " ref={jobTitle} autoComplete="off"
                                 aria-required="true" aria-invalid="true" onChange={e => handleInput(e)} onFocus={() => setShowResults(true)} />
                             <label for="">Current job title</label>
-                            { !!jtError ? <span className="error-msg">Job Title is Required</span> : ''}
+                            { !!jtError ? <span className="m-error-msg">Job Title is Required</span> : ''}
 
                             {showResults ?
                                 <div className="m-user-intent-search-result">
