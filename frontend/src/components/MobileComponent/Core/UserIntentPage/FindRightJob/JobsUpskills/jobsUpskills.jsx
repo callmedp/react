@@ -117,7 +117,7 @@ const JobsUpskills = (props) => {
                         </div>
                     </div>
                 </div>
-                <Feedback feedbackData={feedD} heading={selectTab === 'tab1' ? 'jobs' : 'courses'}/>
+                { (results && results.length > 0) && <Feedback feedbackData={feedD} heading={selectTab === 'tab1' ? 'jobs' : 'courses'}/> }
             </div>
         </section>
     )
