@@ -7,6 +7,7 @@ import UserGuidance from './UserGuidance/UserGuidance';
 import ImproveProfile from './ImproveProfile/improveProfile';
 import ProgressCareer from './ProgressCareer/progressCareer';
 import UIBanner from '../../Common/UIBanner/UIbanner';
+import SearchPage from '../../Common/SearchPage/SearchPage';
 import './userIntentPage.scss';
 import Footer from '../../Common/Footer/Footer';
 import Aos from "aos";
@@ -16,6 +17,7 @@ import { Helmet } from 'react-helmet';
 const UserIntentPage = (props) => {
     const { history } = props;
     const UIContainer = props.match.params.name;
+    const [showSearchPage, setShowSearchPage] = useState(false);
     const UserIntentRoutes = [undefined, 'find-right-job', 'make-career-change', 'improve-profile', 'progress-career']
 
     useEffect(() => {
@@ -41,33 +43,37 @@ const UserIntentPage = (props) => {
                     }
                 </title>
             </Helmet>
-            <MenuNav />
-            <header className="m-container m-header">
-                <Header />
-                {
-                    {
-                        'find-right-job': <UIBanner heading={'Find the <strong> right job<strong>'} />,
-                        undefined: <UIBanner heading={'<strong> Career Guidance</strong> with personalized recommendations'} />,
-                        'make-career-change': <UIBanner heading={'Make a <strong>  career change</strong>'} />,
-                        'improve-profile': <UIBanner heading={'<strong> Improve your profile</strong> with shine'} />,
-                        'progress-career': <UIBanner heading={'<strong> Progress </strong> your career'} />
-                    }[UIContainer]
-                }
+            { showSearchPage ? <SearchPage setShowSearchPage={setShowSearchPage} /> :
+                <>
+                    <MenuNav />
+                    <header className="m-container m-header">
+                        <Header setShowSearchPage={setShowSearchPage} />
+                        {
+                            {
+                                'find-right-job': <UIBanner heading={'Find the <strong> right job </strong>'} />,
+                                undefined: <UIBanner heading={'<strong>Career Guidance</strong> with personalized recommendations'} />,
+                                'make-career-change': <UIBanner heading={'Make a <strong> career change </strong>'} />,
+                                'improve-profile': <UIBanner heading={'<strong> Improve your</strong> profile'} />,
+                                'progress-career': <UIBanner heading={'<strong> Progress your</strong> career'} />
+                            }[UIContainer]
+                        }
 
-                {/* <UIBanner heading={headingTitle} /> */}
-            </header>
-            <main className="mb-0">
-                {
-                    {
-                        'find-right-job': <FindRightJob icon="icon-ui2" title="Find the right job" back={true} {...props} />,
-                        'make-career-change': <MakeCareerChange icon="icon-ui2" title="Make a career change" back={true} {...props} />,
-                        'improve-profile': <ImproveProfile icon="icon-ui2" title="Improve your profile" back={true} />,
-                        'progress-career': <ProgressCareer icon="icon-ui2" title="Progress your career" back={true} {...props} />,
-                        undefined: <UserGuidance icon="icon-ui1" title="Career Guidance with personalized recommendations" back={false} />
-                    }[UIContainer]
-                }
-            </main>
-            <Footer />
+                        {/* <UIBanner heading={headingTitle} /> */}
+                    </header>
+                    <main className="mb-0">
+                        {
+                            {
+                                'find-right-job': <FindRightJob icon="icon-ui2" title="Find the right job" back={true} {...props} />,
+                                'make-career-change': <MakeCareerChange icon="icon-ui2" title="Make a career change" back={true} {...props} />,
+                                'improve-profile': <ImproveProfile icon="icon-ui2" title="Improve your profile" back={true} />,
+                                'progress-career': <ProgressCareer icon="icon-ui2" title="Progress your career" back={true} {...props} />,
+                                undefined: <UserGuidance icon="icon-ui1" title="Career Guidance with personalized recommendations" back={false} />
+                            }[UIContainer]
+                        }
+                    </main>
+                    <Footer />
+                </>
+            }
         </div>
     )
 }

@@ -6,7 +6,7 @@ import './jobsUpskills.scss';
 import JobListing from './JobListing/jobListing';
 import CourseListing from '../../IntentUtil/courseListing';
 import Feedback from '../../IntentUtil/feedback';
-import { fetchFindRightJobsData, fetchUpskillYourselfData } from 'store/UserIntentPage/actions';
+import { fetchFindRightJobsData, fetchUpskillYourselfData, upskillAndJobsCleanup } from 'store/UserIntentPage/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { startJobsUpskillsLoader, stopJobsUpskillsLoader } from 'store/Loader/actions/index';
 import Loader from 'components/DesktopComponent/Common/Loader/loader';
@@ -55,6 +55,10 @@ const JobsUpskills = (props) => {
 
 	useEffect(() => {
 		handleEffect(history?.location?.search + `&page=1`)
+
+		return function cleanup () {
+			dispatch(upskillAndJobsCleanup())
+		}
 	}, [])
   
 	const loadMoreJobs = (url_next) => {
@@ -102,7 +106,7 @@ const JobsUpskills = (props) => {
 									</Tab>
 								</Tabs>
 							</div>
-							<Feedback feedbackData={feedD} />
+							<Feedback feedbackData={feedD} heading={key} />
 						</div>
 					</div>
 				</div>

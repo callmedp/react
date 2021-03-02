@@ -1,4 +1,4 @@
-import { findRightJobsDataFetched, serviceRecommendationFetched, uploadFileUrl, upskillYourselfDataFetched } from './actions';
+import { findRightJobsDataFetched, serviceRecommendationFetched, uploadFileUrl, upskillYourselfDataFetched, upskillAndJobsCleanup } from './actions';
 
 // const userIntentState = {
 //     userIntent: [
@@ -72,6 +72,7 @@ export const findRightJobsReducer = (state=findRightJobsState, action) => {
                 results: [...state.jobsList.results, ...(action.payload.jobsList.results ?? [])]
             }
         }
+        case upskillAndJobsCleanup.type : return findRightJobsState;
         default: return state;
     }
 }
@@ -90,6 +91,7 @@ export const upskillYourselfReducer = (state=upskillYourselfState, action) => {
             recommended_course_ids: action.payload.recommended_course_ids ?? [],
             course_data: [...state.course_data, ...(action.payload.course_data ?? [])]
         }
+        case upskillAndJobsCleanup.type : return upskillYourselfState;
         default: return state;
     }
 }

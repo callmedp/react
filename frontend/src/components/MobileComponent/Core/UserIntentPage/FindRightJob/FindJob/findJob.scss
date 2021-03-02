@@ -11,6 +11,7 @@
             background: transparent;
             }
         }
+        
 
         label {
             position: absolute;
@@ -48,6 +49,16 @@
             color: $blue;
             left: 1.6rem;
             }
+            .m-error-msg {
+                background: $red;
+                font-size: 1rem;
+                padding: 0 .4rem;
+                color: $white;
+                position: absolute;
+                right: 0;
+                top: 0;
+                border-top-right-radius: .4rem;
+              }
         }
 
         input, textarea {

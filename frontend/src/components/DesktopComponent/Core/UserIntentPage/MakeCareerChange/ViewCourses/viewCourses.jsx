@@ -54,7 +54,7 @@ const ViewCourses = (props) => {
                                         <CourseLisiting courseList={course_data} />
                                         {page && page.has_next ? <Link onClick={loadMoreCourses} className="load-more">View More Courses</Link> : ''}
                                     </div>
-                                    <Feedback feedbackData={feedD}/>
+                                    <Feedback feedbackData={feedD} heading={'courses'} />
                                 </div>
                             </div>
                         </div>

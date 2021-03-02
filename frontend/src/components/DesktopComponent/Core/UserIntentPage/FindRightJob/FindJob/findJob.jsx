@@ -8,6 +8,7 @@ import UserIntentForm from 'formHandler/desktopFormHandler/formData/userIntent';
 import useDebounce from 'utils/searchUtils/debouce';
 import { IndianState } from 'utils/constants';
 import { userSearch, relatedSearch, userSkillSearch } from 'utils/searchUtils/searchFunctions';
+import {imageUrl} from 'utils/domains'
 
 const FindJob = (props) => {
     const [chips, setChips] = useState([]);
@@ -42,8 +43,11 @@ const FindJob = (props) => {
     const debounceSkillSearch = useDebounce(searchSkillTerm, 500);
 
     const handleSkillsClick = () => {
-        handleAppend(skillsKey.current.value)
-        skillsKey.current.value = ''
+        if(skillsKey.current.value){
+            handleAppend(skillsKey.current.value)
+            skillsKey.current.value = ''
+            setShowSkillResults(false)
+        }
     }
 
     const suggestSkills = (e) => {
@@ -141,16 +145,21 @@ const FindJob = (props) => {
         )
     }
 
+    function uniqueResult(result) {
+        // get an object check for the duplicate pid and pdesc
+        return result?.filter((v,i,a)=>a.findIndex(t=>(t.pid === v.pid && t.pdesc === v.pdesc))===i)
+    }
+
     useEffect(() => {
         // Make sure we have a value (user has entered something in input)
         if(debounceSkillSearch) {
             userSkillSearch(debounceSkillSearch).then(results => {
-                setSkillResults(results?.data);
+                setSkillResults(uniqueResult(results?.data));
             });
         }
         else if (debouncedSearchTerm) {
             userSearch(debouncedSearchTerm).then(results => {
-                setResults(results?.data);
+                setResults(uniqueResult(results?.data));
             });
         } 
         else {
@@ -203,7 +212,7 @@ const FindJob = (props) => {
                                         }
 
                                         <div className={chips?.length ? "form-group-custom checked" : !!errors ? "form-group-custom error" : "form-group-custom"}>
-                                            <label className="sticky-label" htmlFor="" style={!!errors ? { top: '1rem' } : { top: '-1rem' }}>Your skills</label>
+                                            <label className="sticky-label" htmlFor="" style={chips?.length > 0 ? { top: '-1rem' } : { top: '1rem' }}>Your skills</label>
                                             <div className="custom-textarea">
                                                 {chips?.map((data, i) => {
                                                     return (
@@ -239,7 +248,7 @@ const FindJob = (props) => {
                                 </div>
                             </div>
                             <figure className="find-job-bg">
-                                <img src="/media/images/desktop/find-right-job.png" className="img-fluid" alt="Let’s get you to the right job" />
+                                <img src={`${imageUrl}desktop/find-right-job.png`} className="img-fluid" alt="Let’s get you to the right job" />
                             </figure>
                         </div>
                     </div>

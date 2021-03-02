@@ -32,12 +32,12 @@ const userSearch = (search ) =>{
 
 const relatedSearch = (query) =>{
     // return fetch(`${siteDomain}/intent/api/v1/keyword-suggestion/?q=${query}&skill_only=true`,
-    return fetch(`https://sumosc.shine.com/api/v3/search/skill-to-related-skills/?q=${query}`,
+    return fetch(`https://sumosc.shine.com/api/v3/search/skill-to-related-skills/?q="${query}"`,
         { method: 'GET' }).then(r => r.json())
         .catch(error => {
             console.error(error);
-            return ["Django","C","C++","Machine Learning","Java","Bash","Perl","Software Engineering","Linux","Python Professional","Python Expert","Developer","Technical Lead","Numpy","Scipy","Sqlalchemy","Pyqt","Celery","Matplotlib","Scikit-Learn","Twisted"]
-            // return [];
+            // return ["Django","C","C++","Machine Learning","Java","Bash","Perl","Software Engineering","Linux","Python Professional","Python Expert","Developer","Technical Lead","Numpy","Scipy","Sqlalchemy","Pyqt","Celery","Matplotlib","Scikit-Learn","Twisted"]
+            return [];
         }
     );
 

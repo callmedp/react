@@ -68,7 +68,7 @@ const ViewCourses = (props) => {
                         {page?.has_next && <span className="m-load-more btn-col" onClick={() => loadMoreCourses(page?.current_page)}>View More Courses</span>}
                         <br/>
                     </div>
-                    <Feedback feedbackData={feedD}/>
+                    <Feedback feedbackData={feedD} heading={'courses'} />
                 </div>
             </section>
         </>

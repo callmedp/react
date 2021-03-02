@@ -45,8 +45,11 @@ const FindJob = (props) => {
     const debounceSkillSearch = useDebounce(searchSkillTerm, 500);
 
     const handleSkillsClick = () => {
-        handleAppend(skillsKey.current.value)
-        skillsKey.current.value = ''
+        if(skillsKey.current.value){
+            handleAppend(skillsKey.current.value)
+            skillsKey.current.value = ''
+            setShowSkillResults(false)
+        }
     }
 
     const suggestSkills = (e) => {
@@ -136,16 +139,21 @@ const FindJob = (props) => {
         )
     }
 
+    function uniqueResult(result) {
+        // get an object check for the duplicate pid and pdesc
+        return result?.filter((v,i,a)=>a.findIndex(t=>(t.pid === v.pid && t.pdesc === v.pdesc))===i)
+    }
+
     useEffect(() => {
         // Make sure we have a value (user has entered something in input)
         if(debounceSkillSearch) {
             userSkillSearch(debounceSkillSearch).then(results => {
-                setSkillResults(results?.data);
+                setSkillResults(uniqueResult(results?.data));
             });
         }
         else if (debouncedSearchTerm) {
             userSearch(debouncedSearchTerm).then(results => {
-                setResults(results?.data);
+                setResults(uniqueResult(results?.data));
             });
         } 
         else {
@@ -193,10 +201,10 @@ const FindJob = (props) => {
                             <input type="text" className="form-control" id="job" name="job" placeholder=" " ref={jobTitle} autoComplete="off"
                                 aria-required="true" aria-invalid="true" onChange={e => handleInput(e)} onFocus={() => setShowResults(true)} />
                             <label for="">Current job title</label>
-                            { !!jtError ? <span className="error_cls">Job Title is Required</span> : ''}
+                            { !!jtError ? <span className="m-error-msg">Job Title is Required</span> : ''}
 
                             {showResults ?
-                                <div className="user-intent-search-result">
+                                <div className="m-user-intent-search-result">
                                     {results?.length ? getMenuItems(results, jobTitle) : null}
                                 </div> : null
                             }
@@ -252,7 +260,7 @@ const FindJob = (props) => {
 
                             {
                                 showSkillResults ?
-                                    <div className="user-intent-search-result">
+                                    <div className="m-user-intent-search-result">
                                         {skillResults?.length ? getMenuItems(skillResults, skillsKey) : null}
                                     </div> : null
                             }

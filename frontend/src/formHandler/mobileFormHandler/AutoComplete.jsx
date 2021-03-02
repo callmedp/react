@@ -75,7 +75,7 @@ class Autocomplete extends Component {
         if (showSuggestion && input) {
             if(filterSuggestion?.length) {
                 suggestionList = (
-                    <div className="user-intent-search-result">
+                    <div className="m-user-intent-search-result">
                         {
                             filterSuggestion?.slice(0, 8)?.map((suggestion, index) => {
                                 return(
@@ -91,7 +91,7 @@ class Autocomplete extends Component {
             else {
                 suggestionList = (
                     <div>
-                        <i> No suggestions, type manually</i>
+                        {/* <i> No suggestions, type manually</i> */}
                     </div>
                 );
             }
@@ -110,7 +110,6 @@ class Autocomplete extends Component {
                 aria-invalid="true"
                 onChange={onChange}
                 value={input}
-                required="required"
                 />
                 <label htmlFor=""> {lableFor} </label>
 
