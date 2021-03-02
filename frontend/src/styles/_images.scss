@@ -296,3 +296,8 @@
   background: $sprite;
   @include icon-inblock(16px, 14px, -225px -187px);
 }
+
+.icon-ui-cg {
+  background: $sprite;
+  @include icon-inblock(18px, 22px, -256px -186px);
+}

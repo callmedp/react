@@ -220,7 +220,7 @@ const navSkillList = [
     { name: 'Big Data', url: '/courses/it-information-technology/big-data/84/', id:'big_data'},
     { name: 'IT Software', url: '/courses/it-information-technology/it-software/53/', id:'it_software' },
     { name: 'Data Science', url: '/courses/it-information-technology/data-science/497/', id:'data_science' },
-    { name: 'Cloud Computing', url: '/courses/it-information-technology/cloud-computing/82/', id:'cloud_computing'}
+    // { name: 'Cloud Computing', url: '/courses/it-information-technology/cloud-computing/82/', id:'cloud_computing'}
 ]
 
 const contactData = {

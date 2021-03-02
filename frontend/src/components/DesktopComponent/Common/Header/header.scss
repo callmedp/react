@@ -105,3 +105,35 @@
         }
     }
 }
+
+.ui-btn {
+
+    .btn-gradient {
+        display: flex;
+        align-items: center;
+        font-size: 1.3rem;
+        text-transform: uppercase;
+        color: $white;
+        padding: 0.7rem 1rem;
+        background-image: linear-gradient(114deg, #3664D1 3%, #813EB3 100%);
+        border: 1px solid #699BE2;
+        border-radius: .4rem;
+        position: relative;
+
+        span {
+            position: absolute;
+            background: $yellow;
+            font-size: .7rem;
+            color: $gray-100;
+            right: -.1rem;
+            top: -.1rem;
+            display: inline-block;
+            padding: .1rem .3rem 0 .3rem;
+            border-top-right-radius: .4rem;
+        }
+
+        figure {
+            margin: 0 1rem 0 0;
+        }
+    }
+}
