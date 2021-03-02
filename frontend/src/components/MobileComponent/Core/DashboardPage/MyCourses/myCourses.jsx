@@ -18,6 +18,7 @@ import { showSwal } from 'utils/swal';
 import ViewDetails from '../MyServices/oiViewDetails';
 import { getCandidateId } from 'utils/storage.js';
 import { getVendorUrl } from 'store/DashboardPage/StartCourse/actions/index';
+import Filter from '../Filter/filter';
 
 
 const MyCourses = (props) => {
@@ -34,6 +35,7 @@ const MyCourses = (props) => {
     const toggleIframe = (id) => setOpenIframe(id);
     const handleIframeShow = () => setShowIframe(true);
     const handleIframeClose = () => setShowIframe(false);
+    const [filterState, setfilterState] = useState({ 'last_month_from': 'all', 'select_type' : 'all' });
     
     const dispatch = useDispatch();
     const { data, page } = useSelector(store => store?.dashboardCourses);
@@ -65,7 +67,7 @@ const MyCourses = (props) => {
     const handleEffects = async () => {
             try{
                 dispatch(startDashboardCoursesPageLoader());
-                await new Promise((resolve, reject) => dispatch(fetchMyCourses({ page: currentPage, resolve, reject })));
+                await new Promise((resolve, reject) => dispatch(fetchMyCourses({page: currentPage, ...filterState, resolve, reject })));
                 dispatch(stopDashboardCoursesPageLoader());
             }
             catch{
@@ -123,7 +125,7 @@ const MyCourses = (props) => {
             behavior: "smooth"
         });
         handleEffects();
-    }, [currentPage])
+    }, [currentPage, filterState])
 
     return(
         <>
@@ -132,6 +134,10 @@ const MyCourses = (props) => {
                 page?.total === 0 ? <EmptyInbox inboxType="courses"/> :
 
             <div>
+                {
+                   data?.length > 1 &&  <Filter filterState={filterState} setfilterState={setfilterState} />
+                }
+
                 <div className="m-courses-detail db-warp">
                     {
                         data?.map((course, index) => {

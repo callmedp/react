@@ -180,7 +180,7 @@ const MyCourses = (props) => {
         try {
           
                 dispatch(startDashboardCoursesPageLoader());
-                await new Promise((resolve, reject) => dispatch(fetchMyCourses({ page: currentPage, isDesk: true, ...filterState, resolve, reject })))
+                await new Promise((resolve, reject) => dispatch(fetchMyCourses({ page: currentPage, ...filterState, resolve, reject })))
                 dispatch(stopDashboardCoursesPageLoader());
                 
         } catch (error) {

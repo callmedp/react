@@ -39,7 +39,7 @@ const RejectModal = (props) => {
         try {
             dispatch(startAcceptRejectLoader());
             await new Promise((resolve, reject) => { dispatch(CandidateAcceptRejectResume({ payload: rejectValues, resolve, reject }));});
-            await new Promise((resolve, reject) => dispatch(fetchMyServices({ page: currentPage, isDesk: true, ...filterState, resolve, reject })))
+            await new Promise((resolve, reject) => dispatch(fetchMyServices({ page: currentPage, ...filterState, resolve, reject })))
             dispatch(stopAcceptRejectLoader());
 
             event.target.reset();

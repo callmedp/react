@@ -82,7 +82,7 @@ const MyServices = (props) => {
     const handleEffects = async () => {
         try{
                 dispatch(startDashboardServicesPageLoader());
-                await new Promise((resolve, reject) => dispatch(fetchMyServices({ page: currentPage, isDesk: true, ...filterState, resolve, reject })))
+                await new Promise((resolve, reject) => dispatch(fetchMyServices({ page: currentPage, ...filterState, resolve, reject })))
                 dispatch(stopDashboardServicesPageLoader());
         }
         catch(e){

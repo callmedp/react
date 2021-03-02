@@ -56,7 +56,9 @@ const MyWallet = (props) => {
                             </div>
 
                             {/* <button className="btn-blue-outline btn-xs" onClick={() => setShowModal(true)}>Redeem now</button> */}
-                            <a href={`${siteDomain}/cart/payment-summary/`} className="btn-blue-outline btn-xs" >Redeem now</a>
+                            {
+                                wal_total > 0 && <a href={`${siteDomain}/cart/payment-summary/`} className="btn-blue-outline btn-xs" >Redeem now</a>
+                            }
                         </div>
                     </div>
 
