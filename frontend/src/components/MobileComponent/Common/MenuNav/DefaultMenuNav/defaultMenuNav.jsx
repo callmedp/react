@@ -177,13 +177,18 @@ const DefaultMenuNav = (props) => {
         >
           <figure className="micon-blog-services" /> Blog
         </a>
+        <a
+          className="menu-item"
+          href={"/user-intent"}
+        >
+          <figure className="micon-ui-cg" /> Career Guidance <small className="m-config-tag">NEW</small>
+        </a>
         {navTags?.length
           ? navTags.map((tag, index) => {
               return (
                 <a key={index} className="menu-item" href={tag.skill_page_url}>
                   {" "}
                   {tag?.display_name}&emsp;
-                  <small className="m-config-tag">{tag?.tag}</small>
                 </a>
               );
             })
