@@ -177,12 +177,12 @@ const DefaultMenuNav = (props) => {
         >
           <figure className="micon-blog-services" /> Blog
         </a>
-        <a
+        <Link
           className="menu-item"
-          href={"/user-intent"}
+          to={"/user-intent"}
         >
           <figure className="micon-ui-cg" /> Career Guidance <small className="m-config-tag">NEW</small>
-        </a>
+        </Link>
         {navTags?.length
           ? navTags.map((tag, index) => {
               return (
