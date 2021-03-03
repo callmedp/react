@@ -202,7 +202,7 @@ const MyCourses = (props) => {
                                                 <div className="my-order__order-detail">
                                                     <a onClick={(e) => { e.preventDefault(); showDetails(course?.id) }} className={(showOrderDetailsID === course?.id) ? "d-block font-weight-bold open arrow-icon" : "d-block font-weight-bold arrow-icon"}>View Details</a>
                                                     {   
-                                                        (showOrderDetailsID === course?.id) && <ViewDetails id={course?.id} />
+                                                        (showOrderDetailsID === course?.id) && <ViewDetails id={course?.id} status={ course?.updated_status?.status } enrollDate = {course?.enroll_date} />
                                                     }
                                                 </div> 
 

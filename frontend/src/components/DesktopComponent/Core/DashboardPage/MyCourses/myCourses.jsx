@@ -276,6 +276,8 @@ const MyCourses = (props) => {
                                                         id={course.id} 
                                                         toggleDetails={toggleDetails}  
                                                         isOpen={isOpen}
+                                                        status = {course?.updated_status?.status}
+                                                        enrollDate = {course?.enroll_date}
                                                         />
                                                     }
                                                 </div>

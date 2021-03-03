@@ -253,7 +253,7 @@ const MyServices = (props) => {
 
                                                     {/* course detail modal open */}
                                                     {
-                                                        (isOpen === service?.id) && <ViewDetailModal id={service.id} toggleDetails={toggleDetails} isOpen={isOpen}/>
+                                                        (isOpen === service?.id) && <ViewDetailModal id={service.id} toggleDetails={toggleDetails} isOpen={isOpen} status = {service?.updated_status?.status} enrollDate = {service?.enroll_date}/>
                                                     }
                                                 </div>
                                             </div>

@@ -248,7 +248,7 @@ const MyServices = (props) => {
                                                 }> View Details
                                             </a>
                                             {
-                                                (showOrderDetailsID === service?.id) && <ViewDetails id={service?.id} />
+                                                (showOrderDetailsID === service?.id) && <ViewDetails id={service?.id} status={ service?.updated_status?.status } enrollDate = {service?.enroll_date}/>
                                             }
                                         </div>
                                     </div>
