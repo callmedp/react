@@ -78,7 +78,7 @@ const MyOrders = (props) => {
 
     return(
         <div>
-            <BreadCrumbs filterStateShow={false} />
+            {/* <BreadCrumbs filterStateShow={false} /> */}
             <div className="db-my-order">
             { orderLoader ? <Loader /> : ''}
 
@@ -107,8 +107,8 @@ const MyOrders = (props) => {
                                 <div className="order-detail__content">
                                     <div className="order-detail__content--btnWrap">
                                         <Link to={'#orderDetails' + index} className={selectedOrderIndex === index ? "arrow-icon open" : "arrow-icon"} onClick={() => openOrderDetail(index)}>Order Details</Link>
-                                        {item.order.downloadInvoice ? <a target="_blank" href={downloadInvoice(item?.order?.id)} className="download-icon">Download Invoice</a> :
-                                        item.order.canCancel ? <Link to={"#"} onClick={(e) => {e.preventDefault();setShowCancelModal(true);setCancelOrderId(item?.order?.id)}}>Cancel Order</Link> : null}
+                                        {!item.order.downloadInvoice ? <a target="_blank" href={downloadInvoice(item?.order?.id)} className="download-icon">Download Invoice</a> :
+                                        !item.order.canCancel ? <Link to={"#"} onClick={(e) => {e.preventDefault();setShowCancelModal(true);setCancelOrderId(item?.order?.id)}}>Cancel Order</Link> : null}
                                     </div>
                                 </div>
 
@@ -160,7 +160,7 @@ const MyOrders = (props) => {
                             <br /> <br/> */}
 
                             <button className="btn btn-outline-primary px-5" onClick={() => handleCancellation(cancelOrderId)}>Yes</button>&emsp;
-                            <button className="btn btn-outline-primary px-5" onClick={() => setShowCancelModal(false)}>No</button>
+                            {/* <button className="btn btn-outline-primary px-5" onClick={() => setShowCancelModal(false)}>No</button> */}
                         </div>
                         </Modal.Body>
                     </Modal>

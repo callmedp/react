@@ -196,7 +196,6 @@ const MyCourses = (props) => {
         <div>
             { coursesLoader ? <Loader /> : ''}
 
-            <BreadCrumbs filterState={filterState} setfilterState={setfilterState} filterStateShow={true}/>
 
             <div className="db-my-courses-detail">
 

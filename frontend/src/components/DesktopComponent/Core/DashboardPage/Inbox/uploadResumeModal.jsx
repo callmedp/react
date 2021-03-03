@@ -76,8 +76,8 @@ const UploadResumeModal =(props) => {
 
                                 <div className="form-group d-flex align-items-center mt-5">
                                     <div className="upload-btn-wrapper">
-                                        <button className="btn btn-outline-primary" >{filename}</button>
-                                        <input disabled={pending_resume_items && pending_resume_items.length === 0}
+                                        <button className="btn btn-outline-primary" >{filename}
+                                            <input disabled={pending_resume_items && pending_resume_items.length === 0}
                                             type="file"
                                             name="file"
                                             onChange={(e) => {
@@ -86,6 +86,8 @@ const UploadResumeModal =(props) => {
                                             }}
                                             ref={register()}
                                         />
+                                        </button>
+                                        
                                     </div>
                                 </div>
                             </form>

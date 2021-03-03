@@ -156,7 +156,7 @@ const MyServices = (props) => {
 
     return(
         <React.Fragment>
-        <BreadCrumbs filterState={filterState} setfilterState={setfilterState} filterStateShow={true}/>
+        {/* <BreadCrumbs filterState={filterState} setfilterState={setfilterState} filterStateShow={true}/> */}
         <div>
             {serviceLoader ? <Loader /> : ''}
             
@@ -203,7 +203,7 @@ const MyServices = (props) => {
                                                         <strong className="ml-1">
                                                             {service?.updated_status?.status && service?.updated_status?.status !== 'Default' && <><span className="font-weight-normal">Status:</span><strong> { service?.updated_status?.status } </strong></>}
                                                             {
-                                                                service?.updated_status?.upload_resume && <Link to={"#"} className="ml-2" onClick={() => uploadToggleService()}>Upload</Link> 
+                                                                !service?.updated_status?.upload_resume && <Link to={"#"} className="ml-2" onClick={() => uploadToggleService()}>Upload</Link> 
                                                             }
                                                             {
                                                                 service?.updated_status?.download_url && <a href={`${service?.updated_status?.download_url}`} target="_blank" className="ml-2"> Download</a> 
