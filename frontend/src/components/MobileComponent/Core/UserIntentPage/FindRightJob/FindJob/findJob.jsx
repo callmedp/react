@@ -252,7 +252,7 @@ const FindJob = (props) => {
                                 })
                                 }
                                 <span className="d-flex align-items-center mt-10">
-                                    <input type="text" className="form-control custom-input" name="skills" placeholder="Keyword Research" id="skills" autoComplete="off"
+                                    <input type="text" className="form-control custom-input" name="skills" placeholder="Enter Skills" id="skills" autoComplete="off"
                                         ref={skillsKey} onChange={ e => suggestSkills(e) } onFocus={() => setShowSkillResults(true)} />
                                     <button className="custom-btn" type="button" onClick={ handleSkillsClick }><figure className="icon-search-arrow"></figure></button>
                                 </span>
