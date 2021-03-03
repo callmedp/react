@@ -45,7 +45,7 @@ const MyWallet = (props) => {
 
     return (
         <div>
-            {/* <BreadCrumbs filterStateShow={false} /> */}
+            <BreadCrumbs filterStateShow={false} />
             <div className="myWallet">
                 {walletLoader ? <Loader /> : ''}
 

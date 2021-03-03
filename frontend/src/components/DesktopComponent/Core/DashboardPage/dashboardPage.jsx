@@ -21,7 +21,7 @@ const DashboardPage = (props) => {
     const { history } = props;
     const dbContainer = props.match.params.name;
     const dashboardRoutes = [undefined, 'myorder', 'mywallet', 'myservices', 'startcourse']
-    const [filterState, setfilterState] = useState({ 'last_month_from': 'all', 'select_type' : 'all' });
+    // const [filterState, setfilterState] = useState({ 'last_month_from': 'all', 'select_type' : 'all' });
 
     
     useEffect(()=>{
@@ -48,7 +48,7 @@ const DashboardPage = (props) => {
            <Header />
            <main>
                 <div className="container">
-                <BreadCrumbs filterState={filterState} setfilterState={setfilterState} filterStateShow={true}/>
+                {/* <BreadCrumbs filterState={filterState} setfilterState={setfilterState} filterStateShow={true}/> */}
                     
                     <div className="dashboard-warp mt-10">
                         { dbContainer != 'startcourse' ?
