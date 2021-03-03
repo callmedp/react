@@ -303,6 +303,11 @@
         left: 0;
         top: 0;
         opacity: 0;
+        height: 3.9rem;
+
+        &:hover {
+            cursor: pointer;
+        }
     }
 }
   
