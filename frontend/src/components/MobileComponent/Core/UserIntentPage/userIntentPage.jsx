@@ -9,8 +9,12 @@ import ProgressCareer from './ProgressCareer/progressCareer';
 import UIBanner from '../../Common/UIBanner/UIbanner';
 import SearchPage from '../../Common/SearchPage/SearchPage';
 import './userIntentPage.scss';
+import { useDispatch, useSelector } from 'react-redux';
 import Footer from '../../Common/Footer/Footer';
 import Aos from "aos";
+import CTA from '../../Common/CTA/CTA';
+import EnquiryModal from '../../Common/Modals/EnquiryModal';
+
 // import "aos/dist/aos.css";
 import { Helmet } from 'react-helmet';
 
@@ -18,6 +22,8 @@ const UserIntentPage = (props) => {
     const { history } = props;
     const UIContainer = props.match.params.name;
     const [showSearchPage, setShowSearchPage] = useState(false);
+    const [enquiryForm, setEnquiryForm] = useState(false);
+    const { name } = useSelector(store => store.skillBanner);
     const UserIntentRoutes = [undefined, 'find-right-job', 'make-career-change', 'improve-profile', 'progress-career']
 
     useEffect(() => {
@@ -72,6 +78,11 @@ const UserIntentPage = (props) => {
                         }
                     </main>
                     <Footer />
+                    <br/><br/>
+                    <CTA setEnquiryForm={setEnquiryForm} pageType='userintent' heading={name} />
+                    {
+                        enquiryForm ? <EnquiryModal setEnquiryForm={setEnquiryForm} /> : null
+                    }
                 </>
             }
         </div>
