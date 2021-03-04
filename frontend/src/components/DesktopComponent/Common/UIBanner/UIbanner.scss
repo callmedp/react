@@ -37,6 +37,10 @@ header {
             text-transform: uppercase;
             display: flex;
             margin-left: auto;
+
+            &:hover {
+                box-shadow: 0 4px 5px -1px rgba(206,212,224,0.54);
+            }
         }
     }
 }

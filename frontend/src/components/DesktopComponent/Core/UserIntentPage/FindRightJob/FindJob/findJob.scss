@@ -121,7 +121,7 @@
             }
 
             input, select {
-                font-weight: 700;
+                font-weight: 600;
             }
         }
         
@@ -159,7 +159,7 @@
             .custom-textarea {
                 border: .1rem solid $border-color;
                 border-radius: $border-radius;
-                padding: 2rem 1rem 1rem 1rem;
+                padding: 1.4rem 1rem;
 
                 .custom-input {
                     border: transparent;
