@@ -15,7 +15,7 @@
 }
 
 .ml-10n {
-    margin-left: -1rem;
+    margin-left: -1rem !important;
 }
 
 .mt-0 {
@@ -189,6 +189,10 @@ body.swal2-toast-shown .swal2-container.swal2-top-end, body.swal2-toast-shown .s
 }
 main {
     margin-bottom: 5rem;
+}
+
+.w-70 {
+    width: 70%;
 }
 
 .w-75 {

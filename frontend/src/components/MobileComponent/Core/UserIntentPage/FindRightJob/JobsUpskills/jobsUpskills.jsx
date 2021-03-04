@@ -5,7 +5,7 @@ import '../../../SkillPage/CoursesTray/courses.scss';
 import './jobsUpskills.scss';
 import { useSelector } from 'react-redux';
 import Loader from '../../../../Common/Loader/loader';
-import { fetchFindRightJobsData, fetchUpskillYourselfData } from 'store/UserIntentPage/actions';
+import { fetchFindRightJobsData, fetchUpskillYourselfData, upskillAndJobsCleanup } from 'store/UserIntentPage/actions';
 import { useDispatch } from 'react-redux';
 import { startJobsUpskillsLoader, stopJobsUpskillsLoader } from 'store/Loader/actions';
 import JobListing from './JobListing/jobListing';
@@ -27,6 +27,11 @@ const JobsUpskills = (props) => {
 
     useEffect(() => {
         resultApiFunc(history.location.search + `&page=1`);
+        
+        // Cleaning Store Bucket
+        return function cleanup () {
+			dispatch(upskillAndJobsCleanup())
+		}
     }, []);
 
     const resultApiFunc = async (jobParams) => {
