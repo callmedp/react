@@ -42,8 +42,8 @@ const HomeBanner = (props) => {
                                 <input className="form-control top-input" type="search" placeholder="Search courses" aria-label="Search" />
                                 <button className="btn btn-search" type="submit"><figure className="icon-search"></figure></button>
                             </form> */}
-                            OR
-                            <Link to={"/user-intent"} className="btn btn-gradient ml-10">GET CAREER GUIDANCE <figure className="icon-arrow-right ml-10"></figure></Link>
+                            {/* OR */}
+                            {/* <Link to={"/user-intent"} className="btn btn-gradient ml-10">GET CAREER GUIDANCE <figure className="icon-arrow-right ml-10"></figure></Link> */}
                         </div>
                     </div>
 
