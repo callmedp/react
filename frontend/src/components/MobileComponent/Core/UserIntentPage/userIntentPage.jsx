@@ -24,7 +24,6 @@ const UserIntentPage = (props) => {
     const [showCTA, setShowCTAPage] = useState(true);
     const [showSearchPage, setShowSearchPage] = useState(false);
     const [enquiryForm, setEnquiryForm] = useState(false);
-    const { name } = useSelector(store => store.skillBanner);
     const UserIntentRoutes = [undefined, 'find-right-job', 'make-career-change', 'improve-profile', 'progress-career']
 
     useEffect(() => {
@@ -79,7 +78,7 @@ const UserIntentPage = (props) => {
                     </main>
                     {showCTA ? <>
                     <br/><br/>
-                    <CTA setEnquiryForm={setEnquiryForm} pageType='userintent' heading={name} />
+                    <CTA setEnquiryForm={setEnquiryForm} pageType='userintent' />
                     {
                         enquiryForm ? <EnquiryModal setEnquiryForm={setEnquiryForm} /> : null
                     }
