@@ -9,6 +9,15 @@ const MakeCareerChange = (props) => {
     const params = new URLSearchParams(props.location.search);
     const job = params.get('job_title')
 
+    useEffect(() => {
+        if (!job) {
+            props.setShowCTAPage(false)
+        }
+        return function cleanup() {
+            props.setShowCTAPage(true)
+        }
+    })
+
     return (
         <div>
             {/* <GuidanceRecommendations /> */}

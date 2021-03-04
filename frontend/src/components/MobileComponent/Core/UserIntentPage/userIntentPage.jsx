@@ -21,13 +21,13 @@ import { Helmet } from 'react-helmet';
 const UserIntentPage = (props) => {
     const { history } = props;
     const UIContainer = props.match.params.name;
+    const [showCTA, setShowCTAPage] = useState(true);
     const [showSearchPage, setShowSearchPage] = useState(false);
     const [enquiryForm, setEnquiryForm] = useState(false);
     const { name } = useSelector(store => store.skillBanner);
     const UserIntentRoutes = [undefined, 'find-right-job', 'make-career-change', 'improve-profile', 'progress-career']
 
     useEffect(() => {
-
         if (!UserIntentRoutes.includes(UIContainer)) {
             history.push('/404');
         }
@@ -69,18 +69,23 @@ const UserIntentPage = (props) => {
                     <main className="mb-0">
                         {
                             {
-                                'find-right-job': <FindRightJob icon="icon-ui2" title="Find the right job" back={true} {...props} />,
-                                'make-career-change': <MakeCareerChange icon="icon-ui2" title="Make a career change" back={true} {...props} />,
-                                'improve-profile': <ImproveProfile icon="icon-ui2" title="Improve your profile" back={true} />,
-                                'progress-career': <ProgressCareer icon="icon-ui2" title="Progress your career" back={true} {...props} />,
+                                'find-right-job': <FindRightJob icon="icon-ui2" setShowCTAPage={setShowCTAPage} title="Find the right job" back={true} {...props} />,
+                                'make-career-change': <MakeCareerChange icon="icon-ui2" setShowCTAPage={setShowCTAPage} title="Make a career change" back={true} {...props} />,
+                                'improve-profile': <ImproveProfile icon="icon-ui2" setShowCTAPage={setShowCTAPage} title="Improve your profile" back={true} />,
+                                'progress-career': <ProgressCareer icon="icon-ui2" setShowCTAPage={setShowCTAPage} title="Progress your career" back={true} {...props} />,
                                 undefined: <UserGuidance icon="icon-ui1" title="Career Guidance with personalized recommendations" back={false} />
                             }[UIContainer]
                         }
                     </main>
+                    {showCTA ? <>
                     <br/><br/>
                     <CTA setEnquiryForm={setEnquiryForm} pageType='userintent' heading={name} />
                     {
                         enquiryForm ? <EnquiryModal setEnquiryForm={setEnquiryForm} /> : null
+                    }
+                    </>
+                    :
+                    ''
                     }
                 </>
             }
