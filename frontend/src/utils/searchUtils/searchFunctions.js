@@ -31,8 +31,8 @@ const userSearch = (search ) =>{
 }
 
 const relatedSearch = (query) =>{
-    // return fetch(`${siteDomain}/intent/api/v1/keyword-suggestion/?q=${query}&skill_only=true`,
-    return fetch(`${shineDomain}/api/v3/search/skill-to-related-skills/?q="${query}"`,
+    // return fetch(`${shineDomain}/api/v3/search/skill-to-related-skills/?q="${query}"`,
+    return fetch(`https://sumosc.shine.com/api/v3/search/skill-to-related-skills/?q="${query}"`,
         { method: 'GET' }).then(r => r.json())
         .catch(error => {
             console.error(error);
