@@ -56,6 +56,7 @@ const JobsUpskills = (props) => {
 	useEffect(() => {
 		handleEffect(history?.location?.search + `&page=1`)
 
+		// Cleaning Store Bucket
 		return function cleanup () {
 			dispatch(upskillAndJobsCleanup())
 		}
