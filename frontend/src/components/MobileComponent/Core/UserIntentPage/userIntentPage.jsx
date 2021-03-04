@@ -11,7 +11,7 @@ import SearchPage from '../../Common/SearchPage/SearchPage';
 import './userIntentPage.scss';
 import Footer from '../../Common/Footer/Footer';
 import Aos from "aos";
-import "aos/dist/aos.css";
+// import "aos/dist/aos.css";
 import { Helmet } from 'react-helmet';
 
 const UserIntentPage = (props) => {

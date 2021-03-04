@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { Link } from 'react-router-dom';
-import 'slick-carousel/slick/slick.css';
+// import 'slick-carousel/slick/slick.css';
 import '../../../SkillPage/CoursesTray/courses.scss';
 import './jobsUpskills.scss';
 import { useSelector } from 'react-redux';

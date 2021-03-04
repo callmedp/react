@@ -1,9 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Slider from "react-slick";
-import 'slick-carousel/slick/slick.css';
+// import 'slick-carousel/slick/slick.css';
 import { CircularProgressbar } from 'react-circular-progressbar';
-import 'react-circular-progressbar/dist/styles.css';
+// import 'react-circular-progressbar/dist/styles.css';
 import '../../../CataloguePage/ServicesForYou/servicesForYou.scss';
 import './shineServices.scss';
 

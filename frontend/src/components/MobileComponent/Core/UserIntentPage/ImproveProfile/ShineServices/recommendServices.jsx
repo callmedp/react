@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import Slider from "react-slick";
-import 'slick-carousel/slick/slick.css';
+// import 'slick-carousel/slick/slick.css';
 import { Link } from 'react-router-dom';
 import { shineDomain, siteDomain } from '../../../../../../utils/domains.js';
 import '../../../CataloguePage/ServicesForYou/servicesForYou.scss';

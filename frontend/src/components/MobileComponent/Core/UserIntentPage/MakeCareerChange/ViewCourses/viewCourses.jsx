@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
-import 'slick-carousel/slick/slick.css';
+// import 'slick-carousel/slick/slick.css';
 import '../../../SkillPage/CoursesTray/courses.scss'
 import '../../FindRightJob/JobsUpskills/jobsUpskills.scss';
 import CourseLisiting from '../../IntentUtil/courseListing';

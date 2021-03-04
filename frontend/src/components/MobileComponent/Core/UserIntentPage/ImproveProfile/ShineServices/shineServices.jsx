@@ -1,11 +1,11 @@
 import React, {useState, useEffect, useRef} from 'react';
 import { Link } from 'react-router-dom';
-import 'slick-carousel/slick/slick.css';
+// import 'slick-carousel/slick/slick.css';
 import '../../../CataloguePage/ServicesForYou/servicesForYou.scss';
 import { shineDomain, resumeShineSiteDomain } from '../../../../../../utils/domains.js';
 import './shineServices.scss';
 import { CircularProgressbar } from 'react-circular-progressbar';
-import 'react-circular-progressbar/dist/styles.css';
+// import 'react-circular-progressbar/dist/styles.css';
 import { getCandidateId } from '../../../../../../utils/storage.js';
 import { uploadFileUrl } from 'store/UserIntentPage/actions';
 import { startGetResumeScoreLoader, stopGetResumeScoreLoader } from 'store/Loader/actions/index';
