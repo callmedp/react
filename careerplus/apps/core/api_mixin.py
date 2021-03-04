@@ -797,8 +797,8 @@ class TestPrepApiMixin(object):
     def get_all_test_for_email(self,email):
         if not email:
             logging.getLogger('error_log').error('cannot get test, email address not found')
-        url = 'https://www.testpreptraining.com/api/apiv2/getCertificationsByEmail?email={}'.format(email)
-        headers = self.get_headers()
+        url = 'https://www.skilr.com/api/index.php/apiv2/getCertificationsByEmail?email={}'.format(email)
+        headers = t.get_headers()
         if not headers:
             return
 
@@ -816,7 +816,7 @@ class TestPrepApiMixin(object):
 
 
     def get_all_product(self):
-        url = 'https://www.testpreptraining.com/api/index.php/apiv2/getProducts'
+        url =' https://www.skilr.com/api/index.php/apiv2/getProducts'
         headers = self.get_headers()
         if not headers:
             return
@@ -828,21 +828,3 @@ class TestPrepApiMixin(object):
             logging.getLogger('error_log').error('error in making testprep get_all_test_for_email request')
 
         return response
-
-
-
-        
-
-
-
-        
-        
-        
-
-
-
-
-
-        
-
-        
