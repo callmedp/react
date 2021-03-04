@@ -1,6 +1,7 @@
 import React from 'react';
 import FindJob from './FindJob/findJob';
 import JobsUpskills from './JobsUpskills/jobsUpskills';
+import Footer from '../../../Common/Footer/Footer';
 
 const FindRightJob = (props) => {
     const params = new URLSearchParams(props.location.search);
@@ -8,7 +9,7 @@ const FindRightJob = (props) => {
 
     return (
         <div>
-            { !!job ? <JobsUpskills {...props} /> : <FindJob type={"job"} {...props}/> }
+            { !!job ? <><JobsUpskills {...props} /><Footer /></> : <FindJob type={"job"} {...props}/> }
         </div>
     )
 }

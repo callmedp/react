@@ -71,7 +71,6 @@ const UserIntentPage = (props) => {
                             }[UIContainer]
                         }
                     </main>
-                    <Footer />
                 </>
             }
         </div>
