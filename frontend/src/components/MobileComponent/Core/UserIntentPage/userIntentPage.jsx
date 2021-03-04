@@ -77,7 +77,6 @@ const UserIntentPage = (props) => {
                             }[UIContainer]
                         }
                     </main>
-                    <Footer />
                     <br/><br/>
                     <CTA setEnquiryForm={setEnquiryForm} pageType='userintent' heading={name} />
                     {

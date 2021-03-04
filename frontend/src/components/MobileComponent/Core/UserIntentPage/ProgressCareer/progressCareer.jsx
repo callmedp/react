@@ -1,6 +1,7 @@
 import React from 'react';
 import FindJob from '../FindRightJob/FindJob/findJob';
 import ViewCourses from '../MakeCareerChange/ViewCourses/viewCourses';
+import Footer from '../../../Common/Footer/Footer';
 
 
 const ProgressCareer = (props) => {
@@ -11,7 +12,7 @@ const ProgressCareer = (props) => {
         <div>
             {/* <GuidanceRecommendations /> */}
             {/* <FindJob /> */}
-            { !!job ? <ViewCourses {...props} /> : <FindJob type={"pcareer"} {...props}/> }
+            { !!job ? <><ViewCourses {...props} /><Footer /></> : <FindJob type={"pcareer"} {...props}/> }
         </div>
     )
 }
