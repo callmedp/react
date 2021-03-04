@@ -25,12 +25,12 @@ import { showSwal } from '../../../../../utils/swal';
 
 const MyServices = (props) => {
     const dispatch = useDispatch();
-    const { history } = props;
+    const { history, filterState, setfilterState, setFilterVisible } = props
     const { serviceLoader } = useSelector(store => store.loader);
     
     // page no. set here
     const [currentPage, setCurrentPage] = useState(1);
-    const [filterState, setfilterState] = useState({ 'last_month_from': 'all', 'select_type' : 'all' });
+    // const [filterState, setfilterState] = useState({ 'last_month_from': 'all', 'select_type' : 'all' });
     
     // main api result state here
     const results = useSelector(store => store.dashboardServices);
@@ -156,7 +156,7 @@ const MyServices = (props) => {
 
     return(
         <React.Fragment>
-        <BreadCrumbs filterState={filterState} setfilterState={setfilterState} filterStateShow={true}/>
+        {/* <BreadCrumbs filterState={filterState} setfilterState={setfilterState} filterStateShow={true}/> */}
         <div>
             {serviceLoader ? <Loader /> : ''}
             
@@ -167,7 +167,7 @@ const MyServices = (props) => {
                     : null
                 } */}
 
-                {  results.page.total === 0 ? <EmptyInbox inboxButton="Go To Home" redirectUrl={resumeShineSiteDomain} inboxText="There is no service added to your profile!"/> : '' }
+                {  results.page.total === 0 ? <EmptyInbox inboxButton="Go To Home" redirectUrl={resumeShineSiteDomain} inboxText="There is no service added to your profile!" setFilterVisible={setFilterVisible} /> : setFilterVisible(true) }
 
                 {results?.data && results?.data?.length > 0 ?
                     results?.data?.map((service,index) => {

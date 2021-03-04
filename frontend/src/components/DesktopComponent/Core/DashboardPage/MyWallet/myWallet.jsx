@@ -17,7 +17,7 @@ const MyWallet = (props) => {
     const handleShow = () => setShow(true);
     const [currentPage, setCurrentPage] = useState(1);
     const dispatch = useDispatch();
-    const { history } = props;
+    const { history, setFilterVisible } = props;
     const { walletLoader } = useSelector(store => store.loader);
     const walletResult = useSelector(store => store.dashboardWallet.data);
 
@@ -41,11 +41,12 @@ const MyWallet = (props) => {
             behavior: "smooth"
         });
         handleEffects();
+        setFilterVisible(false)
     }, [currentPage])
 
     return (
         <div>
-            <BreadCrumbs filterStateShow={false} />
+            {/* <BreadCrumbs filterStateShow={false} /> */}
             <div className="myWallet">
                 {walletLoader ? <Loader /> : ''}
 
@@ -107,7 +108,7 @@ const MyWallet = (props) => {
                                 )
                             })
                             :
-                            <EmptyInbox inboxButton="Go To Home" redirectUrl={siteDomain} inboxText="Your wallet is empty!" />
+                            <EmptyInbox inboxButton="Go To Home" redirectUrl={siteDomain} inboxText="Your wallet is empty!" setFilterVisible={setFilterVisible}/>
                     }
                 </div>
 

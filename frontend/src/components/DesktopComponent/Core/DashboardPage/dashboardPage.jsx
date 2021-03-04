@@ -21,7 +21,9 @@ const DashboardPage = (props) => {
     const { history } = props;
     const dbContainer = props.match.params.name;
     const dashboardRoutes = [undefined, 'myorder', 'mywallet', 'myservices', 'startcourse']
-    // const [filterState, setfilterState] = useState({ 'last_month_from': 'all', 'select_type' : 'all' });
+    const [filterState, setfilterState] = useState({ 'last_month_from': 'all', 'select_type' : 'all' });
+    // const filterHidePage = ['myorder', 'mywallet']
+    const [filterVisible, setFilterVisible] = useState(true)
 
     
     useEffect(()=>{
@@ -48,7 +50,7 @@ const DashboardPage = (props) => {
            <Header />
            <main>
                 <div className="container">
-                {/* <BreadCrumbs filterState={filterState} setfilterState={setfilterState} filterStateShow={true}/> */}
+                <BreadCrumbs filterState={filterState} setfilterState={setfilterState} filterStateShow={filterVisible}/>
                     
                     <div className="dashboard-warp mt-10">
                         { dbContainer != 'startcourse' ?
@@ -61,10 +63,10 @@ const DashboardPage = (props) => {
                             <div className="dashboard-warp--content">
                               {
                                 {
-                                    'myorder' : <MyOrders />,
-                                    'mywallet' : <MyWallet/>,
-                                    'myservices' : <MyServices {...props} />,
-                                    undefined : <MyCourses history={history} />
+                                    'myorder' : <MyOrders setFilterVisible={setFilterVisible}/>,
+                                    'mywallet' : <MyWallet setFilterVisible={setFilterVisible}/>,
+                                    'myservices' : <MyServices {...props} filterState={filterState} setfilterState={setfilterState} setFilterVisible={setFilterVisible}/>,
+                                    undefined : <MyCourses history={history} filterState={filterState} setfilterState={setfilterState} setFilterVisible={setFilterVisible}/>
                                 }[dbContainer]
                               }  
                             </div>
