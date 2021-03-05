@@ -198,16 +198,19 @@ const Header = (props) => {
                                     navTags?.map((tag, index) => {
                                         return (
                                             <li key={index} className="nav-item">
-                                                <a href={tag.skill_page_url} className="nav-link">{tag?.display_name}<small className="config-tag">{tag?.tag}</small></a>
+                                                <a href={tag.skill_page_url} className="nav-link">{tag?.display_name}</a>
                                             </li>
                                         )
                                     })
                                 }
                             </ul>
                         </div>
-                        <span className="ui-btn">
-                            <Link to={"/user-intent"} className="btn btn-gradient"><figure className="icon-ui-cg"></figure> GET CAREER GUIDANCE <span>NEW</span></Link>
-                        </span>
+                        {
+                            isHomepage ? '' : 
+                                <span className="ui-btn">
+                                    <Link to={"/user-intent"} className="btn btn-gradient"><figure className="icon-ui-cg"></figure> GET CAREER GUIDANCE <span>NEW</span></Link>
+                                </span>
+                        }
                     </div>
                 </nav>
         </div >
