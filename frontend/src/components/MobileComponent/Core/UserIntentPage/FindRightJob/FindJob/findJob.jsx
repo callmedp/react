@@ -28,6 +28,7 @@ const FindJob = (props) => {
     const [searchTerm, setSearchTerm] = useState('');
     const debouncedSearchTerm = useDebounce(searchTerm, 500);
     const [skillSet, setSkillSet] = useState([])
+    const [cssOriginal, setcssOriginal] = useState('m-find-job');
 
     const handleInput = (e) => {
         setJtError(false)
@@ -126,6 +127,8 @@ const FindJob = (props) => {
         }
     }
 
+  
+
     //Return result format
     const getMenuItems = (data, refr, noOfItems = 6) => {
         return (
@@ -195,7 +198,7 @@ const FindJob = (props) => {
                 </div>
                 <h2 className="m-heading3 mt-20">{type === 'job' ? 'Let’s get you to the right job' : type === 'pcareer' ? 'Get to next level with shine' : 'What do you have in mind'}</h2>
 
-                <div className="m-find-job">
+                <div className={cssOriginal} onClick={()=>setcssOriginal('m-find-job mb-100')}>
                     <form className="mt-20" onSubmit={handleSubmit(onSubmit)}>
                         <div className={checkedClass}>
                             <input type="text" className="form-control" id="job" name="job" placeholder=" " ref={jobTitle} autoComplete="off"
