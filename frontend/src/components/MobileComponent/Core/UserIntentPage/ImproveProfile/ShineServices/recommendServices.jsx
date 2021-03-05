@@ -17,16 +17,18 @@ const RecommendServices = (props) => {
                 <Slider {...settings}>
                     { services?.map((service, index) => {
                             return (
-                                <div className="m-services-foryou__list" key={index}>
-                                    <h3 className="m-heading3">{service.title?.length > 50 ? service.title?.slice(0, 50) + '...' :  service.title}</h3>
-                                    <p>{ service.about?.length > 85 ? service.about?.slice(0, 85) + '...' :  service.about }</p>
-                                    <span className="d-flex">
-                                        <a href={`${siteDomain}${service.url}`}>Know more</a>
-                                        <figure>
-                                            <img src={service?.imgUrl} alt={service?.imgAlt} />
-                                        </figure>
-                                    </span>
-                                </div>
+                                <Link to={`${siteDomain}${service.url}`}>
+                                    <div className="m-services-foryou__list" key={index}>
+                                        <h3 className="m-heading3">{service.title?.length > 50 ? service.title?.slice(0, 50) + '...' :  service.title}</h3>
+                                        <p>{ service.about?.length > 85 ? service.about?.slice(0, 85) + '...' :  service.about }</p>
+                                        <span className="d-flex">
+                                            <a href={`${siteDomain}${service.url}`}>Know more</a>
+                                            <figure>
+                                                <img src={service?.imgUrl} alt={service?.imgAlt} />
+                                            </figure>
+                                        </span>
+                                    </div>
+                                </Link>
                     )})}
                 </Slider>
             </div>

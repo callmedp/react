@@ -16,16 +16,18 @@ const RecommendServices = (props) => {
                 { services?.map((service, index) => {
                 return (
                     <div className="col">
-                        <div className="services-foryou">
-                            <h3 className="heading3">{service.title?.length > 50 ? service.title?.slice(0, 50) + '...' :  service.title}</h3>
-                            <p>{ service.about?.length > 85 ? service.about?.slice(0, 85) + '...' :  service.about }</p>
-                            <span className="d-flex">
-                                <a href={`${siteDomain}${service.url}`}>Know more</a>
-                                <figure>
-                                    <img src={service?.imgUrl} alt={service?.imgAlt} />
-                                </figure>
-                            </span>
-                        </div>
+                        <Link to={`${siteDomain}${service.url}`}>
+                            <div className="services-foryou">
+                                <h3 className="heading3">{service.title?.length > 50 ? service.title?.slice(0, 50) + '...' :  service.title}</h3>
+                                <p>{ service.about?.length > 85 ? service.about?.slice(0, 85) + '...' :  service.about }</p>
+                                <span className="d-flex">
+                                    <a href={`${siteDomain}${service.url}`}>Know more</a>
+                                    <figure>
+                                        <img src={service?.imgUrl} alt={service?.imgAlt} />
+                                    </figure>
+                                </span>
+                            </div>
+                        </Link>
                     </div>
                 )})}
                 </div>

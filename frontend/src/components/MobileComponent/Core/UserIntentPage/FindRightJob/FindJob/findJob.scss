@@ -140,7 +140,13 @@
             .custom-textarea {
                 border: .1rem solid $border-color;
                 border-radius: .4rem;
-                padding: 2rem 1rem 1rem 1rem;
+                padding: 1.5rem 1rem;
+
+                span {
+                    input {
+                        text-transform: capitalize;
+                    }
+                }
 
                 .custom-input {
                     border: transparent;
