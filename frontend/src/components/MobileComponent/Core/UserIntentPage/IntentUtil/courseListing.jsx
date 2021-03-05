@@ -6,7 +6,7 @@ const CourseLisiting = (props) => {
 
     const { courseList } = props;
     const [setOpen, setCourseOpen] = useState(false);
-    const openCourseDetails = (id) => setCourseOpen(setOpen === id ? false : 'upSkill'+id);
+    const openCourseDetails = (event, id) => { event.preventDefault(); setCourseOpen(setOpen === id ? false : 'upSkill'+id) };
     const regex = /<[^>]*>/g;
     const noOfWords = 100;
 
@@ -25,8 +25,12 @@ const CourseLisiting = (props) => {
                 mode ? <> Mode: <strong>{mode.split(" ")[0]}</strong> </> : <>&nbsp;</>
             }
             </div>
-        )
-        
+        )   
+    }
+
+    const goToUrl = (event, url) => {
+        event.preventDefault();
+        return window.location.href = `${siteDomain}${url}`;
     }
 
     return (
@@ -34,7 +38,7 @@ const CourseLisiting = (props) => {
             {
                 courseList?.map((course, index) => {
                     return (
-                        <div className="m-card" key={index}>
+                        <div className="m-card" key={index} onClick={(e) => goToUrl(e, course.url)}>
                             <div className="m-card__heading">
                                 {course?.tags === 1 && <span className="m-flag-yellow">BESTSELLER</span>}
                                 {course?.tags === 2 && <span className="m-flag-blue">NEW</span>}
@@ -43,7 +47,7 @@ const CourseLisiting = (props) => {
                                 </figure>
                                 
                                 <h3 className="m-heading3">
-                                    <a href={`${siteDomain}${course?.url}`}>{course?.name}</a>
+                                    <a>{course?.name}</a>
                                 </h3>
                             </div>
                             <div className="m-card__box">
@@ -57,7 +61,7 @@ const CourseLisiting = (props) => {
                                     {course?.test_duration ? getDurationMode(course?.test_duration, course?.mode, 'minutes') : getDurationMode(course?.duration, course?.mode, 'days')}
                                 <div className="m-card__price">
                                     <strong>{course?.price}/-</strong> 
-                                    {setOpen !== ('upSkill' + course?.id) && <span id={'upSk' + course?.id} className="m-view-more text-right" onClick={() => openCourseDetails(course?.id)}>View more</span>}
+                                    {setOpen !== ('upSkill' + course?.id) && <span id={'upSk' + course?.id} className="m-view-more text-right" onClick={(e) => openCourseDetails(e, course?.id)}>View more</span>}
                                 </div>
                             </div>
 

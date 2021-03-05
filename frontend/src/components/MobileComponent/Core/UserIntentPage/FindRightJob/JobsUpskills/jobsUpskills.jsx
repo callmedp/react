@@ -22,8 +22,9 @@ const JobsUpskills = (props) => {
     const params = new URLSearchParams(props.location.search);
     const [currentJobPage, setJobPage] = useState(1);
     const [selectTab, tabSelected] = useState('tab1');
-    const openSelectedTab = (id) => tabSelected(id);
+    const openSelectedTab = (id) => { tabSelected(id); setFeedback(false) };
     const feedD = {'recommended_course_ids': recommended_course_ids, 'intent': 2, 'context': 'Find the right job'};
+    const [feedback, setFeedback] = useState(false);
 
     useEffect(() => {
         resultApiFunc(history.location.search + `&page=1`);
@@ -50,6 +51,7 @@ const JobsUpskills = (props) => {
     }
 
     const handleUpskillData = async (tabType) => {
+        setFeedback(false);
         if (tabType === "tab2" && (!course_data || (Array.isArray(course_data) && course_data.length === 0))) {
             const dataUpskill = `?preferred_role=${params.get('job_title')}&experience=${params.get('minexp')}&skills=${params.get('skill') || ''}&page=${currentJobPage}&intent=2`;
             courseDispatchHit(dataUpskill);
@@ -122,7 +124,7 @@ const JobsUpskills = (props) => {
                         </div>
                     </div>
                 </div>
-                { (results && results.length > 0) && <Feedback feedbackData={feedD} heading={selectTab === 'tab1' ? 'jobs' : 'courses'}/> }
+                { (results && results.length > 0) && <Feedback feed={feedback} setFeedback={setFeedback} feedbackData={feedD} heading={selectTab === 'tab1' ? 'jobs' : 'courses'}/> }
             </div>
         </section>
     )
