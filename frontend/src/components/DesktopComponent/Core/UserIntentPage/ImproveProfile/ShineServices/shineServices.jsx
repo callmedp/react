@@ -109,7 +109,7 @@ const ShineServices = (props) => {
                                     Check out the detailed reviews to improve the score. <strong className="fs-13">Score more to get perfect job match your profile</strong>
                                     <span className="d-flex mt-20">
                                         <a href={`${resumeShineSiteDomain}/resume-score-checker`}>View details</a>
-                                        <Link className="file-close">{filename} <i className="icon-close-sm ml-10" onClick={() => resetFileDetails()} ></i></Link>
+                                        <Link className="file-close disabledCursor">{filename} <Link><i className="icon-close-sm ml-10" onClick={() => resetFileDetails()} ></i></Link></Link>
                                     </span>
                                 </span>
                             </div> :
