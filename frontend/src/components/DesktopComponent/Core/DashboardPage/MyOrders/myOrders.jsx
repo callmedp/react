@@ -15,7 +15,7 @@ import { siteDomain } from 'utils/domains';
 const MyOrders = (props) => {
     const ordPageNo = '1';
     const dispatch = useDispatch();
-    const { history, setFilterVisible } = props;
+    const { history } = props;
     const { orderLoader } = useSelector(store => store.loader);
     const results = useSelector(store => store.dashboardOrders);
     const [ selectedOrderIndex, toggleQuestion ] = useState(0);
@@ -42,7 +42,6 @@ const MyOrders = (props) => {
             behavior: "smooth"
         });
         handleEffects();
-        setFilterVisible(false)
     }, [ordPageNo])
 
   
@@ -143,7 +142,7 @@ const MyOrders = (props) => {
                         )
                     })
                 :
-                <EmptyInbox inboxButton="Browse Courses" redirectUrl={`${siteDomain}/online-courses.html`} inboxText="You have not ordered any product till now!" setFilterVisible={setFilterVisible} />
+                <EmptyInbox inboxButton="Browse Courses" redirectUrl={`${siteDomain}/online-courses.html`} inboxText="You have not ordered any product till now!" />
                 }
 
                 {/* cancel order confirmation modal */}

@@ -143,9 +143,7 @@ const MyServices = (props) => {
         <div>
 
             {/* My Services Block Start */}
-            {
-                myServicesList?.length > 0 && <Filter filterState={filterState} setfilterState={setfilterState} />
-            }
+            <Filter filterState={filterState} setfilterState={setfilterState} />
             <main className="mb-0">
                 <div className="m-courses-detail db-warp">
                     {

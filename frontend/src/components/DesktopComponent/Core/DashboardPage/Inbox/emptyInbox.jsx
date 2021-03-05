@@ -5,19 +5,16 @@ import '../MyCourses/myCourses.scss';
 import '../MyServices/myServices.scss';
    
 const EmptyInbox = (props) => {
-    const { inboxButton, inboxText, redirectUrl, setFilterVisible } = props;
+    const { inboxButton, inboxText, redirectUrl } = props;
 
     return(
-        <>
-            { setFilterVisible(false) }
-            <div>
-                <div className="db-nocourses">
-                    <img src={`${imageUrl}desktop/no-courses.png`} alt="Empty Dashboard Image"/>
-                    <p className="db-nocourses--text">{inboxText}</p>
-                    <a href={redirectUrl} className="btn btn-outline-primary font-weight-bold">{inboxButton}</a>
-                </div>
+        <div>
+            <div className="db-nocourses">
+                <img src={`${imageUrl}desktop/no-courses.png`} alt="Empty Dashboard Image"/>
+                <p className="db-nocourses--text">{inboxText}</p>
+                <a href={redirectUrl} className="btn btn-outline-primary font-weight-bold">{inboxButton}</a>
             </div>
-        </>
+        </div>
     )
 }
    

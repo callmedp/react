@@ -39,6 +39,7 @@ class DashboardMyorderApi(DashboardInfo, APIView):
         data = []
         page = request.GET.get("page", 1)
         candidate_id = self.request.session.get('candidate_id', None)
+        # candidate_id='601b8120ca3f418906a889a8'
         order_list = []
         page_info={}
         if candidate_id:         

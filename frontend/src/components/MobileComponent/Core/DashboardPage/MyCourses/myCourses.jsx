@@ -134,9 +134,7 @@ const MyCourses = (props) => {
                 page?.total === 0 ? <EmptyInbox inboxType="courses"/> :
 
             <div>
-                {
-                   data?.length > 1 &&  <Filter filterState={filterState} setfilterState={setfilterState} />
-                }
+                <Filter filterState={filterState} setfilterState={setfilterState} />
 
                 <div className="m-courses-detail db-warp">
                     {

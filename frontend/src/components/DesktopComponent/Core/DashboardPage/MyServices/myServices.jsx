@@ -25,7 +25,7 @@ import { showSwal } from '../../../../../utils/swal';
 
 const MyServices = (props) => {
     const dispatch = useDispatch();
-    const { history, filterState, setfilterState, setFilterVisible } = props
+    const { history, filterState, setfilterState } = props
     const { serviceLoader } = useSelector(store => store.loader);
     
     // page no. set here
@@ -167,7 +167,7 @@ const MyServices = (props) => {
                     : null
                 } */}
 
-                {  results.page.total === 0 ? <EmptyInbox inboxButton="Go To Home" redirectUrl={resumeShineSiteDomain} inboxText="There is no service added to your profile!" setFilterVisible={setFilterVisible} /> : setFilterVisible(true) }
+                {  results.page.total === 0 ? <EmptyInbox inboxButton="Go To Home" redirectUrl={resumeShineSiteDomain} inboxText="There is no service added to your profile!" /> : '' }
 
                 {results?.data && results?.data?.length > 0 ?
                     results?.data?.map((service,index) => {

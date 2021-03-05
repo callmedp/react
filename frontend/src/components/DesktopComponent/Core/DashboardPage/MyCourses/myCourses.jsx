@@ -25,7 +25,7 @@ import { getCandidateId } from 'utils/storage.js';
 import { getVendorUrl } from 'store/DashboardPage/StartCourse/actions/index';
 
 const MyCourses = (props) => {
-    const { filterState, setfilterState, setFilterVisible } = props
+    const { filterState, setfilterState } = props
     const [addOpen, setAddOpen] = useState(false);
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -202,7 +202,7 @@ const MyCourses = (props) => {
             <div className="db-my-courses-detail">
 
 
-                { page.total === 0 ? <EmptyInbox inboxButton="Browse Courses" redirectUrl={`${siteDomain}/online-courses.html`} inboxText="Seems like no courses / certification added to your profile" setFilterVisible={setFilterVisible}/> : setFilterVisible(true) }
+                { page.total === 0 ? <EmptyInbox inboxButton="Browse Courses" redirectUrl={`${siteDomain}/online-courses.html`} inboxText="Seems like no courses / certification added to your profile" /> : '' }
                 {
                     data?.map((course, index) => {
                         return (
