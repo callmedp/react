@@ -20,6 +20,7 @@ const ViewCourses = (props) => {
     let currentPage = 1;
     let intentValue = match?.params?.name === 'make-career-change' ? 0 : 1;
     const feedD = {'recommended_course_ids': recommended_course_ids, 'intent': intentValue, 'context': match?.params?.name === 'make-career-change' ? 'Make a career change' : 'Progress your career' };
+    const [feedback, setFeedback] = useState(false);
 
     useEffect(() => {
         handleUpskillData();
@@ -68,7 +69,7 @@ const ViewCourses = (props) => {
                         {page?.has_next && <span className="m-load-more btn-col" onClick={() => loadMoreCourses(page?.current_page)}>View More Courses</span>}
                         <br/>
                     </div>
-                    <Feedback feedbackData={feedD} heading={'courses'} />
+                    <Feedback feed={feedback} setFeedback={setFeedback} feedbackData={feedD} heading={'courses'} />
                 </div>
             </section>
         </>

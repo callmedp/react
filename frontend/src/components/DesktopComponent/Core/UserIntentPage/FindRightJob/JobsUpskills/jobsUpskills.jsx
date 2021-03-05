@@ -21,8 +21,9 @@ const JobsUpskills = (props) => {
 	const { jobsUpskillsLoader } = useSelector(store => store.loader);
 	const { jobsList: { results, next } } = useSelector(store => store.findRightJob);
 	const { course_data, page, recommended_course_ids } = useSelector(store => store.upskillYourself);
-    const feedD = {'recommended_course_ids': recommended_course_ids, 'intent': 2, 'context': 'Find the right job'};
-  
+	const feedD = {'recommended_course_ids': recommended_course_ids, 'intent': 2, 'context': 'Find the right job'};
+    const [feedback, setFeedback] = useState(false);
+	
 	const courseDispatchHit = async (dataUpskill) => {
 		dispatch(startJobsUpskillsLoader())
 			await new Promise((resolve) => dispatch(fetchUpskillYourselfData({ dataUpskill, resolve })));
@@ -36,6 +37,7 @@ const JobsUpskills = (props) => {
 				courseDispatchHit(dataUpskill);
 			}
 			setKey(tabType);
+			setFeedback(false);
 		}
 	}
 
@@ -60,8 +62,8 @@ const JobsUpskills = (props) => {
 		return function cleanup () {
 			dispatch(upskillAndJobsCleanup())
 		}
-	}, [])
-  
+	}, []);
+
 	const loadMoreJobs = (url_next) => {
 		let next_data = url_next.split('json&');
 		history.push({
@@ -76,7 +78,7 @@ const JobsUpskills = (props) => {
 		handleSelect('Courses');
 		const dataUpskill = `?preferred_role=${params.get('job_title')}&experience=${params.get('minexp')}&skills=${params.get('skill') || ''}&page=${currentJobPage + 1}&intent=2`;
 		courseDispatchHit(dataUpskill);
-		setJobPage(state => state + 1)
+		setJobPage(state => state + 1);
 	}
 
 	return (
@@ -107,7 +109,7 @@ const JobsUpskills = (props) => {
 									</Tab>
 								</Tabs>
 							</div>
-							<Feedback feedbackData={feedD} heading={key} />
+							{ (results && results.length > 0) && <Feedback feed={feedback} setFeedback={setFeedback} feedbackData={feedD} heading={key} /> }
 						</div>
 					</div>
 				</div>

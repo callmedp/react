@@ -39,7 +39,7 @@ const JobListing = (props) => {
                                                 </li>
                                             </ul>
                                             <div className="m-price-date">
-                                                {jData.jRUrl && <a href={jData.jRUrl} target="_blank" className="btn-blue-outline mb-10">Apply</a>}
+                                                <a href={`${shineSiteUrl}${jData?.jSlug}`} target="_blank" className="btn-blue-outline mb-10">Apply</a>
                                                 <span>{new Date(jData.jPDate).toLocaleString('en-us',{month:'short', year:'numeric', day:'numeric'})}</span> 
                                             </div>
                                         </div>

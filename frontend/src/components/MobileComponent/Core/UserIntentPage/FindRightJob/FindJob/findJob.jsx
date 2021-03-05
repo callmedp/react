@@ -28,6 +28,7 @@ const FindJob = (props) => {
     const [searchTerm, setSearchTerm] = useState('');
     const debouncedSearchTerm = useDebounce(searchTerm, 500);
     const [skillSet, setSkillSet] = useState([])
+    const [cssOriginal, setcssOriginal] = useState('m-find-job');
 
     const handleInput = (e) => {
         setJtError(false)
@@ -126,6 +127,8 @@ const FindJob = (props) => {
         }
     }
 
+  
+
     //Return result format
     const getMenuItems = (data, refr, noOfItems = 6) => {
         return (
@@ -195,12 +198,12 @@ const FindJob = (props) => {
                 </div>
                 <h2 className="m-heading3 mt-20">{type === 'job' ? 'Let’s get you to the right job' : type === 'pcareer' ? 'Get to next level with shine' : 'What do you have in mind'}</h2>
 
-                <div className="m-find-job">
+                <div className={cssOriginal} onClick={()=>setcssOriginal('m-find-job mb-100')}>
                     <form className="mt-20" onSubmit={handleSubmit(onSubmit)}>
                         <div className={checkedClass}>
                             <input type="text" className="form-control" id="job" name="job" placeholder=" " ref={jobTitle} autoComplete="off"
                                 aria-required="true" aria-invalid="true" onChange={e => handleInput(e)} onFocus={() => setShowResults(true)} />
-                            <label for="">Current job title</label>
+                            <label for="">{ type === 'career' ? 'Preferred Role' : 'Current job title'}</label>
                             { !!jtError ? <span className="m-error-msg">Job Title is Required</span> : ''}
 
                             {showResults ?
@@ -243,7 +246,7 @@ const FindJob = (props) => {
                             errors={!!errors ? errors[UserIntentForm.skills.name] : ''} /> */}
 
                         <div className={"form-group-custom pos-rel"}>
-                            <label className="sticky-label" htmlFor="">Your skills</label>
+                            {/* <label className="sticky-label" htmlFor="">Your skills</label> */}
                             <div className="custom-textarea">
                                 {chips?.map((data, i) => {
                                     return (
@@ -251,7 +254,7 @@ const FindJob = (props) => {
                                     )
                                 })
                                 }
-                                <span className="d-flex align-items-center mt-10">
+                                <span className="d-flex align-items-center">
                                     <input type="text" className="form-control custom-input" name="skills" placeholder="Enter Skills" id="skills" autoComplete="off"
                                         ref={skillsKey} onChange={ e => suggestSkills(e) } onFocus={() => setShowSkillResults(true)} />
                                     <button className="custom-btn" type="button" onClick={ handleSkillsClick }><figure className="icon-search-arrow"></figure></button>
