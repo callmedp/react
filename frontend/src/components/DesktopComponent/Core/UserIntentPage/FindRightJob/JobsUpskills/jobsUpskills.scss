@@ -53,7 +53,8 @@
     
             &__content {
                 position: relative;
-                flex: 1;
+                // flex: 1;
+                width: 75%;
                 padding: 0;
                 font-size: 1.1rem;
     
@@ -152,7 +153,6 @@
 
                 p {
                    font-size: 1.2rem; 
-                   margin-right: 10%;
                 }
             }
     
@@ -161,6 +161,8 @@
                 align-items: flex-end;
                 justify-content: flex-start;
                 flex-direction: column;
+                margin-left: 75%;
+                
                 span {
                     font-size: 1.1rem;
                     color: $gray-100;
@@ -186,7 +188,7 @@
                 padding: 1.5rem 2.5rem;
                 background: $course-light-bg;
                 display: flex;
-                align-items: center;
+                align-items: flex-start;
     
                 strong {
                     font-size: 1.1rem;

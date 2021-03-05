@@ -243,7 +243,7 @@ const FindJob = (props) => {
                             errors={!!errors ? errors[UserIntentForm.skills.name] : ''} /> */}
 
                         <div className={"form-group-custom pos-rel"}>
-                            <label className="sticky-label" htmlFor="">Your skills</label>
+                            {/* <label className="sticky-label" htmlFor="">Your skills</label> */}
                             <div className="custom-textarea">
                                 {chips?.map((data, i) => {
                                     return (
@@ -251,7 +251,7 @@ const FindJob = (props) => {
                                     )
                                 })
                                 }
-                                <span className="d-flex align-items-center mt-10">
+                                <span className="d-flex align-items-center">
                                     <input type="text" className="form-control custom-input" name="skills" placeholder="Enter Skills" id="skills" autoComplete="off"
                                         ref={skillsKey} onChange={ e => suggestSkills(e) } onFocus={() => setShowSkillResults(true)} />
                                     <button className="custom-btn" type="button" onClick={ handleSkillsClick }><figure className="icon-search-arrow"></figure></button>

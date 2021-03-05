@@ -16,13 +16,13 @@ const JobListing = (props) => {
                                     <div className="course__content">
                                     {
                                             job.jHJ === 1 && 
-                                            <span className="hot-badge">
+                                            <span className="hot-badge mr-10">
                                                 <figure className="icon-hot"></figure> Hot
                                             </span>
                                         }
                                         {
                                             job.jPJ === 1 && 
-                                            <span className="premium-badge">
+                                            <span className="premium-badge mr-10">
                                                 <figure className="icon-premium"></figure> Premium
                                             </span>
                                         }
