@@ -28,17 +28,17 @@ const CourseLisiting = (props) => {
         )   
     }
 
-    const goToUrl = (event, url) => {
-        event.preventDefault();
-        return window.location.href = `${siteDomain}${url}`;
-    }
+    // const goToUrl = (event, url) => {
+    //     event.preventDefault();
+    //     return window.location.href = `${siteDomain}${url}`;
+    // }
 
     return (
         <ul className="courses-listing ml-10n mt-30">
             {
                 courseList?.map((course, index) => {
                     return (
-                        <div className="m-card" key={index} onClick={(e) => goToUrl(e, course.url)}>
+                        <div className="m-card" key={index}>
                             <div className="m-card__heading">
                                 {course?.tags === 1 && <span className="m-flag-yellow">BESTSELLER</span>}
                                 {course?.tags === 2 && <span className="m-flag-blue">NEW</span>}
@@ -47,7 +47,7 @@ const CourseLisiting = (props) => {
                                 </figure>
                                 
                                 <h3 className="m-heading3">
-                                    <a>{course?.name}</a>
+                                    <a href={`${siteDomain}${course?.url}`}>{course?.name}</a>
                                 </h3>
                             </div>
                             <div className="m-card__box">
@@ -130,9 +130,9 @@ const CourseLisiting = (props) => {
                                     </p>
                                     <p className="d-flex align-items-center">
                                         <a className="btn-yellow" role="button" href={`${siteDomain}${course?.url}`}>Enroll now</a>
-                                        {course?.brochure && <Link to={"#"} className="micon-pdf ml-auto"></Link>}
+                                        {course?.brochure && <a href={course?.brochure} className="micon-pdf ml-auto"></a>}
                                     </p>
-                                    <span to={"#"} className="m-view-less d-block text-right" onClick={() => openCourseDetails(false)}>View less</span>
+                                    <span className="m-view-less d-block text-right" onClick={() => setCourseOpen(false)}>View less</span>
                                 </div>
                             }
                         </div>
