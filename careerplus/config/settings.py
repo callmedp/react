@@ -452,6 +452,51 @@ TINYMCE_DEFAULT_CONFIG = {
 RESUME_SHINE_URL = "https://resume.shine.com"
 PAGINATOR_PAGE_SIZE = 10
 
+#recommendation engine apis
+ANALYTICS_COURSES_RECOMMENDATION_API = "http://10.136.1.4:5000/courses"
+ANALYTICS_COURSES_RECOMMENDATION_API_AUTH = ("admin", "learningcourse@111")
+
+#Recommendation Learning Mongo Database connections details
+LEARNING_MONGO_PORT = ':27017'
+LEARNING_MONGO_USERNAME = 'analyticsTeam'
+LEARNING_MONGO_PASSWORD = '@n@lyt!c$'
+LEARNING_MONGO_INSTANCE_STR = '172.22.65.150:27017'
+LEARNING_MONGO_DB = 'analyticsLearning'
+
+#Default products to be recommended
+DEFAULT_LEARNING_COURSE_RECOMMENDATION_PRODUCT_ID = [2634, 2787, 1, 4]
+DEFAULT_LEARNING_SERVICE_RECOMMENDATION_CANDIDATE_ID = '000000000000000000000000'
+
+# product of Resume Critique flow is not included in recommendation engine.
+# Analytics product groups mapped with learning flows and sub type flows.
+ANALYTIC_PRODUCT_ID_TO_SHINE_PRODUCT_ID = {
+    1: "application_highlighter",
+    2: "skills_assessment",
+    3: "featured_profile",
+    4: "international_profile_update",
+    5: "international_resume",
+    6: "interview_preparation",
+    7: "jobs_on_the_move",
+    8: "linkedin_profile",
+    9: "resume_builder",
+    10: "expert_help",
+    11: "shine_premium",
+}
+
+ANALYTIC_TO_LEARNING_PRODUCTFLOWS={
+    1:{'type_flow':[],'sub_type_flow':[503,504]},
+    2:{'type_flow':[16],'sub_type_flow':[]},
+    3:{'type_flow':[5,7],'sub_type_flow':[501]},
+    4:{'type_flow':[4],'sub_type_flow':[]},
+    5:{'type_flow':[12],'sub_type_flow':[]},
+    6:{'type_flow':[16],'sub_type_flow':[]},
+    7:{'type_flow':[5],'sub_type_flow':[502]},
+    8:{'type_flow':[8],'sub_type_flow':[]},
+    9:{'type_flow':[17,1],'sub_type_flow':[]},
+    10:{'type_flow':[],'sub_type_flow':[101]},
+    11:{'type_flow':[17],'sub_type_flow':[]},
+}
+
 try:
     from .settings_local import *
 except:
