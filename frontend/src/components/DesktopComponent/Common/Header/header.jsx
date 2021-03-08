@@ -205,9 +205,12 @@ const Header = (props) => {
                                 }
                             </ul>
                         </div>
-                        <span className="ui-btn">
-                            <Link to={"/user-intent"} className="btn btn-gradient"><figure className="icon-ui-cg"></figure> GET CAREER GUIDANCE <span>NEW</span></Link>
-                        </span>
+                        {
+                            isHomepage ? '' : 
+                                <span className="ui-btn">
+                                    <Link to={"/user-intent"} className="btn btn-gradient"><figure className="icon-ui-cg"></figure> GET CAREER GUIDANCE <span>NEW</span></Link>
+                                </span>
+                        }
                     </div>
                 </nav>
         </div >

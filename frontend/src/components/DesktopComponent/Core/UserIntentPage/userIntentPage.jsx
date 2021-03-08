@@ -8,7 +8,7 @@ import ProgressCareer from './ProgressCareer/progressCareer';
 import Footer from '../../Common/Footer/footer';
 import './userIntentPage.scss';
 import Aos from "aos";
-import "aos/dist/aos.css";
+// import "aos/dist/aos.css";
 import { Helmet } from 'react-helmet';
 
 const UserIntentPage = (props) => {

@@ -22,7 +22,7 @@ const Feedback = props => {
 
     return (
         feed ? (
-            <div className="courses-feedback mr-15p">
+            <div className="m-courses-feedback mr-15p">
                 <strong>Thanks for your feedback!</strong>
             </div>
         ) : (
