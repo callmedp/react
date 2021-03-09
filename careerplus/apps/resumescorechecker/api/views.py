@@ -109,7 +109,7 @@ class GetResumeScoreApiView(APIView):
                 score_list.update({
                     score_index :  data
                     })
-                cache.set("user-intent-score", score_list, timeout=3600)#
+                cache.set("user-intent-score", score_list, timeout=600)#
                 if not total_score:
                     return Response({"status": "ERROR", "error": "unable to Parse Resume"})
                 return Response({"status": "SUCCESS", "total_score":total_score, "score_index":score_index})
