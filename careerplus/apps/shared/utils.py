@@ -1,5 +1,5 @@
 #python imports
-import logging
+import logging ,requests
 from decimal import Decimal
 from datetime import datetime, timedelta
 from dateutil import relativedelta
@@ -151,6 +151,16 @@ class ShineCandidate:
         return self.candidate_id
 
 
+def getAllConnectedLead(data):
+    url = settings.SHINECPCRM_DICT.get('connected_leads')
+    try:
+        response = requests.post(url,data=json.dumps(data),headers={'content-type':'application/json'})
+        return response.json()
+    except Exception as e:
+        logging.getLogger('error_log').error("Error in making connected leads request")
+    return
+
+
 class DiscountReportUtil:
 
     def __init__(self,**kwargs):
@@ -189,7 +199,7 @@ class DiscountReportUtil:
              "Price of item on site", "Transaction_Amount", "coupon_id",\
              "Payment_mode", "Combo", "Combo Parent", "Variation", "Refunded", "Refund Amount",\
              "No Process", "Replaced", "Replaced With", "Replacement Of", "Writer price excluding Incentives",\
-             "Writer's name", "Lead Type", 'LTV Bracket'])
+             "Writer's name", "Lead Type", 'LTV Bracket','Connected CRM'])
 
         if int(self.filter_type) == 1:  # get order item based on payment_date filter
             transactions = PaymentTxn.objects.filter(status=1,\
@@ -201,8 +211,13 @@ class DiscountReportUtil:
             orders = Order.objects.filter(\
               status__in=[1,3],payment_date__gte=self.start_date,payment_date__lte=self.end_date)
 
+        order_id_map = orders.values_list('id','mobile','created')
+
+        order_id_map = [[i[0],i[1],i[2].strftime('%Y-%m-%d')] for i in order_id_map]
+        
         logging.getLogger('info_log').info("\
-            Discount Report :: Total orders found - {}".format(orders.count()))
+            Discount Report :: Total orders found - {}".format(len(order_id_map)))
+        order_id_mapping = getAllConnectedLead({'order':order_id_map})
 
         for order in orders:
             order_items = OrderItem.objects.filter(order=order)
@@ -370,7 +385,7 @@ class DiscountReportUtil:
                         float(item.delivery_price_excl_tax),item_cost_price,order.total_incl_tax,\
                         coupon_code,txn_obj.get_payment_mode(),item.is_combo, combo_parent,item.is_variation,\
                         bool(item_refund_request_list),refund_amount,item.no_process, replaced, replacement_id,\
-                        order.replaced_order,writer_price,writer_name,lead_type,ltv_bracket
+                        order.replaced_order,writer_price,writer_name,lead_type,ltv_bracket,bool(order_id_mapping.get(order.id),0)
                     ]
 
                     csv_writer.writerow(row_data)
@@ -391,6 +406,9 @@ def default(obj):
 
 def jsondumps(obj):
     return json.dumps(obj, default=default)
+
+
+
 
 
 
