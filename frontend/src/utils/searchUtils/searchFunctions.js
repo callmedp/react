@@ -19,7 +19,7 @@ const submitData = (values) => {
 }
 
 const userSearch = (search ) =>{
-    return fetch(`${siteDomain}/intent/api/v1/keyword-suggestion/?q=${search}&jt_only=true`,
+    return fetch(`${siteDomain}/api/intent/v1/keyword-suggestion/?q=${search}&jt_only=true`,
         { method: 'GET' }).then(r => r.json())
         .catch(error => {
             console.error(error);
@@ -44,7 +44,7 @@ const relatedSearch = (query) =>{
 }
 
 const userSkillSearch = (query) =>{
-    return fetch(`${siteDomain}/intent/api/v1/keyword-suggestion/?q=${query}&skill_only=true`,
+    return fetch(`${siteDomain}/api/intent/v1/keyword-suggestion/?q=${query}&skill_only=true`,
         { method: 'GET' }).then(r => r.json())
         .catch(error => {
             console.error(error);

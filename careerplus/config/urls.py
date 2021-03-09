@@ -246,7 +246,7 @@ urlpatterns += [
                    re_path(r'^api/', include('api.urls', namespace='api')),
                    re_path(r'^api/', include('homepage.api.urls', namespace='api')),
                    re_path(r'^dashboard/api/', include('dashboard.api.urls', namespace='dashboard-api')),
-                   re_path(r'^intent/api/', include('userintent.api.urls',namespace='userintent-api')),
+                   re_path(r'^api/intent/', include('userintent.api.urls',namespace='userintent-api')),
                    re_path(r'^lead/', include('crmapi.urls', namespace='crmapi')),
 
                     re_path(r'^api/', include('wallet.urls')),
