@@ -1,0 +1,62 @@
+@import '../../../../../styles-mobile/abstracts';
+
+.m-sticky-detail {
+    background: $white;
+    box-shadow: 0 -3px 16px 0 rgba(193,186,186,0.50);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 999;
+
+    &__price {
+        display: flex;
+        align-items: center;
+        padding: .7rem 1.5rem;
+        border-bottom: 1px solid rgba($color: $border-color, $alpha: 0.4);
+
+        strong {
+            font-size: 1.8rem;
+            color: $gray-100;
+
+            &::before {
+                content: '\20B9';
+                margin-right: .5rem;
+            }
+
+            del {
+                font-size: 1.4rem;
+                font-weight: 400;
+
+                &::before {
+                    content: '\20B9';
+                    margin-right: .5rem;
+                }
+            }
+        }
+
+        .btn-secondary {
+            color: $gray-100;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+        }
+    }
+
+    &__nav {
+        padding: 0 1.5rem;
+        font-size: 1.3rem;
+        font-weight: 700;
+
+        a {
+            margin-right: 2rem;
+            color: $gray-100;
+            padding: 1.2rem .5rem;
+            width: auto !important;
+
+            &.active {
+                color: $blue;
+                border-bottom: .2rem solid $blue;
+            }
+        }
+    }
+}

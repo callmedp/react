@@ -10,6 +10,7 @@ import { getDashboardPageActions } from "apiHandler/dashboardPageApi";
 import HomePageContainer from 'components/DesktopComponent/Core/HomePage/homePage';
 import RouteWithSubRoutes from './route';
 import { getHomepageActions } from "apiHandler/homepageApi";
+import DetailPageContainer from 'components/DesktopComponent/Core/DetailPage/detailPage';
 
 const DesktopAppRouter = () => (
     <div>
@@ -36,6 +37,11 @@ export const routes = [
         path: '/online-courses.html/',
         component: CataloguePageContainer,
         actionGroup: getCataloguePageActions,
+        exact: true,
+    },
+    {
+        path: '/detail-page/',
+        component: DetailPageContainer,
         exact: true,
     },
     {

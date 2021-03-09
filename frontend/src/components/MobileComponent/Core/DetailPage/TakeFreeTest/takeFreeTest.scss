@@ -1,0 +1,13 @@
+@import '../../../../../styles-mobile/abstracts';
+
+.m-take-test-free {
+    padding: 3rem 1.5rem;
+    @include border-radius(4px);
+    background: url('/media/images/mobile/take-free-test2.png') $lightblue2 no-repeat right 4rem;
+    display: block;
+
+    p {
+        width: 56%;
+        margin: 2rem 0 3rem 0;
+    }
+}

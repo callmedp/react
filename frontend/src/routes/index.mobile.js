@@ -11,6 +11,7 @@ import DashboardPageContainer from 'components/MobileComponent/Core/DashboardPag
 import RouteWithSubRoutes from 'routes/route';
 import HomePageContainer from 'components/MobileComponent/Core/HomePage/homePage';
 import { getHomepageActionsMobile } from "apiHandler/homepageApi";
+import DetailPageContainer from 'components/MobileComponent/Core/DetailPage/detailPage';
 
 
 
@@ -41,6 +42,11 @@ export const routes = [
         path: '/online-courses.html/',
         component: CataloguePageContainer,
         actionGroup: getCataloguePageActionsMobile,
+        exact: true,
+    },
+    {
+        path: '/detail-page/',
+        component: DetailPageContainer,
         exact: true,
     },
     {

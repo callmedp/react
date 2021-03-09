@@ -1,0 +1,79 @@
+@import '../../../../../styles/functions';
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
+
+.sticky-nav-detail {
+    display: none;
+    box-shadow: $box-shadow;
+    padding: 2rem 1rem 0 1rem;
+    position: sticky;
+    top: 35rem;
+    z-index: 9999;
+
+    .container {
+        justify-content: flex-start;
+        align-items: flex-end;
+    }
+
+    .sticky-icon-thumb {
+        width: 6rem;
+        height: 6rem;
+        
+        img {
+            width: 100%;
+        }
+    }
+    h2 {
+        font-size: 2.6rem;
+        margin: .5rem 0 0 0;
+    }
+
+    .nav-item, .nav-link {
+        padding: 1rem 2rem !important;
+
+        &.active {
+            color: $blue !important;
+            font-weight: 600;
+            border-bottom: 3px solid $blue;
+        }
+    }
+
+    .course-enrol-sticky {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-end;
+        margin-bottom: 1.5rem;
+        strong {
+            font-size: 2.4rem;
+            color: $gray-100;
+            margin-bottom: 1.5rem;
+
+            &::before {
+                content: '\20B9';
+                margin-right: .5rem;
+            }
+
+            del {
+                font-size: 1.8rem;
+                font-weight: 400;
+
+                &::before {
+                    content: '\20B9';
+                    margin-right: .5rem;
+                }
+            }
+        }
+
+        .btn {
+            padding: 1rem 2.5rem;
+            font-size: 1.3rem;
+        }
+
+        .btn-secondary {
+            color: $gray-100;
+            padding: 1rem 3rem;
+        }
+    }
+    
+}
