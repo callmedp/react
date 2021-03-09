@@ -237,6 +237,16 @@
   @include icon-inblock(29px, 26px, -49px -175px);
 }
 
+.icon-ui3 {
+  background: $sprite;
+  @include icon-inblock(23px, 28px, -294px -176px);
+}
+
+.icon-ui4 {
+  background: $sprite;
+  @include icon-inblock(32px, 29px, -334px -174px);
+}
+
 .icon-white-tick {
   background: $sprite;
   @include icon-inblock(15px, 12px, -88px -184px);
