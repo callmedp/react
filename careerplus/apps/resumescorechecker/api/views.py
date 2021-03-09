@@ -1,8 +1,12 @@
 # python imports
 import logging
 import requests
+import json
 # django imports
 from django.conf import settings
+from django.core.cache import cache
+from django.utils import timezone
+from datetime import datetime
 # local imports
 from resumescorechecker.models import ResumeScoreCheckerUserDetails
 from resumescorechecker.choices import section_mapping
@@ -91,12 +95,44 @@ class GetResumeScoreApiView(APIView):
             response = requests.post(url, files=file)
             if response.status_code == 200:
                 result = response.json()
-                data = result.get('data',{})
+                data = result.get('data', {})
                 total_score = data.get('total_score', None)
+                # sections = ''
+                # if data:
+                #     sections = json.dumps(data)
+                score_list = cache.get("user-intent-score", {})
+                # score_list.update({
+                #     datetime.today().timestamp() : {'sections' : data,
+                #     'time_stamp' : timezone.now()
+                #     }})
+                score_index = datetime.today().timestamp()
+                score_list.update({
+                    score_index :  data
+                    })
+                cache.set("user-intent-score", score_list, timeout=3600)#
                 if not total_score:
                     return Response({"status": "ERROR", "error": "unable to Parse Resume"})
-                return Response({"status": "SUCCESS", "total_score":total_score})
+                return Response({"status": "SUCCESS", "total_score":total_score, "score_index":score_index})
         except Exception as e:
             logging.getLogger('error_log').error('unable to Parse Resume %s'%str(e))
             return Response({"status": "ERROR", "error": "Unable to Parse Resume"})
+
+    def get(self, request, *args, **kwargs):
+        index = request.GET.get('s_index', '')
+        if not index:
+            return Response({"status": "ERROR", "error": "Upload your resume here"})
+        score_list = cache.get("user-intent-score", {})
+        try:
+            score_data = score_list.get(float(index), {})
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get cached score data %s'%str(e))
+            return Response({"status": "ERROR", "error": "Upload your resume here"})
+
+        if not score_data:
+            return Response({"status": "ERROR", "error": "Upload your resume here"})
+        
+        return Response({"status": "SUCCESS", "score_data":score_data, "error":""})
+
+
+
 

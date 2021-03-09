@@ -13,7 +13,7 @@ const fetchServiceRecommendation = (data) => {
 }
 
 const uploadFileUrlAPI = (data) => {
-    const url = 'api/resume-score-checker/get-score';
+    const url = 'api/resume-score-checker/get-score/';
     return BaseApiService.post(`${siteDomain}/${url}`, data, {}, true);
 };
 

@@ -31,6 +31,7 @@ const ShineServices = (props) => {
     const resetFileDetails = () => {resetFileName(); resetFile(); resetTotalScore();}
     const { resumeScoreLoader } = useSelector(store => store.loader);
     const { services , page } = useSelector(store => store.serviceRecommend);
+    const [ scoreIndex, setScoreIndex ] = useState(undefined);
 
     useEffect(() => {
         handleEffects();
@@ -59,7 +60,9 @@ const ShineServices = (props) => {
                 const response = await new Promise((resolve, reject) => {dispatch(uploadFileUrl({ file1, resolve, reject }));})
                 if(response.status == 'SUCCESS') {
                     const total_score = response.total_score;
+                    const score_index = response.score_index;
                     setTotalScore(total_score);
+                    setScoreIndex(score_index);
                 }
                 else {
                     showSwal('error', 'Something went wrong! Try Again')
@@ -108,7 +111,7 @@ const ShineServices = (props) => {
                                     <strong className="heading3 d-block">Your resume Scored {totalScore} out of 100 </strong> 
                                     Check out the detailed reviews to improve the score. <strong className="fs-13">Score more to get perfect job match your profile</strong>
                                     <span className="d-flex mt-20">
-                                        <a href={`${resumeShineSiteDomain}/resume-score-checker`}>View details</a>
+                                        <a href={`${resumeShineSiteDomain}/resume-score-checker/?s_index=${scoreIndex}&file_name=${filename}`}>View details</a>
                                         <Link className="file-close disabledCursor">{filename} <Link><i className="icon-close-sm ml-10" onClick={() => resetFileDetails()} ></i></Link></Link>
                                     </span>
                                 </span>
