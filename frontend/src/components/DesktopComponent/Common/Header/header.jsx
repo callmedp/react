@@ -17,7 +17,7 @@ const Header = (props) => {
     const { count, navTags } = useSelector(store => store.header)
     const [candidateInfo, setCandidateInfo] = useState(false)
     const [isLoggedIn, setIsLoggedIn] = useState(false)
-    const { isHomepage } = props;
+    const { isHomepage, isUserIntentPage } = props;
 
     const handleRedirect = (event, type) => {
         event.preventDefault();
