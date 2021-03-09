@@ -39,7 +39,7 @@ const UserIntentPage = (props) => {
                     }
                 </title>
             </Helmet>
-            <Header />
+            <Header isUserIntentPage={true}/>
             <main>
                 {
                     {
