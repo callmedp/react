@@ -152,9 +152,9 @@ class ShineCandidate:
 
 
 def getAllConnectedLead(data):
-    url = settings.SHINECPCRM_DICT.get('connected_leads')
+    url = settings.SHINECPCRM_DICT.get('base_url') + settings.SHINECPCRM_DICT.get('connected_leads')
     try:
-        response = requests.post(url,data=json.dumps(data),headers={'content-type':'application/json'})
+        response = requests.post(url,data=json.dumps(data),headers={'content-type':'application/json'},timeout=30)
         return response.json()
     except Exception as e:
         logging.getLogger('error_log').error("Error in making connected leads request")
