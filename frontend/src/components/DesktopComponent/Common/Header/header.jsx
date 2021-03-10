@@ -149,7 +149,7 @@ const Header = (props) => {
                                     </li>
                                     <li className="nav-item dropdown dropdown-call">
                                         <Link className="nav-link link-ht" to={"#"} id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <figure className="icon-call"></figure>
+                                            <figure className="icon-call" onClick={() => MyGA.SendEvent('header_icons', 'ln_header_icons', 'ln_call', 'tel:0124-6096096/97', '', false, true)}></figure>
                                         </Link>
                                         <div className="dropdown-menu" aria-labelledby="navbarDropdown">
                                             <a className="dropdown-item" onClick={() => MyGA.SendEvent('header_icons', 'ln_header_icons', 'ln_call', 'tel:0124-6096096/97', '', false, true)}><strong>Call us:</strong> 0124-6096096/97</a>

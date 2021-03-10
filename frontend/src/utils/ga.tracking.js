@@ -143,6 +143,8 @@ GA.prototype.SendEvent = function() {
         case 'recently _added_blogs': /*recently added in blogs*/
         case 'ln_popular_courses': /*popular courses*/
         case 'click_on_search': /*search in navbar*/
+        case 'ln_new_homepage': /*new homepage components*/ 
+
     
         
         /* Skill Page Events */
