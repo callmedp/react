@@ -365,7 +365,7 @@ class DiscountReportUtil:
                 main_category = product.category_main
                 lv2_parent = 'NA'   #default
                 if main_category:
-                    lv2_parent  = main_category.get_parent().first()
+                    lv2_parent  = main_category.get_parent().first() if main_category.get_parent() else None
                     lv2_parent = lv2_parent.name if lv2_parent else 'NA'
 
                 try:
