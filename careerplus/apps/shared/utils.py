@@ -158,7 +158,7 @@ def getAllConnectedLead(data):
         return response.json()
     except Exception as e:
         logging.getLogger('error_log').error("Error in making connected leads request")
-    return
+    return  {}
 
 
 class DiscountReportUtil:
@@ -214,7 +214,7 @@ class DiscountReportUtil:
         order_id_map = orders.values_list('id','mobile','created')
 
         order_id_map = [[i[0],i[1],i[2].strftime('%Y-%m-%d')] for i in order_id_map]
-        
+
         logging.getLogger('info_log').info("\
             Discount Report :: Total orders found - {}".format(len(order_id_map)))
         order_id_mapping = getAllConnectedLead({'order':order_id_map})
@@ -385,7 +385,7 @@ class DiscountReportUtil:
                         float(item.delivery_price_excl_tax),item_cost_price,order.total_incl_tax,\
                         coupon_code,txn_obj.get_payment_mode(),item.is_combo, combo_parent,item.is_variation,\
                         bool(item_refund_request_list),refund_amount,item.no_process, replaced, replacement_id,\
-                        order.replaced_order,writer_price,writer_name,lead_type,ltv_bracket,bool(order_id_mapping.get(order.id),0)
+                        order.replaced_order,writer_price,writer_name,lead_type,ltv_bracket,bool(order_id_mapping.get(order.id,0)) if order_id_map.get(order.id) else 'Unable To Fetch'
                     ]
 
                     csv_writer.writerow(row_data)
