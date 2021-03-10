@@ -385,7 +385,7 @@ class DiscountReportUtil:
                         float(item.delivery_price_excl_tax),item_cost_price,order.total_incl_tax,\
                         coupon_code,txn_obj.get_payment_mode(),item.is_combo, combo_parent,item.is_variation,\
                         bool(item_refund_request_list),refund_amount,item.no_process, replaced, replacement_id,\
-                        order.replaced_order,writer_price,writer_name,lead_type,ltv_bracket,bool(order_id_mapping.get(order.id,0)) if order_id_mapping.get(order.id) else 'Unable To Fetch'
+                        order.replaced_order,writer_price,writer_name,lead_type,ltv_bracket,bool(order_id_mapping.get(order.id,0))
                     ]
 
                     csv_writer.writerow(row_data)
