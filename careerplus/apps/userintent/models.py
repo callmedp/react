@@ -15,16 +15,16 @@ class UserIntent(AbstractAutoDate):
     candidate_id = models.CharField(
         null=True,
         blank=True,
-        max_length=255,
+        max_length=50,
         verbose_name=_("Customer ID"))
     intent = models.PositiveSmallIntegerField(
         default=0, choices=INTENT_CHOICES)
-    current_job_title = models.CharField(max_length=255, blank=True, null=True)
-    preferred_role = models.TextField(blank=True,null=True)
-    preferred_location = models.TextField(blank=True,null=True)
-    department = models.TextField(blank=True,null=True)
-    skills = models.TextField(blank=True,null=True)
-    experience = models.CharField(max_length=255, blank=True, null=True)
+    current_job_title = models.CharField(max_length=100, blank=True, null=True)
+    preferred_role = models.CharField(max_length=200, blank=True, null=True)
+    preferred_location = models.CharField(max_length=100, blank=True, null=True)
+    department = models.CharField(max_length=150, blank=True, null=True)
+    skills = models.CharField(max_length=500, blank=True, null=True)
+    experience = models.CharField(max_length=50, blank=True, null=True)
 
     def __str__(self):
         return dict(INTENT_CHOICES).get(self.intent)
@@ -42,4 +42,4 @@ class RecommendationFeedback(AbstractAutoDate):
         default=0, choices=INTENT_CHOICES)
     recommendation_relevant = models.BooleanField(default=False)
     recommended_products = models.TextField(blank=True,null=True)
-    context = models.CharField(max_length=255, blank=True, null=True)
+    context = models.CharField(max_length=100, blank=True, null=True)
