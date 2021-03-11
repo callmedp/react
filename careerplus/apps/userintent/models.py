@@ -36,7 +36,7 @@ class RecommendationFeedback(AbstractAutoDate):
     candidate_id = models.CharField(
         null=True,
         blank=True,
-        max_length=255,
+        max_length=50,
         verbose_name=_("Customer ID"))
     intent = models.PositiveSmallIntegerField(
         default=0, choices=INTENT_CHOICES)
