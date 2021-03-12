@@ -16,11 +16,11 @@ import logging
 logger = logging.getLogger('error_log')
 
 class RecommendationMixin(object):
-    LEARNING_MONGO_PORT = settings.LEARNING_MONGO_PORT
-    LEARNING_MONGO_USERNAME = settings.LEARNING_MONGO_USERNAME
-    LEARNING_MONGO_PASSWORD = settings.LEARNING_MONGO_PASSWORD
-    LEARNING_MONGO_INSTANCE_STR = settings.LEARNING_MONGO_INSTANCE_STR
-    LEARNING_MONGO_DB = settings.LEARNING_MONGO_DB
+    LEARNING_MONGO_PORT = settings.ANALYTICS_MONGO_PORT
+    LEARNING_MONGO_USERNAME = settings.ANALYTICS_MONGO_USERNAME
+    LEARNING_MONGO_PASSWORD = settings.ANALYTICS_MONGO_PASSWORD
+    LEARNING_MONGO_INSTANCE_STR = settings.ANALYTICS_MONGO_INSTANCE_STR
+    LEARNING_MONGO_DB = settings.ANALYTICS_MONGO_DB
 
     def __init__(self):
         # Recommended services data is to be fetched from LearningAnalytics mongo database.
