@@ -209,6 +209,7 @@ SHINECPCRM_DICT = {
     'update_products_url': '/product/update_sale_product/',
     'update_cartleads_url': '/api/update-cartleads/',
     'ad_server_url': '/api/mobile-version-leads/',
+    'connected_leads': '/api/orders/order-fetch-lead/',
     'timeout': 30,
 }
 
