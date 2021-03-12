@@ -44,3 +44,31 @@
         }
     }
 }
+
+.m-user-intent-search-result {
+    background: $white;
+    color: $gray-100;
+    font-size: 1.3rem;
+    position: absolute;
+    box-shadow: inset 0 1px 6px 0 rgba(201,199,199,0.50);
+    padding: 0;
+    z-index: 99999;
+    width: -webkit-fill-available;
+
+    strong {
+        font-weight: 600;
+        background: $lightblue;
+        padding: 1rem 1.5rem;
+        display: block;
+    }
+    span {
+        padding: 1rem 1.5rem;
+        color: $gray-100;
+        display: block;
+
+        &:hover, &:focus {
+            background-color: $blue;
+            color: $white;
+        }
+    }
+}

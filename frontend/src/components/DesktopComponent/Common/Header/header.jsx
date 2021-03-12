@@ -17,7 +17,7 @@ const Header = (props) => {
     const { count, navTags } = useSelector(store => store.header)
     const [candidateInfo, setCandidateInfo] = useState(false)
     const [isLoggedIn, setIsLoggedIn] = useState(false)
-    const { isHomepage } = props;
+    const { isHomepage, isUserIntentPage } = props;
 
     const handleRedirect = (event, type) => {
         event.preventDefault();
@@ -205,6 +205,12 @@ const Header = (props) => {
                                 }
                             </ul>
                         </div>
+                        {
+                            isHomepage || isUserIntentPage ? '' : 
+                                <span className="ui-btn">
+                                    <Link to={"/user-intent"} className="btn btn-gradient"><figure className="icon-ui-cg"></figure> GET CAREER GUIDANCE <span>NEW</span></Link>
+                                </span>
+                        }
                     </div>
                 </nav>
         </div >
