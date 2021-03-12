@@ -222,9 +222,12 @@
         $('#popup_subscribe{{main_article.id}}').modal('toggle');
         }
         $(document).ready(function() {
+          if(sessionStorage.getItem('popState') != 'shown'){
           setTimeout(function() {
               $("#popup_subscribe{{main_article.id}}").modal('show');
-          }, 15000);
+          }, 60000);
+          sessionStorage.setItem('popState','shown')
+        }
         });
 
     $.validator.addMethod("numbercheck", function (value, element) {
