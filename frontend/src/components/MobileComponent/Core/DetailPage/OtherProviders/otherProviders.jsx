@@ -1,25 +1,38 @@
-import React, { Component }  from 'react';
-import { Link } from 'react-router-dom';
-import Slider from "react-slick";
+import React, { useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import 'slick-carousel/slick/slick.css';
 import '../../CataloguePage/RecentCourses/recentCourses.scss';
+import ProductCardsSlider from '../../../Common/ProductCardsSlider/productCardsSlider';
+import { fetchOtherProviderCourses } from 'store/DetailPage/actions';
 
 const OtherProviders = (props) => {
-    const settings = {
-        dots: false,
-        arrows: false,
-        infinite: false,
-        speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        swipeToSlide: true,
-        variableWidth: true,
+
+    const { otherProvidersCourses } = useSelector(store => store.otherCourses);
+    const dispatch = useDispatch()
+
+    const handleEffects = async () => {
+        try {
+            await new Promise((resolve, reject) => dispatch(fetchOtherProviderCourses({ resolve, reject })));
+        }
+        catch (error) {
+            if (error?.status == 404) {
+                // history.push('/404');
+            }
+        }
     };
+
+    useEffect(() => {
+        handleEffects();
+    }, [])
+
     return(
         <section className="m-container mt-0 mb-0 pr-0" data-aos="fade-up">
             <h2 className="m-heading2 mb-10 mt-10">Courses by other providers</h2>
             <div className="m-courses m-recent-courses ml-10n">
-                <Slider {...settings}>
+                {
+                    otherProvidersCourses?.length > 0 ? <ProductCardsSlider productList = {otherProvidersCourses}/> : ''
+                }
+                {/* <Slider {...settings}>
                     <div className="m-card">
                         <div className="m-card__heading">
                             <figure>
@@ -98,7 +111,7 @@ const OtherProviders = (props) => {
                             </div>
                         </div>
                     </div>
-                </Slider>
+                </Slider> */}
             </div>
         </section>
     )

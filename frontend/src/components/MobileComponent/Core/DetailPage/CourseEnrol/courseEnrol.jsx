@@ -9,7 +9,7 @@ const CourseEnrol = (props) => {
             <div className="m-course-enrol">
                 <div className="m-course-enrol__mode">
                     <form>
-                        <strong>Mode</strong> <label><input type="radio" value="" checked /> Online</label> 
+                        <strong>Mode</strong> <label><input type="radio" value="" defaultChecked /> Online</label> 
                         <label><input type="radio" value="" /> Class room</label>
                     </form>
                 </div>
