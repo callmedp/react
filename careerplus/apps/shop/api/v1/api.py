@@ -5,8 +5,11 @@ import logging
 from django.core.cache import cache
 from django.core.exceptions import PermissionDenied
 from django.http import Http404
+from django.contrib.contenttypes.models import ContentType
+from django.core.paginator import Paginator
 
 # Inter-App Import
+from review.models import Review
 from search.helpers import get_recommendations
 from core.common import APIResponse
 from shop.views import ProductInformationMixin
@@ -137,6 +140,49 @@ class ProductInformationAPIMixin(object):
                 'prd_fbt_list': prd_fbt_list
             })
         return prd_fbt
+
+    def get_reviews(self, product, page):
+        product_type = ContentType.objects.get(
+            app_label='shop', model='product')
+        try:
+            prd_list = []
+            if product.type_product in [0, 2, 4, 5]:
+                prd_list = [product.pk]
+            elif product.type_product == 1:
+                prd_id = product.variation.filter(
+                    siblingproduct__active=True,
+                    active=True).values_list('id', flat=True)
+                prd_list = list(prd_id)
+                prd_list.append(product.pk)
+            elif product.type_product == 3:
+                prd_id = product.childs.filter(
+                    childrenproduct__active=True,
+                    active=True).values_list('id', flat=True)
+                prd_list = list(prd_id)
+                prd_list.append(product.pk)
+            review_list = Review.objects.filter(
+                content_type__id=product_type.id,
+                object_id__in=prd_list, status=1)
+            rv_total = len(review_list)
+            per_page = 5
+            rv_paginator = Paginator(review_list, per_page)
+            rv_page = int(page if page else 1)
+            try:
+                review_list = rv_paginator.page(rv_page)
+            except Exception as e:
+                logging.getLogger('error_log').error(str(e))
+                review_list = []
+            return {
+                'prd_rv_total': rv_total,
+                'prd_review_list': review_list,
+                'prd_rv_page': rv_page}
+        except Exception as e:
+            logging.getLogger('error_log').error(str(e))
+            return {
+                'prd_rv_total': 0,
+                'prd_review_list': [],
+                'prd_rv_page': page
+            }
 
 
 class ProductDetailAPI(ProductInformationMixin, APIView):
