@@ -334,6 +334,19 @@ class ProductInformationAPIMixin(object):
         context['navigation'] = navigation
         return context
 
+    def get_product_detail_context(self, product, sqs, product_main, sqs_main):
+        main_context = {}
+        key = 'context_product_detail' + str(product.pk)
+        useragent = self.request.META.get('HTTP_USER_AGENT', [])
+        if cache.get(key) and 'facebookexternalhit' not in useragent:
+            main_context.update(cache.get(key))
+        else:
+            data = self.get_product_information(product, sqs, product_main, sqs_main)
+            main_context.update(data)
+            cache.set(key, data, 60*60*4)
+        main_context.update(self.get_other_detail(product, sqs))
+        return main_context
+
 
 class ProductDetailAPI(ProductInformationMixin, APIView):
     permission_classes = (AllowAny,)
