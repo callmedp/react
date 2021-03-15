@@ -1,5 +1,6 @@
 # Python Core Import
 import logging
+from datetime import datetime
 
 # Django-Core Import
 from django.core.cache import cache
@@ -11,6 +12,7 @@ from django.core.paginator import Paginator
 
 # Inter-App Import
 from core.library.haystack.query import SQS
+from wallet.models import ProductPoint
 from review.models import Review
 from homepage.models import Testimonial
 from search.helpers import get_recommendations
@@ -278,6 +280,58 @@ class ProductInformationAPIMixin(object):
         # context['sqs_main'] = sqs_main
         context['prd_vendor_count'] = SQS().filter(pVid=product.vendor.id). \
             exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).count()
+        return context
+
+    def get_other_detail(self, product, sqs):
+        context = {}
+        pk = product.pk
+        context.update(self.get_reviews(product, 1))
+        context['is_logged_in'] = True if self.request.session.get('candidate_id') else False
+        context['linkedin_resume_services'] = settings.LINKEDIN_RESUME_PRODUCTS
+        context['redeem_test'] = False
+        context['product_redeem_count'] = 0
+        context['redeem_option'] = 'assessment'
+
+        if self.request.session.get('candidate_id'):
+            candidate_id = self.request.session.get('candidate_id', None)
+            contenttype_obj = ContentType.objects.get_for_model(product)
+            context['review_obj'] = Review.objects.filter(object_id=product.id, content_type=contenttype_obj, user_id=candidate_id).first()
+            # User_Reviews depicts if user already has a review for this product or not
+            user_reviews = Review.objects.filter(content_type=contenttype_obj, object_id=pk, status__in=[0,1],
+                                                 user_id=candidate_id).count()
+            context['user_reviews'] = True if user_reviews else False
+
+            redeem_option = product.attr.get_attribute_by_name('redeem_option')
+            attr_value = product.attr.get_value_by_attribute(redeem_option)
+
+            if not attr_value:
+                code = None
+            else:
+                code = attr_value.value or None
+
+            if code:
+                product_point = ProductPoint.objects.filter(candidate_id=candidate_id).first()
+
+                if product_point:
+                    redeem_options = eval(product_point.redeem_options)
+
+                    required_obj = [
+                        option for option in redeem_options if option['type'] == code
+                    ]
+                    required_obj = required_obj[0]
+                    product_redeem_count = required_obj['product_redeem_count']
+                    days = required_obj['product_validity_in_days'] or 0
+                    timestamp = required_obj['purchased_at'] or 0
+                    days_diff = datetime.now() - datetime.fromtimestamp(int(timestamp))
+                    if days_diff.days < days and product_redeem_count != 0:
+                        context['redeem_test'] = True
+                        context['product_redeem_count'] = product_redeem_count
+                        context['redeem_option'] = code
+        navigation = True
+
+        if sqs.id in settings.LINKEDIN_RESUME_PRODUCTS:
+            navigation = False
+        context['navigation'] = navigation
         return context
 
 
