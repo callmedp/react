@@ -44,9 +44,24 @@ from crmapi.config import PRODUCT_SOURCE_MAPPING
 from crmapi.models import UNIVERSITY_LEAD_SOURCE, DEFAULT_SLUG_SOURCE
 from shop.choices import APPLICATION_PROCESS, BENEFITS, NEO_LEVEL_OG_IMAGES, SMS_URL_LIST
 
+# TODO
+# 1. Redirect handling
+# 2. more information need to be handled
+# 3. Pluck out unwanted data
+# 4. fixed variable part
+
 class ProductInformationAPIMixin(object):
+    """
+    Product Mixin to fetch all the information from different
+    objects and model and save it to the cache key to get the data
+    more frequent
+    """
 
     def get_solor_info(self, product):
+        """
+        Solar Info function will fetch all the information from Solar Queryset
+        index on product
+        """
         info = {}
         info['prd_img'] = product.pImg
         info['prd_img_alt'] = product.pImA
@@ -90,6 +105,10 @@ class ProductInformationAPIMixin(object):
         return info
 
     def get_program_structure(self, product):
+        """
+        Function will fetch the program structure of product
+        i.e heading, content, ordering
+        """
         structure = {
             'prd_program_struct': False,
             'chapter': False
@@ -99,15 +118,22 @@ class ProductInformationAPIMixin(object):
             structure.update({
                 'prd_program_struct': False,
                 'chapter': True,
-                'chapter_list': chapter_list
+                'chapter_list': list(chapter_list.values('heading', 'content', 'ordering'))
             })
             return structure
 
     def get_solar_program_structure(self, product):
+        """
+        Function will fetch the program structure of solar
+        i.e heading, content, ordering
+        """
         structure = json.loads(product.pPChs)
         return structure
 
     def get_faq(self, product):
+        """
+        Function will fetch the product faq added from product object
+        """
         structure = {
             'prd_faq': False
         }
@@ -125,6 +151,9 @@ class ProductInformationAPIMixin(object):
         return job_url
 
     def get_solor_faq(self, product):
+        """
+        Function will fetch the product faq added from product object
+        """
         structure = json.loads(product.pFAQs)
         return structure
 
@@ -162,6 +191,9 @@ class ProductInformationAPIMixin(object):
             })
 
     def get_frequently_brought(self, product):
+        """
+        Function will Frequntly brought product based on the product
+        """
         prd_fbt = {
             'prd_fbt': False
         }
@@ -177,6 +209,10 @@ class ProductInformationAPIMixin(object):
         return prd_fbt
 
     def get_reviews(self, product, page):
+        """
+        Function will get all the reviews given on the product
+        May need to pluck it down
+        """
         product_type = ContentType.objects.get(
             app_label='shop', model='product')
         try:
@@ -231,12 +267,17 @@ class ProductInformationAPIMixin(object):
             }
 
     def get_sorted_products(self, pvrs_data):
+        # Study Mode & Access Duration
         if pvrs_data.get('var_list'):
             sort_pvrs = sorted(pvrs_data.get('var_list'), key=lambda i: i['inr_price'])
             pvrs_data['var_list'] = sort_pvrs
         return pvrs_data
 
     def get_product_information(self, product, sqs, product_main, sqs_main):
+        """
+        Main function used to fetch and combine all the product data used in API
+        study mode & duration
+        """
         context = {}
         # context['product'] = product
         context['num_jobs_url'] = self.get_jobs_url(product)
@@ -257,7 +298,7 @@ class ProductInformationAPIMixin(object):
             # Create get_sorted_products
             pvrs_data = self.get_sorted_products(pvrs_data)
             try:
-                selected_var = pvrs_data['var_list'][0]
+                selected_var = pvrs_data['var_list'][0] # Study Mode
             except Exception:
                 selected_var = None
             context.update({'selected_var': selected_var})
@@ -328,6 +369,10 @@ class ProductInformationAPIMixin(object):
         return context
 
     def get_other_detail(self, product, sqs):
+        """
+        Other Detail like
+        reviews, loggedin_status, redeem_test, redeem_options will be fetched from here
+        """
         context = {}
         pk = product.pk
         context.update({'reviews': self.get_reviews(product, 1)})
@@ -380,6 +425,10 @@ class ProductInformationAPIMixin(object):
         return context
 
     def get_product_detail_context(self, product, sqs, product_main, sqs_main):
+        """
+        Function using cache to get the data from redis if available else
+        will summarise the data and save it to redis-server to used furthur
+        """
         main_context = {}
         key = 'context_product_detail' + str(product.pk)
         useragent = self.request.META.get('HTTP_USER_AGENT', [])
@@ -457,6 +506,14 @@ class ProductDetailAPI(ProductInformationAPIMixin, APIView):
             return 11
 
     def get(self, request, *args, **kwargs):
+        """
+        API Get function to populate the product detail, function contains
+        1. creating the product_lead_details
+        2. storing the tracking information
+        3. Managing the campaign availability
+        4.
+        """
+
         context = {}
         pid = self.request.GET.get('pid')
         slug = self.request.GET.get('slug')
@@ -667,7 +724,6 @@ class ProductDetailAPI(ProductInformationAPIMixin, APIView):
         if not self.skill and self.product_obj.type_flow == 2:
             self.skill = self.product_obj.productskills.filter(skill__active=True).values_list('skill__name', flat=True)[:3]
         self.skill == ",".join(self.skill)
-        context.update({'skill': self.skill})
 
         product_data = self.get_product_detail_context(
             self.product_obj, self.sqs,
@@ -676,6 +732,7 @@ class ProductDetailAPI(ProductInformationAPIMixin, APIView):
 
         context.update({
             'product_detail': product_data,
+            'skill': self.skill,
             "ggn_contact_full": settings.GGN_CONTACT_FULL,
             "ggn_contact": settings.GGN_CONTACT,
             'shine_api_url': settings.SHINE_API_URL,
