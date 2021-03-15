@@ -90,6 +90,11 @@ class ProductInformationAPIMixin(object):
             })
             return structure
 
+    def get_jobs_url(self, product):
+        job_url = 'https://www.shine.com/job-search/{}-jobs'.format(product.slug) \
+            if product.slug else None
+        return job_url
+    
 
 class ProductDetailAPI(ProductInformationMixin, APIView):
     permission_classes = (AllowAny,)
