@@ -19,6 +19,66 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 
+class ProductInformationAPIMixin(object):
+
+    def get_solor_info(self, product):
+        info = {}
+        info['prd_img'] = product.pImg
+        info['prd_img_alt'] = product.pImA
+        info['prd_img_bg'] = product.pIBg
+        info['prd_H1'] = product.pHd if product.pHd else product.pNm
+        if product.pTF == 16:
+            info['prd_about'] = product.pAbx
+        else:
+            info['prd_about'] = product.pAb
+        info['prd_desc'] = product.pDsc
+        info['prd_uget'] = product.pBS
+        info['prd_rating'] = round(float(product.pARx), 1)
+        info['prd_num_rating'] = product.pRC
+        info['prd_num_bought'] = product.pBC
+        info['prd_num_jobs'] = product.pNJ
+        info['prd_vendor'] = product.pPvn
+        info['prd_vendor_img'] = product.pVi
+        # info['prd_vendor_img_alt'] = product.vendor.image_alt
+        info['prd_rating_star'] = product.pStar
+        info['prd_video'] = product.pvurl
+        info['start_price'] = product.pPinb
+
+        if product.pPc == 'course':
+            info['prd_service'] = 'course'
+        elif product.pPc == 'writing':
+            info['prd_service'] = 'resume'
+        elif product.pPc == 'service':
+            info['prd_service'] = 'service'
+        elif product.pPc == 'assessment':
+            info['prd_service'] = 'assessment'
+        else:
+            info['prd_service'] = 'other'
+        info['prd_product'] = product.pTP
+        info['prd_exp'] = product.pEX
+
+        if product.pTF == 5:
+            info['prd_dur'] = product.pDM[0] if product.pDM else ''
+
+        if product.pTF == 16 and product.pAsft:
+            info['prd_asft'] = eval(product.pAsft[0])
+        return info
+
+    def get_program_structure(self, product):
+        structure = {
+            'prd_program_struct': False,
+            'chapter': False
+        }
+        chapter_list = product.chapter_product.filter(status=True)
+        if chapter_list:
+            structure.update({
+                'prd_program_struct': False,
+                'chapter': True,
+                'chapter_list': chapter_list
+            })
+            return structure
+
+
 class ProductDetailAPI(ProductInformationMixin, APIView):
     permission_classes = (AllowAny,)
     serializer_class = ProductDetailSerializer
