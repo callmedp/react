@@ -7,6 +7,7 @@ from django.core.exceptions import PermissionDenied
 from django.http import Http404
 
 # Inter-App Import
+from search.helpers import get_recommendations
 from core.common import APIResponse
 from shop.views import ProductInformationMixin
 from shop.models import (Product, Skill)
@@ -94,7 +95,25 @@ class ProductInformationAPIMixin(object):
         job_url = 'https://www.shine.com/job-search/{}-jobs'.format(product.slug) \
             if product.slug else None
         return job_url
-    
+
+    def get_recommendation(self, product):
+        recommendation = {
+            'prd_recommend': False
+        }
+        rcourses = get_recommendations(
+            self.request.session.get('func_area', None),
+            self.request.session.get('skils', None)
+        )
+        if rcourses:
+            rcourses = rcourses.exclude(id=product.id)
+            rcourses = rcourses[:6]
+        if rcourses:
+            recommendation.update({
+                'prd_recommend': True,
+                'recommended_products': rcourses
+            })
+            return recommendation
+
 
 class ProductDetailAPI(ProductInformationMixin, APIView):
     permission_classes = (AllowAny,)
