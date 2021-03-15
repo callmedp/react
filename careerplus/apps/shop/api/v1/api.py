@@ -12,6 +12,7 @@ from django.core.paginator import Paginator
 
 # Inter-App Import
 from core.library.haystack.query import SQS
+from crmapi.tasks import create_lead_crm
 from haystack.query import SearchQuerySet
 from wallet.models import ProductPoint
 from review.models import Review
@@ -371,12 +372,61 @@ class ProductDetailAPI(ProductInformationMixin, APIView):
             raise Http404
 
     def create_product_detail_leads(self, data_dict={}):
-        pass
+        if not data_dict:
+            logging.getLogger('info_log').info('No data found')
+            return
+        from crmapi.models import UserQueries
+        lead = UserQueries.objects.create(**data_dict)
+        if not lead:
+            logging.getLogger('info_log').info('user query not created')
+            return
+
+        create_lead_crm.apply_async(
+            (lead.pk,), countdown=settings.PRODUCT_LEADCREATION_COUNTDOWN)
+        return lead
+
+    def maintain_tracking_info(self, product=None):
+        if not product:
+            return -1
+        if product.sub_type_flow == 501:
+            return 1
+        if product.sub_type_flow == 503:
+            return 2
+        if product.sub_type_flow == 504:
+            return 3
+        if product.type_flow == 18:
+            return 4
+        if product.type_flow == 19:
+            return 5
+        if product.type_flow == 1:
+            return 6
+        if product.sub_type_flow == 502:
+            return 7
+        if product.type_flow == 16:
+            return 8
+        if product.type_flow == 2:
+            return 9
+        if product.type_flow == 17:
+            return 11
 
     def get(self, request, *args, **kwargs):
         pid = self.request.GET.get('pid')
         slug = self.request.GET.get('slug')
         user = self.request.user
+        tracking_info = request.GET.get('t_id', '')
+        utm_campaign = request.GET.get('utm_campaign', '')
+        trigger_point = request.GET.get('trigger_point', '')
+        u_id = request.GET.get('u_id', request.session.get('u_id', ''))
+        position = self.request.GET.get('position', -1)
+
+        if self.request.GET.get('lc') and self.request.session.get('candidate_id'):
+            if not pid:
+                return
+            prod = Product.objects.filter(id=pid).first()
+            if not prod:
+                return
+
+
 
 
 
