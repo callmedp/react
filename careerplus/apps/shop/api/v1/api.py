@@ -78,6 +78,18 @@ class ProductInformationAPIMixin(object):
             })
             return structure
 
+    def get_faq(self, product):
+        structure = {
+            'prd_faq': False
+        }
+        faqs = product.faqs.filter(productfaqs__active=True, status=2).order_by('productfaqs__question_order')
+        if faqs:
+            structure.update({
+                'prd_faq': True,
+                'faq_list': faqs
+            })
+            return structure
+
 
 class ProductDetailAPI(ProductInformationMixin, APIView):
     permission_classes = (AllowAny,)
