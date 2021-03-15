@@ -114,6 +114,30 @@ class ProductInformationAPIMixin(object):
             })
             return recommendation
 
+    def get_combos(self, product):
+        combo = { 'combo': False }
+        combos = product.childs.filter(active=True)
+        if combo:
+            combo.update({
+                'combo': True,
+                'combos': combos
+            })
+
+    def get_frequently_brought(self, product):
+        prd_fbt = {
+            'prd_fbt': False
+        }
+        prd_fbt_list = product.related.filter(
+            secondaryproduct__active = True,
+            secondaryproduct__type_relation=1
+        )
+        if prd_fbt_list:
+            prd_fbt.update({
+                'prd_fbt': True,
+                'prd_fbt_list': prd_fbt_list
+            })
+        return prd_fbt
+
 
 class ProductDetailAPI(ProductInformationMixin, APIView):
     permission_classes = (AllowAny,)
