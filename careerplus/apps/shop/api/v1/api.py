@@ -12,6 +12,7 @@ from django.core.paginator import Paginator
 
 # Inter-App Import
 from core.library.haystack.query import SQS
+from haystack.query import SearchQuerySet
 from wallet.models import ProductPoint
 from review.models import Review
 from homepage.models import Testimonial
@@ -193,6 +194,12 @@ class ProductInformationAPIMixin(object):
                 'prd_rv_page': page
             }
 
+    def get_sorted_products(self, pvrs_data):
+        if pvrs_data.get('var_list'):
+            sort_pvrs = sorted(pvrs_data.get('var_list'), key=lambda i: i['inr_price'])
+            pvrs_data['var_list'] = sort_pvrs
+        return pvrs_data
+
     def get_product_information(self, product, sqs, product_main, sqs_main):
         context = {}
         context['product'] = product
@@ -214,7 +221,12 @@ class ProductInformationAPIMixin(object):
             pvrs_data = json.loads(sqs.pVrs)
             # Create get_sorted_products
             pvrs_data = self.get_sorted_products(pvrs_data)
-
+            try:
+                selected_var = pvrs_data['var_list'][0]
+            except Exception:
+                selected_var = None
+            context.update({'selected_var': selected_var})
+            context.update(pvrs_data)
             context['canonical_url'] = product.get_parent_canonical_url()
 
             if product.type_flow == 14:
@@ -358,13 +370,27 @@ class ProductDetailAPI(ProductInformationMixin, APIView):
         except Product.DoesNotExist:
             raise Http404
 
+    def create_product_detail_leads(self, data_dict={}):
+        pass
+
     def get(self, request, *args, **kwargs):
         pid = self.request.GET.get('pid')
         slug = self.request.GET.get('slug')
         user = self.request.user
 
-        product = self.get_object(pid)
 
-        serializer_obj = ProductDetailSerializer(product)
 
-        return APIResponse(data=serializer_obj.data)
+
+
+
+
+
+
+        # product = self.get_object(pid)
+        # sqs = SearchQuerySet().filter(pPc__in=settings.COURSE_SLUG, pTP__in=[0, 1, 3]).exclude(
+        #     id__in=settings.EXCLUDE_SEARCH_PRODUCTS
+        # )
+
+        # serializer_obj = ProductDetailSerializer(product)
+
+        # return APIResponse(data=serializer_obj.data)
