@@ -5,11 +5,14 @@ import logging
 from django.core.cache import cache
 from django.core.exceptions import PermissionDenied
 from django.http import Http404
+from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 from django.core.paginator import Paginator
 
 # Inter-App Import
+from core.library.haystack.query import SQS
 from review.models import Review
+from homepage.models import Testimonial
 from search.helpers import get_recommendations
 from core.common import APIResponse
 from shop.views import ProductInformationMixin
@@ -22,6 +25,10 @@ from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
+# Constant Import
+from homepage.config import UNIVERSITY_COURSE
+from crmapi.models import UNIVERSITY_LEAD_SOURCE, DEFAULT_SLUG_SOURCE
+from shop.choices import APPLICATION_PROCESS, BENEFITS, NEO_LEVEL_OG_IMAGES, SMS_URL_LIST
 
 class ProductInformationAPIMixin(object):
 
@@ -183,6 +190,95 @@ class ProductInformationAPIMixin(object):
                 'prd_review_list': [],
                 'prd_rv_page': page
             }
+
+    def get_product_information(self, product, sqs, product_main, sqs_main):
+        context = {}
+        context['product'] = product
+        context['num_jobs_url'] = self.get_jobs_url(product)
+
+        # Solar Product Info
+        context.update(self.get_solor_info(sqs))
+
+        if product.is_course or product.is_assesment:
+            # Solar program structure
+            context.update(self.get_program_structure(sqs))
+
+        # Solar FAQ
+        context.update(self.get_faq(sqs))
+
+        import json
+        if sqs.pPc == 'course':
+            context.update(json.loads(sqs_main.pPOP))
+            pvrs_data = json.loads(sqs.pVrs)
+            # Create get_sorted_products
+            pvrs_data = self.get_sorted_products(pvrs_data)
+
+            context['canonical_url'] = product.get_parent_canonical_url()
+
+            if product.type_flow == 14:
+                context['university_detail'] = json.loads(sqs.pUncdl[0])
+                faculty = [f.faculty for f in product.facultyproducts.all().select_related('faculty', 'faculty_institute')]
+                context['faculty'] = [faculty[i:i + 2] for i in range(0, len(faculty), 2)]
+                context['institute'] = product.category_main
+                app_process = context['university_detail']['app_process']
+                context['university_detail']['app_process'] = [
+                    APPLICATION_PROCESS.get(proc) for proc in app_process]
+                app_process = context['university_detail']['benefits']
+                context['university_detail']['benefits'] = [
+                    BENEFITS.get(proc) for proc in app_process]
+                context['university_testimonial'] = Testimonial.objects.filter(
+                    page=UNIVERSITY_COURSE, object_id=product.pk
+                )
+                product['lead_source'] = UNIVERSITY_LEAD_SOURCE
+        else:
+            if context.get('prd_exp', None) in ['EP', 'FP']:
+                pPOP = json.loads(sqs_main.pPOP)
+                pid = None
+                for pop in pPOP.get('pop_list'):
+                    if pop.get('experience', '') == 'FR' and context.get('prd_exp', None) == 'FP':
+                        pid = pop.get('id')
+                        break
+                    elif pop.get('experience', '') == 'SP' and ctx.get('prd_exp', None) == 'EP':
+                        pid = pop.get('id')
+                        break
+                try:
+                    if pid:
+                        pid = Product.objects.get(pk=pid)
+                        context['canonical_url'] = pid.get_parent_canonical_url()
+                    else:
+                        context['canonical_url'] = product.get_parent_canonical_url()
+                except Exception as e:
+                    context['canonical_url'] = product.get_parent_canonical_url()
+                    logging.getLogger('error_log').error(
+                        "%(msg)s : %(err)s" % {'msg': 'Canonical Url ERROR', 'err': e})
+            else:
+                context['canonical_url'] = product.get_parent_canonical_url()
+            context.update(json.loads(sqs_main.pPOP))
+            pvrs_data = json.loads(sqs.pVrs)
+            pvrs_data = self.get_sorted_products(pvrs_data)
+            context.update(pvrs_data)
+
+        if self.get_combos(sqs):
+            context.update(json.loads(sqs.pCmbs))
+
+        context.update(json.loads(sqs.pFBT))
+        # update get fake price
+        get_fake_price = 00
+
+        context['domain_name'] = '{}//{}'.format(
+            settings.SITE_PROTOCOL, settings.SITE_DOMAIN)
+        if getattr(product, 'vendor', None):
+            context.update({'prd_vendor_slug': product.vendor.slug})
+        context.update({'sqs': sqs})
+        # context.update({'get_fakeprice': get_fakeprice})
+        context['meta'] = product.as_meta(self.request)
+        context['meta']._url = context.get('canonical_url', '')
+        context['show_chat'] = True
+        # context['product_main'] = product_main,
+        # context['sqs_main'] = sqs_main
+        context['prd_vendor_count'] = SQS().filter(pVid=product.vendor.id). \
+            exclude(id__in=settings.EXCLUDE_SEARCH_PRODUCTS).count()
+        return context
 
 
 class ProductDetailAPI(ProductInformationMixin, APIView):
