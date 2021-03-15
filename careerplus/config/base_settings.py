@@ -107,6 +107,7 @@ LOCAL_APPS = [
     'assessment',
     'resumescorechecker',
     'tinymce',
+    'userintent',
 ]
 
 # See: https://docs.djangoproject.com/en/dev/ref/settings/#installed-apps
