@@ -10,7 +10,7 @@ const Header = (props) => {
     const { count } = useSelector(store => store.header)
     return(
         <div className="d-flex pl-50">
-            { !hideName && !icon && <strong className="m-heading2">{name}</strong>}
+            { !hideName && !icon && <strong className="m-heading2 flex-1">{name}</strong>}
             { icon &&  <strong className="m-heading2"><figure className="icon-shine-learning"></figure></strong> } {/* for homepage */}
             <div className="m-header__links">
                 {   showSearchButton &&

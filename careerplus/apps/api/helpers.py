@@ -32,3 +32,56 @@ def offset_paginator(page, data, **kwargs):
             page = count
     offset = page * size - size
     return {"data": data[offset : size * page], "total": total,"total_pages":count,"current_page":page}
+
+class JsonValidationHelper:
+    """class for methods which helps in providing validation for data received from client
+
+    Raises:
+        Exception: MalformedDataException object
+
+    Returns:
+        dict -- Validated Dictionary
+    """
+
+    class MalformedDataException(Exception):
+        """Custom Exception for Malformed Data made for JsonValidationHelper
+
+        Arguments:
+            Exception {Exception} -- Exception object
+
+        Returns:
+            MalformedDataException -- MalformedDataException object
+        """
+
+        def __init__(self, message="Malformed Data"):
+            """Constructor of Malformed Data
+
+            Keyword Arguments:
+                message {str} -- message while giving the exception (default: {"Malformed Data"})
+            """
+            super().__init__(message)
+            self._message = message
+
+        def __str__(self):
+            return self._message
+
+    @staticmethod
+    def validate(post_dict, expected_dict):
+        """Validate JSON based on expected dictionary
+
+        Arguments:
+            post_dict {dict} -- request.data dictionary given when a POST request is received
+            expected_dict {dict} -- expected JSON data
+
+        Raises:
+            Exception: [description]
+
+        Returns:
+            dict -- dictionary provided
+        """
+        for key, _ in expected_dict.items():
+            if key not in post_dict:
+                raise JsonValidationHelper.MalformedDataException(
+                    "Malformed Data"
+                )
+        return post_dict

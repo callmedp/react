@@ -25,6 +25,7 @@ import { getCandidateId } from 'utils/storage.js';
 import { getVendorUrl } from 'store/DashboardPage/StartCourse/actions/index';
 
 const MyCourses = (props) => {
+    const { filterState, setfilterState } = props
     const [addOpen, setAddOpen] = useState(false);
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
@@ -39,7 +40,7 @@ const MyCourses = (props) => {
     const [openReview, setOpenReview] = useState(false);
     const oiComments = useSelector(store => store.getComment);
     const [currentPage, setCurrentPage] = useState(1);
-    const [filterState, setfilterState] = useState({ 'last_month_from': 'all', 'select_type' : 'all' });
+    // const [filterState, setfilterState] = useState({ 'last_month_from': 'all', 'select_type' : 'all' });
     const [showIframe, setShowIframe] = useState(false);
     const handleIframeShow = () => setShowIframe(true);
     const handleIframeClose = () => setShowIframe(false);
@@ -129,18 +130,19 @@ const MyCourses = (props) => {
     const autoLogin = async (oi, ci, lm) => {
         try {
            dispatch(startDashboardCoursesPageLoader());
+           const candidate_id =  getCandidateId();
            const response = await new Promise((resolve, reject) => {
-           dispatch(
-               getVendorUrl({
-               payload: {
-                   candidate_id: getCandidateId(),
-                   order_id: oi,
-                   course_id: ci,
-               },
-               resolve,
-               reject,
-               })
-           );
+            dispatch(
+                getVendorUrl({
+                    payload: {
+                        candidate_id: candidate_id,
+                        order_id: oi,
+                        course_id: ci,
+                    },
+                resolve,
+                reject,
+                })
+            );
            });
            dispatch(stopDashboardCoursesPageLoader());
            let url = response?.data?.vendor_url;
@@ -180,7 +182,7 @@ const MyCourses = (props) => {
         try {
           
                 dispatch(startDashboardCoursesPageLoader());
-                await new Promise((resolve, reject) => dispatch(fetchMyCourses({ page: currentPage, isDesk: true, ...filterState, resolve, reject })))
+                await new Promise((resolve, reject) => dispatch(fetchMyCourses({ page: currentPage, ...filterState, resolve, reject })))
                 dispatch(stopDashboardCoursesPageLoader());
                 
         } catch (error) {
@@ -196,12 +198,12 @@ const MyCourses = (props) => {
         <div>
             { coursesLoader ? <Loader /> : ''}
 
-            <BreadCrumbs filterState={filterState} setfilterState={setfilterState} filterStateShow={true}/>
-
+            {/* <BreadCrumbs filterState={filterState} setfilterState={setfilterState} filterStateShow={true}/> */}
+            
             <div className="db-my-courses-detail">
 
 
-                { page.total === 0 ? <EmptyInbox inboxButton="Browse Courses" redirectUrl={`${siteDomain}/online-courses.html`} inboxText="Seems like no courses / certification added to your profile"/> : '' }
+                { page.total === 0 ? <EmptyInbox inboxButton="Browse Courses" redirectUrl={`${siteDomain}/online-courses.html`} inboxText="Seems like no courses / certification added to your profile" /> : '' }
                 {
                     data?.map((course, index) => {
                         return (

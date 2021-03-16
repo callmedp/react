@@ -313,7 +313,61 @@ class ShineCandidateDetail(ShineToken):
             logging.getLogger('error_log').error(
                 'unable to return candidate resume response  %s' % str(e))
         return None
+    
+    # Intent capture search jobs
+    def get_jobs(self,data={},email=None, shine_id=None, token=None):
+        try:
+            headers = self.get_api_headers()
+            if email and not shine_id:
+                shine_id = self.get_shine_id(email=email, headers=headers)
+            if shine_id:
+                jobs_url = "{}/api/v2/search/candidate/{}/simple/?format=json&job_title={}&loc={}&minexp={}&skill={}&page={}".format(
+                    settings.SHINE_SITE, shine_id,data['job_title'],data['loc'],data['minexp'],data['skill'],data['page'])
+            else:
+                jobs_url = "{}/api/v2/search/simple/?format=json&job_title={}&loc={}&minexp={}&skill={}&q={}&page={}".format(
+                    settings.SHINE_SITE,data['job_title'],data['loc'],data['minexp'],data['skill'],data['q'],data['page'])
+            jobs_response = requests.get(
+                jobs_url, headers=headers, timeout=settings.SHINE_API_TIMEOUT)
+            if jobs_response.status_code == 401:
+                logging.getLogger('error_log').error(
+                    'Token validity compromised, trying again')
+                cache.set('shine_client_access_token', None)
+                cache.set('shine_user_access_token', None)
+                headers = self.get_api_headers()
+                jobs_response = requests.get(
+                    jobs_url, headers=headers,data=data, timeout=settings.SHINE_API_TIMEOUT)
+            if jobs_response.status_code == 200 and jobs_response.json():
+                return jobs_response.json()
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get status details %s'%str(e))
 
+        return None
+
+    #Keyword suggestion for skills and job titles used in Intent capture
+    def get_keyword_sugesstion(self,query='',skill_only =False, token=None):
+        if not query:
+            return None
+        try:
+            response = {}
+            headers = self.get_api_headers()
+            keyword_suggestion_url = "{}/api/v3/search/lookup/keyword-suggestions/query?q={}".format(
+                    settings.SHINE_SITE, query)
+            keyword_suggestion_response = requests.get(
+                keyword_suggestion_url, headers=headers, timeout=settings.SHINE_API_TIMEOUT)
+            if keyword_suggestion_response.status_code == 200 and keyword_suggestion_response.json():
+                response['keyword_suggestion']=keyword_suggestion_response.json()
+            # if skill_only:
+            #     related_skill_url = "{}/api/v3/search/skill-to-related-skills/?q={}".format(
+            #         settings.SHINE_SITE, query)
+            #     related_skill_response = requests.get(
+            #     related_skill_url, headers=headers, timeout=settings.SHINE_API_TIMEOUT)
+            #     if related_skill_response.status_code == 200 and related_skill_response.json():
+            #         response['related_skill'] = related_skill_response.json()
+            return response
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to get status details %s'%str(e))
+
+        return None
 
 class FeatureProfileUpdate(ShineToken):
 
@@ -743,8 +797,8 @@ class TestPrepApiMixin(object):
     def get_all_test_for_email(self,email):
         if not email:
             logging.getLogger('error_log').error('cannot get test, email address not found')
-        url = 'https://www.testpreptraining.com/api/apiv2/getCertificationsByEmail?email={}'.format(email)
-        headers = self.get_headers()
+        url = 'https://www.skilr.com/api/index.php/apiv2/getCertificationsByEmail?email={}'.format(email)
+        headers = t.get_headers()
         if not headers:
             return
 
@@ -762,7 +816,7 @@ class TestPrepApiMixin(object):
 
 
     def get_all_product(self):
-        url = 'https://www.testpreptraining.com/api/index.php/apiv2/getProducts'
+        url =' https://www.skilr.com/api/index.php/apiv2/getProducts'
         headers = self.get_headers()
         if not headers:
             return
@@ -774,21 +828,3 @@ class TestPrepApiMixin(object):
             logging.getLogger('error_log').error('error in making testprep get_all_test_for_email request')
 
         return response
-
-
-
-        
-
-
-
-        
-        
-        
-
-
-
-
-
-        
-
-        

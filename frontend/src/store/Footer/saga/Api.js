@@ -4,10 +4,10 @@ import { siteDomain } from 'utils/domains';
 
 const fetchTrendingCnA = (data) => {
     let query='';
-    if(!!data.homepage){
+    if(!!data?.homepage){
         query='homepage=True'
     }
-    const url = `trending-courses-and-skills/?${query}&num_courses=${data.numCourses}`;
+    const url = `trending-courses-and-skills/?${query}${ data ? `&num_courses=${data?.numCourses}` : ''}`;
     return BaseApiService.get(`${siteDomain}/api/v1/${url}`);
 }
 

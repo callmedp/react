@@ -29,12 +29,13 @@ const MyServices = (props) => {
 
     const dispatch = useDispatch();
     const { serviceLoader } = useSelector(store => store.loader);
+    const [filterState, setfilterState] = useState({ 'last_month_from': 'all', 'select_type' : 'all' });
 
     //My Services Api hit
     const handleEffects = async () => {
         try{
                 dispatch(startDashboardServicesPageLoader());
-                await new Promise((resolve, reject) => dispatch(fetchMyServices({page: currentPage, resolve, reject })));
+                await new Promise((resolve, reject) => dispatch(fetchMyServices({page: currentPage, ...filterState, resolve, reject })));
                 dispatch(stopDashboardServicesPageLoader());
         }
         catch(e){
@@ -131,7 +132,7 @@ const MyServices = (props) => {
 
         handleEffects();
         // dispatch(fetchPendingResume())
-    }, [currentPage])
+    }, [currentPage, filterState])
 
     return (
         <>
@@ -142,7 +143,7 @@ const MyServices = (props) => {
         <div>
 
             {/* My Services Block Start */}
-            {/* <Filter /> */}
+            <Filter filterState={filterState} setfilterState={setfilterState} />
             <main className="mb-0">
                 <div className="m-courses-detail db-warp">
                     {
@@ -366,8 +367,8 @@ const MyServices = (props) => {
             { showUpload && <UploadResume setShowUpload={setShowUpload} /> }
 
             {/* Accept Reject Modal */}
-            { acceptModal && <AcceptModal setAcceptModal={setAcceptModal} oi_id={acceptModalId} currentPage={currentPage}/> }
-            { rejectModal && <RejectModal setRejectModal={setRejectModal} oi_id={rejectModalId} currentPage={currentPage}/> }
+            { acceptModal && <AcceptModal setAcceptModal={setAcceptModal} oi_id={acceptModalId} filterState={filterState} currentPage={currentPage}/> }
+            { rejectModal && <RejectModal setRejectModal={setRejectModal} oi_id={rejectModalId} filterState={filterState} currentPage={currentPage}/> }
 
             {/* Pagination */}
             { page?.total > 1 && <Pagination totalPage={page?.total} currentPage={currentPage} setCurrentPage={setCurrentPage} /> }

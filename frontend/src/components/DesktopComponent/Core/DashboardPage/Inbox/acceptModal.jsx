@@ -22,7 +22,7 @@ const AcceptModal = (props) => {
         try {
                 dispatch(startAcceptRejectLoader());
                 await new Promise((resolve, reject) => { dispatch(CandidateAcceptRejectResume({ payload: acceptValues, resolve, reject })); });
-                await new Promise((resolve, reject) => dispatch(fetchMyServices({ page: currentPage, isDesk: true, ...filterState, resolve, reject })))
+                await new Promise((resolve, reject) => dispatch(fetchMyServices({ page: currentPage, ...filterState, resolve, reject })))
                 dispatch(stopAcceptRejectLoader());
 
                 Swal.fire({

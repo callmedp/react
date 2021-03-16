@@ -14,7 +14,7 @@ import { startAcceptRejectLoader, stopAcceptRejectLoader } from 'store/Loader/ac
 import Loader from '../../../Common/Loader/loader';
 
 const RejectModal = (props) => {
-    const { setRejectModal, oi_id, currentPage } = props
+    const { setRejectModal, oi_id, currentPage, filterState } = props
     const [filename, setFileName] = useState("Upload Resume");
     const [file, setFile] = useState(undefined);
 
@@ -42,7 +42,7 @@ const RejectModal = (props) => {
         try {
             dispatch(startAcceptRejectLoader());
             new Promise((resolve, reject) => { dispatch(CandidateAcceptRejectResume({ payload: rejectValues, resolve, reject }));});
-            await new Promise((resolve, reject) => dispatch(fetchMyServices({page: currentPage, resolve, reject })));
+            await new Promise((resolve, reject) => dispatch(fetchMyServices({page: currentPage, ...filterState, resolve, reject })));
             dispatch(stopAcceptRejectLoader());
 
             event.target.reset();
