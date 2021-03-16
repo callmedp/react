@@ -2,18 +2,13 @@
 import logging
 import json
 from datetime import datetime
-from urllib.parse import unquote
 
 # Django-Core Import
 from django.core.cache import cache
-from django.urls import reverse
-from django.utils.http import urlquote
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.core.exceptions import PermissionDenied
-from django.http import Http404, HttpResponseRedirect, HttpResponsePermanentRedirect
+from django.http import Http404
 from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
-from django.core.paginator import Paginator
 
 # Inter-App Import
 from core.library.haystack.query import SQS
@@ -25,13 +20,7 @@ from review.models import Review
 from homepage.models import Testimonial
 from search.helpers import get_recommendations
 from core.common import APIResponse
-from shop.views import ProductInformationMixin
 from shop.models import (Product, Skill)
-from shop.mixins import (CourseCatalogueMixin,
-                         LinkedinSeriviceMixin
-                         )
-from .serializers import (
-    ProductDetailSerializer)
 
 # DRF Import
 from rest_framework.views import APIView
@@ -42,7 +31,7 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from homepage.config import UNIVERSITY_COURSE
 from crmapi.config import PRODUCT_SOURCE_MAPPING
 from crmapi.models import UNIVERSITY_LEAD_SOURCE, DEFAULT_SLUG_SOURCE
-from shop.choices import APPLICATION_PROCESS, BENEFITS, NEO_LEVEL_OG_IMAGES, SMS_URL_LIST
+from shop.choices import APPLICATION_PROCESS, BENEFITS, NEO_LEVEL_OG_IMAGES, SMS_URL_LIST, PRODUCT_TAG_CHOICES
 
 
 # TODO
@@ -79,6 +68,7 @@ class ProductInformationAPIMixin(object):
         info['prd_num_bought'] = product.pBC
         info['prd_num_jobs'] = product.pNJ
         info['prd_vendor'] = product.pPvn
+        info['pTg'] = dict(PRODUCT_TAG_CHOICES).get(product.pTg)
         info['prd_vendor_img'] = product.pVi
         # info['prd_vendor_img_alt'] = product.vendor.image_alt
         info['prd_rating_star'] = product.pStar
@@ -503,7 +493,6 @@ class ProductDetailAPI(ProductInformationAPIMixin, APIView):
 
         context = {}
         pid = self.request.GET.get('pid')
-        slug = self.request.GET.get('slug')
         tracking_id = request.GET.get('t_id', '')
         utm_campaign = request.GET.get('utm_campaign', '')
         trigger_point = request.GET.get('trigger_point', '')
@@ -512,8 +501,6 @@ class ProductDetailAPI(ProductInformationAPIMixin, APIView):
         self.skill = self.request.session.get('skills_name', [])
 
         try:
-
-
             if not pid:
                 return APIResponse(message='Product id is required', error=True, status=status.HTTP_400_BAD_REQUEST)
 
@@ -716,7 +703,7 @@ class ProductDetailAPI(ProductInformationAPIMixin, APIView):
 
             if not self.skill and self.product_obj.type_flow == 2:
                 self.skill = self.product_obj.productskills.filter(skill__active=True).values_list('skill__name',
-                                                                                                   flat=True)[:3]
+                                                                                                   flat=True)[:10]
             self.skill == ",".join(self.skill)
 
             product_data = self.get_product_detail_context(
@@ -752,11 +739,9 @@ class ProductReviewAPI(ProductInformationAPIMixin, APIView):
     permission_classes = (AllowAny,)
 
     def get(self, request):
-
         """
         API to return the all reviews related to product
         """
-
         pid = self.request.GET.get('pid')
         page = self.request.GET.get('page')
         context = {}
