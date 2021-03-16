@@ -1,4 +1,4 @@
-import React, { useEffect }from 'react';
+import React, { useState, useEffect } from 'react';
 import MenuNav from '../../Common/MenuNav/menuNav';
 import Header from '../../Common/Header/Header';
 import CourseDetailBanner from './Banner/Banner';
@@ -23,17 +23,21 @@ import EnquiryModal from '../../Common/Modals/EnquiryModal';
 import ReviewModal from '../../Common/Modals/ReviewModal';
 import '../DetailPage/detailPage.scss';
 import Aos from "aos";
-import "aos/dist/aos.css";
-
+// import "aos/dist/aos.css";
 
 const DetailPage = (props) => {
+
+    const [reviewModal, showReviewModal] = useState(false)
+
     useEffect( () => {
         Aos.init({ duration: 2000, once: true, offset: 10, anchorPlacement: 'bottom-bottom' });
     }, [])
     return(
         <div>
             <MenuNav />
-            <header className="m-container m-header detail-bg">
+            {
+                reviewModal ? <ReviewModal showReviewModal={showReviewModal}/> :<>
+                <header className="m-container m-header detail-bg">
                 <Header />
                 <CourseDetailBanner />
             </header>
@@ -50,14 +54,14 @@ const DetailPage = (props) => {
                 <TakeFreeTest />
                 <OtherProviders />
                 <FAQ />
-                <Reviews />
+                <Reviews showReviewModal={showReviewModal}/>
                 <CoursesMayLike />
                 <CTA />
                 {/* <EnquiryModal /> */}
                 {/* <CertificateModal /> */}
-                {/* <ReviewModal /> */}
             </main>
-            <Footer />
+            <Footer /></>
+            }
         </div>
 
     )

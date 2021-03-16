@@ -3,7 +3,7 @@ import {
 } from './actions';
 
 const otherProvidersCoursesState = {
-    mostViewedCourses: {}
+    pop_list: {}
 }
 
 export const OtherProvidersCoursesReducer = (state = otherProvidersCoursesState, action) => {

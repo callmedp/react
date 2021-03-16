@@ -25,3 +25,15 @@ input:-webkit-autofill:focus,
 input:-webkit-autofill:active  {
     -webkit-box-shadow: 0 0 0 30px white inset !important;
 }
+
+.big-review-star {
+    margin: 15px 0;
+    display: block;
+    padding-left: 60px;
+
+    .micon-blankstar,
+    .micon-fullstar {
+        margin: 0 15px;
+        transform: scale(2);
+    }
+}
