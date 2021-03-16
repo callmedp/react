@@ -229,6 +229,7 @@ urlpatterns += [
                    re_path(r'^login/$', LoginApiView.as_view(), name='login'),
                    re_path(r'^logout/$', LogoutApiView.as_view(), name='logout'),
                    re_path(r'^dashboard/', include('dashboard.urls', namespace='dashboard')),
+                   re_path(r'^intent/', include('userintent.urls', namespace='userintent')),
                    re_path(r'^autologin/(?P<token>.+)/$', AutoLoginView.as_view(), name='autologin'),
                    re_path(r'^linkedin/login/$',
                        LinkedinCallbackView.as_view(), name='linkedin-login'),
@@ -245,7 +246,7 @@ urlpatterns += [
                    re_path(r'^api/', include('api.urls', namespace='api')),
                    re_path(r'^api/', include('homepage.api.urls', namespace='api')),
                    re_path(r'^dashboard/api/', include('dashboard.api.urls', namespace='dashboard-api')),
-
+                   re_path(r'^api/intent/', include('userintent.api.urls',namespace='userintent-api')),
                    re_path(r'^lead/', include('crmapi.urls', namespace='crmapi')),
 
                     re_path(r'^api/', include('wallet.urls')),

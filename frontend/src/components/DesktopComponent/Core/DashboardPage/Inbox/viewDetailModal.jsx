@@ -6,7 +6,7 @@ import Loader from '../../../Common/Loader/loader';
 import { startOiDetailsLoader, stopOiDetailsLoader } from 'store/Loader/actions/index';
 
 const ViewDetailModal = (props) => {
-    const { id, toggleDetails, isOpen } = props;
+    const { id, toggleDetails, isOpen, status, enrollDate } = props;
     const dispatch = useDispatch()
     const { oiDetailsLoader } = useSelector(store => store.loader);
     const oiDetailsData = useSelector(store => store.oiDetails?.data);
@@ -35,17 +35,22 @@ const ViewDetailModal = (props) => {
             <div className="db-view-detail arrow-box left-big" id={`openViewDetail`+id}>
             <span className="btn-close" onClick={() => toggleDetails(id)}>&#x2715;</span>
                 <ul className="db-timeline-list">
-                    { 
-                        oiDetailsData?.map((det, ind) => {
-                            return (
-                                <li key={ind}>
-                                    <i className="db-timeline-list--dot"></i>
-                                    <span>{det.date}</span>
-                                    <p className="db-timeline-list--text">{det.status}</p>
-                                </li>
-                            )
-                        })
-                
+                    {
+                        oiDetailsData?.length > 0 ? 
+                            oiDetailsData?.map((det, ind) => {
+                                return (
+                                    <li key={ind}>
+                                        <i className="db-timeline-list--dot"></i>
+                                        <span>{det.date}</span>
+                                        <p className="db-timeline-list--text">{det.status}</p>
+                                    </li>
+                                )
+                            }) :
+                            <li>
+                                <i className="db-timeline-list--dot"></i>
+                                <span>{enrollDate}</span>
+                                <p className="db-timeline-list--text">{status}</p>
+                            </li> 
                     }
                 </ul>
             </div>
