@@ -9,7 +9,8 @@ from .views import (
 )
 
 from .api import (
-    ProductDetailAPI
+    ProductDetailAPI,
+    ProductReviewAPI
 )
 
 from django.conf import settings
@@ -31,7 +32,8 @@ urlpatterns = [
     re_path(r'^skill-product/$',SkillProductView.as_view()),
     re_path(r'^course-catalogue/$', CourseCatalogueAPI.as_view(), name='course-catalogue-api'),
 
-    re_path(r'^get-product/$', ProductDetailAPI.as_view(), name='get-product-api')
+    re_path(r'^get-product/$', ProductDetailAPI.as_view(), name='get-product-api'),
+    re_path(r'^get-prd-review/$', ProductReviewAPI.as_view(), name='get-product-review-api')
 ]
 
 if settings.DEBUG:
