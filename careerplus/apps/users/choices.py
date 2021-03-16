@@ -14,6 +14,7 @@ WRITING_STARTER_VALUE = 150
 # starter is value calculation on WRITING_STARTER_VALUE
 # runner, expert, and veteran value is given percentage of starter value
 # matrix value is in percentages
+
 RESUME_WRITING_MATRIX_DICT = {
     'FR': {
         1: 150, 2: 150,
@@ -45,6 +46,7 @@ LINKEDIN_STARTER_VALUE = 300
 # runner, expert, and veteran value is given percentage of starter value
 # matrix value is in percentages
 # 1 starter, 2 - runner, 3 - expert, 4 - veteran
+
 LINKEDIN_WRITING_MATRIX_DICT = {
     'FR': {
         1: 350, 2: 300,
@@ -74,6 +76,7 @@ INTERNATIONAL_RESUME_STARTER_VALUE = 225
 # runner, expert, and veteran value is given percentage of starter value
 # matrix value is in percentages
 # 1 starter, 2 - runner, 3 - expert, 4 - veteran
+
 INTERNATIONAL_RESUME_MATRIX_DICT = {
     'FR': {
         1: 250, 2: 100,
@@ -104,6 +107,7 @@ VISUAL_RESUME_STARTER_VALUE = 225
 # runner, expert, and veteran value is given percentage of starter value
 # matrix value is in percentages
 # 1 starter, 2 - runner, 3 - expert, 4 - veteran
+
 VISUAL_RESUME_MATRIX_DICT = {
     'FR': {
         1: 250, 2: 100,
@@ -162,6 +166,7 @@ PORTFOLIO_PRICE = 1200
 # combo discount
 DISCOUNT_ALLOCATION_DAYS = 15
 COMBO_DISCOUNT = 25  # in percentage
+
 # COMBO_DISCOUNT_OF_TWO = 10  # in percentage
 # COMBO_DISCOUNT_OF_THREE = 20  # in percentage
 
@@ -174,6 +179,7 @@ COMBO_DISCOUNT_OF_THREE = 10  # in percentage
 # REGULAR_SLA = 15
 # EXPRESS_SLA = 12
 # SUPER_EXPRESS_SLA = 10
+
 REGULAR_SLA = 4
 EXPRESS_SLA = 2
 SUPER_EXPRESS_SLA = 1

@@ -282,14 +282,7 @@ class DashboardReviewApi(APIView):
             object_id__in=prd_list, status=1,user_id=candidate_id)
 
         review_list.update({'no_review':len(review_list)})
-        # paginated_data = offset_paginator(page, review_list)
         data = ReviewSerializer(review_list, many=True).data
-        # page_info ={
-        # 'current_page':paginated_data['current_page'],
-        # 'total':paginated_data['total_pages'],
-        # 'has_prev': True if paginated_data['current_page'] >1 else False,
-        # 'has_next':True if (paginated_data['total_pages']-paginated_data['current_page'])>0 else False
-        # }
         return APIResponse(data={'data':data},message='Review data Success',status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):

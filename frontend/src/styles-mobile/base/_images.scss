@@ -273,3 +273,33 @@
   background: $sprite;
   @include icon-inblock(16px, 16px, -581px -38px);
 }
+
+.micon-white-tick {
+  background: $sprite;
+  @include icon-inblock(15px, 12px, -88px -184px);
+}
+
+.micon-hot {
+  background: $sprite;
+  @include icon-inblock(9px, 11px, -350px -171px);
+}
+
+.micon-upload-resume {
+  background: $sprite;
+  @include icon-inblock(33px, 37px, -265px -171px);
+}
+
+.micon-update-profile {
+  background: $sprite;
+  @include icon-inblock(35px, 39px, -308px -171px);
+}
+
+.micon-premium {
+  background: $sprite;
+  @include icon-inblock(16px, 14px, -370px -170px);
+}
+
+.micon-ui-cg {
+  background: $sprite;
+  @include icon-inblock(16px, 20px, -398px -171px);
+}

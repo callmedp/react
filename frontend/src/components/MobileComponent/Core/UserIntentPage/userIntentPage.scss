@@ -1,0 +1,104 @@
+@import '../../../../styles-mobile/abstracts';
+
+.m-ui-main {
+    background: $white;
+
+    h2 {
+        margin-bottom: 0;
+    }
+}
+
+.mt-30n {
+    margin-top: -3rem;
+}
+
+.m-ui-steps {
+    margin: 0 0 0 -.5rem;
+    padding: 0;
+    list-style-type: none;
+    display: inline-flex;
+    position: relative;
+    z-index: 99;
+
+    &::before {
+        content: '';
+        position: absolute;
+        top: 1.6rem;
+        left: 0;
+        right: 0;
+        border-top: .1rem solid #f5f5f5;
+        z-index: -9;
+    }
+
+    a {
+        color: $gray-300;
+        width: 3.5rem;
+        height: 3.5rem;
+        border-radius: 100%;
+        background: #f5f5f5;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: .5rem solid $white;
+
+        &.m-current {
+            background: $blue;
+            color: $white;
+            cursor: pointer !important;
+        }
+
+        &.m-completed {
+            background: $green !important;
+            text-indent: 500%;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer !important;
+            &::after {
+                content: '';
+                background: $sprite  -226px -171px;
+                width: 1.2rem;
+                height: .9rem;
+                position: absolute;
+                right: .6rem;
+                top: .7rem;
+            }
+        }
+        
+        &:not(:last-child) {
+            margin-right: 3rem;
+        }
+
+        &:-webkit-any-link {
+            cursor: auto;
+        }
+    }
+
+    .btn-blue-outline {
+        text-transform: uppercase;
+    }
+}
+
+.m-back-goal-btn {
+    font-size: 1.2rem !important;
+    font-weight: 600 !important;
+    padding: .6rem 1.2rem !important;
+    margin-left: auto;
+}
+
+.m-courses-feedback {
+    background: $course-light-bg1;
+    padding: 2rem;
+
+    strong {
+        display: block;
+    }
+
+    span {
+        display: flex;
+        .btn-blue-outline {
+            font-size: 1.2rem;
+            padding: .8rem 2.5rem;
+            margin-right: 1rem;
+        }
+    }
+}
