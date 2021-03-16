@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useEffect } from 'react';
 // import { Intersection } from 'react-use';
 import Header from '../../Common/Header/header';
 import StickyNavDetail from './StickyNavDetail/stickyNavDetail';
@@ -20,26 +20,50 @@ import Footer from '../../Common/Footer/footer';
 import '../SkillPage/skillPage.scss';
 import Aos from "aos";
 import "aos/dist/aos.css";
+import { fetchMainCourses } from 'store/DetailPage/actions';
+import { useSelector, useDispatch } from 'react-redux';
 
 const DetailPage = (props) => {
+    const mainCoursesData = useSelector(store => store.mainCourses);
+    const dispatch = useDispatch();
+    const {match: {params: {id}}} = props;
+
+    // console.log(props);
+
     useEffect( () => {
         Aos.init({ duration: 2000, once: true, offset: 10, anchorPlacement: 'bottom-bottom' });
+
+        handleEffects();
     }, [])
+
+    const handleEffects = async () => {
+        try {
+            await new Promise((resolve, reject) => dispatch(fetchMainCourses({ id: id.split('-')[1] ,resolve, reject })));
+        }
+        catch (error) {
+            if (error?.status == 404) {
+                // history.push('/404');
+            }
+        }
+    };
 
     return (
         <div>
             <Header />
             <StickyNavDetail />
-            <BannerCourseDetail/>
+            <BannerCourseDetail mainCoursesData={mainCoursesData}/>
             <KeyFeatures />
             
-            <div className="container-fluid">
-                <div className="row">
-                    <div className="col-sm-12">
-                        <CourseOutline />
+            {
+                mainCoursesData?.chapter && 
+                <div className="container-fluid">
+                    <div className="row">
+                        <div className="col-sm-12">
+                            <CourseOutline chapter_list={mainCoursesData?.chapter_list}/>
+                        </div>
                     </div>
                 </div>
-            </div>
+            }
             <div className="container-fluid mt-50 mb-50">
                 <div className="row">
                     <div className="col-sm-9">
@@ -62,7 +86,7 @@ const DetailPage = (props) => {
                 </div>
             </div>
             <SkillGain />
-            <OtherProviders />
+            <OtherProviders pop_list={mainCoursesData?.pop_list} />
             <FAQ />
             <Reviews />
             <EnquireNow />
