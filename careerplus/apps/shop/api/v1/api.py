@@ -28,8 +28,8 @@ from core.common import APIResponse
 from shop.views import ProductInformationMixin
 from shop.models import (Product, Skill)
 from shop.mixins import (CourseCatalogueMixin,
-                     LinkedinSeriviceMixin
-                     )
+                         LinkedinSeriviceMixin
+                         )
 from .serializers import (
     ProductDetailSerializer)
 
@@ -43,6 +43,7 @@ from homepage.config import UNIVERSITY_COURSE
 from crmapi.config import PRODUCT_SOURCE_MAPPING
 from crmapi.models import UNIVERSITY_LEAD_SOURCE, DEFAULT_SLUG_SOURCE
 from shop.choices import APPLICATION_PROCESS, BENEFITS, NEO_LEVEL_OG_IMAGES, SMS_URL_LIST
+
 
 # TODO
 # 1. Redirect handling
@@ -182,7 +183,7 @@ class ProductInformationAPIMixin(object):
         return False
 
     def get_combos(self, product):
-        combo = { 'combo': False }
+        combo = {'combo': False}
         combos = product.childs.filter(active=True)
         if combo:
             combo.update({
@@ -198,7 +199,7 @@ class ProductInformationAPIMixin(object):
             'prd_fbt': False
         }
         prd_fbt_list = product.related.filter(
-            secondaryproduct__active = True,
+            secondaryproduct__active=True,
             secondaryproduct__type_relation=1
         )
         if prd_fbt_list:
@@ -256,7 +257,8 @@ class ProductInformationAPIMixin(object):
                 'prd_rv_current_page': wal_txns_page_obj.number,
                 'prd_rv_has_next': wal_txns_page_obj.has_next(),
                 'prd_rv_has_prev': wal_txns_page_obj.has_previous(),
-                'prd_review_list': list(review_list.values('title', 'user_email', 'user_name', 'average_rating', 'created'))
+                'prd_review_list': list(
+                    review_list.values('title', 'user_email', 'user_name', 'average_rating', 'created'))
             }
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
@@ -298,7 +300,7 @@ class ProductInformationAPIMixin(object):
             # Create get_sorted_products
             pvrs_data = self.get_sorted_products(pvrs_data)
             try:
-                selected_var = pvrs_data['var_list'][0] # Study Mode
+                selected_var = pvrs_data['var_list'][0]  # Study Mode
             except Exception:
                 selected_var = None
             context.update({'selected_var': selected_var})
@@ -307,7 +309,8 @@ class ProductInformationAPIMixin(object):
 
             if product.type_flow == 14:
                 context['university_detail'] = json.loads(sqs.pUncdl[0])
-                faculty = [f.faculty for f in product.facultyproducts.all().select_related('faculty', 'faculty_institute')]
+                faculty = [f.faculty for f in
+                           product.facultyproducts.all().select_related('faculty', 'faculty_institute')]
                 context['faculty'] = [faculty[i:i + 2] for i in range(0, len(faculty), 2)]
                 context['institute'] = product.category_main
                 app_process = context['university_detail']['app_process']
@@ -328,7 +331,7 @@ class ProductInformationAPIMixin(object):
                     if pop.get('experience', '') == 'FR' and context.get('prd_exp', None) == 'FP':
                         pid = pop.get('id')
                         break
-                    elif pop.get('experience', '') == 'SP' and ctx.get('prd_exp', None) == 'EP':
+                    elif pop.get('experience', '') == 'SP' and context.get('prd_exp', None) == 'EP':
                         pid = pop.get('id')
                         break
                 try:
@@ -385,9 +388,10 @@ class ProductInformationAPIMixin(object):
         if self.request.session.get('candidate_id'):
             candidate_id = self.request.session.get('candidate_id', None)
             contenttype_obj = ContentType.objects.get_for_model(product)
-            context['review_obj'] = Review.objects.filter(object_id=product.id, content_type=contenttype_obj, user_id=candidate_id).first()
+            context['review_obj'] = Review.objects.filter(object_id=product.id, content_type=contenttype_obj,
+                                                          user_id=candidate_id).first()
             # User_Reviews depicts if user already has a review for this product or not
-            user_reviews = Review.objects.filter(content_type=contenttype_obj, object_id=pk, status__in=[0,1],
+            user_reviews = Review.objects.filter(content_type=contenttype_obj, object_id=pk, status__in=[0, 1],
                                                  user_id=candidate_id).count()
             context['user_reviews'] = True if user_reviews else False
 
@@ -437,7 +441,7 @@ class ProductInformationAPIMixin(object):
         else:
             data = self.get_product_information(product, sqs, product_main, sqs_main)
             main_context.update(data)
-            cache.set(key, data, 60*60*4)
+            cache.set(key, data, 60 * 60 * 4)
         main_context.update(self.get_other_detail(product, sqs))
         return main_context
 
@@ -558,7 +562,8 @@ class ProductDetailAPI(ProductInformationAPIMixin, APIView):
             try:
                 self.request.session.update({'product_lead_dropout': lead.id})
             except:
-                logging.getLogger('error_log').error('error in updating session for product lead drop out {}'.format(data_dict))
+                logging.getLogger('error_log').error(
+                    'error in updating session for product lead drop out {}'.format(data_dict))
 
         if tracking_id and self.request.session.get('candidate_id'):
             if not pid:
@@ -581,7 +586,8 @@ class ProductDetailAPI(ProductInformationAPIMixin, APIView):
 
             if tracking_id and prod.id and product_tracking_mapping_id:
                 make_logging_request.delay(
-                    prod.id, product_tracking_mapping_id, tracking_id, 'product_page',position, trigger_point, u_id, utm_campaign, 2)
+                    prod.id, product_tracking_mapping_id, tracking_id, 'product_page', position, trigger_point, u_id,
+                    utm_campaign, 2)
 
         elif self.request.session.get('candidate_id') and \
                 request.session.get('tracking_product_id') and \
@@ -657,14 +663,14 @@ class ProductDetailAPI(ProductInformationAPIMixin, APIView):
                     prod.id, product_tracking_mapping_id, tracking_id, 'product_page', position, trigger_point, u_id,
                     utm_campaign, 2, r_p, r_sp)
 
-        self.prd_key = 'detail_db_product_'+pid
-        self.prd_solr_key = 'detail_solr_product_'+pid
+        self.prd_key = 'detail_db_product_' + pid
+        self.prd_solr_key = 'detail_solr_product_' + pid
         cache_dbprd_maping = cache.get(self.prd_key, "")
         if cache_dbprd_maping:
             self.product_obj = cache_dbprd_maping
         else:
             self.product_obj = Product.browsable.filter(pk=pid).first()
-            cache.set(self.prd_key, self.product_obj, 60*60*4)
+            cache.set(self.prd_key, self.product_obj, 60 * 60 * 4)
             if not self.product_obj:
                 return APIResponse(message='Product Not Found', status=status.HTTP_404_NOT_FOUND)
 
@@ -676,7 +682,7 @@ class ProductDetailAPI(ProductInformationAPIMixin, APIView):
             sqs = SearchQuerySet().filter(id=pid)
             if sqs:
                 self.sqs = sqs[0]
-                cache.set(self.prd_solr_key, self.sqs, 60*60*4)
+                cache.set(self.prd_solr_key, self.sqs, 60 * 60 * 4)
             else:
                 return APIResponse(message='Product Not Found', status=status.HTTP_404_NOT_FOUND)
 
@@ -722,7 +728,8 @@ class ProductDetailAPI(ProductInformationAPIMixin, APIView):
         #         return APIResponse(message='Redirect', data='/')
 
         if not self.skill and self.product_obj.type_flow == 2:
-            self.skill = self.product_obj.productskills.filter(skill__active=True).values_list('skill__name', flat=True)[:3]
+            self.skill = self.product_obj.productskills.filter(skill__active=True).values_list('skill__name',
+                                                                                               flat=True)[:3]
         self.skill == ",".join(self.skill)
 
         product_data = self.get_product_detail_context(
@@ -749,14 +756,6 @@ class ProductDetailAPI(ProductInformationAPIMixin, APIView):
             'popup_based_product': self.request.session.get('popup_based_product', '')
         })
         return APIResponse(message='Product fetched successfully', data=context)
-
-
-
-
-
-
-
-
 
         # product = self.get_object(pid)
         # sqs = SearchQuerySet().filter(pPc__in=settings.COURSE_SLUG, pTP__in=[0, 1, 3]).exclude(
