@@ -45,7 +45,7 @@ export const routes = [
         exact: true,
     },
     {
-        path: '/detail-page/',
+        path: '/detail-page/:id/',
         component: DetailPageContainer,
         exact: true,
     },

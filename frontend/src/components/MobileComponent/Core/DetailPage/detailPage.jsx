@@ -28,10 +28,12 @@ import Aos from "aos";
 const DetailPage = (props) => {
 
     const [reviewModal, showReviewModal] = useState(false)
+    const prdId = props.match.params.id;
 
     useEffect( () => {
         Aos.init({ duration: 2000, once: true, offset: 10, anchorPlacement: 'bottom-bottom' });
-    }, [])
+    }, [prdId])
+
     return(
         <div>
             <MenuNav />
@@ -54,7 +56,7 @@ const DetailPage = (props) => {
                 <TakeFreeTest />
                 <OtherProviders />
                 <FAQ />
-                <Reviews showReviewModal={showReviewModal}/>
+                <Reviews showReviewModal={showReviewModal} prdId={prdId}/>
                 <CoursesMayLike />
                 <CTA />
                 {/* <EnquiryModal /> */}

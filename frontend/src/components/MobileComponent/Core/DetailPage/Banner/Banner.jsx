@@ -58,7 +58,7 @@ const CourseDetailBanner = (props) => {
             <div className="m-intro-video">
                 <figure className="m-intro-video__img">
                     <Link to={"#"}>
-                        <img src="./media/images/mobile/intro-video.jpg" alt="Intro Video" />
+                        <img src="/media/images/mobile/intro-video.jpg" alt="Intro Video" />
                         <i className="micon-play-video"></i>
                     </Link>
                 </figure>

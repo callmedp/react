@@ -245,9 +245,15 @@ class ProductInformationAPIMixin(object):
                 'prd_rv_has_next': review_list.has_next(),
                 'prd_rv_has_prev': review_list.has_previous(),
                 'prd_review_list': [
-                    {'title': review.title, 'user_email': review.user_email, 'user_name:': review.user_name,
-                     'average_rating': review.average_rating, 'rating': review.get_ratings(),
-                     'created': review.created.strftime("%b %d, %Y")}
+                    {
+                        'title': review.title, 
+                        'user_email': review.user_email,
+                        'user_name:': review.user_name,
+                        'average_rating': review.average_rating,
+                        'rating': review.get_ratings(),
+                        'created': review.created.strftime("%b %d, %Y"),
+                        'content': review.content
+                    }
                     for review in review_list
                 ]
             }

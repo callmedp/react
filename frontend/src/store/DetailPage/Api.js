@@ -97,7 +97,19 @@ const otherProvidersCourses = (data) => {
     }
 }
 
+const fetchReviews = (data) => {
+    const url = `/shop/api/v1/get-prd-review/?pid=${data.prdId}`;
+    return BaseApiService.get(`${siteDomain}${url}`);
+}
+
+const submitReviews = (data) => {
+    const url = `/shop/api/v1/get-prd-review/?pid=${data.prdId}`;
+    return BaseApiService.get(`${siteDomain}${url}`);
+}
+
 export default {
     otherProvidersCourses,
+    fetchReviews,
+    submitReviews
 }   
 

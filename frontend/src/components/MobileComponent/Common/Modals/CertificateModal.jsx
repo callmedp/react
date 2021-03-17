@@ -9,7 +9,7 @@ const CertificateModal = (props) => {
             <div className="m-modal-body">
                 <Link to={"#"} className="m-close">x</Link>
                 <figure>
-                    <img src="./media/images/mobile/sample-certificate-big.jpg" className="img-fluid" alt="Sample certificate" />
+                    <img src="/media/images/mobile/sample-certificate-big.jpg" className="img-fluid" alt="Sample certificate" />
                 </figure>
             </div>
         </div>

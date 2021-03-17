@@ -9,7 +9,7 @@ const SampleCertificate = (props) => {
                 <h2 className="m-heading2">Sample certificate</h2>
                 <Link to={"#"}>
                     <figure>
-                        <img src="./media/images/mobile/sample-certificate-thumb.jpg" alt="Sample certificate" />
+                        <img src="/media/images/mobile/sample-certificate-thumb.jpg" alt="Sample certificate" />
                         <span variant="primary">View</span>
                     </figure>
                 </Link>
