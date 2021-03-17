@@ -85,6 +85,10 @@ function* submitReviews(action){
     }
 }
 
+function* SendEnquireNow(action) {
+    const { payload: { payload, resolve, reject }} = action;
+}
+
 export default function* WatchDetailPage() {
     yield takeLatest(fetchOtherProviderCourses.type, otherProvidersCourses);
     yield takeLatest(fetchRecommendedCourses.type, recommendedCourses);
