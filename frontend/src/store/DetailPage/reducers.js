@@ -1,10 +1,10 @@
 import {
-    OtherProviderCoursesFetched, mainCoursesFetched
+    OtherProviderCoursesFetched, mainCoursesFetched, CourseReviewFetched
 } from './actions';
 
 
 const mainCoursesState = {
-    mainCoursesFetched: {}
+    // mainCoursesData: {}
 }
 
 export const mainCoursesReducer = (state = mainCoursesState, action) => {
@@ -21,6 +21,17 @@ const otherProvidersCoursesState = {
 export const OtherProvidersCoursesReducer = (state = otherProvidersCoursesState, action) => {
     switch (action.type) {
         case OtherProviderCoursesFetched.type: return { ...otherProvidersCoursesState, ...action.payload  }
+        default: return state;
+    }
+}
+
+const courseReviewState = {
+    // mostViewedCourses: {}
+}
+
+export const CourseReviewReducer = (state = courseReviewState, action) => {
+    switch (action.type) {
+        case CourseReviewFetched.type: return { ...courseReviewState, ...action.payload  }
         default: return state;
     }
 }

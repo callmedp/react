@@ -6,7 +6,7 @@ import './courseOutline.scss'
 
 const CourseOutline = (props) => {
     const {chapter_list} = props;
-    console.log(chapter_list);
+
     return (
         <section id="courseoutline" className="container-fluid mt-40" data-aos="fade-up">
             <div className="row">

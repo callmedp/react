@@ -4,25 +4,24 @@ import {
     fetchOtherProviderCourses,
     OtherProviderCoursesFetched,
     mainCoursesFetched,
-    fetchMainCourses
+    fetchMainCourses,
+    CourseReviewFetched,
+    fetchCourseReview
 } from './actions';
 
 function* mainCoursesApi(action){
     const { payload, resolve, reject } = action;
-    console.log(payload);
+
     try {
         const response = yield call(Api.mainCourses, payload.id);
-        console.log(response);
-        if(response?.error){
-            return reject(response);
-        }
-        const item = response;
-        yield put(mainCoursesFetched({ ...item }))
+
+        if(response?.error) return reject(response);
+        const item = response?.data?.data;
+        yield put(mainCoursesFetched({ ...item }));
         return resolve(item);
     }
-    catch(e){
-     
-        return reject(e);
+    catch(e) {
+        return e;
     }
 }
 
@@ -46,7 +45,25 @@ function* otherProvidersCourses(action){
     }
 }
 
+function* courseReviewsApi(action){
+    const { payload: {values}, resolve, reject } = action;
+    try {
+        const response = yield call(Api.courseReviews, values);
+
+        if(response?.error) return reject(response);
+
+        console.log(response);
+        const item = response?.data?.data?.prd_reviews;
+        yield put(CourseReviewFetched({ ...item }));
+        return resolve(item);
+    }
+    catch(e) {
+        return e;
+    }
+}
+
 export default function* WatchDetailPage() {
     yield takeLatest(fetchOtherProviderCourses.type, otherProvidersCourses);
     yield takeLatest(fetchMainCourses.type, mainCoursesApi);
+    yield takeLatest(fetchCourseReview.type, courseReviewsApi);
 }

@@ -1,10 +1,19 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Accordion from 'react-bootstrap/Accordion';
-import Card from 'react-bootstrap/Card';
 import { Link } from 'react-router-dom';
 import '../../SkillPage/FAQ/faq.scss';
+import FaqAccordion from '../../../Common/FaqAccordion/faqAccordion';
+import Card from 'react-bootstrap/Card';
 
 const FAQ = (props) => {
+    const { faq_list } = props;
+    // console.log(props)
+    const [sliceFlag, setSliceFlag] = useState(true);
+
+    const loadMore = () => {
+        setSliceFlag(state => !state);
+    }
+
     return (
         <section id="faqs" className="container-fluid lightblue-bg mt-40" data-aos="fade-up">
             <div className="row">
@@ -13,7 +22,22 @@ const FAQ = (props) => {
                     <div className="faq d-flex">
                         <div className="faq__list">
                             <Accordion defaultActiveKey="0">
-                                <Card data-aos="fade-up">
+                                {/* {
+                                    (sliceFlag ? faq_list.slice(0, 4) : faq_list).map((item, index) => <FaqAccordion item={item} index={index}/>)   
+                                } */}
+                                {faq_list?.map((faqs, indx) => {
+                                    return (
+                                        <Card data-aos="fade-up" key={indx}>
+                                            <Accordion.Toggle as={Card.Header} eventKey={indx}>
+                                            <strong>{faqs.question}</strong>
+                                            </Accordion.Toggle>
+                                            <Accordion.Collapse eventKey={indx}>
+                                            <Card.Body>{faqs.answer}</Card.Body>
+                                            </Accordion.Collapse>
+                                        </Card>
+                                    )
+                                })}
+                                {/* <Card data-aos="fade-up">
                                     <Accordion.Toggle as={Card.Header} eventKey="0">
                                     <strong>What is a resume format?</strong>
                                     </Accordion.Toggle>
@@ -60,9 +84,9 @@ const FAQ = (props) => {
                                     <Accordion.Collapse eventKey="5">
                                     <Card.Body>A resume format is a sample resume that can be edited and filled with the required details. It is often provided with instructions or sample text and needs a rigorous edit to make it useful.</Card.Body>
                                     </Accordion.Collapse>
-                                </Card>
+                                </Card> */}
                             </Accordion>
-                            <Link to={"#"} className="load-more pt-20">Load More FAQS</Link>
+                            { sliceFlag ? <Link onClick={loadMore} to={"#"} className="load-more pt-20">Load More FAQS</Link> : '' }
                         </div>
                         <div className="faq__img">
                             <span className="faq-tween1" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="100">

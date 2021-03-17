@@ -5,10 +5,12 @@ import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import { Link as LinkScroll } from 'react-scroll';
 
 const BannerCourseDetail = (props) => {
-    const {mainCoursesData} = props;
+    const {product_detail} = props;
     const reqLength = 365;
     const inputCheckbox = useRef(null);
     const regex = /<(.|\n)*?>/g;
+
+    // console.log(props);
 
     const starRatings = (star, index) => {
         return (star === '*' ? <em className="icon-fullstar" key={index}></em> : star === '+' 
@@ -35,31 +37,31 @@ const BannerCourseDetail = (props) => {
                         <div className="detail-heading" data-aos="fade-right">
                             <div className="detail-heading__icon">
                                 <figure>
-                                    <img src={mainCoursesData?.prd_img} alt={mainCoursesData?.prd_img_alt} />
+                                    <img src={product_detail?.prd_img} alt={product_detail?.prd_img_alt} />
                                 </figure>
                             </div>
                             <div className="detail-heading__content">
-                                <span className="flag-yellowB">BESTSELLER</span>
+                                { product_detail?.pTg && <span className="flag-yellowB">{product_detail?.pTg}</span> }
                                 <h1 className="heading1">
-                                    {mainCoursesData?.product || mainCoursesData?.prd_H1}
+                                    {product_detail?.prd_H1}
                                 </h1>
                                 <div className="d-flex mt-15">
                                     <span className="rating">
                                         {
-                                            mainCoursesData?.prd_rating_star?.map((star, index) => starRatings(star, index))
+                                            product_detail?.prd_rating_star?.map((star, index) => starRatings(star, index))
                                         }
-                                        <span>{mainCoursesData?.prd_rating?.toFixed()}/5</span>
+                                        <span>{product_detail?.prd_rating?.toFixed()}/5</span>
                                     </span>
                                     {
                                         <>
-                                        {mainCoursesData?.prd_num_rating && <span className="review-jobs">
+                                        {product_detail?.prd_num_rating && <span className="review-jobs">
                                         <LinkScroll to={"#"}>
-                                            <figure className="icon-reviews-link"></figure> <strong> {mainCoursesData?.prd_num_rating}</strong> Reviews
+                                            <figure className="icon-reviews-link"></figure> <strong> {product_detail?.prd_num_rating}</strong> Reviews
                                         </LinkScroll>
                                         </span>}
-                                        {mainCoursesData?.prd_num_jobs && <span className="review-jobs">
+                                        {product_detail?.prd_num_jobs && <span className="review-jobs">
                                             <LinkScroll to={"#"}>
-                                                <figure className="icon-jobs-link"></figure> <strong>{mainCoursesData?.prd_num_jobs}</strong> Jobs available
+                                                <figure className="icon-jobs-link"></figure> <strong>{product_detail?.prd_num_jobs}</strong> Jobs available
                                             </LinkScroll>
                                         </span>}
                                         </>
@@ -69,10 +71,10 @@ const BannerCourseDetail = (props) => {
                         </div>
                         <ul className="course-stats mt-30 mb-30">
                             <li>
-                                <strong>By {mainCoursesData?.prd_vendor}</strong> <LinkScroll to={"#"}>View all</LinkScroll> courses by {mainCoursesData?.prd_vendor}  
+                                <strong>By {product_detail?.prd_vendor}</strong> <LinkScroll to={"#"}>View all</LinkScroll> courses by {product_detail?.prd_vendor}  
                             </li>
                             <li>
-                            <LinkScroll className="d-block" to={"popListTemplate"}>+{mainCoursesData?.pop_list?.length} more</LinkScroll> Course providers  
+                            <LinkScroll className="d-block" to={"popListTemplate"}>+{product_detail?.pop_list?.length} more</LinkScroll> Course providers  
                             </li>
                             <li className="d-flex align-items-center">
                                 <figure className="icon-course-duration mr-10"></figure>
@@ -89,24 +91,24 @@ const BannerCourseDetail = (props) => {
                         </ul>
                         <div className="intro-video">
                             <figure className="intro-video__img">
-                                <a target="_blank" href={mainCoursesData?.prd_video}>
-                                    <img src={mainCoursesData?.prd_vendor_img} alt="Intro Video" />
+                                <a target="_blank" href={product_detail?.prd_video}>
+                                    <img src={product_detail?.prd_vendor_img} alt="Intro Video" />
                                     <i className="icon-play-video"></i>
                                     <strong>Intro video</strong>
                                 </a>
                             </figure>
 
                             <p className="intro-video__content">
-                                { mainCoursesData?.prd_desc ? <div id="module" className="row about-course">
-                                    {mainCoursesData?.prd_desc.replace(regex, '')?.length > reqLength ? (
+                                { product_detail?.prd_about ? <div id="module" className="row about-course">
+                                    {product_detail?.prd_about.replace(regex, '')?.length > reqLength ? (
                                         <input type="checkbox" className="read-more-state" id="post-10" ref={inputCheckbox} itemProp="about" />
                                         ) : (
                                             ""
                                             )}
                                             
                                     <p className="read-more-wrap">
-                                        <span dangerouslySetInnerHTML={{__html:mainCoursesData?.prd_desc?.replace(regex, '').slice(0, reqLength)}} />
-                                        <span className="read-more-target" dangerouslySetInnerHTML={{__html: mainCoursesData?.prd_desc?.replace(regex, '').slice(reqLength)}} />
+                                        <span dangerouslySetInnerHTML={{__html:product_detail?.prd_about?.replace(regex, '').slice(0, reqLength)}} />
+                                        <span className="read-more-target" dangerouslySetInnerHTML={{__html: product_detail?.prd_about?.replace(regex, '').slice(reqLength)}} />
                                     </p>
                                     <label htmlFor="post-10" className="read-more-trigger"></label>
                                 </div> : "" }

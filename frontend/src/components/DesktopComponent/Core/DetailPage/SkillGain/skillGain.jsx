@@ -4,7 +4,8 @@ import {Link} from 'react-router-dom';
 import '../../SkillPage/SkillGain/skillGain';
 
 const SkillGain = (props) => {
-    
+    const {skill} = props;
+
     return (
         <section className="container-fluid lightblue-bg mt-40" data-aos="fade-up">
             <div className="row">
@@ -13,7 +14,15 @@ const SkillGain = (props) => {
                         <div className="skill-gain">
                             <h2 className="heading2 mt-40">Skills you will gain</h2>
                             <div className="skill-gain__list">
-                                <Badge pill variant="light">Light</Badge>{' '}
+                                {
+                                    skill?.map((skl, indx) => {
+                                        return (
+                                            <Badge pill variant="light" key={indx}>{skl}</Badge>
+                                        )
+                                    })
+                                }
+                                {' '}
+                                {/* <Badge pill variant="light">Light</Badge>{' '}
                                 <Badge pill variant="light">PythonR</Badge>{' '}
                                 <Badge pill variant="light">Programming</Badge>{' '}
                                 <Badge pill variant="light">Tableau</Badge>{' '}
@@ -22,7 +31,7 @@ const SkillGain = (props) => {
                                 <Badge pill variant="light">Data Visualization</Badge>{' '}
                                 <Badge pill variant="light">Statistical computing</Badge>{' '}
                                 <Badge pill variant="light">Visual Analytics</Badge>{' '}
-                                <Badge pill variant="light">Dashboards</Badge>{' '}
+                                <Badge pill variant="light">Dashboards</Badge>{' '} */}
                             </div>
                             <div className="d-flex mt-50">
                                 <Link to={"#"} className="btn btn-outline-primary btn-custom">Enquire now</Link>

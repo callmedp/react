@@ -24,11 +24,12 @@ import { fetchMainCourses } from 'store/DetailPage/actions';
 import { useSelector, useDispatch } from 'react-redux';
 
 const DetailPage = (props) => {
-    const mainCoursesData = useSelector(store => store.mainCourses);
+    const {product_detail, skill} = useSelector(store => store?.mainCourses);
     const dispatch = useDispatch();
     const {match: {params: {id}}} = props;
 
-    // console.log(props);
+    console.log(product_detail);
+
 
     useEffect( () => {
         Aos.init({ duration: 2000, once: true, offset: 10, anchorPlacement: 'bottom-bottom' });
@@ -51,15 +52,15 @@ const DetailPage = (props) => {
         <div>
             <Header />
             <StickyNavDetail />
-            <BannerCourseDetail mainCoursesData={mainCoursesData}/>
-            <KeyFeatures />
+            <BannerCourseDetail product_detail={product_detail}/>
+            <KeyFeatures prd_uget={product_detail?.prd_uget}/>
             
             {
-                mainCoursesData?.chapter && 
+                product_detail?.chapter && 
                 <div className="container-fluid">
                     <div className="row">
                         <div className="col-sm-12">
-                            <CourseOutline chapter_list={mainCoursesData?.chapter_list}/>
+                            <CourseOutline chapter_list={product_detail?.chapter_list}/>
                         </div>
                     </div>
                 </div>
@@ -85,10 +86,10 @@ const DetailPage = (props) => {
                     </div>
                 </div>
             </div>
-            <SkillGain />
-            <OtherProviders pop_list={mainCoursesData?.pop_list} />
-            <FAQ />
-            <Reviews />
+            { skill && <SkillGain skill={skill}/> }
+            { product_detail?.pop && <OtherProviders pop_list={product_detail?.pop_list} /> }
+            { product_detail?.faq && <FAQ faq_list={product_detail?.faq_list}/> }
+            <Reviews id={id.split('-')[1]}/>
             <EnquireNow />
             <CoursesMayLike />
             <Footer />
