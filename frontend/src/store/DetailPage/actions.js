@@ -6,14 +6,16 @@ const mainCoursesFetched = createAction('MAIN_COURSES_FETCHED');
 const fetchOtherProviderCourses = createAction('FETCH_OTHER_PROVIDER_COURSES');
 const OtherProviderCoursesFetched = createAction('OTHER_PROVIDER_COURSES_FETCHED');
 
-const fetchCourseReview = createAction("FETCH_COURSE_REVIEW");
-const CourseReviewFetched = createAction("COURSE_REVIEW_FETCHED")
+const fetchReviews = createAction('FETCH_REVIEWS');
+const ReviewsFetched = createAction('REVIEWS_FETCHED');
+const submitReview = createAction('SUBMIT_REVIEW');
 
 export {
     fetchMainCourses,
     mainCoursesFetched,
     fetchOtherProviderCourses,
     OtherProviderCoursesFetched,
-    fetchCourseReview,
-    CourseReviewFetched
+    fetchReviews,
+    ReviewsFetched,
+    submitReview,
 }

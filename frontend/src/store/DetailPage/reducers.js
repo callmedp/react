@@ -1,5 +1,5 @@
 import {
-    OtherProviderCoursesFetched, mainCoursesFetched, CourseReviewFetched
+    OtherProviderCoursesFetched, mainCoursesFetched, ReviewsFetched
 } from './actions';
 
 
@@ -15,7 +15,7 @@ export const mainCoursesReducer = (state = mainCoursesState, action) => {
 }
 
 const otherProvidersCoursesState = {
-    mostViewedCourses: {}
+    pop_list: {}
 }
 
 export const OtherProvidersCoursesReducer = (state = otherProvidersCoursesState, action) => {
@@ -25,13 +25,13 @@ export const OtherProvidersCoursesReducer = (state = otherProvidersCoursesState,
     }
 }
 
-const courseReviewState = {
-    // mostViewedCourses: {}
+const reviewsState = {
+    prd_reviews: {}
 }
 
-export const CourseReviewReducer = (state = courseReviewState, action) => {
+export const ProductReviewsReducer = (state = reviewsState, action) => {
     switch (action.type) {
-        case CourseReviewFetched.type: return { ...courseReviewState, ...action.payload  }
+        case ReviewsFetched.type: return { ...reviewsState, ...action.payload  }
         default: return state;
     }
 }

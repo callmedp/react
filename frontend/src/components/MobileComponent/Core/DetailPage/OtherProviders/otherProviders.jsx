@@ -7,7 +7,7 @@ import { fetchOtherProviderCourses } from 'store/DetailPage/actions';
 
 const OtherProviders = (props) => {
 
-    const { otherProvidersCourses } = useSelector(store => store.otherCourses);
+    const { pop_list } = useSelector(store => store.otherCourses);
     const dispatch = useDispatch()
 
     const handleEffects = async () => {
@@ -30,7 +30,7 @@ const OtherProviders = (props) => {
             <h2 className="m-heading2 mb-10 mt-10">Courses by other providers</h2>
             <div className="m-courses m-recent-courses ml-10n">
                 {
-                    otherProvidersCourses?.length > 0 ? <ProductCardsSlider productList = {otherProvidersCourses}/> : ''
+                    pop_list?.length > 0 ? <ProductCardsSlider productList = {pop_list}/> : ''
                 }
                 {/* <Slider {...settings}>
                     <div className="m-card">

@@ -19,7 +19,7 @@ import { DashboardMyServicesReducer } from './DashboardPage/MyServices/reducer/i
 import { InDemandProductsReducer, JobAssistanceAndBlogsReducer, MostViewedCoursesReducer, TestimonialsReducer, SkillwithDemandsReducer   } from './HomePage/reducers';
 import { DashboardMyServicesResumeReducer, OiDetailsReducer } from './DashboardPage/MyServices/reducer/index';
 import { VendorUrlReducer } from './DashboardPage/StartCourse/reducer/index';
-import { mainCoursesReducer, OtherProvidersCoursesReducer, CourseReviewReducer } from './DetailPage/reducers';
+import { mainCoursesReducer, OtherProvidersCoursesReducer, ProductReviewsReducer } from './DetailPage/reducers';
 
 const rootReducer = combineReducers({
     needHelp : NeedHelpReducer,
@@ -52,7 +52,8 @@ const rootReducer = combineReducers({
     vendorUrl: VendorUrlReducer,
     otherCourses: OtherProvidersCoursesReducer,
     mainCourses: mainCoursesReducer,
-    courseReviews: CourseReviewReducer
+    reviews: ProductReviewsReducer
+
 });
 
 

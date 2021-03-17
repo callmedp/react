@@ -5,6 +5,7 @@ from datetime import datetime
 
 # Django-Core Import
 from django.core.cache import cache
+from django.db.models import Count, Avg, Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import Http404
 from django.conf import settings
@@ -12,6 +13,7 @@ from django.contrib.contenttypes.models import ContentType
 
 # Inter-App Import
 from core.library.haystack.query import SQS
+from decimal import Decimal
 from payment.tasks import make_logging_request, make_logging_sk_request
 from crmapi.tasks import create_lead_crm
 from haystack.query import SearchQuerySet
@@ -199,11 +201,14 @@ class ProductInformationAPIMixin(object):
             })
         return prd_fbt
 
+
+
     def get_reviews(self, product, page):
         """
         Function will get all the reviews given on the product
         May need to pluck it down
         """
+        context = {}
         product_type = ContentType.objects.get(
             app_label='shop', model='product')
         try:
@@ -224,7 +229,7 @@ class ProductInformationAPIMixin(object):
                 prd_list.append(product.pk)
             review_list = Review.objects.filter(
                 content_type__id=product_type.id,
-                object_id__in=prd_list, status=1).values('title', 'user_email', 'user_name', 'average_rating', 'created')
+                object_id__in=prd_list, status=1)
             per_page = 3
             try:
                 rv_paginator = Paginator(review_list, per_page)
@@ -239,7 +244,18 @@ class ProductInformationAPIMixin(object):
                 'prd_rv_current_page': review_list.number,
                 'prd_rv_has_next': review_list.has_next(),
                 'prd_rv_has_prev': review_list.has_previous(),
-                'prd_review_list': list(review_list)
+                'prd_review_list': [
+                    {
+                        'title': review.title, 
+                        'user_email': review.user_email,
+                        'user_name:': review.user_name,
+                        'average_rating': review.average_rating,
+                        'rating': review.get_ratings(),
+                        'created': review.created.strftime("%b %d, %Y"),
+                        'content': review.content
+                    }
+                    for review in review_list
+                ]
             }
         except Exception as e:
             logging.getLogger('error_log').error(str(e))
@@ -762,7 +778,7 @@ class ProductReviewAPI(ProductInformationAPIMixin, APIView):
 
             context.update({'prd_reviews': self.get_reviews(product_obj, page)})
 
-            return APIResponse(data=context, message='Review fetched successfully', error=True, status=status.HTTP_200_OK)
+            return APIResponse(data=context, message='Review fetched successfully', status=status.HTTP_200_OK)
         except Exception as e:
             logging.getLogger('error_log').error('Product fetch error with id {} and error is {}'.format(pid, str(e)))
             return APIResponse(message='Something went wrong', error=True, status=status.HTTP_400_BAD_REQUEST)

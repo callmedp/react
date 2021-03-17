@@ -5,7 +5,8 @@ import './Reviews.scss';
 import Modal from 'react-bootstrap/Modal';
 // import Button from 'react-bootstrap/Button';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchCourseReview } from 'store/DetailPage/actions';
+import { fetchReviews } from 'store/DetailPage/actions';
+import Slider from "react-slick";
 
 const LearnersStories = (props) => {
     const {id} = props;
@@ -13,18 +14,21 @@ const LearnersStories = (props) => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    const {prd_review_list, prd_rv_current_page, prd_rv_has_next, prd_rv_has_prev, prd_rv_total} = useSelector(store => store?.courseReviews);
-    console.log(prd_review_list, prd_rv_current_page, prd_rv_has_next, prd_rv_has_prev, prd_rv_total)
+    const { prd_reviews : { prd_review_list, prd_rv_current_page, prd_rv_has_next, prd_rv_has_prev, prd_rv_total } } = useSelector( store => store.reviews )
+
+    // console.log(prd_review_list, prd_rv_current_page, prd_rv_has_next, prd_rv_has_prev, prd_rv_total)
     const dispatch = useDispatch();
-    const currentPage = 1;
+    let currentPage = 1;
 
     useEffect( () => {
-        handleEffects();
-    }, [])
+        handleEffects(currentPage);
+    }, [id])
 
-    const handleEffects = async () => {
+    const handleEffects = async (page) => {
+        console.log(page);
+        currentPage = page;
         try {
-            await new Promise((resolve, reject) => dispatch(fetchCourseReview({ values: {id: id, page: currentPage} ,resolve, reject })));
+            await new Promise((resolve, reject) => dispatch(fetchReviews({ payload: { prdId: id, page: page }, resolve, reject })));
         }
         catch (error) {
             if (error?.status == 404) {
@@ -33,38 +37,51 @@ const LearnersStories = (props) => {
         }
     };
 
+    const starRatings = (star, index) => {
+        return (
+            star === '*' ? <em className="micon-fullstar" key={index}></em> :
+                star === '+' ? <em className="micon-halfstar" key={index}></em> :
+                    <em className="micon-blankstar" key={index}></em>
+        )
+    }
+
+    const handleSelect = (selectedIndex, e) => {
+        //   console.log(currentPage)
+          if(e.target.className === 'carousel-control-next-icon' && prd_rv_has_next) handleEffects(prd_rv_current_page+1);
+          if(e.target.className === 'carousel-control-prev-icon' && prd_rv_has_prev) handleEffects(prd_rv_current_page-1);
+    }
 
     return (
         <section id="reviews" className="container" data-aos="fade-up">
-            <div className="row">
+            <div className="grid">
                 <h2 className="heading2 m-auto pb-20">Reviews</h2>
-                
-                <Carousel className="reviews">
-                    {prd_review_list?.map((prdList, indx) => {
-                        return (
-                            <Carousel.Item interval={10000000000}>
-                                <div className="d-flex col">
-                                    <div className="col-sm-4">
-                                        <div className="card">
-                                            <span className="rating">
-                                                <em className="icon-fullstar"></em>
-                                                <em className="icon-fullstar"></em>
-                                                <em className="icon-fullstar"></em>
-                                                <em className="icon-fullstar"></em>
-                                                <em className="icon-blankstar"></em>
-                                            </span>
-                                            <strong className="card__name">{prdList?.title}</strong>
-                                            <p className="card__txt">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled.</p>
-                                            <strong>{prdList?.user_name || 'Anonymous'}</strong>
-                                            <span className="card__location">{prdList?.created}</span>
+
+                <Carousel className="reviews" onSelect={handleSelect}>
+                    <Carousel.Item interval={10000000000}>
+                        <div className="d-flex col">
+                            {
+                                prd_review_list?.map((review, idx) => {
+                                    return (
+                                        <div className="col-sm-4">
+                                            <div className="card">
+                                                <span className="rating">
+                                                    {
+                                                        review?.rating?.map((star, index) => starRatings(star, index))
+                                                    }
+                                                </span>
+                                                <strong className="card__name">{review?.title}</strong>
+                                                <p className="card__txt">{review?.content}</p>
+                                                <strong>{ review?.user_name ? review?.user_name : review?.user_email }</strong>
+                                                <span className="card__location">{review?.created}</span>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                            </Carousel.Item>
-                        )
-                    })}
+                                    )
+                                })
+                            }
+                        </div>
+                    </Carousel.Item>
                 </Carousel>
-               
+
                 <div className="d-flex mx-auto mt-20">
                     <Link to={"#"} onClick={handleShow} className="btn btn-outline-primary btn-custom">Write a review</Link>
                 </div>
