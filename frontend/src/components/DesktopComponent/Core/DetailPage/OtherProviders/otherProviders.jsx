@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import '../../CataloguePage/RecentCourses/recentCourses.scss';
 import { Link } from 'react-router-dom';
    
