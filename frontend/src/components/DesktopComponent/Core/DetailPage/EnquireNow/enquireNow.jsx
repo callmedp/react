@@ -1,7 +1,16 @@
-import React from 'react';
+// React Core Import
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
+// Form Import
+import { useForm } from 'react-hook-form';
+
+// Styling Import
 import './enquireNow.scss';
 
 const EnquireNow = (props) => {
+    const { history } = props;
+    
     
     return (
         <section id="enquire-now" className="container-fluid lightblue-bg mt-40" data-aos="fade-up">
