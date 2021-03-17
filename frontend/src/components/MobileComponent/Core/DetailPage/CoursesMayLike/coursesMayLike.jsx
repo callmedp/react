@@ -1,25 +1,25 @@
-import React, { Component }  from 'react';
+import React, { useEffect }  from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import Slider from "react-slick";
 import 'slick-carousel/slick/slick.css';
 import '../../CataloguePage/RecentCourses/recentCourses.scss';
+// import { fetchRecommendedCourses } from 'store/DetailPage/actions';
+import ProductCardsSlider from '../../../Common/ProductCardsSlider/productCardsSlider';
 
 const CoursesMayLike = (props) => {
-    const settings = {
-        dots: false,
-        arrows: false,
-        infinite: false,
-        speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1,
-        swipeToSlide: true,
-        variableWidth: true,
-    };
+
+    const dispatch = useDispatch()
+    const { pop_list } = useSelector(store => store.recommendedCourses);
+
     return(
         <section className="m-container mt-0 mb-0 pr-0" data-aos="fade-up">
             <h2 className="m-heading2 mb-10">Courses you may like</h2>
             <div className="m-courses m-recent-courses ml-10n">
-                <Slider {...settings}>
+                {
+                    pop_list?.length > 0 ? <ProductCardsSlider productList = {pop_list}/> : ''
+                }
+                {/* <Slider {...settings}>
                     <div className="m-card">
                         <div className="m-card__heading">
                             <figure>
@@ -98,7 +98,7 @@ const CoursesMayLike = (props) => {
                             </div>
                         </div>
                     </div>
-                </Slider>
+                </Slider> */}
             </div>
         </section>
     )

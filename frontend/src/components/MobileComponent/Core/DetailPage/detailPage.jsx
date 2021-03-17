@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import MenuNav from '../../Common/MenuNav/menuNav';
 import Header from '../../Common/Header/Header';
 import CourseDetailBanner from './Banner/Banner';
@@ -24,13 +25,35 @@ import ReviewModal from '../../Common/Modals/ReviewModal';
 import '../DetailPage/detailPage.scss';
 import Aos from "aos";
 // import "aos/dist/aos.css";
+import { fetchRecommendedCourses, fetchReviews, fetchOtherProviderCourses } from 'store/DetailPage/actions';
 
 const DetailPage = (props) => {
 
     const [reviewModal, showReviewModal] = useState(false)
     const prdId = props.match.params.id;
+    const dispatch = useDispatch()
+
+    const handleEffects = async () => {
+        try {
+            if (!(window && window.config && window.config.isServerRendered)) {
+                new Promise((resolve, reject) => dispatch(fetchReviews({ payload: { prdId: prdId }, resolve, reject })));
+                new Promise((resolve, reject) => dispatch(fetchRecommendedCourses({ resolve, reject })));
+                await new Promise((resolve, reject) => dispatch(fetchOtherProviderCourses({ resolve, reject })));
+            }
+            else {
+                delete window.config?.isServerRendered
+            }
+        } catch (error) {
+            if (error?.status == 404) {
+                // history.push('/404');
+                console.log(error)
+            }
+        }
+
+    };
 
     useEffect( () => {
+        handleEffects();
         Aos.init({ duration: 2000, once: true, offset: 10, anchorPlacement: 'bottom-bottom' });
     }, [prdId])
 

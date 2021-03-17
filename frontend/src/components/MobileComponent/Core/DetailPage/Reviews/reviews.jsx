@@ -4,13 +4,10 @@ import Slider from "react-slick";
 import 'slick-carousel/slick/slick.css';
 import {Link} from 'react-router-dom';
 import './reviews.scss';
-import { fetchReviews } from 'store/DetailPage/actions';
 
 const Reviews = (props) => {
-    const { showReviewModal, prdId } = props
-    const dispatch = useDispatch()
+    const { showReviewModal } = props
     const { prd_reviews : { prd_review_list } } = useSelector( store => store.reviews )
-    console.log(prd_review_list)
 
     const settings = {
         dots: false,
@@ -24,17 +21,6 @@ const Reviews = (props) => {
         // variableWidth: true,
     }
 
-    const handleEffects = async () => {
-        try {
-            await new Promise((resolve, reject) => dispatch(fetchReviews({ payload: { prdId: prdId }, resolve, reject })));
-        }
-        catch (error) {
-            if (error?.status == 404) {
-                console.log(error)
-            }
-        }
-    };
-
     const starRatings = (star, index) => {
         return (
             star === '*' ? <em className="micon-fullstar" key={index}></em> :
@@ -42,10 +28,6 @@ const Reviews = (props) => {
                     <em className="micon-blankstar" key={index}></em>
         )
     }
-
-    useEffect(() => {
-        handleEffects();
-    }, [prdId])
 
     return (
         <section className="m-container mt-0 mb-0 pb-0" data-aos="fade-up">
