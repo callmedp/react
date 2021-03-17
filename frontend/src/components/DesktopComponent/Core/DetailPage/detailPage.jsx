@@ -90,7 +90,7 @@ const DetailPage = (props) => {
             { product_detail?.pop && <OtherProviders pop_list={product_detail?.pop_list} /> }
             { product_detail?.faq && <FAQ faq_list={product_detail?.faq_list}/> }
             <Reviews id={id.split('-')[1]}/>
-            <EnquireNow />
+            <EnquireNow {...props} />
             <CoursesMayLike />
             <Footer />
         </div>
