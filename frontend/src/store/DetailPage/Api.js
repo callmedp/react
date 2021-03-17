@@ -211,7 +211,7 @@ const recommendedCoursesApi = (data) => {
 
 const EnquireNewSend = (data) => {
     const url = `lead-management`;
-    return BaseApiService.post(`${siteDomain}/api/lead/${url}/`, data);
+    return BaseApiService.post(`${siteDomain}/lead/api/v1/${url}/`, data);
 }
 
 export default {
