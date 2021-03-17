@@ -112,7 +112,7 @@ class ServiceRecommendationAPI(APIView):
                 'has_prev': True if paginated_data['current_page'] >1 else False,
                 'has_next':True if (paginated_data['total_pages']-paginated_data['current_page'])>0 else False
                 }
-        return APIResponse(data={'services':data,'page':page_info},message='recommended services fetched', status=HTTP_200_OK)
+        return APIResponse(data={'services':data,'page':page_info,'recommended_services_ids':recommended_services_ids},message='recommended services fetched', status=HTTP_200_OK)
         # cache.set(f"analytics_recommendations_services{candidate_id}", data, timeout=86400)
 
 class JobsSearchAPI(APIView):
