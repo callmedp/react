@@ -1,25 +1,39 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import './modals.scss'
 import DetailForm from 'formHandler/mobileFormHandler/formData/detailPageForm';
 import { TextArea, InputField } from 'formHandler/mobileFormHandler/formFields';
 import { useForm } from "react-hook-form";
+import { submitReview } from 'store/DetailPage/actions';
+import { showSwal } from 'utils/swal'
  
 const ReviewModal = (props) => {
     const { showReviewModal } = props
     const [inputStar, setInputStar] = useState(0);
     const { register, handleSubmit, errors, reset } = useForm();
     const [showError, setShowError] = useState(false)
+    const dispatch = useDispatch()
 
-    const submitReviews = values => {
+    const submitReviews = async values => {
         if(inputStar === 0){
             setShowError(true)
         }
         else{
-            const new_review = {
+            const review_values = {
                 ...values,
                 rating: inputStar ? inputStar : 5,
             }
-            console.log(new_review)
+
+            let addedReview = await new Promise((resolve, reject) => dispatch(submitReview({ payload: review_values, resolve, reject })));
+
+            if(addedReview) {
+                if(!addedReview?.error) showReviewModal(false);
+
+                showSwal((addedReview?.error ? 'error' : 'success'), (addedReview?.data?.display_message ? addedReview?.data?.display_message : addedReview.error))
+            }
+            
+            reset(addedReview);
+            showReviewModal(false)
         }
     }
 
