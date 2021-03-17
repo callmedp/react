@@ -8,7 +8,7 @@ import {
     submitReview,
     fetchRecommendedCourses,
     recommendedCoursesFetched,
-    sendedEnquireNow
+    sendEnquireNow
 } from './actions';
 
 function* otherProvidersCourses(action){
@@ -109,5 +109,5 @@ export default function* WatchDetailPage() {
     yield takeLatest(fetchRecommendedCourses.type, recommendedCourses);
     yield takeLatest(fetchReviews.type, productReviews);
     yield takeLatest(submitReview.type, submitReviews);
-    yield takeLatest(sendedEnquireNow.type, SendEnquireNow);
+    yield takeLatest(sendEnquireNow.type, SendEnquireNow);
 }
