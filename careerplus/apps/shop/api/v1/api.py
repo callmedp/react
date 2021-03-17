@@ -895,8 +895,8 @@ class ProductReviewAPI(APIView):
 
     def put(self, request, format=None):
         product_pk = self.request.POST.get('product_id')
-        # candidate_id = request.session.get('candidate_id', None)
-        candidate_id = self.request.POST.get('candidate_id')
+        candidate_id = request.session.get('candidate_id')
+        # candidate_id = self.request.POST.get('candidate_id')
 
         if candidate_id and product_pk:
             review = request.POST.get('review', '').strip()
