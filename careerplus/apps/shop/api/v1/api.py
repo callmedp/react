@@ -2,6 +2,7 @@
 import logging
 import json
 from datetime import datetime
+from django.utils import timezone
 
 # Django-Core Import
 from django.core.cache import cache
@@ -892,14 +893,18 @@ class ProductReviewAPI(APIView):
 
         return APIResponse(message='Product Id and candidate Id required', status=status.HTTP_400_BAD_REQUEST)
 
-    def put(self, request, pk, format=None):
-        product_pk = self.request.PUT.get('product_id')
-        candidate_id = request.session.get('candidate_id', None)
+    def put(self, request, format=None):
+        product_pk = self.request.POST.get('product_id')
+        # candidate_id = request.session.get('candidate_id', None)
+        candidate_id = self.request.POST.get('candidate_id')
 
         if candidate_id and product_pk:
-            review = request.PUT.get('review', '').strip()
-            rating = int(request.PUT.get('rating', 1))
-            title = request.PUT.get('title', '').strip()
+            review = request.POST.get('review', '').strip()
+            rating = int(request.POST.get('rating', 1))
+            title = request.POST.get('title', '').strip()
+
+            if not all(len(i) > 0 for i in [review, title]):
+                return APIResponse(message='Review and Title is required', status=status.HTTP_400_BAD_REQUEST)
 
             try:
                 product_obj = Product.objects.only('id').get(pk=product_pk)
@@ -908,7 +913,6 @@ class ProductReviewAPI(APIView):
                 review_obj = Review.objects.filter(object_id=product_obj.id, content_type=contenttype_obj, user_id=candidate_id).first()
 
                 # Setting status back to 0 for adding this review again to moderation list
-
                 if review_obj and review_obj.user_id == candidate_id:
                     review_obj.content = review
                     review_obj.average_rating = rating
@@ -916,11 +920,10 @@ class ProductReviewAPI(APIView):
                     review_obj.title = title
                     review_obj.created = timezone.now()
                     review_obj.save()
+                    return APIResponse(message='Thank you for posting review. It will be displayed after moderation.', status=status.HTTP_200_OK)
                 else:
-                    return APIResponse(message='Now Allowed', status=status.HTTP_400_BAD_REQUEST)
+                    return APIResponse(message='Something went wrong', status=status.HTTP_400_BAD_REQUEST)
             except Exception as e:
                 logging.getLogger('error_log').error('Error in updating review log: {}'.format(str(e)))
-        else:
-            return APIResponse(message='Something went wrong', status=status.HTTP_400_BAD_REQUEST)
-
-        return APIResponse(message="Thank you for posting. It will be displayed after moderation.")
+                return APIResponse(message='Something went wrong', status=status.HTTP_400_BAD_REQUEST)
+        return APIResponse(message='Product Id and candidate Id required', status=status.HTTP_400_BAD_REQUEST)
