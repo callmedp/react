@@ -10,7 +10,11 @@ import './enquireNow.scss';
 
 const EnquireNow = (props) => {
     const { history } = props;
-    
+    const { register, handleSubmit, errors } = useForm();
+
+    const addValues = (values) => {
+        // Adding and contributing their values according to contributions
+    }
     
     return (
         <section id="enquire-now" className="container-fluid lightblue-bg mt-40" data-aos="fade-up">
