@@ -203,10 +203,17 @@ const recommendedCoursesApi = (data) => {
     }
 }
 
+
+const EnquireNewSend = (data) => {
+    const url = `lead-management`;
+    return BaseApiService.post(`${siteDomain}/api/lead/${url}/`, data);
+}
+
 export default {
     otherProvidersCourses,
     fetchReviews,
     submitReviews,
-    recommendedCoursesApi
+    recommendedCoursesApi,
+    EnquireNewSend
 }   
 
