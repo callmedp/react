@@ -1,9 +1,26 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import './banner.scss';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
-import {Link} from 'react-router-dom';
+// import {Link} from 'react-router-dom';
+import { Link as LinkScroll } from 'react-scroll';
 
 const BannerCourseDetail = (props) => {
+    const {product_detail} = props;
+    const reqLength = 365;
+    const inputCheckbox = useRef(null);
+    const regex = /<(.|\n)*?>/g;
+
+    // console.log(props);
+
+    const starRatings = (star, index) => {
+        return (star === '*' ? <em className="icon-fullstar" key={index}></em> : star === '+' 
+            ? <em className="icon-halfstar" key={index}></em> : <em className="icon-blankstar" key={index}></em>
+        )
+    }
+
+    useEffect(() => {
+        inputCheckbox.current && (inputCheckbox.current.checked = false)
+    })
 
     return (
        <header className="container-fluid pos-rel course-detail-bg">
@@ -20,42 +37,44 @@ const BannerCourseDetail = (props) => {
                         <div className="detail-heading" data-aos="fade-right">
                             <div className="detail-heading__icon">
                                 <figure>
-                                    <img src="https://static1.shine.com/l/m/product_image/3425/1542800087_8980.png" alt="Digital Marketing Training Course" />
+                                    <img src={product_detail?.prd_img} alt={product_detail?.prd_img_alt} />
                                 </figure>
                             </div>
                             <div className="detail-heading__content">
-                                <span className="flag-yellowB">BESTSELLER</span>
+                                { product_detail?.pTg && <span className="flag-yellowB">{product_detail?.pTg}</span> }
                                 <h1 className="heading1">
-                                    Digital Marketing Master Training Course
+                                    {product_detail?.prd_H1}
                                 </h1>
                                 <div className="d-flex mt-15">
                                     <span className="rating">
-                                        <em className="icon-fullstar"></em>
-                                        <em className="icon-fullstar"></em>
-                                        <em className="icon-fullstar"></em>
-                                        <em className="icon-halfstar"></em>
-                                        <em className="icon-blankstar"></em>
-                                        <span>4/5</span>
+                                        {
+                                            product_detail?.prd_rating_star?.map((star, index) => starRatings(star, index))
+                                        }
+                                        <span>{product_detail?.prd_rating?.toFixed()}/5</span>
                                     </span>
-                                    <span className="review-jobs">
-                                        <Link to={"#"}>
-                                            <figure className="icon-reviews-link"></figure> <strong>43</strong> Reviews
-                                        </Link>
-                                    </span>
-                                    <span className="review-jobs">
-                                        <Link to={"#"}>
-                                            <figure className="icon-jobs-link"></figure> <strong>2819</strong> Jobs available
-                                        </Link>
-                                    </span>
+                                    {
+                                        <>
+                                        {product_detail?.prd_num_rating && <span className="review-jobs">
+                                        <LinkScroll to={"#"}>
+                                            <figure className="icon-reviews-link"></figure> <strong> {product_detail?.prd_num_rating}</strong> Reviews
+                                        </LinkScroll>
+                                        </span>}
+                                        {product_detail?.prd_num_jobs && <span className="review-jobs">
+                                            <LinkScroll to={"#"}>
+                                                <figure className="icon-jobs-link"></figure> <strong>{product_detail?.prd_num_jobs}</strong> Jobs available
+                                            </LinkScroll>
+                                        </span>}
+                                        </>
+                                    }
                                 </div>
                             </div>
                         </div>
                         <ul className="course-stats mt-30 mb-30">
                             <li>
-                                <strong>By Simplilearn</strong> <Link to={"#"}>View all</Link> courses by Simplilearn  
+                                <strong>By {product_detail?.prd_vendor}</strong> <LinkScroll to={"#"}>View all</LinkScroll> courses by {product_detail?.prd_vendor}  
                             </li>
                             <li>
-                            <Link className="d-block" to={"#"}>+3 more</Link> Course providers  
+                            <LinkScroll className="d-block" to={"popListTemplate"}>+{product_detail?.pop_list?.length} more</LinkScroll> Course providers  
                             </li>
                             <li className="d-flex align-items-center">
                                 <figure className="icon-course-duration mr-10"></figure>
@@ -72,13 +91,28 @@ const BannerCourseDetail = (props) => {
                         </ul>
                         <div className="intro-video">
                             <figure className="intro-video__img">
-                                <Link to={"#"}>
-                                    <img src="/media/images/desktop/intro-video.jpg" alt="Intro Video" />
+                                <a target="_blank" href={product_detail?.prd_video}>
+                                    <img src={product_detail?.prd_vendor_img} alt="Intro Video" />
                                     <i className="icon-play-video"></i>
                                     <strong>Intro video</strong>
-                                </Link>
+                                </a>
                             </figure>
-                            <p className="intro-video__content">This Course is intended for professionals and graduates wanting to excel in their chosen areas. It is also well suited for those who are already working and would like to take certification for further career progression. Earning Vskills Email Marketing Professional Certification. <Link to={"#"}>Read more</Link></p>
+
+                            <p className="intro-video__content">
+                                { product_detail?.prd_about ? <div id="module" className="row about-course">
+                                    {product_detail?.prd_about.replace(regex, '')?.length > reqLength ? (
+                                        <input type="checkbox" className="read-more-state" id="post-10" ref={inputCheckbox} itemProp="about" />
+                                        ) : (
+                                            ""
+                                            )}
+                                            
+                                    <p className="read-more-wrap">
+                                        <span dangerouslySetInnerHTML={{__html:product_detail?.prd_about?.replace(regex, '').slice(0, reqLength)}} />
+                                        <span className="read-more-target" dangerouslySetInnerHTML={{__html: product_detail?.prd_about?.replace(regex, '').slice(reqLength)}} />
+                                    </p>
+                                    <label htmlFor="post-10" className="read-more-trigger"></label>
+                                </div> : "" }
+                            </p>
                         </div>
                     </div>
                     <div className="banner-detail">
@@ -91,8 +125,8 @@ const BannerCourseDetail = (props) => {
                             </div>
                             <div className="course-enrol__price">
                                 <strong className="mt-20 mb-10">3,499/- <del>5,499/-</del></strong>
-                                <Link to={"#"} className="btn btn-secondary mt-10">Enroll now</Link>
-                                <Link to={"#"} className="btn btn-outline-primary mt-10">Enquire now</Link>
+                                <LinkScroll to={"#"} className="btn btn-secondary mt-10">Enroll now</LinkScroll>
+                                <LinkScroll to={"#"} className="btn btn-outline-primary mt-10">Enquire now</LinkScroll>
                             </div>
                             <div className="course-enrol__offer lightblue-bg2">
                                 <strong className="mt-10 mb-5">Offers</strong>
@@ -102,7 +136,7 @@ const BannerCourseDetail = (props) => {
                                     <li><figure className="icon-offer-badge"></figure> <strong>Get badging</strong> on your Shine profile</li>
                                     <li><figure className="icon-offer-global"></figure> <strong>Global</strong> Education providers</li>
                                 </ul>
-                                <Link to={"#"}>+2 more</Link>
+                                <LinkScroll to={"#"}>+2 more</LinkScroll>
                             </div>
                         </div>
                     </div>

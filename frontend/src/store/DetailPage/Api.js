@@ -98,7 +98,7 @@ const otherProvidersCourses = (data) => {
 }
 
 const fetchReviews = (data) => {
-    const url = `/shop/api/v1/get-prd-review/?pid=${data.prdId}`;
+    const url = `/shop/api/v1/get-prd-review/?pid=${data.prdId}&page=${data.page}`;
     return BaseApiService.get(`${siteDomain}${url}`);
 }
 
@@ -106,6 +106,11 @@ const submitReviews = (data) => {
     // const url = `/shop/api/v1/get-prd-review/?pid=${data.prdId}`;
     // return BaseApiService.get(`${siteDomain}${url}`);
     return {'data': {'display_message': 'Form Submitted Succesfully'}}
+}
+
+const mainCourses = (id) => {
+    const url = `/shop/api/v1/get-product/?pid=${id}`;
+    return BaseApiService.get(`${siteDomain}${url}`);
 }
 
 const recommendedCoursesApi = (data) => {
@@ -210,6 +215,7 @@ const EnquireNewSend = (data) => {
 }
 
 export default {
+    mainCourses,
     otherProvidersCourses,
     fetchReviews,
     submitReviews,

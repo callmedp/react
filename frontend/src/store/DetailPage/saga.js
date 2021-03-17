@@ -3,6 +3,8 @@ import Api from './Api';
 import {  
     fetchOtherProviderCourses,
     OtherProviderCoursesFetched,
+    mainCoursesFetched,
+    fetchMainCourses,
     fetchReviews,
     ReviewsFetched,
     submitReview,
@@ -10,6 +12,22 @@ import {
     recommendedCoursesFetched,
     sendEnquireNow
 } from './actions';
+
+function* mainCoursesApi(action){
+    const { payload, resolve, reject } = action;
+
+    try {
+        const response = yield call(Api.mainCourses, payload.id);
+
+        if(response?.error) return reject(response);
+        const item = response?.data?.data;
+        yield put(mainCoursesFetched({ ...item }));
+        return resolve(item);
+    }
+    catch(e) {
+        return e;
+    }
+}
 
 function* otherProvidersCourses(action){
     const { payload: { payload, resolve, reject} } = action;
@@ -106,6 +124,7 @@ function* SendEnquireNow(action) {
 
 export default function* WatchDetailPage() {
     yield takeLatest(fetchOtherProviderCourses.type, otherProvidersCourses);
+    yield takeLatest(fetchMainCourses.type, mainCoursesApi);
     yield takeLatest(fetchRecommendedCourses.type, recommendedCourses);
     yield takeLatest(fetchReviews.type, productReviews);
     yield takeLatest(submitReview.type, submitReviews);

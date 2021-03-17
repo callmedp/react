@@ -54,6 +54,12 @@ export const routes = [
         component: Error404Container
     },
     {
+        path: '/course/:func/:skill/:id/',
+        component: DetailPageContainer,
+        // actionGroup: getSkillPageActions,
+        exact: true
+    },
+    {
         //keep this at the bottom
         path: '*',
         component: Error404Container
