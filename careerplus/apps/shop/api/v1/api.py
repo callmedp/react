@@ -12,6 +12,7 @@ from django.conf import settings
 from django.contrib.contenttypes.models import ContentType
 
 # Inter-App Import
+from .tasks import create_product_review_task
 from core.library.haystack.query import SQS
 from shop.models import Category, SubHeaderCategory
 from payment.tasks import make_logging_request, make_logging_sk_request
@@ -804,7 +805,7 @@ class ProductDetailAPI(ProductInformationAPIMixin, APIView):
             return APIResponse(message='Something went wrong', error=True, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ProductReviewAPI(ProductInformationAPIMixin, APIView):
+class ProductReviewAPIListing(ProductInformationAPIMixin, APIView):
     permission_classes = (AllowAny,)
 
     def get(self, request):
@@ -836,7 +837,9 @@ class ProductReviewAPI(ProductInformationAPIMixin, APIView):
             logging.getLogger('error_log').error('Product fetch error with id {} and error is {}'.format(pid, str(e)))
             return APIResponse(message='Something went wrong', error=True, status=status.HTTP_400_BAD_REQUEST)
 
+
 class ProductReviewAPI(APIView):
+    permission_classes = (AllowAny,)
 
     def __init__(self):
         self.oi = None
@@ -844,11 +847,12 @@ class ProductReviewAPI(APIView):
         self.rating = None
         self.select_rat = None
 
-    def post(self, request, pk, format=None):
+    def post(self, request):
         """
         This method create reviews for individual product.
         """
         self.candidate_id = request.session.get('candidate_id', None)
+        # self.candidate_id = request.POST.get('candidate_id', None)
         self.product_pk = request.POST.get('product_id')
         self.product = None
 
@@ -861,51 +865,62 @@ class ProductReviewAPI(APIView):
                         content_type=contenttype_obj,
                         user_id=self.candidate_id
                     )
+                if review_obj:
+                    return APIResponse(message='You have already submitted feedback', status=status.HTTP_200_OK)
+
                 review = request.POST.get('review', '').strip()
                 rating = int(request.POST.get('rating', 1))
                 title = request.POST.get('title', '')
+                email = request.session.get('email', '')
+                # email = request.POST.get('email', '')
 
-                if rating and not review_obj and self.product:
-                    name = ''
-                    if request.session.get('first_name'):
-                        name += request.session.get('first_name')
-                    if request.session.get('last_name'):
-                        name += ' ' + request.session.get('last_name')
-                    product = self.product
-                    email = request.session.get('email')
-                    content_type = ContentType.objects.get(
-                        app_label="shop", model="product")
-                    review_obj = Review.objects.create(
-                        content_type=content_type,
-                        object_id=product.id,
-                        user_name=name,
-                        user_email=email,
-                        user_id=self.candidate_id,
-                        content=review,
-                        average_rating=rating,
-                        title=title
-                    )
-                    extra_content_obj = ContentType.objects.get(
-                        app_label="shop", model="product")
+                if not all(len(i) > 0 for i in [review, title, email]):
+                    return APIResponse(message='Email, Review and Title is required', status=status.HTTP_400_BAD_REQUEST)
 
-                    review_obj.extra_content_type = extra_content_obj
-                    review_obj.extra_object_id = self.product.id
-                    review_obj.save()
-
-                    if review_obj:
-                        return APIResponse(message='You have already submitted feedback', status=status.HTTP_200_OK)
-                    else:
-                        return APIResponse(message='Select a valid input for feedback', error=True, status=status.HTTP_400_BAD_REQUEST)
+                name = ''
+                if request.session.get('first_name'):
+                    name += request.session.get('first_name')
+                if request.session.get('last_name'):
+                    name += ' ' + request.session.get('last_name')
+                product = self.product
+                create_product_review_task.delay(product.id, name, email, self.candidate_id, review, rating, title)
+                return APIResponse(message='Thank you for posting review. It will be displayed after moderation.', status=status.HTTP_200_OK)
 
             except Exception as e:
                 logging.getLogger('error_log').error('Error in creating review log: {}'.format(str(e)))
-                return APIResponse(error=True, message='Select valid input for feedback', status=status.HTTP_400_BAD_REQUEST)
+                return APIResponse(error=True, message='Something went wrong', status=status.HTTP_400_BAD_REQUEST)
 
-            return APIResponse(message='Thank you for posting a review. \n It will be display after moderation.', status=status.HTTP_201_CREATED)
+        return APIResponse(message='Product Id and candidate Id required', status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request, pk, format=None):
-        product_pk = self.request.POST.get('product_id')
+        product_pk = self.request.PUT.get('product_id')
         candidate_id = request.session.get('candidate_id', None)
 
         if candidate_id and product_pk:
-            pass
+            review = request.PUT.get('review', '').strip()
+            rating = int(request.PUT.get('rating', 1))
+            title = request.PUT.get('title', '').strip()
+
+            try:
+                product_obj = Product.objects.only('id').get(pk=product_pk)
+                contenttype_obj = ContentType.objects.get_for_model(
+                    product_obj)
+                review_obj = Review.objects.filter(object_id=product_obj.id, content_type=contenttype_obj, user_id=candidate_id).first()
+
+                # Setting status back to 0 for adding this review again to moderation list
+
+                if review_obj and review_obj.user_id == candidate_id:
+                    review_obj.content = review
+                    review_obj.average_rating = rating
+                    review_obj.status = 0
+                    review_obj.title = title
+                    review_obj.created = timezone.now()
+                    review_obj.save()
+                else:
+                    return APIResponse(message='Now Allowed', status=status.HTTP_400_BAD_REQUEST)
+            except Exception as e:
+                logging.getLogger('error_log').error('Error in updating review log: {}'.format(str(e)))
+        else:
+            return APIResponse(message='Something went wrong', status=status.HTTP_400_BAD_REQUEST)
+
+        return APIResponse(message="Thank you for posting. It will be displayed after moderation.")
