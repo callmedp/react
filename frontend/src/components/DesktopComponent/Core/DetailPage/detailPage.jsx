@@ -28,8 +28,6 @@ const DetailPage = (props) => {
     const dispatch = useDispatch();
     const {match: {params: {id}}} = props;
 
-    console.log(product_detail);
-
 
     useEffect( () => {
         Aos.init({ duration: 2000, once: true, offset: 10, anchorPlacement: 'bottom-bottom' });
