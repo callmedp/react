@@ -16,15 +16,18 @@ const EnquireNow = (props) => {
     const { history } = props;
     const { register, handleSubmit, errors } = useForm();
 
-
-    console.log(errors)
-
     const addValues = (values) => {
+        return {
+            'form_field': {
+                ...values
+            }
+        }
         // Adding and contributing their values according to contributions
     }
 
     const onSubmit = async (data) => {
         // On submit send data to back-end
+        console.log(data)
 
     }
 
