@@ -83,7 +83,7 @@ class CourseRecommendationAPI(APIView):
                 }
         data ={
             'course_data':course_data,
-            'recommended_course_ids':course_id,
+            'recommended_course_ids':course_ids,
             'page':page_info
         }
         return APIResponse(data=data,message='recommended courses fetched', status=HTTP_200_OK)
