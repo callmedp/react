@@ -37,6 +37,9 @@ const EnquireNow = (props) => {
         await new Promise((resolve) => dispatch(sendEnquireNow({ payload: addValues(data), resolve })));
         e.target.reset(); // reset after form submit
         setSubmitted(true);
+        setTimeout(() => {
+            setSubmitted(false);
+        }, 3000);
 
     }
 
