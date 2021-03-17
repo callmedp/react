@@ -14,7 +14,8 @@ import { sendEnquireNow } from 'store/DetailPage/actions';
 import './enquireNow.scss';
 
 const EnquireNow = (props) => {
-    const { history } = props;
+    const {location, match: {params: {id}}} = props;
+    const {product_detail} = useSelector(store => store?.mainCourses);
     const dispatch = useDispatch()
     const { register, handleSubmit, reset, errors } = useForm();
 
@@ -22,7 +23,11 @@ const EnquireNow = (props) => {
         return {
             'form_field': {
                 ...values
-            }
+            },
+            'lsource': 2,
+            'product': id?.split('-')[1],
+            'prd': product_detail?.prd_H1,
+            'path': location['pathname']
         }
         // Adding and contributing their values according to contributions
     }
