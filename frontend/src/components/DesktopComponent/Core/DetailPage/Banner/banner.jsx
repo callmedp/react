@@ -22,17 +22,26 @@ const BannerCourseDetail = (props) => {
         inputCheckbox.current && (inputCheckbox.current.checked = false)
     })
 
+    const changeMode = (e) => {
+        console.log(e);
+    }
+
     return (
        <header className="container-fluid pos-rel course-detail-bg">
             <div className="row">
                 <div className="container detail-header-content">
                     <div className="flex-1">
                         <Breadcrumb>
-                            <Breadcrumb.Item href="#">Home</Breadcrumb.Item>
+                            {
+                                product_detail?.breadcrumbs?.map((bread, inx) => {
+                                    return <Breadcrumb.Item key={inx} href={bread.url}>{bread.name}</Breadcrumb.Item>
+                                })
+                            }
+                            {/* <Breadcrumb.Item href="#">Home</Breadcrumb.Item>
                             <Breadcrumb.Item href="#">
                                 Sales and Marketing
                             </Breadcrumb.Item>
-                            <Breadcrumb.Item active>Digital Marketing</Breadcrumb.Item>
+                            <Breadcrumb.Item active>Digital Marketing</Breadcrumb.Item> */}
                         </Breadcrumb>
                         <div className="detail-heading" data-aos="fade-right">
                             <div className="detail-heading__icon">
@@ -79,13 +88,13 @@ const BannerCourseDetail = (props) => {
                             <li className="d-flex align-items-center">
                                 <figure className="icon-course-duration mr-10"></figure>
                                 <p>
-                                    Course Duration <strong>180 Days</strong>
+                                    Course Duration <strong>{product_detail?.duration} Days</strong>
                                 </p>
                             </li>
                             <li className="d-flex align-items-center">
                                 <figure className="icon-access-duration mr-10"></figure>
                                 <p>
-                                    Access Duration <strong>365 Days</strong>
+                                    Access Duration <strong>{product_detail?.access_duration}</strong>
                                 </p>
                             </li>
                         </ul>
@@ -119,12 +128,21 @@ const BannerCourseDetail = (props) => {
                         <div className="course-enrol">
                             <div className="course-enrol__mode">
                                 <form>
-                                    Mode <label><input type="radio" value="" checked /> Online</label> 
-                                    <label><input type="radio" value="" /> Class room</label>
+                                    Mode 
+                                    {
+                                        product_detail?.var_list?.map((varList, indx) => {
+                                            return (
+                                            <label key={indx} for={varList.mode+varList.id}>
+                                                <input type="radio" name="mode" id={varList.mode+varList.id} checked={product_detail?.selected_var?.id === varList.id} onClick={(event) => changeMode(event)} />
+                                                {varList.mode === 'OL' ? 'Online' : varList.mode === 'CA' ? 'Class room' : 'Other'}
+                                            </label> 
+                                            )
+                                        })
+                                    }
                                 </form>
                             </div>
                             <div className="course-enrol__price">
-                                <strong className="mt-20 mb-10">3,499/- <del>5,499/-</del></strong>
+                                <strong className="mt-20 mb-10">{product_detail?.selected_var?.inr_price}/- <del>{product_detail?.start_price}/-</del></strong>
                                 <LinkScroll to={"#"} className="btn btn-secondary mt-10">Enroll now</LinkScroll>
                                 <LinkScroll to={"#"} className="btn btn-outline-primary mt-10">Enquire now</LinkScroll>
                             </div>
