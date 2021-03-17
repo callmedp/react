@@ -150,7 +150,7 @@ GA.prototype.SendEvent = function() {
         case 'recently _added_blogs': /*recently added in blogs*/
         case 'ln_popular_courses': /*popular courses*/
         case 'click_on_search': /*search in navbar*/
-    
+        case 'ln_career_guidance':/*career guidance */
         
         /* Skill Page Events */
         case 'SkillNeedHelpForm': /* When the user fills the form of need help */
