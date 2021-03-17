@@ -155,6 +155,7 @@ GA.prototype.SendEvent = function() {
         case 'practicetest_search': /* search practice test*/
         case 'test_preps_select': /* when user clicks on test preparation */
         case 'sign_in': /* existing user sign in using facebook etc */
+        case 'ln_new_homepage': /*new homepage components*/ 
         case 'header_icons': /*header icons clicked like cart, account etc. */
         case 'homepage_avail_offer': /* when user clicks on avail offer */
         case 'blog_banner': /* when user clicks on blog banner */
