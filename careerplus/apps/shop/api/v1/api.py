@@ -13,7 +13,7 @@ from django.contrib.contenttypes.models import ContentType
 
 # Inter-App Import
 from core.library.haystack.query import SQS
-from decimal import Decimal
+from shop.models import Category, SubHeaderCategory
 from payment.tasks import make_logging_request, make_logging_sk_request
 from crmapi.tasks import create_lead_crm
 from haystack.query import SearchQuerySet
@@ -33,7 +33,8 @@ from rest_framework.permissions import IsAuthenticated, AllowAny
 from homepage.config import UNIVERSITY_COURSE
 from crmapi.config import PRODUCT_SOURCE_MAPPING
 from crmapi.models import UNIVERSITY_LEAD_SOURCE, DEFAULT_SLUG_SOURCE
-from shop.choices import APPLICATION_PROCESS, BENEFITS, NEO_LEVEL_OG_IMAGES, SMS_URL_LIST, PRODUCT_TAG_CHOICES
+from shop.choices import APPLICATION_PROCESS, BENEFITS, NEO_LEVEL_OG_IMAGES, SMS_URL_LIST, PRODUCT_TAG_CHOICES, \
+                        STUDY_MODE, COURSE_TYPE_DICT, COURSE_LEVEL_DICT, DURATION_DICT
 
 
 # TODO
@@ -201,8 +202,6 @@ class ProductInformationAPIMixin(object):
             })
         return prd_fbt
 
-
-
     def get_reviews(self, product, page):
         """
         Function will get all the reviews given on the product
@@ -264,6 +263,38 @@ class ProductInformationAPIMixin(object):
                 'prd_review_list': [],
                 'prd_rv_page': page
             }
+
+    def get_who_should_learn(self, category):
+        """
+        Data for who should learn
+        """
+        prd_should_learn = {
+            'prd_should_lrn': False
+        }
+        # Heading choice means only take heading with who-should-learn
+        subheadercategory = SubHeaderCategory.objects.filter(category=category, heading_choices=2, active=True,
+                                                             heading_choices__in=[2, 3, 4])
+
+        if subheadercategory:
+            prd_should_learn.update({
+                'prd_should_lrn': True,
+                'prd_should_lrn_dt': subheadercategory.first().description
+            })
+        return prd_should_learn
+
+    def get_breadcrumb_data(self, category):
+        """
+        Getting the breadcrumb detail
+        """
+        breadcrumbs = []
+        breadcrumbs.append({"url": '/', "name": "Home"})
+        parent = category.get_parent()
+        if parent:
+            breadcrumbs.append({
+                "url": parent.first().get_absolute_url(), "name": parent.first().name,
+            })
+        breadcrumbs.append({"url": '', "name": category.name})
+        return breadcrumbs
 
     def get_sorted_products(self, pvrs_data):
         # Study Mode & Access Duration
@@ -424,6 +455,22 @@ class ProductInformationAPIMixin(object):
         context['navigation'] = navigation
         return context
 
+    def get_duration_mode(self, product):
+        type_dict = dict(COURSE_TYPE_DICT)
+        level_type = dict(COURSE_LEVEL_DICT)
+        access_duratiopn = dict(DURATION_DICT)
+        context = {}
+        duration_days = json.loads(product.pVrs).get('var_list')
+        if len(duration_days) != 0:
+            context.update({
+                'duration': duration_days[0].get('dur_days'),
+                'access_duration': access_duratiopn.get(duration_days[0].get('duration')),
+                'type': type_dict.get(duration_days[0].get('type'), duration_days[0].get('type')),
+                'label': duration_days[0].get('label'),
+                'level': level_type.get(duration_days[0].get('level'), duration_days[0].get('level')),
+            })
+        return context
+
     def get_product_detail_context(self, product, sqs, product_main, sqs_main):
         """
         Function using cache to get the data from redis if available else
@@ -436,9 +483,15 @@ class ProductInformationAPIMixin(object):
             main_context.update(cache.get(key))
         else:
             data = self.get_product_information(product, sqs, product_main, sqs_main)
+            data.update(self.get_other_detail(product, sqs))
+            data.update(self.get_duration_mode(sqs))
+            data.update({'breadcrumbs': self.get_breadcrumb_data(product.category_main)})
+            data.update(self.get_who_should_learn(product.category_main))
+            if product.category_main:
+                data.update({'shld_take_test_slg': product.category_main.slug})
             main_context.update(data)
             cache.set(key, data, 60 * 60 * 4)
-        main_context.update(self.get_other_detail(product, sqs))
+
         return main_context
 
 
