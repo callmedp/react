@@ -14,7 +14,7 @@ import './enquireNow.scss';
 
 const EnquireNow = (props) => {
     const { history } = props;
-    const { register, handleSubmit, errors } = useForm();
+    const { register, handleSubmit, reset, errors } = useForm();
 
     const addValues = (values) => {
         return {
@@ -25,9 +25,11 @@ const EnquireNow = (props) => {
         // Adding and contributing their values according to contributions
     }
 
-    const onSubmit = async (data) => {
+    const onSubmit = async (data, e) => {
         // On submit send data to back-end
         console.log(data)
+
+        e.target.reset(); // reset after form submit
 
     }
 
