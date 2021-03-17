@@ -8,12 +8,14 @@ import { useForm } from 'react-hook-form';
 
 // Inter-App Import
 import DetailPageForm from 'formHandler/desktopFormHandler/formData/DetailPage';
+import { sendEnquireNow } from 'store/DetailPage/actions';
 
 // Styling Import
 import './enquireNow.scss';
 
 const EnquireNow = (props) => {
     const { history } = props;
+    const dispatch = useDispatch()
     const { register, handleSubmit, reset, errors } = useForm();
 
     const addValues = (values) => {
@@ -28,8 +30,8 @@ const EnquireNow = (props) => {
     const onSubmit = async (data, e) => {
         // On submit send data to back-end
         console.log(data)
-
-        e.target.reset(); // reset after form submit
+        await new Promise((resolve) => dispatch(sendEnquireNow({ payload: addValues(data), resolve })));
+        // e.target.reset(); // reset after form submit
 
     }
 
