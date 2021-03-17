@@ -65,7 +65,7 @@ const DetailPage = (props) => {
             <OtherProviders />
             <FAQ />
             <Reviews />
-            <EnquireNow />
+            <EnquireNow {...props}/>
             <CoursesMayLike />
             <Footer />
         </div>
