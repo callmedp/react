@@ -10,7 +10,9 @@ from .views import (
 
 from .api import (
     ProductDetailAPI,
+    ProductReviewAPIListing,
     ProductReviewAPI
+
 )
 
 from django.conf import settings
@@ -33,7 +35,8 @@ urlpatterns = [
     re_path(r'^course-catalogue/$', CourseCatalogueAPI.as_view(), name='course-catalogue-api'),
 
     re_path(r'^get-product/$', ProductDetailAPI.as_view(), name='get-product-api'),
-    re_path(r'^get-prd-review/$', ProductReviewAPI.as_view(), name='get-product-review-api')
+    re_path(r'^get-prd-review/$', ProductReviewAPIListing.as_view(), name='get-product-review-api'),
+    re_path(r'^product/review/$', ProductReviewAPI.as_view(), name='product-review-add-update-api')
 ]
 
 if settings.DEBUG:
