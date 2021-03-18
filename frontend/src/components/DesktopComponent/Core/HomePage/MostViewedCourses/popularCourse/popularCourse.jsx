@@ -4,7 +4,7 @@ import { MyGA } from 'utils/ga.tracking.js';
 
 
 const popularCourse = (props) => {
-    const {course} = props
+    const {course,category} = props
 
     const starRatings = (star) => {
         return (star === '*' ? <em className="icon-fullstar" key={Math.random()}></em> : star === '+' 
@@ -13,7 +13,7 @@ const popularCourse = (props) => {
     }
     return (
         <li className="col-sm-3">
-        <div className="card" onClick={() => MyGA.SendEvent('ln_new_homepage','ln_most_viewed_course', 'ln_{{selected domain e.g All, Law, Banking etc}}', course.name,'', false, true)}>
+        <div className="card" onClick={() => MyGA.SendEvent('ln_new_homepage','ln_most_viewed_course', 'ln_'+category, course.name,'', false, true)}>
             <div className="card__heading">
                 <figure>
                     <img src={course.imgUrl} alt={course.imgAlt} />
