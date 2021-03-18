@@ -16,6 +16,7 @@ const ViewCourses = (props) => {
     const [currentJobPage, setJobPage] = useState(1);
     const params = new URLSearchParams(props.location?.search);
     const feedD = {'recommended_course_ids': recommended_course_ids, 'intent': 1, 'context': 'Progress your career'};
+    const [feedback, setFeedback] = useState(false);
 
     const handleEffect = async () => {
 		const dataUpskill = `?preferred_role=${params.get('job_title')}&experience=${params.get('minexp')}&skills=${params.get('skill') || ''}&page=${currentJobPage}&intent=1&department=${params.get('department')}`; //need to revied
@@ -55,7 +56,7 @@ const ViewCourses = (props) => {
                             <CourseLisiting courseList={course_data} />
                             {page && page.has_next ? <Link onClick={loadMoreCourses} className="load-more">View More Courses</Link> : ''}
                         </div>
-                        <Feedback feedbackData={feedD} heading={'courses'} />
+                        <Feedback feed={feedback} setFeedback={setFeedback} feedbackData={feedD} heading={'courses'} />
                     </div>
                 </div>
             </div>
