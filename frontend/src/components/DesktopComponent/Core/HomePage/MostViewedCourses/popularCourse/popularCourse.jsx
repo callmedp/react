@@ -1,5 +1,7 @@
 import React from 'react'
 import { siteDomain } from 'utils/domains';
+import { MyGA } from 'utils/ga.tracking.js';
+
 
 const popularCourse = (props) => {
     const {course} = props
@@ -11,7 +13,7 @@ const popularCourse = (props) => {
     }
     return (
         <li className="col-sm-3">
-        <div className="card">
+        <div className="card" onClick={() => MyGA.SendEvent('ln_new_homepage','ln_most_viewed_course', 'ln_{{selected domain e.g All, Law, Banking etc}}', course.name,'', false, true)}>
             <div className="card__heading">
                 <figure>
                     <img src={course.imgUrl} alt={course.imgAlt} />
