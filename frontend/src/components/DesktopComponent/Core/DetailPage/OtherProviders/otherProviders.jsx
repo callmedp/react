@@ -21,7 +21,7 @@ const OtherProviders = (props) => {
                             {
                                 pop_list?.map((popList, indx) => {
                                     return (
-                                        <li className="col">
+                                        <li className="col" key={indx}>
                                             <div className="card">
                                                 <div className="card__heading">
                                                     <figure>

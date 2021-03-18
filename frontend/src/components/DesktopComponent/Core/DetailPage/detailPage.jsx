@@ -77,10 +77,10 @@ const DetailPage = (props) => {
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-sm-9">
-                        <WhoLearn />
+                       { product_detail?.prd_should_lrn && <WhoLearn prd_lrn_data={product_detail?.prd_should_lrn_dt}/> }
                     </div>
                     <div className="col-sm-3">
-                        <TakeFreeTest />
+                        <TakeFreeTest should_take_test_url={product_detail?.shld_take_test_slg} />
                     </div>
                 </div>
             </div>
