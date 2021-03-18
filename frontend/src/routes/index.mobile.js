@@ -45,7 +45,7 @@ export const routes = [
         exact: true,
     },
     {
-        path: '/detail-page/:id/',
+        path: '/course/:func/:skill/:id/',
         component: DetailPageContainer,
         exact: true,
     },

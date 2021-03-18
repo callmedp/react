@@ -26,10 +26,7 @@ import { useSelector, useDispatch } from 'react-redux';
 const DetailPage = (props) => {
     const {product_detail, skill} = useSelector(store => store?.mainCourses);
     const dispatch = useDispatch();
-    const {match: {params: {id}}} = props;
-
-    console.log(product_detail);
-
+    const {match: {params: {id}}, history} = props;
 
     useEffect( () => {
         Aos.init({ duration: 2000, once: true, offset: 10, anchorPlacement: 'bottom-bottom' });
@@ -43,7 +40,7 @@ const DetailPage = (props) => {
         }
         catch (error) {
             if (error?.status == 404) {
-                // history.push('/404');
+                history.push('/404');
             }
         }
     };

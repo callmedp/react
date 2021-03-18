@@ -25,18 +25,20 @@ import ReviewModal from '../../Common/Modals/ReviewModal';
 import '../DetailPage/detailPage.scss';
 import Aos from "aos";
 // import "aos/dist/aos.css";
-import { fetchRecommendedCourses, fetchReviews, fetchOtherProviderCourses } from 'store/DetailPage/actions';
+import { fetchRecommendedCourses, fetchReviews, fetchOtherProviderCourses, fetchMainCourses } from 'store/DetailPage/actions';
 
 const DetailPage = (props) => {
 
     const [reviewModal, showReviewModal] = useState(false)
     const prdId = props.match.params.id;
     const dispatch = useDispatch()
+    const { product_detail, skill } = useSelector(store => store?.mainCourses);
 
     const handleEffects = async () => {
         try {
             if (!(window && window.config && window.config.isServerRendered)) {
-                new Promise((resolve, reject) => dispatch(fetchReviews({ payload: { prdId: prdId }, resolve, reject })));
+                new Promise((resolve, reject) => dispatch(fetchMainCourses({ id: prdId?.split('-')[1] ,resolve, reject })));
+                new Promise((resolve, reject) => dispatch(fetchReviews({ payload: { prdId: prdId?.split('-')[1] }, resolve, reject })));
                 new Promise((resolve, reject) => dispatch(fetchRecommendedCourses({ resolve, reject })));
                 await new Promise((resolve, reject) => dispatch(fetchOtherProviderCourses({ resolve, reject })));
             }
@@ -64,7 +66,7 @@ const DetailPage = (props) => {
                 reviewModal ? <ReviewModal showReviewModal={showReviewModal}/> :<>
                 <header className="m-container m-header detail-bg">
                 <Header />
-                <CourseDetailBanner />
+                <CourseDetailBanner product_detail={product_detail} prdId={prdId}/>
             </header>
             <main className="mb-0">
                 <CourseEnrol />
