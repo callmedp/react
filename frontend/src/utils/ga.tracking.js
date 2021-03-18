@@ -151,6 +151,7 @@ GA.prototype.SendEvent = function() {
         case 'ln_popular_courses': /*popular courses*/
         case 'click_on_search': /*search in navbar*/
         case 'ln_career_guidance':/*career guidance */
+        case 'ln_new_homepage':/*new homepage*/
         
         /* Skill Page Events */
         case 'SkillNeedHelpForm': /* When the user fills the form of need help */
