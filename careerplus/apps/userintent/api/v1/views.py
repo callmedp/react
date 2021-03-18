@@ -68,11 +68,10 @@ class CourseRecommendationAPI(APIView):
         except Exception as e:
             logging.getLogger('error_log').error('response for {} - {}'.format(candidate_id, str(e)))
             return APIResponse(error=True,message='Error in user intent object creation',status=HTTP_400_BAD_REQUEST)
-        course_id = RecommendationMixin().get_courses_from_analytics_recommendation_engine(data=data)
-        if not course_id:
-            course_id = settings.DEFAULT_LEARNING_COURSE_RECOMMENDATION_PRODUCT_ID
+        course_ids = RecommendationMixin().get_courses_from_analytics_recommendation_engine(data=data)
+        if not course_ids:
+            course_ids = settings.DEFAULT_LEARNING_COURSE_RECOMMENDATION_PRODUCT_ID
         user_purchased_courses = OrderItem.objects.filter(product__type_flow=2,no_process=False,order__candidate_id=candidate_id,order__status__in=[1, 3]).values_list('product__id',flat=True)
-        course_ids = [2070,570,1615,88,2679]
         courses = SearchQuerySet().filter(id__in=course_ids).exclude(id__in=user_purchased_courses)
         paginated_data = offset_paginator(page, courses,size=3)
         course_data = ProductMixin().get_course_json(paginated_data["data"])
@@ -85,7 +84,7 @@ class CourseRecommendationAPI(APIView):
                 }
         data ={
             'course_data':course_data,
-            'recommended_course_ids':course_id,
+            'recommended_course_ids':course_ids,
             'page':page_info
         }
         return APIResponse(data=data,message='recommended courses fetched', status=HTTP_200_OK)
