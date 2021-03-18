@@ -20,10 +20,10 @@ const CourseLisiting = (props) => {
         setToggleMore(state => state === idx ? false : idx);
     }
 
-    const goToUrl = (event, url) => {
-        event.preventDefault();
-        return window.location.href = `${siteDomain}${url}`;
-    }
+    // const goToUrl = (event, url) => {
+    //     event.preventDefault();
+    //     return window.location.href = `${siteDomain}${url}`;
+    // }
 
     return (
         <ul className="courses-listing ml-10n mt-30">
@@ -31,7 +31,7 @@ const CourseLisiting = (props) => {
                 courseList?.map((course, index) => {
                     return (
                         <li className="col" key={index}>
-                            <div className="course" onClick={(e) => goToUrl(e, course.url)}>
+                            <div className="course">
                                 <div className="d-flex align-items-center">
                                     <figure className="course__icon">
                                         <img src={course.imgUrl} alt={course.imgAlt} />
