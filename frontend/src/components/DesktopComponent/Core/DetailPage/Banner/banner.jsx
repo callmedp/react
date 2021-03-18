@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import './banner.scss';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 // import {Link} from 'react-router-dom';
@@ -10,7 +10,9 @@ const BannerCourseDetail = (props) => {
     const inputCheckbox = useRef(null);
     const regex = /<(.|\n)*?>/g;
 
-    // console.log(props);
+    const [varChecked, changeChecked] = useState({});
+
+
 
     const starRatings = (star, index) => {
         return (star === '*' ? <em className="icon-fullstar" key={index}></em> : star === '+' 
@@ -19,11 +21,13 @@ const BannerCourseDetail = (props) => {
     }
 
     useEffect(() => {
-        inputCheckbox.current && (inputCheckbox.current.checked = false)
+        inputCheckbox.current && (inputCheckbox.current.checked = false);
     })
 
-    const changeMode = (e) => {
-        console.log(e);
+    const changeMode = (objj) => {
+        let neww = objj;
+        console.log(neww);
+        changeChecked({...neww});
     }
 
     return (
@@ -37,11 +41,6 @@ const BannerCourseDetail = (props) => {
                                     return <Breadcrumb.Item key={inx} href={bread.url}>{bread.name}</Breadcrumb.Item>
                                 })
                             }
-                            {/* <Breadcrumb.Item href="#">Home</Breadcrumb.Item>
-                            <Breadcrumb.Item href="#">
-                                Sales and Marketing
-                            </Breadcrumb.Item>
-                            <Breadcrumb.Item active>Digital Marketing</Breadcrumb.Item> */}
                         </Breadcrumb>
                         <div className="detail-heading" data-aos="fade-right">
                             <div className="detail-heading__icon">
@@ -69,9 +68,9 @@ const BannerCourseDetail = (props) => {
                                         </LinkScroll>
                                         </span>}
                                         {product_detail?.prd_num_jobs && <span className="review-jobs">
-                                            <LinkScroll to={"#"}>
+                                            <a target="_blank" href={product_detail?.num_jobs_url}>
                                                 <figure className="icon-jobs-link"></figure> <strong>{product_detail?.prd_num_jobs}</strong> Jobs available
-                                            </LinkScroll>
+                                            </a>
                                         </span>}
                                         </>
                                     }
@@ -100,9 +99,9 @@ const BannerCourseDetail = (props) => {
                         </ul>
                         <div className="intro-video">
                             <figure className="intro-video__img">
-                                <a target="_blank" href={product_detail?.prd_video}>
+                                <a rel="noopener noreferrer" target="_blank" href={`https://${product_detail?.prd_video}`}>
                                     <img src={product_detail?.prd_vendor_img} alt="Intro Video" />
-                                    <i className="icon-play-video"></i>
+                                    {/* <i className="icon-play-video"></i> */}
                                     <strong>Intro video</strong>
                                 </a>
                             </figure>
@@ -127,24 +126,25 @@ const BannerCourseDetail = (props) => {
                     <div className="banner-detail">
                         <div className="course-enrol">
                             <div className="course-enrol__mode">
-                                <form>
-                                    Mode 
-                                    {
-                                        product_detail?.var_list?.map((varList, indx) => {
-                                            return (
-                                            <label key={indx} for={varList.mode+varList.id}>
-                                                <input type="radio" name="mode" id={varList.mode+varList.id} checked={product_detail?.selected_var?.id === varList.id} onClick={(event) => changeMode(event)} />
-                                                {varList.mode === 'OL' ? 'Online' : varList.mode === 'CA' ? 'Class room' : 'Other'}
-                                            </label> 
-                                            )
-                                        })
-                                    }
-                                </form>
+                            {
+                                product_detail?.var_list?.map((varList, indx) => {
+                                    return (
+                                            <form>
+                                                Mode
+                                                <label key={indx} for={varList.id}>
+                                                    <input type="radio" name="radio" id={varList.id} checked={varChecked?.id && (varChecked?.id === varList.id ? true : false) || !varChecked?.id && (product_detail?.selected_var?.id === varList.id ? true : false)} onChange={() => changeMode(varList)} />
+                                                    {varList.mode === 'OL' ? 'Online' : varList.mode === 'CA' ? 'Class room' : 'Other'}
+                                                </label> 
+                                            </form>
+                                        )
+                                })
+                            }
                             </div>
+
                             <div className="course-enrol__price">
-                                <strong className="mt-20 mb-10">{product_detail?.selected_var?.inr_price}/- <del>{product_detail?.start_price}/-</del></strong>
+                                <strong className="mt-20 mb-10">{varChecked?.inr_price || product_detail?.var_list[0].inr_price}/- <del>{product_detail?.start_price}/-</del></strong>
                                 <LinkScroll to={"#"} className="btn btn-secondary mt-10">Enroll now</LinkScroll>
-                                <LinkScroll to={"#"} className="btn btn-outline-primary mt-10">Enquire now</LinkScroll>
+                                <LinkScroll to={"enquire-now"} className="btn btn-outline-primary mt-10">Enquire now</LinkScroll>
                             </div>
                             <div className="course-enrol__offer lightblue-bg2">
                                 <strong className="mt-10 mb-5">Offers</strong>
