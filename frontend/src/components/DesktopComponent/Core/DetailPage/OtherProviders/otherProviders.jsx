@@ -12,14 +12,14 @@ const OtherProviders = (props) => {
     }
     
     return(
-        <section className="container-fluid" data-aos="fade-up">
+        <section className="container-fluid" data-aos="fade-up" id="popListTemplate">
         <div className="row">
             <div className="container"> 
                 <div className="recent-courses mt-20 mb-30">
                     <h2 className="heading2">Courses by other providers</h2>
                         <ul className="recent-courses__list mt-30">
                             {
-                                pop_list?.map((popList, indx) => {
+                                pop_list?.slice(0,4).map((popList, indx) => {
                                     return (
                                         <li className="col" key={indx}>
                                             <div className="card">

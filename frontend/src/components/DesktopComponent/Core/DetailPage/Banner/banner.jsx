@@ -9,10 +9,7 @@ const BannerCourseDetail = (props) => {
     const reqLength = 365;
     const inputCheckbox = useRef(null);
     const regex = /<(.|\n)*?>/g;
-
     const [varChecked, changeChecked] = useState({});
-
-
 
     const starRatings = (star, index) => {
         return (star === '*' ? <em className="icon-fullstar" key={index}></em> : star === '+' 
@@ -79,10 +76,10 @@ const BannerCourseDetail = (props) => {
                         </div>
                         <ul className="course-stats mt-30 mb-30">
                             <li>
-                                <strong>By {product_detail?.prd_vendor}</strong> <LinkScroll to={"#"}>View all</LinkScroll> courses by {product_detail?.prd_vendor}  
+                                <strong>By {product_detail?.prd_vendor}</strong> <a href={() => window.location.pathname=`search/results/?fvid=${product_detail?.pPv}`}>View all</a> courses by {product_detail?.prd_vendor}  
                             </li>
                             <li>
-                            <LinkScroll className="d-block" to={"popListTemplate"}>+{product_detail?.pop_list?.length} more</LinkScroll> Course providers  
+                            <LinkScroll className="d-block" to={"popListTemplate"}>+4 more</LinkScroll> Course providers  
                             </li>
                             <li className="d-flex align-items-center">
                                 <figure className="icon-course-duration mr-10"></figure>
@@ -129,9 +126,9 @@ const BannerCourseDetail = (props) => {
                             {
                                 product_detail?.var_list?.map((varList, indx) => {
                                     return (
-                                            <form>
+                                            <form key={indx}>
                                                 Mode
-                                                <label key={indx} for={varList.id}>
+                                                <label htmlFor={varList.id}>
                                                     <input type="radio" name="radio" id={varList.id} checked={varChecked?.id && (varChecked?.id === varList.id ? true : false) || !varChecked?.id && (product_detail?.selected_var?.id === varList.id ? true : false)} onChange={() => changeMode(varList)} />
                                                     {varList.mode === 'OL' ? 'Online' : varList.mode === 'CA' ? 'Class room' : 'Other'}
                                                 </label> 
