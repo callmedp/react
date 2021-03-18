@@ -3,8 +3,7 @@ import { siteDomain } from 'utils/domains';
 
 const myServicesData = (data) => {
     let url = "";
-    if(data.isDesk) url = `my-services/?page=${data?.page}&last_month_from=${data?.last_month_from}&select_type=${data?.select_type}`;
-    else url = `my-services/?page=${data?.page}`;
+    url = `my-services/?page=${data?.page}&last_month_from=${data?.last_month_from}&select_type=${data?.select_type}`;
     return BaseApiService.get(`${siteDomain}/dashboard/api/v1/${url}`);
 };
 

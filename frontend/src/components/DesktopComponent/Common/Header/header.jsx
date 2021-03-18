@@ -134,7 +134,7 @@ const Header = (props) => {
                                                         <a className="dropdown-item" href={`${siteDomain}/dashboard/myorder/`}>My Orders</a>
                                                         <a className="dropdown-item" href={`${siteDomain}/dashboard/mywallet/`}>My Wallet</a>
                                                         <a className="dropdown-item" href={`${siteDomain}/dashboard/roundone/`}>My Referrals</a>
-                                                        <a className="dropdown-item truncate" >{candidateInfo?.name ? candidateInfo?.name?.charAt(0)?.toUpperCase() + candidateInfo?.name?.slice(1) : candidateInfo?.email}</a>
+                                                        <a className="dropdown-item truncate" >{candidateInfo?.email ? candidateInfo?.email : candidateInfo?.name?.charAt(0)?.toUpperCase() + candidateInfo?.name?.slice(1)}</a>
                                                         <div className="dropdown-divider"></div>
                                                         <a className="dropdown-item" onClick={() => handleLogout()} >Logout</a>
                                                     </>

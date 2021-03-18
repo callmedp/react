@@ -39,6 +39,7 @@ class DashboardMyorderApi(DashboardInfo, APIView):
         data = []
         page = request.GET.get("page", 1)
         candidate_id = self.request.session.get('candidate_id', None)
+        # candidate_id='601b8120ca3f418906a889a8'
         order_list = []
         page_info={}
         if candidate_id:         
@@ -400,6 +401,7 @@ class ViewOrderDetailsApi(APIView):
 
     def get(self,request):
         candidate_id = self.request.session.get('candidate_id', None)
+        # candidate_id='601b8120ca3f418906a889a8'
         oi_id = request.GET.get('oi_id',None)
         if candidate_id is None:
             return APIResponse(data='', error='Candidate Details required', status=status.HTTP_400_BAD_REQUEST)

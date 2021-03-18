@@ -78,7 +78,7 @@ const MyOrders = (props) => {
 
     return(
         <div>
-            <BreadCrumbs filterStateShow={false} />
+            {/* <BreadCrumbs filterStateShow={false} /> */}
             <div className="db-my-order">
             { orderLoader ? <Loader /> : ''}
 
@@ -160,7 +160,7 @@ const MyOrders = (props) => {
                             <br /> <br/> */}
 
                             <button className="btn btn-outline-primary px-5" onClick={() => handleCancellation(cancelOrderId)}>Yes</button>&emsp;
-                            <button className="btn btn-outline-primary px-5" onClick={() => setShowCancelModal(false)}>No</button>
+                            {/* <button className="btn btn-outline-primary px-5" onClick={() => setShowCancelModal(false)}>No</button> */}
                         </div>
                         </Modal.Body>
                     </Modal>

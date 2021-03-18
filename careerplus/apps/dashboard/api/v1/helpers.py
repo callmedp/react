@@ -95,19 +95,19 @@ def get_courses_detail(instance):
             current_status.update({'status':'Modifications requested'})
         if oi.oi_status == 46 and oi.draft_counter == 1:
             current_status.update({'status':'Document is ready'})
-            current_status.update({'download_url':reverse("dashboard-draf-download",kwargs={'order_item':oi.order.pk})})
+            current_status.update({'download_url':reverse("dashboard-draf-download",kwargs={'order_item':oi.pk})})
         elif oi.oi_status == 46 and oi.draft_counter < max_draft_limit:
             current_status.update({'status':'Revised Document is ready'})
-            current_status.update({'download_url':reverse("dashboard-draf-download",kwargs={'order_item':oi.order.pk})})
+            current_status.update({'download_url':reverse("dashboard-draf-download",kwargs={'order_item':oi.pk})})
         elif oi.oi_status == 4 and oi.draft_counter == max_draft_limit :
             current_status.update({'status':'Final Document is ready'})
-            current_status.update({'download_url':reverse("dashboard-draf-download",kwargs={'order_item':oi.order.pk})})
+            current_status.update({'download_url':reverse("dashboard-draf-download",kwargs={'order_item':oi.pk})})
 
             if not oi.order.service_resume_upload_shine:
                 current_status.update({'UploadResumeToShine':True})
         elif oi.oi_status == 4 and oi.draft_counter < max_draft_limit :
             current_status.update({'status':'Service has been processed and Document is finalized'})
-            current_status.update({'download_url':reverse("dashboard-draf-download",kwargs={'order_item':oi.order.pk})})
+            current_status.update({'download_url':reverse("dashboard-draf-download",kwargs={'order_item':oi.pk})})
 
             if not oi.order.service_resume_upload_shine:
                 current_status.update({'UploadResumeToShine':True})
