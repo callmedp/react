@@ -9,7 +9,8 @@ import {
     ReviewsFetched,
     submitReview,
     fetchRecommendedCourses,
-    recommendedCoursesFetched
+    recommendedCoursesFetched,
+    sendEnquireNow
 } from './actions';
 
 function* mainCoursesApi(action){
@@ -103,10 +104,29 @@ function* submitReviews(action){
     }
 }
 
+function* SendEnquireNow(action) {
+    const { payload: { payload, resolve, reject }} = action;
+
+    try{
+        const response = yield call(Api.EnquireNewSend, payload)
+
+        if (response?.error) {
+            return reject(response)
+        }
+        const item = response?.data?.data;
+        return resolve(item);
+    }
+    catch(e) {
+        console.log(`Reject sending survey question due to ${e}`);
+        return reject(e);
+    }
+}
+
 export default function* WatchDetailPage() {
     yield takeLatest(fetchOtherProviderCourses.type, otherProvidersCourses);
     yield takeLatest(fetchMainCourses.type, mainCoursesApi);
     yield takeLatest(fetchRecommendedCourses.type, recommendedCourses);
     yield takeLatest(fetchReviews.type, productReviews);
     yield takeLatest(submitReview.type, submitReviews);
+    yield takeLatest(sendEnquireNow.type, SendEnquireNow);
 }

@@ -13,6 +13,9 @@ const fetchReviews = createAction('FETCH_REVIEWS');
 const ReviewsFetched = createAction('REVIEWS_FETCHED');
 const submitReview = createAction('SUBMIT_REVIEW');
 
+const sendEnquireNow = createAction('SEND_ENQUIRE_NOW');
+const sendedEnquireNow = createAction('SENEDED_EQUIRE_NOW');
+
 export {
     fetchMainCourses,
     mainCoursesFetched,
@@ -22,5 +25,7 @@ export {
     ReviewsFetched,
     submitReview,
     fetchRecommendedCourses,
-    recommendedCoursesFetched
+    recommendedCoursesFetched,
+    sendEnquireNow,
+    sendedEnquireNow
 }

@@ -8,19 +8,25 @@ import { useForm } from 'react-hook-form';
 
 // Inter-App Import
 import DetailPageForm from 'formHandler/desktopFormHandler/formData/DetailPage';
+import { sendEnquireNow } from 'store/DetailPage/actions';
 
 // Styling Import
 import './enquireNow.scss';
 
 const EnquireNow = (props) => {
-    const { history } = props;
+    const {location, match: {params: {id}}} = props;
+    const [ issubmitted, setSubmitted ] = useState(false);
+    const {product_detail} = useSelector(store => store?.mainCourses);
+    const dispatch = useDispatch()
     const { register, handleSubmit, reset, errors } = useForm();
 
     const addValues = (values) => {
         return {
-            'form_field': {
-                ...values
-            }
+            ...values,
+            'lsource': 2,
+            'product': id?.split('-')[1],
+            'prd': product_detail?.prd_H1,
+            'path': location['pathname']
         }
         // Adding and contributing their values according to contributions
     }
@@ -28,8 +34,12 @@ const EnquireNow = (props) => {
     const onSubmit = async (data, e) => {
         // On submit send data to back-end
         console.log(data)
-
+        await new Promise((resolve) => dispatch(sendEnquireNow({ payload: addValues(data), resolve })));
         e.target.reset(); // reset after form submit
+        setSubmitted(true);
+        setTimeout(() => {
+            setSubmitted(false);
+        }, 3000);
 
     }
 
@@ -42,7 +52,9 @@ const EnquireNow = (props) => {
                             <img src="/media/images/desktop/enquire-now-bg.png" alt="Enquire Now" />
                         </div>
                         <div className="enquire-now__form col">
+                           
                             <strong className="heading2">Enquire now!</strong>
+                            {issubmitted ? <p style={{ color: 'red', fontWeight: 800}}> Your Query Submitted Successfully. </p> : '' }
                             <form className="mt-30" onSubmit={handleSubmit(onSubmit)}>
 
                                 <InputField attributes={DetailPageForm.name} register={register}

@@ -1,10 +1,12 @@
 import requests
-
+import logging
 from celery import task
 import subprocess, os
 from django.conf import settings
 from shop.models import PracticeTestInfo
 from core.api_mixin import NeoApiMixin
+from review.models import Review
+from django.contrib.contenttypes.models import ContentType
 
 @task(name='delete_products_from_solr')
 def delete_from_solr():
@@ -76,4 +78,28 @@ def create_neo_lead(email=None):
         if flag:
             lead.lead_created = True
             lead.save()
+
+
+@task(name='create_product_review_task')
+def create_product_review_task(product_id, name, email, candidate_id, review, rating, title):
+    try:
+        content_type = ContentType.objects.get(
+            app_label="shop", model="product")
+        review_obj_created = Review.objects.create(
+            content_type=content_type,
+            object_id=product_id,
+            user_name=name,
+            user_email=email,
+            user_id=candidate_id,
+            content=review,
+            average_rating=rating,
+            title=title
+        )
+        extra_content_obj = ContentType.objects.get(
+            app_label="shop", model="product")
+        review_obj_created.extra_content_type = extra_content_obj
+        review_obj_created.extra_object_id = product_id
+        review_obj_created.save()
+    except Exception as e:
+        logging.getLogger('error_info').error('error is task log: {}'.format(str(e)))
 

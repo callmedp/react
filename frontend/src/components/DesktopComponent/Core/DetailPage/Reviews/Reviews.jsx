@@ -62,7 +62,7 @@ const LearnersStories = (props) => {
                             {
                                 prd_review_list?.map((review, idx) => {
                                     return (
-                                        <div className="col-sm-4">
+                                        <div className="col-sm-4" key={idx}>
                                             <div className="card">
                                                 <span className="rating">
                                                     {
