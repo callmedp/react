@@ -6,7 +6,7 @@ import Modal from 'react-bootstrap/Modal';
 // import Button from 'react-bootstrap/Button';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchReviews } from 'store/DetailPage/actions';
-import Slider from "react-slick";
+// import Slider from "react-slick";
 
 const LearnersStories = (props) => {
     const {id} = props;
@@ -14,9 +14,8 @@ const LearnersStories = (props) => {
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
-    const { prd_reviews : { prd_review_list, prd_rv_current_page, prd_rv_has_next, prd_rv_has_prev, prd_rv_total } } = useSelector( store => store.reviews )
+    const { prd_reviews : { prd_review_list, prd_rv_current_page, prd_rv_has_next, prd_rv_has_prev } } = useSelector( store => store.reviews )
 
-    // console.log(prd_review_list, prd_rv_current_page, prd_rv_has_next, prd_rv_has_prev, prd_rv_total)
     const dispatch = useDispatch();
     let currentPage = 1;
 
@@ -25,7 +24,6 @@ const LearnersStories = (props) => {
     }, [id])
 
     const handleEffects = async (page) => {
-        console.log(page);
         currentPage = page;
         try {
             await new Promise((resolve, reject) => dispatch(fetchReviews({ payload: { prdId: id, page: page }, resolve, reject })));

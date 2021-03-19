@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import './banner.scss';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 // import {Link} from 'react-router-dom';
@@ -9,8 +9,7 @@ const BannerCourseDetail = (props) => {
     const reqLength = 365;
     const inputCheckbox = useRef(null);
     const regex = /<(.|\n)*?>/g;
-
-    // console.log(props);
+    const [varChecked, changeChecked] = useState({});
 
     const starRatings = (star, index) => {
         return (star === '*' ? <em className="icon-fullstar" key={index}></em> : star === '+' 
@@ -19,8 +18,14 @@ const BannerCourseDetail = (props) => {
     }
 
     useEffect(() => {
-        inputCheckbox.current && (inputCheckbox.current.checked = false)
+        inputCheckbox.current && (inputCheckbox.current.checked = false);
     })
+
+    const changeMode = (objj) => {
+        let neww = objj;
+        console.log(neww);
+        changeChecked({...neww});
+    }
 
     return (
        <header className="container-fluid pos-rel course-detail-bg">
@@ -28,11 +33,11 @@ const BannerCourseDetail = (props) => {
                 <div className="container detail-header-content">
                     <div className="flex-1">
                         <Breadcrumb>
-                            <Breadcrumb.Item href="#">Home</Breadcrumb.Item>
-                            <Breadcrumb.Item href="#">
-                                Sales and Marketing
-                            </Breadcrumb.Item>
-                            <Breadcrumb.Item active>Digital Marketing</Breadcrumb.Item>
+                            {
+                                product_detail?.breadcrumbs?.map((bread, inx) => {
+                                    return <Breadcrumb.Item key={inx} href={bread.url}>{bread.name}</Breadcrumb.Item>
+                                })
+                            }
                         </Breadcrumb>
                         <div className="detail-heading" data-aos="fade-right">
                             <div className="detail-heading__icon">
@@ -60,9 +65,9 @@ const BannerCourseDetail = (props) => {
                                         </LinkScroll>
                                         </span>}
                                         {product_detail?.prd_num_jobs && <span className="review-jobs">
-                                            <LinkScroll to={"#"}>
+                                            <a target="_blank" href={product_detail?.num_jobs_url}>
                                                 <figure className="icon-jobs-link"></figure> <strong>{product_detail?.prd_num_jobs}</strong> Jobs available
-                                            </LinkScroll>
+                                            </a>
                                         </span>}
                                         </>
                                     }
@@ -71,29 +76,29 @@ const BannerCourseDetail = (props) => {
                         </div>
                         <ul className="course-stats mt-30 mb-30">
                             <li>
-                                <strong>By {product_detail?.prd_vendor}</strong> <LinkScroll to={"#"}>View all</LinkScroll> courses by {product_detail?.prd_vendor}  
+                                <strong>By {product_detail?.prd_vendor}</strong> <a href={() => window.location.pathname=`search/results/?fvid=${product_detail?.pPv}`}>View all</a> courses by {product_detail?.prd_vendor}  
                             </li>
                             <li>
-                            <LinkScroll className="d-block" to={"popListTemplate"}>+{product_detail?.pop_list?.length} more</LinkScroll> Course providers  
+                            <LinkScroll className="d-block" to={"popListTemplate"}>+4 more</LinkScroll> Course providers  
                             </li>
                             <li className="d-flex align-items-center">
                                 <figure className="icon-course-duration mr-10"></figure>
                                 <p>
-                                    Course Duration <strong>180 Days</strong>
+                                    Course Duration <strong>{product_detail?.duration} Days</strong>
                                 </p>
                             </li>
                             <li className="d-flex align-items-center">
                                 <figure className="icon-access-duration mr-10"></figure>
                                 <p>
-                                    Access Duration <strong>365 Days</strong>
+                                    Access Duration <strong>{product_detail?.access_duration}</strong>
                                 </p>
                             </li>
                         </ul>
                         <div className="intro-video">
                             <figure className="intro-video__img">
-                                <a target="_blank" href={product_detail?.prd_video}>
+                                <a rel="noopener noreferrer" target="_blank" href={`https://${product_detail?.prd_video}`}>
                                     <img src={product_detail?.prd_vendor_img} alt="Intro Video" />
-                                    <i className="icon-play-video"></i>
+                                    {/* <i className="icon-play-video"></i> */}
                                     <strong>Intro video</strong>
                                 </a>
                             </figure>
@@ -118,15 +123,25 @@ const BannerCourseDetail = (props) => {
                     <div className="banner-detail">
                         <div className="course-enrol">
                             <div className="course-enrol__mode">
-                                <form>
-                                    Mode <label><input type="radio" value="" checked /> Online</label> 
-                                    <label><input type="radio" value="" /> Class room</label>
-                                </form>
+                            {
+                                product_detail?.var_list?.map((varList, indx) => {
+                                    return (
+                                            <form key={indx}>
+                                                Mode
+                                                <label htmlFor={varList.id}>
+                                                    <input type="radio" name="radio" id={varList.id} checked={varChecked?.id && (varChecked?.id === varList.id ? true : false) || !varChecked?.id && (product_detail?.selected_var?.id === varList.id ? true : false)} onChange={() => changeMode(varList)} />
+                                                    {varList.mode === 'OL' ? 'Online' : varList.mode === 'CA' ? 'Class room' : 'Other'}
+                                                </label> 
+                                            </form>
+                                        )
+                                })
+                            }
                             </div>
+
                             <div className="course-enrol__price">
-                                <strong className="mt-20 mb-10">3,499/- <del>5,499/-</del></strong>
+                                <strong className="mt-20 mb-10">{varChecked?.inr_price || product_detail?.var_list[0].inr_price}/- <del>{product_detail?.start_price}/-</del></strong>
                                 <LinkScroll to={"#"} className="btn btn-secondary mt-10">Enroll now</LinkScroll>
-                                <LinkScroll to={"#"} className="btn btn-outline-primary mt-10">Enquire now</LinkScroll>
+                                <LinkScroll to={"enquire-now"} className="btn btn-outline-primary mt-10">Enquire now</LinkScroll>
                             </div>
                             <div className="course-enrol__offer lightblue-bg2">
                                 <strong className="mt-10 mb-5">Offers</strong>
