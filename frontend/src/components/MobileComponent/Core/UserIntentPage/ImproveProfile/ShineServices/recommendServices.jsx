@@ -17,7 +17,6 @@ const RecommendServices = (props) => {
                 <Slider {...settings}>
                     { services?.map((service, index) => {
                             return (
-                                <Link to={`${siteDomain}${service.url}`}>
                                     <div className="m-services-foryou__list" key={index}>
                                         <h3 className="m-heading3">{service.title?.length > 50 ? service.title?.slice(0, 50) + '...' :  service.title}</h3>
                                         <p>{ service.about?.length > 85 ? service.about?.slice(0, 85) + '...' :  service.about }</p>
@@ -28,7 +27,6 @@ const RecommendServices = (props) => {
                                             </figure>
                                         </span>
                                     </div>
-                                </Link>
                     )})}
                 </Slider>
             </div>

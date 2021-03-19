@@ -27,10 +27,12 @@ const JobsUpskills = (props) => {
     const [feedback, setFeedback] = useState(false);
 
     useEffect(() => {
+        console.log('job skills')
         resultApiFunc(history.location.search + `&page=1`);
         
         // Cleaning Store Bucket
         return function cleanup () {
+            console.log('cleanup fn job');
 			dispatch(upskillAndJobsCleanup())
 		}
     }, []);

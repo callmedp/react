@@ -2,6 +2,7 @@ import React from 'react';
 import { imageUrl } from 'utils/domains';
 import './practiceTestBanner.scss';
 import { siteDomain } from 'utils/domains';
+import { MyGA } from 'utils/ga.tracking.js';
 
 const PracticeTestBanner = (props) => {
 
@@ -20,7 +21,7 @@ const PracticeTestBanner = (props) => {
                                 <img src={`${imageUrl}desktop/practice-test-bg.png`} className="img-fluid" alt="Practice Test" />
                             </figure>
                             <strong>Take our free practice test to help you choose the right course.</strong>
-                            <button type="button" onClick={ testRedirection } className="btn btn-outline-primary mr-30">TAKE FREE TEST</button>
+                            <button type="button" onClick={ testRedirection } className="btn btn-outline-primary mr-30" onClick={() => MyGA.SendEvent('ln_new_homepage','ln_free_test', 'ln_free_test','test_click', false, true)}>TAKE FREE TEST</button>
                         </div>
                     </div>
                 </div>

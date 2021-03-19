@@ -6,8 +6,8 @@ import '../../FindRightJob/JobsUpskills/jobsUpskills.scss';
 import CourseLisiting from '../../IntentUtil/courseListing';
 import Feedback from '../../IntentUtil/feedback';
 import { useDispatch, useSelector } from 'react-redux';
-import { startCareerChangeLoader, stopCareerChangeLoader } from 'store/Loader/actions/index';
-import { fetchUpskillYourselfData } from 'store/UserIntentPage/actions';
+import { startCareerChangeLoader, stopCareerChangeLoader,  } from 'store/Loader/actions/index';
+import { fetchUpskillYourselfData, upskillAndJobsCleanup } from 'store/UserIntentPage/actions';
 import Loader from '../../../../Common/Loader/loader';
 import { showSwal } from 'utils/swal';
 
@@ -24,6 +24,12 @@ const ViewCourses = (props) => {
 
     useEffect(() => {
         handleUpskillData();
+
+        // Cleaning Store Bucket
+        return function cleanup () {
+			dispatch(upskillAndJobsCleanup())
+		}
+
     }, []);
 
     const handleUpskillData = async() => {

@@ -5,7 +5,7 @@ import '../../../SkillPage/CoursesTray/coursesTray.scss';
 import './viewCourses.scss';
 import CourseLisiting from '../../IntentUtil/courseListing';
 import Feedback from '../../IntentUtil/feedback';
-import { fetchUpskillYourselfData } from 'store/UserIntentPage/actions';
+import { fetchUpskillYourselfData, upskillAndJobsCleanup } from 'store/UserIntentPage/actions';
 import { startCareerChangeLoader, stopCareerChangeLoader } from 'store/Loader/actions/index';
 import Loader from 'components/DesktopComponent/Common/Loader/loader';
 
@@ -28,6 +28,10 @@ const ViewCourses = (props) => {
     
     useEffect(() => {
         handleEffect()
+
+        return function cleanup () {
+        dispatch(upskillAndJobsCleanup())
+        }
     },[])
 
     const loadMoreCourses = async (eve) => {

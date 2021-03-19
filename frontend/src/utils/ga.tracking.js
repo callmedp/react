@@ -25,11 +25,12 @@ function GA(){
         custom_event = options.custom_event || false;
         window.dataLayer = window.dataLayer || [];
         let candidate_id = getCandidateId()
+        candidate_id = candidate_id?candidate_id:''
         let user_type = candidate_id? 'loggedin' : "guest";
 
 
         try{
-            if(custom_event==false){
+            if(custom_event===false){
                 gtag('event', name, {
                     'send_to': ['UA-3537905-41'],
                     'event_category': category,
@@ -150,7 +151,8 @@ GA.prototype.SendEvent = function() {
         case 'recently _added_blogs': /*recently added in blogs*/
         case 'ln_popular_courses': /*popular courses*/
         case 'click_on_search': /*search in navbar*/
-    
+        case 'ln_career_guidance':/*career guidance */
+        case 'ln_new_homepage':/*new homepage*/
         
         /* Skill Page Events */
         case 'SkillNeedHelpForm': /* When the user fills the form of need help */

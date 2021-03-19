@@ -68,8 +68,9 @@ class CourseRecommendationAPI(APIView):
         except Exception as e:
             logging.getLogger('error_log').error('response for {} - {}'.format(candidate_id, str(e)))
             return APIResponse(error=True,message='Error in user intent object creation',status=HTTP_400_BAD_REQUEST)
-
         course_ids = RecommendationMixin().get_courses_from_analytics_recommendation_engine(data=data)
+        if not course_ids:
+            course_ids = settings.DEFAULT_LEARNING_COURSE_RECOMMENDATION_PRODUCT_ID
         user_purchased_courses = OrderItem.objects.filter(product__type_flow=2,no_process=False,order__candidate_id=candidate_id,order__status__in=[1, 3]).values_list('product__id',flat=True)
         courses = SearchQuerySet().filter(id__in=course_ids).exclude(id__in=user_purchased_courses)
         paginated_data = offset_paginator(page, courses,size=3)
@@ -83,7 +84,7 @@ class CourseRecommendationAPI(APIView):
                 }
         data ={
             'course_data':course_data,
-            'recommended_course_ids':course_id,
+            'recommended_course_ids':course_ids,
             'page':page_info
         }
         return APIResponse(data=data,message='recommended courses fetched', status=HTTP_200_OK)
@@ -112,7 +113,7 @@ class ServiceRecommendationAPI(APIView):
                 'has_prev': True if paginated_data['current_page'] >1 else False,
                 'has_next':True if (paginated_data['total_pages']-paginated_data['current_page'])>0 else False
                 }
-        return APIResponse(data={'services':data,'page':page_info},message='recommended services fetched', status=HTTP_200_OK)
+        return APIResponse(data={'services':data,'page':page_info,'recommended_services_ids':recommended_services_ids},message='recommended services fetched', status=HTTP_200_OK)
         # cache.set(f"analytics_recommendations_services{candidate_id}", data, timeout=86400)
 
 class JobsSearchAPI(APIView):
@@ -214,21 +215,25 @@ class KeywordSuggestionAPI(APIView):
                 #     data['keyword_suggestion'] = skills
                 #     data['related_skill'] = response.get('related_skill',None)
                 
-                keyword_suggestions = response.get('keyword_suggestion',None)[:suggestion_quantity]
+                keyword_suggestions = response.get('keyword_suggestion',None)
                 data = keyword_suggestions
-                if not(skill_only and job_title_only):
-                    for word in keyword_suggestions:
+                data_ids =[]
+                # if not(skill_only and job_title_only):
+                for word in keyword_suggestions:
+                    pid = word.get('pid',None)
+                    if pid not in data_ids:
+                        data_ids.append(pid)
                         word_type = word.get('type',None)
                         if word_type == 'skill':
-                            if len(skills)<skill_quantity:
-                                skills.append(word)
-                        elif len(job_titles)<job_title_quantity:
+                            skills.append(word)
+                        else:
                             job_titles.append(word)
-                    if skill_only:                   
-                        data = skills
-                    elif job_title_only:
-                        data = job_titles
-
+                if skill_only:                   
+                    data = skills[:skill_quantity]
+                elif job_title_only:
+                    data = job_titles[:job_title_quantity]
+                else:
+                    data=skills+job_titles[:suggestion_quantity]
             return APIResponse(data=data,message='suggested words fetched', status=HTTP_200_OK)
         except Exception as e:
             logging.getLogger('error_log').error(

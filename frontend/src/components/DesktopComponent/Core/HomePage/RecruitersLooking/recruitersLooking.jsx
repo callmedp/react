@@ -4,6 +4,8 @@ import { Link } from 'react-router-dom';
 import Carousel from 'react-bootstrap/Carousel';
 import { useSelector } from 'react-redux';
 import { siteDomain } from 'utils/domains';
+import { MyGA } from 'utils/ga.tracking.js';
+
 
 const RecruitersLooking = (props) => {
 
@@ -15,13 +17,13 @@ const RecruitersLooking = (props) => {
         return (
             <li className="col-sm-3" key={index}>
             <Link to={skill.skillUrl}>
-                <div className="card">
+                <div className="card" onClick={() => MyGA.SendEvent('ln_new_homepage', 'ln_recruiter_course', ' ln_click_course', skill.skillName, '', false, true)}>
                     <figure>
                         <img src={skill.image} className="img-fluid" alt={skill.name} />
                     </figure>
                     <h3>{skill.skillName}</h3>
                     { !!skill.no_courses ? <strong>{skill.no_courses} { skill.no_courses == 1 ? 'course': 'courses'}</strong> : ''}
-                    <Link to={skill.skillUrl}>Know more</Link>
+                    <Link to={skill.skillUrl} onClick={() => MyGA.SendEvent('ln_new_homepage', 'ln_recruiter_course', ' ln_click_course', skill.skillName, '', false, true)}>Know more</Link>
                 </div>
             </Link>
             </li>
