@@ -164,7 +164,7 @@
                   <div class="panel panel-default box-shadow1">
                     <div class="panel-heading" role="tab" id="headingTwo">
                       <h4 class="panel-title">
-                        <a class="collapsed" role="button" onclick="MyGA.SendEvent('ln_payment_option', 'ln_payment_option', 'ln_click_make_payment', 'Cheque', '', false, true); GAImpression('checkout', options=[{'products': JSON.parse(sessionStorage.getItem('ck_product')), 'actionField': [{ 'step': 1, 'option': 'Cheque' }] }]);" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        <a class="collapsed" role="button" onclick="GAImpression('checkout', options=[{'products': JSON.parse(sessionStorage.getItem('ck_product')), 'actionField': [{ 'step': 1, 'option': 'Cheque' }] }]);" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
                           Cheque
                         </a>
                       </h4>
@@ -215,7 +215,7 @@
                         </strong>
 
                         <div class="continue">
-                            <button type="button" id="check-sumit-button" class="make-payment">Make Payment</button>
+                            <button type="button" id="check-sumit-button" class="make-payment" onclick="MyGA.SendEvent('ln_payment_option', 'ln_payment_option', 'ln_click_make_payment', 'Cheque', '', false, true);">Make Payment</button>
                         </div>
                         <!-- cheque payment method -->
                       </div>
