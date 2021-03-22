@@ -23,7 +23,7 @@ const RecruitersLooking = (props) => {
                     </figure>
                     <h3>{skill.skillName}</h3>
                     { !!skill.no_courses ? <strong>{skill.no_courses} { skill.no_courses == 1 ? 'course': 'courses'}</strong> : ''}
-                    <Link to={skill.skillUrl} onClick={() => MyGA.SendEvent('ln_new_homepage', 'ln_recruiter_course', ' ln_click_course', skill.skillName, '', false, true)}>Know more</Link>
+                    <Link to={skill.skillUrl}>Know more</Link>
                 </div>
             </Link>
             </li>

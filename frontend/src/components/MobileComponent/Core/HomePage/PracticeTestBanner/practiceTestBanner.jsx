@@ -1,7 +1,8 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { siteDomain, imageUrl } from 'utils/domains';
-import './practiceTestBanner.scss'
+import './practiceTestBanner.scss';
+import { MyGA } from 'utils/ga.tracking.js';
 
 const PracticeTestBanner = (props) => {
 
@@ -16,7 +17,7 @@ const PracticeTestBanner = (props) => {
                     <img src={`${imageUrl}mobile/practice-test-bg.png`} className="img-fluid w-100" alt="Practice Test" />
                 </figure>
                 <strong>Take our free practice test to help you choose the right course.</strong>
-                <a href={`${siteDomain}/practice-tests/`} className="btn-blue-outline mb-20">Take free test</a>
+                <a href={`${siteDomain}/practice-tests/`} onClick={ () => MyGA.SendEvent('ln_new_homepage','ln_free_test', 'ln_free_test','test_click', '',false, true)}  className="btn-blue-outline mb-20">Take free test</a>
             </div>
         </section>
     )

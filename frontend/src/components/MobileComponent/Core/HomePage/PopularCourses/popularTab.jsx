@@ -46,8 +46,9 @@ const PopularTab = props => {
             {   
                 productList?.map((product, index) => {
                     return (
-                        <div className="m-card" key={index} onClick={() => MyGA.SendEvent('ln_new_homepage', 'ln_popular_course_select', ' ln_masters_course_click,  ln_certification_course_click', product.name, '', false, true)}>
-                            <div className={`m-card__heading colbg${index > 4 ? index % 4 + 1 : index + 1 }`} onClick={() => MyGA.SendEvent('ln_new_homepage', 'ln_popular_course_select', ' ln_masters_course_click,  ln_certification_course_click', product.name, '', false, true)}>
+                        <div className="m-card" key={index} onClick={() => tabType == 'master' ? MyGA.SendEvent('ln_new_homepage', 'ln_popular_course_select', 'ln_masters_course_click', product.name, '', false, true) : MyGA.SendEvent('ln_new_homepage', 'ln_popular_course_select', 'ln_certification_course_click', product.name, '', false, true)}
+                        >
+                            <div className={`m-card__heading colbg${index > 4 ? index % 4 + 1 : index + 1 }`} onClick={() => tabType == 'master' ? MyGA.SendEvent('ln_new_homepage', 'ln_popular_course_select', 'ln_masters_course_click', product.name, '', false, true) : MyGA.SendEvent('ln_new_homepage', 'ln_popular_course_select', 'ln_certification_course_click', product.name, '', false, true)}>
                                 {/* <span className="m-flag-yellow">BESTSELLER</span> */}
                                 {product.tags === 2 && <span className="m-flag-yellow">NEW</span>}
                                 {product.tags === 1 && <span className="m-flag-yellow">BESTSELLER</span>}
@@ -70,7 +71,7 @@ const PopularTab = props => {
                                 <div className="m-card__duration-mode mt-10">
                                     {product.jobsAvailable ? <> <strong>{product.jobsAvailable}</strong> Jobs available </> : ''} {product.jobsAvailable && product.duration ? '|' : ''} {product.duration ? <>Duration: <strong>{product.duration} days</strong> </> : <strong>&nbsp;</strong>}
                                 </div>
-                                <a className="m-view-program mt-10" href={`${siteDomain}${product.url}`} onClick={() => MyGA.SendEvent('ln_new_homepage', 'ln_popular_course_select', ' ln_masters_course_click,  ln_certification_course_click', product.name, '', false, true)}>View program---</a>
+                                <a className="m-view-program mt-10" href={`${siteDomain}${product.url}`} onClick={() => tabType == 'master' ? MyGA.SendEvent('ln_new_homepage', 'ln_popular_course_select', 'ln_masters_course_click', product.name, '', false, true) : MyGA.SendEvent('ln_new_homepage', 'ln_popular_course_select', 'ln_certification_course_click', product.name, '', false, true)}>View program---</a>
                             </div>
                         </div>
                     )

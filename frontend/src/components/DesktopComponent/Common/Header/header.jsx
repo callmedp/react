@@ -22,10 +22,10 @@ const Header = (props) => {
     const handleRedirect = (event, type) => {
         event.preventDefault();
         if (type === 'login') {
-            MyGA.SendEvent('header_icons', 'ln_header_icons', 'ln_login', 'login', '', false, true);
+            MyGA.SendEvent('header_icons', 'ln_header_icons', 'ln_account', 'login', '', false, true);
         }
         if (type === 'register') {
-            MyGA.SendEvent('header_icons', 'ln_header_icons', 'ln_register', 'register', '', false, true);
+            MyGA.SendEvent('header_icons', 'ln_header_icons', 'ln_account', 'register', '', false, true);
         }
         let redirectPath = props.location?.pathname;
         redirectPath ?

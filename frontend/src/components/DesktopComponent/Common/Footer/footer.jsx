@@ -50,7 +50,7 @@ const Footer = (props) => {
                                         trendingCourses.slice(0,25)?.map((course, index) => {
                                             return (
                                                 <React.Fragment key={index}>
-                                                    <a href={`${siteDomain}${course.url}`} onClick={() => MyGA.SendEvent('ln_new_homepage','ln_trending_course', 'ln_click_course',course.name, false, true)}>{course.name}</a>&nbsp;
+                                                    <a href={`${siteDomain}${course.url}`} onClick={() => MyGA.SendEvent('ln_new_homepage','ln_trending_course', 'ln_click_course',course.name, '',false, true)}>{course.name}</a>&nbsp;
                                                     { trendingCourses.length - 1 === index ? '' : '|'}
                                                 </React.Fragment>
                                             )
@@ -66,7 +66,7 @@ const Footer = (props) => {
                                         trendingSkills.slice(0,25)?.map((skill, index) => {
                                             return (
                                                 <React.Fragment key={index} >
-                                                    <a href={`${siteDomain}${skill.skillUrl}`} onClick={() => MyGA.SendEvent('ln_new_homepage','ln_trending_skill', 'ln_click_skill',skill.skillName, false, true)}>{skill.skillName}</a>&nbsp;
+                                                    <a href={`${siteDomain}${skill.skillUrl}`} onClick={() => MyGA.SendEvent('ln_new_homepage','ln_trending_skill', 'ln_click_skill',skill.skillName, '',false, true)}>{skill.skillName}</a>&nbsp;
                                                     { trendingSkills.length - 1 === index ? '' : '|'}
                                                 </React.Fragment>
                                             )
