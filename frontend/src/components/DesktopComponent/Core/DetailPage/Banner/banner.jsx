@@ -139,7 +139,7 @@ const BannerCourseDetail = (props) => {
                             </div>
 
                             <div className="course-enrol__price">
-                                <strong className="mt-20 mb-10">{varChecked?.inr_price || product_detail?.var_list[0].inr_price}/- <del>{product_detail?.start_price}/-</del></strong>
+                                <strong className="mt-20 mb-10">{varChecked?.inr_price || product_detail?.var_list[0]?.inr_price}/- <del>{product_detail?.start_price}/-</del></strong>
                                 <LinkScroll to={"#"} className="btn btn-secondary mt-10">Enroll now</LinkScroll>
                                 <LinkScroll to={"enquire-now"} className="btn btn-outline-primary mt-10">Enquire now</LinkScroll>
                             </div>
