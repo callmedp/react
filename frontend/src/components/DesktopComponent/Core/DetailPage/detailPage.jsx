@@ -5,8 +5,8 @@ import StickyNavDetail from './StickyNavDetail/stickyNavDetail';
 import BannerCourseDetail from './Banner/banner';
 import KeyFeatures from './KeyFeatures/keyFeatures';
 import CourseOutline from './CourseOutline/courseOutline';
-import CourseOutcome from './CourseOutcome/courseOutcome';
-import SampleCertificate from './SampleCertificate/sampleCertificate';
+// import CourseOutcome from './CourseOutcome/courseOutcome';
+// import SampleCertificate from './SampleCertificate/sampleCertificate';
 import WhoLearn from './WhoLearn/whoLearn';
 import TakeFreeTest from './TakeFreeTest/takeFreeTest';
 import HowItWorks from './HowItWorks/howItWorks';
@@ -30,7 +30,7 @@ const DetailPage = (props) => {
     const dispatch = useDispatch();
     const {match: {params: {id}}, history} = props;
     const { mainCourseLoader } = useSelector(store => store.loader);
-
+    console.log(mainCourseLoader);
     useEffect( () => {
         Aos.init({ duration: 2000, once: true, offset: 10, anchorPlacement: 'bottom-bottom' });
 
@@ -38,8 +38,8 @@ const DetailPage = (props) => {
     }, [])
 
     const handleEffects = async () => {
-        dispatch(startMainCourseLoader());
         try {
+            dispatch(startMainCourseLoader());
             await new Promise((resolve, reject) => dispatch(fetchMainCourses({ id: id.split('-')[1] ,resolve, reject })));
             dispatch(stopMainCourseLoader());
         }
@@ -84,7 +84,6 @@ const DetailPage = (props) => {
                 </div>
             </div> */}
 
-            
             <HowItWorks />
             <div className="container-fluid">
                 <div className="row">

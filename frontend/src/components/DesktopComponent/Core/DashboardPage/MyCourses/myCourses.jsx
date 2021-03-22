@@ -178,10 +178,9 @@ const MyCourses = (props) => {
 
     const handleEffects = async () => {
         try {
-          
-                dispatch(startDashboardCoursesPageLoader());
-                await new Promise((resolve, reject) => dispatch(fetchMyCourses({ page: currentPage, isDesk: true, ...filterState, resolve, reject })))
-                dispatch(stopDashboardCoursesPageLoader());
+            dispatch(startDashboardCoursesPageLoader());
+            await new Promise((resolve, reject) => dispatch(fetchMyCourses({ page: currentPage, isDesk: true, ...filterState, resolve, reject })))
+            dispatch(stopDashboardCoursesPageLoader());
                 
         } catch (error) {
             dispatch(stopDashboardCoursesPageLoader());

@@ -10,8 +10,10 @@ import {
     submitReview,
     fetchRecommendedCourses,
     recommendedCoursesFetched,
-    sendEnquireNow
+    sendEnquireNow,
+    fetchAddToCartEnroll
 } from './actions';
+import {siteDomain} from '../../utils/domains';
 
 function* mainCoursesApi(action){
     const { payload, resolve, reject } = action;
@@ -22,7 +24,7 @@ function* mainCoursesApi(action){
         if(response?.error) return reject(response);
         const item = response?.data?.data;
         yield put(mainCoursesFetched({ ...item }));
-        return resolve(item);
+        return payload?.resolve(item);
     }
     catch(e) {
         return e;
@@ -121,6 +123,25 @@ function* SendEnquireNow(action) {
     }
 }
 
+function* AddToCart(action) {
+    const { payload: { payload, resolve, reject }} = action;
+
+    try{
+        const response = yield call(Api.addToCartApi, payload)
+
+        if (response?.error) {
+            return reject(response)
+        }
+        // const item = response?.data?.data;
+        return window.location.href = `${siteDomain}/cart/payment-summary/`;
+        // return resolve(item);
+    }
+    catch(e) {
+        console.log(`Reject sending survey question due to ${e}`);
+        return reject(e);
+    }
+}
+
 export default function* WatchDetailPage() {
     yield takeLatest(fetchOtherProviderCourses.type, otherProvidersCourses);
     yield takeLatest(fetchMainCourses.type, mainCoursesApi);
@@ -128,4 +149,6 @@ export default function* WatchDetailPage() {
     yield takeLatest(fetchReviews.type, productReviews);
     yield takeLatest(submitReview.type, submitReviews);
     yield takeLatest(sendEnquireNow.type, SendEnquireNow);
+    yield takeLatest(fetchAddToCartEnroll.type, AddToCart);
+
 }

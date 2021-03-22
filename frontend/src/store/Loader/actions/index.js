@@ -172,3 +172,18 @@ export const stopMainCourseLoader = () => {
         payload: { mainCourseLoader: false }
     }
 }
+
+// main course cart loader
+export const startMainCourseCartLoader = () => {
+    return {
+        type: Actions.START_MAIN_COURSE_CART_LOADER,
+        payload: { mainCourseCartLoader: true }
+    }
+}
+
+export const stopMainCourseCartLoader = () => {
+    return {
+        type: Actions.STOP_MAIN_COURSE_CART_LOADER,
+        payload: { mainCourseCartLoader: false }
+    }
+}

@@ -29,9 +29,9 @@ const LearnersStories = (props) => {
 
     const handleEffects = async (page) => {
         currentPage = page;
-        dispatch(startReviewLoader())
 
         try {
+            dispatch(startReviewLoader())
             await new Promise((resolve, reject) => dispatch(fetchReviews({ payload: { prdId: id, page: page }, resolve, reject })));
             dispatch(stopReviewLoader())
         }
@@ -41,6 +41,7 @@ const LearnersStories = (props) => {
                 // history.push('/404');
             }
         }
+        dispatch(stopReviewLoader());
     };
 
     const starRatings = (star, index) => {

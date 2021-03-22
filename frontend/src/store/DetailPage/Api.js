@@ -214,12 +214,17 @@ const EnquireNewSend = (data) => {
     return BaseApiService.post(`${siteDomain}/lead/api/v1/${url}/`, data);
 }
 
+const addToCartApi = (data) => {
+    return BaseApiService.post(`${siteDomain}/cart/api/v1/add-to-cart/`, data);
+}
+
 export default {
     mainCourses,
     otherProvidersCourses,
     fetchReviews,
     submitReviews,
     recommendedCoursesApi,
-    EnquireNewSend
+    EnquireNewSend,
+    addToCartApi
 }   
 
