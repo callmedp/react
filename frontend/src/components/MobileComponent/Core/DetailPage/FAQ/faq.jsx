@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './faq-detail.scss';
-import { faqList } from 'utils/dashboardUtils/faqListUtils';
 
 const FAQ = (props) => {
 
+    const { faq_list } = props;
     const [sliceFlag, setSliceFlag] = useState(true)
     const [checkedId, setCheckedId] = useState(null);
 
@@ -12,10 +12,10 @@ const FAQ = (props) => {
 
     const renderAccordion = (item, index) => {
         return (
-            <div className="tab" key={index.toString() + item.heading}>
-                <input type="radio" id={"rd" + index} name="rd" checked = { checkedId === index } onClick={() => accordionHandle(index)}/><label className="tab-label" htmlFor={ "rd" + index } itemProp="name">{item.heading}</label>
+            <div className="tab" key={index.toString() + item.question}>
+                <input type="radio" id={"rd" + index} name="rd" checked = { checkedId === index } onClick={() => accordionHandle(index)}/><label className="tab-label" htmlFor={ "rd" + index } itemProp="name">{item.question}</label>
                 <div id={index} className="tab-content">
-                    <p itemProp="text" hidden="">{item.content}</p>
+                    <p itemProp="text" hidden="" dangerouslySetInnerHTML={{__html : item.answer}} />
                 </div>
             </div>
         )
@@ -26,12 +26,12 @@ const FAQ = (props) => {
     }
 
     return(
-        faqList.length ? (
+        faq_list.length ? (
             <section className="m-container m-faq-detail m-lightblue-bg mt-0 mb-0" id="m-faq" data-aos="fade-up">
                 <h2 className="m-heading2">Frequently Asked Questions</h2>
                     <div className="tabs">
-                        { (sliceFlag ? faqList.slice(0, 4) : faqList).map(renderAccordion) }
-                        { sliceFlag && (faqList?.length  > 4) ? <Link onClick={loadMore} to={"#"} className="m-load-more mt-20">Load More FAQS</Link> : '' }
+                        { (sliceFlag ? faq_list?.slice(0, 4) : faq_list).map(renderAccordion) }
+                        { sliceFlag && (faq_list?.length  > 4) ? <Link onClick={loadMore} to={"#"} className="m-load-more mt-20">Load More FAQS</Link> : '' }
                     </div>
             </section>
             ): null

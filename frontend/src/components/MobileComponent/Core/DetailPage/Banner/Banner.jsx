@@ -4,7 +4,7 @@ import './Banner.scss';
 
 const CourseDetailBanner = (props) => {
     const { product_detail, prdId } = props
-    const noOfWords = 365;
+    const noOfWords = 250;
     const [showAll, setShowAll] = useState(false)
 
     const starRatings = (star, index) => {
@@ -15,16 +15,16 @@ const CourseDetailBanner = (props) => {
         )
     }
 
-    const controlContent = (content, state) =>{
-        return (
-            <span onClick={()=>setShowAll(state)}>
-                <strong>{content}</strong>
-            </span>
-        )
-    }
+    // const controlContent = (content, state) =>{
+    //     return (
+    //         <a href={"#"} onClick={() => setShowAll(state)}>
+    //             {content}
+    //         </a>
+    //     )
+    // }
 
     useEffect(() => {
-        setShowAll(false)
+        // setShowAll(false)
     }, [prdId])
 
     return (
@@ -99,23 +99,22 @@ const CourseDetailBanner = (props) => {
                 </figure>
 
                 {
-                    product_detail?.prd_about && <p dangerouslySetInnerHTML={{__html: product_detail?.prd_about?.replace(/<[^>]*>/g, '').slice(0, noOfWords)}} />
+                    product_detail?.prd_about && 
+                    <>
+                        <p className="m-intro-video__content" dangerouslySetInnerHTML={{__html: product_detail?.prd_about?.replace(/<[^>]*>/g, '').slice(0, noOfWords) + "<a href='#'> ...Read More</a>" }} />
+                        {/* <span>
+                            {
+                                (!showAll && product_detail?.prd_about?.length > noOfWords) ? 
+                                        controlContent(" ...Read More", true) : ("") 
+                            } 
+                        </span> */}
+                    </>
                 }
 
-                { 
-                    (!showAll && product_detail?.prd_about?.length > noOfWords) ? 
-                            controlContent(" ...Read More", true) : ("") 
-                }
-
-                {
+                {/* {
                     showAll ?
-                       <>
-                            <p dangerouslySetInnerHTML={{__html: product_detail?.prd_about?.replace(/<[^>]*>/g, '').slice(noOfWords)}}/>
-                            <p>
-                                {controlContent("Show less", false)}
-                            </p> 
-                        </> : null
-                }
+                       <p className="m-intro-video__content" dangerouslySetInnerHTML={{__html: product_detail?.prd_about?.replace(/<[^>]*>/g, '').slice(noOfWords)}} /> : null
+                } */}
 
             </div>
             <ul className="m-course-stats mt-10 mb-10 bdr-top pt-20">

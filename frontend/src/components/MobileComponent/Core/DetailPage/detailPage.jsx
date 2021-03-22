@@ -71,16 +71,22 @@ const DetailPage = (props) => {
             <main className="mb-0">
                 <CourseEnrol />
                 {/* <StickyNavDetail /> */}
-                <KeyFeatures />
-                <CourseOutline />
+                <KeyFeatures prd_uget={product_detail?.prd_uget}/>
+                {
+                    product_detail?.chapter && 
+                        <CourseOutline chapter_list={product_detail?.chapter_list}/>
+                }
                 <CourseOutcome />
                 <SampleCertificate />
                 <HowItWorks />
-                <WhoLearn />
+                { 
+                    product_detail?.prd_should_lrn &&
+                        <WhoLearn prd_lrn_data={product_detail?.prd_should_lrn_dt} />
+                }
                 <SkillGain />
-                <TakeFreeTest />
+                <TakeFreeTest should_take_test_url={product_detail?.shld_take_test_slg} />
                 <OtherProviders />
-                <FAQ />
+                { product_detail?.faq && <FAQ faq_list={product_detail?.faq_list}/> }
                 <Reviews showReviewModal={showReviewModal} prdId={prdId}/>
                 <CoursesMayLike />
                 <CTA />
