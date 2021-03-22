@@ -22,11 +22,14 @@ import Aos from "aos";
 import "aos/dist/aos.css";
 import { fetchMainCourses } from 'store/DetailPage/actions';
 import { useSelector, useDispatch } from 'react-redux';
+import { startMainCourseLoader, stopMainCourseLoader } from 'store/Loader/actions/index';
+import Loader from '../../Common/Loader/loader';
 
 const DetailPage = (props) => {
     const {product_detail, skill} = useSelector(store => store?.mainCourses);
     const dispatch = useDispatch();
     const {match: {params: {id}}, history} = props;
+    const { mainCourseLoader } = useSelector(store => store.loader);
 
     useEffect( () => {
         Aos.init({ duration: 2000, once: true, offset: 10, anchorPlacement: 'bottom-bottom' });
@@ -35,10 +38,14 @@ const DetailPage = (props) => {
     }, [])
 
     const handleEffects = async () => {
+        dispatch(startMainCourseLoader());
         try {
             await new Promise((resolve, reject) => dispatch(fetchMainCourses({ id: id.split('-')[1] ,resolve, reject })));
+            dispatch(stopMainCourseLoader());
         }
         catch (error) {
+            dispatch(stopMainCourseLoader());
+
             if (error?.status == 404) {
                 history.push('/404');
             }
@@ -46,6 +53,8 @@ const DetailPage = (props) => {
     };
 
     return (
+        <>
+        { mainCourseLoader ? <Loader /> : ''}
         <div>
             <Header />
             <StickyNavDetail/>
@@ -62,7 +71,9 @@ const DetailPage = (props) => {
                     </div>
                 </div>
             }
-            <div className="container-fluid mt-50 mb-50">
+
+            {/* commented due to lack of data */}
+            {/* <div className="container-fluid mt-50 mb-50">
                 <div className="row">
                     <div className="col-sm-9">
                         <CourseOutcome />
@@ -71,7 +82,9 @@ const DetailPage = (props) => {
                         <SampleCertificate />
                     </div>
                 </div>
-            </div>
+            </div> */}
+
+            
             <HowItWorks />
             <div className="container-fluid">
                 <div className="row">
@@ -91,6 +104,7 @@ const DetailPage = (props) => {
             <CoursesMayLike />
             <Footer />
         </div>
+        </>
     )
 }
 

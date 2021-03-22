@@ -7,13 +7,17 @@ import Modal from 'react-bootstrap/Modal';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchReviews } from 'store/DetailPage/actions';
 // import Slider from "react-slick";
+import ReviewModal from '../../../Common/Modals/reviewModal';
+import { startReviewLoader, stopReviewLoader } from 'store/Loader/actions/index';
+import Loader from '../../../Common/Loader/loader';
 
 const LearnersStories = (props) => {
     const {id} = props;
+    const [reviewModal, showReviewModal] = useState(false);
+    const { reviewLoader } = useSelector(store => store.loader);
 
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
-    const handleShow = () => setShow(true);
     const { prd_reviews : { prd_review_list, prd_rv_current_page, prd_rv_has_next, prd_rv_has_prev } } = useSelector( store => store.reviews )
 
     const dispatch = useDispatch();
@@ -25,10 +29,14 @@ const LearnersStories = (props) => {
 
     const handleEffects = async (page) => {
         currentPage = page;
+        dispatch(startReviewLoader())
+
         try {
             await new Promise((resolve, reject) => dispatch(fetchReviews({ payload: { prdId: id, page: page }, resolve, reject })));
+            dispatch(stopReviewLoader())
         }
         catch (error) {
+            dispatch(stopReviewLoader())
             if (error?.status == 404) {
                 // history.push('/404');
             }
@@ -44,13 +52,18 @@ const LearnersStories = (props) => {
     }
 
     const handleSelect = (selectedIndex, e) => {
-        //   console.log(currentPage)
           if(e.target.className === 'carousel-control-next-icon' && prd_rv_has_next) handleEffects(prd_rv_current_page+1);
           if(e.target.className === 'carousel-control-prev-icon' && prd_rv_has_prev) handleEffects(prd_rv_current_page-1);
+
     }
 
     return (
+        <>
+        { reviewLoader ? <Loader /> : ''}
         <section id="reviews" className="container" data-aos="fade-up">
+            {
+                reviewModal ? <ReviewModal reviewModal={reviewModal} showReviewModal={showReviewModal}/> : ""
+            }
             <div className="grid">
                 <h2 className="heading2 m-auto pb-20">Reviews</h2>
 
@@ -81,7 +94,7 @@ const LearnersStories = (props) => {
                 </Carousel>
 
                 <div className="d-flex mx-auto mt-20">
-                    <Link to={"#"} onClick={handleShow} className="btn btn-outline-primary btn-custom">Write a review</Link>
+                    <Link to={"#"} onClick={showReviewModal} className="btn btn-outline-primary btn-custom">Write a review</Link>
                 </div>
                 <Modal show={show} 
                     onHide={handleClose}
@@ -122,6 +135,7 @@ const LearnersStories = (props) => {
                 </Modal>
             </div>
         </section>
+        </>
     )
 }
 

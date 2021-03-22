@@ -94,10 +94,9 @@ function* submitReviews(action){
     try{
     
         const response = yield call(Api.submitReviews, payload);
-   
-        if(response['error']) return resolve(response)
+        if(response['error']) return resolve(response);
 
-        return resolve(response)
+        return resolve(response);
     }
     catch(error){
         return resolve(error)

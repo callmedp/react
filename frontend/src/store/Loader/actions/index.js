@@ -157,3 +157,18 @@ export const stopOiDetailsLoader = () => {
         payload: { oiDetailsLoader: false }
     }
 }
+
+// main course loader
+export const startMainCourseLoader = () => {
+    return {
+        type: Actions.START_MAIN_COURSE_LOADER,
+        payload: { mainCourseLoader: true }
+    }
+}
+
+export const stopMainCourseLoader = () => {
+    return {
+        type: Actions.STOP_MAIN_COURSE_LOADER,
+        payload: { mainCourseLoader: false }
+    }
+}
