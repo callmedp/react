@@ -76,8 +76,8 @@ const DetailPage = (props) => {
                     product_detail?.chapter && 
                         <CourseOutline chapter_list={product_detail?.chapter_list}/>
                 }
-                <CourseOutcome />
-                <SampleCertificate />
+                {/* <CourseOutcome />
+                <SampleCertificate /> */}
                 <HowItWorks />
                 { 
                     product_detail?.prd_should_lrn &&

@@ -62,7 +62,7 @@ const DetailPage = (props) => {
                     </div>
                 </div>
             }
-            <div className="container-fluid mt-50 mb-50">
+            {/* <div className="container-fluid mt-50 mb-50">
                 <div className="row">
                     <div className="col-sm-9">
                         <CourseOutcome />
@@ -71,7 +71,7 @@ const DetailPage = (props) => {
                         <SampleCertificate />
                     </div>
                 </div>
-            </div>
+            </div> */}
             <HowItWorks />
             <div className="container-fluid">
                 <div className="row">
