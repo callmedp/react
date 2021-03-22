@@ -48,7 +48,7 @@ const Reviews = (props) => {
                                     </span>
                                     <strong className="m-card__name">{review?.title}</strong>
                                     <p className="m-card__txt">{review?.content}</p>
-                                    <strong>By { review?.user_name ? review?.user_name : review?.user_email }</strong>
+                                    <strong>By { review?.user_name ? review?.user_name : "Anonymous" }</strong>
                                     <span className="m-card__location">{review?.created}</span>
                                 </div>
                             )

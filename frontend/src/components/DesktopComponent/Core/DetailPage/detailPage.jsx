@@ -82,7 +82,7 @@ const DetailPage = (props) => {
                         <SampleCertificate />
                     </div>
                 </div>
-            </div> */}
+            </div> */} 
 
             <HowItWorks />
             <div className="container-fluid">

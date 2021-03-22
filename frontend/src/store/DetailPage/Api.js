@@ -103,9 +103,10 @@ const fetchReviews = (data) => {
 }
 
 const submitReviews = (data) => {
-    // const url = `/shop/api/v1/get-prd-review/?pid=${data.prdId}`;
-    // return BaseApiService.get(`${siteDomain}${url}`);
-    return {'data': {'display_message': 'Form Submitted Succesfully'}}
+    const url = `/shop/api/v1/product/review/`;
+    return BaseApiService.post(`${siteDomain}${url}`, data);
+
+    // return {'data': {'display_message': 'Form Submitted Succesfully'}}
 }
 
 const mainCourses = (id) => {

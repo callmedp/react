@@ -855,7 +855,7 @@ class ProductReviewAPI(APIView):
         """
         self.candidate_id = request.session.get('candidate_id', None)
         # self.candidate_id = request.POST.get('candidate_id', None)
-        self.product_pk = request.POST.get('product_id')
+        self.product_pk = request.POST.get('product_id') or request.data.get('product_id')
         self.product = None
 
         if self.product_pk and self.candidate_id:
@@ -870,9 +870,9 @@ class ProductReviewAPI(APIView):
                 if review_obj:
                     return APIResponse(message='You have already submitted feedback', status=status.HTTP_200_OK)
 
-                review = request.POST.get('review', '').strip()
-                rating = int(request.POST.get('rating', 1))
-                title = request.POST.get('title', '')
+                review = request.POST.get('review', '').strip() or request.data.get('review', '').strip() 
+                rating = int(request.POST.get('rating', 1)) or int(request.data.get('rating', 1))
+                title = request.POST.get('title', '') or request.data.get('title', '') 
                 email = request.session.get('email', '')
                 # email = request.POST.get('email', '')
 
