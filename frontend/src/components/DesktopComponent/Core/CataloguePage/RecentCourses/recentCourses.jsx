@@ -2,7 +2,7 @@ import React from 'react';
 import './recentCourses.scss';
 import { useSelector } from 'react-redux';
 import CourseCard from 'components/DesktopComponent/Common/CourseCard/courseCard';
-import { siteDomain } from 'utils/domains';
+// import { siteDomain } from 'utils/domains';
 
 const RecentCourses = (props) => {
 

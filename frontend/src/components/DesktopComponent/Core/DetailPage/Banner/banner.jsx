@@ -6,6 +6,7 @@ import { startMainCourseCartLoader, stopMainCourseCartLoader } from 'store/Loade
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchAddToCartEnroll } from 'store/DetailPage/actions';
 import Loader from '../../../Common/Loader/loader';
+import { siteDomain } from 'utils/domains';
 
 const BannerCourseDetail = (props) => {
     const {product_detail} = props;
@@ -34,12 +35,8 @@ const BannerCourseDetail = (props) => {
     const goToCart = async (value) => {
         let cartItems = {};
 
-        if(value.id) {
-            cartItems = {'prod_id': product_detail.pPv, 'cart_type': 'cart', 'cv_id': value.id}
-        }
-        else {
-            cartItems = {'prod_id': product_detail.pPv, 'cart_type': 'cart', 'cv_id': product_detail.selected_var.id}
-        }
+        if(value.id) cartItems = {'prod_id': product_detail.pPv, 'cart_type': 'cart', 'cv_id': value.id};
+        else cartItems = {'prod_id': product_detail.pPv, 'cart_type': 'cart', 'cv_id': product_detail.selected_var.id};
 
         try {
             dispatch(startMainCourseCartLoader());
@@ -87,7 +84,7 @@ const BannerCourseDetail = (props) => {
                                             {
                                                 <>
                                                 {product_detail?.prd_num_rating && <span className="review-jobs">
-                                                <LinkScroll to={"#"}>
+                                                <LinkScroll to={"reviews"}>
                                                     <figure className="icon-reviews-link"></figure> <strong> {product_detail?.prd_num_rating}</strong> Reviews
                                                 </LinkScroll>
                                                 </span>}
@@ -103,23 +100,34 @@ const BannerCourseDetail = (props) => {
                                 </div>
                                 <ul className="course-stats mt-30 mb-30">
                                     <li>
-                                        <strong>By {product_detail?.prd_vendor}</strong> <a href={() => window.location.pathname=`search/results/?fvid=${product_detail?.pPv}`}>View all</a> courses by {product_detail?.prd_vendor}  
+                                        <strong>By {product_detail?.prd_vendor}</strong> <a onClick={() => window.location.href=`${siteDomain}/search/results/?fvid=${product_detail?.pPv}`}>View all</a> courses by {product_detail?.prd_vendor}  
                                     </li>
-                                    <li>
-                                    <LinkScroll className="d-block" to={"popListTemplate"}>+4 more</LinkScroll> Course providers  
-                                    </li> 
-                                    <li className="d-flex align-items-center">
-                                        <figure className="icon-course-duration mr-10"></figure>
-                                        <p>
-                                            Course Duration <strong>{product_detail?.duration} Days</strong>
-                                        </p>
-                                    </li>
-                                    <li className="d-flex align-items-center">
-                                        <figure className="icon-access-duration mr-10"></figure>
-                                        <p>
-                                            Access Duration <strong>{product_detail?.access_duration}</strong>
-                                        </p>
-                                    </li>
+
+                                    {
+                                        product_detail?.pop &&
+                                        <li>
+                                            <LinkScroll className="d-block" to={"popListTemplate"}>+4 more</LinkScroll> Course providers  
+                                        </li> 
+                                    }
+
+                                    {
+                                        product_detail?.duration &&
+                                        <li className="d-flex align-items-center">
+                                            <figure className="icon-course-duration mr-10"></figure>
+                                            <p>
+                                                Course Duration <strong>{varChecked?.dur_days || product_detail?.selected_var.dur_days} Days</strong>
+                                            </p>
+                                        </li>
+                                    }
+                                    {
+                                        product_detail?.access_duration &&
+                                        <li className="d-flex align-items-center">
+                                            <figure className="icon-access-duration mr-10"></figure>
+                                            <p>
+                                                Access Duration <strong>{product_detail?.access_duration}</strong>
+                                            </p>
+                                        </li>
+                                    }
                                 </ul>
                                 <div className="intro-video">
                                     <figure className="intro-video__img">
@@ -147,41 +155,44 @@ const BannerCourseDetail = (props) => {
                                     </p>
                                 </div>
                             </div>
-                            <div className="banner-detail">
-                                <div className="course-enrol">
-                                    <div className="course-enrol__mode">
-                                    {
-                                        product_detail?.var_list?.map((varList, indx) => {
-                                            return (
-                                                    <form key={indx}>
-                                                        Mode
-                                                        <label htmlFor={varList.id}>
-                                                            <input type="radio" name="radio" id={varList.id} checked={varChecked?.id && (varChecked?.id === varList.id ? true : false) || !varChecked?.id && (product_detail?.selected_var?.id === varList.id ? true : false)} onChange={() => changeMode(varList)} />
-                                                            {varList.mode === 'OL' ? 'Online' : varList.mode === 'CA' ? 'Class room' : 'Other'}
-                                                        </label> 
-                                                    </form>
-                                                )
-                                        })
-                                    }
-                                    </div>
+                            {
+                                product_detail?.selected_var && product_detail?.var_list && product_detail?.var_list?.length > 0 &&
+                                <div className="banner-detail">
+                                    <div className="course-enrol">
+                                        <div className="course-enrol__mode">
+                                            Mode
+                                            {
+                                                product_detail?.var_list?.map((varList, indx) => {
+                                                    return (
+                                                            <form key={indx}>
+                                                                <label htmlFor={varList.id}>
+                                                                    <input type="radio" name="radio" id={varList.id} checked={varChecked?.id && (varChecked?.id === varList.id ? true : false) || !varChecked?.id && (product_detail?.selected_var?.id === varList.id ? true : false)} onChange={() => changeMode(varList)} />
+                                                                    {varList.mode === 'OL' ? 'Online' : varList.mode === 'CA' ? 'Class room' : 'Other'}
+                                                                </label> 
+                                                            </form>
+                                                        )
+                                                })
+                                            }
+                                        </div>
 
-                                    <div className="course-enrol__price">
-                                        <strong className="mt-20 mb-10">{varChecked?.inr_price || product_detail?.var_list[0]?.inr_price}/- <del>{product_detail?.start_price}/-</del></strong>
-                                        <a onClick={() => goToCart(varChecked)} className="btn btn-secondary mt-10">Enroll now</a>
-                                        <LinkScroll to={"enquire-now"} className="btn btn-outline-primary mt-10">Enquire now</LinkScroll>
-                                    </div>
-                                    <div className="course-enrol__offer lightblue-bg2">
-                                        <strong className="mt-10 mb-5">Offers</strong>
-                                        <ul className="pb-0">
-                                            <li><figure className="icon-offer-pay"></figure> Buy now & <strong>pay within 14 days using ePayLater</strong> </li>
-                                            <li><figure className="icon-offer-test"></figure> Take <strong>free practice test</strong> to enhance your skill</li>
-                                            <li><figure className="icon-offer-badge"></figure> <strong>Get badging</strong> on your Shine profile</li>
-                                            <li><figure className="icon-offer-global"></figure> <strong>Global</strong> Education providers</li>
-                                        </ul>
-                                        <LinkScroll to={"#"}>+2 more</LinkScroll>
+                                        <div className="course-enrol__price">
+                                            <strong className="mt-20 mb-10">{varChecked?.inr_price || product_detail?.var_list[0]?.inr_price}/- <del>{product_detail?.start_price}/-</del></strong>
+                                            <a onClick={() => goToCart(varChecked)} className="btn btn-secondary mt-10">Enroll now</a>
+                                            <LinkScroll to={"enquire-now"} className="btn btn-outline-primary mt-10">Enquire now</LinkScroll>
+                                        </div>
+                                        <div className="course-enrol__offer lightblue-bg2">
+                                            <strong className="mt-10 mb-5">Offers</strong>
+                                            <ul className="pb-0">
+                                                <li><figure className="icon-offer-pay"></figure> Buy now & <strong>pay within 14 days using ePayLater</strong> </li>
+                                                <li><figure className="icon-offer-test"></figure> Take <strong>free practice test</strong> to enhance your skill</li>
+                                                <li><figure className="icon-offer-badge"></figure> <strong>Get badging</strong> on your Shine profile</li>
+                                                <li><figure className="icon-offer-global"></figure> <strong>Global</strong> Education providers</li>
+                                            </ul>
+                                            <LinkScroll to={"#"}>+2 more</LinkScroll>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            }
                         </div>
                     </div>
             </header> 

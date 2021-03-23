@@ -1,6 +1,6 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import './howItWorks.scss';
+import { Link as LinkScroll } from 'react-scroll';
 
 const HowItWorks = (props) => {
     
@@ -41,7 +41,7 @@ const HowItWorks = (props) => {
                             </li>
                         </ul>
                         <div className="d-flex justify-content-center mt-50">
-                            <Link to={"#"} className="btn btn-outline-primary btn-custom">Enquire now</Link>
+                            <LinkScroll to={"enquire-now"} className="btn btn-outline-primary btn-custom">Enquire now</LinkScroll>
                         </div>
                     </div>
                 </div>

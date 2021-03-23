@@ -22,19 +22,9 @@ const SkillGain = (props) => {
                                     })
                                 }
                                 {' '}
-                                {/* <Badge pill variant="light">Light</Badge>{' '}
-                                <Badge pill variant="light">PythonR</Badge>{' '}
-                                <Badge pill variant="light">Programming</Badge>{' '}
-                                <Badge pill variant="light">Tableau</Badge>{' '}
-                                <Badge pill variant="light">Data Science</Badge>{' '}
-                                <Badge pill variant="light">Deep Learning</Badge>{' '}
-                                <Badge pill variant="light">Data Visualization</Badge>{' '}
-                                <Badge pill variant="light">Statistical computing</Badge>{' '}
-                                <Badge pill variant="light">Visual Analytics</Badge>{' '}
-                                <Badge pill variant="light">Dashboards</Badge>{' '} */}
                             </div>
                             <div className="d-flex mt-50">
-                                <Link to={"#"} className="btn btn-outline-primary btn-custom">Enquire now</Link>
+                                <Link to={"enquire-now"} className="btn btn-outline-primary btn-custom">Enquire now</Link>
                             </div>
                         </div>
                         <figure className="skill-gain__img mt-40">

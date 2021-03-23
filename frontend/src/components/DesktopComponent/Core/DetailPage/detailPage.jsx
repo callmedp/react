@@ -95,7 +95,7 @@ const DetailPage = (props) => {
                     </div>
                 </div>
             </div>
-            { skill && <SkillGain skill={skill}/> }
+            { skill && skill.length > 0 && <SkillGain skill={skill}/> }
             { product_detail?.pop && <OtherProviders pop_list={product_detail?.pop_list} /> }
             { product_detail?.faq && <FAQ faq_list={product_detail?.faq_list}/> }
             <Reviews id={id?.split('-')[1]}/>
