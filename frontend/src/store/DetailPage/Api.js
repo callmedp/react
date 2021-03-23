@@ -216,7 +216,8 @@ const EnquireNewSend = (data) => {
 }
 
 const addToCartApi = (data) => {
-    return BaseApiService.post(`${siteDomain}/cart/api/v1/add-to-cart/`, data);
+    console.log(data);
+    return BaseApiService.post(`${siteDomain}/api/v1/cart/add/`, data);
 }
 
 export default {
