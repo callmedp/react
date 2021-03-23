@@ -1,6 +1,5 @@
 # Core Python Imports
 import logging
-from datetime import datetime, date
 
 # Django Imports
 from django.conf import settings
@@ -29,6 +28,15 @@ class AddToCartApiView(CartMixin, APIView):
         self.data = {'status': False}
 
     def post(self, request, *args, **kwargs):
+
+        """
+        Function to add the product in cart using the existing session of
+        cart or creating a new cart using CartMixin.
+
+        1. Explore CartMixin for more internal functionality
+        2. Also creating lead for the crm added cart
+        """
+
         cart_type = request.POST.get('cart_type', None)
         prod_id   = request.POST.get('prod_id', None)
         cart_pk   = request.session.get('cart_pk', None)
