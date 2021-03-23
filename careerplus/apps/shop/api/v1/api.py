@@ -73,6 +73,7 @@ class ProductInformationAPIMixin(object):
         info['prd_num_bought'] = product.pBC
         info['prd_num_jobs'] = product.pNJ
         info['prd_vendor'] = product.pPvn
+        info['pTF'] = product.pTF
         info['pTg'] = dict(PRODUCT_TAG_CHOICES).get(product.pTg)
         info['prd_vendor_img'] = product.pVi
         # info['prd_vendor_img_alt'] = product.vendor.image_alt
