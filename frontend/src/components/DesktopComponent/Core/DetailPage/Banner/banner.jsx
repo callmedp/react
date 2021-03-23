@@ -159,7 +159,7 @@ const BannerCourseDetail = (props) => {
                                                         Mode
                                                         <label htmlFor={varList.id}>
                                                             <input type="radio" name="radio" id={varList.id} checked={varChecked?.id && (varChecked?.id === varList.id ? true : false) || !varChecked?.id && (product_detail?.selected_var?.id === varList.id ? true : false)} onChange={() => changeMode(varList)} />
-                                                            {varList.mode === 'OL' ? 'Online' : varList.mode === 'CA' ? 'Class room' : 'Other'}
+                                                            {varList.mode === 'OL' ? 'Online' : varList.mode === 'CA' ? 'Classroom' : 'Other'}
                                                         </label> 
                                                     </form>
                                                 )

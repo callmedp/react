@@ -126,7 +126,7 @@ const CourseDetailBanner = (props) => {
                     <a href={`${siteDomain}/search/results/?fvid=${product_detail?.pPv}`}>View all</a> courses by {product_detail?.prd_vendor}
                 </li>
                 <li>
-                <Link to={"#"}>+3 more</Link> Course providers  
+                <Link to={"#"}>+{product_detail?.prd_vendor_count} more</Link> Course providers  
                 </li>
             </ul>
         </div>
