@@ -109,7 +109,7 @@ const BannerCourseDetail = (props) => {
                                     </li>
                                     <li>
                                     <LinkScroll className="d-block" to={"popListTemplate"}>+4 more</LinkScroll> Course providers  
-                                    </li>
+                                    </li> 
                                     <li className="d-flex align-items-center">
                                         <figure className="icon-course-duration mr-10"></figure>
                                         <p>

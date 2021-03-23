@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {Link} from 'react-router-dom';
 import './Banner.scss';
+import { siteDomain } from 'utils/domains';
 
 const CourseDetailBanner = (props) => {
     const { product_detail, prdId } = props
@@ -78,25 +79,28 @@ const CourseDetailBanner = (props) => {
                         <li className="d-flex align-items-center">
                             <figure className="icon-course-duration mr-10"></figure>
                             <p>
-                                Course Duration <strong>180 Days</strong>
+                                Course Duration <strong>{product_detail?.duration} Days</strong>
                             </p>
                         </li>
                         <li className="d-flex align-items-center">
                             <figure className="icon-access-duration mr-10"></figure>
                             <p>
-                                Access Duration <strong>365 Days</strong>
+                                Access Duration <strong>{product_detail?.access_duration}</strong>
                             </p>
                         </li>
                     </ul>
                 </div>
             </div>
             <div className="m-intro-video">
-                <figure className="m-intro-video__img">
-                    <a href={product_detail?.prd_video} target="_blank">
-                        <img src="/media/images/mobile/intro-video.jpg" alt="Intro Video" />
-                        <i className="micon-play-video"></i>
-                    </a>
-                </figure>
+                {
+                    product_detail?.prd_video && 
+                        <figure className="m-intro-video__img">
+                            <a href={`https://${product_detail?.prd_video}`} target="_blank">
+                                <img src={product_detail?.prd_vendor_img} alt="Intro Video" />
+                                <i className="micon-play-video"></i>
+                            </a>
+                        </figure>
+                }
 
                 {
                     product_detail?.prd_about && 
@@ -119,7 +123,7 @@ const CourseDetailBanner = (props) => {
             </div>
             <ul className="m-course-stats mt-10 mb-10 bdr-top pt-20">
                 <li>
-                    <Link to={"#"}>View all</Link> courses by Simplilearn  
+                    <a href={`${siteDomain}/search/results/?fvid=${product_detail?.pPv}`}>View all</a> courses by {product_detail?.prd_vendor}
                 </li>
                 <li>
                 <Link to={"#"}>+3 more</Link> Course providers  
