@@ -121,14 +121,17 @@ const CourseDetailBanner = (props) => {
                 } */}
 
             </div>
-            <ul className="m-course-stats mt-10 mb-10 bdr-top pt-20">
-                <li>
-                    <a href={`${siteDomain}/search/results/?fvid=${product_detail?.pPv}`}>View all</a> courses by {product_detail?.prd_vendor}
-                </li>
-                <li>
-                <Link to={"#"}>+3 more</Link> Course providers  
-                </li>
-            </ul>
+            {
+                product_detail?.prd_service === 'course' &&
+                    <ul className="m-course-stats mt-10 mb-10 bdr-top pt-20">
+                        <li>
+                            <a href={`${siteDomain}/search/results/?fvid=${product_detail?.pPv}`}>View all</a> courses by {product_detail?.prd_vendor}
+                        </li>
+                        <li>
+                        <a href={`${siteDomain}/search/results/?fvid=${product_detail?.pPv}`}>+{product_detail?.prd_vendor_count} more</a> Course providers  
+                        </li>
+                    </ul>
+            }
         </div>
     )
 }

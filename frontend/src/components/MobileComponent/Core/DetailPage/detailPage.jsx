@@ -33,6 +33,7 @@ const DetailPage = (props) => {
     const prdId = props.match.params.id;
     const dispatch = useDispatch()
     const { product_detail, skill } = useSelector(store => store?.mainCourses);
+    const [enquiryForm, setEnquiryForm] = useState(false);
 
     const handleEffects = async () => {
         try {
@@ -69,7 +70,7 @@ const DetailPage = (props) => {
                 <CourseDetailBanner product_detail={product_detail} prdId={prdId}/>
             </header>
             <main className="mb-0">
-                <CourseEnrol />
+                <CourseEnrol product_detail={product_detail} />
                 {/* <StickyNavDetail /> */}
                 <KeyFeatures prd_uget={product_detail?.prd_uget}/>
                 {
@@ -89,8 +90,10 @@ const DetailPage = (props) => {
                 { product_detail?.faq && <FAQ faq_list={product_detail?.faq_list}/> }
                 <Reviews showReviewModal={showReviewModal} prdId={prdId}/>
                 <CoursesMayLike />
-                <CTA />
-                {/* <EnquiryModal /> */}
+                <CTA setEnquiryForm={setEnquiryForm} />
+                {
+                    enquiryForm ? <EnquiryModal setEnquiryForm={setEnquiryForm} /> : null
+                }
                 {/* <CertificateModal /> */}
             </main>
             <Footer /></>
