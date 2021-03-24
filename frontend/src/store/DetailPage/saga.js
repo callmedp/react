@@ -124,17 +124,24 @@ function* SendEnquireNow(action) {
 }
 
 function* AddToCart(action) {
-    const { payload: { payload, resolve, reject }} = action;
+    const { payload: { cartItems, resolve, reject }} = action;
 
-    try{
-        const response = yield call(Api.addToCartApi, payload)
+    let cartFormData = new FormData();
+    cartFormData.append('prod_id', cartItems.prod_id);
+    cartFormData.append('cart_type', cartItems.cart_type);
+    cartFormData.append('cv_id', cartItems.cv_id);
+
+    try {
+        const response = yield call(Api.addToCartApi, cartFormData)
 
         if (response?.error) {
             return reject(response)
         }
-        // const item = response?.data?.data;
-        return window.location.href = `${siteDomain}/cart/payment-summary/`;
-        // return resolve(item);
+
+        console.log(response);
+        const item = response?.data?.data;
+        if(cartItems.cart_type === 'cart') return window.location.href = `${siteDomain}${item.cart_url}`;
+        else if(cartItems.cart_type === 'express') return window.location.href = `${siteDomain}${item.redirect_url}`;
     }
     catch(e) {
         console.log(`Reject sending survey question due to ${e}`);

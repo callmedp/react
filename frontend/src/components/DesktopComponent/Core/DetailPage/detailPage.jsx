@@ -30,7 +30,7 @@ const DetailPage = (props) => {
     const dispatch = useDispatch();
     const {match: {params: {id}}, history} = props;
     const { mainCourseLoader } = useSelector(store => store.loader);
-    console.log(mainCourseLoader);
+
     useEffect( () => {
         Aos.init({ duration: 2000, once: true, offset: 10, anchorPlacement: 'bottom-bottom' });
 
@@ -82,7 +82,7 @@ const DetailPage = (props) => {
                         <SampleCertificate />
                     </div>
                 </div>
-            </div> */}
+            </div> */} 
 
             <HowItWorks />
             <div className="container-fluid">

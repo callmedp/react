@@ -8,7 +8,7 @@ import { submitReview } from 'store/DetailPage/actions';
 import { showSwal } from 'utils/swal'
  
 const ReviewModal = (props) => {
-    const { showReviewModal } = props
+    const { showReviewModal, prdId } = props
     const [inputStar, setInputStar] = useState(0);
     const { register, handleSubmit, errors, reset } = useForm();
     const [showError, setShowError] = useState(false)
@@ -22,6 +22,7 @@ const ReviewModal = (props) => {
             const review_values = {
                 ...values,
                 rating: inputStar ? inputStar : 5,
+                product_id: prdId?.split('-')[1]
             }
 
             let addedReview = await new Promise((resolve, reject) => dispatch(submitReview({ payload: review_values, resolve, reject })));
@@ -29,7 +30,7 @@ const ReviewModal = (props) => {
             if(addedReview) {
                 if(!addedReview?.error) showReviewModal(false);
 
-                showSwal((addedReview?.error ? 'error' : 'success'), (addedReview?.data?.display_message ? addedReview?.data?.display_message : addedReview.error))
+                showSwal((addedReview?.error ? 'error' : 'success'), (addedReview?.data?.message ? addedReview?.data?.message : addedReview.error))
             }
             
             reset(addedReview);
@@ -54,7 +55,7 @@ const ReviewModal = (props) => {
                                 onClick={() => setInputStar(value)} />
                             );
                     })}
-                </span>
+                </span> 
                 { showError && <p className="error_cls">* Please click on star for ratings</p> }
                 <span>Click on rate to scale of 1-5</span>
                 <form className="mt-20" onSubmit={handleSubmit(submitReviews)}>

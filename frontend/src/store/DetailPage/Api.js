@@ -103,9 +103,10 @@ const fetchReviews = (data) => {
 }
 
 const submitReviews = (data) => {
-    // const url = `/shop/api/v1/get-prd-review/?pid=${data.prdId}`;
-    // return BaseApiService.get(`${siteDomain}${url}`);
-    return {'data': {'display_message': 'Form Submitted Succesfully'}}
+    const url = `/shop/api/v1/product/review/`;
+    return BaseApiService.post(`${siteDomain}${url}`, data);
+
+    // return {'data': {'display_message': 'Form Submitted Succesfully'}}
 }
 
 const mainCourses = (id) => {
@@ -215,7 +216,8 @@ const EnquireNewSend = (data) => {
 }
 
 const addToCartApi = (data) => {
-    return BaseApiService.post(`${siteDomain}/cart/api/v1/add-to-cart/`, data);
+    console.log(data);
+    return BaseApiService.post(`${siteDomain}/api/v1/cart/add/`, data);
 }
 
 export default {

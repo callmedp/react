@@ -35,17 +35,15 @@ const BannerCourseDetail = (props) => {
         let cartItems = {};
 
         if(value.id) {
-            cartItems = {'prod_id': product_detail.pPv, 'cart_type': 'cart', cv_id: value.id}
-            console.log(cartItems);
+            cartItems = {'prod_id': product_detail.pPv, 'cart_type': 'cart', 'cv_id': value.id}
         }
         else {
-            cartItems = {'prod_id': product_detail.pPv, 'cart_type': 'cart', cv_id: product_detail.selected_var.id}
-            console.log(cartItems);
+            cartItems = {'prod_id': product_detail.pPv, 'cart_type': 'cart', 'cv_id': product_detail.selected_var.id}
         }
 
         try {
             dispatch(startMainCourseCartLoader());
-            await new Promise((resolve, reject) => dispatch(fetchAddToCartEnroll({ ...cartItems ,resolve, reject })));
+            await new Promise((resolve, reject) => dispatch(fetchAddToCartEnroll({ cartItems ,resolve, reject })));
             dispatch(stopMainCourseCartLoader());
         }
         catch (error) {
@@ -109,7 +107,7 @@ const BannerCourseDetail = (props) => {
                                     </li>
                                     <li>
                                     <LinkScroll className="d-block" to={"popListTemplate"}>+4 more</LinkScroll> Course providers  
-                                    </li>
+                                    </li> 
                                     <li className="d-flex align-items-center">
                                         <figure className="icon-course-duration mr-10"></figure>
                                         <p>

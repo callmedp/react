@@ -63,7 +63,7 @@ const DetailPage = (props) => {
         <div>
             <MenuNav />
             {
-                reviewModal ? <ReviewModal showReviewModal={showReviewModal}/> :<>
+                reviewModal ? <ReviewModal showReviewModal={showReviewModal} prdId={prdId}/> :<>
                 <header className="m-container m-header detail-bg">
                 <Header />
                 <CourseDetailBanner product_detail={product_detail} prdId={prdId}/>
@@ -83,7 +83,7 @@ const DetailPage = (props) => {
                     product_detail?.prd_should_lrn &&
                         <WhoLearn prd_lrn_data={product_detail?.prd_should_lrn_dt} />
                 }
-                <SkillGain />
+                { skill && <SkillGain skills={skill}/> }
                 <TakeFreeTest should_take_test_url={product_detail?.shld_take_test_slg} />
                 <OtherProviders />
                 { product_detail?.faq && <FAQ faq_list={product_detail?.faq_list}/> }
