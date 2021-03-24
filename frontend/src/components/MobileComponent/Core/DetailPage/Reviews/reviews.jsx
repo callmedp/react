@@ -33,7 +33,7 @@ const Reviews = (props) => {
         <section className="m-container mt-0 mb-0 pb-0" data-aos="fade-up">
             <div className="d-flex">
                 <h2 className="m-heading2 mb-10">Review</h2>
-                <Link className="ml-auto fs-13 font-weight-bold" onClick={() => showReviewModal(true) }>Write a review</Link>
+                <Link to={'#'} className="ml-auto fs-13 font-weight-bold" onClick={() => showReviewModal(true) }>Write a review</Link>
             </div>
             <div className="m-reviews">
                 <Slider {...settings}>

@@ -1,20 +1,40 @@
-import React from 'react';
+import React, { useState } from 'react';
 import './courseEnrol.scss';
 import {Link} from 'react-router-dom';
+import { getStudyMode } from 'utils/detailPageUtils/studyMode';
 
 
 const CourseEnrol = (props) => {
+    const { product_detail } = props
+    // console.log(product_detail)
+    const [varChecked, changeChecked] = useState({});
+
+    // const changeMode = (objj) => {
+    //     let selectedObj = objj;
+    //     changeChecked({...selectedObj});
+    // }
+
     return (
         <section className="m-container mt-80n mb-0 pb-0">
             <div className="m-course-enrol">
-                <div className="m-course-enrol__mode">
+                <div className="m-course-enrol__mode"> 
                     <form>
-                        <strong>Mode</strong> <label><input type="radio" value="" defaultChecked /> Online</label> 
-                        <label><input type="radio" value="" /> Class room</label>
+                        <strong>Mode</strong>
+                        {
+                            product_detail?.var_list?.map((varList) => {
+                                return (
+                                    <label key={varList.id}>
+                                        <input type="radio" value="" /> {getStudyMode(varList?.mode)}
+                                    </label>
+                                )
+                            })
+                        }
+                        {/* <label><input type="radio" value="" defaultChecked /> Online</label> 
+                        <label><input type="radio" value="" /> Classroom</label> */}
                     </form>
                 </div>
                 <div className="m-course-enrol__price">
-                    <strong className="mt-20 mb-10">3,499/- <del>5,499/-</del></strong>
+                    <strong className="mt-20 mb-10">{varChecked?.inr_price || product_detail?.var_list[0]?.inr_price}/- <del>{product_detail?.start_price}-</del></strong>
                     <Link to={"#"} className="btn btn-secondary mt-10 ml-auto">Enroll now</Link>
                 </div>
                 <div className="m-course-enrol__offer lightblue-bg2">
