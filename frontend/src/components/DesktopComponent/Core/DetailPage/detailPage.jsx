@@ -84,7 +84,7 @@ const DetailPage = (props) => {
                 </div>
             </div> */} 
 
-            <HowItWorks />
+            { product_detail?.dlvry_flow && <HowItWorks dlvry_flow={product_detail?.dlvry_flow} /> }
             <div className="container-fluid">
                 <div className="row">
                     <div className="col-sm-9">

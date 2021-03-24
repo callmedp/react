@@ -133,7 +133,6 @@ function* AddToCart(action) {
             return reject(response)
         }
 
-        console.log(response);
         const item = response?.data?.data;
         if(cartItems.cart_type === 'cart') return window.location.href = `${siteDomain}${item.cart_url}`;
         else if(cartItems.cart_type === 'express') return window.location.href = `${siteDomain}${item.redirect_url}`;
