@@ -206,6 +206,246 @@ class ProductInformationAPIMixin(object):
             })
         return prd_fbt
 
+    def get_delivery_flow(self, pTF):
+        """
+        Return data of how it works
+        """
+        context = {}
+        if pTF == 1 or pTF == 12 or pTF == 13:
+            context.update({
+                'main_heading': 'How to begin',
+                'articles': [
+                    {
+                        'heading': '',
+                        'article': 'Place order and upload your initial resume'
+                    },
+                    {
+                        'heading': '',
+                        'article': 'Our resume expert will contact you for discussion'
+                    },
+                    {
+                        'heading': '',
+                        'article': 'Receive 1st draft and give feedback to the expert'
+                    },
+                    {
+                        'heading': '',
+                        'article': 'Download your finalized professional resume'
+                    }
+                ]
+            })
+        if pTF == 2:
+            # Courses
+            context.update({
+                'main_heading': 'How to begin',
+                'articles': [
+                    {
+                        'heading': '',
+                        'article': 'Place order'
+                    },
+                    {
+                        'heading': '',
+                        'article': 'Recieve online access/study material from course provider'
+                    },
+                    {
+                        'heading': '',
+                        'article': 'Access the material and start learning'
+                    },
+                    {
+                        'heading': '',
+                        'article': 'Appear for exam - Get Certified'
+                    }
+                ]
+            })
+        if pTF == 3:
+            # Resume Critique
+            context.update({
+                'main_heading': 'How to begin',
+                'articles': [
+                    {
+                        'heading': '',
+                        'article': 'Place order and upload your resume'
+                    },
+                    {
+                        'heading': '',
+                        'article': 'Our resume expert will evaluate your resume'
+                    },
+                    {
+                        'heading': '',
+                        'article': 'Receive feedback from resume expert'
+                    },
+                    {
+                        'heading': '',
+                        'article': 'Apply feedback to develop the best resume yourself'
+                    }
+                ]
+            })
+        if pTF == 4:
+            # International Profile update
+            context.update({
+                'main_heading': 'How to begin',
+                'articles': [
+                    {
+                        'heading': '',
+                        'article': 'Place order and upload your resume'
+                    },
+                    {
+                        'heading': '',
+                        'article': 'Our expert will update your profile'
+                    },
+                    {
+                        'heading': '',
+                        'article': 'Start accessing your profile'
+                    },
+                    {
+                        'heading': '',
+                        'article': 'Increase your chances of getting relevant job matches'
+                    }
+                ]
+            })
+        if pTF == 5:
+            # Featured profile
+            context.update({
+                'main_heading': 'How to begin',
+                'articles': [
+                    {
+                        'heading': '',
+                        'article': 'Place order and upload your resume'
+                    },
+                    {
+                        'heading': '',
+                        'article': 'Our expert will update your profile'
+                    },
+                    {
+                        'heading': '',
+                        'article': 'Get featured on shine'
+                    },
+                    {
+                        'heading': '',
+                        'article': 'Get 10x recruiter views'
+                    }
+                ]
+            })
+        if pTF == 6:
+            # IDFY/Assessment reports
+            context.update({
+                'main_heading': 'How to begin',
+                'articles': [
+                    {
+                        'heading': '',
+                        'article': 'Place order'
+                    },
+                    {
+                        'heading': '',
+                        'article': 'Update your details on partner site'
+                    },
+                    {
+                        'heading': '',
+                        'article': 'Verification process by the team'
+                    },
+                    {
+                        'heading': '',
+                        'article': 'Download Assessment report'
+                    }
+                ]
+            })
+        if pTF == 7 or pTF == 15:
+            # Resume Booster
+            context.update({
+                'main_heading': 'How to begin',
+                'articles': [
+                    {
+                        'heading': '',
+                        'article': 'Place order'
+                    },
+                    {
+                        'heading': '',
+                        'article': 'Upload resume'
+                    },
+                    {
+                        'heading': '',
+                        'article': 'Resume shared with 1000+ Recruiters'
+                    },
+                    {
+                        'heading': '',
+                        'article': 'Increase chances of getting Interview Calls'
+                    }
+                ]
+            })
+        if pTF == 9:
+            # RoundOne
+            context.update({
+                'main_heading': 'How to begin',
+                'articles': [
+                    {
+                        'heading': '',
+                        'article': 'Place order'
+                    },
+                    {
+                        'heading': '',
+                        'article': 'Apply on relation jobs'
+                    },
+                    {
+                        'heading': '',
+                        'article': 'Talk to referrals'
+                    },
+                    {
+                        'heading': '',
+                        'article': 'Get an interview call'
+                    }
+                ]
+            })
+        if pTF == 10:
+            # Courses study Mate
+            context.update({
+                'main_heading': 'How to begin',
+                'articles': [
+                    {
+                        'heading': '',
+                        'article': 'Place order'
+                    },
+                    {
+                        'heading': '',
+                        'article': 'Give assessment to start your course'
+                    },
+                    {
+                        'heading': '',
+                        'article': 'Learn from best educators in the industry'
+                    },
+                    {
+                        'heading': '',
+                        'article': 'Get Certified'
+                    }
+                ]
+            })
+        if pTF == 16:
+            # Link and SMS Service
+            context.update({
+                'main_heading': 'How it works',
+                'articles': [
+                    {
+                        'heading': '',
+                        'article': 'Place order'
+                    },
+                    {
+                        'heading': '',
+                        'article': 'Get the link of the test on mail and sms'
+                    },
+                    {
+                        'heading': '',
+                        'article': 'Complete your test'
+                    },
+                    {
+                        'heading': '',
+                        'article': 'Get the report of the site'
+                    },
+                    {
+                        'heading': '',
+                        'article': 'Certificate gets added to your shine profile'
+                    }
+                ]
+            })
+        return context
+
     def get_reviews(self, product, page):
         """
         Function will get all the reviews given on the product
@@ -490,6 +730,7 @@ class ProductInformationAPIMixin(object):
             data.update(self.get_other_detail(product, sqs))
             data.update(self.get_duration_mode(sqs))
             data.update({'breadcrumbs': self.get_breadcrumb_data(product.category_main)})
+            data.update({'dlvry_flow': self.get_delivery_flow(sqs.pTF)})
             data.update(self.get_who_should_learn(product.category_main))
             if product.category_main:
                 data.update({'shld_take_test_slg': product.category_main.slug})
