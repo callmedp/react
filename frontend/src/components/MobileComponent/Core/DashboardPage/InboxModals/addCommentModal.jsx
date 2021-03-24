@@ -10,6 +10,7 @@ import Loader from '../../../Common/Loader/loader';
 import { updateServiceCommentCount } from 'store/DashboardPage/MyServices/actions/index';
 import { updateCourseCommentCount } from 'store/DashboardPage/MyCourses/actions/index';
 import { showSwal } from 'utils/swal';
+import { MyGA } from 'utils/ga.tracking.js';
 
 const AddCommentModal = (props) => {
     const { setShowCommentModal, oi_id, type } = props
@@ -101,7 +102,7 @@ const AddCommentModal = (props) => {
                             <div className="m-form-group">
                                 <TextArea attributes={inboxForm.name} register={register} errors={!!errors ? errors[inboxForm.name.name] : ''} />
                             </div>
-                            <button className="btn btn-blue" onClick={handleSubmit(submitComment)}>Submit</button>
+                            <button className="btn btn-blue" onClick={() => {handleSubmit(submitComment); MyGA.SendEvent('DashboardInbox','ln_dashboard_left_menu', 'ln_my_inbox', 'leave_a_message','', false, true);}}>Submit</button>
                         </div>
                     </form>
                 </div>

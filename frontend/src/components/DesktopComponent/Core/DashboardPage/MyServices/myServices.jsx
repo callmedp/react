@@ -22,6 +22,7 @@ import { pausePlayResume } from 'store/DashboardPage/MyServices/actions/index';
 import {siteDomain, resumeShineSiteDomain} from '../../../../../utils/domains';
 import {Toast} from '../../../Common/Toast/toast';
 import { showSwal } from '../../../../../utils/swal';
+import { MyGA } from 'utils/ga.tracking.js';
 
 const MyServices = (props) => {
     const dispatch = useDispatch();
@@ -244,7 +245,7 @@ const MyServices = (props) => {
                                                     <Link 
                                                         to={'#'}
                                                         className="font-weight-bold"
-                                                        onClick={() => toggleDetails(service.id)}
+                                                        onClick={() => {toggleDetails(service.id); MyGA.SendEvent('DashboardLeftMenu', 'ln_dashboard_left_menu', 'ln_my_inbox', 'view_details','' ,false, true);}}
                                                         aria-controls="addComments"
                                                         aria-expanded={`openViewDetail`+service.id}
                                                     >
