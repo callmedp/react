@@ -738,14 +738,17 @@ class ProductInformationAPIMixin(object):
             main_context.update(cache.get(key))
         else:
             data = self.get_product_information(product, sqs, product_main, sqs_main)
-            data.update(self.get_other_detail(product, sqs))
             data.update(self.get_duration_mode(sqs))
             data.update({'breadcrumbs': self.get_breadcrumb_data(product.category_main)})
             data.update({'dlvry_flow': self.get_delivery_flow(sqs.pTF)})
             data.update(self.get_who_should_learn(product.category_main))
-            if product.category_main:
-                data.update({'shld_take_test_slg': product.category_main.slug})
+            if product.take_free_test:
+                data.update({'free_test': True, 'shld_take_test_slg': product.take_free_test.get_absolute_url})
+            else:
+                data.update({'free_test': False})
+            main_context.update(self.get_other_detail(product, sqs))
             main_context.update(data)
+
             cache.set(key, data, 60 * 60 * 4)
 
         return main_context
