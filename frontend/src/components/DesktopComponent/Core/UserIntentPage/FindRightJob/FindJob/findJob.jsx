@@ -65,17 +65,20 @@ const FindJob = (props) => {
             return {
                 ...values,
                 'type': type,
-                'job': jobTitle.current.value,
+                'job': jobTitle.current.value?.toLowerCase(),
                 'location': document.getElementById('location').value, //Is document work on SSR?
                 'skills': chips?.concat(document.getElementById('skills').value.split(",")),
+                // 'skills': getLowerCaseSkills(chips)
             }
         }
         else {
             return {
                 ...values,
+                'department': values.department?.toLowerCase(),
                 'type': type,
-                'job': jobTitle.current.value,
+                'job': jobTitle.current.value?.toLowerCase(),
                 'skills': chips?.concat(document.getElementById('skills').value.split(",")),
+                // 'skills': getLowerCaseSkills(chips)
             }
         }
     }
