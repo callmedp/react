@@ -656,7 +656,6 @@ class ProductInformationAPIMixin(object):
         context['product_redeem_count'] = 0
         context['redeem_option'] = 'assessment'
         candidate_id = self.request.session.get('candidate_id', None)
-        candidate_id = '568a0b20cce9fb485393489b'
         if candidate_id:
             contenttype_obj = ContentType.objects.get_for_model(product)
             review_obj = Review.objects.filter(object_id=product.id, content_type=contenttype_obj,
