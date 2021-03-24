@@ -79,7 +79,7 @@ const DetailPage = (props) => {
                 }
                 {/* <CourseOutcome />
                 <SampleCertificate /> */}
-                <HowItWorks />
+                <HowItWorks steps={product_detail?.dlvry_flow}/>
                 { 
                     product_detail?.prd_should_lrn &&
                         <WhoLearn prd_lrn_data={product_detail?.prd_should_lrn_dt} />

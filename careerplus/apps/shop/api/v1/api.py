@@ -216,19 +216,19 @@ class ProductInformationAPIMixin(object):
                 'main_heading': 'How to begin',
                 'articles': [
                     {
-                        'heading': '',
+                        'heading': 'Upload Resume',
                         'article': 'Place order and upload your initial resume'
                     },
                     {
-                        'heading': '',
+                        'heading': 'We Contact',
                         'article': 'Our resume expert will contact you for discussion'
                     },
                     {
-                        'heading': '',
+                        'heading': 'Receive Draft',
                         'article': 'Receive 1st draft and give feedback to the expert'
                     },
                     {
-                        'heading': '',
+                        'heading': 'Download Final Resume',
                         'article': 'Download your finalized professional resume'
                     }
                 ]
@@ -239,19 +239,19 @@ class ProductInformationAPIMixin(object):
                 'main_heading': 'How to begin',
                 'articles': [
                     {
-                        'heading': '',
-                        'article': 'Place order'
+                        'heading': 'Place Order',
+                        'article': 'Place your order'
                     },
                     {
-                        'heading': '',
+                        'heading': 'Get Your Study Material',
                         'article': 'Recieve online access/study material from course provider'
                     },
                     {
-                        'heading': '',
+                        'heading': 'Start Learning',
                         'article': 'Access the material and start learning'
                     },
                     {
-                        'heading': '',
+                        'heading': 'Go for Exam',
                         'article': 'Appear for exam - Get Certified'
                     }
                 ]
@@ -262,19 +262,19 @@ class ProductInformationAPIMixin(object):
                 'main_heading': 'How to begin',
                 'articles': [
                     {
-                        'heading': '',
-                        'article': 'Place order and upload your resume'
+                        'heading': 'Introduce yourself',
+                        'article': 'Place order and upload your initial resume'
                     },
                     {
-                        'heading': '',
+                        'heading': 'We Update',
                         'article': 'Our resume expert will evaluate your resume'
                     },
                     {
-                        'heading': '',
+                        'heading': 'Get Feedback',
                         'article': 'Receive feedback from resume expert'
                     },
                     {
-                        'heading': '',
+                        'heading': 'Apply Feedback',
                         'article': 'Apply feedback to develop the best resume yourself'
                     }
                 ]
@@ -285,19 +285,19 @@ class ProductInformationAPIMixin(object):
                 'main_heading': 'How to begin',
                 'articles': [
                     {
-                        'heading': '',
+                        'heading': 'Introduce yourself',
                         'article': 'Place order and upload your resume'
                     },
                     {
-                        'heading': '',
+                        'heading': 'We Update',
                         'article': 'Our expert will update your profile'
                     },
                     {
-                        'heading': '',
+                        'heading': 'Profile Access',
                         'article': 'Start accessing your profile'
                     },
                     {
-                        'heading': '',
+                        'heading': 'Increase Chances of Jobs',
                         'article': 'Increase your chances of getting relevant job matches'
                     }
                 ]
@@ -308,19 +308,19 @@ class ProductInformationAPIMixin(object):
                 'main_heading': 'How to begin',
                 'articles': [
                     {
-                        'heading': '',
+                        'heading': 'Introduce yourself',
                         'article': 'Place order and upload your resume'
                     },
                     {
-                        'heading': '',
+                        'heading': 'We update',
                         'article': 'Our expert will update your profile'
                     },
                     {
-                        'heading': '',
+                        'heading': 'Featured',
                         'article': 'Get featured on shine'
                     },
                     {
-                        'heading': '',
+                        'heading': 'View',
                         'article': 'Get 10x recruiter views'
                     }
                 ]
@@ -331,19 +331,19 @@ class ProductInformationAPIMixin(object):
                 'main_heading': 'How to begin',
                 'articles': [
                     {
-                        'heading': '',
-                        'article': 'Place order'
+                        'heading': 'Order',
+                        'article': 'Place your order'
                     },
                     {
-                        'heading': '',
+                        'heading': 'Update Details',
                         'article': 'Update your details on partner site'
                     },
                     {
-                        'heading': '',
+                        'heading': 'Verify',
                         'article': 'Verification process by the team'
                     },
                     {
-                        'heading': '',
+                        'heading': 'Download',
                         'article': 'Download Assessment report'
                     }
                 ]
@@ -354,19 +354,19 @@ class ProductInformationAPIMixin(object):
                 'main_heading': 'How to begin',
                 'articles': [
                     {
-                        'heading': '',
-                        'article': 'Place order'
+                        'heading': 'Order',
+                        'article': 'Place your order'
                     },
                     {
-                        'heading': '',
+                        'heading': 'Upload',
                         'article': 'Upload resume'
                     },
                     {
-                        'heading': '',
+                        'heading': 'Resume Shared',
                         'article': 'Resume shared with 1000+ Recruiters'
                     },
                     {
-                        'heading': '',
+                        'heading': 'Get Calls',
                         'article': 'Increase chances of getting Interview Calls'
                     }
                 ]
@@ -377,19 +377,19 @@ class ProductInformationAPIMixin(object):
                 'main_heading': 'How to begin',
                 'articles': [
                     {
-                        'heading': '',
-                        'article': 'Place order'
+                        'heading': 'Order',
+                        'article': 'Place your order'
                     },
                     {
-                        'heading': '',
+                        'heading': 'Apply',
                         'article': 'Apply on relation jobs'
                     },
                     {
-                        'heading': '',
+                        'heading': 'Talk',
                         'article': 'Talk to referrals'
                     },
                     {
-                        'heading': '',
+                        'heading': 'Get Calls',
                         'article': 'Get an interview call'
                     }
                 ]
@@ -400,19 +400,19 @@ class ProductInformationAPIMixin(object):
                 'main_heading': 'How to begin',
                 'articles': [
                     {
-                        'heading': '',
-                        'article': 'Place order'
+                        'heading': 'Order',
+                        'article': 'Place your order'
                     },
                     {
-                        'heading': '',
+                        'heading': 'Assessment',
                         'article': 'Give assessment to start your course'
                     },
                     {
-                        'heading': '',
+                        'heading': 'Learn',
                         'article': 'Learn from best educators in the industry'
                     },
                     {
-                        'heading': '',
+                        'heading': 'Certificate',
                         'article': 'Get Certified'
                     }
                 ]
@@ -423,23 +423,23 @@ class ProductInformationAPIMixin(object):
                 'main_heading': 'How it works',
                 'articles': [
                     {
-                        'heading': '',
-                        'article': 'Place order'
+                        'heading': 'Order',
+                        'article': 'Place your order'
                     },
                     {
-                        'heading': '',
+                        'heading': 'Get test link',
                         'article': 'Get the link of the test on mail and sms'
                     },
                     {
-                        'heading': '',
+                        'heading': 'Test',
                         'article': 'Complete your test'
                     },
                     {
-                        'heading': '',
+                        'heading': 'Get Report',
                         'article': 'Get the report of the site'
                     },
                     {
-                        'heading': '',
+                        'heading': 'Get Certificate',
                         'article': 'Certificate gets added to your shine profile'
                     }
                 ]
