@@ -1,5 +1,5 @@
 import {
-    OtherProviderCoursesFetched, mainCoursesFetched, ReviewsFetched, recommendedCoursesFetched, addToCartEnrollFetched
+    OtherProviderCoursesFetched, mainCoursesFetched, ReviewsFetched, recommendedCoursesFetched, addToCartEnrollFetched, recommendCourseFetched
 } from './actions';
 
 
@@ -26,7 +26,7 @@ export const OtherProvidersCoursesReducer = (state = otherProvidersCoursesState,
 }
 
 const recommendedCoursesState = {
-    pop_list: {}
+    results: []
 }
 
 export const RecommendedCoursesReducer = (state = recommendedCoursesState, action) => {

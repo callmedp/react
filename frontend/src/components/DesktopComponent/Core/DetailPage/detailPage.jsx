@@ -26,7 +26,7 @@ import { startMainCourseLoader, stopMainCourseLoader } from 'store/Loader/action
 import Loader from '../../Common/Loader/loader';
 
 const DetailPage = (props) => {
-    const {product_detail, skill} = useSelector(store => store?.mainCourses);
+    const {product_detail, skill, product_id} = useSelector(store => store?.mainCourses);
     const dispatch = useDispatch();
     const {match: {params: {id}}, history} = props;
     const { mainCourseLoader } = useSelector(store => store.loader);
@@ -100,7 +100,7 @@ const DetailPage = (props) => {
             { product_detail?.faq && <FAQ faq_list={product_detail?.faq_list}/> }
             <Reviews id={id?.split('-')[1]}/>
             <EnquireNow {...props} />
-            <CoursesMayLike />
+            { skill && <CoursesMayLike product_id={id?.split('-')[1]} skill={skill}/> }
             <Footer />
         </div>
         </>

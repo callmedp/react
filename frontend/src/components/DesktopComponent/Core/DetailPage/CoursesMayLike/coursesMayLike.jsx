@@ -1,10 +1,33 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import '../../CataloguePage/RecentCourses/recentCourses.scss';
 import './coursesMayLike.scss'
 import Carousel from 'react-bootstrap/Carousel';
 import { Link } from 'react-router-dom';
-   
+import { fetchRecommendedCourses } from 'store/DetailPage/actions';
+
 const CoursesMayLike = (props) => {
+    const {product_id, skill} = props;
+    const dispatch = useDispatch();
+    const { results } = useSelector(store => {console.log(store); return store.recommendedCourses});
+    console.log(results);
+
+    useEffect(() => {
+        handleEffects();
+    },[])
+
+    const handleEffects = async () => {
+        try {
+            await new Promise((resolve, reject) => dispatch(fetchRecommendedCourses({ payload: {'skill': (skill && skill?.join(',')) || '', 'id': product_id, 'page': 6}, resolve, reject })));
+        } 
+        catch (error) {
+            if (error?.status == 404) {
+                // history.push('/404');
+                console.log(error)
+            }
+        }
+    };
+
     return(
         <section className="container" data-aos="fade-up">
             <div className="row">
