@@ -1,27 +1,18 @@
 import React, { useState } from 'react';
 import './courseEnrol.scss';
 import {Link} from 'react-router-dom';
+import { getStudyMode } from 'utils/detailPageUtils/studyMode';
 
 
 const CourseEnrol = (props) => {
     const { product_detail } = props
-    console.log(product_detail)
+    // console.log(product_detail)
     const [varChecked, changeChecked] = useState({});
 
     // const changeMode = (objj) => {
     //     let selectedObj = objj;
     //     changeChecked({...selectedObj});
     // }
-
-    const getMode = (type) => {
-        if(type === 'OL'){
-            return 'Online'
-        }
-        else if(type === 'CA'){
-            return 'Classroom'
-        }
-        return 'Other'
-    }
 
     return (
         <section className="m-container mt-80n mb-0 pb-0">
@@ -30,10 +21,10 @@ const CourseEnrol = (props) => {
                     <form>
                         <strong>Mode</strong>
                         {
-                            product_detail?.var_list?.map((varList, indx) => {
+                            product_detail?.var_list?.map((varList) => {
                                 return (
-                                    <label htmlFor={varList.id}>
-                                        <input type="radio" value="" /> {getMode(varList?.mode)}
+                                    <label key={varList.id}>
+                                        <input type="radio" value="" /> {getStudyMode(varList?.mode)}
                                     </label>
                                 )
                             })
