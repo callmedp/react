@@ -655,12 +655,24 @@ class ProductInformationAPIMixin(object):
         context['redeem_test'] = False
         context['product_redeem_count'] = 0
         context['redeem_option'] = 'assessment'
-
-        if self.request.session.get('candidate_id'):
-            candidate_id = self.request.session.get('candidate_id', None)
+        candidate_id = self.request.session.get('candidate_id', None)
+        candidate_id = '568a0b20cce9fb485393489b'
+        if candidate_id:
             contenttype_obj = ContentType.objects.get_for_model(product)
-            context['review_obj'] = Review.objects.filter(object_id=product.id, content_type=contenttype_obj,
+            review_obj = Review.objects.filter(object_id=product.id, content_type=contenttype_obj,
                                                           user_id=candidate_id).first()
+            if review_obj:
+                context['review'] = {
+                    'title': review_obj.title,
+                    'user_email': review_obj.user_email,
+                    'user_name:': review_obj.user_name,
+                    'average_rating': review_obj.average_rating,
+                    'rating': review_obj.get_ratings(),
+                    'created': review_obj.created.strftime("%b %d, %Y"),
+                    'content': review_obj.content
+                }
+            else:
+                context['review'] = None
             # User_Reviews depicts if user already has a review for this product or not
             user_reviews = Review.objects.filter(content_type=contenttype_obj, object_id=pk, status__in=[0, 1],
                                                  user_id=candidate_id).count()
