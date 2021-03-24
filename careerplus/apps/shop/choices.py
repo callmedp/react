@@ -51,20 +51,20 @@ PRODUCT_CHOICES = PRODUCT_VENDOR_CHOICES + ((2, 'Variation-Child'),
 
 FLOW_CHOICES = (
     (0, 'Default'),
-    (1, 'Resume Writing India'),  # flow1
+    (1, 'Resume Writing India'),  # flow1 
     (2, 'Courses'),  # flow2
-    (3, 'Resume Critique'),  # flow3
+    (3, 'Resume Critique'),  # flow3 product of this flow is not included in recommendation engine
     (4, 'International Profile Update'),  # flow4
     (5, 'Featured Profile'),  # flow5
     (6, 'IDfy Assessment'),  # flow6
-    (7, 'Resume Booster'),  # flow7
+    (7, 'Resume Booster'),  # flow7 
     (8, 'Linkedin'),  # flow8
     (9, 'Round One'),  # flow9
     (10, 'StudyMate'),  # flow 10
     (11, 'TSSC'),  # flow 11
     (12, 'Country Specific Resume'),  # flow 12
     (13, 'Executive Bio,Portfolio,Visual Resume,Cover Letter,Second Regular Resume'),  # flow 13
-    (14, 'University Courses'),
+    (14, 'University Courses'), 
     (15, 'Resume Booster International'),
     (16, 'Assessment and Certifications'),
     (17, 'Resume Builder'),

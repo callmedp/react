@@ -4,7 +4,7 @@
 
 .dashboard-warp {
     display: flex;
-    margin-top: 30px;
+    margin-top: 5px;
 
     &--tab {
         max-width: 140px;
@@ -22,7 +22,7 @@
     &--content {
         background-color: #F9F9F9;
         border-radius: 0.4rem;
-        padding: 0px 20px 20px 20px;
+        padding: 20px;
         position: relative;
         width: 100%;
     }
@@ -298,11 +298,16 @@
     cursor: pointer;
         
     input[type=file] {
-        font-size: 100px;
+        font-size: initial;
         position: absolute;
         left: 0;
         top: 0;
         opacity: 0;
+        height: 3.9rem;
+
+        &:hover {
+            cursor: pointer;
+        }
     }
 }
   

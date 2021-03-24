@@ -39,6 +39,7 @@ class DashboardMyorderApi(DashboardInfo, APIView):
         data = []
         page = request.GET.get("page", 1)
         candidate_id = self.request.session.get('candidate_id', None)
+        # candidate_id='601b8120ca3f418906a889a8'
         order_list = []
         page_info={}
         if candidate_id:         
@@ -281,14 +282,7 @@ class DashboardReviewApi(APIView):
             object_id__in=prd_list, status=1,user_id=candidate_id)
 
         review_list.update({'no_review':len(review_list)})
-        # paginated_data = offset_paginator(page, review_list)
         data = ReviewSerializer(review_list, many=True).data
-        # page_info ={
-        # 'current_page':paginated_data['current_page'],
-        # 'total':paginated_data['total_pages'],
-        # 'has_prev': True if paginated_data['current_page'] >1 else False,
-        # 'has_next':True if (paginated_data['total_pages']-paginated_data['current_page'])>0 else False
-        # }
         return APIResponse(data={'data':data},message='Review data Success',status=status.HTTP_200_OK)
 
     def post(self, request, *args, **kwargs):
@@ -407,6 +401,7 @@ class ViewOrderDetailsApi(APIView):
 
     def get(self,request):
         candidate_id = self.request.session.get('candidate_id', None)
+        # candidate_id='601b8120ca3f418906a889a8'
         oi_id = request.GET.get('oi_id',None)
         if candidate_id is None:
             return APIResponse(data='', error='Candidate Details required', status=status.HTTP_400_BAD_REQUEST)
