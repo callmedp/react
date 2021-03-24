@@ -126,13 +126,8 @@ function* SendEnquireNow(action) {
 function* AddToCart(action) {
     const { payload: { cartItems, resolve, reject }} = action;
 
-    let cartFormData = new FormData();
-    cartFormData.append('prod_id', cartItems.prod_id);
-    cartFormData.append('cart_type', cartItems.cart_type);
-    cartFormData.append('cv_id', cartItems.cv_id);
-
     try {
-        const response = yield call(Api.addToCartApi, cartFormData)
+        const response = yield call(Api.addToCartApi, cartItems)
 
         if (response?.error) {
             return reject(response)
