@@ -207,6 +207,9 @@ class ProductInformationAPIMixin(object):
         return prd_fbt
 
     def get_delivery_flow(self, pTF):
+        """
+        Return data of how it works
+        """
         context = {}
         if pTF == 1 or pTF == 12 or pTF == 13:
             context.update({
@@ -441,6 +444,7 @@ class ProductInformationAPIMixin(object):
                     }
                 ]
             })
+        return context
 
     def get_reviews(self, product, page):
         """
@@ -726,6 +730,7 @@ class ProductInformationAPIMixin(object):
             data.update(self.get_other_detail(product, sqs))
             data.update(self.get_duration_mode(sqs))
             data.update({'breadcrumbs': self.get_breadcrumb_data(product.category_main)})
+            data.update({'dlvry_flow': self.get_delivery_flow(sqs.pTF)})
             data.update(self.get_who_should_learn(product.category_main))
             if product.category_main:
                 data.update({'shld_take_test_slg': product.category_main.slug})
