@@ -9,7 +9,7 @@ import { fetchRecommendedCourses } from 'store/DetailPage/actions';
 const CoursesMayLike = (props) => {
     const {product_id, skill} = props;
     const dispatch = useDispatch();
-    const { results } = useSelector(store => {console.log(store); return store.recommendedCourses});
+    const { results } = useSelector(store => store.recommendedCourses);
 
     useEffect(() => {
         handleEffects();
