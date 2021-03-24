@@ -37,15 +37,18 @@ class AddToCartApiView(CartMixin, APIView):
         2. Also creating lead for the crm added cart
         """
 
-        cart_type = request.POST.get('cart_type', '')
-        prod_id   = request.POST.get('prod_id', '')
-        cart_pk   = request.session.get('cart_pk', None)
-        is_resume_template = request.POST.get('add_resume', False)
-        candidate_id = request.session.get('candidate_id', None)
+        cart_type = request.data.get('cart_type', None)
+        prod_id   = request.data.get('prod_id', None)
+        cart_pk   = request.session.get('cart_pk', '')
+        is_resume_template = request.data.get('add_resume', False)
+        candidate_id = request.session.get('candidate_id', '')
 
-        if not all(len(i) > 0 for i in [prod_id, cart_type]):
-            return APIResponse(message='Product and Cart type is required', status=status.HTTP_400_BAD_REQUEST,
-                               error=True)
+        if prod_id is None:
+            return APIResponse(message='Product is required', status=status.HTTP_400_BAD_REQUEST, error=True)
+
+        if cart_type is None:
+            return APIResponse(message='Cart Type is required (Try cart or express)', status=status.HTTP_400_BAD_REQUEST, error=True)
+
         try:
             product = Product.objects.filter(id=int(prod_id)).first()
             if not product:
@@ -63,7 +66,7 @@ class AddToCartApiView(CartMixin, APIView):
                 logging.getLogger('error_log').error('unable to get cart objects - {}'.format(str(e)))
                 cart_obj = None
             logging.getLogger('info_log').info(
-                "Cart Obj:{}, candidate_ID: {}, Owner ID:{}".format(cart_obj, candidate_id, cart_obj.owner_id))
+                "Cart Obj:{}, candidate_ID: {}".format(cart_obj, candidate_id))
 
             if cart_obj and candidate_id and int(prod_id) == int(request.session.get('tracking_product_id', -1)):
                 request.session.update({'product_availability': prod_id})
