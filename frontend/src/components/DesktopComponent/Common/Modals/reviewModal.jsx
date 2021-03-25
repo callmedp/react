@@ -12,7 +12,6 @@ import { imageUrl } from 'utils/domains';
 
 const ReviewModal =(props) => {
     const { reviewModal, showReviewModal, review } = props;
-    console.log(reviewModal, showReviewModal, review);
     const { reviewLoader } = useSelector(store => store.loader);
     const { register, handleSubmit, errors } = useForm();
     const dispatch = useDispatch();
