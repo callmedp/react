@@ -59,7 +59,7 @@ const DetailPage = (props) => {
             <Header />
             <StickyNavDetail/>
             <BannerCourseDetail product_detail={product_detail}/>
-            <KeyFeatures prd_uget={product_detail?.prd_uget}/>
+            {product_detail?.prd_uget && <KeyFeatures prd_uget={product_detail?.prd_uget}/>}
             
             {
                 product_detail?.chapter && 

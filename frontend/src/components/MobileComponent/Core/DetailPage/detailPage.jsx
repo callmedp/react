@@ -34,6 +34,7 @@ const DetailPage = (props) => {
     const dispatch = useDispatch()
     const { product_detail, skill } = useSelector(store => store?.mainCourses);
     const [enquiryForm, setEnquiryForm] = useState(false);
+    const [varChecked, changeChecked] = useState({});
 
     const handleEffects = async () => {
         try {
@@ -67,10 +68,10 @@ const DetailPage = (props) => {
                 reviewModal ? <ReviewModal showReviewModal={showReviewModal} prdId={prdId}/> :<>
                 <header className="m-container m-header detail-bg">
                 <Header />
-                <CourseDetailBanner product_detail={product_detail} prdId={prdId}/>
+                <CourseDetailBanner product_detail={product_detail} prdId={prdId} varChecked={varChecked}/>
             </header>
             <main className="mb-0">
-                <CourseEnrol product_detail={product_detail} />
+                <CourseEnrol product_detail={product_detail} varChecked={varChecked} changeChecked={changeChecked}/>
                 {/* <StickyNavDetail /> */}
                 <KeyFeatures prd_uget={product_detail?.prd_uget}/>
                 {
