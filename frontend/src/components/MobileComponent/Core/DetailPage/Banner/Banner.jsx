@@ -4,10 +4,9 @@ import './Banner.scss';
 import { siteDomain } from 'utils/domains';
 
 const CourseDetailBanner = (props) => {
-    const { product_detail, prdId } = props
+    const { product_detail, prdId, varChecked } = props
     const noOfWords = 250;
-    const [showAll, setShowAll] = useState(false)
-
+    // const [showAll, setShowAll] = useState(false);
     const starRatings = (star, index) => {
         return (
             star === '*' ? <em className="micon-fullstar" key={index}></em> :
@@ -23,7 +22,6 @@ const CourseDetailBanner = (props) => {
     //         </a>
     //     )
     // }
-
     useEffect(() => {
         // setShowAll(false)
     }, [prdId])
@@ -43,14 +41,9 @@ const CourseDetailBanner = (props) => {
                         { product_detail?.prd_H1 }
                     </h1>
                     <span className="m-rating">
-                    {
-                        product_detail?.prd_rating_star?.map((star, index) => starRatings(star, index))
-                    }
-                        {/* <em className="micon-fullstar"></em>
-                        <em className="micon-fullstar"></em>
-                        <em className="micon-fullstar"></em>
-                        <em className="micon-halfstar"></em>
-                        <em className="micon-blankstar"></em> */}
+                        {
+                            product_detail?.prd_rating_star?.map((star, index) => starRatings(star, index))
+                        }
                         <span>{ product_detail?.prd_rating?.toFixed() }/5</span>
                         <span>By { product_detail?.prd_vendor }</span>
                     </span>
@@ -79,7 +72,7 @@ const CourseDetailBanner = (props) => {
                         <li className="d-flex align-items-center">
                             <figure className="icon-course-duration mr-10"></figure>
                             <p>
-                                Course Duration <strong>{product_detail?.duration} Days</strong>
+                                Course Duration <strong>{varChecked?.dur_days || product_detail?.selected_var.dur_days} Days</strong>
                             </p>
                         </li>
                         <li className="d-flex align-items-center">

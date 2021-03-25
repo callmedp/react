@@ -5,7 +5,8 @@ const STUDY_MODE = {
     'BL': 'Blended',
     'CA': 'Classroom',
     'CF': 'Certifications',
-    'DL': 'Distance Learning'
+    'DL': 'Distance Learning',
+    '': 'Other'
 }
 
 const getStudyMode = (type) => {

@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { fetchAddToCartEnroll } from 'store/DetailPage/actions';
 import Loader from '../../../Common/Loader/loader';
 import { siteDomain } from 'utils/domains';
+import { getStudyMode } from 'utils/detailPageUtils/studyMode';
 
 const BannerCourseDetail = (props) => {
     const {product_detail} = props;
@@ -83,16 +84,16 @@ const BannerCourseDetail = (props) => {
                                             </span>
                                             {
                                                 <>
-                                                {product_detail?.prd_num_rating && <span className="review-jobs">
+                                                {product_detail?.prd_num_rating ? <span className="review-jobs">
                                                 <LinkScroll to={"reviews"}>
                                                     <figure className="icon-reviews-link"></figure> <strong> {product_detail?.prd_num_rating}</strong> Reviews
                                                 </LinkScroll>
-                                                </span>}
-                                                {product_detail?.prd_num_jobs && <span className="review-jobs">
+                                                </span> : ""}
+                                                {product_detail?.prd_num_jobs ? <span className="review-jobs">
                                                     <a target="_blank" href={product_detail?.num_jobs_url}>
                                                         <figure className="icon-jobs-link"></figure> <strong>{product_detail?.prd_num_jobs}</strong> Jobs available
                                                     </a>
-                                                </span>}
+                                                </span> : ""}
                                                 </>
                                             }
                                         </div>
@@ -111,14 +112,14 @@ const BannerCourseDetail = (props) => {
                                     }
 
                                     {
-                                        product_detail?.duration &&
+                                        product_detail?.duration ?
                                         <li className="d-flex align-items-center">
                                             <figure className="icon-course-duration mr-10"></figure>
                                             <p>
                                                 Course Duration <strong>{varChecked?.dur_days || product_detail?.selected_var.dur_days} Days</strong>
                                             </p>
                                         </li>
-                                    }
+                                    : ""}
                                     {
                                         product_detail?.access_duration &&
                                         <li className="d-flex align-items-center">
@@ -165,9 +166,9 @@ const BannerCourseDetail = (props) => {
                                                 product_detail?.var_list?.map((varList, indx) => {
                                                     return (
                                                             <form key={indx}>
-                                                                <label htmlFor={varList.id}>
-                                                                    <input type="radio" name="radio" id={varList.id} checked={varChecked?.id && (varChecked?.id === varList.id ? true : false) || !varChecked?.id && (product_detail?.selected_var?.id === varList.id ? true : false)} onChange={() => changeMode(varList)} />
-                                                                    {varList.mode === 'OL' ? 'Online' : varList.mode === 'CA' ? 'Class room' : 'Other'}
+                                                                <label htmlFor={varList?.id}>
+                                                                    <input type="radio" name="radio" id={varList?.id} checked={varChecked?.id && (varChecked?.id === varList?.id ? true : false) || !varChecked?.id && (product_detail?.selected_var?.id === varList?.id ? true : false)} onChange={() => changeMode(varList)} />
+                                                                    {getStudyMode(varList?.mode)}
                                                                 </label> 
                                                             </form>
                                                         )
