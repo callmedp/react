@@ -747,7 +747,11 @@ class ProductInformationAPIMixin(object):
             data.update({'dlvry_flow': self.get_delivery_flow(sqs.pTF)})
             data.update(self.get_who_should_learn(product.category_main))
             if product.take_free_test:
-                data.update({'free_test': True, 'shld_take_test_slg': product.take_free_test.get_absolute_url})
+                data.update({
+                    'free_test': True,
+                    'shld_take_test_slg': product.take_free_test.get_absolute_url,
+                    'test_title': product.take_free_test.title
+                })
             else:
                 data.update({'free_test': False})
             main_context.update(self.get_other_detail(product, sqs))

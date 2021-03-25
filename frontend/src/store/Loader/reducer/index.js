@@ -13,7 +13,8 @@ const initState = {
     uploadLoader: false,
     oiDetailsLoader: false,
     mainCourseLoader: false,
-    mainCourseCartLoader: false
+    mainCourseCartLoader: false,
+    needHelpLoader: false
 }
 
 export const LoaderReducer = (state=initState, action) => {
@@ -67,6 +68,10 @@ export const LoaderReducer = (state=initState, action) => {
         // main course cart loader
         case Actions.START_MAIN_COURSE_CART_LOADER : return {...state, ...action.payload}
         case Actions.STOP_MAIN_COURSE_CART_LOADER : return {...state, ...action.payload}
+
+        //Need help loader
+        case Actions.START_NEED_HELP_LOADER : return {...state, ...action.payload}
+        case Actions.STOP_NEED_HELP_LOADER : return {...state, ...action.payload}
 
         default: return state;
     }
