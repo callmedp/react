@@ -20,7 +20,7 @@ const LatestBlog = (props) => {
                             latestBlog?.map((blog, idx) => {
                                 return (
                                     <li className="col-sm-4" key={idx}>
-                                    <div className="card" onClick={() => MyGA.SendEvent('ln_new_homepage','ln_homepage_blog', 'ln_blog_click',blog.display_name, false, true)}>
+                                    <div className="card" onClick={() => MyGA.SendEvent('ln_new_homepage','ln_homepage_blog', 'ln_blog_click',blog.display_name, '', false, true)}>
                                         <a href={`${siteDomain}${blog?.url}`}>
                                             <figure>
                                                 <img src={blog?.image} className="img-fluid" alt={blog?.display_name} />

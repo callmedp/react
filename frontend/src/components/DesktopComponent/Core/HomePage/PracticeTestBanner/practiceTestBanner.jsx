@@ -8,7 +8,7 @@ const PracticeTestBanner = (props) => {
 
 
     const testRedirection = () => {
-        MyGA.SendEvent('ln_new_homepage','ln_free_test', 'ln_free_test','test_click', false, true);
+        MyGA.SendEvent('ln_new_homepage','ln_free_test', 'ln_free_test','test_click', '',false, true);
         window.location.replace(`${siteDomain}/practice-tests/`);
     }
 
