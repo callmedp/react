@@ -109,7 +109,7 @@
   /* IE6-9 */
   content: '';
   position: absolute;
-  left: 15px;
+  /* left: 15px; */
   right: 15px;
   top: 0;
   bottom: 0;
