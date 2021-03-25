@@ -11,11 +11,12 @@ import { Toast } from '../Toast/toast'
 import { imageUrl } from 'utils/domains';
 
 const ReviewModal =(props) => {
-    const { reviewModal, showReviewModal } = props;
+    const { reviewModal, showReviewModal, review } = props;
+    console.log(reviewModal, showReviewModal, review);
     const { reviewLoader } = useSelector(store => store.loader);
     const { register, handleSubmit, errors } = useForm();
     const dispatch = useDispatch();
-    let [rating, setRating] = useState(0);
+    let [rating, setRating] = useState(review ? review?.average_rating : 0);
     let [clicked, setClicked] = useState(false);
     const [showError, setShowError] = useState(false)
 
@@ -76,6 +77,41 @@ const ReviewModal =(props) => {
         }
     };
 
+    let reviewedTitle = {
+        className: "form-control",
+        type: "text",
+        name: "title",
+        id: "title",
+        placeholder: " ",
+        label: "Title",
+        value: review?.title,
+        inputType: 'input',
+        validation: {
+            required:true,
+        },
+        errorMessage: {
+            required: "This field is required",
+        }
+    };
+
+    let reviewedContent = {
+        className: "form-control",
+        type: "text",
+        name: "review",
+        id: "review",
+        placeholder: " ",
+        label: "Type Here",
+        value: review?.content,
+        inputType: 'input',
+        rows: 3,
+        validation: {
+            required:true,
+        },
+        errorMessage: {
+            required: "This field is required",
+        }
+    };
+
     return (
         <>
         { reviewLoader ? <Loader /> : ''}
@@ -104,10 +140,10 @@ const ReviewModal =(props) => {
                 { showError && <p className="error_cls mt-10">* Please click on star for ratings</p> }
                 <p className="db-rate-services--subheading">Click on rate to scale of 1-5</p>
                     <form onSubmit={handleSubmit(submitReviewFunc)}>
-                            <InputField attributes={CoursesServicesForm.title} register={register}
+                            <InputField attributes={review ? reviewedTitle : CoursesServicesForm.title} register={register}
                                 errors={!!errors ? errors[CoursesServicesForm.title.name] : false} />            
 
-                            <TextArea attributes={CoursesServicesForm.review} register={register}
+                            <TextArea attributes={review ? reviewedContent : CoursesServicesForm.review} register={register}
                                 errors={!!errors ? errors[CoursesServicesForm.review.name] : ''} />
                         <br/>
                         <button className="btn btn-primary px-5" type="submit">Submit</button>

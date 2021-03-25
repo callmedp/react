@@ -9,8 +9,7 @@ import { fetchRecommendedCourses } from 'store/DetailPage/actions';
 const CoursesMayLike = (props) => {
     const {product_id, skill} = props;
     const dispatch = useDispatch();
-    const { results } = useSelector(store => {console.log(store); return store.recommendedCourses});
-    console.log(results);
+    const { results } = useSelector(store => store.recommendedCourses);
 
     useEffect(() => {
         handleEffects();
@@ -28,6 +27,12 @@ const CoursesMayLike = (props) => {
         }
     };
 
+    const starRatings = (star, index) => {
+        return (star === '*' ? <em className="icon-fullstar" key={index}></em> : star === '+'
+            ? <em className="icon-halfstar" key={index}></em> : <em className="icon-blankstar" key={index}></em>
+        )
+    }
+
     return(
         <section className="container" data-aos="fade-up">
             <div className="row">
@@ -36,272 +41,44 @@ const CoursesMayLike = (props) => {
                     <Carousel className="courses-like">
                         <Carousel.Item interval={10000000000}>
                             <ul className="recent-courses__list mt-30">
-                                <li className="col">
-                                    <div className="card">
-                                        <div className="card__heading">
-                                            <figure>
-                                                <img src="https://static1.shine.com/l/m/product_image/3425/1542800087_8980.png" alt="Digital Marketing Training Course" />
-                                            </figure>
-                                            <h3 className="heading3">
-                                                <Link to={"#"}>Digital Marketing & Email Marketing Training Course</Link>
-                                            </h3>
-                                        </div>
-                                        <div className="card__box">
-                                            <div className="card__rating">
-                                            <span className="mr-10">By ERB</span>
-                                            <span className="rating">
-                                                <em className="icon-fullstar"></em>
-                                                <em className="icon-fullstar"></em>
-                                                <em className="icon-fullstar"></em>
-                                                <em className="icon-fullstar"></em>
-                                                <em className="icon-blankstar"></em>
-                                                <span>4/5</span>
-                                            </span>
-                                            </div>
-                                            <div className="card__price mt-10">
-                                                <strong>12999/-</strong> 
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li className="col">
-                                    <div className="card">
-                                        <div className="card__heading">
-                                            <figure>
-                                                <img src="https://static1.shine.com/l/m/product_image/3425/1542800087_8980.png" alt="Digital Marketing Training Course" />
-                                            </figure>
-                                            <h3 className="heading3">
-                                                <Link to={"#"}>Email Marketing Master Training Course</Link>
-                                            </h3>
-                                        </div>
-                                        <div className="card__box">
-                                            <div className="card__rating">
-                                            <span className="mr-10">By ERB</span>
-                                            <span className="rating">
-                                                <em className="icon-fullstar"></em>
-                                                <em className="icon-fullstar"></em>
-                                                <em className="icon-fullstar"></em>
-                                                <em className="icon-fullstar"></em>
-                                                <em className="icon-blankstar"></em>
-                                                <span>4/5</span>
-                                            </span>
-                                            </div>
-                                            <div className="card__price mt-10">
-                                                <strong>12999/-</strong> 
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li className="col">
-                                    <div className="card">
-                                        <div className="card__heading">
-                                            <figure>
-                                                <img src="https://static1.shine.com/l/m/product_image/3425/1542800087_8980.png" alt="Digital Marketing Training Course" />
-                                            </figure>
-                                            <h3 className="heading3">
-                                                <Link to={"#"}>Digital Marketing Training Course</Link>
-                                            </h3>
-                                        </div>
-                                        <div className="card__box">
-                                            <div className="card__rating">
-                                            <span className="mr-10">By ERB</span>
-                                            <span className="rating">
-                                                <em className="icon-fullstar"></em>
-                                                <em className="icon-fullstar"></em>
-                                                <em className="icon-fullstar"></em>
-                                                <em className="icon-fullstar"></em>
-                                                <em className="icon-blankstar"></em>
-                                                <span>4/5</span>
-                                            </span>
-                                            </div>
-                                            <div className="card__price mt-10">
-                                                <strong>12999/-</strong> 
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </Carousel.Item>
-                        <Carousel.Item interval={10000000000}>
-                            <ul className="recent-courses__list mt-30">
-                                <li className="col">
-                                    <div className="card">
-                                        <div className="card__heading">
-                                            <figure>
-                                                <img src="https://static1.shine.com/l/m/product_image/3425/1542800087_8980.png" alt="Digital Marketing Training Course" />
-                                            </figure>
-                                            <h3 className="heading3">
-                                                <Link to={"#"}>Digital Marketing & Email Marketing Training Course</Link>
-                                            </h3>
-                                        </div>
-                                        <div className="card__box">
-                                            <div className="card__rating">
-                                            <span className="mr-10">By ERB</span>
-                                            <span className="rating">
-                                                <em className="icon-fullstar"></em>
-                                                <em className="icon-fullstar"></em>
-                                                <em className="icon-fullstar"></em>
-                                                <em className="icon-fullstar"></em>
-                                                <em className="icon-blankstar"></em>
-                                                <span>4/5</span>
-                                            </span>
-                                            </div>
-                                            <div className="card__price mt-10">
-                                                <strong>12999/-</strong> 
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li className="col">
-                                    <div className="card">
-                                        <div className="card__heading">
-                                            <figure>
-                                                <img src="https://static1.shine.com/l/m/product_image/3425/1542800087_8980.png" alt="Digital Marketing Training Course" />
-                                            </figure>
-                                            <h3 className="heading3">
-                                                <Link to={"#"}>Email Marketing Master Training Course</Link>
-                                            </h3>
-                                        </div>
-                                        <div className="card__box">
-                                            <div className="card__rating">
-                                            <span className="mr-10">By ERB</span>
-                                            <span className="rating">
-                                                <em className="icon-fullstar"></em>
-                                                <em className="icon-fullstar"></em>
-                                                <em className="icon-fullstar"></em>
-                                                <em className="icon-fullstar"></em>
-                                                <em className="icon-blankstar"></em>
-                                                <span>4/5</span>
-                                            </span>
-                                            </div>
-                                            <div className="card__price mt-10">
-                                                <strong>12999/-</strong> 
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li className="col">
-                                    <div className="card">
-                                        <div className="card__heading">
-                                            <figure>
-                                                <img src="https://static1.shine.com/l/m/product_image/3425/1542800087_8980.png" alt="Digital Marketing Training Course" />
-                                            </figure>
-                                            <h3 className="heading3">
-                                                <Link to={"#"}>Digital Marketing Training Course</Link>
-                                            </h3>
-                                        </div>
-                                        <div className="card__box">
-                                            <div className="card__rating">
-                                            <span className="mr-10">By ERB</span>
-                                            <span className="rating">
-                                                <em className="icon-fullstar"></em>
-                                                <em className="icon-fullstar"></em>
-                                                <em className="icon-fullstar"></em>
-                                                <em className="icon-fullstar"></em>
-                                                <em className="icon-blankstar"></em>
-                                                <span>4/5</span>
-                                            </span>
-                                            </div>
-                                            <div className="card__price mt-10">
-                                                <strong>12999/-</strong> 
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                            </ul>
-                        </Carousel.Item>
-                        <Carousel.Item interval={10000000000}>
-                            <ul className="recent-courses__list mt-30">
-                                <li className="col">
-                                    <div className="card">
-                                        <div className="card__heading">
-                                            <figure>
-                                                <img src="https://static1.shine.com/l/m/product_image/3425/1542800087_8980.png" alt="Digital Marketing Training Course" />
-                                            </figure>
-                                            <h3 className="heading3">
-                                                <Link to={"#"}>Digital Marketing & Email Marketing Training Course</Link>
-                                            </h3>
-                                        </div>
-                                        <div className="card__box">
-                                            <div className="card__rating">
-                                            <span className="mr-10">By ERB</span>
-                                            <span className="rating">
-                                                <em className="icon-fullstar"></em>
-                                                <em className="icon-fullstar"></em>
-                                                <em className="icon-fullstar"></em>
-                                                <em className="icon-fullstar"></em>
-                                                <em className="icon-blankstar"></em>
-                                                <span>4/5</span>
-                                            </span>
-                                            </div>
-                                            <div className="card__price mt-10">
-                                                <strong>12999/-</strong> 
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li className="col">
-                                    <div className="card">
-                                        <div className="card__heading">
-                                            <figure>
-                                                <img src="https://static1.shine.com/l/m/product_image/3425/1542800087_8980.png" alt="Digital Marketing Training Course" />
-                                            </figure>
-                                            <h3 className="heading3">
-                                                <Link to={"#"}>Email Marketing Master Training Course</Link>
-                                            </h3>
-                                        </div>
-                                        <div className="card__box">
-                                            <div className="card__rating">
-                                            <span className="mr-10">By ERB</span>
-                                            <span className="rating">
-                                                <em className="icon-fullstar"></em>
-                                                <em className="icon-fullstar"></em>
-                                                <em className="icon-fullstar"></em>
-                                                <em className="icon-fullstar"></em>
-                                                <em className="icon-blankstar"></em>
-                                                <span>4/5</span>
-                                            </span>
-                                            </div>
-                                            <div className="card__price mt-10">
-                                                <strong>12999/-</strong> 
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
-                                <li className="col">
-                                    <div className="card">
-                                        <div className="card__heading">
-                                            <figure>
-                                                <img src="https://static1.shine.com/l/m/product_image/3425/1542800087_8980.png" alt="Digital Marketing Training Course" />
-                                            </figure>
-                                            <h3 className="heading3">
-                                                <Link to={"#"}>Digital Marketing Training Course</Link>
-                                            </h3>
-                                        </div>
-                                        <div className="card__box">
-                                            <div className="card__rating">
-                                            <span className="mr-10">By ERB</span>
-                                            <span className="rating">
-                                                <em className="icon-fullstar"></em>
-                                                <em className="icon-fullstar"></em>
-                                                <em className="icon-fullstar"></em>
-                                                <em className="icon-fullstar"></em>
-                                                <em className="icon-blankstar"></em>
-                                                <span>4/5</span>
-                                            </span>
-                                            </div>
-                                            <div className="card__price mt-10">
-                                                <strong>12999/-</strong> 
-                                            </div>
-                                        </div>
-                                    </div>
-                                </li>
+                                {
+                                    results.slice(0,6)?.map((coursesLike, inx) => {
+                                        return (
+                                            <li className="col" key={inx}>
+                                                <div className="card">
+                                                    <div className="card__heading">
+                                                        <figure>
+                                                            <img src={coursesLike.pImg} alt={coursesLike.name} />
+                                                        </figure>
+                                                        <h3 className="heading3">
+                                                            <Link to={coursesLike.pURL}>{coursesLike.name || coursesLike.pNm}</Link>
+                                                        </h3>
+                                                    </div>
+
+                                                    <div className="card__box">
+                                                        <div className="card__rating">
+                                                            <span className="mr-10">By {(coursesLike.pPvn || coursesLike.pViA)?.split(' ')[0]?.length > 10 ? (coursesLike.pPvn || coursesLike.pViA)?.split(' ')[0]?.slice(0,10) + '...' : (coursesLike.pPvn || coursesLike.pViA)?.split(' ')[0] }</span>
+                                                        <span className="rating">
+                                                            {coursesLike.pStar?.map((star, index) => starRatings(star, index))}
+                                                        </span>
+                                                            <em className="icon-blankstar"></em>
+                                                            <span>{parseInt(coursesLike.pAR)?.toFixed(1)}/5</span>
+                                                        </div>
+                                                        <div className="card__price mt-10">
+                                                            <strong>{coursesLike.pPin}/-</strong> 
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        )
+                                    })
+                                }
                             </ul>
                         </Carousel.Item>
                     </Carousel>
                 </div>
-        </div>
-    </section>
+            </div>
+        </section>
     )
 }
    

@@ -10,12 +10,13 @@ import { fetchReviews } from 'store/DetailPage/actions';
 import ReviewModal from '../../../Common/Modals/reviewModal';
 import { startReviewLoader, stopReviewLoader } from 'store/Loader/actions/index';
 import Loader from '../../../Common/Loader/loader';
+import { getCandidateId } from 'utils/storage.js';
+import { siteDomain } from 'utils/domains';
 
 const LearnersStories = (props) => {
-    const {id} = props;
+    const {id, product_detail} = props;
     const [reviewModal, showReviewModal] = useState(false);
     const { reviewLoader } = useSelector(store => store.loader);
-
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const { prd_reviews : { prd_review_list, prd_rv_current_page, prd_rv_has_next, prd_rv_has_prev } } = useSelector( store => store.reviews )
@@ -46,9 +47,9 @@ const LearnersStories = (props) => {
 
     const starRatings = (star, index) => {
         return (
-            star === '*' ? <em className="micon-fullstar" key={index}></em> :
-                star === '+' ? <em className="micon-halfstar" key={index}></em> :
-                    <em className="micon-blankstar" key={index}></em>
+            star === '*' ? <em className="icon-fullstar" key={index}></em> :
+                star === '+' ? <em className="icon-halfstar" key={index}></em> :
+                    <em className="icon-blankstar" key={index}></em>
         )
     }
 
@@ -63,7 +64,7 @@ const LearnersStories = (props) => {
         { reviewLoader ? <Loader /> : ''}
         <section id="reviews" className="container" data-aos="fade-up">
             {
-                reviewModal ? <ReviewModal reviewModal={reviewModal} showReviewModal={showReviewModal}/> : ""
+                reviewModal ? <ReviewModal reviewModal={reviewModal} showReviewModal={showReviewModal} review={product_detail?.review} /> : ""
             }
             <div className="grid">
                 <h2 className="heading2 m-auto pb-20">Reviews</h2>
@@ -95,7 +96,15 @@ const LearnersStories = (props) => {
                 </Carousel>
 
                 <div className="d-flex mx-auto mt-20">
-                    <Link to={"#"} onClick={showReviewModal} className="btn btn-outline-primary btn-custom">Write a review</Link>
+                    {
+                        (product_detail?.user_reviews && getCandidateId()) ?
+                        <Link to={"#"} onClick={showReviewModal} className="btn btn-outline-primary btn-custom">Update your review</Link>
+                        :
+                        (!product_detail?.user_reviews && getCandidateId()) ?
+                        <Link to={"#"} onClick={showReviewModal} className="btn btn-outline-primary btn-custom">Write a review</Link>
+                        :
+                        <Link to={"#"} onClick={() => window.location.href=`${siteDomain}/login/`} className="btn btn-outline-primary btn-custom">Write a review</Link>
+                    }
                 </div>
                 <Modal show={show} 
                     onHide={handleClose}

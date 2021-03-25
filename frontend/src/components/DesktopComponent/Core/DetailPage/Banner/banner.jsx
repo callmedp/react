@@ -183,12 +183,20 @@ const BannerCourseDetail = (props) => {
                                         <div className="course-enrol__offer lightblue-bg2">
                                             <strong className="mt-10 mb-5">Offers</strong>
                                             <ul className="pb-0">
-                                                <li><figure className="icon-offer-pay"></figure> Buy now & <strong>pay within 14 days using ePayLater</strong> </li>
+                                            {
+                                                (varChecked?.inr_price || product_detail?.var_list[0]?.inr_price) < 5001 ?
+                                                <li><figure className="icon-offer-pay"></figure> Buy now & &nbsp;<strong>make payment within 14 days using ePayLater</strong> </li>
+
+                                                :
+                                                
+                                                <li><figure className="icon-offer-pay"></figure> Avail &nbsp; <strong>Interest-free EMIs at no additional cost using Zest Money payment option</strong> </li>
+                                            }
+                                                {/* <li><figure className="icon-offer-pay"></figure> Buy now & <strong>pay within 14 days using ePayLater</strong> </li>
                                                 <li><figure className="icon-offer-test"></figure> Take <strong>free practice test</strong> to enhance your skill</li>
                                                 <li><figure className="icon-offer-badge"></figure> <strong>Get badging</strong> on your Shine profile</li>
-                                                <li><figure className="icon-offer-global"></figure> <strong>Global</strong> Education providers</li>
+                                                <li><figure className="icon-offer-global"></figure> <strong>Global</strong> Education providers</li> */}
                                             </ul>
-                                            <LinkScroll to={"#"}>+2 more</LinkScroll>
+                                            {/* <LinkScroll to={"#"}>+2 more</LinkScroll> */}
                                         </div>
                                     </div>
                                 </div>

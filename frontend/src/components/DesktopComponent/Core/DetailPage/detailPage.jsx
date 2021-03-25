@@ -84,21 +84,30 @@ const DetailPage = (props) => {
                 </div>
             </div> */} 
 
-            <HowItWorks />
-            <div className="container-fluid">
-                <div className="row">
-                    <div className="col-sm-9">
-                       { product_detail?.prd_should_lrn && <WhoLearn prd_lrn_data={product_detail?.prd_should_lrn_dt}/> }
-                    </div>
-                    <div className="col-sm-3">
-                        <TakeFreeTest should_take_test_url={product_detail?.shld_take_test_slg} />
+            { product_detail?.dlvry_flow && <HowItWorks dlvry_flow={product_detail?.dlvry_flow} /> }
+            {
+                (product_detail?.prd_should_lrn || product_detail?.free_test) &&
+                <div className="container-fluid">
+                    <div className="row">
+                        { 
+                            product_detail?.prd_should_lrn && 
+                            <div className="col-sm-9">
+                                <WhoLearn prd_lrn_data={product_detail?.prd_should_lrn_dt}/> 
+                            </div>
+                        }
+                        {
+                            product_detail?.free_test &&
+                            <div className="col-sm-3">
+                                <TakeFreeTest should_take_test_url={product_detail?.shld_take_test_slg} />
+                            </div>
+                        }
                     </div>
                 </div>
-            </div>
+            }
             { skill && skill.length > 0 && <SkillGain skill={skill}/> }
             { product_detail?.pop && <OtherProviders pop_list={product_detail?.pop_list} /> }
             { product_detail?.faq && <FAQ faq_list={product_detail?.faq_list}/> }
-            <Reviews id={id?.split('-')[1]}/>
+            <Reviews id={id?.split('-')[1]} product_detail={product_detail}/>
             <EnquireNow {...props} />
             { skill && <CoursesMayLike product_id={id?.split('-')[1]} skill={skill}/> }
             <Footer />
