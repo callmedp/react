@@ -208,7 +208,7 @@ class DiscountReportUtil:
                                                      payment_date__lte=self.end_date)
             order_id_map = transactions.values_list('order_id', 'order__mobile',
                                                     'order__created')
-            order_ids = [[i[0]] for i in order_id_map]
+            order_ids = [i[0] for i in order_id_map]
             orders = Order.objects.filter(status__in=[1, 3],
                                           id__in=order_ids).order_by('id')
 
@@ -218,10 +218,7 @@ class DiscountReportUtil:
             orders = Order.objects.filter(\
                 status__in=[1, 3], payment_date__gte=self.start_date,
                 payment_date__lte=self.end_date)
-
-            ptxns = orders.values_list('id',flat=True)
-
-            transactions = PaymentTxn.objects.filter(order__in=ptxns)
+            transactions = PaymentTxn.objects.filter(order__in=orders)
             order_id_map = transactions.values_list('order_id', 'order__mobile',
                                                     'order__created')
 
