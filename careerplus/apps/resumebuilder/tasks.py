@@ -289,6 +289,8 @@ def generate_and_upload_resume_pdf(data):
             active_subscription=order_contains_resumebuilder_subscription()
         )
         first_save = True
+        logging.getLogger('SAVING CANDIDATE>>>>>>>>').info('{}-ACTIVE_SUBSCRIPTION1'.format(candidate))
+
         candidate.save()
     elif not candidate and is_free_trial:
         logging.getLogger('error_log').error(
