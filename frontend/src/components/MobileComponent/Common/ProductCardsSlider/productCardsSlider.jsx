@@ -37,10 +37,10 @@ const ProductCards = props => {
                         <div className="m-card" key={index}>
                             <div className="m-card__heading">
                                 <figure>
-                                    <img src={product?.imgUrl} alt={product?.imgAlt} />
+                                    <img src={product?.imgUrl || product?.vendor_image} alt={product?.imgAlt} />
                                 </figure>
                                 <h3 className="m-heading3">
-                                    <a href={`${siteDomain}${product.url}`}>{product?.name?.length > 42 ? product?.name?.slice(0, 42) + '...' : product?.name }</a>
+                                    <a href={`${siteDomain}${product.url}`}>{(product?.name || product?.heading)?.length > 42 ? (product?.name || product?.heading)?.slice(0, 42) + '...' : (product?.name || product?.heading) }</a>
                                 </h3>
                             </div>
                             <div className="m-card__box">
@@ -48,7 +48,7 @@ const ProductCards = props => {
                                     {
                                         !!noProvider ? '' :
                                             <span className="mr-10">
-                                                By { product?.providerName?.split(' ')[0]?.length > 13 ? product?.providerName?.split(' ')[0]?.slice(0, 13) + '...' : product?.providerName?.split(' ')[0] }
+                                                By { (product?.providerName || product?.vendor)?.split(' ')[0]?.length > 13 ? product?.providerName?.split(' ')[0]?.slice(0, 13) + '...' : product?.providerName?.split(' ')[0] }
                                             </span>
                                     }
                                     <span className="m-rating">

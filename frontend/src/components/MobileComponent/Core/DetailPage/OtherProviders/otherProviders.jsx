@@ -5,8 +5,7 @@ import '../../CataloguePage/RecentCourses/recentCourses.scss';
 import ProductCardsSlider from '../../../Common/ProductCardsSlider/productCardsSlider';
 
 const OtherProviders = (props) => {
-
-    const { pop_list } = useSelector(store => store.otherCourses);
+    const { pop_list } = props
 
     return(
         <section className="m-container mt-0 mb-0 pr-0" data-aos="fade-up">

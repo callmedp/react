@@ -89,7 +89,7 @@ const DetailPage = (props) => {
                 }
                 { skill && <SkillGain skills={skill}/> }
                 { product_detail?.free_test && <TakeFreeTest should_take_test_url={product_detail?.shld_take_test_slg} test_title={product_detail?.test_title} /> }
-                <OtherProviders />
+                { product_detail?.pop && <OtherProviders pop_list={product_detail?.pop_list} /> }
                 { product_detail?.faq && <FAQ faq_list={product_detail?.faq_list}/> }
                 <Reviews showReviewModal={showReviewModal} prdId={prdId}/>
                 <CoursesMayLike />
