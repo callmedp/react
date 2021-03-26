@@ -9,6 +9,7 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 from django_mysql.models.fields import JSONField
 from django.core.cache import cache
+import logging
 
 
 # local imports
@@ -93,15 +94,19 @@ class CandidateProfile(AbstractAutoDate):
 class Candidate(PreviewImageCreationMixin, CandidateProfile):
     parent_object_key = "id"
     initiate_image_upload_task = True
-
+    logging.getLogger('CANDIDATE_OBJ1>>>>>>>>').info('{}-CANDIDATE_OBJ1'.format(CandidateProfile))
     @property
     def order_data(self):
         from order.models import Order
 
         product_found = False
         order_data = {}
+        logging.getLogger('CANDIDATE_OBJ2>>>>>>>>').info('{}-CANDIDATE_OBJ2'.format(self.candidate_id))
+
         order_obj_list = Order.objects.filter(
             candidate_id=self.candidate_id, status__in=[1, 3])
+
+        logging.getLogger('CANDIDATE_OBJ3>>>>>>>>').info('{}-CANDIDATE_OBJ3'.format(order_obj_list))
 
         if not order_obj_list:
             return order_data
@@ -135,12 +140,15 @@ class Candidate(PreviewImageCreationMixin, CandidateProfile):
     def save(self, **kwargs):
         created = not bool(getattr(self, "id"))
         obj = super(Candidate, self).save(**kwargs)
+        logging.getLogger('CANDIDATE_OBJ4>>>>>>>>').info('{}-CANDIDATE_OBJ4'.format(Candidate))
 
         if created:
             self.create_template_customisations(self.id)
 
         if not created:
             update_customisations_for_all_templates(self.id)
+
+        logging.getLogger('CANDIDATE_OBJ5>>>>>>>>').info('{}-CANDIDATE_OBJ5'.format(obj))
 
         return obj
 
