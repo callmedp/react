@@ -55,7 +55,7 @@ const MyWallet = (props) => {
                         Loyality point balance - <strong>{walletResult?.wal_total ? walletResult?.wal_total : 0}</strong>
                         {/* <a className="btn btn-outline-primary ml-4" onClick={handleShow}>Redeem now</a> */}
 
-                        {walletResult?.wal_total > 0 ? <a href={`${siteDomain}/cart/payment-summary/`} className="btn btn-outline-primary ml-4" onClick={MyGA.SendEvent('DashboardMyWallet','ln_dashboard_left_menu', 'ln_my_wallet', 'redeem_points','', false, true)}>Redeem now</a> : null}
+                        {walletResult?.wal_total > 0 ? <a href={`${siteDomain}/cart/payment-summary/`} className="btn btn-outline-primary ml-4" onClick={ () => MyGA.SendEvent('DashboardMyWallet','ln_dashboard_left_menu', 'ln_my_wallet', 'redeem_points','', false, true)}>Redeem now</a> : null}
 
 
                         <Modal show={show} onHide={handleClose}>
