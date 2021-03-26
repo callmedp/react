@@ -58,7 +58,7 @@ const MyWallet = (props) => {
 
                             {/* <button className="btn-blue-outline btn-xs" onClick={() => setShowModal(true)}>Redeem now</button> */}
                             {
-                                wal_total > 0 && <a href={`${siteDomain}/cart/payment-summary/`} className="btn-blue-outline btn-xs" onClick={MyGA.SendEvent('DashboardMyWallet','ln_dashboard_left_menu', 'ln_my_wallet', 'redeem_points','', false, true)}>Redeem now</a>
+                                wal_total > 0 && <a href={`${siteDomain}/cart/payment-summary/`} className="btn-blue-outline btn-xs" onClick={ () => MyGA.SendEvent('DashboardMyWallet','ln_dashboard_left_menu', 'ln_my_wallet', 'redeem_points','', false, true)}>Redeem now</a>
                             }
                         </div>
                     </div>

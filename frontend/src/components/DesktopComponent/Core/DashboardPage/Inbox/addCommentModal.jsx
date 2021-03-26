@@ -72,7 +72,7 @@ const AddCommentModal = (props) => {
                             <span className="btn-close" onClick={() => addCommentDataFetch(false)}>&#x2715;</span>
                             <p className="font-weight-semi-bold pr-5"> Add comment </p>
                             <TextArea attributes={CoursesServicesForm.name} register={register} errors={!!errors ? errors[CoursesServicesForm.name.name] : ''} />
-                            <button type="submit" className="btn btn-outline-primary px-5" onClick={MyGA.SendEvent('DashboardInbox','ln_dashboard_left_menu', 'ln_my_inbox', 'leave_a_message','', false, true)}>Submit</button>
+                            <button type="submit" className="btn btn-outline-primary px-5" onClick={ () => MyGA.SendEvent('DashboardInbox','ln_dashboard_left_menu', 'ln_my_inbox', 'submit_comment','', false, true)}>Submit</button>
                         </div>
                     </form>
                 </div>
