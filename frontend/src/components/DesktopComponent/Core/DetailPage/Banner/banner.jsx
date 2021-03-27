@@ -15,6 +15,7 @@ const BannerCourseDetail = (props) => {
     const inputCheckbox = useRef(null);
     const regex = /<(.|\n)*?>/g;
     const [varChecked, changeChecked] = useState({});
+    const [discountPrice, discountPriceSelected] = useState(0);
     const dispatch = useDispatch();
     const { mainCourseCartLoader } = useSelector(store => store.loader);
 
@@ -30,14 +31,15 @@ const BannerCourseDetail = (props) => {
 
     const changeMode = (objj) => {
         let selectedObj = objj;
+        discountPriceSelected(objj.fake_inr_price);
         changeChecked({...selectedObj});
     }
 
     const goToCart = async (value) => {
         let cartItems = {};
 
-        if(value.id) cartItems = {'prod_id': product_detail.pPv, 'cart_type': 'cart', 'cv_id': value.id};
-        else cartItems = {'prod_id': product_detail.pPv, 'cart_type': 'cart', 'cv_id': product_detail.selected_var.id};
+        if(value.id) cartItems = {'prod_id': product_detail?.pPv, 'cart_type': 'cart', 'cv_id': value.id};
+        else cartItems = {'prod_id': product_detail?.pPv, 'cart_type': 'cart', 'cv_id': product_detail?.selected_var.id};
 
         try {
             dispatch(startMainCourseCartLoader());
@@ -175,9 +177,10 @@ const BannerCourseDetail = (props) => {
                                                 })
                                             }
                                         </div>
-
+                                            {varChecked?.id }{ product_detail?.selected_var?.id}
                                         <div className="course-enrol__price">
-                                            <strong className="mt-20 mb-10">{varChecked?.inr_price || product_detail?.var_list[0]?.inr_price}/- <del>{product_detail?.start_price}/-</del></strong>
+                                            <strong className="mt-20 mb-10">{varChecked?.inr_price || product_detail?.var_list[0]?.inr_price}/- 
+                                            <del>{varChecked?.id ? discountPrice : product_detail?.var_list[0]?.fake_inr_price}/-</del></strong>
                                             <a onClick={() => goToCart(varChecked)} className="btn btn-secondary mt-10">Enroll now</a>
                                             <LinkScroll to={"enquire-now"} className="btn btn-outline-primary mt-10">Enquire now</LinkScroll>
                                         </div>

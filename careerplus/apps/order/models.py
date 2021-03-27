@@ -569,21 +569,20 @@ class Order(AbstractAutoDate):
             from resumebuilder.models import Candidate
 
             if self.order_contains_resumebuilder_subscription():
-                logging.getLogger('ACTIVE_SUBSCRIPTION1>>>>>>>>').info('{}-ACTIVE_SUBSCRIPTION1'.format(existing_obj))
                 self.update_subscription_in_order_item()
                 cand_id = existing_obj and existing_obj.candidate_id
-                logging.getLogger('ACTIVE_SUBSCRIPTION2>>>>>>>>').info('{}-ACTIVE_SUBSCRIPTION2'.format(cand_id))
+
                 if cand_id:
                     candidate_obj = Candidate.objects.filter(
                         candidate_id=cand_id).first()
-                    logging.getLogger('ACTIVE_SUBSCRIPTION3>>>>>>>>').info('{}-ACTIVE_SUBSCRIPTION3'.format(candidate_obj))
                     if candidate_obj:
-                        logging.getLogger('ACTIVE_SUBSCRIPTION4>>>>>>>>').info('{}-ACTIVE_SUBSCRIPTION4'.format(candidate_obj))
                         candidate_obj.active_subscription = True
                         candidate_obj.save()
 
+
             if self.order_contains_expert_assistance():
                 cand_id = existing_obj and existing_obj.candidate_id
+                
                 if cand_id:
                     candidate_obj = Candidate.objects.filter(
                         candidate_id=cand_id).first()
@@ -591,8 +590,7 @@ class Order(AbstractAutoDate):
                         candidate_obj.resume_generated = False
                         candidate_obj.save()
 
-            generate_resume_for_order.delay(self.id)
-
+            generate_resume_for_order(self.id)
             logging.getLogger('info_log').info(
                 "Generating resume for order {}".format(self.id))
 

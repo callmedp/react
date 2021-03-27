@@ -46,11 +46,10 @@ import imgkit
 
 
 class CandidateCreateView(CreateAPIView):
-    authentication_classes = (ShineUserAuthentication,)
-    permission_classes = (IsAuthenticated,)
+    # authentication_classes = (ShineUserAuthentication,)
+    # permission_classes = (IsAuthenticated,)
     queryset = Candidate.objects.all()
     serializer_class = CandidateSerializer
-
     def get_serializer(self, *args, **kwargs):
         if isinstance(kwargs.get('data', {}), list):
             kwargs['many'] = True
@@ -78,7 +77,7 @@ class CandidateRetrieveUpdateView(RetrieveUpdateDestroyAPIView):
         ]
     }
     """
-    authentication_classes = (ShineUserAuthentication,)
+    # authentication_classes = (ShineUserAuthentication,)
     permission_classes = (IsObjectOwner,)
     lookup_field = 'candidate_id'
     lookup_url_kwarg = 'pk'
@@ -1031,7 +1030,6 @@ class FreeTrialResumeDownload(APIView):
           'template_no': kwargs.get('template_no',1)
         }
         data = json.dumps(data)
-        logging.getLogger('FREE TRIAL1>>>>>>>>').info('{}-ACTIVE_SUBSCRIPTION1'.format(data))
 
         generate_and_upload_resume_pdf.delay(data)
 
