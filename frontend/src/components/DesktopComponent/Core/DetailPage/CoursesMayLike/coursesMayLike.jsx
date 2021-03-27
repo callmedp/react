@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import '../../CataloguePage/RecentCourses/recentCourses.scss';
 import './coursesMayLike.scss'
@@ -17,7 +17,7 @@ const CoursesMayLike = (props) => {
 
     const handleEffects = async () => {
         try {
-            await new Promise((resolve, reject) => dispatch(fetchRecommendedCourses({ payload: {'skill': (skill && skill?.join(',')) || '', 'id': product_id, 'page': 6}, resolve, reject })));
+            await new Promise((resolve, reject) => dispatch(fetchRecommendedCourses({ payload: {'skill': (skill && skill?.join(',')) || '', 'id': product_id, 'page': 6, 'device': 'desktop'}, resolve, reject })));
         } 
         catch (error) {
             if (error?.status == 404) {
@@ -33,48 +33,56 @@ const CoursesMayLike = (props) => {
         )
     }
 
+    const getLikeCourses = (courseData, idx) => {
+        return (
+            <Carousel.Item interval={10000000000} key={idx}>
+                <ul className="recent-courses__list mt-30">
+                    {
+                        courseData?.map((coursesLike, inx) => {
+                            return (
+                                <li className="col" key={inx}>
+                                    <div className="card">
+                                        <div className="card__heading">
+                                            <figure>
+                                                <img src={coursesLike.pImg} alt={coursesLike.name} />
+                                            </figure>
+                                            <h3 className="heading3">
+                                                <Link to={coursesLike.pURL}>{coursesLike.name || coursesLike.pNm}</Link>
+                                            </h3>
+                                        </div>
+
+                                        <div className="card__box">
+                                            <div className="card__rating">
+                                                <span className="mr-10">By {(coursesLike.pPvn || coursesLike.pViA)?.split(' ')[0]?.length > 10 ? (coursesLike.pPvn || coursesLike.pViA)?.split(' ')[0]?.slice(0,10) + '...' : (coursesLike.pPvn || coursesLike.pViA)?.split(' ')[0] }</span>
+                                            <span className="rating">
+                                                {coursesLike.pStar?.map((star, index) => starRatings(star, index))}
+                                            </span>
+                                                <em className="icon-blankstar"></em>
+                                                <span>{parseInt(coursesLike.pAR)?.toFixed(1)}/5</span>
+                                            </div>
+                                            <div className="card__price mt-10">
+                                                <strong>{coursesLike.pPin}/-</strong> 
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            )
+                        })
+                    }
+                </ul>
+            </Carousel.Item>
+        )
+    }
+
     return(
         <section className="container" data-aos="fade-up">
             <div className="row">
                 <div className="recent-courses mt-20 mb-30">
                     <h2 className="heading2 text-center">Courses you may like</h2>
                     <Carousel className="courses-like">
-                        <Carousel.Item interval={10000000000}>
-                            <ul className="recent-courses__list mt-30">
-                                {
-                                    results.slice(0,6)?.map((coursesLike, inx) => {
-                                        return (
-                                            <li className="col" key={inx}>
-                                                <div className="card">
-                                                    <div className="card__heading">
-                                                        <figure>
-                                                            <img src={coursesLike.pImg} alt={coursesLike.name} />
-                                                        </figure>
-                                                        <h3 className="heading3">
-                                                            <Link to={coursesLike.pURL}>{coursesLike.name || coursesLike.pNm}</Link>
-                                                        </h3>
-                                                    </div>
-
-                                                    <div className="card__box">
-                                                        <div className="card__rating">
-                                                            <span className="mr-10">By {(coursesLike.pPvn || coursesLike.pViA)?.split(' ')[0]?.length > 10 ? (coursesLike.pPvn || coursesLike.pViA)?.split(' ')[0]?.slice(0,10) + '...' : (coursesLike.pPvn || coursesLike.pViA)?.split(' ')[0] }</span>
-                                                        <span className="rating">
-                                                            {coursesLike.pStar?.map((star, index) => starRatings(star, index))}
-                                                        </span>
-                                                            <em className="icon-blankstar"></em>
-                                                            <span>{parseInt(coursesLike.pAR)?.toFixed(1)}/5</span>
-                                                        </div>
-                                                        <div className="card__price mt-10">
-                                                            <strong>{coursesLike.pPin}/-</strong> 
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </li>
-                                        )
-                                    })
-                                }
-                            </ul>
-                        </Carousel.Item>
+                        {
+                            results?.map(getLikeCourses)
+                        }
                     </Carousel>
                 </div>
             </div>

@@ -31,7 +31,7 @@ const LearnersStories = (props) => {
 
         try {
             dispatch(startReviewLoader())
-            await new Promise((resolve, reject) => dispatch(fetchReviews({ payload: { prdId: id, page: page }, resolve, reject })));
+            await new Promise((resolve, reject) => dispatch(fetchReviews({ payload: { prdId: id, page: page, device: 'desktop' }, resolve, reject })));
             dispatch(stopReviewLoader())
         }
         catch (error) {
@@ -52,8 +52,36 @@ const LearnersStories = (props) => {
     }
 
     const handleSelect = (selectedIndex, e) => {
-          if(e.target.className === 'carousel-control-next-icon' && prd_rv_has_next) handleEffects(prd_rv_current_page+1);
-          if(e.target.className === 'carousel-control-prev-icon' && prd_rv_has_prev) handleEffects(prd_rv_current_page-1);
+        //   if(e.target.className === 'carousel-control-next-icon' && prd_rv_has_next) handleEffects(prd_rv_current_page+1);
+        //   if(e.target.className === 'carousel-control-prev-icon' && prd_rv_has_prev) handleEffects(prd_rv_current_page-1);
+    }
+
+    const getReviews = (reviewData, idx) => {
+        return (
+            <Carousel.Item interval={1000000} key={idx}>
+                <div className="d-flex col">
+                    {
+                        reviewData?.map((review, idx) => {
+                            return ( 
+                                <div className="col-sm-4" key={idx}>
+                                    <div className="card">
+                                        <span className="rating">
+                                            {
+                                                review?.rating?.map((star, index) => starRatings(star, index))
+                                            }
+                                        </span>
+                                        <strong className="card__name">{review?.title}</strong>
+                                        <p className="card__txt">{review?.content}</p>
+                                        <strong>{ review?.user_name ? review?.user_name : 'Anonymous' }</strong>
+                                        <span className="card__location">{review?.created}</span>
+                                    </div>
+                                </div>
+                            )
+                        })
+                    }
+                </div>
+            </Carousel.Item>
+        )
     }
 
     return (
@@ -68,31 +96,12 @@ const LearnersStories = (props) => {
                 {
                     prd_review_list && prd_review_list.length > 0 ?
                     <Carousel className="reviews" onSelect={handleSelect}>
-                        <Carousel.Item interval={10000000000}>
-                            <div className="d-flex col">
-                                {
-                                    prd_review_list?.map((review, idx) => {
-                                        return (
-                                            <div className="col-sm-4" key={idx}>
-                                                <div className="card">
-                                                    <span className="rating">
-                                                        {
-                                                            review?.rating?.map((star, index) => starRatings(star, index))
-                                                        }
-                                                    </span>
-                                                    <strong className="card__name">{review?.title}</strong>
-                                                    <p className="card__txt">{review?.content}</p>
-                                                    <strong>{ review?.user_name ? review?.user_name : 'Anonymous' }</strong>
-                                                    <span className="card__location">{review?.created}</span>
-                                                </div>
-                                            </div>
-                                        )
-                                    })
-                                }
-                            </div>
-                        </Carousel.Item>
+                        {
+                            prd_review_list?.map(getReviews)
+                        }
                     </Carousel>
-                : ""}
+                    : ""
+                }
 
                 <div className="d-flex mx-auto mt-20">
                     {

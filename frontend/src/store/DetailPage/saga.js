@@ -62,6 +62,15 @@ function* recommendedCourses(action){
         }
 
         const item = response?.data;
+
+        if(!!payload && payload.device === 'desktop' && !!item && item.results instanceof Array) {
+            const courseLikeList = item.results.reduce((rows, key, index) => 
+                (index % 3 == 0 ? rows.push([key]) : rows[rows.length-1].push(key)) && rows, []);
+            if(courseLikeList.length){
+                item.results = courseLikeList.slice();
+            }
+        }
+
         yield put(recommendedCoursesFetched({ ...item }))
         return resolve(item);
     }
@@ -82,6 +91,14 @@ function* productReviews(action){
         }
 
         const item = response?.data?.data;
+
+        if(!!payload && payload.device === 'desktop' && !!item && item.prd_reviews.prd_review_list instanceof Array) {
+            const reviewsList = item.prd_reviews.prd_review_list.reduce((rows, key, index) => 
+                (index % 3 == 0 ? rows.push([key]) : rows[rows.length-1].push(key)) && rows, []);
+            if(reviewsList.length){
+                item.prd_reviews.prd_review_list = reviewsList.slice();
+            }
+        }
         yield put(ReviewsFetched({ ...item }))
         return resolve(item);
     }
