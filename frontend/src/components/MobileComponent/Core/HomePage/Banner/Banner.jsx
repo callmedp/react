@@ -5,6 +5,7 @@ import Slider from "react-slick";
 // import 'slick-carousel/slick/slick.css';
 import SearchPage from '../../../Common/SearchPage/SearchPage'
 import { categoryList } from 'utils/constants';
+import { MyGA } from 'utils/ga.tracking.js';
 
 const HomeBanner = (props) => {
     const { setShowSearch } = props
@@ -38,7 +39,7 @@ const HomeBanner = (props) => {
                         {
                             categoryList?.map((category) => {
                                 return (
-                                    <a href={ category?.url } key={ category?.id }>{ category?.name }</a>
+                                    <a href={ category?.url } key={ category?.id } onClick = { () => MyGA.SendEvent('ln_new_homepage','ln_search_course', 'ln_search_initiated', category?.name,'', false, true) }>{ category?.name }</a>
                                 )
                             })
                         }

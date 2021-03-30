@@ -209,6 +209,7 @@ SHINECPCRM_DICT = {
     'update_products_url': '/product/update_sale_product/',
     'update_cartleads_url': '/api/update-cartleads/',
     'ad_server_url': '/api/mobile-version-leads/',
+    'connected_leads': '/api/orders/order-fetch-lead/',
     'timeout': 30,
 }
 
@@ -457,11 +458,11 @@ ANALYTICS_COURSES_RECOMMENDATION_API = "http://10.136.1.4:5000/courses"
 ANALYTICS_COURSES_RECOMMENDATION_API_AUTH = ("admin", "learningcourse@111")
 
 #Recommendation Learning Mongo Database connections details
-LEARNING_MONGO_PORT = ':27017'
-LEARNING_MONGO_USERNAME = 'analyticsTeam'
-LEARNING_MONGO_PASSWORD = '@n@lyt!c$'
-LEARNING_MONGO_INSTANCE_STR = '172.22.65.150:27017'
-LEARNING_MONGO_DB = 'analyticsLearning'
+ANALYTICS_MONGO_PORT = ':27017'
+ANALYTICS_MONGO_USERNAME = 'analyticsTeam'
+ANALYTICS_MONGO_PASSWORD = '@n@lyt!c$'
+ANALYTICS_MONGO_INSTANCE_STR = '172.22.65.150:27017'
+ANALYTICS_MONGO_DB = 'analyticsLearning'
 
 #Default products to be recommended
 DEFAULT_LEARNING_COURSE_RECOMMENDATION_PRODUCT_ID = [2634, 2787, 1, 4]

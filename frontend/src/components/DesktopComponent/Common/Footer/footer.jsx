@@ -37,9 +37,9 @@ const Footer = (props) => {
                             <a href={`${siteDomain}/disclaimer`} onClick={() =>  MyGA.SendEvent('homepage_footer','ln_homepage_footer', 'ln_homepage_footer_clicked', 'Disclaimer','', false, true)}>Disclaimer</a>&nbsp;&nbsp;
                             </li>
                             <li className="social-icon">
-                                <a href="https://www.facebook.com/shinelearningdotcom/" className="icon-facebook mt-0" onClick={() =>  MyGA.SendEvent('social_media_follow','ln_social_media_follow', 'ln_facebook', 'homepage','', false, true)}></a>
-                                <a  href="https://in.linkedin.com/company/shinelearning" className="icon-linkedin" onClick={() =>  MyGA.SendEvent('social_media_follow','ln_social_media_follow', 'ln_linkedin', 'homepage','', false, true)}></a>
-                                <a href="https://twitter.com/shinelearning" className="icon-twitter mt-5" onClick={() =>  MyGA.SendEvent('social_media_follow','ln_social_media_follow', 'ln_twitter', 'homepage','', false, true)}></a>
+                                <a href="https://www.facebook.com/shinelearningdotcom/" className="icon-facebook mt-0" onClick={() =>  MyGA.SendEvent('ln_new_homepage','ln_social_sign_in', 'ln_social_sign_in', 'facebook','', false, true)}></a>
+                                <a  href="https://in.linkedin.com/company/shinelearning" className="icon-linkedin" onClick={() =>  MyGA.SendEvent('ln_new_homepage','ln_social_sign_in', 'ln_social_sign_in', 'linkedin','', false, true)}></a>
+                                <a href="https://twitter.com/shinelearning" className="icon-twitter mt-5" onClick={() =>  MyGA.SendEvent('ln_new_homepage','ln_social_sign_in', 'ln_social_sign_in', 'twitter','', false, true)}></a>
                             </li>
                         </ul>
                         {
@@ -50,7 +50,7 @@ const Footer = (props) => {
                                         trendingCourses.slice(0,25)?.map((course, index) => {
                                             return (
                                                 <React.Fragment key={index}>
-                                                    <a href={`${siteDomain}${course.url}`}>{course.name}</a>&nbsp;
+                                                    <a href={`${siteDomain}${course.url}`} onClick={() => MyGA.SendEvent('ln_new_homepage','ln_trending_course', 'ln_click_course',course.name, '',false, true)}>{course.name}</a>&nbsp;
                                                     { trendingCourses.length - 1 === index ? '' : '|'}
                                                 </React.Fragment>
                                             )
@@ -65,8 +65,8 @@ const Footer = (props) => {
                                     {
                                         trendingSkills.slice(0,25)?.map((skill, index) => {
                                             return (
-                                                <React.Fragment key={index}>
-                                                    <a href={`${siteDomain}${skill.skillUrl}`}>{skill.skillName}</a>&nbsp;
+                                                <React.Fragment key={index} >
+                                                    <a href={`${siteDomain}${skill.skillUrl}`} onClick={() => MyGA.SendEvent('ln_new_homepage','ln_trending_skill', 'ln_click_skill',skill.skillName, '',false, true)}>{skill.skillName}</a>&nbsp;
                                                     { trendingSkills.length - 1 === index ? '' : '|'}
                                                 </React.Fragment>
                                             )

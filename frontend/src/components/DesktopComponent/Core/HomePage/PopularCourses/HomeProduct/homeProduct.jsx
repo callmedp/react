@@ -5,6 +5,7 @@ import { useDispatch } from "react-redux";
 import { fetchInDemandProducts } from 'store/HomePage/actions';
 import { startHomePageLoader, stopHomePageLoader } from 'store/Loader/actions';
 import { siteDomain } from 'utils/domains';
+import { MyGA } from 'utils/ga.tracking.js';
 
 const HomeProduct = (props) => {
   
@@ -66,7 +67,9 @@ const HomeProduct = (props) => {
                                                         <div className="card__duration-mode mt-10">
                                                             {product.jobsAvailable ? <> <strong>{product.jobsAvailable}</strong> Jobs available </> : ''} {product.jobsAvailable && product.duration ? '|' : ''} {product.duration ? <>Duration: <strong>{product.duration} days</strong> </> : <strong>&nbsp;</strong>}
                                                         </div>
-                                                        <a className="view-program mt-10" href={`${siteDomain}${product.url}`}>View program</a>
+                                                        <a className="view-program mt-10" href={`${siteDomain}${product.url}`} onClick={() => 
+                                                        tabType == "master" ?
+                                                        MyGA.SendEvent('ln_new_homepage', 'ln_popular_course_select', 'ln_masters_course_click', product.name, '', false, true) : MyGA.SendEvent('ln_new_homepage', 'ln_popular_course_select', 'ln_certification_course_click', product.name, '', false, true)  }>View program</a>
                                                     </div>
                                                 </div>
                                             </li>

@@ -2,11 +2,13 @@ import React from 'react';
 import { imageUrl } from 'utils/domains';
 import './practiceTestBanner.scss';
 import { siteDomain } from 'utils/domains';
+import { MyGA } from 'utils/ga.tracking.js';
 
 const PracticeTestBanner = (props) => {
 
 
     const testRedirection = () => {
+        MyGA.SendEvent('ln_new_homepage','ln_free_test', 'ln_free_test','test_click', '',false, true);
         window.location.replace(`${siteDomain}/practice-tests/`);
     }
 

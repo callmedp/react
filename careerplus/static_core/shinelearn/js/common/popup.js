@@ -5,11 +5,15 @@ span.onclick = function() {
 }
 
 $(document).ready(function() {
+  if(sessionStorage.getItem('popState') != 'shown'){
   setTimeout(function() {
       $("#popup_subscribe").modal('show');
-  }, 15000);
+  }, 60000);
+  sessionStorage.setItem('popState','shown')
+  }
 });
 }
 catch(e) {
   
 }
+

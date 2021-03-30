@@ -35,7 +35,7 @@ const SearchBar = (props) => {
                 <strong>{heading}</strong> 
                 {data?.slice(0, noOfItems)?.map(result => (
                     <div key={Math.random()}>
-                        <a href={`${siteDomain}${result.url}`}>{result.name}</a>
+                        <a href={`${siteDomain}${result.url}`} onClick = { () => MyGA.SendEvent('ln_new_homepage','ln_search_course', 'ln_search_initiated', result.name,'', false, true)}>{result.name}</a>
                     </div>
                 ))}
             </> 
@@ -61,7 +61,7 @@ const SearchBar = (props) => {
                 <form className={`form-inline my-2 my-lg-0 ${place === 'banner' ? 'top-search': 'top-search'}`} onSubmit={handleSubmit(submitData)}>
                     <input className="form-control top-input" type="search" id={ !!isHomepage ? 'Search' : 'Search-Box' } onChange={e => setSearchTerm(e.target.value)} onFocus={()=>setShowResults(true)} 
                         placeholder={props.placeHolder ? props.placeHolder : 'Search course, assessment...'} name="query" aria-label="Search" ref={register({required: true})} autoComplete="off" />
-                    <button className="btn btn-search" aria-label="search Button" type="submit" onClick={() => MyGA.SendEvent('click_on_search','ln_click_on_search', 'ln_search_initiated_navigation', 'ln_click_on_search', 'click_on _search','', false, true)}><figure className="icon-search"></figure></button>
+                    <button className="btn btn-search" aria-label="search Button" type="submit" onClick={() => !!isHomepage ? MyGA.SendEvent('click_on_search','ln_click_on_search', 'ln_search_initiated_navigation', 'ln_click_on_search','', false, true) : MyGA.SendEvent('ln_new_homepage','ln_search_course', 'ln_search_initiated', searchTerm,'', false, true) }><figure className="icon-search"></figure></button>
                 </form>
                 {showResults ?
                     <div className="header-search-result">
