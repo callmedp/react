@@ -1051,7 +1051,7 @@ class PopularInDemandProductsAPI(APIView):
         class_category = settings.COURSE_SLUG
         page = int(request.GET.get('page',1))
         tab_type = request.GET.get('tab_type','master')
-        candidate_id = request.session.get('candidate_id', None)
+        candidate_id = request.GET.get('candidate_id',None) or request.session.get('candidate_id', None)
         paginated_data = []
         data= {}
         if candidate_id is None:
@@ -1078,6 +1078,7 @@ class PopularInDemandProductsAPI(APIView):
             recommended = RecommendationMixin().get_courses_and_certification_from_analytics_recommendation_db(candidate_id=candidate_id)
             if tab_type=='certifications':
                 certifications = recommended['assessment']
+                data.update({'recommended_assessments':certifications})
                 certifications = SearchQuerySet().filter(id__in=certifications, pTP__in=[0, 1, 3]).exclude(
                 id__in=settings.EXCLUDE_SEARCH_PRODUCTS
             )
@@ -1085,22 +1086,23 @@ class PopularInDemandProductsAPI(APIView):
                 data.update({'certifications':paginated_data["data"]})
             elif tab_type == 'master':
                 courses = recommended['courses']
+                data.update({'recommended_course_ids':courses})
                 courses = SearchQuerySet().filter(id__in=courses, pTP__in=[0, 1, 3]).exclude(
                     id__in=settings.EXCLUDE_SEARCH_PRODUCTS
                 )
-                paginated_data = offset_paginator(page, courses,size=4)                                                                    
-                courses = paginated_data["data"]
-                course_data = ProductMixin().get_course_json(courses)
-                data.update({ 'courses': course_data})
-
-        page_info ={
-                'current_page':paginated_data['current_page']if paginated_data else 0,
-                'total':paginated_data['total_pages'] if paginated_data else 0,
-                'has_prev': True if paginated_data['current_page'] >1 else False,
-                'has_next':True if (paginated_data['total_pages']-paginated_data['current_page'])>0 else False
-                }
-        # data.append({'page':page_info})
-        data.update({'page':page_info})
+                if courses:
+                    paginated_data = offset_paginator(page, courses,size=4)                                                                    
+                    courses = paginated_data["data"]
+                    course_data = ProductMixin().get_course_json(courses)
+                    data.update({ 'courses': course_data})
+        if paginated_data:
+            page_info ={
+                    'current_page':paginated_data['current_page']if paginated_data else 0,
+                    'total':paginated_data['total_pages'] if paginated_data else 0,
+                    'has_prev': True if paginated_data['current_page'] >1 else False,
+                    'has_next':True if (paginated_data['total_pages']-paginated_data['current_page'])>0 else False
+                    }
+            data.update({'page':page_info})
         return APIResponse(message='Popular certifications and courses Loaded', data=data, status=status.HTTP_200_OK)
 
 class JobAssistanceAndLatestBlogAPI(APIView):
