@@ -478,43 +478,51 @@ def service_initiation(pk=None):
 
                 if oi.product.type_flow == 2 and 162 not in sms_sets:
                     try:
-                        SendSMS().send(sms_type=sms_type, data=data)
-                        oi.smsorderitemoperation_set.create(
-                            sms_oi_status=162,
-                            to_mobile=data.get('mobile'),
-                            status=1)
+                        pass
+                        # SendSMS().send(sms_type=sms_type, data=data)
+                        # Comment to start initial message
+                        # oi.smsorderitemoperation_set.create(
+                        #     sms_oi_status=162,
+                        #     to_mobile=data.get('mobile'),
+                        #     status=1)
                     except Exception as e:
                         logging.getLogger('error_log').error(
                             "%s - %s" % (str(sms_type), str(e)))
 
                 elif oi.product.type_flow == 14 and 192 not in sms_sets:
                     try:
-                        SendSMS().send(sms_type=sms_type, data=data)
-                        oi.smsorderitemoperation_set.create(
-                            sms_oi_status=192,
-                            to_mobile=data.get('mobile'),
-                            status=1)
+                        pass
+                        # SendSMS().send(sms_type=sms_type, data=data)
+                        # Comment to start initial message
+                        # oi.smsorderitemoperation_set.create(
+                        #     sms_oi_status=192,
+                        #     to_mobile=data.get('mobile'),
+                        #     status=1)
                     except Exception as e:
                         logging.getLogger('error_log').error(
                             "%s - %s" % (str(sms_type), str(e)))
 
                 elif oi.product.type_flow == 6 and 172 not in sms_sets:
                     try:
-                        SendSMS().send(sms_type=sms_type, data=data)
-                        oi.smsorderitemoperation_set.create(
-                            sms_oi_status=172,
-                            to_mobile=data.get('mobile'),
-                            status=1)
+                        pass
+                        # SendSMS().send(sms_type=sms_type, data=data)
+                        # Comment to start initial message
+                        # oi.smsorderitemoperation_set.create(
+                        #     sms_oi_status=172,
+                        #     to_mobile=data.get('mobile'),
+                        #     status=1)
                     except Exception as e:
                         logging.getLogger('error_log').error("%s - %s" % (
                             str(sms_type), str(e)))
                 elif oi.product.type_flow == 10 and 133 not in sms_sets:
                     try:
-                        SendSMS().send(sms_type=sms_type, data=data)
-                        oi.smsorderitemoperation_set.create(
-                            sms_oi_status=133,
-                            to_mobile=data.get('mobile'),
-                            status=1)
+                        pass
+                        # SendSMS().send(sms_type=sms_type, data=data)
+                        # Comment to start initial message
+                        # oi.smsorderitemoperation_set.create(
+                        #     sms_oi_status=133,
+                        #     to_mobile=data.get('mobile'),
+                        #     status=1)
                     except Exception as e:
                         logging.getLogger('error_log').error(
                             "%s - %s" % (str(sms_type), str(e)))
