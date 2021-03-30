@@ -201,23 +201,33 @@ class DiscountReportUtil:
              "No Process", "Replaced", "Replaced With", "Replacement Of", "Writer price excluding Incentives",\
              "Writer's name", "Lead Type", 'LTV Bracket','Connected CRM'])
 
-        if int(self.filter_type) == 1:  # get order item based on payment_date filter
+        if int(
+                self.filter_type) == 1:  # get order item based on payment_date filter
             transactions = PaymentTxn.objects.filter(status=1,\
-                payment_date__gte=self.start_date,payment_date__lte=self.end_date)
-            order_ids = list(transactions.values_list('order_id',flat=True))
-            orders = Order.objects.filter(status__in=[1,3],id__in=order_ids).order_by('id')
-        
-        elif int(self.filter_type) == 2: # get order item based on order created date filter
+                                                     payment_date__gte=self.start_date,
+                                                     payment_date__lte=self.end_date)
+            order_id_map = transactions.values_list('order_id', 'order__mobile',
+                                                    'order__created')
+            order_ids = [i[0] for i in order_id_map]
+            orders = Order.objects.filter(status__in=[1, 3],
+                                          id__in=order_ids).order_by('id')
+
+
+        elif int(
+                self.filter_type) == 2:  # get order item based on order created date filter
             orders = Order.objects.filter(\
-              status__in=[1,3],payment_date__gte=self.start_date,payment_date__lte=self.end_date)
+                status__in=[1, 3], payment_date__gte=self.start_date,
+                payment_date__lte=self.end_date)
+            transactions = PaymentTxn.objects.filter(order__in=orders)
+            order_id_map = transactions.values_list('order_id', 'order__mobile',
+                                                    'order__created')
 
-        order_id_map = orders.values_list('id','mobile','created')
-
-        order_id_map = [[i[0],i[1],i[2].strftime('%Y-%m-%d')] for i in order_id_map]
-
+        order_id_map = [[i[0], i[1], i[2].strftime('%Y-%m-%d')] for i in
+                        order_id_map]
         logging.getLogger('info_log').info("\
             Discount Report :: Total orders found - {}".format(len(order_id_map)))
         order_id_mapping = getAllConnectedLead({'order':order_id_map})
+
 
         for order in orders:
             order_items = OrderItem.objects.filter(order=order)
@@ -406,9 +416,6 @@ def default(obj):
 
 def jsondumps(obj):
     return json.dumps(obj, default=default)
-
-
-
 
 
 

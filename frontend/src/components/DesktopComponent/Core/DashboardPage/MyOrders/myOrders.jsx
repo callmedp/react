@@ -11,6 +11,7 @@ import { Modal } from 'react-bootstrap';
 import EmptyInbox from '../Inbox/emptyInbox';
 import BreadCrumbs from '../Breadcrumb/Breadcrumb';
 import { siteDomain } from 'utils/domains';
+import { MyGA } from 'utils/ga.tracking.js';
 
 const MyOrders = (props) => {
     const ordPageNo = '1';
@@ -108,7 +109,7 @@ const MyOrders = (props) => {
                                     <div className="order-detail__content--btnWrap">
                                         <Link to={'#orderDetails' + index} className={selectedOrderIndex === index ? "arrow-icon open" : "arrow-icon"} onClick={() => openOrderDetail(index)}>Order Details</Link>
                                         {item.order.downloadInvoice ? <a target="_blank" href={downloadInvoice(item?.order?.id)} className="download-icon">Download Invoice</a> :
-                                        item.order.canCancel ? <Link to={"#"} onClick={(e) => {e.preventDefault();setShowCancelModal(true);setCancelOrderId(item?.order?.id)}}>Cancel Order</Link> : null}
+                                        item.order.canCancel ? <Link to={"#"} onClick={(e) => {e.preventDefault();setShowCancelModal(true);setCancelOrderId(item?.order?.id); MyGA.SendEvent('DashboardMyOrders','ln_dashboard_left_menu', 'ln_my_orders', 'cancel_order','', false, true);}}>Cancel Order</Link> : null}
                                     </div>
                                 </div>
 

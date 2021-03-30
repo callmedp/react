@@ -49,7 +49,7 @@ const NeedHelp = (props) => {
                     errors={!!errors ? errors[NeedHelpForm.name.name] : ''} />
 
                 <button type="submit" className="btn btn-inline btn-primary mx-auto submit-btn" role="button" data-toggle="modal"
-                    data-target="#thankyouModal" onClick={() => gaTrack('SkillNeedHelpForm','ln_need_help', 'ln_need_help_form_submitted', heading,'', false, true)}>Submit</button>
+                    data-target="#thankyouModal" onClick={() => MyGA.SendEvent('SkillNeedHelpForm','ln_need_help', 'ln_need_help_form_submitted', heading,'', false, true)}>Submit</button>
             </form>
         </div>
     )

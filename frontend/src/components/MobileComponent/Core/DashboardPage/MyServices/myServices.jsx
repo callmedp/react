@@ -20,6 +20,7 @@ import { startDashboardServicesPageLoader, stopDashboardServicesPageLoader } fro
 import { showSwal } from 'utils/swal'
 import ViewDetails from './oiViewDetails'
 import Filter from '../Filter/filter';
+import { MyGA } from 'utils/ga.tracking.js';
 
 // API Import
 import { fetchMyServices, fetchPendingResume, updateResumeShine } from 'store/DashboardPage/MyServices/actions/index';
@@ -242,7 +243,8 @@ const MyServices = (props) => {
                                         <div className="my-order__order-detail">
                                             <a onClick={(e) => {
                                                     e.preventDefault();
-                                                    showDetails(service?.id)
+                                                    showDetails(service?.id);
+                                                    MyGA.SendEvent('DashboardLeftMenu', 'ln_dashboard_left_menu', 'ln_my_inbox', 'view_details','' ,false, true);
                                                 }} 
                                                 className={(showOrderDetailsID === service?.id) 
                                                     ? "font-weight-bold open arrow-icon" : "font-weight-bold arrow-icon"

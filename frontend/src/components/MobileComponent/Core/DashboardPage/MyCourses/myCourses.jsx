@@ -19,6 +19,7 @@ import ViewDetails from '../MyServices/oiViewDetails';
 import { getCandidateId } from 'utils/storage.js';
 import { getVendorUrl } from 'store/DashboardPage/StartCourse/actions/index';
 import Filter from '../Filter/filter';
+import { MyGA } from 'utils/ga.tracking.js';
 
 
 const MyCourses = (props) => {
@@ -204,7 +205,7 @@ const MyCourses = (props) => {
                                                 {/* <Link to={"#"} className="d-block font-weight-bold">View Details</Link> */}
 
                                                 <div className="my-order__order-detail">
-                                                    <a onClick={(e) => { e.preventDefault(); showDetails(course?.id) }} className={(showOrderDetailsID === course?.id) ? "d-block font-weight-bold open arrow-icon" : "d-block font-weight-bold arrow-icon"}>View Details</a>
+                                                    <a onClick={(e) => { e.preventDefault(); showDetails(course?.id); MyGA.SendEvent('DashboardLeftMenu', 'ln_dashboard_left_menu', 'ln_my_inbox', 'view_details','' ,false, true); }} className={(showOrderDetailsID === course?.id) ? "d-block font-weight-bold open arrow-icon" : "d-block font-weight-bold arrow-icon"}>View Details</a>
                                                     {   
                                                         (showOrderDetailsID === course?.id) && <ViewDetails id={course?.id} status={ course?.updated_status?.status } enrollDate = {course?.enroll_date} />
                                                     }

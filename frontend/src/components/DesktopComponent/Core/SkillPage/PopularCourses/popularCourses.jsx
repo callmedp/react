@@ -25,7 +25,7 @@ const PopularCourses = (props) => {
     const trackingParameters = getTrackingParameters(tracking_data);
 
     const handleTracking = (course) => {
-        gaTrack('SkillPopularCourses','ln_popular_course_select', 'ln_'+ course.name, heading,'', false, true);
+        MyGA.SendEvent('SkillPopularCourses','ln_popular_course_select', 'ln_'+ course.name, heading,'', false, true);
         userTrack({"query" : tracking_data, "action" :'exit_skill_page' });
     }
 
@@ -53,7 +53,7 @@ const PopularCourses = (props) => {
                 })
             }
             </ul>
-            <LinkScroll to="courses" className="view-all" isDynamic={true} spy={true}  offset={-120} onClick={()=> gaTrack('SkillPopularCourses','ln_popular_course_select', 'ln_view_courses', heading,'', false, true), () => userTrack({"query" : tracking_data, "action" :'exit_skill_page' }) }>View all courses</LinkScroll>
+            <LinkScroll to="courses" className="view-all" isDynamic={true} spy={true}  offset={-120} onClick={()=> {MyGA.SendEvent('SkillPopularCourses','ln_popular_course_select', 'ln_view_courses', heading,'', false, true); userTrack({"query" : tracking_data, "action" :'exit_skill_page' })} }>View all courses</LinkScroll>
         </div>
     )
 }

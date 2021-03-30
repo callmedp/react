@@ -60,7 +60,7 @@
     <input type="hidden" id="te_art_page_id" name="page" value="{{page_obj.next_page_number}}">
   </form>
   </div>
-  <button type="button" id="load-more-art" class="btn-outline btn"><i class="icon-load mr-10"></i>Load more</button>
+  <button type="button" id="load-more-art" class="btn-outline btn" onclick="MyGA.SendEvent('recently_added_blogs','ln_recently_added_blogs', 'load_more', '', '', false, true);"><i class="icon-load mr-10"></i>Load more</button>
 </div>
 {% endif %}
 
