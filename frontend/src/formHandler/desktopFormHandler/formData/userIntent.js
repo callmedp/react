@@ -34,131 +34,131 @@ export default {
             },
             {
               text: "Finance / Accounts / Investment Banking",
-              value: "10007"
+              value: "finance / accounts / investment banking"
             },
             {
               text: "Customer Service / Back Office Operations",
-              value: "10014"
+              value: "customer service / back office operations"
             },
             {
               text: "IT - Software",
-              value: "10013"
+              value: "it - software"
             },
             {
               text: "Production / Maintenance / Service",
-              value: "10018"
+              value: "production / maintenance / service"
             },
             {
               text: "Sales / BD",
-              value: "10033"
+              value: "sales / bd"
             },
             {
               text: "IT - Hardware / Networking / Telecom Engineer",
-              value: "10012"
+              value: "it - hardware / networking / telecom engineer"
             },
             {
               text: "Engineering Design / Construction",
-              value: "10011"
+              value: "engineering design / construction"
             },
             {
               text: "Administration / Front Office / Secretary",
-              value: "10001"
+              value: "administration / front office / secretary"
             },
             {
               text: "Marketing / Advertising / MR / PR / Events",
-              value: "10020"
+              value: "marketing / advertising / mr / pr / events"
             },
             {
               text: "Quality / Testing (QA-QC)",
-              value: "10028"
+              value: "quality / testing (qa-qc)"
             },
             {
               text: "Architecture / Interior Design",
-              value: "10055"
+              value: "architecture / interior design"
             },
             {
               text: "Civil Services / Military / Police",
-              value: "10004"
+              value: "civil services / military / police"
             },
             {
               text: "Education / Training / Language",
-              value: "10005"
+              value: "education / training / language"
             },
             {
               text: "Environment / Health / Safety",
-              value: "10050"
+              value: "environment / health / safety"
             },
             {
               text: "Graphic Design / Web Design / Copywriting",
-              value: "10056"
+              value: "graphic design / web design / copywriting"
             },
             {
               text: "Hotel / Restaurant",
-              value: "10009"
+              value: "hotel / restaurant"
             },
             {
               text: "HR / Recruitment",
-              value: "10010"
+              value: "hr / recruitment"
             },
             {
               text: "Journalism / Content / Writing",
-              value: "10015"
+              value: "journalism / content / writing"
             },
             {
               text: "Legal / Company Secretary",
-              value: "10016"
+              value: "legal / company secretary"
             },
             {
               text: "Management Consulting / Strategy / EA",
-              value: "10017"
+              value: "management consulting / strategy / ea"
             },
             {
               text: "Medical / Healthcare",
-              value: "10008"
+              value: "medical / healthcare"
             },
             {
               text: "Oil & Gas Engineering / Mining / Geology",
-              value: "10047"
+              value: "oil & gas engineering / mining / geology"
             },
             {
               text: "R&D / Product Design",
-              value: "10034"
+              value: "r&d / product design"
             },
             {
               text: "Real Estate",
-              value: "10030"
+              value: "real estate"
             },
             {
               text: "Retail / Export-Import / Trading",
-              value: "10042"
+              value: "retail / export-import / trading"
             },
             {
               text: "SBU Head / CEO / Director / Entrepreneur",
-              value: "10040"
+              value: "sbu head / ceo / director / entrepreneur"
             },
             {
               text: "Security / Detective Services",
-              value: "10035"
+              value: "security / detective services"
             },
             {
               text: "Statistics / Analytics / Acturial Science",
-              value: "10049"
+              value: "statistics / analytics / acturial science"
             },
             {
               text: "Supply Chain / Purchase / Inventory",
-              value: "10038"
+              value: "supply chain / purchase / inventory"
             },
             {
               text: "Travel / Aviation / Merchant Navy",
-              value: "10003"
+              value: "travel / aviation / merchant navy"
             },
             {
               text: "TV / Film / Radio / Entertainment",
-              value: "10046"
+              value: "tv / film / radio / entertainment"
             },
             {
               text: "Other",
-              value: "10044"
+              value: "other"
             }
           ]
     },

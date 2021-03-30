@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import './filter.scss';
+import { MyGA } from 'utils/ga.tracking.js';
 
 const Filters = (props) => {
 
@@ -34,14 +35,16 @@ const Filters = (props) => {
     const handleMonthFilter = (e, monthFilter) => {
         if(e.target.textContent != month){
             setMonth(e.target.textContent)
-            setfilterState({ ...filterState, 'last_month_from': monthFilter })
+            setfilterState({ ...filterState, 'last_month_from': monthFilter });
+            MyGA.SendEvent('DashboardInbox','ln_dashboard_left_menu', 'ln_my_inbox', 'last_month_from','', false, true);
         }
     }
 
     const handleOrderFilter = (e, itemType) => {
         if(e.target.textContent != selectType){
             setSelectType(e.target.textContent)
-            setfilterState({ ...filterState, 'select_type': itemType })
+            setfilterState({ ...filterState, 'select_type': itemType });
+            MyGA.SendEvent('DashboardInbox','ln_dashboard_left_menu', 'ln_my_inbox', 'select_type','', false, true);
         }
     }
 

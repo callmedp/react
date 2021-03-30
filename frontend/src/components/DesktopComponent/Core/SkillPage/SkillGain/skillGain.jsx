@@ -13,7 +13,7 @@ const SkillGain = (props) => {
     const { skillGainList, name, slug, heading } = useSelector( store => store.skillBanner )
   
     const testRedirect = () => {
-        gaTrack('TestYourSkill','ln_skill_test', "ln" + name, heading,'', false, true);
+        MyGA.SendEvent('TestYourSkill','ln_skill_test', "ln_" + name, heading,'', false, true);
         userTrack({"query":tracking_data, "action":'exit_skill_page'});
         window.location.replace(`${siteDomain}/practice-tests/${slug}/sub`);
     }

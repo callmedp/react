@@ -45,10 +45,10 @@ class CourseRecommendationAPI(APIView):
         intent = request.GET.get('intent',None)
         course_data = []
         data = {
-        'user_desiredjt': request.GET.get("preferred_role",''),
+        'user_desiredjt': request.GET.get("preferred_role",'').lower().split(','),
         'user_functionalarea':request.GET.get("department",''),
         'user_exp' : request.GET.get('experience',''),
-        'user_app_skills': request.GET.get('skills',''),
+        'user_app_skills': request.GET.get('skills','').lower().split(','),
         #below fields are not used in intent capture form
         'user_imp_skills':request.GET.get('user_imp_skills',''),
         'user_skills':request.GET.get('user_skills',''),
@@ -141,21 +141,21 @@ class JobsSearchAPI(APIView):
         candidate_id = request.GET.get('candidate_id', None)
         intent = request.GET.get('intent',None)
         data = {
-        'job_title': request.GET.get("job_title",''),
+        'job_title': request.GET.get("job_title",'').lower().split(','),
         'loc':request.GET.get("loc",''),
         'minexp' : request.GET.get('minexp',''),
-        'skill': request.GET.get('skill',''),
+        'skill': request.GET.get('skill','').lower().split(','),
         'farea': request.GET.get("area", ''),
         # 'q': request.GET.get("q", ''),
         'page':int(request.GET.get('page',1))
         } 
         if not candidate_id:
             if data['job_title'] and data['skill']:
-                data['q'] = data['job_title']+'-'+data['skill']
+                data['q'] = ','.join(data['job_title']) + '-' + ','.join(data['skill'])
             elif data['skill']:
-                data['q']=data['skill']
+                data['q']= ','.join(data['skill'])
             elif data['job_title']:
-                data['q'] = data['job_title']
+                data['q'] = ','.join(data['job_title'])
         try:
             jobs_response = ShineCandidateDetail().get_jobs(shine_id=candidate_id,data=data)
         except Exception as e:

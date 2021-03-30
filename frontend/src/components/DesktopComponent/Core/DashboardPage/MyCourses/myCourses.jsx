@@ -23,6 +23,7 @@ import {Toast} from '../../../Common/Toast/toast';
 import {boardNeoUser} from 'store/DashboardPage/MyCourses/actions/index';
 import { getCandidateId } from 'utils/storage.js';
 import { getVendorUrl } from 'store/DashboardPage/StartCourse/actions/index';
+import { MyGA } from 'utils/ga.tracking.js';
 
 const MyCourses = (props) => {
     const { filterState, setfilterState } = props
@@ -264,7 +265,7 @@ const MyCourses = (props) => {
                                                     </div>
                                                     <Link
                                                         className="font-weight-bold"
-                                                        onClick={() => toggleDetails(course.id)}
+                                                        onClick={() => {toggleDetails(course.id); MyGA.SendEvent('DashboardLeftMenu', 'ln_dashboard_left_menu', 'ln_my_inbox', 'view_details','' ,false, true);}}
                                                         aria-controls="addComments"
                                                         aria-expanded={`openViewDetail` + index}
                                                         to={'#'}

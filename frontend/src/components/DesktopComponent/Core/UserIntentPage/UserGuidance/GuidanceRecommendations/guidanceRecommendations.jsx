@@ -12,8 +12,8 @@ const GuidanceRecommendations = (props) => {
                     <div className="ui-main col">
                         <div className="ui-steps">
                             <Link className="current" to={"#"}>1</Link>
-                            <Link>2</Link>
-                            <Link>3</Link>
+                            <Link to={'#'}>2</Link>
+                            <Link to={'#'}>3</Link>
                         </div>
 
                         <h2 className="heading3 mt-30">How can we help you?</h2>
