@@ -1,23 +1,32 @@
 import React, { useEffect }  from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
-import Slider from "react-slick";
 import 'slick-carousel/slick/slick.css';
 import '../../CataloguePage/RecentCourses/recentCourses.scss';
-// import { fetchRecommendedCourses } from 'store/DetailPage/actions';
 import ProductCardsSlider from '../../../Common/ProductCardsSlider/productCardsSlider';
+import { fetchRecommendedCourses } from 'store/DetailPage/actions';
 
 const CoursesMayLike = (props) => {
-
+    const {product_id, skill} = props;
     const dispatch = useDispatch()
-    const { pop_list } = useSelector(store => store.recommendedCourses);
+    const { results } = useSelector(store => store.recommendedCourses);
+
+    useEffect(() => {
+        handleEffects();
+    },[])
+
+    const handleEffects = async () => {
+        try {
+            await new Promise((resolve, reject) => dispatch(fetchRecommendedCourses({ payload: {'skill': (skill && skill?.join(',')) || '', 'id': product_id, 'page': 6, 'device': 'desktop'}, resolve, reject })));
+        } 
+        catch (error) {}
+    };
 
     return(
         <section className="m-container mt-0 mb-0 pr-0" data-aos="fade-up">
             <h2 className="m-heading2 mb-10">Courses you may like</h2>
             <div className="m-courses m-recent-courses ml-10n">
                 {
-                    pop_list?.length > 0 ? <ProductCardsSlider productList = {pop_list}/> : ''
+                    results?.length > 0 ? <ProductCardsSlider productList = {results}/> : ''
                 }
                 {/* <Slider {...settings}>
                     <div className="m-card">

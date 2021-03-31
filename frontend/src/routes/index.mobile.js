@@ -12,8 +12,7 @@ import RouteWithSubRoutes from 'routes/route';
 import HomePageContainer from 'components/MobileComponent/Core/HomePage/homePage';
 import { getHomepageActionsMobile } from "apiHandler/homepageApi";
 import DetailPageContainer from 'components/MobileComponent/Core/DetailPage/detailPage';
-
-
+import { getDetailPageActions } from "apiHandler/detailsPageApi";
 
 const MobileAppRouter = () => (
 
@@ -47,6 +46,7 @@ export const routes = [
     {
         path: '/course/:func/:skill/:id/',
         component: DetailPageContainer,
+        actionGroup: getDetailPageActions,
         exact: true,
     },
     {

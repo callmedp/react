@@ -6,7 +6,7 @@ import { getSkillPageActions } from 'apiHandler/skillPageApi';
 import Error404Container from 'components/DesktopComponent/Common/ErrorPage404/errorPage404';
 import { getCataloguePageActions } from "apiHandler/cataloguePageApi";
 import DashboardPageContainer from 'components/DesktopComponent/Core/DashboardPage/dashboardPage';
-import { getDashboardPageActions } from "apiHandler/dashboardPageApi";
+import { getDetailPageActions } from "apiHandler/detailsPageApi";
 import HomePageContainer from 'components/DesktopComponent/Core/HomePage/homePage';
 import RouteWithSubRoutes from './route';
 import { getHomepageActions } from "apiHandler/homepageApi";
@@ -40,11 +40,6 @@ export const routes = [
         exact: true,
     },
     {
-        path: '/detail-page/',
-        component: DetailPageContainer,
-        exact: true,
-    },
-    {
         path: '/dashboard/:name?',
         component: DashboardPageContainer,
         private: true
@@ -56,7 +51,7 @@ export const routes = [
     {
         path: '/course/:func/:skill/:id/',
         component: DetailPageContainer,
-        // actionGroup: getSkillPageActions,
+        actionGroup: getDetailPageActions,
         exact: true
     },
     {

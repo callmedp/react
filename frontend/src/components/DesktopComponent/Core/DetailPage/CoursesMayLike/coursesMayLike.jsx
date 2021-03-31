@@ -19,12 +19,7 @@ const CoursesMayLike = (props) => {
         try {
             await new Promise((resolve, reject) => dispatch(fetchRecommendedCourses({ payload: {'skill': (skill && skill?.join(',')) || '', 'id': product_id, 'page': 6, 'device': 'desktop'}, resolve, reject })));
         } 
-        catch (error) {
-            if (error?.status == 404) {
-                // history.push('/404');
-                console.log(error)
-            }
-        }
+        catch (error) {}
     };
 
     const starRatings = (star, index) => {

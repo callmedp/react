@@ -1,8 +1,6 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
 import Api from './Api';
 import {  
-    fetchOtherProviderCourses,
-    OtherProviderCoursesFetched,
     mainCoursesFetched,
     fetchMainCourses,
     fetchReviews,
@@ -16,7 +14,7 @@ import {
 import {siteDomain} from '../../utils/domains';
 
 function* mainCoursesApi(action){
-    const { payload, resolve, reject } = action;
+    const { payload: { payload, resolve, reject } } = action;
 
     try {
         const response = yield call(Api.mainCourses, payload.id);
@@ -24,30 +22,10 @@ function* mainCoursesApi(action){
         if(response?.error) return reject(response);
         const item = response?.data?.data;
         yield put(mainCoursesFetched({ ...item }));
-        return payload?.resolve(item);
+        return resolve(item);
     }
     catch(e) {
         return e;
-    }
-}
-
-function* otherProvidersCourses(action){
-    const { payload: { payload, resolve, reject} } = action;
-    try{
-    
-        const response = yield call(Api.otherProvidersCourses);
-   
-        if(response?.error){
-            return reject(response);
-        }
-
-        const item = response?.data;
-        yield put(OtherProviderCoursesFetched({ ...item }))
-        return resolve(item);
-    }
-    catch(e){
-     
-        return reject(e);
     }
 }
 
@@ -161,7 +139,7 @@ function* AddToCart(action) {
 }
 
 export default function* WatchDetailPage() {
-    yield takeLatest(fetchOtherProviderCourses.type, otherProvidersCourses);
+    // yield takeLatest(fetchOtherProviderCourses.type, otherProvidersCourses);
     yield takeLatest(fetchMainCourses.type, mainCoursesApi);
     yield takeLatest(fetchRecommendedCourses.type, recommendedCourses);
     yield takeLatest(fetchReviews.type, productReviews);
