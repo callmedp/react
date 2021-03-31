@@ -2,21 +2,18 @@ import React, {useState, useEffect} from 'react';
 import Carousel from 'react-bootstrap/Carousel';
 import { Link } from 'react-router-dom';
 import './Reviews.scss';
-// import Modal from 'react-bootstrap/Modal';
-// import Button from 'react-bootstrap/Button';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchReviews } from 'store/DetailPage/actions';
-// import Slider from "react-slick";
 import ReviewModal from '../../../Common/Modals/reviewModal';
-// import { startReviewLoader, stopReviewLoader } from 'store/Loader/actions/index';
-// import Loader from '../../../Common/Loader/loader';
+import { startReviewLoader, stopReviewLoader } from 'store/Loader/actions/index';
+import Loader from '../../../Common/Loader/loader';
 import { getCandidateId } from 'utils/storage.js';
 import { siteDomain } from 'utils/domains';
 
 const LearnersStories = (props) => {
     const {id, product_detail} = props;
     const [reviewModal, showReviewModal] = useState(false);
-    // const { reviewLoader } = useSelector(store => store.loader);
+    const { reviewLoader } = useSelector(store => store.loader);
     const { prd_reviews : { prd_review_list, prd_rv_current_page, prd_rv_has_next, prd_rv_has_prev } } = useSelector( store => store.reviews );
 
     const dispatch = useDispatch();
@@ -30,17 +27,14 @@ const LearnersStories = (props) => {
         currentPage = page;
 
         try {
-            // dispatch(startReviewLoader())
+            dispatch(startReviewLoader())
             await new Promise((resolve, reject) => dispatch(fetchReviews({ payload: { prdId: id, page: page, device: 'desktop' }, resolve, reject })));
-            // dispatch(stopReviewLoader())
+            dispatch(stopReviewLoader())
         }
         catch (error) {
-            // dispatch(stopReviewLoader())
-            if (error?.status == 404) {
-                // history.push('/404');
-            }
+            dispatch(stopReviewLoader())
         }
-        // dispatch(stopReviewLoader());
+        dispatch(stopReviewLoader());
     };
 
     const starRatings = (star, index) => {
@@ -52,8 +46,8 @@ const LearnersStories = (props) => {
     }
 
     const handleSelect = (selectedIndex, e) => {
-        //   if(e.target.className === 'carousel-control-next-icon' && prd_rv_has_next) handleEffects(prd_rv_current_page+1);
-        //   if(e.target.className === 'carousel-control-prev-icon' && prd_rv_has_prev) handleEffects(prd_rv_current_page-1);
+        if(selectedIndex === 0 && e.target.className === 'carousel-control-next-icon' && prd_rv_has_next) handleEffects(prd_rv_current_page+1);
+        if(selectedIndex === 0 && e.target.className === 'carousel-control-prev-icon' && prd_rv_has_prev) handleEffects(prd_rv_current_page-1);
     }
 
     const getReviews = (reviewData, idx) => {
@@ -86,7 +80,7 @@ const LearnersStories = (props) => {
 
     return (
         <>
-        {/* { reviewLoader ? <Loader /> : ''} */}
+        { reviewLoader ? <Loader /> : ''}
         <section id="reviews" className="container" data-aos="fade-up">
             {
                 reviewModal ? <ReviewModal reviewModal={reviewModal} showReviewModal={showReviewModal} review={product_detail?.review} /> : ""
