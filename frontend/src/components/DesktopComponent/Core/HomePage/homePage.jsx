@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import OfferEnds from './OfferEnds/offerEnds';
+// import OfferEnds from './OfferEnds/offerEnds';
 import Header from '../../Common/Header/header';
 import HomeBanner from './Banner/banner';
 import PopularCourses from './PopularCourses/popularCourses';
@@ -14,7 +14,6 @@ import LatestBlog from './LatestBlog/latestBlog';
 import Footer from '../../Common/Footer/footer';
 import '../CataloguePage/cataloguePage.scss';
 import Aos from "aos";
-// import "aos/dist/aos.css";
 import { useDispatch, useSelector } from 'react-redux';
 import {
     fetchMostViewedCourses,

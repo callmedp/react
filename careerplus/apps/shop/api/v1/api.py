@@ -473,7 +473,7 @@ class ProductInformationAPIMixin(object):
             review_list = Review.objects.filter(
                 content_type__id=product_type.id,
                 object_id__in=prd_list, status=1)
-            per_page = 10
+            per_page = 9
             try:
                 rv_paginator = Paginator(review_list, per_page)
                 review_list = rv_paginator.page(page)

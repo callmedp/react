@@ -11,9 +11,11 @@ const CourseEnrol = (props) => {
     const { product_detail, varChecked, changeChecked } = props;
     const dispatch = useDispatch();
     const { mainCourseCartLoader } = useSelector(store => store.loader);
+    const [discountPrice, discountPriceSelected] = useState(0);
 
     const changeMode = (objj) => {
         let selectedObj = objj;
+        discountPriceSelected(objj.fake_inr_price);
         changeChecked({...selectedObj});
     }
 
@@ -55,7 +57,8 @@ const CourseEnrol = (props) => {
                         </form>
                     </div>
                     <div className="m-course-enrol__price">
-                        <strong className="mt-20 mb-10">{varChecked?.inr_price || product_detail?.var_list[0]?.inr_price}/- <del>{product_detail?.start_price}/-</del></strong>
+                        <strong className="mt-20 mb-10">{varChecked?.inr_price || product_detail?.var_list[0]?.inr_price}/- <del>
+                        {varChecked?.id ? discountPrice : product_detail?.var_list[0]?.fake_inr_price}/-</del></strong>
                         <Link to={'#'} className="btn btn-secondary mt-10 ml-auto" onClick={() => goToCart(varChecked)}>Enroll now</Link>
                     </div>
                     <div className="m-course-enrol__offer lightblue-bg2">

@@ -4,11 +4,11 @@ import MenuNav from '../../Common/MenuNav/menuNav';
 import Header from '../../Common/Header/Header';
 import CourseDetailBanner from './Banner/Banner';
 import CourseEnrol from './CourseEnrol/courseEnrol';
-import StickyNavDetail from './StickyNavDetail/stickyNavDetail';
+// import StickyNavDetail from './StickyNavDetail/stickyNavDetail';
 import KeyFeatures from './KeyFeatures/keyFeatures';
 import CourseOutline from './CourseOutline/courseOutline';
-import CourseOutcome from './CourseOutcome/courseOutcome';
-import SampleCertificate from './SampleCertificate/sampleCertificate';
+// import CourseOutcome from './CourseOutcome/courseOutcome';
+// import SampleCertificate from './SampleCertificate/sampleCertificate';
 import HowItWorks from './HowItWorks/howItWorks';
 import WhoLearn from './WhoLearn/whoLearn';
 import SkillGain from './SkillGain/skillGain';
@@ -19,13 +19,13 @@ import FAQ from './FAQ/faq';
 import CoursesMayLike from './CoursesMayLike/coursesMayLike';
 import Footer from '../../Common/Footer/Footer';
 import CTA from '../../Common/CTA/CTA';
-import CertificateModal from '../../Common/Modals/CertificateModal';
+// import CertificateModal from '../../Common/Modals/CertificateModal';
 import EnquiryModal from '../../Common/Modals/EnquiryModal';
 import ReviewModal from '../../Common/Modals/ReviewModal';
 import '../DetailPage/detailPage.scss';
 import Aos from "aos";
 // import "aos/dist/aos.css";
-import { fetchRecommendedCourses, fetchReviews, fetchOtherProviderCourses, fetchMainCourses } from 'store/DetailPage/actions';
+import { fetchReviews, fetchMainCourses } from 'store/DetailPage/actions';
 
 const DetailPage = (props) => {
 
@@ -36,15 +36,13 @@ const DetailPage = (props) => {
     const [enquiryForm, setEnquiryForm] = useState(false);
     const [varChecked, changeChecked] = useState({});
 
-    console.log(product_detail)
+    console.log(skill)
 
     const handleEffects = async () => {
         try {
             if (!(window && window.config && window.config.isServerRendered)) {
-                new Promise((resolve, reject) => dispatch(fetchMainCourses({ id: prdId?.split('-')[1] ,resolve, reject })));
+                new Promise((resolve, reject) => dispatch(fetchMainCourses({ payload: { id: prdId?.split('-')[1] },resolve, reject })));
                 new Promise((resolve, reject) => dispatch(fetchReviews({ payload: { prdId: prdId?.split('-')[1] }, resolve, reject })));
-                new Promise((resolve, reject) => dispatch(fetchRecommendedCourses({ resolve, reject })));
-                await new Promise((resolve, reject) => dispatch(fetchOtherProviderCourses({ resolve, reject })));
             }
             else {
                 delete window.config?.isServerRendered
@@ -92,7 +90,7 @@ const DetailPage = (props) => {
                 { product_detail?.pop && <OtherProviders pop_list={product_detail?.pop_list} /> }
                 { product_detail?.faq && <FAQ faq_list={product_detail?.faq_list}/> }
                 <Reviews showReviewModal={showReviewModal} prdId={prdId}/>
-                <CoursesMayLike />
+                { skill && <CoursesMayLike product_id={prdId} skill={skill}/> }
                 <CTA setEnquiryForm={setEnquiryForm} />
                 {
                     enquiryForm ? <EnquiryModal setEnquiryForm={setEnquiryForm} page="detailPage"/> : null
