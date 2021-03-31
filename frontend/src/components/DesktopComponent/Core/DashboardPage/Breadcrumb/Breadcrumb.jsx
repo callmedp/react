@@ -9,8 +9,10 @@ const BreadCrumbs = (props) => {
     const FilterChecks = async(e) => {
         const name = e.target.name;
         const value = e.target.value;
+        let index = e.nativeEvent.target.selectedIndex;
+        let label = e.nativeEvent.target[index].text;
         setfilterState({ ...filterState, [name]: value });
-        MyGA.SendEvent('DashboardInbox','ln_dashboard_left_menu', 'ln_my_inbox', value,'', false, true);
+        MyGA.SendEvent('DashboardInbox','ln_dashboard_left_menu', 'ln_my_inbox', label,'', false, true);
       };
 
     return(
