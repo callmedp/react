@@ -2,7 +2,7 @@ import React from 'react';
 import { siteDomain } from 'utils/domains';
 
 const CourseCard = (props) => {
-    const { course, key, name } = props;
+    const { course, name, indx } = props;
     
     const starRatings = (star, index) => {
         return (star === '*' ? <em className="icon-fullstar" key={index}></em> : star === '+'
@@ -11,7 +11,7 @@ const CourseCard = (props) => {
     }
 
     return (
-        <li className="col" key={key}>
+        <li className="col" key={indx}>
             <div className="card">
                 <div className="card__heading">
                     <figure>

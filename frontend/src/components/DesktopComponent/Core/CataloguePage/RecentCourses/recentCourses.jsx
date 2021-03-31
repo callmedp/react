@@ -22,7 +22,7 @@ const RecentCourses = (props) => {
                         <h2 className="heading2 text-center">Recently added courses</h2>
                         <ul className="recent-courses__list">
                             {
-                                recentCoursesList.slice(0,4)?.map((course, index) => <CourseCard key={index} course={course} name="recentAdded" />)
+                                recentCoursesList.slice(0,4)?.map((course, index) => <CourseCard indx={index} key={index} course={course} name="recentAdded" />)
                             }
 
                         </ul>
