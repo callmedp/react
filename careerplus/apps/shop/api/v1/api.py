@@ -636,6 +636,10 @@ class ProductInformationAPIMixin(object):
             context.update({'prd_vendor_slug': product.vendor.slug})
         # context.update({'sqs': sqs})
         # context.update({'get_fakeprice': get_fakeprice})
+        meta = product.as_meta(self.request)
+        setattr(meta, '_keywords', None)
+        setattr(meta, '_url', context.get('canonical_url', ''))
+        context['meta'] = meta.__dict__
         context['show_chat'] = True
         # context['product_main'] = product_main,
         # context['sqs_main'] = sqs_main
