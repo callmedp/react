@@ -50,7 +50,7 @@ const EnquireNow = (props) => {
                 <div className="container">
                     <div className="enquire-now mt-30 mb-30">
                         <div className="enquire-now__img col">
-                            <img src={`${imageUrl}/desktop/enquire-now-bg.png`} alt="Enquire Now" />
+                            <img src={`${imageUrl}desktop/enquire-now-bg.png`} alt="Enquire Now" />
                         </div>
                         <div className="enquire-now__form col">
                            

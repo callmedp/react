@@ -33,7 +33,7 @@ const CourseOutline = (props) => {
                             </Accordion>
                         </div>
                         <div className="course-outline__img">
-                            <img src={`${imageUrl}/desktop/course-outline-bg.png`} alt="Course outline" />
+                            <img src={`${imageUrl}desktop/course-outline-bg.png`} alt="Course outline" />
                         </div>
                     </div>
                 </div>

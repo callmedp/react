@@ -18,7 +18,7 @@ const SampleCertificate = (props) => {
                         <h2 className="heading2">Sample certificate</h2>
                         <Link onClick={handleShow} to={"#"}>
                             <figure>
-                                <img src={`${imageUrl}/desktop/sample-certificate-thumb.jpg`} alt="Sample certificate" />
+                                <img src={`${imageUrl}desktop/sample-certificate-thumb.jpg`} alt="Sample certificate" />
                                 <span variant="primary">View</span>
                             </figure>
                         </Link>
@@ -35,7 +35,7 @@ const SampleCertificate = (props) => {
                         <Modal.Header closeButton>
                         </Modal.Header>
                         <Modal.Body>
-                            <img src={`${imageUrl}/desktop/sample-certificate-big.jpg`} alt="Sample certificate" />
+                            <img src={`${imageUrl}desktop/sample-certificate-big.jpg`} alt="Sample certificate" />
                         </Modal.Body>
                     </Modal>
                 </div>
