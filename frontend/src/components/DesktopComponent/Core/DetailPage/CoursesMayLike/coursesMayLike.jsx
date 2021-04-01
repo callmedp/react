@@ -33,7 +33,7 @@ const CoursesMayLike = (props) => {
             <Carousel.Item interval={10000000000} key={idx}>
                 <ul className="recent-courses__list mt-30">
                     {
-                        courseData?.map((coursesLike, inx) => { 
+                        courseData?.map((coursesLike, inx) => {
                             return (
                                 <li className="col" key={inx}>
                                     <div className="card">
