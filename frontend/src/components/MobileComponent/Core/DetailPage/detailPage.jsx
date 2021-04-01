@@ -36,8 +36,6 @@ const DetailPage = (props) => {
     const [enquiryForm, setEnquiryForm] = useState(false);
     const [varChecked, changeChecked] = useState({});
 
-    console.log(skill)
-
     const handleEffects = async () => {
         try {
             if (!(window && window.config && window.config.isServerRendered)) {

@@ -2,7 +2,7 @@ import React from 'react';
 import './stickyNavDetail.scss';
 import {Link} from 'react-router-dom';
 import Slider from "react-slick";
-import 'slick-carousel/slick/slick.css';
+// import 'slick-carousel/slick/slick.css';
 
 const StickyNavDetail = (props) => {
     const settings = {
