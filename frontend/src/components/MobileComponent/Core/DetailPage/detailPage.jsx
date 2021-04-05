@@ -4,7 +4,7 @@ import MenuNav from '../../Common/MenuNav/menuNav';
 import Header from '../../Common/Header/Header';
 import CourseDetailBanner from './Banner/Banner';
 import CourseEnrol from './CourseEnrol/courseEnrol';
-// import StickyNavDetail from './StickyNavDetail/stickyNavDetail';
+import StickyNavDetail from './StickyNavDetail/stickyNavDetail';
 import KeyFeatures from './KeyFeatures/keyFeatures';
 import CourseOutline from './CourseOutline/courseOutline';
 // import CourseOutcome from './CourseOutcome/courseOutcome';
@@ -35,6 +35,7 @@ const DetailPage = (props) => {
     const { product_detail, skill } = useSelector(store => store?.mainCourses);
     const [enquiryForm, setEnquiryForm] = useState(false);
     const [varChecked, changeChecked] = useState({});
+    const [showStickyNav, setShowStickyNav] = useState(false);
 
     const handleEffects = async () => {
         try {
@@ -54,9 +55,18 @@ const DetailPage = (props) => {
 
     };
 
+    const handleScroll=() => {
+        const offset = window.scrollY;
+        if(offset > 670 ) {
+            setShowStickyNav(true);
+        }
+        else setShowStickyNav(false);
+    }
+
     useEffect( () => {
         handleEffects();
         Aos.init({ duration: 2000, once: true, offset: 10, anchorPlacement: 'bottom-bottom' });
+        window.addEventListener('scroll', handleScroll);
     }, [prdId])
 
     return(
@@ -70,7 +80,13 @@ const DetailPage = (props) => {
             </header>
             <main className="mb-0">
                 <CourseEnrol product_detail={product_detail} varChecked={varChecked} changeChecked={changeChecked}/>
-                {/* <StickyNavDetail /> */}
+                {
+                    showStickyNav && <StickyNavDetail 
+                        outline={product_detail?.chapter ? true : false}
+                        faq = {product_detail?.faq ? true : false}
+                        product_detail={product_detail} prdId={prdId} varChecked={varChecked}
+                        />
+                }
                 <KeyFeatures prd_uget={product_detail?.prd_uget}/>
                 {
                     product_detail?.chapter && 

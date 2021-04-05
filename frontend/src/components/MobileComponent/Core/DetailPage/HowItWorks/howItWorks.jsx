@@ -5,7 +5,7 @@ const HowItWorks = (props) => {
     const { steps } = props
 
     return (
-        <section className="m-container mt-0 mb-0" data-aos="fade-up">
+        <section className="m-container mt-0 mb-0" id="begin" data-aos="fade-up">
             <div className="m-how-works">
                 <h2 className="m-heading2 mb-10">{steps?.main_heading}</h2>
                 <ul>
