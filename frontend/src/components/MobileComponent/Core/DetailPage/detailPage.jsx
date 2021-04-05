@@ -7,8 +7,8 @@ import CourseEnrol from './CourseEnrol/courseEnrol';
 // import StickyNavDetail from './StickyNavDetail/stickyNavDetail';
 import KeyFeatures from './KeyFeatures/keyFeatures';
 import CourseOutline from './CourseOutline/courseOutline';
-// import CourseOutcome from './CourseOutcome/courseOutcome';
-// import SampleCertificate from './SampleCertificate/sampleCertificate';
+import CourseOutcome from './CourseOutcome/courseOutcome';
+import SampleCertificate from './SampleCertificate/sampleCertificate';
 import HowItWorks from './HowItWorks/howItWorks';
 import WhoLearn from './WhoLearn/whoLearn';
 import SkillGain from './SkillGain/skillGain';
@@ -24,7 +24,6 @@ import EnquiryModal from '../../Common/Modals/EnquiryModal';
 import ReviewModal from '../../Common/Modals/ReviewModal';
 import '../DetailPage/detailPage.scss';
 import Aos from "aos";
-// import "aos/dist/aos.css";
 import { fetchReviews, fetchMainCourses } from 'store/DetailPage/actions';
 
 const DetailPage = (props) => {
@@ -35,8 +34,6 @@ const DetailPage = (props) => {
     const { product_detail, skill } = useSelector(store => store?.mainCourses);
     const [enquiryForm, setEnquiryForm] = useState(false);
     const [varChecked, changeChecked] = useState({});
-
-    console.log(skill)
 
     const handleEffects = async () => {
         try {
@@ -58,7 +55,7 @@ const DetailPage = (props) => {
 
     useEffect( () => {
         handleEffects();
-        Aos.init({ duration: 2000, once: true, offset: 10, anchorPlacement: 'bottom-bottom' });
+        // Aos.init({ duration: 2000, once: true, offset: 10, anchorPlacement: 'bottom-bottom' });
     }, [prdId])
 
     return(
@@ -67,40 +64,39 @@ const DetailPage = (props) => {
             {
                 reviewModal ? <ReviewModal showReviewModal={showReviewModal} prdId={prdId}/> :<>
                 <header className="m-container m-header detail-bg">
-                <Header />
-                <CourseDetailBanner product_detail={product_detail} prdId={prdId} varChecked={varChecked}/>
-            </header>
-            <main className="mb-0">
-                <CourseEnrol product_detail={product_detail} varChecked={varChecked} changeChecked={changeChecked}/>
-                {/* <StickyNavDetail /> */}
-                <KeyFeatures prd_uget={product_detail?.prd_uget}/>
-                {
-                    product_detail?.chapter && 
-                        <CourseOutline chapter_list={product_detail?.chapter_list}/>
-                }
-                {/* <CourseOutcome />
-                <SampleCertificate /> */}
-                <HowItWorks steps={product_detail?.dlvry_flow}/>
-                { 
-                    product_detail?.prd_should_lrn &&
-                        <WhoLearn prd_lrn_data={product_detail?.prd_should_lrn_dt} />
-                }
-                { skill && <SkillGain skills={skill}/> }
-                <TakeFreeTest should_take_test_url={product_detail?.shld_take_test_slg} />
-                <OtherProviders />
-                { product_detail?.faq && <FAQ faq_list={product_detail?.faq_list}/> }
-                <Reviews showReviewModal={showReviewModal} prdId={prdId}/>
-                { skill && <CoursesMayLike product_id={prdId} skill={skill}/> }
-                <CTA setEnquiryForm={setEnquiryForm} />
-                {
-                    enquiryForm ? <EnquiryModal setEnquiryForm={setEnquiryForm} /> : null
-                }
-                {/* <CertificateModal /> */}
-            </main>
-            <Footer /></>
+                    <Header />
+                    <CourseDetailBanner product_detail={product_detail} prdId={prdId} varChecked={varChecked}/>
+                </header>
+                <main className="mb-0">
+                    <CourseEnrol product_detail={product_detail} varChecked={varChecked} changeChecked={changeChecked}/>
+                    {/* <StickyNavDetail /> */}
+                    <KeyFeatures prd_uget={product_detail?.prd_uget}/>
+                    {
+                        product_detail?.chapter && 
+                            <CourseOutline chapter_list={product_detail?.chapter_list}/>
+                    }
+                    {/* <CourseOutcome />
+                    <SampleCertificate /> */}
+                    <HowItWorks steps={product_detail?.dlvry_flow}/>
+                    { 
+                        product_detail?.prd_should_lrn &&
+                            <WhoLearn prd_lrn_data={product_detail?.prd_should_lrn_dt} />
+                    }
+                    { skill && <SkillGain skills={skill}/> }
+                    <TakeFreeTest should_take_test_url={product_detail?.shld_take_test_slg} />
+                    <OtherProviders />
+                    { product_detail?.faq && <FAQ faq_list={product_detail?.faq_list}/> }
+                    <Reviews showReviewModal={showReviewModal} prdId={prdId}/>
+                    { skill && <CoursesMayLike product_id={prdId} skill={skill}/> }
+                    <CTA setEnquiryForm={setEnquiryForm} />
+                    {
+                        enquiryForm ? <EnquiryModal setEnquiryForm={setEnquiryForm} /> : null
+                    }
+                    {/* <CertificateModal /> */}
+                </main>
+                <Footer /></>
             }
         </div>
-
     )
 }
 
