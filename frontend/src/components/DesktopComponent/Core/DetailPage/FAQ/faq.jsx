@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import '../../SkillPage/FAQ/faq.scss';
 import Card from 'react-bootstrap/Card';
 import { MyGA } from 'utils/ga.tracking.js';
+import { imageUrl } from 'utils/domains';
 
 const FAQ = (props) => {
     const { faq_list } = props;
@@ -44,28 +45,28 @@ const FAQ = (props) => {
                         </div>
                         <div className="faq__img">
                             <span className="faq-tween1" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="100">
-                                <img src="/media/images/desktop/faq-tween1.svg" />
+                                <img src={`${imageUrl}desktop/faq-tween1.svg`} />
                             </span>
                             <span className="faq-tween2" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="200">
-                                <img src="/media/images/desktop/faq-tween2.svg" />
+                                <img src={`${imageUrl}desktop/faq-tween2.svg`} />
                             </span>
                             <span className="faq-tween3" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="300">
-                                <img src="/media/images/desktop/faq-tween3.svg" />
+                                <img src={`${imageUrl}desktop/faq-tween3.svg`} />
                             </span>
                             <span className="faq-tween4" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="400">
-                                <img src="/media/images/desktop/faq-tween4.svg" />
+                                <img src={`${imageUrl}desktop/faq-tween4.svg`} />
                             </span>
                             <span className="faq-tween5" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="500">
-                                <img src="/media/images/desktop/faq-tween5.svg" />
+                                <img src={`${imageUrl}desktop/faq-tween5.svg`} />
                             </span>
                             <span className="faq-tween6" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="600">
-                                <img src="/media/images/desktop/faq-tween6.svg" />
+                                <img src={`${imageUrl}desktop/faq-tween6.svg`} />
                             </span>
                             <span className="faq-tween7" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="300">
-                                <img src="/media/images/desktop/faq-tween7.svg" />
+                                <img src={`${imageUrl}desktop/faq-tween7.svg`} />
                             </span>
                             <span className="faq-tween8" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="300">
-                                <img src="/media/images/desktop/faq-tween8.svg" />
+                                <img src={`${imageUrl}desktop/faq-tween8.svg`} />
                             </span>
                         </div>
                     </div>

@@ -119,7 +119,7 @@ const ReviewModal =(props) => {
         
         <Modal.Body>
             <div className="text-center db-rate-services need-help">
-                <img src={`${imageUrl}/desktop/rate-services.png`} className="img-fluid" alt=""/>
+                <img src={`${imageUrl}desktop/rate-services.png`} className="img-fluid" alt=""/>
                 <p className="db-rate-services--heading">Rate Course</p>
                 
                 <span className="rating-review">

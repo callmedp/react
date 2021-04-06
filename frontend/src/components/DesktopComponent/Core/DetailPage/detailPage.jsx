@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../../Common/Header/header';
-import StickyNavDetail from './StickyNavDetail/stickyNavDetail';
+import StickyNav from './StickyNavDetail/stickyNavDetail';
 import BannerCourseDetail from './Banner/banner';
 import KeyFeatures from './KeyFeatures/keyFeatures';
 import CourseOutline from './CourseOutline/courseOutline';
@@ -28,11 +28,22 @@ const DetailPage = (props) => {
     const {product_detail, skill} = useSelector(store => store?.mainCourses);
     const {match: {params: {id}}, history} = props;
     const { mainCourseLoader } = useSelector(store => store.loader);
+    const [showStickyNav, setShowStickyNav] = useState(false);
+    const [varChecked, changeChecked] = useState({});
 
     useEffect( () => {
         handleEffects();
         Aos.init({ duration: 2000, once: true, offset: 10, anchorPlacement: 'bottom-bottom' });
+        window.addEventListener('scroll', handleScroll);
     }, [id])
+
+    const handleScroll=() => {
+        const offset = window.scrollY;
+        if(offset > 300 ) {
+            setShowStickyNav(true);
+        }
+        else setShowStickyNav(false);
+    }
 
     const handleEffects = async () => {
         try {
@@ -51,8 +62,15 @@ const DetailPage = (props) => {
         <div>
             { mainCourseLoader ? <Loader /> : ''}
             <Header />
-            <StickyNavDetail/>
-            <BannerCourseDetail product_detail={product_detail}/>
+            {
+                    showStickyNav && <StickyNav 
+                        outline={product_detail?.chapter ? true : false}
+                        faq = {product_detail?.faq ? true : false}
+                        product_detail={product_detail} prdId={id} varChecked={varChecked}
+                        />
+            }
+            {/* <StickyNavDetail/> */}
+            <BannerCourseDetail product_detail={product_detail} varChecked={varChecked} changeChecked={changeChecked}/>
             {product_detail?.prd_uget && <KeyFeatures prd_uget={product_detail?.prd_uget}/>}
             {
                  product_detail?.chapter && 

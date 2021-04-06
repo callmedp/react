@@ -10,11 +10,10 @@ import { siteDomain } from 'utils/domains';
 import { getStudyMode } from 'utils/detailPageUtils/studyMode';
 
 const BannerCourseDetail = (props) => {
-    const {product_detail} = props;
+    const {product_detail, varChecked, changeChecked} = props;
     const reqLength = 365;
     const inputCheckbox = useRef(null);
     const regex = /<(.|\n)*?>/g;
-    const [varChecked, changeChecked] = useState({});
     const [discountPrice, discountPriceSelected] = useState(0);
     const dispatch = useDispatch();
     const { mainCourseCartLoader } = useSelector(store => store.loader);

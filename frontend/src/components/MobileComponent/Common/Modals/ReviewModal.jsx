@@ -25,16 +25,22 @@ const ReviewModal = (props) => {
                 product_id: prdId?.split('-')[1]
             }
 
-            let addedReview = await new Promise((resolve, reject) => dispatch(submitReview({ payload: review_values, resolve, reject })));
+            try{
+                let addedReview = await new Promise((resolve, reject) => dispatch(submitReview({ payload: review_values, resolve, reject })));
 
-            if(addedReview) {
-                if(!addedReview?.error) showReviewModal(false);
+                if(addedReview) {
+                    if(!addedReview?.error) showReviewModal(false);
 
-                showSwal((addedReview?.error ? 'error' : 'success'), (addedReview?.data?.message ? addedReview?.data?.message : addedReview.error))
+                    showSwal((addedReview?.error ? 'error' : 'success'), (addedReview?.data?.message ? addedReview?.data?.message : addedReview.error))
+                }
+                
+                reset(addedReview);
+                showReviewModal(false)
+            }
+            catch{
+                showSwal('error', 'Something went wrong!')
             }
             
-            reset(addedReview);
-            showReviewModal(false)
         }
     }
 

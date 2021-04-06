@@ -3,11 +3,11 @@
 @import '../../../../../styles/mixins';
 
 .sticky-nav-detail {
-    display: none;
+    // display: none;
     box-shadow: $box-shadow;
     padding: 2rem 1rem 0 1rem;
     position: sticky;
-    top: 35rem;
+    top: 0;
     z-index: 9999;
 
     .container {
@@ -28,7 +28,7 @@
         margin: .5rem 0 0 0;
     }
 
-    .nav-item, .nav-link {
+    .navbar-nav {
         padding: 1rem 2rem !important;
 
         &.active {

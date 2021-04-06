@@ -187,3 +187,18 @@ export const stopMainCourseCartLoader = () => {
         payload: { mainCourseCartLoader: false }
     }
 }
+
+// need help loader
+export const startNeedHelpLoader = () => {
+    return {
+        type: Actions.START_NEED_HELP_LOADER,
+        payload: { needHelpLoader: true }
+    }
+}
+
+export const stopNeedHelpLoader = () => {
+    return {
+        type: Actions.STOP_NEED_HELP_LOADER,
+        payload: { needHelpLoader: false }
+    }
+}

@@ -15,7 +15,7 @@ const CourseCard = (props) => {
             <div className="card">
                 <div className="card__heading">
                     <figure>
-                        { course.imgUrl && <img src={course.imgUrl || course.vendor_image} alt={course.imgAlt || course.vendor_image} /> }
+                        { course.imgUrl || course.vendor_image && <img src={course.imgUrl || course.vendor_image} alt={course.imgAlt || course.vendor_image} /> }
                     </figure>
                     <h3 className="heading3">
                         <a href={`${siteDomain}${course.url}`}>{course.name || course.heading}</a>

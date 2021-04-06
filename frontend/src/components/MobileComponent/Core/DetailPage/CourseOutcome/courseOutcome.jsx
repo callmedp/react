@@ -3,7 +3,7 @@ import './courseOutcome.scss'
 
 const CourseOutcome = (props) => {
     return (
-        <section className="m-container mt-0 mb-0" data-aos="fade-up">
+        <section className="m-container mt-0 mb-0" id="outcome" data-aos="fade-up">
             <div className="m-course-outcome">
                 <h2 className="m-heading2">Course Outcome</h2>
                 <ul>

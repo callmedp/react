@@ -3,6 +3,7 @@ import Accordion from 'react-bootstrap/Accordion';
 import Card from 'react-bootstrap/Card';
 // import { Link } from 'react-router-dom';
 import './courseOutline.scss'
+import { imageUrl } from 'utils/domains';
 
 const CourseOutline = (props) => {
     const {chapter_list} = props;
@@ -32,7 +33,7 @@ const CourseOutline = (props) => {
                             </Accordion>
                         </div>
                         <div className="course-outline__img">
-                            <img src="/media/images/desktop/course-outline-bg.png" alt="Course outline" />
+                            <img src={`${imageUrl}desktop/course-outline-bg.png`} alt="Course outline" />
                         </div>
                     </div>
                 </div>

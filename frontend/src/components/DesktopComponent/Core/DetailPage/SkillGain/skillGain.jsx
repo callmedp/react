@@ -2,6 +2,7 @@ import React from 'react';
 import Badge from 'react-bootstrap/Badge';
 import {Link} from 'react-router-dom';
 import '../../SkillPage/SkillGain/skillGain';
+import { imageUrl } from 'utils/domains';
 
 const SkillGain = (props) => {
     const {skill} = props;
@@ -29,28 +30,28 @@ const SkillGain = (props) => {
                         </div>
                         <figure className="skill-gain__img mt-40">
                             <span className="skill-tween1">
-                                <img src="/media/images/desktop/skill-tween1.svg" />
+                                <img src={`${imageUrl}desktop/skill-tween1.svg`} />
                             </span>
                             <span className="skill-tween2">
-                                <img src="/media/images/desktop/skill-tween2.svg" />
+                                <img src={`${imageUrl}desktop/skill-tween2.svg`} />
                             </span>
                             <span className="skill-tween3" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="400">
-                                <img src="/media/images/desktop/skill-tween3.svg" />
+                                <img src={`${imageUrl}desktop/skill-tween3.svg`} />
                             </span>
                             <span className="skill-tween4" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="500">
-                                <img src="/media/images/desktop/skill-tween4.svg" />
+                                <img src={`${imageUrl}desktop/skill-tween4.svg`} />
                             </span>
                             <span className="skill-tween5" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="600">
-                                <img src="/media/images/desktop/skill-tween5.svg" />
+                                <img src={`${imageUrl}desktop/skill-tween5.svg`} />
                             </span>
                             <span className="skill-tween6" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="700">
-                                <img src="/media/images/desktop/skill-tween6.svg" />
+                                <img src={`${imageUrl}desktop/skill-tween6.svg`} />
                             </span>
                             <span className="skill-tween7" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="800">
-                                <img src="/media/images/desktop/skill-tween7.svg" />
+                                <img src={`${imageUrl}desktop/skill-tween7.svg`} />
                             </span>
                             <span className="skill-tween8" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="900">
-                                <img src="/media/images/desktop/skill-tween8.svg" />
+                                <img src={`${imageUrl}desktop/skill-tween8.svg`} />
                             </span>
                         </figure>
                     </div>
