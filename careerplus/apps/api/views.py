@@ -2260,13 +2260,13 @@ class FetchInfoAPIView(APIView):
     def post(self, request, *args, **kwargs):
         em = request.data.get('em', '')
         if not em or not isinstance(em, str):
-            return Response({'msg': 'error'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'msg': 'error'}, status=status.HTTP_401_UNAUTHORIZED)
         em = em.split('|')[0].replace('"','')
 
         detail = ShineCandidateDetail().get_status_detail(
             email=em, token=None)
         if not detail:
-            return Response({'msg': 'Not Found'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'msg': 'Not Found'}, status=status.HTTP_401_UNAUTHORIZED)
         code2 = detail.get('country_code', '91')
         candidate_id = detail.get('candidate_id', '')
         data = {'country_code': code2, 'candidate_id': candidate_id}
