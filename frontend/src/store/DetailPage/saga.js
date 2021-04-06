@@ -3,7 +3,7 @@ import Api from './Api';
 import {  
     mainCoursesFetched,
     fetchMainCourses,
-    fetchReviews,
+    fetchProductReviews,
     ReviewsFetched,
     submitReview,
     fetchRecommendedCourses,
@@ -142,7 +142,7 @@ export default function* WatchDetailPage() {
     // yield takeLatest(fetchOtherProviderCourses.type, otherProvidersCourses);
     yield takeLatest(fetchMainCourses.type, mainCoursesApi);
     yield takeLatest(fetchRecommendedCourses.type, recommendedCourses);
-    yield takeLatest(fetchReviews.type, productReviews);
+    yield takeLatest(fetchProductReviews.type, productReviews);
     yield takeLatest(submitReview.type, submitReviews);
     yield takeLatest(sendEnquireNow.type, SendEnquireNow);
     yield takeLatest(fetchAddToCartEnroll.type, AddToCart);

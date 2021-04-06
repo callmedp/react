@@ -9,7 +9,7 @@ const mainCoursesFetched = createAction('MAIN_COURSES_FETCHED');
 const fetchRecommendedCourses = createAction('FETCH_RECOMMENDED_COURSES');
 const recommendedCoursesFetched = createAction('RECOMMENDED_COURSES_FETCHED');
 
-const fetchReviews = createAction('FETCH_REVIEWS');
+const fetchProductReviews = createAction('FETCH_REVIEWS');
 const ReviewsFetched = createAction('REVIEWS_FETCHED');
 const submitReview = createAction('SUBMIT_REVIEW');
 
@@ -25,7 +25,7 @@ export {
     mainCoursesFetched,
     // fetchOtherProviderCourses,
     // OtherProviderCoursesFetched,
-    fetchReviews,
+    fetchProductReviews,
     ReviewsFetched,
     submitReview,
     fetchRecommendedCourses,

@@ -24,42 +24,6 @@ const HowItWorks = (props) => {
                             )
                         })
                     }
-                    {/* <li>
-                        <figure className="micon-how-works">
-                            <i className="micon-how-works1"></i>
-                        </figure>
-                        <div>
-                            <strong className="">Introduce yourself</strong>
-                            <p>Place order and upload your initial resume</p>
-                        </div>
-                    </li>
-                    <li>
-                        <figure className="micon-how-works">
-                            <i className="micon-how-works2"></i>
-                        </figure>
-                        <div>
-                            <strong>We Update</strong>
-                            <p>Our expert will update your profile</p>
-                        </div>
-                    </li>
-                    <li>
-                        <figure className="micon-how-works">
-                            <i className="micon-how-works3"></i>
-                        </figure>
-                        <div>
-                            <strong>Featured</strong>
-                            <p>Get featured on shine</p>
-                        </div>
-                    </li>
-                    <li>
-                        <figure className="micon-how-works">
-                            <i className="micon-how-works4"></i>
-                        </figure>
-                        <div>
-                            <strong>View</strong>
-                            <p>Get 10x recruiter views</p>
-                        </div>
-                    </li> */}
                 </ul>
             </div>
         </section>
