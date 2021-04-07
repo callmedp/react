@@ -11,6 +11,7 @@ export const getDetailPageActions = () => {
 }
 
 export const getDetailPageActionsMobile = () => {
+    console.log(fetchMainCourses);
     return [
         { action: fetchMainCourses, payload: { pageId: 1, device:'mobile'}},
         { action: fetchReviews, payload: { prdId: 1, page: 1, device: 'mobile' } },
