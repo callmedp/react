@@ -16,6 +16,7 @@ from .models import Question, Test
 from .utils import TestCacheUtil
 from shop.models import Category
 from wallet.models import ProductPoint
+from meta.views import Meta
 
 
 class VskillTestView(DetailView):
@@ -74,7 +75,14 @@ class VskillTestView(DetailView):
         lead_created = self.request.session.get('is_lead_created')
         context.update({'questions_list': questions_list,
                         'lead_created': lead_created})
+        context.update(self.get_meta_details())
         return context
+
+    def get_meta_details(self):
+        meta = Meta(
+            title="Practice Test: Start preparing for competitive exams and job interviews",
+        )
+        return {"meta": meta}
 
 
 class AssessmentLandingPage(TemplateView):
@@ -126,7 +134,14 @@ class AssessmentLandingPage(TemplateView):
         context.update({'test_list': self.get_test()})
         context.update({'test_prep': test_prep})
         context.update({'test_prep_children': test_prep_children})
+        context.update(self.get_meta_details())
         return context
+
+    def get_meta_details(self):
+        meta = Meta(
+            title="Practice Test: Start preparing for competitive exams and job interviews",
+        )
+        return {"meta": meta}
 
 
 class AssessmentCategoryPage(DetailView):
@@ -161,7 +176,14 @@ class AssessmentCategoryPage(DetailView):
         category = Category.objects.filter(**filter_dict).filter(
             id__in=cat_ids).order_by('created')
         context.update({'category': category})
+        context.update(self.get_meta_details())
         return context
+
+    def get_meta_details(self):
+        meta = Meta(
+            title="Practice Test: Start preparing for competitive exams and job interviews",
+        )
+        return {"meta": meta}
 
 
 class AssessmentSubCategoryPage(DetailView):
@@ -266,7 +288,14 @@ class AssessmentSubCategoryPage(DetailView):
         context.update({'breadcrumbs': self.get_breadcrumbs()})
         all_test = self.get_free_test()
         context.update({'all_test': all_test})
+        context.update(self.get_meta_details())
         return context
+
+    def get_meta_details(self):
+        meta = Meta(
+            title="Practice Test: Start preparing for competitive exams and job interviews",
+        )
+        return {"meta": meta}
 
 
 class AssessmentResultPage(TemplateView):
@@ -319,4 +348,11 @@ class AssessmentResultPage(TemplateView):
         questions_list = Question.objects.filter(test_id=test.pk)
         context.update({'questions_list': questions_list})
         context.update({'object': test})
+        context.update(self.get_meta_details())
         return context
+
+    def get_meta_details(self):
+        meta = Meta(
+            title="Practice Test: Start preparing for competitive exams and job interviews",
+        )
+        return {"meta": meta}
