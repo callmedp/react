@@ -84,35 +84,48 @@ const CourseDetailBanner = (props) => {
                     </ul>
                 </div>
             </div>
+            <ul className="m-course-stats mb-10 bdr-top pt-10">
+                <li>
+                    Type: <strong className="d-inline">Trial</strong>
+                </li>
+                <li>
+                    Level: <strong className="d-inline">Intermediate</strong>
+                </li>
+                <li>
+                    Certification: <strong className="d-inline">Yes</strong>
+                </li>
+            </ul>
             <div className="m-intro-video">
-                {
-                    product_detail?.prd_video && 
-                        <figure className="m-intro-video__img">
-                            <a href={`https://${product_detail?.prd_video}`} target="_blank">
-                                <img src={product_detail?.prd_vendor_img} alt="Intro Video" />
-                                <i className="micon-play-video"></i>
-                            </a>
-                        </figure>
-                }
+                <strong className="mb-10">Course intro</strong>
+                <div className="d-flex">
+                    {
+                        product_detail?.prd_video && 
+                            <figure className="m-intro-video__img">
+                                <a href={`https://${product_detail?.prd_video}`} target="_blank">
+                                    <img src={product_detail?.prd_vendor_img} alt="Intro Video" />
+                                    <i className="micon-play-video"></i>
+                                </a>
+                            </figure>
+                    }
 
-                {
-                    product_detail?.prd_about && 
-                    <>
-                        <p className="m-intro-video__content" dangerouslySetInnerHTML={{__html: product_detail?.prd_about?.replace(/<[^>]*>/g, '').slice(0, noOfWords) + "<a href='#'> ...Read More</a>" }} />
-                        {/* <span>
-                            {
-                                (!showAll && product_detail?.prd_about?.length > noOfWords) ? 
-                                        controlContent(" ...Read More", true) : ("") 
-                            } 
-                        </span> */}
-                    </>
-                }
+                    {
+                        product_detail?.prd_about && 
+                        <>
+                            <p className="m-intro-video__content" dangerouslySetInnerHTML={{__html: product_detail?.prd_about?.replace(/<[^>]*>/g, '').slice(0, noOfWords) + "<a href='#'> ...Read More</a>" }} />
+                            {/* <span>
+                                {
+                                    (!showAll && product_detail?.prd_about?.length > noOfWords) ? 
+                                            controlContent(" ...Read More", true) : ("") 
+                                } 
+                            </span> */}
+                        </>
+                    }
 
-                {/* {
-                    showAll ?
-                       <p className="m-intro-video__content" dangerouslySetInnerHTML={{__html: product_detail?.prd_about?.replace(/<[^>]*>/g, '').slice(noOfWords)}} /> : null
-                } */}
-
+                    {/* {
+                        showAll ?
+                        <p className="m-intro-video__content" dangerouslySetInnerHTML={{__html: product_detail?.prd_about?.replace(/<[^>]*>/g, '').slice(noOfWords)}} /> : null
+                    } */}
+                </div>
             </div>
             {
                 product_detail?.prd_service === 'course' &&
