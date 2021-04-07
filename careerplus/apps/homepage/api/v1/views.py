@@ -827,7 +827,8 @@ class TrendingCoursesAndSkillsAPI(PopularProductMixin, APIView):
         skill_category = request.GET.get('category_id', None)
         homepage = request.GET.get('homepage',False)
         course_only = request.GET.get('course_only', False)
-        candidate_id = request.session.get('candidate_id', None)
+        candidate_id = request.GET.get('candidate_id',None) or request.session.get('candidate_id', None)
+        # candidate_id = request.session.get('candidate_id', None)
 
         if candidate_id is None:
             product_obj, product_converstion_ratio, product_revenue_per_mile = PopularProductMixin().\
@@ -842,7 +843,7 @@ class TrendingCoursesAndSkillsAPI(PopularProductMixin, APIView):
             product_pks = list(product_converstion_ratio) + list(product_revenue_per_mile)
         else:
             #if user is logged in fetch trending courses from recommendation engine
-            product_pks = RecommendationMixin().get_courses_from_analytics_recommendation_db(candidate_id)
+            product_pks = RecommendationMixin().get_courses_and_certification_from_analytics_recommendation_db(candidate_id=candidate_id)['courses']
         tprds = SearchQuerySet().filter(id__in=product_pks, pTP__in=[0, 1, 3]).exclude(
             id__in=settings.EXCLUDE_SEARCH_PRODUCTS
         )
@@ -877,7 +878,7 @@ class TrendingCoursesAndSkillsAPI(PopularProductMixin, APIView):
             data.update({
                 'trendingSkills': [dict(y) for y in set(tuple(x.items()) for x in skills)]
             })
-
+        data.update({'recommended course ids':product_pks})
         return APIResponse(message='Trending Course Loaded', data=data, status=status.HTTP_200_OK)
 
 
