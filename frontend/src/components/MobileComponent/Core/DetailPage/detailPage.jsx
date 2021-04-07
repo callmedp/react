@@ -24,7 +24,8 @@ import EnquiryModal from '../../Common/Modals/EnquiryModal';
 import ReviewModal from '../../Common/Modals/ReviewModal';
 import '../DetailPage/detailPage.scss';
 import Aos from "aos";
-import { fetchReviews, fetchMainCourses } from 'store/DetailPage/actions';
+// import "aos/dist/aos.css";
+import { fetchProductReviews, fetchMainCourses } from 'store/DetailPage/actions';
 
 const DetailPage = (props) => {
 
@@ -40,7 +41,7 @@ const DetailPage = (props) => {
         try {
             if (!(window && window.config && window.config.isServerRendered)) {
                 new Promise((resolve, reject) => dispatch(fetchMainCourses({ payload: { id: prdId?.split('-')[1] },resolve, reject })));
-                new Promise((resolve, reject) => dispatch(fetchReviews({ payload: { prdId: prdId?.split('-')[1] }, resolve, reject })));
+                new Promise((resolve, reject) => dispatch(fetchProductReviews({ payload: { prdId: prdId?.split('-')[1], page: 1 }, resolve, reject })));
             }
             else {
                 delete window.config?.isServerRendered

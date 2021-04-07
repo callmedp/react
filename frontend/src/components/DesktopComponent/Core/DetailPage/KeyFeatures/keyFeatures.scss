@@ -9,12 +9,13 @@
         padding: 0;
         display: flex;
         flex-wrap: wrap;
+        width: 80%;
 
         li {
-            width: 30%;
+            width: 33%;
             position: relative;
             padding-left: 3rem;
-            margin-right: 20%;
+            margin-right: 15%;
             &:not(:last-child) {
                 margin-bottom: 1.3rem;
             }

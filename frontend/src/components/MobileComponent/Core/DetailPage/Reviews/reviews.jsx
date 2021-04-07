@@ -1,13 +1,16 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import Slider from "react-slick";
 // import 'slick-carousel/slick/slick.css';
 import {Link} from 'react-router-dom';
 import './reviews.scss';
+import { fetchProductReviews } from 'store/DetailPage/actions';
 
 const Reviews = (props) => {
-    const { showReviewModal } = props
-    const { prd_reviews : { prd_review_list } } = useSelector( store => store.reviews )
+    const { showReviewModal, prdId } = props
+    const { prd_reviews : { prd_review_list, prd_rv_total } } = useSelector( store => store.reviews )
+    const [pageId, updatePageId] = useState(2)
+    const dispatch = useDispatch()
 
     const settings = {
         dots: false,
@@ -19,6 +22,12 @@ const Reviews = (props) => {
         swipeToSlide: true,
         arrows: false,
         // variableWidth: true,
+        afterChange: function(index) {
+            if ((index % 7 === 0 && pageId < index ) && pageId <= prd_rv_total) {
+                new Promise((resolve, reject) => dispatch(fetchProductReviews({ payload: { prdId: prdId?.split('-')[1], page: pageId}, resolve, reject })));
+                updatePageId(pageId + 1);
+            }
+        }
     }
 
     const starRatings = (star, index) => {
@@ -54,33 +63,6 @@ const Reviews = (props) => {
                             )
                         })
                     }
-                    
-                    {/* <div className="m-card">
-                        <span className="m-rating">
-                            <em className="micon-fullstar"></em>
-                            <em className="micon-fullstar"></em>
-                            <em className="micon-fullstar"></em>
-                            <em className="micon-fullstar"></em>
-                            <em className="micon-blankstar"></em>
-                        </span>
-                        <strong className="m-card__name">Great service</strong>
-                        <p className="m-card__txt">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled.</p>
-                        <strong>By Gaurav Singh</strong>
-                        <span className="m-card__location">Dec 1, 2019</span>
-                    </div>
-                    <div className="m-card">
-                        <span className="m-rating">
-                            <em className="micon-fullstar"></em>
-                            <em className="micon-fullstar"></em>
-                            <em className="micon-fullstar"></em>
-                            <em className="micon-fullstar"></em>
-                            <em className="micon-blankstar"></em>
-                        </span>
-                        <strong className="m-card__name">Great service</strong>
-                        <p className="m-card__txt">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled.</p>
-                        <strong>By Manish Sharma</strong>
-                        <span className="m-card__location">Dec 1, 2019</span>
-                    </div> */}
                 </Slider>
             </div>
         </section>

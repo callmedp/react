@@ -3,7 +3,7 @@ import Carousel from 'react-bootstrap/Carousel';
 import { Link } from 'react-router-dom';
 import './Reviews.scss';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchReviews } from 'store/DetailPage/actions';
+import { fetchProductReviews } from 'store/DetailPage/actions';
 import ReviewModal from '../../../Common/Modals/reviewModal';
 import { startReviewLoader, stopReviewLoader } from 'store/Loader/actions/index';
 import Loader from '../../../Common/Loader/loader';
@@ -28,7 +28,7 @@ const LearnersStories = (props) => {
 
         try {
             dispatch(startReviewLoader())
-            await new Promise((resolve, reject) => dispatch(fetchReviews({ payload: { prdId: id, page: page, device: 'desktop' }, resolve, reject })));
+            await new Promise((resolve, reject) => dispatch(fetchProductReviews({ payload: { prdId: id, page: page, device: 'desktop' }, resolve, reject })));
             dispatch(stopReviewLoader())
         }
         catch (error) {
