@@ -6,7 +6,7 @@ header {
     &.course-detail-bg {
         background: url('#{$path}desktop/course-detail-bg.png') no-repeat center top;
         background-size: cover;
-        min-height: 40.7rem;
+        min-height: 45.7rem;
     }
 
     .detail-header-content {
@@ -151,6 +151,27 @@ header {
             }
         }
 
+        .course-stats-btm {
+            display: flex;
+            align-items: center;
+            margin-left: -1.5rem;
+
+            li {
+                font-size: 1.1rem;
+                color: $white;
+                padding: 0 1.5rem;
+
+                &:not(:first-child) {
+                    border-left: .1rem solid rgba($color: $white, $alpha: 0.4);
+                }
+
+                strong {
+                    font-size: 1.1rem;
+                    font-weight: 600;
+                }
+            }
+        }
+
         .intro-video {
             font-size: 1.3rem;
             display: flex;
@@ -210,22 +231,25 @@ header {
 
             &__content {
                 flex: 1;
+                color: #ddd;
                 a {
                     font-weight: 700;
-                    color: $white;
+                    color: #ddd;
                 }
             }
         }
     }
 
     .banner-detail {
-        position: relative;
-        top: 9.5rem;
+        position: absolute;
+        top: 11.5rem;
         right: 3rem;
-        width: 35rem;
+        width: 37rem;
         margin-left: 12rem;
         border-radius: .4rem;
         overflow: hidden;
+        z-index: 9999;
+        padding: 0 1.5rem 1.5rem 1.5rem; 
 
         .course-enrol {
             position: relative;
@@ -255,7 +279,7 @@ header {
                 flex-direction: column;
                 justify-content: center;
                 align-items: center;
-                strong {
+                .price-taxes {
                     font-size: 2.4rem;
                     color: $gray-100;
 
@@ -264,24 +288,43 @@ header {
                         margin-right: .5rem;
                     }
 
-                    del {
-                        font-size: 1.8rem;
+                    .taxes {
+                        font-size: 1.2rem;
                         font-weight: 400;
+
+                    }
+                }
+
+                .price-offer {
+                    font-size: 1.6rem;
+                    color: $gray-100;
+                    font-weight: 400;
+
+                    del {
+                        font-size: 1.6rem;
+                        font-weight: 400;
+                        margin-right: 1rem;
     
                         &::before {
                             content: '\20B9';
                             margin-right: .5rem;
                         }
                     }
+
+                    .offer {
+                        color: $green;
+                    }
                 }
 
                 .btn {
-                    padding: 1rem 4rem;
+                    font-size: 1.3rem;
+                    padding: 1rem 2rem;
                 }
 
                 .btn-secondary {
                     color: $gray-100;
-                    padding: 1rem 4.5rem;
+                    padding: 1rem 2rem;
+                    font-size: 1.3rem;
                 }
             }
 

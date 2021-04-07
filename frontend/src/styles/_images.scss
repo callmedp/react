@@ -226,3 +226,23 @@
   background: $sprite;
   @include icon-inblock(85px, 72px, -939px -35px);
 }
+
+.icon-question-no {
+  background: $sprite;
+  @include icon-inblock(21px, 27px, -405px -174px);
+}
+
+.icon-how-works5 {
+  background: $sprite;
+  @include icon-inblock(26px, 26px, -447px -177px);
+}
+
+.icon-how-works6 {
+  background: $sprite;
+  @include icon-inblock(28px, 36px, -495px -177px);
+}
+
+.icon-how-works7 {
+  background: $sprite;
+  @include icon-inblock(33px, 42px, -538px -176px);
+}

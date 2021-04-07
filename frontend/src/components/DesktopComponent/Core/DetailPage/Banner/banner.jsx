@@ -8,6 +8,8 @@ import { fetchAddToCartEnroll } from 'store/DetailPage/actions';
 import Loader from '../../../Common/Loader/loader';
 import { siteDomain } from 'utils/domains';
 import { getStudyMode } from 'utils/detailPageUtils/studyMode';
+import ComboIncludes from '../ComboIncludes/comboIncludes';
+import FrequentlyBought from '../FrequentlyBought/frequentlyBought';
 
 const BannerCourseDetail = (props) => {
     const {product_detail} = props;
@@ -58,7 +60,7 @@ const BannerCourseDetail = (props) => {
             <header className="container-fluid pos-rel course-detail-bg">
                     <div className="row">
                         <div className="container detail-header-content">
-                            <div className="flex-1">
+                            <div className="w-65">
                                 <Breadcrumb>
                                     {
                                         product_detail?.breadcrumbs?.map((bread, inx) => {
@@ -101,7 +103,7 @@ const BannerCourseDetail = (props) => {
                                         </div>
                                     </div>
                                 </div>
-                                <ul className="course-stats mt-30 mb-30">
+                                <ul className="course-stats mt-30 mb-20">
                                     <li>
                                         <strong>By {product_detail?.prd_vendor}</strong> <a onClick={() => window.location.href=`${siteDomain}/search/results/?fvid=${product_detail?.pPv}`}>View all</a> courses by {product_detail?.prd_vendor}  
                                     </li>
@@ -131,6 +133,17 @@ const BannerCourseDetail = (props) => {
                                             </p>
                                         </li>
                                     }
+                                </ul>
+                                <ul className="course-stats-btm mt-20 mb-20">
+                                    <li>
+                                        Course Type: <strong>Trial</strong>
+                                    </li>
+                                    <li>
+                                        Course level: <strong>Intermediate</strong>
+                                    </li>
+                                    <li>
+                                        Certification: <strong>Yes</strong>
+                                    </li>
                                 </ul>
                                 <div className="intro-video">
                                     <figure className="intro-video__img">
@@ -179,10 +192,12 @@ const BannerCourseDetail = (props) => {
                                         </div>
                                             {varChecked?.id }{ product_detail?.selected_var?.id}
                                         <div className="course-enrol__price">
-                                            <strong className="mt-20 mb-10">{varChecked?.inr_price || product_detail?.var_list[0]?.inr_price}/- 
-                                            <del>{varChecked?.id ? discountPrice : product_detail?.var_list[0]?.fake_inr_price}/-</del></strong>
-                                            <a onClick={() => goToCart(varChecked)} className="btn btn-secondary mt-10">Enroll now</a>
-                                            <LinkScroll to={"enquire-now"} className="btn btn-outline-primary mt-10">Enquire now</LinkScroll>
+                                            <strong className="price-taxes mt-20 mb-10">{varChecked?.inr_price || product_detail?.var_list[0]?.inr_price}/-  <span className="taxes">(+taxes)</span></strong>
+                                            <strong className="price-offer mt-0 mb-10"><del>{varChecked?.id ? discountPrice : product_detail?.var_list[0]?.fake_inr_price}/- </del> <span className="offer">30% Off</span></strong>
+                                            <p className="d-flex mb-0">
+                                                <a onClick={() => goToCart(varChecked)} className="btn btn-secondary mt-10 mr-10">Enroll now</a>
+                                                <LinkScroll to={"enquire-now"} className="btn btn-outline-primary mt-10">Enquire now</LinkScroll>
+                                            </p>
                                         </div>
                                         <div className="course-enrol__offer lightblue-bg2">
                                             <strong className="mt-10 mb-5">Offers</strong>
@@ -203,6 +218,8 @@ const BannerCourseDetail = (props) => {
                                             {/* <LinkScroll to={"#"}>+2 more</LinkScroll> */}
                                         </div>
                                     </div>
+                                    <ComboIncludes />
+                                    <FrequentlyBought />
                                 </div>
                             }
                         </div>
