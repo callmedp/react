@@ -38,7 +38,7 @@ const BannerCourseDetail = (props) => {
         let cartItems = {};
 
         if(value.id) cartItems = {'prod_id': product_detail?.pPv, 'cart_type': 'cart', 'cv_id': value.id};
-        else cartItems = {'prod_id': product_detail?.pPv, 'cart_type': 'cart', 'cv_id': product_detail?.selected_var.id};
+        else cartItems = {'prod_id': product_detail?.pPv, 'cart_type': 'cart', 'cv_id': product_detail?.selected_var?.id};
 
         try {
             dispatch(startMainCourseCartLoader());
@@ -117,7 +117,7 @@ const BannerCourseDetail = (props) => {
                                         <li className="d-flex align-items-center">
                                             <figure className="icon-course-duration mr-10"></figure>
                                             <p>
-                                                Course Duration <strong>{varChecked?.dur_days || product_detail?.selected_var.dur_days} Days</strong>
+                                                Course Duration <strong>{varChecked?.dur_days || product_detail?.selected_var?.dur_days || '--'} Days</strong>
                                             </p>
                                         </li>
                                     : ""}

@@ -46,8 +46,8 @@ import imgkit
 
 
 class CandidateCreateView(CreateAPIView):
-    # authentication_classes = (ShineUserAuthentication,)
-    # permission_classes = (IsAuthenticated,)
+    authentication_classes = (ShineUserAuthentication,)
+    permission_classes = (IsAuthenticated,)
     queryset = Candidate.objects.all()
     serializer_class = CandidateSerializer
     def get_serializer(self, *args, **kwargs):
@@ -77,7 +77,7 @@ class CandidateRetrieveUpdateView(RetrieveUpdateDestroyAPIView):
         ]
     }
     """
-    # authentication_classes = (ShineUserAuthentication,)
+    authentication_classes = (ShineUserAuthentication,)
     permission_classes = (IsObjectOwner,)
     lookup_field = 'candidate_id'
     lookup_url_kwarg = 'pk'
