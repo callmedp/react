@@ -708,7 +708,7 @@ class DownloadMonthlyWriterInvoiceView(UserGroupMixin,TemplateView):
         y=d.split('-')[1]
         month_number = str(strptime(m,'%B').tm_mon)
         u = self.request.user.pk
-        path= 'invoice/user/'
+        self.path= 'invoice/user/'
         path=str(self.path+ str(u)+'/'+month_number+'_'+y)
         try:
             bucket = storage.Client().get_bucket(settings.GCP_INVOICE_BUCKET)
