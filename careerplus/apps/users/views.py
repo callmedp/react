@@ -707,7 +707,6 @@ class DownloadMonthlyWriterInvoiceView(UserGroupMixin,TemplateView):
         m=d.split('-')[0]
         y=d.split('-')[1]
         month_number = str(strptime(m,'%B').tm_mon)
-        month_number = 12
         u = self.request.user.pk
         path= 'invoice/user/'
         path=str(self.path+ str(u)+'/'+month_number+'_'+y)
