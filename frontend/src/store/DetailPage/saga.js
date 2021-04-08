@@ -76,7 +76,9 @@ function* productReviews(action){
                 item.prd_reviews.prd_review_list = reviewsList.slice();
             }
         }
-        yield put(ReviewsFetched({ ...item }))
+        if(!!payload && payload.device){
+            yield put(ReviewsFetched({ ...item, device: payload.device }))
+        }
         return resolve(item);
     }
     catch(e){

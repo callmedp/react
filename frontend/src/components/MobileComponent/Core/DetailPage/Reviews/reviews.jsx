@@ -8,7 +8,7 @@ import { fetchProductReviews } from 'store/DetailPage/actions';
 
 const Reviews = (props) => {
     const { showReviewModal, prdId } = props
-    const { prd_reviews : { prd_review_list, prd_rv_total } } = useSelector( store => store.reviews )
+    const { prd_review_list, prd_rv_total } = useSelector( store => store.reviews )
     const [pageId, updatePageId] = useState(2)
     const dispatch = useDispatch()
 
@@ -24,7 +24,7 @@ const Reviews = (props) => {
         // variableWidth: true,
         afterChange: function(index) {
             if ((index % 7 === 0 && pageId < index ) && pageId <= prd_rv_total) {
-                new Promise((resolve, reject) => dispatch(fetchProductReviews({ payload: { prdId: prdId?.split('-')[1], page: pageId}, resolve, reject })));
+                new Promise((resolve, reject) => dispatch(fetchProductReviews({ payload: { prdId: prdId?.split('-')[1], page: pageId, device: 'mobile'}, resolve, reject })));
                 updatePageId(pageId + 1);
             }
         }
