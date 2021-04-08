@@ -1,28 +1,17 @@
 import React from 'react';
 import './frequentlyBought.scss';
-import {Link} from 'react-router-dom';
 
 const FrequentlyBought = (props) => {
-    const {frqntProd, addFrqntProd, fbt_list} = props;
+    const {addFrqntProd, fbt_list} = props;
+    const frqntProd = props.frqntProd;
 
-    // const fbt = props.frqntProd;
-
-    const selectFrqtProd = () => {
-        fbt_list.map((item) => {
-            if (!frqntProd.length) {
-                frqntProd.push(item);
-                addFrqntProd(frqntProd);
-            }
-            else {
-                if (frqntProd.filter((prd) => { return prd.id == item.id }).length) {
-                    addFrqntProd(frqntProd.filter((prd) => { return prd.id != item.id }));
-                }
-                else {
-                    frqntProd.push(item);
-                    addFrqntProd(frqntProd);
-                }
-            }
-        })
+    const toggleProduct = (event, item) => {
+        if(event.target.checked) {
+            addFrqntProd([...frqntProd, item]);
+        }
+        else {
+            addFrqntProd(frqntProd => frqntProd.filter(prd => prd.id != event.target.id));
+        }
     }
 
     return (
@@ -33,17 +22,14 @@ const FrequentlyBought = (props) => {
                     fbt_list?.map((fbt_data, indx) => {
                         return (
                             <li key={indx}>
-                                <label><input type="checkbox" name={`fbt${fbt_data.id}`} onChange={() => selectFrqtProd()}/> {fbt_data.heading} <span className="ml-auto">{fbt_data.inr_price}/-</span></label>
+                                <label>
+                                    <input type="checkbox" id={fbt_data.id} name={`fbt${fbt_data.id}`} onClick={(event) => toggleProduct(event, fbt_data)}/> {fbt_data.heading}
+                                    <span className="ml-auto">{fbt_data.inr_price}/-</span>
+                                </label>
                             </li>
                         )
                     })
                 }
-                {/* <li>
-                    <label><input type="checkbox" /> Cover Letter <span className="ml-auto">1,500/-</span></label>
-                </li> */}
-                {/* <li>
-                    <label><input type="checkbox" /> Second Regular resume <span className="ml-auto">1,500/-</span></label>
-                </li> */}
             </ul>
         </div>
     )

@@ -30,6 +30,7 @@ const DetailPage = (props) => {
     const { mainCourseLoader } = useSelector(store => store.loader);
     const [showStickyNav, setShowStickyNav] = useState(false);
     const [varChecked, changeChecked] = useState({});
+    const [frqntProd, addFrqntProd] = useState([]);
 
     useEffect( () => {
         handleEffects();
@@ -72,10 +73,10 @@ const DetailPage = (props) => {
                         outline={product_detail?.chapter ? true : false}
                         faq = {product_detail?.faq ? true : false}
                         product_detail={product_detail} prdId={id} varChecked={varChecked}
+                        frqntProd={frqntProd}
                         />
             }
-            {/* <StickyNavDetail/> */}
-            <BannerCourseDetail product_detail={product_detail} varChecked={varChecked} changeChecked={changeChecked}/>
+            <BannerCourseDetail frqntProd={frqntProd} addFrqntProd={addFrqntProd} product_detail={product_detail} varChecked={varChecked} changeChecked={changeChecked}/>
             {product_detail?.prd_uget && <KeyFeatures prd_uget={product_detail?.prd_uget}/>}
             {
                  product_detail?.chapter && 

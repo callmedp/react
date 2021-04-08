@@ -10,7 +10,7 @@ import { fetchAddToCartEnroll } from 'store/DetailPage/actions';
 import Loader from '../../../Common/Loader/loader';
 
 const StickyNav = (props) => {
-    const { product_detail, varChecked, outline, faq } = props;
+    const { product_detail, varChecked, outline, faq, frqntProd } = props;
     const dispatch = useDispatch();
     const [tab, setTab] = useState('1');
     const { mainCourseCartLoader } = useSelector(store => store.loader);
@@ -34,6 +34,14 @@ const StickyNav = (props) => {
             dispatch(stopMainCourseCartLoader());
         }
     }
+
+    const getProductPrice = (product) => {
+        let price = 0;
+        price += frqntProd.reduce((previousValue, currentValue) => {
+          return parseFloat(previousValue) + parseFloat(currentValue.inr_price);
+        }, 0);
+        return parseFloat(product) + price;
+    };
 
     return(
         <>
@@ -67,7 +75,7 @@ const StickyNav = (props) => {
                         </Nav>
                     </div>
                     <Form inline className="course-enrol-sticky">
-                        <strong className="mt-20">{varChecked?.inr_price || product_detail?.var_list[0]?.inr_price}
+                        <strong className="mt-20">{getProductPrice(varChecked?.inr_price || product_detail?.var_list[0]?.inr_price)}
                         <del>{varChecked?.id ? varChecked.fake_inr_price : product_detail?.selected_var?.fake_inr_price}</del>
                         </strong>
                         <span className="d-flex">
