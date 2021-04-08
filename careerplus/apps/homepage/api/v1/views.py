@@ -1081,10 +1081,12 @@ class PopularInDemandProductsAPI(APIView):
                 certifications = recommended.get('assessment',None)
                 data.update({'recommended_assessments':certifications})
                 certifications = SearchQuerySet().filter(id__in=certifications, pTP__in=[0, 1, 3]).exclude(
-                id__in=settings.EXCLUDE_SEARCH_PRODUCTS
-            )
-                paginated_data = offset_paginator(page, certifications,size=4)                                                                    
-                data.update({'certifications':paginated_data["data"]})
+                id__in=settings.EXCLUDE_SEARCH_PRODUCTS)
+                if certifications:
+                    paginated_data = offset_paginator(page, certifications,size=4)                                            
+                    certifications = paginated_data["data"]
+                    certifications_data = ProductMixin().get_course_json(certifications)
+                    data.update({ 'certifications': certifications_data})          
             elif tab_type == 'master':
                 courses = recommended.get('courses',None)
                 data.update({'recommended_course_ids':courses})
@@ -1104,7 +1106,7 @@ class PopularInDemandProductsAPI(APIView):
                     'has_next':True if (paginated_data['total_pages']-paginated_data['current_page'])>0 else False
                     }
             data.update({'page':page_info})
-        return APIResponse(message='Popular certifications and courses Loaded', data=data, status=status.HTTP_200_OK)
+        return APIResponse(message='Popular in demand certifications and courses Loaded', data=data, status=status.HTTP_200_OK)
 
 class JobAssistanceAndLatestBlogAPI(APIView):
     permission_classes = (permissions.AllowAny,)
