@@ -22,10 +22,12 @@ import { fetchMainCourses } from 'store/DetailPage/actions';
 import { useSelector, useDispatch } from 'react-redux';
 import { startMainCourseLoader, stopMainCourseLoader } from 'store/Loader/actions/index';
 import Loader from '../../Common/Loader/loader';
+import MetaContent from "../../Common/MetaContent/metaContent";
 
 const DetailPage = (props) => {
     const dispatch = useDispatch();
     const {product_detail, skill} = useSelector(store => store?.mainCourses);
+    const meta_tags = product_detail?.meta;
     const {match: {params: {id}}, history} = props;
     const { mainCourseLoader } = useSelector(store => store.loader);
     const [showStickyNav, setShowStickyNav] = useState(false);
@@ -67,6 +69,8 @@ const DetailPage = (props) => {
     return (
         <div>
             { mainCourseLoader ? <Loader /> : ''}
+            { meta_tags && <MetaContent meta_tags={meta_tags} /> }
+            
             <Header />
             {
                     showStickyNav && <StickyNav 

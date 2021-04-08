@@ -26,6 +26,7 @@ import EnquiryModal from '../../Common/Modals/EnquiryModal';
 import ReviewModal from '../../Common/Modals/ReviewModal';
 import '../DetailPage/detailPage.scss';
 import Aos from "aos";
+import MetaContent from '../../Common/MetaContent/metaContent';
 // import "aos/dist/aos.css";
 import { fetchProductReviews, fetchMainCourses } from 'store/DetailPage/actions';
 
@@ -35,6 +36,7 @@ const DetailPage = (props) => {
     const prdId = props.match.params.id;
     const dispatch = useDispatch()
     const { product_detail, skill } = useSelector(store => store?.mainCourses);
+    const meta_tags = product_detail?.meta;
     const [enquiryForm, setEnquiryForm] = useState(false);
     const [varChecked, changeChecked] = useState({});
     const [showStickyNav, setShowStickyNav] = useState(false);
@@ -73,6 +75,7 @@ const DetailPage = (props) => {
 
     return(
         <div>
+            { meta_tags && <MetaContent meta_tags={meta_tags} /> }
             <MenuNav />
             {
                 reviewModal ? <ReviewModal showReviewModal={showReviewModal} prdId={prdId}/> :<>

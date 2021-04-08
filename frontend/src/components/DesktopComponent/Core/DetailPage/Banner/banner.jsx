@@ -81,13 +81,13 @@ const BannerCourseDetail = (props) => {
                                         })
                                     }
                                 </Breadcrumb>
-                                <div className="detail-heading" data-aos="fade-right">
-                                    <div className="detail-heading__icon">
+                                <div className="detail-heading" data-aos="fade-right" itemprop="Course" itemscope itemtype="https://schema.org/Course">
+                                    <div className="detail-heading__icon" itemprop="image">
                                         <figure>
                                             <img src={product_detail?.prd_img} alt={product_detail?.prd_img_alt} />
                                         </figure>
                                     </div>
-                                    <div className="detail-heading__content">
+                                    <div className="detail-heading__content" itemprop="name">
                                         { product_detail?.pTg && <span className="flag-yellowB">{product_detail?.pTg}</span> }
                                         <h1 className="heading1">
                                             {product_detail?.prd_H1}
@@ -97,7 +97,7 @@ const BannerCourseDetail = (props) => {
                                                 {
                                                     product_detail?.prd_rating_star?.map((star, index) => starRatings(star, index))
                                                 }
-                                                <span>{product_detail?.prd_rating?.toFixed()}/5</span>
+                                                <span itemprop="ratingValue">{product_detail?.prd_rating?.toFixed()}/5</span>
                                             </span>
                                             {
                                                 <>
@@ -118,7 +118,7 @@ const BannerCourseDetail = (props) => {
                                 </div>
                                 <ul className="course-stats mt-30 mb-20">
                                     <li>
-                                        <strong>By {product_detail?.prd_vendor}</strong> <a onClick={() => window.location.href=`${siteDomain}/search/results/?fvid=${product_detail?.pPv}`}>View all</a> courses by {product_detail?.prd_vendor}  
+                                        <strong>By <span itemprop="provider">{product_detail?.prd_vendor}</span></strong> <a onClick={() => window.location.href=`${siteDomain}/search/results/?fvid=${product_detail?.pPv}`}>View all</a> courses by {product_detail?.prd_vendor}  
                                     </li>
 
                                     {
@@ -169,7 +169,7 @@ const BannerCourseDetail = (props) => {
                                         </a>
                                     </figure>
 
-                                    <span className="intro-video__content">
+                                    <span className="intro-video__content" itemprop="embedUrl">
                                         { product_detail?.prd_about ? <div id="module" className="row about-course">
                                             {product_detail?.prd_about.replace(regex, '')?.length > reqLength ? (
                                                 <input type="checkbox" className="read-more-state" id="post-10" ref={inputCheckbox} itemProp="about" />
@@ -177,7 +177,7 @@ const BannerCourseDetail = (props) => {
                                                     ""
                                                     )}
                                                     
-                                            <span className="read-more-wrap">
+                                            <span className="read-more-wrap" itemprop="description">
                                                 <span dangerouslySetInnerHTML={{__html:product_detail?.prd_about?.replace(regex, '').slice(0, reqLength)}} />
                                                 <span className="read-more-target" dangerouslySetInnerHTML={{__html: product_detail?.prd_about?.replace(regex, '').slice(reqLength)}} />
                                             </span>

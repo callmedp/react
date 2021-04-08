@@ -53,17 +53,17 @@ const LearnersStories = (props) => {
                     {
                         reviewData?.map((review, idx) => {
                             return ( 
-                                <div className="col-sm-4" key={idx}>
+                                <div className="col-sm-4" key={idx} itemprop="review" itemscope itemtype="https://schema.org/Review">
                                     <div className="card">
-                                        <span className="rating">
+                                        <span className="rating" itemprop="ratingValue">
                                             {
                                                 review?.rating?.map((star, index) => starRatings(star, index))
                                             }
                                         </span>
-                                        <strong className="card__name">{review?.title}</strong>
-                                        <p className="card__txt">{review?.content}</p>
-                                        <strong>{ review?.user_name ? review?.user_name : 'Anonymous' }</strong>
-                                        <span className="card__location">{review?.created}</span>
+                                        <strong className="card__name" itemprop="name">{review?.title}</strong>
+                                        <p className="card__txt" itemprop="reviewBody">{review?.content}</p>
+                                        <strong itemprop="author">{ review?.user_name ? review?.user_name : 'Anonymous' }</strong>
+                                        <span className="card__location" itemprop="datePublished">{review?.created}</span>
                                     </div>
                                 </div>
                             )

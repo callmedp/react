@@ -27,15 +27,15 @@ const CourseDetailBanner = (props) => {
     }, [prdId])
 
     return (
-        <div className="m-detail-header ml-15 mt-10">
+        <div className="m-detail-header ml-15 mt-10" itemprop="Course" itemscope itemtype="https://schema.org/Course">
 
             <div className="m-detail-heading">
-                <div className="m-detail-heading__icon mt-30">
+                <div className="m-detail-heading__icon mt-30" itemprop="image">
                     <figure>
                         <img src={ product_detail?.prd_img } alt={ product_detail?.prd_img_alt } />
                     </figure>
                 </div>
-                <div className="m-detail-heading__content">
+                <div className="m-detail-heading__content" itemprop="name">
                     { product_detail?.pTg && <span className="m-flag-yellowB">{ product_detail.pTg }</span> }
                     <h1 className="m-heading1 mt-5">
                         { product_detail?.prd_H1 }
@@ -44,8 +44,8 @@ const CourseDetailBanner = (props) => {
                         {
                             product_detail?.prd_rating_star?.map((star, index) => starRatings(star, index))
                         }
-                        <span>{ product_detail?.prd_rating?.toFixed() }/5</span>
-                        <span>By { product_detail?.prd_vendor }</span>
+                        <span itemprop="ratingValue">{ product_detail?.prd_rating?.toFixed() }/5</span>
+                        <span>By <span itemprop="provider">{ product_detail?.prd_vendor }</span></span>
                     </span>
                     <div className="d-flex mt-10">
                         {
@@ -95,7 +95,7 @@ const CourseDetailBanner = (props) => {
                     Certification: <strong className="d-inline">Yes</strong>
                 </li>
             </ul>
-            <div className="m-intro-video">
+            <div className="m-intro-video" itemprop="embedUrl">
                 <strong className="mb-10">Course intro</strong>
                 <div className="d-flex">
                     {
@@ -111,7 +111,7 @@ const CourseDetailBanner = (props) => {
                     {
                         product_detail?.prd_about && 
                         <>
-                            <p className="m-intro-video__content" dangerouslySetInnerHTML={{__html: product_detail?.prd_about?.replace(/<[^>]*>/g, '').slice(0, noOfWords) + "<a href='#'> ...Read More</a>" }} />
+                            <p itemprop="description" className="m-intro-video__content" dangerouslySetInnerHTML={{__html: product_detail?.prd_about?.replace(/<[^>]*>/g, '').slice(0, noOfWords) + "<a href='#'> ...Read More</a>" }} />
                             {/* <span>
                                 {
                                     (!showAll && product_detail?.prd_about?.length > noOfWords) ? 
