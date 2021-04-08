@@ -14,7 +14,7 @@ const LearnersStories = (props) => {
     const {id, product_detail} = props;
     const [reviewModal, showReviewModal] = useState(false);
     const { reviewLoader } = useSelector(store => store.loader);
-    const { prd_reviews : { prd_review_list, prd_rv_current_page, prd_rv_has_next, prd_rv_has_prev } } = useSelector( store => store.reviews );
+    const { prd_review_list, prd_rv_current_page, prd_rv_has_next, prd_rv_has_prev } = useSelector( store => store.reviews );
 
     const dispatch = useDispatch();
     let currentPage = 1;

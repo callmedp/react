@@ -36,13 +36,41 @@ export const RecommendedCoursesReducer = (state = recommendedCoursesState, actio
     }
 }
 
-const reviewsState = {
-    prd_reviews: {}
+const reviewsState = { 
+    prd_review_list : []
+}
+
+const appendReviews = (state, { payload }) => {
+    if (payload.device === 'mobile' || payload.device === 'desktop') {
+        if (!!payload.prd_reviews) {
+            let reviews;
+            let newReviews;
+
+            newReviews = {
+                prd_review_list : state.prd_review_list.concat(payload.prd_reviews.prd_review_list)
+            }
+            reviews = {
+                ...payload.prd_reviews,
+                ...newReviews
+            }
+            return { ...reviews };
+        }
+        else {
+            return {}
+        }
+    }
+    
+    else{
+        return {}
+    }
 }
 
 export const ProductReviewsReducer = (state = reviewsState, action) => {
     switch (action.type) {
-        case ReviewsFetched.type: return { ...reviewsState, ...action.payload  }
+        // case ReviewsFetched.type: return { ...reviewsState, ...action.payload  }
+        case ReviewsFetched.type: {
+            return { ...reviewsState, ...appendReviews(state, action) }
+        }
         default: return state;
     }
 }

@@ -43,7 +43,7 @@ const DetailPage = (props) => {
         try {
             if (!(window && window.config && window.config.isServerRendered)) {
                 new Promise((resolve, reject) => dispatch(fetchMainCourses({ payload: { id: prdId?.split('-')[1] },resolve, reject })));
-                new Promise((resolve, reject) => dispatch(fetchProductReviews({ payload: { prdId: prdId?.split('-')[1], page: 1 }, resolve, reject })));
+                new Promise((resolve, reject) => dispatch(fetchProductReviews({ payload: { prdId: prdId?.split('-')[1], page: 1, device: 'mobile'}, resolve, reject })));
             }
             else {
                 delete window.config?.isServerRendered
@@ -109,7 +109,7 @@ const DetailPage = (props) => {
                 { product_detail?.faq && <FAQ faq_list={product_detail?.faq_list}/> }
                 <Reviews showReviewModal={showReviewModal} prdId={prdId}/>
                 { skill && <CoursesMayLike product_id={prdId} skill={skill}/> }
-                <CTA setEnquiryForm={setEnquiryForm} />
+                {/* <CTA setEnquiryForm={setEnquiryForm} /> */}
                 {
                     enquiryForm ? <EnquiryModal setEnquiryForm={setEnquiryForm} page="detailPage"/> : null
                 }

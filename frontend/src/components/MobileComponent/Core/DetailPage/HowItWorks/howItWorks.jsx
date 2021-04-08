@@ -14,7 +14,7 @@ const HowItWorks = (props) => {
                             return (
                                 <li key={index}>
                                     <figure className="micon-how-works">
-                                        <i className="micon-how-works1"></i>
+                                        <i className={`micon-how-works${index + 1}`}></i>
                                     </figure>
                                     <div>
                                         <strong className="">{article.heading}</strong>
