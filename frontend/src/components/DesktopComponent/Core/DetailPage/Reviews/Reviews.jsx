@@ -5,7 +5,7 @@ import './Reviews.scss';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchProductReviews } from 'store/DetailPage/actions';
 import ReviewModal from '../../../Common/Modals/reviewModal';
-import { startReviewLoader, stopReviewLoader } from 'store/Loader/actions/index';
+// import { startReviewLoader, stopReviewLoader } from 'store/Loader/actions/index';
 import Loader from '../../../Common/Loader/loader';
 import { getCandidateId } from 'utils/storage.js';
 import { siteDomain } from 'utils/domains';
@@ -27,14 +27,9 @@ const LearnersStories = (props) => {
         currentPage = page;
 
         try {
-            dispatch(startReviewLoader())
             await new Promise((resolve, reject) => dispatch(fetchProductReviews({ payload: { prdId: id, page: page, device: 'desktop' }, resolve, reject })));
-            dispatch(stopReviewLoader())
         }
-        catch (error) {
-            dispatch(stopReviewLoader())
-        }
-        dispatch(stopReviewLoader());
+        catch (error) {}
     };
 
     const starRatings = (star, index) => {
@@ -46,8 +41,9 @@ const LearnersStories = (props) => {
     }
 
     const handleSelect = (selectedIndex, e) => {
-        if(selectedIndex === 0 && e.target.className === 'carousel-control-next-icon' && prd_rv_has_next) handleEffects(prd_rv_current_page+1);
-        if(selectedIndex === 0 && e.target.className === 'carousel-control-prev-icon' && prd_rv_has_prev) handleEffects(prd_rv_current_page-1);
+        console.log(selectedIndex);
+        if((selectedIndex % 2 === 0) && e.target.className === 'carousel-control-next-icon' && prd_rv_has_next) handleEffects(prd_rv_current_page+1);
+        // if(selectedIndex === 2 && e.target.className === 'carousel-control-prev-icon' && prd_rv_has_prev) handleEffects(prd_rv_current_page-1);
     }
 
     const getReviews = (reviewData, idx) => {
