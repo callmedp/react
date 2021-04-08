@@ -174,10 +174,12 @@ class ProductInformationAPIMixin(object):
             return recommendation
 
     def is_combos(self, product):
+        combo = {'combo': False}
         combos = json.loads(product.pCmbs)
         if combos['combo']:
-            return True
-        return False
+            combo.update({ 'combo': True, 'combo_list': combos['combo_list'] })
+            return combo
+        return combo
 
     def get_combos(self, product):
         combo = {'combo': False}
@@ -623,8 +625,7 @@ class ProductInformationAPIMixin(object):
             pvrs_data = self.get_sorted_products(pvrs_data)
             context.update(pvrs_data)
 
-        if self.is_combos(sqs):
-            context.update(json.loads(sqs.pCmbs))
+        context.update(self.is_combos(sqs))
 
         context.update(json.loads(sqs.pFBT))
         # update get fake price
