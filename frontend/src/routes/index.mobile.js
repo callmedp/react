@@ -13,6 +13,7 @@ import HomePageContainer from 'components/MobileComponent/Core/HomePage/homePage
 import { getHomepageActionsMobile } from "apiHandler/homepageApi";
 import DetailPageContainer from 'components/MobileComponent/Core/DetailPage/detailPage';
 import { getDetailPageActionsMobile } from "apiHandler/detailsPageApi";
+import CourseDetailPage1 from "components/MobileComponent/Core/DetailPage/detailPage1";
 
 const MobileAppRouter = () => (
 
@@ -48,6 +49,11 @@ export const routes = [
         component: DetailPageContainer,
         actionGroup: getDetailPageActionsMobile,
         exact: true,
+    },
+
+    {
+        path : '/coursedetailPage1',
+        component : CourseDetailPage1
     },
     {
         path: '/dashboard/:name?',

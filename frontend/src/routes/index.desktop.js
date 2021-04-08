@@ -11,6 +11,7 @@ import HomePageContainer from 'components/DesktopComponent/Core/HomePage/homePag
 import RouteWithSubRoutes from './route';
 import { getHomepageActions } from "apiHandler/homepageApi";
 import DetailPageContainer from 'components/DesktopComponent/Core/DetailPage/detailPage';
+import CourseDetailPage1 from "components/DesktopComponent/Core/DetailPage/detailPage1";
 
 const DesktopAppRouter = () => (
     <div>
@@ -53,6 +54,10 @@ export const routes = [
         component: DetailPageContainer,
         actionGroup: getDetailPageActions,
         exact: true
+    },
+    {
+        path : '/coursedetailPage1',
+        component : CourseDetailPage1
     },
     {
         //keep this at the bottom

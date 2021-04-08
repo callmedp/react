@@ -17,6 +17,8 @@ import OtherProviders from './OtherProviders/otherProviders';
 import Reviews from './Reviews/reviews';
 import FAQ from './FAQ/faq';
 import CoursesMayLike from './CoursesMayLike/coursesMayLike';
+import ComboIncludes from './ComboIncludes/comboIncludes';
+import FrequentlyBought from './FrequentlyBought/frequentlyBought';
 import Footer from '../../Common/Footer/Footer';
 import CTA from '../../Common/CTA/CTA';
 // import CertificateModal from '../../Common/Modals/CertificateModal';
@@ -87,6 +89,8 @@ const DetailPage = (props) => {
                         product_detail={product_detail} prdId={prdId} varChecked={varChecked}
                         />
                 }
+                <ComboIncludes />
+                <FrequentlyBought />
                 <KeyFeatures prd_uget={product_detail?.prd_uget}/>
                 {
                     product_detail?.chapter && 
