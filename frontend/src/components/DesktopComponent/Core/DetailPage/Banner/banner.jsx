@@ -19,6 +19,7 @@ const BannerCourseDetail = (props) => {
     const [discountPrice, discountPriceSelected] = useState(0);
     const dispatch = useDispatch();
     const { mainCourseCartLoader } = useSelector(store => store.loader);
+    const [frqntProd, addFrqntProd] = useState([]);
 
     const starRatings = (star, index) => {
         return (star === '*' ? <em className="icon-fullstar" key={index}></em> : star === '+' 
@@ -51,6 +52,17 @@ const BannerCourseDetail = (props) => {
             dispatch(stopMainCourseCartLoader());
         }
     }
+
+    const getProductPrice = (product) => {
+        let price = 0;
+        console.log(frqntProd);
+        price += frqntProd.reduce((previousValue, currentValue) => {
+            console.log(previousValue, currentValue);
+          return parseFloat(previousValue) + parseFloat(currentValue.inr_price);
+        }, 0);
+        console.log(product, price);
+        return parseFloat(product) + price;
+    };
 
     return (
         <>
@@ -135,10 +147,10 @@ const BannerCourseDetail = (props) => {
                                 </ul>
                                 <ul className="course-stats-btm mt-20 mb-20">
                                     <li>
-                                        Course Type: <strong>Trial</strong>
+                                        Course Type: <strong>{product_detail?.type}</strong>
                                     </li>
                                     <li>
-                                        Course level: <strong>Intermediate</strong>
+                                        Course level: <strong>{product_detail?.level}</strong>
                                     </li>
                                     <li>
                                         Certification: <strong>Yes</strong>
@@ -189,10 +201,15 @@ const BannerCourseDetail = (props) => {
                                                 })
                                             }
                                         </div>
-                                            {varChecked?.id }{ product_detail?.selected_var?.id}
+
                                         <div className="course-enrol__price">
-                                            <strong className="price-taxes mt-20 mb-10">{varChecked?.inr_price || product_detail?.var_list[0]?.inr_price}/-  <span className="taxes">(+taxes)</span></strong>
-                                            <strong className="price-offer mt-0 mb-10"><del>{varChecked?.id ? discountPrice : product_detail?.var_list[0]?.fake_inr_price}/- </del> <span className="offer">30% Off</span></strong>
+                                            <strong className="price-taxes mt-20 mb-10">{getProductPrice(varChecked?.inr_price || product_detail?.var_list[0]?.inr_price)}/-  <span className="taxes">(+taxes)</span></strong>
+                                            <strong className="price-offer mt-0 mb-10">
+                                                <del>{varChecked?.id ? discountPrice : product_detail?.var_list[0]?.fake_inr_price}/- </del> 
+                                                <span className="offer">
+                                                    {((varChecked?.id ? discountPrice : product_detail?.var_list[0]?.fake_inr_price) - (varChecked?.inr_price || product_detail?.var_list[0]?.inr_price)) / (varChecked?.id ? discountPrice : product_detail?.var_list[0]?.fake_inr_price) * 100}% Off
+                                                </span>
+                                            </strong>
                                             <p className="d-flex mb-0">
                                                 <a onClick={() => goToCart(varChecked)} className="btn btn-secondary mt-10 mr-10">Enroll now</a>
                                                 <LinkScroll to={"enquire-now"} className="btn btn-outline-primary mt-10">Enquire now</LinkScroll>
@@ -218,7 +235,7 @@ const BannerCourseDetail = (props) => {
                                         </div>
                                     </div>
                                     <ComboIncludes />
-                                    <FrequentlyBought />
+                                    { product_detail?.fbt && <FrequentlyBought frqntProd={frqntProd} addFrqntProd={addFrqntProd} fbt_list={product_detail?.fbt_list}/> }
                                 </div>
                             }
                         </div>

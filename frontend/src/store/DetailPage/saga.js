@@ -18,7 +18,6 @@ function* mainCoursesApi(action){
 
     try {
         const response = yield call(Api.mainCourses, payload.id);
-
         if(response?.error) return reject(response);
         const item = response?.data?.data;
         yield put(mainCoursesFetched({ ...item }));
