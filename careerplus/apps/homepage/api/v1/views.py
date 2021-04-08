@@ -1078,7 +1078,7 @@ class PopularInDemandProductsAPI(APIView):
             #get courses and assessments from recommendation engine
             recommended = RecommendationMixin().get_courses_and_certification_from_analytics_recommendation_db(candidate_id=candidate_id)
             if tab_type=='certifications':
-                certifications = recommended['assessment']
+                certifications = recommended.get('assessment',None)
                 data.update({'recommended_assessments':certifications})
                 certifications = SearchQuerySet().filter(id__in=certifications, pTP__in=[0, 1, 3]).exclude(
                 id__in=settings.EXCLUDE_SEARCH_PRODUCTS
@@ -1086,7 +1086,7 @@ class PopularInDemandProductsAPI(APIView):
                 paginated_data = offset_paginator(page, certifications,size=4)                                                                    
                 data.update({'certifications':paginated_data["data"]})
             elif tab_type == 'master':
-                courses = recommended['courses']
+                courses = recommended.get('courses',None)
                 data.update({'recommended_course_ids':courses})
                 courses = SearchQuerySet().filter(id__in=courses, pTP__in=[0, 1, 3]).exclude(
                     id__in=settings.EXCLUDE_SEARCH_PRODUCTS
