@@ -1080,6 +1080,10 @@ class PopularInDemandProductsAPI(APIView):
             if tab_type=='certifications':
                 certifications = recommended.get('assessment',None)
                 data.update({'recommended_assessments':certifications})
+                if len(certifications)<4:
+                    gap = 4-len(certifications)
+                    popular_certifications = PopularProductMixin().popular_certifications()[:gap]
+                    certifications += popular_certifications 
                 certifications = SearchQuerySet().filter(id__in=certifications, pTP__in=[0, 1, 3]).exclude(
                 id__in=settings.EXCLUDE_SEARCH_PRODUCTS)
                 if certifications:
@@ -1093,6 +1097,12 @@ class PopularInDemandProductsAPI(APIView):
                 courses = SearchQuerySet().filter(id__in=courses, pTP__in=[0, 1, 3]).exclude(
                     id__in=settings.EXCLUDE_SEARCH_PRODUCTS
                 )
+                if len(courses)<4:
+                    gap = 4-len(courses)
+                    popular_courses = PopularProductMixin(). \
+                    popular_courses_algorithm(class_category=class_category,
+                                            quantity=gap)
+                    courses += popular_courses
                 if courses:
                     paginated_data = offset_paginator(page, courses,size=4)                                                                    
                     courses = paginated_data["data"]
