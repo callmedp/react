@@ -52,7 +52,7 @@ from api.helpers import offset_paginator
 from .helper import get_home_offer_values
 from homepage.api.v1.mixins import ProductMixin
 from meta.views import MetadataMixin
-
+from userintent.api.v1.mixins import RecommendationMixin
 from .mixins import ProductMixin
 # Other Import
 from weasyprint import HTML
@@ -827,17 +827,23 @@ class TrendingCoursesAndSkillsAPI(PopularProductMixin, APIView):
         skill_category = request.GET.get('category_id', None)
         homepage = request.GET.get('homepage',False)
         course_only = request.GET.get('course_only', False)
+        candidate_id = request.GET.get('candidate_id',None) or request.session.get('candidate_id', None)
+        # candidate_id = request.session.get('candidate_id', None)
 
-        product_obj, product_converstion_ratio, product_revenue_per_mile = PopularProductMixin().\
-                                                                            popular_courses_algorithm(
-                                                                            quantity=popular_course_quantity,
-                                                                            category=skill_category)
+        if candidate_id is None:
+            product_obj, product_converstion_ratio, product_revenue_per_mile = PopularProductMixin().\
+                                                                                popular_courses_algorithm(
+                                                                                quantity=popular_course_quantity,
+                                                                                category=skill_category)
 
-        if not product_obj:
-            return APIResponse(message='No Product Object Found !', status=status.HTTP_200_OK,
-                               error=False)
+            if not product_obj:
+                return APIResponse(message='No Product Object Found !', status=status.HTTP_200_OK,
+                                error=False)
 
-        product_pks = list(product_converstion_ratio) + list(product_revenue_per_mile)
+            product_pks = list(product_converstion_ratio) + list(product_revenue_per_mile)
+        else:
+            #if user is logged in fetch trending courses from recommendation engine
+            product_pks = RecommendationMixin().get_courses_and_certification_from_analytics_recommendation_db(candidate_id=candidate_id)['courses']
         tprds = SearchQuerySet().filter(id__in=product_pks, pTP__in=[0, 1, 3]).exclude(
             id__in=settings.EXCLUDE_SEARCH_PRODUCTS
         )
@@ -872,7 +878,7 @@ class TrendingCoursesAndSkillsAPI(PopularProductMixin, APIView):
             data.update({
                 'trendingSkills': [dict(y) for y in set(tuple(x.items()) for x in skills)]
             })
-
+        data.update({'recommended course ids':product_pks})
         return APIResponse(message='Trending Course Loaded', data=data, status=status.HTTP_200_OK)
 
 
@@ -1046,43 +1052,61 @@ class PopularInDemandProductsAPI(APIView):
         class_category = settings.COURSE_SLUG
         page = int(request.GET.get('page',1))
         tab_type = request.GET.get('tab_type','master')
+        candidate_id = request.GET.get('candidate_id',None) or request.session.get('candidate_id', None)
         paginated_data = []
-
         data= {}
-        if tab_type=='certifications':
-            certifications = PopularProductMixin().popular_certifications()                                                                              
-            paginated_data = offset_paginator(page, certifications,size=4)                                                                    
-            data.update({'certifications':paginated_data["data"]})
-        
-        elif tab_type == 'master':
-            s_obj, s_ratio, s_revenue = PopularProductMixin(). \
-                popular_courses_algorithm(class_category=class_category,
-                                        quantity=quantity)
+        if candidate_id is None:
+            if tab_type=='certifications':
+                certifications = PopularProductMixin().popular_certifications()                                                                              
+                paginated_data = offset_paginator(page, certifications,size=4)                                                                    
+                data.update({'certifications':paginated_data["data"]})
+            
+            elif tab_type == 'master':
+                s_obj, s_ratio, s_revenue = PopularProductMixin(). \
+                    popular_courses_algorithm(class_category=class_category,
+                                            quantity=quantity)
 
-            course_pks = list(s_ratio) + list(s_revenue)
-            courses = SearchQuerySet().filter(id__in=course_pks, pTP__in=[0, 1, 3]).exclude(
-                id__in=settings.EXCLUDE_SEARCH_PRODUCTS
-            )
-            paginated_data = offset_paginator(page, courses,size=4)                                                                    
-            courses = paginated_data["data"]
-            course_data = ProductMixin().get_course_json(courses)
-            data.update({ 'courses': course_data})
-
-            # {
-            #     'courses': [
-            #         {'id': course.id, 'heading': course.pHd, 'name': course.pNm, 'url': course.pURL, 'img': course.pImg, \
-            #         'img_alt': course.pImA, 'description': course.pDscPt, 'rating': course.pARx, 'price': course.pPinb, 'vendor': course.pPvn, 'stars': course.pStar,
-            #         'provider': course.pPvn} for course in courses]
-            # }
-        page_info ={
-                'current_page':paginated_data['current_page']if paginated_data else 0,
-                'total':paginated_data['total_pages'] if paginated_data else 0,
-                'has_prev': True if paginated_data['current_page'] >1 else False,
-                'has_next':True if (paginated_data['total_pages']-paginated_data['current_page'])>0 else False
-                }
-        # data.append({'page':page_info})
-        data.update({'page':page_info})
-        return APIResponse(message='Popular certifications and courses Loaded', data=data, status=status.HTTP_200_OK)
+                course_pks = list(s_ratio) + list(s_revenue)
+                courses = SearchQuerySet().filter(id__in=course_pks, pTP__in=[0, 1, 3]).exclude(
+                    id__in=settings.EXCLUDE_SEARCH_PRODUCTS
+                )
+                paginated_data = offset_paginator(page, courses,size=4)                                                                    
+                courses = paginated_data["data"]
+                course_data = ProductMixin().get_course_json(courses)
+                data.update({ 'courses': course_data})            
+        else:
+            #get courses and assessments from recommendation engine
+            recommended = RecommendationMixin().get_courses_and_certification_from_analytics_recommendation_db(candidate_id=candidate_id)
+            if tab_type=='certifications':
+                certifications = recommended.get('assessment',None)
+                data.update({'recommended_assessments':certifications})
+                certifications = SearchQuerySet().filter(id__in=certifications, pTP__in=[0, 1, 3]).exclude(
+                id__in=settings.EXCLUDE_SEARCH_PRODUCTS)
+                if certifications:
+                    paginated_data = offset_paginator(page, certifications,size=4)                                            
+                    certifications = paginated_data["data"]
+                    certifications_data = ProductMixin().get_course_json(certifications)
+                    data.update({ 'certifications': certifications_data})          
+            elif tab_type == 'master':
+                courses = recommended.get('courses',None)
+                data.update({'recommended_course_ids':courses})
+                courses = SearchQuerySet().filter(id__in=courses, pTP__in=[0, 1, 3]).exclude(
+                    id__in=settings.EXCLUDE_SEARCH_PRODUCTS
+                )
+                if courses:
+                    paginated_data = offset_paginator(page, courses,size=4)                                                                    
+                    courses = paginated_data["data"]
+                    course_data = ProductMixin().get_course_json(courses)
+                    data.update({ 'courses': course_data})
+        if paginated_data:
+            page_info ={
+                    'current_page':paginated_data['current_page']if paginated_data else 0,
+                    'total':paginated_data['total_pages'] if paginated_data else 0,
+                    'has_prev': True if paginated_data['current_page'] >1 else False,
+                    'has_next':True if (paginated_data['total_pages']-paginated_data['current_page'])>0 else False
+                    }
+            data.update({'page':page_info})
+        return APIResponse(message='Popular in demand certifications and courses Loaded', data=data, status=status.HTTP_200_OK)
 
 class JobAssistanceAndLatestBlogAPI(APIView):
     permission_classes = (permissions.AllowAny,)
