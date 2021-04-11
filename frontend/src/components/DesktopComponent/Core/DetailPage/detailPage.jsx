@@ -52,11 +52,11 @@ const DetailPage = (props) => {
         try {
                 if (!(window && window.config && window.config.isServerRendered)) {
                     dispatch(startMainCourseLoader());
-                    await new Promise((resolve, reject) => dispatch(fetchMainCourses({ payload: {id: id?.split('-')[1] },resolve, reject })));
+                    new Promise((resolve, reject) => dispatch(fetchMainCourses({ payload: {id: id?.split('-')[1], device:'desktop' },resolve, reject })));
                     dispatch(stopMainCourseLoader());
                 }
                 else {
-                    delete window.config?.isServerRendered
+                    delete window.config?.isServerRendered;
                 }
         }
         catch (error) {

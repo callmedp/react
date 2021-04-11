@@ -1,12 +1,16 @@
 import React from 'react';
 import './takeFreeTest.scss';
 import { siteDomain } from 'utils/domains';
+import { getTrackingInfo } from 'utils/storage.js';
+import { trackUser } from 'store/Tracking/actions/index.js';
 
 const TakeFreeTest = (props) => {
     
     const { should_take_test_url } = props
+    const tracking_data = getTrackingInfo();
 
     const testRedirection = () => {
+        trackUser({"query" : tracking_data, "action" :'take_free_test'});
         window.location.replace(`${siteDomain}/practice-tests/${should_take_test_url}/sub`);
     }
 

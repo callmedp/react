@@ -3,13 +3,16 @@ import { useSelector, useDispatch } from 'react-redux';
 import '../../CataloguePage/RecentCourses/recentCourses.scss';
 import './coursesMayLike.scss'
 import Carousel from 'react-bootstrap/Carousel';
-import { Link } from 'react-router-dom';
 import { fetchRecommendedCourses } from 'store/DetailPage/actions';
+import { getTrackingInfo } from 'utils/storage.js';
+import { trackUser } from 'store/Tracking/actions/index.js';
+import { siteDomain } from 'utils/domains';
 
 const CoursesMayLike = (props) => {
     const {product_id, skill} = props;
     const dispatch = useDispatch();
     const { results } = useSelector(store => store.recommendedCourses);
+    const tracking_data = getTrackingInfo();
 
     useEffect(() => {
         handleEffects();
@@ -28,6 +31,13 @@ const CoursesMayLike = (props) => {
         )
     }
 
+    const handleTracking = (url) => {
+        trackUser({"query" : tracking_data, "action" :'exit_product_page'});
+        trackUser({"query" : tracking_data, "action" :'recommended_products'});
+
+        window.location.href=`${siteDomain}${url}`;
+    }
+
     const getLikeCourses = (courseData, idx) => {
         return (
             <Carousel.Item interval={10000000000} key={idx}>
@@ -35,14 +45,14 @@ const CoursesMayLike = (props) => {
                     {
                         courseData?.map((coursesLike, inx) => {
                             return (
-                                <li className="col" key={inx} itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                                <li className="col" key={inx} itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
                                     <div className="card">
-                                        <div className="card__heading" itemprop="image">
+                                        <div className="card__heading" itemProp="image">
                                             <figure>
                                                 <img src={coursesLike.pImg} alt={coursesLike.name} />
                                             </figure>
                                             <h3 className="heading3">
-                                                <Link itemprop="item" to={coursesLike.pURL}><span itemprop="name">{coursesLike.name || coursesLike.pNm}</span></Link>
+                                                <a itemProp="item" onClick={() => handleTracking(coursesLike.pURL)}><span itemProp="name">{coursesLike.name || coursesLike.pNm}</span></a>
                                             </h3>
                                         </div>
 
@@ -56,7 +66,7 @@ const CoursesMayLike = (props) => {
                                                 <span>{parseInt(coursesLike.pAR)?.toFixed(1)}/5</span>
                                             </div>
                                             <div className="card__price mt-10">
-                                                <strong itemprop="price">{coursesLike.pPin}/-</strong> 
+                                                <strong itemProp="price">{coursesLike.pPin}/-</strong> 
                                             </div>
                                         </div>
                                     </div>

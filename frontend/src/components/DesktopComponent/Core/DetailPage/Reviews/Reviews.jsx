@@ -14,7 +14,7 @@ const LearnersStories = (props) => {
     const {id, product_detail} = props;
     const [reviewModal, showReviewModal] = useState(false);
     const { reviewLoader } = useSelector(store => store.loader);
-    const { prd_review_list, prd_rv_current_page, prd_rv_has_next, prd_rv_has_prev } = useSelector( store => store.reviews );
+    const { prd_review_list, prd_rv_current_page, prd_rv_has_next } = useSelector( store => store.reviews );
 
     const dispatch = useDispatch();
     let currentPage = 1;
@@ -53,17 +53,17 @@ const LearnersStories = (props) => {
                     {
                         reviewData?.map((review, idx) => {
                             return ( 
-                                <div className="col-sm-4" key={idx} itemprop="review" itemscope itemtype="https://schema.org/Review">
+                                <div className="col-sm-4" key={idx} itemProp="review" itemScope itemType="https://schema.org/Review">
                                     <div className="card">
-                                        <span className="rating" itemprop="ratingValue">
+                                        <span className="rating" itemProp="ratingValue">
                                             {
                                                 review?.rating?.map((star, index) => starRatings(star, index))
                                             }
                                         </span>
-                                        <strong className="card__name" itemprop="name">{review?.title}</strong>
-                                        <p className="card__txt" itemprop="reviewBody">{review?.content}</p>
-                                        <strong itemprop="author">{ review?.user_name ? review?.user_name : 'Anonymous' }</strong>
-                                        <span className="card__location" itemprop="datePublished">{review?.created}</span>
+                                        <strong className="card__name" itemProp="name">{review?.title}</strong>
+                                        <p className="card__txt" itemProp="reviewBody">{review?.content}</p>
+                                        <strong itemProp="author">{ review?.user_name ? review?.user_name : 'Anonymous' }</strong>
+                                        <span className="card__location" itemProp="datePublished">{review?.created}</span>
                                     </div>
                                 </div>
                             )
@@ -79,7 +79,7 @@ const LearnersStories = (props) => {
         { reviewLoader ? <Loader /> : ''}
         <section id="reviews" className="container" data-aos="fade-up">
             {
-                reviewModal ? <ReviewModal reviewModal={reviewModal} showReviewModal={showReviewModal} review={product_detail?.review} /> : ""
+                reviewModal ? <ReviewModal reviewModal={reviewModal} showReviewModal={showReviewModal} review={product_detail?.review} user_reviews={product_detail?.user_reviews} /> : ""
             }
             <div className="grid">
                 <h2 className="heading2 m-auto pb-20">Reviews</h2>
