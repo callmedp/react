@@ -79,6 +79,7 @@ const BannerCourseDetail = (props) => {
     const trackJobs = () => {
         trackUser({"query" : tracking_data, "action" :'jobs_available'});
         trackUser({"query" : tracking_data, "action" :'exit_product_page'});
+        MyGA.SendEvent('ln_course_details', 'ln_course_details', 'ln_jobs_available', 'Jobs available', '', '', true);
     }
 
     const viewAllCourses = () => {
