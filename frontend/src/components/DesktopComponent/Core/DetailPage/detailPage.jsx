@@ -70,7 +70,7 @@ const DetailPage = (props) => {
         <div>
             { mainCourseLoader ? <Loader /> : ''}
             { meta_tags && <MetaContent meta_tags={meta_tags} /> }
-            
+
             <Header />
             {
                     showStickyNav && <StickyNav 
@@ -81,7 +81,7 @@ const DetailPage = (props) => {
                         />
             }
             <BannerCourseDetail frqntProd={frqntProd} addFrqntProd={addFrqntProd} product_detail={product_detail} varChecked={varChecked} changeChecked={changeChecked}/>
-            {product_detail?.prd_uget && <KeyFeatures prd_uget={product_detail?.prd_uget}/>}
+            {product_detail?.prd_uget && <KeyFeatures prd_uget={product_detail?.prd_uget} pTF={product_detail?.pTF} prd_vendor_slug={product_detail?.prd_vendor_slug} />}
             {
                  product_detail?.chapter && 
                  <div className="container-fluid">

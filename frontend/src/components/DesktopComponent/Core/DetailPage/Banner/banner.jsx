@@ -88,7 +88,7 @@ const BannerCourseDetail = (props) => {
                                         </figure>
                                     </div>
                                     <div className="detail-heading__content" itemprop="name">
-                                        { product_detail?.pTg && <span className="flag-yellowB">{product_detail?.pTg}</span> }
+                                        { product_detail?.pTg !== 'None' && <span className="flag-yellowB">{product_detail?.pTg}</span> }
                                         <h1 className="heading1">
                                             {product_detail?.prd_H1}
                                         </h1>
@@ -122,10 +122,11 @@ const BannerCourseDetail = (props) => {
                                     </li>
 
                                     {
-                                        product_detail?.pop &&
+                                        product_detail?.pop ?
                                         <li>
                                             <LinkScroll className="d-block" to={"popListTemplate"}>+4 more</LinkScroll> Course providers  
-                                        </li> 
+                                        </li>
+                                        : ""
                                     }
 
                                     {
@@ -136,28 +137,55 @@ const BannerCourseDetail = (props) => {
                                                 Course Duration <strong>{varChecked?.dur_days || product_detail?.selected_var?.dur_days || '--'} Days</strong>
                                             </p>
                                         </li>
-                                    : ""}
+                                        : ""
+                                    }
                                     {
-                                        product_detail?.access_duration &&
+                                        product_detail?.access_duration ?
                                         <li className="d-flex align-items-center">
                                             <figure className="icon-access-duration mr-10"></figure>
                                             <p>
                                                 Access Duration <strong>{product_detail?.access_duration}</strong>
                                             </p>
                                         </li>
+                                        : ""
+                                    }
+
+                                    {
+                                        product_detail?.prd_asft?.test_duration ?
+                                        <li className="d-flex align-items-center">
+                                            <figure className="icon-course-duration mr-10"></figure>
+                                            <p>
+                                                Test Duration <strong>{product_detail?.prd_asft?.test_duration}</strong>
+                                            </p>
+                                        </li>
+                                        : ""
+                                    }
+
+                                    {
+                                        product_detail?.prd_asft?.number_of_questions ?
+                                        <li className="d-flex align-items-center">
+                                            <figure className="icon-question-no mr-10"></figure>
+                                            <p>
+                                                No. of questions <strong>{product_detail?.prd_asft?.number_of_questions}</strong>
+                                            </p>
+                                        </li>
+                                        : ""
                                     }
                                 </ul>
                                 <ul className="course-stats-btm mt-20 mb-20">
                                     {
-                                        product_detail?.type && <li>Course Type: <strong>{product_detail?.type}</strong></li>
+                                        product_detail?.type ? <li>Course Type: <strong>{product_detail?.type}</strong></li>
+                                        : ""
                                     }
 
                                     {
-                                        product_detail?.level && <li>Course Type: <strong>{product_detail?.level}</strong></li>
+                                        product_detail?.level ? <li>Course Type: <strong>{product_detail?.level}</strong></li>
+                                        : ""
                                     }
 
                                     {
-                                        (varChecked?.certify || product_detail?.selected_var) && <li>Certification: <strong>{(varChecked?.certify || product_detail?.selected_var?.certify) === (0 || false) ? 'No' : 'Yes' }</strong></li>
+                                        (varChecked?.certify || product_detail?.selected_var) ? <li>Certification: <strong>{(varChecked?.certify || product_detail?.selected_var?.certify) === (0 || false) ? 'No' : 'Yes' }</strong></li>
+                                        : ""
                                     }
                                 </ul>
                                 <div className="intro-video">
@@ -187,60 +215,67 @@ const BannerCourseDetail = (props) => {
                                 </div>
                             </div>
                             
-                                <div className="banner-detail">
-                                    {  
-                                        product_detail?.selected_var && product_detail?.var_list && product_detail?.var_list?.length > 0 &&
-                                            <div className="course-enrol">
-                                                <div className="course-enrol__mode">
-                                                    Mode
-                                                    {
-                                                        product_detail?.var_list?.map((varList, indx) => {
-                                                            return (
-                                                                    <form key={indx}>
-                                                                        <label htmlFor={varList?.id}>
-                                                                            <input type="radio" name="radio" id={varList?.id} checked={varChecked?.id && (varChecked?.id === varList?.id ? true : false) || !varChecked?.id && (product_detail?.selected_var?.id === varList?.id ? true : false)} onChange={() => changeMode(varList)} />
-                                                                            {getStudyMode(varList?.mode)}
-                                                                        </label> 
-                                                                    </form>
-                                                                )
-                                                        })
-                                                    }
-                                                </div>
-
-                                                <div className="course-enrol__price">
-                                                    <strong className="price-taxes mt-20 mb-10">{getProductPrice(varChecked?.inr_price || product_detail?.var_list[0]?.inr_price)}/-  <span className="taxes">(+taxes)</span></strong>
-                                                    <strong className="price-offer mt-0 mb-10">
-                                                        <del>{varChecked?.id ? discountPrice : product_detail?.var_list[0]?.fake_inr_price}/- </del> 
-                                                        <span className="offer">
-                                                            {
-                                                                getDiscountedPrice(varChecked?.id ? discountPrice : product_detail?.var_list[0]?.fake_inr_price, getProductPrice(varChecked?.inr_price || product_detail?.var_list[0]?.inr_price))
-                                                            }
-                                                            % Off
-                                                        </span>
-                                                    </strong>
-                                                    <p className="d-flex mb-0">
-                                                        <a onClick={() => goToCart(varChecked)} className="btn btn-secondary mt-10 mr-10">Enroll now</a>
-                                                        <LinkScroll to={"enquire-now"} className="btn btn-outline-primary mt-10">Enquire now</LinkScroll>
-                                                    </p>
-                                                </div>
-                                                <div className="course-enrol__offer lightblue-bg2">
-                                                    <strong className="mt-10 mb-5">Offers</strong>
-                                                    <ul className="pb-0">
-                                                    {
-                                                        (varChecked?.inr_price || product_detail?.var_list[0]?.inr_price) < 5001 ?
-                                                        <li><figure className="icon-offer-pay"></figure> Buy now & &nbsp;<strong>make payment within 14 days using ePayLater</strong> </li>
-
-                                                        :
-                                                        
-                                                        <li><figure className="icon-offer-pay"></figure> Avail &nbsp; <strong>Interest-free EMIs at no additional cost using Zest Money payment option</strong> </li>
-                                                    }
-                                                    </ul>
-                                                </div>
+                            <div className="banner-detail">
+                                {  
+                                    product_detail?.selected_var && product_detail?.var_list && product_detail?.var_list?.length > 0 &&
+                                        <div className="course-enrol">
+                                            <div className="course-enrol__mode">
+                                                Mode
+                                                {
+                                                    product_detail?.var_list?.map((varList, indx) => {
+                                                        return (
+                                                                <form key={indx}>
+                                                                    <label htmlFor={varList?.id}>
+                                                                        <input type="radio" name="radio" id={varList?.id} checked={varChecked?.id && (varChecked?.id === varList?.id ? true : false) || !varChecked?.id && (product_detail?.selected_var?.id === varList?.id ? true : false)} onChange={() => changeMode(varList)} />
+                                                                        {getStudyMode(varList?.mode)}
+                                                                    </label> 
+                                                                </form>
+                                                            )
+                                                    })
+                                                }
                                             </div>
-                                    }
-                                    { product_detail?.combo && <ComboIncludes combo_list={product_detail?.combo_list} /> }
-                                    { product_detail?.fbt && <FrequentlyBought addFrqntProd={addFrqntProd} frqntProd={frqntProd} fbt_list={product_detail?.fbt_list}/> }
-                                </div>
+
+                                            <div className="course-enrol__price">
+                                                <strong className="price-taxes mt-20 mb-10">{getProductPrice(varChecked?.inr_price || product_detail?.var_list[0]?.inr_price)}/-  <span className="taxes">(+taxes)</span></strong>
+                                                <strong className="price-offer mt-0 mb-10">
+                                                    {
+                                                        varChecked?.id ? discountPrice : product_detail?.var_list[0]?.fake_inr_price > 0 ?
+                                                        <>
+                                                            <del>{varChecked?.id ? discountPrice : product_detail?.var_list[0]?.fake_inr_price}/- </del> 
+                                                
+                                                            <span className="offer">
+                                                                {
+                                                                    getDiscountedPrice(varChecked?.id ? discountPrice : product_detail?.var_list[0]?.fake_inr_price, varChecked?.inr_price || product_detail?.var_list[0]?.inr_price)
+                                                                }
+                                                                % Off
+                                                            </span>
+                                                        </>
+                                                        : ""
+                                                    }
+                                                </strong>
+                                                <p className="d-flex mb-0">
+                                                    <a onClick={() => goToCart(varChecked)} className="btn btn-secondary mt-10 mr-10">Enroll now</a>
+                                                    <LinkScroll to={"enquire-now"} className="btn btn-outline-primary mt-10">Enquire now</LinkScroll>
+                                                </p>
+                                            </div>
+                                            <div className="course-enrol__offer lightblue-bg2">
+                                                <strong className="mt-10 mb-5">Offers</strong>
+                                                <ul className="pb-0">
+                                                {
+                                                    (varChecked?.inr_price || product_detail?.var_list[0]?.inr_price) < 5001 ?
+                                                    <li><figure className="icon-offer-pay"></figure> Buy now & &nbsp;<strong>make payment within 14 days using ePayLater</strong> </li>
+
+                                                    :
+                                                    
+                                                    <li><figure className="icon-offer-pay"></figure> Avail &nbsp; <strong>Interest-free EMIs at no additional cost using Zest Money payment option</strong> </li>
+                                                }
+                                                </ul>
+                                            </div>
+                                        </div>
+                                }
+                                { product_detail?.combo && <ComboIncludes combo_list={product_detail?.combo_list} /> }
+                                { product_detail?.fbt && <FrequentlyBought addFrqntProd={addFrqntProd} frqntProd={frqntProd} fbt_list={product_detail?.fbt_list}/> }
+                            </div>
                         </div>
                     </div>
             </header> 
