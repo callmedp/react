@@ -20,13 +20,21 @@ const StickyNavDetail = (props) => {
         variableWidth: true,
     }
 
-    const { product_detail, varChecked, outline, faq } = props;
+    const { product_detail, varChecked, outline, faq, frqntProd } = props;
     const [tab, setTab] = useState('1')
     const dispatch = useDispatch()
 
     const handleTab = (event) => {
         setTab(event.target.id)
     }
+
+    const getProductPrice = (product) => {
+        let price = 0;
+        price += frqntProd.reduce((previousValue, currentValue) => {
+          return parseFloat(previousValue) + parseFloat(currentValue.inr_price);
+        }, 0);
+        return parseFloat(product) + price;
+    };
 
     const goToCart = async (value) => {
         let cartItems = {};
@@ -47,9 +55,14 @@ const StickyNavDetail = (props) => {
     return (
             <div className="m-sticky-detail m-container mt-0 mb-0 p-0" data-aos="fade-down">
                 <div className="m-sticky-detail__price">
-                    <strong className="mt-10 mb-10">{varChecked?.inr_price || product_detail?.var_list[0]?.inr_price}/-&nbsp; 
+                    <strong className="mt-10 mb-10">{getProductPrice(varChecked?.inr_price || product_detail?.var_list[0]?.inr_price || product_detail?.pPinb)}/-&nbsp; 
+                        {
+                            (varChecked?.id ? varChecked.fake_inr_price > 0 : product_detail?.selected_var?.fake_inr_price > 0) ? 
+                            <del>{varChecked?.id ? varChecked.fake_inr_price : product_detail?.selected_var?.fake_inr_price}</del> 
+                            : 
+                            (!varChecked?.id && !product_detail?.selected_var && product_detail?.pPfinb > 0) ? <del>{product_detail?.pPfinb}</del> : ''
+                        }
                     </strong>
-                    {/* <strong className="mt-10 mb-10">3,499/- <del>5,499/-</del></strong> */}
                     <Link to={'#'} className="btn btn-secondary ml-auto" onClick={() => goToCart(varChecked)}>{ product_detail?.pTF ? 'Buy Now' : 'Enroll now' }</Link>
                 </div>
                 <div className="m-sticky-detail__nav">

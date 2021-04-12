@@ -3,6 +3,8 @@ import {Link} from 'react-router-dom';
 import './Banner.scss';
 import { siteDomain } from 'utils/domains';
 import { Link as LinkScroll } from "react-scroll";
+import { getStudyMode } from 'utils/detailPageUtils/studyMode';
+import { getStudyLevel } from 'utils/detailPageUtils/studyLevel';
 
 const CourseDetailBanner = (props) => {
     const { 
@@ -95,7 +97,7 @@ const CourseDetailBanner = (props) => {
                         {
                             (varChecked?.dur_days || product_detail?.selected_var?.dur_days) && 
                                 <li className="d-flex align-items-center">
-                                    <figure className="icon-course-duration mr-10"></figure>
+                                    <figure className="micon-course-duration mr-10"></figure>
                                     <p>
                                         Course Duration <strong>{ varChecked?.dur_days || product_detail?.selected_var?.dur_days } Days</strong>
                                     </p>
@@ -105,7 +107,7 @@ const CourseDetailBanner = (props) => {
                         {
                             product_detail?.access_duration && 
                                 <li className="d-flex align-items-center">
-                                    <figure className="icon-access-duration mr-10"></figure>
+                                    <figure className="micon-access-duration mr-10"></figure>
                                     <p>
                                         Access Duration <strong>{product_detail?.access_duration}</strong>
                                     </p>
@@ -113,28 +115,46 @@ const CourseDetailBanner = (props) => {
                         }
                         
                     </ul>
+
+                    <ul className="m-course-stats mt-20 mb-20">
+                        {
+                            product_detail?.prd_asft &&
+                            <>
+                                <li className="d-flex align-items-center">
+                                    <figure className="micon-course-duration mr-10"></figure>
+                                    <p>
+                                        Test Duration <strong>{product_detail?.prd_asft?.test_duration}</strong>
+                                    </p>
+                                </li>
+                                <li className="d-flex align-items-center">
+                                    <figure className="micon-question-no mr-10"></figure>
+                                    <p>
+                                    No. of questions <strong>{product_detail?.prd_asft?.number_of_questions}</strong>
+                                    </p>
+                                </li>
+                            </>
+                        }
+                    </ul>
                 </div>
             </div>
 
             {
-                (product_detail?.type || product_detail?.level) &&
+                (product_detail?.selected_var?.type || product_detail?.selected_var?.level) &&
                     <ul className="m-course-stats mb-10 bdr-top pt-10">
                         {
-                            product_detail?.type && 
-                                <li>
-                                    Type: <strong className="d-inline">{product_detail?.type && product_detail?.type?.split(' ')[0] }</strong>
-                                </li>
+                            <li>
+                                Type: <strong className="d-inline">{getStudyMode(varChecked?.type || product_detail?.selected_var?.type)}</strong>
+                            </li>
                         }
                         
                         {
-                            product_detail?.level && 
-                                <li>
-                                    Level: <strong className="d-inline">{product_detail?.level}</strong>
-                                </li>
+                            <li>
+                                Level: <strong className="d-inline">{getStudyLevel(varChecked?.level || product_detail?.selected_var?.level)}</strong>
+                            </li>
                         }
 
                         <li>
-                            Certification: <strong className="d-inline">Yes</strong>
+                            Certification: <strong className="d-inline">{(varChecked?.certify || product_detail?.selected_var?.certify) === 0 ? 'No' : (varChecked?.certify || product_detail?.selected_var?.certify) === false ? 'No' : 'Yes' }</strong>
                         </li>
                         
                     </ul>

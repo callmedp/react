@@ -4,14 +4,19 @@ import {Link} from 'react-router-dom';
 import { getStudyMode } from 'utils/detailPageUtils/studyMode';
 import { startMainCourseCartLoader, stopMainCourseCartLoader } from 'store/Loader/actions/index';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchAddToCartEnroll } from 'store/DetailPage/actions';
+import { fetchAddToCartEnroll, fetchAddToCartRedeem } from 'store/DetailPage/actions';
 import Loader from '../../../Common/Loader/loader';
+import { showSwal } from 'utils/swal';
+import { MyGA } from 'utils/ga.tracking.js';
+import { getTrackingInfo } from 'utils/storage.js';
+import { trackUser } from 'store/Tracking/actions/index.js';
 
 const CourseEnrol = (props) => {
-    const { product_detail, varChecked, changeChecked } = props;
+    const { product_detail, varChecked, changeChecked, getProductPrice, frqntProd } = props;
     const dispatch = useDispatch();
     const { mainCourseCartLoader } = useSelector(store => store.loader);
     const [discountPrice, discountPriceSelected] = useState(0);
+    const tracking_data = getTrackingInfo();
 
     const changeMode = (objj) => {
         let selectedObj = objj;
@@ -19,19 +24,49 @@ const CourseEnrol = (props) => {
         changeChecked({...selectedObj});
     }
 
+    const getDiscountedPrice = (fakeP, realP) => {
+        return ((fakeP - realP) / fakeP * 100).toFixed(0);
+    }
+
     const goToCart = async (value) => {
         let cartItems = {};
 
-        if(value.id) cartItems = {'prod_id': product_detail.pPv, 'cart_type': 'cart', 'cv_id': value.id};
-        else cartItems = {'prod_id': product_detail.pPv, 'cart_type': 'cart', 'cv_id': product_detail.selected_var.id};
+        let cvId = [];
 
-        try {
-            dispatch(startMainCourseCartLoader());
-            await new Promise((resolve, reject) => dispatch(fetchAddToCartEnroll({ cartItems ,resolve, reject })));
-            dispatch(stopMainCourseCartLoader());
+        if(!product_detail?.redeem_test) {
+            MyGA.SendEvent('ln_enroll_now', 'ln_enroll_now', 'ln_click_enroll_now', `${product_detail?.prd_H1}`, '', false, true);
+            trackUser({"query" : tracking_data, "action" :'enroll_now'});
+
+            if(frqntProd && frqntProd.length > 0) {
+                frqntProd.map(prdId => cvId.push(prdId.id));
+                if(value.id) cvId.push(value.id)
+                else cvId.push(product_detail?.selected_var?.id);
+            }
+
+            if(value.id) cartItems = {'prod_id': product_detail?.pPv, 'cart_type': 'cart', 'cv_id': (cvId.length > 0 ? cvId : value.id)};
+            else cartItems = {'prod_id': product_detail?.pPv, 'cart_type': 'cart', 'cv_id': (cvId.length > 0 ? cvId : product_detail?.selected_var?.id)};
+
+            try {
+                dispatch(startMainCourseCartLoader());
+                await new Promise((resolve, reject) => dispatch(fetchAddToCartEnroll({ cartItems ,resolve, reject })));
+                dispatch(stopMainCourseCartLoader());
+            }
+            catch (error) {
+                dispatch(stopMainCourseCartLoader());
+            }
         }
-        catch (error) {
-            dispatch(stopMainCourseCartLoader());
+        else {
+            cartItems = { 'prod_id': product_detail?.pPv, 'redeem_option': product_detail?.redeem_option }
+
+            try {
+                dispatch(startMainCourseCartLoader());
+                await new Promise((resolve, reject) => dispatch(fetchAddToCartRedeem({ cartItems ,resolve, reject })));
+                dispatch(stopMainCourseCartLoader());
+            }
+            catch (error) {
+                showSwal('error', error?.error_message);
+                dispatch(stopMainCourseCartLoader());
+            }
         }
     }
 
@@ -61,18 +96,38 @@ const CourseEnrol = (props) => {
                     }
 
                     <div className="m-course-enrol__price">
-                        <strong className="mt-20 mb-10">{varChecked?.inr_price || product_detail?.var_list[0]?.inr_price}/-&nbsp; 
-                            <span>
-                                {
-                                    varChecked?.id ? 
-                                        <del>{discountPrice}</del> 
-                                        :
-                                        <del>{product_detail?.var_list[0]?.fake_inr_price}</del>
-                                }
-                                &nbsp;30%off
-                            </span>
+                        <strong className="mt-20 mb-10">{getProductPrice(varChecked?.inr_price || product_detail?.var_list[0]?.inr_price || product_detail?.pPinb)}/-&nbsp; 
+                            {
+                                (varChecked?.id ? discountPrice : product_detail?.var_list[0]?.fake_inr_price) > 0 ?
+                                <span>
+                                    {
+                                        varChecked?.id ? 
+                                            <del>{discountPrice}</del> 
+                                            :
+                                            <del>{product_detail?.var_list[0]?.fake_inr_price}</del>
+                                    }
+                                    &nbsp;
+                                    {
+                                        getDiscountedPrice(varChecked?.id ? discountPrice : product_detail?.var_list[0]?.fake_inr_price, varChecked?.inr_price || product_detail?.var_list[0]?.inr_price)
+                                    }%off
+                                </span>
+                                : ""
+                            }
+
+                            {
+                                (!product_detail?.var_list?.length > 0 && !product_detail?.selected_var && product_detail?.pPfinb > 0) ?
+                                <span>
+                                    <del>{product_detail?.pPfinb}</del> 
+                                    &nbsp;
+                                    {
+                                        getDiscountedPrice(product_detail?.pPfinb, product_detail?.pPinb)
+                                    }%off
+                                </span>
+                                : ""
+                            }
+
                         </strong>
-                        <Link to={'#'} className="btn btn-secondary mt-10 ml-auto" onClick={() => goToCart(varChecked)}>{ product_detail?.pTF === 16 ? 'Buy Now' : 'Enroll now' }</Link>
+                        <Link to={'#'} className="btn btn-secondary mt-10 ml-auto" onClick={() => goToCart(varChecked)}> { product_detail?.prd_service === 'assessment' ? 'Buy Now' : product_detail?.redeem_test ? 'Redeem Now' : 'Enroll now' }</Link>
                     </div>
                     <div className="m-course-enrol__offer lightblue-bg2">
                         <strong className="mt-10 mb-5">Offers</strong>

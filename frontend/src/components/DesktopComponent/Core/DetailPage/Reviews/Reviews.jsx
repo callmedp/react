@@ -85,7 +85,7 @@ const LearnersStories = (props) => {
                 <h2 className="heading2 m-auto pb-20">Reviews</h2>
                 {
                     prd_review_list && prd_review_list.length > 0 ?
-                    <Carousel className="reviews" onSelect={handleSelect}>
+                    <Carousel className="reviews" next={handleSelect}>
                         {
                             prd_review_list?.map(getAllReviews)
                         }

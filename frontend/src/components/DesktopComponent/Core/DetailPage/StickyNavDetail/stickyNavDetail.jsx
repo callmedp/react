@@ -97,12 +97,13 @@ const StickyNav = (props) => {
                     </div>
                     <Form inline className="course-enrol-sticky">
                         { 
-                            varChecked?.inr_price || product_detail?.var_list?.length > 0 ? 
-                            <strong className="mt-20">{getProductPrice(varChecked?.inr_price || product_detail?.var_list[0]?.inr_price)}
+                            (varChecked?.inr_price || product_detail?.var_list?.length > 0 || product_detail?.pPinb ) ? 
+                            <strong className="mt-20">{getProductPrice(varChecked?.inr_price || product_detail?.var_list[0]?.inr_price || product_detail?.pPinb)}
                                 {
                                     (varChecked?.id ? varChecked.fake_inr_price > 0 : product_detail?.selected_var?.fake_inr_price > 0) ? 
                                     <del>{varChecked?.id ? varChecked.fake_inr_price : product_detail?.selected_var?.fake_inr_price}</del> 
-                                    : "" 
+                                    : 
+                                    (!varChecked?.id && !product_detail?.selected_var && product_detail?.pPfinb > 0) ? <del>{product_detail?.pPfinb}</del> : ''
                                 }
                             </strong>
                             : ""

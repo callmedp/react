@@ -42,6 +42,7 @@ const DetailPage = (props) => {
     const [varChecked, changeChecked] = useState({});
     const [showStickyNav, setShowStickyNav] = useState(false);
     const [showSearchPage, setShowSearchPage] = useState(false)
+    const [frqntProd, addFrqntProd] = useState([]);
 
     const handleEffects = async () => {
         try {
@@ -59,6 +60,14 @@ const DetailPage = (props) => {
             }
         }
 
+    };
+
+    const getProductPrice = (product) => {
+        let price = 0;
+        price += frqntProd.reduce((previousValue, currentValue) => {
+          return parseFloat(previousValue) + parseFloat(currentValue.inr_price);
+        }, 0);
+        return parseFloat(product) + price;
     };
 
     const handleScroll=() => {
@@ -95,19 +104,20 @@ const DetailPage = (props) => {
                         />
                     </header>
                     <main className="mb-0">
-                        <CourseEnrol product_detail={product_detail} varChecked={varChecked} changeChecked={changeChecked} />
+                        <CourseEnrol product_detail={product_detail} getProductPrice={getProductPrice} frqntProd={frqntProd} varChecked={varChecked} changeChecked={changeChecked} />
                         {
                             showStickyNav && <StickyNavDetail 
                                 outline={product_detail?.chapter ? true : false}
                                 faq = {product_detail?.faq ? true : false}
                                 product_detail={product_detail} prdId={prdId} varChecked={varChecked}
+                                frqntProd={frqntProd}
                                 />
                         }
                         {
                             product_detail?.combo && <ComboIncludes comboList={product_detail.combo_list}/>
                         }
                         {
-                            product_detail?.fbt && <FrequentlyBought fbtList ={product_detail.fbt_list} varChecked={varChecked}/>
+                            product_detail?.fbt && <FrequentlyBought fbtList ={product_detail.fbt_list} addFrqntProd={addFrqntProd} frqntProd={frqntProd}/>
                         }
                         <KeyFeatures prd_uget={product_detail?.prd_uget} prd_vendor_slug={product_detail?.prd_vendor_slug} typeFlow={product_detail?.pTF}/>
                         {

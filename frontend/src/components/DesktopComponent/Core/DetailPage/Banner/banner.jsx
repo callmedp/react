@@ -234,7 +234,6 @@ const BannerCourseDetail = (props) => {
 
                                     {
                                         <li>Certification: <strong>{(varChecked?.certify || product_detail?.selected_var?.certify) === 0 ? 'No' : (varChecked?.certify || product_detail?.selected_var?.certify) === false ? 'No' : 'Yes' }</strong></li>
-                                        // : ""
                                     }
                                 </ul>
                                 <div className="intro-video">
@@ -301,7 +300,6 @@ const BannerCourseDetail = (props) => {
                                             <div className="course-enrol__price">
                                                 <strong className="price-taxes mt-20 mb-10">{getProductPrice(varChecked?.inr_price || product_detail?.var_list[0]?.inr_price) || product_detail?.pPinb}/-  <span className="taxes">(+taxes)</span></strong>
                                                 <strong className="price-offer mt-0 mb-10">
-                                                    {/* sdvsv{varChecked?.id} second {discountPrice} third {product_detail?.var_list[0]?.fake_inr_price} */}
                                                     {
                                                         (varChecked?.id ? discountPrice : product_detail?.var_list[0]?.fake_inr_price) > 0 ?
                                                         <>
@@ -320,7 +318,7 @@ const BannerCourseDetail = (props) => {
                                                         (!product_detail?.var_list?.length > 0 && !product_detail?.selected_var && product_detail?.pPfinb > 0) ?
                                                             <>
                                                                 <del>{product_detail?.pPfinb}/- </del>
-                                                                <span className="offer">{getDiscountedPrice(product_detail?.pPfinb, product_detail?.pPfinb)} % Off</span>
+                                                                <span className="offer">{getDiscountedPrice(product_detail?.pPfinb, product_detail?.pPinb)} % Off</span>
                                                             </>
                                                         : ""
                                                     }
