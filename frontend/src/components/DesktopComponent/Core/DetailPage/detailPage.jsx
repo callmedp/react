@@ -49,14 +49,16 @@ const DetailPage = (props) => {
     }
 
     const handleEffects = async () => {
+        dispatch(startMainCourseLoader());
         try {
                 if (!(window && window.config && window.config.isServerRendered)) {
-                    dispatch(startMainCourseLoader());
+                    // dispatch(startMainCourseLoader());
                     new Promise((resolve, reject) => dispatch(fetchMainCourses({ payload: {id: id?.split('-')[1], device:'desktop' },resolve, reject })));
                     dispatch(stopMainCourseLoader());
                 }
                 else {
                     delete window.config?.isServerRendered;
+                    dispatch(stopMainCourseLoader());
                 }
         }
         catch (error) {

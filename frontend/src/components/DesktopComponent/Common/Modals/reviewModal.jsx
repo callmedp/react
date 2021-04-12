@@ -7,7 +7,7 @@ import { submitReview } from 'store/DetailPage/actions';
 import { useForm } from "react-hook-form";
 import { startReviewLoader, stopReviewLoader } from 'store/Loader/actions/index';
 import Loader from '../Loader/loader';
-import { Toast } from '../Toast/toast'
+import { Toast } from '../Toast/toast';
 import { imageUrl } from 'utils/domains';
 import { MyGA } from 'utils/ga.tracking.js';
 

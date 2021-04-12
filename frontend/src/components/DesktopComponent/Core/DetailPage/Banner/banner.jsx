@@ -4,15 +4,17 @@ import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import { Link as LinkScroll } from 'react-scroll';
 import { startMainCourseCartLoader, stopMainCourseCartLoader } from 'store/Loader/actions/index';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchAddToCartEnroll } from 'store/DetailPage/actions';
+import { fetchAddToCartEnroll, fetchAddToCartRedeem } from 'store/DetailPage/actions';
 import Loader from '../../../Common/Loader/loader';
 import { siteDomain } from 'utils/domains';
 import { getStudyMode } from 'utils/detailPageUtils/studyMode';
+import { getStudyLevel } from 'utils/detailPageUtils/studyLevel';
 import ComboIncludes from '../ComboIncludes/comboIncludes';
 import FrequentlyBought from '../FrequentlyBought/frequentlyBought';
 import { MyGA } from 'utils/ga.tracking.js';
 import { getTrackingInfo } from 'utils/storage.js';
 import { trackUser } from 'store/Tracking/actions/index.js';
+import { Toast } from '../../../Common/Toast/toast';
 
 const BannerCourseDetail = (props) => {
     const {product_detail, varChecked, changeChecked, frqntProd, addFrqntProd} = props;
@@ -22,7 +24,6 @@ const BannerCourseDetail = (props) => {
     const [discountPrice, discountPriceSelected] = useState(0);
     const dispatch = useDispatch();
     const { mainCourseCartLoader } = useSelector(store => store.loader);
-    const [certification, changeCertification] = useState(0);
     const tracking_data = getTrackingInfo();
 
     const starRatings = (star, index) => {
@@ -39,28 +40,51 @@ const BannerCourseDetail = (props) => {
         let selectedObj = objj;
         discountPriceSelected(objj.fake_inr_price);
         changeChecked({...selectedObj});
-        changeCertification({...selectedObj.certify});
 
         MyGA.SendEvent('ln_study_mode', 'ln_study_mode', 'ln_click_study_mode', `${selectedObj.mode}|get_choice_display:"STUDY_MODE"`, '', false, true);
     }
 
     const goToCart = async (value) => {
         let cartItems = {};
+        let cvId = [];
 
-        if(!product_detail?.redeem_test) MyGA.SendEvent('ln_enroll_now', 'ln_enroll_now', 'ln_click_enroll_now', `${product_detail?.prd_H1}`, '', false, true);
-        trackUser({"query" : tracking_data, "action" :'enroll_now'});
+        if(!product_detail?.redeem_test) {
+            MyGA.SendEvent('ln_enroll_now', 'ln_enroll_now', 'ln_click_enroll_now', `${product_detail?.prd_H1}`, '', false, true);
+            trackUser({"query" : tracking_data, "action" :'enroll_now'});
 
+            if(frqntProd && frqntProd.length > 0) {
+                frqntProd.map(prdId => cvId.push(prdId.id));
+                if(value.id) cvId.push(value.id)
+                else cvId.push(product_detail?.selected_var?.id);
+            }
 
-        if(value.id) cartItems = {'prod_id': product_detail?.pPv, 'cart_type': 'cart', 'cv_id': value.id};
-        else cartItems = {'prod_id': product_detail?.pPv, 'cart_type': 'cart', 'cv_id': product_detail?.selected_var?.id};
+            if(value.id) cartItems = {'prod_id': product_detail?.pPv, 'cart_type': 'cart', 'cv_id': (cvId.length > 0 ? cvId : value.id)};
+            else cartItems = {'prod_id': product_detail?.pPv, 'cart_type': 'cart', 'cv_id': (cvId.length > 0 ? cvId : product_detail?.selected_var?.id)};
 
-        try {
-            dispatch(startMainCourseCartLoader());
-            await new Promise((resolve, reject) => dispatch(fetchAddToCartEnroll({ cartItems ,resolve, reject })));
-            dispatch(stopMainCourseCartLoader());
+            try {
+                dispatch(startMainCourseCartLoader());
+                await new Promise((resolve, reject) => dispatch(fetchAddToCartEnroll({ cartItems ,resolve, reject })));
+                dispatch(stopMainCourseCartLoader());
+            }
+            catch (error) {
+                dispatch(stopMainCourseCartLoader());
+            }
         }
-        catch (error) {
-            dispatch(stopMainCourseCartLoader());
+        else {
+            cartItems = { 'prod_id': product_detail?.pPv, 'redeem_option': product_detail?.redeem_option }
+
+            try {
+                dispatch(startMainCourseCartLoader());
+                await new Promise((resolve, reject) => dispatch(fetchAddToCartRedeem({ cartItems ,resolve, reject })));
+                dispatch(stopMainCourseCartLoader());
+            }
+            catch (error) {
+                Toast.fire({
+                    type: 'error',
+                    title: error?.error_message
+                });
+                dispatch(stopMainCourseCartLoader());
+            }
         }
     }
 
@@ -204,7 +228,7 @@ const BannerCourseDetail = (props) => {
                                     }
 
                                     {
-                                        (varChecked?.level || product_detail?.selected_var?.level) ? <li>Course Level: <strong>{varChecked?.level || product_detail?.selected_var?.level}</strong></li>
+                                        (varChecked?.level || product_detail?.selected_var?.level) ? <li>Course Level: <strong>{getStudyLevel(varChecked?.level || product_detail?.selected_var?.level)}</strong></li>
                                         : ""
                                     }
 
@@ -235,6 +259,20 @@ const BannerCourseDetail = (props) => {
                                                 <span className="read-more-target" dangerouslySetInnerHTML={{__html: product_detail?.prd_about?.replace(regex, '').slice(reqLength)}} />
                                             </span>
                                             <label htmlFor="post-10" className="read-more-trigger"></label>
+                                        </div> : "" }
+
+                                        { product_detail?.prd_desc ? <div id="module" className="row about-course">
+                                            {product_detail?.prd_desc.replace(regex, '')?.length > reqLength ? (
+                                                <input type="checkbox" className="read-more-state" id="post-20" ref={inputCheckbox} itemProp="desc" />
+                                                ) : (
+                                                    ""
+                                                    )}
+                                                    
+                                            <span className="read-more-wrap" itemProp="description">
+                                                <span dangerouslySetInnerHTML={{__html:product_detail?.prd_desc?.replace(regex, '').slice(0, reqLength)}} />
+                                                <span className="read-more-target" dangerouslySetInnerHTML={{__html: product_detail?.prd_desc?.replace(regex, '').slice(reqLength)}} />
+                                            </span>
+                                            <label htmlFor="post-20" className="read-more-trigger"></label>
                                         </div> : "" }
                                     </span>
                                 </div>

@@ -9,7 +9,8 @@ import {
     fetchRecommendedCourses,
     recommendedCoursesFetched,
     sendEnquireNow,
-    fetchAddToCartEnroll
+    fetchAddToCartEnroll,
+    fetchAddToCartRedeem
 } from './actions';
 import {siteDomain} from '../../utils/domains';
 
@@ -139,6 +140,27 @@ function* AddToCart(action) {
     }
 }
 
+function* AddToCartRedeem(action) {
+    const { payload: { cartItems, resolve, reject }} = action;
+
+    try {
+        const response = yield call(Api.addToCartRedeemApi, cartItems)
+
+        if (response?.error) {
+            return reject(response)
+        }
+        console.log(response);
+
+        const item = response?.data?.data;
+        if(item.status === 1) return window.location.href = `${siteDomain}${item.redirectUrl}`;
+        else resolve(item);
+    }
+    catch(e) {
+        console.log(`Reject sending survey question due to ${e}`);
+        return reject(e);
+    }
+}
+
 export default function* WatchDetailPage() {
     // yield takeLatest(fetchOtherProviderCourses.type, otherProvidersCourses);
     yield takeLatest(fetchMainCourses.type, mainCoursesApi);
@@ -147,5 +169,5 @@ export default function* WatchDetailPage() {
     yield takeLatest(submitReview.type, submitReviews);
     yield takeLatest(sendEnquireNow.type, SendEnquireNow);
     yield takeLatest(fetchAddToCartEnroll.type, AddToCart);
-
+    yield takeLatest(fetchAddToCartRedeem.type, AddToCartRedeem);
 }

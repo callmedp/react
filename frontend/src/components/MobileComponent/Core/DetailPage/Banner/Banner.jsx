@@ -27,7 +27,7 @@ const CourseDetailBanner = (props) => {
     }, [prdId])
 
     return (
-        <div className="m-detail-header ml-15 mt-10" itemProp="Course" itemScope itemtype="https://schema.org/Course">
+        <div className="m-detail-header ml-15 mt-10" itemProp="Course" itemScope itemType="https://schema.org/Course">
 
             <div className="m-detail-heading">
                 <div className="m-detail-heading__icon mt-30" itemProp="image">

@@ -46,7 +46,7 @@ const LearnersStories = (props) => {
         // if(selectedIndex === 2 && e.target.className === 'carousel-control-prev-icon' && prd_rv_has_prev) handleEffects(prd_rv_current_page-1);
     }
 
-    const getReviews = (reviewData, idx) => {
+    const getAllReviews = (reviewData, idx) => {
         return (
             <Carousel.Item interval={1000000} key={idx}>
                 <div className="d-flex col">
@@ -87,7 +87,7 @@ const LearnersStories = (props) => {
                     prd_review_list && prd_review_list.length > 0 ?
                     <Carousel className="reviews" onSelect={handleSelect}>
                         {
-                            prd_review_list?.map(getReviews)
+                            prd_review_list?.map(getAllReviews)
                         }
                     </Carousel>
                     : ""

@@ -29,12 +29,17 @@ const addToCartApi = (data) => {
     return BaseApiService.post(`${siteDomain}/api/v1/cart/add/`, data);
 }
 
+const addToCartRedeemApi = (data) => {
+    return BaseApiService.post(`${siteDomain}/api/v1/order/direct-order/`, data);
+}
+
 export default {
     mainCourses,
     fetchReviews,
     submitReviews,
     recommendedCoursesApi,
     EnquireNewSend,
-    addToCartApi
+    addToCartApi,
+    addToCartRedeemApi
 }   
 

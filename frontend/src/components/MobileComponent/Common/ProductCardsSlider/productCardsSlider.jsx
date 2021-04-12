@@ -34,7 +34,7 @@ const ProductCards = props => {
             {
                 productList?.map((product, index) => {
                     return (
-                        <div className="m-card" key={index} itemProp="itemListElement" itemScope itemtype="https://schema.org/ListItem">
+                        <div className="m-card" key={index} itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
                             <div className="m-card__heading" itemProp="image">
                                 <figure>
                                     <img src={product?.imgUrl} alt={product?.imgAlt} />
@@ -44,7 +44,7 @@ const ProductCards = props => {
                                 </h3>
                             </div>
                             <div className="m-card__box">
-                                <div className="m-card__rating" itemProp="aggregateRating" itemScope itemtype="https://schema.org/AggregateRating">
+                                <div className="m-card__rating" itemProp="aggregateRating" itemScope itemType="https://schema.org/AggregateRating">
                                     {
                                         !!noProvider ? '' :
                                             <span className="mr-10">

@@ -6,6 +6,9 @@ const STUDY_MODE = {
     'CA': 'Classroom',
     'CF': 'Certifications',
     'DL': 'Distance Learning',
+    'BD': 'Basic + More Deliverable',
+    'BS': 'Basic',
+    'TR': 'Trial',
     '': 'Other'
 }
 

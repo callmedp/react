@@ -1,5 +1,5 @@
 import {
-    mainCoursesFetched, ReviewsFetched, recommendedCoursesFetched, addToCartEnrollFetched
+    mainCoursesFetched, ReviewsFetched, recommendedCoursesFetched, addToCartEnrollFetched, addToCartRedeemFetched
 } from './actions';
 
 
@@ -13,17 +13,6 @@ export const mainCoursesReducer = (state = mainCoursesState, action) => {
         default: return state;
     }
 }
-
-// const otherProvidersCoursesState = {
-//     pop_list: {}
-// }
-
-// export const OtherProvidersCoursesReducer = (state = otherProvidersCoursesState, action) => {
-//     switch (action.type) {
-//         case OtherProviderCoursesFetched.type: return { ...otherProvidersCoursesState, ...action.payload  }
-//         default: return state;
-//     }
-// }
 
 const recommendedCoursesState = {
     results: []
@@ -82,6 +71,17 @@ const addToCartState = {
 export const AddToCartReducer = (state = addToCartState, action) => {
     switch (action.type) {
         case addToCartEnrollFetched.type: return { ...addToCartState, ...action.payload  }
+        default: return state;
+    }
+}
+
+const addToCartRedeemState = {
+    // prd_reviews: {}
+}
+
+export const AddToCartRedeemReducer = (state = addToCartRedeemState, action) => {
+    switch (action.type) {
+        case addToCartRedeemFetched.type: return { ...addToCartRedeemState, ...action.payload  }
         default: return state;
     }
 }
