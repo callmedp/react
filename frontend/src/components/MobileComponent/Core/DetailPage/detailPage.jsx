@@ -84,7 +84,7 @@ const DetailPage = (props) => {
                 <>
                     <MenuNav />
                     {
-                        reviewModal ? <ReviewModal showReviewModal={showReviewModal} prdId={prdId}/> :<>
+                        reviewModal ? <ReviewModal showReviewModal={showReviewModal} prdId={prdId} product_detail={product_detail}/> :<>
                         <header className="m-container m-header detail-bg">
                         <Header setShowSearchPage={setShowSearchPage} hideName={true}/>
                         <CourseDetailBanner 
@@ -126,7 +126,7 @@ const DetailPage = (props) => {
                         { product_detail?.pop && <OtherProviders pop_list={product_detail?.pop_list} /> }
                         { product_detail?.faq && <FAQ faq_list={product_detail?.faq_list}/> }
                         {
-                            product_detail?.prd_num_rating ? <Reviews showReviewModal={showReviewModal} prdId={prdId}/> : ''
+                            product_detail?.prd_num_rating ? <Reviews showReviewModal={showReviewModal} product_detail={product_detail} prdId={prdId} pUrl={props?.match?.url}/> : ''
                         }
                         { skill?.length > 0 && <CoursesMayLike product_id={prdId} skill={skill}/> }
                         <CTA setEnquiryForm={setEnquiryForm} contact={ggn_contact} />
