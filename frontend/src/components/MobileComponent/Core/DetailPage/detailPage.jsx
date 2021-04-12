@@ -29,30 +29,32 @@ import Aos from "aos";
 import MetaContent from '../../Common/MetaContent/metaContent';
 // import "aos/dist/aos.css";
 import { fetchProductReviews, fetchMainCourses } from 'store/DetailPage/actions';
+import SearchPage from '../../Common/SearchPage/SearchPage';
 
 const DetailPage = (props) => {
-
+    const { history } = props
     const [reviewModal, showReviewModal] = useState(false)
     const prdId = props.match.params.id;
     const dispatch = useDispatch()
-    const { product_detail, skill } = useSelector(store => store?.mainCourses);
+    const { product_detail, skill, ggn_contact } = useSelector(store => store?.mainCourses);
     const meta_tags = product_detail?.meta;
     const [enquiryForm, setEnquiryForm] = useState(false);
     const [varChecked, changeChecked] = useState({});
     const [showStickyNav, setShowStickyNav] = useState(false);
+    const [showSearchPage, setShowSearchPage] = useState(false)
 
     const handleEffects = async () => {
         try {
             if (!(window && window.config && window.config.isServerRendered)) {
-                new Promise((resolve, reject) => dispatch(fetchMainCourses({ payload: { id: prdId?.split('-')[1], device: 'mobile' },resolve, reject })));
                 new Promise((resolve, reject) => dispatch(fetchProductReviews({ payload: { prdId: prdId?.split('-')[1], page: 1, device: 'mobile'}, resolve, reject })));
+                await new Promise((resolve, reject) => dispatch(fetchMainCourses({ payload: { id: prdId?.split('-')[1], device: 'mobile' },resolve, reject })));
             }
             else {
                 delete window.config?.isServerRendered
             }
         } catch (error) {
             if (error?.status == 404) {
-                // history.push('/404');
+                history.push('/404');
                 console.log(error)
             }
         }
@@ -76,52 +78,66 @@ const DetailPage = (props) => {
     return(
         <div>
             { meta_tags && <MetaContent meta_tags={meta_tags} /> }
-            <MenuNav />
-            {
-                reviewModal ? <ReviewModal showReviewModal={showReviewModal} prdId={prdId}/> :<>
-                <header className="m-container m-header detail-bg">
-                <Header />
-                <CourseDetailBanner product_detail={product_detail} prdId={prdId} varChecked={varChecked}/>
-            </header>
-            <main className="mb-0">
-                <CourseEnrol product_detail={product_detail} varChecked={varChecked} changeChecked={changeChecked}/>
-                {
-                    showStickyNav && <StickyNavDetail 
-                        outline={product_detail?.chapter ? true : false}
-                        faq = {product_detail?.faq ? true : false}
-                        product_detail={product_detail} prdId={prdId} varChecked={varChecked}
+            { 
+                showSearchPage ? 
+                <SearchPage setShowSearchPage={setShowSearchPage} /> :
+                <>
+                    <MenuNav />
+                    {
+                        reviewModal ? <ReviewModal showReviewModal={showReviewModal} prdId={prdId}/> :<>
+                        <header className="m-container m-header detail-bg">
+                        <Header setShowSearchPage={setShowSearchPage} hideName={true}/>
+                        <CourseDetailBanner 
+                            product_detail={product_detail} 
+                            prdId={prdId} 
+                            varChecked={varChecked}
+                            showReviewModal={showReviewModal} 
                         />
-                }
-                {
-                    product_detail?.combo && <ComboIncludes comboList={product_detail.combo_list}/>
-                }
-
-                <FrequentlyBought />
-                <KeyFeatures prd_uget={product_detail?.prd_uget}/>
-                {
-                    product_detail?.chapter && 
-                        <CourseOutline chapter_list={product_detail?.chapter_list}/>
-                }
-                {/* <CourseOutcome />
-                <SampleCertificate /> */}
-                <HowItWorks steps={product_detail?.dlvry_flow}/>
-                { 
-                    product_detail?.prd_should_lrn &&
-                        <WhoLearn prd_lrn_data={product_detail?.prd_should_lrn_dt} />
-                }
-                { skill && <SkillGain skills={skill}/> }
-                { product_detail?.free_test && <TakeFreeTest should_take_test_url={product_detail?.shld_take_test_slg} test_title={product_detail?.test_title} /> }
-                { product_detail?.pop && <OtherProviders pop_list={product_detail?.pop_list} /> }
-                { product_detail?.faq && <FAQ faq_list={product_detail?.faq_list}/> }
-                <Reviews showReviewModal={showReviewModal} prdId={prdId}/>
-                { skill && <CoursesMayLike product_id={prdId} skill={skill}/> }
-                {/* <CTA setEnquiryForm={setEnquiryForm} /> */}
-                {
-                    enquiryForm ? <EnquiryModal setEnquiryForm={setEnquiryForm} page="detailPage"/> : null
-                }
-                {/* <CertificateModal /> */}
-            </main>
-            <Footer /></>
+                    </header>
+                    <main className="mb-0">
+                        <CourseEnrol product_detail={product_detail} varChecked={varChecked} changeChecked={changeChecked} />
+                        {
+                            showStickyNav && <StickyNavDetail 
+                                outline={product_detail?.chapter ? true : false}
+                                faq = {product_detail?.faq ? true : false}
+                                product_detail={product_detail} prdId={prdId} varChecked={varChecked}
+                                />
+                        }
+                        {
+                            product_detail?.combo && <ComboIncludes comboList={product_detail.combo_list}/>
+                        }
+                        {
+                            product_detail?.fbt && <FrequentlyBought fbtList ={product_detail.fbt_list} varChecked={varChecked}/>
+                        }
+                        <KeyFeatures prd_uget={product_detail?.prd_uget} prd_vendor_slug={product_detail?.prd_vendor_slug} typeFlow={product_detail?.pTF}/>
+                        {
+                            product_detail?.chapter && 
+                                <CourseOutline chapter_list={product_detail?.chapter_list}/>
+                        }
+                        {/* <CourseOutcome />
+                        <SampleCertificate /> */}
+                        <HowItWorks steps={product_detail?.dlvry_flow}/>
+                        { 
+                            product_detail?.prd_should_lrn &&
+                                <WhoLearn prd_lrn_data={product_detail?.prd_should_lrn_dt} />
+                        }
+                        { skill?.length > 0 && <SkillGain skills={skill}/> }
+                        { product_detail?.free_test && <TakeFreeTest should_take_test_url={product_detail?.shld_take_test_slg} test_title={product_detail?.test_title} /> }
+                        { product_detail?.pop && <OtherProviders pop_list={product_detail?.pop_list} /> }
+                        { product_detail?.faq && <FAQ faq_list={product_detail?.faq_list}/> }
+                        {
+                            product_detail?.prd_num_rating ? <Reviews showReviewModal={showReviewModal} prdId={prdId}/> : ''
+                        }
+                        { skill?.length > 0 && <CoursesMayLike product_id={prdId} skill={skill}/> }
+                        <CTA setEnquiryForm={setEnquiryForm} contact={ggn_contact} />
+                        {
+                            enquiryForm ? <EnquiryModal setEnquiryForm={setEnquiryForm} page="detailPage"/> : null
+                        }
+                        {/* <CertificateModal /> */}
+                    </main>
+                    <Footer /></>
+                    }
+                </>
             }
         </div>
     )

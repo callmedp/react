@@ -335,7 +335,7 @@ const BannerCourseDetail = (props) => {
                                                 <ul className="pb-0">
                                                 {
                                                     (varChecked?.inr_price || product_detail?.var_list[0]?.inr_price) < 5001 ?
-                                                    <li><figure className="icon-offer-pay"></figure> Buy now & &nbsp;<strong>make payment within 14 days using ePayLater</strong> </li>
+                                                    <li><figure className="icon-offer-pay"></figure> Buy now &amp; <strong>pay within 14 days using ePayLater</strong> </li>
 
                                                     :
                                                     

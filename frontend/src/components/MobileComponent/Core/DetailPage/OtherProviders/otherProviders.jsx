@@ -12,7 +12,7 @@ const OtherProviders = (props) => {
             <h2 className="m-heading2 mb-10 mt-10">Courses by other providers</h2>
             <div className="m-courses m-recent-courses ml-10n">
                 {
-                    pop_list?.length > 0 ? <ProductCards productList = {pop_list?.slice(12)}/> : ''
+                    pop_list?.length > 0 && <ProductCards productList = {pop_list.slice(0, 12)}/>
                 }
             </div>
         </section>
