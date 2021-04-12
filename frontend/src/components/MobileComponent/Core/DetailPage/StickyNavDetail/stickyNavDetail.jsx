@@ -50,7 +50,7 @@ const StickyNavDetail = (props) => {
                     <strong className="mt-10 mb-10">{varChecked?.inr_price || product_detail?.var_list[0]?.inr_price}/-&nbsp; 
                     </strong>
                     {/* <strong className="mt-10 mb-10">3,499/- <del>5,499/-</del></strong> */}
-                    <Link to={'#'} className="btn btn-secondary ml-auto" onClick={() => goToCart(varChecked)}>Enroll now</Link>
+                    <Link to={'#'} className="btn btn-secondary ml-auto" onClick={() => goToCart(varChecked)}>{ product_detail?.pTF ? 'Buy Now' : 'Enroll now' }</Link>
                 </div>
                 <div className="m-sticky-detail__nav">
                     <Slider {...settings}>
@@ -68,7 +68,7 @@ const StickyNavDetail = (props) => {
                             <Link to={"#"} className={ tab === '3' ? "active" : '' } id='3' onClick={handleTab}>Outcome</Link>
                         </LinkScroll> */}
                         <LinkScroll to="begin" offset={-120}>
-                            <Link to={"#"} className={ tab === '4' ? "active" : '' } id='4' onClick={handleTab}>How to begin</Link>
+                            <Link to={"#"} className={ tab === '4' ? "active" : '' } id='4' onClick={handleTab}>How it works</Link>
                         </LinkScroll>
                         {
                             faq &&
@@ -76,9 +76,12 @@ const StickyNavDetail = (props) => {
                                     <Link to={"#"} className={ tab === '5' ? "active" : '' } id='5' onClick={handleTab}>FAQ</Link>
                                 </LinkScroll>
                         }
-                        <LinkScroll to="reviews" offset={-120}>
-                            <Link to={"#"} className={ tab === '6' ? "active" : '' } id='6' onClick={handleTab}>Reviews</Link>
-                        </LinkScroll>
+                        {
+                            product_detail?.prd_num_rating > 0 &&
+                                <LinkScroll to="reviews" offset={-120}>
+                                    <Link to={"#"} className={ tab === '6' ? "active" : '' } id='6' onClick={handleTab}>Reviews</Link>
+                                </LinkScroll>
+                        }
                     </Slider>
                 </div>
             </div>

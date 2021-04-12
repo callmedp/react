@@ -2,9 +2,16 @@ import React, { useState, useEffect } from 'react';
 import {Link} from 'react-router-dom';
 import './Banner.scss';
 import { siteDomain } from 'utils/domains';
+import { Link as LinkScroll } from "react-scroll";
 
 const CourseDetailBanner = (props) => {
-    const { product_detail, prdId, varChecked } = props
+    const { 
+        product_detail,
+        prdId,
+        varChecked,
+        showReviewModal 
+    } = props
+
     const noOfWords = 250;
     const [showAll, setShowAll] = useState(false);
     const starRatings = (star, index) => {
@@ -37,33 +44,48 @@ const CourseDetailBanner = (props) => {
                     </figure>
                 </div>
                 <div className="m-detail-heading__content" itemProp="name">
-                    { product_detail?.pTg && <span className="m-flag-yellowB">{ product_detail.pTg }</span> }
+                    { product_detail?.pTg && product_detail.pTg !== 'None' && <span className="m-flag-yellowB">{ product_detail.pTg }</span> }
                     <h1 className="m-heading1 mt-5">
                         { product_detail?.prd_H1 }
                     </h1>
                     <span className="m-rating">
                         {
-                            product_detail?.prd_rating_star?.map((star, index) => starRatings(star, index))
+                            product_detail?.prd_num_rating ? 
+                                <>
+                                    {
+                                        product_detail?.prd_rating_star?.map((star, index) => starRatings(star, index))
+                                    }
+                                    <span itemProp="ratingValue">{ product_detail?.prd_rating?.toFixed() }/5</span>
+                                </>
+                                :
+                                ''
                         }
-                        <span itemProp="ratingValue">{ product_detail?.prd_rating?.toFixed() }/5</span>
                         <span>By <span itemProp="provider">{ product_detail?.prd_vendor }</span></span>
                     </span>
                     <div className="d-flex mt-10">
                         {
-                            product_detail?.prd_num_rating && 
+                            product_detail?.prd_num_rating > 0 ?
                                 <span className="m-review-jobs">
-                                    <Link to={"#"}>
-                                        <figure className="micon-reviews-link"></figure> <strong>{ product_detail?.prd_num_rating }</strong> Reviews
+                                    <LinkScroll to="review" offset={-120}>
+                                        <Link to={"#"}>
+                                            <figure className="micon-reviews-link"></figure> <strong>{ product_detail?.prd_num_rating }</strong> Reviews
+                                        </Link>
+                                    </LinkScroll>
+                                </span>
+                                :
+                                <span className="m-review-jobs">
+                                    <Link to={"#"} onClick={ () => showReviewModal(true) }>
+                                        <figure className="micon-reviews-link"></figure> Write a Review
                                     </Link>
                                 </span>
                         }
 
                         {
-                            product_detail?.prd_num_jobs &&
+                            product_detail?.prd_num_jobs > 0 &&
                                 <span className="m-review-jobs">
-                                    <Link to={"#"}>
+                                    <a href={product_detail?.num_jobs_url}>
                                         <figure className="micon-jobs-link"></figure> <strong>{ product_detail?.prd_num_jobs }</strong> Jobs available
-                                    </Link>
+                                    </a>
                                 </span>
 
                         }
@@ -93,26 +115,31 @@ const CourseDetailBanner = (props) => {
                     </ul>
                 </div>
             </div>
-            <ul className="m-course-stats mb-10 bdr-top pt-10">
-                {
-                    product_detail?.type && 
-                        <li>
-                            Type: <strong className="d-inline">{product_detail?.type && product_detail?.type?.split(' ')[0] }</strong>
-                        </li>
-                }
-                
-                {
-                    product_detail?.level && 
-                        <li>
-                            Level: <strong className="d-inline">{product_detail?.level}</strong>
-                        </li>
-                }
 
-                <li>
-                    Certification: <strong className="d-inline">Yes</strong>
-                </li>
-                
-            </ul>
+            {
+                (product_detail?.type || product_detail?.level) &&
+                    <ul className="m-course-stats mb-10 bdr-top pt-10">
+                        {
+                            product_detail?.type && 
+                                <li>
+                                    Type: <strong className="d-inline">{product_detail?.type && product_detail?.type?.split(' ')[0] }</strong>
+                                </li>
+                        }
+                        
+                        {
+                            product_detail?.level && 
+                                <li>
+                                    Level: <strong className="d-inline">{product_detail?.level}</strong>
+                                </li>
+                        }
+
+                        <li>
+                            Certification: <strong className="d-inline">Yes</strong>
+                        </li>
+                        
+                    </ul>
+            }
+
             <div className="m-intro-video" itemProp="embedUrl">
                 <strong className="mb-10">Course intro</strong>
                 <div className="d-flex">
@@ -120,7 +147,7 @@ const CourseDetailBanner = (props) => {
                         product_detail?.prd_video && 
                             <figure className="m-intro-video__img">
                                 <a href={`https://${product_detail?.prd_video}`} target="_blank">
-                                    <img src={product_detail?.prd_vendor_img} alt="Intro Video" />
+                                    <iframe src={`https://${product_detail?.prd_video}`} frameborder="0" />
                                     <i className="micon-play-video"></i>
                                 </a>
                             </figure>
@@ -128,15 +155,15 @@ const CourseDetailBanner = (props) => {
 
                     {
                         product_detail?.prd_about && 
-                        <>
-                            <p itemprop="description" className="m-intro-video__content" dangerouslySetInnerHTML={{__html: product_detail?.prd_about?.replace(/<[^>]*>/g, '').slice(0, showAll ? product_detail?.prd_about?.length : noOfWords) }} />
+                        <p className="m-intro-video__content">
+                            <span itemprop="description" dangerouslySetInnerHTML={{__html: product_detail?.prd_about?.replace(/<[^>]*>/g, '').slice(0, showAll ? product_detail?.prd_about?.length : noOfWords) }} />
                             <span>
                                 {
                                     (!showAll && product_detail?.prd_about?.length > noOfWords) ? 
-                                            controlContent(" ...Read More", true) : controlContent(" ...Show less", false)
+                                            controlContent(" ... Read More", true) : controlContent(" ... Show less", false)
                                 } 
                             </span>
-                        </>
+                        </p>
                     }
 
                     {/* {

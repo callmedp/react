@@ -41,21 +41,25 @@ const CourseEnrol = (props) => {
 
             <section className="m-container mt-80n mb-0 pb-0">
                 <div className="m-course-enrol">
-                    <div className="m-course-enrol__mode"> 
-                        <form>
-                            <strong>Mode</strong>
-                            {
-                                product_detail?.var_list?.map((varList) => {
-                                    return (
-                                        <label key={varList.id}>
-                                            <input type="radio" name="radio" id={varList.id} checked={varChecked?.id && (varChecked?.id === varList.id ? true : false) || !varChecked?.id && (product_detail?.selected_var?.id === varList.id ? true : false)} onChange={() => changeMode(varList)} />
-                                            {getStudyMode(varList?.mode)}
-                                        </label>
-                                    )
-                                })
-                            }
-                        </form>
-                    </div>
+                    {
+                        product_detail?.var_list?.length > 0 && 
+                            <div className="m-course-enrol__mode"> 
+                                <form>
+                                    <strong>Mode</strong>
+                                    {
+                                        product_detail?.var_list?.map((varList) => {
+                                            return (
+                                                <label key={varList.id}>
+                                                    <input type="radio" name="radio" id={varList.id} checked={varChecked?.id && (varChecked?.id === varList.id ? true : false) || !varChecked?.id && (product_detail?.selected_var?.id === varList.id ? true : false)} onChange={() => changeMode(varList)} />
+                                                    {getStudyMode(varList?.mode)}
+                                                </label>
+                                            )
+                                        })
+                                    }
+                                </form>
+                            </div>
+                    }
+
                     <div className="m-course-enrol__price">
                         <strong className="mt-20 mb-10">{varChecked?.inr_price || product_detail?.var_list[0]?.inr_price}/-&nbsp; 
                             <span>
@@ -68,7 +72,7 @@ const CourseEnrol = (props) => {
                                 &nbsp;30%off
                             </span>
                         </strong>
-                        <Link to={'#'} className="btn btn-secondary mt-10 ml-auto" onClick={() => goToCart(varChecked)}>Enroll now</Link>
+                        <Link to={'#'} className="btn btn-secondary mt-10 ml-auto" onClick={() => goToCart(varChecked)}>{ product_detail?.pTF === 16 ? 'Buy Now' : 'Enroll now' }</Link>
                     </div>
                     <div className="m-course-enrol__offer lightblue-bg2">
                         <strong className="mt-10 mb-5">Offers</strong>
