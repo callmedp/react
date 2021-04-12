@@ -5,9 +5,11 @@ import Slider from "react-slick";
 import {Link} from 'react-router-dom';
 import './reviews.scss';
 import { fetchProductReviews } from 'store/DetailPage/actions';
+import { getCandidateId } from 'utils/storage.js';
+import { siteDomain } from 'utils/domains';
 
 const Reviews = (props) => {
-    const { showReviewModal, prdId } = props
+    const { showReviewModal, prdId, product_detail, pUrl } = props
     const { prd_review_list, prd_rv_total } = useSelector( store => store.reviews )
     const [pageId, updatePageId] = useState(2)
     const dispatch = useDispatch()
@@ -42,7 +44,16 @@ const Reviews = (props) => {
         <section className="m-container mt-0 mb-0 pb-0" id="review" data-aos="fade-up">
             <div className="d-flex" itemProp="review" itemScope itemType="https://schema.org/Review">
                 <h2 className="m-heading2 mb-10">Review</h2>
-                <Link to={'#'} className="ml-auto fs-13 font-weight-bold" onClick={() => showReviewModal(true) }>Write a review</Link>
+                {
+                    (product_detail?.user_reviews && getCandidateId()) ?
+                        <Link to={'#'} className="ml-auto fs-13 font-weight-bold" onClick={() => showReviewModal(true) }>Update your review</Link>
+                    :
+                    (!product_detail?.user_reviews && getCandidateId()) ?
+                        <Link to={'#'} className="ml-auto fs-13 font-weight-bold" onClick={() => showReviewModal(true) }>Write a review</Link>
+                    : 
+                    <a href={`${siteDomain}/login/?next=${pUrl}`} className="ml-auto fs-13 font-weight-bold" >Write a review</a>
+                }
+                
             </div>
             <div className="m-reviews">
                 <Slider {...settings}>
