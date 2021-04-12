@@ -167,7 +167,7 @@ const CourseDetailBanner = (props) => {
                         product_detail?.prd_video && 
                             <figure className="m-intro-video__img">
                                 <a href={`https://${product_detail?.prd_video}`} target="_blank">
-                                    <iframe src={`https://${product_detail?.prd_video}`} frameborder="0" />
+                                    <iframe src={`https://${product_detail?.prd_video}`} frameBorder="0" />
                                     <i className="micon-play-video"></i>
                                 </a>
                             </figure>
@@ -176,7 +176,7 @@ const CourseDetailBanner = (props) => {
                     {
                         product_detail?.prd_about && 
                         <p className="m-intro-video__content">
-                            <span itemprop="description" dangerouslySetInnerHTML={{__html: product_detail?.prd_about?.replace(/<[^>]*>/g, '').slice(0, showAll ? product_detail?.prd_about?.length : noOfWords) }} />
+                            <span itemProp="description" dangerouslySetInnerHTML={{__html: product_detail?.prd_about?.replace(/<[^>]*>/g, '').slice(0, showAll ? product_detail?.prd_about?.length : noOfWords) }} />
                             <span>
                                 {
                                     (!showAll && product_detail?.prd_about?.length > noOfWords) ? 

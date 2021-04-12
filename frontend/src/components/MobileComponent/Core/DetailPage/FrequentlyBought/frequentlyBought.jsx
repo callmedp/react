@@ -22,7 +22,7 @@ const FrequentlyBought = (props) => {
                     {
                         fbtList?.map((course, idx) => {
                             return (
-                                <li>
+                                <li key={idx}>
                                     <label key={idx}><input type="checkbox" id={course.id} name={`fbt${course.id}`} onClick={(event) => toggleProduct(event, course)} /> { course?.heading ? course.heading : course.label } <span className="ml-auto"> { course.inr_price }/-</span></label>
                                 </li>
                             )

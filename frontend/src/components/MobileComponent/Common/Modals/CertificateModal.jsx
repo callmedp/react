@@ -6,7 +6,7 @@ import { imageUrl } from 'utils/domains';
  
 const CertificateModal = (props) => {
     return(
-        <div class="m-container m-certificate-modal m-form-pos-center pb-10" data-aos="zoom-in">
+        <div className="m-container m-certificate-modal m-form-pos-center pb-10" data-aos="zoom-in">
             <div className="m-modal-body">
                 <Link to={"#"} className="m-close">x</Link>
                 <figure>

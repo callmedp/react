@@ -134,7 +134,7 @@ const CourseEnrol = (props) => {
                         <ul className="pb-0">
                             {
                                 (varChecked?.inr_price || product_detail?.var_list[0]?.inr_price) < 5001 ?
-                                <li><figure class="micon-offer-pay"></figure> Buy now &amp; <strong>pay within 14 days using ePayLater</strong> </li>
+                                <li><figure className="micon-offer-pay"></figure> Buy now &amp; <strong>pay within 14 days using ePayLater</strong> </li>
 
                                 :
                                 
