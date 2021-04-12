@@ -20,8 +20,14 @@ function* mainCoursesApi(action){
         const response = yield call(Api.mainCourses, payload.id);
         if(response?.error) return reject(response);
         const item = response?.data?.data;
-        yield put(mainCoursesFetched({ ...item }));
-        return resolve(item);
+
+        if(item?.redirect_url){
+            window.location.href = item?.redirect_url
+        }
+        else{
+            yield put(mainCoursesFetched({ ...item }));
+            return resolve(item);
+        }
     }
     catch(e) {
         return e;
