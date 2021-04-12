@@ -6,7 +6,7 @@ import { siteDomain } from 'utils/domains';
 const CourseDetailBanner = (props) => {
     const { product_detail, prdId, varChecked } = props
     const noOfWords = 250;
-    // const [showAll, setShowAll] = useState(false);
+    const [showAll, setShowAll] = useState(false);
     const starRatings = (star, index) => {
         return (
             star === '*' ? <em className="micon-fullstar" key={index}></em> :
@@ -15,15 +15,16 @@ const CourseDetailBanner = (props) => {
         )
     }
 
-    // const controlContent = (content, state) =>{
-    //     return (
-    //         <a href={"#"} onClick={() => setShowAll(state)}>
-    //             {content}
-    //         </a>
-    //     )
-    // }
+    const controlContent = (content, state) =>{
+        return (
+            <a href={"#"} onClick={(e) => {e.preventDefault(); setShowAll(state)}}>
+                {content}
+            </a>
+        )
+    }
+
     useEffect(() => {
-        // setShowAll(false)
+        setShowAll(false)
     }, [prdId])
 
     return (
@@ -69,31 +70,48 @@ const CourseDetailBanner = (props) => {
                         
                     </div>
                     <ul className="m-course-stats mt-20 mb-20">
-                        <li className="d-flex align-items-center">
-                            <figure className="icon-course-duration mr-10"></figure>
-                            <p>
-                                Course Duration <strong>{varChecked?.dur_days || product_detail?.selected_var?.dur_days || '--'} Days</strong>
-                            </p>
-                        </li>
-                        <li className="d-flex align-items-center">
-                            <figure className="icon-access-duration mr-10"></figure>
-                            <p>
-                                Access Duration <strong>{product_detail?.access_duration}</strong>
-                            </p>
-                        </li>
+                        {
+                            (varChecked?.dur_days || product_detail?.selected_var?.dur_days) && 
+                                <li className="d-flex align-items-center">
+                                    <figure className="icon-course-duration mr-10"></figure>
+                                    <p>
+                                        Course Duration <strong>{ varChecked?.dur_days || product_detail?.selected_var?.dur_days } Days</strong>
+                                    </p>
+                                </li>
+                        }
+
+                        {
+                            product_detail?.access_duration && 
+                                <li className="d-flex align-items-center">
+                                    <figure className="icon-access-duration mr-10"></figure>
+                                    <p>
+                                        Access Duration <strong>{product_detail?.access_duration}</strong>
+                                    </p>
+                                </li>
+                        }
+                        
                     </ul>
                 </div>
             </div>
             <ul className="m-course-stats mb-10 bdr-top pt-10">
-                <li>
-                    Type: <strong className="d-inline">Trial</strong>
-                </li>
-                <li>
-                    Level: <strong className="d-inline">Intermediate</strong>
-                </li>
+                {
+                    product_detail?.type && 
+                        <li>
+                            Type: <strong className="d-inline">{product_detail?.type && product_detail?.type?.split(' ')[0] }</strong>
+                        </li>
+                }
+                
+                {
+                    product_detail?.level && 
+                        <li>
+                            Level: <strong className="d-inline">{product_detail?.level}</strong>
+                        </li>
+                }
+
                 <li>
                     Certification: <strong className="d-inline">Yes</strong>
                 </li>
+                
             </ul>
             <div className="m-intro-video" itemprop="embedUrl">
                 <strong className="mb-10">Course intro</strong>
@@ -111,13 +129,13 @@ const CourseDetailBanner = (props) => {
                     {
                         product_detail?.prd_about && 
                         <>
-                            <p itemprop="description" className="m-intro-video__content" dangerouslySetInnerHTML={{__html: product_detail?.prd_about?.replace(/<[^>]*>/g, '').slice(0, noOfWords) + "<a href='#'> ...Read More</a>" }} />
-                            {/* <span>
+                            <p itemprop="description" className="m-intro-video__content" dangerouslySetInnerHTML={{__html: product_detail?.prd_about?.replace(/<[^>]*>/g, '').slice(0, showAll ? product_detail?.prd_about?.length : noOfWords) }} />
+                            <span>
                                 {
                                     (!showAll && product_detail?.prd_about?.length > noOfWords) ? 
-                                            controlContent(" ...Read More", true) : ("") 
+                                            controlContent(" ...Read More", true) : controlContent(" ...Show less", false)
                                 } 
-                            </span> */}
+                            </span>
                         </>
                     }
 

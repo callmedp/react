@@ -35,7 +35,7 @@ const DetailPage = (props) => {
     const [reviewModal, showReviewModal] = useState(false)
     const prdId = props.match.params.id;
     const dispatch = useDispatch()
-    const { product_detail, skill } = useSelector(store => store?.mainCourses);
+    const { product_detail, skill, ggn_contact } = useSelector(store => store?.mainCourses);
     const meta_tags = product_detail?.meta;
     const [enquiryForm, setEnquiryForm] = useState(false);
     const [varChecked, changeChecked] = useState({});
@@ -84,7 +84,7 @@ const DetailPage = (props) => {
                 <CourseDetailBanner product_detail={product_detail} prdId={prdId} varChecked={varChecked}/>
             </header>
             <main className="mb-0">
-                <CourseEnrol product_detail={product_detail} varChecked={varChecked} changeChecked={changeChecked}/>
+                <CourseEnrol product_detail={product_detail} varChecked={varChecked} changeChecked={changeChecked} />
                 {
                     showStickyNav && <StickyNavDetail 
                         outline={product_detail?.chapter ? true : false}
@@ -95,8 +95,9 @@ const DetailPage = (props) => {
                 {
                     product_detail?.combo && <ComboIncludes comboList={product_detail.combo_list}/>
                 }
-
-                <FrequentlyBought />
+                {
+                    product_detail?.fbt && <FrequentlyBought fbtList ={product_detail.fbt_list} varChecked={varChecked}/>
+                }
                 <KeyFeatures prd_uget={product_detail?.prd_uget}/>
                 {
                     product_detail?.chapter && 
@@ -109,13 +110,13 @@ const DetailPage = (props) => {
                     product_detail?.prd_should_lrn &&
                         <WhoLearn prd_lrn_data={product_detail?.prd_should_lrn_dt} />
                 }
-                { skill && <SkillGain skills={skill}/> }
+                { skill?.length > 0 && <SkillGain skills={skill}/> }
                 { product_detail?.free_test && <TakeFreeTest should_take_test_url={product_detail?.shld_take_test_slg} test_title={product_detail?.test_title} /> }
                 { product_detail?.pop && <OtherProviders pop_list={product_detail?.pop_list} /> }
                 { product_detail?.faq && <FAQ faq_list={product_detail?.faq_list}/> }
                 <Reviews showReviewModal={showReviewModal} prdId={prdId}/>
-                { skill && <CoursesMayLike product_id={prdId} skill={skill}/> }
-                {/* <CTA setEnquiryForm={setEnquiryForm} /> */}
+                { skill?.length > 0 && <CoursesMayLike product_id={prdId} skill={skill}/> }
+                <CTA setEnquiryForm={setEnquiryForm} contact={ggn_contact} />
                 {
                     enquiryForm ? <EnquiryModal setEnquiryForm={setEnquiryForm} page="detailPage"/> : null
                 }
