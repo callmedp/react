@@ -199,18 +199,18 @@ const BannerCourseDetail = (props) => {
                                 </ul>
                                 <ul className="course-stats-btm mt-20 mb-20">
                                     {
-                                        product_detail?.type ? <li>Course Type: <strong>{product_detail?.type}</strong></li>
+                                        (varChecked?.type || product_detail?.selected_var?.type) ? <li>Course Type: <strong>{getStudyMode(varChecked?.type || product_detail?.selected_var?.type)}</strong></li>
                                         : ""
                                     }
 
                                     {
-                                        product_detail?.level ? <li>Course Type: <strong>{product_detail?.level}</strong></li>
+                                        (varChecked?.level || product_detail?.selected_var?.level) ? <li>Course Level: <strong>{varChecked?.level || product_detail?.selected_var?.level}</strong></li>
                                         : ""
                                     }
 
                                     {
-                                        (varChecked?.certify || product_detail?.selected_var) ? <li>Certification: <strong>{(varChecked?.certify || product_detail?.selected_var?.certify) === (0 || false) ? 'No' : 'Yes' }</strong></li>
-                                        : ""
+                                        <li>Certification: <strong>{(varChecked?.certify || product_detail?.selected_var?.certify) === 0 ? 'No' : (varChecked?.certify || product_detail?.selected_var?.certify) === false ? 'No' : 'Yes' }</strong></li>
+                                        // : ""
                                     }
                                 </ul>
                                 <div className="intro-video">
@@ -263,8 +263,9 @@ const BannerCourseDetail = (props) => {
                                             <div className="course-enrol__price">
                                                 <strong className="price-taxes mt-20 mb-10">{getProductPrice(varChecked?.inr_price || product_detail?.var_list[0]?.inr_price)}/-  <span className="taxes">(+taxes)</span></strong>
                                                 <strong className="price-offer mt-0 mb-10">
+                                                    {/* sdvsv{varChecked?.id} second {discountPrice} third {product_detail?.var_list[0]?.fake_inr_price} */}
                                                     {
-                                                        varChecked?.id ? discountPrice : product_detail?.var_list[0]?.fake_inr_price > 0 ?
+                                                        (varChecked?.id ? discountPrice : product_detail?.var_list[0]?.fake_inr_price) > 0 ?
                                                         <>
                                                             <del>{varChecked?.id ? discountPrice : product_detail?.var_list[0]?.fake_inr_price}/- </del> 
                                                 
