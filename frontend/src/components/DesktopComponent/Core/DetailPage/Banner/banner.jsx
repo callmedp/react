@@ -279,27 +279,27 @@ const BannerCourseDetail = (props) => {
                             </div>
                             
                             <div className="banner-detail">
-                                {  
-                                    product_detail?.selected_var && product_detail?.var_list && product_detail?.var_list?.length > 0 &&
                                         <div className="course-enrol">
-                                            <div className="course-enrol__mode">
-                                                Mode
-                                                {
-                                                    product_detail?.var_list?.map((varList, indx) => {
-                                                        return (
-                                                                <form key={indx}>
-                                                                    <label htmlFor={varList?.id}>
-                                                                        <input type="radio" name="radio" id={varList?.id} checked={varChecked?.id && (varChecked?.id === varList?.id ? true : false) || !varChecked?.id && (product_detail?.selected_var?.id === varList?.id ? true : false)} onChange={() => changeMode(varList)} />
-                                                                        {getStudyMode(varList?.mode)}
-                                                                    </label> 
-                                                                </form>
-                                                            )
-                                                    })
-                                                }
-                                            </div>
-
+                                            {  
+                                                product_detail?.selected_var && product_detail?.var_list && product_detail?.var_list?.length > 0 &&
+                                                <div className="course-enrol__mode">
+                                                    Mode
+                                                    {
+                                                        product_detail?.var_list?.map((varList, indx) => {
+                                                            return (
+                                                                    <form key={indx}>
+                                                                        <label htmlFor={varList?.id}>
+                                                                            <input type="radio" name="radio" id={varList?.id} checked={varChecked?.id && (varChecked?.id === varList?.id ? true : false) || !varChecked?.id && (product_detail?.selected_var?.id === varList?.id ? true : false)} onChange={() => changeMode(varList)} />
+                                                                            {getStudyMode(varList?.mode)}
+                                                                        </label> 
+                                                                    </form>
+                                                                )
+                                                        })
+                                                    }
+                                                </div>
+                                            }
                                             <div className="course-enrol__price">
-                                                <strong className="price-taxes mt-20 mb-10">{getProductPrice(varChecked?.inr_price || product_detail?.var_list[0]?.inr_price)}/-  <span className="taxes">(+taxes)</span></strong>
+                                                <strong className="price-taxes mt-20 mb-10">{getProductPrice(varChecked?.inr_price || product_detail?.var_list[0]?.inr_price) || product_detail?.pPinb}/-  <span className="taxes">(+taxes)</span></strong>
                                                 <strong className="price-offer mt-0 mb-10">
                                                     {/* sdvsv{varChecked?.id} second {discountPrice} third {product_detail?.var_list[0]?.fake_inr_price} */}
                                                     {
@@ -314,6 +314,14 @@ const BannerCourseDetail = (props) => {
                                                                 % Off
                                                             </span>
                                                         </>
+                                                        : "" 
+                                                    }
+                                                    {
+                                                        (!product_detail?.var_list?.length > 0 && !product_detail?.selected_var && product_detail?.pPfinb > 0) ?
+                                                            <>
+                                                                <del>{product_detail?.pPfinb}/- </del>
+                                                                <span className="offer">{getDiscountedPrice(product_detail?.pPfinb, product_detail?.pPfinb)} % Off</span>
+                                                            </>
                                                         : ""
                                                     }
                                                 </strong>
@@ -336,7 +344,7 @@ const BannerCourseDetail = (props) => {
                                                 </ul>
                                             </div>
                                         </div>
-                                }
+                               
                                 { product_detail?.combo && <ComboIncludes combo_list={product_detail?.combo_list} /> }
                                 { product_detail?.fbt && <FrequentlyBought addFrqntProd={addFrqntProd} frqntProd={frqntProd} fbt_list={product_detail?.fbt_list}/> }
                             </div>
