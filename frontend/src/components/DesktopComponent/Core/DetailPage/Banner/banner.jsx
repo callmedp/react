@@ -246,7 +246,7 @@ const BannerCourseDetail = (props) => {
                                     </figure>
 
                                     <span className="intro-video__content" itemProp="embedUrl">
-                                        { product_detail?.prd_about ? <div id="module" className="row about-course">
+                                        { product_detail?.prd_about ? <div id="module" className=" about-course">
                                             {product_detail?.prd_about.replace(regex, '')?.length > reqLength ? (
                                                 <input type="checkbox" className="read-more-state" id="post-10" ref={inputCheckbox} itemProp="about" />
                                                 ) : (
@@ -260,7 +260,7 @@ const BannerCourseDetail = (props) => {
                                             <label htmlFor="post-10" className="read-more-trigger"></label>
                                         </div> : "" }
 
-                                        { product_detail?.prd_desc ? <div id="module" className="row about-course">
+                                        { product_detail?.prd_desc ? <div id="module" className=" about-course">
                                             {product_detail?.prd_desc.replace(regex, '')?.length > reqLength ? (
                                                 <input type="checkbox" className="read-more-state" id="post-20" ref={inputCheckbox} itemProp="desc" />
                                                 ) : (
