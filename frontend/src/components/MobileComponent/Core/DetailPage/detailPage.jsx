@@ -92,7 +92,10 @@ const DetailPage = (props) => {
                         product_detail={product_detail} prdId={prdId} varChecked={varChecked}
                         />
                 }
-                <ComboIncludes />
+                {
+                    product_detail?.combo && <ComboIncludes comboList={product_detail.combo_list}/>
+                }
+
                 <FrequentlyBought />
                 <KeyFeatures prd_uget={product_detail?.prd_uget}/>
                 {
