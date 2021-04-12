@@ -3,6 +3,7 @@ import logging
 import json
 from datetime import datetime
 from django.utils import timezone
+from decimal import Decimal
 
 # Django-Core Import
 from django.core.cache import cache
@@ -52,6 +53,16 @@ class ProductInformationAPIMixin(object):
     more frequent
     """
 
+    def get_solar_fakeprice(self, inr_price, fake_inr_price):
+        if inr_price is not None:
+            inr_price = inr_price
+            fake_inr_price = fake_inr_price
+            if fake_inr_price > Decimal('0.00'):
+                diff = float(fake_inr_price) - float(inr_price)
+                percent_diff = round((diff / float(fake_inr_price)) * 100, 0)
+                return (round(fake_inr_price, 0), percent_diff)
+        return None
+
     def get_solor_info(self, product):
         """
         Solar Info function will fetch all the information from Solar Queryset
@@ -81,6 +92,8 @@ class ProductInformationAPIMixin(object):
         info['prd_rating_star'] = product.pStar
         info['prd_video'] = product.pvurl
         info['start_price'] = product.pPinb
+        info['pPinb'] = product.pPinb
+        info['pPfinb'] = product.pPfinb
 
         if product.pPc == 'course':
             info['prd_service'] = 'course'
@@ -628,6 +641,7 @@ class ProductInformationAPIMixin(object):
         context.update(self.is_combos(sqs))
 
         context.update(json.loads(sqs.pFBT))
+        get_fakeprice = self.get_solar_fakeprice(sqs.pPinb, sqs.pPfinb)
         # update get fake price
         get_fake_price = 00
 
@@ -636,7 +650,7 @@ class ProductInformationAPIMixin(object):
         if getattr(product, 'vendor', None):
             context.update({'prd_vendor_slug': product.vendor.slug})
         # context.update({'sqs': sqs})
-        # context.update({'get_fakeprice': get_fakeprice})
+        context.update({'get_fakeprice': get_fakeprice})
         meta = product.as_meta(self.request)
         setattr(meta, '_keywords', None)
         setattr(meta, '_url', context.get('canonical_url', ''))
