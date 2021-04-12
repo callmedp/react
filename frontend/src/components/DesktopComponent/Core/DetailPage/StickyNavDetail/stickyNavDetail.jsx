@@ -52,26 +52,47 @@ const StickyNav = (props) => {
                     <div className="flex-1">
                         <span className="d-flex">
                             <figure className="sticky-icon-thumb">
-                                <img src="https://static1.shine.com/l/m/product_image/3425/1542800087_8980.png" alt="Digital Marketing Training Course" />
+                                <img src={product_detail?.prd_img} alt={product_detail?.prd_img_alt} />
                             </figure>
-                            <h2>Digital Marketing Courses & Certification</h2>
+                            <h2>{product_detail?.prd_H1}</h2>
                         </span>
                         <Nav>
-                            <LinkScroll offset={-160} className={ tab === '1' ? "active" : '' } to={"keyfeatures"} id='1' onClick={handleTab}>Key Features</LinkScroll>
+                            <LinkScroll offset={-160} isDynamic={true} spy={true} to="keyfeatures" id='1'>
+                                <Nav.Link>
+                                    Key Features
+                                </Nav.Link>
+                            </LinkScroll>
                             
                             {
-                                outline && <LinkScroll to={"courseoutline"} offset={-140} className={ tab === '2' ? "active" : '' } id='2' onClick={handleTab}>Outline</LinkScroll>
+                                outline && 
+                                    <LinkScroll to="courseoutline" offset={-140} isDynamic={true} spy={true} id='2'>
+                                        <Nav.Link>
+                                            Outline
+                                        </Nav.Link>
+                                    </LinkScroll>
                             }
                             
                             {/* <LinkScroll offset={-120} to={"outcome"} className={ tab === '3' ? "active" : '' } id='3' onClick={handleTab}>Outcome</LinkScroll> */}
                             
-                            <LinkScroll offset={-130} to={"howitworks"} className={ tab === '4' ? "active" : '' } id='4' onClick={handleTab}>How it works</LinkScroll>
+                            <LinkScroll offset={-130} to="howitworks" isDynamic={true} spy={true} id='4'>
+                                <Nav.Link>
+                                    How it works
+                                </Nav.Link>
+                            </LinkScroll>
 
                             {
-                                faq && <LinkScroll to="faqs" offset={-180} className={ tab === '5' ? "active" : '' } id='5' onClick={handleTab}>FAQs</LinkScroll>
+                                faq && <LinkScroll to="faqs" offset={-180} isDynamic={true} spy={true} id='5'>
+                                    <Nav.Link>
+                                        FAQs
+                                    </Nav.Link>
+                                </LinkScroll>
                             }
 
-                            <LinkScroll to={"reviews"} offset={-200} className={ tab === '6' ? "active" : '' } id='6' onClick={handleTab}>Reviews</LinkScroll>
+                            <LinkScroll to="reviews" offset={-200} isDynamic={true} spy={true} id='6'>
+                                <Nav.Link>
+                                    Reviews
+                                </Nav.Link>
+                            </LinkScroll>
                         </Nav>
                     </div>
                     <Form inline className="course-enrol-sticky">
