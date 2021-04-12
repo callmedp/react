@@ -3,6 +3,7 @@ import logging
 import json
 from datetime import datetime
 from django.utils import timezone
+from decimal import Decimal
 
 # Django-Core Import
 from django.core.cache import cache
@@ -52,6 +53,16 @@ class ProductInformationAPIMixin(object):
     more frequent
     """
 
+    def get_solar_fakeprice(self, inr_price, fake_inr_price):
+        if inr_price is not None:
+            inr_price = inr_price
+            fake_inr_price = fake_inr_price
+            if fake_inr_price > Decimal('0.00'):
+                diff = float(fake_inr_price) - float(inr_price)
+                percent_diff = round((diff / float(fake_inr_price)) * 100, 0)
+                return (round(fake_inr_price, 0), percent_diff)
+        return None
+
     def get_solor_info(self, product):
         """
         Solar Info function will fetch all the information from Solar Queryset
@@ -81,6 +92,8 @@ class ProductInformationAPIMixin(object):
         info['prd_rating_star'] = product.pStar
         info['prd_video'] = product.pvurl
         info['start_price'] = product.pPinb
+        info['pPinb'] = product.pPinb
+        info['pPfinb'] = product.pPfinb
 
         if product.pPc == 'course':
             info['prd_service'] = 'course'
@@ -628,6 +641,7 @@ class ProductInformationAPIMixin(object):
         context.update(self.is_combos(sqs))
 
         context.update(json.loads(sqs.pFBT))
+        get_fakeprice = self.get_solar_fakeprice(sqs.pPinb, sqs.pPfinb)
         # update get fake price
         get_fake_price = 00
 
@@ -636,7 +650,7 @@ class ProductInformationAPIMixin(object):
         if getattr(product, 'vendor', None):
             context.update({'prd_vendor_slug': product.vendor.slug})
         # context.update({'sqs': sqs})
-        # context.update({'get_fakeprice': get_fakeprice})
+        context.update({'get_fakeprice': get_fakeprice})
         meta = product.as_meta(self.request)
         setattr(meta, '_keywords', None)
         setattr(meta, '_url', context.get('canonical_url', ''))
@@ -781,6 +795,18 @@ class ProductDetailAPI(ProductInformationAPIMixin, APIView):
         except Product.DoesNotExist:
             raise Http404
 
+    def redirect_for_resume_shine(self, path_info):
+        pk = path_info.get("pk", "")
+        cat_slug = 'product'
+        prd_slug = path_info.get('prd_slug')
+
+        if(path_info.get('cat_slug') == 'linkedin-profile-writing'):
+            cat_slug = cat_slug + '/' + path_info.get("cat_slug", "")
+
+        expected_path = "{}/{}/{}/{}".format(
+            settings.RESUME_SHINE_MAIN_DOMAIN, cat_slug, prd_slug, pk)
+        return expected_path
+
     def create_product_detail_leads(self, data_dict={}):
         if not data_dict:
             logging.getLogger('info_log').info('No data found')
@@ -827,7 +853,7 @@ class ProductDetailAPI(ProductInformationAPIMixin, APIView):
         3. Managing the campaign availability
         4.
         """
-
+        path_info = kwargs
         context = {}
         pid = self.request.GET.get('pid')
         tracking_id = request.GET.get('t_id', '')
@@ -997,7 +1023,12 @@ class ProductDetailAPI(ProductInformationAPIMixin, APIView):
                 else:
                     return APIResponse(message='Product Not Found', error=True, status=status.HTTP_404_NOT_FOUND)
 
-            # if (self.sqs.pPc == 'writing' or self.sqs.pPc == 'service' or self.sqs.pPc == 'other') and self.sqs.pTP not in [2, 4] and self.sqs.pTF not in [16, 2]:
+            if (self.sqs.pPc == 'writing' or self.sqs.pPc == 'service' or self.sqs.pPc == 'other') and self.sqs.pTP not in [2, 4] and self.sqs.pTF not in [16, 2]:
+                path_info = {"pk": self.sqs.pk, 'prd_slug': self.sqs.pSg, "cat_slug": self.sqs.pCat}
+                data = {
+                    'redirect_url': self.redirect_for_resume_shine(path_info)
+                }
+                return APIResponse(message='Resume Redirect', data=data)
             #     pass
             #     # redirect to resume shine (need to handle)
             #     # resume_shine_redirection = self.redirect_for_resume_shine(path_info)
