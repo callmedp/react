@@ -63,7 +63,7 @@ const StickyNavDetail = (props) => {
                             (!varChecked?.id && !product_detail?.selected_var && product_detail?.pPfinb > 0) ? <del>{product_detail?.pPfinb}</del> : ''
                         }
                     </strong>
-                    <Link to={'#'} className="btn btn-secondary ml-auto" onClick={() => goToCart(varChecked)}>{ product_detail?.pTF ? 'Buy Now' : 'Enroll now' }</Link>
+                    <Link to={'#'} className="btn btn-secondary ml-auto" onClick={() => goToCart(varChecked)}>{ product_detail?.pTF === 16 ? 'Buy Now' : 'Enroll now' }</Link>
                 </div>
                 <div className="m-sticky-detail__nav">
                     <Slider {...settings}>
