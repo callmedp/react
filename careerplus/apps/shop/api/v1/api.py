@@ -795,6 +795,18 @@ class ProductDetailAPI(ProductInformationAPIMixin, APIView):
         except Product.DoesNotExist:
             raise Http404
 
+    def redirect_for_resume_shine(self, path_info):
+        pk = path_info.get("pk", "")
+        cat_slug = 'product'
+        prd_slug = path_info.get('prd_slug')
+
+        if(path_info.get('cat_slug') == 'linkedin-profile-writing'):
+            cat_slug = cat_slug + '/' + path_info.get("cat_slug", "")
+
+        expected_path = "{}/{}/{}/{}".format(
+            settings.RESUME_SHINE_MAIN_DOMAIN, cat_slug, prd_slug, pk)
+        return expected_path
+
     def create_product_detail_leads(self, data_dict={}):
         if not data_dict:
             logging.getLogger('info_log').info('No data found')
@@ -841,7 +853,7 @@ class ProductDetailAPI(ProductInformationAPIMixin, APIView):
         3. Managing the campaign availability
         4.
         """
-
+        path_info = kwargs
         context = {}
         pid = self.request.GET.get('pid')
         tracking_id = request.GET.get('t_id', '')
@@ -1011,7 +1023,12 @@ class ProductDetailAPI(ProductInformationAPIMixin, APIView):
                 else:
                     return APIResponse(message='Product Not Found', error=True, status=status.HTTP_404_NOT_FOUND)
 
-            # if (self.sqs.pPc == 'writing' or self.sqs.pPc == 'service' or self.sqs.pPc == 'other') and self.sqs.pTP not in [2, 4] and self.sqs.pTF not in [16, 2]:
+            if (self.sqs.pPc == 'writing' or self.sqs.pPc == 'service' or self.sqs.pPc == 'other') and self.sqs.pTP not in [2, 4] and self.sqs.pTF not in [16, 2]:
+                path_info = {"pk": self.sqs.pk, 'prd_slug': self.sqs.pSg, "cat_slug": self.sqs.pCat}
+                data = {
+                    'redirect_url': self.redirect_for_resume_shine(path_info)
+                }
+                return APIResponse(message='Resume Redirect', data=data)
             #     pass
             #     # redirect to resume shine (need to handle)
             #     # resume_shine_redirection = self.redirect_for_resume_shine(path_info)
