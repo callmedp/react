@@ -8,7 +8,7 @@ import { fetchProductReviews } from 'store/DetailPage/actions';
 
 const Reviews = (props) => {
     const { showReviewModal, prdId } = props
-    const { prd_reviews : { prd_review_list, prd_rv_total } } = useSelector( store => store.reviews )
+    const { prd_review_list, prd_rv_total } = useSelector( store => store.reviews )
     const [pageId, updatePageId] = useState(2)
     const dispatch = useDispatch()
 
@@ -24,7 +24,7 @@ const Reviews = (props) => {
         // variableWidth: true,
         afterChange: function(index) {
             if ((index % 7 === 0 && pageId < index ) && pageId <= prd_rv_total) {
-                new Promise((resolve, reject) => dispatch(fetchProductReviews({ payload: { prdId: prdId?.split('-')[1], page: pageId}, resolve, reject })));
+                new Promise((resolve, reject) => dispatch(fetchProductReviews({ payload: { prdId: prdId?.split('-')[1], page: pageId, device: 'mobile'}, resolve, reject })));
                 updatePageId(pageId + 1);
             }
         }
@@ -40,7 +40,7 @@ const Reviews = (props) => {
 
     return (
         <section className="m-container mt-0 mb-0 pb-0" id="review" data-aos="fade-up">
-            <div className="d-flex">
+            <div className="d-flex" itemprop="review" itemscope itemtype="https://schema.org/Review">
                 <h2 className="m-heading2 mb-10">Review</h2>
                 <Link to={'#'} className="ml-auto fs-13 font-weight-bold" onClick={() => showReviewModal(true) }>Write a review</Link>
             </div>
@@ -50,15 +50,15 @@ const Reviews = (props) => {
                         prd_review_list?.map((review, idx) => {
                             return (
                                 <div className="m-card" key={idx}>
-                                    <span className="m-rating">
+                                    <span className="m-rating" itemprop="ratingValue">
                                     {
                                         review?.rating?.map((star, index) => starRatings(star, index))
                                     }
                                     </span>
-                                    <strong className="m-card__name">{review?.title}</strong>
-                                    <p className="m-card__txt">{review?.content}</p>
-                                    <strong>By { review?.user_name ? review?.user_name : "Anonymous" }</strong>
-                                    <span className="m-card__location">{review?.created}</span>
+                                    <strong className="m-card__name" itemprop="name">{review?.title}</strong>
+                                    <p className="m-card__txt" itemprop="reviewBody">{review?.content}</p>
+                                    <strong itemprop="author">By { review?.user_name ? review?.user_name : "Anonymous" }</strong>
+                                    <span className="m-card__location" itemprop="datePublished">{review?.created}</span>
                                 </div>
                             )
                         })

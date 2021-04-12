@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Header from '../../Common/Header/header';
-import StickyNavDetail from './StickyNavDetail/stickyNavDetail';
+import StickyNav from './StickyNavDetail/stickyNavDetail';
 import BannerCourseDetail from './Banner/banner';
 import KeyFeatures from './KeyFeatures/keyFeatures';
 import CourseOutline from './CourseOutline/courseOutline';
@@ -22,23 +22,42 @@ import { fetchMainCourses } from 'store/DetailPage/actions';
 import { useSelector, useDispatch } from 'react-redux';
 import { startMainCourseLoader, stopMainCourseLoader } from 'store/Loader/actions/index';
 import Loader from '../../Common/Loader/loader';
+import MetaContent from "../../Common/MetaContent/metaContent";
 
 const DetailPage = (props) => {
     const dispatch = useDispatch();
     const {product_detail, skill} = useSelector(store => store?.mainCourses);
+    const meta_tags = product_detail?.meta;
     const {match: {params: {id}}, history} = props;
     const { mainCourseLoader } = useSelector(store => store.loader);
+    const [showStickyNav, setShowStickyNav] = useState(false);
+    const [varChecked, changeChecked] = useState({});
+    const [frqntProd, addFrqntProd] = useState([]);
 
     useEffect( () => {
         handleEffects();
         Aos.init({ duration: 2000, once: true, offset: 10, anchorPlacement: 'bottom-bottom' });
+        window.addEventListener('scroll', handleScroll);
     }, [id])
+
+    const handleScroll=() => {
+        const offset = window.scrollY;
+        if(offset > 300 ) {
+            setShowStickyNav(true);
+        }
+        else setShowStickyNav(false);
+    }
 
     const handleEffects = async () => {
         try {
-            dispatch(startMainCourseLoader());
-            await new Promise((resolve, reject) => dispatch(fetchMainCourses({ payload: {id: id?.split('-')[1] },resolve, reject })));
-            dispatch(stopMainCourseLoader());
+                if (!(window && window.config && window.config.isServerRendered)) {
+                    dispatch(startMainCourseLoader());
+                    await new Promise((resolve, reject) => dispatch(fetchMainCourses({ payload: {id: id?.split('-')[1] },resolve, reject })));
+                    dispatch(stopMainCourseLoader());
+                }
+                else {
+                    delete window.config?.isServerRendered
+                }
         }
         catch (error) {
             dispatch(stopMainCourseLoader());
@@ -50,9 +69,18 @@ const DetailPage = (props) => {
     return (
         <div>
             { mainCourseLoader ? <Loader /> : ''}
+            { meta_tags && <MetaContent meta_tags={meta_tags} /> }
+            
             <Header />
-            <StickyNavDetail/>
-            <BannerCourseDetail product_detail={product_detail}/>
+            {
+                    showStickyNav && <StickyNav 
+                        outline={product_detail?.chapter ? true : false}
+                        faq = {product_detail?.faq ? true : false}
+                        product_detail={product_detail} prdId={id} varChecked={varChecked}
+                        frqntProd={frqntProd}
+                        />
+            }
+            <BannerCourseDetail frqntProd={frqntProd} addFrqntProd={addFrqntProd} product_detail={product_detail} varChecked={varChecked} changeChecked={changeChecked}/>
             {product_detail?.prd_uget && <KeyFeatures prd_uget={product_detail?.prd_uget}/>}
             {
                  product_detail?.chapter && 

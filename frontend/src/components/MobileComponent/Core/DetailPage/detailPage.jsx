@@ -7,8 +7,8 @@ import CourseEnrol from './CourseEnrol/courseEnrol';
 import StickyNavDetail from './StickyNavDetail/stickyNavDetail';
 import KeyFeatures from './KeyFeatures/keyFeatures';
 import CourseOutline from './CourseOutline/courseOutline';
-// import CourseOutcome from './CourseOutcome/courseOutcome';
-// import SampleCertificate from './SampleCertificate/sampleCertificate';
+import CourseOutcome from './CourseOutcome/courseOutcome';
+import SampleCertificate from './SampleCertificate/sampleCertificate';
 import HowItWorks from './HowItWorks/howItWorks';
 import WhoLearn from './WhoLearn/whoLearn';
 import SkillGain from './SkillGain/skillGain';
@@ -26,6 +26,7 @@ import EnquiryModal from '../../Common/Modals/EnquiryModal';
 import ReviewModal from '../../Common/Modals/ReviewModal';
 import '../DetailPage/detailPage.scss';
 import Aos from "aos";
+import MetaContent from '../../Common/MetaContent/metaContent';
 // import "aos/dist/aos.css";
 import { fetchProductReviews, fetchMainCourses } from 'store/DetailPage/actions';
 
@@ -35,6 +36,7 @@ const DetailPage = (props) => {
     const prdId = props.match.params.id;
     const dispatch = useDispatch()
     const { product_detail, skill } = useSelector(store => store?.mainCourses);
+    const meta_tags = product_detail?.meta;
     const [enquiryForm, setEnquiryForm] = useState(false);
     const [varChecked, changeChecked] = useState({});
     const [showStickyNav, setShowStickyNav] = useState(false);
@@ -43,7 +45,7 @@ const DetailPage = (props) => {
         try {
             if (!(window && window.config && window.config.isServerRendered)) {
                 new Promise((resolve, reject) => dispatch(fetchMainCourses({ payload: { id: prdId?.split('-')[1] },resolve, reject })));
-                new Promise((resolve, reject) => dispatch(fetchProductReviews({ payload: { prdId: prdId?.split('-')[1], page: 1 }, resolve, reject })));
+                new Promise((resolve, reject) => dispatch(fetchProductReviews({ payload: { prdId: prdId?.split('-')[1], page: 1, device: 'mobile'}, resolve, reject })));
             }
             else {
                 delete window.config?.isServerRendered
@@ -73,6 +75,7 @@ const DetailPage = (props) => {
 
     return(
         <div>
+            { meta_tags && <MetaContent meta_tags={meta_tags} /> }
             <MenuNav />
             {
                 reviewModal ? <ReviewModal showReviewModal={showReviewModal} prdId={prdId}/> :<>
@@ -89,7 +92,10 @@ const DetailPage = (props) => {
                         product_detail={product_detail} prdId={prdId} varChecked={varChecked}
                         />
                 }
-                <ComboIncludes />
+                {
+                    product_detail?.combo && <ComboIncludes comboList={product_detail.combo_list}/>
+                }
+
                 <FrequentlyBought />
                 <KeyFeatures prd_uget={product_detail?.prd_uget}/>
                 {
@@ -109,7 +115,7 @@ const DetailPage = (props) => {
                 { product_detail?.faq && <FAQ faq_list={product_detail?.faq_list}/> }
                 <Reviews showReviewModal={showReviewModal} prdId={prdId}/>
                 { skill && <CoursesMayLike product_id={prdId} skill={skill}/> }
-                <CTA setEnquiryForm={setEnquiryForm} />
+                {/* <CTA setEnquiryForm={setEnquiryForm} /> */}
                 {
                     enquiryForm ? <EnquiryModal setEnquiryForm={setEnquiryForm} page="detailPage"/> : null
                 }
@@ -118,7 +124,6 @@ const DetailPage = (props) => {
             <Footer /></>
             }
         </div>
-
     )
 }
 

@@ -11,7 +11,7 @@ import EnquireNow from './EnquireNow/enquireNow';
 import Footer from '../../Common/Footer/footer';
 import '../SkillPage/skillPage.scss';
 import Aos from "aos";
-import "aos/dist/aos.css";
+// import "aos/dist/aos.css";
 import WhatYouGet from './KeyFeatures/whatYouGet';
 
 const DetailPage = (props) => {

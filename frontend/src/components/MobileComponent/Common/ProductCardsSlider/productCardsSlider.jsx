@@ -34,17 +34,17 @@ const ProductCards = props => {
             {
                 productList?.map((product, index) => {
                     return (
-                        <div className="m-card" key={index}>
-                            <div className="m-card__heading">
+                        <div className="m-card" key={index} itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                            <div className="m-card__heading" itemprop="image">
                                 <figure>
                                     <img src={product?.imgUrl} alt={product?.imgAlt} />
                                 </figure>
-                                <h3 className="m-heading3">
-                                    <a href={`${siteDomain}${product.url}`}>{(product?.name)?.length > 42 ? (product?.name)?.slice(0, 42) + '...' : (product?.name) }</a>
+                                <h3 className="m-heading3" itemprop="item">
+                                    <a href={`${siteDomain}${product.url}`}><span itemprop="name">{(product?.name)?.length > 42 ? (product?.name)?.slice(0, 42) + '...' : (product?.name) }</span></a>
                                 </h3>
                             </div>
                             <div className="m-card__box">
-                                <div className="m-card__rating">
+                                <div className="m-card__rating" itemprop="aggregateRating" itemscope itemtype="https://schema.org/AggregateRating">
                                     {
                                         !!noProvider ? '' :
                                             <span className="mr-10">
@@ -53,7 +53,7 @@ const ProductCards = props => {
                                     }
                                     <span className="m-rating">
                                         { product?.stars?.map((star, index) => starRatings(star, index)) }
-                                        <span>{product?.rating?.toFixed(1)}/5</span>
+                                        <span itemprop="ratingValue">{product?.rating?.toFixed(1)}/5</span>
                                     </span>
                                     {
                                         !!showMode && product?.mode ? <span className="m-mode">{product.mode}</span> : ''

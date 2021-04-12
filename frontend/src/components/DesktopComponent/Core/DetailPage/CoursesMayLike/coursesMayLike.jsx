@@ -35,14 +35,14 @@ const CoursesMayLike = (props) => {
                     {
                         courseData?.map((coursesLike, inx) => {
                             return (
-                                <li className="col" key={inx}>
+                                <li className="col" key={inx} itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
                                     <div className="card">
-                                        <div className="card__heading">
+                                        <div className="card__heading" itemprop="image">
                                             <figure>
                                                 <img src={coursesLike.pImg} alt={coursesLike.name} />
                                             </figure>
                                             <h3 className="heading3">
-                                                <Link to={coursesLike.pURL}>{coursesLike.name || coursesLike.pNm}</Link>
+                                                <Link itemprop="item" to={coursesLike.pURL}><span itemprop="name">{coursesLike.name || coursesLike.pNm}</span></Link>
                                             </h3>
                                         </div>
 
@@ -56,7 +56,7 @@ const CoursesMayLike = (props) => {
                                                 <span>{parseInt(coursesLike.pAR)?.toFixed(1)}/5</span>
                                             </div>
                                             <div className="card__price mt-10">
-                                                <strong>{coursesLike.pPin}/-</strong> 
+                                                <strong itemprop="price">{coursesLike.pPin}/-</strong> 
                                             </div>
                                         </div>
                                     </div>

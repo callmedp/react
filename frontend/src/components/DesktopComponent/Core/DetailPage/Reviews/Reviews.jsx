@@ -5,7 +5,7 @@ import './Reviews.scss';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchProductReviews } from 'store/DetailPage/actions';
 import ReviewModal from '../../../Common/Modals/reviewModal';
-import { startReviewLoader, stopReviewLoader } from 'store/Loader/actions/index';
+// import { startReviewLoader, stopReviewLoader } from 'store/Loader/actions/index';
 import Loader from '../../../Common/Loader/loader';
 import { getCandidateId } from 'utils/storage.js';
 import { siteDomain } from 'utils/domains';
@@ -14,7 +14,7 @@ const LearnersStories = (props) => {
     const {id, product_detail} = props;
     const [reviewModal, showReviewModal] = useState(false);
     const { reviewLoader } = useSelector(store => store.loader);
-    const { prd_reviews : { prd_review_list, prd_rv_current_page, prd_rv_has_next, prd_rv_has_prev } } = useSelector( store => store.reviews );
+    const { prd_review_list, prd_rv_current_page, prd_rv_has_next, prd_rv_has_prev } = useSelector( store => store.reviews );
 
     const dispatch = useDispatch();
     let currentPage = 1;
@@ -27,14 +27,9 @@ const LearnersStories = (props) => {
         currentPage = page;
 
         try {
-            dispatch(startReviewLoader())
             await new Promise((resolve, reject) => dispatch(fetchProductReviews({ payload: { prdId: id, page: page, device: 'desktop' }, resolve, reject })));
-            dispatch(stopReviewLoader())
         }
-        catch (error) {
-            dispatch(stopReviewLoader())
-        }
-        dispatch(stopReviewLoader());
+        catch (error) {}
     };
 
     const starRatings = (star, index) => {
@@ -46,8 +41,9 @@ const LearnersStories = (props) => {
     }
 
     const handleSelect = (selectedIndex, e) => {
-        if(selectedIndex === 0 && e.target.className === 'carousel-control-next-icon' && prd_rv_has_next) handleEffects(prd_rv_current_page+1);
-        if(selectedIndex === 0 && e.target.className === 'carousel-control-prev-icon' && prd_rv_has_prev) handleEffects(prd_rv_current_page-1);
+        console.log(selectedIndex);
+        if((selectedIndex % 2 === 0) && e.target.className === 'carousel-control-next-icon' && prd_rv_has_next) handleEffects(prd_rv_current_page+1);
+        // if(selectedIndex === 2 && e.target.className === 'carousel-control-prev-icon' && prd_rv_has_prev) handleEffects(prd_rv_current_page-1);
     }
 
     const getReviews = (reviewData, idx) => {
@@ -57,17 +53,17 @@ const LearnersStories = (props) => {
                     {
                         reviewData?.map((review, idx) => {
                             return ( 
-                                <div className="col-sm-4" key={idx}>
+                                <div className="col-sm-4" key={idx} itemprop="review" itemscope itemtype="https://schema.org/Review">
                                     <div className="card">
-                                        <span className="rating">
+                                        <span className="rating" itemprop="ratingValue">
                                             {
                                                 review?.rating?.map((star, index) => starRatings(star, index))
                                             }
                                         </span>
-                                        <strong className="card__name">{review?.title}</strong>
-                                        <p className="card__txt">{review?.content}</p>
-                                        <strong>{ review?.user_name ? review?.user_name : 'Anonymous' }</strong>
-                                        <span className="card__location">{review?.created}</span>
+                                        <strong className="card__name" itemprop="name">{review?.title}</strong>
+                                        <p className="card__txt" itemprop="reviewBody">{review?.content}</p>
+                                        <strong itemprop="author">{ review?.user_name ? review?.user_name : 'Anonymous' }</strong>
+                                        <span className="card__location" itemprop="datePublished">{review?.created}</span>
                                     </div>
                                 </div>
                             )
@@ -104,7 +100,7 @@ const LearnersStories = (props) => {
                         :
                         (!product_detail?.user_reviews && getCandidateId()) ?
                         <Link to={"#"} onClick={showReviewModal} className="btn btn-outline-primary btn-custom">Write a review</Link>
-                        :
+                        : 
                         <Link to={"#"} onClick={() => window.location.href=`${siteDomain}/login/`} className="btn btn-outline-primary btn-custom">Write a review</Link>
                     }
                 </div>
