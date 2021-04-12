@@ -75,9 +75,9 @@ const StickyNav = (props) => {
                         </Nav>
                     </div>
                     <Form inline className="course-enrol-sticky">
-                        <strong className="mt-20">{getProductPrice(varChecked?.inr_price || product_detail?.var_list[0]?.inr_price)}
+                        { varChecked?.inr_price || product_detail?.var_list?.length > 0 ? <strong className="mt-20">{getProductPrice(varChecked?.inr_price || product_detail?.var_list[0]?.inr_price)}
                         <del>{varChecked?.id ? varChecked.fake_inr_price : product_detail?.selected_var?.fake_inr_price}</del>
-                        </strong>
+                        </strong> : "" }
                         <span className="d-flex">
                             <LinkScroll offset={-220} to={"enquire-now"} className="btn btn-outline-primary">Enquire now</LinkScroll>
                             <a onClick={() => goToCart(varChecked)} className="btn btn-secondary ml-10">Enroll now</a>

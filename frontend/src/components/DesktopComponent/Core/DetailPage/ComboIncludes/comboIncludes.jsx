@@ -1,7 +1,7 @@
 import React from 'react';
 import './comboIncludes.scss';
-import {Link} from 'react-router-dom';
-import { siteDomain } from 'utils/domains';
+// import {Link} from 'react-router-dom';
+// import { siteDomain } from 'utils/domains';
 
 const ComboIncludes = (props) => {
     const {combo_list} = props;
@@ -13,13 +13,11 @@ const ComboIncludes = (props) => {
                     combo_list?.map((combData, indx) => {
                         return (
                             <li key={indx}>
-                                <a href={`${siteDomain}${combData.url}`}>{combData.heading}</a>
+                                <a href={`${combData.url}`}>{combData.heading}</a>
                             </li>
                         )
                     })
                 }
-                {/* <li><Link to={"#"}>Featured Profile : 30 Days</Link></li> */}
-                {/* <li><Link to={"#"}>AWS Architect Certification Training</Link></li> */}
             </ul>
         </div>
     )

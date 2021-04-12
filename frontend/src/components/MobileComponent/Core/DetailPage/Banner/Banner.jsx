@@ -28,15 +28,15 @@ const CourseDetailBanner = (props) => {
     }, [prdId])
 
     return (
-        <div className="m-detail-header ml-15 mt-10" itemprop="Course" itemscope itemtype="https://schema.org/Course">
+        <div className="m-detail-header ml-15 mt-10" itemProp="Course" itemScope itemtype="https://schema.org/Course">
 
             <div className="m-detail-heading">
-                <div className="m-detail-heading__icon mt-30" itemprop="image">
+                <div className="m-detail-heading__icon mt-30" itemProp="image">
                     <figure>
                         <img src={ product_detail?.prd_img } alt={ product_detail?.prd_img_alt } />
                     </figure>
                 </div>
-                <div className="m-detail-heading__content" itemprop="name">
+                <div className="m-detail-heading__content" itemProp="name">
                     { product_detail?.pTg && <span className="m-flag-yellowB">{ product_detail.pTg }</span> }
                     <h1 className="m-heading1 mt-5">
                         { product_detail?.prd_H1 }
@@ -45,8 +45,8 @@ const CourseDetailBanner = (props) => {
                         {
                             product_detail?.prd_rating_star?.map((star, index) => starRatings(star, index))
                         }
-                        <span itemprop="ratingValue">{ product_detail?.prd_rating?.toFixed() }/5</span>
-                        <span>By <span itemprop="provider">{ product_detail?.prd_vendor }</span></span>
+                        <span itemProp="ratingValue">{ product_detail?.prd_rating?.toFixed() }/5</span>
+                        <span>By <span itemProp="provider">{ product_detail?.prd_vendor }</span></span>
                     </span>
                     <div className="d-flex mt-10">
                         {
@@ -113,7 +113,7 @@ const CourseDetailBanner = (props) => {
                 </li>
                 
             </ul>
-            <div className="m-intro-video" itemprop="embedUrl">
+            <div className="m-intro-video" itemProp="embedUrl">
                 <strong className="mb-10">Course intro</strong>
                 <div className="d-flex">
                     {

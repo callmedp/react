@@ -9,9 +9,10 @@ import { startReviewLoader, stopReviewLoader } from 'store/Loader/actions/index'
 import Loader from '../Loader/loader';
 import { Toast } from '../Toast/toast'
 import { imageUrl } from 'utils/domains';
+import { MyGA } from 'utils/ga.tracking.js';
 
 const ReviewModal =(props) => {
-    const { reviewModal, showReviewModal, review } = props;
+    const { reviewModal, showReviewModal, review, user_reviews } = props;
     const { reviewLoader } = useSelector(store => store.loader);
     const { register, handleSubmit, errors } = useForm();
     const dispatch = useDispatch();
@@ -51,6 +52,9 @@ const ReviewModal =(props) => {
 
     // add new review
     const submitReviewFunc = async(values) => {
+        if(user_reviews) MyGA.SendEvent('ln_review', 'ln_review', 'ln_submit_review', 'review_updated', '', false, true)
+        else MyGA.SendEvent('ln_review', 'ln_review', 'ln_submit_review', 'review_written', '', false, true)
+
         dispatch(startReviewLoader())
         if(rating === 0){
             setShowError(true)

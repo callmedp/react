@@ -40,7 +40,7 @@ const Reviews = (props) => {
 
     return (
         <section className="m-container mt-0 mb-0 pb-0" id="review" data-aos="fade-up">
-            <div className="d-flex" itemprop="review" itemscope itemtype="https://schema.org/Review">
+            <div className="d-flex" itemProp="review" itemScope itemtype="https://schema.org/Review">
                 <h2 className="m-heading2 mb-10">Review</h2>
                 <Link to={'#'} className="ml-auto fs-13 font-weight-bold" onClick={() => showReviewModal(true) }>Write a review</Link>
             </div>
@@ -50,15 +50,15 @@ const Reviews = (props) => {
                         prd_review_list?.map((review, idx) => {
                             return (
                                 <div className="m-card" key={idx}>
-                                    <span className="m-rating" itemprop="ratingValue">
+                                    <span className="m-rating" itemProp="ratingValue">
                                     {
                                         review?.rating?.map((star, index) => starRatings(star, index))
                                     }
                                     </span>
-                                    <strong className="m-card__name" itemprop="name">{review?.title}</strong>
-                                    <p className="m-card__txt" itemprop="reviewBody">{review?.content}</p>
-                                    <strong itemprop="author">By { review?.user_name ? review?.user_name : "Anonymous" }</strong>
-                                    <span className="m-card__location" itemprop="datePublished">{review?.created}</span>
+                                    <strong className="m-card__name" itemProp="name">{review?.title}</strong>
+                                    <p className="m-card__txt" itemProp="reviewBody">{review?.content}</p>
+                                    <strong itemProp="author">By { review?.user_name ? review?.user_name : "Anonymous" }</strong>
+                                    <span className="m-card__location" itemProp="datePublished">{review?.created}</span>
                                 </div>
                             )
                         })
