@@ -107,7 +107,7 @@ const BannerCourseDetail = (props) => {
     }
 
     const viewAllCourses = () => {
-        MyGA.SendEvent('Search','{{prd_vendor}}','ViewAllProductVendor');
+        MyGA.SendEvent('Search',`${product_detail?.prd_vendor}`,'ViewAllProductVendor');
         trackUser({"query" : tracking_data, "action" :'all_courses_or_certifications'});
         trackUser({"query" : tracking_data, "action" :'exit_product_page'});
 

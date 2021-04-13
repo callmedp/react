@@ -1,7 +1,5 @@
 import React from 'react';
 import './comboIncludes.scss';
-// import {Link} from 'react-router-dom';
-// import { siteDomain } from 'utils/domains';
 
 const ComboIncludes = (props) => {
     const {combo_list} = props;

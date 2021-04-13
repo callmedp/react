@@ -5,6 +5,9 @@ import { siteDomain } from 'utils/domains';
 import { Link as LinkScroll } from "react-scroll";
 import { getStudyMode } from 'utils/detailPageUtils/studyMode';
 import { getStudyLevel } from 'utils/detailPageUtils/studyLevel';
+import { MyGA } from 'utils/ga.tracking.js';
+import { getTrackingInfo } from 'utils/storage.js';
+import { trackUser } from 'store/Tracking/actions/index.js';
 
 const CourseDetailBanner = (props) => {
     const { 
@@ -12,10 +15,11 @@ const CourseDetailBanner = (props) => {
         prdId,
         varChecked,
         showReviewModal 
-    } = props
-
+    } = props;
+    const tracking_data = getTrackingInfo();
     const noOfWords = 250;
     const [showAll, setShowAll] = useState(false);
+    
     const starRatings = (star, index) => {
         return (
             star === '*' ? <em className="micon-fullstar" key={index}></em> :
@@ -35,6 +39,18 @@ const CourseDetailBanner = (props) => {
     useEffect(() => {
         setShowAll(false)
     }, [prdId])
+
+    const trackJobs = () => {
+        trackUser({"query" : tracking_data, "action" :'jobs_available'});
+        trackUser({"query" : tracking_data, "action" :'exit_product_page'});
+        MyGA.SendEvent('ln_course_details', 'ln_course_details', 'ln_jobs_available', 'Jobs available', '', '', true);
+    }
+
+    const viewAllCourses = () => {
+        MyGA.SendEvent('Search',`${product_detail?.prd_vendor}`,'ViewAllProductVendor');
+        trackUser({"query" : tracking_data, "action" :'all_courses_or_certifications'});
+        trackUser({"query" : tracking_data, "action" :'exit_product_page'});
+    }
 
     return (
         <div className="m-detail-header ml-15 mt-10" itemProp="Course" itemScope itemType="https://schema.org/Course">
@@ -62,7 +78,7 @@ const CourseDetailBanner = (props) => {
                                 :
                                 ''
                         }
-                        <span>By <span itemProp="provider">{ product_detail?.prd_vendor }</span></span>
+                        <span>By <span itemProp="provider" onClick={() => MyGA.SendEvent('ln_course_provider', 'ln_course_provider', 'ln_click_course_provider', `${product_detail?.prd_vendor}` , '', false, true)}>{ product_detail?.prd_vendor }</span></span>
                     </span>
                     <div className="d-flex mt-10">
                         {
@@ -85,7 +101,7 @@ const CourseDetailBanner = (props) => {
                         {
                             product_detail?.prd_num_jobs > 0 &&
                                 <span className="m-review-jobs">
-                                    <a href={product_detail?.num_jobs_url}>
+                                    <a href={product_detail?.num_jobs_url} onClick={() => trackJobs()}>
                                         <figure className="micon-jobs-link"></figure> <strong>{ product_detail?.prd_num_jobs }</strong> Jobs available
                                     </a>
                                 </span>
@@ -196,7 +212,7 @@ const CourseDetailBanner = (props) => {
                 product_detail?.prd_service === 'course' &&
                     <ul className="m-course-stats mt-10 mb-10 bdr-top pt-20">
                         <li>
-                            <a href={`${siteDomain}/search/results/?fvid=${product_detail?.pPv}`}>View all</a> courses by {product_detail?.prd_vendor}
+                            <a href={`${siteDomain}/search/results/?fvid=${product_detail?.pPv}`} onClick={() => viewAllCourses()}>View all</a> courses by {product_detail?.prd_vendor}
                         </li>
                         <li>
                         <a href={`${siteDomain}/search/results/?fvid=${product_detail?.pPv}`}>+{product_detail?.prd_vendor_count} more</a> Course providers  
