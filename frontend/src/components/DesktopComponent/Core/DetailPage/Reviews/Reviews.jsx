@@ -103,7 +103,7 @@ const LearnersStories = (props) => {
                         (!product_detail?.user_reviews && getCandidateId()) ?
                             <Link to={"#"} onClick={showReviewModal} className="btn btn-outline-primary btn-custom">Write a review</Link>
                         : 
-                        <a href={`${siteDomain}/login/?next=${pUrl}`} className="btn btn-outline-primary btn-custom">Write a review</a>
+                        <a href={`${siteDomain}/login/?next=${pUrl}`} className="btn btn-outline-primary btn-custom mx-auto">Write a review</a>
                     }
                 </div>
             </div>

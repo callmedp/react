@@ -82,7 +82,7 @@ const CoursesMayLike = (props) => {
     return(
         <section className="container" data-aos="fade-up">
             <div className="row">
-                <div className="recent-courses mt-20 mb-30">
+                <div className="recent-courses w-100 mt-20 mb-30">
                     <h2 className="heading2 text-center">Courses you may like</h2>
                     <Carousel className="courses-like">
                         {
