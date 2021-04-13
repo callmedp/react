@@ -17,7 +17,7 @@ import { trackUser } from 'store/Tracking/actions/index.js';
 import { Toast } from '../../../Common/Toast/toast';
 
 const BannerCourseDetail = (props) => {
-    const {product_detail, varChecked, changeChecked, frqntProd, addFrqntProd} = props;
+    const {product_detail, varChecked, changeChecked, frqntProd, addFrqntProd, prdId} = props;
     const reqLength = 365;
     const inputCheckbox = useRef(null);
     const regex = /<(.|\n)*?>/g;
@@ -25,8 +25,9 @@ const BannerCourseDetail = (props) => {
     const dispatch = useDispatch();
     const { mainCourseCartLoader } = useSelector(store => store.loader);
     const tracking_data = getTrackingInfo();
+    const [readAll, setReadAll] = useState(false)
 
-    const abt_desc = product_detail?.prd_about + product_detail?.prd_desc;
+    const completeDescription = product_detail?.prd_about + ' <br /> ' + product_detail?.prd_desc;
 
     const starRatings = (star, index) => {
         return (star === '*' ? <em className="icon-fullstar" key={index}></em> : star === '+' 
@@ -34,9 +35,12 @@ const BannerCourseDetail = (props) => {
         )
     }
 
+    // useEffect(() => {
+    //     inputCheckbox.current && (inputCheckbox.current.checked = false);
+    // }, [])
     useEffect(() => {
-        inputCheckbox.current && (inputCheckbox.current.checked = false);
-    })
+        setReadAll(false)
+    }, [prdId])
 
     const changeMode = (objj) => {
         let selectedObj = objj;
@@ -184,7 +188,7 @@ const BannerCourseDetail = (props) => {
                                     {
                                         product_detail?.pop ?
                                         <li>
-                                            <LinkScroll className="d-block" to={"popListTemplate"}>+4 more</LinkScroll> Course providers  
+                                            <LinkScroll className="d-block" to={"popListTemplate"}>+{product_detail?.prd_vendor_count} more</LinkScroll> Course providers  
                                         </li>
                                         : ""
                                     }
@@ -257,18 +261,17 @@ const BannerCourseDetail = (props) => {
                                     </figure>
 
                                     <span className="intro-video__content" itemProp="embedUrl">
-                                        { abt_desc ? <div id="module" className=" about-course">
-                                            {abt_desc.replace(regex, '')?.length > reqLength ? (
-                                                <input type="checkbox" className="read-more-state" id="post-10" ref={inputCheckbox} itemProp="about" />
+                                        { completeDescription ? <div id="module" className=" about-course">
+                                            {completeDescription?.length > reqLength ? (
+                                                <input type="checkbox" onClick={() => setReadAll(!readAll) } className="read-more-state" id="post-10" checked={readAll} itemProp="about" />
                                                 ) : (
                                                     ""
                                                     )}
-                                                    
-                                            <div className="read-more-wrap" itemProp="description">
-                                                <span dangerouslySetInnerHTML={{__html:abt_desc?.replace(regex, '').slice(0, reqLength)}}></span>
-                                                <span className="read-more-target" dangerouslySetInnerHTML={{__html: abt_desc?.replace(regex, '').slice(reqLength)}}></span>
-                                            </div>
-                                            <label htmlFor="post-10" className="read-more-trigger"></label>
+                                                <span className="read-more-wrap" itemProp="description">
+                                                    <span dangerouslySetInnerHTML={{__html:completeDescription?.slice(0, readAll ? completeDescription?.length : reqLength)}} />
+                                                    {/* <span className="read-more-target" dangerouslySetInnerHTML={{__html: completeDescription?.slice(reqLength)}} /> */}
+                                                </span>
+                                                <label htmlFor="post-10" className="read-more-trigger"></label>
                                         </div> : "" }
 
                                         {/* { product_detail?.prd_desc ? <div id="module" className=" about-course">
