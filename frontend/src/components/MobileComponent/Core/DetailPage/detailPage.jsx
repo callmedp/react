@@ -108,7 +108,8 @@ const DetailPage = (props) => {
                         <CourseEnrol product_detail={product_detail} getProductPrice={getProductPrice} frqntProd={frqntProd} varChecked={varChecked} changeChecked={changeChecked} />
                         {
                             showStickyNav && <StickyNavDetail 
-                                outline={product_detail?.chapter ? true : false}
+                                outline={(product_detail?.chapter && product_detail?.prd_service !== 'assessment') ? true : false}
+                                topics={(product_detail?.chapter && product_detail?.prd_service === 'assessment') ? true : false}
                                 faq = {product_detail?.faq ? true : false}
                                 product_detail={product_detail} prdId={prdId} varChecked={varChecked}
                                 frqntProd={frqntProd}

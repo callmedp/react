@@ -77,7 +77,8 @@ const DetailPage = (props) => {
             <Header />
             {
                     showStickyNav && <StickyNav 
-                        outline={product_detail?.chapter ? true : false}
+                        outline={(product_detail?.chapter && product_detail?.prd_service !== 'assessment') ? true : false}
+                        topics={(product_detail?.chapter && product_detail?.prd_service === 'assessment') ? true : false}
                         faq = {product_detail?.faq ? true : false}
                         product_detail={product_detail} prdId={id} varChecked={varChecked}
                         frqntProd={frqntProd}

@@ -5,7 +5,7 @@ const TopicsCovered = (props) => {
     const { chapter_list } = props;
 
     return (
-        <section className="container-fluid" data-aos="fade-up">
+        <section className="container-fluid" data-aos="fade-up" id="topicsCovered">
             <div className="row">
                 <div className="container">
                     <div className="topic-covered">

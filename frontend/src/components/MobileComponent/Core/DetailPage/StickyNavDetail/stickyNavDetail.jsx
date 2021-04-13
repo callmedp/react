@@ -20,7 +20,7 @@ const StickyNavDetail = (props) => {
         variableWidth: true,
     }
 
-    const { product_detail, varChecked, outline, faq, frqntProd } = props;
+    const { product_detail, varChecked, outline, faq, frqntProd, topics } = props;
     const [tab, setTab] = useState('1')
     const dispatch = useDispatch()
 
@@ -83,16 +83,24 @@ const StickyNavDetail = (props) => {
                         <LinkScroll to="begin" offset={-120}>
                             <Link to={"#"} className={ tab === '4' ? "active" : '' } id='4' onClick={handleTab}>How it works</Link>
                         </LinkScroll>
+
+                        {
+                            topics && 
+                                <LinkScroll to="topicsCovered" offset={-170}>
+                                    <Link to={"#"} className={ tab === '5' ? "active" : '' } id='5' onClick={handleTab}>Topics Covered</Link>
+                                </LinkScroll>
+                        }
+
                         {
                             faq &&
                                 <LinkScroll to="faq" offset={-120}>
-                                    <Link to={"#"} className={ tab === '5' ? "active" : '' } id='5' onClick={handleTab}>FAQ</Link>
+                                    <Link to={"#"} className={ tab === '6' ? "active" : '' } id='6' onClick={handleTab}>FAQ</Link>
                                 </LinkScroll>
                         }
                         {
                             product_detail?.prd_num_rating > 0 &&
                                 <LinkScroll to="reviews" offset={-120}>
-                                    <Link to={"#"} className={ tab === '6' ? "active" : '' } id='6' onClick={handleTab}>Reviews</Link>
+                                    <Link to={"#"} className={ tab === '7' ? "active" : '' } id='7' onClick={handleTab}>Reviews</Link>
                                 </LinkScroll>
                         }
                     </Slider>
