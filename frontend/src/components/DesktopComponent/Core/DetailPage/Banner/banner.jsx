@@ -53,7 +53,7 @@ const BannerCourseDetail = (props) => {
             trackUser({"query" : tracking_data, "action" :'enroll_now'});
 
             if(frqntProd && frqntProd.length > 0) {
-                frqntProd.map(prdId => cvId.push(prdId.id));
+                frqntProd?.map(prdId => cvId.push(prdId.id));
                 if(value.id) cvId.push(value.id)
                 else cvId.push(product_detail?.selected_var?.id);
             }
@@ -105,6 +105,7 @@ const BannerCourseDetail = (props) => {
         trackUser({"query" : tracking_data, "action" :'jobs_available'});
         trackUser({"query" : tracking_data, "action" :'exit_product_page'});
         MyGA.SendEvent('ln_course_details', 'ln_course_details', 'ln_jobs_available', 'Jobs available', '', '', true);
+        window.location.href = product_detail?.num_jobs_url;
     }
 
     const viewAllCourses = () => {
@@ -113,6 +114,13 @@ const BannerCourseDetail = (props) => {
         trackUser({"query" : tracking_data, "action" :'exit_product_page'});
 
         window.location.href=`${siteDomain}/search/results/?fvid=${product_detail?.pPv}`;
+    }
+
+    const handleBreadCrumbTracking = (data, key, val) => {
+        if(data.length - 1 !== key) trackUser({"query" : tracking_data, "action" :'exit_product_page'});
+        
+        MyGA.SendEvent('ln_breadcrumbs', 'ln_breadcrumbs', 'ln_breadcrumb_click', `${val.name}`, '', false, true);
+        window.location.href = `${siteDomain}${val.url}`;
     }
 
     return (
@@ -126,7 +134,7 @@ const BannerCourseDetail = (props) => {
                                 <Breadcrumb>
                                     {
                                         product_detail?.breadcrumbs?.map((bread, inx) => {
-                                            return <Breadcrumb.Item key={inx} href={bread.url}>{bread.name}</Breadcrumb.Item>
+                                            return <Breadcrumb.Item key={inx} onClick={() => handleBreadCrumbTracking(product_detail?.breadcrumbs, inx, bread)}>{bread.name}</Breadcrumb.Item>
                                         })
                                     }
                                 </Breadcrumb>
@@ -156,7 +164,7 @@ const BannerCourseDetail = (props) => {
                                                 </LinkScroll>
                                                 </span> : ""}
                                                 {product_detail?.prd_num_jobs ? <span className="review-jobs">
-                                                    <a target="_blank" href={product_detail?.num_jobs_url} onClick={() => trackJobs()}>
+                                                    <a target="_blank" onClick={() => trackJobs(product_detail?.num_jobs_url)}>
                                                         <figure className="icon-jobs-link"></figure> <strong>{product_detail?.prd_num_jobs}</strong> Jobs available
                                                     </a>
                                                 </span> : ""}
@@ -328,8 +336,10 @@ const BannerCourseDetail = (props) => {
                                                     <a onClick={() => goToCart(varChecked)} className="btn btn-secondary mt-10 mr-10">{ product_detail?.prd_service === 'assessment' ? 'Buy Now' : product_detail?.redeem_test ? 'Redeem Now' : 'Enroll now' }</a>
                                                     <LinkScroll to={"enquire-now"} className="btn btn-outline-primary mt-10">Enquire now</LinkScroll>
                                                 </p>
+                                                
                                             </div>
                                             <div className="course-enrol__offer lightblue-bg2">
+                                                {product_detail?.redeem_test && <span>You have {product_detail?.product_redeem_count} free practice test (Assessment) as you're a Shine Premium User</span>}
                                                 <strong className="mt-10 mb-5">Offers</strong>
                                                 <ul className="pb-0">
                                                 {

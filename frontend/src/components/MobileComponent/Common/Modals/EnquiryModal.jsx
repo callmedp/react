@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import ReactDOM from 'react-dom';
-import Modal from 'react-modal';
+// import ReactDOM from 'react-dom';
+// import Modal from 'react-modal';
 import './modals.scss'
 import { useForm } from 'react-hook-form';
 import { InputField, SelectBox } from 'formHandler/mobileFormHandler/formFields'
@@ -9,6 +9,7 @@ import EnquireNowForm from 'formHandler/mobileFormHandler/formData/enquireNow';
 import { createLead } from 'store/SkillPage/NeedHelp/actions';
 import { startNeedHelpLoader, stopNeedHelpLoader } from 'store/Loader/actions/index';
 import Loader from '../../Common/Loader/loader';
+import { MyGA } from 'utils/ga.tracking.js';
 
 const EnquiryModal = (props) => {
     const { setEnquiryForm, page } = props
@@ -40,6 +41,7 @@ const EnquiryModal = (props) => {
     }
 
     const onSubmit = async (values, event) => {
+        MyGA.SendEvent('SkillNeedHelpForm','ln_need_help', 'ln_need_help_form_submitted', `${values.name}`,'', false, true);
         const data = page === 'detailPage' ?  addProductValues(values) : addHiddenValues(values)
         try{
             dispatch(startNeedHelpLoader())

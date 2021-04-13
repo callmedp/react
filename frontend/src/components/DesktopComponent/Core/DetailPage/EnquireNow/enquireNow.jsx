@@ -14,6 +14,7 @@ import {Toast} from '../../../Common/Toast/toast';
 // Styling Import
 import './enquireNow.scss';
 import { imageUrl } from 'utils/domains';
+import { MyGA } from 'utils/ga.tracking.js';
 
 const EnquireNow = (props) => {
     const {location, match: {params: {id}}} = props;
@@ -35,11 +36,17 @@ const EnquireNow = (props) => {
 
     const onSubmit = async (data, e) => {
         // On submit send data to back-end
-        // console.log(data)
-        await new Promise((resolve) => dispatch(sendEnquireNow({ payload: addValues(data), resolve })));
-        e.target.reset(); // reset after form submit
-        Toast.fire({ type: 'success', title: 'Your Query Submitted Successfully.' })
 
+        MyGA.SendEvent('SkillNeedHelpForm','ln_need_help', 'ln_need_help_form_submitted', `${data.name}`,'', false, true);
+
+        try {
+            await new Promise((resolve) => dispatch(sendEnquireNow({ payload: addValues(data), resolve })));
+            e.target.reset(); // reset after form submit
+            Toast.fire({ type: 'success', title: 'Your Query Submitted Successfully.' })
+        }
+        catch (error) {
+            Toast.fire({ type: 'error', title: 'Something went wrong!' })
+        }
     }
 
     return (

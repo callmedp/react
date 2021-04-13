@@ -25,7 +25,7 @@ const FAQ = (props) => {
                         <div className="faq__list">
                             <Accordion defaultActiveKey="0" >
                                 {
-                                    (sliceFlag ? faq_list.slice(0, 4) : faq_list).map((item, index) => 
+                                    (sliceFlag ? faq_list.slice(0, 4) : faq_list)?.map((item, index) => 
                                         <Card data-aos="fade-up" key={index.toString() + item.question} itemScope itemProp="mainEntity" 
                                         itemType="https://schema.org/Question" >
                                             <Accordion.Toggle as={Card.Header} eventKey={index === 0 ? '0' : index} >

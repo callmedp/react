@@ -133,6 +133,7 @@ const CourseEnrol = (props) => {
                         <Link to={'#'} className="btn btn-secondary mt-10 ml-auto" onClick={() => goToCart(varChecked)}> { product_detail?.prd_service === 'assessment' ? 'Buy Now' : product_detail?.redeem_test ? 'Redeem Now' : 'Enroll now' }</Link>
                     </div>
                     <div className="m-course-enrol__offer lightblue-bg2">
+                        {product_detail?.redeem_test && <span>You have {product_detail?.product_redeem_count} free practice test (Assessment) as you're a Shine Premium User</span>}
                         <strong className="mt-10 mb-5">Offers</strong>
                         <ul className="pb-0">
                             {

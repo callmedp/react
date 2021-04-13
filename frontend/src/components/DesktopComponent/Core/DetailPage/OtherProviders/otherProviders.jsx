@@ -13,7 +13,7 @@ const OtherProviders = (props) => {
                     <h2 className="heading2">Courses by other providers</h2>
                         <ul className="recent-courses__list mt-30">
                             {
-                                pop_list?.slice(0,4).map((popList, indx) => <CourseCard key={indx} indx={indx} course={popList} name={'otherProviders'} />)
+                                pop_list?.slice(0,4)?.map((popList, indx) => <CourseCard key={indx} indx={indx} course={popList} name={'otherProviders'} />)
                             }
                         </ul>
                 </div>
