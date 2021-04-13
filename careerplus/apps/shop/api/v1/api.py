@@ -771,8 +771,8 @@ class ProductInformationAPIMixin(object):
                 data.update({'free_test': False})
             main_context.update(self.get_other_detail(product, sqs))
             main_context.update(data)
-
-            cache.set(key, data, 60 * 60 * 4)
+            if not settings.DEBUG:
+                cache.set(key, data, 60 * 60 * 4)
 
         return main_context
 
@@ -1007,7 +1007,8 @@ class ProductDetailAPI(ProductInformationAPIMixin, APIView):
                 self.product_obj = cache_dbprd_maping
             else:
                 self.product_obj = Product.browsable.filter(pk=pid).first()
-                cache.set(self.prd_key, self.product_obj, 60 * 60 * 4)
+                if not settings.DEBUG:
+                    cache.set(self.prd_key, self.product_obj, 60 * 60 * 4)
                 if not self.product_obj:
                     return APIResponse(message='Product Not Found', error=True, status=status.HTTP_404_NOT_FOUND)
 
@@ -1019,7 +1020,8 @@ class ProductDetailAPI(ProductInformationAPIMixin, APIView):
                 sqs = SearchQuerySet().filter(id=pid)
                 if sqs:
                     self.sqs = sqs[0]
-                    cache.set(self.prd_solr_key, self.sqs, 60 * 60 * 4)
+                    if not settings.DEBUG:
+                        cache.set(self.prd_solr_key, self.sqs, 60 * 60 * 4)
                 else:
                     return APIResponse(message='Product Not Found', error=True, status=status.HTTP_404_NOT_FOUND)
 
@@ -1124,7 +1126,8 @@ class ProductReviewAPIListing(ProductInformationAPIMixin, APIView):
                 product_obj = cache_dbprd_maping
             else:
                 product_obj = Product.browsable.filter(pk=pid).first()
-                cache.set(prd_key, product_obj, 60 * 60 * 4)
+                if not settings.DEBUG:
+                    cache.set(prd_key, product_obj, 60 * 60 * 4)
                 if not product_obj:
                     return APIResponse(message='Product Not found', error=True, status=status.HTTP_404_NOT_FOUND)
 

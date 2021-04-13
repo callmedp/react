@@ -67,7 +67,7 @@ function* productReviews(action){
     const { payload: { payload, resolve, reject} } = action;
     try{
     
-        const response = yield call(Api.fetchReviews, payload);
+        const response = yield call(Api.fetchProductReviews, payload);
    
         if(response?.error){
             return reject(response);

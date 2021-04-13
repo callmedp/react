@@ -9,6 +9,7 @@ import { useForm } from 'react-hook-form';
 // Inter-App Import
 import DetailPageForm from 'formHandler/desktopFormHandler/formData/DetailPage';
 import { sendEnquireNow } from 'store/DetailPage/actions';
+import {Toast} from '../../../Common/Toast/toast';
 
 // Styling Import
 import './enquireNow.scss';
@@ -37,10 +38,7 @@ const EnquireNow = (props) => {
         console.log(data)
         await new Promise((resolve) => dispatch(sendEnquireNow({ payload: addValues(data), resolve })));
         e.target.reset(); // reset after form submit
-        setSubmitted(true);
-        setTimeout(() => {
-            setSubmitted(false);
-        }, 3000);
+        Toast.fire({ type: 'success', title: 'Your Query Submitted Successfully.' })
 
     }
 
@@ -55,7 +53,6 @@ const EnquireNow = (props) => {
                         <div className="enquire-now__form col">
                            
                             <strong className="heading2">Enquire now!</strong>
-                            {issubmitted ? <p style={{ color: 'red', fontWeight: 800}}> Your Query Submitted Successfully. </p> : '' }
                             <form className="mt-30" onSubmit={handleSubmit(onSubmit)}>
 
                                 <InputField attributes={DetailPageForm.name} register={register}

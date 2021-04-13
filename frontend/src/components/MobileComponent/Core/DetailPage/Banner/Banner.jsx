@@ -180,7 +180,7 @@ const CourseDetailBanner = (props) => {
                             <span>
                                 {
                                     (!showAll && product_detail?.prd_about?.length > noOfWords) ? 
-                                            controlContent(" ... Read More", true) : controlContent(" ... Show less", false)
+                                            controlContent(" ... Read More", true) : showAll ? controlContent(" Show less", false) : ''
                                 } 
                             </span>
                         </p>

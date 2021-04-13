@@ -11,7 +11,7 @@ import { getCandidateId } from 'utils/storage.js';
 import { siteDomain } from 'utils/domains';
 
 const LearnersStories = (props) => {
-    const {id, product_detail} = props;
+    const {id, product_detail, pUrl} = props;
     const [reviewModal, showReviewModal] = useState(false);
     const { reviewLoader } = useSelector(store => store.loader);
     const { prd_review_list, prd_rv_current_page, prd_rv_has_next } = useSelector( store => store.reviews );
@@ -97,13 +97,13 @@ const LearnersStories = (props) => {
 
                 <div className="d-flex mx-auto mt-20">
                     {
-                        // (product_detail?.user_reviews && getCandidateId()) ?
-                        // <Link to={"#"} onClick={showReviewModal} className="btn btn-outline-primary btn-custom">Update your review</Link>
-                        // :
-                        // (!product_detail?.user_reviews && getCandidateId()) ?
-                        <Link to={"#"} onClick={showReviewModal} className="btn btn-outline-primary btn-custom">Write a review</Link>
-                        // : 
-                        // <Link to={"#"} onClick={() => window.location.href=`${siteDomain}/login/`} className="btn btn-outline-primary btn-custom">Write a review</Link>
+                        (product_detail?.user_reviews && getCandidateId()) ?
+                            <Link to={"#"} onClick={showReviewModal} className="btn btn-outline-primary btn-custom">Update your review</Link>
+                        :
+                        (!product_detail?.user_reviews && getCandidateId()) ?
+                            <Link to={"#"} onClick={showReviewModal} className="btn btn-outline-primary btn-custom">Write a review</Link>
+                        : 
+                        <a href={`${siteDomain}/login/?next=${pUrl}`} className="btn btn-outline-primary btn-custom">Write a review</a>
                     }
                 </div>
             </div>
