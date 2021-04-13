@@ -1,7 +1,7 @@
 import BaseApiService from 'services/BaseApiService'
 import { siteDomain } from 'utils/domains'
 
-const fetchReviews = (data) => {
+const fetchProductReviews = (data) => {
     const url = `/shop/api/v1/get-prd-review/?pid=${data.prdId}&page=${data.page}`;
     return BaseApiService.get(`${siteDomain}${url}`);
 }
@@ -35,7 +35,7 @@ const addToCartRedeemApi = (data) => {
 
 export default {
     mainCourses,
-    fetchReviews,
+    fetchProductReviews,
     submitReviews,
     recommendedCoursesApi,
     EnquireNewSend,
