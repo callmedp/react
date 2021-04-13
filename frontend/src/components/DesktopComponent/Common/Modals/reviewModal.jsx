@@ -104,7 +104,7 @@ const ReviewModal =(props) => {
         name: "review",
         id: "review",
         placeholder: " ",
-        label: "Type Here",
+        label: "Review",
         value: review?.content,
         inputType: 'input',
         rows: 3,

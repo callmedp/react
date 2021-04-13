@@ -26,6 +26,8 @@ const BannerCourseDetail = (props) => {
     const { mainCourseCartLoader } = useSelector(store => store.loader);
     const tracking_data = getTrackingInfo();
 
+    const abt_desc = product_detail?.prd_about + product_detail?.prd_desc;
+
     const starRatings = (star, index) => {
         return (star === '*' ? <em className="icon-fullstar" key={index}></em> : star === '+' 
             ? <em className="icon-halfstar" key={index}></em> : <em className="icon-blankstar" key={index}></em>
@@ -255,21 +257,21 @@ const BannerCourseDetail = (props) => {
                                     </figure>
 
                                     <span className="intro-video__content" itemProp="embedUrl">
-                                        { product_detail?.prd_about ? <div id="module" className=" about-course">
-                                            {product_detail?.prd_about.replace(regex, '')?.length > reqLength ? (
+                                        { abt_desc ? <div id="module" className=" about-course">
+                                            {abt_desc.replace(regex, '')?.length > reqLength ? (
                                                 <input type="checkbox" className="read-more-state" id="post-10" ref={inputCheckbox} itemProp="about" />
                                                 ) : (
                                                     ""
                                                     )}
                                                     
-                                            <span className="read-more-wrap" itemProp="description">
-                                                <span dangerouslySetInnerHTML={{__html:product_detail?.prd_about?.replace(regex, '').slice(0, reqLength)}} />
-                                                <span className="read-more-target" dangerouslySetInnerHTML={{__html: product_detail?.prd_about?.replace(regex, '').slice(reqLength)}} />
-                                            </span>
+                                            <div className="read-more-wrap" itemProp="description">
+                                                <span dangerouslySetInnerHTML={{__html:abt_desc?.replace(regex, '').slice(0, reqLength)}}></span>
+                                                <span className="read-more-target" dangerouslySetInnerHTML={{__html: abt_desc?.replace(regex, '').slice(reqLength)}}></span>
+                                            </div>
                                             <label htmlFor="post-10" className="read-more-trigger"></label>
                                         </div> : "" }
 
-                                        { product_detail?.prd_desc ? <div id="module" className=" about-course">
+                                        {/* { product_detail?.prd_desc ? <div id="module" className=" about-course">
                                             {product_detail?.prd_desc.replace(regex, '')?.length > reqLength ? (
                                                 <input type="checkbox" className="read-more-state" id="post-20" ref={inputCheckbox} itemProp="desc" />
                                                 ) : (
@@ -281,7 +283,7 @@ const BannerCourseDetail = (props) => {
                                                 <span className="read-more-target" dangerouslySetInnerHTML={{__html: product_detail?.prd_desc?.replace(regex, '').slice(reqLength)}} />
                                             </span>
                                             <label htmlFor="post-20" className="read-more-trigger"></label>
-                                        </div> : "" }
+                                        </div> : "" } */}
                                     </span>
                                 </div>
                             </div>
