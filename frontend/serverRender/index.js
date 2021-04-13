@@ -148,8 +148,11 @@ app.get(expressRoutes, (req, res) => {
                     if (route && route.actionGroup) {
                         try {
                             result = await new Promise((resolve, reject) => fetchApiData(store, match.params,cookies, route.actionGroup, resolve, reject));
+                            console.log('1>>>>>>>>>>>', result)
                         }
                         catch (error) {
+                            console.log('2>>>>>>>>>>>', result)
+
                             if (error?.status === 404) {
                                 return res.redirect('/404/');
                             }

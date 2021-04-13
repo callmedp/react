@@ -1,8 +1,7 @@
 import React from 'react';
 import Accordion from 'react-bootstrap/Accordion';
 import Card from 'react-bootstrap/Card';
-// import { Link } from 'react-router-dom';
-import './courseOutline.scss'
+import './courseOutline.scss';
 import { imageUrl } from 'utils/domains';
 
 const CourseOutline = (props) => {

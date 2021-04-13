@@ -22,6 +22,7 @@ const CourseEnrol = (props) => {
         let selectedObj = objj;
         discountPriceSelected(objj.fake_inr_price);
         changeChecked({...selectedObj});
+        MyGA.SendEvent('ln_study_mode', 'ln_study_mode', 'ln_click_study_mode', `${selectedObj.mode}|get_choice_display:"STUDY_MODE"`, '', false, true);
     }
 
     const getDiscountedPrice = (fakeP, realP) => {

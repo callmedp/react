@@ -1,7 +1,7 @@
 import React from 'react';
 import './courseOutcome.scss';
 
-const CourseOutcome = (props) => {
+const CourseOutcome = () => {
     return (
         <section id="outcome" className="container-fluid">
             <div className="row">
