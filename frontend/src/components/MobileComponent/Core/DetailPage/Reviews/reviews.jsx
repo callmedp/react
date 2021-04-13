@@ -26,8 +26,11 @@ const Reviews = (props) => {
         // variableWidth: true,
         afterChange: function(index) {
             if ((index % 7 === 0 && pageId < index ) && pageId <= prd_rv_total) {
-                new Promise((resolve, reject) => dispatch(fetchProductReviews({ payload: { prdId: prdId?.split('-')[1], page: pageId, device: 'mobile'}, resolve, reject })));
-                updatePageId(pageId + 1);
+                try {
+                    new Promise((resolve, reject) => dispatch(fetchProductReviews({ payload: { prdId: prdId?.split('-')[1], page: pageId, device: 'mobile'}, resolve, reject })));
+                    updatePageId(pageId + 1);
+                }
+                catch(error) {}
             }
         }
     }
