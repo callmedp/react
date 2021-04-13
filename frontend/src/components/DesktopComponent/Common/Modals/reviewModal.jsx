@@ -82,8 +82,8 @@ const ReviewModal =(props) => {
             catch(error) {
                 dispatch(stopReviewLoader())
                 Toast.fire({
-                    type: response?.error ? 'error' : 'success',
-                    title: response?.message
+                    type: 'error',
+                    title: error?.message
                 });
             }
         }
