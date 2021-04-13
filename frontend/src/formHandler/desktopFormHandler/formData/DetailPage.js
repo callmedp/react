@@ -1252,12 +1252,6 @@ export default {
         id: "message",
         placeholder: " ",
         label: "Message",
-        inputType: 'input',
-        validation: {
-            required:true,
-        },
-        errorMessage: {
-            required: "This field is required",
-        }
+        inputType: 'input'
     }
 }
