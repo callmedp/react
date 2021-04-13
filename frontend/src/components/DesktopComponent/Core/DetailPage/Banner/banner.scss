@@ -237,7 +237,7 @@ header {
             &__content {
                 flex: 1;
                 color: #ddd;
-                overflow: auto;
+                overflow-x: auto;
                 max-height: 8rem;
                 a {
                     font-weight: 700;
