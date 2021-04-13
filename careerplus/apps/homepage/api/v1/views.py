@@ -1094,15 +1094,15 @@ class PopularInDemandProductsAPI(APIView):
             elif tab_type == 'master':
                 courses = recommended.get('courses',None)
                 data.update({'recommended_course_ids':courses})
-                courses = SearchQuerySet().filter(id__in=courses, pTP__in=[0, 1, 3]).exclude(
-                    id__in=settings.EXCLUDE_SEARCH_PRODUCTS
-                )
                 if len(courses)<4:
                     gap = 4-len(courses)
                     popular_courses = PopularProductMixin(). \
                     popular_courses_algorithm(class_category=class_category,
                                             quantity=gap)
                     courses += popular_courses
+                courses = SearchQuerySet().filter(id__in=courses, pTP__in=[0, 1, 3]).exclude(
+                    id__in=settings.EXCLUDE_SEARCH_PRODUCTS
+                )
                 if courses:
                     paginated_data = offset_paginator(page, courses,size=4)                                                                    
                     courses = paginated_data["data"]
