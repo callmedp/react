@@ -53,7 +53,7 @@ const BannerCourseDetail = (props) => {
             trackUser({"query" : tracking_data, "action" :'enroll_now'});
 
             if(frqntProd && frqntProd.length > 0) {
-                frqntProd?.map(prdId => cvId.push(prdId.id));
+                frqntProd.map(prdId => cvId.push(prdId.id));
                 if(value.id) cvId.push(value.id)
                 else cvId.push(product_detail?.selected_var?.id);
             }
