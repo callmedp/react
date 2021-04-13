@@ -70,7 +70,7 @@ const CourseDetailBanner = (props) => {
                                 <span className="m-review-jobs">
                                     <LinkScroll to="review" offset={-120}>
                                         <Link to={"#"}>
-                                            <figure className="micon-reviews-link"></figure> <strong>{ product_detail?.prd_num_rating }</strong> Reviews
+                                            <figure className="micon-reviews-link"></figure> <strong>{ product_detail?.prd_num_rating }</strong> { product_detail?.prd_num_rating > 1 ? 'Reviews' : 'Review' }
                                         </Link>
                                     </LinkScroll>
                                 </span>
