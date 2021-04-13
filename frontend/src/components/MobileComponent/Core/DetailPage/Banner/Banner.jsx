@@ -19,6 +19,8 @@ const CourseDetailBanner = (props) => {
     const tracking_data = getTrackingInfo();
     const noOfWords = 250;
     const [showAll, setShowAll] = useState(false);
+
+    const completeDescription = product_detail?.prd_about + ' <br /> ' + product_detail?.prd_desc
     
     const starRatings = (star, index) => {
         return (
@@ -145,7 +147,7 @@ const CourseDetailBanner = (props) => {
                                 <li className="d-flex align-items-center">
                                     <figure className="micon-question-no mr-10"></figure>
                                     <p>
-                                    No. of questions <strong>{product_detail?.prd_asft?.number_of_questions}</strong>
+                                        No. of questions <strong>{product_detail?.prd_asft?.number_of_questions}</strong>
                                     </p>
                                 </li>
                             </>
@@ -190,12 +192,12 @@ const CourseDetailBanner = (props) => {
                     }
 
                     {
-                        product_detail?.prd_about && 
+                        completeDescription && 
                         <p className="m-intro-video__content">
-                            <span itemProp="description" dangerouslySetInnerHTML={{__html: product_detail?.prd_about?.replace(/<[^>]*>/g, '').slice(0, showAll ? product_detail?.prd_about?.length : noOfWords) }} />
+                            <span itemProp="description" dangerouslySetInnerHTML={{__html: completeDescription?.slice(0, showAll ? completeDescription?.length : noOfWords) }} />
                             <span>
                                 {
-                                    (!showAll && product_detail?.prd_about?.length > noOfWords) ? 
+                                    (!showAll && completeDescription?.length > noOfWords) ? 
                                             controlContent(" ... Read More", true) : showAll ? controlContent(" Show less", false) : ''
                                 } 
                             </span>
