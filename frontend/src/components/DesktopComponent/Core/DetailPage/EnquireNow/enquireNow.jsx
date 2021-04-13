@@ -1,5 +1,5 @@
 // React Core Import
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { InputField, SelectBox, InputFieldDynamic, TextAreaDynamic } from 'formHandler/desktopFormHandler/formFields';
 
@@ -19,7 +19,7 @@ const EnquireNow = (props) => {
     const {location, match: {params: {id}}} = props;
     const [ issubmitted, setSubmitted ] = useState(false);
     const {product_detail} = useSelector(store => store?.mainCourses);
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
     const { register, handleSubmit, reset, errors } = useForm();
 
     const addValues = (values) => {
@@ -35,7 +35,7 @@ const EnquireNow = (props) => {
 
     const onSubmit = async (data, e) => {
         // On submit send data to back-end
-        console.log(data)
+        // console.log(data)
         await new Promise((resolve) => dispatch(sendEnquireNow({ payload: addValues(data), resolve })));
         e.target.reset(); // reset after form submit
         Toast.fire({ type: 'success', title: 'Your Query Submitted Successfully.' })

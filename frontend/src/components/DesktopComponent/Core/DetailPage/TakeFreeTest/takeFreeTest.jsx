@@ -6,7 +6,7 @@ import { trackUser } from 'store/Tracking/actions/index.js';
 
 const TakeFreeTest = (props) => {
     
-    const { should_take_test_url } = props
+    const { should_take_test_url } = props;
     const tracking_data = getTrackingInfo();
 
     const testRedirection = () => {

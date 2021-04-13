@@ -10,14 +10,14 @@ import { fetchAddToCartEnroll } from 'store/DetailPage/actions';
 import Loader from '../../../Common/Loader/loader';
 
 const StickyNav = (props) => {
-    const { product_detail, varChecked, outline, faq, frqntProd } = props;
+    const { product_detail, varChecked, outline, faq, frqntProd, topics } = props;
     const dispatch = useDispatch();
     const [tab, setTab] = useState('1');
     const { mainCourseCartLoader } = useSelector(store => store.loader);
 
-    const handleTab = (event) => {
-        setTab(event.target.id)
-    }
+    // const handleTab = (event) => {
+    //     setTab(event.target.id)
+    // }
 
     const goToCart = async (value) => {
         let cartItems = {};
@@ -79,6 +79,15 @@ const StickyNav = (props) => {
                                     How it works
                                 </Nav.Link>
                             </LinkScroll>
+
+                            {
+                                topics && 
+                                    <LinkScroll to="topicsCovered" offset={-170} isDynamic={true} spy={true} id='2'>
+                                        <Nav.Link>
+                                            Topics Covered
+                                        </Nav.Link>
+                                    </LinkScroll>
+                            }
 
                             {
                                 faq && <LinkScroll to="faqs" offset={-180} isDynamic={true} spy={true} id='5'>

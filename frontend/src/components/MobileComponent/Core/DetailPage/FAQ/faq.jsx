@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './faq-detail.scss';
+import { MyGA } from 'utils/ga.tracking.js';
 
 const FAQ = (props) => {
 
@@ -22,6 +23,7 @@ const FAQ = (props) => {
     }
 
     const loadMore = () => {
+        MyGA.SendEvent('SkillMoreFAQs','ln_FAQ_click', 'more_FAQs', 'ln_FAQ','', false, true);
         setSliceFlag(state => !state);
     }
 

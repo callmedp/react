@@ -4,14 +4,12 @@ import { useSelector, useDispatch } from 'react-redux';
 import '../../CataloguePage/RecentCourses/recentCourses.scss';
 import ProductCards from '../ProductCards/productCards';
 import { fetchRecommendedCourses } from 'store/DetailPage/actions';
-import { getTrackingInfo } from 'utils/storage.js';
-import { trackUser } from 'store/Tracking/actions/index.js';
+
 
 const CoursesMayLike = (props) => {
     const {product_id, skill} = props;
     const dispatch = useDispatch()
     const { results } = useSelector(store => store.recommendedCourses)
-    const tracking_data = getTrackingInfo();
 
     useEffect(() => {
         handleEffects();
@@ -23,6 +21,8 @@ const CoursesMayLike = (props) => {
         } 
         catch (error) {}
     };
+
+
 
     return(
         <section className="m-container mt-0 mb-0 pr-0" data-aos="fade-up">

@@ -1,6 +1,5 @@
 import React from 'react';
 import '../../CataloguePage/RecentCourses/recentCourses.scss';
-// import { Link } from 'react-router-dom';
 import CourseCard from 'components/DesktopComponent/Common/CourseCard/courseCard';
    
 const OtherProviders = (props) => {

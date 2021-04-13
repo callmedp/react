@@ -43,9 +43,8 @@ const LearnersStories = (props) => {
     }
 
     const handleSelect = (selectedIndex, e) => {
-        console.log(selectedIndex);
+        // console.log(selectedIndex);
         if((selectedIndex % 2 === 0) && e.target.className === 'carousel-control-next-icon' && prd_rv_has_next) handleEffects(prd_rv_current_page+1);
-        // if(selectedIndex === 2 && e.target.className === 'carousel-control-prev-icon' && prd_rv_has_prev) handleEffects(prd_rv_current_page-1);
     }
 
     const getAllReviews = (reviewData, idx) => {

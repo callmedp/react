@@ -10,6 +10,7 @@ import CourseOutline from './CourseOutline/courseOutline';
 import CourseOutcome from './CourseOutcome/courseOutcome';
 import SampleCertificate from './SampleCertificate/sampleCertificate';
 import HowItWorks from './HowItWorks/howItWorks';
+import TopicsCovered from './TopicsCovered/topicsCovered';
 import WhoLearn from './WhoLearn/whoLearn';
 import SkillGain from './SkillGain/skillGain';
 import TakeFreeTest from './TakeFreeTest/takeFreeTest';
@@ -107,7 +108,8 @@ const DetailPage = (props) => {
                         <CourseEnrol product_detail={product_detail} getProductPrice={getProductPrice} frqntProd={frqntProd} varChecked={varChecked} changeChecked={changeChecked} />
                         {
                             showStickyNav && <StickyNavDetail 
-                                outline={product_detail?.chapter ? true : false}
+                                outline={(product_detail?.chapter && product_detail?.prd_service !== 'assessment') ? true : false}
+                                topics={(product_detail?.chapter && product_detail?.prd_service === 'assessment') ? true : false}
                                 faq = {product_detail?.faq ? true : false}
                                 product_detail={product_detail} prdId={prdId} varChecked={varChecked}
                                 frqntProd={frqntProd}
@@ -121,12 +123,15 @@ const DetailPage = (props) => {
                         }
                         <KeyFeatures prd_uget={product_detail?.prd_uget} prd_vendor_slug={product_detail?.prd_vendor_slug} typeFlow={product_detail?.pTF}/>
                         {
-                            product_detail?.chapter && 
+                            (product_detail?.chapter && product_detail?.prd_service !== 'assessment') && 
                                 <CourseOutline chapter_list={product_detail?.chapter_list}/>
                         }
                         {/* <CourseOutcome />
                         <SampleCertificate /> */}
                         <HowItWorks steps={product_detail?.dlvry_flow}/>
+                        {
+                            (product_detail?.chapter && product_detail?.prd_service === 'assessment') && <TopicsCovered  chapter_list={product_detail?.chapter_list} />
+                        }
                         { 
                             product_detail?.prd_should_lrn &&
                                 <WhoLearn prd_lrn_data={product_detail?.prd_should_lrn_dt} />

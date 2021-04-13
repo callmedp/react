@@ -9,6 +9,7 @@ import CourseOutline from './CourseOutline/courseOutline';
 import WhoLearn from './WhoLearn/whoLearn';
 import TakeFreeTest from './TakeFreeTest/takeFreeTest';
 import HowItWorks from './HowItWorks/howItWorks';
+import TopicsCovered from './TopicsCovered/topicsCovered';
 import SkillGain from './SkillGain/skillGain';
 import OtherProviders from './OtherProviders/otherProviders';
 import FAQ from './FAQ/faq';
@@ -76,7 +77,8 @@ const DetailPage = (props) => {
             <Header />
             {
                     showStickyNav && <StickyNav 
-                        outline={product_detail?.chapter ? true : false}
+                        outline={(product_detail?.chapter && product_detail?.prd_service !== 'assessment') ? true : false}
+                        topics={(product_detail?.chapter && product_detail?.prd_service === 'assessment') ? true : false}
                         faq = {product_detail?.faq ? true : false}
                         product_detail={product_detail} prdId={id} varChecked={varChecked}
                         frqntProd={frqntProd}
@@ -85,7 +87,7 @@ const DetailPage = (props) => {
             <BannerCourseDetail frqntProd={frqntProd} addFrqntProd={addFrqntProd} product_detail={product_detail} varChecked={varChecked} changeChecked={changeChecked}/>
             {product_detail?.prd_uget && <KeyFeatures prd_uget={product_detail?.prd_uget} pTF={product_detail?.pTF} prd_vendor_slug={product_detail?.prd_vendor_slug} />}
             {
-                 product_detail?.chapter && 
+                 (product_detail?.chapter && product_detail?.prd_service !== 'assessment') && 
                  <div className="container-fluid">
                      <div className="row">
                          <div className="col-sm-12">
@@ -108,6 +110,7 @@ const DetailPage = (props) => {
             </div> */}
 
             { product_detail?.dlvry_flow && <HowItWorks dlvry_flow={product_detail?.dlvry_flow} /> }
+            { (product_detail?.chapter && product_detail?.prd_service === 'assessment') && <TopicsCovered  chapter_list={product_detail?.chapter_list}/> }
 
             {
                 (product_detail?.prd_should_lrn || product_detail?.free_test) &&

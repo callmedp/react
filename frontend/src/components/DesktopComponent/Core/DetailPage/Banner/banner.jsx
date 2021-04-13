@@ -71,6 +71,7 @@ const BannerCourseDetail = (props) => {
             }
         }
         else {
+            trackUser({"query" : tracking_data, "action" :'redeem_now'});
             cartItems = { 'prod_id': product_detail?.pPv, 'redeem_option': product_detail?.redeem_option }
 
             try {
