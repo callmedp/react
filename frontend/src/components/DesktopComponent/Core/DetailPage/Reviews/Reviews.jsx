@@ -29,7 +29,9 @@ const LearnersStories = (props) => {
         try {
             await new Promise((resolve, reject) => dispatch(fetchProductReviews({ payload: { prdId: id, page: page, device: 'desktop' }, resolve, reject })));
         }
-        catch (error) {}
+        catch (error) {
+            console.log(error);
+        }
     };
 
     const starRatings = (star, index) => {
@@ -79,13 +81,13 @@ const LearnersStories = (props) => {
         { reviewLoader ? <Loader /> : ''}
         <section id="reviews" className="container" data-aos="fade-up">
             {
-                reviewModal ? <ReviewModal reviewModal={reviewModal} showReviewModal={showReviewModal} review={product_detail?.review} user_reviews={product_detail?.user_reviews} /> : ""
+                reviewModal ? <ReviewModal reviewModal={reviewModal} prdId={id} showReviewModal={showReviewModal} review={product_detail?.review} user_reviews={product_detail?.user_reviews} /> : ""
             }
             <div className="grid">
                 <h2 className="heading2 m-auto pb-20">Reviews</h2>
                 {
                     prd_review_list && prd_review_list.length > 0 ?
-                    <Carousel className="reviews" onSelect={(i,e)=>handleSelect(i,e)}>
+                    <Carousel className="reviews" onSelect={ (i,e) => handleSelect(i,e) }>
                         {
                             prd_review_list?.map(getAllReviews)
                         }
@@ -95,13 +97,13 @@ const LearnersStories = (props) => {
 
                 <div className="d-flex mx-auto mt-20">
                     {
-                        (product_detail?.user_reviews && getCandidateId()) ?
-                        <Link to={"#"} onClick={showReviewModal} className="btn btn-outline-primary btn-custom">Update your review</Link>
-                        :
-                        (!product_detail?.user_reviews && getCandidateId()) ?
+                        // (product_detail?.user_reviews && getCandidateId()) ?
+                        // <Link to={"#"} onClick={showReviewModal} className="btn btn-outline-primary btn-custom">Update your review</Link>
+                        // :
+                        // (!product_detail?.user_reviews && getCandidateId()) ?
                         <Link to={"#"} onClick={showReviewModal} className="btn btn-outline-primary btn-custom">Write a review</Link>
-                        : 
-                        <Link to={"#"} onClick={() => window.location.href=`${siteDomain}/login/`} className="btn btn-outline-primary btn-custom">Write a review</Link>
+                        // : 
+                        // <Link to={"#"} onClick={() => window.location.href=`${siteDomain}/login/`} className="btn btn-outline-primary btn-custom">Write a review</Link>
                     }
                 </div>
             </div>

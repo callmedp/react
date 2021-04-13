@@ -1164,7 +1164,7 @@ class ProductReviewAPI(APIView):
                         user_id=self.candidate_id
                     )
                 if review_obj:
-                    return APIResponse(message='You have already submitted feedback', status=status.HTTP_200_OK)
+                    return APIResponse(error=False, message='You have already submitted feedback', status=status.HTTP_200_OK)
 
                 review = request.POST.get('review', '').strip() or request.data.get('review', '').strip() 
                 rating = int(request.POST.get('rating', 1)) or int(request.data.get('rating', 1))
@@ -1173,7 +1173,7 @@ class ProductReviewAPI(APIView):
                 # email = request.POST.get('email', '')
 
                 if not all(len(i) > 0 for i in [review, title, email]):
-                    return APIResponse(message='Email, Review and Title is required', status=status.HTTP_400_BAD_REQUEST)
+                    return APIResponse(error=True, message='Email, Review and Title is required', status=status.HTTP_400_BAD_REQUEST)
 
                 name = ''
                 if request.session.get('first_name'):
@@ -1182,13 +1182,13 @@ class ProductReviewAPI(APIView):
                     name += ' ' + request.session.get('last_name')
                 product = self.product
                 create_product_review_task.delay(product.id, name, email, self.candidate_id, review, rating, title)
-                return APIResponse(message='Thank you for posting review. It will be displayed after moderation.', status=status.HTTP_200_OK)
+                return APIResponse(error=False, message='Thank you for posting review. It will be displayed after moderation.', status=status.HTTP_200_OK)
 
             except Exception as e:
                 logging.getLogger('error_log').error('Error in creating review log: {}'.format(str(e)))
                 return APIResponse(error=True, message='Something went wrong', status=status.HTTP_400_BAD_REQUEST)
 
-        return APIResponse(message='Product Id and candidate Id required', status=status.HTTP_400_BAD_REQUEST)
+        return APIResponse(error=True, message='Product Id and candidate Id required', status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request, format=None):
         product_pk = self.request.POST.get('product_id')
@@ -1201,7 +1201,7 @@ class ProductReviewAPI(APIView):
             title = request.POST.get('title', '').strip()
 
             if not all(len(i) > 0 for i in [review, title]):
-                return APIResponse(message='Review and Title is required', status=status.HTTP_400_BAD_REQUEST)
+                return APIResponse(error=True, message='Review and Title is required', status=status.HTTP_400_BAD_REQUEST)
 
             try:
                 product_obj = Product.objects.only('id').get(pk=product_pk)
@@ -1217,10 +1217,10 @@ class ProductReviewAPI(APIView):
                     review_obj.title = title
                     review_obj.created = timezone.now()
                     review_obj.save()
-                    return APIResponse(message='Thank you for posting review. It will be displayed after moderation.', status=status.HTTP_200_OK)
+                    return APIResponse(error=False, message='Thank you for posting review. It will be displayed after moderation.', status=status.HTTP_200_OK)
                 else:
-                    return APIResponse(message='Something went wrong', status=status.HTTP_400_BAD_REQUEST)
+                    return APIResponse(error=True, message='Something went wrong', status=status.HTTP_400_BAD_REQUEST)
             except Exception as e:
                 logging.getLogger('error_log').error('Error in updating review log: {}'.format(str(e)))
-                return APIResponse(message='Something went wrong', status=status.HTTP_400_BAD_REQUEST)
-        return APIResponse(message='Product Id and candidate Id required', status=status.HTTP_400_BAD_REQUEST)
+                return APIResponse(error=True, message='Something went wrong', status=status.HTTP_400_BAD_REQUEST)
+        return APIResponse(error=True, message='Product Id and candidate Id required', status=status.HTTP_400_BAD_REQUEST)

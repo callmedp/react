@@ -41,7 +41,7 @@ const FAQ = (props) => {
                                     )   
                                 }
                             </Accordion>
-                            { sliceFlag ? <Link onClick={loadMore} to={"#"} className="load-more pt-20">Load More FAQS</Link> : '' }
+                            { (sliceFlag && (faq_list?.length  > 4)) ? <Link onClick={loadMore} to={"#"} className="load-more pt-20">Load More FAQS</Link> : '' }
                         </div>
                         <div className="faq__img">
                             <span className="faq-tween1" data-aos="zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay="100">

@@ -12,7 +12,7 @@ import { imageUrl } from 'utils/domains';
 import { MyGA } from 'utils/ga.tracking.js';
 
 const ReviewModal =(props) => {
-    const { reviewModal, showReviewModal, review, user_reviews } = props;
+    const { reviewModal, showReviewModal, review, user_reviews, prdId } = props;
     const { reviewLoader } = useSelector(store => store.loader);
     const { register, handleSubmit, errors } = useForm();
     const dispatch = useDispatch();
@@ -63,6 +63,7 @@ const ReviewModal =(props) => {
             const new_review = {
                 ...values,
                 rating: rating ? rating : 5,
+                product_id: prdId
             };
     
             const response = await new Promise((resolve, reject) => dispatch(submitReview({payload: new_review, resolve, reject})));
@@ -71,10 +72,10 @@ const ReviewModal =(props) => {
 
             if(response) {
                 if(!response?.error) showReviewModal(false);
-    
+                console.log(response);
                 Toast.fire({
                     type: response?.error ? 'error' : 'success',
-                    title: response?.data?.display_message ? response?.data?.display_message : response?.display_message
+                    title: response?.message
                 });
             }
         }
