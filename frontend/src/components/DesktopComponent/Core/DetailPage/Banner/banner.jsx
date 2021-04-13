@@ -239,7 +239,7 @@ const BannerCourseDetail = (props) => {
                                 <div className="intro-video">
                                     <figure className="intro-video__img">
                                         <a rel="noopener noreferrer" target="_blank" href={`https://${product_detail?.prd_video}`}>
-                                            <iframe src={`https://${product_detail?.prd_video}`} frameborder="0" />
+                                            <iframe src={`https://${product_detail?.prd_video}`} frameBorder="0" />
                                             <i className="icon-play-video"></i>
                                             <strong>Intro video</strong>
                                         </a>
