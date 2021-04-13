@@ -66,13 +66,21 @@ const ReviewModal =(props) => {
                 product_id: prdId
             };
     
-            const response = await new Promise((resolve, reject) => dispatch(submitReview({payload: new_review, resolve, reject})));
-    
-            dispatch(stopReviewLoader())
+            try {
+                const response = await new Promise((resolve, reject) => dispatch(submitReview({payload: new_review, resolve, reject})));
+        
+                dispatch(stopReviewLoader())
 
-            if(response) {
-                if(!response?.error) showReviewModal(false);
-                console.log(response);
+                if(response) {
+                    if(!response?.error) showReviewModal(false);
+                    Toast.fire({
+                        type: response?.error ? 'error' : 'success',
+                        title: response?.message
+                    });
+                }
+            }
+            catch(error) {
+                dispatch(stopReviewLoader())
                 Toast.fire({
                     type: response?.error ? 'error' : 'success',
                     title: response?.message
