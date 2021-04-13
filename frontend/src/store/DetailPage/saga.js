@@ -22,10 +22,8 @@ function* mainCoursesApi(action){
         if(response?.error) return reject(response);
         const item = response?.data?.data;
 
-        if(item?.redirect_url){
-            window.location.href = item?.redirect_url
-        }
-        else{
+        if(item?.redirect_url) return window.location.href = item.redirect_url;
+        else {
             yield put(mainCoursesFetched({ ...item }));
             return resolve(item);
         }
