@@ -15,9 +15,9 @@ const StickyNav = (props) => {
     const [tab, setTab] = useState('1');
     const { mainCourseCartLoader } = useSelector(store => store.loader);
 
-    const handleTab = (event) => {
-        setTab(event.target.id)
-    }
+    // const handleTab = (event) => {
+    //     setTab(event.target.id)
+    // }
 
     const goToCart = async (value) => {
         let cartItems = {};

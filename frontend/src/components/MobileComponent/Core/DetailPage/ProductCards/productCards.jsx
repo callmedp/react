@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 import Slider from "react-slick";
 import { siteDomain } from 'utils/domains';
 import '../../../Common/ProductCardsSlider/productCardsSlider';
+import { getTrackingInfo } from 'utils/storage.js';
+import { trackUser } from 'store/Tracking/actions/index.js';
 
 const ProductCards = props => {
     const {
         productList
-    } = props
+    } = props;
+    const tracking_data = getTrackingInfo();
 
     const settings = {
         dots: false,
@@ -27,6 +30,11 @@ const ProductCards = props => {
         )
     }
 
+    const handleTracking = () => {
+        trackUser({"query" : tracking_data, "action" :'exit_product_page'});
+        trackUser({"query" : tracking_data, "action" :'recommended_products'});
+    }
+
     return (
         <Slider {...settings}>
             {
@@ -38,7 +46,7 @@ const ProductCards = props => {
                                     <img src={product?.pImg || product?.vendor_image } alt={product?.name || product?.pNm || product?.heading} />
                                 </figure>
                                 <h3 className="m-heading3">
-                                    <a href={`${siteDomain}${product.pURL || product?.url}`}>{(product?.name || product?.pNm || product?.heading)?.length > 42 ? (product?.name || product?.pNm || product?.heading)?.slice(0, 42) + '...' : (product?.name || product?.pNm || product?.heading) }</a>
+                                    <a onClick={() => handleTracking} href={`${siteDomain}${product.pURL || product?.url}`}>{(product?.name || product?.pNm || product?.heading)?.length > 42 ? (product?.name || product?.pNm || product?.heading)?.slice(0, 42) + '...' : (product?.name || product?.pNm || product?.heading) }</a>
                                 </h3>
                             </div>
                             <div className="m-card__box">
