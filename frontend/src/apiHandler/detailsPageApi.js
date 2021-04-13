@@ -6,13 +6,13 @@ import {
 export const getDetailPageActions = (params) => {
     return [
         { action: fetchMainCourses, payload: { id: params?.id?.split('-')[1], device:'desktop'}},
-        { action: fetchProductReviews, payload: { prdId: 1, page: 1, device: 'desktop' } },
+        // { action: fetchProductReviews, payload: { prdId: params?.id?.split('-')[1], page: 1, device: 'desktop' } },
     ]
 }
 
 export const getDetailPageActionsMobile = (params) => {
     return [
         { action: fetchMainCourses, payload: { id: params?.id?.split('-')[1], device:'mobile'}},
-        { action: fetchProductReviews, payload: { prdId: 1, page: 1, device: 'mobile' } },
+        { action: fetchProductReviews, payload: { prdId: params?.id?.split('-')[1], page: 1, device: 'mobile' } },
     ]
 }
