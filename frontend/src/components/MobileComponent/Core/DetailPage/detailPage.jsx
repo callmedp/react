@@ -48,7 +48,7 @@ const DetailPage = (props) => {
     const handleEffects = async () => {
         try {
             if (!(window && window.config && window.config.isServerRendered)) {
-                new Promise((resolve, reject) => dispatch(fetchProductReviews({ payload: { prdId: prdId?.split('-')[1], page: 1, device: 'mobile'}, resolve, reject })));
+                await new Promise((resolve, reject) => dispatch(fetchProductReviews({ payload: { prdId: prdId?.split('-')[1], page: 1, device: 'mobile'}, resolve, reject })));
                 await new Promise((resolve, reject) => dispatch(fetchMainCourses({ payload: { id: prdId?.split('-')[1], device: 'mobile' },resolve, reject })));
             }
             else {
