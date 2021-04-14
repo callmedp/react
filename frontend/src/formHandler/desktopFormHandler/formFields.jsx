@@ -42,15 +42,16 @@ const SelectBox = (props) => {
 }
 
 const TextArea = (props) => {
-    const { attributes: { className, label, type, name, value, validation, defaultValue, id, rows, placeholder }, register } = props;
+    const { attributes: { className, label, type, name, value, validation, defaultValue, id, errorMessage, rows, placeholder }, errors, register } = props;
 
     return (
 
         
         <React.Fragment>
-            <div className="form-group add-comments">
+            <div className={`add-comments ${!!errors ? "form-group error" : "form-group"}`}>
                 <textarea className={className} name={name} type={type} placeholder={placeholder} ref={register(validation)} value={value} defaultValue={defaultValue} rows={rows} id={id} />
                 <label htmlFor={name}>{label}</label>
+                { !!errors ? <span className="error-msg">{errorMessage[errors.type]}</span> : ''}
             </div>
         </React.Fragment>
     )
