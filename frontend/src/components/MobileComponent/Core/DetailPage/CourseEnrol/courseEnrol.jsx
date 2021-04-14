@@ -86,7 +86,7 @@ const CourseEnrol = (props) => {
                                             return (
                                                 <label key={varList.id}>
                                                     <input type="radio" name="radio" id={varList.id} checked={varChecked?.id && (varChecked?.id === varList.id ? true : false) || !varChecked?.id && (product_detail?.selected_var?.id === varList.id ? true : false)} onChange={() => changeMode(varList)} />
-                                                    {getStudyMode(varList?.mode)}
+                                                    &nbsp;{getStudyMode(varList?.mode)}
                                                 </label>
                                             )
                                         })
