@@ -75,7 +75,7 @@ const ReviewModal =(props) => {
                     if(!response?.error) showReviewModal(false);
                     Toast.fire({
                         type: response?.error ? 'error' : 'success',
-                        title: response?.message
+                        title: response?.data?.message
                     });
                 }
             }

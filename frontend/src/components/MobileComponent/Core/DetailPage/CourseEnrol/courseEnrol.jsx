@@ -12,7 +12,7 @@ import { getTrackingInfo } from 'utils/storage.js';
 import { trackUser } from 'store/Tracking/actions/index.js';
 
 const CourseEnrol = (props) => {
-    const { product_detail, varChecked, changeChecked, getProductPrice, frqntProd } = props;
+    const { product_detail, varChecked, changeChecked, getProductPrice, frqntProd, product_id } = props;
     const dispatch = useDispatch();
     const { mainCourseCartLoader } = useSelector(store => store.loader);
     const [discountPrice, discountPriceSelected] = useState(0);
@@ -31,21 +31,18 @@ const CourseEnrol = (props) => {
 
     const goToCart = async (value) => {
         let cartItems = {};
-
-        let cvId = [];
+        let addonsId = [];
 
         if(!product_detail?.redeem_test) {
             MyGA.SendEvent('ln_enroll_now', 'ln_enroll_now', 'ln_click_enroll_now', `${product_detail?.prd_H1}`, '', false, true);
             trackUser({"query" : tracking_data, "action" :'enroll_now'});
 
             if(frqntProd && frqntProd.length > 0) {
-                frqntProd.map(prdId => cvId.push(prdId.id));
-                if(value.id) cvId.push(value.id)
-                else cvId.push(product_detail?.selected_var?.id);
+                frqntProd.map(prdId => addonsId.push(prdId.id));
             }
 
-            if(value.id) cartItems = {'prod_id': product_detail?.pPv, 'cart_type': 'cart', 'cv_id': (cvId.length > 0 ? cvId : value.id)};
-            else cartItems = {'prod_id': product_detail?.pPv, 'cart_type': 'cart', 'cv_id': (cvId.length > 0 ? cvId : product_detail?.selected_var?.id)};
+            if(value.id) cartItems = {'prod_id': product_id, 'cart_type': 'cart', 'cv_id': value.id, "addons": addonsId};
+            else cartItems = {'prod_id': product_id, 'cart_type': 'cart', 'cv_id': (product_detail?.selected_var ? product_detail?.selected_var?.id : ""), "addons": addonsId};
 
             try {
                 dispatch(startMainCourseCartLoader());
@@ -53,13 +50,13 @@ const CourseEnrol = (props) => {
                 dispatch(stopMainCourseCartLoader());
             }
             catch (error) {
+                showSwal('error', error?.error_message);
                 dispatch(stopMainCourseCartLoader());
             }
         }
         else {
             trackUser({"query" : tracking_data, "action" :'redeem_now'});
-
-            cartItems = { 'prod_id': product_detail?.pPv, 'redeem_option': product_detail?.redeem_option }
+            cartItems = { 'prod_id': product_detail?.product_id, 'redeem_option': product_detail?.redeem_option }
 
             try {
                 dispatch(startMainCourseCartLoader());
