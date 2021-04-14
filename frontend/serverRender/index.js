@@ -100,13 +100,8 @@ app.use(function (req, res, next) {
     next();
 });
 
-
-
-
-
 // app.use('/media/static/',express.static('../careerplus/media/static/'));
 app.use(express.static('../careerplus/static_core/react/'));
-
 
 const isMobile = (userAgents) => {
     return /Android|Phone|Mobile|Opera\sM(in|ob)i|iP[ao]d|BlackBerry|SymbianOS|Safari\.SearchHelper|SAMSUNG-(GT|C)|WAP|CFNetwork|Puffin|PlayBook|Nokia|LAVA|SonyEricsson|Karbonn|UCBrowser|ucweb|Micromax|Silk|LG(MW|-MMS)|PalmOS/i.test(userAgents)
@@ -117,7 +112,6 @@ app.set('view engine', 'ejs');
 app.get(expressRoutes, (req, res) => {
 
     if (isMobile(userAgents)) {
-
         console.log("<><><><><><>Entered Mobile<><><><><><>   ", req.url)
         indexFile = 'indexMobile';
         routes = require('routes/index.mobile').routes;
@@ -148,16 +142,13 @@ app.get(expressRoutes, (req, res) => {
                     if (route && route.actionGroup) {
                         try {
                             result = await new Promise((resolve, reject) => fetchApiData(store, match.params,cookies, route.actionGroup, resolve, reject));
-                            console.log('1>>>>>>>>>>>', result)
                         }
                         catch (error) {
-                            console.log('2>>>>>>>>>>>', result)
-
                             if (error?.status === 404) {
                                 return res.redirect('/404/');
                             }
                             if(error?.redirect_url) {
-                                res.redirect(error.redirect_url);
+                                return res.redirect(error.redirect_url);
                             }
                         }
 
