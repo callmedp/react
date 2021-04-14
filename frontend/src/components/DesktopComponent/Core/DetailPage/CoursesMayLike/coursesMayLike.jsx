@@ -47,7 +47,7 @@ const CoursesMayLike = (props) => {
                             return (
                                 <li className="col-4" key={inx} itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
                                     <div className="card">
-                                        <div className="card__heading" itemProp="image">
+                                        <div className="card__heading cursorLink" itemProp="image">
                                             <figure>
                                                 <img src={coursesLike.pImg} alt={coursesLike.name} />
                                             </figure>

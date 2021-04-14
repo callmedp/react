@@ -163,13 +163,13 @@ const BannerCourseDetail = (props) => {
                                             
                                             {
                                                 <>
-                                                {product_detail?.prd_num_rating ? <span className="review-jobs">
+                                                {product_detail?.prd_num_rating ? <span className="review-jobs cursorLink">
                                                 <LinkScroll to={"reviews"}>
                                                     <figure className="icon-reviews-link"></figure> <strong> {product_detail?.prd_num_rating}</strong> Reviews
                                                 </LinkScroll>
                                                 </span> : ""}
                                                 {product_detail?.prd_num_jobs ? <span className="review-jobs">
-                                                    <a target="_blank" onClick={() => trackJobs(product_detail?.num_jobs_url)}>
+                                                    <a target="_blank" onClick={() => trackJobs(product_detail?.num_jobs_url)} className="cursorLink">
                                                         <figure className="icon-jobs-link"></figure> <strong>{product_detail?.prd_num_jobs}</strong> Jobs available
                                                     </a>
                                                 </span> : ""}
@@ -181,13 +181,13 @@ const BannerCourseDetail = (props) => {
                                 <ul className="course-stats mt-30 mb-20">
                                     <li>
                                         <strong>By <span itemProp="provider" onClick={() => MyGA.SendEvent('ln_course_provider', 'ln_course_provider', 'ln_click_course_provider', `${product_detail?.prd_vendor}` , '', false, true)}>{product_detail?.prd_vendor}</span></strong>
-                                        <a onClick={() => viewAllCourses()}>View all</a> courses by {product_detail?.prd_vendor}  
+                                        <a onClick={() => viewAllCourses()} className="cursorLink">View all</a> courses by {product_detail?.prd_vendor}  
                                     </li>
 
                                     {
                                         product_detail?.pop ?
                                         <li>
-                                            <LinkScroll className="d-block" to={"popListTemplate"} offset={-150}>+{providerCount} more</LinkScroll> Course providers  
+                                            <LinkScroll className="d-block cursorLink" to={"popListTemplate"} offset={-150}>+{providerCount} more</LinkScroll> Course providers  
                                         </li>
                                         : ""
                                     }
