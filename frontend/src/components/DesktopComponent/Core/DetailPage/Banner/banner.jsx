@@ -17,7 +17,7 @@ import { trackUser } from 'store/Tracking/actions/index.js';
 import { Toast } from '../../../Common/Toast/toast';
 
 const BannerCourseDetail = (props) => {
-    const {product_detail, varChecked, changeChecked, frqntProd, addFrqntProd, prdId, product_id} = props;
+    const {product_detail, varChecked, changeChecked, frqntProd, addFrqntProd, prdId, product_id, providerCount} = props;
     const reqLength = 365;
     // const inputCheckbox = useRef(null);
     // const regex = /<(.|\n)*?>/g;
@@ -27,7 +27,7 @@ const BannerCourseDetail = (props) => {
     const tracking_data = getTrackingInfo();
     const [readAll, setReadAll] = useState(false)
 
-    const completeDescription = product_detail?.prd_about + ' <br /> ' + product_detail?.prd_desc;
+    const completeDescription = (product_detail?.prd_about || product_detail?.prd_desc) ? product_detail?.prd_about + ' <br /> ' + product_detail?.prd_desc : '';
 
     const starRatings = (star, index) => {
         return (star === '*' ? <em className="icon-fullstar" key={index}></em> : star === '+' 
@@ -151,12 +151,16 @@ const BannerCourseDetail = (props) => {
                                             {product_detail?.prd_H1}
                                         </h1>
                                         <div className="d-flex mt-15">
-                                            <span className="rating">
-                                                {
-                                                    product_detail?.prd_rating_star?.map((star, index) => starRatings(star, index))
-                                                }
-                                                <span itemProp="ratingValue">{product_detail?.prd_rating?.toFixed()}/5</span>
-                                            </span>
+                                            {
+                                                product_detail?.prd_num_rating ?
+                                                <span className="rating">
+                                                    {
+                                                        product_detail?.prd_rating_star?.map((star, index) => starRatings(star, index))
+                                                    }
+                                                    <span itemProp="ratingValue">{product_detail?.prd_rating?.toFixed()}/5</span>
+                                                </span> : ''
+                                            }
+                                            
                                             {
                                                 <>
                                                 {product_detail?.prd_num_rating ? <span className="review-jobs">
@@ -183,7 +187,7 @@ const BannerCourseDetail = (props) => {
                                     {
                                         product_detail?.pop ?
                                         <li>
-                                            <LinkScroll className="d-block" to={"popListTemplate"}>+{product_detail?.prd_vendor_count} more</LinkScroll> Course providers  
+                                            <LinkScroll className="d-block" to={"popListTemplate"} offset={-150}>+{providerCount} more</LinkScroll> Course providers  
                                         </li>
                                         : ""
                                     }
@@ -320,7 +324,7 @@ const BannerCourseDetail = (props) => {
                                                 </strong>
                                                 <p className="d-flex mb-0">
                                                     <a onClick={() => goToCart(varChecked)} className="btn btn-secondary mt-10 mr-10">{ product_detail?.prd_service === 'assessment' ? 'Buy Now' : product_detail?.redeem_test ? 'Redeem Now' : 'Enroll now' }</a>
-                                                    <LinkScroll to={"enquire-now"} className="btn btn-outline-primary mt-10">Enquire now</LinkScroll>
+                                                    <LinkScroll to={"enquire-now"} className="btn btn-outline-primary mt-10" offset={-220}>Enquire now</LinkScroll>
                                                 </p>
                                                 
                                             </div>

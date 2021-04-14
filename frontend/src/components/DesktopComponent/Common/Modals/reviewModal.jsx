@@ -96,7 +96,7 @@ const ReviewModal =(props) => {
         id: "title",
         placeholder: " ",
         label: "Title",
-        value: review?.title,
+        defaultValue: review?.title,
         inputType: 'input',
         validation: {
             required:true,
@@ -113,7 +113,7 @@ const ReviewModal =(props) => {
         id: "review",
         placeholder: " ",
         label: "Review",
-        value: review?.content,
+        defaultValue: review?.content,
         inputType: 'input',
         rows: 3,
         validation: {

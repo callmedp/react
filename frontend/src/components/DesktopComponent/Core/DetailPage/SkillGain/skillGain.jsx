@@ -1,6 +1,6 @@
 import React from 'react';
 import Badge from 'react-bootstrap/Badge';
-import {Link} from 'react-router-dom';
+import { Link as LinkScroll } from "react-scroll";
 import '../../SkillPage/SkillGain/skillGain';
 import { imageUrl } from 'utils/domains';
 
@@ -25,7 +25,7 @@ const SkillGain = (props) => {
                                 {' '}
                             </div>
                             <div className="d-flex mt-50">
-                                <Link to={"enquire-now"} className="btn btn-outline-primary btn-custom">Enquire now</Link>
+                                <LinkScroll to={"enquire-now"} className="btn btn-outline-primary btn-custom" offset={-220}>Enquire now</LinkScroll>
                             </div>
                         </div>
                         <figure className="skill-gain__img mt-40">

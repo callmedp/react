@@ -48,7 +48,7 @@ function* recommendedCourses(action){
 
         if(!!payload && payload.device === 'desktop' && !!item && item.results instanceof Array) {
             const courseLikeList = item.results.reduce((rows, key, index) => 
-                (index % 4 == 0 ? rows.push([key]) : rows[rows.length-1].push(key)) && rows, []);
+                (index % 3 == 0 ? rows.push([key]) : rows[rows.length-1].push(key)) && rows, []);
             if(courseLikeList.length){
                 item.results = courseLikeList.slice();
             }
