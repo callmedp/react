@@ -6,32 +6,60 @@ import './stickyNavDetail.scss';
 import { Link as LinkScroll } from "react-scroll";
 import { useSelector, useDispatch } from 'react-redux';
 import { startMainCourseCartLoader, stopMainCourseCartLoader } from 'store/Loader/actions/index';
-import { fetchAddToCartEnroll } from 'store/DetailPage/actions';
+import { fetchAddToCartEnroll, fetchAddToCartRedeem } from 'store/DetailPage/actions';
 import Loader from '../../../Common/Loader/loader';
+import { MyGA } from 'utils/ga.tracking.js';
+import { getTrackingInfo } from 'utils/storage.js';
+import { trackUser } from 'store/Tracking/actions/index.js';
+import { Toast } from '../../../Common/Toast/toast';
 
 const StickyNav = (props) => {
-    const { product_detail, varChecked, outline, faq, frqntProd, topics } = props;
+    const { product_detail, varChecked, outline, faq, frqntProd, topics, product_id } = props;
     const dispatch = useDispatch();
-    const [tab, setTab] = useState('1');
+    // const [tab, setTab] = useState('1');
     const { mainCourseCartLoader } = useSelector(store => store.loader);
-
-    // const handleTab = (event) => {
-    //     setTab(event.target.id)
-    // }
+    const tracking_data = getTrackingInfo();
 
     const goToCart = async (value) => {
         let cartItems = {};
+        let addonsId = [];
 
-        if(value.id) cartItems = {'prod_id': product_detail?.pPv, 'cart_type': 'cart', 'cv_id': value.id};
-        else cartItems = {'prod_id': product_detail?.pPv, 'cart_type': 'cart', 'cv_id': product_detail?.selected_var.id};
+        if(!product_detail?.redeem_test) {
+            MyGA.SendEvent('ln_enroll_now', 'ln_enroll_now', 'ln_click_enroll_now', `${product_detail?.prd_H1}`, '', false, true);
+            trackUser({"query" : tracking_data, "action" :'enroll_now'});
 
-        try {
-            dispatch(startMainCourseCartLoader());
-            await new Promise((resolve, reject) => dispatch(fetchAddToCartEnroll({ cartItems ,resolve, reject })));
-            dispatch(stopMainCourseCartLoader());
+            if(frqntProd && frqntProd.length > 0) {
+                frqntProd.map(prdId => addonsId.push(prdId.id));
+            }
+
+            if(value.id) cartItems = {'prod_id': product_id, 'cart_type': 'cart', 'cv_id': value.id, "addons": addonsId};
+            else cartItems = {'prod_id': product_id, 'cart_type': 'cart', 'cv_id': (product_detail?.selected_var ? product_detail?.selected_var?.id : ""), "addons": addonsId};
+
+            try {
+                dispatch(startMainCourseCartLoader());
+                await new Promise((resolve, reject) => dispatch(fetchAddToCartEnroll({ cartItems ,resolve, reject })));
+                dispatch(stopMainCourseCartLoader());
+            }
+            catch (error) {
+                dispatch(stopMainCourseCartLoader());
+            }
         }
-        catch (error) {
-            dispatch(stopMainCourseCartLoader());
+        else {
+            trackUser({"query" : tracking_data, "action" :'redeem_now'});
+            cartItems = { 'prod_id': product_detail?.product_id, 'redeem_option': product_detail?.redeem_option }
+
+            try {
+                dispatch(startMainCourseCartLoader());
+                await new Promise((resolve, reject) => dispatch(fetchAddToCartRedeem({ cartItems ,resolve, reject })));
+                dispatch(stopMainCourseCartLoader());
+            }
+            catch (error) {
+                Toast.fire({
+                    type: 'error',
+                    title: error?.error_message
+                });
+                dispatch(stopMainCourseCartLoader());
+            }
         }
     }
 
@@ -118,8 +146,8 @@ const StickyNav = (props) => {
                             : ""
                         }
                         <span className="d-flex">
-                            <LinkScroll offset={-260} to={"enquire-now"} className="btn btn-outline-primary">Enquire now</LinkScroll>
-                            <a onClick={() => goToCart(varChecked)} className="btn btn-secondary ml-10">Enroll now</a>
+                            <LinkScroll offset={-220} to={"enquire-now"} className="btn btn-outline-primary">Enquire now</LinkScroll>
+                            <a onClick={() => goToCart(varChecked)} className="btn btn-secondary ml-10">{ product_detail?.prd_service === 'assessment' ? 'Buy Now' : product_detail?.redeem_test ? 'Redeem Now' : 'Enroll now' }</a>
                         </span>
                     </Form>
                 </div> 

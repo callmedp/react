@@ -22,7 +22,7 @@ const CourseDetailBanner = (props) => {
     const noOfWords = 250;
     const [showAll, setShowAll] = useState(false);
 
-    const completeDescription = (product_detail?.prd_about || product_detail?.prd_desc) ? product_detail?.prd_about + ' <br /> ' + product_detail?.prd_desc : '';
+    const completeDescription = (product_detail?.prd_about ? (product_detail?.prd_about + ' <br /> ') : '') + (product_detail?.prd_desc ? product_detail?.prd_desc : '')
     
     const starRatings = (star, index) => {
         return (

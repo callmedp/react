@@ -12,7 +12,7 @@ import { getTrackingInfo } from 'utils/storage.js';
 import { trackUser } from 'store/Tracking/actions/index.js';
 
 const CourseEnrol = (props) => {
-    const { product_detail, varChecked, changeChecked, getProductPrice, frqntProd } = props;
+    const { product_detail, varChecked, changeChecked, getProductPrice, frqntProd, product_id } = props;
     const dispatch = useDispatch();
     const { mainCourseCartLoader } = useSelector(store => store.loader);
     const [discountPrice, discountPriceSelected] = useState(0);
@@ -31,21 +31,18 @@ const CourseEnrol = (props) => {
 
     const goToCart = async (value) => {
         let cartItems = {};
-
-        let cvId = [];
+        let addonsId = [];
 
         if(!product_detail?.redeem_test) {
             MyGA.SendEvent('ln_enroll_now', 'ln_enroll_now', 'ln_click_enroll_now', `${product_detail?.prd_H1}`, '', false, true);
             trackUser({"query" : tracking_data, "action" :'enroll_now'});
 
             if(frqntProd && frqntProd.length > 0) {
-                frqntProd.map(prdId => cvId.push(prdId.id));
-                if(value.id) cvId.push(value.id)
-                else cvId.push(product_detail?.selected_var?.id);
+                frqntProd.map(prdId => addonsId.push(prdId.id));
             }
 
-            if(value.id) cartItems = {'prod_id': product_detail?.pPv, 'cart_type': 'cart', 'cv_id': (cvId.length > 0 ? cvId : value.id)};
-            else cartItems = {'prod_id': product_detail?.pPv, 'cart_type': 'cart', 'cv_id': (cvId.length > 0 ? cvId : product_detail?.selected_var?.id)};
+            if(value.id) cartItems = {'prod_id': product_id, 'cart_type': 'cart', 'cv_id': value.id, "addons": addonsId};
+            else cartItems = {'prod_id': product_id, 'cart_type': 'cart', 'cv_id': (product_detail?.selected_var ? product_detail?.selected_var?.id : ""), "addons": addonsId};
 
             try {
                 dispatch(startMainCourseCartLoader());
@@ -53,13 +50,13 @@ const CourseEnrol = (props) => {
                 dispatch(stopMainCourseCartLoader());
             }
             catch (error) {
+                showSwal('error', error?.error_message);
                 dispatch(stopMainCourseCartLoader());
             }
         }
         else {
             trackUser({"query" : tracking_data, "action" :'redeem_now'});
-
-            cartItems = { 'prod_id': product_detail?.pPv, 'redeem_option': product_detail?.redeem_option }
+            cartItems = { 'prod_id': product_detail?.product_id, 'redeem_option': product_detail?.redeem_option }
 
             try {
                 dispatch(startMainCourseCartLoader());
@@ -89,7 +86,7 @@ const CourseEnrol = (props) => {
                                             return (
                                                 <label key={varList.id}>
                                                     <input type="radio" name="radio" id={varList.id} checked={varChecked?.id && (varChecked?.id === varList.id ? true : false) || !varChecked?.id && (product_detail?.selected_var?.id === varList.id ? true : false)} onChange={() => changeMode(varList)} />
-                                                    {getStudyMode(varList?.mode)}
+                                                    &nbsp;{getStudyMode(varList?.mode)}
                                                 </label>
                                             )
                                         })
@@ -138,14 +135,14 @@ const CourseEnrol = (props) => {
                         <ul className="pb-0">
                             {
                                 (varChecked?.inr_price || product_detail?.var_list[0]?.inr_price) < 5001 ?
-                                <li><figure className="micon-offer-pay"></figure> Buy now &amp; <strong>pay within 14 days using ePayLater</strong> </li>
+                                <li><figure className="micon-offer-pay"></figure> <span className="flex-1">Buy now <strong>pay within 14 days using ePayLater</strong></span> </li>
 
                                 :
                                 
-                                <li><figure className="micon-offer-pay"></figure> Avail &nbsp; <strong>Interest-free EMIs at no additional cost using Zest Money payment option</strong> </li>
+                                <li><figure className="micon-offer-pay"></figure> <span className="flex-1">Avail <strong>Interest-free EMIs at no additional cost using Zest Money payment option</strong></span> </li>
                             }
                             {
-                                product_detail?.free_test && <li><figure className="micon-offer-test"></figure> Take <strong>free practice test</strong> to enhance your skill</li>
+                                !product_detail?.free_test && <li><figure className="micon-offer-test"></figure> Take <strong>free practice test</strong> to enhance your skill</li>
                             }
                             {/* <li><figure className="micon-offer-pay"></figure> Buy now & <strong>pay within 14 days using ePayLater</strong> </li>
                             <li><figure className="micon-offer-badge"></figure> <strong>Get badging</strong> on your Shine profile</li>

@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './banner.scss';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import { Link as LinkScroll } from 'react-scroll';
@@ -17,17 +17,17 @@ import { trackUser } from 'store/Tracking/actions/index.js';
 import { Toast } from '../../../Common/Toast/toast';
 
 const BannerCourseDetail = (props) => {
-    const {product_detail, varChecked, changeChecked, frqntProd, addFrqntProd, prdId, providerCount} = props;
+    const {product_detail, varChecked, changeChecked, frqntProd, addFrqntProd, prdId, product_id, providerCount} = props;
     const reqLength = 365;
-    const inputCheckbox = useRef(null);
-    const regex = /<(.|\n)*?>/g;
+    // const inputCheckbox = useRef(null);
+    // const regex = /<(.|\n)*?>/g;
     const [discountPrice, discountPriceSelected] = useState(0);
     const dispatch = useDispatch();
     const { mainCourseCartLoader } = useSelector(store => store.loader);
     const tracking_data = getTrackingInfo();
     const [readAll, setReadAll] = useState(false)
 
-    const completeDescription = (product_detail?.prd_about || product_detail?.prd_desc) ? product_detail?.prd_about + ' <br /> ' + product_detail?.prd_desc : '';
+    const completeDescription = (product_detail?.prd_about ? (product_detail?.prd_about + ' <br /> ') : '') + (product_detail?.prd_desc ? product_detail?.prd_desc : '')
 
     const starRatings = (star, index) => {
         return (star === '*' ? <em className="icon-fullstar" key={index}></em> : star === '+' 
@@ -35,9 +35,6 @@ const BannerCourseDetail = (props) => {
         )
     }
 
-    // useEffect(() => {
-    //     inputCheckbox.current && (inputCheckbox.current.checked = false);
-    // }, [])
     useEffect(() => {
         setReadAll(false)
     }, [prdId])
@@ -52,20 +49,18 @@ const BannerCourseDetail = (props) => {
 
     const goToCart = async (value) => {
         let cartItems = {};
-        let cvId = [];
+        let addonsId = [];
 
         if(!product_detail?.redeem_test) {
             MyGA.SendEvent('ln_enroll_now', 'ln_enroll_now', 'ln_click_enroll_now', `${product_detail?.prd_H1}`, '', false, true);
             trackUser({"query" : tracking_data, "action" :'enroll_now'});
 
             if(frqntProd && frqntProd.length > 0) {
-                frqntProd.map(prdId => cvId.push(prdId.id));
-                if(value.id) cvId.push(value.id)
-                else cvId.push(product_detail?.selected_var?.id);
+                frqntProd.map(prdId => addonsId.push(prdId.id));
             }
 
-            if(value.id) cartItems = {'prod_id': product_detail?.pPv, 'cart_type': 'cart', 'cv_id': (cvId.length > 0 ? cvId : value.id)};
-            else cartItems = {'prod_id': product_detail?.pPv, 'cart_type': 'cart', 'cv_id': (cvId.length > 0 ? cvId : product_detail?.selected_var?.id)};
+            if(value.id) cartItems = {'prod_id': product_id, 'cart_type': 'cart', 'cv_id': value.id, "addons": addonsId};
+            else cartItems = {'prod_id': product_id, 'cart_type': 'cart', 'cv_id': (product_detail?.selected_var ? product_detail?.selected_var?.id : ""), "addons": addonsId};
 
             try {
                 dispatch(startMainCourseCartLoader());
@@ -78,7 +73,7 @@ const BannerCourseDetail = (props) => {
         }
         else {
             trackUser({"query" : tracking_data, "action" :'redeem_now'});
-            cartItems = { 'prod_id': product_detail?.pPv, 'redeem_option': product_detail?.redeem_option }
+            cartItems = { 'prod_id': product_detail?.product_id, 'redeem_option': product_detail?.redeem_option }
 
             try {
                 dispatch(startMainCourseCartLoader());
@@ -168,13 +163,13 @@ const BannerCourseDetail = (props) => {
                                             
                                             {
                                                 <>
-                                                {product_detail?.prd_num_rating ? <span className="review-jobs">
+                                                {product_detail?.prd_num_rating ? <span className="review-jobs cursorLink">
                                                 <LinkScroll to={"reviews"}>
                                                     <figure className="icon-reviews-link"></figure> <strong> {product_detail?.prd_num_rating}</strong> Reviews
                                                 </LinkScroll>
                                                 </span> : ""}
                                                 {product_detail?.prd_num_jobs ? <span className="review-jobs">
-                                                    <a target="_blank" onClick={() => trackJobs(product_detail?.num_jobs_url)}>
+                                                    <a target="_blank" onClick={() => trackJobs(product_detail?.num_jobs_url)} className="cursorLink">
                                                         <figure className="icon-jobs-link"></figure> <strong>{product_detail?.prd_num_jobs}</strong> Jobs available
                                                     </a>
                                                 </span> : ""}
@@ -186,13 +181,13 @@ const BannerCourseDetail = (props) => {
                                 <ul className="course-stats mt-30 mb-20">
                                     <li>
                                         <strong>By <span itemProp="provider" onClick={() => MyGA.SendEvent('ln_course_provider', 'ln_course_provider', 'ln_click_course_provider', `${product_detail?.prd_vendor}` , '', false, true)}>{product_detail?.prd_vendor}</span></strong>
-                                        <a onClick={() => viewAllCourses()}>View all</a> courses by {product_detail?.prd_vendor}  
+                                        <a onClick={() => viewAllCourses()} className="cursorLink">View all</a> courses by {product_detail?.prd_vendor}  
                                     </li>
 
                                     {
                                         product_detail?.pop ?
                                         <li>
-                                            <LinkScroll className="d-block" to={"popListTemplate"} offset={-150}>+{providerCount} more</LinkScroll> Course providers  
+                                            <LinkScroll className="d-block cursorLink" to={"popListTemplate"} offset={-150}>+{providerCount} more</LinkScroll> Course providers  
                                         </li>
                                         : ""
                                     }
@@ -277,20 +272,6 @@ const BannerCourseDetail = (props) => {
                                                 </span>
                                                 <label htmlFor="post-10" className="read-more-trigger"></label>
                                         </div> : "" }
-
-                                        {/* { product_detail?.prd_desc ? <div id="module" className=" about-course">
-                                            {product_detail?.prd_desc.replace(regex, '')?.length > reqLength ? (
-                                                <input type="checkbox" className="read-more-state" id="post-20" ref={inputCheckbox} itemProp="desc" />
-                                                ) : (
-                                                    ""
-                                                    )}
-                                                    
-                                            <span className="read-more-wrap" itemProp="description">
-                                                <span dangerouslySetInnerHTML={{__html:product_detail?.prd_desc?.replace(regex, '').slice(0, reqLength)}} />
-                                                <span className="read-more-target" dangerouslySetInnerHTML={{__html: product_detail?.prd_desc?.replace(regex, '').slice(reqLength)}} />
-                                            </span>
-                                            <label htmlFor="post-20" className="read-more-trigger"></label>
-                                        </div> : "" } */}
                                     </span>
                                 </div>
                             </div>
@@ -353,11 +334,14 @@ const BannerCourseDetail = (props) => {
                                                 <ul className="pb-0">
                                                 {
                                                     (varChecked?.inr_price || product_detail?.var_list[0]?.inr_price) < 5001 ?
-                                                    <li><figure className="icon-offer-pay"></figure> Buy now &amp; <strong>pay within 14 days using ePayLater</strong> </li>
+                                                    <li><figure className="icon-offer-pay"></figure> <span className="flex-1">Buy now &amp; <strong>pay within 14 days using ePayLater</strong></span> </li>
 
                                                     :
                                                     
-                                                    <li><figure className="icon-offer-pay"></figure> Avail &nbsp; <strong>Interest-free EMIs at no additional cost using Zest Money payment option</strong> </li>
+                                                    <li><figure className="icon-offer-pay"></figure> <span className="flex-1">Avail <strong>Interest-free EMIs at no additional cost using Zest Money payment option</strong></span> </li>
+                                                }
+                                                {
+                                                    !product_detail?.free_test && <li><figure className="icon-offer-test"></figure><span className="flex-1">Take <strong>free practice test</strong> to enhance your skill</span></li>
                                                 }
                                                 </ul>
                                             </div>

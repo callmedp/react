@@ -98,6 +98,7 @@ header {
 
                     figure {
                         margin-right: .5rem;
+                        margin-bottom: 0;
                     }
                     
                     strong {
@@ -355,15 +356,18 @@ header {
                     list-style-type: none;
                     margin: 0;
                     padding: 1.5rem;
-                    height: 7rem;
+                    max-height: 7rem;
                     overflow: hidden;
 
                     li {
                         display: flex;
                         font-size: 1.2rem;
                         color: $gray-200;
-                        align-items: center;
                         margin-bottom: 1rem;
+
+                        &:last-child {
+                            margin-bottom: 0;
+                        }
 
                         strong {
                             font-weight: 600;
@@ -375,7 +379,7 @@ header {
                         }
 
                         figure {
-                            margin: 0 1rem 0 0;
+                            margin: .3rem 1rem 0 0;
                         }
                     }
                 }

@@ -16,7 +16,7 @@ const HowItWorks = (props) => {
                                     <figure className="micon-how-works">
                                         <i className={`micon-how-works${index + 1}`}></i>
                                     </figure>
-                                    <div>
+                                    <div className="flex-1">
                                         <strong className="">{article.heading}</strong>
                                         <p>{article.article}</p>
                                     </div>

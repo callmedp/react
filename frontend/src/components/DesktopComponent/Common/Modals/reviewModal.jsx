@@ -55,11 +55,10 @@ const ReviewModal =(props) => {
         if(user_reviews) MyGA.SendEvent('ln_review', 'ln_review', 'ln_submit_review', 'review_updated', '', false, true)
         else MyGA.SendEvent('ln_review', 'ln_review', 'ln_submit_review', 'review_written', '', false, true)
 
-        dispatch(startReviewLoader())
-        if(rating === 0){
-            setShowError(true)
-        }
+        if(rating === 0) return setShowError(true)
         else {
+            dispatch(startReviewLoader())
+
             const new_review = {
                 ...values,
                 rating: rating ? rating : 5,
@@ -75,7 +74,7 @@ const ReviewModal =(props) => {
                     if(!response?.error) showReviewModal(false);
                     Toast.fire({
                         type: response?.error ? 'error' : 'success',
-                        title: response?.message
+                        title: response?.error ? response?.message : response?.data?.message
                     });
                 }
             }
@@ -96,7 +95,7 @@ const ReviewModal =(props) => {
         id: "title",
         placeholder: " ",
         label: "Title",
-        value: review?.title,
+        defaultValue: review?.title,
         inputType: 'input',
         validation: {
             required:true,
@@ -113,7 +112,7 @@ const ReviewModal =(props) => {
         id: "review",
         placeholder: " ",
         label: "Review",
-        value: review?.content,
+        defaultValue: review?.content,
         inputType: 'input',
         rows: 3,
         validation: {
@@ -151,12 +150,14 @@ const ReviewModal =(props) => {
                 </span>
                 { showError && <p className="error_cls mt-10">* Please click on star for ratings</p> }
                 <p className="db-rate-services--subheading">Click on rate to scale of 1-5</p>
+                {/* {errors}  */}
+                {/* {errors[CoursesServicesForm.review.name]} */}
                     <form onSubmit={handleSubmit(submitReviewFunc)}>
                             <InputField attributes={review ? reviewedTitle : CoursesServicesForm.title} register={register}
                                 errors={!!errors ? errors[CoursesServicesForm.title.name] : false} />            
 
                             <TextArea attributes={review ? reviewedContent : CoursesServicesForm.review} register={register}
-                                errors={!!errors ? errors[CoursesServicesForm.review.name] : ''} />
+                                errors={!!errors ? errors[CoursesServicesForm.review.name] : ""} />
                         <br/>
                         <button className="btn btn-primary px-5" type="submit">Submit</button>
                     </form>

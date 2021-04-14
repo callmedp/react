@@ -5,7 +5,7 @@
 }
 
 .m-detail-header {
-    // padding-bottom: 5rem;
+    padding-bottom: 5rem;
 
     .m-flag-yellowB {
         font-size: .8rem;
@@ -132,6 +132,7 @@
 
             p {
                 margin: 0;
+                flex: 1;
             }
         }
     }

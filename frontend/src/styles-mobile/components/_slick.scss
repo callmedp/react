@@ -38,21 +38,27 @@
     .slick-arrow {
         position: absolute;
         top: 45%;
-        width: 4.2rem;
-        height: 4.2rem;
+        width: 3.6rem;
+        height: 3.6rem;
         border: none;
         text-indent: 200%;
         overflow: hidden;
         z-index: 9;
     }
     .slick-prev {
-        background: $sprite -684px 0;
-        left: -5px;
+        background: $sprite -137px -171px;
+        left: -1rem;
+
+        &:focus {
+            outline: none;
+        }
     }
 
     .slick-next {
-        background: $sprite -727px 0;
-        right: -5px;
-        
+        background: $sprite -181px -171px;
+        right: -1rem;
+        &:focus {
+            outline: none;
+        }
     }
 }

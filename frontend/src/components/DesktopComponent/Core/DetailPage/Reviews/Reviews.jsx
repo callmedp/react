@@ -97,10 +97,10 @@ const LearnersStories = (props) => {
                 <div className="d-flex mx-auto mt-20">
                     {
                         (product_detail?.user_reviews && getCandidateId()) ?
-                            <Link to={"#"} onClick={showReviewModal} className="btn btn-outline-primary btn-custom">Update your review</Link>
+                            <Link to={"#"} onClick={showReviewModal} className="btn btn-outline-primary btn-custom mx-auto">Update your review</Link>
                         :
                         (!product_detail?.user_reviews && getCandidateId()) ?
-                            <Link to={"#"} onClick={showReviewModal} className="btn btn-outline-primary btn-custom">Write a review</Link>
+                            <Link to={"#"} onClick={showReviewModal} className="btn btn-outline-primary btn-custom mx-auto">Write a review</Link>
                         : 
                         <a href={`${siteDomain}/login/?next=${pUrl}`} className="btn btn-outline-primary btn-custom mx-auto">Write a review</a>
                     }

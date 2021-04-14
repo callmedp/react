@@ -22,8 +22,7 @@ function* mainCoursesApi(action){
         if(response?.error) return reject(response);
         const item = response?.data?.data;
 
-        if(item?.redirect_url) return reject(item)
-        // window.location.href = item.redirect_url;
+        if(item?.redirect_url) {console.log('front>>>>>>>>>>>>>>>', response?.data); return reject(item)}
         else {
             yield put(mainCoursesFetched({ ...item }));
             return resolve(item);
@@ -48,7 +47,7 @@ function* recommendedCourses(action){
 
         if(!!payload && payload.device === 'desktop' && !!item && item.results instanceof Array) {
             const courseLikeList = item.results.reduce((rows, key, index) => 
-                (index % 4 == 0 ? rows.push([key]) : rows[rows.length-1].push(key)) && rows, []);
+                (index % 3 == 0 ? rows.push([key]) : rows[rows.length-1].push(key)) && rows, []);
             if(courseLikeList.length){
                 item.results = courseLikeList.slice();
             }

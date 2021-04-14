@@ -45,14 +45,16 @@ const CoursesMayLike = (props) => {
                     {
                         courseData?.map((coursesLike, inx) => {
                             return (
-                                <li className="col" key={inx} itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
+                                <li className="col-4" key={inx} itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
                                     <div className="card">
-                                        <div className="card__heading" itemProp="image">
+                                        <div className="card__heading cursorLink" itemProp="image">
                                             <figure>
                                                 <img src={coursesLike.pImg} alt={coursesLike.name} />
                                             </figure>
                                             <h3 className="heading3">
-                                                <a itemProp="item" onClick={() => handleTracking(coursesLike.pURL)}><span itemProp="name">{coursesLike.name || coursesLike.pNm}</span></a>
+                                                <a itemProp="item" onClick={() => handleTracking(coursesLike.pURL)}>
+                                                    {coursesLike.name || coursesLike.pNm}
+                                                </a>
                                             </h3>
                                         </div>
 

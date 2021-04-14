@@ -4,9 +4,12 @@ import {Link} from 'react-router-dom';
 import Slider from "react-slick";
 import { Link as LinkScroll } from "react-scroll";
 import { startMainCourseCartLoader, stopMainCourseCartLoader } from 'store/Loader/actions/index';
-import { useSelector, useDispatch } from 'react-redux';
-import { fetchAddToCartEnroll } from 'store/DetailPage/actions';
-// import 'slick-carousel/slick/slick.css';
+import { useDispatch } from 'react-redux';
+import { fetchAddToCartEnroll, fetchAddToCartRedeem } from 'store/DetailPage/actions';
+import { MyGA } from 'utils/ga.tracking.js';
+import { getTrackingInfo } from 'utils/storage.js';
+import { trackUser } from 'store/Tracking/actions/index.js';
+import { showSwal } from 'utils/swal';
 
 const StickyNavDetail = (props) => {
     const settings = {
@@ -20,9 +23,10 @@ const StickyNavDetail = (props) => {
         variableWidth: true,
     }
 
-    const { product_detail, varChecked, outline, faq, frqntProd, topics } = props;
-    const [tab, setTab] = useState('1')
-    const dispatch = useDispatch()
+    const { product_detail, varChecked, outline, faq, frqntProd, topics, product_id } = props;
+    const [tab, setTab] = useState('1');
+    const dispatch = useDispatch();
+    const tracking_data = getTrackingInfo();
 
     const handleTab = (event) => {
         setTab(event.target.id)
@@ -38,17 +42,42 @@ const StickyNavDetail = (props) => {
 
     const goToCart = async (value) => {
         let cartItems = {};
+        let addonsId = [];
 
-        if(value.id) cartItems = {'prod_id': product_detail.pPv, 'cart_type': 'cart', 'cv_id': value.id};
-        else cartItems = {'prod_id': product_detail.pPv, 'cart_type': 'cart', 'cv_id': product_detail.selected_var.id};
+        if(!product_detail?.redeem_test) {
+            MyGA.SendEvent('ln_enroll_now', 'ln_enroll_now', 'ln_click_enroll_now', `${product_detail?.prd_H1}`, '', false, true);
+            trackUser({"query" : tracking_data, "action" :'enroll_now'});
 
-        try {
-            dispatch(startMainCourseCartLoader());
-            await new Promise((resolve, reject) => dispatch(fetchAddToCartEnroll({ cartItems ,resolve, reject })));
-            dispatch(stopMainCourseCartLoader());
+            if(frqntProd && frqntProd.length > 0) {
+                frqntProd.map(prdId => addonsId.push(prdId.id));
+            }
+
+            if(value.id) cartItems = {'prod_id': product_id, 'cart_type': 'cart', 'cv_id': value.id, "addons": addonsId};
+            else cartItems = {'prod_id': product_id, 'cart_type': 'cart', 'cv_id': (product_detail?.selected_var ? product_detail?.selected_var?.id : ""), "addons": addonsId};
+
+            try {
+                dispatch(startMainCourseCartLoader());
+                await new Promise((resolve, reject) => dispatch(fetchAddToCartEnroll({ cartItems ,resolve, reject })));
+                dispatch(stopMainCourseCartLoader());
+            }
+            catch (error) {
+                showSwal('error', error?.error_message);
+                dispatch(stopMainCourseCartLoader());
+            }
         }
-        catch (error) {
-            dispatch(stopMainCourseCartLoader());
+        else {
+            trackUser({"query" : tracking_data, "action" :'redeem_now'});
+            cartItems = { 'prod_id': product_detail?.product_id, 'redeem_option': product_detail?.redeem_option }
+
+            try {
+                dispatch(startMainCourseCartLoader());
+                await new Promise((resolve, reject) => dispatch(fetchAddToCartRedeem({ cartItems ,resolve, reject })));
+                dispatch(stopMainCourseCartLoader());
+            }
+            catch (error) {
+                showSwal('error', error?.error_message);
+                dispatch(stopMainCourseCartLoader());
+            }
         }
     }
 
@@ -63,7 +92,7 @@ const StickyNavDetail = (props) => {
                             (!varChecked?.id && !product_detail?.selected_var && product_detail?.pPfinb > 0) ? <del>{product_detail?.pPfinb}</del> : ''
                         }
                     </strong>
-                    <Link to={'#'} className="btn btn-secondary ml-auto" onClick={() => goToCart(varChecked)}>{ product_detail?.pTF === 16 ? 'Buy Now' : 'Enroll now' }</Link>
+                    <Link to={'#'} className="btn btn-secondary ml-auto" onClick={() => goToCart(varChecked)}>{ product_detail?.prd_service === 'assessment' ? 'Buy Now' : product_detail?.redeem_test ? 'Redeem Now' : 'Enroll now' }</Link>
                 </div>
                 <div className="m-sticky-detail__nav">
                     <Slider {...settings}>
