@@ -26,10 +26,11 @@ input:-webkit-autofill:active  {
     -webkit-box-shadow: 0 0 0 30px white inset !important;
 }
 
-.big-review-star {
+.m-big-review-star {
     margin: 15px 0;
     display: block;
-    padding-left: 60px;
+    // padding-left: 60px;
+    text-align: center;
 
     .micon-blankstar,
     .micon-fullstar {

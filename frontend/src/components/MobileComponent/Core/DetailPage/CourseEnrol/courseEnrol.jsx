@@ -138,11 +138,11 @@ const CourseEnrol = (props) => {
                         <ul className="pb-0">
                             {
                                 (varChecked?.inr_price || product_detail?.var_list[0]?.inr_price) < 5001 ?
-                                <li><figure className="micon-offer-pay"></figure> Buy now &amp; <strong>pay within 14 days using ePayLater</strong> </li>
+                                <li><figure className="micon-offer-pay"></figure> <span className="flex-1">Buy now <strong>pay within 14 days using ePayLater</strong></span> </li>
 
                                 :
                                 
-                                <li><figure className="micon-offer-pay"></figure> Avail &nbsp; <strong>Interest-free EMIs at no additional cost using Zest Money payment option</strong> </li>
+                                <li><figure className="micon-offer-pay"></figure> <span className="flex-1">Avail <strong>Interest-free EMIs at no additional cost using Zest Money payment option</strong></span> </li>
                             }
                             {
                                 product_detail?.free_test && <li><figure className="micon-offer-test"></figure> Take <strong>free practice test</strong> to enhance your skill</li>

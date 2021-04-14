@@ -50,7 +50,7 @@ const ReviewModal = (props) => {
                 {/* <Link to={"#"} className="m-close" onClick={() => showReviewModal(false)}>x</Link> */}
                 <span className="m-close" onClick={() => showReviewModal(false)}>x</span>
                 <h2 className="m-heading2 text-center">Write a Review</h2>
-                <span className="m-rating big-review-star">
+                <span className="m-rating m-big-review-star">
                     {
                         [1, 2, 3, 4, 5].map((value,indx) => {
                             return (

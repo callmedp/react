@@ -22,7 +22,6 @@ const Reviews = (props) => {
         slidesToShow: 1,
         slidesToScroll: 1,
         swipeToSlide: true,
-        arrows: false,
         // variableWidth: true,
         afterChange: function(index) {
             if ((index % 7 === 0 && pageId < index ) && pageId <= prd_rv_total) {
