@@ -8,8 +8,8 @@ import { submitReview } from 'store/DetailPage/actions';
 import { showSwal } from 'utils/swal'
  
 const ReviewModal = (props) => {
-    const { showReviewModal, prdId } = props
-    const [inputStar, setInputStar] = useState(0);
+    const { showReviewModal, prdId, review } = props
+    const [inputStar, setInputStar] = useState(review ? review?.average_rating : 0);
     const { register, handleSubmit, errors, reset } = useForm();
     const [showError, setShowError] = useState(false)
     const dispatch = useDispatch()
@@ -44,6 +44,20 @@ const ReviewModal = (props) => {
         }
     }
 
+    const getTitlewithReview = () => {
+        return {
+            ... DetailForm.title,
+            'defaultValue' : review?.title ? review?.title : ''
+        }
+    }
+
+    const getContentwithReview = () => {
+        return {
+            ... DetailForm.review,
+            'defaultValue' : review?.content ? review?.content : ''
+        }
+    }
+
     return(
         <div className="m-container m-enquire-now m-review-modal m-form-pos-center" data-aos="zoom-in">
             <div className="m-modal-body">
@@ -73,9 +87,9 @@ const ReviewModal = (props) => {
                         <textarea type="text" className="input_field" name="review" id="review" placeholder=" " />
                         <label className="m-input_label" htmlFor="review">Review*</label>
                     </div> */}
-                    <InputField attributes={DetailForm.title} register={register} customClass='m-form-group' errors={!!errors ? errors[DetailForm.title.name] : false} />  
+                    <InputField attributes={getTitlewithReview()} register={register} customClass='m-form-group' review={review} errors={!!errors ? errors[DetailForm.title.name] : false} />  
                                     
-                    <TextArea attributes={DetailForm.review} register={register} errors={!!errors ? errors[DetailForm.review.name] : ''} />
+                    <TextArea attributes={getContentwithReview()} register={register} review={review} errors={!!errors ? errors[DetailForm.review.name] : ''} />
                     <div className="m-form-group">
                         <button className="btn-blue">Submit</button>
                     </div>

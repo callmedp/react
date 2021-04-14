@@ -14,13 +14,15 @@ const CourseDetailBanner = (props) => {
         product_detail,
         prdId,
         varChecked,
-        showReviewModal 
+        showReviewModal,
+        providerCount
     } = props;
+
     const tracking_data = getTrackingInfo();
     const noOfWords = 250;
     const [showAll, setShowAll] = useState(false);
 
-    const completeDescription = product_detail?.prd_about + ' <br /> ' + product_detail?.prd_desc
+    const completeDescription = (product_detail?.prd_about || product_detail?.prd_desc) ? product_detail?.prd_about + ' <br /> ' + product_detail?.prd_desc : '';
     
     const starRatings = (star, index) => {
         return (
@@ -113,13 +115,13 @@ const CourseDetailBanner = (props) => {
                     </div>
                     <ul className="m-course-stats mt-20 mb-20">
                         {
-                            (varChecked?.dur_days || product_detail?.selected_var?.dur_days) && 
+                            (varChecked?.dur_days || product_detail?.selected_var?.dur_days) ? 
                                 <li className="d-flex align-items-center">
                                     <figure className="micon-course-duration mr-10"></figure>
                                     <p>
                                         Course Duration <strong>{ varChecked?.dur_days || product_detail?.selected_var?.dur_days } Days</strong>
                                     </p>
-                                </li>
+                                </li> : ''
                         }
 
                         {
@@ -178,38 +180,41 @@ const CourseDetailBanner = (props) => {
                     </ul>
             }
 
-            <div className="m-intro-video" itemProp="embedUrl">
-                <strong className="mb-10">Course intro</strong>
-                <div className="d-flex">
-                    {
-                        product_detail?.prd_video && 
-                            <figure className="m-intro-video__img">
-                                <a href={`https://${product_detail?.prd_video}`} target="_blank">
-                                    <iframe src={`https://${product_detail?.prd_video}`} frameBorder="0" />
-                                    <i className="micon-play-video"></i>
-                                </a>
-                            </figure>
-                    }
+            {
+                (product_detail?.prd_video || completeDescription) &&
+                    <div className="m-intro-video" itemProp="embedUrl">
+                        <strong className="mb-10">Course intro</strong>
+                        <div className="d-flex">
+                            {
+                                product_detail?.prd_video && 
+                                    <figure className="m-intro-video__img">
+                                        <a href={`https://${product_detail?.prd_video}`} target="_blank">
+                                            <iframe src={`https://${product_detail?.prd_video}`} frameBorder="0" />
+                                            <i className="micon-play-video"></i>
+                                        </a>
+                                    </figure>
+                            }
 
-                    {
-                        completeDescription && 
-                        <p className="m-intro-video__content">
-                            <span itemProp="description" dangerouslySetInnerHTML={{__html: completeDescription?.slice(0, showAll ? completeDescription?.length : noOfWords) }} />
-                            <span>
-                                {
-                                    (!showAll && completeDescription?.length > noOfWords) ? 
-                                            controlContent(" ... Read More", true) : showAll ? controlContent(" Show less", false) : ''
-                                } 
-                            </span>
-                        </p>
-                    }
+                            {
+                                completeDescription && 
+                                <p className="m-intro-video__content">
+                                    <span itemProp="description" dangerouslySetInnerHTML={{__html: completeDescription?.slice(0, showAll ? completeDescription?.length : noOfWords) }} />
+                                    <span>
+                                        {
+                                            (!showAll && completeDescription?.length > noOfWords) ? 
+                                                    controlContent(" ... Read More", true) : showAll ? controlContent(" Show less", false) : ''
+                                        } 
+                                    </span>
+                                </p>
+                            }
+                            {/* {
+                                showAll ?
+                                <p className="m-intro-video__content" dangerouslySetInnerHTML={{__html: product_detail?.prd_about?.replace(/<[^>]*>/g, '').slice(noOfWords)}} /> : null
+                            } */}
+                        </div>
+                    </div>
+            }
 
-                    {/* {
-                        showAll ?
-                        <p className="m-intro-video__content" dangerouslySetInnerHTML={{__html: product_detail?.prd_about?.replace(/<[^>]*>/g, '').slice(noOfWords)}} /> : null
-                    } */}
-                </div>
-            </div>
             {
                 product_detail?.prd_service === 'course' &&
                     <ul className="m-course-stats mt-10 mb-10 bdr-top pt-20">
@@ -217,7 +222,7 @@ const CourseDetailBanner = (props) => {
                             <a href={`${siteDomain}/search/results/?fvid=${product_detail?.pPv}`} onClick={() => viewAllCourses()}>View all</a> courses by {product_detail?.prd_vendor}
                         </li>
                         <li>
-                        <a href={`${siteDomain}/search/results/?fvid=${product_detail?.pPv}`}>+{product_detail?.prd_vendor_count} more</a> Course providers  
+                            <LinkScroll to={'otherProviders'} offset={-150} >+{providerCount} more</LinkScroll> Course providers  
                         </li>
                     </ul>
             }
