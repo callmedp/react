@@ -76,8 +76,8 @@ const ReviewModal = (props) => {
                             );
                     })}
                 </span> 
-                { showError && <p className="error_cls">* Please click on star for ratings</p> }
-                <span>Click on rate to scale of 1-5</span>
+                { showError && <p className="error_cls d-block text-center">* Please click on star for ratings</p> }
+                <span className="d-block text-center">Click on rate to scale of 1-5</span>
                 <form className="mt-20" onSubmit={handleSubmit(submitReviews)}>
                     {/* <div className="m-form-group m-error">
                         <input className="m-input_field" type="text" name="name" id="name" placeholder=" " />
