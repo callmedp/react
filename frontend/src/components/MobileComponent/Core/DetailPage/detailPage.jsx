@@ -94,7 +94,7 @@ const DetailPage = (props) => {
                 <>
                     <MenuNav />
                     {
-                        reviewModal ? <ReviewModal showReviewModal={showReviewModal} prdId={prdId} product_detail={product_detail}/> :<>
+                        reviewModal ? <ReviewModal showReviewModal={showReviewModal} prdId={prdId} product_detail={product_detail} review={product_detail?.review}/> :<>
                         <header className="m-container m-header detail-bg">
                         <Header setShowSearchPage={setShowSearchPage} hideName={true}/>
                         <CourseDetailBanner 
