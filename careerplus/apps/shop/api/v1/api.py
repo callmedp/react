@@ -764,7 +764,7 @@ class ProductInformationAPIMixin(object):
             if product.take_free_test:
                 data.update({
                     'free_test': True,
-                    'shld_take_test_slg': product.take_free_test.get_absolute_url,
+                    'shld_take_test_slg': product.take_free_test.get_absolute_url(),
                     'test_title': product.take_free_test.title
                 })
             else:
