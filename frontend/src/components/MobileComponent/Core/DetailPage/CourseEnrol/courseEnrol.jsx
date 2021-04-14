@@ -142,7 +142,7 @@ const CourseEnrol = (props) => {
                                 <li><figure className="micon-offer-pay"></figure> <span className="flex-1">Avail <strong>Interest-free EMIs at no additional cost using Zest Money payment option</strong></span> </li>
                             }
                             {
-                                !product_detail?.free_test && <li><figure className="micon-offer-test"></figure> Take <strong>free practice test</strong> to enhance your skill</li>
+                                product_detail?.free_test && <li><figure className="micon-offer-test"></figure> Take <strong>free practice test</strong> to enhance your skill</li>
                             }
                             {/* <li><figure className="micon-offer-pay"></figure> Buy now & <strong>pay within 14 days using ePayLater</strong> </li>
                             <li><figure className="micon-offer-badge"></figure> <strong>Get badging</strong> on your Shine profile</li>
