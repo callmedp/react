@@ -3,7 +3,7 @@
 .m-take-test-free {
     padding: 3rem 1.5rem;
     @include border-radius(4px);
-    background: url('/media/images/mobile/take-free-test2.png') $lightblue2 no-repeat right 4rem;
+    background: url('#{$path}mobile/take-free-test2.png') $lightblue2 no-repeat right 4rem;
     display: block;
 
     p {
