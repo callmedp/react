@@ -77,15 +77,18 @@
             list-style-type: none;
             margin: 0;
             padding: 1rem 1.5rem 1.5rem 1.5rem;
-            height: 6.5rem;
+            max-height: 6.5rem;
             overflow: hidden;
 
             li {
                 display: flex;
                 font-size: 1.2rem;
                 color: $gray-200;
-                align-items: center;
                 margin-bottom: 1rem;
+
+                &:last-child {
+                    margin-bottom: 0;
+                }
 
                 strong {
                     font-weight: 600;
@@ -93,11 +96,12 @@
                     text-transform: none;
                     background: transparent;
                     padding: 0;
-                    margin: 0 .5rem;
+                    margin: 0 .3rem;
+                    display: inline;
                 }
 
                 figure {
-                    margin: 0 1rem 0 0;
+                    margin: .3rem 1rem 0 0;
                 }
             }
         }

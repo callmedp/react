@@ -153,7 +153,7 @@ const DetailPage = (props) => {
                         }
                         {/* <CertificateModal /> */}
                     </main>
-                    <Footer /></>
+                    <Footer pageType={"homePage"} /></>
                     }
                 </>
             }
