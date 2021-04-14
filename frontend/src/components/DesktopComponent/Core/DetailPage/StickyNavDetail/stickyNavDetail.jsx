@@ -118,7 +118,7 @@ const StickyNav = (props) => {
                             : ""
                         }
                         <span className="d-flex">
-                            <LinkScroll offset={-220} to={"enquire-now"} className="btn btn-outline-primary">Enquire now</LinkScroll>
+                            <LinkScroll offset={-260} to={"enquire-now"} className="btn btn-outline-primary">Enquire now</LinkScroll>
                             <a onClick={() => goToCart(varChecked)} className="btn btn-secondary ml-10">Enroll now</a>
                         </span>
                     </Form>

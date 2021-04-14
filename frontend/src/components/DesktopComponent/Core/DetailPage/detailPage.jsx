@@ -84,7 +84,7 @@ const DetailPage = (props) => {
                         frqntProd={frqntProd}
                         />
             }
-            <BannerCourseDetail frqntProd={frqntProd} addFrqntProd={addFrqntProd} product_detail={product_detail} varChecked={varChecked} changeChecked={changeChecked} prdId={id}/>
+            <BannerCourseDetail frqntProd={frqntProd} addFrqntProd={addFrqntProd} product_detail={product_detail} varChecked={varChecked} changeChecked={changeChecked} prdId={id} providerCount={product_detail?.pop_list?.length}/>
             {product_detail?.prd_uget && <KeyFeatures prd_uget={product_detail?.prd_uget} pTF={product_detail?.pTF} prd_vendor_slug={product_detail?.prd_vendor_slug} />}
             {
                  (product_detail?.chapter && product_detail?.prd_service !== 'assessment') && 

@@ -102,6 +102,7 @@ const DetailPage = (props) => {
                             prdId={prdId} 
                             varChecked={varChecked}
                             showReviewModal={showReviewModal} 
+                            providerCount = {product_detail?.pop_list?.length}
                         />
                     </header>
                     <main className="mb-0">
@@ -121,7 +122,9 @@ const DetailPage = (props) => {
                         {
                             product_detail?.fbt && <FrequentlyBought fbtList ={product_detail.fbt_list} addFrqntProd={addFrqntProd} frqntProd={frqntProd}/>
                         }
-                        <KeyFeatures prd_uget={product_detail?.prd_uget} prd_vendor_slug={product_detail?.prd_vendor_slug} typeFlow={product_detail?.pTF}/>
+                        {
+                            product_detail?.prd_uget && <KeyFeatures prd_uget={product_detail?.prd_uget} prd_vendor_slug={product_detail?.prd_vendor_slug} typeFlow={product_detail?.pTF}/>
+                        }
                         {
                             (product_detail?.chapter && product_detail?.prd_service !== 'assessment') && 
                                 <CourseOutline chapter_list={product_detail?.chapter_list}/>
