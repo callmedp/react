@@ -1,4 +1,4 @@
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './banner.scss';
 import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import { Link as LinkScroll } from 'react-scroll';
@@ -17,10 +17,10 @@ import { trackUser } from 'store/Tracking/actions/index.js';
 import { Toast } from '../../../Common/Toast/toast';
 
 const BannerCourseDetail = (props) => {
-    const {product_detail, varChecked, changeChecked, frqntProd, addFrqntProd, prdId, providerCount} = props;
+    const {product_detail, varChecked, changeChecked, frqntProd, addFrqntProd, prdId, product_id, providerCount} = props;
     const reqLength = 365;
-    const inputCheckbox = useRef(null);
-    const regex = /<(.|\n)*?>/g;
+    // const inputCheckbox = useRef(null);
+    // const regex = /<(.|\n)*?>/g;
     const [discountPrice, discountPriceSelected] = useState(0);
     const dispatch = useDispatch();
     const { mainCourseCartLoader } = useSelector(store => store.loader);
@@ -35,9 +35,6 @@ const BannerCourseDetail = (props) => {
         )
     }
 
-    // useEffect(() => {
-    //     inputCheckbox.current && (inputCheckbox.current.checked = false);
-    // }, [])
     useEffect(() => {
         setReadAll(false)
     }, [prdId])
@@ -52,20 +49,18 @@ const BannerCourseDetail = (props) => {
 
     const goToCart = async (value) => {
         let cartItems = {};
-        let cvId = [];
+        let addonsId = [];
 
         if(!product_detail?.redeem_test) {
             MyGA.SendEvent('ln_enroll_now', 'ln_enroll_now', 'ln_click_enroll_now', `${product_detail?.prd_H1}`, '', false, true);
             trackUser({"query" : tracking_data, "action" :'enroll_now'});
 
             if(frqntProd && frqntProd.length > 0) {
-                frqntProd.map(prdId => cvId.push(prdId.id));
-                if(value.id) cvId.push(value.id)
-                else cvId.push(product_detail?.selected_var?.id);
+                frqntProd.map(prdId => addonsId.push(prdId.id));
             }
 
-            if(value.id) cartItems = {'prod_id': product_detail?.pPv, 'cart_type': 'cart', 'cv_id': (cvId.length > 0 ? cvId : value.id)};
-            else cartItems = {'prod_id': product_detail?.pPv, 'cart_type': 'cart', 'cv_id': (cvId.length > 0 ? cvId : product_detail?.selected_var?.id)};
+            if(value.id) cartItems = {'prod_id': product_id, 'cart_type': 'cart', 'cv_id': value.id, "addons": addonsId};
+            else cartItems = {'prod_id': product_id, 'cart_type': 'cart', 'cv_id': (product_detail?.selected_var ? product_detail?.selected_var?.id : ""), "addons": addonsId};
 
             try {
                 dispatch(startMainCourseCartLoader());
@@ -78,7 +73,7 @@ const BannerCourseDetail = (props) => {
         }
         else {
             trackUser({"query" : tracking_data, "action" :'redeem_now'});
-            cartItems = { 'prod_id': product_detail?.pPv, 'redeem_option': product_detail?.redeem_option }
+            cartItems = { 'prod_id': product_detail?.product_id, 'redeem_option': product_detail?.redeem_option }
 
             try {
                 dispatch(startMainCourseCartLoader());
@@ -277,20 +272,6 @@ const BannerCourseDetail = (props) => {
                                                 </span>
                                                 <label htmlFor="post-10" className="read-more-trigger"></label>
                                         </div> : "" }
-
-                                        {/* { product_detail?.prd_desc ? <div id="module" className=" about-course">
-                                            {product_detail?.prd_desc.replace(regex, '')?.length > reqLength ? (
-                                                <input type="checkbox" className="read-more-state" id="post-20" ref={inputCheckbox} itemProp="desc" />
-                                                ) : (
-                                                    ""
-                                                    )}
-                                                    
-                                            <span className="read-more-wrap" itemProp="description">
-                                                <span dangerouslySetInnerHTML={{__html:product_detail?.prd_desc?.replace(regex, '').slice(0, reqLength)}} />
-                                                <span className="read-more-target" dangerouslySetInnerHTML={{__html: product_detail?.prd_desc?.replace(regex, '').slice(reqLength)}} />
-                                            </span>
-                                            <label htmlFor="post-20" className="read-more-trigger"></label>
-                                        </div> : "" } */}
                                     </span>
                                 </div>
                             </div>

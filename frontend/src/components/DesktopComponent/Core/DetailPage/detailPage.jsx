@@ -27,7 +27,7 @@ import MetaContent from "../../Common/MetaContent/metaContent";
 
 const DetailPage = (props) => {
     const dispatch = useDispatch();
-    const {product_detail, skill} = useSelector(store => store?.mainCourses);
+    const {product_detail, skill, product_id} = useSelector(store => store?.mainCourses);
     const meta_tags = product_detail?.meta;
     const {match: {params: {id}}, history} = props;
     const { mainCourseLoader } = useSelector(store => store.loader);
@@ -81,10 +81,10 @@ const DetailPage = (props) => {
                         topics={(product_detail?.chapter && product_detail?.prd_service === 'assessment') ? true : false}
                         faq = {product_detail?.faq ? true : false}
                         product_detail={product_detail} prdId={id} varChecked={varChecked}
-                        frqntProd={frqntProd}
+                        frqntProd={frqntProd} product_id={product_id}
                         />
             }
-            <BannerCourseDetail frqntProd={frqntProd} addFrqntProd={addFrqntProd} product_detail={product_detail} varChecked={varChecked} changeChecked={changeChecked} prdId={id} providerCount={product_detail?.pop_list?.length}/>
+            <BannerCourseDetail frqntProd={frqntProd} addFrqntProd={addFrqntProd} product_detail={product_detail} varChecked={varChecked} changeChecked={changeChecked} prdId={id} product_id={product_id} providerCount={product_detail?.pop_list?.length}/>
             {product_detail?.prd_uget && <KeyFeatures prd_uget={product_detail?.prd_uget} pTF={product_detail?.pTF} prd_vendor_slug={product_detail?.prd_vendor_slug} />}
             {
                  (product_detail?.chapter && product_detail?.prd_service !== 'assessment') && 

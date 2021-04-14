@@ -7,8 +7,8 @@ import CourseEnrol from './CourseEnrol/courseEnrol';
 import StickyNavDetail from './StickyNavDetail/stickyNavDetail';
 import KeyFeatures from './KeyFeatures/keyFeatures';
 import CourseOutline from './CourseOutline/courseOutline';
-import CourseOutcome from './CourseOutcome/courseOutcome';
-import SampleCertificate from './SampleCertificate/sampleCertificate';
+// import CourseOutcome from './CourseOutcome/courseOutcome';
+// import SampleCertificate from './SampleCertificate/sampleCertificate';
 import HowItWorks from './HowItWorks/howItWorks';
 import TopicsCovered from './TopicsCovered/topicsCovered';
 import WhoLearn from './WhoLearn/whoLearn';
@@ -37,7 +37,7 @@ const DetailPage = (props) => {
     const [reviewModal, showReviewModal] = useState(false)
     const prdId = props.match.params.id;
     const dispatch = useDispatch()
-    const { product_detail, skill, ggn_contact } = useSelector(store => store?.mainCourses);
+    const { product_detail, skill, ggn_contact, product_id } = useSelector(store => store?.mainCourses);
     const meta_tags = product_detail?.meta;
     const [enquiryForm, setEnquiryForm] = useState(false);
     const [varChecked, changeChecked] = useState({});
@@ -106,14 +106,14 @@ const DetailPage = (props) => {
                         />
                     </header>
                     <main className="mb-0">
-                        <CourseEnrol product_detail={product_detail} getProductPrice={getProductPrice} frqntProd={frqntProd} varChecked={varChecked} changeChecked={changeChecked} />
+                        <CourseEnrol product_detail={product_detail} getProductPrice={getProductPrice} frqntProd={frqntProd} varChecked={varChecked} changeChecked={changeChecked} product_id={product_id} />
                         {
                             showStickyNav && <StickyNavDetail 
                                 outline={(product_detail?.chapter && product_detail?.prd_service !== 'assessment') ? true : false}
                                 topics={(product_detail?.chapter && product_detail?.prd_service === 'assessment') ? true : false}
                                 faq = {product_detail?.faq ? true : false}
                                 product_detail={product_detail} prdId={prdId} varChecked={varChecked}
-                                frqntProd={frqntProd}
+                                frqntProd={frqntProd} product_id={product_id}
                                 />
                         }
                         {
