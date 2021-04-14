@@ -27,7 +27,7 @@ const BannerCourseDetail = (props) => {
     const tracking_data = getTrackingInfo();
     const [readAll, setReadAll] = useState(false)
 
-    const completeDescription = (product_detail?.prd_about || product_detail?.prd_desc) ? product_detail?.prd_about + ' <br /> ' + product_detail?.prd_desc : '';
+    const completeDescription = (product_detail?.prd_about ? (product_detail?.prd_about + ' <br /> ') : '') + (product_detail?.prd_desc ? product_detail?.prd_desc : '')
 
     const starRatings = (star, index) => {
         return (star === '*' ? <em className="icon-fullstar" key={index}></em> : star === '+' 
@@ -339,6 +339,9 @@ const BannerCourseDetail = (props) => {
                                                     :
                                                     
                                                     <li><figure className="icon-offer-pay"></figure> <span className="flex-1">Avail <strong>Interest-free EMIs at no additional cost using Zest Money payment option</strong></span> </li>
+                                                }
+                                                {
+                                                    !product_detail?.free_test && <li><figure className="icon-offer-test"></figure><span className="flex-1">Take <strong>free practice test</strong> to enhance your skill</span></li>
                                                 }
                                                 </ul>
                                             </div>
