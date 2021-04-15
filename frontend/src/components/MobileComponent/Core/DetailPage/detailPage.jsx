@@ -93,8 +93,8 @@ const DetailPage = (props) => {
                 <SearchPage setShowSearchPage={setShowSearchPage} /> :
                 <>
                     <MenuNav />
-                    {
-                        reviewModal ? <ReviewModal showReviewModal={showReviewModal} prdId={prdId} product_detail={product_detail} review={product_detail?.review}/> :<>
+                    
+                        <>
                         <header className="m-container m-header detail-bg">
                         <Header setShowSearchPage={setShowSearchPage} hideName={true}/>
                         <CourseDetailBanner 
@@ -152,9 +152,9 @@ const DetailPage = (props) => {
                             enquiryForm ? <EnquiryModal setEnquiryForm={setEnquiryForm} page="detailPage"/> : null
                         }
                         {/* <CertificateModal /> */}
+                        {reviewModal ? <ReviewModal showReviewModal={showReviewModal} prdId={prdId} product_detail={product_detail} review={product_detail?.review}/> :""}
                     </main>
                     <Footer pageType={"homePage"} /></>
-                    }
                 </>
             }
         </div>

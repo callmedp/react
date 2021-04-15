@@ -30,7 +30,7 @@ const FAQ = (props) => {
     return(
         faq_list.length ? (
             <section className="m-container m-faq-detail lightblue-bg mt-0 mb-0" id="faq" data-aos="fade-up">
-                <h2 className="m-heading2">Frequently Asked Questions</h2>
+                <h3 className="m-heading2">Frequently Asked Questions</h3>
                     <div className="tabs">
                         { (sliceFlagFaq ? faq_list?.slice(0, 4) : faq_list).map(renderAccordion) }
                         { sliceFlagFaq && (faq_list?.length  > 4) ? <Link onClick={loadMore} to={"#"} className="m-load-more mt-20">Load More FAQS</Link> : '' }

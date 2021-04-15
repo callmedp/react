@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../CataloguePage/RecentCourses/recentCourses.scss';
+import './otherProviders.scss';
 import CourseCard from 'components/DesktopComponent/Common/CourseCard/courseCard';
 import Carousel from 'react-bootstrap/Carousel';
 import { siteDomain } from 'utils/domains';
@@ -72,9 +72,9 @@ const OtherProviders = (props) => {
         <section className="container-fluid" data-aos="fade-up" id="popListTemplate">
             <div className="row">
                 <div className="container">
-                    <div className="recent-courses mt-20 mb-30">
+                    <div className=" mt-20 mb-30">
                         <h2 className="heading2">Courses by other providers</h2>
-                        <Carousel className="courses-like">
+                        <Carousel className="other-providers">
                             {
                                 pop_list?.map(getLikeCourses)
                             }

@@ -126,7 +126,7 @@ const CourseDetailBanner = (props) => {
 
                         {
                             product_detail?.access_duration && 
-                                <li className="d-flex align-items-center">
+                                <li className="d-flex align-items-center nobdr">
                                     <figure className="micon-access-duration mr-10"></figure>
                                     <p>
                                         Access Duration <strong>{product_detail?.access_duration}</strong>

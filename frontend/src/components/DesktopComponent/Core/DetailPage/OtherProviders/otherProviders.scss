@@ -2,19 +2,19 @@
 @import '../../../../../styles/variables';
 @import '../../../../../styles/mixins';
 
-.courses-like {
+.other-providers {
     .carousel-indicators {
         display: none;
     }
 
     .carousel-control-prev {
         width: 7%;
-        left: 0;
+        left: -2.5rem;
     }
 
     .carousel-control-next {
         width: 7%;
-        right: 0;
+        right: -2.5rem;
     }
 
     .carousel-control-prev-icon {
@@ -31,6 +31,6 @@
     .carousel-inner {
         padding-bottom: 2rem;
         margin: 0 auto;
-        width: 85%;
+        width: 100%;
     }
 }

@@ -26,7 +26,7 @@ const CoursesMayLike = (props) => {
 
     return(
         <section className="m-container mt-0 mb-0 pr-0" data-aos="fade-up">
-            <h2 className="m-heading2 mb-10">Courses you may like</h2>
+            <h3 className="m-heading2 mb-10">Courses you may like</h3>
             <div className="m-courses m-recent-courses ml-10n">
                 {
                     results?.length > 0 ? <ProductCards productList = {results}/> : ''
