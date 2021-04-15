@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const InputField = (props) => {
     const { attributes: {
@@ -57,8 +57,84 @@ const TextArea = (props) => {
     )
 }
 
+
+const SelectIntentBox = (props) => {
+
+    const { attributes: {
+                            name, children, validation, label, errorMessage
+                        }, register, errors } = props;
+
+    const [checkedClass, setCheckedClass] = useState('form-group')
+    
+    // const handleSelect = (e) => {
+    //     if(e.target.value){
+    //         setCheckedClass('form-group checked')
+    //     }
+    //     else{
+    //         setCheckedClass('form-group')
+    //     }
+    // }
+
+    return (
+        <div className={!!errors ? 'form-group error' : checkedClass}>
+            <div className="custom-select-box">
+                <select name={name} className="custom-select" ref={register(validation)} aria-label={label}>
+                    { children?.map((item,index)=>{
+                        return(
+                        <option value={item.value} key={index}>{item.text}</option>
+                        )
+                    })}
+                </select>
+            </div>
+        </div>
+    )
+}
+
+const MultiSelectBox = (props) => {
+    const [mouse, setMouse] = useState(false);
+    const { attributes: {
+        className, type, 
+        name, value, 
+        validation, 
+        label,defaultValue,
+        errorMessage, id, placeholder
+    }, register, errors, data } = props
+
+    return (<>
+        {
+            mouse ?
+
+                <div className="form-group" onClick={() => setMouse(false)}>
+                    <label for="">Your skills</label>
+                    <input className="form-control" type="text" name={name} ref={register(validation)} autoComplete="off"/>
+                </div>
+
+                :
+
+                <div className="form-group-custom pos-rel" >
+                    <label className="sticky-label" htmlFor="">Your skills</label>
+                    <div className="custom-textarea">
+                        {data?.map((data, i) => {
+                            return (
+                                <label className="label-added" for="">{data}</label>
+                            )
+                        })
+                        }
+                        <span className="d-flex align-items-center mt-10">
+                            <input type="text" name={name} className="form-control custom-input" ref={register(validation)} defaultValue={defaultValue} id={id} placeholder={placeholder} autoComplete="off"/>
+                        </span>
+                    </div>
+                { !!errors ? <span className="error-msg">{errorMessage[errors.type]}</span> : ''}
+                </div>
+        }
+    </>)
+
+}
+
 export {
     InputField,
     SelectBox,
     TextArea,
+    SelectIntentBox,
+    MultiSelectBox
 }

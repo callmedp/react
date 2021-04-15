@@ -5,7 +5,7 @@ import Footer from '../../Common/Footer/footer';
 import PopularCourses from './PopularCourses/PopularCourses';
 import DashboardNavigation from './DashboardNavigation/DashboardTabs';
 import HaveQuery from './HaveQuery/HaveQuery';
-// import BreadCrumbs from './Breadcrumb/Breadcrumb';
+import BreadCrumbs from './Breadcrumb/Breadcrumb';
 import MyCourses from './MyCourses/myCourses';
 import MyServices from './MyServices/myServices';
 import MyOrders from './MyOrders/myOrders';
@@ -21,6 +21,10 @@ const DashboardPage = (props) => {
     const { history } = props;
     const dbContainer = props.match.params.name;
     const dashboardRoutes = [undefined, 'myorder', 'mywallet', 'myservices', 'startcourse']
+    const [filterState, setfilterState] = useState({ 'last_month_from': 'all', 'select_type' : 'all' });
+    const filterHidePage = ['myorder', 'mywallet']
+    // const [filterVisible, setFilterVisible] = useState(true)
+
     
     useEffect(()=>{
         if(!dashboardRoutes.includes(dbContainer)){
@@ -46,9 +50,9 @@ const DashboardPage = (props) => {
            <Header />
            <main>
                 <div className="container">
-                    {/* <BreadCrumbs /> */}
+                <BreadCrumbs filterState={filterState} setfilterState={setfilterState} filterStateShow={filterHidePage.includes(dbContainer) ? false : true}/>
                     
-                    <div className="dashboard-warp">
+                    <div className="dashboard-warp mt-10">
                         { dbContainer != 'startcourse' ?
                         <div className="dashboard-warp--tab">
                          <DashboardNavigation /> 
@@ -60,9 +64,9 @@ const DashboardPage = (props) => {
                               {
                                 {
                                     'myorder' : <MyOrders />,
-                                    'mywallet' : <MyWallet/>,
-                                    'myservices' : <MyServices {...props} />,
-                                    undefined : <MyCourses history={history} />
+                                    'mywallet' : <MyWallet />,
+                                    'myservices' : <MyServices {...props} filterState={filterState} setfilterState={setfilterState} />,
+                                    undefined : <MyCourses history={history} filterState={filterState} setfilterState={setfilterState} />
                                 }[dbContainer]
                               }  
                             </div>

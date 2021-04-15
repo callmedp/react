@@ -16,12 +16,12 @@ const CoursesTray = (props) => {
     const { gaTrack, setHasCourses, pageId } = props;
 
     const loadMoreCourses = () => {
-        gaTrack('SkillCourseLoadMore', 'ln_course_click', 'ln_know_more', 'ln_course', '', false, true)
+        MyGA.SendEvent('SkillCourseLoadMore', 'ln_course_click', 'ln_know_more', 'ln_course', '', false, true)
         setCourseKey(state => state + 1)
     }
 
     const loadMoreAssessments = () => {
-        gaTrack('SkillAssesmentLoadMore', 'ln_course_click', 'ln_know_more', 'ln_assessment', '', false, true)
+        MyGA.SendEvent('SkillAssesmentLoadMore', 'ln_course_click', 'ln_know_more', 'ln_assessment', '', false, true)
         setAssessmentKey(state => state + 1)
     }
 

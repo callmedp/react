@@ -1,0 +1,193 @@
+@import '../../../../../../styles/functions';
+@import '../../../../../../styles/variables';
+@import '../../../../../../styles/mixins';
+
+
+.jobs-upskills {
+    .nav-tabs {
+        justify-content: flex-start;
+
+        h2 {
+            margin: 0;
+        }
+
+        .nav-link {
+            padding: 1rem 3rem;
+            text-transform: none;
+            margin: 0 1rem 0 0;
+
+            &.active {
+
+                h2 {
+                    color: $gray-100;
+                }
+            }
+
+            h2 {
+                color: $blue;
+            }
+        }
+    }
+}
+
+.shine-courses-listing {
+    list-style-type: none;
+    margin: 4rem 0 0 0;
+    padding: 0;
+
+    .col {
+        margin-bottom: 3rem;
+
+        .course {
+            box-shadow: $box-shadow;
+            border: none;
+            background: $white;
+    
+            &:hover {
+                box-shadow: $box-shadow-hover;
+            }
+    
+            &__content {
+                position: relative;
+                // flex: 1;
+                width: 75%;
+                padding: 0;
+                font-size: 1.1rem;
+    
+                .flag-red {
+                    font-size: .9rem;
+                    font-weight: 600;
+                    text-transform: uppercase;
+                    background: $course-badge-red;
+                    padding: 0 .5rem;
+                    border-top-left-radius: .5rem;
+                    box-shadow: 0 1px 1px 0 rgba(139,139,139,0.50);
+                    display: inline-block;
+                    position: relative;
+    
+                    &::after {
+                        content: '';
+                        width: 0;
+                        height: 0;
+                        border-top: .7rem solid transparent;
+                        border-left: .7rem solid $course-badge-red;
+                        border-bottom: .6rem solid transparent;
+                        position: absolute;
+                        right: -.7rem;
+                        top: 0;
+                    }
+                }
+
+                .hot-badge {
+                    font-size: 1rem;
+                    color: $red;
+                    font-weight: 600;
+                    border: .1rem solid $red;
+                    border-radius: 2rem;
+                    padding: .1rem .5rem;
+                    margin-bottom: 1rem;
+                    display: inline-flex;
+                    align-items: center;
+
+                    figure {
+                        margin-right: .3rem;
+                    }
+                }
+    
+                h3 {
+                    margin: 0;
+                    overflow: hidden;
+                    font-size: 1.6rem;
+                    font-weight: 600;
+    
+                    a, :hover, :focus {
+                        color: $gray-100;
+                    }
+                }
+
+                strong {
+                    font-size: 1.3rem;
+                    font-weight: 600;
+                }
+
+                ul {
+                    list-style-type: none;
+                    margin: 1rem 0 0 0;
+                    padding: 0;
+                    display: flex;
+
+                    li {
+                        margin-right: 2rem;
+                        position: relative;
+
+                        &::before {
+                            content: '';
+                            width: .5rem;
+                            height: .5rem;
+                            background: #D3E3EC;
+                            display: inline-block;
+                            margin-right: .5rem;
+                        }
+                    }
+                }
+
+                p {
+                   font-size: 1.2rem; 
+                }
+            }
+    
+            &__price-date {
+                display: flex;
+                align-items: flex-end;
+                justify-content: flex-start;
+                flex-direction: column;
+                margin-left: auto;
+                
+                span {
+                    font-size: 1.1rem;
+                    color: $gray-100;
+                }
+    
+                a {
+                    margin-left: auto;
+                    margin-top: auto;
+                }
+    
+                .btn-secondary {
+                    font-size: 1.1rem;
+                    color: $gray-100;
+                    text-transform: uppercase;
+                    padding: 1rem 2rem;
+                    font-weight: 700;
+                    align-self: flex-end;
+                }
+            }
+    
+            &__bottom {
+                padding: 1.5rem 2.5rem;
+                background: $course-light-bg;
+                display: flex;
+    
+                strong {
+                    font-size: 1.1rem;
+                    margin-right: .5rem;
+                }
+    
+                ul {
+                    list-style-type: none;
+                    margin: 0;
+                    padding: 0;
+                    display: flex;
+                    align-items: center;
+            
+                    li {
+                        font-size: 1.2rem;
+                        margin-right: .5rem;
+                    }
+                }
+    
+            }
+        }
+
+    }
+}

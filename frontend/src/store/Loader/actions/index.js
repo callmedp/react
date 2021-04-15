@@ -202,3 +202,45 @@ export const stopNeedHelpLoader = () => {
         payload: { needHelpLoader: false }
     }
 }
+
+export const startGetResumeScoreLoader = () => {
+    return {
+        type: Actions.START_GET_RESUME_SCORE_LOADER,
+        payload: { resumeScoreLoader: true }
+    }
+}
+
+export const stopGetResumeScoreLoader = () => {
+    return {
+        type: Actions.STOP_GET_RESUME_SCORE_LOADER,
+        payload: { resumeScoreLoader: false }
+    }
+}
+
+export const startJobsUpskillsLoader = () => {
+    return {
+        type: Actions.START_OI_DETAILS_LOADER,
+        payload: { jobsUpskillsLoader: true }
+    }
+}
+
+export const stopJobsUpskillsLoader = () => {
+    return {
+        type: Actions.STOP_OI_DETAILS_LOADER,
+        payload: { jobsUpskillsLoader: false }
+    }
+}
+
+export const startCareerChangeLoader = () => {
+    return {
+        type: Actions.START_CAREER_CHANGE_LOADER,
+        payload: { careerChangeLoader: true }
+    }
+}
+
+export const stopCareerChangeLoader = () => {
+    return {
+        type: Actions.STOP_CAREER_CHANGE_LOADER,
+        payload: { careerChangeLoader: false }
+    }
+}

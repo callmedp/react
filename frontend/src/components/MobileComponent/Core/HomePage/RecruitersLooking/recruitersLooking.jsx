@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { MyGA } from 'utils/ga.tracking.js';
 
 // Third-Party Import
 import Swal from 'sweetalert2';
@@ -44,7 +45,7 @@ const RecruitersLooking = (props) => {
                     {
                         trendingSkills?.slice(0,12)?.map((skill, index) => {
                             return (
-                                <Link to={skill.skillUrl} key={index}>
+                                <Link to={skill.skillUrl} key={index} onClick={() => MyGA.SendEvent('ln_new_homepage', 'ln_recruiter_course', ' ln_click_course', skill.skillName, '', false, true)}>
                                 <div className="m-card" >
                                     
                                     <figure>

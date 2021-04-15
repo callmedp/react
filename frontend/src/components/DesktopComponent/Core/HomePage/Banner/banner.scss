@@ -230,6 +230,10 @@ header {
                 padding: 0.8rem 2rem;
                 background-image: linear-gradient(114deg, #3664D1 3%, #813EB3 100%);
                 border: 1px solid #699BE2;
+
+                figure {
+                    margin: 0 0 0 1rem;
+                }
             }
 
             .header-search-result {

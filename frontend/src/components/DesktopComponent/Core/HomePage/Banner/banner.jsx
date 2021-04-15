@@ -1,9 +1,11 @@
 import React from 'react';
 import './banner.scss';
+import { Link } from 'react-router-dom';
 import Carousel from 'react-bootstrap/Carousel';
 // import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import SearchBar from '../../../Common/Header/SeachBar/SearchBar.jsx';
 import { imageUrl } from 'utils/domains';
+import { MyGA } from 'utils/ga.tracking.js';
 
 const HomeBanner = (props) => {
 
@@ -12,7 +14,7 @@ const HomeBanner = (props) => {
            
             <div className="row">
                 <div className="container home-header-content mt-30">
-                    <div className="w-50">
+                    <div className="w-75">
                         <h1 className="heading1 mt-20" data-aos="fade-right">
                             <strong>Learn the right skills,</strong> be future ready
                         </h1>
@@ -41,8 +43,8 @@ const HomeBanner = (props) => {
                                 <input className="form-control top-input" type="search" placeholder="Search courses" aria-label="Search" />
                                 <button className="btn btn-search" type="submit"><figure className="icon-search"></figure></button>
                             </form> */}
-                            {/* OR
-                            <Link to={"#services"} className="btn btn-gradient ml-10">GET CAREER GUIDANCE <figure className="icon-arrow-right ml-10"></figure></Link> */}
+                            OR
+                            <Link to={"/user-intent"} className="btn btn-gradient ml-10" onClick={() => MyGA.SendEvent('ln_career_guidance','ln_career_guidance', 'ln_click_career_guidance', 'career_guidance','', false, true)}>GET CAREER GUIDANCE <figure className="icon-arrow-right ml-10"></figure></Link>
                         </div>
                     </div>
 

@@ -14,7 +14,10 @@ const initState = {
     oiDetailsLoader: false,
     mainCourseLoader: false,
     mainCourseCartLoader: false,
-    needHelpLoader: false
+    needHelpLoader: false,
+    resumeScoreLoader: false,
+    jobsUpSkillsLoader: false,
+    careerChangeLoader: false
 }
 
 export const LoaderReducer = (state=initState, action) => {
@@ -72,6 +75,18 @@ export const LoaderReducer = (state=initState, action) => {
         //Need help loader
         case Actions.START_NEED_HELP_LOADER : return {...state, ...action.payload}
         case Actions.STOP_NEED_HELP_LOADER : return {...state, ...action.payload}
+        
+        // get resume score loader
+        case Actions.START_GET_RESUME_SCORE_LOADER : return {...state, ...action.payload}
+        case Actions.STOP_GET_RESUME_SCORE_LOADER : return {...state, ...action.payload}
+
+        // jobs upskill loader
+        case Actions.START_JOBS_UPSKILLS_LOADER : return {...state, ...action.payload}
+        case Actions.STOP_JOBS_UPSKILLS_LOADER : return {...state, ...action.payload}
+
+        // career loader
+        case Actions.START_CAREER_CHANGE_LOADER : return {...state, ...action.payload}
+        case Actions.STOP_CAREER_CHANGE_LOADER : return {...state, ...action.payload}
 
         default: return state;
     }

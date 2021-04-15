@@ -15,7 +15,7 @@ const FrequentlyBought = (props) => {
     }
 
     return (
-        <div className="frequently-bought mt-20">
+        <div className="frequently-bought mt-50">
             <h2 className="heading2">Frequently Bought Together</h2>
             <ul className="frequently-bought__list">
                 {

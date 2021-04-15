@@ -1,6 +1,7 @@
 import React from 'react';
 import { siteDomain } from 'utils/domains';
 import './breadcrumb.scss';
+import { MyGA } from 'utils/ga.tracking.js';
    
 const BreadCrumbs = (props) => {
     const {filterState, setfilterState, filterStateShow} = props;
@@ -8,7 +9,10 @@ const BreadCrumbs = (props) => {
     const FilterChecks = async(e) => {
         const name = e.target.name;
         const value = e.target.value;
+        let index = e.nativeEvent.target.selectedIndex;
+        let label = e.nativeEvent.target[index].text;
         setfilterState({ ...filterState, [name]: value });
+        MyGA.SendEvent('DashboardInbox','ln_dashboard_left_menu', 'ln_my_inbox', label,'', false, true);
       };
 
     return(

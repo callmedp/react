@@ -9,13 +9,14 @@ const FAQ = (props) => {
     const { faqList } = useSelector(store => store.skillBanner)
     const [sliceFlag, setSliceFlag] = useState(true)
     const [checkedId, setCheckedId] = useState(null);
+    const regex = /(<([^>]+)>)/ig;
 
     const accordionHandle = (index) => { (index === checkedId) ? setCheckedId(null) : setCheckedId(index) }
 
     const renderAccordion = (item, index) => {
         return (
             <div className="m-tab" key={index.toString() + item.heading} itemScope itemProp="mainEntity" itemType="https://schema.org/Question" >
-                <input type="radio" id={"rd"+index} name="rd" checked = { checkedId === index } onClick={() => accordionHandle(index)} /><label className="m-tab-label" htmlFor={"rd"+index} ><span itemProp="name" dangerouslySetInnerHTML={{__html : item.heading}}/></label>
+                <input type="radio" id={"rd"+index} name="rd" checked = { checkedId === index } onClick={() => {accordionHandle(index); MyGA.SendEvent('SkillFAQs','ln_FAQ_click', 'ln_down_arrow_click', 'ln_'+item.heading.replace(regex, ''),'', false, true)}} /><label className="m-tab-label" htmlFor={"rd"+index} ><span itemProp="name" dangerouslySetInnerHTML={{__html : item.heading}}/></label>
                 <div id={index} className="m-tab-content" itemScope itemProp="acceptedAnswer" itemType="https://schema.org/Answer">
                     <p  hidden=""><span itemProp="text" dangerouslySetInnerHTML={{__html : item.content}}/></p>
                 </div>

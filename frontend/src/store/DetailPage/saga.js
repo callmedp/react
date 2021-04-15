@@ -22,11 +22,18 @@ function* mainCoursesApi(action){
         if(response?.error) return reject(response);
         const item = response?.data?.data;
 
-        if(item?.redirect_url) return reject(item)
-        else {
-            yield put(mainCoursesFetched({ ...item }));
-            return resolve(item);
+        if(item?.redirect_url) return reject(item);
+
+        if(!!payload && payload.device === 'desktop' && !!item && item.product_detail.pop_list instanceof Array) {
+            const otherProvidersList = item.product_detail.pop_list.reduce((rows, key, index) => 
+                (index % 4 == 0 ? rows.push([key]) : rows[rows.length-1].push(key)) && rows, []);
+            if(otherProvidersList.length){
+                item.product_detail.pop_list = otherProvidersList.slice();
+            }
         }
+        
+        yield put(mainCoursesFetched({ ...item }));
+        return resolve(item);
     }
     catch(e) {
         return e;

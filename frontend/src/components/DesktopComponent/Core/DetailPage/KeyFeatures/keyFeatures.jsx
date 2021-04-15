@@ -11,7 +11,7 @@ const KeyFeatures = (props) => {
                 <div className="container">
                     <div className="key-features">
                         <h2 className="heading2">Key Features</h2>
-                        <p dangerouslySetInnerHTML={{__html: prd_uget}}></p>
+                        <p className="mt-20 mb-0" dangerouslySetInnerHTML={{__html: prd_uget}}></p>
                     </div>
                 </div>
             </div>
