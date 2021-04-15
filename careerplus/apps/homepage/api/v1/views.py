@@ -844,6 +844,15 @@ class TrendingCoursesAndSkillsAPI(PopularProductMixin, APIView):
         else:
             #if user is logged in fetch trending courses from recommendation engine
             product_pks = RecommendationMixin().get_courses_and_certification_from_analytics_recommendation_db(candidate_id=candidate_id)['courses']
+            if len(product_pks)<16:
+                gap = 16-len(product_pks)
+                product_obj, product_converstion_ratio, product_revenue_per_mile = PopularProductMixin().\
+                                                                                popular_courses_algorithm(
+                                                                                quantity=popular_course_quantity,
+                                                                                category=skill_category)
+
+                popular_products = list(product_converstion_ratio) + list(product_revenue_per_mile)
+                product_pks += popular_products[:gap]
         tprds = SearchQuerySet().filter(id__in=product_pks, pTP__in=[0, 1, 3]).exclude(
             id__in=settings.EXCLUDE_SEARCH_PRODUCTS
         )
@@ -1073,6 +1082,7 @@ class PopularInDemandProductsAPI(APIView):
                 paginated_data = offset_paginator(page, courses,size=4)                                                                    
                 courses = paginated_data["data"]
                 course_data = ProductMixin().get_course_json(courses)
+                print(course_data)
                 data.update({ 'courses': course_data})            
         else:
             #get courses and assessments from recommendation engine
@@ -1080,6 +1090,10 @@ class PopularInDemandProductsAPI(APIView):
             if tab_type=='certifications':
                 certifications = recommended.get('assessment',None)
                 data.update({'recommended_assessments':certifications})
+                if len(certifications)<4:
+                    gap = 4-len(certifications)
+                    popular_certifications = PopularProductMixin().popular_certifications()[:gap]
+                    certifications += popular_certifications 
                 certifications = SearchQuerySet().filter(id__in=certifications, pTP__in=[0, 1, 3]).exclude(
                 id__in=settings.EXCLUDE_SEARCH_PRODUCTS)
                 if certifications:
@@ -1090,6 +1104,13 @@ class PopularInDemandProductsAPI(APIView):
             elif tab_type == 'master':
                 courses = recommended.get('courses',None)
                 data.update({'recommended_course_ids':courses})
+                if len(courses)<4:
+                    gap = 4-len(courses)
+                    s_obj, s_ratio, s_revenue = PopularProductMixin(). \
+                    popular_courses_algorithm(class_category=class_category,
+                                            quantity=gap)
+                    course_pks = list(s_ratio) + list(s_revenue)
+                    courses += course_pks[:gap]
                 courses = SearchQuerySet().filter(id__in=courses, pTP__in=[0, 1, 3]).exclude(
                     id__in=settings.EXCLUDE_SEARCH_PRODUCTS
                 )
