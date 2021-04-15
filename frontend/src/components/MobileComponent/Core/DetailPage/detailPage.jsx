@@ -32,14 +32,17 @@ import { fetchProductReviews, fetchMainCourses } from 'store/DetailPage/actions'
 import SearchPage from '../../Common/SearchPage/SearchPage';
 import { startMainCourseLoader, stopMainCourseLoader } from 'store/Loader/actions/index';
 import Loader from '../../Common/Loader/loader';
+import queryString from 'query-string';
+import { getTrackingInfo, storageTrackingInfo, removeTrackingInfo } from 'utils/storage.js';
+import { trackUser } from 'store/Tracking/actions/index.js';
 
 const DetailPage = (props) => {
-    const { history } = props;
+    const { location: { search }, history } = props;
     const dispatch = useDispatch();
     const { mainCourseLoader } = useSelector(store => store.loader);
     const [reviewModal, showReviewModal] = useState(false)
     const prdId = props.match.params.id;
-    const { product_detail, skill, ggn_contact, product_id } = useSelector(store => store?.mainCourses);
+    const { product_detail, skill, ggn_contact, product_id, product_tracking_mapping_id } = useSelector(store => store?.mainCourses);
     const meta_tags = product_detail?.meta;
     const [enquiryForm, setEnquiryForm] = useState(false);
     const [varChecked, changeChecked] = useState({});
@@ -73,6 +76,22 @@ const DetailPage = (props) => {
             }
         }
 
+        const query = queryString.parse(search);
+        if (query["t_id"]) {
+          query["prod_id"] = prdId?.split('-')[1];
+          query["product_tracking_mapping_id"] = product_tracking_mapping_id;
+          storageTrackingInfo(query);
+          dispatch(
+            trackUser({
+              query: query,
+              action: "ln_course_page",
+            })
+          );
+        }
+        else {
+          let tracking_data = getTrackingInfo();
+          if (tracking_data["prod_id"] != prdId?.split('-')[1] && tracking_data["product_tracking_mapping_id"] === product_tracking_mapping_id) removeTrackingInfo();
+        }
     };
 
     const getProductPrice = (product) => {

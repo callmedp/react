@@ -73,7 +73,7 @@ const DetailPage = (props) => {
 
         const query = queryString.parse(search);
         if (query["t_id"]) {
-          query["prod_id"] = id;
+          query["prod_id"] = id.split('-')[1];
           query["product_tracking_mapping_id"] = product_tracking_mapping_id;
           storageTrackingInfo(query);
           dispatch(
@@ -85,7 +85,7 @@ const DetailPage = (props) => {
         }
         else {
           let tracking_data = getTrackingInfo();
-          if (tracking_data["prod_id"] != id && tracking_data["product_tracking_mapping_id"] === product_tracking_mapping_id) removeTrackingInfo();
+          if (tracking_data["prod_id"] != id.split('-')[1] && tracking_data["product_tracking_mapping_id"] === product_tracking_mapping_id) removeTrackingInfo();
         }
     };
 
