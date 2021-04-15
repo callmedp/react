@@ -22,7 +22,8 @@ const ReviewModal = (props) => {
             const review_values = {
                 ...values,
                 rating: inputStar ? inputStar : 5,
-                product_id: prdId?.split('-')[1]
+                product_id: prdId?.split('-')[1],
+                update: review ? true : false
             }
 
             try{

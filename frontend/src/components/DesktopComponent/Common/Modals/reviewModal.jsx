@@ -62,7 +62,8 @@ const ReviewModal =(props) => {
             const new_review = {
                 ...values,
                 rating: rating ? rating : 5,
-                product_id: prdId
+                product_id: prdId,
+                update: review ? true : false
             };
     
             try {

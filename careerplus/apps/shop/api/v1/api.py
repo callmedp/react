@@ -1194,14 +1194,14 @@ class ProductReviewAPI(APIView):
         return APIResponse(error=True, message='Product Id and candidate Id required', status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request, format=None):
-        product_pk = self.request.POST.get('product_id')
+        product_pk = self.request.POST.get('product_id') or self.request.data.get('product_id')
         candidate_id = request.session.get('candidate_id')
         # candidate_id = self.request.POST.get('candidate_id')
 
         if candidate_id and product_pk:
-            review = request.POST.get('review', '').strip()
-            rating = int(request.POST.get('rating', 1))
-            title = request.POST.get('title', '').strip()
+            review = request.POST.get('review', '').strip() or request.data.get('review', '').strip() 
+            rating = int(request.POST.get('rating', 1)) or int(request.data.get('rating', 1))
+            title = request.POST.get('title', '').strip() or request.data.get('title', '') 
 
             if not all(len(i) > 0 for i in [review, title]):
                 return APIResponse(error=True, message='Review and Title is required', status=status.HTTP_400_BAD_REQUEST)
