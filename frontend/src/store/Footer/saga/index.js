@@ -50,9 +50,6 @@ function* fetchPopularCourses(action) {
     }
 }
 
-
-
-
 export default function* WatchFooter(){
     yield takeLatest(Actions.FETCH_TRENDING_COURSES_AND_SKILLS, fetchTrendingCnA);
     yield takeLatest(Actions.FETCH_POPULAR_COURSES, fetchPopularCourses);

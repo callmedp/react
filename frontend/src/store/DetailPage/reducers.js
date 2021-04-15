@@ -42,6 +42,7 @@ const appendReviews = (state, { payload }) => {
                 ...payload.prd_reviews,
                 ...newReviews
             }
+
             return { ...reviews };
         }
         else {
@@ -49,7 +50,7 @@ const appendReviews = (state, { payload }) => {
         }
     }
     
-    else{
+    else {
         return {}
     }
 }
@@ -65,7 +66,6 @@ export const ProductReviewsReducer = (state = reviewsState, action) => {
 }
 
 const addToCartState = {
-    // prd_reviews: {}
 }
 
 export const AddToCartReducer = (state = addToCartState, action) => {
@@ -76,7 +76,6 @@ export const AddToCartReducer = (state = addToCartState, action) => {
 }
 
 const addToCartRedeemState = {
-    // prd_reviews: {}
 }
 
 export const AddToCartRedeemReducer = (state = addToCartRedeemState, action) => {

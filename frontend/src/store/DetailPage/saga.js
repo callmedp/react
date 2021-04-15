@@ -22,7 +22,7 @@ function* mainCoursesApi(action){
         if(response?.error) return reject(response);
         const item = response?.data?.data;
 
-        if(item?.redirect_url) {console.log('front>>>>>>>>>>>>>>>', response?.data); return reject(item)}
+        if(item?.redirect_url) return reject(item)
         else {
             yield put(mainCoursesFetched({ ...item }));
             return resolve(item);
@@ -75,15 +75,13 @@ function* productReviews(action){
         const item = response?.data?.data;
 
         if(!!payload && payload.device === 'desktop' && !!item && item.prd_reviews.prd_review_list instanceof Array) {
-            const reviewsList = item.prd_reviews.prd_review_list.reduce((rows, key, index) => 
+            const reviewsList = item?.prd_reviews?.prd_review_list.reduce((rows, key, index) => 
                 (index % 3 == 0 ? rows.push([key]) : rows[rows.length-1].push(key)) && rows, []);
-            if(reviewsList.length){
-                item.prd_reviews.prd_review_list = reviewsList.slice();
-            }
+            
+            if(reviewsList.length) item.prd_reviews.prd_review_list = reviewsList.slice();
         }
-        if(!!payload && payload.device){
-            yield put(ReviewsFetched({ ...item, device: payload.device }))
-        }
+
+        if(!!payload && payload.device) yield put(ReviewsFetched({ ...item, device: payload.device }));
         return resolve(item);
     }
     catch(e){
@@ -109,12 +107,11 @@ function* submitReviews(action){
 function* SendEnquireNow(action) {
     const { payload: { payload, resolve, reject }} = action;
 
-    try{
+    try {
         const response = yield call(Api.EnquireNewSend, payload)
 
-        if (response?.error) {
-            return reject(response)
-        }
+        if (response?.error) return reject(response);
+
         const item = response?.data?.data;
         return resolve(item);
     }
@@ -130,9 +127,7 @@ function* AddToCart(action) {
     try {
         const response = yield call(Api.addToCartApi, cartItems)
 
-        if (response?.error) {
-            return reject(response)
-        }
+        if (response?.error) return reject(response);
 
         const item = response?.data?.data;
         if(cartItems.cart_type === 'cart') return window.location.href = `${siteDomain}${item.cart_url}`;
@@ -150,10 +145,7 @@ function* AddToCartRedeem(action) {
     try {
         const response = yield call(Api.addToCartRedeemApi, cartItems)
 
-        if (response?.error) {
-            return reject(response)
-        }
-        console.log(response);
+        if (response?.error) return reject(response);
 
         const item = response?.data?.data;
         if(item.status === 1) return window.location.href = `${siteDomain}${item.redirectUrl}`;
@@ -166,7 +158,6 @@ function* AddToCartRedeem(action) {
 }
 
 export default function* WatchDetailPage() {
-    // yield takeLatest(fetchOtherProviderCourses.type, otherProvidersCourses);
     yield takeLatest(fetchMainCourses.type, mainCoursesApi);
     yield takeLatest(fetchRecommendedCourses.type, recommendedCourses);
     yield takeLatest(fetchProductReviews.type, productReviews);

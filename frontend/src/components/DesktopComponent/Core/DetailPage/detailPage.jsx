@@ -84,32 +84,38 @@ const DetailPage = (props) => {
                         frqntProd={frqntProd} product_id={product_id}
                         />
             }
+
             <BannerCourseDetail frqntProd={frqntProd} addFrqntProd={addFrqntProd} product_detail={product_detail} varChecked={varChecked} changeChecked={changeChecked} prdId={id} product_id={product_id} providerCount={product_detail?.pop_list?.length}/>
-            {product_detail?.prd_uget && <KeyFeatures prd_uget={product_detail?.prd_uget} pTF={product_detail?.pTF} prd_vendor_slug={product_detail?.prd_vendor_slug} />}
+            
             {
-                 (product_detail?.chapter && product_detail?.prd_service !== 'assessment') && 
-                 <div className="container-fluid">
-                     <div className="row">
-                         <div className="col-sm-12">
-                             <CourseOutline chapter_list={product_detail?.chapter_list}/>
-                         </div>
-                     </div>
-                 </div>
+                product_detail?.prd_uget && <KeyFeatures prd_uget={product_detail?.prd_uget} pTF={product_detail?.pTF} prd_vendor_slug={product_detail?.prd_vendor_slug} />
+            }
+
+            {
+                (product_detail?.chapter && product_detail?.prd_service !== 'assessment') && 
+                <div className="container-fluid">
+                    <div className="row">
+                        <div className="col-sm-12">
+                            <CourseOutline chapter_list={product_detail?.chapter_list}/>
+                        </div>
+                    </div>
+                </div>
             }
 
             {/* commented due to lack of data */}
             {/* <div className="container-fluid mt-50 mb-50">
-                <div className="row">
-                    <div className="col-sm-9">
-                        <CourseOutcome />
-                    </div>
-                    <div className="col-sm-3">
-                        <SampleCertificate />
-                    </div>
+            <div className="row">
+                <div className="col-sm-9">
+                    <CourseOutcome />
                 </div>
+                <div className="col-sm-3">
+                    <SampleCertificate />
+                </div>
+            </div>
             </div> */}
 
             { product_detail?.dlvry_flow && <HowItWorks dlvry_flow={product_detail?.dlvry_flow} /> }
+
             { (product_detail?.chapter && product_detail?.prd_service === 'assessment') && <TopicsCovered  chapter_list={product_detail?.chapter_list}/> }
 
             {
@@ -133,11 +139,17 @@ const DetailPage = (props) => {
             }
 
             { skill && skill.length > 0 && <SkillGain skill={skill}/> }
+
             { product_detail?.pop && <OtherProviders pop_list={product_detail?.pop_list} /> }
+            
             { product_detail?.faq && <FAQ faq_list={product_detail?.faq_list}/> }
+
             <Reviews id={id?.split('-')[1]} product_detail={product_detail} pUrl={props?.match?.url}/>
+
             <EnquireNow {...props} />
+            
             { skill && <CoursesMayLike product_id={id?.split('-')[1]} skill={skill}/> }
+            
             <Footer />
         </div>
     )

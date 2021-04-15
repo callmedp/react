@@ -1,7 +1,7 @@
 import React from 'react';
 import './banner.scss';
 import Carousel from 'react-bootstrap/Carousel';
-import Breadcrumb from 'react-bootstrap/Breadcrumb';
+// import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import SearchBar from '../../../Common/Header/SeachBar/SearchBar.jsx';
 import { imageUrl } from 'utils/domains';
 

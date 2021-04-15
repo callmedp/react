@@ -25,6 +25,7 @@ const BannerCourseDetail = (props) => {
     const dispatch = useDispatch();
     const { mainCourseCartLoader } = useSelector(store => store.loader);
     const tracking_data = getTrackingInfo();
+    console.log(tracking_data)
     const [readAll, setReadAll] = useState(false)
 
     const completeDescription = (product_detail?.prd_about ? (product_detail?.prd_about + ' <br /> ') : '') + (product_detail?.prd_desc ? product_detail?.prd_desc : '')
