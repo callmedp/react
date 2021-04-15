@@ -5,7 +5,7 @@ const AboutSection = (props) => {
     const { completeDescription } = props;
 
     return (
-        <section id="aboutsection" className="container-fluid mt-0 mb-0">
+        <section id="aboutsection" className="container-fluid mt-0 mb-0" data-aos="fade-up">
             <div className="row">
                 <div className="container">
                     <div className="about-section">

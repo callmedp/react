@@ -61,7 +61,7 @@ const Reviews = (props) => {
                     <h2 className="heading2 m-auto pb-20">Reviews</h2>
                 </div>
 
-                <Carousel className="reviews" fade={true} activeIndex={carIndex} onSelect={handleSelect} >
+                <Carousel className="reviews" activeIndex={carIndex} onSelect={handleSelect} >
                     {
                         (prd_review_list && prd_review_list?.length > 0) &&
                             prd_review_list?.map((reviewData, idx) => {

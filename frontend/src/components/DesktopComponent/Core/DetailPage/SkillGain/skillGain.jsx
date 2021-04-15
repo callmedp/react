@@ -25,7 +25,7 @@ const SkillGain = (props) => {
                                 {' '}
                             </div>
                             <div className="d-flex mt-50">
-                                <LinkScroll to={"enquire-now"} className="btn btn-outline-primary btn-custom" offset={-220}>Enquire now</LinkScroll>
+                                <LinkScroll to={"enquire-now"} className="btn btn-outline-primary btn-custom" offset={-160}>Enquire now</LinkScroll>
                             </div>
                         </div>
                         <figure className="skill-gain__img mt-40">

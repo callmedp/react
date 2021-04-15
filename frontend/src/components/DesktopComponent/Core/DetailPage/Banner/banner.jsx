@@ -167,7 +167,7 @@ const BannerCourseDetail = (props) => {
                                             {
                                                 <>
                                                 {product_detail?.prd_num_rating ? <span className="review-jobs cursorLink">
-                                                <LinkScroll to={"reviews"}>
+                                                <LinkScroll to={"reviews"} offset={-160} smooth={true}>
                                                     <figure className="icon-reviews-link"></figure> <strong> {product_detail?.prd_num_rating}</strong> Reviews
                                                 </LinkScroll>
                                                 </span> : ""}
@@ -190,7 +190,7 @@ const BannerCourseDetail = (props) => {
                                     {
                                         product_detail?.pop ?
                                         <li>
-                                            <LinkScroll className="d-block cursorLink" to={"popListTemplate"} offset={-150}>+{providerCount} more</LinkScroll> Course providers  
+                                            <LinkScroll className="d-block cursorLink" to={"popListTemplate"} offset={-150} smooth={true}>+{providerCount} more</LinkScroll> Course providers  
                                         </li>
                                         : ""
                                     }
@@ -273,7 +273,7 @@ const BannerCourseDetail = (props) => {
                                                         completeDescription?.length > reqLength ? 
                                                         (
                                                             // <input type="checkbox" onClick={() => setReadAll(!readAll) } className="read-more-state" id="post-10" checked={readAll} itemProp="about" />
-                                                            <LinkScroll to = {'aboutsection'} > Read More</LinkScroll> 
+                                                            <LinkScroll to = {'aboutsection'} offset={-160} smooth={true}> Read More</LinkScroll> 
                                                         ) : (
                                                             ""
                                                             )
@@ -332,7 +332,7 @@ const BannerCourseDetail = (props) => {
                                                 </strong>
                                                 <p className="d-flex mb-0">
                                                     <a onClick={() => goToCart(varChecked)} className="btn btn-secondary mt-10 mr-10">{ product_detail?.prd_service === 'assessment' ? 'Buy Now' : product_detail?.redeem_test ? 'Redeem Now' : 'Enroll now' }</a>
-                                                    <LinkScroll to={"enquire-now"} className="btn btn-outline-primary mt-10" offset={-220}>Enquire now</LinkScroll>
+                                                    <LinkScroll to={"enquire-now"} className="btn btn-outline-primary mt-10" offset={-160} smooth={true}>Enquire now</LinkScroll>
                                                 </p>
                                                 
                                             </div>

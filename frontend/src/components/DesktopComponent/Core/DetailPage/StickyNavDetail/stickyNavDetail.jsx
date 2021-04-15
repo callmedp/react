@@ -89,7 +89,7 @@ const StickyNav = (props) => {
                             <h2>{product_detail?.prd_H1}</h2>
                         </span>
                         <Nav>
-                            <LinkScroll offset={-160} isDynamic={true} spy={true} to="keyfeatures" id='1'>
+                            <LinkScroll offset={-160} isDynamic={true} spy={true} to="keyfeatures" id='1' smooth={true}>
                                 <Nav.Link>
                                     Key Features
                                 </Nav.Link>
@@ -97,7 +97,7 @@ const StickyNav = (props) => {
                             
                             {
                                 outline && 
-                                    <LinkScroll to="courseoutline" offset={-140} isDynamic={true} spy={true} id='2'>
+                                    <LinkScroll to="courseoutline" offset={-140} isDynamic={true} spy={true} id='2' smooth={true}>
                                         <Nav.Link>
                                             Outline
                                         </Nav.Link>
@@ -106,7 +106,7 @@ const StickyNav = (props) => {
                             
                             {/* <LinkScroll offset={-120} to={"outcome"} className={ tab === '3' ? "active" : '' } id='3' onClick={handleTab}>Outcome</LinkScroll> */}
                             
-                            <LinkScroll offset={-130} to="howitworks" isDynamic={true} spy={true} id='4'>
+                            <LinkScroll offset={-130} to="howitworks" isDynamic={true} spy={true} id='4' smooth={true}>
                                 <Nav.Link>
                                     How it works
                                 </Nav.Link>
@@ -114,7 +114,7 @@ const StickyNav = (props) => {
 
                             {
                                 topics && 
-                                    <LinkScroll to="topicsCovered" offset={-170} isDynamic={true} spy={true} id='2'>
+                                    <LinkScroll to="topicsCovered" offset={-170} isDynamic={true} spy={true} id='2' smooth={true}>
                                         <Nav.Link>
                                             Topics Covered
                                         </Nav.Link>
@@ -122,14 +122,14 @@ const StickyNav = (props) => {
                             }
 
                             {
-                                faq && <LinkScroll to="faqs" offset={-180} isDynamic={true} spy={true} id='5'>
+                                faq && <LinkScroll to="faqs" offset={-200} isDynamic={true} spy={true} id='5' smooth={true}>
                                     <Nav.Link>
                                         FAQs
                                     </Nav.Link>
                                 </LinkScroll>
                             }
 
-                            <LinkScroll to="reviews" offset={-200} isDynamic={true} spy={true} id='6'>
+                            <LinkScroll to="reviews" offset={-160} isDynamic={true} spy={true} id='6' smooth={true}>
                                 <Nav.Link>
                                     Reviews
                                 </Nav.Link>
@@ -150,7 +150,7 @@ const StickyNav = (props) => {
                             : ""
                         }
                         <span className="d-flex">
-                            <LinkScroll offset={-220} to={"enquire-now"} className="btn btn-outline-primary">Enquire now</LinkScroll>
+                            <LinkScroll offset={-160} to={"enquire-now"} className="btn btn-outline-primary" smooth={true}>Enquire now</LinkScroll>
                             <a onClick={() => goToCart(varChecked)} className="btn btn-secondary ml-10">{ product_detail?.prd_service === 'assessment' ? 'Buy Now' : product_detail?.redeem_test ? 'Redeem Now' : 'Enroll now' }</a>
                         </span>
                     </Form>

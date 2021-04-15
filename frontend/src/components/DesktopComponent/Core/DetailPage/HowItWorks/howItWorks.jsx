@@ -27,7 +27,7 @@ const HowItWorks = (props) => {
                             }
                         </ul>
                         <div className="d-flex justify-content-center mt-50">
-                            <LinkScroll to={"enquire-now"} className="btn btn-outline-primary btn-custom" offset={-220}>Enquire now</LinkScroll>
+                            <LinkScroll to={"enquire-now"} className="btn btn-outline-primary btn-custom" offset={-160}>Enquire now</LinkScroll>
                         </div>
                     </div>
                 </div>
