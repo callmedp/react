@@ -11,7 +11,7 @@ const TakeFreeTest = (props) => {
 
     const testRedirection = () => {
         trackUser({"query" : tracking_data, "action" :'take_free_test'});
-        window.location.replace(`${siteDomain}/practice-tests/${should_take_test_url}/sub`);
+        window.location.replace(`${siteDomain}${should_take_test_url}`);
     }
 
     return (
