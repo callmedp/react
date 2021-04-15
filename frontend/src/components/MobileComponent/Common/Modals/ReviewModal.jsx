@@ -60,7 +60,7 @@ const ReviewModal = (props) => {
     }
 
     return(
-        <div className="m-container m-enquire-now m-review-modal m-form-pos-center" data-aos="zoom-in">
+        <div className="m-container m-enquire-now m-review-modal m-form-pos-btm" data-aos="fade-up">
             <div className="m-modal-body">
                 {/* <Link to={"#"} className="m-close" onClick={() => showReviewModal(false)}>x</Link> */}
                 <span className="m-close" onClick={() => showReviewModal(false)}>x</span>

@@ -13,7 +13,7 @@ const SkillGain = (props) => {
                 <div className="container">
                     <div className="d-flex">
                         <div className="skill-gain">
-                            <h2 className="heading2 mt-40">Skills you will gain</h2>
+                            <h3 className="heading2 mt-40">Skills you will gain</h3>
                             <div className="skill-gain__list">
                                 {
                                     skill?.map((skl, indx) => {

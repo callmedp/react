@@ -20,7 +20,7 @@ const FAQ = (props) => {
         <section id="faqs" className="container-fluid lightblue-bg mt-40" data-aos="fade-up">
             <div className="row">
                 <div className="container">
-                    <h2 className="heading2 mt-40">Frequently Asked Questions</h2>
+                    <h3 className="heading2 mt-40">Frequently Asked Questions</h3>
                     <div className="faq d-flex">
                         <div className="faq__list">
                             <Accordion defaultActiveKey="0" >

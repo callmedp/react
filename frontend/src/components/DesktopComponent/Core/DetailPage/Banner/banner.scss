@@ -240,9 +240,26 @@ header {
                 color: #ddd;
                 // overflow-x: auto;
                 // max-height: 8rem;
-                a {
-                    font-weight: 700;
-                    color: #ddd;
+                > .about-course {
+    
+                    a {
+                       margin-bottom: .7rem;
+                       display: inline-block; 
+                       cursor: pointer;
+                       font-weight: 600;
+                       
+                        &.collapsed {
+                            &::after {
+                                content: 'Read more';
+                            }
+                        }
+                
+                        &:not(.collapsed) {
+                            &::after {
+                                content: '';
+                            }
+                        }
+                    }
                 }
             }
         }
