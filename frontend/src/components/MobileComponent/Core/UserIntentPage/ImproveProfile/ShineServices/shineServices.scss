@@ -1,0 +1,48 @@
+@import '../../../../../../styles-mobile/abstracts';
+
+.m-shine-services {
+    background: $white;
+    padding: 1.5rem;
+    @extend %box-shadow1;
+    display: flex;
+    align-items: center;
+    margin: 2rem 0;
+
+    figure {
+        margin-right: 1rem;
+    }
+
+    p {
+        margin: 0;
+        flex: 1;
+    }
+
+    a {
+        font-size: 1.3rem;
+        font-weight: 700;
+        display: block;
+    }
+
+    .CircularProgressbar {
+        width: 8rem;
+        margin-right: 1rem;
+
+        .CircularProgressbar-text {
+            font-size: 3.5rem;
+            font-weight: 700;
+            fill: $gray-100;
+        }
+
+        .CircularProgressbar-path {
+            stroke: #CBA5FF;
+        }
+    }
+    
+    .file-close {
+        word-break: break-word;
+        font-size: 1.4rem;
+        display: flex;
+        align-items: center;
+        margin-left: auto;
+    }
+}

@@ -20,6 +20,7 @@ import { startDashboardServicesPageLoader, stopDashboardServicesPageLoader } fro
 import { showSwal } from 'utils/swal'
 import ViewDetails from './oiViewDetails'
 import Filter from '../Filter/filter';
+import { MyGA } from 'utils/ga.tracking.js';
 
 // API Import
 import { fetchMyServices, fetchPendingResume, updateResumeShine } from 'store/DashboardPage/MyServices/actions/index';
@@ -29,12 +30,13 @@ const MyServices = (props) => {
 
     const dispatch = useDispatch();
     const { serviceLoader } = useSelector(store => store.loader);
+    const [filterState, setfilterState] = useState({ 'last_month_from': 'all', 'select_type' : 'all' });
 
     //My Services Api hit
     const handleEffects = async () => {
         try{
                 dispatch(startDashboardServicesPageLoader());
-                await new Promise((resolve, reject) => dispatch(fetchMyServices({page: currentPage, resolve, reject })));
+                await new Promise((resolve, reject) => dispatch(fetchMyServices({page: currentPage, ...filterState, resolve, reject })));
                 dispatch(stopDashboardServicesPageLoader());
         }
         catch(e){
@@ -131,7 +133,7 @@ const MyServices = (props) => {
 
         handleEffects();
         // dispatch(fetchPendingResume())
-    }, [currentPage])
+    }, [currentPage, filterState])
 
     return (
         <>
@@ -142,7 +144,7 @@ const MyServices = (props) => {
         <div>
 
             {/* My Services Block Start */}
-            {/* <Filter /> */}
+            <Filter filterState={filterState} setfilterState={setfilterState} />
             <main className="mb-0">
                 <div className="m-courses-detail db-warp">
                     {
@@ -241,14 +243,15 @@ const MyServices = (props) => {
                                         <div className="my-order__order-detail">
                                             <a onClick={(e) => {
                                                     e.preventDefault();
-                                                    showDetails(service?.id)
+                                                    showDetails(service?.id);
+                                                    MyGA.SendEvent('DashboardLeftMenu', 'ln_dashboard_left_menu', 'ln_my_inbox', 'view_details','' ,false, true);
                                                 }} 
                                                 className={(showOrderDetailsID === service?.id) 
                                                     ? "font-weight-bold open arrow-icon" : "font-weight-bold arrow-icon"
                                                 }> View Details
                                             </a>
                                             {
-                                                (showOrderDetailsID === service?.id) && <ViewDetails id={service?.id} />
+                                                (showOrderDetailsID === service?.id) && <ViewDetails id={service?.id} status={ service?.updated_status?.status } enrollDate = {service?.enroll_date}/>
                                             }
                                         </div>
                                     </div>
@@ -366,8 +369,8 @@ const MyServices = (props) => {
             { showUpload && <UploadResume setShowUpload={setShowUpload} /> }
 
             {/* Accept Reject Modal */}
-            { acceptModal && <AcceptModal setAcceptModal={setAcceptModal} oi_id={acceptModalId} currentPage={currentPage}/> }
-            { rejectModal && <RejectModal setRejectModal={setRejectModal} oi_id={rejectModalId} currentPage={currentPage}/> }
+            { acceptModal && <AcceptModal setAcceptModal={setAcceptModal} oi_id={acceptModalId} filterState={filterState} currentPage={currentPage}/> }
+            { rejectModal && <RejectModal setRejectModal={setRejectModal} oi_id={rejectModalId} filterState={filterState} currentPage={currentPage}/> }
 
             {/* Pagination */}
             { page?.total > 1 && <Pagination totalPage={page?.total} currentPage={currentPage} setCurrentPage={setCurrentPage} /> }

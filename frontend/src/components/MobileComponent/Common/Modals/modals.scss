@@ -38,3 +38,68 @@ input:-webkit-autofill:active  {
         transform: scale(2);
     }
 }
+.m-upload-modal {
+    background: $white;
+    .small {
+        font-size: 1.1rem;
+        margin: 0 10%;
+        display: block;
+        text-align: center;
+    }
+
+    .upload-btn-wrapper {
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        cursor: pointer;
+        align-items: center;
+        justify-content: center;
+
+        &:hover, &:focus {
+            + input {
+                background-color: $blue;
+                color: $white;
+            }
+        }
+
+        input[type=file] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
+            width: 13.6rem;
+            height: 3.6rem;
+
+            &:hover {
+                ~ .btn-upload {
+                    background-color: $blue;
+                    color: $white;
+                }
+            }
+        }
+    }
+
+    .btn-upload {
+        border: 1px solid $blue;
+        color: $blue;
+        background-color: $white;
+        padding: .8rem 2rem;
+        border-radius: 2rem;
+        font-size: 1.2rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        cursor: pointer;
+
+        &:hover, &:focus {
+            background-color: $blue;
+            color: $white;
+        }
+    }
+
+    .btn-blue {
+        display: inline-block;
+        width: auto !important;
+        margin: 0 auto;
+    }
+} 

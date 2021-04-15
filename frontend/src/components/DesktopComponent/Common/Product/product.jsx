@@ -41,7 +41,7 @@ const Product = (props) => {
     }, [rating])
 
     const handleTracking = () => {
-        gaTrack('SkillAllCourses', 'ln_course_click', 'ln_all_' + name, 'ln_' + name,'', false, true);
+        MyGA.SendEvent('SkillAllCourses', 'ln_course_click', 'ln_all_' + name, 'ln_' + name,'', false, true);
         userTrack({'query' :tracking_data, 'action' :'exit_skill_page'});
     }
 

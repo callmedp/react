@@ -1,3 +1,5 @@
+import {getCandidateId} from './storage.js'
+
 window.dataLayer = window.dataLayer || [];
 function gtag(){window.dataLayer.push(arguments);}
 gtag('js', new Date());
@@ -22,9 +24,13 @@ function GA(){
         name = options.name || '',
         custom_event = options.custom_event || false;
         window.dataLayer = window.dataLayer || [];
+        let candidate_id = getCandidateId()
+        candidate_id = candidate_id?candidate_id:''
+        let user_type = candidate_id? 'loggedin' : "guest";
+
 
         try{
-            if(custom_event==false){
+            if(custom_event===false){
                 gtag('event', name, {
                     'send_to': ['UA-3537905-41'],
                     'event_category': category,
@@ -37,7 +43,9 @@ function GA(){
                 'event': 'LearningEvents',
                 'event_category': category,
                 'event_label': label,
-                'event_action':action
+                'event_action':action,
+                'userID': candidate_id,
+                'user_type': user_type
                 });
         }
         }catch(e)
@@ -143,7 +151,8 @@ GA.prototype.SendEvent = function() {
         case 'recently _added_blogs': /*recently added in blogs*/
         case 'ln_popular_courses': /*popular courses*/
         case 'click_on_search': /*search in navbar*/
-    
+        case 'ln_career_guidance':/*career guidance */
+        case 'ln_new_homepage':/*new homepage*/
         
         /* Skill Page Events */
         case 'SkillNeedHelpForm': /* When the user fills the form of need help */

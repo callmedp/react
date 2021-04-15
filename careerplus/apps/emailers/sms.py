@@ -91,9 +91,11 @@ class SendSMS(object):
             self.process(send_dict, data)
 
         elif sms_type == "SERVICE_INITIATION":
-            template_name = data.get('template_name', 'service_initiation.html')
-            send_dict['template'] = 'sms/' + template_name
-            self.process(send_dict, data)
+            pass
+            # template_name = data.get('template_name', 'service_initiation.html')
+            # send_dict['template'] = 'sms/' + template_name
+            # self.process(send_dict, data)
+            # Uncomment to enable to initial message send
 
         elif sms_type == "WELCOME_CALL_BACK":
             template_name = data.get('template_name','welcome_call_back.html')

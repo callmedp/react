@@ -5,7 +5,7 @@ import Loader from '../../../Common/Loader/loader';
 import { startOiDetailsLoader, stopOiDetailsLoader } from 'store/Loader/actions/index';
 
 const ViewDetails = (props) => {
-    const { id } = props
+    const { id, status, enrollDate } = props
     const dispatch = useDispatch()
     const { oiDetailsLoader } = useSelector(store => store.loader);
     const oiDetailsData = useSelector(store => store.oiDetails?.data);
@@ -32,14 +32,22 @@ const ViewDetails = (props) => {
             }
             <ul className="my-order__order-detail--info mt-15">
                 {
-                    oiDetailsData?.map((data, index) =>
-                        <li key={index}>
+                    oiDetailsData?.length > 0 ?
+                        oiDetailsData?.map((data, index) =>
+                            <li key={index}>
+                                <span> 
+                                    {/* <hr /> */}
+                                    {data?.date} <br />
+                                    <strong> {data?.status} </strong>
+                                </span>
+                            </li>)
+                        :
+                        <li>
                             <span> 
-                                {/* <hr /> */}
-                                {data?.date} <br />
-                                <strong> {data?.status} </strong>
+                                {enrollDate} <br />
+                                <strong> {status} </strong>
                             </span>
-                        </li>)
+                        </li>
                 }
             </ul>
         </>

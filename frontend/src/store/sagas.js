@@ -16,6 +16,7 @@ import WatchDashboardMyCourses from './DashboardPage/MyCourses/saga/index';
 import WatchDashboardMyServices from './DashboardPage/MyServices/saga/index';
 import WatchHomePage from './HomePage/saga';
 import WatchDashboardStartCourse from './DashboardPage/StartCourse/saga/index';
+import WatchUserIntentPage from './UserIntentPage/saga';
 import WatchFetchUserInfo from './Authentication/saga/index';
 import WatchDetailPage from './DetailPage/saga';
 
@@ -38,6 +39,7 @@ export default function* () {
         WatchDashboardMyServices(),
         WatchDashboardStartCourse(),
         WatchHomePage(),
+        WatchUserIntentPage(),
         WatchFetchUserInfo(),
         WatchDetailPage()
     ])

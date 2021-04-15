@@ -12,7 +12,7 @@ import Pagination from '../../../Common/Pagination/pagination';
 import { getDataStorage } from 'utils/storage';
 import EmptyInbox from '../InboxModals/emptyInbox';
 import { showSwal } from 'utils/swal';
-
+import { MyGA } from 'utils/ga.tracking.js';
    
 const MyWallet = (props) => {
     const dispatch = useDispatch();
@@ -121,7 +121,7 @@ const MyWallet = (props) => {
                                             <span className="my-order__priceWrap--tAmount d-block">Total amount</span>
                                             <strong className="my-order__priceWrap--price">{ order?.order?.currency === 'Rs.' ? <span>&#8377;</span> : order?.order?.currency } {order?.order?.total_incl_tax}/- </strong>
                                         </div>
-                                        { order?.order?.canCancel && <a href='/' onClick={(e) => {e.preventDefault();setShowCancelModal(true);setCancelOrderId(order?.order?.id)}}>Cancel order</a> }
+                                        { order?.order?.canCancel && <a href='/' onClick={(e) => {e.preventDefault();setShowCancelModal(true);setCancelOrderId(order?.order?.id); MyGA.SendEvent('DashboardMyOrders','ln_dashboard_left_menu', 'ln_my_orders', 'cancel_order','', false, true);}}>Cancel order</a> }
                                         { order?.order?.downloadInvoice && <a href={downloadInvoice(order?.order?.id)} target="_blank">Download Invoice</a> }
                                         
                                     </div>

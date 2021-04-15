@@ -8,7 +8,7 @@ import { fetchMyServices } from 'store/DashboardPage/MyServices/actions';
 import { showSwal } from 'utils/swal';
 
 const AcceptModal = (props) => {
-    const { setAcceptModal, oi_id, currentPage } = props
+    const { setAcceptModal, oi_id, currentPage, filterState } = props
 
     const dispatch = useDispatch()
     const { acceptRejectLoader } = useSelector(store => store.loader);
@@ -22,7 +22,7 @@ const AcceptModal = (props) => {
           try {
                 dispatch(startAcceptRejectLoader());
                 new Promise((resolve, reject) => { dispatch(CandidateAcceptRejectResume({ payload: acceptValues, resolve, reject })); });
-                await new Promise((resolve, reject) => dispatch(fetchMyServices({page: currentPage, resolve, reject })));
+                await new Promise((resolve, reject) => dispatch(fetchMyServices({page: currentPage, ...filterState, resolve, reject })));
                 dispatch(stopAcceptRejectLoader());
 
                 setAcceptModal(false)

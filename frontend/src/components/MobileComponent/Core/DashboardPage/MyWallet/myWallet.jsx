@@ -9,7 +9,8 @@ import Pagination from '../../../Common/Pagination/pagination';
 import FAQ from '../../../Common/FAQ/faq';
 import { faqList } from 'utils/dashboardUtils/faqListUtils';
 import EmptyInbox from '../InboxModals/emptyInbox';
-import { siteDomain } from 'utils/domains'
+import { siteDomain } from 'utils/domains';
+import { MyGA } from 'utils/ga.tracking.js';
 
    
 const MyWallet = (props) => {
@@ -56,7 +57,9 @@ const MyWallet = (props) => {
                             </div>
 
                             {/* <button className="btn-blue-outline btn-xs" onClick={() => setShowModal(true)}>Redeem now</button> */}
-                            <a href={`${siteDomain}/cart/payment-summary/`} className="btn-blue-outline btn-xs" >Redeem now</a>
+                            {
+                                wal_total > 0 && <a href={`${siteDomain}/cart/payment-summary/`} className="btn-blue-outline btn-xs" onClick={ () => MyGA.SendEvent('DashboardMyWallet','ln_dashboard_left_menu', 'ln_my_wallet', 'redeem_points','', false, true)}>Redeem now</a>
+                            }
                         </div>
                     </div>
 

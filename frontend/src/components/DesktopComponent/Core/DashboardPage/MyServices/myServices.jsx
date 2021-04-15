@@ -22,15 +22,16 @@ import { pausePlayResume } from 'store/DashboardPage/MyServices/actions/index';
 import {siteDomain, resumeShineSiteDomain} from '../../../../../utils/domains';
 import {Toast} from '../../../Common/Toast/toast';
 import { showSwal } from '../../../../../utils/swal';
+import { MyGA } from 'utils/ga.tracking.js';
 
 const MyServices = (props) => {
     const dispatch = useDispatch();
-    const { history } = props;
+    const { history, filterState, setfilterState } = props
     const { serviceLoader } = useSelector(store => store.loader);
     
     // page no. set here
     const [currentPage, setCurrentPage] = useState(1);
-    const [filterState, setfilterState] = useState({ 'last_month_from': 'all', 'select_type' : 'all' });
+    // const [filterState, setfilterState] = useState({ 'last_month_from': 'all', 'select_type' : 'all' });
     
     // main api result state here
     const results = useSelector(store => store.dashboardServices);
@@ -82,7 +83,7 @@ const MyServices = (props) => {
     const handleEffects = async () => {
         try{
                 dispatch(startDashboardServicesPageLoader());
-                await new Promise((resolve, reject) => dispatch(fetchMyServices({ page: currentPage, isDesk: true, ...filterState, resolve, reject })))
+                await new Promise((resolve, reject) => dispatch(fetchMyServices({ page: currentPage, ...filterState, resolve, reject })))
                 dispatch(stopDashboardServicesPageLoader());
         }
         catch(e){
@@ -156,7 +157,7 @@ const MyServices = (props) => {
 
     return(
         <React.Fragment>
-        <BreadCrumbs filterState={filterState} setfilterState={setfilterState} filterStateShow={true}/>
+        {/* <BreadCrumbs filterState={filterState} setfilterState={setfilterState} filterStateShow={true}/> */}
         <div>
             {serviceLoader ? <Loader /> : ''}
             
@@ -167,7 +168,7 @@ const MyServices = (props) => {
                     : null
                 } */}
 
-                {  results.page.total === 0 ? <EmptyInbox inboxButton="Go To Home" redirectUrl={resumeShineSiteDomain} inboxText="There is no service added to your profile!"/> : '' }
+                {  results.page.total === 0 ? <EmptyInbox inboxButton="Go To Home" redirectUrl={resumeShineSiteDomain} inboxText="There is no service added to your profile!" /> : '' }
 
                 {results?.data && results?.data?.length > 0 ?
                     results?.data?.map((service,index) => {
@@ -244,7 +245,7 @@ const MyServices = (props) => {
                                                     <Link 
                                                         to={'#'}
                                                         className="font-weight-bold"
-                                                        onClick={() => toggleDetails(service.id)}
+                                                        onClick={() => {toggleDetails(service.id); MyGA.SendEvent('DashboardLeftMenu', 'ln_dashboard_left_menu', 'ln_my_inbox', 'view_details','' ,false, true);}}
                                                         aria-controls="addComments"
                                                         aria-expanded={`openViewDetail`+service.id}
                                                     >
@@ -253,7 +254,7 @@ const MyServices = (props) => {
 
                                                     {/* course detail modal open */}
                                                     {
-                                                        (isOpen === service?.id) && <ViewDetailModal id={service.id} toggleDetails={toggleDetails} isOpen={isOpen}/>
+                                                        (isOpen === service?.id) && <ViewDetailModal id={service.id} toggleDetails={toggleDetails} isOpen={isOpen} status = {service?.updated_status?.status} enrollDate = {service?.enroll_date}/>
                                                     }
                                                 </div>
                                             </div>

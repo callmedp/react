@@ -11,7 +11,6 @@ import { ReviewsReducer } from './DashboardPage/AddSubmitReview/reducer/index';
 import { RecommendationReducer } from './RecommendedCourses/reducer/index';
 import { RecentlyAddedCoursesReducer, PopularServicesReducer, TrendingCategoriesReducer, AllCategoriesReducer } from './CataloguePage/reducer/index';
 import {FetchUserInfoReducer} from './Authentication/reducer/index'
-// import { RecentlyServicesReducer } from './DashboardPage/Service/reducer/index';
 import { DashboardMyWalletReducer } from './DashboardPage/MyWallet/reducer/index'; 
 import { DashboardMyOrdersReducer } from './DashboardPage/MyOrder/reducer/index'; 
 import { DashboardMyCoursesReducer } from './DashboardPage/MyCourses/reducer/index';
@@ -20,6 +19,7 @@ import { InDemandProductsReducer, JobAssistanceAndBlogsReducer, MostViewedCourse
 import { DashboardMyServicesResumeReducer, OiDetailsReducer } from './DashboardPage/MyServices/reducer/index';
 import { VendorUrlReducer } from './DashboardPage/StartCourse/reducer/index';
 import { mainCoursesReducer, ProductReviewsReducer, RecommendedCoursesReducer, AddToCartReducer, AddToCartRedeemReducer } from './DetailPage/reducers';
+import { findRightJobsReducer, upskillYourselfReducer,  serviceRecommendationReducer, ResumeScoreReducer } from './UserIntentPage/reducers';
 
 const rootReducer = combineReducers({
     needHelp : NeedHelpReducer,
@@ -54,8 +54,11 @@ const rootReducer = combineReducers({
     reviews: ProductReviewsReducer,
     recommendedCourses: RecommendedCoursesReducer,
     addToCartCourses: AddToCartReducer,
-    addToCartRedeemCourses: AddToCartRedeemReducer
-
+    addToCartRedeemCourses: AddToCartRedeemReducer,
+    resumeScore: ResumeScoreReducer,
+    findRightJob: findRightJobsReducer,
+    upskillYourself: upskillYourselfReducer,
+    serviceRecommend: serviceRecommendationReducer
 });
 
 
