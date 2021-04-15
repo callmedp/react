@@ -43,7 +43,7 @@ const Reviews = (props) => {
     }
 
     return (
-        <section className="m-container mt-0 mb-0 pb-0" id="review" data-aos="fade-up">
+        <section className="m-container mt-0 mb-0 pb-0" id="reviews" data-aos="fade-up">
             <div className="d-flex" itemProp="review" itemScope itemType="https://schema.org/Review">
                 <h2 className="m-heading2 mb-10">Review</h2>
                 {
