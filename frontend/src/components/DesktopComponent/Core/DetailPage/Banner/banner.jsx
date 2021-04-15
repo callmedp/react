@@ -17,17 +17,16 @@ import { trackUser } from 'store/Tracking/actions/index.js';
 import { Toast } from '../../../Common/Toast/toast';
 
 const BannerCourseDetail = (props) => {
-    const {product_detail, varChecked, changeChecked, frqntProd, addFrqntProd, prdId, product_id, providerCount} = props;
-    const reqLength = 365;
+    const {product_detail, varChecked, changeChecked, frqntProd, addFrqntProd, prdId, product_id, providerCount, completeDescription, reqLength} = props;
     // const inputCheckbox = useRef(null);
     // const regex = /<(.|\n)*?>/g;
     const [discountPrice, discountPriceSelected] = useState(0);
     const dispatch = useDispatch();
     const { mainCourseCartLoader } = useSelector(store => store.loader);
     const tracking_data = getTrackingInfo();
-    const [readAll, setReadAll] = useState(false)
+    // const [readAll, setReadAll] = useState(false)
 
-    const completeDescription = (product_detail?.prd_about ? (product_detail?.prd_about + ' <br /> ') : '') + (product_detail?.prd_desc ? product_detail?.prd_desc : '')
+    // const completeDescription = (product_detail?.prd_about ? (product_detail?.prd_about + ' <br /> ') : '') + (product_detail?.prd_desc ? product_detail?.prd_desc : '')
 
     const starRatings = (star, index) => {
         return (star === '*' ? <em className="icon-fullstar" key={index}></em> : star === '+' 
@@ -35,9 +34,9 @@ const BannerCourseDetail = (props) => {
         )
     }
 
-    useEffect(() => {
-        setReadAll(false)
-    }, [prdId])
+    // useEffect(() => {
+    //     setReadAll(false)
+    // }, [prdId])
 
     const changeMode = (objj) => {
         let selectedObj = objj;
@@ -260,18 +259,23 @@ const BannerCourseDetail = (props) => {
                                     </figure>
 
                                     <span className="intro-video__content" itemProp="embedUrl">
-                                        { completeDescription ? <div id="module" className=" about-course">
-                                            {completeDescription?.length > reqLength ? (
-                                                <input type="checkbox" onClick={() => setReadAll(!readAll) } className="read-more-state" id="post-10" checked={readAll} itemProp="about" />
-                                                ) : (
-                                                    ""
-                                                    )}
-                                                <span className="read-more-wrap" itemProp="description">
-                                                    <span dangerouslySetInnerHTML={{__html:completeDescription?.slice(0, readAll ? completeDescription?.length : reqLength)}} />
-                                                    {/* <span className="read-more-target" dangerouslySetInnerHTML={{__html: completeDescription?.slice(reqLength)}} /> */}
-                                                </span>
-                                                <label htmlFor="post-10" className="read-more-trigger"></label>
-                                        </div> : "" }
+                                        { completeDescription && 
+                                            <div id="module" className="about-course">
+                                                    <span className="read-more-wrap" itemProp="description">
+                                                        <span dangerouslySetInnerHTML={{__html:completeDescription?.slice(0, reqLength) + '....'}} />
+                                                    </span>
+                                                    {/* <label htmlFor="post-10" className="read-more-trigger"></label> */}
+                                                    {
+                                                        completeDescription?.length > reqLength ? 
+                                                        (
+                                                            // <input type="checkbox" onClick={() => setReadAll(!readAll) } className="read-more-state" id="post-10" checked={readAll} itemProp="about" />
+                                                            <LinkScroll to = {'aboutsection'} > Read More</LinkScroll> 
+                                                        ) : (
+                                                            ""
+                                                            )
+                                                    }
+                                                    
+                                            </div> }
                                     </span>
                                 </div>
                             </div>

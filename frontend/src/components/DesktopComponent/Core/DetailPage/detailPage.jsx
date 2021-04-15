@@ -35,6 +35,8 @@ const DetailPage = (props) => {
     const [showStickyNav, setShowStickyNav] = useState(false);
     const [varChecked, changeChecked] = useState({});
     const [frqntProd, addFrqntProd] = useState([]);
+    const completeDescription = (product_detail?.prd_about ? (product_detail?.prd_about + ' <br /> ') : '') + (product_detail?.prd_desc ? product_detail?.prd_desc : '')
+    const reqLength = 250;
 
     useEffect( () => {
         handleEffects();
@@ -85,9 +87,21 @@ const DetailPage = (props) => {
                         frqntProd={frqntProd} product_id={product_id}
                         />
             }
-            <BannerCourseDetail frqntProd={frqntProd} addFrqntProd={addFrqntProd} product_detail={product_detail} varChecked={varChecked} changeChecked={changeChecked} prdId={id} product_id={product_id} providerCount={product_detail?.pop_list?.length}/>
+            <BannerCourseDetail 
+                frqntProd={frqntProd}
+                addFrqntProd={addFrqntProd}
+                product_detail={product_detail}
+                varChecked={varChecked}
+                changeChecked={changeChecked}
+                prdId={id} product_id={product_id}
+                providerCount={product_detail?.pop_list?.length}
+                completeDescription={completeDescription}
+                reqLength={reqLength}
+            />
             {product_detail?.prd_uget && <KeyFeatures prd_uget={product_detail?.prd_uget} pTF={product_detail?.pTF} prd_vendor_slug={product_detail?.prd_vendor_slug} />}
-            <AboutSection />
+            {
+                completeDescription?.length > reqLength ?  <AboutSection completeDescription={completeDescription} /> : ''
+            }
             {
                  (product_detail?.chapter && product_detail?.prd_service !== 'assessment') && 
                  <div className="container-fluid">
