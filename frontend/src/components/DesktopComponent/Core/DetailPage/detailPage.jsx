@@ -113,7 +113,7 @@ const DetailPage = (props) => {
             { (product_detail?.chapter && product_detail?.prd_service === 'assessment') && <TopicsCovered  chapter_list={product_detail?.chapter_list}/> }
 
             {
-                (product_detail?.prd_should_lrn || !product_detail?.free_test) &&
+                (product_detail?.prd_should_lrn || product_detail?.free_test) &&
                 <div className="container-fluid">
                     <div className="row">
                         { 
@@ -123,7 +123,7 @@ const DetailPage = (props) => {
                             </div>
                         }
                         {
-                            !product_detail?.free_test &&
+                            product_detail?.free_test &&
                             <div className="col-sm-3">
                                 <TakeFreeTest should_take_test_url={product_detail?.shld_take_test_slg} />
                             </div>
