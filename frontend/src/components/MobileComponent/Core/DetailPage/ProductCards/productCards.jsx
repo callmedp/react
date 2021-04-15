@@ -57,13 +57,13 @@ const ProductCards = props => {
 
                                     <span className="m-rating">
                                         { (product?.pStar || product?.rating)?.map((star, index) => starRatings(star, index)) }
-                                        <span>{product?.pARx || product?.avg_rating}/5</span>
+                                        { (product?.pARx || product?.avg_rating) ? <span>{product?.pARx || product?.avg_rating}/5</span> : ''}
                                     </span>
                                 </div>
                                 <div className="m-card__price">
                                     <strong>{product?.pPin || product?.inr_price}/-</strong>
                                 </div>
-                                </div>
+                            </div>
                         </div>
                     )
                 })

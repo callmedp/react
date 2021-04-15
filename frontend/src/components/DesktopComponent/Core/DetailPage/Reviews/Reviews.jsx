@@ -10,8 +10,8 @@ import { getCandidateId } from 'utils/storage.js';
 import { siteDomain } from 'utils/domains';
 
 const Reviews = (props) => {
-    const {id, product_detail, pUrl} = props;
-    const [detReviewModal, showReviewModal] = useState(false);
+    const {id, product_detail, pUrl, detReviewModal, showReviewModal} = props;
+    // const [detReviewModal, showReviewModal] = useState(false);
     const { reviewLoader } = useSelector(store => store.loader);
     const { prd_review_list, prd_rv_current_page, prd_rv_has_next } = useSelector( store => store.reviews );
     const [carIndex, setIndex] = useState(0);
@@ -53,10 +53,6 @@ const Reviews = (props) => {
         <>
             { reviewLoader ? <Loader /> : ''}
             <section id="reviews" className="container" data-aos="fade-up">
-                {
-                    detReviewModal ? <ReviewModal detReviewModal={detReviewModal} prdId={id} showReviewModal={showReviewModal} review={product_detail?.review} user_reviews={product_detail?.user_reviews} /> : ""
-                }
-
                 <div className="grid">
                     <h2 className="heading2 m-auto pb-20">Reviews</h2>
                 </div>

@@ -24,7 +24,7 @@ function* mainCoursesApi(action){
 
         if(item?.redirect_url) return reject(item);
 
-        if(!!payload && payload.device === 'desktop' && !!item && item.product_detail.pop_list instanceof Array) {
+        if(!!payload && payload.device === 'desktop' && !!item && !!item.product_detail && item.product_detail.pop_list instanceof Array) {
             const otherProvidersList = item.product_detail.pop_list.reduce((rows, key, index) => 
                 (index % 4 == 0 ? rows.push([key]) : rows[rows.length-1].push(key)) && rows, []);
             if(otherProvidersList.length){

@@ -17,7 +17,21 @@ import { trackUser } from 'store/Tracking/actions/index.js';
 import { Toast } from '../../../Common/Toast/toast';
 
 const BannerCourseDetail = (props) => {
-    const {product_detail, varChecked, changeChecked, frqntProd, addFrqntProd, prdId, product_id, providerCount, completeDescription, reqLength} = props;
+
+    const {
+        product_detail,
+        varChecked,
+        changeChecked,
+        frqntProd,
+        addFrqntProd,
+        prdId,
+        product_id,
+        providerCount,
+        completeDescription,
+        reqLength,
+        showReviewModal
+    } = props;
+
     // const inputCheckbox = useRef(null);
     // const regex = /<(.|\n)*?>/g;
     const [discountPrice, discountPriceSelected] = useState(0);
@@ -166,16 +180,26 @@ const BannerCourseDetail = (props) => {
                                             
                                             {
                                                 <>
-                                                {product_detail?.prd_num_rating ? <span className="review-jobs cursorLink">
-                                                <LinkScroll to={"reviews"} offset={-160} smooth={true}>
-                                                    <figure className="icon-reviews-link"></figure> <strong> {product_detail?.prd_num_rating}</strong> Reviews
-                                                </LinkScroll>
-                                                </span> : ""}
-                                                {product_detail?.prd_num_jobs ? <span className="review-jobs">
-                                                    <a target="_blank" onClick={() => trackJobs(product_detail?.num_jobs_url)} className="cursorLink">
-                                                        <figure className="icon-jobs-link"></figure> <strong>{product_detail?.prd_num_jobs}</strong> Jobs available
-                                                    </a>
-                                                </span> : ""}
+                                                    {
+                                                        product_detail?.prd_num_rating ? 
+                                                            <span className="review-jobs cursorLink">
+                                                                <LinkScroll to={"reviews"} offset={-160} smooth={true}>
+                                                                    <figure className="icon-reviews-link"></figure> <strong> {product_detail?.prd_num_rating}</strong> Reviews
+                                                                </LinkScroll>
+                                                            </span> : 
+                                                            <span className="review-jobs cursorLink" onClick={() => {showReviewModal(true)}}>
+                                                                <figure className="icon-reviews-link"></figure> Write a Review
+                                                            </span> 
+                                                    }
+
+                                                    {
+                                                        product_detail?.prd_num_jobs ? 
+                                                            <span className="review-jobs">
+                                                                <a target="_blank" onClick={() => trackJobs(product_detail?.num_jobs_url)} className="cursorLink">
+                                                                    <figure className="icon-jobs-link"></figure> <strong>{product_detail?.prd_num_jobs}</strong> Jobs available
+                                                                </a>
+                                                            </span> : ""
+                                                    }
                                                 </>
                                             }
                                         </div>

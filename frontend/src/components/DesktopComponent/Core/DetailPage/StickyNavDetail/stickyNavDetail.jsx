@@ -14,7 +14,7 @@ import { trackUser } from 'store/Tracking/actions/index.js';
 import { Toast } from '../../../Common/Toast/toast';
 
 const StickyNav = (props) => {
-    const { product_detail, varChecked, outline, faq, frqntProd, topics, product_id } = props;
+    const { product_detail, varChecked, outline, faq, frqntProd, topics, product_id, hasReview } = props;
     const dispatch = useDispatch();
     // const [tab, setTab] = useState('1');
     const { mainCourseCartLoader } = useSelector(store => store.loader);
@@ -129,11 +129,14 @@ const StickyNav = (props) => {
                                 </LinkScroll>
                             }
 
-                            <LinkScroll to="reviews" offset={-160} isDynamic={true} spy={true} id='6' smooth={true}>
-                                <Nav.Link>
-                                    Reviews
-                                </Nav.Link>
-                            </LinkScroll>
+                            {
+                                hasReview &&  
+                                    <LinkScroll to="reviews" offset={-160} isDynamic={true} spy={true} id='6' smooth={true}>
+                                        <Nav.Link>
+                                            Reviews
+                                        </Nav.Link>
+                                    </LinkScroll>
+                            }
                         </Nav>
                     </div>
                     <Form inline className="course-enrol-sticky">

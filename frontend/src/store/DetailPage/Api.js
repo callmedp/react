@@ -8,7 +8,6 @@ const fetchProductReviews = (data) => {
 
 const submitReviews = (data) => {
     const url = `/shop/api/v1/product/review/`;
-    debugger
     if(data?.update){
         return BaseApiService.put(`${siteDomain}${url}`, data);
     }

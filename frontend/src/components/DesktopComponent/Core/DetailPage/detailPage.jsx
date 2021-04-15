@@ -28,6 +28,7 @@ import MetaContent from "../../Common/MetaContent/metaContent";
 import queryString from 'query-string';
 import { getTrackingInfo, storageTrackingInfo, removeTrackingInfo } from 'utils/storage.js';
 import { trackUser } from 'store/Tracking/actions/index.js';
+import ReviewModal from '../../Common/Modals/reviewModal';
 
 const DetailPage = (props) => {
     const dispatch = useDispatch();
@@ -40,6 +41,7 @@ const DetailPage = (props) => {
     const [frqntProd, addFrqntProd] = useState([]);
     const completeDescription = (product_detail?.prd_about ? (product_detail?.prd_about + ' <br /> ') : '') + (product_detail?.prd_desc ? product_detail?.prd_desc : '')
     const reqLength = 250;
+    const [detReviewModal, showReviewModal] = useState(false);
 
     useEffect( () => {
         handleEffects();
@@ -97,6 +99,11 @@ const DetailPage = (props) => {
             { mainCourseLoader ? <Loader /> : ''}
             { meta_tags && <MetaContent meta_tags={meta_tags} /> }
 
+            {/* Review Modal */}
+            {
+                detReviewModal ? <ReviewModal detReviewModal={detReviewModal} prdId={id?.split('-')[1]} showReviewModal={showReviewModal} review={product_detail?.review} user_reviews={product_detail?.user_reviews} /> : ""
+            }
+
             <Header />
             {
                     showStickyNav && <StickyNav 
@@ -105,8 +112,10 @@ const DetailPage = (props) => {
                         faq = {product_detail?.faq ? true : false}
                         product_detail={product_detail} prdId={id} varChecked={varChecked}
                         frqntProd={frqntProd} product_id={product_id}
+                        hasReview = { product_detail?.prd_num_rating ? true : false }
                         />
             }
+            
             <BannerCourseDetail 
                 frqntProd={frqntProd}
                 addFrqntProd={addFrqntProd}
@@ -117,6 +126,7 @@ const DetailPage = (props) => {
                 providerCount={product_detail?.pop_list?.length}
                 completeDescription={completeDescription}
                 reqLength={reqLength}
+                showReviewModal={showReviewModal}
             />
             {product_detail?.prd_uget && <KeyFeatures prd_uget={product_detail?.prd_uget} pTF={product_detail?.pTF} prd_vendor_slug={product_detail?.prd_vendor_slug} />}
             
@@ -177,7 +187,9 @@ const DetailPage = (props) => {
             
             { product_detail?.faq && <FAQ faq_list={product_detail?.faq_list}/> }
 
-            <Reviews id={id?.split('-')[1]} product_detail={product_detail} pUrl={props?.match?.url}/>
+            {
+                product_detail?.prd_num_rating ? <Reviews id={id?.split('-')[1]} product_detail={product_detail} pUrl={props?.match?.url} detReviewModal={detReviewModal} showReviewModal={showReviewModal}/> : ''
+            }
 
             <EnquireNow {...props} />
             
