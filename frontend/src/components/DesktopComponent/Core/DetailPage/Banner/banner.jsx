@@ -67,6 +67,10 @@ const BannerCourseDetail = (props) => {
                 dispatch(stopMainCourseCartLoader());
             }
             catch (error) {
+                Toast.fire({
+                    type: 'error',
+                    title: error?.error_message
+                });
                 dispatch(stopMainCourseCartLoader());
             }
         }

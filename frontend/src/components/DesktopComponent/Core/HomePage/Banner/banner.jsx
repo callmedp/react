@@ -2,7 +2,7 @@ import React from 'react';
 import './banner.scss';
 import { Link } from 'react-router-dom';
 import Carousel from 'react-bootstrap/Carousel';
-import Breadcrumb from 'react-bootstrap/Breadcrumb';
+// import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import SearchBar from '../../../Common/Header/SeachBar/SearchBar.jsx';
 import { imageUrl } from 'utils/domains';
 import { MyGA } from 'utils/ga.tracking.js';

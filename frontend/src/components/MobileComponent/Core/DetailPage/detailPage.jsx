@@ -28,16 +28,21 @@ import ReviewModal from '../../Common/Modals/ReviewModal';
 import '../DetailPage/detailPage.scss';
 import Aos from "aos";
 import MetaContent from '../../Common/MetaContent/metaContent';
-// import "aos/dist/aos.css";
 import { fetchProductReviews, fetchMainCourses } from 'store/DetailPage/actions';
 import SearchPage from '../../Common/SearchPage/SearchPage';
+import { startMainCourseLoader, stopMainCourseLoader } from 'store/Loader/actions/index';
+import Loader from '../../Common/Loader/loader';
+import queryString from 'query-string';
+import { getTrackingInfo, storageTrackingInfo, removeTrackingInfo } from 'utils/storage.js';
+import { trackUser } from 'store/Tracking/actions/index.js';
 
 const DetailPage = (props) => {
-    const { history } = props
+    const { location: { search }, history } = props;
+    const dispatch = useDispatch();
+    const { mainCourseLoader } = useSelector(store => store.loader);
     const [reviewModal, showReviewModal] = useState(false)
     const prdId = props.match.params.id;
-    const dispatch = useDispatch()
-    const { product_detail, skill, ggn_contact, product_id } = useSelector(store => store?.mainCourses);
+    const { product_detail, skill, ggn_contact, product_id, product_tracking_mapping_id } = useSelector(store => store?.mainCourses);
     const meta_tags = product_detail?.meta;
     const [enquiryForm, setEnquiryForm] = useState(false);
     const [varChecked, changeChecked] = useState({});
@@ -46,21 +51,47 @@ const DetailPage = (props) => {
     const [frqntProd, addFrqntProd] = useState([]);
 
     const handleEffects = async () => {
+
         try {
+            dispatch(startMainCourseLoader());
+
             if (!(window && window.config && window.config.isServerRendered)) {
-                new Promise((resolve, reject) => dispatch(fetchProductReviews({ payload: { prdId: prdId?.split('-')[1], page: 1, device: 'mobile'}, resolve, reject })));
                 await new Promise((resolve, reject) => dispatch(fetchMainCourses({ payload: { id: prdId?.split('-')[1], device: 'mobile' },resolve, reject })));
+                
+                dispatch(stopMainCourseLoader());
             }
             else {
-                delete window.config?.isServerRendered
+                dispatch(stopMainCourseLoader());
+                delete window.config?.isServerRendered;
             }
-        } catch (error) {
+
+            await new Promise((resolve, reject) => dispatch(fetchProductReviews({ payload: { prdId: prdId?.split('-')[1], page: 1, device: 'mobile'}, resolve, reject })));
+        }
+        catch (error) {
+            dispatch(stopMainCourseLoader());
+
             if (error?.status == 404) {
                 history.push('/404');
                 console.log(error)
             }
         }
 
+        const query = queryString.parse(search);
+        if (query["t_id"]) {
+          query["prod_id"] = prdId?.split('-')[1];
+          query["product_tracking_mapping_id"] = product_tracking_mapping_id;
+          storageTrackingInfo(query);
+          dispatch(
+            trackUser({
+              query: query,
+              action: "ln_course_page",
+            })
+          );
+        }
+        else {
+          let tracking_data = getTrackingInfo();
+          if (tracking_data["prod_id"] != prdId?.split('-')[1] && tracking_data["product_tracking_mapping_id"] === product_tracking_mapping_id) removeTrackingInfo();
+        }
     };
 
     const getProductPrice = (product) => {
@@ -87,6 +118,8 @@ const DetailPage = (props) => {
 
     return(
         <div>
+            { mainCourseLoader ? <Loader /> : ''}
+
             { meta_tags && <MetaContent meta_tags={meta_tags} /> }
             { 
                 showSearchPage ? 

@@ -12,7 +12,7 @@ import { imageUrl } from 'utils/domains';
 import { MyGA } from 'utils/ga.tracking.js';
 
 const ReviewModal =(props) => {
-    const { reviewModal, showReviewModal, review, user_reviews, prdId } = props;
+    const { detReviewModal, showReviewModal, review, user_reviews, prdId } = props;
     const { reviewLoader } = useSelector(store => store.loader);
     const { register, handleSubmit, errors } = useForm();
     const dispatch = useDispatch();
@@ -127,7 +127,7 @@ const ReviewModal =(props) => {
     return (
         <>
         { reviewLoader ? <Loader /> : ''}
-        <Modal show={reviewModal} onHide={showReviewModal} className="db-modal db-page">
+        <Modal show={detReviewModal} onHide={showReviewModal} className="db-modal db-page">
         <Modal.Header closeButton></Modal.Header>
         
         <Modal.Body>

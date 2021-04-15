@@ -1087,17 +1087,8 @@ class ProductDetailAPI(ProductInformationAPIMixin, APIView):
                 "ggn_contact_full": settings.GGN_CONTACT_FULL,
                 "ggn_contact": settings.GGN_CONTACT,
                 'shine_api_url': settings.SHINE_API_URL,
-                'tracking_product_id': self.request.session.get('tracking_product_id', ''),
-                'product_tracking_mapping_id': self.request.session.get('product_tracking_mapping_id', ''),
-                'tracking_id': self.request.session.get('tracking_id', ''),
-                'trigger_point': self.request.session.get('trigger_point', ''),
-                'u_id': self.request.session.get('u_id', ''),
-                'position': self.request.session.get('position', 1),
-                'utm_campaign': self.request.session.get('utm_campaign', ''),
+                'product_tracking_mapping_id': self.maintain_tracking_info(self.product_obj),
                 'product_id': self.product_obj and self.product_obj.id,
-                'referal_product': self.request.session.get('referal_product', ''),
-                'referal_subproduct': self.request.session.get('referal_subproduct'),
-                'popup_based_product': self.request.session.get('popup_based_product', '')
             })
             return APIResponse(message='Product fetched successfully', data=context)
         except Exception as e:
