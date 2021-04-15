@@ -240,7 +240,7 @@ const BannerCourseDetail = (props) => {
                                         : ""
                                     }
                                 </ul>
-                                <ul className="course-stats-btm mt-20 mb-20">
+                                <ul className="course-stats-btm mt-20 mb-25">
                                     {
                                         (varChecked?.type || product_detail?.selected_var?.type) ? <li>Course Type: <strong>{getStudyMode(varChecked?.type || product_detail?.selected_var?.type)}</strong></li>
                                         : ""
