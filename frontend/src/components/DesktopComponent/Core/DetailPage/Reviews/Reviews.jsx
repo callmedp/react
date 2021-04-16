@@ -98,7 +98,7 @@ const Reviews = (props) => {
                         (!product_detail?.user_reviews && getCandidateId()) ?
                             <Link to={"#"} onClick={showReviewModal} className="btn btn-outline-primary btn-custom mx-auto">Write a review</Link>
                         : 
-                        <a href={`${siteDomain}/login/?next=${pUrl}`} className="btn btn-outline-primary btn-custom mx-auto">Write a review</a>
+                        <a href={`${siteDomain}/login/?next=${pUrl}?sm=true`} className="btn btn-outline-primary btn-custom mx-auto">Write a review</a>
                     }
                 </div>
             </section>

@@ -12,7 +12,7 @@ import { getStudyLevel } from 'utils/detailPageUtils/studyLevel';
 import ComboIncludes from '../ComboIncludes/comboIncludes';
 import FrequentlyBought from '../FrequentlyBought/frequentlyBought';
 import { MyGA } from 'utils/ga.tracking.js';
-import { getTrackingInfo } from 'utils/storage.js';
+import { getTrackingInfo, getCandidateId } from 'utils/storage.js';
 import { trackUser } from 'store/Tracking/actions/index.js';
 import { Toast } from '../../../Common/Toast/toast';
 
@@ -29,7 +29,8 @@ const BannerCourseDetail = (props) => {
         providerCount,
         completeDescription,
         reqLength,
-        showReviewModal
+        showReviewModal,
+        pUrl
     } = props;
 
     // const inputCheckbox = useRef(null);
@@ -57,7 +58,7 @@ const BannerCourseDetail = (props) => {
         discountPriceSelected(objj.fake_inr_price);
         changeChecked({...selectedObj});
 
-        MyGA.SendEvent('ln_study_mode', 'ln_study_mode', 'ln_click_study_mode', `${selectedObj.mode}|get_choice_display:"STUDY_MODE"`, '', false, true);
+        MyGA.SendEvent('ln_study_mode', 'ln_study_mode', 'ln_click_study_mode', `${selectedObj.mode}`, '', false, true);
     }
 
     const goToCart = async (value) => {
@@ -141,6 +142,10 @@ const BannerCourseDetail = (props) => {
         window.location.href = `${siteDomain}${val.url}`;
     }
 
+    const handleLoginRedirect = () => {
+        window.location.href= `${siteDomain}/login/?next=${pUrl}?sm=true`
+    }
+
     return (
         <>
             { mainCourseCartLoader ? <Loader /> : ''}
@@ -186,10 +191,16 @@ const BannerCourseDetail = (props) => {
                                                                 <LinkScroll to={"reviews"} offset={-160} smooth={true}>
                                                                     <figure className="icon-reviews-link"></figure> <strong> {product_detail?.prd_num_rating}</strong> Reviews
                                                                 </LinkScroll>
-                                                            </span> : 
-                                                            <span className="review-jobs cursorLink" onClick={() => {showReviewModal(true)}}>
-                                                                <figure className="icon-reviews-link"></figure> Write a Review
                                                             </span> 
+                                                            :
+                                                            getCandidateId() ?
+                                                                <span className="review-jobs cursorLink" onClick={() => {showReviewModal(true)}}>
+                                                                    <figure className="icon-reviews-link"></figure> Write a Review
+                                                                </span> 
+                                                                : 
+                                                                <span className="review-jobs cursorLink" onClick={() => { handleLoginRedirect() }}>
+                                                                    <figure className="icon-reviews-link"></figure> Write a Review
+                                                                </span>    
                                                     }
 
                                                     {
