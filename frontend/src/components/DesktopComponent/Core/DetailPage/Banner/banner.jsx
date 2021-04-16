@@ -58,7 +58,7 @@ const BannerCourseDetail = (props) => {
         discountPriceSelected(objj.fake_inr_price);
         changeChecked({...selectedObj});
 
-        MyGA.SendEvent('ln_study_mode', 'ln_study_mode', 'ln_click_study_mode', `${selectedObj.mode}`, '', false, true);
+        MyGA.SendEvent('ln_study_mode', 'ln_study_mode', 'ln_click_study_mode', `${getStudyMode(selectedObj.mode)}`, '', false, true);
     }
 
     const goToCart = async (value) => {
@@ -67,7 +67,8 @@ const BannerCourseDetail = (props) => {
 
         if(!product_detail?.redeem_test) {
             MyGA.SendEvent('ln_enroll_now', 'ln_enroll_now', 'ln_click_enroll_now', `${product_detail?.prd_H1}`, '', false, true);
-            trackUser({"query" : tracking_data, "action" :'enroll_now'});
+            console.log(tracking_data);
+            dispatch(trackUser({"query" : tracking_data, "action" :'enroll_now'}));
 
             if(frqntProd && frqntProd.length > 0) {
                 frqntProd.map(prdId => addonsId.push(prdId.id));
@@ -90,7 +91,7 @@ const BannerCourseDetail = (props) => {
             }
         }
         else {
-            trackUser({"query" : tracking_data, "action" :'redeem_now'});
+            dispatch(trackUser({"query" : tracking_data, "action" :'redeem_now'}));
             cartItems = { 'prod_id': product_detail?.product_id, 'redeem_option': product_detail?.redeem_option }
 
             try {
@@ -121,25 +122,25 @@ const BannerCourseDetail = (props) => {
     }
 
     const trackJobs = () => {
-        trackUser({"query" : tracking_data, "action" :'jobs_available'});
-        trackUser({"query" : tracking_data, "action" :'exit_product_page'});
+        dispatch(trackUser({"query" : tracking_data, "action" :'jobs_available'}));
+        dispatch(trackUser({"query" : tracking_data, "action" :'exit_product_page'}));
         MyGA.SendEvent('ln_course_details', 'ln_course_details', 'ln_jobs_available', 'Jobs available', '', '', true);
         window.location.href = product_detail?.num_jobs_url;
     }
 
     const viewAllCourses = () => {
         MyGA.SendEvent('Search',`${product_detail?.prd_vendor}`,'ViewAllProductVendor');
-        trackUser({"query" : tracking_data, "action" :'all_courses_or_certifications'});
-        trackUser({"query" : tracking_data, "action" :'exit_product_page'});
+        dispatch(trackUser({"query" : tracking_data, "action" :'all_courses_or_certifications'}));
+        dispatch(trackUser({"query" : tracking_data, "action" :'exit_product_page'}));
 
         window.location.href=`${siteDomain}/search/results/?fvid=${product_detail?.pPv}`;
     }
 
     const handleBreadCrumbTracking = (data, key, val) => {
-        if(data.length - 1 !== key) trackUser({"query" : tracking_data, "action" :'exit_product_page'});
+        if(data.length - 1 !== key) dispatch(trackUser({"query" : tracking_data, "action" :'exit_product_page'}));
         
         MyGA.SendEvent('ln_breadcrumbs', 'ln_breadcrumbs', 'ln_breadcrumb_click', `${val.name}`, '', false, true);
-        window.location.href = `${siteDomain}${val.url}`;
+        if(val.url !== "") window.location.href = `${siteDomain}${val.url}`;
     }
 
     const handleLoginRedirect = () => {
@@ -340,7 +341,7 @@ const BannerCourseDetail = (props) => {
                                                 </div>
                                             }
                                             <div className="course-enrol__price">
-                                                <strong className="price-taxes mt-20 mb-10">{getProductPrice(varChecked?.inr_price || product_detail?.var_list[0]?.inr_price) || product_detail?.pPinb}/-  <span className="taxes">(+taxes)</span></strong>
+                                                <strong className="price-taxes mt-20 mb-10">{getProductPrice(varChecked?.inr_price || product_detail?.var_list[0]?.inr_price || product_detail?.pPinb)}/-  <span className="taxes">(+taxes)</span></strong>
                                                 <strong className="price-offer mt-0 mb-10">
                                                     {
                                                         (varChecked?.id ? discountPrice : product_detail?.var_list[0]?.fake_inr_price) > 0 ?

@@ -3,13 +3,15 @@ import './takeFreeTest.scss';
 import { siteDomain } from 'utils/domains';
 import { getTrackingInfo } from 'utils/storage.js';
 import { trackUser } from 'store/Tracking/actions/index.js';
+import { useDispatch } from 'react-redux';
 
 const TakeFreeTest = (props) => {
     const { should_take_test_url, test_title } = props;
     const tracking_data = getTrackingInfo();
+    const dispatch = useDispatch();
 
     const testRedirection = () => {
-        trackUser({"query" : tracking_data, "action" :'take_free_test'});
+        dispatch(trackUser({"query" : tracking_data, "action" :'take_free_test'}));
     }
 
     return (

@@ -32,8 +32,8 @@ const CoursesMayLike = (props) => {
     }
 
     const handleTracking = (url) => {
-        trackUser({"query" : tracking_data, "action" :'exit_product_page'});
-        trackUser({"query" : tracking_data, "action" :'recommended_products'});
+        dispatch(trackUser({"query" : tracking_data, "action" :'exit_product_page'}));
+        dispatch(trackUser({"query" : tracking_data, "action" :'recommended_products'}));
 
         window.location.href=`${siteDomain}${url}`;
     }

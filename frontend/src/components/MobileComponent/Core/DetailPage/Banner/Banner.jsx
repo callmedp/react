@@ -8,6 +8,7 @@ import { getStudyLevel } from 'utils/detailPageUtils/studyLevel';
 import { MyGA } from 'utils/ga.tracking.js';
 import { getTrackingInfo, getCandidateId } from 'utils/storage.js';
 import { trackUser } from 'store/Tracking/actions/index.js';
+import { useDispatch } from 'react-redux';
 
 const CourseDetailBanner = (props) => {
     const { 
@@ -19,6 +20,7 @@ const CourseDetailBanner = (props) => {
         pUrl
     } = props;
 
+    const dispatch = useDispatch();
     const tracking_data = getTrackingInfo();
     const noOfWords = 250;
     const [showAll, setShowAll] = useState(false);
@@ -46,15 +48,15 @@ const CourseDetailBanner = (props) => {
     }, [prdId])
 
     const trackJobs = () => {
-        trackUser({"query" : tracking_data, "action" :'jobs_available'});
-        trackUser({"query" : tracking_data, "action" :'exit_product_page'});
+        dispatch(trackUser({"query" : tracking_data, "action" :'jobs_available'}));
+        dispatch(trackUser({"query" : tracking_data, "action" :'exit_product_page'}));
         MyGA.SendEvent('ln_course_details', 'ln_course_details', 'ln_jobs_available', 'Jobs available', '', '', true);
     }
 
     const viewAllCourses = () => {
         MyGA.SendEvent('Search',`${product_detail?.prd_vendor}`,'ViewAllProductVendor');
-        trackUser({"query" : tracking_data, "action" :'all_courses_or_certifications'});
-        trackUser({"query" : tracking_data, "action" :'exit_product_page'});
+        dispatch(trackUser({"query" : tracking_data, "action" :'all_courses_or_certifications'}));
+        dispatch(trackUser({"query" : tracking_data, "action" :'exit_product_page'}));
     }
 
     return (
