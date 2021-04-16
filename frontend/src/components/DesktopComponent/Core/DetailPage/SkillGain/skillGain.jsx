@@ -24,7 +24,7 @@ const SkillGain = (props) => {
                                 }
                                 {' '}
                             </div>
-                            <div className="d-flex mt-50">
+                            <div className="d-flex mt-50 mb-20">
                                 <LinkScroll to={"enquire-now"} className="btn btn-outline-primary btn-custom" offset={-160}>Enquire now</LinkScroll>
                             </div>
                         </div>
