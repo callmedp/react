@@ -140,7 +140,7 @@ const BannerCourseDetail = (props) => {
         if(data.length - 1 !== key) dispatch(trackUser({"query" : tracking_data, "action" :'exit_product_page'}));
         
         MyGA.SendEvent('ln_breadcrumbs', 'ln_breadcrumbs', 'ln_breadcrumb_click', `${val.name}`, '', false, true);
-        if(val.url !== "") window.location.href = `${siteDomain}${val.url}`;
+        if(!!val.url) window.location.href = `${siteDomain}${val.url}`;
     }
 
     const handleLoginRedirect = () => {

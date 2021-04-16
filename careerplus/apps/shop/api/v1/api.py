@@ -4,6 +4,7 @@ import json
 from datetime import datetime
 from django.utils import timezone
 from decimal import Decimal
+from collections import OrderedDict
 
 # Django-Core Import
 from django.core.cache import cache
@@ -11,6 +12,7 @@ from django.db.models import Count, Avg, Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import Http404
 from django.conf import settings
+from django.urls import reverse
 from django.contrib.contenttypes.models import ContentType
 
 # Inter-App Import
@@ -541,17 +543,60 @@ class ProductInformationAPIMixin(object):
             })
         return prd_should_learn
 
-    def get_breadcrumb_data(self, category):
+    def get_breadcrumbs(self, product, category):
         """
         Getting the breadcrumb detail
         """
         breadcrumbs = []
-        breadcrumbs.append({"url": '/', "name": "Home"})
-        parent = category.get_parent()
-        if parent:
-            breadcrumbs.append({
-                "url": parent.first().get_absolute_url(), "name": parent.first().name,
-            })
+        breadcrumbs.append(
+            OrderedDict({
+                'name': 'Home',
+                'url': '/',
+                'active': True}))
+        if category:
+            if category.type_level == 4:
+                category = category.get_parent(
+                )[0] if category.get_parent() else None
+        if category:
+            if product.is_course and product.type_flow != 14:
+                parent = category.get_parent()
+                if parent:
+                    breadcrumbs.append(
+                        OrderedDict({
+                            'name': parent[0].name,
+                            'url': parent[0].get_absolute_url(),
+                            'active': True}))
+
+            if product.is_service or product.is_writing:
+                if category.is_service and category.type_level == 3:
+                    breadcrumbs.append(
+                        OrderedDict({
+                            'name': category.name,
+                            'url': category.get_absolute_url(),
+                            'active': True}))
+                else:
+                    parent = category.get_parent()
+                    if parent:
+                        breadcrumbs.append(
+                            OrderedDict({
+                                'name': parent[0].name,
+                                'url': reverse('func_area_results', kwargs={'fa_slug': parent[0].slug, 'pk': parent[0].id}),
+                                'active': True}))
+            else:
+                breadcrumbs.append(
+                    OrderedDict({
+                        'name': category.name,
+                        'url': category.get_absolute_url(),
+                        'active': True}))
+        breadcrumbs.append(
+            OrderedDict({
+                'name': product.name,
+                'active': None}))
+        return breadcrumbs
+
+    def get_breadcrumb_data(self, category):
+        # Not in used
+        breadcrumbs = []
         breadcrumbs.append({"url": '', "name": category.name})
         return breadcrumbs
 
@@ -758,7 +803,8 @@ class ProductInformationAPIMixin(object):
         else:
             data = self.get_product_information(product, sqs, product_main, sqs_main)
             data.update(self.get_duration_mode(sqs))
-            data.update({'breadcrumbs': self.get_breadcrumb_data(product.category_main)})
+            if product:
+                data.update({'breadcrumbs': self.get_breadcrumbs(product, product.category_main)})
             data.update({'dlvry_flow': self.get_delivery_flow(sqs.pTF)})
             data.update(self.get_who_should_learn(product.category_main))
             if product.take_free_test:
