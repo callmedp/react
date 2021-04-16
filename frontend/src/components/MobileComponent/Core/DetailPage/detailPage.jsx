@@ -51,6 +51,7 @@ const DetailPage = (props) => {
     const [frqntProd, addFrqntProd] = useState([]);
     const params = new URLSearchParams(props.location.search);
     const showAfterLoginReviewModal = params.get('sm')
+    const { prd_review_list, prd_rv_total } = useSelector( store => store.reviews )
 
     const handleEffects = async () => {
 
@@ -182,7 +183,7 @@ const DetailPage = (props) => {
                         { product_detail?.pop && <OtherProviders pop_list={product_detail?.pop_list} /> }
                         { product_detail?.faq && <FAQ faq_list={product_detail?.faq_list}/> }
                         {
-                            product_detail?.prd_num_rating ? <Reviews showReviewModal={showReviewModal} product_detail={product_detail} prdId={prdId} pUrl={props?.match?.url}/> : ''
+                            prd_review_list ? <Reviews showReviewModal={showReviewModal} product_detail={product_detail} prdId={prdId} pUrl={props?.match?.url}/> : ''
                         }
                         { skill?.length > 0 && <CoursesMayLike product_id={prdId} skill={skill}/> }
                         <CTA setEnquiryForm={setEnquiryForm} contact={ggn_contact} />
