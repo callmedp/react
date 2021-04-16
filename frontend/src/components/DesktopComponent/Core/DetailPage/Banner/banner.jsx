@@ -373,7 +373,7 @@ const BannerCourseDetail = (props) => {
                                                 
                                             </div>
                                             <div className="course-enrol__offer lightblue-bg2">
-                                                {product_detail?.redeem_test && <span>You have {product_detail?.product_redeem_count} free practice test (Assessment) as you're a Shine Premium User</span>}
+                                                {product_detail?.redeem_test && <span className="flex-1">You have {product_detail?.product_redeem_count} free practice test (Assessment) as you're a Shine Premium User</span>}
                                                 <strong className="mt-10 mb-5">Offers</strong>
                                                 <ul className="pb-0">
                                                 {

@@ -33,10 +33,13 @@ import ReviewModal from '../../Common/Modals/reviewModal';
 const DetailPage = (props) => {
     const dispatch = useDispatch();
     const {product_detail, skill, product_id, product_tracking_mapping_id} = useSelector(store => store?.mainCourses);
+    const { prd_review_list, prd_rv_current_page, prd_rv_has_next } = useSelector( store => store.reviews );
+    
     const meta_tags = product_detail?.meta;
     const {location: { search }, match: {params: {id}}, history} = props;
     const { mainCourseLoader } = useSelector(store => store.loader);
     const [showStickyNav, setShowStickyNav] = useState(false);
+    const [currentPage, setCurrentPage] = useState(1);
     const [varChecked, changeChecked] = useState({});
     const [frqntProd, addFrqntProd] = useState([]);
     const completeDescription = (product_detail?.prd_about ? (product_detail?.prd_about + ' <br /> ') : '') + (product_detail?.prd_desc ? product_detail?.prd_desc : '')
@@ -73,6 +76,8 @@ const DetailPage = (props) => {
                 delete window.config?.isServerRendered;
                 dispatch(stopMainCourseLoader());
             }
+
+            await new Promise((resolve, reject) => dispatch(fetchProductReviews({ payload: { prdId: id?.split('-')[1], page: currentPage, device: 'desktop' }, resolve, reject })));
         }
         catch (error) {
             dispatch(stopMainCourseLoader());
@@ -194,7 +199,7 @@ const DetailPage = (props) => {
             { product_detail?.faq && <FAQ faq_list={product_detail?.faq_list}/> }
 
             {
-                product_detail?.prd_num_rating ? <Reviews id={id?.split('-')[1]} product_detail={product_detail} pUrl={props?.match?.url} detReviewModal={detReviewModal} showReviewModal={showReviewModal}/> : ''
+                (prd_review_list && prd_review_list.length) ? <Reviews setCurrentPage={setCurrentPage} prd_review_list={prd_review_list} prd_rv_current_page={prd_rv_current_page} prd_rv_has_next={prd_rv_has_next} product_detail={product_detail} pUrl={props?.match?.url} showReviewModal={showReviewModal}/> : ''
             }
 
             <EnquireNow {...props} />
