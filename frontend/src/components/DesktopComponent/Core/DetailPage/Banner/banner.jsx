@@ -57,7 +57,7 @@ const BannerCourseDetail = (props) => {
         discountPriceSelected(objj.fake_inr_price);
         changeChecked({...selectedObj});
 
-        MyGA.SendEvent('ln_study_mode', 'ln_study_mode', 'ln_click_study_mode', `${selectedObj.mode}|get_choice_display:"STUDY_MODE"`, '', false, true);
+        MyGA.SendEvent('ln_study_mode', 'ln_study_mode', 'ln_click_study_mode', `${getStudyMode(selectedObj.mode)}`, '', false, true);
     }
 
     const goToCart = async (value) => {
@@ -66,6 +66,7 @@ const BannerCourseDetail = (props) => {
 
         if(!product_detail?.redeem_test) {
             MyGA.SendEvent('ln_enroll_now', 'ln_enroll_now', 'ln_click_enroll_now', `${product_detail?.prd_H1}`, '', false, true);
+            console.log(tracking_data);
             trackUser({"query" : tracking_data, "action" :'enroll_now'});
 
             if(frqntProd && frqntProd.length > 0) {
