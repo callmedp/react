@@ -289,35 +289,42 @@ const BannerCourseDetail = (props) => {
                                         <li>Certification: <strong>{(varChecked?.certify || product_detail?.selected_var?.certify) === 0 ? 'No' : (varChecked?.certify || product_detail?.selected_var?.certify) === false ? 'No' : 'Yes' }</strong></li>
                                     }
                                 </ul>
-                                <div className="intro-video">
-                                    <figure className="intro-video__img">
-                                        <a rel="noopener noreferrer" target="_blank" href={`https://${product_detail?.prd_video}`}>
-                                            <iframe src={`https://${product_detail?.prd_video}`} frameBorder="0" />
-                                            <i className="icon-play-video"></i>
-                                            <strong>Intro video</strong>
-                                        </a>
-                                    </figure>
+                                {
+                                    (product_detail?.prd_video || completeDescription) &&
+                                        <div className="intro-video">
+                                            {
+                                                product_detail?.prd_video &&
+                                                    <figure className="intro-video__img">
+                                                        <a rel="noopener noreferrer" target="_blank" href={`https://${product_detail?.prd_video}`}>
+                                                            <iframe src={`https://${product_detail?.prd_video}`} frameBorder="0" />
+                                                            <i className="icon-play-video"></i>
+                                                            <strong>Intro video</strong>
+                                                        </a>
+                                                    </figure>    
+                                            }
 
-                                    <span className="intro-video__content" itemProp="embedUrl">
-                                        { completeDescription && 
-                                            <div id="module" className="about-course">
-                                                    <span className="read-more-wrap" itemProp="description">
-                                                        <span dangerouslySetInnerHTML={{__html:completeDescription?.slice(0, reqLength) + '....'}} />
-                                                    </span>
-                                                    {/* <label htmlFor="post-10" className="read-more-trigger"></label> */}
-                                                    {
-                                                        completeDescription?.length > reqLength ? 
-                                                        (
-                                                            // <input type="checkbox" onClick={() => setReadAll(!readAll) } className="read-more-state" id="post-10" checked={readAll} itemProp="about" />
-                                                            <LinkScroll to = {'aboutsection'} offset={-160} smooth={true}> Read More</LinkScroll> 
-                                                        ) : (
-                                                            ""
-                                                            )
-                                                    }
-                                                    
-                                            </div> }
-                                    </span>
-                                </div>
+                                            
+                                            { completeDescription && 
+                                                <span className="intro-video__content" itemProp="embedUrl">
+                                                    <div id="module" className="about-course">
+                                                            <span className="read-more-wrap" itemProp="description">
+                                                                <span dangerouslySetInnerHTML={{__html:completeDescription?.slice(0, reqLength) + '....'}} />
+                                                            </span>
+                                                            {/* <label htmlFor="post-10" className="read-more-trigger"></label> */}
+                                                            {
+                                                                completeDescription?.length > reqLength ? 
+                                                                (
+                                                                    // <input type="checkbox" onClick={() => setReadAll(!readAll) } className="read-more-state" id="post-10" checked={readAll} itemProp="about" />
+                                                                    <LinkScroll to = {'aboutsection'} offset={-160} smooth={true}> Read More</LinkScroll> 
+                                                                ) : (
+                                                                    ""
+                                                                    )
+                                                            }
+                                                    </div> 
+                                                </span>
+                                            }
+                                        </div>
+                                }
                             </div>
                             
                             <div className="banner-detail">

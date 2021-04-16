@@ -17,10 +17,17 @@ const CourseOutline = (props) => {
                     chapter_list?.map((chap, index) => {
                         return (
                             <div className="tab" key={index} >
-                                <input type="radio" name="rd" id={"co" + index} checked = { checkedId === index } onClick={() => accordionHandle(index)}/><label className="tab-label" htmlFor={ "co" + index } itemProp="name"><h3>{chap.heading}</h3></label>
-                                <div id="0" className="tab-content">
-                                    <p itemProp="text" hidden="" dangerouslySetInnerHTML={{__html: chap.content}}/>
-                                </div>
+                                {
+                                    !!chap.content && 
+                                        <input type="radio" name="rd" id={"co" + index} checked = { checkedId === index } onClick={() => accordionHandle(index)}/>
+                                }
+                                <label className="tab-label" htmlFor={ "co" + index } itemProp="name"><h3>{chap.heading}</h3></label>
+                                {
+                                    !!chap.content && 
+                                        <div id="0" className="tab-content">
+                                            <p itemProp="text" hidden="" dangerouslySetInnerHTML={{__html: chap.content}}/>
+                                        </div>
+                                }
                             </div>
                         )
                     })
