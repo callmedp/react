@@ -162,7 +162,7 @@ const BannerCourseDetail = (props) => {
                                         })
                                     }
                                 </Breadcrumb>
-                                <div className="detail-heading" data-aos="fade-right" itemProp="Course" itemScope itemType="https://schema.org/Course">
+                                <div className="detail-heading" data-aos="fade-zoom-in" itemProp="Course" itemScope itemType="https://schema.org/Course">
                                     <div className="detail-heading__icon" itemProp="image">
                                         <figure>
                                             <img src={product_detail?.prd_img} alt={product_detail?.prd_img_alt} />

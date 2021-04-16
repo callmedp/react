@@ -54,7 +54,7 @@ const Reviews = (props) => {
             { reviewLoader ? <Loader /> : ''}
             <section id="reviews" className="container" data-aos="fade-up">
                 <div className="grid">
-                    <h2 className="heading2 m-auto pb-20">Reviews</h2>
+                    <h2 className="heading2 text-center pb-20">Reviews</h2>
                 </div>
 
                 <Carousel className="reviews" activeIndex={carIndex} onSelect={handleSelect} >

@@ -6,7 +6,7 @@
     margin-right: 2rem;
     box-shadow: $box-shadow;
     padding: 2rem 2rem 4rem 2rem;
-    background: $lightblue2 url("#{$path}desktop/take-free-test.png") no-repeat right bottom;
+    background: url("#{$path}desktop/take-free-test.png") no-repeat right bottom;
 
     strong {
         font-size: 1.8rem;
