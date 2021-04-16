@@ -54,7 +54,7 @@ const Reviews = (props) => {
             { reviewLoader ? <Loader /> : ''}
             <section id="reviews" className="container" data-aos="fade-up">
                 <div className="grid">
-                    <h2 className="heading2 m-auto pb-20">Reviews</h2>
+                    <h2 className="heading2 text-center pb-20">Reviews</h2>
                 </div>
 
                 <Carousel className="reviews" activeIndex={carIndex} onSelect={handleSelect} >
@@ -98,7 +98,7 @@ const Reviews = (props) => {
                         (!product_detail?.user_reviews && getCandidateId()) ?
                             <Link to={"#"} onClick={showReviewModal} className="btn btn-outline-primary btn-custom mx-auto">Write a review</Link>
                         : 
-                        <a href={`${siteDomain}/login/?next=${pUrl}`} className="btn btn-outline-primary btn-custom mx-auto">Write a review</a>
+                        <a href={`${siteDomain}/login/?next=${pUrl}?sm=true`} className="btn btn-outline-primary btn-custom mx-auto">Write a review</a>
                     }
                 </div>
             </section>

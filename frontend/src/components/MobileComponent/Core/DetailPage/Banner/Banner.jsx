@@ -6,7 +6,7 @@ import { Link as LinkScroll } from "react-scroll";
 import { getStudyMode } from 'utils/detailPageUtils/studyMode';
 import { getStudyLevel } from 'utils/detailPageUtils/studyLevel';
 import { MyGA } from 'utils/ga.tracking.js';
-import { getTrackingInfo } from 'utils/storage.js';
+import { getTrackingInfo, getCandidateId } from 'utils/storage.js';
 import { trackUser } from 'store/Tracking/actions/index.js';
 import { useDispatch } from 'react-redux';
 
@@ -16,7 +16,8 @@ const CourseDetailBanner = (props) => {
         prdId,
         varChecked,
         showReviewModal,
-        providerCount
+        providerCount,
+        pUrl
     } = props;
 
     const dispatch = useDispatch();
@@ -90,18 +91,26 @@ const CourseDetailBanner = (props) => {
                         {
                             product_detail?.prd_num_rating > 0 ?
                                 <span className="m-review-jobs">
-                                    <LinkScroll to="review" offset={-120}>
+                                    <LinkScroll to="reviews" offset={-120}>
                                         <Link to={"#"}>
                                             <figure className="micon-reviews-link"></figure> <strong>{ product_detail?.prd_num_rating }</strong> { product_detail?.prd_num_rating > 1 ? 'Reviews' : 'Review' }
                                         </Link>
                                     </LinkScroll>
                                 </span>
                                 :
-                                <span className="m-review-jobs">
-                                    <Link to={"#"} onClick={ () => showReviewModal(true) }>
-                                        <figure className="micon-reviews-link"></figure> Write a Review
-                                    </Link>
-                                </span>
+                                getCandidateId() ?
+                                    <span className="m-review-jobs">
+                                        <Link to={"#"} onClick={ () => showReviewModal(true) }>
+                                            <figure className="micon-reviews-link"></figure> Write a Review
+                                        </Link>
+                                    </span>
+                                    : 
+                                    <span className="m-review-jobs">
+                                        <a  href={`${siteDomain}/login/?next=${pUrl}?sm=true`}>
+                                            <figure className="micon-reviews-link"></figure> Write a Review
+                                        </a>
+                                    </span>
+                                
                         }
 
                         {

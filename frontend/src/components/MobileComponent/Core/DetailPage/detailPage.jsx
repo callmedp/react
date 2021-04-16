@@ -33,7 +33,7 @@ import SearchPage from '../../Common/SearchPage/SearchPage';
 import { startMainCourseLoader, stopMainCourseLoader } from 'store/Loader/actions/index';
 import Loader from '../../Common/Loader/loader';
 import queryString from 'query-string';
-import { getTrackingInfo, storageTrackingInfo, removeTrackingInfo } from 'utils/storage.js';
+import { getTrackingInfo, storageTrackingInfo, removeTrackingInfo, getCandidateId } from 'utils/storage.js';
 import { trackUser } from 'store/Tracking/actions/index.js';
 
 const DetailPage = (props) => {
@@ -49,6 +49,8 @@ const DetailPage = (props) => {
     const [showStickyNav, setShowStickyNav] = useState(false);
     const [showSearchPage, setShowSearchPage] = useState(false)
     const [frqntProd, addFrqntProd] = useState([]);
+    const params = new URLSearchParams(props.location.search);
+    const showAfterLoginReviewModal = params.get('sm')
 
     const handleEffects = async () => {
 
@@ -114,6 +116,8 @@ const DetailPage = (props) => {
         handleEffects();
         Aos.init({ duration: 2000, once: true, offset: 10, anchorPlacement: 'bottom-bottom' });
         window.addEventListener('scroll', handleScroll);
+        if(getCandidateId() && (showAfterLoginReviewModal === 'true')) showReviewModal(true)
+        else showReviewModal(false)
     }, [prdId])
 
     return(
@@ -136,6 +140,7 @@ const DetailPage = (props) => {
                             varChecked={varChecked}
                             showReviewModal={showReviewModal} 
                             providerCount = {product_detail?.pop_list?.length}
+                            pUrl={props?.match?.url}
                         />
                     </header>
                     <main className="mb-0">

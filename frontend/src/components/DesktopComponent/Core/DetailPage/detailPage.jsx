@@ -26,7 +26,7 @@ import { startMainCourseLoader, stopMainCourseLoader } from 'store/Loader/action
 import Loader from '../../Common/Loader/loader';
 import MetaContent from "../../Common/MetaContent/metaContent";
 import queryString from 'query-string';
-import { getTrackingInfo, storageTrackingInfo, removeTrackingInfo } from 'utils/storage.js';
+import { getTrackingInfo, storageTrackingInfo, removeTrackingInfo, getCandidateId } from 'utils/storage.js';
 import { trackUser } from 'store/Tracking/actions/index.js';
 import ReviewModal from '../../Common/Modals/reviewModal';
 
@@ -42,11 +42,15 @@ const DetailPage = (props) => {
     const completeDescription = (product_detail?.prd_about ? (product_detail?.prd_about + ' <br /> ') : '') + (product_detail?.prd_desc ? product_detail?.prd_desc : '')
     const reqLength = 250;
     const [detReviewModal, showReviewModal] = useState(false);
+    const params = new URLSearchParams(props.location.search);
+    const showAfterLoginReviewModal = params.get('sm')
 
     useEffect( () => {
         handleEffects();
         Aos.init({ duration: 2000, once: true, offset: 10, anchorPlacement: 'bottom-bottom' });
         window.addEventListener('scroll', handleScroll);
+        if(getCandidateId() && (showAfterLoginReviewModal === 'true')) showReviewModal(true)
+        else showReviewModal(false)
     }, [id])
 
     const handleScroll=() => {
@@ -115,7 +119,7 @@ const DetailPage = (props) => {
                         hasReview = { product_detail?.prd_num_rating ? true : false }
                         />
             }
-            
+
             <BannerCourseDetail 
                 frqntProd={frqntProd}
                 addFrqntProd={addFrqntProd}
@@ -127,7 +131,9 @@ const DetailPage = (props) => {
                 completeDescription={completeDescription}
                 reqLength={reqLength}
                 showReviewModal={showReviewModal}
+                pUrl={props?.match?.url}
             />
+
             {product_detail?.prd_uget && <KeyFeatures prd_uget={product_detail?.prd_uget} pTF={product_detail?.pTF} prd_vendor_slug={product_detail?.prd_vendor_slug} />}
             
             {

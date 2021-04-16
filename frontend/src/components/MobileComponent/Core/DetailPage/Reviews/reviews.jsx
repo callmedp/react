@@ -53,7 +53,7 @@ const Reviews = (props) => {
                     (!product_detail?.user_reviews && getCandidateId()) ?
                         <Link to={'#'} className="ml-auto fs-13 font-weight-bold" onClick={() => showReviewModal(true) }>Write a review</Link>
                     : 
-                    <a href={`${siteDomain}/login/?next=${pUrl}`} className="ml-auto fs-13 font-weight-bold" >Write a review</a>
+                    <a href={`${siteDomain}/login/?next=${pUrl}?sm=true`} className="ml-auto fs-13 font-weight-bold" >Write a review</a>
                 }
                 
             </div>
