@@ -67,7 +67,7 @@ const BannerCourseDetail = (props) => {
 
         if(!product_detail?.redeem_test) {
             MyGA.SendEvent('ln_enroll_now', 'ln_enroll_now', 'ln_click_enroll_now', `${product_detail?.prd_H1}`, '', false, true);
-            console.log(tracking_data);
+
             dispatch(trackUser({"query" : tracking_data, "action" :'enroll_now'}));
 
             if(frqntProd && frqntProd.length > 0) {
