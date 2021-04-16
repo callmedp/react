@@ -35,7 +35,7 @@ const CourseEnrol = (props) => {
 
         if(!product_detail?.redeem_test) {
             MyGA.SendEvent('ln_enroll_now', 'ln_enroll_now', 'ln_click_enroll_now', `${product_detail?.prd_H1}`, '', false, true);
-            trackUser({"query" : tracking_data, "action" :'enroll_now'});
+            dispatch(trackUser({"query" : tracking_data, "action" :'enroll_now'}));
 
             if(frqntProd && frqntProd.length > 0) {
                 frqntProd.map(prdId => addonsId.push(prdId.id));
@@ -55,7 +55,7 @@ const CourseEnrol = (props) => {
             }
         }
         else {
-            trackUser({"query" : tracking_data, "action" :'redeem_now'});
+            dispatch(trackUser({"query" : tracking_data, "action" :'redeem_now'}));
             cartItems = { 'prod_id': product_detail?.product_id, 'redeem_option': product_detail?.redeem_option }
 
             try {

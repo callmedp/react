@@ -4,6 +4,7 @@ import { siteDomain } from 'utils/domains';
 import '../../../Common/ProductCardsSlider/productCardsSlider';
 import { getTrackingInfo } from 'utils/storage.js';
 import { trackUser } from 'store/Tracking/actions/index.js';
+import { useDispatch } from 'react-redux';
 
 const ProductCards = props => {
     const {
@@ -22,6 +23,8 @@ const ProductCards = props => {
         variableWidth: true,
     };
 
+    const dispatch = useDispatch();
+
     const starRatings = (star, index) => {
         return (
             star === '*' ? <em className="micon-fullstar" key={index}></em> :
@@ -31,8 +34,8 @@ const ProductCards = props => {
     }
 
     const handleTracking = () => {
-        trackUser({"query" : tracking_data, "action" :'exit_product_page'});
-        trackUser({"query" : tracking_data, "action" :'recommended_products'});
+        dispatch(trackUser({"query" : tracking_data, "action" :'exit_product_page'}));
+        dispatch(trackUser({"query" : tracking_data, "action" :'recommended_products'}));
     }
 
     return (
