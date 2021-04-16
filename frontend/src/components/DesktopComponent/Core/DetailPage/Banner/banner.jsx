@@ -112,6 +112,7 @@ const BannerCourseDetail = (props) => {
         price += frqntProd.reduce((previousValue, currentValue) => {
           return parseFloat(previousValue) + parseFloat(currentValue.inr_price);
         }, 0);
+        console.log(product, price)
         return parseFloat(product) + price;
     };
 
@@ -138,7 +139,7 @@ const BannerCourseDetail = (props) => {
         if(data.length - 1 !== key) trackUser({"query" : tracking_data, "action" :'exit_product_page'});
         
         MyGA.SendEvent('ln_breadcrumbs', 'ln_breadcrumbs', 'ln_breadcrumb_click', `${val.name}`, '', false, true);
-        window.location.href = `${siteDomain}${val.url}`;
+        if(val.url !== "") window.location.href = `${siteDomain}${val.url}`;
     }
 
     return (
@@ -329,7 +330,7 @@ const BannerCourseDetail = (props) => {
                                                 </div>
                                             }
                                             <div className="course-enrol__price">
-                                                <strong className="price-taxes mt-20 mb-10">{getProductPrice(varChecked?.inr_price || product_detail?.var_list[0]?.inr_price) || product_detail?.pPinb}/-  <span className="taxes">(+taxes)</span></strong>
+                                                <strong className="price-taxes mt-20 mb-10">{getProductPrice(varChecked?.inr_price || product_detail?.var_list[0]?.inr_price || product_detail?.pPinb)}/-  <span className="taxes">(+taxes)</span></strong>
                                                 <strong className="price-offer mt-0 mb-10">
                                                     {
                                                         (varChecked?.id ? discountPrice : product_detail?.var_list[0]?.fake_inr_price) > 0 ?
