@@ -84,7 +84,7 @@ const DetailPage = (props) => {
           dispatch(
             trackUser({
               query: query,
-              action: "ln_course_page",
+              action: "product_page",
             })
           );
         }
