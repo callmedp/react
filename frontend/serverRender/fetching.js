@@ -1,15 +1,13 @@
 const fetchApiData = async ({ dispatch }, params, cookies, actionGroup, resolve, reject) => {
-
   let actionList = actionGroup(params);
   let results = [];
-
+  
   try {
-
     results = await Promise.all((actionList || []).map((caller, index) => {
     let data = { ...caller.payload, em: cookies };
-      return new Promise((resolve, reject) =>
-        dispatch(caller['action']({ payload: { ...data}, resolve, reject })))
-    })
+      return new Promise((resolve, reject) => {
+        dispatch(caller['action']({ payload: { ...data}, resolve, reject }))});
+      })
     )
   }
   catch (error) {

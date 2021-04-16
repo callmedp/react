@@ -158,6 +158,51 @@ export const stopOiDetailsLoader = () => {
     }
 }
 
+// main course loader
+export const startMainCourseLoader = () => {
+    return {
+        type: Actions.START_MAIN_COURSE_LOADER,
+        payload: { mainCourseLoader: true }
+    }
+}
+
+export const stopMainCourseLoader = () => {
+    return {
+        type: Actions.STOP_MAIN_COURSE_LOADER,
+        payload: { mainCourseLoader: false }
+    }
+}
+
+// main course cart loader
+export const startMainCourseCartLoader = () => {
+    return {
+        type: Actions.START_MAIN_COURSE_CART_LOADER,
+        payload: { mainCourseCartLoader: true }
+    }
+}
+
+export const stopMainCourseCartLoader = () => {
+    return {
+        type: Actions.STOP_MAIN_COURSE_CART_LOADER,
+        payload: { mainCourseCartLoader: false }
+    }
+}
+
+// need help loader
+export const startNeedHelpLoader = () => {
+    return {
+        type: Actions.START_NEED_HELP_LOADER,
+        payload: { needHelpLoader: true }
+    }
+}
+
+export const stopNeedHelpLoader = () => {
+    return {
+        type: Actions.STOP_NEED_HELP_LOADER,
+        payload: { needHelpLoader: false }
+    }
+}
+
 export const startGetResumeScoreLoader = () => {
     return {
         type: Actions.START_GET_RESUME_SCORE_LOADER,

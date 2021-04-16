@@ -2,8 +2,7 @@ import React from 'react';
 import { siteDomain } from 'utils/domains';
 
 const CourseCard = (props) => {
-
-    const { course, key } = props;
+    const { course, name, indx } = props;
     
     const starRatings = (star, index) => {
         return (star === '*' ? <em className="icon-fullstar" key={index}></em> : star === '+'
@@ -12,27 +11,28 @@ const CourseCard = (props) => {
     }
 
     return (
-        <li className="col" key={key}>
+        <li className="col" key={indx} itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
             <div className="card">
-                <div className="card__heading">
+                <div className="card__heading" itemProp="image">
                     <figure>
-                        <img src={course.imgUrl} alt={course.imgAlt} />
+                        { course.imgUrl || course.vendor_image && <img src={course.imgUrl || course.vendor_image} alt={course.imgAlt || course.name || course.heading} /> }
                     </figure>
-                    <h3 className="heading3">
-                        <a href={`${siteDomain}${course.url}`}>{course.name}</a>
+                    <h3 className="heading3" itemProp="item">
+                        <a href={`${siteDomain}${course.url}`}> <span itemProp="name">{course.name || course.heading}</span></a>
                     </h3>
                 </div>
                 <div className="card__box">
                     <div className="card__rating">
-                        <span className="mr-10">By {course.providerName?.split(' ')[0]?.length > 10 ? course.providerName?.split(' ')[0]?.slice(0,10) + '...' : course.providerName?.split(' ')[0] }</span>
+                        <span className="mr-10">By {(course.providerName || course.vendor)?.split(' ')[0]?.length > 10 ? (course.providerName || course.vendor)?.split(' ')[0]?.slice(0,10) + '...' : (course.providerName || course.vendor)?.split(' ')[0] }</span>
 
-                        <span className="rating">
-                            {course.stars?.map((star, index) => starRatings(star, index))}
-                            <span>{course.rating?.toFixed(1)}/5</span>
+                        <span className="rating" itemProp="aggregateRating" itemScope itemType="https://schema.org/AggregateRating">
+                            {(course.stars || course.rating)?.map((star, index) => starRatings(star, index))}
+                            {name != 'otherProviders' && <span itemProp="ratingValue">{course.rating?.toFixed(1)}/5</span>}
+                            {name === 'otherProviders' && course.avg_rating && <span itemProp="ratingValue">{course.avg_rating}/5</span>}
                         </span>
                     </div>
                     <div className="card__price mt-10">
-                        <strong>{course.price}/-</strong>
+                        <strong>{(course.price || course.inr_price)}/-</strong>
                     </div>
                 </div>
             </div>

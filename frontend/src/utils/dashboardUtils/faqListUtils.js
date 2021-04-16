@@ -25,6 +25,6 @@ export const faqList = [
     },
     {
         heading: "If I cancel or return an item from my order, will the points credited be deducted?",
-        content: "points calculation happens at the order level. You will get to know about the points deducted after you've cancelled or returned an item as it will be recalculated on the basis of the updated order value."
+        content: "Points calculation happens at the order level. You will get to know about the points deducted after you've cancelled or returned an item as it will be recalculated on the basis of the updated order value."
     }
 ]

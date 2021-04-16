@@ -7,10 +7,10 @@ import { zendeskChatShow } from 'utils/zendeskIniti';
 import { getWhatsAppNo } from 'utils/whatsappNo';
 
 const CTA = (props) => {
-    const { setEnquiryForm, pageType, heading } = props
+    const { setEnquiryForm, pageType, heading, contact } = props
     const { callUs, whatsappDict } = useSelector(store => store.header)
     const [whatsappNo, setWhatsAppNo] = useState('')
-    
+
     const showEnquiryForm = (event) => {
         event.preventDefault();
         setEnquiryForm(true)
@@ -26,7 +26,7 @@ const CTA = (props) => {
                 <figure className="micon-enquiry"></figure>
                 Enquiry
             </a>
-            <a href={`tel:${callUs}`}>
+            <a href={!!contact ? `tel:${contact}` : `tel:${callUs}`}>
                 <figure className="micon-callus"></figure>
                 Call us
             </a>

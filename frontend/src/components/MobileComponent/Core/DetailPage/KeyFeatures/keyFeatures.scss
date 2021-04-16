@@ -1,0 +1,29 @@
+@import '../../../../../styles-mobile/abstracts';
+
+.m-key-features {
+    ul {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+
+        li {
+            padding-left: 3rem;
+            position: relative;
+
+            &:not(:last-child) {
+                margin-bottom: 1.5rem;
+            }
+            
+            &::before {
+                content: '';
+                background: $sprite -444px -143px;
+                width: 1.6rem;
+                height: 1.6rem;
+                display: inline-block;
+                position: absolute;
+                left: 0;
+                top: .4rem;
+            }
+        }
+    }
+}
