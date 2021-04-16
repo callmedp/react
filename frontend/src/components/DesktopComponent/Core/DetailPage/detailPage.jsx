@@ -3,6 +3,7 @@ import Header from '../../Common/Header/header';
 import StickyNav from './StickyNavDetail/stickyNavDetail';
 import BannerCourseDetail from './Banner/banner';
 import KeyFeatures from './KeyFeatures/keyFeatures';
+import WhatYouGet from './KeyFeatures/whatYouGet';
 import AboutSection from './AboutSection/aboutSection';
 import CourseOutline from './CourseOutline/courseOutline';
 // import CourseOutcome from './CourseOutcome/courseOutcome';
@@ -20,7 +21,7 @@ import EnquireNow from './EnquireNow/enquireNow';
 import Footer from '../../Common/Footer/footer';
 import '../SkillPage/skillPage.scss';
 import Aos from "aos";
-import { fetchMainCourses } from 'store/DetailPage/actions';
+import { fetchMainCourses, fetchProductReviews } from 'store/DetailPage/actions';
 import { useSelector, useDispatch } from 'react-redux';
 import { startMainCourseLoader, stopMainCourseLoader } from 'store/Loader/actions/index';
 import Loader from '../../Common/Loader/loader';
@@ -139,7 +140,9 @@ const DetailPage = (props) => {
                 pUrl={props?.match?.url}
             />
 
-            {product_detail?.prd_uget && <KeyFeatures prd_uget={product_detail?.prd_uget} pTF={product_detail?.pTF} prd_vendor_slug={product_detail?.prd_vendor_slug} />}
+            {product_detail?.prd_uget && <KeyFeatures prd_uget={product_detail?.prd_uget} />}
+
+            { product_detail?.pTF === 16 && <WhatYouGet prd_vendor_slug={product_detail?.prd_vendor_slug} /> }
             
             {
                 completeDescription?.length > reqLength ?  <AboutSection completeDescription={completeDescription} /> : ''
@@ -199,7 +202,7 @@ const DetailPage = (props) => {
             { product_detail?.faq && <FAQ faq_list={product_detail?.faq_list}/> }
 
             {
-                (prd_review_list && prd_review_list.length) ? <Reviews setCurrentPage={setCurrentPage} prd_review_list={prd_review_list} prd_rv_current_page={prd_rv_current_page} prd_rv_has_next={prd_rv_has_next} product_detail={product_detail} pUrl={props?.match?.url} showReviewModal={showReviewModal}/> : ''
+                (prd_review_list && prd_review_list.length) ? <Reviews id={id?.split('-')[1]} setCurrentPage={setCurrentPage} prd_review_list={prd_review_list} prd_rv_current_page={prd_rv_current_page} prd_rv_has_next={prd_rv_has_next} product_detail={product_detail} pUrl={props?.match?.url} showReviewModal={showReviewModal}/> : ''
             }
 
             <EnquireNow {...props} />

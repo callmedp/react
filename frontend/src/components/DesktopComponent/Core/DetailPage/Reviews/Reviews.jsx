@@ -4,28 +4,21 @@ import { Link } from 'react-router-dom';
 import './Reviews.scss';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchProductReviews } from 'store/DetailPage/actions';
-import ReviewModal from '../../../Common/Modals/reviewModal';
+// import ReviewModal from '../../../Common/Modals/reviewModal';
 import Loader from '../../../Common/Loader/loader';
 import { getCandidateId } from 'utils/storage.js';
 import { siteDomain } from 'utils/domains';
 
 const Reviews = (props) => {
-    const {id, product_detail, pUrl, detReviewModal, showReviewModal} = props;
-    // const [detReviewModal, showReviewModal] = useState(false);
+    const {id, product_detail, pUrl, setCurrentPage, prd_review_list, prd_rv_current_page, prd_rv_has_next, showReviewModal} = props;
     const { reviewLoader } = useSelector(store => store.loader);
-    const { prd_review_list, prd_rv_current_page, prd_rv_has_next } = useSelector( store => store.reviews );
     const [carIndex, setIndex] = useState(0);
-
     const dispatch = useDispatch();
-    let currentPage = 1;
 
     useEffect( () => {
-        handleEffects(currentPage);
-    }, [id])
+    })
 
     const handleEffects = async (page) => {
-        currentPage = page;
-
         try {
             await new Promise((resolve, reject) => dispatch(fetchProductReviews({ payload: { prdId: id, page: page, device: 'desktop' }, resolve, reject })));
         }
@@ -45,7 +38,10 @@ const Reviews = (props) => {
     const handleSelect = (selectedIndex, e) => {
         if (e !== undefined) {
             setIndex(selectedIndex);
-            if((selectedIndex % 2 === 0) && e.target.className === 'carousel-control-next-icon' && prd_rv_has_next) handleEffects(prd_rv_current_page+1);
+            if((selectedIndex % 2 === 0) && e.target.className === 'carousel-control-next-icon' && prd_rv_has_next) {
+                setCurrentPage(prd_rv_current_page+1);
+                handleEffects(prd_rv_current_page+1);
+            }
         }
     }
 

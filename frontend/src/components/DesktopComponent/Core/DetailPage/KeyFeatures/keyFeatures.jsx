@@ -1,9 +1,8 @@
 import React from 'react';
 import './keyFeatures.scss';
-import WhatYouGet from './whatYouGet';
 
 const KeyFeatures = (props) => {
-    const {prd_uget, pTF, prd_vendor_slug} = props;
+    const {prd_uget} = props;
 
     return (
         <section id="keyfeatures" className="container-fluid mb-0">
@@ -16,7 +15,6 @@ const KeyFeatures = (props) => {
                 </div>
             </div>
             <br/>
-            { pTF === 16 && <WhatYouGet prd_vendor_slug={prd_vendor_slug} /> }
         </section>
     )
 }

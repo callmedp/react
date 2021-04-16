@@ -1,9 +1,8 @@
 import React from 'react';
 import './keyFeatures.scss'
-import WhatYouGet from './whatYouGet';
 
 const KeyFeatures = (props) => {
-    const { prd_uget, typeFlow, prd_vendor_slug } = props;
+    const { prd_uget } = props;
 
     return (
         <>
@@ -13,10 +12,7 @@ const KeyFeatures = (props) => {
                     <p dangerouslySetInnerHTML={{__html: prd_uget}} />
                 </div>
             </section>
-            { 
-                typeFlow === 16 && 
-                    <WhatYouGet prd_vendor_slug={prd_vendor_slug} />
-            }
+            
         </>
     )
 }
