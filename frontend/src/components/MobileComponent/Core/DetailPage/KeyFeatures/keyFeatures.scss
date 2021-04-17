@@ -1,6 +1,25 @@
 @import '../../../../../styles-mobile/abstracts';
 
 .m-key-features {
+    p {
+        p {
+            margin-left: 3rem;
+            position: relative;
+            strong {
+                font-weight: 600;
+            }
+            &::before {
+                content: '';
+                background: $sprite -444px -143px;
+                width: 1.6rem;
+                height: 1.6rem;
+                display: inline-block;
+                position: absolute;
+                left: -2.5rem;
+                top: .4rem;
+            }
+        }
+    }
     ul {
         list-style-type: none;
         margin: 0;
