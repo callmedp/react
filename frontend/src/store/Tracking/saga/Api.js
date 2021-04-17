@@ -3,7 +3,6 @@ import { shineSiteDomain, siteDomain } from '../../../utils/domains'
 
 const trackUser = (query, userAction) => {
     let t_id = !!query['t_id'] ? query['t_id']:"";
-    console.log(query);
     if(t_id == "") {
         return
     }

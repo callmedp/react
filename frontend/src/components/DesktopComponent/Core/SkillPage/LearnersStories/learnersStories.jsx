@@ -33,7 +33,7 @@ const LearnersStories = (props) => {
     const { setHasLearnerStories } = props
 
     useEffect(() => {
-        console.log(testimonialCategory)
+        // console.log(testimonialCategory)
         setHasLearnerStories( testimonialCategory.length > 0 )
     }, [testimonialCategory])
 

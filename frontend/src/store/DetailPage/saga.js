@@ -137,8 +137,10 @@ function* AddToCart(action) {
         if (response?.error) return reject(response);
 
         const item = response?.data?.data;
-        if(cartItems.cart_type === 'cart') return window.location.href = `${siteDomain}${item.cart_url}`;
-        else if(cartItems.cart_type === 'express') return window.location.href = `${siteDomain}${item.redirect_url}`;
+        
+        if(cartItems.cart_type === 'cart') return window.location.href = `${siteDomain}${item.cart_url}?t_id=${localStorage.getItem("trackingId")}&prod_id=${localStorage.getItem("productId")}&prod_t_m_id=${localStorage.getItem("productTrackingMappingId")}`;
+
+        else if(cartItems.cart_type === 'express') return window.location.href = `${siteDomain}${item.redirect_url}?t_id=${localStorage.getItem("trackingId")}&prod_id=${localStorage.getItem("productId")}&prod_t_m_id=${localStorage.getItem("productTrackingMappingId")}`;
     }
     catch(e) {
         console.log(`Reject sending survey question due to ${e}`);

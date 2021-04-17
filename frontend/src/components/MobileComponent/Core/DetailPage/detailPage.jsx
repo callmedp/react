@@ -6,6 +6,7 @@ import CourseDetailBanner from './Banner/Banner';
 import CourseEnrol from './CourseEnrol/courseEnrol';
 import StickyNavDetail from './StickyNavDetail/stickyNavDetail';
 import KeyFeatures from './KeyFeatures/keyFeatures';
+import WhatYouGet from './KeyFeatures/whatYouGet';
 import CourseOutline from './CourseOutline/courseOutline';
 // import CourseOutcome from './CourseOutcome/courseOutcome';
 // import SampleCertificate from './SampleCertificate/sampleCertificate';
@@ -162,8 +163,12 @@ const DetailPage = (props) => {
                             product_detail?.fbt && <FrequentlyBought fbtList ={product_detail.fbt_list} addFrqntProd={addFrqntProd} frqntProd={frqntProd}/>
                         }
                         {
-                            product_detail?.prd_uget && <KeyFeatures prd_uget={product_detail?.prd_uget} prd_vendor_slug={product_detail?.prd_vendor_slug} typeFlow={product_detail?.pTF}/>
+                            product_detail?.prd_uget && <KeyFeatures prd_uget={product_detail?.prd_uget} />
                         }
+                        { 
+                            product_detail?.pTF === 16 && <WhatYouGet prd_vendor_slug={product_detail?.prd_vendor_slug} />
+                        }
+
                         {
                             (product_detail?.chapter && product_detail?.prd_service !== 'assessment') && 
                                 <CourseOutline chapter_list={product_detail?.chapter_list}/>
