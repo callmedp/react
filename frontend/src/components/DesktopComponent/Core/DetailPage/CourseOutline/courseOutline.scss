@@ -44,6 +44,10 @@
                         height: 1.8rem;
                         display: inline-block;
                     }
+
+                    &.no-dd {
+                        background: none;
+                    }
                     
                     h3 {
                         font-size: 1.6rem;

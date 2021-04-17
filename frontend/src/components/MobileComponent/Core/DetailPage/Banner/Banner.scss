@@ -203,6 +203,31 @@
                 font-weight: 700;
                 color: $white;
             }
+
+            p {
+        
+                strong {
+                    font-weight: 600;
+                }
+        
+                p {
+                    margin-bottom: 1rem;
+        
+                    strong {
+                        margin: 1rem 0;
+                        font-weight: 600;
+                    }
+                }
+        
+                ol {
+                    padding: 0;
+                    li {
+                        margin-bottom: 1rem;
+                        list-style: decimal;
+                        list-style-position: inside;
+                    }
+                }
+            }
         }
     }
 

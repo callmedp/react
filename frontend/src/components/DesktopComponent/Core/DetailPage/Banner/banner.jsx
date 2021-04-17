@@ -67,7 +67,7 @@ const BannerCourseDetail = (props) => {
 
         if(!product_detail?.redeem_test) {
             MyGA.SendEvent('ln_enroll_now', 'ln_enroll_now', 'ln_click_enroll_now', `${product_detail?.prd_H1}`, '', false, true);
-            console.log(tracking_data);
+
             dispatch(trackUser({"query" : tracking_data, "action" :'enroll_now'}));
 
             if(frqntProd && frqntProd.length > 0) {
@@ -146,6 +146,8 @@ const BannerCourseDetail = (props) => {
     const handleLoginRedirect = () => {
         window.location.href= `${siteDomain}/login/?next=${pUrl}?sm=true`
     }
+
+    let hello = null
 
     return (
         <>
@@ -289,35 +291,42 @@ const BannerCourseDetail = (props) => {
                                         <li>Certification: <strong>{(varChecked?.certify || product_detail?.selected_var?.certify) === 0 ? 'No' : (varChecked?.certify || product_detail?.selected_var?.certify) === false ? 'No' : 'Yes' }</strong></li>
                                     }
                                 </ul>
-                                <div className="intro-video">
-                                    <figure className="intro-video__img">
-                                        <a rel="noopener noreferrer" target="_blank" href={`https://${product_detail?.prd_video}`}>
-                                            <iframe src={`https://${product_detail?.prd_video}`} frameBorder="0" />
-                                            <i className="icon-play-video"></i>
-                                            <strong>Intro video</strong>
-                                        </a>
-                                    </figure>
+                                {
+                                    (product_detail?.prd_video || completeDescription) &&
+                                        <div className="intro-video">
+                                            {
+                                                product_detail?.prd_video &&
+                                                    <figure className="intro-video__img">
+                                                        <a rel="noopener noreferrer" target="_blank" href={`https://${product_detail?.prd_video}`}>
+                                                            <iframe src={`https://${product_detail?.prd_video}`} frameBorder="0" />
+                                                            <i className="icon-play-video"></i>
+                                                            <strong>Intro video</strong>
+                                                        </a>
+                                                    </figure>    
+                                            }
 
-                                    <span className="intro-video__content" itemProp="embedUrl">
-                                        { completeDescription && 
-                                            <div id="module" className="about-course">
-                                                    <span className="read-more-wrap" itemProp="description">
-                                                        <span dangerouslySetInnerHTML={{__html:completeDescription?.slice(0, reqLength) + '....'}} />
-                                                    </span>
-                                                    {/* <label htmlFor="post-10" className="read-more-trigger"></label> */}
-                                                    {
-                                                        completeDescription?.length > reqLength ? 
-                                                        (
-                                                            // <input type="checkbox" onClick={() => setReadAll(!readAll) } className="read-more-state" id="post-10" checked={readAll} itemProp="about" />
-                                                            <LinkScroll to = {'aboutsection'} offset={-160} smooth={true}> Read More</LinkScroll> 
-                                                        ) : (
-                                                            ""
-                                                            )
-                                                    }
-                                                    
-                                            </div> }
-                                    </span>
-                                </div>
+                                            
+                                            { completeDescription && 
+                                                <span className="intro-video__content" itemProp="embedUrl">
+                                                    <div id="module" className="about-course">
+                                                            <span className="read-more-wrap" itemProp="description">
+                                                                <span dangerouslySetInnerHTML={{__html:completeDescription?.slice(0, reqLength) + '....'}} />
+                                                            </span>
+                                                            {/* <label htmlFor="post-10" className="read-more-trigger"></label> */}
+                                                            {
+                                                                completeDescription?.length > reqLength ? 
+                                                                (
+                                                                    // <input type="checkbox" onClick={() => setReadAll(!readAll) } className="read-more-state" id="post-10" checked={readAll} itemProp="about" />
+                                                                    <LinkScroll to = {'aboutsection'} offset={-160} smooth={true}> Read More</LinkScroll> 
+                                                                ) : (
+                                                                    ""
+                                                                    )
+                                                            }
+                                                    </div> 
+                                                </span>
+                                            }
+                                        </div>
+                                }
                             </div>
                             
                             <div className="banner-detail">
@@ -373,7 +382,7 @@ const BannerCourseDetail = (props) => {
                                                 
                                             </div>
                                             <div className="course-enrol__offer lightblue-bg2">
-                                                {product_detail?.redeem_test && <span>You have {product_detail?.product_redeem_count} free practice test (Assessment) as you're a Shine Premium User</span>}
+                                                {product_detail?.redeem_test && <span className="flex-1">You have {product_detail?.product_redeem_count} free practice test (Assessment) as you're a Shine Premium User</span>}
                                                 <strong className="mt-10 mb-5">Offers</strong>
                                                 <ul className="pb-0">
                                                 {

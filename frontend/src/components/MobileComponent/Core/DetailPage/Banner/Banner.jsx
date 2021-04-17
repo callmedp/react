@@ -232,9 +232,12 @@ const CourseDetailBanner = (props) => {
                         <li>
                             <a href={`${siteDomain}/search/results/?fvid=${product_detail?.pPv}`} onClick={() => viewAllCourses()}>View all</a> courses by {product_detail?.prd_vendor}
                         </li>
-                        <li>
-                            <LinkScroll to={'otherProviders'} offset={-150} >+{providerCount} more</LinkScroll> Course providers  
-                        </li>
+                        {
+                            providerCount > 0 ? 
+                                <li>
+                                    <LinkScroll to={'otherProviders'} offset={-150} >+{providerCount} more</LinkScroll> Course providers  
+                                </li> : ''
+                        }
                     </ul>
             }
         </div>

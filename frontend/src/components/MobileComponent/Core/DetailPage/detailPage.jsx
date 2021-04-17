@@ -6,6 +6,7 @@ import CourseDetailBanner from './Banner/Banner';
 import CourseEnrol from './CourseEnrol/courseEnrol';
 import StickyNavDetail from './StickyNavDetail/stickyNavDetail';
 import KeyFeatures from './KeyFeatures/keyFeatures';
+import WhatYouGet from './KeyFeatures/whatYouGet';
 import CourseOutline from './CourseOutline/courseOutline';
 // import CourseOutcome from './CourseOutcome/courseOutcome';
 // import SampleCertificate from './SampleCertificate/sampleCertificate';
@@ -51,6 +52,7 @@ const DetailPage = (props) => {
     const [frqntProd, addFrqntProd] = useState([]);
     const params = new URLSearchParams(props.location.search);
     const showAfterLoginReviewModal = params.get('sm')
+    const { prd_review_list, prd_rv_total } = useSelector( store => store.reviews )
 
     const handleEffects = async () => {
 
@@ -161,8 +163,12 @@ const DetailPage = (props) => {
                             product_detail?.fbt && <FrequentlyBought fbtList ={product_detail.fbt_list} addFrqntProd={addFrqntProd} frqntProd={frqntProd}/>
                         }
                         {
-                            product_detail?.prd_uget && <KeyFeatures prd_uget={product_detail?.prd_uget} prd_vendor_slug={product_detail?.prd_vendor_slug} typeFlow={product_detail?.pTF}/>
+                            product_detail?.prd_uget && <KeyFeatures prd_uget={product_detail?.prd_uget} />
                         }
+                        { 
+                            product_detail?.pTF === 16 && <WhatYouGet prd_vendor_slug={product_detail?.prd_vendor_slug} />
+                        }
+
                         {
                             (product_detail?.chapter && product_detail?.prd_service !== 'assessment') && 
                                 <CourseOutline chapter_list={product_detail?.chapter_list}/>
@@ -182,7 +188,7 @@ const DetailPage = (props) => {
                         { product_detail?.pop && <OtherProviders pop_list={product_detail?.pop_list} /> }
                         { product_detail?.faq && <FAQ faq_list={product_detail?.faq_list}/> }
                         {
-                            product_detail?.prd_num_rating ? <Reviews showReviewModal={showReviewModal} product_detail={product_detail} prdId={prdId} pUrl={props?.match?.url}/> : ''
+                            prd_review_list ? <Reviews showReviewModal={showReviewModal} product_detail={product_detail} prdId={prdId} pUrl={props?.match?.url}/> : ''
                         }
                         { skill?.length > 0 && <CoursesMayLike product_id={prdId} skill={skill}/> }
                         <CTA setEnquiryForm={setEnquiryForm} contact={ggn_contact} />
