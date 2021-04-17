@@ -21,7 +21,7 @@ const CourseOutline = (props) => {
                                     !!chap.content && 
                                         <input type="radio" name="rd" id={"co" + index} checked = { checkedId === index } onClick={() => accordionHandle(index)}/>
                                 }
-                                <label className="tab-label" htmlFor={ "co" + index } itemProp="name"><h3>{chap.heading}</h3></label>
+                                <label className={`tab-label ${!!chap.content ? " " : 'no-dd'}`} htmlFor={ "co" + index } itemProp="name"><h3>{chap.heading}</h3></label>
                                 {
                                     !!chap.content && 
                                         <div id="0" className="tab-content">
