@@ -15,15 +15,15 @@ const Reviews = (props) => {
     const [carIndex, setIndex] = useState(0);
     const dispatch = useDispatch();
 
-    useEffect( () => {
-    })
+    // useEffect( () => {
+    // })
 
     const handleEffects = async (page) => {
         try {
             await new Promise((resolve, reject) => dispatch(fetchProductReviews({ payload: { prdId: id, page: page, device: 'desktop' }, resolve, reject })));
         }
         catch (error) {
-            console.log(error);
+            console.log('error in reviews api');
         }
     };
 
@@ -70,10 +70,10 @@ const Reviews = (props) => {
                                                                         review?.rating?.map((star, index) => starRatings(star, index))
                                                                     }
                                                                 </span>
-                                                                <strong className="card__name" itemProp="name">{review?.title}</strong>
+                                                                <strong className="card__name" itemProp="name">{review?.title ? review?.title : '  '}</strong>
                                                                 <p className="card__txt" itemProp="reviewBody">{review?.content}</p>
                                                                 <strong itemProp="author">{ review?.user_name ? review?.user_name : 'Anonymous' }</strong>
-                                                                <span className="card__location" itemProp="datePublished">{review?.created}</span>
+                                                                <span className="card__location" itemProp="datePublished">{review?.created ? review?.created : '  '}</span>
                                                             </div>
                                                         </div>
                                                     )
