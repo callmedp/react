@@ -343,6 +343,11 @@ class PaymentLoginView(TemplateView, CartMixin):
                     #                                                        shine_id=candidate_id)
                     # self.request.session.update(resp_status)
                     cart_obj.save()
+                    source_type = "cart_summary"
+                    # create_lead_on_crm(cart_pk, source_type, guest_name)
+                    create_lead_on_crm.apply_async(
+                        (cart_obj.pk, source_type, guest_name),
+                        countdown=settings.CART_SUMMARY)
                     return HttpResponseRedirect(reverse('payment:payment-option'))
                 return HttpResponseRedirect(reverse('cart:payment-summary'))
 

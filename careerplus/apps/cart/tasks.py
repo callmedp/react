@@ -36,18 +36,21 @@ def create_lead_on_crm(pk=None, source_type=None, name=None):
                              },
         "payment_drop_out": {"shipping_done": True,
                              "payment_page": True,
+                             },
+        "payment_option": {"shipping_done": True,
+                             "payment_page": True,
                              }
-
     }
     source_in_dict = cart_lead_creation_dict.get(source_type,None)
-    if not source_in_dict:
+    if not source_in_dict and source_type not in ["cart_summary", "payment_option"]:
         return
     filter_dict = {'status': 2, 'owner_id__isnull': False, 'pk': pk}
-    filter_dict.update(source_in_dict)
-    lead_creation_function(filter_dict=filter_dict, cndi_name=name)
+    if source_in_dict:
+        filter_dict.update(source_in_dict)
+    lead_creation_function(filter_dict=filter_dict, cndi_name=name, source_type=source_type)
 
 
-def lead_creation_function(filter_dict=None, cndi_name=None):
+def lead_creation_function(filter_dict=None, cndi_name=None, source_type=None):
     try:
         cart_objs = Cart.objects.filter(**filter_dict).exclude(owner_id__exact='')
         extra_info = {}
@@ -75,6 +78,10 @@ def lead_creation_function(filter_dict=None, cndi_name=None):
             variation_list = []
             deltatasktime = timezone.now() - timedelta(seconds=settings.CART_DROP_OUT_LEAD)
             # deltatasktime = date_timezone_convert(deltatasktime)  if timezone is needed
+            if source_type == "cart_summary":
+                deltatasktime = timezone.now() - timedelta(seconds=settings.CART_SUMMARY)
+            elif source_type == "payment_option":
+                deltatasktime = timezone.now() - timedelta(seconds=settings.PAYMENT_OPTION)
             server_time = deltatasktime
             prod = m_prods.filter(modified__lte=server_time).first()
             counter = 0
@@ -85,17 +92,18 @@ def lead_creation_function(filter_dict=None, cndi_name=None):
                 product_name = prod.product.heading if prod.product.heading else prod.product.name
                 data_dict.update({
                                      "product": product_name,
-                                     "productid": prod.product.id
+                                     "productid": prod.product.id,
+                                     "product_url":prod.product.absolute_url
                                  })
                 m_prods = m_prods.exclude(id=prod.id)
             for m_prod in m_prods:
                 # logging.getLogger('error_log').error('inside the loop')
-
                 if counter == 0:
                     product_name = m_prod.product.heading if m_prod.product.heading else m_prod.product.name
                     data_dict.update({
                         "product": product_name,
-                        "productid": m_prod.product.id
+                        "productid": m_prod.product.id,
+                        "product_url":prod.product.absolute_url
                     })
                     counter += 1
                     continue
@@ -127,6 +135,14 @@ def lead_creation_function(filter_dict=None, cndi_name=None):
                 m_prod = m_prods[0]
             
             data_dict.update({"extra_info": json.dumps(extra_info)})
+
+            if source_type in ["cart_summary", "payment_option"]:
+                data_dict.update({
+                    "lead_type":2,
+                    "source_type":source_type
+                    })
+                lead_create_on_crm(cart_obj, data_dict=data_dict)
+                return
 
             #Create resume lead if resume items present in cart
             if cart_obj.lineitems.exclude(product__type_flow__in=[2,14,16]):
