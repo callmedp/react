@@ -20,7 +20,7 @@ const OtherProviders = (props) => {
                     {
                         courseData?.map((course, indx) => {
                             return (
-                                <li className="col" key={indx} itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
+                                <li className="col-sm-3" key={indx} itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
                                     <div className="card">
                                         <div className="card__heading" itemProp="image">
                                             <figure>

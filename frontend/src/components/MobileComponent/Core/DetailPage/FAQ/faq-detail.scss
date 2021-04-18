@@ -82,6 +82,10 @@
         margin: 0 1rem 1rem 1rem;
       }
     }
+
+    label.no-dd::after {
+      background: none;
+    }
   }
   
   // :checked
