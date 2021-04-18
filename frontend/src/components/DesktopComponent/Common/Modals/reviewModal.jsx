@@ -74,7 +74,7 @@ const ReviewModal =(props) => {
                 if(response) {
                     if(!response?.error) {
                         showReviewModal(false);
-                        return window.location.replace(window.location.href.replace("?sm=true",''));
+                        return window.history.pushState({}, null, window.location.href.replace("?sm=true",''));
                     }
 
                     Toast.fire({
@@ -131,7 +131,7 @@ const ReviewModal =(props) => {
     return (
         <>
         { reviewLoader ? <Loader /> : ''}
-        <Modal show={detReviewModal} onHide={showReviewModal} onClick={() => {return window.location.replace(window.location.href.replace("?sm=true",''))}} className="db-modal db-page">
+        <Modal show={detReviewModal} onHide={showReviewModal} onClick={() => {return window.history.pushState({}, null, window.location.href.replace("?sm=true",''))}} className="db-modal db-page">
         <Modal.Header closeButton></Modal.Header>
         
         <Modal.Body>

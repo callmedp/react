@@ -32,7 +32,7 @@ const ReviewModal = (props) => {
                 if(addedReview) {
                     if(!addedReview?.error) {
                         showReviewModal(false);
-                        return window.location.replace(window.location.href.replace("?sm=true",''));
+                        return window.history.pushState({}, null, window.location.href.replace("?sm=true",''));
                     }
 
                     showSwal((addedReview?.error ? 'error' : 'success'), (addedReview?.data?.message ? addedReview?.data?.message : addedReview.error))
@@ -66,7 +66,7 @@ const ReviewModal = (props) => {
         <div className="m-container m-enquire-now m-review-modal m-form-pos-btm" data-aos="fade-up">
             <div className="m-modal-body">
                 {/* <Link to={"#"} className="m-close" onClick={() => showReviewModal(false)}>x</Link> */}
-                <span className="m-close" onClick={() => {showReviewModal(false); return window.location.replace(window.location.href.replace("?sm=true",''))}}>x</span>
+                <span className="m-close" onClick={() => {showReviewModal(false); return window.history.pushState({}, null, window.location.href.replace("?sm=true",''))}}>x</span>
                 <h2 className="m-heading2 text-center">Write a Review</h2>
                 <span className="m-rating m-big-review-star">
                     {
