@@ -54,33 +54,16 @@ const OtherProviders = (props) => {
     }
 
     return(
-        // <section className="container-fluid" data-aos="fade-up" id="popListTemplate">
-        //     <div className="row">
-        //         <div className="container"> 
-        //             <div className="recent-courses mt-20 mb-30">
-        //                 <h2 className="heading2">Courses by other providers</h2>
-        //                     <ul className="recent-courses__list mt-30">
-        //                         {
-        //                             pop_list?.slice(0,4)?.map((popList, indx) => <CourseCard key={indx} indx={indx} course={popList} name={'otherProviders'} />)
-        //                         }
-        //                     </ul>
-        //             </div>
-        //         </div>
-        //     </div>
-        // </section>
-
         <section className="container-fluid" data-aos="fade-up" id="popListTemplate">
             <div className="row">
                 <div className="container">
                     <div className=" mt-20 mb-30">
                         <h2 className="heading2">Courses by other providers</h2>
-                        <Carousel className="other-providers">
+                        <Carousel className={`other-providers ${pop_list.length === 1 ? `removeButtons` : ``}`}>
                             {
                                 pop_list?.map(getLikeCourses)
                             }
                         </Carousel>
-                        {/* <span className="pink-circle2" data-aos="fade-right"></span>
-                        <span className="pink-circle3" data-aos="fade-left"></span> */}
                     </div>
                 </div>
             </div>

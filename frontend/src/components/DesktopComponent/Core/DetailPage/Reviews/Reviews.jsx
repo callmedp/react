@@ -4,19 +4,22 @@ import { Link } from 'react-router-dom';
 import './Reviews.scss';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchProductReviews } from 'store/DetailPage/actions';
-// import ReviewModal from '../../../Common/Modals/reviewModal';
 import Loader from '../../../Common/Loader/loader';
 import { getCandidateId } from 'utils/storage.js';
 import { siteDomain } from 'utils/domains';
 
 const Reviews = (props) => {
-    const {id, product_detail, pUrl, setCurrentPage, prd_review_list, prd_rv_current_page, prd_rv_has_next, showReviewModal} = props;
+    const {id, product_detail, pUrl, showReviewModal} = props;
     const { reviewLoader } = useSelector(store => store.loader);
     const [carIndex, setIndex] = useState(0);
     const dispatch = useDispatch();
+    const { prd_review_list, prd_rv_current_page, prd_rv_has_next } = useSelector( store => store.reviews );
+
+    let currentPage = 1;
 
     useEffect( () => {
-    })
+        handleEffects(currentPage)
+    },[id])
 
     const handleEffects = async (page) => {
         try {
@@ -39,7 +42,6 @@ const Reviews = (props) => {
         if (e !== undefined) {
             setIndex(selectedIndex);
             if((selectedIndex % 2 === 0) && e.target.className === 'carousel-control-next-icon' && prd_rv_has_next) {
-                setCurrentPage(prd_rv_current_page+1);
                 handleEffects(prd_rv_current_page+1);
             }
         }
@@ -53,9 +55,10 @@ const Reviews = (props) => {
                     <h2 className="heading2 text-center pb-20">Reviews</h2>
                 </div>
 
-                <Carousel className="reviews" activeIndex={carIndex} onSelect={handleSelect} >
-                    {
-                        (prd_review_list && prd_review_list?.length > 0) &&
+                {
+                    (prd_review_list && prd_review_list?.length > 0) &&
+                    <Carousel className="reviews" activeIndex={carIndex} onSelect={handleSelect} >
+                        {
                             prd_review_list?.map((reviewData, idx) => {
                                 return (
                                     <Carousel.Item interval={10000000000} key={idx}>
@@ -83,8 +86,9 @@ const Reviews = (props) => {
                                     </Carousel.Item>
                                 )
                             })
-                    }
-                </Carousel>
+                        }
+                    </Carousel>
+                }
 
                 <div className="d-flex mx-auto mt-20">
                     {

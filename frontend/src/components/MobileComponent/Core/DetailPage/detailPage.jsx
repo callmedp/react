@@ -43,7 +43,7 @@ const DetailPage = (props) => {
     const { mainCourseLoader } = useSelector(store => store.loader);
     const [reviewModal, showReviewModal] = useState(false)
     const prdId = props.match.params.id;
-    const { product_detail, skill, ggn_contact, product_id, product_tracking_mapping_id } = useSelector(store => store?.mainCourses);
+    const { product_detail, skill, ggn_contact, product_id, product_tracking_mapping_id, providerLength } = useSelector(store => store?.mainCourses);
     const meta_tags = product_detail?.meta;
     const [enquiryForm, setEnquiryForm] = useState(false);
     const [varChecked, changeChecked] = useState({});
@@ -51,8 +51,8 @@ const DetailPage = (props) => {
     const [showSearchPage, setShowSearchPage] = useState(false)
     const [frqntProd, addFrqntProd] = useState([]);
     const params = new URLSearchParams(props.location.search);
-    const showAfterLoginReviewModal = params.get('sm')
-    const { prd_review_list, prd_rv_total } = useSelector( store => store.reviews )
+    const showAfterLoginReviewModal = params.get('sm');
+    const { prd_review_list, prd_rv_total } = useSelector( store => store.reviews );
 
     const handleEffects = async () => {
 
@@ -141,7 +141,7 @@ const DetailPage = (props) => {
                             prdId={prdId} 
                             varChecked={varChecked}
                             showReviewModal={showReviewModal} 
-                            providerCount = {product_detail?.pop_list?.length}
+                            providerCount = {providerLength}
                             pUrl={props?.match?.url}
                         />
                     </header>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import Slider from "react-slick";
 // import 'slick-carousel/slick/slick.css';
@@ -9,10 +9,10 @@ import { getCandidateId } from 'utils/storage.js';
 import { siteDomain } from 'utils/domains';
 
 const Reviews = (props) => {
-    const { showReviewModal, prdId, product_detail, pUrl } = props
-    const { prd_review_list, prd_rv_total } = useSelector( store => store.reviews )
-    const [pageId, updatePageId] = useState(2)
-    const dispatch = useDispatch()
+    const { showReviewModal, prdId, product_detail, pUrl } = props;
+    const { prd_review_list, prd_rv_total } = useSelector( store => store.reviews );
+    const [pageId, updatePageId] = useState(2);
+    const dispatch = useDispatch();
 
     const settings = {
         dots: false,
@@ -47,13 +47,13 @@ const Reviews = (props) => {
             <div className="d-flex" itemProp="review" itemScope itemType="https://schema.org/Review">
                 <h2 className="m-heading2 mb-10">Review</h2>
                 {
-                    (product_detail?.user_reviews && getCandidateId()) ?
-                        <Link to={'#'} className="ml-auto fs-13 font-weight-bold" onClick={() => showReviewModal(true) }>Update your review</Link>
-                    :
-                    (!product_detail?.user_reviews && getCandidateId()) ?
+                    // (product_detail?.user_reviews && getCandidateId()) ?
+                    //     <Link to={'#'} className="ml-auto fs-13 font-weight-bold" onClick={() => showReviewModal(true) }>Update your review</Link>
+                    // :
+                    // (!product_detail?.user_reviews && getCandidateId()) ?
                         <Link to={'#'} className="ml-auto fs-13 font-weight-bold" onClick={() => showReviewModal(true) }>Write a review</Link>
-                    : 
-                    <a href={`${siteDomain}/login/?next=${pUrl}?sm=true`} className="ml-auto fs-13 font-weight-bold" >Write a review</a>
+                    // : 
+                    // <a href={`${siteDomain}/login/?next=${pUrl}?sm=true`} className="ml-auto fs-13 font-weight-bold" >Write a review</a>
                 }
                 
             </div>

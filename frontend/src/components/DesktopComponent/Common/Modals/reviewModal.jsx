@@ -72,7 +72,11 @@ const ReviewModal =(props) => {
                 dispatch(stopReviewLoader())
 
                 if(response) {
-                    if(!response?.error) showReviewModal(false);
+                    if(!response?.error) {
+                        showReviewModal(false);
+                        return window.location.href.replace("?sm=true",'');
+                    }
+                    
                     Toast.fire({
                         type: response?.error ? 'error' : 'success',
                         title: response?.error ? response?.message : response?.data?.message
@@ -127,7 +131,7 @@ const ReviewModal =(props) => {
     return (
         <>
         { reviewLoader ? <Loader /> : ''}
-        <Modal show={detReviewModal} onHide={showReviewModal} className="db-modal db-page">
+        <Modal show={detReviewModal} onHide={showReviewModal} onClick={() => {return window.location.href.replace("?sm=true",'')}} className="db-modal db-page">
         <Modal.Header closeButton></Modal.Header>
         
         <Modal.Body>
