@@ -111,15 +111,16 @@ const DetailPage = (props) => {
             }
 
             <Header />
+            
             {
-                    showStickyNav && <StickyNav 
-                        outline={(product_detail?.chapter && product_detail?.prd_service !== 'assessment') ? true : false}
-                        topics={(product_detail?.chapter && product_detail?.prd_service === 'assessment') ? true : false}
-                        faq = {product_detail?.faq ? true : false}
-                        product_detail={product_detail} prdId={id} varChecked={varChecked}
-                        frqntProd={frqntProd} product_id={product_id}
-                        hasReview = { product_detail?.prd_num_rating ? true : false }
-                        />
+                showStickyNav && <StickyNav 
+                    outline={(product_detail?.chapter && product_detail?.prd_service !== 'assessment') ? true : false}
+                    topics={(product_detail?.chapter && product_detail?.prd_service === 'assessment') ? true : false}
+                    faq = {product_detail?.faq ? true : false}
+                    product_detail={product_detail} prdId={id} varChecked={varChecked}
+                    frqntProd={frqntProd} product_id={product_id}
+                    hasReview = { product_detail?.prd_num_rating ? true : false }
+                    />
             }
 
             <BannerCourseDetail 
@@ -136,7 +137,7 @@ const DetailPage = (props) => {
                 pUrl={props?.match?.url}
             />
 
-            {product_detail?.prd_uget && <KeyFeatures prd_uget={product_detail?.prd_uget} />}
+            { product_detail?.prd_uget && <KeyFeatures prd_uget={product_detail?.prd_uget} /> }
 
             { product_detail?.pTF === 16 && <WhatYouGet prd_vendor_slug={product_detail?.prd_vendor_slug} /> }
             
@@ -197,7 +198,7 @@ const DetailPage = (props) => {
             
             { product_detail?.faq && <FAQ faq_list={product_detail?.faq_list}/> }
 
-            <Reviews id={id?.split('-')[1]} product_detail={product_detail} pUrl={props?.match?.url} showReviewModal={showReviewModal}/> : ''
+            <Reviews id={id?.split('-')[1]} product_detail={product_detail} pUrl={props?.match?.url} showReviewModal={showReviewModal}/>
             
             <EnquireNow {...props} />
             

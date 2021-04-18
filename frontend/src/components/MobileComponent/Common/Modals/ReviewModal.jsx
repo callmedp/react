@@ -30,11 +30,7 @@ const ReviewModal = (props) => {
                 let addedReview = await new Promise((resolve, reject) => dispatch(submitReview({ payload: review_values, resolve, reject })));
 
                 if(addedReview) {
-                    if(!addedReview?.error) {
-                        showReviewModal(false);
-                        return window.history.pushState({}, null, window.location.href.replace("?sm=true",''));
-                    }
-
+                    window.history.pushState({}, null, window.location.href.replace("?sm=true",''));
                     showSwal((addedReview?.error ? 'error' : 'success'), (addedReview?.data?.message ? addedReview?.data?.message : addedReview.error))
                 }
                 

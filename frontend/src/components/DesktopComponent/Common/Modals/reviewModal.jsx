@@ -72,15 +72,14 @@ const ReviewModal =(props) => {
                 dispatch(stopReviewLoader())
 
                 if(response) {
-                    if(!response?.error) {
-                        showReviewModal(false);
-                        return window.history.pushState({}, null, window.location.href.replace("?sm=true",''));
-                    }
+                    window.history.pushState({}, null, window.location.href.replace("?sm=true",''));
 
                     Toast.fire({
                         type: response?.error ? 'error' : 'success',
                         title: response?.error ? response?.message : response?.data?.message
                     });
+
+                    showReviewModal(false);
                 }
             }
             catch(error) {
