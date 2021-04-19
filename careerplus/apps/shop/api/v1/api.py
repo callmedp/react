@@ -508,7 +508,7 @@ class ProductInformationAPIMixin(object):
                     {
                         'title': review.title, 
                         'user_email': review.user_email,
-                        'user_name:': review.user_name,
+                        'user_name': review.user_name,
                         'average_rating': review.average_rating,
                         'rating': review.get_ratings(),
                         'created': review.created.strftime("%b %d, %Y"),
