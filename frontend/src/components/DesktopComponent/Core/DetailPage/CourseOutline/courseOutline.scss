@@ -81,22 +81,30 @@
 
                 .card-body {
                     padding: 1.5rem 1.5rem 0 0; 
-
-                    p { 
-                        padding-left: 1.5rem;
-                        position: relative;
-
-                        &::before {
-                            content: '';
-                            background: $sprite -34px -17px;
-                            width: .5rem;
-                            height: .9rem;
-                            display: inline-block;
-                            position: absolute;
-                            left: 0;
-                            top: .6rem;
+                    ol {
+                        margin: 0 0 0 1rem;
+                        padding: 0;
+                        li {
+                            list-style: decimal;
+                            list-style-position: inside;
                         }
                     }
+
+                    // p { 
+                    //     padding-left: 1.5rem;
+                    //     position: relative;
+
+                    //     &::before {
+                    //         content: '';
+                    //         background: $sprite -34px -17px;
+                    //         width: .5rem;
+                    //         height: .9rem;
+                    //         display: inline-block;
+                    //         position: absolute;
+                    //         left: 0;
+                    //         top: .6rem;
+                    //     }
+                    // }
                 }
             }
         }

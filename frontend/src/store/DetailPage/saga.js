@@ -21,6 +21,7 @@ function* mainCoursesApi(action){
         const response = yield call(Api.mainCourses, payload.id);
         if(response?.error) return reject(response);
         const item = response?.data?.data;
+        let providerLength = item?.product_detail?.pop_list?.length;
 
         if(item?.redirect_url) return reject(item);
 
@@ -32,7 +33,7 @@ function* mainCoursesApi(action){
             }
         }
         
-        yield put(mainCoursesFetched({ ...item }));
+        yield put(mainCoursesFetched({ ...item, 'providerLength': providerLength }));
         return resolve(item);
     }
     catch(e) {

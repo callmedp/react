@@ -24,24 +24,19 @@ const BannerCourseDetail = (props) => {
         changeChecked,
         frqntProd,
         addFrqntProd,
-        prdId,
         product_id,
         providerCount,
         completeDescription,
         reqLength,
         showReviewModal,
-        pUrl
+        pUrl,
+        prd_review_list
     } = props;
 
-    // const inputCheckbox = useRef(null);
-    // const regex = /<(.|\n)*?>/g;
     const [discountPrice, discountPriceSelected] = useState(0);
     const dispatch = useDispatch();
     const { mainCourseCartLoader } = useSelector(store => store.loader);
     const tracking_data = getTrackingInfo();
-    // const [readAll, setReadAll] = useState(false)
-
-    // const completeDescription = (product_detail?.prd_about ? (product_detail?.prd_about + ' <br /> ') : '') + (product_detail?.prd_desc ? product_detail?.prd_desc : '')
 
     const starRatings = (star, index) => {
         return (star === '*' ? <em className="icon-fullstar" key={index}></em> : star === '+' 
@@ -147,8 +142,6 @@ const BannerCourseDetail = (props) => {
         window.location.href= `${siteDomain}/login/?next=${pUrl}?sm=true`
     }
 
-    let hello = null
-
     return (
         <>
             { mainCourseCartLoader ? <Loader /> : ''}
@@ -189,7 +182,7 @@ const BannerCourseDetail = (props) => {
                                             {
                                                 <>
                                                     {
-                                                        product_detail?.prd_num_rating ? 
+                                                        (product_detail?.prd_num_rating > 0 && prd_review_list && prd_review_list?.length) ? 
                                                             <span className="review-jobs cursorLink">
                                                                 <LinkScroll to={"reviews"} offset={-160} smooth={true}>
                                                                     <figure className="icon-reviews-link"></figure> <strong> {product_detail?.prd_num_rating}</strong> Reviews
@@ -310,7 +303,7 @@ const BannerCourseDetail = (props) => {
                                                 <span className="intro-video__content" itemProp="embedUrl">
                                                     <div id="module" className="about-course">
                                                             <span className="read-more-wrap" itemProp="description">
-                                                                <span dangerouslySetInnerHTML={{__html:completeDescription?.slice(0, reqLength) + '....'}} />
+                                                                <span dangerouslySetInnerHTML={{__html:completeDescription?.slice(0, reqLength) + ((completeDescription?.length > reqLength) ? '....' : '')}} />
                                                             </span>
                                                             {/* <label htmlFor="post-10" className="read-more-trigger"></label> */}
                                                             {

@@ -43,7 +43,7 @@ const DetailPage = (props) => {
     const { mainCourseLoader } = useSelector(store => store.loader);
     const [reviewModal, showReviewModal] = useState(false)
     const prdId = props.match.params.id;
-    const { product_detail, skill, ggn_contact, product_id, product_tracking_mapping_id } = useSelector(store => store?.mainCourses);
+    const { product_detail, skill, ggn_contact, product_id, product_tracking_mapping_id, providerLength } = useSelector(store => store?.mainCourses);
     const meta_tags = product_detail?.meta;
     const [enquiryForm, setEnquiryForm] = useState(false);
     const [varChecked, changeChecked] = useState({});
@@ -51,8 +51,8 @@ const DetailPage = (props) => {
     const [showSearchPage, setShowSearchPage] = useState(false)
     const [frqntProd, addFrqntProd] = useState([]);
     const params = new URLSearchParams(props.location.search);
-    const showAfterLoginReviewModal = params.get('sm')
-    const { prd_review_list, prd_rv_total } = useSelector( store => store.reviews )
+    const showAfterLoginReviewModal = params.get('sm');
+    const { prd_review_list, prd_rv_total } = useSelector( store => store.reviews );
 
     const handleEffects = async () => {
 
@@ -141,8 +141,9 @@ const DetailPage = (props) => {
                             prdId={prdId} 
                             varChecked={varChecked}
                             showReviewModal={showReviewModal} 
-                            providerCount = {product_detail?.pop_list?.length}
+                            providerCount = {providerLength}
                             pUrl={props?.match?.url}
+                            prd_review_list={prd_review_list}
                         />
                     </header>
                     <main className="mb-0">
@@ -153,7 +154,7 @@ const DetailPage = (props) => {
                                 topics={(product_detail?.chapter && product_detail?.prd_service === 'assessment') ? true : false}
                                 faq = {product_detail?.faq ? true : false}
                                 product_detail={product_detail} prdId={prdId} varChecked={varChecked}
-                                frqntProd={frqntProd} product_id={product_id}
+                                frqntProd={frqntProd} product_id={product_id} prd_review_list={prd_review_list}
                                 />
                         }
                         {
@@ -187,9 +188,9 @@ const DetailPage = (props) => {
                         { product_detail?.free_test && <TakeFreeTest should_take_test_url={product_detail?.shld_take_test_slg} test_title={product_detail?.test_title} /> }
                         { product_detail?.pop && <OtherProviders pop_list={product_detail?.pop_list} /> }
                         { product_detail?.faq && <FAQ faq_list={product_detail?.faq_list}/> }
-                        {
-                            prd_review_list ? <Reviews showReviewModal={showReviewModal} product_detail={product_detail} prdId={prdId} pUrl={props?.match?.url}/> : ''
-                        }
+                        
+                        {(prd_review_list && prd_review_list?.length) > 0 && <Reviews showReviewModal={showReviewModal} product_detail={product_detail} prdId={prdId} pUrl={props?.match?.url} prd_review_list={prd_review_list} prd_rv_total={prd_rv_total} />}
+                        
                         { skill?.length > 0 && <CoursesMayLike product_id={prdId} skill={skill}/> }
                         <CTA setEnquiryForm={setEnquiryForm} contact={ggn_contact} />
                         {

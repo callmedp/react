@@ -23,7 +23,7 @@ const StickyNavDetail = (props) => {
         variableWidth: true,
     }
 
-    const { product_detail, varChecked, outline, faq, frqntProd, topics, product_id } = props;
+    const { product_detail, varChecked, outline, faq, frqntProd, topics, product_id, prd_review_list } = props;
     const [tab, setTab] = useState('1');
     const dispatch = useDispatch();
     const tracking_data = getTrackingInfo();
@@ -127,7 +127,7 @@ const StickyNavDetail = (props) => {
                                 </LinkScroll>
                         }
                         {
-                            product_detail?.prd_num_rating > 0 &&
+                            (product_detail?.prd_num_rating > 0 && prd_review_list && prd_review_list?.length > 0) &&
                                 <LinkScroll to="reviews" offset={-120}>
                                     <Link to={"#"} className={ tab === '7' ? "active" : '' } id='7' onClick={handleTab}>Reviews</Link>
                                 </LinkScroll>

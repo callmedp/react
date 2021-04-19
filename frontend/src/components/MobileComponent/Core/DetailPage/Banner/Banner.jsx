@@ -17,7 +17,8 @@ const CourseDetailBanner = (props) => {
         varChecked,
         showReviewModal,
         providerCount,
-        pUrl
+        pUrl,
+        prd_review_list
     } = props;
 
     const dispatch = useDispatch();
@@ -25,7 +26,7 @@ const CourseDetailBanner = (props) => {
     const noOfWords = 250;
     const [showAll, setShowAll] = useState(false);
 
-    const completeDescription = (product_detail?.prd_about ? (product_detail?.prd_about + ' <br /> ') : '') + (product_detail?.prd_desc ? product_detail?.prd_desc : '')
+    const completeDescription = ((product_detail?.prd_about && (product_detail?.prd_about !== product_detail?.prd_desc)) ? (product_detail?.prd_about + ' <br /> ') : '') + (product_detail?.prd_desc ? product_detail?.prd_desc : '')
     
     const starRatings = (star, index) => {
         return (
@@ -89,7 +90,7 @@ const CourseDetailBanner = (props) => {
                     </span>
                     <div className="d-flex mt-10">
                         {
-                            product_detail?.prd_num_rating > 0 ?
+                            (product_detail?.prd_num_rating > 0 && prd_review_list && prd_review_list?.length) ?
                                 <span className="m-review-jobs">
                                     <LinkScroll to="reviews" offset={-120}>
                                         <Link to={"#"}>
@@ -151,18 +152,25 @@ const CourseDetailBanner = (props) => {
                         {
                             product_detail?.prd_asft &&
                             <>
-                                <li className="d-flex align-items-center">
-                                    <figure className="micon-course-duration mr-10"></figure>
-                                    <p>
-                                        Test Duration <strong>{product_detail?.prd_asft?.test_duration}</strong>
-                                    </p>
-                                </li>
-                                <li className="d-flex align-items-center">
-                                    <figure className="micon-question-no mr-10"></figure>
-                                    <p>
-                                        No. of questions <strong>{product_detail?.prd_asft?.number_of_questions}</strong>
-                                    </p>
-                                </li>
+                                {
+                                    product_detail?.prd_asft?.test_duration ?
+                                        <li className="d-flex align-items-center">
+                                            <figure className="micon-course-duration mr-10"></figure>
+                                            <p>
+                                                Test Duration <strong>{product_detail?.prd_asft?.test_duration}</strong>
+                                            </p>
+                                        </li> : ''
+                                }
+
+                                {
+                                    product_detail?.prd_asft?.number_of_questions ?
+                                        <li className="d-flex align-items-center">
+                                            <figure className="micon-question-no mr-10"></figure>
+                                            <p>
+                                                No. of questions <strong>{product_detail?.prd_asft?.number_of_questions}</strong>
+                                            </p>
+                                        </li> : ''
+                                }
                             </>
                         }
                     </ul>

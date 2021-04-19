@@ -72,11 +72,14 @@ const ReviewModal =(props) => {
                 dispatch(stopReviewLoader())
 
                 if(response) {
-                    if(!response?.error) showReviewModal(false);
+                    window.history.pushState({}, null, window.location.href.replace("?sm=true",''));
+
                     Toast.fire({
                         type: response?.error ? 'error' : 'success',
                         title: response?.error ? response?.message : response?.data?.message
                     });
+
+                    showReviewModal(false);
                 }
             }
             catch(error) {
@@ -127,7 +130,7 @@ const ReviewModal =(props) => {
     return (
         <>
         { reviewLoader ? <Loader /> : ''}
-        <Modal show={detReviewModal} onHide={showReviewModal} className="db-modal db-page">
+        <Modal show={detReviewModal} onHide={showReviewModal} onClick={() => {return window.history.pushState({}, null, window.location.href.replace("?sm=true",''))}} className="db-modal db-page">
         <Modal.Header closeButton></Modal.Header>
         
         <Modal.Body>
@@ -160,7 +163,7 @@ const ReviewModal =(props) => {
                             <TextArea attributes={review ? reviewedContent : CoursesServicesForm.review} register={register}
                                 errors={!!errors ? errors[CoursesServicesForm.review.name] : ""} />
                         <br/>
-                        <button className="btn btn-primary px-5" type="submit">Submit</button>
+                        <button className="btn btn-primary px-5" type="submit">{review ? 'Update' : 'Submit'}</button>
                     </form>
                 </div>
             </Modal.Body>
