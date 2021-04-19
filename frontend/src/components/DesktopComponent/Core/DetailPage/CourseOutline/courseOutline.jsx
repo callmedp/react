@@ -18,12 +18,12 @@ const CourseOutline = (props) => {
                                 {
                                     chapter_list?.map((chap, indx) => {
                                         return (
-                                            <Card data-aos="fade-up" key={indx+1}>
+                                            <Card data-aos="fade-up" key={indx}>
                                                 <Accordion.Toggle as={Card.Header} eventKey={indx+1}>
                                                     <h3>{chap.heading}</h3>
                                                 </Accordion.Toggle>
                                                 {
-                                                    chap.content &&
+                                                    !!chap.content &&
                                                         <Accordion.Collapse eventKey={indx+1}>
                                                             <Card.Body dangerouslySetInnerHTML={{__html: chap.content}}></Card.Body>
                                                         </Accordion.Collapse>

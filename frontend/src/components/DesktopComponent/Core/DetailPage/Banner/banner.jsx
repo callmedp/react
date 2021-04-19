@@ -24,7 +24,6 @@ const BannerCourseDetail = (props) => {
         changeChecked,
         frqntProd,
         addFrqntProd,
-        prdId,
         product_id,
         providerCount,
         completeDescription,
@@ -33,15 +32,10 @@ const BannerCourseDetail = (props) => {
         pUrl
     } = props;
 
-    // const inputCheckbox = useRef(null);
-    // const regex = /<(.|\n)*?>/g;
     const [discountPrice, discountPriceSelected] = useState(0);
     const dispatch = useDispatch();
     const { mainCourseCartLoader } = useSelector(store => store.loader);
     const tracking_data = getTrackingInfo();
-    // const [readAll, setReadAll] = useState(false)
-
-    // const completeDescription = (product_detail?.prd_about ? (product_detail?.prd_about + ' <br /> ') : '') + (product_detail?.prd_desc ? product_detail?.prd_desc : '')
 
     const starRatings = (star, index) => {
         return (star === '*' ? <em className="icon-fullstar" key={index}></em> : star === '+' 
@@ -146,8 +140,6 @@ const BannerCourseDetail = (props) => {
     const handleLoginRedirect = () => {
         window.location.href= `${siteDomain}/login/?next=${pUrl}?sm=true`
     }
-
-    let hello = null
 
     return (
         <>

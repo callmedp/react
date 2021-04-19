@@ -86,7 +86,7 @@ const CoursesMayLike = (props) => {
             <div className="row">
                 <div className="recent-courses w-100 mt-20 mb-30">
                     <h3 className="heading2 text-center">Courses you may like</h3>
-                    <Carousel className="courses-like">
+                    <Carousel className={`courses-like ${results.length === 1 ? `removeButtons` : ``}`}>
                         {
                             results?.map(getLikeCourses)
                         }

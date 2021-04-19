@@ -2,6 +2,16 @@
 @import '../../../../../styles/variables';
 @import '../../../../../styles/mixins';
 
+.removeButtons {
+    .carousel-control-prev {
+        display: none;
+    }
+
+    .carousel-control-next {
+        display: none;
+    }
+}
+
 .other-providers {
     .carousel-indicators {
         display: none;

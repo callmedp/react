@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import Slider from "react-slick";
 // import 'slick-carousel/slick/slick.css';
@@ -9,10 +9,10 @@ import { getCandidateId } from 'utils/storage.js';
 import { siteDomain } from 'utils/domains';
 
 const Reviews = (props) => {
-    const { showReviewModal, prdId, product_detail, pUrl } = props
-    const { prd_review_list, prd_rv_total } = useSelector( store => store.reviews )
-    const [pageId, updatePageId] = useState(2)
-    const dispatch = useDispatch()
+    const { showReviewModal, prdId, product_detail, pUrl } = props;
+    const { prd_review_list, prd_rv_total } = useSelector( store => store.reviews );
+    const [pageId, updatePageId] = useState(2);
+    const dispatch = useDispatch();
 
     const settings = {
         dots: false,
@@ -57,29 +57,32 @@ const Reviews = (props) => {
                 }
                 
             </div>
-            <div className="m-reviews">
-                <Slider {...settings}>
-                    {
-                        prd_review_list?.map((review, idx) => {
-                            return (
-                                <div className="m-card" key={idx}>
-                                    <span className="m-rating" itemProp="ratingValue">
-                                    {
-                                        review?.rating?.map((star, index) => starRatings(star, index))
-                                    }
-                                    </span>
-                                    <strong className="m-card__name" itemProp="name">{review?.title ? review?.title : '  '}</strong>
-                                    <p className="m-card__txt" itemProp="reviewBody">{review?.content}</p>
-                                    <strong itemProp="author">By { review?.user_name ? review?.user_name : "Anonymous" }</strong>
-                                    <span className="m-card__location" itemProp="datePublished">{review?.created ? review?.created : '  '}</span>
-                                </div>
-                            )
-                        })
-                    }
-                </Slider>
-            </div>
+            {
+                prd_review_list && prd_review_list?.length > 0 &&
+                <div className="m-reviews">
+                    <Slider {...settings}>
+                        {
+                            prd_review_list?.map((review, idx) => {
+                                return (
+                                    <div className="m-card" key={idx}>
+                                        <span className="m-rating" itemProp="ratingValue">
+                                        {
+                                            review?.rating?.map((star, index) => starRatings(star, index))
+                                        }
+                                        </span>
+                                        <strong className="m-card__name" itemProp="name">{review?.title ? review?.title : '  '}</strong>
+                                        <p className="m-card__txt" itemProp="reviewBody">{review?.content}</p>
+                                        <strong itemProp="author">By { review?.user_name ? review?.user_name : "Anonymous" }</strong>
+                                        <span className="m-card__location" itemProp="datePublished">{review?.created ? review?.created : '  '}</span>
+                                    </div>
+                                )
+                            })
+                        }
+                    </Slider>
+                </div>
+            }
         </section>
     );
-  }
+}
 
 export default Reviews;

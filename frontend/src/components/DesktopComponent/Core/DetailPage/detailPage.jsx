@@ -21,7 +21,7 @@ import EnquireNow from './EnquireNow/enquireNow';
 import Footer from '../../Common/Footer/footer';
 import '../SkillPage/skillPage.scss';
 import Aos from "aos";
-import { fetchMainCourses, fetchProductReviews } from 'store/DetailPage/actions';
+import { fetchMainCourses } from 'store/DetailPage/actions';
 import { useSelector, useDispatch } from 'react-redux';
 import { startMainCourseLoader, stopMainCourseLoader } from 'store/Loader/actions/index';
 import Loader from '../../Common/Loader/loader';
@@ -33,21 +33,19 @@ import ReviewModal from '../../Common/Modals/reviewModal';
 
 const DetailPage = (props) => {
     const dispatch = useDispatch();
-    const {product_detail, skill, product_id, product_tracking_mapping_id} = useSelector(store => store?.mainCourses);
-    const { prd_review_list, prd_rv_current_page, prd_rv_has_next } = useSelector( store => store.reviews );
+    const {product_detail, skill, product_id, product_tracking_mapping_id, providerLength} = useSelector(store => store?.mainCourses);
     
     const meta_tags = product_detail?.meta;
     const {location: { search }, match: {params: {id}}, history} = props;
     const { mainCourseLoader } = useSelector(store => store.loader);
     const [showStickyNav, setShowStickyNav] = useState(false);
-    const [currentPage, setCurrentPage] = useState(1);
     const [varChecked, changeChecked] = useState({});
     const [frqntProd, addFrqntProd] = useState([]);
     const completeDescription = (product_detail?.prd_about ? (product_detail?.prd_about + ' <br /> ') : '') + (product_detail?.prd_desc ? product_detail?.prd_desc : '')
     const reqLength = 250;
     const [detReviewModal, showReviewModal] = useState(false);
     const params = new URLSearchParams(props.location.search);
-    const showAfterLoginReviewModal = params.get('sm')
+    const showAfterLoginReviewModal = params.get('sm');
 
     useEffect( () => {
         handleEffects();
@@ -77,8 +75,6 @@ const DetailPage = (props) => {
                 delete window.config?.isServerRendered;
                 dispatch(stopMainCourseLoader());
             }
-
-            await new Promise((resolve, reject) => dispatch(fetchProductReviews({ payload: { prdId: id?.split('-')[1], page: currentPage, device: 'desktop' }, resolve, reject })));
         }
         catch (error) {
             dispatch(stopMainCourseLoader());
@@ -115,6 +111,7 @@ const DetailPage = (props) => {
             }
 
             <Header />
+            
             {
                     showStickyNav && <StickyNav 
                         outline={(product_detail?.chapter && product_detail?.prd_service !== 'assessment') ? true : false}
@@ -132,15 +129,15 @@ const DetailPage = (props) => {
                 product_detail={product_detail}
                 varChecked={varChecked}
                 changeChecked={changeChecked}
-                prdId={id} product_id={product_id}
-                providerCount={product_detail?.pop_list?.length}
+                product_id={product_id}
+                providerCount={providerLength}
                 completeDescription={completeDescription}
                 reqLength={reqLength}
                 showReviewModal={showReviewModal}
                 pUrl={props?.match?.url}
             />
 
-            {product_detail?.prd_uget && <KeyFeatures prd_uget={product_detail?.prd_uget} />}
+            { product_detail?.prd_uget && <KeyFeatures prd_uget={product_detail?.prd_uget} /> }
 
             { product_detail?.pTF === 16 && <WhatYouGet prd_vendor_slug={product_detail?.prd_vendor_slug} /> }
             
@@ -201,10 +198,8 @@ const DetailPage = (props) => {
             
             { product_detail?.faq && <FAQ faq_list={product_detail?.faq_list}/> }
 
-            {
-                (prd_review_list && prd_review_list.length > 0) ? <Reviews id={id?.split('-')[1]} setCurrentPage={setCurrentPage} prd_review_list={prd_review_list} prd_rv_current_page={prd_rv_current_page} prd_rv_has_next={prd_rv_has_next} product_detail={product_detail} pUrl={props?.match?.url} showReviewModal={showReviewModal}/> : ''
-            }
-
+            <Reviews id={id?.split('-')[1]} product_detail={product_detail} pUrl={props?.match?.url} showReviewModal={showReviewModal}/>
+            
             <EnquireNow {...props} />
             
             { skill && <CoursesMayLike product_id={id?.split('-')[1]} skill={skill}/> }
