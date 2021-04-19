@@ -3,29 +3,29 @@
 @import '../../../../../styles/mixins';
 
 .key-features {
-    p {
-        p {
-            margin-left: 3rem;
-            position: relative;
-            strong {
-                font-weight: 600;
-            }
-            &::before {
-                content: '';
-                background: $sprite -471px -111px;
-                width: 1.7rem;
-                height: 1.7rem;
-                display: inline-block;
-                margin-right: 1.5rem;
-                position: absolute;
-                left: -3rem;
-                top: .4rem;
-            }
-        }
-    }
+    // p {
+    //     p {
+    //         margin-left: 3rem;
+    //         position: relative;
+    //         strong {
+    //             font-weight: 600;
+    //         }
+    //         &::before {
+    //             content: '';
+    //             background: $sprite -471px -111px;
+    //             width: 1.7rem;
+    //             height: 1.7rem;
+    //             display: inline-block;
+    //             margin-right: 1.5rem;
+    //             position: absolute;
+    //             left: -3rem;
+    //             top: .4rem;
+    //         }
+    //     }
+    // }
     ul {
-        list-style-type: none;
-        margin: 0;
+        list-style-type: inherit !important;
+        margin: 0 0 0 1.5rem;
         padding: 0;
         display: flex;
         width: 75%;
@@ -33,23 +33,23 @@
 
         li {
             position: relative;
-            padding-left: 3rem;
+            // padding-left: 3rem;
             margin-right: 15%;
-            &:not(:last-child) {
-                margin-bottom: 1.5rem;
-            }
+            // &:not(:last-child) {
+            //     margin-bottom: 1.5rem;
+            // }
             
-            &::before {
-                content: '';
-                background: $sprite -471px -111px;
-                width: 1.7rem;
-                height: 1.7rem;
-                display: inline-block;
-                margin-right: 1.5rem;
-                position: absolute;
-                left: 0;
-                top: .4rem;
-            }
+            // &::before {
+            //     content: '';
+            //     background: $sprite -471px -111px;
+            //     width: 1.7rem;
+            //     height: 1.7rem;
+            //     display: inline-block;
+            //     margin-right: 1.5rem;
+            //     position: absolute;
+            //     left: 0;
+            //     top: .4rem;
+            // }
 
             span {
                 display: block;
