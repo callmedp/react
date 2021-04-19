@@ -91,7 +91,7 @@ const ReviewModal = (props) => {
                                     
                     <TextArea attributes={getContentwithReview()} register={register} review={review} errors={!!errors ? errors[DetailForm.review.name] : ''} />
                     <div className="m-form-group">
-                        <button className="btn-blue">Submit</button>
+                        <button className="btn-blue">{review ? 'Update' : 'Submit'}</button>
                     </div>
                 </form>
             </div>

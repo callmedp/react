@@ -42,7 +42,8 @@ const DetailPage = (props) => {
     const [showStickyNav, setShowStickyNav] = useState(false);
     const [varChecked, changeChecked] = useState({});
     const [frqntProd, addFrqntProd] = useState([]);
-    const completeDescription = (product_detail?.prd_about ? (product_detail?.prd_about + ' <br /> ') : '') + (product_detail?.prd_desc ? product_detail?.prd_desc : '')
+    const completeDescription = ((product_detail?.prd_about && (product_detail?.prd_about !== product_detail?.prd_desc)) 
+                                    ? (product_detail?.prd_about + ' <br /> ') : '') + (product_detail?.prd_desc ? product_detail?.prd_desc : '')
     const reqLength = 250;
     const [detReviewModal, showReviewModal] = useState(false);
     const params = new URLSearchParams(props.location.search);
