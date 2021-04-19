@@ -182,7 +182,7 @@ const BannerCourseDetail = (props) => {
                                             {
                                                 <>
                                                     {
-                                                        (product_detail?.prd_num_rating && prd_review_list && prd_review_list?.length) ? 
+                                                        (product_detail?.prd_num_rating > 0 && prd_review_list && prd_review_list?.length) ? 
                                                             <span className="review-jobs cursorLink">
                                                                 <LinkScroll to={"reviews"} offset={-160} smooth={true}>
                                                                     <figure className="icon-reviews-link"></figure> <strong> {product_detail?.prd_num_rating}</strong> Reviews

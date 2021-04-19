@@ -17,7 +17,8 @@ const CourseDetailBanner = (props) => {
         varChecked,
         showReviewModal,
         providerCount,
-        pUrl
+        pUrl,
+        prd_review_list
     } = props;
 
     const dispatch = useDispatch();
@@ -89,7 +90,7 @@ const CourseDetailBanner = (props) => {
                     </span>
                     <div className="d-flex mt-10">
                         {
-                            product_detail?.prd_num_rating > 0 ?
+                            (product_detail?.prd_num_rating > 0 && prd_review_list && prd_review_list?.length) ?
                                 <span className="m-review-jobs">
                                     <LinkScroll to="reviews" offset={-120}>
                                         <Link to={"#"}>

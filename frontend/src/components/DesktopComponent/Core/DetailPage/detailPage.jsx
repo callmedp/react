@@ -39,7 +39,6 @@ const DetailPage = (props) => {
     const meta_tags = product_detail?.meta;
     const {location: { search }, match: {params: {id}}, history} = props;
     const { mainCourseLoader } = useSelector(store => store.loader);
-    const { prd_review_list } = useSelector( store => store.reviews );
     const [showStickyNav, setShowStickyNav] = useState(false);
     const [varChecked, changeChecked] = useState({});
     const [frqntProd, addFrqntProd] = useState([]);
