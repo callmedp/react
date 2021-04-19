@@ -26,7 +26,7 @@ const CourseDetailBanner = (props) => {
     const noOfWords = 250;
     const [showAll, setShowAll] = useState(false);
 
-    const completeDescription = (product_detail?.prd_about ? (product_detail?.prd_about + ' <br /> ') : '') + (product_detail?.prd_desc ? product_detail?.prd_desc : '')
+    const completeDescription = ((product_detail?.prd_about && (product_detail?.prd_about !== product_detail?.prd_desc)) ? (product_detail?.prd_about + ' <br /> ') : '') + (product_detail?.prd_desc ? product_detail?.prd_desc : '')
     
     const starRatings = (star, index) => {
         return (
@@ -167,7 +167,7 @@ const CourseDetailBanner = (props) => {
                                         <li className="d-flex align-items-center">
                                             <figure className="micon-question-no mr-10"></figure>
                                             <p>
-                                                No. of questions <strong>{}</strong>
+                                                No. of questions <strong>{product_detail?.prd_asft?.number_of_questions}</strong>
                                             </p>
                                         </li> : ''
                                 }

@@ -303,7 +303,7 @@ const BannerCourseDetail = (props) => {
                                                 <span className="intro-video__content" itemProp="embedUrl">
                                                     <div id="module" className="about-course">
                                                             <span className="read-more-wrap" itemProp="description">
-                                                                <span dangerouslySetInnerHTML={{__html:completeDescription?.slice(0, reqLength) + '....'}} />
+                                                                <span dangerouslySetInnerHTML={{__html:completeDescription?.slice(0, reqLength) + ((completeDescription?.length > reqLength) ? '....' : '')}} />
                                                             </span>
                                                             {/* <label htmlFor="post-10" className="read-more-trigger"></label> */}
                                                             {

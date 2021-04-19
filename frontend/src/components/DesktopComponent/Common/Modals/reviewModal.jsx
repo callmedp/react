@@ -163,7 +163,7 @@ const ReviewModal =(props) => {
                             <TextArea attributes={review ? reviewedContent : CoursesServicesForm.review} register={register}
                                 errors={!!errors ? errors[CoursesServicesForm.review.name] : ""} />
                         <br/>
-                        <button className="btn btn-primary px-5" type="submit">Submit</button>
+                        <button className="btn btn-primary px-5" type="submit">{review ? 'Update' : 'Submit'}</button>
                     </form>
                 </div>
             </Modal.Body>
