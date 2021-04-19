@@ -122,7 +122,7 @@ const DetailPage = (props) => {
                         faq = {product_detail?.faq ? true : false}
                         product_detail={product_detail} prdId={id} varChecked={varChecked}
                         frqntProd={frqntProd} product_id={product_id}
-                        hasReview = { product_detail?.prd_num_rating ? true : false }
+                        hasReview = { prd_review_list?.length ? true : false }
                         />
             }
 
@@ -202,7 +202,7 @@ const DetailPage = (props) => {
             { product_detail?.faq && <FAQ faq_list={product_detail?.faq_list}/> }
 
             {
-                (prd_review_list && prd_review_list.length) ? <Reviews id={id?.split('-')[1]} setCurrentPage={setCurrentPage} prd_review_list={prd_review_list} prd_rv_current_page={prd_rv_current_page} prd_rv_has_next={prd_rv_has_next} product_detail={product_detail} pUrl={props?.match?.url} showReviewModal={showReviewModal}/> : ''
+                (prd_review_list && prd_review_list.length > 0) ? <Reviews id={id?.split('-')[1]} setCurrentPage={setCurrentPage} prd_review_list={prd_review_list} prd_rv_current_page={prd_rv_current_page} prd_rv_has_next={prd_rv_has_next} product_detail={product_detail} pUrl={props?.match?.url} showReviewModal={showReviewModal}/> : ''
             }
 
             <EnquireNow {...props} />
