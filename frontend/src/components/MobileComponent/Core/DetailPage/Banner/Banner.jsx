@@ -151,18 +151,25 @@ const CourseDetailBanner = (props) => {
                         {
                             product_detail?.prd_asft &&
                             <>
-                                <li className="d-flex align-items-center">
-                                    <figure className="micon-course-duration mr-10"></figure>
-                                    <p>
-                                        Test Duration <strong>{product_detail?.prd_asft?.test_duration}</strong>
-                                    </p>
-                                </li>
-                                <li className="d-flex align-items-center">
-                                    <figure className="micon-question-no mr-10"></figure>
-                                    <p>
-                                        No. of questions <strong>{product_detail?.prd_asft?.number_of_questions}</strong>
-                                    </p>
-                                </li>
+                                {
+                                    product_detail?.prd_asft?.test_duration ?
+                                        <li className="d-flex align-items-center">
+                                            <figure className="micon-course-duration mr-10"></figure>
+                                            <p>
+                                                Test Duration <strong>{product_detail?.prd_asft?.test_duration}</strong>
+                                            </p>
+                                        </li> : ''
+                                }
+
+                                {
+                                    product_detail?.prd_asft?.number_of_questions ?
+                                        <li className="d-flex align-items-center">
+                                            <figure className="micon-question-no mr-10"></figure>
+                                            <p>
+                                                No. of questions <strong>{}</strong>
+                                            </p>
+                                        </li> : ''
+                                }
                             </>
                         }
                     </ul>
