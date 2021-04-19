@@ -9,17 +9,16 @@ import { getCandidateId } from 'utils/storage.js';
 import { siteDomain } from 'utils/domains';
 
 const Reviews = (props) => {
-    const {id, product_detail, pUrl, showReviewModal} = props;
+    const {id, product_detail, pUrl, showReviewModal, prd_review_list, prd_rv_current_page, prd_rv_has_next} = props;
     const { reviewLoader } = useSelector(store => store.loader);
     const [carIndex, setIndex] = useState(0);
     const dispatch = useDispatch();
-    const { prd_review_list, prd_rv_current_page, prd_rv_has_next } = useSelector( store => store.reviews );
+    // const { prd_review_list, prd_rv_current_page, prd_rv_has_next } = useSelector( store => store.reviews );
 
-    let currentPage = 1;
 
-    useEffect( () => {
-        handleEffects(currentPage)
-    },[id])
+    // useEffect( () => {
+    //     handleEffects(currentPage)
+    // },[id])
 
     const handleEffects = async (page) => {
         try {

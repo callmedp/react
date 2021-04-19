@@ -9,8 +9,7 @@ import { getCandidateId } from 'utils/storage.js';
 import { siteDomain } from 'utils/domains';
 
 const Reviews = (props) => {
-    const { showReviewModal, prdId, product_detail, pUrl } = props;
-    const { prd_review_list, prd_rv_total } = useSelector( store => store.reviews );
+    const { showReviewModal, prdId, product_detail, pUrl, prd_review_list, prd_rv_total } = props;
     const [pageId, updatePageId] = useState(2);
     const dispatch = useDispatch();
 

@@ -21,7 +21,7 @@ import EnquireNow from './EnquireNow/enquireNow';
 import Footer from '../../Common/Footer/footer';
 import '../SkillPage/skillPage.scss';
 import Aos from "aos";
-import { fetchMainCourses } from 'store/DetailPage/actions';
+import { fetchMainCourses, fetchProductReviews } from 'store/DetailPage/actions';
 import { useSelector, useDispatch } from 'react-redux';
 import { startMainCourseLoader, stopMainCourseLoader } from 'store/Loader/actions/index';
 import Loader from '../../Common/Loader/loader';
@@ -34,6 +34,7 @@ import ReviewModal from '../../Common/Modals/reviewModal';
 const DetailPage = (props) => {
     const dispatch = useDispatch();
     const {product_detail, skill, product_id, product_tracking_mapping_id, providerLength} = useSelector(store => store?.mainCourses);
+    const { prd_review_list, prd_rv_current_page, prd_rv_has_next } = useSelector( store => store.reviews );
     
     const meta_tags = product_detail?.meta;
     const {location: { search }, match: {params: {id}}, history} = props;
@@ -46,6 +47,7 @@ const DetailPage = (props) => {
     const [detReviewModal, showReviewModal] = useState(false);
     const params = new URLSearchParams(props.location.search);
     const showAfterLoginReviewModal = params.get('sm');
+    let currentPage = 1;
 
     useEffect( () => {
         handleEffects();
@@ -75,6 +77,8 @@ const DetailPage = (props) => {
                 delete window.config?.isServerRendered;
                 dispatch(stopMainCourseLoader());
             }
+
+            await new Promise((resolve, reject) => dispatch(fetchProductReviews({ payload: { prdId: id?.split('-')[1], page: currentPage, device: 'desktop' }, resolve, reject })));
         }
         catch (error) {
             dispatch(stopMainCourseLoader());
@@ -111,7 +115,7 @@ const DetailPage = (props) => {
             }
 
             <Header />
-            
+
             {
                 showStickyNav && <StickyNav 
                     outline={(product_detail?.chapter && product_detail?.prd_service !== 'assessment') ? true : false}
@@ -135,6 +139,7 @@ const DetailPage = (props) => {
                 reqLength={reqLength}
                 showReviewModal={showReviewModal}
                 pUrl={props?.match?.url}
+                prd_review_list={prd_review_list}
             />
 
             { product_detail?.prd_uget && <KeyFeatures prd_uget={product_detail?.prd_uget} /> }
@@ -198,7 +203,7 @@ const DetailPage = (props) => {
             
             { product_detail?.faq && <FAQ faq_list={product_detail?.faq_list}/> }
 
-            <Reviews id={id?.split('-')[1]} product_detail={product_detail} pUrl={props?.match?.url} showReviewModal={showReviewModal}/>
+            <Reviews id={id?.split('-')[1]} product_detail={product_detail} pUrl={props?.match?.url} showReviewModal={showReviewModal} prd_review_list={prd_review_list} prd_rv_current_page={prd_rv_current_page} prd_rv_has_next={prd_rv_has_next} />
             
             <EnquireNow {...props} />
             
