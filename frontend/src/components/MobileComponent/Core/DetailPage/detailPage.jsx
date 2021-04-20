@@ -36,6 +36,7 @@ import Loader from '../../Common/Loader/loader';
 import queryString from 'query-string';
 import { getTrackingInfo, storageTrackingInfo, removeTrackingInfo, getCandidateId } from 'utils/storage.js';
 import { trackUser } from 'store/Tracking/actions/index.js';
+import About from '../DetailPage/About/aboutSection';
 
 const DetailPage = (props) => {
     const { location: { search }, history } = props;
@@ -53,6 +54,8 @@ const DetailPage = (props) => {
     const params = new URLSearchParams(props.location.search);
     const showAfterLoginReviewModal = params.get('sm');
     const { prd_review_list, prd_rv_total } = useSelector( store => store.reviews );
+    const completeDescription = ((product_detail?.prd_about && (product_detail?.prd_about !== product_detail?.prd_desc)) ? (product_detail?.prd_about + ' <br /> ') : '') + (product_detail?.prd_desc ? product_detail?.prd_desc : '')
+    const noOfWords = 250;
 
     const handleEffects = async () => {
 
@@ -144,6 +147,8 @@ const DetailPage = (props) => {
                             providerCount = {providerLength}
                             pUrl={props?.match?.url}
                             prd_review_list={prd_review_list}
+                            completeDescription={completeDescription}
+                            noOfWords={noOfWords}
                         />
                     </header>
                     <main className="mb-0">
@@ -155,6 +160,8 @@ const DetailPage = (props) => {
                                 faq = {product_detail?.faq ? true : false}
                                 product_detail={product_detail} prdId={prdId} varChecked={varChecked}
                                 frqntProd={frqntProd} product_id={product_id} prd_review_list={prd_review_list}
+                                hasKeyFeatures = {product_detail?.prd_uget ? true : false}
+                                hasWhatYouGet = {product_detail?.pTF === 16 ? true : false}
                                 />
                         }
                         {
@@ -162,6 +169,9 @@ const DetailPage = (props) => {
                         }
                         {
                             product_detail?.fbt && <FrequentlyBought fbtList ={product_detail.fbt_list} addFrqntProd={addFrqntProd} frqntProd={frqntProd}/>
+                        }
+                        {
+                            (product_detail?.prd_desc && completeDescription?.length > noOfWords) && <About desc={product_detail?.prd_desc}/>
                         }
                         {
                             product_detail?.prd_uget && <KeyFeatures prd_uget={product_detail?.prd_uget} />

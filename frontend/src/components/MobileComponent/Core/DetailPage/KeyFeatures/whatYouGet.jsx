@@ -5,7 +5,7 @@ const WhatYouGet = (props) => {
     const { prd_vendor_slug } = props
 
     return (
-        <section className="m-container mt-0 mb-0" data-aos="fade-up">
+        <section id="whatyouget" className="m-container mt-0 mb-0" data-aos="fade-up">
             <div className="m-key-features">
                 {prd_vendor_slug === 'testpreptraining' ?
                             <>

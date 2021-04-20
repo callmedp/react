@@ -5,7 +5,7 @@ const WhatYouGet = (props) => {
     const {prd_vendor_slug} = props;
 
     return (
-        <section id="keyfeatures" className="container-fluid mb-0">
+        <section id="whatyouget" className="container-fluid mb-0">
             <div className="row">
                 <div className="container">
                     <div className="key-features">
