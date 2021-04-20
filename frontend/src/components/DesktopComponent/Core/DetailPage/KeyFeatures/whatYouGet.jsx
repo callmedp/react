@@ -8,7 +8,7 @@ const WhatYouGet = (props) => {
         <section id="whatyouget" className="container-fluid mb-0">
             <div className="row">
                 <div className="container">
-                    <div className="key-features">
+                    <div className="key-features mb-20">
                         {prd_vendor_slug === 'testpreptraining' ?
                             <>
                                 <h2 className="heading2">What you get?</h2>
