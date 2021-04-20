@@ -81,6 +81,15 @@
       p {
         margin: 0 1rem 1rem 1rem;
       }
+
+      ol {
+        margin: 0 0 0 1rem;
+        padding: 0;
+        li {
+            list-style: decimal;
+            list-style-position: inside;
+        }
+    }
     }
 
     label.no-dd::after {
@@ -100,6 +109,7 @@
       max-height: 100vh;
       padding: 0 1rem 1rem 1rem;
       background: $white;
+      overflow: auto;
     }
   }
 }
