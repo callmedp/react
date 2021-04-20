@@ -18,15 +18,14 @@ const CourseDetailBanner = (props) => {
         showReviewModal,
         providerCount,
         pUrl,
-        prd_review_list
+        prd_review_list,
+        completeDescription,
+        noOfWords
     } = props;
 
     const dispatch = useDispatch();
     const tracking_data = getTrackingInfo();
-    const noOfWords = 250;
     const [showAll, setShowAll] = useState(false);
-
-    const completeDescription = ((product_detail?.prd_about && (product_detail?.prd_about !== product_detail?.prd_desc)) ? (product_detail?.prd_about + ' <br /> ') : '') + (product_detail?.prd_desc ? product_detail?.prd_desc : '')
     
     const starRatings = (star, index) => {
         return (
@@ -217,10 +216,10 @@ const CourseDetailBanner = (props) => {
                             {
                                 completeDescription && 
                                 <p className="m-intro-video__content">
-                                    <span itemProp="description" dangerouslySetInnerHTML={{__html: completeDescription?.slice(0, showAll ? completeDescription?.length : noOfWords) }} />
+                                    <span itemProp="description" dangerouslySetInnerHTML={{__html: product_detail?.prd_about?.slice(0, showAll ? product_detail?.prd_about?.length : noOfWords) }} />
                                     <span>
                                         {
-                                            (!showAll && completeDescription?.length > noOfWords) ? 
+                                            (!showAll && product_detail?.prd_about?.length > noOfWords) ? 
                                                     controlContent(" ... Read More", true) : showAll ? controlContent(" Show less", false) : ''
                                         } 
                                     </span>

@@ -72,10 +72,10 @@ const Reviews = (props) => {
                                                                         review?.rating?.map((star, index) => starRatings(star, index))
                                                                     }
                                                                 </span>
-                                                                <strong className="card__name" itemProp="name">{review?.title ? review?.title : '  '}</strong>
+                                                                <strong className="card__name" itemProp="name">{review?.title ? review?.title : <>&nbsp;</>}</strong>
                                                                 <p className="card__txt" itemProp="reviewBody">{review?.content}</p>
                                                                 <strong itemProp="author">{ review?.user_name ? review?.user_name : 'Anonymous' }</strong>
-                                                                <span className="card__location" itemProp="datePublished">{review?.created ? review?.created : '  '}</span>
+                                                                <span className="card__location" itemProp="datePublished">{review?.created ? review?.created : <>&nbsp;</>}</span>
                                                             </div>
                                                         </div>
                                                     )

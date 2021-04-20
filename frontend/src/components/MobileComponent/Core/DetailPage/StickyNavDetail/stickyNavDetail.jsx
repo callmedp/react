@@ -23,7 +23,7 @@ const StickyNavDetail = (props) => {
         variableWidth: true,
     }
 
-    const { product_detail, varChecked, outline, faq, frqntProd, topics, product_id, prd_review_list } = props;
+    const { product_detail, varChecked, outline, faq, frqntProd, topics, product_id, prd_review_list, hasKeyFeatures, hasWhatYouGet } = props;
     const [tab, setTab] = useState('1');
     const dispatch = useDispatch();
     const tracking_data = getTrackingInfo();
@@ -96,9 +96,20 @@ const StickyNavDetail = (props) => {
                 </div>
                 <div className="m-sticky-detail__nav">
                     <Slider {...settings}>
-                        <LinkScroll to="features" offset={-120}>
-                            <Link className={ tab === '1' ? "active" : '' } to={"#"} id='1' onClick={handleTab}>Key Features</Link>
-                        </LinkScroll>
+                        {
+                            hasKeyFeatures &&
+                                <LinkScroll to="features" offset={-120}>
+                                    <Link className={ tab === '1' ? "active" : '' } to={"#"} id='1' onClick={handleTab}>Key Features</Link>
+                                </LinkScroll>
+                        }
+
+                        {
+                            hasWhatYouGet && 
+                                <LinkScroll to="whatyouget" offset={-120}>
+                                    <Link className={ tab === '10' ? "active" : '' } to={"#"} id='10' onClick={handleTab}>What You Get</Link>
+                                </LinkScroll>
+                        }
+
                         {
                             outline && 
                                 <LinkScroll to="m-faq" offset={-120}>

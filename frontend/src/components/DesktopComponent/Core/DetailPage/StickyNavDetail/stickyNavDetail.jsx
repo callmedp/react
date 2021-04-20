@@ -14,7 +14,7 @@ import { trackUser } from 'store/Tracking/actions/index.js';
 import { Toast } from '../../../Common/Toast/toast';
 
 const StickyNav = (props) => {
-    const { product_detail, varChecked, outline, faq, frqntProd, topics, product_id, hasReview } = props;
+    const { product_detail, varChecked, outline, faq, frqntProd, topics, product_id, hasReview, hasKeyFeatures, hasWhatYouGet } = props;
     const dispatch = useDispatch();
     // const [tab, setTab] = useState('1');
     const { mainCourseCartLoader } = useSelector(store => store.loader);
@@ -89,11 +89,23 @@ const StickyNav = (props) => {
                             <h2>{product_detail?.prd_H1}</h2>
                         </span>
                         <Nav>
-                            <LinkScroll offset={-160} isDynamic={true} spy={true} to="keyfeatures" id='1' smooth={true}>
-                                <Nav.Link>
-                                    Key Features
-                                </Nav.Link>
-                            </LinkScroll>
+                            {
+                                hasKeyFeatures &&
+                                    <LinkScroll offset={-160} isDynamic={true} spy={true} to="keyfeatures" id='1' smooth={true}>
+                                        <Nav.Link>
+                                            Key Features
+                                        </Nav.Link>
+                                    </LinkScroll>
+                            }
+
+                            {
+                                hasWhatYouGet &&
+                                    <LinkScroll offset={-160} isDynamic={true} spy={true} to="whatyouget" id='10' smooth={true}>
+                                        <Nav.Link>
+                                            What You Get
+                                        </Nav.Link>
+                                    </LinkScroll>
+                            }
                             
                             {
                                 outline && 
