@@ -47,6 +47,9 @@
 
                     &.no-dd {
                         background: none;
+                        &::after {
+                            background: none;
+                        }
                     }
                     
                     h3 {

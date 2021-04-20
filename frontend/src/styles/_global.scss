@@ -191,6 +191,12 @@
     cursor: unset;
 }
 
+.noLinkAnchor {
+    a {
+        cursor: unset;
+    }
+}
+
 .cursorLink {
     cursor: pointer;
 }

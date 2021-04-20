@@ -153,7 +153,7 @@ const BannerCourseDetail = (props) => {
                                 <Breadcrumb>
                                     {
                                         product_detail?.breadcrumbs?.map((bread, inx) => {
-                                            return <Breadcrumb.Item key={inx} onClick={() => handleBreadCrumbTracking(product_detail?.breadcrumbs, inx, bread)}>{bread.name}</Breadcrumb.Item>
+                                            return <Breadcrumb.Item key={inx} className={bread.active === null ? 'noLinkAnchor' : ""} onClick={() => handleBreadCrumbTracking(product_detail?.breadcrumbs, inx, bread)}>{bread.name}</Breadcrumb.Item>
                                         })
                                     }
                                 </Breadcrumb>

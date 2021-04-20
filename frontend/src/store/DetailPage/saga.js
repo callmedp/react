@@ -138,10 +138,16 @@ function* AddToCart(action) {
         if (response?.error) return reject(response);
 
         const item = response?.data?.data;
-        
-        if(cartItems.cart_type === 'cart') return window.location.href = `${siteDomain}${item.cart_url}?t_id=${localStorage.getItem("trackingId")}&prod_id=${localStorage.getItem("productId")}&prod_t_m_id=${localStorage.getItem("productTrackingMappingId")}`;
 
-        else if(cartItems.cart_type === 'express') return window.location.href = `${siteDomain}${item.redirect_url}?t_id=${localStorage.getItem("trackingId")}&prod_id=${localStorage.getItem("productId")}&prod_t_m_id=${localStorage.getItem("productTrackingMappingId")}`;
+        let appendTracking = "";
+        
+        if(localStorage.getItem("trackingId")) appendTracking += `?t_id=${localStorage.getItem("trackingId")}`;
+        if(localStorage.getItem("productId")) appendTracking += `&prod_id=${localStorage.getItem("productId")}`;
+        if(localStorage.getItem("productTrackingMappingId")) appendTracking += `&prod_t_m_id=${localStorage.getItem("productTrackingMappingId")}`;
+        
+        if(cartItems.cart_type === 'cart') return window.location.href = `${siteDomain}${item.cart_url}${appendTracking}`;
+
+        else if(cartItems.cart_type === 'express') return window.location.href = `${siteDomain}${item.redirect_url}${appendTracking}`;
     }
     catch(e) {
         console.log(`Reject sending survey question due to ${e}`);
