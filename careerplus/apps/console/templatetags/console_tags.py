@@ -3,6 +3,7 @@ from django.contrib.auth.models import Group
 from django.urls import reverse_lazy, reverse
 from console.decorators import flatlist
 import logging
+import json
 register = template.Library()
 
 @register.filter
@@ -97,5 +98,7 @@ def is_whole_refund(key, refund_dict):
 
 @register.filter(name='get_dict_item')
 def get_dict_item(item_dict,id):
+    if isinstance(item_dict, str):
+        item_dict = json.loads(item_dict)
     return item_dict.get(id,None)
 
