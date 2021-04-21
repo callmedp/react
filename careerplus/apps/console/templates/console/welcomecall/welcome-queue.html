@@ -230,7 +230,7 @@
                       </td>
                       <td>{{obj.number}}{% if obj.id|is_whole_refund:refund_order_dict %} <p> Refunded</p> {% endif %}</td>
                       <td>{{obj.first_name}} {{obj.last_name}}</td>
-                        <td> Some branch head </td>
+                        <td> {% if obj.sales_user_info|length > 0 %} {{ obj.sales_user_info|get_dict_item:'branch_head' }} {% else %} None {% endif %} </td>
                         <td>
                     <div id="email{{obj.id}}">
                       <div id="email_field{{obj.id}}_{{forloop.counter}}"></div>
