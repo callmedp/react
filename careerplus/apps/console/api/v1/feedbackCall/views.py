@@ -95,7 +95,7 @@ class FeedbackQueueView(ListAPIView):
         else:
             queryset = queryset.none()
 
-        queryset = queryset.order_by('-last_payment_date')
+        queryset = queryset.prefetch_related('orderitemfeedback_set').order_by('-last_payment_date')
 
         return queryset
 

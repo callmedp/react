@@ -19,7 +19,7 @@ class FeedbackQueueSerializer(serializers.ModelSerializer):
 
     def get_sales_user_info(self, obj):
         try:
-            sales_user_info = ast.literal_eval(obj.orderitemfeedback_set.select_related('order_item').first().order_item.order.sales_user_info)
+            sales_user_info = ast.literal_eval(obj.orderitemfeedback_set.prefetch_related('order_item').first().order_item.order.sales_user_info)
         except:
             sales_user_info = {}
         return sales_user_info.get('branch_head', None)
