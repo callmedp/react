@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Slider from "react-slick";
 import { siteDomain } from 'utils/domains';
 import '../../../Common/ProductCardsSlider/productCardsSlider';
-import { getTrackingInfo } from 'utils/storage.js';
+import { getTrackingInfo, updateReferalIds } from 'utils/storage.js';
 import { trackUser } from 'store/Tracking/actions/index.js';
 import { useDispatch } from 'react-redux';
 
@@ -36,6 +36,7 @@ const ProductCards = props => {
     const handleTracking = () => {
         dispatch(trackUser({"query" : tracking_data, "action" :'exit_product_page'}));
         dispatch(trackUser({"query" : tracking_data, "action" :'recommended_products'}));
+        updateReferalIds();
     }
 
     return (

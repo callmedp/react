@@ -46,6 +46,48 @@ export const removeTrackingInfo = () => {
     localStorage.removeItem("popup_based_product");
 }
 
+export const updateReferalIds = () => {
+    if (localStorage.getItem("trackingId", "")){
+        var prod_id = localStorage.getItem("productId");
+        var product_tracking_mapping_id = localStorage.getItem("productTrackingMappingId");
+        if(product_tracking_mapping_id){
+            localStorage.setItem("referal_product", product_tracking_mapping_id)
+        }
+        if(prod_id){
+            localStorage.setItem("referal_subproduct", prod_id)
+        }
+    }
+}
+
+export const getTrackingUrl = () => {
+    if (localStorage.getItem("trackingId", "")){
+        var t_id = localStorage.getItem("trackingId");
+        var prod_id = localStorage.getItem("productId");
+        var product_tracking_mapping_id = localStorage.getItem("productTrackingMappingId");
+        var position =!!localStorage.getItem("position") ? parseInt(localStorage.getItem("position")) : '';
+        var u_id = localStorage.getItem("uId");
+        var trigger_point = localStorage.getItem("triggerPoint");
+        var utm_campaign = localStorage.getItem("utmCampaign");
+        var popup_based_product =  localStorage.getItem("popup_based_product");
+        var referal_product =  !! localStorage.getItem("referal_product") ? localStorage.getItem("referal_product") : '';
+        var referal_subproduct = !! localStorage.getItem("referal_subproduct") ? localStorage.getItem("referal_subproduct") : '';
+
+        var tracking_url = `?t_id=${t_id}`;
+        if(prod_id) tracking_url += `&t_prod_id=${prod_id}`;
+        if(product_tracking_mapping_id) tracking_url += `&prod_t_m_id=${product_tracking_mapping_id}`;
+        if(u_id) tracking_url += `&u_id=${u_id}`;
+        if(position) tracking_url += `&position=${position}`;
+        if(trigger_point) tracking_url += `&trigger_point=${trigger_point}`;
+        if(utm_campaign) tracking_url += `&utm_campaign=${utm_campaign}`;
+        if(popup_based_product) tracking_url += `&popup_based_product=${popup_based_product}`;
+        if(referal_product) tracking_url += `&referal_product=${referal_product}`;
+        if(referal_subproduct) tracking_url += `&referal_subproduct=${referal_subproduct}`;
+        
+        return tracking_url
+    }
+    return ""
+}
+
 export const getTrackingInfo = () => {
     if (localStorage.getItem("trackingId", "")){
         return {
@@ -57,8 +99,8 @@ export const getTrackingInfo = () => {
             "trigger_point": localStorage.getItem("triggerPoint"),
             "utm_campaign": localStorage.getItem("utmCampaign"),
             "popup_based_product": localStorage.getItem("popup_based_product"),
-            // "referal_product": !! localStorage.getItem("referal_product") ? localStorage.getItem("referal_product") : '',
-            // "referal_subproduct": !! localStorage.getItem("referal_subproduct") ? localStorage.getItem("referal_subproduct") : ''
+            "referal_product": !! localStorage.getItem("referal_product") ? localStorage.getItem("referal_product") : '',
+            "referal_subproduct": !! localStorage.getItem("referal_subproduct") ? localStorage.getItem("referal_subproduct") : ''
         }
     }
     return {}
