@@ -1,15 +1,15 @@
 // We won't use precaching
 const ignored = self.__WB_MANIFEST;
 
-self.addEventListener('install',(event) => {
-  caches.keys().then(cacheNames => {
-    cacheNames.forEach( cacheName => {
-      caches.delete(cacheName);
-    })
-  })
-  self.skipWaiting()
-}
-)
+// self.addEventListener('install',(event) => {
+//   caches.keys().then(cacheNames => {
+//     cacheNames.forEach( cacheName => {
+//       caches.delete(cacheName);
+//     })
+//   })
+//   self.skipWaiting()
+// }
+// )
 
 
 workbox.routing.registerRoute(
@@ -22,7 +22,7 @@ workbox.routing.registerRoute(
 
 workbox.routing.registerRoute(
 ({ request, url}) => {
- 
+  console.log("navigation url", url)
   return request.mode === 'navigate';
 },
 new workbox.strategies.StaleWhileRevalidate({
@@ -47,5 +47,3 @@ new workbox.strategies.StaleWhileRevalidate({
   cacheName: 'apis',
 })
 );
-
-
