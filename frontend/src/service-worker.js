@@ -7,7 +7,7 @@ self.addEventListener('install',(event) => {
       caches.delete(cacheName);
     })
   })
-  self.skipwaiting()
+  self.skipWaiting()
 }
 )
 
@@ -46,5 +46,6 @@ workbox.routing.registerRoute(
 new workbox.strategies.StaleWhileRevalidate({
   cacheName: 'apis',
 })
-)
+);
+
 
