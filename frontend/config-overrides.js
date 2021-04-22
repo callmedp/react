@@ -1,10 +1,11 @@
 const path = require('path');
 const fs = require('fs');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const WorkboxWebpackPlugin = require('workbox-webpack-plugin');
 
 const appDirectory = fs.realpathSync(process.cwd());
 const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
+
 
 const moduleFileExtensions = [
   'web.mjs',
@@ -34,6 +35,7 @@ const resolveModule = (resolveFn, filePath) => {
 
 const appDesktopIndexJs = resolveModule(resolveApp, 'src/index.desktop');
 const appMobileIndexJs = resolveModule(resolveApp, 'src/index.mobile');
+const swSrc = resolveModule(resolveApp, 'src/service-worker');
 
 const appHtml = '!!raw-loader!public/serverIndex.ejs';
 const appBuild = resolveApp('../careerplus/static_core/react');
@@ -75,7 +77,7 @@ module.exports = {
     config.plugins[0].options.filename = indexHtml;
     config.plugins[0].options.template = appHtml;
 
-    config.plugins.push(new HtmlWebpackPlugin(
+    config.plugins[8] = new HtmlWebpackPlugin(
       Object.assign(
         {},
         {
@@ -99,7 +101,13 @@ module.exports = {
           },
         }
       )
-    ))
+    )
+    
+    fs.existsSync(swSrc) && config.plugins.push(
+    new WorkboxWebpackPlugin.InjectManifest({
+      swSrc,
+      exclude: [/\.map$/, /asset-manifest\.json$/, /LICENSE/],
+    }))
 
     // config.resolve = {
     //   ...config.resolve,
