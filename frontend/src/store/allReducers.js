@@ -18,6 +18,7 @@ import { DashboardMyServicesReducer } from './DashboardPage/MyServices/reducer/i
 import { InDemandProductsReducer, JobAssistanceAndBlogsReducer, MostViewedCoursesReducer, TestimonialsReducer, SkillwithDemandsReducer   } from './HomePage/reducers';
 import { DashboardMyServicesResumeReducer, OiDetailsReducer } from './DashboardPage/MyServices/reducer/index';
 import { VendorUrlReducer } from './DashboardPage/StartCourse/reducer/index';
+import { mainCoursesReducer, ProductReviewsReducer, RecommendedCoursesReducer, AddToCartReducer, AddToCartRedeemReducer } from './DetailPage/reducers';
 import { findRightJobsReducer, upskillYourselfReducer,  serviceRecommendationReducer, ResumeScoreReducer } from './UserIntentPage/reducers';
 
 const rootReducer = combineReducers({
@@ -49,6 +50,11 @@ const rootReducer = combineReducers({
     dashboardPendingResume: DashboardMyServicesResumeReducer,
     oiDetails: OiDetailsReducer,
     vendorUrl: VendorUrlReducer,
+    mainCourses: mainCoursesReducer,
+    reviews: ProductReviewsReducer,
+    recommendedCourses: RecommendedCoursesReducer,
+    addToCartCourses: AddToCartReducer,
+    addToCartRedeemCourses: AddToCartRedeemReducer,
     resumeScore: ResumeScoreReducer,
     findRightJob: findRightJobsReducer,
     upskillYourself: upskillYourselfReducer,

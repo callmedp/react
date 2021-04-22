@@ -54,7 +54,7 @@ const Product = (props) => {
             delay={200}
         >
             <li className="col-sm-4" key={index} itemProp="itemListElement" itemScope itemType="http://schema.org/ListItem">
-                <meta itemprop="position" content={id}/>
+                <meta itemProp="position" content={id}/>
                 <div className="card" data-aos="fade-zoom-in" data-aos-easing="ease-in-back" data-aos-offset="0" data-aos-delay={listIdx*50+50} data-aos-duration="1000">
                     <div className="card__heading">
                         {tags === 2 && <span className="flag-blue">NEW</span>}

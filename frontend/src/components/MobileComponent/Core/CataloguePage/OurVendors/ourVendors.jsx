@@ -33,31 +33,6 @@ const OurVendors = (props) => {
                             )
                         })
                     }
-                    {/* <div className="m-our-vendors-slider__txt">
-                        <figure>
-                            <img src="./media/images/mobile/shine-learning-vendor.png" className="img-fluid" alt="Shine Learning" />
-                        </figure>
-                    </div>
-                    <div className="m-our-vendors-slider__txt">
-                        <figure>
-                            <img src="./media/images/mobile/361minds-vendor.png" className="img-fluid" alt="Shine Learning" />
-                        </figure>
-                    </div>
-                    <div className="m-our-vendors-slider__txt">
-                        <figure>
-                            <img src="./media/images/mobile/vskills-vendor.png" className="img-fluid" alt="Shine Learning" />
-                        </figure>
-                    </div>
-                    <div className="m-our-vendors-slider__txt">
-                        <figure>
-                            <img src="./media/images/mobile/skillsoft-vendor.png" className="img-fluid" alt="Shine Learning" />
-                        </figure>
-                    </div>
-                    <div className="m-our-vendors-slider__txt">
-                        <figure>
-                            <img src="./media/images/mobile/edurekha-vendor.png" className="img-fluid" alt="Shine Learning" />
-                        </figure>
-                    </div> */}
                 </Slider>
             </div>
         </section>

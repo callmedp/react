@@ -6,7 +6,6 @@ import Api from './Api';
 function* GetReviews(action) {
 
     const { payload: { payload, resolve, reject } } = action;
-
     try {
         let result = null;
 

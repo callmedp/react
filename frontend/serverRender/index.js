@@ -100,13 +100,8 @@ app.use(function (req, res, next) {
     next();
 });
 
-
-
-
-
 // app.use('/media/static/',express.static('../careerplus/media/static/'));
 app.use(express.static('../careerplus/static_core/react/'));
-
 
 const isMobile = (userAgents) => {
     return /Android|Phone|Mobile|Opera\sM(in|ob)i|iP[ao]d|BlackBerry|SymbianOS|Safari\.SearchHelper|SAMSUNG-(GT|C)|WAP|CFNetwork|Puffin|PlayBook|Nokia|LAVA|SonyEricsson|Karbonn|UCBrowser|ucweb|Micromax|Silk|LG(MW|-MMS)|PalmOS/i.test(userAgents)
@@ -117,7 +112,6 @@ app.set('view engine', 'ejs');
 app.get(expressRoutes, (req, res) => {
 
     if (isMobile(userAgents)) {
-
         console.log("<><><><><><>Entered Mobile<><><><><><>   ", req.url)
         indexFile = 'indexMobile';
         routes = require('routes/index.mobile').routes;
@@ -128,7 +122,7 @@ app.get(expressRoutes, (req, res) => {
         routes = require('routes/index.desktop').routes;
 
     }
-    const branch = matchRoutes(routes, req.path) || [] ;
+    const branch = matchRoutes(routes, req.path) || [];
 
        const data = async () => await new Promise((resolve, reject) => {
         fetch(`${window.config?.siteDomain || 'https://learning.shine.com'}/api/v1/fetch-info/`,
@@ -136,45 +130,43 @@ app.get(expressRoutes, (req, res) => {
                 method: 'POST',
                 body: JSON.stringify({ "em": cookies }),
                 headers: { 'Content-Type': 'application/json' }
-            }).then(res => res.json())
+            })
+            .then(res => res.json())
             .then(json => {
                 console.log('promise resolved');
             })
             .catch(err => console.log(err))
             .finally(() => {
                 console.log('here in finally');
-    branch.forEach(async ({ route, match }) => {
-        if (route && route.actionGroup) {
-            try {
-                result = await new Promise((resolve, reject) => fetchApiData(store, match.params,cookies, route.actionGroup, resolve, reject));
-            }
-            catch (error) {
-                if (error?.status === 404) {
-                    return res.redirect('/404/');
-                }
-            }
+                branch.forEach(async ({ route, match }) => {
+                    if (route && route.actionGroup) {
+                        try {
+                            result = await new Promise((resolve, reject) => fetchApiData(store, match.params,cookies, route.actionGroup, resolve, reject));
+                        }
+                        catch (error) {
+                            if (error?.status === 404) {
+                                return res.redirect('/404/');
+                            }
+                            if(error?.redirect_url) {
+                                return res.redirect(error.redirect_url);
+                            }
+                        }
 
+                        appContent = render(req, routes);
+                        const preloadedState = store.getState()
 
-            appContent = render(req, routes);
-            const preloadedState = store.getState()
+                        return res.render(indexFile, {
+                            appContent,
+                            preloadedState: JSON.stringify(preloadedState).replace(/</g, '\\u003c'),
+                            config: JSON.stringify(window.config)
+                        });
+                    }
 
-            return res.render(indexFile, {
-                appContent,
-                preloadedState: JSON.stringify(preloadedState).replace(/</g, '\\u003c'),
-                config: JSON.stringify(window.config)
+                });
             });
-
-
-
-        }
-
-    });
-});
-});
-
+        });
     data();
 });
-
 
 
 app.get('*', (req, res) => {

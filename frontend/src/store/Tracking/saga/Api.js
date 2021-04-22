@@ -3,7 +3,7 @@ import { shineSiteDomain, siteDomain } from '../../../utils/domains'
 
 const trackUser = (query, userAction) => {
     let t_id = !!query['t_id'] ? query['t_id']:"";
-    if(t_id == ""){
+    if(t_id == "") {
         return
     }
     let productTrackingMappingId = !!query['product_tracking_mapping_id'] ? query['product_tracking_mapping_id'].toString() : "";

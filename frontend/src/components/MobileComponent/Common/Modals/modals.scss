@@ -5,7 +5,7 @@
     left: 0;
     right: 0;
     bottom: 0;
-    z-index: 99;
+    z-index: 999;
 }
 
 input:-internal-autofill-selected { 
@@ -26,6 +26,18 @@ input:-webkit-autofill:active  {
     -webkit-box-shadow: 0 0 0 30px white inset !important;
 }
 
+.m-big-review-star {
+    margin: 15px 0;
+    display: block;
+    // padding-left: 60px;
+    text-align: center;
+
+    .micon-blankstar,
+    .micon-fullstar {
+        margin: 0 15px;
+        transform: scale(2);
+    }
+}
 .m-upload-modal {
     background: $white;
     .small {

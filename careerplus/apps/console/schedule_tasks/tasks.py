@@ -548,7 +548,6 @@ def generate_pixel_report(task=None, url_slug=None, days=None):
                 content = gzip.open(GCPPrivateMediaStorage(bucket_name=bucket_name).open(file_name, 'rb')).read()
         except IOError:
             content = b''
-            print()
             logging.getLogger('error_log').error('File' + file_name + 'Does not Exist')
 
         for line in content.decode('utf-8').split('\n'):
