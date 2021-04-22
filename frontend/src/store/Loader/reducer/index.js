@@ -12,6 +12,9 @@ const initState = {
     homeLoader: false,
     uploadLoader: false,
     oiDetailsLoader: false,
+    mainCourseLoader: false,
+    mainCourseCartLoader: false,
+    needHelpLoader: false,
     resumeScoreLoader: false,
     jobsUpSkillsLoader: false,
     careerChangeLoader: false
@@ -61,6 +64,18 @@ export const LoaderReducer = (state=initState, action) => {
         case Actions.START_OI_DETAILS_LOADER : return {...state, ...action.payload}
         case Actions.STOP_OI_DETAILS_LOADER : return {...state, ...action.payload}
 
+        // main course loader
+        case Actions.START_MAIN_COURSE_LOADER : return {...state, ...action.payload}
+        case Actions.STOP_MAIN_COURSE_LOADER : return {...state, ...action.payload}
+
+        // main course cart loader
+        case Actions.START_MAIN_COURSE_CART_LOADER : return {...state, ...action.payload}
+        case Actions.STOP_MAIN_COURSE_CART_LOADER : return {...state, ...action.payload}
+
+        //Need help loader
+        case Actions.START_NEED_HELP_LOADER : return {...state, ...action.payload}
+        case Actions.STOP_NEED_HELP_LOADER : return {...state, ...action.payload}
+        
         // get resume score loader
         case Actions.START_GET_RESUME_SCORE_LOADER : return {...state, ...action.payload}
         case Actions.STOP_GET_RESUME_SCORE_LOADER : return {...state, ...action.payload}

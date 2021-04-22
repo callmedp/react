@@ -9,6 +9,7 @@ from django.dispatch import receiver
 from django.db.models.signals import post_save
 from django_mysql.models.fields import JSONField
 from django.core.cache import cache
+import logging
 
 
 # local imports
@@ -93,13 +94,13 @@ class CandidateProfile(AbstractAutoDate):
 class Candidate(PreviewImageCreationMixin, CandidateProfile):
     parent_object_key = "id"
     initiate_image_upload_task = True
-
     @property
     def order_data(self):
         from order.models import Order
 
         product_found = False
         order_data = {}
+
         order_obj_list = Order.objects.filter(
             candidate_id=self.candidate_id, status__in=[1, 3])
 

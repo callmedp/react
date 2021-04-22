@@ -28,28 +28,6 @@ const LatestBlog = (props) => {
                             )
                         })
                     }
-                    {/* <li className="col">
-                        <div className="m-card">
-                            <Link to={"#"}>
-                                <figure>
-                                    <img src="/media/images/blog-pic1.jpg" className="img-fluid" alt="Latest from blog" />
-                                    <span>Career prospects</span>
-                                </figure>
-                                <strong>Planning required before re- locating to a new city…</strong>
-                            </Link>
-                        </div>
-                    </li>
-                    <li className="col pl-0">
-                        <div className="m-card">
-                            <Link to={"#"}>
-                                <figure>
-                                    <img src="/media/images/blog-pic2.jpg" className="img-fluid" alt="Latest from blog" />
-                                    <span>Career prospects</span>
-                                </figure>
-                                <strong>Careers that can be opt by learning Autocad</strong>
-                            </Link>
-                        </div>
-                    </li> */}
                 </ul>
             </div>
         </section>

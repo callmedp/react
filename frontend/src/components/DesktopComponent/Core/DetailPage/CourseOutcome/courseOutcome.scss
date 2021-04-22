@@ -1,0 +1,34 @@
+@import '../../../../../styles/functions';
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
+
+.course-outcome {
+    box-shadow: $box-shadow;
+    padding: 2rem;
+    ul {
+        list-style-type: none;
+        margin: 3rem 0;
+        padding: 0;
+
+        li {
+            position: relative;
+            padding-left: 2rem;
+
+            &:not(:last-child) {
+                margin-bottom: 1.3rem;
+            }
+            
+            &::before {
+                content: '';
+                background: $lightblueround;
+                width: .7rem;
+                height: .7rem;
+                border-radius: 100%;
+                display: inline-block;
+                position: absolute;
+                left: 0;
+                top: .6rem;
+            }
+        }
+    }
+}

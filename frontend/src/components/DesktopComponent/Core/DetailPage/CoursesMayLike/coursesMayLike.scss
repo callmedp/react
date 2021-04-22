@@ -1,0 +1,46 @@
+@import '../../../../../styles/functions';
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
+
+.removeButtons {
+    .carousel-control-prev {
+        display: none;
+    }
+
+    .carousel-control-next {
+        display: none;
+    }
+}
+
+.courses-like {
+    .carousel-indicators {
+        display: none;
+    }
+
+    .carousel-control-prev {
+        width: 7%;
+        left: 0;
+    }
+
+    .carousel-control-next {
+        width: 7%;
+        right: 0;
+    }
+
+    .carousel-control-prev-icon {
+        background: $sprite -579px -32px;
+        width: 7.6rem;
+        height: 7.6rem;
+    }
+    .carousel-control-next-icon {
+        background: $sprite -645px -32px;
+        width: 7.6rem;
+        height: 7.6rem;
+    }
+
+    .carousel-inner {
+        padding-bottom: 2rem;
+        margin: 0 auto;
+        width: 85%;
+    }
+}
