@@ -1,4 +1,6 @@
 #rest imports
+import logging
+
 from rest_framework import serializers
 import ast
 
@@ -22,6 +24,7 @@ class FeedbackQueueSerializer(serializers.ModelSerializer):
             sales_user_info = ast.literal_eval(obj.orderitemfeedback_set.select_related('order_item').first().order_item.order.sales_user_info)
         except:
             sales_user_info = {}
+            logging.getLogger('error_log').error('Unable to retrieve item feedback')
         return sales_user_info.get('branch_head', None)
 
 
