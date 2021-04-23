@@ -1,5 +1,8 @@
 #rest imports
+import logging
+
 from rest_framework import serializers
+import ast
 
 #app imports
 from order.models import CustomerFeedback,OrderItemFeedback,OrderItemFeedbackOperation,OrderItem
@@ -10,10 +13,20 @@ from users.models import User
 class FeedbackQueueSerializer(serializers.ModelSerializer):
     status_text = serializers.CharField()
     assigned_to_text = serializers.CharField()
+    sales_user_info = serializers.SerializerMethodField()
     class Meta:
         model = CustomerFeedback
-        include= ('status_text')
+        include= ('status_text', 'sales_user_info')
         exclude = ('candidate_id','mobile','email','comment')
+
+    def get_sales_user_info(self, obj):
+        try:
+            sales_user_info = ast.literal_eval(obj.orderitemfeedback_set.select_related('order_item').first().order_item.order.sales_user_info)
+        except:
+            sales_user_info = {}
+            logging.getLogger('error_log').error('Unable to retrieve item feedback')
+        return sales_user_info.get('branch_head', None)
+
 
 class CustomerFeedbackSerializer(serializers.ModelSerializer):
     class Meta:
