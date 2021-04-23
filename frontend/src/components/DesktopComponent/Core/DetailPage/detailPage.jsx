@@ -125,6 +125,8 @@ const DetailPage = (props) => {
                         product_detail={product_detail} prdId={id} varChecked={varChecked}
                         frqntProd={frqntProd} product_id={product_id}
                         hasReview = { prd_review_list?.length ? true : false }
+                        hasKeyFeatures = {product_detail?.prd_uget ? true : false}
+                        hasWhatYouGet = {product_detail?.pTF === 16 ? true : false}
                         />
             }
 
@@ -148,7 +150,7 @@ const DetailPage = (props) => {
             { product_detail?.pTF === 16 && <WhatYouGet prd_vendor_slug={product_detail?.prd_vendor_slug} /> }
             
             {
-                completeDescription?.length > reqLength ?  <AboutSection completeDescription={completeDescription} /> : ''
+                completeDescription?.length > reqLength ?  <AboutSection product_detail={product_detail} /> : ''
             }
             
             {
