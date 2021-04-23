@@ -800,6 +800,7 @@ class PaymentSummaryView(TemplateView, CartMixin):
                     product_list = cart_obj.lineitems.values_list('product__id', flat=True)
                     if int(tracking_product_id) not in product_list:
                         tracking_id = None
+                        self.remove_tracking()
                     else:
                         request.session.update({'tracking_product_id': tracking_product_id,
                                     'product_availability': tracking_product_id,
