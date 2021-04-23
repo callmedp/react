@@ -388,7 +388,8 @@ def generate_and_upload_resume_pdf(data):
     })
 
     if template_no == 5 and is_combo:
-        zip_all_resume_pdfs.apply_async((order.id, data), countdown=2)
+        # zip_all_resume_pdfs.apply_async((order.id, data), countdown=2)
+        zip_all_resume_pdfs(order.id, data)
 
     if send_mail:
         send_resume_in_mail_resume_builder(['resume', pdf_file], data)
