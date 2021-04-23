@@ -46,19 +46,6 @@ export const removeTrackingInfo = () => {
     localStorage.removeItem("popup_based_product");
 }
 
-export const updateReferalIds = () => {
-    if (localStorage.getItem("trackingId", "")){
-        var prod_id = localStorage.getItem("productId");
-        var product_tracking_mapping_id = localStorage.getItem("productTrackingMappingId");
-        if(product_tracking_mapping_id){
-            localStorage.setItem("referal_product", product_tracking_mapping_id)
-        }
-        if(prod_id){
-            localStorage.setItem("referal_subproduct", prod_id)
-        }
-    }
-}
-
 export const getTrackingUrl = () => {
     if (localStorage.getItem("trackingId", "")){
         var t_id = localStorage.getItem("trackingId");
