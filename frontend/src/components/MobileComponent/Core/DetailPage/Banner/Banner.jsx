@@ -63,14 +63,14 @@ const CourseDetailBanner = (props) => {
         <div className="m-detail-header ml-15 mt-10" itemProp="Course" itemScope itemType="https://schema.org/Course">
 
             <div className="m-detail-heading">
-                <div className="m-detail-heading__icon mt-30" itemProp="image">
+                <div className="m-detail-heading__icon mt-30">
                     <figure>
-                        <img src={ product_detail?.prd_img } alt={ product_detail?.prd_img_alt } />
+                        <img itemProp="image" src={ product_detail?.prd_img } alt={ product_detail?.prd_img_alt } />
                     </figure>
                 </div>
-                <div className="m-detail-heading__content" itemProp="name">
+                <div className="m-detail-heading__content">
                     { product_detail?.pTg && product_detail.pTg !== 'None' && <span className="m-flag-yellowB">{ product_detail.pTg }</span> }
-                    <h1 className="m-heading1 mt-5">
+                    <h1 className="m-heading1 mt-5" itemProp="name">
                         { product_detail?.prd_H1 }
                     </h1>
                     <span className="m-rating">
@@ -200,14 +200,14 @@ const CourseDetailBanner = (props) => {
 
             {
                 (product_detail?.prd_video || completeDescription) &&
-                    <div className="m-intro-video" itemProp="embedUrl">
+                    <div className="m-intro-video">
                         <strong className="mb-10">Course intro</strong>
                         <div className="d-flex">
                             {
                                 product_detail?.prd_video && 
                                     <figure className="m-intro-video__img">
                                         <a href={`https://${product_detail?.prd_video}`} target="_blank">
-                                            <iframe src={`https://${product_detail?.prd_video}`} frameBorder="0" />
+                                            <iframe itemProp="embedUrl" src={`https://${product_detail?.prd_video}`} frameBorder="0" />
                                             <i className="micon-play-video"></i>
                                         </a>
                                     </figure>

@@ -13,12 +13,6 @@ const Reviews = (props) => {
     const { reviewLoader } = useSelector(store => store.loader);
     const [carIndex, setIndex] = useState(0);
     const dispatch = useDispatch();
-    // const { prd_review_list, prd_rv_current_page, prd_rv_has_next } = useSelector( store => store.reviews );
-
-
-    // useEffect( () => {
-    //     handleEffects(currentPage)
-    // },[id])
 
     const handleEffects = async (page) => {
         try {

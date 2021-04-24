@@ -158,14 +158,14 @@ const BannerCourseDetail = (props) => {
                                     }
                                 </Breadcrumb>
                                 <div className="detail-heading" data-aos="fade-zoom-in" itemProp="Course" itemScope itemType="https://schema.org/Course">
-                                    <div className="detail-heading__icon" itemProp="image">
+                                    <div className="detail-heading__icon">
                                         <figure>
-                                            <img src={product_detail?.prd_img} alt={product_detail?.prd_img_alt} />
+                                            <img itemProp="image" src={product_detail?.prd_img} alt={product_detail?.prd_img_alt} />
                                         </figure>
                                     </div>
-                                    <div className="detail-heading__content" itemProp="name">
+                                    <div className="detail-heading__content">
                                         { product_detail?.pTg !== 'None' && <span className="flag-yellowB">{product_detail?.pTg}</span> }
-                                        <h1 className="heading1">
+                                        <h1 className="heading1" itemProp="name">
                                             {product_detail?.prd_H1}
                                         </h1>
                                         <div className="d-flex mt-15">
@@ -291,7 +291,7 @@ const BannerCourseDetail = (props) => {
                                                 product_detail?.prd_video &&
                                                     <figure className="intro-video__img">
                                                         <a rel="noopener noreferrer" target="_blank" href={`https://${product_detail?.prd_video}`}>
-                                                            <iframe src={`https://${product_detail?.prd_video}`} frameBorder="0" />
+                                                            <iframe itemProp="embedUrl" src={`https://${product_detail?.prd_video}`} frameBorder="0" />
                                                             <i className="icon-play-video"></i>
                                                             <strong>Intro video</strong>
                                                         </a>
@@ -300,20 +300,17 @@ const BannerCourseDetail = (props) => {
 
                                             
                                             { completeDescription && 
-                                                <span className="intro-video__content" itemProp="embedUrl">
+                                                <span className="intro-video__content">
                                                     <div id="module" className="about-course">
-                                                            <span className="read-more-wrap" itemProp="description">
-                                                                <span dangerouslySetInnerHTML={{__html:completeDescription?.slice(0, reqLength) + ((completeDescription?.length > reqLength) ? '....' : '')}} />
+                                                            <span className="read-more-wrap">
+                                                                <span itemProp="description" dangerouslySetInnerHTML={{__html:completeDescription?.slice(0, reqLength) + ((completeDescription?.length > reqLength) ? '....' : '')}} />
                                                             </span>
-                                                            {/* <label htmlFor="post-10" className="read-more-trigger"></label> */}
                                                             {
                                                                 completeDescription?.length > reqLength ? 
                                                                 (
-                                                                    // <input type="checkbox" onClick={() => setReadAll(!readAll) } className="read-more-state" id="post-10" checked={readAll} itemProp="about" />
                                                                     <LinkScroll to = {'aboutsection'} offset={-160} smooth={true}> Read More</LinkScroll> 
-                                                                ) : (
-                                                                    ""
-                                                                    )
+                                                                )
+                                                                : ("")
                                                             }
                                                     </div> 
                                                 </span>
@@ -323,76 +320,76 @@ const BannerCourseDetail = (props) => {
                             </div>
                             
                             <div className="banner-detail">
-                                        <div className="course-enrol">
-                                            {  
-                                                product_detail?.selected_var && product_detail?.var_list && product_detail?.var_list?.length > 0 &&
-                                                <div className="course-enrol__mode">
-                                                    Mode
-                                                    {
-                                                        product_detail?.var_list?.map((varList, indx) => {
-                                                            return (
-                                                                    <form key={indx}>
-                                                                        <label htmlFor={varList?.id}>
-                                                                            <input type="radio" name="radio" id={varList?.id} checked={varChecked?.id && (varChecked?.id === varList?.id ? true : false) || !varChecked?.id && (product_detail?.selected_var?.id === varList?.id ? true : false)} onChange={() => changeMode(varList)} />
-                                                                            {getStudyMode(varList?.mode)}
-                                                                        </label> 
-                                                                    </form>
-                                                                )
-                                                        })
-                                                    }
-                                                </div>
+                                <div className="course-enrol">
+                                    {  
+                                        product_detail?.selected_var && product_detail?.var_list && product_detail?.var_list?.length > 0 &&
+                                        <div className="course-enrol__mode">
+                                            Mode
+                                            {
+                                                product_detail?.var_list?.map((varList, indx) => {
+                                                    return (
+                                                            <form key={indx}>
+                                                                <label htmlFor={varList?.id}>
+                                                                    <input type="radio" name="radio" id={varList?.id} checked={varChecked?.id && (varChecked?.id === varList?.id ? true : false) || !varChecked?.id && (product_detail?.selected_var?.id === varList?.id ? true : false)} onChange={() => changeMode(varList)} />
+                                                                    {getStudyMode(varList?.mode)}
+                                                                </label> 
+                                                            </form>
+                                                        )
+                                                })
                                             }
-                                            <div className="course-enrol__price">
-                                                <strong className="price-taxes mt-20 mb-10">{getProductPrice(varChecked?.inr_price || product_detail?.var_list[0]?.inr_price || product_detail?.pPinb)}/-  <span className="taxes">(+taxes)</span></strong>
-                                                <strong className="price-offer mt-0 mb-10">
-                                                    {
-                                                        (varChecked?.id ? discountPrice : product_detail?.var_list[0]?.fake_inr_price) > 0 ?
-                                                        <>
-                                                            <del>{varChecked?.id ? discountPrice : product_detail?.var_list[0]?.fake_inr_price}/- </del> 
-                                                
-                                                            <span className="offer">
-                                                                {
-                                                                    getDiscountedPrice(varChecked?.id ? discountPrice : product_detail?.var_list[0]?.fake_inr_price, varChecked?.inr_price || product_detail?.var_list[0]?.inr_price)
-                                                                }
-                                                                % Off
-                                                            </span>
-                                                        </>
-                                                        : "" 
-                                                    }
-                                                    {
-                                                        (!product_detail?.var_list?.length > 0 && !product_detail?.selected_var && product_detail?.pPfinb > 0) ?
-                                                            <>
-                                                                <del>{product_detail?.pPfinb}/- </del>
-                                                                <span className="offer">{getDiscountedPrice(product_detail?.pPfinb, product_detail?.pPinb)} % Off</span>
-                                                            </>
-                                                        : ""
-                                                    }
-                                                </strong>
-                                                <p className="d-flex mb-0">
-                                                    <a onClick={() => goToCart(varChecked)} className="btn btn-secondary mt-10 mr-10">{ product_detail?.prd_service === 'assessment' ? 'Buy Now' : product_detail?.redeem_test ? 'Redeem Now' : 'Enroll now' }</a>
-                                                    <LinkScroll to={"enquire-now"} className="btn btn-outline-primary mt-10" offset={-160} smooth={true}>Enquire now</LinkScroll>
-                                                </p>
-                                                
-                                            </div>
-                                            <div className="course-enrol__offer lightblue-bg2">
-                                                {product_detail?.redeem_test && <span className="flex-1">You have {product_detail?.product_redeem_count} free practice test (Assessment) as you're a Shine Premium User</span>}
-                                                <strong className="mt-10 mb-5">Offers</strong>
-                                                <ul className="pb-0">
-                                                {
-                                                    (varChecked?.inr_price || product_detail?.var_list[0]?.inr_price) < 5001 ?
-                                                    <li><figure className="icon-offer-pay"></figure> <span className="flex-1">Buy now &amp; <strong>pay within 14 days using ePayLater</strong></span> </li>
-
-                                                    :
-                                                    
-                                                    <li><figure className="icon-offer-pay"></figure> <span className="flex-1">Avail <strong>Interest-free EMIs at no additional cost using Zest Money payment option</strong></span> </li>
-                                                }
-                                                {
-                                                    product_detail?.free_test && <li><figure className="icon-offer-test"></figure><span className="flex-1">Take <strong>free practice test</strong> to enhance your skill</span></li>
-                                                }
-                                                </ul>
-                                            </div>
                                         </div>
-                               
+                                    }
+                                    <div className="course-enrol__price">
+                                        <strong className="price-taxes mt-20 mb-10">{getProductPrice(varChecked?.inr_price || product_detail?.var_list[0]?.inr_price || product_detail?.pPinb)}/-  <span className="taxes">(+taxes)</span></strong>
+                                        <strong className="price-offer mt-0 mb-10">
+                                            {
+                                                (varChecked?.id ? discountPrice : product_detail?.var_list[0]?.fake_inr_price) > 0 ?
+                                                <>
+                                                    <del>{varChecked?.id ? discountPrice : product_detail?.var_list[0]?.fake_inr_price}/- </del> 
+                                        
+                                                    <span className="offer">
+                                                        {
+                                                            getDiscountedPrice(varChecked?.id ? discountPrice : product_detail?.var_list[0]?.fake_inr_price, varChecked?.inr_price || product_detail?.var_list[0]?.inr_price)
+                                                        }
+                                                        % Off
+                                                    </span>
+                                                </>
+                                                : "" 
+                                            }
+                                            {
+                                                (!product_detail?.var_list?.length > 0 && !product_detail?.selected_var && product_detail?.pPfinb > 0) ?
+                                                    <>
+                                                        <del>{product_detail?.pPfinb}/- </del>
+                                                        <span className="offer">{getDiscountedPrice(product_detail?.pPfinb, product_detail?.pPinb)} % Off</span>
+                                                    </>
+                                                : ""
+                                            }
+                                        </strong>
+                                        <p className="d-flex mb-0">
+                                            <a onClick={() => goToCart(varChecked)} className="btn btn-secondary mt-10 mr-10">{ product_detail?.prd_service === 'assessment' ? 'Buy Now' : product_detail?.redeem_test ? 'Redeem Now' : 'Enroll now' }</a>
+                                            <LinkScroll to={"enquire-now"} className="btn btn-outline-primary mt-10" offset={-160} smooth={true}>Enquire now</LinkScroll>
+                                        </p>
+                                        
+                                    </div>
+                                    <div className="course-enrol__offer lightblue-bg2">
+                                        {product_detail?.redeem_test && <span className="flex-1">You have {product_detail?.product_redeem_count} free practice test (Assessment) as you're a Shine Premium User</span>}
+                                        <strong className="mt-10 mb-5">Offers</strong>
+                                        <ul className="pb-0">
+                                        {
+                                            (varChecked?.inr_price || product_detail?.var_list[0]?.inr_price) < 5001 ?
+                                            <li><figure className="icon-offer-pay"></figure> <span className="flex-1">Buy now &amp; <strong>pay within 14 days using ePayLater</strong></span> </li>
+
+                                            :
+                                            
+                                            <li><figure className="icon-offer-pay"></figure> <span className="flex-1">Avail <strong>Interest-free EMIs at no additional cost using Zest Money payment option</strong></span> </li>
+                                        }
+                                        {
+                                            product_detail?.free_test && <li><figure className="icon-offer-test"></figure><span className="flex-1">Take <strong>free practice test</strong> to enhance your skill</span></li>
+                                        }
+                                        </ul>
+                                    </div>
+                                </div>
+                        
                                 { product_detail?.combo && <ComboIncludes combo_list={product_detail?.combo_list} /> }
                                 { product_detail?.fbt && <FrequentlyBought addFrqntProd={addFrqntProd} frqntProd={frqntProd} fbt_list={product_detail?.fbt_list}/> }
                             </div>
