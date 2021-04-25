@@ -80,32 +80,32 @@ const CourseDetailBanner = (props) => {
                                     {
                                         product_detail?.prd_rating_star?.map((star, index) => starRatings(star, index))
                                     }
-                                    <span itemprop="reviewCount">{ product_detail?.prd_rating?.toFixed() }/5</span>
+                                    <span itemprop="ratingValue">{ product_detail?.prd_rating?.toFixed() }/5</span>
                                 </>
                                 :
                                 ''
                         }
-                        <span itemProp="brand" itemType="http://schema.org/Brand" itemScope>By <span itemProp="name" onClick={() => MyGA.SendEvent('ln_course_provider', 'ln_course_provider', 'ln_click_course_provider', `${product_detail?.prd_vendor}` , '', false, true)}>{ product_detail?.prd_vendor }</span></span>
+                        <span itemProp="brand" itemType="http://schema.org/Brand" itemScope>By <span itemProp="name" content={product_detail?.prd_vendor} onClick={() => MyGA.SendEvent('ln_course_provider', 'ln_course_provider', 'ln_click_course_provider', `${product_detail?.prd_vendor}` , '', false, true)}>{ product_detail?.prd_vendor }</span></span>
                     </span>
-                    <div className="d-flex mt-10">
+                    <div className="d-flex mt-10" itemProp="aggregateRating" itemScope itemType="https://schema.org/AggregateRating">
                         {
                             (product_detail?.prd_num_rating > 0 && prd_review_list && prd_review_list?.length) ?
-                                <span className="m-review-jobs" itemProp="aggregateRating" itemScope itemType="https://schema.org/AggregateRating">
+                                <span className="m-review-jobs">
                                     <LinkScroll to="reviews" offset={-120}>
                                         <Link to={"#"}>
-                                            <figure className="micon-reviews-link"></figure> <strong itemprop="reviewCount">{ product_detail?.prd_num_rating }</strong> { product_detail?.prd_num_rating > 1 ? 'Reviews' : 'Review' }
+                                            <figure className="micon-reviews-link"></figure> <strong itemprop="reviewCount" content={product_detail?.prd_num_rating}>{ product_detail?.prd_num_rating }</strong> { product_detail?.prd_num_rating > 1 ? 'Reviews' : 'Review' }
                                         </Link>
                                     </LinkScroll>
                                 </span>
                                 :
                                 getCandidateId() ?
-                                    <span className="m-review-jobs">
+                                    <span className="m-review-jobs" itemprop="reviewCount" content="1">
                                         <Link to={"#"} onClick={ () => showReviewModal(true) }>
                                             <figure className="micon-reviews-link"></figure> Write a Review
                                         </Link>
                                     </span>
                                     : 
-                                    <span className="m-review-jobs">
+                                    <span className="m-review-jobs" itemprop="reviewCount" content="1">
                                         <a  href={`${siteDomain}/login/?next=${pUrl}?sm=true`}>
                                             <figure className="micon-reviews-link"></figure> Write a Review
                                         </a>
@@ -207,7 +207,7 @@ const CourseDetailBanner = (props) => {
                                 product_detail?.prd_video && 
                                     <figure className="m-intro-video__img">
                                         <a href={`https://${product_detail?.prd_video}`} target="_blank">
-                                            <iframe itemProp="embedUrl" src={`https://${product_detail?.prd_video}`} frameBorder="0" />
+                                            <iframe src={`https://${product_detail?.prd_video}`} frameBorder="0" />
                                             <i className="micon-play-video"></i>
                                         </a>
                                     </figure>
@@ -216,7 +216,7 @@ const CourseDetailBanner = (props) => {
                             {
                                 completeDescription && 
                                 <p className="m-intro-video__content">
-                                    <span itemProp="description" dangerouslySetInnerHTML={{__html: product_detail?.prd_about?.slice(0, showAll ? product_detail?.prd_about?.length : noOfWords) }} />
+                                    <span itemProp="description" content={product_detail?.prd_about} dangerouslySetInnerHTML={{__html: product_detail?.prd_about?.slice(0, showAll ? product_detail?.prd_about?.length : noOfWords) }} />
                                     <span>
                                         {
                                             (!showAll && product_detail?.prd_about?.length > noOfWords) ? 

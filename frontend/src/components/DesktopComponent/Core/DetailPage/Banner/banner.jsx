@@ -153,7 +153,17 @@ const BannerCourseDetail = (props) => {
                                 <Breadcrumb itemScope itemType="http://schema.org/BreadcrumbList">
                                     {
                                         product_detail?.breadcrumbs?.map((bread, inx) => {
-                                            return <Breadcrumb.Item itemProp="itemListElement" itemScope itemType="http://schema.org/ListItem" key={inx} className={bread.active === null ? 'noLinkAnchor' : ""} onClick={() => handleBreadCrumbTracking(product_detail?.breadcrumbs, inx, bread)}><span itemProp="name">{bread.name}</span></Breadcrumb.Item>
+
+                                            return (
+                                                bread?.url ? 
+                                                    <Breadcrumb.Item itemProp="itemListElement" itemScope itemType="http://schema.org/ListItem" key={inx} onClick={() => handleBreadCrumbTracking(product_detail?.breadcrumbs, inx, bread)}>
+                                                        <span itemprop="item" content={siteDomain + bread?.url}></span>
+                                                        <span itemProp="name">{bread?.name}</span>
+                                                        <span itemprop="position" content={inx+1}></span>
+                                                    </Breadcrumb.Item>
+                                                : 
+                                                    <Breadcrumb.Item key={inx} className="noLinkAnchor">{bread?.name}</Breadcrumb.Item>
+                                            )
                                         })
                                     }
                                 </Breadcrumb>
@@ -175,7 +185,7 @@ const BannerCourseDetail = (props) => {
                                                     {
                                                         product_detail?.prd_rating_star?.map((star, index) => starRatings(star, index))
                                                     }
-                                                    <span itemProp="ratingValue">{product_detail?.prd_rating?.toFixed()}/5</span>
+                                                    <span itemProp="ratingValue" content={product_detail?.prd_rating?.toFixed()}>{product_detail?.prd_rating?.toFixed()}/5</span>
                                                 </span> : ''
                                             }
                                             
@@ -185,16 +195,16 @@ const BannerCourseDetail = (props) => {
                                                         (product_detail?.prd_num_rating > 0 && prd_review_list && prd_review_list?.length) ? 
                                                             <span className="review-jobs cursorLink">
                                                                 <LinkScroll to={"reviews"} offset={-160} smooth={true}>
-                                                                    <figure className="icon-reviews-link"></figure> <strong itemProp="reviewCount"> {product_detail?.prd_num_rating}</strong> Reviews
+                                                                    <figure className="icon-reviews-link"></figure> <strong itemProp="reviewCount" content={product_detail?.prd_num_rating}> {product_detail?.prd_num_rating}</strong> Reviews
                                                                 </LinkScroll>
                                                             </span> 
                                                             :
                                                             getCandidateId() ?
-                                                                <span className="review-jobs cursorLink" onClick={() => {showReviewModal(true)}}>
+                                                                <span className="review-jobs cursorLink" onClick={() => {showReviewModal(true)}} itemProp="reviewCount" content="1">
                                                                     <figure className="icon-reviews-link"></figure> Write a Review
                                                                 </span> 
                                                                 : 
-                                                                <span className="review-jobs cursorLink" onClick={() => { handleLoginRedirect() }}>
+                                                                <span className="review-jobs cursorLink" onClick={() => { handleLoginRedirect() }} itemProp="reviewCount" content="1">
                                                                     <figure className="icon-reviews-link"></figure> Write a Review
                                                                 </span>    
                                                     }
@@ -213,8 +223,8 @@ const BannerCourseDetail = (props) => {
                                     </div>
                                 </div>
                                 <ul className="course-stats mt-30 mb-20">
-                                    <li>
-                                        <strong itemProp="brand" itemType="http://schema.org/Brand" itemScope>By <span itemProp="name" onClick={() => MyGA.SendEvent('ln_course_provider', 'ln_course_provider', 'ln_click_course_provider', `${product_detail?.prd_vendor}` , '', false, true)}>{product_detail?.prd_vendor}</span></strong>
+                                    <li itemProp="brand" itemType="http://schema.org/Brand" itemScope>
+                                        <strong>By <span itemProp="name" content={product_detail?.prd_vendor} onClick={() => MyGA.SendEvent('ln_course_provider', 'ln_course_provider', 'ln_click_course_provider', `${product_detail?.prd_vendor}` , '', false, true)}>{product_detail?.prd_vendor}</span></strong>
                                         <a onClick={() => viewAllCourses()} className="cursorLink">View all</a> courses by {product_detail?.prd_vendor}  
                                     </li>
 
@@ -291,7 +301,7 @@ const BannerCourseDetail = (props) => {
                                                 product_detail?.prd_video &&
                                                     <figure className="intro-video__img">
                                                         <a rel="noopener noreferrer" target="_blank" href={`https://${product_detail?.prd_video}`}>
-                                                            <iframe itemProp="embedUrl" src={`https://${product_detail?.prd_video}`} frameBorder="0" />
+                                                            <iframe src={`https://${product_detail?.prd_video}`} frameBorder="0" />
                                                             <i className="icon-play-video"></i>
                                                             <strong>Intro video</strong>
                                                         </a>
@@ -303,7 +313,7 @@ const BannerCourseDetail = (props) => {
                                                 <span className="intro-video__content">
                                                     <div id="module" className="about-course">
                                                             <span className="read-more-wrap">
-                                                                <span itemProp="description" dangerouslySetInnerHTML={{__html:completeDescription?.slice(0, reqLength) + ((completeDescription?.length > reqLength) ? '....' : '')}} />
+                                                                <span itemProp="description" content={completeDescription} dangerouslySetInnerHTML={{__html:completeDescription?.slice(0, reqLength) + ((completeDescription?.length > reqLength) ? '....' : '')}} />
                                                             </span>
                                                             {
                                                                 completeDescription?.length > reqLength ? 
@@ -328,7 +338,7 @@ const BannerCourseDetail = (props) => {
                                             {
                                                 product_detail?.var_list?.map((varList, indx) => {
                                                     return (
-                                                            <form key={indx}>
+                                                            <form key={indx} itemProp="offers" itemScope itemType="http://schema.org/Offer">
                                                                 <label htmlFor={varList?.id} itemProp={varList?.mode === 'OL' ? `availability` : ''} content={varList?.mode === 'OL' ? "https://schema.org/OnlineOnly" : ''}>
                                                                     <input type="radio" name="radio" id={varList?.id} checked={varChecked?.id && (varChecked?.id === varList?.id ? true : false) || !varChecked?.id && (product_detail?.selected_var?.id === varList?.id ? true : false)} onChange={() => changeMode(varList)} />
                                                                     {getStudyMode(varList?.mode)}
@@ -340,7 +350,9 @@ const BannerCourseDetail = (props) => {
                                         </div>
                                     }
                                     <div className="course-enrol__price" itemProp="offers" itemScope itemType="http://schema.org/Offer">
-                                        <strong className="price-taxes mt-20 mb-10" itemProp="price">{getProductPrice(varChecked?.inr_price || product_detail?.var_list[0]?.inr_price || product_detail?.pPinb)}/-  <span className="taxes">(+taxes)</span></strong>
+                                        <strong className="price-taxes mt-20 mb-10" itemProp="price" content={getProductPrice(varChecked?.inr_price || product_detail?.var_list[0]?.inr_price || product_detail?.pPinb)}>
+                                            {getProductPrice(varChecked?.inr_price || product_detail?.var_list[0]?.inr_price || product_detail?.pPinb)}/- <span className="taxes">(+taxes)</span>
+                                        </strong>
                                         <strong className="price-offer mt-0 mb-10">
                                             {
                                                 (varChecked?.id ? discountPrice : product_detail?.var_list[0]?.fake_inr_price) > 0 ?

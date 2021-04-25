@@ -9,7 +9,7 @@ import { getCandidateId } from 'utils/storage.js';
 import { siteDomain } from 'utils/domains';
 
 const Reviews = (props) => {
-    const {id, product_detail, pUrl, showReviewModal, prd_review_list, prd_rv_current_page, prd_rv_has_next} = props;
+    const {id, product_detail, pUrl, showReviewModal, prd_review_list, prd_rv_current_page, prd_rv_has_next, prd_product, upc } = props;
     const { reviewLoader } = useSelector(store => store.loader);
     const [carIndex, setIndex] = useState(0);
     const dispatch = useDispatch();
@@ -96,6 +96,8 @@ const Reviews = (props) => {
                         <a href={`${siteDomain}/login/?next=${pUrl}?sm=true`} className="btn btn-outline-primary btn-custom mx-auto">Write a review</a>
                     }
                 </div>
+                <span itemProp="sku" content={prd_product}></span>
+                <span itemProp="mpn" content={upc}></span>
             </section>
         </>
     )

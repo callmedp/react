@@ -199,7 +199,7 @@ const DetailPage = (props) => {
                         { product_detail?.pop && <OtherProviders pop_list={product_detail?.pop_list} /> }
                         { product_detail?.faq && <FAQ faq_list={product_detail?.faq_list}/> }
                         
-                        {(prd_review_list && prd_review_list?.length) > 0 && <Reviews showReviewModal={showReviewModal} product_detail={product_detail} prdId={prdId} pUrl={props?.match?.url} prd_review_list={prd_review_list} prd_rv_total={prd_rv_total} />}
+                        {(prd_review_list && prd_review_list?.length) > 0 && <Reviews showReviewModal={showReviewModal} product_detail={product_detail} prdId={prdId} pUrl={props?.match?.url} prd_review_list={prd_review_list} prd_rv_total={prd_rv_total} prd_product={product_detail?.prd_product} upc={product_detail?.pUPC} />}
                         
                         { skill?.length > 0 && <CoursesMayLike product_id={prdId} skill={skill}/> }
                         <CTA setEnquiryForm={setEnquiryForm} contact={ggn_contact} />

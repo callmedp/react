@@ -1,6 +1,6 @@
 import React from 'react';
 import './otherProviders.scss';
-import CourseCard from 'components/DesktopComponent/Common/CourseCard/courseCard';
+// import CourseCard from 'components/DesktopComponent/Common/CourseCard/courseCard';
 import Carousel from 'react-bootstrap/Carousel';
 import { siteDomain } from 'utils/domains';
    
@@ -20,23 +20,23 @@ const OtherProviders = (props) => {
                     {
                         courseData?.map((course, indx) => {
                             return (
-                                <li className="col-sm-3" key={indx} itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
+                                <li className="col-sm-3" key={indx}>
                                     <div className="card">
                                         <div className="card__heading">
                                             <figure>
-                                                { course.imgUrl || course.vendor_image && <img itemProp="image" src={course.imgUrl || course.vendor_image} alt={course.imgAlt || course.name || course.heading} /> }
+                                                { course.imgUrl || course.vendor_image && <img src={course.imgUrl || course.vendor_image} alt={course.imgAlt || course.name || course.heading} /> }
                                             </figure>
-                                            <h3 className="heading3" itemProp="item">
-                                                <a href={`${siteDomain}${course.url}`}> <span itemProp="name">{course.name || course.heading}</span></a>
+                                            <h3 className="heading3">
+                                                <a href={`${siteDomain}${course.url}`}> <span>{course.name || course.heading}</span></a>
                                             </h3>
                                         </div>
                                         <div className="card__box">
                                             <div className="card__rating">
                                                 <span className="mr-10">By {(course.providerName || course.vendor)?.split(' ')[0]?.length > 10 ? (course.providerName || course.vendor)?.split(' ')[0]?.slice(0,10) + '...' : (course.providerName || course.vendor)?.split(' ')[0] }</span>
                         
-                                                <span className="rating" itemProp="aggregateRating" itemScope itemType="https://schema.org/AggregateRating">
+                                                <span className="rating">
                                                     {(course.stars || course.rating)?.map((star, index) => starRatings(star, index))}
-                                                    { course.avg_rating && <span itemProp="reviewCount">{course.avg_rating}/5</span> }
+                                                    { course.avg_rating && <span>{course.avg_rating}/5</span> }
                                                 </span>
                                             </div>
                                             <div className="card__price mt-10">

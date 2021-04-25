@@ -9,7 +9,7 @@ import { getCandidateId } from 'utils/storage.js';
 import { siteDomain } from 'utils/domains';
 
 const Reviews = (props) => {
-    const { showReviewModal, prdId, product_detail, pUrl, prd_review_list, prd_rv_total } = props;
+    const { showReviewModal, prdId, product_detail, pUrl, prd_review_list, prd_rv_total, prd_product, upc } = props;
     const [pageId, updatePageId] = useState(2);
     const dispatch = useDispatch();
 
@@ -64,17 +64,17 @@ const Reviews = (props) => {
                             prd_review_list?.map((review, idx) => {
                                 return (
                                     <div className="m-card" key={idx} itemProp="review" itemScope itemType="https://schema.org/Review">
-                                        <span className="m-rating" itemProp="reviewRating" itemScope itemType="http://schema.org/Rating" itemProp="ratingValue">
+                                        <span className="m-rating" itemProp="reviewRating" itemScope itemType="http://schema.org/Rating">
                                             <span itemProp="ratingValue">
                                                 {
                                                     review?.rating?.map((star, index) => starRatings(star, index))
                                                 }
                                             </span>
                                         </span>
-                                        <strong className="m-card__name" itemProp="name">{review?.title ? review?.title : <>&nbsp;</>}</strong>
+                                        <strong className="m-card__name" itemProp="name" content={review?.title || ""}>{review?.title ? review?.title : <>&nbsp;</>}</strong>
                                         <p className="m-card__txt" itemProp="description">{review?.content}</p>
                                         <strong itemProp="author" itemType="http://schema.org/Person" itemScope>
-                                            <span itemProp="name">By { review?.user_name ? review?.user_name : "Anonymous" }</span>
+                                            <span itemProp="name" content={review?.user_name ? review?.user_name : "Anonymous"}>By { review?.user_name ? review?.user_name : "Anonymous" }</span>
                                         </strong>
                                         <span className="m-card__location" itemProp="datePublished">{review?.created ? review?.created : <>&nbsp;</>}</span>
                                     </div>
@@ -84,6 +84,8 @@ const Reviews = (props) => {
                     </Slider>
                 </div>
             }
+            <span itemProp="sku" content={prd_product}></span>
+            <span itemProp="mpn" content={upc}></span>
         </section>
     );
 }

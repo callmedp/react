@@ -79,7 +79,7 @@ const CourseEnrol = (props) => {
                     {
                         product_detail?.var_list?.length > 0 && 
                             <div className="m-course-enrol__mode"> 
-                                <form>
+                                <form itemProp="offers" itemScope itemType="http://schema.org/Offer">
                                     <strong>Mode</strong>
                                     {
                                         product_detail?.var_list?.map((varList) => {
