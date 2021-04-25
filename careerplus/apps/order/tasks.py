@@ -1,4 +1,5 @@
 import logging
+import requests
 from celery.decorators import task
 from django.conf import settings
 from django.core.files.base import ContentFile
@@ -25,6 +26,7 @@ from shop.models import PracticeTestInfo
 from core.api_mixin import NeoApiMixin
 
 from shop.models import ProductUserProfile
+from core.api_mixin import ShineCandidateDetail
 
 
 @task(name="invoice_generation_order")
@@ -665,7 +667,7 @@ def generate_resume_for_order(order_id):
     from resumebuilder.utils import ResumeGenerator
     order_obj = Order.objects.get(id=order_id)
     candidate_id = order_obj.candidate_id
-    
+
     for item in order_obj.orderitems.all():
         if item.product and item.product.type_flow == 17 and item.product.type_product == 0:
             product_id = item.product.id
@@ -984,3 +986,39 @@ def update_purchase_on_shine(oi_id):
     except Exception as exc:
         logging.getLogger('error_log').error(
             'could not update touch point data')
+
+
+# @task
+def hiresure_verify_process(email_id=None):
+    hire_sure_data = {}
+    # Update client and secret for hiresure
+    hire_sure_data.update({
+        'client_id': settings.HIRESURE_CLIENT_ID,
+        'client_secret': settings.HIRESURE_CLIENT_SECRET
+    })
+
+    if email_id is None:
+        return False
+
+    candidate_detail = ShineCandidateDetail().get_candidate_detail(email=email_id)
+
+    if len(candidate_detail) <= 0:
+        return False
+
+    hire_sure_data.update({
+        'name': candidate_detail['personal_detail'][0]['first_name'] + ' ' + candidate_detail['personal_detail'][0]['last_name'],
+        'email': candidate_detail['personal_detail'][0]['email'],
+        'mobile': candidate_detail['personal_detail'][0]['cell_phone'],
+        'is_education': True if len(candidate_detail['education']) <= 0 else False,
+        'is_employment': True if len(candidate_detail['jobs']) <= 0 else False
+    })
+
+    try:
+        response = requests.post(settings.HIRESURE_VERIFY_URL, data=hire_sure_data, timeout=10.00)
+        if response.json()['Info']['response_code'] == 200:
+            return response
+        else:
+            return response.json()['Info']['result']
+
+    except Exception as e:
+        logging.getLogger('error_log').log('Error in request Hiresure data => {}, error => {}'.format(hire_sure_data, str(e)))
