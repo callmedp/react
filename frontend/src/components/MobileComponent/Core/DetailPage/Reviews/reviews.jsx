@@ -9,7 +9,7 @@ import { getCandidateId } from 'utils/storage.js';
 import { siteDomain } from 'utils/domains';
 
 const Reviews = (props) => {
-    const { showReviewModal, prdId, product_detail, pUrl, prd_review_list, prd_rv_total, prd_product, upc } = props;
+    const { showReviewModal, prdId, product_detail, pUrl, prd_review_list, prd_rv_total } = props;
     const [pageId, updatePageId] = useState(2);
     const dispatch = useDispatch();
 
@@ -84,8 +84,6 @@ const Reviews = (props) => {
                     </Slider>
                 </div>
             }
-            <span itemProp="sku" content={prd_product}></span>
-            <span itemProp="mpn" content={upc}></span>
         </section>
     );
 }

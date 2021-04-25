@@ -126,7 +126,7 @@ const DetailPage = (props) => {
     }, [prdId])
 
     return(
-        <div>
+        <div itemScope itemType="http://schema.org/Product">
             { mainCourseLoader ? <Loader /> : ''}
 
             { meta_tags && <MetaContent meta_tags={meta_tags} /> }
@@ -152,7 +152,7 @@ const DetailPage = (props) => {
                         />
                     </header>
                     <main className="mb-0">
-                        <CourseEnrol product_detail={product_detail} getProductPrice={getProductPrice} frqntProd={frqntProd} varChecked={varChecked} changeChecked={changeChecked} product_id={product_id} />
+                        <CourseEnrol product_detail={product_detail} getProductPrice={getProductPrice} frqntProd={frqntProd} varChecked={varChecked} changeChecked={changeChecked} product_id={product_id} prd_product={product_detail?.prd_product} upc={product_detail?.pUPC} />
                         {
                             showStickyNav && <StickyNavDetail 
                                 outline={(product_detail?.chapter && product_detail?.prd_service !== 'assessment') ? true : false}
@@ -199,7 +199,7 @@ const DetailPage = (props) => {
                         { product_detail?.pop && <OtherProviders pop_list={product_detail?.pop_list} /> }
                         { product_detail?.faq && <FAQ faq_list={product_detail?.faq_list}/> }
                         
-                        {(prd_review_list && prd_review_list?.length) > 0 && <Reviews showReviewModal={showReviewModal} product_detail={product_detail} prdId={prdId} pUrl={props?.match?.url} prd_review_list={prd_review_list} prd_rv_total={prd_rv_total} prd_product={product_detail?.prd_product} upc={product_detail?.pUPC} />}
+                        {(prd_review_list && prd_review_list?.length) > 0 && <Reviews showReviewModal={showReviewModal} product_detail={product_detail} prdId={prdId} pUrl={props?.match?.url} prd_review_list={prd_review_list} prd_rv_total={prd_rv_total} />}
                         
                         { skill?.length > 0 && <CoursesMayLike product_id={prdId} skill={skill}/> }
                         <CTA setEnquiryForm={setEnquiryForm} contact={ggn_contact} />

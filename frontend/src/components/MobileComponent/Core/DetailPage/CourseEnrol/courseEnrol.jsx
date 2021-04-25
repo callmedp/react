@@ -10,9 +10,10 @@ import { showSwal } from 'utils/swal';
 import { MyGA } from 'utils/ga.tracking.js';
 import { getTrackingInfo } from 'utils/storage.js';
 import { trackUser } from 'store/Tracking/actions/index.js';
+import { siteDomain } from 'utils/domains';
 
 const CourseEnrol = (props) => {
-    const { product_detail, varChecked, changeChecked, getProductPrice, frqntProd, product_id } = props;
+    const { product_detail, varChecked, changeChecked, getProductPrice, frqntProd, product_id, prd_product, upc } = props;
     const dispatch = useDispatch();
     const { mainCourseCartLoader } = useSelector(store => store.loader);
     const [discountPrice, discountPriceSelected] = useState(0);
@@ -75,11 +76,11 @@ const CourseEnrol = (props) => {
             { mainCourseCartLoader ? <Loader /> : ''}
 
             <section className="m-container mt-80n mb-0 pb-0">
-                <div className="m-course-enrol">
+                <div className="m-course-enrol" itemProp="offers" itemScope itemType="http://schema.org/Offer">
                     {
                         product_detail?.var_list?.length > 0 && 
                             <div className="m-course-enrol__mode"> 
-                                <form itemProp="offers" itemScope itemType="http://schema.org/Offer">
+                                <form>
                                     <strong>Mode</strong>
                                     {
                                         product_detail?.var_list?.map((varList) => {
@@ -91,12 +92,13 @@ const CourseEnrol = (props) => {
                                             )
                                         })
                                     }
+                                    <span itemProp="price" content={getProductPrice(varChecked?.inr_price || product_detail?.var_list[0]?.inr_price || product_detail?.pPinb)}></span>
                                 </form>
                             </div>
                     }
 
-                    <div className="m-course-enrol__price" itemProp="offers" itemScope itemType="http://schema.org/Offer">
-                        <strong className="mt-20 mb-10" itemProp="price">{getProductPrice(varChecked?.inr_price || product_detail?.var_list[0]?.inr_price || product_detail?.pPinb)}/-&nbsp; 
+                    <div className="m-course-enrol__price">
+                        <strong className="mt-20 mb-10">{getProductPrice(varChecked?.inr_price || product_detail?.var_list[0]?.inr_price || product_detail?.pPinb)}/-&nbsp; 
                             {
                                 (varChecked?.id ? discountPrice : product_detail?.var_list[0]?.fake_inr_price) > 0 ?
                                 <span>
@@ -113,6 +115,11 @@ const CourseEnrol = (props) => {
                                 </span>
                                 : ""
                             }
+
+                            {/* meta tags for price */}
+                            <span itemprop="priceCurrency" content="INR"></span>
+                            <span itemprop="priceValidUntil" content={new Date()}></span>
+                            <span itemprop="url" content={siteDomain+product_detail?.canonical_url}></span>
 
                             {
                                 (!product_detail?.var_list?.length > 0 && !product_detail?.selected_var && product_detail?.pPfinb > 0) ?
@@ -152,6 +159,10 @@ const CourseEnrol = (props) => {
                     </div>
                 </div>
             </section>
+
+            {/* meta tag common */}
+            <span itemProp="sku" content={prd_product}></span>
+            <span itemProp="mpn" content={upc}></span>
         </>
     )
 }

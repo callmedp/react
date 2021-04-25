@@ -13,7 +13,7 @@ const FAQ = (props) => {
 
     const renderAccordion = (item, index) => {
         return (
-            <div className="tab" key={index.toString() + item.question} itemScope itemProp="mainEntity" 
+            <div className="tab" key={index.toString() + item.question} itemScope 
             itemType="https://schema.org/Question">
                 <input type="radio" id={"rd" + (index + 1000)} name={"rd" + (index + 1000)} checked = { checkedIdFaq === (index + 1000) } onClick={() => accordionHandle(index + 1000)}/><label className="tab-label" htmlFor={ "rd" + (index + 1000) } itemProp="name">{item.question}</label>
                 <div id={index + 1000} className="tab-content" itemProp="acceptedAnswer" itemScope itemType="https://schema.org/Answer">

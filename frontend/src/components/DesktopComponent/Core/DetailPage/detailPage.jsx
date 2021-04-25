@@ -106,7 +106,7 @@ const DetailPage = (props) => {
     };
 
     return (
-        <div>
+        <div itemScope itemType="http://schema.org/Product">
             { mainCourseLoader ? <Loader /> : ''}
             { meta_tags && <MetaContent meta_tags={meta_tags} /> }
 
@@ -143,6 +143,8 @@ const DetailPage = (props) => {
                 showReviewModal={showReviewModal}
                 pUrl={props?.match?.url}
                 prd_review_list={prd_review_list}
+                prd_product={product_detail?.prd_product}
+                upc={product_detail?.pUPC}
             />
 
             { product_detail?.prd_uget && <KeyFeatures prd_uget={product_detail?.prd_uget} /> }
@@ -206,7 +208,7 @@ const DetailPage = (props) => {
             
             { product_detail?.faq && <FAQ faq_list={product_detail?.faq_list}/> }
 
-            {(prd_review_list && prd_review_list?.length) > 0 && <Reviews id={id?.split('-')[1]} product_detail={product_detail} pUrl={props?.match?.url} showReviewModal={showReviewModal} prd_review_list={prd_review_list} prd_rv_current_page={prd_rv_current_page} prd_rv_has_next={prd_rv_has_next} prd_product={product_detail?.prd_product} upc={product_detail?.pUPC} /> }
+            {(prd_review_list && prd_review_list?.length) > 0 && <Reviews id={id?.split('-')[1]} product_detail={product_detail} pUrl={props?.match?.url} showReviewModal={showReviewModal} prd_review_list={prd_review_list} prd_rv_current_page={prd_rv_current_page} prd_rv_has_next={prd_rv_has_next} /> }
             
             <EnquireNow {...props} />
             

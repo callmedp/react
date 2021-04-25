@@ -9,7 +9,7 @@ import { getCandidateId } from 'utils/storage.js';
 import { siteDomain } from 'utils/domains';
 
 const Reviews = (props) => {
-    const {id, product_detail, pUrl, showReviewModal, prd_review_list, prd_rv_current_page, prd_rv_has_next, prd_product, upc } = props;
+    const {id, product_detail, pUrl, showReviewModal, prd_review_list, prd_rv_current_page, prd_rv_has_next } = props;
     const { reviewLoader } = useSelector(store => store.loader);
     const [carIndex, setIndex] = useState(0);
     const dispatch = useDispatch();
@@ -55,11 +55,11 @@ const Reviews = (props) => {
                             prd_review_list?.map((reviewData, idx) => {
                                 return (
                                     <Carousel.Item interval={10000000000} key={idx}>
-                                        <div className="d-flex col">
+                                        <div className="d-flex col" itemProp="review" itemScope itemType="https://schema.org/Review">
                                             {
                                                 reviewData?.map((review, indx) => {
                                                     return (
-                                                        <div className="col-sm-4" key={indx} itemProp="review" itemScope itemType="https://schema.org/Review">
+                                                        <div className="col-sm-4" key={indx}>
                                                             <div className="card" itemProp="reviewRating" itemScope itemType="http://schema.org/Rating">
                                                                 <span className="rating" itemProp="ratingValue">
                                                                     {
@@ -96,8 +96,6 @@ const Reviews = (props) => {
                         <a href={`${siteDomain}/login/?next=${pUrl}?sm=true`} className="btn btn-outline-primary btn-custom mx-auto">Write a review</a>
                     }
                 </div>
-                <span itemProp="sku" content={prd_product}></span>
-                <span itemProp="mpn" content={upc}></span>
             </section>
         </>
     )
