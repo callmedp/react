@@ -51,8 +51,8 @@ const CoursesMayLike = (props) => {
                                             <figure>
                                                 <img itemProp="image" src={coursesLike.pImg} alt={coursesLike.name} />
                                             </figure>
-                                            <h3 className="heading3">
-                                                <a itemProp="item" onClick={() => handleTracking(coursesLike.pURL)}>
+                                            <h3 className="heading3" itemProp="item">
+                                                <a itemProp="name" onClick={() => handleTracking(coursesLike.pURL)}>
                                                     {coursesLike.name || coursesLike.pNm}
                                                 </a>
                                             </h3>

@@ -60,7 +60,7 @@ const CourseDetailBanner = (props) => {
     }
 
     return (
-        <div className="m-detail-header ml-15 mt-10" itemProp="Course" itemScope itemType="https://schema.org/Course">
+        <div className="m-detail-header ml-15 mt-10" itemScope itemType="http://schema.org/Product">
 
             <div className="m-detail-heading">
                 <div className="m-detail-heading__icon mt-30">
@@ -73,27 +73,27 @@ const CourseDetailBanner = (props) => {
                     <h1 className="m-heading1 mt-5" itemProp="name">
                         { product_detail?.prd_H1 }
                     </h1>
-                    <span className="m-rating">
+                    <span className="m-rating" itemProp="aggregateRating" itemScope itemType="https://schema.org/AggregateRating">
                         {
                             product_detail?.prd_num_rating ? 
                                 <>
                                     {
                                         product_detail?.prd_rating_star?.map((star, index) => starRatings(star, index))
                                     }
-                                    <span itemProp="ratingValue">{ product_detail?.prd_rating?.toFixed() }/5</span>
+                                    <span itemprop="reviewCount">{ product_detail?.prd_rating?.toFixed() }/5</span>
                                 </>
                                 :
                                 ''
                         }
-                        <span>By <span itemProp="provider" onClick={() => MyGA.SendEvent('ln_course_provider', 'ln_course_provider', 'ln_click_course_provider', `${product_detail?.prd_vendor}` , '', false, true)}>{ product_detail?.prd_vendor }</span></span>
+                        <span itemProp="brand" itemType="http://schema.org/Brand" itemScope>By <span itemProp="name" onClick={() => MyGA.SendEvent('ln_course_provider', 'ln_course_provider', 'ln_click_course_provider', `${product_detail?.prd_vendor}` , '', false, true)}>{ product_detail?.prd_vendor }</span></span>
                     </span>
                     <div className="d-flex mt-10">
                         {
                             (product_detail?.prd_num_rating > 0 && prd_review_list && prd_review_list?.length) ?
-                                <span className="m-review-jobs">
+                                <span className="m-review-jobs" itemProp="aggregateRating" itemScope itemType="https://schema.org/AggregateRating">
                                     <LinkScroll to="reviews" offset={-120}>
                                         <Link to={"#"}>
-                                            <figure className="micon-reviews-link"></figure> <strong>{ product_detail?.prd_num_rating }</strong> { product_detail?.prd_num_rating > 1 ? 'Reviews' : 'Review' }
+                                            <figure className="micon-reviews-link"></figure> <strong itemprop="reviewCount">{ product_detail?.prd_num_rating }</strong> { product_detail?.prd_num_rating > 1 ? 'Reviews' : 'Review' }
                                         </Link>
                                     </LinkScroll>
                                 </span>

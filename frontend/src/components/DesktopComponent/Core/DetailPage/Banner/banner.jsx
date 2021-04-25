@@ -150,14 +150,14 @@ const BannerCourseDetail = (props) => {
                     <div className="row">
                         <div className="container detail-header-content">
                             <div className="w-65">
-                                <Breadcrumb>
+                                <Breadcrumb itemScope itemType="http://schema.org/BreadcrumbList">
                                     {
                                         product_detail?.breadcrumbs?.map((bread, inx) => {
-                                            return <Breadcrumb.Item key={inx} className={bread.active === null ? 'noLinkAnchor' : ""} onClick={() => handleBreadCrumbTracking(product_detail?.breadcrumbs, inx, bread)}>{bread.name}</Breadcrumb.Item>
+                                            return <Breadcrumb.Item itemProp="itemListElement" itemScope itemType="http://schema.org/ListItem" key={inx} className={bread.active === null ? 'noLinkAnchor' : ""} onClick={() => handleBreadCrumbTracking(product_detail?.breadcrumbs, inx, bread)}><span itemProp="name">{bread.name}</span></Breadcrumb.Item>
                                         })
                                     }
                                 </Breadcrumb>
-                                <div className="detail-heading" data-aos="fade-zoom-in" itemProp="Course" itemScope itemType="https://schema.org/Course">
+                                <div className="detail-heading" data-aos="fade-zoom-in" itemScope itemType="http://schema.org/Product">
                                     <div className="detail-heading__icon">
                                         <figure>
                                             <img itemProp="image" src={product_detail?.prd_img} alt={product_detail?.prd_img_alt} />
@@ -168,7 +168,7 @@ const BannerCourseDetail = (props) => {
                                         <h1 className="heading1" itemProp="name">
                                             {product_detail?.prd_H1}
                                         </h1>
-                                        <div className="d-flex mt-15">
+                                        <div className="d-flex mt-15" itemProp="aggregateRating" itemScope itemType="https://schema.org/AggregateRating">
                                             {
                                                 product_detail?.prd_num_rating ?
                                                 <span className="rating">
@@ -185,7 +185,7 @@ const BannerCourseDetail = (props) => {
                                                         (product_detail?.prd_num_rating > 0 && prd_review_list && prd_review_list?.length) ? 
                                                             <span className="review-jobs cursorLink">
                                                                 <LinkScroll to={"reviews"} offset={-160} smooth={true}>
-                                                                    <figure className="icon-reviews-link"></figure> <strong> {product_detail?.prd_num_rating}</strong> Reviews
+                                                                    <figure className="icon-reviews-link"></figure> <strong itemProp="reviewCount"> {product_detail?.prd_num_rating}</strong> Reviews
                                                                 </LinkScroll>
                                                             </span> 
                                                             :
@@ -214,7 +214,7 @@ const BannerCourseDetail = (props) => {
                                 </div>
                                 <ul className="course-stats mt-30 mb-20">
                                     <li>
-                                        <strong>By <span itemProp="provider" onClick={() => MyGA.SendEvent('ln_course_provider', 'ln_course_provider', 'ln_click_course_provider', `${product_detail?.prd_vendor}` , '', false, true)}>{product_detail?.prd_vendor}</span></strong>
+                                        <strong itemProp="brand" itemType="http://schema.org/Brand" itemScope>By <span itemProp="name" onClick={() => MyGA.SendEvent('ln_course_provider', 'ln_course_provider', 'ln_click_course_provider', `${product_detail?.prd_vendor}` , '', false, true)}>{product_detail?.prd_vendor}</span></strong>
                                         <a onClick={() => viewAllCourses()} className="cursorLink">View all</a> courses by {product_detail?.prd_vendor}  
                                     </li>
 
@@ -329,7 +329,7 @@ const BannerCourseDetail = (props) => {
                                                 product_detail?.var_list?.map((varList, indx) => {
                                                     return (
                                                             <form key={indx}>
-                                                                <label htmlFor={varList?.id}>
+                                                                <label htmlFor={varList?.id} itemProp={varList?.mode === 'OL' ? `availability` : ''} content={varList?.mode === 'OL' ? "https://schema.org/OnlineOnly" : ''}>
                                                                     <input type="radio" name="radio" id={varList?.id} checked={varChecked?.id && (varChecked?.id === varList?.id ? true : false) || !varChecked?.id && (product_detail?.selected_var?.id === varList?.id ? true : false)} onChange={() => changeMode(varList)} />
                                                                     {getStudyMode(varList?.mode)}
                                                                 </label> 
@@ -339,8 +339,8 @@ const BannerCourseDetail = (props) => {
                                             }
                                         </div>
                                     }
-                                    <div className="course-enrol__price">
-                                        <strong className="price-taxes mt-20 mb-10">{getProductPrice(varChecked?.inr_price || product_detail?.var_list[0]?.inr_price || product_detail?.pPinb)}/-  <span className="taxes">(+taxes)</span></strong>
+                                    <div className="course-enrol__price" itemProp="offers" itemScope itemType="http://schema.org/Offer">
+                                        <strong className="price-taxes mt-20 mb-10" itemProp="price">{getProductPrice(varChecked?.inr_price || product_detail?.var_list[0]?.inr_price || product_detail?.pPinb)}/-  <span className="taxes">(+taxes)</span></strong>
                                         <strong className="price-offer mt-0 mb-10">
                                             {
                                                 (varChecked?.id ? discountPrice : product_detail?.var_list[0]?.fake_inr_price) > 0 ?

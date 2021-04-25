@@ -43,7 +43,7 @@ const Reviews = (props) => {
 
     return (
         <section className="m-container mt-0 mb-0 pb-0" id="reviews" data-aos="fade-up">
-            <div className="d-flex" itemProp="review" itemScope itemType="https://schema.org/Review">
+            <div className="d-flex">
                 <h2 className="m-heading2 mb-10">Review</h2>
                 {
                     (product_detail?.user_reviews && getCandidateId()) ?
@@ -63,15 +63,19 @@ const Reviews = (props) => {
                         {
                             prd_review_list?.map((review, idx) => {
                                 return (
-                                    <div className="m-card" key={idx}>
-                                        <span className="m-rating" itemProp="ratingValue">
-                                        {
-                                            review?.rating?.map((star, index) => starRatings(star, index))
-                                        }
+                                    <div className="m-card" key={idx} itemProp="review" itemScope itemType="https://schema.org/Review">
+                                        <span className="m-rating" itemProp="reviewRating" itemScope itemType="http://schema.org/Rating" itemProp="ratingValue">
+                                            <span itemProp="ratingValue">
+                                                {
+                                                    review?.rating?.map((star, index) => starRatings(star, index))
+                                                }
+                                            </span>
                                         </span>
                                         <strong className="m-card__name" itemProp="name">{review?.title ? review?.title : <>&nbsp;</>}</strong>
-                                        <p className="m-card__txt" itemProp="reviewBody">{review?.content}</p>
-                                        <strong itemProp="author">By { review?.user_name ? review?.user_name : "Anonymous" }</strong>
+                                        <p className="m-card__txt" itemProp="description">{review?.content}</p>
+                                        <strong itemProp="author" itemType="http://schema.org/Person" itemScope>
+                                            <span itemProp="name">By { review?.user_name ? review?.user_name : "Anonymous" }</span>
+                                        </strong>
                                         <span className="m-card__location" itemProp="datePublished">{review?.created ? review?.created : <>&nbsp;</>}</span>
                                     </div>
                                 )

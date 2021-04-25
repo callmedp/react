@@ -60,15 +60,17 @@ const Reviews = (props) => {
                                                 reviewData?.map((review, indx) => {
                                                     return (
                                                         <div className="col-sm-4" key={indx} itemProp="review" itemScope itemType="https://schema.org/Review">
-                                                            <div className="card">
+                                                            <div className="card" itemProp="reviewRating" itemScope itemType="http://schema.org/Rating">
                                                                 <span className="rating" itemProp="ratingValue">
                                                                     {
                                                                         review?.rating?.map((star, index) => starRatings(star, index))
                                                                     }
                                                                 </span>
                                                                 <strong className="card__name" itemProp="name">{review?.title ? review?.title : <>&nbsp;</>}</strong>
-                                                                <p className="card__txt" itemProp="reviewBody">{review?.content}</p>
-                                                                <strong itemProp="author">{ review?.user_name ? review?.user_name : 'Anonymous' }</strong>
+                                                                <p className="card__txt" itemProp="description">{review?.content}</p>
+                                                                <strong itemProp="author" itemType="http://schema.org/Person" itemScope>
+                                                                    <span itemprop="name">{ review?.user_name ? review?.user_name : 'Anonymous' }</span>
+                                                                </strong>
                                                                 <span className="card__location" itemProp="datePublished">{review?.created ? review?.created : <>&nbsp;</>}</span>
                                                             </div>
                                                         </div>

@@ -84,7 +84,7 @@ const CourseEnrol = (props) => {
                                     {
                                         product_detail?.var_list?.map((varList) => {
                                             return (
-                                                <label key={varList.id}>
+                                                <label key={varList.id} itemProp={varList?.mode === 'OL' ? `availability` : ''} content={varList?.mode === 'OL' ? "https://schema.org/OnlineOnly" : ''}>
                                                     <input type="radio" name="radio" id={varList.id} checked={varChecked?.id && (varChecked?.id === varList.id ? true : false) || !varChecked?.id && (product_detail?.selected_var?.id === varList.id ? true : false)} onChange={() => changeMode(varList)} />
                                                     &nbsp;{getStudyMode(varList?.mode)}
                                                 </label>
@@ -95,8 +95,8 @@ const CourseEnrol = (props) => {
                             </div>
                     }
 
-                    <div className="m-course-enrol__price">
-                        <strong className="mt-20 mb-10">{getProductPrice(varChecked?.inr_price || product_detail?.var_list[0]?.inr_price || product_detail?.pPinb)}/-&nbsp; 
+                    <div className="m-course-enrol__price" itemProp="offers" itemScope itemType="http://schema.org/Offer">
+                        <strong className="mt-20 mb-10" itemProp="price">{getProductPrice(varChecked?.inr_price || product_detail?.var_list[0]?.inr_price || product_detail?.pPinb)}/-&nbsp; 
                             {
                                 (varChecked?.id ? discountPrice : product_detail?.var_list[0]?.fake_inr_price) > 0 ?
                                 <span>

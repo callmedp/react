@@ -43,13 +43,13 @@ const ProductCards = props => {
             {
                 productList?.map((product, index) => {
                     return (
-                        <div className="m-card" key={index}>
+                        <div className="m-card" key={index} itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
                             <div className="m-card__heading">
                                 <figure>
-                                    <img src={product?.pImg || product?.vendor_image } alt={product?.name || product?.pNm || product?.heading} />
+                                    <img itemProp="image" src={product?.pImg || product?.vendor_image } alt={product?.name || product?.pNm || product?.heading} />
                                 </figure>
-                                <h3 className="m-heading3">
-                                    <a onClick={() => handleTracking} href={`${siteDomain}${product.pURL || product?.url}`}>{(product?.name || product?.pNm || product?.heading)?.length > 42 ? (product?.name || product?.pNm || product?.heading)?.slice(0, 42) + '...' : (product?.name || product?.pNm || product?.heading) }</a>
+                                <h3 className="m-heading3" itemProp="item">
+                                    <a itemProp="name" onClick={() => handleTracking} href={`${siteDomain}${product.pURL || product?.url}`}>{(product?.name || product?.pNm || product?.heading)?.length > 42 ? (product?.name || product?.pNm || product?.heading)?.slice(0, 42) + '...' : (product?.name || product?.pNm || product?.heading) }</a>
                                 </h3>
                             </div>
                             <div className="m-card__box">
@@ -58,9 +58,9 @@ const ProductCards = props => {
                                         By { (product.pPvn || product.pViA || product?.vendor)?.split(' ')[0]?.length > 13 ? (product.pPvn || product.pViA || product?.vendor)?.split(' ')[0]?.slice(0, 13) + '...' : (product.pPvn || product.pViA || product?.vendor)?.split(' ')[0] }
                                     </span>
 
-                                    <span className="m-rating">
+                                    <span className="m-rating" itemProp="aggregateRating" itemScope itemType="https://schema.org/AggregateRating">
                                         { (product?.pStar || product?.rating)?.map((star, index) => starRatings(star, index)) }
-                                        { (product?.pARx || product?.avg_rating) ? <span>{product?.pARx || product?.avg_rating}/5</span> : ''}
+                                        { (product?.pARx || product?.avg_rating) ? <span itemProp="reviewCount">{product?.pARx || product?.avg_rating}/5</span> : ''}
                                     </span>
                                 </div>
                                 <div className="m-card__price">

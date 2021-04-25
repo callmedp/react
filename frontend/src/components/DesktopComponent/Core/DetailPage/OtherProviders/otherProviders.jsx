@@ -22,9 +22,9 @@ const OtherProviders = (props) => {
                             return (
                                 <li className="col-sm-3" key={indx} itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
                                     <div className="card">
-                                        <div className="card__heading" itemProp="image">
+                                        <div className="card__heading">
                                             <figure>
-                                                { course.imgUrl || course.vendor_image && <img src={course.imgUrl || course.vendor_image} alt={course.imgAlt || course.name || course.heading} /> }
+                                                { course.imgUrl || course.vendor_image && <img itemProp="image" src={course.imgUrl || course.vendor_image} alt={course.imgAlt || course.name || course.heading} /> }
                                             </figure>
                                             <h3 className="heading3" itemProp="item">
                                                 <a href={`${siteDomain}${course.url}`}> <span itemProp="name">{course.name || course.heading}</span></a>
@@ -36,7 +36,7 @@ const OtherProviders = (props) => {
                         
                                                 <span className="rating" itemProp="aggregateRating" itemScope itemType="https://schema.org/AggregateRating">
                                                     {(course.stars || course.rating)?.map((star, index) => starRatings(star, index))}
-                                                    { course.avg_rating && <span itemProp="ratingValue">{course.avg_rating}/5</span> }
+                                                    { course.avg_rating && <span itemProp="reviewCount">{course.avg_rating}/5</span> }
                                                 </span>
                                             </div>
                                             <div className="card__price mt-10">
