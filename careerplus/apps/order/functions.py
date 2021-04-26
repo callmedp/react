@@ -175,7 +175,7 @@ def update_initiat_orderitem_sataus(order=None):
             elif type_flow == 20:
                 # Flow for Background Verification
                 last_oi_status = oi.oi_status
-                oi.oi_status = 165
+                oi.oi_status = 167
                 oi.wc_cat = 21
                 oi.wc_sub_cat = 41
                 oi.wc_status = 41
