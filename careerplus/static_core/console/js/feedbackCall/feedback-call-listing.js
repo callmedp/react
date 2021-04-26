@@ -1,5 +1,5 @@
 //global variables
-let page_size = 12
+let page_size = 20
 let total_pages = 0
 let feedback_id_selected = []
 
@@ -128,7 +128,6 @@ const customerFeedbackList = (page_no,filter_data) => {
                             </td>
                             <td>${result.full_name}</td>
                             <td>${formatDate(result.added_on)}</td>
-                            <td> ${result.sales_user_info} </td>
                             <td>${result.follow_up_date ? formatDate(result.follow_up_date,true) : '-'}</td>
                             <td>${result.status_text}</td>
                             <td>${formatDate(result.last_payment_date)}</td>
