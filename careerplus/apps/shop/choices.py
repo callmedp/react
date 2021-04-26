@@ -100,6 +100,10 @@ SUB_FLOWS = {
         (1800, 'One Month'),
         (1801, 'Two Month'),
         (1802, 'Six Month')
+    ),
+    19: (
+        (1900, 'Education'),
+        (1901, 'Employment')
     )
 }
 
