@@ -60,32 +60,32 @@ const CourseDetailBanner = (props) => {
     }
 
     return (
-        <div className="m-detail-header ml-15 mt-10" itemProp="Course" itemScope itemType="https://schema.org/Course">
+        <div className="m-detail-header ml-15 mt-10">
 
             <div className="m-detail-heading">
-                <div className="m-detail-heading__icon mt-30" itemProp="image">
+                <div className="m-detail-heading__icon mt-30">
                     <figure>
-                        <img src={ product_detail?.prd_img } alt={ product_detail?.prd_img_alt } />
+                        <img itemProp="image" src={ product_detail?.prd_img } alt={ product_detail?.prd_img_alt } />
                     </figure>
                 </div>
-                <div className="m-detail-heading__content" itemProp="name">
+                <div className="m-detail-heading__content" itemProp="aggregateRating" itemScope itemType="https://schema.org/AggregateRating">
                     { product_detail?.pTg && product_detail.pTg !== 'None' && <span className="m-flag-yellowB">{ product_detail.pTg }</span> }
-                    <h1 className="m-heading1 mt-5">
+                    <h1 className="m-heading1 mt-5" itemProp="name">
                         { product_detail?.prd_H1 }
                     </h1>
                     <span className="m-rating">
                         {
                             product_detail?.prd_num_rating ? 
-                                <>
+                                <span>
                                     {
                                         product_detail?.prd_rating_star?.map((star, index) => starRatings(star, index))
                                     }
-                                    <span itemProp="ratingValue">{ product_detail?.prd_rating?.toFixed() }/5</span>
-                                </>
+                                    <span itemprop="ratingValue">{ product_detail?.prd_rating?.toFixed() }/5</span>
+                                </span>
                                 :
                                 ''
                         }
-                        <span>By <span itemProp="provider" onClick={() => MyGA.SendEvent('ln_course_provider', 'ln_course_provider', 'ln_click_course_provider', `${product_detail?.prd_vendor}` , '', false, true)}>{ product_detail?.prd_vendor }</span></span>
+                        <span>By <span onClick={() => MyGA.SendEvent('ln_course_provider', 'ln_course_provider', 'ln_click_course_provider', `${product_detail?.prd_vendor}` , '', false, true)}>{ product_detail?.prd_vendor }</span></span>
                     </span>
                     <div className="d-flex mt-10">
                         {
@@ -93,19 +93,19 @@ const CourseDetailBanner = (props) => {
                                 <span className="m-review-jobs">
                                     <LinkScroll to="reviews" offset={-120}>
                                         <Link to={"#"}>
-                                            <figure className="micon-reviews-link"></figure> <strong>{ product_detail?.prd_num_rating }</strong> { product_detail?.prd_num_rating > 1 ? 'Reviews' : 'Review' }
+                                            <figure className="micon-reviews-link"></figure> <strong itemprop="reviewCount" content={product_detail?.prd_num_rating}>{ product_detail?.prd_num_rating }</strong> { product_detail?.prd_num_rating > 1 ? 'Reviews' : 'Review' }
                                         </Link>
                                     </LinkScroll>
                                 </span>
                                 :
                                 getCandidateId() ?
-                                    <span className="m-review-jobs">
+                                    <span className="m-review-jobs" itemprop="reviewCount" content="1">
                                         <Link to={"#"} onClick={ () => showReviewModal(true) }>
                                             <figure className="micon-reviews-link"></figure> Write a Review
                                         </Link>
                                     </span>
                                     : 
-                                    <span className="m-review-jobs">
+                                    <span className="m-review-jobs" itemprop="reviewCount" content="1">
                                         <a  href={`${siteDomain}/login/?next=${pUrl}?sm=true`}>
                                             <figure className="micon-reviews-link"></figure> Write a Review
                                         </a>
@@ -174,6 +174,11 @@ const CourseDetailBanner = (props) => {
                         }
                     </ul>
                 </div>
+
+                {/* brand meta tag */}
+                <span itemProp="brand" itemType="http://schema.org/Brand" itemScope>
+                    <span itemProp="name" content={product_detail?.prd_vendor}></span>
+                </span>
             </div>
 
             {
@@ -200,7 +205,7 @@ const CourseDetailBanner = (props) => {
 
             {
                 (product_detail?.prd_video || completeDescription) &&
-                    <div className="m-intro-video" itemProp="embedUrl">
+                    <div className="m-intro-video">
                         <strong className="mb-10">Course intro</strong>
                         <div className="d-flex">
                             {
@@ -216,7 +221,7 @@ const CourseDetailBanner = (props) => {
                             {
                                 completeDescription && 
                                 <p className="m-intro-video__content">
-                                    <span itemProp="description" dangerouslySetInnerHTML={{__html: product_detail?.prd_about?.slice(0, showAll ? product_detail?.prd_about?.length : noOfWords) }} />
+                                    <span itemProp="description" content={product_detail?.prd_about} dangerouslySetInnerHTML={{__html: product_detail?.prd_about?.slice(0, showAll ? product_detail?.prd_about?.length : noOfWords) }} />
                                     <span>
                                         {
                                             (!showAll && product_detail?.prd_about?.length > noOfWords) ? 

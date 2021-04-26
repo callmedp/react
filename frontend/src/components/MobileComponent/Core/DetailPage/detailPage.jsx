@@ -126,7 +126,7 @@ const DetailPage = (props) => {
     }, [prdId])
 
     return(
-        <div>
+        <div itemScope itemType="http://schema.org/Product">
             { mainCourseLoader ? <Loader /> : ''}
 
             { meta_tags && <MetaContent meta_tags={meta_tags} /> }
@@ -152,7 +152,7 @@ const DetailPage = (props) => {
                         />
                     </header>
                     <main className="mb-0">
-                        <CourseEnrol product_detail={product_detail} getProductPrice={getProductPrice} frqntProd={frqntProd} varChecked={varChecked} changeChecked={changeChecked} product_id={product_id} />
+                        <CourseEnrol product_detail={product_detail} getProductPrice={getProductPrice} frqntProd={frqntProd} varChecked={varChecked} changeChecked={changeChecked} product_id={product_id} prd_product={product_detail?.prd_product} upc={product_detail?.pUPC} />
                         {
                             showStickyNav && <StickyNavDetail 
                                 outline={(product_detail?.chapter && product_detail?.prd_service !== 'assessment') ? true : false}

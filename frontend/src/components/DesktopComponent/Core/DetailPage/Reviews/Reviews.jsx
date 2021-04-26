@@ -9,16 +9,10 @@ import { getCandidateId } from 'utils/storage.js';
 import { siteDomain } from 'utils/domains';
 
 const Reviews = (props) => {
-    const {id, product_detail, pUrl, showReviewModal, prd_review_list, prd_rv_current_page, prd_rv_has_next} = props;
+    const {id, product_detail, pUrl, showReviewModal, prd_review_list, prd_rv_current_page, prd_rv_has_next } = props;
     const { reviewLoader } = useSelector(store => store.loader);
     const [carIndex, setIndex] = useState(0);
     const dispatch = useDispatch();
-    // const { prd_review_list, prd_rv_current_page, prd_rv_has_next } = useSelector( store => store.reviews );
-
-
-    // useEffect( () => {
-    //     handleEffects(currentPage)
-    // },[id])
 
     const handleEffects = async (page) => {
         try {
@@ -61,20 +55,22 @@ const Reviews = (props) => {
                             prd_review_list?.map((reviewData, idx) => {
                                 return (
                                     <Carousel.Item interval={10000000000} key={idx}>
-                                        <div className="d-flex col">
+                                        <div className="d-flex col" itemProp="review" itemScope itemType="https://schema.org/Review">
                                             {
                                                 reviewData?.map((review, indx) => {
                                                     return (
-                                                        <div className="col-sm-4" key={indx} itemProp="review" itemScope itemType="https://schema.org/Review">
-                                                            <div className="card">
+                                                        <div className="col-sm-4" key={indx}>
+                                                            <div className="card" itemProp="reviewRating" itemScope itemType="http://schema.org/Rating">
                                                                 <span className="rating" itemProp="ratingValue">
                                                                     {
                                                                         review?.rating?.map((star, index) => starRatings(star, index))
                                                                     }
                                                                 </span>
                                                                 <strong className="card__name" itemProp="name">{review?.title ? review?.title : <>&nbsp;</>}</strong>
-                                                                <p className="card__txt" itemProp="reviewBody">{review?.content}</p>
-                                                                <strong itemProp="author">{ review?.user_name ? review?.user_name : 'Anonymous' }</strong>
+                                                                <p className="card__txt" itemProp="description">{review?.content}</p>
+                                                                <strong itemProp="author" itemType="http://schema.org/Person" itemScope>
+                                                                    <span itemprop="name">{ review?.user_name ? review?.user_name : 'Anonymous' }</span>
+                                                                </strong>
                                                                 <span className="card__location" itemProp="datePublished">{review?.created ? review?.created : <>&nbsp;</>}</span>
                                                             </div>
                                                         </div>
