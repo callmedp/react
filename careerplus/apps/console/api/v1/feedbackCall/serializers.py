@@ -20,12 +20,14 @@ class FeedbackQueueSerializer(serializers.ModelSerializer):
         exclude = ('candidate_id','mobile','email','comment')
 
     def get_sales_user_info(self, obj):
-        try:
-            sales_user_info = ast.literal_eval(obj.orderitemfeedback_set.select_related('order_item').first().order_item.order.sales_user_info)
-        except:
-            sales_user_info = {}
-            logging.getLogger('error_log').error('Unable to retrieve item feedback')
-        return sales_user_info.get('branch_head', None)
+        branch_head = ''
+        for oi_item in obj.orderitemfeedback_set.select_related('order_item'):
+            try:
+                sales_user_info = ast.literal_eval(oi_item.order_item.order.sales_user_info)
+                branch_head += sales_user_info.get('branch_head') + '-'
+            except:
+                logging.getLogger('error_log').error('Unable to find branch head returning empty')
+        return branch_head
 
 
 class CustomerFeedbackSerializer(serializers.ModelSerializer):
