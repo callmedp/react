@@ -106,6 +106,9 @@ OI_OPS_STATUS = (
     (191, 'Certificate Updated on Shine'),
     (192, 'Badging Done for Assesment'),
 
+    # Flow 20
+    (165, 'Background Verification is under progress'),
+    (166, 'Background Verification has been processed')
 
 )
 

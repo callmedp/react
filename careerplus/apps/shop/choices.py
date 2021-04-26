@@ -69,7 +69,8 @@ FLOW_CHOICES = (
     (16, 'Assessment and Certifications'),
     (17, 'Resume Builder'),
     (18, 'Shine Premium'),
-    (19,'Profile Booster')
+    (19,'Profile Booster'),
+    (20, 'Background Verification') # Flow 20
 )
 
 SUB_FLOWS = {
