@@ -172,6 +172,31 @@ def update_initiat_orderitem_sataus(order=None):
                     last_oi_status=last_oi_status,
                     assigned_to=oi.assigned_to)
 
+            elif type_flow == 20:
+                # Flow for Background Verification
+                last_oi_status = oi.oi_status
+                oi.oi_status = 165
+                oi.wc_cat = 21
+                oi.wc_sub_cat = 41
+                oi.wc_status = 41
+                oi.last_oi_status = last_oi_status
+                oi.order.welcome_call_done = True
+                oi.order.save()
+                oi.save()
+
+                oi.orderitemoperation_set.create(
+                    oi_status=oi.oi_status,
+                    last_oi_status=last_oi_status,
+                    assigned_to=oi.assigned_to
+                )
+                oi.order.welcomecalloperation_set.create(
+                    wc_cat=oi.wc_cat,
+                    wc_sub_cat=oi.wc_sub_cat,
+                    message='Done automatically, skipped welcome call.',
+                    wc_status=oi.wc_status,
+                    assigned_to=oi.assigned_to
+                )
+
         # for assesment/neo if no orderitems other than assesment/ neo present
         # then make welcome call done and update welcome call statuses.
         oi = order.orderitems.exclude(Q(product__type_flow=16) | Q(product__vendor__slug='neo')| Q(product__type_flow=17) | Q(product__sub_type_flow=101) | Q(no_process=True))
