@@ -180,8 +180,6 @@ def update_initiat_orderitem_sataus(order=None):
                 oi.wc_sub_cat = 41
                 oi.wc_status = 41
                 oi.last_oi_status = last_oi_status
-                oi.order.welcome_call_done = True
-                oi.order.save()
                 oi.save()
 
                 oi.orderitemoperation_set.create(
