@@ -108,7 +108,8 @@ OI_OPS_STATUS = (
 
     # Flow 20
     (165, 'Background Verification is under progress'),
-    (166, 'Background Verification has been processed')
+    (166, 'Background Verification has been processed'),
+    (167, 'Background Verification has been initiated')
 
 )
 
@@ -173,6 +174,11 @@ OI_USER_STATUS = (
     (162, 'Refund under progress'),
     (163, 'Refunded'),
     (164, 'Replaced'),
+
+    # Flow 20
+    (165, 'Background Verification is under progress'),
+    (166, 'Background Verification has been processed'),
+    (167, 'Background Verification has been initiated')
 )
 
 OI_LINKEDIN_FLOW_STATUS = (
