@@ -13,6 +13,7 @@ import {
     fetchAddToCartRedeem
 } from './actions';
 import {siteDomain} from '../../utils/domains';
+import { getTrackingUrl } from 'utils/storage.js';
 
 function* mainCoursesApi(action){
     const { payload: { payload, resolve, reject } } = action;
@@ -140,10 +141,14 @@ function* AddToCart(action) {
         const item = response?.data?.data;
 
         let appendTracking = "";
+
+        if(localStorage.getItem("trackingId")){
+            appendTracking = getTrackingUrl()
+        }
         
-        if(localStorage.getItem("trackingId")) appendTracking += `?t_id=${localStorage.getItem("trackingId")}`;
-        if(localStorage.getItem("productId")) appendTracking += `&prod_id=${localStorage.getItem("productId")}`;
-        if(localStorage.getItem("productTrackingMappingId")) appendTracking += `&prod_t_m_id=${localStorage.getItem("productTrackingMappingId")}`;
+        // if(localStorage.getItem("trackingId")) appendTracking += `?t_id=${localStorage.getItem("trackingId")}`;
+        // if(localStorage.getItem("productId")) appendTracking += `&prod_id=${localStorage.getItem("productId")}`;
+        // if(localStorage.getItem("productTrackingMappingId")) appendTracking += `&prod_t_m_id=${localStorage.getItem("productTrackingMappingId")}`;
         
         if(cartItems.cart_type === 'cart') return window.location.href = `${siteDomain}${item.cart_url}${appendTracking}`;
 
