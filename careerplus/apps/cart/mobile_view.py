@@ -38,6 +38,13 @@ class RemoveFromCartMobileView(View, CartMixin):
             'referal_subproduct','')
         popup_based_product = self.request.session.get(
             'popup_based_product', '')
+        try:
+            tracking_product_id = int(tracking_product_id)
+            product_id = int(product_id)
+        except Exception as e:
+            logging.getLogger('error_log').error(
+                "int to string issue {}".format(e))
+
         if tracking_product_id == product_id and tracking_id:
             name = email_dict.get('name', '')
             email = email_dict.get('email', '')
