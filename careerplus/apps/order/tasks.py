@@ -989,7 +989,7 @@ def update_purchase_on_shine(oi_id):
 
 
 # @task
-def hiresure_verify_process(email_id=None):
+def hiresure_verify_process(email_id=None, data={}):
     hire_sure_data = {}
     # Update client and secret for hiresure
     hire_sure_data.update({
@@ -1000,20 +1000,23 @@ def hiresure_verify_process(email_id=None):
     if email_id is None:
         return False
 
+    # Getting the candidate detail
     candidate_detail = ShineCandidateDetail().get_candidate_detail(email=email_id)
 
     if len(candidate_detail) <= 0:
         return False
 
+    # Hire sure required data update
     hire_sure_data.update({
         'name': candidate_detail['personal_detail'][0]['first_name'] + ' ' + candidate_detail['personal_detail'][0]['last_name'],
         'email': candidate_detail['personal_detail'][0]['email'],
         'mobile': candidate_detail['personal_detail'][0]['cell_phone'],
-        'is_education': True if len(candidate_detail['education']) <= 0 else False,
-        'is_employment': True if len(candidate_detail['jobs']) <= 0 else False
+        'is_education': data.get('is_education', False),
+        'is_employment': data.get('is_employment', False)
     })
 
     try:
+        # API hit to initiate hiresure process
         response = requests.post(settings.HIRESURE_VERIFY_URL, data=hire_sure_data, timeout=10.00)
         if response.json()['Info']['response_code'] == 200:
             return response
