@@ -46,7 +46,7 @@ from shop.models import Category
 from order.tasks import pending_item_email, process_mailer, payment_realisation_mailer
 from payment.tasks import add_reward_point_in_wallet
 
-from .functions import draft_upload_mail, roundone_product
+from .functions import draft_upload_mail, roundone_product, process_background_verification
 
 
 class ArticleCommentView(View):
@@ -686,6 +686,8 @@ class MarkedPaidOrderView(View):
 
                     # roundone order
                     roundone_product(order=obj)
+
+                    process_background_verification(order=obj)
 
             except Exception as e:
                 data['display_message'] = '%s order id - %s' % (str(e), str(order_pk))
