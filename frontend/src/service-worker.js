@@ -30,7 +30,7 @@ workbox.routing.registerRoute(
 ({ request, url}) => {
   return request.mode === 'navigate';
 },
-new workbox.strategies.StaleWhileRevalidate({
+new workbox.strategies.NetworkFirst({
   cacheName: 'navigation', 
   plugins: [
     new workbox.cacheableResponse.Plugin({
@@ -64,7 +64,7 @@ workbox.routing.registerRoute(
 ({ url, request }) => {
     return url.origin === self.location.origin && request.mode !== 'navigate';
 },
-new workbox.strategies.StaleWhileRevalidate({
+new workbox.strategies.NetworkFirst({
   cacheName: 'apis',
 })
 );
