@@ -687,7 +687,7 @@ class MarkedPaidOrderView(View):
                     # roundone order
                     roundone_product(order=obj)
 
-                    process_background_verification(order=obj)
+                    process_background_verification.delay(order_pk=obj.pk)
 
             except Exception as e:
                 data['display_message'] = '%s order id - %s' % (str(e), str(order_pk))
