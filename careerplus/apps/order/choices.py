@@ -108,7 +108,7 @@ OI_OPS_STATUS = (
 
     # Flow 20
     (165, 'Background Verification is under progress'),
-    (166, 'Background Verification has been processed'),
+    (166, 'Background Verification has been processed & Final document is ready'),
     (167, 'Background Verification has been initiated')
 
 )
@@ -177,7 +177,7 @@ OI_USER_STATUS = (
 
     # Flow 20
     (165, 'Background Verification is under progress'),
-    (166, 'Background Verification has been processed'),
+    (166, 'Background Verification has been processed & Final Document is ready'),
     (167, 'Background Verification has been initiated')
 )
 
