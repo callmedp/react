@@ -13,21 +13,21 @@ from users.models import User
 class FeedbackQueueSerializer(serializers.ModelSerializer):
     status_text = serializers.CharField()
     assigned_to_text = serializers.CharField()
-    sales_user_info = serializers.SerializerMethodField()
+    # sales_user_info = serializers.SerializerMethodField()
     class Meta:
         model = CustomerFeedback
-        include= ('status_text', 'sales_user_info')
+        include= ('status_text')
         exclude = ('candidate_id','mobile','email','comment')
 
-    def get_sales_user_info(self, obj):
-        branch_head = ''
-        for oi_item in obj.orderitemfeedback_set.select_related('order_item'):
-            try:
-                sales_user_info = ast.literal_eval(oi_item.order_item.order.sales_user_info)
-                branch_head += sales_user_info.get('branch_head') + '-'
-            except:
-                logging.getLogger('error_log').error('Unable to find branch head returning empty')
-        return branch_head
+    # def get_sales_user_info(self, obj):
+    #     branch_head = ''
+    #     for oi_item in obj.orderitemfeedback_set.select_related('order_item'):
+    #         try:
+    #             sales_user_info = ast.literal_eval(oi_item.order_item.order.sales_user_info)
+    #             branch_head += sales_user_info.get('branch_head') + '-'
+    #         except:
+    #             logging.getLogger('error_log').error('Unable to find branch head returning empty')
+    #     return branch_head
 
 
 class CustomerFeedbackSerializer(serializers.ModelSerializer):
