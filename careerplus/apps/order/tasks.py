@@ -989,7 +989,7 @@ def update_purchase_on_shine(oi_id):
 
 
 # @task
-def hiresure_verify_process(candidate_id=None, verification_type=None):
+def hiresure_verify_process(candidate_id=None, verification_type=None, oi_obj=None):
     hire_sure_data = {}
     # Update client and secret for hiresure
     hire_sure_data.update({
@@ -998,30 +998,38 @@ def hiresure_verify_process(candidate_id=None, verification_type=None):
     })
 
     if candidate_id is None:
-        return False
+        return
 
     # Getting the candidate detail
     candidate_detail = ShineCandidateDetail().get_candidate_detail(shine_id=candidate_id)
 
     if len(candidate_detail) <= 0:
-        return False
+        return
 
     # Hire sure required data update
     hire_sure_data.update({
-        'name': candidate_detail['personal_detail'][0]['first_name'] + ' ' + candidate_detail['personal_detail'][0]['last_name'],
+        'name': candidate_detail['personal_detail'][0]['first_name'] + ' ' + candidate_detail['personal_detail'][0][
+            'last_name'],
         'email': candidate_detail['personal_detail'][0]['email'],
         'mobile': candidate_detail['personal_detail'][0]['cell_phone'],
-        'is_education': True if verification_type == 1900 else False,
-        'is_employment': True if verification_type == 1901 else False
+        'is_education': 'true' if verification_type == 1900 else 'false',
+        'is_employment': 'true' if verification_type == 1901 else 'false'
     })
-
     try:
         # API hit to initiate hiresure process
-        response = requests.post(settings.HIRESURE_VERIFY_URL, data=hire_sure_data, timeout=10.00)
-        if response.json()['Info']['response_code'] == 200:
-            return response
+        response = requests.post(settings.HIRESURE_VERIFY_URL, params=hire_sure_data)
+
+        if int(response.json()['Info']['response_code']) == 200:
+            oi_obj.message_set.create(message=response.json()['Verification']['ID'], candidate_id=candidate_id,
+                                      is_internal=True)
+            return
         else:
-            return response.json()['Info']['result']
+            logging.getLogger('error_log').log('HireSure API Failed with status_code: {}, response: {}, params: {}'. \
+                                               format(str(response.json()['Info']['response_code']),
+                                                      str(response.json()['Info'],
+                                                          str(hire_sure_data))))
+            return
 
     except Exception as e:
-        logging.getLogger('error_log').log('Error in request Hiresure data => {}, error => {}'.format(hire_sure_data, str(e)))
+        logging.getLogger('error_log').log(
+            'Error in request Hiresure data => {}, error => {}'.format(hire_sure_data, str(e)))
