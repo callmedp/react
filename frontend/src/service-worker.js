@@ -27,7 +27,6 @@ workbox.routing.registerRoute(
 
 workbox.routing.registerRoute(
 ({ request, url}) => {
-  console.log("navigation url", url)
   return request.mode === 'navigate';
 },
 new workbox.strategies.StaleWhileRevalidate({
