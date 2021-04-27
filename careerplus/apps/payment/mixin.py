@@ -20,7 +20,7 @@ from .tasks import (
     add_reward_point_in_wallet, make_logging_request, 
     make_logging_sk_request, make_logging_amount_request
     )
-
+from ajax.functions import process_background_verification
 
 class PaymentMixin(object):
 
@@ -283,6 +283,8 @@ class PaymentMixin(object):
                 # add reward_point in wallet
                 add_reward_point_in_wallet.delay(order_pk=order.pk)
                 # OrderMixin().addRewardPointInWallet(order=order)
+                process_background_verification(order=order)
+
 
             try:
                 del request.session['cart_pk']
