@@ -6,6 +6,8 @@ from emailers.sms import SendSMS
 from order.functions import create_short_url
 from microsite.roundoneapi import RoundOneAPI
 from order.tasks import hiresure_verify_process
+from celery.decorators import task
+from order.models import Order
 
 def draft_upload_mail(oi=None, to_emails=[], mail_type=None, email_dict={}):
     email_sets = list(oi.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
@@ -163,8 +165,10 @@ def roundone_product(order=None):
         logging.getLogger('error_log').error("%s - %s" % (str(order), str(e)))
 
 
-def process_background_verification(order=None):
+@task(name="process_background_verification")
+def process_background_verification(order_pk=None):
     try:
+        order = Order.objects.get(pk=order_pk)
         if order.status == 1:
             orderitems = order.orderitems.filter(
                 no_process=False,
