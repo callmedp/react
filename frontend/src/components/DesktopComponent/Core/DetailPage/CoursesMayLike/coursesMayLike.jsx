@@ -12,7 +12,6 @@ const CoursesMayLike = (props) => {
     const {product_id, skill} = props;
     const dispatch = useDispatch();
     const { results } = useSelector(store => store.recommendedCourses);
-    const tracking_data = getTrackingInfo();
 
     useEffect(() => {
         handleEffects();
@@ -32,6 +31,8 @@ const CoursesMayLike = (props) => {
     }
 
     const handleTracking = (url) => {
+        let tracking_data = getTrackingInfo();
+
         dispatch(trackUser({"query" : tracking_data, "action" :'exit_product_page'}));
         dispatch(trackUser({"query" : tracking_data, "action" :'recommended_products'}));
 

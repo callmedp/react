@@ -38,17 +38,12 @@ const BannerCourseDetail = (props) => {
     const [discountPrice, discountPriceSelected] = useState(0);
     const dispatch = useDispatch();
     const { mainCourseCartLoader } = useSelector(store => store.loader);
-    const tracking_data = getTrackingInfo();
 
     const starRatings = (star, index) => {
         return (star === '*' ? <em className="icon-fullstar" key={index}></em> : star === '+' 
             ? <em className="icon-halfstar" key={index}></em> : <em className="icon-blankstar" key={index}></em>
         )
     }
-
-    // useEffect(() => {
-    //     setReadAll(false)
-    // }, [prdId])
 
     const changeMode = (objj) => {
         let selectedObj = objj;
@@ -61,6 +56,7 @@ const BannerCourseDetail = (props) => {
     const goToCart = async (value) => {
         let cartItems = {};
         let addonsId = [];
+        let tracking_data = getTrackingInfo();
 
         if(!product_detail?.redeem_test) {
             MyGA.SendEvent('ln_enroll_now', 'ln_enroll_now', 'ln_click_enroll_now', `${product_detail?.prd_H1}`, '', false, true);
@@ -119,6 +115,8 @@ const BannerCourseDetail = (props) => {
     }
 
     const trackJobs = () => {
+        let tracking_data = getTrackingInfo();
+
         dispatch(trackUser({"query" : tracking_data, "action" :'jobs_available'}));
         dispatch(trackUser({"query" : tracking_data, "action" :'exit_product_page'}));
         MyGA.SendEvent('ln_course_details', 'ln_course_details', 'ln_jobs_available', 'Jobs available', '', '', true);
@@ -126,6 +124,8 @@ const BannerCourseDetail = (props) => {
     }
 
     const viewAllCourses = () => {
+        let tracking_data = getTrackingInfo();
+
         MyGA.SendEvent('Search',`${product_detail?.prd_vendor}`,'ViewAllProductVendor');
         dispatch(trackUser({"query" : tracking_data, "action" :'all_courses_or_certifications'}));
         dispatch(trackUser({"query" : tracking_data, "action" :'exit_product_page'}));
@@ -134,6 +134,8 @@ const BannerCourseDetail = (props) => {
     }
 
     const handleBreadCrumbTracking = (data, key, val) => {
+        let tracking_data = getTrackingInfo();
+
         if(data.length - 1 !== key) dispatch(trackUser({"query" : tracking_data, "action" :'exit_product_page'}));
         
         MyGA.SendEvent('ln_breadcrumbs', 'ln_breadcrumbs', 'ln_breadcrumb_click', `${val.name}`, '', false, true);
@@ -159,9 +161,9 @@ const BannerCourseDetail = (props) => {
                                         return (
                                             bread?.url ? 
                                                 <Breadcrumb.Item itemProp="itemListElement" itemScope itemType="http://schema.org/ListItem" key={inx} onClick={() => handleBreadCrumbTracking(product_detail?.breadcrumbs, inx, bread)}>
-                                                    <span itemprop="item" content={siteDomain + bread?.url}></span>
+                                                    <span itemProp="item" content={siteDomain + bread?.url}></span>
                                                     <span itemProp="name">{bread?.name}</span>
-                                                    <span itemprop="position" content={inx+1}></span>
+                                                    <span itemProp="position" content={inx+1}></span>
                                                 </Breadcrumb.Item>
                                             : 
                                                 <Breadcrumb.Item key={inx} className="noLinkAnchor">{bread?.name}</Breadcrumb.Item>
@@ -358,9 +360,9 @@ const BannerCourseDetail = (props) => {
                                     
                                     {/* meta tags for price */}
                                     <span itemProp="price" content={getProductPrice(varChecked?.inr_price || product_detail?.var_list[0]?.inr_price || product_detail?.pPinb)}></span>
-                                    <span itemprop="priceCurrency" content="INR"></span>
-                                    <span itemprop="priceValidUntil" content={new Date()}></span>
-                                    <span itemprop="url" content={siteDomain+product_detail?.canonical_url}></span>
+                                    <span itemProp="priceCurrency" content="INR"></span>
+                                    <span itemProp="priceValidUntil" content={new Date()}></span>
+                                    <span itemProp="url" content={siteDomain+product_detail?.canonical_url}></span>
 
                                     <strong className="price-offer mt-0 mb-10">
                                         {

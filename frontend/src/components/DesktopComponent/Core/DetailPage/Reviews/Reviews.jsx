@@ -69,7 +69,7 @@ const Reviews = (props) => {
                                                                 <strong className="card__name" itemProp="name">{review?.title ? review?.title : <>&nbsp;</>}</strong>
                                                                 <p className="card__txt" itemProp="description">{review?.content}</p>
                                                                 <strong itemProp="author" itemType="http://schema.org/Person" itemScope>
-                                                                    <span itemprop="name">{ review?.user_name ? review?.user_name : 'Anonymous' }</span>
+                                                                    <span itemProp="name">{ review?.user_name ? review?.user_name : 'Anonymous' }</span>
                                                                 </strong>
                                                                 <span className="card__location" itemProp="datePublished">{review?.created ? review?.created : <>&nbsp;</>}</span>
                                                             </div>

@@ -18,11 +18,11 @@ const StickyNav = (props) => {
     const dispatch = useDispatch();
     // const [tab, setTab] = useState('1');
     const { mainCourseCartLoader } = useSelector(store => store.loader);
-    const tracking_data = getTrackingInfo();
 
     const goToCart = async (value) => {
         let cartItems = {};
         let addonsId = [];
+        let tracking_data = getTrackingInfo();
 
         if(!product_detail?.redeem_test) {
             MyGA.SendEvent('ln_enroll_now', 'ln_enroll_now', 'ln_click_enroll_now', `${product_detail?.prd_H1}`, '', false, true);

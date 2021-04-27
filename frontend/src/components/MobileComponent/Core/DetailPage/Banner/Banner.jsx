@@ -24,7 +24,6 @@ const CourseDetailBanner = (props) => {
     } = props;
 
     const dispatch = useDispatch();
-    const tracking_data = getTrackingInfo();
     const [showAll, setShowAll] = useState(false);
     
     const starRatings = (star, index) => {
@@ -48,12 +47,16 @@ const CourseDetailBanner = (props) => {
     }, [prdId])
 
     const trackJobs = () => {
+        let tracking_data = getTrackingInfo();
+
         dispatch(trackUser({"query" : tracking_data, "action" :'jobs_available'}));
         dispatch(trackUser({"query" : tracking_data, "action" :'exit_product_page'}));
         MyGA.SendEvent('ln_course_details', 'ln_course_details', 'ln_jobs_available', 'Jobs available', '', '', true);
     }
 
     const viewAllCourses = () => {
+        let tracking_data = getTrackingInfo();
+
         MyGA.SendEvent('Search',`${product_detail?.prd_vendor}`,'ViewAllProductVendor');
         dispatch(trackUser({"query" : tracking_data, "action" :'all_courses_or_certifications'}));
         dispatch(trackUser({"query" : tracking_data, "action" :'exit_product_page'}));
@@ -80,7 +83,7 @@ const CourseDetailBanner = (props) => {
                                     {
                                         product_detail?.prd_rating_star?.map((star, index) => starRatings(star, index))
                                     }
-                                    <span itemprop="ratingValue">{ product_detail?.prd_rating?.toFixed() }/5</span>
+                                    <span itemProp="ratingValue">{ product_detail?.prd_rating?.toFixed() }/5</span>
                                 </span>
                                 :
                                 ''
@@ -93,19 +96,19 @@ const CourseDetailBanner = (props) => {
                                 <span className="m-review-jobs">
                                     <LinkScroll to="reviews" offset={-120}>
                                         <Link to={"#"}>
-                                            <figure className="micon-reviews-link"></figure> <strong itemprop="reviewCount" content={product_detail?.prd_num_rating}>{ product_detail?.prd_num_rating }</strong> { product_detail?.prd_num_rating > 1 ? 'Reviews' : 'Review' }
+                                            <figure className="micon-reviews-link"></figure> <strong itemProp="reviewCount" content={product_detail?.prd_num_rating}>{ product_detail?.prd_num_rating }</strong> { product_detail?.prd_num_rating > 1 ? 'Reviews' : 'Review' }
                                         </Link>
                                     </LinkScroll>
                                 </span>
                                 :
                                 getCandidateId() ?
-                                    <span className="m-review-jobs" itemprop="reviewCount" content="1">
+                                    <span className="m-review-jobs" itemProp="reviewCount" content="1">
                                         <Link to={"#"} onClick={ () => showReviewModal(true) }>
                                             <figure className="micon-reviews-link"></figure> Write a Review
                                         </Link>
                                     </span>
                                     : 
-                                    <span className="m-review-jobs" itemprop="reviewCount" content="1">
+                                    <span className="m-review-jobs" itemProp="reviewCount" content="1">
                                         <a  href={`${siteDomain}/login/?next=${pUrl}?sm=true`}>
                                             <figure className="micon-reviews-link"></figure> Write a Review
                                         </a>

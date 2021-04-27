@@ -17,7 +17,6 @@ const CourseEnrol = (props) => {
     const dispatch = useDispatch();
     const { mainCourseCartLoader } = useSelector(store => store.loader);
     const [discountPrice, discountPriceSelected] = useState(0);
-    const tracking_data = getTrackingInfo();
 
     const changeMode = (objj) => {
         let selectedObj = objj;
@@ -33,6 +32,7 @@ const CourseEnrol = (props) => {
     const goToCart = async (value) => {
         let cartItems = {};
         let addonsId = [];
+        let tracking_data = getTrackingInfo();
 
         if(!product_detail?.redeem_test) {
             MyGA.SendEvent('ln_enroll_now', 'ln_enroll_now', 'ln_click_enroll_now', `${product_detail?.prd_H1}`, '', false, true);
@@ -117,9 +117,9 @@ const CourseEnrol = (props) => {
                             }
 
                             {/* meta tags for price */}
-                            <span itemprop="priceCurrency" content="INR"></span>
-                            <span itemprop="priceValidUntil" content={new Date()}></span>
-                            <span itemprop="url" content={siteDomain+product_detail?.canonical_url}></span>
+                            <span itemProp="priceCurrency" content="INR"></span>
+                            <span itemProp="priceValidUntil" content={new Date()}></span>
+                            <span itemProp="url" content={siteDomain+product_detail?.canonical_url}></span>
 
                             {
                                 (!product_detail?.var_list?.length > 0 && !product_detail?.selected_var && product_detail?.pPfinb > 0) ?
