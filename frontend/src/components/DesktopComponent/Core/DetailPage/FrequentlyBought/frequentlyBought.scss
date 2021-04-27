@@ -1,0 +1,44 @@
+@import '../../../../../styles/functions';
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
+
+.frequently-bought {
+    box-shadow: $box-shadow;
+    padding: 1.5rem;
+    border-radius: $border-radius;
+    background-color: $white;
+
+    .heading2 {
+        font-size: 2rem;
+    }
+
+    &__list {
+        list-style-type: none;
+        margin: 1.5rem 0 0 0;
+        padding: 0;
+        color: $gray-200;
+
+        li {
+
+            &:not(:last-child) {
+                margin-bottom: .8rem;
+            }
+
+            label {
+                display: flex;
+                align-items: center;
+
+                input {
+                    margin-right: .7rem;
+                }
+
+                span {
+                    &::before {
+                        content: '\20B9';
+                        margin-right: .5rem;
+                    }
+                }
+            }
+        }
+    }
+}

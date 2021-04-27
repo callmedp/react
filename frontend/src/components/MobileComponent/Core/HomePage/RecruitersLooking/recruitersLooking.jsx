@@ -60,63 +60,6 @@ const RecruitersLooking = (props) => {
                             )
                         })
                     }
-
-                    {/* <div className="m-card">
-                        <figure>
-                            <img src="./media/images/mobile/categories2.jpg" className="img-fluid" alt="Information Technology" />
-                        </figure>
-                        <h3>Information Technology</h3>
-                        <span>30 courses</span>
-                        <Link to={"#"}>Know more</Link>
-                    </div>
-                    <div className="m-card">
-                        <figure>
-                            <img src="./media/images/mobile/categories3.jpg" className="img-fluid" alt="Sales and Marketing" />
-                        </figure>
-                        <h3>Sales and Marketing</h3>
-                        <span>30 courses</span>
-                        <Link to={"#"}>Know more</Link>
-                    </div>
-                    <div className="m-card">
-                        <figure>
-                            <img src="./media/images/mobile/categories4.jpg" className="img-fluid" alt="Human Resources (HR)" />
-                        </figure>
-                        <h3>Human Resources (HR)</h3>
-                        <span>30 courses</span>
-                        <Link to={"#"}>Know more</Link>
-                    </div>
-                    <div className="m-card">
-                        <figure>
-                            <img src="./media/images/mobile/categories5.jpg" className="img-fluid" alt="Management" />
-                        </figure>
-                        <h3>Management</h3>
-                        <span>30 courses</span>
-                        <Link to={"#"}>Know more</Link>
-                    </div>
-                    <div className="m-card">
-                        <figure>
-                            <img src="./media/images/mobile/categories6.jpg" className="img-fluid" alt="Law" />
-                        </figure>
-                        <h3>Law</h3>
-                        <span>30 courses</span>
-                        <Link to={"#"}>Know more</Link>
-                    </div>
-                    <div className="m-card">
-                        <figure>
-                            <img src="./media/images/mobile/categories7.jpg" className="img-fluid" alt="Operation Management" />
-                        </figure>
-                        <h3>Operation Management</h3>
-                        <span>30 courses</span>
-                        <Link to={"#"}>Know more</Link>
-                    </div>
-                    <div className="m-card">
-                        <figure>
-                            <img src="./media/images/mobile/categories8.jpg" className="img-fluid" alt="Mass Communication" />
-                        </figure>
-                        <h3>Mass Communication</h3>
-                        <span>30 courses</span>
-                        <Link to={"#"}>Know more</Link>
-                    </div> */}
                 </Slider>
             </div>
         </section>

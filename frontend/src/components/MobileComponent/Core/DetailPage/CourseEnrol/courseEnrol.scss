@@ -1,0 +1,118 @@
+@import '../../../../../styles-mobile/abstracts';
+
+.m-course-enrol {
+    position: relative;
+    background: $white;
+    box-shadow: 0 3px 21px 0 rgba(179,179,179,0.50);
+    border-radius: .4rem;
+    overflow: hidden;
+
+    &__mode {
+        overflow: hidden;
+        color: $gray-200;
+        display: flex;
+        align-items: center;
+        padding: 1rem 0;
+        font-size: 1.3rem;
+        border-bottom: 1px solid $gray-900;
+        margin: 0 1.5rem;
+
+        label {
+            margin: .5rem 1rem;
+            font-size: 1.3rem;
+        }
+    }
+
+    &__price {
+        display: flex;
+        align-items: center;
+        padding: 0 1.5rem;
+        strong {
+            font-size: 1.8rem;
+            color: $gray-100;
+
+            &::before {
+                content: '\20B9';
+                margin-right: .5rem;
+            }
+
+            span {
+                font-size: 1.4rem;
+                font-weight: 400;
+                display: block;
+                color: $green;
+
+                del {
+                    color: $gray-200;
+
+                    &::before {
+                        content: '\20B9';
+                        margin-right: .5rem;
+                    }
+                }
+            }
+        }
+
+        // .btn {
+        //     padding: 1rem 4rem;
+        // }
+
+        .btn-secondary {
+            color: $gray-100;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+        }
+    }
+
+    &__offer {
+        padding-bottom: 2rem;
+        strong {
+            font-size: 1.2rem;
+            text-transform: uppercase;
+            color: $gray-100;
+            display: block;
+            padding: 1.5rem 1.5rem 0 1.5rem;
+        }
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 1rem 1.5rem 1.5rem 1.5rem;
+            // max-height: 6.5rem;
+            // overflow: hidden;
+
+            li {
+                display: flex;
+                font-size: 1.2rem;
+                color: $gray-200;
+                margin-bottom: 1rem;
+
+                &:last-child {
+                    margin-bottom: 0;
+                }
+
+                strong {
+                    font-weight: 600;
+                    font-size: 1.2rem;
+                    text-transform: none;
+                    background: transparent;
+                    padding: 0;
+                    margin: 0 .3rem;
+                    display: inline;
+                }
+
+                figure {
+                    margin: .3rem 1rem 0 0;
+                }
+            }
+        }
+
+        a {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-left: 1.5rem;
+            color: $blue;
+            display: block;
+            cursor: pointer;
+        }
+    }
+}

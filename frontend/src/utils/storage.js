@@ -22,6 +22,7 @@ export const getCandidateId = () => {
 
 export const storageTrackingInfo = (query) => {
     let trackingId = !!query["t_id"] ? query["t_id"] : "";
+
     if (trackingId) {
         localStorage.setItem("trackingId", trackingId);
         localStorage.setItem("productTrackingMappingId", !!query['product_tracking_mapping_id'] ?  query['product_tracking_mapping_id'] : "");

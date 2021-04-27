@@ -1,0 +1,86 @@
+@import '../../../../../styles/functions';
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
+
+.sample-certificate {
+    box-shadow: $box-shadow;
+    padding: 2rem 2rem 0 2rem;
+
+    figure {
+        width: 20.3rem;
+        height: 23.2rem;
+        position: relative;
+        margin: 0 auto;
+
+        &::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 99;
+            background: rgba($color: $black, $alpha: 0.4)
+        }
+
+        span {
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            z-index: 999;
+            padding: 0 1rem;
+            display: inline-block;
+            width: 9rem;
+            height: 3rem;
+            line-height: 3rem;
+            background: $white;
+            text-align: center;
+            border-radius: 2rem;
+            margin: auto;
+            font-weight: 600;
+        }
+    }
+}
+
+.modal {
+
+    .modal-content {
+        .modal-header {
+            .close {
+                position: relative;
+                margin: .5rem .5rem -1rem auto;
+
+                &::after {
+                    content: '';
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    background: $sprite -796px -82px;
+                    width: 1.6rem;
+                    height: 1.6rem;
+                }
+                span {
+                    display: none;
+                }
+            }
+        }
+    }
+}
+
+.modal {
+    .view-certificate {
+        max-width: 41.5rem;
+        text-align: center;
+
+        .modal-content {
+            .modal-header {
+                border-bottom: none;
+            }
+            .modal-body {
+                padding: 1rem 5rem 4rem 5rem;
+            }
+        }
+    }
+}

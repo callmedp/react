@@ -16,6 +16,7 @@ from .deliveryUpdate import DeliveryUpdateView
 from .removeFromCart import RemoveFromCartAPIView
 from .paymentOptions import PaymentOptionsApiView
 from .cartLogin import  PaymentLoginView
+from .candidateCartCount import CandidateCartCountView
 # inter app imports
 
 # third party imports
@@ -33,6 +34,7 @@ urlpatterns = [
     re_path(r'^guest-login/$', GuestLoginView.as_view()),
     re_path(r'^delivery-update/$', DeliveryUpdateView.as_view()),
     re_path(r'^payment-options/$', PaymentOptionsApiView.as_view()),
-    re_path(r'^payment-login/$', PaymentLoginView.as_view())
+    re_path(r'^payment-login/$', PaymentLoginView.as_view()),
+    re_path(r'^candidate-cart-count/$', CandidateCartCountView.as_view())
 
 ]

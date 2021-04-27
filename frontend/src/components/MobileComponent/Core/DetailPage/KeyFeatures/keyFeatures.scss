@@ -1,0 +1,54 @@
+@import '../../../../../styles-mobile/abstracts';
+
+.m-key-features {
+    // p {
+    //     p {
+    //         margin-left: 3rem;
+    //         position: relative;
+    //         strong {
+    //             font-weight: 600;
+    //         }
+    //         &::before {
+    //             content: '';
+    //             background: $sprite -444px -143px;
+    //             width: 1.6rem;
+    //             height: 1.6rem;
+    //             display: inline-block;
+    //             position: absolute;
+    //             left: -2.5rem;
+    //             top: .4rem;
+    //         }
+    //     }
+    // }
+    strong {
+        font-weight: 600;
+        font-size: 1.6rem;
+    }
+    ul {
+        list-style-type: inherit !important;
+        margin: 0 0 0 2rem;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+
+        li {
+            // padding-left: 3rem;
+            position: relative;
+
+            // &:not(:last-child) {
+            //     margin-bottom: 1.5rem;
+            // }
+            
+            // &::before {
+            //     content: '';
+            //     background: $sprite -444px -143px;
+            //     width: 1.6rem;
+            //     height: 1.6rem;
+            //     display: inline-block;
+            //     position: absolute;
+            //     left: 0;
+            //     top: .4rem;
+            // }
+        }
+    }
+}

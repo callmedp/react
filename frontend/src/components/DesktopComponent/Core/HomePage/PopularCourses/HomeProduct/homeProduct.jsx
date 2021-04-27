@@ -53,7 +53,7 @@ const HomeProduct = (props) => {
                                                             <img src={product.imgUrl} alt={product.imageAlt} itemProp="image" />
                                                         </figure>
                                                         <h3 className="heading3">
-                                                            <a itemProp="url" href={`${siteDomain}${product.url}`} >{product.name}</a>
+                                                            <a itemProp="url" href={`${product.url}`} >{product.name}</a>
                                                         </h3>
                                                     </div>
                                                     <div className="card__box">
