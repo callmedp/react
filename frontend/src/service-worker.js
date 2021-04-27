@@ -18,7 +18,8 @@ workbox.routing.registerRoute(
     cacheName: 'assets',
     plugins: [
       new workbox.expiration.Plugin({
-        maxAgeSeconds: 7*24*3600
+        maxAgeSeconds: 7*24*3600,
+        maxEntries: 10
       })
     ]
   })
