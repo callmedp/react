@@ -283,7 +283,7 @@ class PaymentMixin(object):
                 # add reward_point in wallet
                 add_reward_point_in_wallet.delay(order_pk=order.pk)
                 # OrderMixin().addRewardPointInWallet(order=order)
-                process_background_verification(order=order)
+                process_background_verification.delay(order_pk=order.pk)
 
 
             try:
