@@ -179,6 +179,7 @@ def update_initiat_orderitem_sataus(order=None):
                 oi.wc_cat = 21
                 oi.wc_sub_cat = 41
                 oi.wc_status = 41
+                oi.active_on_shine = 1
                 oi.last_oi_status = last_oi_status
                 oi.save()
 
