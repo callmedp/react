@@ -556,3 +556,7 @@ ANALYTIC_TO_LEARNING_PRODUCTFLOWS={
     10:{'type_flow':[],'sub_type_flow':[101]},
     11:{'type_flow':[17],'sub_type_flow':[]},
 }
+
+HIRESURE_CLIENT_ID = 'fk9za8p15jfe5xzb'
+HIRESURE_CLIENT_SECRET = 'ki827i1jut33m80wi8xihi390148g2x9cgkm'
+HIRESURE_VERIFY_URL = 'https://demo.hiresure.ai/bgv_verify/v1/auth/verify'
