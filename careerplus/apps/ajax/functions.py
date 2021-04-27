@@ -167,7 +167,7 @@ def process_background_verification(order=None):
     try:
         if order.status == 1:
             orderitems = order.orderitems.filter(
-                no_process = False,
+                no_process=False,
                 product__type_flow=20).select_related(
                 'order', 'product')
 
@@ -178,11 +178,12 @@ def process_background_verification(order=None):
                     oi.last_oi_status = last_oi_status
                     oi.save()
                     oi.orderitemoperation_set.create(
-                        oi_status = oi.oi_status,
-                        last_oi_status = last_oi_status
+                        oi_status=oi.oi_status,
+                        last_oi_status=last_oi_status
                     )
-                    hiresure_verify_process(candidate_id=order.candidate_id, verification_type=oi.product.sub_type_flow)
+                    hiresure_verify_process(candidate_id=order.candidate_id,
+                                            verification_type=oi.product.sub_type_flow,
+                                            oi_obj=oi)
 
     except Exception as e:
         logging.getLogger('error_log').error('Background Verification Iniit failed - {}'.format(str(e)))
-
