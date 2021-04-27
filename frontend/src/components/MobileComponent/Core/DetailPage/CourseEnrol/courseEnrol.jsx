@@ -10,9 +10,10 @@ import { showSwal } from 'utils/swal';
 import { MyGA } from 'utils/ga.tracking.js';
 import { getTrackingInfo } from 'utils/storage.js';
 import { trackUser } from 'store/Tracking/actions/index.js';
+import { siteDomain } from 'utils/domains';
 
 const CourseEnrol = (props) => {
-    const { product_detail, varChecked, changeChecked, getProductPrice, frqntProd, product_id } = props;
+    const { product_detail, varChecked, changeChecked, getProductPrice, frqntProd, product_id, prd_product, upc } = props;
     const dispatch = useDispatch();
     const { mainCourseCartLoader } = useSelector(store => store.loader);
     const [discountPrice, discountPriceSelected] = useState(0);
@@ -75,7 +76,7 @@ const CourseEnrol = (props) => {
             { mainCourseCartLoader ? <Loader /> : ''}
 
             <section className="m-container mt-80n mb-0 pb-0">
-                <div className="m-course-enrol">
+                <div className="m-course-enrol" itemProp="offers" itemScope itemType="http://schema.org/Offer">
                     {
                         product_detail?.var_list?.length > 0 && 
                             <div className="m-course-enrol__mode"> 
@@ -84,13 +85,14 @@ const CourseEnrol = (props) => {
                                     {
                                         product_detail?.var_list?.map((varList) => {
                                             return (
-                                                <label key={varList.id}>
+                                                <label key={varList.id} itemProp={varList?.mode === 'OL' ? `availability` : ''} content={varList?.mode === 'OL' ? "https://schema.org/OnlineOnly" : ''}>
                                                     <input type="radio" name="radio" id={varList.id} checked={varChecked?.id && (varChecked?.id === varList.id ? true : false) || !varChecked?.id && (product_detail?.selected_var?.id === varList.id ? true : false)} onChange={() => changeMode(varList)} />
                                                     &nbsp;{getStudyMode(varList?.mode)}
                                                 </label>
                                             )
                                         })
                                     }
+                                    <span itemProp="price" content={getProductPrice(varChecked?.inr_price || product_detail?.var_list[0]?.inr_price || product_detail?.pPinb)}></span>
                                 </form>
                             </div>
                     }
@@ -113,6 +115,11 @@ const CourseEnrol = (props) => {
                                 </span>
                                 : ""
                             }
+
+                            {/* meta tags for price */}
+                            <span itemprop="priceCurrency" content="INR"></span>
+                            <span itemprop="priceValidUntil" content={new Date()}></span>
+                            <span itemprop="url" content={siteDomain+product_detail?.canonical_url}></span>
 
                             {
                                 (!product_detail?.var_list?.length > 0 && !product_detail?.selected_var && product_detail?.pPfinb > 0) ?
@@ -152,6 +159,10 @@ const CourseEnrol = (props) => {
                     </div>
                 </div>
             </section>
+
+            {/* meta tag common */}
+            <span itemProp="sku" content={prd_product}></span>
+            <span itemProp="mpn" content={upc}></span>
         </>
     )
 }

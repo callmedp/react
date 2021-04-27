@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Switch } from "react-router-dom";
+import { Switch } from "react-router-dom";
 import SkillPageContainer from "components/MobileComponent/Core/SkillPage/skillPage";
 import CataloguePageContainer from "components/MobileComponent/Core/CataloguePage/cataloguePage";
 // import MyServices from "components/MobileComponent/Core/DashboardPage/MyServices/myServices";
@@ -13,7 +13,6 @@ import HomePageContainer from 'components/MobileComponent/Core/HomePage/homePage
 import { getHomepageActionsMobile } from "apiHandler/homepageApi";
 import DetailPageContainer from 'components/MobileComponent/Core/DetailPage/detailPage';
 import { getDetailPageActionsMobile } from "apiHandler/detailsPageApi";
-import CourseDetailPage1 from "components/MobileComponent/Core/DetailPage/detailPage1";
 import UserIntentPageContainer from 'components/MobileComponent/Core/UserIntentPage/userIntentPage';
 
 
