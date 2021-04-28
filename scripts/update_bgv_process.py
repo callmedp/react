@@ -33,11 +33,14 @@ def update_bgv_process():
                         pass
 
                     elif report_status == 'COMPLETED':
+                        order = oi.order
                         last_oi_status = oi.oi_status
                         oi.oi_status = 166
                         oi.last_oi_status = last_oi_status
                         oi.closed_on = timezone.now()
                         oi.save()
+                        order.status = 3
+                        order.save()
                         oi.orderitemoperation_set.create(
                             oi_status=oi.oi_status,
                             last_oi_status=last_oi_status
