@@ -5,6 +5,7 @@ import { Api } from './Api'
 
 function* trackUser(action) {
     const { payload: { query, action: userAction }} = action;
+
     try {
         yield call(Api.trackUser, query, userAction);
         //yield call(Api.trackUser, trackingId, productTrackingMappingId, productId, userAction, position, triggerPoint, uId, utmCampaign, popup_based_product );        

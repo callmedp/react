@@ -13,9 +13,10 @@ const FAQ = (props) => {
 
     const renderAccordion = (item, index) => {
         return (
-            <div className="tab" key={index.toString() + item.question}>
+            <div className="tab" key={index.toString() + item.question} itemScope 
+            itemType="https://schema.org/Question">
                 <input type="radio" id={"rd" + (index + 1000)} name={"rd" + (index + 1000)} checked = { checkedIdFaq === (index + 1000) } onClick={() => accordionHandle(index + 1000)}/><label className="tab-label" htmlFor={ "rd" + (index + 1000) } itemProp="name">{item.question}</label>
-                <div id={index + 1000} className="tab-content">
+                <div id={index + 1000} className="tab-content" itemProp="acceptedAnswer" itemScope itemType="https://schema.org/Answer">
                     <p itemProp="text" hidden="" dangerouslySetInnerHTML={{__html : item.answer}} />
                 </div>
             </div>
@@ -27,7 +28,7 @@ const FAQ = (props) => {
         setSliceFlagFaq(state => !state);
     }
 
-    return(
+    return (
         faq_list.length ? (
             <section className="m-container m-faq-detail lightblue-bg mt-0 mb-0" id="faq" data-aos="fade-up">
                 <h3 className="m-heading2">Frequently Asked Questions</h3>
@@ -36,41 +37,9 @@ const FAQ = (props) => {
                         { sliceFlagFaq && (faq_list?.length  > 4) ? <Link onClick={loadMore} to={"#"} className="m-load-more mt-20">Load More FAQS</Link> : '' }
                     </div>
             </section>
-            ): null
+            )
+        : null
     )
-
-        // return(
-        //     <section className="m-container m-faq-detail m-lightblue-bg mt-0 mb-0" id="m-faq" data-aos="fade-up">
-        //         <h2 className="m-heading2">Frequently Asked Questions</h2>
-        //         <div className="tabs">
-        //             <div className="tab">
-        //                 <input type="radio" id="rd0" name="rd"/><label className="tab-label" for="rd0" itemProp="name">Who will write my resume?</label>
-        //                 <div id="0" className="tab-content">
-        //                     <p itemProp="text" hidden="">A resume format is a sample resume that can be edited and filled with the required details. It is often provided with instructions or sample text and needs a rigorous edit to make it useful.</p>
-        //                 </div>
-        //             </div>
-        //             <div className="tab">
-        //                 <input type="radio" id="rd1" name="rd"/><label className="tab-label" for="rd1" itemProp="name">How to choose a resume format?</label>
-        //                 <div id="1" className="tab-content">
-        //                     <p itemProp="text" hidden="">A resume format is a sample resume that can be edited and filled with the required details. It is often provided with instructions or sample text and needs a rigorous edit to make it useful.</p>
-        //                 </div>
-        //             </div>
-        //             <div className="tab">
-        //                 <input type="radio" id="rd2" name="rd"/><label className="tab-label" for="rd2" itemProp="name">Why are resume formats important?</label>
-        //                 <div id="2" className="tab-content">
-        //                     <p itemProp="text" hidden="">A resume format is a sample resume that can be edited and filled with the required details. It is often provided with instructions or sample text and needs a rigorous edit to make it useful.</p>
-        //                 </div>
-        //             </div>
-        //             <div className="tab">
-        //                 <input type="radio" id="rd3" name="rd"/><label className="tab-label" for="rd3" itemProp="name">What makes a resume good and attractive?</label>
-        //                 <div id="3" className="tab-content">
-        //                     <p itemProp="text" hidden="">A resume format is a sample resume that can be edited and filled with the required details. It is often provided with instructions or sample text and needs a rigorous edit to make it useful.</p>
-        //                 </div>
-        //             </div>
-        //             <Link to={"#"} className="m-load-more mt-20">Load More FAQS</Link>
-        //         </div>
-        //     </section>
-        // )
-    }
+}
 
 export default FAQ;

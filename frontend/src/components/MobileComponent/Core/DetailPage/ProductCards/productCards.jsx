@@ -10,7 +10,6 @@ const ProductCards = props => {
     const {
         productList
     } = props;
-    const tracking_data = getTrackingInfo();
 
     const settings = {
         dots: false,
@@ -34,6 +33,8 @@ const ProductCards = props => {
     }
 
     const handleTracking = () => {
+        let tracking_data = getTrackingInfo();
+
         dispatch(trackUser({"query" : tracking_data, "action" :'exit_product_page'}));
         dispatch(trackUser({"query" : tracking_data, "action" :'recommended_products'}));
     }
