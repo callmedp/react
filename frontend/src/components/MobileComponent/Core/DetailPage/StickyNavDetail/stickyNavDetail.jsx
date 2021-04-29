@@ -26,7 +26,6 @@ const StickyNavDetail = (props) => {
     const { product_detail, varChecked, outline, faq, frqntProd, topics, product_id, prd_review_list, hasKeyFeatures, hasWhatYouGet } = props;
     const [tab, setTab] = useState('1');
     const dispatch = useDispatch();
-    const tracking_data = getTrackingInfo();
 
     const handleTab = (event) => {
         setTab(event.target.id)
@@ -43,6 +42,7 @@ const StickyNavDetail = (props) => {
     const goToCart = async (value) => {
         let cartItems = {};
         let addonsId = [];
+        let tracking_data = getTrackingInfo();
 
         if(!product_detail?.redeem_test) {
             MyGA.SendEvent('ln_enroll_now', 'ln_enroll_now', 'ln_click_enroll_now', `${product_detail?.prd_H1}`, '', false, true);
