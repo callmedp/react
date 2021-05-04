@@ -2001,23 +2001,18 @@ class ResumeTemplateDownload(APIView):
         file_path = settings.RESUME_TEMPLATE_DIR + "/{}/pdf/{}.pdf".format(candidate_obj.id, selected_template)
         content_type = "application/pdf"
         filename_suffix = ".pdf"
-        logging.getLogger('info_log').info(">>>>>>>>>>>>file_path1 {}".format(file_path))
-        logging.getLogger('info_log').info(">>>>>>>>>>>>file_path2 {}".format(str(candidate_obj)))
-        logging.getLogger('info_log').info(">>>>>>>>>>>>file_path3 {}".format(selected_template))
-        logging.getLogger('info_log').info(">>>>>>>>>>>>file_path4 {}".format(is_combo))
-        logging.getLogger('info_log').info(">>>>>>>>>>>>file_path5 {}".format(email))
 
         if is_combo:
             file_path = settings.RESUME_TEMPLATE_DIR + "/{}/zip/combo.zip".format(candidate_obj.id)
             content_type = "application/zip"
             filename_suffix = ".zip"
-        logging.getLogger('info_log').info(">>>>>>>>>>>>file_path6 {}".format(file_path, settings.IS_GCP))
+        logging.getLogger('info_log').info(">>>>>>>>>>>>file_path6 {}".format(file_path))
         logging.getLogger('info_log').info(">>>>>>>>>>>>file_path7 {}".format(settings.IS_GCP))
 
         try:
             if not settings.IS_GCP:
                 file_path = "{}/{}".format(settings.MEDIA_ROOT, file_path)
-                logging.getLogger('info_log').info(">>>>>>>>>>>>file_path8 {}".format(settings.MEDIA_ROOT, file_path))
+                logging.getLogger('info_log').info(">>>>>>>>>>>>file_path8 {}".format(settings.MEDIA_ROOT))
                 logging.getLogger('info_log').info(">>>>>>>>>>>>file_path9 {}".format(file_path))
 
                 fsock = FileWrapper(open(file_path, 'rb'))
@@ -2025,7 +2020,6 @@ class ResumeTemplateDownload(APIView):
                 fsock = GCPResumeBuilderStorage().open(file_path)
 
             logging.getLogger('info_log').info(">>>>>>>>>>>>file_path10 {}".format(fsock))
-            
 
             filename = filename_prefix + filename_suffix
             response = HttpResponse(fsock, content_type=content_type)
