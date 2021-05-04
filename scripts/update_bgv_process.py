@@ -14,7 +14,7 @@ from order.models import OrderItem
 
 def update_bgv_process():
     command = "update_bgv_process"
-    hire_sure_report_url = 'https://demo.hiresure.ai/bgv_verify/v1/view_report/{report_id}'
+
     try:
         orderitems = OrderItem.objects.select_related('order', 'product') \
             .filter(oi_status__in=[165])
@@ -23,7 +23,7 @@ def update_bgv_process():
             if oi.product.type_flow == 20:
 
                 report_value = oi.message_set.filter(is_internal=True).first().message
-                verification_url = hire_sure_report_url.format(report_id=report_value)
+                verification_url = settings.HIRESURE_REPORT_URL.format(report_id=report_value)
                 response = requests.get(verification_url)
                 rresponse = response.json()
                 if response.status_code == 200:
