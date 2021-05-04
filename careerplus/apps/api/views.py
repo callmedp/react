@@ -2001,18 +2001,31 @@ class ResumeTemplateDownload(APIView):
         file_path = settings.RESUME_TEMPLATE_DIR + "/{}/pdf/{}.pdf".format(candidate_obj.id, selected_template)
         content_type = "application/pdf"
         filename_suffix = ".pdf"
+        logging.getLogger('info_log').info(">>>>>>>>>>>>file_path1 {}".format(file_path))
+        logging.getLogger('info_log').info(">>>>>>>>>>>>file_path2 {}".format(str(candidate_obj)))
+        logging.getLogger('info_log').info(">>>>>>>>>>>>file_path3 {}".format(selected_template))
+        logging.getLogger('info_log').info(">>>>>>>>>>>>file_path4 {}".format(is_combo))
+        logging.getLogger('info_log').info(">>>>>>>>>>>>file_path5 {}".format(email))
 
         if is_combo:
             file_path = settings.RESUME_TEMPLATE_DIR + "/{}/zip/combo.zip".format(candidate_obj.id)
             content_type = "application/zip"
             filename_suffix = ".zip"
+        logging.getLogger('info_log').info(">>>>>>>>>>>>file_path6 {}".format(file_path, settings.IS_GCP))
+        logging.getLogger('info_log').info(">>>>>>>>>>>>file_path7 {}".format(settings.IS_GCP))
 
         try:
             if not settings.IS_GCP:
                 file_path = "{}/{}".format(settings.MEDIA_ROOT, file_path)
+                logging.getLogger('info_log').info(">>>>>>>>>>>>file_path8 {}".format(settings.MEDIA_ROOT, file_path))
+                logging.getLogger('info_log').info(">>>>>>>>>>>>file_path9 {}".format(file_path))
+
                 fsock = FileWrapper(open(file_path, 'rb'))
             else:
                 fsock = GCPResumeBuilderStorage().open(file_path)
+
+            logging.getLogger('info_log').info(">>>>>>>>>>>>file_path10 {}".format(fsock))
+            
 
             filename = filename_prefix + filename_suffix
             response = HttpResponse(fsock, content_type=content_type)
@@ -2024,7 +2037,7 @@ class ResumeTemplateDownload(APIView):
             return Response(
                 {'success': '',
                  'error_message': 'Try after some Time'
-                 },  status=status.HTTP_500_BAD_REQUEST)
+                 },  status=status.HTTP_400_BAD_REQUEST)
 
 
 
@@ -2260,13 +2273,13 @@ class FetchInfoAPIView(APIView):
     def post(self, request, *args, **kwargs):
         em = request.data.get('em', '')
         if not em or not isinstance(em, str):
-            return Response({'msg': 'error'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'msg': 'error'}, status=status.HTTP_401_UNAUTHORIZED)
         em = em.split('|')[0].replace('"','')
 
         detail = ShineCandidateDetail().get_status_detail(
             email=em, token=None)
         if not detail:
-            return Response({'msg': 'Not Found'}, status=status.HTTP_400_BAD_REQUEST)
+            return Response({'msg': 'Not Found'}, status=status.HTTP_401_UNAUTHORIZED)
         code2 = detail.get('country_code', '91')
         candidate_id = detail.get('candidate_id', '')
         data = {'country_code': code2, 'candidate_id': candidate_id}

@@ -1,0 +1,124 @@
+@import '../../../../../styles/functions';
+@import '../../../../../styles/variables';
+@import '../../../../../styles/mixins';
+
+
+.course-outline {
+    box-shadow: $box-shadow;
+    background: $white;
+
+    &__list {
+        width: auto;
+        margin: 3rem 0rem 1.5rem 0;
+        flex: 1;
+
+        .accordion {
+            counter-reset: strong 0;
+            margin-left: 2rem;
+            margin-top: 2rem;
+
+            .card {
+                background-color: $lightblue;
+                margin-bottom: 2rem;
+                border: none;
+                border-radius: .5rem;
+                padding: 2rem 2rem;
+
+                &:hover, &:focus {
+                    cursor: pointer;
+                }
+
+                .card-header {
+                    background-color: $lightblue;
+                    border: none;
+                    padding: 0;
+                    position: relative;
+
+                    &::after {
+                        content: '';
+                        position: absolute;
+                        right: 1rem;
+                        top: 1rem;
+                        background: $lightblue $sprite -24px -36px;
+                        width: 1.4rem;
+                        height: 1.8rem;
+                        display: inline-block;
+                    }
+
+                    &.no-dd {
+                        background: none;
+                        &::after {
+                            background: none;
+                        }
+                    }
+                    
+                    h3 {
+                        font-size: 1.6rem;
+                        font-weight: 400;
+                        counter-increment: strong;
+
+                        &::before {
+                            content: counter(strong) ". ";
+                        }
+                    }
+
+                    p {
+                        margin-bottom: 0;
+                    }
+                }
+
+                .collapse {
+                    position: relative;
+
+                    &::after {
+                        content: '';
+                        position: absolute;
+                        right: 1rem;
+                        top: -1.5rem;
+                        background: $lightblue $sprite 0 -36px;
+                        width: 1.4rem;
+                        height: 1.8rem;
+                        display: inline-block
+                    }
+                }
+
+                .card-body {
+                    padding: 1.5rem 1.5rem 0 0; 
+                    ol {
+                        margin: 0 0 0 1rem;
+                        padding: 0;
+                        li {
+                            list-style: decimal;
+                            list-style-position: inside;
+                        }
+                    }
+
+                    // p { 
+                    //     padding-left: 1.5rem;
+                    //     position: relative;
+
+                    //     &::before {
+                    //         content: '';
+                    //         background: $sprite -34px -17px;
+                    //         width: .5rem;
+                    //         height: .9rem;
+                    //         display: inline-block;
+                    //         position: absolute;
+                    //         left: 0;
+                    //         top: .6rem;
+                    //     }
+                    // }
+                }
+            }
+        }
+    }
+
+    &__img {
+        margin-left: auto;
+        align-self: flex-end;
+        width: 37rem;
+        height: 27rem;
+        position: relative;
+
+    }
+}

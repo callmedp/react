@@ -9,6 +9,7 @@ from django.template.loader import get_template
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django_redis import get_redis_connection
 from django.http import HttpResponse
+import logging
 
 
 # local imports
@@ -49,7 +50,6 @@ class CandidateCreateView(CreateAPIView):
     permission_classes = (IsAuthenticated,)
     queryset = Candidate.objects.all()
     serializer_class = CandidateSerializer
-
     def get_serializer(self, *args, **kwargs):
         if isinstance(kwargs.get('data', {}), list):
             kwargs['many'] = True
@@ -1030,7 +1030,9 @@ class FreeTrialResumeDownload(APIView):
           'template_no': kwargs.get('template_no',1)
         }
         data = json.dumps(data)
+
         generate_and_upload_resume_pdf.delay(data)
+
         response = HttpResponse(json.dumps({'result':'Free Resume template creation started.Please wait for a few seconds'}))
         return response 
 

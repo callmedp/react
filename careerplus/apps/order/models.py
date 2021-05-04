@@ -4,6 +4,7 @@ import logging
 import json
 from datetime import datetime, timedelta
 import time
+import logging
 
 from decimal import Decimal
 from dateutil import relativedelta
@@ -568,9 +569,9 @@ class Order(AbstractAutoDate):
             from resumebuilder.models import Candidate
 
             if self.order_contains_resumebuilder_subscription():
-
                 self.update_subscription_in_order_item()
                 cand_id = existing_obj and existing_obj.candidate_id
+
                 if cand_id:
                     candidate_obj = Candidate.objects.filter(
                         candidate_id=cand_id).first()
@@ -578,8 +579,10 @@ class Order(AbstractAutoDate):
                         candidate_obj.active_subscription = True
                         candidate_obj.save()
 
+
             if self.order_contains_expert_assistance():
                 cand_id = existing_obj and existing_obj.candidate_id
+                
                 if cand_id:
                     candidate_obj = Candidate.objects.filter(
                         candidate_id=cand_id).first()
@@ -588,7 +591,6 @@ class Order(AbstractAutoDate):
                         candidate_obj.save()
 
             generate_resume_for_order.delay(self.id)
-
             logging.getLogger('info_log').info(
                 "Generating resume for order {}".format(self.id))
 

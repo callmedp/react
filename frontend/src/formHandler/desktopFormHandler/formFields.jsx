@@ -42,13 +42,53 @@ const SelectBox = (props) => {
 }
 
 const TextArea = (props) => {
-    const { attributes: { className, label, type, name, value, validation, defaultValue, id, rows, placeholder }, register } = props;
+    const { attributes: { className, label, type, name, value, validation, defaultValue, id, errorMessage, rows, placeholder }, errors, register } = props;
 
     return (
 
         
         <React.Fragment>
-            <div className="form-group add-comments">
+            <div className={`add-comments ${!!errors ? "form-group error" : "form-group"}`}>
+                <textarea className={className} name={name} type={type} placeholder={placeholder} ref={register(validation)} value={value} defaultValue={defaultValue} rows={rows} id={id} />
+                <label htmlFor={name}>{label}</label>
+                { !!errors ? <span className="error-msg">{errorMessage[errors.type]}</span> : ''}
+            </div>
+        </React.Fragment>
+    )
+}
+
+
+const InputFieldDynamic = (props) => {
+    const { attributes: {
+                            className, type, 
+                            name, value, form_class_name, 
+                            validation, 
+                            label,defaultValue,
+                            errorMessage, id, placeholder
+                        }, 
+            errors,
+            register } = props
+    
+    return (
+        <div className={ !!errors ? `${form_class_name} error` : `${form_class_name}`}>
+            <input className={className} type={type} name={name}
+                placeholder={placeholder} ref={register(validation)} value={value}
+                defaultValue={defaultValue} aria-required="true" aria-invalid="true" id={id} />
+            <label>{label}</label>
+            { !!errors ? <span className="error-msg">{errorMessage[errors.type]}</span> : ''}
+        </div>
+    )
+}
+
+
+const TextAreaDynamic = (props) => {
+    const { attributes: { className, label, type, name, value, form_class_name, validation, defaultValue, id, rows, placeholder }, errors, register } = props;
+
+    return (
+
+        
+        <React.Fragment>
+            <div className={ !!errors ? `${form_class_name} error` : `${form_class_name}`}>
                 <textarea className={className} name={name} type={type} placeholder={placeholder} ref={register(validation)} value={value} defaultValue={defaultValue} rows={rows} id={id} />
                 <label htmlFor={name}>{label}</label>
             </div>
@@ -137,6 +177,8 @@ export {
     InputField,
     SelectBox,
     TextArea,
+    InputFieldDynamic,
+    TextAreaDynamic,
     SelectIntentBox,
     MultiSelectBox
 }

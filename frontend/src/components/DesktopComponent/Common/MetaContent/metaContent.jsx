@@ -17,9 +17,9 @@ const MetaContent = props => {
             <meta property="og:site_name" content={meta_tags.site_name || 'ShineLearning'} />
             <meta property="fb:profile_id" content={meta_tags.og_profile_id || ''} />
             {/* <meta property="og:image" content={meta_tags.og_url} /> */}
-            <meta itemprop="name" content={meta_tags.title} />
-            <meta itemprop="url" content={`${siteDomain}${meta_tags._url}`} />
-            <meta itemprop="description" content={meta_tags.og_description || meta_tags.description} />
+            <meta itemProp="name" content={meta_tags.title} />
+            <meta itemProp="url" content={`${siteDomain}${meta_tags._url}`} />
+            <meta itemProp="description" content={meta_tags.og_description || meta_tags.description} />
             <link rel="canonical" href={`${siteDomain}${meta_tags._url ?? '/' }`} />
             <meta name="twitter:card" content="summary" />
             <meta name="twitter:domain" content={siteDomain} />

@@ -40,7 +40,7 @@ export default {
         name: "review",
         id: "review",
         placeholder: " ",
-        label: "Type Here",
+        label: "Review",
         inputType: 'input',
         rows: 3,
         validation: {
