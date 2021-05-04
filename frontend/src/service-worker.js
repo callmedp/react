@@ -11,6 +11,21 @@ self.addEventListener('install',(event) => {
 }
 )
 
+// Handling logout case
+self.addEventListener('fetch', event => {
+  if( event.location.pathname != '/logout/')
+    return;
+
+  event.respondWith(async function() {
+    caches.keys().then(cacheNames => {
+      cacheNames.forEach( cacheName => {
+        caches.delete(cacheName);
+      })
+    })
+    return fetch(event.request);
+  }());
+});
+
 
 workbox.routing.registerRoute(
   /\.(?:js|css)$/,
@@ -26,18 +41,15 @@ workbox.routing.registerRoute(
 )
 
 
+
 workbox.routing.registerRoute(
 ({ request, url}) => {
-  return request.mode === 'navigate';
+  return request.mode === 'navigate' && url.pathname != '/logout';
 },
 new workbox.strategies.NetworkFirst({
   cacheName: 'navigation', 
   plugins: [
-    new workbox.cacheableResponse.Plugin({
-      statuses: [0, 200, 206]  
-   }),
    new workbox.expiration.Plugin({
-    maxAgeSeconds: 24*3600, 
     maxEntries: 20
   })
 
@@ -47,7 +59,6 @@ new workbox.strategies.NetworkFirst({
 
 workbox.routing.registerRoute(
 ({ url }) => {
-  console.log("images",url, url.pathname.endsWith('.jpg') || url.pathname.endsWith('.png') || url.pathname.endsWith('.svg'))
   return (url.pathname.endsWith('.jpg') || url.pathname.endsWith('.png') || url.pathname.endsWith('.svg'));
 }, 
 new workbox.strategies.CacheFirst({
