@@ -1,5 +1,5 @@
 import BaseApiService from "../../../services/BaseApiService";
-import { shineSiteDomain, siteDomain } from '../../../utils/domains'
+import { shineSiteDomain } from '../../../utils/domains'
 
 const trackUser = (query, userAction) => {
     let t_id = !!query['t_id'] ? query['t_id']:"";

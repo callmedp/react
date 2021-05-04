@@ -2006,20 +2006,13 @@ class ResumeTemplateDownload(APIView):
             file_path = settings.RESUME_TEMPLATE_DIR + "/{}/zip/combo.zip".format(candidate_obj.id)
             content_type = "application/zip"
             filename_suffix = ".zip"
-        logging.getLogger('info_log').info(">>>>>>>>>>>>file_path6 {}".format(file_path))
-        logging.getLogger('info_log').info(">>>>>>>>>>>>file_path7 {}".format(settings.IS_GCP))
 
         try:
             if not settings.IS_GCP:
                 file_path = "{}/{}".format(settings.MEDIA_ROOT, file_path)
-                logging.getLogger('info_log').info(">>>>>>>>>>>>file_path8 {}".format(settings.MEDIA_ROOT))
-                logging.getLogger('info_log').info(">>>>>>>>>>>>file_path9 {}".format(file_path))
-
                 fsock = FileWrapper(open(file_path, 'rb'))
             else:
                 fsock = GCPResumeBuilderStorage().open(file_path)
-
-            logging.getLogger('info_log').info(">>>>>>>>>>>>file_path10 {}".format(fsock))
 
             filename = filename_prefix + filename_suffix
             response = HttpResponse(fsock, content_type=content_type)
