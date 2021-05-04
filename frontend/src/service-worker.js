@@ -1,5 +1,9 @@
 // We won't use precaching
 const ignored = self.__WB_MANIFEST;
+let denyList = [
+  '/logout/',
+  '/login/'
+]
 
 self.addEventListener('install',(event) => {
   caches.keys().then(cacheNames => {
@@ -11,20 +15,6 @@ self.addEventListener('install',(event) => {
 }
 )
 
-// Handling logout case
-self.addEventListener('fetch', event => {
-  if( event.location.pathname != '/logout/')
-    return;
-
-  event.respondWith(async function() {
-    caches.keys().then(cacheNames => {
-      cacheNames.forEach( cacheName => {
-        caches.delete(cacheName);
-      })
-    })
-    return fetch(event.request);
-  }());
-});
 
 
 workbox.routing.registerRoute(
@@ -43,19 +33,34 @@ workbox.routing.registerRoute(
 
 
 workbox.routing.registerRoute(
-({ request, url}) => {
-  return request.mode === 'navigate' && url.pathname != '/logout';
-},
-new workbox.strategies.NetworkFirst({
-  cacheName: 'navigation', 
-  plugins: [
-   new workbox.expiration.Plugin({
-    maxEntries: 20
+  ({ request, url}) => {
+    return request.mode === 'navigate' && !denyList.includes(url.pathname);
+  },
+  new workbox.strategies.NetworkFirst({
+    cacheName: 'navigation', 
+    plugins: [
+     new workbox.expiration.Plugin({
+      maxEntries: 20
+    })
+    ]
   })
+  )
 
-  ]
-})
+workbox.routing.registerRoute(
+  ({ request, url}) => {
+    return request.mode === 'navigate' && url.pathname == '/logout/';
+  },
+  async ({request}) => {
+    await caches.keys().then(cacheNames => {
+      cacheNames.forEach( cacheName => {
+        caches.delete(cacheName);
+      })
+    })
+    const response = await fetch(request);
+    return response;
+  }
 )
+
 
 workbox.routing.registerRoute(
 ({ url }) => {
