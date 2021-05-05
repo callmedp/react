@@ -240,7 +240,7 @@ class LineItem(AbstractAutoDate):
             name = "{} {}".format(self.cart.first_name, self.cart.last_name if self.cart.last_name else '').strip()
             #create_lead_on_crm(self.cart.id, source_type, name)
             create_lead_on_crm.apply_async(
-                    (self.cart_obj.pk, source_type, name),
+                    (self.cart.id, source_type, name),
                     countdown=settings.CART_SUMMARY)
 
         super(LineItem, self).save(*args, **kwargs)
