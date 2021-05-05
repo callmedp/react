@@ -19,11 +19,10 @@ self.addEventListener('install',(event) => {
 
 workbox.routing.registerRoute(
   /\.(?:js|css)$/,
-  new workbox.strategies.CacheFirst({
+  new workbox.strategies.StaleWhileRevalidate({
     cacheName: 'assets',
     plugins: [
       new workbox.expiration.Plugin({
-        maxAgeSeconds: 7*24*3600,
         maxEntries: 10
       })
     ]
@@ -66,11 +65,10 @@ workbox.routing.registerRoute(
 ({ url }) => {
   return (url.pathname.endsWith('.jpg') || url.pathname.endsWith('.png') || url.pathname.endsWith('.svg'));
 }, 
-new workbox.strategies.CacheFirst({
+new workbox.strategies.StaleWhileRevalidate({
   cacheName: 'images', 
   plugins: [
     new workbox.expiration.Plugin({
-      maxAgeSeconds: 30*24*3600, 
       maxEntries: 50
     })
   ]
