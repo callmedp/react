@@ -248,6 +248,8 @@ class DashboardDetailView(TemplateView):
                 ops = self.oi.orderitemoperation_set.filter(oi_status__in=[5, 6, 101, 161, 162, 163, 164])
             elif self.oi.product.type_flow == 16:
                 ops = self.oi.orderitemoperation_set.filter(oi_status__in=[5, 6, 4])
+            elif self.oi.product.type_flow == 20:
+                ops = self.oi.orderitemoperation_set.filter(oi_status__in=[165, 166, 167])
 
             context.update({
                 "oi": self.oi,
