@@ -474,6 +474,18 @@ def get_history(instance):
             if current_status:
                 datalist.append(current_status)
 
+    elif oi.product.type_flow == 16 and oi.product.sub_type_flow == 1602:
+        for op in ops:
+            current_status = {}
+            date_created = op.created.strftime("%d %b %y")
+            current_status = {'date': date_created, 'status': op.get_user_oi_status}
+            if op.oi_status == 5:
+                current_status.update({'take_test': True, 'status': op.get_user_oi_status, 'auto_login_url': oi.autologin_url})
+            elif op.oi_status == 4:
+                current_status.update({'status': op.get_user_oi_status})
+            if current_status:
+                datalist.append(current_status)
+
     return datalist
     
 def get_review_details(product, candidate_id):
