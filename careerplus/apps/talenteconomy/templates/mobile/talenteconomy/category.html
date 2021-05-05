@@ -4,6 +4,7 @@
 
 {% block django_meta %}
     {% include 'meta/meta.html' %}
+    <link rel="preconnect" href="https://fonts.gstatic.com/">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" media="print" onload="this.media='all'"
  rel="stylesheet">
 
@@ -97,7 +98,7 @@
 </div>
 
 {% block call_us %}
-  {% include "shop/partials/call_us.html" %}
+  {% include "shop/partials/call_us.html" with page='talenteconomy-category' %}
 {% endblock call_us %}
 
 {% endblock container %}

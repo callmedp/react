@@ -82,7 +82,8 @@
             {% if bradcbs.url %}
               <li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="{{bradcbs.url}}" itemprop="item"><span itemprop="name">{{bradcbs.name}}</span></a></li>
             {% else %}
-              <li class="active">{{bradcbs.name}}</li>
+              <!-- <li class="active">{{bradcbs.name}}</li> -->
+              <li class="active"> {% if bradcbs.name|length > 7 %}{{bradcbs.name|slice:"7"}}{%endif%}... </li>
             {% endif %}
           {% endfor %} 
         </ul>
@@ -157,7 +158,7 @@
 </div>
 
 {% block call_us %}
-  {% include "shop/partials/call_us.html" %}
+  {% include "shop/partials/call_us.html" with page='talenteconomy-article-details' %}
 {% endblock call_us %}
 
 {% endblock container %}
