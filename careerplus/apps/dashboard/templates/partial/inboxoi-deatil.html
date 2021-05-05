@@ -183,6 +183,18 @@
                     </li>
                 {% endfor %}
 
+            {% elif oi.product.type_flow == 20 %}
+                {% for op in ops %}
+                    <li>
+                        <datalist class="col-sm-3">
+                            {{ op.created.date }}
+                        </datalist>
+                        <datalist class="col-sm-6">
+                            {{ op.get_user_oi_status }}
+                        </datalist>
+                    </li>
+                {% endfor %}
+
             {% elif oi.product.type_flow == 2 or  oi.product.type_flow == 14 %}
                 {% for op in ops %}
                     <li>
