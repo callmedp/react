@@ -139,7 +139,8 @@ def lead_creation_function(filter_dict=None, cndi_name=None, source_type=None):
             if source_type in ["cart_summary", "payment_option"]:
                 data_dict.update({
                     "lead_type":2,
-                    "source_type":source_type
+                    "source_type":source_type,
+                    "campaign_slug": "cartleads"
                     })
                 lead_create_on_crm(cart_obj, data_dict=data_dict)
                 return
