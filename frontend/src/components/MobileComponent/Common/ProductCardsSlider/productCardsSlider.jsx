@@ -62,7 +62,7 @@ const ProductCards = props => {
                                 <div className="m-card__price">
                                     <strong>{product?.price}/-</strong>
                                 </div>
-                                </div>
+                            </div>
                         </div>
                     )
                 })

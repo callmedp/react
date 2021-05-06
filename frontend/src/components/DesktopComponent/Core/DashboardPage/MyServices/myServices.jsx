@@ -88,7 +88,7 @@ const MyServices = (props) => {
         }
         catch(e){
             dispatch(stopDashboardServicesPageLoader());
-            showSwal('error', 'Sorry! we are unable to fecth your data.')
+            showSwal('error', 'Sorry! we are unable to fetch your data.')
         }
     };
     

@@ -5,7 +5,9 @@ from emailers.tasks import send_email_task
 from emailers.sms import SendSMS
 from order.functions import create_short_url
 from microsite.roundoneapi import RoundOneAPI
-
+from order.tasks import hiresure_verify_process
+from celery.decorators import task
+from order.models import Order
 
 def draft_upload_mail(oi=None, to_emails=[], mail_type=None, email_dict={}):
     email_sets = list(oi.emailorderitemoperation_set.all().values_list('email_oi_status',flat=True).distinct())
@@ -161,3 +163,31 @@ def roundone_product(order=None):
                     RoundOneAPI().create_roundone_order(order)
     except Exception as e:
         logging.getLogger('error_log').error("%s - %s" % (str(order), str(e)))
+
+
+@task(name="process_background_verification")
+def process_background_verification(order_pk=None):
+    try:
+        order = Order.objects.get(pk=order_pk)
+        if order.status == 1:
+            orderitems = order.orderitems.filter(
+                no_process=False,
+                product__type_flow=20).select_related(
+                'order', 'product')
+
+            for oi in orderitems:
+                if oi.product.type_flow == 20:
+                    last_oi_status = oi.oi_status
+                    oi.oi_status = 165
+                    oi.last_oi_status = last_oi_status
+                    oi.save()
+                    oi.orderitemoperation_set.create(
+                        oi_status=oi.oi_status,
+                        last_oi_status=last_oi_status
+                    )
+                    hiresure_verify_process(candidate_id=order.candidate_id,
+                                            verification_type=oi.product.sub_type_flow,
+                                            oi_obj=oi)
+
+    except Exception as e:
+        logging.getLogger('error_log').error('Background Verification Iniit failed - {}'.format(str(e)))

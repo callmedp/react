@@ -194,12 +194,14 @@ class ResumeGenerator(object):
 
         if not is_combo:
             data_to_send.update({"send_mail": True, 'is_combo': False})
-            generate_and_upload_resume_pdf(json.dumps(data_to_send))
+            generate_and_upload_resume_pdf.apply_async(json.dumps(data_to_send), priority = 0)
+
             return
 
         for i in range(1, 6):
             data_to_send.update({"template_no": i, 'is_combo': True})
-            generate_and_upload_resume_pdf(json.dumps(data_to_send))
+            generate_and_upload_resume_pdf.apply_async(json.dumps(data_to_send), priority = 0)
+
 
 
 # Uplod byte stream to cloud

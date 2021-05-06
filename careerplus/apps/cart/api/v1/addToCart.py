@@ -68,8 +68,8 @@ class AddToCartApiView(CartMixin, APIView):
             logging.getLogger('info_log').info(
                 "Cart Obj:{}, candidate_ID: {}".format(cart_obj, candidate_id))
 
-            if cart_obj and candidate_id and int(prod_id) == int(request.session.get('tracking_product_id', -1)):
-                request.session.update({'product_availability': prod_id})
+            # if cart_obj and candidate_id and int(prod_id) == int(request.session.get('tracking_product_id', -1)):
+            #     request.session.update({'product_availability': prod_id})
 
             if cart_obj and (candidate_id == cart_obj.owner_id) and not request.ip_restricted:
                 first_name = request.session.get('first_name', '')

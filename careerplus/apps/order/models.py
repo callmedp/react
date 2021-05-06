@@ -590,7 +590,7 @@ class Order(AbstractAutoDate):
                         candidate_obj.resume_generated = False
                         candidate_obj.save()
 
-            generate_resume_for_order(self.id)
+            generate_resume_for_order.delay(self.id)
             logging.getLogger('info_log').info(
                 "Generating resume for order {}".format(self.id))
 

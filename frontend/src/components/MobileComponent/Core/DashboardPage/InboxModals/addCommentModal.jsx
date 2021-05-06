@@ -59,7 +59,7 @@ const AddCommentModal = (props) => {
         }
         catch (e) {
             dispatch(stopCommentLoader());
-            showSwal('error', 'Sorry! we are unable to fecth your data.')
+            showSwal('error', 'Sorry! we are unable to fetch your data.')
         }
     };
 

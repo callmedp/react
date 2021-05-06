@@ -202,6 +202,7 @@
                     </th>
                     <th class="column-title">#OrderId</th>
                     <th class="column-title">Name</th>
+                    <th class="column-title">Branch Head</th>
                     <th class="column-title">Email</th>
                     <th class="column-title">Contact</th>
                     <th class="column-title">Follow Up</th>
@@ -229,6 +230,7 @@
                       </td>
                       <td>{{obj.number}}{% if obj.id|is_whole_refund:refund_order_dict %} <p> Refunded</p> {% endif %}</td>
                       <td>{{obj.first_name}} {{obj.last_name}}</td>
+                        <td> {% if obj.sales_user_info|length > 0 %} {{ obj.sales_user_info|get_dict_item:'branch_head' }} {% else %} None {% endif %} </td>
                         <td>
                     <div id="email{{obj.id}}">
                       <div id="email_field{{obj.id}}_{{forloop.counter}}"></div>

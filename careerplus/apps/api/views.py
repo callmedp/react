@@ -2024,7 +2024,7 @@ class ResumeTemplateDownload(APIView):
             return Response(
                 {'success': '',
                  'error_message': 'Try after some Time'
-                 },  status=status.HTTP_500_BAD_REQUEST)
+                 },  status=status.HTTP_400_BAD_REQUEST)
 
 
 

@@ -18,16 +18,6 @@ const SkillGain = (props) => {
                                 )
                             })
                         }
-                        {/* <li>Light</li>
-                        <li>PythonR</li>
-                        <li>Programming</li>
-                        <li>Tableau</li>
-                        <li>Data Science</li>
-                        <li>Deep Learning</li>
-                        <li>Data Visualization</li>
-                        <li>Statistical computing</li>
-                        <li>Visual Analytics</li>
-                        <li>Dashboards</li> */}
                     </ul>
                 </div>
             </div>
