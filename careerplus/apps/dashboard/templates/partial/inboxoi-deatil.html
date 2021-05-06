@@ -338,6 +338,23 @@
                         </datalist>
                     </li>
                 {% endfor %}
+
+           {% elif oi.product.type_flow == 16 %}
+            {% for op in ops %}
+                <li>
+                    <datalist class="col-sm-3">
+                        {{op.created.date}}
+                    </datalist>
+                    <datalist class="col-sm-6">
+                        {{op.get_user_oi_status}}
+                    </datalist>
+                    <datalist class="col-sm-3 text-right">
+                        {% if op.oi_status == 5 %}
+                            <a href="{{oi.autologin_url}}" target="_blank">Take Test</a>
+                        {% endif %}
+                    </datalist>
+                </li>
+            {% endfor %}
           
           {% elif oi.product.type_flow == 17 %}
                 {% for op in ops %}
@@ -358,7 +375,8 @@
                     </li>
                 {% endfor %}
 
-            {% endif %}
+
+          {% endif %}
           
         </ul>
     </li>
