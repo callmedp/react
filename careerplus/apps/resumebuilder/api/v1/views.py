@@ -9,6 +9,7 @@ from django.template.loader import get_template
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django_redis import get_redis_connection
 from django.http import HttpResponse
+from core.common import APIResponse
 import logging
 
 
@@ -359,61 +360,68 @@ class CandidateResumePreview(APIView):
         template_id = self.kwargs.get('pk', '')
         candidate = Candidate.objects.filter(candidate_id=candidate_id).first()
         if not candidate:
-            return Response({})
-        current_config = candidate.ordercustomisation_set.filter(template_no=template_id).first()
-        entity_position = current_config.entity_position_eval
-        entity_preference = eval(candidate.entity_preference_data)
-        extracurricular = candidate.extracurricular_list
-        education = candidate.candidateeducation_set.all().order_by('order')
-        experience = candidate.candidateexperience_set.all().order_by('order')
-        skills = candidate.skill_set.all().order_by('order')
-        achievements = candidate.candidateachievement_set.all().order_by('order')
-        references = candidate.candidatereference_set.all().order_by('order')
-        projects = candidate.candidateproject_set.all().order_by('order')
-        certifications = candidate.candidatecertification_set.all().order_by('order')
-        languages = candidate.candidatelanguage_set.all().order_by('order')
-        current_exp = experience.filter(is_working=True).order_by('-start_date').first()
+            return APIResponse(message='Candidate should not be blank', status=status.HTTP_400_BAD_REQUEST)
 
-        entity_id_count_mapping = {
-            2: bool(education.count()),
-            3: bool(experience.count()),
-            4: bool(projects.count()),
-            5: bool(skills.count()),
-            7: bool(achievements.count()),
-            8: bool(certifications.count()),
-            9: bool(languages.count()),
-            10: bool(references.count()),
-            11: bool(len(extracurricular)),
-        }
-        updated_entity_position = []
+        try:
 
-        for item in entity_position:
-            item.update({"count": entity_id_count_mapping.get(item['entity_id'])})
-            updated_entity_position.append(item)
+            current_config = candidate.ordercustomisation_set.filter(template_no=template_id).first()
+            entity_position = current_config.entity_position_eval
+            entity_preference = eval(candidate.entity_preference_data)
+            extracurricular = candidate.extracurricular_list
+            education = candidate.candidateeducation_set.all().order_by('order')
+            experience = candidate.candidateexperience_set.all().order_by('order')
+            skills = candidate.skill_set.all().order_by('order')
+            achievements = candidate.candidateachievement_set.all().order_by('order')
+            references = candidate.candidatereference_set.all().order_by('order')
+            projects = candidate.candidateproject_set.all().order_by('order')
+            certifications = candidate.candidatecertification_set.all().order_by('order')
+            languages = candidate.candidatelanguage_set.all().order_by('order')
+            current_exp = experience.filter(is_working=True).order_by('-start_date').first()
 
-        latest_experience, latest_end_date = '', None
-        for i in experience:
-            if i.is_working:
-                latest_end_date = date.today()
-                latest_experience = i.job_profile
-                break
-            elif latest_end_date == None:
-                latest_end_date = i.end_date
-                latest_experience = i.job_profile
-            else:
-                if latest_end_date < i.end_date:
+            entity_id_count_mapping = {
+                2: bool(education.count()),
+                3: bool(experience.count()),
+                4: bool(projects.count()),
+                5: bool(skills.count()),
+                7: bool(achievements.count()),
+                8: bool(certifications.count()),
+                9: bool(languages.count()),
+                10: bool(references.count()),
+                11: bool(len(extracurricular)),
+            }
+            updated_entity_position = []
+
+            for item in entity_position:
+                item.update({"count": entity_id_count_mapping.get(item['entity_id'])})
+                updated_entity_position.append(item)
+
+            latest_experience, latest_end_date = '', None
+            for i in experience:
+                if i.is_working:
+                    latest_end_date = date.today()
+                    latest_experience = i.job_profile
+                    break
+                elif latest_end_date == None:
                     latest_end_date = i.end_date
                     latest_experience = i.job_profile
+                else:
+                    if latest_end_date < i.end_date:
+                        latest_end_date = i.end_date
+                        latest_experience = i.job_profile
 
-        template = get_template('resume{}_preview.html'.format(template_id))
-        rendered_template = template.render(
-            {'candidate': candidate, 'education': education, 'experience': experience, 'skills': skills,
-             'achievements': achievements, 'references': references, 'projects': projects,
-             'certifications': certifications, 'extracurricular': extracurricular, 'languages': languages,
-             'current_exp': current_exp, 'latest_exp': latest_experience,
-             'preference_list': entity_preference, 'current_config': current_config,
-             'entity_position': updated_entity_position, 'width': 100, "watermark_in_preview": True
-             }).encode(encoding='UTF-8')
+            template = get_template('resume{}_preview.html'.format(template_id))
+            rendered_template = template.render(
+                {'candidate': candidate, 'education': education, 'experience': experience, 'skills': skills,
+                 'achievements': achievements, 'references': references, 'projects': projects,
+                 'certifications': certifications, 'extracurricular': extracurricular, 'languages': languages,
+                 'current_exp': current_exp, 'latest_exp': latest_experience,
+                 'preference_list': entity_preference, 'current_config': current_config,
+                 'entity_position': updated_entity_position, 'width': 100, "watermark_in_preview": True
+                 }).encode(encoding='UTF-8')
+
+        except Exception as e:
+            logging.getLogger('error_log').error('CandidateResumePreview Failed with error {}'.format(str(e)))
+            return APIResponse(message='Bad Request, Please try again later', status=status.HTTP_400_BAD_REQUEST)
 
         return Response({
             'html': rendered_template
