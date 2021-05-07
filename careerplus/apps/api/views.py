@@ -1987,14 +1987,16 @@ class ResumeTemplateDownload(APIView):
         except Order.DoesNotExist:
             return Response(
                 {'success': '',
-                 'error_message': 'Order not found'
+                 'error_message': 'Order not found',
+                 'redirect_url': '{}/404/'.format(settings.RESUME_SHINE_MAIN_DOMAIN)
                  },  status=status.HTTP_404_NOT_FOUND)
 
         if not candidate_id or not order.status in [1, 3, 0] or not (order.email == email) \
                 or not (order.candidate_id == candidate_id):
             return Response(
                 {'success': '',
-                 'error_message': 'Invalid Request'
+                 'error_message': 'Invalid Request',
+                 'redirect': '{}/404/'.format(settings.RESUME_SHINE_MAIN_DOMAIN)
                  },  status=status.HTTP_400_BAD_REQUEST)
 
         filename_prefix = "{}_{}".format(order.first_name or "resume", order.last_name or order_pk)
@@ -2020,10 +2022,11 @@ class ResumeTemplateDownload(APIView):
             return response
 
         except Exception as e:
-            logging.getLogger('error_log').error("%s" % str(e))
+            logging.getLogger('error_log').error("Error in resume template download view %s" % str(e))
             return Response(
                 {'success': '',
-                 'error_message': 'Try after some Time'
+                 'error_message': 'Some error occured, Please try again!',
+                 'redirect_url': '{}/404/'.format(settings.RESUME_SHINE_MAIN_DOMAIN)
                  },  status=status.HTTP_400_BAD_REQUEST)
 
 
