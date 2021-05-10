@@ -1019,8 +1019,11 @@ class PDFRefreshAPIView(APIView):
         if not candidate_obj:
             return Response({"detail": "Candidate with given  candidate id is invalid."}, status= status.HTTP_400_BAD_REQUEST)
         candidate_obj.resume_generated = True 
-        candidate_obj.save();
-        generate_resume_for_order.delay(order_obj.id)
+        candidate_obj.save()
+        celery_order_status = generate_resume_for_order.delay(order_obj.id)
+        task_status = {'task_id': celery_order_status.task_id, 'status': celery_order_status.status}
+        order_obj.orderitems.first().message_set.create(message=json.dumps(task_status), candidate_id='celery_task',
+                                                   is_internal=True)
         return Response({"detail": "Resume successfully Updated"}, status=status.HTTP_200_OK)
 
 class FreeTrialResumeDownload(APIView):
