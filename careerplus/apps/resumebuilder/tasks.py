@@ -210,7 +210,7 @@ def zip_all_resume_pdfs(order_id, data):
     send_resume_in_mail_resume_builder(
         [file_name, zip_stream.getvalue()], data)
 
-@task
+# @task
 def generate_and_upload_resume_pdf(data):
     from resumebuilder.models import Candidate, CandidateResumeOperations
     from order.models import Order
