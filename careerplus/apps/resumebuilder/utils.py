@@ -195,16 +195,14 @@ class ResumeGenerator(object):
 
         if not is_combo:
             data_to_send.update({"send_mail": True, 'is_combo': False})
-            resume_generator_task = generate_and_upload_resume_pdf.delay(json.dumps(data_to_send))
+            generate_and_upload_resume_pdf(json.dumps(data_to_send))
 
         for i in range(1, 6):
             data_to_send.update({"template_no": i, 'is_combo': True})
-            resume_generator_task = generate_and_upload_resume_pdf.delay(json.dumps(data_to_send))
+            generate_and_upload_resume_pdf(json.dumps(data_to_send))
 
-        task_status = {'task_id': resume_generator_task.task_id, 'status': resume_generator_task.status}
-        oi_obj.first().message_set.create(message=json.dumps(task_status), candidate_id='celery_task', is_internal=True)
-
-
+        # task_status = {'task_id': resume_generator_task.task_id, 'status': resume_generator_task.status}
+        # oi_obj.first().message_set.create(message=json.dumps(task_status), candidate_id='celery_task', is_internal=True)
 
 
 # Uplod byte stream to cloud
