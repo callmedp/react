@@ -1,5 +1,14 @@
+import os, django, sys
+
+# Settings imports
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "careerplus.config.settings_live")
+ROOT_FOLDER = os.path.realpath(os.path.dirname(__file__))
+ROOT_FOLDER = ROOT_FOLDER[:ROOT_FOLDER.rindex('/')]
+if ROOT_FOLDER not in sys.path:
+    sys.path.insert(1, ROOT_FOLDER + '/')
+django.setup()
+
 # Python Core Imports
-import time
 from datetime import date
 import logging
 import requests
