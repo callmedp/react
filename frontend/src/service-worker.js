@@ -18,16 +18,19 @@ self.addEventListener('install',(event) => {
 
 
 workbox.routing.registerRoute(
-  /\.(?:js|css)$/,
+  ({ url }) => {
+    return (url.pathname.endsWith('.chunk.js') || url.pathname.endsWith('.chunk.css'));
+  }, 
   new workbox.strategies.StaleWhileRevalidate({
-    cacheName: 'assets',
+    cacheName: 'assets', 
     plugins: [
       new workbox.expiration.Plugin({
         maxEntries: 10
       })
     ]
   })
-)
+  )
+  
 
 
 
