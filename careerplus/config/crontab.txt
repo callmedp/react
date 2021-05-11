@@ -48,5 +48,7 @@
 
 5 00 * * * export DJANGO_SETTINGS_MODULE=careerplus.config.settings_live && /var/www/virtualenvs/learning/bin/python /var/www/site/learning/current/scripts/scripts/update_bgv_process.py 1 &
 
+*/7 * * * * export DJANGO_SETTINGS_MODULE=careerplus.config.settings_live && /var/www/virtualenvs/learning/bin/python /var/www/site/learning/current/scripts/scripts/update_celery_status_builder.py >> /var/log/celery_builder_status.log 2>&1
+
 #Keep extra line for crontab syntax correction
 

@@ -190,18 +190,19 @@ class ResumeGenerator(object):
         if not order:
             return None, None
 
+        oi_obj=order.orderitems
         data_to_send = {"order_id": order.id, "template_no": index}
 
         if not is_combo:
             data_to_send.update({"send_mail": True, 'is_combo': False})
-            generate_and_upload_resume_pdf.apply_async(json.dumps(data_to_send), priority = 0)
-
-            return
+            generate_and_upload_resume_pdf(json.dumps(data_to_send))
 
         for i in range(1, 6):
             data_to_send.update({"template_no": i, 'is_combo': True})
-            generate_and_upload_resume_pdf.apply_async(json.dumps(data_to_send), priority = 0)
+            generate_and_upload_resume_pdf(json.dumps(data_to_send))
 
+        # task_status = {'task_id': resume_generator_task.task_id, 'status': resume_generator_task.status}
+        # oi_obj.first().message_set.create(message=json.dumps(task_status), candidate_id='celery_task', is_internal=True)
 
 
 # Uplod byte stream to cloud
