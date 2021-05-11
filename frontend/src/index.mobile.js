@@ -5,7 +5,6 @@ import AppMobile from './App.mobile';
 import { Provider } from 'react-redux';
 import store from 'store/index';
 import { BrowserRouter } from 'react-router-dom';
-import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
 ReactDOM.hydrate(
   <React.StrictMode>
@@ -18,6 +17,4 @@ ReactDOM.hydrate(
   </React.StrictMode>,
   document.getElementById('root')
 );
-
-serviceWorkerRegistration.register();
 
