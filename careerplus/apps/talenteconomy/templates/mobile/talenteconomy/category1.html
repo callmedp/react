@@ -4,6 +4,7 @@
 
 {% block django_meta %}
     {% include 'meta/meta.html' %}
+    <link rel="preconnect" href="https://fonts.gstatic.com/">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap" media="print" onload="this.media='all'"
  rel="stylesheet">
 
@@ -66,7 +67,7 @@
       <h1>{{category.name}} - Career Guidance</h1>
 
     </div>
-    <img loading="lazy" aria-label="Article Category" src="{% static 'shinelearn/images/mobile/common/article-category.jpg' %}" class="img-responsive">
+    <img loading="lazy" aria-label="Article Category" src="{% static 'shinelearn/images/mobile/common/article-category.jpg' %}" class="fixed-header-img">
 </div><!-- Trending articles Ends here -->
 
 <!-- Starts of talent-economy list -->
@@ -96,7 +97,7 @@
 </div>
 
 {% block call_us %}
-  {% include "shop/partials/call_us.html" %}
+  {% include "shop/partials/call_us.html" with page='talenteconomy-category'%}
 {% endblock call_us %}
 
 {% endblock container %}
