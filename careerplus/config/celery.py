@@ -16,7 +16,7 @@ try:
 except ImportError:
     pass
 
-app = Celery('careerplus', backend=None, broker=settings.BROKER_URL)
+app = Celery('careerplus', backend='amqp', broker=settings.BROKER_URL)
 
 # Using a string here means the worker don't have to serialize
 # the configuration object to child processes.

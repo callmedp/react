@@ -35,6 +35,7 @@ from partner.models import ProductSkill
 from rest_framework.generics import ListAPIView, RetrieveAPIView
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from django_filters.rest_framework import DjangoFilterBackend
+from django.shortcuts import redirect
 
 from users.tasks import user_register
 from crmapi.tasks import create_lead_crm
@@ -1985,17 +1986,16 @@ class ResumeTemplateDownload(APIView):
         try:
             order = Order.objects.get(pk=order_pk)
         except Order.DoesNotExist:
-            return Response(
-                {'success': '',
-                 'error_message': 'Order not found'
-                 },  status=status.HTTP_404_NOT_FOUND)
+            return redirect('{}/404/'.format(settings.RESUME_SHINE_MAIN_DOMAIN))
+            # return Response(
+            #     {'success': '',
+            #      'error_message': 'Order not found',
+            #      'redirect_url': '{}/404/'.format(settings.RESUME_SHINE_MAIN_DOMAIN)
+            #      },  status=status.HTTP_404_NOT_FOUND)
 
         if not candidate_id or not order.status in [1, 3, 0] or not (order.email == email) \
                 or not (order.candidate_id == candidate_id):
-            return Response(
-                {'success': '',
-                 'error_message': 'Invalid Request'
-                 },  status=status.HTTP_400_BAD_REQUEST)
+            return redirect('{}/404/'.format(settings.RESUME_SHINE_MAIN_DOMAIN))
 
         filename_prefix = "{}_{}".format(order.first_name or "resume", order.last_name or order_pk)
         file_path = settings.RESUME_TEMPLATE_DIR + "/{}/pdf/{}.pdf".format(candidate_obj.id, selected_template)
@@ -2020,11 +2020,13 @@ class ResumeTemplateDownload(APIView):
             return response
 
         except Exception as e:
-            logging.getLogger('error_log').error("%s" % str(e))
-            return Response(
-                {'success': '',
-                 'error_message': 'Try after some Time'
-                 },  status=status.HTTP_400_BAD_REQUEST)
+            logging.getLogger('error_log').error("Error in resume template download view %s" % str(e))
+            return redirect('{}/404/'.format(settings.RESUME_SHINE_MAIN_DOMAIN))
+            # return Response(
+            #     {'success': '',
+            #      'error_message': 'Some error occured, Please try again!',
+            #      'redirect_url': '{}/404/'.format(settings.RESUME_SHINE_MAIN_DOMAIN)
+            #      },  status=status.HTTP_400_BAD_REQUEST)
 
 
 
