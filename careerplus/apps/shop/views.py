@@ -1010,7 +1010,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
 
 
             if tracking_id and prod.id and product_tracking_mapping_id:
-                make_logging_request(
+                make_logging_request.delay(
                     prod.id, product_tracking_mapping_id, tracking_id, 'product_page',position, trigger_point, u_id, utm_campaign, 2, popup_based_product, recommendation_by)
 
         elif self.request.session.get('candidate_id') and \
