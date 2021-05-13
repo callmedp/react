@@ -106,6 +106,10 @@ OI_OPS_STATUS = (
     (191, 'Certificate Updated on Shine'),
     (192, 'Badging Done for Assesment'),
 
+    # Flow 20
+    (165, 'Background Verification is under progress'),
+    (166, 'Background Verification has been processed & Final document is ready'),
+    (167, 'Background Verification has been initiated')
 
 )
 
@@ -170,6 +174,11 @@ OI_USER_STATUS = (
     (162, 'Refund under progress'),
     (163, 'Refunded'),
     (164, 'Replaced'),
+
+    # Flow 20
+    (165, 'Background Verification is under progress'),
+    (166, 'Background Verification has been processed & Final Document is ready'),
+    (167, 'Background Verification has been initiated')
 )
 
 OI_LINKEDIN_FLOW_STATUS = (
