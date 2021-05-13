@@ -281,7 +281,7 @@ def cart_drop_out_mail(pk=None, cnd_email=None, mail_type=None, name=None,
 def cart_product_removed_mail(product_id= None, tracking_id="", 
         u_id=None, email=None, name=None, tracking_product_id="", 
         product_tracking_mapping_id="", trigger_point="", 
-        position=-1, utm_campaign="", domain=2, popup_based_product=""):
+        position=-1, utm_campaign="", domain=2, popup_based_product="", recommendation_by=""):
     try:
         name = name if name else "Candidate"
         if not email and not u_id:
@@ -314,12 +314,12 @@ def cart_product_removed_mail(product_id= None, tracking_id="",
         data['subject'] = '{}Forgot Something?'.format(subject_name)
 
         token = AutoLogin().encode(email, u_id, days=None)
-        data['autologin'] = "{}://{}/cart/payment-summary/?prod_id={}&t_id={}&token={}&utm_campaign=learning_remove_product_mailer&trigger_point={}&u_id={}&position={}&email=1".format(
-            settings.SITE_PROTOCOL, settings.SITE_DOMAIN, product_id, tracking_id, token, trigger_point, u_id, position)
+        data['autologin'] = "{}://{}/cart/payment-summary/?prod_id={}&t_id={}&token={}&utm_campaign=learning_remove_product_mailer&trigger_point={}&u_id={}&position={}&recommendation_by={}&email=1".format(
+            settings.SITE_PROTOCOL, settings.SITE_DOMAIN, product_id, tracking_id, token, trigger_point, u_id, position, recommendation_by)
         if domain == 3:
             data.update({
-                'autologin' : "{}://{}/cart/payment-summary/?token={}&prod_id={}&t_id={}&utm_campaign=learning_remove_product_mailer&trigger_point={}&u_id={}&position={}&email=1".format(
-            settings.SITE_PROTOCOL, settings.RESUME_SHINE_SITE_DOMAIN, token, product_id, tracking_id, trigger_point, u_id, position)
+                'autologin' : "{}://{}/cart/payment-summary/?token={}&prod_id={}&t_id={}&utm_campaign=learning_remove_product_mailer&trigger_point={}&u_id={}&position={}&recommendation_by={}&email=1".format(
+            settings.SITE_PROTOCOL, settings.RESUME_SHINE_SITE_DOMAIN, token, product_id, tracking_id, trigger_point, u_id, position, recommendation_by)
                 })
 
 
@@ -331,7 +331,7 @@ def cart_product_removed_mail(product_id= None, tracking_id="",
         except Exception as e:
             logging.getLogger('error_log').error("Unable to sent mail: {}".format(e))
         make_logging_request.delay(
-            tracking_product_id, product_tracking_mapping_id, tracking_id, 'remove_product_mail_sent', position, trigger_point, u_id, utm_campaign, domain, popup_based_product)
+            tracking_product_id, product_tracking_mapping_id, tracking_id, 'remove_product_mail_sent', position, trigger_point, u_id, utm_campaign, domain, popup_based_product, recommendation_by)
     except Exception as e:
          logging.getLogger('error_log').error(e)
 
