@@ -44,7 +44,7 @@ def put_epay_for_successful_payment(epl_id, epl_market_place_id):
 
 
 @task
-def make_logging_request(tracking_product_id, product_tracking_mapping_id, tracking_id, action, position, trigger_point, u_id, utm_campaign, domain, popup_based_product, recommendation_by):
+def make_logging_request(tracking_product_id, product_tracking_mapping_id, tracking_id, action, position, trigger_point, u_id, utm_campaign, domain, popup_based_product, recommendation_by=""):
     shine_api_url = settings.SHINE_API_URL
     req_dict, tracking_data = {} ,{}
     headers = dict()
@@ -89,7 +89,7 @@ def make_logging_request(tracking_product_id, product_tracking_mapping_id, track
 
 
 @task
-def make_logging_sk_request(tracking_product_id, product_tracking_mapping_id, tracking_id, action, position, trigger_point, u_id, utm_campaign, domain, referal_product, referal_sub_product, popup_based_product, recommendation_by):
+def make_logging_sk_request(tracking_product_id, product_tracking_mapping_id, tracking_id, action, position, trigger_point, u_id, utm_campaign, domain, referal_product, referal_sub_product, popup_based_product, recommendation_by=""):
     shine_api_url = settings.SHINE_API_URL
     req_dict, tracking_data = {} ,{}
     headers = dict()
