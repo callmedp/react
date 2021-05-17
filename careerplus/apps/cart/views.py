@@ -171,6 +171,8 @@ class RemoveFromCartView(View, CartMixin):
             'popup_based_product', '')
         recommendation_by = self.request.session.get(
             'recommendation_by', '' )
+        cart_addition = self.request.session.get(
+            'cart_addition', "False")
         if tracking_product_id == product_id and tracking_id:
             # logging.getLogger('info_log').info(email_data)
             name = email_dict.get('name', '')
@@ -182,10 +184,10 @@ class RemoveFromCartView(View, CartMixin):
                 countdown=settings.CART_DROP_OUT_EMAIL)
             # cart_product_removed_mail(email_data)
             make_logging_sk_request.delay(
-                tracking_product_id, product_tracking_mapping_id, tracking_id, 'remove_product', position, trigger_point, u_id, utm_campaign, 2, referal_product, referal_subproduct, popup_based_product, recommendation_by)
+                tracking_product_id, product_tracking_mapping_id, tracking_id, 'remove_product', position, trigger_point, u_id, utm_campaign, 2, referal_product, referal_subproduct, popup_based_product, recommendation_by, cart_addition)
             # for showing the user exits for that particular cart product
             make_logging_sk_request.delay(
-                tracking_product_id, product_tracking_mapping_id, tracking_id, 'exit_cart', position, trigger_point, u_id, utm_campaign, 2, referal_product, referal_subproduct, popup_based_product, popup_based_product, recommendation_by)
+                tracking_product_id, product_tracking_mapping_id, tracking_id, 'exit_cart', position, trigger_point, u_id, utm_campaign, 2, referal_product, referal_subproduct, popup_based_product, popup_based_product, recommendation_by, cart_addition)
             if tracking_id:
                 del self.request.session['tracking_id']
             if product_tracking_mapping_id:
@@ -755,6 +757,7 @@ class PaymentSummaryView(TemplateView, CartMixin):
         referal_product = request.GET.get('referal_product','')
         referal_subproduct = request.GET.get('referal_subproduct','')
         recommendation_by = request.GET.get('recommendation_by', '')
+        cart_addition = request.GET.get('cart_addition', 'False')
         if tracking_id:
             tracking_id = tracking_id.strip()
         valid = False
@@ -826,7 +829,8 @@ class PaymentSummaryView(TemplateView, CartMixin):
                 'popup_based_product': popup_based_product,
                 'referal_product' : referal_product,
                 'referal_subproduct' : referal_subproduct,
-                'recommendation_by': recommendation_by})
+                'recommendation_by': recommendation_by,
+                'cart_addition': cart_addition})
         
         tracking_id= request.session.get('tracking_id','')
         tracking_product_id= request.session.get('tracking_product_id','')
@@ -840,6 +844,7 @@ class PaymentSummaryView(TemplateView, CartMixin):
         referal_subproduct = request.session.get('referal_subproduct', '')
         popup_based_product = request.session.get('popup_based_product', '')
         recommendation_by = request.session.get('recommendation_by', '')
+        cart_addition = request.session.get('cart_addition', "False")
 
         if product_id and tracking_id:
             try:  
@@ -861,7 +866,7 @@ class PaymentSummaryView(TemplateView, CartMixin):
 
         if tracking_id and tracking_product_id and product_tracking_mapping_id and product_availability and emailer:
             make_logging_request.delay(
-                    tracking_product_id, product_tracking_mapping_id, tracking_id, 'clicked', position, trigger_point, u_id, utm_campaign, 2, popup_based_product, recommendation_by)
+                    tracking_product_id, product_tracking_mapping_id, tracking_id, 'clicked', position, trigger_point, u_id, utm_campaign, 2, popup_based_product, recommendation_by, cart_addition)
 
         redirect = self.redirect_if_necessary(reload_url)
         if redirect:
@@ -872,7 +877,7 @@ class PaymentSummaryView(TemplateView, CartMixin):
 
         if tracking_id and tracking_product_id and product_tracking_mapping_id and product_availability:
             make_logging_sk_request.delay(
-                tracking_product_id, product_tracking_mapping_id, tracking_id, 'cart_payment_summary',position, trigger_point, u_id, utm_campaign, 2, referal_product, referal_subproduct, popup_based_product, recommendation_by)
+                tracking_product_id, product_tracking_mapping_id, tracking_id, 'cart_payment_summary',position, trigger_point, u_id, utm_campaign, 2, referal_product, referal_subproduct, popup_based_product, recommendation_by, cart_addition)
 
         return super(self.__class__, self).get(request, *args, **kwargs)
 
@@ -967,7 +972,8 @@ class PaymentSummaryView(TemplateView, CartMixin):
             'referal_product': self.request.session.get('referal_product', ''),
             'referal_subproduct': self.request.session.get('referal_subproduct', ''),
             'popup_based_product' : self.request.session.get('popup_based_product', ''),
-            'recommendation_by': self.request.session.get('recommendation_by', '')
+            'recommendation_by': self.request.session.get('recommendation_by', ''),
+            'cart_addition': self.request.session.get('cart_addition', "False")
         })
 
         context.update({
