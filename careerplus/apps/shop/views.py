@@ -940,6 +940,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         position = self.request.GET.get('position', -1)
         popup_based_product = self.request.GET.get('popup_based_product', '')
         recommendation_by = request.GET.get('recommendation_by', '')
+        cart_addition = request.GET.get('cart_addition', "False")
 
         show_popup = self.request.GET.get('spop',False)
         if not show_popup:
@@ -1011,7 +1012,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
 
             if tracking_id and prod.id and product_tracking_mapping_id:
                 make_logging_request.delay(
-                    prod.id, product_tracking_mapping_id, tracking_id, 'product_page',position, trigger_point, u_id, utm_campaign, 2, popup_based_product, recommendation_by)
+                    prod.id, product_tracking_mapping_id, tracking_id, 'product_page',position, trigger_point, u_id, utm_campaign, 2, popup_based_product, recommendation_by, cart_addition)
 
         elif self.request.session.get('candidate_id') and \
                 request.session.get('tracking_product_id') and \
@@ -1025,8 +1026,9 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             r_sp = request.session.get('referal_subproduct', '')
             popup_based_product = request.session.get('popup_based_product', '')
             recommendation_by = request.GET.get('recommendation_by', '')
+            cart_addition = request.GET.get('cart_addition', "False")
             make_logging_sk_request.delay(
-                request.session.get('tracking_product_id'), request.session.get('product_tracking_mapping_id'), request.session.get('tracking_id'), 'product_page',position, trigger_point, u_id, utm_campaign, 2, r_p, r_sp, popup_based_product, recommendation_by)
+                request.session.get('tracking_product_id'), request.session.get('product_tracking_mapping_id'), request.session.get('tracking_id'), 'product_page',position, trigger_point, u_id, utm_campaign, 2, r_p, r_sp, popup_based_product, recommendation_by, cart_addition)
         elif self.request.session.get('candidate_id') and \
                 request.session.get('tracking_id') and \
                 not request.session.get('tracking_product_id'):
@@ -1051,9 +1053,10 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             r_sp = request.session.get('referal_subproduct', '')
             popup_based_product = request.session.get('popup_based_product', '')
             recommendation_by = request.GET.get('recommendation_by', '')
+            cart_addition = request.GET.get('cart_addition', "False")
             if tracking_id and prod.id and product_tracking_mapping_id:
                 make_logging_sk_request.delay(
-                    prod.id, product_tracking_mapping_id, tracking_id, 'product_page',position, trigger_point, u_id, utm_campaign, 2, r_p, r_sp, popup_based_product, recommendation_by)
+                    prod.id, product_tracking_mapping_id, tracking_id, 'product_page',position, trigger_point, u_id, utm_campaign, 2, r_p, r_sp, popup_based_product, recommendation_by, cart_addition)
 
         elif self.request.session.get('candidate_id') and \
                 request.session.get('tracking_id') and \
@@ -1083,9 +1086,10 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             r_sp = request.session.get('referal_subproduct', '')
             popup_based_product = request.session.get('popup_based_product', '')
             recommendation_by = request.GET.get('recommendation_by', '')
+            cart_addition = request.GET.get('cart_addition', "False")
             if tracking_id and prod.id and product_tracking_mapping_id:
                 make_logging_sk_request.delay(
-                    prod.id, product_tracking_mapping_id, tracking_id, 'product_page',position, trigger_point, u_id, utm_campaign, 2, r_p, r_sp, popup_based_product, recommendation_by)
+                    prod.id, product_tracking_mapping_id, tracking_id, 'product_page',position, trigger_point, u_id, utm_campaign, 2, r_p, r_sp, popup_based_product, recommendation_by, cart_addition)
 
 
         root = request.GET.get('root')
