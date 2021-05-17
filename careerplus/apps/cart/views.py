@@ -757,7 +757,7 @@ class PaymentSummaryView(TemplateView, CartMixin):
         referal_product = request.GET.get('referal_product','')
         referal_subproduct = request.GET.get('referal_subproduct','')
         recommendation_by = request.GET.get('recommendation_by', '')
-        cart_addition = request.GET.get('cart_addition', 'False')
+        cart_addition = request.GET.get('cart_addition', "False")
         if tracking_id:
             tracking_id = tracking_id.strip()
         valid = False
