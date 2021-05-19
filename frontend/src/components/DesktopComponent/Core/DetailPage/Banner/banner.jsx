@@ -30,7 +30,8 @@ const BannerCourseDetail = (props) => {
         reqLength,
         showReviewModal,
         pUrl,
-        prd_review_list
+        prd_review_list,
+        setVideoModal
     } = props;
 
     const [discountPrice, discountPriceSelected] = useState(0);
@@ -140,6 +141,11 @@ const BannerCourseDetail = (props) => {
 
     const handleLoginRedirect = () => {
         window.location.href= `${siteDomain}/login/?next=${pUrl}?sm=true`
+    }
+
+    const handleVideoModal = (eve) => {
+        eve.preventDefault();
+        setVideoModal(true);
     }
 
     return (
@@ -286,12 +292,11 @@ const BannerCourseDetail = (props) => {
                                 </ul>
                                 {
                                     (product_detail?.prd_video || completeDescription) &&
-                                        <div className="intro-video">
+                                        <div className="intro-video" >
                                             {
                                                 product_detail?.prd_video &&
                                                     <figure className="intro-video__img">
-                                                        <a rel="noopener noreferrer" target="_blank" href={`https://${product_detail?.prd_video}`}>
-                                                            <iframe src={`https://${product_detail?.prd_video}`} frameBorder="0" />
+                                                        <a rel="noopener noreferrer" onClick={handleVideoModal}>
                                                             <i className="icon-play-video"></i>
                                                             <strong>Intro video</strong>
                                                         </a>

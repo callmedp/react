@@ -20,7 +20,8 @@ const CourseDetailBanner = (props) => {
         pUrl,
         prd_review_list,
         completeDescription,
-        noOfWords
+        noOfWords,
+        setVideoModal,
     } = props;
 
     const dispatch = useDispatch();
@@ -57,6 +58,12 @@ const CourseDetailBanner = (props) => {
         MyGA.SendEvent('Search',`${product_detail?.prd_vendor}`,'ViewAllProductVendor');
         dispatch(trackUser({"query" : tracking_data, "action" :'all_courses_or_certifications'}));
         dispatch(trackUser({"query" : tracking_data, "action" :'exit_product_page'}));
+    }
+
+    const handleVideoModal = (eve) => {
+        eve.preventDefault();
+        console.log("video modal set")
+        setVideoModal(true);
     }
 
     return (
@@ -206,8 +213,7 @@ const CourseDetailBanner = (props) => {
                             {
                                 product_detail?.prd_video && 
                                     <figure className="m-intro-video__img">
-                                        <a href={`https://${product_detail?.prd_video}`} target="_blank">
-                                            <iframe src={`https://${product_detail?.prd_video}`} frameBorder="0" />
+                                        <a onClick={handleVideoModal}>
                                             <i className="micon-play-video"></i>
                                         </a>
                                     </figure>
