@@ -782,11 +782,9 @@ class ProductInformationAPIMixin(object):
         access_duratiopn = dict(DURATION_DICT)
         context = {}
         duration_days = json.loads(product.pVrs).get('var_list')
-        pattr = ProductAttribute.objects.filter(attribute__name='learning_duration',product__id=product.id).first().value_text
-        context.update({'duration': pattr})
         if len(duration_days) != 0:
             context.update({
-                # 'duration': duration_days[0].get('dur_days'),
+                'duration': duration_days[0].get('dur_days'),
                 'access_duration': access_duratiopn.get(duration_days[0].get('duration')),
                 'type': type_dict.get(duration_days[0].get('type'), duration_days[0].get('type')),
                 'label': duration_days[0].get('label'),
