@@ -26,8 +26,8 @@ def get_upload_path_category(instance, filename):
 
 
 def get_upload_path_product_image(instance, filename):
-    return "product_image/{pr_id}/{filename}".format(
-        pr_id=instance.id, filename=get_file_name(filename))
+    return "product_image/images_all/{filename}".format(
+        filename=get_file_name(filename))
 
 
 def get_upload_path_product_icon(instance, filename):

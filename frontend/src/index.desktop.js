@@ -5,7 +5,6 @@ import AppDesktop from './App.desktop';
 import { Provider } from 'react-redux';
 import store from 'store/index';
 import { BrowserRouter } from 'react-router-dom';
-import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 
 ReactDOM.hydrate(
   <React.StrictMode>
@@ -19,4 +18,3 @@ ReactDOM.hydrate(
   document.getElementById('root')
 );
 
-serviceWorkerRegistration.register();

@@ -113,6 +113,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
             'product_type_flow': instance.product.type_flow if instance.product_id else '',
             'heading': instance.product.heading if instance.product_id else '',
             'order_id':instance.order.id,
+            'ready_to_download': True if instance.message_set.filter(candidate_id='celery_task', is_internal=True).count() <= 0 else False,
             'auto_login_method':instance.product.vendor.auto_login_method if instance.product and  instance.product.vendor and instance.product.vendor.auto_login_method else 0
         })
         

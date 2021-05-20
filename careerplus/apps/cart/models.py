@@ -2,6 +2,7 @@ import json
 import logging
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from django.conf import settings
 
 from haystack.query import SearchQuerySet
 
@@ -232,6 +233,17 @@ class LineItem(AbstractAutoDate):
 
         return round(price, 0)
 
+    def save(self, *args, **kwargs):
+        from .tasks import create_lead_on_crm
+        source_type = "cart_summary"
+        if self.cart.first_name and not self.created and not self.parent_id:
+            name = "{} {}".format(self.cart.first_name, self.cart.last_name if self.cart.last_name else '').strip()
+            #create_lead_on_crm(self.cart.id, source_type, name)
+            create_lead_on_crm.apply_async(
+                    (self.cart.id, source_type, name),
+                    countdown=settings.CART_SUMMARY)
+
+        super(LineItem, self).save(*args, **kwargs)
 
 SUBSCRIPTION_STATUS = (
     (-1, "Invalid"),

@@ -249,6 +249,8 @@ CART_DROP_OUT_EMAIL = 1 * 60
 CART_DROP_OUT_LEAD = 3 * 60
 SHIPPING_DROP_OUT_LEAD = 10 * 60
 PAYMENT_DROP_LEAD = 5 * 60
+CART_SUMMARY = 30 * 60
+PAYMENT_OPTION = 15 * 60
 
 # Booster Recruiters
 BOOSTER_RECRUITERS = ['amar.kumar@hindustantimes.com']
@@ -498,6 +500,11 @@ ANALYTIC_TO_LEARNING_PRODUCTFLOWS={
     11:{'type_flow':[17],'sub_type_flow':[]},
 }
 
+# HIRESURE BGV VERIFICATION GLOBAL CONFIGURATION
+HIRESURE_CLIENT_ID = 'z94ntxagadc4ntl0'
+HIRESURE_CLIENT_SECRET = 'gur0v5ndpiofik57jpm96u7cuj3pj6lcnjne'
+HIRESURE_VERIFY_URL = 'https://www.hiresure.ai/bgv_verify/v1/auth/verify'
+HIRESURE_REPORT_URL = 'https://www.hiresure.ai/bgv_verify/v1/view_report/{report_id}'
 
 try:
     from .settings_local import *

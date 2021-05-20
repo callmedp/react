@@ -38,6 +38,7 @@ class OrderItemDetailSerializer(SerializerFieldsMixin,serializers.ModelSerialize
     neo_mail_sent = serializers.ReadOnlyField()
     product_vendor = serializers.SerializerMethodField()
     product_sub_type_flow = serializers.SerializerMethodField()
+    ready_to_download = serializers.SerializerMethodField()
 
 
     
@@ -107,6 +108,10 @@ class OrderItemDetailSerializer(SerializerFieldsMixin,serializers.ModelSerialize
 
     def get_product_sub_type_flow(self,obj):
         return obj.product.sub_type_flow if obj.product else ''
+
+    def get_ready_to_download(self, obj):
+        oi_items = obj.message_set.filter(candidate_id='celery_task', is_internal=True).count()
+        return True if oi_items <= 0 else False
 
 
 

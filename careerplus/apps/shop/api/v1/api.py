@@ -1,4 +1,5 @@
 # Python Core Import
+from shop.models import ProductAttribute
 import logging
 import json
 from datetime import datetime
