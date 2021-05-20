@@ -45,7 +45,7 @@ const DetailPage = (props) => {
     const { mainCourseLoader } = useSelector(store => store.loader);
     const [reviewModal, showReviewModal] = useState(false)
     const prdId = props.match.params.id;
-    const { product_detail, skill, ggn_contact, product_id, product_tracking_mapping_id, providerLength } = useSelector(store => store?.mainCourses);
+    const { product_detail, skill, ggn_contact, product_id, product_tracking_mapping_id, providerLength, video_url } = useSelector(store => store?.mainCourses);
     const meta_tags = product_detail?.meta;
     const [enquiryForm, setEnquiryForm] = useState(false);
     const [videoModal, setVideoModal] = useState(false);
@@ -188,7 +188,7 @@ const DetailPage = (props) => {
                                     <CourseOutline chapter_list={product_detail?.chapter_list} />
                                 }
                                 {/* <CourseOutcome />
-                        <SampleCertificate /> */}
+                                <SampleCertificate /> */}
                                 <HowItWorks steps={product_detail?.dlvry_flow} />
                                 {
                                     (product_detail?.chapter && product_detail?.prd_service === 'assessment') && <TopicsCovered chapter_list={product_detail?.chapter_list} />
@@ -212,7 +212,7 @@ const DetailPage = (props) => {
                                 {/* <CertificateModal /> */}
                                 {reviewModal ? <ReviewModal showReviewModal={showReviewModal} prdId={prdId} product_detail={product_detail} review={product_detail?.review} /> : ""}
 
-                                {videoModal ? <VideoModal setVideoModal = {setVideoModal} />: '' }
+                                {videoModal ? <VideoModal setVideoModal = {setVideoModal} videoUrl = {video_url} />: '' }
                                  
                     </main>
                     <Footer pageType={"homePage"} /></>
