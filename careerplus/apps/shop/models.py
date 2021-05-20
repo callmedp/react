@@ -1850,14 +1850,6 @@ class Product(AbstractProduct, ModelMeta):
             learning_duration=''
         return learning_duration
     
-    def get_video_url(self):
-        video_url=ProductAttribute.objects.filter(attribute__name='video_url',product__id=self.id).first()
-        if video_url:
-            video_url=video_url.value_text
-        else:
-            video_url=''
-        return video_url
-
     @property
     def product_tag_text(self):
         return dict(PRODUCT_TAG_CHOICES).get(self.product_tag)
