@@ -78,7 +78,7 @@ const CourseDetailBanner = (props) => {
     }
 
     return (
-        <div className="m-detail-header ml-15 mt-10">
+        <div className="m-detail-header ml-15 mt-10 of-vis">
 
             <div className="m-detail-heading">
                 <div className="m-detail-heading__icon mt-30">
