@@ -44,9 +44,8 @@ const CourseDetailBanner = (props) => {
     }
 
     const getVideoId = (link) => {
-        return 'mWRsgZuwf_8'
         try{
-            return new URL(link).searchParams.get('v');
+            return new URL("https://"+link).searchParams.get('v');
         }catch{
             return ''
         }

@@ -10,7 +10,7 @@ const EnquiryModal = (props) => {
 
     const embeddedUrl = (link) => {
         try {
-            const url = new URL(link);
+            const url = new URL("https://"+link);
             const id = url.searchParams.get('v');
 
             if (id == null)
