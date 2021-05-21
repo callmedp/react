@@ -145,8 +145,6 @@ const BannerCourseDetail = (props) => {
     const handleLoginRedirect = () => {
         window.location.href= `${siteDomain}/login/?next=${pUrl}?sm=true`
     }
-    console.log('yahahaya')
-    console.log(product_detail?.selected_var?.learning_duration)
     return (
         <>
             { mainCourseCartLoader ? <Loader /> : ''}
