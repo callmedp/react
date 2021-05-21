@@ -12,6 +12,7 @@ import RouteWithSubRoutes from './route';
 import { getHomepageActions } from "apiHandler/homepageApi";
 import DetailPageContainer from 'components/DesktopComponent/Core/DetailPage/detailPage';
 import UserIntentPageContainer from 'components/DesktopComponent/Core/UserIntentPage/userIntentPage';
+import LeadCampaignPageContainer from 'components/DesktopComponent/Core/LeadCampaignPage/leadCampaignPage';
 
 const DesktopAppRouter = () => (
     <div>
@@ -58,6 +59,11 @@ export const routes = [
         path: '/course/:func/:skill/:id/',
         component: DetailPageContainer,
         actionGroup: getDetailPageActions,
+        exact: true
+    },
+    {
+        path: "/LeadCampaignPageContainer",
+        component: LeadCampaignPageContainer,
         exact: true
     },
     {
