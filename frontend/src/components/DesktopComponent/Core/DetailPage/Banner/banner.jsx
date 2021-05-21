@@ -260,7 +260,11 @@ const BannerCourseDetail = (props) => {
                                     <li className="d-flex align-items-center">
                                         <figure className="icon-course-duration mr-10"></figure>
                                         <p>
-                                            Course Duration <strong>{varChecked?.dur_days || product_detail?.selected_var?.dur_days || '--'} Days</strong>
+                                            {
+                                            product_detail?.selected_var?.learning_duration ? <>Course Duration <strong>{varChecked?.learning_duration || product_detail?.selected_var?.learning_duration || '--'} </strong> </>
+                                            :
+                                            <>Course Duration <strong>{varChecked?.dur_days || product_detail?.selected_var?.dur_days || '--'} Days</strong></>
+                                            }
                                         </p>
                                     </li>
                                     : ""
