@@ -115,6 +115,10 @@ const BannerCourseDetail = (props) => {
         return ((fakeP - realP) / fakeP * 100).toFixed(0);
     }
 
+    // chatbot course details
+    window["course_duration"] = product_detail?.selected_var?.learning_duration ? (varChecked?.learning_duration || product_detail?.selected_var?.learning_duration) : (varChecked?.dur_days || product_detail?.selected_var?.dur_days);
+    window["course_fee"] = getProductPrice(varChecked?.inr_price || product_detail?.var_list[0]?.inr_price || product_detail?.pPinb);
+
     const trackJobs = () => {
         let tracking_data = getTrackingInfo();
 

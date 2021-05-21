@@ -32,10 +32,9 @@ import { trackUser } from 'store/Tracking/actions/index.js';
 import ReviewModal from '../../Common/Modals/reviewModal';
 import VideoModal from '../../Common/Modals/videoModal';
 
-
 const DetailPage = (props) => {
     const dispatch = useDispatch();
-    const {product_detail, skill, product_id, product_tracking_mapping_id, providerLength } = useSelector(store => store?.mainCourses);
+    const {product_detail, skill, product_id, product_tracking_mapping_id, providerLength, ggn_contact_full } = useSelector(store => store?.mainCourses);
     const { prd_review_list, prd_rv_current_page, prd_rv_has_next } = useSelector( store => store.reviews );
     
     const meta_tags = product_detail?.meta;
@@ -52,6 +51,14 @@ const DetailPage = (props) => {
     const params = new URLSearchParams(props.location.search);
     const showAfterLoginReviewModal = params.get('sm');
     let currentPage = 1;
+
+    // for chatbot
+    window["course_name"] = product_detail?.prd_H1;
+    window["contact_number_support"] = ggn_contact_full;
+    window["link_interview_service"] = ""
+    window["link_profile_booster"] = ""
+    window["link_resume_builder"] = ""
+    window["link_resume_writer"] = ""
 
     useEffect( () => {
         handleEffects();
