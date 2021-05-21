@@ -113,11 +113,15 @@ class ProductMixin(object):
                 }
             if len(d)!=0:
                 data.update({
-                    'duration':d[0].get('dur_days'), 
                     'type':type_dict.get(d[0].get('type'), d[0].get('type')),  
                     'label':d[0].get('label'), 
                     'level':level_type.get(d[0].get('level'), d[0].get('level')), 
                 })
+                learning_duration = d[0].get('learning_duration')
+                if learning_duration:
+                    data.update({'duration':d[0].get('learning_duration')})
+                else:
+                    data.update({'duration':d[0].get('dur_days')})
             course_data.append(data)
 
         return course_data
