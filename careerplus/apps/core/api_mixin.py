@@ -556,7 +556,7 @@ class CrmApiMixin(object):
             
             resp = requests.post(lead_create_api, data=json.dumps(
                 client_data), headers=headers)
-            if resp.status_code == 201:
+            if resp.status_code in [200, 201]:
                 return True
         except Exception as e:
             logging.getLogger('error_log').error(

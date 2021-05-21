@@ -1,6 +1,7 @@
 # python imports
 import logging
 import json
+import ast
 from django.utils import timezone
 # django imports
 from django.conf import settings
@@ -44,7 +45,7 @@ def put_epay_for_successful_payment(epl_id, epl_market_place_id):
 
 
 @task
-def make_logging_request(tracking_product_id, product_tracking_mapping_id, tracking_id, action, position, trigger_point, u_id, utm_campaign, domain, popup_based_product):
+def make_logging_request(tracking_product_id, product_tracking_mapping_id, tracking_id, action, position, trigger_point, u_id, utm_campaign, domain, popup_based_product, recommendation_by="", cart_addition="False"):
     shine_api_url = settings.SHINE_API_URL
     req_dict, tracking_data = {} ,{}
     headers = dict()
@@ -64,17 +65,36 @@ def make_logging_request(tracking_product_id, product_tracking_mapping_id, track
                      'trigger_point': trigger_point,
                      'u_id': u_id,
                      'utm_campaign':utm_campaign.strip() if utm_campaign.strip().lower() != 'null' else '',
-                     'popup_based_product':popup_based_product})
+                     'popup_based_product':popup_based_product,
+                     'recommendation_by': recommendation_by})
     if not product_tracking_mapping_id:
         logging.getLogger('error_log').error(
                 "tracking details is missing data : {}".format(req_dict))
     try:
+
+        if ast.literal_eval(cart_addition):
+            cart_addition_dict = req_dict.copy()
+            cart_addition_dict.update({
+                'action': 'direct_cart_addition'
+            })
+            requ_addition = requests.post(url_to_hit, data=json.dumps(cart_addition_dict), headers=headers)
+            if requ_addition.status_code == 200:
+                logging.getLogger('info_log').info('Send direct cart addition log data {}'.format(req_dict))
+        else:
+            cart_addition_dict = req_dict.copy()
+            cart_addition_dict.update({
+                'action': 'cart_addition_product_page'
+            })
+            requ_addition = requests.post(url_to_hit, data=json.dumps(cart_addition_dict), headers=headers)
+            if requ_addition.status_code == 200:
+                logging.getLogger('info_log').info('Send direct cart addition log data {}'.format(req_dict))
+
         resp = requests.post(
             url_to_hit, data=json.dumps(req_dict), headers=headers)
         if resp.status_code == 200:
             logging.getLogger('info_log').info(
                 "send tracking data {}".format(req_dict))
-            tracking_last_action = UpdatetrackingCache().update_tracking_last_action(data_dict=req_dict)
+            UpdatetrackingCache().update_tracking_last_action(data_dict=req_dict)
             
         elif not resp:
             logging.getLogger('error_log').error(
@@ -88,7 +108,7 @@ def make_logging_request(tracking_product_id, product_tracking_mapping_id, track
 
 
 @task
-def make_logging_sk_request(tracking_product_id, product_tracking_mapping_id, tracking_id, action, position, trigger_point, u_id, utm_campaign, domain, referal_product, referal_sub_product, popup_based_product):
+def make_logging_sk_request(tracking_product_id, product_tracking_mapping_id, tracking_id, action, position, trigger_point, u_id, utm_campaign, domain, referal_product, referal_sub_product, popup_based_product, recommendation_by="", cart_addition="False"):
     shine_api_url = settings.SHINE_API_URL
     req_dict, tracking_data = {} ,{}
     headers = dict()
@@ -110,11 +130,30 @@ def make_logging_sk_request(tracking_product_id, product_tracking_mapping_id, tr
                      'utm_campaign':utm_campaign.strip() if utm_campaign.strip().lower() != 'null' else '',
                      'referral_product': referal_product,
                      'referal_subproduct': referal_sub_product,
-                     'popup_based_product':popup_based_product})
+                     'popup_based_product':popup_based_product,
+                     'recommendation_by': recommendation_by})
     if not product_tracking_mapping_id:
         logging.getLogger('error_log').error(
                 "tracking details is missing data : {}".format(req_dict))
     try:
+
+        if ast.literal_eval(cart_addition):
+            cart_addition_dict = req_dict.copy()
+            cart_addition_dict.update({
+                'action': 'direct_cart_addition'
+            })
+            requ_addition = requests.post(url_to_hit, data=json.dumps(cart_addition_dict), headers=headers)
+            if requ_addition.status_code == 200:
+                logging.getLogger('info_log').info('Send direct cart addition log data {}'.format(req_dict))
+        else:
+            cart_addition_dict = req_dict.copy()
+            cart_addition_dict.update({
+                'action': 'cart_addition_product_page'
+            })
+            requ_addition = requests.post(url_to_hit, data=json.dumps(cart_addition_dict), headers=headers)
+            if requ_addition.status_code == 200:
+                logging.getLogger('info_log').info('Send direct cart addition log data {}'.format(req_dict))
+
         resp = requests.post(
             url_to_hit, data=json.dumps(req_dict), headers=headers)
         if resp.status_code == 200:
