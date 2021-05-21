@@ -10,7 +10,7 @@ const ReviewModal = (props) => {
 
     const embeddedUrl = (link) => {
         try {
-            const url = new URL(videoUrl);
+            const url = new URL(link);
             const id = url.searchParams.get('v');
 
             if(id == null)
@@ -38,7 +38,7 @@ const ReviewModal = (props) => {
                             !faultyVideoUrl ? (
                                 <iframe width="100%" height="380"
                                     src={`https://www.youtube.com/embed/${embeddedUrl(videoUrl)}?autoplay=1&mute=0&controls=1&modestbranding=1&showinfo=0`}
-                                    frameborder="2"
+                                    frameBorder="2"
                                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                     allowFullScreen
                                 ></iframe>

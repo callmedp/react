@@ -152,6 +152,15 @@ const BannerCourseDetail = (props) => {
         setVideoModal(true);
     }
 
+    const getVideoId = (link) => {
+        
+        try{
+            return new URL(link).searchParams.get('v');
+        }catch{
+            return ''
+        }
+    }
+
     return (
         <>
             { mainCourseCartLoader ? <Loader /> : ''}
@@ -311,7 +320,7 @@ const BannerCourseDetail = (props) => {
                                             product_detail?.prd_video &&
                                                 <figure className="intro-video__img">
                                                     <a rel="noopener noreferrer" onClick={handleVideoModal}>
-                                                        <iframe src={`https://${product_detail?.prd_video}`} frameBorder="0" />
+                                                        <iframe src={`https://www.youtube.com/embed/${getVideoId(product_detail?.prd_video)}`} frameBorder="0" />
                                                         <i className="icon-play-video"></i>
                                                         <strong>Intro video</strong>
                                                     </a>

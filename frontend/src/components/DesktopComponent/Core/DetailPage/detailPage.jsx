@@ -35,7 +35,7 @@ import VideoModal from '../../Common/Modals/videoModal';
 
 const DetailPage = (props) => {
     const dispatch = useDispatch();
-    const {product_detail, skill, product_id, product_tracking_mapping_id, providerLength, video_url} = useSelector(store => store?.mainCourses);
+    const {product_detail, skill, product_id, product_tracking_mapping_id, providerLength } = useSelector(store => store?.mainCourses);
     const { prd_review_list, prd_rv_current_page, prd_rv_has_next } = useSelector( store => store.reviews );
     
     const meta_tags = product_detail?.meta;
@@ -119,7 +119,7 @@ const DetailPage = (props) => {
             }
 
             {   
-                videoModal ? <VideoModal videoModal={videoModal}  setVideoModal={setVideoModal} videoUrl={video_url}/> : ""
+                videoModal ? <VideoModal videoModal={videoModal}  setVideoModal={setVideoModal} videoUrl={product_detail?.prd_video}/> : ""
             }
 
             <Header />
