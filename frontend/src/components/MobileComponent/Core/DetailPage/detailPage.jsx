@@ -45,7 +45,7 @@ const DetailPage = (props) => {
     const { mainCourseLoader } = useSelector(store => store.loader);
     const [reviewModal, showReviewModal] = useState(false)
     const prdId = props.match.params.id;
-    const { product_detail, skill, ggn_contact, product_id, product_tracking_mapping_id, providerLength } = useSelector(store => store?.mainCourses);
+    const { product_detail, skill, ggn_contact, product_id, product_tracking_mapping_id, providerLength, ggn_contact_full } = useSelector(store => store?.mainCourses);
     const meta_tags = product_detail?.meta;
     const [enquiryForm, setEnquiryForm] = useState(false);
     const [videoModal, setVideoModal] = useState(false);
@@ -58,6 +58,14 @@ const DetailPage = (props) => {
     const { prd_review_list, prd_rv_total } = useSelector(store => store.reviews);
     const completeDescription = ((product_detail?.prd_about && (product_detail?.prd_about !== product_detail?.prd_desc)) ? (product_detail?.prd_about + ' <br /> ') : '') + (product_detail?.prd_desc ? product_detail?.prd_desc : '')
     const noOfWords = 250;
+
+    // for chatbot
+    window["course_name"] = product_detail?.prd_H1;
+    window["contact_number_support"] = ggn_contact_full;
+    window["link_interview_service"] = ""
+    window["link_profile_booster"] = ""
+    window["link_resume_builder"] = ""
+    window["link_resume_writer"] = ""
 
     const handleEffects = async () => {
 
@@ -110,6 +118,9 @@ const DetailPage = (props) => {
         }, 0);
         return parseFloat(product) + price;
     };
+
+
+    window["course_fee"] = getProductPrice(varChecked?.inr_price || product_detail?.var_list[0]?.inr_price || product_detail?.pPinb);
 
     const handleScroll = () => {
         const offset = window.scrollY;

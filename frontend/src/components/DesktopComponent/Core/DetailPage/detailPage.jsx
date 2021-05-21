@@ -52,7 +52,7 @@ const DetailPage = (props) => {
     const showAfterLoginReviewModal = params.get('sm');
     let currentPage = 1;
 
-    // for chatbot
+    // for chatbot details
     window["course_name"] = product_detail?.prd_H1;
     window["contact_number_support"] = ggn_contact_full;
     window["link_interview_service"] = ""
