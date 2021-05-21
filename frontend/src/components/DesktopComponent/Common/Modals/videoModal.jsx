@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import Loader from '../Loader/loader';
 
 const ReviewModal = (props) => {
-    const { videoModal, setVideoModal, videoUrl } = props;
+    const { videoModal, setVideoModal, videoUrl, productName } = props;
     const { reviewLoader } = useSelector(store => store.loader);
     const [faultyVideoUrl, setFaultyVideoUrl] = useState(false);
 
@@ -34,6 +34,8 @@ const ReviewModal = (props) => {
 
                 <Modal.Body>
                     <div className="">
+                        <h2>Course Intro</h2>
+                        <p>{productName}</p>
                         {
                             !faultyVideoUrl ? (
                                 <iframe width="100%" height="380"
@@ -43,7 +45,7 @@ const ReviewModal = (props) => {
                                     allowFullScreen
                                 ></iframe>
                             ) : (
-                                <h2>Something went wrong!</h2>
+                                <strong>Something went wrong!</strong>
                             )
                         }
                     </div>

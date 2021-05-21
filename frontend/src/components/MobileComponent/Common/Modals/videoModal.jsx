@@ -4,7 +4,7 @@ import './modals.scss'
 import Loader from '../../Common/Loader/loader';
 
 const EnquiryModal = (props) => {
-    const { setVideoModal, videoUrl } = props
+    const { setVideoModal, videoUrl, productName } = props
     const { needHelpLoader } = useSelector(store => store.loader);
     const  [faultyVideoUrl, setFaultyVideoUrl] = useState(false);
 
@@ -29,7 +29,8 @@ const EnquiryModal = (props) => {
             }
             <div className="m-container m-enquire-now m-form-pos-btm pb-10" data-aos="fade-up" data-aos-duration="500">
                 <span className="m-close" onClick={() => setVideoModal(false)}>x</span>
-                <h2 className="m-heading2 text-center"></h2>
+                <h2 className="m-heading2 text-center">Course Intro</h2>
+                <p>{productName}</p>
                 {
                     !faultyVideoUrl ? (
                         <iframe width="100%" height="280"

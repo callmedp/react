@@ -119,7 +119,7 @@ const DetailPage = (props) => {
             }
 
             {   
-                videoModal ? <VideoModal videoModal={videoModal}  setVideoModal={setVideoModal} videoUrl={product_detail?.prd_video}/> : ""
+                videoModal ? <VideoModal videoModal={videoModal}  setVideoModal={setVideoModal} videoUrl={product_detail?.prd_video} productName={product_detail?.prd_H1} /> : ""
             }
 
             <Header />

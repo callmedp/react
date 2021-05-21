@@ -212,7 +212,7 @@ const DetailPage = (props) => {
                                 {/* <CertificateModal /> */}
                                 {reviewModal ? <ReviewModal showReviewModal={showReviewModal} prdId={prdId} product_detail={product_detail} review={product_detail?.review} /> : ""}
 
-                                {videoModal ? <VideoModal setVideoModal = {setVideoModal} videoUrl = {product_detail?.prd_video} />: '' }
+                                {videoModal ? <VideoModal setVideoModal = {setVideoModal} videoUrl = {product_detail?.prd_video} productName={product_detail?.prd_H1} />: '' }
                                  
                     </main>
                     <Footer pageType={"homePage"} /></>
