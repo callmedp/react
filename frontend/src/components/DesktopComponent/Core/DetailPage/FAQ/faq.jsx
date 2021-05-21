@@ -26,14 +26,12 @@ const FAQ = (props) => {
                             <Accordion defaultActiveKey="0" >
                                 {
                                     (sliceFlag ? faq_list.slice(0, 4) : faq_list)?.map((item, index) => 
-                                        <Card data-aos="fade-up" key={index.toString() + item.question} itemScope itemProp="mainEntity" 
-                                        itemType="https://schema.org/Question" >
+                                        <Card data-aos="fade-up" key={index.toString() + item.question} itemScope itemType="https://schema.org/Question" >
                                             <Accordion.Toggle as={Card.Header} eventKey={index === 0 ? '0' : index} >
                                                 <p className="font-weight-bold" dangerouslySetInnerHTML={{__html : item.question}} onClick={() => MyGA.SendEvent('FAQs','ln_FAQ_click', 'ln_down_arrow_click', 'ln_'+item.question.replace(regex, ''),'', false, true) }></p>
                                                 <meta itemProp="name" content={item.question} />
                                             </Accordion.Toggle>
-                                            <Accordion.Collapse eventKey={index === 0 ? '0' : index} itemProp="acceptedAnswer" itemScope 
-                                                            itemType="https://schema.org/Answer">
+                                            <Accordion.Collapse eventKey={index === 0 ? '0' : index} itemProp="acceptedAnswer" itemScope itemType="https://schema.org/Answer">
                                                 <Card.Body itemProp="text" dangerouslySetInnerHTML={{ __html: item.answer }}>
                                                 </Card.Body>
                                             </Accordion.Collapse>

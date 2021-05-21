@@ -158,4 +158,9 @@ $(document).ready(function () {
             }
     });
 
+    setTimeout(function(){
+        if($('.show_hide_filter')){
+            $('.show_hide_filter').css('display', '')
+        }
+    }, 400);
 });

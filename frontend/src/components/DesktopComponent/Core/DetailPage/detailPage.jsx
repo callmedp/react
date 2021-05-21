@@ -109,7 +109,7 @@ const DetailPage = (props) => {
     };
 
     return (
-        <div>
+        <div itemScope itemType="http://schema.org/Product">
             { mainCourseLoader ? <Loader /> : ''}
             { meta_tags && <MetaContent meta_tags={meta_tags} /> }
 
@@ -151,6 +151,8 @@ const DetailPage = (props) => {
                 setVideoModal={setVideoModal}
                 pUrl={props?.match?.url}
                 prd_review_list={prd_review_list}
+                prd_product={product_detail?.prd_product}
+                upc={product_detail?.pUPC}
             />
 
             { product_detail?.prd_uget && <KeyFeatures prd_uget={product_detail?.prd_uget} /> }

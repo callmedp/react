@@ -66,7 +66,7 @@ const RateProductModal = (props) => {
     //         dispatch(stopReviewLoader());
     //         Swal.fire({
     //             icon: 'error',
-    //             text: 'Sorry! we are unable to fecth your data.'
+    //             text: 'Sorry! we are unable to fetch your data.'
     //         })
     //     }
     // };

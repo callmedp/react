@@ -127,8 +127,8 @@ const DetailPage = (props) => {
         else showReviewModal(false)
     }, [prdId])
 
-    return (
-        <div>
+    return(
+        <div itemScope itemType="http://schema.org/Product">
             { mainCourseLoader ? <Loader /> : ''}
 
             { meta_tags && <MetaContent meta_tags={meta_tags} />}

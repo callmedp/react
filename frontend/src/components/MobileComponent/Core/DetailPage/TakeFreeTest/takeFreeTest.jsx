@@ -7,10 +7,10 @@ import { useDispatch } from 'react-redux';
 
 const TakeFreeTest = (props) => {
     const { should_take_test_url, test_title } = props;
-    const tracking_data = getTrackingInfo();
     const dispatch = useDispatch();
 
     const testRedirection = () => {
+        let tracking_data = getTrackingInfo();
         dispatch(trackUser({"query" : tracking_data, "action" :'take_free_test'}));
     }
 

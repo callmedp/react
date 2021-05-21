@@ -34,7 +34,7 @@ def update_sales_count_product():
                                                                            by_id_product_counts.__len__()))
 
         except Exception as e:
-            logging.getLogger('error_log').info(
+            logging.getLogger('error_log').error(
                 'Error occurred while update Sales count on Product. Debug Info {}'.format(str(e)))
 
 

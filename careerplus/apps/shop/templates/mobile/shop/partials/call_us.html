@@ -39,10 +39,17 @@
 
     {% if not product.is_assesment %}
         {% if not request.amp %}
-        <a class="enquire-cta__chat cls_chat" href="javascript:void(0)" id="enquire_btn" onclick="handleTracking('zendesk_chat')">
-            <i class="icon-chat-2"></i>
-            <span>Chat</span>
-        </a><!-- // Chat -->
+            {% if page in 'talenteconomy-home,talenteconomy-article-details,talenteconomy-author-details,talenteconomy-author-listing,talenteconomy-category' %}
+                <a class="enquire-cta__chat cls_chat" href="javascript:void(0)" id="enquire_btn">
+                    <i class="icon-chat-2"></i>
+                    <span>Chat</span>
+                </a><!-- // Chat -->
+            {% else %}
+                <a class="enquire-cta__chat cls_chat" href="javascript:void(0)" id="enquire_btn"  onclick="handleTracking('zendesk_chat')">
+                    <i class="icon-chat-2"></i>
+                    <span>Chat</span>
+                </a><!-- // Chat -->
+            {% endif %}
         {% endif %}
     {% endif %}
 
