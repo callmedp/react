@@ -1084,7 +1084,6 @@ class PopularInDemandProductsAPI(APIView):
                 paginated_data = offset_paginator(page, courses,size=4)                                                                    
                 courses = paginated_data["data"]
                 course_data = ProductMixin().get_course_json(courses)
-                print(course_data)
                 data.update({ 'courses': course_data})            
         else:
             #get courses and assessments from recommendation engine
