@@ -15,6 +15,8 @@ from haystack.query import SearchQuerySet
 
 from shop.choices import PRODUCT_CHOICES,PRODUCT_TAG_CHOICES, STUDY_MODE, COURSE_TYPE_DICT, COURSE_LEVEL_DICT
 from shop.templatetags.shop_tags import get_faq_list, format_features, format_extra_features
+from shine.core import ShineCandidateDetail
+
 class PopularProductMixin(object):
 
     def popular_courses_algorithm(self, class_category=settings.COURSE_SLUG, quantity=2, category=None):
@@ -82,13 +84,30 @@ class PopularProductMixin(object):
 
 class ProductMixin(object):
 
+    def get_jobs_count(self, course_name):
+        try:
+
+            jobs_count = ShineCandidateDetail().get_jobs(data={ 'job_title': course_name}).get('count', 0)
+            return jobs_count
+
+        except Exception as e:
+
+            logging.getLogger('error_log').error(
+                "Data fetch from shine.com jobs search api failed  - {}".format(e))
+            return 0
+
     def get_course_json(self, courses=[]):
         course_data = []
         mode_choices = dict(STUDY_MODE)
         type_dict = dict(COURSE_TYPE_DICT)
         level_type = dict(COURSE_LEVEL_DICT)
+
         for course in courses:
             d = json.loads(course.pVrs).get('var_list')
+            
+            #This call can be optimized in future
+            no_of_jobs = self.get_jobs_count(course.pNm)
+           
             data = {
                 'id':course.id,
                 'name':course.pNm,
@@ -98,7 +117,7 @@ class ProductMixin(object):
                 'imgAlt':course.pImA,
                 'title':course.pTt,
                 'slug':course.pSg,
-                'jobsAvailable':course.pNJ,
+                'jobsAvailable':no_of_jobs,
                 'skillList': course.pSkilln,
                 'rating': float(course.pARx),
                 'stars': course.pStar,
@@ -126,6 +145,10 @@ class ProductMixin(object):
         assessments_data = []
         mode_choices = dict(STUDY_MODE)
         for assessment in assessments:
+
+            #This call can be optimized in future
+            no_of_jobs = self.get_jobs_count(assessments.pNm)
+
             assessment_data = {
                 'id':assessment.id,
                 'name':assessment.pNm,
@@ -134,7 +157,7 @@ class ProductMixin(object):
                 'imgUrl':assessment.pImg,
                 'rating':assessment.pARx,
                 'stars': assessment.pStar,
-                'jobsAvailable':assessment.pNJ,
+                'jobsAvailable':no_of_jobs,
                 'skillList': assessment.pSkilln,
                 'mode': mode_choices.get(assessment.pStM[0], assessment.pStM[0]) if assessment.pStM else None,
                 'providerName':assessment.pPvn if assessment.pPvn else None,

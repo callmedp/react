@@ -322,10 +322,10 @@ class ShineCandidateDetail(ShineToken):
                 shine_id = self.get_shine_id(email=email, headers=headers)
             if shine_id:
                 jobs_url = "{}/api/v2/search/candidate/{}/simple/?format=json&job_title={}&loc={}&minexp={}&skill={}&page={}".format(
-                    settings.SHINE_SITE, shine_id,data['job_title'],data['loc'],data['minexp'],data['skill'],data['page'])
+                    settings.SHINE_SITE, shine_id,data.get('job_title'),data.get('loc'),data.get('minexp'),data.get('skill'),data.get('page'))
             else:
                 jobs_url = "{}/api/v2/search/simple/?format=json&job_title={}&loc={}&minexp={}&skill={}&q={}&page={}".format(
-                    settings.SHINE_SITE,data['job_title'],data['loc'],data['minexp'],data['skill'],data['q'],data['page'])
+                    settings.SHINE_SITE,data.get('job_title'),data.get('loc'),data.get('minexp'),data.get('skill'),data.get('q'),data.get('page'))
             jobs_response = requests.get(
                 jobs_url, headers=headers, timeout=settings.SHINE_API_TIMEOUT)
             if jobs_response.status_code == 401:
@@ -336,12 +336,13 @@ class ShineCandidateDetail(ShineToken):
                 headers = self.get_api_headers()
                 jobs_response = requests.get(
                     jobs_url, headers=headers,data=data, timeout=settings.SHINE_API_TIMEOUT)
-            if jobs_response.status_code == 200 and jobs_response.json():
+            if jobs_response.status_code == 200 and jobs_response.json(): 
                 return jobs_response.json()
         except Exception as e:
             logging.getLogger('error_log').error('unable to get status details %s'%str(e))
 
         return None
+
 
     #Keyword suggestion for skills and job titles used in Intent capture
     def get_keyword_sugesstion(self,query='',skill_only =False, token=None):
