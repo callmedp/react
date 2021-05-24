@@ -14,7 +14,7 @@ import { getHomepageActionsMobile } from "apiHandler/homepageApi";
 import DetailPageContainer from 'components/MobileComponent/Core/DetailPage/detailPage';
 import { getDetailPageActionsMobile } from "apiHandler/detailsPageApi";
 import UserIntentPageContainer from 'components/MobileComponent/Core/UserIntentPage/userIntentPage';
-
+import LeadCampaignPageContainer from 'components/MobileComponent/Core/LeadCampaignPage/leadCampaignPage';
 
 
 const MobileAppRouter = () => (
@@ -60,6 +60,11 @@ export const routes = [
     {
         path: '/user-intent/:name?',
         component: UserIntentPageContainer,
+        exact: true
+    },
+    {
+        path: "/registration",
+        component: LeadCampaignPageContainer,
         exact: true
     },
     {

@@ -2,7 +2,7 @@ import { takeLatest, call, put } from 'redux-saga/effects';
 import Api from './Api';
 import { fetchLeadManagement, leadManagementFetched } from './actions';
 
-function* mostViewedCourse(action){
+function* leadManagementSaga(action){
     const { payload: { payload, resolve, reject } } = action;
     try {
         const response = yield call(Api.leadManagementApi, payload);
@@ -11,7 +11,8 @@ function* mostViewedCourse(action){
         }
         const item = response?.data;
 
-        yield put(leadManagementFetched({ ...item }))
+        yield put(leadManagementFetched({ ...item }));
+
         return resolve(item)
 
     } catch (e) {
@@ -19,6 +20,6 @@ function* mostViewedCourse(action){
     }
 }
 
-export default function* WatchHomePage() {
-    yield takeLatest(fetchLeadManagement.type, mostViewedCourse);
+export default function* WatchLeadManagementPage() {
+    yield takeLatest(fetchLeadManagement.type, leadManagementSaga);
 }

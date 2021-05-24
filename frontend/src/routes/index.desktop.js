@@ -62,9 +62,9 @@ export const routes = [
         exact: true
     },
     {
-        path: "/LeadCampaignPageContainer",
+        path: "/registration",
         component: LeadCampaignPageContainer,
-        exact: true
+        private: true
     },
     {
         //keep this at the bottom

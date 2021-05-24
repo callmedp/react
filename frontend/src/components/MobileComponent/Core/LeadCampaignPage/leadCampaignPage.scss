@@ -1,36 +1,24 @@
-@import '../../../../styles/functions';
-@import '../../../../styles/variables';
-@import '../../../../styles/mixins';
-.ja-langingpage {
-    box-shadow: $box-shadow;
-    margin: 1rem 5% 2rem 5%;
+@import '../../../../styles-mobile/abstracts';
+
+.m-ja-langingpage {
+    @extend %box-shadow1;
+    margin: 1rem;
     display: flex;
     align-items: center;
       
 }
 
-.ja-form {
+.m-ja-form {
     display: flex;
     align-items: center;
-    min-width: 75rem;
-    position: relative;
+    flex-direction: column;
   
     &__img {
-        width: 33.8rem;
-        min-height: 56rem;
-        background: #F3F9FD url(/media/images/ja-form-bg.jpg) no-repeat right bottom;
-
-        &::before {
-          content: '';
-          background: url(/media/images/ja-form-bg1.png) no-repeat left top;
-          position: absolute;
-          z-index: 99;
-          width: 8rem;
-          height: 11.2rem;
-        }
+        background: url(/media/images/mobile/ja-form-bg1.png) no-repeat left top;
         
         h1 {
             font-size: 2.5rem;
+            line-height: 3rem;
         }
 
         ul {
@@ -59,15 +47,13 @@
         }
     }
     &__form {
-      padding: 2rem 1rem;
-      margin-right: 3rem;
-      margin-left: 3rem;
+      padding: 0 0 4rem 0;
+      width: 85%;
       
       form {
         .form-group{
           position: relative;
           margin-bottom: 1.5rem;
-          width: 100%;
   
           .form-control {
             background: transparent;
@@ -149,7 +135,7 @@
           }
 
           &::after {
-            background: $sprite -382px -173px;
+            background: $sprite -405px -28px;
             width: .8rem;
             height: .5rem;
             right: 1.2rem;
@@ -159,7 +145,7 @@
     }
 }
 
-.social-links-lp {
+.m-social-links-lp {
   display: flex;
   align-items: center;
   font-size: 1.3rem;

@@ -1,11 +1,10 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import './leadCampaignPage.scss';
-import CampaignHeader from '../../Common/CampaignHeader/campaignHeader';
-import Footer from '../../Common/Footer/footer';
+import Header from '../../Common/CampaignHeader/campaignHeader';
+import Footer from '../../Common/Footer/Footer';
 import { useDispatch } from 'react-redux';
 import { InputField, SelectBox, SelectBoxCampaign } from 'formHandler/desktopFormHandler/formFields';
-import {Toast} from '../../Common/Toast/toast';
+import { showSwal } from 'utils/swal';
 import { useForm } from 'react-hook-form';
 import NeedHelpForm from 'formHandler/desktopFormHandler/formData/needHelp';
 import { fetchLeadManagement } from 'store/LeadManagement/actions';
@@ -22,22 +21,21 @@ const LeadCampaignPage = () => {
         try {
             await new Promise((resolve, reject) => dispatch(fetchLeadManagement({ payload: data, resolve, reject })));
             e.target.reset(); // reset after form submit
-            Toast.fire({ type: 'success', title: 'Thank you for your response' })
+            showSwal('success', 'Thank you for your response')
         }
         catch (error) {
-            Toast.fire({ type: 'error', title: 'Something went wrong!' })
+            showSwal('error', 'Something went wrong!')
         }
     }
 
     return (
         <div>
-            <CampaignHeader />
-            <section className="container-fluid">
-                <div className="row">
-                    <div className="ja-langingpage mx-auto">
-                        <div className="ja-form">
-                            <div className="ja-form__img">
-                                <h1 className="heading1 ml-30 mt-70">100% guaranteed Job Assistance Programs</h1>
+            <Header />
+            <section className="container mt-20 mb-50">
+                    <div className="m-ja-langingpage mx-auto">
+                        <div className="m-ja-form">
+                            <div className="m-ja-form__img">
+                                <h1 className="m-heading1 ml-30 mt-70">100% guaranteed Job Assistance Programs</h1>
                                 <ul>
                                     <li>Google/Azure Certification </li>
                                     <li>Datascience </li>
@@ -47,15 +45,15 @@ const LeadCampaignPage = () => {
                                     <li>Amazon Web Services ( AWS Certification)</li>
                                 </ul>
                             </div>
-                            <div className="ja-form__form flex-1">
+                            <div className="m-ja-form__form">
                                 <form className="mt-30" onSubmit={handleSubmit(onSubmit)}>
                                     <InputField attributes={NeedHelpForm.name} register={register} errors={!!errors ? errors[NeedHelpForm.name.name] : false} />
 
                                     <InputField attributes={NeedHelpForm.emailCampaign} register={register} errors={!!errors ? errors[NeedHelpForm.emailCampaign.name] : ''} />
 
                                     <div className="d-flex">
-                                        <SelectBox attributes={NeedHelpForm.country_code} register={register} />
-                                        <InputField attributes={NeedHelpForm.mobile} register={register} errors={!!errors ? errors[NeedHelpForm.mobile.name] : ''} />
+                                            <SelectBox attributes={NeedHelpForm.country_code} register={register} />
+                                            <InputField attributes={NeedHelpForm.mobile} register={register} errors={!!errors ? errors[NeedHelpForm.mobile.name] : ''} />
                                     </div>
 
                                     <div className="custom-select-box w-100">
@@ -63,16 +61,21 @@ const LeadCampaignPage = () => {
                                     </div>
                                     <button type="submit" className="btn btn-primary submit-btn w-100" role="button">Submit</button>
                                 </form>
-                                <div className="social-links-lp mx-auto mt-50">
+                                <div className="m-social-links-lp mx-auto mt-50">
                                     <p>Follow us on :</p>
-                                    <a href="https://www.facebook.com/shinelearningdotcom/" className="icon-facebook mt-0" onClick={() =>  MyGA.SendEvent('ln_new_homepage','ln_social_sign_in', 'ln_social_sign_in', 'facebook','', false, true)}></a>
-                                    <a  href="https://in.linkedin.com/company/shinelearning" className="icon-linkedin" onClick={() =>  MyGA.SendEvent('ln_new_homepage','ln_social_sign_in', 'ln_social_sign_in', 'linkedin','', false, true)}></a>
-                                    <a href="https://twitter.com/shinelearning" className="icon-twitter mt-5" onClick={() =>  MyGA.SendEvent('ln_new_homepage','ln_social_sign_in', 'ln_social_sign_in', 'twitter','', false, true)}></a>
+                                    <a href="https://www.facebook.com/shinelearningdotcom/" onClick={() => MyGA.SendEvent('social_media_follow','ln_social_media_follow', 'ln_facebook', 'homepage','', false, true)}>
+                                        <figure className="micon-facebook"></figure>
+                                    </a>
+                                    <a href="https://in.linkedin.com/company/shinelearning" onClick={() => MyGA.SendEvent('social_media_follow','ln_social_media_follow', 'ln_linkedin', 'homepage','', false, true)}>
+                                        <figure className="micon-linkedin"></figure>
+                                    </a>
+                                    <a href="https://twitter.com/shinelearning" onClick={() =>  MyGA.SendEvent('social_media_follow','ln_social_media_follow', 'ln_twitter', 'homepage','', false, true)}>
+                                        <figure className="micon-twitter"></figure>
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
             </section>
             <Footer />
         </div>
