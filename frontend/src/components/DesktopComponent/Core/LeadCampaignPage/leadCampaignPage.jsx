@@ -10,10 +10,12 @@ import { useForm } from 'react-hook-form';
 import NeedHelpForm from 'formHandler/desktopFormHandler/formData/needHelp';
 import { fetchLeadManagement } from 'store/LeadManagement/actions';
 import { MyGA } from 'utils/ga.tracking.js';
+import { Helmet } from 'react-helmet';
 
-const LeadCampaignPage = () => {
+const LeadCampaignPage = (props) => {
     const dispatch = useDispatch();
     const { register, handleSubmit, errors } = useForm();
+    const { history } = props;
 
     const onSubmit = async (data, e) => {
         data['lsource'] = 4;
@@ -23,6 +25,7 @@ const LeadCampaignPage = () => {
             await new Promise((resolve, reject) => dispatch(fetchLeadManagement({ payload: data, resolve, reject })));
             e.target.reset(); // reset after form submit
             Toast.fire({ type: 'success', title: 'Thank you for your response' })
+            history.push('');
         }
         catch (error) {
             Toast.fire({ type: 'error', title: 'Something went wrong!' })
@@ -31,6 +34,9 @@ const LeadCampaignPage = () => {
 
     return (
         <div>
+            <Helmet>
+                <meta name="robots" content="noindex, nofollow" />
+            </Helmet>
             <CampaignHeader />
             <section className="container-fluid">
                 <div className="row">

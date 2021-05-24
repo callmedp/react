@@ -9,10 +9,12 @@ import { useForm } from 'react-hook-form';
 import NeedHelpForm from 'formHandler/desktopFormHandler/formData/needHelp';
 import { fetchLeadManagement } from 'store/LeadManagement/actions';
 import { MyGA } from 'utils/ga.tracking.js';
+import { Helmet } from 'react-helmet';
 
-const LeadCampaignPage = () => {
+const LeadCampaignPage = (props) => {
     const dispatch = useDispatch();
     const { register, handleSubmit, errors } = useForm();
+    const { history } = props;
 
     const onSubmit = async (data, e) => {
         data['lsource'] = 4;
@@ -21,7 +23,8 @@ const LeadCampaignPage = () => {
         try {
             await new Promise((resolve, reject) => dispatch(fetchLeadManagement({ payload: data, resolve, reject })));
             e.target.reset(); // reset after form submit
-            showSwal('success', 'Thank you for your response')
+            showSwal('success', 'Thank you for your response');
+            history.push('');
         }
         catch (error) {
             showSwal('error', 'Something went wrong!')
@@ -30,6 +33,9 @@ const LeadCampaignPage = () => {
 
     return (
         <div>
+            <Helmet>
+                <meta name="robots" content="noindex, nofollow" />
+            </Helmet>
             <Header />
             <section className="container mt-20 mb-50">
                     <div className="m-ja-langingpage mx-auto">

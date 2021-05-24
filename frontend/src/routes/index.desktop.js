@@ -64,7 +64,7 @@ export const routes = [
     {
         path: "/registration",
         component: LeadCampaignPageContainer,
-        private: true
+        // private: true
     },
     {
         //keep this at the bottom
