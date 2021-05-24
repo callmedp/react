@@ -31,6 +31,7 @@ const BannerCourseDetail = (props) => {
         showReviewModal,
         pUrl,
         prd_review_list,
+        setVideoModal,
         prd_product,
         upc
     } = props;
@@ -146,6 +147,20 @@ const BannerCourseDetail = (props) => {
         window.location.href= `${siteDomain}/login/?next=${pUrl}?sm=true`
     }
 
+    const handleVideoModal = (eve) => {
+        eve.preventDefault();
+        setVideoModal(true);
+    }
+
+    const getVideoId = (link) => {
+        
+        try{
+            return new URL("https://"+link).searchParams.get('v');
+        }catch{
+            return ''
+        }
+    }
+
     return (
         <>
             { mainCourseCartLoader ? <Loader /> : ''}
@@ -245,7 +260,16 @@ const BannerCourseDetail = (props) => {
                                     <li className="d-flex align-items-center">
                                         <figure className="icon-course-duration mr-10"></figure>
                                         <p>
-                                            Course Duration <strong>{varChecked?.dur_days || product_detail?.selected_var?.dur_days || '--'} Days</strong>
+                                            {
+                                            product_detail?.selected_var?.learning_duration ? 
+                                                <>
+                                                    Course Duration <strong>{varChecked?.learning_duration || product_detail?.selected_var?.learning_duration || '--'} </strong>
+                                                </>
+                                                :
+                                                <>
+                                                    Course Duration <strong>{varChecked?.dur_days || product_detail?.selected_var?.dur_days || '--'}</strong>
+                                                </>
+                                            }
                                         </p>
                                     </li>
                                     : ""
@@ -304,8 +328,8 @@ const BannerCourseDetail = (props) => {
                                         {
                                             product_detail?.prd_video &&
                                                 <figure className="intro-video__img">
-                                                    <a rel="noopener noreferrer" target="_blank" href={`https://${product_detail?.prd_video}`}>
-                                                        <iframe src={`https://${product_detail?.prd_video}`} frameBorder="0" />
+                                                    <a rel="noopener noreferrer" onClick={handleVideoModal}>
+                                                        <iframe src={`https://www.youtube.com/embed/${getVideoId(product_detail?.prd_video)}`} frameBorder="0" />
                                                         <i className="icon-play-video"></i>
                                                         <strong>Intro video</strong>
                                                     </a>
