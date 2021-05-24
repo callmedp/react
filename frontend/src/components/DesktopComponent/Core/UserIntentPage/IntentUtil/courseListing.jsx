@@ -48,8 +48,7 @@ const CourseLisiting = (props) => {
                                             <span className="ml-10">{course.rating}/5</span>
                                         </span>
                                         <p className="course__duration-mode mt-20">
-                                            {course.duration ? <>Duration: <strong>{+course.duration > 1 ? course.duration + " days" :
-                                                course.duration + " day"}</strong></> : ''}  {course.duration && course.mode ? '|' : ''}  {course.mode ? <>Mode: <strong>{course.mode}</strong></> :
+                                            {course.duration ? <>Duration: <strong>{course.duration}</strong></> : ''}  {course.duration && course.mode ? '|' : ''}  {course.mode ? <>Mode: <strong>{course.mode}</strong></> :
                                                     ''}  {course.mode && course.jobsAvailable ? '|' : ''}  {course.jobsAvailable ? <strong>{+course.jobsAvailable > 1 ? course.jobsAvailable + ' Jobs available' :
                                                         course.jobsAvailable + ' Job available'}</strong> : ''}
                                         </p>

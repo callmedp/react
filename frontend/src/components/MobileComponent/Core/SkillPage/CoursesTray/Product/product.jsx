@@ -70,7 +70,7 @@ const Product = (props) =>{
                 </div>
                 {
                     productType === 'Assessments' ? 
-                        getDurationMode(test_duration, mode, 'minutes') : getDurationMode(duration, mode, 'days')
+                        getDurationMode(test_duration, mode, 'minutes') : getDurationMode(duration, mode, '')
                 }
                 <div className="m-card__price">
                     <strong>{price}/-</strong> 

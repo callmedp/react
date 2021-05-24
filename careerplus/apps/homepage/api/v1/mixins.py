@@ -121,7 +121,11 @@ class ProductMixin(object):
                 if learning_duration:
                     data.update({'duration':d[0].get('learning_duration')})
                 else:
-                    data.update({'duration':str(d[0].get('dur_days'))+' days'})
+                    dur_days = d[0].get('dur_days')
+                    if dur_days == 0:
+                        data.update({'duration':''})
+                    else:
+                        data.update({'duration':str(dur_days)+' days'})
             course_data.append(data)
 
         return course_data
