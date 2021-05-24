@@ -2,7 +2,7 @@
 {% for result in page.object_list %}
 <div class="box row mb-15 js_prod_card pl-0">
     <div class="media">
-        <div class="media-left pr-0">
+        <div class="media-left" style="padding-left:10px; padding-right:10px">
             <a href="{{ result.pURL }}" class="sigma-pro ">
                 <img loading="lazy" aria-label="{{ result.pImA|title }}" src="{{ result.pImg}}" alt="{{ result.pImA|title }}">
                
