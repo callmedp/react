@@ -27,7 +27,7 @@ const ReviewModal = (props) => {
             { reviewLoader ? <Loader /> : ''}
             <Modal show={videoModal}
                 onHide={() => setVideoModal(false)}
-                className="db-modal db-page"
+                className="db-modal db-page yt-modal"
                 dialogClassName="modal-lg"
             >
                 <Modal.Header closeButton></Modal.Header>
