@@ -85,7 +85,7 @@ const Product = (props) => {
                                { !!test_duration ? <>Duration: <strong>{test_duration} minutes</strong>  | </>: ''}  { !!mode ? <>Mode: <strong>{mode}</strong> </> : ''}
                             </div> :
                             <div className="card__duration-mode mt-10">
-                                { !!duration ? <>Duration: <strong>{duration} days</strong>  | </> : '' } { !!mode ? <>Mode: <strong>{mode}</strong> </> : ''}
+                                { !!duration ? <>Duration: <strong>{duration}</strong>  | </> : '' } { !!mode ? <>Mode: <strong>{mode}</strong> </> : ''}
                             </div>
                         }
                         <div className="card__price mt-30">

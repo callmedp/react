@@ -58,7 +58,7 @@ const CourseLisiting = (props) => {
                                         <span>{course?.rating}/5</span>
                                     </span>
                                 </div>
-                                    {course?.test_duration ? getDurationMode(course?.test_duration, course?.mode, 'minutes') : getDurationMode(course?.duration, course?.mode, 'days')}
+                                    {course?.test_duration ? getDurationMode(course?.test_duration, course?.mode, 'minutes') : getDurationMode(course?.duration, course?.mode, '')}
                                 <div className="m-card__price">
                                     <strong>{course?.price}/-</strong> 
                                     {setOpen !== ('upSkill' + course?.id) && <span id={'upSk' + course?.id} className="m-view-more text-right" onClick={(e) => openCourseDetails(e, course?.id)}>View more</span>}
