@@ -14,7 +14,7 @@
     flex-direction: column;
   
     &__img {
-        background: url(/media/images/mobile/ja-form-bg1.png) no-repeat left top;
+        background: url('#{$path}mobile/ja-form-bg1.png') no-repeat left top;
         
         h1 {
             font-size: 2.5rem;
