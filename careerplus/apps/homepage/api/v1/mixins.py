@@ -87,7 +87,7 @@ class ProductMixin(object):
     def get_jobs_count(self, course_name):
         try:
 
-            jobs_count = ShineCandidateDetail().get_jobs(data={ 'job_title': course_name}).get('count', 0)
+            jobs_count = ShineCandidateDetail().get_jobs(data={ 'q': course_name}).get('count', 0)
             return jobs_count
 
         except Exception as e:

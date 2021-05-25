@@ -322,10 +322,10 @@ class ShineCandidateDetail(ShineToken):
                 shine_id = self.get_shine_id(email=email, headers=headers)
             if shine_id:
                 jobs_url = "{}/api/v2/search/candidate/{}/simple/?format=json&job_title={}&loc={}&minexp={}&skill={}&page={}".format(
-                    settings.SHINE_SITE, shine_id,data.get('job_title'),data.get('loc'),data.get('minexp'),data.get('skill'),data.get('page'))
+                    settings.SHINE_SITE, shine_id,data.get('job_title',''),data.get('loc',''),data.get('minexp',''),data.get('skill',''),data.get('page',''))
             else:
                 jobs_url = "{}/api/v2/search/simple/?format=json&job_title={}&loc={}&minexp={}&skill={}&q={}&page={}".format(
-                    settings.SHINE_SITE,data.get('job_title'),data.get('loc'),data.get('minexp'),data.get('skill'),data.get('q'),data.get('page'))
+                    settings.SHINE_SITE,data.get('job_title',''),data.get('loc',''),data.get('minexp',''),data.get('skill',''),data.get('q',''),data.get('page',''))
             jobs_response = requests.get(
                 jobs_url, headers=headers, timeout=settings.SHINE_API_TIMEOUT)
             if jobs_response.status_code == 401:
