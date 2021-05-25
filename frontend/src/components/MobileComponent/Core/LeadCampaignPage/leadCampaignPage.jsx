@@ -3,10 +3,11 @@ import './leadCampaignPage.scss';
 import Header from '../../Common/CampaignHeader/campaignHeader';
 import Footer from '../../Common/Footer/Footer';
 import { useDispatch } from 'react-redux';
-import { InputField, SelectBox, SelectBoxCampaign } from 'formHandler/desktopFormHandler/formFields';
+import { InputField, SelectBox, SelectBoxCampaign } from 'formHandler/mobileFormHandler/formFields';
 import { showSwal } from 'utils/swal';
 import { useForm } from 'react-hook-form';
-import NeedHelpForm from 'formHandler/desktopFormHandler/formData/needHelp';
+import EnquireNowForm from 'formHandler/mobileFormHandler/formData/enquireNow';
+import inboxForm from 'formHandler/mobileFormHandler/formData/inboxForm';
 import { fetchLeadManagement } from 'store/LeadManagement/actions';
 import { MyGA } from 'utils/ga.tracking.js';
 import { Helmet } from 'react-helmet';
@@ -53,18 +54,18 @@ const LeadCampaignPage = (props) => {
                             </div>
                             <div className="m-ja-form__form">
                                 <form className="mt-30" onSubmit={handleSubmit(onSubmit)}>
-                                    <InputField attributes={NeedHelpForm.name} register={register} errors={!!errors ? errors[NeedHelpForm.name.name] : false} />
+                                    <InputField attributes={EnquireNowForm.name} register={register} errors={!!errors ? errors[EnquireNowForm.name.name] : false} />
 
-                                    <InputField attributes={NeedHelpForm.emailCampaign} register={register} errors={!!errors ? errors[NeedHelpForm.emailCampaign.name] : ''} />
+                                    <InputField attributes={inboxForm.emailCampaign} register={register} errors={!!errors ? errors[inboxForm.emailCampaign.name] : ''} />
 
                                     <div className="d-flex">
-                                            <SelectBox attributes={NeedHelpForm.country_code} register={register} />
-                                            <InputField attributes={NeedHelpForm.mobile} register={register} errors={!!errors ? errors[NeedHelpForm.mobile.name] : ''} />
+                                            <SelectBox attributes={EnquireNowForm.country_code} register={register} />
+                                            <InputField attributes={inboxForm.mobile} register={register} errors={!!errors ? errors[inboxForm.mobile.name] : ''} />
                                     </div>
 
-                                    <div className="custom-select-box w-100">
-                                        <SelectBoxCampaign attributes={NeedHelpForm.campaign_code} register={register} />
-                                    </div>
+                                    {/* <div className="custom-select-box w-100"> */}
+                                        <SelectBoxCampaign attributes={inboxForm.campaign_code} register={register} />
+                                    {/* </div> */}
                                     <button type="submit" className="btn btn-primary submit-btn w-100" role="button">Submit</button>
                                 </form>
                                 <div className="m-social-links-lp mx-auto mt-50">
