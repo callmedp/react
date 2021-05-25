@@ -106,7 +106,7 @@ class ProductMixin(object):
             d = json.loads(course.pVrs).get('var_list')
             
             #This call can be optimized in future
-            no_of_jobs = self.get_jobs_count(course.pNm)
+            no_of_jobs = self.get_jobs_count(course.pSg)
            
             data = {
                 'id':course.id,
@@ -155,7 +155,7 @@ class ProductMixin(object):
         for assessment in assessments:
 
             #This call can be optimized in future
-            no_of_jobs = self.get_jobs_count(assessments.pNm)
+            no_of_jobs = self.get_jobs_count(assessments.pSg)
 
             assessment_data = {
                 'id':assessment.id,
