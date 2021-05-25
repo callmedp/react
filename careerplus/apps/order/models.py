@@ -590,7 +590,9 @@ class Order(AbstractAutoDate):
                         candidate_obj.resume_generated = False
                         candidate_obj.save()
 
-            generate_resume_for_order(self.id)
+            celery_order_status = generate_resume_for_order.delay(self.id)
+            task_status = {'task_id': celery_order_status.task_id, 'status': celery_order_status.status}
+            self.orderitems.first().message_set.create(message=json.dumps(task_status), candidate_id='celery_task', is_internal=True)
             logging.getLogger('info_log').info(
                 "Generating resume for order {}".format(self.id))
 

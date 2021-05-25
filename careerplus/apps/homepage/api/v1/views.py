@@ -216,6 +216,8 @@ class DashboardDetailApi(APIView):
             ops = order_item.orderitemoperation_set.filter(oi_status__in=[5, 6, 4])
         elif order_item.product.type_flow == 17:
             ops = order_item.orderitemoperation_set.filter(oi_status__in=[0])
+        elif order_item.product.type_flow == 20:
+            ops = order_item.orderitemoperation_set.filter(oi_status__in=[165, 166, 167])
 
         # ops = ops.values_list('id', 'oi_status', 'draft_counter', 'get_user_oi_status', 'created__date',
         #
@@ -1082,7 +1084,6 @@ class PopularInDemandProductsAPI(APIView):
                 paginated_data = offset_paginator(page, courses,size=4)                                                                    
                 courses = paginated_data["data"]
                 course_data = ProductMixin().get_course_json(courses)
-                print(course_data)
                 data.update({ 'courses': course_data})            
         else:
             #get courses and assessments from recommendation engine

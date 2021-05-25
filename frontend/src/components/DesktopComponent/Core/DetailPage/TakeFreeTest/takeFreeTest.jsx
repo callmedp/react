@@ -8,9 +8,10 @@ import { useDispatch } from 'react-redux';
 const TakeFreeTest = (props) => {
     const dispatch = useDispatch();
     const { should_take_test_url } = props;
-    const tracking_data = getTrackingInfo();
 
     const testRedirection = () => {
+        let tracking_data = getTrackingInfo();
+
         dispatch(trackUser({"query" : tracking_data, "action" :'take_free_test'}));
         window.location.replace(`${siteDomain}${should_take_test_url}`);
     }

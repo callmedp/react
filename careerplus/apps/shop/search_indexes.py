@@ -10,7 +10,7 @@ from django.conf import settings
 from shop.choices import DURATION_DICT, convert_to_month
 from shop.choices import (
     DURATION_DICT, convert_to_month)
-from .models import Product, Review
+from .models import Product, Review, ProductAttribute
 
 
 def get_attributes(pv, currency='INR'):
@@ -789,6 +789,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                     'aedp': obj.get_aed_price(),
                     'usdp': obj.get_usd_price(),
                     'gbpp': obj.get_gbp_price(),
+                    'learning_duration':obj.get_learning_duration(),
                     'inr_price': float(obj.inr_price),
                     'fake_inr_price': float(obj.fake_inr_price),
                     'usd_price': float(obj.usd_price),
@@ -824,6 +825,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                         'aedp': pv.get_aed_price(),
                         'usdp': pv.get_usd_price(),
                         'gbpp': pv.get_gbp_price(),
+                        'learning_duration':obj.get_learning_duration(),
                         'inr_price': float(pv.inr_price),
                         'fake_inr_price': float(pv.fake_inr_price),
                         'usd_price': float(pv.usd_price),
@@ -849,6 +851,7 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                         'aedp': pv.get_aed_price(),
                         'usdp': pv.get_usd_price(),
                         'gbpp': pv.get_gbp_price(),
+                        'learning_duration':obj.get_learning_duration(),
                         'inr_price': float(pv.inr_price),
                         'fake_inr_price': float(pv.fake_inr_price),
                         'usd_price': float(pv.usd_price),

@@ -1842,6 +1842,14 @@ class Product(AbstractProduct, ModelMeta):
         cache.set(unique_key, apply_date, 86400)
         return apply_date
 
+    def get_learning_duration(self):
+        learning_duration=ProductAttribute.objects.filter(attribute__name='learning_duration',product__id=self.id).first()
+        if learning_duration:
+            learning_duration=learning_duration.value_text
+        else:
+            learning_duration=''
+        return learning_duration
+    
     @property
     def product_tag_text(self):
         return dict(PRODUCT_TAG_CHOICES).get(self.product_tag)

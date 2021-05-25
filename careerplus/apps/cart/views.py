@@ -343,6 +343,11 @@ class PaymentLoginView(TemplateView, CartMixin):
                     #                                                        shine_id=candidate_id)
                     # self.request.session.update(resp_status)
                     cart_obj.save()
+                    source_type = "cart_summary"
+                    # create_lead_on_crm(cart_pk, source_type, guest_name)
+                    create_lead_on_crm.apply_async(
+                        (cart_obj.pk, source_type, guest_name),
+                        countdown=settings.CART_SUMMARY)
                     return HttpResponseRedirect(reverse('payment:payment-option'))
                 return HttpResponseRedirect(reverse('cart:payment-summary'))
 
@@ -727,6 +732,11 @@ class PaymentSummaryView(TemplateView, CartMixin):
             del self.request.session['tracking_product_id']
         if self.request.session.get('product_availability',''):
             del self.request.session['product_availability']
+        if self.request.session.get('referal_product',''):
+            del self.request.session['referal_product']
+        if self.request.session.get('referal_subproduct',''):
+            del self.request.session['referal_subproduct']
+
 
     def get(self, request, *args, **kwargs):
         token = request.GET.get('token', '')
@@ -740,6 +750,8 @@ class PaymentSummaryView(TemplateView, CartMixin):
         tracking_product_id = request.GET.get('t_prod_id', '')
         product_tracking_mapping_id = request.GET.get('prod_t_m_id', '')
         popup_based_product = request.GET.get('popup_based_product','')
+        referal_product = request.GET.get('referal_product','')
+        referal_subproduct = request.GET.get('referal_subproduct','')
         if tracking_id:
             tracking_id = tracking_id.strip()
         valid = False
@@ -785,6 +797,21 @@ class PaymentSummaryView(TemplateView, CartMixin):
                     if product_tracking_mapping_id != -1:
                         request.session.update(
                             {'product_tracking_mapping_id': product_tracking_mapping_id})
+        elif tracking_id and tracking_product_id:
+            try:
+                cart_pk = self.request.session.get('cart_pk', '')
+                cart_obj = Cart.objects.filter(pk=cart_pk).first()
+                if cart_obj:
+                    product_list = cart_obj.lineitems.values_list('product__id', flat=True)
+                    if int(tracking_product_id) not in product_list:
+                        tracking_id = None
+                        self.remove_tracking()
+                    else:
+                        request.session.update({'tracking_product_id': tracking_product_id,
+                                    'product_availability': tracking_product_id,
+                                    'product_tracking_mapping_id': product_tracking_mapping_id})
+            except Exception as e:
+                logging.getLogger('error_log').error("Unable to send mail: {}".format(e))
 
         if tracking_id:
             request.session.update({
@@ -793,15 +820,17 @@ class PaymentSummaryView(TemplateView, CartMixin):
                 'position': position,
                 'u_id': u_id,
                 'utm_campaign': utm_campaign,
-                'popup_based_product': popup_based_product})
+                'popup_based_product': popup_based_product,
+                'referal_product' : referal_product,
+                'referal_subproduct' : referal_subproduct})
         
         tracking_id= request.session.get('tracking_id','')
-        tracking_product_id= request.session.get('tracking_product_id',tracking_product_id)
-        product_availability = request.session.get('product_availability', tracking_product_id)
+        tracking_product_id= request.session.get('tracking_product_id','')
+        product_availability = request.session.get('product_availability', '')
         position= request.session.get('position',-1)
         u_id= request.session.get('u_id','')
         utm_campaign= request.session.get('utm_campaign','')
-        product_tracking_mapping_id= request.session.get('product_tracking_mapping_id',product_tracking_mapping_id)
+        product_tracking_mapping_id= request.session.get('product_tracking_mapping_id','')
         trigger_point = request.session.get('trigger_point', '')
         referal_product = request.session.get('referal_product', '')
         referal_subproduct = request.session.get('referal_subproduct', '')

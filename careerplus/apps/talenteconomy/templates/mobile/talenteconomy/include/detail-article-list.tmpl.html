@@ -42,12 +42,12 @@
 
     {% endif%}
 
-    <p class="mt-15">
+    <p class="mt-15 fixed-blog-section">
         {% if request.amp %}
         <amp-img src="{{main_article.image.url}}" itemprop="image" width="345" height="262" layout="responsive">
         </amp-img>
         {% else %}
-        <img loading="lazy" aria-label="Main article image" src="{{main_article.image.url}}" class="img-responsive"
+        <img loading="lazy" aria-label="Main article image" src="{{main_article.image.url}}" class="fixed-blog-img"
             itemprop="image">
         {% endif %}
     </p>

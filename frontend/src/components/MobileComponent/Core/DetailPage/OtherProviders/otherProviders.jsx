@@ -1,6 +1,4 @@
-import React, { useEffect } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-// import 'slick-carousel/slick/slick.css';
+import React from 'react';
 import '../../CataloguePage/RecentCourses/recentCourses.scss';
 import ProductCards from '../ProductCards/productCards';
 

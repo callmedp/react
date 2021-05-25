@@ -1,4 +1,5 @@
 # Python Core Import
+from shop.models import ProductAttribute
 import logging
 import json
 from datetime import datetime
@@ -96,6 +97,7 @@ class ProductInformationAPIMixin(object):
         info['start_price'] = product.pPinb
         info['pPinb'] = product.pPinb
         info['pPfinb'] = product.pPfinb
+        info['pUPC'] = product.pUPC
 
         if product.pPc == 'course':
             info['prd_service'] = 'course'
@@ -1121,6 +1123,7 @@ class ProductDetailAPI(ProductInformationAPIMixin, APIView):
                 self.skill = self.product_obj.productskills.filter(skill__active=True).values_list('skill__name',
                                                                                                    flat=True)[:10]
             self.skill == ",".join(self.skill)
+
 
             product_data = self.get_product_detail_context(
                 self.product_obj, self.sqs,

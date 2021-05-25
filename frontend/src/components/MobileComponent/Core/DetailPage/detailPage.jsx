@@ -26,6 +26,7 @@ import CTA from '../../Common/CTA/CTA';
 // import CertificateModal from '../../Common/Modals/CertificateModal';
 import EnquiryModal from '../../Common/Modals/EnquiryModal';
 import ReviewModal from '../../Common/Modals/ReviewModal';
+import VideoModal from '../../Common/Modals/videoModal';
 import '../DetailPage/detailPage.scss';
 import Aos from "aos";
 import MetaContent from '../../Common/MetaContent/metaContent';
@@ -47,13 +48,14 @@ const DetailPage = (props) => {
     const { product_detail, skill, ggn_contact, product_id, product_tracking_mapping_id, providerLength } = useSelector(store => store?.mainCourses);
     const meta_tags = product_detail?.meta;
     const [enquiryForm, setEnquiryForm] = useState(false);
+    const [videoModal, setVideoModal] = useState(false);
     const [varChecked, changeChecked] = useState({});
     const [showStickyNav, setShowStickyNav] = useState(false);
     const [showSearchPage, setShowSearchPage] = useState(false)
     const [frqntProd, addFrqntProd] = useState([]);
     const params = new URLSearchParams(props.location.search);
     const showAfterLoginReviewModal = params.get('sm');
-    const { prd_review_list, prd_rv_total } = useSelector( store => store.reviews );
+    const { prd_review_list, prd_rv_total } = useSelector(store => store.reviews);
     const completeDescription = ((product_detail?.prd_about && (product_detail?.prd_about !== product_detail?.prd_desc)) ? (product_detail?.prd_about + ' <br /> ') : '') + (product_detail?.prd_desc ? product_detail?.prd_desc : '')
     const noOfWords = 250;
 
@@ -63,8 +65,8 @@ const DetailPage = (props) => {
             dispatch(startMainCourseLoader());
 
             if (!(window && window.config && window.config.isServerRendered)) {
-                await new Promise((resolve, reject) => dispatch(fetchMainCourses({ payload: { id: prdId?.split('-')[1], device: 'mobile' },resolve, reject })));
-                
+                await new Promise((resolve, reject) => dispatch(fetchMainCourses({ payload: { id: prdId?.split('-')[1], device: 'mobile' }, resolve, reject })));
+
                 dispatch(stopMainCourseLoader());
             }
             else {
@@ -72,7 +74,7 @@ const DetailPage = (props) => {
                 delete window.config?.isServerRendered;
             }
 
-            await new Promise((resolve, reject) => dispatch(fetchProductReviews({ payload: { prdId: prdId?.split('-')[1], page: 1, device: 'mobile'}, resolve, reject })));
+            await new Promise((resolve, reject) => dispatch(fetchProductReviews({ payload: { prdId: prdId?.split('-')[1], page: 1, device: 'mobile' }, resolve, reject })));
         }
         catch (error) {
             dispatch(stopMainCourseLoader());
@@ -85,134 +87,138 @@ const DetailPage = (props) => {
 
         const query = queryString.parse(search);
         if (query["t_id"]) {
-          query["prod_id"] = prdId?.split('-')[1];
-          query["product_tracking_mapping_id"] = product_tracking_mapping_id;
-          storageTrackingInfo(query);
-          dispatch(
-            trackUser({
-              query: query,
-              action: "product_page",
-            })
-          );
+            query["prod_id"] = prdId?.split('-')[1];
+            query["product_tracking_mapping_id"] = product_tracking_mapping_id;
+            storageTrackingInfo(query);
+            dispatch(
+                trackUser({
+                    query: query,
+                    action: "product_page",
+                })
+            );
         }
         else {
-          let tracking_data = getTrackingInfo();
-          if (tracking_data["prod_id"] != prdId?.split('-')[1] && tracking_data["product_tracking_mapping_id"] === product_tracking_mapping_id) removeTrackingInfo();
+            let tracking_data = getTrackingInfo();
+            if (tracking_data["prod_id"] != prdId?.split('-')[1] && tracking_data["product_tracking_mapping_id"] === product_tracking_mapping_id) removeTrackingInfo();
         }
     };
 
     const getProductPrice = (product) => {
         let price = 0;
         price += frqntProd.reduce((previousValue, currentValue) => {
-          return parseFloat(previousValue) + parseFloat(currentValue.inr_price);
+            return parseFloat(previousValue) + parseFloat(currentValue.inr_price);
         }, 0);
         return parseFloat(product) + price;
     };
 
-    const handleScroll=() => {
+    const handleScroll = () => {
         const offset = window.scrollY;
-        if(offset > 670 ) {
+        if (offset > 670) {
             setShowStickyNav(true);
         }
         else setShowStickyNav(false);
     }
 
-    useEffect( () => {
+    useEffect(() => {
         handleEffects();
         Aos.init({ duration: 2000, once: true, offset: 10, anchorPlacement: 'bottom-bottom' });
         window.addEventListener('scroll', handleScroll);
-        if(getCandidateId() && (showAfterLoginReviewModal === 'true')) showReviewModal(true)
+        if (getCandidateId() && (showAfterLoginReviewModal === 'true')) showReviewModal(true)
         else showReviewModal(false)
     }, [prdId])
 
     return(
-        <div>
+        <div itemScope itemType="http://schema.org/Product">
             { mainCourseLoader ? <Loader /> : ''}
 
-            { meta_tags && <MetaContent meta_tags={meta_tags} /> }
-            { 
-                showSearchPage ? 
-                <SearchPage setShowSearchPage={setShowSearchPage} /> :
-                <>
-                    <MenuNav />
-                    
-                        <>
-                        <header className="m-container m-header detail-bg">
-                        <Header setShowSearchPage={setShowSearchPage} hideName={true}/>
-                        <CourseDetailBanner 
-                            product_detail={product_detail} 
-                            prdId={prdId} 
-                            varChecked={varChecked}
-                            showReviewModal={showReviewModal} 
-                            providerCount = {providerLength}
-                            pUrl={props?.match?.url}
-                            prd_review_list={prd_review_list}
-                            completeDescription={completeDescription}
-                            noOfWords={noOfWords}
-                        />
-                    </header>
-                    <main className="mb-0">
-                        <CourseEnrol product_detail={product_detail} getProductPrice={getProductPrice} frqntProd={frqntProd} varChecked={varChecked} changeChecked={changeChecked} product_id={product_id} />
-                        {
-                            showStickyNav && <StickyNavDetail 
-                                outline={(product_detail?.chapter && product_detail?.prd_service !== 'assessment') ? true : false}
-                                topics={(product_detail?.chapter && product_detail?.prd_service === 'assessment') ? true : false}
-                                faq = {product_detail?.faq ? true : false}
-                                product_detail={product_detail} prdId={prdId} varChecked={varChecked}
-                                frqntProd={frqntProd} product_id={product_id} prd_review_list={prd_review_list}
-                                hasKeyFeatures = {product_detail?.prd_uget ? true : false}
-                                hasWhatYouGet = {product_detail?.pTF === 16 ? true : false}
-                                />
-                        }
-                        {
-                            product_detail?.combo && <ComboIncludes comboList={product_detail.combo_list}/>
-                        }
-                        {
-                            product_detail?.fbt && <FrequentlyBought fbtList ={product_detail.fbt_list} addFrqntProd={addFrqntProd} frqntProd={frqntProd}/>
-                        }
-                        {
-                            (product_detail?.prd_desc && completeDescription?.length > noOfWords) && <About desc={product_detail?.prd_desc}/>
-                        }
-                        {
-                            product_detail?.prd_uget && <KeyFeatures prd_uget={product_detail?.prd_uget} />
-                        }
-                        { 
-                            product_detail?.pTF === 16 && <WhatYouGet prd_vendor_slug={product_detail?.prd_vendor_slug} />
-                        }
+            { meta_tags && <MetaContent meta_tags={meta_tags} />}
+            {
+                showSearchPage ?
+                    <SearchPage setShowSearchPage={setShowSearchPage} /> :
+                    <>
+                        <MenuNav />
 
-                        {
-                            (product_detail?.chapter && product_detail?.prd_service !== 'assessment') && 
-                                <CourseOutline chapter_list={product_detail?.chapter_list}/>
-                        }
-                        {/* <CourseOutcome />
-                        <SampleCertificate /> */}
-                        <HowItWorks steps={product_detail?.dlvry_flow}/>
-                        {
-                            (product_detail?.chapter && product_detail?.prd_service === 'assessment') && <TopicsCovered  chapter_list={product_detail?.chapter_list} />
-                        }
-                        { 
-                            product_detail?.prd_should_lrn &&
-                                <WhoLearn prd_lrn_data={product_detail?.prd_should_lrn_dt} />
-                        }
-                        { skill?.length > 0 && <SkillGain skills={skill}/> }
-                        { product_detail?.free_test && <TakeFreeTest should_take_test_url={product_detail?.shld_take_test_slg} test_title={product_detail?.test_title} /> }
-                        { product_detail?.pop && <OtherProviders pop_list={product_detail?.pop_list} /> }
-                        { product_detail?.faq && <FAQ faq_list={product_detail?.faq_list}/> }
-                        
-                        {(prd_review_list && prd_review_list?.length) > 0 && <Reviews showReviewModal={showReviewModal} product_detail={product_detail} prdId={prdId} pUrl={props?.match?.url} prd_review_list={prd_review_list} prd_rv_total={prd_rv_total} />}
-                        
-                        { skill?.length > 0 && <CoursesMayLike product_id={prdId} skill={skill}/> }
-                        <CTA setEnquiryForm={setEnquiryForm} contact={ggn_contact} />
-                        {
-                            enquiryForm ? <EnquiryModal setEnquiryForm={setEnquiryForm} page="detailPage"/> : null
-                        }
-                        {/* <CertificateModal /> */}
-                        {reviewModal ? <ReviewModal showReviewModal={showReviewModal} prdId={prdId} product_detail={product_detail} review={product_detail?.review}/> :""}
+                        <>
+                            <header className="m-container m-header detail-bg">
+                                <Header setShowSearchPage={setShowSearchPage} hideName={true} />
+                                <CourseDetailBanner
+                                    product_detail={product_detail}
+                                    prdId={prdId}
+                                    varChecked={varChecked}
+                                    showReviewModal={showReviewModal}
+                                    providerCount={providerLength}
+                                    pUrl={props?.match?.url}
+                                    prd_review_list={prd_review_list}
+                                    completeDescription={completeDescription}
+                                    noOfWords={noOfWords}
+                                    setVideoModal={setVideoModal}
+                                />
+                            </header>
+                            <main className="mb-0">
+                                <CourseEnrol product_detail={product_detail} getProductPrice={getProductPrice} frqntProd={frqntProd} varChecked={varChecked} changeChecked={changeChecked} product_id={product_id} />
+                                {
+                                    showStickyNav && <StickyNavDetail
+                                        outline={(product_detail?.chapter && product_detail?.prd_service !== 'assessment') ? true : false}
+                                        topics={(product_detail?.chapter && product_detail?.prd_service === 'assessment') ? true : false}
+                                        faq={product_detail?.faq ? true : false}
+                                        product_detail={product_detail} prdId={prdId} varChecked={varChecked}
+                                        frqntProd={frqntProd} product_id={product_id} prd_review_list={prd_review_list}
+                                        hasKeyFeatures={product_detail?.prd_uget ? true : false}
+                                        hasWhatYouGet={product_detail?.pTF === 16 ? true : false}
+                                    />
+                                }
+                                {
+                                    product_detail?.combo && <ComboIncludes comboList={product_detail.combo_list} />
+                                }
+                                {
+                                    product_detail?.fbt && <FrequentlyBought fbtList={product_detail.fbt_list} addFrqntProd={addFrqntProd} frqntProd={frqntProd} />
+                                }
+                                {
+                                    (product_detail?.prd_desc && completeDescription?.length > noOfWords) && <About desc={product_detail?.prd_desc} />
+                                }
+                                {
+                                    product_detail?.prd_uget && <KeyFeatures prd_uget={product_detail?.prd_uget} />
+                                }
+                                {
+                                    product_detail?.pTF === 16 && <WhatYouGet prd_vendor_slug={product_detail?.prd_vendor_slug} />
+                                }
+
+                                {
+                                    (product_detail?.chapter && product_detail?.prd_service !== 'assessment') &&
+                                    <CourseOutline chapter_list={product_detail?.chapter_list} />
+                                }
+                                {/* <CourseOutcome />
+                                <SampleCertificate /> */}
+                                <HowItWorks steps={product_detail?.dlvry_flow} />
+                                {
+                                    (product_detail?.chapter && product_detail?.prd_service === 'assessment') && <TopicsCovered chapter_list={product_detail?.chapter_list} />
+                                }
+                                {
+                                    product_detail?.prd_should_lrn &&
+                                    <WhoLearn prd_lrn_data={product_detail?.prd_should_lrn_dt} />
+                                }
+                                {skill?.length > 0 && <SkillGain skills={skill} />}
+                                {product_detail?.free_test && <TakeFreeTest should_take_test_url={product_detail?.shld_take_test_slg} test_title={product_detail?.test_title} />}
+                                {product_detail?.pop && <OtherProviders pop_list={product_detail?.pop_list} />}
+                                {product_detail?.faq && <FAQ faq_list={product_detail?.faq_list} />}
+
+                                {(prd_review_list && prd_review_list?.length) > 0 && <Reviews showReviewModal={showReviewModal} product_detail={product_detail} prdId={prdId} pUrl={props?.match?.url} prd_review_list={prd_review_list} prd_rv_total={prd_rv_total} />}
+
+                                {skill?.length > 0 && <CoursesMayLike product_id={prdId} skill={skill} />}
+                                <CTA setEnquiryForm={setEnquiryForm} contact={ggn_contact} />
+                                {
+                                    enquiryForm ? <EnquiryModal setEnquiryForm={setEnquiryForm} page="detailPage" /> : null
+                                }
+                                {/* <CertificateModal /> */}
+                                {reviewModal ? <ReviewModal showReviewModal={showReviewModal} prdId={prdId} product_detail={product_detail} review={product_detail?.review} /> : ""}
+
+                                {videoModal ? <VideoModal setVideoModal = {setVideoModal} videoUrl = {product_detail?.prd_video} productName={product_detail?.prd_H1} />: '' }
+                                 
                     </main>
                     <Footer pageType={"homePage"} /></>
-                </>
+                        </>
             }
-        </div>
+                    </div>
     )
 }
 

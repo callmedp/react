@@ -275,6 +275,10 @@ def get_courses_detail(instance):
         elif oi.oi_draft and oi.oi_draft.name:
             current_status.update({'download_url':reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})+'?path='+oi.oi_draft.name})
 
+    elif oi.product.type_flow == 20:
+        # Background verification flow
+        current_status.update({'status': oi.get_user_oi_status})
+
     if oi.oi_status == 28 or oi.oi_status == 34 or oi.oi_status == 36 or oi.oi_status == 35:
         if oi.days_left_oi_product > 0 and oi.product.is_pause_service:
             if oi.service_pause_status():
@@ -323,6 +327,8 @@ def get_history(instance):
         ops = instance.orderitemoperation_set.filter(oi_status__in=[5, 6, 101, 161, 162, 163, 164])
     elif instance.product.type_flow == 16:
         ops = instance.orderitemoperation_set.filter(oi_status__in=[5, 6, 4])
+    elif instance.product.type_flow == 20:
+        ops = instance.orderitemoperation_set.filter(oi_status__in=[165, 166, 167])
     
     datalist = []
     oi = instance
@@ -471,6 +477,27 @@ def get_history(instance):
                 current_status.update({'take_test':True})
             elif op.oi_draft:
                 current_status.update({'download_url':reverse("dashboard:dashboard-resumedownload",kwargs={'pk':oi.order.pk})+'?path='+op.oi_draft.name})
+            if current_status:
+                datalist.append(current_status)
+
+    elif oi.product.type_flow == 16 and oi.product.sub_type_flow == 1602:
+        for op in ops:
+            current_status = {}
+            date_created = op.created.strftime("%d %b %y")
+            current_status = {'date': date_created, 'status': op.get_user_oi_status}
+            if op.oi_status == 5:
+                current_status.update(
+                    {'take_test': True, 'status': op.get_user_oi_status, 'auto_login_url': oi.autologin_url})
+            elif op.oi_status == 4:
+                current_status.update({'status': op.get_user_oi_status})
+            if current_status:
+                datalist.append(current_status)
+
+    elif oi.product.type_flow == 20:
+        for op in ops:
+            current_status = {}
+            date_created = op.created.strftime("%d %b %y")
+            current_status = {'date': date_created, 'status': op.get_user_oi_status}
             if current_status:
                 datalist.append(current_status)
 
