@@ -133,8 +133,8 @@ class RecommendationMixin(object):
                 recommended_course_ids = [x for x in courses if x not in user_purchased_items]
             else:
                 recommended_course_ids = settings.DEFAULT_LEARNING_COURSE_RECOMMENDATION_PRODUCT_ID
-            # assessments = eval(service_recommendation['a_lst']) 
-            assessments = service_recommendation['a_lst']          
+            assessments = eval(service_recommendation['a_lst']) 
+            #assessments = service_recommendation['a_lst']          
             recommended_assessment_ids = [x for x in assessments if x not in user_purchased_items]
             print(recommended_assessment_ids)
         except Exception as e:
