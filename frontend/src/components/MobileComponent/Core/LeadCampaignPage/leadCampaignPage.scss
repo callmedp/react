@@ -126,21 +126,21 @@
             margin-top: 2rem;
         }
         
-        .custom-select-box {
+        .m-custom-select-box {
 
-          .custom-select {
+          .m-custom-select {
             background: transparent;
-
+            
             &:focus {
               outline: 0;
             }
-          }
 
-          &::after {
-            background: $sprite -405px -28px;
-            width: .8rem;
-            height: .5rem;
-            right: 1.2rem;
+            &::after {
+              background: $sprite -405px -28px !important;
+              // width: .8rem;
+              // height: .5rem;
+              // right: 1.5rem;
+            }
           }
         }
       }
