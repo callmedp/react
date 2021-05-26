@@ -53,6 +53,7 @@ class LeadManagementAPI(APIView):
             lead_source = request.data.get('lsource', 0)
             company = request.data.get('cname', '')
             path = request.data.get('path', '')
+            extra_info = request.data.get('extra', [])
             rejectlist = ['http', 'www', 'href', '***', 'url', '<html>']
             product_offer = request.data.get('product_offer', True)
             name = name + '(' + company + ')' if company else name
@@ -143,7 +144,7 @@ class LeadManagementAPI(APIView):
                 lead = lead_serializer.save()
                 validate = True if lead.email else False
 
-                create_lead_crm.delay(pk=lead.pk, validate=validate, product_offer=product_offer)
+                create_lead_crm.delay(pk=lead.pk, validate=validate, product_offer=product_offer, extra_info=extra_info)
 
                 return APIResponse(message='Thank you for your response', status=status.HTTP_201_CREATED, error=False)
 

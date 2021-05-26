@@ -119,7 +119,7 @@ def add_server_lead_task(query_dict):
 
 
 @task(name="create_lead_crm")
-def create_lead_crm(pk=None, validate=False, product_offer = None):
+def create_lead_crm(pk=None, validate=False, product_offer = None, extra_info=''):
     flag = False
     try:
         data_dict = {}
@@ -176,7 +176,8 @@ def create_lead_crm(pk=None, validate=False, product_offer = None):
             "medium": lead.medium,
             "source": lead.source,
             "utm_parameter": lead.utm_parameter,
-            "sub_campaign":lead.sub_campaign_slug
+            "sub_campaign":lead.sub_campaign_slug,
+            "extra_info": json.dumps(extra_info)
         })
         flag = CrmApiMixin().create_lead_by_api(data_dict=data_dict)
         if flag:
