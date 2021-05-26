@@ -7,7 +7,7 @@ const trackUser = (query, userAction) => {
     if(t_id == "") {
         return;
     }
-    
+
     let productTrackingMappingId = !!query['product_tracking_mapping_id'] ? query['product_tracking_mapping_id'].toString() : "";
     let action = userAction;
     let position = !!query['position'] ? parseInt(query['position']) : "";
@@ -16,7 +16,7 @@ const trackUser = (query, userAction) => {
     let u_id = !!query['u_id']? query['u_id'] : "";
     let utm_campaign = !!query['utm_campaign']? query['utm_campaign']: "";
     let popup_based_product = !!query['popup_based_product']? query['utm_campaign'] : "";
-    let recommendation_by = !!query['recommended_by']? query['recommended_by'] : "";
+    let recommendation_by = !!query['recommendation_by']? query['recommendation_by'] : "";
     let cart_addition = !!query['cart_addition']? query['cart_addition'] : "";
     let domain = 2;
     let loggingData = { t_id: t_id, products: [productTrackingMappingId], action: action, 'position': position, domain: domain, 

@@ -46,7 +46,7 @@ export const removeTrackingInfo = () => {
     localStorage.removeItem("triggerPoint");
     localStorage.removeItem("utmCampaign");
     localStorage.removeItem("popup_based_product");
-    localStorage.removeItem("recommended_by");
+    localStorage.removeItem("recommendation_by");
     localStorage.removeItem("cart_addition");
 }
 
@@ -62,7 +62,7 @@ export const getTrackingUrl = () => {
         var popup_based_product =  localStorage.getItem("popup_based_product");
         var referal_product =  !! localStorage.getItem("referal_product") ? localStorage.getItem("referal_product") : '';
         var referal_subproduct = !! localStorage.getItem("referal_subproduct") ? localStorage.getItem("referal_subproduct") : '';
-        var recommendation_by = !! localStorage.getItem("recommended_by") ? localStorage.getItem("recommended_by") : '';
+        var recommendation_by = !! localStorage.getItem("recommendation_by") ? localStorage.getItem("recommendation_by") : '';
         var cart_addition = !! localStorage.getItem("cart_addition") ? localStorage.getItem("cart_addition") : '';
 
         var tracking_url = `?t_id=${t_id}`;
@@ -73,11 +73,11 @@ export const getTrackingUrl = () => {
         if(trigger_point) tracking_url += `&trigger_point=${trigger_point}`;
         if(utm_campaign) tracking_url += `&utm_campaign=${utm_campaign}`;
         if(popup_based_product) tracking_url += `&popup_based_product=${popup_based_product}`;
-        if(recommendation_by) recommendation_by += `&recommended_by=${recommendation_by}`;
-        if(cart_addition) cart_addition += `&cart_addition=${cart_addition}`;
+        if(recommendation_by) tracking_url += `&recommendation_by=${recommendation_by}`;
+        if(cart_addition) tracking_url += `&cart_addition=${cart_addition}`;
         if(referal_product) tracking_url += `&referal_product=${referal_product}`;
         if(referal_subproduct) tracking_url += `&referal_subproduct=${referal_subproduct}`;
-        
+        // console.log(tracking_url)
         return tracking_url
     }
     return ""
@@ -94,7 +94,7 @@ export const getTrackingInfo = () => {
             "trigger_point": localStorage.getItem("triggerPoint"),
             "utm_campaign": localStorage.getItem("utmCampaign"),
             "popup_based_product": localStorage.getItem("popup_based_product"),
-            "recommended_by": localStorage.getItem("recommended_by"),
+            "recommendation_by": localStorage.getItem("recommendation_by"),
             "cart_addition": localStorage.getItem("cart_addition"),
             "referal_product": !! localStorage.getItem("referal_product") ? localStorage.getItem("referal_product") : '',
             "referal_subproduct": !! localStorage.getItem("referal_subproduct") ? localStorage.getItem("referal_subproduct") : ''
