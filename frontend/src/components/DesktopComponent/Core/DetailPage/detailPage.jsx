@@ -28,6 +28,7 @@ import Loader from '../../Common/Loader/loader';
 import MetaContent from "../../Common/MetaContent/metaContent";
 import queryString from 'query-string';
 import { getTrackingInfo, storageTrackingInfo, removeTrackingInfo, getCandidateId } from 'utils/storage.js';
+import { chatbot_links } from 'utils/constants.js'
 import { trackUser } from 'store/Tracking/actions/index.js';
 import ReviewModal from '../../Common/Modals/reviewModal';
 import VideoModal from '../../Common/Modals/videoModal';
@@ -55,10 +56,12 @@ const DetailPage = (props) => {
     // for chatbot details
     window["course_name"] = product_detail?.prd_H1;
     window["contact_number_support"] = ggn_contact_full;
-    window["link_interview_service"] = ""
-    window["link_profile_booster"] = ""
-    window["link_resume_builder"] = ""
-    window["link_resume_writer"] = ""
+    window["link_interview_service"] = chatbot_links.link_interview_service;
+    window["link_profile_booster"] = chatbot_links.link_profile_booster;
+    window["link_resume_builder"] = chatbot_links.link_resume_builder;
+    window["link_resume_writer"] = chatbot_links.link_resume_writer;
+    window["candidate_id"] = localStorage.getItem('candidateId');
+    window["payment_link"] = "https://learning.shine.com/cart/payment-summary/?prod_id=" + product_id;
 
     useEffect( () => {
         handleEffects();

@@ -4,7 +4,7 @@ import '../../SkillPage/SkillGain/skillGain.scss';
 
 const SkillGain = (props) => {
     const { skills } = props
-    
+    window['course_skills'] = skills.slice(0,4);
     return (
         <section className="m-container mt-0 mb-0 pb-0" data-aos="fade-up">
             <div className="d-flex">
