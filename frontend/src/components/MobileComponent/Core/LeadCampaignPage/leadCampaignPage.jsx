@@ -18,8 +18,8 @@ const LeadCampaignPage = (props) => {
     const { register, handleSubmit, errors } = useForm();
     const { history, location: { search } } = props;
     const campaignQuery = queryString.parse(search);
-
-    if(campaignQuery) history.push('/404')
+    
+    if(Object.keys(campaignQuery).length === 0) history.push('/404')
 
     const onSubmit = async (data, e) => {
         data['lsource'] = 162;
