@@ -11,15 +11,23 @@ import NeedHelpForm from 'formHandler/desktopFormHandler/formData/needHelp';
 import { fetchLeadManagement } from 'store/LeadManagement/actions';
 import { MyGA } from 'utils/ga.tracking.js';
 import { Helmet } from 'react-helmet';
+import queryString from 'query-string';
 
 const LeadCampaignPage = (props) => {
     const dispatch = useDispatch();
     const { register, handleSubmit, errors } = useForm();
-    const { history } = props;
+    const { history, location: { search } } = props;
+    const campaignQuery = queryString.parse(search);
+
+    if(!campaignQuery) history.push('/404')
 
     const onSubmit = async (data, e) => {
-        data['lsource'] = 4;
-        data["source"] = "awscloud";
+        data['lsource'] = 162;
+        data["source"] = campaignQuery['utm_medium'];
+        data["campaign"] = campaignQuery['utm_campaign'];
+
+        data['extra'] = [];
+        data['extra'].push(campaignQuery);
 
         try {
             await new Promise((resolve, reject) => dispatch(fetchLeadManagement({ payload: data, resolve, reject })));
