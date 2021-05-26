@@ -29,6 +29,7 @@ from homepage.models import Testimonial
 from search.helpers import get_recommendations
 from core.common import APIResponse
 from shop.models import (Product, Skill)
+from homepage.api.v1.mixins import ProductMixin
 
 # DRF Import
 from rest_framework.views import APIView
@@ -85,7 +86,7 @@ class ProductInformationAPIMixin(object):
         info['prd_rating'] = round(float(product.pARx), 1)
         info['prd_num_rating'] = product.pRC
         info['prd_num_bought'] = product.pBC
-        info['prd_num_jobs'] = product.pNJ
+        info['prd_num_jobs'] = ProductMixin().get_jobs_count(product.pSg)
         info['prd_vendor'] = product.pPvn
         info['pTF'] = product.pTF
         info['pTg'] = dict(PRODUCT_TAG_CHOICES).get(product.pTg)
