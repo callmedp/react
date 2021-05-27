@@ -31,11 +31,15 @@ import { getTrackingInfo, storageTrackingInfo, removeTrackingInfo, getCandidateI
 import { trackUser } from 'store/Tracking/actions/index.js';
 import ReviewModal from '../../Common/Modals/reviewModal';
 import VideoModal from '../../Common/Modals/videoModal';
-
+import { fetchChatbotScript } from 'store/Authentication/actions';
+import { Helmet } from "react-helmet";
 
 const DetailPage = (props) => {
     const dispatch = useDispatch();
     const {product_detail, skill, product_id, product_tracking_mapping_id, providerLength } = useSelector(store => store?.mainCourses);
+
+    const { loadChatbotScript } = useSelector(store => store?.chatbotScript);
+    console.log(loadChatbotScript)
     const { prd_review_list, prd_rv_current_page, prd_rv_has_next } = useSelector( store => store.reviews );
     
     const meta_tags = product_detail?.meta;
@@ -83,6 +87,8 @@ const DetailPage = (props) => {
             }
 
             await new Promise((resolve, reject) => dispatch(fetchProductReviews({ payload: { prdId: id?.split('-')[1], page: currentPage, device: 'desktop' }, resolve, reject })));
+
+            new Promise((resolve, reject) => dispatch(fetchChatbotScript({ payload: {}, resolve, reject })));
         }
         catch (error) {
             dispatch(stopMainCourseLoader());
@@ -106,9 +112,21 @@ const DetailPage = (props) => {
           let tracking_data = getTrackingInfo();
           if (tracking_data["prod_id"] != id.split('-')[1] && tracking_data["product_tracking_mapping_id"] === product_tracking_mapping_id) removeTrackingInfo();
         }
+
+        localStorage.setItem('script_link', 'https://learning-media-staging-189607.storage.googleapis.com/c/m/chatbot/learning_learning_course_page-1622096786.js');
+
+        // if (typeof document !== 'undefined' && document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]) {
+        //     document.getElementById('root').innerHTML += document.getElementsByClassName('chat-bot')[0];
+        // }
     };
 
     return (
+        <>
+            <Helmet
+            script={[
+                { "src": (localStorage.getItem('script_link') ? localStorage.getItem('script_link') : null), "type": "text/javascript" }
+            ]}
+            />
         <div itemScope itemType="http://schema.org/Product">
             { mainCourseLoader ? <Loader /> : ''}
             { meta_tags && <MetaContent meta_tags={meta_tags} /> }
@@ -224,6 +242,7 @@ const DetailPage = (props) => {
             
             <Footer />
         </div>
+        </>
     )
 }
 

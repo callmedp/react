@@ -7,4 +7,16 @@ const fetchUserInform = (payload = { em: '' }) => {
     return BaseApiService.post(`${siteDomain}${url}`, payload);
 }
 
-export default fetchUserInform;
+const chatbotScriptApi = () => {
+    let url = "";
+
+    url = `${siteDomain}/chatbot/api/app/learning_course_non_loggedIn/get-script/`;
+    // else url = `https://chat.shine.com/chatbot/api/app/learning_course_non_loggedIn/get-script/`;
+
+    return BaseApiService.get(url);
+}
+
+export default {
+    fetchUserInform,
+    chatbotScriptApi
+}
