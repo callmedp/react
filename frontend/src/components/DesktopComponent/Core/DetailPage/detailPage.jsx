@@ -133,11 +133,11 @@ const DetailPage = (props) => {
 
     return (
         <>
-            <Helmet
+            {/* <Helmet
             script={[
                 { "src": (localStorage.getItem('script_link') ? localStorage.getItem('script_link') : null), "type": "text/javascript" }
             ]}
-            />
+            /> */}
         <div itemScope itemType="http://schema.org/Product">
             { mainCourseLoader ? <Loader /> : ''}
             { meta_tags && <MetaContent meta_tags={meta_tags} /> }
