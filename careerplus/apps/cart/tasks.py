@@ -140,7 +140,7 @@ def lead_creation_function(filter_dict=None, cndi_name=None, source_type=None):
                 data_dict.update({
                     "lead_type":2,
                     "source_type":source_type,
-                    "campaign_slug": "cartleads"
+                    "campaign_slug": "cartleadcourses"
                     })
                 lead_create_on_crm(cart_obj, data_dict=data_dict)
                 return

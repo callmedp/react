@@ -24,10 +24,15 @@ class RecommendationMixin(object):
 
     def __init__(self):
         # Recommended services data is to be fetched from LearningAnalytics mongo database.
-        connection_string = 'mongodb://{}:{}@{}/{}'.format(
-            urllib.parse.quote(self.LEARNING_MONGO_USERNAME),urllib.parse.quote(self.LEARNING_MONGO_PASSWORD),
+        if settings.DEBUG:
+            connection_string = 'mongodb://{}/{}'.format(
             self.LEARNING_MONGO_INSTANCE_STR, self.LEARNING_MONGO_DB
-        )
+            )
+        else:
+            connection_string = 'mongodb://{}:{}@{}/{}'.format(
+                urllib.parse.quote(self.LEARNING_MONGO_USERNAME),urllib.parse.quote(self.LEARNING_MONGO_PASSWORD),
+                self.LEARNING_MONGO_INSTANCE_STR, self.LEARNING_MONGO_DB
+            )
         conn = MongoClient(connection_string)
         database = conn[self.LEARNING_MONGO_DB]
         self.coll = database['recos_service_prod']
@@ -107,27 +112,31 @@ class RecommendationMixin(object):
     def get_courses_and_certification_from_analytics_recommendation_db(self, candidate_id=None):
         recommended_course_ids = []
         recommended_assessment_ids = []
-
-        if candidate_id is None:
-            service_recommendation = self.coll.find_one({"fcu": settings.DEFAULT_LEARNING_SERVICE_RECOMMENDATION_CANDIDATE_ID})
-            course_recommendation = self.coll.find_one({"fcu": settings.DEFAULT_LEARNING_SERVICE_RECOMMENDATION_CANDIDATE_ID})
-        else:
-            course_recommendation = self.courses.find_one({"fcu": candidate_id})          
-            service_recommendation = self.coll.find_one({"fcu": candidate_id})
-        if not service_recommendation:
-            service_recommendation = self.coll.find_one({"fcu": settings.DEFAULT_LEARNING_SERVICE_RECOMMENDATION_CANDIDATE_ID})
-        
-        excl_txns = PaymentTxn.objects.filter(
-        status__in=[0, 2, 3, 4, 5,6],
-        payment_mode__in=[6, 7],
-        order__candidate_id=candidate_id)
-        excl_order_list = excl_txns.all().values_list('order_id', flat=True)
-        user_purchased_items = OrderItem.objects.filter(order__candidate_id=candidate_id, no_process=False,order__status__in=[1, 3]).exclude(order__in=excl_order_list).values_list('product__id',flat=True)
-        if course_recommendation:
-            courses = eval(course_recommendation['cand_courses'])
-            recommended_course_ids = [x for x in courses if x not in user_purchased_items]
-        else:
-            recommended_course_ids = settings.DEFAULT_LEARNING_COURSE_RECOMMENDATION_PRODUCT_ID
-        assessments = eval(service_recommendation['a_lst'])           
-        recommended_assessment_ids = [x for x in assessments if x not in user_purchased_items]
+        try:
+            if candidate_id is None:
+                service_recommendation = self.coll.find_one({"fcu": settings.DEFAULT_LEARNING_SERVICE_RECOMMENDATION_CANDIDATE_ID})
+                course_recommendation = self.coll.find_one({"fcu": settings.DEFAULT_LEARNING_SERVICE_RECOMMENDATION_CANDIDATE_ID})
+            else:
+                course_recommendation = self.courses.find_one({"fcu": candidate_id})          
+                service_recommendation = self.coll.find_one({"fcu": candidate_id})
+            if not service_recommendation:
+                service_recommendation = self.coll.find_one({"fcu": settings.DEFAULT_LEARNING_SERVICE_RECOMMENDATION_CANDIDATE_ID})
+            
+            excl_txns = PaymentTxn.objects.filter(
+            status__in=[0, 2, 3, 4, 5,6],
+            payment_mode__in=[6, 7],
+            order__candidate_id=candidate_id)
+            excl_order_list = excl_txns.all().values_list('order_id', flat=True)
+            user_purchased_items = OrderItem.objects.filter(order__candidate_id=candidate_id, no_process=False,order__status__in=[1, 3]).exclude(order__in=excl_order_list).values_list('product__id',flat=True)
+            if course_recommendation:
+                courses = eval(course_recommendation['cand_courses'])
+                recommended_course_ids = [x for x in courses if x not in user_purchased_items]
+            else:
+                recommended_course_ids = settings.DEFAULT_LEARNING_COURSE_RECOMMENDATION_PRODUCT_ID
+            assessments = eval(service_recommendation['a_lst']) 
+            #assessments = service_recommendation['a_lst']          
+            recommended_assessment_ids = [x for x in assessments if x not in user_purchased_items]
+            print(recommended_assessment_ids)
+        except Exception as e:
+            logger.error('ERROR in trending courses :get_courses_and_certification_from_analytics_recommendation_db %s' % str(e))
         return {'courses':recommended_course_ids,'assessment':recommended_assessment_ids}

@@ -30,10 +30,12 @@ import queryString from 'query-string';
 import { getTrackingInfo, storageTrackingInfo, removeTrackingInfo, getCandidateId } from 'utils/storage.js';
 import { trackUser } from 'store/Tracking/actions/index.js';
 import ReviewModal from '../../Common/Modals/reviewModal';
+import VideoModal from '../../Common/Modals/videoModal';
+
 
 const DetailPage = (props) => {
     const dispatch = useDispatch();
-    const {product_detail, skill, product_id, product_tracking_mapping_id, providerLength} = useSelector(store => store?.mainCourses);
+    const {product_detail, skill, product_id, product_tracking_mapping_id, providerLength } = useSelector(store => store?.mainCourses);
     const { prd_review_list, prd_rv_current_page, prd_rv_has_next } = useSelector( store => store.reviews );
     
     const meta_tags = product_detail?.meta;
@@ -46,6 +48,7 @@ const DetailPage = (props) => {
                                     ? (product_detail?.prd_about + ' <br /> ') : '') + (product_detail?.prd_desc ? product_detail?.prd_desc : '')
     const reqLength = 250;
     const [detReviewModal, showReviewModal] = useState(false);
+    const [videoModal, setVideoModal] = useState(false);
     const params = new URLSearchParams(props.location.search);
     const showAfterLoginReviewModal = params.get('sm');
     let currentPage = 1;
@@ -115,6 +118,10 @@ const DetailPage = (props) => {
                 detReviewModal ? <ReviewModal detReviewModal={detReviewModal} prdId={id?.split('-')[1]} showReviewModal={showReviewModal} review={product_detail?.review} user_reviews={product_detail?.user_reviews} /> : ""
             }
 
+            {   
+                videoModal ? <VideoModal videoModal={videoModal}  setVideoModal={setVideoModal} videoUrl={product_detail?.prd_video} productName={product_detail?.prd_H1} /> : ""
+            }
+
             <Header />
 
             {
@@ -141,6 +148,7 @@ const DetailPage = (props) => {
                 completeDescription={completeDescription}
                 reqLength={reqLength}
                 showReviewModal={showReviewModal}
+                setVideoModal={setVideoModal}
                 pUrl={props?.match?.url}
                 prd_review_list={prd_review_list}
                 prd_product={product_detail?.prd_product}
