@@ -24,7 +24,7 @@ const LeadCampaignPage = (props) => {
     const onSubmit = async (data, e) => {
         data['lsource'] = 162;
         data["source"] = campaignQuery['utm_medium'];
-        data["campaign"] = campaignQuery['utm_campaign'];
+        data["campaign"] = campaignQuery['utm_campaign'] || 'awscloud';
 
         data['extra'] = [];
         data['extra'].push(campaignQuery);
