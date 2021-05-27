@@ -33,6 +33,24 @@ export default {
             
         }
     },
+    'emailCampaign': {
+        className: "input_field form-control",
+        type: "text",
+        name: "email",
+        id: "email",
+        label: "Email",
+        placeholder: " ",
+        inputType: 'input',
+        validation: {
+            required:true,
+            pattern:/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
+        },
+        errorMessage: {
+            required: "Email address is required",
+            pattern: "Email address is invalid!",
+            
+        }
+    },
     'mobile': {
         className: "input_field form-control",
         type: "number",
@@ -1260,6 +1278,52 @@ export default {
                 value:"1 340",
             
             }
+        ]
+    },
+    'campaign_code': {
+        name: "msg",
+        inputType: 'select',
+        children: [
+            {
+                text:"AWS",
+                value:"AWS",
+                
+            }, 
+            {
+                text:"Datascience",
+                value:"Datascience",
+                
+            }, 
+            {
+                text:"Six Sigma",
+                value:"Six Sigma",
+                
+            }, 
+            {
+                text:"Google",
+                value:"Google",
+                
+            }, 
+            {
+                text:"Azure",
+                value:"Azure",
+                
+            }, 
+            {
+                text:"Project Management",
+                value:"Project Management",
+                
+            }, 
+            {
+                text:"Digital Marketing",
+                value:"Digital Marketing",
+                
+            }, 
+            {
+                text:"Others",
+                value:"Others",
+                
+            }, 
         ]
     }
 }

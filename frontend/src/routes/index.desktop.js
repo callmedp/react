@@ -12,6 +12,7 @@ import RouteWithSubRoutes from './route';
 import { getHomepageActions } from "apiHandler/homepageApi";
 import DetailPageContainer from 'components/DesktopComponent/Core/DetailPage/detailPage';
 import UserIntentPageContainer from 'components/DesktopComponent/Core/UserIntentPage/userIntentPage';
+import LeadCampaignPageContainer from 'components/DesktopComponent/Core/LeadCampaignPage/leadCampaignPage';
 
 const DesktopAppRouter = () => (
     <div>
@@ -59,6 +60,11 @@ export const routes = [
         component: DetailPageContainer,
         actionGroup: getDetailPageActions,
         exact: true
+    },
+    {
+        path: "/registration/",
+        component: LeadCampaignPageContainer,
+        // private: true
     },
     {
         //keep this at the bottom

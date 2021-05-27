@@ -146,10 +146,6 @@ function* AddToCart(action) {
             appendTracking = getTrackingUrl()
         }
         
-        // if(localStorage.getItem("trackingId")) appendTracking += `?t_id=${localStorage.getItem("trackingId")}`;
-        // if(localStorage.getItem("productId")) appendTracking += `&prod_id=${localStorage.getItem("productId")}`;
-        // if(localStorage.getItem("productTrackingMappingId")) appendTracking += `&prod_t_m_id=${localStorage.getItem("productTrackingMappingId")}`;
-        
         if(cartItems.cart_type === 'cart') return window.location.href = `${siteDomain}${item.cart_url}${appendTracking}`;
 
         else if(cartItems.cart_type === 'express') return window.location.href = `${siteDomain}${item.redirect_url}${appendTracking}`;

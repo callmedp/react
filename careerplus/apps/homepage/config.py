@@ -15,7 +15,7 @@ PAGECHOICES = (
 
 STATIC_PAGE_NAME_CHOICES = (
     (1, 'Privacy Policy'),
-    (2, 'Terms and Condition'),
+    (2, 'Terms and Conditions'),
     (3, 'Disclaimer')
 )
 

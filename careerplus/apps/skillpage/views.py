@@ -63,6 +63,8 @@ class SkillPageView(DetailView, SkillPageMixin):
         skill_id = self.kwargs.get('pk')
         product_tracking_mapping_id = self.request.session.get('product_tracking_mapping_id', '')
         popup_based_product = self.request.session.get('popup_based_product', '')
+        recommended_by = self.request.session.get('recommended_by', '')
+        cart_addition = self.request.session.get('cart_addition', 'False')
 
         if product_tracking_mapping_id == 10:
             self.remove_tracking()
@@ -80,7 +82,7 @@ class SkillPageView(DetailView, SkillPageMixin):
                 'popup_based_product':popup_based_product
             })
             make_logging_request.delay(
-                skill_id, product_tracking_mapping_id, tracking_id, 'skill_page', position, trigger_point, u_id, utm_campaign, 2, popup_based_product)
+                skill_id, product_tracking_mapping_id, tracking_id, 'skill_page', position, trigger_point, u_id, utm_campaign, 2, popup_based_product, recommended_by, cart_addition)
 
         # elif self.request.session.get('tracking_id', '') and self.request.session.get('candidate_id'):
         #     product_tracking_mapping_id = self.request.session.get(
@@ -149,6 +151,8 @@ class SkillPageView(DetailView, SkillPageMixin):
         tracking_product_id = self.request.session.get('tracking_product_id')
         product_tracking_mapping_id = self.request.session.get('product_tracking_mapping_id','')
         popup_based_product = self.request.session.get('popup_based_product', '')
+        recommended_by = self.request.session.get('recommended_by', '')
+        cart_addition = self.request.session.get('cart_addition', 'False')
 
         if tracking_id:
             product_tracking_mapping_id = 10
@@ -179,7 +183,9 @@ class SkillPageView(DetailView, SkillPageMixin):
             'trigger_point': trigger_point, 
             'u_id': u_id, 
             'utm_campaign': utm_campaign,
-            'popup_based_product' : popup_based_product
+            'popup_based_product' : popup_based_product,
+            'recommended_by': recommended_by,
+            'cart_addition': cart_addition
         })
         return context
 
