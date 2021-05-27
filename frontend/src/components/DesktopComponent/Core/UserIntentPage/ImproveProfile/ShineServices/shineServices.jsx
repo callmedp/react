@@ -187,8 +187,8 @@ const ShineServices = (props) => {
                     <Modal.Body>
                         <h2 className="mb-20">Upload Resume</h2>
                             <p>increases the chances of getting more opportunities, with latest resume</p>
-                            <div class="upload-btn-wrapper mt-5">
-                                <button class="btn-upload"><input class="btn-upload" type="file" name="myfile" onChange={fileUploadName} />{filename}</button>  
+                            <div className="upload-btn-wrapper mt-5">
+                                <button className="btn-upload"><input className="btn-upload" type="file" name="myfile" onChange={fileUploadName} />{filename}</button>  
                             </div>
                             <span className={alert ?"d-block mt-10 alert":"d-block mt-10"}>File size should not exceed 5MB. in .doc, PDF, .docx format only</span>
                             <button className="btn btn-primary submit-btn mx-auto mt-30" onClick={fileUpload}>Save</button>
