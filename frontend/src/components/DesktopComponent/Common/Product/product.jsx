@@ -82,10 +82,11 @@ const Product = (props) => {
                             productType === 'assessments' ? 
                             
                             <div className="card__duration-mode mt-10">
-                               { !!test_duration ? <>Duration: <strong>{test_duration} minutes</strong>  | </>: ''}  { !!mode ? <>Mode: <strong>{mode}</strong> </> : ''}
-                            </div> :
+                               { !!test_duration ? <>Duration: <strong>{test_duration} minutes</strong>  | </> : <>&nbsp;</>}  { !!mode ? <>Mode: <strong>{mode}</strong> </> : <>&nbsp;</>}
+                            </div> 
+                            :
                             <div className="card__duration-mode mt-10">
-                                { !!duration ? <>Duration: <strong>{duration}</strong>  | </> : '' } { !!mode ? <>Mode: <strong>{mode}</strong> </> : ''}
+                                { !!duration ? <>Duration: <strong>{duration}</strong>  | </> : <>&nbsp;</> } { !!mode ? <>Mode: <strong>{mode}</strong> </> : <>&nbsp;</> }
                             </div>
                         }
                         <div className="card__price mt-30">
