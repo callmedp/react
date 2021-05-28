@@ -112,6 +112,15 @@ const DetailPage = (props) => {
             let tracking_data = getTrackingInfo();
             if (tracking_data["prod_id"] != prdId?.split('-')[1] && tracking_data["product_tracking_mapping_id"] === product_tracking_mapping_id) removeTrackingInfo();
         }
+
+        const scriptTag = document.createElement('script');
+
+        scriptTag.src = localStorage.getItem('script_link');
+        scriptTag.async = true;
+
+        // console.log(scriptTag.toString())
+
+        document.body.appendChild(scriptTag);
     };
 
     const getProductPrice = (product) => {

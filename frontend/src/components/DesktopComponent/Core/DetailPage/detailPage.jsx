@@ -118,7 +118,7 @@ const DetailPage = (props) => {
           if (tracking_data["prod_id"] != id.split('-')[1] && tracking_data["product_tracking_mapping_id"] === product_tracking_mapping_id) removeTrackingInfo();
         }
 
-        localStorage.setItem('script_link', 'https://learning-media-staging-189607.storage.googleapis.com/c/m/chatbot/learning_learning_course_page-1622193262.js');
+        // localStorage.setItem('script_link', 'https://learning-media-staging-189607.storage.googleapis.com/c/m/chatbot/learning_learning_course_page-1622193262.js');
 
         // localStorage.setItem('script_link', 'https://learning-media-staging-189607.storage.googleapis.com/c/m/chatbot/learning_learning_course_page-1622193262.js');
 
@@ -130,7 +130,7 @@ const DetailPage = (props) => {
 
         const scriptTag = document.createElement('script');
 
-        scriptTag = localStorage.getItem('script_link');
+        scriptTag.src = localStorage.getItem('script_link');
         scriptTag.async = true;
 
         // console.log(scriptTag.toString())
