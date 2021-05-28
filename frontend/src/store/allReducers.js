@@ -20,6 +20,7 @@ import { DashboardMyServicesResumeReducer, OiDetailsReducer } from './DashboardP
 import { VendorUrlReducer } from './DashboardPage/StartCourse/reducer/index';
 import { mainCoursesReducer, ProductReviewsReducer, RecommendedCoursesReducer, AddToCartReducer, AddToCartRedeemReducer } from './DetailPage/reducers';
 import { findRightJobsReducer, upskillYourselfReducer,  serviceRecommendationReducer, ResumeScoreReducer } from './UserIntentPage/reducers';
+import { leadManagementReducer } from './LeadManagement/reducer';
 
 const rootReducer = combineReducers({
     needHelp : NeedHelpReducer,
@@ -58,7 +59,8 @@ const rootReducer = combineReducers({
     resumeScore: ResumeScoreReducer,
     findRightJob: findRightJobsReducer,
     upskillYourself: upskillYourselfReducer,
-    serviceRecommend: serviceRecommendationReducer
+    serviceRecommend: serviceRecommendationReducer,
+    leadManagement: leadManagementReducer
 });
 
 

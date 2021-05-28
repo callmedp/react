@@ -32,6 +32,7 @@ LEAD_LOCATION = (
     (31, "Mailer Course Lead"),
     (32, "Mailer Service Lead"),
     (33, "Mailer Assessment Lead"),
+    (162, 'SEM'),
 
 )
 

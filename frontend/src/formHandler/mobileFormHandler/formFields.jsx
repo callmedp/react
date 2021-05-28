@@ -43,6 +43,25 @@ const SelectBox = (props) => {
     )
 }
 
+const SelectBoxCampaign = (props) => {
+
+    const { attributes: {
+                            name, children, validation
+                        }, register } = props
+
+    return (
+        <div className="m-custom-select-box w-100">
+            <select name={name} className="m-custom-select" ref={register(validation)}>
+                { children?.map((item,index)=>{
+                    return(
+                    <option value={item.value} key={index}>{item.text}</option>
+                    )
+                })}
+            </select>
+        </div>
+    )
+}
+
 const TextArea = (props) => {
     const { attributes: { className, type, name, value, validation, defaultValue, rows, placeholder, label, errorMessage }, register, errors } = props;
 
@@ -134,6 +153,7 @@ const MultiSelectBox = (props) => {
 export {
     InputField,
     SelectBox,
+    SelectBoxCampaign,
     TextArea,
     SelectIntentBox,
     MultiSelectBox

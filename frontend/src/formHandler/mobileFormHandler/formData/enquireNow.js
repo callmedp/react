@@ -31,6 +31,7 @@ export default {
             
         }
     },
+
     'mobile': {
         className: "input_field flex-1",
         type: "number",
@@ -1258,5 +1259,5 @@ export default {
             
             }
         ]
-    }
+    },
 }

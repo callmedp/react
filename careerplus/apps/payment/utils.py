@@ -512,6 +512,7 @@ class UpdatetrackingCache():
             utm_campaign = data_dict.get('utm_campaign','')
             referral_product = data_dict.get('referral_product','')
             referal_subproduct = data_dict.get('referal_subproduct','')
+            recommendation_by = data_dict.get('recommendation_by', '')
 
             cache_data = cache.get('tracking_last_action',{})
             cache_data.update({
@@ -521,7 +522,8 @@ class UpdatetrackingCache():
                         "products" : products,
                         "sub_product" : sub_product,
                         "date_time" : timezone.now(),
-                        "domain" : domain
+                        "domain" : domain,
+                        "recommendation_by": recommendation_by
                     }
                 })
             cache.set('tracking_last_action',cache_data, timeout=None)
