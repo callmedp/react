@@ -5,6 +5,8 @@ import Api from './Api';
 
 function* fetchUserInfos(action) {
     const { payload: { payload, resolve, reject } } = action;
+    yield call(chatbotScriptSaga);
+
     try {
         const response = yield call(Api.fetchUserInform, payload);
         if (!response || response?.error) {
@@ -24,7 +26,7 @@ function* chatbotScriptSaga() {
     var hours = 24; // Reset when storage is more than 24hours
     var now = new Date().getTime();
     var setupTime = localStorage.getItem('setupTime');
-    
+
     try {
         const result = yield call(Api.chatbotScriptApi);
         
@@ -51,5 +53,5 @@ function* chatbotScriptSaga() {
 
 export default function* WatchFetchUserInfo() {
     yield takeLatest(Actions.FETCH_USER, fetchUserInfos);
-    yield takeLatest(Actions.FETCH_CHATBOT_SCRIPT, chatbotScriptSaga);
+    // yield takeLatest(Actions.FETCH_CHATBOT_SCRIPT, chatbotScriptSaga);
 }

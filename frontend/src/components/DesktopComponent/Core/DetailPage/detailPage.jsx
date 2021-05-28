@@ -38,11 +38,7 @@ import { Helmet } from "react-helmet";
 const DetailPage = (props) => {
     const dispatch = useDispatch();
     const {product_detail, skill, product_id, product_tracking_mapping_id, providerLength, ggn_contact_full } = useSelector(store => store?.mainCourses);
-
-    const { loadChatbotScript } = useSelector(store => store?.chatbotScript);
-    console.log(loadChatbotScript)
     const { prd_review_list, prd_rv_current_page, prd_rv_has_next } = useSelector( store => store.reviews );
-    
     const meta_tags = product_detail?.meta;
     const {location: { search }, match: {params: {id}}, history} = props;
     const { mainCourseLoader } = useSelector(store => store.loader);
@@ -98,8 +94,6 @@ const DetailPage = (props) => {
             }
 
             await new Promise((resolve, reject) => dispatch(fetchProductReviews({ payload: { prdId: id?.split('-')[1], page: currentPage, device: 'desktop' }, resolve, reject })));
-
-            new Promise((resolve, reject) => dispatch(fetchChatbotScript({ payload: {}, resolve, reject })));
         }
         catch (error) {
             dispatch(stopMainCourseLoader());
@@ -124,21 +118,42 @@ const DetailPage = (props) => {
           if (tracking_data["prod_id"] != id.split('-')[1] && tracking_data["product_tracking_mapping_id"] === product_tracking_mapping_id) removeTrackingInfo();
         }
 
-        localStorage.setItem('script_link', 'https://learning-media-staging-189607.storage.googleapis.com/c/m/chatbot/learning_learning_course_page-1622096786.js');
+        localStorage.setItem('script_link', 'https://learning-media-staging-189607.storage.googleapis.com/c/m/chatbot/learning_learning_course_page-1622193262.js');
 
+        // localStorage.setItem('script_link', 'https://learning-media-staging-189607.storage.googleapis.com/c/m/chatbot/learning_learning_course_page-1622193262.js');
+
+        // if(document.getElementsByClassName('chat-bot')) {
+        //     console.log(document.getElementsByClassName('chat-bot')[0])
+        //     let aa = document.getElementsByClassName('chat-bot')[0];
+        // }
+
+
+        const scriptTag = document.createElement('script');
+
+        scriptTag = localStorage.getItem('script_link');
+        scriptTag.async = true;
+
+        // console.log(scriptTag.toString())
+
+        document.body.appendChild(scriptTag);
+
+        // if (typeof document !== 'undefined') {
+        //     console.log(document.getElementById('chat-bot'))
+        // // }
+        //     // document.getElementById('root').insertAdjacentElement('beforeend', scriptTag);
+        // }
         // if (typeof document !== 'undefined' && document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]) {
         //     document.getElementById('root').innerHTML += document.getElementsByClassName('chat-bot')[0];
         // }
     };
 
     return (
-        <>
+        <div itemScope itemType="http://schema.org/Product">
             {/* <Helmet
             script={[
-                { "src": (localStorage.getItem('script_link') ? localStorage.getItem('script_link') : null), "type": "text/javascript" }
+                { "src": localStorage.getItem('script_link'), "type": "text/javascript", 'async': true }
             ]}
             /> */}
-        <div itemScope itemType="http://schema.org/Product">
             { mainCourseLoader ? <Loader /> : ''}
             { meta_tags && <MetaContent meta_tags={meta_tags} /> }
 
@@ -253,7 +268,6 @@ const DetailPage = (props) => {
             
             <Footer />
         </div>
-        </>
     )
 }
 
