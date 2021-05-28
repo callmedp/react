@@ -6,14 +6,3 @@ export const FetchUserInfoReducer = (state={}, action) => {
         default: return state;
     }
 }
-
-const chatbotScriptState = {
-    script_link : []
-}
-
-export const ChatbotScriptReducer = (state=chatbotScriptState, action) => {
-    switch(action.type){
-        case Actions.CHATBOT_SCRIPT_FETCHED : return {...chatbotScriptState, ...action.item}
-        default : return state;
-    }
-}

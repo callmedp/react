@@ -36,6 +36,15 @@ const addToCartRedeemApi = (data) => {
     return BaseApiService.post(`${siteDomain}/api/v1/order/direct-order/`, data);
 }
 
+const chatbotScriptApi = () => {
+    let url = "";
+
+    if(localStorage.getItem('candidateId')) url = `${siteDomain}/chatbot/api/app/learning_course_page/get-script`;
+    else url = `${siteDomain}/chatbot/api/app/learning_course_non_loggedIn/get-script/`;
+
+    return BaseApiService.get(url);
+}
+
 export default {
     mainCourses,
     fetchProductReviews,
@@ -43,6 +52,7 @@ export default {
     recommendedCoursesApi,
     EnquireNewSend,
     addToCartApi,
-    addToCartRedeemApi
+    addToCartRedeemApi,
+    chatbotScriptApi
 }   
 

@@ -84,14 +84,6 @@ const HomePage = (props) => {
             // above actions need to be dispatched.
             delete window.config?.isServerRendered
         }
-        
-
-        // const scriptTag = document.createElement('script');
-
-        // scriptTag.src = localStorage.getItem('script_link');
-        // scriptTag.async = true;
-
-        // document.getElementById('root').appendChild(scriptTag);
     }
 
     useEffect(() => {
