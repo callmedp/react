@@ -53,6 +53,7 @@ const DetailPage = (props) => {
     let currentPage = 1;
 
     // for chatbot details
+    window["name"] = localStorage.getItem('userName') ? localStorage.getItem('userName') : 'Customer';
     window["course_name"] = product_detail?.prd_H1;
     window["contact_number_support"] = ggn_contact_full;
     window["link_interview_service"] = chatbot_links.link_interview_service;

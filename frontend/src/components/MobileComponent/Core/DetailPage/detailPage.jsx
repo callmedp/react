@@ -61,6 +61,7 @@ const DetailPage = (props) => {
     const noOfWords = 250;
 
     // for chatbot
+    window["name"] = localStorage.getItem('userName') ? localStorage.getItem('userName') : 'Customer';
     window["course_name"] = product_detail?.prd_H1;
     window["contact_number_support"] = ggn_contact_full;
     window["link_interview_service"] = chatbot_links.link_interview_service;
