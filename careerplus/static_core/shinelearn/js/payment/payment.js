@@ -22,11 +22,11 @@ const saveTrackingRequest = (loggingData1) => {
 
 const trackClickEvent = () => {
     let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'exit_cart', 'position': parseInt(position), 
-        domain: 2, sub_product: trackingProductId , trigger_point : triggerPoint, u_id : uId, utm_campaign : utmCampaign, popup_based_product: popup_based_product};
+        domain: 2, sub_product: trackingProductId , trigger_point : triggerPoint, u_id : uId, utm_campaign : utmCampaign, popup_based_product: popup_based_product, cart_addition: cart_addition, recommendation_by: recommendation_by};
     if (trackingId && productAvailability) {
         if(referal_product){
             let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'exit_cart', 'position': parseInt(position), 
-        domain: 2, sub_product: trackingProductId , trigger_point : triggerPoint, u_id : uId, utm_campaign : utmCampaign, referral_product:parseInt(referal_product), referal_subproduct:referal_subproduct, popup_based_product: popup_based_product};
+        domain: 2, sub_product: trackingProductId , trigger_point : triggerPoint, u_id : uId, utm_campaign : utmCampaign, referral_product:parseInt(referal_product), referal_subproduct:referal_subproduct, popup_based_product: popup_based_product, cart_addition: cart_addition, recommendation_by: recommendation_by};
            makeTrackingRequest(loggingData);
         }else{
         makeTrackingRequest(loggingData);}
@@ -40,11 +40,11 @@ $(document).ready(function () {
 
     $('#review-order-option').click(function () {
         let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'review_order', 'position': parseInt(position), domain: 2, sub_product: trackingProductId,
-            trigger_point : triggerPoint, u_id : uId, utm_campaign : utmCampaign, popup_based_product: popup_based_product };
+            trigger_point : triggerPoint, u_id : uId, utm_campaign : utmCampaign, popup_based_product: popup_based_product, cart_addition: cart_addition, recommendation_by: recommendation_by };
         if (trackingId && productAvailability) {
             if(referal_product){
             let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'review_order', 'position': parseInt(position), 
-        domain: 2, sub_product: trackingProductId , trigger_point : triggerPoint, u_id : uId, utm_campaign : utmCampaign, referral_product:parseInt(referal_product), referal_subproduct:referal_subproduct, popup_based_product: popup_based_product};
+        domain: 2, sub_product: trackingProductId , trigger_point : triggerPoint, u_id : uId, utm_campaign : utmCampaign, referral_product:parseInt(referal_product), referal_subproduct:referal_subproduct, popup_based_product: popup_based_product, cart_addition: cart_addition, recommendation_by: recommendation_by};
             makeTrackingRequest(loggingData);
         }else{
         makeTrackingRequest(loggingData);}

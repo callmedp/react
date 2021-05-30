@@ -249,7 +249,7 @@ COMPRESS_CSS_FILTERS = (
     'compressor.filters.cssmin.CSSMinFilter'
 )
 
-COMPRESS_PRECOMPILERS = ( ('text/scss', 'sass --scss {infile} {outfile}'),)
+COMPRESS_PRECOMPILERS = ( ('text/scss', 'sass {infile} {outfile}'),)
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
