@@ -569,8 +569,8 @@ class UpdatetrackingCache():
                         "utm_campaign" : utm_campaign,
                         "referal_product" : referral_product,
                         "referal_subproduct" : referal_subproduct,
-                        "popup_based_product" : popup_based_product
-                        "recommendation_by" : recommendation_by
+                        "popup_based_product" : popup_based_product,
+                        "recommendation_by" : recommendation_by,
                         "cart_addition" : cart_addition
 
                     },
