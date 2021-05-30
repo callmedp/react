@@ -32,6 +32,7 @@ import { chatbot_links } from 'utils/constants.js'
 import { trackUser } from 'store/Tracking/actions/index.js';
 import ReviewModal from '../../Common/Modals/reviewModal';
 import VideoModal from '../../Common/Modals/videoModal';
+import { Helmet } from "react-helmet";
 
 const DetailPage = (props) => {
     const dispatch = useDispatch();
@@ -115,17 +116,15 @@ const DetailPage = (props) => {
           let tracking_data = getTrackingInfo();
           if (tracking_data["prod_id"] != id.split('-')[1] && tracking_data["product_tracking_mapping_id"] === product_tracking_mapping_id) removeTrackingInfo();
         }
-
-        const scriptTag = document.createElement('script');
-
-        scriptTag.src = localStorage.getItem('script_link');
-        scriptTag.async = true;
-
-        document.body.appendChild(scriptTag);
     };
 
     return (
         <div itemScope itemType="http://schema.org/Product">
+            <Helmet
+            script={[
+                { "src": (localStorage.getItem('script_link') ? localStorage.getItem('script_link') : null), "type": "text/javascript" }
+            ]}
+            />
             { mainCourseLoader ? <Loader /> : ''}
             { meta_tags && <MetaContent meta_tags={meta_tags} /> }
 

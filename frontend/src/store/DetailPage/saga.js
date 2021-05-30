@@ -18,7 +18,6 @@ import { getTrackingUrl } from 'utils/storage.js';
 
 
 function* chatbotScriptSaga() {
-    console.log('eherf')
     var hours = 24; // Reset when storage is more than 24hours
     var now = new Date().getTime();
     var setupTime = localStorage.getItem('setupTime');

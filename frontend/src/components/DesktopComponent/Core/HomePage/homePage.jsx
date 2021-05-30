@@ -24,7 +24,6 @@ import {
 import Loader from '../../Common/Loader/loader';
 import MetaContent from '../../Common/MetaContent/metaContent';
 import { fetchAlreadyLoggedInUser } from "store/Authentication/actions/index";
-import { Helmet } from "react-helmet";
 
 const HomePage = (props) => {
 

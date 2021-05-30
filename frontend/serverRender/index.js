@@ -152,16 +152,12 @@ app.get(expressRoutes, (req, res) => {
                             }
                         }
 
-                        appContent = render(req, routes);
-                        const preloadedState = store.getState()
-
                         return res.render(indexFile, {
                             appContent,
                             preloadedState: JSON.stringify(preloadedState).replace(/</g, '\\u003c'),
-                            config: JSON.stringify(window.config)
+                            config: JSON.stringify(window.config),
                         });
                     }
-
                 });
             });
         });
