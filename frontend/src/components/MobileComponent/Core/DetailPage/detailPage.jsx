@@ -62,6 +62,7 @@ const DetailPage = (props) => {
     const noOfWords = 250;
 
     // for chatbot
+    window["name"] = localStorage.getItem('userName') ? localStorage.getItem('userName') : 'Customer';
     window["course_name"] = product_detail?.prd_H1;
     window["contact_number_support"] = ggn_contact_full;
     window["link_interview_service"] = chatbot_links.link_interview_service;
@@ -69,7 +70,7 @@ const DetailPage = (props) => {
     window["link_resume_builder"] = chatbot_links.link_resume_builder;
     window["link_resume_writer"] = chatbot_links.link_resume_writer;
     window["candidate_id"] = localStorage.getItem('candidateId');
-    window["payment_link"] = "https://learning.shine.com/cart/payment-summary/?prod_id=" + product_id;
+    window["link_payment"] = "https://learning.shine.com/cart/payment-summary/?prod_id=" + product_id;
 
     const handleEffects = async () => {
 
