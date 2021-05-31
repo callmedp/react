@@ -40,6 +40,7 @@ import { chatbot_links } from 'utils/constants.js';
 import { siteDomain } from 'utils/domains.js';
 import { trackUser } from 'store/Tracking/actions/index.js';
 import About from '../DetailPage/About/aboutSection';
+import { Helmet } from "react-helmet";
 
 const DetailPage = (props) => {
     const { location: { search }, history } = props;
@@ -114,15 +115,6 @@ const DetailPage = (props) => {
             let tracking_data = getTrackingInfo();
             if (tracking_data["prod_id"] != prdId?.split('-')[1] && tracking_data["product_tracking_mapping_id"] === product_tracking_mapping_id) removeTrackingInfo();
         }
-
-        const scriptTag = document.createElement('script');
-
-        scriptTag.src = localStorage.getItem('script_link');
-        scriptTag.async = true;
-
-        // console.log(scriptTag.toString())
-
-        document.body.appendChild(scriptTag);
     };
 
     const getProductPrice = (product) => {
@@ -154,6 +146,11 @@ const DetailPage = (props) => {
 
     return(
         <div itemScope itemType="http://schema.org/Product">
+            <Helmet
+            script={[
+                { "src": (localStorage.getItem('script_link') ? localStorage.getItem('script_link') : null), "type": "text/javascript" }
+            ]}
+            />
             { mainCourseLoader ? <Loader /> : ''}
 
             { meta_tags && <MetaContent meta_tags={meta_tags} />}
