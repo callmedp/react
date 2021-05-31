@@ -198,7 +198,11 @@ def make_logging_amount_request(tracking_product_id, product_tracking_mapping_id
                      'referal_subproduct': referal_sub_product,
                      'total_amount' : total_amount,
                      'total_amount_paid' : total_amount_paid, 
-                     'popup_based_product':popup_based_product})
+                     'popup_based_product':popup_based_product,
+                     'recommendation_by':recommendation_by,
+                     'cart_addition':cart_addition
+                     })
+
     if not product_tracking_mapping_id:
         logging.getLogger('error_log').error(
                 "tracking details is missing data : {}".format(req_dict))
