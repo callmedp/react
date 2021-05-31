@@ -36,7 +36,8 @@ import { startMainCourseLoader, stopMainCourseLoader } from 'store/Loader/action
 import Loader from '../../Common/Loader/loader';
 import queryString from 'query-string';
 import { getTrackingInfo, storageTrackingInfo, removeTrackingInfo, getCandidateId } from 'utils/storage.js';
-import { chatbot_links } from 'utils/constants.js'
+import { chatbot_links } from 'utils/constants.js';
+import { siteDomain } from 'utils/domains.js';
 import { trackUser } from 'store/Tracking/actions/index.js';
 import About from '../DetailPage/About/aboutSection';
 
@@ -69,7 +70,7 @@ const DetailPage = (props) => {
     window["link_resume_builder"] = chatbot_links.link_resume_builder;
     window["link_resume_writer"] = chatbot_links.link_resume_writer;
     window["candidate_id"] = localStorage.getItem('candidateId');
-    window["link_payment"] = "https://learning.shine.com/cart/payment-summary/?prod_id=" + product_id;
+    window["link_payment"] = siteDomain+"/cart/payment-summary/?prod_id=" + product_id;
 
     const handleEffects = async () => {
 
