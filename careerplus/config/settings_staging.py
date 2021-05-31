@@ -575,10 +575,3 @@ SHINECPCRM_DICT = {
     'connected_leads': '/api/orders/order-fetch-lead/',
     'timeout': 60,
 }
-
-CART_DROP_OUT_EMAIL = 5
-CART_DROP_OUT_LEAD = 5
-SHIPPING_DROP_OUT_LEAD = 5
-PAYMENT_DROP_LEAD = 5
-CART_SUMMARY = 5
-PAYMENT_OPTION = 5
