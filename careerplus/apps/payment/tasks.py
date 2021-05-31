@@ -174,7 +174,7 @@ def make_logging_sk_request(tracking_product_id, product_tracking_mapping_id, tr
 @task
 def make_logging_amount_request(tracking_product_id, product_tracking_mapping_id, 
     tracking_id, action, position, trigger_point, u_id, utm_campaign, 
-    domain, referal_product, referal_sub_product, total_amount, total_amount_paid, popup_based_product):
+    domain, referal_product, referal_sub_product, total_amount, total_amount_paid, popup_based_product, recommendation_by, cart_addition):
     shine_api_url = settings.SHINE_API_URL
     req_dict, tracking_data = {} ,{}
     headers = dict()
