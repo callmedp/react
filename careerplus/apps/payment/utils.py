@@ -552,6 +552,9 @@ class UpdatetrackingCache():
             referral_product = data_dict.get('referral_product','')
             referal_subproduct = data_dict.get('referal_subproduct','')
             popup_based_product = data_dict.get('popup_based_product', '')
+            recommendation_by = data_dict.get('recommendation_by', '')
+            cart_addition = data_dict.get('cart_addition', '')
+
 
             payment_cache = cache.get('tracking_payment_action', {})
             u_id_payment_cache = payment_cache.get(str(u_id),{})
@@ -566,7 +569,10 @@ class UpdatetrackingCache():
                         "utm_campaign" : utm_campaign,
                         "referal_product" : referral_product,
                         "referal_subproduct" : referal_subproduct,
-                        "popup_based_product" : popup_based_product
+                        "popup_based_product" : popup_based_product,
+                        "recommendation_by" : recommendation_by,
+                        "cart_addition" : cart_addition
+
                     },
                     "date_time" : timezone.now()
                 })
