@@ -1,5 +1,4 @@
 const makeTrackingRequest = (loggingData) => {
-    console.log(loggingData)
     $.ajax({
         method: "POST",
         url: `${shineApiUrl}/learning-touchpoints-tracking/`,
@@ -68,8 +67,6 @@ $(document).ready(function () {
         makeTrackingRequest(loggingData);
         saveTrackingRequest(loggingData1);}
         }
-
-        console.log(loggingData, loggingData1)
     })
 
     // 
