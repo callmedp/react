@@ -331,6 +331,8 @@ class RecommendedProductSerializerSolr(Serializer):
         source='pARx',
         max_digits=8, decimal_places=2)
     pIc  = serializers.CharField()
+    pPvn = serializers.CharField()
+    pAR = serializers.CharField()
     # pSkilln = serializers.ListField(
     #     child=serializers.CharField())
 
