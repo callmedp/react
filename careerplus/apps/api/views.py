@@ -2050,6 +2050,8 @@ class TrackingResumeShine(APIView):
         trigger_point = self.request.data.get('trigger_point','')
         utm_campaign = self.request.data.get('utm_campaign', '')
         popup_based_product = self.request.data.get('popup_based_product', '')
+        recommendation_by = self.request.data.get('recommendation_by', '')
+        cart_addition = self.request.data.get('cart_addition', '')
 
         try:
             cache_data = cache.get('tracking_last_action', {})
@@ -2080,13 +2082,16 @@ class TrackingResumeShine(APIView):
                             "position" : position,
                             "trigger_point" : trigger_point,
                             "utm_campaign" : utm_campaign,
-                            "popup_based_product" : popup_based_product
+                            "popup_based_product" : popup_based_product,
+                            'recommendation_by': recommendation_by,
+                            'cart_addition': cart_addition
                         },
                         "date_time" : timezone.now()
                     })
                 payment_cache.update({
                     str(u_id) : u_id_payment_cache
                     })
+
                 cache.set("tracking_payment_action", payment_cache, timeout = None)
                 logging.getLogger('info_log').info("tracking data for payment is updated, tracking_id: {}".format(t_id))
 

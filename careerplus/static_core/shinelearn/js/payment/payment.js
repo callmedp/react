@@ -1,5 +1,5 @@
 const makeTrackingRequest = (loggingData) => {
-
+    console.log(loggingData)
     $.ajax({
         method: "POST",
         url: `${shineApiUrl}/learning-touchpoints-tracking/`,
@@ -22,11 +22,11 @@ const saveTrackingRequest = (loggingData1) => {
 
 const trackClickEvent = () => {
     let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'exit_cart', 'position': parseInt(position), 
-        domain: 2, sub_product: trackingProductId , trigger_point : triggerPoint, u_id : uId, utm_campaign : utmCampaign, popup_based_product: popup_based_product};
+        domain: 2, sub_product: trackingProductId , trigger_point : triggerPoint, u_id : uId, utm_campaign : utmCampaign, popup_based_product: popup_based_product, cart_addition: cart_addition, recommendation_by: recommendation_by};
     if (trackingId && productAvailability) {
         if(referal_product){
             let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'exit_cart', 'position': parseInt(position), 
-        domain: 2, sub_product: trackingProductId , trigger_point : triggerPoint, u_id : uId, utm_campaign : utmCampaign, referral_product:parseInt(referal_product), referal_subproduct:referal_subproduct, popup_based_product: popup_based_product};
+        domain: 2, sub_product: trackingProductId , trigger_point : triggerPoint, u_id : uId, utm_campaign : utmCampaign, referral_product:parseInt(referal_product), referal_subproduct:referal_subproduct, popup_based_product: popup_based_product, cart_addition: cart_addition, recommendation_by: recommendation_by};
            makeTrackingRequest(loggingData);
         }else{
         makeTrackingRequest(loggingData);}
@@ -40,11 +40,11 @@ $(document).ready(function () {
 
     $('#review-order-option').click(function () {
         let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'review_order', 'position': parseInt(position), domain: 2, sub_product: trackingProductId,
-            trigger_point : triggerPoint, u_id : uId, utm_campaign : utmCampaign, popup_based_product: popup_based_product };
+            trigger_point : triggerPoint, u_id : uId, utm_campaign : utmCampaign, popup_based_product: popup_based_product, cart_addition: cart_addition, recommendation_by: recommendation_by };
         if (trackingId && productAvailability) {
             if(referal_product){
             let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'review_order', 'position': parseInt(position), 
-        domain: 2, sub_product: trackingProductId , trigger_point : triggerPoint, u_id : uId, utm_campaign : utmCampaign, referral_product:parseInt(referal_product), referal_subproduct:referal_subproduct, popup_based_product: popup_based_product};
+        domain: 2, sub_product: trackingProductId , trigger_point : triggerPoint, u_id : uId, utm_campaign : utmCampaign, referral_product:parseInt(referal_product), referal_subproduct:referal_subproduct, popup_based_product: popup_based_product, cart_addition: cart_addition, recommendation_by: recommendation_by};
             makeTrackingRequest(loggingData);
         }else{
         makeTrackingRequest(loggingData);}
@@ -53,21 +53,23 @@ $(document).ready(function () {
 
     $('#card-netbanking').click(function () {
         let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'card_and_netbanking', 'position': parseInt(position), domain: 2, 
-        sub_product: trackingProductId, trigger_point : triggerPoint, u_id : uId, utm_campaign : utmCampaign, popup_based_product: popup_based_product };
+        sub_product: trackingProductId, trigger_point : triggerPoint, u_id : uId, utm_campaign : utmCampaign, popup_based_product: popup_based_product, cart_addition: cart_addition, recommendation_by: recommendation_by };
         let loggingData1 = { t_id: trackingId, products: productTrackingMappingId, action: 'card_and_netbanking', 'position': parseInt(position), domain: 2, 
-        sub_product: trackingProductId, trigger_point : triggerPoint, u_id : uId, utm_campaign : utmCampaign, popup_based_product: popup_based_product };
+        sub_product: trackingProductId, trigger_point : triggerPoint, u_id : uId, utm_campaign : utmCampaign, popup_based_product: popup_based_product, cart_addition: cart_addition, recommendation_by: recommendation_by };
         if (trackingId && productAvailability) {
             if(referal_product){
             let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'card_and_netbanking', 'position': parseInt(position), 
-        domain: 2, sub_product: trackingProductId , trigger_point : triggerPoint, u_id : uId, utm_campaign : utmCampaign, referral_product:parseInt(referal_product), referal_subproduct:referal_subproduct, popup_based_product: popup_based_product};
+        domain: 2, sub_product: trackingProductId , trigger_point : triggerPoint, u_id : uId, utm_campaign : utmCampaign, referral_product:parseInt(referal_product), referal_subproduct:referal_subproduct, popup_based_product: popup_based_product, cart_addition: cart_addition, recommendation_by: recommendation_by};
             let loggingData1 = { t_id: trackingId, products: productTrackingMappingId, action: 'card_and_netbanking', 'position': parseInt(position), 
-        domain: 2, sub_product: trackingProductId , trigger_point : triggerPoint, u_id : uId, utm_campaign : utmCampaign, referral_product:parseInt(referal_product), referal_subproduct:referal_subproduct, popup_based_product: popup_based_product};
+        domain: 2, sub_product: trackingProductId , trigger_point : triggerPoint, u_id : uId, utm_campaign : utmCampaign, referral_product:parseInt(referal_product), referal_subproduct:referal_subproduct, popup_based_product: popup_based_product, cart_addition: cart_addition, recommendation_by: recommendation_by};
             makeTrackingRequest(loggingData);
             saveTrackingRequest(loggingData1);
         }else{
         makeTrackingRequest(loggingData);
         saveTrackingRequest(loggingData1);}
         }
+
+        console.log(loggingData, loggingData1)
     })
 
     // 
@@ -181,15 +183,15 @@ $(document).ready(function () {
 
     $('#amazon-pay-payment').click(function () {
         let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'amazon_pay_payment',
-         'position': parseInt(position), domain: 2, sub_product: trackingProductId, trigger_point : triggerPoint, u_id : uId, utm_campaign: utmCampaign, popup_based_product: popup_based_product };
+         'position': parseInt(position), domain: 2, sub_product: trackingProductId, trigger_point : triggerPoint, u_id : uId, utm_campaign: utmCampaign, popup_based_product: popup_based_product, cart_addition: cart_addition, recommendation_by: recommendation_by };
         let loggingData1 = { t_id: trackingId, products: productTrackingMappingId, action: 'amazon_pay_payment',
-         'position': parseInt(position), domain: 2, sub_product: trackingProductId, trigger_point : triggerPoint, u_id : uId, utm_campaign: utmCampaign, popup_based_product: popup_based_product };
+         'position': parseInt(position), domain: 2, sub_product: trackingProductId, trigger_point : triggerPoint, u_id : uId, utm_campaign: utmCampaign, popup_based_product: popup_based_product, cart_addition: cart_addition, recommendation_by: recommendation_by };
         if (trackingId && productAvailability) {
             if(referal_product){
                     let loggingData = { t_id: trackingId, products: [productTrackingMappingId], action: 'amazon_pay_payment', 'position': parseInt(position), 
-                domain: 2, sub_product: trackingProductId , trigger_point : triggerPoint, u_id : uId, utm_campaign : utmCampaign, referral_product:parseInt(referal_product), referal_subproduct:referal_subproduct, popup_based_product: popup_based_product};
+                domain: 2, sub_product: trackingProductId , trigger_point : triggerPoint, u_id : uId, utm_campaign : utmCampaign, referral_product:parseInt(referal_product), referal_subproduct:referal_subproduct, popup_based_product: popup_based_product, cart_addition: cart_addition, recommendation_by: recommendation_by};
                     let loggingData1 = { t_id: trackingId, products: productTrackingMappingId, action: 'amazon_pay_payment', 'position': parseInt(position), 
-                domain: 2, sub_product: trackingProductId , trigger_point : triggerPoint, u_id : uId, utm_campaign : utmCampaign, referral_product:parseInt(referal_product), referal_subproduct:referal_subproduct, popup_based_product: popup_based_product};
+                domain: 2, sub_product: trackingProductId , trigger_point : triggerPoint, u_id : uId, utm_campaign : utmCampaign, referral_product:parseInt(referal_product), referal_subproduct:referal_subproduct, popup_based_product: popup_based_product, cart_addition: cart_addition, recommendation_by: recommendation_by};
                     makeTrackingRequest(loggingData);
                     saveTrackingRequest(loggingData1);
             }else{
