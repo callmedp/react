@@ -25,6 +25,7 @@ from payment.tasks import make_logging_request
 
 time_delta = 45 if not settings.DEBUG else 0
 
+
 @task(name="create_lead_on_crm")
 def create_lead_on_crm(pk=None, source_type=None, name=None):
     cart_lead_creation_dict = {
@@ -33,28 +34,34 @@ def create_lead_on_crm(pk=None, source_type=None, name=None):
                           },
         "shipping_drop_out": {"shipping_done": True,
                               "payment_page": False,
-                             },
+                              },
         "payment_drop_out": {"shipping_done": True,
                              "payment_page": True,
                              },
         "payment_option": {"shipping_done": True,
-                             "payment_page": True,
-                             }
+                           "payment_page": True,
+                           }
     }
-    source_in_dict = cart_lead_creation_dict.get(source_type,None)
+    source_in_dict = cart_lead_creation_dict.get(source_type, None)
     if not source_in_dict and source_type not in ["cart_summary", "payment_option"]:
         return
-    filter_dict = {'status': 2, 'owner_id__isnull': False, 'pk': pk}
+    filter_dict = {'owner_id__isnull': False, 'pk': pk}
     if source_in_dict:
         filter_dict.update(source_in_dict)
     lead_creation_function(filter_dict=filter_dict, cndi_name=name, source_type=source_type)
+    logging.getLogger('info_log').info(
+        'CREATE_LEAD_ON_CRM, checkpoint4 for pk => {} AND FILTER => {} AND source_type => {}'.format(str(pk),
+                                                                                                     str(filter_dict),
+                                                                                                     str(source_type)))
 
 
 def lead_creation_function(filter_dict=None, cndi_name=None, source_type=None):
     try:
         cart_objs = Cart.objects.filter(**filter_dict).exclude(owner_id__exact='')
+        logging.getLogger('info_log').info("CART_OBJS FOUND {} " + str(cart_objs.count()))
         extra_info = {}
         for cart_obj in cart_objs:
+            logging.getLogger('info_log').info('CREATE_LEAD_ON_CRM, checkpoint1 for pk => {}'.format(str(cart_obj.pk)))
             data_dict = {}
             total_amount = None
             data_dict.update({
@@ -87,14 +94,14 @@ def lead_creation_function(filter_dict=None, cndi_name=None, source_type=None):
             counter = 0
             if prod:
                 # logging.getLogger('error_log').error('prdid'+ str(prod.id))
-                logging.getLogger('info_log').info("lead creation process for product-"+str(prod.id))
+                logging.getLogger('info_log').info("lead creation process for product-" + str(prod.id))
                 counter += 1
                 product_name = prod.product.heading if prod.product.heading else prod.product.name
                 data_dict.update({
-                                     "product": product_name,
-                                     "productid": prod.product.id,
-                                     "product_url":prod.product.absolute_url
-                                 })
+                    "product": product_name,
+                    "productid": prod.product.id,
+                    "product_url": prod.product.absolute_url
+                })
                 m_prods = m_prods.exclude(id=prod.id)
             for m_prod in m_prods:
                 # logging.getLogger('error_log').error('inside the loop')
@@ -103,7 +110,7 @@ def lead_creation_function(filter_dict=None, cndi_name=None, source_type=None):
                     data_dict.update({
                         "product": product_name,
                         "productid": m_prod.product.id,
-                        "product_url":prod.product.absolute_url
+                        "product_url": m_prod.product.absolute_url
                     })
                     counter += 1
                     continue
@@ -133,46 +140,50 @@ def lead_creation_function(filter_dict=None, cndi_name=None, source_type=None):
                 })
             if m_prods and m_prods.count() == 1:
                 m_prod = m_prods[0]
-            
+
             data_dict.update({"extra_info": json.dumps(extra_info)})
+            logging.getLogger('info_log').info('CREATE_LEAD_ON_CRM, checkpoint2 for pk => {}'.format(str(cart_obj.pk)))
 
             if source_type in ["cart_summary", "payment_option"]:
                 data_dict.update({
-                    "lead_type":2,
-                    "source_type":source_type,
-                    "campaign_slug": "cartleadcourses"
-                    })
+                    "lead_type": 2,
+                    "source_type": source_type,
+                    "campaign_slug": "cartleads" if cart_obj.lineitems.exclude(product__type_flow__in=[2, 14, 16]) else "cartleadcourses"
+                })
                 lead_create_on_crm(cart_obj, data_dict=data_dict)
+                logging.getLogger('info_log').info("LEAD CREATE CRM " + str(data_dict))
                 return
 
-            #Create resume lead if resume items present in cart
-            if cart_obj.lineitems.exclude(product__type_flow__in=[2,14,16]):
+            # Create resume lead if resume items present in cart
+            if cart_obj.lineitems.exclude(product__type_flow__in=[2, 14, 16]):
                 data_dict.update({
                     "campaign_slug": "cartleads",
                     'lead_type': lead_type,
                 })
                 # create lead on crm
                 lead_create_on_crm(cart_obj, data_dict=data_dict)
-            
-            if not cart_obj.lineitems.filter(product__type_flow__in=[2,14,16]):
+                logging.getLogger('info_log').info("LEAD CREATE CRM RESUME LEAD" + str(data_dict))
+
+            if not cart_obj.lineitems.filter(product__type_flow__in=[2, 14, 16]):
                 return
 
-            #Create course lead if course items present in cart
+            # Create course lead if course items present in cart
             data_dict.update({
-                    "campaign_slug":"cartleadcourses",
-                    "lead_type":2
-                    })
+                "campaign_slug": "cartleadcourses",
+                "lead_type": 2
+            })
             lead_create_on_crm(cart_obj, data_dict=data_dict)
-    
+            logging.getLogger('info_log').info('CREATE_LEAD_ON_CRM, checkpoint3 for pk => {}'.format(str(cart_obj.pk)))
+
     except Exception as e:
         logging.getLogger('error_log').error("lead creation from crm failed %s" % str(e))
 
 
 @task(name="cart_drop_out_mail")
-def cart_drop_out_mail(pk=None, cnd_email=None, mail_type=None, name=None, 
-    tracking_id="", u_id="", tracking_product_id="", 
-    product_tracking_mapping_id="", trigger_point="", 
-    position=-1, utm_campaign="", domain=2, popup_based_product=""):
+def cart_drop_out_mail(pk=None, cnd_email=None, mail_type=None, name=None,
+                       tracking_id="", u_id="", tracking_product_id="",
+                       product_tracking_mapping_id="", trigger_point="",
+                       position=-1, utm_campaign="", domain=2, popup_based_product=""):
     mail_type = 'CART_DROP_OUT' if not mail_type else mail_type
     cart_objs = Cart.objects.filter(
         status=2,
@@ -181,8 +192,8 @@ def cart_drop_out_mail(pk=None, cnd_email=None, mail_type=None, name=None,
         owner_id__isnull=False, pk=pk).exclude(owner_id__exact='')
     count = 0
     for crt_obj in cart_objs:
-        # send mail only if user has not edited cart in the last 45 minutes 
-        if crt_obj.modified < (timezone.now()- timezone.timedelta(minutes=time_delta)):
+        # send mail only if user has not edited cart in the last 45 minutes
+        if crt_obj.modified < (timezone.now() - timezone.timedelta(minutes=time_delta)):
             cart_id = crt_obj.owner_id
             data = {}
             last_cart_items = []
@@ -244,10 +255,10 @@ def cart_drop_out_mail(pk=None, cnd_email=None, mail_type=None, name=None,
                 if mail_type == "SHINE_CART_DROP":
                     subject_name = "{}, ".format(name) if name != 'Candidate' else ''
                     data.update({
-                        'subject' : "{}Your cart is waiting!".format(subject_name)
-                        })
+                        'subject': "{}Your cart is waiting!".format(subject_name)
+                    })
                     email_list_spent = cache.get("email_sent_for_the_day", [])
-                    if toemail in email_list_spent: 
+                    if toemail in email_list_spent:
                         logging.getLogger('info_log').info(
                             "Candidate already recieved an email for the day, email: {}".format(to_email))
                         continue
@@ -255,18 +266,22 @@ def cart_drop_out_mail(pk=None, cnd_email=None, mail_type=None, name=None,
                         email_list_spent.append(toemail)
                         cache.set("email_sent_for_the_day", email_list_spent, timeout=None)
                         if product_tracking_mapping_id and tracking_id and tracking_product_id:
-                                make_logging_request.delay(
-                                        tracking_product_id, product_tracking_mapping_id, tracking_id,\
-                                         'exit_cart_mail_sent', position, trigger_point, u_id, utm_campaign, domain, popup_based_product)
+                            make_logging_request.delay(
+                                tracking_product_id, product_tracking_mapping_id, tracking_id, \
+                                'exit_cart_mail_sent', position, trigger_point, u_id, utm_campaign, domain,
+                                popup_based_product)
 
                 token = AutoLogin().encode(toemail, cart_id, days=None)
-                data['autologin'] = "{}://{}/cart/payment-summary/?t_id={}&token={}&utm_campaign=learning_exit_mailer&trigger_point={}&u_id={}&position={}&emailer=1&t_prod_id={}&prod_t_m_id={}".format(
-                    settings.SITE_PROTOCOL, settings.SITE_DOMAIN, tracking_id, token, trigger_point, u_id, position, tracking_product_id, product_tracking_mapping_id)
+                data[
+                    'autologin'] = "{}://{}/cart/payment-summary/?t_id={}&token={}&utm_campaign=learning_exit_mailer&trigger_point={}&u_id={}&position={}&emailer=1&t_prod_id={}&prod_t_m_id={}".format(
+                    settings.SITE_PROTOCOL, settings.SITE_DOMAIN, tracking_id, token, trigger_point, u_id, position,
+                    tracking_product_id, product_tracking_mapping_id)
                 if domain == 3:
                     data.update({
-                        'autologin' : "{}://{}/cart/payment-summary/?token={}&t_id={}&utm_campaign=learning_exit_mailer&trigger_point={}&u_id={}&position={}&emailer=1&t_prod_id={}&prod_t_m_id={}".format(
-                    settings.SITE_PROTOCOL, settings.RESUME_SHINE_SITE_DOMAIN, token, tracking_id, trigger_point, u_id, position, tracking_product_id, product_tracking_mapping_id)
-                        })
+                        'autologin': "{}://{}/cart/payment-summary/?token={}&t_id={}&utm_campaign=learning_exit_mailer&trigger_point={}&u_id={}&position={}&emailer=1&t_prod_id={}&prod_t_m_id={}".format(
+                            settings.SITE_PROTOCOL, settings.RESUME_SHINE_SITE_DOMAIN, token, tracking_id,
+                            trigger_point, u_id, position, tracking_product_id, product_tracking_mapping_id)
+                    })
 
                 try:
                     SendMail().send(to_email, mail_type, data)
@@ -277,11 +292,12 @@ def cart_drop_out_mail(pk=None, cnd_email=None, mail_type=None, name=None,
                             str(to_email), str(mail_type), str(e)))
     print("{} of {} cart dropout mails sent".format(count, cart_objs.count()))
 
+
 @task(name="cart_product_removed_mail")
-def cart_product_removed_mail(product_id= None, tracking_id="", 
-        u_id=None, email=None, name=None, tracking_product_id="", 
-        product_tracking_mapping_id="", trigger_point="", 
-        position=-1, utm_campaign="", domain=2, popup_based_product="", recommendation_by=""):
+def cart_product_removed_mail(product_id=None, tracking_id="",
+                              u_id=None, email=None, name=None, tracking_product_id="",
+                              product_tracking_mapping_id="", trigger_point="",
+                              position=-1, utm_campaign="", domain=2, popup_based_product=""):
     try:
         name = name if name else "Candidate"
         if not email and not u_id:
@@ -297,7 +313,7 @@ def cart_product_removed_mail(product_id= None, tracking_id="",
             return
 
         to_email = [email]
-        try: 
+        try:
             prod = Product.objects.filter(id=product_id).first()
         except Exception as e:
             logging.getLogger('error_log').error("product does not exist: {}".format(product_id))
@@ -314,14 +330,15 @@ def cart_product_removed_mail(product_id= None, tracking_id="",
         data['subject'] = '{}Forgot Something?'.format(subject_name)
 
         token = AutoLogin().encode(email, u_id, days=None)
-        data['autologin'] = "{}://{}/cart/payment-summary/?prod_id={}&t_id={}&token={}&utm_campaign=learning_remove_product_mailer&trigger_point={}&u_id={}&position={}&recommendation_by={}&email=1".format(
-            settings.SITE_PROTOCOL, settings.SITE_DOMAIN, product_id, tracking_id, token, trigger_point, u_id, position, recommendation_by)
+        data[
+            'autologin'] = "{}://{}/cart/payment-summary/?prod_id={}&t_id={}&token={}&utm_campaign=learning_remove_product_mailer&trigger_point={}&u_id={}&position={}&email=1".format(
+            settings.SITE_PROTOCOL, settings.SITE_DOMAIN, product_id, tracking_id, token, trigger_point, u_id, position)
         if domain == 3:
             data.update({
-                'autologin' : "{}://{}/cart/payment-summary/?token={}&prod_id={}&t_id={}&utm_campaign=learning_remove_product_mailer&trigger_point={}&u_id={}&position={}&recommendation_by={}&email=1".format(
-            settings.SITE_PROTOCOL, settings.RESUME_SHINE_SITE_DOMAIN, token, product_id, tracking_id, trigger_point, u_id, position, recommendation_by)
-                })
-
+                'autologin': "{}://{}/cart/payment-summary/?token={}&prod_id={}&t_id={}&utm_campaign=learning_remove_product_mailer&trigger_point={}&u_id={}&position={}&email=1".format(
+                    settings.SITE_PROTOCOL, settings.RESUME_SHINE_SITE_DOMAIN, token, product_id, tracking_id,
+                    trigger_point, u_id, position)
+            })
 
         email_list_spent.append(email)
         cache.set("email_sent_for_the_day", email_list_spent, timeout=None)
@@ -331,9 +348,9 @@ def cart_product_removed_mail(product_id= None, tracking_id="",
         except Exception as e:
             logging.getLogger('error_log').error("Unable to sent mail: {}".format(e))
         make_logging_request.delay(
-            tracking_product_id, product_tracking_mapping_id, tracking_id, 'remove_product_mail_sent', position, trigger_point, u_id, utm_campaign, domain, popup_based_product, recommendation_by)
+            tracking_product_id, product_tracking_mapping_id, tracking_id, 'remove_product_mail_sent', position,
+            trigger_point, u_id, utm_campaign, domain, popup_based_product)
     except Exception as e:
-         logging.getLogger('error_log').error(e)
-
+        logging.getLogger('error_log').error(e)
 
 
