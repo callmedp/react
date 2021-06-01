@@ -2050,6 +2050,8 @@ class TrackingResumeShine(APIView):
         trigger_point = self.request.data.get('trigger_point','')
         utm_campaign = self.request.data.get('utm_campaign', '')
         popup_based_product = self.request.data.get('popup_based_product', '')
+        recommendation_by = self.request.data.get('recommendation_by', '')
+        cart_addition = self.request.data.get('cart_addition', '')
 
         try:
             cache_data = cache.get('tracking_last_action', {})

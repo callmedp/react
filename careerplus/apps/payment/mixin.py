@@ -55,8 +55,8 @@ class PaymentMixin(object):
                     prod, products, t_id, method, position, trigger_point, str(candidate_id), utm_campaign, domain, referal_product, referal_subproduct, total_amount, total_amount_paid, popup_based_product, recommendation_by, cart_addition)
                 logging.getLogger('info_log').info('purchase method data: tracking_product_id: {}, product_tracking_mapping_id : {}, tracking_id: {},'
                     'action: {}, position: {}, trigger_point: {}, u_id: {}, utm_campaign: {}, domain: {}, referal_product: {}, referal_subproduct: {},'
-                    'total_amount: {}, total_amount_paid: {}, popup_based_product:{}'.format(prod, products, t_id, method, position,\
-                     trigger_point, str(candidate_id), utm_campaign, domain, referal_product, referal_subproduct, total_amount, total_amount_paid, popup_based_product))
+                    'total_amount: {}, total_amount_paid: {}, popup_based_product:{}, recommendation_by:{}, cart_addition:{}'.format(prod, products, t_id, method, position,\
+                     trigger_point, str(candidate_id), utm_campaign, domain, referal_product, referal_subproduct, total_amount, total_amount_paid, popup_based_product, recommendation_by, cart_addition))
         return True
 
     def paid_amount_without_tax(self, order):
@@ -273,8 +273,8 @@ class PaymentMixin(object):
                     tracking_product_id, product_tracking_mapping_id, tracking_id, action, position, trigger_point, u_id, utm_campaign, 2, referal_product, referal_subproduct, total_amount, total_amount_paid, popup_based_product, recommendation_by, cart_addition)
                 logging.getLogger('info_log').info('purchase done data: tracking_product_id: {}, product_tracking_mapping_id : {}, tracking_id: {},'
                     'action: {}, position: {}, trigger_point: {}, u_id: {}, utm_campaign: {}, domain: {}, referal_product: {}, referal_subproduct: {},'
-                     'total_amount: {}, total_amount_paid: {}, popup_based_product:{}'.format(tracking_product_id, product_tracking_mapping_id, tracking_id,\
-                        action, position, trigger_point, u_id, utm_campaign, 2, referal_product, referal_subproduct, total_amount, total_amount_paid, popup_based_product))
+                     'total_amount: {}, total_amount_paid: {}, popup_based_product:{}, recommendation_by:{}, cart_addition:{}'.format(tracking_product_id, product_tracking_mapping_id, tracking_id,\
+                        action, position, trigger_point, u_id, utm_campaign, 2, referal_product, referal_subproduct, total_amount, total_amount_paid, popup_based_product, recommendation_by, cart_addition))
                 # if method:
                 #     make_logging_sk_request.delay(
                 #         tracking_product_id, product_tracking_mapping_id, tracking_id, method, position, trigger_point, u_id, utm_campaign, 2, referal_product, referal_subproduct)
