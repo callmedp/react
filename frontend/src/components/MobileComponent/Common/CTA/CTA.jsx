@@ -36,7 +36,7 @@ const CTA = (props) => {
                     Whatsapp
                 </a> : null
             }
-            <a href="#" onclick="openChat()">
+            <a href="#" onClick="openChat()">
                 <figure className="micon-chat"></figure>
                 Chat
             </a>
