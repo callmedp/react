@@ -30,16 +30,16 @@ const CTA = (props) => {
                 <figure className="micon-callus"></figure>
                 Call us
             </a>
-            <a href="#" onClick={(e) => {e.preventDefault();zendeskChatShow();}}>
-                <figure className="micon-chat"></figure>
-                Chat
-            </a>
             { whatsappNo ?
                 <a href={`https://api.whatsapp.com/send?phone=91${whatsappNo}&text=I need your help for ${heading}`}>
                     <figure className="micon-whatsapp"></figure>
                     Whatsapp
                 </a> : null
             }
+            <a href="#" onclick="openChat()">
+                <figure className="micon-chat"></figure>
+                Chat
+            </a>
         </section>
     )
 }
