@@ -16,12 +16,24 @@ const CTA = (props) => {
         setEnquiryForm(true)
     }
 
-    const showChatbot = () =>{
-        window.openChat()
+    const showChatbot = () => {
+        // if(window && window.openChat()) {
+            // const offset = window.scrollY;
+            // if(offset > 30) window.openChat();
+            if(window) window.openChat();
+        // }
+    }
+
+    const handleScroll = () =>{
+        if(window) {
+            const offset = window.scrollY;
+            if(offset === 0) window.openChat();
+        }
     }
 
     useEffect(()=>{
-        setWhatsAppNo(getWhatsAppNo(pageType, whatsappDict))
+        setWhatsAppNo(getWhatsAppNo(pageType, whatsappDict));
+        window.addEventListener('scroll', handleScroll);
     }, [whatsappDict])
 
     return(
@@ -40,7 +52,7 @@ const CTA = (props) => {
                     Whatsapp
                 </a> : null
             }
-            <a href="#" onClick={pageType == 'detailPage' ? showChatbot() : (e) => {e.preventDefault();zendeskChatShow();}}>
+            <a href="#" onClick={pageType == 'detailPage' ? showChatbot : (e) => {e.preventDefault();zendeskChatShow();}}>
                 <figure className="micon-chat"></figure>
                 Chat
             </a>
