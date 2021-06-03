@@ -165,7 +165,14 @@ function* AddToCartRedeem(action) {
         if (response?.error) return reject(response);
 
         const item = response?.data?.data;
-        if(item.status === 1) return window.location.href = `${siteDomain}${item.redirectUrl}`;
+
+        let appendTracking = "";
+
+        if(localStorage.getItem("trackingId")){
+            appendTracking = getTrackingUrl()
+        }
+
+        if(item.status === 1) return window.location.href = `${siteDomain}${item.redirectUrl}${appendTracking}`;
         else resolve(item);
     }
     catch(e) {
