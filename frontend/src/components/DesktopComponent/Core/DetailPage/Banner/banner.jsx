@@ -39,6 +39,7 @@ const BannerCourseDetail = (props) => {
     const [discountPrice, discountPriceSelected] = useState(0);
     const dispatch = useDispatch();
     const { mainCourseCartLoader } = useSelector(store => store.loader);
+    const maximumAllowedStars = ['*', '*', '*', '*', '*']
 
     const starRatings = (star, index) => {
         return (star === '*' ? <em className="icon-fullstar" key={index}></em> : star === '+' 
@@ -200,12 +201,21 @@ const BannerCourseDetail = (props) => {
                                     <div className="d-flex mt-15" itemProp="aggregateRating" itemScope itemType="https://schema.org/AggregateRating">
                                         {
                                             product_detail?.prd_num_rating ?
-                                            <span className="rating">
-                                                {
-                                                    product_detail?.prd_rating_star?.map((star, index) => starRatings(star, index))
-                                                }
-                                                <span itemProp="ratingValue" content={product_detail?.prd_rating?.toFixed()}>{product_detail?.prd_rating?.toFixed()}/5</span>
-                                            </span> : ''
+                                                (product_detail?.prd_rating_star?.length <= 5) ?
+                                                <span className="rating">
+                                                    {
+                                                        product_detail?.prd_rating_star?.map((star, index) => starRatings(star, index))
+                                                    }
+                                                    <span itemProp="ratingValue" content={product_detail?.prd_rating?.toFixed()}>{product_detail?.prd_rating?.toFixed()}/5</span>
+                                                </span> 
+                                                :
+                                                <span className="rating">
+                                                    {
+                                                        maximumAllowedStars?.map((star, index) => starRatings(star, index))
+                                                    }
+                                                    <span itemProp="ratingValue" content='5'>5/5</span>
+                                                </span> 
+                                            : ''
                                         }
                                         
                                         {
@@ -267,7 +277,7 @@ const BannerCourseDetail = (props) => {
                                                 </>
                                                 :
                                                 <>
-                                                    Course Duration <strong>{varChecked?.dur_days || product_detail?.selected_var?.dur_days || '--'}</strong>
+                                                    Course Duration <strong>{varChecked?.dur_days || product_detail?.selected_var?.dur_days || '--'} days</strong>
                                                 </>
                                             }
                                         </p>
