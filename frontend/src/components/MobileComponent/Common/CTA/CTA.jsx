@@ -16,6 +16,10 @@ const CTA = (props) => {
         setEnquiryForm(true)
     }
 
+    const showChatbot = () =>{
+        window.openChat()
+    }
+
     useEffect(()=>{
         setWhatsAppNo(getWhatsAppNo(pageType, whatsappDict))
     }, [whatsappDict])
@@ -36,7 +40,7 @@ const CTA = (props) => {
                     Whatsapp
                 </a> : null
             }
-            <a href="#" onClick={pageType == 'detailPage' ? window.openChat() : (e) => {e.preventDefault();zendeskChatShow();}}>
+            <a href="#" onClick={pageType == 'detailPage' ? showChatbot() : (e) => {e.preventDefault();zendeskChatShow();}}>
                 <figure className="micon-chat"></figure>
                 Chat
             </a>
