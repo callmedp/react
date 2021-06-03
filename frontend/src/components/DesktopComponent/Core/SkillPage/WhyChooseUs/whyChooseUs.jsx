@@ -1,7 +1,10 @@
 import React from 'react';
 import './whyChooseUs.scss';
+import { useSelector } from 'react-redux';
 
 const WhyChooseUs = (props) => {
+    const { name } = useSelector(store => store.skillBanner)
+
     return (
         <section className="why-choose-us" id="choose">
         <div className="container">
@@ -10,7 +13,7 @@ const WhyChooseUs = (props) => {
                 <ul>
                     <li className="col">
                         <strong data-aos="fade-up" data-aos-delay="10">1500<span>+</span></strong>
-                        <p data-aos="fade-up" data-aos-delay="30" >jobs available in Digital Marketing</p>
+                        <p data-aos="fade-up" data-aos-delay="30" >jobs available { !!name ? `in ${name}` : ''}</p>
                     </li>
                     <li className="col">
                         <strong data-aos="fade-up" data-aos-delay="50">100<span>+</span></strong>
