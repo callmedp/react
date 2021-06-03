@@ -36,7 +36,7 @@ const CTA = (props) => {
                     Whatsapp
                 </a> : null
             }
-            <a href="#" onClick={pageType == 'detailPage' ? "openChat()" : (e) => {e.preventDefault();zendeskChatShow();}}>
+            <a href="#" onClick={pageType == 'detailPage' ? window.openChat() : (e) => {e.preventDefault();zendeskChatShow();}}>
                 <figure className="micon-chat"></figure>
                 Chat
             </a>
