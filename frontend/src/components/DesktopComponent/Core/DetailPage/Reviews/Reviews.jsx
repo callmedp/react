@@ -50,7 +50,7 @@ const Reviews = (props) => {
 
                 {
                     (prd_review_list && prd_review_list?.length > 0) &&
-                    <Carousel className="reviews" activeIndex={carIndex} onSelect={handleSelect} >
+                    <Carousel className={`reviews ${prd_review_list?.length < 4 ? `removeButtons` : ``}`} activeIndex={carIndex} onSelect={handleSelect} >
                         {
                             prd_review_list?.map((reviewData, idx) => {
                                 return (

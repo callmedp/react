@@ -192,7 +192,7 @@ const CourseDetailBanner = (props) => {
                                         <li className="d-flex align-items-center">
                                             <figure className="micon-course-duration mr-10"></figure>
                                             <p>
-                                                Test Duration <strong>{product_detail?.prd_asft?.test_duration}</strong>
+                                                Test Duration <strong>{product_detail?.prd_asft?.test_duration} minutes</strong>
                                             </p>
                                         </li> : ''
                                 }
