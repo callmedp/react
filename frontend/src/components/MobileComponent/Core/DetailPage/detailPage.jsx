@@ -228,7 +228,7 @@ const DetailPage = (props) => {
                                 {(prd_review_list && prd_review_list?.length) > 0 && <Reviews showReviewModal={showReviewModal} product_detail={product_detail} prdId={prdId} pUrl={props?.match?.url} prd_review_list={prd_review_list} prd_rv_total={prd_rv_total} />}
 
                                 {skill?.length > 0 && <CoursesMayLike product_id={prdId} skill={skill} />}
-                                <CTA setEnquiryForm={setEnquiryForm} contact={ggn_contact} />
+                                <CTA setEnquiryForm={setEnquiryForm} contact={ggn_contact} pageType="detailPage" />
                                 {
                                     enquiryForm ? <EnquiryModal setEnquiryForm={setEnquiryForm} page="detailPage" /> : null
                                 }
