@@ -151,6 +151,10 @@ class HomePageOffer(AbstractAutoDate):
             help_text=("For eg. 'Upto 30%\' off!' or 'Flat 20%\' off!'"))
     banner_text = models.CharField(
         _('Offer Banner Text'), max_length=100, blank=True, null=True)
+    desktop_image = models.ImageField(
+        _('desktop Icon'), upload_to="images/homepage/", blank=True, null=True)
+    mobile_image = models.ImageField(
+        _('Mobile Icon'), upload_to="images/mobile/homepage/", blank=True, null=True)
     start_time = models.DateTimeField(
         _('Start Time'))
     end_time = models.DateTimeField(

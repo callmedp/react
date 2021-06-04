@@ -69,7 +69,7 @@ const OfferEnds = (props) => {
           <Toast className="offer-ends">
             <Toast.Header>
               <p className="flex-1">
-                {navOffer[1]}  |  {navOffer[3]} OFF  |  Offer ends in
+                limited time offer by&nbsp;<strong>{navOffer[1]}&nbsp;</strong>   |  {navOffer[3]} OFF  |  Offer ends in
                 <span className="time">
                   <strong>{timerDays}</strong> 
                   <em>D</em>
