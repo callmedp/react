@@ -1702,102 +1702,167 @@ class Product(AbstractProduct, ModelMeta):
 
     def get_courselevel_db(self):
         # for db return display value
-        if self.is_course:
-            return getattr(self.attr, C_ATTR_DICT.get('CL')) \
-                if getattr(self.attr, C_ATTR_DICT.get('CL'), None) \
-                else ''
-        else:
+        try:
+            if self.is_course:
+                return getattr(self.attr, C_ATTR_DICT.get('CL')) \
+                    if getattr(self.attr, C_ATTR_DICT.get('CL'), None) \
+                    else ''
+            else:
+                return ''
+        except AttributeError as error:
+            logging.getLogger('error_log').error('Attribute Error while adding get_courselevel_db() in shop.models, {}'.format(str(error)))
+            return ''
+        except Exception as e:
+            logging.getLogger('error_log').error('Error Occured while adding get_courselevel_db() in shop.models {}'.format(str(e)))
             return ''
     
     def get_coursetype(self):
-        if self.is_course:
-            return getattr(self.attr, C_ATTR_DICT.get('CT')).code \
-                if getattr(self.attr, C_ATTR_DICT.get('CT'), None) \
-                else ''
-        else:
+        try:
+            if self.is_course:
+                return getattr(self.attr, C_ATTR_DICT.get('CT')).code \
+                    if getattr(self.attr, C_ATTR_DICT.get('CT'), None) \
+                    else ''
+            else:
+                return ''
+        except AttributeError as error:
+            logging.getLogger('error_log').error('Attribute Error while adding get_coursetype() in shop.models, {}'.format(str(error)))
+            return ''
+        except Exception as e:
+            logging.getLogger('error_log').error('Error Occured while adding get_coursetype() in shop.models {}'.format(str(e)))
             return ''
 
     def get_coursetype_db(self):
         # return dispaly value
-        if self.is_course:
-            return choices.COURSE_TYPE_DICT.get(getattr(
-                self.attr, C_ATTR_DICT.get('CT')).code) \
-                if getattr(self.attr, C_ATTR_DICT.get('CT'), None) \
-                else ''
-        else:
+        try:
+            if self.is_course:
+                return choices.COURSE_TYPE_DICT.get(getattr(
+                    self.attr, C_ATTR_DICT.get('CT')).code) \
+                    if getattr(self.attr, C_ATTR_DICT.get('CT'), None) \
+                    else ''
+            else:
+                return ''
+        except AttributeError as error:
+            logging.getLogger('error_log').error('Attribute Error while adding get_coursetype_db() in shop.models, {}'.format(str(error)))
+            return ''
+        except Exception as e:
+            logging.getLogger('error_log').error('Error Occured while adding get_coursetype_db() in shop.models {}'.format(str(e)))
             return ''
 
     def get_cert(self):
-        if self.is_course:
-            return getattr(self.attr, C_ATTR_DICT.get('CERT')) \
-                if getattr(self.attr, C_ATTR_DICT.get('CERT'), None) \
-                else 0
-        else:
-            return 0
+        try:
+            if self.is_course:
+                return getattr(self.attr, C_ATTR_DICT.get('CERT')) \
+                    if getattr(self.attr, C_ATTR_DICT.get('CERT'), None) \
+                    else 0
+            else:
+                return 0
+        except AttributeError as error:
+            logging.getLogger('error_log').error('Attribute Error while adding get_cert() in shop.models, {}'.format(str(error)))
+            return ''
+        except Exception as e:
+            logging.getLogger('error_log').error('Error Occured while adding get_cert() in shop.models {}'.format(str(e)))
+            return ''
 
     def get_duration(self):
-        if self.is_course:
-            dd = getattr(self.attr, C_ATTR_DICT.get('DD')) \
-                if getattr(self.attr, C_ATTR_DICT.get('DD'), None) \
-                else 0
-            return convert_to_month(dd)
-        else:
+        try:
+            if self.is_course:
+                dd = getattr(self.attr, C_ATTR_DICT.get('DD')) \
+                    if getattr(self.attr, C_ATTR_DICT.get('DD'), None) \
+                    else 0
+                return convert_to_month(dd)
+            else:
+                return ''
+        except AttributeError as error:
+            logging.getLogger('error_log').error('Attribute Error while adding get_duration() in shop.models, {}'.format(str(error)))
+            return ''
+        except Exception as e:
+            logging.getLogger('error_log').error('Error Occured while adding get_duration() in shop.models {}'.format(str(e)))
             return ''
 
     def get_duration_in_day(self):
-        if self.is_course:
-            dd = getattr(self.attr, C_ATTR_DICT.get('DD')) \
-                if getattr(self.attr, C_ATTR_DICT.get('DD'), None) \
-                else 0
-            return dd
-        elif self.is_service and self.type_flow in [5,18]:
-            dd = getattr(self.attr, S_ATTR_DICT.get('FD'), 180) \
-                if getattr(self.attr, S_ATTR_DICT.get('FD'), None) \
-                else 0
-            return dd
-        elif self.sub_type_flow == 1701:
-            dd = int(getattr(self.attr, S_ATTR_DICT.get('SUB'), 14))\
-                if getattr(self.attr,S_ATTR_DICT.get('SUB'), None )\
-                else 0 
-            return dd 
-        elif self.type_flow in [18, 19]:
-            dd = int(getattr(self.attr, S_ATTR_DICT.get('SUB'), 30))\
-                if getattr(self.attr,S_ATTR_DICT.get('SUB'), None )\
-                else 0 
-            return dd 
-        else:
+        try:
+
+            if self.is_course:
+                dd = getattr(self.attr, C_ATTR_DICT.get('DD')) \
+                    if getattr(self.attr, C_ATTR_DICT.get('DD'), None) \
+                    else 0
+                return dd
+            elif self.is_service and self.type_flow in [5,18]:
+                dd = getattr(self.attr, S_ATTR_DICT.get('FD'), 180) \
+                    if getattr(self.attr, S_ATTR_DICT.get('FD'), None) \
+                    else 0
+                return dd
+            elif self.sub_type_flow == 1701:
+                dd = int(getattr(self.attr, S_ATTR_DICT.get('SUB'), 14))\
+                    if getattr(self.attr,S_ATTR_DICT.get('SUB'), None )\
+                    else 0
+                return dd
+            elif self.type_flow in [18, 19]:
+                dd = int(getattr(self.attr, S_ATTR_DICT.get('SUB'), 30))\
+                    if getattr(self.attr,S_ATTR_DICT.get('SUB'), None )\
+                    else 0
+                return dd
+            else:
+                return ''
+        except AttributeError as error:
+            logging.getLogger('error_log').error('Attribute Error while adding get_duration_day() in shop.models, {}'.format(str(error)))
             return ''
+        except Exception as e:
+            logging.getLogger('error_log').error('Error Occured while adding get_duration_day() in shop.models {}'.format(str(e)))
+            return ''
+
     @property
     def day_duration(self):
         return self.get_duration_in_day()
 
     @property
     def is_pause_service(self):
-        return getattr(self.attr, S_ATTR_DICT.get('CP'),False)
-
+        try:
+            return getattr(self.attr, S_ATTR_DICT.get('CP'),False)
+        except AttributeError as error:
+            logging.getLogger('error_log').error('Attribute Error while adding is_pause_service() in shop.models, {}'.format(str(error)))
+            return False
+        except Exception as e:
+            logging.getLogger('error_log').error('Error Occured while adding is_pause_service() in shop.models {}'.format(str(e)))
+            return False
 
     def get_duration_in_ddmmyy(self):
-        if self.is_course:
-            dd = getattr(self.attr, C_ATTR_DICT.get('DD')) \
-                if getattr(self.attr, C_ATTR_DICT.get('DD'), None) \
-                else 0
-            return get_days_month_year(dd)
-        elif self.is_service and self.type_flow == 5:
-            dd = getattr(self.attr, S_ATTR_DICT.get('FD')) \
-                if getattr(self.attr, S_ATTR_DICT.get('FD'), None) \
-                else 0
-            return get_days_month_year(dd)
-        else:
-            return get_days_month_year()
+        try:
+            if self.is_course:
+                dd = getattr(self.attr, C_ATTR_DICT.get('DD')) \
+                    if getattr(self.attr, C_ATTR_DICT.get('DD'), None) \
+                    else 0
+                return get_days_month_year(dd)
+            elif self.is_service and self.type_flow == 5:
+                dd = getattr(self.attr, S_ATTR_DICT.get('FD')) \
+                    if getattr(self.attr, S_ATTR_DICT.get('FD'), None) \
+                    else 0
+                return get_days_month_year(dd)
+            else:
+                return get_days_month_year()
+
+        except AttributeError as error:
+            logging.getLogger('error_log').error('Attribute Error while adding get_duration_in_ddmmy() in shop.models, {}'.format(str(error)))
+            return ''
+        except Exception as e:
+            logging.getLogger('error_log').error('Error Occured while adding get_duration_in_ddmmy() in shop.models {}'.format(str(e)))
+            return ''
 
     def get_duration_db(self):
         # return display value
-        if self.is_course:
-            dd = getattr(self.attr, C_ATTR_DICT.get('DD')) \
-                if getattr(self.attr, C_ATTR_DICT.get('DD'), None) \
-                else 0
-            return choices.DURATION_DICT.get(convert_to_month(dd))
-        else:
+        try:
+            if self.is_course:
+                dd = getattr(self.attr, C_ATTR_DICT.get('DD')) \
+                    if getattr(self.attr, C_ATTR_DICT.get('DD'), None) \
+                    else 0
+                return choices.DURATION_DICT.get(convert_to_month(dd))
+            else:
+                return ''
+        except AttributeError as error:
+            logging.getLogger('error_log').error('Attribute Error while adding get_duration_db() in shop.models, {}'.format(str(error)))
+            return ''
+        except Exception as e:
+            logging.getLogger('error_log').error('Error Occured while adding get_duration_db() in shop.models {}'.format(str(e)))
             return ''
 
     def get_profile_country(self):
