@@ -1610,58 +1610,94 @@ class Product(AbstractProduct, ModelMeta):
 
     def get_exp(self):
         # for code return
-        if self.is_writing:
-            return getattr(self.attr, R_ATTR_DICT.get('EXP')).code \
-                if getattr(self.attr, R_ATTR_DICT.get('EXP'), None) \
-                else ''
-        elif self.is_service:
-            return getattr(self.attr, S_ATTR_DICT.get('EXP')).code \
-                if getattr(self.attr, S_ATTR_DICT.get('EXP'), None) \
-                else ''
-        else:
+        try:
+            if self.is_writing:
+                return getattr(self.attr, R_ATTR_DICT.get('EXP')).code \
+                    if getattr(self.attr, R_ATTR_DICT.get('EXP'), None) \
+                    else ''
+            elif self.is_service:
+                return getattr(self.attr, S_ATTR_DICT.get('EXP')).code \
+                    if getattr(self.attr, S_ATTR_DICT.get('EXP'), None) \
+                    else ''
+            else:
+                return ''
+        except AttributeError as error:
+            logging.getLogger('error_log').error('Attribute Error while adding get_exp() in shop.models, {}'.format(str(error)))
+            return ''
+        except Exception as e:
+            logging.getLogger('error_log').error('Error Occured while adding get_exp() in shop.models {}'.format(str(e)))
             return ''
 
     def get_exp_db(self):
         # return display value
-        if self.is_writing:
-            return choices.EXP_DICT.get(getattr(
-                self.attr, R_ATTR_DICT.get('EXP')).code) \
-                if getattr(self.attr, R_ATTR_DICT.get('EXP'), None) \
-                else ''
-        elif self.is_service:
-            return choices.EXP_DICT.get(getattr(
-                self.attr, S_ATTR_DICT.get('EXP')).code) \
-                if getattr(self.attr, S_ATTR_DICT.get('EXP'), None) \
-                else ''
-        else:
+        try:
+            if self.is_writing:
+                return choices.EXP_DICT.get(getattr(
+                    self.attr, R_ATTR_DICT.get('EXP')).code) \
+                    if getattr(self.attr, R_ATTR_DICT.get('EXP'), None) \
+                    else ''
+            elif self.is_service:
+                return choices.EXP_DICT.get(getattr(
+                    self.attr, S_ATTR_DICT.get('EXP')).code) \
+                    if getattr(self.attr, S_ATTR_DICT.get('EXP'), None) \
+                    else ''
+            else:
+                return ''
+        except AttributeError as error:
+            logging.getLogger('error_log').error('Attribute Error while adding get_exp_db() in shop.models, {}'.format(str(error)))
             return ''
+        except Exception as e:
+            logging.getLogger('error_log').error('Error Occured while adding get_exp_db() in shop.models {}'.format(str(e)))
+            return ''
+
 
     def get_studymode(self):
         # for Solr
-        if self.is_course:
-            return getattr(self.attr, C_ATTR_DICT.get('SM')).code \
-                if getattr(self.attr, C_ATTR_DICT.get('SM'), None) \
-                else ''
-        else:
+        try:
+            if self.is_course:
+                return getattr(self.attr, C_ATTR_DICT.get('SM')).code \
+                    if getattr(self.attr, C_ATTR_DICT.get('SM'), None) \
+                    else ''
+            else:
+                return ''
+        except AttributeError as error:
+            logging.getLogger('error_log').error('Attribute Error while adding get_studymode() in shop.models, {}'.format(str(error)))
+            return ''
+        except Exception as e:
+            logging.getLogger('error_log').error('Error Occured while adding get_studymode() in shop.models {}'.format(str(e)))
             return ''
 
     def get_studymode_db(self):
         # return display value
-        if self.is_course:
-            return choices.STUDY_MODE.get(getattr(
-                self.attr, C_ATTR_DICT.get('SM')).code)\
-                if getattr(self.attr, C_ATTR_DICT.get('SM'), None) \
-                else ''
-        else:
+        try:
+            if self.is_course:
+                return choices.STUDY_MODE.get(getattr(
+                    self.attr, C_ATTR_DICT.get('SM')).code)\
+                    if getattr(self.attr, C_ATTR_DICT.get('SM'), None) \
+                    else ''
+            else:
+                return ''
+        except AttributeError as error:
+            logging.getLogger('error_log').error('Attribute Error while adding get_studymode_db() in shop.models, {}'.format(str(error)))
+            return ''
+        except Exception as e:
+            logging.getLogger('error_log').error('Error Occured while adding get_studymode_db() in shop.models {}'.format(str(e)))
             return ''
 
     def get_courselevel(self):
         # return code
-        if self.is_course:
-            return getattr(self.attr, C_ATTR_DICT.get('CL')).code \
-                if getattr(self.attr, C_ATTR_DICT.get('CL'), None) \
-                else ''
-        else:
+        try:
+            if self.is_course:
+                return getattr(self.attr, C_ATTR_DICT.get('CL')).code \
+                    if getattr(self.attr, C_ATTR_DICT.get('CL'), None) \
+                    else ''
+            else:
+                return ''
+        except AttributeError as error:
+            logging.getLogger('error_log').error('Attribute Error while adding get_courselevel() in shop.models, {}'.format(str(error)))
+            return ''
+        except Exception as e:
+            logging.getLogger('error_log').error('Error Occured while adding get_courselevel() in shop.models {}'.format(str(e)))
             return ''
 
     def get_courselevel_db(self):
