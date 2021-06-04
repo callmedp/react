@@ -974,7 +974,8 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
                         'fake_aed_price': float(pv.fake_aed_price),
                         'gbp_price': float(pv.gbp_price),
                         'fake_gbp_price': float(pv.fake_gbp_price),
-                        "short_description": pv.short_description})
+                        "short_description": pv.short_description,
+                        'pImg': self.prepare_pImg(pv)})
                 pop_dict.update({
                     'pop_list': pop_list
                 })

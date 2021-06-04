@@ -1,7 +1,10 @@
 import React from 'react';
 import './whyChooseUs.scss';
+import { useSelector } from 'react-redux';
 
 const WhyChooseUs = (props) => {
+    const { name } = useSelector(store => store.skillBanner)
+
     return (
         <section className="m-why-choose-us mt-0 mb-0" data-aos="fade-up">
         <div className="m-container pt-10">
@@ -11,7 +14,7 @@ const WhyChooseUs = (props) => {
                     <li>
                         <p>
                             <strong>1500<span>+</span></strong>
-                            jobs available in Digital Marketing
+                            jobs available { !!name ? `in ${name}` : ''}
                         </p>
                     </li>
                     <li>

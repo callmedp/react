@@ -155,7 +155,7 @@ class ProductMixin(object):
         for assessment in assessments:
 
             #This call can be optimized in future
-            no_of_jobs = self.get_jobs_count(assessments.pSg)
+            no_of_jobs = self.get_jobs_count(assessment.pSg)
 
             assessment_data = {
                 'id':assessment.id,
