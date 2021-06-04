@@ -24,12 +24,14 @@ import {
 import Loader from '../../Common/Loader/loader';
 import MetaContent from '../../Common/MetaContent/metaContent';
 import { fetchAlreadyLoggedInUser } from "store/Authentication/actions/index";
+import OfferEnds from './OfferEnds/offerEnds';
 
 const HomePage = (props) => {
 
     const dispatch = useDispatch();
     const { homeLoader } = useSelector(store => store.loader)
     const { meta } = useSelector(store => store.testimonials)
+    const { navOffer } = useSelector((store) => store.header);
 
     let cookies = "";
     try {
@@ -97,6 +99,8 @@ const HomePage = (props) => {
             { meta && <MetaContent meta_tags={meta} />}
             { homeLoader ? <Loader /> : ''}
             {/* <OfferEnds /> */}
+            {navOffer[4] ? <OfferEnds navOffer={navOffer}/> : ""}
+
             <Header isHomepage={true} />
             <main>
                 <HomeBanner />
