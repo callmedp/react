@@ -709,8 +709,15 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
         return obj.vendor.id if obj.vendor else -1
 
     def prepare_pRD(self, obj):
-        if obj.is_course:
-            return getattr(obj.attr, 'requires_delivery', False)
+        try:
+            if obj.is_course:
+                return getattr(obj.attr, 'requires_delivery', False)
+        except AttributeError as error:
+            logging.getLogger('error_log').error('Attribute Error while adding prepare_PRD() in shop.models, {}'.format(str(error)))
+            return False
+        except Exception as e:
+            logging.getLogger('error_log').error('Error Occured while adding prepare_PRD() in shop.models {}'.format(str(e)))
+            return False
 
     def prepare_pEX(self, obj):
         return obj.get_exp()
