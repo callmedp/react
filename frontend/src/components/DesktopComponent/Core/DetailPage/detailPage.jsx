@@ -31,6 +31,7 @@ import { getTrackingInfo, storageTrackingInfo, removeTrackingInfo, getCandidateI
 import { trackUser } from 'store/Tracking/actions/index.js';
 import ReviewModal from '../../Common/Modals/reviewModal';
 import VideoModal from '../../Common/Modals/videoModal';
+import { zendeskTimeControlledWindow } from 'utils/zendeskIniti';
 
 
 const DetailPage = (props) => {
@@ -57,6 +58,9 @@ const DetailPage = (props) => {
         handleEffects();
         Aos.init({ duration: 2000, once: true, offset: 10, anchorPlacement: 'bottom-bottom' });
         window.addEventListener('scroll', handleScroll);
+        
+        //Zendesk Chat
+        zendeskTimeControlledWindow(7000);
         if(getCandidateId() && (showAfterLoginReviewModal === 'true')) showReviewModal(true)
         else showReviewModal(false)
     }, [id])
