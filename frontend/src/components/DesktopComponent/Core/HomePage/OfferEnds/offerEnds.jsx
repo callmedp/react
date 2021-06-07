@@ -18,12 +18,13 @@ const OfferEnds = (props) => {
         showMainOffer &&
         <div>
           <Toast className="offer-ends">
-            <Toast.Header onClick={() => setShowMainOffer(!showMainOffer)}>
+            <Toast.Header closeButton={false}>
               <p className="flex-1">
                 limited time offer by&nbsp;<strong>{navOffer[1]}&nbsp;</strong>   |  {navOffer[3]} OFF  |  Offer ends in
                   <OfferTimer timerDate={navOffer[0]} cssClass='time' type="main" />
                 <em onClick={handleShow} className="btn btn-inline btn-outline-primary">Avail offer</em>
               </p>
+              <span className="close mr-3" onClick={() => setShowMainOffer(false)}>x</span>
             </Toast.Header>
           </Toast>
 

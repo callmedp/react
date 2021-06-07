@@ -192,6 +192,8 @@ class HomePageOffer(AbstractAutoDate):
 
     def get_active_offer(self):
         offer = cache.get('homepage_active_offer')
+        cache.delete('homepage_active_offer')
+        # import ipdb;ipdb.set_trace()
         if not offer:
             offer = HomePageOffer.objects.filter(is_active=True).first()
             cache.set('homepage_active_offer',offer,timeout=None)
