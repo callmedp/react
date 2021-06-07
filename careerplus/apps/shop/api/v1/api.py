@@ -15,6 +15,7 @@ from django.http import Http404
 from django.conf import settings
 from django.urls import reverse
 from django.contrib.contenttypes.models import ContentType
+from shine.core import ShineCandidateDetail
 
 # Inter-App Import
 from .tasks import create_product_review_task
@@ -86,7 +87,7 @@ class ProductInformationAPIMixin(object):
         info['prd_rating'] = round(float(product.pARx), 1)
         info['prd_num_rating'] = product.pRC
         info['prd_num_bought'] = product.pBC
-        info['prd_num_jobs'] = ProductMixin().get_jobs_count(product.pSg)
+        info['prd_num_jobs'] = product.pNJ
         info['prd_vendor'] = product.pPvn
         info['pTF'] = product.pTF
         info['pTg'] = dict(PRODUCT_TAG_CHOICES).get(product.pTg)
@@ -894,6 +895,25 @@ class ProductDetailAPI(ProductInformationAPIMixin, APIView):
         if product.type_flow == 17:
             return 11
 
+    
+    def get_jobs_count(self, course_name):
+        try:
+
+            jobs_count = ShineCandidateDetail().get_jobs(
+                data={ 'q': course_name}, 
+                shine_id =self.request.session.get('candidate_id')
+                ).get('count', 0)
+                
+            return jobs_count
+
+        except Exception as e:
+
+            logging.getLogger('error_log').error(
+                "Data fetch from shine.com jobs search api failed  - {}".format(e))
+            return 0
+        
+
+
     def get(self, request, *args, **kwargs):
         """
         API Get function to populate the product detail, function contains
@@ -1080,8 +1100,9 @@ class ProductDetailAPI(ProductInformationAPIMixin, APIView):
                     return APIResponse(message='Product Not Found', error=True, status=status.HTTP_404_NOT_FOUND)
 
             cache_slrprd_maping = cache.get(self.prd_solr_key, "")
-
+            
             if cache_slrprd_maping:
+                
                 self.sqs = cache_slrprd_maping
             else:
                 sqs = SearchQuerySet().filter(id=pid)
@@ -1143,11 +1164,17 @@ class ProductDetailAPI(ProductInformationAPIMixin, APIView):
                                                                                                    flat=True)[:10]
             self.skill == ",".join(self.skill)
 
-
             product_data = self.get_product_detail_context(
                 self.product_obj, self.sqs,
                 self.product_obj, self.sqs
             )
+
+            
+            jobs_count = self.get_jobs_count(self.sqs.pSg) 
+                
+            product_data.update({
+                'prd_num_jobs': jobs_count
+            }) 
 
             context.update({
                 'product_detail': product_data,
