@@ -1,17 +1,15 @@
 import React, {useState} from 'react';
 import { Modal } from 'react-bootstrap';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import {InputField, SelectBox} from 'formHandler/desktopFormHandler/formFields';
 import NeedHelpForm from 'formHandler/desktopFormHandler/formData/needHelp';
-import { submitReview } from 'store/DetailPage/actions';
 import { useForm } from "react-hook-form";
-import { startReviewLoader, stopReviewLoader } from 'store/Loader/actions/index';
-import Loader from '../Loader/loader';
-import { Toast } from '../Toast/toast';
+// import { startReviewLoader, stopReviewLoader } from 'store/Loader/actions/index';
+// import Loader from '../Loader/loader';
 import { imageUrl } from 'utils/domains';
-import { MyGA } from 'utils/ga.tracking.js';
 import '../../Core/HomePage/OfferEnds/offerEnds.scss';
 import { fetchLeadManagement } from 'store/LeadManagement/actions';
+import OfferTimer from 'utils/OfferTimer';
 
 const OfferModal =(props) => {
     const { show, handleClose, timerDays, timerHours, timerMinutes, timerSeconds, navOffer } = props;
@@ -20,20 +18,15 @@ const OfferModal =(props) => {
     const [offerStatus, setOfferStatus] = useState(false);
 
     const onSubmit = async (values, event) => {
-
-        // homepagebanner
-
-
-        console.log(values)
-        values['course'] = '';
+        values['course'] = navOffer[2];
         values['product_offer'] = true;
-        values['msg'] = ""
-        values['lsource'] = 8;
-        values["source"] = 'cambridge';
+        values['msg'] = `${navOffer[1]} - ${navOffer[3]}`;
+        values['lsource'] = 34;
+        values["source"] = navOffer[2];
         values["campaign"] = 'homepage-banner';
         
-        // const result = await new Promise((resolve) => dispatch(fetchLeadManagement({ payload: data, resolve, reject })))
-        // if(result.status) setOfferStatus(result.status);
+        const result = await new Promise((resolve, reject) => dispatch(fetchLeadManagement({ payload: values, resolve, reject })))
+        if(result.status) setOfferStatus(result.status);
     }
 
     return (
@@ -79,22 +72,7 @@ const OfferModal =(props) => {
                             <span className="offer-heading">Limited time offer -<strong> {navOffer[3]} off</strong></span>
                             Offer ends in  
                             <p className="mt-10">
-                                <span className="time">
-                                <strong>{timerDays}</strong>
-                                <em>Days</em>
-                                </span>
-                                <span className="time">
-                                <strong>{timerHours}</strong> 
-                                <em>Hours</em>
-                                </span>
-                                <span className="time">
-                                <strong>{timerMinutes}</strong> 
-                                <em>Min.</em> 
-                                </span>
-                                <span className="time">
-                                <strong>{timerSeconds}</strong> 
-                                <em>Sec.</em> 
-                                </span>
+                                <OfferTimer timerDate={navOffer[0]} cssClass='time' type="modal" />
                             </p>
                             </div>
                         </div>

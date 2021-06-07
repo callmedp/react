@@ -103,3 +103,47 @@ input:-webkit-autofill:active  {
         margin: 0 auto;
     }
 } 
+
+.m-form-pos-center-v {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    top: 0;
+    z-index: 999;
+    padding: 0 2rem;
+
+    &::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        z-index: 9;
+        background: rgba($color: $black, $alpha: 0.4)
+    }
+
+    .m-modal-body {
+        position: relative;
+        z-index: 9999;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        background: $white;
+        padding: 10%;
+        flex: 1;
+        margin: 0 2rem;
+
+        .m-close {
+            position: absolute;
+            right: 1.5rem;
+            top: .5rem;
+            font-size: 2rem;
+            font-weight: 400;
+            color: $gray-200;
+        }
+    }
+}
+

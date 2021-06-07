@@ -99,7 +99,7 @@ const HomePage = (props) => {
             { meta && <MetaContent meta_tags={meta} />}
             { homeLoader ? <Loader /> : ''}
             {/* <OfferEnds /> */}
-            {navOffer[4] ? <OfferEnds navOffer={navOffer}/> : ""}
+            {navOffer[4] ? <OfferEnds navOffer={navOffer} /> : ""}
 
             <Header isHomepage={true} />
             <main>
