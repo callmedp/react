@@ -150,7 +150,7 @@ input:-webkit-autofill:active  {
 .m-offer-modal {
     height: 100vh;
     .m-offer-box {
-        background: url(/media/images/mobile/offer-bg.jpg) no-repeat center top;
+        background: url('#{$path}mobile/offer-bg.jpg') no-repeat center top;
         background-size: cover;
         display: flex;
         width: auto;
