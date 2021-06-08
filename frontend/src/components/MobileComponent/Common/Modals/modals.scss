@@ -147,3 +147,113 @@ input:-webkit-autofill:active  {
     }
 }
 
+.m-offer-modal {
+    height: 100vh;
+    .m-offer-box {
+        background: url(/media/images/mobile/offer-bg.jpg) no-repeat center top;
+        background-size: cover;
+        display: flex;
+        width: auto;
+
+        .m-offer-txt {
+            align-self: flex-end;
+            margin: 1.5rem;
+            color: $white;
+
+            .m-offer-heading {
+                font-size: 2.2rem;
+                line-height: 2.5rem;
+                text-align: left;
+                margin-bottom: 1rem;
+                display: block;
+                strong {
+                    font-weight: 600;
+                    display: block;
+                }
+            }
+
+            p {
+                font-size: 1.3rem;
+                color: $white;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                .m-time {
+                    margin: 0;
+                    display: inline-block;
+
+                    strong {
+                        width: 4.5rem;
+                        height: 4rem;
+                        border-radius: .2rem;
+                        font-size: 2.4rem;
+                        font-weight: 600;
+                        color: $gray-100;
+                        background: $white;
+                        display: block;
+                        text-align: center;
+                        vertical-align: middle;
+                        // line-height: 4rem;
+                    }
+
+                    em {
+                        font-style: normal;
+                        display: block;
+                        margin-top: .5rem;
+                        margin-left: 0;
+                        text-align: center;
+                        width: 5.5rem;
+                    }
+                }
+            }
+        }
+    }
+    .m-brand-partner {
+        text-align: center;
+        strong {
+            font-size: 1.2rem;
+            font-weight: 700;
+            width: 100%;
+            position: relative;
+            display: block;
+
+            &::before {
+                content: '';
+                position: absolute;
+                left: 0;
+                right: 0;
+                top: 1.7rem;
+                border: 1px solid $border-color;
+            }
+
+            span {
+                background: $white;
+                padding: 0 1rem;
+                display: inline-block;
+                position: relative;
+                z-index: 9;
+                font-size: 1.2rem;
+            }
+        }
+
+        span {
+            font-size: 1.1rem;
+            color: $gray-200;
+            display: block;
+            margin: 1rem 0;
+        }
+    }
+
+    .m-close {
+        color: $white !important;
+        right: 1rem !important;
+        top: 0 !important;
+    }
+}
+
+.m-offer-modal-thanks {
+    .m-close {
+        color: $gray-100 !important;
+    }
+}

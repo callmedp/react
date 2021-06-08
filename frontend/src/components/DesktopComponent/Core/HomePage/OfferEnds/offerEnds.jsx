@@ -24,7 +24,7 @@ const OfferEnds = (props) => {
                   <OfferTimer timerDate={navOffer[0]} cssClass='time' type="main" />
                 <em onClick={handleShow} className="btn btn-inline btn-outline-primary">Avail offer</em>
               </p>
-              <span className="close mr-3" onClick={() => setShowMainOffer(false)}>x</span>
+              <span className="icon-close mr-3" onClick={() => setShowMainOffer(false)}>x</span>
             </Toast.Header>
           </Toast>
 

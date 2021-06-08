@@ -35,7 +35,7 @@ const OfferModal =(props) => {
             <Modal 
                 show={show} 
                 onHide={handleClose}
-                dialogClassName="offer-end-box"
+                dialogClassName={`offer-end-box ${offerStatus ? `offer-thanks` : ``}`}
                 aria-labelledby="contained-modal-title-vcenter"
                 centered
             >
