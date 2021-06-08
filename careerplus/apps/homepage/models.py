@@ -192,8 +192,7 @@ class HomePageOffer(AbstractAutoDate):
 
     def get_active_offer(self):
         offer = cache.get('homepage_active_offer')
-        cache.delete('homepage_active_offer')
-        # import ipdb;ipdb.set_trace()
+
         if not offer:
             offer = HomePageOffer.objects.filter(is_active=True).first()
             cache.set('homepage_active_offer',offer,timeout=None)
@@ -203,7 +202,6 @@ class HomePageOffer(AbstractAutoDate):
     def save(self,*args,**kwargs):
         cache.delete('homepage_active_offer')
         super(HomePageOffer,self).save(*args,**kwargs)
-
 
 class NavigationSpecialTag(AbstractAutoDate):
     display_name = models.CharField(

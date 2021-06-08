@@ -62,7 +62,7 @@ const OfferModal =(props) => {
                             <div className="brand-partner">
                             <strong><span>Course offered by</span></strong>
                             <figure>
-                                <img src={`${imageUrl}desktop/cambridge-logo.png`} alt="Cambridge Assessment English" />
+                                <img src={navOffer[5]} alt="Cambridge Assessment English" />
                             </figure>
                             <span>*T&C applied, valid only on select courses</span>
                             </div>
