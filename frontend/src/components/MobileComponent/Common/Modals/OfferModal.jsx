@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import './modals.scss';
 import { useDispatch } from 'react-redux';
 import { useForm } from 'react-hook-form';
@@ -14,7 +14,12 @@ const OfferModal = (props) => {
     const dispatch = useDispatch();
     const { register, handleSubmit, errors } = useForm();
 
-    const onSubmit = async (values, event) => {
+    useEffect(() => {
+        document.body.style.overflow = 'hidden';
+        return ()=> document.body.style.overflow = 'unset';
+    }, []);
+
+    const onSubmit = async (values) => {
         values['course'] = navOffer[2];
         values['product_offer'] = true;
         values['msg'] = `${navOffer[1]} - ${navOffer[3]}`;
