@@ -12,3 +12,5 @@ export const shineSiteDomain = window?.config?.shineSiteDomain || process.env.RE
 export const shineDomain = 'https://www.shine.com';
 
 export const shineSiteUrl = 'https://www.shine.com/jobs/';
+
+export const chatbotDomain = window?.config?.chatbotDomain || process.env.REACT_APP_CHATBOT_SITE_DOMAIN ||  'https://chat.shine.com';
