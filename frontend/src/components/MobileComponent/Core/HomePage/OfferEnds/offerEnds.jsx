@@ -17,7 +17,7 @@ const OfferEnds = (props) => {
                 showMainOffer &&
                 <section className="m-offer-ends mt-0 mb-0">
                     <p>
-                        <span className="m-offer-heading"><span>Limited time offer by <strong>{navOffer[1]}&nbsp;</strong> |</span>  {navOffer[3]} OFF</span>
+                        <span className="m-offer-heading"><span>Limited time offer by <strong>{navOffer[1]}&nbsp;</strong> |</span>  {navOffer[3]} OFF &emsp;</span>
                         Offer ends in
                         <OfferTimer timerDate={navOffer[0]} cssClass='m-time' type="main" />
                         <em className="btn-blue-outline" onClick={handleOfferShow}>Avail offer</em>
