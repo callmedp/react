@@ -50,7 +50,7 @@ def create_lead_on_crm(pk=None, source_type=None, name=None):
         filter_dict.update(source_in_dict)
     lead_creation_function(filter_dict=filter_dict, cndi_name=name, source_type=source_type)
     logging.getLogger('info_log').info(
-        'CREATE_LEAD_ON_CRM, checkpoint4 for pk => {} AND FILTER => {} AND source_type => {}'.format(str(pk),
+        'CREATE_LEAD_ON_CRM, checkpoint4 (final) for pk => {} AND FILTER => {} AND source_type => {}'.format(str(pk),
                                                                                                      str(filter_dict),
                                                                                                      str(source_type)))
 
@@ -63,7 +63,7 @@ def lead_creation_function(filter_dict=None, cndi_name=None, source_type=None):
         for cart_obj in cart_objs:
             logging.getLogger('info_log').info('CREATE_LEAD_ON_CRM, checkpoint1 for pk => {}'.format(str(cart_obj.pk)))
             data_dict = {}
-            total_amount = None
+            total_amount = 0
             data_dict.update({
                 "name": cndi_name,
                 "email": cart_obj.email,
@@ -94,7 +94,7 @@ def lead_creation_function(filter_dict=None, cndi_name=None, source_type=None):
             counter = 0
             if prod:
                 # logging.getLogger('error_log').error('prdid'+ str(prod.id))
-                logging.getLogger('info_log').info("lead creation process for product-" + str(prod.id))
+                logging.getLogger('info_log').info("lead creation process for product-{} with data_dict => {}".format(str(prod.id), str(data_dict)))
                 counter += 1
                 product_name = prod.product.heading if prod.product.heading else prod.product.name
                 data_dict.update({
@@ -142,7 +142,19 @@ def lead_creation_function(filter_dict=None, cndi_name=None, source_type=None):
                 m_prod = m_prods[0]
 
             data_dict.update({"extra_info": json.dumps(extra_info)})
-            logging.getLogger('info_log').info('CREATE_LEAD_ON_CRM, checkpoint2 for pk => {}'.format(str(cart_obj.pk)))
+            logging.getLogger('info_log').info('CREATE_LEAD_ON_CRM, checkpoint2 for pk => {} and data_dict => {}'.format(str(cart_obj.pk), str(data_dict)))
+
+            if not 'product' in data_dict.keys():
+                logging.getLogger('info_log').info(
+                    'CREATE_LEAD_ON_CRM, product not found in cart  cart_count => {}, source => {}, data_dict => {}'.format(
+                        str(m_prods.count()), str(source_type), str(data_dict)))
+                return
+
+            if not 'productid' in data_dict.keys():
+                logging.getLogger('info_log').info(
+                    'CREATE_LEAD_ON_CRM, product not found in cart  cart_count => {}, source => {}, data_dict => {}'.format(
+                        str(m_prods.count()), str(source_type), str(data_dict)))
+                return
 
             if source_type in ["cart_summary", "payment_option"]:
                 data_dict.update({
