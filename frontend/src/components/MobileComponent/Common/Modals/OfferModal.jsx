@@ -35,7 +35,7 @@ const OfferModal = (props) => {
     }
 
     return(
-        <div className="m-container m-enquire-now m-offer-modal m-form-pos-btm p-0">
+        <div className="m-container m-enquire-now m-offer-modal m-form-pos-top p-0">
             <span className="m-close" onClick={() => handleOfferClose(state => !state)}>x</span>
             <div className="m-offer-box">
                 <div className="m-offer-txt">
