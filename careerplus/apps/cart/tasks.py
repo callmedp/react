@@ -150,12 +150,6 @@ def lead_creation_function(filter_dict=None, cndi_name=None, source_type=None):
                         str(m_prods.count()), str(source_type), str(data_dict)))
                 return
 
-            if not 'productid' in data_dict.keys():
-                logging.getLogger('info_log').info(
-                    'CREATE_LEAD_ON_CRM, product not found in cart  cart_count => {}, source => {}, data_dict => {}'.format(
-                        str(m_prods.count()), str(source_type), str(data_dict)))
-                return
-
             if source_type in ["cart_summary", "payment_option"]:
                 data_dict.update({
                     "lead_type": 2,
