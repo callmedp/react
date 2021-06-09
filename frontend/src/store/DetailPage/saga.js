@@ -24,16 +24,7 @@ function* mainCoursesApi(action){
         const item = response?.data?.data;
         let providerLength = item?.product_detail?.pop_list?.length;
 
-        let appendTracking = "";
-
-        if(localStorage.getItem("trackingId")){
-            appendTracking = getTrackingUrl()
-        }
-
-        if(item?.redirect_url) {
-            // item['tracking_values'] = appendTracking;
-            return reject(item);
-        }
+        if(item?.redirect_url) return reject(item);
 
         if(!!payload && payload.device === 'desktop' && !!item && !!item.product_detail && item.product_detail.pop_list instanceof Array) {
             const otherProvidersList = item.product_detail.pop_list.reduce((rows, key, index) => 
