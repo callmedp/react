@@ -862,16 +862,29 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
     #         sender=self, product=product, user=request.user, request=request,
     #         response=response)
 
-    def redirect_for_resume_shine(self, path_info, request):
+    def redirect_for_resume_shine(self, request, path_info):
         pk = path_info.get("pk", "")
         cat_slug = 'product'
         prd_slug = path_info.get('prd_slug')
+
+        tracking_id = request.GET.get('t_id','')
+        trigger_point = request.GET.get('trigger_point','')
+        u_id = request.GET.get('u_id','')
+        position = request.GET.get('position',1)
+        utm_campaign = request.GET.get('utm_campaign','')
+        r_p = request.GET.get('referal_product', '')
+        r_sp = request.GET.get('referal_subproduct', '')
+        popup_based_product = request.GET.get('popup_based_product', '')
+        recommendation_by = request.GET.get('recommendation_by', '')
+        cart_addition = request.GET.get('cart_addition', "False")
+
         if(path_info.get('cat_slug') == 'linkedin-profile-writing'):
             cat_slug = cat_slug + '/' + path_info.get("cat_slug", "")
-        # print('>>>>>>>>>>>>>>1', request.session.__dict__)
+
         expected_path = "{}/{}/{}/{}".format(
             settings.RESUME_SHINE_MAIN_DOMAIN, cat_slug, prd_slug, pk, request)
-        return HttpResponsePermanentRedirect(expected_path)
+
+        return HttpResponsePermanentRedirect(expected_path + '?t_id=' + tracking_id + '&trigger_point=' + trigger_point + '&u_id=' + u_id + '&position=' + position + '&recommendation_by=' + recommendation_by + '&cart_addition=' + cart_addition + '&utm_campaign=' + utm_campaign + '&r_p=' + r_p + '&r_sp' + r_sp + '&popup_based_product=' + popup_based_product)
 
     def return_http404(self, sqs_obj):
         if sqs_obj.count() == 1:
@@ -947,8 +960,6 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
                 self.request.session.update({'lead_create_prods': [int(kwargs.get('pk', 0))]})
             except:
                 pass
-
-        # self.redirect_for_resume_shine(path_info, request)
 
         if self.request.GET.get('lc') and self.request.session.get('candidate_id'):
             if not kwargs.get('pk', ''):
@@ -1129,11 +1140,8 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             else:
                 raise Http404
 
-        # print('>>>>>>>>>>>', request.session.__dict__)
-        
         if (self.sqs.pPc == 'writing' or self.sqs.pPc == 'service' or self.sqs.pPc == 'other') and self.sqs.pTP not in [2, 4] and self.sqs.pTF not in [16, 2]:
-            resume_shine_redirection = self.redirect_for_resume_shine(
-                path_info, request)
+            resume_shine_redirection = self.redirect_for_resume_shine(request, path_info)
             return resume_shine_redirection
         if self.sqs.id in settings.LINKEDIN_RESUME_PRODUCTS:
             linkedin_cid = settings.LINKEDIN_DICT.get('CLIENT_ID', None)

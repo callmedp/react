@@ -77,8 +77,8 @@ export const getTrackingUrl = () => {
         if(cart_addition) tracking_url += `&cart_addition=${cart_addition}`;
         if(referal_product) tracking_url += `&referal_product=${referal_product}`;
         if(referal_subproduct) tracking_url += `&referal_subproduct=${referal_subproduct}`;
-        // console.log(tracking_url)
-        return tracking_url
+
+        return tracking_url;
     }
     return ""
 }

@@ -10,7 +10,7 @@ import { fetchLeadManagement } from 'store/LeadManagement/actions';
 // import '../../Core/HomePage/OfferEnds/offerEnds.scss';
 
 const OfferModal = (props) => {
-    const {showOffer, handleOfferClose, navOffer, setOfferStatus} = props;
+    const { handleOfferClose, navOffer, setOfferStatus} = props;
     const dispatch = useDispatch();
     const { register, handleSubmit, errors } = useForm();
 

@@ -23,8 +23,6 @@ const OfferTimer = (props) => {
       setTimerMinutes(minutes);
       setTimerSeconds(seconds);
     }
-
-    // console.log(timerDays, timerHours, timerMinutes, timerSeconds)
   };
   
   const saveInLocalStorage = (time) => {
