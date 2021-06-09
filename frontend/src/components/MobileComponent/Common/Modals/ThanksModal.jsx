@@ -11,7 +11,7 @@ const OfferModal = (props) => {
     }, []);
 
     return(
-        <div className="m-container m-enquire-now m-offer-modal m-offer-modal-thanks m-form-pos-btm p-0">
+        <div className="m-container m-enquire-now m-offer-modal m-offer-modal-thanks m-form-pos-top p-0">
             <span className="m-close" onClick={() => setOfferStatus(state => !state)}>x</span>
 
             <div className="pl-15 pr-15 mt-20">
