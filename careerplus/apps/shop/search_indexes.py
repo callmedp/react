@@ -1046,10 +1046,17 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_pAsft(self, obj):
         detail = {}
-        if obj.product_class.name == 'assessment':
-            objs = obj.productattributes.filter(active=True)
-            for obj in objs:
-                detail[obj.attribute.name] = obj.value
+        try:
+            if obj.product_class.name == 'assessment':
+                objs = obj.productattributes.filter(active=True)
+                for obj in objs:
+                    detail[obj.attribute.name] = obj.value
+                return json.dumps(detail)
+        except AttributeError as error:
+            logging.getLogger('error_log').error('Attribute Error while adding prepare_pAsft() in shop.models, {}'.format(str(error)))
+            return json.dumps(detail)
+        except Exception as e:
+            logging.getLogger('error_log').error('Error Occured while adding prepare_pAsft() in shop.models {}'.format(str(e)))
             return json.dumps(detail)
 
     def prepare_pRT(self, obj):
