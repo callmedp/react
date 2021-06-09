@@ -862,16 +862,15 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
     #         sender=self, product=product, user=request.user, request=request,
     #         response=response)
 
-    def redirect_for_resume_shine(self, path_info):
+    def redirect_for_resume_shine(self, path_info, request):
         pk = path_info.get("pk", "")
         cat_slug = 'product'
         prd_slug = path_info.get('prd_slug')
-
         if(path_info.get('cat_slug') == 'linkedin-profile-writing'):
             cat_slug = cat_slug + '/' + path_info.get("cat_slug", "")
-
+        # print('>>>>>>>>>>>>>>1', request.session.__dict__)
         expected_path = "{}/{}/{}/{}".format(
-            settings.RESUME_SHINE_MAIN_DOMAIN, cat_slug, prd_slug, pk)
+            settings.RESUME_SHINE_MAIN_DOMAIN, cat_slug, prd_slug, pk, request)
         return HttpResponsePermanentRedirect(expected_path)
 
     def return_http404(self, sqs_obj):
@@ -949,8 +948,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             except:
                 pass
 
-
-        
+        # self.redirect_for_resume_shine(path_info, request)
 
         if self.request.GET.get('lc') and self.request.session.get('candidate_id'):
             if not kwargs.get('pk', ''):
@@ -1130,9 +1128,12 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
                 cache.set(self.prd_solr_key, self.sqs, 60 * 60 * 4)
             else:
                 raise Http404
+
+        # print('>>>>>>>>>>>', request.session.__dict__)
+        
         if (self.sqs.pPc == 'writing' or self.sqs.pPc == 'service' or self.sqs.pPc == 'other') and self.sqs.pTP not in [2, 4] and self.sqs.pTF not in [16, 2]:
             resume_shine_redirection = self.redirect_for_resume_shine(
-                path_info)
+                path_info, request)
             return resume_shine_redirection
         if self.sqs.id in settings.LINKEDIN_RESUME_PRODUCTS:
             linkedin_cid = settings.LINKEDIN_DICT.get('CLIENT_ID', None)
