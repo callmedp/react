@@ -149,6 +149,8 @@ input:-webkit-autofill:active  {
 
 .m-offer-modal {
     height: 100vh;
+    overflow-y: auto;
+    
     .m-offer-box {
         background: url('#{$path}mobile/offer-bg.jpg') no-repeat center top;
         background-size: cover;

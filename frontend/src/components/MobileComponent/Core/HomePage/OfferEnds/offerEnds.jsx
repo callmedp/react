@@ -20,7 +20,7 @@ const OfferEnds = (props) => {
                         <span className="m-offer-heading"><span>Limited time offer by <strong>{navOffer[1]}&nbsp;</strong> |</span>  {navOffer[3]} OFF &emsp;</span>
                         Offer ends in
                         <OfferTimer timerDate={navOffer[0]} cssClass='m-time' type="main" />
-                        <em className="btn-blue-outline" onClick={handleOfferShow}>Avail offer</em>
+                        <em className="btn-blue-outline mt-5" onClick={handleOfferShow}>Avail offer</em>
                     </p>
                     <button className="m-close-offer micon-close" onClick={() => setShowMainOffer(!showMainOffer)}></button>
 
