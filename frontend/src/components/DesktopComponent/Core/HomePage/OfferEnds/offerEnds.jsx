@@ -5,13 +5,12 @@ import OfferModal from '../../../Common/Modals/offerModal';
 import OfferTimer from 'utils/OfferTimer';
 
 const OfferEnds = (props) => {
-  const { navOffer } = props;
+  const { navOffer, showMainOffer, setShowMainOffer } = props;
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [offerStatus, setOfferStatus] = useState(false);
-  const [showMainOffer, setShowMainOffer] = useState(true);
-
+  console.log(showMainOffer)
   return(
     <>
       {
