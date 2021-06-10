@@ -17,7 +17,7 @@ urlpatterns = [
     re_path(r'^v1/remove-coupon/$',
         views.RemoveCouponApiView.as_view(), name='remove-coupon'),
 
-    re_path(r'^v1/recommended-products/$',
+    re_path(r'^v1/recommended-products-by-email/$',
         views.RecommendedProductsApiView.as_view(),
         name='api-recommended-products'),
 

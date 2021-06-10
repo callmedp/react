@@ -34,7 +34,7 @@ import { trackUser } from 'store/Tracking/actions/index.js';
 import ReviewModal from '../../Common/Modals/reviewModal';
 import VideoModal from '../../Common/Modals/videoModal';
 import { Helmet } from "react-helmet";
-import { zendeskTimeControlledWindow } from 'utils/zendeskIniti';
+// import { zendeskTimeControlledWindow } from 'utils/zendeskIniti';
 
 const DetailPage = (props) => {
     const dispatch = useDispatch();
@@ -73,7 +73,7 @@ const DetailPage = (props) => {
         window.addEventListener('scroll', handleScroll);
         
         //Zendesk Chat
-        zendeskTimeControlledWindow(7000);
+        // zendeskTimeControlledWindow(7000);
         if(getCandidateId() && (showAfterLoginReviewModal === 'true')) showReviewModal(true)
         else showReviewModal(false)
     }, [id])
