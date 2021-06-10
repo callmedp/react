@@ -46,7 +46,7 @@ const ReviewModal =(props) => {
         let data = typeof e == "number" ? e : parseInt(e.target.getAttribute("value")) - 1;
         let children = document.getElementsByClassName("rating-review")[0].children;
         for (let i = 0; i <= data; i++) {
-            children[i].setAttribute("class", `icon-${className}`);
+            children[i].setAttribute("className", `icon-${className}`);
         }
     };
 

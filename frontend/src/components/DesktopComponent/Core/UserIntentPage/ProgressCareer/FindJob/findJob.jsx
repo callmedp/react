@@ -40,7 +40,7 @@ const FindJob = (props) => {
                                             <input type="text" className="form-control" id="location" name="location" placeholder=" "
                                                 aria-required="true" aria-invalid="true" />
                                             <label for="">Preferred location</label>
-                                            <span class="error-msg">Required</span>
+                                            <span className="error-msg">Required</span>
                                         </div>
                                         <div className="form-group">
                                             <input type="text" className="form-control" id="skills" name="skills" placeholder=" "

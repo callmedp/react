@@ -17,7 +17,7 @@ const Header = (props) => {
     const { count, navTags } = useSelector(store => store.header)
     const [candidateInfo, setCandidateInfo] = useState(false)
     const [isLoggedIn, setIsLoggedIn] = useState(false)
-    const { isHomepage, isUserIntentPage } = props;
+    const { isHomepage, isUserIntentPage, showMainOffer, setShowMainOffer } = props;
 
     const handleRedirect = (event, type) => {
         event.preventDefault();
@@ -212,6 +212,7 @@ const Header = (props) => {
                                 </span>
                         }
                     </div>
+                    { (!showMainOffer && isHomepage) && <a onClick={() => setShowMainOffer(true)} className="icon-offer ml-auto mr-20 cursorLink" data-toogle="tooltip" title="View Offer"></a> }
                 </nav>
         </div >
     )
