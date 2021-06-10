@@ -10,7 +10,7 @@ const OfferEnds = (props) => {
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   const [offerStatus, setOfferStatus] = useState(false);
-  console.log(showMainOffer)
+
   return(
     <>
       {
