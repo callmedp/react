@@ -212,6 +212,7 @@ const Header = (props) => {
                                 </span>
                         }
                     </div>
+                    <Link to="#" className="icon-offer ml-auto mr-20"></Link>
                 </nav>
         </div >
     )
