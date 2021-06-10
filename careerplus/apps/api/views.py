@@ -789,6 +789,9 @@ class RecommendedProductsApiView(ListAPIView):
 
         if university_course:
             products = products.filter(pTF=14)
+
+        if len(products) == 0:
+            products = SearchQuerySet().filter(id__in=settings.DEFAULT_RECOMMEND_PRODUCT)
         return products
 
 

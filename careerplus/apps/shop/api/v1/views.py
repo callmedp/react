@@ -284,6 +284,7 @@ class RecommendedProductsAPIView(FieldFilterMixin, ListAPIView):
 
     def get_queryset(self, *args, **kwargs):
         email = self.request.GET.get('email', '')
+        func_area_obj = None
         skills_ids = None
         func_area = None
         job_title = None

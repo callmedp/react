@@ -1,5 +1,5 @@
 import BaseApiService from 'services/BaseApiService'
-import { siteDomain } from 'utils/domains'
+import { siteDomain, chatbotDomain } from 'utils/domains'
 
 const fetchProductReviews = (data) => {
     const url = `/shop/api/v1/get-prd-review/?pid=${data.prdId}&page=${data.page}`;
@@ -39,8 +39,8 @@ const addToCartRedeemApi = (data) => {
 const chatbotScriptApi = () => {
     let url = "";
 
-    if(localStorage.getItem('candidateId')) url = `${siteDomain}/chatbot/api/app/learning_course_page/get-script`;
-    else url = `${siteDomain}/chatbot/api/app/learning_course_non_loggedIn/get-script/`;
+    if(localStorage.getItem('candidateId')) url = `${chatbotDomain}/api/app/learning_course_page/get-script`;
+    else url = `${chatbotDomain}/api/app/learning_course_non_loggedIn/get-script/`;
 
     return BaseApiService.get(url);
 }
