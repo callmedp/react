@@ -29,7 +29,7 @@ urlpatterns = [
     re_path(r'^parse-skill/$', ParseSkillFromTextApiView.as_view()),
     re_path(r'^screen-product-skill/update/$', UpdateScreenProductSkillView.as_view()),
     re_path(r'^product-skill/update/$', UpdateProductSkillView.as_view()),
-    re_path(r'^recommended-products/$', RecommendedProductsAPIView.as_view()),
+    re_path(r'^recommended-products-on-userskills/$', RecommendedProductsAPIView.as_view()),
     re_path(r'^product-review',ProductReview.as_view()),
     re_path(r'^skill-product/$',SkillProductView.as_view()),
     re_path(r'^course-catalogue/$', CourseCatalogueAPI.as_view(), name='course-catalogue-api'),

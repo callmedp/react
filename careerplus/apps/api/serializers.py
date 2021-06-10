@@ -329,6 +329,10 @@ class RecommendedProductSerializerSolr(Serializer):
     avg_rating = serializers.DecimalField(
         source='pARx',
         max_digits=8, decimal_places=2)
+    vendor = serializers.CharField(source='pPvn')
+    price = serializers.DecimalField(
+        source='pPin',
+        max_digits=8, decimal_places=2)
     # pSkilln = serializers.ListField(
     #     child=serializers.CharField())
 
