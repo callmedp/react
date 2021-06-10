@@ -333,6 +333,10 @@ class RecommendedProductSerializerSolr(Serializer):
     pIc  = serializers.CharField()
     pPvn = serializers.CharField()
     pAR = serializers.CharField()
+    vendor = serializers.CharField(source='pPvn')
+    price = serializers.DecimalField(
+        source='pPin',
+        max_digits=8, decimal_places=2)
     # pSkilln = serializers.ListField(
     #     child=serializers.CharField())
 

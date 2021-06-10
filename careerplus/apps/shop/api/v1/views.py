@@ -283,7 +283,7 @@ class RecommendedProductsAPIView(FieldFilterMixin, ListAPIView):
     pagination_class = LearningCustomPagination
 
     def get_queryset(self, *args, **kwargs):
-        email = self.request.GET.get('email', '')
+        email = self.request.GET.get('email', '') or self.request.session.get('email', '')
         func_area_obj = None
         skills_ids = None
         func_area = None
