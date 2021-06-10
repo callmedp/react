@@ -26,6 +26,7 @@ const CourseDetailBanner = (props) => {
 
     const dispatch = useDispatch();
     const [showAll, setShowAll] = useState(false);
+    const maximumAllowedStar = ['*', '*', '*', '*', '*']
 
     // chatbot course details
     window["course_duration"] = product_detail?.selected_var?.learning_duration ? (varChecked?.learning_duration || product_detail?.selected_var?.learning_duration) : (varChecked?.dur_days || product_detail?.selected_var?.dur_days);
@@ -97,12 +98,20 @@ const CourseDetailBanner = (props) => {
                     <span className="m-rating">
                         {
                             product_detail?.prd_num_rating ?
-                                <span>
-                                    {
-                                        product_detail?.prd_rating_star?.map((star, index) => starRatings(star, index))
-                                    }
-                                    <span itemProp="ratingValue">{product_detail?.prd_rating?.toFixed()}/5</span>
-                                </span>
+                                (product_detail?.prd_rating_star?.length <= 5) ?
+                                    <span>
+                                        {
+                                            product_detail?.prd_rating_star?.map((star, index) => starRatings(star, index))
+                                        }
+                                        <span itemProp="ratingValue">{product_detail?.prd_rating?.toFixed()}/5</span>
+                                    </span>
+                                    :
+                                    <span>
+                                        {
+                                            maximumAllowedStar?.map((star, index) => starRatings(star, index))
+                                        }
+                                        <span itemProp="ratingValue">5/5</span>
+                                    </span>
                                 :
                                 ''
                         }
@@ -158,7 +167,7 @@ const CourseDetailBanner = (props) => {
                                             </>
                                             :
                                             <>
-                                                Course Duration <strong>{varChecked?.dur_days || product_detail?.selected_var?.dur_days}</strong>
+                                                Course Duration <strong>{varChecked?.dur_days || product_detail?.selected_var?.dur_days} days</strong>
                                             </>
                                         }
                                     </p>
@@ -186,7 +195,7 @@ const CourseDetailBanner = (props) => {
                                         <li className="d-flex align-items-center">
                                             <figure className="micon-course-duration mr-10"></figure>
                                             <p>
-                                                Test Duration <strong>{product_detail?.prd_asft?.test_duration}</strong>
+                                                Test Duration <strong>{product_detail?.prd_asft?.test_duration} minutes</strong>
                                             </p>
                                         </li> : ''
                                 }

@@ -563,3 +563,15 @@ HIRESURE_CLIENT_ID = 'fk9za8p15jfe5xzb'
 HIRESURE_CLIENT_SECRET = 'ki827i1jut33m80wi8xihi390148g2x9cgkm'
 HIRESURE_VERIFY_URL = 'https://demo.hiresure.ai/bgv_verify/v1/auth/verify'
 HIRESURE_REPORT_URL = 'https://demo.hiresure.ai/bgv_verify/v1/view_report/{report_id}'
+
+########## CRM SETINGS #############
+SHINECPCRM_DICT = {
+    'base_url': 'https://shinecpcrm1.shine.com',
+    'token': '73f53cf358b94156feb49d034081ed507334e02a',
+    'create_lead_url': '/api/v1/create-lead/',
+    'update_products_url': '/product/update_sale_product/',
+    'update_cartleads_url': '/api/update-cartleads/',
+    'ad_server_url': '/api/mobile-version-leads/',
+    'connected_leads': '/api/orders/order-fetch-lead/',
+    'timeout': 60,
+}

@@ -1,7 +1,7 @@
 import React from 'react';
 import './leadCampaignPage.scss';
 import Header from '../../Common/CampaignHeader/campaignHeader';
-import Footer from '../../Common/Footer/Footer';
+// import Footer from '../../Common/Footer/Footer';
 import { useDispatch } from 'react-redux';
 import { InputField, SelectBox, SelectBoxCampaign } from 'formHandler/mobileFormHandler/formFields';
 import { showSwal } from 'utils/swal';
@@ -24,7 +24,7 @@ const LeadCampaignPage = (props) => {
     const onSubmit = async (data, e) => {
         data['lsource'] = 162;
         data["source"] = campaignQuery['utm_medium'];
-        data["campaign"] = campaignQuery['utm_campaign'];
+        data["campaign"] = campaignQuery['utm_campaign'] || 'awscloud';
         
         data['extra'] = [];
         data['extra'].push(campaignQuery);
@@ -92,7 +92,7 @@ const LeadCampaignPage = (props) => {
                         </div>
                     </div>
             </section>
-            <Footer />
+            {/* <Footer /> */}
         </div>
     )
 };

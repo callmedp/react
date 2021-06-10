@@ -1,8 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 import './leadCampaignPage.scss';
 import CampaignHeader from '../../Common/CampaignHeader/campaignHeader';
-import Footer from '../../Common/Footer/footer';
+// import Footer from '../../Common/Footer/footer';
 import { useDispatch } from 'react-redux';
 import { InputField, SelectBox, SelectBoxCampaign } from 'formHandler/desktopFormHandler/formFields';
 import {Toast} from '../../Common/Toast/toast';
@@ -24,7 +24,7 @@ const LeadCampaignPage = (props) => {
     const onSubmit = async (data, e) => {
         data['lsource'] = 162;
         data["source"] = campaignQuery['utm_medium'];
-        data["campaign"] = campaignQuery['utm_campaign'];
+        data["campaign"] = campaignQuery['utm_campaign'] || 'awscloud';
 
         data['extra'] = [];
         data['extra'].push(campaignQuery);
@@ -88,7 +88,7 @@ const LeadCampaignPage = (props) => {
                     </div>
                 </div>
             </section>
-            <Footer />
+            {/* <Footer /> */}
         </div>
     )
 };
