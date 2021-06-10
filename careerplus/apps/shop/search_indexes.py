@@ -709,8 +709,15 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
         return obj.vendor.id if obj.vendor else -1
 
     def prepare_pRD(self, obj):
-        if obj.is_course:
-            return getattr(obj.attr, 'requires_delivery', False)
+        try:
+            if obj.is_course:
+                return getattr(obj.attr, 'requires_delivery', False)
+        except AttributeError as error:
+            logging.getLogger('error_log').error('Attribute Error while adding prepare_PRD() in shop.models, {}'.format(str(error)))
+            return False
+        except Exception as e:
+            logging.getLogger('error_log').error('Error Occured while adding prepare_PRD() in shop.models {}'.format(str(e)))
+            return False
 
     def prepare_pEX(self, obj):
         return obj.get_exp()
@@ -1039,10 +1046,17 @@ class ProductIndex(indexes.SearchIndex, indexes.Indexable):
 
     def prepare_pAsft(self, obj):
         detail = {}
-        if obj.product_class.name == 'assessment':
-            objs = obj.productattributes.filter(active=True)
-            for obj in objs:
-                detail[obj.attribute.name] = obj.value
+        try:
+            if obj.product_class.name == 'assessment':
+                objs = obj.productattributes.filter(active=True)
+                for obj in objs:
+                    detail[obj.attribute.name] = obj.value
+                return json.dumps(detail)
+        except AttributeError as error:
+            logging.getLogger('error_log').error('Attribute Error while adding prepare_pAsft() in shop.models, {}'.format(str(error)))
+            return json.dumps(detail)
+        except Exception as e:
+            logging.getLogger('error_log').error('Error Occured while adding prepare_pAsft() in shop.models {}'.format(str(e)))
             return json.dumps(detail)
 
     def prepare_pRT(self, obj):
