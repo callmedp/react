@@ -882,7 +882,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
             cat_slug = cat_slug + '/' + path_info.get("cat_slug", "")
 
         expected_path = "{}/{}/{}/{}".format(
-            settings.RESUME_SHINE_MAIN_DOMAIN, cat_slug, prd_slug, pk, request)
+            settings.RESUME_SHINE_MAIN_DOMAIN, cat_slug, prd_slug, pk)
 
         return HttpResponsePermanentRedirect(expected_path + '?t_id=' + tracking_id + '&trigger_point=' + trigger_point + '&u_id=' + u_id + '&position=' + position + '&recommendation_by=' + recommendation_by + '&cart_addition=' + cart_addition + '&utm_campaign=' + utm_campaign + '&r_p=' + r_p + '&r_sp' + r_sp + '&popup_based_product=' + popup_based_product)
 
@@ -918,6 +918,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         return lead
 
     def maintain_tracking_info(self, product=None):
+        print('>>>>>>>>>>>>>>>', product)
         if not product:
             return -1
         if product.sub_type_flow == 501:
@@ -960,6 +961,9 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
                 self.request.session.update({'lead_create_prods': [int(kwargs.get('pk', 0))]})
             except:
                 pass
+
+        # import ipdb;ipdb.set_trace()
+        
 
         if self.request.GET.get('lc') and self.request.session.get('candidate_id'):
             if not kwargs.get('pk', ''):
@@ -1129,7 +1133,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         cache_slrprd_maping = cache.get(self.prd_solr_key, "")
 
         # setting cache if product is not in solrcache
-
+        # import ipdb;ipdb.set_trace()
         if cache_slrprd_maping:
             self.sqs = cache_slrprd_maping
         else:

@@ -977,6 +977,7 @@ class ProductDetailAPI(ProductInformationAPIMixin, APIView):
                     'utm_campaign': utm_campaign,
                     'recommendation_by': recommendation_by
                 })
+
                 product_tracking_mapping_id = self.maintain_tracking_info(prod)
                 if product_tracking_mapping_id != -1:
                     request.session.update(

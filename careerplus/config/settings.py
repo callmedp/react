@@ -505,11 +505,7 @@ HIRESURE_CLIENT_ID = 'z94ntxagadc4ntl0'
 HIRESURE_CLIENT_SECRET = 'gur0v5ndpiofik57jpm96u7cuj3pj6lcnjne'
 HIRESURE_VERIFY_URL = 'https://www.hiresure.ai/bgv_verify/v1/auth/verify'
 HIRESURE_REPORT_URL = 'https://www.hiresure.ai/bgv_verify/v1/view_report/{report_id}'
-ANALYTICS_MONGO_PORT=""
-ANALYTICS_MONGO_USERNAME=""
-ANALYTICS_MONGO_PASSWORD=""
-ANALYTICS_MONGO_INSTANCE_STR=""
-ANALYTICS_MONGO_DB=""
+
 try:
     from .settings_local import *
 except:
