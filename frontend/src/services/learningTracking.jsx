@@ -1,11 +1,13 @@
-import React from 'react';
 import { useDispatch } from 'react-redux';
 import { logLearningTracking } from 'store/LearningTracking/actions';
 
-const useLearningTracking = (props) => {
-    const dispatch = useDispatch(logLearningTracking({props}));
-    dispatch()
-
-}
+const useLearningTracking = () => {
+    const dispatch = useDispatch();
+    console.log("use learning tracking initiated")
+    return (props) => {
+        console.log("use learning dispatch initiated", props)
+        dispatch(logLearningTracking(props))
+    }
+}   
 
 export default useLearningTracking;

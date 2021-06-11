@@ -4,8 +4,9 @@ import { logLearningTracking } from './actions';
 import { addDefaultPayload } from 'utils/baseTracking';
 
 function* learningTrackingWorker(action){
-
-    const { payload: { payload } } = action;
+    console.log("learning tracking actions", action)
+    const { payload } = action;
+    console.log("learning tracking payload", payload)
     const superChargedPayload = addDefaultPayload(payload);
     yield call(Api.learningTrackingApi, superChargedPayload);
 

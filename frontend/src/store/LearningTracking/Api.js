@@ -1,11 +1,12 @@
 import BaseApiService from 'services/BaseApiService'
 import { siteDomain } from 'utils/domains'
 
-const learningTrackingtApi = (data) => {
+const learningTrackingApi = (data) => {
+    console.log("final tracking data", data)
     return BaseApiService.post(`${siteDomain}/demo-tracking-api/`, data);
 }
 
 export default {
-    learningTrackingtApi
+    learningTrackingApi
 }   
 

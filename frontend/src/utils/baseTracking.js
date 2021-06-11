@@ -6,7 +6,7 @@ const isMobileDevice = (userAgents) => {
   
 
 export const addDefaultPayload = (payload) => {
-    return { ...getDefaultEvents(), payload };
+    return { ...getDefaultEvents(), ...payload };
 }
 
 export const getDefaultEvents = () => {

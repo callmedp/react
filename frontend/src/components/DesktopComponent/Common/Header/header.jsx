@@ -11,6 +11,8 @@ import { fetchAlreadyLoggedInUser } from "store/Authentication/actions/index";
 import { removeTrackingInfo, getCandidateInformation,getCandidateId } from 'utils/storage.js';
 import SearchBar from './SeachBar/SearchBar';
 import { MyGA } from 'utils/ga.tracking.js';
+import useLearningTracking from 'services/learningTracking';
+
 
 const Header = (props) => {
     const dispatch = useDispatch()
@@ -18,6 +20,7 @@ const Header = (props) => {
     const [candidateInfo, setCandidateInfo] = useState(false)
     const [isLoggedIn, setIsLoggedIn] = useState(false)
     const { isHomepage, isUserIntentPage } = props;
+    const sendLearningTracking = useLearningTracking();
 
     const handleRedirect = (event, type) => {
         event.preventDefault();
@@ -82,6 +85,18 @@ const Header = (props) => {
         if (product_tracking_mapping_id == '10') {
             removeTrackingInfo()
         }
+        
+        sendLearningTracking({
+            productId: '',
+            event: 'header_learning_logo',
+            pageTitle:'',
+            sectionPlacement:'',
+            eventCategory: 'header',
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: '',
+        })
     }
 
     return (
