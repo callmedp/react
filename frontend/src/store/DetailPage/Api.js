@@ -39,8 +39,8 @@ const addToCartRedeemApi = (data) => {
 const chatbotScriptApi = () => {
     let url = "";
 
-    if(localStorage.getItem('candidateId')) url = `${chatbotDomain}/api/app/learning_course_page/get-script`;
-    else url = `${chatbotDomain}/api/app/learning_course_non_loggedIn/get-script/`;
+    if(localStorage.getItem('candidateId')) url = `${siteDomain}/api/v1/chatbot-script/learning_course_page/`;
+    else url = `${siteDomain}/api/v1/chatbot-script/learning_course_non_loggedIn/`;
 
     return BaseApiService.get(url);
 }

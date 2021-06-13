@@ -2287,3 +2287,24 @@ class FetchInfoAPIView(APIView):
         if not rrequest.session.get('candidate_id') or not rrequest.session.get('candidate_id') == candidate_id:
             rrequest.session.update(detail)
         return Response(data, status=status.HTTP_200_OK)
+
+class FetchScriptLinkView(APIView):
+    authentication_classes = ()
+    permission_classes = ()
+    serializer_class = None
+
+    def get(self, request, *args, **kwargs):
+        name = kwargs.get('name', '')
+        data = {'script_link':''}
+        if not name:
+            return Response({ 'status': 'No script available'}, status=status.HTTP_400_BAD_REQUEST)
+
+        chatbot_domain = settings.CHATBOT_DOMAIN
+
+        try:
+            res = requests.get('{}/api/app/{}/get-script/'.format(chatbot_domain, name))
+            data = res.json()
+        except Exception as e:
+            return Response({ 'status': 'Something went wrong'}, status=status.HTTP_400_BAD_REQUEST)
+
+        return Response(data, status=status.HTTP_200_OK)
