@@ -33,6 +33,7 @@ LEAD_LOCATION = (
     (32, "Mailer Service Lead"),
     (33, "Mailer Assessment Lead"),
     (162, 'SEM'),
+    (34, 'Homepage Banner')
 
 )
 
@@ -57,7 +58,6 @@ DEFAULT_SLUG_SOURCE = (
     (31, "mailercourselead"),
     (32, "mailerservicelead"),
     (33, "mailerassignmentlead"),
-
 
 )
 

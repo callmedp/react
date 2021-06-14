@@ -283,7 +283,9 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
             'product_availability': self.request.session.get('product_availability', self.request.session.get('tracking_product_id', '')),
             'referal_product' : self.request.session.get('referal_product', ''),
             'referal_subproduct' : self.request.session.get('referal_subproduct', ''),
-            'popup_based_product' : self.request.session.get('popup_based_product', '')
+            'popup_based_product' : self.request.session.get('popup_based_product', ''),
+            'recommendation_by': self.request.session.get('recommendation_by', ''),
+            'cart_addition': self.request.session.get('cart_addition', '')
             
         })
         return context

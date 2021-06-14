@@ -47,7 +47,7 @@ const ProductCards = props => {
                         <div className="m-card" key={index}>
                             <div className="m-card__heading">
                                 <figure>
-                                    <img src={product?.pImg || product?.vendor_image } alt={product?.name || product?.pNm || product?.heading} />
+                                    { (product?.pImg || product?.vendor_image) && <img src={product?.pImg || product?.vendor_image } alt={product?.name || product?.pNm || product?.heading} /> }
                                 </figure>
                                 <h3 className="m-heading3">
                                     <a onClick={() => handleTracking} href={`${siteDomain}${product.pURL || product?.url}`}>{(product?.name || product?.pNm || product?.heading)?.length > 42 ? (product?.name || product?.pNm || product?.heading)?.slice(0, 42) + '...' : (product?.name || product?.pNm || product?.heading) }</a>

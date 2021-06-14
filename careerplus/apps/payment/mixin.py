@@ -47,13 +47,16 @@ class PaymentMixin(object):
             referal_product = prod_data.get('referal_product', '')
             referal_subproduct = prod_data.get('referal_subproduct', '')
             popup_based_product = prod_data.get('popup_based_product', '')
+            recommendation_by = prod_data.get('recommendation_by', '')
+            cart_addition = prod_data.get('cart_addition', '')
+
             if t_id and prod and method:
                 make_logging_amount_request.delay(
-                    prod, products, t_id, method, position, trigger_point, str(candidate_id), utm_campaign, domain, referal_product, referal_subproduct, total_amount, total_amount_paid, popup_based_product)
+                    prod, products, t_id, method, position, trigger_point, str(candidate_id), utm_campaign, domain, referal_product, referal_subproduct, total_amount, total_amount_paid, popup_based_product, recommendation_by, cart_addition)
                 logging.getLogger('info_log').info('purchase method data: tracking_product_id: {}, product_tracking_mapping_id : {}, tracking_id: {},'
                     'action: {}, position: {}, trigger_point: {}, u_id: {}, utm_campaign: {}, domain: {}, referal_product: {}, referal_subproduct: {},'
-                    'total_amount: {}, total_amount_paid: {}, popup_based_product:{}'.format(prod, products, t_id, method, position,\
-                     trigger_point, str(candidate_id), utm_campaign, domain, referal_product, referal_subproduct, total_amount, total_amount_paid, popup_based_product))
+                    'total_amount: {}, total_amount_paid: {}, popup_based_product:{}, recommendation_by:{}, cart_addition:{}'.format(prod, products, t_id, method, position,\
+                     trigger_point, str(candidate_id), utm_campaign, domain, referal_product, referal_subproduct, total_amount, total_amount_paid, popup_based_product, recommendation_by, cart_addition))
         return True
 
     def paid_amount_without_tax(self, order):
@@ -257,17 +260,21 @@ class PaymentMixin(object):
                 'referal_subproduct','')
             popup_based_product = request.session.get(
                 'popup_based_product','')
+            recommendation_by = request.session.get(
+                'recommendation_by','')
+            cart_addition = request.session.get(
+                'cart_addition','')
             
             action = 'purchase_done'
             total_amount = order.total_excl_tax if order.total_excl_tax else ""
             total_amount_paid = self.paid_amount_without_tax(order = order)
             if tracking_id and product_availability and payment_type != "PAID FREE":
                 make_logging_amount_request.delay(
-                    tracking_product_id, product_tracking_mapping_id, tracking_id, action, position, trigger_point, u_id, utm_campaign, 2, referal_product, referal_subproduct, total_amount, total_amount_paid, popup_based_product)
+                    tracking_product_id, product_tracking_mapping_id, tracking_id, action, position, trigger_point, u_id, utm_campaign, 2, referal_product, referal_subproduct, total_amount, total_amount_paid, popup_based_product, recommendation_by, cart_addition)
                 logging.getLogger('info_log').info('purchase done data: tracking_product_id: {}, product_tracking_mapping_id : {}, tracking_id: {},'
                     'action: {}, position: {}, trigger_point: {}, u_id: {}, utm_campaign: {}, domain: {}, referal_product: {}, referal_subproduct: {},'
-                     'total_amount: {}, total_amount_paid: {}, popup_based_product:{}'.format(tracking_product_id, product_tracking_mapping_id, tracking_id,\
-                        action, position, trigger_point, u_id, utm_campaign, 2, referal_product, referal_subproduct, total_amount, total_amount_paid, popup_based_product))
+                     'total_amount: {}, total_amount_paid: {}, popup_based_product:{}, recommendation_by:{}, cart_addition:{}'.format(tracking_product_id, product_tracking_mapping_id, tracking_id,\
+                        action, position, trigger_point, u_id, utm_campaign, 2, referal_product, referal_subproduct, total_amount, total_amount_paid, popup_based_product, recommendation_by, cart_addition))
                 # if method:
                 #     make_logging_sk_request.delay(
                 #         tracking_product_id, product_tracking_mapping_id, tracking_id, method, position, trigger_point, u_id, utm_campaign, 2, referal_product, referal_subproduct)
