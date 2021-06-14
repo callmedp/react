@@ -4,6 +4,7 @@ import { useForm } from 'react-hook-form';
 import useDebounce from '../../../../../utils/searchUtils/debouce';
 import { searchCharacters, submitData } from '../../../../../utils/searchUtils/searchFunctions';
 import { MyGA } from 'utils/ga.tracking.js';
+import useLearningTracking from 'services/learningTracking';
 
 const SearchBar = (props) => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -12,7 +13,7 @@ const SearchBar = (props) => {
     const { register, handleSubmit } = useForm()
     const [showResults, setShowResults] = useState(false);
     const debouncedSearchTerm = useDebounce(searchTerm, 500);
-    // let redirectPath = props.location.pathname;
+    const sendLearningTracking = useLearningTracking();
 
     const handleScroll = () =>{
         const offset = window.scrollY;
@@ -29,13 +30,29 @@ const SearchBar = (props) => {
         }
     }
 
+    const sendMultipleEvents = (name) => {
+        MyGA.SendEvent('ln_new_homepage','ln_search_course', 'ln_search_initiated', name,'', false, true);
+
+        sendLearningTracking({
+            productId: '',
+            event: 'banner_search_bar_clicked',
+            pageTitle:'homepage banner searchbar',
+            sectionPlacement:'banner_searchbar',
+            eventCategory: 'banner',
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: '',
+        })
+    }
+
     const getMenuItems = (data, heading, noOfItems=3) => {
         return (
             <>
                 <strong>{heading}</strong> 
                 {data?.slice(0, noOfItems)?.map(result => (
                     <div key={Math.random()}>
-                        <a href={`${siteDomain}${result.url}`} onClick = { () => MyGA.SendEvent('ln_new_homepage','ln_search_course', 'ln_search_initiated', result.name,'', false, true)}>{result.name}</a>
+                        <a href={`${siteDomain}${result.url}`} onClick = { () => sendMultipleEvents(result.name)}>{result.name}</a>
                     </div>
                 ))}
             </> 

@@ -1,13 +1,32 @@
 import React from 'react';
 import './banner.scss';
-import { Link } from 'react-router-dom';
 import Carousel from 'react-bootstrap/Carousel';
-// import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import SearchBar from '../../../Common/Header/SeachBar/SearchBar.jsx';
 import { imageUrl } from 'utils/domains';
 import { MyGA } from 'utils/ga.tracking.js';
+import { siteDomain } from 'utils/domains';
+import useLearningTracking from 'services/learningTracking';
 
-const HomeBanner = (props) => {
+const HomeBanner = () => {
+    const sendLearningTracking = useLearningTracking();
+
+    const goToCareerGuidance = () => {
+        MyGA.SendEvent('ln_career_guidance','ln_career_guidance', 'ln_click_career_guidance', 'career_guidance','', false, true);
+        
+        sendLearningTracking({
+            productId: '',
+            event: 'homepage_banner_career_guidance_clicked',
+            pageTitle:'homepage',
+            sectionPlacement:'homepage_banner',
+            eventCategory: 'header',
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: '',
+        })
+
+        window.location.href = `${siteDomain}/user-intent`;
+    }
 
     return (
        <header className="container-fluid pos-rel home-bg">
@@ -44,7 +63,7 @@ const HomeBanner = (props) => {
                                 <button className="btn btn-search" type="submit"><figure className="icon-search"></figure></button>
                             </form> */}
                             OR
-                            <Link to={"/user-intent"} className="btn btn-gradient ml-10" onClick={() => MyGA.SendEvent('ln_career_guidance','ln_career_guidance', 'ln_click_career_guidance', 'career_guidance','', false, true)}>GET CAREER GUIDANCE <figure className="icon-arrow-right ml-10"></figure></Link>
+                            <a className="btn btn-gradient ml-10" onClick={() => goToCareerGuidance()}>GET CAREER GUIDANCE <figure className="icon-arrow-right ml-10"></figure></a>
                         </div>
                     </div>
 

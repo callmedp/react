@@ -6,12 +6,13 @@ import { fetchInDemandProducts } from 'store/HomePage/actions';
 import { startHomePageLoader, stopHomePageLoader } from 'store/Loader/actions';
 import { siteDomain } from 'utils/domains';
 import { MyGA } from 'utils/ga.tracking.js';
+import useLearningTracking from 'services/learningTracking';
 
 const HomeProduct = (props) => {
-  
     const [index, setIndex] = useState(0);
     const { tabType, popularProducts } = props;
     const dispatch = useDispatch()
+    const sendLearningTracking = useLearningTracking();
 
     const handleSelect = async (selectedIndex, e) => {
         if (e !== undefined) {
@@ -21,17 +22,41 @@ const HomeProduct = (props) => {
                 dispatch(stopHomePageLoader())
             }
             setIndex(selectedIndex);
+
+            sendLearningTracking({
+                productId: '',
+                event: `popular_courses_${tabType}_next_clicked`,
+                pageTitle:`homepage popular ${tabType} courses`,
+                sectionPlacement:'section',
+                eventCategory: `${tabType} carousel`,
+                eventLabel: '',
+                eventAction: 'click',
+                algo: '',
+                rank: selectedIndex,
+            })
         }
     };
+
+    const setTracking = (url, name, indx) => {
+        sendLearningTracking({
+            productId: '',
+            event: `homepage_popular_courses_${name}_clicked`,
+            pageTitle:`homepage_popular_${name}_course`,
+            sectionPlacement:'ul',
+            eventCategory: `${name}_${indx}`,
+            eventLabel: name,
+            eventAction: 'click',
+            algo: '',
+            rank: indx,
+        })
+        window.location.href = url;
+    }
 
     const starRatings = (star, index) => {
         return (star === '*' ? <em className="icon-fullstar" key={index}></em> : star === '+'
             ? <em className="icon-halfstar" key={index}></em> : <em className="icon-blankstar" key={index}></em>
         )
     }
-   
-
-
 
     return (
         <Carousel className="" fade={true} activeIndex={index} onSelect={handleSelect} >
@@ -53,7 +78,7 @@ const HomeProduct = (props) => {
                                                             <img src={product.imgUrl} alt={product.imageAlt} itemProp="image" />
                                                         </figure>
                                                         <h3 className="heading3">
-                                                            <a itemProp="url" href={`${product.url}`} >{product.name}</a>
+                                                            <a itemProp="url" className="cursorLink" onClick={() => setTracking(product.url, product.name, idx)}>{product.name}</a>
                                                         </h3>
                                                     </div>
                                                     <div className="card__box">

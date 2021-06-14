@@ -6,21 +6,35 @@ import { categoryTabs } from 'utils/constants';
 import { startHomePageLoader, stopHomePageLoader } from 'store/Loader/actions';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchMostViewedCourses } from 'store/HomePage/actions';
+import useLearningTracking from 'services/learningTracking';
 
 function MostViewedCourses() {
     
     const [key, setKey] = useState('-1');
     const dispatch = useDispatch()
     const { mostViewedCourses } = useSelector(store => store.mostViewed)
+    const sendLearningTracking = useLearningTracking();
 
-    const handleTabChange = async (tabType) => {
+    const handleTabChange = async (tabType, key) => {
         
         if (!mostViewedCourses[tabType] || mostViewedCourses[tabType].length === 0)  {
             dispatch(startHomePageLoader())
             await new Promise((resolve, reject) => dispatch(fetchMostViewedCourses({ payload:{categoryId: tabType}, resolve, reject })));
             dispatch(stopHomePageLoader())
         }
-        setKey(tabType)
+        setKey(tabType);
+
+        sendLearningTracking({
+            productId: '',
+            event: `homepage_most_viewed_course_${tabType}_tab_clicked`,
+            pageTitle:`homepage`,
+            sectionPlacement:'most_viewed_courses',
+            eventCategory: key,
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: key,
+        })
     }
 
 
@@ -34,7 +48,7 @@ function MostViewedCourses() {
                         <Tabs
                             id="controlled-tab-example"
                             activeKey={key}
-                            onSelect={(tabType) => handleTabChange(tabType)}
+                            onSelect={(tabType) => handleTabChange(tabType, key)}
                             className="category"
                         >
 
@@ -44,7 +58,7 @@ function MostViewedCourses() {
                                         <Tab eventKey={category.id} title={<span>{category.name}</span>} key={category.id}>
                                             <ul className="recent-courses__list">
                                                 {
-                                                    mostViewedCourses[key]?.map((course, idx) => <PopularCourse course={course} key={idx} category={category.name}/>)
+                                                    mostViewedCourses[key]?.map((course, idx) => <PopularCourse course={course} indx={idx} key={idx} category={category.name}/>)
                                                 }
                                             </ul>
                                         </Tab>

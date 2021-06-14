@@ -1,29 +1,44 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './recruitersLooking.scss';
 import { Link } from 'react-router-dom';
 import Carousel from 'react-bootstrap/Carousel';
 import { useSelector } from 'react-redux';
-import { siteDomain } from 'utils/domains';
 import { MyGA } from 'utils/ga.tracking.js';
+import useLearningTracking from 'services/learningTracking';
 
-
-const RecruitersLooking = (props) => {
-
-
+const RecruitersLooking = () => {
     const { recruiterList } = useSelector(store => store.footer)
-    
+    const sendLearningTracking = useLearningTracking();
+
+    const trackRecruitersLooking = (name, url, indx) => {
+        MyGA.SendEvent('ln_new_homepage', 'ln_recruiter_course', ' ln_click_course', name, '', false, true)
+
+        sendLearningTracking({
+            productId: '',
+            event: `homepage_recruiters_looking_${name}_clicked`,
+            pageTitle:'homepage_recruiters_looking',
+            sectionPlacement:'recruiters_looking',
+            eventCategory: `${name}_${indx}`,
+            eventLabel: name,
+            eventAction: 'click',
+            algo: '',
+            rank: indx,
+        })
+
+        window.location.href = url;
+    }
 
     const getSlide = (recruiterSlide) => recruiterSlide.slice(0,12)?.map((skill, index) => {
         return (
             <li className="col-sm-3" key={index}>
-            <Link to={skill.skillUrl}>
-                <div className="card" onClick={() => MyGA.SendEvent('ln_new_homepage', 'ln_recruiter_course', ' ln_click_course', skill.skillName, '', false, true)}>
+            <Link onClick={() => trackRecruitersLooking(skill.skillName, skill.skillUrl, index)}>
+                <div className="card">
                     <figure>
                         <img src={skill.image} className="img-fluid" alt={skill.name} />
                     </figure>
                     <h3>{skill.skillName}</h3>
                     { !!skill.no_courses ? <strong>{skill.no_courses} { skill.no_courses == 1 ? 'course': 'courses'}</strong> : ''}
-                    <Link to={skill.skillUrl}>Know more</Link>
+                    <Link>Know more</Link>
                 </div>
             </Link>
             </li>

@@ -7,7 +7,7 @@ import DropDown from './DropDown/dropDown';
 import { useDispatch, useSelector } from 'react-redux';
 import { cartCount, fetchNavOffersAndTags } from 'store/Header/actions/index';
 import { initLoggedInZendesk, loggedOutZendesk } from 'utils/zendeskIniti';
-import { fetchAlreadyLoggedInUser } from "store/Authentication/actions/index";
+// import { fetchAlreadyLoggedInUser } from "store/Authentication/actions/index";
 import { removeTrackingInfo, getCandidateInformation,getCandidateId } from 'utils/storage.js';
 import SearchBar from './SeachBar/SearchBar';
 import { MyGA } from 'utils/ga.tracking.js';
@@ -19,7 +19,7 @@ const Header = (props) => {
     const { count, navTags } = useSelector(store => store.header)
     const [candidateInfo, setCandidateInfo] = useState(false)
     const [isLoggedIn, setIsLoggedIn] = useState(false)
-    const { isHomepage, isUserIntentPage } = props;
+    const { isHomepage, isUserIntentPage, showMainOffer, setShowMainOffer } = props;
     const sendLearningTracking = useLearningTracking();
 
     const handleRedirect = (event, type) => {

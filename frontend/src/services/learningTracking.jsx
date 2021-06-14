@@ -3,9 +3,9 @@ import { logLearningTracking } from 'store/LearningTracking/actions';
 
 const useLearningTracking = () => {
     const dispatch = useDispatch();
-    console.log("use learning tracking initiated")
+    // console.log("use learning tracking initiated")
     return (props) => {
-        console.log("use learning dispatch initiated", props)
+        // console.log("use learning dispatch initiated", props)
         dispatch(logLearningTracking(props))
     }
 }   

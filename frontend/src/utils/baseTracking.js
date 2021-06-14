@@ -17,6 +17,6 @@ export const getDefaultEvents = () => {
         userType : !!localStorage.getItem('userId') ? 'logged_in' : 'non_logged_in',
         timeStamp : new Date(),
         learning_session_id : '', 
-        tracking_id : ''
+        shine_t_id : ''
     }
 }
