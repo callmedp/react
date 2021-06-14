@@ -2305,6 +2305,7 @@ class FetchScriptLinkView(APIView):
             res = requests.get('{}/api/app/{}/get-script/'.format(chatbot_domain, name))
             data = res.json()
         except Exception as e:
+            logging.getLogger('error_log').error("issue with fetching chatbot script: {}".format(e))
             return Response({ 'status': 'Something went wrong'}, status=status.HTTP_400_BAD_REQUEST)
 
         return Response(data, status=status.HTTP_200_OK)
