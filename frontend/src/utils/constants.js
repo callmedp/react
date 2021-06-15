@@ -1,5 +1,11 @@
 import { resumeShineSiteDomain, siteDomain } from './domains';
 
+const chatbot_links = {
+    'link_interview_service' : 'https://learning.shine.com/course/job-interview-services/job-and-interview-assistance/pd-1879',
+    'link_profile_booster' : 'https://resume.shine.com/product/profile-booster/4561/',
+    'link_resume_builder' : 'https://resume.shine.com/product/profile-booster/4561/',
+    'link_resume_writer' : 'https://resume.shine.com/product/entry-level/1922/'
+}
 
 const freeResourcesList = [
     { 
@@ -1492,5 +1498,6 @@ export {
     TrendingCategoryList,
     categoryTabs,
     populartabType,
-    IndianState
+    IndianState,
+    chatbot_links
 }

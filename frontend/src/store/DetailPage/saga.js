@@ -1,4 +1,4 @@
-import { takeLatest, call, put } from 'redux-saga/effects';
+import { takeLatest, call, put, all } from 'redux-saga/effects';
 import Api from './Api';
 import {  
     mainCoursesFetched,
@@ -10,16 +10,49 @@ import {
     recommendedCoursesFetched,
     sendEnquireNow,
     fetchAddToCartEnroll,
-    fetchAddToCartRedeem
+    fetchAddToCartRedeem,
+    fetchChatbotScript
 } from './actions';
 import {siteDomain} from '../../utils/domains';
 import { getTrackingUrl } from 'utils/storage.js';
+
+
+function* chatbotScriptSaga() {
+    var hours = 24; // Reset when storage is more than 24hours
+    var now = new Date().getTime();
+    var setupTime = localStorage.getItem('setupTime');
+
+    try {
+        const result = yield call(Api.chatbotScriptApi);
+        
+        if (setupTime == null) {
+            if(result['data']['script_link'] != "script not available") {
+                localStorage.setItem('script_link', result['data']['script_link'])
+                localStorage.setItem('setupTime', now);
+            }
+        }
+        else {
+            if(now-setupTime > hours*60*60*1000) {
+                localStorage.clear();
+                if(result['data']['script_link'] != "script not available") {
+                    localStorage.setItem('script_link', result['data']['script_link'])
+                    localStorage.setItem('setupTime', now);
+                }
+            }
+        }
+    }
+    catch (e) {
+        console.log(e);
+    }
+}
 
 function* mainCoursesApi(action){
     const { payload: { payload, resolve, reject } } = action;
 
     try {
         const response = yield call(Api.mainCourses, payload.id);
+        yield call(chatbotScriptSaga);
+
         if(response?.error) return reject(response);
         const item = response?.data?.data;
         let providerLength = item?.product_detail?.pop_list?.length;
@@ -35,6 +68,8 @@ function* mainCoursesApi(action){
         }
         
         yield put(mainCoursesFetched({ ...item, 'providerLength': providerLength }));
+
+        
         return resolve(item);
     }
     catch(e) {
@@ -189,4 +224,6 @@ export default function* WatchDetailPage() {
     yield takeLatest(sendEnquireNow.type, SendEnquireNow);
     yield takeLatest(fetchAddToCartEnroll.type, AddToCart);
     yield takeLatest(fetchAddToCartRedeem.type, AddToCartRedeem);
+    yield takeLatest(fetchChatbotScript.type, chatbotScriptSaga);
+
 }

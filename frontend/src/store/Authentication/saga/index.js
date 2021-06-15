@@ -1,12 +1,13 @@
 import * as Actions from '../actions/actionTypes';
-import { takeLatest, call, put } from 'redux-saga/effects';
-import fetchUserInform from './Api';
+import { takeLatest, call } from 'redux-saga/effects';
+import Api from './Api';
 
 
 function* fetchUserInfos(action) {
     const { payload: { payload, resolve, reject } } = action;
+
     try {
-        const response = yield call(fetchUserInform, payload);
+        const response = yield call(Api.fetchUserInform, payload);
         if (!response || response?.error) {
             return reject(response?.error);
         }
@@ -19,6 +20,8 @@ function* fetchUserInfos(action) {
         return reject(e);
     }
 }
+
+
 
 export default function* WatchFetchUserInfo() {
     yield takeLatest(Actions.FETCH_USER, fetchUserInfos);
