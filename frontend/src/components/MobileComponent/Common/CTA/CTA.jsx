@@ -16,8 +16,24 @@ const CTA = (props) => {
         setEnquiryForm(true)
     }
 
+    const showChatbot = () => {
+        // if(window && window.openChat()) {
+            // const offset = window.scrollY;
+            // if(offset > 30) window.openChat();
+            if(window) window.openChat();
+        // }
+    }
+
+    const handleScroll = () =>{
+        if(window) {
+            const offset = window.scrollY;
+            if(offset === 0) window.openChat();
+        }
+    }
+
     useEffect(()=>{
-        setWhatsAppNo(getWhatsAppNo(pageType, whatsappDict))
+        setWhatsAppNo(getWhatsAppNo(pageType, whatsappDict));
+        window.addEventListener('scroll', handleScroll);
     }, [whatsappDict])
 
     return(
@@ -30,16 +46,16 @@ const CTA = (props) => {
                 <figure className="micon-callus"></figure>
                 Call us
             </a>
-            <a href="#" onClick={(e) => {e.preventDefault();zendeskChatShow();}}>
-                <figure className="micon-chat"></figure>
-                Chat
-            </a>
             { whatsappNo ?
                 <a href={`https://api.whatsapp.com/send?phone=91${whatsappNo}&text=I need your help for ${heading}`}>
                     <figure className="micon-whatsapp"></figure>
                     Whatsapp
                 </a> : null
             }
+            <a href="#" onClick={pageType == 'detailPage' ? showChatbot : (e) => {e.preventDefault();zendeskChatShow();}}>
+                <figure className="micon-chat"></figure>
+                Chat
+            </a>
         </section>
     )
 }

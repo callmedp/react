@@ -121,6 +121,9 @@ urlpatterns = [
     re_path(r'v1/fetch-info/$', views.FetchInfoAPIView.as_view(),
             name='fetch-info'
             ),
+    re_path(r'v1/chatbot-script/(?P<name>[\w-]+)/$', views.FetchScriptLinkView.as_view(),
+            name='fetch-script-link'
+            ),
 ]
 
 if settings.DEBUG:

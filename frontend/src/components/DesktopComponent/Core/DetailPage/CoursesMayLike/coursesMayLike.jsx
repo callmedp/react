@@ -55,26 +55,26 @@ const CoursesMayLike = (props) => {
                                     <div className="card">
                                         <div className="card__heading cursorLink">
                                             <figure>
-                                                <img src={coursesLike.pImg} alt={coursesLike.name} />
+                                                <img src={coursesLike.pImg} alt={coursesLike.display_name} />
                                             </figure>
                                             <h3 className="heading3">
                                                 <a onClick={() => handleTracking(coursesLike.pURL)}>
-                                                    {coursesLike.name || coursesLike.pNm}
+                                                    {coursesLike.display_name}
                                                 </a>
                                             </h3>
                                         </div>
 
                                         <div className="card__box">
                                             <div className="card__rating">
-                                                <span className="mr-10">By {(coursesLike.pPvn || coursesLike.pViA)?.split(' ')[0]?.length > 10 ? (coursesLike.pPvn || coursesLike.pViA)?.split(' ')[0]?.slice(0,10) + '...' : (coursesLike.pPvn || coursesLike.pViA)?.split(' ')[0] }</span>
+                                                <span className="mr-10">By {(coursesLike.vendor)?.split(' ')[0]?.length > 10 ? (coursesLike.vendor)?.split(' ')[0]?.slice(0,10) + '...' : (coursesLike.vendor)?.split(' ')[0] }</span>
                                             <span className="rating">
                                                 {coursesLike.pStar?.map((star, index) => starRatings(star, index))}
                                             </span>
-                                                <em className="icon-blankstar"></em>
-                                                <span>{parseInt(coursesLike.pAR)?.toFixed(1)}/5</span>
+                                                {/* <em className="icon-blankstar"></em> */}
+                                                <span>{parseFloat(coursesLike.avg_rating)?.toFixed(1)}/5</span>
                                             </div>
                                             <div className="card__price mt-10">
-                                                <strong>{coursesLike.pPin}/-</strong> 
+                                                <strong>{parseInt(coursesLike.price)}/-</strong> 
                                             </div>
                                         </div>
                                     </div>

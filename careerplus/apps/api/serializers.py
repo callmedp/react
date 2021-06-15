@@ -318,6 +318,7 @@ class RecommendedProductSerializer(ModelSerializer):
 
 class RecommendedProductSerializerSolr(Serializer):
     id = serializers.CharField()
+    name = serializers.CharField(source="pNm")
     display_name = serializers.CharField(source='pHd')
     buy_count = serializers.IntegerField(source='pBC')
     pImg = serializers.CharField()
@@ -328,6 +329,13 @@ class RecommendedProductSerializerSolr(Serializer):
     review_count = serializers.IntegerField(source='pRC')
     avg_rating = serializers.DecimalField(
         source='pARx',
+        max_digits=8, decimal_places=2)
+    pIc  = serializers.CharField()
+    pPvn = serializers.CharField()
+    pAR = serializers.CharField()
+    vendor = serializers.CharField(source='pPvn')
+    price = serializers.DecimalField(
+        source='pPin',
         max_digits=8, decimal_places=2)
     # pSkilln = serializers.ListField(
     #     child=serializers.CharField())
