@@ -848,7 +848,7 @@ class ProductDetailAPI(ProductInformationAPIMixin, APIView):
         pk = path_info.get("pk", "")
         cat_slug = 'product'
         prd_slug = path_info.get('prd_slug')
-
+        
         if(path_info.get('cat_slug') == 'linkedin-profile-writing'):
             cat_slug = cat_slug + '/' + path_info.get("cat_slug", "")
 
@@ -916,6 +916,7 @@ class ProductDetailAPI(ProductInformationAPIMixin, APIView):
         self.skill = self.request.session.get('skills_name', [])
 
         show_popup = self.request.GET.get('spop', False)
+
         if not show_popup:
             try:
                 self.request.session.update({'lead_create_prods': [int(kwargs.get('pk', 0))]})
@@ -976,6 +977,7 @@ class ProductDetailAPI(ProductInformationAPIMixin, APIView):
                     'utm_campaign': utm_campaign,
                     'recommendation_by': recommendation_by
                 })
+
                 product_tracking_mapping_id = self.maintain_tracking_info(prod)
                 if product_tracking_mapping_id != -1:
                     request.session.update(
@@ -1091,6 +1093,7 @@ class ProductDetailAPI(ProductInformationAPIMixin, APIView):
                         cache.set(self.prd_solr_key, self.sqs, 60 * 60 * 4)
                 else:
                     return APIResponse(message='Product Not Found', error=True, status=status.HTTP_404_NOT_FOUND)
+
 
             if (self.sqs.pPc == 'writing' or self.sqs.pPc == 'service' or self.sqs.pPc == 'other') and self.sqs.pTP not in [2, 4] and self.sqs.pTF not in [16, 2]:
                 path_info = {"pk": self.sqs.pk, 'prd_slug': self.sqs.pSg, "cat_slug": self.sqs.pCat}

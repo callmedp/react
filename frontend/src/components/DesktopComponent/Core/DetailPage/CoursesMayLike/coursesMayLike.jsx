@@ -4,7 +4,7 @@ import '../../CataloguePage/RecentCourses/recentCourses.scss';
 import './coursesMayLike.scss'
 import Carousel from 'react-bootstrap/Carousel';
 import { fetchRecommendedCourses } from 'store/DetailPage/actions';
-import { getTrackingInfo } from 'utils/storage.js';
+import { getTrackingInfo, getTrackingUrl } from 'utils/storage.js';
 import { trackUser } from 'store/Tracking/actions/index.js';
 import { siteDomain } from 'utils/domains';
 
@@ -32,10 +32,16 @@ const CoursesMayLike = (props) => {
 
     const handleTracking = (url) => {
         let tracking_data = getTrackingInfo();
-
         dispatch(trackUser({"query" : tracking_data, "action" :'exit_product_page'}));
         dispatch(trackUser({"query" : tracking_data, "action" :'recommended_products'}));
-        window.location.href=`${siteDomain}${url}`;
+
+        let appendTracking = "";
+
+        if(localStorage.getItem("trackingId")){
+            appendTracking = getTrackingUrl();
+            window.location.href=`${siteDomain}${url}${appendTracking}`;
+        }
+        else window.location.href=`${siteDomain}${url}`;
     }
 
     const getLikeCourses = (courseData, idx) => {

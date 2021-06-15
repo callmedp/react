@@ -1,7 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
 import { shineDomain, resumeShineSiteDomain } from '../../../../../../utils/domains.js';
-import { getCandidateId } from '../../../../../../utils/storage.js';
 import Modal from 'react-bootstrap/Modal';
 import '../../../CataloguePage/ServicesForYou/servicesForYou.scss';
 import {uploadFileUrl} from 'store/UserIntentPage/actions';
@@ -81,7 +80,6 @@ const ShineServices = (props) => {
     const handleEffects = async () => {
         try {
             dispatch(startGetResumeScoreLoader());
-            // const candidate_id = getCandidateId();
             await new Promise((resolve, reject) => dispatch(fetchServiceRecommendation({ resolve, reject })));
             dispatch(stopGetResumeScoreLoader());
         }
@@ -105,68 +103,27 @@ const ShineServices = (props) => {
                             </div>
                             <h2 className="heading3 mt-20">Get an edge over others with shine services</h2>
                             { totalScore ? 
-                            <div className="shine-services w-70">
-                                <CircularProgressbar value={totalScore/100} maxValue={1} text={`${totalScore}`} />
-                                <span className="fs-13">
-                                    <strong className="heading3 d-block">Your resume Scored {totalScore} out of 100 </strong> 
-                                    Check out the detailed reviews to improve the score. <strong className="fs-13">Score more to get perfect job match your profile</strong>
-                                    <span className="d-flex mt-20">
-                                        <a href={`${resumeShineSiteDomain}/resume-score-checker/?s_index=${scoreIndex}&file_name=${filename}`}>View details</a>
-                                        <Link className="file-close disabledCursor">{filename} <Link><i className="icon-close-sm ml-10" onClick={() => resetFileDetails()} ></i></Link></Link>
+                                <div className="shine-services w-70">
+                                    <CircularProgressbar value={totalScore/100} maxValue={1} text={`${totalScore}`} />
+                                    <span className="fs-13">
+                                        <strong className="heading3 d-block">Your resume Scored {totalScore} out of 100 </strong> 
+                                        Check out the detailed reviews to improve the score. <strong className="fs-13">Score more to get perfect job match your profile</strong>
+                                        <span className="d-flex mt-20">
+                                            <a href={`${resumeShineSiteDomain}/resume-score-checker/?s_index=${scoreIndex}&file_name=${filename}`}>View details</a>
+                                            <Link className="file-close disabledCursor">{filename} <Link><i className="icon-close-sm ml-10" onClick={() => resetFileDetails()} ></i></Link></Link>
+                                        </span>
                                     </span>
-                                </span>
-                            </div> :
-                            <div className="shine-services w-70">
-                                <figure className="icon-upload-resume"></figure>
-                                <p>Updated resume increases the chances of getting more opportunities. </p>
-                                <Link to={"#"} onClick={handleShow} className="ml-auto">Upload latest resume</Link>
-                            </div>
-                        }
-                            {/* <div className="shine-services w-70">
-                                <figure className="icon-upload-resume"></figure>
-                                <p>Updated resume increases the chances of getting more opportunities. </p>
-                                <Link to={"#"} onClick={handleShow} className="ml-auto">Upload latest resume</Link>
-                            </div> */}
+                                </div> :
+                                <div className="shine-services w-70">
+                                    <figure className="icon-upload-resume"></figure>
+                                    <p>Updated resume increases the chances of getting more opportunities. </p>
+                                    <Link to={"#"} onClick={handleShow} className="ml-auto">Upload latest resume</Link>
+                                </div>
+                            }
+                            
                             <div className="shine-services w-70">
                                 <figure className="icon-update-profile"></figure>
                                 <p>Update your profile to get customised career recommendation </p>
-                                {/* <Link to={"#"} className="ml-auto">Update your profile</Link> */}
-                            {/* </div> */}
-
-                            {/* <h2 className="heading3 mt-50">Recommended services</h2>
-                            <div className="w-70">
-                                <div className="row recommend-services">
-                                    <div className="col">
-                                        <div className="services-foryou">
-                                            <h3 className="heading3">Resume Writing</h3>
-                                            <p>Resume written by experts to increase your profile visibility</p>
-                                            <span className="d-flex">
-                                                <Link to={"#"}>Know more</Link>
-                                                <figure className="icon-service1"></figure>
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div className="col">
-                                        <div className="services-foryou">
-                                            <h3 className="heading3">Featured Profile</h3>
-                                            <p>Appear on top when Recruiters search for best candidates</p>
-                                            <span className="d-flex">
-                                                <Link to={"#"}>Know more</Link>
-                                                <figure className="icon-service2"></figure>
-                                            </span>
-                                        </div>
-                                    </div>
-                                    <div className="col">
-                                        <div className="services-foryou">
-                                            <h3 className="heading3">Jobs on the Move</h3>
-                                            <p>Get personalized job recommend -ations from all the job portals on your Whatsapp</p>
-                                            <span className="d-flex">
-                                                <Link to={"#"}>Know more</Link>
-                                                <figure className="icon-service3"></figure>
-                                            </span>
-                                        </div>
-                                    </div>
-                                </div> */}
                                 <a href={shineDomain + "/myshine/myprofile/"} className="ml-auto">Update your profile</a>
                             </div>
                             { services ? <RecommendServices services={services} /> : null } 
@@ -193,24 +150,9 @@ const ShineServices = (props) => {
                             <span className={alert ?"d-block mt-10 alert":"d-block mt-10"}>File size should not exceed 5MB. in .doc, PDF, .docx format only</span>
                             <button className="btn btn-primary submit-btn mx-auto mt-30" onClick={fileUpload}>Save</button>
                     </Modal.Body>
-                    
-                    {/* <Modal.Header closeButton>
-                    </Modal.Header>
-                    <Modal.Body>
-                        <h2 className="mb-20">Upload Resume</h2>
-                        <form className="mt-10">
-                            <p>increases the chances of getting more opportunities, with latest resume</p>
-                            <div class="upload-btn-wrapper mt-5">
-                                <button class="btn-upload">Choose file<input type="file" name="myfile" /></button>
-                                
-                            </div>
-                            <span className="d-block mt-10">File size should not exceed 3MB. in .doc, PDF, Jpeg format only</span>
-                            <button type="submit" className="btn btn-primary submit-btn mx-auto mt-30" role="button">Save</button>
-                        </form>
-                    </Modal.Body> */}
                 </Modal>
             </section>
-            </>
+        </>
     )
 }
 
