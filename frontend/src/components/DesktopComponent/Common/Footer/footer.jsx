@@ -17,16 +17,17 @@ const Footer = (props) => {
         dispatch(fetchTrendingCnA({ ...props, numCourses:8 }))
     },[])
 
-    const footerTracking = (title, ln_title, event_clicked, name, val, val1, val2) => {
-        MyGA.SendEvent(title, ln_title, event_clicked, name, val, val1, val2);
+    const footerTracking = (title, ln_title, event_clicked, name, val, val1, val2, indx) => {
+        let name_joined = name.replace(/ /g, '_');
+        MyGA.SendEvent(title, ln_title, event_clicked, name_joined, val, val1, val2);
 
         sendLearningTracking({
             productId: '',
-            event: `homepage_latest_blog_${category}_${name_scored}_clicked`,
+            event: `homepage_footer_${name_joined}_clicked`,
             pageTitle:`homepage`,
-            sectionPlacement:'latest_blog',
-            eventCategory: `${name_scored}_${indx}`,
-            eventLabel: name_scored,
+            sectionPlacement:'footer',
+            eventCategory: `${name_joined}_${indx}`,
+            eventLabel: name_joined,
             eventAction: 'click',
             algo: '',
             rank: indx,
@@ -68,7 +69,7 @@ const Footer = (props) => {
                                         trendingCourses.slice(0,25)?.map((course, index) => {
                                             return (
                                                 <React.Fragment key={index}>
-                                                    <a href={`${siteDomain}${course.url}`} onClick={() => MyGA.SendEvent('ln_new_homepage','ln_trending_course', 'ln_click_course',course.name, '',false, true)}>{course.name}</a>&nbsp;
+                                                    <a href={`${siteDomain}${course.url}`} onClick={() => footerTracking('ln_new_homepage','ln_trending_course', 'ln_click_course',course.name, '',false, true, index)}>{course.name}</a>&nbsp;
                                                     { trendingCourses.length - 1 === index ? '' : '|'}
                                                 </React.Fragment>
                                             )
@@ -84,7 +85,7 @@ const Footer = (props) => {
                                         trendingSkills.slice(0,25)?.map((skill, index) => {
                                             return (
                                                 <React.Fragment key={index} >
-                                                    <a href={`${siteDomain}${skill.skillUrl}`} onClick={() => MyGA.SendEvent('ln_new_homepage','ln_trending_skill', 'ln_click_skill',skill.skillName, '',false, true)}>{skill.skillName}</a>&nbsp;
+                                                    <a href={`${siteDomain}${skill.skillUrl}`} onClick={() => footerTracking('ln_new_homepage','ln_trending_skill', 'ln_click_skill',skill.skillName, '',false, true, index)}>{skill.skillName}</a>&nbsp;
                                                     { trendingSkills.length - 1 === index ? '' : '|'}
                                                 </React.Fragment>
                                             )
