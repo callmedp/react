@@ -266,3 +266,20 @@ class CRMWalletView(APIView):
             logging.getLogger('error_log').error(
                 'unable to access wallet data CRM %s' % str(e))
             return APIResponse(message='Try again after some time', status=status.HTTP_400_BAD_REQUEST, error=True)
+
+
+class CRMRedeemWalletView(APIView):
+    permission_classes = ()
+    authentication_classes = ()
+
+    def post(self, request, format=None):
+        try:
+            email = request.data.get('email')
+            points = request.data.get('point')
+            if not email and points:
+                return APIResponse(message='email and point are required')
+            pass
+
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to redeem crm %s' % str(e))
+            return APIResponse(message='unable to redeem')
