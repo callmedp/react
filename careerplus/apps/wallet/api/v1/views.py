@@ -1,24 +1,24 @@
+# Python Core Import
 from decimal import Decimal
+import logging
+
+# Django Core Import
 from django.utils import timezone
+
+# DRF Import
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from cart.models import Cart
-from cart.mixins import CartMixin
-from shared.rest_addons.authentication import ShineUserAuthentication
-from rest_framework.permissions import IsAuthenticated
-from django.views.decorators.csrf import csrf_exempt
+
+# Third-Party App Import
 from core.common import APIResponse
 from core.api_mixin import ShineCandidateDetail
-
-
-import logging
 from wallet.models import (
     Wallet, RewardPoint, ECash,
     WalletTransaction, ECashTransaction, PointTransaction)
 from cart.mixins import CartMixin
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 
 
 class WalletRedeemView(APIView, CartMixin):
@@ -243,6 +243,15 @@ class CRMWalletView(APIView):
     authentication_classes = ()
 
     def post(self, request, format=None):
+        """
+        Basic moto of this class to:
+        1. show the wallet info in crm on the basis of email
+
+        Procsss:
+        1. Check email availability
+        2. check if owner with email exist or not
+        3. Get the wallet data and return
+        """
         email = request.data.get('email')
         try:
             if not email:
@@ -273,6 +282,18 @@ class CRMRedeemWalletView(APIView):
     authentication_classes = ()
 
     def post(self, request, format=None):
+        """
+        Basic moto of this class to:
+        1. show the wallet info in crm on the basis of email
+        2. Redeem the point on the basis of point and availability
+
+        Procsss:
+        1. Check email availability and validate the point
+        2. check if owner with email exist or not
+        3. create wallettxn
+        4. redeem the point from wallet while creating a PointTransaction history
+        5. Return the data
+        """
         try:
             email = request.data.get('email')
             point = request.data.get('point', 0)
