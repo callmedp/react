@@ -427,7 +427,7 @@ const BannerCourseDetail = (props) => {
                                         }
                                     </strong>
                                     <p className="d-flex mb-0">
-                                        <a onClick={() => goToCart(varChecked)} className="btn btn-secondary mt-10 mr-10">{ product_detail?.prd_service === 'assessment' ? 'Buy Now' : product_detail?.redeem_test ? 'Redeem Now' : 'Enroll now' }</a>
+                                        <a onClick={() => goToCart(varChecked)} className="btn btn-secondary mt-10 mr-10">{ product_detail?.prd_service === 'assessment' ? 'Buy Now' : product_detail?.redeem_test ? 'Redeem Now' : 'Buy now' }</a>
                                         <LinkScroll to={"enquire-now"} className="btn btn-outline-primary mt-10" offset={-160} smooth={true}>Enquire now</LinkScroll>
                                     </p>
                                     

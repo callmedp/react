@@ -84,7 +84,7 @@ const PopoverDetail = (props) => {
                         </ul>
                     </> : ''
             }
-            <button onClick={OpenProductPage} type="submit" className="btn btn-inline btn-secondary mx-auto" role="button">Enroll now</button>
+            <button onClick={OpenProductPage} type="submit" className="btn btn-inline btn-secondary mx-auto" role="button">Buy now</button>
         </>
     )
 }
