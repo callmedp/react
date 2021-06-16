@@ -275,8 +275,9 @@ class CRMRedeemWalletView(APIView):
     def post(self, request, format=None):
         try:
             email = request.data.get('email')
-            points = request.data.get('point')
-            if not email and points:
+            point = request.data.get('point')
+            lead_id = 190
+            if not email and point:
                 return APIResponse(message='email and point are required')
 
             owner_id = ShineCandidateDetail().get_shine_id(email=email)
@@ -286,9 +287,55 @@ class CRMRedeemWalletView(APIView):
 
             wal_obj, created = Wallet.objects.get_or_create(owner=owner_id)
 
-            points = Decimal(points)
-            if points <= Decimal(0):
+            if point <= Decimal(0):
                 return APIResponse(message='Redeeem point should be positive', status=status.HTTP_400_BAD_REQUEST, error=True)
+
+            wallettxn = WalletTransaction.objects.create(wallet=wal_obj, txn_type=2, point_value=point)
+            points = wal_obj.point.filter(status=1).order_by('created')
+
+            for pts in points:
+                if pts.expiry >= timezone.now():
+                    if point > Decimal(0):
+                        if pts.current >= point:
+                            pts.current -= point
+                            pts.last_used = timezone.now()
+                            if pts.current == Decimal(0):
+                                pts.status = 1
+                            pts.save()
+
+                            PointTransaction.objects.create(
+                                transaction=wallettxn,
+                                point=pts,
+                                point_value=point,
+                                txn_type=2)
+                            point = Decimal(0)
+
+                    else:
+                        point -= pts.current
+                        pts.last_used = timezone.now()
+                        pts.status = 2
+                        PointTransaction.objects.create(
+                            transaction=wallettxn,
+                            point=pts,
+                            point_value=pts.current,
+                            txn_type=2
+                        )
+                        pts.current = Decimal(0)
+                        pts.save()
+
+            wallettxn.status = 1
+            wallettxn.notes = 'Redeemed from crm of lead ID: {}'.format(lead_id)
+            wallettxn.current_value = wal_obj.get_current_amount()
+            wallettxn.save()
+
+            data = {
+                'wal_total': wal_obj.get_current_amount(),
+                'point_redeemed': point,
+                'owner': owner_id,
+                'owner_email': email
+            }
+
+            return APIResponse(data=data, message='Point redeemed from credit', status=status.HTTP_200_OK)
 
         except Exception as e:
             logging.getLogger('error_log').error('unable to redeem crm %s' % str(e))
