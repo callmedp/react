@@ -5,7 +5,7 @@ import { siteDomain } from 'utils/domains';
 import { MyGA } from 'utils/ga.tracking.js';
 import useLearningTracking from 'services/learningTracking';
 
-const PracticeTestBanner = (props) => {
+const PracticeTestBanner = () => {
     const sendLearningTracking = useLearningTracking();
 
 
