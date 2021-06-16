@@ -278,7 +278,13 @@ class CRMRedeemWalletView(APIView):
             points = request.data.get('point')
             if not email and points:
                 return APIResponse(message='email and point are required')
-            pass
+
+            owner_id = ShineCandidateDetail().get_shine_id(email=email)
+
+            if not owner_id:
+                return APIResponse(message='owner not exist', status=status.HTTP_404_NOT_FOUND, error=True)
+
+
 
         except Exception as e:
             logging.getLogger('error_log').error('unable to redeem crm %s' % str(e))
