@@ -9,6 +9,8 @@ from cart.mixins import CartMixin
 from shared.rest_addons.authentication import ShineUserAuthentication
 from rest_framework.permissions import IsAuthenticated
 from django.views.decorators.csrf import csrf_exempt
+from core.common import APIResponse
+from core.api_mixin import ShineCandidateDetail
 
 
 import logging
@@ -234,3 +236,31 @@ class WalletRemoveView(APIView, CartMixin):
                 {'success': 0,
                  'error_message': 'Try after some Time'
                  },  status=status.HTTP_400_BAD_REQUEST)
+
+
+class CRMWalletView(APIView):
+    permission_classes = ()
+    authentication_classes = ()
+
+    def post(self, request, format=None):
+        email = request.data.get('email')
+        try:
+            if not email:
+                return APIResponse(message='email is required', status=status.HTTP_400_BAD_REQUEST, error=True)
+
+            owner_id = ShineCandidateDetail().get_shine_id(email=email)
+
+            if not owner_id:
+                return APIResponse(message='owner not exist', status=status.HTTP_404_NOT_FOUND, error=True)
+
+            wal_obj, created = Wallet.objects.get_or_create(email=owner_id)
+
+            data = {
+                'wal_total': wal_obj.get_current_amount()
+            }
+            return APIResponse(data=data, message='shine credit points fetched', status=status.HTTP_200_OK)
+
+        except Exception as e:
+            logging.getLogger('error_log').error(
+                'unable to access wallet data CRM %s' % str(e))
+            return APIResponse(message='Try again after some time', status=status.HTTP_400_BAD_REQUEST, error=True)
