@@ -253,10 +253,12 @@ class CRMWalletView(APIView):
             if not owner_id:
                 return APIResponse(message='owner not exist', status=status.HTTP_404_NOT_FOUND, error=True)
 
-            wal_obj, created = Wallet.objects.get_or_create(email=owner_id)
+            wal_obj, created = Wallet.objects.get_or_create(owner=owner_id)
 
             data = {
-                'wal_total': wal_obj.get_current_amount()
+                'wal_total': wal_obj.get_current_amount(),
+                'owner_email': email,
+                'owner': owner_id
             }
             return APIResponse(data=data, message='shine credit points fetched', status=status.HTTP_200_OK)
 
