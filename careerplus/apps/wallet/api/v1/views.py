@@ -275,10 +275,10 @@ class CRMRedeemWalletView(APIView):
     def post(self, request, format=None):
         try:
             email = request.data.get('email')
-            point = request.data.get('point')
+            point = request.data.get('point', 0)
             lead_id = 190
-            if not email and point:
-                return APIResponse(message='email and point are required')
+            if not email:
+                return APIResponse(message='email required')
 
             owner_id = ShineCandidateDetail().get_shine_id(email=email)
 
@@ -308,7 +308,7 @@ class CRMRedeemWalletView(APIView):
                                 point=pts,
                                 point_value=point,
                                 txn_type=2)
-                            point = Decimal(0)
+                            # point = Decimal(0)
 
                     else:
                         point -= pts.current
