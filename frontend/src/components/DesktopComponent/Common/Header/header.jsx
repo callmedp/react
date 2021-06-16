@@ -7,7 +7,6 @@ import DropDown from './DropDown/dropDown';
 import { useDispatch, useSelector } from 'react-redux';
 import { cartCount, fetchNavOffersAndTags } from 'store/Header/actions/index';
 import { initLoggedInZendesk, loggedOutZendesk } from 'utils/zendeskIniti';
-import { fetchAlreadyLoggedInUser } from "store/Authentication/actions/index";
 import { removeTrackingInfo, getCandidateInformation,getCandidateId } from 'utils/storage.js';
 import SearchBar from './SeachBar/SearchBar';
 import { MyGA } from 'utils/ga.tracking.js';
@@ -88,14 +87,59 @@ const Header = (props) => {
         
         sendLearningTracking({
             productId: '',
-            event: 'header_learning_logo',
-            pageTitle:'',
-            sectionPlacement:'',
+            event: `${props.pageTitle}_learning_logo`,
+            pageTitle: props.pageTitle,
+            sectionPlacement:'learning_logo',
             eventCategory: 'header',
             eventLabel: '',
             eventAction: 'click',
             algo: '',
             rank: '',
+        })
+    }
+
+    const jobAssistanceTracking = (job, index) => {
+        MyGA.SendEvent('homepage_navigation', 'ln_homepage_navigation', 'ln_job_assisstance', 'ln_' + job.id, '', false, true)
+        sendLearningTracking({
+            productId: '',
+            event: `${props.pageTitle}_job_assistance_${job.id}`,
+            pageTitle: props.pageTitle,
+            sectionPlacement:'header',
+            eventCategory: 'job_assistance',
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: index,
+        })
+    }
+
+    const practiceTestTracking = () =>{
+        MyGA.SendEvent('homepage_navigation', 'ln_homepage_navigation', 'ln_practice_tests', 'ln_practice_tests', '', false, true)
+        sendLearningTracking({
+            productId: '',
+            event: `${props.pageTitle}_practice_test`,
+            pageTitle: props.pageTitle,
+            sectionPlacement:'header',
+            eventCategory: 'practice_test',
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: index,
+        })
+    }
+
+    const blogTracking = () => {
+        MyGA.SendEvent('homepage_navigation', 'ln_homepage_navigation', 'ln_blog', 'ln_blog', '', false, true)
+        sendLearningTracking({
+            productId: '',
+            event: `${props.pageTitle}_blog`,
+            pageTitle: props.pageTitle,
+            sectionPlacement:'header',
+            eventCategory: 'blog',
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: index,
         })
     }
 
@@ -116,25 +160,25 @@ const Header = (props) => {
                                         <a className="nav-link" to={"#"} id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onClick={() => MyGA.SendEvent('homepage_navigation', 'ln_homepage_navigation', 'ln_job_assisstance', 'ln_job_assisstance', '', false, true)}>Job assistance</a>
                                         <div className="dropdown-menu" aria-labelledby="navbarDropdown">
                                             {
-                                                jobAssistanceList?.map((job) => <a key={job.url} className="dropdown-item" href={job.url} onClick={() => MyGA.SendEvent('homepage_navigation', 'ln_homepage_navigation', 'ln_job_assisstance', 'ln_' + job.id, '', false, true)}>{job.name}</a>)
+                                                jobAssistanceList?.map((job, index) => <a key={job.url} className="dropdown-item" href={job.url} onClick={() => jobAssistanceTracking(job, index)}>{job.name}</a>)
                                             }
                                         </div>
                                     </li>
                                     <li className="nav-item">
-                                        <a className="nav-link" href={`${siteDomain}/practice-tests/`} onClick={() => MyGA.SendEvent('homepage_navigation', 'ln_homepage_navigation', 'ln_practice_tests', 'ln_practice_tests', '', false, true)}>Practice test</a>
+                                        <a className="nav-link" href={`${siteDomain}/practice-tests/`} onClick={practiceTestTracking}>Practice test</a>
                                     </li>
                                     <li className="nav-item dropdown dropdown-resources">
                                         <a className="nav-link" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onClick={() => MyGA.SendEvent('homepage_navigation', 'ln_homepage_navigation', 'ln_free_resources', 'ln_free_resources', '', false, true)}>Free resources</a>
                                         <div className="dropdown-menu category-tab" aria-labelledby="navbarDropdown">
                                             <div className="resources-tab">
 
-                                                <DropDown usedIn="freeResources" tabList={freeResourcesList} />
+                                                <DropDown usedIn="freeResources" pageTitle = {props.pageTitle} tabList={freeResourcesList} />
 
                                             </div>
                                         </div>
                                     </li>
                                     <li className="nav-item">
-                                        <a className="nav-link" href={`${siteDomain}/talenteconomy/`} onClick={() => MyGA.SendEvent('homepage_navigation', 'ln_homepage_navigation', 'ln_blog', 'ln_blog', '', false, true)} >Blog</a>
+                                        <a className="nav-link" href={`${siteDomain}/talenteconomy/`} onClick={blogTracking} >Blog</a>
                                     </li>
                                     <li className="nav-item dropdown dropdown-user">
                                         <Link className="nav-link link-ht" aria-label="dropdown user link" to={"#"} id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
