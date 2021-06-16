@@ -284,7 +284,11 @@ class CRMRedeemWalletView(APIView):
             if not owner_id:
                 return APIResponse(message='owner not exist', status=status.HTTP_404_NOT_FOUND, error=True)
 
+            wal_obj, created = Wallet.objects.get_or_create(owner=owner_id)
 
+            points = Decimal(points)
+            if points <= Decimal(0):
+                return APIResponse(message='Redeeem point should be positive', status=status.HTTP_400_BAD_REQUEST, error=True)
 
         except Exception as e:
             logging.getLogger('error_log').error('unable to redeem crm %s' % str(e))
