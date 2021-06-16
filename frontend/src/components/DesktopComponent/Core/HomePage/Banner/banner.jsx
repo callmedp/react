@@ -18,7 +18,7 @@ const HomeBanner = () => {
             event: 'homepage_banner_career_guidance_clicked',
             pageTitle:'homepage',
             sectionPlacement:'homepage_banner',
-            eventCategory: 'header',
+            eventCategory: '',
             eventLabel: '',
             eventAction: 'click',
             algo: '',
