@@ -6,11 +6,12 @@ import logging
 from django.utils import timezone
 
 # DRF Import
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from cart.models import Cart
+from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 
 # Third-Party App Import
 from core.common import APIResponse
@@ -239,8 +240,8 @@ class WalletRemoveView(APIView, CartMixin):
 
 
 class CRMWalletView(APIView):
-    permission_classes = ()
-    authentication_classes = ()
+    authentication_classes = [OAuth2Authentication]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request, format=None):
         """
@@ -278,8 +279,8 @@ class CRMWalletView(APIView):
 
 
 class CRMRedeemWalletView(APIView):
-    permission_classes = ()
-    authentication_classes = ()
+    authentication_classes = [OAuth2Authentication]
+    permission_classes = [IsAuthenticated]
 
     def post(self, request, format=None):
         """
