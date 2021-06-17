@@ -870,7 +870,7 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         tracking_id = request.GET.get('t_id','')
         trigger_point = request.GET.get('trigger_point','')
         u_id = request.GET.get('u_id','')
-        position = request.GET.get('position',1)
+        position = request.GET.get('position','1')
         utm_campaign = request.GET.get('utm_campaign','')
         r_p = request.GET.get('referal_product', '')
         r_sp = request.GET.get('referal_subproduct', '')
@@ -884,7 +884,24 @@ class ProductDetailView(TemplateView, ProductInformationMixin, CartMixin):
         expected_path = "{}/{}/{}/{}".format(
             settings.RESUME_SHINE_MAIN_DOMAIN, cat_slug, prd_slug, pk)
 
-        return HttpResponsePermanentRedirect(expected_path + '?t_id=' + tracking_id + '&trigger_point=' + trigger_point + '&u_id=' + u_id + '&position=' + position + '&recommendation_by=' + recommendation_by + '&cart_addition=' + cart_addition + '&utm_campaign=' + utm_campaign + '&r_p=' + r_p + '&r_sp' + r_sp + '&popup_based_product=' + popup_based_product)
+        if tracking_id:
+            tracking_params_path = '?t_id={}&trigger_point={}&u_id={}&position={}&recommendation_by= \
+            {}&cart_addition={}&utm_campaign={}&r_p= {}&r_sp={}&popup_based_product={}' \
+            .format(
+                tracking_id, 
+                trigger_point,
+                u_id,
+                position,
+                recommendation_by,
+                cart_addition,
+                utm_campaign,
+                r_p,
+                r_sp,
+                popup_based_product
+            )
+            expected_path+=tracking_params_path 
+
+        return HttpResponsePermanentRedirect(expected_path)
 
     def return_http404(self, sqs_obj):
         if sqs_obj.count() == 1:
