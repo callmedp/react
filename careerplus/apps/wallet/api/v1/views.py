@@ -297,7 +297,8 @@ class CRMRedeemWalletView(APIView):
         try:
             email = request.data.get('email')
             point = request.data.get('point', 0)
-            lead_id = 190
+            lead_id = request.data.get('lead_id')
+            point = Decimal(point)
             if not email:
                 return APIResponse(message='email required')
 
@@ -345,7 +346,7 @@ class CRMRedeemWalletView(APIView):
                         pts.save()
 
             wallettxn.status = 1
-            wallettxn.notes = 'Redeemed from crm of lead ID: {}'.format(lead_id)
+            wallettxn.notes = 'Point {} | Redeemed from crm of lead ID: {}'.format(point, lead_id)
             wallettxn.current_value = wal_obj.get_current_amount()
             wallettxn.save()
 
@@ -360,4 +361,5 @@ class CRMRedeemWalletView(APIView):
 
         except Exception as e:
             logging.getLogger('error_log').error('unable to redeem crm %s' % str(e))
+            import pdb; pdb.set_trace()
             return APIResponse(message='unable to redeem')
