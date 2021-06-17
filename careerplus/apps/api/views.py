@@ -1685,14 +1685,20 @@ class TestTimer(APIView):
     def get(self, request, *args, **kwargs):
         test_id = self.request.GET.get('test_id')
         duration = int(self.request.GET.get('duration', 0))
-        self.cache_test = TestCacheUtil(request=request)
-        if not test_id:
-            return Response({'status':'Bad Request'},status=status.HTTP_400_BAD_REQUEST)
+        test_start_time = ''
+        try:
+            self.cache_test = TestCacheUtil(request=request)
+            
+            if not test_id:
+                return Response({'status':'Bad Request'},status=status.HTTP_400_BAD_REQUEST)
 
-        test_start_time = self.cache_test.get_start_test_cache(
-            key='test-'+test_id)
-        set_test_duration_cache = self.cache_test.get_test_duration_cache(
-            key='test-'+test_id, duration=duration)
+            test_start_time = self.cache_test.get_start_test_cache(
+                key='test-'+test_id)
+            set_test_duration_cache = self.cache_test.get_test_duration_cache(
+                key='test-'+test_id, duration=duration)
+        
+        except Exception as ex:
+            logging.getLogger('error_log').error('error in TestTimer get view', ex)
         #
         # if not timestamp:
         #     timestamp_with_tduration = (datetime.now() + timedelta(seconds=duration)).strftime(timeformat)

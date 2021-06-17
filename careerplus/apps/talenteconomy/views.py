@@ -802,9 +802,11 @@ class AuthorDetailView(DetailView):
     model = Author
 
     def get_template_names(self):
-        if not self.request.amp:
-            return ["talenteconomy/author-detail.html"]
-        return ["talenteconomy/author-detail-amp.html"]
+        
+        if self.request.amp and self.request.flavour != 'full':
+            return ["talenteconomy/author-detail-amp.html"]
+        return ["talenteconomy/author-detail.html"]
+        
 
     def get(self, request, *args, **kwargs):
         context = super(self.__class__, self).get(request, args, **kwargs)

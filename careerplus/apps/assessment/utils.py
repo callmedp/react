@@ -11,6 +11,7 @@ from django_redis import get_redis_connection
 # interapp imports
 
 # 3rd party imports
+import logging
 
 
 class TestCacheUtil:
@@ -101,15 +102,20 @@ class TestCacheUtil:
 
         key = self.session_id + key
         timeout = None
-        if not self.test_timeout:
-            conn = get_redis_connection('test_lookup')
-            redis_key = str.encode(':' + str(settings.CACHES.get('test_lookup').get('LOCATION')[0].split("/")[-1])+":"+key)
-            timeout = conn.pttl(redis_key)
-        if not timeout or timeout == -2:
-            timeout = self.VSKILL_CACHE_TIMEOUT
-        cache.set(key,data,timeout)
-        return cache.get(key)
-
+        
+        try:
+            if not self.test_timeout:
+                conn = get_redis_connection('test_lookup')
+                redis_key = str.encode(':' + str(settings.CACHES.get('test_lookup').get('LOCATION')[0].split("/")[-1])+":"+key)
+                timeout = conn.pttl(redis_key)
+            if not timeout or timeout == -2:
+                timeout = self.VSKILL_CACHE_TIMEOUT
+            cache.set(key,data,timeout)
+            return cache.get(key)
+            
+        except Exception as ex:
+            logging.getLogger('error_log').error('get-set-time set_cache_data error', ex)
+            return None
 
 
 
