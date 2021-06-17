@@ -789,6 +789,9 @@ class RecommendedProductsApiView(ListAPIView):
 
         if university_course:
             products = products.filter(pTF=14)
+
+        if len(products) == 0:
+            products = SearchQuerySet().filter(id__in=settings.DEFAULT_RECOMMEND_PRODUCT)
         return products
 
 
@@ -1682,14 +1685,20 @@ class TestTimer(APIView):
     def get(self, request, *args, **kwargs):
         test_id = self.request.GET.get('test_id')
         duration = int(self.request.GET.get('duration', 0))
-        self.cache_test = TestCacheUtil(request=request)
-        if not test_id:
-            return Response({'status':'Bad Request'},status=status.HTTP_400_BAD_REQUEST)
+        test_start_time = ''
+        try:
+            self.cache_test = TestCacheUtil(request=request)
+            
+            if not test_id:
+                return Response({'status':'Bad Request'},status=status.HTTP_400_BAD_REQUEST)
 
-        test_start_time = self.cache_test.get_start_test_cache(
-            key='test-'+test_id)
-        set_test_duration_cache = self.cache_test.get_test_duration_cache(
-            key='test-'+test_id, duration=duration)
+            test_start_time = self.cache_test.get_start_test_cache(
+                key='test-'+test_id)
+            set_test_duration_cache = self.cache_test.get_test_duration_cache(
+                key='test-'+test_id, duration=duration)
+        
+        except Exception as ex:
+            logging.getLogger('error_log').error('error in TestTimer get view', ex)
         #
         # if not timestamp:
         #     timestamp_with_tduration = (datetime.now() + timedelta(seconds=duration)).strftime(timeformat)
@@ -2283,4 +2292,26 @@ class FetchInfoAPIView(APIView):
 
         if not rrequest.session.get('candidate_id') or not rrequest.session.get('candidate_id') == candidate_id:
             rrequest.session.update(detail)
+        return Response(data, status=status.HTTP_200_OK)
+
+class FetchScriptLinkView(APIView):
+    authentication_classes = ()
+    permission_classes = ()
+    serializer_class = None
+
+    def get(self, request, *args, **kwargs):
+        name = kwargs.get('name', '')
+        data = {'script_link':''}
+        if not name:
+            return Response({ 'status': 'No script available'}, status=status.HTTP_400_BAD_REQUEST)
+
+        chatbot_domain = settings.CHATBOT_DOMAIN
+
+        try:
+            res = requests.get('{}/api/app/{}/get-script/'.format(chatbot_domain, name))
+            data = res.json()
+        except Exception as e:
+            logging.getLogger('error_log').error("issue with fetching chatbot script: {}".format(e))
+            return Response({ 'status': 'Something went wrong'}, status=status.HTTP_400_BAD_REQUEST)
+
         return Response(data, status=status.HTTP_200_OK)

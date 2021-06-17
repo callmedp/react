@@ -74,7 +74,13 @@ const RouteWithSubRoutes = (route) => {
   }, []);
 
   const renderComponent = (props) => {
-    
+    if(props.match.path === "/course/:func/:skill/:id/") {
+      if(typeof document && document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]) document.getElementsByClassName('chat-bot')[0].style.display = 'block';
+    }
+    else {
+      if(typeof document && document.getElementsByClassName('chat-bot') && document.getElementsByClassName('chat-bot')[0]) document.getElementsByClassName('chat-bot')[0].style.display = 'none';
+    }
+
     if (!!route.private) {
       if (localStorage.getItem("isAuthenticated") === "true") {
         return <route.component {...props} routes={route.routes} />;

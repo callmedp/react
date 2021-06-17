@@ -6,6 +6,7 @@ if (typeof global.window == 'undefined') {
             imageUrl : 'https://static1.shine.com/l/s/react/media/images/',
             resumeShineSiteDomain : 'https://resume.shine.com',
             shineSiteDomain : 'https://mapi.shine.com',
+            chatbotDomain: "https://chat.shine.com",
         }
     };
 }

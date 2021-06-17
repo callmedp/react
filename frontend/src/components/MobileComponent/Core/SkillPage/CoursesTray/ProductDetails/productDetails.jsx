@@ -102,7 +102,7 @@ const ProductDetails = (props) =>{
             }
 
             <p className="d-flex align-items-center mt-15">
-                <button type="submit" onClick={OpenProductPage} className="btn-yellow" role="button">Enroll now</button>
+                <button type="submit" onClick={OpenProductPage} className="btn-yellow" role="button">Buy now</button>
                 { icon === 'file' ?
                     (brochure ? <a href={brochure} className="micon-pdf ml-auto"></a> : '') : 
                     <span className="m-view-less d-block text-right ml-auto" onClick={()=>setShowDetails(false)}>View less</span>
