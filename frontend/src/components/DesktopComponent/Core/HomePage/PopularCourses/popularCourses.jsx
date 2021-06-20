@@ -25,10 +25,10 @@ function PopularCourses() {
 
         sendLearningTracking({
             productId: '',
-            event: `homepage_popular_courses_${tabType}_tab_clicked`,
-            pageTitle:`homepage_popular_${tabType}_courses`,
+            event: `homepage_popular_courses_${tabType}_${key}_tab_clicked`,
+            pageTitle:`homepage`,
             sectionPlacement:'popular_courses',
-            eventCategory: key,
+            eventCategory: tabType,
             eventLabel: '',
             eventAction: 'click',
             algo: '',

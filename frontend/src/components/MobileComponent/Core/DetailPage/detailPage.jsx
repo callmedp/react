@@ -215,7 +215,7 @@ const DetailPage = (props) => {
                                 {videoModal ? <VideoModal setVideoModal = {setVideoModal} videoUrl = {product_detail?.prd_video} productName={product_detail?.prd_H1} />: '' }
                                  
                     </main>
-                    <Footer pageType={"homePage"} /></>
+                    <Footer pageType={`course_${product_detail?.label.replace(/ /gi, '_')}`} /></>
                         </>
             }
                     </div>

@@ -33,7 +33,7 @@ const SearchBar = (props) => {
     const sendMultipleEvents = (name) => {
         let name_joined = name.replace(/ /g, '_');
 
-        MyGA.SendEvent('ln_new_homepage','ln_search_course', 'ln_search_initiated', name_joined,'', false, true);
+        MyGA.SendEvent('ln_new_homepage', 'ln_search_course', 'ln_search_initiated', name_joined, '', false, true);
 
         sendLearningTracking({
             productId: '',

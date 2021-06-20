@@ -22,7 +22,7 @@ const MakeCareerChange = (props) => {
         <div>
             {/* <GuidanceRecommendations /> */}
             {/* <FindJob /> */}
-            { !!job ? <><ViewCourses {...props} /><Footer /></> : <FindJob type={"career"} {...props}/> } 
+            { !!job ? <><ViewCourses {...props} /><Footer pageType={'user_intent_make_career_change'} /></> : <FindJob type={"career"} {...props}/> } 
             {/* <FeedbackResult /> */}
         </div>
     )

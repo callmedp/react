@@ -33,6 +33,7 @@ import { startSkillPageLoader, stopSkillPageLoader } from 'store/Loader/actions'
 
 const SkillPage = (props) => {
   const pageId = props?.match?.params?.id;
+  const skill_name = props?.match?.params?.skill;
   const dispatch = useDispatch();
 
   const { skillLoader } = useSelector((store) => store.loader);
@@ -170,7 +171,7 @@ const SkillPage = (props) => {
       <WhyChooseUs />
       <FAQ setHasFaq={setHasFaq} />
       <LearnersStories setHasLearnerStories={setHasLearnerStories} />
-      <Footer />
+      <Footer pageTitle={`skill_${skill_name}`} />
       </React.Fragment>}
     </div>
   );

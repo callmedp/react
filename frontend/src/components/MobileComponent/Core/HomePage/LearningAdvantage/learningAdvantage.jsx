@@ -1,9 +1,7 @@
-import React, {useState} from 'react';
+import React from 'react';
 import './learningAdvantage.scss';
-import { Link } from 'react-router-dom';
-
    
-const LearningAdvantage = (props) => {
+const LearningAdvantage = () => {
     return(
         <section className="m-container m-learning-advantage mt-0 mb-0 pr-0" data-aos="fade-up">
             <h2 className="m-heading2-home text-center mt-20">Shine learning advantages</h2>

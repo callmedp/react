@@ -226,7 +226,7 @@ const DetailPage = (props) => {
             
             { skill && <CoursesMayLike product_id={id?.split('-')[1]} skill={skill}/> }
             
-            <Footer />
+            <Footer  pageTitle={`course_${product_detail?.label.replace(/ /gi, '_')}`} />
         </div>
     )
 }

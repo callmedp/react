@@ -101,7 +101,7 @@ const CatalogPage = (props) => {
           <RecentCourses />
           <OurVendors />
         </main>
-        <Footer />
+        <Footer pageTitle={'catalogue'} />
       </div>
     </>
   );

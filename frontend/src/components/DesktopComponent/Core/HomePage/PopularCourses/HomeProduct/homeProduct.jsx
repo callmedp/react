@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 import Carousel from 'react-bootstrap/Carousel';
-// import { Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useDispatch } from "react-redux";
 import { fetchInDemandProducts } from 'store/HomePage/actions';
 import { startHomePageLoader, stopHomePageLoader } from 'store/Loader/actions';
-import { siteDomain } from 'utils/domains';
 import { MyGA } from 'utils/ga.tracking.js';
 import useLearningTracking from 'services/learningTracking';
 
@@ -25,10 +24,10 @@ const HomeProduct = (props) => {
 
             sendLearningTracking({
                 productId: '',
-                event: `popular_courses_${tabType}_next_clicked`,
-                pageTitle:`homepage popular ${tabType} courses`,
-                sectionPlacement:'section',
-                eventCategory: `${tabType} carousel`,
+                event: `popular_courses_${tabType}_${selectedIndex}_next_clicked`,
+                pageTitle:`homepage`,
+                sectionPlacement:'popular_courses',
+                eventCategory: tabType,
                 eventLabel: '',
                 eventAction: 'click',
                 algo: '',
@@ -37,19 +36,20 @@ const HomeProduct = (props) => {
         }
     };
 
-    const setTracking = (url, name, indx) => {
+    const setTracking = (name, indx) => {
+        let name_joined = name.replace(/ /g, '_');
+
         sendLearningTracking({
             productId: '',
-            event: `homepage_popular_courses_${name}_clicked`,
-            pageTitle:`homepage_popular_${name}_course`,
-            sectionPlacement:'ul',
-            eventCategory: `${name}_${indx}`,
-            eventLabel: name,
+            event: `homepage_popular_courses_${name_joined}_${indx}_clicked`,
+            pageTitle:`homepage`,
+            sectionPlacement: 'popular_courses',
+            eventCategory: name_joined,
+            eventLabel: '',
             eventAction: 'click',
             algo: '',
             rank: indx,
         })
-        window.location.href = url;
     }
 
     const starRatings = (star, index) => {
@@ -78,7 +78,7 @@ const HomeProduct = (props) => {
                                                             <img src={product.imgUrl} alt={product.imageAlt} itemProp="image" />
                                                         </figure>
                                                         <h3 className="heading3">
-                                                            <a itemProp="url" className="cursorLink" onClick={() => setTracking(product.url, product.name, idx)}>{product.name}</a>
+                                                            <Link to={product.url} itemProp="url" className="cursorLink" onClick={() => setTracking(product.name, idx)}>{product.name}</Link>
                                                         </h3>
                                                     </div>
                                                     <div className="card__box">
@@ -92,9 +92,9 @@ const HomeProduct = (props) => {
                                                         <div className="card__duration-mode mt-10">
                                                             {product.jobsAvailable ? <> <strong>{product.jobsAvailable}</strong> Jobs available </> : ''} {product.jobsAvailable && product.duration ? '|' : ''} {product.duration ? <>Duration: <strong>{product.duration}</strong> </> : <strong>&nbsp;</strong>}
                                                         </div>
-                                                        <a className="view-program mt-10" href={`${siteDomain}${product.url}`} onClick={() => 
+                                                        <Link className="view-program mt-10" to={product.url} onClick={() => 
                                                         tabType == "master" ?
-                                                        MyGA.SendEvent('ln_new_homepage', 'ln_popular_course_select', 'ln_masters_course_click', product.name, '', false, true) : MyGA.SendEvent('ln_new_homepage', 'ln_popular_course_select', 'ln_certification_course_click', product.name, '', false, true)  }>View program</a>
+                                                        MyGA.SendEvent('ln_new_homepage', 'ln_popular_course_select', 'ln_masters_course_click', product.name, '', false, true) : MyGA.SendEvent('ln_new_homepage', 'ln_popular_course_select', 'ln_certification_course_click', product.name, '', false, true)  }>View program</Link>
                                                     </div>
                                                 </div>
                                             </li>

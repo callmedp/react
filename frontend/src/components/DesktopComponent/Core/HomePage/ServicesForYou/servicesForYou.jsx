@@ -11,15 +11,17 @@ const JobAssistanceServices = () => {
     const sendLearningTracking = useLearningTracking();
 
     const goToAssistedService = (heading, url, indx) => {
-        MyGA.SendEvent('ln_new_homepage','ln_assistance_services_select', 'ln_click_assistance_services', heading,'', false, true);
+        let name_joined = heading.replace(/ /g, '_');
+
+        MyGA.SendEvent('ln_new_homepage','ln_assistance_services_select', 'ln_click_assistance_services', name_joined, '', false, true);
 
         sendLearningTracking({
             productId: '',
-            event: `homepage_assistance_service_${heading}_clicked`,
-            pageTitle:`homepage_assistance_service_for_${heading}`,
-            sectionPlacement:'job_assistance_service',
-            eventCategory: `${heading}_${indx}`,
-            eventLabel: heading,
+            event: `homepage_assistance_service_${name_joined}_${indx}_clicked`,
+            pageTitle:`homepage`,
+            sectionPlacement:'service_for_you',
+            eventCategory: name_joined,
+            eventLabel: '',
             eventAction: 'click',
             algo: '',
             rank: indx,
@@ -42,19 +44,17 @@ const JobAssistanceServices = () => {
                                         jobAssistanceServices?.map((service, index) => {
                                             return (
                                                 <div className="col-sm-6 cursorLink" key={service.id} onClick={() => goToAssistedService(service.heading, service.url, index)}>
-                                                    <a>
                                                     <div className="services-foryou">
                                                         <h3 className="heading3">{service.heading}</h3>
                                                         <p>{ service.description.length > 100 ? service.description.slice(0,100)+"..." : service.description }</p>
                                                         <span className="d-flex">
-                                                            <a>Know more</a>
+                                                            <span>Know more</span>
                                                             {/* <figure className="icon-service1"></figure> */}
                                                             <figure >
                                                                 <img src={service.img} className="img-fluid" alt={service.img_alt} />
                                                             </figure>
                                                         </span>
                                                     </div>
-                                                    </a>
                                                 </div>
                                             )
                                         })

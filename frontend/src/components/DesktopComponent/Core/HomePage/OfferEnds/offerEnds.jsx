@@ -14,13 +14,15 @@ const OfferEnds = (props) => {
   const sendLearningTracking = useLearningTracking();
 
   const trackOffer = () => {
+    handleShow(state => !state);
+
     sendLearningTracking({
       productId: '',
       event: `homepage_banner_offer_${navOffer[1] || navOffer[2] || ''}_clicked`,
       pageTitle:`homepage`,
       sectionPlacement:'banner_offer',
       eventCategory: navOffer[1] || navOffer[2] || '',
-      eventLabel: navOffer[1] || navOffer[2] || '',
+      eventLabel: '',
       eventAction: 'click',
       algo: '',
       rank: ''
@@ -37,7 +39,7 @@ const OfferEnds = (props) => {
               <p className="flex-1">
                 limited time offer by&nbsp;<strong>{navOffer[1]}&nbsp;</strong>  |  {navOffer[3]} OFF  |  Offer ends in
                   <OfferTimer timerDate={navOffer[0]} cssClass='time' type="main" />
-                  <em onClick={() => {handleShow(); trackOffer()}} className="btn btn-inline btn-outline-primary">Avail offer</em>
+                  <em onClick={() => {trackOffer()}} className="btn btn-inline btn-outline-primary">Avail offer</em>
               </p>
               <span className="icon-close mr-3" onClick={() => setShowMainOffer(false)}>x</span>
             </Toast.Header>

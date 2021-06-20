@@ -10,28 +10,28 @@ const RecruitersLooking = () => {
     const { recruiterList } = useSelector(store => store.footer)
     const sendLearningTracking = useLearningTracking();
 
-    const trackRecruitersLooking = (name, url, indx) => {
-        MyGA.SendEvent('ln_new_homepage', 'ln_recruiter_course', ' ln_click_course', name, '', false, true)
+    const trackRecruitersLooking = (name, indx) => {
+        let name_joined = name.replace(/ /g, '_');
+
+        MyGA.SendEvent('ln_new_homepage', 'ln_recruiter_course', ' ln_click_course', name_joined, '', false, true)
 
         sendLearningTracking({
             productId: '',
-            event: `homepage_recruiters_looking_${name}_clicked`,
-            pageTitle:'homepage_recruiters_looking',
+            event: `homepage_recruiters_looking_${name_joined}_${indx}_clicked`,
+            pageTitle:'homepage',
             sectionPlacement:'recruiters_looking',
-            eventCategory: `${name}_${indx}`,
-            eventLabel: name,
+            eventCategory: name_joined,
+            eventLabel: '',
             eventAction: 'click',
             algo: '',
             rank: indx,
         })
-
-        window.location.href = url;
     }
 
     const getSlide = (recruiterSlide) => recruiterSlide.slice(0,12)?.map((skill, index) => {
         return (
             <li className="col-sm-3" key={index}>
-            <Link onClick={() => trackRecruitersLooking(skill.skillName, skill.skillUrl, index)}>
+            <Link to={skill?.skillUrl} onClick={() => trackRecruitersLooking(skill.skillName, index)}>
                 <div className="card">
                     <figure>
                         <img src={skill.image} className="img-fluid" alt={skill.name} />

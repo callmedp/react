@@ -20,8 +20,8 @@ const LatestBlog = () => {
             event: `homepage_latest_blog_${category}_${name_scored}_${indx}_clicked`,
             pageTitle:`homepage`,
             sectionPlacement:'latest_blog',
-            eventCategory: `${name_scored}`,
-            eventLabel: '',
+            eventCategory: name_scored,
+            eventLabel: `${category}_${name_scored}`,
             eventAction: 'click',
             algo: '',
             rank: indx,
@@ -41,16 +41,14 @@ const LatestBlog = () => {
                             latestBlog?.map((blog, idx) => {
                                 return (
                                     <li className="col-sm-4" key={idx}>
-                                    <div className="card" onClick={() => latesBlogTracking(blog.display_name, blog?.p_category, blog?.url, idx)}>
-                                        <a className="cursorLink">
+                                        <div className="card cursorLink" onClick={() => latesBlogTracking(blog.display_name, blog?.p_category, blog?.url, idx)}>
                                             <figure>
                                                 <img src={blog?.image} className="img-fluid" alt={blog?.display_name} />
                                                 <span>{ blog?.p_category?.length > 13 ? blog?.p_category?.slice(0, 13) + '...' : blog?.p_category }</span>
                                             </figure>
                                             <strong>{ blog?.display_name?.length > 40 ? blog?.display_name?.slice(0, 40) + '...' : blog?.display_name }</strong>
-                                        </a>
-                                    </div>
-                                </li>
+                                        </div>
+                                    </li>
                                 )
                             })
                           }

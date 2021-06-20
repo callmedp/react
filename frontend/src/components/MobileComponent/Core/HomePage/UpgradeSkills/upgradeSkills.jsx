@@ -1,10 +1,8 @@
-import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
 import Slider from "react-slick";
-// import 'slick-carousel/slick/slick.css';
 import './upgradeSkills.scss'
 
-const UpgradeSkills = (props) => {
+const UpgradeSkills = () => {
     const settings = {
         dots: false,
         arrows: false,
@@ -15,6 +13,7 @@ const UpgradeSkills = (props) => {
         swipeToSlide: true,
         variableWidth: true,
     };
+    
     return(
         <section className="m-container mt-0 mb-0 pr-0 pt-0 ml-10n">
             <div className="m-upgrade-skills">

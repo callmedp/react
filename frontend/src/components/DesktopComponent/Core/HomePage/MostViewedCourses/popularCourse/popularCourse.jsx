@@ -1,7 +1,7 @@
 import React from 'react'
-import { siteDomain } from 'utils/domains';
 import { MyGA } from 'utils/ga.tracking.js';
 import useLearningTracking from 'services/learningTracking';
+import { Link } from 'react-router-dom';
 
 const PopularCourse = (props) => {
     const {course,category, indx} = props;
@@ -13,33 +13,33 @@ const PopularCourse = (props) => {
         )
     }
 
-    const mostViewedTracking = (name, url) => {
-        MyGA.SendEvent('ln_new_homepage','ln_most_viewed_course', 'ln_'+category, name,'', false, true);
+    const mostViewedTracking = (name) => {
+        let name_joined = name.replace(/ /g, '_');
+
+        MyGA.SendEvent('ln_new_homepage','ln_most_viewed_course', 'ln_'+category, name_joined,'', false, true);
 
         sendLearningTracking({
             productId: '',
-            event: `homepage_most_viewed_course_${category}_${name}_${indx}_clicked`,
+            event: `homepage_most_viewed_course_${category}_${name_joined}_${indx}_clicked`,
             pageTitle:`homepage`,
             sectionPlacement:'most_viewed_courses',
-            eventCategory: `${name}`,
-            eventLabel: `${category}_${name}`,
+            eventCategory: `${name_joined}`,
+            eventLabel: `${category}_${name_joined}`,
             eventAction: 'click',
             algo: '',
             rank: indx,
         })
-
-        window.location.href = `${siteDomain}${url}`;
     }
 
     return (
         <li className="col-sm-3">
-        <div className="card" onClick={() => mostViewedTracking(course.name, course.url)}>
+        <div className="card">
             <div className="card__heading">
                 <figure>
                     <img src={course.imgUrl} alt={course.imgAlt} />
                 </figure>
                 <h3 className="heading3">
-                    <a className="cursorLink">{course.name}</a>
+                    <Link className="cursorLink" to={course.url} onClick={() => mostViewedTracking(course.name)}>{course.name}</Link>
                 </h3>
             </div>
             <div className="card__box">

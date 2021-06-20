@@ -1,24 +1,19 @@
 // React Core Import
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { MyGA } from 'utils/ga.tracking.js';
+import useLearningTracking from 'services/learningTracking';
 
 // Third-Party Import
-import Swal from 'sweetalert2';
 import Slider from "react-slick";
 
 // Inter-App Import
 import './recruitersLooking.scss';
-// import 'slick-carousel/slick/slick.css';
-import { siteDomain } from 'utils/domains';
 
-
-
-const RecruitersLooking = (props) => {
-    const dispatch = useDispatch();
-
+const RecruitersLooking = () => {
     const { trendingSkills } = useSelector(store => store?.skillDemand);
+    const sendLearningTracking = useLearningTracking();
 
     const settings = {
         dots: false,
@@ -33,7 +28,22 @@ const RecruitersLooking = (props) => {
         variableHeight: true,
     };
 
+    const trackRecruitersLooking = (name, indx) => {
+        let name_joined = name.replace(/ /g, '_');
+        MyGA.SendEvent('ln_new_homepage', 'ln_recruiter_course', ' ln_click_course', name_joined, '', false, true)
 
+        sendLearningTracking({
+            productId: '',
+            event: `homepage_recruiters_looking_${name_joined}_${indx}_clicked`,
+            pageTitle:'homepage',
+            sectionPlacement:'recruiters_looking',
+            eventCategory: name_joined,
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: indx,
+        })
+    }
 
     return (
         <section className="m-container m-lightblue-bg mt-0 mb-0 pb-0 pr-0 ml-10n" data-aos="fade-up">
@@ -45,7 +55,7 @@ const RecruitersLooking = (props) => {
                     {
                         trendingSkills?.slice(0,12)?.map((skill, index) => {
                             return (
-                                <Link to={skill.skillUrl} key={index} onClick={() => MyGA.SendEvent('ln_new_homepage', 'ln_recruiter_course', ' ln_click_course', skill.skillName, '', false, true)}>
+                                <Link to={skill.skillUrl} key={index} onClick={() => trackRecruitersLooking(skill.skillName, index)}>
                                 <div className="m-card" >
                                     
                                     <figure>

@@ -53,12 +53,12 @@ function MostViewedCourses() {
                         >
 
                             {
-                                categoryTabs?.map((category, index) => {
+                                categoryTabs?.map((category) => {
                                     return (
                                         <Tab eventKey={category.id} title={<span>{category.name}</span>} key={category.id}>
                                             <ul className="recent-courses__list">
                                                 {
-                                                    mostViewedCourses[key]?.map((course, idx) => <PopularCourse course={course} indx={idx} key={idx} category={category.name}/>)
+                                                    mostViewedCourses[key]?.map((course, idx) => <PopularCourse course={course} indx={idx} key={idx} category={category?.name.replace(/ /gi, '_')}/>)
                                                 }
                                             </ul>
                                         </Tab>

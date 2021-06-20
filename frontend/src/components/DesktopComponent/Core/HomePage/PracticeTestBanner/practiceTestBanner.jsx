@@ -17,7 +17,7 @@ const PracticeTestBanner = () => {
             event: `homepage_practice_test_clicked`,
             pageTitle:`homepage`,
             sectionPlacement:'practice_test',
-            eventCategory: ``,
+            eventCategory: '',
             eventLabel: '',
             eventAction: 'click',
             algo: '',

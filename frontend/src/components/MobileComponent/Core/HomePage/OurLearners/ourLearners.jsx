@@ -1,8 +1,8 @@
-import React, { Component } from "react";
+import React from "react";
 import './ourLearners.scss';
 import { imageUrl } from 'utils/domains';
 
-const OurVendors = (props) => {
+const OurVendors = () => {
     return (
         <section className="m-container mt-0 mb-0 pb-0" data-aos="fade-up">
             <h2 className="m-heading2-home text-center mx-auto">Our learners are now at these amazing places</h2>

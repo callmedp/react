@@ -4,8 +4,8 @@ import Carousel from 'react-bootstrap/Carousel';
 import SearchBar from '../../../Common/Header/SeachBar/SearchBar.jsx';
 import { imageUrl } from 'utils/domains';
 import { MyGA } from 'utils/ga.tracking.js';
-import { siteDomain } from 'utils/domains';
 import useLearningTracking from 'services/learningTracking';
+import { Link } from 'react-router-dom';
 
 const HomeBanner = () => {
     const sendLearningTracking = useLearningTracking();
@@ -24,8 +24,6 @@ const HomeBanner = () => {
             algo: '',
             rank: '',
         })
-
-        window.location.href = `${siteDomain}/user-intent`;
     }
 
     return (
@@ -63,7 +61,7 @@ const HomeBanner = () => {
                                 <button className="btn btn-search" type="submit"><figure className="icon-search"></figure></button>
                             </form> */}
                             OR
-                            <a className="btn btn-gradient ml-10" onClick={() => goToCareerGuidance()}>GET CAREER GUIDANCE <figure className="icon-arrow-right ml-10"></figure></a>
+                            <Link to={'/user-intent'} className="btn btn-gradient ml-10" onClick={() => goToCareerGuidance()}>GET CAREER GUIDANCE <figure className="icon-arrow-right ml-10"></figure></Link>
                         </div>
                     </div>
 

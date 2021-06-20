@@ -112,7 +112,7 @@ const HomePage = () => {
                 <OurLearners />
                 <LatestBlog />
             </main>
-            <Footer homepage={true} />
+            <Footer homepage={true} pageTitle={'homepage'} />
         </div>
     )
 }
