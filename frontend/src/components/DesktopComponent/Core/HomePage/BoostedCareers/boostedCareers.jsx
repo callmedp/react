@@ -29,11 +29,11 @@ const BoostedCareers = () => {
 
             sendLearningTracking({
                 productId: '',
-                event: `homepage_boosted_careers_${e.target.offsetParent.className}_clicked`,
+                event: `homepage_boosted_careers_${e.target.offsetParent.className}_${selectedIndex}_clicked`,
                 pageTitle:`homepage`,
                 sectionPlacement:'boosted_careers',
-                eventCategory: `${e.target.offsetParent.className}_${selectedIndex}`,
-                eventLabel: e.target.offsetParent.className,
+                eventCategory: `${e.target.offsetParent.className}`,
+                eventLabel: '',
                 eventAction: 'click',
                 algo: '',
                 rank: selectedIndex,

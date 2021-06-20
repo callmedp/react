@@ -17,11 +17,11 @@ const LatestBlog = () => {
 
         sendLearningTracking({
             productId: '',
-            event: `homepage_latest_blog_${category}_${name_scored}_clicked`,
+            event: `homepage_latest_blog_${category}_${name_scored}_${indx}_clicked`,
             pageTitle:`homepage`,
             sectionPlacement:'latest_blog',
-            eventCategory: `${name_scored}_${indx}`,
-            eventLabel: name_scored,
+            eventCategory: `${name_scored}`,
+            eventLabel: '',
             eventAction: 'click',
             algo: '',
             rank: indx,

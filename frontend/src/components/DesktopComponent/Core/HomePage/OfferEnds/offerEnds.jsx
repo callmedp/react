@@ -16,11 +16,11 @@ const OfferEnds = (props) => {
   const trackOffer = () => {
     sendLearningTracking({
       productId: '',
-      event: `homepage_banner_offer_${navOffer[1]}_clicked`,
+      event: `homepage_banner_offer_${navOffer[1] || navOffer[2] || ''}_clicked`,
       pageTitle:`homepage`,
       sectionPlacement:'banner_offer',
-      eventCategory: navOffer[1],
-      eventLabel: navOffer[1],
+      eventCategory: navOffer[1] || navOffer[2] || '',
+      eventLabel: navOffer[1] || navOffer[2] || '',
       eventAction: 'click',
       algo: '',
       rank: ''

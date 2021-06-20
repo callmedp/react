@@ -18,11 +18,11 @@ const PopularCourse = (props) => {
 
         sendLearningTracking({
             productId: '',
-            event: `homepage_most_viewed_course_${category}_${name}_clicked`,
+            event: `homepage_most_viewed_course_${category}_${name}_${indx}_clicked`,
             pageTitle:`homepage`,
             sectionPlacement:'most_viewed_courses',
-            eventCategory: `${name}_${indx}`,
-            eventLabel: name,
+            eventCategory: `${name}`,
+            eventLabel: `${category}_${name}`,
             eventAction: 'click',
             algo: '',
             rank: indx,

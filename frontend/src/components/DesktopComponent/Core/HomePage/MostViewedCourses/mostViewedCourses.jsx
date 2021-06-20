@@ -26,10 +26,10 @@ function MostViewedCourses() {
 
         sendLearningTracking({
             productId: '',
-            event: `homepage_most_viewed_course_${tabType}_tab_clicked`,
+            event: `homepage_most_viewed_course_${tabType}_${key}_tab_clicked`,
             pageTitle:`homepage`,
             sectionPlacement:'most_viewed_courses',
-            eventCategory: key,
+            eventCategory: tabType,
             eventLabel: '',
             eventAction: 'click',
             algo: '',

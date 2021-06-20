@@ -17,7 +17,7 @@ const HomeBanner = () => {
             productId: '',
             event: 'homepage_banner_career_guidance_clicked',
             pageTitle:'homepage',
-            sectionPlacement:'homepage_banner',
+            sectionPlacement: 'banner_career_guidance',
             eventCategory: '',
             eventLabel: '',
             eventAction: 'click',
@@ -57,7 +57,7 @@ const HomeBanner = () => {
                             </Carousel>
                         </div>
                         <div className="banner-search mt-20">
-                            <SearchBar place="banner" placeHolder = 'Search course, assessment...' isHomepage={true} />
+                            <SearchBar place="banner" placeHolder = 'Search course, assessment...' isHomepage={true} pageTitle={'homepage'} />
                             {/* <form className="form-inline top-search my-2 my-lg-0">
                                 <input className="form-control top-input" type="search" placeholder="Search courses" aria-label="Search" />
                                 <button className="btn btn-search" type="submit"><figure className="icon-search"></figure></button>

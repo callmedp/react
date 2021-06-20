@@ -8,7 +8,7 @@ import useLearningTracking from 'services/learningTracking';
 
 const SearchBar = (props) => {
     const [searchTerm, setSearchTerm] = useState('');
-    const { place, isHomepage } = props;
+    const { place, isHomepage, pageTitle } = props;
     const [results, setResults] = useState([]);
     const { register, handleSubmit } = useForm()
     const [showResults, setShowResults] = useState(false);
@@ -31,16 +31,18 @@ const SearchBar = (props) => {
     }
 
     const sendMultipleEvents = (name) => {
-        MyGA.SendEvent('ln_new_homepage','ln_search_course', 'ln_search_initiated', name,'', false, true);
+        let name_joined = name.replace(/ /g, '_');
+
+        MyGA.SendEvent('ln_new_homepage','ln_search_course', 'ln_search_initiated', name_joined,'', false, true);
 
         sendLearningTracking({
             productId: '',
-            event: 'banner_search_bar_clicked',
-            pageTitle:'homepage banner searchbar',
-            sectionPlacement:'banner_searchbar',
-            eventCategory: 'banner',
+            event: `${name_joined}_search_bar_clicked`,
+            pageTitle:`${pageTitle}_searchbar`,
+            sectionPlacement:'searchbar',
+            eventCategory: '',
             eventLabel: '',
-            eventAction: 'click',
+            eventAction: 'search',
             algo: '',
             rank: '',
         })
