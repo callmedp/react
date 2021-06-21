@@ -1004,18 +1004,18 @@ class TrendingCategoriesApi(PopularProductMixin, APIView):
 
     def get(self, request):
         quantity_to_display = int(request.GET.get('num', 6))
-
+        candidate_id = request.session.get('candidate_id', None)
         # cached_data = cache.get('category_popular_courses')
         # if (not settings.DEBUG) and cached_data:
         #     data = cached_data
         # else:
         data = {
             'SnMCourseList': PopularProductMixin().get_products_json(PopularProductMixin().\
-                                                    get_popular_courses(category=17,quantity=quantity_to_display)),
+                                                    get_popular_courses(category=17,quantity=quantity_to_display), candidate_id = candidate_id),
             'ITCourseList': PopularProductMixin().get_products_json(PopularProductMixin().\
-                                                    get_popular_courses(category=22,quantity=quantity_to_display)),
+                                                    get_popular_courses(category=22,quantity=quantity_to_display), candidate_id = candidate_id),
             'BnFCourseList': PopularProductMixin().get_products_json(PopularProductMixin().\
-                                                    get_popular_courses(category=20,quantity=quantity_to_display)),
+                                                    get_popular_courses(category=20,quantity=quantity_to_display), candidate_id = candidate_id),
         }
             # cache.set('category_popular_courses',data,86400)
         return Response(data=data, status=status.HTTP_200_OK)
@@ -1066,9 +1066,10 @@ class PopularInDemandProductsAPI(APIView):
         candidate_id = request.GET.get('candidate_id',None) or request.session.get('candidate_id', None)
         paginated_data = []
         data= {}
+        
         if candidate_id is None:
             if tab_type=='certifications':
-                certifications = PopularProductMixin().popular_certifications()                                                                              
+                certifications = PopularProductMixin().popular_certifications(candidate_id = candidate_id)                                                                              
                 paginated_data = offset_paginator(page, certifications,size=4)                                                                    
                 data.update({'certifications':paginated_data["data"]})
             
@@ -1083,7 +1084,7 @@ class PopularInDemandProductsAPI(APIView):
                 )
                 paginated_data = offset_paginator(page, courses,size=4)                                                                    
                 courses = paginated_data["data"]
-                course_data = ProductMixin().get_course_json(courses)
+                course_data = ProductMixin().get_course_json(courses, candidate_id = candidate_id)
                 data.update({ 'courses': course_data})            
         else:
             #get courses and assessments from recommendation engine
@@ -1093,14 +1094,14 @@ class PopularInDemandProductsAPI(APIView):
                 data.update({'recommended_assessments':certifications})
                 if len(certifications)<4:
                     gap = 4-len(certifications)
-                    popular_certifications = PopularProductMixin().popular_certifications()[:gap]
+                    popular_certifications = PopularProductMixin().popular_certifications(candidate_id=candidate_id)[:gap]
                     certifications += popular_certifications 
                 certifications = SearchQuerySet().filter(id__in=certifications, pTP__in=[0, 1, 3]).exclude(
                 id__in=settings.EXCLUDE_SEARCH_PRODUCTS)
                 if certifications:
                     paginated_data = offset_paginator(page, certifications,size=4)                                            
                     certifications = paginated_data["data"]
-                    certifications_data = ProductMixin().get_course_json(certifications)
+                    certifications_data = ProductMixin().get_course_json(certifications, candidate_id = candidate_id)
                     data.update({ 'certifications': certifications_data})          
             elif tab_type == 'master':
                 courses = recommended.get('courses',None)
@@ -1118,7 +1119,7 @@ class PopularInDemandProductsAPI(APIView):
                 if courses:
                     paginated_data = offset_paginator(page, courses,size=4)                                                                    
                     courses = paginated_data["data"]
-                    course_data = ProductMixin().get_course_json(courses)
+                    course_data = ProductMixin().get_course_json(courses, candidate_id = candidate_id)
                     data.update({ 'courses': course_data})
         if paginated_data:
             page_info ={

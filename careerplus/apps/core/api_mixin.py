@@ -321,8 +321,8 @@ class ShineCandidateDetail(ShineToken):
             if email and not shine_id:
                 shine_id = self.get_shine_id(email=email, headers=headers)
             if shine_id:
-                jobs_url = "{}/api/v2/search/candidate/{}/simple/?format=json&job_title={}&loc={}&minexp={}&skill={}&page={}".format(
-                    settings.SHINE_SITE, shine_id,data.get('job_title',''),data.get('loc',''),data.get('minexp',''),data.get('skill',''),data.get('page',''))
+                jobs_url = "{}/api/v2/search/candidate/{}/simple/?format=json&job_title={}&loc={}&minexp={}&skill={}&q={}&page={}".format(
+                    settings.SHINE_SITE, shine_id,data.get('job_title',''),data.get('loc',''),data.get('minexp',''),data.get('skill',''),data.get('q',''),data.get('page',''))
             else:
                 jobs_url = "{}/api/v2/search/simple/?format=json&job_title={}&loc={}&minexp={}&skill={}&q={}&page={}".format(
                     settings.SHINE_SITE,data.get('job_title',''),data.get('loc',''),data.get('minexp',''),data.get('skill',''),data.get('q',''),data.get('page',''))
@@ -342,6 +342,8 @@ class ShineCandidateDetail(ShineToken):
             logging.getLogger('error_log').error('unable to get status details %s'%str(e))
 
         return None
+
+    
 
 
     #Keyword suggestion for skills and job titles used in Intent capture

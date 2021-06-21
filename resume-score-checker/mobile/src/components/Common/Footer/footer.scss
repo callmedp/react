@@ -13,46 +13,19 @@
      color: $gray-dark;
    }
   
-    &__smo {
-      display: flex;
-      justify-content: center;
-      margin-top: 20px;
-      margin-bottom: 20px;
-      
-      a {
-        @include size(26px, 25px, block);
-  
-        &:not(:last-child) {
-          margin-right: 10px;
-        }
-      }
-    }
-  }
-
-  footer {
-    .m-social-icon {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-  
-      a {
-        margin: 0 20px;
-      }
+  &__smo {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
     
-      .micon-facebook {
-        background: url(https://static1.shine.com/l/s/react/media/images/mobile/learning-sprite-mobile3.svg);
-        @include icon-inblock(13px, 24px, -618px 0);
-      }
-      
-      .micon-linkedin {
-        background: url(https://static1.shine.com/l/s/react/media/images/mobile/learning-sprite-mobile3.svg);
-        @include icon-inblock(25px, 23px, -641px 0);
-      }
-      
-      .micon-twitter {
-        background: url(https://static1.shine.com/l/s/react/media/images/mobile/learning-sprite-mobile3.svg);
-        @include icon-inblock(24px, 20px, -676px 0);
+    a {
+      @include size(26px, 25px, block);
+
+      &:not(:last-child) {
+        margin-right: 10px;
       }
     }
   }
+}
     

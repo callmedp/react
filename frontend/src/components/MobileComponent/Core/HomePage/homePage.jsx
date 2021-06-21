@@ -34,6 +34,7 @@ const HomePage = (props) => {
     const { navOffer } = useSelector((store) => store.header);
     const [showOffer, setShowOffer] = useState(false);
     const [offerStatus, setOfferStatus] = useState(false);
+    const [showMainOffer, setShowMainOffer] = useState(true);
 
     const handleEffects = async () => {
         //You may notice that apis corresponding to these actions are not getting called on initial render.
@@ -80,10 +81,10 @@ const HomePage = (props) => {
         <>
             { meta && <MetaContent meta_tags={meta}/> }
             { homeLoader && <Loader />}
-            { navOffer[4] ? <OfferEnds navOffer={navOffer} showOffer={showOffer} setShowOffer={setShowOffer} offerStatus={offerStatus} setOfferStatus={setOfferStatus} /> : ""}
+            { (navOffer[4] && (new Date(navOffer[0]) > new Date())) ? <OfferEnds navOffer={navOffer} showOffer={showOffer} setShowOffer={setShowOffer} offerStatus={offerStatus} setOfferStatus={setOfferStatus} showMainOffer={showMainOffer} setShowMainOffer={setShowMainOffer} /> : ""}
             {
                 showSearch ? <SearchPage setShowSearchPage={setShowSearch} /> :
-                    <div className="mb-100 home-offer">
+                    <div className={(showMainOffer && navOffer[4] && (new Date(navOffer[0]) > new Date())) ? "mb-100 home-offer" : ""}>
                         {/* <OfferEnds /> */}
                         <MenuNav />
                         <header className="m-container m-header">

@@ -6,10 +6,9 @@ import ThanksModal from '../../../Common/Modals/ThanksModal';
 import useLearningTracking from 'services/learningTracking';
 
 const OfferEnds = (props) => {
-    const { navOffer, showOffer, setShowOffer, offerStatus, setOfferStatus } = props;
+    const { navOffer, showOffer, setShowOffer, offerStatus, setOfferStatus, showMainOffer, setShowMainOffer } = props;
     const handleOfferClose = () => setShowOffer(false);
     const handleOfferShow = () => setShowOffer(true);
-    const [showMainOffer, setShowMainOffer] = useState(true);
     const sendLearningTracking = useLearningTracking();
 
     const trackOffer = () => {
@@ -27,7 +26,7 @@ const OfferEnds = (props) => {
           rank: ''
         })
     }
-
+    
     return(
         <>
             {
