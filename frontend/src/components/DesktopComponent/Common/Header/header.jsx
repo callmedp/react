@@ -25,9 +25,31 @@ const Header = (props) => {
         event.preventDefault();
         if (type === 'login') {
             MyGA.SendEvent('header_icons', 'ln_header_icons', 'ln_account', 'login', '', false, true);
+            sendLearningTracking({
+                productId: '',
+                event: `${props.pageTitle}_login_login`,
+                pageTitle: props.pageTitle,
+                sectionPlacement:'header',
+                eventCategory: 'login',
+                eventLabel: '',
+                eventAction: 'click',
+                algo: '',
+                rank: '',
+            })
         }
         if (type === 'register') {
             MyGA.SendEvent('header_icons', 'ln_header_icons', 'ln_account', 'register', '', false, true);
+            sendLearningTracking({
+                productId: '',
+                event: `${props.pageTitle}_login_register`,
+                pageTitle: props.pageTitle,
+                sectionPlacement:'header',
+                eventCategory: 'login',
+                eventLabel: '',
+                eventAction: 'click',
+                algo: '',
+                rank: '',
+            })
         }
         let redirectPath = props.location?.pathname;
         redirectPath ?
@@ -87,10 +109,10 @@ const Header = (props) => {
         
         sendLearningTracking({
             productId: '',
-            event: `${props.pageTitle}_learning_logo`,
+            event: `${props.pageTitle}_learning_logo_homepage_redirection`,
             pageTitle: props.pageTitle,
-            sectionPlacement:'learning_logo',
-            eventCategory: 'header',
+            sectionPlacement:'header',
+            eventCategory: 'learning_logo',
             eventLabel: '',
             eventAction: 'click',
             algo: '',
@@ -117,14 +139,14 @@ const Header = (props) => {
         MyGA.SendEvent('homepage_navigation', 'ln_homepage_navigation', 'ln_practice_tests', 'ln_practice_tests', '', false, true)
         sendLearningTracking({
             productId: '',
-            event: `${props.pageTitle}_practice_test`,
+            event: `${props.pageTitle}_practice_test_redirection`,
             pageTitle: props.pageTitle,
             sectionPlacement:'header',
             eventCategory: 'practice_test',
             eventLabel: '',
             eventAction: 'click',
             algo: '',
-            rank: index,
+            rank: '',
         })
     }
 
@@ -132,14 +154,76 @@ const Header = (props) => {
         MyGA.SendEvent('homepage_navigation', 'ln_homepage_navigation', 'ln_blog', 'ln_blog', '', false, true)
         sendLearningTracking({
             productId: '',
-            event: `${props.pageTitle}_blog`,
+            event: `${props.pageTitle}_blog_redirection`,
             pageTitle: props.pageTitle,
             sectionPlacement:'header',
             eventCategory: 'blog',
             eventLabel: '',
             eventAction: 'click',
             algo: '',
-            rank: index,
+            rank: '',
+        })
+    }
+
+    const handleHeaderTracking = (category, event) => {
+        sendLearningTracking({
+            productId: '',
+            event: `${props.pageTitle}_${category}_${event}`,
+            pageTitle: props.pageTitle,
+            sectionPlacement:'header',
+            eventCategory: category,
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: '',
+        })
+    }
+
+    const callUsTracking = () => {
+        MyGA.SendEvent('header_icons', 'ln_header_icons', 'ln_call', 'tel:0124-6096096/97', '', false, true);
+        sendLearningTracking({
+            productId: '',
+            event: `${props.pageTitle}_call_us`,
+            pageTitle: props.pageTitle,
+            sectionPlacement:'header',
+            eventCategory: 'call_us',
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: '',
+        })
+    }
+
+    const cartTracking = () => {
+        MyGA.SendEvent('header_icons', 'ln_header_icons', 'ln_cart', 'cart', '', false, true);
+        sendLearningTracking({
+            productId: '',
+            event: `${props.pageTitle}_add_to_cart_redirection`,
+            pageTitle: props.pageTitle,
+            sectionPlacement:'header',
+            eventCategory: 'add_to_cart',
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: '',
+        })
+    }
+
+    const navTracking = (type, id) => {
+        if(type === 'navSkillList'){
+            MyGA.SendEvent('navigation_menu', 'ln_navigation_menu', 'ln_' + id + '_navigation', 'ln_' + id, '', false, true);
+        }
+        
+        sendLearningTracking({
+            productId: '',
+            event: `${props.pageTitle}_nav_list_${id}`,
+            pageTitle: props.pageTitle,
+            sectionPlacement:'header',
+            eventCategory: 'nav_list',
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: '',
         })
     }
 
@@ -188,14 +272,14 @@ const Header = (props) => {
                                             {
                                                 isLoggedIn ? (
                                                     <>
-                                                        <a className="dropdown-item" href={`${siteDomain}/dashboard/`} >My Courses</a>
-                                                        <a className="dropdown-item" href={`${siteDomain}/dashboard/myservices`} >My Services</a>
-                                                        <a className="dropdown-item" href={`${siteDomain}/dashboard/myorder/`}>My Orders</a>
-                                                        <a className="dropdown-item" href={`${siteDomain}/dashboard/mywallet/`}>My Wallet</a>
-                                                        <a className="dropdown-item" href={`${siteDomain}/dashboard/roundone/`}>My Referrals</a>
+                                                        <a className="dropdown-item" onClick={() => handleHeaderTracking('login', 'my_courses')} href={`${siteDomain}/dashboard/`} >My Courses</a>
+                                                        <a className="dropdown-item" onClick={() => handleHeaderTracking('login', 'my_services')} href={`${siteDomain}/dashboard/myservices`} >My Services</a>
+                                                        <a className="dropdown-item" onClick={() => handleHeaderTracking('login', 'my_orders')} href={`${siteDomain}/dashboard/myorder/`}>My Orders</a>
+                                                        <a className="dropdown-item" onClick={() => handleHeaderTracking('login', 'my_wallets')} href={`${siteDomain}/dashboard/mywallet/`}>My Wallet</a>
+                                                        <a className="dropdown-item" onClick={() => handleHeaderTracking('login', 'my_referrals')} href={`${siteDomain}/dashboard/roundone/`}>My Referrals</a>
                                                         <a className="dropdown-item truncate" >{candidateInfo?.email ? candidateInfo?.email : candidateInfo?.name?.charAt(0)?.toUpperCase() + candidateInfo?.name?.slice(1)}</a>
                                                         <div className="dropdown-divider"></div>
-                                                        <a className="dropdown-item" onClick={() => handleLogout()} >Logout</a>
+                                                        <a className="dropdown-item" onClick={() => {handleHeaderTracking('login', 'logout');handleLogout()}} >Logout</a>
                                                     </>
                                                 ) : (
                                                         <>
@@ -208,15 +292,15 @@ const Header = (props) => {
                                     </li>
                                     <li className="nav-item dropdown dropdown-call">
                                         <Link className="nav-link link-ht" to={"#"} id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <figure className="icon-call" onClick={() => MyGA.SendEvent('header_icons', 'ln_header_icons', 'ln_call', 'tel:0124-6096096/97', '', false, true)}></figure>
+                                            <figure className="icon-call" onClick={callUsTracking}></figure>
                                         </Link>
                                         <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                                            <a className="dropdown-item" onClick={() => MyGA.SendEvent('header_icons', 'ln_header_icons', 'ln_call', 'tel:0124-6096096/97', '', false, true)}><strong>Call us:</strong> 0124-6096096/97</a>
+                                            <a className="dropdown-item" onClick={callUsTracking}><strong>Call us:</strong> 0124-6096096/97</a>
                                         </div>
                                     </li>
                                     <li className="nav-item position-relative">
                                         <span className="counter">{count}</span>
-                                        <a className="nav-link link-ht" href={`${siteDomain}/cart/payment-summary/`} aria-label="payment cart button" onClick={() => MyGA.SendEvent('header_icons', 'ln_header_icons', 'ln_cart', 'cart', '', false, true)}>
+                                        <a className="nav-link link-ht" href={`${siteDomain}/cart/payment-summary/`} aria-label="payment cart button" onClick={cartTracking}>
                                             <figure className="icon-cart"></figure>
                                         </a>
                                     </li>
@@ -239,7 +323,7 @@ const Header = (props) => {
                                     <div className="dropdown-menu category-tab" aria-labelledby="navbarDropdown">
                                         <div className="categories-tab">
 
-                                            <DropDown usedIn="exploreCategories" tabList={categoryList} />
+                                            <DropDown pageTitle = {props.pageTitle} usedIn="exploreCategories" tabList={categoryList} />
 
                                         </div>
                                     </div>
@@ -248,7 +332,7 @@ const Header = (props) => {
                                     navSkillList?.map((skill) => {
                                         return (
                                             <li key={skill.url} className="nav-item">
-                                                <Link className="nav-link" to={`${skill.url}`} onClick={() => MyGA.SendEvent('navigation_menu', 'ln_navigation_menu', 'ln_' + skill.id + '_navigation', 'ln_' + skill.id, '', false, true)}>{skill.name}</Link>
+                                                <Link className="nav-link" to={`${skill.url}`} onClick={() => navTracking('navSkillList', skill.id)}>{skill.name}</Link>
                                             </li>
                                         )
                                     })
@@ -257,7 +341,10 @@ const Header = (props) => {
                                     navTags?.map((tag, index) => {
                                         return (
                                             <li key={index} className="nav-item">
-                                                <a href={tag.skill_page_url} className="nav-link">{tag?.display_name}<small className="config-tag">{tag?.tag}</small></a>
+                                                <a href={tag.skill_page_url} className="nav-link"  onClick={() => navTracking('navTags', tag.display_name)} >{tag?.display_name}   
+                                                    <small className="config-tag">{tag?.tag}
+                                                    </small>
+                                                </a>
                                             </li>
                                         )
                                     })

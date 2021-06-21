@@ -4,21 +4,47 @@ import { siteDomain } from 'utils/domains';
 import { loggedOutZendesk } from 'utils/zendeskIniti';
 
 const menuNavHeader = (props) => {
-    const { candidateInfo, isLoggedIn } = props
+    const { candidateInfo, isLoggedIn, sendLearningTracking } = props
+
     const handleLogout = () => {
         localStorage.clear();
         loggedOutZendesk();
+        sendLearningTracking({
+            productId: '',
+            event: `${props.pageTitle}_login_logout`,
+            pageTitle: props.pageTitle,
+            sectionPlacement:'menu_nav_header',
+            eventCategory: 'login',
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: '',
+        })
         let path = window.location.pathname
         window.location.href = `${siteDomain}/logout/?next=${path}`;
     }
 
     const handleRedirect = (type) => {
         let redirectPath = window.location.pathname
+
+        sendLearningTracking({
+            productId: '',
+            event: `${props.pageTitle}_menu_nav_header_${type}`,
+            pageTitle: props.pageTitle,
+            sectionPlacement:'header',
+            eventCategory: 'menu_nav_header',
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: '',
+        })
+
         redirectPath ?
             window.location.href = `${siteDomain}/${type}/?next=${redirectPath}` :
             window.location.href = `${siteDomain}/${type}/`
     }
 
+    
     return(
         <>
         {

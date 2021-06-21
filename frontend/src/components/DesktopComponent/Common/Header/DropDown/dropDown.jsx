@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 
 import { MyGA } from 'utils/ga.tracking.js';
+import useLearningTracking from 'services/learningTracking';
 
 const DropDown = (props) => {
 
     const { tabList, usedIn } = props;
     const [activeTab, setActiveTab] = useState(tabList?.[0].id)
+    const sendLearningTracking = useLearningTracking();
 
     const levelOneSelect = (item, index) => {
         MyGA.SendEvent('homepage_navigation', 'ln_homepage_navigation', 'ln_' + item.id, '', '', false, true)

@@ -86,9 +86,9 @@ const HomePage = (props) => {
                 showSearch ? <SearchPage setShowSearchPage={setShowSearch} /> :
                     <div className="mb-100 home-offer">
                         {/* <OfferEnds /> */}
-                        <MenuNav />
+                        <MenuNav pageTitle = "homepage" />
                         <header className="m-container m-header">
-                            <Header showSearchButton={false} icon={true} />
+                            <Header showSearchButton={false} icon={true} pageTitle = "homepage" />
                             <HomeBanner setShowSearch={setShowSearch} />
                         </header>
                         <CareerGuidance />
