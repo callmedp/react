@@ -36,8 +36,11 @@ import { startMainCourseLoader, stopMainCourseLoader } from 'store/Loader/action
 import Loader from '../../Common/Loader/loader';
 import queryString from 'query-string';
 import { getTrackingInfo, storageTrackingInfo, removeTrackingInfo, getCandidateId } from 'utils/storage.js';
+import { chatbot_links } from 'utils/constants.js';
+import { siteDomain } from 'utils/domains.js';
 import { trackUser } from 'store/Tracking/actions/index.js';
 import About from '../DetailPage/About/aboutSection';
+import { Helmet } from "react-helmet";
 
 const DetailPage = (props) => {
     const { location: { search }, history } = props;
@@ -45,7 +48,7 @@ const DetailPage = (props) => {
     const { mainCourseLoader } = useSelector(store => store.loader);
     const [reviewModal, showReviewModal] = useState(false)
     const prdId = props.match.params.id;
-    const { product_detail, skill, ggn_contact, product_id, product_tracking_mapping_id, providerLength } = useSelector(store => store?.mainCourses);
+    const { product_detail, skill, ggn_contact, product_id, product_tracking_mapping_id, providerLength, ggn_contact_full } = useSelector(store => store?.mainCourses);
     const meta_tags = product_detail?.meta;
     const [enquiryForm, setEnquiryForm] = useState(false);
     const [videoModal, setVideoModal] = useState(false);
@@ -58,6 +61,18 @@ const DetailPage = (props) => {
     const { prd_review_list, prd_rv_total } = useSelector(store => store.reviews);
     const completeDescription = ((product_detail?.prd_about && (product_detail?.prd_about !== product_detail?.prd_desc)) ? (product_detail?.prd_about + ' <br /> ') : '') + (product_detail?.prd_desc ? product_detail?.prd_desc : '')
     const noOfWords = 250;
+
+    // for chatbot
+    window["name"] = localStorage.getItem('userName') ? localStorage.getItem('userName') : 'Customer';
+    window['candidate_id'] = localStorage.getItem('candidateId');
+    window["course_name"] = product_detail?.prd_H1;
+    window["contact_number_support"] = ggn_contact_full;
+    window["link_interview_service"] = chatbot_links.link_interview_service;
+    window["link_profile_booster"] = chatbot_links.link_profile_booster;
+    window["link_resume_builder"] = chatbot_links.link_resume_builder;
+    window["link_resume_writer"] = chatbot_links.link_resume_writer;
+    window["candidate_id"] = localStorage.getItem('candidateId');
+    window["link_payment"] = siteDomain+"/cart/payment-summary/?prod_id=" + product_id;
 
     const handleEffects = async () => {
 
@@ -111,6 +126,9 @@ const DetailPage = (props) => {
         return parseFloat(product) + price;
     };
 
+
+    window["course_fee"] = getProductPrice(varChecked?.inr_price || product_detail?.var_list[0]?.inr_price || product_detail?.pPinb);
+
     const handleScroll = () => {
         const offset = window.scrollY;
         if (offset > 670) {
@@ -129,6 +147,11 @@ const DetailPage = (props) => {
 
     return(
         <div itemScope itemType="http://schema.org/Product">
+            <Helmet
+            script={[
+                { "src": (localStorage.getItem('script_link') ? localStorage.getItem('script_link') : null), "type": "text/javascript" }
+            ]}
+            />
             { mainCourseLoader ? <Loader /> : ''}
 
             { meta_tags && <MetaContent meta_tags={meta_tags} />}
@@ -205,7 +228,7 @@ const DetailPage = (props) => {
                                 {(prd_review_list && prd_review_list?.length) > 0 && <Reviews showReviewModal={showReviewModal} product_detail={product_detail} prdId={prdId} pUrl={props?.match?.url} prd_review_list={prd_review_list} prd_rv_total={prd_rv_total} />}
 
                                 {skill?.length > 0 && <CoursesMayLike product_id={prdId} skill={skill} />}
-                                <CTA setEnquiryForm={setEnquiryForm} contact={ggn_contact} />
+                                <CTA setEnquiryForm={setEnquiryForm} contact={ggn_contact} pageType="detailPage" />
                                 {
                                     enquiryForm ? <EnquiryModal setEnquiryForm={setEnquiryForm} page="detailPage" /> : null
                                 }
@@ -215,7 +238,7 @@ const DetailPage = (props) => {
                                 {videoModal ? <VideoModal setVideoModal = {setVideoModal} videoUrl = {product_detail?.prd_video} productName={product_detail?.prd_H1} />: '' }
                                  
                     </main>
-                    <Footer pageType={`course_${product_detail?.label.replace(/ /gi, '_')}`} /></>
+                    <Footer pageType={`course_${product_detail?.prd_H1}`} /></>
                         </>
             }
                     </div>

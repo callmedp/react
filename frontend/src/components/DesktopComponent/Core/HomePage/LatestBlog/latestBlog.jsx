@@ -4,6 +4,7 @@ import './latestBlog.scss';
 import { siteDomain } from 'utils/domains';
 import { MyGA } from 'utils/ga.tracking.js';
 import useLearningTracking from 'services/learningTracking';
+import {stringReplace} from 'utils/stringReplace.js';
 
 const LatestBlog = () => {
     
@@ -11,17 +12,16 @@ const LatestBlog = () => {
     const sendLearningTracking = useLearningTracking();
 
     const latesBlogTracking = (name, category, url, indx) => {
-        let name_scored = name.replace(/ /g, '_');
 
-        MyGA.SendEvent('ln_new_homepage','ln_homepage_blog', 'ln_blog_click', name_scored, '', false, true);
+        MyGA.SendEvent('ln_new_homepage','ln_homepage_blog', 'ln_blog_click', stringReplace(name), '', false, true);
 
         sendLearningTracking({
             productId: '',
-            event: `homepage_latest_blog_${category}_${name_scored}_${indx}_clicked`,
+            event: `homepage_latest_blog_${category}_${stringReplace(name)}_${indx}_clicked`,
             pageTitle:`homepage`,
             sectionPlacement:'latest_blog',
-            eventCategory: name_scored,
-            eventLabel: `${category}_${name_scored}`,
+            eventCategory: stringReplace(name),
+            eventLabel: `${category}_${stringReplace(name)}`,
             eventAction: 'click',
             algo: '',
             rank: indx,

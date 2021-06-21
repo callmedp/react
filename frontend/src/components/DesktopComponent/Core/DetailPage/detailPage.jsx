@@ -28,17 +28,17 @@ import Loader from '../../Common/Loader/loader';
 import MetaContent from "../../Common/MetaContent/metaContent";
 import queryString from 'query-string';
 import { getTrackingInfo, storageTrackingInfo, removeTrackingInfo, getCandidateId } from 'utils/storage.js';
+import { chatbot_links } from 'utils/constants.js';
+import { siteDomain } from 'utils/domains.js';
 import { trackUser } from 'store/Tracking/actions/index.js';
 import ReviewModal from '../../Common/Modals/reviewModal';
 import VideoModal from '../../Common/Modals/videoModal';
-import { zendeskTimeControlledWindow } from 'utils/zendeskIniti';
-
+import { Helmet } from "react-helmet";
 
 const DetailPage = (props) => {
     const dispatch = useDispatch();
-    const {product_detail, skill, product_id, product_tracking_mapping_id, providerLength } = useSelector(store => store?.mainCourses);
+    const {product_detail, skill, product_id, product_tracking_mapping_id, providerLength, ggn_contact_full } = useSelector(store => store?.mainCourses);
     const { prd_review_list, prd_rv_current_page, prd_rv_has_next } = useSelector( store => store.reviews );
-    
     const meta_tags = product_detail?.meta;
     const {location: { search }, match: {params: {id}}, history} = props;
     const { mainCourseLoader } = useSelector(store => store.loader);
@@ -52,6 +52,18 @@ const DetailPage = (props) => {
     const params = new URLSearchParams(props.location.search);
     const showAfterLoginReviewModal = params.get('sm');
     let currentPage = 1;
+
+    // for chatbot details
+    window["name"] = localStorage.getItem('userName') ? localStorage.getItem('userName') : 'Customer';
+    window['candidate_id'] = localStorage.getItem('candidateId');
+    window["course_name"] = product_detail?.prd_H1;
+    window["contact_number_support"] = ggn_contact_full;
+    window["link_interview_service"] = chatbot_links.link_interview_service;
+    window["link_profile_booster"] = chatbot_links.link_profile_booster;
+    window["link_resume_builder"] = chatbot_links.link_resume_builder;
+    window["link_resume_writer"] = chatbot_links.link_resume_writer;
+    window["candidate_id"] = localStorage.getItem('candidateId');
+    window["link_payment"] = siteDomain+"/cart/payment-summary/?prod_id=" + product_id;
 
     useEffect( () => {
         handleEffects();
@@ -113,6 +125,11 @@ const DetailPage = (props) => {
 
     return (
         <div itemScope itemType="http://schema.org/Product">
+            {/* <Helmet
+            script={[
+                { "src": (localStorage.getItem('script_link') ? localStorage.getItem('script_link') : null), "type": "text/javascript" }
+            ]}
+            /> */}
             { mainCourseLoader ? <Loader /> : ''}
             { meta_tags && <MetaContent meta_tags={meta_tags} /> }
 
@@ -189,7 +206,7 @@ const DetailPage = (props) => {
             </div>
             </div> */}
 
-            { product_detail?.dlvry_flow && <HowItWorks dlvry_flow={product_detail?.dlvry_flow} /> }
+            { product_detail?.dlvry_flow && <HowItWorks prd_H1={product_detail?.prd_H1} product_id={product_id} dlvry_flow={product_detail?.dlvry_flow} /> }
 
             { (product_detail?.chapter && product_detail?.prd_service === 'assessment') && <TopicsCovered  chapter_list={product_detail?.chapter_list}/> }
 
@@ -213,7 +230,7 @@ const DetailPage = (props) => {
                 </div>
             }
 
-            { skill && skill.length > 0 && <SkillGain skill={skill}/> }
+            { skill && skill.length > 0 && <SkillGain skill={skill} prd_H1={product_detail?.prd_H1} product_id={product_id} /> }
 
             { product_detail?.pop && <OtherProviders pop_list={product_detail?.pop_list} /> }
             
@@ -225,7 +242,7 @@ const DetailPage = (props) => {
             
             { skill && <CoursesMayLike product_id={id?.split('-')[1]} skill={skill}/> }
             
-            <Footer pageTitle={`course_${product_detail?.prd_H1.replace(/ /gi, '_')}`} />
+            <Footer pageTitle={`course_${product_detail?.prd_H1}`} />
         </div>
     )
 }

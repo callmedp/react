@@ -6,28 +6,29 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchTrendingCnA } from 'store/Footer/actions/index';
 import { MyGA } from 'utils/ga.tracking.js';
 import useLearningTracking from 'services/learningTracking';
+import {stringReplace} from 'utils/stringReplace.js';
 
 const Footer = (props) => {
 
     const dispatch = useDispatch()
     const { trendingSkills, trendingCourses } = useSelector( store => store.footer )
     const sendLearningTracking = useLearningTracking();
-    const { pageTitle } = props;
+    let { pageTitle } = props;
+    pageTitle = stringReplace(pageTitle);
 
     useEffect(() => {
         dispatch(fetchTrendingCnA({ ...props, numCourses:8 }))
     },[])
 
     const footerTracking = (title, ln_title, event_clicked, name, val, val1, val2, indx) => {
-        let name_joined = name.replace(/ /g, '_');
-        MyGA.SendEvent(title, ln_title, event_clicked, name_joined, val, val1, val2);
+        MyGA.SendEvent(title, ln_title, event_clicked, stringReplace(name), val, val1, val2);
 
         sendLearningTracking({
             productId: '',
-            event: `${pageTitle}_${name_joined}${indx ? '_' + indx : ''}_footer_clicked`,
+            event: `${pageTitle}_${stringReplace(name)}${indx ? '_' + indx : ''}_footer_clicked`,
             pageTitle:`${pageTitle}`,
             sectionPlacement:'footer',
-            eventCategory: name_joined,
+            eventCategory: stringReplace(name),
             eventLabel: '',
             eventAction: 'click',
             algo: '',

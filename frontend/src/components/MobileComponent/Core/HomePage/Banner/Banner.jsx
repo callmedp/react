@@ -4,6 +4,7 @@ import Slider from "react-slick";
 import { categoryList } from 'utils/constants';
 import { MyGA } from 'utils/ga.tracking.js';
 import useLearningTracking from 'services/learningTracking';
+import {stringReplace} from 'utils/stringReplace.js';
 
 const HomeBanner = (props) => {
     const { setShowSearch } = props;
@@ -21,15 +22,14 @@ const HomeBanner = (props) => {
     };
 
     const bannerTracking = (title, ln_title, event_clicked, name, val, val1, val2, indx) => {
-        let name_joined = name.replace(/ /g, '_');
-        MyGA.SendEvent(title, ln_title, event_clicked, name_joined, val, val1, val2);
+        MyGA.SendEvent(title, ln_title, event_clicked, stringReplace(name), val, val1, val2);
 
         sendLearningTracking({
             productId: '',
-            event: `homepage_${name_joined}${indx ? '_' + indx : ''}_banner_clicked`,
+            event: `homepage_${stringReplace(name)}${indx ? '_' + indx : ''}_banner_clicked`,
             pageTitle:`homepage`,
             sectionPlacement:'banner',
-            eventCategory: name_joined,
+            eventCategory: stringReplace(name),
             eventLabel: '',
             eventAction: 'click',
             algo: '',

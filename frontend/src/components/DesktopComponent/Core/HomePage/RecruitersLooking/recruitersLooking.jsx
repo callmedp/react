@@ -5,22 +5,22 @@ import Carousel from 'react-bootstrap/Carousel';
 import { useSelector } from 'react-redux';
 import { MyGA } from 'utils/ga.tracking.js';
 import useLearningTracking from 'services/learningTracking';
+import {stringReplace} from 'utils/stringReplace.js';
 
 const RecruitersLooking = () => {
     const { recruiterList } = useSelector(store => store.footer)
     const sendLearningTracking = useLearningTracking();
 
     const trackRecruitersLooking = (name, indx) => {
-        let name_joined = name.replace(/ /g, '_');
 
-        MyGA.SendEvent('ln_new_homepage', 'ln_recruiter_course', ' ln_click_course', name_joined, '', false, true)
+        MyGA.SendEvent('ln_new_homepage', 'ln_recruiter_course', ' ln_click_course', stringReplace(name), '', false, true)
 
         sendLearningTracking({
             productId: '',
-            event: `homepage_recruiters_looking_${name_joined}_${indx}_clicked`,
+            event: `homepage_recruiters_looking_${stringReplace(name)}_${indx}_clicked`,
             pageTitle:'homepage',
             sectionPlacement:'recruiters_looking',
-            eventCategory: name_joined,
+            eventCategory: stringReplace(name),
             eventLabel: '',
             eventAction: 'click',
             algo: '',

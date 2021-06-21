@@ -36,14 +36,14 @@
   {% comment %}
   {% if sqs.id in linkedin_resume_services and not request.session.candidate_id %}
   <a role="button" class="enrol-now" id="login-now-button" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}"
-    href="javascript:void();" onclick="handleTracking('enroll_now')" >Enroll now</a>
+    href="javascript:void();" onclick="handleTracking('enroll_now')" >Buy now</a>
   {% else %}
   {% endcomment %}
 
   {% if sqs.id in linkedin_resume_services %}
   <!-- buy now button -->
   <a role="button" class="enrol-now" id="enrol-now-button" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}"
-    href="javascript:void();">Enroll now</a>
+    href="javascript:void();">Buy now</a>
   {% endif %}
 
 
@@ -51,16 +51,16 @@
   {% if sqs.id not in linkedin_resume_services %}
   {% if prd_vendor_slug == 'neo' %}
   <a role="button" class="enrol-now neo-enroll-button" data-neotest="1" prod-id="{{sqs.id}}"
-    data-price="{{sqs.inr_price}}">Enroll now</a>
+    data-price="{{sqs.inr_price}}">Buy now</a>
   {% else %}
   <div class="price-box-prd">
     <span class="col">
       <a role="button" class="enrol-now" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}"
         href="javascript:void();" onclick="handleTracking('enroll_now'); MyGA.SendEvent('ln_enroll_now', 'ln_enroll_now', 'ln_click_enroll_now', '{{prd_H1}}', '', false, true);" >
         {% if product.is_assesment %}
-        BuyNow
+        Buy now
         {% else %}
-        Enroll now
+        Buy now
         {% endif %}
       </a>
     </span>

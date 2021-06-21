@@ -2,6 +2,7 @@ import React from 'react'
 import { MyGA } from 'utils/ga.tracking.js';
 import useLearningTracking from 'services/learningTracking';
 import { Link } from 'react-router-dom';
+import {stringReplace} from 'utils/stringReplace.js';
 
 const PopularCourse = (props) => {
     const {course,category, indx} = props;
@@ -14,17 +15,16 @@ const PopularCourse = (props) => {
     }
 
     const mostViewedTracking = (name) => {
-        let name_joined = name.replace(/ /g, '_');
 
-        MyGA.SendEvent('ln_new_homepage','ln_most_viewed_course', 'ln_'+category, name_joined,'', false, true);
+        MyGA.SendEvent('ln_new_homepage','ln_most_viewed_course', 'ln_'+stringReplace(category), stringReplace(name),'', false, true);
 
         sendLearningTracking({
             productId: '',
-            event: `homepage_most_viewed_course_${category}_${name_joined}_${indx}_clicked`,
+            event: `homepage_most_viewed_course_${stringReplace(category)}_${stringReplace(name)}_${indx}_clicked`,
             pageTitle:`homepage`,
             sectionPlacement:'most_viewed_courses',
-            eventCategory: `${name_joined}`,
-            eventLabel: `${category}_${name_joined}`,
+            eventCategory: `${stringReplace(name)}`,
+            eventLabel: `${stringReplace(category)}_${stringReplace(name)}`,
             eventAction: 'click',
             algo: '',
             rank: indx,

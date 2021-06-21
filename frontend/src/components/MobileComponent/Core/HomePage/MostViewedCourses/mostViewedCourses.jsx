@@ -73,7 +73,7 @@ const MostViewedCourses = () => {
                 </Slider>
                 <div className="m-courses m-recent-courses">
                     {
-                        <ProductCardsSlider productList={mostViewedCourses[selectedIndex]} selectedIndexName={selectedIndexName.replace(/ /gi, '_')} noProvider={true} showMode={true} />
+                        <ProductCardsSlider productList={mostViewedCourses[selectedIndex]} selectedIndexName={selectedIndexName} noProvider={true} showMode={true} />
                     }
                 </div>
             </div>

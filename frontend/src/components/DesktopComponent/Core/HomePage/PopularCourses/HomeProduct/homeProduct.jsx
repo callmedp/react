@@ -6,6 +6,7 @@ import { fetchInDemandProducts } from 'store/HomePage/actions';
 import { startHomePageLoader, stopHomePageLoader } from 'store/Loader/actions';
 import { MyGA } from 'utils/ga.tracking.js';
 import useLearningTracking from 'services/learningTracking';
+import {stringReplace} from 'utils/stringReplace.js';
 
 const HomeProduct = (props) => {
     const [index, setIndex] = useState(0);
@@ -37,14 +38,13 @@ const HomeProduct = (props) => {
     };
 
     const setTracking = (name, indx) => {
-        let name_joined = name.replace(/ /g, '_');
 
         sendLearningTracking({
             productId: '',
-            event: `homepage_popular_courses_${name_joined}_${indx}_clicked`,
+            event: `homepage_popular_courses_${stringReplace(name)}_${indx}_clicked`,
             pageTitle:`homepage`,
             sectionPlacement: 'popular_courses',
-            eventCategory: name_joined,
+            eventCategory: stringReplace(name),
             eventLabel: '',
             eventAction: 'click',
             algo: '',

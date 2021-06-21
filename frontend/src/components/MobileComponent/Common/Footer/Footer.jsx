@@ -3,21 +3,21 @@ import './footer.scss'
 import { siteDomain } from 'utils/domains'; 
 import { MyGA } from 'utils/ga.tracking.js';
 import useLearningTracking from 'services/learningTracking';
+import {stringReplace} from 'utils/stringReplace.js';
 
 const Footer = (props) => {
     const { pageType } = props;
     const sendLearningTracking = useLearningTracking();
 
     const footerTracking = (title, ln_title, event_clicked, name, val, val1, val2) => {
-        let name_joined = name.replace(/ /gi, '_');
-        MyGA.SendEvent(title, ln_title, event_clicked, name_joined, val, val1, val2);
+        MyGA.SendEvent(title, ln_title, event_clicked, stringReplace(name), val, val1, val2);
 
         sendLearningTracking({
             productId: '',
-            event: `${pageType}_${name_joined}_footer_clicked`,
+            event: `${pageType}_${stringReplace(name)}_footer_clicked`,
             pageTitle: pageType,
             sectionPlacement: 'footer',
-            eventCategory: name_joined,
+            eventCategory: stringReplace(name),
             eventLabel: '',
             eventAction: 'click',
             algo: '',

@@ -5,6 +5,7 @@ import useDebounce from '../../../../../utils/searchUtils/debouce';
 import { searchCharacters, submitData } from '../../../../../utils/searchUtils/searchFunctions';
 import { MyGA } from 'utils/ga.tracking.js';
 import useLearningTracking from 'services/learningTracking';
+import {stringReplace} from 'utils/stringReplace.js';
 
 const SearchBar = (props) => {
     const [searchTerm, setSearchTerm] = useState('');
@@ -31,13 +32,12 @@ const SearchBar = (props) => {
     }
 
     const sendMultipleEvents = (name) => {
-        let name_joined = name.replace(/ /gi, '_');
 
-        MyGA.SendEvent('ln_new_homepage', 'ln_search_course', 'ln_search_initiated', name_joined, '', false, true);
+        MyGA.SendEvent('ln_new_homepage', 'ln_search_course', 'ln_search_initiated', stringReplace(name), '', false, true);
 
         sendLearningTracking({
             productId: '',
-            event: `${name_joined}_searchbar_searched`,
+            event: `${stringReplace(name)}_searchbar_searched`,
             pageTitle:`${pageTitle}`,
             sectionPlacement: `${pageTitle}_searchbar`,
             eventCategory: '',

@@ -16,6 +16,7 @@ import { getTrackingInfo, getCandidateId } from 'utils/storage.js';
 import { trackUser } from 'store/Tracking/actions/index.js';
 import { Toast } from '../../../Common/Toast/toast';
 import useLearningTracking from 'services/learningTracking';
+import {stringReplace} from 'utils/stringReplace.js';
 
 const BannerCourseDetail = (props) => {
 
@@ -42,7 +43,6 @@ const BannerCourseDetail = (props) => {
     const { mainCourseCartLoader } = useSelector(store => store.loader);
     const maximumAllowedStars = ['*', '*', '*', '*', '*']
     const sendLearningTracking = useLearningTracking();
-    let name_scored = product_detail?.prd_H1.replace(/ /gi, '_');
 
     const starRatings = (star, index) => {
         return (star === '*' ? <em className="icon-fullstar" key={index}></em> : star === '+' 
@@ -58,7 +58,7 @@ const BannerCourseDetail = (props) => {
         MyGA.SendEvent('ln_study_mode', 'ln_study_mode', 'ln_click_study_mode', `${getStudyMode(selectedObj.mode)}`, '', false, true);
         sendLearningTracking({
             productId: '',
-            event: `course_detail_${name_scored}_${getStudyMode(selectedObj.mode)}_${selectedObj.id}_mode_clicked`,
+            event: `course_detail_${stringReplace(product_detail?.prd_H1)}_${getStudyMode(selectedObj.mode)}_${selectedObj.id}_mode_clicked`,
             pageTitle:'course_detail',
             sectionPlacement: 'banner',
             eventCategory: '',
@@ -73,17 +73,17 @@ const BannerCourseDetail = (props) => {
         let cartItems = {};
         let addonsId = [];
         let tracking_data = getTrackingInfo();
-        let category_name = product_detail?.breadcrumbs[1].name.replace(/ /g, '_') || product_detail?.breadcrumbs[2].name.replace(/ /g, '_');
+        let category_name = stringReplace(product_detail?.breadcrumbs[1].name) || stringReplace(product_detail?.breadcrumbs[2].name);
 
         if(!product_detail?.redeem_test) {
             MyGA.SendEvent('ln_enroll_now', 'ln_enroll_now', 'ln_click_enroll_now', `${product_detail?.prd_H1}`, '', false, true);
             
             sendLearningTracking({
                 productId: '',
-                event: `course_detail_sticky_nav_${name_scored}_${product_id}_enroll_now_clicked`,
+                event: `course_detail_sticky_nav_${stringReplace(product_detail?.prd_H1)}_${product_id}_enroll_now_clicked`,
                 pageTitle:'course_detail',
                 sectionPlacement: 'sticky_nav',
-                eventCategory: name_scored,
+                eventCategory: stringReplace(product_detail?.prd_H1),
                 eventLabel: category_name,
                 eventAction: 'click',
                 algo: '',
@@ -116,10 +116,10 @@ const BannerCourseDetail = (props) => {
             dispatch(trackUser({"query" : tracking_data, "action" :'redeem_now'}));
             sendLearningTracking({
                 productId: '',
-                event: `course_detail_sticky_nav_${name_scored}_${product_id}_redeem_now_clicked`,
+                event: `course_detail_sticky_nav_${stringReplace(product_detail?.prd_H1)}_${product_id}_redeem_now_clicked`,
                 pageTitle:'course_detail',
                 sectionPlacement: 'sticky_nav',
-                eventCategory: name_scored,
+                eventCategory: stringReplace(product_detail?.prd_H1),
                 eventLabel: category_name,
                 eventAction: 'click',
                 algo: '',
@@ -154,6 +154,10 @@ const BannerCourseDetail = (props) => {
     const getDiscountedPrice = (fakeP, realP) => {
         return ((fakeP - realP) / fakeP * 100).toFixed(0);
     }
+
+    // chatbot course details
+    window["course_duration"] = product_detail?.selected_var?.learning_duration ? (varChecked?.learning_duration || product_detail?.selected_var?.learning_duration) : (varChecked?.dur_days || product_detail?.selected_var?.dur_days);
+    window["course_fee"] = getProductPrice(varChecked?.inr_price || product_detail?.var_list[0]?.inr_price || product_detail?.pPinb);
 
     const trackJobs = () => {
         let tracking_data = getTrackingInfo();
@@ -230,7 +234,6 @@ const BannerCourseDetail = (props) => {
     }
 
     const getVideoId = (link) => {
-        console.log(new URL("https://"+link).searchParams.get('v'))
         try{
             return new URL("https://"+link).searchParams.get('v');
         }catch{
@@ -267,10 +270,9 @@ const BannerCourseDetail = (props) => {
     }
 
     const courseVideoTracking = (ev) => {
-        // console.log(getVideoId(product_detail?.prd_video))
         handleVideoModal(ev);
         
-        if(product_detail?.prd_video) {
+        if(getVideoId(product_detail?.prd_video)) {
             sendLearningTracking({
                 productId: '',
                 event: `course_detail_intro_video_https://www.youtube.com/embed/${getVideoId(product_detail?.prd_video)}_clicked`,
@@ -546,7 +548,7 @@ const BannerCourseDetail = (props) => {
                                         }
                                     </strong>
                                     <p className="d-flex mb-0">
-                                        <a onClick={() => goToCart(varChecked)} className="btn btn-secondary mt-10 mr-10">{ product_detail?.prd_service === 'assessment' ? 'Buy Now' : product_detail?.redeem_test ? 'Redeem Now' : 'Enroll now' }</a>
+                                        <a onClick={() => goToCart(varChecked)} className="btn btn-secondary mt-10 mr-10">{ product_detail?.prd_service === 'assessment' ? 'Buy Now' : product_detail?.redeem_test ? 'Redeem Now' : 'Buy now' }</a>
                                         <LinkScroll to={"enquire-now"} className="btn btn-outline-primary mt-10" offset={-160} smooth={true}>Enquire now</LinkScroll>
                                     </p>
                                     

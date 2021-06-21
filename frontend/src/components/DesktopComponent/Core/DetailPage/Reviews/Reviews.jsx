@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import Carousel from 'react-bootstrap/Carousel';
 import { Link } from 'react-router-dom';
 import './Reviews.scss';
@@ -7,12 +7,14 @@ import { fetchProductReviews } from 'store/DetailPage/actions';
 import Loader from '../../../Common/Loader/loader';
 import { getCandidateId } from 'utils/storage.js';
 import { siteDomain } from 'utils/domains';
+import useLearningTracking from 'services/learningTracking';
 
 const Reviews = (props) => {
     const {id, product_detail, pUrl, showReviewModal, prd_review_list, prd_rv_current_page, prd_rv_has_next } = props;
     const { reviewLoader } = useSelector(store => store.loader);
     const [carIndex, setIndex] = useState(0);
     const dispatch = useDispatch();
+    const sendLearningTracking = useLearningTracking();
 
     const handleEffects = async (page) => {
         try {
@@ -37,7 +39,35 @@ const Reviews = (props) => {
             if((selectedIndex % 2 === 0) && e.target.className === 'carousel-control-next-icon' && prd_rv_has_next) {
                 handleEffects(prd_rv_current_page+1);
             }
+
+            sendLearningTracking({
+                productId: '',
+                event: `course_detail_reviews_${e.target.offsetParent.className}_${selectedIndex}_clicked`,
+                pageTitle:`course_detail`,
+                sectionPlacement:'reviews',
+                eventCategory: `${e.target.offsetParent.className}`,
+                eventLabel: '',
+                eventAction: 'click',
+                algo: '',
+                rank: selectedIndex,
+            })
         }
+    }
+
+    const writeReviewTracking = (name, logged) => {
+        if(logged) showReviewModal(state => !state);
+        
+        sendLearningTracking({
+            productId: '',
+            event: `course_detail_${name}_clicked`,
+            pageTitle:`course_detail`,
+            sectionPlacement:'reviews',
+            eventCategory: '',
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: '',
+        })
     }
 
     return (
@@ -88,12 +118,12 @@ const Reviews = (props) => {
                 <div className="d-flex mx-auto mt-20">
                     {
                         (product_detail?.user_reviews && getCandidateId()) ?
-                            <Link to={"#"} onClick={showReviewModal} className="btn btn-outline-primary btn-custom mx-auto">Update your review</Link>
+                            <Link to={"#"} onClick={() => writeReviewTracking('update_your_review', true)} className="btn btn-outline-primary btn-custom mx-auto">Update your review</Link>
                         :
                         (!product_detail?.user_reviews && getCandidateId()) ?
-                            <Link to={"#"} onClick={showReviewModal} className="btn btn-outline-primary btn-custom mx-auto">Write a review</Link>
+                            <Link to={"#"} onClick={() => writeReviewTracking('write_a_review', true)} className="btn btn-outline-primary btn-custom mx-auto">Write a review</Link>
                         : 
-                        <a href={`${siteDomain}/login/?next=${pUrl}?sm=true`} className="btn btn-outline-primary btn-custom mx-auto">Write a review</a>
+                        <a href={`${siteDomain}/login/?next=${pUrl}?sm=true`} onClick={() => writeReviewTracking('write_a_review_non_logged_in', false)} className="btn btn-outline-primary btn-custom mx-auto">Write a review</a>
                     }
                 </div>
             </section>

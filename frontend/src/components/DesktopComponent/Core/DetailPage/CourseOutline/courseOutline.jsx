@@ -3,9 +3,27 @@ import Accordion from 'react-bootstrap/Accordion';
 import Card from 'react-bootstrap/Card';
 import './courseOutline.scss';
 import { imageUrl } from 'utils/domains';
+import useLearningTracking from 'services/learningTracking';
+import {stringReplace} from 'utils/stringReplace.js';
 
 const CourseOutline = (props) => {
     const {chapter_list} = props;
+    const sendLearningTracking = useLearningTracking();
+
+    const outlineTracking = (chap, indx) => {
+
+        sendLearningTracking({
+            productId: '',
+            event: `course_detail_course_outline_${stringReplace(chap)}_${indx}_clicked`,
+            pageTitle:'course_detail',
+            sectionPlacement: 'course_outline',
+            eventCategory: '',
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: indx,
+        })
+    }
 
     return (
         <section id="courseoutline" className="container-fluid mt-40" data-aos="fade-up">
@@ -19,7 +37,7 @@ const CourseOutline = (props) => {
                                     chapter_list?.map((chap, indx) => {
                                         return (
                                             <Card data-aos="fade-up" key={indx}>
-                                                <Accordion.Toggle className={!!chap.content ? 'card-header' : 'card-header no-dd'} as={Card.Header} eventKey={indx+1}>
+                                                <Accordion.Toggle onClick={() => outlineTracking(chap?.heading, indx)} className={!!chap.content ? 'card-header' : 'card-header no-dd'} as={Card.Header} eventKey={indx+1}>
                                                     <h3>{chap.heading}</h3>
                                                 </Accordion.Toggle>
                                                 {

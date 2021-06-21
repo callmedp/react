@@ -4,7 +4,7 @@ import Slider from "react-slick";
 import { siteDomain } from 'utils/domains';
 import { useDispatch } from 'react-redux';
 import { MyGA } from 'utils/ga.tracking.js';
-
+import {stringReplace} from 'utils/stringReplace.js';
 
 // API Import 
 import { fetchInDemandProducts } from 'store/HomePage/actions';
@@ -56,14 +56,13 @@ const PopularTab = props => {
     }
 
     const setTracking = (name, indx) => {
-        let name_joined = name.replace(/ /g, '_');
 
         sendLearningTracking({
             productId: '',
-            event: `homepage_popular_courses_${name_joined}_${indx}_clicked`,
+            event: `homepage_popular_courses_${stringReplace(name)}_${indx}_clicked`,
             pageTitle:`homepage`,
             sectionPlacement: 'popular_courses',
-            eventCategory: name_joined,
+            eventCategory: stringReplace(name),
             eventLabel: '',
             eventAction: 'click',
             algo: '',

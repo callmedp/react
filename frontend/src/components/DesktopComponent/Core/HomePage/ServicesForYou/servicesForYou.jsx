@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { imageUrl, siteDomain } from 'utils/domains';
 import { MyGA } from 'utils/ga.tracking.js';
 import useLearningTracking from 'services/learningTracking';
+import {stringReplace} from 'utils/stringReplace.js';
 
 const JobAssistanceServices = () => {
 
@@ -11,16 +12,15 @@ const JobAssistanceServices = () => {
     const sendLearningTracking = useLearningTracking();
 
     const goToAssistedService = (heading, url, indx) => {
-        let name_joined = heading.replace(/ /g, '_');
 
-        MyGA.SendEvent('ln_new_homepage','ln_assistance_services_select', 'ln_click_assistance_services', name_joined, '', false, true);
+        MyGA.SendEvent('ln_new_homepage','ln_assistance_services_select', 'ln_click_assistance_services', stringReplace(heading), '', false, true);
 
         sendLearningTracking({
             productId: '',
-            event: `homepage_assistance_service_${name_joined}_${indx}_clicked`,
+            event: `homepage_assistance_service_${stringReplace(heading)}_${indx}_clicked`,
             pageTitle:`homepage`,
             sectionPlacement:'service_for_you',
-            eventCategory: name_joined,
+            eventCategory: stringReplace(heading),
             eventLabel: '',
             eventAction: 'click',
             algo: '',

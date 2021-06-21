@@ -7,4 +7,6 @@ const fetchUserInform = (payload = { em: '' }) => {
     return BaseApiService.post(`${siteDomain}${url}`, payload);
 }
 
-export default fetchUserInform;
+export default {
+    fetchUserInform,
+}
