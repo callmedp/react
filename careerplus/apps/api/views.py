@@ -2248,18 +2248,18 @@ class RecommendedCoursesAPI(APIView):
         jt = self.request.session.get('job_title', None)
         skill = self.request.session.get('all_skill_ids', [])
         farea = self.request.session.get('func_area', None)
-
+        candidate_id = self.request.session.get('candidate_id', None)
         rcourses = get_recommended_products(jt, skill, farea)
         rassesments = get_recommended_products(jt, skill, farea, flow_type = 16)
-
+        
         if rcourses:
             rcourses = rcourses[:self.no_of_products]
         if rassesments:
             rassesments = rassesments[:self.no_of_products]
         
         return {
-            'r_courses': ProductMixin().get_course_json(rcourses),
-            'r_assesments': ProductMixin().get_assessments_json(rassesments)
+            'r_courses': ProductMixin().get_course_json(rcourses, candidate_id = candidate_id),
+            'r_assesments': ProductMixin().get_assessments_json(rassesments, candidate_id=candidate_id)
         }
 
     def get(self, request, *args, **kwargs):

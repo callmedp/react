@@ -74,7 +74,7 @@ class CourseRecommendationAPI(APIView):
         user_purchased_courses = OrderItem.objects.filter(product__type_flow=2,no_process=False,order__candidate_id=candidate_id,order__status__in=[1, 3]).values_list('product__id',flat=True)
         courses = SearchQuerySet().filter(id__in=course_ids).exclude(id__in=user_purchased_courses)
         paginated_data = offset_paginator(page, courses,size=3)
-        course_data = ProductMixin().get_course_json(paginated_data["data"])
+        course_data = ProductMixin().get_course_json(paginated_data["data"], candidate_id = candidate_id)
         #pagination
         page_info ={
                 'current_page':paginated_data['current_page']if paginated_data else 0,
@@ -105,7 +105,7 @@ class ServiceRecommendationAPI(APIView):
         recommended_services_ids = RecommendationMixin().get_services_from_analytics_recommendation_engine(candidate_id=candidate_id)
         services = SearchQuerySet().filter(id__in=recommended_services_ids)
         paginated_data = offset_paginator(page, services,size=3)
-        data = ProductMixin().get_course_json(paginated_data["data"])
+        data = ProductMixin().get_course_json(paginated_data["data"], candidate_id = candidate_id)
         #pagination
         page_info ={
                 'current_page':paginated_data['current_page']if paginated_data else 0,
