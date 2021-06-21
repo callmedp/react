@@ -35,7 +35,7 @@ const PopularTab = props => {
 
                 sendLearningTracking({
                     productId: '',
-                    event: `popular_courses_${tabType}_${pageId}_next_clicked`,
+                    event: `homepage_popular_courses_${tabType}_${pageId}_next_clicked`,
                     pageTitle:`homepage`,
                     sectionPlacement:'popular_courses',
                     eventCategory: tabType,

@@ -39,7 +39,7 @@ const SearchBar = (props) => {
             productId: '',
             event: `${stringReplace(name)}_searchbar_searched`,
             pageTitle:`${pageTitle}`,
-            sectionPlacement: `${pageTitle}_searchbar`,
+            sectionPlacement: `searchbar`,
             eventCategory: '',
             eventLabel: '',
             eventAction: 'search',
