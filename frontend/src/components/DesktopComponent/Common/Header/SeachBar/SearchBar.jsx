@@ -31,15 +31,15 @@ const SearchBar = (props) => {
     }
 
     const sendMultipleEvents = (name) => {
-        let name_joined = name.replace(/ /g, '_');
+        let name_joined = name.replace(/ /gi, '_');
 
         MyGA.SendEvent('ln_new_homepage', 'ln_search_course', 'ln_search_initiated', name_joined, '', false, true);
 
         sendLearningTracking({
             productId: '',
-            event: `${name_joined}_search_bar_clicked`,
-            pageTitle:`${pageTitle}_searchbar`,
-            sectionPlacement:'searchbar',
+            event: `${name_joined}_searchbar_clicked`,
+            pageTitle:`${pageTitle}`,
+            sectionPlacement: `${pageTitle}_searchbar`,
             eventCategory: '',
             eventLabel: '',
             eventAction: 'search',
