@@ -107,9 +107,9 @@
                     </ul>
                     <div class="text-center text-upper">
                      {% if not request.session.candidate_id and not request.session.university_course %}
-                        <a class="btn btn-round-30 btn-slg btn-shadow btn-grOrange bold" id="enroll_now" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll Now</a>
+                        <a class="btn btn-round-30 btn-slg btn-shadow btn-grOrange bold" id="enroll_now" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Buy Now</a>
                     {% else %}
-                        <a role="button" class="btn btn-round-30 btn-slg btn-shadow btn-grOrange bold" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll now</a>
+                        <a role="button" class="btn btn-round-30 btn-slg btn-shadow btn-grOrange bold" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Buy now</a>
                     {% endif %}
                     </div>
                     {% if  university_detail.brochure %}
@@ -492,13 +492,13 @@
                     <div class="pr-15">Search Engine Optimisation Master...</div>
                     <div>  
                     {% if not request.session.candidate_id and not request.session.university_course %}
-                        <a class="btn btn-round-30 btn-lg btn-shadow btn-grOrange bold" id="enroll_now_bg" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" >Enroll Now</a>
+                        <a class="btn btn-round-30 btn-lg btn-shadow btn-grOrange bold" id="enroll_now_bg" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" >Buy Now</a>
                     {% else %}
-                        <a role="button" class="btn btn-round-30 btn-slg btn-shadow btn-grOrange bold"  id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" >Enroll now</a>
+                        <a role="button" class="btn btn-round-30 btn-slg btn-shadow btn-grOrange bold"  id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" >Buy now</a>
                     {% endif %}
                     </div>
                 </div>
-                <img aria-label="enroll now" src="{% static 'shinelearn/images/mobile/executive-course/enroll-now.jpg' %}" class="img-responsive"/>
+                <img aria-label="Buy now" src="{% static 'shinelearn/images/mobile/executive-course/enroll-now.jpg' %}" class="img-responsive"/>
             </div>
             <div id="popup-modal1" class="modal" style="display: none;z-index:99999;">
                   <div class="modal-helper">
@@ -543,7 +543,7 @@
                                 <input type="hidden" name="lsource" value="{{ lead_source }}">
                               </div>
                               <div class="form-group text-center tabs mt-30">
-                                <button type="submit" id="overlay-submit-btn" class="btn btn-blue w100fl btn-round mb-20">Enroll Now</button>
+                                <button type="submit" id="overlay-submit-btn" class="btn btn-blue w100fl btn-round mb-20">Buy Now</button>
                               </div>
                             </form>
                           </div>
@@ -784,8 +784,8 @@
               $.post(action, $(form).serialize(), function (data) {
                   if (data && data['status']){
                     form_id = $(form).attr('id')
-                    // lead2 form for enroll now , add id to add-to-cart and trigger click
-                    // lead3 form for download broucher, remove modal on  lcick from enroll now
+                    // lead2 form for Buy now , add id to add-to-cart and trigger click
+                    // lead3 form for download broucher, remove modal on  lcick from Buy now
                     // and download broucher button.
                     // lead1 form for form on detail page.
                      if(form_id == 'lead2'){

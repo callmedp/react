@@ -48,7 +48,7 @@ const FeedbackResult = (props) => {
                                             </div>
                                             <div className="course__price-enrol mr-20">
                                                 <strong>12999/-</strong> 
-                                                <Link to={"#"} class="btn btn-secondary mt-10">Enroll now</Link>
+                                                <Link to={"#"} className="btn btn-secondary mt-10">Buy now</Link>
                                             </div>
                                         </div>
                                         <div className="course__bottom">
@@ -90,7 +90,7 @@ const FeedbackResult = (props) => {
                                             </div>
                                             <div className="course__price-enrol mr-20">
                                                 <strong>12999/-</strong> 
-                                                <Link to={"#"} class="btn btn-secondary mt-10">Enroll now</Link>
+                                                <Link to={"#"} className="btn btn-secondary mt-10">Buy now</Link>
                                             </div>
                                         </div>
                                         <div className="course__bottom">
@@ -152,7 +152,7 @@ const FeedbackResult = (props) => {
                                             </div>
                                             <div className="course__price-enrol mr-20">
                                                 <strong>12999/-</strong> 
-                                                <Link to={"#"} class="btn btn-secondary mt-10">Enroll now</Link>
+                                                <Link to={"#"} className="btn btn-secondary mt-10">Buy now</Link>
                                             </div>
                                         </div>
                                         <div className="course__bottom">

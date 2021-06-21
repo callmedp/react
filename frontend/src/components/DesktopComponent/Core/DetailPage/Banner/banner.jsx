@@ -116,6 +116,10 @@ const BannerCourseDetail = (props) => {
         return ((fakeP - realP) / fakeP * 100).toFixed(0);
     }
 
+    // chatbot course details
+    window["course_duration"] = product_detail?.selected_var?.learning_duration ? (varChecked?.learning_duration || product_detail?.selected_var?.learning_duration) : (varChecked?.dur_days || product_detail?.selected_var?.dur_days);
+    window["course_fee"] = getProductPrice(varChecked?.inr_price || product_detail?.var_list[0]?.inr_price || product_detail?.pPinb);
+
     const trackJobs = () => {
         let tracking_data = getTrackingInfo();
 
@@ -423,7 +427,7 @@ const BannerCourseDetail = (props) => {
                                         }
                                     </strong>
                                     <p className="d-flex mb-0">
-                                        <a onClick={() => goToCart(varChecked)} className="btn btn-secondary mt-10 mr-10">{ product_detail?.prd_service === 'assessment' ? 'Buy Now' : product_detail?.redeem_test ? 'Redeem Now' : 'Enroll now' }</a>
+                                        <a onClick={() => goToCart(varChecked)} className="btn btn-secondary mt-10 mr-10">{ product_detail?.prd_service === 'assessment' ? 'Buy Now' : product_detail?.redeem_test ? 'Redeem Now' : 'Buy now' }</a>
                                         <LinkScroll to={"enquire-now"} className="btn btn-outline-primary mt-10" offset={-160} smooth={true}>Enquire now</LinkScroll>
                                     </p>
                                     

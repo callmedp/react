@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 // import OfferEnds from './OfferEnds/offerEnds';
 import Header from '../../Common/Header/header';
 import HomeBanner from './Banner/banner';
@@ -24,12 +24,15 @@ import {
 import Loader from '../../Common/Loader/loader';
 import MetaContent from '../../Common/MetaContent/metaContent';
 import { fetchAlreadyLoggedInUser } from "store/Authentication/actions/index";
+import OfferEnds from './OfferEnds/offerEnds';
 
 const HomePage = (props) => {
 
     const dispatch = useDispatch();
     const { homeLoader } = useSelector(store => store.loader)
     const { meta } = useSelector(store => store.testimonials)
+    const { navOffer } = useSelector((store) => store.header);
+    const [showMainOffer, setShowMainOffer] = useState(true);
 
     let cookies = "";
     try {
@@ -41,7 +44,8 @@ const HomePage = (props) => {
                 break;
             }
         }
-    } catch (err) {
+    }
+    catch (err) {
         cookies = "";
     }
 
@@ -88,7 +92,6 @@ const HomePage = (props) => {
     useEffect(() => {
 
         handleEffect()
-
         Aos.init({ duration: 2000, once: true, offset: 10, anchorPlacement: 'bottom-bottom' });
     }, [])
 
@@ -97,7 +100,9 @@ const HomePage = (props) => {
             { meta && <MetaContent meta_tags={meta} />}
             { homeLoader ? <Loader /> : ''}
             {/* <OfferEnds /> */}
-            <Header isHomepage={true} />
+            {(navOffer[4] && showMainOffer) ? <OfferEnds navOffer={navOffer} showMainOffer={showMainOffer} setShowMainOffer={setShowMainOffer} /> : ""}
+
+            <Header isHomepage={true} showMainOffer={showMainOffer} setShowMainOffer={setShowMainOffer} />
             <main>
                 <HomeBanner />
                 <PopularCourses />

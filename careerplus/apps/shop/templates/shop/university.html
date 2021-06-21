@@ -82,9 +82,9 @@
                       Rs. {{ sqs.pPinb|floatformat|intcomma }}
                     </div>
                     {% if not request.session.candidate_id and not request.session.university_course %}
-                        <a class="exe-button-enrol mt-10" id="enroll_now"  data-toggle="modal" data-target=".bs-example-modal-sm" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll Now</a>
+                        <a class="exe-button-enrol mt-10" id="enroll_now"  data-toggle="modal" data-target=".bs-example-modal-sm" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Buy Now</a>
                     {% else %}
-                        <a role="button" class="exe-button-enrol mt-10" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll now</a>
+                        <a role="button" class="exe-button-enrol mt-10" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Buy now</a>
                     {% endif %}
                     
                     
@@ -660,10 +660,10 @@
                           <div class="sep mt-10 mb-10"></div>
 
                            {% if not request.session.candidate_id and not request.session.university_course %}
-                                <a class="exe-button-enrol mt-5" id="enroll_now"  data-toggle="modal" data-target=".bs-example-modal-sm" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll now</a>
+                                <a class="exe-button-enrol mt-5" id="enroll_now"  data-toggle="modal" data-target=".bs-example-modal-sm" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Buy now</a>
 
                             {% else %}
-                                <a role="button" class="exe-button-enrol mt-5" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Enroll now</a>
+                                <a role="button" class="exe-button-enrol mt-5" id="add-to-cart" prod-id="{{sqs.id}}" data-price="{{sqs.inr_price}}" href="javascript:void();">Buy now</a>
                             {% endif %}
                             {% if  university_detail.brochure %}
                              {% if not request.session.candidate_id and not request.session.university_course %}
@@ -753,7 +753,7 @@
                 <input type="hidden" name="lsource" value="{{ lead_source }}">
 
                 <input type="hidden" name="uc" value="1">
-                <button type="submit" class="exe-button-callback">Enroll Now</button>
+                <button type="submit" class="exe-button-callback">Buy Now</button>
               </form>
             </div>
           </div>
@@ -829,8 +829,8 @@ $("#lead1, #lead2, #lead3").each(function() {
               $.post(action, $(form).serialize(), function (data) {
                   if (data && data['status']){
                     form_id = $(form).attr('id')
-                    // lead2 form for enroll now , add id to add-to-cart and trigger click
-                    // lead3 form for download broucher, remove modal on  lcick from enroll now
+                    // lead2 form for Buy now , add id to add-to-cart and trigger click
+                    // lead3 form for download broucher, remove modal on  lcick from Buy now
                     // and download broucher button.
                     // lead1 form for form on detail page.
                      if(form_id == 'lead2'){

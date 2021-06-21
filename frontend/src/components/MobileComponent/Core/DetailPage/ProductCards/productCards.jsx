@@ -47,10 +47,10 @@ const ProductCards = props => {
                         <div className="m-card" key={index}>
                             <div className="m-card__heading">
                                 <figure>
-                                    { (product?.pImg || product?.vendor_image) && <img src={product?.pImg || product?.vendor_image } alt={product?.name || product?.pNm || product?.heading} /> }
+                                    { (product?.pImg || product?.vendor_image) && <img src={product?.pImg || product?.vendor_image } alt={product?.name || product?.pNm || product?.heading || product?.display_name} /> }
                                 </figure>
                                 <h3 className="m-heading3">
-                                    <a onClick={() => handleTracking} href={`${siteDomain}${product.pURL || product?.url}`}>{(product?.name || product?.pNm || product?.heading)?.length > 42 ? (product?.name || product?.pNm || product?.heading)?.slice(0, 42) + '...' : (product?.name || product?.pNm || product?.heading) }</a>
+                                    <a onClick={() => handleTracking} href={`${siteDomain}${product.pURL || product?.url}`}>{(product?.name || product?.pNm || product?.heading || product?.display_name)?.length > 42 ? (product?.name || product?.pNm || product?.heading || product?.display_name)?.slice(0, 42) + '...' : (product?.name || product?.pNm || product?.heading || product?.display_name) }</a>
                                 </h3>
                             </div>
                             <div className="m-card__box">
@@ -61,11 +61,11 @@ const ProductCards = props => {
 
                                     <span className="m-rating">
                                         { (product?.pStar || product?.rating)?.map((star, index) => starRatings(star, index)) }
-                                        { (product?.pARx || product?.avg_rating) ? <span>{product?.pARx || product?.avg_rating}/5</span> : ''}
+                                        { (product?.pARx || product?.avg_rating) ? <span>{product?.pARx || parseFloat(product?.avg_rating)?.toFixed(1)}/5</span> : ''}
                                     </span>
                                 </div>
                                 <div className="m-card__price">
-                                    <strong>{product?.pPin || product?.inr_price}/-</strong>
+                                    <strong>{product?.pPin || product?.inr_price || parseInt(product?.price)}/-</strong>
                                 </div>
                             </div>
                         </div>

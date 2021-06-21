@@ -4,7 +4,7 @@ import '../../CataloguePage/RecentCourses/recentCourses.scss';
 import './coursesMayLike.scss'
 import Carousel from 'react-bootstrap/Carousel';
 import { fetchRecommendedCourses } from 'store/DetailPage/actions';
-import { getTrackingInfo } from 'utils/storage.js';
+import { getTrackingInfo, getTrackingUrl } from 'utils/storage.js';
 import { trackUser } from 'store/Tracking/actions/index.js';
 import { siteDomain } from 'utils/domains';
 
@@ -32,10 +32,16 @@ const CoursesMayLike = (props) => {
 
     const handleTracking = (url) => {
         let tracking_data = getTrackingInfo();
-
         dispatch(trackUser({"query" : tracking_data, "action" :'exit_product_page'}));
         dispatch(trackUser({"query" : tracking_data, "action" :'recommended_products'}));
-        window.location.href=`${siteDomain}${url}`;
+
+        let appendTracking = "";
+
+        if(localStorage.getItem("trackingId")){
+            appendTracking = getTrackingUrl();
+            window.location.href=`${siteDomain}${url}${appendTracking}`;
+        }
+        else window.location.href=`${siteDomain}${url}`;
     }
 
     const getLikeCourses = (courseData, idx) => {
@@ -49,26 +55,26 @@ const CoursesMayLike = (props) => {
                                     <div className="card">
                                         <div className="card__heading cursorLink">
                                             <figure>
-                                                <img src={coursesLike.pImg} alt={coursesLike.name} />
+                                                <img src={coursesLike.pImg} alt={coursesLike.display_name} />
                                             </figure>
                                             <h3 className="heading3">
                                                 <a onClick={() => handleTracking(coursesLike.pURL)}>
-                                                    {coursesLike.name || coursesLike.pNm}
+                                                    {coursesLike.display_name}
                                                 </a>
                                             </h3>
                                         </div>
 
                                         <div className="card__box">
                                             <div className="card__rating">
-                                                <span className="mr-10">By {(coursesLike.pPvn || coursesLike.pViA)?.split(' ')[0]?.length > 10 ? (coursesLike.pPvn || coursesLike.pViA)?.split(' ')[0]?.slice(0,10) + '...' : (coursesLike.pPvn || coursesLike.pViA)?.split(' ')[0] }</span>
+                                                <span className="mr-10">By {(coursesLike.vendor)?.split(' ')[0]?.length > 10 ? (coursesLike.vendor)?.split(' ')[0]?.slice(0,10) + '...' : (coursesLike.vendor)?.split(' ')[0] }</span>
                                             <span className="rating">
                                                 {coursesLike.pStar?.map((star, index) => starRatings(star, index))}
                                             </span>
-                                                <em className="icon-blankstar"></em>
-                                                <span>{parseInt(coursesLike.pAR)?.toFixed(1)}/5</span>
+                                                {/* <em className="icon-blankstar"></em> */}
+                                                <span>{parseFloat(coursesLike.avg_rating)?.toFixed(1)}/5</span>
                                             </div>
                                             <div className="card__price mt-10">
-                                                <strong>{coursesLike.pPin}/-</strong> 
+                                                <strong>{parseInt(coursesLike.price)}/-</strong> 
                                             </div>
                                         </div>
                                     </div>

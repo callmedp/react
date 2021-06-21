@@ -575,3 +575,6 @@ SHINECPCRM_DICT = {
     'connected_leads': '/api/orders/order-fetch-lead/',
     'timeout': 60,
 }
+
+#Chatbot Domain
+CHATBOT_DOMAIN = 'https://learning1.shine.com/chatbot'

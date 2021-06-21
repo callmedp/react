@@ -27,7 +27,7 @@ const JobsUpskills = (props) => {
     const [feedback, setFeedback] = useState(false);
 
     useEffect(() => {
-        console.log('job skills')
+        // console.log('job skills')
         resultApiFunc(history.location.search + `&page=1`);
         
         // Cleaning Store Bucket

@@ -1,5 +1,5 @@
 import BaseApiService from 'services/BaseApiService'
-import { siteDomain } from 'utils/domains'
+import { siteDomain, chatbotDomain } from 'utils/domains'
 
 const fetchProductReviews = (data) => {
     const url = `/shop/api/v1/get-prd-review/?pid=${data.prdId}&page=${data.page}`;
@@ -36,6 +36,15 @@ const addToCartRedeemApi = (data) => {
     return BaseApiService.post(`${siteDomain}/api/v1/order/direct-order/`, data);
 }
 
+const chatbotScriptApi = () => {
+    let url = "";
+
+    if(localStorage.getItem('candidateId')) url = `${siteDomain}/api/v1/chatbot-script/learning_course_page/`;
+    else url = `${siteDomain}/api/v1/chatbot-script/learning_course_non_loggedIn/`;
+
+    return BaseApiService.get(url);
+}
+
 export default {
     mainCourses,
     fetchProductReviews,
@@ -43,6 +52,7 @@ export default {
     recommendedCoursesApi,
     EnquireNewSend,
     addToCartApi,
-    addToCartRedeemApi
+    addToCartRedeemApi,
+    chatbotScriptApi
 }   
 

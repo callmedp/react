@@ -28,6 +28,9 @@ const CourseDetailBanner = (props) => {
     const [showAll, setShowAll] = useState(false);
     const maximumAllowedStar = ['*', '*', '*', '*', '*']
 
+    // chatbot course details
+    window["course_duration"] = product_detail?.selected_var?.learning_duration ? (varChecked?.learning_duration || product_detail?.selected_var?.learning_duration) : (varChecked?.dur_days || product_detail?.selected_var?.dur_days);
+
     const starRatings = (star, index) => {
         return (
             star === '*' ? <em className="micon-fullstar" key={index}></em> :

@@ -6,6 +6,7 @@ import { imageUrl } from 'utils/domains';
 
 const SkillGain = (props) => {
     const {skill} = props;
+    window['course_skills'] = skill.slice(0,4)
 
     return (
         <section className="container-fluid lightblue-bg mt-40" data-aos="fade-up">

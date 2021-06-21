@@ -21,6 +21,10 @@ const addToCartEnrollFetched = createAction('ADD_TO_CART_ENROLL_FETCHED');
 const fetchAddToCartRedeem = createAction('FETCH_ADD_TO_CART_REDEEM');
 const addToCartRedeemFetched = createAction('ADD_TO_CART_REDEEM_FETCHED');
 
+// chatbot
+const fetchChatbotScript = createAction('FETCH_CHATBOT_SCRIPT');
+const chatbotScriptFetched = createAction('CHATBOT_SCRIPT_FETCHED');
+
 export {
     fetchMainCourses,
     mainCoursesFetched,
@@ -34,5 +38,7 @@ export {
     fetchAddToCartEnroll,
     addToCartEnrollFetched,
     fetchAddToCartRedeem,
-    addToCartRedeemFetched
+    addToCartRedeemFetched,
+    fetchChatbotScript,
+    chatbotScriptFetched
 }

@@ -40,8 +40,8 @@ const ServicesForYou = (props) => {
                     {
                         jobAssistanceServices?.map((job, index) => {
                             return (
-                                <a href={`${siteDomain}${job?.url}`} onClick={() => MyGA.SendEvent('ln_new_homepage','ln_assistance_services_select', 'ln_click_assistance_services', job?.heading,'', false, true)}>
-                                <div className="m-services-foryou__list" key={index}>
+                                <a href={`${siteDomain}${job?.url}`} onClick={() => MyGA.SendEvent('ln_new_homepage','ln_assistance_services_select', 'ln_click_assistance_services', job?.heading,'', false, true)} key={index}>
+                                <div className="m-services-foryou__list">
                                     <h3 className="m-heading3">{ job?.heading }</h3>
                                     <p>{ job?.description?.length > 80 ? job?.description?.slice(0, 80) + '...' : job?.description }</p>
                                     <span className="d-flex">
