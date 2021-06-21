@@ -37,7 +37,7 @@ const SearchBar = (props) => {
 
         sendLearningTracking({
             productId: '',
-            event: `${name_joined}_searchbar_clicked`,
+            event: `${name_joined}_searchbar_searched`,
             pageTitle:`${pageTitle}`,
             sectionPlacement: `${pageTitle}_searchbar`,
             eventCategory: '',

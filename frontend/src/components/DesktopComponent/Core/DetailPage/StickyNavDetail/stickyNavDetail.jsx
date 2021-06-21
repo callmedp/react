@@ -12,21 +12,36 @@ import { MyGA } from 'utils/ga.tracking.js';
 import { getTrackingInfo } from 'utils/storage.js';
 import { trackUser } from 'store/Tracking/actions/index.js';
 import { Toast } from '../../../Common/Toast/toast';
+import useLearningTracking from 'services/learningTracking';
 
 const StickyNav = (props) => {
     const { product_detail, varChecked, outline, faq, frqntProd, topics, product_id, hasReview, hasKeyFeatures, hasWhatYouGet } = props;
     const dispatch = useDispatch();
-    // const [tab, setTab] = useState('1');
+    const sendLearningTracking = useLearningTracking();
     const { mainCourseCartLoader } = useSelector(store => store.loader);
+    let name_scored = product_detail?.prd_H1.replace(/ /gi, '_');
 
     const goToCart = async (value) => {
         let cartItems = {};
         let addonsId = [];
         let tracking_data = getTrackingInfo();
+        let category_name = product_detail?.breadcrumbs[1].name.replace(/ /g, '_') || product_detail?.breadcrumbs[2].name.replace(/ /g, '_');
 
         if(!product_detail?.redeem_test) {
-            MyGA.SendEvent('ln_enroll_now', 'ln_enroll_now', 'ln_click_enroll_now', `${product_detail?.prd_H1}`, '', false, true);
+            MyGA.SendEvent('ln_enroll_now', 'ln_enroll_now', 'ln_click_enroll_now', `${name_scored}`, '', false, true);
             dispatch(trackUser({"query" : tracking_data, "action" :'enroll_now'}));
+            
+            sendLearningTracking({
+                productId: '',
+                event: `course_detail_sticky_nav_${name_scored}_${product_id}_enroll_now_clicked`,
+                pageTitle:'course_detail',
+                sectionPlacement: 'sticky_nav',
+                eventCategory: name_scored,
+                eventLabel: category_name,
+                eventAction: 'click',
+                algo: '',
+                rank: '',
+            })
 
             if(frqntProd && frqntProd.length > 0) {
                 frqntProd.map(prdId => addonsId.push(prdId.id));
@@ -50,6 +65,18 @@ const StickyNav = (props) => {
         }
         else {
             dispatch(trackUser({"query" : tracking_data, "action" :'redeem_now'}));
+            sendLearningTracking({
+                productId: '',
+                event: `course_detail_sticky_nav_${name_scored}_${product_id}_redeem_now_clicked`,
+                pageTitle:'course_detail',
+                sectionPlacement: 'sticky_nav',
+                eventCategory: name_scored,
+                eventLabel: category_name,
+                eventAction: 'click',
+                algo: '',
+                rank: '',
+            })
+
             cartItems = { 'prod_id': product_detail?.product_id, 'redeem_option': product_detail?.redeem_option }
 
             try {
@@ -65,6 +92,20 @@ const StickyNav = (props) => {
                 dispatch(stopMainCourseCartLoader());
             }
         }
+    }
+
+    const trackEnquireNow = () => {
+        sendLearningTracking({
+            productId: '',
+            event: `course_detail_sticky_nav_${name_scored}_${product_id}_enquire_now_clicked`,
+            pageTitle:'course_detail',
+            sectionPlacement: 'sticky_nav',
+            eventCategory: '',
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: '',
+        })
     }
 
     const getProductPrice = (product) => {
@@ -165,7 +206,7 @@ const StickyNav = (props) => {
                             : ""
                         }
                         <span className="d-flex">
-                            <LinkScroll offset={-160} to={"enquire-now"} className="btn btn-outline-primary" smooth={true}>Enquire now</LinkScroll>
+                            <LinkScroll offset={-160} to={"enquire-now"} onClick={ trackEnquireNow } className="btn btn-outline-primary" smooth={true}>Enquire now</LinkScroll>
                             <a onClick={() => goToCart(varChecked)} className="btn btn-secondary ml-10">{ product_detail?.prd_service === 'assessment' ? 'Buy Now' : product_detail?.redeem_test ? 'Redeem Now' : 'Enroll now' }</a>
                         </span>
                     </Form>

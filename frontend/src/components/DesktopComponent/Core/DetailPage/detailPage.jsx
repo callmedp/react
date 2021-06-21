@@ -45,8 +45,7 @@ const DetailPage = (props) => {
     const [showStickyNav, setShowStickyNav] = useState(false);
     const [varChecked, changeChecked] = useState({});
     const [frqntProd, addFrqntProd] = useState([]);
-    const completeDescription = ((product_detail?.prd_about && (product_detail?.prd_about !== product_detail?.prd_desc)) 
-                                    ? (product_detail?.prd_about + ' <br /> ') : '') + (product_detail?.prd_desc ? product_detail?.prd_desc : '')
+    const completeDescription = ((product_detail?.prd_about && (product_detail?.prd_about !== product_detail?.prd_desc)) ? (product_detail?.prd_about + ' <br /> ') : '') + (product_detail?.prd_desc ? product_detail?.prd_desc : '');
     const reqLength = 250;
     const [detReviewModal, showReviewModal] = useState(false);
     const [videoModal, setVideoModal] = useState(false);
@@ -60,7 +59,7 @@ const DetailPage = (props) => {
         window.addEventListener('scroll', handleScroll);
         
         //Zendesk Chat
-        zendeskTimeControlledWindow(7000);
+        // zendeskTimeControlledWindow(7000);
         if(getCandidateId() && (showAfterLoginReviewModal === 'true')) showReviewModal(true)
         else showReviewModal(false)
     }, [id])
@@ -129,16 +128,16 @@ const DetailPage = (props) => {
             <Header />
 
             {
-                    showStickyNav && <StickyNav 
-                        outline={(product_detail?.chapter && product_detail?.prd_service !== 'assessment') ? true : false}
-                        topics={(product_detail?.chapter && product_detail?.prd_service === 'assessment') ? true : false}
-                        faq = {product_detail?.faq ? true : false}
-                        product_detail={product_detail} prdId={id} varChecked={varChecked}
-                        frqntProd={frqntProd} product_id={product_id}
-                        hasReview = { prd_review_list?.length ? true : false }
-                        hasKeyFeatures = {product_detail?.prd_uget ? true : false}
-                        hasWhatYouGet = {product_detail?.pTF === 16 ? true : false}
-                        />
+                showStickyNav && <StickyNav 
+                    outline={(product_detail?.chapter && product_detail?.prd_service !== 'assessment') ? true : false}
+                    topics={(product_detail?.chapter && product_detail?.prd_service === 'assessment') ? true : false}
+                    faq = {product_detail?.faq ? true : false}
+                    product_detail={product_detail} prdId={id} varChecked={varChecked}
+                    frqntProd={frqntProd} product_id={product_id}
+                    hasReview = { prd_review_list?.length ? true : false }
+                    hasKeyFeatures = {product_detail?.prd_uget ? true : false}
+                    hasWhatYouGet = {product_detail?.pTF === 16 ? true : false}
+                    />
             }
 
             <BannerCourseDetail 
@@ -226,7 +225,7 @@ const DetailPage = (props) => {
             
             { skill && <CoursesMayLike product_id={id?.split('-')[1]} skill={skill}/> }
             
-            <Footer  pageTitle={`course_${product_detail?.label.replace(/ /gi, '_')}`} />
+            <Footer pageTitle={`course_${product_detail?.prd_H1.replace(/ /gi, '_')}`} />
         </div>
     )
 }

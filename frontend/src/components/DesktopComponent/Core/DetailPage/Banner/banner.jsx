@@ -15,6 +15,7 @@ import { MyGA } from 'utils/ga.tracking.js';
 import { getTrackingInfo, getCandidateId } from 'utils/storage.js';
 import { trackUser } from 'store/Tracking/actions/index.js';
 import { Toast } from '../../../Common/Toast/toast';
+import useLearningTracking from 'services/learningTracking';
 
 const BannerCourseDetail = (props) => {
 
@@ -40,6 +41,8 @@ const BannerCourseDetail = (props) => {
     const dispatch = useDispatch();
     const { mainCourseCartLoader } = useSelector(store => store.loader);
     const maximumAllowedStars = ['*', '*', '*', '*', '*']
+    const sendLearningTracking = useLearningTracking();
+    let name_scored = product_detail?.prd_H1.replace(/ /gi, '_');
 
     const starRatings = (star, index) => {
         return (star === '*' ? <em className="icon-fullstar" key={index}></em> : star === '+' 
@@ -53,16 +56,40 @@ const BannerCourseDetail = (props) => {
         changeChecked({...selectedObj});
 
         MyGA.SendEvent('ln_study_mode', 'ln_study_mode', 'ln_click_study_mode', `${getStudyMode(selectedObj.mode)}`, '', false, true);
+        sendLearningTracking({
+            productId: '',
+            event: `course_detail_${name_scored}_${getStudyMode(selectedObj.mode)}_${selectedObj.id}_mode_clicked`,
+            pageTitle:'course_detail',
+            sectionPlacement: 'banner',
+            eventCategory: '',
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: '',
+        })
     }
 
     const goToCart = async (value) => {
         let cartItems = {};
         let addonsId = [];
         let tracking_data = getTrackingInfo();
+        let category_name = product_detail?.breadcrumbs[1].name.replace(/ /g, '_') || product_detail?.breadcrumbs[2].name.replace(/ /g, '_');
 
         if(!product_detail?.redeem_test) {
             MyGA.SendEvent('ln_enroll_now', 'ln_enroll_now', 'ln_click_enroll_now', `${product_detail?.prd_H1}`, '', false, true);
-
+            
+            sendLearningTracking({
+                productId: '',
+                event: `course_detail_sticky_nav_${name_scored}_${product_id}_enroll_now_clicked`,
+                pageTitle:'course_detail',
+                sectionPlacement: 'sticky_nav',
+                eventCategory: name_scored,
+                eventLabel: category_name,
+                eventAction: 'click',
+                algo: '',
+                rank: '',
+            })
+            
             dispatch(trackUser({"query" : tracking_data, "action" :'enroll_now'}));
 
             if(frqntProd && frqntProd.length > 0) {
@@ -87,6 +114,18 @@ const BannerCourseDetail = (props) => {
         }
         else {
             dispatch(trackUser({"query" : tracking_data, "action" :'redeem_now'}));
+            sendLearningTracking({
+                productId: '',
+                event: `course_detail_sticky_nav_${name_scored}_${product_id}_redeem_now_clicked`,
+                pageTitle:'course_detail',
+                sectionPlacement: 'sticky_nav',
+                eventCategory: name_scored,
+                eventLabel: category_name,
+                eventAction: 'click',
+                algo: '',
+                rank: '',
+            })
+
             cartItems = { 'prod_id': product_detail?.product_id, 'redeem_option': product_detail?.redeem_option }
 
             try {
@@ -122,6 +161,18 @@ const BannerCourseDetail = (props) => {
         dispatch(trackUser({"query" : tracking_data, "action" :'jobs_available'}));
         dispatch(trackUser({"query" : tracking_data, "action" :'exit_product_page'}));
         MyGA.SendEvent('ln_course_details', 'ln_course_details', 'ln_jobs_available', 'Jobs available', '', '', true);
+        sendLearningTracking({
+            productId: '',
+            event: `course_detail_${product_detail?.num_jobs_url}_jobs_available_clicked`,
+            pageTitle:'course_detail',
+            sectionPlacement: 'banner',
+            eventCategory: '',
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: '',
+        })
+
         window.location.href = product_detail?.num_jobs_url;
     }
 
@@ -131,8 +182,33 @@ const BannerCourseDetail = (props) => {
         MyGA.SendEvent('Search',`${product_detail?.prd_vendor}`,'ViewAllProductVendor');
         dispatch(trackUser({"query" : tracking_data, "action" :'all_courses_or_certifications'}));
         dispatch(trackUser({"query" : tracking_data, "action" :'exit_product_page'}));
+        sendLearningTracking({
+            productId: '',
+            event: `course_detail_${product_detail?.prd_vendor}_view_all_clicked`,
+            pageTitle:'course_detail',
+            sectionPlacement: 'banner',
+            eventCategory: '',
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: '',
+        })
 
         window.location.href=`${siteDomain}/search/results/?fvid=${product_detail?.pPv}`;
+    }
+
+    const courseProviderTracking = () => {
+        sendLearningTracking({
+            productId: '',
+            event: `course_detail_+${providerCount}_course_provider_clicked`,
+            pageTitle:'course_detail',
+            sectionPlacement: 'banner',
+            eventCategory: '',
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: '',
+        })
     }
 
     const handleBreadCrumbTracking = (data, key, val) => {
@@ -154,11 +230,58 @@ const BannerCourseDetail = (props) => {
     }
 
     const getVideoId = (link) => {
-        
+        console.log(new URL("https://"+link).searchParams.get('v'))
         try{
             return new URL("https://"+link).searchParams.get('v');
         }catch{
             return ''
+        }
+    }
+
+    const goToReviewsTracking = () => {
+        sendLearningTracking({
+            productId: '',
+            event: `course_detail_${product_detail?.prd_num_rating}_reviews_clicked`,
+            pageTitle:'course_detail',
+            sectionPlacement: 'banner',
+            eventCategory: '',
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: '',
+        })
+    }
+
+    const aboutSectionTracking = () => {
+        sendLearningTracking({
+            productId: '',
+            event: `course_detail_read_more_about_section_clicked`,
+            pageTitle:'course_detail',
+            sectionPlacement: 'banner',
+            eventCategory: '',
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: '',
+        })
+    }
+
+    const courseVideoTracking = (ev) => {
+        // console.log(getVideoId(product_detail?.prd_video))
+        handleVideoModal(ev);
+        
+        if(product_detail?.prd_video) {
+            sendLearningTracking({
+                productId: '',
+                event: `course_detail_intro_video_https://www.youtube.com/embed/${getVideoId(product_detail?.prd_video)}_clicked`,
+                pageTitle:'course_detail',
+                sectionPlacement: 'banner',
+                eventCategory: '',
+                eventLabel: '',
+                eventAction: 'click',
+                algo: '',
+                rank: '',
+            })
         }
     }
 
@@ -223,7 +346,7 @@ const BannerCourseDetail = (props) => {
                                                 {
                                                     (product_detail?.prd_num_rating > 0 && prd_review_list && prd_review_list?.length) ? 
                                                         <span className="review-jobs cursorLink">
-                                                            <LinkScroll to={"reviews"} offset={-160} smooth={true}>
+                                                            <LinkScroll to={"reviews"} offset={-160} smooth={true} onClick={goToReviewsTracking}>
                                                                 <figure className="icon-reviews-link"></figure> <strong itemProp="reviewCount" content={product_detail?.prd_num_rating}> {product_detail?.prd_num_rating}</strong> Reviews
                                                             </LinkScroll>
                                                         </span> 
@@ -260,7 +383,7 @@ const BannerCourseDetail = (props) => {
                                 {
                                     product_detail?.pop ?
                                     <li>
-                                        <LinkScroll className="d-block cursorLink" to={"popListTemplate"} offset={-150} smooth={true}>+{providerCount} more</LinkScroll> Course providers  
+                                        <LinkScroll className="d-block cursorLink" onClick={courseProviderTracking} to={"popListTemplate"} offset={-150} smooth={true}>+{providerCount} more</LinkScroll> Course providers  
                                     </li>
                                     : ""
                                 }
@@ -338,7 +461,7 @@ const BannerCourseDetail = (props) => {
                                         {
                                             product_detail?.prd_video &&
                                                 <figure className="intro-video__img">
-                                                    <a rel="noopener noreferrer" onClick={handleVideoModal}>
+                                                    <a rel="noopener noreferrer" onClick={(event) => courseVideoTracking(event)}>
                                                         <iframe src={`https://www.youtube.com/embed/${getVideoId(product_detail?.prd_video)}`} frameBorder="0" />
                                                         <i className="icon-play-video"></i>
                                                         <strong>Intro video</strong>
@@ -356,7 +479,7 @@ const BannerCourseDetail = (props) => {
                                                         {
                                                             completeDescription?.length > reqLength ? 
                                                             (
-                                                                <LinkScroll to = {'aboutsection'} offset={-160} smooth={true}> Read More</LinkScroll> 
+                                                                <LinkScroll to={'aboutsection'} onClick={aboutSectionTracking} offset={-160} smooth={true}> Read More</LinkScroll> 
                                                             )
                                                             : ("")
                                                         }
