@@ -148,7 +148,8 @@ app.get(expressRoutes, (req, res) => {
                                 return res.redirect('/404/');
                             }
                             if(error?.redirect_url) {
-                                return res.redirect(error.redirect_url);
+                                if(req.url.split('?').length > 1) return res.redirect(`${error.redirect_url}?${req.url.split('?')[1]}`);
+                                else return res.redirect(error.redirect_url);
                             }
                         }
 

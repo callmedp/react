@@ -32,6 +32,9 @@ const HomePage = (props) => {
     const [showSearch, setShowSearch] = useState(false)
     const [stickSearchBar, showStickSearchBar] = useState(false)
     const { meta } = useSelector( store => store.testimonials )
+    const { navOffer } = useSelector((store) => store.header);
+    const [showOffer, setShowOffer] = useState(false);
+    const [offerStatus, setOfferStatus] = useState(false);
 
     const handleEffects = async () => {
         //You may notice that apis corresponding to these actions are not getting called on initial render.
@@ -78,9 +81,10 @@ const HomePage = (props) => {
         <>
             { meta && <MetaContent meta_tags={meta}/> }
             { homeLoader && <Loader />}
+            { navOffer[4] ? <OfferEnds navOffer={navOffer} showOffer={showOffer} setShowOffer={setShowOffer} offerStatus={offerStatus} setOfferStatus={setOfferStatus} /> : ""}
             {
                 showSearch ? <SearchPage setShowSearchPage={setShowSearch} /> :
-                    <div className="mb-100">
+                    <div className="mb-100 home-offer">
                         {/* <OfferEnds /> */}
                         <MenuNav />
                         <header className="m-container m-header">
@@ -107,7 +111,7 @@ const HomePage = (props) => {
                             <LatestBlog />
                         </main>
                         <Footer pageType='homePage' />
-                        <CTAhome />
+                        {(!showOffer || offerStatus) && <CTAhome /> }
                     </div>
             }
         </>

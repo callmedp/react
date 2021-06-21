@@ -15,3 +15,11 @@
     left: 0;
     z-index: 9999;
 }
+
+.home-offer {
+    .bm-burger-button {
+        #react-burger-menu-btn {
+            top: 10rem !important;
+        }
+    }
+}
