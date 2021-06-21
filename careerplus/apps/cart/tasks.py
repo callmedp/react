@@ -80,6 +80,11 @@ def lead_creation_function(filter_dict=None, cndi_name=None, source_type=None):
             m_prods = cart_obj.lineitems.filter(
                 parent=None).select_related(
                 'product', 'product__vendor').order_by('-created')
+            m_prods = m_prods.exclude(product__type_flow__in=[16])
+            # Excluding certification and assessment product
+            logging.getLogger('info_log').info(
+                'CREATE_LEAD_ON_CRM, exclude assessment for pk => {} and data_dict => {}'.format(str(cart_obj.pk),
+                                                                                          str(data_dict)))
             product_list = []
             addon_list = []
             variation_list = []
