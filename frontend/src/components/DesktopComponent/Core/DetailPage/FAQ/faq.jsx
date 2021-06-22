@@ -32,7 +32,7 @@ const FAQ = (props) => {
     }
 
     const courseFaqTracking = (question, indx) => {
-        MyGA.SendEvent('FAQs','ln_FAQ_click', 'ln_down_arrow_click', 'ln_'+ question.replace(regex, ''),'', false, true);
+        MyGA.SendEvent('FAQs','ln_FAQ_click', 'ln_down_arrow_click', 'ln_'+ stringReplace(question.replace(regex, '')),'', false, true);
 
         sendLearningTracking({
             productId: '',

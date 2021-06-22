@@ -1,27 +1,63 @@
 import React, { useState, useEffect }from 'react';
-import { Link } from 'react-router-dom';
-import Modal from 'react-modal';
 import './cta.scss'
 import { useSelector } from 'react-redux';
 import { zendeskChatShow } from 'utils/zendeskIniti';
 import { getWhatsAppNo } from 'utils/whatsappNo';
+import useLearningTracking from 'services/learningTracking';
+import {stringReplace} from 'utils/stringReplace.js';
 
 const CTA = (props) => {
     const { setEnquiryForm, pageType, heading, contact } = props
     const { callUs, whatsappDict } = useSelector(store => store.header)
     const [whatsappNo, setWhatsAppNo] = useState('')
+    const sendLearningTracking = useLearningTracking();
 
     const showEnquiryForm = (event) => {
         event.preventDefault();
-        setEnquiryForm(true)
+        setEnquiryForm(true);
+
+        sendLearningTracking({
+            productId: '',
+            event: `${pageType}_${stringReplace(heading)}_enquire_now_clicked`,
+            pageTitle: pageType,
+            sectionPlacement: 'CTA',
+            eventCategory: ``,
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: '',
+        })
+    }
+
+    const callUsTracking = () => {
+        sendLearningTracking({
+            productId: '',
+            event: `${pageType}_${stringReplace(heading)}_${contact}_call_us_clicked`,
+            pageTitle: pageType,
+            sectionPlacement: 'CTA',
+            eventCategory: ``,
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: '',
+        })
     }
 
     const showChatbot = () => {
-        // if(window && window.openChat()) {
-            // const offset = window.scrollY;
-            // if(offset > 30) window.openChat();
-            if(window) window.openChat();
-        // }
+        if(window) {
+            window.openChat();
+            sendLearningTracking({
+                productId: '',
+                event: `${pageType}_${stringReplace(heading)}_shiney_chat_clicked`,
+                pageTitle: pageType,
+                sectionPlacement: 'CTA',
+                eventCategory: ``,
+                eventLabel: '',
+                eventAction: 'click',
+                algo: '',
+                rank: '',
+            })
+        }
     }
 
     const handleScroll = () =>{
@@ -42,7 +78,7 @@ const CTA = (props) => {
                 <figure className="micon-enquiry"></figure>
                 Enquiry
             </a>
-            <a href={!!contact ? `tel:${contact}` : `tel:${callUs}`}>
+            <a href={!!contact ? `tel:${contact}` : `tel:${callUs}`} onClick={callUsTracking}>
                 <figure className="micon-callus"></figure>
                 Call us
             </a>

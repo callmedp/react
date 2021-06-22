@@ -9,6 +9,8 @@ import { MyGA } from 'utils/ga.tracking.js';
 import { getTrackingInfo, getCandidateId } from 'utils/storage.js';
 import { trackUser } from 'store/Tracking/actions/index.js';
 import { useDispatch } from 'react-redux';
+import useLearningTracking from 'services/learningTracking';
+import {stringReplace} from 'utils/stringReplace.js';
 
 const CourseDetailBanner = (props) => {
     const {
@@ -27,6 +29,7 @@ const CourseDetailBanner = (props) => {
     const dispatch = useDispatch();
     const [showAll, setShowAll] = useState(false);
     const maximumAllowedStar = ['*', '*', '*', '*', '*']
+    const sendLearningTracking = useLearningTracking();
 
     // chatbot course details
     window["course_duration"] = product_detail?.selected_var?.learning_duration ? (varChecked?.learning_duration || product_detail?.selected_var?.learning_duration) : (varChecked?.dur_days || product_detail?.selected_var?.dur_days);
@@ -61,10 +64,22 @@ const CourseDetailBanner = (props) => {
 
     const trackJobs = () => {
         let tracking_data = getTrackingInfo();
-
-        dispatch(trackUser({ "query": tracking_data, "action": 'jobs_available' }));
-        dispatch(trackUser({ "query": tracking_data, "action": 'exit_product_page' }));
+        
+        dispatch(trackUser({"query" : tracking_data, "action" :'jobs_available'}));
+        dispatch(trackUser({"query" : tracking_data, "action" :'exit_product_page'}));
         MyGA.SendEvent('ln_course_details', 'ln_course_details', 'ln_jobs_available', 'Jobs available', '', '', true);
+        
+        sendLearningTracking({
+            productId: '',
+            event: `course_detail_${product_detail?.prd_num_jobs}_jobs_available_clicked`,
+            pageTitle:'course_detail',
+            sectionPlacement: 'banner',
+            eventCategory: '',
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: '',
+        })
     }
 
     const viewAllCourses = () => {
@@ -73,12 +88,86 @@ const CourseDetailBanner = (props) => {
         MyGA.SendEvent('Search', `${product_detail?.prd_vendor}`, 'ViewAllProductVendor');
         dispatch(trackUser({ "query": tracking_data, "action": 'all_courses_or_certifications' }));
         dispatch(trackUser({ "query": tracking_data, "action": 'exit_product_page' }));
+
+        sendLearningTracking({
+            productId: '',
+            event: `course_detail_${stringReplace(product_detail?.prd_vendor)}_view_all_clicked`,
+            pageTitle:'course_detail',
+            sectionPlacement: 'banner',
+            eventCategory: '',
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: '',
+        })
     }
 
     const handleVideoModal = (eve) => {
         eve.preventDefault();
         console.log("video modal set")
         setVideoModal(true);
+    }
+
+    const goToReviewsTracking = (name) => {
+        if(name === 'write_a_review') showReviewModal(true);
+
+        sendLearningTracking({
+            productId: '',
+            event: `course_detail_${(product_detail?.prd_num_rating > 0 && prd_review_list && prd_review_list?.length) ? product_detail?.prd_num_rating + '_reviews' : name}_clicked`,
+            pageTitle:'course_detail',
+            sectionPlacement: 'banner',
+            eventCategory: '',
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: '',
+        })
+    }
+
+    const courseProviderTracking = () => {
+        sendLearningTracking({
+            productId: '',
+            event: `course_detail_+${providerCount}_${stringReplace(product_detail?.prd_vendor)}_course_provider_clicked`,
+            pageTitle:'course_detail',
+            sectionPlacement: 'banner',
+            eventCategory: '',
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: '',
+        })
+    }
+
+    const readMoreDescTracking = () => {
+        sendLearningTracking({
+            productId: '',
+            event: `course_detail_${(!showAll && product_detail?.prd_about?.length > noOfWords) ? 'read_more' : 'show_less'}_section_clicked`,
+            pageTitle:'course_detail',
+            sectionPlacement: 'banner',
+            eventCategory: '',
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: '',
+        })
+    }
+
+    const courseVideoTracking = (ev) => {
+        handleVideoModal(ev);
+        
+        if(getVideoId(product_detail?.prd_video)) {
+            sendLearningTracking({
+                productId: '',
+                event: `course_detail_intro_video_https://www.youtube.com/embed/${getVideoId(product_detail?.prd_video)}_clicked`,
+                pageTitle:'course_detail',
+                sectionPlacement: 'banner',
+                eventCategory: '',
+                eventLabel: '',
+                eventAction: 'click',
+                algo: '',
+                rank: '',
+            })
+        }
     }
 
     return (
@@ -121,7 +210,7 @@ const CourseDetailBanner = (props) => {
                         {
                             (product_detail?.prd_num_rating > 0 && prd_review_list && prd_review_list?.length) ?
                                 <span className="m-review-jobs">
-                                    <LinkScroll to="reviews" offset={-120}>
+                                    <LinkScroll to="reviews" onClick={() => goToReviewsTracking()} offset={-120}>
                                         <Link to={"#"}>
                                             <figure className="micon-reviews-link"></figure> <strong itemProp="reviewCount" content={product_detail?.prd_num_rating}>{product_detail?.prd_num_rating}</strong> {product_detail?.prd_num_rating > 1 ? 'Reviews' : 'Review'}
                                         </Link>
@@ -130,13 +219,13 @@ const CourseDetailBanner = (props) => {
                                 :
                                 getCandidateId() ?
                                     <span className="m-review-jobs" itemProp="reviewCount" content="1">
-                                        <Link to={"#"} onClick={() => showReviewModal(true)}>
+                                        <Link to={"#"} onClick={() => goToReviewsTracking('write_a_review')}>
                                             <figure className="micon-reviews-link"></figure> Write a Review
                                         </Link>
                                     </span>
                                     :
                                     <span className="m-review-jobs" itemProp="reviewCount" content="1">
-                                        <a href={`${siteDomain}/login/?next=${pUrl}?sm=true`}>
+                                        <a href={`${siteDomain}/login/?next=${pUrl}?sm=true`} onClick={ () => goToReviewsTracking('write_a_review_non_logged_in')}>
                                             <figure className="micon-reviews-link"></figure> Write a Review
                                         </a>
                                     </span>
@@ -250,7 +339,7 @@ const CourseDetailBanner = (props) => {
                         {
                             product_detail?.prd_video &&
                             <figure className="m-intro-video__img">
-                                <a onClick={handleVideoModal}>
+                                <a onClick={(event) => courseVideoTracking(event)}>
                                     <iframe src={`https://www.youtube.com/embed/${getVideoId(product_detail?.prd_video)}`} frameBorder="0" />
                                     <i className="micon-play-video"></i>
                                 </a>
@@ -261,7 +350,7 @@ const CourseDetailBanner = (props) => {
                             completeDescription &&
                             <p className="m-intro-video__content">
                                 <span itemProp="description" content={product_detail?.prd_about} dangerouslySetInnerHTML={{ __html: product_detail?.prd_about?.slice(0, showAll ? product_detail?.prd_about?.length : noOfWords) }} />
-                                <span>
+                                <span onClick={readMoreDescTracking}>
                                     {
                                         (!showAll && product_detail?.prd_about?.length > noOfWords) ?
                                             controlContent(" ... Read More", true) : showAll ? controlContent(" Show less", false) : ''
@@ -286,7 +375,7 @@ const CourseDetailBanner = (props) => {
                     {
                         providerCount > 0 ?
                             <li>
-                                <LinkScroll to={'otherProviders'} offset={-150} >+{providerCount} more</LinkScroll> Course providers
+                                <LinkScroll to={'otherProviders'} offset={-150} onClick={courseProviderTracking}>+{providerCount} more</LinkScroll> Course providers
                                 </li> : ''
                     }
                 </ul>

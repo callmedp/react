@@ -20,32 +20,33 @@ const StickyNav = (props) => {
     const dispatch = useDispatch();
     const sendLearningTracking = useLearningTracking();
     const { mainCourseCartLoader } = useSelector(store => store.loader);
+    let category_name = stringReplace(product_detail?.breadcrumbs[1].name) || stringReplace(product_detail?.breadcrumbs[2].name);
+
+    const addToCartTracking = (title) => {
+        sendLearningTracking({
+            productId: '',
+            event: title,
+            pageTitle:'course_detail',
+            sectionPlacement: 'sticky_nav',
+            eventCategory: stringReplace(product_detail?.prd_H1),
+            eventLabel: category_name,
+            eventAction: 'click',
+            algo: '',
+            rank: '',
+        })
+    }
 
     const goToCart = async (value) => {
         let cartItems = {};
         let addonsId = [];
         let tracking_data = getTrackingInfo();
-        let category_name = stringReplace(product_detail?.breadcrumbs[1].name) || stringReplace(product_detail?.breadcrumbs[2].name);
 
         if(!product_detail?.redeem_test) {
             MyGA.SendEvent('ln_enroll_now', 'ln_enroll_now', 'ln_click_enroll_now', `${stringReplace(product_detail?.prd_H1)}`, '', false, true);
             dispatch(trackUser({"query" : tracking_data, "action" :'enroll_now'}));
-            
-            sendLearningTracking({
-                productId: '',
-                event: `course_detail_sticky_nav_${stringReplace(product_detail?.prd_H1)}_${product_id}_enroll_now_clicked`,
-                pageTitle:'course_detail',
-                sectionPlacement: 'sticky_nav',
-                eventCategory: stringReplace(product_detail?.prd_H1),
-                eventLabel: category_name,
-                eventAction: 'click',
-                algo: '',
-                rank: '',
-            })
+            addToCartTracking(`course_detail_sticky_nav_${stringReplace(product_detail?.prd_H1)}_${product_id}_enroll_now_clicked`);
 
-            if(frqntProd && frqntProd.length > 0) {
-                frqntProd.map(prdId => addonsId.push(prdId.id));
-            }
+            if(frqntProd && frqntProd.length > 0) frqntProd.map(prdId => addonsId.push(prdId.id));
 
             if(value.id) cartItems = {'prod_id': product_id, 'cart_type': 'cart', 'cv_id': value.id, "addons": addonsId};
             else cartItems = {'prod_id': product_id, 'cart_type': 'cart', 'cv_id': (product_detail?.selected_var ? product_detail?.selected_var?.id : ""), "addons": addonsId};
@@ -65,18 +66,7 @@ const StickyNav = (props) => {
         }
         else {
             dispatch(trackUser({"query" : tracking_data, "action" :'redeem_now'}));
-            sendLearningTracking({
-                productId: '',
-                event: `course_detail_sticky_nav_${stringReplace(product_detail?.prd_H1)}_${product_id}_redeem_now_clicked`,
-                pageTitle:'course_detail',
-                sectionPlacement: 'sticky_nav',
-                eventCategory: stringReplace(product_detail?.prd_H1),
-                eventLabel: category_name,
-                eventAction: 'click',
-                algo: '',
-                rank: '',
-            })
-
+            addToCartTracking(`course_detail_sticky_nav_${stringReplace(product_detail?.prd_H1)}_${product_id}_redeem_now_clicked`);
             cartItems = { 'prod_id': product_detail?.product_id, 'redeem_option': product_detail?.redeem_option }
 
             try {

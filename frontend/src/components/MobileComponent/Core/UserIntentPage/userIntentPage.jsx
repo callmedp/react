@@ -78,7 +78,7 @@ const UserIntentPage = (props) => {
                     </main>
                     {showCTA ? <>
                     <br/><br/>
-                    <CTA setEnquiryForm={setEnquiryForm} pageType='userintent' />
+                    <CTA setEnquiryForm={setEnquiryForm} pageType='userintent' heading={UIContainer.replace(/-/gi, ' ')} />
                     {
                         enquiryForm ? <EnquiryModal setEnquiryForm={setEnquiryForm} /> : null
                     }

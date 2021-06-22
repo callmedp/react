@@ -11,18 +11,33 @@ import { MyGA } from 'utils/ga.tracking.js';
 import { getTrackingInfo } from 'utils/storage.js';
 import { trackUser } from 'store/Tracking/actions/index.js';
 import { siteDomain } from 'utils/domains';
+import useLearningTracking from 'services/learningTracking';
+import {stringReplace} from 'utils/stringReplace.js';
 
 const CourseEnrol = (props) => {
     const { product_detail, varChecked, changeChecked, getProductPrice, frqntProd, product_id, prd_product, upc } = props;
     const dispatch = useDispatch();
     const { mainCourseCartLoader } = useSelector(store => store.loader);
     const [discountPrice, discountPriceSelected] = useState(0);
+    const sendLearningTracking = useLearningTracking();
 
     const changeMode = (objj) => {
         let selectedObj = objj;
         discountPriceSelected(objj.fake_inr_price);
         changeChecked({...selectedObj});
+        
         MyGA.SendEvent('ln_study_mode', 'ln_study_mode', 'ln_click_study_mode', `${selectedObj.mode}|get_choice_display:"STUDY_MODE"`, '', false, true);
+        sendLearningTracking({
+            productId: '',
+            event: `course_detail_${stringReplace(product_detail?.prd_H1)}_${getStudyMode(selectedObj.mode)}_${selectedObj.id}_mode_clicked`,
+            pageTitle:'course_detail',
+            sectionPlacement: 'banner',
+            eventCategory: '',
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: '',
+        })
     }
 
     const getDiscountedPrice = (fakeP, realP) => {
@@ -33,10 +48,23 @@ const CourseEnrol = (props) => {
         let cartItems = {};
         let addonsId = [];
         let tracking_data = getTrackingInfo();
+        let category_name = stringReplace(product_detail?.breadcrumbs[1].name) || stringReplace(product_detail?.breadcrumbs[2].name);
 
         if(!product_detail?.redeem_test) {
             MyGA.SendEvent('ln_enroll_now', 'ln_enroll_now', 'ln_click_enroll_now', `${product_detail?.prd_H1}`, '', false, true);
             dispatch(trackUser({"query" : tracking_data, "action" :'enroll_now'}));
+
+            sendLearningTracking({
+                productId: '',
+                event: `course_detail_sticky_nav_${stringReplace(product_detail?.prd_H1)}_${product_id}_enroll_now_clicked`,
+                pageTitle:'course_detail',
+                sectionPlacement: 'sticky_nav',
+                eventCategory: stringReplace(product_detail?.prd_H1),
+                eventLabel: category_name,
+                eventAction: 'click',
+                algo: '',
+                rank: '',
+            })
 
             if(frqntProd && frqntProd.length > 0) {
                 frqntProd.map(prdId => addonsId.push(prdId.id));
@@ -57,6 +85,18 @@ const CourseEnrol = (props) => {
         }
         else {
             dispatch(trackUser({"query" : tracking_data, "action" :'redeem_now'}));
+            sendLearningTracking({
+                productId: '',
+                event: `course_detail_sticky_nav_${stringReplace(product_detail?.prd_H1)}_${product_id}_redeem_now_clicked`,
+                pageTitle:'course_detail',
+                sectionPlacement: 'sticky_nav',
+                eventCategory: stringReplace(product_detail?.prd_H1),
+                eventLabel: category_name,
+                eventAction: 'click',
+                algo: '',
+                rank: '',
+            })
+
             cartItems = { 'prod_id': product_detail?.product_id, 'redeem_option': product_detail?.redeem_option }
 
             try {
@@ -151,9 +191,6 @@ const CourseEnrol = (props) => {
                             {
                                 product_detail?.free_test && <li><figure className="micon-offer-test"></figure> Take <strong>free practice test</strong> to enhance your skill</li>
                             }
-                            {/* <li><figure className="micon-offer-pay"></figure> Buy now & <strong>pay within 14 days using ePayLater</strong> </li>
-                            <li><figure className="micon-offer-badge"></figure> <strong>Get badging</strong> on your Shine profile</li>
-                            <li><figure className="micon-offer-global"></figure> <strong>Global</strong> Education providers</li> */}
                         </ul>
                         {/* <Link to={"#"}>+2 more</Link> */}
                     </div>

@@ -14,7 +14,7 @@ const PopularTab = props => {
     const [pageId, updatePageId] = useState(2)
     const dispatch = useDispatch()
     const {
-        productList, tabType, total_page
+        product_name, productList, tabType, total_page
     } = props;
     const sendLearningTracking = useLearningTracking();
 
@@ -32,20 +32,8 @@ const PopularTab = props => {
             if ((index % 3 === 0 && pageId < index ) && pageId <= total_page) {
                 new Promise((resolve, reject) => dispatch(fetchInDemandProducts({ payload:{ pageId: pageId, tabType, device: 'mobile'}, resolve, reject })));
                 updatePageId(pageId + 1);
-
-                sendLearningTracking({
-                    productId: '',
-                    event: `homepage_popular_courses_${tabType}_${pageId}_next_clicked`,
-                    pageTitle:`homepage`,
-                    sectionPlacement:'popular_courses',
-                    eventCategory: tabType,
-                    eventLabel: '',
-                    eventAction: 'click',
-                    algo: '',
-                    rank: pageId,
-                })
             }
-          }
+        }
     };
 
 

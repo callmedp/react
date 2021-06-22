@@ -19,7 +19,7 @@ const TakeFreeTest = (props) => {
             productId: '',
             event: `course_detail_take_free_test_button_clicked`,
             pageTitle:`course_detail`,
-            sectionPlacement:'take_free_trest',
+            sectionPlacement:'take_free_test',
             eventCategory: '',
             eventLabel: '',
             eventAction: 'click',

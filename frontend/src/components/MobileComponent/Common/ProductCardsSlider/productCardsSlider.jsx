@@ -32,13 +32,12 @@ const ProductCards = props => {
         )
     }
 
-    const mostViewedTracking = (name, indx) => {
-        
+    const mostViewedTracking = (name, vendor, indx) => {
         MyGA.SendEvent('ln_new_homepage','ln_most_viewed_course', 'ln_'+selectedIndexName, stringReplace(name),'', false, true);
 
         sendLearningTracking({
             productId: '',
-            event: `homepage_most_viewed_course_${selectedIndexName}_${stringReplace(name)}_${indx}_clicked`,
+            event: `homepage_most_viewed_course_${selectedIndexName}_${stringReplace(name)}_vendor_${stringReplace(vendor)}_${indx}_clicked`,
             pageTitle:`homepage`,
             sectionPlacement:'most_viewed_courses',
             eventCategory: `${stringReplace(name)}`,
@@ -62,7 +61,7 @@ const ProductCards = props => {
                                     <img src={product?.imgUrl} alt={product?.imgAlt} />
                                 </figure>
                                 <h3 className="m-heading3" itemProp="item">
-                                    <a href={`${siteDomain}${product.url}`} onClick={() => mostViewedTracking(product.name, index)}><span itemProp="name">{(product?.name)?.length > 42 ? (product?.name)?.slice(0, 42) + '...' : (product?.name) }</span></a>
+                                    <a href={`${siteDomain}${product.url}`} onClick={() => mostViewedTracking(product.name, product.providerName, index)}><span itemProp="name">{(product?.name)?.length > 42 ? (product?.name)?.slice(0, 42) + '...' : (product?.name) }</span></a>
                                 </h3>
                             </div>
                             <div className="m-card__box">

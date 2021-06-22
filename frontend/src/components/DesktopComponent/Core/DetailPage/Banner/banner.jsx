@@ -167,7 +167,7 @@ const BannerCourseDetail = (props) => {
         MyGA.SendEvent('ln_course_details', 'ln_course_details', 'ln_jobs_available', 'Jobs available', '', '', true);
         sendLearningTracking({
             productId: '',
-            event: `course_detail_${product_detail?.num_jobs_url}_jobs_available_clicked`,
+            event: `course_detail_${product_detail?.prd_num_jobs}_jobs_available_clicked`,
             pageTitle:'course_detail',
             sectionPlacement: 'banner',
             eventCategory: '',
@@ -176,8 +176,6 @@ const BannerCourseDetail = (props) => {
             algo: '',
             rank: '',
         })
-
-        window.location.href = product_detail?.num_jobs_url;
     }
 
     const viewAllCourses = () => {
@@ -188,7 +186,7 @@ const BannerCourseDetail = (props) => {
         dispatch(trackUser({"query" : tracking_data, "action" :'exit_product_page'}));
         sendLearningTracking({
             productId: '',
-            event: `course_detail_${product_detail?.prd_vendor}_view_all_clicked`,
+            event: `course_detail_${stringReplace(product_detail?.prd_vendor)}_view_all_clicked`,
             pageTitle:'course_detail',
             sectionPlacement: 'banner',
             eventCategory: '',
@@ -197,14 +195,12 @@ const BannerCourseDetail = (props) => {
             algo: '',
             rank: '',
         })
-
-        window.location.href=`${siteDomain}/search/results/?fvid=${product_detail?.pPv}`;
     }
 
     const courseProviderTracking = () => {
         sendLearningTracking({
             productId: '',
-            event: `course_detail_+${providerCount}_course_provider_clicked`,
+            event: `course_detail_+${providerCount}_${stringReplace(product_detail?.prd_vendor)}_course_provider_clicked`,
             pageTitle:'course_detail',
             sectionPlacement: 'banner',
             eventCategory: '',
@@ -224,10 +220,6 @@ const BannerCourseDetail = (props) => {
         if(!!val.url) return window.location.href = `${siteDomain}${val.url}`;
     }
 
-    const handleLoginRedirect = () => {
-        window.location.href= `${siteDomain}/login/?next=${pUrl}?sm=true`
-    }
-
     const handleVideoModal = (eve) => {
         eve.preventDefault();
         setVideoModal(true);
@@ -241,10 +233,12 @@ const BannerCourseDetail = (props) => {
         }
     }
 
-    const goToReviewsTracking = () => {
+    const goToReviewsTracking = (name) => {
+        if(name === 'write_a_review') showReviewModal(true);
+
         sendLearningTracking({
             productId: '',
-            event: `course_detail_${product_detail?.prd_num_rating}_reviews_clicked`,
+            event: `course_detail_${(product_detail?.prd_num_rating > 0 && prd_review_list && prd_review_list?.length) ? product_detail?.prd_num_rating + '_reviews' : name}_clicked`,
             pageTitle:'course_detail',
             sectionPlacement: 'banner',
             eventCategory: '',
@@ -348,25 +342,27 @@ const BannerCourseDetail = (props) => {
                                                 {
                                                     (product_detail?.prd_num_rating > 0 && prd_review_list && prd_review_list?.length) ? 
                                                         <span className="review-jobs cursorLink">
-                                                            <LinkScroll to={"reviews"} offset={-160} smooth={true} onClick={goToReviewsTracking}>
+                                                            <LinkScroll to={"reviews"} offset={-160} smooth={true} onClick={ () => goToReviewsTracking()}>
                                                                 <figure className="icon-reviews-link"></figure> <strong itemProp="reviewCount" content={product_detail?.prd_num_rating}> {product_detail?.prd_num_rating}</strong> Reviews
                                                             </LinkScroll>
                                                         </span> 
                                                         :
                                                         getCandidateId() ?
-                                                            <span className="review-jobs cursorLink" onClick={() => {showReviewModal(true)}} itemProp="reviewCount" content="1">
+                                                            <span className="review-jobs cursorLink" onClick={() => goToReviewsTracking('write_a_review')} itemProp="reviewCount" content="1">
                                                                 <figure className="icon-reviews-link"></figure> Write a Review
                                                             </span> 
                                                             : 
-                                                            <span className="review-jobs cursorLink" onClick={() => { handleLoginRedirect() }} itemProp="reviewCount" content="1">
-                                                                <figure className="icon-reviews-link"></figure> Write a Review
+                                                            <span className="review-jobs cursorLink" itemProp="reviewCount" content="1">
+                                                                <a href={`${siteDomain}/login/?next=${pUrl}?sm=true`} onClick={ () => goToReviewsTracking('write_a_review_non_logged_in')}>
+                                                                    <figure className="icon-reviews-link"></figure> Write a Review
+                                                                </a>
                                                             </span>    
                                                 }
 
                                                 {
                                                     product_detail?.prd_num_jobs ? 
                                                         <span className="review-jobs">
-                                                            <a target="_blank" onClick={() => trackJobs(product_detail?.num_jobs_url)} className="cursorLink">
+                                                            <a target="_blank" href={product_detail?.num_jobs_url} onClick={() => trackJobs(product_detail?.num_jobs_url)} className="cursorLink">
                                                                 <figure className="icon-jobs-link"></figure> <strong>{product_detail?.prd_num_jobs}</strong> Jobs available
                                                             </a>
                                                         </span> : ""
@@ -379,7 +375,7 @@ const BannerCourseDetail = (props) => {
                             <ul className="course-stats mt-30 mb-20">
                                 <li>
                                     <strong itemProp="brand" itemType="http://schema.org/Brand" itemScope>By <span itemProp="name" content={product_detail?.prd_vendor} onClick={() => MyGA.SendEvent('ln_course_provider', 'ln_course_provider', 'ln_click_course_provider', `${product_detail?.prd_vendor}` , '', false, true)}>{product_detail?.prd_vendor}</span></strong>
-                                    <a onClick={() => viewAllCourses()} className="cursorLink">View all</a> courses by {product_detail?.prd_vendor}  
+                                    <a href={`${siteDomain}/search/results/?fvid=${product_detail?.pPv}`} onClick={() => viewAllCourses()} className="cursorLink">View all</a> courses by {product_detail?.prd_vendor}  
                                 </li>
 
                                 {
@@ -573,7 +569,7 @@ const BannerCourseDetail = (props) => {
                             </div>
                     
                             { product_detail?.combo && <ComboIncludes combo_list={product_detail?.combo_list} /> }
-                            { product_detail?.fbt && <FrequentlyBought addFrqntProd={addFrqntProd} frqntProd={frqntProd} fbt_list={product_detail?.fbt_list}/> }
+                            { product_detail?.fbt && <FrequentlyBought addFrqntProd={addFrqntProd} frqntProd={frqntProd} fbt_list={product_detail?.fbt_list} productName={product_detail?.prd_H1}/> }
                         </div>
                     </div>
                 </div>

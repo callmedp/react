@@ -1,17 +1,36 @@
 import React from 'react';
 import './frequentlyBought.scss';
+import useLearningTracking from 'services/learningTracking';
+import {stringReplace} from 'utils/stringReplace.js';
 
 const FrequentlyBought = (props) => {
-    const { fbtList, addFrqntProd } = props;
+    const { fbtList, addFrqntProd, productName } = props;
     const frqntProd = props.frqntProd;
+    const sendLearningTracking = useLearningTracking();
 
     const toggleProduct = (event, item) => {
+        let eventString = "";
+
         if(event.target.checked) {
             addFrqntProd([...frqntProd, item]);
+            eventString = `course_detail_frequently_bought_${stringReplace(item?.heading ? item.heading : item.label)}_${item.id}_added_to_${stringReplace(productName)}`;
         }
         else {
             addFrqntProd(frqntProd => frqntProd.filter(prd => prd.id != event.target.id));
+            eventString = `course_detail_frequently_bought_${stringReplace(item?.heading ? item.heading : item.label)}_${item.id}_removed_from_${stringReplace(productName)}`;
         }
+
+        sendLearningTracking({
+            productId: '',
+            event: eventString,
+            pageTitle:'course_detail',
+            sectionPlacement: 'frequently_bought',
+            eventCategory: '',
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: '',
+        })
     }
 
     return (

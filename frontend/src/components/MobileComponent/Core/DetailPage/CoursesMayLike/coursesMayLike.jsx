@@ -1,6 +1,5 @@
 import React, { useEffect }  from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-// import 'slick-carousel/slick/slick.css';
 import '../../CataloguePage/RecentCourses/recentCourses.scss';
 import ProductCards from '../ProductCards/productCards';
 import { fetchRecommendedCourses } from 'store/DetailPage/actions';
@@ -29,7 +28,7 @@ const CoursesMayLike = (props) => {
             <h3 className="m-heading2 mb-10">Courses you may like</h3>
             <div className="m-courses m-recent-courses ml-10n">
                 {
-                    results?.length > 0 ? <ProductCards productList = {results}/> : ''
+                    results?.length > 0 ? <ProductCards page_section={'courses_you_may_like'} productList = {results}/> : ''
                 }
             </div>
         </section>

@@ -51,7 +51,7 @@ const UserIntentPage = (props) => {
                     }[UIContainer]
                 }
             </main>
-            <Footer pageTitle={`user_intent_${UIContainer?.replace(/-/gi, ' ')}`} />
+            <Footer pageTitle={`user_intent_${UIContainer?.replace(/-/gi, '_')}`} />
         </div>
     )
 }
