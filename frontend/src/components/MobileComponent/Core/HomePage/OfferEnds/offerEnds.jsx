@@ -5,10 +5,9 @@ import OfferModal from '../../../Common/Modals/OfferModal';
 import ThanksModal from '../../../Common/Modals/ThanksModal';
 
 const OfferEnds = (props) => {
-    const { navOffer, showOffer, setShowOffer, offerStatus, setOfferStatus } = props;
+    const { navOffer, showOffer, setShowOffer, offerStatus, setOfferStatus, showMainOffer, setShowMainOffer } = props;
     const handleOfferClose = () => setShowOffer(false);
     const handleOfferShow = () => setShowOffer(true);
-    const [showMainOffer, setShowMainOffer] = useState(true);
 
     return(
         <>

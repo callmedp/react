@@ -57,14 +57,14 @@ class PopularProductMixin(object):
                                                     values_list('id', flat=True)
         return products   
 
-    def get_products_json(self,product_ids):
+    def get_products_json(self,product_ids, candidate_id):
         products = SearchQuerySet().filter(id__in=product_ids, pTP__in=[0, 1, 3]).exclude(
             id__in=settings.EXCLUDE_SEARCH_PRODUCTS
         )
-        popularProducts = ProductMixin().get_course_json(products)
+        popularProducts = ProductMixin().get_course_json(products, candidate_id)
         return popularProducts 
     
-    def popular_certifications(self):
+    def popular_certifications(self, candidate_id):
         try:
             product_obj = Product.objects.filter(type_flow=16,
                                                      active=True,
@@ -74,7 +74,7 @@ class PopularProductMixin(object):
             products = SearchQuerySet().filter(id__in=product_conversion_ratio, pTP__in=[0, 1, 3]).exclude(
             id__in=settings.EXCLUDE_SEARCH_PRODUCTS
             )[:20]
-            popular_certification = ProductMixin().get_course_json(products)
+            popular_certification = ProductMixin().get_course_json(products, candidate_id=candidate_id)
 
             return popular_certification
 
@@ -84,10 +84,14 @@ class PopularProductMixin(object):
 
 class ProductMixin(object):
 
-    def get_jobs_count(self, course_name):
+    def get_jobs_count(self, course_name, candidate_id=None):
         try:
 
-            jobs_count = ShineCandidateDetail().get_jobs(data={ 'q': course_name}).get('count', 0)
+            jobs_count = ShineCandidateDetail().get_jobs(
+                data={ 'q': course_name}, 
+                shine_id=candidate_id
+                ).get('count', 0)
+
             return jobs_count
 
         except Exception as e:
@@ -96,7 +100,7 @@ class ProductMixin(object):
                 "Data fetch from shine.com jobs search api failed  - {}".format(e))
             return 0
 
-    def get_course_json(self, courses=[]):
+    def get_course_json(self, courses=[], candidate_id=None):
         course_data = []
         mode_choices = dict(STUDY_MODE)
         type_dict = dict(COURSE_TYPE_DICT)
@@ -106,7 +110,7 @@ class ProductMixin(object):
             d = json.loads(course.pVrs).get('var_list')
             
             #This call can be optimized in future
-            no_of_jobs = self.get_jobs_count(course.pSg)
+            no_of_jobs = self.get_jobs_count(course.pSg, candidate_id)
            
             data = {
                 'id':course.id,
@@ -149,13 +153,13 @@ class ProductMixin(object):
 
         return course_data
 
-    def get_assessments_json(self, assessments=[]):
+    def get_assessments_json(self, assessments=[], candidate_id=None):
         assessments_data = []
         mode_choices = dict(STUDY_MODE)
         for assessment in assessments:
 
             #This call can be optimized in future
-            no_of_jobs = self.get_jobs_count(assessment.pSg)
+            no_of_jobs = self.get_jobs_count(assessment.pSg, candidate_id)
 
             assessment_data = {
                 'id':assessment.id,

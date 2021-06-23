@@ -55,7 +55,7 @@ const CourseLisiting = (props) => {
                                     </div>
                                     <div className="course__price-enrol mr-20 mt-20">
                                         <strong>{course.price}/-</strong>
-                                        <a href={`${siteDomain}${course.url}`} className="btn btn-secondary mt-10">Enroll now</a>
+                                        <a href={`${siteDomain}${course.url}`} className="btn btn-secondary mt-10">Buy now</a>
                                     </div>
                                 </div>
                                 <div className="course__bottom">

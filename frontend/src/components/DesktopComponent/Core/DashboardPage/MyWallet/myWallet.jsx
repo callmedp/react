@@ -9,7 +9,6 @@ import Loader from '../../../Common/Loader/loader';
 import Pagination from '../../../Common/Pagination/pagination';
 import { siteDomain } from '../../../../../utils/domains';
 import EmptyInbox from '../Inbox/emptyInbox';
-import BreadCrumbs from '../Breadcrumb/Breadcrumb';
 import { MyGA } from 'utils/ga.tracking.js';
 
 const MyWallet = (props) => {

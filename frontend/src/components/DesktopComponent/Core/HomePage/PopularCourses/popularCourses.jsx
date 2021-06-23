@@ -7,7 +7,6 @@ import CertificationProduct from './HomeProduct/homeProduct';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchInDemandProducts } from 'store/HomePage/actions';
 import { startHomePageLoader, stopHomePageLoader } from 'store/Loader/actions';
-import { MyGA } from 'utils/ga.tracking.js';
 
 function PopularCourses() {
     

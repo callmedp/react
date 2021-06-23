@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector, connect } from 'react-redux';
+import { useSelector, connect } from 'react-redux';
 import { Link as LinkScroll } from 'react-scroll';
 import './popularCourses.scss'
 import { siteDomain } from 'utils/domains';
@@ -10,10 +10,9 @@ import { trackUser } from 'store/Tracking/actions/index.js';
 const PopularCourses = (props) => {
 
     const { trendingCourses } = useSelector( store => store.popularCourses )
-    const { userTrack, gaTrack } = props;
+    const { userTrack } = props;
     const { heading } = useSelector( store => store.skillBanner )
     const tracking_data = getTrackingInfo();
-    const dispatch = useDispatch();
 
     const starRatings = (star) => {
         return (star === '*' ? <em className="icon-fullstar" key={Math.random()}></em> : star === '+' 
@@ -63,8 +62,8 @@ const mapDispatchToProps = (dispatch) => {
         "userTrack": (data) => {
             return dispatch(trackUser(data))
         },
-        "gaTrack": (data) => { MyGA.SendEvent(data)
-        }
+        // "gaTrack": (data) => { MyGA.SendEvent(data)
+        // }
     }
 }
 

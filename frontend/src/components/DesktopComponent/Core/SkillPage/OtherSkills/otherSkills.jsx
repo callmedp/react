@@ -1,7 +1,7 @@
 import React from 'react';
 import Badge from 'react-bootstrap/Badge';
 import './otherSkills.scss'
-import { useDispatch, useSelector, connect } from 'react-redux';
+import { useSelector, connect } from 'react-redux';
 import { siteDomain } from 'utils/domains';
 import { getTrackingInfo } from 'utils/storage.js';
 import { trackUser } from 'store/Tracking/actions/index.js';
@@ -10,7 +10,6 @@ const OtherSkills = (props) => {
 
     const { otherSkills } = useSelector( store => store.skillBanner )
     const tracking_data = getTrackingInfo();
-    const dispatch = useDispatch();
     const { userTrack } = props;
     
     return (

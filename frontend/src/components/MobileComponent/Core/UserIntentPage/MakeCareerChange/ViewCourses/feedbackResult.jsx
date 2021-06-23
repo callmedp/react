@@ -103,7 +103,7 @@ const FeedbackResult = (props) => {
                                     </ul>
                                 </p>
                                 <p className="d-flex align-items-center">
-                                    <button type="submit" className="btn-yellow" role="button">Enroll now</button>
+                                    <button type="submit" className="btn-yellow" role="button">Buy now</button>
                                     <Link to={"#"} className="micon-pdf ml-auto"></Link>
                                 </p>
                                 <Link to={"#"} className="m-view-less d-block text-right">View less</Link>

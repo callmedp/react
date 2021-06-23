@@ -1,5 +1,5 @@
 import React from 'react';
-import { useDispatch, useSelector, connect } from 'react-redux';
+import { useSelector, connect } from 'react-redux';
 import './domainJobs.scss';
 import { getTrackingInfo } from 'utils/storage.js';
 import { trackUser } from 'store/Tracking/actions/index.js';
@@ -10,7 +10,6 @@ const DomainJobs = (props) => {
 
     const { jobsList } = useSelector(store => store.jobs) 
     const tracking_data = getTrackingInfo();
-    const dispatch = useDispatch();
     const { userTrack } = props;
 
     return (
