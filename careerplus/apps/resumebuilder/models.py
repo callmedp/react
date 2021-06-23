@@ -104,6 +104,9 @@ class Candidate(PreviewImageCreationMixin, CandidateProfile):
         order_obj_list = Order.objects.filter(
             candidate_id=self.candidate_id, status__in=[1, 3])
 
+        logging.getLogger("error_log").error("Candidate_object01 {}".format(order_obj_list))
+        logging.getLogger("error_log").error("Candidate_object1 {}".format(order_obj_list.__dict__))
+
         if not order_obj_list:
             return order_data
 
@@ -111,12 +114,21 @@ class Candidate(PreviewImageCreationMixin, CandidateProfile):
             if product_found:
                 break
 
+            logging.getLogger("error_log").error("Candidate_object02 {}".format(order_obj))
+            logging.getLogger("error_log").error("Candidate_object2 {}".format(order_obj.__dict__))
+
             for item in order_obj.orderitems.all():
                 if item.product and item.product.type_flow == 17 and item.product.type_product == 0:
+                    logging.getLogger("error_log").error("Candidate_object3 {}".format(item))
+                    logging.getLogger("error_log").error("Candidate_object4 {}".format(item.product))
+
                     order_data = {"id": order_obj.id,
                                   "combo": True if item.product.attr.get_value_by_attribute(item.product.attr.get_attribute_by_name('template_type')).value == 'multiple' else False,
                                   "expiry": item.end_date,
                                   }
+                    logging.getLogger('error_log').error("Candidate_object05 - {} in order".format(order_data))
+                    logging.getLogger('error_log').error("Candidate_object5 - {} in order".format(order_data.__dict__))
+                    
                     product_found = True
                     break
         return order_data
