@@ -186,7 +186,6 @@ class ShineCandidateDetail(ShineToken):
         return {}
 
     def get_candidate_public_detail(self, email=None, shine_id=None):
-
         headers = self.get_api_headers()
 
         if not shine_id and email:

@@ -571,10 +571,13 @@ class Order(AbstractAutoDate):
             if self.order_contains_resumebuilder_subscription():
                 self.update_subscription_in_order_item()
                 cand_id = existing_obj and existing_obj.candidate_id
+                logging.getLogger('info_log').info("CRM_RESUME3-{}".format(cand_id.__dict__))
 
                 if cand_id:
                     candidate_obj = Candidate.objects.filter(
                         candidate_id=cand_id).first()
+                    logging.getLogger('info_log').info("CRM_RESUME4-{}".format(candidate_obj.__dict__))
+                    
                     if candidate_obj:
                         candidate_obj.active_subscription = True
                         candidate_obj.save()
@@ -582,10 +585,12 @@ class Order(AbstractAutoDate):
 
             if self.order_contains_expert_assistance():
                 cand_id = existing_obj and existing_obj.candidate_id
+                logging.getLogger('info_log').info("CRM_RESUME5-{}".format(cand_id.__dict__))
                 
                 if cand_id:
                     candidate_obj = Candidate.objects.filter(
                         candidate_id=cand_id).first()
+                    logging.getLogger('info_log').info("CRM_RESUME6-{}".format(candidate_obj.__dict__))
                     if candidate_obj:
                         candidate_obj.resume_generated = False
                         candidate_obj.save()
