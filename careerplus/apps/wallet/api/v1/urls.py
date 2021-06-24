@@ -7,7 +7,7 @@ from django.urls import re_path
 
 # local imports
 
-from .views import (WalletRedeemView, WalletRemoveView)
+from .views import (WalletRedeemView, WalletRemoveView, CRMWalletView, CRMRedeemWalletView)
 
 # inter app imports
 
@@ -17,5 +17,9 @@ router = routers.DefaultRouter()
 app_name = 'coupon'
 urlpatterns = [
     re_path(r'^redeem/$', WalletRedeemView.as_view()),
-    re_path(r'^remove/$', WalletRemoveView.as_view())
+    re_path(r'^remove/$', WalletRemoveView.as_view()),
+
+    # ------------ CRM API ---------------------------- #
+    re_path(r'^crm-wallet-info', CRMWalletView.as_view()),
+    re_path(r'crm-wallet-redeem', CRMRedeemWalletView.as_view())
 ]

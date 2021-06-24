@@ -1,22 +1,25 @@
+# Python Core Import
 from decimal import Decimal
+import logging
+
+# Django Core Import
 from django.utils import timezone
-from rest_framework.permissions import AllowAny
+
+# DRF Import
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from cart.models import Cart
-from cart.mixins import CartMixin
-from shared.rest_addons.authentication import ShineUserAuthentication
-from rest_framework.permissions import IsAuthenticated
-from django.views.decorators.csrf import csrf_exempt
+from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 
-
-import logging
+# Third-Party App Import
+from core.common import APIResponse
+from core.api_mixin import ShineCandidateDetail
 from wallet.models import (
     Wallet, RewardPoint, ECash,
     WalletTransaction, ECashTransaction, PointTransaction)
 from cart.mixins import CartMixin
-from rest_framework.authentication import SessionAuthentication, BasicAuthentication
 
 
 class WalletRedeemView(APIView, CartMixin):
@@ -234,3 +237,130 @@ class WalletRemoveView(APIView, CartMixin):
                 {'success': 0,
                  'error_message': 'Try after some Time'
                  },  status=status.HTTP_400_BAD_REQUEST)
+
+
+class CRMWalletView(APIView):
+    authentication_classes = [OAuth2Authentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, format=None):
+        """
+        Basic moto of this class to:
+        1. show the wallet info in crm on the basis of email
+
+        Procsss:
+        1. Check email availability
+        2. check if owner with email exist or not
+        3. Get the wallet data and return
+        """
+        email = request.data.get('email')
+        try:
+            if not email:
+                return APIResponse(message='email is required', status=status.HTTP_400_BAD_REQUEST, error=True)
+
+            owner_id = ShineCandidateDetail().get_shine_id(email=email)
+
+            if not owner_id:
+                return APIResponse(message='owner not exist', status=status.HTTP_404_NOT_FOUND, error=True)
+
+            wal_obj, created = Wallet.objects.get_or_create(owner=owner_id)
+
+            data = {
+                'wal_total': wal_obj.get_current_amount(),
+                'owner_email': email,
+                'owner': owner_id
+            }
+            return APIResponse(data=data, message='shine credit points fetched', status=status.HTTP_200_OK)
+
+        except Exception as e:
+            logging.getLogger('error_log').error(
+                'unable to access wallet data CRM %s' % str(e))
+            return APIResponse(message='Try again after some time', status=status.HTTP_400_BAD_REQUEST, error=True)
+
+
+class CRMRedeemWalletView(APIView):
+    authentication_classes = [OAuth2Authentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, format=None):
+        """
+        Basic moto of this class to:
+        1. show the wallet info in crm on the basis of email
+        2. Redeem the point on the basis of point and availability
+
+        Procsss:
+        1. Check email availability and validate the point
+        2. check if owner with email exist or not
+        3. create wallettxn
+        4. redeem the point from wallet while creating a PointTransaction history
+        5. Return the data
+        """
+        try:
+            email = request.data.get('email')
+            point = request.data.get('point', 0)
+            lead_id = request.data.get('lead_id')
+            crm_order_id = request.data.get('order_id')
+            point = Decimal(point)
+            if not email:
+                return APIResponse(message='email required')
+
+            owner_id = ShineCandidateDetail().get_shine_id(email=email)
+
+            if not owner_id:
+                return APIResponse(message='owner not exist', status=status.HTTP_404_NOT_FOUND, error=True)
+
+            wal_obj, created = Wallet.objects.get_or_create(owner=owner_id)
+
+            if point <= Decimal(0):
+                return APIResponse(message='Redeeem point should be positive', status=status.HTTP_400_BAD_REQUEST, error=True)
+
+            wallettxn = WalletTransaction.objects.create(wallet=wal_obj, txn_type=2, point_value=point)
+            points = wal_obj.point.filter(status=1).order_by('created')
+
+            for pts in points:
+                if pts.expiry >= timezone.now():
+                    if point > Decimal(0):
+                        if pts.current >= point:
+                            pts.current -= point
+                            pts.last_used = timezone.now()
+                            if pts.current == Decimal(0):
+                                pts.status = 1
+                            pts.save()
+
+                            PointTransaction.objects.create(
+                                transaction=wallettxn,
+                                point=pts,
+                                point_value=point,
+                                txn_type=2)
+                            # point = Decimal(0)
+
+                    else:
+                        point -= pts.current
+                        pts.last_used = timezone.now()
+                        pts.status = 2
+                        PointTransaction.objects.create(
+                            transaction=wallettxn,
+                            point=pts,
+                            point_value=pts.current,
+                            txn_type=2
+                        )
+                        pts.current = Decimal(0)
+                        pts.save()
+
+            wallettxn.status = 1
+            wallettxn.notes = 'Point: {} | Redeemed from crm of lead ID: {} | CRM OrderId: {}'.format(point, lead_id, crm_order_id)
+            wallettxn.current_value = wal_obj.get_current_amount()
+            wallettxn.save()
+
+            data = {
+                'wal_total': wal_obj.get_current_amount(),
+                'point_redeemed': point,
+                'owner': owner_id,
+                'owner_email': email
+            }
+
+            return APIResponse(data=data, message='Point redeemed from credit', status=status.HTTP_200_OK)
+
+        except Exception as e:
+            logging.getLogger('error_log').error('unable to redeem crm %s' % str(e))
+            return APIResponse(message='unable to redeem', status=status.HTTP_400_BAD_REQUEST)
