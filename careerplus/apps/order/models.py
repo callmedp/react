@@ -570,6 +570,7 @@ class Order(AbstractAutoDate):
                 update_purchase_on_shine.delay(amcat_oi.pk)
                 amcat_oi.save()
 
+        logging.getLogger('error_log').info("CRM_RESUME_0-{} - {} - {} ".format(self.status, existing_obj.__dict__, self.order_contains_resume_builder()))
         if self.status == 1 and existing_obj.status != 1 and self.order_contains_resume_builder():
             # imported here to not cause cyclic import for resumebuilder models
             from resumebuilder.models import Candidate
