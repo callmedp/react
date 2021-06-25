@@ -271,14 +271,14 @@ class Order(AbstractAutoDate):
 
     def update_subscription_in_order_item(self):
         items = self.orderitems.all().select_related('product')
-        logging.getLogger('error_log').error("end_date {}".format(items.__dict__))
+        # logging.getLogger('error_log').error("end_date {}".format(items.__dict__))
 
         items = [item for item in items if item.product.sub_type_flow == 1701]
-        logging.getLogger('error_log').error("end_date {}".format(items.__dict__))
+        # logging.getLogger('error_log').error("end_date {}".format(items.__dict__))
 
         for oi in items:
             logging.getLogger('error_log').error("end_date {}".format(oi.__dict__))
-            logging.getLogger('error_log').error("end_date {}".format(oi.product.__dict__))
+            logging.getLogger('error_log').error("end_date {}".format(oi.product.day_duration))
             oi.start_date = timezone.now()
             oi.end_date = timezone.now() + timedelta(days=oi.product.day_duration)
             oi.active_on_shine = 1
