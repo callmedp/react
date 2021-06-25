@@ -667,7 +667,7 @@ def generate_resume_for_order(order_id):
     from resumebuilder.utils import ResumeGenerator
     order_obj = Order.objects.get(id=order_id)
     candidate_id = order_obj.candidate_id
-    logging.getLogger('info_log').info("CRM_RESUME7-{}".format(candidate_id.__dict__))
+    logging.getLogger('info_log').info("CRM_RESUME7-{}".format(order_obj.candidate_id))
     for item in order_obj.orderitems.all():
         if item.product and item.product.type_flow == 17 and item.product.type_product == 0:
             logging.getLogger('info_log').info("CRM_RESUME8-{}".format(item.__dict__))
