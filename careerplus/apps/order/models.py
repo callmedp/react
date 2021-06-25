@@ -503,6 +503,11 @@ class Order(AbstractAutoDate):
 
     def save(self, **kwargs):
         created = not bool(getattr(self, "id"))
+        logging.getLogger('error_log').info("CRM_RESUME_1-{}".format(created))
+
+        logging.getLogger('error_log').info("CRM_RESUME_2-{} - {}".format(getattr(self, "id"), self.id))
+
+
         if created:
             return super(Order, self).save(**kwargs)
         existing_obj =None
@@ -511,6 +516,7 @@ class Order(AbstractAutoDate):
         except:
             logging.getLogger('error_log').error('order not in save found checking using master -{}'.format(self.id))
             existing_obj = Order.objects.using('master').get(id=self.id)
+        logging.getLogger('error_log').info("CRM_RESUME_3-{}".format(existing_obj))
 
         if self.status == 1:
             assesment_items = self.orderitems.filter(
