@@ -425,6 +425,7 @@ def get_recommend_for_job_title_skills(job_title=None,skills=None,fa=None, flow_
         return product_list[:6]
 
     skill_product_list = get_skill_product_list(skills, flow_type=flow_type)
+    logging.getLogger('error_log').error('CHATBOT1 {}'.format(skill_product_list.__dict__))
     product_list_id = [prod.id for prod in product_list]
     distinct_prod_list = [prod_id for prod_id in skill_product_list if
                         prod_id.id not in product_list_id]
