@@ -991,7 +991,7 @@ class ShineCandidateLoginAPIView(APIView):
                                   "combo": True if item.product.attr.get_value_by_attribute(item.product.attr.get_attribute_by_name('template_type')).value == 'multiple' else False,
                                   "expiry": item.end_date,
                                   }
-                    logging.getLogger('error_log').error("order_object_list5 - {} in order".format(order_data.__dict__))
+                    logging.getLogger('error_log').error("order_object_list5 - {} in order".format(order_data))
                     product_found = True
                     break
 
