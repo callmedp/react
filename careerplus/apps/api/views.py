@@ -176,7 +176,6 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
             if candidate_id:
                 status_response = ShineCandidateDetail().get_status_detail(
                     email=None, shine_id=candidate_id)
-                logging.getLogger('info_log').info("CRM_RESUME2-{}".format(status_response.__dict__))
 
                 if status_response:
                     first_name = status_response.get('first_name')
