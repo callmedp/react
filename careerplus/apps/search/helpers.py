@@ -434,16 +434,25 @@ def get_recommend_for_job_title_skills(job_title=None,skills=None,fa=None, flow_
     if len(product_list) >= 6:
         return product_list[:6]
     product_list_id = [prod.id for prod in product_list]
+    logging.getLogger('error_log').error('CHATBOT2 {}'.format(product_list_id.__dict__))
 
     rest_jt_products = [prod for prod in jt_products if prod.id not in
                         product_list_id]
+    logging.getLogger('error_log').error('CHATBOT3 {}'.format(rest_jt_products.__dict__))
+    
     product_list += rest_jt_products
+
+    logging.getLogger('error_log').error('CHATBOT4 {}'.format(product_list.__dict__))
+
     if len(product_list) >= 6:
         return product_list[:6]
     fa_products = get_recommendation_for_fa(fa, flow_type=flow_type)
     fa_products_list = [ prod for prod in fa_products if
                          prod.id not in product_list_id ]
+    logging.getLogger('error_log').error('CHATBOT9 {}'.format(fa_products_list.__dict__))
+    
     product_list += fa_products_list
+    logging.getLogger('error_log').error('CHATBOT9 {}'.format(product_list.__dict__))
     return product_list[:6]
 
 
@@ -477,14 +486,20 @@ def get_recommendation_for_fa(fa=None, flow_type=2):
         return sort_prod_list(default_product_get_set_cache(flow_type=flow_type))
 
     fa_prod_list = get_fa_product_list(fa, flow_type=flow_type)
+    logging.getLogger('error_log').error('CHATBOT5 {}'.format(fa_prod_list.__dict__))
+
     if len(fa_prod_list) < 6:
         fa_prod_ids = [ prd.id for prd in fa_prod_list ]
+        logging.getLogger('error_log').error('CHATBOT6 {}'.format(fa_prod_ids.__dict__))
+
         default_products = sort_prod_list(default_product_get_set_cache(flow_type=flow_type))
+        logging.getLogger('error_log').error('CHATBOT7 {}'.format(default_products.__dict__))
+
         default_products =[dfproduct for dfproduct in default_products if
                            dfproduct.id not in fa_prod_ids]
-
+        logging.getLogger('error_log').error('CHATBOT7 {}'.format(default_products.__dict__))
         fa_prod_list += default_products
-
+        logging.getLogger('error_log').error('CHATBOT8 {}'.format(fa_prod_list.__dict__))
     return fa_prod_list[:6]
 
 
