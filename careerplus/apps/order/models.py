@@ -224,7 +224,7 @@ class Order(AbstractAutoDate):
 
     def order_contains_resume_builder(self):
         items = self.orderitems.all()
-        logging.getLogger('error_log').error("CRM_RESUME_ORDER {}".format(self.orderitems.__dict__))
+        logging.getLogger('error_log').error("CRM_RESUME_ORDER {}".format(self.orderitems.all().__dict__))
         return any([item.product.type_flow == 17 for item in items])
 
     def order_contains_expert_assistance(self):

@@ -111,7 +111,7 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
         country_code = request.data.get('country_code', '91').strip()
         mobile = request.data.get('mobile').strip()
         candidate_id = request.data.get('candidate_id', '').strip()
-        logging.getLogger('error_log').error("Order creation request recieved -{}".format(request.data))
+        logging.getLogger('error_log').error("CRM_RESUME_REQ -{}".format(request.data.__dict__))
 
         if not item_list:
             return Response(
