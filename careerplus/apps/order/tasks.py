@@ -778,6 +778,7 @@ def bypass_resume_midout(order_id):
     utc = pytz.UTC
 
     order = Order.objects.filter(id=order_id).first()
+    logging.getLogger('error_log').error("CRM_RESUME_001 {} ".format(Order.objects.filter(id=order_id).__dict__))
 
     if not order:
         return
@@ -786,15 +787,17 @@ def bypass_resume_midout(order_id):
 
     # update order item id to upload previous resume
     order_items = order.orderitems.all().exclude(no_process=True)
-    logging.getLogger('error_log').error("CRM_RESUME_001 {} ".format(order_items))
+
+
+    logging.getLogger('error_log').error("CRM_RESUME_002 {} ".format(order_items.__dict__))
 
     for order_item in order_items:
-        logging.getLogger('error_log').error("CRM_RESUME_002 {} - {} - {} - {} ".format(order_item.oi_status, order_item.product.__dict__, order_item.product.type_flow, order_item.id))
+        logging.getLogger('error_log').error("CRM_RESUME_003 {} - {} - {} - {} ".format(order_item.oi_status, order_item.product.__dict__, order_item.product.type_flow, order_item.id))
 
         if order_item.oi_status == 2 and order_item.product and order_item.product.type_flow in [1, 12, 13, 8, 3, 4]:
             update_resume_oi_ids.append(order_item.id)
 
-    logging.getLogger('error_log').error("CRM_RESUME_003 {} ".format(update_resume_oi_ids))
+    logging.getLogger('error_log').error("CRM_RESUME_004 {} ".format(update_resume_oi_ids))
 
     if not update_resume_oi_ids:
         logging.getLogger('error_log').error(
