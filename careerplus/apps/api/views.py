@@ -111,7 +111,7 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
         country_code = request.data.get('country_code', '91').strip()
         mobile = request.data.get('mobile').strip()
         candidate_id = request.data.get('candidate_id', '').strip()
-        logging.getLogger('info_log').info("Order creation request recieved -{}".format(request.data))
+        logging.getLogger('error_log').error("Order creation request recieved -{}".format(request.data))
 
         if not item_list:
             return Response(
@@ -228,7 +228,7 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                 order.sales_user_info = sales_user_info
 
                 logging.getLogger('info_log').info("CRM_RESUME1-{}".format(order.__dict__))
-                order.save(order)
+                order.save()
                 coupon_amount = request.data.get('coupon', 0)
                 coupon_code = request.data.get('coupon_code', '')
                 flag = False

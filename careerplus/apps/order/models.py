@@ -504,9 +504,7 @@ class Order(AbstractAutoDate):
 
     def save(self, **kwargs):
         created = not bool(getattr(self, "id"))
-        logging.getLogger('error_log').error("CRM_RESUME_1-{}".format(created))
-        logging.getLogger('error_log').error("CRM_RESUME_2-{} - {} - {}".format(getattr(self, "id"), self.id, self))
-
+        logging.getLogger('error_log').error("CRM_RESUME_2-{} - {} - {}".format(getattr(self, "id"), self))
 
         if created:
             return super(Order, self).save(**kwargs)
