@@ -224,7 +224,7 @@ class Order(AbstractAutoDate):
 
     def order_contains_resume_builder(self):
         items = self.orderitems.all()
-        logging.getLogger('error_log').error("CRM_RESUME_ORDER {} - {} ".format(items.__dict__, self.id))
+        logging.getLogger('error_log').error("CRM_RESUME_ORDER {}".format(self.orderitems.__dict__))
         return any([item.product.type_flow == 17 for item in items])
 
     def order_contains_expert_assistance(self):
@@ -511,8 +511,6 @@ class Order(AbstractAutoDate):
             return super(Order, self).save(**kwargs)
         existing_obj =None
 
-        logging.getLogger('error_log').error("CRM_RESUME_30-{}".format(existing_obj))
-
         try:
             existing_obj = Order.objects.get(id=self.id)
             logging.getLogger('error_log').error("CRM_RESUME_31-{}".format(existing_obj))
@@ -580,7 +578,7 @@ class Order(AbstractAutoDate):
                 update_purchase_on_shine.delay(amcat_oi.pk)
                 amcat_oi.save()
 
-        logging.getLogger('error_log').error("CRM_RESUME_0-{} - {} - {} ".format(self.status, existing_obj.__dict__, self.order_contains_resume_builder()))
+        logging.getLogger('error_log').error("CRM_RESUME_0-{} - {} - {} ".format(self.status, existing_obj.status, self.order_contains_resume_builder()))
         if self.status == 1 and existing_obj.status != 1 and self.order_contains_resume_builder():
             # imported here to not cause cyclic import for resumebuilder models
             from resumebuilder.models import Candidate
@@ -1419,9 +1417,7 @@ class OrderItem(AbstractAutoDate):
     def save(self, *args, **kwargs):
         created = not bool(getattr(self, "id"))
         orderitem = OrderItem.objects.filter(id=self.pk).first()
-        logging.getLogger('error_log').error("CRM_RESUME110-{}".format(OrderItem.objects.filter(id=self.pk).__dict__))
-
-        logging.getLogger('error_log').error("CRM_RESUME111-{}".format(self.pk))
+        logging.getLogger('error_log').error("CRM_RESUME110-{} === {} === {}".format(OrderItem.objects.__dict__, self.pk, getattr(self, "id")))
 
         self.oi_status = 4 if orderitem and orderitem.oi_status == 4 else self.oi_status
         # handling combo case getting parent and updating child

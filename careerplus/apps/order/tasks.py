@@ -778,7 +778,7 @@ def bypass_resume_midout(order_id):
     utc = pytz.UTC
 
     order = Order.objects.filter(id=order_id).first()
-    logging.getLogger('error_log').error("CRM_RESUME_001 {} ".format(Order.objects.filter(id=order_id).__dict__))
+    logging.getLogger('error_log').error("CRM_RESUME_001 {} === {} === {} ".format(Order.objects.__dict__), order_id, order)
 
     if not order:
         return
@@ -789,10 +789,10 @@ def bypass_resume_midout(order_id):
     order_items = order.orderitems.all().exclude(no_process=True)
 
 
-    logging.getLogger('error_log').error("CRM_RESUME_002 {} ".format(order_items.__dict__))
+    logging.getLogger('error_log').error("CRM_RESUME_002 {} === {} ".format(order.orderitems.__dict__, order_items))
 
     for order_item in order_items:
-        logging.getLogger('error_log').error("CRM_RESUME_003 {} - {} - {} - {} ".format(order_item.oi_status, order_item.product.__dict__, order_item.product.type_flow, order_item.id))
+        logging.getLogger('error_log').error("CRM_RESUME_003 {} - {} - {} ".format(order_item.oi_status, order_item.product.type_flow, order_item.id))
 
         if order_item.oi_status == 2 and order_item.product and order_item.product.type_flow in [1, 12, 13, 8, 3, 4]:
             update_resume_oi_ids.append(order_item.id)
@@ -813,6 +813,9 @@ def bypass_resume_midout(order_id):
     oi_resume_creation_date = None
     start_date = timezone.now() - timedelta(days=180)
     end_date = timezone.now()
+
+    logging.getLogger('error_log').error("CRM_RESUME_005 {} === {} ".format(start_date, end_date))
+
     # order items to get previous resume in previous 180 days
     order_items = OrderItem.objects.filter(
         order__candidate_id=order.candidate_id, created__range=[
@@ -820,6 +823,8 @@ def bypass_resume_midout(order_id):
     ).order_by('-id')
 
     for order_item in order_items:
+        logging.getLogger('error_log').error("CRM_RESUME_006 {}".format(order_item.oi_resume))
+
         if order_item.oi_resume:
             old_resume = order_item.oi_resume
             oi_operation = order_item.orderitemoperation_set.filter(
