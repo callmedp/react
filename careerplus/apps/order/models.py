@@ -504,7 +504,7 @@ class Order(AbstractAutoDate):
 
     def save(self, **kwargs):
         created = not bool(getattr(self, "id"))
-        logging.getLogger('error_log').error("CRM_RESUME_2-{} - {} - {}".format(getattr(self, "id"), self))
+        logging.getLogger('error_log').error("CRM_RESUME_2-{} - {}".format(getattr(self, "id"), self))
 
         if created:
             return super(Order, self).save(**kwargs)
@@ -1413,6 +1413,8 @@ class OrderItem(AbstractAutoDate):
     def save(self, *args, **kwargs):
         created = not bool(getattr(self, "id"))
         orderitem = OrderItem.objects.filter(id=self.pk).first()
+        logging.getLogger('error_log').error("CRM_RESUME111-{}".format(orderitem.__dict__))
+
         self.oi_status = 4 if orderitem and orderitem.oi_status == 4 else self.oi_status
         # handling combo case getting parent and updating child
         self.update_pause_resume_service(orderitem)
