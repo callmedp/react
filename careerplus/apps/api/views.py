@@ -227,7 +227,7 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                 order.crm_sales_id = crm_sales_id
                 order.sales_user_info = sales_user_info
 
-                logging.getLogger('info_log').info("CRM_RESUME1-{}".format(order.__dict__))
+                logging.getLogger('error_log').error("CRM_RESUME1-{}".format(order.__dict__))
                 order.save()
                 coupon_amount = request.data.get('coupon', 0)
                 coupon_code = request.data.get('coupon_code', '')
