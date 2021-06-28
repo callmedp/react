@@ -111,20 +111,12 @@ class Candidate(PreviewImageCreationMixin, CandidateProfile):
             if product_found:
                 break
 
-            logging.getLogger("error_log").error("Candidate_object2 {}".format(order_obj.__dict__))
-
             for item in order_obj.orderitems.all():
                 if item.product and item.product.type_flow == 17 and item.product.type_product == 0:
-                    logging.getLogger("error_log").error("Candidate_object3 {}".format(item.__dict__))
-                    logging.getLogger("error_log").error("Candidate_object4 {}".format(item.product))
-                    logging.getLogger("error_log").error("Candidate_object04 {}".format(item.product.type_flow))
-                    logging.getLogger("error_log").error("Candidate_object14 {}".format(item.product.type_product))
-
                     order_data = {"id": order_obj.id,
                                   "combo": True if item.product.attr.get_value_by_attribute(item.product.attr.get_attribute_by_name('template_type')).value == 'multiple' else False,
                                   "expiry": item.end_date,
                                   }
-                    logging.getLogger('error_log').error("Candidate_object5 - {} in order".format(order_data.__dict__))
                     
                     product_found = True
                     break

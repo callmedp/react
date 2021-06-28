@@ -425,7 +425,6 @@ def get_recommend_for_job_title_skills(job_title=None,skills=None,fa=None, flow_
         return product_list[:6]
 
     skill_product_list = get_skill_product_list(skills, flow_type=flow_type)
-    logging.getLogger('error_log').error('CHATBOT1 {}'.format(skill_product_list))
     product_list_id = [prod.id for prod in product_list]
     distinct_prod_list = [prod_id for prod_id in skill_product_list if
                         prod_id.id not in product_list_id]
@@ -434,25 +433,19 @@ def get_recommend_for_job_title_skills(job_title=None,skills=None,fa=None, flow_
     if len(product_list) >= 6:
         return product_list[:6]
     product_list_id = [prod.id for prod in product_list]
-    logging.getLogger('error_log').error('CHATBOT2 {}'.format(product_list_id))
 
     rest_jt_products = [prod for prod in jt_products if prod.id not in
                         product_list_id]
-    logging.getLogger('error_log').error('CHATBOT3 {}'.format(rest_jt_products))
     
     product_list += rest_jt_products
-
-    logging.getLogger('error_log').error('CHATBOT4 {}'.format(product_list))
 
     if len(product_list) >= 6:
         return product_list[:6]
     fa_products = get_recommendation_for_fa(fa, flow_type=flow_type)
     fa_products_list = [ prod for prod in fa_products if
                          prod.id not in product_list_id ]
-    logging.getLogger('error_log').error('CHATBOT9 {}'.format(fa_products_list))
     
     product_list += fa_products_list
-    logging.getLogger('error_log').error('CHATBOT9 {}'.format(product_list))
     return product_list[:6]
 
 
@@ -486,20 +479,15 @@ def get_recommendation_for_fa(fa=None, flow_type=2):
         return sort_prod_list(default_product_get_set_cache(flow_type=flow_type))
 
     fa_prod_list = get_fa_product_list(fa, flow_type=flow_type)
-    logging.getLogger('error_log').error('CHATBOT5 {}'.format(fa_prod_list))
 
     if len(fa_prod_list) < 6:
         fa_prod_ids = [ prd.id for prd in fa_prod_list ]
-        logging.getLogger('error_log').error('CHATBOT6 {}'.format(fa_prod_ids))
 
         default_products = sort_prod_list(default_product_get_set_cache(flow_type=flow_type))
-        logging.getLogger('error_log').error('CHATBOT7 {}'.format(default_products))
 
         default_products =[dfproduct for dfproduct in default_products if
                            dfproduct.id not in fa_prod_ids]
-        logging.getLogger('error_log').error('CHATBOT7 {}'.format(default_products))
         fa_prod_list += default_products
-        logging.getLogger('error_log').error('CHATBOT8 {}'.format(fa_prod_list))
     return fa_prod_list[:6]
 
 

@@ -317,11 +317,9 @@ class RecommendedProductsAPIView(FieldFilterMixin, ListAPIView):
                 func_area = func_area_obj.id
             if candid_job_detail and candid_job_detail.get('job_title'):
                 job_title = str.title(candid_job_detail.get('job_title'))
-        logging.getLogger('error_log').error('CHATBOT10 {}'.format(job_title))
         products = get_recommended_products(
             job_title=job_title, skills=skills_ids, func_area=func_area
             )
-        logging.getLogger('error_log').error('CHATBOT11 {}'.format(products))
         
         return products
 
