@@ -20,6 +20,7 @@ import WatchUserIntentPage from './UserIntentPage/saga';
 import WatchFetchUserInfo from './Authentication/saga/index';
 import WatchDetailPage from './DetailPage/saga';
 import WatchLeadManagementPage from './LeadManagement/saga';
+import WatchLearningTracking from './LearningTracking/saga';
 
 export default function* () {
     yield all([
@@ -43,6 +44,7 @@ export default function* () {
         WatchUserIntentPage(),
         WatchFetchUserInfo(),
         WatchDetailPage(),
-        WatchLeadManagementPage()
+        WatchLeadManagementPage(),
+        WatchLearningTracking(),
     ])
 }
