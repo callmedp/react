@@ -224,7 +224,7 @@ class Order(AbstractAutoDate):
 
     def order_contains_resume_builder(self):
         items = self.orderitems.all()
-        logging.getLogger('error_log').error("CRM_RESUME_ORDER {}".format(self.orderitems.all().__dict__))
+        logging.getLogger('error_log').error("CRM_RESUME_ORDER {}".format(any([item.product.type_flow == 17 for item in items])))
         return any([item.product.type_flow == 17 for item in items])
 
     def order_contains_expert_assistance(self):
@@ -513,12 +513,10 @@ class Order(AbstractAutoDate):
 
         try:
             existing_obj = Order.objects.get(id=self.id)
-            logging.getLogger('error_log').error("CRM_RESUME_31-{}".format(existing_obj))
 
         except:
             logging.getLogger('error_log').error('order not in save found checking using master -{}'.format(self.id))
             existing_obj = Order.objects.using('master').get(id=self.id)
-        logging.getLogger('error_log').error("CRM_RESUME_3-{}".format(existing_obj))
 
         if self.status == 1:
             assesment_items = self.orderitems.filter(
@@ -578,7 +576,7 @@ class Order(AbstractAutoDate):
                 update_purchase_on_shine.delay(amcat_oi.pk)
                 amcat_oi.save()
 
-        logging.getLogger('error_log').error("CRM_RESUME_0-{} - {} - {} ".format(self.status, existing_obj.status, self.order_contains_resume_builder()))
+        logging.getLogger('error_log').error("CRM_RESUME_0-{} - {} ".format(self.status, self.order_contains_resume_builder()))
         if self.status == 1 and existing_obj.status != 1 and self.order_contains_resume_builder():
             # imported here to not cause cyclic import for resumebuilder models
             from resumebuilder.models import Candidate
@@ -591,12 +589,12 @@ class Order(AbstractAutoDate):
                 if cand_id:
                     candidate_obj = Candidate.objects.filter(
                         candidate_id=cand_id).first()
-                    logging.getLogger('error_log').error("CRM_RESUME_144-{}".format(candidate_obj.__dict__))
                     
                     if candidate_obj:
                         candidate_obj.active_subscription = True
                         candidate_obj.save()
 
+                logging.getLogger('error_log').error("CRM_RESUME_144-{}".format(candidate_obj.__dict__))
 
             if self.order_contains_expert_assistance():
                 cand_id = existing_obj and existing_obj.candidate_id

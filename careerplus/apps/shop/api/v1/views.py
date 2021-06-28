@@ -293,6 +293,9 @@ class RecommendedProductsAPIView(FieldFilterMixin, ListAPIView):
         if candidate_detail:
             skills = [skill['value'] for skill in candidate_detail['skills']]
             skills_in_ascii = []
+            
+            logging.getLogger('error_log').error('CHATBOT001 {} === {}'.format(candidate_detail, skills))
+
             for skill in skills:
                 try:
                     skills_in_ascii.append(

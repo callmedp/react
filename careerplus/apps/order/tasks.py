@@ -778,7 +778,7 @@ def bypass_resume_midout(order_id):
     utc = pytz.UTC
 
     order = Order.objects.filter(id=order_id).first()
-    logging.getLogger('error_log').error("CRM_RESUME_001 {} === {} === {} ".format(Order.objects.__dict__, order_id, order))
+    logging.getLogger('error_log').error("CRM_RESUME_001 {} === {} ".format(order_id, order))
 
     if not order:
         return
