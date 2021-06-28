@@ -160,7 +160,7 @@ Payment Summary - Shine Learning
           <div class="row">
             <div class="col-sm-9">
               <div class="delivery-speed mb-15 delivery-toggle-action" id="btn-delivery"
-                onclick="toggleDeliveryItems('{{item.id}}')">
+                onclick="sendLearningTracking({'productId':'{{item.id}}', 'event': 'cart_summary_open_delivery_service_dropdown', 'pageTitle': 'cart_summary', 'sectionPlacement': 'cart_item', 'eventCategory':'open_delivery_service_dropdown', 'eventLabel': '{{delivery_service.title}}', 'eventAction': 'click', 'algo': '', 'rank': '{{forloop.counter}}'});toggleDeliveryItems('{{item.id}}')">
                 <span class="delivery-icon delivery-toggle-action"></span>
                 <p class="pb-0  delivery-toggle-action">
                   <strong class="block delivery-toggle-action"
@@ -568,8 +568,7 @@ Payment Summary - Shine Learning
   var productAvailability = "{{product_availability}}"
   var productTrackingMappingId = "{{product_tracking_mapping_id}}"
   var trackingId = "{{tracking_id}}"
-
-    var site_domain = "{{ SITE_PROTOCOL }}://{{ SITE_DOMAIN}}";
+  var site_domain = "{{ SITE_PROTOCOL }}://{{ SITE_DOMAIN}}";
 
   var items = document.getElementsByClassName("item-list");
   for (var i = 0; i < items.length; i++){
