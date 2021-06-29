@@ -87,7 +87,7 @@
                     </div>
 
                     <div class="continue col-sm-6">
-                      <button style="font-size:16px;" type="submit" onclick="soc_gaevent('Buy Flow','Cart Order Login','Continue');">Continue</button>
+                      <button style="font-size:16px;" type="submit" onclick="sendLearningTracking({'productId':'', 'event': 'cart_payment_login_continue', 'pageTitle': 'cart_login', 'sectionPlacement': 'cart_button', 'eventCategory':'payment_continue', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''}); soc_gaevent('Buy Flow','Cart Order Login','Continue');">Continue</button>
                     </div>
                      {% if guest_login%}
                     <div class="continue col-sm-6">
@@ -108,16 +108,16 @@
                       <span class="error-txt">{{email_error}}</span>
                     </div>
                     <div class="continue col-sm-12">
-                      <button type="submit" onclick="soc_gaevent('Buy Flow','Cart Login','Continue')";>Continue</button>
+                      <button type="submit" onclick="sendLearningTracking({'productId':'', 'event': 'cart_payment_login_continue', 'pageTitle': 'cart_login', 'sectionPlacement': 'cart_button', 'eventCategory':'login_continue', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''});soc_gaevent('Buy Flow','Cart Login','Continue')";>Continue</button>
                     </div>
                 {% endif %}
 
             </form>
               <div class="social-login" style="margin:30px 0 15px 0px;">
                     <span>or login with</span>
-                    <a class="facebook" onclick="Login('/cart/payment-shipping/');soc_gaevent('Buy Flow','Facebook_BuyFlow','Sign In');"></a>
-                    <a class="linkedin" onclick="soc_gaevent('Buy Flow','Linkedin_BuyFlow','Sign In');" href="{% url 'users:linkedin-code' %}?next=/cart/payment-shipping/"></a>
-                    <a class="gplus" onclick="glogin('/cart/payment-shipping/');soc_gaevent('Buy Flow','GooglePlus_BuyFlow','Sign In');"></a>
+                    <a class="facebook" onclick="sendLearningTracking({'productId':'', 'event': 'cart_payment_login_with_facebook', 'pageTitle': 'cart_login', 'sectionPlacement': 'cart_button', 'eventCategory':'login_facebook', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''});Login('/cart/payment-shipping/');soc_gaevent('Buy Flow','Facebook_BuyFlow','Sign In');"></a>
+                    <a class="linkedin" onclick="sendLearningTracking({'productId':'', 'event': 'cart_payment_login_with_linkedIn', 'pageTitle': 'cart_login', 'sectionPlacement': 'cart_button', 'eventCategory':'login_linkedIn', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''});soc_gaevent('Buy Flow','Linkedin_BuyFlow','Sign In');" href="{% url 'users:linkedin-code' %}?next=/cart/payment-shipping/"></a>
+                    <a class="gplus" onclick="sendLearningTracking({'productId':'', 'event': 'cart_payment_login_with_googleplus', 'pageTitle': 'cart_login', 'sectionPlacement': 'cart_button', 'eventCategory':'login_googleplus', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''});glogin('/cart/payment-shipping/');soc_gaevent('Buy Flow','GooglePlus_BuyFlow','Sign In');"></a>
                 </div>
 
         </div>
@@ -169,9 +169,30 @@ function soc_gaevent(event_cat,event_lab,event_action){
 
 </script>
 
+<script>
+  var shineApiUrl = "{{shine_api_url}}"
+  var trackingProductId = "{{tracking_product_id}}"
+  var productAvailability = "{{product_availability}}"
+  var productTrackingMappingId = "{{product_tracking_mapping_id}}"
+  var trackingId = "{{tracking_id}}"
+  var site_domain = "{{ SITE_PROTOCOL }}://{{ SITE_DOMAIN}}";
+  var triggerPoint = "{{trigger_point}}"
+  var uId = "{{u_id}}"
+  var position = "{{position}}"
+  var utmCampaign ="{{utm_campaign}}"
+  var referal_product = "{{referal_product}}"
+  var referal_subproduct = "{{referal_subproduct}}";
+  var popup_based_product = "{{popup_based_product}}";
+  var recommendation_by = "{{recommendation_by}}";
+  var cart_addition = "{{cart_addition}}";
+  var cartData = "{{request|get_cart_info}}";
+  var cart_candidate_id ='{{cart.owner_id}}'
+</script>
+
 
    {{ block.super }}
       <script src="{% static 'shinelearn/js/cart/guest_login.js' %}"></script>
+      <script src="{% static 'shinelearn/js/common/learning_tracking.js' %}"></script>
 
     {% compress js %}
       <script src="{% static 'shinelearn/js/cart/payment-login.js' %}"></script>

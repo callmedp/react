@@ -64,7 +64,7 @@ Thank You - Shine Learning
                         {% csrf_token %}
                         <div class="latest-resume selected" id="upload-resume-box">
                             <figure></figure>
-                            <a href="javascript:void();" onclick="MyGA.SendEvent('ln_complete_payment', 'ln_complete_payment', 'ln_thankyou_page_clicks', 'upload_resume', '', false, true);">Upload</a> new resume
+                            <a href="javascript:void();" onclick="sendLearningTracking({'productId':'', 'event': 'thank_you_upload_new_resume', 'pageTitle': 'thank_you', 'sectionPlacement': 'upload_new_resume_button', 'eventCategory': 'upload_new_resume', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''});MyGA.SendEvent('ln_complete_payment', 'ln_complete_payment', 'ln_thankyou_page_clicks', 'upload_resume', '', false, true);">Upload</a> new resume
                             <input type="file" name="resume_file">
                             <span class="db">or</span>
                             fill this <a href="{% url "dashboard:dashboard-downloadquestionnaire" %}">questionnaire</a> and
@@ -73,19 +73,19 @@ Thank You - Shine Learning
 
                         {% if request.session.resume_id %}
                         <div class="latest-resume" id="shine-resume-box">
-                            <figure onClick="MyGA.SendEvent('ln_complete_payment', 'ln_complete_payment', 'ln_thankyou_page_clicks', 'checkmark_shine_resume', '', false, true);"></figure>
+                            <figure onclick="sendLearningTracking({'productId':'', 'event': 'thank_you_use_latest_shine_resume', 'pageTitle': 'thank_you', 'sectionPlacement': 'use_latest_shine_resume_button', 'eventCategory': 'use_latest_shine_resume', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''});MyGA.SendEvent('ln_complete_payment', 'ln_complete_payment', 'ln_thankyou_page_clicks', 'checkmark_shine_resume', '', false, true);"></figure>
                             Use latest shine resume
                         </div>
                         {% endif %}
                         {% if candidate_id %}
                         <div>
-                            <input type="checkbox" checked onclick="uploadResumeShine(this,{{order.id}});MyGA.SendEvent('ln_complete_payment', 'ln_complete_payment', 'ln_thankyou_page_clicks', 'upload_resume', '', false, true);"/> <span>Upload
+                            <input type="checkbox" checked onclick="sendLearningTracking({'productId':'', 'event': 'thank_you_upload_new_resume_post_service_completion', 'pageTitle': 'thank_you', 'sectionPlacement': 'upload_new_resume_post_service_completion_checkbox', 'eventCategory': 'upload_new_resume_post_service_completion', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''});uploadResumeShine(this,{{order.id}});MyGA.SendEvent('ln_complete_payment', 'ln_complete_payment', 'ln_thankyou_page_clicks', 'upload_resume', '', false, true);"/> <span>Upload
                                 new resume post service completion</span>
                         </div>
                         {% endif %}
                         <input type="hidden" id="action-type-id" name="action_type" value="upload_resume">
                         <div>
-                            <a role="button" class="blue-button mt-20" id="resume-sumbmit-button">Proceed</a>
+                            <a role="button" class="blue-button mt-20" id="resume-sumbmit-button" onclick="sendLearningTracking({'productId':'', 'event': 'thank_you_proceed', 'pageTitle': 'thank_you', 'sectionPlacement': 'proceed_button', 'eventCategory': 'proceed', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''});">Proceed</a>
                         </div>
                     </form>
 
@@ -100,7 +100,7 @@ Thank You - Shine Learning
         <div class="col-sm-5">
             {% if candidate_id %}
             <div class="new-test text-right">
-                <a onClick="MyGA.SendEvent('ln_complete_payment', 'ln_complete_payment', 'ln_thankyou_page_clicks', 'go_to_dashboard', '', false, true);" href="/dashboard/"
+                <a onclick="sendLearningTracking({'productId':'', 'event': 'thank_you_go_to_dashboard', 'pageTitle': 'thank_you', 'sectionPlacement': 'go_to_dashboard_button', 'eventCategory': 'go_to_dashboard', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''}); MyGA.SendEvent('ln_complete_payment', 'ln_complete_payment', 'ln_thankyou_page_clicks', 'go_to_dashboard', '', false, true);" href="/dashboard/"
                     style="background-color: #2f5ea6;padding: 5px 15px;color: #fff;position: relative;right: 0;font-size: 13px;bottom:16px;">Go
                     To DashBoard</a>
             </div>
@@ -196,9 +196,9 @@ Thank You - Shine Learning
                             </small>
                             <div class="social-login">
                                 <span>or login with</span>
-                                <a class="facebook" onclick="reviewSocialLogin(window.location.href,'fb');"></a>
-                                <a class="linkedin" onclick="reviewLinkedInLogin()"></a>
-                                <a class="gplus" onclick="reviewSocialLogin(window.location.href,'gplus');"></a>
+                                <a class="facebook" onclick="sendLearningTracking({'productId':'', 'event': 'thank_you_login_with_facebook', 'pageTitle': 'thank_you', 'sectionPlacement': 'login_with_facebook_button', 'eventCategory': 'login_with_facebook', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''}); reviewSocialLogin(window.location.href,'fb');"></a>
+                                <a class="linkedin" onclick="sendLearningTracking({'productId':'', 'event': 'thank_you_login_with_linkedin', 'pageTitle': 'thank_you', 'sectionPlacement': 'login_with_linkedin_button', 'eventCategory': 'login_with_linkedin', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''}); reviewLinkedInLogin()"></a>
+                                <a class="gplus" onclick="sendLearningTracking({'productId':'', 'event': 'thank_you_login_with_googleplus', 'pageTitle': 'thank_you', 'sectionPlacement': 'login_with_googleplus_button', 'eventCategory': 'login_with_googleplus', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''}); reviewSocialLogin(window.location.href,'gplus');"></a>
                             </div>
                             <small class="form-text text-muted text-center">Don’t have an account yet? <a role="button"
                                     data-toggle="modal" data-target=".bs-example-modal-sm2"
@@ -225,6 +225,28 @@ Thank You - Shine Learning
     var ResumeBuilderBuy = "{{order.order_contains_resume_builder}}"
 </script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8.14.0/dist/sweetalert2.all.min.js"></script>
+<script src="{% static 'shinelearn/js/common/learning_tracking.js' %}"></script>
+
+<script>
+    var site_domain = "{{ SITE_PROTOCOL }}://{{ SITE_DOMAIN}}";
+    var totalAmount = "{{total_amount}}";
+    var cart_id     = "{{cart_id}}"
+    var shineApiUrl = "{{shine_api_url}}"
+    var trackingProductId = "{{tracking_product_id}}"
+    var productTrackingMappingId = "{{product_tracking_mapping_id}}"
+    var productAvailability = "{{product_availability}}"
+    var trackingId = "{{tracking_id}}"
+    var triggerPoint = "{{trigger_point}}"
+    var uId = "{{u_id}}"
+    var position = "{{position}}"
+    var utmCampaign ="{{utm_campaign}}"
+    var referal_product = "{{referal_product}}"
+    var referal_subproduct = "{{referal_subproduct}}"
+    var popup_based_product = "{{popup_based_product}}";
+    var recommendation_by = "{{recommendation_by}}";
+    var cart_addition = "{{cart_addition}}";
+</script>
+
 {% include 'homepage/partials/ga.impression.html' with page="checkout-complete" used_as="script" oi_products=orderitems order_id=order.ordertxns.last.txn total_price=order.total_incl_tax tax_exlude=order.total_excl_tax  %}
 {% compress js %}
 <script src="{% static 'shinelearn/js/payment/thank-you.js' %}"></script>

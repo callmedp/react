@@ -121,8 +121,8 @@ Payment Login - Shine Learning
                 </div>
 
                 <div class="continue">
-                    <a class="pull-right mr-20" onclick="forgotPassword()">Forgot password?</a>
-                    <button type="button" onclick="handleLoginCandidate()">Continue</button>
+                    <a class="pull-right mr-20" onclick="sendLearningTracking({'productId':'', 'event': 'cart_payment_login_forgot_password', 'pageTitle': 'cart_login', 'sectionPlacement': 'cart_button', 'eventCategory':'payment_forgot_password', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''});forgotPassword()">Forgot password?</a>
+                    <button type="button" onclick="sendLearningTracking({'productId':'', 'event': 'cart_payment_login_continue', 'pageTitle': 'cart_login', 'sectionPlacement': 'cart_button', 'eventCategory':'payment_continue', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''});handleLoginCandidate()">Continue</button>
                 </div>
 
                 <!-- <div class="col-sm-12 text-center social-icon-new mt-20">
@@ -202,7 +202,7 @@ Payment Login - Shine Learning
                     </div>
                 </div>
                 <div class="continue">
-                    <button type="button" onclick="handleForgotPassword()">Submit</button>
+                    <button type="button" onclick="sendLearningTracking({'productId':'', 'event': 'cart_payment_forgot_password_submit', 'pageTitle': 'cart_login', 'sectionPlacement': 'cart_forgot_password_submit_button', 'eventCategory':'payment_forgot_password_submit', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''});handleForgotPassword()">Submit</button>
                 </div>
             </form>
 
@@ -210,7 +210,7 @@ Payment Login - Shine Learning
             <div class="col-sm-6 text-center" id="continue-as-guest-button">
                 <div class="login-guest guest-selection">
                     <span>
-                        <a onclick="continueAsGuest()">
+                        <a onclick="sendLearningTracking({'productId':'', 'event': 'cart_payment_continue_as_guest', 'pageTitle': 'cart_login', 'sectionPlacement': 'cart_continue_as_guest_button', 'eventCategory':'payment_continue_as_guest', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''});continueAsGuest()">
                             <figure class="guestlogin-payment-icon"></figure>
                             Continue as guest
                         </a>
@@ -222,7 +222,7 @@ Payment Login - Shine Learning
             <div class="col-sm-6 text-center hidden" id="login-candidate-button">
                 <div class="login-guest">
                     <span>
-                        <a onclick="loginAsCandidate()">
+                        <a onclick="sendLearningTracking({'productId':'', 'event': 'cart_payment_login', 'pageTitle': 'cart_login', 'sectionPlacement': 'cart_login_button', 'eventCategory':'payment_login', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''});loginAsCandidate()">
                             <figure class="login-payment-icon"></figure>
                             Login
                         </a>
@@ -252,9 +252,31 @@ Payment Login - Shine Learning
 
 </script>
 
+
+<script>
+    var shineApiUrl = "{{shine_api_url}}"
+    var trackingProductId = "{{tracking_product_id}}"
+    var productAvailability = "{{product_availability}}"
+    var productTrackingMappingId = "{{product_tracking_mapping_id}}"
+    var trackingId = "{{tracking_id}}"
+    var site_domain = "{{ SITE_PROTOCOL }}://{{ SITE_DOMAIN}}";
+    var triggerPoint = "{{trigger_point}}"
+    var uId = "{{u_id}}"
+    var position = "{{position}}"
+    var utmCampaign ="{{utm_campaign}}"
+    var referal_product = "{{referal_product}}"
+    var referal_subproduct = "{{referal_subproduct}}";
+    var popup_based_product = "{{popup_based_product}}";
+    var recommendation_by = "{{recommendation_by}}";
+    var cart_addition = "{{cart_addition}}";
+    var cartData = "{{request|get_cart_info}}";
+    var cart_candidate_id ='{{cart.owner_id}}'
+</script>
+
 {{ block.super }}
 <script type="text/javascript" src="{% static 'packages/select2/dist/js/select2.min.js' %}"></script>
 <script src="{% static 'packages/sweetalert/dist/sweetalert2.all.min.js' %}"></script>
+<script src="{% static 'shinelearn/js/common/learning_tracking.js' %}"></script>
 
 
 <script>
