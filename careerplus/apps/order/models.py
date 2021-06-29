@@ -591,10 +591,11 @@ class Order(AbstractAutoDate):
                 if cand_id:
                     candidate_obj = Candidate.objects.filter(
                         candidate_id=cand_id).first()
-                    logging.getLogger('error_log').error("CRM_RESUME_144-{}".format(candidate_obj.__dict__))
+                    logging.getLogger('error_log').error("CRM_RESUME_144-{}".format(candidate_obj))
                     
                     if candidate_obj:
                         candidate_obj.active_subscription = True
+                        logging.getLogger('error_log').error("CRM_RESUME_145-{}".format(candidate_obj))
                         candidate_obj.save()
 
 
