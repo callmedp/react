@@ -667,14 +667,14 @@ def generate_resume_for_order(order_id):
     from resumebuilder.utils import ResumeGenerator
     order_obj = Order.objects.get(id=order_id)
     candidate_id = order_obj.candidate_id
-    logging.getLogger('info_log').info("CRM_RESUME7-{}".format(order_obj.candidate_id))
+    logging.getLogger('error_log').error("CRM_RESUME7-{}".format(order_obj.candidate_id))
     for item in order_obj.orderitems.all():
         if item.product and item.product.type_flow == 17 and item.product.type_product == 0:
-            logging.getLogger('info_log').info("CRM_RESUME8-{}".format(item.__dict__))
+            logging.getLogger('error_log').error("CRM_RESUME8-{}".format(item.__dict__))
             product_id = item.product.id
             break
     product = Product.objects.filter(id=product_id).first()
-    logging.getLogger('info_log').info("CRM_RESUME9-{}".format(product.__dict__))
+    logging.getLogger('error_log').error("CRM_RESUME9-{}".format(product.__dict__))
     if product.sub_type_flow == 1701:
         is_combo = True
     else:
@@ -683,7 +683,7 @@ def generate_resume_for_order(order_id):
         ).value == 'multiple' else False
 
     candidate_obj = Candidate.objects.filter(candidate_id=candidate_id).first()
-    logging.getLogger('info_log').info("CRM_RESUME10-{}".format(candidate_obj.__dict__))
+    logging.getLogger('error_log').error("CRM_RESUME10-{}".format(candidate_obj.__dict__))
     # if not candidate_obj create it by yourself.
     if not candidate_obj:
         selected_template = 1
@@ -789,15 +789,13 @@ def bypass_resume_midout(order_id):
     order_items = order.orderitems.all().exclude(no_process=True)
 
 
-    logging.getLogger('error_log').error("CRM_RESUME_002 {} === {} ".format(order.orderitems.__dict__, order_items))
+    logging.getLogger('error_log').error("CRM_RESUME_002 {} ".format(order_items))
 
     for order_item in order_items:
         logging.getLogger('error_log').error("CRM_RESUME_003 {} - {} - {} ".format(order_item.oi_status, order_item.product.type_flow, order_item.id))
 
         if order_item.oi_status == 2 and order_item.product and order_item.product.type_flow in [1, 12, 13, 8, 3, 4]:
             update_resume_oi_ids.append(order_item.id)
-
-    logging.getLogger('error_log').error("CRM_RESUME_004 {} ".format(update_resume_oi_ids))
 
     if not update_resume_oi_ids:
         logging.getLogger('error_log').error(
