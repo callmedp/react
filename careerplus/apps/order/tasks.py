@@ -683,7 +683,7 @@ def generate_resume_for_order(order_id):
         ).value == 'multiple' else False
 
     candidate_obj = Candidate.objects.filter(candidate_id=candidate_id).first()
-    logging.getLogger('error_log').error("CRM_RESUME10-{}".format(candidate_obj.__dict__))
+    if candidate_obj and candidate_obj.__dict__: logging.getLogger('error_log').error("CRM_RESUME10-{}".format(candidate_obj.__dict__))
     # if not candidate_obj create it by yourself.
     if not candidate_obj:
         selected_template = 1
