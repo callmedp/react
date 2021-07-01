@@ -114,7 +114,6 @@ class Order(AbstractAutoDate):
         null=True, blank=True)  # order payment complete
     date_placed = models.DateTimeField(db_index=True)
     closed_on = models.DateTimeField(null=True, blank=True)
-    logging.getLogger('error_log').error("CRM_RESUME_012_Closed-{}".format(closed_on))
 
     # shipping Address
     email = models.CharField(

@@ -436,7 +436,7 @@ class PaymentLoginView(TemplateView, CartMixin):
         cart_pk = self.request.session.get('cart_pk')
         cart_obj = Cart.objects.get(pk=cart_pk)
         type_flow = -1
-
+        # import ipdb;ipdb.set_trace()
         # line_item_list = cart_obj.lineitems.filter(parent=None)
 
         # if len(line_item_list):
@@ -468,6 +468,8 @@ class PaymentLoginView(TemplateView, CartMixin):
         alert = messages.get_messages(self.request)
         context.update({
             'messages': alert})
+
+        print('>>>>>>>>>>>>>', context)
         return context
 
 
@@ -987,13 +989,11 @@ class PaymentSummaryView(TemplateView, CartMixin):
             email = cache.get('{}_neo_email_done'.format(session_id))
             context.update({'neo_email': email})
 
-
         alert = messages.get_messages(self.request)
         context.update({
             'messages': alert})
 
-
-
+        # print('>>>>', context.get('cart_items'))
         return context
 
 
