@@ -51,7 +51,7 @@
         </li>
 
         <li class="payment__steps__item">
-            <a class='trig-loader' href="{% url "cart:payment-login" %}">
+            <a onclick="sendLearningTracking({'productId':'', 'event': 'cart_summary_payment_login_redirection', 'pageTitle': 'cart_summary', 'sectionPlacement': 'cart_header', 'eventCategory':'payment_login_redirection', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''});" class='trig-loader' href="{% url "cart:payment-login" %}">
                 <span
                     class="{% if candidate_in_session %} tick {% else %} dot {% endif %}">{% if candidate_in_session %}
                     {% else %} 2 {% endif %}</span>
@@ -61,7 +61,7 @@
         </li>
 
         <li class="payment__steps__item">
-            <a>
+            <a onclick="sendLearningTracking({'productId':'', 'event': 'cart_summary_payment_option_redirection', 'pageTitle': 'cart_summary', 'sectionPlacement': 'cart_header', 'eventCategory':'payment_option_redirection', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''});">
                 <span class="dot">3</span>
                 <!-- <span class="tick"></span> -->
                 Payment
@@ -165,7 +165,7 @@
                     <input type="hidden" name="product_reference"
                         value="{% if item.product_class == 'course' and variations|length  or item.type_flow == 17 and variations|length  %}{{variations.0.reference}}{% else %}{{item.reference}}{% endif %}">
 
-                    <span class="payment__summary__item--close item-list" name="{{item.id}}" onclick="removeFromCartMobile('{{item.id}}')">+</span>
+                    <span class="payment__summary__item--close item-list" name="{{item.id}}" onclick="sendLearningTracking({'productId':'{{item.id}}', 'event': 'cart_summary_remove_from_cart', 'pageTitle': 'cart_summary', 'sectionPlacement': 'cart_item', 'eventCategory':'remove_from_cart', 'eventLabel': '{{item.name}}', 'eventAction': 'click', 'algo': '', 'rank': '{{forloop.counter}}'});removeFromCartMobile('{{item.id}}')">+</span>
                 </li>
             </form>
             {% endif %}
@@ -206,7 +206,7 @@
                 <input id="discount_code" type="text" placeholder="Enter coupon code" name="code" maxlength="15"
                     class="apply__wrap--input">
                 <button class="btn btn-lg btn-round btn-blue" id="discount-apply" type="button"
-                    onclick="JSApplyDiscount(event);">Apply</button>
+                    onclick="JSApplyDiscount(event);sendLearningTracking({'productId':'', 'event': 'cart_summary_coupon_applied', 'pageTitle': 'cart_summary', 'sectionPlacement': 'cart_footer', 'eventCategory':'coupon_applied', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''});">Apply</button>
             </div>
             <p class="error-txt" id="discount-alert"> </p>
         </div>
@@ -218,7 +218,7 @@
                     <input id="loyalty_point" type="text" placeholder="{{wallet_total}} loyalty points." name="point"
                         min="0" max="{{wallet_total}}" class="apply__wrap--input">
                     <button class="btn btn-lg btn-round btn-blue" id="loyalty-point-apply" type="button"
-                        onclick="JSApplyPoint(event);">Reedem</button>
+                        onclick="JSApplyPoint(event);sendLearningTracking({'productId':'', 'event': 'cart_summary_wallet_redeemed', 'pageTitle': 'cart_summary', 'sectionPlacement': 'cart_footer', 'eventCategory':'wallet_redeemed', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''})">Reedem</button>
                 </div>
                 <p class="error-txt" id="point-alert">Required</p>
             </div>
@@ -274,7 +274,7 @@
     </div>
 
     <div class="bottom-cta__btn">
-        <a class='trig-loader' href="{% url "cart:payment-login" %}"><button class='summary-proceed-button'
+        <a class='trig-loader' onclick="sendLearningTracking({'productId':'', 'event': 'cart_summary_payment_login_redirection', 'pageTitle': 'cart_summary', 'sectionPlacement': 'cart_footer', 'eventCategory':'payment_login_redirection', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''});" href="{% url "cart:payment-login" %}"><button class='summary-proceed-button'
                 id='payment-summary-continue-id'>Proceed</button></a>
     </div>
 </div><!-- Bottom CTA -->
@@ -316,7 +316,7 @@
     var popup_based_product = "{{popup_based_product}}";
     var recommendation_by = "{{recommendation_by}}";
     var cart_addition = "{{cart_addition}}";
-
+    var site_domain = "{{ SITE_PROTOCOL }}://{{ SITE_DOMAIN}}";
 //   console.log({ trackingProductId, shineApiUrl, productTrackingMappingId, trackingId})
 
 </script>
@@ -324,6 +324,7 @@
 {% compress js %}
 <script src="{% static 'shinelearn/js/mobile/cart/cart.js' %}"></script>
 <script type="text/javascript" src="{% static 'shinelearn/js/cart/payment-summary.js' %}"></script>
+<script src="{% static 'shinelearn/js/common/learning_tracking.js' %}"></script>
 
 
 
