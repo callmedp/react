@@ -79,7 +79,7 @@
         <div class="payment-type">
           <div class="payment-type--item">
             <span></span>
-            <a class='trig-loader' id="card-netbanking" href="{% url "payment:razor-request" cart_id %}">Cards, Net Banking & UPI</a>
+            <a class='trig-loader' id="card-netbanking" onclick="sendLearningTracking({'productId':'', 'event': 'cart_payment_cards_net_banking_upi', 'pageTitle': 'cart_payment', 'sectionPlacement': 'cart_cards_net_banking_upi_button', 'eventCategory': 'payment_cards_net_banking_upi', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''})" href="{% url "payment:razor-request" cart_id %}">Cards, Net Banking & UPI</a>
           </div>
         
           {% if type_flow != 17 or debug_mode %}
@@ -257,7 +257,7 @@
                             </ul>
                         </div><!-- // ROW Content ends here -->
                         <div class="mt-10 p-15 text-center">
-                          <button type="button" class="btn btn-yellow btn-round w100 trig-loader" id="zestMakePaymentBtn">Make Payment</button>
+                          <button type="button" class="btn btn-yellow btn-round w100 trig-loader" onclick="sendLearningTracking({'productId':'', 'event': 'cart_payment_zest_money', 'pageTitle': 'cart_payment', 'sectionPlacement': 'cart_zest_money_button', 'eventCategory':'payment_zest_money', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''})" id="zestMakePaymentBtn">Make Payment</button>
                         </div>
 
                     </div><!-- /. accordion content -->
@@ -267,7 +267,7 @@
                 {% endif %}
                    <div class="payment-type--item">
             <span></span>
-            <a href="{% url "payment:payu-request" cart_id %}" id="amazon-pay-payment" >Amazon Pay, Paytm, PhonePe & Other Wallets
+            <a href="{% url "payment:payu-request" cart_id %}" id="amazon-pay-payment" onclick="sendLearningTracking({'productId':'', 'event': 'cart_payment_amazon_paytm_phonepay_other_wallet', 'pageTitle': 'cart_payment', 'sectionPlacement': 'cart_amazon_paytm_phonepay_other_wallet_button', 'eventCategory': 'payment_amazon_paytm_phonepay_other_wallet', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''})">Amazon Pay, Paytm, PhonePe & Other Wallets
               <!-- <img src="{% static 'shinelearn/images/payments/amazon-pay.png' %}" width="89" class="payment-type--item--img"/> -->
             </a>
           </div>
@@ -291,58 +291,60 @@
 
 {% block js_section %}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script src="{% static 'shinelearn/js/common/learning_tracking.js' %}"></script>
 
 <script type="text/javascript">
-        var site_domain = "{{ SITE_PROTOCOL }}://{{ SITE_DOMAIN}}";
-        var totalAmount = "{{total_amount}}";
-        var cart_id     = "{{cart_id}}"
-        var shineApiUrl = "{{shine_api_url}}"
-        var trackingProductId = "{{tracking_product_id}}"
-        var productTrackingMappingId = "{{product_tracking_mapping_id}}"
-        var productAvailability = "{{product_availability}}"
-        var trackingId = "{{tracking_id}}"
-        var triggerPoint = "{{trigger_point}}"
-        var uId = "{{u_id}}"
-        var position = "{{position}}"
-        var utmCampaign ="{{utm_campaign}}"
-        var referal_product = "{{referal_product}}"
-        var referal_subproduct = "{{referal_subproduct}}"
-        var popup_based_product = "{{popup_based_product}}";
-        var recommendation_by = "{{recommendation_by}}";
-        var cart_addition = "{{cart_addition}}";
-        // console.log({ trackingProductId, shineApiUrl, productTrackingMappingId, trackingId })
-        </script>
-    {{block.super}}
-    {% compress js %}
-        <!-- <script src="{% static 'shinelearn/js/common/bootstrap.min.js' %}"></script> -->
-        <script src="{% static 'shinelearn/js/common/bootstrap-datepicker.min.js' %}"></script>
-        <script src="{% static 'shinelearn/js/payment/payment.js' %}"></script>
-    {% endcompress %}
+  var site_domain = "{{ SITE_PROTOCOL }}://{{ SITE_DOMAIN}}";
+  var totalAmount = "{{total_amount}}";
+  var cart_id     = "{{cart_id}}"
+  var shineApiUrl = "{{shine_api_url}}"
+  var trackingProductId = "{{tracking_product_id}}"
+  var productTrackingMappingId = "{{product_tracking_mapping_id}}"
+  var productAvailability = "{{product_availability}}"
+  var trackingId = "{{tracking_id}}"
+  var triggerPoint = "{{trigger_point}}"
+  var uId = "{{u_id}}"
+  var position = "{{position}}"
+  var utmCampaign ="{{utm_campaign}}"
+  var referal_product = "{{referal_product}}"
+  var referal_subproduct = "{{referal_subproduct}}"
+  var popup_based_product = "{{popup_based_product}}";
+  var recommendation_by = "{{recommendation_by}}";
+  var cart_addition = "{{cart_addition}}";
+</script>
 
-    {% compress js inline %}
-        <script>
-           jQuery(document).ready(function($){
-              $(".accordion_example1").smk_Accordion({
-                showIcon: true, //boolean
-                animation: true, //boolean
-                closeAble: true, //boolean
-                slideSpeed: 200 //integer, miliseconds
-              });
-            });
+{{block.super}}
 
-            $(window).load(function(){
-                $(".input-effect input").val("");
-                
-                $(".input-effect input").focusout(function(){
-                    if($(this).val() != ""){
-                        $(this).addClass("has-content");
-                    }else{
-                        $(this).removeClass("has-content");
-                    }
-                })
-            });
-        </script>
-    {% endcompress js %}
+{% compress js %}
+    <!-- <script src="{% static 'shinelearn/js/common/bootstrap.min.js' %}"></script> -->
+    <script src="{% static 'shinelearn/js/common/bootstrap-datepicker.min.js' %}"></script>
+    <script src="{% static 'shinelearn/js/payment/payment.js' %}"></script>
+{% endcompress %}
+
+{% compress js inline %}
+    <script>
+        jQuery(document).ready(function($){
+          $(".accordion_example1").smk_Accordion({
+            showIcon: true, //boolean
+            animation: true, //boolean
+            closeAble: true, //boolean
+            slideSpeed: 200 //integer, miliseconds
+          });
+        });
+
+        $(window).load(function(){
+            $(".input-effect input").val("");
+            
+            $(".input-effect input").focusout(function(){
+                if($(this).val() != ""){
+                    $(this).addClass("has-content");
+                }else{
+                    $(this).removeClass("has-content");
+                }
+            })
+        });
+    </script>
+{% endcompress js %}
 
 
 {% endblock js_section %}

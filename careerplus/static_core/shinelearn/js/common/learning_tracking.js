@@ -6,12 +6,13 @@ const isMobileDevice = (userAgents) => {
 const getDefaultEvents = () => {
     return {
         source : localStorage.getItem('source') || '',
-        device : isMobileDevice(navigator.userAgent) ? 'mobile' : 'desktop',
-        userId : uId || localStorage.getItem('userId') || '',
-        userType : !!(uId || localStorage.getItem('userId')) ? 'logged_in' : 'non_logged_in',
-        timeStamp : new Date(),
+        device_type : isMobileDevice(navigator.userAgent) ? 'mobile' : 'desktop',
+        userID : uId || localStorage.getItem('userId') || '',
+        user_type : !!(uId || localStorage.getItem('userId')) ? 'logged_in' : 'non_logged_in',
+        timestamp : new Date(),
         learning_session_id : '', 
-        shine_t_id : trackingId || ''
+        shine_t_id : trackingId || '',
+        email: localStorage.getItem('userEmail')
     }
 }
 

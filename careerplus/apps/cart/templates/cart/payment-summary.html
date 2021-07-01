@@ -152,7 +152,7 @@ Payment Summary - Shine Learning
             <input type="hidden" name="product_reference"
               value="{% if item.product_class == 'course' and variations|length  or item.type_flow == 17 and variations|length %}{{variations.0.reference}}{% else %}{{item.reference}}{% endif %}">
             <span class="close-icon item-list" name="{{item.id}}"
-              id="id-remove-cart{{item.id}}" onclick="sendLearningTracking({'productId':'{{item.id}}', 'event': 'cart_summary_remove_from_cart', 'pageTitle': 'cart_summary', 'sectionPlacement': 'cart_item', 'eventCategory':'remove_from_cart', 'eventLabel': '{{item.name}}', 'eventAction': 'click', 'algo': '', 'rank': '{{forloop.counter}}'});GAImpression('removeFromCart', options=[{'name': '{{ item.name }}', 'id': '{{ item.id }}', 'brand': '{{ item.vendor }}', 'category': '{% if item.variations|length %}{{ item.variations.0.li.product.get_category_main }}{% else %}{{ item.li.product.get_category_main }}{% endif %}', 'variant': '{{ item.product_class }}', 'price': '{% if item.variations|length %} {{ item.variations.0.price }} {% else %} {{ item.price }} {% endif %}','position': '{{ forloop.counter }}', 'dimension15': 'Cart Page', 'dimension16': '{% if item.variations|length %} {{ item.variations.0.li.product.avg_rating }}{% else %}{{ item.li.product.avg_rating }}{% endif %}', 'dimension17': '{% if item.variations|length %} {{ item.variations.0.li.product.buy_count }}{% else %}{{ item.li.product.buy_count }}{% endif %}'}]); "></span>
+              id="id-remove-cart{{item.id}}" onclick="sendLearningTracking({'productId':'{{item.id}}', 'event': 'cart_summary_remove_from_cart', 'pageTitle': 'cart_summary', 'sectionPlacement': 'cart_item', 'eventCategory':'remove_from_cart', 'eventLabel': '{{item.name}}', 'eventAction': 'click', 'algo': '', 'rank': '{{forloop.counter}}', 'course_provider': '{{item.vendor}}', 'product_type': '{{item.product_class}}', 'product_price': '{% if item.product_class == course and variations|length  or item.type_flow == 17 and variations|length %}{{variations.0.price}}{% else %}{{item.price}}{% endif %}'}); GAImpression('removeFromCart', options=[{'name': '{{ item.name }}', 'id': '{{ item.id }}', 'brand': '{{ item.vendor }}', 'category': '{% if item.variations|length %}{{ item.variations.0.li.product.get_category_main }}{% else %}{{ item.li.product.get_category_main }}{% endif %}', 'variant': '{{ item.product_class }}', 'price': '{% if item.variations|length %} {{ item.variations.0.price }} {% else %} {{ item.price }} {% endif %}','position': '{{ forloop.counter }}', 'dimension15': 'Cart Page', 'dimension16': '{% if item.variations|length %} {{ item.variations.0.li.product.avg_rating }}{% else %}{{ item.li.product.avg_rating }}{% endif %}', 'dimension17': '{% if item.variations|length %} {{ item.variations.0.li.product.buy_count }}{% else %}{{ item.li.product.buy_count }}{% endif %}'}]); "></span>
           </form>
 
           <!-- delivery section -->
@@ -160,7 +160,7 @@ Payment Summary - Shine Learning
           <div class="row">
             <div class="col-sm-9">
               <div class="delivery-speed mb-15 delivery-toggle-action" id="btn-delivery"
-                onclick="sendLearningTracking({'productId':'{{item.id}}', 'event': 'cart_summary_open_delivery_service_dropdown', 'pageTitle': 'cart_summary', 'sectionPlacement': 'cart_item', 'eventCategory':'open_delivery_service_dropdown', 'eventLabel': '{{delivery_service.title}}', 'eventAction': 'click', 'algo': '', 'rank': '{{forloop.counter}}'});toggleDeliveryItems('{{item.id}}')">
+                onclick="sendLearningTracking({'productId':'{{item.id}}', 'event': 'cart_summary_open_delivery_service_dropdown', 'pageTitle': 'cart_summary', 'sectionPlacement': 'cart_item', 'eventCategory':'open_delivery_service_dropdown', 'eventLabel': '{{delivery_service.title}}', 'eventAction': 'click', 'algo': '', 'rank': '{{forloop.counter}}', 'course_provider': '{{item.vendor}}', 'product_type': '{{item.product_class}}', 'product_price': '{% if item.product_class == course and variations|length  or item.type_flow == 17 and variations|length %}{{variations.0.price}}{% else %}{{item.price}}{% endif %}'});toggleDeliveryItems('{{item.id}}')">
                 <span class="delivery-icon delivery-toggle-action"></span>
                 <p class="pb-0  delivery-toggle-action">
                   <strong class="block delivery-toggle-action"
@@ -367,13 +367,13 @@ Payment Summary - Shine Learning
       <span class="col-sm-7 col-md-8"></span>
       <span class="col-sm-3 col-md-4 continue">
          {% if cart.coupon_id and guest_in_session %}
-                      <a class='trig-loader' onClick="sendLearningTracking({'productId':'', 'event': 'cart_summary_payment_options_redirection', 'pageTitle': 'cart_summary', 'sectionPlacement': 'cart_footer', 'eventCategory':'payment_options_redirection', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''});MyGA.SendEvent('ln_proceed_payment', 'ln_proceed_payment', 'ln_click_to_payment', {{no_of_cartitems}}, '', false, true);" href="{% url 'payment:payment-option' %}"><button type="button"
+                      <a class='trig-loader' onClick="sendLearningTracking({'productId':'', 'event': 'cart_summary_payment_options_redirection', 'pageTitle': 'cart_summary', 'sectionPlacement': 'cart_footer', 'eventCategory':'payment_options_redirection', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': '', 'product_price': '{{total_payable_amount}}' });MyGA.SendEvent('ln_proceed_payment', 'ln_proceed_payment', 'ln_click_to_payment', {{no_of_cartitems}}, '', false, true);" href="{% url 'payment:payment-option' %}"><button type="button"
             id="payment-summary-continue-id">Proceed to
             payment</button></a>
 
           {% else %}
 
-        <a class='trig-loader' onClick="sendLearningTracking({'productId':'', 'event': 'cart_summary_payment_login_redirection', 'pageTitle': 'cart_summary', 'sectionPlacement': 'cart_footer', 'eventCategory':'payment_login_redirection', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''});MyGA.SendEvent('ln_proceed_payment', 'ln_proceed_payment', 'ln_click_to_payment', {{no_of_cartitems}}, '', false, true);" href="{% url 'cart:payment-login' %}"><button type="button"
+        <a class='trig-loader' onClick="sendLearningTracking({'productId':'', 'event': 'cart_summary_payment_login_redirection', 'pageTitle': 'cart_summary', 'sectionPlacement': 'cart_footer', 'eventCategory':'payment_login_redirection', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': '', 'product_price': '{{total_payable_amount}}' });MyGA.SendEvent('ln_proceed_payment', 'ln_proceed_payment', 'ln_click_to_payment', {{no_of_cartitems}}, '', false, true);" href="{% url 'cart:payment-login' %}"><button type="button"
             id="payment-summary-continue-id">Proceed to
             payment</button></a>
 
@@ -589,8 +589,11 @@ Payment Summary - Shine Learning
   var cartData = "{{request|get_cart_info}}";
   var cart_candidate_id ='{{cart.owner_id}}'
   var neoEmail = "{{neo_email}}";
+  var total_payable_amount = "{{total_payable_amount}}"
+  var cart_items = "{{cart_items}}"
 
 
+// console.log("{{total_amount}}", "{{total_payable_amount}}", "{{cart_items}}")
 
 </script>
 <script type="text/javascript" src="{% static 'packages/select2/dist/js/select2.min.js' %}"></script>
