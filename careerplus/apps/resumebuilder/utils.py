@@ -237,10 +237,10 @@ class SubscriptionUtil:
         sub_type_flow = [1701]
         orderitems = self.get_oi(sub_type_flow)
 
-        logging.getLogger('error_log').error("CRM_RESUME_SUB21-{}".format(orderitems))
+        logging.getLogger('error_log').error("CRM_RESUME_SUB21-{}".format(self))
 
         for oi in orderitems:
-            logging.getLogger('error_log').error("CRM_RESUME_SUB31-{}".format(oi.end_date))
+            logging.getLogger('error_log').error("CRM_RESUME_SUB31-{} === {}".format(oi.end_date, oi))
 
             if oi.end_date and (oi.end_date < timezone.now()):
                 # get shine candidate_id
