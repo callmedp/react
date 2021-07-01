@@ -229,6 +229,13 @@ class SubscriptionUtil:
     def get_oi(self, sub_type_flow):
         from order.models import OrderItem
 
+
+        orrder = OrderItem.objects.filter(order__status__in=[1, 3], product__type_flow__in=[17], oi_status__in=[0],
+            product__sub_type_flow__in=sub_type_flow).first()
+
+        for oi in orrder:
+            logging.getLogger('error_log').error("CRM_RESUME_SUB31-{}".format(oi))
+
         return OrderItem.objects.filter(
             order__status__in=[1, 3], product__type_flow__in=[17], oi_status__in=[0],
             product__sub_type_flow__in=sub_type_flow).select_related('order')
@@ -237,10 +244,8 @@ class SubscriptionUtil:
         sub_type_flow = [1701]
         orderitems = self.get_oi(sub_type_flow)
 
-        logging.getLogger('error_log').error("CRM_RESUME_SUB21-{}".format(self))
-
         for oi in orderitems:
-            logging.getLogger('error_log').error("CRM_RESUME_SUB31-{} === {}".format(oi.end_date, oi))
+            # logging.getLogger('error_log').error("CRM_RESUME_SUB31-{} === {}".format(oi.end_date, oi))
 
             if oi.end_date and (oi.end_date < timezone.now()):
                 # get shine candidate_id
