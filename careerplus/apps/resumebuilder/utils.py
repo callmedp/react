@@ -231,7 +231,7 @@ class SubscriptionUtil:
 
 
         orrder = OrderItem.objects.filter(order__status__in=[1, 3], product__type_flow__in=[17], oi_status__in=[0],
-            product__sub_type_flow__in=sub_type_flow).first()
+            product__sub_type_flow__in=sub_type_flow)
 
         for oi in orrder:
             logging.getLogger('error_log').error("CRM_RESUME_SUB31-{}".format(oi))
