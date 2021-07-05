@@ -236,8 +236,7 @@ class SubscriptionUtil:
     def get_oi_data(self):
         from order.models import Order
 
-        order_obj_list = Order.objects.filter(status__in=[1, 3], product__type_flow__in=[17],
-            product__sub_type_flow__in=[1701], status=0)
+        order_obj_list = Order.objects.filter(status__in=[1, 3], status=0)
         logging.getLogger('error_log').error("order_obj_list {}".format(order_obj_list.__dict__))
 
         return order_obj_list
