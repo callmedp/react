@@ -223,7 +223,6 @@ class Order(AbstractAutoDate):
 
     def order_contains_resume_builder(self):
         items = self.orderitems.all()
-        logging.getLogger('error_log').error("CRM_RESUME_ORDER {}".format(any([item.product.type_flow == 17 for item in items])))
         return any([item.product.type_flow == 17 for item in items])
 
     def order_contains_expert_assistance(self):
@@ -278,8 +277,6 @@ class Order(AbstractAutoDate):
         # logging.getLogger('error_log').error("end_date {}".format(items.__dict__))
 
         for oi in items:
-            logging.getLogger('error_log').error("end_date {}".format(oi.__dict__))
-            logging.getLogger('error_log').error("end_date {}".format(oi.product.day_duration))
             oi.start_date = timezone.now()
             oi.end_date = timezone.now() + timedelta(days=oi.product.day_duration)
             oi.active_on_shine = 1
@@ -504,7 +501,6 @@ class Order(AbstractAutoDate):
 
     def save(self, **kwargs):
         created = not bool(getattr(self, "id"))
-        logging.getLogger('error_log').error("CRM_RESUME_2-{} - {}".format(getattr(self, "id"), self.id))
 
         if created:
             return super(Order, self).save(**kwargs)
@@ -512,12 +508,9 @@ class Order(AbstractAutoDate):
 
         try:
             existing_obj = Order.objects.get(id=self.id)
-            logging.getLogger('error_log').error("CRM_RESUME_31-{}".format(existing_obj))
 
         except:
-            logging.getLogger('error_log').error('order not in save found checking using master -{}'.format(self.id))
             existing_obj = Order.objects.using('master').get(id=self.id)
-        logging.getLogger('error_log').error("CRM_RESUME_3-{}".format(existing_obj))
 
         if self.status == 1:
             assesment_items = self.orderitems.filter(
@@ -577,7 +570,6 @@ class Order(AbstractAutoDate):
                 update_purchase_on_shine.delay(amcat_oi.pk)
                 amcat_oi.save()
 
-        logging.getLogger('error_log').error("CRM_RESUME_0-{} - {} - {} ".format(self.status, existing_obj.status, self.order_contains_resume_builder()))
         if self.status == 1 and (existing_obj.status != 1 or self.site == 1) and self.order_contains_resume_builder():
             # imported here to not cause cyclic import for resumebuilder models
             from resumebuilder.models import Candidate
@@ -585,16 +577,13 @@ class Order(AbstractAutoDate):
             if self.order_contains_resumebuilder_subscription():
                 self.update_subscription_in_order_item()
                 cand_id = existing_obj and existing_obj.candidate_id
-                logging.getLogger('error_log').error("CRM_RESUME_133-{}".format(cand_id))
 
                 if cand_id:
                     candidate_obj = Candidate.objects.filter(
                         candidate_id=cand_id).first()
-                    logging.getLogger('error_log').error("CRM_RESUME_144-{}".format(candidate_obj))
                     
                     if candidate_obj:
                         candidate_obj.active_subscription = True
-                        logging.getLogger('error_log').error("CRM_RESUME_145-{}".format(candidate_obj))
                         candidate_obj.save()
 
 
@@ -1417,7 +1406,6 @@ class OrderItem(AbstractAutoDate):
     def save(self, *args, **kwargs):
         created = not bool(getattr(self, "id"))
         orderitem = OrderItem.objects.filter(id=self.pk).first()
-        logging.getLogger('error_log').error("CRM_RESUME110-{} === {} === {}".format(OrderItem.objects.__dict__, self.pk, getattr(self, "id")))
 
         self.oi_status = 4 if orderitem and orderitem.oi_status == 4 else self.oi_status
         # handling combo case getting parent and updating child

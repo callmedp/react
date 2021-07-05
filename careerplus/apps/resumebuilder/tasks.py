@@ -275,7 +275,6 @@ def generate_and_upload_resume_pdf(data):
 
     template_id = int(template_no)
     candidate = Candidate.objects.using('master').filter(candidate_id=candidate_id).first()
-    if candidate and candidate.__dict__: logging.getLogger('error_log').error("CRM_RESUME11-{} ".format(candidate.__dict__))
 
     first_save = False
 
@@ -292,7 +291,6 @@ def generate_and_upload_resume_pdf(data):
         )
         first_save = True
         candidate.save()
-        logging.getLogger('error_log').error("CRM_RESUME12-{}".format(candidate.__dict__))
         
     elif not candidate and is_free_trial:
         logging.getLogger('error_log').error(
