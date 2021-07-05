@@ -1009,11 +1009,13 @@ class ShineCandidateLoginAPIView(APIView):
         resumebuilder_candidate = Candidate.objects.filter(
             candidate_id=candidate_id).first()
 
-        if resumebuilder_candidate and resumebuilder_candidate.__dict__: logging.getLogger('error_log').error("CRM_RESUME009 - {} in order".format(resumebuilder_candidate.__dict__))
+        if resumebuilder_candidate and resumebuilder_candidate.__dict__: logging.getLogger('error_log').error("CRM_RESUME009 - {}".format(resumebuilder_candidate.__dict__))
 
         if resumebuilder_candidate:
             subscription_active = resumebuilder_candidate.active_subscription or False
             logging.getLogger('error_log').error("CRM_RESUME0010 - {} in order".format(subscription_active))
+
+        logging.getLogger('error_log').error("CRM_RESUME001o - {}".format(subscription_active))
 
         self.request.session.update(login_response)
 
@@ -1041,7 +1043,7 @@ class ShineCandidateLoginAPIView(APIView):
                 'profile': personal_info
             }
 
-        logging.getLogger('error_log').error("CRM_RESUME0011 - {} in order".format(data_to_send))
+        logging.getLogger('error_log').error("CRM_RESUME0011 - {}".format(data_to_send))
 
         return Response(data_to_send, status=status.HTTP_201_CREATED)
 
@@ -1303,6 +1305,8 @@ class ShineCandidateLoginAPIView(APIView):
 
         with_info = request.GET.get('with_info', 'true')
         with_info = False if with_info == 'false' else True
+        logging.getLogger('error_log').error("CRM_RESUME_500 - {} === {}".format(candidate_id, login_response))
+
         return self.get_response_for_successful_login(candidate_id, login_response, with_info)
 
     def post(self, request, *args, **kwargs):
