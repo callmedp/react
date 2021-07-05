@@ -114,7 +114,6 @@ class Order(AbstractAutoDate):
         null=True, blank=True)  # order payment complete
     date_placed = models.DateTimeField(db_index=True)
     closed_on = models.DateTimeField(null=True, blank=True)
-    logging.getLogger('error_log').error("CRM_RESUME_012_Closed-{}".format(closed_on))
 
     # shipping Address
     email = models.CharField(
@@ -579,7 +578,7 @@ class Order(AbstractAutoDate):
                 amcat_oi.save()
 
         logging.getLogger('error_log').error("CRM_RESUME_0-{} - {} - {} ".format(self.status, existing_obj.status, self.order_contains_resume_builder()))
-        if self.status == 1 and existing_obj.status == 1 and self.order_contains_resume_builder():
+        if self.status == 1 and (existing_obj.status != 1 or self.crm_sales_id) and self.order_contains_resume_builder():
             # imported here to not cause cyclic import for resumebuilder models
             from resumebuilder.models import Candidate
 
