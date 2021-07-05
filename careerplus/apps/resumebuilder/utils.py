@@ -233,10 +233,11 @@ class SubscriptionUtil:
             order__status__in=[1, 3], product__type_flow__in=[17], oi_status__in=[0],
             product__sub_type_flow__in=sub_type_flow).select_related('order')
 
-    def get_oi_data(self, candidate_id):
+    def get_oi_data(self):
         from order.models import Order
 
-        order_obj_list = Order.objects.filter(candidate_id=candidate_id).first()
+        order_obj_list = Order.objects.filter(status__in=[1, 3], product__type_flow__in=[17],
+            product__sub_type_flow__in=[1701], status=0)
         logging.getLogger('error_log').error("order_obj_list {}".format(order_obj_list.__dict__))
 
         return order_obj_list
@@ -244,6 +245,7 @@ class SubscriptionUtil:
     def close_subscription(self):
         sub_type_flow = [1701]
         orderitems = self.get_oi(sub_type_flow)
+        self.get_oi_data()
 
         for oi in orderitems:
 
@@ -256,7 +258,6 @@ class SubscriptionUtil:
                     last_oi_status=0
                 )
                 candidate_id = oi.order.candidate_id
-                self.get_oi_data(candidate_id)
                 candidate = Candidate.objects.filter(
                     candidate_id=candidate_id).first()
                 if not candidate:
