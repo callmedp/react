@@ -468,8 +468,6 @@ class PaymentLoginView(TemplateView, CartMixin):
         alert = messages.get_messages(self.request)
         context.update({
             'messages': alert})
-
-        print('>>>>>>>>>>>>>', context)
         return context
 
 
@@ -993,7 +991,6 @@ class PaymentSummaryView(TemplateView, CartMixin):
         context.update({
             'messages': alert})
 
-        # print('>>>>', context.get('cart_items'))
         return context
 
 
