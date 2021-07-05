@@ -233,18 +233,9 @@ class SubscriptionUtil:
             order__status__in=[1, 3], product__type_flow__in=[17], oi_status__in=[0],
             product__sub_type_flow__in=sub_type_flow).select_related('order')
 
-    def get_oi_data(self):
-        from order.models import Order
-
-        order_obj_list = Order.objects.filter(status__in=[1, 3], status=0).first()
-        logging.getLogger('error_log').error("order_obj_list {}".format(order_obj_list.__dict__))
-
-        return order_obj_list
-
     def close_subscription(self):
         sub_type_flow = [1701]
         orderitems = self.get_oi(sub_type_flow)
-        self.get_oi_data()
 
         for oi in orderitems:
 

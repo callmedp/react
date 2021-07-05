@@ -111,7 +111,6 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
         country_code = request.data.get('country_code', '91').strip()
         mobile = request.data.get('mobile').strip()
         candidate_id = request.data.get('candidate_id', '').strip()
-        logging.getLogger('error_log').error("CRM_RESUME_REQ -{}".format(request.data))
 
         if not item_list:
             return Response(
@@ -227,7 +226,6 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
                 order.crm_sales_id = crm_sales_id
                 order.sales_user_info = sales_user_info
 
-                logging.getLogger('error_log').error("CRM_RESUME1-{}".format(order.__dict__))
                 order.save()
                 coupon_amount = request.data.get('coupon', 0)
                 coupon_code = request.data.get('coupon_code', '')
@@ -968,8 +966,6 @@ class ShineCandidateLoginAPIView(APIView):
         order_obj_list = Order.objects.filter(
             candidate_id=candidate_id, status__in=[1, 3])
 
-        logging.getLogger('error_log').error("CRM_RESUME001 - {} in order".format(order_obj_list.__dict__))
-
         if not order_obj_list:
             return order_data
 
@@ -979,16 +975,10 @@ class ShineCandidateLoginAPIView(APIView):
 
             for item in order_obj.orderitems.all():
                 if item.product and item.product.type_flow == 17 and item.product.type_product == 0:
-                    logging.getLogger('error_log').error("CRM_RESUME005 - {} in order".format(item.product.type_flow))
-                    logging.getLogger('error_log').error("CRM_RESUME006 - {} in order".format(item.product.type_product))
-                    logging.getLogger('error_log').error("CRM_RESUME007 - {} in order".format(item.end_date))
-
-
                     order_data = {"id": order_obj.id,
                                   "combo": True if item.product.attr.get_value_by_attribute(item.product.attr.get_attribute_by_name('template_type')).value == 'multiple' else False,
                                   "expiry": item.end_date,
                                   }
-                    logging.getLogger('error_log').error("CRM_RESUME008 - {} in order".format(order_data))
                     product_found = True
                     break
 
@@ -1009,13 +999,8 @@ class ShineCandidateLoginAPIView(APIView):
         resumebuilder_candidate = Candidate.objects.filter(
             candidate_id=candidate_id).first()
 
-        if resumebuilder_candidate and resumebuilder_candidate.__dict__: logging.getLogger('error_log').error("CRM_RESUME009 - {}".format(resumebuilder_candidate.__dict__))
-
         if resumebuilder_candidate:
             subscription_active = resumebuilder_candidate.active_subscription or False
-            logging.getLogger('error_log').error("CRM_RESUME0010 - {} in order".format(subscription_active))
-
-        logging.getLogger('error_log').error("CRM_RESUME001o - {}".format(subscription_active))
 
         self.request.session.update(login_response)
 
@@ -1042,8 +1027,6 @@ class ShineCandidateLoginAPIView(APIView):
                 'cart_pk': self.request.session.get('cart_pk') or self.request._request.session.get('cart_pk'),
                 'profile': personal_info
             }
-
-        logging.getLogger('error_log').error("CRM_RESUME0011 - {}".format(data_to_send))
 
         return Response(data_to_send, status=status.HTTP_201_CREATED)
 
@@ -1305,7 +1288,6 @@ class ShineCandidateLoginAPIView(APIView):
 
         with_info = request.GET.get('with_info', 'true')
         with_info = False if with_info == 'false' else True
-        logging.getLogger('error_log').error("CRM_RESUME_500 - {} === {}".format(candidate_id, login_response))
 
         return self.get_response_for_successful_login(candidate_id, login_response, with_info)
 
