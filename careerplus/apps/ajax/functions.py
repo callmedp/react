@@ -190,7 +190,7 @@ def process_background_verification(order_pk=None):
                                             verification_type=oi.product.sub_type_flow,
                                             oi_obj=oi)
                     logging.getLogger('info_log').info('process_background step2 hire_sure_initialized order {}, '
-                                                       'candidate_id {}, orderitem'.format(str(order.id),
+                                                       'candidate_id {}, orderitem {}'.format(str(order.id),
                                                                                            str(order.candidate_id),
                                                                                            str(oi.id)))
 
