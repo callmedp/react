@@ -377,8 +377,13 @@ def get_recommendations(func_area, skills, results=None):
 
 
 def sort_prod_list(prod_skill_dict):
+    logging.getLogger("error_log").error("CHATBOT011 {}".format(prod_skill_dict))
+
     if not prod_skill_dict:
         return []
+
+    logging.getLogger("error_log").error("CHATBOT012 {}".format([prod_id[0] for prod_id in sorted(prod_skill_dict.items(),key=lambda k: (len(k[1])), reverse=True)]))
+    
     return [prod_id[0] for prod_id in sorted(prod_skill_dict.items(),
                                       key=lambda k: (len(k[1])), reverse=True)]
 
@@ -479,6 +484,7 @@ def convert_qs_to_pskill_mapping(qs,skill=None):
 
 def get_fa_product_list(fa, flow_type=2):
     product_list = SQS().filter(pFnA=fa,pTF=flow_type)
+    logging.getLogger("error_log").error("CHATBOT014 {}".format(product_list))
 
     return sort_prod_list(convert_qs_to_pskill_mapping(product_list))
 
@@ -512,13 +518,19 @@ def get_skill_product_list(skills, flow_type=2):
     if not skills:
         return []
     all_prod_skill = SQS().filter(uSkill__in=skills, pTF=flow_type)
+    logging.getLogger("error_log").error("CHATBOT013 {}".format(all_prod_skill))
+
     if not all_prod_skill:
         return []
+
+    logging.getLogger("error_log").error("CHATBOT014 {}".format(sort_prod_list(convert_qs_to_pskill_mapping(all_prod_skill,skills))))
+    
     return sort_prod_list(convert_qs_to_pskill_mapping(
         all_prod_skill,skills))
 
 
 def get_recommendation_for_skill_and_fa(skills=None,fa=None, flow_type=2):
+    logging.getLogger("error_log").error("CHATBOT000 {} === {} === {}".format(skills, fa, flow_type))
 
     if not skills and not fa:
         return sort_prod_list(default_product_get_set_cache(flow_type=flow_type))
@@ -528,20 +540,36 @@ def get_recommendation_for_skill_and_fa(skills=None,fa=None, flow_type=2):
 
     product_list = get_skill_product_list(skills, flow_type=flow_type)
 
+    logging.getLogger("error_log").error("CHATBOT010 {}".format(product_list))
+
     if len(product_list) >= 6:
         return product_list[:6]
 
     secondary_product_list = get_fa_product_list(fa, flow_type=flow_type)
+
+    logging.getLogger("error_log").error("CHATBOT015 {}".format(secondary_product_list))
+
     product_list_id =[prod.id for prod in product_list]
+
+    logging.getLogger("error_log").error("CHATBOT016 {}".format(product_list_id))
 
     fa_product_list = [prod_id for prod_id in secondary_product_list if
                        prod_id.id not in product_list_id]
 
+    logging.getLogger("error_log").error("CHATBOT017 {}".format(fa_product_list))
+
     product_list += fa_product_list
+
+    logging.getLogger("error_log").error("CHATBOT018 {}".format(product_list))
+
     if len(product_list) >= 6:
         return product_list[:6]
     product_list_id = [ prod.id for prod in product_list]
+
+    logging.getLogger("error_log").error("CHATBOT019 {}".format(product_list_id))
+
     default_product = sort_prod_list(default_product_get_set_cache(skills, flow_type=flow_type))
+    
     default_product_list = [prod_id for prod_id in default_product if
                        prod_id.id not in product_list_id]
 
