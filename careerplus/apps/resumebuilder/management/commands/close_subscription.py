@@ -9,4 +9,5 @@ from resumebuilder.utils import SubscriptionUtil
 class Command(BaseCommand):
     def handle(self, *args, **options):
         util = SubscriptionUtil()
+        util.assign_end_date()
         util.close_subscription()

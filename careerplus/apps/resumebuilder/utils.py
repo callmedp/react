@@ -254,3 +254,16 @@ class SubscriptionUtil:
                     continue
                 candidate.active_subscription = False
                 candidate.save()
+
+    def assign_end_date(self):
+        sub_type_flow = [1701]
+        orderitems = self.get_oi(sub_type_flow)
+
+        for oi in orderitems:
+
+            if oi.start_date and not oi.end_date:
+                try:
+                    oi.end_date = oi.start_date + datetime.timedelta(days = oi.product.day_duration)
+                    oi.save()
+                except Exception as e:
+                    logging.getLogger('error_log').error("Unable to set end date due to %s " % str(e))
