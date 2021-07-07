@@ -260,8 +260,8 @@ class SubscriptionUtil:
         orderitems = self.get_oi(sub_type_flow)
 
         for oi in orderitems:
-
             if oi.start_date and not oi.end_date:
+                logging.getLogger('error_log').error("end_date {} ==== {}".format(oi.start_date, oi.end_date))
                 try:
                     oi.end_date = oi.start_date + datetime.timedelta(days = oi.product.day_duration)
                     oi.save()
