@@ -1016,14 +1016,22 @@ def hiresure_verify_process(candidate_id=None, verification_type=None, oi_obj=No
         'is_education': 'true' if verification_type == 1900 else 'false',
         'is_employment': 'true' if verification_type == 1901 else 'false'
     })
+    logging.getLogger('info_log').info('process_background step3 hire_sure_data_initialized ordeitem{}, '
+                                       'candidate_id {}, params {}'.format(str(oi_obj.id),
+                                                                           str(candidate_id),
+                                                                           str(hire_sure_data)))
     try:
         # API hit to initiate hiresure process
         response = requests.post(settings.HIRESURE_VERIFY_URL, params=hire_sure_data)
 
         if int(response.json()['Info']['response_code']) == 200:
-            oi_obj.message_set.create(message=response.json()['Verification']['ID'], candidate_id=candidate_id,
-                                      is_internal=True)
+            logging.getLogger('info_log').info('process_background step4 hire_sure_data_response ordeitem{}, '
+                                               'candidate_id {}, params {}'.format(str(oi_obj.id),
+                                                                                str(candidate_id),
+                                                                                str(response.json())))
+            oi_obj.message_set.create(message=response.json()['Verification']['ID'], candidate_id=candidate_id, is_internal=True)
             return
+
         else:
             logging.getLogger('error_log').log('HireSure API Failed with status_code: {}, response: {}, params: {}'. \
                                                format(str(response.json()['Info']['response_code']),
