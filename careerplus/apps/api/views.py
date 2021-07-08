@@ -111,7 +111,6 @@ class CreateOrderApiView(APIView, ProductInformationMixin):
         country_code = request.data.get('country_code', '91').strip()
         mobile = request.data.get('mobile').strip()
         candidate_id = request.data.get('candidate_id', '').strip()
-        logging.getLogger('info_log').info("Order creation request recieved -{}".format(request.data))
 
         if not item_list:
             return Response(
@@ -960,8 +959,6 @@ class ShineCandidateLoginAPIView(APIView):
         return data
 
     def get_existing_order_data(self, candidate_id):
-        from order.models import Order
-
         product_found = False
         order_data = {}
         order_obj_list = Order.objects.filter(
@@ -999,6 +996,7 @@ class ShineCandidateLoginAPIView(APIView):
         # Check whether subscription active or not if resumebuilder candidate exists
         resumebuilder_candidate = Candidate.objects.filter(
             candidate_id=candidate_id).first()
+
         if resumebuilder_candidate:
             subscription_active = resumebuilder_candidate.active_subscription or False
 
@@ -1288,6 +1286,7 @@ class ShineCandidateLoginAPIView(APIView):
 
         with_info = request.GET.get('with_info', 'true')
         with_info = False if with_info == 'false' else True
+
         return self.get_response_for_successful_login(candidate_id, login_response, with_info)
 
     def post(self, request, *args, **kwargs):

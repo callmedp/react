@@ -78,6 +78,7 @@ class CandidateRetrieveUpdateView(RetrieveUpdateDestroyAPIView):
         ]
     }
     """
+
     authentication_classes = (ShineUserAuthentication,)
     permission_classes = (IsObjectOwner,)
     lookup_field = 'candidate_id'

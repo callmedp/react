@@ -117,7 +117,6 @@ class Candidate(PreviewImageCreationMixin, CandidateProfile):
                                   "combo": True if item.product.attr.get_value_by_attribute(item.product.attr.get_attribute_by_name('template_type')).value == 'multiple' else False,
                                   "expiry": item.end_date,
                                   }
-                    
                     product_found = True
                     break
         return order_data

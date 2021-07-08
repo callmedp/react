@@ -275,6 +275,7 @@ def generate_and_upload_resume_pdf(data):
 
     template_id = int(template_no)
     candidate = Candidate.objects.using('master').filter(candidate_id=candidate_id).first()
+
     first_save = False
 
     if not candidate and not is_free_trial:
@@ -289,8 +290,8 @@ def generate_and_upload_resume_pdf(data):
             active_subscription=order_contains_resumebuilder_subscription()
         )
         first_save = True
-
         candidate.save()
+        
     elif not candidate and is_free_trial:
         logging.getLogger('error_log').error(
             "No candidate for this trial resume download.")

@@ -271,14 +271,10 @@ class Order(AbstractAutoDate):
 
     def update_subscription_in_order_item(self):
         items = self.orderitems.all().select_related('product')
-        # logging.getLogger('error_log').error("end_date {}".format(items.__dict__))
 
         items = [item for item in items if item.product.sub_type_flow == 1701]
-        # logging.getLogger('error_log').error("end_date {}".format(items.__dict__))
 
         for oi in items:
-            logging.getLogger('error_log').error("end_date {}".format(oi.__dict__))
-            logging.getLogger('error_log').error("end_date {}".format(oi.product.day_duration))
             oi.start_date = timezone.now()
             oi.end_date = timezone.now() + timedelta(days=oi.product.day_duration)
             oi.active_on_shine = 1
@@ -503,13 +499,15 @@ class Order(AbstractAutoDate):
 
     def save(self, **kwargs):
         created = not bool(getattr(self, "id"))
+
         if created:
             return super(Order, self).save(**kwargs)
         existing_obj =None
+
         try:
             existing_obj = Order.objects.get(id=self.id)
+
         except:
-            logging.getLogger('error_log').error('order not in save found checking using master -{}'.format(self.id))
             existing_obj = Order.objects.using('master').get(id=self.id)
 
         if self.status == 1:
@@ -570,7 +568,7 @@ class Order(AbstractAutoDate):
                 update_purchase_on_shine.delay(amcat_oi.pk)
                 amcat_oi.save()
 
-        if self.status == 1 and existing_obj.status != 1 and self.order_contains_resume_builder():
+        if self.status == 1 and (existing_obj.status != 1 or self.site == 1) and self.order_contains_resume_builder():
             # imported here to not cause cyclic import for resumebuilder models
             from resumebuilder.models import Candidate
 
@@ -1406,6 +1404,7 @@ class OrderItem(AbstractAutoDate):
     def save(self, *args, **kwargs):
         created = not bool(getattr(self, "id"))
         orderitem = OrderItem.objects.filter(id=self.pk).first()
+
         self.oi_status = 4 if orderitem and orderitem.oi_status == 4 else self.oi_status
         # handling combo case getting parent and updating child
         self.update_pause_resume_service(orderitem)

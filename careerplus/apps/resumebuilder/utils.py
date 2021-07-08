@@ -228,6 +228,7 @@ class SubscriptionUtil:
 
     def get_oi(self, sub_type_flow):
         from order.models import OrderItem
+
         return OrderItem.objects.filter(
             order__status__in=[1, 3], product__type_flow__in=[17], oi_status__in=[0],
             product__sub_type_flow__in=sub_type_flow).select_related('order')
@@ -237,6 +238,7 @@ class SubscriptionUtil:
         orderitems = self.get_oi(sub_type_flow)
 
         for oi in orderitems:
+
             if oi.end_date and (oi.end_date < timezone.now()):
                 # get shine candidate_id
                 oi.oi_status = 4

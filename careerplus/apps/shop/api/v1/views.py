@@ -292,8 +292,12 @@ class RecommendedProductsAPIView(FieldFilterMixin, ListAPIView):
         candidate_detail = ShineCandidateDetail().get_candidate_public_detail(email=email)
         if candidate_detail:
             skills = [skill['value'] for skill in candidate_detail['skills']]
+            logging.getLogger('error_log').error('CHATBOT1 {}'.format(candidate_detail))
+
             skills_in_ascii = []
             for skill in skills:
+                logging.getLogger('error_log').error('CHATBOT2 {}'.format(skill))
+
                 try:
                     skills_in_ascii.append(
                         skill.encode('ascii', 'replace').decode('ascii', 'replace')
@@ -307,19 +311,29 @@ class RecommendedProductsAPIView(FieldFilterMixin, ListAPIView):
             skills_obj = Skill.objects.filter(name__in=skills_in_ascii)
             skills_ids = [str(skill.id) for skill in skills_obj]
 
+            logging.getLogger('error_log').error('CHATBOT3 {} === {}'.format(skills_obj, skills_ids))
+
+
             candid_job_detail = candidate_detail.get('jobs')[0] if candidate_detail.get('jobs') \
                 and isinstance(candidate_detail.get('jobs'), list) else None
+
+            logging.getLogger('error_log').error('CHATBOT4 {}'.format(candid_job_detail))
+            
             if candid_job_detail:
                 func_area_detail = candid_job_detail.get("parent_sub_field", "")
                 func_area_obj = FunctionalArea.objects.filter(
                     name__iexact=func_area_detail).first()
+                logging.getLogger('error_log').error('CHATBOT5 {}'.format(func_area_detail, func_area_obj))
             if func_area_obj:
                 func_area = func_area_obj.id
+                logging.getLogger('error_log').error('CHATBOT6 {}'.format(func_area_obj.id))
             if candid_job_detail and candid_job_detail.get('job_title'):
                 job_title = str.title(candid_job_detail.get('job_title'))
+                logging.getLogger('error_log').error('CHATBOT7 {}'.format(job_title))
         products = get_recommended_products(
             job_title=job_title, skills=skills_ids, func_area=func_area
             )
+        logging.getLogger('error_log').error('CHATBOT8 {}'.format(products))
         
         return products
 

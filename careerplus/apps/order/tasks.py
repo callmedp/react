@@ -784,7 +784,9 @@ def bypass_resume_midout(order_id):
 
     # update order item id to upload previous resume
     order_items = order.orderitems.all().exclude(no_process=True)
+
     for order_item in order_items:
+
         if order_item.oi_status == 2 and order_item.product and order_item.product.type_flow in [1, 12, 13, 8, 3, 4]:
             update_resume_oi_ids.append(order_item.id)
 
@@ -802,6 +804,7 @@ def bypass_resume_midout(order_id):
     oi_resume_creation_date = None
     start_date = timezone.now() - timedelta(days=180)
     end_date = timezone.now()
+
     # order items to get previous resume in previous 180 days
     order_items = OrderItem.objects.filter(
         order__candidate_id=order.candidate_id, created__range=[
