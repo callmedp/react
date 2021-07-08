@@ -170,6 +170,7 @@ def process_background_verification(order_pk=None):
     try:
         order = Order.objects.get(pk=order_pk)
         if order.status == 1:
+            logging.getLogger('info_log').info('process_background step1 paid order {}'.format(str(order.id)))
             orderitems = order.orderitems.filter(
                 no_process=False,
                 product__type_flow=20).select_related(
@@ -188,6 +189,10 @@ def process_background_verification(order_pk=None):
                     hiresure_verify_process(candidate_id=order.candidate_id,
                                             verification_type=oi.product.sub_type_flow,
                                             oi_obj=oi)
+                    logging.getLogger('info_log').info('process_background step2 hire_sure_initialized order {}, '
+                                                       'candidate_id {}, orderitem {}'.format(str(order.id),
+                                                                                           str(order.candidate_id),
+                                                                                           str(oi.id)))
 
     except Exception as e:
         logging.getLogger('error_log').error('Background Verification Iniit failed - {}'.format(str(e)))

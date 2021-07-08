@@ -188,13 +188,13 @@ def update_initiat_orderitem_sataus(order=None):
                     last_oi_status=last_oi_status,
                     assigned_to=oi.assigned_to
                 )
-                oi.order.welcomecalloperation_set.create(
-                    wc_cat=oi.wc_cat,
-                    wc_sub_cat=oi.wc_sub_cat,
-                    message='Done automatically, skipped welcome call.',
-                    wc_status=oi.wc_status,
-                    assigned_to=oi.assigned_to
-                )
+                # oi.order.welcomecalloperation_set.create(
+                #     wc_cat=oi.wc_cat,
+                #     wc_sub_cat=oi.wc_sub_cat,
+                #     message='Done automatically, skipped welcome call.',
+                #     wc_status=oi.wc_status,
+                #     assigned_to=oi.assigned_to
+                # )
 
         # for assesment/neo if no orderitems other than assesment/ neo present
         # then make welcome call done and update welcome call statuses.
