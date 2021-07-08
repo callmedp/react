@@ -35,10 +35,9 @@ class CandidateCartCountView(CartMixin, APIView):
         try:
             cart_user = Cart.objects.get(owner_id=candidate_id, status=2)
         except Cart.DoesNotExist:
-            logging.getLogger('error_log').error('Cart not exist for the candidate, {}'.format(str(candidate_id)))
-            cart_user = Cart.objects.create(owner_id=candidate_id, status=2, session_id=sessionid)
+            data = {'count': 0}
+            return APIResponse(data=data, message='Candidate does not exist', status=status.HTTP_200_OK)
         except Cart.MultipleObjectsReturned:
-            logging.getLogger('error_log').error('Multiple cart exist for candidate, {}'.format(str(candidate_id)))
             cart_user = Cart.objects.filter(owner_id=candidate_id, status=2).first()
 
         # update cart_obj in session
