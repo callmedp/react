@@ -436,7 +436,6 @@ class PaymentLoginView(TemplateView, CartMixin):
         cart_pk = self.request.session.get('cart_pk')
         cart_obj = Cart.objects.get(pk=cart_pk)
         type_flow = -1
-        # import ipdb;ipdb.set_trace()
         # line_item_list = cart_obj.lineitems.filter(parent=None)
 
         # if len(line_item_list):

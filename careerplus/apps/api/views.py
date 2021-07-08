@@ -959,8 +959,6 @@ class ShineCandidateLoginAPIView(APIView):
         return data
 
     def get_existing_order_data(self, candidate_id):
-            
-
         product_found = False
         order_data = {}
         order_obj_list = Order.objects.filter(
