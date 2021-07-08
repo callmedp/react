@@ -271,10 +271,8 @@ class Order(AbstractAutoDate):
 
     def update_subscription_in_order_item(self):
         items = self.orderitems.all().select_related('product')
-        # logging.getLogger('error_log').error("end_date {}".format(items.__dict__))
 
         items = [item for item in items if item.product.sub_type_flow == 1701]
-        # logging.getLogger('error_log').error("end_date {}".format(items.__dict__))
 
         for oi in items:
             oi.start_date = timezone.now()
