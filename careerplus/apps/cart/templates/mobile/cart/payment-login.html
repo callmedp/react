@@ -115,7 +115,7 @@
             <!-- Login social -->
 
             <div class="login__guest">
-                <a onclick="sendLearningTracking({'productId':'', 'event': 'cart_payment_continue_as_guest', 'pageTitle': 'cart_login', 'sectionPlacement': 'cart_continue_as_guest_button', 'eventCategory':'payment_continue_as_guest', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''});continueAsGuest()" class="fs-18">
+                <a onclick="sendLearningTracking([{'productId':'', 'event': 'cart_payment_continue_as_guest', 'pageTitle': 'cart_login', 'sectionPlacement': 'cart_continue_as_guest_button', 'eventCategory':'payment_continue_as_guest', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''}]);continueAsGuest()" class="fs-18">
                     <span class="icon-guest mr-10"></span>
                     Continue as guest
                 </a>
@@ -172,7 +172,7 @@
             </div><!-- /. p-15 -->
 
             <div class="login__guest">
-                <a onclick="sendLearningTracking({'productId':'', 'event': 'cart_payment_user_login', 'pageTitle': 'cart_login', 'sectionPlacement': 'cart_user_login_button', 'eventCategory':'payment_user_login', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''}); loginAsCandidate()" class="fs-18">
+                <a onclick="sendLearningTracking([{'productId':'', 'event': 'cart_payment_user_login', 'pageTitle': 'cart_login', 'sectionPlacement': 'cart_user_login_button', 'eventCategory':'payment_user_login', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''}]); loginAsCandidate()" class="fs-18">
                     <span class="icon-user mr-10"></span>
                     User login
                 </a>
@@ -216,7 +216,7 @@
             </div><!-- /. p-15 -->
             <div class="login__guest">
 
-                <a onclick="sendLearningTracking({'productId':'', 'event': 'cart_payment_user_login', 'pageTitle': 'cart_login', 'sectionPlacement': 'cart_user_login_button', 'eventCategory':'payment_user_login', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''});loginAsCandidate()" class="fs-18">
+                <a onclick="sendLearningTracking([{'productId':'', 'event': 'cart_payment_user_login', 'pageTitle': 'cart_login', 'sectionPlacement': 'cart_user_login_button', 'eventCategory':'payment_user_login', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''}]);loginAsCandidate()" class="fs-18">
                     <span class="icon-user mr-10"></span>
                     User login
                 </a>
@@ -231,9 +231,9 @@
             <strong class="fs-22">Rs. {{total_payable_amount}}</strong>
         </div>
 
-        <div class="bottom-cta__btn" id="login_guests" onclick="sendLearningTracking({'productId':'', 'event': 'cart_payment_continue_as_guest_submit', 'pageTitle': 'cart_login', 'sectionPlacement': 'cart_continue_as_guest_submit_button', 'eventCategory':'payment_continue_as_guest_submit', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''})">Continue</div>
+        <div class="bottom-cta__btn" id="login_guests" onclick="sendLearningTracking([{'productId':'', 'event': 'cart_payment_continue_as_guest_submit', 'pageTitle': 'cart_login', 'sectionPlacement': 'cart_continue_as_guest_submit_button', 'eventCategory':'payment_continue_as_guest_submit', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''}])">Continue</div>
 
-        <div  class="bottom-cta__btn hide" id="login_users" onclick="sendLearningTracking({'productId':'', 'event': 'cart_payment_user_login_submit', 'pageTitle': 'cart_login', 'sectionPlacement': 'cart_user_login_submit_button', 'eventCategory':'payment_user_login_submit', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''});handleLoginCandidate()">Continue</div>
+        <div  class="bottom-cta__btn hide" id="login_users" onclick="sendLearningTracking([{'productId':'', 'event': 'cart_payment_user_login_submit', 'pageTitle': 'cart_login', 'sectionPlacement': 'cart_user_login_submit_button', 'eventCategory':'payment_user_login_submit', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''}]);handleLoginCandidate()">Continue</div>
     </div>
 {% endblock container %}
 

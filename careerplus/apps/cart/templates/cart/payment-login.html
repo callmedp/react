@@ -121,8 +121,8 @@ Payment Login - Shine Learning
                 </div>
 
                 <div class="continue">
-                    <a class="pull-right mr-20" onclick="sendLearningTracking({'productId':'', 'event': 'cart_payment_login_forgot_password', 'pageTitle': 'cart_login', 'sectionPlacement': 'cart_button', 'eventCategory':'payment_forgot_password', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''});forgotPassword()">Forgot password?</a>
-                    <button type="button" onclick="sendLearningTracking({'productId':'', 'event': 'cart_payment_login_continue', 'pageTitle': 'cart_login', 'sectionPlacement': 'cart_button', 'eventCategory':'payment_continue', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''});handleLoginCandidate()">Continue</button>
+                    <a class="pull-right mr-20" onclick="sendLearningTracking([{'productId':'', 'event': 'cart_payment_login_forgot_password', 'pageTitle': 'cart_login', 'sectionPlacement': 'cart_button', 'eventCategory':'payment_forgot_password', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''}]); forgotPassword()">Forgot password?</a>
+                    <button type="button" onclick="sendLearningTracking([{'productId':'', 'event': 'cart_payment_login_continue', 'pageTitle': 'cart_login', 'sectionPlacement': 'cart_button', 'eventCategory':'payment_continue', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''}]); handleLoginCandidate()">Continue</button>
                 </div>
 
                 <!-- <div class="col-sm-12 text-center social-icon-new mt-20">
@@ -202,7 +202,7 @@ Payment Login - Shine Learning
                     </div>
                 </div>
                 <div class="continue">
-                    <button type="button" onclick="sendLearningTracking({'productId':'', 'event': 'cart_payment_forgot_password_submit', 'pageTitle': 'cart_login', 'sectionPlacement': 'cart_forgot_password_submit_button', 'eventCategory':'payment_forgot_password_submit', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''});handleForgotPassword()">Submit</button>
+                    <button type="button" onclick="sendLearningTracking([{'productId':'', 'event': 'cart_payment_forgot_password_submit', 'pageTitle': 'cart_login', 'sectionPlacement': 'cart_forgot_password_submit_button', 'eventCategory':'payment_forgot_password_submit', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''}]);handleForgotPassword()">Submit</button>
                 </div>
             </form>
 
@@ -210,7 +210,7 @@ Payment Login - Shine Learning
             <div class="col-sm-6 text-center" id="continue-as-guest-button">
                 <div class="login-guest guest-selection">
                     <span>
-                        <a onclick="sendLearningTracking({'productId':'', 'event': 'cart_payment_continue_as_guest', 'pageTitle': 'cart_login', 'sectionPlacement': 'cart_continue_as_guest_button', 'eventCategory':'payment_continue_as_guest', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''});continueAsGuest()">
+                        <a onclick="sendLearningTracking([{'productId':'', 'event': 'cart_payment_continue_as_guest', 'pageTitle': 'cart_login', 'sectionPlacement': 'cart_continue_as_guest_button', 'eventCategory':'payment_continue_as_guest', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''}]);continueAsGuest()">
                             <figure class="guestlogin-payment-icon"></figure>
                             Continue as guest
                         </a>
@@ -222,7 +222,7 @@ Payment Login - Shine Learning
             <div class="col-sm-6 text-center hidden" id="login-candidate-button">
                 <div class="login-guest">
                     <span>
-                        <a onclick="sendLearningTracking({'productId':'', 'event': 'cart_payment_login', 'pageTitle': 'cart_login', 'sectionPlacement': 'cart_login_button', 'eventCategory':'payment_login', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''});loginAsCandidate()">
+                        <a onclick="sendLearningTracking([{'productId':'', 'event': 'cart_payment_login', 'pageTitle': 'cart_login', 'sectionPlacement': 'cart_login_button', 'eventCategory':'payment_login', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''}]);loginAsCandidate()">
                             <figure class="login-payment-icon"></figure>
                             Login
                         </a>
@@ -272,15 +272,11 @@ Payment Login - Shine Learning
     var cartData = "{{request|get_cart_info}}";
     var cart_candidate_id ='{{cart.owner_id}}'
     var neoEmail = "{{neo_email}}";
-
-    // console.log("{{total_amount}}", "{{total_payable_amount}}", "{{cart_items}}")
-
 </script>
 
 {{ block.super }}
 <script type="text/javascript" src="{% static 'packages/select2/dist/js/select2.min.js' %}"></script>
 <script src="{% static 'packages/sweetalert/dist/sweetalert2.all.min.js' %}"></script>
-<script src="{% static 'shinelearn/js/common/learning_tracking.js' %}"></script>
 
 {% compress js %}
 <script src="{% static 'shinelearn/js/cart/payment-login.js' %}"></script>
@@ -288,6 +284,7 @@ Payment Login - Shine Learning
 <script src="{% static 'shinelearn/js/common/jquery.autocomplete.min.js' %}"></script>
 <script src="{% static 'shinelearn/js/cart/payment-shipping.js' %}"></script>
 <script src="{% static 'shinelearn/js/users/login.js' %}"></script>
+<script src="{% static 'shinelearn/js/common/learning_tracking.js' %}"></script>
 
 
 {% endcompress %}

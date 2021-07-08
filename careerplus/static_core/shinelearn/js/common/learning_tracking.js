@@ -3,8 +3,9 @@ const isMobileDevice = (userAgents) => {
     return /Android|Phone|Mobile|Opera\sM(in|ob)i|iP[ao]d|BlackBerry|SymbianOS|Safari\.SearchHelper|SAMSUNG-(GT|C)|WAP|CFNetwork|Puffin|PlayBook|Nokia|LAVA|SonyEricsson|Karbonn|UCBrowser|ucweb|Micromax|Silk|LG(MW|-MMS)|PalmOS/i.test(userAgents)
 }
 
-const getDefaultEvents = () => {
-    return {
+const getDefaultEvents = (data) => {
+    const newArr = data.map(v => ({
+        ...v,
         source : localStorage.getItem('source') || '',
         device_type : isMobileDevice(navigator.userAgent) ? 'mobile' : 'desktop',
         userID : uId || localStorage.getItem('userId') || '',
@@ -13,18 +14,20 @@ const getDefaultEvents = () => {
         learning_session_id : '', 
         shine_t_id : trackingId || '',
         email: localStorage.getItem('userEmail')
-    }
+    }))
+    return newArr;
 }
 
 const addDefaultPayload = (payload) => {
-    return { ...getDefaultEvents(), ...payload };
+    return [ ...getDefaultEvents(payload) ];
 }
 
 const sendLearningTracking = function (payload) {
     console.log("tracking function fired")
     var superChargedPayload = addDefaultPayload(payload);
+    console.log(superChargedPayload)
     console.log("payload is", superChargedPayload)
-    const url = `${site_domain}/dummy-api/`;
+    const url = `http://35.200.189.201/api/v1/core/tracking`;
     fetch( url, {
         method: 'POST',
         cache: 'no-cache',

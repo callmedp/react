@@ -152,7 +152,7 @@ Payment Summary - Shine Learning
             <input type="hidden" name="product_reference"
               value="{% if item.product_class == 'course' and variations|length  or item.type_flow == 17 and variations|length %}{{variations.0.reference}}{% else %}{{item.reference}}{% endif %}">
             <span class="close-icon item-list" name="{{item.id}}"
-              id="id-remove-cart{{item.id}}" onclick="sendLearningTracking({'productId':'{{item.id}}', 'event': 'cart_summary_remove_from_cart', 'pageTitle': 'cart_summary', 'sectionPlacement': 'cart_item', 'eventCategory':'remove_from_cart', 'eventLabel': '{{item.name}}', 'eventAction': 'click', 'algo': '', 'rank': '{{forloop.counter}}', 'course_provider': '{{item.vendor}}', 'product_type': '{{item.product_class}}', 'product_price': '{% if item.product_class == course and variations|length  or item.type_flow == 17 and variations|length %}{{variations.0.price}}{% else %}{{item.price}}{% endif %}'}); GAImpression('removeFromCart', options=[{'name': '{{ item.name }}', 'id': '{{ item.id }}', 'brand': '{{ item.vendor }}', 'category': '{% if item.variations|length %}{{ item.variations.0.li.product.get_category_main }}{% else %}{{ item.li.product.get_category_main }}{% endif %}', 'variant': '{{ item.product_class }}', 'price': '{% if item.variations|length %} {{ item.variations.0.price }} {% else %} {{ item.price }} {% endif %}','position': '{{ forloop.counter }}', 'dimension15': 'Cart Page', 'dimension16': '{% if item.variations|length %} {{ item.variations.0.li.product.avg_rating }}{% else %}{{ item.li.product.avg_rating }}{% endif %}', 'dimension17': '{% if item.variations|length %} {{ item.variations.0.li.product.buy_count }}{% else %}{{ item.li.product.buy_count }}{% endif %}'}]); "></span>
+              id="id-remove-cart{{item.id}}" onclick="sendLearningTracking([{'productId':'{{item.id}}', 'event': 'cart_summary_remove_from_cart', 'pageTitle': 'cart_summary', 'sectionPlacement': 'cart_item', 'eventCategory':'remove_from_cart', 'eventLabel': '{{item.name}}', 'eventAction': 'click', 'algo': '', 'rank': '{{forloop.counter}}', 'course_provider': '{{item.vendor}}', 'product_type': '{{item.product_class}}', 'product_price': '{% if item.product_class == course and variations|length  or item.type_flow == 17 and variations|length %}{{variations.0.price}}{% else %}{{item.price}}{% endif %}'}]); GAImpression('removeFromCart', options=[{'name': '{{ item.name }}', 'id': '{{ item.id }}', 'brand': '{{ item.vendor }}', 'category': '{% if item.variations|length %}{{ item.variations.0.li.product.get_category_main }}{% else %}{{ item.li.product.get_category_main }}{% endif %}', 'variant': '{{ item.product_class }}', 'price': '{% if item.variations|length %} {{ item.variations.0.price }} {% else %} {{ item.price }} {% endif %}','position': '{{ forloop.counter }}', 'dimension15': 'Cart Page', 'dimension16': '{% if item.variations|length %} {{ item.variations.0.li.product.avg_rating }}{% else %}{{ item.li.product.avg_rating }}{% endif %}', 'dimension17': '{% if item.variations|length %} {{ item.variations.0.li.product.buy_count }}{% else %}{{ item.li.product.buy_count }}{% endif %}'}])"></span>
           </form>
 
           <!-- delivery section -->
@@ -160,7 +160,7 @@ Payment Summary - Shine Learning
           <div class="row">
             <div class="col-sm-9">
               <div class="delivery-speed mb-15 delivery-toggle-action" id="btn-delivery"
-                onclick="sendLearningTracking({'productId':'{{item.id}}', 'event': 'cart_summary_open_delivery_service_dropdown', 'pageTitle': 'cart_summary', 'sectionPlacement': 'cart_item', 'eventCategory':'open_delivery_service_dropdown', 'eventLabel': '{{delivery_service.title}}', 'eventAction': 'click', 'algo': '', 'rank': '{{forloop.counter}}', 'course_provider': '{{item.vendor}}', 'product_type': '{{item.product_class}}', 'product_price': '{% if item.product_class == course and variations|length  or item.type_flow == 17 and variations|length %}{{variations.0.price}}{% else %}{{item.price}}{% endif %}'});toggleDeliveryItems('{{item.id}}')">
+                onclick="sendLearningTracking([{'productId':'{{item.id}}', 'event': 'cart_summary_open_delivery_service_dropdown', 'pageTitle': 'cart_summary', 'sectionPlacement': 'cart_item', 'eventCategory':'open_delivery_service_dropdown', 'eventLabel': '{{delivery_service.title}}', 'eventAction': 'click', 'algo': '', 'rank': '{{forloop.counter}}', 'course_provider': '{{item.vendor}}', 'product_type': '{{item.product_class}}', 'product_price': '{% if item.product_class == course and variations|length  or item.type_flow == 17 and variations|length %}{{variations.0.price}}{% else %}{{item.price}}{% endif %}'}]); toggleDeliveryItems('{{item.id}}')">
                 <span class="delivery-icon delivery-toggle-action"></span>
                 <p class="pb-0  delivery-toggle-action">
                   <strong class="block delivery-toggle-action"
@@ -270,7 +270,7 @@ Payment Summary - Shine Learning
                 <span class="error-txt" id="discount-alert"></span>
 
               {% if candidate_in_session  %}
-                <button type="button" id='remove-discount' onclick="JSRemoveDiscount(event);sendLearningTracking({'productId':'', 'event': 'cart_summary_coupon_removed', 'pageTitle': 'cart_summary', 'sectionPlacement': 'cart_footer', 'eventCategory':'coupon_removed', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''});">Remove</button>
+                <button type="button" id='remove-discount' onclick="JSRemoveDiscount(event);sendLearningTracking([{'productId':'', 'event': 'cart_summary_coupon_removed', 'pageTitle': 'cart_summary', 'sectionPlacement': 'cart_footer', 'eventCategory':'coupon_removed', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''}]);">Remove</button>
                   {% else %}
                                  <button type="button" id='remove-discount' onclick="removeGuestCoupon('{{cart.pk}}');">Remove</button>
                                 {% endif %}
@@ -282,21 +282,21 @@ Payment Summary - Shine Learning
               <div class="coupon__wrap">
                 <input id="loyalty_point" type="text" placeholder="{{redeemed_reward_point}} loyalty points redeemed!"
                   disabled>
-                <button type="button" id='remove-point' onclick="JSRemovePoint(event);sendLearningTracking({'productId':'', 'event': 'cart_summary_guest_coupon_removed', 'pageTitle': 'cart_summary', 'sectionPlacement': 'cart_footer', 'eventCategory':'guest_coupon_removed', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''});">Remove</button>
+                <button type="button" id='remove-point' onclick="JSRemovePoint(event);sendLearningTracking([{'productId':'', 'event': 'cart_summary_guest_coupon_removed', 'pageTitle': 'cart_summary', 'sectionPlacement': 'cart_footer', 'eventCategory':'guest_coupon_removed', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''}]);">Remove</button>
               </div><!-- // coupon__wrap -->
               <span class="error-txt" id="point-alert"></span>
             </div><!-- // shineCredit -->
             {% else %}
             {% if candidate_in_session %}
-             <a href="javascript:void(0)" onclick="toggler('showCoupon','shineCredit',true); sendLearningTracking({'productId':'', 'event': 'cart_summary_apply_coupon', 'pageTitle': 'cart_summary', 'sectionPlacement': 'cart_footer', 'eventCategory':'apply_coupon', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''});MyGA.SendEvent('ln_coupon_apply', 'ln_coupon_apply', 'ln_click_apply', 'apply_coupon', '', false, true);" id="show_hide_coupon">Apply 
+             <a href="javascript:void(0)" onclick="toggler('showCoupon','shineCredit',true); sendLearningTracking([{'productId':'', 'event': 'cart_summary_apply_coupon', 'pageTitle': 'cart_summary', 'sectionPlacement': 'cart_footer', 'eventCategory':'apply_coupon', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''}]);MyGA.SendEvent('ln_coupon_apply', 'ln_coupon_apply', 'ln_click_apply', 'apply_coupon', '', false, true);" id="show_hide_coupon">Apply 
               coupon</a>
             |
-            <a href="javascript:void(0)" onclick="toggler('shineCredit','showCoupon',false); sendLearningTracking({'productId':'', 'event': 'cart_summary_redeem_shine_credit', 'pageTitle': 'cart_summary', 'sectionPlacement': 'cart_footer', 'eventCategory':'redeem_shine_credit', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''}); MyGA.SendEvent('ln_coupon_apply', 'ln_coupon_apply', 'ln_click_apply', 'reedem_credit', '', false, true);">Redeem Shine credit</a>
+            <a href="javascript:void(0)" onclick="toggler('shineCredit','showCoupon',false); sendLearningTracking([{'productId':'', 'event': 'cart_summary_redeem_shine_credit', 'pageTitle': 'cart_summary', 'sectionPlacement': 'cart_footer', 'eventCategory':'redeem_shine_credit', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''}]); MyGA.SendEvent('ln_coupon_apply', 'ln_coupon_apply', 'ln_click_apply', 'reedem_credit', '', false, true);">Redeem Shine credit</a>
               {% else %}
                    <div class="form-group pr">
                 <div class="coupon__wrap">
                   <input id="discount_code" type="text" placeholder="Enter coupon code" name="code" maxlength="15" value="{% if cart_coupon %}{{cart_coupon}}{%endif%}">
-                  <button id="guest_apply_btn" type="button" class="btn btn-primary" onclick="sendLearningTracking({'productId':'', 'event': 'cart_summary_coupon_applied', 'pageTitle': 'cart_summary', 'sectionPlacement': 'cart_footer', 'eventCategory':'coupon_applied', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''});MyGA.SendEvent('ln_coupon_apply', 'ln_coupon_apply', 'ln_click_apply', 'apply_coupon', '', false, true);" disabled data-toggle="modal" data-target=".bs-example-modal-lg" >Apply </button>
+                  <button id="guest_apply_btn" type="button" class="btn btn-primary" onclick="sendLearningTracking([{'productId':'', 'event': 'cart_summary_coupon_applied', 'pageTitle': 'cart_summary', 'sectionPlacement': 'cart_footer', 'eventCategory':'coupon_applied', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''}]);MyGA.SendEvent('ln_coupon_apply', 'ln_coupon_apply', 'ln_click_apply', 'apply_coupon', '', false, true);" disabled data-toggle="modal" data-target=".bs-example-modal-lg" >Apply </button>
                 </div><!-- // coupon wrap -->
                 <span class="error-txt" id="discount-alert"></span>
               </div>
@@ -307,7 +307,7 @@ Payment Summary - Shine Learning
               <div class="form-group pr">
                 <div class="coupon__wrap">
                   <input id="discount_code" type="text" placeholder="Enter coupon code" name="code" maxlength="15">
-                  <button type="button" id="discount-apply" onclick="JSApplyDiscount(event);sendLearningTracking({'productId':'', 'event': 'cart_summary_coupon_applied', 'pageTitle': 'cart_summary', 'sectionPlacement': 'cart_footer', 'eventCategory':'coupon_applied', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''});MyGA.SendEvent('ln_coupon_apply', 'ln_coupon_apply', 'ln_click_apply', 'apply_coupon', '', false, true);">Apply </button>
+                  <button type="button" id="discount-apply" onclick="JSApplyDiscount(event);sendLearningTracking([{'productId':'', 'event': 'cart_summary_coupon_applied', 'pageTitle': 'cart_summary', 'sectionPlacement': 'cart_footer', 'eventCategory':'coupon_applied', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''}]);MyGA.SendEvent('ln_coupon_apply', 'ln_coupon_apply', 'ln_click_apply', 'apply_coupon', '', false, true);">Apply </button>
                 </div><!-- // coupon wrap -->
                 <span class="error-txt" id="discount-alert"></span>
               </div><!-- // form-group -->
@@ -320,7 +320,7 @@ Payment Summary - Shine Learning
                   <input id="loyalty_point" type="number" placeholder="Enter loyalty points" min="0"
                     max="{{wallet_total}}" name="point">
                   <button type="button" class="add-redeem-button" id="loyalty-point-apply"
-                    onclick="JSApplyPoint(event);sendLearningTracking({'productId':'', 'event': 'cart_summary_wallet_redeemed', 'pageTitle': 'cart_summary', 'sectionPlacement': 'cart_footer', 'eventCategory':'wallet_redeemed', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''})">Redeem</button>
+                    onclick="JSApplyPoint(event);sendLearningTracking([{'productId':'', 'event': 'cart_summary_wallet_redeemed', 'pageTitle': 'cart_summary', 'sectionPlacement': 'cart_footer', 'eventCategory':'wallet_redeemed', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': ''}])">Redeem</button>
                 </div><!-- // coupon wrap -->
                 <span class="error-txt" id="point-alert"></span>
               </div><!-- // form-group -->
@@ -367,15 +367,15 @@ Payment Summary - Shine Learning
       <span class="col-sm-7 col-md-8"></span>
       <span class="col-sm-3 col-md-4 continue">
          {% if cart.coupon_id and guest_in_session %}
-                      <a class='trig-loader' onClick="sendLearningTracking({'productId':'', 'event': 'cart_summary_payment_options_redirection', 'pageTitle': 'cart_summary', 'sectionPlacement': 'cart_footer', 'eventCategory':'payment_options_redirection', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': '', 'product_price': '{{total_payable_amount}}' });MyGA.SendEvent('ln_proceed_payment', 'ln_proceed_payment', 'ln_click_to_payment', {{no_of_cartitems}}, '', false, true);" href="{% url 'payment:payment-option' %}"><button type="button"
+                      <a class='trig-loader' onClick="MyGA.SendEvent('ln_proceed_payment', 'ln_proceed_payment', 'ln_click_to_payment', '{{no_of_cartitems}}', '', false, true);" href="{% url 'payment:payment-option' %}"><button type="button"
             id="payment-summary-continue-id">Proceed to
             payment</button></a>
 
           {% else %}
 
-        <a class='trig-loader' onClick="sendLearningTracking({'productId':'', 'event': 'cart_summary_payment_login_redirection', 'pageTitle': 'cart_summary', 'sectionPlacement': 'cart_footer', 'eventCategory':'payment_login_redirection', 'eventLabel': '', 'eventAction': 'click', 'algo': '', 'rank': '', 'product_price': '{{total_payable_amount}}' });MyGA.SendEvent('ln_proceed_payment', 'ln_proceed_payment', 'ln_click_to_payment', {{no_of_cartitems}}, '', false, true);" href="{% url 'cart:payment-login' %}"><button type="button"
-            id="payment-summary-continue-id">Proceed to
-            payment</button></a>
+        <a class='trig-loader' onClick="MyGA.SendEvent('ln_proceed_payment', 'ln_proceed_payment', 'ln_click_to_payment', '{{no_of_cartitems}}', '', false, true)" href="{% url 'cart:payment-login' %}">
+          <button type="button" id="payment-summary-continue-id">Proceed to payment</button>
+        </a>
 
           {% endif %}
         <!-- <figure class="secure-payment-icon"></figure>
@@ -584,7 +584,6 @@ Payment Summary - Shine Learning
   var popup_based_product = "{{popup_based_product}}";
   var recommendation_by = "{{recommendation_by}}";
   var cart_addition = "{{cart_addition}}";
-
   var paymentSummary = true;
   var cartData = "{{request|get_cart_info}}";
   var cart_candidate_id ='{{cart.owner_id}}'
@@ -592,22 +591,50 @@ Payment Summary - Shine Learning
   var total_payable_amount = "{{total_payable_amount}}"
   var cart_items = "{{cart_items}}"
 
+  </script>
 
-// console.log("{{total_amount}}", "{{total_payable_amount}}", "{{cart_items}}")
+  <script>
+    $('#payment-summary-continue-id').click(function () {
+      var artt = [
+        {% for cart in cart_items %}
+        {% with addons=cart.addons variations=cart.variations delivery_types=cart.delivery_types product=cart.li.product delivery_service=cart.delivery_obj  %}
+            // {% if not forloop.first %},{% endif %}
+            {
+              // console.log({{cart.id}}, {{cart.product_class}}, {{cart.vendor}})
 
-</script>
+                'productId': '{{cart.id}}',
+                'event': 'cart_summary_proceed_to_payment',
+                'pageTitle': 'cart_summary',
+                'sectionPlacement': 'cart_footer',
+                'eventCategory':'proceed_to_payment',
+                'eventLabel': '',
+                'eventAction': 'click',
+                'algo': '',
+                'rank': '',
+                'product_price': '{{total_payable_amount}}',
+                'course_provider': '{{cart.vendor}}',
+                'product_type': '{{cart.product_class}}',
+                'product_price': {% if cart.product_class == 'course' and variations|length  or cart.type_flow == 17 and  variations|length  %}
+              {{variations.0.price}} {% else %} {{cart.price}} {% endif %}
+            },
+        {% endwith %}
+        {% endfor %}
+      ]
+      sendLearningTracking(artt)
+});
+
+  </script>
 <script type="text/javascript" src="{% static 'packages/select2/dist/js/select2.min.js' %}"></script>
 <script src="{% static 'packages/sweetalert/dist/sweetalert2.all.min.js' %}"></script>
-<script src="{% static 'shinelearn/js/cart/payment-login.js' %}"></script>
-<script src="{% static 'shinelearn/js/common/learning_tracking.js' %}"></script>
-<script src="{% static 'shinelearn/js/cart/guest_login.js' %}"></script>
 <script type="text/javascript" src="{% static 'shinelearn/js/mobile/cart/cart.js' %}"></script>
-
 
 
 {% compress js %}
 <script type="text/javascript" src="{% static 'shinelearn/js/cart/payment-summary.js' %}"></script>
 <script src="{% static 'shinelearn/js/cart/cart.js' %}"></script>
+<script src="{% static 'shinelearn/js/cart/payment-login.js' %}"></script>
+<script src="{% static 'shinelearn/js/common/learning_tracking.js' %}"></script>
+<script src="{% static 'shinelearn/js/cart/guest_login.js' %}"></script>
 <script src="{% static 'shinelearn/js/common/plugins.ga.js' %}"></script>
 {% endcompress %}
 
