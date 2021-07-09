@@ -590,12 +590,12 @@ Payment Summary - Shine Learning
   var neoEmail = "{{neo_email}}";
   var total_payable_amount = "{{total_payable_amount}}"
   var cart_items = "{{cart_items}}"
-
+// console.log('{{request|get_cart_info}}')
   </script>
 
   <script>
     $('#payment-summary-continue-id').click(function () {
-      var artt = [
+      var trackData = [
         {% for cart in cart_items %}
         {% with addons=cart.addons variations=cart.variations delivery_types=cart.delivery_types product=cart.li.product delivery_service=cart.delivery_obj  %}
             // {% if not forloop.first %},{% endif %}
@@ -620,7 +620,7 @@ Payment Summary - Shine Learning
         {% endwith %}
         {% endfor %}
       ]
-      sendLearningTracking(artt)
+      sendLearningTracking(trackData)
 });
 
   </script>
