@@ -1219,7 +1219,7 @@ class UserMixin(object):
         ip = self.get_client_ip(request)
         code2 = 'IN'
         try:
-            if ip:
+            if ip and g.country(ip)['country_code']:
                 code2 = g.country(ip)['country_code'].upper()
             else:
                 code2 = 'IN'
