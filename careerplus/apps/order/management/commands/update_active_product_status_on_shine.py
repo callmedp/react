@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 from order.models import OrderItem
 from django.utils import timezone
-
+import logging
 class Command(BaseCommand):
 
     def handle(self, *args, **options):
@@ -30,5 +30,4 @@ def remove_inactive_products_from_scp():
                 oi.active_on_shine = 0
                 oi.save()
             except Exception as e:
-                logging.getLogger('error_log').error(
-                    'could not able to update order Item {} whle inactivating products from shine', oi.id)
+                logging.getLogger('error_log').error('could not able to update order Item %s whle inactivating products from shine' % (str(oi.id)))
