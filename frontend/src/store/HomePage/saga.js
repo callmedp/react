@@ -116,6 +116,11 @@ function* skillwithDemands(action) {
             return reject(response);
         }
         const item = response?.data?.data;
+
+        if(!!item && item.trendingSkills instanceof Array){
+            item.trendingSkills = item.trendingSkills.filter((skill) => skill.image && !skill.image.includes('default_product_image'))
+        }
+
         yield put(skillwithDemandsFetched({ item }))
         return resolve(item);
     }
