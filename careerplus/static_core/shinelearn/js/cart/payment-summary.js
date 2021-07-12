@@ -525,8 +525,8 @@ const removeGuestCoupon = (cart_pk) =>{
            $('body').removeClass('body-noscroll')
            $('#CartLoginBtn').removeAttr("disabled")
            let msg
-           if(data?.msg != undefined){
-           msg = data?.msg}
+           if(data && data.msg != undefined){
+           msg = data.msg}
 
            if(msg !=undefined){
                  Swal.fire({
@@ -545,8 +545,8 @@ const removeGuestCoupon = (cart_pk) =>{
           error: function (jqXHR, textStatus, errorThrown)
           {
                                                let message;
-          if(jqXHR?.responseJSON?.error_message != undefined){
-            message =  jqXHR?.responseJSON?.error_message
+          if(jqXHR && jqXHR.responseJSON && jqXHR.responseJSON.error_message  && jqXHR.responseJSON.error_message != undefined){
+            message =  jqXHR.responseJSON.error_message
           }
           else{
           message= 'Something Went Wrong'

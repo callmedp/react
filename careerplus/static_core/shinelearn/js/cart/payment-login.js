@@ -425,12 +425,12 @@ const CartLogin =  (e) => {
            $('body').removeClass('body-noscroll')
            $('#CartLoginBtn').removeAttr("disabled")
 
-          if(data?.error != undefined){
+          if(data && data.error != undefined){
                           $('#CartloginModal').modal('hide')
 
                        Swal.fire({
                             title: 'Error!',
-                            text: data?.error,
+                            text: data.error,
                             type: 'error',
                             showConfirmButton: false,
                             timer: 2000
@@ -438,7 +438,7 @@ const CartLogin =  (e) => {
                         })
           }
 
-          else if (data?.candidate_id !=undefined){
+          else if (data && data.candidate_id !=undefined){
 
           $('#guest_apply_btn').removeAttr('data-target')
 

@@ -91,11 +91,11 @@ $(document).ready(function () {
            $('body').removeClass('body-noscroll')
            $('#CartLoginBtn').removeAttr("disabled")
 
-          if(data?.error != undefined){
+          if(data && data.error != undefined){
            $('#CartloginModal').modal('hide')
            Swal.fire({
                 title: 'Error!',
-                text: data?.error,
+                text: data.error,
                 type: 'error',
                 showConfirmButton: false,
                 timer: 2000
@@ -103,10 +103,10 @@ $(document).ready(function () {
             })
           }
 
-          else if (data?.candidate_id !=undefined){
+          else if (data && data.candidate_id !=undefined){
           let cart_pk = $('#cart_pk').val()
           let code = $('#discount_code').val()
-             applyGuestCoupon(data?.candidate_id,cart_pk,code)
+             applyGuestCoupon(data.candidate_id,cart_pk,code)
 
 
           }
@@ -574,13 +574,13 @@ let data = { 'candidate_id':candidate_id,'cart_pk':cart_pk,'code':code }
            $('#CartLoginBtn').removeAttr("disabled")
           $('#CartloginModal').modal('hide')
 
-          if(data?.error != undefined){
+          if(data && data.error != undefined){
                        $('.overlay-background').show()
 
            $('#CartloginModal').modal('hide')
            Swal.fire({
                 title: 'Error!',
-                text: data?.error,
+                text: data.error,
                 type: 'error',
                 showConfirmButton: false,
                 timer: 2000
@@ -588,17 +588,17 @@ let data = { 'candidate_id':candidate_id,'cart_pk':cart_pk,'code':code }
             })
                 $('#discount_code').parent().addClass('error');
                     $('#discount-alert').empty();
-                    $('#discount-alert').text(data?.error);
+                    $('#discount-alert').text(data.error);
                     $('#discount-alert').fadeIn('slow').fadeTo('fast', 0.5).fadeTo('fast', 1.0);
                     $('#discount-apply').prop('disabled', false);
           }
 
-          if(data?.msg != undefined){
+          if(data && data.msg != undefined){
 
 
                      Swal.fire({
                 title: 'Success!',
-                text: data?.msg,
+                text: data.msg,
                 type: 'success',
                 showConfirmButton: false,
                 timer: 2000
@@ -615,8 +615,8 @@ let data = { 'candidate_id':candidate_id,'cart_pk':cart_pk,'code':code }
           {
 
                                                let message;
-          if(jqXHR?.responseJSON?.error_message != undefined){
-            message =  jqXHR?.responseJSON?.error_message
+          if(jqXHR && jqXHR.responseJSON && jqXHR.error_message != undefined){
+            message =  jqXHR.responseJSON.error_message
           }
           else{
           message= 'Something Went Wrong'
