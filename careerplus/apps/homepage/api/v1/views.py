@@ -867,7 +867,7 @@ class TrendingCoursesAndSkillsAPI(PopularProductMixin, APIView):
         skills = []
         skill_data = {}
         for i in categories:
-            if not 'default_product_image' in i.get_absolute_url():
+            if not 'default_product_image' in i.get_absolute_image_url():
                 skill_data ={
                     'id': i.id,
                     'skillName': i.name,

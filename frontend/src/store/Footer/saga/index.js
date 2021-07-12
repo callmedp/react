@@ -12,6 +12,10 @@ function* fetchTrendingCnA(action) {
         }
         const item = response?.data?.data;
 
+        if(!!item && item.trendingSkills instanceof Array){
+            item.trendingSkills = item.trendingSkills.filter((skill) => skill.image && !skill.image.includes('default_product_image'))
+        }
+
         if(!!payload && !!payload.homepage && !!item && item.trendingSkills instanceof Array){
             const skillList = item?.trendingSkills.reduce((rows, key, index) => 
                 (index % 4 == 0 ? rows.push([key]) : rows[rows.length-1].push(key)) && rows, []);
