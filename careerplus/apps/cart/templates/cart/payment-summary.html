@@ -590,40 +590,35 @@ Payment Summary - Shine Learning
   var neoEmail = "{{neo_email}}";
   var total_payable_amount = "{{total_payable_amount}}"
   var cart_items = "{{cart_items}}"
-// console.log('{{request|get_cart_info}}')
-  </script>
+</script>
 
-  <script>
-    $('#payment-summary-continue-id').click(function () {
-      var trackData = [
-        {% for cart in cart_items %}
-        {% with addons=cart.addons variations=cart.variations delivery_types=cart.delivery_types product=cart.li.product delivery_service=cart.delivery_obj  %}
-            // {% if not forloop.first %},{% endif %}
-            {
-              // console.log({{cart.id}}, {{cart.product_class}}, {{cart.vendor}})
+<script>
+  $('#payment-summary-continue-id').click(function () {
+    var trackData = [
+      {% for cart in cart_items %}
+      {% with addons=cart.addons variations=cart.variations delivery_types=cart.delivery_types product=cart.li.product delivery_service=cart.delivery_obj  %}
+          {
+              'productId': '{{cart.id}}',
+              'event': 'cart_summary_proceed_to_payment',
+              'pageTitle': 'cart_summary',
+              'sectionPlacement': 'cart_footer',
+              'eventCategory':'proceed_to_payment',
+              'eventLabel': '',
+              'eventAction': 'click',
+              'algo': '',
+              'rank': '{{forloop.counter0}}',
+              'course_provider': '{{cart.vendor}}',
+              'product_type': '{{cart.product_class}}',
+              'product_price': {% if cart.product_class == 'course' and variations|length or cart.type_flow == 17 and  variations|length  %}
+            {{variations.0.price}} {% else %} {{cart.price}} {% endif %}
+          },
+      {% endwith %}
+      {% endfor %}
+    ]
+    sendLearningTracking(trackData)
+  });
+</script>
 
-                'productId': '{{cart.id}}',
-                'event': 'cart_summary_proceed_to_payment',
-                'pageTitle': 'cart_summary',
-                'sectionPlacement': 'cart_footer',
-                'eventCategory':'proceed_to_payment',
-                'eventLabel': '',
-                'eventAction': 'click',
-                'algo': '',
-                'rank': '',
-                'product_price': '{{total_payable_amount}}',
-                'course_provider': '{{cart.vendor}}',
-                'product_type': '{{cart.product_class}}',
-                'product_price': {% if cart.product_class == 'course' and variations|length  or cart.type_flow == 17 and  variations|length  %}
-              {{variations.0.price}} {% else %} {{cart.price}} {% endif %}
-            },
-        {% endwith %}
-        {% endfor %}
-      ]
-      sendLearningTracking(trackData)
-});
-
-  </script>
 <script type="text/javascript" src="{% static 'packages/select2/dist/js/select2.min.js' %}"></script>
 <script src="{% static 'packages/sweetalert/dist/sweetalert2.all.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'shinelearn/js/mobile/cart/cart.js' %}"></script>

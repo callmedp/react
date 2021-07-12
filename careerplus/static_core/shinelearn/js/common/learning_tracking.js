@@ -19,7 +19,7 @@ const getDefaultEvents = (data) => {
 }
 
 const addDefaultPayload = (payload) => {
-    return [ ...getDefaultEvents(payload) ];
+    return getDefaultEvents(payload);
 }
 
 const sendLearningTracking = function (payload) {
