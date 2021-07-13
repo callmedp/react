@@ -8,7 +8,8 @@ function* learningTrackingWorker(action){
     const { payload } = action;
     console.log("learning tracking payload", payload)
     const superChargedPayload = addDefaultPayload(payload);
-    yield call(Api.learningTrackingApi, superChargedPayload);
+    const superChargedArray = [superChargedPayload]
+    yield call(Api.learningTrackingApi, superChargedArray);
 
 }
 

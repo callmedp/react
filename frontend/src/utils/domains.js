@@ -14,3 +14,5 @@ export const shineDomain = 'https://www.shine.com';
 export const shineSiteUrl = 'https://www.shine.com/jobs/';
 
 export const chatbotDomain = window?.config?.chatbotDomain || process.env.REACT_APP_CHATBOT_SITE_DOMAIN ||  'https://chat.shine.com';
+
+export const trackingSiteDomain = window?.config?.trackingSiteDomain || process.env.REACT_APP_TRACKING_SITE_DOMAIN ||  'http://34.93.108.100:80/api/v1/core/track';
