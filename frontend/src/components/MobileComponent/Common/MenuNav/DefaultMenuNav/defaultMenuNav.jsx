@@ -14,7 +14,7 @@ import {
   getCandidateId,
 } from "utils/storage.js";
 import { MyGA } from "utils/ga.tracking.js";
-import { fetchAlreadyLoggedInUser } from "store/Authentication/actions/index";
+import useLearningTracking from 'services/learningTracking';
 
 const DefaultMenuNav = (props) => {
   const { setType, setOpen, open } = props;
@@ -23,6 +23,7 @@ const DefaultMenuNav = (props) => {
   const { navTags } = useSelector((store) => store.header);
   const [candidateInfo, setCandidateInfo] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const sendLearningTracking = useLearningTracking();
 
   const fetchUserInfo = async () => {
     try {
@@ -60,6 +61,17 @@ const DefaultMenuNav = (props) => {
       false,
       true
     );
+    sendLearningTracking({
+      productId: '',
+      event: `${props.pageTitle}_menu_nav_header_homepage_redirection`,
+      pageTitle: props.pageTitle,
+      sectionPlacement: 'header',
+      eventCategory: 'menu_nav_header',
+      eventLabel: '',
+      eventAction: 'click',
+      algo: '',
+      rank: '',
+    })
     let product_tracking_mapping_id = localStorage.getItem(
       "productTrackingMappingId"
     );
@@ -73,6 +85,183 @@ const DefaultMenuNav = (props) => {
     dispatch(fetchNavOffersAndTags());
   }, []);
 
+  const handleHeaderTracking = (category, event) => {
+    sendLearningTracking({
+      productId: '',
+      event: `${props.pageTitle}_${category}_${event}`,
+      pageTitle: props.pageTitle,
+      sectionPlacement: 'header',
+      eventCategory: `default_menu_nav_${category}`,
+      eventLabel: '',
+      eventAction: 'click',
+      algo: '',
+      rank: '',
+    })
+  }
+  const aboutContactTracking = (name) => {
+    MyGA.SendEvent(
+      "homepage_footer",
+      "ln_homepage_footer",
+      "ln_homepage_footer_clicked",
+      name,
+      "",
+      false,
+      true
+    )
+
+    sendLearningTracking({
+      productId: '',
+      event: `${props.pageTitle}_default_menu_nav_${name}`,
+      pageTitle: props.pageTitle,
+      sectionPlacement: 'header',
+      eventCategory: 'default_menu_nav',
+      eventLabel: '',
+      eventAction: 'click',
+      algo: '',
+      rank: '',
+    })
+
+  }
+
+  const blogTracking = () => {
+    MyGA.SendEvent('homepage_navigation', 'ln_homepage_navigation', 'ln_blog', 'ln_blog', '', false, true)
+    sendLearningTracking({
+      productId: '',
+      event: `${props.pageTitle}_default_menu_nav_blog`,
+      pageTitle: props.pageTitle,
+      sectionPlacement: 'header',
+      eventCategory: 'default_menu_nav',
+      eventLabel: '',
+      eventAction: 'click',
+      algo: '',
+      rank: '',
+    })
+  }
+
+  const userIntentTracking = () => {
+    sendLearningTracking({
+      productId: '',
+      event: `${props.pageTitle}_default_menu_nav_user_intent`,
+      pageTitle: props.pageTitle,
+      sectionPlacement: 'header',
+      eventCategory: 'default_menu_nav',
+      eventLabel: '',
+      eventAction: 'click',
+      algo: '',
+      rank: '',
+    })
+  }
+
+  const jobAssistanceTracking = (e) => {
+    e.preventDefault();
+    setType("jobAssistanceServices");
+    MyGA.SendEvent(
+      "homepage_navigation",
+      "ln_homepage_navigation",
+      "ln_job_assisstance",
+      "ln_job_assisstance",
+      "",
+      false,
+      true
+    );
+
+    sendLearningTracking({
+      productId: '',
+      event: `${props.pageTitle}_default_menu_nav_job_assistance_services`,
+      pageTitle: props.pageTitle,
+      sectionPlacement: 'header',
+      eventCategory: 'default_menu_nav',
+      eventLabel: '',
+      eventAction: 'click',
+      algo: '',
+      rank: '',
+    })
+  }
+
+  const allCoursesTracking = (e) => {
+    e.preventDefault();
+    setType("allCourses");
+    sendLearningTracking({
+      productId: '',
+      event: `${props.pageTitle}_default_menu_nav_all_courses`,
+      pageTitle: props.pageTitle,
+      sectionPlacement: 'header',
+      eventCategory: 'default_menu_nav',
+      eventLabel: '',
+      eventAction: 'click',
+      algo: '',
+      rank: '',
+    })
+
+  }
+
+  const linkedinProfileTracking = () => {
+    MyGA.SendEvent(
+      "homepage_navigation",
+      "ln_homepage_navigation",
+      "ln_linked_profile_writing",
+      "ln_linked_profile_writing",
+      "",
+      false,
+      true
+    )
+
+    sendLearningTracking({
+      productId: '',
+      event: `${props.pageTitle}_default_menu_nav_linkedin_profile_writing`,
+      pageTitle: props.pageTitle,
+      sectionPlacement: 'header',
+      eventCategory: 'default_menu_nav',
+      eventLabel: '',
+      eventAction: 'click',
+      algo: '',
+      rank: '',
+    })
+
+  }
+
+  const freeResourcesTracking = (e) => {
+    e.preventDefault();
+    setType("freeResources");
+    MyGA.SendEvent(
+      "homepage_navigation",
+      "ln_homepage_navigation",
+      "ln_free_resources",
+      "ln_free_resources",
+      "",
+      false,
+      true
+    );
+
+    sendLearningTracking({
+      productId: '',
+      event: `${props.pageTitle}_default_menu_nav_free_resources`,
+      pageTitle: props.pageTitle,
+      sectionPlacement: 'header',
+      eventCategory: 'default_menu_nav',
+      eventLabel: '',
+      eventAction: 'click',
+      algo: '',
+      rank: '',
+    })
+  }
+
+  const navTracking = (name, index) => {
+
+    sendLearningTracking({
+      productId: '',
+      event: `${props.pageTitle}_default_menu_nav_${name}`,
+      pageTitle: props.pageTitle,
+      sectionPlacement:'header',
+      eventCategory: 'default_menu_nav',
+      eventLabel: '',
+      eventAction: 'click',
+      algo: '',
+      rank: '',
+  })
+  }
+
+
   return (
     <Menu
       className="navigation"
@@ -80,7 +269,12 @@ const DefaultMenuNav = (props) => {
       isOpen={open}
       onStateChange={(state) => setOpen(state.isOpen)}
     >
-      <MenuNavHeader isLoggedIn={isLoggedIn} candidateInfo={candidateInfo} />
+      <MenuNavHeader 
+        isLoggedIn={isLoggedIn} 
+        candidateInfo={candidateInfo} 
+        sendLearningTracking={sendLearningTracking}
+        pageTitle = {props.pageTitle}
+      />
       <div className="m-menu-links">
         <Link
           className="menu-item"
@@ -95,10 +289,7 @@ const DefaultMenuNav = (props) => {
         <a
           href="/"
           className="menu-item"
-          onClick={(e) => {
-            e.preventDefault();
-            setType("allCourses");
-          }}
+          onClick={allCoursesTracking}
         >
           <figure className="micon-courses-services" /> All Courses{" "}
           <figure className="micon-arrow-menusm ml-auto" />
@@ -106,19 +297,7 @@ const DefaultMenuNav = (props) => {
         <a
           href="/"
           className="menu-item"
-          onClick={(e) => {
-            e.preventDefault();
-            setType("jobAssistanceServices");
-            MyGA.SendEvent(
-              "homepage_navigation",
-              "ln_homepage_navigation",
-              "ln_job_assisstance",
-              "ln_job_assisstance",
-              "",
-              false,
-              true
-            );
-          }}
+          onClick={jobAssistanceTracking}
         >
           <figure className="micon-resume-service" /> Job Assistance Services{" "}
           <figure className="micon-arrow-menusm ml-auto" />
@@ -126,36 +305,14 @@ const DefaultMenuNav = (props) => {
         <a
           href={`${resumeShineSiteDomain}/product/linkedin-profile-writing/entry-level-2/1926/`}
           className="menu-item"
-          onClick={() =>
-            MyGA.SendEvent(
-              "homepage_navigation",
-              "ln_homepage_navigation",
-              "ln_linked_profile_writing",
-              "ln_linked_profile_writing",
-              "",
-              false,
-              true
-            )
-          }
+          onClick={linkedinProfileTracking}
         >
           <figure className="micon-linkedin-service" /> Linkedin Profile Writing
         </a>
         <a
           href="/"
           className="menu-item"
-          onClick={(e) => {
-            e.preventDefault();
-            setType("freeResources");
-            MyGA.SendEvent(
-              "homepage_navigation",
-              "ln_homepage_navigation",
-              "ln_free_resources",
-              "ln_free_resources",
-              "",
-              false,
-              true
-            );
-          }}
+          onClick={freeResourcesTracking}
         >
           <figure className="micon-free-resources" /> Free Resources{" "}
           <figure className="micon-arrow-menusm ml-auto" />
@@ -163,40 +320,32 @@ const DefaultMenuNav = (props) => {
         <a
           className="menu-item"
           href={`${siteDomain}/talenteconomy/`}
-          onClick={() =>
-            MyGA.SendEvent(
-              "homepage_navigation",
-              "ln_homepage_navigation",
-              "ln_blog",
-              "ln_blog",
-              "",
-              false,
-              true
-            )
-          }
+          onClick={blogTracking}
         >
           <figure className="micon-blog-services" /> Blog
         </a>
         <Link
           className="menu-item"
+          onClick={userIntentTracking}
           to={"/user-intent"}
         >
           <figure className="micon-ui-cg" /> Career Guidance <small className="m-config-tag">NEW</small>
         </Link>
         {navTags?.length
           ? navTags.map((tag, index) => {
-              return (
-                <a key={index} className="menu-item" href={tag.skill_page_url}>
-                  {" "}
-                  {tag?.display_name}&emsp;
-                </a>
-              );
-            })
+            return (
+              <a key={index} className="menu-item" onClick={() => navTracking(tag.display_name, index)} href={tag.skill_page_url}>
+                {" "}
+                {tag?.display_name}&emsp;
+              </a>
+            );
+          })
           : null}
         {isLoggedIn && (
           <ul className="dashboard-menu">
             <li>
               <a
+                onClick={() => handleHeaderTracking('login', 'my_courses')}
                 className="dashboard-menu--item"
                 href={`${siteDomain}/dashboard/`}
               >
@@ -204,16 +353,16 @@ const DefaultMenuNav = (props) => {
               </a>
               <ul className="dashboard-menu__submmenu">
                 <li>
-                  <a href={`${siteDomain}/dashboard/`}>My Courses</a>
+                  <a onClick={() => handleHeaderTracking('login', 'my_courses')} href={`${siteDomain}/dashboard/`}>My Courses</a>
                 </li>
                 <li>
-                  <a href={`${siteDomain}/dashboard/myservices`}>My Services</a>
+                  <a onClick={() => handleHeaderTracking('login', 'my_services')} href={`${siteDomain}/dashboard/myservices`}>My Services</a>
                 </li>
                 <li>
-                  <a href={`${siteDomain}/dashboard/myorder/`}>My Orders</a>
+                  <a onClick={() => handleHeaderTracking('login', 'my_orders')} href={`${siteDomain}/dashboard/myorder/`}>My Orders</a>
                 </li>
                 <li>
-                  <a href={`${siteDomain}/dashboard/mywallet/`}>My Wallet</a>
+                  <a onClick={() => handleHeaderTracking('login', 'my_wallet')} href={`${siteDomain}/dashboard/mywallet/`}>My Wallet</a>
                 </li>
               </ul>
             </li>
@@ -222,34 +371,14 @@ const DefaultMenuNav = (props) => {
         <a
           className="menu-item"
           href={`${siteDomain}/about-us`}
-          onClick={() =>
-            MyGA.SendEvent(
-              "homepage_footer",
-              "ln_homepage_footer",
-              "ln_homepage_footer_clicked",
-              "About Us",
-              "",
-              false,
-              true
-            )
-          }
+          onClick={() => aboutContactTracking('about_us')}
         >
           About us
         </a>
         <a
           className="menu-item"
           href={`${siteDomain}/contact-us`}
-          onClick={() =>
-            MyGA.SendEvent(
-              "homepage_footer",
-              "ln_homepage_footer",
-              "ln_homepage_footer_clicked",
-              "Contact Us",
-              "",
-              false,
-              true
-            )
-          }
+          onClick={() => aboutContactTracking("contact_us")}
         >
           Contact us
         </a>

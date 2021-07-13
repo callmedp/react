@@ -102,7 +102,7 @@ const HomePage = (props) => {
             {/* <OfferEnds /> */}
             {(navOffer[4] && showMainOffer) ? <OfferEnds navOffer={navOffer} showMainOffer={showMainOffer} setShowMainOffer={setShowMainOffer} /> : ""}
 
-            <Header isHomepage={true} showMainOffer={showMainOffer} setShowMainOffer={setShowMainOffer} />
+            <Header pageTitle = "homepage" isHomepage={true} showMainOffer={showMainOffer} setShowMainOffer={setShowMainOffer} />
             <main>
                 <HomeBanner />
                 <PopularCourses />
