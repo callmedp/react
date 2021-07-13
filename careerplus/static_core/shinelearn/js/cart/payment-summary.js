@@ -511,6 +511,9 @@ $(document).ready(function () {
     });
 });
 
+const trackingCheck = (data) => {
+    console.log(data);
+}
 
 const removeGuestCoupon = (cart_pk) =>{
     $('.overlay-background').show()
