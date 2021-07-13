@@ -245,6 +245,7 @@ Thank You - Shine Learning
     var popup_based_product = "{{popup_based_product}}";
     var recommendation_by = "{{recommendation_by}}";
     var cart_addition = "{{cart_addition}}";
+    var email_id = "{{email_id}}"
 </script>
 
 {% include 'homepage/partials/ga.impression.html' with page="checkout-complete" used_as="script" oi_products=orderitems order_id=order.ordertxns.last.txn total_price=order.total_incl_tax tax_exlude=order.total_excl_tax  %}

@@ -344,7 +344,8 @@ class ThankYouView(TemplateView):
             "pending_resume_items": pending_resume_items,
             "assesment_items": assesment_items,
             'booster_item_exist': booster_item_exist,
-            'candidate_id': self.request and self.request.session.get('candidate_id', '')
+            'candidate_id': self.request and self.request.session.get('candidate_id', ''), 
+            'email_id': self.request.session.get('email', '')
         })
 
         if not self.request.session.get('resume_id', None):
