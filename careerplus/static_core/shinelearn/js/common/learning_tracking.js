@@ -11,7 +11,7 @@ const getDefaultEvents = (data) => {
         userID : uId || localStorage.getItem('userId') || '',
         user_type : !!(uId || localStorage.getItem('userId')) ? 'logged_in' : 'non_logged_in',
         timestamp : new Date(),
-        learning_session_id : '', 
+        learning_session_id : localStorage.getItem('session_id') || session_id, 
         shine_t_id : trackingId || '',
         email: localStorage.getItem('userEmail') || email_id
     }))

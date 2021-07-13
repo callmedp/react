@@ -11,12 +11,13 @@ export const addDefaultPayload = (payload) => {
 
 export const getDefaultEvents = () => {
     return {
-        source : localStorage.getItem('source') || '',
+        source : localStorage.getItem('source') || 'learning',
         device : isMobileDevice(navigator.userAgent) ? 'mobile' : 'desktop',
         userId : localStorage.getItem('userId') || '',
         userType : !!localStorage.getItem('userId') ? 'logged_in' : 'non_logged_in',
         timeStamp : new Date(),
-        learning_session_id : '', 
-        tracking_id : ''
+        learning_session_id : localStorage.getItem('sessionId'), 
+        tracking_id : localStorage.getItem("trackingId") || '', 
+        email : localStorage.getItem('userEmail') || '' 
     }
 }

@@ -6,9 +6,10 @@ function* sessionAvailability(action) {
     let { payload: {payload, resolve, reject } } = action;
     try {
         let resp = yield call(Api.sessionAvailability)
-        const { result, candidate_id } = resp.data;
+        const { result, candidate_id, session_id } = resp.data;
         localStorage.setItem('isAuthenticated', result);
         localStorage.setItem('candidateId', candidate_id);
+        localStorage.setItem('sessionId', session_id)
         return resolve({ result: result, candidate_id: candidate_id });
     } catch (e) {
         return resolve(false)

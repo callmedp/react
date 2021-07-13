@@ -953,11 +953,12 @@ class SessionAvailabilityAPIView(APIView):
     serializer_class = None
 
     def get(self, request, *args, **kwargs):
+        session_id = request._request.session.session_key
         if (request.user and request.user.is_authenticated):
             try:
                 candidate_id = request._request.session.get('candidate_id', '')
                 code2 = request._request.session.get('country_code2')
-
+                
             except:
                 candidate_id = ''
                 code2 = 'IN'
@@ -965,7 +966,8 @@ class SessionAvailabilityAPIView(APIView):
                 data={
                     'result': True,
                     'candidate_id': candidate_id,
-                    'code2':code2
+                    'code2':code2, 
+                    'session_id': session_id
                 },
                 status=status.HTTP_200_OK
             )
@@ -973,6 +975,7 @@ class SessionAvailabilityAPIView(APIView):
             data={
                 'result': False,
                 'candidate_id': '',
+                'session_id': session_id
             },
             status=status.HTTP_200_OK 
         )

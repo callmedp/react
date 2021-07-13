@@ -972,17 +972,20 @@ class PaymentSummaryView(TemplateView, CartMixin):
             'referal_subproduct': self.request.session.get('referal_subproduct', ''),
             'popup_based_product' : self.request.session.get('popup_based_product', ''),
             'recommendation_by': self.request.session.get('recommendation_by', ''),
-            'cart_addition': self.request.session.get('cart_addition', "False")
+            'cart_addition': self.request.session.get('cart_addition', "False"),
         })
+
+        session_id = self.request.session.session_key
 
         context.update({
             "cart_items": cart_items,
             "cart_contain_items": True if len(cart_items) else False,
             'no_of_cartitems':len(cart_items),
+            'session_id': session_id
         })
 
         if cart_obj and cart_obj.lineitems.filter(product__vendor__slug='neo').exists():
-            session_id = self.request.session.session_key
+            
             email = cache.get('{}_neo_email_done'.format(session_id))
             context.update({'neo_email': email})
 

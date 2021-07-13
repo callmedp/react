@@ -285,7 +285,8 @@ class PaymentOptionView(TemplateView, OrderMixin, PaymentMixin):
             'referal_subproduct' : self.request.session.get('referal_subproduct', ''),
             'popup_based_product' : self.request.session.get('popup_based_product', ''),
             'recommendation_by': self.request.session.get('recommendation_by', ''),
-            'cart_addition': self.request.session.get('cart_addition', '')
+            'cart_addition': self.request.session.get('cart_addition', ''),
+            'session_id': self.request.session.session_key,
             
         })
         return context
@@ -345,7 +346,8 @@ class ThankYouView(TemplateView):
             "assesment_items": assesment_items,
             'booster_item_exist': booster_item_exist,
             'candidate_id': self.request and self.request.session.get('candidate_id', ''), 
-            'email_id': self.request.session.get('email', '')
+            'email_id': self.request.session.get('email', ''), 
+            'session_id': self.request.session.session_key,
         })
 
         if not self.request.session.get('resume_id', None):
