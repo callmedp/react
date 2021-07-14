@@ -238,7 +238,7 @@ const Header = (props) => {
                         </Link>
 
                             <div className="collapse navbar-collapse" id="navbarSupportedContent">
-                                { !isHomepage ? <SearchBar place="topHeader" placeHolder = {props.placeHolder} isHomepage={isHomepage} /> : ''}
+                                { !isHomepage ? <SearchBar place="topHeader" placeHolder = {props.placeHolder} isHomepage={isHomepage} pageTitle={''} /> : ''}
                                 <ul className={`navbar-nav navbar-right ${ !!isHomepage ? ' ml-auto' : ''}`}>
                                     <li className="nav-item dropdown dropdown-jobs">
                                         <a className="nav-link" to={"#"} id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" onClick={() => MyGA.SendEvent('homepage_navigation', 'ln_homepage_navigation', 'ln_job_assisstance', 'ln_job_assisstance', '', false, true)}>Job assistance</a>

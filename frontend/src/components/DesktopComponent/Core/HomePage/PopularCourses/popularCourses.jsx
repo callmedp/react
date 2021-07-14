@@ -7,20 +7,33 @@ import CertificationProduct from './HomeProduct/homeProduct';
 import { useSelector, useDispatch } from 'react-redux';
 import { fetchInDemandProducts } from 'store/HomePage/actions';
 import { startHomePageLoader, stopHomePageLoader } from 'store/Loader/actions';
+import useLearningTracking from 'services/learningTracking';
 
 function PopularCourses() {
-    
     const [key, setKey] = useState('master');
     const { courses, certifications } = useSelector( store => store.inDemand )
-    const dispatch = useDispatch()
+    const dispatch = useDispatch();
+    const sendLearningTracking = useLearningTracking();
 
-    const handleTabChange = async (tabType) => {
+    const handleTabChange = async (tabType, key) => {
         if (tabType === 'certifications' && certifications.length === 0) {
             dispatch(startHomePageLoader())
             await new Promise((resolve, reject) => dispatch(fetchInDemandProducts({ payload: { pageId: 1, tabType, device: 'desktop'}, resolve, reject })));
             dispatch(stopHomePageLoader())
         }
         setKey(tabType)
+
+        sendLearningTracking({
+            productId: '',
+            event: `homepage_popular_courses_${tabType}_${key}_tab_clicked`,
+            pageTitle:`homepage`,
+            sectionPlacement:'popular_courses',
+            eventCategory: tabType,
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: key,
+        })
     }
 
     return (
@@ -31,7 +44,7 @@ function PopularCourses() {
                     <Tabs
                         id="controlled-tab-example"
                         activeKey={key}
-                        onSelect={(tabType) => handleTabChange(tabType)}
+                        onSelect={(tabType) => handleTabChange(tabType, key)}
                         className="category"
                     >
 

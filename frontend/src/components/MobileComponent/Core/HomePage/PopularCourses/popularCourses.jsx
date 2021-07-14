@@ -1,15 +1,13 @@
 // React-Core Import
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import Slider from "react-slick";
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 // Inter-App Import
 // import 'slick-carousel/slick/slick.css';
 import './popularCourses.scss';
 import { populartabType } from 'utils/constants';
-import { siteDomain } from 'utils/domains';
 import PopularTab from './popularTab';
+import useLearningTracking from 'services/learningTracking';
 
 // API Import
 import { fetchInDemandProducts } from 'store/HomePage/actions';
@@ -20,6 +18,7 @@ const PopularCourses = (props) => {
     const [key, setKey] = useState('master');
     const { courses, certifications, pages } = useSelector(store => store.inDemand)
     const dispatch = useDispatch()
+    const sendLearningTracking = useLearningTracking();
 
     const handleTabChange = async (tabType, id) => {
         try {
@@ -28,11 +27,23 @@ const PopularCourses = (props) => {
                 await new Promise((resolve, reject) => dispatch(fetchInDemandProducts({ payload: {pageId: 1, tabType, device: 'mobile'}, resolve, reject })));
                 dispatch(stopHomePageLoader())
             }
-            setKey(tabType)
+            setKey(tabType);
         }
         catch (e) {
             dispatch(stopHomePageLoader());
         }
+
+        sendLearningTracking({
+            productId: '',
+            event: `homepage_popular_courses_${tabType}_${id}_tab_clicked`,
+            pageTitle:`homepage`,
+            sectionPlacement:'popular_courses',
+            eventCategory: tabType,
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: id,
+        })
     };
 
     return (

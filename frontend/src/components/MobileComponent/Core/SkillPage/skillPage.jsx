@@ -143,7 +143,7 @@ const SkillPage = (props) => {
                                     )
                             }
                         </div>
-                        <Footer />
+                        <Footer pageType={`skill_${name}`} />
                     </section>
                     <CTA setEnquiryForm={setEnquiryForm} pageType='skill' heading={name} />
                     {

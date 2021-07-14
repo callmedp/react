@@ -12,12 +12,29 @@ import { MyGA } from 'utils/ga.tracking.js';
 import { getTrackingInfo } from 'utils/storage.js';
 import { trackUser } from 'store/Tracking/actions/index.js';
 import { Toast } from '../../../Common/Toast/toast';
+import useLearningTracking from 'services/learningTracking';
+import {stringReplace} from 'utils/stringReplace.js';
 
 const StickyNav = (props) => {
     const { product_detail, varChecked, outline, faq, frqntProd, topics, product_id, hasReview, hasKeyFeatures, hasWhatYouGet } = props;
     const dispatch = useDispatch();
-    // const [tab, setTab] = useState('1');
+    const sendLearningTracking = useLearningTracking();
     const { mainCourseCartLoader } = useSelector(store => store.loader);
+    let category_name = stringReplace(product_detail?.breadcrumbs[1].name) || stringReplace(product_detail?.breadcrumbs[2].name);
+
+    const addToCartTracking = (title) => {
+        sendLearningTracking({
+            productId: '',
+            event: title,
+            pageTitle:'course_detail',
+            sectionPlacement: 'sticky_nav',
+            eventCategory: stringReplace(product_detail?.prd_H1),
+            eventLabel: category_name,
+            eventAction: 'click',
+            algo: '',
+            rank: '',
+        })
+    }
 
     const goToCart = async (value) => {
         let cartItems = {};
@@ -25,12 +42,11 @@ const StickyNav = (props) => {
         let tracking_data = getTrackingInfo();
 
         if(!product_detail?.redeem_test) {
-            MyGA.SendEvent('ln_enroll_now', 'ln_enroll_now', 'ln_click_enroll_now', `${product_detail?.prd_H1}`, '', false, true);
+            MyGA.SendEvent('ln_enroll_now', 'ln_enroll_now', 'ln_click_enroll_now', `${stringReplace(product_detail?.prd_H1)}`, '', false, true);
             dispatch(trackUser({"query" : tracking_data, "action" :'enroll_now'}));
+            addToCartTracking(`course_detail_sticky_nav_${stringReplace(product_detail?.prd_H1)}_${product_id}_enroll_now_clicked`);
 
-            if(frqntProd && frqntProd.length > 0) {
-                frqntProd.map(prdId => addonsId.push(prdId.id));
-            }
+            if(frqntProd && frqntProd.length > 0) frqntProd.map(prdId => addonsId.push(prdId.id));
 
             if(value.id) cartItems = {'prod_id': product_id, 'cart_type': 'cart', 'cv_id': value.id, "addons": addonsId};
             else cartItems = {'prod_id': product_id, 'cart_type': 'cart', 'cv_id': (product_detail?.selected_var ? product_detail?.selected_var?.id : ""), "addons": addonsId};
@@ -50,6 +66,7 @@ const StickyNav = (props) => {
         }
         else {
             dispatch(trackUser({"query" : tracking_data, "action" :'redeem_now'}));
+            addToCartTracking(`course_detail_sticky_nav_${stringReplace(product_detail?.prd_H1)}_${product_id}_redeem_now_clicked`);
             cartItems = { 'prod_id': product_detail?.product_id, 'redeem_option': product_detail?.redeem_option }
 
             try {
@@ -65,6 +82,20 @@ const StickyNav = (props) => {
                 dispatch(stopMainCourseCartLoader());
             }
         }
+    }
+
+    const trackScrollMenu = (name) => {
+        sendLearningTracking({
+            productId: '',
+            event: `course_detail_sticky_nav_${stringReplace(product_detail?.prd_H1)}_${product_id}_${name}_clicked`,
+            pageTitle:'course_detail',
+            sectionPlacement: 'sticky_nav',
+            eventCategory: '',
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: '',
+        })
     }
 
     const getProductPrice = (product) => {
@@ -91,7 +122,7 @@ const StickyNav = (props) => {
                         <Nav>
                             {
                                 hasKeyFeatures &&
-                                    <LinkScroll offset={-160} isDynamic={true} spy={true} to="keyfeatures" id='1' smooth={true}>
+                                    <LinkScroll offset={-160} isDynamic={true} spy={true} to="keyfeatures" id='1' smooth={true} onClick={ () => trackScrollMenu('key_features') }>
                                         <Nav.Link>
                                             Key Features
                                         </Nav.Link>
@@ -100,7 +131,7 @@ const StickyNav = (props) => {
 
                             {
                                 hasWhatYouGet &&
-                                    <LinkScroll offset={-160} isDynamic={true} spy={true} to="whatyouget" id='10' smooth={true}>
+                                    <LinkScroll offset={-160} isDynamic={true} spy={true} to="whatyouget" id='10' smooth={true} onClick={ () => trackScrollMenu('what_you_get') }>
                                         <Nav.Link>
                                             What You Get
                                         </Nav.Link>
@@ -109,7 +140,7 @@ const StickyNav = (props) => {
                             
                             {
                                 outline && 
-                                    <LinkScroll to="courseoutline" offset={-140} isDynamic={true} spy={true} id='2' smooth={true}>
+                                    <LinkScroll to="courseoutline" offset={-140} isDynamic={true} spy={true} id='2' smooth={true} onClick={ () => trackScrollMenu('course_outline') }>
                                         <Nav.Link>
                                             Outline
                                         </Nav.Link>
@@ -118,7 +149,7 @@ const StickyNav = (props) => {
                             
                             {/* <LinkScroll offset={-120} to={"outcome"} className={ tab === '3' ? "active" : '' } id='3' onClick={handleTab}>Outcome</LinkScroll> */}
                             
-                            <LinkScroll offset={-130} to="howitworks" isDynamic={true} spy={true} id='4' smooth={true}>
+                            <LinkScroll offset={-130} to="howitworks" isDynamic={true} spy={true} id='4' smooth={true} onClick={ () => trackScrollMenu('how_it_works') }>
                                 <Nav.Link>
                                     How it works
                                 </Nav.Link>
@@ -126,7 +157,7 @@ const StickyNav = (props) => {
 
                             {
                                 topics && 
-                                    <LinkScroll to="topicsCovered" offset={-170} isDynamic={true} spy={true} id='2' smooth={true}>
+                                    <LinkScroll to="topicsCovered" offset={-170} isDynamic={true} spy={true} id='2' smooth={true} onClick={ () => trackScrollMenu('topics_covered') }>
                                         <Nav.Link>
                                             Topics Covered
                                         </Nav.Link>
@@ -134,7 +165,7 @@ const StickyNav = (props) => {
                             }
 
                             {
-                                faq && <LinkScroll to="faqs" offset={-200} isDynamic={true} spy={true} id='5' smooth={true}>
+                                faq && <LinkScroll to="faqs" offset={-200} isDynamic={true} spy={true} id='5' smooth={true} onClick={ () => trackScrollMenu('faqs') }>
                                     <Nav.Link>
                                         FAQs
                                     </Nav.Link>
@@ -143,7 +174,7 @@ const StickyNav = (props) => {
 
                             {
                                 hasReview &&  
-                                    <LinkScroll to="reviews" offset={-160} isDynamic={true} spy={true} id='6' smooth={true}>
+                                    <LinkScroll to="reviews" offset={-160} isDynamic={true} spy={true} id='6' smooth={true} onClick={ () => trackScrollMenu('reviews') }>
                                         <Nav.Link>
                                             Reviews
                                         </Nav.Link>
@@ -165,8 +196,8 @@ const StickyNav = (props) => {
                             : ""
                         }
                         <span className="d-flex">
-                            <LinkScroll offset={-160} to={"enquire-now"} className="btn btn-outline-primary" smooth={true}>Enquire now</LinkScroll>
-                            <a onClick={() => goToCart(varChecked)} className="btn btn-secondary ml-10">{ product_detail?.prd_service === 'assessment' ? 'Buy Now' : product_detail?.redeem_test ? 'Redeem Now' : 'Buy now' }</a>
+                            <LinkScroll offset={-160} to={"enquire-now"} onClick={ () => trackScrollMenu('enquire_now') } className="btn btn-outline-primary" smooth={true}>Enquire now</LinkScroll>
+                            <a onClick={() => goToCart(varChecked)} className="btn btn-secondary ml-10">{ product_detail?.prd_service === 'assessment' ? 'Buy Now' : product_detail?.redeem_test ? 'Redeem Now' : 'Enroll now' }</a>
                         </span>
                     </Form>
                 </div> 

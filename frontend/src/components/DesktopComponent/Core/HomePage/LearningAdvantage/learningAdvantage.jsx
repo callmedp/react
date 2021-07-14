@@ -1,9 +1,7 @@
-import React, {useState} from 'react';
+import React from 'react';
 import './learningAdvantage.scss';
-import { Link } from 'react-router-dom';
-
    
-const LearningAdvantage = (props) => {
+const LearningAdvantage = () => {
     
     return(
         <section className="container-fluid learning-advantage" data-aos="fade-up">

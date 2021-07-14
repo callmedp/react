@@ -1,9 +1,9 @@
-import React, {useState} from 'react';
+import React from 'react';
 import './ourLearners.scss';
 import { imageUrl } from 'utils/domains';
 
    
-const OurLearners = (props) => {
+const OurLearners = () => {
     
     return(
         <section className="container-fluid lightblue-bg mt-50 mb-0" data-aos="fade-up">

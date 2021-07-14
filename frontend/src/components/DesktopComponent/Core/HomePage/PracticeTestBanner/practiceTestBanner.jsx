@@ -3,12 +3,27 @@ import { imageUrl } from 'utils/domains';
 import './practiceTestBanner.scss';
 import { siteDomain } from 'utils/domains';
 import { MyGA } from 'utils/ga.tracking.js';
+import useLearningTracking from 'services/learningTracking';
 
-const PracticeTestBanner = (props) => {
+const PracticeTestBanner = () => {
+    const sendLearningTracking = useLearningTracking();
 
 
     const testRedirection = () => {
         MyGA.SendEvent('ln_new_homepage','ln_free_test', 'ln_free_test','test_click', '',false, true);
+
+        sendLearningTracking({
+            productId: '',
+            event: `homepage_practice_test_clicked`,
+            pageTitle:`homepage`,
+            sectionPlacement:'practice_test',
+            eventCategory: '',
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: '',
+        })
+
         window.location.replace(`${siteDomain}/practice-tests/`);
     }
 

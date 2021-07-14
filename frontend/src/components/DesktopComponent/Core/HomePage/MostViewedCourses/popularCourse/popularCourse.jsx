@@ -1,25 +1,45 @@
 import React from 'react'
-import { siteDomain } from 'utils/domains';
 import { MyGA } from 'utils/ga.tracking.js';
+import useLearningTracking from 'services/learningTracking';
+import { Link } from 'react-router-dom';
+import {stringReplace} from 'utils/stringReplace.js';
 
-
-const popularCourse = (props) => {
-    const {course,category} = props
+const PopularCourse = (props) => {
+    const {course,category, indx} = props;
+    const sendLearningTracking = useLearningTracking();
 
     const starRatings = (star) => {
         return (star === '*' ? <em className="icon-fullstar" key={Math.random()}></em> : star === '+' 
             ? <em className="icon-halfstar" key={Math.random()}></em> : <em className="icon-blankstar" key={Math.random()}></em>
         )
     }
+
+    const mostViewedTracking = (name) => {
+
+        MyGA.SendEvent('ln_new_homepage','ln_most_viewed_course', 'ln_'+stringReplace(category), stringReplace(name),'', false, true);
+
+        sendLearningTracking({
+            productId: '',
+            event: `homepage_most_viewed_course_${stringReplace(category)}_${stringReplace(name)}_${indx}_clicked`,
+            pageTitle:`homepage`,
+            sectionPlacement:'most_viewed_courses',
+            eventCategory: `${stringReplace(name)}`,
+            eventLabel: `${stringReplace(category)}_${stringReplace(name)}`,
+            eventAction: 'click',
+            algo: '',
+            rank: indx,
+        })
+    }
+
     return (
         <li className="col-sm-3">
-        <div className="card" onClick={() => MyGA.SendEvent('ln_new_homepage','ln_most_viewed_course', 'ln_'+category, course.name,'', false, true)}>
+        <div className="card">
             <div className="card__heading">
                 <figure>
                     <img src={course.imgUrl} alt={course.imgAlt} />
                 </figure>
                 <h3 className="heading3">
-                    <a href={`${siteDomain}${course.url}`}>{course.name}</a>
+                    <Link className="cursorLink" to={course.url} onClick={() => mostViewedTracking(course.name)}>{course.name}</Link>
                 </h3>
             </div>
             <div className="card__box">
@@ -41,4 +61,4 @@ const popularCourse = (props) => {
     )
 }
 
-export default popularCourse;
+export default PopularCourse;

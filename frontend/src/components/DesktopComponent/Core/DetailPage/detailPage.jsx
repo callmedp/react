@@ -34,7 +34,6 @@ import { trackUser } from 'store/Tracking/actions/index.js';
 import ReviewModal from '../../Common/Modals/reviewModal';
 import VideoModal from '../../Common/Modals/videoModal';
 import { Helmet } from "react-helmet";
-// import { zendeskTimeControlledWindow } from 'utils/zendeskIniti';
 
 const DetailPage = (props) => {
     const dispatch = useDispatch();
@@ -46,8 +45,7 @@ const DetailPage = (props) => {
     const [showStickyNav, setShowStickyNav] = useState(false);
     const [varChecked, changeChecked] = useState({});
     const [frqntProd, addFrqntProd] = useState([]);
-    const completeDescription = ((product_detail?.prd_about && (product_detail?.prd_about !== product_detail?.prd_desc)) 
-                                    ? (product_detail?.prd_about + ' <br /> ') : '') + (product_detail?.prd_desc ? product_detail?.prd_desc : '')
+    const completeDescription = ((product_detail?.prd_about && (product_detail?.prd_about !== product_detail?.prd_desc)) ? (product_detail?.prd_about + ' <br /> ') : '') + (product_detail?.prd_desc ? product_detail?.prd_desc : '');
     const reqLength = 250;
     const [detReviewModal, showReviewModal] = useState(false);
     const [videoModal, setVideoModal] = useState(false);
@@ -127,11 +125,11 @@ const DetailPage = (props) => {
 
     return (
         <div itemScope itemType="http://schema.org/Product">
-            <Helmet
+            {/* <Helmet
             script={[
                 { "src": (localStorage.getItem('script_link') ? localStorage.getItem('script_link') : null), "type": "text/javascript" }
             ]}
-            />
+            /> */}
             { mainCourseLoader ? <Loader /> : ''}
             { meta_tags && <MetaContent meta_tags={meta_tags} /> }
 
@@ -147,16 +145,16 @@ const DetailPage = (props) => {
             <Header />
 
             {
-                    showStickyNav && <StickyNav 
-                        outline={(product_detail?.chapter && product_detail?.prd_service !== 'assessment') ? true : false}
-                        topics={(product_detail?.chapter && product_detail?.prd_service === 'assessment') ? true : false}
-                        faq = {product_detail?.faq ? true : false}
-                        product_detail={product_detail} prdId={id} varChecked={varChecked}
-                        frqntProd={frqntProd} product_id={product_id}
-                        hasReview = { prd_review_list?.length ? true : false }
-                        hasKeyFeatures = {product_detail?.prd_uget ? true : false}
-                        hasWhatYouGet = {product_detail?.pTF === 16 ? true : false}
-                        />
+                showStickyNav && <StickyNav 
+                    outline={(product_detail?.chapter && product_detail?.prd_service !== 'assessment') ? true : false}
+                    topics={(product_detail?.chapter && product_detail?.prd_service === 'assessment') ? true : false}
+                    faq = {product_detail?.faq ? true : false}
+                    product_detail={product_detail} prdId={id} varChecked={varChecked}
+                    frqntProd={frqntProd} product_id={product_id}
+                    hasReview = { prd_review_list?.length ? true : false }
+                    hasKeyFeatures = {product_detail?.prd_uget ? true : false}
+                    hasWhatYouGet = {product_detail?.pTF === 16 ? true : false}
+                    />
             }
 
             <BannerCourseDetail 
@@ -208,7 +206,7 @@ const DetailPage = (props) => {
             </div>
             </div> */}
 
-            { product_detail?.dlvry_flow && <HowItWorks dlvry_flow={product_detail?.dlvry_flow} /> }
+            { product_detail?.dlvry_flow && <HowItWorks prd_H1={product_detail?.prd_H1} product_id={product_id} dlvry_flow={product_detail?.dlvry_flow} /> }
 
             { (product_detail?.chapter && product_detail?.prd_service === 'assessment') && <TopicsCovered  chapter_list={product_detail?.chapter_list}/> }
 
@@ -232,7 +230,7 @@ const DetailPage = (props) => {
                 </div>
             }
 
-            { skill && skill.length > 0 && <SkillGain skill={skill}/> }
+            { skill && skill.length > 0 && <SkillGain skill={skill} prd_H1={product_detail?.prd_H1} product_id={product_id} /> }
 
             { product_detail?.pop && <OtherProviders pop_list={product_detail?.pop_list} /> }
             
@@ -244,7 +242,7 @@ const DetailPage = (props) => {
             
             { skill && <CoursesMayLike product_id={id?.split('-')[1]} skill={skill}/> }
             
-            <Footer />
+            <Footer pageTitle={`course_${product_detail?.prd_H1}`} />
         </div>
     )
 }

@@ -15,7 +15,7 @@ const UserIntentPage = (props) => {
     const { history } = props;
     const UIContainer = props.match.params.name;
     const userIntentRoutes = [undefined, 'find-right-job', 'make-career-change', 'improve-profile', 'progress-career']
-
+    console.log(userIntentRoutes)
     useEffect(() => {
         if (!userIntentRoutes.includes(UIContainer)) {
             history.push('/404');
@@ -51,7 +51,7 @@ const UserIntentPage = (props) => {
                     }[UIContainer]
                 }
             </main>
-            <Footer />
+            <Footer pageTitle={`user_intent_${UIContainer?.replace(/-/gi, '_')}`} />
         </div>
     )
 }

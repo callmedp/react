@@ -1,23 +1,20 @@
 // React Core Import
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import React from 'react';
+import { useSelector } from 'react-redux';
+import useLearningTracking from 'services/learningTracking';
+import {stringReplace} from 'utils/stringReplace.js';
 
 // Third-Party Import
 import Slider from "react-slick";
-import Swal from 'sweetalert2';
 
 // Inter-App Import
-// import 'slick-carousel/slick/slick.css';
 import './servicesForYou.scss'
 import { siteDomain } from 'utils/domains';
 import { MyGA } from 'utils/ga.tracking.js';
 
-// API Import
-
-
-const ServicesForYou = (props) => {
+const ServicesForYou = () => {
     const { jobAssistanceServices } = useSelector(store => store?.jobAssistance)
+    const sendLearningTracking = useLearningTracking();
 
     const settings = {
         dots: false,
@@ -30,6 +27,23 @@ const ServicesForYou = (props) => {
         variableWidth: true,
     };
 
+    const goToAssistedService = (heading, indx) => {
+
+        MyGA.SendEvent('ln_new_homepage','ln_assistance_services_select', 'ln_click_assistance_services', stringReplace(heading), '', false, true);
+
+        sendLearningTracking({
+            productId: '',
+            event: `homepage_assistance_service_${stringReplace(heading)}_${indx}_clicked`,
+            pageTitle:`homepage`,
+            sectionPlacement:'service_for_you',
+            eventCategory: stringReplace(heading),
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: indx,
+        })
+    }
+
     return (
         <section className="m-container mt-0 mb-0 pr-0 ml-10n" data-aos="fade-up">
             <div className="m-services-foryou">
@@ -40,7 +54,7 @@ const ServicesForYou = (props) => {
                     {
                         jobAssistanceServices?.map((job, index) => {
                             return (
-                                <a href={`${siteDomain}${job?.url}`} onClick={() => MyGA.SendEvent('ln_new_homepage','ln_assistance_services_select', 'ln_click_assistance_services', job?.heading,'', false, true)} key={index}>
+                                <a href={`${siteDomain}${job?.url}`} onClick={() => goToAssistedService(job?.heading, index)} key={index}>
                                 <div className="m-services-foryou__list">
                                     <h3 className="m-heading3">{ job?.heading }</h3>
                                     <p>{ job?.description?.length > 80 ? job?.description?.slice(0, 80) + '...' : job?.description }</p>
@@ -56,31 +70,6 @@ const ServicesForYou = (props) => {
                             )
                         })
                     }
-
-                    {/* <div className="m-services-foryou__list">
-                        <h3 className="m-heading3">Featured Profile</h3>
-                        <p>Appear on top when Recruiters search for best candidates</p>
-                        <span className="d-flex">
-                            <Link to={"#"}>Know more</Link>
-                            <figure className="micon-service2"></figure>
-                        </span>
-                    </div>
-                    <div className="m-services-foryou__list">
-                        <h3 className="m-heading3">Jobs on the Move</h3>
-                        <p>Get personalized job recommendations from all the job portals on your Whatsapp</p>
-                        <span className="d-flex">
-                            <Link to={"#"}>Know more</Link>
-                            <figure className="micon-service3"></figure>
-                        </span>
-                    </div>
-                    <div className="m-services-foryou__list">
-                        <h3 className="m-heading3">Application Highlighter</h3>
-                        <p>Get your Job Application noticed among others</p>
-                        <span className="d-flex">
-                            <Link to={"#"}>Know more</Link>
-                            <figure className="micon-service4"></figure>
-                        </span>
-                    </div> */}
                 </Slider>
             </div>
         </section>

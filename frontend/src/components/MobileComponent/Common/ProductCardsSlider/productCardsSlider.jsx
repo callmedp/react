@@ -1,12 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Slider from "react-slick";
 import { siteDomain } from 'utils/domains';
 import './productCardsSlider.scss';
+import useLearningTracking from 'services/learningTracking';
+import { MyGA } from 'utils/ga.tracking.js';
+import {stringReplace} from 'utils/stringReplace.js';
 
 const ProductCards = props => {
     const {
-        productList, noProvider, showMode
-    } = props
+        productList, selectedIndexName, noProvider, showMode
+    } = props;
+    const sendLearningTracking = useLearningTracking();
+    console.log(selectedIndexName)
 
     const settings = {
         dots: false,
@@ -27,6 +32,22 @@ const ProductCards = props => {
         )
     }
 
+    const mostViewedTracking = (name, vendor, indx) => {
+        MyGA.SendEvent('ln_new_homepage','ln_most_viewed_course', 'ln_'+selectedIndexName, stringReplace(name),'', false, true);
+
+        sendLearningTracking({
+            productId: '',
+            event: `homepage_most_viewed_course_${selectedIndexName}_${stringReplace(name)}_vendor_${stringReplace(vendor)}_${indx}_clicked`,
+            pageTitle:`homepage`,
+            sectionPlacement:'most_viewed_courses',
+            eventCategory: `${stringReplace(name)}`,
+            eventLabel: `${selectedIndexName}_${stringReplace(name)}`,
+            eventAction: 'click',
+            algo: '',
+            rank: indx,
+        })
+    }
+
     return (
     // <section className="m-courses mt-0 mb-0 pt-10 pb-0" >
     //     <h2 className="m-heading centered">Popular Courses</h2>
@@ -40,7 +61,7 @@ const ProductCards = props => {
                                     <img src={product?.imgUrl} alt={product?.imgAlt} />
                                 </figure>
                                 <h3 className="m-heading3" itemProp="item">
-                                    <a href={`${siteDomain}${product.url}`}><span itemProp="name">{(product?.name)?.length > 42 ? (product?.name)?.slice(0, 42) + '...' : (product?.name) }</span></a>
+                                    <a href={`${siteDomain}${product.url}`} onClick={() => mostViewedTracking(product.name, product.providerName, index)}><span itemProp="name">{(product?.name)?.length > 42 ? (product?.name)?.slice(0, 42) + '...' : (product?.name) }</span></a>
                                 </h3>
                             </div>
                             <div className="m-card__box">

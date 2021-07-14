@@ -82,7 +82,7 @@ const Dashboard = (props) => {
                             </> : '' }
                         { dbContainer != 'startcourse' ? <HaveQuery /> : '' }
                     </div>
-                    <Footer /> 
+                    <Footer pageType={"dashboard"} /> 
                 </>
             }
         </div>

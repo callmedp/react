@@ -1,5 +1,5 @@
 // React Core Import
-import React, { useState } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { InputField, SelectBox, InputFieldDynamic, TextAreaDynamic } from 'formHandler/desktopFormHandler/formFields';
 
@@ -15,13 +15,14 @@ import {Toast} from '../../../Common/Toast/toast';
 import './enquireNow.scss';
 import { imageUrl } from 'utils/domains';
 import { MyGA } from 'utils/ga.tracking.js';
+import useLearningTracking from 'services/learningTracking';
 
 const EnquireNow = (props) => {
     const {location, match: {params: {id}}} = props;
-    const [ issubmitted, setSubmitted ] = useState(false);
+    const sendLearningTracking = useLearningTracking();
     const {product_detail} = useSelector(store => store?.mainCourses);
     const dispatch = useDispatch();
-    const { register, handleSubmit, reset, errors } = useForm();
+    const { register, handleSubmit, errors } = useForm();
 
     const addValues = (values) => {
         return {
@@ -47,6 +48,18 @@ const EnquireNow = (props) => {
         catch (error) {
             Toast.fire({ type: 'error', title: 'Something went wrong!' })
         }
+
+        sendLearningTracking({
+            productId: '',
+            event: `course_detail_enquire_now_submit_clicked`,
+            pageTitle: `course_detail`,
+            sectionPlacement: 'enquire_now',
+            eventCategory: '',
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: '',
+        })
     }
 
     return (

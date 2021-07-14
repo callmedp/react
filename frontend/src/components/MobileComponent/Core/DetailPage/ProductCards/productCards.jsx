@@ -5,11 +5,14 @@ import '../../../Common/ProductCardsSlider/productCardsSlider';
 import { getTrackingInfo } from 'utils/storage.js';
 import { trackUser } from 'store/Tracking/actions/index.js';
 import { useDispatch } from 'react-redux';
+import useLearningTracking from 'services/learningTracking';
+import {stringReplace} from 'utils/stringReplace.js';
 
 const ProductCards = props => {
     const {
-        productList
+        productList, page_section
     } = props;
+    const sendLearningTracking = useLearningTracking();
 
     const settings = {
         dots: false,
@@ -32,11 +35,23 @@ const ProductCards = props => {
         )
     }
 
-    const handleTracking = () => {
+    const handleTracking = (heading, vendor, idx) => {
         let tracking_data = getTrackingInfo();
 
         dispatch(trackUser({"query" : tracking_data, "action" :'exit_product_page'}));
         dispatch(trackUser({"query" : tracking_data, "action" :'recommended_products'}));
+
+        sendLearningTracking({
+            productId: '',
+            event: `course_detail_${page_section}_${stringReplace(heading)}_vendor_${stringReplace(vendor)}_${idx}_clicked`,
+            pageTitle:'course_detail',
+            sectionPlacement: `${page_section}`,
+            eventCategory: '',
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: idx,
+        })
     }
 
     return (
@@ -50,7 +65,7 @@ const ProductCards = props => {
                                     { (product?.pImg || product?.vendor_image) && <img src={product?.pImg || product?.vendor_image } alt={product?.name || product?.pNm || product?.heading || product?.display_name} /> }
                                 </figure>
                                 <h3 className="m-heading3">
-                                    <a onClick={() => handleTracking} href={`${siteDomain}${product.pURL || product?.url}`}>{(product?.name || product?.pNm || product?.heading || product?.display_name)?.length > 42 ? (product?.name || product?.pNm || product?.heading || product?.display_name)?.slice(0, 42) + '...' : (product?.name || product?.pNm || product?.heading || product?.display_name) }</a>
+                                    <a onClick={() => handleTracking(product?.name || product?.pNm || product?.heading, product?.vendor, index)} href={`${siteDomain}${product.pURL || product?.url}`}>{(product?.name || product?.pNm || product?.heading || product?.display_name)?.length > 42 ? (product?.name || product?.pNm || product?.heading || product?.display_name)?.slice(0, 42) + '...' : (product?.name || product?.pNm || product?.heading || product?.display_name) }</a>
                                 </h3>
                             </div>
                             <div className="m-card__box">

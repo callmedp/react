@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import '../../CataloguePage/RecentCourses/recentCourses.scss';
 import './coursesMayLike.scss'
@@ -7,11 +7,15 @@ import { fetchRecommendedCourses } from 'store/DetailPage/actions';
 import { getTrackingInfo, getTrackingUrl } from 'utils/storage.js';
 import { trackUser } from 'store/Tracking/actions/index.js';
 import { siteDomain } from 'utils/domains';
+import useLearningTracking from 'services/learningTracking';
+import {stringReplace} from 'utils/stringReplace.js';
 
 const CoursesMayLike = (props) => {
     const {product_id, skill} = props;
     const dispatch = useDispatch();
     const { results } = useSelector(store => store.recommendedCourses);
+    const sendLearningTracking = useLearningTracking();
+    const [carIndex, setIndex] = useState(0);
 
     useEffect(() => {
         handleEffects();
@@ -30,12 +34,42 @@ const CoursesMayLike = (props) => {
         )
     }
 
-    const handleTracking = (url) => {
+    const handleSelect = (selectedIndex, e) => {
+        if (e !== undefined) {
+            setIndex(selectedIndex);
+
+            sendLearningTracking({
+                productId: '',
+                event: `course_detail_reviews_${e.target.offsetParent.className}_${selectedIndex}_clicked`,
+                pageTitle:`course_detail`,
+                sectionPlacement:'reviews',
+                eventCategory: `${e.target.offsetParent.className}`,
+                eventLabel: '',
+                eventAction: 'click',
+                algo: '',
+                rank: selectedIndex,
+            })
+        }
+    }
+
+    const handleTracking = (name, vendor, url, idx) => {
         let tracking_data = getTrackingInfo();
+        let appendTracking = "";
+
         dispatch(trackUser({"query" : tracking_data, "action" :'exit_product_page'}));
         dispatch(trackUser({"query" : tracking_data, "action" :'recommended_products'}));
-
-        let appendTracking = "";
+        
+        sendLearningTracking({
+            productId: '',
+            event: `course_detail_courses_you_may_like_${stringReplace(name)}_vendor_${stringReplace(vendor)}_${idx}_clicked`,
+            pageTitle:'course_detail',
+            sectionPlacement: 'courses_you_may_like',
+            eventCategory: '',
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: idx,
+        })
 
         if(localStorage.getItem("trackingId")){
             appendTracking = getTrackingUrl();
@@ -58,7 +92,7 @@ const CoursesMayLike = (props) => {
                                                 <img src={coursesLike.pImg} alt={coursesLike.display_name} />
                                             </figure>
                                             <h3 className="heading3">
-                                                <a onClick={() => handleTracking(coursesLike.pURL)}>
+                                                <a onClick={() => handleTracking(coursesLike.display_name, coursesLike.vendor, coursesLike.pURL, inx)}>
                                                     {coursesLike.display_name}
                                                 </a>
                                             </h3>
@@ -92,7 +126,7 @@ const CoursesMayLike = (props) => {
             <div className="row">
                 <div className="recent-courses w-100 mt-20 mb-30">
                     <h3 className="heading2 text-center">Courses you may like</h3>
-                    <Carousel className={`courses-like ${results.length === 1 ? `removeButtons` : ``}`}>
+                    <Carousel className={`courses-like ${results.length === 1 ? `removeButtons` : ``}`} activeIndex={carIndex} onSelect={handleSelect}>
                         {
                             results?.map(getLikeCourses)
                         }

@@ -5,15 +5,46 @@ import '../../SkillPage/FAQ/faq.scss';
 import Card from 'react-bootstrap/Card';
 import { MyGA } from 'utils/ga.tracking.js';
 import { imageUrl } from 'utils/domains';
+import useLearningTracking from 'services/learningTracking';
+import {stringReplace} from 'utils/stringReplace.js';
 
 const FAQ = (props) => {
     const { faq_list } = props;
     const [sliceFlag, setSliceFlag] = useState(true);
     const regex = /(<([^>]+)>)/ig;
+    const sendLearningTracking = useLearningTracking();
 
     const loadMore = () => {
         MyGA.SendEvent('SkillMoreFAQs','ln_FAQ_click', 'more_FAQs', 'ln_FAQ','', false, true);
+        sendLearningTracking({
+            productId: '',
+            event: `course_detail_load_more_faqs_clicked`,
+            pageTitle:'course_detail',
+            sectionPlacement: 'faqs',
+            eventCategory: '',
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: '',
+        })
+
         setSliceFlag(state => !state);
+    }
+
+    const courseFaqTracking = (question, indx) => {
+        MyGA.SendEvent('FAQs','ln_FAQ_click', 'ln_down_arrow_click', 'ln_'+ stringReplace(question.replace(regex, '')),'', false, true);
+
+        sendLearningTracking({
+            productId: '',
+            event: `course_detail_faq_${stringReplace(question)}_${indx}_clicked`,
+            pageTitle:'course_detail',
+            sectionPlacement: 'faqs',
+            eventCategory: '',
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: indx,
+        })
     }
 
     return (
@@ -28,7 +59,7 @@ const FAQ = (props) => {
                                     (sliceFlag ? faq_list.slice(0, 4) : faq_list)?.map((item, index) => 
                                         <Card data-aos="fade-up" key={index.toString() + item.question} itemScope itemType="https://schema.org/Question" >
                                             <Accordion.Toggle as={Card.Header} eventKey={index === 0 ? '0' : index} >
-                                                <p className="font-weight-bold" dangerouslySetInnerHTML={{__html : item.question}} onClick={() => MyGA.SendEvent('FAQs','ln_FAQ_click', 'ln_down_arrow_click', 'ln_'+item.question.replace(regex, ''),'', false, true) }></p>
+                                                <p className="font-weight-bold" dangerouslySetInnerHTML={{__html : item.question}} onClick={() => courseFaqTracking(item.question, index) }></p>
                                                 <meta itemProp="name" content={item.question} />
                                             </Accordion.Toggle>
                                             <Accordion.Collapse eventKey={index === 0 ? '0' : index} itemProp="acceptedAnswer" itemScope itemType="https://schema.org/Answer">

@@ -21,7 +21,7 @@ const ProgressCareer = (props) => {
         <div>
             {/* <GuidanceRecommendations /> */}
             {/* <FindJob /> */}
-            { !!job ? <><ViewCourses {...props} /><Footer /></> : <FindJob type={"pcareer"} {...props}/> }
+            { !!job ? <><ViewCourses {...props} /><Footer pageType={'user_intent_progress_career'} /></> : <FindJob type={"pcareer"} {...props}/> }
         </div>
     )
 }

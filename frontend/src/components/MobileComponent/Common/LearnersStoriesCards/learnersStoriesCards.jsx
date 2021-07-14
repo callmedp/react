@@ -2,7 +2,6 @@ import React from "react";
 import Slider from "react-slick";
 // import 'slick-carousel/slick/slick.css';
 import './learnersStories.scss';
-import { useSelector } from 'react-redux';
 
 const LearnersStoriesCards = (props) => {
     const { learnersData, page } = props

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-// import OfferEnds from './OfferEnds/offerEnds';
 import Header from '../../Common/Header/header';
 import HomeBanner from './Banner/banner';
 import PopularCourses from './PopularCourses/popularCourses';
@@ -26,7 +25,7 @@ import MetaContent from '../../Common/MetaContent/metaContent';
 import { fetchAlreadyLoggedInUser } from "store/Authentication/actions/index";
 import OfferEnds from './OfferEnds/offerEnds';
 
-const HomePage = (props) => {
+const HomePage = () => {
 
     const dispatch = useDispatch();
     const { homeLoader } = useSelector(store => store.loader)
@@ -90,7 +89,6 @@ const HomePage = (props) => {
     }
 
     useEffect(() => {
-
         handleEffect()
         Aos.init({ duration: 2000, once: true, offset: 10, anchorPlacement: 'bottom-bottom' });
     }, [])
@@ -99,7 +97,6 @@ const HomePage = (props) => {
         <div>
             { meta && <MetaContent meta_tags={meta} />}
             { homeLoader ? <Loader /> : ''}
-            {/* <OfferEnds /> */}
             {(navOffer[4] && showMainOffer) ? <OfferEnds navOffer={navOffer} showMainOffer={showMainOffer} setShowMainOffer={setShowMainOffer} /> : ""}
 
             <Header pageTitle = "homepage" isHomepage={true} showMainOffer={showMainOffer} setShowMainOffer={setShowMainOffer} />
@@ -115,7 +112,7 @@ const HomePage = (props) => {
                 <OurLearners />
                 <LatestBlog />
             </main>
-            <Footer homepage={true} />
+            <Footer homepage={true} pageTitle={'homepage'} />
         </div>
     )
 }

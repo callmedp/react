@@ -10,6 +10,8 @@ import { MyGA } from 'utils/ga.tracking.js';
 import { getTrackingInfo } from 'utils/storage.js';
 import { trackUser } from 'store/Tracking/actions/index.js';
 import { showSwal } from 'utils/swal';
+import useLearningTracking from 'services/learningTracking';
+import {stringReplace} from 'utils/stringReplace.js';
 
 const StickyNavDetail = (props) => {
     const settings = {
@@ -24,8 +26,10 @@ const StickyNavDetail = (props) => {
     }
 
     const { product_detail, varChecked, outline, faq, frqntProd, topics, product_id, prd_review_list, hasKeyFeatures, hasWhatYouGet } = props;
+    const sendLearningTracking = useLearningTracking();
     const [tab, setTab] = useState('1');
     const dispatch = useDispatch();
+    let category_name = stringReplace(product_detail?.breadcrumbs[1].name) || stringReplace(product_detail?.breadcrumbs[2].name);
 
     const handleTab = (event) => {
         setTab(event.target.id)
@@ -39,6 +43,20 @@ const StickyNavDetail = (props) => {
         return parseFloat(product) + price;
     };
 
+    const addToCartTracking = (title) => {
+        sendLearningTracking({
+            productId: '',
+            event: title,
+            pageTitle:'course_detail',
+            sectionPlacement: 'sticky_nav',
+            eventCategory: stringReplace(product_detail?.prd_H1),
+            eventLabel: category_name,
+            eventAction: 'click',
+            algo: '',
+            rank: '',
+        })
+    }
+
     const goToCart = async (value) => {
         let cartItems = {};
         let addonsId = [];
@@ -47,6 +65,7 @@ const StickyNavDetail = (props) => {
         if(!product_detail?.redeem_test) {
             MyGA.SendEvent('ln_enroll_now', 'ln_enroll_now', 'ln_click_enroll_now', `${product_detail?.prd_H1}`, '', false, true);
             dispatch(trackUser({"query" : tracking_data, "action" :'enroll_now'}));
+            addToCartTracking(`course_detail_sticky_nav_${stringReplace(product_detail?.prd_H1)}_${product_id}_enroll_now_clicked`);
 
             if(frqntProd && frqntProd.length > 0) {
                 frqntProd.map(prdId => addonsId.push(prdId.id));
@@ -67,6 +86,7 @@ const StickyNavDetail = (props) => {
         }
         else {
             dispatch(trackUser({"query" : tracking_data, "action" :'redeem_now'}));
+            addToCartTracking(`course_detail_sticky_nav_${stringReplace(product_detail?.prd_H1)}_${product_id}_redeem_now_clicked`);
             cartItems = { 'prod_id': product_detail?.product_id, 'redeem_option': product_detail?.redeem_option }
 
             try {
@@ -79,6 +99,21 @@ const StickyNavDetail = (props) => {
                 dispatch(stopMainCourseCartLoader());
             }
         }
+    }
+
+    const trackScrollMenu = (name, ev) => {
+        handleTab(ev);
+        sendLearningTracking({
+            productId: '',
+            event: `course_detail_sticky_nav_${stringReplace(product_detail?.prd_H1)}_${product_id}_${name}_clicked`,
+            pageTitle:'course_detail',
+            sectionPlacement: 'sticky_nav',
+            eventCategory: '',
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: '',
+        })
     }
 
     return (
@@ -99,48 +134,48 @@ const StickyNavDetail = (props) => {
                         {
                             hasKeyFeatures &&
                                 <LinkScroll to="features" offset={-120}>
-                                    <Link className={ tab === '1' ? "active" : '' } to={"#"} id='1' onClick={handleTab}>Key Features</Link>
+                                    <Link className={ tab === '1' ? "active" : '' } to={"#"} id='1' onClick={ (event) => trackScrollMenu('key_features', event) }>Key Features</Link>
                                 </LinkScroll>
                         }
 
                         {
                             hasWhatYouGet && 
                                 <LinkScroll to="whatyouget" offset={-120}>
-                                    <Link className={ tab === '10' ? "active" : '' } to={"#"} id='10' onClick={handleTab}>What You Get</Link>
+                                    <Link className={ tab === '10' ? "active" : '' } to={"#"} id='10' onClick={ (event) => trackScrollMenu('key_features', event) }>What You Get</Link>
                                 </LinkScroll>
                         }
 
                         {
                             outline && 
                                 <LinkScroll to="m-faq" offset={-120}>
-                                    <Link to={"#"} className={ tab === '2' ? "active" : '' } id='2' onClick={handleTab}>Outline</Link>
+                                    <Link to={"#"} className={ tab === '2' ? "active" : '' } id='2' onClick={ (event) => trackScrollMenu('key_features', event) }>Outline</Link>
                                 </LinkScroll>
                         }
                         
                         {/* <LinkScroll to="outcome" offset={-120}>
-                            <Link to={"#"} className={ tab === '3' ? "active" : '' } id='3' onClick={handleTab}>Outcome</Link>
+                            <Link to={"#"} className={ tab === '3' ? "active" : '' } id='3' onClick={ (event) => trackScrollMenu('key_features', event) }>Outcome</Link>
                         </LinkScroll> */}
                         <LinkScroll to="begin" offset={-120}>
-                            <Link to={"#"} className={ tab === '4' ? "active" : '' } id='4' onClick={handleTab}>How it works</Link>
+                            <Link to={"#"} className={ tab === '4' ? "active" : '' } id='4' onClick={ (event) => trackScrollMenu('key_features', event) }>How it works</Link>
                         </LinkScroll>
 
                         {
                             topics && 
                                 <LinkScroll to="topicsCovered" offset={-170}>
-                                    <Link to={"#"} className={ tab === '5' ? "active" : '' } id='5' onClick={handleTab}>Topics Covered</Link>
+                                    <Link to={"#"} className={ tab === '5' ? "active" : '' } id='5' onClick={ (event) => trackScrollMenu('key_features', event) }>Topics Covered</Link>
                                 </LinkScroll>
                         }
 
                         {
                             faq &&
                                 <LinkScroll to="faq" offset={-120}>
-                                    <Link to={"#"} className={ tab === '6' ? "active" : '' } id='6' onClick={handleTab}>FAQ</Link>
+                                    <Link to={"#"} className={ tab === '6' ? "active" : '' } id='6' onClick={ (event) => trackScrollMenu('key_features', event) }>FAQ</Link>
                                 </LinkScroll>
                         }
                         {
                             (product_detail?.prd_num_rating > 0 && prd_review_list && prd_review_list?.length > 0) &&
                                 <LinkScroll to="reviews" offset={-120}>
-                                    <Link to={"#"} className={ tab === '7' ? "active" : '' } id='7' onClick={handleTab}>Reviews</Link>
+                                    <Link to={"#"} className={ tab === '7' ? "active" : '' } id='7' onClick={ (event) => trackScrollMenu('key_features', event) }>Reviews</Link>
                                 </LinkScroll>
                         }
                     </Slider>

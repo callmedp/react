@@ -1,13 +1,30 @@
 import React from 'react';
 import './banner.scss';
-import { Link } from 'react-router-dom';
 import Carousel from 'react-bootstrap/Carousel';
-// import Breadcrumb from 'react-bootstrap/Breadcrumb';
 import SearchBar from '../../../Common/Header/SeachBar/SearchBar.jsx';
 import { imageUrl } from 'utils/domains';
 import { MyGA } from 'utils/ga.tracking.js';
+import useLearningTracking from 'services/learningTracking';
+import { Link } from 'react-router-dom';
 
-const HomeBanner = (props) => {
+const HomeBanner = () => {
+    const sendLearningTracking = useLearningTracking();
+
+    const goToCareerGuidance = () => {
+        MyGA.SendEvent('ln_career_guidance','ln_career_guidance', 'ln_click_career_guidance', 'career_guidance','', false, true);
+        
+        sendLearningTracking({
+            productId: '',
+            event: 'homepage_banner_career_guidance_clicked',
+            pageTitle:'homepage',
+            sectionPlacement: 'banner_career_guidance',
+            eventCategory: '',
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: '',
+        })
+    }
 
     return (
        <header className="container-fluid pos-rel home-bg">
@@ -38,13 +55,13 @@ const HomeBanner = (props) => {
                             </Carousel>
                         </div>
                         <div className="banner-search mt-20">
-                            <SearchBar place="banner" placeHolder = 'Search course, assessment...' isHomepage={true} />
+                            <SearchBar place="banner" placeHolder = 'Search course, assessment...' isHomepage={true} pageTitle={'homepage'} />
                             {/* <form className="form-inline top-search my-2 my-lg-0">
                                 <input className="form-control top-input" type="search" placeholder="Search courses" aria-label="Search" />
                                 <button className="btn btn-search" type="submit"><figure className="icon-search"></figure></button>
                             </form> */}
                             OR
-                            <Link to={"/user-intent"} className="btn btn-gradient ml-10" onClick={() => MyGA.SendEvent('ln_career_guidance','ln_career_guidance', 'ln_click_career_guidance', 'career_guidance','', false, true)}>GET CAREER GUIDANCE <figure className="icon-arrow-right ml-10"></figure></Link>
+                            <Link to={'/user-intent'} className="btn btn-gradient ml-10" onClick={() => goToCareerGuidance()}>GET CAREER GUIDANCE <figure className="icon-arrow-right ml-10"></figure></Link>
                         </div>
                     </div>
 

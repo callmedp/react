@@ -1,13 +1,34 @@
 import React from 'react';
 import './latestBlog.scss';
-// import { imageUrl } from "utils/domains";
-import { useSelector } from 'react-redux';
+ import { useSelector } from 'react-redux';
 import { siteDomain } from 'utils/domains';
 import { MyGA } from 'utils/ga.tracking.js';
+import useLearningTracking from 'services/learningTracking';
+import {stringReplace} from 'utils/stringReplace.js';
 
-const LatestBlog = (props) => {
+const LatestBlog = () => {
     
-    const { latestBlog } = useSelector( store => store.jobAssistance )
+    const { latestBlog } = useSelector( store => store.jobAssistance );
+    const sendLearningTracking = useLearningTracking();
+
+    const latesBlogTracking = (name, category, url, indx) => {
+
+        MyGA.SendEvent('ln_new_homepage','ln_homepage_blog', 'ln_blog_click', stringReplace(name), '', false, true);
+
+        sendLearningTracking({
+            productId: '',
+            event: `homepage_latest_blog_${category}_${stringReplace(name)}_${indx}_clicked`,
+            pageTitle:`homepage`,
+            sectionPlacement:'latest_blog',
+            eventCategory: stringReplace(name),
+            eventLabel: `${category}_${stringReplace(name)}`,
+            eventAction: 'click',
+            algo: '',
+            rank: indx,
+        })
+
+        window.location.href = `${siteDomain}${url}`;
+    }
 
     return(
         <section className="container-fluid mt-0 mb-0" data-aos="fade-up">
@@ -20,16 +41,14 @@ const LatestBlog = (props) => {
                             latestBlog?.map((blog, idx) => {
                                 return (
                                     <li className="col-sm-4" key={idx}>
-                                    <div className="card" onClick={() => MyGA.SendEvent('ln_new_homepage','ln_homepage_blog', 'ln_blog_click',blog.display_name, '', false, true)}>
-                                        <a href={`${siteDomain}${blog?.url}`}>
+                                        <div className="card cursorLink" onClick={() => latesBlogTracking(blog.display_name, blog?.p_category, blog?.url, idx)}>
                                             <figure>
                                                 <img src={blog?.image} className="img-fluid" alt={blog?.display_name} />
                                                 <span>{ blog?.p_category?.length > 13 ? blog?.p_category?.slice(0, 13) + '...' : blog?.p_category }</span>
                                             </figure>
                                             <strong>{ blog?.display_name?.length > 40 ? blog?.display_name?.slice(0, 40) + '...' : blog?.display_name }</strong>
-                                        </a>
-                                    </div>
-                                </li>
+                                        </div>
+                                    </li>
                                 )
                             })
                           }

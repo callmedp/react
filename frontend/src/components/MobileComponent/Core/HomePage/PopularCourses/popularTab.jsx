@@ -2,19 +2,21 @@
 import React, { useState } from 'react';
 import Slider from "react-slick";
 import { siteDomain } from 'utils/domains';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { MyGA } from 'utils/ga.tracking.js';
-
+import {stringReplace} from 'utils/stringReplace.js';
 
 // API Import 
 import { fetchInDemandProducts } from 'store/HomePage/actions';
+import useLearningTracking from 'services/learningTracking';
 
 const PopularTab = props => {
     const [pageId, updatePageId] = useState(2)
     const dispatch = useDispatch()
     const {
-        productList, tabType, total_page
-    } = props
+        product_name, productList, tabType, total_page
+    } = props;
+    const sendLearningTracking = useLearningTracking();
 
     const settings = {
         dots: false,
@@ -31,7 +33,7 @@ const PopularTab = props => {
                 new Promise((resolve, reject) => dispatch(fetchInDemandProducts({ payload:{ pageId: pageId, tabType, device: 'mobile'}, resolve, reject })));
                 updatePageId(pageId + 1);
             }
-          }
+        }
     };
 
 
@@ -39,6 +41,21 @@ const PopularTab = props => {
         return (star === '*' ? <em className="micon-fullstar" key={index}></em> : star === '+'
             ? <em className="micon-halfstar" key={index}></em> : <em className="micon-blankstar" key={index}></em>
         )
+    }
+
+    const setTracking = (name, indx) => {
+
+        sendLearningTracking({
+            productId: '',
+            event: `homepage_popular_courses_${stringReplace(name)}_${indx}_clicked`,
+            pageTitle:`homepage`,
+            sectionPlacement: 'popular_courses',
+            eventCategory: stringReplace(name),
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: indx,
+        })
     }
 
     return (
@@ -56,7 +73,7 @@ const PopularTab = props => {
                                     <img src={product.imgUrl} alt={product.imageAlt} itemProp="image" />
                                 </figure>
                                 <h3 className="m-heading3">
-                                    <a href={`${siteDomain}${product.url}`} itemProp="url"> {product?.name?.length > 22 ? product?.name?.slice(0, 22) + '...' : product?.name} </a>
+                                    <a href={`${siteDomain}${product.url}`} onClick={() => setTracking(product?.name, index)} itemProp="url"> {product?.name?.length > 22 ? product?.name?.slice(0, 22) + '...' : product?.name} </a>
                                 </h3>
                             </div>
                             <div className="m-card__box">

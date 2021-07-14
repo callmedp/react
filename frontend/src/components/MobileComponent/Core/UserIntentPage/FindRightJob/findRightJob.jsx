@@ -18,7 +18,7 @@ const FindRightJob = (props) => {
 
     return (
         <div>
-            { !!job ? <><JobsUpskills {...props} /><Footer /></> : <FindJob type={"job"} {...props} />}
+            { !!job ? <><JobsUpskills {...props} /><Footer pageType={'user_intent_find_right_job'} /></> : <FindJob type={"job"} {...props} />}
         </div>
     )
 }

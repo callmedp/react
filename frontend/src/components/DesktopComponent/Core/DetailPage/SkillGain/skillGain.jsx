@@ -3,10 +3,27 @@ import Badge from 'react-bootstrap/Badge';
 import { Link as LinkScroll } from "react-scroll";
 import '../../SkillPage/SkillGain/skillGain';
 import { imageUrl } from 'utils/domains';
+import useLearningTracking from 'services/learningTracking';
+import {stringReplace} from 'utils/stringReplace.js';
 
 const SkillGain = (props) => {
-    const {skill} = props;
-    window['course_skills'] = skill.slice(0,4)
+    const {skill, prd_H1, product_id} = props;
+    window['course_skills'] = skill.slice(0,4);
+    const sendLearningTracking = useLearningTracking();
+
+    const trackEnquireNow = () => {
+        sendLearningTracking({
+            productId: '',
+            event: `course_detail_skill_gain_${stringReplace(prd_H1)}_${product_id}_enquire_now_clicked`,
+            pageTitle:'course_detail',
+            sectionPlacement: 'skill_gain',
+            eventCategory: '',
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: '',
+        })
+    }
 
     return (
         <section className="container-fluid lightblue-bg mt-40" data-aos="fade-up">
@@ -26,7 +43,7 @@ const SkillGain = (props) => {
                                 {' '}
                             </div>
                             <div className="d-flex mt-50 mb-20">
-                                <LinkScroll to={"enquire-now"} className="btn btn-outline-primary btn-custom" offset={-160}>Enquire now</LinkScroll>
+                                <LinkScroll to={"enquire-now"} onClick={trackEnquireNow} className="btn btn-outline-primary btn-custom" offset={-160}>Enquire now</LinkScroll>
                             </div>
                         </div>
                         <figure className="skill-gain__img mt-40">

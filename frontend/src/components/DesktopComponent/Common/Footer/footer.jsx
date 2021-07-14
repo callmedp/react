@@ -5,15 +5,36 @@ import './footer.scss';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchTrendingCnA } from 'store/Footer/actions/index';
 import { MyGA } from 'utils/ga.tracking.js';
+import useLearningTracking from 'services/learningTracking';
+import {stringReplace} from 'utils/stringReplace.js';
 
 const Footer = (props) => {
 
     const dispatch = useDispatch()
     const { trendingSkills, trendingCourses } = useSelector( store => store.footer )
+    const sendLearningTracking = useLearningTracking();
+    let { pageTitle } = props;
+    pageTitle = stringReplace(pageTitle);
 
     useEffect(() => {
         dispatch(fetchTrendingCnA({ ...props, numCourses:8 }))
     },[])
+
+    const footerTracking = (title, ln_title, event_clicked, name, val, val1, val2, indx) => {
+        MyGA.SendEvent(title, ln_title, event_clicked, stringReplace(name), val, val1, val2);
+
+        sendLearningTracking({
+            productId: '',
+            event: `${pageTitle}_${stringReplace(name)}${indx ? '_' + indx : ''}_footer_clicked`,
+            pageTitle:`${pageTitle}`,
+            sectionPlacement:'footer',
+            eventCategory: stringReplace(name),
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: indx,
+        })
+    }
 
     return(
         <section className="container-fluid">
@@ -22,24 +43,24 @@ const Footer = (props) => {
                     <div className="footer">
                         <ul className="footer-bdr">
                             <li>
-                                <a href={`${siteDomain}/about-us`} onClick={() => MyGA.SendEvent('homepage_footer','ln_homepage_footer', 'ln_homepage_footer_clicked', 'About Us','', false, true)}>About Us</a>&nbsp;&nbsp;
+                                <a href={`${siteDomain}/about-us`} onClick={() => footerTracking(`${pageTitle}_footer`,`ln_${pageTitle}_footer`, `ln_${pageTitle}_footer_clicked`, 'About Us','', false, true)}>About Us</a>&nbsp;&nbsp;
                             </li>
                             <li>
-                            <a href={`${siteDomain}/privacy-policy`} onClick={() => MyGA.SendEvent('homepage_footer','ln_homepage_footer', 'ln_homepage_footer_clicked', 'Privacy Policy','', false, true)}>Privacy Policy</a>&nbsp;&nbsp;
+                            <a href={`${siteDomain}/privacy-policy`} onClick={() => footerTracking(`${pageTitle}_footer`,`ln_${pageTitle}_footer`, `ln_${pageTitle}_footer_clicked`, 'Privacy Policy','', false, true)}>Privacy Policy</a>&nbsp;&nbsp;
                             </li>
                             <li>
-                            <a href={`${siteDomain}/tnc`} onClick={() => MyGA.SendEvent('homepage_footer','ln_homepage_footer', 'ln_homepage_footer_clicked', 'Terms & Conditions','', false, true)}>Terms & Conditions</a>&nbsp;&nbsp;
+                            <a href={`${siteDomain}/tnc`} onClick={() => footerTracking(`${pageTitle}_footer`,`ln_${pageTitle}_footer`, `ln_${pageTitle}_footer_clicked`, 'Terms & Conditions','', false, true)}>Terms & Conditions</a>&nbsp;&nbsp;
                             </li>
                             <li>
-                            <a href={`${siteDomain}/contact-us`} onClick={() =>  MyGA.SendEvent('homepage_footer','ln_homepage_footer', 'ln_homepage_footer_clicked', 'Contact Us','', false, true)}>Contact Us</a>&nbsp;&nbsp;
+                            <a href={`${siteDomain}/contact-us`} onClick={() =>  footerTracking(`${pageTitle}_footer`,`ln_${pageTitle}_footer`, `ln_${pageTitle}_footer_clicked`, 'Contact Us','', false, true)}>Contact Us</a>&nbsp;&nbsp;
                             </li>
                             <li>
-                            <a href={`${siteDomain}/disclaimer`} onClick={() =>  MyGA.SendEvent('homepage_footer','ln_homepage_footer', 'ln_homepage_footer_clicked', 'Disclaimer','', false, true)}>Disclaimer</a>&nbsp;&nbsp;
+                            <a href={`${siteDomain}/disclaimer`} onClick={() =>  footerTracking(`${pageTitle}_footer`,`ln_${pageTitle}_footer`, `ln_${pageTitle}_footer_clicked`, 'Disclaimer','', false, true)}>Disclaimer</a>&nbsp;&nbsp;
                             </li>
                             <li className="social-icon">
-                                <a href="https://www.facebook.com/shinelearningdotcom/" className="icon-facebook mt-0" onClick={() =>  MyGA.SendEvent('ln_new_homepage','ln_social_sign_in', 'ln_social_sign_in', 'facebook','', false, true)}></a>
-                                <a  href="https://in.linkedin.com/company/shinelearning" className="icon-linkedin" onClick={() =>  MyGA.SendEvent('ln_new_homepage','ln_social_sign_in', 'ln_social_sign_in', 'linkedin','', false, true)}></a>
-                                <a href="https://twitter.com/shinelearning" className="icon-twitter mt-5" onClick={() =>  MyGA.SendEvent('ln_new_homepage','ln_social_sign_in', 'ln_social_sign_in', 'twitter','', false, true)}></a>
+                                <a href="https://www.facebook.com/shinelearningdotcom/" className="icon-facebook mt-0" onClick={() =>  footerTracking('ln_new_homepage','ln_social_sign_in', 'ln_social_sign_in', 'facebook','', false, true)}></a>
+                                <a  href="https://in.linkedin.com/company/shinelearning" className="icon-linkedin" onClick={() =>  footerTracking('ln_new_homepage','ln_social_sign_in', 'ln_social_sign_in', 'linkedin','', false, true)}></a>
+                                <a href="https://twitter.com/shinelearning" className="icon-twitter mt-5" onClick={() =>  footerTracking(`ln_new_${pageTitle}`,'ln_social_sign_in', 'ln_social_sign_in', 'twitter','', false, true)}></a>
                             </li>
                         </ul>
                         {
@@ -50,7 +71,7 @@ const Footer = (props) => {
                                         trendingCourses.slice(0,25)?.map((course, index) => {
                                             return (
                                                 <React.Fragment key={index}>
-                                                    <a href={`${siteDomain}${course.url}`} onClick={() => MyGA.SendEvent('ln_new_homepage','ln_trending_course', 'ln_click_course',course.name, '',false, true)}>{course.name}</a>&nbsp;
+                                                    <a href={`${siteDomain}${course.url}`} onClick={() => footerTracking(`ln_new_${pageTitle}`,'ln_trending_course', 'ln_click_course',course.name, '',false, true, index)}>{course.name}</a>&nbsp;
                                                     { trendingCourses.length - 1 === index ? '' : '|'}
                                                 </React.Fragment>
                                             )
@@ -66,7 +87,7 @@ const Footer = (props) => {
                                         trendingSkills.slice(0,25)?.map((skill, index) => {
                                             return (
                                                 <React.Fragment key={index} >
-                                                    <a href={`${siteDomain}${skill.skillUrl}`} onClick={() => MyGA.SendEvent('ln_new_homepage','ln_trending_skill', 'ln_click_skill',skill.skillName, '',false, true)}>{skill.skillName}</a>&nbsp;
+                                                    <a href={`${siteDomain}${skill.skillUrl}`} onClick={() => footerTracking(`ln_new_${pageTitle}`,'ln_trending_skill', 'ln_click_skill',skill.skillName, '',false, true, index)}>{skill.skillName}</a>&nbsp;
                                                     { trendingSkills.length - 1 === index ? '' : '|'}
                                                 </React.Fragment>
                                             )

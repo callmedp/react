@@ -1,14 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React from 'react';
 import './Banner.scss';
 import Slider from "react-slick";
-// import 'slick-carousel/slick/slick.css';
-import SearchPage from '../../../Common/SearchPage/SearchPage'
 import { categoryList } from 'utils/constants';
 import { MyGA } from 'utils/ga.tracking.js';
+import useLearningTracking from 'services/learningTracking';
+import {stringReplace} from 'utils/stringReplace.js';
 
 const HomeBanner = (props) => {
-    const { setShowSearch } = props
+    const { setShowSearch } = props;
+    const sendLearningTracking = useLearningTracking();
+
     const settings = {
         dots: false,
         arrows: false,
@@ -19,6 +20,22 @@ const HomeBanner = (props) => {
         swipeToSlide: true,
         variableWidth: true,
     };
+
+    const bannerTracking = (title, ln_title, event_clicked, name, val, val1, val2, indx) => {
+        MyGA.SendEvent(title, ln_title, event_clicked, stringReplace(name), val, val1, val2);
+
+        sendLearningTracking({
+            productId: '',
+            event: `homepage_${stringReplace(name)}${indx ? '_' + indx : ''}_banner_clicked`,
+            pageTitle:`homepage`,
+            sectionPlacement:'banner',
+            eventCategory: stringReplace(name),
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: indx,
+        })
+    }
 
     return (
         <div className="m-container mt-0 mb-0 m-home-header">
@@ -37,17 +54,12 @@ const HomeBanner = (props) => {
                 <figure className="micon-home-nav"></figure>
                     <Slider {...settings}>
                         {
-                            categoryList?.map((category) => {
+                            categoryList?.map((category, idx) => {
                                 return (
-                                    <a href={ category?.url } key={ category?.id } onClick = { () => MyGA.SendEvent('ln_new_homepage','ln_search_course', 'ln_search_initiated', category?.name,'', false, true) }>{ category?.name }</a>
+                                    <a href={ category?.url } key={ category?.id } onClick = { () => bannerTracking('ln_new_homepage','ln_search_course', 'ln_search_initiated', category?.name,'', false, true, idx) }>{ category?.name }</a>
                                 )
                             })
                         }
-                        {/* <Link to={"#"}>Sales</Link>
-                        <Link to={"#"}>IT</Link> 
-                        <Link to={"#"}>Finance</Link> 
-                        <Link to={"#"}>Management</Link> 
-                        <Link to={"#"}>Operations</Link>  */}
                     </Slider>
             </div>
         </div>

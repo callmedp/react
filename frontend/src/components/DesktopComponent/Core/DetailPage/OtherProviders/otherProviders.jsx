@@ -1,11 +1,28 @@
 import React from 'react';
 import './otherProviders.scss';
-// import CourseCard from 'components/DesktopComponent/Common/CourseCard/courseCard';
 import Carousel from 'react-bootstrap/Carousel';
 import { siteDomain } from 'utils/domains';
+import useLearningTracking from 'services/learningTracking';
+import {stringReplace} from 'utils/stringReplace.js';
    
 const OtherProviders = (props) => {
     const {pop_list} = props;
+    const sendLearningTracking = useLearningTracking();
+
+    const providersTracking = (heading, vendor, idx) => {
+
+        sendLearningTracking({
+            productId: '',
+            event: `course_detail_other_providers_${stringReplace(heading)}_vendor_${stringReplace(vendor)}_${idx}_clicked`,
+            pageTitle:'course_detail',
+            sectionPlacement: 'other_providers',
+            eventCategory: '',
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: idx,
+        })
+    }
 
     const starRatings = (star, index) => {
         return (star === '*' ? <em className="icon-fullstar" key={index}></em> : star === '+'
@@ -27,7 +44,7 @@ const OtherProviders = (props) => {
                                                 { (course.imgUrl || course.vendor_image || course.pImg) && <img src={course.imgUrl || course.vendor_image || course.pImg} alt={course.imgAlt || course.name || course.heading} /> }
                                             </figure>
                                             <h3 className="heading3">
-                                                <a href={`${siteDomain}${course.url}`}> <span>{course.name || course.heading}</span></a>
+                                                <a href={`${siteDomain}${course.url}`} onClick={() => providersTracking(course.name || course.heading, course.providerName || course.vendor, indx)}> <span>{course.name || course.heading}</span></a>
                                             </h3>
                                         </div>
                                         <div className="card__box">

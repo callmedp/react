@@ -1,8 +1,6 @@
 import React from 'react';
-// import { Link } from 'react-router-dom';
 import './leadCampaignPage.scss';
 import CampaignHeader from '../../Common/CampaignHeader/campaignHeader';
-// import Footer from '../../Common/Footer/footer';
 import { useDispatch } from 'react-redux';
 import { InputField, SelectBox, SelectBoxCampaign } from 'formHandler/desktopFormHandler/formFields';
 import {Toast} from '../../Common/Toast/toast';

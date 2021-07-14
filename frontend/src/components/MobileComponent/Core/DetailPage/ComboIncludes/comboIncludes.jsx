@@ -1,9 +1,26 @@
 import React from 'react';
 import '../../SkillPage/DomainJobs/domainJobs.scss';
 import { siteDomain } from 'utils/domains';
+import useLearningTracking from 'services/learningTracking';
+import {stringReplace} from 'utils/stringReplace.js';
 
 const ComboIncludes = (props) => {
-    const { comboList } = props
+    const { comboList } = props;
+    const sendLearningTracking = useLearningTracking();
+
+    const comboIncludesTracking = (combo, indx) => {
+        sendLearningTracking({
+            productId: '',
+            event: `course_detail_${stringReplace(combo.heading ? combo.heading : combo.name)}_combo_includes_clicked`,
+            pageTitle:'course_detail',
+            sectionPlacement: 'combo_includes',
+            eventCategory: '',
+            eventLabel: '',
+            eventAction: 'click',
+            algo: '',
+            rank: indx,
+        })
+    }
 
     return (
         <section className="m-container m-domain-jobs mb-0 pt-0 pb-0" data-aos="fade-up">
@@ -13,7 +30,7 @@ const ComboIncludes = (props) => {
                     {
                         comboList?.map((combo, indx) => {
                             return (
-                            <li><a href={`${siteDomain}${combo.url}`}>{ combo.heading ? combo.heading : combo.name }</a></li>
+                            <li key={indx}><a href={`${siteDomain}${combo.url}`} onClick={() => comboIncludesTracking(combo, indx)}>{ combo.heading ? combo.heading : combo.name }</a></li>
                             )
                         })
                     }

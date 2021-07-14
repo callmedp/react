@@ -1,8 +1,8 @@
-import React from 'react';
+import React, {useState} from 'react';
 import Carousel from 'react-bootstrap/Carousel';
 import './boostedCareers.scss';
 import { useSelector } from 'react-redux';
-
+import useLearningTracking from 'services/learningTracking';
 
 const handleTestimonialList = (testimonialList) => testimonialList?.map((testimonial, index) => {
     return (
@@ -17,10 +17,29 @@ const handleTestimonialList = (testimonialList) => testimonialList?.map((testimo
     )
 });
 
-const BoostedCareers = (props) => {
+const BoostedCareers = () => {
     
     const { testimonialCategory } = useSelector(store => store.testimonials)
+    const [key, setKey] = useState(0);
+    const sendLearningTracking = useLearningTracking();
 
+    const handleSelect = (selectedIndex, e) => {
+        if (e !== undefined) {
+            setKey(selectedIndex);
+
+            sendLearningTracking({
+                productId: '',
+                event: `homepage_boosted_careers_${e.target.offsetParent.className}_${selectedIndex}_clicked`,
+                pageTitle:`homepage`,
+                sectionPlacement:'boosted_careers',
+                eventCategory: `${e.target.offsetParent.className}`,
+                eventLabel: '',
+                eventAction: 'click',
+                algo: '',
+                rank: selectedIndex,
+            })
+        }
+    }
 
     return (
         <>
@@ -33,7 +52,7 @@ const BoostedCareers = (props) => {
                                 <figure className="icon-quote mb-20"></figure>
                                 <h2 className="heading2">See how they boosted their careers</h2>
                             </div>
-                            <Carousel className="boosted-careers">
+                            <Carousel className="boosted-careers" activeIndex={key} onSelect={handleSelect}>
                                 {
                                     testimonialCategory?.map((testimonialList, idx) => {
                                         return (
